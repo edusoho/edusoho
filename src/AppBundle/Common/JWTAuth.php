@@ -29,9 +29,11 @@ class JWTAuth
      */
     public function auth($payload, $options = array())
     {
-        if (isset($options['lifetime'])) {
+        if (isset($options['lifetime']) && isset($options['effect_time'])) {
             $payload['exp'] = time() + $options['lifetime'];
+            $payload['iat'] = time() + $options['effect_time'];
         }
+
         $payload = $this->makePayload($payload);
         $header = $this->makeHeader();
         $token = $this->token;

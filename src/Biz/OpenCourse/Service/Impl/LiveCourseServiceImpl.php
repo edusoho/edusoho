@@ -3,9 +3,11 @@
 namespace Biz\OpenCourse\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\AthenaLiveToolkit;
+use AppBundle\Common\ESLiveToolkit;
+use AppBundle\Common\JWTAuth;
 use Biz\BaseService;
 use Biz\OpenCourse\Service\LiveCourseService;
+use Biz\System\Service\SettingService;
 use Biz\Util\EdusohoLiveClient;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -71,9 +73,9 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $role = '';
         $user = $this->getCurrentUser();
 
-        if (!$user->isLogin() && $lesson['type'] == 'liveOpen') {
+        if (!$user->isLogin() && 'liveOpen' == $lesson['type']) {
             return 'student';
-        } elseif (!$user->isLogin() && $lesson['type'] != 'liveOpen') {
+        } elseif (!$user->isLogin() && 'liveOpen' != $lesson['type']) {
             throw $this->createServiceException('您还未登录，不能参加直播！');
         }
 
@@ -105,7 +107,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
 
-        if (empty($lesson) || $lesson['type'] != 'liveOpen') {
+        if (empty($lesson) || 'liveOpen' != $lesson['type']) {
             return true;
         }
 
@@ -113,7 +115,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             return true;
         }
 
-        if ($lesson['progressStatus'] == EdusohoLiveClient::LIVE_STATUS_CLOSED) {
+        if (EdusohoLiveClient::LIVE_STATUS_CLOSED == $lesson['progressStatus']) {
             return true;
         }
 
@@ -171,11 +173,11 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             'callback' => $this->buildCallbackUrl($lesson),
         );
 
-        if ($actionType == 'add') {
+        if ('add' == $actionType) {
             $params['liveLogoUrl'] = $this->_getLiveLogo();
             $params['startTime'] = $lesson['startTime'].'';
             $params['endTime'] = ($lesson['startTime'] + $lesson['length'] * 60).'';
-        } elseif ($actionType == 'update') {
+        } elseif ('update' == $actionType) {
             $params['liveId'] = $lesson['mediaId'];
             $params['provider'] = $lesson['liveProvider'];
 
@@ -207,17 +209,20 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     {
         $baseUrl = $this->biz['env']['base_url'];
 
-        $duration = $lesson['startTime'] + $lesson['length'] * 60 + 86400 - time();
         $args = array(
-            'duration' => $duration,
-            'data' => array(
-                'courseId' => $lesson['courseId'],
-                'type' => 'open_course',
-            ),
+            'sources' => array('open_course', 'my', 'public'), //支持课程资料读取，公共资料读取，还有我的资料库读取
+            'courseId' => $lesson['courseId'],
+            'userId' => $lesson['userId'],
         );
-        $token = $this->getTokenService()->makeToken('live.callback', $args);
 
-        return AthenaLiveToolkit::generateCallback($baseUrl, $token['token'], $lesson['courseId']);
+        $jwtToken = $this->getJWTAuth()->auth($args, array(
+            'lifetime' => 60 * 60 * 4,
+            'effect_time' => $lesson['startTime'],
+        ));
+
+        $callbackUrl = ESLiveToolkit::generateCallback($baseUrl, $jwtToken);
+
+        return $callbackUrl;
     }
 
     protected function getOpenCourseService()
@@ -230,6 +235,9 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
@@ -238,5 +246,14 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    protected function getJWTAuth()
+    {
+        $setting = $this->getSettingService()->get('storage', array());
+        $accessKey = !empty($setting['cloud_access_key']) ? $setting['cloud_access_key'] : '';
+        $secretKey = !empty($setting['cloud_secret_key']) ? $setting['cloud_secret_key'] : '';
+
+        return new JWTAuth($accessKey, $secretKey);
     }
 }

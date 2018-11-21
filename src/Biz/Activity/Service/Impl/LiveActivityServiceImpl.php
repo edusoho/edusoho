@@ -3,7 +3,8 @@
 namespace Biz\Activity\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\AthenaLiveToolkit;
+use AppBundle\Common\ESLiveToolkit;
+use AppBundle\Common\JWTAuth;
 use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\AppLoggerConstant;
@@ -295,14 +296,20 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     {
         $baseUrl = $this->biz['env']['base_url'];
 
-        $duration = $activity['startTime'] + $activity['length'] * 60 + 86400 - time();
-        $args = array('duration' => $duration, 'data' => array(
+        $args = array(
             'courseId' => $activity['fromCourseId'],
-            'type' => 'course',
-        ));
-        $token = $this->getTokenService()->makeToken('live.callback', $args);
+            'sources' => array('course', 'my', 'public'), //支持课程资料读取，公共资料读取，还有我的资料库读取
+            'userId' => $activity['fromUserId'],
+        );
 
-        return AthenaLiveToolkit::generateCallback($baseUrl, $token['token'], $activity['fromCourseId']);
+        $jwtToken = $this->getJWTAuth()->auth($args, array(
+            'lifetime' => 60 * 60 * 4,
+            'effect_time' => $activity['startTime'],
+        ));
+
+        $callbackUrl = ESLiveToolkit::generateCallback($baseUrl, $jwtToken);
+
+        return $callbackUrl;
     }
 
     protected function getTokenService()
@@ -324,5 +331,14 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getActivityDao()
     {
         return $this->createDao('Activity:ActivityDao');
+    }
+
+    protected function getJWTAuth()
+    {
+        $setting = $this->getSettingService()->get('storage', array());
+        $accessKey = !empty($setting['cloud_access_key']) ? $setting['cloud_access_key'] : '';
+        $secretKey = !empty($setting['cloud_secret_key']) ? $setting['cloud_secret_key'] : '';
+
+        return new JWTAuth($accessKey, $secretKey);
     }
 }
