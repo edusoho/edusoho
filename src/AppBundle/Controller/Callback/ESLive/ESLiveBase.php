@@ -15,8 +15,8 @@ class ESLiveBase extends BaseController
     protected function getJWTAuth()
     {
         $setting = $this->getSettingService()->get('storage', array());
-        $accessKey = $setting['cloud_access_key'] ?: '';
-        $secretKey = $setting['cloud_secret_key'] ?: '';
+        $accessKey = !empty($setting['cloud_access_key']) ? $setting['cloud_access_key'] : '';
+        $secretKey = !empty($setting['cloud_secret_key']) ? $setting['cloud_secret_key'] : '';
 
         return new JWTAuth($accessKey, $secretKey);
     }
