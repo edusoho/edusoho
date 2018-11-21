@@ -2,18 +2,14 @@
 
 namespace ApiBundle\Api\Resource\SearchKeyword;
 
-use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 
 class SearchKeyword extends AbstractResource
 {
-    /**
-     * @ApiConf(isRequiredAuth=false)
-     */
     public function search(ApiRequest $request)
     {
-        $name = $request->query->get('name');
+        $name = $request->query->get('title');
         $limit = $request->query->get('limit');
 
         $keywords = $this->getSearchKeywordService()->searchSearchKeywords(array('likeName' => $name), array('times' => 'DESC'), 0, $limit);
@@ -22,12 +18,9 @@ class SearchKeyword extends AbstractResource
         return $keywords;
     }
 
-    /**
-     * @ApiConf(isRequiredAuth=false)
-     */
     public function add(ApiRequest $request)
     {
-        $name = $request->request->get('name');
+        $name = $request->request->get('title');
 
         $keyword = $this->getSearchKeywordService()->getSearchKeywordByName($name);
         if ($keyword) {
