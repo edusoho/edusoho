@@ -13,6 +13,7 @@
     {% else %}
       <div style="position:absolute;top:0;bottom:0;left:0;right:0;text-align:center;">
         <div id="lesson-video-content"
+          data-disable-mode-selection="{{context.disableModeSelection|default(false)}}"
           data-content="{{context.content|default('')}}"
           data-user-id="{{app.user.id|default(0)}}"
           data-user-name="{{app.user.username|default('')}}"
@@ -58,7 +59,7 @@
         ></div>
       </div>
       {% if cloudSdk %}
-        <script src="{{ cloud_sdk_url(cloudSdk) }}"></script>
+        <script src="http://service-cdn.cg-dev.cn/js-sdk/audio-player/sdk-v1.js?1.0.4.1"></script>
       {% endif %}
       {% do script(['libs/base.js','app/js/common.js','app/js/player/index.js'], 1000) %}
     {% endif %}

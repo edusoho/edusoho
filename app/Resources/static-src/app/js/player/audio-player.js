@@ -4,6 +4,7 @@ class AudioPlayer extends Emitter {
   constructor(options) {
     super();
     this.options = options;
+    this.playMode = 'sequence'; //默认开启
     this.player = {};
     this.setup();
   }
@@ -39,6 +40,7 @@ class AudioPlayer extends Emitter {
       template: self.options.content,
       autoplay: true, //音频自动播放开启
       customPos: self.options.customPos,
+      disableModeSelection: self.options.disableModeSelection,
       remeberLastPos: true,
       sequentialMode: true,
     });
@@ -57,10 +59,15 @@ class AudioPlayer extends Emitter {
       self.emit('timechange', e);
     });
 
+    player.on('modeChanged', function (e) {
+      self.playMode = e.data.mode;
+    });
+
     player.on('ended', function(e) {
       let message = {
-        'mode' : 'next'
+        'mode' : self.playMode
       };
+      console.log(message);
       self.emit('ended', message);
     });
 

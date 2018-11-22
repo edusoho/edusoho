@@ -71,7 +71,7 @@ export default class TaskShow extends Emitter {
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
       });
     }
-    if (nextTaskUrl && response.playerMsg && response.playerMsg.mode == 'next') {
+    if (nextTaskUrl && response.playerMsg && response.playerMsg.mode == 'sequence') {
       window.location.href = nextTaskUrl;
     }
   }
