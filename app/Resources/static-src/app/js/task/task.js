@@ -56,7 +56,8 @@ export default class TaskShow extends Emitter {
     });
   }
 
-  _receiveFinish() {
+  _receiveFinish(response) {
+    const nextTaskUrl = this.element.find('#task-content-iframe').data('nextTaskUrl');
     if ($('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
       $.get($('.js-learned-prompt').data('url'), html => {
         $('.js-learned-prompt').attr('data-content', html);
@@ -69,6 +70,9 @@ export default class TaskShow extends Emitter {
         }
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
       });
+    }
+    if (nextTaskUrl && response.playerMsg && response.playerMsg.mode == 'next') {
+      window.location.href = nextTaskUrl;
     }
   }
 

@@ -20,6 +20,7 @@ export default class TaskPipe {
     }
 
     this.eventDatas = {};
+    this.playerMsg = {};
     this.intervalId = null;
     this.lastTime = this.element.data('lastTime');
     this.eventMap = {
@@ -54,7 +55,7 @@ export default class TaskPipe {
       topic: '#',
       callback: ({event, data}) => {
         this.eventDatas[event] = data;
-        this._flush();
+        this._flush(data);
       }
     });
 
@@ -74,13 +75,17 @@ export default class TaskPipe {
     clearInterval(this.intervalId);
   }
 
-  _flush() {
+  _flush(param = {}) {
     let ajax = $.post(this.eventUrl, { data: { lastTime: this.lastTime, lastLearnTime: DurationStorage.get(this.userId, this.fileId), events: this.eventDatas}})
       .done((response) => {
         this._publishResponse(response);
         this.eventDatas = {};
         this.lastTime = response.lastTime;
         if (response && response.result && response.result.status) {
+          if (param.data) {
+            response.playerMsg = param.data.playerMsg;
+          }
+          
           let listners = this.eventMap.receives[response.result.status];
           if (listners) {
             for (var i = listners.length - 1; i >= 0; i--) {

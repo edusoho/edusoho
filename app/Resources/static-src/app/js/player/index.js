@@ -211,9 +211,10 @@ class Show {
       });
     });
 
-    player.on('ended', () => {
+    player.on('ended', (msg) => {
       messenger.sendToParent('ended', {
-        stop: true
+        stop: true,
+        playerMsg: msg
       });
       if (!this.isCloudVideoPalyer() && !this.isCloudAudioPlayer()) {
         DurationStorage.del(this.userId, this.fileId);

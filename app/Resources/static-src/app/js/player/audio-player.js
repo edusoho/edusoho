@@ -39,7 +39,8 @@ class AudioPlayer extends Emitter {
       template: self.options.content,
       autoplay: true, //音频自动播放开启
       customPos: self.options.customPos,
-      remeberLastPos: true
+      remeberLastPos: true,
+      sequentialMode: true,
     });
     var player = new AudioPlayerSDK(extConfig);
 
@@ -57,7 +58,10 @@ class AudioPlayer extends Emitter {
     });
 
     player.on('ended', function(e) {
-      self.emit('ended', e);
+      let message = {
+        'mode' : 'next'
+      };
+      self.emit('ended', message);
     });
 
     player.on('playing', function(e) {
