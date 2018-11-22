@@ -5,14 +5,11 @@ use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    private $userUpdateHelper = null;
-    private $perPageCount = 10000;
 
     public function __construct($biz)
     {
         parent::__construct($biz);
 
-        $this->userUpdateHelper = new BatchUpdateHelper($this->getUserDao());
     }
 
     public function update($index = 0)
@@ -35,13 +32,14 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         try {
-            $dir = realpath($this->biz['kernel.root_dir'].'/../web/install');
+            $dir = realpath($this->biz['kernel.root_dir'] . '/../web/install');
             $filesystem = new Filesystem();
 
             if (!empty($dir)) {
                 $filesystem->remove($dir);
             }
         } catch (\Exception $e) {
+            $this->logger('error', $e->getTraceAsString());
         }
 
         $developerSetting = $this->getSettingService()->get('developer', array());
@@ -55,7 +53,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'resetCrontabJobNum',
-            'audioActivityAddHasText'
+            'addTableIndex',
         );
 
         $funcNames = array();
@@ -98,14 +96,58 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    protected function audioActivityAddHasText()
+    protected function addTableIndex()
     {
-        if (!isFieldsExist('activity_audio', 'hasText')) {
-            $this->getConnection()->exec("
-                ALTER TABLE `activity_audio` ADD tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否包含图文';
-            ");
+        if ($this->isJobExist('HandlingTimeConsumingUpdateStructuresJob')) {
+            return 1;
         }
+
+        $currentTime = time();
+        $today = strtotime(date('Y-m-d', $currentTime) . '02:00:00');
+
+        if ($currentTime > $today) {
+            $time = strtotime(date('Y-m-d', strtotime('+1 day')) . '02:00:00');
+        }
+
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `pre_fire_time`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES (
+              'HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              'Biz\\\\UpdateDatabaseStructure\\\\\Job\\\\HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              '200',
+              '0',
+              '{$time}',
+              '300',
+              'executing',
+              '1',
+              '0',
+              '{$currentTime}',
+              '{$currentTime}'
+        )");
+        $this->logger('info', 'INSERT增加索引的定时任务HandlingTimeConsumingUpdateStructuresJob');
         return 1;
+    }
+
+    protected function isJobExist($code)
+    {
+        $sql = "select * from biz_scheduler_job where name='{$code}'";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
     }
 
     protected function deleteCache()
@@ -132,58 +174,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $page = $index % 1000000;
 
         return array($step, $page);
-    }
-
-    protected function isFieldExist($table, $filedName)
-    {
-        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
-    }
-
-    protected function isTableExist($table)
-    {
-        $sql = "SHOW TABLES LIKE '{$table}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
-    }
-
-    protected function isIndexExist($table, $filedName, $indexName)
-    {
-        $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
-    }
-
-    protected function createIndex($table, $index, $column)
-    {
-        if (!$this->isIndexExist($table, $column, $index)) {
-            $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column})");
-        }
-    }
-
-    protected function getTableCount($table)
-    {
-        $sql = "select count(*) from `{$table}`;";
-
-        return $this->getConnection()->fetchColumn($sql) ?: 0;
-
-    }
-
-    protected function isJobExist($code)
-    {
-        $sql = "select * from biz_scheduler_job where name='{$code}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
-    }
-
-    private function makeUUID()
-    {
-        return sha1(uniqid(mt_rand(), true));
     }
 
     private function getSettingService()
@@ -274,7 +264,7 @@ abstract class AbstractUpdater
     protected function logger($level, $message)
     {
         $version = \AppBundle\System::VERSION;
-        $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
+        $data = date('Y-m-d H:i:s') . " [{$level}] {$version} " . $message . PHP_EOL;
         if (!file_exists($this->getLoggerFile())) {
             touch($this->getLoggerFile());
         }
@@ -283,6 +273,6 @@ abstract class AbstractUpdater
 
     private function getLoggerFile()
     {
-        return $this->biz['kernel.root_dir'].'/../app/logs/upgrade.log';
+        return $this->biz['kernel.root_dir'] . '/../app/logs/upgrade.log';
     }
 }
