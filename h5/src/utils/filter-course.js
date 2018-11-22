@@ -20,7 +20,7 @@ const courseListData = (data, type, typeList) => {
                     <p class="price" style="color: #ff5353">¥ ${data.price}</p>
                   </span>
                   <span class="switch-box__state">
-                    <p style="color: #408ffb">${data.studentNum}人在学</p>
+                    <p style="color: #B0BDC9">${data.studentNum}人在学</p>
                   </span>`
           }
         };
@@ -45,7 +45,7 @@ const courseListData = (data, type, typeList) => {
                     <p style="color: #ff5353">¥ ${data.price}</p>
                 </span>
                 <span class="switch-box__state">
-                  <p style="color: #408ffb">${data.studentNum}人在学</p>
+                  <p style="color: #B0BDC9">${data.studentNum}人在学</p>
                 </span>`
         }
       };
