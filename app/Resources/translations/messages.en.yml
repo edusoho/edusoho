@@ -5190,7 +5190,7 @@ admin.edu_cloud.edu_video.low: Smooth
 admin.edu_cloud.edu_video.normal: Standard
 admin.edu_cloud.edu_video.high: 'High Quality'
 admin.edu_cloud.edu_video.play_speed: 'Speed play: '
-admin.edu_cloud.edu_video.play_speed_tips: 'When turned on, the cloud video task supports play speed accelerate. Note: only support the high version of Chrome, Firefox and QQ browser (speed mode).'
+admin.edu_cloud.edu_video.play_speed_tips: 'When turned on, the cloud video task and audio task supports play speed accelerate.'
 admin.edu_cloud.edu_video.auto_play: 'Auto play for Cloud Video'
 admin.edu_cloud.edu_video.video_header: 'Cloud Video Header'
 admin.edu_cloud.edu_video.video_header_edit_btn: Edit

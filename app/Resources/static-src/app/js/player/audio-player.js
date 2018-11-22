@@ -4,17 +4,23 @@ class AudioPlayer extends Emitter {
   constructor(options) {
     super();
     this.options = options;
+    this.playMode = 'sequence'; //默认开启
     this.player = {};
     this.setup();
   }
 
   setup() {
     let element = this.options.element;
-    console.log(this.options);
 
     var self = this;
 
     let extConfig = {};
+
+    if (self.options.enablePlaybackRates) {
+      extConfig = Object.assign(extConfig, {
+        playbackRates: ['0.8', '1.0', '1.25', '1.5', '2.0']
+      });
+    }
 
     if (self.options.statsInfo) {
       var statsInfo = self.options.statsInfo;
@@ -33,8 +39,10 @@ class AudioPlayer extends Emitter {
       playlist: self.options.url,
       template: self.options.content,
       autoplay: true, //音频自动播放开启
+      customPos: self.options.customPos,
+      disableModeSelection: self.options.disableModeSelection,
       remeberLastPos: true,
-      playbackRates: ['0.8', '1.0', '1.25', '1.5', '2.0'],
+      sequentialMode: true,
     });
     var player = new AudioPlayerSDK(extConfig);
 
@@ -42,13 +50,25 @@ class AudioPlayer extends Emitter {
       self.emit('ready', e);
     });
 
+    player.on('firstplay', function (e) {
+      player.setCurrentTime(self.options.customPos);
+    });
+
     player.on('timeupdate', function(e) {
       //    player.__events get all the event;
       self.emit('timechange', e);
     });
 
+    player.on('modeChanged', function (e) {
+      self.playMode = e.data.mode;
+    });
+
     player.on('ended', function(e) {
-      self.emit('ended', e);
+      let message = {
+        'mode' : self.playMode
+      };
+      console.log(message);
+      self.emit('ended', message);
     });
 
     player.on('playing', function(e) {
