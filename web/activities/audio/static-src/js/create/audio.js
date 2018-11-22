@@ -64,7 +64,6 @@ export default class Audio {
         },
         minute: 'required unsigned_integer unsigned_integer',
         second: 'required second_range unsigned_integer',
-        media: 'required'
       },
       messages: {
         minute: {
@@ -76,7 +75,6 @@ export default class Audio {
           second_range: Translator.trans('activity.audio_manage.second_range_error_hint'),
           unsigned_integer: Translator.trans('activity.audio_manage.length_unsigned_integer_error_hint')
         },
-        media: Translator.trans('activity.audio_manage.media_error_hint')
       }
     });
 

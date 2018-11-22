@@ -10,11 +10,16 @@ class AudioPlayer extends Emitter {
 
   setup() {
     let element = this.options.element;
-    console.log(this.options);
 
     var self = this;
 
     let extConfig = {};
+
+    if (self.options.enablePlaybackRates) {
+      extConfig = Object.assign(extConfig, {
+        playbackRates: ['0.8', '1.0', '1.25', '1.5', '2.0']
+      });
+    }
 
     if (self.options.statsInfo) {
       var statsInfo = self.options.statsInfo;
@@ -33,13 +38,17 @@ class AudioPlayer extends Emitter {
       playlist: self.options.url,
       template: self.options.content,
       autoplay: true, //音频自动播放开启
-      remeberLastPos: true,
-      playbackRates: ['0.8', '1.0', '1.25', '1.5', '2.0'],
+      customPos: self.options.customPos,
+      remeberLastPos: true
     });
     var player = new AudioPlayerSDK(extConfig);
 
     player.on('ready', function(e) {
       self.emit('ready', e);
+    });
+
+    player.on('firstplay', function (e) {
+      player.setCurrentTime(self.options.customPos);
     });
 
     player.on('timeupdate', function(e) {
