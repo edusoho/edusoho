@@ -113,8 +113,7 @@ export default {
       return pathName2Portal[this.pathName];
     },
     supportGrouponVersion() {
-      // return this.supportVersion('1.4.0');
-      return true;
+      return this.supportVersion('1.4.0');
     },
   },
   created() {
