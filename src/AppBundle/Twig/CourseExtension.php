@@ -78,6 +78,7 @@ class CourseExtension extends \Twig_Extension
             'seq_GT' => $task['seq'],
         );
         $tasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, 1);
+
         return reset($tasks);
     }
 
