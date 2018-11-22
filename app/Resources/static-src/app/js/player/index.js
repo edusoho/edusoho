@@ -35,6 +35,7 @@ class Show {
     this.agentInWhiteList = container.data('agentInWhiteList');
     this.disableVolumeButton = container.data('disableVolumeButton');
     this.disablePlaybackButton = container.data('disablePlaybackButton');
+    this.disableModeSelection = container.data('disableModeSelection');
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
     this.autoplay = container.data('autoplay');
@@ -79,6 +80,7 @@ class Show {
         agentInWhiteList: this.agentInWhiteList,
         timelimit: this.timelimit,
         enablePlaybackRates: this.enablePlaybackRates,
+        disableModeSelection: this.disableModeSelection,
         videoH5: this.videoH5,
         controlBar: {
           disableVolumeButton: this.disableVolumeButton,
