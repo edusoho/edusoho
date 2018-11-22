@@ -23,8 +23,8 @@ class AddCourseThreadFields extends Migration
     {
         $container = $this->getContainer();
         $db = $container['db'];
-        $db->exec("ALTER TABLE `course_thread` DROP column `videoAskTime`;");
-        $db->exec("ALTER TABLE `course_thread` DROP column `mediaId`;");
-        $db->exec("ALTER TABLE `course_thread` DROP column `source`;");
+        $db->exec('ALTER TABLE `course_thread` DROP column `videoAskTime`;');
+        $db->exec('ALTER TABLE `course_thread` DROP column `videoId`;');
+        $db->exec('ALTER TABLE `course_thread` DROP column `source`;');
     }
 }
