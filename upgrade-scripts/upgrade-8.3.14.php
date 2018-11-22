@@ -100,9 +100,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function audioActivityAddHasText()
     {
-        if (!isFieldsExist('activity_audio', 'hasText')) {
+        if (!$this->isFieldExist('activity_audio', 'hasText')) {
             $this->getConnection()->exec("
-                ALTER TABLE `activity_audio` ADD tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否包含图文';
+                ALTER TABLE `activity_audio` ADD `hasText` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否包含图文';
             ");
         }
         return 1;
