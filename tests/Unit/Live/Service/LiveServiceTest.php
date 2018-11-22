@@ -228,7 +228,7 @@ class LiveServiceTest extends BaseTestCase
         );
         $results = ReflectionUtils::invokeMethod($this->getLiveService(), 'buildCallbackUrl', $params);
 
-        $this->assertEquals(3, count($results));
+        $this->assertEquals(1, count($results));
         $this->assertArrayHasKey('type', $results[0]);
         $this->assertArrayHasKey('url', $results[0]);
     }
