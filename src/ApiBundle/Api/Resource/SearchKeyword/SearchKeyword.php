@@ -13,7 +13,6 @@ class SearchKeyword extends AbstractResource
         $limit = $request->query->get('limit');
 
         $keywords = $this->getSearchKeywordService()->searchSearchKeywords(array('likeName' => $name), array('times' => 'DESC'), 0, $limit);
-        $keywords = ($keywords) ? $this->filterKeyword($keywords) : array();
 
         return $keywords;
     }

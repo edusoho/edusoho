@@ -12,8 +12,8 @@ class AddCourseThreadFields extends Migration
         $container = $this->getContainer();
         $db = $container['db'];
         $db->exec("ALTER TABLE `course_thread` ADD `videoAskTime` int(10) DEFAULT 0 COMMENT '视频提问时间' AFTER `latestPostUserId`;");
-        $db->exec("ALTER TABLE `course_thread` ADD `mediaId` int(10) DEFAULT 0 COMMENT '视频Id' AFTER `vedioAskTime`;");
-        $db->exec("ALTER TABLE `course_thread` ADD `source` varchar(10) DEFAULT 0 COMMENT '提问来源' AFTER `mediaId`;");
+        $db->exec("ALTER TABLE `course_thread` ADD `videoId` int(10) DEFAULT 0 COMMENT '视频Id' AFTER `videoAskTime`;");
+        $db->exec("ALTER TABLE `course_thread` ADD `source` varchar(10) DEFAULT 0 COMMENT '提问来源' AFTER `videoId`;");
     }
 
     /**
@@ -23,8 +23,8 @@ class AddCourseThreadFields extends Migration
     {
         $container = $this->getContainer();
         $db = $container['db'];
-        $db->exec('ALTER TABLE `course_thread` DROP column `videoAskTime`;');
-        $db->exec('ALTER TABLE `course_thread` DROP column `mediaId`;');
-        $db->exec('ALTER TABLE `course_thread` DROP column `source`;');
+        $db->exec("ALTER TABLE `course_thread` DROP column `videoAskTime`;");
+        $db->exec("ALTER TABLE `course_thread` DROP column `mediaId`;");
+        $db->exec("ALTER TABLE `course_thread` DROP column `source`;");
     }
 }
