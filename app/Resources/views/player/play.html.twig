@@ -59,8 +59,7 @@
         ></div>
       </div>
       {% if cloudSdk %}
-        {# <script src="{{ cloud_sdk_url(cloudSdk) }}"></script> #}
-        <script src="http://service-cdn.cg-dev.cn/js-sdk/audio-player/sdk-v1.js?1.0.4.1"></script>{#发布前删除#}
+        <script src="{{ cloud_sdk_url(cloudSdk) }}"></script>
       {% endif %}
       {% do script(['libs/base.js','app/js/common.js','app/js/player/index.js'], 1000) %}
     {% endif %}
