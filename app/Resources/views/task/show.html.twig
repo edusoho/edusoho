@@ -7,7 +7,6 @@
 
 {% block body %}
   {% set preview = app.request.query.get('preview')  %}
-  {% set nextSeqTask = next_task(task.id) %}
 
   {% if member.role|default('') != 'student' %}
     {% set preview = true %}
@@ -32,7 +31,7 @@
       <div class="dashboard-body">
         <div class="{% if task.type in ['exercise' , 'homework' ,'testpaper'] %} mobile-scroll-wrapper {% endif %} all-wrapper">
           <iframe id="task-content-iframe" class="task-content-iframe" name="task-content-iframe"
-            data-next-task-url="{% if nextSeqTask %}{{ path('course_task_show',{'courseId':nextSeqTask.courseId,'id':nextSeqTask.id}) }}{% endif %}"
+            data-next-task-url="{% if nextTask %}{{ path('course_task_show',{'courseId':nextTask.courseId,'id':nextTask.id}) }}{% endif %}"
             data-event-enable="{% if allowEventAutoTrigger %}1{% else %}0{% endif %}"
             data-event-url="{{ path('course_task_trigger', {courseId: task.courseId, id: task.id}) }}"
             data-last-time="{{ date().timestamp }}"
