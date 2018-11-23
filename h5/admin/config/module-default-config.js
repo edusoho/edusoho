@@ -69,6 +69,9 @@ const BASE_MODULE = [
     name: '课程列表',
     default: MODULE_DEFAULT.courseList,
   }, {
+    name: '班级列表',
+    default: MODULE_DEFAULT.classList,
+  }, {
     name: '图片广告',
     default: MODULE_DEFAULT.poster,
   }

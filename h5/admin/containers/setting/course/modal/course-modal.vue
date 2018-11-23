@@ -29,7 +29,7 @@
       </div>
       <div class="help-text mbs">拖动{{ typeText }}名称可调整排序</div>
     </div>
-    <course-table :key="tableKey" :courseList="courseSets" @updateCourses="getUpdatedCourses" :typeText="typeText"></course-table>
+    <course-table :key="tableKey" :courseList="courseSets" @updateCourses="getUpdatedCourses" :type="type"></course-table>
     <span slot="footer" class="course-modal__footer dialog-footer">
       <el-button class="text-medium btn-border-primary" size="small" @click="modalVisible = false">取 消</el-button>
       <el-button class="text-medium" type="primary" size="small" @click="saveHandler">保 存</el-button>
@@ -61,9 +61,9 @@ export default {
     limit: {
       default: '',
     },
-    typeText: {
+    type: {
       type: String,
-      default: '课程'
+      default: 'course_list'
     }
   },
   data () {
@@ -86,12 +86,19 @@ export default {
     },
     valueKey: {
       get() {
-        return this.typeText === '班级' ? 'title' : 'displayedTitle';
+        return this.type === 'class_list' ? 'title' : 'displayedTitle';
       },
       set() {}
     },
-    unitType() {
-      return this.typeText === '课程' ? '课程' : '活动';
+    typeText: {
+      get() {
+        if (this.type === 'course_list') {
+          return '课程'
+        } else if (this.type === 'class_list') {
+          return '班级'
+        }
+        return '活动';
+      }
     },
   },
   watch: {
@@ -112,7 +119,7 @@ export default {
   methods: {
     ...mapActions([
       'getCourseList',
-      'getClassList'
+      'getClassList',
       'getMarketingList'
     ]),
     restoreListIds() {
@@ -171,7 +178,6 @@ export default {
           type: this.type,
           itemType: 'course'
         }).then(res => {
-          this.cacheResult[queryString] = res.data;
           cb(res.data);
         })
         return;

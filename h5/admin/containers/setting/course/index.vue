@@ -77,7 +77,7 @@
     <course-modal slot="modal"
       :visible="modalVisible"
       :limit="limit"
-      :typeText="typeLabel"
+      :type="type"
       :courseList="copyModuleData.data.items"
       @visibleChange="modalVisibleHandler"
       @updateCourses="getUpdatedCourses"></course-modal>
@@ -93,7 +93,8 @@ import treeDigger from '@admin/utils/tree-digger';
 
 const optionLabel = {
   'course_list': '课程',
-  'class_list': '班级'
+  'class_list': '班级',
+  'groupon': '活动',
 }
 
 export default {

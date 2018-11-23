@@ -1,5 +1,5 @@
 const head = {
-  course: [
+  course_list: [
     {
       col: 5,
       title: '课程名称',
@@ -8,6 +8,29 @@ const head = {
       col: 3,
       title: '商品价格',
       label: 'price',
+    }, {
+      col: 3,
+      title: '创建时间',
+      label: 'createdTime',
+    }, {
+      col: 0,
+      title: '操作',
+      label: 'delete',
+    }
+  ],
+  class_list: [
+    {
+      col: 4,
+      title: '班级名称',
+      label: 'title',
+    }, {
+      col: 2,
+      title: '商品价格',
+      label: 'price',
+    }, {
+      col: 2,
+      title: '课程数量',
+      label: 'courseNum',
     }, {
       col: 3,
       title: '创建时间',

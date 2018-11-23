@@ -11,7 +11,7 @@
       @updateModule="updateHandler(module, index)"></course>
 
     <!-- 班级列表 -->
-    <course v-if="module.type === moduleType.classList"
+    <course v-if="module.type === moduleDefault.classList.type"
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
       @updateModule="updateHandler(module, index)"></course>
 
@@ -99,13 +99,7 @@ export default {
   },
   data () {
     return {
-      moduleType: {
-        slideShow: 'slide_show',
-        courseList: 'course_list',
-        classList: 'class_list',
-        poster: 'poster',
-        incomplete: false,
-      }
+      incomplete: false,
       moduleDefault: MODULE_DEFAULT,
     }
   },

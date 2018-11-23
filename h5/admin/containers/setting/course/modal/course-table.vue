@@ -51,32 +51,14 @@ export default {
       type: Array,
       default: [],
     },
-    typeText: {
+    type: {
       type: String,
-      default: '课程'
+      default: 'course_list'
     }
   },
   data () {
     return {
-      head: [
-        {
-          col: 5,
-          title: `${this.typeText}名称`,
-          label:  this.typeText === '班级' ? 'title' : 'displayedTitle',
-        }, {
-          col: 3,
-          title: '商品价格',
-          label: 'price',
-        }, {
-          col: 3,
-          title: '创建时间',
-          label: 'createdTime',
-        }, {
-          col: 0,
-          title: '操作',
-          label: 'delete',
-        }
-      ],
+      head,
     }
   },
   computed: {
@@ -87,7 +69,7 @@ export default {
       set(courses) {
         this.$emit('updateCourses', courses);
       }
-    },
+    }
   },
   methods: {
     tdClass(ratio) {

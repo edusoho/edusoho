@@ -97,23 +97,23 @@ export default {
       incomplete: true,
       validateResults: [],
       currentModuleIndex: '0',
-      moduleItems: [{
-          name: '轮播图',
-          default: moduleDefault.slideShow,
-        },
-        {
-          name: '课程列表',
-          default: moduleDefault.courseList,
-        },
-        {
-          name: '班级列表',
-          default: moduleDefault.classList,
-        },
-        {
-          name: '图片广告',
-          default: moduleDefault.poster,
-        }
-      ],
+      // moduleItems: [{
+      //     name: '轮播图',
+      //     default: moduleDefault.slideShow,
+      //   },
+      //   {
+      //     name: '课程列表',
+      //     default: moduleDefault.courseList,
+      //   },
+      //   {
+      //     name: '班级列表',
+      //     default: moduleDefault.classList,
+      //   },
+      //   {
+      //     name: '图片广告',
+      //     default: moduleDefault.poster,
+      //   }
+      // ],
       baseModules: BASE_MODULE,
       marketingModules: MARKETING_MODULE,
       typeCount: {},

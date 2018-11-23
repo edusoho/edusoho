@@ -42,6 +42,7 @@ const config = [
     name: 'getClassList',
     url: '/classrooms',
     method: 'GET'
+  }, {
     // 微营销活动列表数据
     name: 'getMarketingList',
     url: '/marketing_activities',
