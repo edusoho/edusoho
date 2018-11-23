@@ -17,6 +17,7 @@ class CouponDaoImpl extends AdvancedDaoImpl implements CouponDao
                 'targetId = :targetId',
                 'targetType = :targetType',
                 'batchId = :batchId',
+                'batchId IN ( :batchIds)',
                 'batchId <> :batchIdNotEqual',
                 'type = :type',
                 'status = :status',
@@ -43,7 +44,7 @@ class CouponDaoImpl extends AdvancedDaoImpl implements CouponDao
 
     public function getByCode($code, array $options = array())
     {
-        $lock = isset($options['lock']) && $options['lock'] === true;
+        $lock = isset($options['lock']) && true === $options['lock'];
         $sql = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1".($lock ? ' FOR UPDATE' : '');
 
         return $this->db()->fetchAssoc($sql, array($code)) ?: null;
