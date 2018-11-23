@@ -9,9 +9,9 @@ class SearchKeywordDaoImpl extends GeneralDaoImpl implements SearchKeywordDao
 {
     protected $table = 'search_keyword';
 
-    public function getByName($name)
+    public function getByNameAndType($name, $type)
     {
-        return $this->getByFields(array('name' => $name));
+        return $this->getByFields(array('name' => $name, 'type' => $type));
     }
 
     public function declares()
@@ -22,6 +22,7 @@ class SearchKeywordDaoImpl extends GeneralDaoImpl implements SearchKeywordDao
             'conditions' => array(
                 'name = :name',
                 'name LIKE :likeName',
+                'type = :type',
             ),
         );
     }

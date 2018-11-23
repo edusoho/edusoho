@@ -10,7 +10,7 @@ interface SearchKeywordService
 
     public function getSearchKeyword($id);
 
-    public function getSearchKeywordByName($name);
+    public function getSearchKeywordByNameAndType($name, $type);
 
     public function searchSearchKeywords($conditions, $orderBy, $start, $limit);
 

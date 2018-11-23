@@ -58,6 +58,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
             'orderbys' => array('createdTime'),
             'conditions' => array(
                 'updatedTime >= :updatedTime_GE',
+                'createdTime >= :createdTime_GE',
                 'courseSetId = :courseSetId',
                 'courseId = :courseId',
                 'courseId IN ( :courseIds)',

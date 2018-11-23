@@ -9,37 +9,13 @@ class SearchKeyword extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
-        $name = $request->query->get('title');
+        $title = $request->query->get('title');
+        $type = $request->query->get('type');
         $limit = $request->query->get('limit');
 
-        $keywords = $this->getSearchKeywordService()->searchSearchKeywords(array('likeName' => $name), array('times' => 'DESC'), 0, $limit);
+        $keywords = $this->getSearchKeywordService()->searchSearchKeywords(array('likeName' => $title, 'type' => $type), array('times' => 'DESC'), 0, $limit);
 
         return $keywords;
-    }
-
-    public function add(ApiRequest $request)
-    {
-        $name = $request->request->get('title');
-
-        $keyword = $this->getSearchKeywordService()->getSearchKeywordByName($name);
-        if ($keyword) {
-            $this->getSearchKeywordService()->addSearchKeywordTimes($keyword['id']);
-            $result = $this->getSearchKeywordService()->getSearchKeyword($keyword['id']);
-        } else {
-            $result = $this->getSearchKeywordService()->createSearchKeyword(array('name' => $name));
-        }
-
-        return $result;
-    }
-
-    protected function filterKeyword($keywords)
-    {
-        $result = array();
-        foreach ($keywords as $keyword) {
-            array_push($result, $keyword['name']);
-        }
-
-        return $result;
     }
 
     /**
