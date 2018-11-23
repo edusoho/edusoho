@@ -5,9 +5,14 @@
         <img v-bind:src="imgSrc">
       </div>
       <div class="e-course__right pull-left">
-        <div class="e-course__title text-overflow">{{ title }}</div>
-        <div class="e-course__project text-overflow">
-          <span v-if="teachPlan">{{ teachPlan }}</span>
+        <div v-if="type === 'confirmOrder'">
+          <div class="e-course__title course-confirm-title">{{ title }}</div>
+        </div>
+        <div v-else>
+          <div class="e-course__title text-overflow">{{ title }}</div>
+          <div class="e-course__project text-overflow">
+            <span v-if="teachPlan">{{ teachPlan }}</span>
+          </div>
         </div>
         <switchBox :type="type" :course="course" :order="order" :studentNum="course.studentNum" :publishedTaskNum="course.publishedTaskNum"></switchBox>
       </div>
@@ -72,12 +77,14 @@
         handler(course) {
           // 小程序后台替换图片协议
           const courseSet = course.courseSet;
+          const mpSettingPath = this.pathName === 'miniprogramSetting' && courseSet
 
-          if (this.pathName !== 'h5Setting' && courseSet) {
-            const keys = Object.keys(courseSet.cover);
-            for (var i = 0; i < keys.length; i++) {
-              courseSet.cover[keys[i]] = courseSet.cover[keys[i]].replace(/^(\/\/)|(http:\/\/)/, 'https://');
-            }
+          if (!mpSettingPath) {
+            return;
+          }
+          const keys = Object.keys(courseSet.cover);
+          for (var i = 0; i < keys.length; i++) {
+            courseSet.cover[keys[i]] = courseSet.cover[keys[i]].replace(/^(\/\/)|(http:\/\/)/, 'https://');
           }
         },
         immediate: true,

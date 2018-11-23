@@ -1,10 +1,10 @@
 import Vue from 'vue';
 
-export default (data, startValidate) => {
+export default (module, startValidate) => {
   // 轮播图
-  if (data.type == 'slide_show') {
-    for (let num in data.data) {
-      const imgUri = data.data[num].image.uri;
+  if (module.type == 'slide_show') {
+    for (let num in module.data) {
+      const imgUri = module.data[num].image.uri;
       if (!imgUri) {
         if (!startValidate) return true;
         Vue.prototype.$message({
@@ -17,9 +17,9 @@ export default (data, startValidate) => {
   }
 
   // 课程
-  if (data.type == 'course_list') {
-    const courseExist = data.data.items.length;
-    if (!data.data.title || (data.data.sourceType == 'custom' && !courseExist)) {
+  if (module.type == 'course_list') {
+    const courseExist = module.data.items.length;
+    if (!module.data.title || (module.data.sourceType == 'custom' && !courseExist)) {
       if (!startValidate) return true;
       Vue.prototype.$message({
         message: '请完善课程模块信息！',
@@ -30,12 +30,25 @@ export default (data, startValidate) => {
   }
 
   // 广告
-  if (data.type == 'poster') {
-    const imgUri = data.data.image.uri;
+  if (module.type == 'poster') {
+    const imgUri = module.data.image.uri;
     if (!imgUri) {
       if (!startValidate) return true;
       Vue.prototype.$message({
         message: '请完善广告模块信息！',
+        type: 'error'
+      });
+      return true;
+    }
+  }
+
+  // 营销活动——拼团
+  if (module.type == 'groupon') {
+    const activityExist = module.data.activity.id;
+    if (!activityExist) {
+      if (!startValidate) return true;
+      Vue.prototype.$message({
+        message: '请完善拼团模块信息！',
         type: 'error'
       });
       return true;

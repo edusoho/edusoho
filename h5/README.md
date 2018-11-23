@@ -10,14 +10,21 @@
 ## Build Setup
 
 ``` bash
-# 安装依赖
-npm install
+# 安装依赖 (锁定版本安装依赖)
+yarn
 
 # 开发阶段
-npm run dev
+npm run dev:h5
+npm run dev:admin
 
 # build 打包
 npm run build
+npm run build:h5
+npm run build:admin
+
+# analyze 分析项目依赖
+npm run analyze:h5
+npm run analyze:admin
 
 ```
 

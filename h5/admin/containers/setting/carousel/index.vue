@@ -40,7 +40,7 @@
 
 <script>
 import Api from '@admin/api';
-import moduleDefault from '@admin/utils/module-default-config';
+import { MODULE_DEFAULT } from '@admin/config/module-default-config';
 import item from './item';
 import moduleFrame from '../module-frame';
 import courseModal from '../course/modal/course-modal';
@@ -119,7 +119,7 @@ export default {
   methods: {
     addItem() {
       // 需要深拷贝对象
-      const itemString = JSON.stringify(moduleDefault.slideShow.data[0]);
+      const itemString = JSON.stringify(MODULE_DEFAULT.slideShow.data[0]);
       const itemObject = JSON.parse(itemString);
       this.copyModuleData.data.push(itemObject)
     },

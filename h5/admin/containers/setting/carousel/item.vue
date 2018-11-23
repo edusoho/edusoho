@@ -23,6 +23,7 @@
           v-show="option.img"
           :img="option.img"
           :fixed="option.fixed"
+          :enlarge="option.enlarge"
           :autoCrop="option.autoCrop"
           :fixedNumber="option.fixedNumber"
           :autoCropWidth="option.autoCropWidth"
@@ -36,7 +37,7 @@
     </el-dialog>
 
     <img class="icon-delete" src="static/images/delete.png" v-show="active === index" @click="handleRemove($event, index, itemNum)">
-    <div class="add-title pull-left">标题：<el-input size="mini" v-model="item.title" placeholder="请输入标题" clearable></el-input>
+    <div class="add-title pull-left">标题：<el-input size="mini" v-model="item.title" placeholder="请输入标题" maxLength="15" clearable></el-input>
     </div>
     <div class="pull-left">链接：<el-button type="info" size="mini" @click="openModal" v-show="!linkTextShow">选择课程</el-button>
       <el-tag
@@ -56,7 +57,7 @@
 
 <script>
   import Api from '@admin/api';
-  import VueCropper from 'vue-cropper';
+  import { VueCropper } from 'vue-cropper';
 
   export default {
     components: {
@@ -73,6 +74,8 @@
           autoCropHeight: 200,
           fixedNumber: [375, 200],
           fixed: true,
+          high: false,
+          enlarge: 2,
         },
         imageCropped: false,
         dialogVisible: false,

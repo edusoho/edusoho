@@ -37,6 +37,14 @@ a {
   text-overflow:ellipsis;
 }
 
+@mixin text-overflow-multi($line) {
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
+
 .primary-btn {
   margin-top: vw(30);
   -webkit-text-fill-color: white;

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="setting-page">
-      <img class="find-head-img" :src="pathName === 'miniprogramSetting' ? 'static/images/miniprogram_head.jpg' : 'static/images/find_head_url.jpg'" alt="">
-      <div class="find-navbar" :class="{'find-navbar-miniprogram': pathName === 'miniprogramSetting'}">
-        <i class="h5-icon h5-icon-houtui"></i>{{ pathName === 'miniprogramSetting' ? '小程序' : '微网校'}}
+    <div class="setting-page" :class="{'setting-page-miniprogram': portal === 'miniprogram' && supportGrouponVersion}">
+      <img class="find-head-img" :src="portal === 'miniprogram' ? 'static/images/miniprogram_head.jpg' : 'static/images/find_head_url.jpg'" alt="">
+      <div class="find-navbar" :class="{'find-navbar-miniprogram': portal === 'miniprogram'}">
+        <i class="h5-icon h5-icon-houtui"></i>{{ portal === 'miniprogram' ? '小程序' : '微网校'}}
       </div>
 
       <!-- 操作预览区域 -->
@@ -11,7 +11,7 @@
         <draggable
           v-model="modules"
           :options="{
-            filter: stopDraggleDoms,
+            filter: stopDraggleClasses,
             preventOnFilter: false,
           }">
           <module-template v-for="(module, index) in modules"
@@ -28,13 +28,25 @@
         </draggable>
       </div>
 
-      <!-- 底部添加组件按钮 -->
-      <div class="find-section clearfix">
+      <!-- h5配置——底部添加组件按钮 -->
+      <div class="find-section clearfix" v-if="portal === 'h5' || !supportGrouponVersion">
         <div class="section-title">点击添加组件</div>
-        <el-button class="find-section-item" type="" size="medium"
-          v-for="(item, index) in moduleItems"
-          @click="addModule(item, index)"
-          :key="index">
+        <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+          v-for="(item, index) in baseModules" :key="index">
+          {{ item.name }}
+        </el-button>
+      </div>
+
+      <!-- 小程序配置——底部添加组件按钮 -->
+      <div class="find-section clearfix" v-if="portal === 'miniprogram' && supportGrouponVersion">
+        <div class="section-title">基础组件</div>
+        <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+          v-for="(item, index) in baseModules" :key="`base-${index}`">
+          {{ item.name }}
+        </el-button>
+        <div class="section-title">营销组件 <a class="color-primary pull-right fsn" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a> </div>
+        <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+          v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
           {{ item.name }}
         </el-button>
       </div>
@@ -59,9 +71,11 @@
 <script>
 import Api from '@admin/api';
 import * as types from '@admin/store/mutation-types';
-import moduleDefault from '@admin/utils/module-default-config';
+import { BASE_MODULE, MARKETING_MODULE } from '@admin/config/module-default-config';
 import ModuleCounter from '@admin/utils/module-counter';
-import pathName2Portal from '@admin/utils/api-portal-config';
+import needUpgrade from '@admin/utils/version-compare';
+import pathName2Portal from '@admin/config/api-portal-config';
+import marketingMixins from '@admin/mixins/marketing';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import moduleTemplate from './module-template';
 import findFooter from './footer';
@@ -74,6 +88,7 @@ export default {
     draggable,
     findFooter
   },
+  mixins: [marketingMixins],
   data() {
     return {
       title: 'EduSoho 微网校',
@@ -82,32 +97,33 @@ export default {
       incomplete: true,
       validateResults: [],
       currentModuleIndex: '0',
-      moduleItems: [{
-          name: '轮播图',
-          default: moduleDefault.slideShow,
-        },
-        {
-          name: '课程列表',
-          default: moduleDefault.courseList,
-        },
-        {
-          name: '图片广告',
-          default: moduleDefault.poster,
-        }
-      ],
+      baseModules: BASE_MODULE,
+      marketingModules: MARKETING_MODULE,
       typeCount: {},
       pathName: this.$route.name,
+      currentMPVersion: '0.0.0',
     }
   },
   computed: {
     ...mapState(['isLoading']),
-    stopDraggleDoms() {
+    stopDraggleClasses() {
       return '.module-frame__setting, .find-footer, .search__container, .el-dialog__header, .el-dialog__footer';
+    },
+    portal() {
+      return pathName2Portal[this.pathName];
+    },
+    supportGrouponVersion() {
+      return this.supportVersion('1.4.0');
     },
   },
   created() {
-    this.load();
+    // 获取小程序版本号
+    Api.getMPVersion().then(res => {
+      this.currentMPVersion = res.current_version.version
+    });
 
+    // 请求发现页配置
+    this.load();
     // 获得课程分类列表
     this.getCategories();
   },
@@ -118,6 +134,9 @@ export default {
       'saveDraft',
       'getDraft',
     ]),
+    supportVersion(version) {
+      return !needUpgrade(version, this.currentMPVersion)
+    },
     moduleCountInit() {
       // 模块类型计数初始化
       const typeCount = new ModuleCounter();
@@ -156,7 +175,7 @@ export default {
       }
       this.typeCount.addByType(data.default.type);
 
-      const defaultString = JSON.stringify(this.moduleItems[index].default); // 需要一个深拷贝对象
+      const defaultString = JSON.stringify(data.default); // 需要一个深拷贝对象
       const defaultCopied = JSON.parse(defaultString);
 
       this.modules.push(defaultCopied);
@@ -167,7 +186,7 @@ export default {
       const mode = this.$route.query.draft == 1 ? 'draft' : 'published';
 
       this.getDraft({
-        portal: pathName2Portal[this.pathName],
+        portal: this.portal,
         type: 'discovery',
         mode,
       }).then(res => {
@@ -178,7 +197,7 @@ export default {
     reset() {
       // 删除草稿配置配置
       this.deleteDraft({
-        portal: pathName2Portal[this.pathName],
+        portal: this.portal,
         type: 'discovery',
         mode: 'draft',
       }).then(res => {
@@ -215,7 +234,7 @@ export default {
         this.saveDraft({
           data,
           mode,
-          portal: pathName2Portal[this.pathName],
+          portal: this.portal,
           type: 'discovery',
         }).then(() => {
 
