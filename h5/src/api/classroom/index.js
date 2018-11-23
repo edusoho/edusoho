@@ -13,5 +13,9 @@ export default [
     name: 'getReviews',
     url: '/classrooms/{classroomId}/reviews',
     method: 'GET'
+  }, {
+    // 获取课程列表数据
+    name: 'getClassList',
+    url: '/classrooms'
   }
 ];

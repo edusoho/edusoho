@@ -25,7 +25,6 @@ const courseListData = (data, type, typeList) => {
           }
         };
       }
-
       return {
         id: data.id,
         imgSrc: {

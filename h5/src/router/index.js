@@ -87,14 +87,14 @@ const routes = [
     path: '/course/explore',
     name: 'more_course',
     meta: {
-      title: ''
+      title: '所有课程'
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/more/course/index.vue')
   }, {
     path: '/class/explore',
     name: 'more_class',
     meta: {
-      title: ''
+      title: '所有班级'
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/more/class/index.vue')
   }, {

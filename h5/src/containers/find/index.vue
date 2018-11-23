@@ -90,6 +90,7 @@
 
             this.parts[index].data.items = res.data;
           })
+          return;
         }
         Api.getCourseList({params}).then(res => {
           if (this.sourceType === 'custom') return;

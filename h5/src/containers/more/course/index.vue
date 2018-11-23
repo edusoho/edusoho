@@ -74,9 +74,6 @@
       }
     },
     methods: {
-      ...mapMutations({
-        setNavbarTitle: types.SET_NAVBAR_TITLE
-      }),
       setQuery(value) {
         this.selectedData = value;
       },
@@ -165,7 +162,6 @@
           const items = Object.values(data)
           items.pop();
           this.selectItems = items;
-          this.setNavbarTitle(data.title)
         });
       // 根据筛选条件获取相应课程
       // this.requestCourses(config)
