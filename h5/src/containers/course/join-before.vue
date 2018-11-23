@@ -37,8 +37,7 @@
   import Directory from './detail/directory';
   import DetailHead from './detail/head';
   import DetailPlan from './detail/plan';
-  import { mapMutations, mapActions, mapState } from 'vuex';
-  import * as types from '@/store/mutation-types';
+  import { mapActions, mapState } from 'vuex';
   import redirectMixin from '@/mixins/saveRedirect';
 
   export default {

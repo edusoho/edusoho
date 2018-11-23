@@ -1,8 +1,8 @@
 <template>
-  <e-panel title="教师介绍">
+  <e-panel :title="title">
     <template v-for="item in teacherInfo">
       <div class="teacher-content">
-        <img :src="item.avatar.large"
+        <img :src="item.avatar && item.avatar.large"
         class="avatar-img">
         <div class="teacher-cell">
           <span class="dark font-family-PFM">{{item.nickname}}</span>
@@ -15,7 +15,7 @@
 <script>
 export default {
   name: 'teacher',
-  props: ['teacherInfo']
+  props: ['teacherInfo', 'title'],
 }
 </script>
 

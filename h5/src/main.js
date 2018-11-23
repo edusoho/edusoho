@@ -24,7 +24,8 @@ import {
   List,
   Field,
   Uploader,
-  Popup
+  Popup,
+  Rate
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -38,6 +39,7 @@ Vue.component('van-tab', Tab);
 Vue.component('van-tabs', Tabs);
 Vue.component('van-field', Field);
 Vue.component('van-uploader', Uploader);
+Vue.component('van-rate', Rate);
 
 Vue.use(filters);
 Vue.use(Popup);
