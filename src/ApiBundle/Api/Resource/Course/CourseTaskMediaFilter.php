@@ -15,5 +15,9 @@ class CourseTaskMediaFilter extends Filter
         if (isset($data['mediaType']) && 'text' == $data['mediaType']) {
             $data['media']['content'] = $this->convertAbsoluteUrl($data['media']['content']);
         }
+
+        if (isset($data['mediaType']) && 'audio' == $data['mediaType']) {
+            $data['media']['text'] = $this->convertAbsoluteUrl($data['media']['text']);
+        }
     }
 }

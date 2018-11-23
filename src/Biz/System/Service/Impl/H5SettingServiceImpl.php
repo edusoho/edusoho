@@ -19,7 +19,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $discoverySettings = $this->getDefaultDiscovery($portal);
         }
 
-        foreach ($discoverySettings as &$discoverySetting) {
+        foreach ($discoverySettings as $key => &$discoverySetting) {
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 if (!empty($discoverySetting['data']['lastDays'])) {
                     $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
@@ -58,11 +58,16 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                     $link['url'] = '';
                 }
             }
-
             if (in_array($discoverySetting['type'], array('groupon'))) {
-                $developerSetting = $this->getSettingService()->get('developer', array());
-                $marketingDomain = !empty($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : 'http://wyx.edusoho.cn';
-                $discoverySetting['data']['url'] = $marketingDomain.'/h5/a/groupon/show/'.$discoverySetting['data']['activity']['id'];
+                $activity = $discoverySetting['data']['activity'];
+                $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+                if (empty($remoteActvity) || isset($remoteActvity['error'])) {
+                    unset($discoverySettings[$key]);
+                    continue;
+                }
+                $discoverySetting['data']['activity']['status'] = $remoteActvity['status'];
+                $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
+                $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
             }
         }
 
@@ -226,5 +231,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     protected function getBlockService()
     {
         return $this->biz->service('Content:BlockService');
+    }
+
+    protected function getMarketingPlatformService()
+    {
+        return $this->biz->service('Marketing:MarketingPlatformService');
     }
 }
