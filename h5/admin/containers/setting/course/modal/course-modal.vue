@@ -7,6 +7,7 @@
     <div class="course-modal__header" slot="title">
       <span class="header__title">选择{{typeText}}</span>
       <span class="header__subtitle">仅显示已发布{{typeText}}</span>
+      <a v-if="type === 'groupon'" class="color-primary pull-right fsn mrl" :href="createMarketingUrl" target="_blank">创建拼团活动</a>
     </div>
     <div class="course-modal__body">
       <div class="search__container">
@@ -26,7 +27,7 @@
           @select="selectHandler"
         ></el-autocomplete>
       </div>
-      <div class="help-text mbs">拖动{{typeText}}名称可调整排序</div>
+      <div class="help-text mbs">拖动{{ typeText }}名称可调整排序</div>
     </div>
     <course-table :key="tableKey" :courseList="courseSets" @updateCourses="getUpdatedCourses" :typeText="typeText"></course-table>
     <span slot="footer" class="course-modal__footer dialog-footer">
@@ -37,11 +38,14 @@
 </template>
 
 <script>
-import courseTable from './course-table'
+import marketingMixins from '@admin/mixins/marketing';
+import head from '@admin/config/modal-config';
+import courseTable from './course-table';
 import { mapMutations, mapState, mapActions } from 'vuex';
 
 export default {
   name: 'course-modal',
+  mixins: [marketingMixins],
   components: {
     courseTable,
   },
@@ -67,7 +71,8 @@ export default {
       tableKey: 0,
       keyWord: '',
       courseSets: this.courseList,
-      courseListIds: []
+      courseListIds: [],
+      head,
     }
   },
   computed: {
@@ -84,7 +89,10 @@ export default {
         return this.typeText === '班级' ? 'title' : 'displayedTitle';
       },
       set() {}
-    }
+    },
+    unitType() {
+      return this.typeText === '课程' ? '课程' : '活动';
+    },
   },
   watch: {
     visible(val) {
@@ -105,6 +113,7 @@ export default {
     ...mapActions([
       'getCourseList',
       'getClassList'
+      'getMarketingList'
     ]),
     restoreListIds() {
       this.courseListIds = [];
@@ -130,7 +139,7 @@ export default {
 
       if (exccedLimit) {
         this.$message({
-          message: `当前最多可选 ${this.limit} 个${this.typeText}`,
+          message: `当前最多可选 ${this.limit} 个${ this.typeText }`,
           type: 'warning'
         });
         return;
@@ -155,6 +164,19 @@ export default {
         })
         return;
       }
+      if (this.type !== 'course') {
+        this.getMarketingList({
+          name: queryString,
+          statuses: 'ongoing,unstart',
+          type: this.type,
+          itemType: 'course'
+        }).then(res => {
+          this.cacheResult[queryString] = res.data;
+          cb(res.data);
+        })
+        return;
+      }
+
       this.getCourseList({
         courseSetTitle: queryString
       }).then(res => {

@@ -50,6 +50,8 @@
         active: 0,
         tabsClass: '',
         learnExpiry: '永久有效',
+        startDateStr: '',
+        endDateStr: '',
         tops: {
           tabsTop: 0,
           teacherTop: 0,
@@ -133,13 +135,16 @@
 
         if (Number(this.details.buyable) && isPast) {
           if (+this.details.price) {
+            const expiryMode = this.details.learningExpiryDate.expiryMode;
+            const expiryScopeStr = `${this.startDateStr} 至 ${this.endDateStr}`;
+            const expiryStr = (expiryMode === 'date') ? expiryScopeStr : this.learnExpiry
             this.$router.push({
               name: 'order',
               params: {
                 id: this.details.id,
               },
               query: {
-                expiry: this.learnExpiry
+                expiryScope: expiryStr
               }
             });
           } else {
@@ -149,8 +154,10 @@
           }
         }
       },
-      getLearnExpiry(val) {
-        this.learnExpiry = val;
+      getLearnExpiry(data) {
+        this.learnExpiry = data.val;
+        this.startDateStr = data.startDateStr;
+        this.endDateStr = data.endDateStr;
       }
     },
     destroyed () {

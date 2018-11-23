@@ -76,6 +76,50 @@
     }
   }
 
+  .e-groupon {
+    margin: 5px 10px;
+    &__tag {
+      -webkit-transform: scale(0.85);
+      transform: scale(0.85);
+      transform-origin: -20% 0;
+      top: 10px;
+      left: 7px;
+    }
+    &__image-container {
+      height: 135px;
+    }
+    &__context {
+      padding: 5px 8px 10px;
+      .context-title {
+        -webkit-transform: scale(0.85);
+        transform: scale(0.85);
+        transform-origin: -20% 0;
+        font-size: 14px;
+      }
+      .context-sale {
+        &__sale-price {
+          -webkit-transform: scale(0.85);
+          transform: scale(0.85);
+          transform-origin: -20% 0;
+          font-size: 14px;
+        }
+        &__origin-price {
+          -webkit-transform: scale(0.85);
+          transform: scale(0.85);
+          transform-origin: -50% 0;
+          font-size: 12px;
+        }
+        &__shopping {
+          -webkit-transform: scale(0.85);
+          transform: scale(0.85);
+          transform-origin: -20% 0;
+          padding: 2px 6px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
   .e-course-switch-box {
     .switch-box__price {
       font-size: 12px;
@@ -98,6 +142,10 @@
       }
     }
   }
+}
+
+.find-page__part {
+  position: relative;
 }
 
 .preview-iframe {

@@ -7,7 +7,6 @@ import plugins from '@/plugins';
 import EdusohoUI from '@/components';
 import whiteList from '@/router/config/white-list';
 
-import 'vant/lib/vant-css/index.css';
 import '@/assets/styles/main.scss';
 import App from '@/App';
 import Api from '@/api';

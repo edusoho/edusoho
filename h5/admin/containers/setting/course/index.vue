@@ -15,7 +15,7 @@
         <div class="course-item-setting__section clearfix">
           <p class="pull-left section-left required-option">列表名称：</p>
           <div class="section-right">
-            <el-input size="mini" v-model="copyModuleData.data.title" placeholder="请输入列表名称" clearable></el-input>
+            <el-input size="mini" v-model="copyModuleData.data.title" maxLength="15" placeholder="请输入列表名称" clearable></el-input>
           </div>
         </div>
         <!-- 课程来源 -->

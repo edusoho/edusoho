@@ -16,7 +16,7 @@
     <div class="course-detail__validity">
       <div>
         <span class="mr20">学习有效期</span>
-        <span class="dark" v-html="learnExpiry"></span>
+        <span class="dark" v-html="learnExpiryHtml"></span>
       </div>
       <div v-if="details.buyExpiryTime != 0" class="mt5">
         <span class="mr20">购买截止日期</span>
@@ -60,10 +60,18 @@ export default {
         });
       }
     },
-    learnExpiry: {
+    learnExpiryHtml: {
       immediate: true,
       handler(val) {
-        this.$emit('getLearnExpiry', val);
+        const learnExpiryData = this.details.learningExpiryDate;
+        const startDateStr = learnExpiryData.expiryStartDate.slice(0, 10);
+        const endDateStr = learnExpiryData.expiryEndDate.slice(0, 10);
+
+        this.$emit('getLearnExpiry', {
+          val,
+          startDateStr,
+          endDateStr
+        });
       }
     }
   },
@@ -73,7 +81,7 @@ export default {
       selectedPlanId: state => state.selectedPlanId
     }),
     ...mapState(['courseSettings']),
-    learnExpiry() {
+    learnExpiryHtml() {
       const memberInfo = this.details.member;
       const learnExpiryData = this.details.learningExpiryDate;
       const expiryMode = learnExpiryData.expiryMode;

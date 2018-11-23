@@ -1,0 +1,74 @@
+.setting-groupon {
+  .groupon {
+    &-allocate {
+    }
+    &-item-setting {
+      background: #fff;
+      padding: 20px;
+      border: 1px solid #e1e1e1;
+
+      &__section{
+        position: relative;
+        margin-top: 15px;
+        &:first-child {
+          margin-top: 0;
+        }
+        .section-left {
+          display: inline;
+          margin: 0;
+          line-height: 28px;
+          font-size: 14px;
+        }
+        .section-right {
+          display: inline-block;
+          width: 212px;
+          line-height: 28px;
+        }
+      }
+    }
+  }
+}
+
+// 复写 h5 单位样式
+.e-groupon {
+  margin: 10px 20px;
+  border-radius: 4px;
+  &__tag {
+    top: 20px;
+    left: 14px;
+    padding: 0 6px;
+    font-size: 12px;
+    line-height: 24px;
+    &:after {
+      right: -6px;
+      border-left-width: 6px;
+      border-right-width: 6px;
+      border-top-width: 12px;
+      border-bottom-width: 12px;
+    }
+  }
+  &__image-container {
+    height: 188px;
+  }
+  &__context {
+    padding: 10px 10px 20px 10px;
+    .context-title {
+
+    }
+    .context-sale {
+      margin-top:8px;
+      &__sale-price {
+
+      }
+      &__origin-price {
+        margin-left: 5px;
+        font-size: 12px;
+      }
+      &__shopping {
+        padding: 6px 16px;
+        font-size: 14px;
+        border-radius: 2px;
+      }
+    }
+  }
+}
