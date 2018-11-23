@@ -10,8 +10,10 @@ class CourseThreadPost extends AbstractResource
     public function search(ApiRequest $request, $courseId, $threadId)
     {
         list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $afterTime = $request->query->get('afterTime');
         $conditions = array(
             'threadId' => $threadId,
+            'createdTime_GE' => $afterTime,
         );
 
         $total = $this->getCourseThreadService()->getThreadPostCountByThreadId($threadId);

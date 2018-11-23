@@ -28,9 +28,9 @@ class SearchKeywordServiceImpl extends BaseService implements SearchKeywordServi
         return $this->getSearchKeywordDao()->get($id);
     }
 
-    public function getSearchKeywordByName($name)
+    public function getSearchKeywordByNameAndType($name, $type)
     {
-        return $this->getSearchKeywordDao()->getByName($name);
+        return $this->getSearchKeywordDao()->getByNameAndType($name, $type);
     }
 
     public function searchSearchKeywords($conditions, $orderBy, $start, $limit)

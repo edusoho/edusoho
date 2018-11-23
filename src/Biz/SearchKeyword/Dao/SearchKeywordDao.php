@@ -4,5 +4,5 @@ namespace Biz\SearchKeyword\Dao;
 
 interface SearchKeywordDao
 {
-    public function getByName($name);
+    public function getByNameAndType($name, $type);
 }

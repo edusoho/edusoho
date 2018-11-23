@@ -8,8 +8,8 @@ use ApiBundle\Api\Resource\User\UserFilter;
 class CourseThreadFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'courseId', 'taskId', 'type', 'isStick', 'isElite', 'isClosed', 'private', 'title', 'content', 'source', 'postNum',
-        'hitNum', 'followNum', 'latestPostUserId', 'videoAskTime', 'mediaId', 'latestPostTime', 'courseSetId', 'createdTime', 'updatedTime', 'user', 'mediaUri',
+        'id', 'courseId', 'taskId', 'type', 'isStick', 'isElite', 'isClosed', 'private', 'title', 'content', 'source', 'postNum', 'userId',
+        'hitNum', 'followNum', 'latestPostUserId', 'videoAskTime', 'videoId', 'latestPostTime', 'courseSetId', 'createdTime', 'updatedTime', 'user', 'videoUri',
     );
 
     protected function publicFields(&$data)
