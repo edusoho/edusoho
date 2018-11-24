@@ -55,7 +55,7 @@
         @close="handleClose"
         v-show="linkTextShow">
         <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
-          <span slot="content">{{linkTextShow}}</span>
+          <span slot="content">{{ linkTextShow }}</span>
           <span>{{ linkTextShow }}</span>
         </el-tooltip>
       </el-tag>
@@ -86,10 +86,10 @@
           enlarge: 2,
         },
         linkOptions: [{
-          value: '课程',
+          type: 'course_list',
           label: '选择课程',
         }, {
-          value: '班级',
+          type: 'class_list',
           label: '选择班级',
         }],
         imageCropped: false,
@@ -226,7 +226,7 @@
       },
       insideLinkHandle(commands) {
         this.linkText = commands.label;
-        this.$emit('chooseCourse', commands.value);
+        this.$emit('chooseCourse', commands.type);
       }
     }
   }
