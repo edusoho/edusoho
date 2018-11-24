@@ -77,7 +77,7 @@
     <course-modal
       slot="modal"
       :visible="modalVisible"
-      :typeText="typeText"
+      :type="type"
       limit=1
       :courseList="courseSets"
       @visibleChange="modalVisibleHandler"
@@ -108,14 +108,14 @@ export default {
         'size-fit',
       ],
       linkOptions: [{
-        value: '课程',
+        type: 'course_list',
         label: '选择课程',
       }, {
-        value: '班级',
+        type: 'class_list',
         label: '选择班级',
       }],
       pathName: this.$route.name,
-      typeText: '课程',
+      type: 'course_list',
       linkText: '选择课程'
     }
   },
@@ -237,7 +237,7 @@ export default {
     },
     insideLinkHandle(commands) {
       this.modalVisible = true;
-      this.typeText = commands.value;
+      this.type = commands.type;
       this.linkText = commands.label;
     }
   }

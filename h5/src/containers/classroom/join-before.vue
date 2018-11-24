@@ -35,7 +35,7 @@
       <div class="segmentation"></div>
 
       <!-- 学员评价 -->
-      <review-list ref="review" :classId="details.classId" :reviews="details.reviews" title="学员评价" defaulValue="暂无评价"></review-list>
+      <review-list ref="review" :classId="details.classId" :reviews="details.reviews" title="学员评价" type="classroom" defaulValue="暂无评价"></review-list>
 
       <e-footer @click.native="handleJoin">{{details.access.code | filterJoinStatus('classroom')}}</e-footer>
     </div>
@@ -86,7 +86,10 @@
       }
     },
     mounted() {
-      window.addEventListener('scroll', this.handleScroll);
+      window.addEventListener('touchmove', this.handleScroll);
+    },
+    destroyed () {
+      window.removeEventListener('touchmove', this.handleScroll);
     },
     methods: {
       onTabClick(index, title) {

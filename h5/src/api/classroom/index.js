@@ -10,8 +10,8 @@ export default [
     url: '/classrooms/{classroomId}/members',
     method: 'POST'
   }, {
-    name: 'getReviews',
-    url: '/classrooms/{classroomId}/reviews',
+    name: 'getClassroomReviews',
+    url: '/classrooms/{id}/reviews',
     method: 'GET'
   }, {
     // 获取课程列表数据

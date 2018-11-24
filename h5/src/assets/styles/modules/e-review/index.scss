@@ -32,8 +32,8 @@
     padding: vw(15) 0;
     border-top: vw(1) solid #EEEEEE;
     &-avatar {
-      width: vw(24);
-      height: vw(24);
+      width: vw(24) !important;
+      height: vw(24) !important;
     }
     &-body {
       padding: 0 vw(24);
