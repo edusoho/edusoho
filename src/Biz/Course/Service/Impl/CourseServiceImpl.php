@@ -11,7 +11,6 @@ use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\MemberException;
-use Biz\Exception\UnableJoinException;
 use Biz\File\UploadFileException;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;

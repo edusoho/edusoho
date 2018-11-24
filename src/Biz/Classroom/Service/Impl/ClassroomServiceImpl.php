@@ -7,7 +7,6 @@ use Biz\BaseService;
 use Biz\Classroom\ClassroomException;
 use Biz\Common\CommonException;
 use Biz\Course\Dao\CourseNoteDao;
-use Biz\Exception\UnableJoinException;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\User\Service\UserService;
