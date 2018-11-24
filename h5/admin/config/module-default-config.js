@@ -25,6 +25,19 @@ const MODULE_DEFAULT = {
       items: []
     }
   },
+  classList: {
+    type: 'class_list',
+    moduleType: '',
+    data: {
+      title: '',
+      sourceType: 'condition',
+      categoryId: '0',
+      sort: 'recommendedSeq',
+      lastDays: '0',
+      limit: '4',
+      items: []
+    }
+  },
   poster: {
     type: 'poster',
     moduleType: '',
@@ -56,6 +69,9 @@ const BASE_MODULE = [
     name: '课程列表',
     default: MODULE_DEFAULT.courseList,
   }, {
+    name: '班级列表',
+    default: MODULE_DEFAULT.classList,
+  }, {
     name: '图片广告',
     default: MODULE_DEFAULT.poster,
   }
@@ -68,4 +84,28 @@ const MARKETING_MODULE = [
   }
 ]
 
-export { MODULE_DEFAULT, BASE_MODULE, MARKETING_MODULE };
+const VALUE_DEFAULT = {
+  class_list: {
+    key: 'title'
+  },
+  course_list: {
+    key: 'displayedTitle'
+  },
+  groupon: {
+    key: 'name'
+  }
+}
+
+const TYPE_TEXT_DEFAULT = {
+  course_list: {
+    text: '课程'
+  },
+  class_list: {
+    text: '班级'
+  },
+  groupon: {
+    text: '活动'
+  }
+}
+
+export { MODULE_DEFAULT, BASE_MODULE, MARKETING_MODULE, VALUE_DEFAULT, TYPE_TEXT_DEFAULT };

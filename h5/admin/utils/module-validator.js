@@ -29,6 +29,19 @@ export default (module, startValidate) => {
     }
   }
 
+  // 班级
+  if (module.type == 'class_list') {
+    const classExist = module.data.items.length;
+    if (!module.data.title || (module.data.sourceType == 'custom' && !classExist)) {
+      if (!startValidate) return true;
+      Vue.prototype.$message({
+        message: '请完善班级模块信息！',
+        type: 'error'
+      });
+      return true;
+    }
+  }
+
   // 广告
   if (module.type == 'poster') {
     const imgUri = module.data.image.uri;

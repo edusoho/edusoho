@@ -85,11 +85,18 @@ const routes = [
     component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
   }, {
     path: '/course/explore',
-    name: 'more',
+    name: 'more_course',
     meta: {
-      title: ''
+      title: '所有课程'
     },
-    component: () => import(/* webpackChunkName: "more" */'@/containers/more/index.vue')
+    component: () => import(/* webpackChunkName: "more" */'@/containers/more/course/index.vue')
+  }, {
+    path: '/class/explore',
+    name: 'more_class',
+    meta: {
+      title: '所有班级'
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/more/class/index.vue')
   }, {
     path: '/course/:id',
     name: 'course',
@@ -97,6 +104,20 @@ const routes = [
       title: '课程详情'
     },
     component: () => import(/* webpackChunkName: "course" */'@/containers/course/index.vue')
+  }, {
+    path: '/classroom/:id',
+    name: 'classroom',
+    meta: {
+      title: '班级详情'
+    },
+    component: () => import(/* webpackChunkName: "classroom" */'@/containers/classroom/index.vue')
+  }, {
+    path: '/comment/:id',
+    name: 'comment',
+    meta: {
+      title: '学员评价'
+    },
+    component: () => import(/* webpackChunkName: "comment" */'@/containers/comment/index.vue')
   }, {
     path: '/order/:id',
     name: 'order',

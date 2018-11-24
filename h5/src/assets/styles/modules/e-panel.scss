@@ -10,9 +10,14 @@
   }
 
   &-body {
-    display: flex;
     font-size: vw(14);
     margin-bottom: vw(25);
-    // flex-direction: column;
+    &.needFlex {
+      display: flex;
+      flex-direction: column;
+    }
+    .e-course:last-child {
+      padding-bottom: 0;
+    }
   }
 }

@@ -2,15 +2,16 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img v-bind:src="imgSrc">
+        <img :class="[typeList==='course_list' ? 'e-course__img' : 'e-class__img']" v-bind:src="imgSrc">
       </div>
       <div class="e-course__right pull-left">
-        <div v-if="type === 'confirmOrder'">
-          <div class="e-course__title course-confirm-title">{{ title }}</div>
-        </div>
+        <div v-if="type === 'confirmOrder'" class="e-course__title course-confirm-title">{{ title }}</div>
         <div v-else>
           <div class="e-course__title text-overflow">{{ title }}</div>
-          <div class="e-course__project text-overflow">
+          <div v-if="typeList==='class_list'" class="e-course__count">
+            共 {{course.courseNum}} 门课程
+          </div>
+          <div v-if="typeList==='course_list'" class="e-course__project text-overflow">
             <span v-if="teachPlan">{{ teachPlan }}</span>
           </div>
         </div>
@@ -47,6 +48,10 @@
       feedback: {
         type: Boolean,
         default: true,
+      },
+      typeList: {
+        type: String,
+        default: 'course_list'
       }
     },
     data() {
@@ -56,10 +61,16 @@
     },
     computed: {
       imgSrc() {
+        if (this.typeList === 'class_list') {
+          return this.course.cover.middle;
+        }
         const courseSet = this.course.courseSet;
         return courseSet ? courseSet.cover.middle : this.order.cover.middle;
       },
       title() {
+        if (this.typeList === 'class_list') {
+          return this.course.title
+        }
         return this.course.courseSetTitle
           || (this.course.courseSet ? this.course.courseSet.title : '')
           || this.order.title;

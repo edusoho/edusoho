@@ -38,6 +38,11 @@ const config = [
     url: '/courses',
     method: 'GET'
   }, {
+    // 获取班级列表数据
+    name: 'getClassList',
+    url: '/classrooms',
+    method: 'GET'
+  }, {
     // 微营销活动列表数据
     name: 'getMarketingList',
     url: '/marketing_activities',

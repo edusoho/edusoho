@@ -7,7 +7,7 @@
       </div>
     </e-panel>
 
-    <ul class="course-detail__plan">
+    <ul class="course-detail__plan" v-if="!defaultPlan">
       <li v-if="item.title" v-for="(item, index) in items"
         @click="handleClick(item, index)"
         :class="{ active: item.active }">{{item.title}}</li>
@@ -28,7 +28,6 @@
 <script>
 import * as types from '@/store/mutation-types';
 import { mapMutations, mapState, mapActions } from 'vuex';
-import tryVue from '../try.vue';
 
 export default {
   data() {
@@ -85,7 +84,7 @@ export default {
     learnExpiryHtml() {
       const memberInfo = this.details.member;
       const learnExpiryData = this.details.learningExpiryDate;
-      const expiryMode = this.details.learningExpiryDate.expiryMode;
+      const expiryMode = learnExpiryData.expiryMode;
 
       if (!memberInfo) {
         switch (expiryMode) {
@@ -93,10 +92,10 @@ export default {
             return ('永久有效');
             break;
           case 'end_date':
-            return ( this.details.learningExpiryDate.expiryEndDate.slice(0, 10) + '之前可学习');
+            return (learnExpiryData.expiryEndDate.slice(0, 10) + '之前可学习');
             break;
           case 'days':
-            return (this.details.learningExpiryDate.expiryDays + '天内可学习');
+            return (learnExpiryData.expiryDays + '天内可学习');
             break;
           case 'date':
             const startDateStr = learnExpiryData.expiryStartDate.slice(0, 10);
@@ -119,6 +118,9 @@ export default {
     showStudent() {
       return this.courseSettings ? Number(this.courseSettings.show_student_num_enabled) : true;
     },
+    defaultPlan() {
+      return this.items.length === 1 && !this.items[0].title;
+    }
   },
   methods: {
     ...mapActions ('course', [

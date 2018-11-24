@@ -29,7 +29,9 @@
     </div>
 
     <course-modal
-      slot="modal" limit=1
+      slot="modal"
+      limit=1
+      :typeText="typeText"
       :visible="modalVisible"
       :courseList="courseSets[activeItemIndex] || []"
       @visibleChange="modalVisibleHandler"
@@ -56,6 +58,7 @@ export default {
       activeItemIndex: 0,
       modalVisible: false,
       courseSets: [],
+      typeText: '课程'
     }
   },
   props: {
@@ -137,7 +140,8 @@ export default {
     modalVisibleHandler(visible) {
       this.modalVisible = visible;
     },
-    openModal() {
+    openModal(typeText) {
+      this.typeText = typeText
       this.modalVisible = true;
     },
     itemRemove(index) {

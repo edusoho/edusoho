@@ -57,22 +57,51 @@
   }
 }
 
-
 // h5 组件 vw 单位复写
 .e-course {
   padding: 0 20px 30px;
+  &__header {
+    font-size: 14px;
+  }
+  &__middle {
+    min-height: 20px;
+  }
+  &__bottom {
+    display: flex;
+    flex-direction:row;
+    justify-content:space-between;
+    .switch-box__price {
+      font-size: 14px;
+    }
+    .switch-box__state {
+      font-size: 12px;
+
+      .order-pay {
+        border-radius: 42px;
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+    }
+  }
+  &__count {
+    font-size: 12px;
+    line-height: 20px;
+  }
   &__left {
-   img {
-    width: 140px;
-    height: 79px;
-   }
+    .e-class__img {
+      width: 140px;
+      height: 93px;
+    }
+    .e-course__img {
+      width: 140px;
+      height: 80px;
+    }
   }
   &__right {
     margin-left: 10px;
+    line-height: 1;
   }
-  &__title {
-    font-size: 14px;
-  }
+
   &__project {
     margin-top: 6.5px;
     margin-bottom: 5px;
@@ -107,24 +136,6 @@
       margin-right: 2px;
       width: 7px;
       height: 7px;
-    }
-  }
-}
-
-.e-course-switch-box {
-  margin-top: 9px;
-  .switch-box {
-    &__price {
-      font-size: 14px;
-    }
-    &__state {
-      font-size: 12px;
-
-      .order-pay {
-        border-radius: 42px;
-        padding: 8px 12px;
-        font-size: 12px;
-      }
     }
   }
 }

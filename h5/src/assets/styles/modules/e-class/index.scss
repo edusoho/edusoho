@@ -1,0 +1,58 @@
+.e-course__header {
+  font-family: PingFangSC-Medium;
+  font-size: vw(14);
+  color: #2B333B;
+}
+
+.e-course__middle {
+  min-height: 20px;
+}
+
+.e-course__bottom {
+  display: flex;
+  flex-direction:row;
+  justify-content:space-between;
+}
+
+.switch-box__price {
+  font-size: vw(14);
+  p {
+    margin: 0;
+    font-family: PingFangSC-Medium;
+  }
+}
+
+.switch-box__state {
+  font-size: vw(12);
+  p {
+    font-family: PingFangSC-Medium;
+    margin: 0;
+  }
+}
+
+.rank-box {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  overflow: hidden;
+  .progress {
+    width: vw(150);
+    background: #ddd;
+  }
+  .curRate {
+    background: #408FFB;
+  }
+  .round-conner {
+    height: vw(14);
+    border-radius: 42px;
+  }
+  span {
+    display: block;
+    margin-left: vw(4);
+    font-family: PingFangSC-Medium;
+    font-size: vw(14);
+    color: #408FFB;
+    letter-spacing: 0;
+    line-height: vw(14);
+  }
+}

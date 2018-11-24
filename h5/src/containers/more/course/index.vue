@@ -13,16 +13,17 @@
       v-model="isRequestCompile"
       @needRequest="sendRequest"
       :isMorePage=true
+      :typeList="'course_list'"
     ></lazyLoading>
-    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false"></emptyCourse>
+    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'course'"></emptyCourse>
   </div>
 </template>
 
 <script>
   import Api from '@/api';
-  import treeSelect from '../components/e-tree-select/e-tree-select.vue';
-  import lazyLoading from '../components/e-lazy-loading/e-lazy-loading.vue';
-  import emptyCourse from '../learning/emptyCourse/emptyCourse.vue';
+  import treeSelect from '../../components/e-tree-select/e-tree-select.vue';
+  import lazyLoading from '../../components/e-lazy-loading/e-lazy-loading.vue';
+  import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
   import { mapMutations } from 'vuex';
   import * as types from '@/store/mutation-types';
 
@@ -73,9 +74,6 @@
       }
     },
     methods: {
-      ...mapMutations({
-        setNavbarTitle: types.SET_NAVBAR_TITLE
-      }),
       setQuery(value) {
         this.selectedData = value;
       },
@@ -164,7 +162,6 @@
           const items = Object.values(data)
           items.pop();
           this.selectItems = items;
-          this.setNavbarTitle(data.title)
         });
       // 根据筛选条件获取相应课程
       // this.requestCourses(config)

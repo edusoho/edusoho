@@ -61,6 +61,10 @@ export const getCourseList = ({ commit }, params) => Api.getCourseList({
   params
 });
 
+export const getClassList = ({ commit }, params) => Api.getClassList({
+  params
+});
+
 // 营销活动搜索列表数据
 export const getMarketingList = ({ commit }, params) => Api.getMarketingList({
   params

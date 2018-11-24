@@ -9,15 +9,21 @@
       </div>
     </div>
     <div class="e-course-list__body">
-      <e-course v-for="item in courseList.items" :key="item.id" :course="item" :type="type" :feedback="feedback">
-      </e-course>
+      <e-class v-for="item in courseList.items"
+        :key="item.id"
+        :course="item | courseListData(type, typeList)"
+        :typeList="typeList"
+        :type="type"
+        :feedback="feedback">
+      </e-class>
     </div>
     <div v-show="courseItemData" class="e-course__empty">暂无课程</div>
   </div>
 </template>
 
 <script>
-  import course from '../e-course/e-course';
+import eClass from '../e-class/e-class';
+import courseListData from '../../../utils/filter-course.js';
 
   export default {
     props: {
@@ -32,15 +38,22 @@
       index: {
         type: Number,
         default: -1,
+      },
+      typeList: {
+        type: String,
+        default: 'course_list'
       }
     },
     components: {
-      'e-course': course,
+      'e-class': eClass,
     },
     data() {
       return {
-        type: 'price',
+        type: 'price'
       };
+    },
+    filters: {
+      courseListData,
     },
     computed: {
       sourceType: {
@@ -108,23 +121,25 @@
         if (!this.feedback) {
           return;
         }
+        let routeName = this.typeList === 'course_list' ? 'more_course' : 'more_class';
         this.$router.push({
-          name: 'more',
-          query: {...this.source}
+          name: routeName
         });
       },
       fetchCourse() {
         if (this.sourceType === 'custom') return;
 
-        const params = {
+        let params = {
           sort: this.sort,
           limit: this.limit,
           lastDays: this.lastDays,
           categoryId: this.categoryId,
         };
+
         this.$emit('fetchCourse', {
           index: this.index,
           params,
+          typeList: this.typeList
         });
       }
     },

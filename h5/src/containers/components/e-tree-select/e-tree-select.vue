@@ -4,6 +4,7 @@
       <div class="e-tree-select__item"
         v-bind:class="{ active: selectedIndex === index && isActive }"
         v-for="(item, index) in selectItems"
+        v-if="item.data"
         @click="toggle(item, index)"
       >{{ selectedText(item.data, index) }}</div>
     </div>

@@ -41,7 +41,7 @@
       <div class="progress round-conner">
         <div class="curRate round-conner" :style="{ width: rate + '%' }"></div>
       </div>
-      <span class="">{{ this.rate }}%</span>
+      <span>{{ this.rate }}%</span>
     </div>
   </div>
 </template>
@@ -62,7 +62,7 @@
       order: {
         type: Object,
         default: {},
-      },
+      }
     },
     data() {
       return {

@@ -23,6 +23,9 @@ import {
   Autocomplete,
   Tooltip,
   Loading,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu
 } from 'element-ui';
 
 import {
@@ -45,8 +48,10 @@ Vue.use(Dialog);
 Vue.use(Tag);
 Vue.use(Autocomplete);
 Vue.use(Tooltip);
-
 Vue.use(utils);
+Vue.use(Dropdown);
+Vue.use(DropdownItem);
+Vue.use(DropdownMenu);
 
 Vue.prototype.$message = Message;
 

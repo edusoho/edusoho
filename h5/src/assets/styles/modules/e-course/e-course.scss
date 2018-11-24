@@ -6,10 +6,20 @@
 }
 
 .e-course__left {
- img {
-  width: vw(140);
-  height: vw(79);
- }
+  display: flex;
+  .e-course__img {
+    width: vw(140);
+    height: vw(80);
+  }
+  .e-class__img {
+    width: vw(140);
+    height: vw(93);
+  }
+}
+
+.e-course__count {
+  font-size: vw(12);
+  color: #71777D;
 }
 
 .e-course__right {
@@ -17,6 +27,7 @@
   flex: 1;
   flex-direction: column;
   justify-content: space-around;
+  // line-height: 1;
   margin-left: 10px;
   width: 48%;
 }
@@ -32,8 +43,8 @@
 }
 
 .e-course__project {
-  margin-top: vw(6.5);
-  // margin-bottom: vw(5);
+  margin-top: vw(5);
+  margin-bottom: vw(5);
   span {
     display: inline-block;
     padding: vw(4) vw(10);

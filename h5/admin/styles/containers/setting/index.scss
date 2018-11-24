@@ -32,7 +32,7 @@
     vertical-align: top;
   }
   .find-body {
-    padding-bottom: 153px;
+    padding-bottom: 227px;
   }
   .find-section {
     position: absolute;
@@ -56,7 +56,7 @@
   }
   &-miniprogram {
     .find-body {
-      padding-bottom: 270px
+      padding-bottom: 364px
     }
     .find-section {
       background: #FFFFFF;
@@ -67,11 +67,11 @@
         background: #F5F5F5;
         line-height: 38px;
       }
-      .find-section-item {
-        float: none;
-        margin: 15px 15px 20px 0;
-        &:nth-child(4n + 2) {
-          margin-left: 15px;
+      .section-button-group {
+        padding: 7.5px 0 7.5px 15px;
+        .find-section-item {
+          float: none;
+          margin: 7.5px 15px 7.5px 0;
         }
       }
     }

@@ -53,8 +53,8 @@ export default {
     },
     type: {
       type: String,
-      default: 'course',
-    },
+      default: 'course_list'
+    }
   },
   data () {
     return {
@@ -69,7 +69,7 @@ export default {
       set(courses) {
         this.$emit('updateCourses', courses);
       }
-    },
+    }
   },
   methods: {
     tdClass(ratio) {

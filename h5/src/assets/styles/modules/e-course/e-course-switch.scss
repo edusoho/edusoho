@@ -1,7 +1,3 @@
-.e-course-switch-box {
-  margin-top: vw(9);
-}
-
 .switch-box {
   display: flex;
   flex-direction:row;
@@ -28,18 +24,14 @@
   font-family: PingFangSC-Medium;
   p {
     margin: 0;
-    color: #408FFB;
     &.closed {
       color: #B0BDC9;
     }
-    // &.success {
-    //   color: #408FFB;
-    // }
   }
 
   .order-pay {
     border-radius: 42px;
-    padding: vw(8) vw(12);
+    padding: vw(6) vw(14);
     background: #408ffb;
     font-size: vw(12);
     color: #ffffff;
