@@ -84,4 +84,28 @@ const MARKETING_MODULE = [
   }
 ]
 
-export { MODULE_DEFAULT, BASE_MODULE, MARKETING_MODULE };
+const VALUE_DEFAULT = {
+  class_list: {
+    key: 'title'
+  },
+  course_list: {
+    key: 'displayedTitle'
+  },
+  groupon: {
+    key: 'name'
+  }
+}
+
+const TYPE_TEXT_DEFAULT = {
+  course_list: {
+    text: '课程'
+  },
+  class_list: {
+    text: '班级'
+  },
+  groupon: {
+    text: '活动'
+  }
+}
+
+export { MODULE_DEFAULT, BASE_MODULE, MARKETING_MODULE, VALUE_DEFAULT, TYPE_TEXT_DEFAULT };

@@ -42,6 +42,7 @@ import marketingMixins from '@admin/mixins/marketing';
 import head from '@admin/config/modal-config';
 import courseTable from './course-table';
 import { mapMutations, mapState, mapActions } from 'vuex';
+import { VALUE_DEFAULT, TYPE_TEXT_DEFAULT } from '@admin/config/module-default-config';
 
 export default {
   name: 'course-modal',
@@ -73,6 +74,8 @@ export default {
       courseSets: this.courseList,
       courseListIds: [],
       head,
+      valueDefault: VALUE_DEFAULT,
+      typeTextDefault: TYPE_TEXT_DEFAULT
     }
   },
   computed: {
@@ -84,22 +87,12 @@ export default {
         this.$emit('visibleChange', visible);
       }
     },
-    valueKey: {
-      get() {
-        return this.type === 'class_list' ? 'title' : 'displayedTitle';
-      },
-      set() {}
+    valueKey() {
+      return this.valueDefault[this.type].key;
     },
-    typeText: {
-      get() {
-        if (this.type === 'course_list') {
-          return '课程'
-        } else if (this.type === 'class_list') {
-          return '班级'
-        }
-        return '活动';
-      }
-    },
+    typeText() {
+      return this.typeTextDefault[this.type].text;
+    }
   },
   watch: {
     visible(val) {
@@ -134,7 +127,6 @@ export default {
     },
     beforeCloseHandler() {
       // todo
-
       this.modalVisible = false;
     },
     saveHandler() {
@@ -163,15 +155,16 @@ export default {
       this.courseSets = [...this.courseSets, item];
     },
     searchHandler(queryString, cb) {
-      if (this.typeText === '班级') {
+      if (this.type === 'class_list') {
         this.getClassList({
           courseSetTitle: queryString
         }).then(res => {
+          console.log(res,cb,555)
           cb(res.data);
         })
         return;
       }
-      if (this.type !== 'course') {
+      if (this.type === 'groupon') {
         this.getMarketingList({
           name: queryString,
           statuses: 'ongoing,unstart',

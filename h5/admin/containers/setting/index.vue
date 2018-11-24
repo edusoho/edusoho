@@ -31,24 +31,30 @@
       <!-- h5配置——底部添加组件按钮 -->
       <div class="find-section clearfix" v-if="portal === 'h5' || !supportGrouponVersion">
         <div class="section-title">点击添加组件</div>
-        <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-          v-for="(item, index) in baseModules" :key="index">
-          {{ item.name }}
-        </el-button>
+        <div class="section-button-group">
+          <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+            v-for="(item, index) in baseModules" :key="index">
+            {{ item.name }}
+          </el-button>
+        </div>
       </div>
 
       <!-- 小程序配置——底部添加组件按钮 -->
       <div class="find-section clearfix" v-if="portal === 'miniprogram' && supportGrouponVersion">
         <div class="section-title">基础组件</div>
-        <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-          v-for="(item, index) in baseModules" :key="`base-${index}`">
-          {{ item.name }}
-        </el-button>
-        <div class="section-title">营销组件 <a class="color-primary pull-right fsn" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a> </div>
-        <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-          v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
-          {{ item.name }}
-        </el-button>
+        <div class="section-button-group">
+          <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+            v-for="(item, index) in baseModules" :key="`base-${index}`">
+            {{ item.name }}
+          </el-button>
+        </div>
+        <div class="section-title">营销组件 <a class="color-primary pull-right fsn" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a></div>
+        <div class="section-button-group">
+          <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+            v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
+            {{ item.name }}
+          </el-button>
+        </div>
       </div>
 
       <find-footer></find-footer>
@@ -97,23 +103,6 @@ export default {
       incomplete: true,
       validateResults: [],
       currentModuleIndex: '0',
-      // moduleItems: [{
-      //     name: '轮播图',
-      //     default: moduleDefault.slideShow,
-      //   },
-      //   {
-      //     name: '课程列表',
-      //     default: moduleDefault.courseList,
-      //   },
-      //   {
-      //     name: '班级列表',
-      //     default: moduleDefault.classList,
-      //   },
-      //   {
-      //     name: '图片广告',
-      //     default: moduleDefault.poster,
-      //   }
-      // ],
       baseModules: BASE_MODULE,
       marketingModules: MARKETING_MODULE,
       typeCount: {},
@@ -130,7 +119,8 @@ export default {
       return pathName2Portal[this.pathName];
     },
     supportGrouponVersion() {
-      return this.supportVersion('1.4.0');
+      return true;
+      // return this.supportVersion('1.4.0');
     },
   },
   created() {

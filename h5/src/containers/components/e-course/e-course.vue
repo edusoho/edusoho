@@ -2,15 +2,18 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img :class="[typeList==='course' ? 'e-course__img' : 'e-class__img']" v-bind:src="imgSrc">
+        <img :class="[typeList==='course_list' ? 'e-course__img' : 'e-class__img']" v-bind:src="imgSrc">
       </div>
       <div class="e-course__right pull-left">
-        <div class="e-course__title text-overflow">{{ title }}</div>
-        <div v-if="typeList==='class_list'" class="e-course__count">
-          共 {{course.courseNum}} 门课程
-        </div>
-        <div class="e-course__project text-overflow" v-if="typeList==='course_list'">
-          <span v-if="teachPlan">{{ teachPlan }}</span>
+        <div v-if="type === 'confirmOrder'" class="e-course__title course-confirm-title">{{ title }}</div>
+        <div v-else>
+          <div class="e-course__title text-overflow">{{ title }}</div>
+          <div v-if="typeList==='class_list'" class="e-course__count">
+            共 {{course.courseNum}} 门课程
+          </div>
+          <div v-if="typeList==='course_list'" class="e-course__project text-overflow">
+            <span v-if="teachPlan">{{ teachPlan }}</span>
+          </div>
         </div>
         <switchBox :type="type" :course="course" :order="order" :studentNum="course.studentNum" :publishedTaskNum="course.publishedTaskNum"></switchBox>
       </div>
