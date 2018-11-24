@@ -31,5 +31,9 @@ export default [
     name: 'getCourse',
     url: '/course_sets/{courseId}',
     method: 'GET'
+  }, {
+    name: 'getCourseReviews',
+    url: '/courseSet/{id}/reviews',
+    method: 'GET'
   }
 ];

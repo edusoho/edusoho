@@ -17,7 +17,7 @@ export default {
     review,
     moreMask
   },
-  props: ['reviews', 'title', 'classId', 'defaulValue'],
+  props: ['reviews', 'title', 'classId', 'defaulValue', 'type'],
   data() {
     return {
       maxShowNum: 5,
@@ -27,6 +27,9 @@ export default {
     loadMore() {
       this.$router.push({
         path: `/comment/${this.classId}`,
+        query: {
+          type: this.type,
+        }
       });
     }
   },

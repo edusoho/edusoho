@@ -1,19 +1,14 @@
 <template>
   <div class="join-after">
-    <detail-head
-      :courseSet="details.courseSet"></detail-head>
+    <detail-head :courseSet="details.courseSet"></detail-head>
 
-    <van-tabs
-      v-model="active"
-      class="after-tabs"
-      @click="onTabClick">
-      <van-tab v-for="item in tabs"
-        :title="item" :key="item"></van-tab>
+    <van-tabs v-model="active" :class="tabsClass">
+      <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
     </van-tabs>
 
      <!-- 课程目录 -->
     <div class="join-after__content">
-      <template v-if="!active">
+      <div v-if="active == 1">
         <div class="progress-bar">
           <div class="progress-bar__content">
             <div class="progress-bar__rate" :style="{'width': progress}"></div>
@@ -25,9 +20,9 @@
           :hiddeTitle=true
           class="join-after-dirctory"
           :tryLookable="details.tryLookable"></directory>
-      </template>
+      </div>
 
-      <template v-else>
+      <div v-if="active == 0">
         <!-- 课程计划 -->
         <detail-plan></detail-plan>
 
@@ -42,11 +37,17 @@
         <teacher
           class="teacher"
           :teacherInfo="details.teachers"></teacher>
-      </template>
+      </div>
+
+      <!-- 学员评价 -->
+      <div v-if="active == 2">
+        <review-list ref="review" :classId="details.courseSet.id" :reviews="details.reviews" title="学员评价" defaulValue="暂无评价" type="classroom"></review-list>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import reviewList from '@/containers/classroom/review-list';
 import Directory from './detail/directory';
 import DetailHead from './detail/head';
 import DetailPlan from './detail/plan';
@@ -57,8 +58,11 @@ export default {
   props: ['details'],
   data() {
     return {
+      headBottom: 0,
       active: 0,
-      tabs: ['课程目录', '课程简介'],
+      scrollFlag: false,
+      tabs: ['班级介绍', '课程目录', '学员评价'],
+      tabsClass: '',
     }
   },
   computed: {
@@ -84,12 +88,8 @@ export default {
     Directory,
     DetailHead,
     DetailPlan,
-    Teacher
+    Teacher,
+    reviewList
   },
-  methods: {
-    onTabClick(){
-      console.log('click')
-    }
-  }
 }
 </script>
