@@ -20,35 +20,13 @@
     margin: 0;
     font-family: PingFangSC-Medium;
   }
-  .free {
-    color: #408ffb;
-  }
-  .price {
-    color: #FF5353;
-  }
 }
 
 .switch-box__state {
-  color: #B0BDC9;
   font-size: vw(12);
-  font-family: PingFangSC-Medium;
   p {
+    font-family: PingFangSC-Medium;
     margin: 0;
-    // color: #408FFB;
-    &.closed {
-      color: #B0BDC9;
-    }
-    // &.success {
-    //   color: #408FFB;
-    // }
-  }
-
-  .order-pay {
-    border-radius: 42px;
-    padding: vw(6) vw(14);
-    background: #408ffb;
-    font-size: vw(12);
-    color: #ffffff;
   }
 }
 

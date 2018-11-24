@@ -17,7 +17,7 @@ const courseListData = (data, type, typeList) => {
           bottom: {
             value: data.price || data.studentNum,
             html: `<span class="switch-box__price">
-                    <p class="price" style="color: #ff5353">¥ ${data.price}</p>
+                    <p style="color: #ff5353">¥ ${data.price}</p>
                   </span>
                   <span class="switch-box__state">
                     <p style="color: #B0BDC9">${data.studentNum}人在学</p>

@@ -160,15 +160,6 @@
           items.pop();
           this.selectItems = items;
         });
-      // 根据筛选条件获取相应课程
-      // this.requestCourses(config)
-      //   .then(() => {
-      //     if (this.courseList.length !== 0) {
-      //       this.isEmptyCourse = false;
-      //     } else {
-      //       this.isEmptyCourse = true;
-      //     }
-      //   });
     }
   }
 </script>
