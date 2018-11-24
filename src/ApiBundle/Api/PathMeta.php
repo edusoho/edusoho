@@ -17,13 +17,14 @@ class PathMeta
     private $singleMap = array(
         'GET' => AbstractResource::METHOD_GET,
         'PATCH' => AbstractResource::METHOD_UPDATE,
-        'DELETE' => AbstractResource::METHOD_REMOVE
+        'PUT' => AbstractResource::METHOD_UPDATE,
+        'DELETE' => AbstractResource::METHOD_REMOVE,
     );
 
     private $listMap = array(
         'GET' => AbstractResource::METHOD_SEARCH,
         'POST' => AbstractResource::METHOD_ADD,
-        'DELETE' => AbstractResource::METHOD_REMOVE
+        'DELETE' => AbstractResource::METHOD_REMOVE,
     );
 
     public function getResourceClassName()
@@ -32,7 +33,7 @@ class PathMeta
             throw CommonException::NOTFOUND_API();
         }
 
-        if ($this->resNames[0] == 'plugins') {
+        if ('plugins' == $this->resNames[0]) {
             return $this->getPluginResClass();
         } else {
             return $this->getNormalResClass(__NAMESPACE__);
@@ -43,7 +44,7 @@ class PathMeta
     {
         $result = array(
             'isFind' => false,
-            'className' => ''
+            'className' => '',
         );
         foreach ($customApiNamespaces as $namespace) {
             $className = $this->getNormalResClass($namespace);
@@ -59,7 +60,7 @@ class PathMeta
 
     public function getResMethod()
     {
-        $isSingleMethod = ($this->resNames[0] == 'me' && count($this->resNames) - 1 == count($this->slugs)) || (count($this->resNames) == count($this->slugs));
+        $isSingleMethod = ('me' == $this->resNames[0] && count($this->resNames) - 1 == count($this->slugs)) || (count($this->resNames) == count($this->slugs));
         if ($isSingleMethod) {
             return $this->singleMap[$this->httpMethod];
         } else {
