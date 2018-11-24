@@ -32,6 +32,10 @@ class TestpaperException extends AbstractException
 
     const MODIFY_COMMITTED_TESTPAPER = 5002212;
 
+    const DOING_TESTPAPER = 5002213;
+
+    const REDO_INTERVAL_EXIST = 5002214;
+
     public $messages = array(
         4042201 => 'exception.testpaper.not_found',
         4032202 => 'exception.testpaper.draft',
@@ -45,5 +49,7 @@ class TestpaperException extends AbstractException
         5002210 => 'exception.testpaper.status_invalid',
         4042211 => 'exception.testpaper.not_found_result',
         5002212 => 'exception.testpaper.modify_committed_testpaper',
+        5002213 => 'exception.testpaper.doing',
+        5002214 => 'exception.testpaper.redo_interval_exist',
     );
 }

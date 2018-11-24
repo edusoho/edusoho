@@ -4,8 +4,8 @@ namespace Biz\OpenCourse\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\AthenaLiveToolkit;
+use Biz\Activity\LiveActivityException;
 use Biz\BaseService;
-use Biz\OpenCourse\LiveCourseException;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
 use Biz\User\UserException;
@@ -26,7 +26,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $live = $this->createLiveClient()->createLive($liveParams);
 
         if (empty($live)) {
-            $this->createNewException(LiveCourseException::CREATE_LIVEROOM_FAILED());
+            $this->createNewException(LiveActivityException::CREATE_LIVEROOM_FAILED());
         }
 
         if (isset($live['error'])) {

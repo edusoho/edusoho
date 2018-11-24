@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\MaterialException;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
@@ -65,7 +66,7 @@ class OpenCourseFileManageController extends BaseController
         );
 
         if (!$materialCount) {
-            throw $this->createNotFoundException();
+            $this->createNewException(MaterialException::NOTFOUND_MATERIAL());
         }
 
         $file = $this->getUploadFileService()->getFile($fileId);

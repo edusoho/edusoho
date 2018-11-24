@@ -842,7 +842,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\Thread\ThreadException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCanAccess()
     {
@@ -861,7 +861,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\Thread\ThreadException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testTryAccessWithException()
     {

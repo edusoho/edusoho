@@ -147,7 +147,8 @@ class PlayerServiceImpl extends BaseService implements PlayerService
      *
      * @return array
      *
-     * @throws \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @throws \Biz\Player\PlayerException
+     * @throws \Exception
      */
     public function getDocFilePlayer($doc, $ssl)
     {
@@ -160,7 +161,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         }
 
         if ('document' != $file['type']) {
-            throw $this->createAccessDeniedException('file type error, expect document');
+            $this->createNewException(PlayerException::FILE_TYPE_INVALID());
         }
 
         $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);

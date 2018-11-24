@@ -108,7 +108,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     {
         $targetType = array('course', 'classroom', 'global');
         if (!in_array($conditions['targetType'], $targetType)) {
-            throw $this->createServiceException('targetType不正确！');
+            $this->createNewException(AnnouncementException::TYPE_INVALID());
         }
 
         return $conditions;

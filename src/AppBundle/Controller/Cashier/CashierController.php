@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Cashier;
 use AppBundle\Controller\BaseController;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
 use Codeages\Biz\Pay\Service\AccountService;
@@ -66,7 +67,7 @@ class CashierController extends BaseController
         $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
 
         if ($trade['user_id'] !== $this->getCurrentUser()->getId()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         return $this->redirect($trade['platform_created_result']['url']);

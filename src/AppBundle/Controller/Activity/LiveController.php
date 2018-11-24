@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Activity;
 use AppBundle\Controller\LiveroomController;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\LiveReplayException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
@@ -211,7 +212,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $replay = $this->getLiveReplayService()->getReplay($replayId);
 
         if ((bool) $replay['hidden']) {
-            throw $this->createNotFoundException('replay not found');
+            $this->createNewException(LiveReplayException::NOTFOUND_LIVE_REPLAY());
         }
 
         $sourceActivityId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];

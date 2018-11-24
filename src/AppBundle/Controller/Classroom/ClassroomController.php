@@ -466,7 +466,7 @@ class ClassroomController extends BaseController
     public function becomeStudentAction($id)
     {
         if (!$this->setting('vip.enabled')) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(ClassroomException::FORBIDDEN_BECOME_STUDENT());
         }
 
         $user = $this->getCurrentUser();
@@ -476,7 +476,7 @@ class ClassroomController extends BaseController
         }
 
         if ($this->getClassroomService()->isClassroomOverDue($id)) {
-            throw $this->createAccessDeniedException('班级已过期');
+            $this->createNewException(ClassroomException::EXPIRED_CLASSROOM());
         }
 
         $this->getClassroomService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
@@ -491,7 +491,7 @@ class ClassroomController extends BaseController
         $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
 
         if (empty($member)) {
-            throw $this->createAccessDeniedException('您不是班级的学员。');
+            $this->createNewException(ClassroomException::NOTFOUND_MEMBER());
         }
 
         if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
@@ -519,7 +519,7 @@ class ClassroomController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         if (!$classroom['buyable']) {
@@ -549,7 +549,7 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $result = $this->getClassroomService()->canLookClassroom($classroomId);
@@ -653,7 +653,7 @@ class ClassroomController extends BaseController
         }
 
         if ('published' != $classroom['status']) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ClassroomException::UNPUBLISHED_CLASSROOM());
         }
     }
 

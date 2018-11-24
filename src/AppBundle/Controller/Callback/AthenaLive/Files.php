@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Callback\AthenaLive;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 
 class Files extends AthenaLiveBase
@@ -18,7 +19,7 @@ class Files extends AthenaLiveBase
         $userToken = $this->getTokenService()->verifyToken('live.callback', $token);
 
         if (!$userToken) {
-            throw $this->createAccessDeniedException('token error');
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         if ($userToken['data']['type'] == 'open_course') {
@@ -80,11 +81,11 @@ class Files extends AthenaLiveBase
         $userToken = $this->getTokenService()->verifyToken('live.callback', $token);
 
         if (!$userToken) {
-            throw $this->createAccessDeniedException('token error');
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         if ($userToken['data']['courseId'] != $courseId) {
-            throw $this->createAccessDeniedException(sprintf('token course id 不匹配', $userToken['data']));
+            $this->createNewException(TokenException::NOT_MATCH_COURSE());
         }
 
         $type = $userToken['data']['type'];

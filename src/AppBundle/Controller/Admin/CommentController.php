@@ -5,7 +5,7 @@ namespace AppBundle\Controller\Admin;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use AppBundle\Common\Exception\AbstractException;
 
 class CommentController extends BaseController
 {
@@ -33,7 +33,7 @@ class CommentController extends BaseController
             $this->getCommentService()->deleteComment($id);
 
             return $this->createJsonResponse(array('status' => 'ok'));
-        } catch (ServiceException $e) {
+        } catch (AbstractException $e) {
             return $this->createJsonResponse(array('status' => 'ok', 'error' => array($e->getMessage())));
         }
     }

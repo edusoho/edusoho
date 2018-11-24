@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Classroom;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ExportHelp;
 use Biz\Activity\ActivityException;
+use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\LearningDataAnalysisService;
 use Biz\Common\CommonException;
 use Biz\Task\Service\TaskService;
@@ -334,7 +335,7 @@ class ClassroomManageController extends BaseController
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 
             if (empty($user)) {
-                throw $this->createNotFoundException("用户{$data['nickname']}不存在");
+                $this->createNewException(UserException::NOTFOUND_USER());
             }
 
             $data['remark'] = empty($data['remark']) ? '管理员添加' : $data['remark'];
@@ -533,7 +534,7 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->tryManageClassroom($classroomId);
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
         if (empty($member)) {
-            throw $this->createAccessDeniedException("学员#{$userId}不属于班级{#$classroomId}");
+            $this->createNewException(ClassroomException::NOTFOUND_MEMBER());
         }
 
         return $this->forward('AppBundle:Student:definedShow', array(
@@ -968,7 +969,7 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         if ('published' != $classroom['status']) {
-            throw $this->createNotFoundException('未发布班级不能导入学员!');
+            $this->createNewException(ClassroomException::UNPUBLISHED_CLASSROOM());
         }
 
         return $this->forward(

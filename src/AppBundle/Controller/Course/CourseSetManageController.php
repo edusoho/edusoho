@@ -4,7 +4,9 @@ namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
+use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\OpenCourse\Service\OpenCourseService;
@@ -22,14 +24,14 @@ class CourseSetManageController extends BaseController
             $type = $request->request->get('type', '');
 
             if (empty($type) || empty($visibleCourseTypes[$type])) {
-                throw $this->createNotFoundException('未设置课程类型');
+                $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
             }
 
             return $this->forward($visibleCourseTypes[$type]['saveAction'], array('request' => $request));
         }
 
         if (!$this->getCourseSetService()->hasCourseSetManageRole()) {
-            throw  $this->createAccessDeniedException();
+            $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
 
         $user = $this->getUser();
@@ -229,7 +231,7 @@ class CourseSetManageController extends BaseController
                 $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
                 if (empty($course['maxStudentNum'])) {
-                    throw $this->createAccessDeniedException('直播课程发布前需要在计划设置中设置课程人数');
+                    $this->createNewException(CourseSetException::LIVE_STUDENT_NUM_REQUIRED());
                 }
 
                 $this->getCourseService()->publishCourse($course['id']);

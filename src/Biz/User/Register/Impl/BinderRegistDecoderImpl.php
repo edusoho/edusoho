@@ -2,7 +2,7 @@
 
 namespace Biz\User\Register\Impl;
 
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Biz\System\SettingException;
 
 class BinderRegistDecoderImpl extends RegistDecoder
 {
@@ -14,7 +14,7 @@ class BinderRegistDecoderImpl extends RegistDecoder
         if (empty($thirdLoginInfo["{$type}_enabled"]) ||
                 empty($thirdLoginInfo["{$type}_key"]) ||
                 empty($thirdLoginInfo["{$type}_secret"])) {
-            throw new InvalidArgumentException('Invalid binder type for '.$type);
+            throw SettingException::OAUTH_CLIENT_TYPE_INVALID();
         }
     }
 

@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ImgConverToData;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserApprovalController extends BaseController
@@ -123,7 +124,7 @@ class UserApprovalController extends BaseController
         $status = $request->query->get('status', 'approving');
 
         if (empty($currentUser)) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], $status);

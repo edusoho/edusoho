@@ -3,8 +3,10 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
+use Biz\Common\CommonException;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Service\TaskService;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Common\ArrayToolkit;
@@ -21,8 +23,6 @@ use Biz\Course\Service\CourseDeleteService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\ActivityLearnLogService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use VipPlugin\Biz\Vip\Service\LevelService;
 
@@ -100,7 +100,7 @@ class CourseSetController extends BaseController
         $currentUser = $this->getUser();
 
         if (!$currentUser->hasPermission('admin_course_set_delete')) {
-            throw $this->createAccessDeniedException('您没有删除课程的权限！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
@@ -150,7 +150,7 @@ class CourseSetController extends BaseController
 
             return $this->createJsonResponse($response);
         }
-        throw new AccessDeniedException('Method Not Allowed');
+        $this->createNewException(CommonException::NOT_ALLOWED_METHOD());
     }
 
     public function publishAction(Request $request, $id)
@@ -222,7 +222,7 @@ class CourseSetController extends BaseController
             return $this->renderCourseTr($id, $request);
         }
 
-        throw new InvalidArgumentException('Invalid Target');
+        $this->createNewException(CommonException::ERROR_PARAMETER());
     }
 
     public function recommendListAction(Request $request)

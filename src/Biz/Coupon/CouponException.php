@@ -12,8 +12,11 @@ class CouponException extends AbstractException
 
     const STATUS_INVALID = 5004502;
 
+    const TYPE_INVALID = 5004503;
+
     public $messages = array(
         4044501 => 'exception.coupon.not_found',
         5004502 => 'exception.coupon.status_invalid',
+        5004503 => 'exception.coupon.type_invalid',
     );
 }

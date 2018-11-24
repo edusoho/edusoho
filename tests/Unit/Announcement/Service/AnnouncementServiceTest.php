@@ -54,8 +54,8 @@ class AnnouncementServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage targetType不正确！
+     * @expectedException \Biz\Announcement\AnnouncementException
+     * @expectedExceptionMessage exception.announcement.type_invalid
      */
     public function testSearchAnnouncementsConditionError()
     {

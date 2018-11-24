@@ -5,6 +5,8 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
+use Biz\Course\MaterialException;
 use Biz\File\UploadFileException;
 use Biz\System\Service\SettingService;
 use Biz\Course\Service\MaterialService;
@@ -106,7 +108,7 @@ class CourseSetFileManageController extends BaseController
         );
 
         if (!$materialCount) {
-            throw $this->createNotFoundException('Materials Not Found');
+            $this->createNewException(MaterialException::NOTFOUND_MATERIAL());
         }
 
         $file = $this->getUploadFileService()->getFile($fileId);
@@ -204,7 +206,7 @@ class CourseSetFileManageController extends BaseController
 
             return $this->createJsonResponse(true);
         }
-        throw $this->createAccessDeniedException('Method Not Allowed');
+        $this->createNewException(CommonException::NOT_ALLOWED_METHOD());
     }
 
     /**

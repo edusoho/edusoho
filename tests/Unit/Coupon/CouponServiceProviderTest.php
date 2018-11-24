@@ -25,8 +25,8 @@ class CouponServiceProviderTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage support vip or course, you give:abc
+     * @expectedException \Biz\Coupon\CouponException
+     * @expectedExceptionMessage exception.coupon.type_invalid
      */
     public function testGetCouponClassError()
     {

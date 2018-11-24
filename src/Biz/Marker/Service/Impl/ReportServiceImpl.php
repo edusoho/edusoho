@@ -9,6 +9,7 @@ use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Marker\Dao\QuestionMarkerResultDao;
 use Biz\Marker\Service\MarkerService;
+use Biz\Marker\QuestionMarkerException;
 use Biz\Marker\Service\QuestionMarkerResultService;
 use Biz\Marker\Service\QuestionMarkerService;
 use Biz\Marker\Service\ReportService;
@@ -23,7 +24,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
 
         if (empty($questionMarker)) {
-            throw $this->createNotFoundException('Question marker not found.');
+            $this->createNewException(QuestionMarkerException::NOTFOUND_QUESTION_MARKER());
         }
 
         $analysis = array();

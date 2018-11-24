@@ -595,7 +595,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function tryAccess($permision, $resource)
     {
         if (!$this->canAccess($permision, $resource)) {
-            throw $this->createAccessDeniedException("Permision `{$permision}`, resource `{$resource['targetType']}[{$resource['targetId']}]`, access denied.");
+            $this->createNewException(ThreadException::ACCESS_DENIED());
         }
 
         return true;
@@ -621,7 +621,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         );
 
         if (!array_key_exists($permision, $permisions)) {
-            $this->createNewException(ThreadException::PERMISSION_INVALID());
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $firewall = $this->getTargetFirewall($resource);
@@ -634,7 +634,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getTargetFirewall($resource)
     {
         if (empty($resource['targetType']) || empty($resource['targetId'])) {
-            $this->createNewException(ThreadException::RESOURCE_MISS_FIELD());
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         return $this->biz["thread_firewall.{$resource['targetType']}"];

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\Exception\FileToolkitException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\FileToolkit;
 use Biz\Common\HTMLHelper;
@@ -157,7 +158,7 @@ class SiteSettingController extends BaseController
         $fileId = $request->request->get('id');
         $objectFile = $this->getFileService()->getFileObject($fileId);
         if (!FileToolkit::isImageFile($objectFile)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            $this->createNewException(FileToolkitException::NOT_IMAGE());
         }
 
         $file = $this->getFileService()->getFile($fileId);

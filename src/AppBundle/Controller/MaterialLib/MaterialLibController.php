@@ -8,6 +8,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Taxonomy\Service\TagService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class MaterialLibController extends BaseController
@@ -17,7 +18,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('access denied');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         return $this->render('material-lib/web/material-thumb-view.html.twig', array(
@@ -50,7 +51,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('access denied');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $currentUserId = $currentUser['id'];
@@ -101,7 +102,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $currentUserId = $currentUser['id'];
@@ -212,7 +213,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('access denied');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $allTeachers = $this->getUserService()->searchUsers(
@@ -243,7 +244,7 @@ class MaterialLibController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('access denied');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $conditions['sourceUserId'] = $user['id'];
@@ -306,7 +307,7 @@ class MaterialLibController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('access denied');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $conditions['sourceUserId'] = $user['id'];
@@ -351,7 +352,7 @@ class MaterialLibController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('access denied');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $conditions['sourceUserId'] = $user['id'];
@@ -395,7 +396,7 @@ class MaterialLibController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('access denied');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $mySharingContacts = $this->getUploadFileService()->findMySharingContacts($user['id']);
@@ -408,7 +409,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('access denied');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $currentUserId = $currentUser['id'];
@@ -442,7 +443,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('access denied');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $currentUserId = $currentUser['id'];

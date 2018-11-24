@@ -6,12 +6,15 @@ use Biz\CloudPlatform\Service\AppService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
+use Biz\File\UploadFileException;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\FileToolkit;
+use Biz\User\TokenException;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -32,13 +35,13 @@ class UploadFileController extends BaseController
         $token = $this->getUserService()->getToken('fileupload', $token);
 
         if (empty($token)) {
-            throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $user = $this->getUserService()->getUser($token['userId']);
 
         if (empty($user)) {
-            throw $this->createAccessDeniedException('上传TOKEN非法。');
+            $this->createNewException(TokenException::NOT_MATCH_USER());
         }
         $this->getCurrentUser()->fromArray($user);
 
@@ -61,7 +64,7 @@ class UploadFileController extends BaseController
         $file = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         $this->getLogService()->info('upload_file', 'download', "文件Id #{$fileId}");
@@ -102,7 +105,7 @@ class UploadFileController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权查看此页面！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $conditions = $request->query->all();
@@ -140,7 +143,7 @@ class UploadFileController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权查看此页面！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $conditions = $request->query->all();
@@ -163,7 +166,7 @@ class UploadFileController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $params = $request->query->all();

@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\DateToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Common\CommonException;
+use Biz\Course\CourseException;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
 use Biz\Task\Service\TaskService;
@@ -867,7 +868,7 @@ class CourseManageController extends BaseController
         if (!$this->getCurrentUser()->isAdmin()
             && (empty($courseSetting['teacher_search_order']) || 1 != $courseSetting['teacher_search_order'])
         ) {
-            throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
+            $this->createNewException(CourseException::SEARCH_ORDER_CLOSED());
         }
 
         $conditions = $request->query->all();

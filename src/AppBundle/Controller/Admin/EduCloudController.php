@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\Exception\FileToolkitException;
+use Biz\System\SettingException;
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
 use Biz\Util\EdusohoLiveClient;
@@ -307,7 +309,7 @@ class EduCloudController extends BaseController
         $file = $request->files->get('watermark');
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            $this->createNewException(FileToolkitException::NOT_IMAGE());
         }
 
         $filename = 'watermark_'.time().'.'.$file->getClientOriginalExtension();
@@ -329,7 +331,7 @@ class EduCloudController extends BaseController
         $file = $request->files->get('watermark');
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            $this->createNewException(FileToolkitException::NOT_IMAGE());
         }
 
         $filename = 'watermarkembed_'.time().'.'.$file->getClientOriginalExtension();
@@ -1000,7 +1002,7 @@ class EduCloudController extends BaseController
         $info = $api->get('/me');
 
         if (empty($info['copyright'])) {
-            throw $this->createAccessDeniedException('您无权操作!');
+            $this->createNewException(SettingException::NO_COPYRIGHT());
         }
 
         $name = $request->request->get('name');

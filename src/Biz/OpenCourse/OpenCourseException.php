@@ -28,6 +28,8 @@ class OpenCourseException extends AbstractException
 
     const IS_NOT_MEMBER = 5004010;
 
+    const CHECK_PASSWORD_REQUIRED = 5004011;
+
     public $messages = array(
         4044001 => 'exception.opencourse.not_found',
         4044002 => 'exception.opencourse.not_found_lesson',
@@ -39,5 +41,6 @@ class OpenCourseException extends AbstractException
         4034008 => 'exception.opencourse.forbidden_manage_course',
         5004009 => 'exception.opencourse.itemids_invalid',
         5004010 => 'exception.opencourse.is_not_member',
+        5004011 => 'exception.opencourse.check_password_required',
     );
 }

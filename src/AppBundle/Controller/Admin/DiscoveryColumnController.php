@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\DiscoveryColumn\DiscoveryColumnException;
 use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -86,7 +87,7 @@ class DiscoveryColumnController extends BaseController
         $discoveryColumn = $this->getDiscoveryColumnService()->getDiscoveryColumn($id);
 
         if (empty($discoveryColumn)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(DiscoveryColumnException::NOTFOUND_DISCOVERY_COLUMN());
         }
 
         if ($request->getMethod() == 'POST') {

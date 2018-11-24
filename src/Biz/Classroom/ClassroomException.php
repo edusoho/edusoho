@@ -50,15 +50,17 @@ class ClassroomException extends AbstractException
 
     const MEMBER_NOT_IN_CLASSROOM = 4031821;
 
-    const CLOSED_CLASSROOM = 5001821;
+    const CLOSED_CLASSROOM = 5001822;
 
-    const UNBUYABLE_CLASSROOM = 5001822;
+    const UNBUYABLE_CLASSROOM = 5001823;
 
-    const EXPIRED_CLASSROOM = 5001823;
+    const EXPIRED_CLASSROOM = 5001824;
 
-    const FORBIDDEN_AUDITOR_LEARN = 4031824;
+    const FORBIDDEN_AUDITOR_LEARN = 4031825;
 
-    const EXPIRED_MEMBER = 5001825;
+    const EXPIRED_MEMBER = 5001826;
+
+    const FORBIDDEN_CREATE_THREAD_EVENT = 5001827;
 
     public $messages = array(
         4041801 => 'exception.classroom.not_found',
@@ -82,10 +84,11 @@ class ClassroomException extends AbstractException
         5001819 => 'exception.classroom.recommend_required_numeric',
         5001820 => 'exception.classroom.member_level_limit',
         4031821 => 'exception.classroom.member_not_in_classroom',
-        5001821 => 'exception.classroom.closed_classroom',
-        5001822 => 'exception.classroom.unbuyable_classroom',
-        5001823 => 'exception.classroom.expired_classroom',
-        4031824 => 'exception.classroom.forbidden_auditor_learn',
-        5001825 => 'exception.classroom.expired_member',
+        5001822 => 'exception.classroom.closed_classroom',
+        5001823 => 'exception.classroom.unbuyable_classroom',
+        5001824 => 'exception.classroom.expired_classroom',
+        4031825 => 'exception.classroom.forbidden_auditor_learn',
+        5001826 => 'exception.classroom.expired_member',
+        5001827 => 'exception.classroom.forbidden_create_thread_event',
     );
 }

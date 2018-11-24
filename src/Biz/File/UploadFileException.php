@@ -26,6 +26,8 @@ class UploadFileException extends AbstractException
 
     const EXTENSION_NOT_ALLOWED = 5002309;
 
+    const NOTFOUND_ATTACHMENT = 4042310;
+
     public $messages = array(
         4042301 => 'exception.uploadfile.file_not_found',
         4032302 => 'exception.uploadfile.forbidden_manage_file',
@@ -36,5 +38,6 @@ class UploadFileException extends AbstractException
         5002307 => 'exception.uploadfile.globalId_required',
         5002308 => 'exception.uploadfile.local_convert_not_support',
         5002309 => 'exception.uploadfile.extension_not_allowed',
+        4042310 => 'exception.uploadfile.not_found_attachment',
     );
 }

@@ -5,6 +5,7 @@ namespace Biz\Classroom\Service\Impl;
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\ClassroomException;
+use Biz\Classroom\ClassroomReviewException;
 use Biz\Common\CommonException;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
@@ -76,7 +77,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         }
 
         if ($fields['rating'] > 5) {
-            throw $this->createInvalidArgumentException('参数不正确，评价数太大');
+            $this->createNewException(ClassroomReviewException::RATING_LIMIT());
         }
 
         $this->getClassroomService()->tryTakeClassroom($fields['classroomId']);
@@ -151,11 +152,11 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $review = $this->getReview($id);
 
         if (empty($review)) {
-            throw $this->createNotFoundException(sprintf('评价(#%s)不存在，删除失败！', $id));
+            $this->createNewException(ClassroomReviewException::NOTFOUND_REVIEW());
         }
 
         if (!$user->isAdmin() && $review['userId'] != $user['id']) {
-            throw $this->createAccessDeniedException('review is not exsits.');
+            $this->createNewException(ClassroomReviewException::PERMISSION_DENIED());
         }
 
         $this->getClassroomReviewDao()->delete($id);

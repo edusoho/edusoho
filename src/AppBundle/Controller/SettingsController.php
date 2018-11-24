@@ -16,7 +16,6 @@ use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class SettingsController extends BaseController
 {
@@ -963,7 +962,7 @@ class SettingsController extends BaseController
         $types = array_keys(OAuthClientFactory::clients());
 
         if (!in_array($type, $types)) {
-            throw new NotFoundException('Type Not Found');
+            $this->createNewException(SettingException::OAUTH_CLIENT_TYPE_INVALID());
         }
     }
 

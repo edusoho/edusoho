@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Course\CourseNoteException;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
@@ -67,7 +68,7 @@ class NoteController extends BaseController
         $note = $this->getNoteService()->getNote($id);
 
         if (empty($note)) {
-            throw $this->createNotFoundException('not found');
+            $this->createNewException(CourseNoteException::NOTFOUND_NOTE());
         }
 
         return $this->createJsonResponse($this->getNoteService()->like($id));
@@ -78,7 +79,7 @@ class NoteController extends BaseController
         $note = $this->getNoteService()->getNote($id);
 
         if (empty($note)) {
-            throw $this->createNotFoundException('not found');
+            $this->createNewException(CourseNoteException::NOTFOUND_NOTE());
         }
 
         return $this->createJsonResponse($this->getNoteService()->cancelLike($id));

@@ -10,8 +10,8 @@ use Biz\User\CurrentUser;
 class LiveCourseServiceTest extends BaseTestCase
 {
     /**
-     * @expectedException \Biz\OpenCourse\LiveCourseException
-     * @expectedExceptionMessage exception.livecourse.create_liveroom_failed
+     * @expectedException \Biz\Activity\LiveActivityException
+     * @expectedExceptionMessage exception.live_activity.create_liveroom_failed
      */
     public function testCreateLiveRoomEmpty()
     {

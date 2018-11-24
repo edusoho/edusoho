@@ -4,11 +4,13 @@ namespace AppBundle\Controller;
 
 use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\LiveReplayException;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\LiveReplayService;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\Task\TaskException;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveroomController extends BaseController
@@ -50,14 +52,14 @@ class LiveroomController extends BaseController
     {
         $replay = $this->getLiveReplayService()->getReplay($replayId);
         if (empty($replay)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(LiveReplayException::NOTFOUND_LIVE_REPLAY());
         }
 
         if ($this->canTakeReplay($targetType, $targetId, $lessonId, $replayId)) {
             return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
         }
 
-        throw $this->createNotFoundException();
+        $this->createNewException(LiveReplayException::NOTFOUND_LIVE_REPLAY());
     }
 
     public function ticketAction(Request $request, $roomId)
@@ -80,7 +82,7 @@ class LiveroomController extends BaseController
     {
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
         if (!$task) {
-            throw $this->createNotFoundException();
+            $this->createNewException(TaskException::NOTFOUND_TASK());
         }
         $access = $this->getCourseService()->canLearnTask($task['id']);
 

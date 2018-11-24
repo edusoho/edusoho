@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\Exception\AbstractException;
+use Biz\Common\CommonException;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
@@ -11,10 +13,10 @@ use Biz\User\Service\UserFieldService;
 use Biz\Distributor\Util\DistributorCookieToolkit;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
+use Biz\User\UserException;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class RegisterController extends BaseController
 {
@@ -101,7 +103,7 @@ class RegisterController extends BaseController
                 );
 
                 return $response;
-            } catch (ServiceException $se) {
+            } catch (AbstractException $se) {
                 $this->setFlashMessage('danger', $se->getMessage());
             } catch (\Exception $e) {
                 return $this->createMessageResponse('error', $e->getMessage());
@@ -200,7 +202,7 @@ class RegisterController extends BaseController
         $user = $this->checkHash($id, $hash);
 
         if (empty($user)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $auth = $this->getSettingService()->get('auth');
@@ -268,7 +270,7 @@ class RegisterController extends BaseController
             $email = $request->request->get('email');
 
             if ($user['email'] !== $email) {
-                throw $this->createAccessDeniedException('');
+                $this->createNewException(UserException::NOT_MATCH_BIND_EMAIL());
             }
 
             $user = $this->getUserService()->getUserByEmail($email);
@@ -287,7 +289,7 @@ class RegisterController extends BaseController
         }
 
         if (empty($user)) {
-            throw $this->createNotFoundException('hash is error');
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         return $this->render('register/reset-email-step1.html.twig', array(
@@ -302,7 +304,7 @@ class RegisterController extends BaseController
         $newEmail = $request->request->get('email');
 
         if (empty($newEmail)) {
-            throw $this->createAccessDeniedException('email undefined');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $token = $request->request->get('token');
@@ -314,7 +316,7 @@ class RegisterController extends BaseController
         $user = $this->getUserService()->getUser($token['userId']);
 
         if (empty($user)) {
-            throw $this->createNotFoundException('user not found');
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $this->getAuthService()->changeEmail($user['id'], $token['data']['password'], $newEmail);
@@ -573,16 +575,16 @@ class RegisterController extends BaseController
             $captchaCode = $request->getSession()->get('captcha_code');
 
             if (!isset($captchaCodePostedByUser) || strlen($captchaCodePostedByUser) < 5) {
-                throw new \RuntimeException('验证码错误。');
+                $this->createNewException(CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR());
             }
 
             if (!isset($captchaCode) || strlen($captchaCode) < 5) {
-                throw new \RuntimeException('验证码错误。');
+                $this->createNewException(CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR());
             }
 
             if ($captchaCode != $captchaCodePostedByUser) {
                 $request->getSession()->set('captcha_code', mt_rand(0, 999999999));
-                throw new \RuntimeException('验证码错误。');
+                $this->createNewException(CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR());
             }
 
             $request->getSession()->set('captcha_code', mt_rand(0, 999999999));

@@ -3,7 +3,11 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\Course\CourseException;
 use Biz\Course\Dao\CourseDao;
+use Biz\Course\MemberException;
+use Biz\Order\OrderException;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -12,6 +16,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\CloudPlatform\Service\AppService;
@@ -36,7 +41,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         //        $data = ArrayToolkit::parts($data, array('price', 'amount', 'remark', 'isAdminAdded', 'source'));
 
         if (!ArrayToolkit::requireds($data, array('price', 'remark'))) {
-            throw $this->createServiceException('parameter is invalid!');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $this->getCourseService()->tryManageCourse($courseId);
@@ -44,17 +49,17 @@ class MemberServiceImpl extends BaseService implements MemberService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createNotFoundException("user #{$userId} does not exist");
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("course #{$courseId} does not exist ");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         if ($this->isCourseStudent($course['id'], $user['id'])) {
-            throw $this->createNotFoundException('用户已经是学员，不能添加！');
+            $this->createNewException(MemberException::DUPLICATE_MEMBER());
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
@@ -127,14 +132,14 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getCourseService()->tryManageCourse($courseId);
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
-            throw $this->createNotFoundException("User#{$user['id']} Not Found");
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
         if (empty($member)) {
-            throw $this->createNotFoundException("User#{$user['id']} Not in Course#{$courseId}");
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
         if ('student' !== $member['role']) {
-            throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
+            $this->createNewException(MemberException::MEMBER_NOT_STUDENT());
         }
 
         $result = $this->removeMember(
@@ -197,7 +202,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isLogin()) {
-            throw $this->createServiceException('用户未登录');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $condition = array(
@@ -275,7 +280,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function isMemberNonExpired($course, $member)
     {
         if (empty($course) || empty($member)) {
-            throw $this->createServiceException('course, member参数不能为空');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $vipNonExpired = true;
@@ -443,12 +448,12 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         if (empty($userIds)) {
-            throw $this->createServiceException('教师不能为空');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $teacherMembers = $this->buildTeachers($course, $teachers);
         if (empty($teacherMembers)) {
-            throw $this->createServiceException('教师不能为空');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         // 删除老师
@@ -529,7 +534,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $member = $this->getCourseMember($courseId, $userId);
 
         if (empty($member)) {
-            throw $this->createServiceException('教学计划学员不存在，备注失败!');
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
 
         $fields = array('remark' => empty($remark) ? '' : (string) $remark);
@@ -559,19 +564,19 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("教学计划(#{$courseId})不存在，退出教学计划失败。");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ('student' != $member['role'])) {
-            throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，退出教学计划失败。");
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
 
         $isNonExpired = $this->isMemberNonExpired($course, $member);
 
         if ($isNonExpired) {
-            throw $this->createServiceException("用户(#{$userId})还未达到有效期，不能退出教学计划。");
+            $this->createNewException(MemberException::NON_EXPIRED_MEMBER());
         }
         $user = $this->getUserService()->getUser($userId);
 
@@ -613,17 +618,17 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         if (!in_array($course['status'], array('published'))) {
-            throw $this->createServiceException('不能加入未发布教学计划');
+            $this->createNewException(CourseException::UNPUBLISHED_COURSE());
         }
 
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException("用户(#{$userId})不存在，加入教学计划失败！");
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
@@ -632,7 +637,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             if ('teacher' == $member['role']) {
                 return $member;
             } else {
-                throw $this->createServiceException("用户(#{$userId})已加入该教学计划！");
+                $this->createNewException(MemberException::DUPLICATE_MEMBER());
             }
         }
 
@@ -649,7 +654,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $order = $this->getOrderService()->getOrder($info['orderId']);
 
             if (empty($order)) {
-                throw $this->createServiceException("订单(#{$info['orderId']}})不存在，加入教学计划失败！");
+                $this->createNewException(OrderException::NOTFOUND_ORDER());
             }
         } else {
             $order = null;
@@ -712,18 +717,18 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         if (!in_array($course['status'], array('published'))) {
-            throw $this->createServiceException('不能加入未发布教学计划');
+            $this->createNewException(CourseException::UNPUBLISHED_COURSE());
         }
 
         $users = $this->getUserService()->findUsersByIds($memberIds);
         $userIds = ArrayToolkit::column($users, 'id');
 
         if (empty($users)) {
-            throw $this->createServiceException('用户(#'.implode(',#', $memberIds).')不存在，加入教学计划失败！');
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $existMembers = $this->searchMembers(array('courseId' => $course['id']), array(), 0, PHP_INT_MAX);
@@ -816,13 +821,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("教学计划(#{$courseId})不存在，退出教学计划失败。");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ('student' != $member['role'])) {
-            throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，退出教学计划失败。");
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
 
         $reason = ArrayToolkit::parts($reason, array('reason', 'reason_type'));
@@ -863,7 +868,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("教学计划(#{$courseId})不存在，封锁学员失败。");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
@@ -872,7 +877,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         if ('student' != $member['role']) {
-            throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，封锁学员失败。");
+            $this->createNewException(MemberException::MEMBER_NOT_STUDENT());
         }
 
         if ($member['locked']) {
@@ -887,7 +892,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("教学计划(#{$courseId})不存在，解封学员失败。");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
@@ -897,7 +902,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         if ('student' != $member['role']) {
-            throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，解封学员失败。");
+            $this->createNewException(MemberException::MEMBER_NOT_STUDENT());
         }
 
         if (empty($member['locked'])) {
@@ -1218,7 +1223,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
     {
         if (empty($classroomId) || empty($userId)) {
-            throw $this->createServiceException("userId #{$userId} or classroomId #{$classroomId} can not empty!");
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         return $this->getMemberDao()->updateByClassroomIdAndUserId($classroomId, $userId, array(
