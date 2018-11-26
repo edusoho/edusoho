@@ -2,6 +2,7 @@
   <div class="course-detail classroom-detail">
     <div class="join-after">
       <detail-head ref="head" :cover="details.cover"></detail-head>
+
       <van-tabs v-model="active" :class="tabsClass">
         <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
       </van-tabs>
@@ -33,7 +34,7 @@
 
       <!-- 学员评价 -->
       <div v-if="active == 2" style="margin-top: 44px;">
-        <review-list ref="review" :classId="details.classId" :reviews="details.reviews" title="学员评价" defaulValue="暂无评价"></review-list>
+        <review-list ref="review" :classId="details.classId" :reviews="details.reviews" title="学员评价" defaulValue="暂无评价" type="classroom"></review-list>
       </div>
     </div>
 
@@ -71,7 +72,10 @@
       }
     },
     mounted() {
-      window.addEventListener('scroll', this.handleScroll);
+      window.addEventListener('touchmove', this.handleScroll);
+    },
+    destroyed () {
+      window.removeEventListener('touchmove', this.handleScroll);
     },
     methods: {
       handleScroll() {

@@ -7,32 +7,41 @@
     <detail-plan @getLearnExpiry="getLearnExpiry"></detail-plan>
     <div class="segmentation"></div>
 
-    <van-tabs v-model="active"
-      @click="onTabClick"
-      :class="tabsClass" ref="tabs">
+    <van-tabs v-model="active" @click="onTabClick" :class="tabsClass">
       <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
     </van-tabs>
 
     <!-- 课程介绍 -->
     <e-panel title="课程介绍" ref="about" class="about">
-      <div v-html="summary"></div>
+      <more-mask :disabled="loadMoreAbout" @maskLoadMore="loadMoreAbout = true">
+        <div v-html="summary"></div>
+      </more-mask>
     </e-panel>
     <div class="segmentation"></div>
 
     <!-- 教师介绍 -->
     <teacher
-      ref="teacher"
-      class="teacher"
+      class="teacher" title="教师介绍"
       :teacherInfo="details.teachers"></teacher>
+    <div class="segmentation"></div>
+    <teacher
+      class="teacher" title="班主任" :teacherInfo="details.headTeacher ? [details.headTeacher] : []"></teacher>
     <div class="segmentation"></div>
 
     <!-- 课程目录 -->
     <directory ref="directory"></directory>
+    <div class="segmentation"></div>
+
+    <!-- 学员评价 -->
+    <review-list ref="review" :classId="details.courseSet.id" :reviews="details.reviews" title="学员评价" type="course" defaulValue="暂无评价"></review-list>
+
     <e-footer @click.native="handleJoin">
       {{details.access.code | filterJoinStatus}}</e-footer>
   </div>
 </template>
 <script>
+  import moreMask from '@/components/more-mask';
+  import reviewList from '@/containers/classroom/review-list';
   import Teacher from './detail/teacher';
   import Directory from './detail/directory';
   import DetailHead from './detail/head';
@@ -40,30 +49,34 @@
   import { mapActions, mapState } from 'vuex';
   import redirectMixin from '@/mixins/saveRedirect';
 
+  const TAB_HEIGHT = 44;
+
   export default {
     name: 'joinBefore',
     mixins: [redirectMixin],
     data() {
       return {
-        teacherInfo: {},
-        tabs: ['课程介绍', '教师介绍', '目录'],
+        tabs: ['课程介绍', '课程目录', '学员评价'],
+        loadMoreAbout: false,
         active: 0,
         tabsClass: '',
         learnExpiry: '永久有效',
         startDateStr: '',
         endDateStr: '',
         tops: {
-          tabsTop: 0,
-          teacherTop: 0,
           aboutTop: 0,
-        }
-      }
+          courseTop: 0,
+          reviewTop: 0,
+        },
+      };
     },
     components: {
       Teacher,
       Directory,
       DetailHead,
-      DetailPlan
+      DetailPlan,
+      moreMask,
+      reviewList
     },
     computed: {
       ...mapState('course', {
@@ -74,18 +87,7 @@
       }
     },
     mounted() {
-      const refs = this.$refs;
-
-      window.addEventListener('touchmove', this.handleTouch);
-      window.addEventListener('scroll', this.handleScroll);
-      setTimeout(() => {
-        window.scrollTo(0,0);
-
-        Object.keys(refs).forEach(item => {
-          this.tops[`${item}Top`] = refs[item].$el.getBoundingClientRect().top
-        })
-        console.log(this.tops);
-      }, 100)
+      window.addEventListener('touchmove', this.handleScroll);
     },
     methods: {
        ...mapActions('course', [
@@ -93,20 +95,37 @@
        ]),
       onTabClick(index, title) {
         const ref = this.$refs[this.transIndex2Tab(index)];
-        window.scrollTo(0, ref.$el.offsetTop - 44);
+        window.scrollTo(0, ref.$el.offsetTop - TAB_HEIGHT);
       },
       transIndex2Tab(index) {
-        return index ? (index > 1 ? 'directory' : 'teacher') : 'about';
+        const tabs = ['about', 'directory', 'review']
+        return tabs[index];
       },
-      handleTouch() {
-        const scrollTop = window.pageYOffset ||
-          document.documentElement.scrollTop || document.body.scrollTop;
+      handleScroll() {
+        if (this.scrollFlag) {
+          return;
+        }
+        this.scrollFlag = true;
+        const refs = this.$refs;
+        const tabs = ['about', 'directory', 'review'].reverse()
 
-        this.active = this.activeCurrentTab(scrollTop);
+        // 滚动节流
+        setTimeout(() => {
+          Object.keys(refs).forEach(item => {
+            this.tops[`${item}Top`] = refs[item].$el.getBoundingClientRect().top
+          })
+          this.scrollFlag = false;
+          this.tabsClass = this.tops.aboutTop - TAB_HEIGHT <= 0 ? 'van-tabs--fixed' : '';
 
-        scrollTop >= this.tops.tabsTop
-          ? this.tabsClass = 'van-tabs--fixed'
-          : this.tabsClass = '';
+          for (let index = 0; index < tabs.length; index++) {
+            const activeCondition = this.tops[`${tabs[index]}Top`] - TAB_HEIGHT <= 0
+            if (!activeCondition) {
+              continue;
+            }
+            this.active = tabs.length - index - 1;
+            return;
+          }
+        }, 400)
       },
       activeCurrentTab(scrollTop) {
         const tops = this.tops;

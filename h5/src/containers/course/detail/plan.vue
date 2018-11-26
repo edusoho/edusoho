@@ -14,6 +14,7 @@
     </ul>
 
     <div class="course-detail__validity">
+      <service v-if="details.services.length" :services="details.services" ></service>
       <div>
         <span class="mr20">学习有效期</span>
         <span class="dark" v-html="learnExpiryHtml"></span>
@@ -27,6 +28,7 @@
 </template>
 <script>
 import * as types from '@/store/mutation-types';
+import service from '@/containers/classroom/service';
 import { mapMutations, mapState, mapActions } from 'vuex';
 
 export default {
@@ -35,6 +37,9 @@ export default {
       items: [],
       isFree: false
     }
+  },
+  components: {
+    service
   },
   filters:{
     filterTime(time) {

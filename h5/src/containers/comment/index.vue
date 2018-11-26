@@ -22,9 +22,15 @@ export default {
     };
   },
   created() {
-    const classId = this.$route.params.id
-    Api.getReviews({
-      query: { classroomId: classId }
+    const id = this.$route.params.id
+    const type = this.$route.query.type
+
+    const ApiType = {
+      course: 'getCourseReviews',
+      classroom: 'getClassroomReviews',
+    }
+    Api[ApiType[type]]({
+      query: { id }
     }).then(({ data }) => {
       this.reviews = data;
     }).catch(err => {
