@@ -2558,6 +2558,7 @@ classroom.total_task_count: >
   %taskNum%个%taskName%
 classroom.expiry_mode: 有效期
 classroom.forever: 永久
+classroom.end_date: 截止日期
 classroom.course_tips: >
   若%name%课程被移除，则该课程内所有学习数据将被清空。
 classroom.total_price: 共计

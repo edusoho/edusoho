@@ -117,7 +117,12 @@
                                 {% if course.expiryDays %}
                                   {{course.expiryDays}}{{'site.date.day'|trans}}
                                 {% else %}
-                                  {{'classroom.forever'|trans}}
+                                  {{'classroom.end_date'|trans}}
+                                  {% if course.expiryMode|default(null) == 'end_date' %}
+                                    {{ course.expiryEndDate|date('Y-m-d') }}
+                                  {% else %}
+                                    {{'classroom.forever'|trans}}
+                                  {% endif %}
                                 {% endif %}
                               {% endif %}
                           </span>
