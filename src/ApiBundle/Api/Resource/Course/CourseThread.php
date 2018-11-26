@@ -62,13 +62,14 @@ class CourseThread extends AbstractResource
                         'duration' => 3600,
                         'userId' => 0,
                     ));
+                    $result = $this->getMaterialLibService()->player($file['no']);
 
                     if ($file['type'] == 'video') {
                         $mediaUri = 'http://'.$_SERVER['HTTP_HOST']."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=";
-                        $thread['attachments']['video'] = $mediaUri;
+                        $thread['attachments'][$file['type']] = $mediaUri;
                     } elseif ($file['type'] == 'audio') {
-                        $mediaUri = 'http://'.$_SERVER['HTTP_HOST']."/hls/{$file['id']}/audio/playlist/{$token['token']}.m3u8?format=json&line=";
-                        $thread['attachments']['audio'] = $mediaUri;
+                        //                        $mediaUri = 'http://'.$_SERVER['HTTP_HOST']."/hls/{$file['id']}/audio/playlist/{$token['token']}.m3u8?format=json&line=";
+                        $thread['attachments']['audio'] = $result['url'];
                     } else {
                         $result = $this->getMaterialLibService()->player($file['globalId'], false);
                         $mediaUri = $result['thumbnail'];
@@ -99,6 +100,11 @@ class CourseThread extends AbstractResource
         }
 
         return $result;
+    }
+
+    protected function getCloudFileService()
+    {
+        return $this->service('CloudFile:CloudFileService');
     }
 
     protected function getPlayerService()
