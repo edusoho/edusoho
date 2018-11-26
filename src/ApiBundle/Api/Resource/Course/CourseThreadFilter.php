@@ -8,7 +8,7 @@ use ApiBundle\Api\Resource\User\UserFilter;
 class CourseThreadFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'courseId', 'taskId', 'type', 'isStick', 'isElite', 'isClosed', 'private', 'title', 'content', 'source', 'postNum', 'userId', 'attachments',
+        'id', 'courseId', 'taskId', 'type', 'isStick', 'isElite', 'isClosed', 'private', 'title', 'content', 'source', 'postNum', 'userId', 'attachments', 'attachments',
         'hitNum', 'followNum', 'latestPostUserId', 'videoAskTime', 'videoId', 'latestPostTime', 'courseSetId', 'createdTime', 'updatedTime', 'user', 'videoUri',
     );
 
@@ -16,5 +16,7 @@ class CourseThreadFilter extends Filter
     {
         $userFilter = new UserFilter();
         $userFilter->filter($data['user']);
+
+        $data['latestPostTime'] = empty($data['latestPostTime']) ? 0 : date('c', $data['latestPostTime']);
     }
 }
