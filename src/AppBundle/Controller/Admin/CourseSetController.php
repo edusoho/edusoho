@@ -52,7 +52,7 @@ class CourseSetController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseSets, 'creator'));
         $courseSetStatusNum = $this->getDifferentCourseSetsNum($conditions);
-        $courseSets = $this->buildCourseTags($courseSets);
+        $courseSets = $this->buildCourseSetTags($courseSets);
 
         return $this->render(
             'admin/course-set/index.html.twig',
@@ -717,15 +717,18 @@ class CourseSetController extends BaseController
         return $conditions;
     }
 
-    protected function buildCourseTags($courseSets)
+    protected function buildCourseSetTags($courseSets)
     {
+        $tags = array();
+        foreach ($courseSets as $courseSet) {
+            $tags = array_merge($tags, $courseSet['tags']);
+        }
+        $tags = $this->getTagService()->findTagsByIds($tags);
         foreach ($courseSets as &$courseSet) {
             if (!empty($courseSet['tags'])) {
-                $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
-                $tags = array_values($tags);
-                $courseSet['tag'] = $tags[0]['name'];
+                $courseSet['disPlayTag'] = $tags[$courseSet['tags'][0]]['name'];
                 if (count($courseSet['tags']) > 1) {
-                    $courseSet['tagNames'] = $this->buildTagsNames(ArrayToolkit::column($tags, 'id'), $tags);
+                    $courseSet['disPlayTagNames'] = $this->buildTagsDisPlayNames(ArrayToolkit::column($tags, 'id'), $tags);
                 }
             }
         }
@@ -733,15 +736,9 @@ class CourseSetController extends BaseController
         return $courseSets;
     }
 
-    protected function buildTagsNames(array $tagIds, array $tags, $delimiter = '/')
+    protected function buildTagsDisPlayNames(array $tagIds, array $tags, $delimiter = '/')
     {
         $tagsNames = '';
-
-        if (empty($tagIds) || empty($tags)) {
-            return $tagsNames;
-        }
-
-        $tags = ArrayToolkit::index($tags, 'id');
 
         foreach ($tagIds as $tagId) {
             if (!empty($tags[$tagId])) {
