@@ -32,6 +32,7 @@ use Biz\User\Service\BlacklistService;
 use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -1345,6 +1346,9 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createNotFoundException("User#{$id} Not Found");
         }
         $currentUser = $this->getCurrentUser();
+        if ($id === $currentUser['id']) {
+            $this->createNewException(UserException::LOCK_SELF_DENIED());
+        }
         if (in_array('ROLE_SUPER_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
             throw $this->createAccessDeniedException($this->trans('admin.user_manage.lock_user.access_deniedexception_message'));
         }

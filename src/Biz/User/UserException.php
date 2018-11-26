@@ -36,6 +36,8 @@ class UserException extends AbstractException
 
     const PASSWORD_ERROR = 4030115;
 
+    const LOCK_SELF_DENIED = 4030142;
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.unlogin',
@@ -51,5 +53,6 @@ class UserException extends AbstractException
         5000113 => 'exception.user.nickname_existed',
         4030114 => 'exception.user.permission_denied',
         4030115 => 'exception.user.password_error',
+        4030142 => 'exception.user.lock_self_denied',
     );
 }
