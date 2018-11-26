@@ -6294,7 +6294,7 @@ admin.edu_cloud.edu_video.low: 流畅
 admin.edu_cloud.edu_video.normal: 标准
 admin.edu_cloud.edu_video.high: 高品质
 admin.edu_cloud.edu_video.play_speed: 倍速播放：
-admin.edu_cloud.edu_video.play_speed_tips: 开启后，云视频任务支持倍速播放。注意：仅支持高版本Chrome、火狐以及QQ浏览器（极速模式）。
+admin.edu_cloud.edu_video.play_speed_tips: 开启后，云视频任务及音频任务支持倍速播放。
 admin.edu_cloud.edu_video.auto_play: 云视频自动播放
 admin.edu_cloud.edu_video.video_header: 云视频片头：
 admin.edu_cloud.edu_video.video_header_edit_btn: 编辑
@@ -7109,7 +7109,7 @@ admin.developer_setting.address: 地址
 admin.developer_setting.im_api_address: IMAPI地址
 admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
 admin.developer_setting.hls_encrypted: HLS加密视频
-admin.developer_setting.market_address: 微营销地址(http://wyx.marketing.com)
+admin.developer_setting.market_address: 微营销地址(https://wyx.marketing.com)
 admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
 admin.developer_setting.without_outer_network: 是否无外网
 admin.developer_setting.default_locale: 默认语言
@@ -9407,6 +9407,7 @@ exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
 exception.user.permission_denied: 暂无权限访问
 exception.user_lock: 账户被封禁，请联系管理员
+exception.user.password_error: 用户名密码错误
 
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败

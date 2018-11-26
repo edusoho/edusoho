@@ -1,42 +1,32 @@
-{% set isVipInstalled = is_plugin_installed('Vip') %} {# 是否安装了会员插件 #}
-{% set isCoursePublished = (course.status == 'published' and courseSet.status == 'published') %} {# 计划（course）是否已经是发布的 #}
-{% set isBuyExpired = (course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U')) %} {# 计划是否已经超过加入购买时效 #}
-{% set isLearnExpired = (course.expiryMode in ['end_date', 'date'] and course.expiryEndDate < 'now'|date('U')) %} {# 是否已经超过学习有效期 #}
-
-{% if isCoursePublished %} {# 如果课程发布 #}
-  {% if isBuyExpired %} {# 如果超过课程加入有效期 #}
-    {{ 'course.unbuyable.over_buy_expiry_time_tips'|trans }}
-  {% else %} {# 如果未超过课程加入有效期 #}
-    {% if isLearnExpired %} {# 如果超过课程学习有效期 #}
-      {{ 'course.unbuyable.over_expiry_end_date_tips'|trans }}
-    {% else %} {# 如果未超过课程学习有效期 #}
-      {% if course.buyable|default(true) == false %} {# 如果课程关闭了购买加入 #}
-        {% if not isVipInstalled or course.vipLevelId == 0 %} {# 如果没有装Vip插件 或者 课程没有开启会员免费加入 #}
-          {{ 'course.course_limited_tips'|trans }}
-        {% else %} {# 如果装了Vip插件 并且 课程开启了会员免费加入 #}
-          {% set canRenderJoinAndBuy =  true %}
-        {% endif %}
-      {% else %}{# 如果课程允许购买加入 #}
-        {% set canRenderJoinAndBuy =  true %}
-      {% endif %}
-    {% endif %}
-  {% endif %} 
-{% else %} {# 如果课程未发布 #}
+{% if course.buyable|default(true) == false and ( is_plugin_installed('Vip') and  course.vipLevelId == 0) %}
+  {{ 'course.course_limited_tips'|trans }}
+{% elseif course.status != 'published' or courseSet.status != 'published' %}
   {{ 'course.unbuyable.unpublished_tips'|trans }}
-{% endif %}
+{% elseif course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U') %}
+  {{ 'course.unbuyable.over_buy_expiry_time_tips'|trans }}
+{% elseif (course.expiryMode in ['end_date', 'date'] and course.expiryEndDate < 'now'|date('U')) %}
+  {{ 'course.unbuyable.over_expiry_end_date_tips'|trans }}
+{% else %}
+  {{ slot('course.purchase.extension', {'course':course}) }}
 
-{% if canRenderJoinAndBuy|default(false) == true %}
-  {{ slot('course.purchase.extension', {'course':course}) }} {# 会员免费学引导引导 #}
+
+  {% set noVipText = 1  %}
   {% if slot('course.buy-btn.extension', {'course': course})|trim %}
     {% set btnText = slot('course.buy-btn.extension', {'course': course}) %}
+    {% set noVipText = 0 %}
   {% elseif course.originPrice == 0 or course.isFree %}
     {% set btnText = 'course.btn.join' %}
   {% else  %}
     {% set btnText = 'course.btn.buy' %}
   {% endif %}
-  {% if btnText is not empty %}
+
+  {# 特殊业务逻辑 #}
+  {% if course.buyable|default(true) == false and ( is_plugin_installed('Vip') and  course.vipLevelId > 0) and noVipText %}
+  {% else %}
     <a class="cd-btn cd-btn-primary js-buy-btn {% if previewAs|default() %}disabled{% endif %}" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">
       {{ btnText|trans }}
     </a>
   {% endif %}
+
+
 {% endif %}
