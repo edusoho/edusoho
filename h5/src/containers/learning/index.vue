@@ -6,7 +6,8 @@
       <van-tab v-for="item in tabs"
         :title="item" :key="item"></van-tab>
     </van-tabs>
-    <emptyCourse v-if="(isEmptyCourse || isEmptyClass) && isFirstRequestCompile" :type="typeList"></emptyCourse>
+    <emptyCourse v-if="active==0 && isEmptyCourse  && isFirstRequestCompile" :type="typeList"></emptyCourse>
+    <emptyCourse v-if="active==1 && isEmptyClass && isFirstRequestCompile" :type="typeList"></emptyCourse>
     <div v-else>
       <lazyLoading
         v-show="active==0"
