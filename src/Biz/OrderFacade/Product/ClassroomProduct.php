@@ -44,7 +44,7 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         }
 
         if (AccessorInterface::SUCCESS !== $access['code']) {
-            throw call_user_func(array($access['class'], $access['code']), $access['msg']);
+            throw call_user_func(array($access['class'], $access['code']));
         }
     }
 

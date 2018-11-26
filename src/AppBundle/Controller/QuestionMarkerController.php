@@ -214,7 +214,7 @@ class QuestionMarkerController extends BaseController
         $access = $this->getCourseService()->canLearnCourse($data['courseId']);
 
         if (AccessorInterface::SUCCESS !== $access['code']) {
-            $this->createNewException(call_user_func(array($access['class'], $access['code']), $access['msg']));
+            $this->createNewException(call_user_func(array($access['class'], $access['code'])));
         }
 
         if (in_array($data['type'], array('uncertain_choice', 'single_choice', 'choice'))) {

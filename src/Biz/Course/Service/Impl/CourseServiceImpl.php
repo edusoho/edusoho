@@ -2143,7 +2143,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $access = $this->canJoinCourse($courseId);
 
         if (AccessorInterface::SUCCESS != $access['code']) {
-            $this->createNewException(call_user_func(array($access['class'], $access['code']), $access['msg']));
+            $this->createNewException(call_user_func(array($access['class'], $access['code'])));
         }
 
         $course = $this->getCourse($courseId);

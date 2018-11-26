@@ -1914,7 +1914,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $access = $this->canJoinClassroom($classroomId);
         if (AccessorInterface::SUCCESS != $access['code']) {
-            $this->createNewException(call_user_func(array($access['class'], $access['code']), $access['msg']));
+            $this->createNewException(call_user_func(array($access['class'], $access['code'])));
         }
 
         $classroom = $this->getClassroom($classroomId);
