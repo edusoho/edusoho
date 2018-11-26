@@ -49,6 +49,7 @@
         isEmptyClass: true,
         isFirstRequestCompile: false,
         isCourseComplete: false,
+        isClassComplete: false,
         isAllCourse: false,
         courseList: [],
         classList: [],

@@ -61,8 +61,13 @@ export default [
     method: 'PATCH'
   }, {
     // 我的学习
-    name: 'myStudyState',
+    name: 'myStudyCourses',
     url: '/me/courses',
+    method: 'GET'
+  }, {
+    // 我的学习
+    name: 'myStudyClasses',
+    url: '/me/classrooms',
     method: 'GET'
   }
 ];
