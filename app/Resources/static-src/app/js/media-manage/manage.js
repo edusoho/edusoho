@@ -74,6 +74,9 @@ class Manage {
     let subtitleCreateUrl = $uploader.data('subtitleCreateUrl');
     
     let uploader = new UploaderSDK({
+      sdkBaseUri: app.cloudSdkBaseUri,
+      disableDataUpload: app.cloudDisableLogReport,
+      disableSentry: app.cloudDisableLogReport,
       initUrl: $uploader.data('initUrl'),
       finishUrl: $uploader.data('finishUrl'),
       id: 'uploader',

@@ -55,15 +55,6 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="col-md-3 control-label">
-      <label>Cloud Play Server</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      <input class="form-control" type="text" name="cloud_play_server" value="{{ developerSetting.cloud_play_server|default('') }}">
-    </div>
-  </div>
-
 {#   <div class="form-group">
     <div class="col-md-3 control-label">
       <label>云文件服务地址</label>
@@ -97,15 +88,6 @@
     </div>
     <div class="controls col-md-8 radios">
       <input class="form-control" type="text" name="cloud_api_im_server" value="{{ developerSetting.cloud_api_im_server|default('http://imapi.edusoho.net/v1/') }}">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-md-3 control-label">
-      <label>{{ 'admin.developer_setting.cloud_sdk_cdn_address'|trans }}</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      <input class="form-control" type="text" name="cloud_sdk_cdn" value="{{ developerSetting.cloud_sdk_cdn|default('') }}">
     </div>
   </div>
 
@@ -182,6 +164,41 @@
       {{ radios('show_switch_locale', {0:'admin.developer_setting.show_switch_locale.0'|trans, 1:'admin.developer_setting.show_switch_locale.1'|trans}, developerSetting.show_switch_locale|default(0)) }}
     </div>
   </div>
+
+  <fieldset>
+    <legend>云平台播放器配置</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.developer_setting.cloud_sdk_cdn_address'|trans }}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input class="form-control" type="text" name="cloud_sdk_cdn" value="{{ developerSetting.cloud_sdk_cdn|default('') }}">
+        <div class="help-block">默认为 service-cdn.qiqiuyun.net </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>云资源播放SDK的API地址</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input class="form-control" type="text" name="cloud_play_server" value="{{ developerSetting.cloud_play_server|default('') }}">
+        <div class="help-block">默认为 //play1.qiqiuyun.net (//play2.qiqiuyun.net) </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>SDK日志上报</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <div class="controls col-md-8 radios">
+          {{ radios('disable_log_report', {0: '开启', 1:'关闭'}, developerSetting.disable_log_report|default(0)) }}
+        </div>
+      </div>
+    </div>
+
+  </fieldset>
 
   <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">
