@@ -35,7 +35,11 @@
     <td><a class="pvs phs" href="javascript:void(0);" data-url="{{ path('admin_course_list', {id:courseSet.id}) }}" data-toggle="modal" data-target="#modal" target="_blank">{{ coursesCount[courseSet.id].courseNum|default(0) }}</a></td>
   {% endif %}
   <td>
-    {{ courseSet.displayTag|default('--') }}
+    {% if tag|default() and courseSet.displayTag|default('') %}
+        {{ tag.name }}
+      {% else %}
+        {{ courseSet.displayTag|default('--') }}
+    {% endif %}
     {% if count(courseSet.tags)>1 %}
       <i class="es-icon es-icon-more ft-xsm" data-toggle="popover" data-container="body" data-trigger="hover"
          data-placement="top" data-content="{{ courseSet.displayTagNames|default() }}"></i>
