@@ -12,7 +12,6 @@
       :courseItemType="courseItemType"
       v-model="isRequestCompile"
       @needRequest="sendRequest"
-      :isMorePage=true
       :typeList="'class_list'"
     ></lazyLoading>
     <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'class'"></emptyCourse>

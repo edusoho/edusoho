@@ -6,25 +6,25 @@
       <van-tab v-for="item in tabs"
         :title="item" :key="item"></van-tab>
     </van-tabs>
-    <emptyCourse v-if="active==0 && isEmptyCourse  && isFirstRequestCompile" :type="typeList"></emptyCourse>
-    <emptyCourse v-if="active==1 && isEmptyClass && isFirstRequestCompile" :type="typeList"></emptyCourse>
+    <emptyCourse v-if="active==0 && isEmptyCourse && isCourseFirstRequestCompile" :type="typeList"></emptyCourse>
+    <emptyCourse v-if="active==1 && isEmptyClass && isClassFirstRequestCompile" :type="typeList"></emptyCourse>
     <div v-else>
       <lazyLoading
         v-show="active==0"
         :courseList="courseList"
-        :isAllCourse="isAllCourse"
+        :isAllData="isAllCourse"
         :courseItemType="courseItemType"
-        v-model="isCourseComplete"
-        @needRequest="sendRequest"
+        :isRequestCompile="isCourseRequestComplete"
+        @needRequest="courseSendRequest"
         :typeList="'course_list'"
       ></lazyLoading>
       <lazyLoading
         v-show="active==1"
         :courseList="classList"
-        :isAllCourse="isAllCourse"
-        :courseItemType="courseItemType"
-        v-model="isClassComplete"
-        @needRequest="sendRequest"
+        :isAllData="isAllClass"
+        :courseItemType="classItemType"
+        :isRequestCompile="isClassRequestComplete"
+        @needRequest="classSendRequest"
         :typeList="'class_list'"
       ></lazyLoading>
     </div>
@@ -46,18 +46,22 @@
     data() {
       return {
         courseItemType: 'rank',
+        classItemType: 'rank',
         isEmptyCourse: true,
         isEmptyClass: true,
-        isFirstRequestCompile: false,
-        isCourseComplete: false,
-        isClassComplete: false,
+        isCourseRequestComplete: false,
+        isClassRequestComplete: false,
         isAllCourse: false,
+        isAllClass: false,
         courseList: [],
         classList: [],
-        isAllClass: false,
-        offset: 0,
-        limit: 10,
+        offset_course: 0,
+        offset_class: 0,
+        limit_course: 10,
+        limit_class: 10,
         active: 0,
+        isCourseFirstRequestCompile: false,
+        isClassFirstRequestCompile: false,
         tabs: ['我的课程', '我的班级']
       };
     },
@@ -74,15 +78,15 @@
         return false
       },
 
-      judgeIsAllClass(courseInfomation) {
-        if (this.classList.length == courseInfomation.paging.total) {
+      judgeIsAllClass(classInfomation) {
+        if (this.classList.length == classInfomation.paging.total) {
           return true
         }
         return false
       },
 
       requestCourses(setting) {
-        this.isCourseComplete = false;
+        this.isCourseRequestComplete = false;
         return Api.myStudyCourses({
           params: setting
         }).then((data) => {
@@ -95,14 +99,14 @@
             })
           }
           this.isAllCourse = isAllCourse;
-          this.isCourseComplete = true;
+          this.isCourseRequestComplete = true;
         }).catch((err) => {
           console.log(err, 'error');
         })
       },
 
       requestClasses(setting) {
-        this.isClassComplete = false;
+        this.isClassRequestComplete = false;
         return Api.myStudyClasses({
           params: setting
         }).then((data) => {
@@ -115,39 +119,51 @@
             })
           }
           this.isAllClass = isAllClass;
-          this.isClassComplete = true;
+          this.isClassRequestComplete = true;
         }).catch((err) => {
           console.log(err, 'error');
         })
       },
-      sendRequest() {
-        const args = {
-          offset: this.offset,
-          limit: this.limit
-        };
 
+      courseSendRequest() {
+        const args = {
+          offset: this.offset_course,
+          limit: this.limit_course
+        };
         if (!this.isAllCourse) this.requestCourses(args);
+      },
+
+      classSendRequest() {
+        const args = {
+          offset: this.offset_class,
+          limit: this.limit_class
+        };
         if (!this.isAllClass) this.requestClasses(args);
       }
     },
 
     created() {
-      const setting = {
-            offset: this.offset,
-            limit: this.limit
+      const courseSetting = {
+            offset: this.offset_course,
+            limit: this.limit_course
           };
-      this.requestCourses(setting)
+      const classSetting = {
+            offset: this.offset_class,
+            limit: this.limit_class
+          };
+
+      this.requestCourses(courseSetting)
         .then(() => {
-          this.isFirstRequestCompile = true;
+          this.isCourseFirstRequestCompile = true;
           if (this.courseList.length !== 0) {
             this.isEmptyCourse = false;
           } else {
             this.isEmptyCourse = true;
           }
         });
-      this.requestClasses(setting)
+      this.requestClasses(classSetting)
         .then(() => {
-          this.isFirstRequestCompile = true;
+          this.isClassFirstRequestCompile = true;
           if (this.classList.length !== 0) {
             this.isEmptyClass = false;
           } else {
@@ -155,6 +171,5 @@
           }
         });
     }
-
   }
 </script>
