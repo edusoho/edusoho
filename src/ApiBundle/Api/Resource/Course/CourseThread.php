@@ -62,12 +62,13 @@ class CourseThread extends AbstractResource
                         'duration' => 3600,
                         'userId' => 0,
                     ));
+
                     if ($file['type'] == 'video') {
                         $mediaUri = 'http://'.$_SERVER['HTTP_HOST']."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=";
-                        $thread['attachments']['videos'][] = $mediaUri;
+                        $thread['attachments']['video'] = $mediaUri;
                     } elseif ($file['type'] == 'audio') {
                         $mediaUri = 'http://'.$_SERVER['HTTP_HOST']."/hls/{$file['id']}/audio/playlist/{$token['token']}.m3u8?format=json&line=";
-                        $thread['attachments']['audios'][] = $mediaUri;
+                        $thread['attachments']['audio'] = $mediaUri;
                     } else {
                         $result = $this->getMaterialLibService()->player($file['globalId'], false);
                         $mediaUri = $result['thumbnail'];
