@@ -6,9 +6,10 @@
         :slides="part.data"
         :feedback="feedback"></e-swipe>
       <e-course-list
-        v-if="part.type == 'course_list'"
+        v-if="['class_list', 'course_list'].includes(part.type)"
         :courseList="part.data"
-        :feedback="feedback"></e-course-list>
+        :feedback="feedback"
+        :typeList="part.type"></e-course-list>
       <e-poster
         v-if="part.type == 'poster'"
         :class="imageMode[part.data.responsive]"

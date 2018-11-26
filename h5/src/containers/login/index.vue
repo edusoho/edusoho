@@ -67,7 +67,7 @@ export default {
           duration: 2000,
           message: '登录成功'
         });
-        const redirect = this.$route.query.redirect || 'find';
+        const redirect = this.$route.query.redirect || '/';
         const jumpAction = () => {
           this.$router.replace({path: redirect});
         }

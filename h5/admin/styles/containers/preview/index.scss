@@ -47,20 +47,20 @@
   .e-course {
     padding: 0 10px 20px;
     &__left {
-      img {
+      .e-class__img {
+        width: 98px;
+        height: 70px;
+      }
+      .e-course__img {
         width: 98px;
         height: 64px;
       }
     }
     &__right {
-      position: relative;
-      top: -10px;
-      width: 150px;
-      margin-left: 0;
-      transform: scale(0.85);
-    }
-    &__title {
-      font-size: 14px;
+      .e-course__header {
+        font-family: PingFangSC-Medium;
+        color: #2B333B;
+      }
     }
   }
 
