@@ -88,6 +88,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column verifiedMobile
          */
         $this->createIndex('user', 'verifiedMobile', 'verifiedMobile');
+
+        /*
+         *  Table  course_task_result
+         *  UniqueIndex  courseTaskID_userId
+         *  Column courseTaskId, userId
+         */
+        $this->createUniqueIndex('course_task_result', 'courseTaskId_userId', 'courseTaskId, userId');
     }
 
     protected function changeTableFiledType()
@@ -119,6 +126,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
     {
         if (!$this->isIndexExist($table, $index)) {
             $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column});");
+        }
+    }
+
+    protected function createUniqueIndex($table, $index, $column)
+    {
+        if (!$this->isIndexExist($table, $index)) {
+            $this->getConnection()->exec("ALTER TABLE {$table} ADD UNIQUE INDEX {$index} ({$column});");
         }
     }
 
