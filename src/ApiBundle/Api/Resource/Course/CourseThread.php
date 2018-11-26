@@ -39,27 +39,43 @@ class CourseThread extends AbstractResource
             $limit
         );
 
-//        foreach ($threads as &$thread) {
-//            $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread', $thread['id'], 'attachment');
-//            $thread['attachments'] = array();
-//            foreach ($attachments as $attachment) {
-//                $attachment = $this->getUploadFileService()->getUseFile($attachment['id']);
-//                $file = $this->getUploadFileService()->getFile($attachment['fileId']);
+        foreach ($threads as &$thread) {
+            if ($thread['source'] == 'app') {
+                $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread', $thread['id'], 'attachment');
+                $thread['attachments'] = array();
+                foreach ($attachments as $attachment) {
+                    $attachment = $this->getUploadFileService()->getUseFile($attachment['id']);
+                    $file = $this->getUploadFileService()->getFullFile($attachment['fileId']);
+
+                    if ($file['storage'] != 'cloud') {
+                        throw CommonException::ERROR_PARAMETER();
+                    }
 //
-//                if ($file['storage'] != 'cloud') {
-//                    throw CommonException::ERROR_PARAMETER();
-//                }
-//
-//                if ($file['targetType'] != 'attachment') {
-//                    throw CommonException::ERROR_PARAMETER();
-//                }
-//
-//                return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array(
-//                    'request' => $request,
-//                    'globalId' => $file['globalId'],
-//                ));
-//            }
-//        }
+//                    if ($file['targetType'] != 'attachment') {
+//                        throw CommonException::ERROR_PARAMETER();
+//                    }
+
+                    $token = $this->getTokenService()->makeToken('hls.playlist', array(
+                        'data' => array(
+                            'id' => $file['id'],
+                        ),
+                        'duration' => 3600,
+                        'userId' => 0,
+                    ));
+                    if ($file['type'] == 'video') {
+                        $mediaUri = 'http://'.$_SERVER['HTTP_HOST']."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=";
+                        $thread['attachments']['videos'][] = $mediaUri;
+                    } elseif ($file['type'] == 'audio') {
+                        $mediaUri = 'http://'.$_SERVER['HTTP_HOST']."/hls/{$file['id']}/audio/playlist/{$token['token']}.m3u8?format=json&line=";
+                        $thread['attachments']['audios'][] = $mediaUri;
+                    } else {
+                        $result = $this->getMaterialLibService()->player($file['globalId'], false);
+                        $mediaUri = $result['thumbnail'];
+                        $thread['attachments']['pictures'][] = $mediaUri;
+                    }
+                }
+            }
+        }
 
         $this->getOCUtil()->multiple($threads, array('userId'));
 
@@ -82,6 +98,21 @@ class CourseThread extends AbstractResource
         }
 
         return $result;
+    }
+
+    protected function getPlayerService()
+    {
+        return $this->service('Player:PlayerService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->service('User:TokenService');
+    }
+
+    protected function getMaterialLibService()
+    {
+        return $this->service('MaterialLib:MaterialLibService');
     }
 
     /**
