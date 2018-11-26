@@ -35,10 +35,10 @@
     <td><a class="pvs phs" href="javascript:void(0);" data-url="{{ path('admin_course_list', {id:courseSet.id}) }}" data-toggle="modal" data-target="#modal" target="_blank">{{ coursesCount[courseSet.id].courseNum|default(0) }}</a></td>
   {% endif %}
   <td>
-    {{ courseSet.disPlayTag|default('--') }}
+    {{ courseSet.displayTag|default('--') }}
     {% if count(courseSet.tags)>1 %}
       <i class="es-icon es-icon-more ft-xsm" data-toggle="popover" data-container="body" data-trigger="hover"
-         data-placement="top" data-content="{{ courseSet.disPlayTagNames|default() }}"></i>
+         data-placement="top" data-content="{{ courseSet.displayTagNames|default() }}"></i>
     {% endif %}
   </td>
   {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode} %}

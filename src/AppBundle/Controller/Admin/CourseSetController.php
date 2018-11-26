@@ -726,9 +726,9 @@ class CourseSetController extends BaseController
         $tags = $this->getTagService()->findTagsByIds($tags);
         foreach ($courseSets as &$courseSet) {
             if (!empty($courseSet['tags'])) {
-                $courseSet['disPlayTag'] = $tags[$courseSet['tags'][0]]['name'];
+                $courseSet['displayTag'] = $tags[$courseSet['tags'][0]]['name'];
                 if (count($courseSet['tags']) > 1) {
-                    $courseSet['disPlayTagNames'] = $this->buildTagsDisPlayNames(ArrayToolkit::column($tags, 'id'), $tags);
+                    $courseSet['displayTagNames'] = $this->buildTagsDisplayNames(ArrayToolkit::column($tags, 'id'), $tags);
                 }
             }
         }
@@ -736,7 +736,7 @@ class CourseSetController extends BaseController
         return $courseSets;
     }
 
-    protected function buildTagsDisPlayNames(array $tagIds, array $tags, $delimiter = '/')
+    protected function buildTagsDisplayNames(array $tagIds, array $tags, $delimiter = '/')
     {
         $tagsNames = '';
 
