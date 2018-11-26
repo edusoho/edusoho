@@ -173,7 +173,7 @@
       </div>
       <div class="controls col-md-8 radios">
         <input class="form-control" type="text" name="cloud_sdk_cdn" value="{{ developerSetting.cloud_sdk_cdn|default('') }}">
-        <div class="help-block">默认为 service-cdn.qiqiuyun.net </div>
+        <div class="help-block">请不要携带 http(s):// ；默认为 service-cdn.qiqiuyun.net 。</div>
       </div>
     </div>
 
@@ -183,7 +183,7 @@
       </div>
       <div class="controls col-md-8 radios">
         <input class="form-control" type="text" name="cloud_play_server" value="{{ developerSetting.cloud_play_server|default('') }}">
-        <div class="help-block">默认为 //play1.qiqiuyun.net (//play2.qiqiuyun.net) </div>
+        <div class="help-block">默认为 //play1.qiqiuyun.net (or //play2.qiqiuyun.net) </div>
       </div>
     </div>
 
