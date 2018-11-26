@@ -122,10 +122,12 @@
           {% endif %}
 
           <ul class="class-data clearfix {% if classroomMemberLevel and 'auditor' in member.role %}hidden-sm{% else %}two-col{% endif %}">
-            <li>
-              <p><i class="es-icon es-icon-person"></i></p>
-              <p>{{ 'site.default.student'|trans }}({{ classroom.studentNum + classroom.auditorNum }})</p>
-            </li>
+            {% if setting('classroom.show_student_num_enabled', '1') == 1 %}
+              <li>
+                <p><i class="es-icon es-icon-person"></i></p>
+                <p>{{ 'site.default.student'|trans }}({{ classroom.studentNum + classroom.auditorNum }})</p>
+              </li>
+            {% endif %}
             <li>
             <span class="es-share top">
               <a class="dropdown-toggle" href="" data-toggle="dropdown" aria-labelledby="dropdownMenu1">

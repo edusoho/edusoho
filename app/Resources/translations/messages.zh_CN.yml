@@ -9436,3 +9436,4 @@ admin.sts_discovery.pc_use_tip: 若在PC电脑端开启本功能，用户需要�
 admin.sts_discovery_feature_tip: 更多功能敬请期待。。。
 admin.user_manage.lock_user.access_deniedexception_message: 没有封禁该角色的权限
 admin.course_manage.manage.tags: 标签
+admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级中允许显示班级人数
