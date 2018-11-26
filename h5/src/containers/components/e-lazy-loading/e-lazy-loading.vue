@@ -2,8 +2,7 @@
   <van-list
     v-model="loading"
     :finished="finished"
-    @load="onLoad"
-  >
+    @load="onLoad">
     <courseItem v-for="(course, index) in courseList"
       :key="index"
       :type="courseItemType"
@@ -22,20 +21,11 @@
       courseItem,
     },
 
-    model: {
-      prop: 'isRequestCompile',
-      event: 'needRequest'
-    },
-
     props: {
       courseList: Array,
       isRequestCompile: Boolean,
-      isAllCourse: Boolean,
+      isAllData: Boolean,
       courseItemType: String,
-      isMorePage: {
-        type: Boolean,
-        default: false
-      },
       typeList: {
         type: String,
         default: 'course_list'
@@ -45,7 +35,7 @@
     data() {
       return {
         list: [],
-        finished: false,
+        finished: false
       };
     },
 
@@ -65,9 +55,9 @@
     },
 
     watch: {
-      isAllCourse() {
+      isAllData() {
         this.loading = false;
-        this.finished = this.isAllCourse;
+        this.finished = this.isAllData;
       }
     },
 
