@@ -728,7 +728,7 @@ class CourseSetController extends BaseController
             if (!empty($courseSet['tags'])) {
                 $courseSet['displayTag'] = $tags[$courseSet['tags'][0]]['name'];
                 if (count($courseSet['tags']) > 1) {
-                    $courseSet['displayTagNames'] = $this->buildTagsDisplayNames(ArrayToolkit::column($tags, 'id'), $tags);
+                    $courseSet['displayTagNames'] = $this->buildTagsDisplayNames($courseSet['tags'], $tags);
                 }
             }
         }
