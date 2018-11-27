@@ -87,9 +87,11 @@
     },
     mounted() {
       window.addEventListener('touchmove', this.handleScroll);
+      window.addEventListener('scroll', this.handleScroll);
     },
     destroyed () {
       window.removeEventListener('touchmove', this.handleScroll);
+      window.removeEventListener('scroll', this.handleScroll);
     },
     methods: {
       onTabClick(index, title) {

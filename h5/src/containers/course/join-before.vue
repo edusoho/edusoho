@@ -1,8 +1,7 @@
 <template>
-  <div class="join-before">
+  <div :class="isClassCourse ? '' : 'join-before'">
     <detail-head
-      :price="details.price"
-      :courseSet="details.courseSet"></detail-head>
+      :price="details.price" :courseSet="details.courseSet"></detail-head>
 
     <detail-plan @getLearnExpiry="getLearnExpiry"></detail-plan>
     <div class="segmentation"></div>
@@ -35,8 +34,7 @@
     <!-- 学员评价 -->
     <review-list ref="review" :classId="details.courseSet.id" :reviews="details.reviews" title="学员评价" type="course" defaulValue="暂无评价"></review-list>
 
-    <e-footer @click.native="handleJoin">
-      {{details.access.code | filterJoinStatus}}</e-footer>
+    <e-footer v-if="!isClassCourse" @click.native="handleJoin">{{details.access.code | filterJoinStatus}}</e-footer>
   </div>
 </template>
 <script>
@@ -84,10 +82,14 @@
       }),
       summary () {
         return this.details.summary || this.details.courseSet.summary;
-      }
+      },
+      isClassCourse() {
+        return Number(this.details.parentId);
+      },
     },
     mounted() {
       window.addEventListener('touchmove', this.handleScroll);
+      window.addEventListener('scroll', this.handleScroll);
     },
     methods: {
        ...mapActions('course', [
@@ -181,6 +183,7 @@
     },
     destroyed () {
       window.removeEventListener('touchmove', this.handleScroll);
+      window.removeEventListener('scroll', this.handleScroll);
     },
   }
 </script>

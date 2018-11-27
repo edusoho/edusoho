@@ -88,6 +88,9 @@
         selectedPlanId: state => state.selectedPlanId,
       }),
       ...mapState(['courseSettings']),
+      currentCourseType() {
+        return Number(this.details.parentId) ? '班级' : '课程'
+      }
     },
     data() {
       return {
@@ -262,10 +265,10 @@
               })
               break;
             default:
-              return Toast('请先加入课程');
+              return Toast(`请先加入${this.currentCourseType}`);
           }
         } else {
-          this.joinStatus ? this.showTypeDetail(task) : Toast('请先加入课程');
+          this.joinStatus ? this.showTypeDetail(task) : Toast(`请先加入${this.currentCourseType}`);
         }
         //join after click
       },
