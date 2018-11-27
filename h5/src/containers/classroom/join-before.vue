@@ -78,7 +78,7 @@
         },
         active: 0,
         scrollFlag: false,
-        tabs: ['班级介绍', '课程列表', '学员评价'],
+        tabs: ['班级介绍', '班级课程', '学员评价'],
         tabsClass: '',
         loadMoreAbout: false,
         disableMask: false,

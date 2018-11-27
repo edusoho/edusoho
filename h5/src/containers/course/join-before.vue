@@ -23,9 +23,6 @@
       class="teacher" title="教师介绍"
       :teacherInfo="details.teachers"></teacher>
     <div class="segmentation"></div>
-    <teacher
-      class="teacher" title="班主任" :teacherInfo="details.headTeacher ? [details.headTeacher] : []"></teacher>
-    <div class="segmentation"></div>
 
     <!-- 课程目录 -->
     <directory ref="directory"></directory>

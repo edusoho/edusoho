@@ -12,7 +12,7 @@
         <detail-plan :details="planDetails" :joinStatus="details.joinStatus"></detail-plan>
         <div class="segmentation"></div>
 
-        <e-panel title="班级介绍" ref="about" class="about">
+        <e-panel title="班级介绍" ref="about">
           <div v-html="details.summary"></div>
         </e-panel>
         <div class="segmentation"></div>
@@ -67,7 +67,7 @@
         headBottom: 0,
         active: 0,
         scrollFlag: false,
-        tabs: ['班级介绍', '课程列表', '学员评价'],
+        tabs: ['班级介绍', '班级课程', '学员评价'],
         tabsClass: '',
       }
     },
