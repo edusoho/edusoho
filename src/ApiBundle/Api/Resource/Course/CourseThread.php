@@ -5,12 +5,19 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CourseThread extends AbstractResource
 {
     public function get(ApiRequest $request, $courseId, $threadId)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            throw new BadRequestHttpException("CourseSet#{$courseId} Not Found", null, 4041601);
+        }
+
         $thread = $this->getCourseThreadService()->getThreadByThreadId($threadId);
+        $thread = $this->addAttachments($thread);
         $thread['user'] = $this->getUserService()->getUser($thread['userId']);
 
         return $thread;
@@ -18,6 +25,10 @@ class CourseThread extends AbstractResource
 
     public function search(ApiRequest $request, $courseId)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            throw new BadRequestHttpException("CourseSet#{$courseId} Not Found", null, 4041601);
+        }
         $type = $request->query->get('type', 'question');
         $keyword = $request->query->get('keyword');
         list($offset, $limit) = $this->getOffsetAndLimit($request);
@@ -40,44 +51,7 @@ class CourseThread extends AbstractResource
         );
 
         foreach ($threads as &$thread) {
-            if ($thread['source'] == 'app') {
-                $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread', $thread['id'], 'attachment');
-                $thread['attachments'] = array();
-                foreach ($attachments as $attachment) {
-                    $attachment = $this->getUploadFileService()->getUseFile($attachment['id']);
-                    $file = $this->getUploadFileService()->getFullFile($attachment['fileId']);
-
-                    if ($file['storage'] != 'cloud') {
-                        throw CommonException::ERROR_PARAMETER();
-                    }
-//
-//                    if ($file['targetType'] != 'attachment') {
-//                        throw CommonException::ERROR_PARAMETER();
-//                    }
-
-                    $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                        'data' => array(
-                            'id' => $file['id'],
-                        ),
-                        'duration' => 3600,
-                        'userId' => 0,
-                    ));
-                    $download = $this->getUploadFileService()->getDownloadMetas($file['id']);
-                    $result = $this->getMaterialLibService()->player($file['no']);
-
-                    if ($file['type'] == 'video') {
-                        $mediaUri = 'http://'.$_SERVER['HTTP_HOST']."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=";
-                        $thread['attachments'][$file['type']] = $download['url'];
-                    } elseif ($file['type'] == 'audio') {
-                        //                        $mediaUri = 'http://'.$_SERVER['HTTP_HOST']."/hls/{$file['id']}/audio/playlist/{$token['token']}.m3u8?format=json&line=";
-                        $thread['attachments']['audio'] = $result['url'];
-                    } else {
-                        $result = $this->getMaterialLibService()->player($file['globalId'], false);
-                        $mediaUri = $result['thumbnail'];
-                        $thread['attachments']['pictures'][] = $mediaUri;
-                    }
-                }
-            }
+            $thread = $this->addAttachments($thread);
         }
 
         $this->getOCUtil()->multiple($threads, array('userId'));
@@ -101,6 +75,36 @@ class CourseThread extends AbstractResource
         }
 
         return $result;
+    }
+
+    protected function addAttachments($thread)
+    {
+        if ($thread['source'] == 'app') {
+            $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread', $thread['id'], 'attachment');
+            $thread['attachments'] = array();
+            foreach ($attachments as $attachment) {
+                $attachment = $this->getUploadFileService()->getUseFile($attachment['id']);
+                $file = $this->getUploadFileService()->getFullFile($attachment['fileId']);
+
+                if ($file['storage'] != 'cloud') {
+                    throw CommonException::ERROR_PARAMETER();
+                }
+
+//                    if ($file['targetType'] != 'attachment') {
+//                        throw CommonException::ERROR_PARAMETER();
+//                    }
+
+                $download = $this->getUploadFileService()->getDownloadMetas($file['id']);
+
+                if ($file['type'] == 'video' or $file['type'] == 'audio') {
+                    $thread['attachments'][$file['type']] = $download['url'];
+                } else {
+                    $thread['attachments']['pictures'][] = $download['url'];
+                }
+            }
+        }
+
+        return $thread;
     }
 
     protected function getCloudFileService()
