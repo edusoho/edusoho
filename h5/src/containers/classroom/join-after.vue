@@ -24,7 +24,8 @@
         <div class="segmentation"></div>
 
         <teacher
-          class="teacher" title="班主任" :teacherInfo="details.headTeacher ? [details.headTeacher] : []"></teacher>
+          class="teacher" title="班主任" :teacherInfo="details.headTeacher ? [details.headTeacher] : []"
+          defaulValue="尚未设置班主任"></teacher>
       </div>
 
       <!-- 班级课程 -->

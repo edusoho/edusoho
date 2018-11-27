@@ -27,7 +27,8 @@
       <div class="segmentation"></div>
 
       <teacher
-        class="teacher" title="班主任" :teacherInfo="details.headTeacher ? [details.headTeacher] : []"></teacher>
+        class="teacher" title="班主任" :teacherInfo="details.headTeacher ? [details.headTeacher] : []"
+        defaulValue="尚未设置班主任"></teacher>
       <div class="segmentation"></div>
 
       <!-- 班级课程 -->
@@ -88,6 +89,9 @@
     mounted() {
       window.addEventListener('touchmove', this.handleScroll);
       window.addEventListener('scroll', this.handleScroll);
+      setTimeout(() => {
+        window.scrollTo(0,0);
+      }, 100)
     },
     destroyed () {
       window.removeEventListener('touchmove', this.handleScroll);

@@ -87,6 +87,13 @@
     mounted() {
       window.addEventListener('touchmove', this.handleScroll);
       window.addEventListener('scroll', this.handleScroll);
+      setTimeout(() => {
+        window.scrollTo(0,0);
+      }, 100)
+    },
+    destroyed () {
+      window.removeEventListener('touchmove', this.handleScroll);
+      window.removeEventListener('scroll', this.handleScroll);
     },
     methods: {
        ...mapActions('course', [
@@ -177,10 +184,6 @@
         this.startDateStr = data.startDateStr;
         this.endDateStr = data.endDateStr;
       }
-    },
-    destroyed () {
-      window.removeEventListener('touchmove', this.handleScroll);
-      window.removeEventListener('scroll', this.handleScroll);
     },
   }
 </script>

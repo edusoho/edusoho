@@ -6,7 +6,7 @@
         class="avatar-img">
         <div class="teacher-cell">
           <span class="dark font-family-PFM">{{item.nickname}}</span>
-          <span class="text-content">{{item.title || '暂无简介'}}</span>
+          <span class="text-content" v-show="item.title">{{ item.title }}</span>
         </div>
       </div>
     </template>
