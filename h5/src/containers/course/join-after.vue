@@ -59,7 +59,7 @@ export default {
   data() {
     return {
       headBottom: 0,
-      active: 0,
+      active: 1,
       scrollFlag: false,
       tabs: ['班级介绍', '课程目录', '学员评价'],
       tabsClass: '',

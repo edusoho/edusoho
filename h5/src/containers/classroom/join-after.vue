@@ -66,7 +66,7 @@
     data() {
       return {
         headBottom: 0,
-        active: 0,
+        active: 1,
         scrollFlag: false,
         tabs: ['班级介绍', '班级课程', '学员评价'],
         tabsClass: '',
