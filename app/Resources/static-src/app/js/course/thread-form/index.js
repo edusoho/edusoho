@@ -7,6 +7,10 @@ let validator = $form.validate({
     },
     'content': {
       required: true,
+    },
+    'thread[title]': {
+      required: true,
+      trim: true,
     }
   }
 });
