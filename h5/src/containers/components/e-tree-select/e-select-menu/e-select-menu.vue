@@ -78,10 +78,10 @@
         if (query === 'categoryId') {
           switch(level) {
             case 'levelOne':
-              if (item.children) {
+              if (item.children.length) {
                 this.secondLevel = item.children;
               } else {
-                this.queryData.categoryId = item.id
+                this.queryData.categoryId = Number(item.id)
                 this.isReadyEmit = true;
               }
               break;
@@ -89,12 +89,12 @@
               if (item.children) {
                 this.thirdLevel = item.children;
               } else {
-                this.queryData.categoryId = item.id
+                this.queryData.categoryId = Number(item.id)
                 this.isReadyEmit = true;
               }
               break;
             case 'levelThree':
-              this.queryData.categoryId = item.id
+              this.queryData.categoryId = Number(item.id)
               this.isReadyEmit = true;
               break;
           }
