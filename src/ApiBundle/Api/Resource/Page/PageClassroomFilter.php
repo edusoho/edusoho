@@ -1,25 +1,28 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Classroom;
+namespace ApiBundle\Api\Resource\Page;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
+use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
+use ApiBundle\Api\Resource\Classroom\ClassroomMemberFilter;
+use ApiBundle\Api\Resource\Classroom\ClassroomReviewFilter;
 
-class ClassroomFilter extends Filter
+class PageClassroomFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'courseNum', 'about',
+        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'about',
     );
 
     protected $publicFields = array(
         'status', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
-        'createdTime', 'updatedTime', 'creator', 'access',
+        'createdTime', 'updatedTime', 'creator', 'access', 'courses', 'reviews', 'member',
     );
 
     protected function simpleFields(&$data)
@@ -47,6 +50,17 @@ class ClassroomFilter extends Filter
             $userFilter->setMode(Filter::PUBLIC_MODE);
             $userFilter->filter($data['headTeacher']);
         }
+        $courseFilter = new CourseFilter();
+        $courseFilter->setMode(Filter::PUBLIC_MODE);
+        $courseFilter->filters($data['courses']);
+
+        $memberFilter = new ClassroomMemberFilter();
+        $memberFilter->setMode(Filter::PUBLIC_MODE);
+        $memberFilter->filter($data['member']);
+
+        $reviewFilter = new ClassroomReviewFilter();
+        $reviewFilter->setMode(Filter::PUBLIC_MODE);
+        $reviewFilter->filters($data['reviews']);
     }
 
     private function transformCover(&$data)

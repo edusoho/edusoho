@@ -5,11 +5,11 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 
-class CourseReviewFilter extends Filter
+class CourseReviewPostFilter extends Filter
 {
     protected $publicFields = array(
         'id', 'title', 'content', 'rating', 'private', 'createdTime', 'parentId',
-        'updatedTime', 'courseSetId', 'user', 'course', 'posts',
+        'updatedTime', 'courseSetId', 'user', 'course',
     );
 
     protected function publicFields(&$data)
@@ -21,9 +21,5 @@ class CourseReviewFilter extends Filter
         $courseFilter = new CourseFilter();
         $courseFilter->setMode(Filter::SIMPLE_MODE);
         $courseFilter->filter($data['course']);
-
-        $postFilter = new CourseReviewPostFilter();
-        $postFilter->setMode(Filter::PUBLIC_MODE);
-        $postFilter->filters($data['posts']);
     }
 }
