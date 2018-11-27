@@ -11,9 +11,15 @@ class CourseThread extends AbstractResource
 {
     public function get(ApiRequest $request, $courseId, $threadId)
     {
+        $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         if (empty($course)) {
-            throw new BadRequestHttpException("CourseSet#{$courseId} Not Found", null, 4041601);
+            throw new BadRequestHttpException('教学计划不存在', null, 4041601);
+        }
+
+        if (empty($member)) {
+            throw new BadRequestHttpException('教学计划中没有该学员', null, '4041901');
         }
 
         $thread = $this->getCourseThreadService()->getThreadByThreadId($threadId);
@@ -25,17 +31,28 @@ class CourseThread extends AbstractResource
 
     public function search(ApiRequest $request, $courseId)
     {
+        $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         if (empty($course)) {
-            throw new BadRequestHttpException("CourseSet#{$courseId} Not Found", null, 4041601);
+            throw new BadRequestHttpException('教学计划不存在', null, 4041601);
         }
+
+        if (empty($member)) {
+            throw new BadRequestHttpException('教学计划中没有该学员', null, '4041901');
+        }
+
         $type = $request->query->get('type', 'question');
         $keyword = $request->query->get('keyword');
+//        $taskId = $request->query->get('taskId', 0);
+//        if ($taskId) {
+//            $activity = $this->getActivityService()->getActivity($taskId, true);
+//        }
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions = array(
             'courseId' => $courseId,
             'type' => $type,
-            'title' => $keyword,
+            'content' => $keyword,
         );
 
         if (!empty($keyword)) {
@@ -90,16 +107,23 @@ class CourseThread extends AbstractResource
                     throw CommonException::ERROR_PARAMETER();
                 }
 
-//                    if ($file['targetType'] != 'attachment') {
-//                        throw CommonException::ERROR_PARAMETER();
-//                    }
+                if ($file['targetType'] != 'attachment') {
+                    throw CommonException::ERROR_PARAMETER();
+                }
 
                 $download = $this->getUploadFileService()->getDownloadMetas($file['id']);
 
                 if ($file['type'] == 'video' or $file['type'] == 'audio') {
-                    $thread['attachments'][$file['type']] = $download['url'];
+                    $thread['attachments'][$file['type']] = array(
+                        'url' => $download['url'],
+                        'length' => $file['length'],
+                    );
                 } else {
                     $thread['attachments']['pictures'][] = $download['url'];
+                }
+
+                if ($file['type'] == 'video') {
+                    $thread['attachments'][$file['type']]['thumbnail'] = ($file['thumbnail']) ? $file['thumbnail'] : '';
                 }
             }
         }
@@ -107,24 +131,12 @@ class CourseThread extends AbstractResource
         return $thread;
     }
 
-    protected function getCloudFileService()
+    /**
+     * @return \Biz\Activity\Service\Impl\ActivityServiceImpl
+     */
+    protected function getActivityService()
     {
-        return $this->service('CloudFile:CloudFileService');
-    }
-
-    protected function getPlayerService()
-    {
-        return $this->service('Player:PlayerService');
-    }
-
-    protected function getTokenService()
-    {
-        return $this->service('User:TokenService');
-    }
-
-    protected function getMaterialLibService()
-    {
-        return $this->service('MaterialLib:MaterialLibService');
+        return $this->service('Activity:ActivityService');
     }
 
     /**
@@ -149,6 +161,14 @@ class CourseThread extends AbstractResource
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return \Biz\Course\Service\Impl\MemberServiceImpl
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 
     /**
