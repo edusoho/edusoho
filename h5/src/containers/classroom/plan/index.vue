@@ -3,7 +3,7 @@
     <e-panel :title="details.title">
       <div class="course-detail__plan-price">
         <span :class="{ isFree: Number(details.price) === 0 }">{{ details.price | filterPrice }}</span>
-        <span v-if="showStudent" class="plan-price__student-num">{{ details.studentNum }}人在学</span>
+        <span class="plan-price__student-num">{{ details.studentNum }}人在学</span>
       </div>
     </e-panel>
 
@@ -20,7 +20,6 @@
 <script>
 import service from '../service';
 import { formatFullTime } from '@/utils/date-toolkit.js';
-import { mapState } from 'vuex';
 
 export default {
   props: {
@@ -41,7 +40,6 @@ export default {
     },
   },
   computed: {
-    ...mapState(['courseSettings']),
     learnExpiry() {
       const memberInfo = this.joinStatus;
       const learnExpiryData = this.details.expiryValue;
@@ -69,10 +67,7 @@ export default {
           : '永久有效'
         );
       }
-    },
-    showStudent() {
-      return this.courseSettings ? Number(this.courseSettings.show_student_num_enabled) : true;
-    },
+    }
   }
 }
 </script>

@@ -18,7 +18,6 @@ export const userLogin = ({ commit }, { username, password }) => {
   });
 };
 
-
 export const getUserInfo = ({ commit }) => Api.getUserInfo({})
   .then(res => {
     commit(types.USER_INFO, res);
