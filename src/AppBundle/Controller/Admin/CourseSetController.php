@@ -711,7 +711,7 @@ class CourseSetController extends BaseController
 
         $tagOwnerIds = $this->getTagService()->findOwnerIdsByTagIdsAndOwnerType($conditions['tagIds'], 'course-set');
 
-        $conditions['ids'] = empty($tagOwnerIds) ? array() : $tagOwnerIds;
+        $conditions['ids'] = empty($tagOwnerIds) ? array(-1) : $tagOwnerIds;
         unset($conditions['tagIds']);
 
         return $conditions;
