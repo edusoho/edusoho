@@ -87,11 +87,11 @@
         },
         linkOptions: [{
           key: 0,
-          type: 'course_list',
+          type: 'course',
           label: '选择课程',
         }, {
           key: 1,
-          type: 'class_list',
+          type: 'classroom',
           label: '选择班级',
         }],
         imageCropped: false,

@@ -109,15 +109,15 @@ export default {
       ],
       linkOptions: [{
         key: 0,
-        type: 'course_list',
+        type: 'course',
         label: '选择课程',
       }, {
         key: 1,
-        type: 'class_list',
+        type: 'classroom',
         label: '选择班级',
       }],
       pathName: this.$route.name,
-      type: 'course_list',
+      type: 'course',
     }
   },
   props: {
@@ -155,7 +155,7 @@ export default {
     courseLinkText() {
       const data = this.courseSets[0];
       if (data) {
-        return (this.type === 'course_list') ? data.displayedTitle : data.title;
+        return (this.type === 'course') ? data.displayedTitle : data.title;
       }
       if (this.copyModuleData.link.target.title) {
         return this.copyModuleData.link.target.title;
@@ -224,7 +224,7 @@ export default {
       this.courseSets = data;
       if (!data.length) return;
 
-      if (this.type === 'class_list') {
+      if (this.type === 'classroom') {
         this.moduleData.data.link.target = {
           id: data[0].id,
           title: data[0].title,

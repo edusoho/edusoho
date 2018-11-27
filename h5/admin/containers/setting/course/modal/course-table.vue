@@ -53,7 +53,7 @@ export default {
     },
     type: {
       type: String,
-      default: 'course_list'
+      default: 'course'
     }
   },
   data () {
