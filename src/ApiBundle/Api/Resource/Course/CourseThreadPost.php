@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Common\CommonException;
 
 class CourseThreadPost extends AbstractResource
 {
@@ -24,9 +25,57 @@ class CourseThreadPost extends AbstractResource
             $limit
         );
 
-        $this->getOCUtil()->multiple($threads, array('userId'));
+        $this->getOCUtil()->multiple($posts, array('userId'));
+        $posts = $this->addAttachments($posts);
 
         return $this->makePagingObject(array_values($posts), $total, $offset, $limit);
+    }
+
+    protected function addAttachments($posts)
+    {
+        foreach ($posts as &$post) {
+            if ($post['source'] == 'app') {
+                $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread.post', $post['id'], 'attachment');
+                $post['attachments'] = array();
+                foreach ($attachments as $attachment) {
+                    $attachment = $this->getUploadFileService()->getUseFile($attachment['id']);
+                    $file = $this->getUploadFileService()->getFullFile($attachment['fileId']);
+
+                    if ($file['storage'] != 'cloud') {
+                        throw CommonException::ERROR_PARAMETER();
+                    }
+
+//                if ($file['targetType'] != 'attachment') {
+//                    throw CommonException::ERROR_PARAMETER();
+//                }
+
+                    $download = $this->getUploadFileService()->getDownloadMetas($file['id']);
+
+                    if ($file['type'] == 'video' or $file['type'] == 'audio') {
+                        $post['attachments'][$file['type']] = array(
+                            'uri' => $download['url'],
+                            'length' => $file['length'],
+                        );
+                    } else {
+                        $post['attachments']['pictures'][] = $download['url'];
+                    }
+
+                    if ($file['type'] == 'video') {
+                        $post['attachments'][$file['type']]['thumbnail'] = ($file['thumbnail']) ? $file['thumbnail'] : '';
+                    }
+                }
+            }
+        }
+
+        return $posts;
+    }
+
+    /**
+     * @return \Biz\File\Service\Impl\UploadFileServiceImpl
+     */
+    protected function getUploadFileService()
+    {
+        return $this->service('File:UploadFileService');
     }
 
     /**
