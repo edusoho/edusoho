@@ -71,6 +71,7 @@
   },
   "devDependencies": {
     "babel-jest": "^21.0.2",
+    "chromedriver": "^2.27.2",
     "cross-spawn": "^5.0.1",
     "eslint": "^4.15.0",
     "friendly-errors-webpack-plugin": "^1.6.1",
