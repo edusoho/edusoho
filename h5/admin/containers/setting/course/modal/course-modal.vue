@@ -157,9 +157,8 @@ export default {
     searchHandler(queryString, cb) {
       if (this.type === 'class_list') {
         this.getClassList({
-          courseSetTitle: queryString
+          title: queryString
         }).then(res => {
-          console.log(res,cb,555)
           cb(res.data);
         })
         return;

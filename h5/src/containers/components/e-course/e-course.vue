@@ -107,7 +107,7 @@
           return;
         }
         const isOrder = this.type === 'order';
-        const id = this.course.id || this.course.targetId;
+        const id = this.course.id || this.order.targetId;
         if (e.target.tagName === 'SPAN') {
           console.log(e.target.tagName);
           return;
@@ -117,7 +117,7 @@
           return;
         }
         this.$router.push({
-          path: `/course/${id}`,
+          path: (this.typeList === 'course_list') ? `/course/${id}` : `/classroom/${id}`,
         });
       }
     }

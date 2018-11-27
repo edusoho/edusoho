@@ -17,7 +17,7 @@
         :feedback="feedback">
       </e-class>
     </div>
-    <div v-show="courseItemData" class="e-course__empty">暂无课程</div>
+    <div v-show="courseItemData" class="e-course__empty">暂无{{typeList === 'course_list' ? '课程' : '班级'}}</div>
   </div>
 </template>
 

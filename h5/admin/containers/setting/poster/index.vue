@@ -43,11 +43,11 @@
           <p class="pull-left section-left">课程名称：</p>
           <div class="section-right">
             <el-dropdown @command="insideLinkHandle" v-show="!courseLinkText">
-              <span class="el-dropdown-link">
-                {{linkText}}<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
+              <el-button size="mini" class="el-dropdown-link">
+                添加链接
+              </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item :command="item" v-for="item in linkOptions" :key="item.value">{{item.label}}</el-dropdown-item>
+                <el-dropdown-item @click.native="insideLinkHandle(item.type)" v-for="item in linkOptions" :key="item.key">{{item.label}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
             <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="courseLinkText">
@@ -108,15 +108,16 @@ export default {
         'size-fit',
       ],
       linkOptions: [{
+        key: 0,
         type: 'course_list',
         label: '选择课程',
       }, {
+        key: 1,
         type: 'class_list',
         label: '选择班级',
       }],
       pathName: this.$route.name,
       type: 'course_list',
-      linkText: '选择课程'
     }
   },
   props: {
@@ -152,8 +153,9 @@ export default {
       set() {}
     },
     courseLinkText() {
-      if (this.courseSets[0]) {
-        return this.courseSets[0].displayedTitle;
+      const data = this.courseSets[0];
+      if (data) {
+        return (this.type === 'course_list') ? data.displayedTitle : data.title;
       }
       if (this.copyModuleData.link.target.title) {
         return this.copyModuleData.link.target.title;
@@ -218,14 +220,23 @@ export default {
     modalVisibleHandler(visible) {
       this.modalVisible = visible;
     },
-    getUpdatedCourses(courses) {
-      this.courseSets = courses;
-      if (!courses.length) return;
+    getUpdatedCourses(data) {
+      this.courseSets = data;
+      if (!data.length) return;
+
+      if (this.type === 'class_list') {
+        this.moduleData.data.link.target = {
+          id: data[0].id,
+          title: data[0].title,
+          courseSetId: data[0].id,
+        };
+        return;
+      }
 
       this.moduleData.data.link.target = {
-        id: courses[0].id,
-        title: courses[0].title || courses[0].courseSetTitle,
-        courseSetId: courses[0].courseSet.id,
+        id: data[0].id,
+        title: data[0].title || data[0].courseSetTitle,
+        courseSetId: data[0].courseSet.id,
       };
     },
     removeCourseLink() {
@@ -235,10 +246,9 @@ export default {
     handleClose() {
       this.removeCourseLink();
     },
-    insideLinkHandle(commands) {
+    insideLinkHandle(value) {
       this.modalVisible = true;
-      this.type = commands.type;
-      this.linkText = commands.label;
+      this.type = value;
     }
   }
 }

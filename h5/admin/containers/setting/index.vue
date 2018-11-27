@@ -132,11 +132,14 @@ export default {
     // 请求发现页配置
     this.load();
     // 获得课程分类列表
-    this.getCategories();
+    this.getCourseCategories();
+    // 获得班级分类列表
+    this.getClassCategories();
   },
   methods: {
     ...mapActions([
-      'getCategories',
+      'getCourseCategories',
+      'getClassCategories',
       'deleteDraft',
       'saveDraft',
       'getDraft',

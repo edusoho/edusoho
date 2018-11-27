@@ -51,7 +51,6 @@
         handler(course) {
           // 小程序后台替换图片协议
           const courseSet = course.courseSet;
-
           if (this.pathName !== 'h5Setting' && courseSet) {
             const keys = Object.keys(courseSet.cover);
             for (var i = 0; i < keys.length; i++) {

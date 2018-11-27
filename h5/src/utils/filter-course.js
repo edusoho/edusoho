@@ -4,7 +4,7 @@ const courseListData = (data, type, typeList) => {
       if (typeList === 'class_list') {
         return {
           id: data.id,
-          // targetId: data.targetId,
+          targetId: data.targetId,
           imgSrc: {
             url: data.cover.middle || '',
             className: 'e-class__img'
@@ -51,7 +51,7 @@ const courseListData = (data, type, typeList) => {
     case 'confirmOrder':
       return {
         imgSrc: {
-          url: data.cover.middle,
+          url: data.cover.middle || '',
           className: 'e-course__img'
         },
         header: data.title,
@@ -67,6 +67,7 @@ const courseListData = (data, type, typeList) => {
       if (typeList === 'class_list') {
         return {
           id: data.id,
+          targetId: data.targetId,
           imgSrc: {
             url: data.cover.middle || '',
             className: 'e-class__img'
@@ -82,7 +83,7 @@ const courseListData = (data, type, typeList) => {
       return {
         id: data.id,
         imgSrc: {
-          url: data.courseSet.cover.middle,
+          url: data.courseSet.cover.middle || '',
           className: (typeList === 'course_list') ? 'e-course__img' : 'e-class__img'
         },
         header: data.courseSetTitle,
