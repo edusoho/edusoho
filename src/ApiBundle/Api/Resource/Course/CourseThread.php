@@ -66,6 +66,7 @@ class CourseThread extends AbstractResource
             $conditions['videoAskTime_GE'] = ($videoAskTime - 60) > 0 ? $videoAskTime - 60 : 0;
             $conditions['videoAskTime_LE'] = $videoAskTime + 60;
         }
+
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
         if (!empty($keyword)) {
