@@ -38,7 +38,8 @@
       <!-- 学员评价 -->
       <review-list ref="review" :classId="details.classId" :reviews="details.reviews" title="学员评价" type="classroom" defaulValue="暂无评价"></review-list>
 
-      <e-footer @click.native="handleJoin">{{details.access.code | filterJoinStatus('classroom')}}</e-footer>
+      <e-footer :disabled="!accessToJoin" @click.native="handleJoin">
+      {{details.access.code | filterJoinStatus('classroom')}}</e-footer>
     </div>
 
 
@@ -85,6 +86,12 @@
         disableMask: false,
         learnExpiry: '永久有效',
       }
+    },
+    computed: {
+      accessToJoin() {
+        return this.details.access.code === 'success'
+          || this.details.access.code === 'user.not_login';
+      },
     },
     mounted() {
       window.addEventListener('touchmove', this.handleScroll);
@@ -133,6 +140,9 @@
         }, 400)
       },
       handleJoin() {
+        if (!this.accessToJoin) {
+          return;
+        }
         const details = this.details;
         const planDetails = this.planDetails;
         const canJoinIn = details.access.code === 'success'

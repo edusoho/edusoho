@@ -31,7 +31,8 @@
     <!-- 学员评价 -->
     <review-list ref="review" :classId="details.courseSet.id" :reviews="details.reviews" title="学员评价" type="course" defaulValue="暂无评价"></review-list>
 
-    <e-footer v-if="!isClassCourse" @click.native="handleJoin">{{details.access.code | filterJoinStatus}}</e-footer>
+    <e-footer v-if="!isClassCourse" :disabled="!accessToJoin" @click.native="handleJoin">
+      {{details.access.code | filterJoinStatus}}</e-footer>
   </div>
 </template>
 <script>
@@ -82,6 +83,10 @@
       },
       isClassCourse() {
         return Number(this.details.parentId);
+      },
+      accessToJoin() {
+        return this.details.access.code === 'success'
+          || this.details.access.code === 'user.not_login';
       },
     },
     mounted() {
@@ -142,6 +147,9 @@
           :(scrollTop >= tops.directoryTop ? 2 : 1);
       },
       handleJoin(){
+        if (!this.accessToJoin) {
+          return;
+        }
         const endDate = this.details.learningExpiryDate.expiryEndDate;
         const endDateStamp = new Date(endDate).getTime();
         const todayStamp = new Date().getTime();
