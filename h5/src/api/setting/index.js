@@ -5,9 +5,13 @@ export default [
     url: '/settings/face',
     method: 'GET'
   }, {
-    // 更多获取筛选信息
-    name: 'getSelectItems',
-    url: '/pages/h5/settings/course'
+    // 更多课程分类
+    name: 'getCourseCategories',
+    url: '/categories/course'
+  }, {
+    // 更多班级分类
+    name: 'getClassCategories',
+    url: '/categories/classroom'
   }, {
     // 获取全局设置
     name: 'getSettings',

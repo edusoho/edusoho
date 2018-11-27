@@ -148,15 +148,16 @@
             limit: this.limit
           });
       // 获取select items
-      Api.getSelectItems()
+      Api.getClassCategories()
         .then((data) => {
-          data[0].data.unshift({
-            name: '全部',
-            id: '0'
-          });
-          data[1].data='';
+          console.log(Object.values(data),9999)
+          // data[0].data.unshift({
+          //   name: '全部',
+          //   id: '0'
+          // });
+          // data[1].data='';
           const items = Object.values(data)
-          items.pop();
+          // items.pop();
           this.selectItems = items;
         });
     }
