@@ -62,11 +62,12 @@ class CourseThread extends AbstractResource
                         'duration' => 3600,
                         'userId' => 0,
                     ));
+                    $download = $this->getUploadFileService()->getDownloadMetas($file['id']);
                     $result = $this->getMaterialLibService()->player($file['no']);
 
                     if ($file['type'] == 'video') {
                         $mediaUri = 'http://'.$_SERVER['HTTP_HOST']."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=";
-                        $thread['attachments'][$file['type']] = $mediaUri;
+                        $thread['attachments'][$file['type']] = $download['url'];
                     } elseif ($file['type'] == 'audio') {
                         //                        $mediaUri = 'http://'.$_SERVER['HTTP_HOST']."/hls/{$file['id']}/audio/playlist/{$token['token']}.m3u8?format=json&line=";
                         $thread['attachments']['audio'] = $result['url'];
