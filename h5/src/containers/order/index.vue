@@ -11,8 +11,7 @@
       <div class="order-coupon">
         <div class="coupon-column"
           :chosen-coupon="activeItemIndex"
-          @click="showList = true"
-          >
+          @click="showList = true">
           <span>优惠券</span>
           <span class="red">{{ couponShow }}</span>
         </div>
@@ -30,8 +29,7 @@
             :data="item"
             :index="index"
             :active="activeItemIndex"
-            @chooseItem="chooseItem"
-            >
+            @chooseItem="chooseItem">
           </coupon>
           <div class="coupon-empty" v-show="!course.availableCoupons.length">
             <img class="empty-img" src='static/images/coupon_empty.png'>

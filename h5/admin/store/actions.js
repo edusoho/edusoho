@@ -7,7 +7,7 @@ export const updateLoading = ({ commit }, { isLoading }) => {
 };
 
 // 课程分类
-export const getCategories = ({ commit }) => Api.getCategories({
+export const getCourseCategories = ({ commit }) => Api.getCategories({
   query: {
     groupCode: 'course'
   }
@@ -19,7 +19,24 @@ export const getCategories = ({ commit }) => Api.getCategories({
     }
     return children;
   });
-  commit(types.GET_CATEGORIES, formatedRes);
+  commit(types.GET_COURSE_CATEGORIES, formatedRes);
+  return formatedRes;
+});
+
+// 班级分类
+export const getClassCategories = ({ commit }) => Api.getCategories({
+  query: {
+    groupCode: 'classroom'
+  }
+}).then(res => {
+  res.unshift({ id: '0', children: undefined, name: '全部' });
+  const formatedRes = treeDigger(res, children => {
+    if (!children.length) {
+      children = undefined;
+    }
+    return children;
+  });
+  commit(types.GET_CLASS_CATEGORIES, formatedRes);
   return formatedRes;
 });
 

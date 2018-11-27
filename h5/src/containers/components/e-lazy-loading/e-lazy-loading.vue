@@ -7,7 +7,7 @@
       :key="index"
       :type="courseItemType"
       :typeList="typeList"
-      :course="course | courseListData(courseItemType, typeList)"
+      :course="course | courseListData(listObj)"
     ></courseItem>
   </van-list>
 </template>
@@ -15,6 +15,7 @@
 <script>
   import courseItem from '../e-class/e-class.vue';
   import courseListData from '../../../utils/filter-course.js';
+  import { mapState } from 'vuex';
 
   export default {
     components: {
@@ -44,12 +45,20 @@
     },
 
     computed: {
+      ...mapState(['courseSettings']),
       loading: {
         get() {
           return !this.isRequestCompile;
         },
         set(v) {
           console.log(v, 'value');
+        }
+      },
+      listObj() {
+        return {
+          type: this.courseItemType,
+          typeList: this.typeList,
+          showStudent: Number(this.courseSettings.show_student_num_enabled) || true,
         }
       }
     },

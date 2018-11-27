@@ -33,7 +33,7 @@
             <el-cascader v-show="sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="categories" :props="cascaderProps" v-model="categoryTempId" filterable change-on-select></el-cascader>
             </el-input>
             <div class="required-option" v-show="sourceType === 'custom'">
-              <el-button type="info" size="mini" @click="openModal">选择{{typeLabel}}</el-button>
+              <el-button size="mini" @click="openModal">选择{{typeLabel}}</el-button>
             </div>
           </div>
           <draggable v-show="sourceType === 'custom' && copyModuleData.data.items.length" v-model="copyModuleData.data.items" class="section__course-container">

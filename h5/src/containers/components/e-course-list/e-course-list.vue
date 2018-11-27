@@ -11,19 +11,20 @@
     <div class="e-course-list__body">
       <e-class v-for="item in courseList.items"
         :key="item.id"
-        :course="item | courseListData(type, typeList)"
+        :course="item | courseListData(listObj)"
         :typeList="typeList"
         :type="type"
         :feedback="feedback">
       </e-class>
     </div>
-    <div v-show="courseItemData" class="e-course__empty">暂无课程</div>
+    <div v-show="courseItemData" class="e-course__empty">暂无{{typeList === 'course_list' ? '课程' : '班级'}}</div>
   </div>
 </template>
 
 <script>
 import eClass from '../e-class/e-class';
 import courseListData from '../../../utils/filter-course.js';
+import { mapState } from 'vuex';
 
   export default {
     props: {
@@ -49,13 +50,14 @@ import courseListData from '../../../utils/filter-course.js';
     },
     data() {
       return {
-        type: 'price'
+        type: 'price',
       };
     },
     filters: {
       courseListData,
     },
     computed: {
+      ...mapState(['courseSettings']),
       sourceType: {
         get() {
           return this.courseList.sourceType;
@@ -87,6 +89,14 @@ import courseListData from '../../../utils/filter-course.js';
         },
         set() {}
       },
+      listObj() {
+        return {
+          type: 'price',
+          typeList: this.typeList,
+          showStudent: this.courseSettings ?
+                      Number(this.courseSettings.show_student_num_enabled) : true,
+        }
+      }
     },
     watch: {
       sort(value) {

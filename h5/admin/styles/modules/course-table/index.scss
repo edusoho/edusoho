@@ -29,6 +29,10 @@
     .tr-content {
       height: 40px;
       cursor: move;
+      .text-content {
+        box-sizing: border-box;
+        padding-right: 15px;
+      }
     }
   }
   &__empty {

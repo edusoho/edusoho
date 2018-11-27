@@ -129,12 +129,21 @@ export default {
     selected(selected) {
       this.activeItemIndex = selected.selectIndex;
     },
-    getUpdatedCourses(courses) {
+    getUpdatedCourses(data) {
+      if (this.type === 'class_list') {
+        this.courseSets[this.activeItemIndex] = [{
+          id: data[0].id,
+          // courseSetId: data[0].courseSet.id,
+          title: data[0].title,
+          displayedTitle: data[0].title,
+        }];
+        return;
+      }
       this.courseSets[this.activeItemIndex] = [{
-        id: courses[0].id,
-        courseSetId: courses[0].courseSet.id,
-        title: courses[0].title || courses[0].courseSetTitle,
-        displayedTitle: courses[0].displayedTitle,
+        id: data[0].id,
+        courseSetId: data[0].courseSet.id,
+        title: data[0].title || data[0].courseSetTitle,
+        displayedTitle: data[0].displayedTitle,
       }];
     },
     modalVisibleHandler(visible) {
