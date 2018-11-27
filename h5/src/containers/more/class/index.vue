@@ -147,7 +147,7 @@
             offset: this.offset,
             limit: this.limit
           });
-      // 获取select items
+      // 获取原课程分类数据
       Api.getSelectItems()
         .then((data) => {
           data[0].data.unshift({
@@ -159,6 +159,16 @@
           items.pop();
           this.selectItems = items;
         });
-    }
+      // 重组数据
+      Api.getClassCategories()
+        .then((data) => {
+          const item = data;
+          item.unshift({
+            name: '全部',
+            id: '0'
+          });
+          this.selectItems[0].data = item;
+        })
+    },
   }
 </script>
