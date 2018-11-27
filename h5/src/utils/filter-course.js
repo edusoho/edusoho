@@ -1,7 +1,11 @@
-const courseListData = (data, type, typeList) => {
-  switch (type) {
+const courseListData = (data, listObj) => {
+  switch (listObj.type) {
     case 'price':
-      if (typeList === 'class_list') {
+      const showStudentStr = listObj.showStudent ?
+        `<span class="switch-box__state"><p style="color: #B0BDC9">
+          ${data.studentNum}人在学</p></span>` : '';
+
+      if (listObj.typeList === 'class_list') {
         return {
           id: data.id,
           targetId: data.targetId,
@@ -18,10 +22,7 @@ const courseListData = (data, type, typeList) => {
             value: data.price || data.studentNum,
             html: `<span class="switch-box__price">
                     <p style="color: #ff5353">¥ ${data.price}</p>
-                  </span>
-                  <span class="switch-box__state">
-                    <p style="color: #B0BDC9">${data.studentNum}人在学</p>
-                  </span>`
+                  </span>${showStudentStr}`
           }
         };
       }
@@ -42,10 +43,7 @@ const courseListData = (data, type, typeList) => {
           value: data.price || data.studentNum,
           html: `<span class="switch-box__price">
                     <p style="color: #ff5353">¥ ${data.price}</p>
-                </span>
-                <span class="switch-box__state">
-                  <p style="color: #B0BDC9">${data.studentNum}人在学</p>
-                </span>`
+                </span>${showStudentStr}`
         }
       };
     case 'confirmOrder':
@@ -64,7 +62,7 @@ const courseListData = (data, type, typeList) => {
         }
       };
     case 'rank':
-      if (typeList === 'class_list') {
+      if (listObj.typeList === 'class_list') {
         return {
           id: data.id,
           targetId: data.targetId,
@@ -84,7 +82,7 @@ const courseListData = (data, type, typeList) => {
         id: data.id,
         imgSrc: {
           url: data.courseSet.cover.middle || '',
-          className: (typeList === 'course_list') ? 'e-course__img' : 'e-class__img'
+          className: (listObj.typeList === 'course_list') ? 'e-course__img' : 'e-class__img'
         },
         header: data.courseSetTitle,
         middle: {
