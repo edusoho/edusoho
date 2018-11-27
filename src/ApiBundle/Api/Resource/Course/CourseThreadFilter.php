@@ -9,7 +9,7 @@ class CourseThreadFilter extends Filter
 {
     protected $publicFields = array(
         'id', 'courseId', 'taskId', 'type', 'isStick', 'isElite', 'isClosed', 'private', 'title', 'content', 'source', 'postNum', 'userId', 'attachments', 'attachments',
-        'hitNum', 'followNum', 'latestPostUserId', 'videoAskTime', 'videoId', 'latestPostTime', 'courseSetId', 'createdTime', 'updatedTime', 'user', 'videoUri',
+        'hitNum', 'followNum', 'latestPostUserId', 'videoAskTime', 'videoId', 'latestPostTime', 'courseSetId', 'createdTime', 'updatedTime', 'user', 'askVideoUri', 'askVideoLength', 'askVideoThumbnail',
     );
 
     protected function publicFields(&$data)

@@ -19,11 +19,18 @@ class CourseThread extends AbstractResource
         }
 
         if (empty($member)) {
-            throw new BadRequestHttpException('教学计划中没有该学员', null, '4041901');
+            throw new BadRequestHttpException('教学计划中没有该学员', null, 4041901);
         }
 
         $thread = $this->getCourseThreadService()->getThreadByThreadId($threadId);
         $thread = $this->addAttachments($thread);
+        if ($thread['videoId']) {
+            $file = $this->getUploadFileService()->getFullFile($thread['videoId']);
+            $download = $this->getUploadFileService()->getDownloadMetas($file['id']);
+            $thread['askVideoUri'] = $download['url'];
+            $thread['askVideoLength'] = $file['length'];
+            $thread['askVideoThumbnail'] = $file['thumbnail'];
+        }
         $thread['user'] = $this->getUserService()->getUser($thread['userId']);
 
         return $thread;
@@ -39,21 +46,27 @@ class CourseThread extends AbstractResource
         }
 
         if (empty($member)) {
-            throw new BadRequestHttpException('教学计划中没有该学员', null, '4041901');
+            throw new BadRequestHttpException('教学计划中没有该学员', null, 4041901);
         }
 
         $type = $request->query->get('type', 'question');
         $keyword = $request->query->get('keyword');
-//        $taskId = $request->query->get('taskId', 0);
-//        if ($taskId) {
-//            $activity = $this->getActivityService()->getActivity($taskId, true);
-//        }
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $taskId = $request->query->get('taskId', 0);
         $conditions = array(
             'courseId' => $courseId,
             'type' => $type,
             'content' => $keyword,
         );
+        if ($taskId) {
+            $videoAskTime = $request->query->get('videoAskTime', 0);
+            $task = $this->getTaskService()->getTask($taskId);
+            $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            $videoId = $activity['ext']['file']['id'];
+            $conditions['videoId'] = isset($videoId) ? $videoId : 0;
+            $conditions['videoAskTime_GE'] = ($videoAskTime - 60) > 0 ? $videoAskTime - 60 : 0;
+            $conditions['videoAskTime_LE'] = $videoAskTime + 60;
+        }
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
 
         if (!empty($keyword)) {
             $this->createSearchKeyword($keyword, $type);
@@ -107,15 +120,15 @@ class CourseThread extends AbstractResource
                     throw CommonException::ERROR_PARAMETER();
                 }
 
-                if ($file['targetType'] != 'attachment') {
-                    throw CommonException::ERROR_PARAMETER();
-                }
+//                if ($file['targetType'] != 'attachment') {
+//                    throw CommonException::ERROR_PARAMETER();
+//                }
 
                 $download = $this->getUploadFileService()->getDownloadMetas($file['id']);
 
                 if ($file['type'] == 'video' or $file['type'] == 'audio') {
                     $thread['attachments'][$file['type']] = array(
-                        'url' => $download['url'],
+                        'uri' => $download['url'],
                         'length' => $file['length'],
                     );
                 } else {
@@ -129,6 +142,14 @@ class CourseThread extends AbstractResource
         }
 
         return $thread;
+    }
+
+    /**
+     * @return \Biz\Task\Service\Impl\TaskServiceImpl
+     */
+    protected function getTaskService()
+    {
+        return $this->service('Task:TaskService');
     }
 
     /**
