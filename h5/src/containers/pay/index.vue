@@ -48,6 +48,7 @@ export default {
       selected: true,
       paySettings: {},
       inWechat: this.isWeixinBrowser(),
+      targetType: this.$route.query.targetType,
     };
   },
   computed: {
@@ -74,7 +75,7 @@ export default {
     if (source !== 'order') {
       Api.createOrder({
         data: {
-          targetType: 'course',
+          targetType: this.targetType,
           targetId: id,
           isOrderCreate: 1,
           couponCode: this.$route.params.couponCode

@@ -158,7 +158,7 @@
             },
             query: {
               expiry: this.learnExpiry,
-              type: 'classroom',
+              targetType: 'classroom',
             }
           });
           return;

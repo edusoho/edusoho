@@ -169,7 +169,8 @@
                 id: this.details.id,
               },
               query: {
-                expiryScope: expiryStr
+                expiryScope: expiryStr,
+                targetType: 'course',
               }
             });
           } else {

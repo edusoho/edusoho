@@ -87,7 +87,7 @@ export default {
       showList: false,
       itemData: null,
       couponNumber: 0,
-      targetType: this.$route.query.type || 'course',
+      targetType: this.$route.query.targetType,
       targetId: this.$route.params.id,
     }
   },
@@ -161,6 +161,7 @@ export default {
         name: 'pay',
         query: {
           id: this.targetId,
+          targetType: this.targetType
         },
         params: {
           couponCode: this.itemData ? this.itemData.code : ''
