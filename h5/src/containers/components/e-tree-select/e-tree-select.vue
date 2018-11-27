@@ -4,9 +4,9 @@
       <div class="e-tree-select__item"
         v-bind:class="{ active: selectedIndex === index && isActive }"
         v-for="(item, index) in selectItems"
-        v-if="item"
+        v-if="item.data"
         @click="toggle(item, index)"
-      >{{ selectedText(item, index) }}</div>
+      >{{ selectedText(item.data, index) }}</div>
     </div>
 
     <selectMenu
@@ -80,7 +80,6 @@
         this.toggle();
       },
       selectedText(value, index) {
-        console.log(value,index,)
         const TREE = {
           CATEGORY: 0,
           TYPE: 1,
@@ -88,7 +87,11 @@
         }
         for (let i = 0; i < value.length; i++) {
           if (index === TREE.CATEGORY) {
-            if (value.id == this.selectedData.categoryId) return value.name
+            if (value[i].id == this.selectedData.categoryId) return value[i].name
+          } else if (index === TREE.TYPE) {
+            if (value[i].type === this.selectedData.type) return value[i].text
+          } else if (index === TREE.SORT) {
+            if (value[i].type === this.selectedData.sort) return value[i].text
           }
         }
       }

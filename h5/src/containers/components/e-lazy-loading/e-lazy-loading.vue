@@ -58,7 +58,8 @@
         return {
           type: this.courseItemType,
           typeList: this.typeList,
-          showStudent: Number(this.courseSettings.show_student_num_enabled) || true,
+          showStudent: this.courseSettings ?
+                      Number(this.courseSettings.show_student_num_enabled) : true,
         }
       }
     },

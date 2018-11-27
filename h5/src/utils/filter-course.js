@@ -22,7 +22,10 @@ const courseListData = (data, listObj) => {
             value: data.price || data.studentNum,
             html: `<span class="switch-box__price">
                     <p style="color: #ff5353">¥ ${data.price}</p>
-                  </span>${showStudentStr}`
+                  </span>
+                  <span class="switch-box__state"><p style="color: #B0BDC9">
+                    ${data.studentNum}人在学</p>
+                  </span>`
           }
         };
       }
