@@ -8,13 +8,13 @@
     ></treeSelect>
     <lazyLoading
       :courseList="courseList"
-      :isAllCourse="isAllCourse"
+      :isAllData="isAllCourse"
       :courseItemType="courseItemType"
-      v-model="isRequestCompile"
+      :isRequestCompile="isRequestCompile"
       @needRequest="sendRequest"
       :typeList="'course_list'"
     ></lazyLoading>
-    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'course'"></emptyCourse>
+    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'course_list'"></emptyCourse>
   </div>
 </template>
 
@@ -25,6 +25,7 @@
   import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
   import { mapMutations } from 'vuex';
   import * as types from '@/store/mutation-types';
+  import CATEGORY_DEFAULT from '@/config/category-default-config.js';
 
   export default {
     components: {
@@ -52,6 +53,7 @@
           category: 'categoryId',
           sort: 'sort'
         },
+        dataDefault: CATEGORY_DEFAULT['course_list']
       };
     },
     watch: {
@@ -147,30 +149,33 @@
             offset: this.offset,
             limit: this.limit
           });
-      // 获取select items
-      Api.getSelectItems()
+
+      // 老接口数据，会被替换暂不处理
+      // Api.getSelectItems()
+      //   .then((data) => {
+      //     data[0].data.unshift({
+      //       name: '全部',
+      //       id: '0'
+      //     });
+      //     data[1].data.unshift({
+      //       text: '全部',
+      //       type: 'all'
+      //     });
+      //     const items = Object.values(data)
+      //     items.pop();
+      //     this.selectItems = items;
+      //   });
+
+      // 获取班级分类数据
+      Api.getCourseCategories()
         .then((data) => {
-          data[0].data.unshift({
+          data.unshift({
             name: '全部',
             id: '0'
           });
-          data[1].data.unshift({
-            text: '全部',
-            type: 'all'
-          });
-          const items = Object.values(data)
-          items.pop();
-          this.selectItems = items;
-        });
-      // 根据筛选条件获取相应课程
-      // this.requestCourses(config)
-      //   .then(() => {
-      //     if (this.courseList.length !== 0) {
-      //       this.isEmptyCourse = false;
-      //     } else {
-      //       this.isEmptyCourse = true;
-      //     }
-      //   });
+          this.dataDefault[0].data = data;
+          this.selectItems = this.dataDefault;
+        })
     }
   }
 </script>

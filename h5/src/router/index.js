@@ -91,12 +91,12 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/more/course/index.vue')
   }, {
-    path: '/class/explore',
+    path: '/classroom/explore',
     name: 'more_class',
     meta: {
       title: '所有班级'
     },
-    component: () => import(/* webpackChunkName: "more" */'@/containers/more/class/index.vue')
+    component: () => import(/* webpackChunkName: "more" */'@/containers/more/classroom/index.vue')
   }, {
     path: '/course/:id',
     name: 'course',

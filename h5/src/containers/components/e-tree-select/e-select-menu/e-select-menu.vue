@@ -78,12 +78,15 @@
         if (query === 'categoryId') {
           switch(level) {
             case 'levelOne':
-              if (item.children.length) {
-                this.secondLevel = item.children;
-              } else {
-                this.queryData.categoryId = Number(item.id)
-                this.isReadyEmit = true;
-              }
+              // 暂不展示多级分类
+              // if (item.children) {
+              //   this.secondLevel = item.children;
+              // } else {
+              //   this.queryData.categoryId = Number(item.id)
+              //   this.isReadyEmit = true;
+              // }
+              this.queryData.categoryId = Number(item.id)
+              this.isReadyEmit = true;
               break;
             case 'levelTwo':
               if (item.children) {
