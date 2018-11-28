@@ -167,7 +167,7 @@
               id: details.classId,
             },
             query: {
-              expiry: this.learnExpiry,
+              expiryScope: this.learnExpiry,
               targetType: 'classroom',
             }
           });
@@ -184,7 +184,7 @@
           console.error(err.message);
         });
       },
-      getLearnExpiry(val) {
+      getLearnExpiry({val}) {
         this.learnExpiry = val;
       }
     },

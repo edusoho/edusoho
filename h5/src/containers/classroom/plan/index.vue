@@ -11,7 +11,7 @@
       <service v-if="details.service.length" :services="details.service" ></service>
       <div>
         <span>学习有效期：</span>
-        <span v-html="learnExpiry"></span>
+        <span v-html="learnExpiryHtml"></span>
       </div>
     </div>
 
@@ -39,8 +39,18 @@ export default {
       return isFree ? '免费' : `¥${price}`;
     },
   },
+  watch: {
+    learnExpiryHtml: {
+      immediate: true,
+      handler(val) {
+        this.$emit('getLearnExpiry', {
+          val,
+        });
+      }
+    }
+  },
   computed: {
-    learnExpiry() {
+    learnExpiryHtml() {
       const memberInfo = this.joinStatus;
       const learnExpiryData = this.details.expiryValue;
       const expiryMode = this.details.expiryMode;
