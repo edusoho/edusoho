@@ -1,5 +1,5 @@
 const head = {
-  course: [
+  course_list: [
     {
       col: 5,
       title: '课程名称',
@@ -18,7 +18,7 @@ const head = {
       label: 'delete',
     }
   ],
-  classroom: [
+  classroom_list: [
     {
       col: 4,
       title: '班级名称',

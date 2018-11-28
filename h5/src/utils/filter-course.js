@@ -7,7 +7,7 @@ const courseListData = (data, listObj) => {
       const price = data.price === '0.00' ? '<p style="color: #408FFB">免费</p>'
         : `<p style="color: #ff5353">¥ ${data.price}</p>`;
 
-      if (listObj.typeList === 'classroom') {
+      if (listObj.typeList === 'classroom_list') {
         return {
           id: data.id,
           targetId: data.targetId,
@@ -63,7 +63,7 @@ const courseListData = (data, listObj) => {
         }
       };
     case 'rank':
-      if (listObj.typeList === 'classroom') {
+      if (listObj.typeList === 'classroom_list') {
         return {
           id: data.id,
           targetId: data.targetId,
@@ -83,7 +83,7 @@ const courseListData = (data, listObj) => {
         id: data.id,
         imgSrc: {
           url: data.courseSet.cover.middle || '',
-          className: (listObj.typeList === 'course') ? 'e-course__img' : 'e-class__img'
+          className: (listObj.typeList === 'course_list') ? 'e-course__img' : 'e-class__img'
         },
         header: data.courseSetTitle,
         middle: {

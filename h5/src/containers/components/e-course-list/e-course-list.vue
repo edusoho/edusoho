@@ -17,7 +17,7 @@
         :feedback="feedback">
       </e-class>
     </div>
-    <div v-show="courseItemData" class="e-course__empty">暂无{{typeList === 'course' ? '课程' : '班级'}}</div>
+    <div v-show="courseItemData" class="e-course__empty">暂无{{typeList === 'course_list' ? '课程' : '班级'}}</div>
   </div>
 </template>
 
@@ -42,7 +42,7 @@ import { mapState } from 'vuex';
       },
       typeList: {
         type: String,
-        default: 'course'
+        default: 'course_list'
       }
     },
     components: {
@@ -131,7 +131,7 @@ import { mapState } from 'vuex';
         if (!this.feedback) {
           return;
         }
-        let routeName = this.typeList === 'course' ? 'more_course' : 'more_class';
+        let routeName = this.typeList === 'course_list' ? 'more_course' : 'more_class';
         this.$router.push({
           name: routeName
         });
