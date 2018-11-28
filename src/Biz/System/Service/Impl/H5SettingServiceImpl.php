@@ -101,7 +101,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     {
         if (!empty($discoverySetting['data']['link'])) {
             $link = $discoverySetting['data']['link'];
-            $target = $this->getTarget($link['type']);
+            $target = $this->getTarget($link['type'], $link['target']['id']);
             if (empty($target)) {
                 $link['target'] = null;
                 $link['url'] = '';
@@ -116,7 +116,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     {
         if (!empty($discoverySetting['data']['link'])) {
             $link = $discoverySetting['data']['link'];
-            $target = $this->getTarget($link['type']);
+            $target = $this->getTarget($link['type'], $link['target']['id']);
             if (empty($target)) {
                 $link['target'] = null;
                 $link['url'] = '';
@@ -148,14 +148,14 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return lcfirst($method);
     }
 
-    public function getTarget($type)
+    public function getTarget($type, $id)
     {
-        if ('course' == $link['type']) {
-            return $this->getCourseService()->getCourse($link['target']['id']);
+        if ('course' == $type) {
+            return $this->getCourseService()->getCourse($id);
         }
 
-        if ('classroom' == $link['type']) {
-            return $this->getClassroomService()->getClassroom($link['target']['id']);
+        if ('classroom' == $type) {
+            return $this->getClassroomService()->getClassroom($id);
         }
 
         return null;
