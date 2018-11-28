@@ -67,7 +67,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function classListFilter($discoverySetting, $usage = 'show')
+    public function classroomListFilter($discoverySetting, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
             if (!empty($discoverySetting['data']['lastDays'])) {
