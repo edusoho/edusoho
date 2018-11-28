@@ -824,13 +824,9 @@ class ClassroomManageController extends BaseController
     public function removeCourseAction($id, $courseId)
     {
         $this->getClassroomService()->tryManageClassroom($id);
-        try {
-            $this->getClassroomService()->deleteClassroomCourses($id, array($courseId));
+        $this->getClassroomService()->deleteClassroomCourses($id, array($courseId));
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function coursesAction(Request $request, $id)

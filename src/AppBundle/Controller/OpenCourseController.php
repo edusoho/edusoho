@@ -212,24 +212,16 @@ class OpenCourseController extends BaseOpenCourseController
 
     public function favoriteAction(Request $request, $id)
     {
-        try {
-            $favoriteNum = $this->getOpenCourseService()->favoriteCourse($id);
-            $jsonData = array('result' => true, 'number' => $favoriteNum);
-        } catch (\Exception $e) {
-            $jsonData = array('result' => false, 'message' => $e->getMessage());
-        }
+        $favoriteNum = $this->getOpenCourseService()->favoriteCourse($id);
+        $jsonData = array('result' => true, 'number' => $favoriteNum);
 
         return $this->createJsonResponse($jsonData);
     }
 
     public function unfavoriteAction(Request $request, $id)
     {
-        try {
-            $favoriteNum = $this->getOpenCourseService()->unFavoriteCourse($id);
-            $jsonData = array('result' => true, 'number' => $favoriteNum);
-        } catch (\Exception $e) {
-            $jsonData = array('result' => false, 'message' => $e->getMessage());
-        }
+        $favoriteNum = $this->getOpenCourseService()->unFavoriteCourse($id);
+        $jsonData = array('result' => true, 'number' => $favoriteNum);
 
         return $this->createJsonResponse($jsonData);
     }

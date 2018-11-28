@@ -115,26 +115,22 @@ class CourseSetController extends BaseController
         if (!empty($subCourses) || ($courseSet['parentId'] && 1 == $courseSet['locked'])) {
             return $this->createJsonResponse(array('code' => 2, 'message' => '请先删除班级课程'));
         }
-        try {
-            if ('draft' == $courseSet['status']) {
-                $this->getCourseSetService()->deleteCourseSet($id);
-
-                return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
-            }
-
-            $isCheckPassword = $request->getSession()->get('checkPassword');
-            if (!$isCheckPassword) {
-                return $this->render('admin/course/delete.html.twig', array('courseSet' => $courseSet));
-            }
-
-            $request->getSession()->remove('checkPassword');
-
+        if ('draft' == $courseSet['status']) {
             $this->getCourseSetService()->deleteCourseSet($id);
 
             return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('code' => -1, 'message' => $e->getMessage()));
         }
+
+        $isCheckPassword = $request->getSession()->get('checkPassword');
+        if (!$isCheckPassword) {
+            return $this->render('admin/course/delete.html.twig', array('courseSet' => $courseSet));
+        }
+
+        $request->getSession()->remove('checkPassword');
+
+        $this->getCourseSetService()->deleteCourseSet($id);
+
+        return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
     }
 
     public function checkPasswordAction(Request $request)

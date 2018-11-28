@@ -104,9 +104,9 @@ class RegisterController extends BaseController
 
                 return $response;
             } catch (AbstractException $se) {
-                $this->setFlashMessage('danger', $se->getMessage());
+                $this->setFlashMessage('danger', $this->trans($se->getMessage()));
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage());
+                return $this->createMessageResponse('error', $this->trans($e->getMessage()));
             }
         }
 

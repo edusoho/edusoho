@@ -789,24 +789,16 @@ class CourseManageController extends BaseController
 
     public function closeAction(Request $request, $courseSetId, $courseId)
     {
-        try {
-            $this->getCourseService()->closeCourse($courseId);
+        $this->getCourseService()->closeCourse($courseId);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function deleteAction(Request $request, $courseSetId, $courseId)
     {
-        try {
-            $this->getCourseService()->deleteCourse($courseId);
-            if (!$this->getCourseSetService()->hasCourseSetManageRole($courseSetId)) {
-                return $this->createJsonResponse(array('success' => true, 'redirect' => $this->generateUrl('homepage')));
-            }
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        $this->getCourseService()->deleteCourse($courseId);
+        if (!$this->getCourseSetService()->hasCourseSetManageRole($courseSetId)) {
+            return $this->createJsonResponse(array('success' => true, 'redirect' => $this->generateUrl('homepage')));
         }
 
         return $this->createJsonResponse(array('success' => true));
@@ -814,13 +806,9 @@ class CourseManageController extends BaseController
 
     public function publishAction($courseSetId, $courseId)
     {
-        try {
-            $this->getCourseService()->publishCourse($courseId, true);
+        $this->getCourseService()->publishCourse($courseId, true);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function prePublishAction($courseSetId, $courseId)

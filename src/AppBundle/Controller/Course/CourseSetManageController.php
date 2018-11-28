@@ -213,46 +213,34 @@ class CourseSetManageController extends BaseController
 
     public function deleteAction($id)
     {
-        try {
-            $this->getCourseSetService()->deleteCourseSet($id);
+        $this->getCourseSetService()->deleteCourseSet($id);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function publishAction($id)
     {
-        try {
-            $courseSet = $this->getCourseSetService()->getCourseSet($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-            if ('live' == $courseSet['type']) {
-                $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        if ('live' == $courseSet['type']) {
+            $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
-                if (empty($course['maxStudentNum'])) {
-                    $this->createNewException(CourseSetException::LIVE_STUDENT_NUM_REQUIRED());
-                }
-
-                $this->getCourseService()->publishCourse($course['id']);
+            if (empty($course['maxStudentNum'])) {
+                $this->createNewException(CourseSetException::LIVE_STUDENT_NUM_REQUIRED());
             }
-            $this->getCourseSetService()->publishCourseSet($id);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+            $this->getCourseService()->publishCourse($course['id']);
         }
+        $this->getCourseSetService()->publishCourseSet($id);
+
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function closeAction($id)
     {
-        try {
-            $this->getCourseSetService()->closeCourseSet($id);
+        $this->getCourseSetService()->closeCourseSet($id);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function syncInfoAction(Request $request, $id)
@@ -397,25 +385,17 @@ class CourseSetManageController extends BaseController
 
     public function unlockAction($id)
     {
-        try {
-            $this->getCourseSetService()->unlockCourseSet($id);
+        $this->getCourseSetService()->unlockCourseSet($id);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function courseSortAction(Request $request, $courseSetId)
     {
-        try {
-            $courseIds = $request->request->get('ids');
-            $this->getCourseService()->sortCourse($courseSetId, $courseIds);
+        $courseIds = $request->request->get('ids');
+        $this->getCourseService()->sortCourse($courseSetId, $courseIds);
 
-            return $this->createJsonResponse(true, 200);
-        } catch (\Exception $e) {
-            return $this->createJsonResponse($e->getMessage(), 500);
-        }
+        return $this->createJsonResponse(true, 200);
     }
 
     protected function getTemplate($sideNav)

@@ -72,7 +72,7 @@ class EditorController extends BaseController
                 return new Response($response);
             }
         } catch (\Exception $e) {
-            $message = $e->getMessage();
+            $message = $this->trans($e->getMessage());
 
             if ($isWebuploader) {
                 return $this->createJsonResponse(array('message' => $message));
