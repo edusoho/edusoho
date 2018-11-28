@@ -1,7 +1,7 @@
 <template>
   <div class="comment">
     <template v-for="item in reviews">
-      <review :review="item" :disableMask="false"></review>
+      <review :review="item" :disableMask="false" timeFormat="complete"></review>
     </template>
   </div>
 </template>

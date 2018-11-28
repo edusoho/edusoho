@@ -60,9 +60,17 @@ const formatTime = date => {
   }).join(':')}`;
 };
 
+// 2018-12-06 12:03
+const formatCompleteTime = date => {
+  const reg = new RegExp('/', 'g');
+  const time = formatTime(date).replace(reg, '-');
+  return time.slice(0, -3);
+};
+
 export {
   formatTime,
   formatFullTime,
   formatSimpleTime,
-  formatTimeByNumber
+  formatTimeByNumber,
+  formatCompleteTime
 };
