@@ -35,12 +35,11 @@
         <div class="poster-item-setting__section mtl">
           <p class="pull-left section-left">链接：</p>
           <div class="section-right">
-            <el-radio v-model="copyModuleData.link.type" label="course">站内课程</el-radio>
-            <el-radio v-if="pathName === 'h5Setting'" v-model="copyModuleData.link.type" label="url">自定义链接</el-radio>
+            <el-radio v-model="radio" label="insideLink">站内链接</el-radio>
+            <el-radio v-if="pathName === 'h5Setting'" v-model="radio" label="url">自定义链接</el-radio>
           </div>
         </div>
-        <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type === 'course'">
-          <p class="pull-left section-left">课程名称：</p>
+        <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type !== 'url'">
           <div class="section-right">
             <el-dropdown @command="insideLinkHandle" v-show="!courseLinkText">
               <el-button size="mini" class="el-dropdown-link">
@@ -118,6 +117,7 @@ export default {
       }],
       pathName: this.$route.name,
       type: 'course_list',
+      radio: 'insideLink'
     }
   },
   props: {
@@ -157,7 +157,7 @@ export default {
       if (data) {
         return (this.type === 'course_list') ? data.displayedTitle : data.title;
       }
-      if (this.copyModuleData.link.target.title) {
+      if (this.copyModuleData.link.target) {
         return this.copyModuleData.link.target.title;
       }
       return;
@@ -169,6 +169,14 @@ export default {
         this.$emit('updateModule', data);
       },
       deep: true,
+    },
+    radio(type) {
+      if (type === 'insideLink') {
+        let radioType = (this.type === 'classroom_list') ? 'classroom' : 'course';
+        this.moduleData.data.link.type = radioType;
+        return;
+      }
+      this.moduleData.data.link.type = 'url';
     },
   },
   methods: {
@@ -230,6 +238,7 @@ export default {
           title: data[0].title,
           courseSetId: data[0].id,
         };
+        this.moduleData.data.link.type = 'classroom';
         return;
       }
 
@@ -238,10 +247,11 @@ export default {
         title: data[0].title || data[0].courseSetTitle,
         courseSetId: data[0].courseSet.id,
       };
+      this.moduleData.data.link.type = 'course';
     },
     removeCourseLink() {
       this.courseSets = [];
-      this.$set(this.copyModuleData.link, 'target', {});
+      this.$set(this.copyModuleData.link, 'target', null);
     },
     handleClose() {
       this.removeCourseLink();
