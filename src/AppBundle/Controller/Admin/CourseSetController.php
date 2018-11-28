@@ -613,9 +613,8 @@ class CourseSetController extends BaseController
     public function courseTagMatchAction(Request $request)
     {
         $queryString = $request->query->get('q');
-        $page_limit = $request->query->get('page_limit');
 
-        $tags = $this->getTagService()->searchTags(array('likeName' => $queryString), array(), 0, empty($page_limit) ? 10 : $page_limit);
+        $tags = $this->getTagService()->searchTags(array('likeName' => $queryString), array(), 0, PHP_INT_MAX);
 
         return $this->createJsonResponse($tags);
     }
