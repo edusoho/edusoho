@@ -7,7 +7,6 @@ use Biz\Course\MemberException;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Thread\ThreadException;
-use Topxia\Api\Resource\Classroom;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;

@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Admin;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\Exception\AbstractException;
 
 class CommentController extends BaseController
 {
