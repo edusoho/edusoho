@@ -12,7 +12,7 @@
         <detail-plan :details="planDetails" :joinStatus="details.joinStatus"></detail-plan>
         <div class="segmentation"></div>
 
-        <e-panel title="班级介绍" ref="about">
+        <e-panel title="班级介绍" ref="about" class="about">
           <div v-html="details.summary"></div>
         </e-panel>
         <div class="segmentation"></div>
