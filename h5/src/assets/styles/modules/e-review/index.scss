@@ -28,6 +28,14 @@
     color: #B0BDC9;
     margin-top: vw(8);
   }
+  &-origin {
+    display: inline-block;
+    position: relative;
+    bottom: vw(7);
+    padding-bottom: vw(8);
+    margin-top: 2.13333vw;
+    color: #B0BDC9;
+  }
   &__post {
     padding: vw(15) 0;
     border-top: vw(1) solid #EEEEEE;

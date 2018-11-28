@@ -1,7 +1,7 @@
 <template>
   <div class="comment">
     <template v-for="item in reviews">
-      <review :review="item" :disableMask="false" timeFormat="complete"></review>
+      <review :isClass="isClass" :review="item" :disableMask="false" timeFormat="complete" :course="item.course"></review>
     </template>
   </div>
 </template>
@@ -36,7 +36,11 @@ export default {
     }).catch(err => {
       Toast.fail(err.message);
     });
+  },
+  computed: {
+    isClass() {
+      return this.type === 'classroom';
+    }
   }
-
 }
 </script>

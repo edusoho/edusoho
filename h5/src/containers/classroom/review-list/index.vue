@@ -3,7 +3,7 @@
     <moreMask v-if="reviews.length" @maskLoadMore="loadMore" :maxHeight="400">
     <!-- <moreMask v-if="reviews.length" @maskLoadMore="loadMore" :disabled="diableMask" :forceShow="!diableMask"> -->
       <template v-for="item in reviews">
-        <review :review="item"></review>
+        <review :review="item" :isClass="isClass" :course="item.course"></review>
       </template>
     </moreMask>
   </e-panel>
@@ -18,7 +18,7 @@ export default {
     review,
     moreMask
   },
-  props: ['reviews', 'title', 'classId', 'defaulValue', 'type'],
+  props: ['reviews', 'title', 'targetId', 'defaulValue', 'type'],
   data() {
     return {
       maxShowNum: 5,
@@ -27,18 +27,21 @@ export default {
   methods: {
     loadMore() {
       this.$router.push({
-        path: `/comment/${this.classId}`,
+        path: `/comment/${this.targetId}`,
         query: {
           type: this.type,
         }
       });
     }
   },
-  // computed: {
-  //   diableMask() {
-  //     return this.reviews.length < this.maxShowNum;
-  //   }
-  // }
+  computed: {
+    isClass() {
+      return this.type === 'classroom';
+    },
+    // diableMask() {
+    //   return this.reviews.length < this.maxShowNum;
+    // }
+  }
 }
 </script>
 
