@@ -12,7 +12,7 @@
       :courseItemType="courseItemType"
       v-model="isRequestCompile"
       @needRequest="sendRequest"
-      :typeList="'course'"
+      :typeList="'course_list'"
     ></lazyLoading>
     <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'course'"></emptyCourse>
   </div>

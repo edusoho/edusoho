@@ -29,7 +29,7 @@
       courseItemType: String,
       typeList: {
         type: String,
-        default: 'course'
+        default: 'course_list'
       }
     },
 

@@ -92,8 +92,8 @@ import { mapMutations, mapState, mapActions } from 'vuex';
 import treeDigger from '@admin/utils/tree-digger';
 
 const optionLabel = {
-  'course': '课程',
-  'classroom': '班级'
+  'course_list': '课程',
+  'classroom_list': '班级'
 }
 
 export default {
@@ -287,7 +287,7 @@ export default {
     },
     fetchCourse({params, index}) {
     	if (this.sourceType === 'custom') return;
-    	if (this.type === 'course') {
+    	if (this.type === 'course_list') {
 	      this.getCourseList(params).then(res => {
 	        this.moduleData.data.items = res.data;
 	      })

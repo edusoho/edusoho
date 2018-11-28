@@ -22,8 +22,8 @@
     },
     data() {
       return {
-        typeText: this.type === 'course' ? '课程' : '班级',
-        moreText: this.type === 'course' ? '好课' : '班级'
+        typeText: this.type === 'course_list' ? '课程' : '班级',
+        moreText: this.type === 'course_list' ? '好课' : '班级'
       }
     },
     methods: {
