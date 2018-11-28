@@ -130,8 +130,11 @@ export default {
       this.modalVisible = false;
     },
     saveHandler() {
-      this.$emit('updateCourses', this.courseSets);
       this.modalVisible = false;
+      if (!this.courseSets.length) {
+        return;
+      }
+      this.$emit('updateCourses', this.courseSets);
     },
     selectHandler(item) {
       const exccedLimit = this.courseSets.length >= window.parseInt(this.limit, 10);
