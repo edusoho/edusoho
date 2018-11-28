@@ -29,7 +29,7 @@
     <div class="segmentation"></div>
 
     <!-- 学员评价 -->
-    <review-list ref="review" :classId="details.courseSet.id" :reviews="details.reviews" title="学员评价" type="course" defaulValue="暂无评价"></review-list>
+    <review-list ref="review" :targetId="details.courseSet.id" :reviews="details.reviews" title="学员评价" type="course" defaulValue="暂无评价"></review-list>
 
     <e-footer v-if="!isClassCourse" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus}}</e-footer>

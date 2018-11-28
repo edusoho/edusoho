@@ -17,10 +17,12 @@
         <div class="e-review-content text-14">{{ review.content }}</div>
       </more-mask>
 
+      <span class="e-review-origin text-12" v-if="courseTitle">来自：{{ courseTitle }}</span>
+
       <div class="e-review__post" v-for="post in posts">
         <img class="e-review-avatar e-review__post-avatar avatar-img" :src="post.user | avatar" alt="">
         <div class="e-review__post-body">
-          <span class="e-review-nickname text-14">{{ post.user | userName }} 回复 {{ review.user | userName }}</span>
+          <span class="e-review-nickname text-14">{{ post.user | userName }} 回复 {{ review.user | userName }}：</span>
           <div class="e-review-content text-14">{{ post.content }}</div>
         </div>
       </div>
@@ -37,7 +39,15 @@ export default {
   props: {
     review: {
       type: Object,
-      default: {}
+      default: () => {
+        return {}
+      }
+    },
+    course: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     },
     disableMask: {
       type: Boolean,
@@ -96,7 +106,10 @@ export default {
     },
     textOption() {
       return { paddingTop:70, lineHeight:25, align: 'right', content: '显示全部' };
-    }
+    },
+    courseTitle() {
+      return this.isClass ? '' : this.course.displayedTitle;
+    },
   }
 }
 </script>

@@ -35,7 +35,7 @@
 
       <!-- 学员评价 -->
       <div v-if="active == 2" style="margin-top: 44px;">
-        <review-list ref="review" :classId="details.classId" :reviews="details.reviews" title="学员评价" defaulValue="暂无评价" type="classroom"></review-list>
+        <review-list ref="review" :targetId="details.classId" :reviews="details.reviews" title="学员评价" defaulValue="暂无评价" type="classroom"></review-list>
       </div>
     </div>
 
