@@ -1,6 +1,6 @@
 <template>
   <e-panel :title="title" :defaulValue="defaulValue">
-    <div v-if="teacherInfo.length" v-for="item in teacherInfo">
+    <template v-if="teacherInfo.length" v-for="item in teacherInfo">
       <div class="teacher-content">
         <img :src="item.avatar && item.avatar.large"
         class="avatar-img">
@@ -9,7 +9,7 @@
           <span class="text-content" v-show="item.title">{{ item.title }}</span>
         </div>
       </div>
-    </div>
+    </template>
   </e-panel>
 </template>
 <script>
