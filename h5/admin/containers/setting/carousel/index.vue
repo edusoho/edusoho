@@ -19,6 +19,7 @@
           :index="index"
           :active="activeItemIndex"
           :itemNum="itemNum"
+          :type='type'
           :courseSets="courseSets[index]"
           @selected="selected"
           @chooseCourse="openModal"
@@ -150,7 +151,7 @@ export default {
       this.modalVisible = visible;
     },
     openModal(type) {
-      this.type = type
+      this.type = type;
       this.modalVisible = true;
     },
     itemRemove(index) {
@@ -158,7 +159,7 @@ export default {
       this.copyModuleData.data.splice(index, 1);
     },
     removeCourseLink(index) {
-      this.copyModuleData.data[index].link.target = '';
+      this.copyModuleData.data[index].link.target = null;
       this.courseSets[this.activeItemIndex] = [];
     }
   }

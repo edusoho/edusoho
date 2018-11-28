@@ -30,7 +30,7 @@
         <div class="course-item-setting__section mtl clearfix">
           <p class="pull-left section-left">{{typeLabel}}分类：</p>
           <div class="section-right">
-            <el-cascader v-show="sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="categories" :props="cascaderProps" v-model="categoryTempId" filterable change-on-select></el-cascader>
+            <el-cascader v-show="sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="this.type === 'course_list' ? courseCategories : classCategories" :props="cascaderProps" v-model="categoryTempId" filterable change-on-select></el-cascader>
             </el-input>
             <div class="required-option" v-show="sourceType === 'custom'">
               <el-button size="mini" @click="openModal">选择{{typeLabel}}</el-button>
@@ -157,7 +157,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['categories']),
+    ...mapState(['courseCategories', 'classCategories']),
     typeLabel() {
       return optionLabel[this.type];
     },
@@ -248,7 +248,25 @@ export default {
         this.moduleData.data.categoryId = value[endIndex];
       },
     },
-    categories: {
+    courseCategories: {
+      handler(tree) {
+        if (!tree || this.categoryDiggered) return;
+
+        const categoryExist = false;
+        treeDigger(tree, (children, id) => {
+          if (id) {
+            const categoryExist = (id == this.categoryTempId);
+          }
+          return children;
+        })
+        this.categoryDiggered = true;
+
+        if (categoryExist) return;
+        this.categoryTempId = ['0'];
+      },
+      immediate: true,
+    },
+    classCategories: {
       handler(tree) {
         if (!tree || this.categoryDiggered) return;
 
