@@ -25,6 +25,7 @@
   import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
   import { mapMutations } from 'vuex';
   import * as types from '@/store/mutation-types';
+  import CATEGORY_DEFAULT from '@/config/category-default-config.js';
 
   export default {
     components: {
@@ -53,6 +54,7 @@
           category: 'categoryId',
           sort: 'sort'
         },
+        dataDefault: CATEGORY_DEFAULT['classroom_list']
       };
     },
     watch: {
@@ -149,25 +151,6 @@
             offset: this.offset,
             limit: this.limit
           });
-      const categoryDefaultData = [
-        {
-          data: [],
-          moduleType: 'tree',
-          text: '分类',
-          type: 'category'
-        },
-        {},
-        {
-          data: [
-            {text: '推荐', type: 'recommendedSeq'},
-            {text: '热门', type: '"-studentNum"'},
-            {text: '最新', type: '-createdTime'}
-          ],
-          moduleType: 'normal',
-          text: '课程类型',
-          type: 'sort'
-        }
-      ]
 
       // // 老接口数据，会被替换暂不处理
       // Api.getSelectItems()
@@ -186,13 +169,12 @@
       // 获取班级分类数据
       Api.getClassCategories()
         .then((data) => {
-          const item = data;
-          item.unshift({
+          data.unshift({
             name: '全部',
             id: '0'
           });
-          categoryDefaultData[0].data = item;
-          this.selectItems = categoryDefaultData;
+          this.dataDefault[0].data = data;
+          this.selectItems = this.dataDefault;
         })
     },
   }
