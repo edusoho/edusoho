@@ -39,7 +39,6 @@ export default {
   },
   methods: {
     onLoad() {
-      console.log(8888)
       const id = this.$route.params.id
       const type = this.$route.query.type
       const ApiType = this.ApiType

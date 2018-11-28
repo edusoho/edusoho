@@ -7,14 +7,17 @@
     </div>
 
     <div class="order" v-else>
-      <e-course v-for="order in orderList" :key="order.id" :order="order"
-       type="order" :typeList="order.targetType"></e-course>
+      <van-list style="padding-bottom: 40px" v-model="loading" :finished="finished" @load="onLoad">
+        <e-course v-for="order in orderList" :key="order.id" :order="order"
+          type="order" :typeList="order.targetType"></e-course>
+      </van-list>
     </div>
   </div>
 </template>
 <script>
 import eCourse from '@/containers/components/e-course/e-course';
 import Api from '@/api';
+import { Toast } from 'vant';
 
 export default {
   components: {
@@ -24,15 +27,31 @@ export default {
     return {
       orderList: [],
       isEmptyOrder: true,
-      isFirstRequestCompile: false
+      isFirstRequestCompile: false,
+      loading: false,
+      finished: false,
     }
   },
   created() {
-    Api.getMyOrder().then((res) => {
-      this.orderList = res.data;
-      if (this.orderList.length) this.isEmptyOrder = false;
-      this.isFirstRequestCompile = true
-    })
+  },
+  methods: {
+    onLoad() {
+      const params = { offset: this.offset }
+      Api.getMyOrder({params}).then(({data, paging}) => {
+        this.orderList = [...this.orderList, ...data];
+        this.offset = this.orderList.length
+
+        if (this.orderList.length) this.isEmptyOrder = false;
+
+        if (this.orderList.length == paging.total) {
+          this.finished = true
+        }
+        this.loading = false
+      }).catch(err => {
+        Toast.fail(err.message)
+        this.loading = false
+      });
+    }
   }
 }
 </script>
