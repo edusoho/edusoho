@@ -93,7 +93,7 @@ import treeDigger from '@admin/utils/tree-digger';
 
 const optionLabel = {
   'course_list': '课程',
-  'class_list': '班级'
+  'classroom_list': '班级'
 }
 
 export default {

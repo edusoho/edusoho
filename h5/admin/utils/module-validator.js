@@ -30,7 +30,7 @@ export default (module, startValidate) => {
   }
 
   // 班级
-  if (module.type == 'class_list') {
+  if (module.type == 'classroom_list') {
     const classExist = module.data.items.length;
     if (!module.data.title || (module.data.sourceType == 'custom' && !classExist)) {
       if (!startValidate) return true;

@@ -11,8 +11,8 @@ footer {
     text-align: center;
     font-size: vw(16);
     z-index: 900;
-    // >div {
-    //   height: 100%;
-    // }
+    &.gray {
+      background-color: #B0BDC9;
+    }
   }
 }

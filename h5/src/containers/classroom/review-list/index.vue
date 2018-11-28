@@ -1,6 +1,7 @@
 <template>
   <e-panel :title="title" :needFlex="false" :defaulValue="defaulValue">
-    <moreMask v-if="reviews.length" @maskLoadMore="loadMore" :disabled="diableMask" :forceShow="!diableMask">
+    <moreMask v-if="reviews.length" @maskLoadMore="loadMore" :maxHeight="400">
+    <!-- <moreMask v-if="reviews.length" @maskLoadMore="loadMore" :disabled="diableMask" :forceShow="!diableMask"> -->
       <template v-for="item in reviews">
         <review :review="item"></review>
       </template>
@@ -33,11 +34,11 @@ export default {
       });
     }
   },
-  computed: {
-    diableMask() {
-      return this.reviews.length < this.maxShowNum;
-    }
-  }
+  // computed: {
+  //   diableMask() {
+  //     return this.reviews.length < this.maxShowNum;
+  //   }
+  // }
 }
 </script>
 

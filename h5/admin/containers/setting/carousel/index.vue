@@ -130,7 +130,7 @@ export default {
       this.activeItemIndex = selected.selectIndex;
     },
     getUpdatedCourses(data) {
-      if (this.type === 'class_list') {
+      if (this.type === 'classroom_list') {
         this.courseSets[this.activeItemIndex] = [{
           id: data[0].id,
           // courseSetId: data[0].courseSet.id,

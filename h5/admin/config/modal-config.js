@@ -18,7 +18,7 @@ const head = {
       label: 'delete',
     }
   ],
-  class_list: [
+  classroom_list: [
     {
       col: 4,
       title: '班级名称',

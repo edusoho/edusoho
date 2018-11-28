@@ -8,7 +8,7 @@
         <div v-if="type === 'confirmOrder'" class="e-course__title course-confirm-title">{{ title }}</div>
         <div v-else>
           <div class="e-course__title text-overflow">{{ title }}</div>
-          <div v-if="typeList==='class_list'" class="e-course__count">
+          <div v-if="typeList==='classroom_list'" class="e-course__count">
             共 {{course.courseNum}} 门课程
           </div>
           <div v-if="typeList==='course_list'" class="e-course__project text-overflow">
@@ -61,14 +61,14 @@
     },
     computed: {
       imgSrc() {
-        if (this.typeList === 'class_list') {
+        if (this.typeList === 'classroom_list') {
           return this.course.cover.middle;
         }
         const courseSet = this.course.courseSet;
         return courseSet ? courseSet.cover.middle : this.order.cover.middle;
       },
       title() {
-        if (this.typeList === 'class_list') {
+        if (this.typeList === 'classroom_list') {
           return this.course.title
         }
         return this.course.courseSetTitle

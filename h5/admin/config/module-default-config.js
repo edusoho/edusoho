@@ -26,7 +26,7 @@ const MODULE_DEFAULT = {
     }
   },
   classList: {
-    type: 'class_list',
+    type: 'classroom_list',
     moduleType: '',
     data: {
       title: '',
@@ -85,7 +85,7 @@ const MARKETING_MODULE = [
 ]
 
 const VALUE_DEFAULT = {
-  class_list: {
+  classroom_list: {
     key: 'title'
   },
   course_list: {
@@ -100,7 +100,7 @@ const TYPE_TEXT_DEFAULT = {
   course_list: {
     text: '课程'
   },
-  class_list: {
+  classroom_list: {
     text: '班级'
   },
   groupon: {

@@ -4,7 +4,7 @@
     <div class="find-page__part" v-for="(part, index) in parts" :key="index">
       <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
       <e-course-list
-        v-if="['class_list', 'course_list'].includes(part.type)"
+        v-if="['classroom_list', 'course_list'].includes(part.type)"
         :courseList="part.data"
         :typeList="part.type"
         :feedback="feedback"
@@ -84,7 +84,7 @@
     },
     methods: {
       fetchCourse({params, index, typeList}) {
-        if (typeList === 'class_list') {
+        if (typeList === 'classroom_list') {
           Api.getClassList({params}).then(res => {
             if (this.sourceType === 'custom') return;
 

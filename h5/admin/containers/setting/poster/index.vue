@@ -113,7 +113,7 @@ export default {
         label: '选择课程',
       }, {
         key: 1,
-        type: 'class_list',
+        type: 'classroom_list',
         label: '选择班级',
       }],
       pathName: this.$route.name,
@@ -224,7 +224,7 @@ export default {
       this.courseSets = data;
       if (!data.length) return;
 
-      if (this.type === 'class_list') {
+      if (this.type === 'classroom_list') {
         this.moduleData.data.link.target = {
           id: data[0].id,
           title: data[0].title,

@@ -9,7 +9,7 @@
         <van-rate class="e-review-rating" v-model="rating" :size="15" :count="rating"
           color="#FFAA00" :readonly="true"></van-rate>
       </div>
-      <div class="e-review-time text-12">{{ review.createdTime | time }}</div>
+      <div class="e-review-time text-12">{{ review.createdTime | time(timeFormat) }}</div>
 
       <div v-if="disableMask" class="e-review-content text-14">{{ review.content }}</div>
       <more-mask v-else :text="textOption" :maxHeight="100" :disabled="loadAllReview"
@@ -30,7 +30,7 @@
 
 <script>
 import moreMask from '@/components/more-mask';
-import { formatSimpleTime } from '@/utils/date-toolkit.js';
+import { formatSimpleTime, formatCompleteTime } from '@/utils/date-toolkit.js';
 
 export default {
   name: 'review',
@@ -46,6 +46,10 @@ export default {
     isClass: {
       type: Boolean,
       default: true,
+    },
+    timeFormat: {
+      type: String,
+      default: 'simple'
     }
   },
   data() {
@@ -63,9 +67,15 @@ export default {
     avatar(user) {
       return user && user.avatar && user.avatar.middle;
     },
-    time(time) {
+    time(time, timeFormat) {
       const date = new Date(time);
-      return formatSimpleTime(date);
+      if (timeFormat === 'simple') {
+        return formatSimpleTime(date);
+      }
+      if (timeFormat === 'complete') {
+        return formatCompleteTime(date)
+      }
+      return time;
     }
   },
   computed: {

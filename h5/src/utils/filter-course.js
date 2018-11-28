@@ -3,9 +3,11 @@ const courseListData = (data, listObj) => {
     case 'price':
       const showStudentStr = listObj.showStudent ?
         `<span class="switch-box__state"><p style="color: #B0BDC9">
-          ${data.studentNum}人在学</p></span>` : '';
+            ${data.studentNum}人在学</p></span>` : '';
+      const price = data.price === '0.00' ? '<p style="color: #408FFB">免费</p>'
+        : `<p style="color: #ff5353">¥ ${data.price}</p>`;
 
-      if (listObj.typeList === 'class_list') {
+      if (listObj.typeList === 'classroom_list') {
         return {
           id: data.id,
           targetId: data.targetId,
@@ -20,9 +22,7 @@ const courseListData = (data, listObj) => {
           },
           bottom: {
             value: data.price || data.studentNum,
-            html: `<span class="switch-box__price">
-                    <p style="color: #ff5353">¥ ${data.price}</p>
-                  </span>
+            html: `<span class="switch-box__price">${price}</span>
                   <span class="switch-box__state"><p style="color: #B0BDC9">
                     ${data.studentNum}人在学</p>
                   </span>`
@@ -44,9 +44,7 @@ const courseListData = (data, listObj) => {
         },
         bottom: {
           value: data.price || data.studentNum,
-          html: `<span class="switch-box__price">
-                    <p style="color: #ff5353">¥ ${data.price}</p>
-                </span>${showStudentStr}`
+          html: `<span class="switch-box__price">${price}</span>${showStudentStr}`
         }
       };
     case 'confirmOrder':
@@ -60,12 +58,12 @@ const courseListData = (data, listObj) => {
         bottom: {
           value: data.coinPayAmount,
           html: `<span class="switch-box__price">
-                    <p style="color: #ff5353">¥ ${data.coinPayAmount}</p>
+                  <p style="color: #ff5353">¥ ${data.coinPayAmount}</p>
                 </span>`
         }
       };
     case 'rank':
-      if (listObj.typeList === 'class_list') {
+      if (listObj.typeList === 'classroom_list') {
         return {
           id: data.id,
           targetId: data.targetId,

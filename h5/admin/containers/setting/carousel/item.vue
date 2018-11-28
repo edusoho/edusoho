@@ -91,7 +91,7 @@
           label: '选择课程',
         }, {
           key: 1,
-          type: 'class_list',
+          type: 'classroom_list',
           label: '选择班级',
         }],
         imageCropped: false,
