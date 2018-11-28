@@ -180,6 +180,7 @@ export default class PPT extends Emitter {
   }
 
   _onFullScreen() {
+    $('#task-content-iframe').toggleClass('task-content-iframe-ios');
     if (!screenfull.enabled) {
       return;
     }

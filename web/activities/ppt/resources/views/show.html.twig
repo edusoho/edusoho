@@ -6,7 +6,7 @@
 {% set pptPlayer = ppt_player(ppt, app.request.secure) %}
 
 {% block body %}
-  <div class="iframe-parent-content" id="activity-ppt-content"
+  <div class="iframe-parent-content ios-test" id="activity-ppt-content"
     data-finish-type="{{ activity.ext.finishType }}"
     data-finish-detail="{{ activity.ext.finishDetail }}"
     data-slides="{{ pptPlayer.result.images|default()|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
