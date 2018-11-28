@@ -19,7 +19,7 @@ const CATEGORY_DEFAULT = {
     {
       data: [
         { text: '推荐', type: 'recommendedSeq' },
-        { text: '热门', type: '"-studentNum"' },
+        { text: '热门', type: '-studentNum' },
         { text: '最新', type: '-createdTime' }
       ],
       moduleType: 'normal',
@@ -38,7 +38,7 @@ const CATEGORY_DEFAULT = {
     {
       data: [
         { text: '推荐', type: 'recommendedSeq' },
-        { text: '热门', type: '"-studentNum"' },
+        { text: '热门', type: '-studentNum' },
         { text: '最新', type: '-createdTime' }
       ],
       moduleType: 'normal',
