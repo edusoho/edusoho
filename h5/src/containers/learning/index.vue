@@ -72,17 +72,11 @@
     },
     methods: {
       judgeIsAllCourse(courseInfomation) {
-        if (this.courseList.length == courseInfomation.paging.total) {
-          return true
-        }
-        return false
+        return this.courseList.length == courseInfomation.paging.total
       },
 
       judgeIsAllClass(classInfomation) {
-        if (this.classList.length == classInfomation.paging.total) {
-          return true
-        }
-        return false
+        return this.classList.length == classInfomation.paging.total
       },
 
       requestCourses(setting) {
@@ -91,13 +85,12 @@
           params: setting
         }).then((data) => {
           let isAllCourse;
-          isAllCourse = this.judgeIsAllCourse(data);
           if (!isAllCourse) {
-            data.data.forEach(element => {
-              this.courseList.push(element);
-              this.offset++;
-            })
+            this.courseList = [...this.courseList, ...data.data]
+            this.offset_course = this.courseList.length
           }
+
+          isAllCourse = this.judgeIsAllCourse(data);
           this.isAllCourse = isAllCourse;
           this.isCourseRequestComplete = true;
         }).catch((err) => {
@@ -111,13 +104,12 @@
           params: setting
         }).then((data) => {
           let isAllClass;
-          isAllClass = this.judgeIsAllClass(data);
           if (!isAllClass) {
-            data.data.forEach(element => {
-              this.classList.push(element);
-              this.offset++;
-            })
+            this.classList = [...this.classList, ...data.data]
+            this.offset_course = this.classList.length
           }
+
+          isAllClass = this.judgeIsAllClass(data);
           this.isAllClass = isAllClass;
           this.isClassRequestComplete = true;
         }).catch((err) => {
@@ -144,13 +136,13 @@
 
     created() {
       const courseSetting = {
-            offset: this.offset_course,
-            limit: this.limit_course
-          };
+        offset: this.offset_course,
+        limit: this.limit_course
+      };
       const classSetting = {
-            offset: this.offset_class,
-            limit: this.limit_class
-          };
+        offset: this.offset_class,
+        limit: this.limit_class
+      };
 
       this.requestCourses(courseSetting)
         .then(() => {
