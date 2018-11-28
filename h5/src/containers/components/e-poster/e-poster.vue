@@ -22,17 +22,22 @@
       };
     },
     methods: {
-      jumpTo(link) {
+      jumpTo(data) {
         if (!this.feedback) return;
-
-        if (this.link.type == 'course' && this.link.target) {
+        if (data.type === 'course' && data.target) {
           this.$router.push({
-            path: `/course/${this.link.target.id}`
+            path: `/course/${data.target.id}`
           });
           return;
         }
-        if (this.link.type == 'url') {
-          window.location.href = link.url;
+        if (data.type === 'classroom' && data.target) {
+          this.$router.push({
+            path: `/classroom/${data.target.id}`
+          });
+          return;
+        }
+        if (data.type == 'url') {
+          window.location.href = data.url;
           return;
         }
       }

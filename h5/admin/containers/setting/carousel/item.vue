@@ -117,9 +117,6 @@
         } else {
           this.item.link.target = null;
         }
-      },
-      type() {
-        this.item.link.type = (this.type === 'course_list') ? 'course' : 'classroom'; // 修复默认数据中type为 url 的bug
       }
     },
     methods: {
@@ -223,7 +220,10 @@
         this.$emit('removeCourseLink', this.index);
       },
       insideLinkHandle(value) {
-        this.$emit('chooseCourse', value);
+        this.$emit('chooseCourse', {
+          'value': value,
+          'index': this.index
+        });
       }
     }
   }

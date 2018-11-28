@@ -131,6 +131,7 @@ export default {
       this.activeItemIndex = selected.selectIndex;
     },
     getUpdatedCourses(data) {
+      const linkData = this.copyModuleData.data[this.activeItemIndex].link;
       if (this.type === 'classroom_list') {
         this.courseSets[this.activeItemIndex] = [{
           id: data[0].id,
@@ -138,6 +139,7 @@ export default {
           title: data[0].title,
           displayedTitle: data[0].title,
         }];
+        linkData.type = 'classroom';
         return;
       }
       this.courseSets[this.activeItemIndex] = [{
@@ -146,12 +148,14 @@ export default {
         title: data[0].title || data[0].courseSetTitle,
         displayedTitle: data[0].displayedTitle,
       }];
+      linkData.type = 'course';
     },
     modalVisibleHandler(visible) {
       this.modalVisible = visible;
     },
-    openModal(type) {
-      this.type = type;
+    openModal(data) {
+      this.activeItemIndex = data.index;
+      this.type = data.value;
       this.modalVisible = true;
     },
     itemRemove(index) {

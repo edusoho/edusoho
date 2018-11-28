@@ -39,7 +39,7 @@
             <el-radio v-if="pathName === 'h5Setting'" v-model="radio" label="url">自定义链接</el-radio>
           </div>
         </div>
-        <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type !== 'url'">
+        <div class="poster-item-setting__section mtl" v-show="radio !== 'url'">
           <div class="section-right">
             <el-dropdown @command="insideLinkHandle" v-show="!courseLinkText">
               <el-button size="mini" class="el-dropdown-link">
@@ -57,7 +57,7 @@
             </el-tag>
           </div>
         </div>
-        <div class="poster-item-setting__section mtl" v-show="copyModuleData.link.type === 'url'">
+        <div class="poster-item-setting__section mtl" v-show="radio === 'url'">
           <p class="pull-left section-left">输入链接：</p>
           <div class="section-right">
             <el-input size="mini" v-model="copyModuleData.link.url" placeholder="例如 http://www.eduosho.com" clearable></el-input>
@@ -152,15 +152,17 @@ export default {
       },
       set() {}
     },
-    courseLinkText() {
-      const data = this.courseSets[0];
-      if (data) {
-        return (this.type === 'course_list') ? data.displayedTitle : data.title;
-      }
-      if (this.copyModuleData.link.target) {
-        return this.copyModuleData.link.target.title;
-      }
-      return;
+    courseLinkText: {
+      get() {
+        const data = this.courseSets[0];
+        if (data) {
+          return (this.type === 'course_list') ? data.displayedTitle : data.title;
+        }
+        if (this.copyModuleData.link.target) {
+          return this.copyModuleData.link.target.title;
+        }
+      },
+      set() {}
     }
   },
   watch: {
@@ -171,13 +173,19 @@ export default {
       deep: true,
     },
     radio(type) {
+      const linkData = this.moduleData.data.link;
       if (type === 'insideLink') {
         let radioType = (this.type === 'classroom_list') ? 'classroom' : 'course';
-        this.moduleData.data.link.type = radioType;
+        linkData.type = radioType;
         return;
       }
-      this.moduleData.data.link.type = 'url';
+      linkData.type = 'url';
     },
+  },
+  created() {
+    if (this.moduleData.data.link.type = 'url') {
+      this.radio = 'url';
+    };
   },
   methods: {
     beforeUpload(file) {

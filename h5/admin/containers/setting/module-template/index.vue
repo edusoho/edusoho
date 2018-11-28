@@ -110,6 +110,14 @@ export default {
     updateHandler() {
     },
     triggerValidate() {
+      if (this.module.type === 'poster') {
+        const linkData = this.module.data.link;
+        if (linkData.type === 'url') {
+          linkData.target = null;
+          return;
+        }
+        linkData.url = '';
+      }
       const incomplete = validate(this.module, this.saveFlag);
       this.$emit('updateModule', {
         incomplete,

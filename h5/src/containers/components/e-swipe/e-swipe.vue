@@ -4,7 +4,7 @@
       <van-swipe-item v-for="(slide, index) in slides" :key="index">
         <div class="item-container">
           <!-- course -->
-          <div v-if="slide.link.type === 'course'" @click="jumpTo(slide.link.target)">
+          <div v-if="slide.link.type === 'course' || 'classroom'" @click="jumpTo(slide, index)">
             <img v-bind:src="slide.image.uri">
           </div>
           <!-- url -->
@@ -31,13 +31,23 @@
       },
     },
     methods: {
-      jumpTo(target) {
+      jumpTo(slide, index) {
         if (!this.feedback) return;
-        if (!target) return;
+        if (!slide) return;
 
-        this.$router.push({
-          path: `/course/${target.id}`
-        });
+        const itemLinkData = slide.link;
+        if (itemLinkData.type === 'classroom' && itemLinkData.target) {
+          this.$router.push({
+            path: `/classroom/${itemLinkData.target.id}`
+          });
+          return;
+        }
+        if (itemLinkData.type === 'course' && itemLinkData.target) {
+          this.$router.push({
+            path: `/course/${itemLinkData.target.id}`
+          });
+          return;
+        }
       }
     }
   }
