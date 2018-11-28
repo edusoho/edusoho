@@ -106,7 +106,7 @@
           let isAllClass;
           if (!isAllClass) {
             this.classList = [...this.classList, ...data.data]
-            this.offset_course = this.classList.length
+            this.offset_class = this.classList.length
           }
 
           isAllClass = this.judgeIsAllClass(data);
