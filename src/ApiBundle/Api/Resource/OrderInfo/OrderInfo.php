@@ -75,6 +75,13 @@ class OrderInfo extends AbstractResource
 
         if ($product->availableDeducts && isset($product->availableDeducts['coupon'])) {
             $orderInfo['availableCoupons'] = $product->availableDeducts['coupon'];
+
+            foreach ($orderInfo['availableCoupons'] as &$availableCoupon) {
+                if (in_array($availableCoupon['targetType'], array('course', 'classroom')) && !empty($availableCoupon['targetId'])) {
+                    $type = 'course' == $availableCoupon['targetType'] ? 'courseSet' : $availableCoupon['targetType'];
+                    $this->getOCUtil()->single($availableCoupon, array('targetId'), $type);
+                }
+            }
         }
 
         $coinSetting = $this->service('System:SettingService')->get('coin');
