@@ -102,7 +102,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         if (!empty($discoverySetting['data']['link'])) {
             $link = $discoverySetting['data']['link'];
             $id = isset($link['target']['id']) ? $link['target']['id'] : 0;
-            $target = $this->getTarget($link['type'], $link['target']['id']);
+            $target = $this->getTarget($link['type'], $id);
             if (empty($target)) {
                 $link['target'] = null;
                 $link['url'] = '';
@@ -118,7 +118,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         if (!empty($discoverySetting['data']['link'])) {
             $link = $discoverySetting['data']['link'];
             $id = isset($link['target']['id']) ? $link['target']['id'] : 0;
-            $target = $this->getTarget($link['type'], $link['target']['id']);
+            $target = $this->getTarget($link['type'], $id);
             if (empty($target)) {
                 $link['target'] = null;
                 $link['url'] = '';
