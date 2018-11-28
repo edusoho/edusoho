@@ -99,10 +99,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     public function slideShowFilter($discoverySetting, $usage = 'show')
     {
-        if (!empty($discoverySetting['data']['link']) && 'target' == $discoverySetting['data']['link']['type']) {
+        if (!empty($discoverySetting['data']['link'])) {
             $link = $discoverySetting['data']['link'];
-            $course = $this->getCourseService()->getCourse($link['target']['id']);
-            if (empty($course)) {
+            $target = $this->getTarget($link['type']);
+            if (empty($target)) {
                 $link['target'] = null;
                 $link['url'] = '';
                 $discoverySetting['data']['link'] = $link;
@@ -114,10 +114,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     public function posterFilter($discoverySetting, $usage = 'show')
     {
-        if (!empty($discoverySetting['data']['link']) && 'target' == $discoverySetting['data']['link']['type']) {
+        if (!empty($discoverySetting['data']['link'])) {
             $link = $discoverySetting['data']['link'];
-            $course = $this->getCourseService()->getCourse($link['target']['id']);
-            if (empty($course)) {
+            $target = $this->getTarget($link['type']);
+            if (empty($target)) {
                 $link['target'] = null;
                 $link['url'] = '';
                 $discoverySetting['data']['link'] = $link;
@@ -146,6 +146,19 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $method = Inflector::classify($type);
 
         return lcfirst($method);
+    }
+
+    public function getTarget($type)
+    {
+        if ('course' == $link['type']) {
+            return $this->getCourseService()->getCourse($link['target']['id']);
+        }
+
+        if ('classroom' == $link['type']) {
+            return $this->getClassroomService()->getClassroom($link['target']['id']);
+        }
+
+        return null;
     }
 
     public function getCourseCondition($portal, $mode = 'published')
