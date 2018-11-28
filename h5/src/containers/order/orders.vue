@@ -7,7 +7,7 @@
     </div>
 
     <div class="order" v-else>
-      <van-list style="padding-bottom: 40px" v-model="loading" :finished="finished" @load="onLoad">
+      <van-list style="padding-bottom: 40px; margin-top: 0;" v-model="loading" :finished="finished" @load="onLoad">
         <e-course v-for="order in orderList" :key="order.id" :order="order"
           type="order" :typeList="order.targetType"></e-course>
       </van-list>
