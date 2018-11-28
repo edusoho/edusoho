@@ -58,7 +58,7 @@ export default {
       activeItemIndex: 0,
       modalVisible: false,
       courseSets: [],
-      type: 'course_list'
+      type: 'course'
     }
   },
   props: {
@@ -130,7 +130,7 @@ export default {
       this.activeItemIndex = selected.selectIndex;
     },
     getUpdatedCourses(data) {
-      if (this.type === 'class_list') {
+      if (this.type === 'classroom') {
         this.courseSets[this.activeItemIndex] = [{
           id: data[0].id,
           // courseSetId: data[0].courseSet.id,
