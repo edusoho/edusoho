@@ -8,13 +8,13 @@
     ></treeSelect>
     <lazyLoading
       :courseList="courseList"
-      :isAllCourse="isAllCourse"
+      :isAllData="true"
       :courseItemType="courseItemType"
       v-model="isRequestCompile"
       @needRequest="sendRequest"
       :typeList="'classroom_list'"
     ></lazyLoading>
-    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'class'"></emptyCourse>
+    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'classroom_list'"></emptyCourse>
   </div>
 </template>
 
@@ -35,10 +35,11 @@
     data() {
       return {
         selectItems: [],
+        copySelectItems: [],
         selectedData: {},
         courseItemType: 'price',
         isRequestCompile: false,
-        isAllCourse: false,
+        isAllClassroom: false,
         isEmptyCourse: true,
         courseList: [],
         offset: 0,
@@ -79,12 +80,12 @@
 
       initCourseList() {
         this.isRequestCompile = false;
-        this.isAllCourse = false;
+        this.isAllClassroom = false;
         this.courseList = [];
         this.offset = 0;
       },
 
-      judegIsAllCourse(courseInfomation) {
+      judegIsAllClassroom(courseInfomation) {
         if (this.courseList.length == courseInfomation.paging.total) {
           return true
         }
@@ -100,11 +101,12 @@
           data.data.forEach(element => {
             this.courseList.push(element);
           })
-          let isAllCourse= this.judegIsAllCourse(data);
-          if (!isAllCourse) {
+          let isAllClassroom= this.judegIsAllClassroom(data);
+          if (!isAllClassroom) {
             this.offset = this.courseList.length;
           }
-          this.isAllCourse = isAllCourse;
+          console.log(data,111);
+          this.isAllClassroom = isAllClassroom;
           this.isRequestCompile = true;
         }).catch((err) => {
           console.log(err, 'error');
@@ -117,7 +119,7 @@
           limit: this.limit
         };
 
-        if (!this.isAllCourse) this.requestCourses(args);
+        if (!this.isAllClassroom) this.requestCourses(args);
       },
 
       transform(obj) {
@@ -147,19 +149,41 @@
             offset: this.offset,
             limit: this.limit
           });
-      // 获取原课程分类数据
-      Api.getSelectItems()
-        .then((data) => {
-          data[0].data.unshift({
-            name: '全部',
-            id: '0'
-          });
-          data[1].data='';
-          const items = Object.values(data)
-          items.pop();
-          this.selectItems = items;
-        });
-      // 重组数据
+      const categoryDefaultData = [
+        {
+          data: [],
+          moduleType: 'tree',
+          text: '分类',
+          type: 'category'
+        },
+        {},
+        {
+          data: [
+            {text: '推荐', type: 'recommendedSeq'},
+            {text: '热门', type: '"-studentNum"'},
+            {text: '最新', type: '-createdTime'}
+          ],
+          moduleType: 'normal',
+          text: '课程类型',
+          type: 'sort'
+        }
+      ]
+
+      // // 老接口数据，会被替换暂不处理
+      // Api.getSelectItems()
+      //   .then((data) => {
+      //     console.log(data,categoryDefaultData,77777)
+      //     data[0].data.unshift({
+      //       name: '全部',
+      //       id: '0'
+      //     });
+      //     data[1].data='';
+      //     const items = Object.values(data)
+      //     items.pop();
+      //     this.selectItems = items;
+      //   });
+
+      // 获取班级分类数据
       Api.getClassCategories()
         .then((data) => {
           const item = data;
@@ -167,7 +191,8 @@
             name: '全部',
             id: '0'
           });
-          this.selectItems[0].data = item;
+          categoryDefaultData[0].data = item;
+          this.selectItems = categoryDefaultData;
         })
     },
   }

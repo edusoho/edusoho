@@ -8,13 +8,13 @@
     ></treeSelect>
     <lazyLoading
       :courseList="courseList"
-      :isAllCourse="isAllCourse"
+      :isAllData="isAllCourse"
       :courseItemType="courseItemType"
       v-model="isRequestCompile"
       @needRequest="sendRequest"
       :typeList="'course_list'"
     ></lazyLoading>
-    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'course'"></emptyCourse>
+    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'course_list'"></emptyCourse>
   </div>
 </template>
 
@@ -147,23 +147,52 @@
             offset: this.offset,
             limit: this.limit
           });
-      // 获取select items
-      Api.getSelectItems()
-        .then((data) => {
-          data[0].data.unshift({
-            name: '全部',
-            id: '0'
-          });
-          data[1].data.unshift({
-            text: '全部',
-            type: 'all'
-          });
-          const items = Object.values(data)
-          items.pop();
-          this.selectItems = items;
-        });
+      const categoryDefaultData = [
+        {
+          data: [],
+          moduleType: 'tree',
+          text: '分类',
+          type: 'category'
+        },
+        {
+          data: [
+            {text: '全部', type: 'all'},
+            {text: '课程', type: 'normal'},
+            {text: '直播', type: 'live'}
+          ],
+          moduleType: 'normal',
+          text: '课程类型',
+          type: 'courseType'
+        },
+        {
+          data: [
+            {text: '推荐', type: 'recommendedSeq'},
+            {text: '热门', type: '"-studentNum"'},
+            {text: '最新', type: '-createdTime'}
+          ],
+          moduleType: 'normal',
+          text: '课程类型',
+          type: 'sort'
+        }
+      ]
 
-      // 重组数据
+      // 老接口数据，会被替换暂不处理
+      // Api.getSelectItems()
+      //   .then((data) => {
+      //     data[0].data.unshift({
+      //       name: '全部',
+      //       id: '0'
+      //     });
+      //     data[1].data.unshift({
+      //       text: '全部',
+      //       type: 'all'
+      //     });
+      //     const items = Object.values(data)
+      //     items.pop();
+      //     this.selectItems = items;
+      //   });
+
+      // 获取班级分类数据
       Api.getCourseCategories()
         .then((data) => {
           const item = data;
@@ -171,17 +200,9 @@
             name: '全部',
             id: '0'
           });
-          this.selectItems[0].data = item;
+          categoryDefaultData[0].data = item;
+          this.selectItems = categoryDefaultData;
         })
-      // 根据筛选条件获取相应课程
-      // this.requestCourses(config)
-      //   .then(() => {
-      //     if (this.courseList.length !== 0) {
-      //       this.isEmptyCourse = false;
-      //     } else {
-      //       this.isEmptyCourse = true;
-      //     }
-      //   });
     }
   }
 </script>

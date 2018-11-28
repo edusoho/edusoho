@@ -16,7 +16,7 @@
           :class="[item.id == queryData.categoryId ? 'selected' : '']"
           v-for="item in secondLevel"
           @click="itemSelect(item, menuContent.type, 'levelTwo')"
-        >{{ item.name || item.text }}</div>
+        >{{ item.text }}</div>
       </div>
       <!-- third-level -->
       <div class="e-menu__items level-three">
@@ -24,7 +24,7 @@
           :class="[item.id == queryData.categoryId ? 'selected' : '']"
           v-for="item in thirdLevel"
           @click="itemSelect(item, menuContent.type, 'levelThree')"
-        >{{ item.name || item.text }}</div>
+        >{{ item.text }}</div>
       </div>
     </div>
     <!-- line -->
@@ -33,7 +33,7 @@
         :class="judgeIsSelected(item, menuContent.type)"
         v-for="item in menuContent.data"
         @click="itemSelect(item, menuContent.type)"
-      >{{ item.name || item.text }}</div>
+      >{{ item.text }}</div>
     </div>
   </div>
 </template>
@@ -78,12 +78,15 @@
         if (query === 'categoryId') {
           switch(level) {
             case 'levelOne':
-              if (item.children) {
-                this.secondLevel = item.children;
-              } else {
-                this.queryData.categoryId = Number(item.id)
-                this.isReadyEmit = true;
-              }
+              // 暂不展示多级分类
+              // if (item.children) {
+              //   this.secondLevel = item.children;
+              // } else {
+              //   this.queryData.categoryId = Number(item.id)
+              //   this.isReadyEmit = true;
+              // }
+              this.queryData.categoryId = Number(item.id)
+              this.isReadyEmit = true;
               break;
             case 'levelTwo':
               if (item.children) {
