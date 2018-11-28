@@ -46,6 +46,10 @@ class Callback extends ESLiveBase
             goto end;
         }
 
+        if ('course' == $sourceFrom && empty($context['courseId'])) {
+            goto end;
+        }
+
         switch ($sourceFrom) {
             case 'course':
                 $course = $this->getCourseService()->getCourse($context['courseId']);
