@@ -90,11 +90,6 @@ class Callback extends ESLiveBase
             $cloudFile['album'] = empty($course) ? '' : $course['courseSetTitle'];
             $cloudFile['created_at'] = $file['fileSize'];
             $cloudFile['owner'] = empty($users[$file['createdUserId']]) ? '' : $users[$file['createdUserId']]['nickname'];
-            $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                'data' => array('id' => $file['globalId']),
-                'times' => 2,
-                'duration' => 3600 * 4,
-            ));
 
             $biz = $this->getBiz();
             $cloudFile['play'] = array(
