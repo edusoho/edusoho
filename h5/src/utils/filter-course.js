@@ -1,5 +1,4 @@
 const courseListData = (data, listObj) => {
-  console.log(data, listObj, 99);
   switch (listObj.type) {
     case 'price':
       const showStudentStr = listObj.showStudent ?
