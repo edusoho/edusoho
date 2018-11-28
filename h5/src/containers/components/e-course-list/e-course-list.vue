@@ -124,7 +124,7 @@ import { mapState } from 'vuex';
       },
     },
     created() {
-      this.fetchCourse();
+      // this.fetchCourse();
     },
     methods: {
       jumpTo(source) {
