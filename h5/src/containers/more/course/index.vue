@@ -162,6 +162,17 @@
           items.pop();
           this.selectItems = items;
         });
+
+      // 重组数据
+      Api.getCourseCategories()
+        .then((data) => {
+          const item = data;
+          item.unshift({
+            name: '全部',
+            id: '0'
+          });
+          this.selectItems[0].data = item;
+        })
       // 根据筛选条件获取相应课程
       // this.requestCourses(config)
       //   .then(() => {

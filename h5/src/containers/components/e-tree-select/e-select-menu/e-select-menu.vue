@@ -16,7 +16,7 @@
           :class="[item.id == queryData.categoryId ? 'selected' : '']"
           v-for="item in secondLevel"
           @click="itemSelect(item, menuContent.type, 'levelTwo')"
-        >{{ item.text }}</div>
+        >{{ item.name || item.text }}</div>
       </div>
       <!-- third-level -->
       <div class="e-menu__items level-three">
@@ -24,7 +24,7 @@
           :class="[item.id == queryData.categoryId ? 'selected' : '']"
           v-for="item in thirdLevel"
           @click="itemSelect(item, menuContent.type, 'levelThree')"
-        >{{ item.text }}</div>
+        >{{ item.name || item.text }}</div>
       </div>
     </div>
     <!-- line -->
@@ -33,7 +33,7 @@
         :class="judgeIsSelected(item, menuContent.type)"
         v-for="item in menuContent.data"
         @click="itemSelect(item, menuContent.type)"
-      >{{ item.text }}</div>
+      >{{ item.name || item.text }}</div>
     </div>
   </div>
 </template>
@@ -73,6 +73,7 @@
     },
     methods: {
       itemSelect(item, type, level) {
+        console.log(item,88)
         const query = this.queryForm[type];
         this.isReadyEmit = false;
         if (query === 'categoryId') {
@@ -86,7 +87,7 @@
               }
               break;
             case 'levelTwo':
-              if (item.children) {
+              if (item.children.length) {
                 this.thirdLevel = item.children;
               } else {
                 this.queryData.categoryId = Number(item.id)
