@@ -9434,3 +9434,5 @@ admin.sts_discovery.login: 人脸识别登录
 admin.sts_discovery.pc_use_tip: 若在PC电脑端开启本功能，用户需要借助手机微信或APP使用。
 admin.sts_discovery_feature_tip: 更多功能敬请期待。。。
 admin.user_manage.lock_user.access_deniedexception_message: 没有封禁该角色的权限
+
+exception.coupon.receive.failed: 优惠券领取失败
