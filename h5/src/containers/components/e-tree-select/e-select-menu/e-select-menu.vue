@@ -73,13 +73,12 @@
     },
     methods: {
       itemSelect(item, type, level) {
-        console.log(item,88)
         const query = this.queryForm[type];
         this.isReadyEmit = false;
         if (query === 'categoryId') {
           switch(level) {
             case 'levelOne':
-              if (item.children.length) {
+              if (item.children) {
                 this.secondLevel = item.children;
               } else {
                 this.queryData.categoryId = Number(item.id)
@@ -87,7 +86,7 @@
               }
               break;
             case 'levelTwo':
-              if (item.children.length) {
+              if (item.children) {
                 this.thirdLevel = item.children;
               } else {
                 this.queryData.categoryId = Number(item.id)
