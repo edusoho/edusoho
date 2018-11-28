@@ -10,7 +10,7 @@
       :courseList="courseList"
       :isAllData="true"
       :courseItemType="courseItemType"
-      v-model="isRequestCompile"
+      :isRequestCompile="isRequestCompile"
       @needRequest="sendRequest"
       :typeList="'classroom_list'"
     ></lazyLoading>
@@ -101,7 +101,7 @@
           data.data.forEach(element => {
             this.courseList.push(element);
           })
-          let isAllClassroom= this.judegIsAllClassroom(data);
+          let isAllClassroom = this.judegIsAllClassroom(data);
           if (!isAllClassroom) {
             this.offset = this.courseList.length;
           }

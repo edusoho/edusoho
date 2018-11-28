@@ -10,7 +10,7 @@
       :courseList="courseList"
       :isAllData="isAllCourse"
       :courseItemType="courseItemType"
-      v-model="isRequestCompile"
+      :isRequestCompile="isRequestCompile"
       @needRequest="sendRequest"
       :typeList="'course_list'"
     ></lazyLoading>
