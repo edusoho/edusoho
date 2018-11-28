@@ -38,7 +38,7 @@
       },
       typeList: {
         type: String,
-        default: 'course_list'
+        default: 'course'
       }
     },
     data() {
@@ -76,7 +76,7 @@
           return;
         }
         this.$router.push({
-          path: (this.typeList === 'course_list') ? `/course/${id}` : `/classroom/${id}`,
+          path: (this.typeList === 'course') ? `/course/${id}` : `/classroom/${id}`,
         });
       }
     }
