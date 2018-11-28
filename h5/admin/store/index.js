@@ -8,7 +8,8 @@ Vue.use(Vuex);
 
 const state = {
   isLoading: false,
-  categories: [],
+  courseCategories: [],
+  classCategories: [],
   user: {},
   csrfToken: '',
   draft: {},

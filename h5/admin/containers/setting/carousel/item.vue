@@ -71,7 +71,7 @@
     components: {
       VueCropper
     },
-    props: ['item', 'index', 'active', 'itemNum', 'courseSets'],
+    props: ['item', 'index', 'active', 'itemNum', 'courseSets', 'type'],
     data() {
       return {
         activeIndex: this.active,
@@ -115,15 +115,12 @@
             displayedTitle: sets[0].displayedTitle
           }
         } else {
-          this.item.link.target = {};
+          this.item.link.target = null;
         }
+      },
+      type() {
+        this.item.link.type = (this.type === 'course_list') ? 'course' : 'classroom'; // 修复默认数据中type为 url 的bug
       }
-    },
-    created() {
-      if (this.item.link.type === 'course') {
-        return;
-      }
-      this.item.link.type = 'course'; // 修复默认数据中type为 url 的bug
     },
     methods: {
       beforeUpload(file) {

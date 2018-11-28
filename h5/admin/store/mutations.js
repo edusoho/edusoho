@@ -5,10 +5,10 @@ export default {
     state.isLoading = payload;
   },
   [types.GET_COURSE_CATEGORIES](state, payload) {
-    state.categories = payload;
+    state.courseCategories = payload;
   },
   [types.GET_CLASS_CATEGORIES](state, payload) {
-    state.categories = payload;
+    state.classCategories = payload;
   },
   [types.GET_CSRF_TOKEN](state, payload) {
     state.csrfToken = payload;
