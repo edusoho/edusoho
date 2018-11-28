@@ -3,8 +3,6 @@
 namespace Biz\Activity\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\ESLiveToolkit;
-use AppBundle\Common\JWTAuth;
 use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\AppLoggerConstant;
@@ -274,7 +272,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (!empty($liveLogo) && array_key_exists('live_logo', $liveLogo) && !empty($liveLogo['live_logo'])) {
             $liveLogoUrl = $baseUrl.'/'.$liveLogo['live_logo'];
         }
-        $callbackUrl = $this->buildCallbackUrl($activity);
 
         $live = $this->getEdusohoLiveClient()->createLive(array(
             'summary' => empty($activity['remark']) ? '' : $activity['remark'],
@@ -285,31 +282,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'authUrl' => $baseUrl.'/live/auth',
             'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
             'liveLogoUrl' => $liveLogoUrl,
-            'callback' => $callbackUrl,
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
         ));
 
         return $live;
-    }
-
-    protected function buildCallbackUrl($activity)
-    {
-        $baseUrl = $this->biz['env']['base_url'];
-
-        $args = array(
-            'courseId' => $activity['fromCourseId'],
-            'sources' => array('course', 'my', 'public'), //支持课程资料读取，公共资料读取，还有我的资料库读取
-            'userId' => $activity['fromUserId'],
-        );
-
-        $jwtToken = $this->getJWTAuth()->auth($args, array(
-            'lifetime' => 60 * 60 * 4,
-            'effect_time' => $activity['startTime'],
-        ));
-
-        $callbackUrl = ESLiveToolkit::generateCallback($baseUrl, $jwtToken);
-
-        return $callbackUrl;
     }
 
     protected function getTokenService()
@@ -331,14 +307,5 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getActivityDao()
     {
         return $this->createDao('Activity:ActivityDao');
-    }
-
-    protected function getJWTAuth()
-    {
-        $setting = $this->getSettingService()->get('storage', array());
-        $accessKey = !empty($setting['cloud_access_key']) ? $setting['cloud_access_key'] : '';
-        $secretKey = !empty($setting['cloud_secret_key']) ? $setting['cloud_secret_key'] : '';
-
-        return new JWTAuth($accessKey, $secretKey);
     }
 }

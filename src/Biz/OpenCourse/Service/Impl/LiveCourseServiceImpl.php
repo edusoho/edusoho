@@ -3,8 +3,6 @@
 namespace Biz\OpenCourse\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\ESLiveToolkit;
-use AppBundle\Common\JWTAuth;
 use Biz\BaseService;
 use Biz\OpenCourse\Service\LiveCourseService;
 use Biz\System\Service\SettingService;
@@ -170,7 +168,6 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             'speaker' => $this->_getSpeaker($courseTeacherIds),
             'authUrl' => $routes['authUrl'],
             'jumpUrl' => $routes['jumpUrl'],
-            'callback' => $this->buildCallbackUrl($lesson),
         );
 
         if ('add' == $actionType) {
@@ -205,26 +202,6 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $liveLogoUrl;
     }
 
-    protected function buildCallbackUrl($lesson)
-    {
-        $baseUrl = $this->biz['env']['base_url'];
-
-        $args = array(
-            'sources' => array('open_course', 'my', 'public'), //支持课程资料读取，公共资料读取，还有我的资料库读取
-            'courseId' => $lesson['courseId'],
-            'userId' => $lesson['userId'],
-        );
-
-        $jwtToken = $this->getJWTAuth()->auth($args, array(
-            'lifetime' => 60 * 60 * 4,
-            'effect_time' => $lesson['startTime'],
-        ));
-
-        $callbackUrl = ESLiveToolkit::generateCallback($baseUrl, $jwtToken);
-
-        return $callbackUrl;
-    }
-
     protected function getOpenCourseService()
     {
         return $this->createService('OpenCourse:OpenCourseService');
@@ -246,14 +223,5 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
-    }
-
-    protected function getJWTAuth()
-    {
-        $setting = $this->getSettingService()->get('storage', array());
-        $accessKey = !empty($setting['cloud_access_key']) ? $setting['cloud_access_key'] : '';
-        $secretKey = !empty($setting['cloud_secret_key']) ? $setting['cloud_secret_key'] : '';
-
-        return new JWTAuth($accessKey, $secretKey);
     }
 }

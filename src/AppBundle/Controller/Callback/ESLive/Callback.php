@@ -9,11 +9,11 @@ use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class Resource extends ESLiveBase
+class Callback extends ESLiveBase
 {
     public function fetch(Request $request)
     {
-        $token = $request->query->get('jwtToken');
+        $token = $request->query->get('token');
         $context = $this->getJWTAuth()->valid($token);
         if (!$context) {
             throw new BadRequestHttpException('Token Error');
@@ -50,7 +50,7 @@ class Resource extends ESLiveBase
             case 'course':
                 $course = $this->getCourseService()->getCourse($context['courseId']);
                 $conditions['targetId'] = $course['courseSetId'];
-                $conditions['targetType'] = $course['coursematerial'];
+                $conditions['targetType'] = 'coursematerial';
                 break;
             case 'my':
                 $conditions['createdUserId'] = $context['userId'] ?: -1;
@@ -82,8 +82,10 @@ class Resource extends ESLiveBase
             $cloudFile['filename'] = $file['filename'];
             $cloudFile['type'] = $file['type'];
             $cloudFile['size'] = $file['fileSize'];
+            $cloudFile['length'] = $file['length'];
+            $cloudFile['album'] = empty($course) ? '' : $course['courseSetTitle'];
             $cloudFile['created_at'] = $file['fileSize'];
-            $cloudFile['owner'] = empty($users[$file['createdUserId']]) ? '' : $users[$file['createdUserId']];
+            $cloudFile['owner'] = empty($users[$file['createdUserId']]) ? '' : $users[$file['createdUserId']]['nickname'];
             $token = $this->getTokenService()->makeToken('hls.playlist', array(
                 'data' => array('id' => $file['globalId']),
                 'times' => 2,

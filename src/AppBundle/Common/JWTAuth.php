@@ -8,17 +8,11 @@ class JWTAuth
 
     const TYP = 'JWT';
 
-    protected $publicKey;
-
-    protected $privateKey;
-
     protected $token;
 
-    public function __construct($publicKey, $privateKey)
+    public function __construct($key)
     {
-        $this->publicKey = $publicKey;
-        $this->privateKey = $privateKey;
-        $this->token = md5($publicKey.$privateKey);
+        $this->token = $key;
     }
 
     /**
@@ -29,9 +23,9 @@ class JWTAuth
      */
     public function auth($payload, $options = array())
     {
-        if (isset($options['lifetime']) && isset($options['effect_time'])) {
-            $payload['exp'] = time() + $options['lifetime'];
-            $payload['iat'] = time() + $options['effect_time'];
+        if (isset($options['exp']) && isset($options['iat'])) {
+            $payload['exp'] = $options['exp'];
+            $payload['iat'] = $options['iat'];
         }
 
         $payload = $this->makePayload($payload);
@@ -57,15 +51,15 @@ class JWTAuth
         if (empty($header['alg'])) {
             return false;
         }
+
         $expectSign = self::signature($header64.'.'.$payload64, $token, $header['alg']);
 
-        if ($expectSign !== $sign) {
+        if ($expectSign != $sign) {
             return false;
         }
 
         $payload = json_decode(self::urlSafeBase64Decode($payload64), JSON_OBJECT_AS_ARRAY);
         $currentTime = time();
-
         if (isset($payload['iat']) && $payload['iat'] > $currentTime) {
             return false;
         }
@@ -116,7 +110,7 @@ class JWTAuth
         $currentTime = time();
 
         $defaultPayload = array(
-            'iss' => 'edusoho',
+            'iss' => '',
             'iat' => $currentTime,
             'exp' => $currentTime + 3600,
             'aud' => '',

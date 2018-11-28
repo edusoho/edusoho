@@ -2,8 +2,6 @@
 
 namespace Biz\Live\Service\Impl;
 
-use AppBundle\Common\ESLiveToolkit;
-use AppBundle\Common\JWTAuth;
 use Biz\Live\Service\LiveService;
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
@@ -74,11 +72,6 @@ class LiveServiceImpl extends BaseService implements LiveService
             'endTime' => $params['endTime'],
         );
 
-        if (!empty($params['isCallback'])) {
-            $liveParams['callback'] = $this->buildCallbackUrl($params[
-                'startTime'], $params['targetId'], $params['targetType'], $params['speakerId']);
-        }
-
         if (!empty($params['roomType']) && $this->isRoomType($params['roomType'])) {
             $liveParams['roomType'] = $params['roomType'];
         }
@@ -117,25 +110,6 @@ class LiveServiceImpl extends BaseService implements LiveService
         }
 
         return $liveLogoUrl;
-    }
-
-    protected function buildCallbackUrl($startTime, $targetId, $targetType, $speakerId)
-    {
-        $baseUrl = $this->getBaseUrl();
-        $args = array(
-            'sources' => array('my', 'public', $targetType), //支持课程资料读取，还有我的资料库读取
-            'courseId' => $targetId,
-            'userId' => $speakerId,
-        );
-
-        $jwtToken = $this->getJWTAuth()->auth($args, array(
-            'lifetime' => 60 * 60 * 4,
-            'effect_time' => $startTime,
-        ));
-
-        $callbackUrl = ESLiveToolkit::generateCallback($baseUrl, $jwtToken);
-
-        return $callbackUrl;
     }
 
     public function canUpdateRoomType($liveStartTime)
@@ -192,19 +166,5 @@ class LiveServiceImpl extends BaseService implements LiveService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    /**
-     * @return JWTAuth
-     *
-     * @throws \Exception
-     */
-    protected function getJWTAuth()
-    {
-        $setting = $this->getSettingService()->get('storage', array());
-        $accessKey = !empty($setting['cloud_access_key']) ? $setting['cloud_access_key'] : '';
-        $secretKey = !empty($setting['cloud_secret_key']) ? $setting['cloud_secret_key'] : '';
-
-        return new JWTAuth($accessKey, $secretKey);
     }
 }
