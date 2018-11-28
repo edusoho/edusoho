@@ -2,8 +2,6 @@
 
 namespace QiQiuYun\SDK\Constants;
 
-use QiQiuYun\SDK\Exception\SDKException;
-
 final class XAPIActivityTypes
 {
     const APPLICATION = 'application';
@@ -69,5 +67,4 @@ final class XAPIActivityTypes
             throw new \InvalidArgumentException(sprintf('UnSupport type %s', $shortName));
         }
     }
-
 }

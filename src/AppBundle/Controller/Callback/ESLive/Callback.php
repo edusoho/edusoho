@@ -96,8 +96,9 @@ class Callback extends ESLiveBase
                 'duration' => 3600 * 4,
             ));
 
+            $biz = $this->getBiz();
             $cloudFile['play'] = array(
-                'url' => $request->getSchemeAndHttpHost()."/hls/{$file['globalId']}/playlist/{$token['token']}.m3u8?format=json",
+                'url' => $biz['qiQiuYunSdk.play']->makePlayToken($file['globalId'], array('std' => 1), 36000),
             );
 
             $cloudFiles['data'][] = $cloudFile;
