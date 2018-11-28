@@ -6,12 +6,12 @@
       @updateModule="updateHandler(module, index)"></carousel>
 
     <!-- 基础组件——课程列表 -->
-    <course v-if="module.type === moduleDefault.courseList.type"
+    <course v-if="module.type === moduleDefault.courseList.type" :key="1"
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
       @updateModule="updateHandler(module, index)"></course>
 
     <!-- 班级列表 -->
-    <course v-if="module.type === moduleDefault.classList.type"
+    <course v-if="module.type === moduleDefault.classList.type" :key="2"
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
       @updateModule="updateHandler(module, index)"></course>
 
@@ -33,7 +33,7 @@
 import Carousel from '../carousel';
 import Course from '../course';
 import Poster from '../poster';
-import marketingGroupon from '../marketing-groupon';
+import MarketingGroupon from '../marketing-groupon';
 import validate from '@admin/utils/module-validator';
 import { MODULE_DEFAULT } from '@admin/config/module-default-config';
 
@@ -42,7 +42,7 @@ export default {
     'carousel': Carousel,
     'course': Course,
     'poster': Poster,
-    'marketing-groupon': marketingGroupon,
+    'marketing-groupon': MarketingGroupon,
   },
   props: {
     module: {
