@@ -16,7 +16,7 @@
         :courseItemType="courseItemType"
         :isRequestCompile="isCourseRequestComplete"
         @needRequest="courseSendRequest"
-        :typeList="'course'"
+        :typeList="'course_list'"
       ></lazyLoading>
       <lazyLoading
         v-show="active==1"
@@ -25,7 +25,7 @@
         :courseItemType="classItemType"
         :isRequestCompile="isClassRequestComplete"
         @needRequest="classSendRequest"
-        :typeList="'classroom'"
+        :typeList="'classroom_list'"
       ></lazyLoading>
     </div>
     <div class="mt50"></div>
@@ -67,7 +67,7 @@
     },
     computed: {
       typeList() {
-        return this.active == 0 ? 'course' : 'classroom';
+        return this.active == 0 ? 'course_list' : 'classroom_list';
       }
     },
     methods: {

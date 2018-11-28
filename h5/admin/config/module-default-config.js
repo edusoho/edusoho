@@ -13,7 +13,7 @@ const MODULE_DEFAULT = {
     }]
   },
   courseList: {
-    type: 'course',
+    type: 'course_list',
     moduleType: '',
     data: {
       title: '',
@@ -26,7 +26,7 @@ const MODULE_DEFAULT = {
     }
   },
   classList: {
-    type: 'classroom',
+    type: 'classroom_list',
     moduleType: '',
     data: {
       title: '',
@@ -85,10 +85,10 @@ const MARKETING_MODULE = [
 ]
 
 const VALUE_DEFAULT = {
-  classroom: {
+  classroom_list: {
     key: 'title'
   },
-  course: {
+  course_list: {
     key: 'displayedTitle'
   },
   groupon: {
@@ -97,10 +97,10 @@ const VALUE_DEFAULT = {
 }
 
 const TYPE_TEXT_DEFAULT = {
-  course: {
+  course_list: {
     text: '课程'
   },
-  classroom: {
+  classroom_list: {
     text: '班级'
   },
   groupon: {

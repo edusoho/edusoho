@@ -17,7 +17,7 @@ export default (module, startValidate) => {
   }
 
   // 课程
-  if (module.type == 'course') {
+  if (module.type == 'course_list') {
     const courseExist = module.data.items.length;
     if (!module.data.title || (module.data.sourceType == 'custom' && !courseExist)) {
       if (!startValidate) return true;
@@ -30,7 +30,7 @@ export default (module, startValidate) => {
   }
 
   // 班级
-  if (module.type == 'classroom') {
+  if (module.type == 'classroom_list') {
     const classExist = module.data.items.length;
     if (!module.data.title || (module.data.sourceType == 'custom' && !classExist)) {
       if (!startValidate) return true;

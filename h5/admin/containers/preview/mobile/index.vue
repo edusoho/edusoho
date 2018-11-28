@@ -6,7 +6,7 @@
         :slides="part.data"
         :feedback="feedback"></e-swipe>
       <e-course-list
-        v-if="['classroom', 'course'].includes(part.type)"
+        v-if="['classroom_list', 'course_list'].includes(part.type)"
         :courseList="part.data"
         :feedback="feedback"
         :typeList="part.type"></e-course-list>
