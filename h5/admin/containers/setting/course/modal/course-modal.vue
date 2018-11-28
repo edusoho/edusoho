@@ -64,7 +64,7 @@ export default {
     },
     type: {
       type: String,
-      default: 'course_list'
+      default: 'course'
     }
   },
   data () {
@@ -155,7 +155,7 @@ export default {
       this.courseSets = [...this.courseSets, item];
     },
     searchHandler(queryString, cb) {
-      if (this.type === 'class_list') {
+      if (this.type === 'classroom') {
         this.getClassList({
           title: queryString
         }).then(res => {
