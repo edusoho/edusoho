@@ -3,8 +3,8 @@
     <van-swipe :autoplay="2000">
       <van-swipe-item v-for="(slide, index) in slides" :key="index">
         <div class="item-container">
-          <!-- course -->
-          <div v-if="slide.link.type === 'course' || 'classroom'" @click="jumpTo(slide, index)">
+          <!-- course/classroom -->
+          <div v-if="slide.link.type === 'course' || slide.link.typ ==='classroom'" @click="jumpTo(slide, index)">
             <img v-bind:src="slide.image.uri">
           </div>
           <!-- url -->
