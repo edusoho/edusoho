@@ -123,8 +123,7 @@ export default {
       return this.supportVersion('1.4.0');
     },
     supportClassroomVersion() {
-      return true;
-      // return this.supportVersion('1.3.1');
+      return this.supportVersion('1.3.1');
     },
   },
   created() {
