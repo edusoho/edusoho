@@ -179,12 +179,14 @@ export default {
         linkData.type = radioType;
         return;
       }
-      linkData.type = 'url';
+      if (this.pathName === 'h5Setting') {
+        linkData.type = 'url';
+      }
     },
   },
   created() {
     if (this.pathName === 'h5Setting') {
-      if (this.moduleData.data.link.type = 'url') {
+      if (this.moduleData.data.link.type === 'url') {
         this.radio = 'url';
       };
       return;
