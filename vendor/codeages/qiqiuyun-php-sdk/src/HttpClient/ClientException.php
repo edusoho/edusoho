@@ -10,8 +10,8 @@ class ClientException extends \Exception
      * Undocumented function
      *
      * @param string $message
-     * @param integer $code
-     * @param array $transferInfo 传输
+     * @param int    $code
+     * @param array  $transferInfo 传输
      */
     public function __construct($message = '', $code = 0, array $transferInfo = array())
     {
