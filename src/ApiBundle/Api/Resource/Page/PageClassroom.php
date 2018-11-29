@@ -41,6 +41,11 @@ class PageClassroom extends AbstractResource
         }
         $this->getOCUtil()->multiple($classroom['reviews'], array('userId'));
 
+        if ($this->isPluginInstalled('vip') && $classroom['vipLevelId'] > 0) {
+            $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$classroom['vipLevelId'], 'GET', array());
+            $classroom['freeVipLevel'] = $this->invokeResource($apiRequest);
+        }
+
         return $classroom;
     }
 

@@ -14,11 +14,15 @@ class PageCourseFilter extends Filter
         'id', 'title', 'courseSetTitle',
     );
     protected $publicFields = array(
-        'access', 'learnMode', 'studentNum', 'allowAnonymousPreview', 'parentId', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType', 'progress', 'buyable', 'reviews',
+        'freeVipLevel', 'access', 'learnMode', 'studentNum', 'allowAnonymousPreview', 'parentId', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType', 'progress', 'buyable', 'reviews',
     );
 
     protected function publicFields(&$data)
     {
+        if (isset($data['freeVipLevel']) && !empty($data['freeVipLevel'])) {
+            $freeVipLevel = $data['freeVipLevel'];
+        }
+
         $member = $data['member'];
         if (!empty($member)) {
             $courseMemberFilter = new CourseMemberFilter();
@@ -56,5 +60,6 @@ class PageCourseFilter extends Filter
         $data['member'] = $member;
         $data['courses'] = $courses;
         $data['reviews'] = $reviews;
+        $data['freeVipLevel'] = empty($freeVipLevel) ? null : $freeVipLevel;
     }
 }

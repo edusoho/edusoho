@@ -22,7 +22,7 @@ class PageClassroomFilter extends Filter
         'status', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
-        'createdTime', 'updatedTime', 'creator', 'access', 'courses', 'reviews', 'member',
+        'createdTime', 'updatedTime', 'creator', 'access', 'courses', 'reviews', 'member', 'freeVipLevel',
     );
 
     protected function simpleFields(&$data)
@@ -35,6 +35,8 @@ class PageClassroomFilter extends Filter
 
     protected function publicFields(&$data)
     {
+        empty($data['freeVipLevel']) && $data['freeVipLevel'] = null;
+
         if ('date' == $data['expiryMode']) {
             Converter::timestampToDate($data['expiryStartDate']);
         }
