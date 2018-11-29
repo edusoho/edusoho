@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="help-block" v-if="portal === 'miniprogram'">使用班级配置功能，小程序版本需要升级到1.3.1及以上</div>
     <div class="setting-page" :class="{'setting-page-miniprogram': portal === 'miniprogram' && supportGrouponVersion}">
       <img class="find-head-img" :src="portal === 'miniprogram' ? 'static/images/miniprogram_head.jpg' : 'static/images/find_head_url.jpg'" alt="">
       <div class="find-navbar" :class="{'find-navbar-miniprogram': portal === 'miniprogram'}">

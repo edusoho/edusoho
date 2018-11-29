@@ -22,7 +22,7 @@
         <div class="course-item-setting__section mtl clearfix">
           <p class="pull-left section-left">{{typeLabel}}来源：</p>
           <div class="section-right">
-            <el-radio v-model="sourceType" label="condition">{{typeLabel}}名称</el-radio>
+            <el-radio v-model="sourceType" label="condition">{{typeLabel}}分类</el-radio>
             <el-radio v-model="sourceType" label="custom">自定义</el-radio>
           </div>
         </div>
