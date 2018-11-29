@@ -183,9 +183,11 @@ export default {
     },
   },
   created() {
-    if (this.moduleData.data.link.type = 'url') {
-      this.radio = 'url';
-    };
+    if (this.pathName === 'h5Setting') {
+      if (this.moduleData.data.link.type = 'url') {
+        this.radio = 'url';
+      };
+    }
   },
   methods: {
     beforeUpload(file) {
