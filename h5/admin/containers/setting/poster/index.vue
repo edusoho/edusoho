@@ -187,7 +187,9 @@ export default {
       if (this.moduleData.data.link.type = 'url') {
         this.radio = 'url';
       };
+      return;
     }
+    this.radio = 'insideLink';
   },
   methods: {
     beforeUpload(file) {
