@@ -84,6 +84,9 @@ class BalloonCloudVideoPlayer extends Emitter {
 
     extConfig = Object.assign(extConfig, {
       id: $(self.options.element).attr('id'),
+      sdkBaseUri: app.cloudSdkBaseUri,
+      disableDataUpload: app.cloudDisableLogReport,
+      disableSentry: app.cloudDisableLogReport,
       disableControlBar: self.options.disableControlBar,
       disableProgressBar: self.options.disableProgressBar,
       playlist: self.options.url,
