@@ -57,8 +57,14 @@ class OrderInfoFilter extends Filter
 
     protected function updateFullPath(&$data)
     {
-        $data['cover']['small'] = AssetHelper::getFurl(empty($data['cover']['small']) ? '' : $data['cover']['small'], $data['targetType'].'.png');
-        $data['cover']['middle'] = AssetHelper::getFurl(empty($data['cover']['middle']) ? '' : $data['cover']['middle'], $data['targetType'].'.png');
-        $data['cover']['large'] = AssetHelper::getFurl(empty($data['cover']['large']) ? '' : $data['cover']['large'], $data['targetType'].'.png');
+        if ('vip' == $data['targetType']) {
+            $data['cover']['small'] = empty($data['cover']['small']) ? $this->convertFilePath('/assets/v2/img/vip/vip_icon_bronze.png') : $this->convertFilePath($data['cover']['small']);
+            $data['cover']['middle'] = empty($data['cover']['middle']) ? $this->convertFilePath('/assets/v2/img/vip/vip_icon_bronze.png') : $this->convertFilePath($data['cover']['middle']);
+            $data['cover']['large'] = empty($data['cover']['large']) ? $this->convertFilePath('/assets/v2/img/vip/vip_icon_bronze.png') : $this->convertFilePath($data['cover']['large']);
+        } else {
+            $data['cover']['small'] = AssetHelper::getFurl(empty($data['cover']['small']) ? '' : $data['cover']['small'], $data['targetType'].'.png');
+            $data['cover']['middle'] = AssetHelper::getFurl(empty($data['cover']['middle']) ? '' : $data['cover']['middle'], $data['targetType'].'.png');
+            $data['cover']['large'] = AssetHelper::getFurl(empty($data['cover']['large']) ? '' : $data['cover']['large'], $data['targetType'].'.png');
+        }
     }
 }
