@@ -51,6 +51,7 @@ import { mapState } from 'vuex';
     data() {
       return {
         type: 'price',
+        pathName: this.$route.name,
       };
     },
     filters: {
@@ -124,7 +125,8 @@ import { mapState } from 'vuex';
       },
     },
     created() {
-      // this.fetchCourse();
+      if (!this.pathName.includes('Setting')) return
+      this.fetchCourse();
     },
     methods: {
       jumpTo(source) {
