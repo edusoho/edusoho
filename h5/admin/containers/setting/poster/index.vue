@@ -189,7 +189,6 @@ export default {
       };
       return;
     }
-    this.radio = 'insideLink';
   },
   methods: {
     beforeUpload(file) {
