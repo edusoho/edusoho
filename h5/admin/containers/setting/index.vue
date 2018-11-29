@@ -33,7 +33,7 @@
         <div class="section-title">点击添加组件</div>
         <div class="section-button-group">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-            v-for="(item, index) in baseModules" :key="index">
+            v-for="(item, index) in baseModules" :key="index" v-if="item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list')">
             {{ item.name }}
           </el-button>
         </div>
@@ -44,7 +44,7 @@
         <div class="section-title">基础组件</div>
         <div class="section-button-group">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-            v-for="(item, index) in baseModules" :key="`base-${index}`">
+            v-for="(item, index) in baseModules" :key="`base-${index}`" v-if="item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list')">
             {{ item.name }}
           </el-button>
         </div>
@@ -121,6 +121,10 @@ export default {
     supportGrouponVersion() {
       return true;
       // return this.supportVersion('1.4.0');
+    },
+    supportClassroomVersion() {
+      return true;
+      // return this.supportVersion('1.3.1');
     },
   },
   created() {
