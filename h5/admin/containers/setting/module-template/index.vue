@@ -114,9 +114,9 @@ export default {
         const linkData = this.module.data.link;
         if (linkData.type === 'url') {
           linkData.target = null;
-          return;
+        } else {
+          linkData.url = '';
         }
-        linkData.url = '';
       }
       const incomplete = validate(this.module, this.saveFlag);
       this.$emit('updateModule', {
