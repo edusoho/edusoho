@@ -36,7 +36,7 @@
           });
           return;
         }
-        if (data.type == 'url') {
+        if (data.type == 'url' && data.url) {
           window.location.href = data.url;
           return;
         }
