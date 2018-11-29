@@ -162,6 +162,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             return $this->getClassroomService()->getClassroom($id);
         }
 
+        if ('vip' == $type) {
+            return $this->service('VipPlugin:Vip:LevelService')->getLevel($id);
+        }
+
         return null;
     }
 
