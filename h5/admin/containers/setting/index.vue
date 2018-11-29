@@ -34,7 +34,7 @@
         <div class="section-title">点击添加组件</div>
         <div class="section-button-group">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-            v-for="(item, index) in baseModules" :key="index">
+            v-for="(item, index) in baseModules" :key="index" v-if="item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list' && portal === 'miniprogram') || (portal === 'h5')">
             {{ item.name }}
           </el-button>
         </div>
