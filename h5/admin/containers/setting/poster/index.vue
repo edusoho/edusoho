@@ -259,6 +259,7 @@ export default {
         id: data[0].id,
         title: data[0].title || data[0].courseSetTitle,
         courseSetId: data[0].courseSet.id,
+        displayedTitle: data[0].displayedTitle
       };
       this.moduleData.data.link.type = 'course';
     },
