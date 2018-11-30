@@ -6,9 +6,9 @@ use Biz\Common\CommonException;
 use Biz\Live\Service\LiveService;
 use Biz\BaseService;
 use Biz\User\UserException;
+use Biz\System\Service\SettingService;
 use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\AthenaLiveToolkit;
 
 class LiveServiceImpl extends BaseService implements LiveService
 {
@@ -74,11 +74,6 @@ class LiveServiceImpl extends BaseService implements LiveService
             'endTime' => $params['endTime'],
         );
 
-        if (!empty($params['isCallback'])) {
-            $liveParams['callback'] = $this->buildCallbackUrl($params[
-                'endTime'], $params['targetId'], $params['targetType']);
-        }
-
         if (!empty($params['roomType']) && $this->isRoomType($params['roomType'])) {
             $liveParams['roomType'] = $params['roomType'];
         }
@@ -119,23 +114,6 @@ class LiveServiceImpl extends BaseService implements LiveService
         return $liveLogoUrl;
     }
 
-    protected function buildCallbackUrl($endTime, $targetId, $targetType)
-    {
-        $duration = $endTime + 86400 - time();
-        $args = array(
-            'duration' => $duration,
-            'data' => array(
-                'courseId' => $targetId,
-                'type' => $targetType,
-            ),
-        );
-        $token = $this->getTokenService()->makeToken('live.callback', $args);
-
-        $baseUrl = $this->getBaseUrl();
-
-        return AthenaLiveToolkit::generateCallback($baseUrl, $token['token'], $targetId);
-    }
-
     public function canUpdateRoomType($liveStartTime)
     {
         $timeDiff = $liveStartTime - time();
@@ -174,6 +152,9 @@ class LiveServiceImpl extends BaseService implements LiveService
         return $this->biz['educloud.live_client'];
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

@@ -23,11 +23,13 @@ class CourseSetReview extends AbstractResource
         $conditions = array(
             'courseSetId' => $courseSetId,
             'private' => 0,
+            'parentId' => 0,
         );
 
         $offset = $request->query->get('offset', static::DEFAULT_PAGING_OFFSET);
         $limit = $request->query->get('limit', static::DEFAULT_PAGING_LIMIT);
-        $reviews = $this->service('Course:ReviewService')->searchReviews(
+        $total = $this->getCourseReviewService()->searchReviewsCount($conditions);
+        $reviews = $this->getCourseReviewService()->searchReviews(
             $conditions,
             array('updatedTime' => 'DESC'),
             $offset,
@@ -36,9 +38,17 @@ class CourseSetReview extends AbstractResource
 
         $this->getOCUtil()->multiple($reviews, array('userId'));
         $this->getOCUtil()->multiple($reviews, array('courseId'), 'course');
-
-        $total = $this->service('Course:ReviewService')->searchReviewsCount($conditions);
+        foreach ($reviews as &$review) {
+            $review['posts'] = $this->getCourseReviewService()->searchReviews(array('parentId' => $review['id']), array('updatedTime' => 'DESC'), 0, 5);
+            $this->getOCUtil()->multiple($review['posts'], array('userId'));
+            $this->getOCUtil()->multiple($review['posts'], array('courseId'), 'course');
+        }
 
         return $this->makePagingObject($reviews, $total, $offset, $limit);
+    }
+
+    private function getCourseReviewService()
+    {
+        return $this->service('Course:ReviewService');
     }
 }

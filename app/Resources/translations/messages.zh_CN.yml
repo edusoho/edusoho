@@ -4718,6 +4718,8 @@ admin.course_manage.manage.closed_count: >
   已关闭：<strong class="inflow-num">%closedNum%</strong>个
 admin.course_manage.manage.unpublish_count: >
   未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
+admin.course_set_manage.manage.number: 课程编号
+admin.course_manage_modal.manage.number: 计划编号
 admin.course_manage.manage.number: 编号
 admin.course_manage.manage.name: 名称
 admin.course_manage.manage.price: 价格

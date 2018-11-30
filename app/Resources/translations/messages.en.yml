@@ -3880,6 +3880,8 @@ admin.course_manage.manage.count: "Courses：<strong class=\"inflow-num\">%cours
 admin.course_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>(s) \n"
 admin.course_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
 admin.course_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong>\n"
+admin.course_set_manage.manage.number: Id
+admin.course_manage_modal.manage.number: Id
 admin.course_manage.manage.number: Id
 admin.course_manage.manage.name: Name
 admin.course_manage.manage.price: Price

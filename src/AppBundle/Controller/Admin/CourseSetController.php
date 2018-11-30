@@ -609,9 +609,8 @@ class CourseSetController extends BaseController
     public function courseTagMatchAction(Request $request)
     {
         $queryString = $request->query->get('q');
-        $page_limit = $request->query->get('page_limit');
 
-        $tags = $this->getTagService()->searchTags(array('likeName' => $queryString), array(), 0, empty($page_limit) ? 10 : $page_limit);
+        $tags = $this->getTagService()->searchTags(array('likeName' => $queryString), array(), 0, PHP_INT_MAX);
 
         return $this->createJsonResponse($tags);
     }
@@ -707,7 +706,7 @@ class CourseSetController extends BaseController
 
         $tagOwnerIds = $this->getTagService()->findOwnerIdsByTagIdsAndOwnerType($conditions['tagIds'], 'course-set');
 
-        $conditions['ids'] = empty($tagOwnerIds) ? array() : $tagOwnerIds;
+        $conditions['ids'] = empty($tagOwnerIds) ? array(-1) : $tagOwnerIds;
         unset($conditions['tagIds']);
 
         return $conditions;
@@ -724,7 +723,7 @@ class CourseSetController extends BaseController
             if (!empty($courseSet['tags'])) {
                 $courseSet['displayTag'] = $tags[$courseSet['tags'][0]]['name'];
                 if (count($courseSet['tags']) > 1) {
-                    $courseSet['displayTagNames'] = $this->buildTagsDisplayNames(ArrayToolkit::column($tags, 'id'), $tags);
+                    $courseSet['displayTagNames'] = $this->buildTagsDisplayNames($courseSet['tags'], $tags);
                 }
             }
         }

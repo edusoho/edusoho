@@ -64,6 +64,10 @@ class KernelH5RequestListener
             $pathInfo = $this->container->get('router')->generate('course_show', array('id' => $route['id']), UrlGeneratorInterface::ABSOLUTE_PATH);
         }
 
+        if (in_array($route['_route'], array('classroom_reviews', 'classroom_introductions'))) {
+            $pathInfo = $this->container->get('router')->generate('classroom_show', array('id' => $route['id']), UrlGeneratorInterface::ABSOLUTE_PATH);
+        }
+
         if ('course_set_explore' == $route['_route']) {
             $query = array();
             $pathInfo = $this->container->get('router')->generate('course_set_explore', array(), UrlGeneratorInterface::ABSOLUTE_PATH);

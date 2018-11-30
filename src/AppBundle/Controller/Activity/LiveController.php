@@ -133,7 +133,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
 
         return $this->forward('AppBundle:Liveroom:_entry', array(
             'roomId' => $activity['ext']['liveId'],
-            'params' => array('courseId' => $courseId, 'activityId' => $activityId, 'provider' => $provider),
+            'params' => array(
+                'courseId' => $courseId,
+                'activityId' => $activityId,
+                'provider' => $provider,
+                'startTime' => $activity['startTime'],
+                'endTime' => $activity['endTime'],
+            ),
         ), $params);
     }
 

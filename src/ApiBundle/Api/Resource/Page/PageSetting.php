@@ -7,6 +7,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\User\UserException;
 use ApiBundle\Api\Annotation\Access;
+use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Filter;
 
@@ -108,6 +109,14 @@ class PageSetting extends AbstractResource
                     $courseFilter = new CourseFilter();
                     $courseFilter->setMode(Filter::PUBLIC_MODE);
                     $courseFilter->filter($course);
+                }
+            }
+            if ('classroom_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+                foreach ($discoverySetting['data']['items'] as &$classroom) {
+                    $classroomFilter = new ClassroomFilter();
+                    $classroomFilter->setMode(Filter::PUBLIC_MODE);
+                    $classroomFilter->filter($classroom);
                 }
             }
         }

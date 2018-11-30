@@ -2671,6 +2671,7 @@ classroom_explore:
 classroom_show:
     path:  /classroom/{id}
     defaults: { _controller: AppBundle:Classroom/Classroom:show }
+    h5: true
 
 classroom_qrcode:
     path:  /classroom/{id}/qrcode
@@ -2679,6 +2680,7 @@ classroom_qrcode:
 classroom_reviews:
     path:  /classroom/{id}/review
     defaults: { _controller: AppBundle:Classroom/Review:list }
+    h5: true
 
 classroom_review_create:
     path:  /classroom/{id}/review/create
@@ -2695,6 +2697,7 @@ classroom_review_delete:
 classroom_introductions:
     path:  /classroom/{id}/introduction
     defaults: { _controller: AppBundle:Classroom/Classroom:introduction }
+    h5: true
 
 # classroom_review_create:
 #     path:  /classroom/{id}/review/create

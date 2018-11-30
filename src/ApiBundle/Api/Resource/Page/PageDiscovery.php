@@ -39,6 +39,9 @@ class PageDiscovery extends AbstractResource
                     'sort' => $discoverySetting['data']['sort'],
                 );
             }
+            if ('classroom_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+            }
         }
 
         return $discoverySettings;

@@ -71,7 +71,7 @@ class Client implements ClientInterface
 
         $errorCode = curl_errno($curl);
         if ($errorCode) {
-            $errorMessage = sprintf("HTTP request send failed, cURL error %s: %s (see http://curl.haxx.se/libcurl/c/libcurl-errors.html).", $errorCode, \curl_error($curl));;
+            $errorMessage = sprintf('HTTP request send failed, cURL error %s: %s (see http://curl.haxx.se/libcurl/c/libcurl-errors.html).', $errorCode, \curl_error($curl));
             $this->logger && $this->logger->error($errorMessage, curl_getinfo($curl));
             throw new ClientException($errorMessage, $errorCode, curl_getinfo($curl));
         } else {
@@ -84,7 +84,7 @@ class Client implements ClientInterface
 
         $response = new Response($rawHeaders, $rawBody);
 
-        $this->logger && $this->logger->log($response->getHttpResponseCode()>=400 ? 'error' : 'debug', 'HTTP response.', array(
+        $this->logger && $this->logger->log($response->getHttpResponseCode() >= 400 ? 'error' : 'debug', 'HTTP response.', array(
             'status_code' => $response->getHttpResponseCode(),
             'headers' => $response->getHeaders(),
             'body' => $response->getBody(),

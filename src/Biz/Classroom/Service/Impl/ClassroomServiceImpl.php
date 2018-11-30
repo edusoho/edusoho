@@ -94,9 +94,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function getClassroom($id)
     {
-        $classroom = $this->getClassroomDao()->get($id);
-
-        return $classroom;
+        return $this->getClassroomDao()->get($id);
     }
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
@@ -2070,6 +2068,50 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         } else {
             return array('createdTime' => 'DESC');
         }
+    }
+
+    public function isMemberNonExpired($classroom, $member)
+    {
+        if (empty($classroom) || empty($member)) {
+            throw $this->createServiceException('classroom, member参数不能为空');
+        }
+
+        $vipNonExpired = true;
+        if (!empty($member['levelId'])) {
+            // 会员加入的情况下
+            $vipNonExpired = $this->isVipMemberNonExpired($classroom, $member);
+        }
+
+        if (0 == $member['deadline']) {
+            return $vipNonExpired;
+        }
+
+        if ($member['deadline'] > time()) {
+            return $vipNonExpired;
+        }
+
+        return !$vipNonExpired;
+    }
+
+    /**
+     * 会员到期后、会员被取消后、课程会员等级被提高均为过期
+     *
+     * @param  $course
+     * @param  $member
+     *
+     * @return bool 会员加入的学员是否已到期
+     */
+    protected function isVipMemberNonExpired($classroom, $member)
+    {
+        $vipApp = $this->getAppService()->getAppByCode('vip');
+
+        if (empty($vipApp)) {
+            return false;
+        }
+
+        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
+
+        return 'ok' === $status;
     }
 
     /**
