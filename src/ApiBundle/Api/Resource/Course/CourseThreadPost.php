@@ -34,8 +34,8 @@ class CourseThreadPost extends AbstractResource
     protected function addAttachments($posts)
     {
         foreach ($posts as &$post) {
-            if ($post['source'] == 'app') {
-                $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread.post', $post['id'], 'attachment');
+            $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread.post', $post['id'], 'attachment');
+            if ($post['source'] == 'app' && !empty($attachments)) {
                 $post['attachments'] = array();
                 foreach ($attachments as $attachment) {
                     $attachment = $this->getUploadFileService()->getUseFile($attachment['id']);

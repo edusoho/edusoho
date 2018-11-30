@@ -144,6 +144,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException('Course ID can not be empty.');
         }
 
+        $thread = $this->filterThread($thread);
         $trimedThreadTitle = empty($thread['title']) ? '' : trim($thread['title']);
         if (empty($trimedThreadTitle)) {
             throw $this->createServiceException('thread title is null');
@@ -507,6 +508,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         return $conditions;
+    }
+
+    protected function filterThread($thread)
+    {
+        return ArrayToolkit::parts($thread, array('title', 'content', 'type', 'videoAskTime', 'videoId', 'courseId', 'taskId', 'source'));
     }
 
     protected function filterSort($sort)

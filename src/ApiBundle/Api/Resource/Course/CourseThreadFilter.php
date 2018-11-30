@@ -14,9 +14,13 @@ class CourseThreadFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        $userFilter = new UserFilter();
-        $userFilter->filter($data['user']);
+        if (isset($data['user'])) {
+            $userFilter = new UserFilter();
+            $userFilter->filter($data['user']);
+        }
 
-        $data['latestPostTime'] = empty($data['latestPostTime']) ? 0 : date('c', $data['latestPostTime']);
+        if (isset($data['latestPostTime'])) {
+            $data['latestPostTime'] = empty($data['latestPostTime']) ? 0 : date('c', $data['latestPostTime']);
+        }
     }
 }
