@@ -14,7 +14,7 @@ class IapGateway extends AbstractGateway
             'amount',
             'receipt',
             'transaction_id',
-            'is_sand_box'
+            'is_sand_box',
         ));
 
         return $this->requestReceiptData($data);
@@ -50,12 +50,12 @@ class IapGateway extends AbstractGateway
 
         curl_close($ch);
 
-        if ($errno != 0) {
+        if (0 != $errno) {
             return array(
                 array(
-                    'msg' => '充值失败！'.$errno
+                    'msg' => '充值失败！'.$errno,
                 ),
-                'failure'
+                'failure',
             );
         }
 
@@ -63,29 +63,29 @@ class IapGateway extends AbstractGateway
         if (empty($data)) {
             return array(
                 array(
-                    'msg' => '充值验证失败'
+                    'msg' => '充值验证失败',
                 ),
-                'failure'
+                'failure',
             );
         }
 
-        if ($data['status'] == 21007) {
+        if (21007 == $data['status']) {
             $notifyData['is_sand_box'] = true;
+
             return $this->requestReceiptData($notifyData);
         }
-
 
         $setting = $this->getSettingService()->get('appId', array());
         if (!empty($setting['appId'])) {
             if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $setting['appId'])) {
                 return array(
                     array(
-                        'msg' => '充值失败!'
+                        'msg' => '充值失败!',
                     ),
-                    'failure'
+                    'failure',
                 );
             }
-            
+
             $mobileIapProduct = $this->getSettingService()->get('mobile_iap_product', array());
             $products = $data['receipt']['in_app'];
             $amount = 0;
@@ -100,16 +100,16 @@ class IapGateway extends AbstractGateway
             }
         }
 
-        if (!isset($data['status']) || $data['status'] != 0) {
+        if (!isset($data['status']) || 0 != $data['status']) {
             return array(
                 array(
-                    'msg' => '充值失败！状态码 :'.$data['status']
+                    'msg' => '充值失败！状态码 :'.$data['status'],
                 ),
-                'failure'
+                'failure',
             );
         }
 
-        if ($data['status'] == 0) {
+        if (0 == $data['status']) {
             if (isset($data['receipt']) && !empty($data['receipt']['in_app'])) {
                 $inApp = false;
 
@@ -128,32 +128,32 @@ class IapGateway extends AbstractGateway
                 if (!$inApp) {
                     return array(
                         array(
-                            'msg' => 'receipt校验失败：找不到对应的transaction_id'
+                            'msg' => 'receipt校验失败：找不到对应的transaction_id',
                         ),
-                        'failure'
+                        'failure',
                     );
                 }
 
                 return array(
                     array(
                         'status' => 'paid',
-                        'pay_amount' => $amount*100,
+                        'pay_amount' => $amount * 100,
                         'cash_flow' => $inApp['transaction_id'],
                         'paid_time' => $inApp['purchase_date'],
                         'quantity' => $inApp['quantity'],
                         'product_id' => $inApp['product_id'],
                         'attach' => array(
-                            'user_id' => $userId
-                        )
+                            'user_id' => $userId,
+                        ),
                     ),
-                    'success'
+                    'success',
                 );
             }
         }
 
         return array(
             array(),
-            'failure'
+            'failure',
         );
     }
 
