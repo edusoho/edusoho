@@ -201,7 +201,7 @@ class SiteSettingController extends BaseController
 
     public function appIdAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
             $setting = array('appId' => $fields['appId']);
 
@@ -210,6 +210,7 @@ class SiteSettingController extends BaseController
         }
 
         $setting = $this->getSettingService()->get('appId', array());
+
         return $this->render(
             'admin/system/app-id-setting.html.twig',
             array(
