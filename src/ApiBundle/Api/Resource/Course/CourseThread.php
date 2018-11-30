@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -92,7 +93,32 @@ class CourseThread extends AbstractResource
 
     public function add(ApiRequest $request, $courseId)
     {
-        return array(1111);
+        $fields = $request->request->all();
+        $fields['courseId'] = $courseId;
+        $fields['source'] = 'app';
+        $fileIds = $fields['fileIds'];
+        if (!ArrayToolkit::requireds($fields, array('content', 'courseId', 'type'))) {
+            throw new BadRequestHttpException('缺少必填字段', null, 5000305);
+        }
+
+        if (!$this->getCourseService()->canTakeCourse($fields['courseId'])) {
+            throw new BadRequestHttpException('没有提问的权限', null, 5000512);
+        }
+
+        if ($fields['taskId']) {
+            $task = $this->getTaskService()->getTask($fields['taskId']);
+            $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            $fields['videoId'] = ($activity['mediaType'] == 'video') ? $activity['ext']['id'] : 0;
+        }
+
+        $fields['title'] = substr($fields['content'], 0, 30);
+        $thread = $this->getCourseThreadService()->createThread($fields);
+
+        if ($fileIds) {
+            $this->getUploadFileService()->createUseFiles($fileIds, $thread['id'], 'course_thread', 'attachment');
+        }
+
+        return $thread;
     }
 
     protected function createSearchKeyword($keyword, $type)
@@ -143,6 +169,14 @@ class CourseThread extends AbstractResource
         }
 
         return $thread;
+    }
+
+    /**
+     * @return \Biz\Course\Service\Impl\MemberServiceImpl
+     */
+    protected function getMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 
     /**

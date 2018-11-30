@@ -13,7 +13,7 @@ class AddCourseThreadFields extends Migration
         $db = $container['db'];
         $db->exec("ALTER TABLE `course_thread` ADD `videoAskTime` int(10) DEFAULT 0 COMMENT '视频提问时间' AFTER `latestPostUserId`;");
         $db->exec("ALTER TABLE `course_thread` ADD `videoId` int(10) DEFAULT 0 COMMENT '视频Id' AFTER `videoAskTime`;");
-        $db->exec("ALTER TABLE `course_thread` ADD `source` varchar(10) DEFAULT 0 COMMENT '提问来源' AFTER `videoId`;");
+        $db->exec("ALTER TABLE `course_thread` ADD `source` enum('app', 'web') DEFAULT 'web' COMMENT '问题来源' AFTER `videoId`;");
     }
 
     /**
