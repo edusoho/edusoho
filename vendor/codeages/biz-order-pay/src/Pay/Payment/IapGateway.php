@@ -145,6 +145,7 @@ class IapGateway extends AbstractGateway
                         'attach' => array(
                             'user_id' => $userId,
                         ),
+                        'receipt' => $receipt,
                     ),
                     'success',
                 );
