@@ -25,7 +25,6 @@ class AiServiceTest extends BaseTestCase
         $this->assertEquals('created', $result['status']);
     }
 
-
     public function testGetFaceSession()
     {
         $mockSession = $this->mockSession();
@@ -43,17 +42,16 @@ class AiServiceTest extends BaseTestCase
     {
         $mockSession = $this->mockSession();
 
-        $httpClient = $this->mockHttpClient([
-            'success' => true
-        ]);
+        $httpClient = $this->mockHttpClient(array(
+            'success' => true,
+        ));
 
         $service = new AiService($this->auth, array(), null, $httpClient);
 
-        $result = $service->finishFaceUpload($mockSession['id'], 200 , '{"hash":"33df3df3df33","key":"33df3df3df33"}');
+        $result = $service->finishFaceUpload($mockSession['id'], 200, '{"hash":"33df3df3df33","key":"33df3df3df33"}');
 
         $this->assertEquals(true, $result['success']);
     }
-
 
     private function mockSession()
     {
@@ -82,8 +80,8 @@ class AiServiceTest extends BaseTestCase
                 ),
             ),
             'updated_at' => '2018-09-12T16:40:51+08:00',
-            'created_at' => "2018-09-12T16:40:51+08:00",
-            'expired_at' => "2018-09-12T16:50:51+08:00",
+            'created_at' => '2018-09-12T16:40:51+08:00',
+            'expired_at' => '2018-09-12T16:50:51+08:00',
         );
     }
 
