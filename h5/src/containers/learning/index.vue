@@ -101,7 +101,7 @@
       requestClasses(setting) {
         this.isClassRequestComplete = false;
         return Api.myStudyClasses({
-          params: setting
+          params: { ...setting, format: 'pagelist' }
         }).then((data) => {
           let isAllClass;
           if (!isAllClass) {
@@ -141,7 +141,7 @@
       };
       const classSetting = {
         offset: this.offset_class,
-        limit: this.limit_class
+        limit: this.limit_class,
       };
 
       this.requestCourses(courseSetting)
