@@ -2,7 +2,6 @@
 
 namespace Codeages\Biz\Pay\Payment;
 
-
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 
@@ -73,6 +72,32 @@ class IapGateway extends AbstractGateway
         if ($data['status'] == 21007) {
             $notifyData['is_sand_box'] = true;
             return $this->requestReceiptData($notifyData);
+        }
+
+
+        $magic = $this->getSettingService()->get('magic', array());
+        if (!empty($magic['app_id'])) {
+            if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $magic['app_id'])) {
+                return array(
+                    array(
+                        'msg' => '充值失败!'
+                    ),
+                    'failure'
+                );
+            }
+
+            $mobileIapProduct = $this->getSettingService()->get('mobile_iap_product', array());
+            $products = $data['receipt']['in_app'];
+            $amount = 0;
+            if (!empty($products)) {
+                foreach ($products as $product) {
+                    if (empty($mobileIapProduct[$product['product_id']]['price'])) {
+                        $this->getLogService()->warning('iap', 'charge', '购买的商品id不存在', array($product));
+                    } else {
+                        $amount = $amount + $mobileIapProduct[$product['product_id']]['price'];
+                    }
+                }
+            }
         }
 
         if (!isset($data['status']) || $data['status'] != 0) {
@@ -150,5 +175,15 @@ class IapGateway extends AbstractGateway
     public function converterRefundNotify($data)
     {
         throw new AccessDeniedException('can not convert refund notify with iap.');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->biz->service('System:LogService');
     }
 }
