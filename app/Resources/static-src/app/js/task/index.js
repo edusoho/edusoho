@@ -21,5 +21,6 @@ if ($adBtn.length > 0) {
   $adBtn.on('click', function(event) {
     Cookies.set($adBtn.data('cookie'), 'true', {expires: 360, path: '/'});
     $adBtn.parents('.js-audio-convert-box').remove();
+    $('.js-dashboard-footer').removeClass('dashboard-footer--audio');
   });
 }
