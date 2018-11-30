@@ -24,7 +24,7 @@ class MeClassroom extends AbstractResource
 
         $total = $this->getClassroomService()->searchMemberCount($conditions);
 
-        if (isset($querys['limit']) && isset($querys['offset'])) {
+        if (isset($querys['format']) && 'pagelist' == $querys['format']) {
             list($offset, $limit) = $this->getOffsetAndLimit($request);
 
             $classrooms = $this->getClassrooms($conditions, array(), $offset, $limit);
