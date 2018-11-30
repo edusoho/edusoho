@@ -6231,6 +6231,8 @@ admin.mobile_setting.splash_pic_setting_hint: 'Please upload pictures in png, gi
 admin.mobile_setting.online_school_about_hint: 'This profile will be displayed in the app''s " About Us" part'
 admin.mobile_setting.online_school_logo_hint: 'Please upload pictures in png, gif, jpg format. Limit LOGO height to 50px.Image size should not exceed 2MB.<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
 admin.mobile_setting.app_custom_setting_option: 'Custom APP Set'
+admin.mobile_setting.app_ios_bundle_id: 'Bundle ID'
+admin.mobile_setting.app_ios_bundle_id_tutorials: 'Tutorials'
 admin.mobile_setting.app_custom_name: 'APP name'
 admin.mobile_setting.app_custom_about: 'APP Profile'
 admin.mobile_setting.app_custom_logo: 'APP Icon'

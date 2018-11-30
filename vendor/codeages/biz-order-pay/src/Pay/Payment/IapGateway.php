@@ -75,9 +75,9 @@ class IapGateway extends AbstractGateway
             return $this->requestReceiptData($notifyData);
         }
 
-        $setting = $this->getSettingService()->get('appId', array());
+        $setting = $this->getSettingService()->get('mobile', array());
         if (!empty($setting['appId'])) {
-            if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $setting['appId'])) {
+            if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $setting['bundleId'])) {
                 return array(
                     array(
                         'msg' => '充值失败!',

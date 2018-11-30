@@ -904,9 +904,6 @@ admin:
                         admin_setting_security:
                             name: admin.system.site.security_tab
                             disable: true
-                        admin_setting_app_id:
-                            name: admin.system.site.app_id_tab
-                            disable: true
                 admin_setting_user:
                     name: admin.system.user_menu
                     children:
