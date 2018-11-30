@@ -199,6 +199,25 @@ class SiteSettingController extends BaseController
         ));
     }
 
+    public function appIdAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $setting = array('appId' => $fields['appId']);
+
+            $this->getSettingService()->set('appId', $setting);
+            $this->setFlashMessage('success', 'site.save.success');
+        }
+
+        $setting = $this->getSettingService()->get('appId', array());
+        return $this->render(
+            'admin/system/app-id-setting.html.twig',
+            array(
+                'setting' => $setting,
+            )
+        );
+    }
+
     protected function getDefaultSet()
     {
         $default = array(

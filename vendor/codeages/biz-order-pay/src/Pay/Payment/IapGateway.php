@@ -75,9 +75,9 @@ class IapGateway extends AbstractGateway
         }
 
 
-        $magic = $this->getSettingService()->get('magic', array());
-        if (!empty($magic['app_id'])) {
-            if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $magic['app_id'])) {
+        $setting = $this->getSettingService()->get('appId', array());
+        if (!empty($setting['appId'])) {
+            if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $setting['appId'])) {
                 return array(
                     array(
                         'msg' => '充值失败!'
@@ -85,7 +85,7 @@ class IapGateway extends AbstractGateway
                     'failure'
                 );
             }
-
+            
             $mobileIapProduct = $this->getSettingService()->get('mobile_iap_product', array());
             $products = $data['receipt']['in_app'];
             $amount = 0;

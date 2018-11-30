@@ -291,6 +291,7 @@ admin.system.site.consult_setting_tab: Custom Service
 admin.system.site.es_bar_tab: 'Sidebar'
 admin.system.site.share_tab: Share
 admin.system.site.security_tab: Security
+admin.system.site.app_id_tab: AppId
 
 ##用户设置模块
 admin.system.user.auth_tab: Register

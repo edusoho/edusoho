@@ -1,0 +1,27 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_app_id' %}
+
+{% block main %}
+    {{ web_macro.flash_messages() }}
+
+    <form class="form-horizontal with-discuz" method="post" novalidate id="sync-discuz-form">
+
+      <div class="row form-group">
+        <div class="col-md-3 control-label"><label>{{'appId'|trans}}</label></div>
+        <div class="controls col-md-8">
+          <input class="form-control" name="appId" value="{{ setting.appId|default() }}">
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-3 control-label"></div>
+        <div class="controls col-md-8">
+          <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </div>
+      </div>
+
+    </form>
+
+{% endblock %}

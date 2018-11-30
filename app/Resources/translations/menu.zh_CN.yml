@@ -293,6 +293,7 @@ admin.system.site.consult_setting_tab: 客服
 admin.system.site.es_bar_tab: '侧边栏'
 admin.system.site.share_tab: 分享
 admin.system.site.security_tab: 安全
+admin.system.site.app_id_tab: AppId
 
 ##用户设置模块
 admin.system.user.auth_tab: 注册

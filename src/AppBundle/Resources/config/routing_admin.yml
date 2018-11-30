@@ -10,6 +10,10 @@ admin_setting_security:
     path:  /setting/security
     defaults: { _controller: AppBundle:Admin/SiteSetting:security }
 
+admin_setting_app_id:
+    path: /setting/app_id
+    defaults: { _controller: AppBundle:Admin/SiteSetting:appId }
+
 admin_notice_modal:
     path:  /notice/modal
     defaults: { _controller: AppBundle:Admin/Default:notice }
