@@ -76,7 +76,7 @@ class IapGateway extends AbstractGateway
         }
 
         $setting = $this->getSettingService()->get('mobile', array());
-        if (!empty($setting['appId'])) {
+        if (!empty($setting['bundleId'])) {
             if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $setting['bundleId'])) {
                 return array(
                     array(
