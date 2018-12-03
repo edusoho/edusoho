@@ -4,34 +4,22 @@ namespace ApiBundle\Api\Resource\Uploader;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Util\UploaderToken;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UploaderFinish extends AbstractResource
 {
     public function get(ApiRequest $request, $type, $courseId)
     {
-        $maker = new UploaderToken();
-        $token = $maker->make($type, $courseId, 'private', 86400);
-        $params = $this->parseToken($token);
+        $cloudAttachment = $this->getSettingService()->get('cloud_attachment', array());
+        if (!($cloudAttachment['course'])) {
+            throw new BadRequestHttpException('云附件未开启', null, 4031601);
+        }
 
-//        if (!$params) {
-//            return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
-//        }
-
-        $params = array_merge($request->query->all(), $params);
+        $params = $request->query->all();
 
         $file = $this->getUploadFileService()->finishedUpload($params);
 
         return $file;
-    }
-
-    protected function parseToken($token)
-    {
-        $parser = new UploaderToken();
-        $params = $parser->parse($token);
-
-        return $params;
     }
 
     protected function getUploadFileService()

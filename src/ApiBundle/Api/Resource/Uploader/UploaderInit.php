@@ -4,40 +4,41 @@ namespace ApiBundle\Api\Resource\Uploader;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Util\UploaderToken;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UploaderInit extends AbstractResource
 {
-    public function get(ApiRequest $request, $type, $courseId)
+    public function get(ApiRequest $request, $targetType, $targetId)
     {
-        $maker = new UploaderToken();
-        $token = $maker->make($type, $courseId, 'private', 86400);
-        $params = $this->parseToken($token);
+        $cloudAttachment = $this->getSettingService()->get('cloud_attachment', array());
+        if (!($cloudAttachment['course'])) {
+            throw new BadRequestHttpException('云附件未开启', null, 4031601);
+        }
 
-//        if (!$params) {
-//            return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
-//        }
-
+        $user = $this->getCurrentUser();
+        $params = array(
+            'targetType' => $targetType,
+            'targetId' => $targetId,
+            'userId' => $user['id'],
+            'bucket' => 'private',
+        );
         $params = array_merge($request->query->all(), $params);
 
-        $params['uploadCallback'] = $this->generateUrl('uploader_upload_callback', array(), UrlGeneratorInterface::ABSOLUTE_URL);
-        $params['processCallback'] = $this->generateUrl('uploader_process_callback', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        if (!$params) {
+            throw new BadRequestHttpException('上传授权码不正确，请重试！', null, 5001609);
+        }
 
-        $result = $this->getUploadFileService()->initUpload($params);
-
-        $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry', array(), UrlGeneratorInterface::ABSOLUTE_URL);
-        $result['authUrl'] = $this->generateUrl('uploader_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        $result = $this->getUploadFileService()->initFormUpload($params);
 
         return $result;
     }
 
-    protected function parseToken($token)
+    /**
+     * @return \Biz\System\Service\Impl\SettingServiceImpl
+     */
+    protected function getSettingService()
     {
-        $parser = new UploaderToken();
-        $params = $parser->parse($token);
-
-        return $params;
+        return $this->service('System:SettingService');
     }
 
     protected function getUploadFileService()

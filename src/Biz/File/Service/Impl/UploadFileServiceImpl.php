@@ -225,6 +225,84 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $auth;
     }
 
+    /**
+     * 传入的参数：
+     *
+     *   targetId 目标Id
+     *   targetType 目标类型
+     *   hash 文件hash
+     *   fileName 文件名称
+     *   fileSize 文件大小
+     *   uploadType 上传类型（direct表示直传不转码）
+     *
+     * @param array $params
+     *
+     * @throws
+     *
+     * @return array
+     *               globalId
+     *               Url 上传地址
+     *               token 上传token
+     */
+    public function initFormUpload($params)
+    {
+        $user = $this->getCurrentUser();
+
+        if (empty($user)) {
+            throw $this->createServiceException('用户未登录，上传初始化失败！');
+        }
+
+        if (!ArrayToolkit::requireds($params, array('targetId', 'targetType', 'hash'))) {
+            throw $this->createServiceException('参数缺失，上传初始化失败！');
+        }
+        $params['userId'] = $user['id'];
+        $params = ArrayToolkit::parts($params, array(
+            'id',
+            'directives',
+            'userId',
+            'targetId',
+            'targetType',
+            'bucket',
+            'hash',
+            'fileSize',
+            'fileName',
+            'uploadType',
+        ));
+
+        $setting = $this->getSettingService()->get('storage');
+        $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
+        $implementor = $this->getFileImplementor($params['storage']);
+
+        if (isset($params['id'])) {
+            $file = $this->getUploadFileInitDao()->get($params['id']);
+            $initParams = $implementor->resumeUpload($file, $params);
+
+            if ('ok' == $initParams['resumed'] && $file && 'ok' != $file['status']) {
+                $this->getUploadFileInitDao()->update($file['id'], array(
+                    'filename' => $params['fileName'],
+                    'fileSize' => $params['fileSize'],
+                    'targetId' => $params['targetId'],
+                    'targetType' => $params['targetType'],
+                ));
+
+                return $initParams;
+            }
+        }
+
+        $preparedFile = $implementor->prepareUpload($params);
+        $file = $this->getUploadFileInitDao()->create($preparedFile);
+        $params = array_merge($params, $file);
+        $initParams = $implementor->initFormUpload($params);
+
+        if ('cloud' == $params['storage']) {
+            $file = $this->getUploadFileInitDao()->update($file['id'], array('globalId' => $initParams['globalId']));
+        }
+
+        $this->getLogger()->info("initUpload 上传文件： #{$file['id']}");
+
+        return $initParams;
+    }
+
     public function initUpload($params)
     {
         $user = $this->getCurrentUser();
