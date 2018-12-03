@@ -22,6 +22,7 @@ class TagDaoImpl extends GeneralDaoImpl implements TagDao
             'orderbys' => array('createdTime'),
             'conditions' => array(
                 'name = :name',
+                'name LIKE :likeName',
                 'orgId = :orgId',
                 'orgCode = :orgCode',
                 'orgCode LIKE :likeOrgCode',

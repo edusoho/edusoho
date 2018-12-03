@@ -2,8 +2,12 @@
 
 namespace Biz\Marketing\Util;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class MarketingUtils
 {
+    private static $defaultDomain = 'https://wyx.edusoho.cn';
+
     public static function getSiteInfo($settingService, $webExtension)
     {
         $site = $settingService->get('site', array());
@@ -54,5 +58,13 @@ class MarketingUtils
         );
 
         return $config['drpService']->generateLoginForm($user, $site);
+    }
+
+    public static function getMarketingDomain()
+    {
+        $settingService = ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        $developerSetting = $settingService->get('developer', array());
+
+        return !empty($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : self::$defaultDomain;
     }
 }

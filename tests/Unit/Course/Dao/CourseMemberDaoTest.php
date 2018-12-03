@@ -218,7 +218,7 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'm.role' => 'student',
         );
         $res = $this->getDao()->countLearningMembers($conditions);
-        $this->assertEquals(1, count($res));
+        $this->assertEquals(1, $res);
     }
 
     public function testFindLearningMembers()
@@ -437,7 +437,7 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         );
         $res = $this->getDao()->countLearnedMembers($conditions);
 
-        $this->assertEquals(1, count($res));
+        $this->assertEquals(1, $res);
     }
 
     public function testFindLearnedMembers()
@@ -464,12 +464,12 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
     public function testCountActivitiesByCourseIdAndUserId()
     {
-        $this->mockCourseTaskResult(array('courseId' => 1, 'userId' => 1, 'activityId' => 1));
-        $this->mockCourseTaskResult(array('courseId' => 1, 'userId' => 1, 'activityId' => 1));
-        $this->mockCourseTaskResult(array('courseId' => 1, 'userId' => 1, 'activityId' => 3));
+        $this->mockCourseTaskResult(array('courseId' => 1, 'courseTaskId' => 1, 'userId' => 1, 'activityId' => 1));
+        $this->mockCourseTaskResult(array('courseId' => 2, 'courseTaskId' => 2, 'userId' => 1, 'activityId' => 2));
+        $this->mockCourseTaskResult(array('courseId' => 3, 'courseTaskId' => 3, 'userId' => 1, 'activityId' => 3));
         $res = $this->getDao()->countActivitiesByCourseIdAndUserId(1, 1);
 
-        $this->assertEquals(2, $res);
+        $this->assertEquals(1, $res);
     }
 
     public function testCountPostsByCourseIdAndUserId()

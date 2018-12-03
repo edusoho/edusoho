@@ -232,9 +232,9 @@ function uc_fopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = false,
     }
 
     if (function_exists('fsockopen')) {
-        $fp = @fsockopen(('https' == $scheme ? 'https' : 'http').'://'.('https' == $scheme ? $host : ($ip ? $ip : $host)), $port, $errno, $errstr, $timeout);
+        $fp = @fsockopen(('https' == $scheme ? 'ssl://' : '').('https' == $scheme ? $host : ($ip ? $ip : $host)), $port, $errno, $errstr, $timeout);
     } elseif (function_exists('pfsockopen')) {
-        $fp = @pfsockopen(('https' == $scheme ? 'https' : 'http').'://'.('https' == $scheme ? $host : ($ip ? $ip : $host)), $port, $errno, $errstr, $timeout);
+        $fp = @pfsockopen(('https' == $scheme ? 'ssl://' : '').('https' == $scheme ? $host : ($ip ? $ip : $host)), $port, $errno, $errstr, $timeout);
     } else {
         $fp = false;
     }

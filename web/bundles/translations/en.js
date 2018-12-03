@@ -1214,4 +1214,5 @@ t.add("admin.util.item_delete.delete_success_hint", "Delete %name% successfully"
 t.add("admin.shortcut_add_success_hint", "The current page has been added as a popular link!", "js", "en");
 t.add("admin.shortcut_delete_success_hint", "Delete frequently used links successfully!", "js", "en");
 t.add("task_show.user_login_protect_tip", "User unLogin", "js", "en");
+t.add("admin.course_manage.manage.tags_select.placeholder", "\u8f93\u5165\u6807\u7b7e\u540d\u79f0\u5173\u952e\u5b57", "js", "en");
 })(Translator);
