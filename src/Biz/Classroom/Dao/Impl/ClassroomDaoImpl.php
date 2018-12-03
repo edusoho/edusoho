@@ -36,7 +36,6 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
 
     /**
      *  根据一段时间内的加入人数排序
-     *
         SELECT classroom_member.studentNumCount, classroom.*
         FROM (classroom classroom)
             LEFT JOIN (
