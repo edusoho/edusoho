@@ -7642,6 +7642,7 @@ admin.mobile_setting.online_school_about_hint: 此简介将显示在移动客户
 admin.mobile_setting.online_school_logo_hint: 请上传jpg, gif, png格式的图片。logo 图片的高度建议不超过50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.mobile_setting.app_custom_setting_option: 定制APP设置项
 admin.mobile_setting.app_ios_bundle_id: '套装 ID'
+admin.mobile_setting.app_ios_bundle_id_hint: '套装ID必须和App Store Connect后台保持一致，否则会影响充值正常使用，请谨慎填写。'
 admin.mobile_setting.app_ios_bundle_id_tutorials: '查看教程'
 admin.mobile_setting.app_custom_name: APP名称
 admin.mobile_setting.app_custom_about: APP简介
