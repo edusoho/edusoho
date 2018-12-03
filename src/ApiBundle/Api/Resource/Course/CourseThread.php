@@ -25,7 +25,7 @@ class CourseThread extends AbstractResource
 
         $thread = $this->getCourseThreadService()->getThreadByThreadId($threadId);
         $thread = $this->addAttachments($thread);
-        if ($thread['videoId']) {
+        if (!empty($thread['videoId'])) {
             $file = $this->getUploadFileService()->getFullFile($thread['videoId']);
             $download = $this->getUploadFileService()->getDownloadMetas($file['id']);
             $thread['askVideoUri'] = $download['url'];
