@@ -31,6 +31,7 @@ class CourseTaskResult extends AbstractResource
             'courseTaskId' => $task['id'],
             'userId' => $user['id'],
         );
+
         return $this->getTaskResultService()->createTaskResult($taskResult);
     }
 

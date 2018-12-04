@@ -31,7 +31,7 @@ class Setting extends AbstractResource
         return array(
             'name' => $siteSetting['name'],
             'url' => $siteSetting['url'],
-            'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'] . '/' . $siteSetting['logo'],
+            'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
         );
     }
 
@@ -142,7 +142,7 @@ class Setting extends AbstractResource
             'show_student_num_enabled' => !isset($courseSetting['show_student_num_enabled']) ? '1' : $courseSetting['show_student_num_enabled'],
         );
     }
-    
+
     public function getFace()
     {
         $faceSetting = $this->getSettingService()->get('face', array());
@@ -154,7 +154,7 @@ class Setting extends AbstractResource
                 'app_enabled' => 0,
                 'pc_enabled' => 0,
                 'h5_enabled' => 0,
-            )
+            ),
         );
 
         if (isset($featureSetting['face_enabled']) && 1 == $featureSetting['face_enabled']) {
@@ -163,7 +163,7 @@ class Setting extends AbstractResource
             $settings['login']['pc_enabled'] = isset($faceSetting['login']['pc_enabled']) ? $faceSetting['login']['pc_enabled'] : 0;
             $settings['login']['h5_enabled'] = isset($faceSetting['login']['h5_enabled']) ? $faceSetting['login']['h5_enabled'] : 0;
         }
-        
+
         return $settings;
     }
 

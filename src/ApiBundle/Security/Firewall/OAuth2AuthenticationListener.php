@@ -30,5 +30,4 @@ class OAuth2AuthenticationListener extends BaseAuthenticationListener
     {
         return $this->container->get('oauth2.server');
     }
-
 }

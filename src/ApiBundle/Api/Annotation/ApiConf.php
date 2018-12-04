@@ -9,7 +9,7 @@ namespace ApiBundle\Api\Annotation;
 class ApiConf
 {
     /**
-     * @var boolean
+     * @var bool
      */
     private $isRequiredAuth;
 

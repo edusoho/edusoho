@@ -12,16 +12,7 @@ class CourseThread extends AbstractResource
 {
     public function get(ApiRequest $request, $courseId, $threadId)
     {
-        $user = $this->getCurrentUser();
-        $course = $this->getCourseService()->getCourse($courseId);
-        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
-        if (empty($course)) {
-            throw new BadRequestHttpException('教学计划不存在', null, 4041601);
-        }
-
-        if (empty($member)) {
-            throw new BadRequestHttpException('教学计划中没有该学员', null, 4041901);
-        }
+        $this->getCourseService()->tryTakeCourse($courseId);
 
         $thread = $this->getCourseThreadService()->getThreadByThreadId($threadId);
         $thread = $this->addAttachments($thread);
@@ -39,16 +30,7 @@ class CourseThread extends AbstractResource
 
     public function search(ApiRequest $request, $courseId)
     {
-        $user = $this->getCurrentUser();
-        $course = $this->getCourseService()->getCourse($courseId);
-        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
-        if (empty($course)) {
-            throw new BadRequestHttpException('教学计划不存在', null, 4041601);
-        }
-
-        if (empty($member)) {
-            throw new BadRequestHttpException('教学计划中没有该学员', null, 4041901);
-        }
+        $this->getCourseService()->tryTakeCourse($courseId);
 
         $type = $request->query->get('type', 'question');
         $keyword = $request->query->get('keyword');
@@ -93,16 +75,13 @@ class CourseThread extends AbstractResource
 
     public function add(ApiRequest $request, $courseId)
     {
+        $this->getCourseService()->tryTakeCourse($courseId);
         $fields = $request->request->all();
         $fields['courseId'] = $courseId;
         $fields['source'] = 'app';
         $fileIds = $fields['fileIds'];
         if (!ArrayToolkit::requireds($fields, array('content', 'courseId', 'type'))) {
             throw new BadRequestHttpException('缺少必填字段', null, 5000305);
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($fields['courseId'])) {
-            throw new BadRequestHttpException('没有提问的权限', null, 5000512);
         }
 
         if ($fields['taskId']) {

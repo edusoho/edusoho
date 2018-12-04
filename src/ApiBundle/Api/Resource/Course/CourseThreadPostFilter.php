@@ -13,7 +13,9 @@ class CourseThreadPostFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        $userFilter = new UserFilter();
-        $userFilter->filter($data['user']);
+        if (isset($data['user'])) {
+            $userFilter = new UserFilter();
+            $userFilter->filter($data['user']);
+        }
     }
 }
