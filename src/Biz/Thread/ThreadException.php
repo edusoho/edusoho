@@ -15,7 +15,7 @@ class ThreadException extends AbstractException
     const NOTFOUND_POST = 4040503;
 
     const TITLE_REQUIRED = 5000504;
-    
+
     const CONTENT_REQUIRED = 5000505;
 
     const TARGETID_REQUIRED = 5000506;
