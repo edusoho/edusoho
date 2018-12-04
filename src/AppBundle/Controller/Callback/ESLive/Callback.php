@@ -65,8 +65,9 @@ class Callback extends ESLiveBase
             default:
                 break;
         }
+        $filesCount = $this->getUploadFileService()->countUploadFiles($conditions);
 
-        $files = $this->getUploadFileService()->searchLiveCloudFiles(
+        $files = $this->getUploadFileService()->searchUploadFiles(
             $conditions,
             array('createdTime' => 'DESC'),
             $start,
@@ -100,7 +101,7 @@ class Callback extends ESLiveBase
         }
         end:
         $cloudFiles['paging'] = array(
-            'total' => isset($files) ? count($files) : 0,
+            'total' => isset($filesCount) ? $filesCount : 0,
             'start' => $start,
             'limit' => $limit,
         );
