@@ -16,8 +16,9 @@ class MarketingOrderInfo extends AbstractResource
         $orderInfo = $client->get(
             '/order_infos/'.$id,
             array(),
-            array('MERCHANT-USER-ID: ' . $systemUser['id'])
+            array('MERCHANT-USER-ID: '.$systemUser['id'])
         );
+
         return $orderInfo;
     }
 
