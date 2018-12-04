@@ -10,7 +10,10 @@ class PlayerException extends AbstractException
 
     const NOT_SUPPORT_TYPE = 5002501;
 
+    const FILE_TYPE_INVALID = 5002502;
+
     public $messages = array(
         5002501 => 'exception.player.not_support_type',
+        5002502 => 'exception.player.file_type_invalid',
     );
 }

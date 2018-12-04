@@ -10,6 +10,7 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\SimpleValidator;
+use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 
@@ -143,17 +144,17 @@ class LoginBindController extends BaseController
     {
         $token = $request->query->get('token', '');
         if (empty($token)) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $token = $this->getTokenService()->verifyToken('login.bind', $token);
         $tokenData = $token['data'];
         if ($tokenData['type'] != $type) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         if ($tokenData['sessionId'] != $request->getSession()->getId()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
     }
 

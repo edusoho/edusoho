@@ -10,7 +10,9 @@ use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
 use Biz\User\Service\TokenService;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -184,7 +186,7 @@ class TaskController extends BaseController
 
         if (empty($task['isFree']) && !$taskCanTryLook) {
             if (!$user->isLogin()) {
-                throw $this->createAccessDeniedException();
+                $this->createNewException(UserException::UN_LOGIN());
             }
             if ($course['parentId'] > 0) {
                 return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course['id'])));
@@ -201,7 +203,7 @@ class TaskController extends BaseController
         $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
 
         if (empty($allowAnonymousPreview) && !$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         //TODO vip 插件改造 判断用户是否为VIP
@@ -222,11 +224,11 @@ class TaskController extends BaseController
         $task = $this->getTaskService()->getTask($id);
 
         if (empty($task) || $task['courseId'] != $courseId) {
-            throw $this->createNotFoundException('task is not exist');
+            $this->createNewException(TaskException::NOTFOUND_TASK());
         }
 
         if (!$this->canPreviewTask($task, $course)) {
-            throw $this->createAccessDeniedException('task is not free');
+            $this->createNewException(TaskException::FORBIDDEN_PREVIEW_TASK());
         }
 
         return $this->forward('AppBundle:Activity/Activity:preview', array('task' => $task));
@@ -347,7 +349,7 @@ class TaskController extends BaseController
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (!$course['enableFinish']) {
-            throw $this->createAccessDeniedException('task can not finished.');
+            $this->createNewException(TaskException::CAN_NOT_FINISH());
         }
 
         $task = $this->getTaskService()->getTask($id);
@@ -459,7 +461,7 @@ class TaskController extends BaseController
             if ($this->getCourseService()->hasCourseManagerRole($courseId)) {
                 $task = $this->getTaskService()->getTask($taskId);
             } else {
-                throw $this->createNotFoundException('you can not preview this task ');
+                $this->createNewException(TaskException::FORBIDDEN_PREVIEW_TASK());
             }
         } else {
             $isTeacher = $this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->getId());
@@ -470,11 +472,11 @@ class TaskController extends BaseController
             }
         }
         if (empty($task)) {
-            throw $this->createNotFoundException(sprintf('task not found #%d', $taskId));
+            $this->createNewException(TaskException::NOTFOUND_TASK());
         }
 
         if ($task['courseId'] != $courseId) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(TaskException::ACCESS_DENIED());
         }
 
         return $task;

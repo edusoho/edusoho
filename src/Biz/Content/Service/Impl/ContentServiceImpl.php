@@ -3,6 +3,7 @@
 namespace Biz\Content\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Content\ContentException;
 use Biz\Content\Dao\ContentDao;
 use Biz\Content\Service\ContentService;
 use Biz\Content\Type\ContentTypeFactory;
@@ -59,7 +60,7 @@ class ContentServiceImpl extends BaseService implements ContentService
         $user = $this->getCurrentUser();
 
         if (empty($content['type'])) {
-            throw $this->createInvalidArgumentException('参数缺失，创建内容失败！');
+            $this->createNewException(ContentException::TYPE_REQUIRED());
         }
 
         $type = ContentTypeFactory::create($content['type']);
@@ -68,7 +69,7 @@ class ContentServiceImpl extends BaseService implements ContentService
         $content['type'] = $type->getAlias();
 
         if (empty($content['title'])) {
-            throw $this->createInvalidArgumentException('内容标题不能为空，创建内容失败！');
+            $this->createNewException(ContentException::TITLE_REQUIRED());
         }
 
         $content['userId'] = $this->getCurrentUser()->id;
@@ -100,7 +101,7 @@ class ContentServiceImpl extends BaseService implements ContentService
         $content = $this->getContent($id);
 
         if (empty($content)) {
-            throw $this->createNotFoundException('内容不存在，更新失败！');
+            $this->createNewException(ContentException::NOTFOUND_CONTENT());
         }
 
         $type = ContentTypeFactory::create($content['type']);

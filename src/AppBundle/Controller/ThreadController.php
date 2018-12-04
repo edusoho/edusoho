@@ -148,7 +148,7 @@ class ThreadController extends BaseController
                     'threadId' => $thread['id'],
                 )));
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
             }
         }
 
@@ -192,7 +192,7 @@ class ThreadController extends BaseController
                     'threadId' => $thread['id'],
                 )));
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
             }
         }
 

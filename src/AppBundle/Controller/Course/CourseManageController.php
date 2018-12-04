@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\DateToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Common\CommonException;
+use Biz\Course\CourseException;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
 use Biz\Task\Service\TaskService;
@@ -788,24 +789,16 @@ class CourseManageController extends BaseController
 
     public function closeAction(Request $request, $courseSetId, $courseId)
     {
-        try {
-            $this->getCourseService()->closeCourse($courseId);
+        $this->getCourseService()->closeCourse($courseId);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function deleteAction(Request $request, $courseSetId, $courseId)
     {
-        try {
-            $this->getCourseService()->deleteCourse($courseId);
-            if (!$this->getCourseSetService()->hasCourseSetManageRole($courseSetId)) {
-                return $this->createJsonResponse(array('success' => true, 'redirect' => $this->generateUrl('homepage')));
-            }
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        $this->getCourseService()->deleteCourse($courseId);
+        if (!$this->getCourseSetService()->hasCourseSetManageRole($courseSetId)) {
+            return $this->createJsonResponse(array('success' => true, 'redirect' => $this->generateUrl('homepage')));
         }
 
         return $this->createJsonResponse(array('success' => true));
@@ -813,13 +806,9 @@ class CourseManageController extends BaseController
 
     public function publishAction($courseSetId, $courseId)
     {
-        try {
-            $this->getCourseService()->publishCourse($courseId, true);
+        $this->getCourseService()->publishCourse($courseId, true);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function prePublishAction($courseSetId, $courseId)
@@ -867,7 +856,7 @@ class CourseManageController extends BaseController
         if (!$this->getCurrentUser()->isAdmin()
             && (empty($courseSetting['teacher_search_order']) || 1 != $courseSetting['teacher_search_order'])
         ) {
-            throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
+            $this->createNewException(CourseException::SEARCH_ORDER_CLOSED());
         }
 
         $conditions = $request->query->all();

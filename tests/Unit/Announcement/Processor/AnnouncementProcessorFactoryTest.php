@@ -8,7 +8,7 @@ use Biz\Announcement\Processor\AnnouncementProcessorFactory;
 class AnnouncementProcessorFactoryTest extends BaseTestCase
 {
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Announcement\AnnouncementException
      */
     public function testCreateWithEmptyTarget()
     {

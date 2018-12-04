@@ -18,7 +18,7 @@ class Audio extends Activity
     public function create($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('media', 'hasText'))) {
-            throw CommonException::ERROR_PARAMETER();
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $media = json_decode($fields['media'], true);
 
@@ -60,9 +60,8 @@ class Audio extends Activity
     public function update($targetId, &$fields, $activity)
     {
         if (!ArrayToolkit::requireds($fields, array('media', 'hasText'))) {
-            throw CommonException::ERROR_PARAMETER();
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
-
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {

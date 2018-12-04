@@ -16,10 +16,13 @@ class MessageException extends AbstractException
 
     const NOTFOUND_CONVERSATION = 4044404;
 
+    const DELETE_DENIED = 4034405;
+
     public $messages = array(
         4044401 => 'exception.message.not_found_sender_or_receiver',
         5004402 => 'exception.message.send_to_self',
         5004403 => 'exception.message.empty_message',
         4044404 => 'exception.message.not_found_conversation',
+        4034405 => 'exception.message.delete_denied',
     );
 }

@@ -4,6 +4,7 @@ namespace Biz\RewardPoint\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\RewardPoint\AccountException;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
@@ -169,7 +170,7 @@ class AccountServiceImpl extends BaseService implements AccountService
                 $this->createAccount($account);
             } else {
                 if ($flow['amount'] > $account['balance']) {
-                    throw $this->createInvalidArgumentException('Insufficient Balance');
+                    $this->createNewException(AccountException::BALANCE_INSUFFICIENT());
                 }
                 $this->waveDownBalance($account['id'], $flow['amount']);
             }
@@ -221,7 +222,7 @@ class AccountServiceImpl extends BaseService implements AccountService
         $account = $this->getAccount($id);
 
         if (empty($account)) {
-            throw $this->createNotFoundException("account {$id} not exist");
+            $this->createNewException(AccountException::NOTFOUND_ACCOUNT());
         }
 
         return $account;
@@ -232,7 +233,7 @@ class AccountServiceImpl extends BaseService implements AccountService
         $account = $this->getAccountByUserId($userId);
 
         if (!empty($account)) {
-            throw $this->createInvalidArgumentException("user{$userId}'s account have been opened");
+            $this->createNewException(AccountException::ALREADY_OPEN());
         }
     }
 
@@ -241,14 +242,14 @@ class AccountServiceImpl extends BaseService implements AccountService
         $account = $this->getAccountByUserId($userId);
 
         if (empty($account)) {
-            throw $this->createNotFoundException("user'{$userId} account not exist");
+            $this->createNewException(AccountException::NOTFOUND_ACCOUNT());
         }
     }
 
     protected function checkUserCorrect($originUserId, $newUserId)
     {
         if ($originUserId != $newUserId) {
-            throw $this->createInvalidArgumentException('Param Invalid: userId');
+            $this->createNewException(AccountException::USERID_INVALID());
         }
     }
 

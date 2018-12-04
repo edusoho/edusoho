@@ -26,6 +26,14 @@ class CommonException extends AbstractException
 
     const PLUGIN_IS_NOT_INSTALL = 4040309;
 
+    const NOTFOUND_SERVICE_PROVIDER = 4040310;
+
+    const NOT_ALLOWED_METHOD = 4030311;
+
+    const EXPIRED_UPLOAD_TOKEN = 5000312;
+
+    const NOTFOUND_API = 4040313;
+
     public $messages = array(
         4030301 => 'exception.common_drag_captcha_error',
         4030302 => 'exception.common_drag_captcha_expired',
@@ -36,5 +44,9 @@ class CommonException extends AbstractException
         5000307 => 'exception.common_drag_captcha_frequent',
         4040308 => 'exception.common_method_not_found',
         4040309 => 'exception.common_plugin_is_not_install',
+        4040310 => 'exception.common_service_provider_not_found',
+        4030311 => 'exception.common_not_allowed_method',
+        5000312 => 'exception.common_expired_upload_token',
+        4040313 => 'exception.common_not_found_api',
     );
 }

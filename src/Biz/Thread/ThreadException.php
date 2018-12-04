@@ -30,9 +30,7 @@ class ThreadException extends AbstractException
 
     const NOTFOUND_MEMBER = 5000511;
 
-    const PERMISSION_INVALID = 4040512;
-
-    const RESOURCE_MISS_FIELD = 5000513;
+    const ACCESS_DENIED = 4030512;
 
     public $messages = array(
         4030501 => 'exception.thread.frequent',
@@ -46,7 +44,6 @@ class ThreadException extends AbstractException
         5000509 => 'exception.thread.parentid_invalid',
         5000510 => 'exception.thread.type_invalid',
         5000511 => 'exception.thread.not_found_member',
-        4040512 => 'exception.thread.permission_invalid',
-        5000513 => 'exception.thread.resource_miss_field',
+        4030512 => 'exception.thread.access_denied',
     );
 }

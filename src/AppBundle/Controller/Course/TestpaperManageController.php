@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Course;
 
+use Biz\Activity\ActivityException;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
@@ -68,7 +69,7 @@ class TestpaperManageController extends BaseController
 
         $activity = $this->getActivityService()->getActivity($activityId);
         if (!$activity) {
-            throw $this->createResourceNotFoundException('activity', $activityId);
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();

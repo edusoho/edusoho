@@ -4,6 +4,7 @@ namespace Biz\System\Service\Impl;
 
 use Biz\AppLoggerConstant;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\LoggerConstantInterface;
 use Biz\System\Dao\LogDao;
 use Biz\User\Service\UserService;
@@ -40,7 +41,7 @@ class LogServiceImpl extends BaseService implements LogService
                     $sort = array('id' => 'ASC');
                     break;
                 default:
-                    throw $this->createServiceException('参数sort不正确。');
+                    $this->createNewException(CommonException::ERROR_PARAMETER());
                     break;
             }
         }
@@ -68,7 +69,7 @@ class LogServiceImpl extends BaseService implements LogService
                     $sort = array('id' => 'ASC');
                     break;
                 default:
-                    throw $this->createServiceException('参数sort不正确。');
+                    $this->createNewException(CommonException::ERROR_PARAMETER());
                     break;
             }
         }

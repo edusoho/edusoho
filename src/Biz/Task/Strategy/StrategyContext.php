@@ -3,7 +3,6 @@
 namespace Biz\Task\Strategy;
 
 use Biz\Common\CommonException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class StrategyContext
 {
@@ -25,7 +24,7 @@ class StrategyContext
         if (isset($this->biz[$strategyType])) {
             return $this->biz[$strategyType];
         }
-        throw new NotFoundException("course strategy {$strategyType} does not exist");
+        throw CommonException::NOTFOUND_SERVICE_PROVIDER();
     }
 
     public function __call($name, $arguments)

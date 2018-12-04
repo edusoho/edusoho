@@ -263,7 +263,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $class = $dealer->getClass();
         if (!($class instanceof ProductDealerService)) {
-            throw $this->createInvalidArgumentException('参数dealer非ProductDealerService实例');
+            $this->createNewException(OrderPayCheckException::INSTANCE_ERROR());
         }
 
         $this->dealers[] = $dealer;

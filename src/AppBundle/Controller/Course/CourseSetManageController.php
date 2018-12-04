@@ -4,7 +4,9 @@ namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
+use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\OpenCourse\Service\OpenCourseService;
@@ -22,14 +24,14 @@ class CourseSetManageController extends BaseController
             $type = $request->request->get('type', '');
 
             if (empty($type) || empty($visibleCourseTypes[$type])) {
-                throw $this->createNotFoundException('未设置课程类型');
+                $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
             }
 
             return $this->forward($visibleCourseTypes[$type]['saveAction'], array('request' => $request));
         }
 
         if (!$this->getCourseSetService()->hasCourseSetManageRole()) {
-            throw  $this->createAccessDeniedException();
+            $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
 
         $user = $this->getUser();
@@ -211,46 +213,34 @@ class CourseSetManageController extends BaseController
 
     public function deleteAction($id)
     {
-        try {
-            $this->getCourseSetService()->deleteCourseSet($id);
+        $this->getCourseSetService()->deleteCourseSet($id);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function publishAction($id)
     {
-        try {
-            $courseSet = $this->getCourseSetService()->getCourseSet($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-            if ('live' == $courseSet['type']) {
-                $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        if ('live' == $courseSet['type']) {
+            $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
-                if (empty($course['maxStudentNum'])) {
-                    throw $this->createAccessDeniedException('直播课程发布前需要在计划设置中设置课程人数');
-                }
-
-                $this->getCourseService()->publishCourse($course['id']);
+            if (empty($course['maxStudentNum'])) {
+                $this->createNewException(CourseSetException::LIVE_STUDENT_NUM_REQUIRED());
             }
-            $this->getCourseSetService()->publishCourseSet($id);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+            $this->getCourseService()->publishCourse($course['id']);
         }
+        $this->getCourseSetService()->publishCourseSet($id);
+
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function closeAction($id)
     {
-        try {
-            $this->getCourseSetService()->closeCourseSet($id);
+        $this->getCourseSetService()->closeCourseSet($id);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function syncInfoAction(Request $request, $id)
@@ -395,25 +385,17 @@ class CourseSetManageController extends BaseController
 
     public function unlockAction($id)
     {
-        try {
-            $this->getCourseSetService()->unlockCourseSet($id);
+        $this->getCourseSetService()->unlockCourseSet($id);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function courseSortAction(Request $request, $courseSetId)
     {
-        try {
-            $courseIds = $request->request->get('ids');
-            $this->getCourseService()->sortCourse($courseSetId, $courseIds);
+        $courseIds = $request->request->get('ids');
+        $this->getCourseService()->sortCourse($courseSetId, $courseIds);
 
-            return $this->createJsonResponse(true, 200);
-        } catch (\Exception $e) {
-            return $this->createJsonResponse($e->getMessage(), 500);
-        }
+        return $this->createJsonResponse(true, 200);
     }
 
     protected function getTemplate($sideNav)

@@ -10,7 +10,10 @@ class AnnouncementException extends AbstractException
 
     const ANNOUNCEMENT_NOT_FOUND = 4041401;
 
+    const TYPE_INVALID = 5001402;
+
     public $messages = array(
         4041401 => 'exception.announcement.notfound',
+        5001402 => 'exception.announcement.type_invalid',
     );
 }

@@ -36,7 +36,7 @@ class UserException extends AbstractException
 
     const LOCKED_USER = 4030115;
 
-    const ERROR_PASSWORD = 5000116;
+    const PASSWORD_ERROR = 5000116;
 
     const NOTFOUND_TOKEN = 4040117;
 
@@ -84,7 +84,9 @@ class UserException extends AbstractException
 
     const TRUENAME_INVALID = 5000139;
 
-    const PASSWORD_ERROR = 4030140;
+    const LOCK_DENIED = 4030140;
+
+    const NOT_MATCH_BIND_EMAIL = 5000141;
 
     public $messages = array(
         4040101 => 'exception.user.unlogin',
@@ -101,7 +103,7 @@ class UserException extends AbstractException
         5000113 => 'exception.user.nickname_existed',
         4030114 => 'exception.user.permission_denied',
         4030115 => 'exception.user.lock',
-        5000116 => 'exception.user.error_password',
+        5000116 => 'exception.user.password_error',
         4040117 => 'exception.user.token_not_found',
         4040118 => 'exception.user.no_user_provider',
         5000119 => 'exception.user.email_invalid',
@@ -125,6 +127,7 @@ class UserException extends AbstractException
         5000137 => 'exception.user.not_match_auth',
         5000138 => 'exception.user.idcard_invalid',
         5000139 => 'exception.user.truename_invalid',
-        4030140 => 'exception.user.password_error',
+        4030140 => 'exception.user.lock_denied',
+        5000141 => 'exception.user.not_match_bind_email',
     );
 }

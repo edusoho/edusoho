@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Callback\AthenaLive;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 
 class Members extends AthenaLiveBase
@@ -15,11 +16,11 @@ class Members extends AthenaLiveBase
         $userToken = $this->getTokenService()->verifyToken('live.callback', $token);
 
         if (!$userToken) {
-            throw $this->createAccessDeniedException('token error');
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         if ($userToken['data']['courseId'] != $courseId) {
-            throw $this->createAccessDeniedException(sprintf('只能查看课程id为%s的成员', $userToken['data']));
+            $this->createNewException(TokenException::NOT_MATCH_COURSE());
         }
 
         $start = $request->query->get('start', 0);

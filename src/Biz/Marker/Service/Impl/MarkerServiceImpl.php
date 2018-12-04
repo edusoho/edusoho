@@ -6,6 +6,7 @@ use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Marker\MarkerException;
 use Biz\Marker\Service\MarkerService;
+use Biz\System\SettingException;
 use Biz\User\UserException;
 
 class MarkerServiceImpl extends BaseService implements MarkerService
@@ -130,14 +131,14 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         }
 
         if ($user['id'] != $lessonUserId) {
-            throw $this->createAccessDeniedException('Access Denied');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $uploadMode = $this->getSettingService()->get('storage');
 
         if ('local' == $uploadMode['upload_mode']) {
             //TODO 翻译？！！
-            throw $this->createAccessDeniedException('请到我的教育云开启云视频！');
+            $this->createNewException(SettingException::CLOUD_VIDEO_DISABLE());
         }
 
         return true;

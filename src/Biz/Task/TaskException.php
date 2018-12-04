@@ -36,6 +36,10 @@ class TaskException extends AbstractException
 
     const ACCESS_DENIED = 4031214;
 
+    const CATEGORYID_INVALID = 5001215;
+
+    const FORBIDDEN_PREVIEW_TASK = 4031216;
+
     public $messages = array(
         4031201 => 'lesson_tasks_no_more_than_5',
         4041202 => 'exception.task.not_found',
@@ -51,5 +55,7 @@ class TaskException extends AbstractException
         4031212 => 'exception.task.forbidden_delete_task',
         5001213 => 'exception.task.lessonid_invalid',
         4031214 => 'exception.task.access_denied',
+        5001215 => 'exception.task.categoryid_invalid',
+        4031216 => 'exception.task.forbidden_preview_task',
     );
 }

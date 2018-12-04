@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\Paginator;
 use Biz\Course\CourseException;
 use Biz\Course\CourseSetException;
+use Biz\Course\MemberException;
 use Biz\Order\OrderException;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
@@ -684,7 +685,7 @@ class CourseController extends CourseBaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         if (empty($member)) {
-            throw $this->createAccessDeniedException('member not exist');
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
 
         $user = $this->getCurrentUser();

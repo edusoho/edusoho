@@ -5,6 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
+use Biz\OpenCourse\OpenCourseException;
 use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
 use Biz\CloudPlatform\Service\AppService;
@@ -129,7 +131,7 @@ class OpenCourseLessonManageController extends BaseController
         $lesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+            $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
         if ($request->getMethod() == 'POST') {
@@ -316,14 +318,14 @@ class OpenCourseLessonManageController extends BaseController
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
             if (empty($fields['fileId']) && empty($fields['link'])) {
-                throw $this->createNotFoundException();
+                $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
             }
 
             $fields['courseId'] = $course['id'];

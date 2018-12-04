@@ -32,33 +32,33 @@ class CourseException extends AbstractException
 
     const EXPIRYMODE_INVALID = 5001612;
 
-    const EXPIRYDAYS_INVALID = 5001613;
+    const EXPIRYDAYS_REQUIRED = 5001613;
 
-    const EXPIRYENDDATE_INVALID = 5001614;
+    const EXPIRYSTARTDATE_REQUIRED = 5001614;
 
-    const EXPIRYSTARTDATE_REQUIRED = 5001615;
+    const EXPIRYENDDATE_REQUIRED = 5001615;
 
-    const EXPIRYENDDATE_REQUIRED = 5001616;
+    const EXPIRY_DATE_SET_INVALID = 5001616;
 
-    const EXPIRY_DATE_LIMIT = 5001617;
+    const NOT_MATCH_COURSESET = 5001617;
 
-    const NOT_MATCH_COURSESET = 5001618;
+    const CHAPTERTYPE_INVALID = 5001618;
 
-    const CHAPTERTYPE_INVALID = 5001619;
+    const FORBIDDEN_MANAGE_COURSE = 4031619;
 
-    const FORBIDDEN_MANAGE_COURSE = 4031620;
+    const CLOSED_COURSE = 5001620;
 
-    const CLOSED_COURSE = 5001621;
+    const UNBUYABLE_COURSE = 4031621;
 
-    const UNBUYABLE_COURSE = 4031622;
+    const EXPIRED_COURSE = 5001622;
 
-    const EXPIRED_COURSE = 5001623;
+    const BUY_EXPIRED = 5001623;
 
-    const BUY_EXPIRED = 5001624;
+    const REACH_MAX_STUDENT = 4031624;
 
-    const REACH_MAX_STUDENT = 4031625;
+    const UN_ARRIVE = 5001625;
 
-    const UN_ARRIVE = 5001626;
+    const SEARCH_ORDER_CLOSED = 4031626;
 
     public $messages = array(
         4041601 => 'exception.course.not_found',
@@ -73,19 +73,19 @@ class CourseException extends AbstractException
         4041610 => 'exception.course.not_found_chapter',
         5001611 => 'exception.course.chain_not_registered',
         5001612 => 'exception.course.expirymode_invalid',
-        5001613 => 'exception.course.expirydays_invalid',
-        5001614 => 'exception.course.expiryenddate_invalid',
-        5001615 => 'exception.course.expirystartdate_required',
-        5001616 => 'exception.course.expiryenddate_required',
-        5001617 => 'exception.course.expirydate_end_later_than_start',
-        5001618 => 'exception.course.not_match_courseset',
-        5001619 => 'exception.course.chapter_type_invalid',
-        4031620 => 'exception.course.forbidden_manage_course',
-        5001621 => 'exception.course.closed_course',
-        4031622 => 'exception.course.unbuyable_course',
-        5001623 => 'exception.course.expired_course',
-        5001624 => 'exception.course.buy_expired',
-        4031625 => 'exception.course.reach_max_student_num',
-        5001626 => 'exception.course.not_arrive',
+        5001613 => 'exception.course.expirydays_required',
+        5001614 => 'exception.course.expirystartdate_required',
+        5001615 => 'exception.course.expiryenddate_required',
+        5001616 => 'exception.course.expirydate_end_later_than_start',
+        5001617 => 'exception.course.not_match_courseset',
+        5001618 => 'exception.course.chapter_type_invalid',
+        4031619 => 'exception.course.forbidden_manage_course',
+        5001620 => 'exception.course.closed_course',
+        4031621 => 'exception.course.unbuyable_course',
+        5001622 => 'exception.course.expired_course',
+        5001623 => 'exception.course.buy_expired',
+        4031624 => 'exception.course.reach_max_student_num',
+        5001625 => 'exception.course.not_arrive',
+        4031626 => 'exception.course.search_order_closed',
     );
 }

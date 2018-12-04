@@ -162,8 +162,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage 参数不正确，评价数太大
+     * @expectedException \Biz\Classroom\ClassroomReviewException
+     * @expectedExceptionMessage exception.classroom.review.no_more_than_5
      */
     public function testSaveReviewRatingError()
     {
@@ -301,7 +301,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Classroom\ClassroomReviewException
      */
     public function testDeleteReviewWithNotExistReview()
     {
@@ -335,8 +335,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     * @expectedExceptionMessage review is not exsits.
+     * @expectedException \Biz\Classroom\ClassroomReviewException
+     * @expectedExceptionMessage exception.classroom.review.permission_denied
      */
     public function testDeleteReviewPermisstion()
     {

@@ -7,7 +7,6 @@ use Biz\Course\MemberException;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Thread\ThreadException;
-use Topxia\Api\Resource\Classroom;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
@@ -196,7 +195,7 @@ class ThreadController extends CourseBaseController
                         'threadId' => $thread['id'],
                     )));
                 } catch (\Exception $e) {
-                    return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                    return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
                 }
             }
         }
@@ -268,7 +267,7 @@ class ThreadController extends CourseBaseController
                     )));
                 }
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
             }
         }
 

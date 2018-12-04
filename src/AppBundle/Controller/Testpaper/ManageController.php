@@ -157,7 +157,7 @@ class ManageController extends BaseController
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!$result) {
-            throw $this->createResourceNotFoundException('testpaperResult', $resultId);
+            $this->createNewException(TestpaperException::NOTFOUND_RESULT());
         }
         //还需要是否是教师的权限判断
         if (!$this->getTestpaperService()->canLookTestpaper($result['id'])) {

@@ -6,6 +6,7 @@ use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Testpaper\TestpaperException;
 
 class Homework extends Activity
 {
@@ -77,7 +78,7 @@ class Homework extends Activity
         $homework = $this->get($targetId);
 
         if (!$homework) {
-            throw $this->createNotFoundException('教学活动不存在');
+            throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
         $filterFields = $this->filterFields($fields);

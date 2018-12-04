@@ -3,7 +3,9 @@
 namespace Biz\OpenCourse\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\LiveActivityException;
 use Biz\BaseService;
+use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
 use Biz\User\UserException;
 use Biz\System\Service\SettingService;
@@ -24,7 +26,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $live = $this->createLiveClient()->createLive($liveParams);
 
         if (empty($live)) {
-            throw $this->createServiceException('Create liveroom failed, please try again');
+            $this->createNewException(LiveActivityException::CREATE_LIVEROOM_FAILED());
         }
 
         if (isset($live['error'])) {
@@ -81,7 +83,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $courseMember = $this->getOpenCourseService()->getCourseMember($lesson['courseId'], $user['id']);
 
         if (!$courseMember) {
-            throw $this->createServiceException('您不是课程学员，不能参加直播！');
+            $this->createNewException(OpenCourseException::IS_NOT_MEMBER());
         }
 
         $role = 'student';

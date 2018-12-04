@@ -7,7 +7,6 @@ use Biz\BaseService;
 use Biz\Classroom\ClassroomException;
 use Biz\Common\CommonException;
 use Biz\Course\Dao\CourseNoteDao;
-use Biz\Exception\UnableJoinException;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\User\Service\UserService;
@@ -1913,7 +1912,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $access = $this->canJoinClassroom($classroomId);
         if (AccessorInterface::SUCCESS != $access['code']) {
-            throw new UnableJoinException($access['msg'], $access['code']);
+            $this->createNewException(call_user_func(array($access['class'], $access['code'])));
         }
 
         $classroom = $this->getClassroom($classroomId);

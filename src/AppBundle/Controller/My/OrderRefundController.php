@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Order\OrderException;
+use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderRefundService;
 use Biz\OrderFacade\Service\OrderRefundService as LocalOrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
@@ -53,7 +54,7 @@ class OrderRefundController extends BaseController
         $user = $this->getCurrentUser();
         $orderRefund = $this->getOrderRefundService()->getOrderRefundById($id);
         if ($user->getId() != $orderRefund['user_id']) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $order = $this->getOrderService()->getOrder($orderRefund['order_id']);

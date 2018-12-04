@@ -3,6 +3,7 @@
 namespace Biz\Activity\Service\Impl;
 
 use Biz\Activity\ActivityException;
+use Biz\Activity\DownloadActivityException;
 use Biz\BaseService;
 use Biz\Course\MaterialException;
 use Biz\Course\Service\MaterialService;
@@ -38,7 +39,7 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
         }
 
         if ($courseId != $activity['fromCourseId']) {
-            throw $this->createInvalidArgumentException('activity not found in course');
+            $this->createNewException(ActivityException::ACTIVITY_NOT_IN_COURSE());
         }
 
         $material = $this->getMaterialService()->getMaterial($activity['fromCourseId'], $materialId);
@@ -50,11 +51,11 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
         $downloadAvtivity = $activity['ext'];
 
         if (!isset($downloadAvtivity['fileIds'])) {
-            throw $this->createInvalidArgumentException('not download activity');
+            $this->createNewException(DownloadActivityException::NOT_DOWNLOAD_ACTIVITY());
         }
 
         if (!in_array($material['fileId'], $downloadAvtivity['fileIds']) && !in_array($material['link'], $downloadAvtivity['fileIds'])) {
-            throw $this->createNotFoundException('not activity file');
+            $this->createNewException(DownloadActivityException::FILE_NOT_IN_ACTIVITY());
         }
         $this->createDownloadFileRecord($activity, $material);
 

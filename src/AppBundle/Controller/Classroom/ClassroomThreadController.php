@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Classroom;
 
+use Biz\Classroom\ClassroomException;
 use Biz\Common\CommonException;
 use Biz\User\Service\UserService;
 use Biz\Thread\Service\ThreadService;
@@ -63,9 +64,9 @@ class ClassroomThreadController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ($type == 'event' && !$this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroomId))) {
-            throw $this->createAccessDeniedException('无权限创建活动!');
+            $this->createNewException(ClassroomException::FORBIDDEN_CREATE_THREAD_EVENT());
         } elseif (in_array($type, array('discussion', 'question')) && !$this->getClassroomService()->canTakeClassroom($classroomId, true)) {
-            throw $this->createAccessDeniedException('无权限创建话题!');
+            $this->createNewException(ClassroomException::FORBIDDEN_TAKE_CLASSROOM());
         }
 
         if ($request->getMethod() == 'POST') {

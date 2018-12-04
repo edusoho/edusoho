@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\Service\TagService;
+use Biz\Taxonomy\TagException;
 use Symfony\Component\HttpFoundation\Request;
 
 class TagController extends BaseController
@@ -69,7 +70,7 @@ class TagController extends BaseController
         $tag = $this->getTagService()->getTag($id);
 
         if (empty($tag)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(TagException::NOTFOUND_TAG());
         }
 
         if ('POST' == $request->getMethod()) {
@@ -127,7 +128,7 @@ class TagController extends BaseController
         $tag = $this->getTagService()->getTag($tagId);
 
         if (empty($tag)) {
-            throw $this->createNotFoundException('标签不存在!');
+            $this->createNewException(TagException::NOTFOUND_TAG());
         }
 
         return $tag;

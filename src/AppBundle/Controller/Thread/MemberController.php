@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Thread;
 use AppBundle\Controller\BaseController;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\PHPExcelToolkit;
+use Biz\Thread\ThreadException;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +16,7 @@ class MemberController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录!不能加入活动!');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         if ($request->getMethod() == 'POST') {
@@ -47,7 +48,7 @@ class MemberController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('未登录,不能操作!'));
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $this->getThreadService()->deleteMember($memberId);
@@ -95,7 +96,7 @@ class MemberController extends BaseController
         }
 
         if (!$this->getThreadService()->canAccess('thread.update', $thread)) {
-            throw $this->createAccessDeniedException('无权限操作!');
+            $this->createNewException(ThreadException::ACCESS_DENIED());
         }
 
         $filename = $thread['title'].'-成员.xls';

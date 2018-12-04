@@ -4,6 +4,7 @@ namespace Biz\MemberOperation\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\MemberOperation\Dao\MemberOperationRecordDao;
 use Biz\MemberOperation\Service\MemberOperationService;
 
@@ -17,7 +18,7 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
     public function createRecord($record)
     {
         if (!ArrayToolkit::requireds($record, array('member_id', 'target_type', 'operate_type'))) {
-            throw $this->createInvalidArgumentException('参数不正确，记录创建失败！');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         return $this->getRecordDao()->create($record);

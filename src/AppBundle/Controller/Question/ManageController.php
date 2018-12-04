@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Question;
 
 use AppBundle\Common\Paginator;
+use Biz\Question\QuestionException;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
@@ -12,7 +13,6 @@ use Biz\Course\Service\CourseSetService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class ManageController extends BaseController
 {
@@ -148,7 +148,7 @@ class ManageController extends BaseController
 
         $question = $this->getQuestionService()->get($questionId);
         if (!$question || $question['courseSetId'] != $courseSetId) {
-            throw new ResourceNotFoundException('question', $questionId);
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
         if ('POST' === $request->getMethod()) {
@@ -183,7 +183,7 @@ class ManageController extends BaseController
         $this->getCourseSetService()->tryManageCourseSet($courseSetId);
         $question = $this->getQuestionService()->get($questionId);
         if (!$question || $question['courseSetId'] != $courseSetId) {
-            throw new ResourceNotFoundException('question', $questionId);
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
         $this->getQuestionService()->delete($questionId);
 
@@ -197,11 +197,11 @@ class ManageController extends BaseController
         $ids = $request->request->get('ids', array());
         $questions = $this->getQuestionService()->findQuestionsByIds($ids);
         if (empty($questions)) {
-            throw new ResourceNotFoundException('questions', 0);
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
         foreach ($questions as $question) {
             if ($question['courseSetId'] != $courseSetId) {
-                throw new ResourceNotFoundException('question', $question['id']);
+                $this->createNewException(QuestionException::NOTFOUND_QUESTION());
             }
         }
         $this->getQuestionService()->batchDeletes($ids);
@@ -218,7 +218,7 @@ class ManageController extends BaseController
         $question = $this->getQuestionService()->get($questionId);
 
         if (!$question || $question['courseSetId'] != $courseSetId) {
-            throw new ResourceNotFoundException('question', $questionId);
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
         if (!empty($question['matas']['mediaId'])) {
@@ -316,7 +316,7 @@ class ManageController extends BaseController
 
         foreach ($questions as &$question) {
             if ($question['courseSetId'] != $courseSetId) {
-                throw new ResourceNotFoundException('question', $question['id']);
+                $this->createNewException(QuestionException::NOTFOUND_QUESTION());
             }
             if ($question['subCount'] > 0) {
                 $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);

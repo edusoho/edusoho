@@ -10,8 +10,8 @@ use Biz\User\CurrentUser;
 class LiveCourseServiceTest extends BaseTestCase
 {
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage Create liveroom failed, please try again
+     * @expectedException \Biz\Activity\LiveActivityException
+     * @expectedExceptionMessage exception.live_activity.create_liveroom_failed
      */
     public function testCreateLiveRoomEmpty()
     {
@@ -139,8 +139,8 @@ class LiveCourseServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 您不是课程学员，不能参加直播！
+     * @expectedException \Biz\OpenCourse\OpenCourseException
+     * @expectedExceptionMessage exception.opencourse.is_not_member
      */
     public function testCheckCourseUserRoleMemberEmpty()
     {

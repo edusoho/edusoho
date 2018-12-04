@@ -11,7 +11,6 @@ use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\MemberException;
-use Biz\Exception\UnableJoinException;
 use Biz\File\UploadFileException;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
@@ -770,14 +769,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             $course['expiryEndDate'] = null;
 
             if (empty($course['expiryDays'])) {
-                $this->createNewException(CourseException::EXPIRYDAYS_INVALID());
+                $this->createNewException(CourseException::EXPIRYDAYS_REQUIRED());
             }
         } elseif ('end_date' == $course['expiryMode']) {
             $course['expiryStartDate'] = null;
             $course['expiryDays'] = 0;
 
             if (empty($course['expiryEndDate'])) {
-                $this->createNewException(CourseException::EXPIRYENDDATE_INVALID());
+                $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             }
             $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
         } elseif ('date' === $course['expiryMode']) {
@@ -793,7 +792,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
-                $this->createNewException(CourseException::EXPIRY_DATE_LIMIT());
+                $this->createNewException(CourseException::EXPIRY_DATE_SET_INVALID());
             }
         } elseif ('forever' == $course['expiryMode']) {
             $course['expiryStartDate'] = 0;
@@ -2144,7 +2143,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $access = $this->canJoinCourse($courseId);
 
         if (AccessorInterface::SUCCESS != $access['code']) {
-            throw new UnableJoinException($access['msg'], $access['code']);
+            $this->createNewException(call_user_func(array($access['class'], $access['code'])));
         }
 
         $course = $this->getCourse($courseId);

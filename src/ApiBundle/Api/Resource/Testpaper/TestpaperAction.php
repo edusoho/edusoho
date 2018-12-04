@@ -150,7 +150,7 @@ class TestpaperAction extends AbstractResource
         } elseif ($testpaperActivity['redoInterval']) {
             $nextDoTime = $testpaperResult['checkedTime'] + $testpaperActivity['redoInterval'] * 3600;
             if ($nextDoTime > time()) {
-                throw new AccessDeniedHttpException('教师设置了重考间隔，请在'.date('Y-m-d H:i:s', $nextDoTime).'之后再考！');
+                throw TestpaperException::REDO_INTERVAL_EXIST();
             }
         }
 

@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\Exception\FileToolkitException;
+use Biz\Common\CommonException;
+use Biz\Content\FileException;
 use Biz\Content\Service\FileService;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,10 +25,10 @@ class FileController extends BaseController
         $file = $request->files->get('file');
         if ($type == 'image') {
             if (!FileToolkit::isImageFile($file)) {
-                throw $this->createAccessDeniedException('您上传的不是图片文件，请重新上传。');
+                $this->createNewException(FileToolkitException::NOT_IMAGE());
             }
         } else {
-            throw $this->createAccessDeniedException('上传类型不正确！');
+            $this->createNewException(FileException::FILE_TYPE_ERROR());
         }
 
         $record = $this->getFileService()->uploadFile($groupCode, $file);
@@ -95,7 +98,7 @@ class FileController extends BaseController
         $token = $maker->parse($token);
 
         if (empty($token)) {
-            throw $this->createAccessDeniedException('上传授权码已过期，请刷新页面后重试！');
+            $this->createNewException(CommonException::EXPIRED_UPLOAD_TOKEN());
         }
 
         $groupCode = $token['group'];

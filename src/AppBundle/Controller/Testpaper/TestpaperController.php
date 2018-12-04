@@ -206,7 +206,7 @@ class TestpaperController extends BaseController
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!$testpaperResult) {
-            throw $this->createResourceNotFoundException('testpaperResult', $resultId);
+            $this->createNewException(TestpaperException::NOTFOUND_RESULT());
         }
 
         $user = $this->getUser();

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Controller\BaseController;
+use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ class ThreadMemberController extends BaseController
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
 
         if (empty($member)) {
-            throw $this->createAccessDeniedException('不是本班成员!不能加入活动!');
+            $this->createNewException(ClassroomException::NOTFOUND_MEMBER());
         }
 
         return $this->forward('AppBundle:Thread/Member:become', array(

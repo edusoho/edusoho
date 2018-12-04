@@ -185,7 +185,7 @@ class CourseServiceTest extends BaseTestCase
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
-        $this->assertEquals('exception.course.expirydays_invalid', $message);
+        $this->assertEquals('exception.course.expirydays_required', $message);
     }
 
     public function testValidateExpiryModeWhenIsEnd_date()
@@ -223,7 +223,7 @@ class CourseServiceTest extends BaseTestCase
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
-        $this->assertEquals('exception.course.expiryenddate_invalid', $message);
+        $this->assertEquals('exception.course.expiryenddate_required', $message);
     }
 
     public function testValidateExpiryModeWhenIsDate()

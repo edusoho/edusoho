@@ -16,13 +16,10 @@ class ArticleException extends AbstractException
 
     const SOURCE_URL_INVALID = 5000204;
 
-    const SORT_INVALID = 5000205;
-
     public $messages = array(
         4040201 => 'exception.article.notfound',
         5000202 => 'exception.article.error_property',
         5000203 => 'exception.article.duplicate_like',
         5000204 => 'exception.article.error_source_url',
-        5000205 => 'exception.article.error_sort',
     );
 }

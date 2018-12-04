@@ -31,7 +31,7 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
         }
 
         if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
-            throw UserException::ERROR_PASSWORD();
+            throw UserException::PASSWORD_ERROR();
         }
 
         if ($user['locked']) {

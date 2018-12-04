@@ -148,7 +148,7 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testFindRandomRecommendCoursesError()
     {
