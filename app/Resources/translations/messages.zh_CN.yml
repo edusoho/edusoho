@@ -4718,6 +4718,8 @@ admin.course_manage.manage.closed_count: >
   已关闭：<strong class="inflow-num">%closedNum%</strong>个
 admin.course_manage.manage.unpublish_count: >
   未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
+admin.course_set_manage.manage.number: 课程编号
+admin.course_manage_modal.manage.number: 计划编号
 admin.course_manage.manage.number: 编号
 admin.course_manage.manage.name: 名称
 admin.course_manage.manage.price: 价格
@@ -6294,7 +6296,7 @@ admin.edu_cloud.edu_video.low: 流畅
 admin.edu_cloud.edu_video.normal: 标准
 admin.edu_cloud.edu_video.high: 高品质
 admin.edu_cloud.edu_video.play_speed: 倍速播放：
-admin.edu_cloud.edu_video.play_speed_tips: 开启后，云视频任务支持倍速播放。注意：仅支持高版本Chrome、火狐以及QQ浏览器（极速模式）。
+admin.edu_cloud.edu_video.play_speed_tips: 开启后，云视频任务及音频任务支持倍速播放。
 admin.edu_cloud.edu_video.auto_play: 云视频自动播放
 admin.edu_cloud.edu_video.video_header: 云视频片头：
 admin.edu_cloud.edu_video.video_header_edit_btn: 编辑
@@ -7109,7 +7111,7 @@ admin.developer_setting.address: 地址
 admin.developer_setting.im_api_address: IMAPI地址
 admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
 admin.developer_setting.hls_encrypted: HLS加密视频
-admin.developer_setting.market_address: 微营销地址(http://wyx.marketing.com)
+admin.developer_setting.market_address: 微营销地址(https://wyx.marketing.com)
 admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
 admin.developer_setting.without_outer_network: 是否无外网
 admin.developer_setting.default_locale: 默认语言
@@ -9466,6 +9468,8 @@ exception.user.roles_invalid: 角色不正确
 exception.user.unfollow_error: 不能对没有关注过的用户取消关注
 exception.user.idcard_invalid: 身份证号错误
 exception.user.truename_invalid: 真实姓名错误
+exception.user_lock: 账户被封禁，请联系管理员
+exception.user.password_error: 用户名密码错误
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败
@@ -9653,3 +9657,5 @@ admin.sts_discovery.login: 人脸识别登录
 admin.sts_discovery.pc_use_tip: 若在PC电脑端开启本功能，用户需要借助手机微信或APP使用。
 admin.sts_discovery_feature_tip: 更多功能敬请期待。。。
 admin.user_manage.lock_user.access_deniedexception_message: 没有封禁该角色的权限
+admin.course_manage.manage.tags: 标签
+admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级中允许显示班级人数

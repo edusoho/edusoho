@@ -1159,4 +1159,5 @@ t.add("admin.util.item_delete.delete_success_hint", "\u5220\u9664%name%\u6210\u5
 t.add("admin.shortcut_add_success_hint", "\u5df2\u6dfb\u52a0\u5f53\u524d\u9875\u9762\u4e3a\u5e38\u7528\u94fe\u63a5\uff01", "js", "zh_CN");
 t.add("admin.shortcut_delete_success_hint", "\u5220\u9664\u5e38\u7528\u94fe\u63a5\u6210\u529f\uff01", "js", "zh_CN");
 t.add("task_show.user_login_protect_tip", "\u8be5\u8d26\u53f7\u672a\u767b\u5f55\u6216\u5df2\u88ab\u8e22", "js", "zh_CN");
+t.add("admin.course_manage.manage.tags_select.placeholder", "\u8f93\u5165\u6807\u7b7e\u540d\u79f0\u5173\u952e\u5b57", "js", "zh_CN");
 })(Translator);

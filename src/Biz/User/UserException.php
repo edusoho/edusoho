@@ -84,6 +84,8 @@ class UserException extends AbstractException
 
     const TRUENAME_INVALID = 5000139;
 
+    const PASSWORD_ERROR = 4030140;
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.unlogin',
@@ -123,5 +125,6 @@ class UserException extends AbstractException
         5000137 => 'exception.user.not_match_auth',
         5000138 => 'exception.user.idcard_invalid',
         5000139 => 'exception.user.truename_invalid',
+        4030140 => 'exception.user.password_error',
     );
 }

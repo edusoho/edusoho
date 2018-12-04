@@ -5,6 +5,7 @@ namespace Biz\System\Service\Impl;
 use Biz\BaseService;
 use Biz\System\Service\H5SettingService;
 use AppBundle\Common\TimeMachine;
+use Doctrine\Common\Inflector\Inflector;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
 {
@@ -19,54 +20,149 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $discoverySettings = $this->getDefaultDiscovery($portal);
         }
 
-        foreach ($discoverySettings as &$discoverySetting) {
-            if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
-                if (!empty($discoverySetting['data']['lastDays'])) {
-                    $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
-                    $conditions['outerStartTime'] = $timeRange['startTime'];
-                    $conditions['outerEndTime'] = $timeRange['endTime'];
-                }
-
-                $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
-                $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
-                $sort = $this->getSortByStr($discoverySetting['data']['sort']);
-                $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
-                $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
-                $discoverySetting['data']['items'] = $courses;
-            }
-
-            if ('course_list' == $discoverySetting['type'] && 'custom' == $discoverySetting['data']['sourceType'] && 'show' == $usage) {
-                $courses = $discoverySetting['data']['items'];
-                foreach ($courses as $key => $course) {
-                    $existCourse = $this->getCourseService()->getCourse($course['id']);
-                    if (empty($existCourse) || 'published' != $existCourse['status']) {
-                        unset($discoverySetting['data']['items'][$key]);
-                        continue;
-                    }
-                    $existCourseSet = $this->getCourseSetService()->getCourseSet($existCourse['courseSetId']);
-                    if (empty($existCourseSet) || 'published' != $existCourseSet['status']) {
-                        unset($discoverySetting['data']['items'][$key]);
-                    }
-                }
-            }
-
-            if (in_array($discoverySetting['type'], array('poster', 'slide_show')) && !empty($discoverySetting['data']['link']) && 'target' == $discoverySetting['data']['link']['type']) {
-                $link = $discoverySetting['data']['link'];
-                $course = $this->getCourseService()->getCourse($link['target']['id']);
-                if (empty($course)) {
-                    $link['target'] = null;
-                    $link['url'] = '';
-                }
-            }
-
-            if (in_array($discoverySetting['type'], array('groupon'))) {
-                $developerSetting = $this->getSettingService()->get('developer', array());
-                $marketingDomain = !empty($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : 'http://wyx.edusoho.cn';
-                $discoverySetting['data']['url'] = $marketingDomain.'/h5/a/groupon/show/'.$discoverySetting['data']['activity']['id'];
+        foreach ($discoverySettings as $key => &$discoverySetting) {
+            $method = $this->getMethod($discoverySetting['type']);
+            $method .= 'Filter';
+            $discoverySetting = $this->$method($discoverySetting, $usage);
+            if (false === $discoverySetting) {
+                unset($discoverySettings[$key]);
             }
         }
 
         return $discoverySettings;
+    }
+
+    public function courseListFilter($discoverySetting, $usage = 'show')
+    {
+        if ('condition' == $discoverySetting['data']['sourceType']) {
+            if (!empty($discoverySetting['data']['lastDays'])) {
+                $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
+                $conditions['outerStartTime'] = $timeRange['startTime'];
+                $conditions['outerEndTime'] = $timeRange['endTime'];
+            }
+
+            $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
+            $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
+            $sort = $this->getSortByStr($discoverySetting['data']['sort']);
+            $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
+            $courses = $this->getCourseService()->searchBySort($conditions, $sort, 0, $limit);
+            $discoverySetting['data']['items'] = $courses;
+        }
+
+        if ('custom' == $discoverySetting['data']['sourceType'] && 'show' == $usage) {
+            $courses = $discoverySetting['data']['items'];
+            foreach ($courses as $key => $course) {
+                $existCourse = $this->getCourseService()->getCourse($course['id']);
+                if (empty($existCourse) || 'published' != $existCourse['status']) {
+                    unset($discoverySetting['data']['items'][$key]);
+                    continue;
+                }
+                $existCourseSet = $this->getCourseSetService()->getCourseSet($existCourse['courseSetId']);
+                if (empty($existCourseSet) || 'published' != $existCourseSet['status']) {
+                    unset($discoverySetting['data']['items'][$key]);
+                }
+            }
+        }
+
+        return $discoverySetting;
+    }
+
+    public function classroomListFilter($discoverySetting, $usage = 'show')
+    {
+        if ('condition' == $discoverySetting['data']['sourceType']) {
+            if (!empty($discoverySetting['data']['lastDays'])) {
+                $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
+                $conditions['outerStartTime'] = $timeRange['startTime'];
+                $conditions['outerEndTime'] = $timeRange['endTime'];
+            }
+
+            $conditions = array('status' => 'published', 'showable' => 1);
+            $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
+            $sort = $this->getSortByStr($discoverySetting['data']['sort']);
+            $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
+            $classrooms = $this->getClassroomService()->searchClassrooms($conditions, $sort, 0, $limit);
+            $discoverySetting['data']['items'] = $classrooms;
+        }
+
+        if ('custom' == $discoverySetting['data']['sourceType'] && 'show' == $usage) {
+            $classrooms = $discoverySetting['data']['items'];
+            foreach ($classrooms as $key => $classroom) {
+                $existClassroom = $this->getClassroomService()->getClassroom($classroom['id']);
+                if (empty($existClassroom) || 'published' != $existClassroom['status'] || empty($existClassroom['showable'])) {
+                    unset($discoverySetting['data']['items'][$key]);
+                }
+            }
+        }
+
+        return $discoverySetting;
+    }
+
+    public function slideShowFilter($discoverySetting, $usage = 'show')
+    {
+        if (!empty($discoverySetting['data']['link'])) {
+            $link = $discoverySetting['data']['link'];
+            $id = isset($link['target']['id']) ? $link['target']['id'] : 0;
+            $target = empty($id) ? null : $this->getTarget($link['type'], $id);
+            if (empty($target)) {
+                $link['target'] = null;
+                $link['url'] = '';
+                $discoverySetting['data']['link'] = $link;
+            }
+        }
+
+        return $discoverySetting;
+    }
+
+    public function posterFilter($discoverySetting, $usage = 'show')
+    {
+        if (!empty($discoverySetting['data']['link'])) {
+            $link = $discoverySetting['data']['link'];
+            if ('url' != $link['type']) {
+                $id = isset($link['target']['id']) ? $link['target']['id'] : 0;
+                $target = empty($id) ? null : $this->getTarget($link['type'], $id);
+                if (empty($target)) {
+                    $link['target'] = null;
+                    $link['url'] = '';
+                    $discoverySetting['data']['link'] = $link;
+                }
+            }
+        }
+
+        return $discoverySetting;
+    }
+
+    public function grouponFilter($discoverySetting, $usage = 'show')
+    {
+        $activity = $discoverySetting['data']['activity'];
+        $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        if (empty($remoteActvity) || isset($remoteActvity['error'])) {
+            return false;
+        }
+        $discoverySetting['data']['activity']['status'] = $remoteActvity['status'];
+        $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
+        $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
+
+        return $discoverySetting;
+    }
+
+    public function getMethod($type)
+    {
+        $method = Inflector::classify($type);
+
+        return lcfirst($method);
+    }
+
+    public function getTarget($type, $id)
+    {
+        if ('course' == $type) {
+            return $this->getCourseService()->getCourse($id);
+        }
+
+        if ('classroom' == $type) {
+            return $this->getClassroomService()->getClassroom($id);
+        }
+
+        return null;
     }
 
     public function getCourseCondition($portal, $mode = 'published')
@@ -226,5 +322,15 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     protected function getBlockService()
     {
         return $this->biz->service('Content:BlockService');
+    }
+
+    protected function getMarketingPlatformService()
+    {
+        return $this->biz->service('Marketing:MarketingPlatformService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->biz->service('Classroom:ClassroomService');
     }
 }

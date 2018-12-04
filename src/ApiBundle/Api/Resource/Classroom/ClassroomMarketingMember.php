@@ -55,6 +55,10 @@ class ClassroomMarketingMember extends AbstractResource
         }
 
         $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
+        if (empty($classroomMember) || array('auditor') == $classroomMember['role']) {
+            return null;
+        }
+
         $this->getOCUtil()->single($classroomMember, array('userId'));
 
         return $classroomMember;

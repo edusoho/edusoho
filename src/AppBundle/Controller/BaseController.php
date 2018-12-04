@@ -15,6 +15,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use AppBundle\Common\Exception\AbstractException;
+use AppBundle\Common\JWTAuth;
 
 class BaseController extends Controller
 {
@@ -417,5 +418,15 @@ class BaseController extends Controller
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
+    }
+
+    protected function getJWTAuth()
+    {
+        $setting = $this->setting('storage', array());
+        $accessKey = !empty($setting['cloud_access_key']) ? $setting['cloud_access_key'] : '';
+        $secretKey = !empty($setting['cloud_secret_key']) ? $setting['cloud_secret_key'] : '';
+        $key = md5($accessKey.$secretKey);
+
+        return new JWTAuth($key);
     }
 }
