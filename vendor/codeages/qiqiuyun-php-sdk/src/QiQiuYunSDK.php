@@ -54,6 +54,16 @@ class QiQiuYunSDK
     }
 
     /**
+     * 获取云资源播放服务
+     *
+     * @return \QiQiuYun\SDK\Service\PlayV2Service
+     */
+    public function getPlayV2Service()
+    {
+        return $this->getService('PlayV2');
+    }
+
+    /**
      * 获取XAPI服务
      *
      * @return \QiQiuYun\SDK\Service\XAPIService
@@ -102,6 +112,7 @@ class QiQiuYunSDK
      *
      * @param string $accessKey
      * @param string $secretKey
+     *
      * @return Auth
      */
     public function createAuth($accessKey, $secretKey)

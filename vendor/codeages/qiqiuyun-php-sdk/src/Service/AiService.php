@@ -17,7 +17,7 @@ class AiService extends BaseService
      * @param $userId int 用户id
      * @param $userName string 用户名
      * @param $type string 会话类型 register:注册 compare:对比
-     * 
+     *
      * @return array 会话信息
      */
     public function createFaceSession($userId, $userName, $type)
@@ -30,8 +30,8 @@ class AiService extends BaseService
      *
      * @see http://docs.qiqiuyun.com/v2/ai-face.html
      *
-     * @param string $sessionId  会话id
-     * 
+     * @param string $sessionId 会话id
+     *
      * @return array 会话信息
      */
     public function getFaceSession($sessionId)
@@ -44,11 +44,11 @@ class AiService extends BaseService
      *
      * @see http://docs.qiqiuyun.com/v2/ai-face.html
      *
-     * @param string $sessionId 会话id
-     * @param int $responseCode 上传后返回的http状态码，由存储供应商返回
+     * @param string $sessionId    会话id
+     * @param int    $responseCode 上传后返回的http状态码，由存储供应商返回
      * @param string $responseBody 上传结果，由存储供应商返回
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public function finishFaceUpload($sessionId, $responseCode, $responseBody)
     {

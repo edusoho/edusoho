@@ -45,6 +45,13 @@
     </div>
 
     <div class="row form-group">
+      <label class="col-md-2 control-label">{{ 'admin.setting_classroom.classroom_operation_mode.allow_show_user_count'|trans }}</label>
+      <div class="col-md-7 controls radios">
+        {{ radios('show_student_num_enabled', {'1':'admin.setting_course.open'|trans, '0':'admin.setting_course.closed'|trans}, setting('classroom').show_student_num_enabled|default('1') ) }}
+      </div>
+    </div>
+
+    <div class="row form-group">
       <div class="col-md-2 control-label"></div>
       <div class="controls col-md-8">
         <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>  
