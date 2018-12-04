@@ -55,7 +55,7 @@ class PageCourse extends AbstractResource
 
         if ($this->isPluginInstalled('vip') && $course['vipLevelId'] > 0) {
             $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', array());
-            $course['freeVipLevel'] = $this->invokeResource($apiRequest);
+            $course['vipLevel'] = $this->invokeResource($apiRequest);
         }
 
         return $course;
