@@ -2,7 +2,6 @@
 
 namespace Codeages\Biz\Pay\Payment;
 
-
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 
@@ -15,7 +14,7 @@ class IapGateway extends AbstractGateway
             'amount',
             'receipt',
             'transaction_id',
-            'is_sand_box'
+            'is_sand_box',
         ));
 
         return $this->requestReceiptData($data);
@@ -51,12 +50,12 @@ class IapGateway extends AbstractGateway
 
         curl_close($ch);
 
-        if ($errno != 0) {
+        if (0 != $errno) {
             return array(
                 array(
-                    'msg' => '充值失败！'.$errno
+                    'msg' => '充值失败！'.$errno,
                 ),
-                'failure'
+                'failure',
             );
         }
 
@@ -64,27 +63,53 @@ class IapGateway extends AbstractGateway
         if (empty($data)) {
             return array(
                 array(
-                    'msg' => '充值验证失败'
+                    'msg' => '充值验证失败',
                 ),
-                'failure'
+                'failure',
             );
         }
 
-        if ($data['status'] == 21007) {
+        if (21007 == $data['status']) {
             $notifyData['is_sand_box'] = true;
+
             return $this->requestReceiptData($notifyData);
         }
 
-        if (!isset($data['status']) || $data['status'] != 0) {
+        $setting = $this->getSettingService()->get('mobile', array());
+        if (!empty($setting['bundleId'])) {
+            if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $setting['bundleId'])) {
+                return array(
+                    array(
+                        'msg' => '充值失败!',
+                    ),
+                    'failure',
+                );
+            }
+
+            $mobileIapProduct = $this->getSettingService()->get('mobile_iap_product', array());
+            $products = $data['receipt']['in_app'];
+            $amount = 0;
+            if (!empty($products)) {
+                foreach ($products as $product) {
+                    if (empty($mobileIapProduct[$product['product_id']]['price'])) {
+                        $this->getLogService()->warning('iap', 'charge', '购买的商品id不存在', array($product));
+                    } else {
+                        $amount = $amount + $mobileIapProduct[$product['product_id']]['price'];
+                    }
+                }
+            }
+        }
+
+        if (!isset($data['status']) || 0 != $data['status']) {
             return array(
                 array(
-                    'msg' => '充值失败！状态码 :'.$data['status']
+                    'msg' => '充值失败！状态码 :'.$data['status'],
                 ),
-                'failure'
+                'failure',
             );
         }
 
-        if ($data['status'] == 0) {
+        if (0 == $data['status']) {
             if (isset($data['receipt']) && !empty($data['receipt']['in_app'])) {
                 $inApp = false;
 
@@ -103,32 +128,33 @@ class IapGateway extends AbstractGateway
                 if (!$inApp) {
                     return array(
                         array(
-                            'msg' => 'receipt校验失败：找不到对应的transaction_id'
+                            'msg' => 'receipt校验失败：找不到对应的transaction_id',
                         ),
-                        'failure'
+                        'failure',
                     );
                 }
 
                 return array(
                     array(
                         'status' => 'paid',
-                        'pay_amount' => $amount*100,
+                        'pay_amount' => $amount * 100,
                         'cash_flow' => $inApp['transaction_id'],
                         'paid_time' => $inApp['purchase_date'],
                         'quantity' => $inApp['quantity'],
                         'product_id' => $inApp['product_id'],
                         'attach' => array(
-                            'user_id' => $userId
-                        )
+                            'user_id' => $userId,
+                        ),
+                        'receipt' => $receipt,
                     ),
-                    'success'
+                    'success',
                 );
             }
         }
 
         return array(
             array(),
-            'failure'
+            'failure',
         );
     }
 
@@ -150,5 +176,15 @@ class IapGateway extends AbstractGateway
     public function converterRefundNotify($data)
     {
         throw new AccessDeniedException('can not convert refund notify with iap.');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->biz->service('System:LogService');
     }
 }

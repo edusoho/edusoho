@@ -1095,6 +1095,7 @@ t.add("admin.setting.mobile.delete_startup_diagram_figure_4_fail_hint", "Delete 
 t.add("admin.setting.mobile.upload_startup_diagram_figure_5_success_hint", "Uploading the network school startup diagram Figure 5 success!", "js", "en");
 t.add("admin.setting.mobile.delete_startup_diagram_figure_5_success_hint", "Delete the network school startup diagram Figure 5 successfully!", "js", "en");
 t.add("admin.setting.mobile.delete_startup_diagram_figure_5_fail_hint", "Delete the network school startup diagram Figure 5 failed!", "js", "en");
+t.add("admin.setting.mobile.bundle_id", "Bundle ID", "js", "en");
 t.add("admin.setting.mobile.upload_logo_success_hint", "Upload the network school LOGO success!", "js", "en");
 t.add("admin.setting.mobile.delete_logo_success_hint", "Delete the network school LOGO success!", "js", "en");
 t.add("admin.setting.mobile.delete_logo_fail_hint", "Delete the network school LOGO failed!", "js", "en");
