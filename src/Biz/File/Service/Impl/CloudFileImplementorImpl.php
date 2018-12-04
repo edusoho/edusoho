@@ -207,7 +207,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'hash' => $file['hash'],
             'name' => $file['fileName'],
             'size' => $file['fileSize'],
-            'uploadType' => 'direct',
+            'uploadType' => $file['uploadType'],
         );
         if ('attachment' == $file['targetType']) {
             $params['type'] = $file['targetType'];
@@ -228,7 +228,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             }
         }
         $apiResult = $this->createApi('root')->post('/resources/upload_form_init', $params);
-        $apiResult['outerId'] = $file['id'];
+        $apiResult['fileId'] = $file['id'];
 
         return $apiResult;
     }
@@ -330,6 +330,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
         $download = $this->createApi('leaf')->get("/resources/{$file['globalId']}/download", $params);
+
         $download['type'] = 'url';
 
         return $download;
