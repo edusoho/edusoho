@@ -1198,6 +1198,7 @@ admin.setting.mobile.delete_startup_diagram_figure_4_fail_hint: 删除网校启�
 admin.setting.mobile.upload_startup_diagram_figure_5_success_hint: 上传网校启动图5成功！
 admin.setting.mobile.delete_startup_diagram_figure_5_success_hint: 删除网校启动图5成功！
 admin.setting.mobile.delete_startup_diagram_figure_5_fail_hint: 删除网校启动图5失败！
+admin.setting.mobile.bundle_id: 套装 ID
 admin.setting.mobile.upload_logo_success_hint: 上传网校LOGO成功！
 admin.setting.mobile.delete_logo_success_hint: 删除网校LOGO成功！
 admin.setting.mobile.delete_logo_fail_hint: 删除网校LOGO失败！

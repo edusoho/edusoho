@@ -44,6 +44,7 @@ class SettingController extends BaseController
             'ver' => 1, //是否是新版
             'about' => '', // 网校简介
             'logo' => '', // 网校Logo
+            'appId' => '',
             'appname' => '',
             'appabout' => '',
             'applogo' => '',
@@ -65,6 +66,9 @@ class SettingController extends BaseController
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
+            if (!empty($mobile['bundleId'])) {
+                $mobile['bundleId'] = trim($mobile['bundleId']);
+            }
             $this->getSettingService()->set('mobile', $mobile);
 
             $this->setFlashMessage('success', 'site.save.success');
