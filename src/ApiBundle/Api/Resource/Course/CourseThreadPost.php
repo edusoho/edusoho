@@ -5,11 +5,14 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CourseThreadPost extends AbstractResource
 {
     public function search(ApiRequest $request, $courseId, $threadId)
     {
+        $this->getCourseService()->tryTakeCourse($courseId);
+
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $afterTime = $request->query->get('afterTime');
         $conditions = array(
@@ -29,6 +32,24 @@ class CourseThreadPost extends AbstractResource
         $posts = $this->addAttachments($posts);
 
         return $this->makePagingObject(array_values($posts), $total, $offset, $limit);
+    }
+
+    public function add(ApiRequest $apiRequest, $courseId, $threadId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $thread = $this->getCourseThreadService()->getThread($courseId, $threadId);
+
+        $params = $apiRequest->request->all();
+        $params['content'] = isset($params['content']) ? $params['content'] : null;
+        $params['threadId'] = $threadId;
+        $params['courseId'] = $courseId;
+
+        $post = $this->getCourseThreadService()->createPost($params);
+        if (isset($params['fileIds'])) {
+            $this->getUploadFileService()->createUseFiles($params['fileIds'], $post['id'], 'course_thread_post', 'attachment');
+        }
+
+        return $post;
     }
 
     protected function addAttachments($posts)

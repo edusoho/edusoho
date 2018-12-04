@@ -18,13 +18,13 @@ class PathMeta
     private $singleMap = array(
         'GET' => AbstractResource::METHOD_GET,
         'PATCH' => AbstractResource::METHOD_UPDATE,
-        'DELETE' => AbstractResource::METHOD_REMOVE
+        'DELETE' => AbstractResource::METHOD_REMOVE,
     );
 
     private $listMap = array(
         'GET' => AbstractResource::METHOD_SEARCH,
         'POST' => AbstractResource::METHOD_ADD,
-        'DELETE' => AbstractResource::METHOD_REMOVE
+        'DELETE' => AbstractResource::METHOD_REMOVE,
     );
 
     public function getResourceClassName()
@@ -44,7 +44,7 @@ class PathMeta
     {
         $result = array(
             'isFind' => false,
-            'className' => ''
+            'className' => '',
         );
         foreach ($customApiNamespaces as $namespace) {
             $className = $this->getNormalResClass($namespace);

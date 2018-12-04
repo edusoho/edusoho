@@ -27,7 +27,6 @@ abstract class BaseAuthenticationListener implements ListenerInterface
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 
         return new ApiToken($currentUser, $currentUser->getRoles());
-
     }
 
     protected function getTokenStorage()

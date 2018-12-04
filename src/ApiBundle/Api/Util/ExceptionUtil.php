@@ -4,9 +4,7 @@ namespace ApiBundle\Api\Util;
 
 use ApiBundle\Api\Exception\ErrorCode;
 use AppBundle\Common\ExceptionPrintingToolkit;
-use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class ExceptionUtil
@@ -18,9 +16,9 @@ class ExceptionUtil
             $error['message'] = $exception->getMessage();
             $error['code'] = $exception->getCode();
             $httpCode = $exception->getStatusCode();
-        } else{
+        } else {
             $error['message'] = 'Internal server error';
-            $error['code'] = $exception->getCode() ? : ErrorCode::INTERNAL_SERVER_ERROR;
+            $error['code'] = $exception->getCode() ?: ErrorCode::INTERNAL_SERVER_ERROR;
             $httpCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 

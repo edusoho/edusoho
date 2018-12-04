@@ -18,6 +18,6 @@ class CourseTaskResultFilter extends Filter
         'lastLearnTime',
         'finishedTime',
         'updatedTime',
-        'userId'
+        'userId',
     );
 }

@@ -21,7 +21,6 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
         $user = $this->validUser($username, $request->headers->get('PHP_AUTH_PW'));
         $token = $this->createTokenFromRequest($request, $user['id']);
         $this->getTokenStorage()->setToken($token);
-
     }
 
     private function validUser($username, $password)
@@ -36,7 +35,7 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
         }
 
         if ($user['locked']) {
-            throw new UnauthorizedHttpException('Basic','用户已锁定，请联系网校管理员', null, ErrorCode::BANNED_CREDENTIAL);
+            throw new UnauthorizedHttpException('Basic', '用户已锁定，请联系网校管理员', null, ErrorCode::BANNED_CREDENTIAL);
         }
 
         return $user;
