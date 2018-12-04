@@ -93,7 +93,7 @@ class Callback extends ESLiveBase
 
             $biz = $this->getBiz();
             $cloudFile['play'] = array(
-                'url' => $biz['qiQiuYunSdk.play']->makePlayToken($file['globalId'], array('std' => 1), 36000),
+                'url' => $biz['qiQiuYunSdk.playv2']->makePlayToken($file['globalId'], array('std' => 1), 36000),
             );
 
             $cloudFiles['data'][] = $cloudFile;
