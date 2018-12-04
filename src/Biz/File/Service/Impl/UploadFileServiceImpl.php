@@ -243,6 +243,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
      *               globalId
      *               Url 上传地址
      *               token 上传token
+     *               fileId  upload_init id
      */
     public function initFormUpload($params)
     {
