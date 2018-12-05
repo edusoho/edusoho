@@ -74,7 +74,9 @@ interface UploadFileService
 
     public function searchFiles($conditions, $sort, $start, $limit);
 
-    public function searchLiveCloudFiles($conditions, $sort, $start, $limit);
+    public function searchUploadFiles($conditions, $sort, $start, $limit);
+
+    public function countUploadFiles($conditions);
 
     public function searchFileCount($conditions);
 
