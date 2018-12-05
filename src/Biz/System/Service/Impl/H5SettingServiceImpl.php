@@ -152,7 +152,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $couponBatches = $discoverySetting['data'];
         $user = $this->getCurrentUser();
         $conditions = array(
-            'batchIds' => ArrayToolkit::column($couponBatchs, 'id'),
+            'batchIds' => ArrayToolkit::column($couponBatches, 'id'),
             'userId' => $user['id'],
         );
 
@@ -164,9 +164,9 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         );
 
         foreach ($receivedCoupons as $coupon) {
-            $couponBatchs[$coupon['batchId']]['currentUserCoupon'] = $coupon;
+            $couponBatches[$coupon['batchId']]['currentUserCoupon'] = $coupon;
         }
-        $discoverySetting['data'] = $couponBatchs;
+        $discoverySetting['data'] = $couponBatches;
     }
 
     public function getMethod($type)
