@@ -7,7 +7,7 @@
 {% block body %}
   {% if not docPlayer.error is empty %}
     <div class="iframe-parent-content pv20 ph20">
-      <div class="alert alert-danger"><i class="es-icon es-icon-info"></i>{{ error.message|raw }}</div>
+      <div class="alert alert-danger"><i class="es-icon es-icon-info"></i>{{ docPlayer.error.message|raw }}</div>
     </div>
   {% else %}
     <div class="iframe-parent-content iframe-parent-full" id="document-content" data-res-no="{{ file.globalId }}"
