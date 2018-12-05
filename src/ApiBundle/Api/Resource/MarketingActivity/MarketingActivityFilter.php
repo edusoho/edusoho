@@ -38,6 +38,11 @@ class MarketingActivityFilter extends Filter
         $data['endTime'] = $data['end_time'];
         unset($data['end_time']);
 
+        if (isset($data['groupon_id'])) {
+            $data['grouponId'] = $data['groupon_id'];
+            unset($data['groupon_id']);
+        }
+
         $marketingDomain = MarketingUtils::getMarketingDomain();
         $data['url'] = $marketingDomain.'/h5/a/'.$data['type'].'/show/'.$data['id'];
 
