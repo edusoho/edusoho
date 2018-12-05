@@ -83,7 +83,7 @@ class CourseThread extends AbstractResource
             throw new BadRequestHttpException('缺少必填字段', null, 5000305);
         }
 
-        if ($fields['taskId']) {
+        if (isset($fields['taskId'])) {
             $task = $this->getTaskService()->getTask($fields['taskId']);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
             $fields['videoId'] = ($activity['mediaType'] == 'video') ? $activity['ext']['id'] : 0;
