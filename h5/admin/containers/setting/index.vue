@@ -49,7 +49,7 @@
             {{ item.name }}
           </el-button>
         </div>
-        <div class="section-title">营销组件 <a class="color-primary pull-right fsn" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a></div>
+        <div class="section-title">营销组件 <a class="color-primary pull-right text-12" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a></div>
         <div class="section-button-group">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
             v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
@@ -64,13 +64,13 @@
     <!-- 发布预览按钮 -->
     <div class="setting-button-group">
       <el-button
-        class="setting-button-group__button text-medium btn-border-primary"
+        class="setting-button-group__button text-14 btn-border-primary"
         size="mini" @click="reset" :disabled="isLoading">重 置</el-button>
       <el-button
-        class="setting-button-group__button text-medium btn-border-primary"
+        class="setting-button-group__button text-14 btn-border-primary"
         size="mini" @click="save('draft')" :disabled="isLoading">预 览</el-button>
       <el-button
-        class="setting-button-group__button text-medium" type="primary"
+        class="setting-button-group__button text-14" type="primary"
         size="mini" @click="save('published')" :disabled="isLoading">发 布</el-button>
     </div>
   </div>

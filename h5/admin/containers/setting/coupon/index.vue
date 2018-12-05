@@ -1,10 +1,7 @@
 <template>
   <module-frame containerClass="setting-coupon" :isActive="isActive" :isIncomplete="isIncomplete">
     <div slot="preview" class="find-page__part coupon-preview__container">
-      <div class="coupon-preview__title">优惠券</div>
-      <div class="coupon-preview__content clearfix" v-show="courseSets.length">
-        <e-coupon v-for="item in courseSets.slice(0, 2)" :key="item.id" :item="item"></e-coupon>
-      </div>
+      <e-coupon :coupons="copyModuleData.data"></e-coupon>
     </div>
     <div slot="setting" class="coupon-allocate">
       <header class="title">
@@ -13,13 +10,13 @@
       <div class="coupon-allocate__content">
         优惠券选择：
         <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
-        <div class="coupon-list-container" v-if="courseSets.length">
-          <draggable v-model="courseSets" class="section__course-container">
+        <div class="coupon-list-container" v-if="copyModuleData.data">
+          <draggable v-model="copyModuleData.data" class="section__course-container">
             <el-tag
               class="courseLink coupon-list-item"
               closable
               :disable-transitions="true"
-              v-for="(item, index) in courseSets"
+              v-for="(item, index) in copyModuleData.data"
               @close="handleClose(index)"
               :key="item.id">
               <span>{{ item.name }}</span>
@@ -33,7 +30,7 @@
       :visible="modalVisible"
       :type="type"
       limit=10
-      :courseList="courseSets"
+      :courseList="copyModuleData.data"
       @visibleChange="modalVisibleHandler"
       @updateCourses="getUpdatedCourses">
     </course-modal>
@@ -57,14 +54,12 @@ export default {
     return {
       modalVisible: false,
       imgAdress: 'http://www.esdev.com/themes/jianmo/img/banner_net.jpg',
-      courseSets: [],
       imageMode: [
         'responsive',
         'size-fit',
       ],
       pathName: this.$route.name,
-      type: 'coupon',
-      radio: 'insideLink'
+      type: 'coupon'
     }
   },
   props: {
@@ -95,7 +90,7 @@ export default {
     },
     copyModuleData: {
       get() {
-        return this.moduleData.data;
+        return this.moduleData;
       },
       set() {}
     },
@@ -113,14 +108,14 @@ export default {
       this.modalVisible = visible;
     },
     getUpdatedCourses(data) {
-      this.courseSets = data;
+      this.copyModuleData.data = data;
       if (!data.length) return;
     },
     addCoupon() {
       this.modalVisible = true;
     },
     removeCourseLink(index) {
-      this.courseSets.splice(index, 1);
+      this.copyModuleData.data.splice(index, 1);
     },
     handleClose(index) {
       this.removeCourseLink(index);

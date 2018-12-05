@@ -62,10 +62,7 @@ const MODULE_DEFAULT = {
   coupon: {
     type: 'coupon',
     moduleType: '',
-    data: {
-      activity: {},
-      tag: ''
-    }
+    data: []
   }
 };
 

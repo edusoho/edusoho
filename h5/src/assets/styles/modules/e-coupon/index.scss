@@ -1,0 +1,115 @@
+.e-coupon {
+  padding: vw(25) 0 vw(30) vw(20);
+  overflow: hidden;
+  &__container {
+    width: vw(500);
+    height: vw(96);
+    overflow: hidden;
+    margin-top: vw(20);
+  }
+  &__title {
+    line-height: 1;
+    font-size: vw(18);
+    color: #2B333B;
+  }
+  &__body {
+    position: relative;
+    float: left;
+    height: vw(96);
+    margin-right: vw(20);
+    line-height: 1;
+    box-sizing: border-box;
+    &:before {
+      content: '';
+      position: absolute;
+      left: vw(-6);
+      top: vw(52);
+      width: vw(12);
+      height: vw(12);
+      border-radius: 50%;
+      background-color: #fff;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      right: vw(-6);
+      top: vw(52);
+      width: vw(12);
+      height: vw(12);
+      border-radius: 50%;
+      background-color: #fff;
+    }
+  }
+  &__name {
+    color: #fff;
+    float: right;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  &-single {
+    width: vw(335);
+    height: vw(112);
+    .e-coupon__body {
+      margin-right: 0;
+      width: 100%;
+    }
+    .e-coupon__header {
+      padding-right: vw(10);
+      padding-left: vw(10);
+      .coupon-name {
+        width: vw(142);
+      }
+    }
+  }
+  &-multi {
+    .coupon-button {
+      position: absolute;
+      right: vw(15);
+      top: vw(19);
+    }
+    .e-coupon__body {
+      width: vw(196);
+    }
+  }
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: vw(18) vw(15) vw(15);
+    border-top-right-radius: vw(2);
+    border-top-left-radius: vw(2);
+    background-color: #FF6969;
+    .coupon-button {
+      height: vw(24);
+      width: vw(56);
+      text-align: center;
+      line-height: vw(24);
+      box-sizing: border-box;
+      font-size: vw(12);
+      color: #FF5353;
+      background-color: #fff;
+      border-radius: vw(4);
+    }
+  }
+  &__middle {
+    margin-top: vw(-6);
+    margin-bottom: vw(-1);
+    height: vw(6);
+    background-image: url('../../../static/images/dot_red@2x.png');
+    background-size: vw(16) vw(6);
+    background-position-x: vw(6);
+  }
+  &__bottom {
+    padding: vw(10);
+    background-color: #FF5353;
+    color: #fff;
+    font-size: vw(10);
+    border-bottom-right-radius: vw(2);
+    border-bottom-left-radius: vw(2);
+  }
+  &__price {
+    display: inline-block;
+    margin-top: vw(-3);
+    color: #fff;
+    font-size: vw(32);
+  }
+}
