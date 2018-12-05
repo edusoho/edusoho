@@ -12,7 +12,7 @@ class AddCourseThreadPostFields extends Migration
         $container = $this->getContainer();
         $db = $container['db'];
         $db->exec("ALTER TABLE `course_thread_post` ADD `source` enum('app', 'web') DEFAULT 'web' COMMENT '来源' AFTER `content`;");
-        $db->exec("ALTER TABLE `course_thread_post` ADD `isRead` tinyint(3) DEFAULT 1 COMMENT '是否已读' AFTER `source`;");
+        $db->exec("ALTER TABLE `course_thread_post` ADD `isRead` tinyint(3) DEFAULT 0 COMMENT '是否已读' AFTER `source`;");
     }
 
     /**

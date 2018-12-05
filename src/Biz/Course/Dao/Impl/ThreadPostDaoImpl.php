@@ -64,8 +64,10 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
                 'courseId IN ( :courseIds)',
                 'taskId = :taskId',
                 'threadId = :threadId',
+                'threadId IN ( :threadIds)',
                 'userId = :userId',
                 'isElite = :isElite',
+                'isRead = :isRead',
                 'content LIKE :content',
             ),
         );
