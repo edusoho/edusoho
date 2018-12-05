@@ -617,9 +617,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
     }
 
-    public function searchLiveCloudFiles($conditions, $orderBy, $start, $limit)
+    public function searchUploadFiles($conditions, $orderBy, $start, $limit)
     {
         return $this->getUploadFileDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function countUploadFiles($conditions)
+    {
+        return $this->getUploadFileDao()->count($conditions);
     }
 
     protected function searchFilesFromCloud($conditions, $orderBy, $start, $limit)
