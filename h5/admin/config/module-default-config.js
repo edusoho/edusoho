@@ -58,6 +58,14 @@ const MODULE_DEFAULT = {
       activity: {},
       tag: ''
     }
+  },
+  coupon: {
+    type: 'coupon',
+    moduleType: '',
+    data: {
+      activity: {},
+      tag: ''
+    }
   }
 };
 
@@ -74,6 +82,9 @@ const BASE_MODULE = [
   }, {
     name: '图片广告',
     default: MODULE_DEFAULT.poster,
+  }, {
+    name: '优惠券',
+    default: MODULE_DEFAULT.coupon,
   }
 ];
 
@@ -93,6 +104,9 @@ const VALUE_DEFAULT = {
   },
   groupon: {
     key: 'name'
+  },
+  coupon: {
+    key: 'name'
   }
 }
 
@@ -105,6 +119,9 @@ const TYPE_TEXT_DEFAULT = {
   },
   groupon: {
     text: '活动'
+  },
+  coupon: {
+    text: '优惠券'
   }
 }
 

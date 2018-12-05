@@ -113,7 +113,8 @@ export default {
     ...mapActions([
       'getCourseList',
       'getClassList',
-      'getMarketingList'
+      'getMarketingList',
+      'getCouponList'
     ]),
     restoreListIds() {
       this.courseListIds = [];
@@ -172,6 +173,14 @@ export default {
           statuses: 'ongoing,unstart',
           type: this.type,
           itemType: 'course'
+        }).then(res => {
+          cb(res.data);
+        })
+        return;
+      }
+      if (this.type === 'coupon') {
+        this.getCouponList({
+          name: queryString,
         }).then(res => {
           cb(res.data);
         })

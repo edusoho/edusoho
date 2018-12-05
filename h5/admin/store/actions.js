@@ -87,6 +87,11 @@ export const getMarketingList = ({ commit }, params) => Api.getMarketingList({
   params
 });
 
+// 优惠券搜索列表数据
+export const getCouponList = ({ commit }, params) => Api.getCouponList({
+  params
+});
+
 // 后台配置预览二维码
 export const getQrcode = ({ commit }, { route, preview, times, duration }) => Api.getQrcode({
   query: {
