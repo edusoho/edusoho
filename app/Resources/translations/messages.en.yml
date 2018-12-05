@@ -8098,7 +8098,7 @@ exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
 exception.user.permission_denied: 暂无权限访问
 exception.user.password_error: 用户名或密码错误
-exception.user.lock_self_denied: Admin or super admin can not lock self
+exception.user.lock_self_denied: You can't lock yourself
 
 exception.user_lock: User account is locked, please contact system administrator.
 
