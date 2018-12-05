@@ -55,7 +55,8 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $existCourse = $this->getCourseService()->getCourse($course['id']);
                 if (empty($existCourse) || 'published' != $existCourse['status']) {
                     unset($discoverySetting['data']['items'][$key]);
-                    continue;
+
+                    return $discoverySetting;
                 }
                 $existCourseSet = $this->getCourseSetService()->getCourseSet($existCourse['courseSetId']);
                 if (empty($existCourseSet) || 'published' != $existCourseSet['status']) {
@@ -142,6 +143,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
         $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
 
+        return $discoverySetting;
+    }
+
+    public function couponFilter($discoverySetting, $usage = 'show')
+    {
         return $discoverySetting;
     }
 
