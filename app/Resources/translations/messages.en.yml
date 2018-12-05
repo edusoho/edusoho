@@ -2204,6 +2204,7 @@ classroom.live: Live
 classroom.task_num: "%taskName% number: %number%\n"
 classroom.total_task_count: "%taskNum% %taskName%s\n"
 classroom.forever: Forever
+classroom.end_date: End Date
 classroom.course_tips: "All learning data of this course will be erased if delete this course.\n"
 classroom.total_price: Total
 classroom.course_empty: 'Add a new course'
