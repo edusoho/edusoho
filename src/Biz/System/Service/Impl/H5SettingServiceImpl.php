@@ -167,6 +167,8 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $couponBatches[$coupon['batchId']]['currentUserCoupon'] = $coupon;
         }
         $discoverySetting['data'] = $couponBatches;
+
+        return $discoverySetting;
     }
 
     public function getMethod($type)
