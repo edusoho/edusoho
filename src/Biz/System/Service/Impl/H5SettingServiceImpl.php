@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\System\Service\H5SettingService;
 use AppBundle\Common\TimeMachine;
 use Doctrine\Common\Inflector\Inflector;
+use AppBundle\Common\ArrayToolkit;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
 {
@@ -148,7 +149,24 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     public function couponFilter($discoverySetting, $usage = 'show')
     {
-        return $discoverySetting;
+        $couponBatches = $discoverySetting['data'];
+        $user = $this->getCurrentUser();
+        $conditions = array(
+            'batchIds' => ArrayToolkit::column($couponBatchs, 'id'),
+            'userId' => $user['id'],
+        );
+
+        $receivedCoupons = $this->getCouponService()->searchCoupons(
+            $conditions,
+            array(),
+            0,
+            $this->getCouponService()->searchCouponsCount($conditions)
+        );
+
+        foreach ($receivedCoupons as $coupon) {
+            $couponBatchs[$coupon['batchId']]['currentUserCoupon'] = $coupon;
+        }
+        $discoverySetting['data'] = $couponBatchs;
     }
 
     public function getMethod($type)
