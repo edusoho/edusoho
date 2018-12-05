@@ -357,4 +357,9 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     {
         return $this->biz->service('Classroom:ClassroomService');
     }
+
+    protected function getCouponService()
+    {
+        return $this->biz->service('Coupon:CouponService');
+    }
 }
