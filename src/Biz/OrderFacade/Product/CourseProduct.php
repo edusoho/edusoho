@@ -113,6 +113,11 @@ class CourseProduct extends Product implements OrderStatusCallback
     public function onOrderRefundRefused($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
+        $course = $this->getCourseService()->getCourse($orderItem['target_id']);
+        if (empty($course)) {
+            return;
+        }
+
         $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
