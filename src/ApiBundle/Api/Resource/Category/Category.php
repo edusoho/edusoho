@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Category;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
