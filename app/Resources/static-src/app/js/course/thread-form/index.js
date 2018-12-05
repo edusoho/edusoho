@@ -7,7 +7,7 @@ let validator = $form.validate({
     },
     'thread[content]': {
       required: true,
-    },
+    }
   }
 });
 
