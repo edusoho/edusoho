@@ -21,7 +21,7 @@ class Files extends AthenaLiveBase
             throw $this->createAccessDeniedException('token error');
         }
 
-        if ($userToken['data']['type'] == 'open_course') {
+        if ('open_course' == $userToken['data']['type']) {
             return array();
         }
 
@@ -42,7 +42,7 @@ class Files extends AthenaLiveBase
             return array();
         }
 
-        $files = $this->getUploadFileService()->searchLiveCloudFiles(
+        $files = $this->getUploadFileService()->searchUploadFiles(
             array(
                 'ids' => ArrayToolkit::column($materials, 'fileId'),
                 'storage' => 'cloud',
@@ -89,7 +89,7 @@ class Files extends AthenaLiveBase
 
         $type = $userToken['data']['type'];
 
-        if ($type == 'open_course') {
+        if ('open_course' == $type) {
             $course = $this->getOpenCourseService()->getCourse($courseId);
         } else {
             $course = $this->getCourseService()->getCourse($courseId);
@@ -105,7 +105,7 @@ class Files extends AthenaLiveBase
         $file['lazyConvert'] = false;
 
         try {
-            if ($type == 'open_course') {
+            if ('open_course' == $type) {
                 $this->getUploadFileService()->addFile('opencoursematerial', $course['id'], $file, 'cloud');
             } else {
                 $this->getUploadFileService()->addFile('coursematerial', $course['courseSetId'], $file, 'cloud');
