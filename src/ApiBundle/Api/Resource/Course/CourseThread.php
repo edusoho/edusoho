@@ -92,7 +92,7 @@ class CourseThread extends AbstractResource
         $fields['title'] = substr($fields['content'], 0, 30);
         $thread = $this->getCourseThreadService()->createThread($fields);
 
-        if ($fields['fileIds']) {
+        if (isset($fields['fileIds'])) {
             $this->getUploadFileService()->createUseFiles($fields['fileIds'], $thread['id'], 'course_thread', 'attachment');
         }
 
