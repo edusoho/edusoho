@@ -79,7 +79,6 @@ class CourseThread extends AbstractResource
         $fields = $request->request->all();
         $fields['courseId'] = $courseId;
         $fields['source'] = 'app';
-        $fileIds = $fields['fileIds'];
         if (!ArrayToolkit::requireds($fields, array('content', 'courseId', 'type'))) {
             throw new BadRequestHttpException('缺少必填字段', null, 5000305);
         }
@@ -93,8 +92,8 @@ class CourseThread extends AbstractResource
         $fields['title'] = substr($fields['content'], 0, 30);
         $thread = $this->getCourseThreadService()->createThread($fields);
 
-        if ($fileIds) {
-            $this->getUploadFileService()->createUseFiles($fileIds, $thread['id'], 'course_thread', 'attachment');
+        if ($fields['fileIds']) {
+            $this->getUploadFileService()->createUseFiles($fields['fileIds'], $thread['id'], 'course_thread', 'attachment');
         }
 
         return $thread;
