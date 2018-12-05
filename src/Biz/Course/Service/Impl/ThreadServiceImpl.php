@@ -467,6 +467,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $post;
     }
 
+    public function readPost($postId)
+    {
+        return $this->getThreadPostDao()->update($postId, array('isRead' => 1));
+    }
+
     public function deletePost($courseId, $id)
     {
         $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');

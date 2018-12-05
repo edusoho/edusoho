@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CourseThreadPost extends AbstractResource
 {
@@ -28,6 +27,9 @@ class CourseThreadPost extends AbstractResource
             $limit
         );
 
+        if (!empty($posts)) {
+            $posts = $this->readPosts($courseId, $threadId, $posts);
+        }
         $this->getOCUtil()->multiple($posts, array('userId'));
         $posts = $this->addAttachments($posts);
 
@@ -50,6 +52,24 @@ class CourseThreadPost extends AbstractResource
         }
 
         return $post;
+    }
+
+    protected function readPosts($courseId, $threadId, $posts)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $thread = $this->getCourseThreadService()->getThread($courseId, $threadId);
+        $userId = $this->getCurrentUser()->getId();
+        foreach ($posts as &$post) {
+            if (in_array($userId, $course['teacherIds']) && $post['userId'] != $userId) {
+                $post = $this->getCourseThreadService()->readPost($post['id']);
+            }
+
+            if (!in_array($userId, $course['teacherIds']) && in_array($post['userId'], $course['teacherIds'])) {
+                $post = $this->getCourseThreadService()->readPost($post['id']);
+            }
+        }
+
+        return $posts;
     }
 
     protected function addAttachments($posts)
