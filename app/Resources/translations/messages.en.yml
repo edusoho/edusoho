@@ -8179,6 +8179,7 @@ exception.user.idcard_invalid: ID number is invalid
 exception.user.truename_invalid: Truename is invalid
 exception.user.lock_denied: 没有封禁该角色的权限
 exception.user.not_match_bind_email: 与绑定邮箱不符
+exception.user.login_limit: 登录限制！
 
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败

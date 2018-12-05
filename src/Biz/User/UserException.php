@@ -90,7 +90,7 @@ class UserException extends AbstractException
 
     public $messages = array(
         4040101 => 'exception.user.unlogin',
-        4030102 => 'exception.user.unlogin',
+        4030102 => 'exception.user.login_limit',
         4030103 => 'exception.user.register_error',
         4040104 => 'exception.user.not_found',
         5000105 => 'exception.user.reset_password_email_send',

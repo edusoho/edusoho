@@ -9487,6 +9487,7 @@ exception.user.lock_denied: 没有封禁该角色的权限
 exception.user.not_match_bind_email: 与绑定邮箱不符
 exception.user_lock: 账户被封禁，请联系管理员
 exception.user.password_error: 用户名密码错误
+exception.user.login_limit: 登录限制！
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败
