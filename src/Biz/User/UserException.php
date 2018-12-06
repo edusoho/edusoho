@@ -88,6 +88,8 @@ class UserException extends AbstractException
 
     const NOT_MATCH_BIND_EMAIL = 5000141;
 
+    const LOCK_SELF_DENIED = 4030142;
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.login_limit',
@@ -129,5 +131,6 @@ class UserException extends AbstractException
         5000139 => 'exception.user.truename_invalid',
         4030140 => 'exception.user.lock_denied',
         5000141 => 'exception.user.not_match_bind_email',
+        4030142 => 'exception.user.lock_self_denied',
     );
 }

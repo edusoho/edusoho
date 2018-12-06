@@ -1256,6 +1256,7 @@ admin.setting.mobile.delete_startup_diagram_figure_4_fail_hint: Delete the netwo
 admin.setting.mobile.upload_startup_diagram_figure_5_success_hint: Uploading the network school startup diagram Figure 5 success!
 admin.setting.mobile.delete_startup_diagram_figure_5_success_hint: Delete the network school startup diagram Figure 5 successfully!
 admin.setting.mobile.delete_startup_diagram_figure_5_fail_hint: Delete the network school startup diagram Figure 5 failed!
+admin.setting.mobile.bundle_id: Bundle ID
 admin.setting.mobile.upload_logo_success_hint: Upload the network school LOGO success!
 admin.setting.mobile.delete_logo_success_hint: Delete the network school LOGO success!
 admin.setting.mobile.delete_logo_fail_hint: Delete the network school LOGO failed!

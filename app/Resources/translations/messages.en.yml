@@ -2204,6 +2204,7 @@ classroom.live: Live
 classroom.task_num: "%taskName% number: %number%\n"
 classroom.total_task_count: "%taskNum% %taskName%s\n"
 classroom.forever: Forever
+classroom.end_date: End Date
 classroom.course_tips: "All learning data of this course will be erased if delete this course.\n"
 classroom.total_price: Total
 classroom.course_empty: 'Add a new course'
@@ -6233,6 +6234,9 @@ admin.mobile_setting.splash_pic_setting_hint: 'Please upload pictures in png, gi
 admin.mobile_setting.online_school_about_hint: 'This profile will be displayed in the app''s " About Us" part'
 admin.mobile_setting.online_school_logo_hint: 'Please upload pictures in png, gif, jpg format. Limit LOGO height to 50px.Image size should not exceed 2MB.<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
 admin.mobile_setting.app_custom_setting_option: 'Custom APP Set'
+admin.mobile_setting.app_ios_bundle_id: 'Bundle ID'
+admin.mobile_setting.app_ios_bundle_id_tutorials: 'Tutorials'
+admin.mobile_setting.app_ios_bundle_id_hint: '套装ID必须和App Store Connect后台保持一致，否则会影响充值正常使用，请谨慎填写。'
 admin.mobile_setting.app_custom_name: 'APP name'
 admin.mobile_setting.app_custom_about: 'APP Profile'
 admin.mobile_setting.app_custom_logo: 'APP Icon'
@@ -8153,6 +8157,7 @@ exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
 exception.user.permission_denied: 暂无权限访问
 exception.user.password_error: 用户名或密码错误
+exception.user.lock_self_denied: You can't lock yourself
 
 exception.user_lock: User account is locked, please contact system administrator.
 exception.user.token_not_found: token不存在

@@ -2558,6 +2558,7 @@ classroom.total_task_count: >
   %taskNum%个%taskName%
 classroom.expiry_mode: 有效期
 classroom.forever: 永久
+classroom.end_date: 截止日期
 classroom.course_tips: >
   若%name%课程被移除，则该课程内所有学习数据将被清空。
 classroom.total_price: 共计
@@ -7643,6 +7644,9 @@ admin.mobile_setting.splash_pic_setting_hint: 请上传jpg, gif, png格式的图
 admin.mobile_setting.online_school_about_hint: 此简介将显示在移动客户端的"关于网校"
 admin.mobile_setting.online_school_logo_hint: 请上传jpg, gif, png格式的图片。logo 图片的高度建议不超过50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.mobile_setting.app_custom_setting_option: 定制APP设置项
+admin.mobile_setting.app_ios_bundle_id: '套装 ID'
+admin.mobile_setting.app_ios_bundle_id_hint: '套装ID必须和App Store Connect后台保持一致，否则会影响充值正常使用，请谨慎填写。'
+admin.mobile_setting.app_ios_bundle_id_tutorials: '查看教程'
 admin.mobile_setting.app_custom_name: APP名称
 admin.mobile_setting.app_custom_about: APP简介
 admin.mobile_setting.app_custom_logo: APP图标
@@ -9488,6 +9492,7 @@ exception.user.not_match_bind_email: 与绑定邮箱不符
 exception.user_lock: 账户被封禁，请联系管理员
 exception.user.password_error: 用户名密码错误
 exception.user.login_limit: 登录限制！
+exception.user.lock_self_denied: 您不能封禁自己
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败

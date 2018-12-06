@@ -1347,6 +1347,9 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(UserException::NOTFOUND_USER());
         }
         $currentUser = $this->getCurrentUser();
+        if ($id === $currentUser['id']) {
+            $this->createNewException(UserException::LOCK_SELF_DENIED());
+        }
         if (in_array('ROLE_SUPER_ADMIN', $user['roles']) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
             $this->createNewException(UserException::LOCK_DENIED());
         }

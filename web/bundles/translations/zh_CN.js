@@ -1040,6 +1040,7 @@ t.add("admin.setting.mobile.delete_startup_diagram_figure_4_fail_hint", "\u5220\
 t.add("admin.setting.mobile.upload_startup_diagram_figure_5_success_hint", "\u4e0a\u4f20\u7f51\u6821\u542f\u52a8\u56fe5\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.setting.mobile.delete_startup_diagram_figure_5_success_hint", "\u5220\u9664\u7f51\u6821\u542f\u52a8\u56fe5\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.setting.mobile.delete_startup_diagram_figure_5_fail_hint", "\u5220\u9664\u7f51\u6821\u542f\u52a8\u56fe5\u5931\u8d25\uff01", "js", "zh_CN");
+t.add("admin.setting.mobile.bundle_id", "\u5957\u88c5 ID", "js", "zh_CN");
 t.add("admin.setting.mobile.upload_logo_success_hint", "\u4e0a\u4f20\u7f51\u6821LOGO\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.setting.mobile.delete_logo_success_hint", "\u5220\u9664\u7f51\u6821LOGO\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.setting.mobile.delete_logo_fail_hint", "\u5220\u9664\u7f51\u6821LOGO\u5931\u8d25\uff01", "js", "zh_CN");
