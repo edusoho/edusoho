@@ -2,7 +2,6 @@
   padding: vw(25) 0 vw(30) vw(20);
   overflow: hidden;
   &__container {
-    // width: vw(500);
     height: vw(96);
     overflow: hidden;
     margin-top: vw(20);
@@ -16,7 +15,7 @@
     position: relative;
     float: left;
     height: vw(96);
-    margin-right: vw(20);
+    padding-right: vw(20);
     line-height: 1;
     box-sizing: border-box;
     &:before {
@@ -32,7 +31,7 @@
     &:after {
       content: '';
       position: absolute;
-      right: vw(-6);
+      right: vw(14);
       top: vw(52);
       width: vw(12);
       height: vw(12);
@@ -41,19 +40,22 @@
     }
   }
   &__name {
+    position: absolute;
+    right: vw(90);
+    top: vw(22);
     color: #fff;
-    float: right;
-    padding-right:vw(5);
-    padding-left: vw(8);
+    margin-left: vw(8);
   }
   &__header {
-    display: flex;
-    justify-content: space-between;
+    box-sizing: border-box;
     padding: vw(18) vw(15) vw(15);
     border-top-right-radius: vw(2);
     border-top-left-radius: vw(2);
     background-color: #FF6969;
     .coupon-button {
+      position: absolute;
+      right: vw(20);
+      top: vw(26);
       height: vw(24);
       width: vw(56);
       text-align: center;
@@ -86,35 +88,35 @@
     margin-top: vw(-3);
     color: #fff;
     font-size: vw(32);
+    font-weight: 500;
   }
   &-single {
-    width: vw(335);
     height: vw(112);
     .e-coupon__body {
-      margin-right: 0;
-      width: 100%;
+      padding-right: 0;
+      height: vw(112);
+      width: vw(335) !important;
+      &:after {
+        right: vw(-6);
+      }
     }
     .e-coupon__header {
-      padding-right: vw(10);
-      padding-left: vw(10);
+      height: vw(82);
       .coupon-name {
         width: vw(142);
       }
     }
-    .coupon-button {
-      display: inline-block;
-      margin-top: vw(3);
-      margin-right: vw(5);
+    .stamp {
+      right: 0 !important;
     }
   }
   &-multi {
     .coupon-button {
-      position: absolute;
-      right: vw(15);
+      right: vw(35);
       top: vw(19);
     }
     .e-coupon__body {
-      width: vw(196) !important;
+      width: vw(196);
     }
   }
   // 已领完
@@ -132,19 +134,18 @@
       display: none;
     }
     .stamp {
+      right: vw(20);
       background-image: url('../../../static/images/received_all.png') !important;
     }
   }
   // 已领取
-  .coupon-received {
-    .stamp {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: vw(50);
-      height: vw(50);
-      background-image: url('../../../static/images/received.png');
-      background-size: 100%;
-    }
+  .stamp {
+    position: absolute;
+    top: 0;
+    right: vw(20);
+    width: vw(50);
+    height: vw(50);
+    background-image: url('../../../static/images/received.png');
+    background-size: 100%;
   }
 }
