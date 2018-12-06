@@ -15,7 +15,7 @@
         :class="imageMode[part.data.responsive]"
         :poster="part.data"
         :feedback="feedback"></e-poster>
-      <e-coupon
+     <e-coupon
         v-if="part.type == 'coupon'"
         :coupons="part.data"
         :feedback="feedback"></e-coupon>

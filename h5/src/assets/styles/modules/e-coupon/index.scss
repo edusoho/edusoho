@@ -2,7 +2,7 @@
   padding: vw(25) 0 vw(30) vw(20);
   overflow: hidden;
   &__container {
-    width: vw(500);
+    // width: vw(500);
     height: vw(96);
     overflow: hidden;
     margin-top: vw(20);
@@ -114,7 +114,7 @@
       top: vw(19);
     }
     .e-coupon__body {
-      width: vw(196);
+      width: vw(196) !important;
     }
   }
   // 已领完
