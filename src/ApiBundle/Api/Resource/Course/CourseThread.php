@@ -59,7 +59,7 @@ class CourseThread extends AbstractResource
         $total = $this->getCourseThreadService()->countThreads($conditions);
         $threads = $this->getCourseThreadService()->searchThreads(
             $conditions,
-            array(),
+            array('updatedTime' => 'ASC'),
             $offset,
             $limit
         );
