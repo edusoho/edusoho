@@ -146,7 +146,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $thread = $this->filterThread($thread);
         $trimedThreadTitle = empty($thread['title']) ? '' : trim($thread['title']);
-        if (empty($trimedThreadTitle)) {
+        if (!isset($trimedThreadTitle)) {
             throw $this->createServiceException('thread title is null');
         }
 
