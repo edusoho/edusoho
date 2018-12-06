@@ -15,6 +15,10 @@
         :class="imageMode[part.data.responsive]"
         :poster="part.data"
         :feedback="feedback"></e-poster>
+      <e-coupon
+        v-if="part.type == 'coupon'"
+        :coupons="part.data"
+        :feedback="feedback"></e-coupon>
     </div>
   </div>
 </template>
@@ -23,6 +27,7 @@
   import courseList from '../components/e-course-list/e-course-list.vue';
   import poster from '../components/e-poster/e-poster.vue';
   import swipe from '../components/e-swipe/e-swipe.vue';
+  import coupon from '../components/e-coupon/e-coupon.vue';
   import * as types from '@/store/mutation-types';
   import Api from '@/api';
   import { mapState } from 'vuex';
@@ -33,6 +38,7 @@
       'e-course-list': courseList,
       'e-swipe': swipe,
       'e-poster': poster,
+      'e-coupon': coupon
     },
     props: {
       feedback: {

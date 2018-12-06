@@ -68,5 +68,17 @@ export default (module, startValidate) => {
     }
   }
 
+  // 优惠券
+  if (module.type == 'coupon') {
+    if (!module.data.length) {
+      if (!startValidate) return true;
+      Vue.prototype.$message({
+        message: '请完善优惠券模块信息！',
+        type: 'error'
+      });
+      return true;
+    }
+  }
+
   return false;
 }
