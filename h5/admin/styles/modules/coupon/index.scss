@@ -102,6 +102,11 @@
           width: 142px;
         }
       }
+      .coupon-button {
+        display: inline-block;
+        margin-top: 3px;
+        margin-right: 5px;
+      }
     }
     &-multi {
       .coupon-button {
@@ -111,6 +116,36 @@
       }
       .e-coupon__body {
         width: 196px;
+      }
+    }
+    // 已领完
+    .coupon-received-all {
+      .e-coupon__header {
+        background-color: #B0BDC9;
+      }
+      .e-coupon__middle {
+        background-image: url('../../static/images/dot_grey@2x.png');
+      }
+      .e-coupon__bottom {
+        background-color: #A5B2BE;
+      }
+      .coupon-button {
+        display: none;
+      }
+      .stamp {
+        background-image: url('../../static/images/received_all.png') !important;
+      }
+    }
+    // 已领取
+    .coupon-received {
+      .stamp {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50px;
+        height: 50px;
+        background-image: url('../../static/images/received.png');
+        background-size: 100%;
       }
     }
   }

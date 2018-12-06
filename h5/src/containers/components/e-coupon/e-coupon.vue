@@ -2,14 +2,17 @@
   <div class="e-coupon">
     <div class="e-coupon__title">优惠券</div>
     <div :class="['e-coupon__container', 'clearfix', couponNum]" v-show="coupons.length">
-      <div class='e-coupon__body' v-for="item in coupons">
+      <div :class="['e-coupon__body', Number(item.unreceivedNum) == 0 ? 'coupon-received-all' : '']" v-for="item in coupons">
         <div class="e-coupon__header clearfix">
           <span class="e-coupon__price">{{ item.rate }}<span class="text-14">元</span></span>
           <div class="e-coupon__name" v-show="coupons.length == 1">
             <div class="text-overflow text-14 coupon-name">{{ item.name }}</div>
             <span class="text-10">{{ timeExpire(item) }}</span>
           </div>
-          <a href="javascript:0;" class="coupon-button">领券</a>
+          <div :class="[item.currentUserCoupon ? 'coupon-received' : 'coupon-unreceived']">
+            <div class="stamp"></div>
+            <a href="javascript:0;" class="coupon-button">{{ item.currentUserCoupon ? '去使用' : '领券' }}</a>
+          </div>
         </div>
         <div class="e-coupon__middle"></div>
         <div class="e-coupon__bottom text-overflow">
@@ -31,7 +34,7 @@
     computed: {
       couponNum() {
         return this.coupons.length > 1 ? 'e-coupon-multi' : 'e-coupon-single';
-      },
+      }
     },
     methods: {
       scopeFilter(type) {

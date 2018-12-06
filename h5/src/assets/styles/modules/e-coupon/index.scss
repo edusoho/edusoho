@@ -43,33 +43,8 @@
   &__name {
     color: #fff;
     float: right;
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-  &-single {
-    width: vw(335);
-    height: vw(112);
-    .e-coupon__body {
-      margin-right: 0;
-      width: 100%;
-    }
-    .e-coupon__header {
-      padding-right: vw(10);
-      padding-left: vw(10);
-      .coupon-name {
-        width: vw(142);
-      }
-    }
-  }
-  &-multi {
-    .coupon-button {
-      position: absolute;
-      right: vw(15);
-      top: vw(19);
-    }
-    .e-coupon__body {
-      width: vw(196);
-    }
+    padding-right: 5px;
+    padding-left: 8px;
   }
   &__header {
     display: flex;
@@ -111,5 +86,65 @@
     margin-top: vw(-3);
     color: #fff;
     font-size: vw(32);
+  }
+  &-single {
+    width: vw(335);
+    height: vw(112);
+    .e-coupon__body {
+      margin-right: 0;
+      width: 100%;
+    }
+    .e-coupon__header {
+      padding-right: vw(10);
+      padding-left: vw(10);
+      .coupon-name {
+        width: vw(142);
+      }
+    }
+    .coupon-button {
+      display: inline-block;
+      margin-top: 3px;
+      margin-right: 5px;
+    }
+  }
+  &-multi {
+    .coupon-button {
+      position: absolute;
+      right: vw(15);
+      top: vw(19);
+    }
+    .e-coupon__body {
+      width: vw(196);
+    }
+  }
+  // 已领完
+  .coupon-received-all {
+    .e-coupon__header {
+      background-color: #B0BDC9;
+    }
+    .e-coupon__middle {
+      background-image: url('../../../static/images/dot_grey@2x.png');
+    }
+    .e-coupon__bottom {
+      background-color: #A5B2BE;
+    }
+    .coupon-button {
+      display: none;
+    }
+    .stamp {
+      background-image: url('../../../static/images/received_all.png') !important;
+    }
+  }
+  // 已领取
+  .coupon-received {
+    .stamp {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50px;
+      height: 50px;
+      background-image: url('../../../static/images/received.png');
+      background-size: 100%;
+    }
   }
 }
