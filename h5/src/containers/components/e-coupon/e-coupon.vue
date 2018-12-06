@@ -4,7 +4,7 @@
     <div :class="['e-coupon__container', 'clearfix', couponNum]" v-show="coupons.length">
       <div :class="['e-coupon__body', Number(item.unreceivedNum) == 0 ? 'coupon-received-all' : '']" v-for="item in coupons">
         <div class="e-coupon__header clearfix">
-          <span class="e-coupon__price">{{ item.rate }}<span class="text-14">元</span></span>
+          <span class="e-coupon__price" v-html="priceHtml(item)"></span>
           <div class="e-coupon__name" v-show="coupons.length == 1">
             <div class="text-overflow text-14 coupon-name">{{ item.name }}</div>
             <span class="text-10">{{ timeExpire(item) }}</span>
@@ -49,6 +49,12 @@
         const createdTime = item.createdTime.slice(0, 10);
         const deadline = item.deadline.slice(0, 10);
         return `${createdTime}至${deadline}`;
+      },
+      priceHtml(item) {
+        const intPrice = parseInt(item.rate);
+        const pointPrice = Number(item.rate).toFixed(2).split('.')[1];
+        const typeText = item.type === 'discount' ? '折' : '元';
+        return `${intPrice}<span class="text-14">.${pointPrice + typeText}</span>`;
       }
     }
   }

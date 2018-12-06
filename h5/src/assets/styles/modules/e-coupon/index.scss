@@ -43,8 +43,8 @@
   &__name {
     color: #fff;
     float: right;
-    padding-right: 5px;
-    padding-left: 8px;
+    padding-right:vw(5);
+    padding-left: vw(8);
   }
   &__header {
     display: flex;
@@ -103,8 +103,8 @@
     }
     .coupon-button {
       display: inline-block;
-      margin-top: 3px;
-      margin-right: 5px;
+      margin-top: vw(3);
+      margin-right: vw(5);
     }
   }
   &-multi {
@@ -141,8 +141,8 @@
       position: absolute;
       top: 0;
       right: 0;
-      width: 50px;
-      height: 50px;
+      width: vw(50);
+      height: vw(50);
       background-image: url('../../../static/images/received.png');
       background-size: 100%;
     }
