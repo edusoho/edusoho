@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\Common\CommonException;
 
 class TradeFactory
 {
@@ -50,7 +50,7 @@ class TradeFactory
                 $tradeInstance = new AlipayLegacyH5Trade();
                 break;
             default:
-                throw new BadRequestHttpException();
+                throw CommonException::ERROR_PARAMETER();
         }
 
         return $tradeInstance;

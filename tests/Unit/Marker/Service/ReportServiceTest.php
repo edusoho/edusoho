@@ -92,7 +92,7 @@ class ReportServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testStatLessonQuestionMarkerWithError()
     {

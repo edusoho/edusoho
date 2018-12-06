@@ -3,9 +3,9 @@
 namespace Biz\Xapi\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\BaseService;
 use Biz\Task\Service\TaskService;
+use Biz\User\UserException;
 use Biz\Xapi\Dao\ActivityWatchLogDao;
 use Biz\Xapi\Dao\StatementArchiveDao;
 use Biz\Xapi\Dao\StatementDao;
@@ -19,7 +19,7 @@ class XapiServiceImpl extends BaseService implements XapiService
     public function createStatement($statement)
     {
         if (empty($this->biz['user'])) {
-            throw new AccessDeniedException('user is not login.');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $statement['version'] = $this->biz['xapi.options']['version'];
@@ -31,7 +31,7 @@ class XapiServiceImpl extends BaseService implements XapiService
     public function batchCreateStatements($statements)
     {
         if (empty($this->biz['user'])) {
-            throw new AccessDeniedException('user is not login.');
+            $this->createNewException(UserException::UN_LOGIN());
         }
         $batchCreateHelper = new BatchCreateHelper($this->getStatementDao());
         foreach ($statements as $statement) {

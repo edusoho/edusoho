@@ -5,13 +5,16 @@ namespace Biz\Marker\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
+use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Marker\Dao\QuestionMarkerResultDao;
 use Biz\Marker\Service\MarkerService;
+use Biz\Marker\QuestionMarkerException;
 use Biz\Marker\Service\QuestionMarkerResultService;
 use Biz\Marker\Service\QuestionMarkerService;
 use Biz\Marker\Service\ReportService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
 
 class ReportServiceImpl extends BaseService implements ReportService
 {
@@ -21,7 +24,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
 
         if (empty($questionMarker)) {
-            throw $this->createNotFoundException('Question marker not found.');
+            $this->createNewException(QuestionMarkerException::NOTFOUND_QUESTION_MARKER());
         }
 
         $analysis = array();
@@ -61,12 +64,12 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         $course = $this->getCourseService()->getCourse($courseId);
         if (empty($course)) {
-            throw $this->createNotFoundException('Course not found.');
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         if ($task = $this->getTaskService()->getTask($taskId)) {
             if (empty($task)) {
-                throw $this->createNotFoundException('Task not found.');
+                $this->createNewException(TaskException::NOTFOUND_TASK());
             }
         }
     }

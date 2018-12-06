@@ -3,8 +3,10 @@
 namespace Biz\Activity\Type;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\VideoActivityDao;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
@@ -23,12 +25,12 @@ class Video extends Activity
      *
      * @return array|mixed
      *
-     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @throws CommonException
      */
     public function create($fields)
     {
         if (empty($fields['media'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $videoActivity = $this->handleFields($fields);
@@ -71,20 +73,19 @@ class Video extends Activity
      *
      * @return mixed
      *
-     * @throws Exception
-     * @throws \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @throws ActivityException
+     * @throws CommonException
      */
     public function update($activityId, &$fields, $activity)
     {
         if (empty($fields['media'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $video = $this->handleFields($fields);
         $videoActivity = $this->getVideoActivityDao()->get($activity['mediaId']);
         if (empty($videoActivity)) {
-            throw new \Exception('教学活动不存在');
+            throw ActivityException::NOTFOUND_ACTIVITY();
         }
         $videoActivity = $this->getVideoActivityDao()->update($activity['mediaId'], $video);
 

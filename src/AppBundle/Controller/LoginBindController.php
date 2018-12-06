@@ -5,10 +5,12 @@ namespace AppBundle\Controller;
 use ApiBundle\Api\Resource\Setting\Setting;
 use AppBundle\Controller\OAuth2\OAuthUser;
 use Biz\Sensitive\Service\SensitiveService;
+use Biz\System\SettingException;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\SimpleValidator;
+use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 
@@ -142,17 +144,17 @@ class LoginBindController extends BaseController
     {
         $token = $request->query->get('token', '');
         if (empty($token)) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $token = $this->getTokenService()->verifyToken('login.bind', $token);
         $tokenData = $token['data'];
         if ($tokenData['type'] != $type) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         if ($tokenData['sessionId'] != $request->getSession()->getId()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
     }
 
@@ -235,15 +237,15 @@ class LoginBindController extends BaseController
         $settings = $this->setting('login_bind');
 
         if (empty($settings)) {
-            throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
+            $this->createNewException(SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG());
         }
 
         if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
-            throw new \RuntimeException(sprintf('第三方登录(%s)系统参数尚未配置，请先配置。', $type));
+            $this->createNewException(SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG());
         }
 
         if (!$settings[$type.'_enabled']) {
-            throw new \RuntimeException(sprintf('第三方登录(%s)未开启', $type));
+            $this->createNewException(SettingException::FORBIDDEN_THIRD_PARTY_AUTH());
         }
 
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);

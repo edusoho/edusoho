@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Testpaper\TestpaperException;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkManageController extends BaseController
@@ -98,7 +99,7 @@ class HomeworkManageController extends BaseController
         }
 
         if ('doing' == $result['status']) {
-            throw $this->createNotFoundException('您所批阅的作业不存在！');
+            $this->createNewException(TestpaperException::DOING_TESTPAPER());
         }
 
         if ('finished' == $result['status']) {

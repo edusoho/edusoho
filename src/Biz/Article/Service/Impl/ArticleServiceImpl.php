@@ -3,13 +3,17 @@
 namespace Biz\Article\Service\Impl;
 
 use AppBundle\Common\SimpleValidator;
+use Biz\Article\ArticleException;
+use Biz\Article\CategoryException;
 use Biz\BaseService;
 use Biz\Article\Dao\ArticleDao;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Biz\System\Service\LogService;
 use Biz\Article\Dao\ArticleLikeDao;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Article\Service\ArticleService;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Article\Service\CategoryService;
 
@@ -25,7 +29,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article = $this->getArticle($currentArticleId);
 
         if (empty($article)) {
-            throw $this->createNotFoundException('文章内容为空,操作失败！');
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $createdTime = $article['createdTime'];
@@ -33,7 +37,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $category = $this->getCategoryService()->getCategory($categoryId);
 
         if (empty($category)) {
-            throw $this->createNotFoundException('文章分类不存在,操作失败！');
+            $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
         return $this->getArticleDao()->getPrevious($categoryId, $createdTime);
@@ -44,7 +48,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article = $this->getArticle($currentArticleId);
 
         if (empty($article)) {
-            $this->createNotFoundException('文章内容为空,操作失败！');
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $createdTime = $article['createdTime'];
@@ -52,7 +56,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $category = $this->getCategoryService()->getCategory($categoryId);
 
         if (empty($category)) {
-            $this->createNotFoundException('文章分类不存在,操作失败！');
+            $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
         return $this->getArticleDao()->getNext($categoryId, $createdTime);
@@ -104,7 +108,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $user = $this->getCurrentUser();
 
         if (empty($article)) {
-            throw $this->createNotFoundException('文章内容为空，创建文章失败！');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $article = $this->filterArticleFields($article, 'add');
@@ -127,7 +131,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $checkArticle = $this->getArticle($id);
 
         if (empty($checkArticle)) {
-            throw $this->createNotFoundException('文章不存在，操作失败。');
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $article = $this->filterArticleFields($article);
@@ -168,7 +172,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $checkArticle = $this->getArticle($id);
 
         if (empty($checkArticle)) {
-            throw $this->createNotFoundException('文章不存在，操作失败。');
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $this->getArticleDao()->waveArticle($id, 'hits', +1);
@@ -184,19 +188,19 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
-            throw $this->createNotFoundException('用户还未登录,不能点赞。');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $article = $this->getArticle($articleId);
 
         if (empty($article)) {
-            throw $this->createNotFoundException('资讯不存在，或已删除。');
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $like = $this->getArticleLike($articleId, $user['id']);
 
         if (!empty($like)) {
-            throw $this->createAccessDeniedException('不可重复对一条资讯点赞！');
+            $this->createNewException(ArticleException::DUPLICATE_LIKE());
         }
 
         $articleLike = array(
@@ -215,13 +219,13 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
-            throw $this->createNotFoundException('用户还未登录,不能点赞。');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $article = $this->getArticle($articleId);
 
         if (empty($article)) {
-            throw $this->createNotFoundException('资讯不存在，或已删除。');
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $this->getArticleLikeDao()->deleteByArticleIdAndUserId($articleId, $user['id']);
@@ -239,7 +243,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article = $this->getArticleDao()->get($id);
 
         if (empty($property)) {
-            throw $this->createNotFoundException(sprintf('属性%s不存在，更新失败！', $property));
+            $this->createNewException(ArticleException::PROPERTY_INVALID());
         }
 
         $propertyVal = 1;
@@ -253,7 +257,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article = $this->getArticleDao()->get($id);
 
         if (empty($property)) {
-            throw $this->createNotFoundException(sprintf('属性%property%不存在，更新失败！', $property));
+            $this->createNewException(ArticleException::PROPERTY_INVALID());
         }
 
         $propertyVal = 0;
@@ -267,7 +271,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $checkArticle = $this->getArticle($id);
 
         if (empty($checkArticle)) {
-            throw $this->createServiceException('文章不存在，操作失败。');
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $this->getArticleDao()->update($id, $fields = array('status' => 'trash'));
@@ -279,7 +283,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $checkArticle = $this->getArticle($id);
 
         if (empty($checkArticle)) {
-            throw $this->createServiceException('文章不存在，操作失败。');
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $this->getArticleDao()->update($id, $fields = array('thumb' => '', 'originalThumb' => ''));
@@ -292,7 +296,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $checkArticle = $this->getArticle($id);
 
         if (empty($checkArticle)) {
-            throw $this->createServiceException('文章不存在，操作失败。');
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $this->getArticleDao()->delete($id);
@@ -370,7 +374,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article = $this->getArticle($articleId);
 
         if (empty($article)) {
-            throw $this->createNotFoundException(sprintf('article #%s not found', $articleId));
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'article', 'ownerId' => $articleId));
@@ -427,7 +431,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article['publishedTime'] = strtotime($fields['publishedTime']);
 
         if (!empty($article['sourceUrl']) && !SimpleValidator::site($article['sourceUrl'])) {
-            throw $this->createInvalidArgumentException('来源地址不正确！');
+            $this->createNewException(ArticleException::SOURCE_URL_INVALID());
         }
 
         $fields = $this->fillOrgId($fields);
@@ -502,7 +506,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
                 break;
 
             default:
-                throw $this->createInvalidArgumentException('参数sort不正确。');
+                $this->createNewException(ArticleException::SORT_INVALID());
         }
 
         return $orderBys;

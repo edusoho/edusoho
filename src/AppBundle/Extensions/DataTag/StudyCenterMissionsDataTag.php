@@ -2,6 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use Biz\Common\CommonException;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskResultService;
@@ -22,7 +23,7 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         if (!ArrayToolkit::requireds($arguments, array('userId', 'count', 'missionCount'))) {
-            throw new \InvalidArgumentException('参数缺失');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         return $this->getStudyMissions($arguments);

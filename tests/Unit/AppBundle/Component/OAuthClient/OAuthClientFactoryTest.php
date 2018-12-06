@@ -14,7 +14,7 @@ class OAuthClientFactoryTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreateWithNonExistSecret()
     {
@@ -22,7 +22,7 @@ class OAuthClientFactoryTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreateWithNonExistType()
     {

@@ -4,11 +4,14 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\Course\CourseException;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Exception\UnableJoinException;
+use Biz\Course\MemberException;
+use Biz\File\UploadFileException;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Visitor\CourseItemPagingVisitor;
@@ -24,6 +27,7 @@ use Biz\Course\Service\ReviewService;
 use Biz\System\Service\SettingService;
 use Biz\Course\Service\MaterialService;
 use Biz\Task\Service\TaskResultService;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
@@ -148,14 +152,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function createCourse($course)
     {
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
-            throw $this->createInvalidArgumentException('Lack of required fields');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
         if (!in_array($course['learnMode'], static::learnModes())) {
-            throw $this->createInvalidArgumentException('Param Invalid: LearnMode');
+            $this->createNewException(CourseException::LEARNMODE_INVALID());
         }
 
         if (!in_array($course['courseType'], static::courseTypes())) {
-            throw $this->createInvalidArgumentException('Param Invalid: CourseType');
+            $this->createNewException(CourseException::COURSETYPE_INVALID());
         }
 
         if (!isset($course['isDefault'])) {
@@ -168,7 +172,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
         if ($count > 9) {
-            throw $this->createInvalidArgumentException('计划数不得超过10个！');
+            $this->createNewException(CourseException::COURSE_NUM_LIMIT());
         }
 
         $course = ArrayToolkit::parts(
@@ -352,7 +356,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $requiredKeys = array('recommended', 'recommendedSeq', 'recommendedTime');
         $fields = ArrayToolkit::parts($fields, $requiredKeys);
         if (!ArrayToolkit::requireds($fields, array('recommended', 'recommendedSeq', 'recommendedTime'))) {
-            throw $this->createInvalidArgumentException('Lack of required fields');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
         $this->getCourseDao()->updateCourseRecommendByCourseSetId($courseSetId, $fields);
     }
@@ -439,7 +443,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if (!ArrayToolkit::requireds($fields, $requireFields)) {
-            throw $this->createInvalidArgumentException('Lack of required fields');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $fields = $this->validateExpiryMode($fields);
@@ -488,7 +492,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $media = $this->getUploadFileService()->getFile($mediaId);
 
         if (empty($media)) {
-            throw $this->createNotFoundException("No exist the media ID#{$mediaId}");
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         if ('cloud' != $media['storage'] || in_array($media['audioConvertStatus'], array('doing', 'success'))) {
@@ -589,7 +593,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateCourseStatistics($id, $fields)
     {
         if (empty($fields)) {
-            throw $this->createInvalidArgumentException('Invalid Arguments');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $updateFields = array();
@@ -627,7 +631,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if (empty($updateFields)) {
-            throw $this->createInvalidArgumentException('Invalid Arguments');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $course = $this->getCourseDao()->update($id, $updateFields);
@@ -640,16 +644,16 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->tryManageCourse($id);
         if ('published' == $course['status']) {
-            throw $this->createAccessDeniedException('Deleting published Course is not allowed');
+            $this->createNewException(CourseException::FORBIDDEN_DELETE_PUBLISHED());
         }
 
         $subCourses = $this->findCoursesByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
-            throw $this->createAccessDeniedException('该教学计划被班级引用，请先移除班级计划');
+            $this->createNewException(CourseException::SUB_COURSE_EXIST());
         }
         $courseCount = $this->countCourses(array('courseSetId' => $course['courseSetId']));
         if ($courseCount <= 1) {
-            throw $this->createAccessDeniedException('课程下至少需保留一个教学计划');
+            $this->createNewException(CourseException::COURSE_NUM_REQUIRED());
         }
 
         $result = $this->getCourseDeleteService()->deleteCourse($id);
@@ -663,7 +667,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->tryManageCourse($id);
         if ('published' != $course['status']) {
-            throw $this->createAccessDeniedException('Course has not bean published');
+            $this->createNewException(CourseException::UNPUBLISHED_COURSE());
         }
         $course['status'] = 'closed';
 
@@ -765,14 +769,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             $course['expiryEndDate'] = null;
 
             if (empty($course['expiryDays'])) {
-                throw $this->createInvalidArgumentException('Param Invalid: expiryDays');
+                $this->createNewException(CourseException::EXPIRYDAYS_REQUIRED());
             }
         } elseif ('end_date' == $course['expiryMode']) {
             $course['expiryStartDate'] = null;
             $course['expiryDays'] = 0;
 
             if (empty($course['expiryEndDate'])) {
-                throw $this->createInvalidArgumentException('Param Invalid: expiryEndDate');
+                $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             }
             $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
         } elseif ('date' === $course['expiryMode']) {
@@ -780,24 +784,22 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (isset($course['expiryStartDate'])) {
                 $course['expiryStartDate'] = TimeMachine::isTimestamp($course['expiryStartDate']) ? $course['expiryStartDate'] : strtotime($course['expiryStartDate']);
             } else {
-                throw $this->createInvalidArgumentException('Param Required: expiryStartDate');
+                $this->createNewException(CourseException::EXPIRYSTARTDATE_REQUIRED());
             }
             if (empty($course['expiryEndDate'])) {
-                throw $this->createInvalidArgumentException('Param Required: expiryEndDate');
+                $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             } else {
                 $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
-                throw $this->createInvalidArgumentException(
-                    'Value of Params expiryEndDate must later than expiryStartDate'
-                );
+                $this->createNewException(CourseException::EXPIRY_DATE_SET_INVALID());
             }
         } elseif ('forever' == $course['expiryMode']) {
             $course['expiryStartDate'] = 0;
             $course['expiryEndDate'] = 0;
             $course['expiryDays'] = 0;
         } else {
-            throw $this->createInvalidArgumentException('Param Invalid: expiryMode');
+            $this->createNewException(CourseException::EXPIRYMODE_INVALID());
         }
 
         return $course;
@@ -807,7 +809,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourse($courseId);
         if (empty($course)) {
-            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
         $tasks = $this->findTasksByCourseId($course['id']);
 
@@ -828,7 +830,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourse($courseId);
         if (empty($course)) {
-            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $result = $this->createCourseStrategy($course)->accept(new CourseItemPagingVisitor($this->biz, $courseId, $paging));
@@ -844,18 +846,16 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('Unauthorized');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $course = $this->getCourseDao()->get($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
         if ($courseSetId > 0 && $course['courseSetId'] !== $courseSetId) {
-            throw $this->createInvalidArgumentException(
-                "Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}"
-            );
+            $this->createNewException(CourseException::NOT_MATCH_COURSESET());
         }
 
         if ($course['parentId'] > 0) {
@@ -867,7 +867,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if (!$this->hasCourseManagerRole($courseId)) {
-            throw $this->createAccessDeniedException('Unauthorized');
+            $this->createNewException(CourseException::FORBIDDEN_MANAGE_COURSE());
         }
 
         return $course;
@@ -920,7 +920,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $members = $this->getMemberService()->findTeacherMembersByUserIdAndCourseSetId($user['id'], $courseSetId);
@@ -944,10 +944,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
         if (!$this->canTakeCourse($course)) {
-            throw $this->createAccessDeniedException("You have no access to the course#{$courseId} before you buy it");
+            $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
         $user = $this->getCurrentUser();
         $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
@@ -988,7 +988,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chain = $this->biz['course.join_chain'];
 
         if (empty($chain)) {
-            throw $this->createServiceException('Chain Not Registered');
+            $this->createNewException(CourseException::CHAIN_NOT_REGISTERED());
         }
 
         return $chain->process($course);
@@ -1000,7 +1000,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chain = $this->biz['course.learn_chain'];
 
         if (empty($chain)) {
-            throw $this->createServiceException('Chain Not Registered');
+            $this->createNewException(CourseException::CHAIN_NOT_REGISTERED());
         }
 
         return $chain->process($course);
@@ -1012,7 +1012,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chain = $this->biz['course.task.learn_chain'];
 
         if (empty($chain)) {
-            throw $this->createServiceException('Chain Not Registered');
+            $this->createNewException(CourseException::CHAIN_NOT_REGISTERED());
         }
 
         return $chain->process($task);
@@ -1034,7 +1034,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function createChapter($chapter)
     {
         if (!in_array($chapter['type'], CourseToolkit::getAvailableChapterTypes())) {
-            throw $this->createInvalidArgumentException('Invalid Chapter Type');
+            $this->createNewException(CourseException::CHAPTERTYPE_INVALID());
         }
 
         $chapter = $this->getChapterDao()->create($chapter);
@@ -1050,7 +1050,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapter = $this->getChapterDao()->get($chapterId);
 
         if (empty($chapter) || $chapter['courseId'] != $courseId) {
-            throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
+            $this->createNewException(CourseException::NOTFOUND_CHAPTER());
         }
 
         $fields = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
@@ -1077,7 +1077,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($deletedChapter['courseId'] != $courseId) {
-            throw $this->createNotFoundException('Argument Invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $this->getChapterDao()->delete($deletedChapter['id']);
@@ -2112,7 +2112,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         return $this->getCourseDao()->wave(array($courseId), array('hitNum' => 1));
@@ -2123,7 +2123,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $member = $this->getMemberService()->getCourseMember($courseId, $userId);
 
         if (empty($member)) {
-            throw $this->createAccessDeniedException('course.member_not_found');
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
 
         $learnedNum = $this->getTaskResultService()->countTaskResults(
@@ -2143,7 +2143,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $access = $this->canJoinCourse($courseId);
 
         if (AccessorInterface::SUCCESS != $access['code']) {
-            throw new UnableJoinException($access['msg'], $access['code']);
+            $this->createNewException(call_user_func(array($access['class'], $access['code'])));
         }
 
         $course = $this->getCourse($courseId);
@@ -2310,7 +2310,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
 
         if (count($ids) != $count) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(CourseException::NOT_MATCH_COURSESET());
         }
 
         $seq = 1;
@@ -2665,9 +2665,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if ($courseSetId > 0 && $course['courseSetId'] !== $courseSetId) {
-            throw $this->createInvalidArgumentException(
-                "Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}"
-            );
+            $this->createNewException(CourseException::NOT_MATCH_COURSESET());
         }
 
         $user = $this->getCurrentUser();

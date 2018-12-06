@@ -87,7 +87,7 @@ class AppServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testRegisterAppInvalidArgument()
     {
@@ -274,7 +274,7 @@ class AppServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\CloudPlatform\AppException
      */
     public function testUninstallAppNotExist()
     {
@@ -292,7 +292,7 @@ class AppServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\CloudPlatform\AppException
      */
     public function testUpdateAppVersionNotExist()
     {

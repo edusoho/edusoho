@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
+use Biz\User\MessageException;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\MessageService;
@@ -66,7 +67,7 @@ class MessageController extends BaseController
         $user = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) || $conversation['toId'] != $user['id']) {
-            throw $this->createNotFoundException('私信会话不存在！');
+            $this->createNewException(MessageException::NOTFOUND_CONVERSATION());
         }
         $paginator = new Paginator(
             $request,
@@ -112,7 +113,7 @@ class MessageController extends BaseController
             $nickname = $message['receiver'];
             $receiver = $this->getUserService()->getUserByNickname($nickname);
             if (empty($receiver)) {
-                throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
+                $this->createNewException(UserException::NOTFOUND_USER());
             }
             if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
                 $this->createNewException(UserException::FORBIDDEN_SEND_MESSAGE());
@@ -135,10 +136,10 @@ class MessageController extends BaseController
             $nickname = $message['receiver'];
             $receiver = $this->getUserService()->getUserByNickname($nickname);
             if (empty($receiver)) {
-                throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
+                $this->createNewException(UserException::NOTFOUND_USER());
             }
             if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
-                throw $this->createAccessDeniedException('not_allowd_send_message');
+                $this->createNewException(UserException::FORBIDDEN_SEND_MESSAGE());
             }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
 
@@ -158,7 +159,7 @@ class MessageController extends BaseController
             $nickname = $message['receiver'];
             $receiver = $this->getUserService()->getUserByNickname($nickname);
             if (empty($receiver)) {
-                throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
+                $this->createNewException(UserException::NOTFOUND_USER());
             }
             if (!$this->getWebExtension()->canSendMessage($receiver['id'])) {
                 $this->createNewException(UserException::FORBIDDEN_SEND_MESSAGE());
@@ -176,7 +177,7 @@ class MessageController extends BaseController
         $user = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) || $conversation['toId'] != $user['id']) {
-            throw $this->createAccessDeniedException('您无权删除此私信！');
+            $this->createNewException(MessageException::DELETE_DENIED());
         }
 
         $this->getMessageService()->deleteConversation($conversationId);
@@ -189,7 +190,7 @@ class MessageController extends BaseController
         $user = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) || $conversation['toId'] != $user['id']) {
-            throw $this->createAccessDeniedException('您无权删除此私信！');
+            $this->createNewException(MessageException::DELETE_DENIED());
         }
 
         $this->getMessageService()->deleteConversationMessage($conversationId, $messageId);

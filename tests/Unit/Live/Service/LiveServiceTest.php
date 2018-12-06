@@ -96,7 +96,7 @@ class LiveServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testFilterCreateParamsInvalidArguments()
     {
@@ -210,7 +210,7 @@ class LiveServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testGetSpeakerNameError()
     {

@@ -7,6 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\ThreadService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
@@ -20,7 +21,7 @@ class TaskPluginController extends BaseController
         $task = $this->getTaskService()->getTask($taskId);
 
         if (empty($task)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(TaskException::NOTFOUND_TASK());
         }
 
         $preview = $request->query->get('preview', false);
@@ -76,7 +77,7 @@ class TaskPluginController extends BaseController
         $task = $this->getTaskService()->getTask($taskId);
 
         if (empty($task)) {
-            throw $this->createNotFoundException('task not found');
+            $this->createNewException(TaskException::NOTFOUND_TASK());
         }
 
         $threads = $this->getThreadService()->searchThreads(

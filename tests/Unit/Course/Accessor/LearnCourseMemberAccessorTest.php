@@ -25,7 +25,7 @@ class LearnCourseMemberAccessorTest extends BaseTestCase
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $result = $accessor->access(array());
-        $this->assertEquals('user.not_login', $result['code']);
+        $this->assertEquals('UN_LOGIN', $result['code']);
     }
 
     public function testAccessWithLockedUser()
@@ -44,7 +44,7 @@ class LearnCourseMemberAccessorTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $result = $accessor->access(array());
-        $this->assertEquals('user.locked', $result['code']);
+        $this->assertEquals('LOCKED_USER', $result['code']);
     }
 
     public function testAccessWithEmptyMember()
@@ -72,7 +72,7 @@ class LearnCourseMemberAccessorTest extends BaseTestCase
             )
         );
         $result = $accessor->access(array('id' => 111));
-        $this->assertEquals('member.not_found', $result['code']);
+        $this->assertEquals('NOTFOUND_MEMBER', $result['code']);
     }
 
     public function testAccessWithExistedMember()
@@ -107,7 +107,7 @@ class LearnCourseMemberAccessorTest extends BaseTestCase
             )
         );
         $result = $accessor->access(array('id' => 111));
-        $this->assertEquals('member.expired', $result['code']);
+        $this->assertEquals('EXPIRED_MEMBER', $result['code']);
 
         $result = $accessor->access(array('id' => 111));
         $this->assertNull($result);

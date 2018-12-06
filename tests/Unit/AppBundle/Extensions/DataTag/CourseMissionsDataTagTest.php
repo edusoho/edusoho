@@ -8,7 +8,7 @@ use AppBundle\Extensions\DataTag\CourseMissionsDataTag;
 class CourseMissionsDataTagTest extends BaseTestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testArgumentError()
     {

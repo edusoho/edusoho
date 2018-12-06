@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
+use Biz\Course\MaterialException;
+use Biz\OpenCourse\OpenCourseException;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
@@ -14,6 +16,7 @@ use Biz\Thread\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
 use Biz\Course\Service\CourseSetService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Cookie;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
@@ -209,24 +212,16 @@ class OpenCourseController extends BaseOpenCourseController
 
     public function favoriteAction(Request $request, $id)
     {
-        try {
-            $favoriteNum = $this->getOpenCourseService()->favoriteCourse($id);
-            $jsonData = array('result' => true, 'number' => $favoriteNum);
-        } catch (\Exception $e) {
-            $jsonData = array('result' => false, 'message' => $e->getMessage());
-        }
+        $favoriteNum = $this->getOpenCourseService()->favoriteCourse($id);
+        $jsonData = array('result' => true, 'number' => $favoriteNum);
 
         return $this->createJsonResponse($jsonData);
     }
 
     public function unfavoriteAction(Request $request, $id)
     {
-        try {
-            $favoriteNum = $this->getOpenCourseService()->unFavoriteCourse($id);
-            $jsonData = array('result' => true, 'number' => $favoriteNum);
-        } catch (\Exception $e) {
-            $jsonData = array('result' => false, 'message' => $e->getMessage());
-        }
+        $favoriteNum = $this->getOpenCourseService()->unFavoriteCourse($id);
+        $jsonData = array('result' => true, 'number' => $favoriteNum);
 
         return $this->createJsonResponse($jsonData);
     }
@@ -368,7 +363,7 @@ class OpenCourseController extends BaseOpenCourseController
         $smsSetting = $this->setting('cloud_sms', array());
 
         if (!$user->isLogin() && !$smsSetting['sms_enabled']) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         if ('POST' == $request->getMethod()) {
@@ -415,7 +410,7 @@ class OpenCourseController extends BaseOpenCourseController
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createNotFoundException('课时不存在！');
+            $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
         if ('liveOpen' == $lesson['type'] && 'videoGenerated' == $lesson['replayStatus']) {
@@ -464,7 +459,7 @@ class OpenCourseController extends BaseOpenCourseController
         $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
 
         if (empty($material)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(MaterialException::NOTFOUND_MATERIAL());
         }
 
         if ('opencourselesson' == $material['source'] || !$material['lessonId']) {

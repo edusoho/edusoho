@@ -3,6 +3,7 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Sensitive\SensitiveException;
 use Biz\User\Service\AuthService;
 use Codeages\RateLimiter\RateLimiter;
 use AppBundle\Common\SimpleValidator;
@@ -24,7 +25,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (isset($registration['nickname']) && !empty($registration['nickname'])
             && $this->getSensitiveService()->scanText($registration['nickname'])) {
-            throw $this->createInvalidArgumentException('site.register.sensitive_words');
+            $this->createNewException(SensitiveException::FORBIDDEN_WORDS());
         }
 
         //营销平台不需要注册频率限制
@@ -194,7 +195,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function changePayPassword($userId, $userLoginPassword, $newPayPassword)
     {
         if (!$this->checkPassword($userId, $userLoginPassword)) {
-            throw $this->createInvalidArgumentException('Invalid Password');
+            $this->createNewException(UserException::PASSWORD_ERROR());
         }
 
         $this->getUserService()->changePayPassword($userId, $newPayPassword);

@@ -3,6 +3,8 @@
 namespace Biz\Content\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\Content\BlockException;
 use Biz\Content\Dao\BlockDao;
 use Biz\Content\Dao\BlockHistoryDao;
 use Biz\Content\Dao\BlockTemplateDao;
@@ -16,7 +18,7 @@ class BlockServiceImpl extends BaseService implements BlockService
     public function createBlockTemplate($blockTemplate)
     {
         if (!ArrayToolkit::requireds($blockTemplate, array('code', 'mode', 'category', 'meta', 'data', 'templateName', 'title'))) {
-            throw $this->createServiceException('创建编辑区失败，缺少必要的字段');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
         $createdBlockTemplate = $this->getBlockTemplateDao()->create($blockTemplate);
 
@@ -51,7 +53,7 @@ class BlockServiceImpl extends BaseService implements BlockService
             $blockTemplate = $this->getBlockTemplate($id);
 
             if (empty($blockTemplate)) {
-                throw $this->createNotFoundException('block template not found');
+                $this->createNewException(BlockException::NOTFOUND_TEMPLATE());
             }
 
             $blockTemplate['blockTemplateId'] = $blockTemplate['id'];
@@ -140,7 +142,7 @@ class BlockServiceImpl extends BaseService implements BlockService
     public function createBlock($block)
     {
         if (!ArrayToolkit::requireds($block, array('code', 'data', 'content', 'blockTemplateId'))) {
-            throw $this->createInvalidArgumentException('创建编辑区失败，缺少必要的字段');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
         $user = $this->getCurrentUser();
         $block['createdTime'] = time();
@@ -173,7 +175,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         $user = $this->getCurrentUser();
 
         if (!$block) {
-            throw $this->createNotFoundException('此编辑区不存在，更新失败!');
+            $this->createNewException(BlockException::NOTFOUND_BLOCK());
         }
         $fields['updateTime'] = time();
         unset($fields['mode']);
@@ -210,7 +212,7 @@ class BlockServiceImpl extends BaseService implements BlockService
     public function getContentsByCodes(array $codes)
     {
         if (empty($codes)) {
-            throw $this->createInvalidArgumentException('获取内容失败，不允许查询空编号所对应的内容!');
+            $this->createNewException(BlockException::EMPTY_CODES());
         }
 
         $cdn = $this->getSettingService()->get('cdn');
@@ -237,7 +239,7 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $blockTemplate = $this->getBlockTemplateDao()->get($id);
         if (!$blockTemplate) {
-            throw $this->createServiceException('此编辑区不存在，更新失败!');
+            $this->createNewException(BlockException::NOTFOUND_TEMPLATE());
         }
 
         return $this->getBlockTemplateDao()->update($id, array(
@@ -250,11 +252,11 @@ class BlockServiceImpl extends BaseService implements BlockService
         $block = $this->getBlockDao()->get($blockId);
         $blockTemplate = $this->getBlockTemplateDao()->get($block['blockTemplateId']);
         if (empty($block)) {
-            throw $this->createNotFoundException('此编辑区不存在，更新失败!');
+            $this->createNewException(BlockException::NOTFOUND_BLOCK());
         }
 
         if ('template' == $blockTemplate['mode'] && empty($history['data'])) {
-            throw $this->createNotFoundException('此编辑区数据不存在，更新失败!');
+            $this->createNewException(BlockException::EMPTY_HISTORY());
         }
 
         return $this->getBlockDao()->update($blockId, array(
@@ -316,7 +318,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         $blockTemplate = $this->getBlockTemplateDao()->get($id);
 
         if (empty($blockTemplate)) {
-            throw $this->createNotFoundException('此编辑区模板不存在，更新失败!');
+            $this->createNewException(BlockException::NOTFOUND_TEMPLATE());
         }
         $updatedBlockTemplate = $this->getBlockTemplateDao()->update($id, $fields);
 

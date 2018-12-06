@@ -3,8 +3,8 @@
 namespace Biz\Article\Dao\Impl;
 
 use Biz\Article\Dao\ArticleDao;
+use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
 {
@@ -51,7 +51,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
     public function countByCategoryIds(array $categoryIds)
     {
         if (empty($categoryIds)) {
-            throw new InvalidArgumentException(sprintf('参数不允许为空数组'));
+            throw CommonException::ERROR_PARAMETER();
         }
 
         return $this->count(array('categoryIds' => $categoryIds));

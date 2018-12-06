@@ -5,6 +5,7 @@ namespace Biz\MoneyCard\Service\Impl;
 use Biz\BaseService;
 use Biz\MoneyCard\Dao\MoneyCardBatchDao;
 use Biz\MoneyCard\Dao\MoneyCardDao;
+use Biz\MoneyCard\MoneyCardException;
 use Biz\MoneyCard\Service\MoneyCardService;
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Pay\Service\AccountService;
@@ -81,19 +82,19 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         }
 
         if (isset($batch['money']) && $batch['money'] <= 0) {
-            throw $this->createServiceException('ERROR! Money Value Less Than Zero!');
+            $this->createNewException(MoneyCardException::MONEY_INVALID());
         }
 
         if (isset($batch['coin']) && $batch['coin'] <= 0) {
-            throw $this->createServiceException('ERROR! Coin Value Less Than Zero!');
+            $this->createNewException(MoneyCardException::COIN_INVALID());
         }
 
         if (isset($batch['cardLength']) && $batch['cardLength'] <= 0) {
-            throw $this->createServiceException('ERROR! CardLength Less Than Zero!');
+            $this->createNewException(MoneyCardException::CARDLENGTH_INVALID());
         }
 
         if (isset($batch['number']) && $batch['number'] <= 0) {
-            throw $this->createServiceException('ERROR! Card Number Less Than Zero!');
+            $this->createNewException(MoneyCardException::NUMBER_INVALID());
         }
 
         $batch['rechargedNumber'] = 0;
@@ -104,7 +105,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         $moneyCardIds = $this->makeRands($batch['cardLength'], $batch['number'], $batch['cardPrefix'], $moneyCardData['passwordLength']);
 
         if (!$this->getMoneyCardDao()->isCardIdAvailable(array_keys($moneyCardIds))) {
-            throw $this->createServiceException('卡号有重复，生成失败，请重新生成！');
+            $this->createNewException(MoneyCardException::DUPLICATE_CARD());
         }
 
         $token = $this->getTokenService()->makeToken('money_card', array(
@@ -135,7 +136,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         $moneyCard = $this->getMoneyCard($id);
 
         if (empty($moneyCard)) {
-            throw $this->createServiceException('充值卡不存在，作废失败！');
+            $this->createNewException(MoneyCardException::NOTFOUND_MONEYCARD());
         }
 
         if ('normal' == $moneyCard['cardStatus'] || 'receive' == $moneyCard['cardStatus']) {
@@ -155,7 +156,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
             $this->getLogService()->info('money_card', 'lock', "作废了卡号为{$moneyCard['cardId']}的充值卡");
         } else {
-            throw $this->createServiceException('不能作废已使用状态的充值卡！');
+            $this->createNewException(MoneyCardException::LOCK_USED_CARD());
         }
 
         return $moneyCard;
@@ -166,13 +167,13 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         $moneyCard = $this->getMoneyCard($id);
 
         if (empty($moneyCard)) {
-            throw $this->createServiceException('充值卡不存在，作废失败！');
+            $this->createNewException(MoneyCardException::NOTFOUND_MONEYCARD());
         }
 
         $batch = $this->getBatch($moneyCard['batchId']);
 
         if ('invalid' == $batch['batchStatus']) {
-            throw $this->createServiceException('批次刚刚被别人作废，在批次被作废的情况下，不能启用批次下的充值卡！');
+            $this->createNewException(MoneyCardException::BATCH_STATUS_EQUAL_INVALID());
         }
 
         if ('invalid' == $moneyCard['cardStatus']) {
@@ -190,7 +191,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
             $this->getLogService()->info('money_card', 'unlock', "启用了卡号为{$moneyCard['cardId']}的充值卡");
         } else {
-            throw $this->createServiceException("只能启用作废状态的充值卡！{$moneyCard['cardStatus']}--{$moneyCard['rechargeUserId']}");
+            $this->createNewException(MoneyCardException::UNLOCK_NOT_INVALID_CARD());
         }
 
         return $moneyCard;
@@ -218,7 +219,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         $batch = $this->getBatch($id);
 
         if (empty($batch)) {
-            throw $this->createServiceException('批次不存在，作废失败！');
+            $this->createNewException(MoneyCardException::NOTFOUND_BATCH());
         }
 
         $this->getMoneyCardDao()->updateBatchByCardStatus(
@@ -270,7 +271,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         $batch = $this->getBatch($id);
 
         if (empty($batch)) {
-            throw $this->createServiceException('批次不存在，作废失败！');
+            $this->createNewException(MoneyCardException::NOTFOUND_BATCH());
         }
 
         $moneyCards = $this->searchMoneyCards(
@@ -315,7 +316,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         $batch = $this->getBatch($id);
 
         if (empty($batch)) {
-            throw $this->createServiceException(sprintf('学习卡批次不存在或已被删除'));
+            $this->createNewException(MoneyCardException::NOTFOUND_BATCH());
         }
 
         $moneyCards = $this->getMoneyCardDao()->search(array('batchId' => $id), array('id' => 'ASC'), 0, 1000);
@@ -348,7 +349,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
     protected function makeRands($median, $number, $cardPrefix, $passwordLength)
     {
         if ($median <= 3) {
-            throw new \RuntimeException('Bad median');
+            $this->createNewException(MoneyCardException::CARDLENGTH_INVALID());
         }
 
         $cardIds = array();

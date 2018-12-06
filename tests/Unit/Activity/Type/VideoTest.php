@@ -23,7 +23,7 @@ class VideoTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreateWithMediaEmpty()
     {
@@ -53,7 +53,7 @@ class VideoTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testUpdateWithMediaEmpty()
     {
@@ -69,8 +69,8 @@ class VideoTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage 教学活动不存在
+     * @expectedException \Biz\Activity\ActivityException
+     * @expectedExceptionMessage exception.activity.not_found
      */
     public function testUpdateWithEmptyActivity()
     {

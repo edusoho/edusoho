@@ -3,12 +3,14 @@
 namespace Biz\RewardPoint\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Biz\RewardPoint\Dao\AccountFlowDao;
 use Biz\RewardPoint\Service\AccountFlowService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\RewardPoint\Service\AccountService;
+use Biz\User\UserException;
 
 class AccountFlowServiceImpl extends BaseService implements AccountFlowService
 {
@@ -99,7 +101,7 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
     protected function validateFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('userId', 'sn', 'type', 'amount', 'operator'))) {
-            throw $this->createInvalidArgumentException('Lack of required fields');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
     }
 
@@ -113,7 +115,7 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         }
 
         if (empty($account) && empty($user)) {
-            throw $this->createNotFoundException("user{$userId}'s account have been opened");
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
     }
 

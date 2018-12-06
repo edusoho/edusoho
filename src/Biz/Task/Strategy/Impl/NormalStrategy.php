@@ -5,9 +5,8 @@ namespace Biz\Task\Strategy\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
+use Biz\Task\TaskException;
 use Biz\Task\Visitor\CourseStrategyVisitorInterface;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class NormalStrategy extends BaseStrategy implements CourseStrategy
 {
@@ -120,8 +119,6 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
      * 任务学习.
      *
      * @param  $task
-     *
-     * @throws NotFoundException
      *
      * @return bool
      */
@@ -270,7 +267,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
     {
         $chapter = $this->getCourseService()->getChapter($task['fromCourseId'], $task['categoryId']);
         if (empty($chapter) || 'lesson' != $chapter['type']) {
-            throw new InvalidArgumentException('CategoryId Invalid');
+            throw TaskException::CATEGORYID_INVALID();
         }
 
         $task['status'] = $chapter['status'];

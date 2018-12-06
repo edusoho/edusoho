@@ -59,8 +59,8 @@ class ReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage User is not Exist!
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.not_found
      */
     public function testGetUserCourseReviewEmptyUser()
     {
@@ -68,8 +68,8 @@ class ReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage Course is not Exist!
+     * @expectedException \Biz\Course\CourseException
+     * @expectedExceptionMessage exception.course.not_found
      */
     public function testGetUserCourseReviewEmptyCourse()
     {
@@ -136,8 +136,8 @@ class ReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage 参数不正确，评价失败！
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
      */
     public function testSaveReviewFieldsError()
     {
@@ -149,8 +149,8 @@ class ReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage 参数不正确，评价数太大
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_error
      */
     public function testSaveReviewFieldsRatingError()
     {
@@ -167,8 +167,8 @@ class ReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage course(#123) not found
+     * @expectedException \Biz\Course\CourseException
+     * @expectedExceptionMessage exception.course.not_found
      */
     public function testSaveReviewFieldsCourseEmpty()
     {
@@ -192,7 +192,7 @@ class ReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\User\UserException
      */
     public function testSaveReviewFieldsUserEmpty()
     {
@@ -228,8 +228,8 @@ class ReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     * @expectedExceptionMessage not login
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.unlogin
      */
     public function testDeleteReviewUserUnlogin()
     {
@@ -248,8 +248,8 @@ class ReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage course review(#123) not found
+     * @expectedException \Biz\Course\ReviewException
+     * @expectedExceptionMessage exception.review.not_found
      */
     public function testDeleteReviewEmpty()
     {
@@ -257,8 +257,8 @@ class ReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     * @expectedExceptionMessage 无权限删除评价
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.permission_denied
      */
     public function testDeleteReviewPermisstion()
     {

@@ -3,6 +3,8 @@
 namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\Course\CourseException;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -12,10 +14,10 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\TaskException;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -69,11 +71,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         );
 
         if ($this->invalidTask($fields)) {
-            throw $this->createInvalidArgumentException('task is invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
-            throw $this->createAccessDeniedException('无权创建任务');
+            $this->createNewException(TaskException::FORBIDDEN_CREATE_TASK());
         }
 
         $this->preCreateTaskCheck($fields);
@@ -132,7 +134,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->getTask($taskId);
         if (!$task) {
-            throw new NotFoundException('task.not_found');
+            $this->createNewException(TaskException::NOTFOUND_TASK());
         }
 
         $this->getActivityService()->preUpdateCheck($task['activityId'], $fields);
@@ -143,7 +145,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $oldTask = $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException("can not update task #{$id}.");
+            $this->createNewException(TaskException::FORBIDDEN_UPDATE_TASK());
         }
 
         $this->beginTransaction();
@@ -180,7 +182,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException("can not publish task #{$id}.");
+            $this->createNewException(TaskException::FORBIDDEN_PUBLISH_TASK());
         }
 
         if ('published' === $task['status']) {
@@ -244,11 +246,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException("can not unpublish task #{$id}.");
+            $this->createNewException(TaskException::FORBIDDEN_UNPUBLISH_TASK());
         }
 
         if ('unpublished' === $task['status']) {
-            throw $this->createAccessDeniedException("task(#{$task['id']}) has been unpublished");
+            $this->createNewException(TaskException::UNPUBLISHED_TASK());
         }
 
         $strategy = $this->createCourseStrategy($task['courseId']);
@@ -291,7 +293,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->getTask($id);
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException('无权删除任务');
+            $this->createNewException(TaskException::FORBIDDEN_DELETE_TASK());
         }
 
         $this->dispatchEvent('course.task.delete.before', new Event($task));
@@ -549,7 +551,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
         if (empty($taskResult)) {
-            throw $this->createAccessDeniedException('task #{taskId} can not do. ');
+            $this->createNewException(TaskException::CAN_NOT_DO());
         }
 
         $this->getTaskResultService()->waveLearnTime($taskResult['id'], $time);
@@ -562,7 +564,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
         if (empty($taskResult)) {
-            throw $this->createAccessDeniedException('task #{taskId} can not do. ');
+            $this->createNewException(TaskException::CAN_NOT_DO());
         }
 
         $this->getTaskResultService()->waveWatchTime($taskResult['id'], $watchTime);
@@ -573,9 +575,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->tryTakeTask($taskId);
 
         if (!$this->isFinished($taskId)) {
-            throw $this->createAccessDeniedException(
-                "can not finish task #{$taskId}."
-            );
+            $this->createNewException(TaskException::CAN_NOT_FINISH());
         }
 
         return $this->finishTaskResult($taskId);
@@ -592,7 +592,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $this->trigger($task['id'], 'start', array('task' => $task));
                 $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
             } else {
-                throw $this->createAccessDeniedException('task access denied. ');
+                $this->createNewException(TaskException::ACCESS_DENIED());
             }
         }
 
@@ -722,12 +722,12 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function tryTakeTask($taskId)
     {
         if (!$this->canLearnTask($taskId)) {
-            throw $this->createAccessDeniedException('the Task is Locked');
+            $this->createNewException(TaskException::LOCKED_TASK());
         }
         $task = $this->getTask($taskId);
 
         if (empty($task)) {
-            throw $this->createNotFoundException('task does not exist');
+            $this->createNewException(TaskException::NOTFOUND_TASK());
         }
 
         return $task;
@@ -1097,7 +1097,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $lesson = $this->getCourseLessonService()->getLesson($lessonId);
 
         if (empty($lesson) || 'lesson' != $lesson['type']) {
-            throw $this->createInvalidArgumentException('Argument invalid');
+            $this->createNewException(TaskException::LESSONID_INVALID());
         }
 
         $this->getCourseService()->tryManageCourse($lesson['courseId']);
@@ -1130,7 +1130,8 @@ class TaskServiceImpl extends BaseService implements TaskService
     /**
      * @param  $courseId
      *
-     * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @throws CourseException
+     * @throws \Exception
      *
      * @return CourseStrategy
      */
@@ -1138,7 +1139,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $course = $this->getCourseService()->getCourse($courseId);
         if (empty($course)) {
-            throw $this->createNotFoundException('course does not exist');
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         return $this->biz['course.strategy_context']->createStrategy($course['courseType']);

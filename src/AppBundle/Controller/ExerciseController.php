@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\UserService;
 use Biz\Course\Service\CourseService;
 use Topxia\Service\Common\ServiceKernel;
@@ -17,7 +18,7 @@ class ExerciseController extends BaseController
     {
         $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($exerciseId, 'exercise');
         if (empty($exercise)) {
-            throw new ResourceNotFoundException('exercise', $exerciseId);
+            $this->createNewException(TestpaperException::NOTFOUND_EXERCISE());
         }
 
         $activity = $this->getActivityService()->getActivity($lessonId);
@@ -45,14 +46,14 @@ class ExerciseController extends BaseController
     {
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
         if (!$result) {
-            throw new ResourceNotFoundException('exerciseResult', $resultId);
+            $this->createNewException(TestpaperException::NOTFOUND_RESULT());
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($result['courseId']);
 
         $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($result['testId'], 'exercise');
         if (!$exercise) {
-            throw new ResourceNotFoundException('exercise', $result['testId']);
+            $this->createNewException(TestpaperException::NOTFOUND_EXERCISE());
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($exercise['id'], $result['id']);
@@ -79,7 +80,7 @@ class ExerciseController extends BaseController
         $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($exerciseResult['testId'], $exerciseResult['type']);
 
         if (!$exercise) {
-            throw $this->createResourceNotFoundException('exercise', $exerciseResult['testId']);
+            $this->createNewException(TestpaperException::NOTFOUND_EXERCISE());
         }
 
         if (in_array($exerciseResult['status'], array('doing', 'paused'))) {
@@ -89,7 +90,7 @@ class ExerciseController extends BaseController
         $canLookExercise = $this->getTestpaperService()->canLookTestpaper($exerciseResult['id']);
 
         if (!$canLookExercise) {
-            throw $this->createAccessDeniedException('无权查看作业！');
+            $this->createNewException(TestpaperException::FORBIDDEN_ACCESS_TESTPAPER());
         }
 
         $builder = $this->getTestpaperService()->getTestpaperBuilder($exercise['type']);

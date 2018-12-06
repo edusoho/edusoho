@@ -469,8 +469,8 @@ class ClassroomServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage Classroom#999 Not Found
+     * @expectedException \Biz\Classroom\ClassroomException
+     * @expectedExceptionMessage exception.classroom.not_found
      */
     public function testUpdateClassroomNotFound()
     {
@@ -1852,7 +1852,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         sleep(3);
         $result1 = $this->getClassroomService()->canJoinClassroom($classroom1['id']);
-        $this->assertEquals($result1['code'], 'classroom.expired');
+        $this->assertEquals($result1['code'], 'EXPIRED_CLASSROOM');
     }
 
     /** @group current */
@@ -1878,11 +1878,11 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $result1 = $this->getClassroomService()->canLearnClassroom($classroom['id']);
-        $this->assertEquals($result1['code'], 'member.not_found');
+        $this->assertEquals($result1['code'], 'NOTFOUND_MEMBER');
 
         $this->getClassroomService()->becomeAuditor($classroom['id'], $user['id']);
         $result2 = $this->getClassroomService()->canLearnClassroom($classroom['id']);
-        $this->assertEquals($result2['code'], 'member.auditor');
+        $this->assertEquals($result2['code'], 'FORBIDDEN_AUDITOR_LEARN');
 
         $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
         $result3 = $this->getClassroomService()->canLearnClassroom($classroom['id']);

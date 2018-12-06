@@ -16,7 +16,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     *@expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *@expectedException \Biz\RewardPoint\AccountException
      */
     public function testCreateAccountUserRepeat()
     {
@@ -27,7 +27,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     *@expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *@expectedException \Biz\Common\CommonException
      */
     public function testCreateAccountWithoutUserId()
     {
@@ -36,7 +36,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testCreateAccountNotExistUser()
     {
@@ -55,7 +55,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\RewardPoint\AccountException
      */
     public function testUpdateAccountWithoutAccount()
     {
@@ -63,7 +63,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     *@expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *@expectedException \Biz\RewardPoint\AccountException
      */
     public function testUpdateAccountUserNotCorrect()
     {
@@ -85,7 +85,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\RewardPoint\AccountException
      */
     public function testDeleteAccountWithoutAccount()
     {
@@ -103,7 +103,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\RewardPoint\AccountException
      */
     public function testDeleteAccountByUserIdWithoutAccount()
     {
@@ -169,7 +169,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     *@expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *@expectedException \Biz\Common\CommonException
      */
     public function testWaveBalanceWithErrorNum()
     {
@@ -181,7 +181,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\RewardPoint\AccountException
      */
     public function testWaveBalanceWithoutAccount()
     {
@@ -203,7 +203,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     *@expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *@expectedException \Biz\Common\CommonException
      */
     public function testWaveDownBalanceWithErrorNum()
     {
@@ -216,7 +216,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\RewardPoint\AccountException
      */
     public function testWaveDownBalanceWithoutAccount()
     {
@@ -264,7 +264,7 @@ class RewardAccountServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\RewardPoint\AccountException
      */
     public function testDeductionRewardPointWithErrorNum()
     {

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Testpaper;
 
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
+use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
@@ -14,7 +15,6 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class ManageController extends BaseController
 {
@@ -157,7 +157,7 @@ class ManageController extends BaseController
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!$result) {
-            throw $this->createResourceNotFoundException('testpaperResult', $resultId);
+            $this->createNewException(TestpaperException::NOTFOUND_RESULT());
         }
         //还需要是否是教师的权限判断
         if (!$this->getTestpaperService()->canLookTestpaper($result['id'])) {
@@ -166,7 +166,7 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($result['testId'], $result['type']);
         if (!$testpaper) {
-            throw $this->createResourceNotFoundException('testpaper', $result['id']);
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         if ('reviewing' !== $result['status']) {
@@ -215,7 +215,7 @@ class ManageController extends BaseController
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (!$testpaper) {
-            throw $this->createResourceNotFoundException('testpaper', $testpaperId);
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         $status = $request->query->get('status', 'finished');
@@ -348,7 +348,7 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            throw new NotFoundException("testpaper#{$testpaperId} not found");
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         $testpaper = $this->getTestpaperService()->publishTestpaper($testpaperId);
@@ -368,7 +368,7 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            throw new NotFoundException("testpaper#{$testpaperId} not found");
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         $testpaper = $this->getTestpaperService()->closeTestpaper($testpaperId);

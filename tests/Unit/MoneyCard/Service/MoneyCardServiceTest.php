@@ -82,7 +82,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testCreateMoneyCardWithError1()
     {
@@ -90,7 +90,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testCreateMoneyCardWithError2()
     {
@@ -98,7 +98,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testCreateMoneyCardWithError3()
     {
@@ -106,7 +106,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testCreateMoneyCardWithError4()
     {
@@ -114,7 +114,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testCreateMoneyCardWithError5()
     {
@@ -156,7 +156,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testLockMoneyCardWithEmptyCard()
     {
@@ -168,7 +168,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testLockMoneyCardWithBadStatus()
     {
@@ -204,7 +204,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testUnlockMoneyCardWithEmpty()
     {
@@ -216,7 +216,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testUnlockMoneyCardWithBadBatchStatus()
     {
@@ -234,7 +234,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testUnlockMoneyCardWithBadCardStatus()
     {
@@ -304,7 +304,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testLockBatchWithEmptyMoneyCard()
     {
@@ -346,7 +346,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testUnlockBatchWithEmptyBatch()
     {
@@ -391,7 +391,7 @@ class MoneyCardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\MoneyCard\MoneyCardException
      */
     public function testDeleteBatchWithEmpty()
     {

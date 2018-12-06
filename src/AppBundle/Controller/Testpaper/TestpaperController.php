@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Testpaper;
 
 use Biz\Task\Service\TaskService;
+use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
@@ -26,7 +27,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'testpaper');
 
         if (empty($testpaper)) {
-            throw $this->createResourceNotFoundException('testpaper', $testId);
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         if ('draft' === $testpaper['status']) {
@@ -205,7 +206,7 @@ class TestpaperController extends BaseController
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!$testpaperResult) {
-            throw $this->createResourceNotFoundException('testpaperResult', $resultId);
+            $this->createNewException(TestpaperException::NOTFOUND_RESULT());
         }
 
         $user = $this->getUser();

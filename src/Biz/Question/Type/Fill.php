@@ -2,7 +2,7 @@
 
 namespace Biz\Question\Type;
 
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Biz\Question\QuestionException;
 
 class Fill extends BaseQuestion implements TypeInterface
 {
@@ -53,7 +53,7 @@ class Fill extends BaseQuestion implements TypeInterface
 
         preg_match_all("/\[\[(.+?)\]\]/", $fields['stem'], $answer, PREG_PATTERN_ORDER);
         if (empty($answer[1])) {
-            throw new InvalidArgumentException('This Question Answer Unexpected');
+            throw QuestionException::UNEXPECTED_ANSWER();
         }
 
         $fields['answer'] = array();

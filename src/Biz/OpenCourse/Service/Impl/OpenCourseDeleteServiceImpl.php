@@ -3,6 +3,7 @@
 namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
 use Biz\OpenCourse\Dao\RecommendedCourseDao;
@@ -17,7 +18,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
             $types = array('lessons', 'members', 'course', 'recommend', 'materials');
 
             if (!in_array($type, $types)) {
-                throw $this->createServiceException('未知类型,删除失败');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
             $method = 'delete'.ucwords($type);

@@ -12,7 +12,7 @@ class LearnCourseTaskAccessorTest extends BaseTestCase
     {
         $accessor = new LearnCourseTaskAccessor($this->getBiz());
         $result = $accessor->access(array());
-        $this->assertEquals('course.task.not_found', $result['code']);
+        $this->assertEquals('NOTFOUND_TASK', $result['code']);
 
         $this->mockBiz(
             'System:SettingService',

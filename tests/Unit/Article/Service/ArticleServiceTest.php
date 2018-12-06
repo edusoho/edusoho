@@ -163,7 +163,7 @@ class ArticleServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testcreateEmptyArticle()
     {
@@ -211,7 +211,7 @@ class ArticleServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Article\ArticleException
      */
     public function testupdateEmptyArticle()
     {
@@ -234,7 +234,7 @@ class ArticleServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Article\ArticleException
      */
     public function testhitEmptyArticle()
     {
@@ -266,7 +266,7 @@ class ArticleServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Article\ArticleException
      */
     public function testlikeWithEmptyContent()
     {
@@ -275,7 +275,7 @@ class ArticleServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Article\ArticleException
      */
     public function testlikeTwice()
     {

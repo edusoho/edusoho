@@ -3,11 +3,10 @@
 namespace ApiBundle\Api\Resource\Classroom;
 
 use ApiBundle\Api\Annotation\Access;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ApiBundle\Api\Annotation\ResponseFilter;
 
 class ClassroomMarketingMember extends AbstractResource
@@ -23,7 +22,7 @@ class ClassroomMarketingMember extends AbstractResource
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         if (empty($classroom)) {
-            throw new NotFoundHttpException('班级不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw ClassroomException::NOTFOUND_CLASSROOM();
         }
         $biz = $this->getBiz();
         $logger = $biz['logger'];
@@ -47,7 +46,7 @@ class ClassroomMarketingMember extends AbstractResource
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         if (empty($classroom)) {
-            throw new NotFoundHttpException('班级不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw ClassroomException::NOTFOUND_CLASSROOM();
         }
 
         $user = $this->getUserService()->getUserByVerifiedMobile($phoneNumber);

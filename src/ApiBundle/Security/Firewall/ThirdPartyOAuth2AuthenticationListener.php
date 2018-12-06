@@ -3,8 +3,8 @@
 namespace ApiBundle\Security\Firewall;
 
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Biz\System\SettingException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
 {
@@ -45,15 +45,15 @@ class ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
         $settings = $this->getSettingService()->get('login_bind');
 
         if (empty($settings)) {
-            throw new AccessDeniedHttpException('第三方登录系统参数尚未配置，请先配置。');
+            throw SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
         }
 
         if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
-            throw new AccessDeniedHttpException(sprintf('第三方登录(%s)系统参数尚未配置，请先配置。', $type));
+            throw SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
         }
 
         if (!$settings[$type.'_enabled']) {
-            throw new AccessDeniedHttpException(sprintf('第三方登录(%s)未开启', $type));
+            throw SettingException::FORBIDDEN_THIRD_PARTY_AUTH();
         }
 
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);

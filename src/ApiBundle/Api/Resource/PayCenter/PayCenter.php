@@ -3,11 +3,10 @@
 namespace ApiBundle\Api\Resource\PayCenter;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Common\CommonException;
 use Codeages\Biz\Pay\Service\PayService;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PayCenter extends AbstractResource
 {
@@ -15,7 +14,7 @@ class PayCenter extends AbstractResource
     {
         $params = $request->request->all();
         if (empty($params['orderId'])) {
-            throw new BadRequestHttpException('Missing params', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         //可能传过来的是 已经支付的order id， 不是tradeSn

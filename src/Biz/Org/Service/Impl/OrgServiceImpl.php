@@ -3,7 +3,9 @@
 namespace Biz\Org\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Org\Dao\OrgDao;
+use Biz\Org\OrgException;
 use Biz\Org\Service\OrgService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Org\Service\OrgBatchUpdateFactory;
@@ -17,7 +19,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $org = ArrayToolkit::parts($org, array('name', 'code', 'parentId', 'description'));
 
         if (!ArrayToolkit::requireds($org, array('name', 'code'))) {
-            throw $this->createServiceException('缺少必要字段,添加失败');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $org['createdUserId'] = $user['id'];
@@ -65,7 +67,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $fields = ArrayToolkit::parts($fields, array('name', 'code', 'parentId', 'description'));
 
         if (!ArrayToolkit::requireds($fields, array('name', 'code'))) {
-            throw $this->createServiceException('缺少必要字段,添加失败');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $org = $this->getOrgDao()->update($id, $fields);
@@ -147,7 +149,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $org = $this->getOrg($id);
 
         if (empty($org)) {
-            throw $this->createServiceException('组织机构不存在,更新失败');
+            $this->createNewException(OrgException::NOTFOUND_ORG());
         }
 
         return $org;

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\Course;
 
+use Biz\Course\CourseException;
+use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\CourseSetService;
@@ -16,13 +18,13 @@ abstract class CourseBaseController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
-            throw $this->createNotFoundException("Course#{$id} Not Found");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         if (empty($courseSet)) {
-            throw $this->createNotFoundException("CourseSet#{$course['courseSetId']} Not Found");
+            $this->createNewException(CourseSetException::NOTFOUND_COURSESET());
         }
 
         return array($courseSet, $course);
@@ -33,7 +35,7 @@ abstract class CourseBaseController extends BaseController
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException('Course Not Found');
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $member = $this->getCourseMember($request, $course);

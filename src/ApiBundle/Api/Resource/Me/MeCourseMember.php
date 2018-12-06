@@ -3,12 +3,11 @@
 namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use ApiBundle\Api\Annotation\ResponseFilter;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class MeCourseMember extends AbstractResource
 {
@@ -38,7 +37,7 @@ class MeCourseMember extends AbstractResource
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user->getId());
 
         if (empty($member)) {
-            throw new BadRequestHttpException('您不是学员或尚未购买，不能退学。', null, ErrorCode::INVALID_ARGUMENT);
+            throw MemberException::NOTFOUND_MEMBER();
         }
 
         $this->getCourseMemberService()->removeStudent($courseId, $user->getId(), array(

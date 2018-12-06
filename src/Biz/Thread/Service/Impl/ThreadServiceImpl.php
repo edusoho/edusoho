@@ -3,6 +3,7 @@
 namespace Biz\Thread\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Util\TextHelper;
 use Biz\Thread\Dao\ThreadDao;
 use AppBundle\Common\ArrayToolkit;
@@ -31,19 +32,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function createThread($thread)
     {
         if (empty($thread['title'])) {
-            throw $this->createServiceException('thread title is null');
+            $this->createNewException(ThreadException::TITLE_REQUIRED());
         }
 
         if (empty($thread['content'])) {
-            throw $this->createServiceException('thread content is null');
+            $this->createNewException(ThreadException::CONTENT_REQUIRED());
         }
 
         if (empty($thread['targetId'])) {
-            throw $this->createServiceException('thread targetId is null');
+            $this->createNewException(ThreadException::TARGETID_REQUIRED());
         }
 
         if (empty($thread['type']) || !in_array($thread['type'], array('discussion', 'question', 'event'))) {
-            throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
+            $this->createNewException(ThreadException::TYPE_INVALID());
         }
 
         $this->tryAccess('thread.create', $thread);
@@ -108,7 +109,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($id);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("thread(#{$id}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $this->tryAccess('thread.update', $thread);
@@ -116,7 +117,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $fields = ArrayToolkit::parts($fields, array('title', 'content', 'startTime', 'maxUsers', 'location', 'actvityPicture'));
 
         if (empty($fields)) {
-            throw $this->createServiceException('invalid argument');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $fields['content'] = $this->sensitiveFilter($fields['content'], $thread['targetType'].'-thread-update');
@@ -139,7 +140,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("thread(#{$threadId}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $this->tryAccess('thread.delete', $thread);
@@ -161,7 +162,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException("thread(#{$threadId}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $this->tryAccess('thread.sticky', $thread);
@@ -182,7 +183,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException("thread(#{$threadId}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $this->tryAccess('thread.sticky', $thread);
@@ -203,7 +204,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException("thread(#{$threadId}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $this->tryAccess('thread.nice', $thread);
@@ -224,7 +225,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException("thread(#{$threadId}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $this->tryAccess('thread.nice', $thread);
@@ -245,7 +246,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException("thread(#{$threadId}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $fields = array('solved' => 1, 'updateTime' => time());
@@ -265,7 +266,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException("thread(#{$threadId}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $fields = array('solved' => 0, 'updateTime' => time());
@@ -339,7 +340,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $parent = $this->getPost($fields['parentId']);
 
             if (empty($parent)) {
-                throw $this->createServiceException('invalid argument');
+                $this->createNewException(ThreadException::PARENTID_INVALID());
             }
 
             $this->wavePost($parent['id'], 'subposts', 1);
@@ -391,7 +392,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post = $this->getPost($postId);
 
         if (empty($post)) {
-            throw $this->createNotFoundException("threadPost(#{$postId}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_POST());
         }
 
         $this->tryAccess('post.delete', $post);
@@ -442,7 +443,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post = $this->getPost($postId);
 
         if (empty($post)) {
-            throw $this->createNotFoundException("thread(#{$postId}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_POST());
         }
 
         $this->tryAccess('post.adopted', $post);
@@ -454,7 +455,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post = $this->getPost($postId);
 
         if (empty($post)) {
-            throw $this->createNotFoundException("post(#{$postId}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_POST());
         }
 
         $this->tryAccess('post.adopted', $post);
@@ -484,7 +485,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $thread = $this->getThread($fields['threadId']);
 
             if ($thread['maxUsers'] == $thread['memberNum'] && 0 != $thread['maxUsers']) {
-                throw $this->createAccessDeniedException('limit on the number of people');
+                $this->createNewException(ThreadException::MEMBER_NUMBER_LIMIT());
             }
 
             $fields['createdTime'] = time();
@@ -493,7 +494,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
             return $member;
         } else {
-            throw $this->createServiceException('member already exists');
+            $this->createNewException(ThreadException::MEMBER_EXISTED());
         }
     }
 
@@ -502,7 +503,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $member = $this->getMember($memberId);
 
         if (empty($member)) {
-            throw $this->createNotFoundException('thread member not found');
+            $this->createNewException(ThreadException::NOTFOUND_MEMBER());
         }
 
         $thread = $this->getThread($member['threadId']);
@@ -518,7 +519,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         $thread = $this->getThread($threadId);
         if (empty($thread)) {
-            throw $this->createNotFoundException("thread(#{$threadId}) not found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $this->tryAccess('thread.delete', $thread);
@@ -594,7 +595,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function tryAccess($permision, $resource)
     {
         if (!$this->canAccess($permision, $resource)) {
-            throw $this->createAccessDeniedException("Permision `{$permision}`, resource `{$resource['targetType']}[{$resource['targetId']}]`, access denied.");
+            $this->createNewException(ThreadException::ACCESS_DENIED());
         }
 
         return true;
@@ -620,7 +621,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         );
 
         if (!array_key_exists($permision, $permisions)) {
-            throw $this->createInvalidArgumentException("Permision `{$permision}` is invalide.");
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $firewall = $this->getTargetFirewall($resource);
@@ -633,7 +634,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getTargetFirewall($resource)
     {
         if (empty($resource['targetType']) || empty($resource['targetId'])) {
-            throw new \InvalidArgumentException('Resource  targetType or targetId argument missing.');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         return $this->biz["thread_firewall.{$resource['targetType']}"];
@@ -668,7 +669,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 break;
 
             default:
-                throw $this->createServiceException('invalid argument');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         return $orderBys;
@@ -683,7 +684,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             if (!in_array($conditions['keywordType'], array('title', 'content', 'targetId', 'targetTitle'))) {
-                throw $this->createInvalidArgumentException('invalid argument');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
             $conditions[$conditions['keywordType']] = $conditions['keyword'];

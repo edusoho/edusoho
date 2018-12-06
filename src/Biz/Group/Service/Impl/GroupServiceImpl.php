@@ -3,10 +3,12 @@
 namespace Biz\Group\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\Group\Dao\GroupDao;
 use Biz\Group\Dao\MemberDao;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Group\GroupException;
 use Biz\Group\Service\GroupService;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -58,7 +60,7 @@ class GroupServiceImpl extends BaseService implements GroupService
     public function addGroup($user, $group)
     {
         if (!isset($group['title']) || empty($group['title'])) {
-            throw $this->createInvalidArgumentException('Title Required');
+            $this->createNewException(GroupException::TITLE_REQUIRED());
         }
         $title = trim($group['title']);
 
@@ -113,12 +115,12 @@ class GroupServiceImpl extends BaseService implements GroupService
     public function changeGroupImg($id, $field, $data)
     {
         if (!in_array($field, array('logo', 'backgroundLogo'))) {
-            throw $this->createInvalidArgumentException('Invalid Field :'.$field);
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $group = $this->getGroup($id);
         if (empty($group)) {
-            throw $this->createNotFoundException('Group Not Found');
+            $this->createNewException(GroupException::NOTFOUND_GROUP());
         }
 
         $fileIds = ArrayToolkit::column($data, 'id');
@@ -149,11 +151,11 @@ class GroupServiceImpl extends BaseService implements GroupService
     {
         $group = $this->getGroup($groupId);
         if (empty($group)) {
-            throw $this->createNotFoundException('Group Not Found');
+            $this->createNewException(GroupException::NOTFOUND_GROUP());
         }
 
         if ($this->isMember($groupId, $user['id'])) {
-            throw $this->createAccessDeniedException('You\'re in group');
+            $this->createNewException(GroupException::DUPLICATE_JOIN());
         }
 
         $member = array(
@@ -174,13 +176,13 @@ class GroupServiceImpl extends BaseService implements GroupService
     {
         $group = $this->getGroup($groupId);
         if (empty($group)) {
-            throw $this->createNotFoundException('Group Not Found');
+            $this->createNewException(GroupException::NOTFOUND_GROUP());
         }
 
         $member = $this->getGroupMemberDao()->getByGroupIdAndUserId($groupId, $user['id']);
 
         if (empty($member)) {
-            throw $this->createNotFoundException("Member#{$user['id']} Not in Group");
+            $this->createNewException(GroupException::NOTFOUND_MEMBER());
         }
 
         $this->getGroupMemberDao()->delete($member['id']);

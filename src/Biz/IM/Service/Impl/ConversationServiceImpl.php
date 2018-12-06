@@ -5,6 +5,7 @@ namespace Biz\IM\Service\Impl;
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\IMAPIFactory;
+use Biz\IM\ConversationException;
 use Biz\IM\Service\ConversationService;
 
 class ConversationServiceImpl extends BaseService implements ConversationService
@@ -56,7 +57,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
         $lockResult = $this->getLock()->get($lockName, 50);
         if (!$lockResult) {
-            throw $this->createServiceException('Fail to Create Conversation', '700004');
+            $this->createNewException(ConversationException::CREATE_FAILED());
         }
 
         $convNo = $this->createCloudConversation($conversation['title'], $members);
@@ -84,7 +85,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
     public function createCloudConversation($title, $members)
     {
         if (!$members) {
-            throw $this->createNotFoundException('Conversation Not Found', '700009');
+            $this->createNewException(ConversationException::EMPTY_MEMBERS());
         }
 
         $clients = array();
@@ -182,14 +183,14 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         $conv = $this->getConversationByConvNo($convNo);
 
         if (!$conv) {
-            throw $this->createNotFoundException('Conversation Not Found', '700007');
+            $this->createNewException(ConversationException::NOTFOUND_CONVERSATION());
         }
 
         $user = $this->getUserService()->getUser($userId);
 
         $added = $this->addConversationMember($conv['no'], array(array('id' => $user['id'], 'nickname' => $user['nickname'])));
         if (!$added) {
-            throw $this->createServiceException('Fail to Join Conversation', '700006');
+            $this->createNewException(ConversationException::JOIN_FAILED());
         }
 
         $member = array(
@@ -207,18 +208,18 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         $conv = $this->getConversationByConvNo($convNo);
 
         if (!$conv) {
-            throw $this->createNotFoundException('Conversation Not Found', '700007');
+            $this->createNewException(ConversationException::NOTFOUND_CONVERSATION());
         }
 
         $convMember = $this->getMemberByConvNoAndUserId($convNo, $userId);
         if (!$convMember) {
-            throw $this->createNotFoundException('Conversation Member Not Found', '700011');
+            $this->createNewException(ConversationException::NOTFOUND_MEMBER());
         }
 
         $removed = $this->removeConversationMember($convNo, $userId);
 
         if (!$removed) {
-            throw $this->createServiceException('Fail to Quit Conversation', '700010');
+            $this->createNewException(ConversationException::QUIT_FAILED());
         }
 
         $this->deleteMember($convMember['id']);
@@ -288,11 +289,11 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         $fields = ArrayToolkit::parts($fields, array('no', 'memberIds', 'targetId', 'targetType', 'title'));
 
         if (empty($fields['no'])) {
-            throw $this->createServiceException('field `no` can not be empty');
+            $this->createNewException(ConversationException::FIELD_NO_REQUIRED());
         }
 
         if (!is_array($fields['memberIds'])) {
-            throw $this->createServiceException('field `memberIds` must be array');
+            $this->createNewException(ConversationException::FIELD_MEMBERIDS_REQUIRED_ARRAY());
         }
 
         sort($fields['memberIds']);
@@ -315,11 +316,11 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         ));
 
         if (empty($fields['no'])) {
-            throw $this->createServiceException('field `no` can not be empty');
+            $this->createNewException(ConversationException::FIELD_NO_REQUIRED());
         }
 
         if (empty($fields['userId'])) {
-            throw $this->createServiceException('field `userId` can not be empty');
+            $this->createNewException(ConversationException::FIELD_USERID_REQUIRED());
         }
 
         return $fields;

@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\PptActivityDao;
 use Biz\Activity\Service\ActivityService;
+use Biz\Common\CommonException;
 use Biz\File\Service\UploadFileService;
 
 class Ppt extends Activity
@@ -17,12 +18,12 @@ class Ppt extends Activity
     public function create($fields)
     {
         if (empty($fields['media'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $fields['mediaId'] = $media['id'];
 
@@ -75,12 +76,12 @@ class Ppt extends Activity
     public function update($targetId, &$fields, $activity)
     {
         if (empty($fields['media'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $fields['mediaId'] = $media['id'];
 

@@ -3,11 +3,14 @@
 namespace Biz\Content\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Content\Dao\FileDao;
 use Biz\Content\Dao\FileGroupDao;
+use Biz\Content\FileException;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use AppBundle\Common\ArrayToolkit;
@@ -61,7 +64,7 @@ class FileServiceImpl extends BaseService implements FileService
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户尚未登录。');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         return $this->addFile($group, $file);
@@ -72,7 +75,7 @@ class FileServiceImpl extends BaseService implements FileService
         $errors = FileToolkit::validateFileExtension($file);
         if ($errors) {
             @unlink($file->getRealPath());
-            throw $this->createServiceException('该文件格式，不允许上传。');
+            $this->createNewException(FileException::FILE_UPLOAD_NOT_ALLOWED());
         }
         $group = $this->getGroupDao()->getByCode($group);
 
@@ -183,7 +186,7 @@ class FileServiceImpl extends BaseService implements FileService
         }
 
         if (!is_writable($directory)) {
-            throw $this->createServiceException(sprintf('文件上传路径%s不可写，文件上传失败。', $directory));
+            $this->createNewException(FileException::FILE_DIRECTORY_UN_WRITABLE());
         }
 
         $directory .= '/'.$parsed['directory'];
@@ -209,7 +212,7 @@ class FileServiceImpl extends BaseService implements FileService
         $filenameParts = explode('.', $filename);
         $ext = array_pop($filenameParts);
         if (empty($ext)) {
-            throw $this->createServiceException('获取文件扩展名失败！');
+            $this->createNewException(FileException::FILE_EXT_PARSE_FAILED());
         }
 
         $uri = ($group['public'] ? 'public://' : 'private://').$group['code'].'/';
@@ -228,7 +231,7 @@ class FileServiceImpl extends BaseService implements FileService
         $parsed = array();
         $parts = explode('://', $uri);
         if (empty($parts) || count($parts) != 2) {
-            throw $this->createServiceException(sprintf('解析文件URI(%s)失败！', $uri));
+            $this->createNewException(FileException::FILE_PARSE_URI_FAILED());
         }
         $parsed['access'] = $parts[0];
         $parsed['path'] = $parts[1];
@@ -304,12 +307,12 @@ class FileServiceImpl extends BaseService implements FileService
     public function getImgFileMetaInfo($fileId, $scaledWidth, $scaledHeight)
     {
         if (empty($fileId)) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $file = $this->getFile($fileId);
         if (empty($file)) {
-            throw $this->createNotFoundException('文件不存在');
+            $this->createNewException(FileException::FILE_NOT_FOUND());
         }
 
         $parsed = $this->parseFileUri($file['uri']);

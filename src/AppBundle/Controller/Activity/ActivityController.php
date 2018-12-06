@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\Activity;
 
+use Biz\Activity\ActivityException;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
@@ -14,7 +16,7 @@ class ActivityController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
         if (empty($activity)) {
-            throw $this->createNotFoundException('activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         $activityConfigManage = $this->get('activity_config_manager');
@@ -37,7 +39,7 @@ class ActivityController extends BaseController
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         if (empty($activity)) {
-            throw $this->createNotFoundException('activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
         $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
@@ -140,13 +142,13 @@ class ActivityController extends BaseController
         $activity = $this->getActivityService()->getActivity($activityId);
 
         if (empty($activity)) {
-            throw $this->createResourceNotFoundException('activity', $activityId);
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         $eventName = $request->request->get('eventName');
 
         if (empty($eventName)) {
-            throw $this->createNotFoundException('activity event is empty');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $data = $request->request->get('data', array());

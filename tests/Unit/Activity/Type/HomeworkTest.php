@@ -129,8 +129,8 @@ class HomeworkTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage 教学活动不存在
+     * @expectedException \Biz\Testpaper\TestpaperException
+     * @expectedExceptionMessage exception.testpaper.not_found
      */
     public function testUpdate()
     {

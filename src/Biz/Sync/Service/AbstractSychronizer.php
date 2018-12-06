@@ -2,6 +2,7 @@
 
 namespace Biz\Sync\Service;
 
+use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Context\BizAware;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Dao\BatchHelperInterface;
@@ -54,7 +55,7 @@ abstract class AbstractSychronizer extends BizAware
                     $this->batchHelperList[$batchType] = new BatchUpdateHelper($dao);
                     break;
                 default:
-                    throw new \InvalidArgumentException('Bad Type');
+                    throw CommonException::ERROR_PARAMETER();
             }
         }
 

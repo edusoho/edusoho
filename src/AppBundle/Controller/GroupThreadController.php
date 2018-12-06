@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\Exception\FileToolkitException;
+use Biz\Content\FileException;
 use Biz\Content\Service\FileService;
 use Biz\File\Service\UploadFileService;
 use Biz\Group\Service\GroupService;
@@ -12,6 +14,7 @@ use Biz\User\Service\UserService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -57,7 +60,7 @@ class GroupThreadController extends BaseController
                     'threadId' => $thread['id'],
                 )));
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
             }
         }
 
@@ -121,7 +124,7 @@ class GroupThreadController extends BaseController
                     'threadId' => $threadId,
                 )));
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
             }
         }
 
@@ -359,7 +362,7 @@ class GroupThreadController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         if (!$this->getGroupMemberRole($groupId)) {
@@ -710,15 +713,15 @@ class GroupThreadController extends BaseController
         $file = $this->get('request')->files->get('file');
 
         if (!is_object($file)) {
-            throw $this->createNotFoundException('上传文件不能为空!');
+            $this->createNewException(FileException::FILE_EMPTY_ERROR());
         }
 
         if (filesize($file) > 1024 * 1024 * 2) {
-            throw $this->createNotFoundException('上传文件大小不能超过2MB!');
+            $this->createNewException(FileException::FILE_SIZE_LIMIT());
         }
 
         if (FileToolkit::validateFileExtension($file, 'png jpg gif doc xls txt rar zip')) {
-            throw $this->createNotFoundException('文件类型不正确!');
+            $this->createNewException(FileToolkitException::FILE_TYPE_ERROR());
         }
 
         $record = $this->getFileService()->uploadFile($group, $file);

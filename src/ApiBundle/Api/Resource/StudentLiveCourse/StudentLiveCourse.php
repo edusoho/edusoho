@@ -5,8 +5,7 @@ namespace ApiBundle\Api\Resource\StudentLiveCourse;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Exception\ErrorCode;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\Common\CommonException;
 
 class StudentLiveCourse extends AbstractResource
 {
@@ -17,7 +16,7 @@ class StudentLiveCourse extends AbstractResource
     {
         $conditions = $request->query->all();
         if (empty($conditions['startTime_GE']) || empty($conditions['endTime_LT'])) {
-            throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $user = $this->getCurrentUser();
         $liveCourses = $this->getCourseService()->findLiveCourse($conditions, $user['id'], 'student');

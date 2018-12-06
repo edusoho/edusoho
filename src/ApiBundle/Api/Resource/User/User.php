@@ -98,6 +98,7 @@ class User extends AbstractResource
             'registeredWay' => $registeredWay,
             'createdIp' => $request->getHttpRequest()->getClientIp(),
         );
+
         $user = $this->getAuthService()->register($user);
         $user['token'] = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
         $this->getLogService()->info('mobile', 'register', "用户{$user['nickname']}通过手机注册成功", array('userId' => $user['id']));

@@ -2,7 +2,7 @@
 
 namespace Biz\Course\Service;
 
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Biz\User\UserException;
 use Biz\System\Annotation\Log;
 
 interface CourseService
@@ -174,7 +174,7 @@ interface CourseService
      * @param int  $courseSetId
      * @param bool $onlyPublished
      *
-     * @throws AccessDeniedException
+     * @throws UserException
      *
      * @return mixed
      */

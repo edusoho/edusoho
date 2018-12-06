@@ -4,10 +4,14 @@ namespace Biz\Course\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\Course\CourseException;
 use Biz\Course\Dao\ReviewDao;
+use Biz\Course\ReviewException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\ReviewService;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 
 class ReviewServiceImpl extends BaseService implements ReviewService
@@ -51,13 +55,13 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createNotFoundException('User is not Exist!');
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException('Course is not Exist!');
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         return $this->getReviewDao()->getReviewByUserIdAndCourseId($userId, $courseId);
@@ -105,23 +109,23 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     public function saveReview($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('courseId', 'userId', 'rating'), true)) {
-            throw $this->createInvalidArgumentException('参数不正确，评价失败！');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         if ($fields['rating'] > 5) {
-            throw $this->createInvalidArgumentException('参数不正确，评价数太大');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($fields['courseId']);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("course(#{$fields['courseId']}) not found");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $user = $this->getUserService()->getUser($fields['userId']);
 
         if (empty($user)) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
         $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published'));
 
@@ -167,17 +171,17 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('not login');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $review = $this->getReview($id);
 
         if (empty($review)) {
-            throw $this->createNotFoundException("course review(#{$id}) not found");
+            $this->createNewException(ReviewException::NOTFOUND_REVIEW());
         }
 
         if (!$user->isAdmin() && $review['userId'] != $user['id']) {
-            throw $this->createAccessDeniedException('无权限删除评价');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $this->getReviewDao()->delete($id);

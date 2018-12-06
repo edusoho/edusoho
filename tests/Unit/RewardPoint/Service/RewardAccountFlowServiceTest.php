@@ -38,7 +38,7 @@ class RewardAccountFlowServiceTest extends BaseTestCase
     }
 
     /**
-     *@expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *@expectedException \Biz\Common\CommonException
      */
     public function testCreateAccountFlowWithoutFields()
     {
@@ -47,7 +47,7 @@ class RewardAccountFlowServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testCreateAccountFlowWithoutAccount()
     {
@@ -86,7 +86,7 @@ class RewardAccountFlowServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testUpdateAccountFlowWithoutAccount()
     {
