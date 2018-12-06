@@ -106,7 +106,7 @@ class CourseThread extends AbstractResource
             $this->getSearchKeywordService()->addSearchKeywordTimes($existKeyword['id']);
             $result = $this->getSearchKeywordService()->getSearchKeyword($existKeyword['id']);
         } else {
-            $result = $this->getSearchKeywordService()->createSearchKeyword(array('name' => $keyword));
+            $result = $this->getSearchKeywordService()->createSearchKeyword(array('name' => $keyword, 'type' => $type));
         }
 
         return $result;
