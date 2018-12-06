@@ -48,7 +48,7 @@ class CourseThreadPost extends AbstractResource
 
         $post = $this->getCourseThreadService()->createPost($params);
         if (isset($params['fileIds'])) {
-            $this->getUploadFileService()->createUseFiles($params['fileIds'], $post['id'], 'course_thread_post', 'attachment');
+            $this->getUploadFileService()->createUseFiles($params['fileIds'], $post['id'], 'course.thread.post', 'attachment');
         }
 
         return $post;
