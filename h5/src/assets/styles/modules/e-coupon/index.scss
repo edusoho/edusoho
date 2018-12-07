@@ -4,12 +4,12 @@
   &__container {
     height: vw(96);
     overflow: hidden;
-    margin-top: vw(20);
   }
   &__title {
     line-height: 1;
     font-size: vw(18);
     color: #2B333B;
+    margin-bottom: vw(20);
   }
   &__body {
     position: relative;
@@ -97,7 +97,11 @@
       height: vw(112);
       width: vw(335) !important;
       &:after {
+        top: vw(70);
         right: vw(-6);
+      }
+      &:before {
+        top: vw(70);
       }
     }
     .e-coupon__header {
