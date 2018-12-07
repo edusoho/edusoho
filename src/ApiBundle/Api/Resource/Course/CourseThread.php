@@ -44,6 +44,9 @@ class CourseThread extends AbstractResource
             $videoAskTime = $request->query->get('videoAskTime', 0);
             $task = $this->getTaskService()->getTask($taskId);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            if (!isset($activity['ext']['file'])) {
+                throw new BadRequestHttpException('资源不存在', null, '404');
+            }
             $videoId = $activity['ext']['file']['id'];
             $conditions['videoId'] = isset($videoId) ? $videoId : 0;
             $conditions['videoAskTime_GE'] = ($videoAskTime - 60) > 0 ? $videoAskTime - 60 : 0;
@@ -59,7 +62,7 @@ class CourseThread extends AbstractResource
         $total = $this->getCourseThreadService()->countThreads($conditions);
         $threads = $this->getCourseThreadService()->searchThreads(
             $conditions,
-            array('updatedTime' => 'ASC'),
+            'createdNotStick',
             $offset,
             $limit
         );
