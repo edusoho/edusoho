@@ -152,17 +152,20 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $couponBatches = $discoverySetting['data'];
         $couponBatches = ArrayToolkit::index($couponBatches, 'id');
         $user = $this->getCurrentUser();
-        $conditions = array(
-            'batchIds' => ArrayToolkit::column($couponBatches, 'id'),
-            'userId' => $user['id'],
-        );
+        $receivedCoupons = array();
+        if (!empty($user['id'])) {
+            $conditions = array(
+                'batchIds' => ArrayToolkit::column($couponBatches, 'id'),
+                'userId' => $user['id'],
+            );
 
-        $receivedCoupons = $this->getCouponService()->searchCoupons(
-            $conditions,
-            array(),
-            0,
-            $this->getCouponService()->searchCouponsCount($conditions)
-        );
+            $receivedCoupons = $this->getCouponService()->searchCoupons(
+                $conditions,
+                array(),
+                0,
+                $this->getCouponService()->searchCouponsCount($conditions)
+            );
+        }
 
         foreach ($receivedCoupons as $coupon) {
             $couponBatches[$coupon['batchId']]['currentUserCoupon'] = $coupon;
