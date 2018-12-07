@@ -1,92 +1,102 @@
 <template>
-  <div class="e-coupon">
-    <div class="e-coupon__title">优惠券</div>
-    <div :class="['e-coupon__container', 'clearfix', couponNum]" v-show="coupons.length">
-      <van-swipe :width="196" :show-indicators="false" :loop="true" :touchable="true">
-        <van-swipe-item v-for="(item, index) in coupons"
-          :key="index" :class="['e-coupon__body', Number(item.unreceivedNum) == 0 ? 'coupon-received-all' : '']">
-            <div class="e-coupon__header clearfix">
-              <span class="e-coupon__price" v-html="priceHtml(item)"></span>
-              <div class="e-coupon__name" v-show="coupons.length == 1">
-                <div class="text-overflow text-14 coupon-name">{{ item.name }}</div>
-                <span class="text-10">{{ timeExpire(item) }}</span>
-              </div>
-                <div class="stamp" v-if="item.currentUserCoupon"></div>
-                <a href="javascript:0;" class="coupon-button" @click="handleClick(item)">{{ item.currentUserCoupon ? '去使用' : '领券' }}</a>
-            </div>
-            <div class="e-coupon__middle"></div>
-            <div class="e-coupon__bottom text-overflow">
-              可用范围：{{ scopeFilter(item) }}
-            </div>
-       </van-swipe-item>
-      </van-swipe>
+  <div class="coupon-container" @click="onSelect">
+    <div class="e-coupon__container clearfix e-coupon-single">
+      <div :key="index" :class="['e-coupon__body', Number(coupon.unreceivedNum) == 0 ? 'coupon-received-all' : '']">
+        <div class="e-coupon__header clearfix">
+          <span class="e-coupon__price" v-html="priceHtml(coupon)"></span>
+          <div class="e-coupon__name">
+            <div class="text-overflow text-14 coupon-name">{{ coupon.name || '优惠券' }}</div>
+            <span class="text-10">{{ timeExpire(coupon) }}</span>
+          </div>
+          <div class="stamp" v-if="coupon.currentUserCoupon"></div>
+          <div class="e-coupon__select-circle" v-if="showSelecet">
+            <i class="select-icon" :class="index === active ? 'h5-icon h5-icon-check' : ''"></i>
+          </div>
+          <span class="coupon-button" v-if="showButton">{{ coupon.currentUserCoupon ? '去使用' : '领券' }}</span>
+        </div>
+        <div class="e-coupon__middle"></div>
+        <div class="e-coupon__bottom text-overflow">
+          可用范围：{{ scopeFilter(coupon) }}
+        </div>
+     </div>
     </div>
   </div>
 </template>
 
 <script>
-  // import Api from '@/api';
-  import { Toast } from 'vant';
-
-  export default {
-    props: {
-      coupons: {
-        type: Array,
-        default: []
-      },
+export default {
+  name: 'e-coupon',
+  props: {
+    showButton: {
+      type: Boolean,
+      default: true,
     },
-    computed: {
-      couponNum() {
-        return this.coupons.length > 1 ? 'e-coupon-multi' : 'e-coupon-single';
+    showSelecet: {
+      type: Boolean,
+      default: false,
+    },
+    coupon: {
+      type: Object,
+      default: () => {
+        return {}
       }
     },
-    methods: {
-      scopeFilter(item) {
-        if (item.targetType === 'classroom') {
-          if (item.target) {
-            return '指定班级';
-          }
-          return '全部班级';
-        } else if (item.targetType === 'course') {
-          if (item.target) {
-            return '指定课程';
-          }
-          return '全部课程';
-        }
-        return '全部商品';
-      },
-      timeExpire(item) {
-        const createdTime = item.createdTime.slice(0, 10);
-        const deadline = item.deadline.slice(0, 10);
-        return `${createdTime}至${deadline}`;
-      },
-      priceHtml(item) {
-        const intPrice = parseInt(item.rate);
-        let pointPrice = `.${Number(item.rate).toFixed(2).split('.')[1]}`;
-        pointPrice = `${pointPrice == 0 ? '' : pointPrice}`;
-        const typeText = item.type === 'discount' ? '折' : '元';
-        return `${intPrice}<span class="text-14">${pointPrice + typeText}</span>`;
-      },
-      handleClick(data) {
-        // const token = data.token;
-        // Api.receiveCoupon({
-        //   query: { token, }
-        // }).then(res => {
+    index: {
+      type: Number,
+      default: -1,
+    },
+    active: {
+      type: Number,
+      default: -1,
+    },
+  },
+  data () {
+    return {
 
-        // }).catch(err => {
-        //   Toast.fail('您好像没有登录哦');
-        // });
-        if (data.currentUserCoupon) {
-          const couponType = data.targetType;
-          if (data.target) {
-            const id = data.target.id;
-            this.$router.push({
-              path: `${couponType}/${id}`
-            })
-          }
-          return;
-        }
-      }
     }
+  },
+  methods: {
+    timeExpire(item) {
+      let createdTime = '';
+      let deadline = '';
+
+      if (!item.createdTime) {
+        deadline = item.deadline.slice(0, 10);
+        return `有效期截止：${deadline}`;
+      }
+      createdTime = item.createdTime.slice(0, 10);
+      deadline = item.deadline.slice(0, 10);
+      return `${createdTime}至${deadline}`;
+    },
+    priceHtml(item) {
+      const intPrice = parseInt(item.rate);
+      let pointPrice = `.${Number(item.rate).toFixed(2).split('.')[1]}`;
+      pointPrice = `${pointPrice == 0 ? '' : pointPrice}`;
+      const typeText = item.type === 'discount' ? '折' : '元';
+      return `${intPrice}<span class="text-14">${pointPrice + typeText}</span>`;
+    },
+    scopeFilter(item) {
+      const { targetType, target } = item
+
+      if (targetType === 'classroom') {
+        return target ? target.title : '全部班级';
+      }
+      if (targetType === 'course' && !target) {
+        return target ? target.title : '全部班级';
+      }
+      if (targetType === 'vip') {
+        return '会员'
+      }
+      return '全部商品';
+    },
+    onSelect() {
+      this.$emit('chooseItem',
+      {
+        index: this.index,
+        itemData: this.coupon
+      })
+    },
   }
+}
 </script>
+

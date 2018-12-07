@@ -40,7 +40,7 @@
 import Api from '@admin/api';
 import moduleFrame from '../module-frame'
 import courseModal from '../course/modal/course-modal';
-import coupon from '@/containers/components/e-coupon/e-coupon';
+import coupon from '@/containers/components/e-coupon-list/e-coupon-list';
 import draggable from 'vuedraggable';
 
 export default {

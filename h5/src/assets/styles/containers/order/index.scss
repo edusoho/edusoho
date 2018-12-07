@@ -37,14 +37,14 @@
           font-size: vw(24);
           color: #c1c1c1;
         }
-        .h5-icon-checked-circle {
+        .h5-icon-check {
           display: none;
         }
         &.active {
           .h5-icon-circle {
             display: none;
           }
-          .h5-icon-checked-circle {
+          .h5-icon-check {
             display: block;
             color: #FF9800;
           }
@@ -63,110 +63,9 @@
       }
       .coupon-container {
         background-color: #f5f5f5;
-        padding: vw(10) vw(15);
-        .coupon-item {
-          position: relative;
-          padding: vw(6);
-          background-color: #fff;
-          &:before, &:after {
-            content: '';
-            position: absolute;
-            left: 31.5%;
-            width: vw(14);
-            height: vw(9);
-            border: vw(3) solid #fff;
-            z-index: 3;
-            background-color: #f5f5f5;
-          }
-          &:before {
-            top: 0;
-            border-radius:  0 0 vw(12) vw(12);
-            border-top: none;
-          }
-          &:after {
-            bottom: 0;
-            border-radius: vw(12) vw(12) 0 0;
-            border-bottom: none;
-          }
-          .coupon-border-box {
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            border: 1px solid #FF9800;
-            &:before, &:after {
-              content: '';
-              position: absolute;
-              left: 31%;
-              width: vw(18);
-              height: vw(9);
-              background-color: #fff;
-              border: 1px solid #FF9800;
-              z-index: 2;
-            }
-            &:before {
-              top: -1px;
-              border-radius:  0 0 vw(11) vw(11);
-              border-top: none;
-            }
-            &:after {
-              bottom: -1px;
-              border-radius: vw(11) vw(11) 0 0;
-              border-bottom: none;
-            }
-            .coupon-checked {
-              position: absolute;
-              bottom: vw(8);
-              right: vw(8);
-              font-size: vw(24);
-            }
-          }
-          .rate-number {
-            width: 39%;
-            margin-top: vw(29);
-            padding-left: vw(5);
-            text-align: center;
-            font-size: vw(32);
-            color: #FF9800;
-          }
-          .text-26 {
-            font-size: vw(26);
-          }
-          .coupon-info {
-            width: 61%;
-            line-height: vw(20);
-            padding: vw(16) vw(13);
-            font-size: vw(12);
-            overflow: hidden;
-            .title {
-              margin-bottom: vw(10);
-              font-size: vw(17);
-              font-weight: 500;
-            }
-          }
-          .coupon-checked {
-            display: none;
-          }
-          &.minus {
-            .coupon-checked {
-              color: #FF9800;
-            }
-          }
-          &.discount {
-            .coupon-border-box {
-              border-color: $primary-color;
-            }
-            .coupon-checked, .rate-number {
-              color: $primary-color;
-            }
-            .coupon-border-box:before, .coupon-border-box:after {
-              border-color: $primary-color;
-            }
-          }
-          &.active {
-            .coupon-checked {
-              display: block;
-            }
-          }
+        padding: vw(10) vw(20);
+        .e-coupon__container {
+          margin-top: 0
         }
       }
       .coupon-empty {
