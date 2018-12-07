@@ -4,20 +4,13 @@
     <div :class="['e-coupon__container', 'clearfix', couponNum]" v-show="coupons.length">
       <van-swipe :width="196" :show-indicators="false" :loop="true" :touchable="true">
         <van-swipe-item v-for="(item, index) in coupons"
-          :key="index" :class="['e-coupon__body', Number(item.unreceivedNum) == 0 ? 'coupon-received-all' : '']">
-            <div class="e-coupon__header clearfix">
-              <span class="e-coupon__price" v-html="priceHtml(item)"></span>
-              <div class="e-coupon__name" v-show="coupons.length == 1">
-                <div class="text-overflow text-14 coupon-name">{{ item.name }}</div>
-                <span class="text-10">{{ timeExpire(item) }}</span>
-              </div>
-                <div class="stamp" v-if="item.currentUserCoupon"></div>
-                <a href="javascript:0;" class="coupon-button" @click="handleClick(item, index)">{{ item.currentUserCoupon ? '去使用' : '领券' }}</a>
-            </div>
-            <div class="e-coupon__middle"></div>
-            <div class="e-coupon__bottom text-overflow">
-              可用范围：{{ scopeFilter(item) }}
-            </div>
+          :key="index">
+          <item
+            :item="item"
+            :index="index"
+            :num="coupons.length"
+            @buttonClick="handleClick">
+          </item>
        </van-swipe-item>
       </van-swipe>
     </div>
@@ -26,8 +19,12 @@
 
 <script>
   import { Toast } from 'vant';
+  import item from './item.vue';
 
   export default {
+    components: {
+      item
+    },
     props: {
       coupons: {
         type: Array,
@@ -78,13 +75,10 @@
         const typeText = item.type === 'discount' ? '折' : '元';
         return `${intPrice}<span class="text-14">${pointPrice + typeText}</span>`;
       },
-      handleClick(data, index) {
+      handleClick(data) {
         if (!this.feedback) return;
-        this.$emit('couponHandle', {
-          data: data,
-          itemIndex: index,
-          couponIndex: this.couponIndex
-        })
+        data.couponIndex = this.couponIndex;
+        this.$emit('couponHandle', data)
       }
     }
   }
