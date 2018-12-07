@@ -119,6 +119,19 @@
       width: vw(196);
     }
   }
+  &__select-circle {
+    display: inline-block;
+    position: absolute;
+    right: vw(10);
+    top: vw(10);
+    width: vw(20);
+    height: vw(20);
+    color: #FFFFFF;
+    .select-icon {
+      font-size: 20px;
+    }
+  }
+
   // 已领完
   .coupon-received-all {
     .e-coupon__header {
