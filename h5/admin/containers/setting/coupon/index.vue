@@ -5,7 +5,7 @@
     </div>
     <div slot="setting" class="coupon-allocate">
       <header class="title">
-        优惠券设置
+        优惠券设置（已过期的优惠券不做展示）
       </header>
       <div class="coupon-allocate__content">
         优惠券选择：

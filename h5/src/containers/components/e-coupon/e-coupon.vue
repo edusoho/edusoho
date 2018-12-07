@@ -12,11 +12,11 @@
                 <span class="text-10">{{ timeExpire(item) }}</span>
               </div>
                 <div class="stamp" v-if="item.currentUserCoupon"></div>
-                <a href="javascript:0;" class="coupon-button">{{ item.currentUserCoupon ? '去使用' : '领券' }}</a>
+                <a href="javascript:0;" class="coupon-button" @click="handleClick(item)">{{ item.currentUserCoupon ? '去使用' : '领券' }}</a>
             </div>
             <div class="e-coupon__middle"></div>
             <div class="e-coupon__bottom text-overflow">
-              可用范围：{{ scopeFilter(item.targetType) }}
+              可用范围：{{ scopeFilter(item) }}
             </div>
        </van-swipe-item>
       </van-swipe>
@@ -25,6 +25,9 @@
 </template>
 
 <script>
+  // import Api from '@/api';
+  import { Toast } from 'vant';
+
   export default {
     props: {
       coupons: {
@@ -38,13 +41,19 @@
       }
     },
     methods: {
-      scopeFilter(type) {
-        if (type === 'class') {
+      scopeFilter(item) {
+        if (item.targetType === 'classroom') {
+          if (item.target) {
+            return '指定班级';
+          }
           return '全部班级';
-        } else if (type === 'course') {
+        } else if (item.targetType === 'course') {
+          if (item.target) {
+            return '指定课程';
+          }
           return '全部课程';
         }
-        return '全站';
+        return '全部商品';
       },
       timeExpire(item) {
         const createdTime = item.createdTime.slice(0, 10);
@@ -57,6 +66,26 @@
         pointPrice = `${pointPrice == 0 ? '' : pointPrice}`;
         const typeText = item.type === 'discount' ? '折' : '元';
         return `${intPrice}<span class="text-14">${pointPrice + typeText}</span>`;
+      },
+      handleClick(data) {
+        // const token = data.token;
+        // Api.receiveCoupon({
+        //   query: { token, }
+        // }).then(res => {
+
+        // }).catch(err => {
+        //   Toast.fail('您好像没有登录哦');
+        // });
+        if (data.currentUserCoupon) {
+          const couponType = data.targetType;
+          if (data.target) {
+            const id = data.target.id;
+            this.$router.push({
+              path: `${couponType}/${id}`
+            })
+          }
+          return;
+        }
       }
     }
   }
