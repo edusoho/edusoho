@@ -1,13 +1,18 @@
 <template>
   <module-frame containerClass="setting-coupon" :isActive="isActive" :isIncomplete="isIncomplete">
     <div slot="preview" class="find-page__part coupon-preview__container">
-      <e-coupon :coupons="copyModuleData.data"></e-coupon>
+      <e-coupon :coupons="copyModuleData.data" :feedback="false" :titleShow="radio"></e-coupon>
     </div>
     <div slot="setting" class="coupon-allocate">
       <header class="title">
         优惠券设置（已过期的优惠券不做展示）
       </header>
       <div class="coupon-allocate__content">
+        <div class="mbm">
+          <span class="coupon-title">标题栏：</span>
+          <el-radio v-model="radio" label="show">显示</el-radio>
+          <el-radio v-model="radio" label="unshow">不显示</el-radio>
+        </div>
         优惠券选择：
         <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
         <div class="coupon-list-container" v-if="copyModuleData.data">
@@ -59,7 +64,8 @@ export default {
         'size-fit',
       ],
       pathName: this.$route.name,
-      type: 'coupon'
+      type: 'coupon',
+      radio: 'show'
     }
   },
   props: {

@@ -1,6 +1,6 @@
 <template>
   <div class="e-coupon">
-    <div class="e-coupon__title">优惠券</div>
+    <div class="e-coupon__title" v-if="titleShow === 'show'">优惠券</div>
     <div :class="['e-coupon__container', 'clearfix', couponNum]" v-show="coupons.length">
       <van-swipe :width="196" :show-indicators="false" :loop="true" :touchable="true">
         <van-swipe-item v-for="(item, index) in coupons"
@@ -12,7 +12,7 @@
                 <span class="text-10">{{ timeExpire(item) }}</span>
               </div>
                 <div class="stamp" v-if="item.currentUserCoupon"></div>
-                <a href="javascript:0;" class="coupon-button" @click="handleClick(item)">{{ item.currentUserCoupon ? '去使用' : '领券' }}</a>
+                <a href="javascript:0;" class="coupon-button" @click="handleClick(item, index)">{{ item.currentUserCoupon ? '去使用' : '领券' }}</a>
             </div>
             <div class="e-coupon__middle"></div>
             <div class="e-coupon__bottom text-overflow">
@@ -25,7 +25,6 @@
 </template>
 
 <script>
-  // import Api from '@/api';
   import { Toast } from 'vant';
 
   export default {
@@ -34,6 +33,18 @@
         type: Array,
         default: []
       },
+      feedback: {
+        type: Boolean,
+        default: true
+      },
+      couponIndex: {
+        type: Number,
+        default: 0
+      },
+      titleShow: {
+        type: String,
+        default: 'show'
+      }
     },
     computed: {
       couponNum() {
@@ -42,16 +53,16 @@
     },
     methods: {
       scopeFilter(item) {
-        if (item.targetType === 'classroom') {
-          if (item.target) {
-            return '指定班级';
-          }
-          return '全部班级';
-        } else if (item.targetType === 'course') {
-          if (item.target) {
-            return '指定课程';
-          }
-          return '全部课程';
+        const { targetType, target } = item;
+
+        if (targetType === 'classroom') {
+          return target ? target.title : '全部班级';
+        }
+        if (targetType === 'course') {
+          return target ? target.title : '全部课程';
+        }
+        if (targetType === 'vip') {
+          return '会员';
         }
         return '全部商品';
       },
@@ -67,25 +78,13 @@
         const typeText = item.type === 'discount' ? '折' : '元';
         return `${intPrice}<span class="text-14">${pointPrice + typeText}</span>`;
       },
-      handleClick(data) {
-        // const token = data.token;
-        // Api.receiveCoupon({
-        //   query: { token, }
-        // }).then(res => {
-
-        // }).catch(err => {
-        //   Toast.fail('您好像没有登录哦');
-        // });
-        if (data.currentUserCoupon) {
-          const couponType = data.targetType;
-          if (data.target) {
-            const id = data.target.id;
-            this.$router.push({
-              path: `${couponType}/${id}`
-            })
-          }
-          return;
-        }
+      handleClick(data, index) {
+        if (!this.feedback) return;
+        this.$emit('couponHandle', {
+          data: data,
+          itemIndex: index,
+          couponIndex: this.couponIndex
+        })
       }
     }
   }

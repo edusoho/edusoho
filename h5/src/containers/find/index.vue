@@ -18,7 +18,9 @@
      <e-coupon-list
         v-if="part.type == 'coupon'"
         :coupons="part.data"
-        :feedback="feedback"></e-coupon-list>
+        :couponIndex="index"
+        @couponHandle="couponHandle"
+        :feedback="true"></e-coupon-list>
     </div>
   </div>
 </template>
@@ -103,6 +105,53 @@
 
           this.parts[index].data.items = res.data;
         })
+      },
+      couponHandle(value) {
+        const data = value.data;
+        const itemIndex = value.itemIndex;
+        const couponIndex = value.couponIndex;
+        const token = data.token;
+        const item = this.parts[couponIndex].data[itemIndex];
+
+        if (data.currentUserCoupon) {
+          const couponType = data.targetType;
+          if (data.target) {
+            const id = data.target.id;
+            this.$router.push({
+              path: `${couponType}/${id}`
+            })
+            return;
+          }
+          if (couponType === 'vip') {
+            Toast.warning('会员课程暂不开放');
+            return;
+          }
+          if (couponType === 'classroom') {
+            this.$router.push({
+              path: 'classroom/explore'
+            })
+            return;
+          }
+          this.$router.push({
+            path: 'course/explore'
+          })
+          return;
+        }
+
+        Api.receiveCoupon({
+          query: { token }
+        }).then(res => {
+          Toast.success('领取成功');
+          item.targetType = res.targetType;
+          item.currentUserCoupon = true;
+          if (res.targetId != 0) {
+            item.target = {
+              id: res.targetId
+            }
+          }
+        }).catch(err => {
+          Toast.fail(err.message);
+        });
       }
     },
   }
