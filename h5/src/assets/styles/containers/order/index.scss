@@ -67,6 +67,14 @@
         .e-coupon__container {
           margin-top: 0
         }
+        .e-coupon__body {
+          &:after {
+            background-color: #f5f5f5;
+          }
+          &:before {
+            background-color: #f5f5f5;
+          }
+        }
       }
       .coupon-empty {
         height: 80vh;
