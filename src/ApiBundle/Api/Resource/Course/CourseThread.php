@@ -45,7 +45,7 @@ class CourseThread extends AbstractResource
             $task = $this->getTaskService()->getTask($taskId);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
             if (!isset($activity['ext']['file'])) {
-                throw new BadRequestHttpException('资源不存在', null, '404');
+                throw new BadRequestHttpException('被提问资源不存在', null, '404');
             }
             $videoId = $activity['ext']['file']['id'];
             $conditions['videoId'] = isset($videoId) ? $videoId : 0;
