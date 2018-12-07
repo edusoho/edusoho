@@ -9,9 +9,7 @@
         :course="course">
       </e-course>
       <div class="order-coupon">
-        <div class="coupon-column"
-          :chosen-coupon="activeItemIndex"
-          @click="showList = true">
+        <div class="coupon-column" @click="showList = true">
           <span>优惠券</span>
           <span class="red">{{ couponShow }}</span>
         </div>
