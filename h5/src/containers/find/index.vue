@@ -19,6 +19,7 @@
         v-if="part.type == 'coupon'"
         :coupons="part.data"
         :couponIndex="index"
+        :showTitle="part.titleShow"
         @couponHandle="couponHandle"
         :feedback="true"></e-coupon-list>
     </div>
