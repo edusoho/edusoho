@@ -1,6 +1,6 @@
 <template>
   <div class="e-coupon">
-    <div class="e-coupon__title" v-if="titleShow === 'show'">优惠券</div>
+    <div class="e-coupon__title" v-if="showTitle === 'show'">优惠券</div>
     <div :class="['e-coupon__container', 'clearfix', couponNum]" v-show="coupons.length">
       <van-swipe :width="196" :show-indicators="false" :loop="true" :touchable="true">
         <van-swipe-item v-for="(item, index) in coupons"
@@ -41,7 +41,7 @@
         type: Number,
         default: 0
       },
-      titleShow: {
+      showTitle: {
         type: String,
         default: 'show'
       }

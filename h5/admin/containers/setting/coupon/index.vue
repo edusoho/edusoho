@@ -1,14 +1,14 @@
 <template>
   <module-frame containerClass="setting-coupon" :isActive="isActive" :isIncomplete="isIncomplete">
     <div slot="preview" class="find-page__part coupon-preview__container">
-      <e-coupon :coupons="copyModuleData.data" :feedback="false" :titleShow="radio"></e-coupon>
+      <e-coupon :coupons="copyModuleData.data" :feedback="false" :showTitle="radio"></e-coupon>
     </div>
     <div slot="setting" class="coupon-allocate">
       <header class="title">
         优惠券设置（已过期的优惠券不做展示）
       </header>
       <div class="coupon-allocate__content">
-        <div class="mbm">
+        <div class="mbm" @change="showTitle">
           <span class="coupon-title">标题栏：</span>
           <el-radio v-model="radio" label="show">显示</el-radio>
           <el-radio v-model="radio" label="unshow">不显示</el-radio>
@@ -126,6 +126,9 @@ export default {
     handleClose(index) {
       this.removeCourseLink(index);
     },
+    showTitle() {
+      this.copyModuleData.titleShow = this.radio
+    }
   }
 }
 
