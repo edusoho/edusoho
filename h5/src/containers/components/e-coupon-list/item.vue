@@ -6,7 +6,7 @@
         <div class="text-overflow text-14 coupon-name">{{ item.name }}</div>
         <span class="text-10">{{ timeExpire(item) }}</span>
       </div>
-      <div class="stamp" v-if="item.currentUserCoupon"></div>
+      <div class="stamp" v-if="!(item.unreceivedNum != 0 && !item.currentUserCoupon)"></div>
       <span class="coupon-button" @click="handleClick(item, index)">{{ item.currentUserCoupon ? '去使用' : '领券' }}</span>
     </div>
     <div class="e-coupon__middle"></div>
@@ -23,7 +23,7 @@
     props: ['item', 'num', 'index'],
     computed: {
       couponStatus() {
-        const currentUserCoupon = this.item.currentUserCoupon;
+        let currentUserCoupon = this.item.currentUserCoupon;
         if (this.item.unreceivedNum == 0 && !currentUserCoupon) {
           return 'coupon-received-all';
         }
