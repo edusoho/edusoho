@@ -12,7 +12,7 @@
         <i class="icon h5-icon h5-icon-guanbi" @click="couponListShow = false"></i>
       </div>
       <div class="coupon-popup__content">
-        <coupon v-for="(item, index) in unreceivedCoupons" :key="index" :coupon="item" />
+        <coupon v-for="(item, index) in unreceivedCoupons" :key="index" :coupon="item" :showButton="true" />
       </div>
       <div class="coupon-empty" v-show="!unreceivedCoupons.length">
         <img class="empty-img" src='static/images/coupon_empty.png'>
