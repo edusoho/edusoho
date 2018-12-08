@@ -31,6 +31,7 @@
   import swipe from '../components/e-swipe/e-swipe.vue';
   import couponList from '../components/e-coupon-list/e-coupon-list.vue';
   import * as types from '@/store/mutation-types';
+  import getCouponMixin from '@/mixins/coupon/getCouponHandler';
   import Api from '@/api';
   import { mapState } from 'vuex';
   import { Toast } from 'vant';
@@ -42,6 +43,7 @@
       'e-poster': poster,
       'e-coupon-list': couponList
     },
+    mixins: [getCouponMixin],
     props: {
       feedback: {
         type: Boolean,
@@ -106,52 +108,6 @@
           this.parts[index].data.items = res.data;
         })
       },
-      couponHandle(value, couponList) {
-        const data = value.item;
-        const itemIndex = value.itemIndex;
-        const token = data.token;
-        const item = couponList[itemIndex];
-
-        if (data.currentUserCoupon) {
-          const couponType = data.targetType;
-          if (data.target) {
-            const id = data.target.id;
-            this.$router.push({
-              path: `${couponType}/${id}`
-            })
-            return;
-          }
-          if (couponType === 'vip') {
-            Toast.warning('你可以在电脑端或App上购买会员');
-            return;
-          }
-          if (couponType === 'classroom') {
-            this.$router.push({
-              path: 'classroom/explore'
-            })
-            return;
-          }
-          this.$router.push({
-            path: 'course/explore'
-          })
-          return;
-        }
-
-        Api.receiveCoupon({
-          query: { token }
-        }).then(res => {
-          Toast.success('领取成功');
-          item.currentUserCoupon = true;
-          // xxxxxxxx
-          if (res.targetId != 0) {
-            item.target = {
-              id: res.targetId
-            }
-          }
-        }).catch(err => {
-          Toast.fail(err.message);
-        });
-      }
     },
   }
 </script>

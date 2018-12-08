@@ -12,7 +12,8 @@
         <i class="icon h5-icon h5-icon-guanbi" @click="couponListShow = false"></i>
       </div>
       <div class="coupon-popup__content">
-        <coupon v-for="(item, index) in unreceivedCoupons" :key="index" :coupon="item" :showButton="true" />
+        <coupon v-for="(item, index) in unreceivedCoupons" :key="index" :index="index" :coupon="item" :showButton="true"
+          @couponHandle="couponHandle($event, unreceivedCoupons)" />
       </div>
       <div class="coupon-empty" v-show="!unreceivedCoupons.length">
         <img class="empty-img" src='static/images/coupon_empty.png'>
@@ -25,9 +26,11 @@
 <script>
 import coupon from '@/containers/components/e-coupon/e-coupon.vue';
 import miniCoupon from '@/containers/components/e-mini-coupon/e-mini-coupon.vue';
+import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 
 export default {
   name: 'onsale',
+  mixins: [getCouponMixin],
   components: {
     coupon,
     miniCoupon,

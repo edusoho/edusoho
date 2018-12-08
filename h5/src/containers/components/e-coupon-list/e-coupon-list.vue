@@ -18,15 +18,12 @@
 </template>
 
 <script>
-  import { Toast } from 'vant';
   import item from './item.vue';
-  import couponMixin from '@/mixins/coupon'
 
   export default {
     components: {
       item
     },
-    mixins: [couponMixin],
     props: {
       coupons: {
         type: Array,
