@@ -10,7 +10,7 @@ export default {
       }
       createdTime = item.createdTime.slice(0, 10);
       deadline = item.deadline.slice(0, 10);
-      return `${createdTime}至${deadline}`;
+      return `${createdTime} 至 ${deadline}`;
     },
     priceHtml(item, needStyle = true) {
       const intPrice = parseInt(item.rate, 10);
@@ -35,6 +35,12 @@ export default {
         return '会员';
       }
       return '全部商品';
+    },
+    handleClick(data, index) {
+      this.$emit('buttonClick', {
+        item: data,
+        itemIndex: index
+      });
     }
   }
 };
