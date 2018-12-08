@@ -179,10 +179,9 @@ export default {
         return;
       }
       if (this.type === 'coupon') {
-        const currentStamp = Date.parse(new Date()) / 1000;
         this.getCouponList({
           name: queryString,
-          deadlineGt: currentStamp,
+          unexpired: 1,
           unreceivedNumGt: 0
         }).then(res => {
           cb(res.data);
