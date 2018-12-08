@@ -24,8 +24,11 @@
 </template>
 
 <script>
+import couponMixin from '@/mixins/coupon'
+
 export default {
   name: 'e-coupon',
+  mixins: [couponMixin],
   props: {
     showButton: {
       type: Boolean,
@@ -56,39 +59,6 @@ export default {
     }
   },
   methods: {
-    timeExpire(item) {
-      let createdTime = '';
-      let deadline = '';
-
-      if (!item.createdTime) {
-        deadline = item.deadline.slice(0, 10);
-        return `有效期截止：${deadline}`;
-      }
-      createdTime = item.createdTime.slice(0, 10);
-      deadline = item.deadline.slice(0, 10);
-      return `${createdTime}至${deadline}`;
-    },
-    priceHtml(item) {
-      const intPrice = parseInt(item.rate);
-      let pointPrice = `.${Number(item.rate).toFixed(2).split('.')[1]}`;
-      pointPrice = `${pointPrice == 0 ? '' : pointPrice}`;
-      const typeText = item.type === 'discount' ? '折' : '元';
-      return `${intPrice}<span class="text-14">${pointPrice + typeText}</span>`;
-    },
-    scopeFilter(item) {
-      const { targetType, target } = item
-
-      if (targetType === 'classroom') {
-        return target ? target.title : '全部班级';
-      }
-      if (targetType === 'course' && !target) {
-        return target ? target.title : '全部班级';
-      }
-      if (targetType === 'vip') {
-        return '会员'
-      }
-      return '全部商品';
-    },
     onSelect() {
       this.$emit('chooseItem',
       {

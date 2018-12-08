@@ -3,10 +3,13 @@
     <div class="join-before">
       <detail-head :cover="details.cover"></detail-head>
 
-      <template>
-        <detail-plan :details="planDetails" :joinStatus="details.joinStatus" @getLearnExpiry="getLearnExpiry"></detail-plan>
-        <div class="segmentation"></div>
-      </template>
+      <detail-plan :details="planDetails" :joinStatus="details.joinStatus"
+        @getLearnExpiry="getLearnExpiry"></detail-plan>
+      <div class="segmentation"></div>
+
+      <!-- 优惠活动 -->
+      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
+      <div class="segmentation"></div>
 
       <van-tabs v-model="active" @click="onTabClick" :class="tabsClass">
         <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
@@ -42,7 +45,6 @@
       {{details.access.code | filterJoinStatus('classroom')}}</e-footer>
     </div>
 
-
   </div>
 </template>
 
@@ -53,6 +55,7 @@
   import courseSetList from './course-set-list';
   import detailPlan from './plan';
   import directory from '../course/detail/directory';
+  import onsale from '../course/detail/onsale'
   import moreMask from '@/components/more-mask';
   import redirectMixin from '@/mixins/saveRedirect';
   import Api from '@/api';
@@ -68,7 +71,8 @@
       teacher,
       courseSetList,
       reviewList,
-      moreMask
+      moreMask,
+      onsale,
     },
     props: ['details', 'planDetails'],
     data() {
@@ -85,6 +89,8 @@
         loadMoreAbout: false,
         disableMask: false,
         learnExpiry: '永久有效',
+        unreceivedCoupons: [],
+        miniCoupons: [],
       }
     },
     computed: {
@@ -94,6 +100,21 @@
       },
     },
     mounted() {
+      Api.searchCoupon({
+        params: {
+          targetId: this.details.classId,
+          targetType: 'classroom',
+        }
+      }).then(res => {
+        for (var i = 0; i < res.length; i++) {
+          if (res[i].currentUserCoupon) {
+            continue;
+          }
+          this.unreceivedCoupons.push(res[i]);
+        }
+        this.miniCoupons = this.unreceivedCoupons.length > 3 ?
+          this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
+      })
       window.addEventListener('touchmove', this.handleScroll);
       window.addEventListener('scroll', this.handleScroll);
       setTimeout(() => {
