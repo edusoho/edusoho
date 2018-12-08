@@ -99,15 +99,19 @@ a {
 }
 
 .mt50 {
-  margin-top: vw(50);
+  margin-top: vw(50) !important;
 }
 
 .mt5 {
-  margin-top: vw(5);
+  margin-top: vw(5) !important;
 }
 
 .ml3 {
   margin-left: vw(3) !important;
+}
+
+.ml10 {
+  margin-left: vw(10) !important;
 }
 
 // color

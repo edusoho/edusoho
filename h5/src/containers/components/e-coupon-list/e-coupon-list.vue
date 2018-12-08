@@ -20,11 +20,13 @@
 <script>
   import { Toast } from 'vant';
   import item from './item.vue';
+  import couponMixin from '@/mixins/coupon'
 
   export default {
     components: {
       item
     },
+    mixins: [couponMixin],
     props: {
       coupons: {
         type: Array,
@@ -49,32 +51,6 @@
       }
     },
     methods: {
-      scopeFilter(item) {
-        const { targetType, target } = item;
-
-        if (targetType === 'classroom') {
-          return target ? target.title : '全部班级';
-        }
-        if (targetType === 'course') {
-          return target ? target.title : '全部课程';
-        }
-        if (targetType === 'vip') {
-          return '会员';
-        }
-        return '全部商品';
-      },
-      timeExpire(item) {
-        const createdTime = item.createdTime.slice(0, 10);
-        const deadline = item.deadline.slice(0, 10);
-        return `${createdTime}至${deadline}`;
-      },
-      priceHtml(item) {
-        const intPrice = parseInt(item.rate);
-        let pointPrice = `.${Number(item.rate).toFixed(2).split('.')[1]}`;
-        pointPrice = `${pointPrice == 0 ? '' : pointPrice}`;
-        const typeText = item.type === 'discount' ? '折' : '元';
-        return `${intPrice}<span class="text-14">${pointPrice + typeText}</span>`;
-      },
       handleClick(data) {
         if (!this.feedback) return;
         data.couponIndex = this.couponIndex;

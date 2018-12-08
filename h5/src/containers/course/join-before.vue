@@ -6,6 +6,12 @@
     <detail-plan @getLearnExpiry="getLearnExpiry"></detail-plan>
     <div class="segmentation"></div>
 
+    <!-- 优惠活动 -->
+    <template v-if="!isClassCourse">
+      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
+      <div class="segmentation"></div>
+    </template>
+
     <van-tabs v-model="active" @click="onTabClick" :class="tabsClass">
       <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
     </van-tabs>
@@ -42,8 +48,10 @@
   import Directory from './detail/directory';
   import DetailHead from './detail/head';
   import DetailPlan from './detail/plan';
+  import onsale from './detail/onsale';
   import { mapActions, mapState } from 'vuex';
   import redirectMixin from '@/mixins/saveRedirect';
+  import Api from '@/api';
 
   const TAB_HEIGHT = 44;
 
@@ -64,6 +72,8 @@
           courseTop: 0,
           reviewTop: 0,
         },
+        unreceivedCoupons: [],
+        miniCoupons: [],
       };
     },
     components: {
@@ -72,7 +82,8 @@
       DetailHead,
       DetailPlan,
       moreMask,
-      reviewList
+      reviewList,
+      onsale,
     },
     computed: {
       ...mapState('course', {
@@ -90,6 +101,19 @@
       },
     },
     mounted() {
+      if (!isClassCourse) {
+        Api.searchCoupon({
+          params: {
+            targetId: this.details.id,
+            targetType: 'course',
+          }
+        }).then(res => {
+          this.unreceivedCoupons = res;
+          this.miniCoupons = this.unreceivedCoupons.length > 3 ?
+            this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
+        });
+      }
+
       window.addEventListener('touchmove', this.handleScroll);
       window.addEventListener('scroll', this.handleScroll);
       setTimeout(() => {

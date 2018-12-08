@@ -20,6 +20,12 @@ axios.interceptors.request.use(config => {
   if (store.state.token) {
     config.headers['X-Auth-Token'] = store.state.token;
   }
+
+  // 自定义配置显示 loading 动画
+  if (config.disableLoading) {
+    return config;
+  }
+
   store.commit('UPDATE_LOADING_STATUS', true);
 
   return config;

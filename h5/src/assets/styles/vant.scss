@@ -24,3 +24,15 @@
 .van-popup{
   overflow: auto;
 }
+
+.van-cell {
+  padding-left: 0;
+  padding-right: 0;
+  .van-cell__title {
+    color: #71777D;
+  }
+  &:not(:last-child)::after {
+    left: 0;
+    transform: scaleY(1)
+  }
+}

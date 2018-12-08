@@ -13,7 +13,7 @@
           <span>优惠券</span>
           <span class="red">{{ couponShow }}</span>
         </div>
-        <van-popup class="coupon" v-model="showList" position="bottom" :overlay="false">
+        <van-popup class="full-height-popup coupon-popup" v-model="showList" position="bottom" :overlay="false">
           <van-nav-bar title="优惠券"
             class="nav-bar"
             :left-arrow="true"
