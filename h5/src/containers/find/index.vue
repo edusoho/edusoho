@@ -143,8 +143,8 @@
           query: { token }
         }).then(res => {
           Toast.success('领取成功');
-          item.targetType = res.targetType;
           item.currentUserCoupon = true;
+          // xxxxxxxx
           if (res.targetId != 0) {
             item.target = {
               id: res.targetId
