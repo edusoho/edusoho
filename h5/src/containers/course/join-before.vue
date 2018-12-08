@@ -112,6 +112,9 @@
             if (res[i].unreceivedNum == 0 && !res[i].currentUserCoupon) {
               continue;
             }
+            if (res[i].currentUserCoupon.status === 'used') {
+              continue;
+            }
             this.unreceivedCoupons.push(res[i]);
           }
           this.miniCoupons = this.unreceivedCoupons.length > 3 ?
