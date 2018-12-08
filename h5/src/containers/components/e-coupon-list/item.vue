@@ -48,7 +48,7 @@
       timeExpire(item) {
         const createdTime = item.createdTime.slice(0, 10);
         const deadline = item.deadline.slice(0, 10);
-        return `${createdTime}至${deadline}`;
+        return `${createdTime} 至 ${deadline}`;
       },
       priceHtml(item) {
         const intPrice = parseInt(item.rate);
