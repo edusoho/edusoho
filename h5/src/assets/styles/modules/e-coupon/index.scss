@@ -169,3 +169,21 @@
     background-size: 100%;
   }
 }
+
+.mini-coupon {
+  position: relative;
+  &:before {
+    position: absolute;
+    content: "";
+    height: 80%;
+    border-left: vw(4) dotted #FFFFFF;
+    left: vw(-2);
+  }
+  &:after {
+    position: absolute;
+    content: "";
+    height: 80%;
+    border-right: vw(4) dotted #FFFFFF;
+    right: vw(-2);
+  }
+}

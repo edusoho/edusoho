@@ -24,7 +24,9 @@ import {
   Field,
   Uploader,
   Popup,
-  Rate
+  Rate,
+  Cell,
+  Tag
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -39,8 +41,10 @@ Vue.component('van-tabs', Tabs);
 Vue.component('van-field', Field);
 Vue.component('van-uploader', Uploader);
 Vue.component('van-rate', Rate);
+Vue.component('van-cell', Cell);
 
 Vue.use(filters);
+Vue.use(Tag);
 Vue.use(Popup);
 Vue.use(plugins);
 Vue.use(utils);
