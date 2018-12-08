@@ -2,26 +2,26 @@
   <div class="find-page">
     <e-loading v-if="isLoading"></e-loading>
     <div class="find-page__part" v-for="(part, index) in parts" :key="index">
-      <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
+      <e-swipe v-if="part.type === 'slide_show'" :slides="part.data"></e-swipe>
       <e-course-list
         v-if="['classroom_list', 'course_list'].includes(part.type)"
         :courseList="part.data"
         :typeList="part.type"
         :feedback="feedback"
         :index="index"
-        @fetchCourse="fetchCourse"></e-course-list>
+        @fetchCourse="fetchCourse"/>
       <e-poster
-        v-if="part.type == 'poster'"
+        v-if="part.type === 'poster'"
         :class="imageMode[part.data.responsive]"
         :poster="part.data"
-        :feedback="feedback"></e-poster>
-     <e-coupon-list
-        v-if="part.type == 'coupon'"
+        :feedback="feedback"/>
+      <e-coupon-list
+        v-if="part.type === 'coupon'"
         :coupons="part.data"
         :couponIndex="index"
         :showTitle="part.titleShow"
         @couponHandle="couponHandle"
-        :feedback="true"></e-coupon-list>
+        :feedback="true"/>
     </div>
   </div>
 </template>
