@@ -106,7 +106,12 @@
           targetType: 'classroom',
         }
       }).then(res => {
-        this.unreceivedCoupons = res;
+        for (var i = 0; i < res.length; i++) {
+          if (res[i].currentUserCoupon) {
+            continue;
+          }
+          this.unreceivedCoupons.push(res[i]);
+        }
         this.miniCoupons = this.unreceivedCoupons.length > 3 ?
           this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
       })
