@@ -36,10 +36,6 @@
         type: Boolean,
         default: true
       },
-      couponIndex: {
-        type: Number,
-        default: 0
-      },
       showTitle: {
         type: String,
         default: 'show'
@@ -53,7 +49,6 @@
     methods: {
       handleClick(data) {
         if (!this.feedback) return;
-        data.couponIndex = this.couponIndex;
         this.$emit('couponHandle', data)
       }
     }

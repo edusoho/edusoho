@@ -18,9 +18,8 @@
      <e-coupon-list
         v-if="part.type == 'coupon'"
         :coupons="part.data"
-        :couponIndex="index"
         :showTitle="part.titleShow"
-        @couponHandle="couponHandle"
+        @couponHandle="couponHandle($event, part.data)"
         :feedback="true"></e-coupon-list>
     </div>
   </div>
@@ -107,12 +106,11 @@
           this.parts[index].data.items = res.data;
         })
       },
-      couponHandle(value) {
+      couponHandle(value, couponList) {
         const data = value.item;
         const itemIndex = value.itemIndex;
-        const couponIndex = value.couponIndex;
         const token = data.token;
-        const item = this.parts[couponIndex].data[itemIndex];
+        const item = couponList[itemIndex];
 
         if (data.currentUserCoupon) {
           const couponType = data.targetType;
