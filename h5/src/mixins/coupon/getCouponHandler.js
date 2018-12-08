@@ -36,15 +36,15 @@ export default {
 
       Api.receiveCoupon({
         query: { token }
-      }).then(res => {
+      }).then(() => {
         Toast.success('领取成功');
         item.currentUserCoupon = true;
         // xxxxxxxx
-        if (Number(res.targetId) !== 0) {
-          item.target = {
-            id: res.targetId
-          };
-        }
+        // if (Number(res.targetId) !== 0) {
+        //   item.target = {
+        //     id: res.targetId
+        //   };
+        // }
       }).catch(err => {
         Toast.fail(err.message);
       });

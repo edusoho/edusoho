@@ -33,7 +33,5 @@
       }
     },
     mixins: [couponMixin],
-    methods: {
-    }
   }
 </script>

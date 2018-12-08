@@ -8,17 +8,17 @@
         优惠券设置（已过期的优惠券不做展示）
       </header>
       <div class="coupon-allocate__content">
-        <div class="mbm" @change="showTitle">
+        <div class="mbm text-14" @change="showTitle">
           <span class="coupon-title">标题栏：</span>
           <el-radio v-model="radio" label="show">显示</el-radio>
           <el-radio v-model="radio" label="unshow">不显示</el-radio>
         </div>
-        优惠券选择：
+        <span class="text-14">优惠券选择：</span>
         <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
         <div class="coupon-list-container" v-if="copyModuleData.data">
           <draggable v-model="copyModuleData.data" class="section__course-container">
             <el-tag
-              class="courseLink coupon-list-item"
+              class="courseLink coupon-list-item text-overflow"
               closable
               :disable-transitions="true"
               v-for="(item, index) in copyModuleData.data"

@@ -1,7 +1,7 @@
 import { formatTime } from '@/utils/date-toolkit';
 
 const tableFilter = (item, label) => {
-
+console.log(item, label,999)
   if (label.toLocaleLowerCase().includes('price')) {
     if (!item[label]) {
       return '未设置';
@@ -15,7 +15,7 @@ const tableFilter = (item, label) => {
         return '未知日期'
       }
       const date = new Date(item['deadline']);
-      return formatTime(date);
+      return formatTime(date).slice(0, 10);
     case 'delete':
       return `移除`;
     case 'price':
@@ -31,7 +31,9 @@ const tableFilter = (item, label) => {
       } else if (item['targetType'] === 'vip') {
         return '会员'
       }
-      return '全站'
+      return '全站';
+    case 'generatedNum':
+      return `${item['usedNum']} / ${item['generatedNum']}`;
     default:
       return item[label]
   }
