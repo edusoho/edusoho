@@ -6,13 +6,8 @@
         <div class="text-overflow text-14 coupon-name">{{ item.name }}</div>
         <span class="text-10">{{ timeExpire(item) }}</span>
       </div>
-      <div v-if="item.currentUserCoupon">
-        <div class="stamp"></div>
-        <span class="coupon-button" @click="handleClick(item, index)">去使用</span>
-      </div>
-      <div v-if="!item.currentUserCoupon">
-        <span class="coupon-button" @click="handleClick(item, index)">领券</span>
-      </div>
+      <div class="stamp" v-if="item.currentUserCoupon"></div>
+      <span class="coupon-button" @click="handleClick(item, index)">{{ item.currentUserCoupon ? '去使用' : '领券' }}</span>
     </div>
     <div class="e-coupon__middle"></div>
     <div class="e-coupon__bottom text-overflow">
