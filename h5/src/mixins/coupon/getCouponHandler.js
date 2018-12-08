@@ -36,7 +36,7 @@ export default {
 
       Api.receiveCoupon({
         query: { token }
-      }).then(res => {
+      }).then(() => {
         Toast.success('领取成功');
         item.currentUserCoupon = true;
         // xxxxxxxx
