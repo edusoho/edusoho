@@ -35,6 +35,12 @@ export default {
         return '会员';
       }
       return '全部商品';
+    },
+    handleClick(data, index) {
+      this.$emit('buttonClick', {
+        item: data,
+        itemIndex: index
+      });
     }
   }
 };

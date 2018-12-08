@@ -12,7 +12,7 @@
           <div class="e-coupon__select-circle" v-if="showSelecet">
             <i class="select-icon" :class="index === active ? 'h5-icon h5-icon-check' : ''"></i>
           </div>
-          <span class="coupon-button" v-if="showButton && !coupon.currentUserCoupon">领券</span>
+          <span class="coupon-button" @click="couponHandle(coupon, index)" v-if="showButton && !coupon.currentUserCoupon">领券</span>
         </div>
         <div class="e-coupon__middle"></div>
         <div class="e-coupon__bottom text-overflow">
@@ -60,11 +60,18 @@ export default {
   },
   methods: {
     onSelect() {
-      this.$emit('chooseItem',
-      {
+      if (!this.showSelecet) return
+
+      this.$emit('chooseItem', {
         index: this.index,
         itemData: this.coupon
       })
+    },
+    couponHandle(data, index) {
+      this.$emit('couponHandle', {
+        item: data,
+        itemIndex: index
+      });
     },
   }
 }
