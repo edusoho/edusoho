@@ -26,48 +26,6 @@
         font-size: vw(14);
         border-top: 1px solid #eee
       }
-      .btn-coupon-exit {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 vw(20);
-        line-height: vw(46);
-        background-color: #fff;
-        font-size: vw(14);
-        .h5-icon {
-          font-size: vw(24);
-          color: #c1c1c1;
-        }
-        .h5-icon-check {
-          display: none;
-        }
-        &.active {
-          .h5-icon-circle {
-            display: none;
-          }
-          .h5-icon-check {
-            display: block;
-            color: #FF9800;
-          }
-        }
-      }
-      .van-popup {
-        height: 100%;
-        margin-top: vw(30);
-        background-color: #f5f5f5;
-        .coupon-container:nth-child(3) {
-          padding-top: vw(30);
-        }
-        .coupon-container:nth-last-child(2) {
-          padding-bottom: vw(30);
-        }
-      }
-      .coupon-container {
-        background-color: #f5f5f5;
-        padding: vw(10) vw(20);
-        .e-coupon__container {
-          margin-top: 0
-        }
-      }
       .coupon-empty {
         height: 80vh;
         text-align: center;
@@ -119,6 +77,57 @@
     >span {
       font-size: vw(14);
       font-weight: 500;
+    }
+  }
+}
+
+.van-popup.coupon {
+  height: 100%;
+  margin-top: vw(30);
+  background-color: #f5f5f5;
+  .btn-coupon-exit {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 vw(20);
+    line-height: vw(46);
+    background-color: #fff;
+    font-size: vw(14);
+    .h5-icon {
+      font-size: vw(24);
+      color: #c1c1c1;
+    }
+    .h5-icon-check {
+      display: none;
+    }
+    &.active {
+      .h5-icon-circle {
+        display: none;
+      }
+      .h5-icon-check {
+        display: block;
+        color: #FF9800;
+      }
+    }
+  }
+  .coupon-container:nth-child(3) {
+    padding-top: vw(30);
+  }
+  .coupon-container:nth-last-child(2) {
+    padding-bottom: vw(30);
+  }
+  .coupon-container {
+    background-color: #f5f5f5;
+    padding: vw(10) vw(20);
+    .e-coupon__container {
+      margin-top: 0
+    }
+    .e-coupon__body {
+      &:after {
+        background-color: #f5f5f5;
+      }
+      &:before {
+        background-color: #f5f5f5;
+      }
     }
   }
 }
