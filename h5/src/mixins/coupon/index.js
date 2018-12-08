@@ -14,8 +14,8 @@ export default {
     },
     priceHtml(item, needStyle = true) {
       const intPrice = parseInt(item.rate, 10);
-      let pointPrice = `.${Number(item.rate).toFixed(2).split('.')[1]}`;
-      pointPrice = `${pointPrice == 0 ? '' : pointPrice}`;
+      let pointPrice = `${Number(item.rate).toFixed(2).split('.')[1]}`;
+      pointPrice = `${Number(pointPrice) === 0 ? '' : (`.${pointPrice}`)}`;
       const typeText = item.type === 'discount' ? '折' : '元';
       if (!needStyle) {
         return intPrice + pointPrice + typeText;

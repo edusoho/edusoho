@@ -1,7 +1,7 @@
 <template>
-  <div class="coupon-container" @click="onSelect">
+  <div class="coupon-container e-coupon" @click="onSelect">
     <div class="e-coupon__container clearfix e-coupon-single">
-      <div :key="index" :class="['e-coupon__body', Number(coupon.unreceivedNum) == 0 ? 'coupon-received-all' : '']">
+      <div :key="index" class="e-coupon__body">
         <div class="e-coupon__header clearfix">
           <span class="e-coupon__price" v-html="priceHtml(coupon)"></span>
           <div class="e-coupon__name">
@@ -12,7 +12,7 @@
           <div class="e-coupon__select-circle" v-if="showSelecet">
             <i class="select-icon" :class="index === active ? 'h5-icon h5-icon-check' : ''"></i>
           </div>
-          <span class="coupon-button" v-if="showButton">{{ coupon.currentUserCoupon ? '去使用' : '领券' }}</span>
+          <span class="coupon-button" v-if="showButton && !coupon.currentUserCoupon">领券</span>
         </div>
         <div class="e-coupon__middle"></div>
         <div class="e-coupon__bottom text-overflow">

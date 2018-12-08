@@ -2,21 +2,21 @@
   <div class="find-page">
     <e-loading v-if="isLoading"></e-loading>
     <div class="find-page__part" v-for="(part, index) in parts" :key="index">
-      <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
+      <e-swipe v-if="part.type === 'slide_show'" :slides="part.data"></e-swipe>
       <e-course-list
         v-if="['classroom_list', 'course_list'].includes(part.type)"
         :courseList="part.data"
         :typeList="part.type"
         :feedback="feedback"
         :index="index"
-        @fetchCourse="fetchCourse"></e-course-list>
+        @fetchCourse="fetchCourse"/>
       <e-poster
-        v-if="part.type == 'poster'"
+        v-if="part.type === 'poster'"
         :class="imageMode[part.data.responsive]"
         :poster="part.data"
-        :feedback="feedback"></e-poster>
-     <e-coupon-list
-        v-if="part.type == 'coupon'"
+        :feedback="feedback"/>
+      <e-coupon-list
+        v-if="part.type === 'coupon'"
         :coupons="part.data"
         :showTitle="part.titleShow"
         @couponHandle="couponHandle($event, part.data)"
@@ -122,7 +122,7 @@
             return;
           }
           if (couponType === 'vip') {
-            Toast.warning('会员课程暂不开放');
+            Toast.warning('你可以在电脑端或App上购买会员');
             return;
           }
           if (couponType === 'classroom') {
@@ -141,8 +141,8 @@
           query: { token }
         }).then(res => {
           Toast.success('领取成功');
-          item.targetType = res.targetType;
           item.currentUserCoupon = true;
+          // xxxxxxxx
           if (res.targetId != 0) {
             item.target = {
               id: res.targetId

@@ -181,6 +181,8 @@ export default {
       if (this.type === 'coupon') {
         this.getCouponList({
           name: queryString,
+          unexpired: 1,
+          unreceivedNumGt: 0
         }).then(res => {
           cb(res.data);
         })

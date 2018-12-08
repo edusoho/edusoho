@@ -107,7 +107,10 @@
         }
       }).then(res => {
         for (var i = 0; i < res.length; i++) {
-          if (res[i].currentUserCoupon) {
+          if (res[i].unreceivedNum == 0 && !res[i].currentUserCoupon) {
+            continue;
+          }
+          if (res[i].currentUserCoupon.status === 'used') {
             continue;
           }
           this.unreceivedCoupons.push(res[i]);

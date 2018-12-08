@@ -3,7 +3,8 @@ export default [
     // 领取优惠券
     name: 'receiveCoupon',
     url: '/plugins/coupon/coupon_batches/{token}/receivers',
-    method: 'POST'
+    method: 'POST',
+    disableLoading: true
   }, {
     // 根据渠道查询优惠券
     name: 'searchCoupon',
