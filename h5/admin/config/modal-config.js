@@ -84,7 +84,7 @@ const head = {
       title: '使用对象',
       label: 'targetType',
     }, {
-      col: 1,
+      col: 2,
       title: '优惠内容',
       label: 'rate',
     }, {
