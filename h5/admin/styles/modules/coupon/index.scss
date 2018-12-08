@@ -65,6 +65,7 @@
       position: absolute;
       right: 90px;
       top: 22px;
+      line-height: 1.2;
       color: #fff;
       margin-left: 10px;
     }
@@ -86,7 +87,7 @@
     }
     &__price {
       display: inline-block;
-      margin-top: -3px;
+      margin-top: -4px;
       color: #fff;
       font-size: 32px;
       font-weight: 500;
@@ -121,7 +122,7 @@
       }
     }
     // 已领完
-    .coupon-received-all {
+    .coupon-received-all, .coupon-used {
       .e-coupon__header {
         background-color: #B0BDC9;
       }
@@ -134,8 +135,21 @@
       .coupon-button {
         display: none;
       }
+    }
+    .coupon-received-all {
       .stamp {
         right: 20px;
+        background-image: url('../../static/images/received_all.png') !important;
+      }
+    }
+    // 已使用
+    .coupon-used {
+      .coupon-button {
+        display: none;
+      }
+      .stamp {
+        right: 20px;
+        // 暂时缺已使用的图
         background-image: url('../../static/images/received_all.png') !important;
       }
     }
