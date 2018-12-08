@@ -108,7 +108,7 @@
         })
       },
       couponHandle(value) {
-        const data = value.data;
+        const data = value.item;
         const itemIndex = value.itemIndex;
         const couponIndex = value.couponIndex;
         const token = data.token;
