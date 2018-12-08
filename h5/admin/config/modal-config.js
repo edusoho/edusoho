@@ -70,7 +70,7 @@ const head = {
   ],
   coupon: [
     {
-      col: 3,
+      col: 2,
       title: '优惠券名称',
       label: 'name',
     }, {
@@ -86,7 +86,7 @@ const head = {
       title: '优惠内容',
       label: 'rate',
     }, {
-      col: 1,
+      col: 2,
       title: '剩余数量/总数量',
       label: 'generatedNum',
     }, {

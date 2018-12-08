@@ -124,7 +124,7 @@
             return;
           }
           if (couponType === 'vip') {
-            Toast.warning('会员课程暂不开放');
+            Toast.warning('你可以在电脑端或App上购买会员');
             return;
           }
           if (couponType === 'classroom') {
