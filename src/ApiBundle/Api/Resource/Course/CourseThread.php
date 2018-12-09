@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Common\CommonException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CourseThread extends AbstractResource
@@ -15,11 +14,14 @@ class CourseThread extends AbstractResource
         $this->getCourseService()->tryTakeCourse($courseId);
 
         $thread = $this->getCourseThreadService()->getThreadByThreadId($threadId);
-        $thread = $this->addAttachments($thread);
+
+        if ($thread['source'] == 'app') {
+            $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread', $threadId, 'attachment');
+            $thread = $this->addAttachments($thread, ArrayToolkit::group($attachments, 'targetId'));
+        }
+
         if (!empty($thread['videoId'])) {
             $file = $this->getUploadFileService()->getFullFile($thread['videoId']);
-            $download = $this->getUploadFileService()->getDownloadMetas($file['id']);
-            $thread['askVideoUri'] = $download['url'];
             $thread['askVideoLength'] = $file['length'];
             $thread['askVideoThumbnail'] = $file['thumbnail'];
         }
@@ -67,10 +69,13 @@ class CourseThread extends AbstractResource
             $limit
         );
 
+        $attachments = $this->getUploadFileService()->searchUseFiles(array('targetType' => 'course.thread', 'targetIds' => ArrayToolkit::column($threads, 'id')));
+        $attachments = ArrayToolkit::group($attachments, 'targetId');
         foreach ($threads as &$thread) {
-            $thread = $this->addAttachments($thread);
+            if ($thread['source'] == 'app') {
+                $thread = $this->addAttachments($thread, $attachments);
+            }
         }
-
         $this->getOCUtil()->multiple($threads, array('userId'));
 
         return $this->makePagingObject(array_values($threads), $total, $offset, $limit);
@@ -115,36 +120,27 @@ class CourseThread extends AbstractResource
         return $result;
     }
 
-    protected function addAttachments($thread)
+    protected function addAttachments($thread, $attachments)
     {
-        $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread', $thread['id'], 'attachment');
-        if ($thread['source'] == 'app' && !empty($attachments)) {
+        if (isset($attachments[$thread['id']])) {
             $thread['attachments'] = array();
-            foreach ($attachments as $attachment) {
-                $attachment = $this->getUploadFileService()->getUseFile($attachment['id']);
-                $file = $this->getUploadFileService()->getFullFile($attachment['fileId']);
-
-                if ($file['storage'] != 'cloud') {
-                    throw CommonException::ERROR_PARAMETER();
-                }
-
-//                if ($file['targetType'] != 'attachment') {
-//                    throw CommonException::ERROR_PARAMETER();
-//                }
-
-                $download = $this->getUploadFileService()->getDownloadMetas($file['id']);
+            foreach ($attachments[$thread['id']] as $attachment) {
+                $file = isset($attachment['file']) ? $attachment['file'] : array();
 
                 if ($file['type'] == 'video' or $file['type'] == 'audio') {
                     $thread['attachments'][$file['type']] = array(
-                        'uri' => $download['url'],
+                        'id' => $file['id'],
                         'length' => $file['length'],
                     );
                 } else {
-                    $thread['attachments']['pictures'][] = $download['url'];
+                    $thread['attachments']['pictures'][] = array(
+                        'id' => $file['id'],
+                        'thumbnail' => $file['thumbnail'],
+                    );
                 }
 
                 if ($file['type'] == 'video') {
-                    $thread['attachments'][$file['type']]['thumbnail'] = ($file['thumbnail']) ? $file['thumbnail'] : '';
+                    $thread['attachments'][$file['type']]['thumbnail'] = $file['thumbnail'];
                 }
             }
         }

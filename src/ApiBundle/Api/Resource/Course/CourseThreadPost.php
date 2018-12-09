@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use AppBundle\Common\ArrayToolkit;
 
 class CourseThreadPost extends AbstractResource
 {
@@ -30,8 +31,9 @@ class CourseThreadPost extends AbstractResource
         if (!empty($posts)) {
             $posts = $this->readPosts($courseId, $threadId, $posts);
         }
-        $this->getOCUtil()->multiple($posts, array('userId'));
         $posts = $this->addAttachments($posts);
+
+        $this->getOCUtil()->multiple($posts, array('userId'));
 
         return $this->makePagingObject(array_values($posts), $total, $offset, $limit);
     }
@@ -74,31 +76,32 @@ class CourseThreadPost extends AbstractResource
 
     protected function addAttachments($posts)
     {
+        $attachments = $this->getUploadFileService()->searchUseFiles(array('targetType' => 'course.thread.post', 'targetIds' => ArrayToolkit::column($posts, 'id')));
+        $attachments = ArrayToolkit::group($attachments, 'targetId');
         foreach ($posts as &$post) {
-            $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread.post', $post['id'], 'attachment');
-            if ($post['source'] == 'app' && !empty($attachments)) {
+            if ($post['source'] == 'app' && isset($attachments[$post['id']])) {
                 $post['attachments'] = array();
-                foreach ($attachments as $attachment) {
-                    $attachment = $this->getUploadFileService()->getUseFile($attachment['id']);
-                    $file = $this->getUploadFileService()->getFullFile($attachment['fileId']);
+                foreach ($attachments[$post['id']] as $attachment) {
+                    $file = isset($attachment['file']) ? $attachment['file'] : array();
 
                     if ($file['storage'] != 'cloud') {
                         throw CommonException::ERROR_PARAMETER();
                     }
 
-//                if ($file['targetType'] != 'attachment') {
-//                    throw CommonException::ERROR_PARAMETER();
-//                }
-
-                    $download = $this->getUploadFileService()->getDownloadMetas($file['id']);
+                    if ($file['targetType'] != 'attachment') {
+                        throw CommonException::ERROR_PARAMETER();
+                    }
 
                     if ($file['type'] == 'video' or $file['type'] == 'audio') {
                         $post['attachments'][$file['type']] = array(
-                            'uri' => $download['url'],
+                            'id' => $file['id'],
                             'length' => $file['length'],
                         );
                     } else {
-                        $post['attachments']['pictures'][] = $download['url'];
+                        $post['attachments']['pictures'][] = array(
+                            'id' => $file['id'],
+                            'thumbnail' => $file['thumbnail'],
+                        );
                     }
 
                     if ($file['type'] == 'video') {
