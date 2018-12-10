@@ -8112,6 +8112,9 @@ exception.parser.not.support: 不支持该视频类型
 exception.announcement.notfound: Announcement not found
 exception.batch_notification.notfound: Site notification not found
 
+exception.coupon.receive.failed: 优惠券领取失败
+exception.coupon.plugin.not.installed: 优惠券插件未安装
+
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 

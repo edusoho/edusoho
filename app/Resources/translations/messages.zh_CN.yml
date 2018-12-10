@@ -9441,3 +9441,4 @@ admin.course_manage.manage.tags: 标签
 admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级中允许显示班级人数
 
 exception.coupon.receive.failed: 优惠券领取失败
+exception.coupon.plugin.not.installed: 优惠券插件未安装
