@@ -197,5 +197,4 @@ export default class PPT extends Emitter {
   _onChangePage(e) {
     this.page = $(e.target).val();
   }
-
 }
