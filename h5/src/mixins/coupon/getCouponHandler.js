@@ -13,7 +13,7 @@ export default {
     couponHandle(coupon) {
       const token = coupon.token;
 
-      // 未领券
+      /* 未领券 */
       if (!coupon.currentUserCoupon) {
         Api.receiveCoupon({
           data: { token }
@@ -25,11 +25,12 @@ export default {
           coupon.currentUserCoupon = true;
         }).catch(err => {
           Toast.fail(err.message);
+          coupon.unreceivedNum = '0';
         });
         return;
       }
 
-      // 已领券
+      /* 已领券 */
       const targetType = coupon.targetType === ALL_TYPE.all ?
         ALL_TYPE.course : coupon.targetType; // 全站优惠券跳转课程列表页
       const allType = Object.values(ALL_TYPE);
@@ -41,7 +42,7 @@ export default {
 
       if (coupon.target) {
         const targetId = coupon.target.id;
-        this.getPathParams('course', targetId).then(({ id }) => {
+        this.getPathParams(targetType, targetId).then(({ id }) => {
           if (!id) return;
           this.$router.push({
             path: `${targetType}/${id}` // course/{id} | classroom/{id}
@@ -59,7 +60,7 @@ export default {
         path: `${targetType}/explore` // course/explore | classroom/explore
       });
     },
-    // 课程的id 需要转换成计划id 跳转到对应计划详情页
+    /* 课程的id 需要转换成计划id 跳转到对应计划详情页 */
     getPathParams(type, id) {
       if (type !== ALL_TYPE.course) {
         return Promise.resolve({ type, id });
