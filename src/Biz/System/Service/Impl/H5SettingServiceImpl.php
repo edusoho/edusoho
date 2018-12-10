@@ -149,16 +149,13 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     public function couponFilter($discoverySetting, $usage = 'show')
     {
-        $couponBatches = $discoverySetting['data'];
-        $couponBatches = ArrayToolkit::index($couponBatches, 'id');
+        $batches = $discoverySetting['data'];
+        $batches = ArrayToolkit::index($batches, 'id');
+        $batchIds = ArrayToolkit::column($batches, 'id');
         $user = $this->getCurrentUser();
         $receivedCoupons = array();
         if (!empty($user['id'])) {
-            $conditions = array(
-                'batchIds' => ArrayToolkit::column($couponBatches, 'id'),
-                'userId' => $user['id'],
-            );
-
+            $conditions = array('batchIds' => $batchIds, 'userId' => $user['id']);
             $receivedCoupons = $this->getCouponService()->searchCoupons(
                 $conditions,
                 array(),
@@ -168,9 +165,18 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         }
 
         foreach ($receivedCoupons as $coupon) {
-            $couponBatches[$coupon['batchId']]['currentUserCoupon'] = $coupon;
+            $batches[$coupon['batchId']]['currentUserCoupon'] = $coupon;
         }
-        $discoverySetting['data'] = array_values($couponBatches);
+        $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
+        foreach ($batches as &$batch) {
+            $batchId = $batch['id'];
+            if (!empty($currentBatches[$batchId])) {
+                $batch['money'] = $currentBatches[$batchId]['money'];
+                $batch['usedNum'] = $currentBatches[$batchId]['usedNum'];
+                $batch['unreceivedNum'] = $currentBatches[$batchId]['unreceivedNum'];
+            }
+        }
+        $discoverySetting['data'] = array_values($batches);
 
         return $discoverySetting;
     }
@@ -367,5 +373,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     protected function getCouponService()
     {
         return $this->biz->service('Coupon:CouponService');
+    }
+
+    private function getCouponBatchService()
+    {
+        return $this->biz->service('CouponPlugin:Coupon:CouponBatchService');
     }
 }
