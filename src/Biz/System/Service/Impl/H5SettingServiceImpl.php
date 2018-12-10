@@ -149,7 +149,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     public function couponFilter($discoverySetting, $usage = 'show')
     {
-        $batches = $discoverySetting['data'];
+        $batches = $discoverySetting['data']['items'];
         $batches = ArrayToolkit::index($batches, 'id');
         $batchIds = ArrayToolkit::column($batches, 'id');
         $user = $this->getCurrentUser();
@@ -179,7 +179,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $batch['unreceivedNum'] = $currentBatches[$batchId]['unreceivedNum'];
             }
         }
-        $discoverySetting['data'] = array_values($batches);
+        $discoverySetting['data']['items'] = array_values($batches);
 
         return $discoverySetting;
     }
