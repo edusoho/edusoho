@@ -184,20 +184,26 @@
   }
 }
 
+// 详情页mini优惠券样式
+.mini-coupon:before, .mini-coupon:after {
+  position: absolute;
+  content: "";
+  height: 100%;
+  width: vw(4);
+  background-image: url('../../../static/images/coupon_dots.png');
+  top: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  transform: scale(0.8);
+}
+
 .mini-coupon {
   position: relative;
   &:before {
-    position: absolute;
-    content: "";
-    height: 80%;
-    border-left: vw(4) dotted #FFFFFF;
     left: vw(-2);
   }
   &:after {
-    position: absolute;
-    content: "";
-    height: 80%;
-    border-right: vw(4) dotted #FFFFFF;
     right: vw(-2);
   }
 }
