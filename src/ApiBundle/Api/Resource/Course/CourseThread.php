@@ -135,12 +135,12 @@ class CourseThread extends AbstractResource
                 } else {
                     $thread['attachments']['pictures'][] = array(
                         'id' => $file['id'],
-                        'thumbnail' => $file['thumbnail'],
+                        'thumbnail' => isset($file['thumbnail']) ? $file['thumbnail'] : '',
                     );
                 }
 
                 if ($file['type'] == 'video') {
-                    $thread['attachments'][$file['type']]['thumbnail'] = $file['thumbnail'];
+                    $thread['attachments'][$file['type']]['thumbnail'] = isset($file['thumbnail']) ? $file['thumbnail'] : '';
                 }
             }
         }
