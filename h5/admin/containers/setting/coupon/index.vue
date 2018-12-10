@@ -13,8 +13,10 @@
           <el-radio v-model="radio" label="show">显示</el-radio>
           <el-radio v-model="radio" label="unshow">不显示</el-radio>
         </div>
-        <span class="text-14">优惠券选择：</span>
-        <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
+        <div class="coupon-select__section">
+          <span class="text-14 required-option">优惠券选择：</span>
+          <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
+        </div>
         <div class="coupon-list-container" v-if="copyModuleData.data">
           <draggable v-model="copyModuleData.data" class="section__course-container">
             <el-tag

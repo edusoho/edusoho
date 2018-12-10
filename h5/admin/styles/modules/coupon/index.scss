@@ -199,7 +199,13 @@
       }
       &:first-child {
         padding-top: 16px;
+        .el-icon-close {
+          top: 16px;
+        }
       }
     }
+  }
+  .coupon-select__section {
+    position: relative;
   }
 }

@@ -33,7 +33,7 @@ console.log(item, label,999)
       }
       return '全站';
     case 'generatedNum':
-      return `${item['usedNum']} / ${item['generatedNum']}`;
+      return `${item['unreceivedNum']} / ${item['generatedNum']}`;
     case 'rate':
       let targetType = '全部商品';
       let discountType = '折扣';
