@@ -86,7 +86,7 @@ class OrderController extends BaseController
             $type = $request->request->get('targetType');
             $price = $request->request->get('price');
             if ($this->isPluginInstalled('Coupon')) {
-                $coupon = $this->getCouponBatchService()->getCouponByCode($code);
+                $coupon = $this->getCouponService()->getCouponByCode($code);
                 $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
                 if (empty($batch['codeEnable'])) {
                     $message = array('useable' => 'no', 'message' => '该优惠券不存在');
