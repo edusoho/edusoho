@@ -44,9 +44,9 @@
       }
     },
     methods: {
-      handleClick(data) {
+      handleClick(coupon) {
         if (!this.feedback) return;
-        this.$emit('couponHandle', data)
+        this.$emit('couponHandle', coupon)
       }
     }
   }

@@ -36,11 +36,8 @@ export default {
       }
       return '全部商品';
     },
-    handleClick(data, index) {
-      this.$emit('buttonClick', {
-        item: data,
-        itemIndex: index
-      });
+    handleClick(coupon) {
+      this.$emit('buttonClick', coupon);
     }
   }
 };

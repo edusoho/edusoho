@@ -3,50 +3,44 @@ import { Toast } from 'vant';
 
 export default {
   methods: {
-    couponHandle(value, couponList) {
-      const data = value.item;
-      const itemIndex = value.itemIndex;
-      const token = data.token;
-      const item = couponList[itemIndex];
+    couponHandle(coupon) {
+      const token = coupon.token;
 
-      if (data.currentUserCoupon) {
-        const couponType = data.targetType;
-        if (data.target) {
-          const id = data.target.id;
-          this.$router.push({
-            path: `${couponType}/${id}`
-          });
-          return;
-        }
-        if (couponType === 'vip') {
-          Toast.warning('你可以在电脑端或App上购买会员');
-          return;
-        }
-        if (couponType === 'classroom') {
-          this.$router.push({
-            path: 'classroom/explore'
-          });
-          return;
-        }
-        this.$router.push({
-          path: 'course/explore'
+      // 未领券
+      if (!coupon.currentUserCoupon) {
+        coupon.currentUserCoupon = true;
+        Api.receiveCoupon({
+          query: { token }
+        }).then(() => {
+          Toast.success('领取成功');
+          coupon.currentUserCoupon = true;
+        }).catch(err => {
+          Toast.fail(err.message);
         });
         return;
       }
 
-      Api.receiveCoupon({
-        query: { token }
-      }).then(() => {
-        Toast.success('领取成功');
-        item.currentUserCoupon = true;
-        // xxxxxxxx
-        // if (Number(res.targetId) !== 0) {
-        //   item.target = {
-        //     id: res.targetId
-        //   };
-        // }
-      }).catch(err => {
-        Toast.fail(err.message);
+      // 已领券
+      const couponType = coupon.targetType;
+      if (coupon.target) {
+        const id = coupon.target.id;
+        this.$router.push({
+          path: `${couponType}/${id}`
+        });
+        return;
+      }
+      if (couponType === 'vip') {
+        Toast.warning('你可以在电脑端或App上购买会员');
+        return;
+      }
+      if (couponType === 'classroom') {
+        this.$router.push({
+          path: 'classroom/explore'
+        });
+        return;
+      }
+      this.$router.push({
+        path: 'course/explore'
       });
     }
   }

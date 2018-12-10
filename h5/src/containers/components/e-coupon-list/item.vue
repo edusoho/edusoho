@@ -7,7 +7,7 @@
         <span class="text-10">{{ timeExpire(item) }}</span>
       </div>
       <div class="stamp" v-if="!(item.unreceivedNum != 0 && !item.currentUserCoupon)"></div>
-      <span class="coupon-button" @click="handleClick(item, index)">{{ item.currentUserCoupon ? '去使用' : '领券' }}</span>
+      <span class="coupon-button" @click="handleClick(item)">{{ item.currentUserCoupon ? '去使用' : '领券' }}</span>
     </div>
     <div class="e-coupon__middle"></div>
     <div class="e-coupon__bottom text-overflow">
