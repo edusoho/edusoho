@@ -15,6 +15,7 @@
     position: relative;
     float: left;
     height: vw(96);
+    width: 100%;
     padding-right: vw(20);
     line-height: 1;
     box-sizing: border-box;
@@ -93,12 +94,11 @@
   &-single {
     height: vw(112);
     .e-coupon__body {
-      padding-right: 0;
+      padding-right: vw(20);
       height: vw(112);
-      width: vw(335) !important;
       &:after {
         top: vw(70);
-        right: vw(-6);
+        right: vw(14);
       }
       &:before {
         top: vw(70);
@@ -109,21 +109,24 @@
       .coupon-name {
         width: vw(142);
       }
+      .e-coupon__name {
+        right: vw(105);
+      }
+      .coupon-button {
+        right: vw(35);
+      }
     }
     .e-coupon__price {
       margin-top: vw(1);
     }
     .stamp {
-      right: 0 !important;
+      right: vw(20) !important;
     }
   }
   &-multi {
     .coupon-button {
       right: vw(35);
       top: vw(19);
-    }
-    .e-coupon__body {
-      width: vw(196);
     }
   }
   &__select-circle {

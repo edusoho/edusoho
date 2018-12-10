@@ -10,6 +10,7 @@
       position: relative;
       float: left;
       height: 96px;
+      width: 100%;
       padding-right: 20px;
       line-height: 1;
       box-sizing: border-box;
@@ -26,7 +27,7 @@
       &:after {
         content: '';
         position: absolute;
-        right: -6px;
+        right: 14px;
         top: 52px;
         width: 12px;
         height: 12px;
@@ -94,11 +95,14 @@
     &-single {
       height: 112px;
       .e-coupon__body {
-        padding-right: 0;
+        padding-right: 20px;
         height: 112px;
-        width: 335px !important;
         &:after {
-          right: -6px;
+          top: 70px;
+          right: 14px;
+        }
+        &:before {
+          top: 70px;
         }
       }
       .e-coupon__header {
@@ -106,9 +110,15 @@
         .coupon-name {
           width: 142px;
         }
+        .e-coupon__name {
+          right: 100px;
+        }
+        .coupon-button {
+          right: 35px;
+        }
       }
       .stamp {
-        right: 0 !important;
+        right: 20px !important;
       }
       .e-coupon__price {
         margin-top: 1px;
@@ -118,9 +128,6 @@
       .coupon-button {
         right: 35px;
         top: 19px;
-      }
-      .e-coupon__body {
-        width: 196px;
       }
     }
     // 已领完

@@ -1,3 +1,5 @@
+@import "../../modules/coupon/index.scss";
+
 .preview-container {
   padding: 0 50px;
   box-sizing: border-box;
@@ -120,6 +122,36 @@
     }
   }
 
+  .coupon-preview__container {
+    padding-left: 10px;
+    .e-coupon {
+      &-single {
+        .e-coupon__body {
+          padding-right: 10px;
+          &:after {
+            right: 4px;
+          }
+        }
+        .e-coupon__header {
+          .e-coupon__name {
+            right: 55px;
+          }
+          .coupon-button {
+            right: 25px;
+          }
+        }
+        .stamp {
+          right: 10px !important;
+        }
+      }
+      &-multi {
+        .coupon-button {
+          right: 35px;
+        }
+      }
+    }
+  }
+
   .e-course-switch-box {
     .switch-box__price {
       font-size: 12px;
@@ -146,6 +178,7 @@
 
 .find-page__part {
   position: relative;
+  border-bottom: 15px solid #f7f7f7;
 }
 
 .preview-iframe {
