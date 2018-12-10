@@ -183,6 +183,7 @@ class OrderController extends BaseController
         }
     }
 
+    //插件service
     protected function getCouponBatchService()
     {
         return $this->createService('CouponPlugin:Coupon:CouponBatchService');
