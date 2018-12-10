@@ -8,8 +8,10 @@
       <div class="segmentation"></div>
 
       <!-- 优惠活动 -->
-      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
-      <div class="segmentation"></div>
+      <template v-if="Number(planDetails.price) !== 0" >
+        <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
+        <div class="segmentation"></div>
+      </template>
 
       <van-tabs v-model="active" @click="onTabClick" :class="tabsClass">
         <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
@@ -106,15 +108,8 @@
           targetType: 'classroom',
         }
       }).then(res => {
-        for (var i = 0; i < res.length; i++) {
-          if (res[i].unreceivedNum == 0 && !res[i].currentUserCoupon) {
-            continue;
-          }
-          if (res[i].currentUserCoupon && res[i].currentUserCoupon.status === 'used') {
-            continue;
-          }
-          this.unreceivedCoupons.push(res[i]);
-        }
+        this.unreceivedCoupons = res;
+
         this.miniCoupons = this.unreceivedCoupons.length > 3 ?
           this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
       })

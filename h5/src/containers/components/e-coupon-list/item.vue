@@ -8,7 +8,7 @@
       </div>
       <div v-if="feedback">
         <div class="stamp" v-if="!(item.unreceivedNum != 0 && !item.currentUserCoupon)"></div>
-        <span class="coupon-button" @click="handleClick(item, index)">{{ item.currentUserCoupon ? '去使用' : '领券' }}</span>
+        <span class="coupon-button" @click="handleClick(item)">{{ item.currentUserCoupon ? '去使用' : '领券' }}</span>
       </div>
       <div v-else>
         <span class="coupon-button">领券</span>
