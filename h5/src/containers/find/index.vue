@@ -17,8 +17,8 @@
         :feedback="feedback"/>
       <e-coupon-list
         v-if="part.type === 'coupon'"
-        :coupons="part.data"
-        :showTitle="part.titleShow"
+        :coupons="part.data.items"
+        :showTitle="part.data.titleShow"
         @couponHandle="couponHandle($event, part.data)"
         :feedback="true"></e-coupon-list>
     </div>

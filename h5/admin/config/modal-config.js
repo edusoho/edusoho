@@ -70,19 +70,14 @@ const head = {
   ],
   coupon: [
     {
-      col: 2,
+      col: 3,
       title: '优惠券名称',
       label: 'name',
     },
      {
-      col: 1,
+      col: 2,
       title: '前缀',
       label: 'prefix',
-    },
-    {
-      col: 1,
-      title: '使用对象',
-      label: 'targetType',
     }, {
       col: 3,
       title: '优惠内容',
