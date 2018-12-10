@@ -2,7 +2,11 @@
 
 namespace Biz\Accessor;
 
+use Biz\Classroom\ClassroomException;
+use Biz\Course\CourseException;
+use Biz\Course\MemberException;
 use Biz\User\CurrentUser;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Context\Biz;
 
 abstract class AccessorAdapter implements AccessorInterface
@@ -15,6 +19,8 @@ abstract class AccessorAdapter implements AccessorInterface
 
     private $messages;
 
+    private $modules;
+
     /**
      * @var \Biz\Accessor\AccessorAdapter
      */
@@ -25,6 +31,7 @@ abstract class AccessorAdapter implements AccessorInterface
         $this->biz = $biz;
         $this->registerDefaultMessages();
         $this->registerMessages();
+        $this->registerDefaultModules();
     }
 
     public function setNextAccessor(AccessorInterface $nextAccessor)
@@ -66,10 +73,11 @@ abstract class AccessorAdapter implements AccessorInterface
 
     abstract public function access($bean);
 
-    protected function buildResult($code, $params = array())
+    protected function buildResult($code, $params = array(), $module = 0)
     {
         // api暂时不需要支持国际化
         return array(
+            'class' => $this->getExceptionClass($module),
             'code' => $code,
             'msg' => $this->getMessage($code, $params),
         );
@@ -118,6 +126,31 @@ abstract class AccessorAdapter implements AccessorInterface
         if (empty($this->messages[$key])) {
             $this->messages[$key] = $msg;
         }
+    }
+
+    private function registerDefaultModules()
+    {
+        $this->modules[ClassroomException::EXCEPTION_MODUAL] = 'Biz\Classroom\ClassroomException';
+        $this->modules[UserException::EXCEPTION_MODUAL] = 'Biz\User\UserException';
+        $this->modules[CourseException::EXCEPTION_MODUAL] = 'Biz\Course\CourseException';
+        $this->modules[MemberException::EXCEPTION_MODUAL] = 'Biz\Course\MemberException';
+        $this->modules[AccessorException::EXCEPTION_MODUAL] = 'Biz\Accessor\AccessorException';
+    }
+
+    protected function registerModule($module, $path)
+    {
+        if (empty($this->modules[$module])) {
+            $this->modules[$module] = $path;
+        }
+    }
+
+    private function getExceptionClass($module)
+    {
+        if (empty($this->modules[$module])) {
+            return 'Biz\Accessor\AccessorException';
+        }
+
+        return $this->modules[$module];
     }
 
     /**

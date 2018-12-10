@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\MathToolkit;
 
@@ -12,7 +13,7 @@ class BillController extends BaseController
     public function billAction(Request $request, $type)
     {
         if (!in_array($type, array('coin', 'money'))) {
-            throw $this->createNotFoundException('not exist');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $account = $this->getAccountService()->getUserBalanceByUserId(0);

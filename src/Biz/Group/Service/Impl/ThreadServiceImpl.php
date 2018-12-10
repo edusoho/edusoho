@@ -8,7 +8,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Group\Dao\ThreadCollectDao;
 use Biz\Group\Service\ThreadService;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Thread\ThreadException;
+use Biz\Group\ThreadException;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -71,17 +71,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         $thread = $this->getThread($threadId);
         if (empty($thread)) {
-            throw $this->createNotFoundException('Thread Not Found');
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         if ($userId == $thread['userId']) {
-            throw $this->createAccessDeniedException('You can not collect your own thread');
+            $this->createNewException(ThreadException::COLLECT_OWN_THREAD());
         }
 
         $collectThread = $this->getThreadCollectDao()->getByUserIdAndThreadId($userId, $threadId);
 
         if (!empty($collectThread)) {
-            throw $this->createServiceException('Thread has bean collected');
+            $this->createNewException(ThreadException::DUPLICATE_COLLECT());
         }
 
         $this->dispatchEvent('group.thread.collect', new Event($thread));
@@ -102,13 +102,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException('Thread Not Found');
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $collectThread = $this->getThreadCollectDao()->getByUserIdAndThreadId($userId, $threadId);
 
         if (empty($collectThread)) {
-            throw $this->createNotFoundException("Thread#{$threadId} is not in your collection");
+            $this->createNewException(ThreadException::NOTFOUND_COLLECTION());
         }
 
         return $this->getThreadCollectDao()->deleteByUserIdAndThreadId($userId, $threadId);
@@ -132,11 +132,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function addThread($thread)
     {
         if (empty($thread['title'])) {
-            throw $this->createInvalidArgumentException('Title Required');
+            $this->createNewException(ThreadException::TITLE_REQUIRED());
         }
 
         if (empty($thread['content'])) {
-            throw $this->createInvalidArgumentException('Content Required');
+            $this->createNewException(ThreadException::CONTENT_REQUIRED());
         }
 
         $event = $this->dispatchEvent('group.thread.before_create', $thread);
@@ -151,11 +151,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['content'] = $this->purifyHtml($thread['content']);
 
         if (empty($thread['groupId'])) {
-            throw $this->createInvalidArgumentException('GroupId Required');
+            $this->createNewException(ThreadException::GROUPID_REQUIRED());
         }
 
         if (empty($thread['userId'])) {
-            throw $this->createInvalidArgumentException('UserId Required');
+            $this->createNewException(ThreadException::USERID_REQUIRED());
         }
 
         $thread['createdTime'] = time();
@@ -320,7 +320,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function addTrade($fields)
     {
         if (empty($fields['userId'])) {
-            throw $this->createInvalidArgumentException('UserId Required');
+            $this->createNewException(ThreadException::USERID_REQUIRED());
         }
 
         return $this->getThreadTradeDao()->addTrade($fields);
@@ -329,11 +329,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function updateThread($id, $fields)
     {
         if (empty($fields['title'])) {
-            throw $this->createInvalidArgumentException('Title Required');
+            $this->createNewException(ThreadException::TITLE_REQUIRED());
         }
 
         if (empty($fields['content'])) {
-            throw $this->createInvalidArgumentException('Content Required');
+            $this->createNewException(ThreadException::CONTENT_REQUIRED());
         }
 
         $fields['title'] = $this->sensitiveFilter($fields['title'], 'group-thread-update');
@@ -366,7 +366,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function postThread($threadContent, $groupId, $memberId, $threadId, $postId = 0)
     {
         if (empty($threadContent['content'])) {
-            throw $this->createInvalidArgumentException('Content Required');
+            $this->createNewException(ThreadException::CONTENT_REQUIRED());
         }
 
         $event = $this->dispatchEvent('group.thread.post.before_create', $threadContent);
@@ -513,7 +513,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 $orderBys = array('createdTime' => 'DESC');
                 break;
             default:
-                throw $this->createInvalidArgumentException('Invalid Orderby');
+                $this->createNewException(ThreadException::SORT_INVALID());
         }
 
         return $orderBys;

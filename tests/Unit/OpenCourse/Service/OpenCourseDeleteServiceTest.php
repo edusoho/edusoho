@@ -8,7 +8,7 @@ use AppBundle\Common\ReflectionUtils;
 class OpenCourseDeleteServiceTest extends BaseTestCase
 {
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testDeleteWithNoExistedType()
     {

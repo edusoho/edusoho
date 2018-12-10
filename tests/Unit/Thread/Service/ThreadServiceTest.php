@@ -28,8 +28,8 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage thread title is null
+     * @expectedException \Biz\Thread\ThreadException
+     * @expectedExceptionMessage exception.thread.title_required
      */
     public function testCreatedThreadWithNoneTitleException()
     {
@@ -41,8 +41,8 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage thread content is null
+     * @expectedException \Biz\Thread\ThreadException
+     * @expectedExceptionMessage exception.thread.content_required
      */
     public function testCreatedThreadWithNoneContentException()
     {
@@ -54,8 +54,8 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage thread targetId is null
+     * @expectedException \Biz\Thread\ThreadException
+     * @expectedExceptionMessage exception.thread.targetid_required
      */
     public function testCreatedThreadWithNoneTargetIdException()
     {
@@ -67,7 +67,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testCreatedThreadWithNoneTypeException()
     {
@@ -127,7 +127,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testUpdateThreadWithEmptyThread()
     {
@@ -147,8 +147,8 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage invalid argument
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_error
      */
     public function testUpdateThreadWithEmptyFields()
     {
@@ -178,7 +178,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testDeleteThreadWithThreadNoneExist()
     {
@@ -215,7 +215,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testSetThreadStickyWithThreadNonExist()
     {
@@ -237,7 +237,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testCancelThreadStickyWithThreadNonExist()
     {
@@ -256,7 +256,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testSetThreadNiceWithThreadNonExist()
     {
@@ -278,7 +278,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testCancelThreadNiceWithThreadNonExist()
     {
@@ -296,7 +296,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testSetThreadSolvedWithThreadNonExist()
     {
@@ -318,7 +318,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testCancelThreadSolvedWithThreadNonExist()
     {
@@ -405,7 +405,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testCreatePostWithParentIdAndPostNonExist()
     {
@@ -461,7 +461,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testDeletePostWithThreadNonExist()
     {
@@ -514,7 +514,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testSetPostAdoptedWithPostNonExist()
     {
@@ -539,7 +539,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testCancelPostAdoptedWithPostNonExist()
     {
@@ -602,7 +602,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testCreateMemberWithMemberExist()
     {
@@ -612,7 +612,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testCreateMemberWithMemberMax()
     {
@@ -641,7 +641,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testDeleteMemberWithMemberNonExist()
     {
@@ -669,7 +669,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Thread\ThreadException
      */
     public function testDeleteMembersByThreadIdWithThreadNonExist()
     {
@@ -757,7 +757,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testFilterSortWithException()
     {
@@ -781,7 +781,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testPrepareThreadSearchConditionsWithException()
     {
@@ -842,7 +842,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCanAccess()
     {
@@ -861,7 +861,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testTryAccessWithException()
     {

@@ -60,7 +60,7 @@ class BatchNotificationServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Notification\NotificationException
      */
     public function testPublishBatchNotificationWithEmptyNotification()
     {
@@ -78,7 +78,7 @@ class BatchNotificationServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Notification\NotificationException
      */
     public function testPublishBatchNotificationWithPublishedNotification()
     {

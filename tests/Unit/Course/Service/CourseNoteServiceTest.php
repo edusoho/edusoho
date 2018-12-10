@@ -128,10 +128,9 @@ class NoteServiceTest extends BaseTestCase
     }
 
     /**
-     * @throws \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @throws \Biz\Course\CourseNoteException
+     * @throws \Exception
+     * @expectedException \Biz\Course\CourseNoteException
      */
     public function testLikeWithEmptyNote()
     {
@@ -156,10 +155,9 @@ class NoteServiceTest extends BaseTestCase
     }
 
     /**
-     * @throws \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @throws \Biz\Course\CourseNoteException
+     * @throws \Exception
+     * @expectedException \Biz\Course\CourseNoteException
      */
     public function testLikeWithRetry()
     {
@@ -213,10 +211,9 @@ class NoteServiceTest extends BaseTestCase
     }
 
     /**
-     * @throws \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @throws \Biz\Course\CourseNoteException
+     * @throws \Exception
+     * @expectedException \Biz\Course\CourseNoteException
      */
     public function testCancelLikeWithException()
     {
@@ -257,7 +254,7 @@ class NoteServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testPrepareSearchNoteConditionsWithException()
     {
@@ -496,7 +493,7 @@ class NoteServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Course\CourseNoteException
      */
     public function testDeleteNoteWithNotExist()
     {

@@ -2,9 +2,11 @@
 
 namespace Biz\Course\Service;
 
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Biz\Common\CommonException;
+use Biz\Course\CourseException;
+use Biz\Course\CourseNoteException;
+use Biz\Task\TaskException;
+use Biz\User\UserException;
 
 interface CourseNoteService
 {
@@ -85,9 +87,10 @@ interface CourseNoteService
      *
      * @param array $note
      *
-     * @throws InvalidArgumentException
-     * @throws NotFoundException
-     * @throws AccessDeniedException
+     * @throws CommonException
+     * @throws UserException
+     * @throws TaskException
+     * @throws CourseException
      *
      * @return array
      */
@@ -98,8 +101,7 @@ interface CourseNoteService
      *
      * @param $id
      *
-     * @throws AccessDeniedException
-     * @throws NotFoundException
+     * @throws CourseNoteException
      */
     public function deleteNote($id);
 
@@ -108,8 +110,7 @@ interface CourseNoteService
      *
      * @param array $ids
      *
-     * @throws AccessDeniedException
-     * @throws NotFoundException
+     * @throws CourseNoteException
      */
     public function deleteNotes(array $ids);
 
@@ -124,8 +125,8 @@ interface CourseNoteService
     /**
      * @param int $noteId
      *
-     * @throws NotFoundException
-     * @throws AccessDeniedException
+     * @throws UserException
+     * @throws CourseNoteException
      *
      * @return bool
      */
@@ -134,8 +135,8 @@ interface CourseNoteService
     /**
      * @param int $noteId
      *
-     * @throws NotFoundException
-     * @throws AccessDeniedException
+     * @throws UserException
+     * @throws CourseNoteException
      *
      * @return bool
      */

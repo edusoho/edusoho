@@ -4,6 +4,9 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\CourseException;
+use Biz\OpenCourse\OpenCourseException;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class OpenCourseController extends BaseController
@@ -95,13 +98,13 @@ class OpenCourseController extends BaseController
         $currentUser = $this->getUser();
 
         if (!$currentUser->isSuperAdmin()) {
-            throw $this->createAccessDeniedException('您不是超级管理员！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $course = $this->getOpenCourseService()->getCourse($courseId);
 
         if ('published' == $course['status']) {
-            throw $this->createAccessDeniedException('发布课程，不能删除！');
+            $this->createNewException(CourseException::FORBIDDEN_DELETE_PUBLISHED());
         }
 
         if ('draft' == $course['status']) {
@@ -115,7 +118,7 @@ class OpenCourseController extends BaseController
                 $isCheckPassword = $request->getSession()->get('checkPassword');
 
                 if (!$isCheckPassword) {
-                    throw $this->createAccessDeniedException('未输入正确的校验密码！');
+                    $this->createNewException(OpenCourseException::CHECK_PASSWORD_REQUIRED());
                 }
 
                 $result = $this->getOpenCourseDeleteService()->delete($courseId, $type);

@@ -22,7 +22,7 @@ class AccessorAdapterTest extends BaseTestCase
     {
         $accessor = new JoinCourseAccessor($this->biz);
         $result = $accessor->process(null);
-        $this->assertEquals('course.not_found', $result['code']);
+        $this->assertEquals('NOTFOUND_COURSE', $result['code']);
     }
 
     public function testProcessHasNextAccessor()
@@ -32,7 +32,7 @@ class AccessorAdapterTest extends BaseTestCase
         $user = $this->getCurrentUser();
         $user['locked'] = 1;
         $result = $accessor->process(array('id' => 1, 'status' => 'draft'));
-        $this->assertEquals('user.locked', $result['code']);
+        $this->assertEquals('LOCKED_USER', $result['code']);
     }
 
     public function testHasError()

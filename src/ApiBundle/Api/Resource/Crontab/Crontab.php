@@ -7,14 +7,14 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\System;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\System\Service\SettingService;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Biz\User\UserException;
 
 class Crontab extends AbstractResource
 {
     public function get(ApiRequest $request)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
-            throw new AccessDeniedHttpException('无权限访问此接口');
+            throw UserException::PERMISSION_DENIED();
         }
 
         $crontabStatus = array(

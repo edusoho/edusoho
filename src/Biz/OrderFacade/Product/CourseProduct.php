@@ -48,11 +48,11 @@ class CourseProduct extends Product implements OrderStatusCallback
         $course = $this->getCourseService()->getCourse($this->targetId);
 
         if (!$course['buyable']) {
-            throw new OrderPayCheckException('order.pay_check_msg.unpurchasable_product', Product::PRODUCT_VALIDATE_FAIL);
+            throw OrderPayCheckException::UNPURCHASABLE_PRODUCT();
         }
 
         if (AccessorInterface::SUCCESS !== $access['code']) {
-            throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
+            throw call_user_func(array($access['class'], $access['code']));
         }
     }
 
@@ -113,6 +113,11 @@ class CourseProduct extends Product implements OrderStatusCallback
     public function onOrderRefundRefused($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
+        $course = $this->getCourseService()->getCourse($orderItem['target_id']);
+        if (empty($course)) {
+            return;
+        }
+
         $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 

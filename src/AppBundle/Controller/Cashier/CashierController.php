@@ -3,14 +3,15 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
+use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
 use Codeages\Biz\Pay\Service\AccountService;
 use Codeages\Biz\Pay\Service\PayService;
 use Codeages\Biz\Pay\Status\PayingStatus;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Common\MathToolkit;
 
 class CashierController extends BaseController
@@ -27,7 +28,7 @@ class CashierController extends BaseController
         );
 
         if (!$order || $this->getUser()->getId() !== $order['user_id']) {
-            throw new NotFoundHttpException();
+            $this->createNewException(OrderException::NOTFOUND_ORDER());
         }
 
         if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
@@ -66,7 +67,7 @@ class CashierController extends BaseController
         $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
 
         if ($trade['user_id'] !== $this->getCurrentUser()->getId()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         return $this->redirect($trade['platform_created_result']['url']);

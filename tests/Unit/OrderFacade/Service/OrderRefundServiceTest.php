@@ -204,7 +204,7 @@ class OrderRefundServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\User\UserException
      */
     public function testTryManageOrderRefund()
     {

@@ -2,6 +2,7 @@
 
 namespace Biz;
 
+use Biz\Org\OrgException;
 use Monolog\Logger;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Event\Event;
@@ -139,7 +140,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
             if (!empty($fields['orgCode'])) {
                 $org = $this->createService('Org:OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
-                    throw $this->createNotFoundException('组织机构不存在,更新失败');
+                    $this->createNewException(OrgException::NOTFOUND_ORG());
                 }
                 $fields['orgId'] = $org['id'];
                 $fields['orgCode'] = $org['orgCode'];

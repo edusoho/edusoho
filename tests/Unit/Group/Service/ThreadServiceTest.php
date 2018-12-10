@@ -49,7 +49,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Group\ThreadException
      */
     public function testUnThreadCollectError2()
     {
@@ -66,7 +66,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Group\ThreadException
      */
     public function testUnThreadCollectError1()
     {
@@ -182,7 +182,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Group\ThreadException
      */
     public function testFilterSortError()
     {
@@ -206,7 +206,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Group\ThreadException
      */
     public function testThreadCollectError3()
     {
@@ -224,7 +224,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Group\ThreadException
      */
     public function testThreadCollectError2()
     {
@@ -232,7 +232,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Group\ThreadException
      */
     public function testThreadCollectError1()
     {
@@ -349,7 +349,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Group\ThreadException
      */
     public function testAddThreadWithEmptyTitle()
     {
@@ -369,7 +369,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Group\ThreadException
      */
     public function testAddThreadWithEmptyContent()
     {
@@ -389,7 +389,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Group\ThreadException
      */
     public function testAddThreadWithEmptyGroupId()
     {
@@ -409,7 +409,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Group\ThreadException
      */
     public function testAddThreadWithEmptyUserId()
     {

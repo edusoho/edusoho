@@ -2,11 +2,23 @@ define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
     var WebUploader = require('edusoho.webuploader');
+    var Validator = require('bootstrap.validator');
     require('es-ckeditor');
 
     exports.run = function() {
 
       var $form = $("#mobile-form");
+  
+      var validator = new Validator({
+        element: $form
+      });
+  
+      validator.addItem({
+        element: '[name="bundleId"]',
+        required: true,
+        display: Translator.trans('admin.setting.mobile.bundle_id'),
+      });
+      
       if ($('#mobile-splash1-upload').length) {
         var uploader = new WebUploader({
           element: '#mobile-splash1-upload'
@@ -247,6 +259,7 @@ define(function(require, exports, module) {
             Notify.danger(Translator.trans('admin.setting.mobile.delete_app_cover_fail_hint'));
           });
         });
+        
       }
     };
 

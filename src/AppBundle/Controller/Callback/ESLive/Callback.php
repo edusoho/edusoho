@@ -65,8 +65,9 @@ class Callback extends ESLiveBase
             default:
                 break;
         }
+        $filesCount = $this->getUploadFileService()->countUploadFiles($conditions);
 
-        $files = $this->getUploadFileService()->searchLiveCloudFiles(
+        $files = $this->getUploadFileService()->searchUploadFiles(
             $conditions,
             array('createdTime' => 'DESC'),
             $start,
@@ -93,14 +94,14 @@ class Callback extends ESLiveBase
 
             $biz = $this->getBiz();
             $cloudFile['play'] = array(
-                'url' => $biz['qiQiuYunSdk.play']->makePlayToken($file['globalId'], array('std' => 1), 36000),
+                'url' => $biz['qiQiuYunSdk.playv2']->makePlayMetaUrl($file['globalId'], array('std' => 1), 36000),
             );
 
             $cloudFiles['data'][] = $cloudFile;
         }
         end:
         $cloudFiles['paging'] = array(
-            'total' => isset($files) ? count($files) : 0,
+            'total' => isset($filesCount) ? $filesCount : 0,
             'start' => $start,
             'limit' => $limit,
         );

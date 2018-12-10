@@ -3,28 +3,20 @@
 namespace Biz\Content\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Content\CommentException;
 use Biz\Content\Dao\CommentDao;
 use Biz\Content\Service\CommentService;
+use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use AppBundle\Common\TimeMachine;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Biz\User\UserException;
 
 class CommentServiceImpl extends BaseService implements CommentService
 {
     public function createComment(array $comment)
     {
-        try {
-            $this->checkCommentObjectFields($comment['objectType']);
-        } catch (InvalidArgumentException $exception) {
-            throw $exception;
-        }
-
-        try {
-            $this->checkCommentObjectValue($comment);
-        } catch (NotFoundException $exception) {
-            throw $exception;
-        }
+        $this->checkCommentObjectFields($comment['objectType']);
+        $this->checkCommentObjectValue($comment);
 
         $fields = array();
         $fields['objectType'] = $comment['objectType'];
@@ -55,15 +47,15 @@ class CommentServiceImpl extends BaseService implements CommentService
         $comment = $this->getComment($id);
 
         if (empty($comment)) {
-            throw $this->createNotFoundException('评论不存在');
+            $this->createNewException(CommentException::NOTFOUND_COMMENT());
         }
 
         if (empty($user)) {
-            throw $this->createAccessDeniedException('无权限删除评论！');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         if ($comment['userId'] != $user['id'] && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('无权限删除评论！');
+            $this->createNewException(CommentException::FORBIDDEN_DELETE());
         }
 
         return $this->getCommentDao()->delete($id);
@@ -87,7 +79,7 @@ class CommentServiceImpl extends BaseService implements CommentService
     {
         $objectTypes = array('course');
         if (!in_array($objectType, $objectTypes)) {
-            throw $this->createInvalidArgumentException('不存在当前这种评论对象');
+            $this->createNewException(CommentException::OBJECTTYPE_INVALID());
         }
     }
 
@@ -98,7 +90,7 @@ class CommentServiceImpl extends BaseService implements CommentService
             case self::COMMENT_OBJECTTYPE_COURSE:
                 $foundCourse = $this->getCourseService()->getCourse($comment['objectId']);
                 if (empty($foundCourse)) {
-                    throw $this->createNotFoundException('评论教学计划失败，该教学计划不存在');
+                    $this->createNewException(CourseException::NOTFOUND_COURSE());
                 }
                 break;
 

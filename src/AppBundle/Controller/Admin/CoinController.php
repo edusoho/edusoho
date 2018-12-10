@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\MathToolkit;
 use Biz\Account\Service\AccountProxyService;
+use Biz\System\SettingException;
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
 use AppBundle\Common\Paginator;
@@ -215,7 +217,7 @@ class CoinController extends BaseController
         $file = $request->files->get('coin_picture');
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确，请上传png, gif, jpg格式的图片文件！');
+            $this->createNewException(FileToolkitException::NOT_IMAGE());
         }
 
         $filename = 'logo_'.time().'.'.$file->getClientOriginalExtension();
@@ -227,7 +229,7 @@ class CoinController extends BaseController
         $height = $size[1];
 
         if ($width < 50 || $height < 50 || $width != $height) {
-            throw $this->createAccessDeniedException('图片大小不正确，请上传超过50*50的等比例图片！');
+            $this->createNewException(SettingException::COIN_IMG_SIZE_LIMIT());
         }
 
         list($coin_picture_50_50, $url_50_50) = $this->savePicture($request, 50);

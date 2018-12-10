@@ -42,12 +42,12 @@ class MeCoupon extends AbstractResource
         }
 
         if (!$this->isPluginInstalled('coupon')) {
-            throw CouponException::EXCEPTION_COUPON_PLUGIN_NOT_INSTALLED();
+            throw CouponException::PLUGIN_NOT_INSTALLED();
         }
         $result = $this->getCouponBatchService()->receiveCoupon($token, $user['id']);
 
         if ('success' != $result['code']) {
-            throw CouponException::EXCEPTION_COUPON_RECEIVE_FAILED();
+            throw CouponException::RECEIVE_FAILED();
         }
 
         return $this->getCouponService()->getCoupon($result['id']);

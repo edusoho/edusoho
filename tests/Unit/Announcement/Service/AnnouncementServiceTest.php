@@ -8,8 +8,8 @@ use Biz\BaseTestCase;
 class AnnouncementServiceTest extends BaseTestCase
 {
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Arguments invalid
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
      */
     public function testCreateAnnouncementArgumentError()
     {
@@ -54,8 +54,8 @@ class AnnouncementServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage targetType不正确！
+     * @expectedException \Biz\Announcement\AnnouncementException
+     * @expectedExceptionMessage exception.announcement.type_invalid
      */
     public function testSearchAnnouncementsConditionError()
     {
@@ -91,8 +91,8 @@ class AnnouncementServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage 公告#123不存在。
+     * @expectedException \Biz\Announcement\AnnouncementException
+     * @expectedExceptionMessage exception.announcement.notfound
      */
     public function testDeleteAnnouncementEmpty()
     {
@@ -118,8 +118,8 @@ class AnnouncementServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage Arguments invalid
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
      */
     public function testUpdateAnnouncementArgumentError()
     {

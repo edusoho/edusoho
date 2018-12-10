@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Callback\CloudFile;
 
 use AppBundle\Controller\BaseController;
+use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 
 class Files extends BaseController
@@ -14,7 +15,7 @@ class Files extends BaseController
         $userToken = $this->getTokenService()->verifyToken('mp4_delete.callback', $token);
 
         if (!$userToken) {
-            throw $this->createAccessDeniedException('token error');
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $setting = $this->getSettingService()->get('storage', array());
