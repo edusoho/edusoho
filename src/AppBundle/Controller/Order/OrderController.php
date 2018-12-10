@@ -85,16 +85,18 @@ class OrderController extends BaseController
             $id = $request->request->get('targetId');
             $type = $request->request->get('targetType');
             $price = $request->request->get('price');
-            $coupon = $this->getCouponService()->checkCoupon($code, $id, $type);
-            if (isset($coupon['useable']) && 'no' == $coupon['useable']) {
-                return $this->createJsonResponse($coupon);
-            }
-            if (!empty($coupon['batchId']) && $this->isPluginInstalled('Coupon')) {
+            if ($this->isPluginInstalled('Coupon')) {
+                $coupon = $this->getCouponBatchService()->getCouponByCode($code);
                 $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
                 if (empty($batch['codeEnable'])) {
                     $message = array('useable' => 'no', 'message' => '该优惠券不存在');
+
                     return $this->createJsonResponse($message);
                 }
+            }
+            $coupon = $this->getCouponService()->checkCoupon($code, $id, $type);
+            if (isset($coupon['useable']) && 'no' == $coupon['useable']) {
+                return $this->createJsonResponse($coupon);
             }
             $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $price);
             $coupon['deduct_amount_format'] = $this->get('web.twig.order_extension')->priceFormat($coupon['deduct_amount']);
