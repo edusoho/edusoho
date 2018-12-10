@@ -6,7 +6,6 @@ use AppBundle\Common\Exception\AbstractException;
 
 class CouponException extends AbstractException
 {
-
     const EXCEPTION_MODUAL = 45;
 
     const NOTFOUND_COUPON = 4044501;
