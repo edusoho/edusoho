@@ -69,11 +69,9 @@ export default {
         if (res.length && res[0]) {
           return { id: res[0].id };
         }
-        return Promise.reject({
-          error: { message: '当前课程不存在了' }
-        });
+        return Promise.reject({ message: '当前课程不存在了' });
       }).catch(err => {
-        Toast.fail(err.error.message);
+        Toast.fail(err.message);
       });
     }
   }
