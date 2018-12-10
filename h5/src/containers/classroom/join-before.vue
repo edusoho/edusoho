@@ -8,8 +8,10 @@
       <div class="segmentation"></div>
 
       <!-- 优惠活动 -->
-      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
-      <div class="segmentation"></div>
+      <template v-if="Number(planDetails.price) !== 0" >
+        <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
+        <div class="segmentation"></div>
+      </template>
 
       <van-tabs v-model="active" @click="onTabClick" :class="tabsClass">
         <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
