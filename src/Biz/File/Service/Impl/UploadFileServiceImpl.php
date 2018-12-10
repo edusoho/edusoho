@@ -1364,7 +1364,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileUsedDao()->batchCreate($useFiles);
     }
 
-    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
+    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type, $bindFile = true)
     {
         $conditions = array(
             'type' => $type,
@@ -1374,7 +1374,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $limit = $this->getFileUsedDao()->count($conditions);
         $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, $limit);
-        $this->bindFiles($attachments);
+        if ($bindFile) {
+            $this->bindFiles($attachments);
+        }
 
         return $attachments;
     }

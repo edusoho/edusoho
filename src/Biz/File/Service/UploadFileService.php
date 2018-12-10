@@ -172,7 +172,7 @@ interface UploadFileService
 
     public function deleteUseFile($id);
 
-    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
+    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type, $bindFile);
 
     public function searchCloudFilesFromLocal($conditions, $orderBy, $start, $limit);
 
