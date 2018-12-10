@@ -1,9 +1,12 @@
 {% extends 'activity/content-layout.html.twig' %}
 
-{% do script(['pptactivity/js/show/index.js']) %}
 {% set ppt = activity.ext|default(null) %}
 {% set file = ppt.file|default(null) %}
 {% set pptPlayer = ppt_player(ppt, app.request.secure) %}
+
+{% if pptPlayer.error is empty %}
+  {% do script(['pptactivity/js/show/index.js']) %}
+{% endif %}
 
 {% block body %}
   <div class="iframe-parent-content" id="activity-ppt-content"
