@@ -37,7 +37,7 @@ console.log(item, label,999)
     case 'rate':
       let targetType = '全部商品';
       let discountType = '折扣';
-      let text = '元';
+      let text = '折';
       const target = item.target;
 
       if (item.targetType === 'classroom') {

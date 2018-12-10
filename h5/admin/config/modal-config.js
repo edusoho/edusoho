@@ -84,7 +84,7 @@ const head = {
       title: '使用对象',
       label: 'targetType',
     }, {
-      col: 2,
+      col: 3,
       title: '优惠内容',
       label: 'rate',
     }, {
@@ -92,7 +92,7 @@ const head = {
       title: '剩余/总量',
       label: 'generatedNum',
     }, {
-      col: 2,
+      col: 1,
       title: '有效期至',
       label: 'deadline',
     }, {
