@@ -1,7 +1,7 @@
 import { formatTime } from '@/utils/date-toolkit';
 
 const tableFilter = (item, label) => {
-console.log(item, label,999)
+
   if (label.toLocaleLowerCase().includes('price')) {
     if (!item[label]) {
       return '未设置';
@@ -23,15 +23,6 @@ console.log(item, label,999)
         return '未设置';
       }
       return `${item['price']}元`;
-    case 'targetType':
-      if (item['targetType'] === 'course') {
-        return '课程'
-      } else if (item['targetType'] === 'classroom') {
-        return '班级'
-      } else if (item['targetType'] === 'vip') {
-        return '会员'
-      }
-      return '全站';
     case 'generatedNum':
       return `${item['unreceivedNum']} / ${item['generatedNum']}`;
     case 'rate':
@@ -41,19 +32,19 @@ console.log(item, label,999)
       const target = item.target;
 
       if (item.targetType === 'classroom') {
-        targetType =  target ? target.title : '全部班级';
+        targetType = target ? target.title : '全部班级';
       }
       if (item.targetType === 'course' && !target) {
-        targetType =  target ? target.title : '全部课程';
+        targetType = target ? target.title : '全部课程';
       }
       if (item.targetType === 'vip') {
-        targetType =  '会员';
+        targetType = '会员';
       }
       if (item.type === 'minus') {
         discountType = '抵价';
         text = '元';
       }
-      return `${discountType + item.rate + text}/${targetType}`;
+      return `${discountType + item.rate + text} / ${targetType}`;
     default:
       return item[label]
   }

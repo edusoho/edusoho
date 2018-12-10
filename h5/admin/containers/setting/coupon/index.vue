@@ -1,7 +1,7 @@
 <template>
   <module-frame containerClass="setting-coupon" :isActive="isActive" :isIncomplete="isIncomplete">
     <div slot="preview" class="find-page__part coupon-preview__container">
-      <e-coupon :coupons="copyModuleData.data" :feedback="false" :showTitle="radio"></e-coupon>
+      <e-coupon :coupons="copyModuleData.data.items" :feedback="false" :showTitle="radio"></e-coupon>
     </div>
     <div slot="setting" class="coupon-allocate">
       <header class="title">
@@ -17,13 +17,13 @@
           <span class="text-14 required-option">优惠券选择：</span>
           <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
         </div>
-        <div class="coupon-list-container" v-if="copyModuleData.data">
-          <draggable v-model="copyModuleData.data" class="section__course-container">
+        <div class="coupon-list-container" v-if="copyModuleData.data.items">
+          <draggable v-model="copyModuleData.data.items" class="section__course-container">
             <el-tag
               class="courseLink coupon-list-item text-overflow"
               closable
               :disable-transitions="true"
-              v-for="(item, index) in copyModuleData.data"
+              v-for="(item, index) in copyModuleData.data.items"
               @close="handleClose(index)"
               :key="item.id">
               <span>{{ item.name }}</span>
@@ -37,7 +37,7 @@
       :visible="modalVisible"
       :type="type"
       limit=10
-      :courseList="copyModuleData.data"
+      :courseList="copyModuleData.data.items"
       @visibleChange="modalVisibleHandler"
       @updateCourses="getUpdatedCourses">
     </course-modal>
@@ -116,20 +116,20 @@ export default {
       this.modalVisible = visible;
     },
     getUpdatedCourses(data) {
-      this.copyModuleData.data = data;
+      this.copyModuleData.data.items = data;
       if (!data.length) return;
     },
     addCoupon() {
       this.modalVisible = true;
     },
     removeCourseLink(index) {
-      this.copyModuleData.data.splice(index, 1);
+      this.copyModuleData.data.items.splice(index, 1);
     },
     handleClose(index) {
       this.removeCourseLink(index);
     },
     showTitle() {
-      this.copyModuleData.titleShow = this.radio
+      this.copyModuleData.data.titleShow = this.radio
     }
   }
 }
