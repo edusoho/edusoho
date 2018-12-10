@@ -8,7 +8,7 @@ export default {
       const itemIndex = value.itemIndex;
       const token = data.token;
       const item = couponList[itemIndex];
-      // debugger;
+
       if (data.currentUserCoupon) {
         const couponType = data.targetType;
         if (data.target) {

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <e-loading v-if="isLoading"></e-loading>
     <user></user>
     <orders></orders>
   </div>
@@ -17,6 +18,9 @@ export default {
     User
   },
   computed: {
+    ...mapState({
+      isLoading: state => state.isLoading
+    }),
   },
 }
 </script>
