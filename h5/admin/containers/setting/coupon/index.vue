@@ -67,7 +67,6 @@ export default {
       ],
       pathName: this.$route.name,
       type: 'coupon',
-      radio: 'show'
     }
   },
   props: {
@@ -101,6 +100,14 @@ export default {
         return this.moduleData;
       },
       set() {}
+    },
+    radio: {
+      get() {
+        return this.copyModuleData.data.titleShow;
+      },
+      set(value) {
+        this.copyModuleData.data.titleShow = value;
+      },
     },
   },
   watch: {
