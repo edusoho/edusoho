@@ -16,7 +16,7 @@ export default {
       // 未领券
       if (!coupon.currentUserCoupon) {
         Api.receiveCoupon({
-          query: { token }
+          data: { token }
         }).then(() => {
           Toast.success('领取成功');
           coupon.currentUserCoupon = true;

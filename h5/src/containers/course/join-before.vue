@@ -7,7 +7,7 @@
     <div class="segmentation"></div>
 
     <!-- 优惠活动 -->
-    <template v-if="!isClassCourse">
+    <template v-if="!isClassCourse && Number(details.price) !== 0">
       <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
       <div class="segmentation"></div>
     </template>

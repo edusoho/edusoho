@@ -2,7 +2,7 @@ export default [
   {
     // 领取优惠券
     name: 'receiveCoupon',
-    url: '/plugins/coupon/coupon_batches/{token}/receivers',
+    url: '/me/coupons',
     method: 'POST',
     disableLoading: true
   }, {

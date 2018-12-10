@@ -30,7 +30,7 @@ export default {
       if (targetType === 'classroom') {
         return target ? target.title : '全部班级';
       }
-      if (targetType === 'course' && !target) {
+      if (targetType === 'course') {
         return target ? target.title : '全部课程';
       }
       if (targetType === 'vip') {
