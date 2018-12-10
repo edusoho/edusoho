@@ -268,7 +268,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                 $message['message'] = '该优惠券不存在';
             }
 
-            if (empty($message['message']) && !empty($coupon['batchId'])) {
+            if (empty($message['message']) && !empty($coupon['batchId']) && $this->isPluginInstalled('Coupon')) {
                 $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
                 if (empty($batch['codeEnable'])) {
                     $message['message'] = '该优惠券不存在';
@@ -428,6 +428,13 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $coupon;
     }
 
+    protected function isPluginInstalled($code)
+    {
+        $app = $this->getAppService()->getAppByCode($code);
+
+        return !empty($app);
+    }
+
     /**
      * @return CardService
      */
@@ -479,6 +486,11 @@ class CouponServiceImpl extends BaseService implements CouponService
     protected function getCouponBatchService()
     {
         return $this->createService('CouponPlugin:Coupon:CouponBatchService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->biz->service('CloudPlatform:AppService');
     }
 
     /**

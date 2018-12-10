@@ -167,7 +167,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         foreach ($receivedCoupons as $coupon) {
             $batches[$coupon['batchId']]['currentUserCoupon'] = $coupon;
         }
-        $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
+        $currentBatches = array();
+        if ($this->isPluginInstalled('Coupon')) {
+            $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
+        }
         foreach ($batches as &$batch) {
             $batchId = $batch['id'];
             if (!empty($currentBatches[$batchId])) {
@@ -270,6 +273,13 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         }
 
         return array();
+    }
+
+    protected function isPluginInstalled($code)
+    {
+        $app = $this->getAppService()->getAppByCode($code);
+
+        return !empty($app);
     }
 
     public function getDefaultDiscovery($portal)
@@ -375,8 +385,13 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $this->biz->service('Coupon:CouponService');
     }
 
-    private function getCouponBatchService()
+    protected function getCouponBatchService()
     {
         return $this->biz->service('CouponPlugin:Coupon:CouponBatchService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->biz->service('CloudPlatform:AppService');
     }
 }
