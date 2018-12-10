@@ -9,6 +9,7 @@
             :item="item"
             :index="index"
             :num="coupons.length"
+            :feedback="feedback"
             @buttonClick="handleClick">
           </item>
        </van-swipe-item>

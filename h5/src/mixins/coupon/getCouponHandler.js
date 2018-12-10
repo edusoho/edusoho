@@ -18,7 +18,10 @@ export default {
         Api.receiveCoupon({
           data: { token }
         }).then(() => {
-          Toast.success('领取成功');
+          Toast.success({
+            message: '领取成功',
+            duration: 2000
+          });
           coupon.currentUserCoupon = true;
         }).catch(err => {
           Toast.fail(err.message);

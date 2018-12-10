@@ -34,7 +34,7 @@ const tableFilter = (item, label) => {
       if (item.targetType === 'classroom') {
         targetType = target ? target.title : '全部班级';
       }
-      if (item.targetType === 'course' && !target) {
+      if (item.targetType === 'course') {
         targetType = target ? target.title : '全部课程';
       }
       if (item.targetType === 'vip') {
