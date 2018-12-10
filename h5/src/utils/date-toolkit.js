@@ -32,6 +32,7 @@ const formatSimpleTime = date => {
   }).join('-');
 };
 
+// 2018-12-06
 const formatFullTime = date => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
