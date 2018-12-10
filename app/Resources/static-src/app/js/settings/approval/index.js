@@ -4,6 +4,7 @@ $('#approval-form').validate({
     truename: {
       required: true,
       chinese: true,
+      trim: true,
       maxlength: 25,
       minlength: 2
     },

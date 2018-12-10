@@ -8,6 +8,7 @@ $form.validate({
     truename: {
       required: true,
       chinese: true,
+      trim: true,
       byte_minlength: 4,
       byte_maxlength: 10
     },
