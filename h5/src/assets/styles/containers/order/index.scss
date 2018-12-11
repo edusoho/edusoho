@@ -70,6 +70,12 @@
 
 .coupon-popup.full-height-popup {
   height: 100%;
+  .e-coupon__body {
+    padding-right: 0;
+    &:after {
+      right: vw(-6);
+    }
+  }
   .coupon-container:nth-child(3) {
     padding-top: vw(30);
   }
@@ -121,6 +127,18 @@
     top: vw(60);
     width: 100%;
     overflow: scroll;
+    .e-coupon__body {
+      padding-right: 0;
+      &:after {
+        right: vw(-6);
+      }
+      .coupon-button {
+        right: vw(15);
+      }
+      .e-coupon__name {
+        right: vw(85);
+      }
+    }
   }
   .btn-coupon-exit {
     display: flex;

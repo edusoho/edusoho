@@ -104,6 +104,9 @@
         top: vw(70);
       }
     }
+    .van-swipe-item {
+      width: 100% !important;
+    }
     .e-coupon__header {
       height: vw(82);
       .coupon-name {
