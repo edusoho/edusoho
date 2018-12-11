@@ -21,7 +21,6 @@ class UploaderFinish extends AbstractResource
         }
 
         $params = $request->query->all();
-        $params['size'] = isset($params['fileSize']) ? $params['fileSize'] : 0;
         $params['id'] = $fileId;
 
         if (empty($params)) {
