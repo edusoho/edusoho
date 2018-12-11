@@ -108,7 +108,7 @@
             targetType: 'course',
           }
         }).then(res => {
-          this.unreceivedCoupons = res
+          this.unreceivedCoupons = res.data
 
           this.miniCoupons = this.unreceivedCoupons.length > 3 ?
             this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons

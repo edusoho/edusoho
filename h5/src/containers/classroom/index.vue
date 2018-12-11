@@ -1,11 +1,7 @@
 <template>
   <div class="course-detail">
     <e-loading v-if="isLoading"></e-loading>
-    <join-before v-if="!details.joinStatus"
-      :details="details" :planDetails="planDetails"></join-before>
-
-    <join-after v-if="details.joinStatus"
-      :details="details" :planDetails="planDetails"></join-after>
+    <component :is="currentComp" :details="details" :planDetails="planDetails"></component>
   </div>
 </template>
 
@@ -51,6 +47,12 @@
       ...mapState({
         isLoading: state => state.isLoading
       }),
+      currentComp() {
+        if (this.details.joinStatus) {
+          return joinAfter;
+        }
+        return joinBefore;
+      }
     },
     created(){
       const classroomId = this.$route.params.id;
@@ -58,6 +60,8 @@
         query: { classroomId, }
       }).then(res => {
         this.getDetails(res);
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     },
     methods: {
