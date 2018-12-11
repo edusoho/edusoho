@@ -32,7 +32,7 @@ class PageDiscoveryFilter extends Filter
         if ('coupon' == $data['type']) {
             $couponFilter = new CouponFilter();
             $couponFilter->setMode(Filter::PUBLIC_MODE);
-            foreach ($data['data']['itmes'] as $couponBatch) {
+            foreach ($data['data']['items'] as &$couponBatch) {
                 if (!empty($couponBatch['currentUserCoupon'])) {
                     $couponFilter->filter($couponBatch['currentUserCoupon']);
                 }
