@@ -68,6 +68,12 @@
   }
 }
 
+.order-coupon {
+  .e-coupon__name {
+    right: vw(60) !important;
+  }
+}
+
 .coupon-popup.full-height-popup {
   height: 100%;
   .e-coupon__body {
@@ -137,6 +143,9 @@
       }
       .e-coupon__name {
         right: vw(85);
+      }
+      .stamp {
+        right: 0 !important;
       }
     }
   }

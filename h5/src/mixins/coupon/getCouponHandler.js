@@ -11,6 +11,17 @@ const ALL_TYPE = {
 export default {
   methods: {
     couponHandle(coupon) {
+      // 未登录跳转登录页面
+      if (!this.$store.state.token) {
+        this.$router.push({
+          name: 'login',
+          query: {
+            redirect: this.$route.fullPath
+          }
+        });
+        return;
+      }
+
       const token = coupon.token;
 
       /* 未领券 */
