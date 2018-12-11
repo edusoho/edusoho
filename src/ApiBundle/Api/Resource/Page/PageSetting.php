@@ -9,6 +9,7 @@ use Biz\User\UserException;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
+use ApiBundle\Api\Resource\Coupon\CouponFilter;
 use ApiBundle\Api\Resource\Filter;
 
 class PageSetting extends AbstractResource
@@ -105,18 +106,28 @@ class PageSetting extends AbstractResource
             if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
+                $courseFilter = new CourseFilter();
+                $courseFilter->setMode(Filter::PUBLIC_MODE);
                 foreach ($discoverySetting['data']['items'] as &$course) {
-                    $courseFilter = new CourseFilter();
-                    $courseFilter->setMode(Filter::PUBLIC_MODE);
                     $courseFilter->filter($course);
                 }
             }
             if ('classroom_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+                $classroomFilter = new ClassroomFilter();
+                $classroomFilter->setMode(Filter::PUBLIC_MODE);
                 foreach ($discoverySetting['data']['items'] as &$classroom) {
-                    $classroomFilter = new ClassroomFilter();
-                    $classroomFilter->setMode(Filter::PUBLIC_MODE);
                     $classroomFilter->filter($classroom);
+                }
+            }
+
+            if ('coupon' == $discoverySetting['type']) {
+                $couponFilter = new CouponFilter();
+                $couponFilter->setMode(Filter::PUBLIC_MODE);
+                foreach ($data['type']['data'] as $couponBatch) {
+                    if (!empty($couponBatch['currentUserCoupon'])) {
+                        $couponFilter->filter($couponBatch['currentUserCoupon']);
+                    }
                 }
             }
         }

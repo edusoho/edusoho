@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Page;
 
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
+use ApiBundle\Api\Resource\Coupon\CouponFilter;
 use ApiBundle\Api\Resource\Filter;
 
 class PageDiscoveryFilter extends Filter
@@ -25,6 +26,16 @@ class PageDiscoveryFilter extends Filter
             $classroomFilter->setMode(Filter::PUBLIC_MODE);
             foreach ($data['data']['items'] as &$classroom) {
                 $classroomFilter->filter($classroom);
+            }
+        }
+
+        if ('coupon' == $data['type']) {
+            $couponFilter = new CouponFilter();
+            $couponFilter->setMode(Filter::PUBLIC_MODE);
+            foreach ($data['type']['data'] as $couponBatch) {
+                if (!empty($couponBatch['currentUserCoupon'])) {
+                    $couponFilter->filter($couponBatch['currentUserCoupon']);
+                }
             }
         }
     }
