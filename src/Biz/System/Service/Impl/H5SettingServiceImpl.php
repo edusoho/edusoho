@@ -174,13 +174,16 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         if ($this->isPluginInstalled('Coupon')) {
             $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
         }
-        foreach ($batches as &$batch) {
+        foreach ($batches as $key => &$batch) {
             $batchId = $batch['id'];
-            if (!empty($currentBatches[$batchId])) {
-                $batch['money'] = $currentBatches[$batchId]['money'];
-                $batch['usedNum'] = $currentBatches[$batchId]['usedNum'];
-                $batch['unreceivedNum'] = $currentBatches[$batchId]['unreceivedNum'];
+            //显示用的时候，优惠券批次已被删 或 优惠券还在但是已过期 的 优惠券批次需要去除
+            if ('show' == $usage && (empty($currentBatches[$batchId]) || $currentBatches[$batchId]['deadline'] + 86400 < time())) {
+                unset($batches[$key]);
+                continue;
             }
+            $batch['money'] = $currentBatches[$batchId]['money'];
+            $batch['usedNum'] = $currentBatches[$batchId]['usedNum'];
+            $batch['unreceivedNum'] = $currentBatches[$batchId]['unreceivedNum'];
         }
         $discoverySetting['data']['items'] = array_values($batches);
 
