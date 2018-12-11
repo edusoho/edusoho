@@ -2,7 +2,9 @@
   <div>
     <e-panel :title="details.courseSet.title">
       <div class="course-detail__plan-price">
-        <span :class="{isFree: isFree}">{{ filterPrice() }}</span>
+        <span :class="{isFree: isFree}">{{ filterPrice() }}
+          <span v-if="isDiscount" class="original-price ml10">原价：￥{{ details.originPrice }}</span>
+        </span>
         <span v-if="showStudent" class="plan-price__student-num">{{ details.studentNum }}人在学</span>
       </div>
     </e-panel>
@@ -125,6 +127,12 @@ export default {
     },
     defaultPlan() {
       return this.items.length === 1 && !this.items[0].title;
+    },
+    isDiscount() {
+      if (!this.details.courseSet) return false;
+      const discountNum =  Number(this.details.courseSet.discount);
+      if (discountNum === 10) return false;
+      return discountNum;
     }
   },
   methods: {
