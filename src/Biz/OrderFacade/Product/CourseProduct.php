@@ -31,10 +31,14 @@ class CourseProduct extends Product implements OrderStatusCallback
     {
         $this->targetId = $params['targetId'];
         $course = $this->getCourseService()->getCourse($this->targetId);
-        $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
+        $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $this->targetId));
         $this->successUrl = array('my_course_show', array('id' => $this->targetId));
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $this->title = CourseTitleUtils::getDisplayedTitle($course);
+        if (empty($this->title)) {
+            $orderItem = $this->getOrderService()->getOrderItem($params['orderItemId']);
+            $this->title = $orderItem['title'];
+        }
         $this->price = $course['price'];
         $this->originPrice = $course['originPrice'];
         $this->maxRate = $course['maxRate'];
@@ -114,11 +118,9 @@ class CourseProduct extends Product implements OrderStatusCallback
     {
         $orderItem = $orderRefundItem['order_item'];
         $course = $this->getCourseService()->getCourse($orderItem['target_id']);
-        if (empty($course)) {
-            return;
+        if (!empty($course)) {
+            $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
         }
-
-        $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
     /**
