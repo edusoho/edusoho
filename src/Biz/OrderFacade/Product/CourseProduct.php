@@ -35,7 +35,7 @@ class CourseProduct extends Product implements OrderStatusCallback
         $this->successUrl = array('my_course_show', array('id' => $this->targetId));
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $this->title = CourseTitleUtils::getDisplayedTitle($course);
-        if (empty($this->title)) {
+        if (empty($this->title) && isset($params['orderItemId'])) {
             $orderItem = $this->getOrderService()->getOrderItem($params['orderItemId']);
             $this->title = $orderItem['title'];
         }
