@@ -96,12 +96,15 @@
       width: 140px;
       height: 80px;
     }
+    .tag {
+      padding: 4px 10px;
+      font-size: 10px;
+    }
   }
   &__right {
     margin-left: 10px;
     line-height: 1;
   }
-
   &__project {
     margin-top: 6.5px;
     margin-bottom: 5px;

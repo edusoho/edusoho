@@ -7,6 +7,8 @@
       :key="index"
       :type="courseItemType"
       :typeList="typeList"
+      :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
+      :courseType="typeList === 'course_list' ? course.courseSet.type : ''"
       :course="course | courseListData(listObj)"
     ></courseItem>
   </van-list>

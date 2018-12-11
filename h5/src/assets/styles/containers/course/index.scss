@@ -33,6 +33,7 @@
       }
     }
   }
+
   .teacher-cell {
     display: flex;
     flex-direction: column;
@@ -176,6 +177,11 @@
           color: $primary-color;
           font-size: vw(16);
         }
+      }
+      .original-price {
+        font-size: vw(12);
+        color: #B0BDC9;
+        text-decoration: line-through;
       }
     }
   }
