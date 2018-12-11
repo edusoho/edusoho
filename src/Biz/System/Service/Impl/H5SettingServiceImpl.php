@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\System\Service\H5SettingService;
 use AppBundle\Common\TimeMachine;
 use Doctrine\Common\Inflector\Inflector;
+use AppBundle\Common\ArrayToolkit;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
 {
@@ -55,7 +56,8 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $existCourse = $this->getCourseService()->getCourse($course['id']);
                 if (empty($existCourse) || 'published' != $existCourse['status']) {
                     unset($discoverySetting['data']['items'][$key]);
-                    continue;
+
+                    return $discoverySetting;
                 }
                 $existCourseSet = $this->getCourseSetService()->getCourseSet($existCourse['courseSetId']);
                 if (empty($existCourseSet) || 'published' != $existCourseSet['status']) {
@@ -141,6 +143,46 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $discoverySetting['data']['activity']['status'] = $remoteActvity['status'];
         $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
         $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
+
+        return $discoverySetting;
+    }
+
+    public function couponFilter($discoverySetting, $usage = 'show')
+    {
+        $batches = $discoverySetting['data']['items'];
+        $batches = ArrayToolkit::index($batches, 'id');
+        $batchIds = ArrayToolkit::column($batches, 'id');
+        if ('show' == $usage) {
+            $user = $this->getCurrentUser();
+            $receivedCoupons = array();
+            if (!empty($user['id'])) {
+                $conditions = array('batchIds' => $batchIds, 'userId' => $user['id']);
+                $receivedCoupons = $this->getCouponService()->searchCoupons(
+                    $conditions,
+                    array(),
+                    0,
+                    $this->getCouponService()->searchCouponsCount($conditions)
+                );
+            }
+
+            foreach ($receivedCoupons as $coupon) {
+                $batches[$coupon['batchId']]['currentUserCoupon'] = $coupon;
+            }
+        }
+
+        $currentBatches = array();
+        if ($this->isPluginInstalled('Coupon')) {
+            $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
+        }
+        foreach ($batches as &$batch) {
+            $batchId = $batch['id'];
+            if (!empty($currentBatches[$batchId])) {
+                $batch['money'] = $currentBatches[$batchId]['money'];
+                $batch['usedNum'] = $currentBatches[$batchId]['usedNum'];
+                $batch['unreceivedNum'] = $currentBatches[$batchId]['unreceivedNum'];
+            }
+        }
+        $discoverySetting['data']['items'] = array_values($batches);
 
         return $discoverySetting;
     }
@@ -234,6 +276,13 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         }
 
         return array();
+    }
+
+    protected function isPluginInstalled($code)
+    {
+        $app = $this->getAppService()->getAppByCode($code);
+
+        return !empty($app);
     }
 
     public function getDefaultDiscovery($portal)
@@ -332,5 +381,20 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     protected function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
+    }
+
+    protected function getCouponService()
+    {
+        return $this->biz->service('Coupon:CouponService');
+    }
+
+    protected function getCouponBatchService()
+    {
+        return $this->biz->service('CouponPlugin:Coupon:CouponBatchService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->biz->service('CloudPlatform:AppService');
     }
 }

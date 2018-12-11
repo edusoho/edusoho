@@ -8197,6 +8197,9 @@ exception.announcement.type_invalid: Announcement type is invalid
 exception.batch_notification.notfound: Site notification not found
 exception.batch_notification.published: Notification has been sent
 
+exception.coupon.receive.failed: 优惠券领取失败
+exception.coupon.plugin.not.installed: 优惠券插件未安装
+
 exception.lesson.not_found: Lesson is not exist
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
