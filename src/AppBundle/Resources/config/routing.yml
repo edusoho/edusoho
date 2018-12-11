@@ -2492,6 +2492,11 @@ attachment_preview:
   defaults: { _controller: AppBundle:File/Attachment:preview }
   methods: [GET]
 
+attachment_app_video:
+  path: /attachment/{id}/appVideoPreview
+  defaults: { _controller: AppBundle:File/Attachment:appVideoPreview }
+  methods: [GET]
+
 attachment_player:
   path: /attachment/{id}/player
   defaults: { _controller: AppBundle:File/Attachment:player }
