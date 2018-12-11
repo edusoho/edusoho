@@ -57,7 +57,6 @@ export default {
       this.$refs.audio && (this.$refs.audio.innerHTML = '');
 
       const player = this.$route.query;
-      console.error(this.$route);
       // 试看判断
       // const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
 
