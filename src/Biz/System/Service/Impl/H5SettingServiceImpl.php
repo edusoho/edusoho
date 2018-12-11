@@ -152,21 +152,24 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $batches = $discoverySetting['data']['items'];
         $batches = ArrayToolkit::index($batches, 'id');
         $batchIds = ArrayToolkit::column($batches, 'id');
-        $user = $this->getCurrentUser();
-        $receivedCoupons = array();
-        if (!empty($user['id'])) {
-            $conditions = array('batchIds' => $batchIds, 'userId' => $user['id']);
-            $receivedCoupons = $this->getCouponService()->searchCoupons(
-                $conditions,
-                array(),
-                0,
-                $this->getCouponService()->searchCouponsCount($conditions)
-            );
+        if ('show' == $usage) {
+            $user = $this->getCurrentUser();
+            $receivedCoupons = array();
+            if (!empty($user['id'])) {
+                $conditions = array('batchIds' => $batchIds, 'userId' => $user['id']);
+                $receivedCoupons = $this->getCouponService()->searchCoupons(
+                    $conditions,
+                    array(),
+                    0,
+                    $this->getCouponService()->searchCouponsCount($conditions)
+                );
+            }
+
+            foreach ($receivedCoupons as $coupon) {
+                $batches[$coupon['batchId']]['currentUserCoupon'] = $coupon;
+            }
         }
 
-        foreach ($receivedCoupons as $coupon) {
-            $batches[$coupon['batchId']]['currentUserCoupon'] = $coupon;
-        }
         $currentBatches = array();
         if ($this->isPluginInstalled('Coupon')) {
             $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
