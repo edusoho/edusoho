@@ -18,6 +18,18 @@ $('#approval-form').validate({
     backImg: {
       required: Translator.trans('user.fields.idcard_back_placeholder')
     }
+  },
+  submitHandler: function(form) {
+    const $form = $(form);
+    const $btn = $(form).find('[type="submit"]');
+    $('.js-input-val').each(function() {
+      const $this = $(this);
+      const spaceVal = $this.val();
+      const finalVal = $.trim(spaceVal);
+      $this.val(finalVal);
+    })
+    $btn.button('loading');
+    form.submit();
   }
 });
 
