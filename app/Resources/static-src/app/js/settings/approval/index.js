@@ -21,7 +21,7 @@ $('#approval-form').validate({
   },
   submitHandler: function(form) {
     const $form = $(form);
-    const $btn = $(form).find('[type="submit"]');
+    const $btn = $form.find('[type="submit"]');
     $('.js-input-val').each(function() {
       const $this = $(this);
       const spaceVal = $this.val();
