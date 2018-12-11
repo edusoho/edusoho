@@ -124,7 +124,7 @@ class PageSetting extends AbstractResource
             if ('coupon' == $discoverySetting['type']) {
                 $couponFilter = new CouponFilter();
                 $couponFilter->setMode(Filter::PUBLIC_MODE);
-                foreach ($data['type']['data'] as $couponBatch) {
+                foreach ($discoverySetting['data']['items'] as $couponBatch) {
                     if (!empty($couponBatch['currentUserCoupon'])) {
                         $couponFilter->filter($couponBatch['currentUserCoupon']);
                     }
