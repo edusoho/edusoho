@@ -41,17 +41,19 @@
           expiryMode: 'forever',
           expiryValue: '0',
         },
+        currentComp: '',
       };
     },
     computed: {
       ...mapState({
         isLoading: state => state.isLoading
       }),
-      currentComp() {
-        if (this.details.joinStatus) {
-          return joinAfter;
+    },
+    watch: {
+      'details.joinStatus': {
+        handler(status) {
+          this.getComponent(status)
         }
-        return joinBefore;
       }
     },
     created(){
@@ -59,6 +61,7 @@
       Api.getClassroomDetail({
         query: { classroomId, }
       }).then(res => {
+        this.getComponent(res.member);
         this.getDetails(res);
       }).catch(err => {
         Toast.fail(err.message)
@@ -86,6 +89,9 @@
           summary, joinStatus, isEmpty, courses, classId, buyable,
           teachers, assistants, headTeacher, access, cover, reviews,
         }
+      },
+      getComponent(status) {
+        this.currentComp = status ? joinAfter : joinBefore;
       },
     },
   }

@@ -10,11 +10,17 @@
   import joinBefore from './join-before.vue';
   import { mapState, mapActions, mapMutations } from 'vuex';
   import * as types from '@/store/mutation-types';
+  import { Toast } from 'vant';
 
   export default {
     components: {
       joinAfter,
       joinBefore
+    },
+    data() {
+      return {
+        currentComp: '',
+      };
     },
     computed: {
       ...mapState('course', {
@@ -25,16 +31,19 @@
       ...mapState({
         isLoading: state => state.isLoading
       }),
-      currentComp() {
-        if (this.joinStatus) {
-          return joinAfter;
-        }
-        return joinBefore;
+    },
+    watch: {
+      joinStatus(status) {
+        this.getComponent(status);
       }
     },
     created(){
       this.getCourseDetail({
         courseId: this.$route.params.id
+      }).then(() => {
+        this.getComponent(this.joinStatus);
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     },
     methods: {
@@ -44,6 +53,9 @@
       ...mapMutations('course', {
         setSourceType: types.SET_SOURCETYPE
       }),
+      getComponent(status) {
+        this.currentComp = status ? joinAfter : joinBefore;
+      },
     },
     beforeRouteLeave (to, from, next) {
       this.setSourceType({
