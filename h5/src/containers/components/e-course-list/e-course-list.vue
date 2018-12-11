@@ -12,6 +12,8 @@
       <e-class v-for="item in courseList.items"
         :key="item.id"
         :course="item | courseListData(listObj)"
+        :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
+        :courseType="typeList === 'course_list' ? item.courseSet.type : ''"
         :typeList="typeList"
         :type="type"
         :feedback="feedback">
