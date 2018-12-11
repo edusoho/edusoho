@@ -80,6 +80,10 @@ const routes = [
     name: 'course_web',
     component: () => import(/* webpackChunkName: "webView" */'@/containers/course/detail/web-view.vue')
   }, {
+    path: '/course/audioview',
+    name: 'course_audioview',
+    component: () => import(/* webpackChunkName: "audioDoc" */ '@/containers/course/detail/audio-doc.vue')
+  }, {
     path: '/live',
     name: 'live',
     component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')

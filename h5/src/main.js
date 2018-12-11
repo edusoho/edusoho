@@ -10,7 +10,6 @@ import whiteList from '@/router/config/white-list';
 import '@/assets/styles/main.scss';
 import App from '@/App';
 import Api from '@/api';
-
 import {
   Button,
   NavBar,
@@ -81,5 +80,7 @@ Api.getSettings({
     components: { App },
     template: '<App/>'
   });
+}).catch(e => {
+  console.error(e);
 });
 
