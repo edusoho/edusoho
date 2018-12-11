@@ -181,9 +181,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 unset($batches[$key]);
                 continue;
             }
-            $batch['money'] = $currentBatches[$batchId]['money'];
-            $batch['usedNum'] = $currentBatches[$batchId]['usedNum'];
-            $batch['unreceivedNum'] = $currentBatches[$batchId]['unreceivedNum'];
+            if (!empty($currentBatches[$batchId])) {
+                $batch['money'] = $currentBatches[$batchId]['money'];
+                $batch['usedNum'] = $currentBatches[$batchId]['usedNum'];
+                $batch['unreceivedNum'] = $currentBatches[$batchId]['unreceivedNum'];
+            }
         }
         $discoverySetting['data']['items'] = array_values($batches);
 
