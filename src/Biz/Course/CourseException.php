@@ -60,6 +60,8 @@ class CourseException extends AbstractException
 
     const SEARCH_ORDER_CLOSED = 4031626;
 
+    const FORBIDDEN_LEARN_COURSE = 4031627;
+
     public $messages = array(
         4041601 => 'exception.course.not_found',
         4031602 => 'exception.course.forbidden_take_course',
@@ -87,5 +89,6 @@ class CourseException extends AbstractException
         4031624 => 'exception.course.reach_max_student_num',
         5001625 => 'exception.course.not_arrive',
         4031626 => 'exception.course.search_order_closed',
+        4031627 => 'exception.course.forbidden_learn_course',
     );
 }

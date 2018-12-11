@@ -9548,6 +9548,7 @@ exception.course.buy_expired: 教学计划已过购买期限
 exception.course.reach_max_student_num: 达到最大人数限制，不可加入
 exception.course.not_arrive: 教学计划还未开始
 exception.course.search_order_closed: 查询订单已关闭，请联系管理员
+exception.course.forbidden_learn_course: 无权学习教学计划
 exception.courseset.not_found: 课程不存在
 exception.courseset.forbidden_manage: 无权管理课程
 exception.courseset.sub_courseset_exist: 该课程在班级下引用，请先删除引用课程！

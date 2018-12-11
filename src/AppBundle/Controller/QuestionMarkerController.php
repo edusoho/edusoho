@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
 use Biz\Marker\Service\MarkerService;
@@ -214,7 +215,7 @@ class QuestionMarkerController extends BaseController
         $access = $this->getCourseService()->canLearnCourse($data['courseId']);
 
         if (AccessorInterface::SUCCESS !== $access['code']) {
-            $this->createNewException(call_user_func(array($access['class'], $access['code'])));
+            $this->createNewException(CourseException::FORBIDDEN_LEARN_COURSE());
         }
 
         if (in_array($data['type'], array('uncertain_choice', 'single_choice', 'choice'))) {
