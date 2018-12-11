@@ -9,7 +9,6 @@ use Biz\User\UserException;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
-use ApiBundle\Api\Resource\Coupon\CouponFilter;
 use ApiBundle\Api\Resource\Filter;
 
 class PageSetting extends AbstractResource
@@ -118,16 +117,6 @@ class PageSetting extends AbstractResource
                 $classroomFilter->setMode(Filter::PUBLIC_MODE);
                 foreach ($discoverySetting['data']['items'] as &$classroom) {
                     $classroomFilter->filter($classroom);
-                }
-            }
-
-            if ('coupon' == $discoverySetting['type']) {
-                $couponFilter = new CouponFilter();
-                $couponFilter->setMode(Filter::PUBLIC_MODE);
-                foreach ($discoverySetting['data']['items'] as $couponBatch) {
-                    if (!empty($couponBatch['currentUserCoupon'])) {
-                        $couponFilter->filter($couponBatch['currentUserCoupon']);
-                    }
                 }
             }
         }
