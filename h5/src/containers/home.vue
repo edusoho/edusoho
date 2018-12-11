@@ -40,7 +40,6 @@ export default {
   },
   created() {
     const {preview, token} = this.$route.query
-    console.error(preview);
     if (!isNaN(preview) || preview == 1) { // 手机预览页面
       this.$router.push({
         name: 'preview',

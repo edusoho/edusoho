@@ -160,7 +160,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['register', 'login', 'protocol', 'find'].includes(to.name);
-  console.error(4);
   if (!Object.keys(store.state.courseSettings).length) {
     store.dispatch('getGlobalSettings', {
       type: 'course',
@@ -170,12 +169,10 @@ router.beforeEach((to, from, next) => {
 
   if (!Object.keys(store.state.settings).length) {
     // 获取全局设置
-    console.error(23);
     store.dispatch('getGlobalSettings', {
       type: 'site',
       key: 'settings'
     }).then(res => {
-      console.error(1);
       if (shouldUpdateMetaTitle) {
         to.meta.title = res.name;
       }
