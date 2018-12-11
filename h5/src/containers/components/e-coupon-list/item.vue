@@ -34,7 +34,8 @@
         if (this.item.unreceivedNum == 0 && !currentUserCoupon) {
           return 'coupon-received-all';
         }
-        if (currentUserCoupon && currentUserCoupon.status === 'used') {
+        if (currentUserCoupon &&
+          (currentUserCoupon.status === 'used' || currentUserCoupon.status === 'using')) {
           return 'coupon-used'
         }
       }
