@@ -1852,7 +1852,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         sleep(3);
         $result1 = $this->getClassroomService()->canJoinClassroom($classroom1['id']);
-        $this->assertEquals($result1['code'], 'EXPIRED_CLASSROOM');
+        $this->assertEquals($result1['code'], 'classroom.expired');
     }
 
     /** @group current */
@@ -1878,11 +1878,11 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $result1 = $this->getClassroomService()->canLearnClassroom($classroom['id']);
-        $this->assertEquals($result1['code'], 'NOTFOUND_MEMBER');
+        $this->assertEquals($result1['code'], 'member.not_found');
 
         $this->getClassroomService()->becomeAuditor($classroom['id'], $user['id']);
         $result2 = $this->getClassroomService()->canLearnClassroom($classroom['id']);
-        $this->assertEquals($result2['code'], 'FORBIDDEN_AUDITOR_LEARN');
+        $this->assertEquals($result2['code'], 'member.auditor');
 
         $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
         $result3 = $this->getClassroomService()->canLearnClassroom($classroom['id']);

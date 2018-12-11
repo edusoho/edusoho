@@ -7,14 +7,13 @@ use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
-use Biz\Task\TaskException;
 
 class LearnCourseTaskAccessor extends AccessorAdapter
 {
     public function access($task)
     {
         if (!$task) {
-            return $this->buildResult('NOTFOUND_TASK', array(), TaskException::EXCEPTION_MODUAL);
+            return $this->buildResult('course.task.not_found');
         }
 
         $learnCourseChain = $this->biz['course.learn_chain'];

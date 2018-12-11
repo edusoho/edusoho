@@ -38,7 +38,7 @@ class CourseProductTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\Course\CourseException
+     * @expectedException \Biz\OrderFacade\Exception\OrderPayCheckException
      */
     public function testValidateWithError()
     {

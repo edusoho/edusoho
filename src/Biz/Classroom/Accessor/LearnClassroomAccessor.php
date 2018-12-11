@@ -3,22 +3,21 @@
 namespace Biz\Classroom\Accessor;
 
 use Biz\Accessor\AccessorAdapter;
-use Biz\Classroom\ClassroomException;
 
 class LearnClassroomAccessor extends AccessorAdapter
 {
     public function access($classroom)
     {
         if (empty($classroom)) {
-            return $this->buildResult('NOTFOUND_CLASSROOM', array(), ClassroomException::EXCEPTION_MODUAL);
+            return $this->buildResult('classroom.not_found');
         }
 
         if ($classroom['status'] === 'draft') {
-            return $this->buildResult('UNPUBLISHED_CLASSROOM', array('classroomId' => $classroom['id']), ClassroomException::EXCEPTION_MODUAL);
+            return $this->buildResult('classroom.unpublished', array('classroomId' => $classroom['id']));
         }
 
         if ($this->isExpired($classroom)) {
-            return $this->buildResult('EXPIRED_CLASSROOM', array('classroomId' => $classroom['id']), ClassroomException::EXCEPTION_MODUAL);
+            return $this->buildResult('classroom.expired', array('classroomId' => $classroom['id']));
         }
 
         return null;
