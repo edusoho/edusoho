@@ -56,9 +56,9 @@ class AvailableCouponCommand extends Command
             }
         }
 
-        usort($exclusiveCoupons, 'self::compareCoupon');
+        usort($exclusiveCoupons, array($this, 'compareCoupon'));
 
-        usort($unexclusiveCoupons, 'self::compareCoupon');
+        usort($unexclusiveCoupons, array($this, 'compareCoupon'));
 
         return array_merge($exclusiveCoupons, $unexclusiveCoupons);
     }
