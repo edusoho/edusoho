@@ -1671,6 +1671,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             $task['mediaUri'] = $activity['ext']['mediaUri'];
         } elseif ('audio' == $task['type']) {
             $task['mediaSource'] = 'self';
+            $task['hasText'] = $activity['ext']['hasText'] ? true : false;
+            $task['mediaText'] = $activity['ext']['hasText'] ? $activity['content'] : '';
         } elseif ('live' == $task['type']) {
             if ('videoGenerated' == $activity['ext']['replayStatus']) {
                 $task['mediaSource'] = 'self';

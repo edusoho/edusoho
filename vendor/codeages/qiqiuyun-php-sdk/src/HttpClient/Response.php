@@ -1,4 +1,5 @@
 <?php
+
 namespace QiQiuYun\SDK\HttpClient;
 
 class Response
@@ -111,6 +112,7 @@ class Response
     public function __toString()
     {
         $headers = print_r($this->headers, true);
+
         return sprintf("#HTTP RESPONSE# ==Status Code==: %s\t==Headers==: %s\t==Body==: %s", $this->httpResponseCode, $headers, $this->body);
     }
 }

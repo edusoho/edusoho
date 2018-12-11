@@ -17,24 +17,32 @@ class MarketingActivity extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
-        $conditions = $this->fillParams($request);
+        $conditions = $request->query->all();
+        if (isset($conditions['name'])) {
+            $conditions['name_like'] = $conditions['name'];
+            unset($conditions['name']);
+        }
+
+        if (isset($conditions['itemType'])) {
+            $conditions['item_type'] = $conditions['itemType'];
+            unset($conditions['itemType']);
+        }
+
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $conditions['page'] = ceil(($offset + 1) / $limit);
+        $conditions['limit'] = $limit;
+        // 微营销接口传递的参数，表明搜索的活动是已经设置了规则的数据
+        $conditions['is_set_rule'] = 1;
+
         $user = $this->getCurrentUser();
         $client = MarketingAPIFactory::create();
 
-        return $client->get(
+        $pages = $client->get(
             '/activities',
             $conditions,
             array('MERCHANT-USER-ID: '.$user['id'])
         );
-    }
 
-    public function fillParams($request)
-    {
-        $conditions = $request->query->all();
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $conditions['page'] = ceil(($offset + 1) / $limit);
-        $conditions['limit'] = $limit;
-
-        return $conditions;
+        return $this->makePagingObject($pages['data'], $pages['paging']['total'], $offset, $limit);
     }
 }

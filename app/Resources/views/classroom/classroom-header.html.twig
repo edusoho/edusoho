@@ -75,10 +75,12 @@
           </div>
 
           <ul class="class-data hidden-sm clearfix {% if classroomMemberLevel %}active{% endif %}">
-            <li>
-              <p><i class="es-icon es-icon-person"></i></p>
-              <p>{{ 'site.default.student'|trans }}({{ classroom.studentNum + classroom.auditorNum }})</p>
-            </li>
+            {% if setting('classroom.show_student_num_enabled', '1') == 1 %}
+              <li>
+                <p><i class="es-icon es-icon-person"></i></p>
+                <p>{{ 'site.default.student'|trans }}({{ classroom.studentNum + classroom.auditorNum }})</p>
+              </li>
+            {% endif %}
             <li>
               <p><i class="es-icon es-icon-book"></i></p>
               <p>{{ 'course'|trans }}({{ classroom.courseNum }})</p>

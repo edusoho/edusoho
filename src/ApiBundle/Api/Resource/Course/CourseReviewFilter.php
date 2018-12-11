@@ -9,7 +9,7 @@ class CourseReviewFilter extends Filter
 {
     protected $publicFields = array(
         'id', 'title', 'content', 'rating', 'private', 'createdTime', 'parentId',
-        'updatedTime', 'courseSetId', 'user', 'course',
+        'updatedTime', 'courseSetId', 'user', 'course', 'posts',
     );
 
     protected function publicFields(&$data)
@@ -21,5 +21,9 @@ class CourseReviewFilter extends Filter
         $courseFilter = new CourseFilter();
         $courseFilter->setMode(Filter::SIMPLE_MODE);
         $courseFilter->filter($data['course']);
+
+        $postFilter = new CourseReviewPostFilter();
+        $postFilter->setMode(Filter::PUBLIC_MODE);
+        $postFilter->filters($data['posts']);
     }
 }

@@ -29,6 +29,8 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $params['id'] = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
         $params['nickname'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
         $params['isLogin'] = $user->isLogin();
+        $params['startTime'] = $lesson['startTime'];
+        $params['endTime'] = $lesson['endTime'];
         $this->createRefererLog($request, $course);
 
         return $this->forward('AppBundle:Liveroom:_entry',
@@ -132,7 +134,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
             return $this->createMessageResponse('error', '改课程不存在或已删除！');
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $ids = $request->request->get('visibleReplaies');
             $this->getLiveReplayService()->updateReplayByLessonId($lessonId, array('hidden' => 1), 'liveOpen');
 
@@ -184,7 +186,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $client = new EdusohoLiveClient();
         foreach ($lessons as $key => $lesson) {
             $lesson['isEnd'] = $this->get('web.twig.live_extension')->isLiveFinished($lesson['id'], 'openCourse');
-            $lesson['canRecord'] = !($lesson['replayStatus'] == 'videoGenerated') && $client->isAvailableRecord($lesson['mediaId']);
+            $lesson['canRecord'] = !('videoGenerated' == $lesson['replayStatus']) && $client->isAvailableRecord($lesson['mediaId']);
             $lesson['file'] = $this->getLiveReplayMedia($lesson);
             $lessons["lesson-{$lesson['id']}"] = $lesson;
         }
@@ -243,7 +245,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
-        if ($lesson['replayStatus'] == 'videoGenerated') {
+        if ('videoGenerated' == $lesson['replayStatus']) {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             if (!empty($file)) {
                 $lesson['media'] = $file;
@@ -252,7 +254,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
             }
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $fileId = $request->request->get('fileId', 0);
             $this->getOpenCourseService()->generateLessonVideoReplay($courseId, $lessonId, $fileId);
 
@@ -275,7 +277,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
     protected function getLiveReplayMedia($lesson)
     {
-        if ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] == 'videoGenerated') {
+        if ('liveOpen' == $lesson['type'] && 'videoGenerated' == $lesson['replayStatus']) {
             return $this->getUploadFileService()->getFile($lesson['mediaId']);
         }
 
@@ -291,7 +293,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
                 $start = true;
             }
 
-            if ($start && $treeCategory['depth'] == 1) {
+            if ($start && 1 == $treeCategory['depth']) {
                 return $treeCategory;
             }
         }

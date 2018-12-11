@@ -54,6 +54,18 @@
       color:@gray;
       z-index: 1;
       text-align: right;
+      @media(max-width: @screen-xs-min) {
+        &.dashboard-footer--audio {
+          padding-top: 6px;
+        }
+        .audio-convert-tip {
+          margin-bottom: 4px;
+          width: 100%;
+          text-align: left;
+          font-size: 12px;
+          line-height: 1;
+        }
+      }
     }
     .dashboard-body {
       position: relative;

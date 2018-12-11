@@ -1095,6 +1095,7 @@ t.add("admin.setting.mobile.delete_startup_diagram_figure_4_fail_hint", "Delete 
 t.add("admin.setting.mobile.upload_startup_diagram_figure_5_success_hint", "Uploading the network school startup diagram Figure 5 success!", "js", "en");
 t.add("admin.setting.mobile.delete_startup_diagram_figure_5_success_hint", "Delete the network school startup diagram Figure 5 successfully!", "js", "en");
 t.add("admin.setting.mobile.delete_startup_diagram_figure_5_fail_hint", "Delete the network school startup diagram Figure 5 failed!", "js", "en");
+t.add("admin.setting.mobile.bundle_id", "Bundle ID", "js", "en");
 t.add("admin.setting.mobile.upload_logo_success_hint", "Upload the network school LOGO success!", "js", "en");
 t.add("admin.setting.mobile.delete_logo_success_hint", "Delete the network school LOGO success!", "js", "en");
 t.add("admin.setting.mobile.delete_logo_fail_hint", "Delete the network school LOGO failed!", "js", "en");
@@ -1214,4 +1215,5 @@ t.add("admin.util.item_delete.delete_success_hint", "Delete %name% successfully"
 t.add("admin.shortcut_add_success_hint", "The current page has been added as a popular link!", "js", "en");
 t.add("admin.shortcut_delete_success_hint", "Delete frequently used links successfully!", "js", "en");
 t.add("task_show.user_login_protect_tip", "User unLogin", "js", "en");
+t.add("admin.course_manage.manage.tags_select.placeholder", "\u8f93\u5165\u6807\u7b7e\u540d\u79f0\u5173\u952e\u5b57", "js", "en");
 })(Translator);

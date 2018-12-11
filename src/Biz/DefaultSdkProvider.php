@@ -42,6 +42,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
             return $service;
         };
 
+        $biz['qiQiuYunSdk.playv2'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateSdk($biz, array());
+            if (!empty($sdk)) {
+                $service = $sdk->getPlayV2Service();
+            }
+
+            return $service;
+        };
+
         $biz['qiQiuYunSdk.esOp'] = function ($biz) use ($that) {
             $service = null;
             $sdk = $that->generateSdk($biz, $that->getESopConfig($biz));

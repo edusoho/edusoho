@@ -162,6 +162,8 @@ class CourseTaskMedia extends AbstractResource
             'resId' => $file['globalId'],
             'url' => isset($url) ? $url : null,
             'player' => $player,
+            'hasText' => $audio['hasText'] ? true : false,
+            'text' => $audio['hasText'] ? $activity['content'] : '',
             'agentInWhiteList' => $agentInWhiteList,
             'isEncryptionPlus' => false,
         );

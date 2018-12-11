@@ -132,6 +132,9 @@ class TestpaperController extends BaseController
         $total = $this->makeTestpaperTotal($testpaper, $questions);
 
         $favorites = $this->getQuestionService()->findUserFavoriteQuestions($testpaperResult['userId']);
+        $favorites = array_map(function ($favorite) {
+            return ArrayToolkit::parts($favorite, array('id', 'questionId'));
+        }, $favorites);
 
         $student = $this->getUserService()->getUser($testpaperResult['userId']);
 
@@ -146,7 +149,7 @@ class TestpaperController extends BaseController
             'accuracy' => $accuracy,
             'paper' => $testpaper,
             'paperResult' => $testpaperResult,
-            'favorites' => ArrayToolkit::column($favorites, 'questionId'),
+            'favorites' => ArrayToolkit::index($favorites, 'questionId'),
             'total' => $total,
             'student' => $student,
             'source' => $request->query->get('source', 'course'),

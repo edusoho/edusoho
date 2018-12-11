@@ -31,7 +31,13 @@ class PlayerController extends BaseController
         $agentInWhiteList = $this->getPlayerService()->agentInWhiteList($request->headers->get('user-agent'));
 
         $isEncryptionPlus = false;
+
+        //音频无论是否开启教育云都会去使用cloudsdk
+        if ('audio' == $file['type']) {
+            $cloudSdk = 'audio'; //webExtension->getCloudSdkUrl
+        }
         if ('video' == $file['type'] && 'cloud' == $file['storage']) {
+            $cloudSdk = 'video'; //webExtension->getCloudSdkUrl
             $videoPlayer = $this->getPlayerService()->getVideoFilePlayer($file, $agentInWhiteList, $context, $ssl);
             $isEncryptionPlus = $videoPlayer['isEncryptionPlus'];
             $context = $videoPlayer['context'];
@@ -48,6 +54,7 @@ class PlayerController extends BaseController
             'player' => $player,
             'agentInWhiteList' => $agentInWhiteList,
             'isEncryptionPlus' => $isEncryptionPlus,
+            'cloudSdk' => isset($cloudSdk) ? $cloudSdk : null,
         );
 
         if ($isPart) {

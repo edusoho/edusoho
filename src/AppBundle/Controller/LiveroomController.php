@@ -33,6 +33,11 @@ class LiveroomController extends BaseController
         $biz = $this->getBiz();
         $user['hostname'] = $biz['env']['base_url'];
 
+        if (in_array($user['role'], array('speaker', 'teacher'))) {
+            $schemeAndHost = $request->getSchemeAndHttpHost();
+            $user['callbackUrl'] = $this->generateCallbackUrl($schemeAndHost, $params);
+        }
+
         $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $user);
 
         return $this->render('liveroom/entry.html.twig', array(
@@ -41,6 +46,29 @@ class LiveroomController extends BaseController
             'ticket' => $ticket,
             'liveRole' => !empty($user['role']) ? $user['role'] : 'student',
         ));
+    }
+
+    protected function generateCallbackUrl($host, $params)
+    {
+        $callbackArgs = array(
+            'sources' => array('course', 'my', 'public'), //支持课程资料读取，公共资料读取，还有我的资料库读取
+            'userId' => $this->getCurrentUser()->getId(),
+        );
+
+        if (!empty($params['courseId'])) {
+            $callbackArgs['courseId'] = $params['courseId'];
+        }
+
+        $options = array();
+        if (!empty($params['startTime']) && !empty($params['endTime'])) {
+            //直播前后六小时有效
+            $options['exp'] = $params['endTime'] + 60 * 60 * 6;
+            $options['iat'] = $params['startTime'] - 60 * 60 * 6;
+        }
+
+        $token = $this->getJWTAuth()->auth($callbackArgs, $options);
+
+        return "{$host}/callback/ESLive?ac=callback.fetch&token={$token}";
     }
 
     /**

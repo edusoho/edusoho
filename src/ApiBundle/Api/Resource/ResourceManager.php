@@ -21,7 +21,6 @@ class ResourceManager
     public function create(PathMeta $meta)
     {
         $className = $this->getClassName($meta);
-
         if (!class_exists($className)) {
             throw new BadRequestHttpException('API Resource Not found', null, ErrorCode::BAD_REQUEST);
         }

@@ -1,4 +1,5 @@
 import FileChooser from 'app/js/file-chooser/file-choose';
+import { initEditor } from 'app/js/activity-manage/editor.js';
 import { chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/chooser-ui.js';
 export default class Audio {
   constructor() {
@@ -8,6 +9,7 @@ export default class Audio {
     this.autoValidatorLength();
     this.initFileChooser();
     this.initEvent();
+    this.initCkeditor(this.validate);
   }
 
   initEvent() {
@@ -17,6 +19,33 @@ export default class Audio {
 
     window.ltc.on('getValidate', (msg) => {
       window.ltc.emit('returnValidate', { valid: this.validate.form() });
+    });
+
+    $('input[name="hasText"]').on('change', event => {
+      let $target = $(event.currentTarget);
+      if ($target.val() == 0) {
+        $('.js-content').hide();
+      }
+      if ($target.val() == 1) {
+        $('.js-content').show();
+      }
+    });
+  }
+  initCkeditor(validator) {
+    // group: 'course'
+    var editor = CKEDITOR.replace('audio-content-field', {
+      toolbar: 'Simple',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
+      filebrowserImageUploadUrl: $('#audio-content-field').data('imageUploadUrl')
+    });
+  
+    editor.on('change', () => {
+      $('#audio-content-field').val(editor.getData());
+      validator.form();
+    });
+    editor.on('blur', () => {
+      $('#audio-content-field').val(editor.getData());
+      validator.form();
     });
   }
 
@@ -35,7 +64,6 @@ export default class Audio {
         },
         minute: 'required unsigned_integer unsigned_integer',
         second: 'required second_range unsigned_integer',
-        media: 'required'
       },
       messages: {
         minute: {
@@ -47,7 +75,6 @@ export default class Audio {
           second_range: Translator.trans('activity.audio_manage.second_range_error_hint'),
           unsigned_integer: Translator.trans('activity.audio_manage.length_unsigned_integer_error_hint')
         },
-        media: Translator.trans('activity.audio_manage.media_error_hint')
       }
     });
 

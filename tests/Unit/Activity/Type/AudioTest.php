@@ -202,6 +202,8 @@ class AudioTest extends BaseTypeTestCase
             'media' => json_encode(array(
                 'id' => $mediaId,
             )),
+            'content' => 'test content',
+            'hasText' => 1,
         );
     }
 

@@ -12,7 +12,7 @@ use AppBundle\Common\ServiceToolkit;
 class ClassroomFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'about',
+        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'courseNum', 'about',
     );
 
     protected $publicFields = array(

@@ -3,9 +3,9 @@
 namespace Biz\OpenCourse\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\AthenaLiveToolkit;
 use Biz\BaseService;
 use Biz\OpenCourse\Service\LiveCourseService;
+use Biz\System\Service\SettingService;
 use Biz\Util\EdusohoLiveClient;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -71,9 +71,9 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $role = '';
         $user = $this->getCurrentUser();
 
-        if (!$user->isLogin() && $lesson['type'] == 'liveOpen') {
+        if (!$user->isLogin() && 'liveOpen' == $lesson['type']) {
             return 'student';
-        } elseif (!$user->isLogin() && $lesson['type'] != 'liveOpen') {
+        } elseif (!$user->isLogin() && 'liveOpen' != $lesson['type']) {
             throw $this->createServiceException('您还未登录，不能参加直播！');
         }
 
@@ -105,7 +105,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
 
-        if (empty($lesson) || $lesson['type'] != 'liveOpen') {
+        if (empty($lesson) || 'liveOpen' != $lesson['type']) {
             return true;
         }
 
@@ -113,7 +113,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             return true;
         }
 
-        if ($lesson['progressStatus'] == EdusohoLiveClient::LIVE_STATUS_CLOSED) {
+        if (EdusohoLiveClient::LIVE_STATUS_CLOSED == $lesson['progressStatus']) {
             return true;
         }
 
@@ -168,14 +168,13 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             'speaker' => $this->_getSpeaker($courseTeacherIds),
             'authUrl' => $routes['authUrl'],
             'jumpUrl' => $routes['jumpUrl'],
-            'callback' => $this->buildCallbackUrl($lesson),
         );
 
-        if ($actionType == 'add') {
+        if ('add' == $actionType) {
             $params['liveLogoUrl'] = $this->_getLiveLogo();
             $params['startTime'] = $lesson['startTime'].'';
             $params['endTime'] = ($lesson['startTime'] + $lesson['length'] * 60).'';
-        } elseif ($actionType == 'update') {
+        } elseif ('update' == $actionType) {
             $params['liveId'] = $lesson['mediaId'];
             $params['provider'] = $lesson['liveProvider'];
 
@@ -203,23 +202,6 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $liveLogoUrl;
     }
 
-    protected function buildCallbackUrl($lesson)
-    {
-        $baseUrl = $this->biz['env']['base_url'];
-
-        $duration = $lesson['startTime'] + $lesson['length'] * 60 + 86400 - time();
-        $args = array(
-            'duration' => $duration,
-            'data' => array(
-                'courseId' => $lesson['courseId'],
-                'type' => 'open_course',
-            ),
-        );
-        $token = $this->getTokenService()->makeToken('live.callback', $args);
-
-        return AthenaLiveToolkit::generateCallback($baseUrl, $token['token'], $lesson['courseId']);
-    }
-
     protected function getOpenCourseService()
     {
         return $this->createService('OpenCourse:OpenCourseService');
@@ -230,6 +212,9 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

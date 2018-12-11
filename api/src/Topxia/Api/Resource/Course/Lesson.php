@@ -165,6 +165,9 @@ class Lesson extends BaseResource
             $lesson['mediaUri'] = $result['url'];
         }
 
+        $lesson['mediaText'] = $this->filterHtml($lesson['mediaText']);
+        $lesson['content'] = $this->filterHtml($lesson['content']);
+
         return $lesson;
     }
 

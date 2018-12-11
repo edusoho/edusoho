@@ -15,7 +15,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'face'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'face', 'miniprogram'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
@@ -143,7 +143,7 @@ class Setting extends AbstractResource
         );
     }
 
-    public function getFace()
+    public function getFace($request = null)
     {
         $faceSetting = $this->getSettingService()->get('face', array());
         $featureSetting = $this->getSettingService()->get('feature', array());
@@ -167,7 +167,7 @@ class Setting extends AbstractResource
         return $settings;
     }
 
-    public function getWeixinConfig($request)
+    public function getWeixinConfig($request = null)
     {
         $params = $request->query->all();
         if (empty($params['url'])) {
@@ -181,11 +181,26 @@ class Setting extends AbstractResource
         return json_decode($result, true);
     }
 
+    public function getMiniprogram($request = null)
+    {
+        $authorizations = $this->getMpService()->getAuthorization();
+
+        return array(
+            'current_version' => empty($authorizations['current_version']) ? array('version' => '0.0.0') : $authorizations['current_version'],
+            'newest_version' => empty($authorizations['newest_version']) ? array('version' => '0.0.0') : $authorizations['newest_version'],
+        );
+    }
+
     /**
      * @return \Biz\System\Service\SettingService
      */
     private function getSettingService()
     {
         return $this->service('System:SettingService');
+    }
+
+    protected function getMpService()
+    {
+        return $this->service('Mp:MpService');
     }
 }
