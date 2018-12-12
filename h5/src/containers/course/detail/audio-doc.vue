@@ -1,15 +1,9 @@
 <template>
-  <div class="course-detail__head">
-    <div class="course-detail__nav--btn" @click="viewAudioDoc">
-      文稿
-    </div>
-    <div class="course-detail__head--img"
-      v-show="sourceType === 'img' || isEncryptionPlus">
-      <img :src="courseSet.cover.large" alt="">
-    </div>
-    <div id="course-detail__head--video"
-      ref="video"
-      v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus">
+  <div class="course-detail__audio">
+    <div id="course-detail__audio--content"
+      class="course-detail__audio--content"
+      ref="audio"
+      v-show="!isEncryptionPlus">
     </div>
   </div>
 </template>
@@ -22,15 +16,8 @@ import { Toast } from 'vant';
 export default {
   data() {
     return {
-      isEncryptionPlus: false,
-      mediaOpts: {}
+      isEncryptionPlus: false
     };
-  },
-  props: {
-    courseSet: {
-      type: Object,
-      default: {}
-    }
   },
   computed: {
     ...mapState('course', {
@@ -42,30 +29,14 @@ export default {
       user: state => state.user,
     })
   },
-  watch: {
-    taskId: {
-      immediate: true,
-      handler(v, oldVal) {
-        if (['video', 'audio'].includes(this.sourceType)) {
-          window.scrollTo(0, 0);
-          this.initPlayer();
-        }
-      }
-    }
+  created() {
+    this.initPlayer();
   },
   /*
   * 试看需要传preview=1
   * eg: /api/courses/1/task_medias/1?preview=1
   */
   methods: {
-    viewAudioDoc() {
-       this.$router.push({
-        name: 'course_audioview',
-        query: {
-          ...this.mediaOpts
-        },
-      })
-    },
     getParams () {
       const canTryLookable = !this.joinStatus
       return canTryLookable ? {
@@ -83,28 +54,27 @@ export default {
       }
     },
     async initPlayer (){
-      this.$refs.video && (this.$refs.video.innerHTML = '');
+      this.$refs.audio && (this.$refs.audio.innerHTML = '');
 
-      const player = await Api.getMedia(this.getParams())
+      const player = this.$route.query;
       // 试看判断
       // const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
 
-      this.isEncryptionPlus = player.media.isEncryptionPlus;
-      if (player.media.isEncryptionPlus) {
+      this.isEncryptionPlus = player.isEncryptionPlus;
+      if (player.isEncryptionPlus) {
         Toast('该浏览器不支持云视频播放，请下载App')
         return;
       }
-      const media = player.media;
       const options = {
-        id: 'course-detail__head--video',
+        id: 'course-detail__audio--content',
         user: this.user,
-        playlist: media.url,
+        playlist: player.url,
+        template: player.text,
         autoplay: true,
-        disableFullscreen: this.sourceType === 'audio'
+        simpleMode: true
         // resId: media.resId,
         // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
-      this.mediaOpts = options;
 
       this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.loadPlayerSDK().then(SDK => {
@@ -113,9 +83,9 @@ export default {
       })
     },
     loadPlayerSDK () {
-      if (!window.VideoPlayerSDK) {
+      if (!window.AudioPlayerSDK) {
 
-        const scrptSrc = '//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
+        const scrptSrc = '//service-cdn.qiqiuyun.net/js-sdk/audio-player/sdk-v1.js?v='
           + (Date.now() / 1000 / 60);
           // Cache SDK for 1 min.
 
@@ -124,11 +94,11 @@ export default {
             if (err) {
               reject(err);
             }
-            resolve(window.VideoPlayerSDK);
+            resolve(window.AudioPlayerSDK);
           });
         });
       }
-      return Promise.resolve(window.VideoPlayerSDK);
+      return Promise.resolve(window.AudioPlayerSDK);
     },
   }
 }

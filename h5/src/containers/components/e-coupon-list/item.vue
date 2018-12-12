@@ -25,7 +25,7 @@
   import couponMixin from '@/mixins/coupon'
 
   export default {
-    props: ['item', 'num', 'index', 'feedback'],
+    props: ['item', 'num', 'feedback'],
     computed: {
       couponStatus() {
         // 后台不判断优惠券状态
