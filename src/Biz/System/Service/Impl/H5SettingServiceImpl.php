@@ -93,7 +93,9 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $existClassroom = $this->getClassroomService()->getClassroom($classroom['id']);
                 if (empty($existClassroom) || 'published' != $existClassroom['status'] || empty($existClassroom['showable'])) {
                     unset($discoverySetting['data']['items'][$key]);
+                    continue;
                 }
+                $discoverySetting['data']['items'][$key] = $existClassroom;
             }
         }
 
@@ -153,22 +155,8 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $batches = $discoverySetting['data']['items'];
         $batches = ArrayToolkit::index($batches, 'id');
         $batchIds = ArrayToolkit::column($batches, 'id');
-        if ('show' == $usage) {
-            $user = $this->getCurrentUser();
-            $receivedCoupons = array();
-            if (!empty($user['id'])) {
-                $conditions = array('batchIds' => $batchIds, 'userId' => $user['id']);
-                $receivedCoupons = $this->getCouponService()->searchCoupons(
-                    $conditions,
-                    array(),
-                    0,
-                    $this->getCouponService()->searchCouponsCount($conditions)
-                );
-            }
-
-            foreach ($receivedCoupons as $coupon) {
-                $batches[$coupon['batchId']]['currentUserCoupon'] = $coupon;
-            }
+        if ('show' == $usage && $this->isPluginInstalled('Coupon')) {
+            $batches = $this->getCouponBatchService()->fillUserCurrentCouponByBatches($batches);
         }
 
         $currentBatches = array();
