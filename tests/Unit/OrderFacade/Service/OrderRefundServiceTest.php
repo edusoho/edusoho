@@ -71,6 +71,11 @@ class OrderRefundServiceTest extends BaseTestCase
                     'returnValue' => array(array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course')),
                     'withParams' => array(11),
                 ),
+                array(
+                    'functionName' => 'getOrderItem',
+                    'returnValue' => array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'),
+                    'withParams' => array(11),
+                ),
             )
         );
         $this->mockBiz(
@@ -125,6 +130,11 @@ class OrderRefundServiceTest extends BaseTestCase
                     'returnValue' => array(array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11)),
                     'withParams' => array(11),
                 ),
+                array(
+                    'functionName' => 'getOrderItem',
+                    'returnValue' => array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'),
+                    'withParams' => array(11),
+                ),
             )
         );
         $this->mockBiz(
@@ -156,6 +166,11 @@ class OrderRefundServiceTest extends BaseTestCase
                     'returnValue' => array(array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11)),
                     'withParams' => array(11),
                 ),
+                array(
+                    'functionName' => 'getOrderItem',
+                    'returnValue' => array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'),
+                    'withParams' => array(11),
+                ),
             )
         );
         $this->mockBiz(
@@ -185,6 +200,11 @@ class OrderRefundServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'findOrderItemsByOrderId',
                     'returnValue' => array(array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11)),
+                    'withParams' => array(11),
+                ),
+                array(
+                    'functionName' => 'getOrderItem',
+                    'returnValue' => array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'),
                     'withParams' => array(11),
                 ),
             )
@@ -224,6 +244,11 @@ class OrderRefundServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'findOrderItemsByOrderId',
                     'returnValue' => array(array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11)),
+                    'withParams' => array(11),
+                ),
+                array(
+                    'functionName' => 'getOrderItem',
+                    'returnValue' => array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'),
                     'withParams' => array(11),
                 ),
             )
