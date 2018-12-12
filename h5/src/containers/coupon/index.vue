@@ -9,7 +9,7 @@
             <div class="text-overflow text-14 coupon-name">{{ item.name }}</div>
             <span class="text-10">{{ timeExpire(item) }}</span>
           </div>
-          <span class="coupon-button" @click="couponHandle(item)">去使用</span>
+          <span class="coupon-button" @click="couponHandle(item, isReceive)">去使用</span>
         </div>
         <div class="e-coupon__middle"></div>
         <div class="e-coupon__bottom text-overflow">
@@ -24,6 +24,8 @@
   import Api from '@/api';
   import { Toast } from 'vant';
   import couponMixin from '@/mixins/coupon'
+  import getCouponMixin from '@/mixins/coupon/getCouponHandler';
+
   const ALL_TYPE = {
     classroom: 'classroom',
     course: 'course',
@@ -31,11 +33,12 @@
     all: 'all'
   };
   export default {
-    mixins: [couponMixin],
+    mixins: [couponMixin, getCouponMixin],
     data() {
       return {
         item: {},
-        message: ''
+        message: '',
+        isReceive: true
       };
     },
     computed: {
@@ -69,39 +72,6 @@
           Toast.fail(err.message);
         });
       }
-    },
-    methods: {
-      couponHandle(coupon) {
-        /* 已领券 */
-        const targetType = coupon.targetType === ALL_TYPE.all ?
-          ALL_TYPE.course : coupon.targetType; // 全站优惠券跳转课程列表页
-        const allType = Object.values(ALL_TYPE);
-
-        if (!allType.includes(targetType)) {
-          Toast.fail(`暂不支持查看：${targetType}类型商品`);
-          return;
-        }
-
-        if (coupon.target) {
-          const targetId = coupon.target.id;
-          this.getPathParams(targetType, targetId).then(({ id }) => {
-            if (!id) return;
-            this.$router.push({
-              path: `${targetType}/${id}` // course/{id} | classroom/{id}
-            });
-          });
-          return;
-        }
-
-        if (targetType === ALL_TYPE.vip) {
-          Toast.fail('你可以在电脑端或App上购买会员');
-          return;
-        }
-
-        this.$router.push({
-          path: `/${targetType}/explore` // course/explore | classroom/explore
-        });
-      },
     }
   }
 </script>

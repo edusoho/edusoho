@@ -10,7 +10,7 @@ const ALL_TYPE = {
 
 export default {
   methods: {
-    couponHandle(coupon) {
+    couponHandle(coupon, isReceive = false) {
       // 未登录跳转登录页面
       if (!this.$store.state.token) {
         this.$router.push({
@@ -25,7 +25,7 @@ export default {
       const token = coupon.token;
 
       /* 未领券 */
-      if (!coupon.currentUserCoupon) {
+      if (!coupon.currentUserCoupon && !isReceive) {
         Api.receiveCoupon({
           data: { token }
         }).then(() => {
@@ -56,7 +56,7 @@ export default {
         this.getPathParams(targetType, targetId).then(({ id }) => {
           if (!id) return;
           this.$router.push({
-            path: `${targetType}/${id}` // course/{id} | classroom/{id}
+            path: `/${targetType}/${id}` // course/{id} | classroom/{id}
           });
         });
         return;
@@ -68,7 +68,7 @@ export default {
       }
 
       this.$router.push({
-        path: `${targetType}/explore` // course/explore | classroom/explore
+        path: `/${targetType}/explore` // course/explore | classroom/explore
       });
     },
     /* 课程的id 需要转换成计划id 跳转到对应计划详情页 */
