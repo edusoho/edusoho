@@ -222,9 +222,9 @@
   height: 100%;
   background-color: rgba(0, 0, 0, .6);
   .coupon-card-bg {
-    margin: vw(80) vw(20);
+    margin: vw(80) vw(15);
     border-radius: vw(10);
-    padding: vw(40) vw(10) vw(50);
+    padding: vw(40) vw(15) vw(50);
     background-size: 95%;
     .coupon-info {
       color: #fff;
@@ -240,16 +240,28 @@
   }
   .e-coupon__body {
     padding-right: 0;
+    .e-coupon__header {
+      height: vw(80);
+      .e-coupon__price {
+        margin-top: vw(4);
+      }
+      .e-coupon__name {
+        top: vw(30);
+      }
+      .coupon-button {
+        top: vw(29);
+      }
+    }
     &:before {
-      left: 0;
-      top: vw(57);
+      left: vw(-1);
+      top: vw(70);
       width: vw(7);
       border-radius: 0 vw(20) vw(20) 0;
       background-color: #feba37;
     }
     &:after {
-      right: 0;
-      top: vw(57);
+      right: vw(-1);
+      top: vw(70);
       width: vw(7);
       border-radius: vw(20) 0 0 vw(20);
       background-color: #feba37;
