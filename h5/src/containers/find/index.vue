@@ -19,7 +19,7 @@
         v-if="part.type === 'coupon'"
         :coupons="part.data.items"
         :showTitle="part.data.titleShow"
-        @couponHandle="couponHandle($event, part.data)"
+        @couponHandle="couponHandle($event)"
         :feedback="true"></e-coupon-list>
     </div>
   </div>

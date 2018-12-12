@@ -8,7 +8,7 @@
             :item="item"
             :num="coupons.length"
             :feedback="feedback"
-            @buttonClick="handleClick">
+            @buttonClick="handleClick($event)">
           </item>
        </van-swipe-item>
       </van-swipe>

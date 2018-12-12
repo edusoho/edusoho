@@ -8,7 +8,7 @@
       <div class="segmentation"></div>
 
       <!-- 优惠活动 -->
-      <template v-if="Number(planDetails.price) !== 0" >
+      <template v-if="Number(planDetails.price) !== 0 && unreceivedCoupons.length" >
         <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
         <div class="segmentation"></div>
       </template>

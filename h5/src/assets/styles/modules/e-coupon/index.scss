@@ -208,7 +208,10 @@
     left: vw(-2);
   }
   &:after {
+    left: auto;
     right: vw(-2);
+    border: none;
+    transform-origin: center;
   }
 }
 

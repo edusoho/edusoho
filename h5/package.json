@@ -59,7 +59,7 @@
     "shelljs": "^0.7.6",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
-    "vant": "^1.2.1",
+    "vant": "1.2.1",
     "vue": "^2.5.2",
     "vue-cropper": "^0.4.5",
     "vue-loader": "^13.3.0",
