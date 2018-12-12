@@ -36,7 +36,8 @@ export default {
 
         this.isQrcode = to.query.loginToken ? true : false;
 
-        this.showLeftArrow = !['my', 'find', 'learning', 'prelogin', 'preview'].includes(to.name);
+        this.showLeftArrow =
+          !['my', 'find', 'learning', 'prelogin', 'preview', 'coupon_receive'].includes(to.name);
 
         if(redirect === 'learning') {
           this.setNavbarTitle('我的学习')

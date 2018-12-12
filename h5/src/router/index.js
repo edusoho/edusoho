@@ -160,6 +160,13 @@ const routes = [
       title: '人脸认证'
     },
     component: () => import(/* webpackChunkName: "verification" */'@/containers/login/face/verification.vue')
+  }, {
+    path: '/coupon/:token/receive',
+    name: 'coupon_receive',
+    meta: {
+      title: '优惠券领取'
+    },
+    component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/coupon/index.vue')
   }
 ];
 
