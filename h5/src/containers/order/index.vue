@@ -22,15 +22,17 @@
             <i class="h5-icon h5-icon-circle"></i>
             <i class="h5-icon h5-icon-check"></i>
           </div>
-          <coupon v-for="(item, index) in course.availableCoupons"
-            :key="index"
-            :coupon="item"
-            :index="index"
-            :active="activeItemIndex"
-            :showButton="false"
-            :showSelecet="true"
-            @chooseItem="chooseItem">
-          </coupon>
+          <div class="coupon-popup__content">
+            <coupon v-for="(item, index) in course.availableCoupons"
+              :key="index"
+              :coupon="item"
+              :index="index"
+              :active="activeItemIndex"
+              :showButton="false"
+              :showSelecet="true"
+              @chooseItem="chooseItem">
+            </coupon>
+          </div>
           <div class="coupon-empty" v-show="!course.availableCoupons.length">
             <img class="empty-img" src='static/images/coupon_empty.png'>
             <div class="empty-text">暂无优惠券</div>
