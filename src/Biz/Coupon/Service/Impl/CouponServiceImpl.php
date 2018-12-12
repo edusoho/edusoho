@@ -334,7 +334,9 @@ class CouponServiceImpl extends BaseService implements CouponService
             )
         );
 
-        $this->getCouponBatchService()->updateUnreceivedNumByBatchId($coupon['batchId']);
+        if ($this->isPluginInstalled('Coupon')) {
+            $this->getCouponBatchService()->updateUnreceivedNumByBatchId($coupon['batchId']);
+        }
 
         $this->getCardService()->addCard(array(
             'cardType' => 'coupon',
@@ -478,6 +480,18 @@ class CouponServiceImpl extends BaseService implements CouponService
     protected function getCouponBatchService()
     {
         return $this->createService('CouponPlugin:Coupon:CouponBatchService');
+    }
+
+    protected function isPluginInstalled($code)
+    {
+        $app = $this->getAppService()->getAppByCode($code);
+
+        return !empty($app);
+    }
+
+    protected function getAppService()
+    {
+        return $this->biz->service('CloudPlatform:AppService');
     }
 
     /**
