@@ -242,12 +242,14 @@
       top: vw(57);
       width: vw(7);
       border-radius: 0 vw(20) vw(20) 0;
+      background-color: #feba37;
     }
     &:after {
       right: 0;
       top: vw(57);
       width: vw(7);
       border-radius: vw(20) 0 0 vw(20);
+      background-color: #feba37;
     }
   }
 }
