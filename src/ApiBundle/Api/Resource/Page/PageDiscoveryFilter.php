@@ -13,7 +13,7 @@ class PageDiscoveryFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        if ('course_list' == $data['type'] && 'condition' == $data['data']['sourceType']) {
+        if ('course_list' == $data['type']) {
             $courseFilter = new CourseFilter();
             $courseFilter->setMode(Filter::PUBLIC_MODE);
             foreach ($data['data']['items'] as &$course) {
