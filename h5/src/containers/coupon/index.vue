@@ -47,6 +47,17 @@
       // 通过链接领取优惠券
       const token = this.$route.params.token;
 
+      // 未登录跳转登录页面
+      if (!this.$store.state.token) {
+        this.$router.push({
+          name: 'login',
+          query: {
+            redirect: this.$route.fullPath
+          }
+        });
+        return;
+      }
+
       if (token) {
         Api.receiveCoupon({
           data: { token }
@@ -61,17 +72,6 @@
     },
     methods: {
       couponHandle(coupon) {
-      // 未登录跳转登录页面
-        if (!this.$store.state.token) {
-          this.$router.push({
-            name: 'login',
-            query: {
-              redirect: this.$route.fullPath
-            }
-          });
-          return;
-        }
-
         /* 已领券 */
         const targetType = coupon.targetType === ALL_TYPE.all ?
           ALL_TYPE.course : coupon.targetType; // 全站优惠券跳转课程列表页
