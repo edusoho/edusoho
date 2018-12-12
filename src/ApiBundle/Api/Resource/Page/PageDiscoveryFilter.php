@@ -21,7 +21,7 @@ class PageDiscoveryFilter extends Filter
             }
         }
 
-        if ('classroom_list' == $data['type'] && 'condition' == $data['data']['sourceType']) {
+        if ('classroom_list' == $data['type']) {
             $classroomFilter = new ClassroomFilter();
             $classroomFilter->setMode(Filter::PUBLIC_MODE);
             foreach ($data['data']['items'] as &$classroom) {

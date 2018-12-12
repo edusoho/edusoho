@@ -50,7 +50,13 @@ class MeCoupon extends AbstractResource
             throw CouponException::RECEIVE_FAILED();
         }
 
-        return $this->getCouponService()->getCoupon($result['id']);
+        $coupon = $this->getCouponService()->getCoupon($result['id']);
+        if (in_array($coupon['targetType'], array('course', 'classroom')) && !empty($coupon['targetId'])) {
+            $type = 'course' == $coupon['targetType'] ? 'courseSet' : $coupon['targetType'];
+            $this->getOCUtil()->single($coupon, array('targetId'), $type);
+        }
+
+        return $coupon;
     }
 
     private function getCouponBatchService()
