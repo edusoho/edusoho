@@ -74,7 +74,7 @@ export default {
     /* 课程的id 需要转换成计划id 跳转到对应计划详情页 */
     getPathParams(type, id) {
       if (type !== ALL_TYPE.course) {
-        return Promise.resolve({ type, id });
+        return Promise.resolve({ id });
       }
 
       return Api.getCourseByCourseSet({
