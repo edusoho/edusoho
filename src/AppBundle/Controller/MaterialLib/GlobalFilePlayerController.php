@@ -23,7 +23,7 @@ class GlobalFilePlayerController extends BaseController
         }
         if (in_array($file['type'], array('video', 'ppt', 'document'))) {
             return $this->globalPlayer($file, $request);
-        } elseif ($file['type'] == 'audio') {
+        } elseif ('audio' == $file['type']) {
             return $this->audioPlayer($file, $request);
         } elseif (in_array($file['type'], array('image', 'flash'))) {
             return $this->commonPlayer($file, $request);
@@ -80,19 +80,7 @@ class GlobalFilePlayerController extends BaseController
             'url' => $result['url'],
             'player' => 'audio-player',
             'agentInWhiteList' => $this->agentInWhiteList($request->headers->get('user-agent')),
-        ));
-    }
-
-    protected function videoPlayer($file, Request $request)
-    {
-        $url = $this->getPlayUrl($file);
-
-        return $this->render('material-lib/player/global-video-player.html.twig', array(
-            'file' => $file,
-            'url' => $url,
-            'player' => 'balloon-cloud-video-player',
-            'params' => $request->query->all(),
-            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get('user-agent')),
+            'cloudSdk' => 'audio', //webExtension->getCloudSdkUrl
         ));
     }
 
