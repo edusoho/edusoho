@@ -80,7 +80,5 @@ Api.getSettings({
     components: { App },
     template: '<App/>'
   });
-}).catch(e => {
-  console.error(e);
 });
 
