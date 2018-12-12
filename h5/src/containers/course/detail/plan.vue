@@ -130,9 +130,13 @@ export default {
     },
     isDiscount() {
       if (!this.details.courseSet) return false;
-      const discountNum =  Number(this.details.courseSet.discount);
-      if (discountNum === 10) return false;
-      return discountNum;
+      const isDiscount = this.details.courseSet.discount;
+      if (isDiscount !== '') {
+        const discountNum =  Number(isDiscount);
+        if (discountNum === 10) return false;
+        if (discountNum === 0) return true;
+        return discountNum;
+      }
     }
   },
   methods: {
