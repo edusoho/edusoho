@@ -21,6 +21,7 @@
 import { mapActions, mapState } from 'vuex';
 import mobilePreview from './mobile'
 import pathName2Portal from '@admin/config/api-portal-config';
+import { Toast } from 'vant';
 
 export default {
   data() {
@@ -52,6 +53,8 @@ export default {
       route: 'homepage',
     }).then(res => {
       this.qrcode = res.img;
+    }).catch((err) => {
+      Toast.fail(err.message);
     });
   },
   methods: {

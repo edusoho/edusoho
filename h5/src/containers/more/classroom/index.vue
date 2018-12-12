@@ -9,6 +9,7 @@
     <lazyLoading
       :courseList="courseList"
       :isAllData="true"
+      :tagShow="false"
       :courseItemType="courseItemType"
       :isRequestCompile="isRequestCompile"
       @needRequest="sendRequest"
