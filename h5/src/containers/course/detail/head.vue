@@ -1,6 +1,6 @@
 <template>
   <div class="course-detail__head">
-    <div class="course-detail__nav--btn" @click="viewAudioDoc">
+    <div class="course-detail__nav--btn" @click="viewAudioDoc" v-show="['audio'].includes(sourceType) && !isEncryptionPlus">
       文稿
     </div>
     <div class="course-detail__head--img"
