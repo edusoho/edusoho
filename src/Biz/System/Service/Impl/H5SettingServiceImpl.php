@@ -70,6 +70,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 }
             }
         }
+        $discoverySetting['data']['items'] = array_values($discoverySetting['data']['items']);
 
         return $discoverySetting;
     }
@@ -107,6 +108,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 }
             }
         }
+        $discoverySetting['data']['items'] = array_values($discoverySetting['data']['items']);
 
         return $discoverySetting;
     }
