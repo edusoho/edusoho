@@ -127,11 +127,6 @@ export default {
     },
   },
   created() {
-    this.$message({
-      message: '这是一条测试弹窗',
-      type: 'error',
-      duration: 1000000
-    });
     // 获取小程序版本号
     Api.getMPVersion().then(res => {
       this.currentMPVersion = res.current_version.version
