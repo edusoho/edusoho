@@ -104,7 +104,9 @@ export default {
         // resId: media.resId,
         // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
-      this.mediaOpts = options;
+      this.mediaOpts = Object.assign({
+        text: player.media.text
+      }, options) ;
 
       this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.loadPlayerSDK().then(SDK => {

@@ -68,7 +68,7 @@ export default {
       const options = {
         id: 'course-detail__audio--content',
         user: this.user,
-        playlist: player.url,
+        playlist: player.playlist,
         template: player.text,
         autoplay: true,
         simpleMode: true
