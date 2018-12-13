@@ -30,8 +30,7 @@
         <div class="form-group">
           <label class="col-sm-3 control-label" for="email">{{ defaultFields.email }}</label>
           <div class="col-sm-6 controls">
-            {% set emailArr = app.user.email|split('@') %}
-            {% if emailArr[1] != 'edusoho.net' %}
+            {% if not is_system_generated_email(app.user.email) %}
               <div class="form-control-static">{{ app.user.email }}</div>
             {% else %}
               <input class="form-control" id="email" type="text" name="email" value=""
