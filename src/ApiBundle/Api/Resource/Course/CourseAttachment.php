@@ -24,7 +24,7 @@ class CourseAttachment extends AbstractResource
 
         $download = $this->getUploadFileService()->getDownloadMetas($fileId);
 
-        return $download['url'];
+        return array('url' => $download['url']);
     }
 
     /**

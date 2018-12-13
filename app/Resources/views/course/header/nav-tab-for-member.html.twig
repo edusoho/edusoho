@@ -53,7 +53,11 @@
 			    class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
 				<a
 						{% if member|default(false) %}
-							href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+							{% if key in ['discussion', 'question'] %}
+							  href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs, type: key}) }}"
+							{% else %}
+							  href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+                            {% endif %}
 						{% else %}
 							href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
 						{% endif %}

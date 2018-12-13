@@ -94,7 +94,7 @@ class CourseThread extends AbstractResource
         if (isset($fields['taskId'])) {
             $task = $this->getTaskService()->getTask($fields['taskId']);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            $fields['videoId'] = ($activity['mediaType'] == 'video') ? $activity['ext']['id'] : 0;
+            $fields['videoId'] = ($activity['mediaType'] == 'video') ? $activity['ext']['file']['id'] : 0;
         }
 
         $fields['title'] = substr($fields['content'], 0, 30);

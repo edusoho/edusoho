@@ -4,7 +4,7 @@
 {% set thread = thread|default(null) %}
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/course/thread-form/index.js'])%}
 
-{% set nav = 'threads' %}
+{% set nav = type %}
 
 {% block detail_content %}
   <ul class="breadcrumb">
