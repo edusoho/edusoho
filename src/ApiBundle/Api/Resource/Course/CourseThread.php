@@ -98,6 +98,9 @@ class CourseThread extends AbstractResource
         }
 
         $fields['title'] = substr($fields['content'], 0, 30);
+        if (empty($fields['title'])) {
+            $fields['questionType'] = $this->getQuestionType($fields['fileIds']);
+        }
         $thread = $this->getCourseThreadService()->createThread($fields);
 
         if (isset($fields['fileIds'])) {
@@ -105,6 +108,23 @@ class CourseThread extends AbstractResource
         }
 
         return $thread;
+    }
+
+    protected function getQuestionType($fileIds)
+    {
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds, false);
+        $types = ArrayToolkit::column($files, 'type');
+
+        switch ($types) {
+            case in_array('video', $types):
+                return 'video';
+            case in_array('image', $types):
+                return 'image';
+            case in_array('audio', $types):
+                return 'audio';
+            default:
+                return 'content';
+        }
     }
 
     protected function createSearchKeyword($keyword, $type)
