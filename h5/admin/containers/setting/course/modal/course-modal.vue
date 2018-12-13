@@ -22,6 +22,7 @@
           :value-key="valueKey"
           :clearable="true"
           :autofocus="true"
+          :hide-loading="hideLoading"
           :trigger-on-focus="false"
           :fetch-suggestions="searchHandler"
           @select="selectHandler"
@@ -75,7 +76,8 @@ export default {
       courseListIds: [],
       head,
       valueDefault: VALUE_DEFAULT,
-      typeTextDefault: TYPE_TEXT_DEFAULT
+      typeTextDefault: TYPE_TEXT_DEFAULT,
+      hideLoading: false
     }
   },
   computed: {
@@ -159,12 +161,14 @@ export default {
       this.courseSets = [...this.courseSets, item];
     },
     searchHandler(queryString, cb) {
+      this.hideLoading = false;
       if (this.type === 'classroom_list') {
         this.getClassList({
           title: queryString
         }).then(res => {
           cb(res.data);
         }).catch((err) => {
+          this.hideLoading = true;
           this.$message({
             message: err.message,
             type: 'error'
@@ -181,6 +185,7 @@ export default {
         }).then(res => {
           cb(res.data);
         }).catch((err) => {
+          this.hideLoading = true;
           this.$message({
             message: err.message,
             type: 'error'
@@ -196,6 +201,7 @@ export default {
         }).then(res => {
           cb(res.data);
         }).catch((err) => {
+          this.hideLoading = true;
           this.$message({
             message: err.message,
             type: 'error'
@@ -209,6 +215,7 @@ export default {
       }).then(res => {
         cb(res.data);
       }).catch((err) => {
+        this.hideLoading = true;
         this.$message({
           message: err.message,
           type: 'error'
