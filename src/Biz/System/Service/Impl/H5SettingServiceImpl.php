@@ -91,15 +91,20 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $discoverySetting['data']['items'] = $classrooms;
         }
 
-        if ('custom' == $discoverySetting['data']['sourceType'] && 'show' == $usage) {
+        if ('custom' == $discoverySetting['data']['sourceType']) {
             $classrooms = $discoverySetting['data']['items'];
             foreach ($classrooms as $key => $classroom) {
                 $existClassroom = $this->getClassroomService()->getClassroom($classroom['id']);
-                if (empty($existClassroom) || 'published' != $existClassroom['status'] || empty($existClassroom['showable'])) {
+                $discoverySetting['data']['items'][$key] = $existClassroom;
+                if (empty($existClassroom)) {
                     unset($discoverySetting['data']['items'][$key]);
                     continue;
                 }
-                $discoverySetting['data']['items'][$key] = $existClassroom;
+
+                if ('show' == $usage && 'published' != $existClassroom['status'] || empty($existClassroom['showable'])) {
+                    unset($discoverySetting['data']['items'][$key]);
+                    continue;
+                }
             }
         }
 
