@@ -5,6 +5,7 @@
       <e-swipe v-if="part.type === 'slide_show'" :slides="part.data"></e-swipe>
       <e-course-list
         v-if="['classroom_list', 'course_list'].includes(part.type)"
+        class="gray-border-bottom"
         :courseList="part.data"
         :typeList="part.type"
         :feedback="feedback"
@@ -16,6 +17,7 @@
         :poster="part.data"
         :feedback="feedback"/>
       <e-coupon-list
+        class="gray-border-bottom"
         v-if="part.type === 'coupon'"
         :coupons="part.data.items"
         :showTitle="part.data.titleShow"

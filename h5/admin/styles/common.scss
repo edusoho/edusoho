@@ -117,6 +117,10 @@
   }
 }
 
+.gray-border-bottom {
+  border-bottom: 15px solid #f7f7f7;
+}
+
 .required-option:after {
   content: '*';
   position: absolute;

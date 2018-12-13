@@ -13,6 +13,12 @@
         float: none;
         margin-left: auto;
         margin-right: auto;
+        >img {
+          width: 450px;
+        }
+      }
+      >img {
+        width: 450px;
       }
     }
     .code-container {
@@ -49,13 +55,14 @@
   .e-course {
     padding: 0 10px 20px;
     &__left {
+      border-radius: 2px;
       .e-class__img {
-        width: 98px;
-        height: 70px;
+        width: 140px;
+        height: 93px;
       }
       .e-course__img {
-        width: 98px;
-        height: 64px;
+        width: 140px;
+        height: 80px;
       }
     }
     &__right {
@@ -137,7 +144,14 @@
         }
         .e-coupon__header {
           .e-coupon__name {
-            right: 55px;
+            right: 85px;
+            width: 130px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            .coupon-name {
+              width: auto;
+            }
           }
           .coupon-button {
             right: 25px;
@@ -151,6 +165,10 @@
         .coupon-button {
           right: 35px;
         }
+      }
+      &__price {
+        line-height: 20px;
+        box-sizing: border-box;
       }
     }
   }
@@ -181,15 +199,19 @@
 
 .find-page__part {
   position: relative;
-  border-bottom: 15px solid #f7f7f7;
+  &:nth-last-child(2) {
+    .gray-border-bottom {
+      border-bottom: 0;
+    }
+  }
 }
 
 .preview-iframe {
   position: absolute;
-  left: 35px;
-  top: 110px;
-  height: 455px;
-  width: 260px;
+  left: 50px;
+  top: 150px;
+  height: 560px;
+  width: 320px;
   overflow: auto;
 }
 

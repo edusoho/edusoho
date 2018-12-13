@@ -2,8 +2,10 @@
   padding-bottom: 50px;
 }
 
-.find-page__part {
-  border-bottom: 15px solid #f7f7f7;
+.find-page__part:last-child {
+  .gray-border-bottom {
+    border-bottom: 0;
+  }
 }
 
 .van-tabbar-item {

@@ -8,6 +8,7 @@
       <e-course-list
         v-if="['classroom_list', 'course_list'].includes(part.type)"
         :courseList="part.data"
+        class="gray-border-bottom"
         :feedback="feedback"
         :typeList="part.type"></e-course-list>
       <e-poster
@@ -18,10 +19,10 @@
       <e-groupon
         v-if="part.type == 'groupon'"
         :tag="part.data.tag"
+        class="gray-border-bottom"
         :activity="part.data.activity"></e-groupon>
-      <div class="coupon-preview__container">
+      <div class="coupon-preview__container gray-border-bottom" v-if="part.type == 'coupon'">
         <e-coupon-list
-          v-if="part.type == 'coupon'"
           :coupons="part.data.items"
           :feedback="true"
           :showTitle="part.data.titleShow"></e-coupon-list>
