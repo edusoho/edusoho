@@ -195,7 +195,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 'threadId' => $thread['id'],
                 'threadUserId' => $thread['userId'],
                 'threadUserNickname' => $this->getCurrentUser()->nickname,
-                'threadTitle' => $thread['title'],
+                'threadTitle' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType']),
                 'threadType' => $thread['type'],
                 'courseId' => $course['id'],
                 'courseTitle' => $course['title'],
@@ -517,7 +517,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function filterThread($thread)
     {
-        return ArrayToolkit::parts($thread, array('title', 'content', 'type', 'videoAskTime', 'videoId', 'courseId', 'taskId', 'source'));
+        return ArrayToolkit::parts($thread, array('title', 'content', 'type', 'videoAskTime', 'videoId', 'courseId', 'taskId', 'source', 'questionType'));
     }
 
     protected function filterSort($sort)
