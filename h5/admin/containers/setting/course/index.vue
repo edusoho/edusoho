@@ -90,6 +90,7 @@ import courseModal from './modal/course-modal'
 import moduleFrame from '../module-frame'
 import { mapMutations, mapState, mapActions } from 'vuex';
 import treeDigger from '@admin/utils/tree-digger';
+import { Toast } from 'vant';
 
 const optionLabel = {
   'course_list': '课程',
@@ -308,12 +309,16 @@ export default {
     	if (this.type === 'course_list') {
 	      this.getCourseList(params).then(res => {
 	        this.moduleData.data.items = res.data;
-	      })
+	      }).catch((err) => {
+          Toast.fail(err.message);
+        });
 	      return;
       }
     	this.getClassList(params).then(res => {
         this.moduleData.data.items = res.data;
-      })
+      }).catch((err) => {
+        Toast.fail(err.message);
+      });
     }
   }
 }

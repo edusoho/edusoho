@@ -88,6 +88,7 @@ import moduleTemplate from './module-template';
 import findFooter from './footer';
 import draggable from 'vuedraggable';
 import { mapActions, mapState } from 'vuex';
+import { Toast } from 'vant';
 
 export default {
   components: {
@@ -130,6 +131,8 @@ export default {
     // 获取小程序版本号
     Api.getMPVersion().then(res => {
       this.currentMPVersion = res.current_version.version
+    }).catch((err) => {
+      Toast.fail(err.message);
     });
 
     // 请求发现页配置
@@ -205,7 +208,9 @@ export default {
       }).then(res => {
         this.modules = Object.values(res);
         this.moduleCountInit();
-      })
+      }).catch((err) => {
+        Toast.fail(err.message);
+      });
     },
     reset() {
       // 删除草稿配置配置

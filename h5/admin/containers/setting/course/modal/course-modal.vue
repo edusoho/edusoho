@@ -43,6 +43,7 @@ import head from '@admin/config/modal-config';
 import courseTable from './course-table';
 import { mapMutations, mapState, mapActions } from 'vuex';
 import { VALUE_DEFAULT, TYPE_TEXT_DEFAULT } from '@admin/config/module-default-config';
+import { Toast } from 'vant';
 
 export default {
   name: 'course-modal',
@@ -164,7 +165,9 @@ export default {
           title: queryString
         }).then(res => {
           cb(res.data);
-        })
+        }).catch((err) => {
+          Toast.fail(err.message);
+        });
         return;
       }
       if (this.type === 'groupon') {
@@ -175,7 +178,9 @@ export default {
           itemType: 'course'
         }).then(res => {
           cb(res.data);
-        })
+        }).catch((err) => {
+          Toast.fail(err.message);
+        });
         return;
       }
       if (this.type === 'coupon') {
@@ -185,7 +190,9 @@ export default {
           unreceivedNumGt: 0
         }).then(res => {
           cb(res.data);
-        })
+        }).catch((err) => {
+          Toast.fail(err.message);
+        });
         return;
       }
 
@@ -193,7 +200,9 @@ export default {
         courseSetTitle: queryString
       }).then(res => {
         cb(res.data);
-      })
+      }).catch((err) => {
+        Toast.fail(err.message);
+      });
     }
   }
 }
