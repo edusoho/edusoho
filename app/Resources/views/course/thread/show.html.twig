@@ -2,7 +2,7 @@
 {% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/course/thread-show/index.js'])%}
 
-{% set nav = 'threads' %}
+{% set nav = thread['type'] %}
 
 {% block detail_content %}
 

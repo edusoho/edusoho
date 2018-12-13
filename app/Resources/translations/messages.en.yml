@@ -1297,6 +1297,8 @@ course.plan_info: >
 
 course.tab.tasks: 'Syllabus'
 course.tab.threads: 'Discussions'
+course.tab.discussions: 'Discussions'
+course.tab.questions: 'Questions'
 course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'

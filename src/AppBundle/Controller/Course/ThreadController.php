@@ -54,6 +54,7 @@ class ThreadController extends CourseBaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('course/tabs/threads.html.twig', array(
+            'type' => $conditions['type'],
             'courseSet' => $courseSet,
             'course' => $course,
             'member' => $member,
@@ -92,6 +93,7 @@ class ThreadController extends CourseBaseController
         }
 
         $thread = $this->getThreadService()->getThread($course['id'], $threadId);
+        $thread = $this->putImageIntoContent($thread);
 
         if (empty($thread)) {
             throw $this->createNotFoundException('话题不存在，或已删除。');
@@ -611,7 +613,7 @@ class ThreadController extends CourseBaseController
         $filters = array();
         $filters['type'] = $request->query->get('type');
 
-        if (!in_array($filters['type'], array('all', 'question', 'elite'))) {
+        if (!in_array($filters['type'], array('all', 'question', 'elite', 'discussion'))) {
             $filters['type'] = 'all';
         }
 
@@ -624,6 +626,18 @@ class ThreadController extends CourseBaseController
         return $filters;
     }
 
+    protected function putImageIntoContent($thread)
+    {
+        $useFiles = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread', $thread['id'], 'attachment', true);
+        foreach ($useFiles as $useFile) {
+            if ($useFile['file']['type'] == 'image') {
+                $thread['content'] = $thread['content']."<img alt='' src='{$useFile['file']['thumbnail']}' />";
+            }
+        }
+
+        return $thread;
+    }
+
     protected function convertFiltersToConditions($course, $filters)
     {
         $conditions = array('courseId' => $course['id']);
@@ -631,6 +645,9 @@ class ThreadController extends CourseBaseController
         switch ($filters['type']) {
             case 'question':
                 $conditions['type'] = 'question';
+                break;
+            case 'discussion':
+                $conditions['type'] = 'discussion';
                 break;
             case 'elite':
                 $conditions['isElite'] = 1;

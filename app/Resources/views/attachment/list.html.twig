@@ -1,3 +1,5 @@
 {% for attachment in attachments %}
-  {% include 'attachment/item.html.twig' %}
+    {% if attachment.file.type != 'image' %}
+      {% include 'attachment/item.html.twig' %}
+    {% endif %}
 {% endfor %}
