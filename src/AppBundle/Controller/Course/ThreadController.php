@@ -93,7 +93,7 @@ class ThreadController extends CourseBaseController
         }
 
         $thread = $this->getThreadService()->getThread($course['id'], $threadId);
-        $thread = $this->putImageIntoContent($thread);
+        $thread['content'] = $this->putImageIntoContent('course.thread', $thread['id'], $thread['content']);
 
         if (empty($thread)) {
             throw $this->createNotFoundException('话题不存在，或已删除。');
@@ -113,10 +113,20 @@ class ThreadController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
+        foreach ($posts as &$post) {
+            $post['content'] = $this->putImageIntoContent('course.thread.post', $post['id'], $post['content']);
+        }
+
         if ('question' == $thread['type'] && 1 == $paginator->getCurrentPage()) {
             $elitePosts = $this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, 10);
         } else {
             $elitePosts = array();
+        }
+
+        if ('question' == $thread['type'] && !in_array($user['id'], array_merge($course['teacherIds'], array($thread['userId'])))) {
+            $canPost = false;
+        } else {
+            $canPost = true;
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
@@ -140,6 +150,7 @@ class ThreadController extends CourseBaseController
             'users' => $users,
             'isManager' => $isManager,
             'isMemberNonExpired' => $isMemberNonExpired,
+            'canPost' => $canPost,
             'paginator' => $paginator,
         ));
     }
@@ -626,16 +637,16 @@ class ThreadController extends CourseBaseController
         return $filters;
     }
 
-    protected function putImageIntoContent($thread)
+    protected function putImageIntoContent($targetType, $targetId, $content)
     {
-        $useFiles = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread', $thread['id'], 'attachment', true);
+        $useFiles = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, 'attachment', true);
         foreach ($useFiles as $useFile) {
             if ($useFile['file']['type'] == 'image') {
-                $thread['content'] = isset($useFile['file']['thumbnail']) ? $thread['content']."<img alt='' src='{$useFile['file']['thumbnail']}' />" : $thread['content'];
+                $content = isset($useFile['file']['thumbnail']) ? $content."<img alt='' src='{$useFile['file']['thumbnail']}' />" : $content;
             }
         }
 
-        return $thread;
+        return $content;
     }
 
     protected function convertFiltersToConditions($course, $filters)
