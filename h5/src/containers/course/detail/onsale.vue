@@ -13,7 +13,7 @@
       </div>
       <div class="coupon-popup__content">
         <coupon v-for="(item, index) in unreceivedCoupons" :key="index" :index="index" :coupon="item" :showButton="true"
-          @couponHandle="couponHandle($event, unreceivedCoupons)" />
+          @couponHandle="couponHandle($event)" />
       </div>
       <div class="coupon-empty" v-show="!unreceivedCoupons.length">
         <img class="empty-img" src='static/images/coupon_empty.png'>

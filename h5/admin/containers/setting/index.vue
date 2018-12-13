@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="help-block" v-if="portal === 'miniprogram'">使用班级配置功能，小程序版本需要升级到1.3.1及以上</div>
+    <div class="help-block" v-if="portal === 'miniprogram'">
+      <div class="mbl">使用班级配置功能，小程序版本需要升级到1.3.1及以上</div>
+      使用优惠券配置功能，小程序版本需要升级到1.3.2及以上
+    </div>
     <div class="setting-page" :class="{'setting-page-miniprogram': portal === 'miniprogram' && supportGrouponVersion}">
       <img class="find-head-img" :src="portal === 'miniprogram' ? 'static/images/miniprogram_head.jpg' : 'static/images/find_head_url.jpg'" alt="">
       <div class="find-navbar" :class="{'find-navbar-miniprogram': portal === 'miniprogram'}">
@@ -34,7 +37,7 @@
         <div class="section-title">点击添加组件</div>
         <div class="section-button-group">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-            v-for="(item, index) in baseModules" :key="index" v-if="item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list' && portal === 'miniprogram') || (portal === 'h5')">
+            v-for="(item, index) in baseModules" :key="index" v-if="(item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list' && portal === 'miniprogram')) && (item.default.type !== 'coupon' || (supportCouponVersion && item.default.type === 'coupon' && portal === 'miniprogram')) || (portal === 'h5')">
             {{ item.name }}
           </el-button>
         </div>
@@ -45,7 +48,7 @@
         <div class="section-title">基础组件</div>
         <div class="section-button-group">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-            v-for="(item, index) in baseModules" :key="`base-${index}`" v-if="item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list')">
+            v-for="(item, index) in baseModules" :key="`base-${index}`">
             {{ item.name }}
           </el-button>
         </div>
@@ -124,6 +127,9 @@ export default {
     },
     supportClassroomVersion() {
       return this.supportVersion('1.3.1');
+    },
+    supportCouponVersion() {
+      return this.supportVersion('1.3.2');
     },
   },
   created() {

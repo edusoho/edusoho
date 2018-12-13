@@ -87,7 +87,7 @@
     }
     &__price {
       display: inline-block;
-      margin-top: -3px;
+      margin-top: -5px;
       color: #fff;
       font-size: 32px;
       font-weight: 500;
@@ -117,6 +117,7 @@
           right: 100px;
         }
         .coupon-button {
+          top: 30px;
           right: 35px;
         }
       }
