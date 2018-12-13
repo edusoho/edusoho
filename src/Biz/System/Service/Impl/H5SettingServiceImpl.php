@@ -113,14 +113,16 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     public function slideShowFilter($discoverySetting, $usage = 'show')
     {
-        if (!empty($discoverySetting['data']['link'])) {
-            $link = $discoverySetting['data']['link'];
-            $id = isset($link['target']['id']) ? $link['target']['id'] : 0;
-            $target = empty($id) ? null : $this->getTarget($link['type'], $id);
-            if (empty($target)) {
-                $link['target'] = null;
-                $link['url'] = '';
-                $discoverySetting['data']['link'] = $link;
+        foreach ($discoverySetting['data'] as &$slideShow) {
+            if (!empty($slideShow['link'])) {
+                $link = $slideShow['link'];
+                $id = isset($link['target']['id']) ? $link['target']['id'] : 0;
+                $target = empty($id) ? null : $this->getTarget($link['type'], $id);
+                if (empty($target)) {
+                    $link['target'] = null;
+                    $link['url'] = '';
+                    $slideShow['link'] = $link;
+                }
             }
         }
 
