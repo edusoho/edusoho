@@ -631,7 +631,7 @@ class ThreadController extends CourseBaseController
         $useFiles = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread', $thread['id'], 'attachment', true);
         foreach ($useFiles as $useFile) {
             if ($useFile['file']['type'] == 'image') {
-                $thread['content'] = $thread['content']."<img alt='' src='{$useFile['file']['thumbnail']}' />";
+                $thread['content'] = isset($useFile['file']['thumbnail']) ? $thread['content']."<img alt='' src='{$useFile['file']['thumbnail']}' />" : $thread['content'];
             }
         }
 
