@@ -15,7 +15,7 @@ export default {
     priceHtml({ rate, type }, needStyle = true) {
       const intPrice = parseInt(rate, 10);
       const intNum = intPrice.toString().length;
-      const intClass = intNum > 3 ? 'text-16' : '';
+      const intClass = intNum > 3 ? 'text-16 ml-5' : '';
       let pointPrice = Number(rate).toFixed(2).split('.')[1];
       pointPrice = Number(pointPrice) === 0 ? '' : (`.${pointPrice}`);
       const typeText = type === 'discount' ? '折' : '元';
