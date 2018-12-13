@@ -174,8 +174,12 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         }
         foreach ($batches as $key => &$batch) {
             $batchId = $batch['id'];
-            //显示用的时候，优惠券批次已被删 或 优惠券还在但是已过期 的 优惠券批次需要去除
-            if ('show' == $usage && (empty($currentBatches[$batchId]) || $currentBatches[$batchId]['deadline'] + 86400 < time())) {
+            if (empty($currentBatches[$batchId])) {
+                unset($batches[$key]);
+                continue;
+            }
+
+            if ('show' == $usage && $currentBatches[$batchId]['deadline'] + 86400 < time()) {
                 unset($batches[$key]);
                 continue;
             }
