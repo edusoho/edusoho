@@ -1405,6 +1405,7 @@ course.thread: 讨论区
 course.thread.question_type.video: 视频
 course.thread.question_type.image: 图片
 course.thread.question_type.audio: 语音
+course.thread.question.title: 这是一个%questionType%问题
 course.thread.question_type.content: 文字
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！

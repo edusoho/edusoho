@@ -215,14 +215,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
 
-        $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-update');
-        $fields['title'] = $this->sensitiveFilter($fields['title'], 'course-thread-update');
+        $fields['content'] = isset($fields['content']) ? $this->sensitiveFilter($fields['content'], 'course-thread-update') : '';
+        $fields['title'] = isset($fields['title']) ? $this->sensitiveFilter($fields['title'], 'course-thread-update') : '';
 
         if ($this->getCurrentUser()->getId() != $thread['userId']) {
             $this->getCourseService()->tryManageCourse($thread['courseId'], 'admin_course_thread');
         }
 
-        $fields = ArrayToolkit::parts($fields, array('title', 'content'));
+        $fields = ArrayToolkit::parts($fields, array('title', 'content', 'askVideoThumbnail'));
 
         if (empty($fields)) {
             throw $this->createInvalidArgumentException('Fields Required');
@@ -231,7 +231,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($courseId);
         $trusted = empty($hasCourseManagerRole) ? false : true;
         //更新thread过滤html
-        $fields['content'] = $this->biz['html_helper']->purify($fields['content'], $trusted);
+        $fields['content'] = isset($fields['content']) ? $this->biz['html_helper']->purify($fields['content'], $trusted) : '';
 
         $thread = $this->getThreadDao()->update($threadId, $fields);
         $this->dispatchEvent('course.thread.update', new Event($thread));

@@ -21,9 +21,8 @@ class CourseThread extends AbstractResource
         }
 
         if (!empty($thread['videoId'])) {
-            $file = $this->getUploadFileService()->getFullFile($thread['videoId']);
+            $file = $this->getUploadFileService()->getFile($thread['videoId']);
             $thread['askVideoLength'] = $file['length'];
-            $thread['askVideoThumbnail'] = $file['thumbnail'];
         }
         $thread['user'] = $this->getUserService()->getUser($thread['userId']);
 
