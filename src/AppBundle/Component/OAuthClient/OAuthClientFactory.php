@@ -2,7 +2,7 @@
 
 namespace AppBundle\Component\OAuthClient;
 
-use InvalidArgumentException;
+use Biz\Common\CommonException;
 use Topxia\Service\Common\ServiceKernel;
 
 class OAuthClientFactory
@@ -18,13 +18,13 @@ class OAuthClientFactory
     public static function create($type, array $config)
     {
         if (!array_key_exists('key', $config) || !array_key_exists('secret', $config)) {
-            throw new InvalidArgumentException('参数中必需包含key, secret两个为key的值');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         $clients = self::clients();
 
         if (!array_key_exists($type, $clients)) {
-            throw new InvalidArgumentException('参数不正确'.$type);
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $class = $clients[$type]['class'];

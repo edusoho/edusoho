@@ -3,9 +3,9 @@
 namespace ApiBundle\Api\Resource\OrderInfo;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\MathToolkit;
+use Biz\Common\CommonException;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
@@ -19,7 +19,7 @@ class OrderInfo extends AbstractResource
         $params = $request->request->all();
 
         if (empty($params['targetId']) || empty($params['targetType'])) {
-            throw new BadRequestHttpException('缺少参数', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         try {
@@ -75,6 +75,13 @@ class OrderInfo extends AbstractResource
 
         if ($product->availableDeducts && isset($product->availableDeducts['coupon'])) {
             $orderInfo['availableCoupons'] = $product->availableDeducts['coupon'];
+
+            foreach ($orderInfo['availableCoupons'] as &$availableCoupon) {
+                if (in_array($availableCoupon['targetType'], array('course', 'classroom')) && !empty($availableCoupon['targetId'])) {
+                    $type = 'course' == $availableCoupon['targetType'] ? 'courseSet' : $availableCoupon['targetType'];
+                    $this->getOCUtil()->single($availableCoupon, array('targetId'), $type);
+                }
+            }
         }
 
         $coinSetting = $this->service('System:SettingService')->get('coin');
@@ -148,7 +155,7 @@ class OrderInfo extends AbstractResource
         }
 
         if (!$result) {
-            throw new BadRequestHttpException('unit is not allowed', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER();
         }
     }
 

@@ -20,7 +20,7 @@ class CardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testAddCardWithParamsException()
     {
@@ -142,7 +142,7 @@ class CardServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Card\CardException
      */
     public function testFindCardsByUserIdAndCardTypeEmptyCardType()
     {

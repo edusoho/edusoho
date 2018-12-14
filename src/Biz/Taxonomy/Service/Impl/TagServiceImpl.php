@@ -10,6 +10,7 @@ use Biz\Taxonomy\Dao\TagGroupDao;
 use Biz\Taxonomy\Dao\TagGroupTagDao;
 use Biz\Taxonomy\Dao\TagOwnerDao;
 use Biz\Taxonomy\Service\TagService;
+use Biz\Taxonomy\TagException;
 use Topxia\Service\Common\ServiceKernel;
 
 class TagServiceImpl extends BaseService implements TagService
@@ -184,11 +185,11 @@ class TagServiceImpl extends BaseService implements TagService
     public function addTagGroup($fields)
     {
         if (empty($fields['name'])) {
-            throw $this->createServiceException('标签组名字未填写，请添加');
+            $this->createNewException(TagException::EMPTY_GROUP_NAME());
         }
 
         if ($this->getTagGroupDao()->getByName($fields['name'])) {
-            throw $this->createServiceException('标签组名字已存在，请重新填写');
+            $this->createNewException(TagException::DUPLICATE_GROUP_NAME());
         }
 
         $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
@@ -253,7 +254,7 @@ class TagServiceImpl extends BaseService implements TagService
         $tag = $this->getTag($id);
 
         if (empty($tag)) {
-            throw $this->createServiceException("标签(#{$id})不存在，更新失败！");
+            $this->createNewException(TagException::NOTFOUND_TAG());
         }
 
         $fields = ArrayToolkit::parts($fields, array('name'));
@@ -267,7 +268,7 @@ class TagServiceImpl extends BaseService implements TagService
         $tagGroup = $this->getTagGroupDao()->get($id);
 
         if (empty($tagGroup)) {
-            throw $this->createServiceException("标签组(#{$id})不存在，更新失败！");
+            $this->createNewException(TagException::NOTFOUND_GROUP());
         }
 
         if (!empty($fields['tagIds'])) {
@@ -373,7 +374,7 @@ class TagServiceImpl extends BaseService implements TagService
     protected function filterTagFields(&$tag, $relatedTag = null)
     {
         if (empty($tag['name'])) {
-            throw $this->createServiceException('标签名不能为空，添加失败！');
+            $this->createNewException(TagException::EMPTY_TAG_NAME());
         }
 
         $tag['name'] = (string) $tag['name'];
@@ -381,7 +382,7 @@ class TagServiceImpl extends BaseService implements TagService
         $exclude = $relatedTag ? $relatedTag['name'] : null;
 
         if (!$this->isTagNameAvailable($tag['name'], $exclude)) {
-            throw $this->createServiceException('该标签名已存在，添加失败！');
+            $this->createNewException(TagException::DUPLICATE_TAG_NAME());
         }
 
         return $tag;

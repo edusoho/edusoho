@@ -4,9 +4,9 @@ namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Question\QuestionException;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionService;
-use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
 {
@@ -79,7 +79,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $question = $this->get($id);
         $argument = array('question' => $question, 'fields' => $fields);
         if (!$question) {
-            throw new ResourceNotFoundException('question', $id);
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
         $questionConfig = $this->getQuestionConfig($question['type']);

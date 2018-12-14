@@ -42,15 +42,16 @@ class Member extends BaseResource
 
             $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if (!$courseMember) {
-                return $this->error('700003', '学员未加入课程');
+                return $this->error('4041901', '课程中没有该成员');
             }
 
             if ($this->getConversationService()->isImMemberFull($convNo, 500)) {
-                return $this->error('700008', '会话人数已满');
+                return $this->error('5003310', '会话人数已满');
             }
 
             try {
                 $convMember = $this->getConversationService()->joinConversation($convNo, $user['id']);
+
                 return array('convNo' => $convMember['convNo']);
             } catch (\Exception $e) {
                 return $this->error($e->getCode(), $e->getMessage());
@@ -58,7 +59,7 @@ class Member extends BaseResource
         } else {
             $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if (!$courseMember) {
-                return $this->error('700003', '学员未加入课程');
+                return $this->error('4041901', '课程中没有该成员');
             }
 
             $conversation = $this->getConversationService()->createConversation($course['title'], 'course', $course['id'], array($user));
@@ -83,15 +84,16 @@ class Member extends BaseResource
 
             $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
             if (!$classroomMember || in_array('auditor', $classroomMember['role'])) {
-                return $this->error('700013', '学员未加入班级');
+                return $this->error('4031821', '学员未加入班级');
             }
 
             if ($this->getConversationService()->isImMemberFull($convNo, 500)) {
-                return $this->error('700008', '会话人数已满');
+                return $this->error('5003310', '会话人数已满');
             }
 
             try {
                 $this->getConversationService()->joinConversation($convNo, $user['id']);
+
                 return array('convNo' => $convNo);
             } catch (\Exception $e) {
                 return $this->error($e->getCode(), $e->getMessage());
@@ -99,7 +101,7 @@ class Member extends BaseResource
         } else {
             $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
             if (!$classroomMember || in_array('auditor', $classroomMember['role'])) {
-                return $this->error('700013', '学员未加入班级');
+                return $this->error('4031821', '学员未加入班级');
             }
 
             $conversation = $this->getConversationService()->createConversation($classroom['title'], 'classroom', $classroom['id'], array($user));

@@ -2,9 +2,11 @@
 
 namespace Biz\Article\Service\Impl;
 
+use Biz\Article\CategoryException;
 use Biz\Article\Dao\CategoryDao;
 use Biz\Article\Service\CategoryService;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TreeToolkit;
@@ -182,7 +184,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $category = ArrayToolkit::parts($category, array('name', 'code', 'parentId', 'publishArticle', 'seoTitle', 'seoKeyword', 'seoDesc', 'published'));
 
         if (!ArrayToolkit::requireds($category, array('name', 'code', 'parentId'))) {
-            throw $this->createInvalidArgumentException('缺少必要参数，，添加栏目失败');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $this->_filterCategoryFields($category);
@@ -199,13 +201,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $category = $this->getCategory($id);
 
         if (empty($category)) {
-            throw $this->createNotFoundException(sprintf('栏目(#%s)不存在，更新栏目失败！', $id));
+            $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
         $fields = ArrayToolkit::parts($fields, array('name', 'code', 'weight', 'parentId', 'publishArticle', 'seoTitle', 'seoKeyword', 'seoDesc', 'published'));
 
         if (empty($fields)) {
-            throw $this->createServiceException('参数不正确，更新栏目失败！');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $this->_filterCategoryFields($fields);
@@ -220,7 +222,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $category = $this->getCategory($id);
 
         if (empty($category)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
         $ids = $this->findCategoryChildrenIds($id);
@@ -245,18 +247,18 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         ));
 
         if (empty($fields['name'])) {
-            throw $this->createInvalidArgumentException('名称不能为空，保存栏目失败');
+            $this->createNewException(CategoryException::EMPTY_NAME());
         }
 
         if (empty($fields['code'])) {
-            throw $this->createInvalidArgumentException('编码不能为空，保存栏目失败');
+            $this->createNewException(CategoryException::EMPTY_CODE());
         } else {
             if (!preg_match('/^[a-zA-Z0-9_]+$/i', $fields['code'])) {
-                throw $this->createInvalidArgumentException(sprintf('编码(%s)含有非法字符，保存栏目失败', $fields['code']));
+                $this->createNewException(CategoryException::CODE_INVALID());
             }
 
             if (ctype_digit($fields['code'])) {
-                throw $this->createInvalidArgumentException(sprintf('编码(%s)不能全为数字，保存栏目失败', $fields['code']));
+                $this->createNewException(CategoryException::CODE_NUMERIC_INVALID());
             }
         }
 

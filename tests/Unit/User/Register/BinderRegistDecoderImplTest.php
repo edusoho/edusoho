@@ -50,7 +50,7 @@ class BinderRegistDecoderImplTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\System\SettingException
      */
     public function testWithInvalidSetting()
     {

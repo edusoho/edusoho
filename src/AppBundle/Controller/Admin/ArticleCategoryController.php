@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\Article\CategoryException;
 use Biz\Article\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -59,7 +60,7 @@ class ArticleCategoryController extends BaseController
     {
         $category = $this->getCategoryService()->getCategory($id);
         if (empty($category)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
         if ('POST' == $request->getMethod()) {
@@ -79,7 +80,7 @@ class ArticleCategoryController extends BaseController
     {
         $category = $this->getCategoryService()->getCategory($id);
         if (empty($category)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
         if ($this->canDeleteCategory($id)) {

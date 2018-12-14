@@ -44,7 +44,9 @@
       </div>
 
       {% do script(['libs/base.js','app/js/common.js','app/js/main.js'], 1000) %}
-      <script src="{{ cloud_sdk_url('player') }}"></script>
+      {% if cloudSdk %}
+        <script src="{{ cloud_sdk_url(cloudSdk) }}"></script>
+      {% endif %}
       {% do script(['app/js/player/index.js']) %}
     {% else %}
       <div class="">

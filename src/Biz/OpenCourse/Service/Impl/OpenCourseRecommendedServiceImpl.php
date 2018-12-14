@@ -4,6 +4,7 @@ namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Biz\OpenCourse\Dao\RecommendedCourseDao;
 use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 
@@ -148,7 +149,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
     public function findRandomRecommendCourses($courseId, $num = 3)
     {
         if ($num < 0) {
-            throw $this->createServiceException('num must be a unsigned int');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
         $recommendCourses = $this->getRecommendedCourseDao()->findRandomRecommendCourses($courseId, $num);
 

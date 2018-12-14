@@ -15,6 +15,7 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserFieldService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserController extends BaseController
@@ -440,7 +441,7 @@ class UserController extends BaseController
         $user = $this->getUserService()->getUser($id);
 
         if (empty($user)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
@@ -473,7 +474,7 @@ class UserController extends BaseController
         $user = $this->getUserService()->getUser($id);
 
         if (empty($user)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));

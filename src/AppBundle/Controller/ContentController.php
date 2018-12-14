@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Content\ContentException;
 use Biz\Content\Service\ContentService;
 use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
@@ -106,7 +107,7 @@ class ContentController extends BaseController
         }
 
         if (empty($content) || ($content['type'] != $type)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ContentException::NOTFOUND_CONTENT());
         }
 
         return $content;

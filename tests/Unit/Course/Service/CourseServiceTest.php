@@ -29,7 +29,7 @@ class CourseServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testSortCourseAccessDenied()
     {
@@ -66,7 +66,7 @@ class CourseServiceTest extends BaseTestCase
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
         }
-        $this->assertEquals($errorMessage, 'Lack of required fields');
+        $this->assertEquals($errorMessage, 'exception.common_parameter_missing');
     }
 
     public function testCancelRecommendCourseByCourseSetId()
@@ -185,7 +185,7 @@ class CourseServiceTest extends BaseTestCase
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
-        $this->assertEquals('Param Invalid: expiryDays', $message);
+        $this->assertEquals('exception.course.expirydays_required', $message);
     }
 
     public function testValidateExpiryModeWhenIsEnd_date()
@@ -223,7 +223,7 @@ class CourseServiceTest extends BaseTestCase
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
-        $this->assertEquals('Param Invalid: expiryEndDate', $message);
+        $this->assertEquals('exception.course.expiryenddate_required', $message);
     }
 
     public function testValidateExpiryModeWhenIsDate()
@@ -262,7 +262,7 @@ class CourseServiceTest extends BaseTestCase
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
-        $this->assertEquals('Param Required: expiryStartDate', $message);
+        $this->assertEquals('exception.course.expirystartdate_required', $message);
 
         //error path2 endDate not set
         $course['expiryStartDate'] = '2018-04-10';
@@ -273,7 +273,7 @@ class CourseServiceTest extends BaseTestCase
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
-        $this->assertEquals('Param Required: expiryEndDate', $message);
+        $this->assertEquals('exception.course.expiryenddate_required', $message);
 
         //error path3 endDate<=startDate
         $course['expiryStartDate'] = '2018-04-10';
@@ -284,7 +284,7 @@ class CourseServiceTest extends BaseTestCase
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
-        $this->assertEquals('Value of Params expiryEndDate must later than expiryStartDate', $message);
+        $this->assertEquals('exception.course.expirydate_end_later_than_start', $message);
     }
 
     public function testValidateExpiryModeWhenIsForever()
@@ -318,7 +318,7 @@ class CourseServiceTest extends BaseTestCase
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
-        $this->assertEquals('Param Invalid: expiryMode', $message);
+        $this->assertEquals('exception.course.expirymode_invalid', $message);
     }
 
     public function testUpdateMembersDeadlineByClassroomId()
@@ -738,7 +738,7 @@ class CourseServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\File\UploadFileException
      */
     public function testConverAudioByCourseIdAndMediaIdEmptyMedia()
     {

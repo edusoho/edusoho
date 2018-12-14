@@ -161,8 +161,8 @@ class LiveActivityServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Argument invalid
+     * @expectedException \Biz\Activity\LiveActivityException
+     * @expectedExceptionMessage exception.live_activity.live_status_invalid
      */
     public function testUpdateLiveStatusActivityEmpty()
     {

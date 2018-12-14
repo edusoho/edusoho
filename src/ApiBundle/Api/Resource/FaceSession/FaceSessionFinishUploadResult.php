@@ -5,8 +5,7 @@ namespace ApiBundle\Api\Resource\FaceSession;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use ApiBundle\Api\Exception\ErrorCode;
+use Biz\User\TokenException;
 
 class FaceSessionFinishUploadResult extends AbstractResource
 {
@@ -25,7 +24,7 @@ class FaceSessionFinishUploadResult extends AbstractResource
             $token = $this->getTokenService()->verifyToken('face_login', $loginToken, $session);
             
             if (!$token) {
-                throw new BadRequestHttpException('Token error', null, ErrorCode::EXPIRED_CREDENTIAL);
+                throw TokenException::TOKEN_INVALID();
             }
         }
         return $result;

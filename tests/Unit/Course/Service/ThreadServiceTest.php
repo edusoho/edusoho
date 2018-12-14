@@ -213,7 +213,7 @@ class ThreadServiceTest extends BaseTestCase
 
     /**
      * @group current
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Course\ThreadException
      */
     public function testCreateThreadWithEmptyCourseId()
     {
@@ -227,7 +227,7 @@ class ThreadServiceTest extends BaseTestCase
 
     /**
      * @group current
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Course\ThreadException
      */
     public function testCreateThreadWithEmptyType()
     {
@@ -273,7 +273,7 @@ class ThreadServiceTest extends BaseTestCase
 
     /**
      * @group current
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Course\ThreadException
      */
     public function testPostOnNotExistThread()
     {
@@ -351,7 +351,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreatePostWithError()
     {
@@ -454,7 +454,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Course\ThreadException
      */
     public function testGetThreadWithError()
     {
@@ -585,7 +585,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Course\ThreadException
      */
     public function testDeleteThreadWithError()
     {
@@ -762,7 +762,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Course\ThreadException
      */
     public function testUpdatePostWithError()
     {
@@ -770,7 +770,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Course\ThreadException
      */
     public function testDeletePostWithEmptyPost()
     {
@@ -779,7 +779,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Course\ThreadException
      */
     public function testDeletePostWithErrorPost()
     {
@@ -824,7 +824,7 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testFilterSortWithErrorSort()
     {

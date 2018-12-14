@@ -3,7 +3,7 @@
 namespace Biz\Mail;
 
 use Biz\CloudPlatform\CloudAPIFactory;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Biz\Common\CommonException;
 
 class CloudMail extends Mail
 {
@@ -54,6 +54,6 @@ class CloudMail extends Mail
             return;
         }
 
-        throw new AccessDeniedException('type is not allowed');
+        throw CommonException::ERROR_PARAMETER();
     }
 }

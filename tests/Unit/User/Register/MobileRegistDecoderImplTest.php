@@ -8,7 +8,7 @@ use AppBundle\Common\ReflectionUtils;
 class MobileRegistDecoderImplTest extends BaseTestCase
 {
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testWithInvalidSetting()
     {
@@ -20,7 +20,7 @@ class MobileRegistDecoderImplTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\UserException
      */
     public function testWithExistedMobile()
     {

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\Group\Service\GroupService;
 use Biz\Group\Service\ThreadService;
@@ -554,7 +555,7 @@ class GroupController extends BaseController
                 break;
             default:
 
-                throw $this->createNotFoundException('参数sort不正确。');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         return $orderBys;

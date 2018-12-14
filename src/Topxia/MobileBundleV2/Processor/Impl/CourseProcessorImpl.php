@@ -2,12 +2,12 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
+use AppBundle\Common\Exception\AbstractException;
 use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\CourseProcessor;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -885,7 +885,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         try {
             $this->controller->getCourseSetService()->unfavorite($course['courseSetId']);
-        } catch (ServiceException $e) {
+        } catch (AbstractException $e) {
             return $this->createErrorResponse('runtime_error', $e->getMessage());
         }
 
@@ -916,7 +916,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             if (!$success) {
                 return $this->createErrorResponse('error', $message);
             }
-        } catch (ServiceException $e) {
+        } catch (AbstractException $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
 

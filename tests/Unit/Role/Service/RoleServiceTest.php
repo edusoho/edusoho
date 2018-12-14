@@ -144,7 +144,7 @@ class RoleServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Role\RoleException
      */
     public function testCheckChangeRole()
     {

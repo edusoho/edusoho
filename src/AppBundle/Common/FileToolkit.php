@@ -2,6 +2,7 @@
 
 namespace AppBundle\Common;
 
+use AppBundle\Common\Exception\FileToolkitException;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Topxia\Service\Common\ServiceKernel;
@@ -1075,7 +1076,7 @@ class FileToolkit
             $imagine = static::createImagine();
             $image = $imagine->open($fullPath)->save($fullPath, $options);
         } catch (\Exception $e) {
-            throw new \Exception('该文件为非图片格式文件，请重新上传。');
+            throw FileToolkitException::NOT_IMAGE();
         }
     }
 
@@ -1085,7 +1086,7 @@ class FileToolkit
             $imagine = static::createImagine();
             $image = $imagine->open($fullPath);
         } catch (\Exception $e) {
-            throw new \Exception('该文件为非图片格式文件，请重新上传。');
+            throw FileToolkitException::NOT_IMAGE();
         }
 
         $naturalSize = $image->getSize();

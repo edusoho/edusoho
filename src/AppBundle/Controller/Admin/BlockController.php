@@ -2,13 +2,14 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\Exception\AbstractException;
+use AppBundle\Common\Exception\FileToolkitException;
 use Biz\System\Service\SettingService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\BlockToolkit;
 use AppBundle\Common\StringToolkit;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -282,7 +283,7 @@ class BlockController extends BaseController
             $this->getBlockService()->deleteBlockTemplate($id);
 
             return $this->createJsonResponse(array('status' => 'ok'));
-        } catch (ServiceException $e) {
+        } catch (AbstractException $e) {
             return $this->createJsonResponse(array('status' => 'error'));
         }
     }
@@ -315,7 +316,7 @@ class BlockController extends BaseController
         if ($request->getMethod() == 'POST') {
             $file = $request->files->get('file');
             if (!FileToolkit::isImageFile($file)) {
-                throw $this->createAccessDeniedException('图片格式不正确！');
+                $this->createNewException(FileToolkitException::NOT_IMAGE());
             }
 
             $filename = 'block_picture_'.time().'.'.$file->getClientOriginalExtension();

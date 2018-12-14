@@ -3,6 +3,7 @@
 namespace Biz\Testpaper\Builder;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Context\Biz;
 
 class HomeworkBuilder implements TestpaperBuilderInterface
@@ -17,7 +18,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
     public function build($fields)
     {
         if (!isset($fields['questionIds'])) {
-            throw new \InvalidArgumentException('homework field is invalid');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $questionIds = $fields['questionIds'];
 

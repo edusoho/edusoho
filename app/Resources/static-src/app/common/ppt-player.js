@@ -180,7 +180,11 @@ export default class PPT extends Emitter {
   }
 
   _onFullScreen() {
+    const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     if (!screenfull.enabled) {
+      if(isIOS) {
+        $('#task-content-iframe', parent.document).toggleClass('ios-full-screen');
+      }
       return;
     }
     if (screenfull.isFullscreen) {

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\Taxonomy\CategoryException;
 use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends BaseController
@@ -10,7 +11,7 @@ class CategoryController extends BaseController
     {
         $group = $this->getCategoryService()->getGroupByCode($group);
         if (empty($group)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(CategoryException::NOTFOUND_GROUP());
         }
 
         $categories = $this->getCategoryService()->getCategoryStructureTree($group['id']);
@@ -52,7 +53,7 @@ class CategoryController extends BaseController
         $category = $this->getCategoryService()->getCategory($id);
 
         if (empty($category)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
         if ('POST' == $request->getMethod()) {
@@ -71,7 +72,7 @@ class CategoryController extends BaseController
         $category = $this->getCategoryService()->getCategory($id);
 
         if (empty($category)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
         $this->getCategoryService()->deleteCategory($id);

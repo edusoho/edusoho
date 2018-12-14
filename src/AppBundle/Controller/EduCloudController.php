@@ -3,12 +3,15 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\SmsToolkit;
+use Biz\Sms\SmsException;
+use Biz\System\SettingException;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\Service\SettingService;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
@@ -180,15 +183,15 @@ class EduCloudController extends BaseController
     protected function checkSmsType($smsType, CurrentUser $user)
     {
         if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'))) {
-            throw new \RuntimeException('不存在的sms Type');
+            $this->createNewException(SmsException::ERROR_SMS_TYPE());
         }
 
         if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_forget_pay_password')))) {
-            throw new \RuntimeException('用户未登录');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         if ('on' != $this->setting("cloud_sms.{$smsType}") && !$this->getUserService()->isMobileRegisterMode()) {
-            throw new \RuntimeException('该使用场景未开启');
+            $this->createNewException(SettingException::FORBIDDEN_MOBILE_REGISTER());
         }
     }
 

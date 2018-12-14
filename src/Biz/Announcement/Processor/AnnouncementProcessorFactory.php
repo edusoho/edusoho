@@ -2,8 +2,8 @@
 
 namespace Biz\Announcement\Processor;
 
+use Biz\Announcement\AnnouncementException;
 use Codeages\Biz\Framework\Context\Biz;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class AnnouncementProcessorFactory
 {
@@ -22,12 +22,12 @@ class AnnouncementProcessorFactory
      *
      * @return AnnouncementProcessor
      *
-     * @throws InvalidArgumentException
+     * @throws AnnouncementException
      */
     public function create($target)
     {
         if (empty($target) || !in_array($target, array('course', 'classroom'))) {
-            throw new InvalidArgumentException('公告类型不存在');
+            throw AnnouncementException::TYPE_INVALID();
         }
 
         $class = __NAMESPACE__.'\\'.ucfirst($target).'AnnouncementProcessor';
