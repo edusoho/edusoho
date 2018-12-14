@@ -1,3 +1,5 @@
+@import "../../modules/coupon/index.scss";
+
 .preview-container {
   padding: 0 50px;
   box-sizing: border-box;
@@ -6,11 +8,18 @@
       position: relative;
       float: left;
       margin-right: 60px;
+      margin-top: -12px;
       &-mp {
         display: table;
         float: none;
         margin-left: auto;
         margin-right: auto;
+        >img {
+          width: 450px;
+        }
+      }
+      >img {
+        width: 450px;
       }
     }
     .code-container {
@@ -47,13 +56,14 @@
   .e-course {
     padding: 0 10px 20px;
     &__left {
+      border-radius: 2px;
       .e-class__img {
-        width: 98px;
-        height: 70px;
+        width: 140px;
+        height: 93px;
       }
       .e-course__img {
-        width: 98px;
-        height: 64px;
+        width: 140px;
+        height: 80px;
       }
     }
     &__right {
@@ -120,6 +130,49 @@
     }
   }
 
+  .coupon-preview__container {
+    padding-left: 10px;
+    .e-coupon {
+      &-single {
+        .e-coupon__body {
+          padding-right: 10px;
+          &:after {
+            right: 4px;
+          }
+        }
+        .van-swipe-item {
+          width: 100% !important;
+        }
+        .e-coupon__header {
+          .e-coupon__name {
+            right: 85px;
+            width: 130px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            .coupon-name {
+              width: auto;
+            }
+          }
+          .coupon-button {
+            right: 25px;
+          }
+        }
+        .stamp {
+          right: 10px !important;
+        }
+      }
+      &-multi {
+        .coupon-button {
+          right: 35px;
+        }
+      }
+      &__price {
+        box-sizing: border-box;
+      }
+    }
+  }
+
   .e-course-switch-box {
     .switch-box__price {
       font-size: 12px;
@@ -146,14 +199,19 @@
 
 .find-page__part {
   position: relative;
+  &:nth-last-child(2) {
+    .gray-border-bottom {
+      border-bottom: 0;
+    }
+  }
 }
 
 .preview-iframe {
   position: absolute;
-  left: 35px;
-  top: 110px;
-  height: 455px;
-  width: 260px;
+  left: 50px;
+  top: 150px;
+  height: 560px;
+  width: 320px;
   overflow: auto;
 }
 

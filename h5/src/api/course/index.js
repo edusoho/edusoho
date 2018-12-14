@@ -35,5 +35,11 @@ export default [
     name: 'getCourseReviews',
     url: '/courseSet/{id}/reviews',
     method: 'GET'
+  }, {
+    // 根据课程查询计划
+    name: 'getCourseByCourseSet',
+    url: '/course_sets/{id}/courses',
+    method: 'GET',
+    disableLoading: true
   }
 ];

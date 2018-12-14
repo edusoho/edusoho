@@ -1,8 +1,7 @@
 <template>
   <div class="course-detail">
     <e-loading v-if="isLoading"></e-loading>
-    <join-before v-if="!joinStatus && !isEmpty" :details="details"></join-before>
-    <join-after :details="details" v-if="joinStatus && !isEmpty"></join-after>
+    <component :is="currentComp" :details="details"></component>
   </div>
 </template>
 
@@ -11,11 +10,17 @@
   import joinBefore from './join-before.vue';
   import { mapState, mapActions, mapMutations } from 'vuex';
   import * as types from '@/store/mutation-types';
+  import { Toast } from 'vant';
 
   export default {
     components: {
       joinAfter,
       joinBefore
+    },
+    data() {
+      return {
+        currentComp: '',
+      };
     },
     computed: {
       ...mapState('course', {
@@ -26,13 +31,19 @@
       ...mapState({
         isLoading: state => state.isLoading
       }),
-      isEmpty() {
-        return Object.keys(this.details).length === 0;
+    },
+    watch: {
+      joinStatus(status) {
+        this.getComponent(status);
       }
     },
     created(){
       this.getCourseDetail({
         courseId: this.$route.params.id
+      }).then(() => {
+        this.getComponent(this.joinStatus);
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     },
     methods: {
@@ -42,6 +53,9 @@
       ...mapMutations('course', {
         setSourceType: types.SET_SOURCETYPE
       }),
+      getComponent(status) {
+        this.currentComp = status ? joinAfter : joinBefore;
+      },
     },
     beforeRouteLeave (to, from, next) {
       this.setSourceType({

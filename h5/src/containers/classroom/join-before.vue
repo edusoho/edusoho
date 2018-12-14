@@ -3,8 +3,13 @@
     <div class="join-before">
       <detail-head :cover="details.cover"></detail-head>
 
-      <template>
-        <detail-plan :details="planDetails" :joinStatus="details.joinStatus" @getLearnExpiry="getLearnExpiry"></detail-plan>
+      <detail-plan :details="planDetails" :joinStatus="details.joinStatus"
+        @getLearnExpiry="getLearnExpiry"></detail-plan>
+      <div class="segmentation"></div>
+
+      <!-- 优惠活动 -->
+      <template v-if="Number(planDetails.price) !== 0 && unreceivedCoupons.length" >
+        <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
         <div class="segmentation"></div>
       </template>
 
@@ -42,7 +47,6 @@
       {{details.access.code | filterJoinStatus('classroom')}}</e-footer>
     </div>
 
-
   </div>
 </template>
 
@@ -53,6 +57,7 @@
   import courseSetList from './course-set-list';
   import detailPlan from './plan';
   import directory from '../course/detail/directory';
+  import onsale from '../course/detail/onsale'
   import moreMask from '@/components/more-mask';
   import redirectMixin from '@/mixins/saveRedirect';
   import Api from '@/api';
@@ -68,7 +73,8 @@
       teacher,
       courseSetList,
       reviewList,
-      moreMask
+      moreMask,
+      onsale,
     },
     props: ['details', 'planDetails'],
     data() {
@@ -85,6 +91,8 @@
         loadMoreAbout: false,
         disableMask: false,
         learnExpiry: '永久有效',
+        unreceivedCoupons: [],
+        miniCoupons: [],
       }
     },
     computed: {
@@ -94,6 +102,17 @@
       },
     },
     mounted() {
+      Api.searchCoupon({
+        params: {
+          targetId: this.details.classId,
+          targetType: 'classroom',
+        }
+      }).then(res => {
+        this.unreceivedCoupons = res.data;
+
+        this.miniCoupons = this.unreceivedCoupons.length > 3 ?
+          this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
+      })
       window.addEventListener('touchmove', this.handleScroll);
       window.addEventListener('scroll', this.handleScroll);
       setTimeout(() => {

@@ -2,19 +2,27 @@
   <div class="find-page">
     <e-loading v-if="isLoading"></e-loading>
     <div class="find-page__part" v-for="(part, index) in parts" :key="index">
-      <e-swipe v-if="part.type == 'slide_show'" :slides="part.data"></e-swipe>
+      <e-swipe v-if="part.type === 'slide_show'" :slides="part.data"></e-swipe>
       <e-course-list
         v-if="['classroom_list', 'course_list'].includes(part.type)"
+        class="gray-border-bottom"
         :courseList="part.data"
         :typeList="part.type"
         :feedback="feedback"
         :index="index"
-        @fetchCourse="fetchCourse"></e-course-list>
+        @fetchCourse="fetchCourse"/>
       <e-poster
-        v-if="part.type == 'poster'"
+        v-if="part.type === 'poster'"
         :class="imageMode[part.data.responsive]"
         :poster="part.data"
-        :feedback="feedback"></e-poster>
+        :feedback="feedback"/>
+      <e-coupon-list
+        class="gray-border-bottom"
+        v-if="part.type === 'coupon'"
+        :coupons="part.data.items"
+        :showTitle="part.data.titleShow"
+        @couponHandle="couponHandle($event)"
+        :feedback="true"></e-coupon-list>
     </div>
   </div>
 </template>
@@ -23,7 +31,9 @@
   import courseList from '../components/e-course-list/e-course-list.vue';
   import poster from '../components/e-poster/e-poster.vue';
   import swipe from '../components/e-swipe/e-swipe.vue';
+  import couponList from '../components/e-coupon-list/e-coupon-list.vue';
   import * as types from '@/store/mutation-types';
+  import getCouponMixin from '@/mixins/coupon/getCouponHandler';
   import Api from '@/api';
   import { mapState } from 'vuex';
   import { Toast } from 'vant';
@@ -33,7 +43,9 @@
       'e-course-list': courseList,
       'e-swipe': swipe,
       'e-poster': poster,
+      'e-coupon-list': couponList
     },
+    mixins: [getCouponMixin],
     props: {
       feedback: {
         type: Boolean,
@@ -97,7 +109,7 @@
 
           this.parts[index].data.items = res.data;
         })
-      }
+      },
     },
   }
 </script>

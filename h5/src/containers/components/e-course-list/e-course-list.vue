@@ -12,7 +12,10 @@
       <e-class v-for="item in courseList.items"
         :key="item.id"
         :course="item | courseListData(listObj)"
+        :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
+        :courseType="typeList === 'course_list' ? item.courseSet.type : ''"
         :typeList="typeList"
+        :tagShow="tagShow"
         :type="type"
         :feedback="feedback">
       </e-class>
@@ -43,6 +46,10 @@ import { mapState } from 'vuex';
       typeList: {
         type: String,
         default: 'course_list'
+      },
+      tagShow: {
+        type: Boolean,
+        default: true
       }
     },
     components: {

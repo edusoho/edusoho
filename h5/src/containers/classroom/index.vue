@@ -1,11 +1,7 @@
 <template>
   <div class="course-detail">
     <e-loading v-if="isLoading"></e-loading>
-    <join-before v-if="!details.joinStatus"
-      :details="details" :planDetails="planDetails"></join-before>
-
-    <join-after v-if="details.joinStatus"
-      :details="details" :planDetails="planDetails"></join-after>
+    <component :is="currentComp" :details="details" :planDetails="planDetails"></component>
   </div>
 </template>
 
@@ -45,6 +41,7 @@
           expiryMode: 'forever',
           expiryValue: '0',
         },
+        currentComp: '',
       };
     },
     computed: {
@@ -52,12 +49,22 @@
         isLoading: state => state.isLoading
       }),
     },
+    watch: {
+      'details.joinStatus': {
+        handler(status) {
+          this.getComponent(status)
+        }
+      }
+    },
     created(){
       const classroomId = this.$route.params.id;
       Api.getClassroomDetail({
         query: { classroomId, }
       }).then(res => {
+        this.getComponent(res.member);
         this.getDetails(res);
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     },
     methods: {
@@ -82,6 +89,9 @@
           summary, joinStatus, isEmpty, courses, classId, buyable,
           teachers, assistants, headTeacher, access, cover, reviews,
         }
+      },
+      getComponent(status) {
+        this.currentComp = status ? joinAfter : joinBefore;
       },
     },
   }

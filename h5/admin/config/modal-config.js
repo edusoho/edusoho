@@ -68,6 +68,34 @@ const head = {
       label: 'delete',
     }
   ],
+  coupon: [
+    {
+      col: 3,
+      title: '优惠券名称',
+      label: 'name',
+    },
+     {
+      col: 2,
+      title: '前缀',
+      label: 'prefix',
+    }, {
+      col: 3,
+      title: '优惠内容',
+      label: 'rate',
+    }, {
+      col: 1,
+      title: '剩余/总量',
+      label: 'generatedNum',
+    }, {
+      col: 1,
+      title: '有效期至',
+      label: 'deadline',
+    }, {
+      col: 0,
+      title: '操作',
+      label: 'delete'
+    }
+  ]
 };
 
 export default head;

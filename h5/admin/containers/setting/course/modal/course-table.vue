@@ -17,15 +17,15 @@
               v-if="index !== 0"
               :class="[ tdClass(item.col), { 'delete': item.label === 'delete' }]"
               @click="deleteItem(item.label === 'delete', courseIndex)">
-              {{ getContext(course, item.label) }}</span>
+              {{ course | tableFilter(item.label)}}</span>
             <el-tooltip
               v-if="index === 0"
-              :disabled="getContext(course, item.label).length <= 20"
+              :disabled="course[item.label].length <= 20"
               :class="['text-content', `td-col-${item.col}`]"
               placement="top-start"
               effect="dark">
-              <span slot="content">{{ getContext(course, item.label) }}</span>
-              <span class="course-table__td text-overflow">{{ getContext(course, item.label) }}</span>
+              <span slot="content">{{ course | tableFilter(item.label) }}</span>
+              <span class="course-table__td text-overflow">{{ course | tableFilter(item.label) }}</span>
             </el-tooltip>
           </template>
         </div>
@@ -39,7 +39,7 @@
 <script>
 import draggable from 'vuedraggable';
 import head from '@admin/config/modal-config';
-import { formatTime } from '@/utils/date-toolkit';
+import tableFilter from '@admin/utils/table-filter.js';
 
 export default {
   name: 'course-table',
@@ -71,6 +71,9 @@ export default {
       }
     }
   },
+  filters: {
+    tableFilter
+  },
   methods: {
     tdClass(ratio) {
       return `td-col-${ratio}`
@@ -81,23 +84,6 @@ export default {
       }
       this.courseSets.splice(index, 1);
       this.courseSets = this.courseSets; // 触发 courseSets 的 set 事件，向父组件抛出事件
-    },
-    getContext(course, label) {
-      if (label.toLocaleLowerCase().includes('price')) {
-        if (!course[label]) {
-          return '未设置';
-        }
-        return `${course[label]}元`;
-      } else if (label === 'createdTime') {
-        if (!course[label]) {
-          return '未知日期'
-        }
-        const date = new Date(course[label]);
-        return formatTime(date);
-      } else if (label === 'delete') {
-        return `移除`;
-      }
-      return course[label];
     }
   }
 }

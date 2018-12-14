@@ -57,6 +57,10 @@ a {
 }
 
 // text
+.text-10 {
+  font-size: vw(10);
+}
+
 .text-12 {
   font-size: vw(12);
 }
@@ -95,15 +99,23 @@ a {
 }
 
 .mt50 {
-  margin-top: vw(50);
+  margin-top: vw(50) !important;
 }
 
 .mt5 {
-  margin-top: vw(5);
+  margin-top: vw(5) !important;
 }
 
 .ml3 {
   margin-left: vw(3) !important;
+}
+
+.ml-5 {
+  margin-left: vw(-5) !important;
+}
+
+.ml10 {
+  margin-left: vw(10) !important;
 }
 
 // color
@@ -161,6 +173,10 @@ a {
 .segmentation {
   height: vw(15);
   background: #f7f7f7;
+}
+
+.gray-border-bottom {
+  border-bottom: 15px solid #f7f7f7;
 }
 
 // icon

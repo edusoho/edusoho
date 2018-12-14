@@ -3,7 +3,8 @@ export default [
     // 我的订单
     name: 'getMyOrder',
     url: '/me/orders',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }, {
     // 确认订单信息
     name: 'confirmOrder',

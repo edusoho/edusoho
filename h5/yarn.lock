@@ -8788,12 +8788,12 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
-vant@^1.1.5:
-  version "1.1.5"
-  resolved "http://registry.npm.taobao.org/vant/download/vant-1.1.5.tgz#cef549fe3a7cb6449f2f731fe31c420aa795cb5b"
+vant@1.2.1:
+  version "1.2.1"
+  resolved "http://registry.npm.taobao.org/vant/download/vant-1.2.1.tgz#ff37e4def7f26952be2de1c10c58513c9eb0fdb0"
   dependencies:
     babel-runtime "6.x"
-    vue-lazyload "^1.2.3"
+    vue-lazyload "1.2.3"
 
 vary@~1.1.2:
   version "1.1.2"
@@ -8863,7 +8863,7 @@ vue-jest@^1.0.2:
     tsconfig "^7.0.0"
     vue-template-es2015-compiler "^1.5.3"
 
-vue-lazyload@^1.2.3:
+vue-lazyload@1.2.3:
   version "1.2.3"
   resolved "http://registry.npm.taobao.org/vue-lazyload/download/vue-lazyload-1.2.3.tgz#901f9ec15c7e6ca78781a2bae4a343686bdedb2c"
 

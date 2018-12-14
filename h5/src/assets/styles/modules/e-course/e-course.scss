@@ -7,6 +7,9 @@
 
 .e-course__left {
   display: flex;
+  position: relative;
+  border-radius: vw(2);
+  overflow: hidden;
   .e-course__img {
     width: vw(140);
     height: vw(80);
@@ -14,6 +17,29 @@
   .e-class__img {
     width: vw(140);
     height: vw(93);
+  }
+  .tag {
+    position: absolute;
+    display: inline-block;
+    padding: vw(4) vw(10);
+    line-height: 1;
+    color: #fff;
+    font-size: vw(10);
+  }
+  .tag-live {
+    left: 0;
+    top: 0;
+    background-color: $primary-color;
+  }
+  .tag-discount {
+    right: 0;
+    top: 0;
+    background-color: #FF5353;
+  }
+  .tag-vip {
+    left: 0;
+    bottom: 0;
+    background-image: linear-gradient(45deg, #EDBC47 0%, #E5990F 100%);
   }
 }
 

@@ -308,12 +308,22 @@ export default {
     	if (this.type === 'course_list') {
 	      this.getCourseList(params).then(res => {
 	        this.moduleData.data.items = res.data;
-	      })
+	      }).catch((err) => {
+          this.$message({
+            message: err.message,
+            type: 'error'
+          });
+        });
 	      return;
       }
     	this.getClassList(params).then(res => {
         this.moduleData.data.items = res.data;
-      })
+      }).catch((err) => {
+        this.$message({
+          message: err.message,
+          type: 'error'
+        });
+      });
     }
   }
 }

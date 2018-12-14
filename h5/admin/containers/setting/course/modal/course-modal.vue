@@ -7,7 +7,7 @@
     <div class="course-modal__header" slot="title">
       <span class="header__title">选择{{typeText}}</span>
       <span class="header__subtitle">仅显示已发布{{typeText}}</span>
-      <a v-if="type === 'groupon'" class="color-primary pull-right fsn mrl" :href="createMarketingUrl" target="_blank">创建拼团活动</a>
+      <a v-if="type === 'groupon'" class="color-primary pull-right text-12 mrl" :href="createMarketingUrl" target="_blank">创建拼团活动</a>
     </div>
     <div class="course-modal__body">
       <div class="search__container">
@@ -22,6 +22,7 @@
           :value-key="valueKey"
           :clearable="true"
           :autofocus="true"
+          :hide-loading="hideLoading"
           :trigger-on-focus="false"
           :fetch-suggestions="searchHandler"
           @select="selectHandler"
@@ -31,8 +32,8 @@
     </div>
     <course-table :key="tableKey" :courseList="courseSets" @updateCourses="getUpdatedCourses" :type="type"></course-table>
     <span slot="footer" class="course-modal__footer dialog-footer">
-      <el-button class="text-medium btn-border-primary" size="small" @click="modalVisible = false">取 消</el-button>
-      <el-button class="text-medium" type="primary" size="small" @click="saveHandler">保 存</el-button>
+      <el-button class="text-14 btn-border-primary" size="small" @click="modalVisible = false">取 消</el-button>
+      <el-button class="text-14" type="primary" size="small" @click="saveHandler">保 存</el-button>
     </span>
   </el-dialog>
 </template>
@@ -75,7 +76,8 @@ export default {
       courseListIds: [],
       head,
       valueDefault: VALUE_DEFAULT,
-      typeTextDefault: TYPE_TEXT_DEFAULT
+      typeTextDefault: TYPE_TEXT_DEFAULT,
+      hideLoading: false
     }
   },
   computed: {
@@ -113,7 +115,8 @@ export default {
     ...mapActions([
       'getCourseList',
       'getClassList',
-      'getMarketingList'
+      'getMarketingList',
+      'getCouponList'
     ]),
     restoreListIds() {
       this.courseListIds = [];
@@ -158,12 +161,19 @@ export default {
       this.courseSets = [...this.courseSets, item];
     },
     searchHandler(queryString, cb) {
+      this.hideLoading = false;
       if (this.type === 'classroom_list') {
         this.getClassList({
           title: queryString
         }).then(res => {
           cb(res.data);
-        })
+        }).catch((err) => {
+          this.hideLoading = true;
+          this.$message({
+            message: err.message,
+            type: 'error'
+          });
+        });
         return;
       }
       if (this.type === 'groupon') {
@@ -174,7 +184,29 @@ export default {
           itemType: 'course'
         }).then(res => {
           cb(res.data);
-        })
+        }).catch((err) => {
+          this.hideLoading = true;
+          this.$message({
+            message: err.message,
+            type: 'error'
+          });
+        });
+        return;
+      }
+      if (this.type === 'coupon') {
+        this.getCouponList({
+          name: queryString,
+          unexpired: 1,
+          unreceivedNumGt: 0
+        }).then(res => {
+          cb(res.data);
+        }).catch((err) => {
+          this.hideLoading = true;
+          this.$message({
+            message: err.message,
+            type: 'error'
+          });
+        });
         return;
       }
 
@@ -182,7 +214,13 @@ export default {
         courseSetTitle: queryString
       }).then(res => {
         cb(res.data);
-      })
+      }).catch((err) => {
+        this.hideLoading = true;
+        this.$message({
+          message: err.message,
+          type: 'error'
+        });
+      });
     }
   }
 }

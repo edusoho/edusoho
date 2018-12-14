@@ -6,7 +6,10 @@
     <courseItem v-for="(course, index) in courseList"
       :key="index"
       :type="courseItemType"
+      :tagShow="tagShow"
       :typeList="typeList"
+      :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
+      :courseType="typeList === 'course_list' ? course.courseSet.type : ''"
       :course="course | courseListData(listObj)"
     ></courseItem>
   </van-list>
@@ -30,6 +33,10 @@
       typeList: {
         type: String,
         default: 'course_list'
+      },
+      tagShow: {
+        type: Boolean,
+        default: true
       }
     },
 

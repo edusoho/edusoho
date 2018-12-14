@@ -52,6 +52,11 @@ export default {
       route: 'homepage',
     }).then(res => {
       this.qrcode = res.img;
+    }).catch((err) => {
+      this.$message({
+        message: err.message,
+        type: 'error'
+      });
     });
   },
   methods: {

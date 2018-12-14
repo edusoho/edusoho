@@ -2,6 +2,12 @@
   padding-bottom: 50px;
 }
 
+.find-page__part:last-child {
+  .gray-border-bottom {
+    border-bottom: 0;
+  }
+}
+
 .van-tabbar-item {
   .van-tabbar-item__icon {
     margin-bottom: 0;

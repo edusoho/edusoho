@@ -1,0 +1,270 @@
+.e-coupon {
+  padding: vw(25) 0 vw(30) vw(20);
+  overflow: hidden;
+  &__container {
+    height: vw(96);
+    overflow: hidden;
+  }
+  &__title {
+    line-height: 1;
+    font-size: vw(18);
+    color: #2B333B;
+    margin-bottom: vw(20);
+  }
+  &__body {
+    position: relative;
+    float: left;
+    height: vw(96);
+    width: 100%;
+    padding-right: vw(20);
+    line-height: 1;
+    box-sizing: border-box;
+    &:before {
+      content: '';
+      position: absolute;
+      left: vw(-6);
+      top: vw(52);
+      width: vw(12);
+      height: vw(12);
+      border-radius: 50%;
+      background-color: #fff;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      right: vw(14);
+      top: vw(52);
+      width: vw(12);
+      height: vw(12);
+      border-radius: 50%;
+      background-color: #fff;
+    }
+  }
+  &__name {
+    position: absolute;
+    right: vw(85);
+    top: vw(22);
+    line-height: 1.3;
+    color: #fff;
+  }
+  &__header {
+    box-sizing: border-box;
+    padding: vw(20) vw(15) vw(18);
+    border-top-right-radius: vw(2);
+    border-top-left-radius: vw(2);
+    background-color: #FF6969;
+    .coupon-button {
+      position: absolute;
+      right: vw(15);
+      top: vw(26);
+      height: vw(24);
+      width: vw(56);
+      text-align: center;
+      line-height: vw(24);
+      box-sizing: border-box;
+      font-size: vw(12);
+      color: #FF5353;
+      background-color: #fff;
+      border-radius: vw(4);
+    }
+  }
+  &__middle {
+    margin-top: vw(-6);
+    margin-bottom: vw(-1);
+    height: vw(6);
+    background-image: url('../../../static/images/dot_red@2x.png');
+    background-size: vw(16) vw(6);
+    background-position-x: vw(6);
+  }
+  &__bottom {
+    padding: vw(10);
+    background-color: #FF5353;
+    color: #fff;
+    font-size: vw(10);
+    border-bottom-right-radius: vw(2);
+    border-bottom-left-radius: vw(2);
+  }
+  &__price {
+    display: inline-block;
+    margin-top: vw(-5);
+    color: #fff;
+    font-size: vw(32);
+    font-weight: 500;
+  }
+  &-single {
+    height: vw(112);
+    .e-coupon__body {
+      padding-right: vw(20);
+      height: vw(112);
+      &:after {
+        top: vw(70);
+        right: vw(14);
+      }
+      &:before {
+        top: vw(70);
+      }
+    }
+    .van-swipe-item {
+      width: 100% !important;
+    }
+    .e-coupon__header {
+      height: vw(82);
+      .coupon-name {
+        width: vw(150);
+      }
+      .e-coupon__name {
+        right: vw(100);
+      }
+      .coupon-button {
+        right: vw(35);
+      }
+    }
+    .e-coupon__price {
+      margin-top: vw(1);
+    }
+    .stamp {
+      right: vw(20) !important;
+    }
+  }
+  &-multi {
+    .coupon-button {
+      right: vw(35);
+      top: vw(19);
+    }
+  }
+  &__select-circle {
+    display: inline-block;
+    position: absolute;
+    right: vw(10);
+    top: vw(10);
+    width: vw(20);
+    height: vw(20);
+    color: #FFFFFF;
+    .select-icon {
+      font-size: 20px;
+    }
+  }
+
+  // 已领完
+  .coupon-received-all,.coupon-used {
+    .e-coupon__header {
+      background-color: #B0BDC9;
+    }
+    .e-coupon__middle {
+      background-image: url('../../../static/images/dot_grey@2x.png');
+    }
+    .e-coupon__bottom {
+      background-color: #A5B2BE;
+    }
+    .coupon-button {
+      display: none;
+    }
+  }
+  .coupon-received-all {
+    .stamp {
+      right: vw(20);
+      background-image: url('../../../static/images/received_all.png') !important;
+    }
+  }
+  // 已使用
+  .coupon-used {
+    .coupon-button {
+      display: none;
+    }
+    .stamp {
+      right: vw(20);
+      background-image: url('../../../static/images/used_coupon.png') !important;
+    }
+  }
+  // 已领取
+  .stamp {
+    position: absolute;
+    top: 0;
+    right: vw(20);
+    width: vw(50);
+    height: vw(50);
+    background-image: url('../../../static/images/received.png');
+    background-size: 100%;
+  }
+}
+
+// 详情页mini优惠券样式
+.mini-coupon:before, .mini-coupon:after {
+  position: absolute;
+  content: "";
+  height: 100%;
+  width: vw(4);
+  background-image: url('../../../static/images/coupon_dots.png');
+  top: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  transform: scale(0.8);
+}
+
+.mini-coupon {
+  position: relative;
+  &:before {
+    left: vw(-2);
+  }
+  &:after {
+    left: auto;
+    right: vw(-2);
+    border: none;
+    transform-origin: center;
+  }
+}
+
+// 链接领取优惠券
+.coupon-receive-page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .6);
+  .coupon-card-bg {
+    margin: vw(80) vw(15);
+    border-radius: vw(10);
+    padding: vw(40) vw(15) vw(50);
+    background-size: 95%;
+    .coupon-info {
+      color: #fff;
+      font-size: vw(16);
+      text-align: center;
+      margin-bottom: vw(15);
+      font-weight: bold;
+    }
+  }
+  .coupon-receive-success {
+    background-color: #feba37;
+    background-image: url('../../../static/images/card_bg.png');
+  }
+  .e-coupon__body {
+    padding-right: 0;
+    .e-coupon__header {
+      height: vw(80);
+      .e-coupon__price {
+        margin-top: vw(4);
+      }
+      .e-coupon__name {
+        top: vw(30);
+      }
+      .coupon-button {
+        top: vw(29);
+      }
+    }
+    &:before {
+      left: vw(-1);
+      top: vw(70);
+      width: vw(7);
+      border-radius: 0 vw(20) vw(20) 0;
+      background-color: #feba37;
+    }
+    &:after {
+      right: vw(-1);
+      top: vw(70);
+      width: vw(7);
+      border-radius: vw(20) 0 0 vw(20);
+      background-color: #feba37;
+    }
+  }
+}

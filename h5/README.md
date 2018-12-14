@@ -28,3 +28,28 @@ npm run analyze:admin
 
 ```
 
+## 发布到测试站
+
+1、安装 composer 中的依赖
+
+```
+composer require deployer/deployer --dev
+```
+
+
+2、找后端人员给予 deployerkey 文件（允许 ssh 到服务器的验证文件）
+  放到~/.ssh/deployerkey目录下
+  设置权限 600
+
+```
+sudo chmod 600 ~/.ssh/deployerkey
+```
+
+3、打包发布代码到 try 服务器（测试站地址: http://lvliujie.st.edusoho.cn, http://zhangfeng.st.edusoho.cn）
+
+```
+php vendor/bin/dep deploy dev
+```
+
+
+

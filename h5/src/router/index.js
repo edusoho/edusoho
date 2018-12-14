@@ -80,6 +80,10 @@ const routes = [
     name: 'course_web',
     component: () => import(/* webpackChunkName: "webView" */'@/containers/course/detail/web-view.vue')
   }, {
+    path: '/course/audioview',
+    name: 'course_audioview',
+    component: () => import(/* webpackChunkName: "audioDoc" */ '@/containers/course/detail/audio-doc.vue')
+  }, {
     path: '/live',
     name: 'live',
     component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
@@ -160,6 +164,13 @@ const routes = [
       title: '人脸认证'
     },
     component: () => import(/* webpackChunkName: "verification" */'@/containers/login/face/verification.vue')
+  }, {
+    path: '/coupon/:token/receive',
+    name: 'coupon_receive',
+    meta: {
+      title: '优惠券领取'
+    },
+    component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/coupon/index.vue')
   }
 ];
 

@@ -9,28 +9,30 @@
         :course="course">
       </e-course>
       <div class="order-coupon">
-        <div class="coupon-column"
-          :chosen-coupon="activeItemIndex"
-          @click="showList = true">
+        <div class="coupon-column" @click="showList = true">
           <span>优惠券</span>
           <span class="red">{{ couponShow }}</span>
         </div>
-        <van-popup v-model="showList" position="bottom" :overlay="false">
+        <van-popup class="full-height-popup coupon-popup" v-model="showList" position="bottom" :overlay="false">
           <van-nav-bar title="优惠券"
             class="nav-bar"
             :left-arrow="true"
             @click-left="disuse"/>
           <div :class="['btn-coupon-exit', {active: activeItemIndex < 0}]" @click="disuse">不使用优惠
             <i class="h5-icon h5-icon-circle"></i>
-            <i class="h5-icon h5-icon-checked-circle"></i>
+            <i class="h5-icon h5-icon-check"></i>
           </div>
-          <coupon v-for="(item, index) in course.availableCoupons"
-            :key="index"
-            :data="item"
-            :index="index"
-            :active="activeItemIndex"
-            @chooseItem="chooseItem">
-          </coupon>
+          <div class="coupon-popup__content">
+            <coupon v-for="(item, index) in course.availableCoupons"
+              :key="index"
+              :coupon="item"
+              :index="index"
+              :active="activeItemIndex"
+              :showButton="false"
+              :showSelecet="true"
+              @chooseItem="chooseItem">
+            </coupon>
+          </div>
           <div class="coupon-empty" v-show="!course.availableCoupons.length">
             <img class="empty-img" src='static/images/coupon_empty.png'>
             <div class="empty-text">暂无优惠券</div>
@@ -64,7 +66,7 @@
 </template>
 <script>
 import { mapState } from 'vuex';
-import coupon from './coupon.vue';
+import coupon from '@/containers/components/e-coupon/e-coupon.vue';
 import eCourse from '@/containers/components/e-course/e-course.vue';
 import Api from '@/api';
 

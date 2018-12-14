@@ -8,6 +8,7 @@
       <e-course-list
         v-if="['classroom_list', 'course_list'].includes(part.type)"
         :courseList="part.data"
+        class="gray-border-bottom"
         :feedback="feedback"
         :typeList="part.type"></e-course-list>
       <e-poster
@@ -18,7 +19,14 @@
       <e-groupon
         v-if="part.type == 'groupon'"
         :tag="part.data.tag"
+        class="gray-border-bottom"
         :activity="part.data.activity"></e-groupon>
+      <div class="coupon-preview__container gray-border-bottom" v-if="part.type == 'coupon'">
+        <e-coupon-list
+          :coupons="part.data.items"
+          :feedback="true"
+          :showTitle="part.data.titleShow"></e-coupon-list>
+      </div>
     </div>
     <!-- 垫底的 -->
     <div class="mt50"></div>
@@ -31,6 +39,7 @@
   import poster from '@/containers/components/e-poster/e-poster.vue';
   import swipe from '@/containers/components/e-swipe/e-swipe.vue';
   import groupon from '@/containers/components/e-marketing/e-groupon';
+  import coupon from '@/containers/components/e-coupon-list/e-coupon-list';
   import { mapActions } from 'vuex';
 
   export default {
@@ -39,6 +48,7 @@
       'e-swipe': swipe,
       'e-poster': poster,
       'e-groupon': groupon,
+      'e-coupon-list': coupon
     },
     props: {
       feedback: {

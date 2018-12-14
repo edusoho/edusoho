@@ -43,6 +43,11 @@ const config = [
     url: '/classrooms',
     method: 'GET'
   }, {
+    // 获取优惠券
+    name: 'getCouponList',
+    url: '/plugins/coupon/coupon_batches',
+    method: 'GET'
+  }, {
     // 微营销活动列表数据
     name: 'getMarketingList',
     url: '/marketing_activities',

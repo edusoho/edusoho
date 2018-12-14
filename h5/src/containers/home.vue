@@ -32,15 +32,20 @@ export default {
       handler(to) {
         this.items.some((item, index) => {
           const redirect = to.query.redirect || '';
-
-          item.name === ( redirect || to.name ) && ( this.active = index );
+          if (item.name === to.name) {
+            this.active = index
+          } else if (redirect && redirect.includes('orders')) { // prelogin 页面对应tab显示不正确
+            this.active = 2
+          } else if (redirect && redirect.includes('learning')) { // prelogin 页面对应tab显示不正确
+            this.active = 1
+          }
         })
       }
     }
   },
   created() {
     const {preview, token} = this.$route.query
-    if (preview == 1) { // 手机预览页面
+    if (!isNaN(preview) || preview == 1) { // 手机预览页面
       this.$router.push({
         name: 'preview',
         query: {
