@@ -10,7 +10,7 @@ modules:
             cleanup: false # reload dump between tests
             populate: true # load dump before all tests
             #app/console plugin:remove Vip && app/console plugin:register Vip && app/console plugin:remove ChargeCoin && app/console plugin:register ChargeCoin && app/console plugin:remove Coupon && app/console plugin:register Coupon && app/console plugin:remove Discount && app/console plugin:register Discount && app/console plugin:remove MoneyCard && app/console plugin:register MoneyCard;
-            populator: 'wget -O tests/_data/api-test-data.sql http://download-devtest.codeages.net/api-test-data/20181210/test.sql;mysql -h $host -u $user $dbname < tests/_data/api-test-data.sql;bin/phpmig migrate'
+            populator: 'wget -O tests/_data/api-test-data.sql http://download-devtest.codeages.net/api-test-data/20181215/test.sql;mysql -h $host -u $user $dbname < tests/_data/api-test-data.sql;bin/phpmig migrate'
         - REST:
             url: http://127.0.0.1:8000/api
             depends: PhpBrowser
