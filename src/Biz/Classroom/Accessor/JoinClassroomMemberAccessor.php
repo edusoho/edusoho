@@ -3,9 +3,7 @@
 namespace Biz\Classroom\Accessor;
 
 use Biz\Accessor\AccessorAdapter;
-use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\User\UserException;
 
 class JoinClassroomMemberAccessor extends AccessorAdapter
 {
@@ -13,11 +11,11 @@ class JoinClassroomMemberAccessor extends AccessorAdapter
     {
         $user = $this->getCurrentUser();
         if (null === $user || !$user->isLogin()) {
-            return $this->buildResult('UN_LOGIN', array(), UserException::EXCEPTION_MODUAL);
+            return $this->buildResult('user.not_login');
         }
 
         if ($user['locked']) {
-            return $this->buildResult('LOCKED_USER', array('userId' => $user['id']), UserException::EXCEPTION_MODUAL);
+            return $this->buildResult('user.locked', array('userId' => $user['id']));
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
@@ -25,7 +23,7 @@ class JoinClassroomMemberAccessor extends AccessorAdapter
             return null;
         }
 
-        return $this->buildResult('DUPLICATE_JOIN', array('userId' => $user['id']), ClassroomException::EXCEPTION_MODUAL);
+        return $this->buildResult('member.member_exist', array('userId' => $user['id']));
     }
 
     /**

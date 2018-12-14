@@ -102,20 +102,20 @@ class PageSetting extends AbstractResource
         }
         $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode, 'setting');
         foreach ($discoverySettings as &$discoverySetting) {
-            if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
+            if ('course_list' == $discoverySetting['type']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
+                $courseFilter = new CourseFilter();
+                $courseFilter->setMode(Filter::PUBLIC_MODE);
                 foreach ($discoverySetting['data']['items'] as &$course) {
-                    $courseFilter = new CourseFilter();
-                    $courseFilter->setMode(Filter::PUBLIC_MODE);
                     $courseFilter->filter($course);
                 }
             }
-            if ('classroom_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
+            if ('classroom_list' == $discoverySetting['type']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+                $classroomFilter = new ClassroomFilter();
+                $classroomFilter->setMode(Filter::PUBLIC_MODE);
                 foreach ($discoverySetting['data']['items'] as &$classroom) {
-                    $classroomFilter = new ClassroomFilter();
-                    $classroomFilter->setMode(Filter::PUBLIC_MODE);
                     $classroomFilter->filter($classroom);
                 }
             }

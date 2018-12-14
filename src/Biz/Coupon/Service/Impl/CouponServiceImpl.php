@@ -14,6 +14,7 @@ use Biz\Course\Service\CourseService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
+use CouponPlugin\Biz\Coupon\Service\CouponBatchService;
 
 class CouponServiceImpl extends BaseService implements CouponService
 {
@@ -333,6 +334,10 @@ class CouponServiceImpl extends BaseService implements CouponService
             )
         );
 
+        if ($this->isPluginInstalled('Coupon')) {
+            $this->getCouponBatchService()->updateUnreceivedNumByBatchId($coupon['batchId']);
+        }
+
         $this->getCardService()->addCard(array(
             'cardType' => 'coupon',
             'cardId' => $coupon['id'],
@@ -467,6 +472,26 @@ class CouponServiceImpl extends BaseService implements CouponService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return CouponBatchService
+     */
+    protected function getCouponBatchService()
+    {
+        return $this->createService('CouponPlugin:Coupon:CouponBatchService');
+    }
+
+    protected function isPluginInstalled($code)
+    {
+        $app = $this->getAppService()->getAppByCode($code);
+
+        return !empty($app);
+    }
+
+    protected function getAppService()
+    {
+        return $this->biz->service('CloudPlatform:AppService');
     }
 
     /**

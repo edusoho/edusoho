@@ -3,9 +3,7 @@
 namespace Biz\Classroom\Accessor;
 
 use Biz\Accessor\AccessorAdapter;
-use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\User\UserException;
 
 class LearnClassroomMemberAccessor extends AccessorAdapter
 {
@@ -13,23 +11,23 @@ class LearnClassroomMemberAccessor extends AccessorAdapter
     {
         $user = $this->getCurrentUser();
         if (null === $user || !$user->isLogin()) {
-            return $this->buildResult('UN_LOGIN', array(), UserException::EXCEPTION_MODUAL);
+            return $this->buildResult('user.not_login');
         }
 
         if ($user['locked']) {
-            return $this->buildResult('LOCKED_USER', array('userId' => $user['id']), UserException::EXCEPTION_MODUAL);
+            return $this->buildResult('user.locked', array('userId' => $user['id']));
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
         if (empty($member)) {
-            return $this->buildResult('NOTFOUND_MEMBER', array(), ClassroomException::EXCEPTION_MODUAL);
+            return $this->buildResult('member.not_found');
         }
         if ($member['role'] == array('auditor')) {
-            return $this->buildResult('FORBIDDEN_AUDITOR_LEARN', array(), ClassroomException::EXCEPTION_MODUAL);
+            return $this->buildResult('member.auditor');
         }
 
         if ($member['deadline'] > 0 && $member['deadline'] < time()) {
-            return $this->buildResult('EXPIRED_MEMBER', array('userId' => $user['id']), ClassroomException::EXCEPTION_MODUAL);
+            return $this->buildResult('member.expired', array('userId' => $user['id']));
         }
 
         return null;

@@ -3,26 +3,25 @@
 namespace Biz\Course\Accessor;
 
 use Biz\Accessor\AccessorAdapter;
-use Biz\Course\CourseException;
 
 class LearnCourseAccessor extends AccessorAdapter
 {
     public function access($course)
     {
         if (empty($course)) {
-            return $this->buildResult('NOTFOUND_COURSE', array(), CourseException::EXCEPTION_MODUAL);
+            return $this->buildResult('course.not_found');
         }
 
         if ($course['status'] === 'draft') {
-            return $this->buildResult('UNPUBLISHED_COURSE', array('courseId' => $course['id']), CourseException::EXCEPTION_MODUAL);
+            return $this->buildResult('course.unpublished', array('courseId' => $course['id']));
         }
 
         if ($this->isExpired($course)) {
-            return $this->buildResult('EXPIRED_COURSE', array('courseId' => $course['id']), CourseException::EXCEPTION_MODUAL);
+            return $this->buildResult('course.expired', array('courseId' => $course['id']));
         }
 
         if ($this->isNotArriving($course)) {
-            return $this->buildResult('UN_ARRIVE', array('courseId' => $course['id']), CourseException::EXCEPTION_MODUAL);
+            return $this->buildResult('course.not_arrive', array('courseId' => $course['id']));
         }
 
         return null;

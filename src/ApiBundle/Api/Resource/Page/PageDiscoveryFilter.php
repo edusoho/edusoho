@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Page;
 
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
+use ApiBundle\Api\Resource\Coupon\CouponFilter;
 use ApiBundle\Api\Resource\Filter;
 
 class PageDiscoveryFilter extends Filter
@@ -12,7 +13,7 @@ class PageDiscoveryFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        if ('course_list' == $data['type'] && 'condition' == $data['data']['sourceType']) {
+        if ('course_list' == $data['type']) {
             $courseFilter = new CourseFilter();
             $courseFilter->setMode(Filter::PUBLIC_MODE);
             foreach ($data['data']['items'] as &$course) {
@@ -20,11 +21,21 @@ class PageDiscoveryFilter extends Filter
             }
         }
 
-        if ('classroom_list' == $data['type'] && 'condition' == $data['data']['sourceType']) {
+        if ('classroom_list' == $data['type']) {
             $classroomFilter = new ClassroomFilter();
             $classroomFilter->setMode(Filter::PUBLIC_MODE);
             foreach ($data['data']['items'] as &$classroom) {
                 $classroomFilter->filter($classroom);
+            }
+        }
+
+        if ('coupon' == $data['type']) {
+            $couponFilter = new CouponFilter();
+            $couponFilter->setMode(Filter::PUBLIC_MODE);
+            foreach ($data['data']['items'] as &$couponBatch) {
+                if (!empty($couponBatch['currentUserCoupon'])) {
+                    $couponFilter->filter($couponBatch['currentUserCoupon']);
+                }
             }
         }
     }

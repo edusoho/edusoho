@@ -8197,6 +8197,9 @@ exception.announcement.type_invalid: Announcement type is invalid
 exception.batch_notification.notfound: Site notification not found
 exception.batch_notification.published: Notification has been sent
 
+exception.coupon.receive.failed: 优惠券领取失败
+exception.coupon.plugin.not.installed: 优惠券插件未安装
+
 exception.lesson.not_found: Lesson is not exist
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
@@ -8241,6 +8244,7 @@ exception.course.buy_expired: 教学计划已过购买期限
 exception.course.reach_max_student_num: 达到最大人数限制，不可加入
 exception.course.not_arrive: 教学计划还未开始
 exception.course.search_order_closed: 查询订单已关闭，请联系管理员
+exception.course.forbidden_learn_course: 无权学习教学计划
 exception.courseset.not_found: The course doesn't exist
 exception.courseset.forbidden_manage:
 exception.courseset.sub_courseset_exist:
