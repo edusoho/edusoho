@@ -126,10 +126,10 @@ export default {
       return this.supportVersion('1.4.0');
     },
     supportClassroomVersion() {
-      return this.supportVersion('1.3.1');
+      return true;
     },
     supportCouponVersion() {
-      return this.supportVersion('1.3.2');
+      return true;
     },
   },
   created() {
