@@ -24,8 +24,7 @@
                     {% endif %}
                     </td>
                 <td>
-                  {% set emailArr = data.email|split('@') %}
-                  {% if emailArr[1] != 'edusoho.net' %}
+                  {% if not is_system_generated_email(data.email) %}
                     {{ data.email }}
                   {% else %}
                     {{'site.data.empty'|trans}}
