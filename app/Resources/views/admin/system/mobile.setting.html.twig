@@ -70,6 +70,17 @@
 
       <div class="form-group">
         <div class="col-md-2 control-label">
+          <label>{{ 'iOS'|trans }}{{'admin.mobile_setting.app_ios_bundle_id'|trans}}</label>
+        </div>
+        <div class="controls col-md-8">
+          <input class="form-control" name="bundleId" value="{{ mobile.bundleId|default() }}">
+          <p class="help-block">{{ 'admin.mobile_setting.app_ios_bundle_id_hint'|trans }}</p>
+        </div>
+        <div class="help-block"><a target="_blank" href="http://www.qiqiuyu.com/faq/805/detail">{{ 'admin.mobile_setting.app_ios_bundle_id'|trans}}{{ 'admin.mobile_setting.app_ios_bundle_id_tutorials'|trans }}</a></div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
           <label for="appabout">{{'admin.mobile_setting.app_custom_about'|trans}}</label>
         </div>
         <div class="col-md-8 controls">
@@ -131,8 +142,6 @@
       </div>
   {% endfor %}
   </fieldset>
-
-
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 

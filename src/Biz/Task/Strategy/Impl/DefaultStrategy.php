@@ -5,9 +5,8 @@ namespace Biz\Task\Strategy\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
+use Biz\Task\TaskException;
 use Biz\Task\Visitor\CourseStrategyVisitorInterface;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class DefaultStrategy extends BaseStrategy implements CourseStrategy
 {
@@ -137,7 +136,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 array('preparation', 'lesson', 'exercise', 'homework', 'extraClass')
             )
         ) {
-            throw new InvalidArgumentException('task mode  Invalid');
+            throw TaskException::ERROR_TASK_MODE();
         }
     }
 
@@ -245,7 +244,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($task['categoryId'], 'lesson');
 
         if (empty($lessonTask)) {
-            throw new NotFoundException('lesson task is not found');
+            throw TaskException::NOTFOUND_TASK();
         }
 
         $task['isOptional'] = $lessonTask['isOptional'];
@@ -262,7 +261,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         $taskModes = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
         if (!array_key_exists($taskMode, $taskModes)) {
-            throw new InvalidArgumentException('task mode is invalid');
+            throw TaskException::ERROR_TASK_MODE();
         }
 
         return $chapterSeq + $taskModes[$taskMode];

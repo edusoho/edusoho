@@ -31,10 +31,14 @@ class CourseProduct extends Product implements OrderStatusCallback
     {
         $this->targetId = $params['targetId'];
         $course = $this->getCourseService()->getCourse($this->targetId);
-        $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
+        $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $this->targetId));
         $this->successUrl = array('my_course_show', array('id' => $this->targetId));
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $this->title = CourseTitleUtils::getDisplayedTitle($course);
+        if (empty($this->title) && isset($params['orderItemId'])) {
+            $orderItem = $this->getOrderService()->getOrderItem($params['orderItemId']);
+            $this->title = $orderItem['title'];
+        }
         $this->price = $course['price'];
         $this->originPrice = $course['originPrice'];
         $this->maxRate = $course['maxRate'];
@@ -48,11 +52,11 @@ class CourseProduct extends Product implements OrderStatusCallback
         $course = $this->getCourseService()->getCourse($this->targetId);
 
         if (!$course['buyable']) {
-            throw new OrderPayCheckException('order.pay_check_msg.unpurchasable_product', Product::PRODUCT_VALIDATE_FAIL);
+            throw OrderPayCheckException::UNPURCHASABLE_PRODUCT();
         }
 
         if (AccessorInterface::SUCCESS !== $access['code']) {
-            throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
+            throw OrderPayCheckException::UNPURCHASABLE_PRODUCT();
         }
     }
 
@@ -113,7 +117,10 @@ class CourseProduct extends Product implements OrderStatusCallback
     public function onOrderRefundRefused($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
-        $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+        $course = $this->getCourseService()->getCourse($orderItem['target_id']);
+        if (!empty($course)) {
+            $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+        }
     }
 
     /**

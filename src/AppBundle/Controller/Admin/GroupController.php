@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\Common\CommonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Common\Paginator;
@@ -318,7 +319,7 @@ class GroupController extends BaseController
                 );
                 break;
             default:
-                throw $this->createServiceException('参数sort不正确。');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         return $orderBys;

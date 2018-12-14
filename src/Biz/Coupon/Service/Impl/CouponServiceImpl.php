@@ -5,6 +5,7 @@ namespace Biz\Coupon\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Card\Service\CardService;
+use Biz\Coupon\CouponException;
 use Biz\Coupon\Dao\CouponDao;
 use Biz\Coupon\Service\CouponService;
 use Biz\Coupon\State\ReceiveCoupon;
@@ -13,7 +14,7 @@ use Biz\Course\Service\CourseService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use CouponPlugin\Biz\Coupon\Service\CouponBatchService;
 
 class CouponServiceImpl extends BaseService implements CouponService
 {
@@ -333,6 +334,10 @@ class CouponServiceImpl extends BaseService implements CouponService
             )
         );
 
+        if ($this->isPluginInstalled('Coupon')) {
+            $this->getCouponBatchService()->updateUnreceivedNumByBatchId($coupon['batchId']);
+        }
+
         $this->getCardService()->addCard(array(
             'cardType' => 'coupon',
             'cardId' => $coupon['id'],
@@ -377,7 +382,7 @@ class CouponServiceImpl extends BaseService implements CouponService
         $coupon = $this->getCoupon($couponId);
 
         if (!$coupon) {
-            throw new InvalidArgumentException(sprintf('Coupon with id %d does not exist', $couponId));
+            $this->createNewException(CouponException::NOTFOUND_COUPON());
         }
 
         switch ($coupon['status']) {
@@ -386,7 +391,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             case 'receive':
                 return new ReceiveCoupon($this->biz, $coupon);
             default:
-                throw new InvalidArgumentException(sprintf('Invalid coupon status %s given', $coupon['status']));
+                $this->createNewException(CouponException::STATUS_INVALID());
                 break;
         }
     }
@@ -467,6 +472,26 @@ class CouponServiceImpl extends BaseService implements CouponService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return CouponBatchService
+     */
+    protected function getCouponBatchService()
+    {
+        return $this->createService('CouponPlugin:Coupon:CouponBatchService');
+    }
+
+    protected function isPluginInstalled($code)
+    {
+        $app = $this->getAppService()->getAppByCode($code);
+
+        return !empty($app);
+    }
+
+    protected function getAppService()
+    {
+        return $this->biz->service('CloudPlatform:AppService');
     }
 
     /**

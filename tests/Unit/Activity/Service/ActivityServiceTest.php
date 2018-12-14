@@ -27,7 +27,7 @@ class ActivityServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreateActivityWhenInvalidArgument()
     {
@@ -384,8 +384,8 @@ class ActivityServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage activity.missing_params
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
      */
     public function testPreCreateCheckWithMissingParams()
     {
@@ -393,8 +393,8 @@ class ActivityServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage activity.live.overlap_time
+     * @expectedException \Biz\Activity\ActivityException
+     * @expectedExceptionMessage activity.live.overlap_time_notice
      */
     public function testPreCreateCheckWithOverlapTime()
     {

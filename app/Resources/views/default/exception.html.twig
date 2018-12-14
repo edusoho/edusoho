@@ -1,6 +1,6 @@
 {% if app.session.flashBag.has('currentThrowedException')|default() %}
   <div class="js-hidden-exception hidden">
-    {% set currentThrowedException = app.session.flashBag.peek('currentThrowedException')[0] %}
+    {% set currentThrowedException = app.session.flashBag.get('currentThrowedException')[0] %}
     {
       "statusCode": "{{ currentThrowedException['statusCode'] }}",
       "code": "{{ currentThrowedException['code'] }}",

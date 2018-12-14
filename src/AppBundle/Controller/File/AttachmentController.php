@@ -3,6 +3,8 @@
 namespace AppBundle\Controller\File;
 
 use AppBundle\Controller\BaseController;
+use Biz\File\UploadFileException;
+use Biz\User\UserException;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,18 +79,18 @@ class AttachmentController extends BaseController
         $user = $this->getUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $attachment = $this->getUploadFileService()->getUseFile($id);
         $file = $this->getUploadFileService()->getFile($attachment['fileId']);
 
         if ($file['storage'] != 'cloud') {
-            throw $this->createNotFoundException('attachment not found');
+            $this->createNewException(UploadFileException::NOTFOUND_ATTACHMENT());
         }
 
         if ($file['targetType'] != 'attachment') {
-            throw $this->createNotFoundException('attachment not found');
+            $this->createNewException(UploadFileException::NOTFOUND_ATTACHMENT());
         }
 
         return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array(
@@ -101,12 +103,12 @@ class AttachmentController extends BaseController
     {
         $user = $this->getUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
         $attachment = $this->getUploadFileService()->getUseFile($id);
 
         if (empty($attachment)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_ATTACHMENT());
         }
 
         if ($attachment['type'] != 'attachment') {
@@ -140,7 +142,7 @@ class AttachmentController extends BaseController
             if ($this->getUploadFileService()->canManageFile($id)) {
                 $this->getUploadFileService()->deleteFile($id);
             } else {
-                throw $this->createAccessDeniedException('opteration forbiddened');
+                $this->createNewException(UploadFileException::FORBIDDEN_MANAGE_FILE());
             }
         }
 

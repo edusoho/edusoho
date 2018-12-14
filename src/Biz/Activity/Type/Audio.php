@@ -2,9 +2,11 @@
 
 namespace Biz\Activity\Type;
 
+use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\AudioActivityDao;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
+use Biz\Common\CommonException;
 use Biz\File\Service\UploadFileService;
 use AppBundle\Common\ArrayToolkit;
 
@@ -16,12 +18,12 @@ class Audio extends Activity
     public function create($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('media', 'hasText'))) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('media参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $media['mediaId'] = $media['id'];
         $audio = ArrayToolkit::parts($media, array('mediaId'));
@@ -58,13 +60,12 @@ class Audio extends Activity
     public function update($targetId, &$fields, $activity)
     {
         if (!ArrayToolkit::requireds($fields, array('media', 'hasText'))) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
-
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('media参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $audioActivityFields = array(
@@ -73,7 +74,7 @@ class Audio extends Activity
         );
         $audioActivity = $this->getAudioActivityDao()->get($activity['mediaId']);
         if (empty($audioActivity)) {
-            throw $this->createNotFoundException('教学活动不存在');
+            throw ActivityException::NOTFOUND_ACTIVITY();
         }
         $audioActivity = $this->getAudioActivityDao()->update($activity['mediaId'], $audioActivityFields);
 

@@ -2,11 +2,13 @@
 
 namespace AppBundle\Controller;
 
+use Biz\File\UploadFileException;
 use Biz\User\Service\UserService;
 use Biz\User\Service\TokenService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
+use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,7 +25,7 @@ abstract class HLSBaseController extends BaseController
         $clientIp = $request->getClientIp();
 
         if (empty($token)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
@@ -35,7 +37,7 @@ abstract class HLSBaseController extends BaseController
         $file = $this->getFile($id, $token);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         $streams = array();
@@ -132,7 +134,7 @@ abstract class HLSBaseController extends BaseController
         $fromApi = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
         $clientIp = $request->getClientIp();
         if (empty($token)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $streamToken = $token;
@@ -146,7 +148,7 @@ abstract class HLSBaseController extends BaseController
         $file = $this->getFile($id, $token);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         if (empty($file[$this->getMediaAttr()][$level]['key'])) {

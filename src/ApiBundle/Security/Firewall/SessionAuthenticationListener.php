@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Security\Firewall;
 
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -60,7 +61,7 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
      *
      * @return TokenInterface|null
      *
-     * @throws \RuntimeException
+     * @throws UserException
      */
     protected function refreshUser(TokenInterface $token)
     {
@@ -82,7 +83,7 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
             }
         }
 
-        throw new \RuntimeException(sprintf('There is no user provider for user "%s".', get_class($user)));
+        throw UserException::NO_USER_PROVIDER();
     }
 
     /**

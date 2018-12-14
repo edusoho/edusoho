@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\JsonToolkit;
+use Biz\CloudPlatform\AppException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -69,7 +70,7 @@ class DeveloperSettingController extends BaseController
             $app = $this->getAppservice()->getAppByCode($data['code']);
 
             if (empty($app)) {
-                throw $this->createNotFoundException();
+                $this->createNewException(AppException::NOTFOUND_APP());
             }
 
             $this->getAppservice()->updateAppVersion($app['id'], $data['version']);

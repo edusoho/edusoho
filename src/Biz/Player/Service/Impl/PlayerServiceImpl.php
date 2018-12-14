@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
 use Biz\MaterialLib\Service\MaterialLibService;
+use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\TokenService;
@@ -97,7 +98,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
                         'referenceType' => true,
                     );
                 } else {
-                    throw new \RuntimeException('当前视频格式不能被播放！');
+                    $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
                 }
             } else {
                 $result = array();
@@ -146,7 +147,8 @@ class PlayerServiceImpl extends BaseService implements PlayerService
      *
      * @return array
      *
-     * @throws \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @throws \Biz\Player\PlayerException
+     * @throws \Exception
      */
     public function getDocFilePlayer($doc, $ssl)
     {
@@ -159,7 +161,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         }
 
         if ('document' != $file['type']) {
-            throw $this->createAccessDeniedException('file type error, expect document');
+            $this->createNewException(PlayerException::FILE_TYPE_INVALID());
         }
 
         $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
