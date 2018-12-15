@@ -36,6 +36,9 @@
     <div class="thread-body">{{ thread.content|cdn|raw }}</div>
 
     {% include 'attachment/widget/list.html.twig' with {targetType:'course.thread', targetId:thread.id} %}
+    {% if thread.type == 'question' and thread.videoId|default(0) %}
+      {% include 'course/thread/question-video.html.twig' %}
+    {% endif %}
 
     {% if isManager or app.user.id == author.id %}
       <div class="thread-footer" >
