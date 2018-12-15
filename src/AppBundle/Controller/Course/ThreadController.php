@@ -155,6 +155,20 @@ class ThreadController extends CourseBaseController
         ));
     }
 
+    public function askVideoAction(Request $request, $threadId)
+    {
+        $thread = $this->getThreadService()->getThread(null, $threadId);
+        $user = $this->getCurrentUser();
+
+        return $this->render('course/thread/preview-modal.html.twig', array(
+            'courseId' => $thread['courseId'],
+            'taskId' => $thread['taskId'],
+            'videoAskTime' => $thread['videoAskTime'],
+            'fileId' => $thread['videoId'],
+            'userId' => $user['id'],
+        ));
+    }
+
     public function createAction(Request $request, $courseId)
     {
         list($course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);

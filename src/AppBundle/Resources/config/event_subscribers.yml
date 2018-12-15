@@ -119,6 +119,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    course_thread_subscriber:
+          class: Biz\Course\Event\CourseThreadSubscriber
+          arguments: ['@biz']
+          tags:
+              - { name: codeages_plugin.event.subscriber }
+
     course_set_statistics_event_subscriber:
         class: Biz\Course\Event\CourseSetStatisticsSubscriber
         arguments: ['@biz']
