@@ -9,14 +9,17 @@
       </van-tabbar-item>
     </van-tabbar>
 
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    <transition :name="routerTransition">
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 
 <script>
 import items from '@/utils/footer-config'
+import { mapState } from 'vuex';
 
 export default {
   data() {
@@ -24,6 +27,9 @@ export default {
       active: 0,
       items,
     }
+  },
+  computed: {
+    ...mapState(['routerTransition'])
   },
   watch: {
     '$route': {
