@@ -6,7 +6,15 @@
       :title="title"
       :left-arrow="showLeftArrow"
       @click-left="$router.go(-1)"/>
-    <router-view></router-view>
+    <transition :name="routerTransition">
+      <router-view v-if="!routerKeepAlive"></router-view>
+    </transition>
+
+    <transition :name="routerTransition">
+      <keep-alive>
+        <router-view v-if="routerKeepAlive"></router-view>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 <script>
@@ -27,7 +35,10 @@ export default {
     }),
   },
   computed: {
-    ...mapState(['title'])
+    ...mapState(['title', 'routerTransition']),
+    routerKeepAlive() {
+      return this.$route.meta.keepAlive;
+    },
   },
   watch: {
     '$route': {
