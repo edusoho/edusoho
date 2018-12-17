@@ -171,6 +171,13 @@ const routes = [
       title: '优惠券领取'
     },
     component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/coupon/index.vue')
+  }, {
+    path: '/vip',
+    name: 'vip',
+    meta: {
+      title: 'vip营销页'
+    },
+    component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/vip/index.vue')
   }
 ];
 

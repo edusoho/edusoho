@@ -12,12 +12,9 @@
           <span class="grey" v-else>会员已过期</span>
         </span>
         <router-link to="/vip" class='user-vip' v-else>
-          您还不是会员，<span class="color-primary">去开通</span>
+          您还不是会员
         </router-link>
       </div>
-      <router-link to="/settings" class='user-setting'>
-        <img src='static/images/setting.png'>
-      </router-link>
     </div>
   </div>
 </template>
