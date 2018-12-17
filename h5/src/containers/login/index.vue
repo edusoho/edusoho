@@ -19,9 +19,11 @@
       还没有注册帐号？
       <span class="login-account" @click="jumpRegister">立即注册</span>
     </div>
-    <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="face-icon" v-if="faceSetting">
-      <img src="static/images/face.png" alt="人脸识别登录图标">
-    </router-link>
+    <div class="third-party-action-bar">
+      <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="third-party-action-button" v-if="faceSetting">
+        <img src="static/images/face.png" alt="人脸识别登录图标">
+      </router-link>
+    </div>
   </div>
 
 </template>
