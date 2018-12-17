@@ -202,6 +202,13 @@ const routes = [
       index: 10
     },
     component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/coupon/index.vue')
+  }, {
+    path: '/vip',
+    name: 'vip',
+    meta: {
+      title: 'vip营销页'
+    },
+    component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/vip/index.vue')
   }
 ];
 
