@@ -2110,6 +2110,10 @@ course_thread_edit:
    path:  /course/{courseId}/thread/{threadId}/edit
    defaults: { _controller: AppBundle:Course/Thread:edit }
 
+course_thread_ask_video_show:
+    path: /course/thread/{threadId}/askVideo/show
+    defaults: { _controller: AppBundle:Course/Thread:askVideo }
+
 course_thread_post_delete:
    path:  /course/{courseId}/thread/{threadId}/post/{postId}/delete
    defaults: { _controller: AppBundle:Course/Thread:deletePost }

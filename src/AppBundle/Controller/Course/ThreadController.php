@@ -155,6 +155,20 @@ class ThreadController extends CourseBaseController
         ));
     }
 
+    public function askVideoAction(Request $request, $threadId)
+    {
+        $thread = $this->getThreadService()->getThread(null, $threadId);
+        $user = $this->getCurrentUser();
+
+        return $this->render('course/thread/preview-modal.html.twig', array(
+            'courseId' => $thread['courseId'],
+            'taskId' => $thread['taskId'],
+            'videoAskTime' => $thread['videoAskTime'],
+            'fileId' => $thread['videoId'],
+            'userId' => $user['id'],
+        ));
+    }
+
     public function createAction(Request $request, $courseId)
     {
         list($course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);
@@ -624,7 +638,7 @@ class ThreadController extends CourseBaseController
         $filters = array();
         $filters['type'] = $request->query->get('type');
 
-        if (!in_array($filters['type'], array('all', 'question', 'elite', 'discussion'))) {
+        if (!in_array($filters['type'], array('all', 'question', 'discussion'))) {
             $filters['type'] = 'all';
         }
 
@@ -633,6 +647,7 @@ class ThreadController extends CourseBaseController
         if (!in_array($filters['sort'], array('created', 'posted', 'createdNotStick', 'postedNotStick'))) {
             $filters['sort'] = 'posted';
         }
+        $filters['isElite'] = $request->query->get('isElite');
 
         return $filters;
     }
@@ -651,7 +666,7 @@ class ThreadController extends CourseBaseController
 
     protected function convertFiltersToConditions($course, $filters)
     {
-        $conditions = array('courseId' => $course['id']);
+        $conditions = array('courseId' => $course['id'], 'isElite' => isset($filters['isElite']) ? $filters['isElite'] : '');
 
         switch ($filters['type']) {
             case 'question':
@@ -659,9 +674,6 @@ class ThreadController extends CourseBaseController
                 break;
             case 'discussion':
                 $conditions['type'] = 'discussion';
-                break;
-            case 'elite':
-                $conditions['isElite'] = 1;
                 break;
             default:
                 break;

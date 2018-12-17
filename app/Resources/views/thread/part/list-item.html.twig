@@ -2,6 +2,17 @@
   <div class="media-left media-middle">
     {{ web_macro.user_avatar(author, 'pull-left', 'avatar-sm', true)}}
   </div>
+  {% if thread.title == '' %}
+    {% if thread.questionType == 'video' %}
+      {% set questionType = 'course.thread.question_type.video'|trans %}
+    {% elseif thread.questionType == 'image' %}
+      {% set questionType = 'course.thread.question_type.image'|trans %}
+    {% elseif thread.questionType == 'audio' %}
+      {% set questionType = 'course.thread.question_type.audio'|trans %}
+    {% else %}
+      {% set questionType = 'course.thread.question_type.content'|trans %}
+    {% endif %}
+  {% endif %}
   <div class="media-body">
     <div class="title">
       {% if thread.type == 'question'%}
@@ -14,7 +25,7 @@
       {% if thread.type == 'discussion' %}
         <i class="es-icon es-icon-chatcircle color-info" data-toggle="tooltip" data-placement="top" title="{{'thread.hover_tips.thread'|trans}}"></i>
       {% endif %}
-      <a  href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}">{{ thread.title }}
+      <a  href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}">{{ thread.title|default('course.thread.question.title'|trans({'%questionType%':questionType|default('course.thread.question_type.content'|trans)})) }}
       </a>
 
       {% if thread.sticky %}

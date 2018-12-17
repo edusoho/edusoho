@@ -1234,6 +1234,11 @@ course.task.preview.free_join_tips: 'Like it Click to enroll the course'
 course.task.preview.buy_tips: 'Like it? Buy Now（CNY:%price%)'
 course.task.preview.free_learn_tips: 'enroll for free'
 course.thread: Discussions
+course.thread.question_type.video: video
+course.thread.question_type.image: image
+course.thread.question_type.audio: audio
+course.thread.question_type.content: content
+course.thread.question.title: This is a %questionType% question
 course.task.preview.free_learn_tips: 'Join for free'
 course.task.classroom_sync_job_executing_tips: 'Classroom synchronization, please publish later'
 course.task.learning.remaining.watch_time: 'remaining watch length'
@@ -3056,6 +3061,8 @@ thread.all_answer: 'All answers'
 thread.add_btn: Add
 thread.browse: View
 thread.empty: 'No discussion now'
+discussion.empty: 'No discussion now'
+question.empty: 'No discussion now'
 thread.status.stick: 'Bumped up'
 thread.status.essence: 'Excellent'
 thread.status.top: Headline

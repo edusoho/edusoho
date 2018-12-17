@@ -26,6 +26,7 @@ use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use AppBundle\Common\StringToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class PushMessageEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -851,6 +852,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => empty($thread['target']['convNo']) ? '' : $thread['target']['convNo'],
             );
 
+            $questionType = ServiceKernel::instance()->trans('course.thread.question_type.'.$thread['questionType']);
+
             $body = array(
                 'type' => 'question.created',
                 'threadId' => $thread['id'],
@@ -860,7 +863,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'questionCreatedTime' => $thread['createdTime'],
                 'questionTitle' => $thread['title'],
                 'title' => '课程提问',
-                'message' => "您的课程有新的提问《{$thread['title']}》",
+                'message' => !empty($thread['title']) ? "您的课程有新的提问《{$thread['title']}》" : "有一个{$questionType}类型的提问",
             );
 
             foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
@@ -960,6 +963,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             );
 
             $threadType = $this->getThreadType($threadPost['thread']['type']);
+            $threadPostType = !empty($threadPost['postType']) ? ServiceKernel::instance()->trans('course.thread.question_type.'.$threadPost['postType']) : '';
 
             $body = array(
                 'type' => 'question.answered',
@@ -971,7 +975,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'questionTitle' => $threadPost['thread']['title'],
                 'postContent' => $threadPost['content'],
                 'title' => "{$threadType}回复",
-                'message' => "[{$postUser['nickname']}]回复了你的{$threadType}《{$threadPost['thread']['title']}》",
+                'message' => !empty($threadPost['thread']['title']) ? "[{$postUser['nickname']}]回复了你的{$threadType}《{$threadPost['thread']['title']}》" : "[{$postUser['nickname']}]回复了你的{$threadPostType}{$threadType}",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1485,6 +1489,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             );
 
             $threadType = $this->getThreadType($thread['type']);
+            $questionType = ServiceKernel::instance()->trans('course.thread.question_type.'.$thread['questionType']);
 
             $body = array(
                 'type' => 'course.thread.update',
@@ -1492,7 +1497,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'threadId' => $thread['id'],
                 'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
-                'message' => "您的{$threadType}《{$thread['title']}》被[{$user['nickname']}]编辑",
+                'message' => (!empty($thread['title'])) ? "您的{$threadType}《{$thread['title']}》被[{$user['nickname']}]编辑" : "您的{$questionType}{$threadType}被[{$user['nickname']}]编辑",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1552,6 +1557,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             );
 
             $threadType = $this->getThreadType($thread['type']);
+            $questionType = ServiceKernel::instance()->trans('course.thread.question_type.'.$thread['questionType']);
 
             $body = array(
                 'type' => 'course.thread.delete',
@@ -1559,7 +1565,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'threadId' => $thread['id'],
                 'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
-                'message' => "您的{$threadType}《{$thread['title']}》被[{$user['nickname']}]删除",
+                'message' => !empty($thread['title']) ? "您的{$threadType}《{$thread['title']}》被[{$user['nickname']}]删除" : "您的{$questionType}{$threadType}被[{$user['nickname']}]删除",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1629,6 +1635,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $converted['updateTime'] = isset($thread['updateTime']) ? $thread['updateTime'] : $thread['updatedTime'];
         $converted['createdTime'] = $thread['createdTime'];
         $converted['targetType'] = empty($thread['targetType']) ? '' : $thread['targetType'];
+        $converted['questionType'] = empty($thread['questionType']) ? '' : $thread['questionType'];
 
         return $converted;
     }
@@ -1664,6 +1671,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             );
 
             $threadType = $this->getThreadType($threadPost['thread']['type']);
+            $threadPostType = !empty($threadPost['postType']) ? ServiceKernel::instance()->trans('course.thread.question_type.'.$threadPost['postType']) : '';
 
             $body = array(
                 'type' => 'course.thread.post.update',
@@ -1675,7 +1683,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'questionTitle' => $threadPost['thread']['title'],
                 'postContent' => $threadPost['content'],
                 'title' => "《{$threadPost['thread']['title']}》",
-                'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复被[{$user['nickname']}]编辑",
+                'message' => !empty($threadPost['thread']['title']) ? "您的{$threadType}《{$threadPost['thread']['title']}》有回复被[{$user['nickname']}]编辑" : "您的{$threadPostType}{$threadType}有回复被[{$user['nickname']}]编辑",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1718,6 +1726,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             );
 
             $threadType = $this->getThreadType($threadPost['thread']['type']);
+            $threadPostType = !empty($threadPost['postType']) ? ServiceKernel::instance()->trans('course.thread.question_type.'.$threadPost['postType']) : '';
 
             $body = array(
                 'type' => 'course.thread.post.delete',
@@ -1729,7 +1738,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'questionTitle' => $threadPost['thread']['title'],
                 'postContent' => $threadPost['content'],
                 'title' => "《{$threadPost['thread']['title']}》",
-                'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复被[{$user['nickname']}]删除",
+                'message' => !empty($threadPost['thread']['title']) ? "您的{$threadType}《{$threadPost['thread']['title']}》有回复被[{$user['nickname']}]删除" : "您的{$threadPostType}{$threadType}有回复被[{$user['nickname']}]删除",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1773,6 +1782,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $converted['target'] = $this->getTarget($threadPost['targetType'], $threadPost['targetId']);
         $converted['thread'] = $threadPost['thread'];
         $converted['createdTime'] = $threadPost['createdTime'];
+        $converted['postType'] = isset($threadPost['postType']) ? $threadPost['postType'] : '';
 
         return $converted;
     }

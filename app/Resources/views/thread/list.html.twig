@@ -5,7 +5,7 @@
     {% set author = users[thread.userId] %}
     {% include 'thread/part/list-item.html.twig' %}
   {% else %}
-    <div class="empty">{{'thread.empty'|trans}}</div>
+    <div class="empty">{% if type == 'question' %}{{ 'question.empty'|trans }}{% else %}{{ 'discussion.empty'|trans }}{% endif %}</div>
   {% endfor %}
 </div>
 
