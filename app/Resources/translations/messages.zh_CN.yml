@@ -1402,11 +1402,11 @@ course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）�
 course.task.preview.free_learn_tips: 免费加入学习
 course.task.classroom_sync_job_executing_tips: 班级课程同步中，请稍后发布
 course.thread: 讨论区
-course.thread.question_type.video: 视频
-course.thread.question_type.image: 图片
-course.thread.question_type.audio: 语音
+course.thread.question_type.video: 「视频」
+course.thread.question_type.image: 「图片」
+course.thread.question_type.audio: 「语音」
 course.thread.question.title: 这是一个%questionType%问题
-course.thread.question_type.content: 文字
+course.thread.question_type.content: 「文字」
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
 course.thread.hit_times: %hitNum%次浏览

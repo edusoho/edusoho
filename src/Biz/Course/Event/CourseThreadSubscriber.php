@@ -24,7 +24,7 @@ class CourseThreadSubscriber extends EventSubscriber implements EventSubscriberI
     public function onCourseThreadAskVideoThumbnailUpdate(Event $event)
     {
         $thread = $event->getSubject();
-        if (isset($thread['videoId'])) {
+        if (!empty($thread['videoId'])) {
             $task = $this->getTaskService()->getTask($thread['taskId']);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
             $fileId = ($activity['mediaType'] == 'video') ? $activity['ext']['file']['id'] : 0;

@@ -146,7 +146,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $thread = $this->filterThread($thread);
         $trimedThreadTitle = empty($thread['title']) ? '' : trim($thread['title']);
-        if (!isset($trimedThreadTitle)) {
+        if (empty($trimedThreadTitle) and isset($thread['source'])) {
             throw $this->createServiceException('thread title is null');
         }
 
@@ -215,8 +215,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
 
-        $fields['content'] = isset($fields['content']) ? $this->sensitiveFilter($fields['content'], 'course-thread-update') : '';
-        $fields['title'] = isset($fields['title']) ? $this->sensitiveFilter($fields['title'], 'course-thread-update') : '';
+        $fields['content'] = isset($fields['content']) ? $this->sensitiveFilter($fields['content'], 'course-thread-update') : $thread['content'];
+        $fields['title'] = isset($fields['title']) ? $this->sensitiveFilter($fields['title'], 'course-thread-update') : $thread['title'];
 
         if ($this->getCurrentUser()->getId() != $thread['userId']) {
             $this->getCourseService()->tryManageCourse($thread['courseId'], 'admin_course_thread');
@@ -231,7 +231,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($courseId);
         $trusted = empty($hasCourseManagerRole) ? false : true;
         //更新thread过滤html
-        $fields['content'] = isset($fields['content']) ? $this->biz['html_helper']->purify($fields['content'], $trusted) : '';
+        $fields['content'] = isset($fields['content']) ? $this->biz['html_helper']->purify($fields['content'], $trusted) : $thread['content'];
 
         $thread = $this->getThreadDao()->update($threadId, $fields);
         $this->dispatchEvent('course.thread.update', new Event($thread));

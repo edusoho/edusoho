@@ -93,7 +93,6 @@ class ThreadController extends CourseBaseController
         }
 
         $thread = $this->getThreadService()->getThread($course['id'], $threadId);
-        $thread['content'] = $this->putImageIntoContent('course.thread', $thread['id'], $thread['content']);
 
         if (empty($thread)) {
             throw $this->createNotFoundException('话题不存在，或已删除。');
@@ -112,10 +111,6 @@ class ThreadController extends CourseBaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        foreach ($posts as &$post) {
-            $post['content'] = $this->putImageIntoContent('course.thread.post', $post['id'], $post['content']);
-        }
 
         if ('question' == $thread['type'] && 1 == $paginator->getCurrentPage()) {
             $elitePosts = $this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, 10);
@@ -650,18 +645,6 @@ class ThreadController extends CourseBaseController
         $filters['isElite'] = $request->query->get('isElite');
 
         return $filters;
-    }
-
-    protected function putImageIntoContent($targetType, $targetId, $content)
-    {
-        $useFiles = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, 'attachment', true);
-        foreach ($useFiles as $useFile) {
-            if ($useFile['file']['type'] == 'image') {
-                $content = isset($useFile['file']['thumbnail']) ? $content."<img alt='' src='{$useFile['file']['thumbnail']}' />" : $content;
-            }
-        }
-
-        return $content;
     }
 
     protected function convertFiltersToConditions($course, $filters)
