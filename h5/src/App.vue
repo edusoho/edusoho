@@ -6,9 +6,9 @@
       :title="title"
       :left-arrow="showLeftArrow"
       @click-left="$router.go(-1)"/>
-    <transition :name="routerTransition">
-      <router-view v-if="!routerKeepAlive"></router-view>
-    </transition>
+    <!-- <transition :name="routerTransition"> -->
+    <router-view v-if="!routerKeepAlive"></router-view>
+    <!-- </transition> -->
 
     <transition :name="routerTransition">
       <keep-alive>
