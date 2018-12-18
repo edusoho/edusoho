@@ -1,5 +1,6 @@
 import swfobject from 'es-swfobject';
 import EsMessenger from 'app/common/messenger';
+import { getSupportedPlayer } from 'common/video-player-judge';
 import ActivityEmitter from 'app/js/activity/activity-emitter';
 
 export default class VideoPlay {
@@ -11,12 +12,34 @@ export default class VideoPlay {
   }
 
   play() {
-    if ($('#swf-player').length) {
-      this._playerSwf();
-    } else {
+    alert(getSupportedPlayer());
+    console.log(getSupportedPlayer());
+    if (getSupportedPlayer() === 'flash') {
+      this.flashTip();
       this._playVideo();
     }
+    if ($('#swf-player').length) {
+      // 针对外链视频
+      this.flashTip();
+      this._playerSwf();
+    }
     this.record();
+  }
+
+
+  flashTip() {
+    if (!swfobject.hasFlashPlayerVersion('11')) {
+      const html = `
+      <div class="alert alert-warning alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+        </button>
+        ${Translator.trans('site.flash_not_install_hint_1')}
+      </div>`;
+      $('.js-flash-tip').html(html);
+    } else {
+      $('.js-flash-tip').html('');
+    }
   }
 
   record() {
