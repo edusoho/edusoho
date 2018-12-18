@@ -20,6 +20,7 @@
           data-file-global-id="{{file.globalId}}"
           data-file-id="{{file.id}}"
           data-file-type="{{file.type}}"
+          data-file-length="{{ file.length|default(0) }}"
           data-url="{{url}}"
           data-video-header-length="{{ context.videoHeaderLength|default(0) }}"
           data-video-h5="{{ setting('storage.video_h5_enable')|default(1) }}"

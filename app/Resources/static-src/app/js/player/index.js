@@ -19,6 +19,7 @@ class Show {
 
     this.playerType = container.data('player');
     this.fileType = container.data('fileType');
+    this.fileLength = container.data('fileLength');
     this.url = container.data('url');
     this.videoHeaderLength = container.data('videoHeaderLength');
     this.enablePlaybackRates = container.data('enablePlaybackRates');
@@ -45,6 +46,7 @@ class Show {
       DurationStorage.set(this.userId, this.fileId, $iframe.data('lastLearnTime'));
     }
     this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
+    this.remeberLastPos = this.lastLearnTime < this.fileLength;
 
     this.initView();
     this.initEvent();
@@ -97,7 +99,8 @@ class Show {
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
         autoplay: this.autoplay,
-        customPos: this.lastLearnTime
+        customPos: this.remeberLastPos ? this.lastLearnTime : 0,
+        remeberLastPos: this.remeberLastPos,
       }
     );
   }
@@ -165,8 +168,6 @@ class Show {
       }
     });
 
-   
-
     player.on('answered', (data) => {
       let regExp = /course\/(\d+)\/task\/(\d+)\//;
       let matches = regExp.exec(window.location.href);
@@ -192,9 +193,11 @@ class Show {
       });
       if (!this.isCloudVideoPalyer() && !this.isCloudAudioPlayer()) {
         if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
+          DurationStorage.del(this.userId, this.fileId);
           DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
         }
       } else {
+        DurationStorage.del(this.userId, this.fileId);
         DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
       }
     });
