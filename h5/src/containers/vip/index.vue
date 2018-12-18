@@ -1,6 +1,6 @@
 <template>
-  <div class="user">
-    <div class="user-section clearfix">
+  <div class="vip-detail">
+    <div class="user-section gray-border-bottom clearfix">
       <router-link to="/settings">
         <img class='user-img' :src="user.avatar.large" />
       </router-link>
@@ -16,32 +16,29 @@
         </router-link>
       </div>
     </div>
+    <vip-introduce></vip-introduce>
   </div>
 </template>
 <script>
 import Api from '@/api';
-
-import { mapState, mapActions } from 'vuex';
+import introduce from './introduce';
 
 export default {
+  data() {
+    return {
+      user: this.$store.state.user
+    }
+  },
+  components: {
+    'vip-introduce': introduce
+  },
   computed: {
-    ...mapState({
-      user: state => state.user
-    }),
     vipDated() {
       if (!this.user.vip) return false;
       const deadLineStamp = new Date(this.user.vip.deadline).getTime();
       const nowStamp = new Date().getTime();
       return nowStamp > deadLineStamp ? true : false;
     }
-  },
-  created() {
-    this.getUserInfo()
-  },
-  methods: {
-    ...mapActions([
-      'getUserInfo'
-    ])
   }
 }
 </script>

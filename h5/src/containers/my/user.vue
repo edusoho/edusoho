@@ -4,16 +4,18 @@
       <router-link to="/settings">
         <img class='user-img' :src="user.avatar.large" />
       </router-link>
-      <div class="user-middle">
+      <div :class="['user-middle', vipSwitch ? '' : 'single-middle']">
         <div class='user-name'>{{ user.nickname }}</div>
-        <span class='user-vip' v-if="user.vip">
-          <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="user.vip.icon">
-          <span v-if="!vipDated">{{ user.vip.vipName }}</span>
-          <span class="grey" v-else>会员已过期</span>
-        </span>
-        <router-link to="/vip" class='user-vip' v-else>
-          您还不是会员，<span class="color-primary">去开通</span>
-        </router-link>
+        <div v-if="vipSwitch" @click="jumpVip">
+          <span class='user-vip' v-if="user.vip">
+            <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="user.vip.icon">
+            <span v-if="!vipDated">{{ user.vip.vipName }}</span>
+            <span class="grey" v-else>会员已过期</span>
+          </span>
+          <div class='user-vip' v-else>
+            您还不是会员，<span class="color-primary">去开通</span>
+          </div>
+        </div>
       </div>
       <router-link to="/settings" class='user-setting'>
         <img src='static/images/setting.png'>
@@ -29,7 +31,8 @@ import { mapState, mapActions } from 'vuex';
 export default {
   computed: {
     ...mapState({
-      user: state => state.user
+      user: state => state.user,
+      vipSwitch: state => state.vipSwitch
     }),
     vipDated() {
       if (!this.user.vip) return false;
@@ -44,7 +47,15 @@ export default {
   methods: {
     ...mapActions([
       'getUserInfo'
-    ])
+    ]),
+    jumpVip() {
+      this.$router.push({
+        name: 'vip',
+        query: {
+          user: this.user
+        }
+      })
+    }
   }
 }
 </script>
