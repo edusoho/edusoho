@@ -12,9 +12,7 @@ const routes = [
   {
     path: '/',
     meta: {
-      title: '', // navbar 显示的title
-      index: 0, // 转场动画决定前进后退的动画
-      keepAlive: true // tabbar 的三个页面需要缓存下来，减少首页白屏加载次数
+      title: ''
     },
     component: () => import(/* webpackChunkName: "home" */ '@/containers/home.vue'),
     children: [
@@ -25,9 +23,7 @@ const routes = [
         path: '/prelogin',
         name: 'prelogin',
         meta: {
-          title: '我的',
-          index: 1,
-          keepAlive: true
+          title: '我的'
         },
         component: () =>
           import(/* webpackChunkName: "loginPrelogin" */'@/containers/login/prelogin.vue')
@@ -199,13 +195,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['register', 'login', 'protocol', 'find'].includes(to.name);
-
-  // 转场动画 meta.index 决定路由层级
-  if (to.meta.index > from.meta.index) {
-    store.state.routerTransition = 'slide-left';
-  } else {
-    store.state.routerTransition = 'slide-right';
-  }
 
   if (!Object.keys(store.state.courseSettings).length) {
     store.dispatch('getGlobalSettings', {

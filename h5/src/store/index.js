@@ -15,8 +15,7 @@ const state = {
   smsToken: '',
   settings: {},
   courseSettings: {},
-  title: '',
-  routerTransition: ''
+  title: ''
 };
 
 
