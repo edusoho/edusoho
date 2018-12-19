@@ -1,10 +1,15 @@
 <template>
-  <div class="vip-introduce">
+  <div class="vip-introduce gray-border-bottom">
     <swiper :options="swiperOption">
       <swiper-slide v-for="(img, index) in bgImgs" :key="index">
         <img class="card-bg-img" :src="img">
       </swiper-slide>
     </swiper>
+    <div class="vip-introduce__text">
+      <header class="title-18 text-center mb20">会员介绍</header>
+      <div class="text-content">白金会员，具体包含了20门课程和6个班级。可以帮助您开展更好的系统化学习。</div>
+    </div>
+    <div class="text-center mtl"><div class="btn-join-vip">开通会员</div></div>
   </div>
 </template>
 

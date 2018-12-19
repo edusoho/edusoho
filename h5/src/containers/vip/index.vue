@@ -15,21 +15,47 @@
       </div>
     </div>
     <vip-introduce></vip-introduce>
+    <e-course-list
+      class="gray-border-bottom"
+      :courseList="courseData"
+      :typeList="'course_list'"
+      />
+    <e-course-list
+      class="gray-border-bottom"
+      :courseList="classroomData"
+      :typeList="'classroom_list'"
+      />
+    <div class="btn-join-bottom">立即开通</div>
   </div>
 </template>
 <script>
 import Api from '@/api';
 import introduce from './introduce';
+import courseList from '../components/e-course-list/e-course-list.vue';
 
 export default {
   data() {
     return {
       user: null,
+      vipData: null,
+      courseData: {
+        items: [],
+        title: '会员课程',
+        source: {},
+        limit: 4
+      },
+      classroomData: {
+        items: [],
+        title: '会员班级',
+        source: {},
+        limit: 4
+      },
       vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1
     }
   },
   components: {
-    'vip-introduce': introduce
+    'vip-introduce': introduce,
+    'e-course-list': courseList
   },
   computed: {
     vipDated() {
@@ -45,7 +71,10 @@ export default {
         levelId: this.vipLevelId
       }
     }).then((res) => {
+      this.vipData = res;
       this.user = res.vipUser.user;
+      this.courseData.items = res.courses.data;
+      this.classroomData.items = res.classrooms.data;
     })
   }
 }
