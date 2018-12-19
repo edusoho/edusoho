@@ -1,9 +1,7 @@
 <template>
-  <div class="user">
-    <div class="user-section clearfix">
-      <router-link to="/settings">
-        <img class='user-img' :src="user.avatar.large" />
-      </router-link>
+  <div class="vip-detail" v-if="user">
+    <div class="user-section gray-border-bottom clearfix">
+      <img class='user-img' :src="user.avatar.large" />
       <div class="user-middle">
         <div class='user-name'>{{ user.nickname }}</div>
         <span class='user-vip' v-if="user.vip">
@@ -16,18 +14,24 @@
         </router-link>
       </div>
     </div>
+    <vip-introduce></vip-introduce>
   </div>
 </template>
 <script>
 import Api from '@/api';
-
-import { mapState, mapActions } from 'vuex';
+import introduce from './introduce';
 
 export default {
+  data() {
+    return {
+      user: null,
+      vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1
+    }
+  },
+  components: {
+    'vip-introduce': introduce
+  },
   computed: {
-    ...mapState({
-      user: state => state.user
-    }),
     vipDated() {
       if (!this.user.vip) return false;
       const deadLineStamp = new Date(this.user.vip.deadline).getTime();
@@ -36,12 +40,13 @@ export default {
     }
   },
   created() {
-    this.getUserInfo()
-  },
-  methods: {
-    ...mapActions([
-      'getUserInfo'
-    ])
+    Api.getVipDetail({
+      query: {
+        levelId: this.vipLevelId
+      }
+    }).then((res) => {
+      this.user = res.vipUser.user;
+    })
   }
 }
 </script>

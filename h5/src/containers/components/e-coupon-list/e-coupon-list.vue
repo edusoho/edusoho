@@ -2,16 +2,19 @@
   <div class="e-coupon">
     <div class="e-coupon__title" v-if="showTitle === 'show'">优惠券</div>
     <div :class="['e-coupon__container', 'clearfix', couponNum]" v-show="coupons.length">
-      <van-swipe :width="coupons.length > 1 ? 200 : 0" :show-indicators="false" :loop="false" :touchable="true">
+      <!-- 多张优惠券 -->
+      <van-swipe v-if="coupons.length > 1" :width="200" :show-indicators="false" :loop="false" :touchable="true">
         <van-swipe-item v-for="(item, index) in coupons" :key="index">
-          <item
-            :item="item"
-            :num="coupons.length"
-            :feedback="feedback"
+          <item :item="item" :num="coupons.length" :feedback="feedback"
             @buttonClick="handleClick($event)">
           </item>
        </van-swipe-item>
       </van-swipe>
+      <!-- 单张优惠券 -->
+      <item v-else v-for="(item, index) in coupons" :key="index"
+        :item="item" :num="coupons.length" :feedback="feedback"
+        @buttonClick="handleClick($event)">
+      </item>
     </div>
   </div>
 </template>

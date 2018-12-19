@@ -1,7 +1,6 @@
 @import './variables.scss';
 @import './mixins.scss';
 @import './global.scss';
-@import './router-transition.scss';
 @import './vant.scss';
 @import '../fonts/iconfont.css';
 
@@ -20,6 +19,7 @@
 @import './containers/learning/index.scss';
 @import './containers/pay/index.scss';
 @import './containers/find/index.scss';
+@import './containers/vip/index.scss';
 
 // modeles
 @import './modules/e-drag.scss';

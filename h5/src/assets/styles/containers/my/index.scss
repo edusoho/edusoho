@@ -13,7 +13,6 @@
     width: vw(86);
     border-radius: vw(43);
   }
-
   &-middle {
     margin-left: vw(106);
     line-height: vw(43);
@@ -49,6 +48,10 @@
       height: auto;
     }
   }
+}
+
+.single-middle {
+  line-height: vw(86);
 }
 
 .orders {
