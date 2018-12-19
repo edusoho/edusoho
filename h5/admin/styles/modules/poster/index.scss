@@ -3,8 +3,6 @@
     font-size: 0;
   }
   .poster-item-setting__section {
-    // overflow: hidden;
-    position: relative;
     .section {
       &-right {
         .poster-img {
@@ -16,27 +14,6 @@
           .text-content {
             max-width: 15em;
           }
-        }
-      }
-      &__course-item {
-        box-sizing: border-box;
-        color: $primary-color;
-        height: 40px;
-        padding: 13px 0;
-        line-height: 14px;
-        cursor: move;
-        &__title {
-          display: inline-block;
-          width: 240px;
-          font-size: 14px;
-        }
-        &__icon-delete {
-          color: #bdc2c6;
-          font-size: 16px;
-          cursor: pointer;
-        }
-        &:not(:first-child) {
-          border-top: 1px solid #e1e1e1;
         }
       }
     }
