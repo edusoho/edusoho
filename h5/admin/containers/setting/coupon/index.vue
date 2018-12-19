@@ -8,19 +8,17 @@
         优惠券设置（仅显示已发布优惠券）
       </header>
       <div class="default-allocate__content">
-        <div class="default-item-setting__section" @change="showTitle">
-          <span class="pull-left section-left">标题栏：</span>
-          <div class="section-right">
-            <el-radio v-model="radio" label="show">显示</el-radio>
-            <el-radio v-model="radio" label="unshow">不显示</el-radio>
-          </div>
-        </div>
-        <div class="default-item-setting__section mtl clearfix">
-          <span class="pull-left section-left required-option">优惠券选择：</span>
-          <div class="section-right">
-            <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
-          </div>
-        </div>
+        <!-- 标题栏 -->
+        <setting-cell title="标题栏：">
+          <el-radio v-model="radio" label="show">显示</el-radio>
+          <el-radio v-model="radio" label="unshow">不显示</el-radio>
+        </setting-cell>
+
+        <!-- 优惠券选择 -->
+        <setting-cell title="优惠券选择：" leftClass="required-option">
+          <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
+        </setting-cell>
+
         <div v-if="copyModuleData.data.items">
           <draggable v-model="copyModuleData.data.items" class="default-draggable__list">
             <div class="default-draggable__item" v-for="(item, index) in copyModuleData.data.items" :key="index">
@@ -44,7 +42,8 @@
 </template>
 <script>
 import Api from '@admin/api';
-import moduleFrame from '../module-frame'
+import moduleFrame from '../module-frame';
+import settingCell from '../module-frame/setting-cell';
 import courseModal from '../course/modal/course-modal';
 import coupon from '@/containers/components/e-coupon-list/e-coupon-list';
 import draggable from 'vuedraggable';
@@ -54,6 +53,7 @@ export default {
     moduleFrame,
     courseModal,
     draggable,
+    settingCell,
     'e-coupon': coupon
   },
   data() {
@@ -115,7 +115,10 @@ export default {
         this.$emit('updateModule', data);
       },
       deep: true,
-    }
+    },
+    radio(value) {
+      this.showTitle(value);
+    },
   },
   methods: {
     modalVisibleHandler(visible) {
