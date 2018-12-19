@@ -198,6 +198,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
+    public function vipFilter($discoverySetting, $usage = 'show')
+    {
+        return $discoverySetting;
+    }
+
     public function getMethod($type)
     {
         $method = Inflector::classify($type);
