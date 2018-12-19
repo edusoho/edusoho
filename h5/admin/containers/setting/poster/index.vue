@@ -12,64 +12,56 @@
         图片广告设置
         <div class="help-text">建议图片宽度为750px,支持jpg/png/gif格式，图片大小不超过2MB</div>
       </header>
-      <div class="poster-item-setting clearfix">
-        <div class="poster-item-setting__section">
-          <p class="pull-left section-left required-option">广告图片：</p>
-          <div class="section-right">
-            <el-upload
-              action="string"
-              accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
-              :http-request="uploadImg"
-              :before-upload="beforeUpload"
-              :show-file-list="false">
-              <div class="image-uploader">
-                <img v-show="copyModuleData.image.uri" :src="copyModuleData.image.uri" class="poster-img">
-                <div class="add-img" v-show="!copyModuleData.image.uri">
-                  <span><i class="text-18">+</i> 添加图片</span>
-                </div>
-                <div class="uploader-mask" v-show="copyModuleData.image.uri">更换图片</div>
+
+      <div class="default-allocate__content clearfix">
+        <setting-cell title="广告图片：" customClass="poster-item-setting__section" leftClass="required-option">
+          <el-upload
+            action="string"
+            accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
+            :http-request="uploadImg"
+            :before-upload="beforeUpload"
+            :show-file-list="false">
+            <div class="image-uploader">
+              <img v-show="copyModuleData.image.uri" :src="copyModuleData.image.uri" class="poster-img">
+              <div class="add-img" v-show="!copyModuleData.image.uri">
+                <span><i class="text-18">+</i> 添加图片</span>
               </div>
-            </el-upload>
-          </div>
-        </div>
-        <div class="poster-item-setting__section mtl">
-          <p class="pull-left section-left">链接：</p>
-          <div class="section-right">
-            <el-radio v-model="radio" label="insideLink">站内链接</el-radio>
-            <el-radio v-if="pathName === 'h5Setting'" v-model="radio" label="url">自定义链接</el-radio>
-          </div>
-        </div>
-        <div class="poster-item-setting__section mtl" v-show="radio !== 'url'">
-          <div class="section-right">
-            <el-dropdown @command="insideLinkHandle" v-show="!courseLinkText">
-              <el-button size="mini" class="el-dropdown-link">
-                添加链接
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="insideLinkHandle(item.type)" v-for="item in linkOptions" :key="item.key">{{item.label}}</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="courseLinkText">
-              <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
-                <span slot="content">{{courseLinkText}}</span>
-                <span>{{ courseLinkText }}</span>
-              </el-tooltip>
-            </el-tag>
-          </div>
-        </div>
-        <div class="poster-item-setting__section mtl" v-show="radio === 'url'">
-          <p class="pull-left section-left">输入链接：</p>
-          <div class="section-right">
-            <el-input size="mini" v-model="copyModuleData.link.url" placeholder="例如 http://www.eduosho.com" clearable></el-input>
-          </div>
-        </div>
-        <div class="poster-item-setting__section mtl">
-          <p class="pull-left section-left">自适应手机屏幕：</p>
-          <div class="section-right">
-            <el-radio v-model="copyModuleData.responsive" label="1">开启</el-radio>
-            <el-radio v-model="copyModuleData.responsive" label="0">关闭</el-radio>
-          </div>
-        </div>
+              <div class="uploader-mask" v-show="copyModuleData.image.uri">更换图片</div>
+            </div>
+          </el-upload>
+        </setting-cell>
+
+        <setting-cell title="链接：" customClass="poster-item-setting__section">
+          <el-radio v-model="radio" label="insideLink">站内链接</el-radio>
+          <el-radio v-if="pathName === 'h5Setting'" v-model="radio" label="url">自定义链接</el-radio>
+        </setting-cell>
+
+        <setting-cell title="" customClass="poster-item-setting__section" v-show="radio !== 'url'">
+          <el-dropdown @command="insideLinkHandle" v-show="!courseLinkText">
+            <el-button size="mini" class="el-dropdown-link">
+              添加链接
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="insideLinkHandle(item.type)" v-for="item in linkOptions" :key="item.key">{{item.label}}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="courseLinkText">
+            <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
+              <span slot="content">{{courseLinkText}}</span>
+              <span>{{ courseLinkText }}</span>
+            </el-tooltip>
+          </el-tag>
+        </setting-cell>
+
+        <setting-cell title="输入链接：" customClass="poster-item-setting__section" v-show="radio === 'url'">
+          <el-input size="mini" v-model="copyModuleData.link.url" placeholder="例如 http://www.eduosho.com" clearable>
+          </el-input>
+        </setting-cell>
+
+        <setting-cell title="自适应手机屏幕：" customClass="poster-item-setting__section">
+          <el-radio v-model="copyModuleData.responsive" label="1">开启</el-radio>
+          <el-radio v-model="copyModuleData.responsive" label="0">关闭</el-radio>
+        </setting-cell>
       </div>
     </div>
 
@@ -86,7 +78,8 @@
 </template>
 <script>
 import Api from '@admin/api';
-import moduleFrame from '../module-frame'
+import moduleFrame from '../module-frame';
+import settingCell from '../module-frame/setting-cell';
 import courseModal from '../course/modal/course-modal';
 import poster from '@/containers/components/e-poster/e-poster.vue';
 
@@ -94,8 +87,9 @@ import poster from '@/containers/components/e-poster/e-poster.vue';
 export default {
   components: {
     moduleFrame,
+    settingCell,
     courseModal,
-    poster
+    poster,
   },
   data() {
     return {

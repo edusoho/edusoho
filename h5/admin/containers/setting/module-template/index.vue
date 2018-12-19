@@ -25,6 +25,11 @@
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
       @updateModule="updateHandler(module, index)"></coupon>
 
+    <!-- 会员 -->
+    <vip v-if="module.type === moduleDefault.vip.type"
+      :active="isActive" :moduleData="module" :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"></vip>
+
     <!-- 营销组件——拼团活动 -->
     <marketing-groupon v-if="module.type === moduleDefault.groupon.type"
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
@@ -39,6 +44,7 @@ import Carousel from '../carousel';
 import Course from '../course';
 import Poster from '../poster';
 import Coupon from '../coupon';
+import Vip from '../vip';
 import MarketingGroupon from '../marketing-groupon';
 import validate from '@admin/utils/module-validator';
 import { MODULE_DEFAULT } from '@admin/config/module-default-config';
@@ -49,12 +55,15 @@ export default {
     'course': Course,
     'poster': Poster,
     'marketing-groupon': MarketingGroupon,
-    'coupon': Coupon
+    'coupon': Coupon,
+    'vip': Vip
   },
   props: {
     module: {
       type: Object,
-      default: {},
+      default: () => {
+        return {};
+      },
     },
     active: {
       type: Boolean,

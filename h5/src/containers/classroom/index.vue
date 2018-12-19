@@ -13,8 +13,6 @@
 
   export default {
     components: {
-      joinAfter,
-      joinBefore
     },
     data() {
       return {
