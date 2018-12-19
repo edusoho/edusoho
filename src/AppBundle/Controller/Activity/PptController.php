@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Activity;
 
+use Biz\Activity\ActivityException;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Player\Service\PlayerService;
@@ -33,7 +34,7 @@ class PptController extends BaseActivityController implements ActivityActionInte
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if (empty($activity)) {
-            throw $this->createNotFoundException('activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         $config = $this->getActivityService()->getActivityConfig('ppt');

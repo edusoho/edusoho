@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Activity;
 use Biz\Course\Service\CourseService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskResultService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class VideoController extends BaseActivityController implements ActivityActionInterface
@@ -121,7 +122,7 @@ class VideoController extends BaseActivityController implements ActivityActionIn
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $activity = $this->getActivityService()->getActivity($id);

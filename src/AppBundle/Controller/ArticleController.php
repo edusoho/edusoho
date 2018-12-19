@@ -4,11 +4,15 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Article\ArticleException;
+use Biz\Article\CategoryException;
 use Biz\Article\Service\ArticleService;
 use Biz\Article\Service\CategoryService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
+use Biz\Taxonomy\TagException;
 use Biz\Thread\Service\ThreadService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class ArticleController extends BaseController
@@ -114,7 +118,7 @@ class ArticleController extends BaseController
         $category = $this->getCategoryService()->getCategoryByCode($categoryCode);
 
         if (empty($category)) {
-            throw $this->createNotFoundException('资讯栏目页面不存在');
+            $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
         $conditions = array(
@@ -157,7 +161,7 @@ class ArticleController extends BaseController
         $article = $this->getArticleService()->getArticle($id);
 
         if (empty($article)) {
-            throw $this->createNotFoundException('文章已删除或者未发布！');
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         if ($article['status'] != 'published') {
@@ -245,7 +249,7 @@ class ArticleController extends BaseController
             $user = $this->getCurrentUser();
 
             if (!$user->isLogin()) {
-                throw $this->createAccessDeniedException('用户没有登录,不能评论!');
+                $this->createNewException(UserException::UN_LOGIN());
             }
 
             $post = $this->getThreadService()->createPost($post);
@@ -290,7 +294,7 @@ class ArticleController extends BaseController
         $article = $this->getArticleService()->getArticle($articleId);
 
         if (empty($article)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ArticleException::NOTFOUND());
         }
 
         $post = $this->getThreadService()->getPost($postId);
@@ -411,7 +415,7 @@ class ArticleController extends BaseController
         $tag = $this->getTagService()->getTagByName($name);
 
         if (empty($tag)) {
-            throw $this->createAccessDeniedException('标签不存在!');
+            $this->createNewException(TagException::NOTFOUND_TAG());
         }
 
         $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(

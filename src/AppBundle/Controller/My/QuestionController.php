@@ -5,9 +5,8 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\Question\QuestionException;
 use Symfony\Component\HttpFoundation\Request;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class QuestionController extends BaseController
 {
@@ -105,13 +104,13 @@ class QuestionController extends BaseController
         $userFavorites = ArrayToolkit::index($userFavorites, 'questionId');
 
         if (empty($userFavorites[$id])) {
-            throw new AccessDeniedException('Question preview access denied');
+            $this->createNewException(QuestionException::FORBIDDEN_PREVIEW_QUESTION());
         }
 
         $question = $this->getQuestionService()->get($id);
 
         if (empty($question)) {
-            throw new NotFoundException('Question not found');
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
         if ($question['subCount'] > 0) {

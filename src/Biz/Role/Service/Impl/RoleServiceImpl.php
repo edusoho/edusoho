@@ -3,9 +3,9 @@
 namespace Biz\Role\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\Role\RoleException;
 use Biz\Role\Service\RoleService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\UnexpectedValueException;
 use Biz\Role\Util\PermissionBuilder;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Tree;
@@ -31,7 +31,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         $role = ArrayToolkit::parts($role, array('name', 'code', 'data', 'createdTime', 'createdUserId'));
 
         if (!ArrayToolkit::requireds($role, array('name', 'code'))) {
-            throw new UnexpectedValueException('缺乏必要字段');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         return $this->getRoleDao()->create($role);
@@ -173,7 +173,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         $role = $this->getRoleDao()->get($id);
         $notUpdateRoles = array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
         if (in_array($role['code'], $notUpdateRoles)) {
-            throw new AccessDeniedException('该权限不能修改！');
+            $this->createNewException(RoleException::FORBIDDEN_MODIFY());
         }
 
         return $role;

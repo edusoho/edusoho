@@ -4,16 +4,16 @@ namespace AppBundle\Controller;
 
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
+use Biz\File\UploadFileException;
 use Biz\Subtitle\Service\SubtitleService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class SubtitleController extends BaseController
 {
     public function manageAction(Request $request, $mediaId)
     {
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
-            throw $this->createAccessDeniedException('没有权限管理资源');
+            $this->createNewException(UploadFileException::FORBIDDEN_MANAGE_FILE());
         }
 
         $ssl = $request->isSecure() ? true : false;
@@ -21,7 +21,7 @@ class SubtitleController extends BaseController
 
         $media = $this->getUploadFileService()->getFile($mediaId);
         if (empty($media) || !in_array($media['type'], array('video', 'audio'))) {
-            throw new ResourceNotFoundException('uploadFile', $mediaId);
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         return $this->render('media-manage/subtitle/manage.html.twig', array(
@@ -37,7 +37,7 @@ class SubtitleController extends BaseController
     public function listAction(Request $request, $mediaId)
     {
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
-            throw $this->createAccessDeniedException('没有权限管理资源');
+            $this->createNewException(UploadFileException::FORBIDDEN_MANAGE_FILE());
         }
 
         $ssl = $request->isSecure() ? true : false;
@@ -51,7 +51,7 @@ class SubtitleController extends BaseController
     public function createAction(Request $request, $mediaId)
     {
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
-            throw $this->createAccessDeniedException('没有权限管理资源');
+            $this->createNewException(UploadFileException::FORBIDDEN_MANAGE_FILE());
         }
 
         $fileds = $request->request->all();
@@ -64,7 +64,7 @@ class SubtitleController extends BaseController
     public function deleteAction($mediaId, $id)
     {
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
-            throw $this->createAccessDeniedException('没有权限管理资源');
+            $this->createNewException(UploadFileException::FORBIDDEN_MANAGE_FILE());
         }
 
         $this->getSubtitleService()->deleteSubtitle($id);
@@ -87,7 +87,7 @@ class SubtitleController extends BaseController
     {
         $mediaId = $request->query->get('mediaId');
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
-            throw $this->createAccessDeniedException('没有权限管理资源');
+            $this->createNewException(UploadFileException::FORBIDDEN_MANAGE_FILE());
         }
 
         $ssl = $request->isSecure() ? true : false;

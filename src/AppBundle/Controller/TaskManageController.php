@@ -19,13 +19,9 @@ class TaskManageController extends BaseController
     {
         $task = $request->request->all();
         $task['fromCourseId'] = $courseId;
-        try {
-            $this->getTaskService()->preCreateTaskCheck($this->parseTimeFields($task));
+        $this->getTaskService()->preCreateTaskCheck($this->parseTimeFields($task));
 
-            return $this->createJsonResponse(array('success' => 1));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => 0, 'error' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => 1));
     }
 
     public function preUpdateCheckAction(Request $request, $courseId, $activityId)
@@ -35,13 +31,9 @@ class TaskManageController extends BaseController
 
         $task = $request->request->all();
         $task['fromCourseId'] = $courseId;
-        try {
-            $this->getTaskService()->preUpdateTaskCheck($taskId, $this->parseTimeFields($task));
+        $this->getTaskService()->preUpdateTaskCheck($taskId, $this->parseTimeFields($task));
 
-            return $this->createJsonResponse(array('success' => 1));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => 0, 'error' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => 1));
     }
 
     public function createAction(Request $request, $courseId)

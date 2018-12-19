@@ -8,7 +8,7 @@ use AppBundle\Extensions\DataTag\StudyCenterMissionsDataTag;
 class StudyCenterMissionsDataTagTest extends BaseTestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testGetDataWithInvalidArguments()
     {
@@ -53,7 +53,7 @@ class StudyCenterMissionsDataTagTest extends BaseTestCase
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
-        $this->assertEquals('参数缺失', $message);
+        $this->assertEquals('exception.common_parameter_missing', $message);
     }
 
     public function testGetDataEmptyMember()

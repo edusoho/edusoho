@@ -13,11 +13,13 @@ define(function(require, exports, module) {
         element: $form
       });
   
-      validator.addItem({
-        element: '[name="bundleId"]',
-        required: true,
-        display: Translator.trans('admin.setting.mobile.bundle_id'),
-      });
+      if ($("input[name='bundleId']").length) {
+        validator.addItem({
+          element: '[name="bundleId"]',
+          required: true,
+          display: Translator.trans('admin.setting.mobile.bundle_id'),
+        });
+      }
       
       if ($('#mobile-splash1-upload').length) {
         var uploader = new WebUploader({

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use Biz\System\Service\SettingService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\User\UserFieldException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
@@ -291,7 +292,7 @@ class UserSettingController extends BaseController
         $field = $this->getUserFieldService()->getField($id);
 
         if (empty($field)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UserFieldException::NOTFOUND_USERFIELD());
         }
 
         if (strstr($field['fieldName'], 'textField')) {
@@ -339,7 +340,7 @@ class UserSettingController extends BaseController
         $field = $this->getUserFieldService()->getField($id);
 
         if (empty($field)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UserFieldException::NOTFOUND_USERFIELD());
         }
 
         if ('POST' == $request->getMethod()) {
@@ -361,7 +362,7 @@ class UserSettingController extends BaseController
 
         if (isset($field['field_title'])
             && in_array($field['field_title'], array('真实姓名', '手机号码', 'QQ', '所在公司', '身份证号码', '性别', '职业', '微博', '微信'))) {
-            throw $this->createAccessDeniedException('请勿添加与默认字段相同的自定义字段！');
+            $this->createNewException(UserFieldException::DUPLICATE_TITLE());
         }
 
         $field = $this->getUserFieldService()->addUserField($field);

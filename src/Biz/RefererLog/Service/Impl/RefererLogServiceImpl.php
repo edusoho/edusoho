@@ -3,6 +3,7 @@
 namespace Biz\RefererLog\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\RefererLog\Dao\OrderRefererDao;
 use Biz\RefererLog\Dao\RefererLogDao;
 use AppBundle\Common\ArrayToolkit;
@@ -17,7 +18,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
             return false;
         }
         if (!ArrayToolkit::requireds($refererlog, array('targetId', 'targetType', 'refererUrl'))) {
-            throw $this->createServiceException('缺少字段添加RefererLog,增加失败');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         if (!in_array($refererlog['targetType'], array('course', 'openCourse', 'classroom', 'vip'))) {

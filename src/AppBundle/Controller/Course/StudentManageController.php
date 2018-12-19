@@ -7,6 +7,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
@@ -18,6 +19,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
@@ -101,7 +103,7 @@ class StudentManageController extends BaseController
         $operateUser = $this->getUser();
         $courseSetting = $this->getSettingService()->get('course');
         if (!$operateUser->isAdmin() && empty($courseSetting['teacher_manage_student'])) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         if ($request->isMethod('POST')) {
@@ -149,7 +151,7 @@ class StudentManageController extends BaseController
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
         if (empty($member)) {
-            throw $this->createAccessDeniedException(sprintf('学员#%s不属于教学计划#%s', $userId, $courseId));
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
 
         if ($request->isMethod('POST')) {
@@ -257,7 +259,7 @@ class StudentManageController extends BaseController
     public function showAction(Request $request, $courseSetId, $courseId, $userId)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权查看学员详细信息！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         return $this->forward('AppBundle:Student:show', array(
@@ -291,7 +293,7 @@ class StudentManageController extends BaseController
 
         $student = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
         if (empty($student)) {
-            throw $this->createNotFoundException("Student#{$userId} Not Found");
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
         $user = $this->getUserService()->getUser($student['userId']);
 

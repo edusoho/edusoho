@@ -6,6 +6,7 @@ use Biz\Activity\Config\Activity;
 use Biz\BaseService;
 use Biz\Activity\Dao\ActivityDao;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
@@ -145,7 +146,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function createActivity($fields)
     {
         if ($this->invalidActivity($fields)) {
-            throw $this->createInvalidArgumentException('activity is invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);

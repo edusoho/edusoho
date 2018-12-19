@@ -7,6 +7,7 @@ use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Trade\Factory\BaseTrade;
 use ApiBundle\Api\Resource\Trade\Factory\TradeFactory;
+use Biz\Common\CommonException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Pay\Service\PayService;
@@ -42,7 +43,7 @@ class Trade extends AbstractResource
     {
         $params = $request->request->all();
         if (empty($params['gateway']) || empty($params['type'])) {
-            throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         try {

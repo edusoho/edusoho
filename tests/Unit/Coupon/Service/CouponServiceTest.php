@@ -25,7 +25,7 @@ class CouponServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Coupon\CouponException
      */
     public function testGetCouponStateByIdWithError()
     {
@@ -41,7 +41,7 @@ class CouponServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Coupon\CouponException
      */
     public function testGetCouponStateByIdWithError3()
     {

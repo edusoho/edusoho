@@ -4,11 +4,10 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Codeages\Biz\Framework\Event\Event;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseEvent extends AbstractResource
 {
@@ -22,7 +21,7 @@ class CourseEvent extends AbstractResource
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (!$course) {
-            throw new NotFoundHttpException('计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw CourseException::NOTFOUND_COURSE();
         }
 
         if ($event == 'course_view') {

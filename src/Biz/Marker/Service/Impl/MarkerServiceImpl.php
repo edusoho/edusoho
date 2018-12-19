@@ -4,7 +4,10 @@ namespace Biz\Marker\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Marker\MarkerException;
 use Biz\Marker\Service\MarkerService;
+use Biz\System\SettingException;
+use Biz\User\UserException;
 
 class MarkerServiceImpl extends BaseService implements MarkerService
 {
@@ -57,10 +60,10 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         $marker = $this->getMarker($id);
 
         if (empty($marker)) {
-            throw $this->createNotFoundException('Marker Not Found');
+            $this->createNewException(MarkerException::NOTFOUND_MARKER());
         }
         if (empty($fields['second'])) {
-            throw $this->createInvalidArgumentException('Field Second Required');
+            $this->createNewException(MarkerException::FIELD_SECOND_REQUIRED());
         }
 
         return $this->getMarkerDao()->update($id, $fields);
@@ -76,7 +79,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         }
 
         if (!isset($fields['second']) || '' == $fields['second']) {
-            throw $this->createInvalidArgumentException('Field Second Required');
+            $this->createNewException(MarkerException::FIELD_SECOND_REQUIRED());
         }
 
         $marker = array(
@@ -94,7 +97,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         $marker = $this->getMarker($id);
 
         if (empty($marker)) {
-            throw $this->createNotFoundException('Marker Not Found');
+            $this->createNewException(MarkerException::NOTFOUND_MARKER());
         }
 
         $this->getMarkerDao()->delete($id);
@@ -124,18 +127,18 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('Access Denied');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         if ($user['id'] != $lessonUserId) {
-            throw $this->createAccessDeniedException('Access Denied');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $uploadMode = $this->getSettingService()->get('storage');
 
         if ('local' == $uploadMode['upload_mode']) {
             //TODO 翻译？！！
-            throw $this->createAccessDeniedException('请到我的教育云开启云视频！');
+            $this->createNewException(SettingException::CLOUD_VIDEO_DISABLE());
         }
 
         return true;

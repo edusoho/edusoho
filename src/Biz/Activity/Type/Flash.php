@@ -7,6 +7,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\FlashActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
+use Biz\Common\CommonException;
 
 class Flash extends Activity
 {
@@ -17,12 +18,12 @@ class Flash extends Activity
     public function create($fields)
     {
         if (empty($fields['media'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $fields['mediaId'] = $media['id'];
 
@@ -74,12 +75,12 @@ class Flash extends Activity
     public function update($targetId, &$fields, $activity)
     {
         if (empty($fields['media'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $fields['mediaId'] = $media['id'];
         $updateFields = ArrayToolkit::parts($fields, array(

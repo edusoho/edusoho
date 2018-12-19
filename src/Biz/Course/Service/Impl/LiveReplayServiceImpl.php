@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
+use Biz\Course\LiveReplayException;
 use Biz\Course\Service\LiveReplayService;
 use Biz\System\Service\LogService;
 use Biz\Util\EdusohoLiveClient;
@@ -59,7 +60,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         $replay = $this->getLessonReplayDao()->get($id);
 
         if (empty($replay)) {
-            throw $this->createNotFoundException('Live replay not found');
+            $this->createNewException(LiveReplayException::NOTFOUND_LIVE_REPLAY());
         }
 
         $fields = ArrayToolkit::parts($fields, array('hidden', 'title'));

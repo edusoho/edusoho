@@ -3,6 +3,7 @@
 namespace Biz\OrderFacade\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Order\OrderException;
 use Biz\OrderFacade\Command\OrderPayCheck\OrderPayChecker;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
@@ -12,6 +13,7 @@ use Biz\OrderFacade\Service\ProductDealerService;
 use AppBundle\Common\MathToolkit;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
+use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Service\WorkflowService;
 use Codeages\Biz\Order\Status\Order\FailOrderStatus;
@@ -178,7 +180,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
             return $product;
         } else {
-            throw $this->createServiceException("The {$targetType} product not found");
+            throw OrderPayCheckException::NOTFOUND_PRODUCT();
         }
     }
 
@@ -195,7 +197,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
             return $product;
         } else {
-            throw $this->createServiceException("The {$orderItem['target_type']} product not found");
+            throw OrderPayCheckException::NOTFOUND_PRODUCT();
         }
     }
 
@@ -209,17 +211,17 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $order = $this->getOrderService()->getOrderBySn($sn);
 
         if (!$order) {
-            throw new OrderPayCheckException('order.pay_check_msg.order_not_exist', 2004);
+            $this->createNewException(OrderException::NOTFOUND_ORDER());
         }
 
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw new OrderPayCheckException('order.pay_check_msg.user_not_login', 2005);
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         if ($order['user_id'] != $user['id']) {
-            throw new OrderPayCheckException('order.pay_check_msg.not_same_user', 2006);
+            $this->createNewException(OrderException::BEYOND_AUTHORITY());
         }
 
         /** @var $orderPayChecker OrderPayChecker */
@@ -261,7 +263,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $class = $dealer->getClass();
         if (!($class instanceof ProductDealerService)) {
-            throw $this->createInvalidArgumentException('参数dealer非ProductDealerService实例');
+            $this->createNewException(OrderPayCheckException::INSTANCE_ERROR());
         }
 
         $this->dealers[] = $dealer;

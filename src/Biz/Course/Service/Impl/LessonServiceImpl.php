@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Course\LessonException;
 use Biz\Course\Service\LessonService;
 use Codeages\Biz\Framework\Event\Event;
@@ -18,7 +19,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $lesson = $this->getCourseChapterDao()->get($lessonId);
 
         if (empty($lesson) || 'lesson' != $lesson['type']) {
-            throw $this->createInvalidArgumentException('Argument invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         return $lesson;
@@ -34,7 +35,7 @@ class LessonServiceImpl extends BaseService implements LessonService
     public function createLesson($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('title', 'fromCourseId'))) {
-            throw $this->createInvalidArgumentException('Argument invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $this->beginTransaction();
@@ -68,7 +69,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->getCourseService()->tryManageCourse($chapter['courseId']);
 
         if (empty($chapter) || 'lesson' != $chapter['type']) {
-            throw $this->createInvalidArgumentException('Argument Invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $fields = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
@@ -84,7 +85,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->getCourseService()->tryManageCourse($courseId);
         $chapter = $this->getCourseChapterDao()->get($lessonId);
         if (empty($chapter) || $chapter['courseId'] != $courseId || 'lesson' != $chapter['type']) {
-            throw $this->createInvalidArgumentException('Argument Invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $lesson = $this->getCourseChapterDao()->update($lessonId, array('status' => 'published'));
@@ -117,7 +118,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $chapter = $this->getCourseChapterDao()->get($lessonId);
 
         if (empty($chapter) || $chapter['courseId'] != $courseId || 'lesson' != $chapter['type']) {
-            throw $this->createInvalidArgumentException('Argument Invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $lesson = $this->getCourseChapterDao()->update($lessonId, array('status' => 'unpublished'));
@@ -139,7 +140,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         }
 
         if ($lesson['courseId'] != $courseId || 'lesson' != $lesson['type']) {
-            throw $this->createInvalidArgumentException('Argument Invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $this->getCourseChapterDao()->delete($lesson['id']);
@@ -157,7 +158,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $lessonCount = $this->countLessons(array('courseId' => $courseId));
 
         if ($lessonCount >= self::LESSON_LIMIT_NUMBER) {
-            throw $this->createNewException(LessonException::LESSON_NUM_LIMIT());
+            $this->createNewException(LessonException::LESSON_NUM_LIMIT());
         }
 
         return true;
@@ -174,7 +175,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 
         $lesson = $this->getLesson($lessonId);
         if (empty($lesson) || 'lesson' != $lesson['type'] || $lesson['courseId'] != $courseId) {
-            throw $this->createInvalidArgumentException('Argument invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $this->beginTransaction();
@@ -203,7 +204,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 
         $lesson = $this->getLesson($lessonId);
         if (empty($lesson) || 'lesson' != $lesson['type'] || $lesson['courseId'] != $courseId) {
-            throw $this->createInvalidArgumentException('Argument invalid');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $this->beginTransaction();

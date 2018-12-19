@@ -6,9 +6,9 @@ use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseDraftService;
 use Biz\Course\Service\CourseService;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class CourseDraft extends AbstractResource
 {
@@ -26,7 +26,7 @@ class CourseDraft extends AbstractResource
         }
         $params = $request->query->all();
         if (!ArrayToolkit::requireds($params, array('courseId', 'activityId'))) {
-            throw new InvalidParameterException('param is wrong!');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->tryManageCourse($params['courseId']);
@@ -43,7 +43,7 @@ class CourseDraft extends AbstractResource
     {
         $params = $request->request->all();
         if (!ArrayToolkit::requireds($params, array('courseId', 'activityId', 'content'))) {
-            throw new InvalidParameterException('param is wrong!');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->tryManageCourse($params['courseId']);

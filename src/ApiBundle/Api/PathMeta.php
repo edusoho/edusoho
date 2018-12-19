@@ -2,10 +2,9 @@
 
 namespace ApiBundle\Api;
 
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Common\CommonException;
 use Doctrine\Common\Inflector\Inflector;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PathMeta
 {
@@ -31,7 +30,7 @@ class PathMeta
     public function getResourceClassName()
     {
         if (empty($this->resNames) || empty($this->resNames[0])) {
-            throw new BadRequestHttpException('URL is not supported', null, ErrorCode::BAD_REQUEST);
+            throw CommonException::NOTFOUND_API();
         }
 
         if ('plugins' == $this->resNames[0]) {

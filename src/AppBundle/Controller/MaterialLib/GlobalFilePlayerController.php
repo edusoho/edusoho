@@ -2,10 +2,13 @@
 
 namespace AppBundle\Controller\MaterialLib;
 
+use Biz\CloudFile\CloudFileException;
 use Biz\CloudFile\Service\CloudFileService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use AppBundle\Controller\BaseController;
 use Biz\MaterialLib\Service\MaterialLibService;
+use Biz\Player\PlayerException;
+use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,17 +19,17 @@ class GlobalFilePlayerController extends BaseController
         $file = $this->getCloudFileService()->getByGlobalId($globalId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException('file not found');
+            $this->createNewException(CloudFileException::NOTFOUND_CLOUD_FILE());
         }
         if (in_array($file['type'], array('video', 'ppt', 'document'))) {
             return $this->globalPlayer($file, $request);
-        } elseif ($file['type'] == 'audio') {
+        } elseif ('audio' == $file['type']) {
             return $this->audioPlayer($file, $request);
         } elseif (in_array($file['type'], array('image', 'flash'))) {
             return $this->commonPlayer($file, $request);
         }
 
-        throw $this->createNotFoundException('not support play');
+        $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
     }
 
     public function globalDocumentPlayerAction(Request $request, $globalId)
@@ -59,7 +62,7 @@ class GlobalFilePlayerController extends BaseController
         $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
         if (empty($player)) {
-            throw $this->createNotFoundException('file not found');
+            $this->createNewException(CloudFileException::NOTFOUND_PLAYER());
         }
 
         return $this->render("material-lib/player/{$file['type']}-player.html.twig", array(
@@ -77,26 +80,14 @@ class GlobalFilePlayerController extends BaseController
             'url' => $result['url'],
             'player' => 'audio-player',
             'agentInWhiteList' => $this->agentInWhiteList($request->headers->get('user-agent')),
-        ));
-    }
-
-    protected function videoPlayer($file, Request $request)
-    {
-        $url = $this->getPlayUrl($file);
-
-        return $this->render('material-lib/player/global-video-player.html.twig', array(
-            'file' => $file,
-            'url' => $url,
-            'player' => 'balloon-cloud-video-player',
-            'params' => $request->query->all(),
-            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get('user-agent')),
+            'cloudSdk' => 'audio', //webExtension->getCloudSdkUrl
         ));
     }
 
     protected function getPlayUrl($file)
     {
         if (!in_array($file['type'], array('audio', 'video'))) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
         }
 
         $token = $this->makeToken('hls.playlist', $file['no']);
@@ -114,7 +105,7 @@ class GlobalFilePlayerController extends BaseController
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
 
         if (empty($token)) {
-            throw $this->createNotFoundException('token not found');
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $dataId = is_array($token['data']) ? $token['data']['globalId'] : $token['data'];
@@ -126,7 +117,7 @@ class GlobalFilePlayerController extends BaseController
         $file = $this->getCloudFileService()->getByGlobalId($globalId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException('file not found');
+            $this->createNewException(CloudFileException::NOTFOUND_CLOUD_FILE());
         }
 
         $streams = array();
@@ -186,7 +177,7 @@ class GlobalFilePlayerController extends BaseController
         $token = $this->getTokenService()->verifyToken('hls.stream', $token);
 
         if (empty($token)) {
-            throw $this->createNotFoundException('token not found');
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $dataId = is_array($token['data']) ? $token['data']['globalId'] : $token['data'];
@@ -198,7 +189,7 @@ class GlobalFilePlayerController extends BaseController
         $file = $this->getCloudFileService()->getByGlobalId($globalId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException('file not found');
+            $this->createNewException(CloudFileException::NOTFOUND_CLOUD_FILE());
         }
 
         if (empty($file['metas']['levels'][$level]['key'])) {

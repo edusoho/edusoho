@@ -6,6 +6,7 @@ use Biz\Content\Service\FileService;
 use Biz\Sensitive\Service\SensitiveService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
+use Biz\System\SettingException;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserFieldService;
 use AppBundle\Common\SmsToolkit;
@@ -15,7 +16,6 @@ use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class SettingsController extends BaseController
 {
@@ -962,7 +962,7 @@ class SettingsController extends BaseController
         $types = array_keys(OAuthClientFactory::clients());
 
         if (!in_array($type, $types)) {
-            throw new NotFoundException('Type Not Found');
+            $this->createNewException(SettingException::OAUTH_CLIENT_TYPE_INVALID());
         }
     }
 
@@ -976,7 +976,7 @@ class SettingsController extends BaseController
         $settings = $this->setting('login_bind');
 
         if (empty($settings)) {
-            throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
+            $this->createNewException(SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG());
         }
 
         if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {

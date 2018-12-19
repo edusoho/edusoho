@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
+use Biz\Course\CourseException;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\Service\TagService;
@@ -20,7 +21,7 @@ class CourseSetController extends BaseController
         $course = $this->getCourseService()->getCourse($courseSet['defaultCourseId']);
         $previewAs = $request->query->get('previewAs');
         if (empty($course)) {
-            throw $this->createNotFoundException("No Available Course in CourseSet#{$id}");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $this->getCourseSetService()->hitCourseSet($id);

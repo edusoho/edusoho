@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Classroom;
 use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\ClassroomException;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -68,7 +69,7 @@ class CourseController extends BaseController
         $previewAs = '';
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);

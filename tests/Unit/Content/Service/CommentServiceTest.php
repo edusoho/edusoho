@@ -10,7 +10,7 @@ use AppBundle\Common\TimeMachine;
 class CommentServiceTest extends BaseTestCase
 {
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Content\CommentException
      */
     public function testCreateCommentNoObjectType()
     {
@@ -24,7 +24,7 @@ class CommentServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testCreateCommentNoFindCourse()
     {
@@ -151,7 +151,7 @@ class CommentServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Content\CommentException
      */
     public function testDeleteCommentWithEmptyComment()
     {
@@ -179,7 +179,7 @@ class CommentServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\User\UserException
      */
     public function testDeleteCommentWithEmptyUser()
     {
@@ -198,7 +198,7 @@ class CommentServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Content\CommentException
      */
     public function testDeleteCommentWithNotAdminUser()
     {
