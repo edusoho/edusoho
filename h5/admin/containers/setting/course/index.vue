@@ -8,18 +8,18 @@
       	@fetchCourse="fetchCourse">
       </e-course-list>
     </div>
-    <div slot="setting" class="course-allocate">
+    <div slot="setting">
       <header class="title">{{typeLabel}}列表设置</header>
-      <div class="course-item-setting clearfix">
+      <div class="default-allocate__content clearfix">
         <!-- 列表名称 -->
-        <div class="course-item-setting__section clearfix">
+        <div class="default-item-setting__section clearfix">
           <p class="pull-left section-left required-option">列表名称：</p>
           <div class="section-right">
             <el-input size="mini" v-model="copyModuleData.data.title" maxLength="15" placeholder="请输入列表名称" clearable></el-input>
           </div>
         </div>
         <!-- 课程来源 -->
-        <div class="course-item-setting__section mtl clearfix">
+        <div class="default-item-setting__section mtl clearfix">
           <p class="pull-left section-left">{{typeLabel}}来源：</p>
           <div class="section-right">
             <el-radio v-model="sourceType" label="condition">{{typeLabel}}分类</el-radio>
@@ -27,7 +27,7 @@
           </div>
         </div>
         <!-- 课程分类 -->
-        <div class="course-item-setting__section mtl clearfix">
+        <div class="default-item-setting__section mtl clearfix">
           <p class="pull-left section-left">{{typeLabel}}分类：</p>
           <div class="section-right">
             <el-cascader v-show="sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="this.type === 'course_list' ? courseCategories : classCategories" :props="cascaderProps" v-model="categoryTempId" filterable change-on-select></el-cascader>
@@ -36,15 +36,15 @@
               <el-button size="mini" @click="openModal">选择{{typeLabel}}</el-button>
             </div>
           </div>
-          <draggable v-show="sourceType === 'custom' && copyModuleData.data.items.length" v-model="copyModuleData.data.items" class="section__course-container">
-            <div class="section__course-item" v-for="(courseItem, index) in copyModuleData.data.items" :key="index">
-              <div class="section__course-item__title text-overflow">{{ courseItem.displayedTitle || courseItem.title }}</div>
-              <i class="h5-icon h5-icon-cuowu1 section__course-item__icon-delete" @click="deleteCourse(index)"></i>
+          <draggable v-show="sourceType === 'custom' && copyModuleData.data.items.length" v-model="copyModuleData.data.items" class="default-draggable__list">
+            <div class="default-draggable__item" v-for="(courseItem, index) in copyModuleData.data.items" :key="index">
+              <div class="default-draggable__title text-overflow">{{ courseItem.displayedTitle || courseItem.title }}</div>
+              <i class="h5-icon h5-icon-cuowu1 default-draggable__icon-delete" @click="deleteCourse(index)"></i>
             </div>
           </draggable>
         </div>
         <!-- 排列顺序 -->
-        <div class="course-item-setting__section mtl clearfix"
+        <div class="default-item-setting__section mtl clearfix"
           v-show="sourceType === 'condition'">
           <p class="pull-left section-left">排列顺序：</p>
           <div class="section-right">
@@ -63,7 +63,7 @@
           </div>
         </div>
         <!-- 显示个数 -->
-        <div v-show="sourceType === 'condition'" class="course-item-setting__section mtl clearfix">
+        <div v-show="sourceType === 'condition'" class="default-item-setting__section mtl clearfix">
           <p class="pull-left section-left">显示个数：</p>
           <div class="section-right">
             <el-select v-model="limit" placeholder="请选择个数" size="mini">

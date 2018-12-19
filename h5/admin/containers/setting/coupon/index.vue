@@ -7,27 +7,26 @@
       <header class="title">
         优惠券设置（仅显示已发布优惠券）
       </header>
-      <div class="coupon-allocate__content">
-        <div class="mbm text-14" @change="showTitle">
-          <span class="coupon-title">标题栏：</span>
-          <el-radio v-model="radio" label="show">显示</el-radio>
-          <el-radio v-model="radio" label="unshow">不显示</el-radio>
+      <div class="default-allocate__content">
+        <div class="default-item-setting__section" @change="showTitle">
+          <span class="pull-left section-left">标题栏：</span>
+          <div class="section-right">
+            <el-radio v-model="radio" label="show">显示</el-radio>
+            <el-radio v-model="radio" label="unshow">不显示</el-radio>
+          </div>
         </div>
-        <div class="coupon-select__section">
-          <span class="text-14 required-option">优惠券选择：</span>
-          <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
+        <div class="default-item-setting__section mtl clearfix">
+          <span class="pull-left section-left required-option">优惠券选择：</span>
+          <div class="section-right">
+            <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
+          </div>
         </div>
-        <div class="coupon-list-container" v-if="copyModuleData.data.items">
-          <draggable v-model="copyModuleData.data.items" class="section__course-container">
-            <el-tag
-              class="courseLink coupon-list-item text-overflow"
-              closable
-              :disable-transitions="true"
-              v-for="(item, index) in copyModuleData.data.items"
-              @close="handleClose(index)"
-              :key="item.id">
-              <span>{{ item.name }}</span>
-            </el-tag>
+        <div v-if="copyModuleData.data.items">
+          <draggable v-model="copyModuleData.data.items" class="default-draggable__list">
+            <div class="default-draggable__item" v-for="(item, index) in copyModuleData.data.items" :key="index">
+              <div class="default-draggable__title text-overflow">{{ item.name }}</div>
+              <i class="h5-icon h5-icon-cuowu1 default-draggable__icon-delete" @click="handleClose(index)"></i>
+            </div>
           </draggable>
         </div>
       </div>
