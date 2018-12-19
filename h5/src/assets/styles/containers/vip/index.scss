@@ -3,30 +3,23 @@
     padding-top: vw(20);
     padding-bottom: vw(20);
     min-height: vw(125);
-    .van-swipe {
-      overflow: visible;
-    }
-    .van-swipe__track {
-      margin-left: -35%;
-      margin-top: vw(15);
-    }
-    .van-swipe-item {
-      box-sizing: border-box;
-      padding-right: vw(30);
-      padding-left: vw(30);
-    }
-    .van-swipe-item.active {
-      transform: scale(1.2)translateY(-10px) !important;
-      padding-left: vw(10);
-      padding-right: vw(10);
-      transition: all 0.3s;
-      .card-bg-img {
-        height: 100%;
-      }
-    }
     .card-bg-img {
       width: 100%;
       height: auto;
+    }
+    .swiper-container {
+      overflow: visible;
+      margin-top: vw(15);
+      margin-left: 6%;
+      .swiper-slide .card-bg-img {
+        width: vw(208);
+      }
+    }
+    .swiper-slide-active {
+      .card-bg-img {
+        transform: scale(1.2);
+        transition: all 0.3s;
+      }
     }
   }
 }
