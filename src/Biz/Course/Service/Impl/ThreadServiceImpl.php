@@ -181,6 +181,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['private'] = 'published' === $course['status'] ? 0 : 1;
 
         $thread = $this->getThreadDao()->create($thread);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         foreach ($course['teacherIds'] as $teacherId) {
             if ($teacherId == $thread['userId']) {
@@ -198,7 +199,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 'threadTitle' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType']),
                 'threadType' => $thread['type'],
                 'courseId' => $course['id'],
-                'courseTitle' => $course['title'],
+                'courseTitle' => !empty($course['title']) ? $courseSet['title'].'-'.$course['title'] : $courseSet['title'],
             ));
         }
 
@@ -552,6 +553,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function sensitiveFilter($str, $type)
     {
         return $this->getSensitiveService()->sensitiveCheck($str, $type);
+    }
+
+    /**
+     * @return \Biz\Course\Service\Impl\CourseSetServiceImpl
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
