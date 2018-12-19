@@ -6,7 +6,7 @@
       </router-link>
       <div :class="['user-middle', vipSwitch ? '' : 'single-middle']">
         <div class='user-name'>{{ user.nickname }}</div>
-        <div v-if="vipSwitch" @click="jumpVip">
+        <router-link v-if="vipSwitch" :to="{path: '/vip', vipLevelId: user.vip.levelId}">
           <span class='user-vip' v-if="user.vip">
             <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="user.vip.icon">
             <span v-if="!vipDated">{{ user.vip.vipName }}</span>
@@ -15,7 +15,7 @@
           <div class='user-vip' v-else>
             您还不是会员，<span class="color-primary">去开通</span>
           </div>
-        </div>
+        </router-link>
       </div>
       <router-link to="/settings" class='user-setting'>
         <img src='static/images/setting.png'>
@@ -47,15 +47,7 @@ export default {
   methods: {
     ...mapActions([
       'getUserInfo'
-    ]),
-    jumpVip() {
-      this.$router.push({
-        name: 'vip',
-        query: {
-          user: this.user
-        }
-      })
-    }
+    ])
   }
 }
 </script>

@@ -1,9 +1,7 @@
 <template>
-  <div class="vip-detail">
+  <div class="vip-detail" v-if="user">
     <div class="user-section gray-border-bottom clearfix">
-      <router-link to="/settings">
-        <img class='user-img' :src="user.avatar.large" />
-      </router-link>
+      <img class='user-img' :src="user.avatar.large" />
       <div class="user-middle">
         <div class='user-name'>{{ user.nickname }}</div>
         <span class='user-vip' v-if="user.vip">
@@ -26,7 +24,8 @@ import introduce from './introduce';
 export default {
   data() {
     return {
-      user: this.$store.state.user
+      user: null,
+      vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1
     }
   },
   components: {
@@ -39,6 +38,15 @@ export default {
       const nowStamp = new Date().getTime();
       return nowStamp > deadLineStamp ? true : false;
     }
+  },
+  created() {
+    Api.getVipDetail({
+      query: {
+        levelId: this.vipLevelId
+      }
+    }).then((res) => {
+      this.user = res.vipUser.user;
+    })
   }
 }
 </script>
