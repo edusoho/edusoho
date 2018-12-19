@@ -16,7 +16,6 @@ const state = {
   settings: {},
   courseSettings: {},
   title: '',
-  routerTransition: '',
   vipSwitch: true
 };
 
