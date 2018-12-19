@@ -36,6 +36,9 @@
     }
     .default-item-setting__section {
       position: relative;
+      &:not(:first-child) {
+        margin-top: 20px;
+      }
       .section-left {
         display: inline;
         margin: 0;
