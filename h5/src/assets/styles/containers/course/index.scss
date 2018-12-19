@@ -109,6 +109,59 @@
     cursor: pointer;
   }
 
+  &__nav--cover {
+    position: absolute;
+    right: 0;
+    top: 46px;
+    width: 100%;
+    height: calc(100% - 46px);
+    line-height: vw(20);
+    text-align: center;
+    font-size: vw(14);
+    background-color: #ffffff;
+    z-index: 1002;
+    cursor: pointer;
+    overflow: auto;
+    &-close-btn {
+      position: absolute;
+      top: 0px;
+      left: 10px;
+      height: 46px;
+      padding: 0 5px;
+      line-height: 46px;
+      background-color: #212121;
+      z-index: 1002;
+      i {
+        color: #fff;
+        font-weight: bold;
+        vertical-align: middle;
+      }
+    }
+    &-control {
+      position: fixed;
+      display: block;
+      right: 32px;
+      bottom: 24px;
+      width: 46px;
+      height: 46px;
+      border-radius: 100px;
+      background: #03C777;
+      box-shadow: 0 4px 12px 0 #96DCBB;
+      z-index: 1000;
+      overflow: hidden;
+      i {
+        color: #ffffff;
+        &::before {
+          line-height: 48px;
+          width: 46px;
+          height: 46px;
+          text-align: center;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
   &__audio {
     position: absolute;
     right: 0;
