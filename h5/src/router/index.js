@@ -171,6 +171,13 @@ const routes = [
       title: '优惠券领取'
     },
     component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/coupon/index.vue')
+  }, {
+    path: '/vip',
+    name: 'vip',
+    meta: {
+      title: 'vip营销页'
+    },
+    component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/vip/index.vue')
   }
 ];
 
@@ -188,6 +195,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['register', 'login', 'protocol', 'find'].includes(to.name);
+
   if (!Object.keys(store.state.courseSettings).length) {
     store.dispatch('getGlobalSettings', {
       type: 'course',

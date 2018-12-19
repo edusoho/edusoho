@@ -83,6 +83,9 @@ export const getGlobalSettings = ({ commit }, { type, key }) =>
       if (type === 'site') {
         document.title = res.name;
       }
+      if (type === 'vip') {
+        res = res.enabled;
+      }
       commit(types.GET_SETTINGS, {
         key,
         setting: res

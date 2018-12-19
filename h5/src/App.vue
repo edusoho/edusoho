@@ -27,7 +27,16 @@ export default {
     }),
   },
   computed: {
-    ...mapState(['title'])
+    ...mapState(['title']),
+    routerKeepAlive() {
+      return this.$route.meta.keepAlive;
+    },
+  },
+  created() {
+    this.$store.dispatch('getGlobalSettings', {
+      type: 'vip',
+      key: 'vipSwitch'
+    });
   },
   watch: {
     '$route': {
