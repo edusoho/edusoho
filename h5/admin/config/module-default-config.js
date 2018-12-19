@@ -73,6 +73,7 @@ const MODULE_DEFAULT = {
     data: {
       items: [],
       sort: '',
+      title: '',
     }
   }
 };
