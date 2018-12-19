@@ -6,14 +6,17 @@
 
     <div slot="setting">
       <header class="title">
-        图片广告设置
+        网校会员
       </header>
-      <div class="default-allocate__content">
-        <div class="poster-item-setting__section mtl">
-          <p class="pull-left section-left">排列顺序：</p>
-          <div class="section-right">
-            <el-radio v-model="copyModuleData.sort" label="1">等级从低到高</el-radio>
-            <el-radio v-model="copyModuleData.sort" label="0">等级从高到低</el-radio>
+      <div class="default-allocate__content clearfix">
+        <setting-cell title="排列顺序：">
+          <el-radio v-model="copyModuleData.sort" label="1">从低到高</el-radio>
+          <el-radio v-model="copyModuleData.sort" label="0">从高到低</el-radio>
+        </setting-cell>
+
+        <div v-model="copyModuleData.items" class="default-draggable__list">
+          <div class="default-draggable__item" v-for="(item, index) in copyModuleData.items" :key="index">
+            <div class="default-draggable__title text-overflow">{{ item.name }}</div>
           </div>
         </div>
       </div>
@@ -23,7 +26,8 @@
 
 <script>
 import Api from '@admin/api';
-import moduleFrame from '../module-frame'
+import moduleFrame from '../module-frame';
+import settingCell from '../module-frame/setting-cell';
 import vip from '@/containers/components/e-vip/e-vip';
 
 
@@ -31,7 +35,8 @@ export default {
   name: 'vip-list',
   components: {
     moduleFrame,
-    vip
+    settingCell,
+    vip,
   },
   data () {
     return {
