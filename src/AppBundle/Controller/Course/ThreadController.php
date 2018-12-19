@@ -164,6 +164,14 @@ class ThreadController extends CourseBaseController
         ));
     }
 
+    public function playShowAction(Request $request, $id)
+    {
+        return $this->forward('AppBundle:Player:show', array(
+            'id' => $id,
+            'remeberLastPos' => false,
+        ));
+    }
+
     public function createAction(Request $request, $courseId)
     {
         list($course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);

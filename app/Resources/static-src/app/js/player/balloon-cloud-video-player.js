@@ -82,16 +82,23 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
+    if (self.options.remeberLastPos) {
+      var remeberLastPos = true;
+    } else {
+      var remeberLastPos = false;
+    }
+
     extConfig = Object.assign(extConfig, {
       id: $(self.options.element).attr('id'),
       disableControlBar: self.options.disableControlBar,
       disableProgressBar: self.options.disableProgressBar,
       playlist: self.options.url,
-      remeberLastPos: true,
+      remeberLastPos: remeberLastPos,
       customPos: self.options.customPos,
       videoHeaderLength: self.options.videoHeaderLength,
       autoplay: self.options.autoplay
     });
+
     var player = new VideoPlayerSDK(extConfig);
 
     player.on('ready', function(e) {
