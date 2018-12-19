@@ -67,7 +67,7 @@
           <p class="pull-left section-left">显示个数：</p>
           <div class="section-right">
             <el-select v-model="limit" placeholder="请选择个数" size="mini">
-              <el-option v-for="item in [1,2,3,4,5,6,7,8]" :key="item" :label="item" :value="item">
+              <el-option v-for="item in limitOptions" :key="item" :label="item" :value="item">
               </el-option>
             </el-select>
           </div>

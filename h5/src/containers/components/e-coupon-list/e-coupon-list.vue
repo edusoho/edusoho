@@ -29,7 +29,9 @@
     props: {
       coupons: {
         type: Array,
-        default: []
+        default: () => {
+          return [];
+        }
       },
       feedback: {
         type: Boolean,
