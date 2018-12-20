@@ -11,7 +11,7 @@
       {% elseif file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
       <div class="alert alert-danger">{{'site.cloud.file.converting_tips'|trans}}</div>
     {% else %}
-      <div style="position:absolute;top:0;bottom:0;left:0;right:0;text-align:center;">
+      <div class="js-video-wrap" style="position:absolute;top:0;bottom:0;left:0;right:0;text-align:center;">
         <div id="lesson-video-content"
           data-disable-mode-selection="{{context.disableModeSelection|default(false)}}"
           data-content="{{context.content|default('')}}"

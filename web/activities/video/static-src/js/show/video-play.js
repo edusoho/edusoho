@@ -12,11 +12,8 @@ export default class VideoPlay {
   }
 
   play() {
-    alert(getSupportedPlayer());
-    console.log(getSupportedPlayer());
     if (getSupportedPlayer() === 'flash') {
       this.flashTip();
-      this._playVideo();
     }
     if ($('#swf-player').length) {
       // 针对外链视频
@@ -27,7 +24,8 @@ export default class VideoPlay {
   }
 
 
-  flashTip() {
+  flashTip(flag) {
+    const $tip = $('.js-flash-tip');
     if (!swfobject.hasFlashPlayerVersion('11')) {
       const html = `
       <div class="alert alert-warning alert-dismissible fade in" role="alert">
@@ -36,9 +34,16 @@ export default class VideoPlay {
         </button>
         ${Translator.trans('site.flash_not_install_hint_1')}
       </div>`;
-      $('.js-flash-tip').html(html);
+      $tip.html(html);
+      const $cloudVideo = $('.js-video-wrap');
+      if ($cloudVideo.length) {
+        $cloudVideo.addClass('hidden');
+      }
     } else {
-      $('.js-flash-tip').html('');
+      $tip.html('');
+      if (flag) {
+        this._playVideo();
+      }
     }
   }
 
