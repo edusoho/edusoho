@@ -13,7 +13,6 @@ export default class VideoPlay {
 
   play() {
     if ($('#swf-player').length) {
-      // 针对外链视频
       this.flashTip();
       this._playerSwf();
     } else {
