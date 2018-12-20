@@ -5,9 +5,9 @@
         <img class='user-img' :src="user.avatar.large" />
         <div class="user-middle">
           <div class='user-name'>{{ user.nickname }}</div>
-          <span class='user-vip' v-if="user.vip">
-            <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="user.vip.icon">
-            <span v-if="!vipDated">{{ user.vip.vipName }}</span>
+          <span class='user-vip' v-if="vipInfo">
+            <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="vipInfo.icon">
+            <span v-if="!vipDated">{{ vipInfo.vipName }}</span>
             <span class="grey" v-else>会员已过期</span>
           </span>
           <router-link to="/vip" class='user-vip' v-else>
@@ -24,7 +24,7 @@
         </div>
       </router-link>
     </div>
-    <vip-introduce :levels="vipData.levels" @activeIndex="activeIndex"></vip-introduce>
+    <vip-introduce :levels="levels" @activeIndex="activeIndex"></vip-introduce>
     <e-course-list
       class="gray-border-bottom"
       :courseList="courseData"
@@ -47,7 +47,16 @@ export default {
   data() {
     return {
       user: null,
-      vipData: null,
+      vipInfo: null,
+      vipData: {},
+      levels: [{
+        courses: {
+          data: []
+        },
+        classrooms: {
+          data: []
+        }
+      }],
       index: 0,
       vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1
     }
@@ -58,8 +67,8 @@ export default {
   },
   computed: {
     vipDated() {
-      if (!this.user.vip) return false;
-      const deadLineStamp = new Date(this.user.vip.deadline).getTime();
+      if (!this.vipInfo) return false;
+      const deadLineStamp = new Date(this.vipInfo.deadline).getTime();
       const nowStamp = new Date().getTime();
       return nowStamp > deadLineStamp ? true : false;
     },
@@ -70,7 +79,7 @@ export default {
         source: {},
         limit: 4
       }
-      data.items = this.vipData.levels[this.index].courses.data;
+      data.items = this.levels[this.index].courses.data;
       return data;
     },
     classroomData() {
@@ -80,7 +89,7 @@ export default {
         source: {},
         limit: 4
       }
-      data.items = this.vipData.levels[this.index].classrooms.data;
+      data.items = this.levels[this.index].classrooms.data;
       return data;
     }
   },
@@ -91,7 +100,9 @@ export default {
       }
     }).then((res) => {
       this.vipData = res;
+      this.levels = res.levels;
       this.user = res.vipUser.user;
+      this.vipInfo = res.vipUser.vip;
     })
   },
   methods: {
