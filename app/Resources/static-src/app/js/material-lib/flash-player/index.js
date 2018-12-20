@@ -8,7 +8,7 @@ if (!swfobject.hasFlashPlayerVersion('11')) {
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">×</span>
       </button>
-     您的浏览器未装Flash播放器或者该flash版本低于11或者flash被禁用，请检查浏览器中的flash播放器能否正常使用。
+      ${Translator.trans('site.flash_not_install_hint')}
     </div>`;
   $player.html(html).show();
   

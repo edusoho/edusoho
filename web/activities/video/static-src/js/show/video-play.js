@@ -34,7 +34,7 @@ export default class VideoPlay {
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">×</span>
         </button>
-        ${Translator.trans('site.flash_not_install_hint_1')}
+        ${Translator.trans('site.flash_not_install_hint')}
       </div>`;
       $('#video-content').html(html).show();
     } else {
