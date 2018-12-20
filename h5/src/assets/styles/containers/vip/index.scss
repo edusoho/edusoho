@@ -18,6 +18,18 @@
         }
       }
     }
+    .vip-info {
+      position: absolute;
+      left: vw(10);
+      top: vw(16);
+      color: #fff;
+      line-height: 1;
+      .vip-rights-num {
+        opacity: .56;
+        margin-top: vw(10);
+        margin-bottom: vw(15);
+      }
+    }
     &__text {
       margin-top: vw(38);
       margin-bottom: vw(25);
