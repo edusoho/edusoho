@@ -1,8 +1,8 @@
 <template>
   <div class="vip-introduce gray-border-bottom">
     <swiper :options="swiperOption">
-      <swiper-slide v-for="(img, index) in bgImgs" :key="index">
-        <img class="card-bg-img" :src="img">
+      <swiper-slide v-for="(item, index) in levels" :key="index">
+        <img class="card-bg-img" :src="item.background">
       </swiper-slide>
     </swiper>
     <div class="vip-introduce__text">
@@ -22,19 +22,16 @@ import 'swiper/dist/css/swiper.css';
       swiper,
       swiperSlide
     },
+    props:{
+      levels: Array
+    },
     data() {
       return {
-        bgImgs: [
-          'http://lvliujie.st.edusoho.cn/files/default/2018/12-18/111534665c85317473.png',
-          'http://lvliujie.st.edusoho.cn/files/default/2018/12-18/111534665c85317473.png',
-          'http://lvliujie.st.edusoho.cn/files/default/2018/12-18/111534665c85317473.png'
-        ],
         activeIndex: 1,
         swiperOption: {
           notNextTick: true,
-          loop: true,
+          loop: false,
           centeredSlides: true,
-          loopAdditionalSlides: 1,
           spaceBetween: 20,
           slidesPerView: 1.5,
           observer: true,

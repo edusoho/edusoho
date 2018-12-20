@@ -14,7 +14,7 @@
         </router-link>
       </div>
     </div>
-    <vip-introduce></vip-introduce>
+    <vip-introduce :levels="vipData.levels"></vip-introduce>
     <e-course-list
       class="gray-border-bottom"
       :courseList="courseData"
