@@ -1,10 +1,10 @@
 import swfobject from 'es-swfobject';
 import { getSupportedPlayer } from 'common/video-player-judge';
-let $element = $('#global-player');
 import EsMessenger from 'app/common/messenger';
+const $element = $('#global-player');
 
-const videoPlayer = () => {
-  let play = new QiQiuYun.Player({
+const globalPlayer = () => {
+  const play = new QiQiuYun.Player({
     id: 'global-player',
     playServer: app.cloudPlayServer,
     resNo: $element.data('resNo'),
@@ -14,8 +14,8 @@ const videoPlayer = () => {
       name: $element.data('userName')
     }
   });
-  
-  let messenger = new EsMessenger({
+
+  const messenger = new EsMessenger({
     name: 'parent',
     project: 'PlayerProject',
     type: 'child'
@@ -26,8 +26,7 @@ const videoPlayer = () => {
   });  
 };
 
-const flashTip = (flag) => {
-  const $tip = $('.js-flash-tip');
+const flashTip = () => {
   if (!swfobject.hasFlashPlayerVersion('11')) {
     const html = `
     <div class="alert alert-warning alert-dismissible fade in" role="alert">
@@ -36,24 +35,18 @@ const flashTip = (flag) => {
       </button>
       ${Translator.trans('site.flash_not_install_hint_1')}
     </div>`;
-    $tip.html(html);
-    const $cloudVideo = $('.js-video-wrap');
-    if ($cloudVideo.length) {
-      $cloudVideo.addClass('hidden');
-    }
+    $element.html(html).show();
   } else {
-    $tip.html('');
-    videoPlayer();
+    globalPlayer();
   }
 };
 
+const init = () => {
+  if ($element.data('fileType') === 'video' && getSupportedPlayer() === 'flash') {
+    flashTip();
+  } else {
+    globalPlayer();
+  }
+};
 
-alert(getSupportedPlayer());
-
-if (getSupportedPlayer() === 'flash') {
-
-  flashTip();
-} else {
-  videoPlayer();
-}
-
+init();

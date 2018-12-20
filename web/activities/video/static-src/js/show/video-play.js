@@ -12,20 +12,22 @@ export default class VideoPlay {
   }
 
   play() {
-    if (getSupportedPlayer() === 'flash') {
-      this.flashTip();
-    }
     if ($('#swf-player').length) {
       // 针对外链视频
       this.flashTip();
       this._playerSwf();
+    } else {
+      if (getSupportedPlayer() === 'flash') {
+        this.flashTip(true);
+      } else {
+        this._playVideo();
+      }
     }
     this.record();
   }
 
 
   flashTip(flag) {
-    const $tip = $('.js-flash-tip');
     if (!swfobject.hasFlashPlayerVersion('11')) {
       const html = `
       <div class="alert alert-warning alert-dismissible fade in" role="alert">
@@ -34,13 +36,8 @@ export default class VideoPlay {
         </button>
         ${Translator.trans('site.flash_not_install_hint_1')}
       </div>`;
-      $tip.html(html);
-      const $cloudVideo = $('.js-video-wrap');
-      if ($cloudVideo.length) {
-        $cloudVideo.addClass('hidden');
-      }
+      $('#video-content').html(html).show();
     } else {
-      $tip.html('');
       if (flag) {
         this._playVideo();
       }

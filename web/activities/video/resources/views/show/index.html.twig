@@ -9,7 +9,6 @@
          data-id="{{ activity.id }}"
     data-watch-time-sec="{{ setting('magic.watch_time_sec')|default(120) }}">
     {#  如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx #}
-    <div class="js-flash-tip"></div>
     {{ render(controller('AppBundle:Player:show', {id: video.mediaId, isPart: true})) }}
   </div>
   {% else %}
@@ -27,7 +26,6 @@
   <div class="dashboard-body">
     <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="lesson-content"
          data-media-source="{{ video.mediaSource }}">
-      <div class="js-flash-tip"></div>
       <div id="swf-player" data-url="{{ video.mediaUri }}"></div>
     </div>
   </div>
