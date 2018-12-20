@@ -758,8 +758,8 @@ class ClassroomManageController extends BaseController
         $cashRate = $this->getCashRate();
 
         foreach ($courses as $course) {
-            $coinPrice += $course['price'] * $cashRate;
-            $price += $course['price'];
+            $coinPrice += $course['originPrice'] * $cashRate;
+            $price += $course['originPrice'];
         }
 
         $courseNum = count($courses);
