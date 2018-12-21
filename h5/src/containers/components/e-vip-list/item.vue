@@ -1,0 +1,32 @@
+<template>
+  <div class="e-vip-item">
+    <img class="vip-background" :src="item.background"/>
+    <span class="name">{{ item.name }}</span>
+    <span class="explain">{{ item.freeCourseNum }}门课程 {{ item.freeClassroomNum }}门班级</span>
+  </div>
+</template>
+
+<script>
+
+export default {
+
+  name: 'e-vip-item',
+  props: {
+    item: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
+    feedback: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  data () {
+    return {
+
+    }
+  }
+}
+</script>

@@ -1,0 +1,19 @@
+// h5 组件 vw 单位复写
+.e-vip-list {
+  padding: 25px 0 30px 20px;
+}
+
+.e-vip-item {
+  padding-right: 20px;
+  .vip-background {
+    height: 83px;
+  }
+  .name {
+    top: 15px;
+    left: 15px;
+  }
+  .explain {
+    top: 35px;
+    left: 15px;
+  }
+}

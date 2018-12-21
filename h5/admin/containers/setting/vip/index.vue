@@ -1,7 +1,7 @@
 <template>
   <module-frame containerClass="setting-vip" :isActive="isActive" :isIncomplete="isIncomplete">
-    <div slot="preview" class="">
-      <vip v-for="(items, index) in copyModuleData.items" :key="index" />
+    <div slot="preview">
+      <vip-list :items="copyModuleData.items" :sort="copyModuleData.sort" :feedback="false" />
     </div>
 
     <div slot="setting">
@@ -28,15 +28,15 @@
 import Api from '@admin/api';
 import moduleFrame from '../module-frame';
 import settingCell from '../module-frame/setting-cell';
-import vip from '@/containers/components/e-vip/e-vip';
+import vipList from '@/containers/components/e-vip-list/e-vip-list';
 
 
 export default {
-  name: 'vip-list',
+  name: 'vip',
   components: {
     moduleFrame,
     settingCell,
-    vip,
+    vipList,
   },
   data () {
     return {
