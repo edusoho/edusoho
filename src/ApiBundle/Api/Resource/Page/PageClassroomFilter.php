@@ -34,8 +34,6 @@ class PageClassroomFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        empty($data['vipLevel']) && $data['vipLevel'] = null;
-
         if ('date' == $data['expiryMode']) {
             Converter::timestampToDate($data['expiryStartDate']);
         }
