@@ -1,11 +1,6 @@
 {% extends 'layout.html.twig' %}
 {% set homework = activity.ext|default(null) %}
 
-{% block head_scripts %}
-  {{ parent() }}
-  <base target="_blank">
-{% endblock %}
-
 {% block body %}
   <div  class="modal show iframe-modal">
     <div class="modal-dialog">
