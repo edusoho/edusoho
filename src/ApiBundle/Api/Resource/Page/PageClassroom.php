@@ -20,9 +20,6 @@ class PageClassroom extends AbstractResource
         }
         $apiRequest = new ApiRequest('/api/me/classroom_members/'.$classroomId, 'GET', array());
         $classroom['member'] = $this->invokeResource($apiRequest);
-        // $member = $this->getClassroomService()->getClassroomMember($classroomId, $this->getCurrentUser()->getId());
-        // $isMemberNonExpired = empty($member) ? false : $this->getClassroomService()->isMemberNonExpired($classroom, $member);
-        // $classroom['member'] = $isMemberNonExpired ? $member : null;
 
         $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
         if (!empty($classroom['headTeacher'])) {
