@@ -1,5 +1,5 @@
 <template>
-  <div class="e-vip-item">
+  <div class="e-vip-item" @click="handleClick">
     <img class="vip-background" :src="item.background"/>
     <span class="name">{{ item.name }}</span>
     <span class="explain">{{ item.freeCourseNum }}门课程 {{ item.freeClassroomNum }}门班级</span>
@@ -23,9 +23,9 @@ export default {
       default: true,
     },
   },
-  data () {
-    return {
-
+  methods: {
+    handleClick() {
+      console.log(this.item.seq)
     }
   }
 }

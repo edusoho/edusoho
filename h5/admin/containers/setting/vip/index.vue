@@ -1,7 +1,7 @@
 <template>
   <module-frame containerClass="setting-vip" :isActive="isActive" :isIncomplete="isIncomplete">
     <div slot="preview">
-      <vip-list :items="copyModuleData.items" :sort="copyModuleData.sort" :feedback="false" />
+      <vip-list :items="items" :sort="copyModuleData.sort" :feedback="false" />
     </div>
 
     <div slot="setting">
@@ -14,8 +14,8 @@
           <el-radio v-model="copyModuleData.sort" label="0">从高到低</el-radio>
         </setting-cell>
 
-        <div v-model="copyModuleData.items" class="default-draggable__list">
-          <div class="default-draggable__item" v-for="(item, index) in copyModuleData.items" :key="index">
+        <div v-model="items" class="default-draggable__list">
+          <div class="default-draggable__item" v-for="(item, index) in items" :key="index">
             <div class="default-draggable__title text-overflow">{{ item.name }}</div>
           </div>
         </div>
@@ -75,6 +75,22 @@ export default {
       },
       set() {}
     },
+    sort: {
+      get() {
+        return this.moduleData.data.sort;
+      },
+      set(value) {
+        this.moduleData.data.sort = value;
+      }
+    },
+    items: {
+      get() {
+        return this.moduleData.data.items;
+      },
+      set(value) {
+        this.moduleData.data.items = value;
+      }
+    }
   },
   watch: {
     copyModuleData: {
@@ -83,15 +99,17 @@ export default {
       },
       deep: true,
     },
+    sort() {
+      this.items = this.items.reverse();
+    },
   },
   created() {
-    const items = this.copyModuleData.items;
-    const existItems = Array.isArray(items) && items.length > 0;
+    const existItems = Array.isArray(this.items) && this.items.length > 0;
     if(existItems) {
       return;
     }
     Api.getVipLevels().then(res => {
-      items.push(...res);
+      this.items.push(...res);
     })
   },
 }
