@@ -17,10 +17,12 @@ class PageCourse extends AbstractResource
     public function get(ApiRequest $request, $portal, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
-        $member = $this->getCourseMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
+
+        $apiRequest = new ApiRequest('/api/me/course_members/'.$courseId, 'GET', array());
+        $member = $this->invokeResource($apiRequest);
         $course['learnedCompulsoryTaskNum'] = empty($member) ? 0 : $member['learnedCompulsoryTaskNum'];
-        $isMemberNonExpired = empty($member) ? false : $this->getCourseMemberService()->isMemberNonExpired($course, $member);
-        $course['member'] = $isMemberNonExpired ? $member : null;
+        $course['member'] = $member;
+
         $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
         $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
         $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
@@ -52,7 +54,6 @@ class PageCourse extends AbstractResource
             $this->getOCUtil()->multiple($review['posts'], array('courseId'), 'course');
         }
         $course['reviews'] = $reviews;
-
         if ($this->isPluginInstalled('vip') && $course['vipLevelId'] > 0) {
             $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', array());
             $course['vipLevel'] = $this->invokeResource($apiRequest);

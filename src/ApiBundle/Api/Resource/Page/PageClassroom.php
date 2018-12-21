@@ -18,11 +18,13 @@ class PageClassroom extends AbstractResource
         if (empty($classroom)) {
             throw new NotFoundHttpException('班级不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
-        $member = $this->getClassroomService()->getClassroomMember($classroomId, $this->getCurrentUser()->getId());
-        $isMemberNonExpired = empty($member) ? false : $this->getClassroomService()->isMemberNonExpired($classroom, $member);
-        $classroom['member'] = $isMemberNonExpired ? $member : null;
-        $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+        $apiRequest = new ApiRequest('/api/me/classroom_members/'.$classroomId, 'GET', array());
+        $classroom['member'] = $this->invokeResource($apiRequest);
+        // $member = $this->getClassroomService()->getClassroomMember($classroomId, $this->getCurrentUser()->getId());
+        // $isMemberNonExpired = empty($member) ? false : $this->getClassroomService()->isMemberNonExpired($classroom, $member);
+        // $classroom['member'] = $isMemberNonExpired ? $member : null;
 
+        $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
         if (!empty($classroom['headTeacher'])) {
             $this->mergeProfile($classroom['headTeacher']);
         }

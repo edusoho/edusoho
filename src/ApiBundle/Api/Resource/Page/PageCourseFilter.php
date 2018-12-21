@@ -4,7 +4,6 @@ namespace ApiBundle\Api\Resource\Page;
 
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Course\CourseItemWithLessonFilter;
-use ApiBundle\Api\Resource\Course\CourseMemberFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\CourseSet\CourseSetReviewFilter;
 
@@ -19,15 +18,9 @@ class PageCourseFilter extends Filter
 
     protected function publicFields(&$data)
     {
+        $member = $data['member'];
         if (isset($data['vipLevel']) && !empty($data['vipLevel'])) {
             $vipLevel = $data['vipLevel'];
-        }
-
-        $member = $data['member'];
-        if (!empty($member)) {
-            $courseMemberFilter = new CourseMemberFilter();
-            $courseMemberFilter->setMode(Filter::PUBLIC_MODE);
-            $courseMemberFilter->filter($member);
         }
 
         $items = $data['courseItems'];
@@ -57,8 +50,8 @@ class PageCourseFilter extends Filter
         $data['progress'] = $progress;
         $data['allowAnonymousPreview'] = $allowAnonymousPreview;
         $data['courseItems'] = $items;
-        $data['member'] = $member;
         $data['courses'] = $courses;
+        $data['member'] = $member;
         $data['reviews'] = $reviews;
         $data['vipLevel'] = empty($vipLevel) ? null : $vipLevel;
     }

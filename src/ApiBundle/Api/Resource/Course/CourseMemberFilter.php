@@ -12,7 +12,7 @@ class CourseMemberFilter extends Filter
     );
 
     protected $publicFields = array(
-        'user', 'levelId', 'learnedNum', 'noteNum', 'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime', 'lastLearnTime', 'lastViewTime', 'access',
+        'user', 'levelId', 'learnedNum', 'noteNum', 'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime', 'lastLearnTime', 'lastViewTime', 'access', 'learnedCompulsoryTaskNum',
     );
 
     protected function simpleFields(&$data)
@@ -24,6 +24,7 @@ class CourseMemberFilter extends Filter
 
     protected function publicFields(&$data)
     {
+        file_put_contents('/Users/lvliujie/www/wyx-edusoho/web/test.log', $data['noteLastUpdateTime'].PHP_EOL, FILE_APPEND);
         $data['noteLastUpdateTime'] = date('c', $data['noteLastUpdateTime']);
         $data['finishedTime'] = date('c', $data['finishedTime']);
         $data['lastLearnTime'] = date('c', $data['lastLearnTime']);
