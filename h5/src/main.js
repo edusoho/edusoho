@@ -64,7 +64,6 @@ Api.getSettings({
     if (hasQuery === -1) return hash.slice(1);
     return hash.match(/#.*\?/g)[0].slice(1, -1);
   };
-
   const isWhiteList = whiteList.includes(getPathNameByHash(hashStr));
   if (!isWhiteList) {
     if (parseInt(res.version, 10) !== 2) {
