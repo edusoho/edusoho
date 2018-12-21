@@ -1,0 +1,28 @@
+.e-vip-list {
+  padding: vw(25) 0 vw(30) vw(20);
+}
+
+.e-vip-item {
+  padding-right: vw(20);
+  .vip-background {
+    height: vw(83);
+    width: 100%;
+  }
+  .name {
+    position: absolute;
+    top: vw(15);
+    left: vw(15);
+    font-size: 16px;
+    color: #FFFFFF;
+  }
+  .explain {
+    position: absolute;
+    top: vw(35);
+    left: vw(15);
+    opacity: 0.56;
+    font-size: 12px;
+    transform: scale(0.85);
+    transform-origin: left;
+    color: #FFFFFF;
+  }
+}

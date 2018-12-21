@@ -86,7 +86,16 @@ const filters = [
           code = '加入学习';
           break;
         case 'user.locked':
-          code = '用户被锁';
+          code = '用户被锁定';
+          break;
+        case 'member.member_exist':
+          code = '课程学员已存在';
+          break;
+        case `${type}.reach_max_student_num`:
+          code = '学员达到上限';
+          break;
+        case `${type}.not_found`:
+          code = '计划不存在';
           break;
         case `${type}.unpublished`:
           code = `${targetType[type]}未发布`;
@@ -104,6 +113,7 @@ const filters = [
           code = '学习有效期已过';
           break;
         case `${type}.only_vip_join_way`:
+        case 'course.only_vip_join_way': // type 为班级时，code显示为 'course.only_vip_join_way', 此处临时处理
           code = '只能通过VIP加入';
           break;
         default:

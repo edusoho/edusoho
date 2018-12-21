@@ -72,7 +72,7 @@ const MODULE_DEFAULT = {
     moduleType: '',
     data: {
       items: [],
-      sort: '',
+      sort: '1',
       title: '',
     }
   }
