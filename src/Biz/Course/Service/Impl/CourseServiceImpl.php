@@ -2142,7 +2142,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function tryFreeJoin($courseId)
     {
         $access = $this->canJoinCourse($courseId);
-
         if (AccessorInterface::SUCCESS != $access['code']) {
             throw new UnableJoinException($access['msg'], $access['code']);
         }
@@ -2152,7 +2151,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ((1 == $course['isFree'] || 0 == $course['originPrice']) && $course['buyable']) {
             $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->getId());
         }
-
         $this->dispatch('course.try_free_join', $course);
     }
 
