@@ -1,0 +1,36 @@
+.e-popup {
+  height: 60%;
+  margin-top: vw(30);
+  background-color: #FFFFFF;
+  &__title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: vw(16) 0;
+    margin: 0 vw(20);
+    border-bottom: vw(1) solid #EEEEEE;
+    line-height: vw(20);
+    .name {
+      color: #2B333B;
+    }
+    .icon {
+      position: absolute;
+      top: vw(15);
+      right: vw(-4);
+      border: solid vw(4) #fff;
+      border-left-width: vw(8);
+      border-right-width: vw(8);
+      color: #9BA5B0;
+      font-size: vw(10);
+    }
+  }
+  &__content {
+    position: absolute;
+    bottom: 0;
+    top: vw(60);
+    width: 100%;
+    overflow: scroll;
+  }
+}
