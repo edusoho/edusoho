@@ -47,11 +47,13 @@
     <!-- 加入会员 -->
     <e-popup class="vip-popup" :show.sync="vipPopShow" title="开通白金会员" contentClass="vip-popup__content">
       <div class="vip-popup__header text-14">选择开通时长</div>
-      <van-row gutter="20" class="vip-popup__body mt20">
-        <van-col span="8" v-for="(item, index) in priceItems" :key="index">
-          <price-item :class="{ active: index === activePriceIndex }" @click.native="selectPriceItem(index)"></price-item>
+      <van-row gutter="20" class="vip-popup__body">
+        <van-col span="8" v-for="(item, index) in priceItems[currentLevelIndex]" :key="index">
+          <price-item :item="item" :class="{ active: index === activePriceIndex }"
+            @click.native="selectPriceItem(index)" />
         </van-col>
       </van-row>
+      <div class="btn-join-bottom" @click="vipPopShow = true">确认{{ btnStatus }}</div>
     </e-popup>
 
     <div class="btn-join-bottom" @click="vipPopShow = true">立即{{ btnStatus }}</div>
@@ -85,7 +87,7 @@ export default {
           data: []
         }
       }],
-      index: 0,
+      currentLevelIndex: 0,
       activePriceIndex: 0,
       vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1,
       vipPopShow: false,
@@ -113,7 +115,7 @@ export default {
         source: {},
         limit: 4
       }
-      data.items = this.levels[this.index].courses.data;
+      data.items = this.levels[this.currentLevelIndex].courses.data;
       return data;
     },
     classroomData() {
@@ -123,7 +125,7 @@ export default {
         source: {},
         limit: 4
       }
-      data.items = this.levels[this.index].classrooms.data;
+      data.items = this.levels[this.currentLevelIndex].classrooms.data;
       return data;
     },
     vipDeadline() {
@@ -131,7 +133,7 @@ export default {
       return formatFullTime(time);
     },
     btnStatus() {
-      const currentSeq = this.levels[this.index].seq;
+      const currentSeq = this.levels[this.currentLevelIndex].seq;
       const userSeq = this.vipInfo.seq;
       if (userSeq > currentSeq) return;
       if (this.vipDated) return '开通';
@@ -158,10 +160,9 @@ export default {
   },
   methods: {
     activeIndex(index) {
-      this.index = index;
+      this.currentLevelIndex = index;
     },
     selectPriceItem(index) {
-      console.log(index, 999)
       this.activePriceIndex = index;
     }
   }

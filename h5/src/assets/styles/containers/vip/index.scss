@@ -94,13 +94,14 @@
   .vip-popup {
     &__content {
       box-sizing: border-box;
-      padding: vw(30) vw(20) vw(40);
+      padding: 0;
     }
     &__header {
       color: #71777D;
+      padding: vw(30) vw(20) vw(20);
     }
     &__body {
-
+      padding: 0 vw(20);
     }
   }
   .vip-price-item {
