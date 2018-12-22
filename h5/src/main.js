@@ -11,6 +11,8 @@ import '@/assets/styles/main.scss';
 import App from '@/App';
 import Api from '@/api';
 import {
+  Row,
+  Col,
   Button,
   NavBar,
   Tab,
@@ -43,6 +45,8 @@ Vue.component('van-rate', Rate);
 Vue.component('van-cell', Cell);
 
 Vue.use(filters);
+Vue.use(Row);
+Vue.use(Col);
 Vue.use(Tag);
 Vue.use(Popup);
 Vue.use(plugins);

@@ -4,7 +4,7 @@
       <span class="name">{{ title }}</span>
       <i class="icon h5-icon h5-icon-guanbi" @click="toggleClick"></i>
     </div>
-    <div class="e-popup__content">
+    <div class="e-popup__content" :class="contentClass">
       <slot></slot>
     </div>
   </van-popup>
@@ -22,6 +22,10 @@ export default {
       type: String,
       default: '',
     },
+    contentClass: {
+      type: String,
+      default: '',
+    }
   },
   computed: {
     popupShow: {

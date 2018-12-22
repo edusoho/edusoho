@@ -87,3 +87,54 @@
     background-color: $primary-color;
   }
 }
+
+// 弹出层 popup
+.e-popup.vip-popup {
+  height: vw(305);
+  .vip-popup {
+    &__content {
+      box-sizing: border-box;
+      padding: vw(30) vw(20) vw(40);
+    }
+    &__header {
+      color: #71777D;
+    }
+    &__body {
+
+    }
+  }
+  .vip-price-item {
+    position: relative;
+    text-align: center;
+    padding: vw(25) vw(1);
+    background: #FFFFFF;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+    border-radius: 2px;
+    .select-icon {
+      position: absolute;
+      right: vw(2);
+      top: vw(2);
+      font-size: 7px;
+      color: #FFFFFF;
+      z-index: 10;
+    }
+    &.active {
+      border: vw(1) solid $primary-color;
+      padding: vw(24) 0;
+      &:after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-left: vw(10) solid transparent;
+        border-bottom: vw(10) solid transparent;
+        border-right: vw(10) solid $primary-color;
+        border-top: vw(10) solid $primary-color;
+        z-index: 5;
+      }
+    }
+    &__buy-type {
+      font-weight: bold;
+    }
+  }
+}

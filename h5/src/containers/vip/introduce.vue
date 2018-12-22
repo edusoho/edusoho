@@ -5,7 +5,7 @@
         <img class="card-bg-img" :src="item.background">
         <div class="vip-info">
           <div class="text-18">{{item.name}}</div>
-          <div class="text-12 vip-rights-num">20门课程<span class="ml10">6个班级</span></div>
+          <div class="text-12 vip-rights-num">{{item.freeCourseNum}}门课程 {{item.freeClassroomNum}}个班级</div>
           <div class="text-12">10元 / 月</div>
         </div>
       </swiper-slide>
@@ -28,8 +28,18 @@ import 'swiper/dist/css/swiper.css';
       swiperSlide
     },
     props:{
-      levels: Array,
-      isVip: Object
+      levels: {
+        type: Array,
+        default: () => {
+          return [];
+        },
+      },
+      isVip: {
+        type: Object,
+        default: () => {
+          return {};
+        },
+      }
     },
     data() {
       const that = this;
@@ -53,4 +63,5 @@ import 'swiper/dist/css/swiper.css';
       }
     }
   }
+
 </script>

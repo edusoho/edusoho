@@ -28,23 +28,44 @@
         </div>
       </router-link>
     </div>
+
+    <!-- 会员轮播 -->
     <vip-introduce :levels="levels" :isVip="vipData.vipUser.vip" @activeIndex="activeIndex"></vip-introduce>
+
+    <!-- 会员免费课程 -->
     <e-course-list
       class="gray-border-bottom"
       :courseList="courseData"
       :typeList="'course_list'"/>
+
+    <!-- 会员免费班级 -->
     <e-course-list
       class="gray-border-bottom"
       :courseList="classroomData"
       :typeList="'classroom_list'"/>
-    <div class="btn-join-bottom">立即{{ btnStatus }}</div>
+
+    <!-- 加入会员 -->
+    <e-popup class="vip-popup" :show.sync="vipPopShow" title="开通白金会员" contentClass="vip-popup__content">
+      <div class="vip-popup__header text-14">选择开通时长</div>
+      <van-row gutter="20" class="vip-popup__body mt20">
+        <van-col span="8" v-for="(item, index) in priceItems" :key="index">
+          <price-item :class="{ active: index === activePriceIndex }" @click.native="selectPriceItem(index)"></price-item>
+        </van-col>
+      </van-row>
+    </e-popup>
+
+    <div class="btn-join-bottom" @click="vipPopShow = true">立即{{ btnStatus }}</div>
   </div>
 </template>
 <script>
+import EPopup from '@/components/popup';
 import Api from '@/api';
 import introduce from './introduce';
-import courseList from '../components/e-course-list/e-course-list.vue';
+import priceItem from './vip-price-item';
+import courseList from '../components/e-course-list/e-course-list';
+import getPriceItems from '../../config/vip-price-config';
 import { formatFullTime } from '@/utils/date-toolkit.js';
+import { mapState } from 'vuex';
 
 export default {
   data() {
@@ -65,14 +86,20 @@ export default {
         }
       }],
       index: 0,
-      vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1
+      activePriceIndex: 0,
+      vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1,
+      vipPopShow: false,
+      priceItems: [],
     }
   },
   components: {
+    EPopup,
+    priceItem,
     'vip-introduce': introduce,
     'e-course-list': courseList
   },
   computed: {
+    ...mapState(['vipSettings']),
     vipDated() {
       if (!this.vipInfo) return false;
       const deadLineStamp = new Date(this.vipInfo.deadline).getTime();
@@ -121,11 +148,21 @@ export default {
       this.levels = res.levels;
       this.user = res.vipUser.user;
       this.vipInfo = res.vipUser.vip;
+      for (var i = 0; i < this.levels.length; i++) {
+        this.priceItems = [
+          ...this.priceItems,
+          getPriceItems(this.vipSettings.buyType, res.levels[i].monthPrice, res.levels[i].yearPrice)
+        ];
+      }
     })
   },
   methods: {
     activeIndex(index) {
       this.index = index;
+    },
+    selectPriceItem(index) {
+      console.log(index, 999)
+      this.activePriceIndex = index;
     }
   }
 }
