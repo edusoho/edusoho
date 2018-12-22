@@ -5,7 +5,7 @@
         <img class="card-bg-img" :src="item.background">
         <div class="vip-info">
           <div class="text-18">{{item.name}}</div>
-          <div class="text-12 vip-rights-num">20门课程 6个班级</div>
+          <div class="text-12 vip-rights-num">20门课程<span class="ml10">6个班级</span></div>
           <div class="text-12">10元 / 月</div>
         </div>
       </swiper-slide>
@@ -14,7 +14,7 @@
       <header class="title-18 text-center mb20">{{levels[activeIndex].name}}介绍</header>
       <div class="text-content">{{levels[activeIndex].description}}</div>
     </div>
-    <div class="text-center mtl"><div class="btn-join-vip">开通会员</div></div>
+    <div class="text-center" v-if="!isVip"><div class="btn-join-vip">开通会员</div></div>
   </div>
 </template>
 
@@ -28,7 +28,8 @@ import 'swiper/dist/css/swiper.css';
       swiperSlide
     },
     props:{
-      levels: Array
+      levels: Array,
+      isVip: Object
     },
     data() {
       const that = this;
@@ -50,9 +51,6 @@ import 'swiper/dist/css/swiper.css';
           }
         }
       }
-    },
-    methods: {
     }
   }
-
 </script>
