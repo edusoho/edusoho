@@ -35,7 +35,7 @@ export default {
   created() {
     this.$store.dispatch('getGlobalSettings', {
       type: 'vip',
-      key: 'vipSwitch'
+      key: 'vipSettings'
     });
   },
   watch: {

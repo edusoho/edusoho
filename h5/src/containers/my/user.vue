@@ -4,9 +4,9 @@
       <router-link to="/settings">
         <img class='user-img' :src="user.avatar.large" />
       </router-link>
-      <div :class="['user-middle', vipSwitch ? '' : 'single-middle']">
+      <div :class="['user-middle', vipSettings.enabled ? '' : 'single-middle']">
         <div class='user-name'>{{ user.nickname }}</div>
-        <router-link v-if="vipSwitch" :to="{path: '/vip', vipLevelId: user.vip.levelId}">
+        <router-link v-if="vipSettings.enabled" :to="{path: '/vip', vipLevelId: user.vip.levelId}">
           <span class='user-vip' v-if="user.vip">
             <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="user.vip.icon">
             <span v-if="!vipDated">{{ user.vip.vipName }}</span>
@@ -30,10 +30,7 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapState({
-      user: state => state.user,
-      vipSwitch: state => state.vipSwitch
-    }),
+    ...mapState(['user', 'vipSettings']),
     vipDated() {
       if (!this.user.vip) return false;
       const deadLineStamp = new Date(this.user.vip.deadline).getTime();
