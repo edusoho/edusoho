@@ -1,5 +1,33 @@
 .vip-detail {
   padding-bottom: vw(50);
+  .user-middle {
+    position: relative;
+    .user-name {
+      padding-right: vw(80);
+    }
+  }
+  .vip-status {
+    position: absolute;
+    right: vw(20);
+    top: vw(36);
+    text-align: right;
+    &__btn {
+      display: inline-block;
+      width: vw(52);
+      text-align: center;
+      background-color: $primary-color;
+      border-radius: vw(42);
+      margin-bottom: vw(10);
+      padding: vw(8) 0;
+      font-size: vw(12);
+      line-height: 1;
+      color: #fff;
+    }
+    &__deadline {
+      color: #B0BDC9;
+      font-size: vw(10);
+    }
+  }
   .vip-introduce {
     padding-top: vw(20);
     padding-bottom: vw(30);
@@ -33,7 +61,6 @@
     }
     &__text {
       margin-top: vw(38);
-      margin-bottom: vw(25);
       .text-content {
         padding-right: vw(20);
         padding-left: vw(20);
@@ -42,7 +69,7 @@
     }
     .btn-join-vip {
       display: inline-block;
-      margin: 0 auto;
+      margin: vw(25) auto 0;
       background-color: $primary-color;
       border-radius: vw(100);
       font-size: vw(16);
