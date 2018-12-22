@@ -14,9 +14,13 @@
             您还不是会员
           </router-link>
         </div>
+        <div class="vip-status">
+          <div class="vip-status__btn">{{ vipDated ? '重新开通' : btnStatus }}</div>
+          <div class="vip-status__deadline">{{ vipDeadline }} 到期</div>
+        </div>
       </div>
-      <router-link to="/login" v-else>
-        <img class='user-img' src="static/images/avatar.png" />
+      <router-link :to="{path: '/login', query: { redirect : '/vip'}}" v-else>
+        <img class='user-img' src="statsc/images/avatar.png" />
         <div class="user-middle single-middle">
           <div class='user-vip'>
             立即登录，查看会员权益
@@ -24,31 +28,34 @@
         </div>
       </router-link>
     </div>
-    <vip-introduce :levels="levels" @activeIndex="activeIndex"></vip-introduce>
+    <vip-introduce :levels="levels" :isVip="vipData.vipUser.vip" @activeIndex="activeIndex"></vip-introduce>
     <e-course-list
       class="gray-border-bottom"
       :courseList="courseData"
-      :typeList="'course_list'"
-      />
+      :typeList="'course_list'"/>
     <e-course-list
       class="gray-border-bottom"
       :courseList="classroomData"
-      :typeList="'classroom_list'"
-      />
-    <div class="btn-join-bottom">立即开通</div>
+      :typeList="'classroom_list'"/>
+    <div class="btn-join-bottom">立即{{ btnStatus }}</div>
   </div>
 </template>
 <script>
 import Api from '@/api';
 import introduce from './introduce';
 import courseList from '../components/e-course-list/e-course-list.vue';
+import { formatFullTime } from '@/utils/date-toolkit.js';
 
 export default {
   data() {
     return {
-      user: null,
-      vipInfo: null,
-      vipData: {},
+      user: {
+        avatar: {}
+      },
+      vipInfo: {},
+      vipData: {
+        vipUser: {}
+      },
       levels: [{
         courses: {
           data: []
@@ -91,6 +98,17 @@ export default {
       }
       data.items = this.levels[this.index].classrooms.data;
       return data;
+    },
+    vipDeadline() {
+      const time = new Date(this.vipInfo.deadline);
+      return formatFullTime(time);
+    },
+    btnStatus() {
+      const currentSeq = this.levels[this.index].seq;
+      const userSeq = this.vipInfo.seq;
+      if (userSeq > currentSeq) return;
+      if (this.vipDated) return '开通';
+      return userSeq < currentSeq ? '升级' : '续费';
     }
   },
   created() {
