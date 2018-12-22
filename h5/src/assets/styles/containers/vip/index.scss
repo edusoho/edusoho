@@ -13,12 +13,11 @@
     text-align: right;
     &__btn {
       display: inline-block;
-      width: vw(52);
       text-align: center;
       background-color: $primary-color;
       border-radius: vw(42);
       margin-bottom: vw(10);
-      padding: vw(8) 0;
+      padding: vw(8) vw(14);
       font-size: vw(12);
       line-height: 1;
       color: #fff;

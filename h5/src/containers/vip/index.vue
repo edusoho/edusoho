@@ -15,7 +15,7 @@
           </router-link>
         </div>
         <div class="vip-status">
-          <div class="vip-status__btn">{{ btnStatus }}</div>
+          <div class="vip-status__btn">{{ vipDated ? '重新开通' : btnStatus }}</div>
           <div class="vip-status__deadline">{{ vipDeadline }} 到期</div>
         </div>
       </div>
@@ -49,9 +49,13 @@ import { formatFullTime } from '@/utils/date-toolkit.js';
 export default {
   data() {
     return {
-      user: null,
-      vipInfo: null,
-      vipData: {},
+      user: {
+        avatar: {}
+      },
+      vipInfo: {},
+      vipData: {
+        vipUser: {}
+      },
       levels: [{
         courses: {
           data: []
@@ -102,8 +106,8 @@ export default {
     btnStatus() {
       const currentSeq = this.levels[this.index].seq;
       const userSeq = this.vipInfo.seq;
-      console.log(userSeq,currentSeq,88)
       if (userSeq > currentSeq) return;
+      if (this.vipDated) return '开通';
       return userSeq < currentSeq ? '升级' : '续费';
     }
   },
