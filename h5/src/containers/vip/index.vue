@@ -15,7 +15,7 @@
           </router-link>
         </div>
         <div class="vip-status">
-          <div class="vip-status__btn">{{ vipDated ? '重新开通' : btnStatus }}</div>
+          <div class="vip-status__btn" @click="vipPopShow = true">{{ vipDated ? '重新开通' : btnStatus }}</div>
           <div class="vip-status__deadline">{{ vipDeadline }} 到期</div>
         </div>
       </div>
@@ -53,7 +53,7 @@
             @click.native="selectPriceItem(index)" />
         </van-col>
       </van-row>
-      <div class="btn-join-bottom" @click="vipPopShow = true">确认{{ btnStatus }}</div>
+      <div class="btn-join-bottom" @click="vipPopShow = false">确认{{ btnStatus }}</div>
     </e-popup>
 
     <div class="btn-join-bottom" @click="vipPopShow = true">立即{{ btnStatus }}</div>
