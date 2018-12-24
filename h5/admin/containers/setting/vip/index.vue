@@ -1,7 +1,7 @@
 <template>
   <module-frame containerClass="setting-vip" :isActive="isActive" :isIncomplete="isIncomplete">
     <div slot="preview">
-      <vip-list :items="items" :sort="copyModuleData.sort" :feedback="false" />
+      <vip-list :items="items" :sort="copyModuleData.sort" :feedback="false" :showTitle="radio"/>
     </div>
 
     <div slot="setting">
@@ -9,6 +9,11 @@
         网校会员
       </header>
       <div class="default-allocate__content clearfix">
+        <!-- 标题栏 -->
+        <setting-cell title="标题栏：">
+          <el-radio v-model="radio" label="show">显示</el-radio>
+          <el-radio v-model="radio" label="unshow">不显示</el-radio>
+        </setting-cell>
         <setting-cell title="排列顺序：">
           <el-radio v-model="copyModuleData.sort" label="1">从低到高</el-radio>
           <el-radio v-model="copyModuleData.sort" label="0">从高到低</el-radio>
@@ -90,6 +95,14 @@ export default {
       set(value) {
         this.moduleData.data.items = value;
       }
+    },
+    radio: {
+      get() {
+        return this.copyModuleData.titleShow;
+      },
+      set(value) {
+        this.copyModuleData.titleShow = value;
+      },
     }
   },
   watch: {
@@ -102,6 +115,9 @@ export default {
     sort() {
       this.items = this.items.reverse();
     },
+    radio(value) {
+      this.showTitle(value);
+    }
   },
   created() {
     const existItems = Array.isArray(this.items) && this.items.length > 0;
@@ -112,5 +128,10 @@ export default {
       this.items.push(...res);
     })
   },
+  methods: {
+    showTitle() {
+      this.copyModuleData.titleShow = this.radio
+    }
+  }
 }
 </script>

@@ -27,6 +27,13 @@
           :feedback="true"
           :showTitle="part.data.titleShow"></e-coupon-list>
       </div>
+      <e-vip-list
+        v-if="part.type == 'vip'"
+        class="gray-border-bottom"
+        :items="part.data.items"
+        :feedback="true"
+        :sort="part.data.sort"
+        :showTitle="part.data.titleShow"></e-vip-list>
     </div>
     <!-- 垫底的 -->
     <div class="mt50"></div>
@@ -40,6 +47,7 @@
   import swipe from '@/containers/components/e-swipe/e-swipe.vue';
   import groupon from '@/containers/components/e-marketing/e-groupon';
   import coupon from '@/containers/components/e-coupon-list/e-coupon-list';
+  import vipList from '@/containers/components/e-vip-list/e-vip-list';
   import { mapActions } from 'vuex';
 
   export default {
@@ -48,7 +56,8 @@
       'e-swipe': swipe,
       'e-poster': poster,
       'e-groupon': groupon,
-      'e-coupon-list': coupon
+      'e-coupon-list': coupon,
+      'e-vip-list': vipList
     },
     props: {
       feedback: {

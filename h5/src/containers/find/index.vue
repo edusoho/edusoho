@@ -27,6 +27,7 @@
         class="gray-border-bottom"
         v-if="part.type === 'vip'"
         :items="part.data.items"
+        :showTitle="part.data.titleShow"
         :sort="part.data.sort"
         :feedback="feedback"></e-vip-list>
     </div>
