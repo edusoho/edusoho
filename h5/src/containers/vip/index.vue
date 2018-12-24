@@ -32,6 +32,7 @@
     <!-- 会员轮播 -->
     <vip-introduce
       :levels="levels"
+      :buyType="buyType"
       :isVip="vipData.vipUser.vip"
       @activeIndex="activeIndex"
       @vipOpen="vipOpen">
@@ -104,6 +105,7 @@ export default {
       vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1,
       vipPopShow: false,
       priceItems: [],
+      buyType: 'month',
       orderParams: {
         unit: '',
         num: 0,
@@ -170,6 +172,7 @@ export default {
       this.levels = res.levels;
       this.user = res.vipUser.user;
       this.vipInfo = res.vipUser.vip;
+      this.buyType = this.vipSettings.buyType;
       for (var i = 0; i < this.levels.length; i++) {
         this.priceItems = [
           ...this.priceItems,
