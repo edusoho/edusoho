@@ -5,7 +5,7 @@ export default [
     method: 'GET'
   }, {
     name: 'getVipCourses',
-    url: '/plugins/vip/vip_courses?levelId=5&offset=0&sort=-price',
+    url: '/plugins/vip/vip_courses?levelId={levelId}&offset={offset}&sort=-price',
     method: 'GET'
   }
 ];

@@ -14,7 +14,7 @@
       <header class="title-18 text-center mb20">{{levels[activeIndex].name}}介绍</header>
       <div class="text-content">{{levels[activeIndex].description}}</div>
     </div>
-    <div class="text-center" v-if="!isVip"><div class="btn-join-vip">开通会员</div></div>
+    <div class="text-center" v-if="!isVip"><div class="btn-join-vip" @click="vipPopShow">开通会员</div></div>
   </div>
 </template>
 
@@ -60,6 +60,11 @@ import 'swiper/dist/css/swiper.css';
             }
           }
         }
+      }
+    },
+    methods: {
+      vipPopShow() {
+        this.$emit('vipOpen', true);
       }
     }
   }

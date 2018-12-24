@@ -30,7 +30,12 @@
     </div>
 
     <!-- 会员轮播 -->
-    <vip-introduce :levels="levels" :isVip="vipData.vipUser.vip" @activeIndex="activeIndex"></vip-introduce>
+    <vip-introduce
+      :levels="levels"
+      :isVip="vipData.vipUser.vip"
+      @activeIndex="activeIndex"
+      @vipOpen="vipOpen">
+    </vip-introduce>
 
     <!-- 会员免费课程 -->
     <e-course-list
@@ -190,6 +195,9 @@ export default {
           targetType: 'vip',
         }
       });
+    },
+    vipOpen() {
+      this.vipPopShow = true;
     }
   }
 }

@@ -78,7 +78,9 @@ export default {
           targetType: this.targetType,
           targetId: id,
           isOrderCreate: 1,
-          couponCode: this.$route.params.couponCode
+          couponCode: this.$route.params.couponCode,
+          unit: this.$route.params.unit,
+          num: this.$route.params.num,
         }
       }).then(res => {
         this.detail = Object.assign({}, res)
