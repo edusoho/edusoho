@@ -24,7 +24,6 @@ class CourseMemberFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        file_put_contents('/Users/lvliujie/www/wyx-edusoho/web/test.log', $data['noteLastUpdateTime'].PHP_EOL, FILE_APPEND);
         $data['noteLastUpdateTime'] = date('c', $data['noteLastUpdateTime']);
         $data['finishedTime'] = date('c', $data['finishedTime']);
         $data['lastLearnTime'] = date('c', $data['lastLearnTime']);
