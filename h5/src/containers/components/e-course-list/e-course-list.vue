@@ -50,6 +50,10 @@ import { mapState } from 'vuex';
       tagShow: {
         type: Boolean,
         default: true
+      },
+      moreType: {
+        type: String,
+        default: 'normal'
       }
     },
     components: {
@@ -140,7 +144,12 @@ import { mapState } from 'vuex';
         if (!this.feedback) {
           return;
         }
-        let routeName = this.typeList === 'course_list' ? 'more_course' : 'more_class';
+        let routeName = '';
+        if (this.moreType === 'vip') {
+          routeName = this.typeList === 'course_list' ? 'vip_course' : 'vip_classroom';
+        } else {
+          routeName = this.typeList === 'course_list' ? 'more_course' : 'more_class';
+        }
         this.$router.push({
           name: routeName
         });
