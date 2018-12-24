@@ -42,6 +42,12 @@
           });
           return;
         }
+        if (itemLinkData.type === 'vip') {
+          this.$router.push({
+            path: `/vip`
+          });
+          return;
+        }
         if (itemLinkData.type === 'course' && itemLinkData.target) {
           this.$router.push({
             path: `/course/${itemLinkData.target.id}`
