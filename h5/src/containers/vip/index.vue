@@ -45,7 +45,7 @@
       :typeList="'classroom_list'"/>
 
     <!-- 加入会员 -->
-    <e-popup class="vip-popup" :show.sync="vipPopShow" title="开通白金会员" contentClass="vip-popup__content">
+    <e-popup class="vip-popup" :show.sync="vipPopShow" :title="'开通' + levels[this.currentLevelIndex].name" contentClass="vip-popup__content">
       <div class="vip-popup__header text-14">选择开通时长</div>
       <div class="vip-popup__body">
         <van-row gutter="20">
