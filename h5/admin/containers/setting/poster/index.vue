@@ -37,7 +37,7 @@
         </setting-cell>
 
         <setting-cell title="" customClass="poster-item-setting__section" v-show="radio !== 'url'">
-          <el-dropdown @command="insideLinkHandle" v-show="!courseLinkText">
+          <el-dropdown v-show="!courseLinkText">
             <el-button size="mini" class="el-dropdown-link">
               添加链接
             </el-button>
@@ -68,7 +68,7 @@
     <course-modal
       slot="modal"
       :visible="modalVisible"
-      :type="type"
+      :type="(type && type !== 'vip') ? type : 'course_list'"
       limit=1
       :courseList="courseSets"
       @visibleChange="modalVisibleHandler"
@@ -110,12 +110,12 @@ export default {
         label: '选择班级',
       }, {
         key: 2,
-        type: 'vip_list',
-        label: '会员专区',
+        type: 'vip',
+        label: '选择会员',
       }],
       pathName: this.$route.name,
       type: 'course_list',
-      radio: 'insideLink'
+      radio: 'insideLink',
     }
   },
   props: {
@@ -152,6 +152,9 @@ export default {
     },
     courseLinkText: {
       get() {
+        if (this.type === 'vip') {
+          return '会员';
+        }
         const data = this.courseSets[0];
         if (data) {
           return (this.type === 'course_list') ? data.displayedTitle : data.title;
@@ -184,6 +187,7 @@ export default {
   },
   created() {
     if (this.pathName === 'h5Setting') {
+      this.type = this.moduleData.data.link.type;
       if (this.moduleData.data.link.type === 'url') {
         this.radio = 'url';
       };
@@ -266,15 +270,17 @@ export default {
       this.$set(this.copyModuleData.link, 'target', null);
     },
     handleClose() {
+      this.type = '';
+      this.moduleData.data.link.type = '';
       this.removeCourseLink();
     },
     insideLinkHandle(value) {
-      if (value !== 'vip_list') {
-        this.type = value;
+      if (value !== 'vip') {
         this.modalVisible = true;
-        return;
+      } else {
+        this.moduleData.data.link.type = 'vip';
       }
-      this.courseLinkText = '会员专区';
+      this.type = value;
     }
   }
 }

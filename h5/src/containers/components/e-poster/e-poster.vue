@@ -36,6 +36,12 @@
           });
           return;
         }
+        if (data.type === 'vip') {
+          this.$router.push({
+            path: `/vip`
+          });
+          return;
+        }
         if (data.type == 'url' && data.url) {
           window.location.href = data.url;
           return;

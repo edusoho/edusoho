@@ -63,7 +63,9 @@ export default {
       }
 
       if (targetType === ALL_TYPE.vip) {
-        Toast.fail('你可以在电脑端或App上购买会员');
+        this.$router.push({
+          path: '/vip'
+        });
         return;
       }
 
