@@ -5,6 +5,7 @@ namespace Biz\Course\Copy\Entry;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Taxonomy\Dao\TagOwnerDao;
 use Biz\Course\Copy\Chain\CourseSetCopy;
 
@@ -51,6 +52,8 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourse = $this->getCourseDao()->create($newCourse);
 
         $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $newCourse['id']));
+
+        $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($courseSetId);
 
         $this->processChainsDoCopy(
             $course, array(
@@ -144,5 +147,13 @@ class ClassroomCourseCopy extends CourseCopy
     private function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    private function getCourseSetService()
+    {
+        return $this->biz->service('Course:CourseSetService');
     }
 }
