@@ -13,16 +13,16 @@
 {% block esBar %}{% endblock %}
 
 {% block content %}
-  <div class="es-section">
+<div class="es-section">
 
-    <div class="section-header"><h1>{{ content.title }}</h1></div>
+  <div class="section-header"><h1>{{ content.title }}</h1></div>
 
-      {% if content.body %}
-        <div class="editor-text">
-            {{ content.body|cdn|raw }}
-        </div>
-      {% else %}
-        <div class="empty">{{'custom_page.empty'|trans}}</div>
-      {% endif %}
-  </div>
+  {% if content.body %}
+    <div class="editor-text">
+      {{ content.body|cdn|raw }}
+    </div>
+  {% else %}
+    <div class="empty">{{'custom_page.empty'|trans}}</div>
+  {% endif %}
+</div>
 {% endblock %}
