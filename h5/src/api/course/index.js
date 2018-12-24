@@ -45,6 +45,6 @@ export default [
     name: 'deleteCourse',
     url: '/me/course_members/{id}',
     method: 'DELETE',
-    noPrefix: true
+    disableLoading: true
   }
 ];
