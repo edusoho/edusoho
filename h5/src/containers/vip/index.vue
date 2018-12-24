@@ -51,11 +51,11 @@
         <van-row gutter="20">
           <van-col span="8" v-for="(item, index) in priceItems[currentLevelIndex]" :key="index">
             <price-item :item="item" :class="{ active: index === activePriceIndex }"
-              @click.native="selectPriceItem(index)" />
+              @selectItem="selectPriceItem($event, index)" />
           </van-col>
         </van-row>
       </div>
-      <div class="btn-join-bottom" @click="vipPopShow = false">确认{{ btnStatus }}</div>
+      <div class="btn-join-bottom" :class="{ disabled: activePriceIndex < 0 }" @click="joinVip">确认{{ btnStatus }}</div>
     </e-popup>
 
     <div class="btn-join-bottom" @click="vipPopShow = true">立即{{ btnStatus }}</div>
@@ -90,10 +90,14 @@ export default {
         }
       }],
       currentLevelIndex: 0,
-      activePriceIndex: 0,
+      activePriceIndex: -1,
       vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1,
       vipPopShow: false,
       priceItems: [],
+      orderParams: {
+        unit: '',
+        num: 0,
+      }
     }
   },
   components: {
@@ -164,8 +168,27 @@ export default {
     activeIndex(index) {
       this.currentLevelIndex = index;
     },
-    selectPriceItem(index) {
+    selectPriceItem(event, index) {
       this.activePriceIndex = index;
+      this.orderParams.unit = event.unit;
+      this.orderParams.num = event.num;
+    },
+    joinVip() {
+      if (this.activePriceIndex < 0) {
+        return;
+      }
+      // this.vipPopShow = false;
+      this.$router.push({
+        name: 'order',
+        params: {
+          id: this.levels[this.currentLevelIndex].id,
+          unit: this.orderParams.unit,
+          num: this.orderParams.num
+        },
+        query: {
+          targetType: 'vip',
+        }
+      });
     }
   }
 }

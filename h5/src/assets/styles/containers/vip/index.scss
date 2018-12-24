@@ -85,6 +85,9 @@
     color: #fff;
     font-size: vw(16);
     background-color: $primary-color;
+    &.disabled {
+      background-color: #9BA5B0;
+    }
   }
 }
 
