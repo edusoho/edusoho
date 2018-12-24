@@ -70,6 +70,7 @@ import courseList from '../components/e-course-list/e-course-list';
 import getPriceItems from '../../config/vip-price-config';
 import { formatFullTime } from '@/utils/date-toolkit.js';
 import { mapState } from 'vuex';
+import { Toast } from 'vant';
 
 export default {
   data() {
@@ -163,7 +164,12 @@ export default {
           getPriceItems(this.vipSettings.buyType, res.levels[i].monthPrice, res.levels[i].yearPrice)
         ];
       }
+    }).catch(err => {
+      Toast.fail(err.message)
     })
+    setTimeout(() => {
+      window.scrollTo(0,0);
+    }, 100)
   },
   methods: {
     activeIndex(index) {
