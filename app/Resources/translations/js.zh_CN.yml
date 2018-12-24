@@ -1,4 +1,4 @@
-site.flash_not_install_hint: 您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。<a target="_blank" href="http://www.adobe.com/go/getflashplayer">点击安装</a>
+site.flash_not_install_hint: 您的浏览器可能存在未安装flash播放器，未开启flash播放器，flash低于11版本的情况，请先确认flash播放器能够正常使用。<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
 site.date_format_dhis: %days%天%hours%小时%minutes%分钟%seconds%秒
 site.date_format_his: %hours%小时%minutes%分钟%seconds%秒
 site.date_format_is: %minutes%分钟%seconds%秒
