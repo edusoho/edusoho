@@ -1,4 +1,10 @@
 {% extends 'activity/content-layout.html.twig' %}
+
+{% block head_scripts %}
+  {{ parent() }}
+  <base target="_blank">
+{% endblock %}
+
 {% block body %}
   	<div class="iframe-parent-content ph20 pv20">
     <div class="lesson-content-text-body">
