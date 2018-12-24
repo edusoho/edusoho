@@ -187,6 +187,7 @@ export default {
   },
   created() {
     if (this.pathName === 'h5Setting') {
+      this.type = this.moduleData.data.link.type;
       if (this.moduleData.data.link.type === 'url') {
         this.radio = 'url';
       };

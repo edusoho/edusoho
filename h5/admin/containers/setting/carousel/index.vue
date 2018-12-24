@@ -19,7 +19,6 @@
           :index="index"
           :active="activeItemIndex"
           :itemNum="itemNum"
-          :type="type"
           :courseSets="courseSets[index]"
           @selected="selected"
           @chooseCourse="openModal"

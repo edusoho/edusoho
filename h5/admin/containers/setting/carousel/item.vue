@@ -71,7 +71,7 @@
     components: {
       VueCropper
     },
-    props: ['item', 'index', 'active', 'itemNum', 'courseSets', 'type'],
+    props: ['item', 'index', 'active', 'itemNum', 'courseSets'],
     data() {
       return {
         activeIndex: this.active,
@@ -101,6 +101,7 @@
         imageCropped: false,
         dialogVisible: false,
         pathName: this.$route.name,
+        type: '',
       };
     },
     computed: {
@@ -125,6 +126,9 @@
           this.item.link.target = null;
         }
       }
+    },
+    created() {
+      this.type = this.item.link.type;
     },
     methods: {
       beforeUpload(file) {
@@ -224,9 +228,11 @@
         this.dialogVisible = true;
       },
       handleClose() {
+        this.type = '';
         this.$emit('removeCourseLink', this.index);
       },
       insideLinkHandle(value) {
+        this.type = value;
         this.$emit('chooseCourse', {
           'value': value,
           'index': this.index
