@@ -93,6 +93,10 @@
           key: 1,
           type: 'classroom_list',
           label: '选择班级',
+        }, {
+          key: 2,
+          type: 'vip',
+          label: '选择会员',
         }],
         imageCropped: false,
         dialogVisible: false,
@@ -101,6 +105,9 @@
     },
     computed: {
       linkTextShow() {
+        if (this.type === 'vip') {
+          return '会员';
+        }
         return this.item.link.target && this.item.link.target.displayedTitle;
       },
     },

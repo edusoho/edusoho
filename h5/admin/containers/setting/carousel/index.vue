@@ -19,7 +19,7 @@
           :index="index"
           :active="activeItemIndex"
           :itemNum="itemNum"
-          :type='type'
+          :type="type"
           :courseSets="courseSets[index]"
           @selected="selected"
           @chooseCourse="openModal"
@@ -32,7 +32,7 @@
     <course-modal
       slot="modal"
       limit=1
-      :type="type"
+      :type="(type && type !== 'vip') ? type : 'course_list'"
       :visible="modalVisible"
       :courseList="courseSets[activeItemIndex] || []"
       @visibleChange="modalVisibleHandler"
@@ -153,16 +153,22 @@ export default {
     modalVisibleHandler(visible) {
       this.modalVisible = visible;
     },
-    openModal(data) {
-      this.activeItemIndex = data.index;
-      this.type = data.value;
-      this.modalVisible = true;
+    openModal({ value, index }) {
+      if (value !== 'vip') {
+        this.modalVisible = true;
+      } else {
+        this.copyModuleData.data[index].link.type = 'vip';
+      }
+      this.type = value;
+      this.activeItemIndex = index;
     },
     itemRemove(index) {
       this.activeItemIndex = index - 1;
       this.copyModuleData.data.splice(index, 1);
     },
     removeCourseLink(index) {
+      this.type = '';
+      this.copyModuleData.data[index].link.type = '';
       this.copyModuleData.data[index].link.target = null;
       this.courseSets[this.activeItemIndex] = [];
     }
