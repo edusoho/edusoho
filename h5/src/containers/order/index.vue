@@ -4,7 +4,7 @@
       <e-loading v-if="isLoading"></e-loading>
       <!-- 商品缩略图 -->
       <e-course
-        v-if="Object.keys(course).length >0"
+        v-if="Object.keys(course).length > 0"
         type="confirmOrder"
         :order="course"
         :course="course">
@@ -156,11 +156,23 @@ export default {
             targetId: this.targetId,
             isOrderCreate: 1,
             couponCode: this.itemData ? this.itemData.code : '',
+            unit: this.targetUnit,
+            num: this.targetNum,
           }
         }).then(() => {
-          this.$router.push({
-            path: `/${this.targetType}/${this.targetId}`
-          })
+          if (this.targetType === 'vip') {
+            this.$router.replace({
+              path: `/${this.targetType}`
+            }, () => {
+              this.$router.go(-1)
+            })
+          } else {
+            this.$router.replace({
+              path: `/${this.targetType}/${this.targetId}`
+            }, () => {
+              this.$router.go(-1)
+            })
+          }
         })
         return;
       }
@@ -171,7 +183,9 @@ export default {
           targetType: this.targetType,
         },
         params: {
-          couponCode: this.itemData ? this.itemData.code : ''
+          couponCode: this.itemData ? this.itemData.code : '',
+          unit: this.targetUnit,
+          num: this.targetNum,
         }
       })
     },
