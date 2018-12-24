@@ -71,7 +71,7 @@
     components: {
       VueCropper
     },
-    props: ['item', 'index', 'active', 'itemNum', 'courseSets', 'type'],
+    props: ['item', 'index', 'active', 'itemNum', 'courseSets'],
     data() {
       return {
         activeIndex: this.active,
@@ -93,14 +93,22 @@
           key: 1,
           type: 'classroom_list',
           label: '选择班级',
+        }, {
+          key: 2,
+          type: 'vip',
+          label: '选择会员',
         }],
         imageCropped: false,
         dialogVisible: false,
         pathName: this.$route.name,
+        type: '',
       };
     },
     computed: {
       linkTextShow() {
+        if (this.type === 'vip') {
+          return '会员';
+        }
         return this.item.link.target && this.item.link.target.displayedTitle;
       },
     },
@@ -118,6 +126,9 @@
           this.item.link.target = null;
         }
       }
+    },
+    created() {
+      this.type = this.item.link.type;
     },
     methods: {
       beforeUpload(file) {
@@ -217,9 +228,11 @@
         this.dialogVisible = true;
       },
       handleClose() {
+        this.type = '';
         this.$emit('removeCourseLink', this.index);
       },
       insideLinkHandle(value) {
+        this.type = value;
         this.$emit('chooseCourse', {
           'value': value,
           'index': this.index
