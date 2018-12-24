@@ -72,6 +72,7 @@ import { mapState } from 'vuex';
 import coupon from '@/containers/components/e-coupon/e-coupon.vue';
 import eCourse from '@/containers/components/e-course/e-course.vue';
 import Api from '@/api';
+import { Toast } from 'vant';
 
 export default {
   components: {
@@ -145,6 +146,8 @@ export default {
       }
     }).then(res => {
       this.course = res
+    }).catch(err => {
+      Toast.fail(err.message)
     })
   },
   methods: {

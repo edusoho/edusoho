@@ -49,6 +49,7 @@ export default {
       paySettings: {},
       inWechat: this.isWeixinBrowser(),
       targetType: this.$route.query.targetType,
+      timeoutId: -1,
     };
   },
   computed: {
@@ -101,6 +102,10 @@ export default {
       })
     }
   },
+  beforeRouteLeave (to, from, next) {
+    clearTimeout(this.timeoutId);
+    next();
+  },
   methods: {
     handlePay () {
       if (!this.validPayWay) return
@@ -143,7 +148,7 @@ export default {
           window.location.href = window.location.origin + res.paidSuccessUrlH5
           return;
         }
-        setTimeout(() => {
+        this.timeoutId = setTimeout(() => {
           this.getTradeInfo(tradeSn);
         },2000)
       })

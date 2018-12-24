@@ -22,6 +22,11 @@ export default {
       isLoading: state => state.isLoading
     }),
   },
+  created() {
+    setTimeout(() => {
+      window.scrollTo(0,0);
+    }, 100)
+  }
 }
 </script>
 
