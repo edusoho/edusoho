@@ -6,16 +6,20 @@
       </router-link>
       <div :class="['user-middle', vipSettings.enabled ? '' : 'single-middle']">
         <div class='user-name'>{{ user.nickname }}</div>
-        <router-link v-if="vipSettings.enabled" :to="{path: '/vip', vipLevelId: user.vip.levelId}">
+        <div v-if="vipSettings.enabled">
           <span class='user-vip' v-if="user.vip">
-            <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="user.vip.icon">
-            <span v-if="!vipDated">{{ user.vip.vipName }}</span>
-            <span class="grey" v-else>会员已过期</span>
+            <router-link :to="{path: '/vip', vipLevelId: user.vip.levelId}">
+              <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="user.vip.icon">
+              <span v-if="!vipDated">{{ user.vip.vipName }}</span>
+              <span class="grey" v-else>会员已过期</span>
+            </router-link>
           </span>
-          <div class='user-vip' v-else>
-            您还不是会员，<span class="color-primary">去开通</span>
+          <div v-else>
+            <router-link class='user-vip' to="/vip">
+              您还不是会员，<span class="color-primary">去开通</span>
+            </router-link>
           </div>
-        </router-link>
+        </div>
       </div>
       <router-link to="/settings" class='user-setting'>
         <img src='static/images/setting.png'>
