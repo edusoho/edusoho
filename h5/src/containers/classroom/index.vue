@@ -31,6 +31,7 @@
           cover: '',
           reviews: [],
           classId: 0,
+          vipLevel: null,
         },
         planDetails: {
           title: '',
@@ -72,7 +73,7 @@
         const summary = res.about;
         const joinStatus = !isEmpty && res.member;
         const {
-          courses, teachers, assistants, buyable,
+          courses, teachers, assistants, buyable, vipLevel,
           headTeacher, access, reviews, expiryMode,
           expiryValue, title, price, studentNum, service,
         } = res;
@@ -85,7 +86,7 @@
 
         this.planDetails = planDetails;
         this.details = {
-          summary, joinStatus, isEmpty, courses, classId, buyable,
+          summary, joinStatus, isEmpty, courses, classId, buyable, vipLevel,
           teachers, assistants, headTeacher, access, cover, reviews,
         }
       },

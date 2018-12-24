@@ -75,7 +75,10 @@ const filters = [
   },
   {
     name: 'filterJoinStatus',
-    handler(code, type = 'course') {
+    handler(code, type = 'course', vipAccessToJoin) {
+      if (vipAccessToJoin) {
+        return '会员免费学';
+      }
       const targetType = {
         course: '课程',
         classroom: '班级'

@@ -44,7 +44,7 @@
       <review-list ref="review" :targetId="details.classId" :reviews="details.reviews" title="学员评价" type="classroom" defaulValue="暂无评价"></review-list>
 
       <e-footer :disabled="!accessToJoin" @click.native="handleJoin">
-      {{details.access.code | filterJoinStatus('classroom')}}</e-footer>
+      {{details.access.code | filterJoinStatus('classroom', vipAccessToJoin)}}</e-footer>
     </div>
 
   </div>
@@ -60,6 +60,7 @@
   import onsale from '../course/detail/onsale'
   import moreMask from '@/components/more-mask';
   import redirectMixin from '@/mixins/saveRedirect';
+  import { mapState } from 'vuex';
   import Api from '@/api';
 
   const TAB_HEIGHT = 44;
@@ -96,10 +97,22 @@
       }
     },
     computed: {
+      ...mapState(['user']),
       accessToJoin() {
         return this.details.access.code === 'success'
           || this.details.access.code === 'user.not_login';
       },
+      vipAccessToJoin() {
+        let vipAccess = false;
+        if (!this.details.vipLevel || !this.user.vip) {
+          return false;
+        }
+        if (this.details.vipLevel.seq <= this.user.vip.seq) {
+          const vipExpired = new Date(this.user.vip.deadline).getTime() < new Date().getTime();
+          vipAccess = !vipExpired;
+        }
+        return vipAccess;
+      }
     },
     mounted() {
       Api.searchCoupon({
@@ -159,13 +172,17 @@
         }, 400)
       },
       handleJoin() {
-        if (!this.accessToJoin) {
+        // 会员免费学
+        const vipAccessToJoin = this.vipAccessToJoin;
+
+        // 禁止加入
+        if (!this.accessToJoin && !vipAccessToJoin) {
           return;
         }
+
         const details = this.details;
         const planDetails = this.planDetails;
-        const canJoinIn = details.access.code === 'success'
-          || Number(details.buyable ) === 1 || (+planDetails.price) === 0;
+        const canJoinIn = Number(details.buyable ) === 1 || (+planDetails.price) === 0 || vipAccessToJoin;
 
         if (!this.$store.state.token) {
           this.$router.push({
@@ -179,7 +196,7 @@
 
         if (!canJoinIn) return;
 
-        if (+planDetails.price) {
+        if (+planDetails.price && !vipAccessToJoin) {
           this.$router.push({
             name: 'order',
             params: {
