@@ -6,7 +6,7 @@
         <div class="vip-info">
           <div class="text-18">{{item.name}}</div>
           <div class="text-12 vip-rights-num">{{item.courses.data.length}}门课程 {{item.classrooms.data.length}}个班级</div>
-          <div class="text-12">{{item.vipPrice}}元 / 月</div>
+          <div class="text-12">{{buyType === 'year' ? item.yearPrice : item.monthPrice}}元 / 月</div>
         </div>
       </swiper-slide>
     </swiper>
@@ -64,12 +64,6 @@ import 'swiper/dist/css/swiper.css';
             }
           }
         }
-      }
-    },
-    computed: {
-      vipPrice() {
-        if (this.buyType === 'year') return yearPrice;
-        return monthPrice;
       }
     },
     methods: {
