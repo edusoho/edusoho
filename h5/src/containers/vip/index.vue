@@ -15,8 +15,8 @@
           </router-link>
         </div>
         <div class="vip-status" v-if="vipInfo">
-          <div class="vip-status__btn">{{ vipDated ? '重新开通' : btnStatus }}</div>
-          <div class="vip-status__deadline">{{ vipDeadline }} 到期</div>
+          <div class="vip-status__btn" @click="vipPopShow = true">{{ vipDated ? '重新开通' : btnStatus }}</div>
+          <div class="vip-status__deadline" v-if="vipDated">{{ vipDeadline }} 到期</div>
         </div>
       </div>
       <router-link :to="{path: '/login', query: { redirect : '/vip'}}" v-else>
@@ -45,15 +45,17 @@
       :typeList="'classroom_list'"/>
 
     <!-- 加入会员 -->
-    <e-popup class="vip-popup" :show.sync="vipPopShow" title="开通白金会员" contentClass="vip-popup__content">
+    <e-popup class="vip-popup" :show.sync="vipPopShow" :title="'开通' + levels[this.currentLevelIndex].name" contentClass="vip-popup__content">
       <div class="vip-popup__header text-14">选择开通时长</div>
-      <van-row gutter="20" class="vip-popup__body">
-        <van-col span="8" v-for="(item, index) in priceItems[currentLevelIndex]" :key="index">
-          <price-item :item="item" :class="{ active: index === activePriceIndex }"
-            @click.native="selectPriceItem(index)" />
-        </van-col>
-      </van-row>
-      <div class="btn-join-bottom" @click="vipPopShow = true">确认{{ btnStatus }}</div>
+      <div class="vip-popup__body">
+        <van-row gutter="20">
+          <van-col span="8" v-for="(item, index) in priceItems[currentLevelIndex]" :key="index">
+            <price-item :item="item" :class="{ active: index === activePriceIndex }"
+              @selectItem="selectPriceItem($event, index)" />
+          </van-col>
+        </van-row>
+      </div>
+      <div class="btn-join-bottom" :class="{ disabled: activePriceIndex < 0 }" @click="joinVip">确认{{ btnStatus }}</div>
     </e-popup>
 
     <div class="btn-join-bottom" @click="vipPopShow = true">立即{{ btnStatus }}</div>
@@ -88,10 +90,14 @@ export default {
         }
       }],
       currentLevelIndex: 0,
-      activePriceIndex: 0,
+      activePriceIndex: -1,
       vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1,
       vipPopShow: false,
       priceItems: [],
+      orderParams: {
+        unit: '',
+        num: 0,
+      }
     }
   },
   components: {
@@ -163,8 +169,27 @@ export default {
     activeIndex(index) {
       this.currentLevelIndex = index;
     },
-    selectPriceItem(index) {
+    selectPriceItem(event, index) {
       this.activePriceIndex = index;
+      this.orderParams.unit = event.unit;
+      this.orderParams.num = event.num;
+    },
+    joinVip() {
+      if (this.activePriceIndex < 0) {
+        return;
+      }
+      // this.vipPopShow = false;
+      this.$router.push({
+        name: 'order',
+        params: {
+          id: this.levels[this.currentLevelIndex].id,
+          unit: this.orderParams.unit,
+          num: this.orderParams.num
+        },
+        query: {
+          targetType: 'vip',
+        }
+      });
     }
   }
 }

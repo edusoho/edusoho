@@ -5,7 +5,7 @@
         <img class='user-img' :src="user.avatar.large" />
       </router-link>
       <div :class="['user-middle', vipSettings.enabled ? '' : 'single-middle']">
-        <div class='user-name'>{{ user.nickname }}</div>
+        <div class='user-name color-primary'>{{ user.nickname }}</div>
         <div v-if="vipSettings.enabled">
           <span class='user-vip' v-if="user.vip">
             <router-link :to="{path: '/vip', vipLevelId: user.vip.levelId}">
