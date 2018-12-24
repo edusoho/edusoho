@@ -14,7 +14,7 @@
             您还不是会员
           </router-link>
         </div>
-        <div class="vip-status">
+        <div class="vip-status" v-if="vipInfo">
           <div class="vip-status__btn">{{ vipDated ? '重新开通' : btnStatus }}</div>
           <div class="vip-status__deadline">{{ vipDeadline }} 到期</div>
         </div>
@@ -133,7 +133,8 @@ export default {
       return formatFullTime(time);
     },
     btnStatus() {
-      const currentSeq = this.levels[this.currentLevelIndex].seq;
+      if (!this.vipInfo) return '开通';
+      const currentSeq = Number(this.levels[this.currentLevelIndex].seq);
       const userSeq = this.vipInfo.seq;
       if (userSeq > currentSeq) return;
       if (this.vipDated) return '开通';
