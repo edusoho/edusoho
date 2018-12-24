@@ -25,6 +25,7 @@ export default {
   },
   methods: {
     handleClick() {
+      if (!this.feedback) return;
       this.$router.push({
         path: '/vip',
       });
