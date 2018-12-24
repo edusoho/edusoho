@@ -75,6 +75,8 @@
   }
 
   .e-course-list {
+    margin-left: -10px;
+    margin-right: -10px;
     &__header {
       padding: 10px;
     }
@@ -131,13 +133,13 @@
   }
 
   .coupon-preview__container {
-    padding-left: 10px;
+    padding-left: 0;
     .e-coupon {
       &-single {
         .e-coupon__body {
-          padding-right: 10px;
+          padding-right: 0;
           &:after {
-            right: 4px;
+            right: -6px;
           }
         }
         .van-swipe-item {
@@ -145,7 +147,7 @@
         }
         .e-coupon__header {
           .e-coupon__name {
-            right: 85px;
+            right: 80px;
             width: 130px;
             white-space: nowrap;
             overflow: hidden;
@@ -155,7 +157,7 @@
             }
           }
           .coupon-button {
-            right: 25px;
+            right: 15px;
           }
         }
         .stamp {
@@ -213,6 +215,10 @@
   height: 560px;
   width: 320px;
   overflow: auto;
+  .e-vip-list {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 

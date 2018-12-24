@@ -1,5 +1,6 @@
 <template>
   <div class="e-vip-list" :class="items.length <= 1 ? 'single' : ''">
+    <div class="e-vip-list__title" v-if="showTitle === 'show'">会员专区</div>
     <van-swipe v-if="items.length > 1" :width="200" :show-indicators="false" :loop="false" :touchable="true">
       <van-swipe-item v-for="(item, index) in items" :key="index">
         <vip-item :item="item" :feedback="feedback"/>
@@ -16,7 +17,7 @@ import vipItem from './item';
 
 export default {
   name: 'e-vip-list',
-  props: ['items', 'feedback', 'sort'],
+  props: ['items', 'feedback', 'sort', 'showTitle'],
   components: {
     vipItem,
   },

@@ -108,6 +108,10 @@ export default {
         key: 1,
         type: 'classroom_list',
         label: '选择班级',
+      }, {
+        key: 2,
+        type: 'vip_list',
+        label: '会员专区',
       }],
       pathName: this.$route.name,
       type: 'course_list',
@@ -265,8 +269,12 @@ export default {
       this.removeCourseLink();
     },
     insideLinkHandle(value) {
-      this.modalVisible = true;
-      this.type = value;
+      if (value !== 'vip_list') {
+        this.type = value;
+        this.modalVisible = true;
+        return;
+      }
+      this.courseLinkText = '会员专区';
     }
   }
 }

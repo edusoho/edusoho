@@ -74,6 +74,7 @@ const MODULE_DEFAULT = {
       items: [],
       sort: '1',
       title: '',
+      titleShow: 'show'
     }
   }
 };
