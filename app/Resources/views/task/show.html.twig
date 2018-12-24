@@ -3,7 +3,7 @@
 {% block title %}{{ 'course.task.learning'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = "" %}
-{% do script(['libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
+{% do script(['libs/ltc-sdk-server.js', 'libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
 
 {% block body %}
   {% set preview = app.request.query.get('preview')  %}

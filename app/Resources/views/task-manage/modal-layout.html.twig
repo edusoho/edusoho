@@ -1,6 +1,6 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 {% set modal_class= "modal-lg" %}
-
+{% do script(['libs/ltc-sdk-server.js']) %}
 
 {% block title %}
   {% if customTitle|default('') != '' %}
