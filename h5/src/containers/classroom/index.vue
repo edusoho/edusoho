@@ -10,6 +10,7 @@
   import joinBefore from './join-before.vue';
   import { mapState } from 'vuex';
   import Api from '@/api';
+  import { Toast } from 'vant';
 
   export default {
     components: {
