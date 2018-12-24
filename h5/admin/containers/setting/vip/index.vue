@@ -15,8 +15,8 @@
           <el-radio v-model="radio" label="unshow">不显示</el-radio>
         </setting-cell>
         <setting-cell title="排列顺序：">
-          <el-radio v-model="copyModuleData.sort" label="1">从低到高</el-radio>
-          <el-radio v-model="copyModuleData.sort" label="0">从高到低</el-radio>
+          <el-radio v-model="copyModuleData.sort" label="asc">从低到高</el-radio>
+          <el-radio v-model="copyModuleData.sort" label="desc">从高到低</el-radio>
         </setting-cell>
 
         <div v-model="items" class="default-draggable__list">

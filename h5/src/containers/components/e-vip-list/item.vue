@@ -25,7 +25,10 @@ export default {
   },
   methods: {
     handleClick() {
-      console.log(this.item.seq)
+      if (!this.feedback) return;
+      this.$router.push({
+        path: '/vip',
+      });
     }
   }
 }
