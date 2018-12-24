@@ -78,6 +78,10 @@
       hiddeTitle: {
         type: Boolean,
         default: false
+      },
+      errorMsg: {
+        type: String,
+        default: '',
       }
     },
     computed: {
@@ -228,6 +232,12 @@
         return '';
       },
       lessonCellClick (task) {
+        // 课程错误，不允许学习任务
+        if (this.errorMsg) {
+          Toast(this.errorMsg);
+          return;
+        }
+
         const details = this.details;
 
         !details.allowAnonymousPreview && this.$route.push({

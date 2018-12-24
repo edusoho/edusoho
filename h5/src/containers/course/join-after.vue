@@ -18,6 +18,7 @@
 
         <directory
           :hiddeTitle=true
+          :errorMsg="errorMsg"
           class="join-after-dirctory"
           :tryLookable="details.tryLookable"></directory>
       </div>
@@ -65,6 +66,7 @@ export default {
       scrollFlag: false,
       tabs: ['课程介绍', '课程目录', '学员评价'],
       tabsClass: '',
+      errorMsg: '',
     }
   },
   computed: {
@@ -105,6 +107,9 @@ export default {
       return;
     }
 
+    // 学习任务报错信息
+    this.errorMsg = this.getErrorMsg(code);
+
     // 错误处理
     if (code === 'course.expired' || code === 'member.expired') {
       errorMessage = '课程已到期，无法继续学习，是否退出';
@@ -128,21 +133,21 @@ export default {
       };
       this.callConfirm(errorMessage, confirmCallback);
     } else {
-      Toast.fail(this.errorMsg(code));
+      Toast.fail(this.getErrorMsg(code));
     }
 
   },
   methods: {
-    errorMsg(code) {
+    getErrorMsg(code) {
       switch(code) {
         case 'course.not_found':
-          return '课程不存在';
+          return '当前课程不存在';
         case 'course.unpublished':
-          return '课程未发布';
+          return '当前课程未发布';
         case 'course.expired':
-          return '课程已过期';
+          return '当前课程已过期';
         case 'course.not_arrive':
-          return '课程还不能学习';
+          return '当前课程还不能学习';
         case 'user.not_login':
           return '用户未登录';
         case 'user.locked':
@@ -164,7 +169,7 @@ export default {
         case 'vip.level_low':
           return '用户会员等级';
         default:
-          break;
+          return '异常错误';
       }
     },
     callConfirm(message, callback) {
