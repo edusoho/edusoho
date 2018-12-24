@@ -4,6 +4,12 @@
 {% set parameter = get_parameters_from_url(app.request.uri) %}
 {% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-validation.js','app/js/auth/register/index.js'])%}
 
+{% block head_scripts %}
+  {% if (setting('siteTrace.enabled') == 1) %}
+    {{ setting('siteTrace.script')|raw }}
+  {% endif %}
+{% endblock %}
+
 {% block content %}
 	<div class="es-section login-section">
 		<div class="logon-tab clearfix">
