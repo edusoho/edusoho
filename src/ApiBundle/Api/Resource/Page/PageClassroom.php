@@ -18,8 +18,13 @@ class PageClassroom extends AbstractResource
         if (empty($classroom)) {
             throw new NotFoundHttpException('班级不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
-        $apiRequest = new ApiRequest('/api/me/classroom_members/'.$classroomId, 'GET', array());
-        $classroom['member'] = $this->invokeResource($apiRequest);
+        $user = $this->getCurrentUser();
+        $member = null;
+        if (!empty($user['id'])) {
+            $apiRequest = new ApiRequest('/api/me/classroom_members/'.$classroomId, 'GET', array());
+            $member = $this->invokeResource($apiRequest);
+        }
+        $classroom['member'] = $member;
 
         $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
         if (!empty($classroom['headTeacher'])) {

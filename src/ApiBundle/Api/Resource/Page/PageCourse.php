@@ -18,10 +18,14 @@ class PageCourse extends AbstractResource
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $apiRequest = new ApiRequest('/api/me/course_members/'.$courseId, 'GET', array());
-        $member = $this->invokeResource($apiRequest);
-        $course['learnedCompulsoryTaskNum'] = empty($member) ? 0 : $member['learnedCompulsoryTaskNum'];
+        $user = $this->getCurrentUser();
+        $member = null;
+        if (!empty($user['id'])) {
+            $apiRequest = new ApiRequest('/api/me/course_members/'.$courseId, 'GET', array());
+            $member = $this->invokeResource($apiRequest);
+        }
         $course['member'] = $member;
+        $course['learnedCompulsoryTaskNum'] = empty($member) ? 0 : $member['learnedCompulsoryTaskNum'];
 
         $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
         $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
