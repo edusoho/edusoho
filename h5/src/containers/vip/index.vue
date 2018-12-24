@@ -39,13 +39,17 @@
 
     <!-- 会员免费课程 -->
     <e-course-list
+      v-if="courseData"
       class="gray-border-bottom"
       :courseList="courseData"
+      :moreType="'vip'"
       :typeList="'course_list'"/>
 
     <!-- 会员免费班级 -->
     <e-course-list
+      v-if="classroomData"
       class="gray-border-bottom"
+      :moreType="'vip'"
       :courseList="classroomData"
       :typeList="'classroom_list'"/>
 
@@ -121,24 +125,27 @@ export default {
       return nowStamp > deadLineStamp ? true : false;
     },
     courseData() {
-      let data = {
+      const data = this.levels[this.currentLevelIndex].courses.data;
+      let dataFormat = {
         items: [],
         title: '会员课程',
         source: {},
         limit: 4
       }
-      data.items = this.levels[this.currentLevelIndex].courses.data;
-      return data;
+      dataFormat.items = data;
+      return dataFormat;
     },
     classroomData() {
-      let data = {
+      const data = this.levels[this.currentLevelIndex].classrooms.data;
+      if (data.length == 0) return false;
+      let dataFormat = {
         items: [],
         title: '会员班级',
         source: {},
         limit: 4
       }
-      data.items = this.levels[this.currentLevelIndex].classrooms.data;
-      return data;
+      dataFormat.items = data;
+      return dataFormat;
     },
     vipDeadline() {
       const time = new Date(this.vipInfo.deadline);
