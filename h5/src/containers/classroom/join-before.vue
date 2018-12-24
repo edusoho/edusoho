@@ -182,7 +182,8 @@
 
         const details = this.details;
         const planDetails = this.planDetails;
-        const canJoinIn = Number(details.buyable ) === 1 || (+planDetails.price) === 0 || vipAccessToJoin;
+        const canJoinIn = Number(details.buyable ) === 1
+          || (+planDetails.price) === 0 || vipAccessToJoin;
 
         if (!this.$store.state.token) {
           this.$router.push({
