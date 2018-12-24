@@ -8,7 +8,7 @@ const unitLabel = {
 
 const priceItem = (num, unit, singlePrice) => ({
   time: `${num}${unitLabel[unit]}`,
-  price: num * singlePrice,
+  price: (num * singlePrice).toFixed(2),
   num,
   unit
 });

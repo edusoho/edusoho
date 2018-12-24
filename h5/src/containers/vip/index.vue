@@ -32,6 +32,7 @@
     <!-- 会员轮播 -->
     <vip-introduce
       :levels="levels"
+      :buyType="buyType"
       :isVip="vipData.vipUser.vip"
       @activeIndex="activeIndex"
       @vipOpen="vipOpen">
@@ -79,6 +80,7 @@ import courseList from '../components/e-course-list/e-course-list';
 import getPriceItems from '../../config/vip-price-config';
 import { formatFullTime } from '@/utils/date-toolkit.js';
 import { mapState } from 'vuex';
+import { Toast } from 'vant';
 
 export default {
   data() {
@@ -103,6 +105,7 @@ export default {
       vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1,
       vipPopShow: false,
       priceItems: [],
+      buyType: 'month',
       orderParams: {
         unit: '',
         num: 0,
@@ -169,13 +172,19 @@ export default {
       this.levels = res.levels;
       this.user = res.vipUser.user;
       this.vipInfo = res.vipUser.vip;
+      this.buyType = this.vipSettings.buyType;
       for (var i = 0; i < this.levels.length; i++) {
         this.priceItems = [
           ...this.priceItems,
           getPriceItems(this.vipSettings.buyType, res.levels[i].monthPrice, res.levels[i].yearPrice)
         ];
       }
+    }).catch(err => {
+      Toast.fail(err.message)
     })
+    setTimeout(() => {
+      window.scrollTo(0,0);
+    }, 100)
   },
   methods: {
     activeIndex(index) {
