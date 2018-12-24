@@ -47,12 +47,14 @@
     <!-- 加入会员 -->
     <e-popup class="vip-popup" :show.sync="vipPopShow" title="开通白金会员" contentClass="vip-popup__content">
       <div class="vip-popup__header text-14">选择开通时长</div>
-      <van-row gutter="20" class="vip-popup__body">
-        <van-col span="8" v-for="(item, index) in priceItems[currentLevelIndex]" :key="index">
-          <price-item :item="item" :class="{ active: index === activePriceIndex }"
-            @click.native="selectPriceItem(index)" />
-        </van-col>
-      </van-row>
+      <div class="vip-popup__body">
+        <van-row gutter="20">
+          <van-col span="8" v-for="(item, index) in priceItems[currentLevelIndex]" :key="index">
+            <price-item :item="item" :class="{ active: index === activePriceIndex }"
+              @click.native="selectPriceItem(index)" />
+          </van-col>
+        </van-row>
+      </div>
       <div class="btn-join-bottom" @click="vipPopShow = false">确认{{ btnStatus }}</div>
     </e-popup>
 
