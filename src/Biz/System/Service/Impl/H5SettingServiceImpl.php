@@ -208,7 +208,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             try {
                 $levels = $this->getLevelService()->findEnabledLevels();
                 foreach ($levels as &$level) {
-                    $level['freeCourseNum'] = $this->getLevelService()->getFreeCourseNu111mByLevelId($level['id']);
+                    $level['freeCourseNum'] = $this->getLevelService()->getFreeCourseNumByLevelId($level['id']);
                     $level['freeClassroomNum'] = $this->getLevelService()->getFreeClassroomNumByLevelId($level['id']);
                 }
                 $discoverySetting['data']['items'] = 'desc' == $discoverySetting['data']['sort'] ? array_reverse($levels) : $levels;
