@@ -11,7 +11,7 @@
             <router-link :to="{ path: '/vip', query: { id: user.vip.levelId } }">
               <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="user.vip.icon">
               <span v-if="!vipDated" class="color-primary">{{ user.vip.vipName }}</span>
-              <span class="grey" v-else>{{ user.vip.vipName }}已过期</span>
+              <span class="grey" v-else>{{ user.vip.vipName }}已过期，<span class="color-primary">重新开通</span></span>
             </router-link>
           </span>
           <div v-else>
