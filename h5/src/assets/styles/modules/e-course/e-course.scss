@@ -6,6 +6,7 @@
 }
 
 .e-course__left {
+  width: vw(140);
   display: flex;
   position: relative;
   border-radius: vw(2);
@@ -21,7 +22,7 @@
   .e-vip__img {
     width: auto;
     height: vw(56);
-    margin-right: vw(10);
+    margin: 0 auto;
   }
   .tag {
     position: absolute;

@@ -15,7 +15,8 @@
         :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
         :courseType="typeList === 'course_list' ? item.courseSet.type : ''"
         :typeList="typeList"
-        :tagShow="tagShow"
+        :normalTagShow="normalTagShow"
+        :vipTagShow="vipTagShow"
         :type="type"
         :isVip="item.vipLevelId"
         :feedback="feedback">
@@ -48,9 +49,13 @@ import { mapState } from 'vuex';
         type: String,
         default: 'course_list'
       },
-      tagShow: {
+      normalTagShow: {
         type: Boolean,
         default: true
+      },
+      vipTagShow: {
+        type: Boolean,
+        default: false
       },
       moreType: {
         type: String,

@@ -7,7 +7,7 @@
         :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
         :courseType="typeList === 'course_list' ? item.courseSet.type : ''"
         :typeList="typeList"
-        :tagShow="tagShow"
+        :normalTagShow="normalTagShow"
         :type="type"
         :feedback="feedback">
       </e-class>
@@ -30,7 +30,7 @@
         type: Boolean,
         default: true,
       },
-      tagShow: {
+      normalTagShow: {
         type: Boolean,
         default: true
       }
