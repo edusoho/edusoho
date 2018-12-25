@@ -19,7 +19,8 @@
       <div v-if="details.vipLevel" class="mb15">
         <span class="mr20">会员免费</span>
         <img class="vipIcon" :src="details.vipLevel.icon" />
-        <router-link to="/vip" class='color-primary'>{{details.vipLevel.name}}免费学</router-link>
+        <router-link class='color-primary' :to="{ path: '/vip', query: { id: details.vipLevel.id } }">
+          {{details.vipLevel.name}}免费学</router-link>
       </div>
       <service v-if="details.services.length" :services="details.services" />
       <div>
