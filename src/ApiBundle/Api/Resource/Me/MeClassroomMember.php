@@ -25,7 +25,7 @@ class MeClassroomMember extends AbstractResource
 
     public function remove(ApiRequest $request, $classroomId)
     {
-        $reason = $request->request->get('reason', '从移动端退出课程');
+        $reason = $request->request->get('reason', '从移动端退出班级');
 
         $user = $this->getCurrentUser();
 
