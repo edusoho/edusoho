@@ -5,11 +5,11 @@ export default [
     method: 'GET'
   }, {
     name: 'getVipCourses',
-    url: '/plugins/vip/vip_courses?levelId={levelId}&offset={offset}&sort=-price',
+    url: '/plugins/vip/vip_courses?sort=-price',
     method: 'GET'
   }, {
     name: 'getVipClasses',
-    url: '/plugins/vip/vip_classrooms?levelId={levelId}&offset={offset}&sort=-price',
+    url: '/plugins/vip/vip_classrooms?sort=-price',
     method: 'GET'
   }, {
     name: 'getVipLevels',

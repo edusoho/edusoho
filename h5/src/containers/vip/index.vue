@@ -16,7 +16,7 @@
           </span>
         </div>
         <div class="vip-status" v-if="vipInfo">
-          <div class="vip-status__btn" @click="vipPopShow = true" v-if="btnStatus">{{ vipDated ? '重新开通' : btnStatus }}</div>
+          <div class="vip-status__btn" ref="joinBtnTop" @click="popShow" v-if="btnStatus">{{ vipDated ? '重新开通' : btnStatus }}</div>
           <div :class="['vip-status__deadline', btnStatus ? '' : 'deadline-middle']">{{ vipDeadline }} 到期</div>
         </div>
       </div>
@@ -32,7 +32,7 @@
 
     <!-- 会员轮播 -->
     <vip-introduce
-      ref="joinBtn"
+      ref="joinBtnBottom"
       :levels="levels"
       :user="user"
       :buyType="buyType"
@@ -73,7 +73,7 @@
       <div class="btn-join-bottom" :class="{ disabled: activePriceIndex < 0 }" @click="joinVip">确认{{ btnStatus }}</div>
     </e-popup>
 
-    <div v-if="bottomBtnShow" class="btn-join-bottom" @click="vipPopShow = true">立即{{ btnStatus }}</div>
+    <div v-if="bottomBtnShow && btnStatus && !vipDated" class="btn-join-bottom" @click="popShow">立即{{ btnStatus }}</div>
   </div>
 </template>
 <script>
@@ -168,6 +168,10 @@ export default {
     }
   },
   created() {
+    if (!this.vipSettings.enabled) {
+      this.$router.push({name: 'find'});
+      return;
+    }
     Api.getVipLevels().then((res) => {
       const queryId = this.$route.query.id;
 
@@ -200,6 +204,7 @@ export default {
         const vipLevel = res.levels.find((level, index) => {
           if (level.id === levelId) {
             vipIndex = index
+            return level;
           }
         });
         this.currentLevelIndex = vipIndex;
@@ -241,15 +246,54 @@ export default {
       });
     },
     vipOpen() {
+      if (!this.user) {
+        this.$router.push({
+          path: '/login',
+          query: {
+            redirect: '/vip'
+          }
+        })
+        return;
+      }
       this.vipPopShow = true;
     },
     handleScroll () { // 执行函数
-      let topSize = this.$refs.joinBtn.$el.getBoundingClientRect().bottom;
-      if (topSize < 45) {
+      if (!this.btnStatus) return;
+      let topSize = '';
+      let num = 0;
+      if (!this.user || !this.vipData.vipUser.vip) {
+        topSize = this.$refs.joinBtnBottom.$el.getBoundingClientRect().bottom;
+        num = 45;
+      } else {
+        topSize = this.$refs.joinBtnTop.getBoundingClientRect().bottom;
+      }
+      if (topSize < num) {
         this.bottomBtnShow = true;
       } else {
         this.bottomBtnShow = false;
       }
+    },
+    popShow() {
+      if (!this.user) {
+        this.$router.push({
+          path: '/login',
+          query: {
+            redirect: '/vip'
+          }
+        })
+        return;
+      }
+      if (this.vipDated && this.vipInfo) {
+        let vipIndex = 0;
+        const vipLevel = this.levels.find((level, index) => {
+          if (level.id === this.vipInfo.levelId) {
+            vipIndex = index
+            return level;
+          }
+        });
+        this.currentLevelIndex = vipIndex
+      }
+      this.vipPopShow = true;
     }
   }
 }

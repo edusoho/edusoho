@@ -6,6 +6,7 @@
       <e-course
         v-if="Object.keys(course).length > 0"
         type="confirmOrder"
+        :typeList="'vip'"
         :order="course"
         :course="course">
       </e-course>

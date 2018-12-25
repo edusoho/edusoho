@@ -12,7 +12,7 @@
       <lazyLoading
         v-show="active==0"
         :courseList="courseList"
-        :tagShow="false"
+        :normalTagShow="false"
         :isAllData="isAllCourse"
         :courseItemType="courseItemType"
         :isRequestCompile="isCourseRequestComplete"
@@ -23,7 +23,7 @@
         v-show="active==1"
         :courseList="classList"
         :isAllData="isAllClass"
-        :tagShow="false"
+        :normalTagShow="false"
         :courseItemType="classItemType"
         :isRequestCompile="isClassRequestComplete"
         @needRequest="classSendRequest"

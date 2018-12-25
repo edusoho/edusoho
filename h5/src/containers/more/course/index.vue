@@ -11,6 +11,7 @@
       :isAllData="isAllCourse"
       :courseItemType="courseItemType"
       :isRequestCompile="isRequestCompile"
+      :vipTagShow="true"
       @needRequest="sendRequest"
       :typeList="'course_list'"
     ></lazyLoading>

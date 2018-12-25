@@ -6,8 +6,10 @@
     <courseItem v-for="(course, index) in courseList"
       :key="index"
       :type="courseItemType"
-      :tagShow="tagShow"
+      :normalTagShow="normalTagShow"
+      :vipTagShow="vipTagShow"
       :typeList="typeList"
+      :isVip="course.vipLevelId"
       :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
       :courseType="typeList === 'course_list' ? course.courseSet.type : ''"
       :course="course | courseListData(listObj)"
@@ -34,10 +36,14 @@
         type: String,
         default: 'course_list'
       },
-      tagShow: {
+      normalTagShow: {
         type: Boolean,
         default: true
-      }
+      },
+      vipTagShow: {
+        type: Boolean,
+        default: false
+      },
     },
 
     data() {
