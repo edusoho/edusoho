@@ -12,8 +12,8 @@
         </div>
       </swiper-slide>
     </swiper>
-    <div class="vip-introduce__text">
-      <header class="title-18 text-center">{{levels[activeIndex].name}}介绍</header>
+    <div class="vip-introduce__text" v-if="levels && levels[activeIndex]" v-show="levels[activeIndex].description">
+      <header class="title-18 text-center ph20">{{levels[activeIndex].name}}介绍</header>
       <div class="text-content mt20">{{levels[activeIndex].description || '暂无介绍'}}</div>
     </div>
     <div class="text-center" v-if="!isVip || !user"><div class="btn-join-vip" @click="vipPopShow">开通会员</div></div>
@@ -45,10 +45,6 @@ import 'swiper/dist/css/swiper.css';
       buyType: {
         type: String,
         default: 'month'
-      },
-      enterIndex: {
-        type: Number,
-        default: 0
       },
       user: {
         type: Object,
@@ -83,8 +79,16 @@ import 'swiper/dist/css/swiper.css';
         return this.$refs.mySwiper.swiper
       }
     },
+    created() {
+      const query = Object.keys(this.$route.query);
+      if (!query.includes('vipSeq')) {
+        this.activeIndex = 0
+      } else {
+        this.activeIndex = Number(this.$route.query.vipSeq)
+      }
+    },
     updated() {
-      this.swiper.slideTo(this.enterIndex, 1000, false)
+      this.swiper.slideTo(this.activeIndex, 1000, false)
     },
     methods: {
       vipPopShow() {

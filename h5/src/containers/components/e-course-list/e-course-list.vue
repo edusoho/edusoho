@@ -54,6 +54,10 @@ import { mapState } from 'vuex';
       moreType: {
         type: String,
         default: 'normal'
+      },
+      vipName: {
+        type: String,
+        default: '会员'
       }
     },
     components: {
@@ -151,7 +155,10 @@ import { mapState } from 'vuex';
           routeName = this.typeList === 'course_list' ? 'more_course' : 'more_class';
         }
         this.$router.push({
-          name: routeName
+          name: routeName,
+          query: {
+            vipName: this.vipName
+          }
         });
       },
       fetchCourse() {
