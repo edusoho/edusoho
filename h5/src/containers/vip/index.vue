@@ -35,7 +35,6 @@
       :levels="levels"
       :user="user"
       :buyType="buyType"
-      :enterIndex="enterIndex"
       :isVip="vipData.vipUser.vip"
       @activeIndex="activeIndex"
       @vipOpen="vipOpen">
@@ -46,6 +45,7 @@
       v-if="courseData"
       class="gray-border-bottom"
       :courseList="courseData"
+      :vipName="levels[this.currentLevelIndex].name"
       :moreType="'vip'"
       :typeList="'course_list'"/>
 
@@ -55,6 +55,7 @@
       class="gray-border-bottom"
       :moreType="'vip'"
       :courseList="classroomData"
+      :vipName="levels[this.currentLevelIndex].name"
       :typeList="'classroom_list'"/>
 
     <!-- 加入会员 -->
@@ -113,7 +114,6 @@ export default {
       activePriceIndex: -1,
       vipPopShow: false,
       priceItems: [],
-      defaultSeq: 1,
       buyType: 'month',
       bottomBtnShow: false,
       orderParams: {
@@ -121,16 +121,6 @@ export default {
         num: 0,
       }
     }
-  },
-  beforeRouteLeave(to, from, next){
-    let listTitle = '';
-    if (to.name === 'vip_classroom') {
-      listTitle = '班级'
-    } else {
-      listTitle = '课程'
-    }
-    to.meta.title = this.levels[this.currentLevelIndex].name + listTitle;
-    next()
   },
   computed: {
     ...mapState(['vipSettings']),
@@ -174,22 +164,17 @@ export default {
       if (userSeq > currentSeq) return false;
       if (this.vipDated) return '开通';
       return userSeq < currentSeq ? '升级' : '续费';
-    },
-    enterIndex() {
-      const query = Object.keys(this.$route.query);
-      if (!query.includes('vipSeq')) return 0;
-      return Number(this.$route.query.vipSeq);
     }
   },
   created() {
     Api.getVipLevels().then((res) => {
-      this.defaultSeq = Number(res[0].seq);
       let levelId = Number(res[0].id);
-      const query = Object.keys(this.$route.query);
+      const routeQuery = Object.keys(this.$route.query);
 
-      if (query.includes('vipLevelId')) {
+      if (routeQuery.includes('vipLevelId')) {
         levelId = this.$route.query.vipLevelId
       }
+
       Api.getVipDetail({
         query: {
           levelId: levelId
@@ -207,6 +192,12 @@ export default {
             getPriceItems(this.vipSettings.buyType, item.monthPrice, item.yearPrice)
           ];
         }
+        // currentLevelIndex要放在levels数据之后
+        if (!routeQuery.includes('vipSeq')) {
+          this.currentLevelIndex = 0
+        } else {
+          this.currentLevelIndex = Number(this.$route.query.vipSeq)
+        }
       }).catch(err => {
         Toast.fail(err.message)
       })
@@ -216,7 +207,10 @@ export default {
     }, 100)
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll, true)
+    window.addEventListener('scroll', this.handleScroll, true);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
     activeIndex(index) {
