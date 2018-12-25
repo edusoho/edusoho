@@ -16,7 +16,10 @@
     </ul>
 
     <div class="course-detail__validity">
-
+      <div v-if="details.vipLevel" class="mb15">
+        <span class="mr20">会员免费</span>
+        <img class="vipIcon" :src="details.vipLevel.icon" /><span>{{details.vipLevel.name}}免费学</span>
+      </div>
       <service v-if="details.services.length" :services="details.services" />
       <div>
         <span class="mr20">学习有效期</span>

@@ -40,6 +40,7 @@
           studentNum: 0,
           expiryMode: 'forever',
           expiryValue: '0',
+          vipLevel: null,
         },
         currentComp: '',
       };
@@ -81,7 +82,7 @@
         const classId = res.id;
         const planDetails = {
           title, service, price, studentNum,
-          expiryMode, expiryValue,
+          expiryMode, expiryValue, vipLevel,
         };
 
         this.planDetails = planDetails;
