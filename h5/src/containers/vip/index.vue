@@ -15,14 +15,14 @@
           </router-link>
         </div>
         <div class="vip-status" v-if="vipInfo">
-          <div class="vip-status__btn" @click="vipPopShow = true">{{ vipDated ? '重新开通' : btnStatus }}</div>
-          <div class="vip-status__deadline" v-if="vipDated">{{ vipDeadline }} 到期</div>
+          <div class="vip-status__btn" @click="vipPopShow = true" v-if="btnStatus">{{ vipDated ? '重新开通' : btnStatus }}</div>
+          <div :class="['vip-status__deadline', btnStatus ? '' : 'deadline-middle']">{{ vipDeadline }} 到期</div>
         </div>
       </div>
       <router-link :to="{path: '/login', query: { redirect : '/vip'}}" v-else>
-        <img class='user-img' src="statsc/images/avatar.png" />
+        <img class='user-img' src="static/images/avatar.png" />
         <div class="user-middle single-middle">
-          <div class='user-vip'>
+          <div :class="['user-vip', !user ? 'text-middle' : '']">
             立即登录，查看会员权益
           </div>
         </div>
@@ -31,8 +31,11 @@
 
     <!-- 会员轮播 -->
     <vip-introduce
+      ref="joinBtn"
       :levels="levels"
+      :user="user"
       :buyType="buyType"
+      :index="enterIndex"
       :isVip="vipData.vipUser.vip"
       @activeIndex="activeIndex"
       @vipOpen="vipOpen">
@@ -68,7 +71,7 @@
       <div class="btn-join-bottom" :class="{ disabled: activePriceIndex < 0 }" @click="joinVip">确认{{ btnStatus }}</div>
     </e-popup>
 
-    <div class="btn-join-bottom" @click="vipPopShow = true">立即{{ btnStatus }}</div>
+    <div v-if="bottomBtnShow" class="btn-join-bottom" @click="vipPopShow = true">立即{{ btnStatus }}</div>
   </div>
 </template>
 <script>
@@ -83,6 +86,12 @@ import { mapState } from 'vuex';
 import { Toast } from 'vant';
 
 export default {
+  components: {
+    EPopup,
+    priceItem,
+    'vip-introduce': introduce,
+    'e-course-list': courseList
+  },
   data() {
     return {
       user: {
@@ -102,21 +111,26 @@ export default {
       }],
       currentLevelIndex: 0,
       activePriceIndex: -1,
-      vipLevelId: this.$router.query ? this.$router.query.vipLevelId : 1,
       vipPopShow: false,
       priceItems: [],
+      defaultSeq: 1,
       buyType: 'month',
+      bottomBtnShow: false,
       orderParams: {
         unit: '',
         num: 0,
       }
     }
   },
-  components: {
-    EPopup,
-    priceItem,
-    'vip-introduce': introduce,
-    'e-course-list': courseList
+  beforeRouteLeave(to, from, next){
+    let listTitle = '';
+    if (to.name === 'vip_classroom') {
+      listTitle = '班级'
+    } else {
+      listTitle = '课程'
+    }
+    to.meta.title = this.levels[this.currentLevelIndex].name + listTitle;
+    next()
   },
   computed: {
     ...mapState(['vipSettings']),
@@ -157,34 +171,52 @@ export default {
       if (!this.vipInfo) return '开通';
       const currentSeq = Number(this.levels[this.currentLevelIndex].seq);
       const userSeq = this.vipInfo.seq;
-      if (userSeq > currentSeq) return;
+      if (userSeq > currentSeq) return false;
       if (this.vipDated) return '开通';
       return userSeq < currentSeq ? '升级' : '续费';
+    },
+    enterIndex() {
+      const query = Object.keys(this.$route.query);
+      if (!query.includes('activeIndex')) return 0;
+      return Number(this.$route.query.activeIndex);
     }
   },
   created() {
-    Api.getVipDetail({
-      query: {
-        levelId: this.vipLevelId
+    Api.getVipLevels().then((res) => {
+      this.defaultSeq = Number(res[0].seq);
+      let levelId = Number(res[0].id);
+      const query = Object.keys(this.$route.query);
+
+      if (query.includes('vipLevelId')) {
+        levelId = this.$route.query.vipLevelId
       }
-    }).then((res) => {
-      this.vipData = res;
-      this.levels = res.levels;
-      this.user = res.vipUser.user;
-      this.vipInfo = res.vipUser.vip;
-      this.buyType = this.vipSettings.buyType;
-      for (var i = 0; i < this.levels.length; i++) {
-        this.priceItems = [
-          ...this.priceItems,
-          getPriceItems(this.vipSettings.buyType, res.levels[i].monthPrice, res.levels[i].yearPrice)
-        ];
-      }
-    }).catch(err => {
-      Toast.fail(err.message)
+      Api.getVipDetail({
+        query: {
+          levelId: levelId
+        }
+      }).then((res) => {
+        this.vipData = res;
+        this.levels = res.levels;
+        this.user = res.vipUser.user;
+        this.vipInfo = res.vipUser.vip;
+        this.buyType = this.vipSettings.buyType;
+        for (var i = 0; i < this.levels.length; i++) {
+          const item = res.levels[i];
+          this.priceItems = [
+            ...this.priceItems,
+            getPriceItems(this.vipSettings.buyType, item.monthPrice, item.yearPrice)
+          ];
+        }
+      }).catch(err => {
+        Toast.fail(err.message)
+      })
     })
     setTimeout(() => {
       window.scrollTo(0,0);
     }, 100)
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll, true)
   },
   methods: {
     activeIndex(index) {
@@ -214,6 +246,14 @@ export default {
     },
     vipOpen() {
       this.vipPopShow = true;
+    },
+    handleScroll () { // 执行函数
+      let topSize = this.$refs.joinBtn.$el.getBoundingClientRect().bottom;
+      if (topSize < 45) {
+        this.bottomBtnShow = true;
+      } else {
+        this.bottomBtnShow = false;
+      }
     }
   }
 }
