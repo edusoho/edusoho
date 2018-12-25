@@ -153,7 +153,7 @@ export default {
     courseLinkText: {
       get() {
         if (this.type === 'vip') {
-          return '会员';
+          return '会员专区';
         }
         const data = this.courseSets[0];
         if (data) {

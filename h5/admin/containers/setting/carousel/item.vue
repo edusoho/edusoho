@@ -107,7 +107,7 @@
     computed: {
       linkTextShow() {
         if (this.type === 'vip') {
-          return '会员';
+          return '会员专区';
         }
         return this.item.link.target && this.item.link.target.displayedTitle;
       },
