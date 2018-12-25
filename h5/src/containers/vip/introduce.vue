@@ -51,12 +51,12 @@ import 'swiper/dist/css/swiper.css';
         default: () => {
           return {};
         }
-      }
+      },
+      activeIndex: '',
     },
     data() {
       const that = this;
       return {
-        activeIndex: 0,
         swiperOption: {
           notNextTick: true,
           loop: false,
@@ -67,8 +67,7 @@ import 'swiper/dist/css/swiper.css';
           observeParents: true,
           on: {
             slideChangeTransitionStart: function() {
-              that.activeIndex = this.activeIndex;
-              that.$emit('activeIndex', this.activeIndex);
+              that.$emit('update:activeIndex', this.activeIndex);
             }
           }
         }
@@ -82,9 +81,9 @@ import 'swiper/dist/css/swiper.css';
     created() {
       const query = Object.keys(this.$route.query);
       if (!query.includes('vipSeq')) {
-        this.activeIndex = 0
+        this.setActiveIndex(0);
       } else {
-        this.activeIndex = Number(this.$route.query.vipSeq)
+        this.setActiveIndex(Number(this.$route.query.vipSeq));
       }
     },
     updated() {
@@ -93,6 +92,9 @@ import 'swiper/dist/css/swiper.css';
     methods: {
       vipPopShow() {
         this.$emit('vipOpen', true);
+      },
+      setActiveIndex(index) {
+        this.$emit('update:activeIndex', index);
       }
     }
   }
