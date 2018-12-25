@@ -35,7 +35,7 @@
       :levels="levels"
       :user="user"
       :buyType="buyType"
-      :index="enterIndex"
+      :enterIndex="enterIndex"
       :isVip="vipData.vipUser.vip"
       @activeIndex="activeIndex"
       @vipOpen="vipOpen">
@@ -177,8 +177,8 @@ export default {
     },
     enterIndex() {
       const query = Object.keys(this.$route.query);
-      if (!query.includes('activeIndex')) return 0;
-      return Number(this.$route.query.activeIndex);
+      if (!query.includes('vipSeq')) return 0;
+      return Number(this.$route.query.vipSeq);
     }
   },
   created() {

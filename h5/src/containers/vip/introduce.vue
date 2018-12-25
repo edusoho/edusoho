@@ -1,6 +1,6 @@
 <template>
   <div class="vip-introduce gray-border-bottom">
-    <swiper :options="swiperOption">
+    <swiper :options="swiperOption" ref="mySwiper">
       <swiper-slide v-for="(item, index) in levels" :key="index">
         <img class="card-bg-img" :src="item.background">
         <div class="vip-info">
@@ -64,7 +64,6 @@ import 'swiper/dist/css/swiper.css';
         swiperOption: {
           notNextTick: true,
           loop: false,
-          realIndex: 3,
           centeredSlides: true,
           spaceBetween: 20,
           slidesPerView: 1.5,
@@ -78,6 +77,14 @@ import 'swiper/dist/css/swiper.css';
           }
         }
       }
+    },
+    computed: {
+      swiper() {
+        return this.$refs.mySwiper.swiper
+      }
+    },
+    updated() {
+      this.swiper.slideTo(this.enterIndex, 1000, false)
     },
     methods: {
       vipPopShow() {
