@@ -18,6 +18,7 @@
 
         <directory
           :hiddeTitle=true
+          :errorMsg="errorMsg"
           class="join-after-dirctory"
           :tryLookable="details.tryLookable"></directory>
       </div>
@@ -53,6 +54,8 @@ import DetailHead from './detail/head';
 import DetailPlan from './detail/plan';
 import Teacher from './detail/teacher';
 import { mapState } from 'vuex';
+import { Dialog, Toast } from 'vant';
+import Api from '@/api';
 
 export default {
   props: ['details'],
@@ -63,6 +66,7 @@ export default {
       scrollFlag: false,
       tabs: ['课程介绍', '课程目录', '学员评价'],
       tabsClass: '',
+      errorMsg: '',
     }
   },
   computed: {
@@ -91,5 +95,91 @@ export default {
     Teacher,
     reviewList
   },
+  mounted() {
+    let code = '';
+    let errorMessage = '';
+    let confirmCallback = function(){};
+
+    if (this.details.member && this.details.member.access) {
+      code = this.details.member.access.code;
+    }
+    if (!code || code === 'success') {
+      return;
+    }
+
+    // 学习任务报错信息
+    this.errorMsg = this.getErrorMsg(code);
+
+    // 错误处理
+    if (code === 'course.expired' || code === 'member.expired') {
+      errorMessage = '课程已到期，无法继续学习，是否退出';
+      const params = { id: this.details.id };
+      confirmCallback = () => {
+        Api.deleteCourse({ query: params }).then(res => {
+          if (res.success) {
+            window.location.reload();
+            return;
+          }
+          Toast.fail('退出课程失败，请稍后重试')
+        })
+      };
+      this.callConfirm(errorMessage, confirmCallback);
+    } else if (code === 'vip.member_expired') {
+      errorMessage = '会员已到期，请及时续费会员';
+      confirmCallback = () => {
+        this.$router.push({
+          path: `/vip`
+        });
+      };
+      this.callConfirm(errorMessage, confirmCallback);
+    } else {
+      Toast.fail(this.getErrorMsg(code));
+    }
+
+  },
+  methods: {
+    getErrorMsg(code) {
+      switch(code) {
+        case 'course.not_found':
+          return '当前课程不存在';
+        case 'course.unpublished':
+          return '当前课程未发布';
+        case 'course.expired':
+          return '当前课程已过期';
+        case 'course.not_arrive':
+          return '当前课程还不能学习';
+        case 'user.not_login':
+          return '用户未登录';
+        case 'user.locked':
+          return '用户被锁定';
+        case 'member.not_found':
+          return '用户未加入课程';
+        case 'member.expired':
+          return '课程已过期';
+        case 'vip.vip_closed':
+          return '网校已关闭会员功能';
+        case 'vip.not_login':
+          return '用户未登录';
+        case 'vip.not_member':
+          return '当前用户并不是vip';
+        case 'vip.member_expired':
+          return '用户会员服务已过期';
+        case 'vip.level_not_exist':
+          return '用户会员等级或课程会员不存在';
+        case 'vip.level_low':
+          return '用户会员等级';
+        default:
+          return '异常错误';
+      }
+    },
+    callConfirm(message, callback) {
+      Dialog.confirm({
+        title: '',
+        message: message,
+      }).then(() => {
+        callback();
+      })
+    }
+  }
 }
 </script>

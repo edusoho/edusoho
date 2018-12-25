@@ -41,5 +41,10 @@ export default [
     url: '/course_sets/{id}/courses',
     method: 'GET',
     disableLoading: true
+  }, {
+    name: 'deleteCourse',
+    url: '/me/course_members/{id}',
+    method: 'DELETE',
+    disableLoading: true
   }
 ];

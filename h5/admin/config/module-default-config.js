@@ -66,6 +66,16 @@ const MODULE_DEFAULT = {
       items: [],
       titleShow: 'show'
     }
+  },
+  vip: {
+    type: 'vip',
+    moduleType: '',
+    data: {
+      items: [],
+      sort: 'asc',
+      title: '',
+      titleShow: 'show'
+    }
   }
 };
 
@@ -85,6 +95,9 @@ const BASE_MODULE = [
   }, {
     name: '优惠券',
     default: MODULE_DEFAULT.coupon,
+  }, {
+    name: '会员',
+    default: MODULE_DEFAULT.vip,
   }
 ];
 

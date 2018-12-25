@@ -54,7 +54,9 @@ export default {
   props: {
     courseList: {
       type: Array,
-      default: [],
+      default: () => {
+        return [];
+      },
     },
     visible: {
       type: Boolean,

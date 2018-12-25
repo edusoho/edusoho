@@ -16,7 +16,8 @@
     </ul>
 
     <div class="course-detail__validity">
-      <service v-if="details.services.length" :services="details.services" ></service>
+
+      <service v-if="details.services.length" :services="details.services" />
       <div>
         <span class="mr20">学习有效期</span>
         <span class="dark" v-html="learnExpiryHtml"></span>

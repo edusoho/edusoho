@@ -102,6 +102,20 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/more/classroom/index.vue')
   }, {
+    path: '/course/explore/vip',
+    name: 'vip_course',
+    meta: {
+      title: '会员课程'
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/vip/more/course-list.vue')
+  }, {
+    path: '/classroom/explore/vip',
+    name: 'vip_classroom',
+    meta: {
+      title: '会员班级'
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/vip/more/classroom-list.vue')
+  }, {
     path: '/course/:id',
     name: 'course',
     meta: {
@@ -175,9 +189,9 @@ const routes = [
     path: '/vip',
     name: 'vip',
     meta: {
-      title: 'vip营销页'
+      title: '会员专区'
     },
-    component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/vip/index.vue')
+    component: () => import(/* webpackChunkName: "vip" */'@/containers/vip/index.vue')
   }
 ];
 

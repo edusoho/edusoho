@@ -84,7 +84,7 @@ export const getGlobalSettings = ({ commit }, { type, key }) =>
         document.title = res.name;
       }
       if (type === 'vip') {
-        res = res.enabled;
+        res = res || {}; // 防止接口数据 res undefined
       }
       commit(types.GET_SETTINGS, {
         key,

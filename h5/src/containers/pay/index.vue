@@ -49,6 +49,7 @@ export default {
       paySettings: {},
       inWechat: this.isWeixinBrowser(),
       targetType: this.$route.query.targetType,
+      timeoutId: -1,
     };
   },
   computed: {
@@ -78,7 +79,9 @@ export default {
           targetType: this.targetType,
           targetId: id,
           isOrderCreate: 1,
-          couponCode: this.$route.params.couponCode
+          couponCode: this.$route.params.couponCode,
+          unit: this.$route.params.unit,
+          num: this.$route.params.num,
         }
       }).then(res => {
         this.detail = Object.assign({}, res)
@@ -98,6 +101,10 @@ export default {
         this.detail = Object.assign({}, res)
       })
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    clearTimeout(this.timeoutId);
+    next();
   },
   methods: {
     handlePay () {
@@ -141,7 +148,7 @@ export default {
           window.location.href = window.location.origin + res.paidSuccessUrlH5
           return;
         }
-        setTimeout(() => {
+        this.timeoutId = setTimeout(() => {
           this.getTradeInfo(tradeSn);
         },2000)
       })

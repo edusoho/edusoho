@@ -6,26 +6,22 @@
         <mini-coupon :item="item" v-for="(item, index) in miniCoupons" :key="index" />
       </template>
     </van-cell>
-    <van-popup class="coupon-popup white-background" v-model="couponListShow" position="bottom">
-      <div class="coupon-popup__title">
-        <span class="name">优惠券</span>
-        <i class="icon h5-icon h5-icon-guanbi" @click="couponListShow = false"></i>
-      </div>
-      <div class="coupon-popup__content">
-        <coupon v-for="(item, index) in unreceivedCoupons" :key="index" :index="index" :coupon="item" :showButton="true"
-          @couponHandle="couponHandle($event)" />
-      </div>
+
+    <e-popup class="coupon-popup white-background" :show.sync="couponListShow" title="优惠券">
+      <coupon v-for="(item, index) in unreceivedCoupons" :key="index" :index="index" :coupon="item" :showButton="true"
+        @couponHandle="couponHandle($event)" />
       <div class="coupon-empty" v-show="!unreceivedCoupons.length">
         <img class="empty-img" src='static/images/coupon_empty.png'>
         <div class="empty-text">暂无优惠券</div>
       </div>
-    </van-popup>
+    </e-popup>
   </e-panel>
 </template>
 
 <script>
-import coupon from '@/containers/components/e-coupon/e-coupon.vue';
-import miniCoupon from '@/containers/components/e-mini-coupon/e-mini-coupon.vue';
+import EPopup from '@/components/popup';
+import coupon from '@/containers/components/e-coupon/e-coupon';
+import miniCoupon from '@/containers/components/e-mini-coupon/e-mini-coupon';
 import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 
 export default {
@@ -34,6 +30,7 @@ export default {
   components: {
     coupon,
     miniCoupon,
+    EPopup,
   },
   props: ['unreceivedCoupons', 'miniCoupons'],
   data () {

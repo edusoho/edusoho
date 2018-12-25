@@ -2,12 +2,14 @@
   <div class="order">
     <div class="goods-info">
       <e-loading v-if="isLoading"></e-loading>
+      <!-- 商品缩略图 -->
       <e-course
-        v-if="Object.keys(course).length >0"
+        v-if="Object.keys(course).length > 0"
         type="confirmOrder"
         :order="course"
         :course="course">
       </e-course>
+      <!-- 使用优惠券 -->
       <div class="order-coupon">
         <div class="coupon-column" @click="showList = true">
           <span>优惠券</span>
@@ -44,6 +46,7 @@
         <span class="gray-dark" v-html="getValidity"></span>
       </div>
     </div>
+    <!-- 结算区域 -->
     <div class="order-accounts" v-show="itemData">
       <div class="mb20 title-18">结算</div>
       <div class="flex-between-item">
@@ -60,8 +63,8 @@
       </div>
     </div>
     <van-button class="order-submit-bar submit-btn"
-        @click="handleSubmit"
-        size="small">应付￥ {{ total }}</van-button>
+      @click="handleSubmit"
+      size="small">应付￥ {{ total }}</van-button>
   </div>
 </template>
 <script>
@@ -69,6 +72,7 @@ import { mapState } from 'vuex';
 import coupon from '@/containers/components/e-coupon/e-coupon.vue';
 import eCourse from '@/containers/components/e-course/e-course.vue';
 import Api from '@/api';
+import { Toast } from 'vant';
 
 export default {
   components: {
@@ -89,6 +93,8 @@ export default {
       couponNumber: 0,
       targetType: this.$route.query.targetType,
       targetId: this.$route.params.id,
+      targetUnit: this.$route.params.unit,
+      targetNum: this.$route.params.num,
     }
   },
   computed: {
@@ -134,10 +140,14 @@ export default {
     Api.confirmOrder({
       data: {
         targetType: this.targetType,
-        targetId: this.targetId
+        targetId: this.targetId,
+        unit: this.targetUnit,
+        num: this.targetNum,
       }
     }).then(res => {
       this.course = res
+    }).catch(err => {
+      Toast.fail(err.message)
     })
   },
   methods: {
@@ -149,11 +159,23 @@ export default {
             targetId: this.targetId,
             isOrderCreate: 1,
             couponCode: this.itemData ? this.itemData.code : '',
+            unit: this.targetUnit,
+            num: this.targetNum,
           }
         }).then(() => {
-          this.$router.push({
-            path: `/${this.targetType}/${this.targetId}`
-          })
+          if (this.targetType === 'vip') {
+            this.$router.replace({
+              path: `/${this.targetType}`
+            }, () => {
+              this.$router.go(-1)
+            })
+          } else {
+            this.$router.replace({
+              path: `/${this.targetType}/${this.targetId}`
+            }, () => {
+              this.$router.go(-1)
+            })
+          }
         })
         return;
       }
@@ -161,10 +183,12 @@ export default {
         name: 'pay',
         query: {
           id: this.targetId,
-          targetType: this.targetType
+          targetType: this.targetType,
         },
         params: {
-          couponCode: this.itemData ? this.itemData.code : ''
+          couponCode: this.itemData ? this.itemData.code : '',
+          unit: this.targetUnit,
+          num: this.targetNum,
         }
       })
     },
