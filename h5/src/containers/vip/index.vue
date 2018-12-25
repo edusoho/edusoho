@@ -11,9 +11,9 @@
             <span v-if="!vipDated">{{ vipInfo.vipName }}</span>
             <span class="grey" v-else>{{ vipInfo.vipName }}已过期</span>
           </span>
-          <router-link to="/vip" class='user-vip' v-else>
+          <span class='user-vip' v-else>
             您还不是会员
-          </router-link>
+          </span>
         </div>
         <div class="vip-status" v-if="vipInfo">
           <div class="vip-status__btn" @click="vipPopShow = true" v-if="btnStatus">{{ vipDated ? '重新开通' : btnStatus }}</div>

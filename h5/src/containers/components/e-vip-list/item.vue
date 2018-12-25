@@ -28,6 +28,9 @@ export default {
       if (!this.feedback) return;
       this.$router.push({
         path: '/vip',
+        query: {
+          id: this.item.id,
+        }
       });
     }
   }
