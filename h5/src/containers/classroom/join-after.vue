@@ -50,6 +50,8 @@
   import detailPlan from './plan';
   import directory from '../course/detail/directory';
   import moreMask from '@/components/more-mask';
+  import { Dialog, Toast } from 'vant';
+  import Api from '@/api';
   const TAB_HEIGHT = 44;
 
   export default {
@@ -74,6 +76,46 @@
     },
     mounted() {
       window.addEventListener('touchmove', this.handleScroll);
+
+      let code = '';
+      let errorMessage = '';
+      let confirmCallback = function(){};
+
+      if (this.details.member && this.details.member.access) {
+        code = this.details.member.access.code;
+      }
+      if (!code || code === 'success') {
+        return;
+      }
+
+      // 学习任务报错信息
+      this.errorMsg = this.getErrorMsg(code);
+
+      // 错误处理
+      if (code === 'classroom.expired' || code === 'member.expired') {
+        errorMessage = '班级已到期，无法继续学习，是否退出';
+        const params = { id: this.details.classId };
+        confirmCallback = () => {
+          Api.deleteClassroom({ query: params }).then(res => {
+            if (res.success) {
+              window.location.reload();
+              return;
+            }
+            Toast.fail('退出班级失败，请稍后重试')
+          })
+        };
+        this.callConfirm(errorMessage, confirmCallback);
+      } else if (code === 'vip.member_expired') {
+        errorMessage = '会员已到期，请及时续费会员';
+        confirmCallback = () => {
+          this.$router.push({
+            path: `/vip`
+          });
+        };
+        this.callConfirm(errorMessage, confirmCallback);
+      } else {
+        Toast.fail(this.getErrorMsg(code));
+      }
     },
     destroyed () {
       window.removeEventListener('touchmove', this.handleScroll);
@@ -93,6 +135,48 @@
           this.tabsClass = this.headBottom <= 0 ? 'van-tabs--fixed' : '';
         }, 400)
       },
+      getErrorMsg(code) {
+        switch(code) {
+          case 'classroom.not_found':
+            return '当前班级不存在';
+          case 'classroom.unpublished':
+            return '当前班级未发布';
+          case 'classroom.expired':
+            return '当前班级已过期';
+          case 'user.not_login':
+            return '用户未登录';
+          case 'user.locked':
+            return '用户被锁定';
+          case 'member.not_found':
+            return '用户未加入班级';
+          case 'member.auditor':
+            return '用户是旁听生';
+          case 'member.expired':
+            return '班级已过期';
+          case 'vip.vip_closed':
+            return '网校已关闭会员功能';
+          case 'vip.not_login':
+            return '用户未登录';
+          case 'vip.not_member':
+            return '当前用户并不是vip';
+          case 'vip.member_expired':
+            return '用户会员服务已过期';
+          case 'vip.level_not_exist':
+            return '用户会员等级或班级会员不存在';
+          case 'vip.level_low':
+            return '用户会员等级';
+          default:
+            return '异常错误';
+        }
+      },
+      callConfirm(message, callback) {
+        Dialog.confirm({
+          title: '',
+          message: message,
+        }).then(() => {
+          callback();
+        }).catch(() => {})
+      }
     },
   }
 </script>

@@ -178,7 +178,7 @@ export default {
         message: message,
       }).then(() => {
         callback();
-      })
+      }).catch(() => {})
     }
   }
 }
