@@ -5,12 +5,12 @@
         <img class='user-img' :src="user.avatar.large" />
       </router-link>
       <div :class="['user-middle', vipSettings.enabled ? '' : 'single-middle']">
-        <div class='user-name color-primary'>{{ user.nickname }}</div>
+        <div class='user-name'>{{ user.nickname }}</div>
         <div v-if="vipSettings.enabled">
           <span class='user-vip' v-if="user.vip">
-            <router-link :to="{path: '/vip', vipLevelId: user.vip.levelId}">
+            <router-link :to="{path: '/vip', query: {vipLevelId: user.vip.levelId, activeIndex: user.vip.seq}}">
               <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="user.vip.icon">
-              <span v-if="!vipDated">{{ user.vip.vipName }}</span>
+              <span v-if="!vipDated" class="color-primary">{{ user.vip.vipName }}</span>
               <span class="grey" v-else>会员已过期</span>
             </router-link>
           </span>

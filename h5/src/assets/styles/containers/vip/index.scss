@@ -5,6 +5,9 @@
     .user-name {
       padding-right: vw(80);
     }
+    .text-middle {
+      line-height: vw(60);
+    }
   }
   .vip-status {
     position: absolute;
@@ -26,6 +29,9 @@
       color: #B0BDC9;
       font-size: vw(10);
     }
+    .deadline-middle {
+      margin-top: vw(20);
+    }
   }
   .vip-introduce {
     padding-top: vw(20);
@@ -40,22 +46,24 @@
         max-height: vw(96);
       }
       .swiper-slide-active {
-        .card-bg-img {
-          transform: scale(1.2);
-          transition: all 0.3s;
-        }
+        transform: scale(1.2);
+        transition: all 0.3s;
       }
     }
     .vip-info {
       position: absolute;
-      left: vw(10);
-      top: vw(16);
+      left: vw(22);
+      top: vw(21);
       color: #fff;
       line-height: 1;
       .vip-rights-num {
-        opacity: .56;
+        opacity: .6;
         margin-top: vw(10);
-        margin-bottom: vw(15);
+        margin-bottom: vw(13);
+      }
+      &__name {
+        max-width: vw(180);
+        font-size: vw(15);
       }
     }
     &__text {
@@ -73,6 +81,7 @@
       border-radius: vw(100);
       font-size: vw(16);
       padding: vw(10) vw(48);
+      line-height: 1;
       color: #fff;
     }
   }

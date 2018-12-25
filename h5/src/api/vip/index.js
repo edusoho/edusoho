@@ -11,5 +11,9 @@ export default [
     name: 'getVipClasses',
     url: '/plugins/vip/vip_classrooms?levelId={levelId}&offset={offset}&sort=-price',
     method: 'GET'
+  }, {
+    name: 'getVipLevels',
+    url: '/plugins/vip/vip_levels',
+    method: 'GET'
   }
 ];
