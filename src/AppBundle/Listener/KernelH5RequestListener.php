@@ -84,7 +84,7 @@ class KernelH5RequestListener
             $pathInfo = '/live';
         }
 
-        return empty($query) ? '/h5/index.html?'.time().'#'.$pathInfo : '/h5/index.html#'.$pathInfo.'?'.$query;
+        return empty($query) ? '/h5/index.html#'.$pathInfo : '/h5/index.html#'.$pathInfo.'?'.$query;
     }
 
     protected function getSettingService()
