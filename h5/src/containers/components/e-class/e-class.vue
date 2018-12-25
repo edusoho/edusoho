@@ -7,7 +7,7 @@
           <span class="tag tag-live" v-if="courseType === 'live'">直播</span>
           <span class="tag tag-discount" v-if="discountNum">{{discountNum}}</span>
         </div>
-        <span class="tag tag-vip" v-if="vipTagShow && Number(isVip)">会员免费</span>
+        <span class="tag tag-vip" v-if="vipTagShow && vipSettings.enabled && Number(isVip)">会员免费</span>
       </div>
       <div class="e-course__right pull-left">
         <!-- header -->
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-
+  import { mapState } from 'vuex';
   export default {
     props: {
       course: {
@@ -72,6 +72,7 @@
       };
     },
     computed: {
+      ...mapState(['vipSettings', 'isLoading']),
       discountNum() {
         if (this.typeList === 'class_list') return false;
         if (this.discount !== '') {
