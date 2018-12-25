@@ -54,10 +54,14 @@
         }
       }
     },
+    beforeRouteEnter(to, from, next) {
+      const navTitle = to.query.vipName || '会员';
+      to.meta.title = `${navTitle}班级`;
+      next()
+    },
     filters: {
       courseListData,
     },
-    created() {},
     methods: {
       onLoad() {
         const params = { levelId: this.levelId, offset: this.offset }
