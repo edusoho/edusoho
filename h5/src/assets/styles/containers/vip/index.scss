@@ -54,13 +54,12 @@
     .vip-info {
       position: absolute;
       left: vw(22);
-      top: vw(21);
+      top: vw(19);
       color: #fff;
-      line-height: 1;
       .vip-rights-num {
         opacity: .6;
-        margin-top: vw(10);
-        margin-bottom: vw(13);
+        margin-top: vw(5);
+        margin-bottom: vw(8);
       }
       &__name {
         max-width: vw(180);

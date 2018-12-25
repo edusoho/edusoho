@@ -1,5 +1,6 @@
 <template>
   <div class="vip-detail">
+    <e-loading v-if="isLoading"></e-loading>
     <div class="user-section gray-border-bottom clearfix">
       <div v-if="user">
         <img class='user-img' :src="user.avatar.large" />
@@ -8,7 +9,7 @@
           <span class='user-vip' v-if="vipInfo">
             <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="vipInfo.icon">
             <span v-if="!vipDated">{{ vipInfo.vipName }}</span>
-            <span class="grey" v-else>会员已过期</span>
+            <span class="grey" v-else>{{ vipInfo.vipName }}已过期</span>
           </span>
           <router-link to="/vip" class='user-vip' v-else>
             您还不是会员
@@ -123,7 +124,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['vipSettings']),
+    ...mapState(['vipSettings', 'isLoading']),
     vipDated() {
       if (!this.vipInfo) return false;
       const deadLineStamp = new Date(this.vipInfo.deadline).getTime();

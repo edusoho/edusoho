@@ -5,7 +5,7 @@
         <img class="card-bg-img" :src="item.background">
         <div class="vip-info">
           <div class="vip-info__name text-overflow">{{item.name}}</div>
-          <div class="text-10 vip-rights-num">{{item.courses.data.length}}门课程 {{item.classrooms.data.length}}个班级</div>
+          <div class="text-10 vip-rights-num">{{item.freeCourseNum}}门课程 {{item.freeClassroomNum}}个班级</div>
           <div class="text-10">
             {{buyType === 'year' ? `${item.yearPrice}元 / 年` : `${item.monthPrice}元 / 月`}}
           </div>
