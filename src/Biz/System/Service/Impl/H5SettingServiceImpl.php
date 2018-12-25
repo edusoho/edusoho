@@ -7,6 +7,7 @@ use Biz\System\Service\H5SettingService;
 use AppBundle\Common\TimeMachine;
 use Doctrine\Common\Inflector\Inflector;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
 {
@@ -204,12 +205,16 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function vipFilter($discoverySetting, $usage = 'show')
     {
         if ($this->isPluginInstalled('Vip')) {
-            $levels = $this->getLevelService()->findEnabledLevels();
-            foreach ($levels as &$level) {
-                $level['freeCourseNum'] = $this->getLevelService()->getFreeCourseNumByLevelId($level['id']);
-                $level['freeClassroomNum'] = $this->getLevelService()->getFreeClassroomNumByLevelId($level['id']);
+            try {
+                $levels = $this->getLevelService()->findEnabledLevels();
+                foreach ($levels as &$level) {
+                    $level['freeCourseNum'] = $this->getLevelService()->getFreeCourseNu111mByLevelId($level['id']);
+                    $level['freeClassroomNum'] = $this->getLevelService()->getFreeClassroomNumByLevelId($level['id']);
+                }
+                $discoverySetting['data']['items'] = 'desc' == $discoverySetting['data']['sort'] ? array_reverse($levels) : $levels;
+            } catch (\Exception $e) {
+                throw CommonException::NOTFOUND_METHOD();
             }
-            $discoverySetting['data']['items'] = 'desc' == $discoverySetting['data']['sort'] ? array_reverse($levels) : $levels;
         }
 
         return $discoverySetting;
