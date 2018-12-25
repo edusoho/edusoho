@@ -4,13 +4,12 @@ namespace Biz\Course\Copy\Chain;
 
 use Biz\Course\Copy\AbstractEntityCopy;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Course\Dao\CourseDao;
 
 class CourseSetCopy extends AbstractEntityCopy
 {
     protected function copyEntity($source, $config = array())
     {
-        return $this->doCopyCourseSet($source, $config);
+        return $this->doCopyCourseSet($source);
     }
 
     protected function getFields()
@@ -34,18 +33,14 @@ class CourseSetCopy extends AbstractEntityCopy
         );
     }
 
-    private function doCopyCourseSet($courseSet, $config)
+    private function doCopyCourseSet($courseSet)
     {
         $newCourseSet = $this->filterFields($courseSet);
-
-        $course = $this->getCourseDao()->get($config['courseId']);
 
         $newCourseSet['parentId'] = $courseSet['id'];
         $newCourseSet['status'] = 'published';
         $newCourseSet['creator'] = $this->biz['user']['id'];
         $newCourseSet['locked'] = 1; // 默认锁定
-        $newCourseSet['maxCoursePrice'] = $course['originPrice'];
-        $newCourseSet['minCoursePrice'] = $course['originPrice'];
 
         return $this->getCourseSetDao()->create($newCourseSet);
     }
@@ -56,13 +51,5 @@ class CourseSetCopy extends AbstractEntityCopy
     private function getCourseSetDao()
     {
         return $this->biz->dao('Course:CourseSetDao');
-    }
-
-    /**
-     * @return CourseDao
-     */
-    private function getCourseDao()
-    {
-        return $this->biz->dao('Course:CourseDao');
     }
 }
