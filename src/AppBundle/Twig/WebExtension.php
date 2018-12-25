@@ -1578,7 +1578,7 @@ class WebExtension extends \Twig_Extension
 
     public function isTrial()
     {
-        if (file_exists(__DIR__.'/../../../../../app/data/trial.lock')) {
+        if (file_exists($this->getParameter('kernel.root_dir').'/data/trial.lock')) {
             return true;
         }
 
