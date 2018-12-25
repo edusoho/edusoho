@@ -67,7 +67,7 @@
 </template>
 <script>
   import { mapState, mapMutations } from 'vuex';
-  import { Toast } from 'vant';
+  import { Dialog, Toast } from 'vant';
   import * as types from '@/store/mutation-types';
   import redirectMixin from '@/mixins/saveRedirect';
   import Api from '@/api';
@@ -91,7 +91,7 @@
         courseLessons: state => state.courseLessons,
         selectedPlanId: state => state.selectedPlanId,
       }),
-      ...mapState(['courseSettings']),
+      ...mapState(['courseSettings', 'user']),
       currentCourseType() {
         return Number(this.details.parentId) ? '班级' : '课程'
       }
@@ -234,7 +234,7 @@
       lessonCellClick (task) {
         // 课程错误，不允许学习任务
         if (this.errorMsg) {
-          Toast(this.errorMsg);
+          this.$emit('showDialog');
           return;
         }
 

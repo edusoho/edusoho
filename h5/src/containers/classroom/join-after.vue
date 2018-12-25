@@ -164,7 +164,7 @@
           case 'vip.level_not_exist':
             return '用户会员等级或班级会员不存在';
           case 'vip.level_low':
-            return '用户会员等级';
+            return '用户会员等级未达到班级要求';
           default:
             return '异常错误';
         }

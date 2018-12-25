@@ -38,6 +38,7 @@
 import * as types from '@/store/mutation-types';
 import service from '@/containers/classroom/service';
 import { mapMutations, mapState, mapActions } from 'vuex';
+import { Toast } from 'vant';
 
 export default {
   data() {
@@ -155,6 +156,10 @@ export default {
 
       this.getCourseDetail({
         courseId: item.id
+      }).then(() => {
+        this.$emit('switchPlan');
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     },
     filterPrice () {
