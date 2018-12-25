@@ -191,6 +191,9 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $batch['money'] = $currentBatches[$batchId]['money'];
                 $batch['usedNum'] = $currentBatches[$batchId]['usedNum'];
                 $batch['unreceivedNum'] = $currentBatches[$batchId]['unreceivedNum'];
+                if ($this->isPluginInstalled('Vip') && 'vip' == $currentBatches[$batchId]['targetType'] && !empty($currentBatches[$batchId]['targetId'])) {
+                    $batch['target'] = $this->getLevelService()->getLevel($currentBatches[$batchId]['targetId']);
+                }
             }
         }
         $discoverySetting['data']['items'] = array_values($batches);
