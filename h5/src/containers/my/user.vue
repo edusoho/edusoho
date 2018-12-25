@@ -8,7 +8,7 @@
         <div class='user-name'>{{ user.nickname }}</div>
         <div v-if="vipSettings.enabled">
           <span class='user-vip' v-if="user.vip">
-            <router-link :to="{path: '/vip', query: {vipLevelId: user.vip.levelId, vipSeq: user.vip.seq}}">
+            <router-link :to="{path: '/vip', query: {id: user.vip.levelId}}">
               <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="user.vip.icon">
               <span v-if="!vipDated" class="color-primary">{{ user.vip.vipName }}</span>
               <span class="grey" v-else>{{ user.vip.vipName }}已过期</span>

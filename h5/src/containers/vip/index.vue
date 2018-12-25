@@ -37,7 +37,7 @@
       :user="user"
       :buyType="buyType"
       :isVip="vipData.vipUser.vip"
-      @activeIndex="activeIndex"
+      :activeIndex.sync="currentLevelIndex"
       @vipOpen="vipOpen">
     </vip-introduce>
 
@@ -169,12 +169,9 @@ export default {
   },
   created() {
     Api.getVipLevels().then((res) => {
-      let levelId = Number(res[0].id);
-      const routeQuery = Object.keys(this.$route.query);
+      const queryId = this.$route.query.id;
 
-      if (routeQuery.includes('vipLevelId')) {
-        levelId = this.$route.query.vipLevelId
-      }
+      let levelId = res[0].id
 
       Api.getVipDetail({
         query: {
@@ -186,6 +183,10 @@ export default {
         this.user = res.vipUser.user;
         this.vipInfo = res.vipUser.vip;
         this.buyType = this.vipSettings.buyType;
+        // 路由传值vipId > 用户当前等级 > 最低会员等级
+        levelId = res.vipUser.vip ? res.vipUser.vip.levelId : res.levels[0].id;
+        levelId = isNaN(queryId) ? levelId : queryId;
+
         for (var i = 0; i < this.levels.length; i++) {
           const item = res.levels[i];
           this.priceItems = [
@@ -193,12 +194,15 @@ export default {
             getPriceItems(this.vipSettings.buyType, item.monthPrice, item.yearPrice)
           ];
         }
+
         // currentLevelIndex要放在levels数据之后
-        if (!routeQuery.includes('vipSeq')) {
-          this.currentLevelIndex = 0
-        } else {
-          this.currentLevelIndex = Number(this.$route.query.vipSeq)
-        }
+        let vipIndex = 0;
+        const vipLevel = res.levels.find((level, index) => {
+          if (level.id === levelId) {
+            vipIndex = index
+          }
+        });
+        this.currentLevelIndex = vipIndex;
       }).catch(err => {
         Toast.fail(err.message)
       })
@@ -214,9 +218,6 @@ export default {
     window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
-    activeIndex(index) {
-      this.currentLevelIndex = index;
-    },
     selectPriceItem(event, index) {
       this.activePriceIndex = index;
       this.orderParams.unit = event.unit;

@@ -89,5 +89,10 @@
         cursor: pointer;
       }
     }
+    .still-draggable__list {
+      .default-draggable__item {
+        cursor: auto;
+      }
+    }
   }
 }

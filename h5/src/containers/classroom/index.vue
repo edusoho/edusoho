@@ -40,6 +40,7 @@
           studentNum: 0,
           expiryMode: 'forever',
           expiryValue: '0',
+          vipLevel: null,
         },
         currentComp: '',
       };
@@ -74,20 +75,20 @@
         const joinStatus = !isEmpty && res.member;
         const {
           courses, teachers, assistants, buyable, vipLevel,
-          headTeacher, access, reviews, expiryMode,
+          headTeacher, access, reviews, expiryMode, member,
           expiryValue, title, price, studentNum, service,
         } = res;
         const cover = res.cover.large;
         const classId = res.id;
         const planDetails = {
           title, service, price, studentNum,
-          expiryMode, expiryValue,
+          expiryMode, expiryValue, vipLevel,
         };
 
         this.planDetails = planDetails;
         this.details = {
           summary, joinStatus, isEmpty, courses, classId, buyable, vipLevel,
-          teachers, assistants, headTeacher, access, cover, reviews,
+          teachers, assistants, headTeacher, access, cover, reviews, member,
         }
       },
       getComponent(status) {
