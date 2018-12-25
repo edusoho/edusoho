@@ -89,7 +89,10 @@ export default {
     },
     summary () {
       return  this.details.summary || this.details.courseSet.summary;
-    }
+    },
+    isClassCourse() {
+      return Number(this.details.parentId);
+    },
   },
   watch: {
     selectedPlanId: (val, oldVal) => {
@@ -114,7 +117,6 @@ export default {
       let errorCode = '';
       if (this.details.member.access) {
         errorCode = this.details.member.access.code;
-        // errorCode = 'course.expired';
       }
       if (!errorCode || errorCode === 'success') {
         return;
@@ -126,7 +128,8 @@ export default {
       let errorMessage = '';
       let confirmCallback = function(){};
 
-      if (errorCode === 'course.expired' || errorCode === 'member.expired') {
+      if (errorCode === 'course.expired' || errorCode === 'member.expired'
+        && !this.isClassCourse) { // 班级课程不可以退出, 普通课程可以退出
         errorMessage = '课程已到期，无法继续学习，是否退出';
         const params = { id: this.details.id };
         confirmCallback = () => {
@@ -183,7 +186,7 @@ export default {
         case 'vip.level_not_exist':
           return '用户会员等级或课程会员不存在';
         case 'vip.level_low':
-          return '用户会员等级未达到课程要求';
+          return '用户会员等级过低';
         default:
           return '异常错误';
       }

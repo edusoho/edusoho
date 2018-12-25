@@ -30,7 +30,8 @@
 
       <!-- 班级课程 -->
       <div v-if="active == 1" style="margin-top: 44px;">
-        <course-set-list ref="course" :courseSets="details.courses" title="班级课程" defaulValue="暂无课程" :disableMask="true"></course-set-list>
+        <course-set-list ref="course" :feedback="false" :courseSets="details.courses"
+          title="班级课程" defaulValue="暂无课程" :disableMask="true" @click.native="showDialog"></course-set-list>
       </div>
 
       <!-- 学员评价 -->
@@ -77,50 +78,55 @@
     mounted() {
       window.addEventListener('touchmove', this.handleScroll);
 
-      let code = '';
-      let errorMessage = '';
-      let confirmCallback = function(){};
-
-      if (this.details.member && this.details.member.access) {
-        code = this.details.member.access.code;
-      }
-      if (!code || code === 'success') {
-        return;
-      }
-
-      // 学习任务报错信息
-      this.errorMsg = this.getErrorMsg(code);
-
-      // 错误处理
-      if (code === 'classroom.expired' || code === 'member.expired') {
-        errorMessage = '班级已到期，无法继续学习，是否退出';
-        const params = { id: this.details.classId };
-        confirmCallback = () => {
-          Api.deleteClassroom({ query: params }).then(res => {
-            if (res.success) {
-              window.location.reload();
-              return;
-            }
-            Toast.fail('退出班级失败，请稍后重试')
-          })
-        };
-        this.callConfirm(errorMessage, confirmCallback);
-      } else if (code === 'vip.member_expired') {
-        errorMessage = '会员已到期，请及时续费会员';
-        confirmCallback = () => {
-          this.$router.push({
-            path: `/vip`
-          });
-        };
-        this.callConfirm(errorMessage, confirmCallback);
-      } else {
-        Toast.fail(this.getErrorMsg(code));
-      }
+      this.showDialog();
     },
     destroyed () {
       window.removeEventListener('touchmove', this.handleScroll);
     },
     methods: {
+      showDialog() {
+        let code = '';
+        let errorMessage = '';
+        let confirmCallback = function(){};
+
+        if (!this.details.member) return;
+
+        if (this.details.member.access) {
+          code = this.details.member.access.code;
+        }
+        if (!code || code === 'success') {
+          return;
+        }
+
+        // 学习任务报错信息
+        this.errorMsg = this.getErrorMsg(code);
+
+        // 错误处理
+        if (code === 'classroom.expired' || code === 'member.expired') {
+          errorMessage = '班级已到期，无法继续学习，是否退出';
+          const params = { id: this.details.classId };
+          confirmCallback = () => {
+            Api.deleteClassroom({ query: params }).then(res => {
+              if (res.success) {
+                window.location.reload();
+                return;
+              }
+              Toast.fail('退出班级失败，请稍后重试')
+            })
+          };
+          this.callConfirm(errorMessage, confirmCallback);
+        } else if (code === 'vip.member_expired') {
+          errorMessage = '会员已到期，请及时续费会员';
+          confirmCallback = () => {
+            this.$router.push({
+              path: `/vip`
+            });
+          };
+          this.callConfirm(errorMessage, confirmCallback);
+        } else {
+          Toast.fail(this.getErrorMsg(code));
+        }
+      },
       handleScroll() {
         if (this.scrollFlag) {
           return;
@@ -164,7 +170,7 @@
           case 'vip.level_not_exist':
             return '用户会员等级或班级会员不存在';
           case 'vip.level_low':
-            return '用户会员等级未达到班级要求';
+            return '用户会员等级过低';
           default:
             return '异常错误';
         }
