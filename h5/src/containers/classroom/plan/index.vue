@@ -10,7 +10,8 @@
     <div class="course-detail__validity">
       <div v-if="details.vipLevel" class="mb15">
         <span class="mr20">会员免费</span>
-        <img class="vipIcon" :src="details.vipLevel.icon" /><span>{{details.vipLevel.name}}免费学</span>
+        <img class="vipIcon" :src="details.vipLevel.icon" />
+        <router-link to="/vip" class='color-primary'>{{details.vipLevel.name}}免费学</router-link>
       </div>
       <service v-if="details.service.length" :services="details.service" ></service>
       <div>
