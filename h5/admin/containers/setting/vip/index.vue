@@ -6,7 +6,7 @@
 
     <div slot="setting">
       <header class="title">
-        网校会员
+        会员专区
       </header>
       <div class="default-allocate__content clearfix">
         <!-- 标题栏 -->
@@ -14,12 +14,12 @@
           <el-radio v-model="radio" label="show">显示</el-radio>
           <el-radio v-model="radio" label="unshow">不显示</el-radio>
         </setting-cell>
-        <setting-cell title="排列顺序：">
+        <setting-cell title="排列顺序(等级)：">
           <el-radio v-model="copyModuleData.sort" label="asc">从低到高</el-radio>
           <el-radio v-model="copyModuleData.sort" label="desc">从高到低</el-radio>
         </setting-cell>
 
-        <div v-model="items" class="default-draggable__list">
+        <div v-model="items" class="default-draggable__list still-draggable__list">
           <div class="default-draggable__item" v-for="(item, index) in items" :key="index">
             <div class="default-draggable__title text-overflow">{{ item.name }}</div>
           </div>

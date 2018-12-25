@@ -96,7 +96,7 @@ const BASE_MODULE = [
     name: '优惠券',
     default: MODULE_DEFAULT.coupon,
   }, {
-    name: '会员',
+    name: '会员专区',
     default: MODULE_DEFAULT.vip,
   }
 ];

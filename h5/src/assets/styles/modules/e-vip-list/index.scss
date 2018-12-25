@@ -17,6 +17,7 @@
       height: 100%;
     }
     .name {
+      width: 50%;
       transform: scale(1.6);
       transform-origin: left;
     }
@@ -30,6 +31,7 @@
     width: 100%;
   }
   .name {
+    width: 75%;
     position: absolute;
     left: 10%;
     top: 25%;
