@@ -3,11 +3,9 @@
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
         <img :class="course.imgSrc.className" v-bind:src="course.imgSrc.url">
-        <div v-if="tagShow">
-          <span class="tag tag-live" v-if="courseType === 'live'">直播</span>
-          <span class="tag tag-discount" v-if="discountNum">{{discountNum}}</span>
-          <!-- <span class="tag tag-vip">会员免费</span> -->
-        </div>
+        <span class="tag tag-live" v-if="tagShow && courseType === 'live'">直播</span>
+        <span class="tag tag-discount" v-if="tagShow && discountNum">{{discountNum}}</span>
+        <span class="tag tag-vip" v-if="Number(isVip)">会员免费</span>
       </div>
       <div class="e-course__right pull-left">
         <!-- header -->
@@ -56,6 +54,10 @@
       tagShow: {
         type: Boolean,
         default: true
+      },
+      isVip: {
+        type: String,
+        default: '0'
       }
     },
     data() {

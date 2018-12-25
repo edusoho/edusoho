@@ -8,6 +8,7 @@
       :type="courseItemType"
       :tagShow="tagShow"
       :typeList="typeList"
+      :isVip="course.vipLevelId"
       :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
       :courseType="typeList === 'course_list' ? course.courseSet.type : ''"
       :course="course | courseListData(listObj)"

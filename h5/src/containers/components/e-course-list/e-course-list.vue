@@ -17,6 +17,7 @@
         :typeList="typeList"
         :tagShow="tagShow"
         :type="type"
+        :isVip="item.vipLevelId"
         :feedback="feedback">
       </e-class>
     </div>
@@ -148,18 +149,18 @@ import { mapState } from 'vuex';
         if (!this.feedback) {
           return;
         }
-        let routeName = '';
         if (this.moreType === 'vip') {
-          routeName = this.typeList === 'course_list' ? 'vip_course' : 'vip_classroom';
+          this.$router.push({
+            name: this.typeList === 'course_list' ? 'vip_course' : 'vip_classroom',
+            query: {
+              vipName: this.vipName
+            }
+          });
         } else {
-          routeName = this.typeList === 'course_list' ? 'more_course' : 'more_class';
+          this.$router.push({
+            name: this.typeList === 'course_list' ? 'more_course' : 'more_class'
+          });
         }
-        this.$router.push({
-          name: routeName,
-          query: {
-            vipName: this.vipName
-          }
-        });
       },
       fetchCourse() {
         if (this.sourceType === 'custom') return;
