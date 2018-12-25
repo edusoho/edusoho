@@ -3,13 +3,13 @@
     <div class="course-detail__nav--btn" @click="viewAudioDoc" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen">
       文稿
     </div>
-    <div class="course-detail__nav--cover-close-btn" @click="hideAudioDoc">
-      <i class="van-icon van-icon-arrow van-nav-bar__arrow"></i>
-    </div>
-    <div class="course-detail__nav--cover web-view" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus && isCoverOpen">
+    <div class="course-detail__nav--cover web-view" :class="{ opened: isCoverOpen }" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus">
       <div class="media-text" v-html="textContent"></div>
       <div class="course-detail__nav--cover-control" @click="handlePlayer">
         <i class="h5-icon" :class="!isPlaying ? 'h5-icon-bofang' : 'h5-icon-zanting'"></i>
+      </div>
+      <div class="course-detail__nav--cover-close-btn" @click="hideAudioDoc">
+        <i class="van-icon van-icon-arrow van-nav-bar__arrow"></i>
       </div>
     </div>
     <div class="course-detail__head--img"

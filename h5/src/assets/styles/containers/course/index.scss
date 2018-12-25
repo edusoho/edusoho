@@ -112,30 +112,48 @@
   &__nav--cover {
     position: absolute;
     right: 0;
-    top: 46px;
+    top: -100%;
     width: 100%;
     height: calc(100% - 46px);
     line-height: vw(20);
     text-align: center;
     font-size: vw(14);
     background-color: #ffffff;
-    z-index: 1002;
+    z-index: 1000;
     cursor: pointer;
+    transition: all 0.3s;
     overflow: auto;
+    &.opened {
+      top: 46px;
+    }
     &-close-btn {
       position: absolute;
-      top: 0px;
-      left: 10px;
+      left: 0;
+      right: 0;
+      bottom: 0px;
+      width: 50px;
       height: 46px;
-      padding: 0 5px;
+      margin: auto;
       line-height: 46px;
-      background-color: #212121;
+      text-align: center;
       z-index: 1002;
       i {
-        color: #fff;
+        font-size: 20px;
+        transform: rotate(-90deg);
+        color: #212121;
         font-weight: bold;
         vertical-align: middle;
       }
+    }
+    .media-text {
+      position: absolute;
+      top: 0;
+      bottom: 46px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
     }
     &-control {
       position: fixed;
