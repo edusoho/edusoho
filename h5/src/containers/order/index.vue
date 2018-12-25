@@ -6,7 +6,8 @@
       <e-course
         v-if="Object.keys(course).length > 0"
         type="confirmOrder"
-        :typeList="'vip'"
+        :typeList="targetType"
+        :duration="course.duration"
         :order="course"
         :course="course">
       </e-course>
@@ -104,7 +105,7 @@ export default {
     }),
     total() {
       if (!this.itemData) {
-        return this.course.totalPrice;
+        return Number(this.course.totalPrice).toFixed(2);
       }
       const minusType = (this.itemData.type === 'minus');
       const couponRate = this.itemData.rate;
@@ -146,7 +147,7 @@ export default {
         num: this.targetNum,
       }
     }).then(res => {
-      this.course = res
+      this.course = res;
     }).catch(err => {
       Toast.fail(err.message)
     })

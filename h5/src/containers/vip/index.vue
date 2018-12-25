@@ -83,7 +83,7 @@ import introduce from './introduce';
 import priceItem from './vip-price-item';
 import courseList from '../components/e-course-list/e-course-list';
 import getPriceItems from '../../config/vip-price-config';
-import { formatFullTime } from '@/utils/date-toolkit.js';
+import { formatFullTime, getOffsetDays } from '@/utils/date-toolkit.js';
 import { mapState } from 'vuex';
 import { Toast } from 'vant';
 
@@ -118,7 +118,7 @@ export default {
       buyType: 'month',
       bottomBtnShow: false,
       orderParams: {
-        unit: '',
+        unit: 'month',
         num: 0,
       }
     }
@@ -127,9 +127,9 @@ export default {
     ...mapState(['vipSettings', 'isLoading']),
     vipDated() {
       if (!this.vipInfo) return false;
-      const deadLineStamp = new Date(this.vipInfo.deadline).getTime();
+      const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
       const nowStamp = new Date().getTime();
-      return nowStamp > deadLineStamp ? true : false;
+      return nowStamp > deadlineStamp ? true : false;
     },
     courseData() {
       const data = this.levels[this.currentLevelIndex].courses.data;
@@ -165,6 +165,11 @@ export default {
       if (userSeq > currentSeq) return false;
       if (this.vipDated) return '开通';
       return userSeq < currentSeq ? '升级' : '续费';
+    },
+    leftDays() {
+      const todayStamp = new Date().getTime();
+      const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
+      return getOffsetDays(todayStamp, deadlineStamp) + 1;
     }
   },
   created() {
@@ -281,6 +286,17 @@ export default {
             redirect: '/vip'
           }
         })
+        return;
+      }
+      if (this.btnStatus === '升级') {
+        const upgradeMinDay = this.vipSettings.upgradeMinDay;
+        if (this.leftDays <= upgradeMinDay) {
+          const diffDays = upgradeMinDay - this.leftDays;
+          Toast(`会员剩余天数小于${diffDays}天，请先续费后再升级`);
+          return;
+        }
+        this.activePriceIndex = 0;
+        this.joinVip();
         return;
       }
       if (this.vipDated && this.vipInfo) {

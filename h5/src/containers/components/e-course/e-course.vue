@@ -5,8 +5,8 @@
         <img :class="imgClass" v-bind:src="imgSrc">
       </div>
       <div class="e-course__right pull-left">
-        <div v-if="type === 'confirmOrder'" class="e-course__title course-confirm-title">{{ title }}
-          <span class="grey-medium"> x 12个月</span>
+        <div v-if="type === 'confirmOrder'" class="e-course__title course-confirm-title">
+          {{ title }}<span class="grey-medium" v-if="typeList === 'vip'"> x {{duration}}天</span>
         </div>
         <div v-else>
           <div class="e-course__title text-overflow">{{ title }}</div>
@@ -54,6 +54,10 @@
       typeList: {
         type: String,
         default: 'course_list'
+      },
+      duration: {
+        type: Number,
+        default: 0
       }
     },
     data() {
