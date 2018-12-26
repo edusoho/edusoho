@@ -185,6 +185,10 @@ export default {
       return;
     }
     Api.getVipLevels().then((res) => {
+      if (!res.length) {
+        this.$router.push({name: 'find'});
+        return;
+      }
       const queryId = this.$route.query.id;
 
       let levelId = res[0].id
