@@ -8,6 +8,8 @@ use ApiBundle\Api\Resource\AbstractResource;
 
 class PageClassroom extends AbstractResource
 {
+    const DEFAULT_DISPLAY_COUNT = 5;
+
     /**
      * @ApiConf(isRequiredAuth=false)
      */
@@ -37,9 +39,9 @@ class PageClassroom extends AbstractResource
         $this->getOCUtil()->multiple($classroom['courses'], array('courseSetId'), 'courseSet');
         $this->getOCUtil()->multiple($classroom['courses'], array('creator', 'teacherIds'));
 
-        $classroom['reviews'] = $this->getClassroomReviewService()->searchReviews(array('classroomId' => $classroomId, 'parentId' => 0), array('createdTime' => 'DESC'), 0, 5);
+        $classroom['reviews'] = $this->getClassroomReviewService()->searchReviews(array('classroomId' => $classroomId, 'parentId' => 0), array('createdTime' => 'DESC'), 0, self::DEFAULT_DISPLAY_COUNT);
         foreach ($classroom['reviews'] as &$review) {
-            $reviewPosts = $this->getClassroomReviewService()->searchReviews(array('parentId' => $review['id']), array('createdTime' => 'ASC'), 0, 5);
+            $reviewPosts = $this->getClassroomReviewService()->searchReviews(array('parentId' => $review['id']), array('createdTime' => 'ASC'), 0, self::DEFAULT_DISPLAY_COUNT);
             $this->getOCUtil()->multiple($reviewPosts, array('userId'));
             $review['posts'] = $reviewPosts;
         }

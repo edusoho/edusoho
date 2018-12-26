@@ -10,6 +10,8 @@ use AppBundle\Common\ArrayToolkit;
 
 class PageCourse extends AbstractResource
 {
+    const DEFAULT_DISPLAY_COUNT = 5;
+
     /**
      * @ApiConf(isRequiredAuth=false)
      * @ResponseFilter(class="ApiBundle\Api\Resource\Page\PageCourseFilter", mode="public")
@@ -47,13 +49,13 @@ class PageCourse extends AbstractResource
         $reviews = $this->getCourseReviewService()->searchReviews(
             array('courseSetId' => $course['courseSet']['id'], 'private' => 0, 'parentId' => 0),
             array('updatedTime' => 'DESC'),
-            0, 5
+            0, self::DEFAULT_DISPLAY_COUNT
         );
 
         $this->getOCUtil()->multiple($reviews, array('userId'));
         $this->getOCUtil()->multiple($reviews, array('courseId'), 'course');
         foreach ($reviews as &$review) {
-            $review['posts'] = $this->getCourseReviewService()->searchReviews(array('parentId' => $review['id']), array('updatedTime' => 'DESC'), 0, 5);
+            $review['posts'] = $this->getCourseReviewService()->searchReviews(array('parentId' => $review['id']), array('updatedTime' => 'DESC'), 0, self::DEFAULT_DISPLAY_COUNT);
             $this->getOCUtil()->multiple($review['posts'], array('userId'));
             $this->getOCUtil()->multiple($review['posts'], array('courseId'), 'course');
         }
