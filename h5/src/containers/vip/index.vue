@@ -62,12 +62,13 @@
       :typeList="'classroom_list'"/>
 
     <!-- 加入会员 -->
-    <e-popup class="vip-popup" :show.sync="vipPopShow" :title="'开通' + levels[this.currentLevelIndex].name" contentClass="vip-popup__content">
+    <e-popup class="vip-popup" v-if="priceItems[currentLevelIndex]"
+     :show.sync="vipPopShow" :title="'开通' + levels[this.currentLevelIndex].name" contentClass="vip-popup__content">
       <div class="vip-popup__header text-14">选择开通时长</div>
       <div class="vip-popup__body">
         <van-row gutter="20">
           <van-col span="8" v-for="(item, index) in priceItems[currentLevelIndex]" :key="index">
-            <price-item :item="item" :class="{ active: index === activePriceIndex }"
+            <price-item :item="item" :index="index" :class="{ active: index === activePriceIndex }"
               @selectItem="selectPriceItem($event, index)" />
           </van-col>
         </van-row>
@@ -243,6 +244,7 @@ export default {
       this.orderParams.num = event.num;
     },
     joinVip() {
+      // 没有价格选项，不能创建订单
       if (this.activePriceIndex < 0) {
         return;
       }

@@ -34,7 +34,7 @@ const priceItems = (buyType, monthPrice, yearPrice) => {
         priceItem(1, 'year', yearPrice)
       ];
     default:
-      return [];
+      return '';
   }
 };
 

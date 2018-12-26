@@ -17,6 +17,15 @@ export default {
         return {};
       },
     },
+    index: {
+      type: Number,
+      default: -1,
+    },
+  },
+  created() {
+    if (this.index !== 0) return;
+    // 默认第一项选中
+    this.handleClick();
   },
   methods: {
     handleClick() {
