@@ -231,6 +231,7 @@ router.beforeEach((to, from, next) => {
     });
 
     Promise.all([getVipSetting, getSiteSetting]).then(([vipRes, siteRes]) => {
+      console.log(vipRes);
       if (shouldUpdateMetaTitle) {
         to.meta.title = siteRes.name;
       }

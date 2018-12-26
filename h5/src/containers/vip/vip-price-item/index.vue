@@ -11,10 +11,6 @@ export default {
 
   name: 'vip-popup',
   props: {
-    active: {
-      type: Boolean,
-      default: false,
-    },
     item: {
       type: Object,
       default: () => {

@@ -246,7 +246,7 @@ export default {
       if (this.activePriceIndex < 0) {
         return;
       }
-      // this.vipPopShow = false;
+
       this.$router.push({
         name: 'order',
         params: {
@@ -297,6 +297,8 @@ export default {
         })
         return;
       }
+
+      // 会员升级
       if (this.btnStatus === '升级') {
         const upgradeMinDay = this.vipSettings.upgradeMinDay;
         if (this.leftDays <= upgradeMinDay) {
@@ -307,6 +309,7 @@ export default {
         this.joinVip();
         return;
       }
+      // 会员续费
       if (this.vipDated && this.vipInfo) {
         let vipIndex = 0;
         const vipLevel = this.levels.find((level, index) => {
