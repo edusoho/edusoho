@@ -51,6 +51,17 @@ export default {
         return;
       }
 
+      if (targetType === ALL_TYPE.vip) {
+        const targetId = coupon.target && coupon.target.id;
+        this.$router.push({
+          path: '/vip',
+          query: {
+            id: targetId
+          }
+        });
+        return;
+      }
+
       if (coupon.target) {
         const targetId = coupon.target.id;
         this.getPathParams(targetType, targetId).then(({ id }) => {
@@ -58,13 +69,6 @@ export default {
           this.$router.push({
             path: `/${targetType}/${id}` // course/{id} | classroom/{id}
           });
-        });
-        return;
-      }
-
-      if (targetType === ALL_TYPE.vip) {
-        this.$router.push({
-          path: '/vip'
         });
         return;
       }
