@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { Toast } from 'vant';
 import store from '@/store';
 import * as types from '@/store/mutation-types';
 import Router from 'vue-router';
@@ -219,14 +220,23 @@ router.beforeEach((to, from, next) => {
 
   if (!Object.keys(store.state.settings).length) {
     // 获取全局设置
-    store.dispatch('getGlobalSettings', {
+    const getVipSetting = store.dispatch('getGlobalSettings', {
+      type: 'vip',
+      key: 'vipSettings'
+    });
+
+    const getSiteSetting = store.dispatch('getGlobalSettings', {
       type: 'site',
       key: 'settings'
-    }).then(res => {
+    });
+
+    Promise.all([getVipSetting, getSiteSetting]).then((vipRes, siteRes) => {
       if (shouldUpdateMetaTitle) {
-        to.meta.title = res.name;
+        to.meta.title = siteRes.name;
       }
       next();
+    }).catch(err => {
+      Toast.fail(err.message);
     });
   } else if (shouldUpdateMetaTitle) {
     to.meta.title = store.state.settings.name;

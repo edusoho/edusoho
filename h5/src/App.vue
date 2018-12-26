@@ -32,12 +32,6 @@ export default {
       return this.$route.meta.keepAlive;
     },
   },
-  created() {
-    this.$store.dispatch('getGlobalSettings', {
-      type: 'vip',
-      key: 'vipSettings'
-    });
-  },
   watch: {
     '$route': {
       handler(to) {
