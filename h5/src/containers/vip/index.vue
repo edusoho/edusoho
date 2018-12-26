@@ -48,6 +48,7 @@
       :courseList="courseData"
       :vipName="levels[this.currentLevelIndex].name"
       :moreType="'vip'"
+      :levelId="levels[this.currentLevelIndex].id | Number"
       :typeList="'course_list'"/>
 
     <!-- 会员免费班级 -->
@@ -55,6 +56,7 @@
       v-if="classroomData"
       class="gray-border-bottom"
       :moreType="'vip'"
+      :levelId="levels[this.currentLevelIndex].id | Number"
       :courseList="classroomData"
       :vipName="levels[this.currentLevelIndex].name"
       :typeList="'classroom_list'"/>
@@ -170,6 +172,11 @@ export default {
       const todayStamp = new Date().getTime();
       const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
       return getOffsetDays(todayStamp, deadlineStamp) + 1;
+    }
+  },
+  filters: {
+    Number(num) {
+      return Number(num);
     }
   },
   created() {
@@ -291,8 +298,7 @@ export default {
       if (this.btnStatus === '升级') {
         const upgradeMinDay = this.vipSettings.upgradeMinDay;
         if (this.leftDays <= upgradeMinDay) {
-          const diffDays = upgradeMinDay - this.leftDays;
-          Toast(`会员剩余天数小于${diffDays}天，请先续费后再升级`);
+          Toast(`会员剩余天数小于${upgradeMinDay}天，请先续费后再升级`);
           return;
         }
         this.activePriceIndex = 0;

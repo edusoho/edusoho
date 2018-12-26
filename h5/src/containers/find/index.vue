@@ -9,6 +9,7 @@
         :courseList="part.data"
         :typeList="part.type"
         :feedback="feedback"
+        :vipTagShow="true"
         :index="index"
         @fetchCourse="fetchCourse"/>
       <e-poster

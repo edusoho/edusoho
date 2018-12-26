@@ -64,6 +64,10 @@ import { mapState } from 'vuex';
       vipName: {
         type: String,
         default: '会员'
+      },
+      levelId: {
+        type: Number,
+        default: 1
       }
     },
     components: {
@@ -158,7 +162,8 @@ import { mapState } from 'vuex';
           this.$router.push({
             name: this.typeList === 'course_list' ? 'vip_course' : 'vip_classroom',
             query: {
-              vipName: this.vipName
+              vipName: this.vipName,
+              levelId: this.levelId
             }
           });
         } else {

@@ -6,7 +6,7 @@
       </div>
       <div class="e-course__right pull-left">
         <div v-if="type === 'confirmOrder'" class="e-course__title course-confirm-title">
-          {{ title }}<span class="grey-medium" v-if="typeList === 'vip'"> x {{duration}}天</span>
+          {{ title }}<span class="grey-medium" v-if="typeList === 'vip'"> x {{vipDuration}}</span>
         </div>
         <div v-else>
           <div class="e-course__title text-overflow">{{ title }}</div>
@@ -62,7 +62,7 @@
     },
     data() {
       return {
-        pathName: this.$route.name,
+        pathName: this.$route.name
       };
     },
     computed: {
@@ -92,6 +92,11 @@
         if (this.typeList === 'classroom_list') return 'e-class__img';
         if (this.typeList === 'vip') return 'e-vip__img';
         return 'e-course__img';
+      },
+      vipDuration() {
+        if (this.order.unitType === 'month') return `${this.duration}个月`
+        if (this.order.unitType === 'year') return `${this.duration}年`
+        return `${this.duration}天`
       }
     },
     watch: {

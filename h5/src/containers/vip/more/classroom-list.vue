@@ -41,7 +41,7 @@
         finished: false,
         type: 'price',
         offset: 0,
-        levelId: 1,
+        levelId: this.$route.query.levelId,
         typeList: 'classroom_list'
       };
     },
