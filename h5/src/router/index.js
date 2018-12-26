@@ -230,7 +230,7 @@ router.beforeEach((to, from, next) => {
       key: 'settings'
     });
 
-    Promise.all([getVipSetting, getSiteSetting]).then((vipRes, siteRes) => {
+    Promise.all([getVipSetting, getSiteSetting]).then(([vipRes, siteRes]) => {
       if (shouldUpdateMetaTitle) {
         to.meta.title = siteRes.name;
       }
