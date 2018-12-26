@@ -41,7 +41,7 @@ class AudioPlayer extends Emitter {
       autoplay: true, //音频自动播放开启
       customPos: self.options.customPos,
       disableModeSelection: self.options.disableModeSelection,
-      remeberLastPos: true,
+      remeberLastPos: self.options.remeberLastPos,
       sequentialMode: true,
     });
     var player = new AudioPlayerSDK(extConfig);

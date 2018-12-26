@@ -11,10 +11,11 @@ export default class TaskPipe {
     this.userId = this.element.data('userId');
     this.fileId = this.element.data('fileId');
     if (parseInt(this.element.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
+      DurationStorage.del(this.userId, this.fileId);
       DurationStorage.set(this.userId, this.fileId, this.element.data('lastLearnTime'));
     }
     this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
-   
+
     if (this.eventUrl === undefined) {
       throw Error('task event url is undefined');
     }

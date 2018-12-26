@@ -9,6 +9,7 @@ use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\PluginVersionToolkit;
+use AppBundle\Common\UserToolkit;
 use AppBundle\Component\DeviceDetector\DeviceDetectorAdapter;
 use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
@@ -168,6 +169,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('can_send_message', array($this, 'canSendMessage')),
             new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
             new \Twig_SimpleFunction('arrays_key_convert', array($this, 'arraysKeyConvert')),
+            new \Twig_SimpleFunction('is_system_generated_email', array($this, 'isSystemGeneratedEmail')),
         );
     }
 
@@ -1576,7 +1578,7 @@ class WebExtension extends \Twig_Extension
 
     public function isTrial()
     {
-        if (file_exists(__DIR__.'/../../../../../app/data/trial.lock')) {
+        if (file_exists($this->getParameter('kernel.root_dir').'/data/trial.lock')) {
             return true;
         }
 
@@ -1816,6 +1818,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return $arrays;
+    }
+
+    public function isSystemGeneratedEmail($email)
+    {
+        return UserToolkit::isEmailGeneratedBySystem($email);
     }
 
     /**
