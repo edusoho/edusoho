@@ -61,7 +61,7 @@ import 'swiper/dist/css/swiper.css';
           notNextTick: true,
           loop: false,
           centeredSlides: true,
-          spaceBetween: 20,
+          spaceBetween: 38,
           slidesPerView: 1.5,
           observer: true,
           observeParents: true,
