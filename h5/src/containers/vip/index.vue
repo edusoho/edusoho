@@ -36,7 +36,7 @@
       :levels="levels"
       :user="user"
       :buyType="buyType"
-      :isVip="vipData.vipUser.vip"
+      :isVip="vipUser.vip"
       :activeIndex.sync="currentLevelIndex"
       @vipOpen="vipOpen">
     </vip-introduce>
@@ -102,9 +102,7 @@ export default {
         avatar: {}
       },
       vipInfo: {},
-      vipData: {
-        vipUser: {}
-      },
+      vipUser: {},
       levels: [{
         courses: {
           data: []
@@ -198,13 +196,13 @@ export default {
           levelId: levelId
         }
       }).then((res) => {
-        this.vipData = res;
+        this.vipUser = res.vipUser || {};
         this.levels = res.levels;
-        this.user = res.vipUser.user;
-        this.vipInfo = res.vipUser.vip;
+        this.user = this.vipUser.user;
+        this.vipInfo = this.vipUser.vip;
         this.buyType = this.vipSettings.buyType;
         // 路由传值vipId > 用户当前等级 > 最低会员等级
-        levelId = res.vipUser.vip ? res.vipUser.vip.levelId : res.levels[0].id;
+        levelId = this.vipUser.vip ? this.vipUser.vip.levelId : res.levels[0].id;
         levelId = isNaN(queryId) ? levelId : queryId;
 
         for (var i = 0; i < this.levels.length; i++) {
@@ -277,7 +275,7 @@ export default {
       if (!this.btnStatus) return;
       let topSize = '';
       let num = 0;
-      if (!this.user || !this.vipData.vipUser.vip) {
+      if (!this.user || !this.vipUser.vip) {
         topSize = this.$refs.joinBtnBottom.$el.getBoundingClientRect().bottom;
         num = 45;
       } else {
