@@ -22,6 +22,12 @@ class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
     {
+        //blank返回空页面的原因是因为firefox中iframe必须加载有效的src属性才能不出现闪烁的问题.
+        $blank = $request->query->get('blank');
+        if ($blank) {
+            return new Response();
+        }
+
         $preview = $request->query->get('preview');
 
         $user = $this->getUser();
