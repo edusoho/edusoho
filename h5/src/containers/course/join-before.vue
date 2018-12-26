@@ -191,11 +191,6 @@
         if (!this.accessToJoin && !vipAccessToJoin) {
           return;
         }
-        const endDate = this.details.learningExpiryDate.expiryEndDate;
-        const endDateStamp = new Date(endDate).getTime();
-        const todayStamp = new Date().getTime();
-        let isPast = todayStamp < endDateStamp;
-        endDate == 0 ? (isPast = true) : (isPast = todayStamp < endDateStamp);
 
         if (!this.$store.state.token) {
           this.$router.push({
@@ -207,24 +202,23 @@
           return;
         }
 
+        const endDate = this.details.learningExpiryDate.expiryEndDate;
+        const endDateStamp = new Date(endDate).getTime();
+        const todayStamp = new Date().getTime();
+        let isPast = todayStamp < endDateStamp;
+        endDate == 0 ? (isPast = true) : (isPast = todayStamp < endDateStamp);
         if (Number(this.details.buyable) && isPast || vipAccessToJoin) {
           if (+this.details.price && !vipAccessToJoin) {
-            const expiryMode = this.details.learningExpiryDate.expiryMode;
-            const expiryScopeStr = `${this.startDateStr} 至 ${this.endDateStr}`;
-            const expiryStr = (expiryMode === 'date') ? expiryScopeStr : this.learnExpiry
-            this.$router.push({
-              name: 'order',
-              params: {
-                id: this.details.id,
-              },
-              query: {
-                expiryScope: expiryStr,
-                targetType: 'course',
-              }
-            });
+            this.getOrder();
           } else {
             this.joinCourse({
               id: this.details.id
+            }).then(res => {
+              // 返回空对象，表示加入失败，需要去创建订单购买
+              if (!Object.keys(res).length === 0) return;
+              this.getOrder();
+            }).catch(err => {
+              console.error(err)
             });
           }
         }
@@ -233,6 +227,22 @@
         this.learnExpiry = data.val;
         this.startDateStr = data.startDateStr;
         this.endDateStr = data.endDateStr;
+      },
+      // 创建订单
+      getOrder() {
+        const expiryMode = this.details.learningExpiryDate.expiryMode;
+        const expiryScopeStr = `${this.startDateStr} 至 ${this.endDateStr}`;
+        const expiryStr = (expiryMode === 'date') ? expiryScopeStr : this.learnExpiry
+        this.$router.push({
+          name: 'order',
+          params: {
+            id: this.details.id,
+          },
+          query: {
+            expiryScope: expiryStr,
+            targetType: 'course',
+          }
+        });
       }
     },
   }
