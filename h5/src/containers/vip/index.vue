@@ -48,7 +48,7 @@
       :courseList="courseData"
       :vipName="levels[this.currentLevelIndex].name"
       :moreType="'vip'"
-      :levelId="levels[this.currentLevelIndex].id | Number"
+      :levelId="Number(levels[this.currentLevelIndex].id)"
       :typeList="'course_list'"/>
 
     <!-- 会员免费班级 -->
@@ -56,7 +56,7 @@
       v-if="classroomData"
       class="gray-border-bottom"
       :moreType="'vip'"
-      :levelId="levels[this.currentLevelIndex].id | Number"
+      :levelId="Number(levels[this.currentLevelIndex].id)"
       :courseList="classroomData"
       :vipName="levels[this.currentLevelIndex].name"
       :typeList="'classroom_list'"/>
@@ -172,11 +172,6 @@ export default {
       const todayStamp = new Date().getTime();
       const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
       return getOffsetDays(todayStamp, deadlineStamp) + 1;
-    }
-  },
-  filters: {
-    Number(num) {
-      return Number(num);
     }
   },
   created() {
