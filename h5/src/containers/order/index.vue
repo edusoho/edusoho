@@ -53,7 +53,7 @@
       <div class="mb20 title-18">结算</div>
       <div class="flex-between-item">
         <span class="mbl">商品价格：</span>
-        <span class="red">￥ {{ course.totalPrice }}</span>
+        <span class="red">￥ {{ course.totalPrice | filterPrice }}</span>
       </div>
       <div class="flex-between-item">
         <span class="mbl">优惠券：</span>
@@ -137,6 +137,11 @@ export default {
     getValidity() {
       return this.$route.query.expiryScope || '永久有效';
     }
+  },
+  filters: {
+    filterPrice(price) {
+      return parseFloat(price).toFixed(2)
+    },
   },
   created () {
     Api.confirmOrder({
