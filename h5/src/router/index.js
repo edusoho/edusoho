@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { Toast } from 'vant';
 import store from '@/store';
 import * as types from '@/store/mutation-types';
 import Router from 'vue-router';
@@ -236,8 +235,6 @@ router.beforeEach((to, from, next) => {
         to.meta.title = siteRes.name;
       }
       next();
-    }).catch(err => {
-      Toast.fail(err.message);
     });
   } else if (shouldUpdateMetaTitle) {
     to.meta.title = store.state.settings.name;
