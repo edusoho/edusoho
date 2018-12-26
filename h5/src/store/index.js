@@ -16,7 +16,8 @@ const state = {
   settings: {},
   courseSettings: {},
   title: '',
-  vipSettings: {}
+  vipSettings: {},
+  vipSwitch: false
 };
 
 

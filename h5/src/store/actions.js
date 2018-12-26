@@ -74,23 +74,21 @@ export const setAvatar = ({ commit }, { avatarId }) =>
 
 // 全局设置
 export const getGlobalSettings = ({ commit }, { type, key }) =>
-  new Promise((resolve, reject) => {
-    Api.getSettings({
-      query: {
-        type
-      }
-    }).then(res => {
-      if (type === 'site') {
-        document.title = res.name;
-      }
-      if (type === 'vip') {
-        res = res || {}; // 防止接口数据 res undefined
-      }
-      commit(types.GET_SETTINGS, {
-        key,
-        setting: res
-      });
-      resolve(res);
-      return res;
-    }).catch(err => reject(err));
+  Api.getSettings({
+    query: {
+      type
+    }
+  }).then(res => {
+    if (type === 'site') {
+      document.title = res.name;
+    }
+    if (type === 'vip') {
+      res = res || {}; // 防止接口数据 res undefined
+    }
+    commit(types.GET_SETTINGS, {
+      key,
+      setting: res
+    });
+    console.error('request setting key: ', type);
+    return res;
   });

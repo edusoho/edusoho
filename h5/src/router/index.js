@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { Toast } from 'vant';
 import store from '@/store';
 import * as types from '@/store/mutation-types';
 import Router from 'vue-router';
@@ -210,15 +211,18 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['register', 'login', 'protocol', 'find'].includes(to.name);
 
+  // 课程后台配置数据
   if (!Object.keys(store.state.courseSettings).length) {
     store.dispatch('getGlobalSettings', {
       type: 'course',
       key: 'courseSettings'
+    }).catch(err => {
+      Toast.fail(err.message);
     });
   }
 
-  if (!Object.keys(store.state.settings).length) {
-    // 获取全局设置
+  // 站点后台设置、会员后台配置
+  if (!Object.keys(store.state.settings).length || !Object.keys(store.state.vipSettings).length) {
     const getVipSetting = store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' });
     const getSiteSetting = store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' });
 
@@ -228,6 +232,8 @@ router.beforeEach((to, from, next) => {
         to.meta.title = siteRes.name;
       }
       next();
+    }).catch(err => {
+      Toast.fail(err.message);
     });
   } else if (shouldUpdateMetaTitle) {
     to.meta.title = store.state.settings.name;
