@@ -219,15 +219,8 @@ router.beforeEach((to, from, next) => {
 
   if (!Object.keys(store.state.settings).length) {
     // 获取全局设置
-    const getVipSetting = store.dispatch('getGlobalSettings', {
-      type: 'vip',
-      key: 'vipSettings'
-    });
-
-    const getSiteSetting = store.dispatch('getGlobalSettings', {
-      type: 'site',
-      key: 'settings'
-    });
+    const getVipSetting = store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' });
+    const getSiteSetting = store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' });
 
     Promise.all([getVipSetting, getSiteSetting]).then(([vipRes, siteRes]) => {
       console.log(vipRes);
