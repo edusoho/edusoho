@@ -133,6 +133,7 @@ export default {
     },
     courseData() {
       const data = this.levels[this.currentLevelIndex].courses.data;
+      if (data.length == 0) return false;
       let dataFormat = {
         items: [],
         title: '会员课程',
