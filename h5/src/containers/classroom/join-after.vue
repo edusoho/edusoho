@@ -30,7 +30,7 @@
 
       <!-- 班级课程 -->
       <div v-if="active == 1" style="margin-top: 44px;">
-        <course-set-list ref="course" :feedback="false" :courseSets="details.courses"
+        <course-set-list ref="course" :feedback="!errorMsg" :courseSets="details.courses"
           title="班级课程" defaulValue="暂无课程" :disableMask="true" @click.native="showDialog"></course-set-list>
       </div>
 
@@ -73,6 +73,7 @@
         scrollFlag: false,
         tabs: ['班级介绍', '班级课程', '学员评价'],
         tabsClass: '',
+        errorMsg: '',
       }
     },
     mounted() {
