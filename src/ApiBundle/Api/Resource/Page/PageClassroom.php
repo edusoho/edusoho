@@ -8,6 +8,8 @@ use ApiBundle\Api\Resource\AbstractResource;
 
 class PageClassroom extends AbstractResource
 {
+    const DEFAULT_DISPLAY_COUNT = 5;
+
     /**
      * @ApiConf(isRequiredAuth=false)
      */
@@ -18,11 +20,15 @@ class PageClassroom extends AbstractResource
         if (empty($classroom)) {
             throw new NotFoundHttpException('班级不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
-        $member = $this->getClassroomService()->getClassroomMember($classroomId, $this->getCurrentUser()->getId());
-        $isMemberNonExpired = empty($member) ? false : $this->getClassroomService()->isMemberNonExpired($classroom, $member);
-        $classroom['member'] = $isMemberNonExpired ? $member : null;
-        $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+        $user = $this->getCurrentUser();
+        $member = null;
+        if (!empty($user['id'])) {
+            $apiRequest = new ApiRequest('/api/me/classroom_members/'.$classroomId, 'GET', array());
+            $member = $this->invokeResource($apiRequest);
+        }
+        $classroom['member'] = $member;
 
+        $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
         if (!empty($classroom['headTeacher'])) {
             $this->mergeProfile($classroom['headTeacher']);
         }
@@ -33,13 +39,18 @@ class PageClassroom extends AbstractResource
         $this->getOCUtil()->multiple($classroom['courses'], array('courseSetId'), 'courseSet');
         $this->getOCUtil()->multiple($classroom['courses'], array('creator', 'teacherIds'));
 
-        $classroom['reviews'] = $this->getClassroomReviewService()->searchReviews(array('classroomId' => $classroomId, 'parentId' => 0), array('createdTime' => 'DESC'), 0, 5);
+        $classroom['reviews'] = $this->getClassroomReviewService()->searchReviews(array('classroomId' => $classroomId, 'parentId' => 0), array('createdTime' => 'DESC'), 0, self::DEFAULT_DISPLAY_COUNT);
         foreach ($classroom['reviews'] as &$review) {
-            $reviewPosts = $this->getClassroomReviewService()->searchReviews(array('parentId' => $review['id']), array('createdTime' => 'ASC'), 0, 5);
+            $reviewPosts = $this->getClassroomReviewService()->searchReviews(array('parentId' => $review['id']), array('createdTime' => 'ASC'), 0, self::DEFAULT_DISPLAY_COUNT);
             $this->getOCUtil()->multiple($reviewPosts, array('userId'));
             $review['posts'] = $reviewPosts;
         }
         $this->getOCUtil()->multiple($classroom['reviews'], array('userId'));
+
+        if ($this->isPluginInstalled('vip') && $classroom['vipLevelId'] > 0) {
+            $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$classroom['vipLevelId'], 'GET', array());
+            $classroom['vipLevel'] = $this->invokeResource($apiRequest);
+        }
 
         return $classroom;
     }
