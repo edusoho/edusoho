@@ -7,6 +7,8 @@
     <div slot="setting">
       <header class="title">
         会员专区
+        <div class="text-12 color-gray" v-if="portal === 'miniprogram'">
+        使用会员专区配置功能，小程序版本需要升级到1.3.4及以上</div>
       </header>
       <div class="default-allocate__content clearfix">
         <!-- 标题栏 -->
@@ -33,8 +35,8 @@
 import moduleFrame from '../module-frame';
 import settingCell from '../module-frame/setting-cell';
 import vipList from '@/containers/components/e-vip-list/e-vip-list';
+import pathName2Portal from '@admin/config/api-portal-config';
 import { mapState } from 'vuex';
-
 
 export default {
   name: 'vip',
@@ -45,7 +47,7 @@ export default {
   },
   data () {
     return {
-
+      pathName: this.$route.name
     }
   },
   props: {
@@ -104,6 +106,9 @@ export default {
       set(value) {
         this.copyModuleData.titleShow = value;
       },
+    },
+    portal() {
+      return pathName2Portal[this.pathName];
     }
   },
   watch: {

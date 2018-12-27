@@ -5,7 +5,8 @@
     </div>
     <div slot="setting" class="coupon-allocate">
       <header class="title">
-        优惠券设置（仅显示已发布优惠券）
+        优惠券设置（仅显示未过期的优惠券）
+        <div class="text-12 color-gray" v-if="portal === 'miniprogram'">使用优惠券配置功能，小程序版本需要升级到1.3.2及以上</div>
       </header>
       <div class="default-allocate__content">
         <!-- 标题栏 -->
@@ -47,6 +48,7 @@ import settingCell from '../module-frame/setting-cell';
 import courseModal from '../course/modal/course-modal';
 import coupon from '@/containers/components/e-coupon-list/e-coupon-list';
 import draggable from 'vuedraggable';
+import pathName2Portal from '@admin/config/api-portal-config';
 
 export default {
   components: {
@@ -108,6 +110,9 @@ export default {
         this.copyModuleData.data.titleShow = value;
       },
     },
+    portal() {
+      return pathName2Portal[this.pathName];
+    }
   },
   watch: {
     copyModuleData: {

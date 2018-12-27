@@ -9,7 +9,10 @@
       </e-course-list>
     </div>
     <div slot="setting">
-      <header class="title">{{typeLabel}}列表设置</header>
+      <header class="title">
+        {{typeLabel}}列表设置
+        <div class="text-12 color-gray" v-if="portal === 'miniprogram' && typeLabel === '班级'">使用班级配置功能，小程序版本需要升级到1.3.1及以上</div>
+      </header>
       <div class="default-allocate__content clearfix">
         <!-- 列表名称 -->
         <setting-cell title="列表名称：" leftClass="required-option">
@@ -80,6 +83,7 @@ import moduleFrame from '../module-frame';
 import settingCell from '../module-frame/setting-cell';
 import { mapMutations, mapState, mapActions } from 'vuex';
 import treeDigger from '@admin/utils/tree-digger';
+import pathName2Portal from '@admin/config/api-portal-config';
 
 const optionLabel = {
   'course_list': '课程',
@@ -130,6 +134,7 @@ export default {
         label: 'name',
         value: 'id',
       },
+      pathName: this.$route.name,
       categoryTempId: [this.moduleData.data.categoryId.toString()],
       categoryDiggered: false,
       dateOptions: [{
@@ -221,7 +226,10 @@ export default {
       set(value) {
         this.copyModuleData.data.categoryId = value;
       },
-    }
+    },
+    portal() {
+      return pathName2Portal[this.pathName];
+    },
   },
   watch: {
     copyModuleData: {
