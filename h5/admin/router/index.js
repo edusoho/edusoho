@@ -54,9 +54,16 @@ router.beforeEach((to, from, next) => {
     const getVipPlugin = store.dispatch('setVipSetupStatus');
     const vipSettings = store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' });
     const getVipLevels = store.dispatch('setVipLevels');
-    Promise.all([getVipPlugin, vipSettings, getVipLevels])
+
+    Promise.all([getVipPlugin, vipSettings])
       .then(([vipPlugin, vipRes]) => {
-        next();
+        return vipRes;
+      }).then((vipRes) => {
+        if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
+          this.getVipLevels().then(() => next())
+        } else {
+          next();
+        }
       }).catch(err => {
         Vue.prototype.$message({
           message: err.message,
