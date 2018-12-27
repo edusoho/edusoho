@@ -43,7 +43,7 @@
           </div>
         </van-popup>
       </div>
-      <div class="order-goods-item">
+      <div class="order-goods-item" v-if="targetType !== 'vip'">
         <span>学习有效期</span>
         <span class="gray-dark" v-html="getValidity"></span>
       </div>

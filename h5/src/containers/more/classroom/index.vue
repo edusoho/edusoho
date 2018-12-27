@@ -109,7 +109,6 @@
           if (!isAllClassroom) {
             this.offset = this.courseList.length;
           }
-          console.log(data,111);
           this.isAllClassroom = isAllClassroom;
           this.isRequestCompile = true;
         }).catch((err) => {
