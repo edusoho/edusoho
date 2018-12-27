@@ -1,4 +1,5 @@
 // 全局
+export const GET_SETTINGS = 'GET_SETTINGS';
 export const UPDATE_LOADING_STATUS = 'UPDATE_LOADING_STATUS';
 export const GET_CSRF_TOKEN = 'GET_CSRF_TOKEN';
 

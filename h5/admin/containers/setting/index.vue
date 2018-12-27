@@ -37,7 +37,8 @@
         <div class="section-title">点击添加组件</div>
         <div class="section-button-group">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-            v-for="(item, index) in baseModules" :key="index" v-if="(item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list' && portal === 'miniprogram')) && (item.default.type !== 'coupon' || (supportCouponVersion && item.default.type === 'coupon' && portal === 'miniprogram')) || (portal === 'h5')">
+            v-show="item.default.type !== 'vip' || item.default.type === 'vip' && vipSetupStatus"
+            v-for="(item, index) in baseModules" :key="index" v-if="(item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list' && portal === 'miniprogram')) && (item.default.type !== 'coupon' || (supportCouponVersion && item.default.type === 'coupon' && portal === 'miniprogram')) && (item.default.type !== 'vip' || (supportVipVersion && item.default.type === 'vip' && portal === 'miniprogram')) || (portal === 'h5')">
             {{ item.name }}
           </el-button>
         </div>
@@ -115,7 +116,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLoading']),
+    ...mapState(['isLoading', 'vipLevels', 'vipSettings', 'vipSetupStatus']),
     stopDraggleClasses() {
       return '.module-frame__setting, .find-footer, .search__container, .el-dialog__header, .el-dialog__footer';
     },
@@ -126,11 +127,14 @@ export default {
       return this.supportVersion('1.4.0');
     },
     supportClassroomVersion() {
-      return true;
+      return this.supportVersion('1.3.1');
     },
     supportCouponVersion() {
-      return true;
+      return this.supportVersion('1.3.2');
     },
+    supportVipVersion() {
+      return this.supportVersion('1.3.4') && this.vipSetupStatus;
+    }
   },
   created() {
     // 获取小程序版本号
@@ -189,6 +193,37 @@ export default {
       this.modules.splice(index, 1);
     },
     addModule(data, index) {
+      /* 会员组件交互处理:
+       * 会员插件未安装：隐藏按钮 (vipSetupStatus)
+       * 未开通会员功能：/admin/setting/vip (vipSettings)
+       * 开通会员但未配置会员等级：/admin/setting/vip/level (vipLevels)
+      */
+      switch(data.default.type) {
+        case 'vip':
+          if (!this.vipSetupStatus) {
+            return;
+          } else if (!this.vipSettings || !this.vipSettings.enabled || !this.vipSettings.h5Enabled) {
+            this.$confirm('会员功能未开通，去开通？', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+            }).then(() => {
+              window.location.href = '/admin/setting/vip'
+            }).catch(() => {});
+            return;
+          } else if (!this.vipLevels || !this.vipLevels.length) {
+            this.$confirm('未配置会员等级，去配置？', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+            }).then(() => {
+              window.location.href = '/admin/setting/vip/level'
+            }).catch(() => {});
+            return;
+          }
+          break;
+        default:
+          break;
+      }
+
       // 新增一个模块
       if (this.typeCount.getCounterByType(data.default.type) >= 5) {
         this.$message({

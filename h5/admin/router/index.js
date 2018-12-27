@@ -48,4 +48,25 @@ const router = new Router({
   routes
 });
 
+router.beforeEach((to, from, next) => {
+  // 获取会员后台配置
+  if (!Object.keys(store.state.vipSettings).length) {
+    const getVipPlugin = store.dispatch('setVipSetupStatus');
+    const vipSettings = store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' });
+    const getVipLevels = store.dispatch('setVipLevels');
+    Promise.all([getVipPlugin, vipSettings, getVipLevels])
+      .then(([vipPlugin, vipRes]) => {
+        next();
+      }).catch(err => {
+        Vue.prototype.$message({
+          message: err.message,
+          type: 'error'
+        });
+        next();
+      });
+  } else {
+    next();
+  }
+});
+
 export default router;

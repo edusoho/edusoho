@@ -6,6 +6,36 @@ export const updateLoading = ({ commit }, { isLoading }) => {
   commit(types.UPDATE_LOADING_STATUS, { isLoading });
 };
 
+// 全局设置
+export const getGlobalSettings = ({ commit }, { type, key }) =>
+  Api.getSettings({
+    query: {
+      type
+    }
+  }).then(res => {
+    commit(types.GET_SETTINGS, {
+      key,
+      setting: res || {}
+    });
+    return res;
+  });
+
+// 全局vip元素显示开关
+export const setVipLevels = ({ commit }) =>
+  Api.getVipLevels().then(levels => {
+    const levelsExist = levels;
+    commit(types.GET_SETTINGS, { key: 'vipLevels', setting: levelsExist });
+    return levelsExist;
+  });
+
+// vip插件安装
+export const setVipSetupStatus = ({ commit }) =>
+  Api.vipPlugin().then(vipPlugin => {
+    const pluginStatus = Object.keys(vipPlugin).length > 1;
+    commit(types.GET_SETTINGS, { key: 'vipSetupStatus', setting: pluginStatus });
+    return vipPlugin;
+  });
+
 // 课程分类
 export const getCourseCategories = ({ commit }) => Api.getCategories({
   query: {
