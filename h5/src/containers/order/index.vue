@@ -145,14 +145,18 @@ export default {
     },
   },
   created () {
+    if (this.vipOrderType === '升级') {
+      this.targetUnit = undefined;
+      this.targetNum = undefined;
+    }
+
     let data = {
       targetType: this.targetType,
       targetId: this.targetId,
+      num: this.targetNum,
+      unit: this.targetUnit
     }
-    if (this.vipOrderType !== '升级') {
-      data.unit = this.targetUnit,
-      data.num = this.targetNum
-    }
+
     Api.confirmOrder({
       data: data
     }).then(res => {
