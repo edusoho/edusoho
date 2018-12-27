@@ -41,7 +41,7 @@
     .swiper-container {
       overflow: visible;
       margin-top: vw(15);
-      margin-left: 6%;
+      margin-left: 4%;
       .card-bg-img {
         width: vw(217);
         max-height: vw(101);
@@ -95,6 +95,7 @@
     text-align: center;
     color: #fff;
     font-size: vw(16);
+    z-index: 2;
     background-color: $primary-color;
     &.disabled {
       background-color: #9BA5B0;

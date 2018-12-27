@@ -227,9 +227,15 @@ router.beforeEach((to, from, next) => {
     const getSiteSetting = store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' });
 
     Promise.all([getVipSetting, getSiteSetting]).then(([vipRes, siteRes]) => {
-      console.log(vipRes);
+      // 动态更新 navbar title
       if (shouldUpdateMetaTitle) {
         to.meta.title = siteRes.name;
+      }
+      // vip 前端元素判断（vip 插件已安装(升级) && vip 插件已开启 && vip 等级已设置）
+      if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
+        store.dispatch('setVipSwitch', true);
+        next();
+        return;
       }
       next();
     }).catch(err => {

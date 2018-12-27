@@ -89,6 +89,7 @@ import getPriceItems from '../../config/vip-price-config';
 import { formatFullTime, getOffsetDays } from '@/utils/date-toolkit.js';
 import { mapState } from 'vuex';
 import { Toast } from 'vant';
+import * as types from '@/store/mutation-types';
 
 export default {
   components: {
@@ -125,7 +126,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(['vipSettings', 'isLoading']),
+    ...mapState(['vipSettings', 'isLoading', 'vipSwitch']),
+    ...mapState({ userInfo: state => state.user }),
     vipDated() {
       if (!this.vipInfo) return false;
       const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
@@ -175,7 +177,7 @@ export default {
     }
   },
   created() {
-    if (!this.vipSettings.enabled) {
+    if (!this.vipSwitch) {
       this.$router.push({name: 'find'});
       return;
     }
@@ -198,6 +200,10 @@ export default {
         this.user = this.vipUser.user;
         this.vipInfo = this.vipUser.vip;
         this.buyType = this.vipSettings.buyType;
+        // 更新用户会员数据
+        const userInfo = this.userInfo;
+        userInfo.vip = this.vipInfo;
+        this.$store.commit(types.USER_INFO, userInfo);
         // 路由传值vipId > 用户当前等级 > 最低会员等级
         levelId = this.vipUser.vip ? this.vipUser.vip.levelId : res.levels[0].id;
         levelId = isNaN(queryId) ? levelId : queryId;
@@ -219,10 +225,11 @@ export default {
           }
         });
         this.currentLevelIndex = vipIndex;
-      }).catch(err => {
-        Toast.fail(err.message)
       })
+    }).catch(err => {
+      Toast.fail(err.message)
     })
+
     setTimeout(() => {
       window.scrollTo(0,0);
     }, 100)

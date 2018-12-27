@@ -92,3 +92,23 @@ export const getGlobalSettings = ({ commit }, { type, key }) =>
     console.error('request setting key: ', type);
     return res;
   });
+
+// 全局设置
+export const setVipSwitch = ({ commit }, isOn) =>
+  new Promise(resolve => {
+    console.log(isOn);
+    if (!isOn) {
+      commit(types.GET_SETTINGS, { key: 'vipSwitch', setting: isOn });
+      resolve(isOn);
+      return isOn;
+    }
+    return Api.getVipLevels().then(levels => {
+      let levelsExist = false;
+      if (levels && levels.length) {
+        levelsExist = true;
+      }
+      commit(types.GET_SETTINGS, { key: 'vipSwitch', setting: levelsExist });
+      resolve(levelsExist);
+      return levelsExist;
+    });
+  });
