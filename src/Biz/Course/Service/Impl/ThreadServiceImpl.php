@@ -175,6 +175,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $trusted = empty($hasCourseManagerRole) ? false : true;
         //更新thread过滤html
         $thread['content'] = $this->biz['html_helper']->purify($thread['content'], $trusted);
+        $thread['content'] = $this->filter_Emoji($thread['content']);
+        $thread['title'] = $this->filter_Emoji($thread['title']);
 
         $thread['createdTime'] = time();
         $thread['latestPostUserId'] = $thread['userId'];
@@ -235,6 +237,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         //更新thread过滤html
         $fields['content'] = isset($fields['content']) ? $this->biz['html_helper']->purify($fields['content'], $trusted) : $thread['content'];
 
+        $thread['content'] = $this->filter_Emoji($thread['content']);
+        $thread['title'] = $this->filter_Emoji($thread['title']);
         $thread = $this->getThreadDao()->update($threadId, $fields);
         $this->dispatchEvent('course.thread.update', new Event($thread));
 
@@ -410,6 +414,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $post['content'] = $this->sensitiveFilter($post['content'], 'course-thread-post-create');
+        $post['content'] = $this->filter_Emoji($post['content']);
 
         $this->getCourseService()->tryTakeCourse($post['courseId']);
 
@@ -549,6 +554,18 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         return $orderBys;
+    }
+
+    protected function filter_Emoji($str)
+    {
+        $str = preg_replace_callback(
+            '/./u',
+            function (array $match) {
+                return strlen($match[0]) >= 4 ? '[emoji]' : $match[0];
+            },
+            $str);
+
+        return $str;
     }
 
     protected function sensitiveFilter($str, $type)
