@@ -207,7 +207,7 @@ export default {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
             }).then(() => {
-              window.location.href = window.location.origin + '/admin/setting/vip';
+              window.open(window.location.origin + '/admin/setting/vip');
             }).catch(() => {});
             return;
           } else if (!this.vipLevels || !this.vipLevels.length) {
@@ -215,7 +215,7 @@ export default {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
             }).then(() => {
-              window.location.href = window.location.origin + '/admin/setting/vip/level';
+              window.open(window.location.origin + '/admin/setting/vip/level');
             }).catch(() => {});
             return;
           }
