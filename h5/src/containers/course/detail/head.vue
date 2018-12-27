@@ -1,7 +1,16 @@
 <template>
   <div class="course-detail__head">
-    <div class="course-detail__nav--btn" @click="viewAudioDoc" v-if="false" v-show="['audio'].includes(sourceType) && !isEncryptionPlus">
+    <div class="course-detail__nav--btn" @click="viewAudioDoc" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen">
       文稿
+    </div>
+    <div class="course-detail__nav--cover web-view" :class="{ opened: isCoverOpen }" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus">
+      <div class="media-text" v-html="textContent"></div>
+      <div class="course-detail__nav--cover-control" @click="handlePlayer">
+        <i class="h5-icon" :class="!isPlaying ? 'h5-icon-bofang' : 'h5-icon-zanting'"></i>
+      </div>
+      <div class="course-detail__nav--cover-close-btn" @click="hideAudioDoc">
+        <i class="van-icon van-icon-arrow van-nav-bar__arrow"></i>
+      </div>
     </div>
     <div class="course-detail__head--img"
       v-show="sourceType === 'img' || isEncryptionPlus">
@@ -23,7 +32,10 @@ export default {
   data() {
     return {
       isEncryptionPlus: false,
-      mediaOpts: {}
+      mediaOpts: {},
+      isCoverOpen: false,
+      isPlaying: false,
+      player: null
     };
   },
   props: {
@@ -40,7 +52,10 @@ export default {
       details: state => state.details,
       joinStatus: state => state.joinStatus,
       user: state => state.user,
-    })
+    }),
+    textContent() {
+      return this.mediaOpts.text;
+    }
   },
   watch: {
     taskId: {
@@ -59,12 +74,16 @@ export default {
   */
   methods: {
     viewAudioDoc() {
-       this.$router.push({
-        name: 'course_audioview',
-        query: {
-          ...this.mediaOpts
-        },
-      })
+       this.isCoverOpen = true;
+    },
+    hideAudioDoc() {
+      this.isCoverOpen = false;
+    },
+    handlePlayer() {
+      if (this.isPlaying) {
+        return this.player && this.player.pause();
+      }
+      return this.player && this.player.play();
     },
     getParams () {
       const canTryLookable = !this.joinStatus
@@ -100,7 +119,8 @@ export default {
         user: this.user,
         playlist: media.url,
         autoplay: true,
-        disableFullscreen: this.sourceType === 'audio'
+        disableFullscreen: this.sourceType === 'audio',
+        isAudio: this.sourceType === 'audio'
         // resId: media.resId,
         // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
@@ -112,6 +132,13 @@ export default {
       this.loadPlayerSDK().then(SDK => {
         this.$store.commit('UPDATE_LOADING_STATUS', false);
         const player = new SDK(options);
+        player.on('playing', () => {
+          this.isPlaying = true;
+        });
+        player.on('paused', () => {
+          this.isPlaying = false;
+        });
+        this.player = player;
       })
     },
     loadPlayerSDK () {
