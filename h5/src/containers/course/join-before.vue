@@ -215,7 +215,7 @@
               id: this.details.id
             }).then(res => {
               // 返回空对象，表示加入失败，需要去创建订单购买
-              if (!Object.keys(res).length === 0) return;
+              if (!(Object.keys(res).length === 0)) return;
               this.getOrder();
             }).catch(err => {
               console.error(err)
