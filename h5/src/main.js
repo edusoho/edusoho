@@ -27,7 +27,8 @@ import {
   Popup,
   Rate,
   Cell,
-  Tag
+  Tag,
+  Toast
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -84,5 +85,7 @@ Api.getSettings({
     components: { App },
     template: '<App/>'
   });
+}).catch(err => {
+  Toast.fail(err.message);
 });
 

@@ -5,7 +5,8 @@ import * as types from '@/store/mutation-types';
 
 // 状态码
 const statusCode = {
-  EXPIRED_CREDENTIAL: 5
+  EXPIRED_CREDENTIAL: 5,
+  TOKEN_NOT_EXIST: 4040117
 };
 
 axios.interceptors.request.use(config => {
@@ -44,16 +45,28 @@ axios.interceptors.response.use(res => {
 }, error => {
   store.commit('UPDATE_LOADING_STATUS', false);
 
+  let code = '';
   switch (error.response.status) {
     case 401:
-      const code = error.response.data.error.code;
+      code = error.response.data.error.code;
       // token过期的情况
       if (code === statusCode.EXPIRED_CREDENTIAL) { // 待解决：错误码没有同意，这种判断方式需要之后接口错误码同一之后才可用
         store.commit(types.USER_LOGOUT);
-
         router.replace({ // 待解决：replace 会导致返回按钮的功能有问题
           name: 'login',
           query: { redirect: router.currentRoute.fullPath }
+        });
+      }
+      break;
+    case 404:
+      code = error.response.data.error.code;
+      if (code === statusCode.TOKEN_NOT_EXIST) { // 待解决：错误码没有同意，这种判断方式需要之后接口错误码同一之后才可用
+        store.commit(types.USER_LOGOUT);
+        router.replace({ // 待解决：replace 会导致返回按钮的功能有问题
+          name: 'login',
+          query: { redirect: router.currentRoute.fullPath }
+        }, () => {
+          window.location.reload();
         });
       }
       break;

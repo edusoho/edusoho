@@ -86,7 +86,6 @@ export const getGlobalSettings = ({ commit }, { type, key }) =>
       key,
       setting: res || {}
     });
-    console.error('request setting key: ', type);
     return res;
   });
 
