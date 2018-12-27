@@ -5,7 +5,7 @@
     </div>
     <div class="course-detail__nav--cover web-view" :class="{ opened: isCoverOpen }" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus">
       <div class="media-text" v-html="textContent"></div>
-      <div class="course-detail__nav--cover-control" @click="handlePlayer">
+      <div class="course-detail__nav--cover-control" v-show="isCoverOpen" @click="handlePlayer">
         <i class="h5-icon" :class="!isPlaying ? 'h5-icon-bofang' : 'h5-icon-zanting'"></i>
       </div>
       <div class="course-detail__nav--cover-close-btn" @click="hideAudioDoc">
