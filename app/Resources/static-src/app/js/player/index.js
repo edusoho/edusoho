@@ -68,6 +68,8 @@ class Show {
   }
 
   initPlayer() {
+    const audioCustomPos = this.remeberLastPos ? this.lastLearnTime.toString() : '0';
+    const videoCustomPos = this.lastLearnTime.toString();
     return PlayerFactory.create(
       this.playerType, {
         element: '#lesson-player',
@@ -99,7 +101,7 @@ class Show {
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
         autoplay: this.autoplay,
-        customPos: this.remeberLastPos ? this.lastLearnTime.toString() : '0',
+        customPos: this.isCloudAudioPlayer() ? audioCustomPos : videoCustomPos,
         remeberLastPos: this.remeberLastPos,
       }
     );
