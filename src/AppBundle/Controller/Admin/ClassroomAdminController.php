@@ -42,8 +42,8 @@ class ClassroomAdminController extends BaseController
             $price = 0;
 
             foreach ($courses as $course) {
-                $coinPrice += $course['price'] * $cashRate;
-                $price += $course['price'];
+                $coinPrice += $course['originPrice'] * $cashRate;
+                $price += $course['originPrice'];
             }
 
             $coinPriceAll[$value] = $coinPrice;

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\UserToolkit;
 use AppBundle\Util\AvatarAlert;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
@@ -76,6 +77,14 @@ abstract class BuyFlowController extends BaseController
                 if (empty($user[$buyField])) {
                     return true;
                 }
+            }
+
+            if (in_array('email', $buyFields) && UserToolkit::isEmailGeneratedBySystem($user['email'])) {
+                return true;
+            }
+
+            if (in_array('gender', $buyFields) && UserToolkit::isGenderDefault($user['gender'])) {
+                return true;
             }
         }
 

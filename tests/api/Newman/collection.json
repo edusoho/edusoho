@@ -11370,7 +11370,7 @@
 									"tests[\"Status code is 200\"] = responseCode.code === 200;",
 									"",
 									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"The member has not joined the course lesson\"] = jsonData.error.code ===  \"NOTFOUND_MEMBER\";",
+									"tests[\"The member has not joined the course lesson\"] = jsonData.error.code ===  \"member.not_found\";",
 									""
 								],
 								"type": "text/javascript"

@@ -5673,6 +5673,7 @@ admin.custom_page_manage.custom_page_tag: 标签
 admin.custom_page_manage.custom_page_template: 模版
 admin.custom_page_manage.custom_page_default_template: 默认模版
 admin.custom_page_manage.custom_page_no_nav_template: 无导航栏
+admin.custom_page_manage.custom_page_blank_template: 空白页
 
 # 移动端内容管理
 admin.mobile_manage.open_tips: >

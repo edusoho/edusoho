@@ -79,10 +79,12 @@ class ContentController extends BaseController
     {
         $content = $this->getContentByAlias('page', $alias);
 
-        if ($content['template'] == 'default') {
+        if ('default' == $content['template']) {
             $template = 'content/page-show.html.twig';
-        } elseif ($content['template'] == 'blank') {
+        } elseif ('blank' == $content['template']) {
             $template = 'content/blank.html.twig';
+        } elseif ('fullBlank' == $content['template']) {
+            $template = 'content/full-blank.html.twig';
         } else {
             $alias = $content['alias'] ?: $content['id'];
             $template = "@customize/content/page/{$alias}/index.html.twig";

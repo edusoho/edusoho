@@ -7,7 +7,7 @@
          data-role="lesson-content"
          data-watch-url="{{ path('course_acitvity_watch',{courseId: activity.fromCourseId, id: activity.id}) }}"
          data-id="{{ activity.id }}"
-    data-watch-time-sec="{{ setting('magic.watch_time_sec')|default(120) }}>
+    data-watch-time-sec="{{ setting('magic.watch_time_sec')|default(120) }}">
     {#  如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx #}
     {{ render(controller('AppBundle:Player:show', {id: video.mediaId, isPart: true})) }}
   </div>

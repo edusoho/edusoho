@@ -4647,6 +4647,7 @@ admin.custom_page_manage.custom_page_tag: Tag
 admin.custom_page_manage.custom_page_template: Template
 admin.custom_page_manage.custom_page_default_template: 'Default Template'
 admin.custom_page_manage.custom_page_no_nav_template: 'No Navigation'
+admin.custom_page_manage.custom_page_blank_template: 'Blank'
 admin.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">System-Course Setting-Mobile Setting</a>\n"
 admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750×300px in JPG or PNG format.Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
 admin.mobile_manage.banner_label: 'Slider Image'
