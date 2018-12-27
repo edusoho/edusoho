@@ -48,25 +48,17 @@ axios.interceptors.response.use(res => {
   let code = '';
   switch (error.response.status) {
     case 401:
-      code = error.response.data.error.code;
-      // token过期的情况
-      if (code === statusCode.EXPIRED_CREDENTIAL) { // 待解决：错误码没有同意，这种判断方式需要之后接口错误码同一之后才可用
-        store.commit(types.USER_LOGOUT);
-        router.replace({ // 待解决：replace 会导致返回按钮的功能有问题
-          name: 'login',
-          query: { redirect: router.currentRoute.fullPath }
-        });
-      }
-      break;
     case 404:
       code = error.response.data.error.code;
-      if (code === statusCode.TOKEN_NOT_EXIST) { // 待解决：错误码没有同意，这种判断方式需要之后接口错误码同一之后才可用
+      // 待解决：错误码没有统一，这种判断方式需要之后接口错误码统一之后才可用
+      // token过期的情况
+      if (code === statusCode.EXPIRED_CREDENTIAL || code === statusCode.TOKEN_NOT_EXIST) {
         store.commit(types.USER_LOGOUT);
         router.replace({ // 待解决：replace 会导致返回按钮的功能有问题
           name: 'login',
           query: { redirect: router.currentRoute.fullPath }
         }, () => {
-          window.location.reload();
+          window.location.reload(); // redirect 为 '/' 时，需要刷新才能进入对应页面的问题
         });
       }
       break;
