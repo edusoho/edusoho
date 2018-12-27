@@ -82,12 +82,15 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
+    const remeberLastPos = self.options.customPos ? true : false;
+    self.options.customPos = self.options.customPos.toString();
+
     extConfig = Object.assign(extConfig, {
       id: $(self.options.element).attr('id'),
       disableControlBar: self.options.disableControlBar,
       disableProgressBar: self.options.disableProgressBar,
       playlist: self.options.url,
-      remeberLastPos: true,
+      remeberLastPos: remeberLastPos,
       customPos: self.options.customPos,
       videoHeaderLength: self.options.videoHeaderLength,
       autoplay: self.options.autoplay

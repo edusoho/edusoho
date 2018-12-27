@@ -46,7 +46,6 @@ class Show {
       DurationStorage.set(this.userId, this.fileId, $iframe.data('lastLearnTime'));
     }
     this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
-    this.remeberLastPos = this.lastLearnTime < this.fileLength;
 
     this.initView();
     this.initEvent();
@@ -68,8 +67,7 @@ class Show {
   }
 
   initPlayer() {
-    const audioCustomPos = this.remeberLastPos ? this.lastLearnTime.toString() : '0';
-    const videoCustomPos = this.lastLearnTime.toString();
+    const customPos = parseInt(this.lastLearnTime) ? parseInt(this.lastLearnTime) : 0;
     return PlayerFactory.create(
       this.playerType, {
         element: '#lesson-player',
@@ -101,8 +99,8 @@ class Show {
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
         autoplay: this.autoplay,
-        customPos: this.isCloudAudioPlayer() ? audioCustomPos : videoCustomPos,
-        remeberLastPos: this.remeberLastPos,
+        customPos: customPos,
+        mediaLength: this.fileLength,
       }
     );
   }
