@@ -97,6 +97,7 @@ export default {
       targetId: this.$route.params.id,
       targetUnit: this.$route.params.unit,
       targetNum: this.$route.params.num,
+      vipOrderType: this.$route.params.type
     }
   },
   computed: {
@@ -144,13 +145,16 @@ export default {
     },
   },
   created () {
+    let data = {
+      targetType: this.targetType,
+      targetId: this.targetId,
+    }
+    if (this.vipOrderType !== '升级') {
+      data.unit = this.targetUnit,
+      data.num = this.targetNum
+    }
     Api.confirmOrder({
-      data: {
-        targetType: this.targetType,
-        targetId: this.targetId,
-        unit: this.targetUnit,
-        num: this.targetNum,
-      }
+      data: data
     }).then(res => {
       this.course = res;
     }).catch(err => {

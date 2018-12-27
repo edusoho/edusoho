@@ -257,7 +257,8 @@ export default {
         params: {
           id: this.levels[this.currentLevelIndex].id,
           unit: this.orderParams.unit,
-          num: this.orderParams.num
+          num: this.orderParams.num,
+          type: this.btnStatus
         },
         query: {
           targetType: 'vip',
