@@ -26,7 +26,7 @@
         :feedback="feedback"></e-coupon-list>
       <e-vip-list
         class="gray-border-bottom"
-        v-if="part.type === 'vip' && vipSettings.enabled"
+        v-if="part.type === 'vip' && vipSwitch"
         :items="part.data.items"
         :showTitle="part.data.titleShow"
         :sort="part.data.sort"
@@ -72,7 +72,7 @@
       };
     },
     computed: {
-      ...mapState(['vipSettings', 'isLoading']),
+      ...mapState(['vipSwitch', 'isLoading']),
     },
     created() {
       const {preview, token} = this.$route.query

@@ -16,7 +16,7 @@
     </ul>
 
     <div class="course-detail__validity">
-      <div v-if="details.vipLevel" class="mb15">
+      <div v-if="details.vipLevel && vipSwitch" class="mb15">
         <span class="mr20">会员免费</span>
         <img class="vipIcon" :src="details.vipLevel.icon" />
         <router-link class='color-primary' :to="{ path: '/vip', query: { id: details.vipLevel.id } }">
@@ -94,7 +94,7 @@ export default {
       details: state => state.details,
       selectedPlanId: state => state.selectedPlanId
     }),
-    ...mapState(['courseSettings']),
+    ...mapState(['courseSettings', 'vipSwitch']),
     learnExpiryHtml() {
       const memberInfo = this.details.member;
       const learnExpiryData = this.details.learningExpiryDate;
