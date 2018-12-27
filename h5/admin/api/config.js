@@ -1,5 +1,10 @@
 const config = [
   {
+    // 获取全局设置
+    name: 'getSettings',
+    url: '/settings/{type}',
+    method: 'GET'
+  }, {
     // 后台配置获取
     name: 'getDraft',
     url: '/pages/{portal}/settings/{type}',
@@ -53,6 +58,9 @@ const config = [
   }, {
     name: 'getVipLevels',
     url: '/plugins/vip/vip_levels',
+  }, {
+    name: 'vipPlugin',
+    url: '/site_plugins/Vip',
   }
 ];
 

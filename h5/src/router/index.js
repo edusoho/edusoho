@@ -233,11 +233,10 @@ router.beforeEach((to, from, next) => {
       }
       // vip 前端元素判断（vip 插件已安装(升级) && vip 插件已开启 && vip 等级已设置）
       if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
-        store.dispatch('setVipSwitch', true);
+        store.dispatch('setVipSwitch', true).then(() => next());
+      } else {
         next();
-        return;
       }
-      next();
     }).catch(err => {
       Toast.fail(err.message);
     });

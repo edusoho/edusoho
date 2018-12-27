@@ -28,7 +28,8 @@ import {
   Loading,
   Dropdown,
   DropdownItem,
-  DropdownMenu
+  DropdownMenu,
+  MessageBox
 } from 'element-ui';
 
 import {
@@ -57,6 +58,7 @@ Vue.use(DropdownItem);
 Vue.use(DropdownMenu);
 
 Vue.prototype.$message = Message;
+Vue.prototype.$confirm = MessageBox.confirm;
 
 Vue.config.productionTip = false;
 

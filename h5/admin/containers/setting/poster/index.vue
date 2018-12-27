@@ -68,7 +68,7 @@
     <course-modal
       slot="modal"
       :visible="modalVisible"
-      :type="(type && type !== 'vip') ? type : 'course_list'"
+      :type="['course_list', 'classroom_list'].includes(type) ? type : 'course_list'"
       limit=1
       :courseList="courseSets"
       @visibleChange="modalVisibleHandler"

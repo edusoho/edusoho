@@ -82,31 +82,23 @@ export const getGlobalSettings = ({ commit }, { type, key }) =>
     if (type === 'site') {
       document.title = res.name;
     }
-    if (type === 'vip') {
-      res = res || {}; // 防止接口数据 res undefined
-    }
     commit(types.GET_SETTINGS, {
       key,
-      setting: res
+      setting: res || {}
     });
-    console.error('request setting key: ', type);
     return res;
   });
 
 // 全局vip元素显示开关
 export const setVipSwitch = ({ commit }, isOn) =>
   new Promise(resolve => {
-    console.log(isOn);
     if (!isOn) {
       commit(types.GET_SETTINGS, { key: 'vipSwitch', setting: isOn });
       resolve(isOn);
       return isOn;
     }
     return Api.getVipLevels().then(levels => {
-      let levelsExist = false;
-      if (levels && levels.length) {
-        levelsExist = true;
-      }
+      const levelsExist = !!(levels && levels.length);
       commit(types.GET_SETTINGS, { key: 'vipSwitch', setting: levelsExist });
       resolve(levelsExist);
       return levelsExist;

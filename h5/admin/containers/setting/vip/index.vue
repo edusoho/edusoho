@@ -32,11 +32,11 @@
 </template>
 
 <script>
-import Api from '@admin/api';
 import moduleFrame from '../module-frame';
 import settingCell from '../module-frame/setting-cell';
 import vipList from '@/containers/components/e-vip-list/e-vip-list';
 import pathName2Portal from '@admin/config/api-portal-config';
+import { mapState } from 'vuex';
 
 export default {
   name: 'vip',
@@ -64,6 +64,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['vipLevels']),
     isActive: {
       get() {
         return this.active;
@@ -129,9 +130,7 @@ export default {
     if(existItems) {
       return;
     }
-    Api.getVipLevels().then(res => {
-      this.items.push(...res);
-    })
+    this.items.push(...this.vipLevels);
   },
   methods: {
     showTitle() {
