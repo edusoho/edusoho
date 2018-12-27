@@ -116,7 +116,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLoading', 'vipLevels', 'vipSettings', 'vipSetupStatus']),
+    ...mapState(['isLoading', 'vipLevels', 'vipSettings', 'vipSetupStatus', 'vipPlugin']),
     stopDraggleClasses() {
       return '.module-frame__setting, .find-footer, .search__container, .el-dialog__header, .el-dialog__footer';
     },
@@ -195,6 +195,7 @@ export default {
     addModule(data, index) {
       /* 后台会员组件交互处理:
        * 会员插件未安装：隐藏按钮 (vipSetupStatus)
+       * 会员插件未升级：/admin/app/upgrades (vipPlugin)
        * 未开通会员功能：/admin/setting/vip (vipSettings)
        * 开通会员但未配置会员等级：/admin/setting/vip/level (vipLevels)
       */
@@ -202,17 +203,25 @@ export default {
         case 'vip':
           if (!this.vipSetupStatus) {
             return;
+          } else if (needUpgrade('1.7.26', this.vipPlugin.version)) {
+            this.$confirm('请升级会员插件', '提示', {
+              confirmButtonText: '去升级',
+              cancelButtonText: '取消',
+            }).then(() => {
+              window.open(window.location.origin + '/admin/app/upgrades');
+            }).catch(() => {});
+            return;
           } else if (!this.vipSettings || !this.vipSettings.enabled || !this.vipSettings.h5Enabled) {
-            this.$confirm('会员功能未开通，去开通？', '提示', {
-              confirmButtonText: '确定',
+            this.$confirm('会员功能未开通', '提示', {
+              confirmButtonText: '去开通',
               cancelButtonText: '取消',
             }).then(() => {
               window.open(window.location.origin + '/admin/setting/vip');
             }).catch(() => {});
             return;
           } else if (!this.vipLevels || !this.vipLevels.length) {
-            this.$confirm('未配置会员等级，去配置？', '提示', {
-              confirmButtonText: '确定',
+            this.$confirm('请先设置会员等级', '提示', {
+              confirmButtonText: '去设置',
               cancelButtonText: '取消',
             }).then(() => {
               window.open(window.location.origin + '/admin/setting/vip/level');

@@ -31,8 +31,10 @@ export const setVipLevels = ({ commit }) =>
 // vip插件安装
 export const setVipSetupStatus = ({ commit }) =>
   Api.vipPlugin().then(vipPlugin => {
+    const pluginInfo = vipPlugin || {};
     const pluginStatus = Object.keys(vipPlugin).length > 1;
     commit(types.GET_SETTINGS, { key: 'vipSetupStatus', setting: pluginStatus });
+    commit(types.GET_SETTINGS, { key: 'vipPlugin', setting: pluginInfo });
     return vipPlugin;
   });
 
