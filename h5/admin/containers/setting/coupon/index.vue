@@ -6,7 +6,7 @@
     <div slot="setting" class="coupon-allocate">
       <header class="title">
         优惠券设置（仅显示未过期的优惠券）
-        <div class="text-12 color-gray" v-if="portal === 'miniprogram'">使用优惠券配置功能，小程序版本需要升级到1.3.2及以上</div>
+        <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">使用优惠券配置功能，小程序版本需要升级到1.3.2及以上</div>
       </header>
       <div class="default-allocate__content">
         <!-- 标题栏 -->

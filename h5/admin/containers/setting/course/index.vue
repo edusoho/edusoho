@@ -11,7 +11,7 @@
     <div slot="setting">
       <header class="title">
         {{typeLabel}}列表设置
-        <div class="text-12 color-gray" v-if="portal === 'miniprogram' && typeLabel === '班级'">使用班级配置功能，小程序版本需要升级到1.3.1及以上</div>
+        <div class="text-12 color-gray mts" v-if="portal === 'miniprogram' && typeLabel === '班级'">使用班级配置功能，小程序版本需要升级到1.3.1及以上</div>
       </header>
       <div class="default-allocate__content clearfix">
         <!-- 列表名称 -->
