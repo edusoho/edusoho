@@ -93,7 +93,7 @@ export const getGlobalSettings = ({ commit }, { type, key }) =>
     return res;
   });
 
-// 全局设置
+// 全局vip元素显示开关
 export const setVipSwitch = ({ commit }, isOn) =>
   new Promise(resolve => {
     console.log(isOn);
