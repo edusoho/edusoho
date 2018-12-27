@@ -99,7 +99,7 @@ class Show {
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
         autoplay: this.autoplay,
-        customPos: this.remeberLastPos ? this.lastLearnTime : 0,
+        customPos: this.remeberLastPos ? this.lastLearnTime.toString() : '0',
         remeberLastPos: this.remeberLastPos,
       }
     );
