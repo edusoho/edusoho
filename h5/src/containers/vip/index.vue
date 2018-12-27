@@ -3,11 +3,11 @@
     <e-loading v-if="isLoading"></e-loading>
     <div class="user-section gray-border-bottom clearfix">
       <div v-if="user">
-        <img class='user-img' :src="user.avatar.large" />
+        <img v-if="user.avatar" class='user-img' :src="user.avatar.large" />
         <div class="user-middle">
           <div class='user-name'>{{ user.nickname }}</div>
           <span class='user-vip' v-if="vipInfo">
-            <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="vipInfo.icon">
+            <img v-if="vipInfo.icon" :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="vipInfo.icon">
             <span v-if="!vipDated">{{ vipInfo.vipName }}</span>
             <span class="grey" v-else>{{ vipInfo.vipName }}已过期</span>
           </span>
@@ -17,7 +17,7 @@
         </div>
         <div class="vip-status" v-if="vipInfo">
           <div class="vip-status__btn" ref="joinBtnTop" @click="popShow" v-if="btnStatus">{{ vipDated ? '重新开通' : btnStatus }}</div>
-          <div :class="['vip-status__deadline', btnStatus ? '' : 'deadline-middle']">{{ vipDeadline }} 到期</div>
+          <div v-if="vipDeadline" :class="['vip-status__deadline', btnStatus ? '' : 'deadline-middle']">{{ vipDeadline }} 到期</div>
         </div>
       </div>
       <router-link :to="{path: '/login', query: { redirect : '/vip'}}" v-else>
@@ -100,9 +100,7 @@ export default {
   },
   data() {
     return {
-      user: {
-        avatar: {}
-      },
+      user: {},
       vipInfo: {},
       vipUser: {},
       levels: [{
@@ -159,6 +157,7 @@ export default {
       return dataFormat;
     },
     vipDeadline() {
+      if (!Object.values(this.vipInfo).length) return false;
       const time = new Date(this.vipInfo.deadline);
       return formatFullTime(time);
     },
@@ -171,6 +170,7 @@ export default {
       return userSeq < currentSeq ? '升级' : '续费';
     },
     leftDays() {
+      if (!Object.values(this.vipInfo).length) return false;
       const todayStamp = new Date().getTime();
       const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
       return getOffsetDays(todayStamp, deadlineStamp) + 1;
