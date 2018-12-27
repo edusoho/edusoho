@@ -135,6 +135,10 @@
   color: $grey;
 }
 
+.color-gray {
+  color: #919191;
+}
+
 @mixin transition() {
   -webkit-transition: all .2s ease-in-out;
   -moz-transition: all .2s ease-in-out;
