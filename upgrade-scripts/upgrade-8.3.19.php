@@ -49,7 +49,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'addUserAddMatomoVisitId',
+            'addUserAddRegisterVisitId',
         );
 
         $funcNames = array();
@@ -85,10 +85,10 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function addUserAddMatomoVisitId()
+    protected function addUserAddRegisterVisitId()
     {
-        if ($this->isTableExist('user') && !$this->isFieldExist('user', 'matomoVisitId')) {
-            $this->getConnection()->exec("ALTER TABLE `user` ADD COLUMN `matomoVisitId` varchar(64) NOT NULL DEFAULT '';");
+        if ($this->isTableExist('user') && !$this->isFieldExist('user', 'registerVisitId')) {
+            $this->getConnection()->exec("ALTER TABLE `user` ADD COLUMN `registerVisitId` varchar(64) NOT NULL DEFAULT '';");
         }
 
         return 1;
