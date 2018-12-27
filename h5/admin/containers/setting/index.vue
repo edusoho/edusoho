@@ -193,7 +193,7 @@ export default {
       this.modules.splice(index, 1);
     },
     addModule(data, index) {
-      /* 会员组件交互处理:
+      /* 后台会员组件交互处理:
        * 会员插件未安装：隐藏按钮 (vipSetupStatus)
        * 未开通会员功能：/admin/setting/vip (vipSettings)
        * 开通会员但未配置会员等级：/admin/setting/vip/level (vipLevels)
@@ -207,7 +207,7 @@ export default {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
             }).then(() => {
-              window.location.href = '/admin/setting/vip'
+              window.location.href = window.location.origin + '/admin/setting/vip';
             }).catch(() => {});
             return;
           } else if (!this.vipLevels || !this.vipLevels.length) {
@@ -215,7 +215,7 @@ export default {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
             }).then(() => {
-              window.location.href = '/admin/setting/vip/level'
+              window.location.href = window.location.origin + '/admin/setting/vip/level';
             }).catch(() => {});
             return;
           }
