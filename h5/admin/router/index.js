@@ -51,16 +51,15 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   // 获取会员后台配置
   if (!Object.keys(store.state.vipSettings).length) {
-    const getVipPlugin = store.dispatch('setVipSetupStatus');
-    const vipSettings = store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' });
-    const getVipLevels = store.dispatch('setVipLevels');
 
-    Promise.all([getVipPlugin, vipSettings])
-      .then(([vipPlugin, vipRes]) => {
+    Promise.all([
+      store.dispatch('setVipSetupStatus'),
+      store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' })
+      ]).then(([vipPlugin, vipRes]) => {
         return vipRes;
       }).then((vipRes) => {
         if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
-          this.getVipLevels().then(() => next())
+           store.dispatch('setVipLevels').then(() => next())
         } else {
           next();
         }

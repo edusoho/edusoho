@@ -223,23 +223,23 @@ router.beforeEach((to, from, next) => {
 
   // 站点后台设置、会员后台配置
   if (!Object.keys(store.state.settings).length || !Object.keys(store.state.vipSettings).length) {
-    const getVipSetting = store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' });
-    const getSiteSetting = store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' });
-
-    Promise.all([getVipSetting, getSiteSetting]).then(([vipRes, siteRes]) => {
+    Promise.all([
+      store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' }),
+      store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' })])
+      .then(([vipRes, siteRes]) => {
       // 动态更新 navbar title
-      if (shouldUpdateMetaTitle) {
-        to.meta.title = siteRes.name;
-      }
-      // vip 前端元素判断（vip 插件已安装(升级) && vip 插件已开启 && vip 等级已设置）
-      if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
-        store.dispatch('setVipSwitch', true).then(() => next());
-      } else {
-        next();
-      }
-    }).catch(err => {
-      Toast.fail(err.message);
-    });
+        if (shouldUpdateMetaTitle) {
+          to.meta.title = siteRes.name;
+        }
+        // vip 前端元素判断（vip 插件已安装(升级) && vip 插件已开启 && vip 等级已设置）
+        if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
+          store.dispatch('setVipSwitch', true).then(() => next());
+        } else {
+          next();
+        }
+      }).catch(err => {
+        Toast.fail(err.message);
+      });
   } else if (shouldUpdateMetaTitle) {
     to.meta.title = store.state.settings.name;
     next();
