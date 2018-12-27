@@ -64,7 +64,7 @@
     <!-- 加入会员 -->
     <e-popup class="vip-popup" v-if="priceItems[currentLevelIndex]"
      :show.sync="vipPopShow" :title="btnStatus + levels[this.currentLevelIndex].name" contentClass="vip-popup__content">
-      <div class="vip-popup__header text-14">选择开通时长</div>
+      <div class="vip-popup__header text-14">选择{{ btnStatus }}时长</div>
       <div class="vip-popup__body">
         <van-row gutter="20">
           <van-col span="8" v-for="(item, index) in priceItems[currentLevelIndex]" :key="index">
