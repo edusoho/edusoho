@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Task\Service;
 
-use Biz\Task\Service\TaskResultService;
 use Biz\BaseTestCase;
 
 class TaskResultServiceTest extends BaseTestCase
@@ -11,18 +10,22 @@ class TaskResultServiceTest extends BaseTestCase
     {
         $taskResult1 = $this->mockTaskResult(array(
             'userId' => 1,
+            'courseTaskId' => 1,
             'status' => 'finish',
         ));
         $taskResult2 = $this->mockTaskResult(array(
             'userId' => 2,
+            'courseTaskId' => 2,
             'status' => 'start',
         ));
         $taskResult2 = $this->mockTaskResult(array(
             'userId' => 2,
+            'courseTaskId' => 3,
             'status' => 'finish',
         ));
         $taskResult2 = $this->mockTaskResult(array(
             'userId' => 2,
+            'courseTaskId' => 4,
             'status' => 'finish',
         ));
         $result = $this->getTaskResultService()->countTaskNumGroupByUserId(array());
@@ -40,8 +43,8 @@ class TaskResultServiceTest extends BaseTestCase
 
     public function testTanalysisCompletedTaskDataByTime()
     {
-        $this->mockTaskResult(array('finishedTime' => strtotime('2017/1/1')));
-        $this->mockTaskResult(array('finishedTime' => strtotime('2017/11/1')));
+        $this->mockTaskResult(array('courseTaskId' => 5, 'finishedTime' => strtotime('2017/1/1')));
+        $this->mockTaskResult(array('courseTaskId' => 6, 'finishedTime' => strtotime('2017/11/1')));
         $endTime = strtotime('2017/2/1');
         $return = $this->getTaskResultService()->analysisCompletedTaskDataByTime(0, $endTime);
         $this->assertEquals(1, count($return));
@@ -54,11 +57,13 @@ class TaskResultServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'findByCourseIdAndUserId',
-                    'returnValue' => array(array(
-                        'id' => 1,
-                        'userId' => 1,
-                        'courseId' => 1,
-                    )),
+                    'returnValue' => array(
+                        array(
+                            'id' => 1,
+                            'userId' => 1,
+                            'courseId' => 1,
+                        ),
+                    ),
                     'withParams' => array(1, 1),
                 ),
             )
@@ -202,9 +207,9 @@ class TaskResultServiceTest extends BaseTestCase
 
     public function testFindUserProgressingTaskResultByActivityId()
     {
-        $this->mockTaskResult(array('activityId' => 1, 'status' => 'start'));
+        $this->mockTaskResult(array('courseTaskId' => '11', 'activityId' => 1, 'status' => 'start'));
 
-        $this->mockTaskResult(array('activityId' => 1, 'status' => 'finish'));
+        $this->mockTaskResult(array('courseTaskId' => '12', 'activityId' => 1, 'status' => 'finish'));
 
         $taskResult = $this->getTaskResultService()->findUserProgressingTaskResultByActivityId(1);
         $this->assertEquals(1, count($taskResult));
@@ -212,9 +217,9 @@ class TaskResultServiceTest extends BaseTestCase
 
     public function testFindUserProgressingTaskResultByCourseId()
     {
-        $this->mockTaskResult(array('courseId' => 1, 'status' => 'start'));
+        $this->mockTaskResult(array('courseTaskId' => 1, 'courseId' => 1, 'status' => 'start'));
 
-        $this->mockTaskResult(array('courseId' => 1, 'status' => 'finish'));
+        $this->mockTaskResult(array('courseTaskId' => 2, 'courseId' => 1, 'status' => 'finish'));
 
         $taskResult = $this->getTaskResultService()->findUserProgressingTaskResultByCourseId(1);
         $this->assertEquals(1, count($taskResult));
@@ -222,9 +227,9 @@ class TaskResultServiceTest extends BaseTestCase
 
     public function testFindUserFinishedTaskResultsByCourseId()
     {
-        $this->mockTaskResult(array('courseId' => 1, 'status' => 'start'));
+        $this->mockTaskResult(array('courseTaskId' => 1, 'courseId' => 1, 'status' => 'start'));
 
-        $this->mockTaskResult(array('courseId' => 1, 'status' => 'finish'));
+        $this->mockTaskResult(array('courseTaskId' => 2, 'courseId' => 1, 'status' => 'finish'));
 
         $taskResult = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId(1);
         $this->assertEquals(1, count($taskResult));
@@ -281,8 +286,8 @@ class TaskResultServiceTest extends BaseTestCase
 
     public function testCountLearnNumByTaskId()
     {
-        $this->mockTaskResult(array('status' => 'start'));
-        $this->mockTaskResult(array('status' => 'finish'));
+        $this->mockTaskResult(array('userId' => 6, 'courseTaskId' => 2, 'status' => 'start'));
+        $this->mockTaskResult(array('userId' => 5, 'courseTaskId' => 2, 'status' => 'finish'));
 
         $count = $this->getTaskResultService()->countLearnNumByTaskId(2);
         $this->assertEquals(2, $count);
@@ -310,8 +315,8 @@ class TaskResultServiceTest extends BaseTestCase
 
     public function testSumLearnTimeByCourseIdAndUserId()
     {
-        $this->mockTaskResult(array('courseId' => 1, 'time' => 1, 'status' => 'finish'));
-        $this->mockTaskResult(array('courseId' => 1, 'time' => 2, 'status' => 'finish'));
+        $this->mockTaskResult(array('courseId' => 1, 'courseTaskId' => 30, 'time' => 1, 'status' => 'finish'));
+        $this->mockTaskResult(array('courseId' => 1, 'courseTaskId' => 31, 'time' => 2, 'status' => 'finish'));
 
         $count = $this->getTaskResultService()->sumLearnTimeByCourseIdAndUserId(1, 1);
         $this->assertEquals(3, $count);
@@ -319,9 +324,9 @@ class TaskResultServiceTest extends BaseTestCase
 
     public function testGetLearnedTimeByCourseIdGroupByCourseTaskId()
     {
-        $this->mockTaskResult(array('courseTaskId' => 1, 'time' => 1));
-        $this->mockTaskResult(array('courseTaskId' => 1, 'time' => 2));
-        $this->mockTaskResult(array('courseTaskId' => 2, 'time' => 2));
+        $this->mockTaskResult(array('userId' => 5, 'courseTaskId' => 1, 'time' => 1));
+        $this->mockTaskResult(array('userId' => 6, 'courseTaskId' => 1, 'time' => 2));
+        $this->mockTaskResult(array('userId' => 7, 'courseTaskId' => 2, 'time' => 2));
 
         $result = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId(1);
         $this->assertEquals('3', $result);
@@ -329,9 +334,9 @@ class TaskResultServiceTest extends BaseTestCase
 
     public function testGetWatchTimeByCourseIdGroupByCourseTaskId()
     {
-        $this->mockTaskResult(array('courseTaskId' => 1, 'watchTime' => 10));
-        $this->mockTaskResult(array('courseTaskId' => 1, 'watchTime' => 20));
-        $this->mockTaskResult(array('courseTaskId' => 2, 'watchTime' => 20));
+        $this->mockTaskResult(array('userId' => 2, 'courseTaskId' => 1, 'watchTime' => 10));
+        $this->mockTaskResult(array('userId' => 3, 'courseTaskId' => 1, 'watchTime' => 20));
+        $this->mockTaskResult(array('userId' => 4, 'courseTaskId' => 2, 'watchTime' => 20));
 
         $result = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId(1);
         $this->assertEquals('30', $result);
@@ -391,7 +396,14 @@ class TaskResultServiceTest extends BaseTestCase
 
     protected function mockTaskResult($fields = array())
     {
-        $taskReult = array_merge(array('activityId' => 1, 'courseTaskId' => 2, 'time' => 1, 'watchTime' => 1, 'userId' => 1, 'courseId' => 1), $fields);
+        $taskReult = array_merge(array(
+            'activityId' => 1,
+            'courseTaskId' => 2,
+            'time' => 1,
+            'watchTime' => 1,
+            'userId' => 1,
+            'courseId' => 1,
+        ), $fields);
 
         return $this->getTaskResultDao()->create($taskReult);
     }

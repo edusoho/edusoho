@@ -3,6 +3,8 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\CourseException;
+use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
@@ -50,13 +52,13 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $member = $this->getMemberService()->getCourseMember($courseId, $userId);
 
         if (!$member) {
-            throw $this->createNotFoundException('User is not course member');
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
 
         if (!$course['compulsoryTaskNum']) {

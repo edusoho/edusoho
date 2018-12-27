@@ -23,6 +23,7 @@ class LogReader
         $annotationReader::addGlobalIgnoredName('before');
         $reflectClass = new \ReflectionClass($service);
         $interfaces = $reflectClass->getInterfaces();
+        $interceptorData = array();
 
         foreach ($interfaces as $interfaceName => $interfaceObj) {
             $reflectInterface = new \ReflectionClass($interfaceName);

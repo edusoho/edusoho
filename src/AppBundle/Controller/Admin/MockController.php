@@ -3,6 +3,8 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\TimeMachine;
+use Biz\System\SettingException;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Distributor\Util\DistributorJobStatus;
@@ -93,7 +95,7 @@ class MockController extends BaseController
             if (!empty($apiUserId)) {
                 $user = $this->getUserService()->getUser($apiUserId);
                 if (empty($user)) {
-                    throw new \RuntimeException('User not found');
+                    $this->createNewException(UserException::NOTFOUND_USER());
                 }
                 $token = $this->getUserService()->makeToken(
                     MobileBaseController::TOKEN_TYPE,
@@ -154,11 +156,11 @@ class MockController extends BaseController
 
         $storage = $this->getSettingService()->get('storage', array());
         if (empty($storage['cloud_access_key'])) {
-            throw new AccessDeniedException('未设置教育云授权码！！！');
+            $this->createNewException(SettingException::NOT_SET_CLOUD_ACCESS_KEY());
         }
 
         if (!$this->getCurrentUser()->isSuperAdmin()) {
-            throw new AccessDeniedException();
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
     }
 
@@ -197,7 +199,7 @@ class MockController extends BaseController
         if (!empty($apiUserId)) {
             $user = $this->getUserService()->getUser($apiUserId);
             if (empty($user)) {
-                throw new \RuntimeException('User not found');
+                $this->createNewException(UserException::NOTFOUND_USER());
             }
             $token = $this->getUserService()->makeToken(
                 MobileBaseController::TOKEN_TYPE,

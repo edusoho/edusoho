@@ -54,7 +54,7 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(response) {
                     
                     if(response.success){
-                        $('.modal-title').text('admin.open_course.course_delete_title');
+                        $('.modal-title').text(Translator.trans('admin.open_course.course_delete_title'));
                         $('#delete-form').addClass('hidden');
                         $('.progress').removeClass('hidden');
                         $('#delete-hint').show();
@@ -69,7 +69,7 @@ define(function(require, exports, module) {
                         $(document).dequeue('delete_step_queue');
                     }else{
                         $('#delete-form').children('div').addClass('has-error');
-                        $('#delete-form').find('.help-block').show().text('admin.course.delete_course.check_password_fail_hint');
+                        $('#delete-form').find('.help-block').show().text(Translator.trans('admin.course.delete_course.check_password_fail_hint'));
                     }
                 });
             }

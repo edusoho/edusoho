@@ -3,8 +3,9 @@
 namespace Biz\Activity\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\AthenaLiveToolkit;
+use Biz\Activity\ActivityException;
 use Biz\Activity\Dao\LiveActivityDao;
+use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\AppLoggerConstant;
 use Biz\BaseService;
@@ -12,6 +13,7 @@ use Biz\Course\Service\LiveReplayService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Activity\Dao\ActivityDao;
@@ -34,7 +36,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     {
         $liveActivity = $this->getLiveActivityDao()->get($id);
         if (empty($liveActivity)) {
-            throw $this->createNotFoundException('无此直播');
+            $this->createNewException(LiveActivityException::NOTFOUND_LIVE());
         }
         $conditions = array(
             'mediaId' => $liveActivity['id'],
@@ -42,10 +44,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         );
         $activities = $this->getActivityDao()->search($conditions, array('endTime' => 'DESC'), 0, 1);
         if (empty($activities)) {
-            throw $this->createNotFoundException('无此直播活动');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
         if (!isset($activities[0])) {
-            throw $this->createNotFoundException('无此直播活动');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
         $activity = array_merge($activities[0], $liveActivity);
 
@@ -59,7 +61,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
                 || empty($activity['length'])
                 || $activity['length'] <= 0)
         ) {
-            throw $this->createInvalidArgumentException('开始时间或直播时长有误');
+            $this->createNewException(LiveActivityException::LIVE_TIME_INVALID());
         }
 
         //创建直播室
@@ -76,7 +78,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         if (empty($live)) {
-            throw $this->createNotFoundException('云直播创建失败，请重试！');
+            $this->createNewException(LiveActivityException::CREATE_LIVEROOM_FAILED());
         }
 
         if (isset($live['error'])) {
@@ -85,7 +87,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         if (!empty($activity['roomType']) && !$this->isRoomType($activity['roomType'])) {
-            throw $this->createServiceException('Argument room type error');
+            $this->createNewException(LiveActivityException::ROOMTYPE_INVALID());
         }
 
         $liveActivity = array(
@@ -162,7 +164,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         if (!in_array($status, array(EdusohoLiveClient::LIVE_STATUS_LIVING, EdusohoLiveClient::LIVE_STATUS_CLOSED, EdusohoLiveClient::LIVE_STATUS_PAUSE))) {
-            throw $this->createInvalidArgumentException('Argument invalid');
+            $this->createNewException(LiveActivityException::LIVE_STATUS_INVALID());
         }
 
         $update = $this->getLiveActivityDao()->update($liveActivity['id'], array('progressStatus' => $status));
@@ -250,7 +252,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     /**
      * @param  $activity
      *
-     * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @throws \Biz\User\UserException
+     * @throws \Biz\Activity\LiveActivityException
+     * @throws \Exception
      *
      * @return array
      */
@@ -258,11 +262,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     {
         $speaker = $this->getUserService()->getUser($activity['fromUserId']);
         if (empty($speaker)) {
-            throw $this->createNotFoundException('教师不存在！');
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         if (!empty($activity['roomType']) && !$this->isRoomType($activity['roomType'])) {
-            throw $this->createServiceException('Argument roomType error');
+            $this->createNewException(LiveActivityException::ROOMTYPE_INVALID());
         }
 
         $speaker = $speaker['nickname'];
@@ -273,7 +277,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (!empty($liveLogo) && array_key_exists('live_logo', $liveLogo) && !empty($liveLogo['live_logo'])) {
             $liveLogoUrl = $baseUrl.'/'.$liveLogo['live_logo'];
         }
-        $callbackUrl = $this->buildCallbackUrl($activity);
 
         $live = $this->getEdusohoLiveClient()->createLive(array(
             'summary' => empty($activity['remark']) ? '' : $activity['remark'],
@@ -284,25 +287,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'authUrl' => $baseUrl.'/live/auth',
             'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
             'liveLogoUrl' => $liveLogoUrl,
-            'callback' => $callbackUrl,
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
         ));
 
         return $live;
-    }
-
-    protected function buildCallbackUrl($activity)
-    {
-        $baseUrl = $this->biz['env']['base_url'];
-
-        $duration = $activity['startTime'] + $activity['length'] * 60 + 86400 - time();
-        $args = array('duration' => $duration, 'data' => array(
-            'courseId' => $activity['fromCourseId'],
-            'type' => 'course',
-        ));
-        $token = $this->getTokenService()->makeToken('live.callback', $args);
-
-        return AthenaLiveToolkit::generateCallback($baseUrl, $token['token'], $activity['fromCourseId']);
     }
 
     protected function getTokenService()

@@ -4,7 +4,6 @@ namespace QiQiuYun\SDK\Helper;
 
 /**
  * 短信模板ID
- *
  */
 class SmsTemplate
 {

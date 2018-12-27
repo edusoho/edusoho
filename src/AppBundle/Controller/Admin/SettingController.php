@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\JsonToolkit;
 use Biz\CloudPlatform\Service\AppService;
@@ -44,6 +45,7 @@ class SettingController extends BaseController
             'ver' => 1, //是否是新版
             'about' => '', // 网校简介
             'logo' => '', // 网校Logo
+            'appId' => '',
             'appname' => '',
             'appabout' => '',
             'applogo' => '',
@@ -65,6 +67,9 @@ class SettingController extends BaseController
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
+            if (!empty($mobile['bundleId'])) {
+                $mobile['bundleId'] = trim($mobile['bundleId']);
+            }
             $this->getSettingService()->set('mobile', $mobile);
 
             $this->setFlashMessage('success', 'site.save.success');
@@ -138,7 +143,7 @@ class SettingController extends BaseController
         $file = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            $this->createNewException(FileToolkitException::NOT_IMAGE());
         }
 
         $filename = 'mobile_picture'.time().'.'.$file->getExtension();
@@ -175,7 +180,7 @@ class SettingController extends BaseController
         $objectFile = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($objectFile)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            $this->createNewException(FileToolkitException::NOT_IMAGE());
         }
 
         $file = $this->getFileService()->getFile($fileId);
@@ -225,7 +230,7 @@ class SettingController extends BaseController
         $objectFile = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($objectFile)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            $this->createNewException(FileToolkitException::NOT_IMAGE());
         }
 
         $file = $this->getFileService()->getFile($fileId);
@@ -260,7 +265,7 @@ class SettingController extends BaseController
         $objectFile = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($objectFile)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            $this->createNewException(FileToolkitException::NOT_IMAGE());
         }
 
         $file = $this->getFileService()->getFile($fileId);

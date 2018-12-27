@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Course;
 
 use AppBundle\Util\AvatarAlert;
 use Biz\Course\Service\CourseSetService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
 
@@ -15,7 +16,7 @@ class CourseOrderController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);

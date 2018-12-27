@@ -2,11 +2,10 @@
 
 namespace AppBundle\Component\RateLimit;
 
+use Biz\Common\CommonException;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\RateLimiter\RateLimiter;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class LoginFailRateLimiter implements RateLimiterInterface
 {
@@ -36,7 +35,7 @@ class LoginFailRateLimiter implements RateLimiterInterface
         $password = $request->request->get('password');
 
         if (!$username || !$password) {
-            throw new BadRequestHttpException();
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         $user = $this->getUserService()->getUserByLoginField($username);
@@ -54,7 +53,7 @@ class LoginFailRateLimiter implements RateLimiterInterface
         }
 
         if ($remaind <= 0) {
-            throw new TooManyRequestsHttpException();
+            throw CommonException::FORBIDDEN_FREQUENT_OPERATION();
         }
     }
 

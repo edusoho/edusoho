@@ -10,8 +10,8 @@ use Biz\User\CurrentUser;
 class LiveCourseServiceTest extends BaseTestCase
 {
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage Create liveroom failed, please try again
+     * @expectedException \Biz\Activity\LiveActivityException
+     * @expectedExceptionMessage exception.live_activity.create_liveroom_failed
      */
     public function testCreateLiveRoomEmpty()
     {
@@ -27,7 +27,7 @@ class LiveCourseServiceTest extends BaseTestCase
         $this->getLiveCourseService()->setLiveClient($mockObject);
 
         $user = $this->getCurrentuser();
-        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30);
+        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30);
         $routes = array('authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com');
 
         $this->getLiveCourseService()->createLiveRoom(array('teacherIds' => array($user['id'])), $lesson, $routes);
@@ -51,7 +51,7 @@ class LiveCourseServiceTest extends BaseTestCase
         $this->getLiveCourseService()->setLiveClient($mockObject);
 
         $user = $this->getCurrentuser();
-        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30);
+        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30);
         $routes = array('authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com');
 
         $this->getLiveCourseService()->createLiveRoom(array('teacherIds' => array($user['id'])), $lesson, $routes);
@@ -72,7 +72,7 @@ class LiveCourseServiceTest extends BaseTestCase
         $this->getLiveCourseService()->setLiveClient($mockObject);
 
         $user = $this->getCurrentuser();
-        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30);
+        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30);
         $routes = array('authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com');
 
         $result = $this->getLiveCourseService()->createLiveRoom(array('teacherIds' => array($user['id'])), $lesson, $routes);
@@ -89,7 +89,7 @@ class LiveCourseServiceTest extends BaseTestCase
         $this->getLiveCourseService()->setLiveClient($mockObject);
 
         $user = $this->getCurrentuser();
-        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30, 'mediaId' => 10, 'liveProvider' => 'kuozhi');
+        $lesson = array('id' => 1, 'title' => 'lesson title', 'type' => 'video', 'courseId' => 1, 'userId' => 1, 'startTime' => strtotime('+1 day'), 'length' => 30, 'mediaId' => 10, 'liveProvider' => 'kuozhi');
         $routes = array('authUrl' => 'http://www.edusoho.com', 'jumpUrl' => 'http://www.qiqiuyu.com');
 
         $result = $this->getLiveCourseService()->editLiveRoom(array('teacherIds' => array($user['id'])), $lesson, $routes);
@@ -139,8 +139,8 @@ class LiveCourseServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 您不是课程学员，不能参加直播！
+     * @expectedException \Biz\OpenCourse\OpenCourseException
+     * @expectedExceptionMessage exception.opencourse.is_not_member
      */
     public function testCheckCourseUserRoleMemberEmpty()
     {
@@ -222,8 +222,8 @@ class LiveCourseServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 您还未登录，不能参加直播！
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.unlogin
      */
     public function testCheckCourseUserRoleUnLogin()
     {

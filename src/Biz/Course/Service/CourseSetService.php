@@ -2,7 +2,7 @@
 
 namespace Biz\Course\Service;
 
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Biz\User\UserException;
 use Biz\System\Annotation\Log;
 
 interface CourseSetService
@@ -23,7 +23,7 @@ interface CourseSetService
      *
      * @param  $id
      *
-     * @throws AccessDeniedException
+     * @throws UserException
      *
      * @return bool
      */
@@ -34,7 +34,7 @@ interface CourseSetService
      *
      * @param  $id
      *
-     * @throws AccessDeniedException
+     * @throws UserException
      *
      * @return bool
      */

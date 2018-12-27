@@ -21,7 +21,7 @@ class FlashTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreateWithMediaEmpty()
     {
@@ -33,7 +33,7 @@ class FlashTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreateWithMediaIdEmpty()
     {

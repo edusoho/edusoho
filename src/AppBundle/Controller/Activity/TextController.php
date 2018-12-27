@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller\Activity;
 
+use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseDraftService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class TextController extends BaseActivityController implements ActivityActionInterface
@@ -11,13 +13,13 @@ class TextController extends BaseActivityController implements ActivityActionInt
     public function showAction(Request $request, $activity)
     {
         if (empty($activity)) {
-            throw $this->createNotFoundException('activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         $text = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
 
         if (empty($text)) {
-            throw $this->createNotFoundException('text activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         return $this->render('activity/text/show.html.twig', array(
@@ -31,13 +33,13 @@ class TextController extends BaseActivityController implements ActivityActionInt
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if (empty($activity)) {
-            throw $this->createNotFoundException('activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         $text = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
 
         if (empty($text)) {
-            throw $this->createNotFoundException('text activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         return $this->render('activity/text/preview.html.twig', array(
@@ -65,7 +67,7 @@ class TextController extends BaseActivityController implements ActivityActionInt
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('user not login');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $content = $request->request->get('content', '');

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Testpaper;
 
 use Biz\Task\Service\TaskService;
+use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
@@ -26,7 +27,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'testpaper');
 
         if (empty($testpaper)) {
-            throw $this->createResourceNotFoundException('testpaper', $testId);
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
         if ('draft' === $testpaper['status']) {
@@ -132,6 +133,9 @@ class TestpaperController extends BaseController
         $total = $this->makeTestpaperTotal($testpaper, $questions);
 
         $favorites = $this->getQuestionService()->findUserFavoriteQuestions($testpaperResult['userId']);
+        $favorites = array_map(function ($favorite) {
+            return ArrayToolkit::parts($favorite, array('id', 'questionId'));
+        }, $favorites);
 
         $student = $this->getUserService()->getUser($testpaperResult['userId']);
 
@@ -146,7 +150,7 @@ class TestpaperController extends BaseController
             'accuracy' => $accuracy,
             'paper' => $testpaper,
             'paperResult' => $testpaperResult,
-            'favorites' => ArrayToolkit::column($favorites, 'questionId'),
+            'favorites' => ArrayToolkit::index($favorites, 'questionId'),
             'total' => $total,
             'student' => $student,
             'source' => $request->query->get('source', 'course'),
@@ -202,7 +206,7 @@ class TestpaperController extends BaseController
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!$testpaperResult) {
-            throw $this->createResourceNotFoundException('testpaperResult', $resultId);
+            $this->createNewException(TestpaperException::NOTFOUND_RESULT());
         }
 
         $user = $this->getUser();

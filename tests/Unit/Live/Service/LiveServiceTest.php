@@ -96,7 +96,7 @@ class LiveServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testFilterCreateParamsInvalidArguments()
     {
@@ -121,23 +121,6 @@ class LiveServiceTest extends BaseTestCase
         $this->assertArrayHasKey('speaker', $result);
         $this->assertArrayHasKey('authUrl', $result);
         $this->assertArrayHasKey('jumpUrl', $result);
-    }
-
-    public function testFilterCreateParamsHasCallback()
-    {
-        $user = $this->getCurrentUser();
-        $params = array(
-            'startTime' => time() + 3000,
-            'endTime' => time() + 5000,
-            'speakerId' => $user['id'],
-            'type' => 'live',
-            'isCallback' => 1,
-            'targetId' => 1,
-            'targetType' => 'course',
-        );
-        $result = ReflectionUtils::invokeMethod($this->getLiveService(), 'filterCreateParams', array($params));
-
-        $this->assertArrayHasKey('callback', $result);
     }
 
     public function testFilterCreateParamsHasRoomType()
@@ -212,26 +195,6 @@ class LiveServiceTest extends BaseTestCase
         $this->assertEquals($baseUrl.'/'.$liveLogo, $result);
     }
 
-    public function testBuildCallbackUrl()
-    {
-        $this->mockBiz('User:TokenService', array(
-            array(
-                'functionName' => 'makeToken',
-                'returnValue' => array('token' => '123456'),
-            ),
-        ));
-        $params = array(
-            time() + 3600,
-            1,
-            'course',
-        );
-        $results = ReflectionUtils::invokeMethod($this->getLiveService(), 'buildCallbackUrl', $params);
-
-        $this->assertEquals(3, count($results));
-        $this->assertArrayHasKey('type', $results[0]);
-        $this->assertArrayHasKey('url', $results[0]);
-    }
-
     public function testGetSpeakerName()
     {
         $nickname = 'user nickname';
@@ -247,7 +210,7 @@ class LiveServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testGetSpeakerNameError()
     {

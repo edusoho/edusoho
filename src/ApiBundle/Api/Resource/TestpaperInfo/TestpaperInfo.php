@@ -5,10 +5,12 @@ namespace ApiBundle\Api\Resource\TestpaperInfo;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
+use Biz\Common\CommonException;
 use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
 use Biz\Testpaper\Service\TestpaperService;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Biz\Testpaper\TestpaperException;
+use Biz\User\UserException;
 
 class TestpaperInfo extends AbstractResource
 {
@@ -16,13 +18,13 @@ class TestpaperInfo extends AbstractResource
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw new AccessDeniedHttpException('用户未登录，不能查看试卷');
+            throw UserException::UN_LOGIN();
         }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (empty($testpaper)) {
-            throw new NotFoundHttpException('试卷已删除，请联系管理员。!');
+            throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
         $items = $this->getTestpaperService()->showTestpaperItems($testId);
@@ -35,11 +37,11 @@ class TestpaperInfo extends AbstractResource
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
         if (empty($targetType) || empty($targetId)) {
-            throw new AccessDeniedHttpException('没有设定试卷所属范围，不能查看试卷！');
+            throw CommonException::ERROR_PARAMETER();
         }
         $method = 'handle'.$targetType;
         if (!method_exists($this, $method)) {
-            throw new \BadMethodCallException(sprintf('Unknown property "%s" on Testpaper "%s".', $targetType, get_class($this)));
+            throw CommonException::NOTFOUND_METHOD();
         }
         $this->$method($user, $testpaper, $targetId, $results);
 
@@ -50,11 +52,11 @@ class TestpaperInfo extends AbstractResource
     {
         $task = $this->getTaskService()->tryTakeTask($taskId);
         if (empty($task)) {
-            throw new NotFoundHttpException('任务不存在');
+            throw TaskException::NOTFOUND_TASK();
         }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         if ('testpaper' != $activity['mediaType'] || $activity['ext']['mediaId'] != $testpaper['id']) {
-            throw new AccessDeniedHttpException('试卷不属于当前任务！');
+            throw TestpaperException::NOT_TESTPAPER_TASK();
         }
 
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId(

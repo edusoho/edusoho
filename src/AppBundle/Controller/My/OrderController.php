@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\My;
 
+use Biz\Order\OrderException;
 use Codeages\Biz\Order\Service\OrderRefundService;
 use Biz\OrderFacade\Service\OrderRefundService as LocalOrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
@@ -127,7 +128,7 @@ class OrderController extends BaseController
         $order = $this->getOrderService()->getOrder($id);
 
         if ($currentUser['id'] != $order['user_id']) {
-            throw $this->createAccessDeniedException('该订单不属于当前登录用户');
+            $this->createNewException(OrderException::BEYOND_AUTHORITY());
         }
 
         return $order;

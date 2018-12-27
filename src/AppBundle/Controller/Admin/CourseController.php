@@ -147,7 +147,7 @@ class CourseController extends BaseController
 
     protected function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request, $twigToRender)
     {
-        $key = $request->request->get('key');
+        $key = $request->query->get('key');
 
         $conditions = array('title' => $key);
         $conditions['status'] = 'published';

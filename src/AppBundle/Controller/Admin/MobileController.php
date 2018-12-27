@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,7 +108,7 @@ class MobileController extends BaseController
         $fileId = $request->request->get('id');
         $file = $this->getFileService()->getFileObject($fileId);
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            $this->createNewException(FileToolkitException::NOT_IMAGE());
         }
 
         $filename = 'mobile_picture'.time().'.'.$file->getExtension();
@@ -143,7 +145,7 @@ class MobileController extends BaseController
         $targetVersion = $request->request->get('targetVersion');
 
         if (empty($currentVersion) || empty($targetVersion)) {
-            throw new \RuntimeException('参数不正确');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $api = CloudAPIFactory::create('root');

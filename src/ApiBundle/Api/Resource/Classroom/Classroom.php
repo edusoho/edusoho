@@ -3,13 +3,12 @@
 namespace ApiBundle\Api\Resource\Classroom;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use ApiBundle\Api\Annotation\ApiConf;
 use Biz\User\Service\UserService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Classroom extends AbstractResource
 {
@@ -21,7 +20,7 @@ class Classroom extends AbstractResource
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw new NotFoundHttpException('班级不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw ClassroomException::NOTFOUND_CLASSROOM();
         }
 
         $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));

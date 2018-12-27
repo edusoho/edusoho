@@ -4,9 +4,8 @@ namespace ApiBundle\Api\Resource\Setting;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\Common\CommonException;
 
 class Setting extends AbstractResource
 {
@@ -15,8 +14,8 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'face'))) {
-            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'face', 'miniprogram'))) {
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $method = "get${type}";
@@ -31,7 +30,7 @@ class Setting extends AbstractResource
         return array(
             'name' => $siteSetting['name'],
             'url' => $siteSetting['url'],
-            'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'] . '/' . $siteSetting['logo'],
+            'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
         );
     }
 
@@ -142,8 +141,8 @@ class Setting extends AbstractResource
             'show_student_num_enabled' => !isset($courseSetting['show_student_num_enabled']) ? '1' : $courseSetting['show_student_num_enabled'],
         );
     }
-    
-    public function getFace()
+
+    public function getFace($request = null)
     {
         $faceSetting = $this->getSettingService()->get('face', array());
         $featureSetting = $this->getSettingService()->get('feature', array());
@@ -154,7 +153,7 @@ class Setting extends AbstractResource
                 'app_enabled' => 0,
                 'pc_enabled' => 0,
                 'h5_enabled' => 0,
-            )
+            ),
         );
 
         if (isset($featureSetting['face_enabled']) && 1 == $featureSetting['face_enabled']) {
@@ -163,11 +162,11 @@ class Setting extends AbstractResource
             $settings['login']['pc_enabled'] = isset($faceSetting['login']['pc_enabled']) ? $faceSetting['login']['pc_enabled'] : 0;
             $settings['login']['h5_enabled'] = isset($faceSetting['login']['h5_enabled']) ? $faceSetting['login']['h5_enabled'] : 0;
         }
-        
+
         return $settings;
     }
 
-    public function getWeixinConfig($request)
+    public function getWeixinConfig($request = null)
     {
         $params = $request->query->all();
         if (empty($params['url'])) {
@@ -181,11 +180,26 @@ class Setting extends AbstractResource
         return json_decode($result, true);
     }
 
+    public function getMiniprogram($request = null)
+    {
+        $authorizations = $this->getMpService()->getAuthorization();
+
+        return array(
+            'current_version' => empty($authorizations['current_version']) ? array('version' => '0.0.0') : $authorizations['current_version'],
+            'newest_version' => empty($authorizations['newest_version']) ? array('version' => '0.0.0') : $authorizations['newest_version'],
+        );
+    }
+
     /**
      * @return \Biz\System\Service\SettingService
      */
     private function getSettingService()
     {
         return $this->service('System:SettingService');
+    }
+
+    protected function getMpService()
+    {
+        return $this->service('Mp:MpService');
     }
 }

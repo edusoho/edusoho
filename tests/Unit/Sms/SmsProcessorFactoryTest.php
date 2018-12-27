@@ -15,9 +15,9 @@ class SmsProcessorFactoryTest extends BaseTestCase
     }
 
     /**
-     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage 短信类型不存在
+     * @throws \Biz\Sms\SmsException
+     * @expectedException \Biz\Sms\SmsException
+     * @expectedExceptionMessage exception.sms.type_error
      */
     public function testCreateWithException()
     {

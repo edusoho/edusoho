@@ -13,8 +13,8 @@ use Biz\User\Service\UserService;
 class MemberServiceTest extends BaseTestCase
 {
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage parameter is invalid!
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
      */
     public function testBecomeStudentAndCreateOrderWithParamFilterException()
     {
@@ -132,8 +132,8 @@ class MemberServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage course, member参数不能为空
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
      */
     public function testIsMemberNonExpiredWithException()
     {
@@ -181,7 +181,7 @@ class MemberServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testLockStudentWithNotFoundException()
     {
@@ -198,7 +198,7 @@ class MemberServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testUnlockStudentWithNotFoundException()
     {

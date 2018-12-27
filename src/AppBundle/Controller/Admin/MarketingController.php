@@ -17,6 +17,7 @@ class MarketingController extends BaseController
 
         $siteInfo = MarketingUtils::getSiteInfo($this->getSettingService(), $this->getWebExtension());
         $entry = $request->query->get('entry');
+        $target = $request->query->get('target', 'login');
 
         try {
             $login = $client->post('/login', array(
@@ -27,8 +28,8 @@ class MarketingController extends BaseController
                 'user_avatar' => $this->getWebExtension()->getFurl($user['largeAvatar'], 'avatar.png'),
                 'entry' => $entry,
             ));
-
-            return  $this->redirect($login['url']);
+            // 返回的login链接格式固定是：{微营销域名}/login?key=xxxx
+            return  $this->redirect($login['url'].'&target='.$target);
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
         }

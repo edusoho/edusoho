@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\DocActivityDao;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
+use Biz\Common\CommonException;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
 
@@ -28,12 +29,12 @@ class Doc extends Activity
     public function create($fields)
     {
         if (empty($fields['media'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $fields['mediaId'] = $media['id'];
 
@@ -85,12 +86,12 @@ class Doc extends Activity
     public function update($targetId, &$fields, $activity)
     {
         if (empty($fields['media'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $media = json_decode($fields['media'], true);
 
         if (empty($media['id'])) {
-            throw $this->createInvalidArgumentException('参数不正确');
+            throw CommonException::ERROR_PARAMETER();
         }
         $fields['mediaId'] = $media['id'];
         $updateFields = ArrayToolkit::parts($fields, array(

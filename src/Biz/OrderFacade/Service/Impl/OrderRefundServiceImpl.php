@@ -3,7 +3,9 @@
 namespace Biz\OrderFacade\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderRefundService;
+use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 
 class OrderRefundServiceImpl extends BaseService implements OrderRefundService
@@ -113,18 +115,18 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
     {
         $user = $this->getCurrentUser();
         if (!$user->isAdmin()) {
-            throw $this->createAccessDeniedException('you are not allowed to do this');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
     }
 
     private function getProductAndOrderItem($order)
     {
         if (empty($order)) {
-            throw $this->createAccessDeniedException('order not be found');
+            $this->createNewException(OrderException::NOTFOUND_ORDER());
         }
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
         if (empty($orderItems)) {
-            throw $this->createAccessDeniedException('orderItems not be found');
+            $this->createNewException(OrderException::NOTFOUND_ORDER_ITEMS());
         }
         $orderItem = reset($orderItems);
 

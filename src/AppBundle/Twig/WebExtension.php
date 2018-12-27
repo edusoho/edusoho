@@ -9,6 +9,7 @@ use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\PluginVersionToolkit;
+use AppBundle\Common\UserToolkit;
 use AppBundle\Component\DeviceDetector\DeviceDetectorAdapter;
 use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
@@ -20,6 +21,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
+use ApiBundle\Api\Util\AssetHelper;
 
 class WebExtension extends \Twig_Extension
 {
@@ -82,6 +84,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale')),
             new \Twig_SimpleFilter('cdn', array($this, 'cdn')),
             new \Twig_SimpleFilter('wrap', array($this, 'wrap')),
+            new \Twig_SimpleFilter('convert_absolute_url', array($this, 'convertAbsoluteUrl')),
         );
     }
 
@@ -166,7 +169,25 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('can_send_message', array($this, 'canSendMessage')),
             new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
             new \Twig_SimpleFunction('arrays_key_convert', array($this, 'arraysKeyConvert')),
+            new \Twig_SimpleFunction('is_system_generated_email', array($this, 'isSystemGeneratedEmail')),
         );
+    }
+
+    public function convertAbsoluteUrl($html)
+    {
+        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) {
+            $cdn = new CdnUrl();
+            $cdnUrl = $cdn->get('content');
+            if (!empty($cdnUrl)) {
+                $absoluteUrl = AssetHelper::getScheme().':'.rtrim($cdnUrl, '/').'/'.ltrim($matches[1], '/');
+            } else {
+                $absoluteUrl = AssetHelper::uriForPath('/'.ltrim($matches[1], '/'));
+            }
+
+            return "src=\"{$absoluteUrl}\"";
+        }, $html);
+
+        return $html;
     }
 
     public function parseUserAgent($userAgent)
@@ -1557,7 +1578,7 @@ class WebExtension extends \Twig_Extension
 
     public function isTrial()
     {
-        if (file_exists(__DIR__.'/../../../../../app/data/trial.lock')) {
+        if (file_exists($this->getParameter('kernel.root_dir').'/data/trial.lock')) {
             return true;
         }
 
@@ -1713,6 +1734,7 @@ class WebExtension extends \Twig_Extension
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
             'old_document' => 'js-sdk/document-player/v7/viewer.html',
             'faq' => 'js-sdk/faq/sdk-v1.js',
+            'audio' => 'js-sdk/audio-player/sdk-v1.js',
         );
 
         if (isset($paths[$type])) {
@@ -1796,6 +1818,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return $arrays;
+    }
+
+    public function isSystemGeneratedEmail($email)
+    {
+        return UserToolkit::isEmailGeneratedBySystem($email);
     }
 
     /**

@@ -25,6 +25,7 @@ class AudioController extends BaseActivityController implements ActivityActionIn
             'task' => $task,
             'activity' => $activity,
             'courseId' => $task['courseId'],
+            'disableModeSelection' => true, //音频任务非学员预览屏蔽顺序播放
         ));
     }
 

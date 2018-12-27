@@ -2,11 +2,13 @@
 
 namespace Biz\Live\Service\Impl;
 
+use Biz\Common\CommonException;
 use Biz\Live\Service\LiveService;
 use Biz\BaseService;
+use Biz\User\UserException;
+use Biz\System\Service\SettingService;
 use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\AthenaLiveToolkit;
 
 class LiveServiceImpl extends BaseService implements LiveService
 {
@@ -57,7 +59,7 @@ class LiveServiceImpl extends BaseService implements LiveService
     protected function filterCreateParams($params)
     {
         if (!ArrayToolkit::requireds($params, array('startTime', 'endTime', 'speakerId', 'type'))) {
-            throw $this->createInvalidArgumentException('Invalid Arguments');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $liveParams = array(
@@ -71,11 +73,6 @@ class LiveServiceImpl extends BaseService implements LiveService
             'startTime' => $params['startTime'],
             'endTime' => $params['endTime'],
         );
-
-        if (!empty($params['isCallback'])) {
-            $liveParams['callback'] = $this->buildCallbackUrl($params[
-                'endTime'], $params['targetId'], $params['targetType']);
-        }
 
         if (!empty($params['roomType']) && $this->isRoomType($params['roomType'])) {
             $liveParams['roomType'] = $params['roomType'];
@@ -117,23 +114,6 @@ class LiveServiceImpl extends BaseService implements LiveService
         return $liveLogoUrl;
     }
 
-    protected function buildCallbackUrl($endTime, $targetId, $targetType)
-    {
-        $duration = $endTime + 86400 - time();
-        $args = array(
-            'duration' => $duration,
-            'data' => array(
-                'courseId' => $targetId,
-                'type' => $targetType,
-            ),
-        );
-        $token = $this->getTokenService()->makeToken('live.callback', $args);
-
-        $baseUrl = $this->getBaseUrl();
-
-        return AthenaLiveToolkit::generateCallback($baseUrl, $token['token'], $targetId);
-    }
-
     public function canUpdateRoomType($liveStartTime)
     {
         $timeDiff = $liveStartTime - time();
@@ -156,7 +136,7 @@ class LiveServiceImpl extends BaseService implements LiveService
         $user = $this->getUserService()->getUser($speakerId);
 
         if (empty($user)) {
-            throw $this->createNotFoundException('Speaker not found');
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         return $user['nickname'];
@@ -172,6 +152,9 @@ class LiveServiceImpl extends BaseService implements LiveService
         return $this->biz['educloud.live_client'];
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

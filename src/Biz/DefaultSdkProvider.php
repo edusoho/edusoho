@@ -42,6 +42,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
             return $service;
         };
 
+        $biz['qiQiuYunSdk.playv2'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateSdk($biz, $that->getPlayV2Config($biz));
+            if (!empty($sdk)) {
+                $service = $sdk->getPlayV2Service();
+            }
+
+            return $service;
+        };
+
         $biz['qiQiuYunSdk.esOp'] = function ($biz) use ($that) {
             $service = null;
             $sdk = $that->generateSdk($biz, $that->getESopConfig($biz));
@@ -187,5 +197,23 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return array('ai' => array('host' => $hostUrl));
+    }
+
+    public function getPlayV2Config($biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', array());
+
+        if (empty($developerSetting['cloud_play_server'])) {
+            return array();
+        }
+
+        $url = parse_url($developerSetting['cloud_play_server']);
+
+        if (empty($url['host'])) {
+            return array();
+        }
+
+        return array('playv2' => array('host' => $url['host']));
     }
 }

@@ -719,9 +719,9 @@ class XAPIService extends BaseService
             'definition' => array(
                 'type' => $this->getActivityType($object['definitionType']),
                 'name' => array(
-                    $this->defaultLang => $object['name']
-                )
-            )
+                    $this->defaultLang => $object['name'],
+                ),
+            ),
         );
 
         $this->addCourseExtension($object, $statement);
@@ -760,9 +760,9 @@ class XAPIService extends BaseService
             'definition' => array(
                 'type' => $this->getActivityType($object['definitionType']),
                 'name' => array(
-                    $this->defaultLang => $object['name']
-                )
-            )
+                    $this->defaultLang => $object['name'],
+                ),
+            ),
         );
 
         $this->addCourseExtension($object, $statement);
@@ -792,9 +792,9 @@ class XAPIService extends BaseService
             'definition' => array(
                 'type' => $this->getActivityType($object['definitionType']),
                 'name' => array(
-                    $this->defaultLang => $object['name']
-                )
-            )
+                    $this->defaultLang => $object['name'],
+                ),
+            ),
         );
 
         $statement['timestamp'] = $this->getTime($timestamp);
@@ -925,7 +925,7 @@ class XAPIService extends BaseService
 
     private function addCourseExtension($object, &$statement)
     {
-        if ($object['definitionType'] == XAPIActivityTypes::COURSE) {
+        if (XAPIActivityTypes::COURSE == $object['definitionType']) {
             $statement['object']['definition']['extensions'] = array(
                 'http://xapi.edusoho.com/extensions/course' => array(
                     'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
@@ -933,7 +933,7 @@ class XAPIService extends BaseService
                     'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     'price' => empty($object['course']['price']) ? 0 : $object['course']['price'],
                     'tags' => empty($object['course']['tags']) ? '' : $object['course']['tags'],
-                )
+                ),
             );
         }
     }

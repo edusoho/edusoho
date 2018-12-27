@@ -3,8 +3,10 @@
 namespace Biz\File\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\File\Dao\UploadFileDao;
 use Biz\File\Service\FileImplementor;
+use Biz\File\UploadFileException;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use AppBundle\Common\ArrayToolkit;
@@ -55,17 +57,18 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
      *
      * @return array
      *
-     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @throws \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @throws CommonException
+     * @throws UploadFileException
+     * @throws \Exception
      */
     public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null)
     {
         if (!ArrayToolkit::requireds($fileInfo, array('filename', 'key', 'size'))) {
-            throw $this->createServiceException('参数缺失，添加用户文件失败!');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         if (empty($fileInfo['globalId'])) {
-            throw $this->createInvalidArgumentException('添加云文件，缺少globalId');
+            $this->createNewException(UploadFileException::GLOBALID_REQUIRED());
         }
 
         $uploadFile = array();
@@ -371,7 +374,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function finishedUpload($file, $params)
     {
         if (empty($file['globalId'])) {
-            throw $this->createInvalidArgumentException(sprintf('文件不存在%s，完成上传失败！', $params['globalId']));
+            $this->createNewException(UploadFileException::GLOBALID_REQUIRED());
         }
 
         $params = array(

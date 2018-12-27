@@ -10,7 +10,7 @@ style="cursor:pointer"
     {% endif %}
     <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" class="img-responsive thumb"/>
 		<span class="title" style="max-height: 15px;overflow: hidden;line-height: 20px;">
-		{{courseSet.title|default('admin.course_manage.manage.not_select_course'|trans)}}-{{ course.title|default('admin.course_manage.manage.not_select_plan'|trans) }}
+		{{courseSet.title|default('admin.course_manage.manage.not_select_course'|trans)}}{% if course and course.title %}-{{ course.title }}{% endif %}
 		</span>
 
 		<button type="button" role="course-item-delete" data-course-id="{{course.id|default(null)}}" {% if not showDelBtn|default(false) %}style="display:none"{% endif %} class="series-mode-label close"><i class="glyphicon glyphicon-remove"></i></button>

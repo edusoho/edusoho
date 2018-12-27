@@ -7,6 +7,7 @@ class Show {
   constructor(element) {
     let container = $(element);
     this.htmlDom = $(element);
+    this.content = container.data('content');
     this.userId = container.data('userId');
     this.userName = container.data('userName');
     this.fileId = container.data('fileId');
@@ -18,6 +19,7 @@ class Show {
 
     this.playerType = container.data('player');
     this.fileType = container.data('fileType');
+    this.fileLength = container.data('fileLength');
     this.url = container.data('url');
     this.videoHeaderLength = container.data('videoHeaderLength');
     this.enablePlaybackRates = container.data('enablePlaybackRates');
@@ -34,6 +36,7 @@ class Show {
     this.agentInWhiteList = container.data('agentInWhiteList');
     this.disableVolumeButton = container.data('disableVolumeButton');
     this.disablePlaybackButton = container.data('disablePlaybackButton');
+    this.disableModeSelection = container.data('disableModeSelection');
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
     this.autoplay = container.data('autoplay');
@@ -43,6 +46,7 @@ class Show {
       DurationStorage.set(this.userId, this.fileId, $iframe.data('lastLearnTime'));
     }
     this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
+    this.remeberLastPos = this.lastLearnTime < this.fileLength;
 
     this.initView();
     this.initEvent();
@@ -57,7 +61,7 @@ class Show {
         html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
       }
     } else if (this.fileType == 'audio') {
-      html += '<audio id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></audio>';
+      html += '<div id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></audio>';
     }
     this.htmlDom.html(html);
     this.htmlDom.show();
@@ -68,6 +72,7 @@ class Show {
       this.playerType, {
         element: '#lesson-player',
         url: this.url,
+        content: this.content,
         mediaType: this.fileType,
         fingerprint: this.fingerprint,
         fingerprintSrc: this.fingerprintSrc,
@@ -77,6 +82,7 @@ class Show {
         agentInWhiteList: this.agentInWhiteList,
         timelimit: this.timelimit,
         enablePlaybackRates: this.enablePlaybackRates,
+        disableModeSelection: this.disableModeSelection,
         videoH5: this.videoH5,
         controlBar: {
           disableVolumeButton: this.disableVolumeButton,
@@ -93,7 +99,8 @@ class Show {
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
         autoplay: this.autoplay,
-        customPos: this.lastLearnTime
+        customPos: this.remeberLastPos ? this.lastLearnTime : 0,
+        remeberLastPos: this.remeberLastPos,
       }
     );
   }
@@ -129,8 +136,12 @@ class Show {
     });
   }
 
-  isCloudPalyer() {
+  isCloudVideoPalyer() {
     return 'balloon-cloud-video-player' == this.playerType;
+  }
+
+  isCloudAudioPlayer() {
+    return 'audio-player' == this.playerType;
   }
 
   initEvent() {
@@ -141,13 +152,14 @@ class Show {
         pause: true,
         currentTime: player.getCurrentTime()
       });
-      if (!this.isCloudPalyer()) {
+      if (!this.isCloudVideoPalyer() && !this.isCloudAudioPlayer()) {
         let time = DurationStorage.get(this.userId, this.fileId);
         if (time > 0) {
           player.setCurrentTime(time);
         }
         player.play();
-      } else if (this.isCloudPalyer()) {
+      } 
+      if (this.isCloudVideoPalyer()) {
         if (this.markerUrl) {
           $.getJSON(this.markerUrl, function(questions) {
             player.setQuestions(questions);
@@ -155,8 +167,6 @@ class Show {
         }
       }
     });
-
-   
 
     player.on('answered', (data) => {
       let regExp = /course\/(\d+)\/task\/(\d+)\//;
@@ -181,11 +191,13 @@ class Show {
         pause: true,
         currentTime: player.getCurrentTime()
       });
-      if (!this.isCloudPalyer()) {
+      if (!this.isCloudVideoPalyer() && !this.isCloudAudioPlayer()) {
         if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
+          DurationStorage.del(this.userId, this.fileId);
           DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
         }
       } else {
+        DurationStorage.del(this.userId, this.fileId);
         DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
       }
     });
@@ -204,11 +216,12 @@ class Show {
       });
     });
 
-    player.on('ended', () => {
+    player.on('ended', (msg) => {
       messenger.sendToParent('ended', {
-        stop: true
+        stop: true,
+        playerMsg: msg
       });
-      if (!this.isCloudPalyer()) {
+      if (!this.isCloudVideoPalyer() && !this.isCloudAudioPlayer()) {
         DurationStorage.del(this.userId, this.fileId);
       }
     });

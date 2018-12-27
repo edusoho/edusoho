@@ -4,11 +4,13 @@ namespace AppBundle\Controller;
 
 use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\LiveReplayException;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\LiveReplayService;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\Task\TaskException;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveroomController extends BaseController
@@ -33,6 +35,11 @@ class LiveroomController extends BaseController
         $biz = $this->getBiz();
         $user['hostname'] = $biz['env']['base_url'];
 
+        if (in_array($user['role'], array('speaker', 'teacher'))) {
+            $schemeAndHost = $request->getSchemeAndHttpHost();
+            $user['callbackUrl'] = $this->generateCallbackUrl($schemeAndHost, $params);
+        }
+
         $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $user);
 
         return $this->render('liveroom/entry.html.twig', array(
@@ -43,6 +50,29 @@ class LiveroomController extends BaseController
         ));
     }
 
+    protected function generateCallbackUrl($host, $params)
+    {
+        $callbackArgs = array(
+            'sources' => array('course', 'my', 'public'), //支持课程资料读取，公共资料读取，还有我的资料库读取
+            'userId' => $this->getCurrentUser()->getId(),
+        );
+
+        if (!empty($params['courseId'])) {
+            $callbackArgs['courseId'] = $params['courseId'];
+        }
+
+        $options = array();
+        if (!empty($params['startTime']) && !empty($params['endTime'])) {
+            //直播前后六小时有效
+            $options['exp'] = $params['endTime'] + 60 * 60 * 6;
+            $options['iat'] = $params['startTime'] - 60 * 60 * 6;
+        }
+
+        $token = $this->getJWTAuth()->auth($callbackArgs, $options);
+
+        return "{$host}/callback/ESLive?ac=callback.fetch&token={$token}";
+    }
+
     /**
      * [playESLiveReplayAction 播放ES直播回放].
      */
@@ -50,14 +80,14 @@ class LiveroomController extends BaseController
     {
         $replay = $this->getLiveReplayService()->getReplay($replayId);
         if (empty($replay)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(LiveReplayException::NOTFOUND_LIVE_REPLAY());
         }
 
         if ($this->canTakeReplay($targetType, $targetId, $lessonId, $replayId)) {
             return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
         }
 
-        throw $this->createNotFoundException();
+        $this->createNewException(LiveReplayException::NOTFOUND_LIVE_REPLAY());
     }
 
     public function ticketAction(Request $request, $roomId)
@@ -80,7 +110,7 @@ class LiveroomController extends BaseController
     {
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
         if (!$task) {
-            throw $this->createNotFoundException();
+            $this->createNewException(TaskException::NOTFOUND_TASK());
         }
         $access = $this->getCourseService()->canLearnTask($task['id']);
 

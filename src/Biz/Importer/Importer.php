@@ -4,8 +4,8 @@ namespace Biz\Importer;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;
+use Biz\Common\CommonException;
 use Topxia\Service\Common\ServiceKernel;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use Codeages\Biz\Framework\Context\Biz;
 
@@ -49,7 +49,7 @@ abstract class Importer
     protected function createDangerResponse($message)
     {
         if (!is_string($message)) {
-            throw new ServiceException('Message must be a string');
+            throw CommonException::ERROR_PARAMETER();
         }
 
         return array(

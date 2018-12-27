@@ -5,10 +5,9 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Resource\AbstractResource;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use ApiBundle\Api\Exception\ErrorCode;
+use Biz\User\UserException;
 use ApiBundle\Api\Annotation\Access;
+use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Filter;
 
@@ -22,15 +21,15 @@ class PageSetting extends AbstractResource
         $mode = $request->query->get('mode', 'published');
 
         if (!in_array($mode, array('draft', 'published'))) {
-            throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_MODE();
         }
         $type = 'course' == $type ? 'courseCondition' : $type;
         if (!in_array($type, array('courseCondition', 'discovery'))) {
-            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_TYPE();
         }
 
         if (!in_array($portal, array('h5', 'miniprogram'))) {
-            throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_PORTAL();
         }
         $method = 'get'.ucfirst($type);
 
@@ -44,15 +43,15 @@ class PageSetting extends AbstractResource
     {
         $mode = $request->query->get('mode');
         if (!in_array($mode, array('draft', 'published'))) {
-            throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_MODE();
         }
         $type = $request->query->get('type');
         if (!in_array($type, array('discovery'))) {
-            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_TYPE();
         }
 
         if (!in_array($portal, array('h5', 'miniprogram'))) {
-            throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_PORTAL();
         }
         $content = $request->request->all();
         $method = 'add'.ucfirst($type);
@@ -67,14 +66,14 @@ class PageSetting extends AbstractResource
     {
         $mode = $request->query->get('mode');
         if ('draft' != $mode) {
-            throw new BadRequestHttpException('Mode is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_MODE();
         }
         if (!in_array($type, array('discovery'))) {
-            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_TYPE();
         }
 
         if (!in_array($portal, array('h5', 'miniprogram'))) {
-            throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw PageException::ERROR_PORTAL();
         }
         $method = 'remove'.ucfirst($type);
 
@@ -99,17 +98,25 @@ class PageSetting extends AbstractResource
     {
         $user = $this->getCurrentUser();
         if ('draft' == $mode && !$user->isAdmin()) {
-            throw new AccessDeniedHttpException();
+            throw UserException::PERMISSION_DENIED();
         }
         $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode, 'setting');
         foreach ($discoverySettings as &$discoverySetting) {
-            if ('course_list' == $discoverySetting['type'] && 'condition' == $discoverySetting['data']['sourceType']) {
+            if ('course_list' == $discoverySetting['type']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
+                $courseFilter = new CourseFilter();
+                $courseFilter->setMode(Filter::PUBLIC_MODE);
                 foreach ($discoverySetting['data']['items'] as &$course) {
-                    $courseFilter = new CourseFilter();
-                    $courseFilter->setMode(Filter::PUBLIC_MODE);
                     $courseFilter->filter($course);
+                }
+            }
+            if ('classroom_list' == $discoverySetting['type']) {
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+                $classroomFilter = new ClassroomFilter();
+                $classroomFilter->setMode(Filter::PUBLIC_MODE);
+                foreach ($discoverySetting['data']['items'] as &$classroom) {
+                    $classroomFilter->filter($classroom);
                 }
             }
         }

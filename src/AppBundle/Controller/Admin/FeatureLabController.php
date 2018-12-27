@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\System\SettingException;
 use Symfony\Component\HttpFoundation\Request;
 
 class FeatureLabController extends BaseController
@@ -27,7 +28,7 @@ class FeatureLabController extends BaseController
         $cloudInfo = $this->container->get('web.twig.data_extension')->getCloudInfo();
 
         if (!isset($cloudInfo['ai.face']) || !$cloudInfo['ai.face'] || !isset($featureSetting['face_enabled']) || !$featureSetting['face_enabled']) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(SettingException::AI_FACE_DISABLE());
         }
 
         if ('POST' == $request->getMethod()) {

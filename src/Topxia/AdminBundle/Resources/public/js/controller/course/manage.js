@@ -1,8 +1,9 @@
 define(function (require, exports, module) {
   var Notify = require('common/bootstrap-notify');
-  require('../widget/category-select').run('course');
+  // require('../widget/category-select').run('course');
   var CourseSetClone = require('../course-set/clone');
-
+    require('jquery.select2-css');
+    require('jquery.select2');
   exports.run = function (options) {
 
     var csl = new CourseSetClone();
@@ -80,62 +81,56 @@ define(function (require, exports, module) {
     $table.on('click', '.copy-course[data-type="live"]', function (e) {
       e.stopPropagation();
     });
-
-    if ($('#course_tags').length > 0) {
-      $('#course_tags').select2({
-        ajax: {
-          url: app.arguments.tagMatchUrl + '#',
-          dataType: 'json',
-          quietMillis: 100,
-          data: function (term, page) {
-            return {
-              q: term,
-              page_limit: 10
-            };
-          },
-          results: function (data) {
-
-            var results = [];
-
-            $.each(data, function (index, item) {
-
-              results.push({
-                id: item.name,
-                name: item.name
-              });
-            });
-
-            return {
-              results: results
-            };
-
-          }
-        },
-        initSelection: function (element, callback) {
-          var data = [];
-          $(element.val().split(',')).each(function () {
-            data.push({
-              id: this,
-              name: this
-            });
-          });
-          callback(data);
-        },
-        formatSelection: function (item) {
-          return item.name;
-        },
-        formatResult: function (item) {
-          return item.name;
-        },
-        multiple: true,
-        maximumSelectionSize: 20,
-        placeholder: Translator.trans('validate.tag_required_hint'),
-        width: '162px',
-        createSearchChoice: function () {
-          return null;
-        },
+      $('[data-toggle="tooltip"]').tooltip();
+      $('[data-toggle="popover"]').popover({
+          html: true,
+          trigger: 'hover'
       });
-    }
+      var $tagContainer = $('#tag');
+
+      $tagContainer.select2({
+          ajax: {
+              url: $tagContainer.data('url'),
+              dataType: 'json',
+              quietMillis: 100,
+              data: function (term, page) {
+                  return {
+                      q: term,
+                      page_limit: 10
+                  };
+              },
+              results: function (data) {
+                  var results = [];
+                  $.each(data, function (index, item) {
+                      results.push({
+                          id: item.id,
+                          name: item.name,
+                      });
+                  });
+
+                  return {
+                      results: results
+                  };
+
+              }
+          },
+          initSelection: function (element, callback) {
+              $item = element.data('tagValue');
+              callback($item);
+          },
+          formatSelection: function (item) {
+              $('[name=tagId]').val(item.id);
+              return item.name;
+          },
+          formatResult: function (item) {
+              return item.name;
+          },
+          allowClear: true,
+          placeholder: Translator.trans('admin.course_manage.manage.tags_select.placeholder')
+      });
+      $tagContainer.on("change",function(e){
+          $('[name=tagId]').val($tagContainer.val());
+      });
   };
 
 });

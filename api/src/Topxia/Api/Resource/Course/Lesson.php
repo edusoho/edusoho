@@ -17,7 +17,7 @@ class Lesson extends BaseResource
         $task = $this->getTaskService()->getTask($id);
 
         if (empty($task)) {
-            return $this->error('not_courseId', "ID为#{$id}的课时不存在");
+            return $this->error('4041202', "ID为#{$id}的课时不存在");
         }
 
         $access = $this->getCourseService()->canLearnTask($task['id']);
@@ -164,6 +164,9 @@ class Lesson extends BaseResource
             $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
             $lesson['mediaUri'] = $result['url'];
         }
+
+        $lesson['mediaText'] = $this->filterHtml($lesson['mediaText']);
+        $lesson['content'] = $this->filterHtml($lesson['content']);
 
         return $lesson;
     }

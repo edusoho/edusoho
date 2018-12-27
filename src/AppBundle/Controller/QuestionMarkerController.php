@@ -4,11 +4,13 @@ namespace AppBundle\Controller;
 
 use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
 use Biz\Marker\Service\MarkerService;
 use Biz\Marker\Service\QuestionMarkerResultService;
 use Biz\Marker\Service\QuestionMarkerService;
+use Biz\Question\QuestionException;
 use Biz\Question\Service\QuestionService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
@@ -85,7 +87,7 @@ class QuestionMarkerController extends BaseController
         $question = $this->getQuestionService()->get($id);
 
         if (empty($question)) {
-            throw $this->createNotFoundException('题目不存在！');
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
         $item = array(
@@ -213,7 +215,7 @@ class QuestionMarkerController extends BaseController
         $access = $this->getCourseService()->canLearnCourse($data['courseId']);
 
         if (AccessorInterface::SUCCESS !== $access['code']) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(CourseException::FORBIDDEN_LEARN_COURSE());
         }
 
         if (in_array($data['type'], array('uncertain_choice', 'single_choice', 'choice'))) {
