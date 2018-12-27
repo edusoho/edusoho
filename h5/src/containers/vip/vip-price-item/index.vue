@@ -21,11 +21,17 @@ export default {
       type: Number,
       default: -1,
     },
+    vipBuyType: {
+      type: String,
+      default: 'month'
+    }
   },
   created() {
-    if (this.index !== 0) return;
-    // 默认第一项选中
-    this.handleClick();
+    // 默认选择一年或12个月
+    const year = this.vipBuyType === 'year';
+    if ((!year && this.index === 2) || (year && this.index === 0)) {
+      this.handleClick();
+    }
   },
   methods: {
     handleClick() {

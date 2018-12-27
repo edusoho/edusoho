@@ -69,7 +69,7 @@
         <van-row gutter="20">
           <van-col span="8" v-for="(item, index) in priceItems[currentLevelIndex]" :key="index">
             <price-item :item="item" :index="index" :class="{ active: index === activePriceIndex }"
-              @selectItem="selectPriceItem($event, index)" />
+              @selectItem="selectPriceItem($event, index)" :vipBuyType="vipSettings.buyType"/>
           </van-col>
         </van-row>
       </div>
@@ -307,6 +307,7 @@ export default {
         this.joinVip();
         return;
       }
+
       // 会员续费
       if (this.vipDated && this.vipInfo) {
         let vipIndex = 0;
