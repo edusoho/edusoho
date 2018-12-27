@@ -3824,7 +3824,7 @@ my.teaching.live_schedule_menu: 教学课表
 my.teaching.hints_block: (当前仅展示直播课程)
 my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
-my.teaching.question_menu: 学员问题
+my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
 my.teaching.testpaper_check_menu: 试卷批阅
 my.teaching.homework_check_menu: 作业批阅
@@ -3836,9 +3836,11 @@ my.teaching.open_course.normal: 录播公开课
 my.teaching.open_course.live: 直播公开课
 my.teaching.open_course.live_remind: 直播提醒
 my.teaching.threads_discussion: 课程学员话题
+my.teaching.threads_question: 课程学员问答
 my.teaching.classroom.threads_discussion: %classroom%学员话题
 my.teaching.classroom.threads_discussion.nickname: 话题作者
 my.teaching.classroom.threads_event.nickname: 活动发起人
+my.teaching.classroom.threads_question: %classroom%学员问答
 my.teaching.classroom.threads_question.nickname: 话题作者
 my.teaching.classroom: 所教%classroom%
 my.teaching.classroom.manage_btn: 管理%classroom%

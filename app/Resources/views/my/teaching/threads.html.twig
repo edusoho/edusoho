@@ -28,17 +28,15 @@
 <div class="panel panel-default panel-col">
   	<div class="panel-heading">
 		{% if type == 'question' %}
-			{{'role.student'|trans}} {{'my.teaching.course_set.question'|trans}}
+			{{'role.student'|trans}}{{'my.teaching.course_set.question'|trans}}
 		{% elseif type == 'discussion' %}
-			{{'role.student'|trans}} {{'my.teaching.course_set.threasd'|trans}}
+			{{'role.student'|trans}}{{'my.teaching.course_set.threasd'|trans}}
 		{% endif %}
 	</div>
 
   <div class="panel-body">
 
-    {% if type == 'discussion' %}
-	    {% include 'my/teaching/tab.html.twig'%}
-    {% endif %}
+    {% include 'my/teaching/tab.html.twig' with {type: type} %}
 
     {% if threads %}
 	    {% include 'my/learning/thread/thread-list.html.twig'  with {type: type} %}
