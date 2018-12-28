@@ -16,4 +16,7 @@ export default {
   [types.UPDATE_DRAFT](state, payload) {
     state.draft = payload;
   },
+  [types.GET_SETTINGS](state, { key, setting }) {
+    state[key] = setting;
+  },
 };

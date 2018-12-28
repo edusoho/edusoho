@@ -14,20 +14,19 @@ module.exports = {
     proxyTable: {
       '/api': {
         // target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
-        target: 'http://gdy.st.edusoho.cn',
+        target: 'http://lvliujie.st.edusoho.cn',
         changeOrigin: true,
         secure: false,
       }
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 8010, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
-
     // Use Eslint Loader?
     // If true, your code will be linted during bundling and
     // linting errors and warnings will be shown in the console.

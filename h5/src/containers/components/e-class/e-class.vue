@@ -3,11 +3,11 @@
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
         <img :class="course.imgSrc.className" v-bind:src="course.imgSrc.url">
-        <div v-if="tagShow">
+        <div v-if="normalTagShow">
           <span class="tag tag-live" v-if="courseType === 'live'">直播</span>
           <span class="tag tag-discount" v-if="discountNum">{{discountNum}}</span>
-          <!-- <span class="tag tag-vip">会员免费</span> -->
         </div>
+        <span class="tag tag-vip" v-if="vipTagShow && vipSwitch && Number(isVip)">会员免费</span>
       </div>
       <div class="e-course__right pull-left">
         <!-- header -->
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-
+  import { mapState } from 'vuex';
   export default {
     props: {
       course: {
@@ -53,9 +53,17 @@
         type: String,
         default: 'course_list'
       },
-      tagShow: {
+      normalTagShow: {
         type: Boolean,
         default: true
+      },
+      vipTagShow: {
+        type: Boolean,
+        default: false
+      },
+      isVip: {
+        type: String,
+        default: '0'
       }
     },
     data() {
@@ -64,6 +72,7 @@
       };
     },
     computed: {
+      ...mapState(['vipSwitch', 'isLoading']),
       discountNum() {
         if (this.typeList === 'class_list') return false;
         if (this.discount !== '') {

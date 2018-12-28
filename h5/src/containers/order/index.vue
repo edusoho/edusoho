@@ -2,12 +2,16 @@
   <div class="order">
     <div class="goods-info">
       <e-loading v-if="isLoading"></e-loading>
+      <!-- 商品缩略图 -->
       <e-course
-        v-if="Object.keys(course).length >0"
+        v-if="Object.keys(course).length > 0"
         type="confirmOrder"
+        :typeList="targetType"
+        :duration="course.duration"
         :order="course"
         :course="course">
       </e-course>
+      <!-- 使用优惠券 -->
       <div class="order-coupon">
         <div class="coupon-column" @click="showList = true">
           <span>优惠券</span>
@@ -39,16 +43,17 @@
           </div>
         </van-popup>
       </div>
-      <div class="order-goods-item">
+      <div class="order-goods-item" v-if="targetType !== 'vip'">
         <span>学习有效期</span>
         <span class="gray-dark" v-html="getValidity"></span>
       </div>
     </div>
+    <!-- 结算区域 -->
     <div class="order-accounts" v-show="itemData">
       <div class="mb20 title-18">结算</div>
       <div class="flex-between-item">
         <span class="mbl">商品价格：</span>
-        <span class="red">￥ {{ course.totalPrice }}</span>
+        <span class="red">￥ {{ course.totalPrice | filterPrice }}</span>
       </div>
       <div class="flex-between-item">
         <span class="mbl">优惠券：</span>
@@ -60,8 +65,8 @@
       </div>
     </div>
     <van-button class="order-submit-bar submit-btn"
-        @click="handleSubmit"
-        size="small">应付￥ {{ total }}</van-button>
+      @click="handleSubmit"
+      size="small">应付￥ {{ total }}</van-button>
   </div>
 </template>
 <script>
@@ -69,6 +74,7 @@ import { mapState } from 'vuex';
 import coupon from '@/containers/components/e-coupon/e-coupon.vue';
 import eCourse from '@/containers/components/e-course/e-course.vue';
 import Api from '@/api';
+import { Toast } from 'vant';
 
 export default {
   components: {
@@ -89,6 +95,9 @@ export default {
       couponNumber: 0,
       targetType: this.$route.query.targetType,
       targetId: this.$route.params.id,
+      targetUnit: this.$route.params.unit,
+      targetNum: this.$route.params.num,
+      vipOrderType: this.$route.params.type
     }
   },
   computed: {
@@ -97,7 +106,7 @@ export default {
     }),
     total() {
       if (!this.itemData) {
-        return this.course.totalPrice;
+        return Number(this.course.totalPrice).toFixed(2);
       }
       const minusType = (this.itemData.type === 'minus');
       const couponRate = this.itemData.rate;
@@ -130,14 +139,30 @@ export default {
       return this.$route.query.expiryScope || '永久有效';
     }
   },
+  filters: {
+    filterPrice(price) {
+      return parseFloat(price).toFixed(2)
+    },
+  },
   created () {
+    if (this.vipOrderType === '升级') {
+      this.targetUnit = undefined;
+      this.targetNum = undefined;
+    }
+
+    let data = {
+      targetType: this.targetType,
+      targetId: this.targetId,
+      num: this.targetNum,
+      unit: this.targetUnit
+    }
+
     Api.confirmOrder({
-      data: {
-        targetType: this.targetType,
-        targetId: this.targetId
-      }
+      data: data
     }).then(res => {
-      this.course = res
+      this.course = res;
+    }).catch(err => {
+      Toast.fail(err.message)
     })
   },
   methods: {
@@ -149,11 +174,23 @@ export default {
             targetId: this.targetId,
             isOrderCreate: 1,
             couponCode: this.itemData ? this.itemData.code : '',
+            unit: this.targetUnit,
+            num: this.targetNum,
           }
         }).then(() => {
-          this.$router.push({
-            path: `/${this.targetType}/${this.targetId}`
-          })
+          if (this.targetType === 'vip') {
+            this.$router.replace({
+              path: `/${this.targetType}`
+            }, () => {
+              this.$router.go(-1)
+            })
+          } else {
+            this.$router.replace({
+              path: `/${this.targetType}/${this.targetId}`
+            }, () => {
+              this.$router.go(-1)
+            })
+          }
         })
         return;
       }
@@ -161,10 +198,12 @@ export default {
         name: 'pay',
         query: {
           id: this.targetId,
-          targetType: this.targetType
+          targetType: this.targetType,
         },
         params: {
-          couponCode: this.itemData ? this.itemData.code : ''
+          couponCode: this.itemData ? this.itemData.code : '',
+          unit: this.targetUnit,
+          num: this.targetNum,
         }
       })
     },

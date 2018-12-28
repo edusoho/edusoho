@@ -68,10 +68,17 @@ const formatCompleteTime = date => {
   return time.slice(0, -3);
 };
 
+// days（传时间戳）
+const getOffsetDays = (time1, time2) => {
+  const offsetTime = Math.abs(time1 - time2);
+  return Math.floor(offsetTime / (3600 * 24 * 1e3));
+};
+
 export {
   formatTime,
   formatFullTime,
   formatSimpleTime,
   formatTimeByNumber,
-  formatCompleteTime
+  formatCompleteTime,
+  getOffsetDays
 };

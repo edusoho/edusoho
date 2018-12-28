@@ -32,7 +32,7 @@
      <!-- confirm order -->
     <div class="switch-box" v-if="type === 'confirmOrder'">
       <span class="switch-box__price">
-        <p class="price">¥ {{ order.totalPrice}}</p>
+        <p class="price">¥ {{ order.totalPrice | numFilter}}</p>
       </span>
     </div>
 
@@ -78,6 +78,11 @@
       showStudent() {
         return this.courseSettings ? Number(this.courseSettings.show_student_num_enabled) : true;
       },
+    },
+    filters: {
+      numFilter(value) {
+        return parseFloat(value).toFixed(2)
+      }
     },
     methods: {
       goToPay() {

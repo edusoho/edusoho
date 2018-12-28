@@ -17,5 +17,10 @@ export default [
     // 获取课程列表数据
     name: 'getClassList',
     url: '/classrooms'
+  }, {
+    name: 'deleteClassroom',
+    url: '/me/classroom_members/{id}',
+    method: 'DELETE',
+    disableLoading: true
   }
 ];

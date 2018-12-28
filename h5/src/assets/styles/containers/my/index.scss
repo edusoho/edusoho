@@ -3,24 +3,45 @@
   border-bottom: 1px solid #eee;
 
   &-section {
-    display: flex;
+    position: relative;
     padding: 25px 20px 25px 25px;
   }
 
   &-img {
+    float: left;
     height: vw(86);
     width: vw(86);
     border-radius: vw(43);
   }
-
-  &-name {
-    margin-left: vw(20);
-    flex: 1;
-    align-self: center;
-    font-size: vw(18);
+  &-middle {
+    margin-left: vw(106);
+    padding-top: vw(10);
+    line-height: vw(33);
     font-family: PingFangSC-Medium;
+    .user-name {
+      font-size: vw(18);
+    }
+    .user-vip {
+      font-size: vw(12);
+      color: #71777D;
+    }
+    .vip-img {
+      position: relative;
+      top: vw(3);
+      margin-right: vw(4);
+      width: vw(16);
+      height: vw(16);
+    }
+    .vip-expired {
+      color: #B0BDC9;
+      filter: grayscale(1) opacity(50%);
+    }
   }
+
   &-setting {
+    position: absolute;
+    right: vw(23);
+    top: vw(28);
     height: vw(20);
     width: vw(20);
     img {
@@ -28,6 +49,10 @@
       height: auto;
     }
   }
+}
+
+.single-middle {
+  line-height: vw(86);
 }
 
 .orders {

@@ -15,7 +15,9 @@ const state = {
   smsToken: '',
   settings: {},
   courseSettings: {},
-  title: ''
+  title: '',
+  vipSettings: {},
+  vipSwitch: false
 };
 
 

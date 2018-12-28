@@ -27,7 +27,10 @@ export default {
     }),
   },
   computed: {
-    ...mapState(['title'])
+    ...mapState(['title']),
+    routerKeepAlive() {
+      return this.$route.meta.keepAlive;
+    },
   },
   watch: {
     '$route': {

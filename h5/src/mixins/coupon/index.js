@@ -32,7 +32,7 @@ export default {
         return target ? target.title : '全部课程';
       }
       if (targetType === 'vip') {
-        return '会员';
+        return target ? target.name : '全部会员';
       }
       return '全部商品';
     },

@@ -6,7 +6,7 @@
     :close-on-click-modal="false">
     <div class="course-modal__header" slot="title">
       <span class="header__title">选择{{typeText}}</span>
-      <span class="header__subtitle">仅显示已发布{{typeText}}</span>
+      <span class="header__subtitle">仅显示{{type === 'coupon' ? '未过期的' : '已发布'}}{{typeText}}</span>
       <a v-if="type === 'groupon'" class="color-primary pull-right text-12 mrl" :href="createMarketingUrl" target="_blank">创建拼团活动</a>
     </div>
     <div class="course-modal__body">
@@ -54,7 +54,9 @@ export default {
   props: {
     courseList: {
       type: Array,
-      default: [],
+      default: () => {
+        return [];
+      },
     },
     visible: {
       type: Boolean,

@@ -9,6 +9,7 @@
         :courseList="part.data"
         :typeList="part.type"
         :feedback="feedback"
+        :vipTagShow="true"
         :index="index"
         @fetchCourse="fetchCourse"/>
       <e-poster
@@ -22,7 +23,14 @@
         :coupons="part.data.items"
         :showTitle="part.data.titleShow"
         @couponHandle="couponHandle($event)"
-        :feedback="true"></e-coupon-list>
+        :feedback="feedback"></e-coupon-list>
+      <e-vip-list
+        class="gray-border-bottom"
+        v-if="part.type === 'vip' && vipSwitch"
+        :items="part.data.items"
+        :showTitle="part.data.titleShow"
+        :sort="part.data.sort"
+        :feedback="feedback"></e-vip-list>
     </div>
   </div>
 </template>
@@ -32,6 +40,7 @@
   import poster from '../components/e-poster/e-poster.vue';
   import swipe from '../components/e-swipe/e-swipe.vue';
   import couponList from '../components/e-coupon-list/e-coupon-list.vue';
+  import vipList from '../components/e-vip-list/e-vip-list.vue';
   import * as types from '@/store/mutation-types';
   import getCouponMixin from '@/mixins/coupon/getCouponHandler';
   import Api from '@/api';
@@ -43,7 +52,8 @@
       'e-course-list': courseList,
       'e-swipe': swipe,
       'e-poster': poster,
-      'e-coupon-list': couponList
+      'e-coupon-list': couponList,
+      'e-vip-list': vipList,
     },
     mixins: [getCouponMixin],
     props: {
@@ -62,9 +72,7 @@
       };
     },
     computed: {
-      ...mapState({
-        isLoading: state => state.isLoading
-      })
+      ...mapState(['vipSwitch', 'isLoading']),
     },
     created() {
       const {preview, token} = this.$route.query
