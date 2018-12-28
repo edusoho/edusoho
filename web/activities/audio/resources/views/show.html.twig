@@ -4,7 +4,7 @@
 
 {% block body %}
   {% set audio = activity.ext %}
-  <div class="audio-content" id="audio-content" data-role="audio-content">
+  <div class="audio-content" id="audio-content" data-role="audio-content" data-id="{{ activity.id }}">
   {% if audio.file|default(null) %}
     {% if audio.hasText %}
       {% set activityContent = activity.content|default('')|convert_absolute_url|raw %}

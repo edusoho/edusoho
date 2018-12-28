@@ -4,7 +4,6 @@ namespace ApiBundle\Api\Resource\Page;
 
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Course\CourseItemWithLessonFilter;
-use ApiBundle\Api\Resource\Course\CourseMemberFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\CourseSet\CourseSetReviewFilter;
 
@@ -14,16 +13,14 @@ class PageCourseFilter extends Filter
         'id', 'title', 'courseSetTitle',
     );
     protected $publicFields = array(
-        'access', 'learnMode', 'studentNum', 'allowAnonymousPreview', 'parentId', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType', 'progress', 'buyable', 'reviews',
+        'vipLevel', 'access', 'learnMode', 'studentNum', 'allowAnonymousPreview', 'parentId', 'compulsoryTaskNum', 'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary', 'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers', 'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType', 'progress', 'buyable', 'reviews',
     );
 
     protected function publicFields(&$data)
     {
         $member = $data['member'];
-        if (!empty($member)) {
-            $courseMemberFilter = new CourseMemberFilter();
-            $courseMemberFilter->setMode(Filter::PUBLIC_MODE);
-            $courseMemberFilter->filter($member);
+        if (isset($data['vipLevel']) && !empty($data['vipLevel'])) {
+            $vipLevel = $data['vipLevel'];
         }
 
         $items = $data['courseItems'];
@@ -53,8 +50,9 @@ class PageCourseFilter extends Filter
         $data['progress'] = $progress;
         $data['allowAnonymousPreview'] = $allowAnonymousPreview;
         $data['courseItems'] = $items;
-        $data['member'] = $member;
         $data['courses'] = $courses;
+        $data['member'] = $member;
         $data['reviews'] = $reviews;
+        $data['vipLevel'] = empty($vipLevel) ? null : $vipLevel;
     }
 }

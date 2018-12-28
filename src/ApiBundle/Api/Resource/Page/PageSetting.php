@@ -9,6 +9,7 @@ use Biz\User\UserException;
 use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
+use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 use ApiBundle\Api\Resource\Filter;
 
 class PageSetting extends AbstractResource
@@ -117,6 +118,13 @@ class PageSetting extends AbstractResource
                 $classroomFilter->setMode(Filter::PUBLIC_MODE);
                 foreach ($discoverySetting['data']['items'] as &$classroom) {
                     $classroomFilter->filter($classroom);
+                }
+            }
+            if ('vip' == $discoverySetting['type']) {
+                $vipLevelFilter = new VipLevelFilter();
+                $vipLevelFilter->setMode(Filter::PUBLIC_MODE);
+                foreach ($discoverySetting['data']['items'] as &$vipLevel) {
+                    $vipLevelFilter->filter($vipLevel);
                 }
             }
         }

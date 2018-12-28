@@ -225,7 +225,7 @@ export default class Register {
   initFieldVisitId() {
     $(document).ready(() => {
       if ('undefined' !== window._VISITOR_ID) {
-        $('[name="matomoVisitId"]').val(window._VISITOR_ID);
+        $('[name="registerVisitId"]').val(window._VISITOR_ID);
       }
     })
   }
