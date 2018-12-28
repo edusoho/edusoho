@@ -5,7 +5,7 @@ namespace Biz\Sms\Service\Impl;
 use Biz\BaseService;
 use Biz\Sms\Service\SmsService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Biz\System\SettingException;
 use Biz\Sms\SmsException;
 use Biz\User\UserException;
 
@@ -28,7 +28,7 @@ class SmsServiceImpl extends BaseService implements SmsService
     public function smsSend($smsType, $userIds, $description, $parameters = array())
     {
         if (!$this->isOpen($smsType)) {
-            throw new \RuntimeException('云短信相关设置未开启!');
+            $this->createNewException(SmsException::FORBIDDEN_SMS_SETTING());
         }
 
         //这里不考虑去重，只考虑unlock
@@ -38,7 +38,7 @@ class SmsServiceImpl extends BaseService implements SmsService
             $api = $this->createCloudeApi();
             $result = $api->post('/sms/send', array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters));
         } catch (\RuntimeException $e) {
-            throw new \RuntimeException('发送失败！');
+            $this->createNewException(SmsException::FAILED_SEND());
         }
 
         $message = sprintf('对%s发送用于%s的通知短信', $to, $smsType);
@@ -50,7 +50,7 @@ class SmsServiceImpl extends BaseService implements SmsService
     public function sendVerifySms($smsType, $to, $smsLastTime = 0)
     {
         if (!$this->checkPhoneNum($to)) {
-            throw new ServiceException(sprintf('手机号错误:%s', $to));
+            $this->createNewException(SmsException::ERROR_MOBILE());
         }
 
         if (!$this->isOpen($smsType)) {
@@ -60,7 +60,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         $allowedTime = 120;
         $currentTime = time();
         if ($this->isNeedWaiting($smsLastTime, $currentTime, $allowedTime)) {
-            throw new ServiceException('请等待120秒再申请!');
+            $this->createNewException(SmsException::NEED_WAIT());
         }
         $currentUser = $this->getCurrentUser();
 
@@ -83,15 +83,15 @@ class SmsServiceImpl extends BaseService implements SmsService
             $targetUser = $this->getUserService()->getUserByVerifiedMobile($to);
 
             if (empty($targetUser)) {
-                throw new ServiceException('用户不存在');
+                $this->createNewException(UserException::NOTFOUND_USER());
             }
 
             if ((!isset($targetUser['verifiedMobile']) || (0 == strlen($targetUser['verifiedMobile'])))) {
-                throw new ServiceException('用户没有被绑定的手机号');
+                $this->createNewException(SmsException::NOTFOUND_BIND_MOBILE());
             }
 
             if ($targetUser['verifiedMobile'] != $to) {
-                throw new ServiceException('手机与用户名不匹配');
+                $this->createNewException(SmsException::ERROR_MATCH_MOBILE_USERNAME());
             }
             $to = $targetUser['verifiedMobile'];
         }
@@ -104,11 +104,11 @@ class SmsServiceImpl extends BaseService implements SmsService
             }
 
             if ((!isset($currentUser['verifiedMobile']) || (0 == strlen($currentUser['verifiedMobile'])))) {
-                throw new ServiceException('用户没有被绑定的手机号');
+                $this->createNewException(SmsException::NOTFOUND_BIND_MOBILE());
             }
 
             if ($currentUser['verifiedMobile'] != $to) {
-                throw new ServiceException('您输入的手机号，不是已绑定的手机');
+                $this->createNewException(SmsException::ERROR_MOBILE());
             }
 
             $to = $currentUser['verifiedMobile'];
@@ -172,13 +172,13 @@ class SmsServiceImpl extends BaseService implements SmsService
     protected function checkSmsType($smsType, $user)
     {
         if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'))) {
-            throw new \RuntimeException('不存在的sms Type');
+            $this->createNewException(SmsException::ERROR_SMS_TYPE());
         }
 
         $smsSetting = $this->getSettingService()->get('cloud_sms', array());
 
         if (!empty($smsSetting["{$smsType}"]) && 'on' != $smsSetting["{$smsType}"] && !$this->getUserService()->isMobileRegisterMode()) {
-            throw new \RuntimeException('该使用场景未开启');
+            $this->createNewException(SettingException::FORBIDDEN_MOBILE_REGISTER());
         }
     }
 

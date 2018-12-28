@@ -2,7 +2,7 @@
 
 namespace Biz\Org\Service;
 
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Biz\Common\CommonException;
 use Topxia\Service\Common\ServiceKernel;
 
 class OrgBatchUpdateFactory
@@ -11,7 +11,7 @@ class OrgBatchUpdateFactory
     {
         $modules = self::getModules();
         if (!array_key_exists($module, $modules)) {
-            throw new InvalidArgumentException(array('模块%module%不存在,更新组织机构失败', array('%module%' => $module)));
+            throw CommonException::ERROR_PARAMETER();
         }
 
         return $modules[$module];
@@ -68,7 +68,7 @@ class OrgBatchUpdateFactory
         if (array_key_exists($key, $modules)) {
             return $modules[$key];
         }
-        throw new InvalidArgumentException('模块不存在,获取数据出错');
+        throw CommonException::ERROR_PARAMETER();
     }
 
     protected function getKernel()

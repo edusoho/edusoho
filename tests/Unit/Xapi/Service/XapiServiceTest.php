@@ -93,8 +93,8 @@ class XapiServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \AppBundle\Common\Exception\AccessDeniedException
-     * @expectedExceptionMessage user is not login.
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.unlogin
      */
     public function testCreateStatementWithException()
     {
@@ -116,8 +116,8 @@ class XapiServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \AppBundle\Common\Exception\AccessDeniedException
-     * @expectedExceptionMessage user is not login.
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.unlogin
      */
     public function testBatchCreateStatementsWithException()
     {

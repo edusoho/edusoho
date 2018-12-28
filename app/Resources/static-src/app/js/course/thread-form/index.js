@@ -1,11 +1,11 @@
 let $form = $('#thread-form');
 let validator = $form.validate({
   rules: {
-    'title': {
+    'thread[title]': {
       required: true,
       trim: true,
     },
-    'content': {
+    'thread[content]': {
       required: true,
     }
   }
@@ -26,7 +26,6 @@ let editor = CKEDITOR.replace('thread_content', {
 
 editor.on('change', () => {
   $('#thread_content').val(editor.getData());
-  validator.form();
 });
 editor.on('blur', () => {
   $('#thread_content').val(editor.getData());

@@ -4,9 +4,8 @@ namespace ApiBundle\Api\Resource\Setting;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\Common\CommonException;
 
 class Setting extends AbstractResource
 {
@@ -16,7 +15,7 @@ class Setting extends AbstractResource
     public function get(ApiRequest $request, $type)
     {
         if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'face', 'miniprogram'))) {
-            throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $method = "get${type}";
@@ -100,6 +99,7 @@ class Setting extends AbstractResource
 
         return array(
             'enabled' => empty($vipSetting['enabled']) ? false : true,
+            'h5Enabled' => empty($vipSetting['h5Enabled']) ? false : true,
             'buyType' => empty($buyType) ? 'month' : $buyType,
             'upgradeMinDay' => empty($vipSetting['upgrade_min_day']) ? '30' : $vipSetting['upgrade_min_day'],
             'defaultBuyYears' => empty($vipSetting['default_buy_years']) ? '1' : $vipSetting['default_buy_years'],

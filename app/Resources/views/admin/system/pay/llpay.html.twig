@@ -7,9 +7,6 @@
     <div class="controls col-md-3 radios">
       {{ radios('llpay_enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, payment.llpay_enabled) }}
     </div>
-     <div class="controls col-md-4 radios">
-        <a href="http://www.edusoho.com/files/lianlianpay.zip">{{ 'admin.payment_setting.llpay_api_application_word'|trans }}</a>
-      </div>
   </div>
 
   <div data-sub="llpay" {% if not payment.llpay_enabled %} class="hidden" {% endif %}>

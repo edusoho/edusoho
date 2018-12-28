@@ -2,10 +2,9 @@
 
 namespace ApiBundle\Api\Resource;
 
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\PathMeta;
+use Biz\Common\CommonException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ResourceManager
 {
@@ -22,7 +21,7 @@ class ResourceManager
     {
         $className = $this->getClassName($meta);
         if (!class_exists($className)) {
-            throw new BadRequestHttpException('API Resource Not found', null, ErrorCode::BAD_REQUEST);
+            throw CommonException::NOTFOUND_API();
         }
 
         return new ResourceProxy($this->container->get('api.field.filter.factory'), new $className($this->container, $this->container->get('biz')));

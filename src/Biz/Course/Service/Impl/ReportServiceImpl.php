@@ -4,6 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Course\Dao\ReportDao;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
@@ -282,7 +283,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                 );
                 break;
             default:
-                throw $this->createServiceException('filter参数有误');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         return $conditions;
@@ -304,7 +305,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                 $orderBy = array('learnedCompulsoryTaskNum' => 'ASC');
                 break;
             default:
-                throw $this->createServiceException('参数sort有误');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         return $orderBy;

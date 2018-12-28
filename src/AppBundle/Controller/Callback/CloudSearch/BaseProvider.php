@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch;
 
+use Biz\Common\CommonException;
 use Symfony\Component\HttpFoundation\Request;
 use Codeages\Biz\Framework\Context\BizAware;
 
@@ -204,7 +205,7 @@ abstract class BaseProvider extends BizAware
         $requestFields = array_keys($requestData);
         foreach ($requiredFields as $field) {
             if (!in_array($field, $requestFields)) {
-                throw new \InvalidArgumentException(sprintf('missing param: %s', $field));
+                throw CommonException::ERROR_PARAMETER_MISSING();
             }
         }
 

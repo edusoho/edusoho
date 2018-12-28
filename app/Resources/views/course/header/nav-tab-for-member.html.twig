@@ -1,76 +1,76 @@
 <ul class="nav nav-tabs {% if mobile %} es-mobile-nav {% endif %}" role="tablist">
-	{% for key, tab in metas.tabs %}
-		{% if mobile %}
-			{% if not  member|default(null)  and loop.index <= 3 %}
-				<li role="presentation" id="{{ key }}"
-				    class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
-					<a
-							{% if member|default(false) %}
-								href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-							{% else %}
-								href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-							{% endif %}
-					>
-						{{ tab.name|trans }}
-						{% if key == 'tasks' and categoryTag|default(null) %}
-							<span class="badge badge-primary">{{ categoryTag|trans }}</span>
-						{% endif %}
-						{% if tab.number|default(false) %}
-							{% if member|default(false) %}
-								<small>({{ course[tab.number]|default(0) }})</small>
-							{% else %}
-								<small>({{ course_set[tab.number]|default(0) }})</small>
-							{% endif %}
-						{% endif %}
-					</a>
-				</li>
-			{% elseif loop.index == 1 %}
-				<li role="presentation" id="{{ key }}"
-				    class="navs {% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
-					<a
-							{% if member|default(false) %}
-								href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-							{% else %}
-								href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-							{% endif %}
-					>
-						{{ tab.name|trans }}
-						{% if key == 'tasks' and categoryTag|default(null) %}
-							<span class="badge badge-primary">{{ categoryTag|trans }}</span>
-						{% endif %}
-						{% if tab.number|default(false) %}
-							{% if member|default(false) %}
-								<small>({{ course[tab.number]|default(0) }})</small>
-							{% else %}
-								<small>({{ course_set[tab.number]|default(0) }})</small>
-							{% endif %}
-						{% endif %}
-					</a>
-				</li>
-			{% endif %}
-		{% else %}
-			<li role="presentation" id="{{ key }}"
-			    class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
-				<a
-						{% if member|default(false) %}
-							href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-						{% else %}
-							href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-						{% endif %}
-				>
-					{{ tab.name|trans }}
-					{% if key == 'tasks' and categoryTag|default(null) %}
-						<span class="badge badge-primary">{{ categoryTag|trans }}</span>
-					{% endif %}
-					{% if tab.number|default(false) %}
-						{% if member|default(false) %}
-							<small>({{ course[tab.number]|default(0) }})</small>
-						{% else %}
-							<small>({{ course_set[tab.number]|default(0) }})</small>
-						{% endif %}
-					{% endif %}
-				</a>
-			</li>
-		{% endif %}
-	{% endfor %}
+  {% for key, tab in metas.tabs %}
+    {% if mobile %}
+      {% if not  member|default(null)  and loop.index <= 3 %}
+        <li role="presentation" id="{{ key }}"
+            class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
+          <a
+              {% if member|default(false) %}
+                href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+              {% else %}
+                href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+              {% endif %}
+          >
+            {{ tab.name|trans }}
+            {% if key == 'tasks' and categoryTag|default(null) %}
+              <span class="badge badge-primary">{{ categoryTag|trans }}</span>
+            {% endif %}
+            {% if tab.number|default(false) %}
+              {% if member|default(false) %}
+                <small>({{ course[tab.number]|default(0) }})</small>
+              {% else %}
+                <small>({{ course_set[tab.number]|default(0) }})</small>
+              {% endif %}
+            {% endif %}
+          </a>
+        </li>
+      {% elseif loop.index == 1 %}
+        <li role="presentation" id="{{ key }}"
+            class="navs {% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
+          <a
+              {% if member|default(false) %}
+                href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+              {% else %}
+                href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+              {% endif %}
+          >
+            {{ tab.name|trans }}
+            {% if key == 'tasks' and categoryTag|default(null) %}
+              <span class="badge badge-primary">{{ categoryTag|trans }}</span>
+            {% endif %}
+            {% if tab.number|default(false) %}
+              {% if member|default(false) %}
+                <small>({{ course[tab.number]|default(0) }})</small>
+              {% else %}
+                <small>({{ course_set[tab.number]|default(0) }})</small>
+              {% endif %}
+            {% endif %}
+          </a>
+        </li>
+      {% endif %}
+    {% else %}
+      <li role="presentation" id="{{ key }}"
+          class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
+        <a
+            {% if member|default(false) %}
+              href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+            {% else %}
+              href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+            {% endif %}
+        >
+          {{ tab.name|trans }}
+          {% if key == 'tasks' and categoryTag|default(null) %}
+            <span class="badge badge-primary">{{ categoryTag|trans }}</span>
+          {% endif %}
+          {% if tab.number|default(false) %}
+            {% if member|default(false) %}
+              <small>({{ course[tab.number]|default(0) }})</small>
+            {% else %}
+              <small>({{ course_set[tab.number]|default(0) }})</small>
+            {% endif %}
+          {% endif %}
+        </a>
+      </li>
+    {% endif %}
+  {% endfor %}
 </ul>

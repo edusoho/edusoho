@@ -4,8 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\MaterialException;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
+use Biz\File\UploadFileException;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -64,13 +66,13 @@ class OpenCourseFileManageController extends BaseController
         );
 
         if (!$materialCount) {
-            throw $this->createNotFoundException();
+            $this->createNewException(MaterialException::NOTFOUND_MATERIAL());
         }
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         return $this->forward('AppBundle:UploadFile:download', array('fileId' => $file['id']));
@@ -83,7 +85,7 @@ class OpenCourseFileManageController extends BaseController
         $file = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         $convertHash = $this->getUploadFileService()->reconvertFile($file['id']);

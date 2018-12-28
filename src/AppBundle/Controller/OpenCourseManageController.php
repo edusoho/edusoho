@@ -13,6 +13,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\File\Service\UploadFileService;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 
@@ -769,7 +770,7 @@ class OpenCourseManageController extends BaseController
     public function studentDetailAction(Request $request, $id, $userId)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权查看学员详细信息！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $user = $this->getUserService()->getUser($userId);

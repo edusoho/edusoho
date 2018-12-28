@@ -4,7 +4,7 @@ namespace Biz\OrderFacade\Product;
 
 use AppBundle\Common\StringToolkit;
 use Biz\AppLoggerConstant;
-use Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\OrderFacade\Currency;
 use Biz\Sms\Service\SmsService;

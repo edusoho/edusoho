@@ -3,10 +3,12 @@
 namespace Biz\Card\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Card\CardException;
 use Biz\Card\Dao\CardDao;
 use Biz\Card\DetailProcessor\DetailFactory;
 use Biz\Card\DetailProcessor\DetailProcessor;
 use Biz\Card\Service\CardService;
+use Biz\Common\CommonException;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 
@@ -15,7 +17,7 @@ class CardServiceImpl extends BaseService implements CardService
     public function addCard($card)
     {
         if (!ArrayToolkit::requireds($card, array('cardType', 'cardId', 'deadline', 'userId'))) {
-            throw $this->createInvalidArgumentException('缺少必要字段，新创建卡失败！');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $card['createdTime'] = time();
@@ -105,7 +107,7 @@ class CardServiceImpl extends BaseService implements CardService
     public function findCardsByUserIdAndCardType($userId, $cardType)
     {
         if (empty($cardType)) {
-            throw $this->createNotFoundException('缺少必要字段，请明确卡的类型');
+            $this->createNewException(CardException::TYPE_REQUIRED());
         }
 
         return $this->getCardDao()->findByUserIdAndCardType($userId, $cardType);

@@ -107,7 +107,7 @@ class MessageServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\MessageException
      */
     public function testSendMessageWithEmptyFromIdAndToId()
     {
@@ -116,7 +116,7 @@ class MessageServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\User\MessageException
      */
     public function testSendMessageWithEqualFromIdAndToId()
     {
@@ -130,7 +130,7 @@ class MessageServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\User\MessageException
      */
     public function testSendMessageWithEmptyContent()
     {
@@ -164,7 +164,7 @@ class MessageServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testDeleteMessagesByIdsWithEmptyException()
     {

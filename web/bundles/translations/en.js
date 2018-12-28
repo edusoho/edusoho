@@ -2,7 +2,7 @@
 t.fallback = 'en';
 t.defaultDomain = 'js';
 // en
-t.add("site.flash_not_install_hint", "Flash player is not installed in your browser or version is too low, please install the Flash player. <a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\"> Click Install<\/a>", "js", "en");
+t.add("site.flash_not_install_hint", "Flash player is not installed or it is disabled or its version is too low in your browser, please make sure the flash player can work properly. <a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\"> Click Install<\/a>", "js", "en");
 t.add("site.date_format_dhis", "Days %day% Hours %hour% Minutes %minutes% seconds %seconds%", "js", "en");
 t.add("site.date_format_his", "Hours %hours% Minutes %minutes% Seconds %seconds%", "js", "en");
 t.add("site.date_format_is", "Minutes %minutes% seconds %seconds%", "js", "en");
@@ -1095,6 +1095,7 @@ t.add("admin.setting.mobile.delete_startup_diagram_figure_4_fail_hint", "Delete 
 t.add("admin.setting.mobile.upload_startup_diagram_figure_5_success_hint", "Uploading the network school startup diagram Figure 5 success!", "js", "en");
 t.add("admin.setting.mobile.delete_startup_diagram_figure_5_success_hint", "Delete the network school startup diagram Figure 5 successfully!", "js", "en");
 t.add("admin.setting.mobile.delete_startup_diagram_figure_5_fail_hint", "Delete the network school startup diagram Figure 5 failed!", "js", "en");
+t.add("admin.setting.mobile.bundle_id", "Bundle ID", "js", "en");
 t.add("admin.setting.mobile.upload_logo_success_hint", "Upload the network school LOGO success!", "js", "en");
 t.add("admin.setting.mobile.delete_logo_success_hint", "Delete the network school LOGO success!", "js", "en");
 t.add("admin.setting.mobile.delete_logo_fail_hint", "Delete the network school LOGO failed!", "js", "en");

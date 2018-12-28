@@ -6,6 +6,7 @@ use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\StringToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
@@ -41,7 +42,7 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
         $lesson = $this->getOpenCourseService()->getLesson($targetId);
 
         if (empty($lesson)) {
-            throw new \RuntimeException('课时不存在');
+            throw OpenCourseException::NOTFOUND_LESSON();
         }
 
         global $kernel;

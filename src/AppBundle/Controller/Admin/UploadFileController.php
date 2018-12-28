@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class UploadFileController extends BaseController
@@ -12,7 +13,7 @@ class UploadFileController extends BaseController
     {
         $user = $this->getUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $params = $request->query->all();

@@ -9,6 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\User\UserException;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService
 {
@@ -29,7 +30,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('can not get task results because user not login');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         return $this->getTaskResultDao()->findByCourseIdAndUserId($courseId, $user['id']);
@@ -40,7 +41,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('can not get task result because user not login');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         return $this->getTaskResultDao()->getByTaskIdAndUserId($taskId, $user['id']);
@@ -51,7 +52,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('can not get task result because user not login');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         return $this->getTaskResultDao()->deleteByTaskIdAndUserId($taskId, $user['id']);
@@ -79,7 +80,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->biz['user'];
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('user must be login');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $taskResult['status'] = 'start';
@@ -140,7 +141,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('unlogin');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $conditions = array(
@@ -159,7 +160,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('unlogin');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $conditions = array(
@@ -178,7 +179,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('unlogin');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $conditions = array(
@@ -202,7 +203,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('unlogin');
+            $this->createNewException(UserException::UN_LOGIN());
         }
         $conditions = array(
             'userId' => $user->getId(),

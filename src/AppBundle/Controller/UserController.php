@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biz\User\CurrentUser;
 use AppBundle\Common\Paginator;
+use Biz\User\UserException;
 use Vip\Service\Vip\VipService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserService;
@@ -373,7 +374,7 @@ class UserController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $this->getUserService()->unFollow($user['id'], $id);
@@ -386,7 +387,7 @@ class UserController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $this->getUserService()->follow($user['id'], $id);
@@ -563,7 +564,7 @@ class UserController extends BaseController
         $user = $this->getUserService()->getUser($id);
 
         if (empty($user)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         return $user;

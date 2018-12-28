@@ -100,7 +100,7 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Testpaper\TestpaperException
      */
     public function testUpdateTestpaper()
     {
@@ -137,7 +137,7 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Testpaper\TestpaperException
      */
     public function testDeleteEmptyTestpaper()
     {
@@ -217,8 +217,8 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage Testpaper(#123) not found
+     * @expectedException \Biz\Testpaper\TestpaperException
+     * @expectedExceptionMessage exception.testpaper.not_found
      */
     public function testPublishTestpaperEmpty()
     {
@@ -236,8 +236,8 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 试卷状态不合法!
+     * @expectedException \Biz\Testpaper\TestpaperException
+     * @expectedExceptionMessage exception.testpaper.status_invalid
      */
     public function testPublishTestpaperStatus()
     {
@@ -258,8 +258,8 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage Testpaper(#123) not found
+     * @expectedException \Biz\Testpaper\TestpaperException
+     * @expectedExceptionMessage exception.testpaper.not_found
      */
     public function testCloseTestpaperEmpty()
     {
@@ -280,8 +280,8 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
-     * @expectedExceptionMessage 试卷状态不合法!
+     * @expectedException \Biz\Testpaper\TestpaperException
+     * @expectedExceptionMessage exception.testpaper.status_invalid
      */
     public function testCloseTestpaperStatus()
     {
@@ -853,7 +853,7 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testStartTestpaper()
     {
@@ -872,7 +872,7 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Testpaper\TestpaperException
      */
     public function testFinishTest()
     {
@@ -920,8 +920,8 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     * @expectedExceptionMessage 无权修改其他学员的试卷！
+     * @expectedException \Biz\Testpaper\TestpaperException
+     * @expectedExceptionMessage exception.testpaper.forbidden_access_testpaper
      */
     public function testFinishTestUserError()
     {
@@ -1374,8 +1374,8 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     * @expectedExceptionMessage 未登录用户，无权操作！
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.unlogin
      */
     public function testCanLookTestpaperUnlogin()
     {
@@ -1394,8 +1394,8 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage 试卷结果不存在!
+     * @expectedException \Biz\Testpaper\TestpaperException
+     * @expectedExceptionMessage exception.testpaper.not_found_result
      */
     public function testCanLookTestpaperResultEmpty()
     {
@@ -1403,8 +1403,8 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage 试卷不存在!
+     * @expectedException \Biz\Testpaper\TestpaperException
+     * @expectedExceptionMessage exception.testpaper.not_found
      */
     public function testCanLookTestpaperEmpty()
     {
@@ -1427,8 +1427,8 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage 无权查看此试卷
+     * @expectedException \Biz\Testpaper\TestpaperException
+     * @expectedExceptionMessage exception.testpaper.forbidden_access_testpaper
      */
     public function testCanLookTestpaperStatusError()
     {
@@ -1878,8 +1878,8 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage Testpaper(#123) not found
+     * @expectedException \Biz\Testpaper\TestpaperException
+     * @expectedExceptionMessage exception.testpaper.not_found
      */
     public function testUpdateTestpaperItemsTestpaperEmpty()
     {
@@ -1895,7 +1895,7 @@ class TestpaperServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Testpaper\TestpaperException
      */
     public function testUpdateTestpaperItemsEmptyTestpaper()
     {

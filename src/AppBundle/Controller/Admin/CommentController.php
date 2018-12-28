@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Admin;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CommentController extends BaseController
 {
@@ -29,13 +28,9 @@ class CommentController extends BaseController
         if (empty($comment)) {
             return $this->createJsonResponse(array('status' => 'error', array('message' => 'Not Exsit!')));
         }
-        try {
-            $this->getCommentService()->deleteComment($id);
+        $this->getCommentService()->deleteComment($id);
 
-            return $this->createJsonResponse(array('status' => 'ok'));
-        } catch (ServiceException $e) {
-            return $this->createJsonResponse(array('status' => 'ok', 'error' => array($e->getMessage())));
-        }
+        return $this->createJsonResponse(array('status' => 'ok'));
     }
 
     protected function getCommentService()

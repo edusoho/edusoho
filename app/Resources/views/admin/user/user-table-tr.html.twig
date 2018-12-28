@@ -32,8 +32,7 @@
   </td>
 
   <td>
-    {% set emailArr = user.email|split('@') %}
-    {% if emailArr[1] != 'edusoho.net' %}
+    {% if not is_system_generated_email(user.email) %}
       {{ user.email }}
     {% else %}
       --

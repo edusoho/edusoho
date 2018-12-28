@@ -4,7 +4,6 @@ namespace Biz\Coupon;
 
 use AppBundle\Extension\Extension;
 use Pimple\Container;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Pimple\ServiceProviderInterface;
 
 class CouponServiceProvider extends Extension implements ServiceProviderInterface
@@ -17,7 +16,7 @@ class CouponServiceProvider extends Extension implements ServiceProviderInterfac
         $biz['coupon_factory'] = function ($biz) {
             return function ($couponTypeName) use ($biz) {
                 if (!in_array($couponTypeName, array('vip', 'course', 'classroom'))) {
-                    throw new InvalidArgumentException('support vip or course, you give:'.$couponTypeName);
+                    throw CouponException::TYPE_INVALID();
                 }
                 $cls = __NAMESPACE__.'\\Type\\'.ucfirst($couponTypeName).'Coupon';
                 $instance = new $cls();
