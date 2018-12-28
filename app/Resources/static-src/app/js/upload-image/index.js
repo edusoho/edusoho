@@ -1,6 +1,7 @@
 cd.upload({
   el: '.js-upload-input',
 }).on('error', (code) => {
+  $('.js-upload-input').val('');
   if (code === 'FILE_SIZE_LIMIT') {
     cd.message({
       type: 'danger',
@@ -20,10 +21,14 @@ cd.upload({
     let $this = $(event.currentTarget);
     localStorage.setItem('crop_image_attr', JSON.stringify(imageAttr));
     let loading = cd.loading({isFixed: true});
-    
-    $('#modal').html(loading).modal({
+    const $modal = $('#modal');
+    $modal.html(loading).modal({
       backdrop: 'static',
       keyboard: false
     }).load($this.data('saveUrl'));
+
+    $modal.on('hidden.bs.modal', () => {
+      $('.js-upload-input').val('');
+    })
   });
 });
