@@ -1,7 +1,9 @@
+const el = '.js-upload-input';
+const $el = $('.js-upload-input');
 cd.upload({
-  el: '.js-upload-input',
+  el: el,
 }).on('error', (code) => {
-  $('.js-upload-input').val('');
+  $el.val('');
   if (code === 'FILE_SIZE_LIMIT') {
     cd.message({
       type: 'danger',
@@ -28,7 +30,7 @@ cd.upload({
     }).load($this.data('saveUrl'));
 
     $modal.on('hidden.bs.modal', () => {
-      $('.js-upload-input').val('');
+      $el.val('');
     })
   });
 });
