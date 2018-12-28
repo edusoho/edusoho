@@ -88,6 +88,9 @@ class BalloonCloudVideoPlayer extends Emitter {
       var remeberLastPos = false;
     }
 
+    const remeberLastPos = self.options.customPos ? true : false;
+    self.options.customPos = self.options.customPos.toString();
+
     extConfig = Object.assign(extConfig, {
       id: $(self.options.element).attr('id'),
       disableControlBar: self.options.disableControlBar,

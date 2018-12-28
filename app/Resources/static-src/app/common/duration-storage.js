@@ -39,6 +39,9 @@ class DurationStorage {
   static del(userId, fileId) {
     var key = userId + '-' + fileId;
     var durationTmpArray = store.get('durations');
+    if (!durationTmpArray) {
+      return;
+    }
     for (var i = 0; i < durationTmpArray.length; i++) {
       var index = durationTmpArray[i].indexOf(userId + '-' + fileId);
       if (index > -1) {
