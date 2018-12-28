@@ -10,6 +10,7 @@ export default class Register {
     this.initValidator();
     this.inEventMobile();
     this.initMobileMsgVeriCodeSendBtn();
+    this.initFieldVisitId();
   }
 
   dragEvent() {
@@ -219,5 +220,13 @@ export default class Register {
       this.initDragCaptchaCodeRule();
       $('[name="sms_code"]').rules('remove');
     }
+  }
+
+  initFieldVisitId() {
+    $(document).ready(() => {
+      if ('undefined' !== window._VISITOR_ID) {
+        $('[name="registerVisitId"]').val(window._VISITOR_ID);
+      }
+    })
   }
 }

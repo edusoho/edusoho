@@ -11,8 +11,7 @@
 {% block body %}
   {% if mailer.enabled == 1 or cloudEmail.status|default(null) == 'enable' %}
     <form id="setting-email-form" method="post" action="{{path('settings_email')}}">
-      {% set emailArr = app.user.email|split('@') %}
-      {% if emailArr[1] != 'edusoho.net' %}
+      {% if not is_system_generated_email(app.user.email) %}
         <div class="form-group cd-form-group">
           <label class="readonly">{{'user.settings.email.current_email'|trans}}</label>
           <input type="text" class="form-control" value="{{ blur_number(app.user.email) }}" readonly>

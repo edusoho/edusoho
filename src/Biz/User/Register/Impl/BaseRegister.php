@@ -67,6 +67,7 @@ abstract class BaseRegister
             'guid' => null,
             'registeredWay' => '',
             'passwordInit' => 1,
+            'registerVisitId' => '',
         );
     }
 

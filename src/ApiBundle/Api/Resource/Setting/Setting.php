@@ -99,6 +99,7 @@ class Setting extends AbstractResource
 
         return array(
             'enabled' => empty($vipSetting['enabled']) ? false : true,
+            'h5Enabled' => empty($vipSetting['h5Enabled']) ? false : true,
             'buyType' => empty($buyType) ? 'month' : $buyType,
             'upgradeMinDay' => empty($vipSetting['upgrade_min_day']) ? '30' : $vipSetting['upgrade_min_day'],
             'defaultBuyYears' => empty($vipSetting['default_buy_years']) ? '1' : $vipSetting['default_buy_years'],

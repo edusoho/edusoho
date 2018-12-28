@@ -19,6 +19,7 @@ class Show {
 
     this.playerType = container.data('player');
     this.fileType = container.data('fileType');
+    this.fileLength = container.data('fileLength');
     this.url = container.data('url');
     this.videoHeaderLength = container.data('videoHeaderLength');
     this.enablePlaybackRates = container.data('enablePlaybackRates');
@@ -66,6 +67,7 @@ class Show {
   }
 
   initPlayer() {
+    const customPos = parseInt(this.lastLearnTime) ? parseInt(this.lastLearnTime) : 0;
     return PlayerFactory.create(
       this.playerType, {
         element: '#lesson-player',
@@ -97,7 +99,8 @@ class Show {
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
         autoplay: this.autoplay,
-        customPos: this.lastLearnTime
+        customPos: customPos,
+        mediaLength: this.fileLength,
       }
     );
   }
@@ -165,8 +168,6 @@ class Show {
       }
     });
 
-   
-
     player.on('answered', (data) => {
       let regExp = /course\/(\d+)\/task\/(\d+)\//;
       let matches = regExp.exec(window.location.href);
@@ -192,9 +193,11 @@ class Show {
       });
       if (!this.isCloudVideoPalyer() && !this.isCloudAudioPlayer()) {
         if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
+          DurationStorage.del(this.userId, this.fileId);
           DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
         }
       } else {
+        DurationStorage.del(this.userId, this.fileId);
         DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
       }
     });
