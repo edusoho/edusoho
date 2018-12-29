@@ -20,7 +20,7 @@ cd.upload({
     let $this = $(event.currentTarget);
     localStorage.setItem('crop_image_attr', JSON.stringify(imageAttr));
     let loading = cd.loading({isFixed: true});
-
+    
     $('#modal').html(loading).modal({
       backdrop: 'static',
       keyboard: false
