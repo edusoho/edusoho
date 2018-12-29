@@ -1,9 +1,6 @@
-const el = '.js-upload-input';
-const $el = $('.js-upload-input');
 cd.upload({
-  el: el,
+  el: '.js-upload-input',
 }).on('error', (code) => {
-  $el.val('');
   if (code === 'FILE_SIZE_LIMIT') {
     cd.message({
       type: 'danger',
@@ -23,14 +20,10 @@ cd.upload({
     let $this = $(event.currentTarget);
     localStorage.setItem('crop_image_attr', JSON.stringify(imageAttr));
     let loading = cd.loading({isFixed: true});
-    const $modal = $('#modal');
-    $modal.html(loading).modal({
+
+    $('#modal').html(loading).modal({
       backdrop: 'static',
       keyboard: false
     }).load($this.data('saveUrl'));
-
-    $modal.on('hidden.bs.modal', () => {
-      $el.val('');
-    })
   });
 });
