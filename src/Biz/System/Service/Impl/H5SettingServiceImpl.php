@@ -164,6 +164,34 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
+    public function seckillFilter($discoverySetting, $usage = 'show')
+    {
+        $activity = $discoverySetting['data']['activity'];
+        $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        if (empty($remoteActvity) || isset($remoteActvity['error'])) {
+            return false;
+        }
+        $discoverySetting['data']['activity']['status'] = $remoteActvity['status'];
+        $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
+        $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
+
+        return $discoverySetting;
+    }
+
+    public function cutFilter($discoverySetting, $usage = 'show')
+    {
+        $activity = $discoverySetting['data']['activity'];
+        $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        if (empty($remoteActvity) || isset($remoteActvity['error'])) {
+            return false;
+        }
+        $discoverySetting['data']['activity']['status'] = $remoteActvity['status'];
+        $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
+        $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
+
+        return $discoverySetting;
+    }
+
     public function couponFilter($discoverySetting, $usage = 'show')
     {
         $batches = $discoverySetting['data']['items'];
