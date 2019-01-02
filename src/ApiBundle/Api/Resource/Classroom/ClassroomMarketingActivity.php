@@ -38,7 +38,13 @@ class ClassroomMarketingActivity extends AbstractResource
             $marketingActivityFilter = new MarketingActivityFilter();
             $marketingActivityFilter->filters($activities);
 
-            return ArrayToolkit::group($activities, 'type');
+            $activities = ArrayToolkit::group($activities, 'type');
+
+            foreach ($activities as $type => $activity) {
+                $activities[$type] = current($activity);
+            }
+
+            return $activities;
         } catch (\Exception $e) {
             return array();
         }
