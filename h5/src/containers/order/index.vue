@@ -17,7 +17,7 @@
           <span>优惠券</span>
           <span class="red">{{ couponShow }}</span>
         </div>
-        <van-popup class="full-height-popup coupon-popup" v-model="showList" position="bottom" :overlay="false">
+        <van-popup class="e-popup full-height-popup coupon-popup" v-model="showList" position="bottom" :overlay="false">
           <van-nav-bar title="优惠券"
             class="nav-bar"
             :left-arrow="true"
@@ -26,7 +26,7 @@
             <i class="h5-icon h5-icon-circle"></i>
             <i class="h5-icon h5-icon-check"></i>
           </div>
-          <div class="coupon-popup__content">
+          <div class="e-popup__content coupon-popup__content">
             <coupon v-for="(item, index) in course.availableCoupons"
               :key="index"
               :coupon="item"
