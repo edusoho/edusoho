@@ -4236,7 +4236,7 @@ my.learning.thread.browse: 浏览
 my.learning.thread.question_empty: 你还没提过问题
 my.learning.thread.empty: 你还没有发表过话题
 my.learning.thread.task_id: 课时%taskId%
-my.learning.thread.target_course: "来自<a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a>\n"
+my.learning.thread.target_course_from: 来自
 my.learning.thread.target_course_deleted: 课程已删除
 
 # 我的课程

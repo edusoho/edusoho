@@ -3509,7 +3509,7 @@ my.learning.thread.browse: View
 my.learning.thread.question_empty: 'No record'
 my.learning.thread.empty: 'No record'
 my.learning.thread.task_id: 'Lesson %taskId%'
-my.learning.thread.target_course: "Come from <a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a>\n"
+my.learning.thread.target_course_from: "Come from"
 my.learning.thread.target_course_deleted: 'Course has been deleted'
 my.learning.course: 'My Course'
 my.learning.course.learning: Learning
