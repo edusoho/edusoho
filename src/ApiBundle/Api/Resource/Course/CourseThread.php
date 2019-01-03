@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -18,6 +19,10 @@ class CourseThread extends AbstractResource
         if ($thread['source'] == 'app') {
             $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread', $threadId, 'attachment');
             $thread = $this->addAttachments($thread, ArrayToolkit::group($attachments, 'targetId'));
+        }
+
+        if ($thread['source'] == 'web') {
+            $thread['content'] = $this->filterHtml($thread['content']);
         }
 
         if (!empty($thread['videoId'])) {
@@ -74,6 +79,10 @@ class CourseThread extends AbstractResource
             if ($thread['source'] == 'app') {
                 $thread = $this->addAttachments($thread, $attachments);
             }
+
+            if ($thread['source'] == 'web') {
+                $thread['content'] = $this->filterHtml($thread['content']);
+            }
         }
         $this->getOCUtil()->multiple($threads, array('userId'));
 
@@ -107,6 +116,20 @@ class CourseThread extends AbstractResource
         }
 
         return $thread;
+    }
+
+    protected function filterHtml($text)
+    {
+        preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
+        if (empty($matches)) {
+            return $text;
+        }
+
+        foreach ($matches[1] as $url) {
+            $text = str_replace($url, AssetHelper::uriForPath($url), $text);
+        }
+
+        return $text;
     }
 
     protected function getQuestionType($fileIds)

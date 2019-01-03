@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use Biz\Common\CommonException;
 use AppBundle\Common\ArrayToolkit;
 
@@ -60,6 +61,20 @@ class CourseThreadPost extends AbstractResource
         return $post;
     }
 
+    protected function filterHtml($text)
+    {
+        preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
+        if (empty($matches)) {
+            return $text;
+        }
+
+        foreach ($matches[1] as $url) {
+            $text = str_replace($url, AssetHelper::uriForPath($url), $text);
+        }
+
+        return $text;
+    }
+
     protected function readPosts($courseId, $threadId, $posts)
     {
         $course = $this->getCourseService()->getCourse($courseId);
@@ -72,6 +87,10 @@ class CourseThreadPost extends AbstractResource
 
             if (!in_array($userId, $course['teacherIds']) && in_array($post['userId'], $course['teacherIds'])) {
                 $post = $this->getCourseThreadService()->readPost($post['id']);
+            }
+
+            if ($post['source'] == 'web') {
+                $post['content'] = $this->filterHtml($post['content']);
             }
         }
 
