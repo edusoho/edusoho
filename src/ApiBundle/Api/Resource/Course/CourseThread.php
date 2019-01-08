@@ -44,7 +44,7 @@ class CourseThread extends AbstractResource
         $conditions = array(
             'courseId' => $courseId,
             'type' => $type,
-            'content' => $keyword,
+            'title' => $keyword,
         );
         if ($taskId) {
             $videoAskTime = $request->query->get('videoAskTime', 0);
