@@ -1,5 +1,5 @@
 const el = '.js-upload-input';
-const $el = $('.js-upload-input');
+const $el = $(el);
 cd.upload({
   el: el,
 }).on('error', (code) => {
