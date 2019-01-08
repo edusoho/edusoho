@@ -227,7 +227,7 @@ class ChaosThreads extends BaseResource
         }
 
         $courses = $this->multicallFilter('Course', $courses);
-        $posts = $this->getCourseThreadService()->searchThreadPosts(array('threadIds' => ArrayToolkit::column($courseThreads, 'id'), 'isRead' => 0), array(), 0, PHP_INT_MAX);
+        $posts = $this->getCourseThreadService()->searchThreadPosts(array('threadIds' => ArrayToolkit::column($courseThreads, 'id'), 'isRead' => 0, 'exceptedUserId' => $currentUser['id']), array(), 0, PHP_INT_MAX);
         $posts = ArrayToolkit::group($posts, 'threadId');
 
         foreach ($courseThreads as $key => $thread) {

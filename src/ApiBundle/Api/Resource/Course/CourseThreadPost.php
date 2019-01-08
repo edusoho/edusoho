@@ -30,7 +30,7 @@ class CourseThreadPost extends AbstractResource
         );
 
         if (!empty($posts)) {
-            $posts = $this->readPosts($courseId, $threadId, $posts);
+            $posts = $this->readPosts($courseId, $posts);
         }
         $posts = $this->addAttachments($posts);
 
@@ -75,10 +75,9 @@ class CourseThreadPost extends AbstractResource
         return $text;
     }
 
-    protected function readPosts($courseId, $threadId, $posts)
+    protected function readPosts($courseId, $posts)
     {
         $course = $this->getCourseService()->getCourse($courseId);
-        $thread = $this->getCourseThreadService()->getThread($courseId, $threadId);
         $userId = $this->getCurrentUser()->getId();
         foreach ($posts as &$post) {
             if (in_array($userId, $course['teacherIds']) && $post['userId'] != $userId) {
