@@ -30,6 +30,7 @@ class CourseThread extends AbstractResource
             $thread['askVideoLength'] = $file['length'];
         }
         $thread['user'] = $this->getUserService()->getUser($thread['userId']);
+        $this->getCourseThreadService()->hitThread($courseId, $threadId);
 
         return $thread;
     }
