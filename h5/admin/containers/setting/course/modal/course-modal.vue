@@ -45,6 +45,56 @@ import courseTable from './course-table';
 import { mapMutations, mapState, mapActions } from 'vuex';
 import { VALUE_DEFAULT, TYPE_TEXT_DEFAULT } from '@admin/config/module-default-config';
 
+function apiConfig(type, queryString) {
+  return {
+    'classroom_list': {
+      apiName: 'getClassList',
+      params: {
+        title: queryString
+      }
+    },
+    'course_list': {
+      apiName: 'getCourseList',
+      params: {
+        courseSetTitle: queryString
+      }
+    },
+    'groupon': {
+      apiName: 'getMarketingList',
+      params: {
+        name: queryString,
+        statuses: 'ongoing,unstart',
+        type: type,
+        itemType: 'course'
+      }
+    },
+    'coupon': {
+      apiName: 'getCouponList',
+      params: {
+        name: queryString,
+        unexpired: 1,
+        unreceivedNumGt: 0
+      }
+    },
+    'cut': {
+      apiName: 'getMarketingList',
+      params: {
+        name: queryString,
+        statuses: 'ongoing,unstart',
+        type: type
+      }
+    },
+    'seckill': {
+      apiName: 'getMarketingList',
+      params: {
+        name: queryString,
+        statuses: 'ongoing,unstart',
+        type: type
+      }
+    }
+  }
+}
+
 export default {
   name: 'course-modal',
   mixins: [marketingMixins],
@@ -163,58 +213,11 @@ export default {
       this.courseSets = [...this.courseSets, item];
     },
     searchHandler(queryString, cb) {
+      const apiConfigObj = apiConfig(this.type, queryString);
       this.hideLoading = false;
-      if (this.type === 'classroom_list') {
-        this.getClassList({
-          title: queryString
-        }).then(res => {
-          cb(res.data);
-        }).catch((err) => {
-          this.hideLoading = true;
-          this.$message({
-            message: err.message,
-            type: 'error'
-          });
-        });
-        return;
-      }
-      if (this.type === 'groupon') {
-        this.getMarketingList({
-          name: queryString,
-          statuses: 'ongoing,unstart',
-          type: this.type,
-          itemType: 'course'
-        }).then(res => {
-          cb(res.data);
-        }).catch((err) => {
-          this.hideLoading = true;
-          this.$message({
-            message: err.message,
-            type: 'error'
-          });
-        });
-        return;
-      }
-      if (this.type === 'coupon') {
-        this.getCouponList({
-          name: queryString,
-          unexpired: 1,
-          unreceivedNumGt: 0
-        }).then(res => {
-          cb(res.data);
-        }).catch((err) => {
-          this.hideLoading = true;
-          this.$message({
-            message: err.message,
-            type: 'error'
-          });
-        });
-        return;
-      }
-
-      this.getCourseList({
-        courseSetTitle: queryString
-      }).then(res => {
+      this[apiConfigObj[this.type].apiName](
+        apiConfigObj[this.type].params
+      ).then(res => {
         cb(res.data);
       }).catch((err) => {
         this.hideLoading = true;
@@ -223,6 +226,7 @@ export default {
           type: 'error'
         });
       });
+      return;
     }
   }
 }

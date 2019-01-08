@@ -35,6 +35,15 @@
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
       @updateModule="updateHandler(module, index)"></marketing-groupon>
 
+    <!-- 营销组件——砍价 -->
+    <marketing-groupon v-if="module.type === moduleDefault.cut.type"
+      :active="isActive" :moduleData="module" :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"></marketing-groupon>
+
+    <!-- 营销组件——秒杀 -->
+    <marketing-groupon v-if="module.type === moduleDefault.seckill.type"
+      :active="isActive" :moduleData="module" :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"></marketing-groupon>
     <img class="icon-delete" src="static/images/delete.png" @click="handleRemove(module, index)" v-show="isActive">
   </div>
 </template>

@@ -68,6 +68,62 @@ const head = {
       label: 'delete',
     }
   ],
+  cut: [
+    {
+      col: 3,
+      title: '活动名称',
+      label: 'name',
+    },
+     {
+      col: 2,
+      title: '商品原价',
+      label: 'originPrice',
+    }, {
+      col: 1,
+      title: '最低售价',
+      label: 'lowestPrice',
+    }, {
+      col: 1,
+      title: '砍价次数',
+      label: 'rule',
+    }, {
+      col: 3,
+      title: '创建时间',
+      label: 'createdTime',
+    }, {
+      col: 0,
+      title: '操作',
+      label: 'delete'
+    }
+  ],
+  seckill: [
+    {
+      col: 3,
+      title: '活动名称',
+      label: 'name',
+    },
+     {
+      col: 2,
+      title: '商品原价',
+      label: 'originPrice',
+    }, {
+      col: 1,
+      title: '最低售价',
+      label: 'lowestPrice',
+    }, {
+      col: 1,
+      title: '商品个数',
+      label: 'rule',
+    }, {
+      col: 3,
+      title: '创建时间',
+      label: 'createdTime',
+    }, {
+      col: 0,
+      title: '操作',
+      label: 'delete'
+    }
+  ],
   coupon: [
     {
       col: 3,
@@ -95,7 +151,7 @@ const head = {
       title: '操作',
       label: 'delete'
     }
-  ]
+  ],
 };
 
 export default head;

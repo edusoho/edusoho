@@ -16,6 +16,12 @@ const tableFilter = (item, label) => {
       }
       const date = new Date(item['deadline']);
       return formatTime(date).slice(0, 10);
+    case 'createdTime':
+     if (!item['createdTime']) {
+        return '未知日期'
+      }
+      const date1 = new Date(item['createdTime']);
+      return formatTime(date1);
     case 'delete':
       return `移除`;
     case 'price':
@@ -25,6 +31,9 @@ const tableFilter = (item, label) => {
       return `${item['price']}元`;
     case 'generatedNum':
       return `${item['unreceivedNum']} / ${item['generatedNum']}`;
+    case 'rule':
+      const count = item.rule.times || item.rule.productSum;
+      return Number(count);
     case 'rate':
       let targetType = '全部商品';
       let discountType = '折扣';

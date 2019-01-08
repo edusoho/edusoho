@@ -75,6 +75,16 @@ $tag-color: #FF5722;
           background: #E1E1E1;
         }
       }
+      .type-tag {
+        float: left;
+        padding: 4px;
+        margin-right: 5px;
+        line-height: 1;
+        background-color: #fff0ef;
+        border-radius: 2px;
+        font-size: 10px;
+        color: #FF5353;
+      }
     }
   }
 }
