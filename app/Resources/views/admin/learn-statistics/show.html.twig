@@ -20,6 +20,7 @@
       { 'exportFileName': 'user-learn-statistics', 
         'targetFormId': 'user-search'}  
       %}
+      {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'user.learn.statistics.manage.describe_tips'|trans|raw, placement: 'left'} %}
     </form>
     <table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
       <thead>
