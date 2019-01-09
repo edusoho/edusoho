@@ -168,10 +168,10 @@ const TYPE_TEXT_DEFAULT = {
     text: '优惠券'
   },
   cut: {
-    text: '砍价活动'
+    text: '活动'
   },
   seckill: {
-    text: '秒杀活动'
+    text: '活动'
   }
 }
 

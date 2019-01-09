@@ -27,7 +27,7 @@
         </div>
         <div class="groupon-item-setting__section clearfix">
           <p class="pull-left section-left">活动标签：</p>
-          <div class="section-right">
+          <div class="section-right pull-left">
             <el-input size="mini" v-model="copyModuleData.tag" maxLength="8" placeholder="请输入活动名称" clearable></el-input>
           </div>
         </div>
