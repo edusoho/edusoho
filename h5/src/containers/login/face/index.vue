@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <span class='login-title'>确认账号</span>
+    <span class="login-title">确认账号</span>
     <van-field v-model.trim="username"
       class="login-input e-input"
       placeholder="请输入邮箱/手机/用户名"v-on:input="checkName"/>

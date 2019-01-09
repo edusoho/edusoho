@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <e-loading v-if="isLoading"></e-loading>
-    <span class='register-title'>注册账号</span>
+    <span class="register-title">注册账号</span>
 
       <van-field
         ref="mobile"

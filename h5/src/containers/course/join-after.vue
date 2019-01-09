@@ -147,9 +147,6 @@ export default {
         confirmCallback = () => {
           this.$router.push({
             path: `/vip`,
-            query: {
-              id: this.user.vip && this.user.vip.levelId,
-            }
           });
         };
         this.callConfirm(errorMessage, confirmCallback);
@@ -193,8 +190,8 @@ export default {
     },
     callConfirm(message, callback) {
       Dialog.confirm({
+        message,
         title: '',
-        message: message,
       }).then(() => {
         callback();
       }).catch(() => {})

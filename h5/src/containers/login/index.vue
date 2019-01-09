@@ -1,7 +1,7 @@
 <template>
   <div class="login" :style="{ height: bodyHeight + 'px'}">
-    <span class='login-title'>登录账号</span>
-    <img class='login-avatarimg' src="" />
+    <span class="login-title">登录账号</span>
+    <img class="login-avatarimg" src="" />
     <van-field v-model="username"
       :autosize="{ maxHeight: 24 }"
       type="textarea"
@@ -15,7 +15,7 @@
       placeholder="请输入密码" />
     <van-button type="default" class="primary-btn mb20" @click="onSubmit" :disabled="btnDisable">登录</van-button>
     <div class="login-bottom">
-      <!-- <router-link to="/register" class='login-account'>找回密码</router-link> -->
+      <!-- <router-link to="/register" class="login-account">找回密码</router-link> -->
       还没有注册帐号？
       <span class="login-account" @click="jumpRegister">立即注册</span>
     </div>
