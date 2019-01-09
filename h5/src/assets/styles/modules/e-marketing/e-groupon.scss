@@ -63,7 +63,7 @@ $tag-color: #FF5722;
         padding: vw(6) vw(16);
         color: #FFFFFF;
         font-size: vw(14);
-        border-radius: vw(2);
+        border-radius: vw(42);
         &.unstart {
           background: #FF9800;
           opacity: 0.4;
@@ -74,6 +74,16 @@ $tag-color: #FF5722;
         &.closed {
           background: #E1E1E1;
         }
+      }
+      .type-tag {
+        float: left;
+        padding: 4px;
+        margin-right: 5px;
+        line-height: 1;
+        background-color: #fff0ef;
+        border-radius: 2px;
+        font-size: 10px;
+        color: #FF5353;
       }
     }
   }

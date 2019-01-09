@@ -31,6 +31,14 @@
         :showTitle="part.data.titleShow"
         :sort="part.data.sort"
         :feedback="feedback"></e-vip-list>
+      <e-groupon
+        class="gray-border-bottom"
+        v-if="['groupon', 'cut', 'seckill'].includes(part.type)"
+        :activity="part.data.activity"
+        :showTitle="part.data.titleShow"
+        :type="part.type"
+        @couponHandle="couponHandle($event)"
+        :feedback="feedback"></e-groupon>
     </div>
   </div>
 </template>
@@ -38,6 +46,7 @@
 <script>
   import courseList from '../components/e-course-list/e-course-list.vue';
   import poster from '../components/e-poster/e-poster.vue';
+  import marketPart from '../components/e-marketing/e-groupon/index.vue';
   import swipe from '../components/e-swipe/e-swipe.vue';
   import couponList from '../components/e-coupon-list/e-coupon-list.vue';
   import vipList from '../components/e-vip-list/e-vip-list.vue';
@@ -54,6 +63,7 @@
       'e-poster': poster,
       'e-coupon-list': couponList,
       'e-vip-list': vipList,
+      'e-groupon': marketPart
     },
     mixins: [getCouponMixin],
     props: {

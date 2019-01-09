@@ -20,8 +20,7 @@
           font-size: 14px;
         }
         .section-right {
-          display: inline-block;
-          width: 212px;
+          position: relative;
           line-height: 28px;
         }
       }
@@ -33,6 +32,13 @@
 .e-groupon {
   margin: 10px 20px;
   border-radius: 4px;
+  .e-coupon__title {
+    line-height: 1;
+    font-size: 18px;
+    color: #2B333B;
+    margin-top: 15px;
+    margin-bottom: 20px;
+  }
   &__tag {
     top: 20px;
     left: 14px;
@@ -67,7 +73,7 @@
       &__shopping {
         padding: 6px 16px;
         font-size: 14px;
-        border-radius: 2px;
+        border-radius: 42px;
       }
     }
   }
