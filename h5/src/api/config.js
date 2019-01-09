@@ -6,7 +6,8 @@ import order from './order/index';
 import me from './me/index';
 import coupon from './coupon/index';
 import vip from './vip/index';
+import marketing from './marketing/index';
 
-const config = [...classroom, ...course, ...lesson, ...me, ...order, ...setting, ...coupon, ...vip];
+const config = [...classroom, ...course, ...lesson, ...me, ...order, ...setting, ...coupon, ...vip, ...marketing];
 
 export default config;

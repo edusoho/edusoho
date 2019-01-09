@@ -1,14 +1,14 @@
-$tag-color: #FF5722;
+$tag-color: #FF5353;
 
 .e-groupon {
-  margin: vw(10) vw(20);
+  position: relative;
+  padding: vw(25) vw(20);
   border-radius: vw(4);
   background: #FFFFFF;
   overflow: hidden;
   &__tag {
-    display: inline-block;
     position: absolute;
-    top: vw(20);
+    top: vw(73);
     left: vw(14);
     padding: 0 vw(12) 0 vw(6);
     background: $tag-color;

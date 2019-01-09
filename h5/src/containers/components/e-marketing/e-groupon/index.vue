@@ -9,9 +9,9 @@
       <div class="context-title text-overflow">{{ activity.name || '拼团活动' }}</div>
       <div class="context-sale">
         <div class="type-tag" v-if="type === 'cut'">砍价享</div>
-        <div class="context-sale__sale-price">￥{{ activity.memberPrice || '00.00' }}</div>
+        <div class="context-sale__sale-price">￥{{ activityPrice }}</div>
         <div v-if="activity.originPrice" class="context-sale__origin-price">原价{{ activity.originPrice }} 元</div>
-        <a class="context-sale__shopping" :class="activity.status" href="javascript:;">{{ grounponStatus[activity.status] }}</a>
+        <a class="context-sale__shopping" :class="activity.status" href="javascript:;">{{ grounponStatus[type][activity.status]}}</a>
       </div>
     </div>
   </div>
@@ -41,9 +41,21 @@ export default {
   data () {
     return {
       grounponStatus: {
-        unstart: '活动未开始',
-        ongoing: '去拼团',
-        closed: '活动已结束'
+        'groupon': {
+          unstart: '活动未开始',
+          ongoing: '去拼团',
+          closed: '活动已结束'
+        },
+        'cut': {
+          unstart: '活动未开始',
+          ongoing: '发起砍价',
+          closed: '活动已结束'
+        },
+        'seckill': {
+          unstart: '活动未开始',
+          ongoing: '马上秒',
+          closed: '活动已结束'
+        }
       }
     }
   },
@@ -52,6 +64,12 @@ export default {
       if (this.type === 'seckill') return '秒杀';
       if (this.type === 'cut') return '砍价';
       return '拼团';
+    },
+    activityPrice() {
+      if (!Object.values(this.activity).length) return '00.00';
+      if (this.type === 'seckill') return this.activity.rule.seckillPrice;
+      if (this.type === 'cut') return this.activity.rule.lowestPrice;
+      if (this.type === 'groupon') return this.activity.rule.memberPrice;
     }
   }
 }
