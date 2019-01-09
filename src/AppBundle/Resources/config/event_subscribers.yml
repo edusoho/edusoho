@@ -304,3 +304,8 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    task_result_event_subscriber:
+        class: Biz\Task\Event\TaskResultSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
