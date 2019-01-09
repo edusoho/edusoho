@@ -34,7 +34,7 @@
       <e-groupon
         class="gray-border-bottom"
         v-if="['groupon', 'cut', 'seckill'].includes(part.type)"
-        :coupons="part.data.items"
+        :activity="part.data.activity"
         :showTitle="part.data.titleShow"
         :type="part.type"
         @couponHandle="couponHandle($event)"
