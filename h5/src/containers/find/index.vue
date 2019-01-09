@@ -19,14 +19,14 @@
         :feedback="feedback"/>
       <e-coupon-list
         class="gray-border-bottom"
-        v-if="part.type === 'coupon'"
+        v-if="part.type === 'coupon' && part.data.items && part.data.items.length"
         :coupons="part.data.items"
         :showTitle="part.data.titleShow"
         @couponHandle="couponHandle($event)"
         :feedback="feedback"></e-coupon-list>
       <e-vip-list
         class="gray-border-bottom"
-        v-if="part.type === 'vip' && vipSwitch"
+        v-if="part.type === 'vip' && vipSwitch && part.data.items && part.data.items.length"
         :items="part.data.items"
         :showTitle="part.data.titleShow"
         :sort="part.data.sort"
