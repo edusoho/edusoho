@@ -1,5 +1,12 @@
+{% set type = type|default('discussion') %}
+
+{% set courseUrl = type == 'discussion' ? 'my_discussions' : 'my_questions' %}
+{% set courseTitle = type == 'discussion' ? 'my.learning.question.course_thread' : 'my.learning.class.question' %}
+{% set classroomUrl = type == 'discussion' ? 'my_classroom_discussions' : 'my_classroom_questions' %}
+{% set classroomTitle = type == 'discussion' ? 'my.learning.question.classroom_thread' : 'my.learning.classroom.question' %}
+
 <ul class="nav nav-pills">
-	<li class="{% if threadType == 'course' %}active{% endif %}"><a href="{{ path('my_discussions') }}">{{'my.learning.question.course_thread'|trans}}</a></li>
-	<li class="{% if threadType == 'classroom' %}active{% endif %}"><a href="{{ path('my_classroom_discussions') }}">{{'my.learning.question.classroom_thread'|trans({'%classroomName%':setting('classroom.name')|default('classroom'|trans) })}}</a></li>
+  <li class="{% if threadType == 'course' %}active{% endif %}"><a href="{{ path(courseUrl) }}">{{ courseTitle|trans }}</a></li>
+  <li class="{% if threadType == 'classroom' %}active{% endif %}"><a href="{{ path(classroomUrl) }}">{{ classroomTitle|trans({'%classroomName%':setting('classroom.name')|default('classroom'|trans) })}}</a></li>
 </ul>
 <br>
