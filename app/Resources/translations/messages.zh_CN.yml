@@ -3824,7 +3824,7 @@ my.teaching.live_schedule_menu: 教学课表
 my.teaching.hints_block: (当前仅展示直播课程)
 my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
-my.teaching.question_menu: 学员问题
+my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
 my.teaching.testpaper_check_menu: 试卷批阅
 my.teaching.homework_check_menu: 作业批阅
@@ -3836,9 +3836,11 @@ my.teaching.open_course.normal: 录播公开课
 my.teaching.open_course.live: 直播公开课
 my.teaching.open_course.live_remind: 直播提醒
 my.teaching.threads_discussion: 课程学员话题
+my.teaching.threads_question: 课程学员问答
 my.teaching.classroom.threads_discussion: %classroom%学员话题
 my.teaching.classroom.threads_discussion.nickname: 话题作者
 my.teaching.classroom.threads_event.nickname: 活动发起人
+my.teaching.classroom.threads_question: %classroom%学员问答
 my.teaching.classroom.threads_question.nickname: 话题作者
 my.teaching.classroom: 所教%classroom%
 my.teaching.classroom.manage_btn: 管理%classroom%
@@ -4236,7 +4238,7 @@ my.learning.thread.browse: 浏览
 my.learning.thread.question_empty: 你还没提过问题
 my.learning.thread.empty: 你还没有发表过话题
 my.learning.thread.task_id: 课时%taskId%
-my.learning.thread.target_course: "来自<a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a>\n"
+my.learning.thread.target_course_from: 来自
 my.learning.thread.target_course_deleted: 课程已删除
 
 # 我的课程
@@ -9494,6 +9496,7 @@ exception.user_lock: 账户被封禁，请联系管理员
 exception.user.password_error: 用户名密码错误
 exception.user.login_limit: 登录限制！
 exception.user.lock_self_denied: 您不能封禁自己
+exception.user.datefield_invalid: 日期类型字段没有按日期格式填写
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败
