@@ -24,15 +24,9 @@ class TaskResultSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $testpaperResult = $event->getSubject();
 
-        $tasks = $this->getTaskService()->findTasksByActivityIds(array($testpaperResult['lessonId']));
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($testpaperResult['courseId'], $testpaperResult['lessonId']);
         $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-
-        if (empty($tasks)) {
-            return;
-        }
-
-        $task = $tasks[$testpaperResult['lessonId']];
 
         if ($testpaperResult['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
             $this->finishTaskResult($task['id'], $testpaperResult['userId']);
