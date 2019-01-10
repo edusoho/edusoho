@@ -9,7 +9,7 @@ use Biz\Marketing\Util\MarketingUtils;
 class MarketingActivityFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'item_type', 'item_source_id', 'order', 'rule', 'item_cover', 'created_time', 'start_time', 'end_time',
+        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'item_type', 'item_source_id', 'order', 'rule', 'item_cover', 'product_remaind', 'created_time', 'start_time', 'end_time',
     );
 
     protected function publicFields(&$data)
@@ -25,6 +25,9 @@ class MarketingActivityFilter extends Filter
 
         $data['cover'] = $data['item_cover'];
         unset($data['item_cover']);
+
+        $data['productRemaind'] = $data['product_remaind'];
+        unset($data['product_remaind']);
 
         Converter::timestampToDate($data['created_time']);
         $data['createdTime'] = $data['created_time'];
