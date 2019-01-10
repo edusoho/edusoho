@@ -183,9 +183,10 @@
 
         if (!this.$store.state.token) {
           this.$router.push({
-            name: 'login',
+            name: 'prelogin',
             query: {
-              redirect: this.redirect
+              redirect: this.redirect,
+              doLogin: 1
             }
           });
           return;

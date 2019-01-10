@@ -19,7 +19,6 @@
           message: '正在登陆'
         });
         code = code[0].slice(6, -1);
-        console.log(code)
         await Api.login({
           params: {
             code: code,
@@ -41,8 +40,13 @@
         }).catch(err => {
           window.location.href = '/login/bind/weixinmob?os=h5&_target_path='
                   +
-                  encodeURIComponent('/h5/#/prelogin');
+                  encodeURIComponent('/h5/#/prelogin?doLogin=1');
         })
+      }
+    },
+    mounted() {
+      if (this.$route.query.doLogin) {
+        this.goLogin()
       }
     },
   methods: {
@@ -70,8 +74,14 @@
     async redirectIfWeChatEnabled() {
       Api.loginConfig({}).then(res => {
         if (res.weixinmob_enabled == 1) {
-          let redirectUrl = encodeURIComponent(location.origin + '/h5/#/prelogin');
-          window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+res.weixinmob_key+'&redirect_uri='+redirectUrl+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'
+          const redirect = this.$route.query.redirect || '/';
+          const redirectUrl =
+                  encodeURIComponent(location.origin + '/h5/#/prelogin?redirect=' + redirect);
+          window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
+                  +res.weixinmob_key
+                  +'&redirect_uri='
+                  +redirectUrl
+                  +'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'
         } else {
           Toast.clear()
           this.goOriginLogin()
