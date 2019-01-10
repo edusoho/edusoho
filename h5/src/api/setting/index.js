@@ -36,5 +36,15 @@ export default [
     name: 'updateFile',
     url: '/files',
     method: 'POST'
+  },
+  {
+    name: 'weixinConfig',
+    url: '/settings/weixinConfig',
+    method: 'GET'
+  },
+  {
+    name: 'loginConfig',
+    url: '/settings/login',
+    method: 'GET'
   }
 ];

@@ -195,6 +195,10 @@ router.beforeEach((to, from, next) => {
     });
   }
 
+  if (location.search && !['prelogin'].includes(to.name)) {
+    window.location.href = location.origin + to.fullPath;
+  }
+
   if (!Object.keys(store.state.settings).length) {
     // 获取全局设置
     store.dispatch('getGlobalSettings', {
