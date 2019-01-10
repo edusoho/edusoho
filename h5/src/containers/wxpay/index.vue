@@ -22,6 +22,8 @@
 import Api from '@/api'
 import axios from 'axios'
 import { mapState } from 'vuex';
+import { Toast } from 'vant';
+
 export default {
   data () {
     return {
@@ -64,6 +66,8 @@ export default {
 
           }
         );
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     },
   }
