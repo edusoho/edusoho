@@ -25,6 +25,14 @@
       font-size: vw(12);
       color: #71777D;
     }
+    .vip-name {
+      width: 80%;
+      display: inline-block;
+      line-height: 1;
+    }
+    .vip-name-short {
+      width: 50%;
+    }
     .vip-img {
       position: relative;
       top: vw(3);

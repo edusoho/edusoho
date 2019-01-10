@@ -29,6 +29,7 @@ export default [
     // 获取微信支付信息
     name: 'getTrade',
     url: '/trades/{tradesSn}',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }
 ];
