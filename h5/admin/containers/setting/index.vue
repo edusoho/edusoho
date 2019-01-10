@@ -50,7 +50,9 @@
             {{ item.name }}
           </el-button>
         </div>
-        <div class="section-title">营销组件 <a class="color-primary pull-right text-12" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a></div>
+        <div class="section-title">营销组件
+          <a class="color-primary pull-right text-12" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a>
+        </div>
         <div class="section-button-group clearfix">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
             v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
