@@ -1252,11 +1252,13 @@ course.order.end_time: 结束时间
 course.replay_manage: 录播管理
 course.replay_manage.content_title: 录播管理
 course.replay_manage.empty: 暂无直播内容！
-course.replay_manage.tips: 提示：上传录像文件后无法再生成在线录像!
+course.replay_manage.tips: >
+  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
+  <div class="cd-text-medium">注意，上传视频文件后无法再使用录制文件作为回放。</div>
 course.replay_manage.unpublished: 未发布
 course.replay_manage.live_not_stop: 直播未结束
-course.replay_manage.ungenerated: 未录制回放
-course.replay_manage.generated: 已录制回放
+course.replay_manage.ungenerated: 未生成回放
+course.replay_manage.generated: 已生成回放
 course.replay_manage.video_generated.file_exsist: 已上传录像
 course.replay_manage.video_generated.file_not_exsist: 回放视频文件已删除
 course.replay_manage.record: 录制
@@ -1998,11 +2000,13 @@ course.live.replay_manage.upload_mode_not_cloud_tips: >
 course.live.replay_manage.file_empty_tips: 暂无视频文件，请先上传。
 course.live.replay_manage.content_title: 录播管理
 course.live.replay_manage.lesson_empty_tips: 暂无课时内容！
-course.live.replay_manage.upload_tips: 提示：上传录像文件后 <b>无法再生成</b> 在线录像
+course.live.replay_manage.upload_tips: >
+  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
+  <div class="cd-text-medium">注意，上传视频文件后无法再使用录制文件作为回放。</div>
 course.live.replay_manage.lesson_status.unpublished: 未发布
 course.live.replay_manage.lesson_status.published: 直播未结束
-course.live.replay_manage.lesson_replay_status.ungenerated: 未录制回放
-course.live.replay_manage.lesson_replay_status.generated: 已录制回放
+course.live.replay_manage.lesson_replay_status.ungenerated: 未生成回放
+course.live.replay_manage.lesson_replay_status.generated: 已生成回放
 course.live.replay_manage.lesson_replay_status.videoGenerated: 已上传录像
 course.live.replay_manage.lesson_replay_status.videoGenerated_and_file_empty: 回放视频文件已删除
 course.live.replay_manage.lesson_edit_btn: 编辑

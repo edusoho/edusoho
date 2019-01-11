@@ -1099,11 +1099,13 @@ course.order.end_time: 'End time'
 course.replay_manage: Playback
 course.replay_manage.content_title: Playback
 course.replay_manage.empty: 'No live courses yet！'
-course.replay_manage.tips: 'Tip: You can not generate an online video after uploading a video file!'
+course.replay_manage.tips: >
+  Tip: for the lessons of ungenerated playback, you can click the button <i class="es-icon es-icon-videocam color-gray mh5"></i> to use the recorded video during the live stream or click the button <i class="glyphicon glyphicon-paperclip color-gray mh5"></i> to upload a video by yourself.
+  <div><b>Attention please, you can not generate an online video after uploading a video file!</b></div>
 course.replay_manage.unpublished: Unpublished
 course.replay_manage.live_not_stop: 'Live not finished'
-course.replay_manage.ungenerated: 'Playback not recorded'
-course.replay_manage.generated: 'Playback recorded'
+course.replay_manage.ungenerated: 'Ungenerated playback'
+course.replay_manage.generated: 'Generated playback'
 course.replay_manage.video_generated.file_exsist: 'The video has been uploaded'
 course.replay_manage.video_generated.file_not_exsist: 'The video has been deleted'
 course.replay_manage.record: Record
@@ -1751,11 +1753,13 @@ course.live.replay_manage.upload_mode_not_cloud_tips: "<li>Support<strong>mp4</s
 course.live.replay_manage.file_empty_tips: 'No video fund, please upload.'
 course.live.replay_manage.content_title: 'Playbacks'
 course.live.replay_manage.lesson_empty_tips: 'No lessons found'
-course.live.replay_manage.upload_tips: 'Tip: Can not generate </ b> online video after uploading a video file.'
+course.live.replay_manage.upload_tips: >
+  Tip: for the lessons of ungenerated playback, you can click the button <i class='es-icon es-icon-videocam color-gray mh5'></i> to use the recorded video during the live stream or click the button <i class='glyphicon glyphicon-paperclip color-gray mh5'></i> to upload a video by yourself.
+  <div><b>Attention please, you can not generate an online video after uploading a video file!</b></div>
 course.live.replay_manage.lesson_status.unpublished: Unpublished
 course.live.replay_manage.lesson_status.published: 'Live in progress'
-course.live.replay_manage.lesson_replay_status.ungenerated: 'No recorded playback'
-course.live.replay_manage.lesson_replay_status.generated: 'Recorded playback'
+course.live.replay_manage.lesson_replay_status.ungenerated: 'Ungenerated playback'
+course.live.replay_manage.lesson_replay_status.generated: 'Generated playback'
 course.live.replay_manage.lesson_replay_status.videoGenerated: 'Uploaded video'
 course.live.replay_manage.lesson_replay_status.videoGenerated_and_file_empty: 'The playback has been deleted.'
 course.live.replay_manage.lesson_edit_btn: Edit

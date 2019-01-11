@@ -18,6 +18,6 @@
         {% include 'course-manage/live-replay/list-item.html.twig' with {course: course, task: task, activity: task.activity } %}
       {% endfor %}
     </ul>
-    <div class="color-warning">{{'course.replay_manage.tips'|trans}}</div>
+    <div class="color-warning">{{'course.replay_manage.tips'|trans|raw}}</div>
   </div>
 {% endblock %}
