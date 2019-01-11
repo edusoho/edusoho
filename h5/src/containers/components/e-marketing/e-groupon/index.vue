@@ -5,9 +5,13 @@
     <div class="e-groupon__image-container" :class="{ 'e-groupon__image-empty': !activity.cover }">
       <img v-if="activity.cover" class="e-groupon__image" :src="activity.cover" alt="">
     </div>
-    <div v-if="type === 'seckill'" class="seckill-countdown-container clearfix seckill-unstart">
-      <span class="pull-left status-title">秒杀中</span>
-      <span class="pull-right text-12">距离结束仅剩<span class="ml10">03:29:38</span></span>
+    <div v-if="type === 'seckill'" :class="['seckill-countdown-container clearfix', seckillClass]">
+      <span class="pull-left status-title">秒杀{{activity.status==='ongoing' && seckilling ? '中' : ''}}</span>
+      <div class="pull-right text-12" v-html="statusTitle">
+        <!-- <span v-if="activity.status==='unstart'">距离开抢<span class="ml10">03:29:38</span></span>
+        <span v-if="activity.status==='ongoing'">距离结束仅剩<span class="ml10">03:29:38</span></span>
+        <span v-else>秒杀已结束</span> -->
+      </div>
     </div>
     <div class="e-groupon__context">
       <div class="context-title text-overflow">{{ activity.name || '拼团活动' }}</div>
@@ -47,7 +51,11 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+      statusTitle: '',
+      seckillClass: 'seckill-unstart',
+      seckilling: false
+    }
   },
   computed: {
     activityTitle() {
@@ -71,14 +79,32 @@ export default {
           if(status === 'closed') return '活动已结束';
         case 'seckill':
           if(status === 'unstart') return '秒杀未开始';
-          if(status === 'closed') return '秒杀已结束';
+          if(status === 'closed') {
+            this.statusTitle = '秒杀已结束';
+            this.seckillClass = 'seckill-closed';
+            return '已结束';
+          }
           if(status === 'ongoing') {
-            if (this.activity.productRemaind == 0) {}
+            if (this.activity.productRemaind == 0) {
+              this.statusTitle = '商品已售空';
+              this.seckillClass = 'seckill-closed';
+            }
             const startStamp = new Date(this.activity.startTime).getTime();
             const endStamp = new Date(this.activity.endTime).getTime();
             const nowStamp = new Date().getTime();
-            if ((startStamp < nowStamp) && (nowStamp < endStamp)) return '秒杀中';
-            if (startStamp > nowStamp) return '';
+            const buyCountDownStamp = startStamp - nowStamp;
+            if ((startStamp < nowStamp) && (nowStamp < endStamp)) {
+              this.seckilling = true;
+              this.seckillClass = 'seckill-ongoing';
+              this.statusTitle = '距离结束仅剩<span class="ml10 mlm">03:29:38</span>';
+              return '马上秒'
+            };
+            if (startStamp > nowStamp) {
+              this.seckilling = false;
+              this.seckillClass = 'seckill-unstart';
+              this.statusTitle = '距离开抢<span class="ml10 mlm">03:29:38</span>';
+              return '提醒我'
+            };
           }
         case 'cut':
           if(status === 'unstart') return '砍价未开始';
