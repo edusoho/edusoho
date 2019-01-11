@@ -83,6 +83,7 @@ abstract class BaseTrade
             $tradeFields['order_sn'] = '';
             $tradeFields['amount'] = round(MathToolkit::simple($params['amount'], 100));
             $tradeFields['cash_amount'] = round(MathToolkit::simple($params['amount'], 100));
+            $params['amount'] = $tradeFields['amount'];
         }
 
         $tradeFields = array_merge($tradeFields, $this->getCustomFields($params));
