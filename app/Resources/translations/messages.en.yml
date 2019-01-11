@@ -8051,6 +8051,11 @@ user.learn.statistics.learned.seconds: 'Length of study (minutes)'
 user.learn.statistics.actual.amount: 'Total amount (CNY)'
 user.learn.statistics.empty: 'No user statistics'
 user.learn.statistics.init: 'Data upgrading, please wait'
+user.learn.statistics.manage.describe_tips: >
+  <div style='width:250px;'>
+    <h5 style='color:blue;margin:5px 0;'>User data instruction</h5>
+    <P style='margin:0;'>User data update daily from 00:00-02:00.</p>
+  </div>
 
 admin.datalab.setting.modal_title: 'Tips:'
 admin.datalab.setting.modal_enable_body: "When it is on, the data will update after 24 hours. Data doesn't update while it is off."

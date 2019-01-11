@@ -9358,6 +9358,11 @@ user.learn.statistics.learned.seconds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
+user.learn.statistics.manage.describe_tips: >
+  <div style='width:250px;'>
+    <h5 style='color:blue;margin:5px 0;'>用户数据说明</h5>
+    <P style='margin:0;'>用户数据每日00:00-02:00间更新。</p>
+  </div>
 
 
 admin.datalab.setting.modal_title: 提示：
