@@ -3,6 +3,7 @@
 namespace Biz\User\Event;
 
 use AppBundle\Common\StringToolkit;
+use Biz\User\CurrentUser;
 use Biz\User\Service\StatusService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -59,8 +60,12 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
 
     public function onCourseTaskFinish(Event $event)
     {
-        $user = $this->getCurrentUser();
-        if (empty($user) || !$user->isLogin()) {
+        $user = $event->getArgument('user');
+        if (empty($user)) {
+            return;
+        }
+
+        if ($user instanceof CurrentUser && !$user->isLogin()) {
             return;
         }
 
@@ -90,6 +95,7 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
                 'course' => $this->simplifyCousrse($course),
                 'task' => $this->simplifyTask($task),
             ),
+            'userId' => $user['id'],
         ));
     }
 
