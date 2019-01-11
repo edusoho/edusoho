@@ -345,6 +345,15 @@ class BuildCommand extends BaseCommand
             }
             $this->filesystem->mirror($dir->getRealpath(), "{$this->distDirectory}/web/bundles/{$dir->getFilename()}");
         }
+
+        $finder = new Finder();
+        $finder->directories()->in("{$this->rootDirectory}/web/static-dist");
+        foreach ($finder as $dir) {
+            $dirName = $dir->getFilename();
+            if (preg_match('/activity$/', $dirName)) {
+                $this->filesystem->mirror($dir->getRealpath(), "{$this->distDirectory}/web/static-dist/{$dirName}");
+            }
+        }
     }
 
     public function buildDefaultBlocks()
