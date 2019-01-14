@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { formatTime } from '@/utils/date-toolkit';
+import { dateTimeDown } from '@/utils/date-toolkit';
 
 export default {
   name: 'e-groupon',
@@ -54,7 +54,9 @@ export default {
     return {
       statusTitle: '',
       seckillClass: 'seckill-unstart',
-      seckilling: false
+      seckilling: false,
+      buyCountDownStamp: '',
+      startStamp: new Date(this.activity.startTime).getTime()
     }
   },
   computed: {
@@ -69,6 +71,13 @@ export default {
       if (this.type === 'cut') return this.activity.rule.lowestPrice;
       if (this.type === 'groupon') return this.activity.rule.memberPrice;
     }
+  },
+  created() {
+    this.countDown();
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
+    this.timer = null;
   },
   methods: {
     grouponStatus(status) {
@@ -89,20 +98,18 @@ export default {
               this.statusTitle = '商品已售空';
               this.seckillClass = 'seckill-closed';
             }
-            const startStamp = new Date(this.activity.startTime).getTime();
             const endStamp = new Date(this.activity.endTime).getTime();
             const nowStamp = new Date().getTime();
-            const buyCountDownStamp = startStamp - nowStamp;
-            if ((startStamp < nowStamp) && (nowStamp < endStamp)) {
+            if ((this.startStamp < nowStamp) && (nowStamp < endStamp)) {
               this.seckilling = true;
               this.seckillClass = 'seckill-ongoing';
-              this.statusTitle = '距离结束仅剩<span class="ml10 mlm">03:29:38</span>';
+              this.statusTitle = `距离结束仅剩<span class="ml10 mlm">${this.buyCountDownStamp}</span>`;
               return '马上秒'
             };
-            if (startStamp > nowStamp) {
+            if (this.startStamp > nowStamp) {
               this.seckilling = false;
               this.seckillClass = 'seckill-unstart';
-              this.statusTitle = '距离开抢<span class="ml10 mlm">03:29:38</span>';
+              this.statusTitle = `距离开抢<span class="ml10 mlm">${this.buyCountDownStamp}</span>`;
               return '提醒我'
             };
           }
@@ -111,6 +118,11 @@ export default {
           if(status === 'ongoing') return '发起砍价';
           if(status === 'closed') return '砍价已结束';
       }
+    },
+    countDown() {
+      const timer = setInterval(() => {
+        this.buyCountDownStamp = dateTimeDown(this.startStamp);
+      }, 1000);
     }
   }
 }

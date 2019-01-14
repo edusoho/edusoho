@@ -68,6 +68,23 @@ const formatCompleteTime = date => {
   return time.slice(0, -3);
 };
 
+const dateTimeDown = date => {
+  const now = new Date().getTime();
+  if (now > date) {
+    return '已到期';
+  }
+  const diff = parseInt((date - now) / 1000, 10);
+  let day = parseInt(diff / 24 / 60 / 60, 10);
+  let hour = parseInt((diff / 60 / 60) % 24, 10);
+  let minute = parseInt((diff / 60) % 60, 10);
+  let second = parseInt(diff % 60, 10);
+  day = day ? `${day}天` : '';
+  hour = hour ? `${hour}小时` : '';
+  minute = minute ? `${minute}分` : '';
+  second = second ? `${second}秒` : '';
+  return day + hour + minute + second;
+};
+
 // days（传时间戳）
 const getOffsetDays = (time1, time2) => {
   const offsetTime = Math.abs(time1 - time2);
@@ -80,5 +97,6 @@ export {
   formatSimpleTime,
   formatTimeByNumber,
   formatCompleteTime,
+  dateTimeDown,
   getOffsetDays
 };
