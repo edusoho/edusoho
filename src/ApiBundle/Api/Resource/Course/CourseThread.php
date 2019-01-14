@@ -6,7 +6,8 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\Common\CommonException;
+use Biz\File\UploadFileException;
 
 class CourseThread extends AbstractResource
 {
@@ -52,7 +53,7 @@ class CourseThread extends AbstractResource
             $task = $this->getTaskService()->getTask($taskId);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
             if (!isset($activity['ext']['file'])) {
-                throw new BadRequestHttpException('被提问资源不存在', null, '404');
+                throw UploadFileException::NOTFOUND_FILE();
             }
             $videoId = $activity['ext']['file']['id'];
             $conditions['videoId'] = isset($videoId) ? $videoId : 0;
@@ -97,7 +98,7 @@ class CourseThread extends AbstractResource
         $fields['courseId'] = $courseId;
         $fields['source'] = 'app';
         if (!ArrayToolkit::requireds($fields, array('content', 'courseId', 'type'))) {
-            throw new BadRequestHttpException('缺少必填字段', null, 5000305);
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         if (isset($fields['taskId'])) {

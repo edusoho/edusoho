@@ -30,6 +30,10 @@ class CourseThreadSubscriber extends EventSubscriber implements EventSubscriberI
             $fileId = ($activity['mediaType'] == 'video') ? $activity['ext']['file']['id'] : 0;
             $file = $this->getUploadFileService()->getFile($fileId);
             $result = $this->getMaterialLibService()->getThumbnail($file['globalId'], array('seconds' => $thread['videoAskTime']));
+            while ($result['status'] == 'waiting') {
+                sleep(3);
+                $result = $this->getMaterialLibService()->getThumbnail($file['globalId'], array('seconds' => $thread['videoAskTime']));
+            }
             if ($result['status'] == 'success') {
                 $this->getCourseThreadService()->updateThread($thread['courseId'], $thread['id'], array('askVideoThumbnail' => $result['url']));
             }

@@ -3206,9 +3206,11 @@ my.teaching.open_course.normal: 'Recorded Open Course'
 my.teaching.open_course.live: 'Live Open Courses'
 my.teaching.open_course.live_remind: 'Live remind'
 my.teaching.threads_discussion: 'Student discussion'
+my.teaching.threads_question: 'Student question'
 my.teaching.classroom.threads_discussion: '%classroom% discussion'
 my.teaching.classroom.threads_discussion.nickname: 'Discussion owner'
 my.teaching.classroom.threads_event.nickname: 'Activity owner'
+my.teaching.classroom.threads_question: '%classroom% question'
 my.teaching.classroom.threads_question.nickname: 'Discussion owner'
 my.teaching.classroom: 'Teaching %classroom%'
 my.teaching.classroom.manage_btn: 'Edit %classroom%'
@@ -3518,7 +3520,7 @@ my.learning.thread.browse: View
 my.learning.thread.question_empty: 'No record'
 my.learning.thread.empty: 'No record'
 my.learning.thread.task_id: 'Lesson %taskId%'
-my.learning.thread.target_course: "Come from <a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a>\n"
+my.learning.thread.target_course_from: "Come from"
 my.learning.thread.target_course_deleted: 'Course has been deleted'
 my.learning.course: 'My Course'
 my.learning.course.learning: Learning
@@ -8120,6 +8122,7 @@ exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enbale: Cloud SMS related settings are not enabled!
+exception.setting.attachment.setting_enbale: Cloud Attachement settings are not enabled!
 exception.sms.code_invalid: SMS verification code error
 exception.sms.type_error:
 exception.sms.send_failed:
@@ -8195,6 +8198,7 @@ exception.user.truename_invalid: Truename is invalid
 exception.user.lock_denied: 没有封禁该角色的权限
 exception.user.not_match_bind_email: 与绑定邮箱不符
 exception.user.login_limit: 登录限制！
+exception.user.datefield_invalid: 日期类型字段没有按日期格式填写
 
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
@@ -8490,3 +8494,5 @@ admin.sts_discovery_feature_tip: 更多功能敬请期待。。。
 admin.user_manage.lock_user.access_deniedexception_message: 没有封禁该角色的权限
 admin.course_manage.manage.tags: 标签
 admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级中允许显示班级人数
+
+course.question.question_background: Question Background
