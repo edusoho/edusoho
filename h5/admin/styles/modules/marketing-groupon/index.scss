@@ -57,9 +57,6 @@
   }
   &__context {
     padding: 10px 10px 20px 10px;
-    .context-title {
-
-    }
     .context-sale {
       margin-top:8px;
       &__sale-price {
@@ -70,8 +67,8 @@
         font-size: 12px;
       }
       &__shopping {
-        padding: 6px 16px;
-        font-size: 14px;
+        padding: 8px 14px;
+        font-size: 12px;
         border-radius: 42px;
       }
     }
