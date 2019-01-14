@@ -37,6 +37,10 @@ export default {
     state.user = payload;
     localStorage.setItem('user', JSON.stringify(payload));
   },
+  [types.BIND_MOBILE](state, payload) {
+    state.user.verifiedMobile = payload.verifiedMobile;
+    localStorage.setItem('user', JSON.stringify(state.user));
+  },
   [types.GET_SETTINGS](state, { key, setting }) {
     state[key] = setting;
   },

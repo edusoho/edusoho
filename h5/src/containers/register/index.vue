@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <e-loading v-if="isLoading"></e-loading>
-    <span class="register-title">注册账号</span>
+    <span class="register-title">{{ registerType[pathName] }}</span>
 
       <van-field
         ref="mobile"
@@ -19,7 +19,7 @@
         maxLength="20"
         :error-message="errorMessage.encrypt_password"
         @blur="validateMobileOrPsw('encrypt_password')"
-        placeholder="请设置密码（5-20位字符）"
+        :placeholder="placeHolder[pathName]"
       />
 
       <e-drag
@@ -51,7 +51,7 @@
       <van-button type="default"
         class="primary-btn mb20"
         :disabled="btnDisable"
-        @click="handleSubmit">注册</van-button>
+        @click="handleSubmit">{{ btnType[pathName] }}</van-button>
 
       <!-- <div class="login-bottom ">
         请详细阅读 <router-link to="/protocol">《用户服务协议》</router-link>
@@ -83,6 +83,18 @@ const emptyRegisterInfo = {
   smsToken: '',
   type: 'register'
 };
+const registerType = {
+  binding: '绑定手机',
+  register: '注册账号'
+}
+const btnType = {
+  binding: '绑定',
+  register: '注册'
+}
+const placeHolder = {
+  binding: '请输入密码',
+  register: '请设置密码（5-20位字符）'
+}
 
 export default {
   components: {
@@ -111,22 +123,27 @@ export default {
         showCount: false,
         num: 120,
         codeBtnDisable: false
-      }
+      },
+      pathName: this.$route.name,
+      registerType,
+      btnType,
+      placeHolder
     }
   },
   computed: {
+    ...mapState({
+      isLoading: state => state.isLoading
+    }),
     btnDisable() {
       return !(this.registerInfo.mobile
         && this.registerInfo.encrypt_password
         && this.registerInfo.smsCode);
     },
-    ...mapState({
-      isLoading: state => state.isLoading
-    })
   },
   methods: {
     ...mapActions([
       'addUser',
+      'setMobile',
       'sendSmsCenter',
       'userLogin'
     ]),
@@ -153,14 +170,47 @@ export default {
       this.handleSendSms();
     },
     handleSubmit() {
-      const password = this.registerInfo.encrypt_password;
-      const usertel = this.registerInfo.mobile;
+      const registerInfo = Object.assign({}, this.registerInfo);
+      const password = registerInfo.encrypt_password;
+      const mobile = registerInfo.mobile;
+
       if(this.submitFlag) {
         const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
-        this.registerInfo.encrypt_password = encrypt;
+        registerInfo.encrypt_password = encrypt;
         this.submitFlag = false;
       }
-      this.addUser(this.registerInfo)
+
+      // 手机绑定
+      if (this.pathName === 'binding') {
+        this.setMobile({
+          query: {
+            mobile,
+          },
+          data: {
+            password,
+            smsCode: registerInfo.smsCode,
+            smsToken: registerInfo.smsToken
+          }
+        })
+        .then(res => {
+          Toast.success({
+            duration: 2000,
+            message: '绑定成功'
+          });
+          const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
+          var jumpToLogin = () => {
+            this.$router.replace({ path: redirect });
+          }
+          setTimeout(jumpToLogin, 2000);
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+        return;
+      }
+
+      // 手机注册
+      this.addUser(registerInfo)
       .then(res => {
         Toast.success({
           duration: 2000,
@@ -168,14 +218,14 @@ export default {
         });
         const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
         var jumpToLogin = () => {
-          this.$router.replace({path: redirect});
+          this.$router.replace({ path: redirect });
         }
         setTimeout(jumpToLogin, 2000);
       })
       .then(() => {
         this.userLogin({
-          username: usertel,
-          password: password
+          password,
+          username: mobile,
         })
       })
       .catch(err => {

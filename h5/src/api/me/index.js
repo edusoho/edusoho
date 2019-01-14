@@ -65,6 +65,12 @@ export default [
     method: 'PATCH',
     disableLoading: true
   }, {
+    // 绑定手机
+    name: 'setMobile',
+    url: '/me/mobiles/{mobile}',
+    method: 'PUT',
+    disableLoading: true
+  }, {
     // 我的学习
     name: 'myStudyCourses',
     url: '/me/courses',
