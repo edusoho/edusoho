@@ -155,6 +155,40 @@ class ClassroomController extends BaseController
         ));
     }
 
+    public function classroomQuestionsAction(Request $request)
+    {
+        $user = $this->getUser();
+
+        $conditions = array(
+            'userId' => $user['id'],
+            'type' => 'question',
+            'targetType' => 'classroom',
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchThreadCount($conditions),
+            20
+        );
+        $threads = $this->getThreadService()->searchThreads(
+            $conditions,
+            'createdNotStick',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'lastPostUserId'));
+        $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($threads, 'targetId'));
+
+        return $this->render('my/learning/classroom/questions.html.twig', array(
+            'threadType' => 'classroom',
+            'paginator' => $paginator,
+            'threads' => $threads,
+            'users' => $users,
+            'classrooms' => $classrooms,
+        ));
+    }
+
     /**
      * @return ClassroomService
      */

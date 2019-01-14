@@ -4295,6 +4295,8 @@ my.learning.note.delete: 删除笔记
 
 # 我的问答
 my.learning.question: 我的问答
+my.learning.class.question: 课程问答
+my.learning.classroom.question: 班级问答
 my.learning.question.empty: 暂无提问的记录
 my.learning.question.course_thread: 课程话题
 my.learning.question.classroom_thread: %classroomName%话题
