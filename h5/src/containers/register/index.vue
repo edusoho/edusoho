@@ -203,12 +203,10 @@ export default {
             this.dragKey ++;
             this.registerInfo.dragCaptchaToken = '';
             this.registerInfo.smsToken = '';
-            Toast.fail(err.message);
-            return;
+            break;
           case 4030303:
-            this.dragEnable = true
-            Toast.fail(err.message);
-            return;
+            this.dragEnable = true;
+            break;
         }
         Toast.fail(err.message);
       });
