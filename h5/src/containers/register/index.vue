@@ -204,11 +204,13 @@ export default {
             this.registerInfo.dragCaptchaToken = '';
             this.registerInfo.smsToken = '';
             Toast.fail(err.message);
+            return;
           case 4030303:
             this.dragEnable = true
             Toast.fail(err.message);
-            break;
+            return;
         }
+        Toast.fail(err.message);
       });
     },
     // 倒计时
