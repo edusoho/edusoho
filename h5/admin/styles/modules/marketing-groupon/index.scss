@@ -59,8 +59,9 @@
     padding: 10px 10px 20px 10px;
     .context-sale {
       margin-top:8px;
+      line-height: 26px;
       &__sale-price {
-
+        font-size: 16px;
       }
       &__origin-price {
         margin-left: 5px;
@@ -70,6 +71,9 @@
         padding: 8px 14px;
         font-size: 12px;
         border-radius: 42px;
+      }
+      .type-tag {
+        top: 4px;
       }
     }
   }
