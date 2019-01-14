@@ -47,6 +47,8 @@ export default {
       query: {
         type: 'register'
       }
+    }).catch(err => {
+      Toast.fail(err.message)
     });
   },
   computed: {
@@ -77,7 +79,9 @@ export default {
       })
     },
     jumpRegister() {
-      if (this.registerSettings.mode == 'closed' || this.registerSettings.mode == 'email') {
+      if (!this.registerSettings
+        || this.registerSettings.mode == 'closed'
+        || this.registerSettings.mode == 'email') {
         Toast('网校未开启手机注册，请联系管理员');
         return;
       }
@@ -98,6 +102,8 @@ export default {
       } else {
         this.faceSetting = 0;
       }
+    }).catch(err => {
+      Toast.fail(err.message)
     });
   },
 }
