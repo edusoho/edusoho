@@ -5,7 +5,8 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\Common\CommonException;
+use Biz\File\UploadFileException;
 
 class CourseAttachment extends AbstractResource
 {
@@ -13,13 +14,13 @@ class CourseAttachment extends AbstractResource
     {
         $params = $request->query->all();
         if (!ArrayToolkit::requireds($params, array('targetType', 'targetId'))) {
-            throw new BadRequestHttpException('缺少参数', null, '500');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $this->getCourseService()->tryTakeCourse($courseId);
         $fileUseds = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($params['targetType'], $params['targetId'], 'attachment', false);
 
         if (!in_array($fileId, ArrayToolkit::column($fileUseds, 'fileId'))) {
-            throw new BadRequestHttpException('该文件没有被引用', null, '404');
+            throw UploadFileException::NOTFOUND_FILE();
         }
 
         $download = $this->getUploadFileService()->getDownloadMetas($fileId);

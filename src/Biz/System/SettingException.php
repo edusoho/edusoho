@@ -32,6 +32,8 @@ class SettingException extends AbstractException
 
     const AI_FACE_DISABLE = 5000812;
 
+    const FORBIDDEN_CLOUD_ATTACHMENT = 4030813;
+
     public $messages = array(
         4030801 => 'exception.setting.forbidden_mobile_register',
         4030802 => 'exception.sms.setting_enbale',
@@ -45,5 +47,6 @@ class SettingException extends AbstractException
         5000810 => 'exception.setting.coin_img_size_limit',
         5000811 => 'exception.setting.no_copyright',
         5000812 => 'exception.setting.ai_face_disable',
+        4030813 => 'exception.setting.attachment.setting_enbale',
     );
 }
