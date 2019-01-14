@@ -7,19 +7,15 @@
     </div>
     <div v-if="type === 'seckill'" :class="['seckill-countdown-container clearfix', seckillClass]">
       <span class="pull-left status-title">秒杀{{activity.status==='ongoing' && seckilling ? '中' : ''}}</span>
-      <div class="pull-right text-12" v-html="statusTitle">
-        <!-- <span v-if="activity.status==='unstart'">距离开抢<span class="ml10">03:29:38</span></span>
-        <span v-if="activity.status==='ongoing'">距离结束仅剩<span class="ml10">03:29:38</span></span>
-        <span v-else>秒杀已结束</span> -->
-      </div>
+      <div class="pull-right text-12" v-html="statusTitle"></div>
     </div>
     <div class="e-groupon__context">
       <div class="context-title text-overflow">{{ activity.name || '拼团活动' }}</div>
-      <div class="context-sale">
+      <div class="context-sale clearfix">
         <div class="type-tag" v-if="type !== 'groupon'">{{ type === 'cut' ? '砍价享' : '秒杀价' }}</div>
         <div class="context-sale__sale-price">￥{{ activityPrice }}</div>
         <div v-if="activity.originPrice" class="context-sale__origin-price">原价{{ activity.originPrice }} 元</div>
-        <a class="context-sale__shopping" :class="activity.status" href="javascript:;">
+        <a class="context-sale__shopping" :class="activity.status" href="javascript:;" @click="getMarketUrl(activity.status)">
           {{ grouponStatus(activity.status)}}
         </a>
       </div>
@@ -29,6 +25,7 @@
 
 <script>
 import { dateTimeDown } from '@/utils/date-toolkit';
+import Api from '@/api';
 
 export default {
   name: 'e-groupon',
@@ -55,7 +52,10 @@ export default {
       statusTitle: '',
       seckillClass: 'seckill-unstart',
       seckilling: false,
-      buyCountDownStamp: '',
+      buyCountDownText: '',
+      endCountDownText: '',
+      activityId: Number(this.activity.id),
+      endStamp: new Date(this.activity.endTime).getTime(),
       startStamp: new Date(this.activity.startTime).getTime()
     }
   },
@@ -87,7 +87,10 @@ export default {
           if(status === 'ongoing') return '去拼团';
           if(status === 'closed') return '活动已结束';
         case 'seckill':
-          if(status === 'unstart') return '秒杀未开始';
+          if(status === 'unstart') {
+            this.statusTitle = '秒杀未开始';
+            return '秒杀未开始';
+          }
           if(status === 'closed') {
             this.statusTitle = '秒杀已结束';
             this.seckillClass = 'seckill-closed';
@@ -98,18 +101,17 @@ export default {
               this.statusTitle = '商品已售空';
               this.seckillClass = 'seckill-closed';
             }
-            const endStamp = new Date(this.activity.endTime).getTime();
             const nowStamp = new Date().getTime();
-            if ((this.startStamp < nowStamp) && (nowStamp < endStamp)) {
+            if ((this.startStamp < nowStamp) && (nowStamp < this.endStamp)) {
               this.seckilling = true;
               this.seckillClass = 'seckill-ongoing';
-              this.statusTitle = `距离结束仅剩<span class="ml10 mlm">${this.buyCountDownStamp}</span>`;
+              this.statusTitle = `距离结束仅剩<span class="ml10 mlm">${this.endCountDownText}</span>`;
               return '马上秒'
             };
             if (this.startStamp > nowStamp) {
               this.seckilling = false;
               this.seckillClass = 'seckill-unstart';
-              this.statusTitle = `距离开抢<span class="ml10 mlm">${this.buyCountDownStamp}</span>`;
+              this.statusTitle = `距离开抢<span class="ml10 mlm">${this.buyCountDownText}</span>`;
               return '提醒我'
             };
           }
@@ -121,8 +123,20 @@ export default {
     },
     countDown() {
       const timer = setInterval(() => {
-        this.buyCountDownStamp = dateTimeDown(this.startStamp);
+        this.endCountDownText = dateTimeDown(this.endStamp);
+        this.buyCountDownText = dateTimeDown(this.startStamp);
       }, 1000);
+    },
+    getMarketUrl(status) {
+      if (status === 'ongoing' && this.seckilling) {
+        Api.marketingActivities({
+          query: {
+            activityId: this.activityId
+          }
+        }).then((res) => {
+          console.log(res,222)
+        })
+      }
     }
   }
 }

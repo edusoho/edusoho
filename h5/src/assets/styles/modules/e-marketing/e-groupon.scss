@@ -41,13 +41,15 @@ $tag-color: #FF5353;
     border-top: none;
     padding: vw(10) vw(10) vw(20) vw(10);
     .context-title {
-
+      font-weight: 500;
+      font-size: vw(14);
     }
     .context-sale {
       margin-top:vw(8);
+      line-height: vw(26);
       &__sale-price {
         display: inline-block;
-        font-size: 16px;
+        font-size: vw(16);
         color: $tag-color;
         font-weight: bold;
       }
@@ -77,6 +79,8 @@ $tag-color: #FF5353;
         }
       }
       .type-tag {
+        position: relative;
+        top: vw(4);
         float: left;
         padding: 4px;
         margin-right: 5px;

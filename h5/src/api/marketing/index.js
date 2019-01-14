@@ -1,6 +1,6 @@
 export default [
   {
-    // 领取优惠券
+    // 微营销活动
     name: 'marketingActivities',
     url: '/marketing_activities/{activityId}/urls',
     method: 'POST'

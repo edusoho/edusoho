@@ -1,7 +1,8 @@
+@import './activity/index.scss';
+
 .user {
   border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-
+  // border-bottom: 1px solid #eee;
   &-section {
     position: relative;
     padding: 25px 20px 25px 25px;
@@ -64,10 +65,21 @@
 }
 
 .orders {
-  margin-top: 1px;
+  margin-top: -20px;
   display: flex;
   flex-direction: column;
-
+  .orders-content {
+    margin-top: vw(20);
+  }
+  .van-tabs__line {
+    background-color: $primary-color;
+  }
+  .van-tab--active {
+    color: $primary-color;
+  }
+  .van-hairline--top-bottom::after {
+    border-top: none;
+  }
   &-title {
     margin:vw(25) 0 vw(16) vw(20);
     font-size: vw(18);
