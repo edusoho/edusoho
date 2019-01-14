@@ -28,7 +28,8 @@ export default [
     // 新增用户短信验证码
     name: 'getSmsCenter',
     url: '/sms_center',
-    method: 'POST'
+    method: 'POST',
+    disableLoading: true
   }, {
     // 新增用户
     name: 'addUser',
@@ -55,12 +56,14 @@ export default [
     // 修改头像
     name: 'setAvatar',
     url: '/me',
-    method: 'PATCH'
+    method: 'PATCH',
+    disableLoading: true
   }, {
     // 修改昵称
     name: 'setNickname',
     url: '/me/nicknames/h5',
-    method: 'PATCH'
+    method: 'PATCH',
+    disableLoading: true
   }, {
     // 我的学习
     name: 'myStudyCourses',

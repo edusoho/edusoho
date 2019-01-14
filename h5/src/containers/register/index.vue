@@ -23,6 +23,7 @@
       />
 
       <e-drag
+        ref="dragComponent"
         v-if="dragEnable"
         :key="dragKey"
         :info="registerInfo"
@@ -73,20 +74,23 @@ import { mapActions, mapState } from 'vuex';
 import XXTEA from '@/utils/xxtea.js';
 import { Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js'
+
+const emptyRegisterInfo = {
+  mobile: '',
+  dragCaptchaToken: '',
+  encrypt_password: '',
+  smsCode: '',
+  smsToken: '',
+  type: 'register'
+};
+
 export default {
   components: {
     EDrag
   },
   data() {
     return {
-      registerInfo: {
-        mobile: '',
-        dragCaptchaToken: '',
-        encrypt_password: '',
-        smsCode: '',
-        smsToken: '',
-        type: 'register'
-      },
+      registerInfo: emptyRegisterInfo,
       dragEnable: false,
       dragKey: 0,
       submitFlag: true,
@@ -179,7 +183,12 @@ export default {
       });
     },
     clickSmsBtn() {
-      this.dragEnable = true
+      if (!this.dragEnable) {
+        this.dragEnable = true
+        return;
+      }
+      // 验证码组件更新数据
+      this.$refs.dragComponent.initDragCaptcha();
     },
     handleSendSms() {
       this.sendSmsCenter(this.registerInfo)

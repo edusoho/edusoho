@@ -79,7 +79,9 @@ export default {
       })
     },
     jumpRegister() {
-      if (!this.registerSettings || this.registerSettings.mode == 'closed' || this.registerSettings.mode == 'email') {
+      if (!this.registerSettings
+        || this.registerSettings.mode == 'closed'
+        || this.registerSettings.mode == 'email') {
         Toast('网校未开启手机注册，请联系管理员');
         return;
       }
