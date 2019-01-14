@@ -35,6 +35,15 @@ export const addUser = ({ commit }, data) =>
     }).catch(err => reject(err));
   });
 
+export const setMobile = ({ commit }, { query, data }) =>
+  new Promise((resolve, reject) => {
+    Api.setMobile({ query, data }).then(res => {
+      commit(types.BIND_MOBILE, res);
+      resolve(res);
+      return res;
+    }).catch(err => reject(err));
+  });
+
 export const sendSmsCenter = ({ commit }, data) =>
   new Promise((resolve, reject) => {
     Api.getSmsCenter({
