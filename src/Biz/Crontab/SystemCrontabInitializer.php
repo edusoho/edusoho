@@ -73,12 +73,13 @@ class SystemCrontabInitializer
     private static function createCrontabJob()
     {
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
+        $logCommand = $rootDir.'/../bin/crontab-log';
         $logPath = $rootDir.'/logs/crontab.log';
         $command = self::getCrontabJobCommand();
         $env = ServiceKernel::instance()->getEnvironment();
         $env = empty($env) ? 'prod' : $env;
         $command .= ' -e '.$env;
-        $command = "*/1 * * * * {$command} >> {$logPath} 2>&1";
+        $command = "*/1 * * * * {$command} 2>&1 | xargs {$logCommand} {$logPath}";
 
         $crontabJob = CrontabJob::createFromCrontabLine($command);
         $crontabJob->comments = 'EduSoho scheduler Job '.uniqid();
