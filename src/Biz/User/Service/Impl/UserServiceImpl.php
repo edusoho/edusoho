@@ -1008,6 +1008,17 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(UserException::BLOG_INVALID());
         }
 
+        $dateFields = array('dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5');
+        foreach ($dateFields as $dateField) {
+            if (empty($fields[$dateField])) {
+                $fields[$dateField] = null;
+            }
+
+            if (!empty($fields[$dateField]) && !SimpleValidator::date($fields[$dateField])) {
+                $this->createNewException(UserException::DATEFIELD_INVALID());
+            }
+        }
+
         if (empty($fields['isWeiboPublic'])) {
             $fields['isWeiboPublic'] = 0;
         } else {

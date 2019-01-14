@@ -3206,9 +3206,11 @@ my.teaching.open_course.normal: 'Recorded Open Course'
 my.teaching.open_course.live: 'Live Open Courses'
 my.teaching.open_course.live_remind: 'Live remind'
 my.teaching.threads_discussion: 'Student discussion'
+my.teaching.threads_question: 'Student question'
 my.teaching.classroom.threads_discussion: '%classroom% discussion'
 my.teaching.classroom.threads_discussion.nickname: 'Discussion owner'
 my.teaching.classroom.threads_event.nickname: 'Activity owner'
+my.teaching.classroom.threads_question: '%classroom% question'
 my.teaching.classroom.threads_question.nickname: 'Discussion owner'
 my.teaching.classroom: 'Teaching %classroom%'
 my.teaching.classroom.manage_btn: 'Edit %classroom%'
@@ -3518,7 +3520,7 @@ my.learning.thread.browse: View
 my.learning.thread.question_empty: 'No record'
 my.learning.thread.empty: 'No record'
 my.learning.thread.task_id: 'Lesson %taskId%'
-my.learning.thread.target_course: "Come from <a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a>\n"
+my.learning.thread.target_course_from: "Come from"
 my.learning.thread.target_course_deleted: 'Course has been deleted'
 my.learning.course: 'My Course'
 my.learning.course.learning: Learning
@@ -8195,6 +8197,7 @@ exception.user.truename_invalid: Truename is invalid
 exception.user.lock_denied: 没有封禁该角色的权限
 exception.user.not_match_bind_email: 与绑定邮箱不符
 exception.user.login_limit: 登录限制！
+exception.user.datefield_invalid: 日期类型字段没有按日期格式填写
 
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
