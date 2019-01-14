@@ -38,12 +38,14 @@ export default [
     // 获取滑动验证参数
     name: 'dragCaptcha',
     url: '/drag_captcha',
-    method: 'POST'
+    method: 'POST',
+    disableLoading: true
   }, {
     // 滑动验证吗数据验证
     name: 'dragValidate',
     url: '/drag_captcha/{token}',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }, {
     // 获取我的个人信息
     name: 'getUserInfo',
