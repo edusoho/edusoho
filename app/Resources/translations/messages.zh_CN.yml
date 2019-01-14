@@ -1254,7 +1254,7 @@ course.replay_manage.content_title: 录播管理
 course.replay_manage.empty: 暂无直播内容！
 course.replay_manage.tips: >
   提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
-  <div class="cd-text-medium">注意，上传视频文件后无法再使用录制文件作为回放。</div>
+  <div class="cd-text-medium"><b>注意，上传视频文件后无法再使用录制文件作为回放。</b></div>
 course.replay_manage.unpublished: 未发布
 course.replay_manage.live_not_stop: 直播未结束
 course.replay_manage.ungenerated: 未生成回放
@@ -2002,7 +2002,7 @@ course.live.replay_manage.content_title: 录播管理
 course.live.replay_manage.lesson_empty_tips: 暂无课时内容！
 course.live.replay_manage.upload_tips: >
   提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
-  <div class="cd-text-medium">注意，上传视频文件后无法再使用录制文件作为回放。</div>
+  <div class="cd-text-medium"><b>注意，上传视频文件后无法再使用录制文件作为回放。</b></div>
 course.live.replay_manage.lesson_status.unpublished: 未发布
 course.live.replay_manage.lesson_status.published: 直播未结束
 course.live.replay_manage.lesson_replay_status.ungenerated: 未生成回放
