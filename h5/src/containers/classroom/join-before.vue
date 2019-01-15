@@ -44,8 +44,12 @@
       <!-- 学员评价 -->
       <review-list ref="review" :targetId="details.classId" :reviews="details.reviews" title="学员评价" type="classroom" defaulValue="暂无评价"></review-list>
 
-      <e-footer :disabled="!accessToJoin" @click.native="handleJoin">
+      <!-- 加入学习 -->
+      <e-footer v-if="!marketingActivities.seckill" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus('classroom', vipAccessToJoin)}}</e-footer>
+      <!-- 秒杀 -->
+      <e-footer v-if="showSeckill" :half="true" @click.native="handleJoin">原价购买</e-footer>
+      <e-footer v-if="showSeckill" :half="true" @click.native="">去秒杀</e-footer>
     </div>
 
   </div>
@@ -119,6 +123,10 @@
         return Number(this.planDetails.price) !== 0
           && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities));
       },
+      showSeckill() {
+        return Number(this.details.price) !== 0
+         && this.marketingActivities.seckill && this.accessToJoin;
+      }
     },
     mounted() {
       // 获取促销优惠券

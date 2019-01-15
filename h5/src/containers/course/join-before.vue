@@ -4,7 +4,7 @@
       :price="details.price" :courseSet="details.courseSet"
       :seckillActivities="marketingActivities.seckill"></detail-head>
 
-    <detail-plan @getLearnExpiry="getLearnExpiry"></detail-plan>
+    <detail-plan @getLearnExpiry="getLearnExpiry" @switchPlan="switchPlan"></detail-plan>
     <div class="segmentation"></div>
 
     <!-- 优惠活动 -->
@@ -39,8 +39,12 @@
     <!-- 学员评价 -->
     <review-list ref="review" :targetId="details.courseSet.id" :reviews="details.reviews" title="学员评价" type="course" defaulValue="暂无评价"></review-list>
 
-    <e-footer v-if="!isClassCourse" :disabled="!accessToJoin" @click.native="handleJoin">
+    <!-- 加入学习 -->
+    <e-footer v-if="!isClassCourse && !marketingActivities.seckill" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
+    <!-- 秒杀 -->
+    <e-footer v-if="showSeckill" :half="true" @click.native="handleJoin">原价购买</e-footer>
+    <e-footer v-if="showSeckill" :half="true" @click.native="">去秒杀</e-footer>
   </div>
 </template>
 <script>
@@ -118,6 +122,10 @@
         return !this.isClassCourse && Number(this.details.price) !== 0
           && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities));
       },
+      showSeckill() {
+        return !this.isClassCourse && Number(this.details.price) !== 0
+         && this.marketingActivities.seckill && this.accessToJoin;
+      }
     },
     mounted() {
       if (!this.isClassCourse) {
@@ -245,6 +253,18 @@
         this.learnExpiry = data.val;
         this.startDateStr = data.startDateStr;
         this.endDateStr = data.endDateStr;
+      },
+      // 切换计划
+      switchPlan() {
+        // 获取营销活动
+        this.marketingActivities = {};
+        Api.coursesActivities({
+          query: { id: this.details.id }
+        }).then(res => {
+          this.marketingActivities = res;
+        }).catch(err => {
+          console.error(err);
+        });
       },
       // 创建订单
       getOrder() {

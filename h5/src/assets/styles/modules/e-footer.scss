@@ -11,8 +11,15 @@ footer {
     text-align: center;
     font-size: vw(16);
     z-index: 900;
-    &.gray {
+    &.disabled {
       background-color: #B0BDC9;
+    }
+    &.half {
+      width: 50%;
+    }
+    +.footer-bar {
+      right: 0;
+      background: #FFAA00;
     }
   }
 }
