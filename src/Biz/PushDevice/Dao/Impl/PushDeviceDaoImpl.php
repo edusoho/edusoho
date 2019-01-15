@@ -1,17 +1,22 @@
 <?php
 
-namespace Biz\PushMessageMobileDevice\Dao\Impl;
+namespace Biz\PushDevice\Dao\Impl;
 
-use Biz\PushMessageMobileDevice\Dao\PushMessageMobileDeviceDao;
+use Biz\PushDevice\Dao\PushDeviceDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class PushMessageMobileDeviceDaoImpl extends GeneralDaoImpl implements PushMessageMobileDeviceDao
+class PushDeviceDaoImpl extends GeneralDaoImpl implements PushDeviceDao
 {
-    protected $table = 'push_message_mobile_device';
+    protected $table = 'push_device';
 
     public function getByRegId($regId)
     {
         return $this->getByFields(array('regId' => $regId));
+    }
+
+    public function getByUserId($userId)
+    {
+        return $this->getByFields(array('userId' => $userId));
     }
 
     public function findByUserIds($userIds)

@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class PushMessageMobileDevice extends Migration
+class PushDevice extends Migration
 {
     /**
      * Do the migration
@@ -12,7 +12,7 @@ class PushMessageMobileDevice extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            CREATE TABLE IF NOT EXISTS `push_message_mobile_device`(
+            CREATE TABLE IF NOT EXISTS `push_device`(
               `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `userId` varchar(64) NOT NULL COMMENT '用户ID',
               `regId` varchar(255) NOT NULL DEFAULT '' COMMENT '消息服务注册后的regId',

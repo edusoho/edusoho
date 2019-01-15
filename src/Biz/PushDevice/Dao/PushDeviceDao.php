@@ -1,10 +1,10 @@
 <?php
 
-namespace Biz\PushMessageMobileDevice\Dao;
+namespace Biz\PushDevice\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
-interface PushMessageMobileDeviceDao extends GeneralDaoInterface
+interface PushDeviceDao extends GeneralDaoInterface
 {
     public function getByRegId($regId);
 
