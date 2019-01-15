@@ -21,7 +21,9 @@
         </van-list>
       </div>
     </div>
-    <div v-show="active == 1">111</div>
+    <div v-show="active == 1">
+      
+    </div>
   </div>
 </template>
 <script>

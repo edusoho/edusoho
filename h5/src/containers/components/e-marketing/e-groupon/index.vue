@@ -129,12 +129,20 @@ export default {
     },
     getMarketUrl(status) {
       if (status === 'ongoing' && this.seckilling) {
+        const params = {
+          domainUri: 'http://lvliujie.st.edusoho.c',
+          itemUri: '',
+          source: 'h5'
+        }
         Api.marketingActivities({
           query: {
             activityId: this.activityId
-          }
+          },
+          data: params
         }).then((res) => {
-          console.log(res,222)
+          window.location.href = res.url;
+        }).catch((err) => {
+          console.log(err.message)
         })
       }
     }
