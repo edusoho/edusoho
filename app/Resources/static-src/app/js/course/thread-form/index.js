@@ -4,9 +4,11 @@ let validator = $form.validate({
     'thread[title]': {
       required: true,
       trim: true,
+      maxlength: 30,
     },
     'thread[content]': {
       required: true,
+      maxlength: 1000,
     }
   }
 });
