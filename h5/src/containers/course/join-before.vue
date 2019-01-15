@@ -124,6 +124,8 @@
 
           this.miniCoupons = this.unreceivedCoupons.length > 3 ?
             this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
+        }).catch(err => {
+          console.error(err);
         });
       }
 
