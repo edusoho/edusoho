@@ -29,7 +29,7 @@ class MarketingActivityUrl extends AbstractResource
                 array(
                     'activityId' => $activityId,
                     'mobile' => empty($user['verifiedMobile']) ? '' : $user['verifiedMobile'],
-                    'isLogin' => 0 == $this->getCurrentUser()['id'] ? 0 : 1,
+                    'isLogin' => 0 == $user['id'] ? 0 : 1,
                     'domainUri' => $params['domainUri'],
                     'itemUri' => $params['itemUri'],
                     'source' => $params['source'],
