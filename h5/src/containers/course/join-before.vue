@@ -1,14 +1,16 @@
 <template>
   <div :class="isClassCourse ? '' : 'join-before'">
     <detail-head
-      :price="details.price" :courseSet="details.courseSet"></detail-head>
+      :price="details.price" :courseSet="details.courseSet"
+      :seckillActivities="marketingActivities.seckill"></detail-head>
 
     <detail-plan @getLearnExpiry="getLearnExpiry"></detail-plan>
     <div class="segmentation"></div>
 
     <!-- 优惠活动 -->
-    <template v-if="!isClassCourse && Number(details.price) !== 0 && unreceivedCoupons.length">
-      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
+    <template v-if="showOnsale">
+      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons"
+        :activities="marketingActivities"/>
       <div class="segmentation"></div>
     </template>
 
@@ -74,6 +76,7 @@
         },
         unreceivedCoupons: [],
         miniCoupons: [],
+        marketingActivities: {},
       };
     },
     components: {
@@ -110,10 +113,15 @@
           vipAccess = !vipExpired;
         }
         return vipAccess;
-      }
+      },
+      showOnsale() {
+        return !this.isClassCourse && Number(this.details.price) !== 0
+          && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities));
+      },
     },
     mounted() {
       if (!this.isClassCourse) {
+        // 获取促销优惠券
         Api.searchCoupon({
           params: {
             targetId: this.details.courseSet.id,
@@ -124,6 +132,16 @@
 
           this.miniCoupons = this.unreceivedCoupons.length > 3 ?
             this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
+        }).catch(err => {
+          console.error(err);
+        });
+        // 获取营销活动
+        Api.coursesActivities({
+          query: { id: this.details.id }
+        }).then(res => {
+          this.marketingActivities = res;
+        }).catch(err => {
+          console.error(err);
         });
       }
 

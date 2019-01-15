@@ -1,6 +1,23 @@
 <template>
-  <e-panel title="优惠" v-if="unreceivedCoupons.length">
-    <van-cell class="course-detail__cell" is-link @click="couponListShow = true">
+  <e-panel title="优惠">
+    <!-- 砍价 -->
+    <van-cell v-if="activities.cut" class="course-detail__cell" is-link @click="">
+      <template slot="title">
+        <span class="text-12">砍价：</span>
+        <van-tag class="ml5" style="background-color: #ffaa00">砍价</van-tag>
+        <span class="text-12 dark">最后48小时砍价活动，最低可砍至0元！</span>
+      </template>
+    </van-cell>
+    <!-- 拼团 -->
+    <van-cell v-if="activities.groupon" class="course-detail__cell" is-link @click="">
+      <template slot="title">
+        <span class="text-12">拼团：</span>
+        <van-tag class="ml5" style="background-color: #ffaa00">拼团</van-tag>
+        <span class="text-12 dark">跟好友一起买更划算哦！</span>
+      </template>
+    </van-cell>
+    <!-- 优惠券 -->
+    <van-cell v-if="unreceivedCoupons.length" class="course-detail__cell" is-link @click="couponListShow = true">
       <template slot="title">
         <span class="text-12">领券：</span>
         <mini-coupon :item="item" v-for="(item, index) in miniCoupons" :key="index" />
@@ -32,7 +49,7 @@ export default {
     miniCoupon,
     EPopup,
   },
-  props: ['unreceivedCoupons', 'miniCoupons'],
+  props: ['unreceivedCoupons', 'miniCoupons', 'activities'],
   data () {
     return {
       couponListShow: false,

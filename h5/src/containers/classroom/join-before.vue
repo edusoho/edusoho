@@ -1,15 +1,16 @@
 <template>
   <div class="course-detail classroom-detail">
     <div class="join-before">
-      <detail-head :cover="details.cover"></detail-head>
+      <detail-head :cover="details.cover" :seckillActivities="marketingActivities.seckill"></detail-head>
 
       <detail-plan :details="planDetails" :joinStatus="details.joinStatus"
         @getLearnExpiry="getLearnExpiry"></detail-plan>
       <div class="segmentation"></div>
 
       <!-- 优惠活动 -->
-      <template v-if="Number(planDetails.price) !== 0 && unreceivedCoupons.length" >
-        <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
+      <template v-if="showOnsale" >
+        <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons"
+          :activities="marketingActivities"/>
         <div class="segmentation"></div>
       </template>
 
@@ -94,6 +95,7 @@
         learnExpiry: '永久有效',
         unreceivedCoupons: [],
         miniCoupons: [],
+        marketingActivities: {},
       }
     },
     computed: {
@@ -112,9 +114,14 @@
           vipAccess = !vipExpired;
         }
         return vipAccess;
-      }
+      },
+      showOnsale() {
+        return Number(this.planDetails.price) !== 0
+          && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities));
+      },
     },
     mounted() {
+      // 获取促销优惠券
       Api.searchCoupon({
         params: {
           targetId: this.details.classId,
@@ -125,7 +132,18 @@
 
         this.miniCoupons = this.unreceivedCoupons.length > 3 ?
           this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
-      })
+      }).catch(err => {
+        console.error(err);
+      });
+      // 获取营销活动
+      Api.classroomsActivities({
+        query: { id: this.details.classId }
+      }).then(res => {
+        this.marketingActivities = res;
+      }).catch(err => {
+        console.error(err);
+      });
+
       window.addEventListener('touchmove', this.handleScroll);
       window.addEventListener('scroll', this.handleScroll);
       setTimeout(() => {
