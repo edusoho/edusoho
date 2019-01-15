@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\MarketingActivity;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Marketing\MarketingAPIFactory;
@@ -11,6 +12,9 @@ use ApiBundle\Api\Exception\ErrorCode;
 
 class MarketingActivityUrl extends AbstractResource
 {
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function add(ApiRequest $request, $activityId)
     {
         $params = $request->request->all();
@@ -24,7 +28,8 @@ class MarketingActivityUrl extends AbstractResource
                 '/activity_by_mobile',
                 array(
                     'activityId' => $activityId,
-                    'mobile' => $user['verifiedMobile'],
+                    'mobile' => empty($user['verifiedMobile']) ? '' : $user['verifiedMobile'],
+                    'isLogin' => 0 == $this->getCurrentUser()['id'] ? 0 : 1,
                     'domainUri' => $params['domainUri'],
                     'itemUri' => $params['itemUri'],
                     'source' => $params['source'],
