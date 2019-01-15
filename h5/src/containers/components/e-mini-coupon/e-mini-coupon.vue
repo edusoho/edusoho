@@ -1,5 +1,5 @@
 <template>
-  <van-tag class="mini-coupon ml10" type="danger">{{ priceHtml(item, false) }}</van-tag>
+  <van-tag class="mini-coupon ml5" type="danger">{{ priceHtml(item, false) }}</van-tag>
 </template>
 
 <script>
