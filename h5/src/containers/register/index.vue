@@ -105,7 +105,6 @@ export default {
       registerInfo: emptyRegisterInfo,
       dragEnable: false,
       dragKey: 0,
-      submitFlag: true,
       options: [{
         model: 'email'
       }, {
@@ -173,12 +172,9 @@ export default {
       const registerInfo = Object.assign({}, this.registerInfo);
       const password = registerInfo.encrypt_password;
       const mobile = registerInfo.mobile;
+      const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
 
-      if(this.submitFlag) {
-        const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
-        registerInfo.encrypt_password = encrypt;
-        this.submitFlag = false;
-      }
+      registerInfo.encrypt_password = encrypt;
 
       // 手机绑定
       if (this.pathName === 'binding') {
