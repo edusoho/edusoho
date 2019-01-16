@@ -1,5 +1,3 @@
-@import './activity/index.scss';
-
 .user {
   border-top: 1px solid #eee;
   // border-bottom: 1px solid #eee;
@@ -65,27 +63,18 @@
 }
 
 .orders {
-  margin-top: -20px;
   display: flex;
   flex-direction: column;
-  .orders-content {
-    margin-top: vw(20);
-  }
-  .van-tabs__line {
-    background-color: $primary-color;
-  }
-  .van-tab--active {
-    color: $primary-color;
-  }
-  .van-hairline--top-bottom::after {
-    border-top: none;
-  }
   &-title {
     margin:vw(25) 0 vw(16) vw(20);
     font-size: vw(18);
     font-family: PingFangSC-Medium;
   }
-  .order {
+  .order, .activity {
+    .tab-list {
+      padding-bottom: 40px;
+      margin-top: vw(20);
+    }
     .e-course {
       padding-bottom: vw(30);
       padding-top: 0;
@@ -93,6 +82,10 @@
         padding-bottom: vw(80);
       }
     }
+  }
+
+  .activity .tab-list {
+    margin-top: 0;
   }
 
   &-container__empty {
