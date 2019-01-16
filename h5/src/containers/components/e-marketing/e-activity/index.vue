@@ -132,7 +132,8 @@ export default {
     },
     getMarketUrl(status) {
       if (!this.feedback) return;
-      if (status === 'ongoing' && this.seckilling) {
+      if ((this.type !== 'seckill' && status === 'ongoing')
+        || (this.type === 'seckill' && this.seckilling)) {
         this.$emit('grouponHandle', this.activityId)
       }
     }
