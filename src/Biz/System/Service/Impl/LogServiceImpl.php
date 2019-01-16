@@ -102,6 +102,14 @@ class LogServiceImpl extends BaseService implements LogService
     {
         $user = $this->getCurrentUser();
 
+        if (!$user->isLogin() && !empty($data['unLoginUser'])) {
+            $user['id'] = $data['unLoginUser']['id'];
+        }
+
+        if (isset($data['unLoginUser'])) {
+            unset($data['unLoginUser']);
+        }
+
         if (is_array($data)) {
             $data = json_encode($data);
         }
