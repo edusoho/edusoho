@@ -45,7 +45,7 @@
   import courseList from '@/containers/components/e-course-list/e-course-list.vue';
   import poster from '@/containers/components/e-poster/e-poster.vue';
   import swipe from '@/containers/components/e-swipe/e-swipe.vue';
-  import groupon from '@/containers/components/e-marketing/e-groupon';
+  import groupon from '@/containers/components/e-marketing/e-activity';
   import coupon from '@/containers/components/e-coupon-list/e-coupon-list';
   import vipList from '@/containers/components/e-vip-list/e-vip-list';
   import { mapActions } from 'vuex';
