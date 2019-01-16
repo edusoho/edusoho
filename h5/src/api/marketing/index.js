@@ -14,5 +14,10 @@ export default [
     name: 'coursesActivities',
     url: '/courses/{id}/marketing_activities',
     disableLoading: true
+  }, {
+    // 我的营销活动
+    name: 'myActivities',
+    url: '/me/marketing_activities',
+    disableLoading: true
   }
 ];
