@@ -81,7 +81,7 @@ class CourseThread extends AbstractResource
                 $thread = $this->addAttachments($thread, $attachments);
             }
 
-            $thread['content'] = $this->filterHtml($thread['content']);
+            $thread['content'] = !empty($thread['content']) ? $this->filterHtml($thread['content']) : $thread['content'];
         }
         $this->getOCUtil()->multiple($threads, array('userId'));
 

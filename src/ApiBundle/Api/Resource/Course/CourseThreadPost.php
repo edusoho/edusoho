@@ -88,7 +88,7 @@ class CourseThreadPost extends AbstractResource
                 $post = $this->getCourseThreadService()->readPost($post['id']);
             }
 
-            $post['content'] = $this->filterHtml($post['content']);
+            $post['content'] = !empty($post['content']) ? $this->filterHtml($post['content']) : $post['content'];
         }
 
         return $posts;
