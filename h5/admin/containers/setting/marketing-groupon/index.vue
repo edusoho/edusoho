@@ -1,7 +1,13 @@
 <template>
   <module-frame containerClass="setting-groupon" :isActive="active" :isIncomplete="incomplete">
     <div slot="preview" class="groupon-container">
-      <groupon :activity="copyModuleData.activity" :tag="copyModuleData.tag" :showTitle="radio" :type="moduleData.type"></groupon>
+      <groupon
+        :activity="copyModuleData.activity"
+        :tag="copyModuleData.tag"
+        :showTitle="radio"
+        :type="moduleData.type"
+        :feedback="false">
+      </groupon>
     </div>
     <div slot="setting" class="groupon-allocate">
       <header class="title">{{ activityTitle }}</header>

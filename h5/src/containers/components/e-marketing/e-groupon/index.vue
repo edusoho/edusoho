@@ -25,7 +25,6 @@
 
 <script>
 import { dateTimeDown } from '@/utils/date-toolkit';
-import Api from '@/api';
 
 export default {
   name: 'e-groupon',
@@ -45,6 +44,10 @@ export default {
     type: {
       type: String,
       default: 'groupon'
+    },
+    feedback: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -128,22 +131,9 @@ export default {
       }, 1000);
     },
     getMarketUrl(status) {
+      if (!this.feedback) return;
       if (status === 'ongoing' && this.seckilling) {
-        const params = {
-          domainUri: 'http://lvliujie.st.edusoho.cn',
-          itemUri: '',
-          source: 'h5'
-        }
-        Api.marketingActivities({
-          query: {
-            activityId: this.activityId
-          },
-          data: params
-        }).then((res) => {
-          window.location.href = res.url;
-        }).catch((err) => {
-          console.log(err.message)
-        })
+        this.$emit('grouponHandle', this.activityId)
       }
     }
   }

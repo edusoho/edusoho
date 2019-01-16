@@ -38,7 +38,7 @@
         :showTitle="part.data.titleShow"
         :type="part.type"
         :tag="part.data.tag"
-        @couponHandle="couponHandle($event)"
+        @grouponHandle="grouponHandle"
         :feedback="feedback"></e-groupon>
     </div>
   </div>
