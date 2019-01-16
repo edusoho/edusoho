@@ -70,8 +70,13 @@ export default {
           message: '登录成功'
         });
         const redirect = this.$route.query.redirect || '/';
+        const callbackUrl = this.$route.query.callback || '';
         const jumpAction = () => {
-          this.$router.replace({path: redirect});
+          if (callbackUrl) {
+            window.location.href = callbackUrl
+          } else {
+            this.$router.replace({path: redirect});
+          }
         }
         setTimeout(jumpAction, 2000);
       }).catch(err => {

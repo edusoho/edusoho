@@ -81,11 +81,13 @@ const head = {
     }, {
       col: 1,
       title: '最低售价',
-      label: 'lowestPrice',
+      label: 'rule',
+      subProperty: 'lowestPrice',
     }, {
       col: 1,
       title: '砍价次数',
       label: 'rule',
+      subProperty: 'times'
     }, {
       col: 3,
       title: '创建时间',
@@ -105,15 +107,18 @@ const head = {
      {
       col: 2,
       title: '商品原价',
-      label: 'originPrice',
+      label: 'rule',
+      subProperty: 'originPrice'
     }, {
       col: 1,
       title: '最低售价',
-      label: 'lowestPrice',
+      label: 'rule',
+      subProperty: 'seckillPrice'
     }, {
       col: 1,
       title: '商品个数',
       label: 'rule',
+      subProperty: 'productSum'
     }, {
       col: 3,
       title: '创建时间',

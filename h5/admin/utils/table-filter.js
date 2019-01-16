@@ -1,6 +1,6 @@
 import { formatTime } from '@/utils/date-toolkit';
 
-const tableFilter = (item, label) => {
+const tableFilter = (item, label, subProperty) => {
 
   if (label.toLocaleLowerCase().includes('price')) {
     if (!item[label]) {
@@ -31,9 +31,6 @@ const tableFilter = (item, label) => {
       return `${item['price']}元`;
     case 'generatedNum':
       return `${item['unreceivedNum']} / ${item['generatedNum']}`;
-    case 'rule':
-      const count = item.rule.times || item.rule.productSum;
-      return Number(count);
     case 'rate':
       let targetType = '全部商品';
       let discountType = '折扣';
@@ -55,6 +52,10 @@ const tableFilter = (item, label) => {
       }
       return `${discountType + item.rate + text} / ${targetType}`;
     default:
+      // 有子属性的返回子属性
+      if (subProperty) {
+        return item[label][subProperty];
+      }
       return item[label]
   }
 }
