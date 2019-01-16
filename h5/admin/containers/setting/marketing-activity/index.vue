@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import groupon from '@/containers/components/e-marketing/e-groupon';
+import groupon from '@/containers/components/e-marketing/e-activity';
 import moduleFrame from '../module-frame';
 import courseModal from '../course/modal/course-modal';
 import settingCell from '../module-frame/setting-cell';
