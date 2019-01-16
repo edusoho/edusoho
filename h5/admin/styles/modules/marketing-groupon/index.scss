@@ -57,6 +57,9 @@
   }
   &__context {
     padding: 10px 10px 20px 10px;
+    .context-title {
+      font-size: 14px;
+    }
     .context-sale {
       margin-top:8px;
       line-height: 26px;
