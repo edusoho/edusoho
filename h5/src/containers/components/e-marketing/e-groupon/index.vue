@@ -130,7 +130,7 @@ export default {
     getMarketUrl(status) {
       if (status === 'ongoing' && this.seckilling) {
         const params = {
-          domainUri: 'http://lvliujie.st.edusoho.c',
+          domainUri: 'http://lvliujie.st.edusoho.cn',
           itemUri: '',
           source: 'h5'
         }
