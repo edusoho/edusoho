@@ -34,9 +34,9 @@ const type2symbol = {
 };
 
 const status2label = {
-  success: '成功',
+  successed: '成功',
   ongoing: '进行中',
-  fail: '失败',
+  failed: '失败',
 };
 
 export default {
