@@ -57,7 +57,7 @@
 <script>
 import Api from '@/api'
 import EDrag from '@/containers/components/e-drag';
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import XXTEA from '@/utils/xxtea.js';
 import { Dialog, Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js'
@@ -112,9 +112,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'userLogin'
-    ]),
     validateAccountOrPsw(type = 'account') {
       const ele = this.resetInfo[type];
       const rule = type === 'account' ?
@@ -168,7 +165,12 @@ export default {
           Dialog.alert({
             message: '验证链接已发送到\ ' + account,
           }).then(() => {
-            this.$router.replace({ name: 'login' });
+            this.$router.replace({
+              name: 'login',
+              params: {
+                username: account
+              },
+            });
           });
         })
         .catch(err => {
@@ -187,7 +189,12 @@ export default {
         }
       })
       .then(res => {
-        this.$router.replace({ name: 'login' });
+        this.$router.replace({
+          name: 'login',
+          params: {
+            username: account
+          },
+        });
       })
       .catch(err => {
         Toast.fail(err.message);

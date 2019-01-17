@@ -101,6 +101,7 @@ export default {
 
   mounted() {
     this.bodyHeight = document.documentElement.clientHeight - 46;
+    this.username = this.$route.params.username || '';
     Api.settingsFace({}).then(res => {
       if (Number(res.login.enabled)) {
         this.faceSetting = Number(res.login.h5_enabled);
