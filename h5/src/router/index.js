@@ -193,6 +193,13 @@ const routes = [
       title: '会员专区'
     },
     component: () => import(/* webpackChunkName: "vip" */'@/containers/vip/index.vue')
+  }, {
+    path: '/setting/password/reset',
+    name: 'password_reset',
+    meta: {
+      title: '密码重置'
+    },
+    component: () => import(/* webpackChunkName: "password_reset" */'@/containers/password-reset/index.vue')
   }
 ];
 

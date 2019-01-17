@@ -1,14 +1,19 @@
 <template>
   <div class="register">
     <e-loading v-if="isLoading"></e-loading>
-    <span class='register-title'>注册账号</span>
+    <span class='register-title'>找回密码</span>
+
+      <e-drag
+        v-if="dragEnable"
+        :key="dragKey"
+        @success="handleSmsSuccess"></e-drag>
 
       <van-field
-        v-model="registerInfo.mobile"
-        placeholder="请输入手机号"
+        v-model="registerInfo.account"
+        placeholder="请输入手机号或邮箱号"
         maxLength="11"
-        :error-message="errorMessage.mobile"
-        @blur="validateMobileOrPsw('mobile')"
+        :error-message="errorMessage.account"
+        @blur="validateAccountOrPsw('account')"
         @keyup="validatedChecker()"
       />
 
@@ -20,11 +25,6 @@
         @blur="validateMobileOrPsw('encrypt_password')"
         placeholder="请设置密码（5-20位字符）"
       />
-
-      <e-drag
-        v-if="dragEnable"
-        :key="dragKey"
-        @success="handleSmsSuccess"></e-drag>
 
       <van-field
         v-model="registerInfo.smsCode"
@@ -38,7 +38,7 @@
           slot="button"
           size="small"
           type="primary"
-          :disabled="count.codeBtnDisable || !validated.mobile"
+          :disabled="count.codeBtnDisable || !validated.account"
           @click="clickSmsBtn">
           发送验证码
           <span v-show="count.showCount">({{ count.num }})</span>
@@ -49,36 +49,25 @@
         class="primary-btn mb20"
         :disabled="btnDisable"
         @click="handleSubmit">注册</van-button>
-
-      <!-- <div class="login-bottom ">
-        请详细阅读 <router-link to="/protocol">《用户服务协议》</router-link>
-      </div> -->
-
-      <!-- 一期不做 -->
-      <!-- <div class="register-social">
-        <span>
-          <i class="iconfont icon-qq"></i>
-          <i class="iconfont icon-weixin1"></i>
-          <i class="iconfont icon-weibo"></i>
-        </span>
-        <div class="line"></div>
-      </div> -->
   </div>
 </template>
+
 <script>
 import EDrag from '@/containers/components/e-drag';
 import { mapActions, mapState } from 'vuex';
 import XXTEA from '@/utils/xxtea.js';
 import { Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js'
+
 export default {
+  name: 'password-reset',
   components: {
     EDrag
   },
   data() {
     return {
       registerInfo: {
-        mobile: '',
+        account: '',
         dragCaptchaToken: '',
         encrypt_password: '',
         smsCode: '',
@@ -89,11 +78,11 @@ export default {
       dragKey: 0,
       submitFlag: true,
       errorMessage: {
-        mobile: '',
+        account: '',
         encrypt_password: ''
       },
       validated: {
-        mobile: false,
+        account: false,
         encrypt_password: false
       },
       count: {
@@ -105,7 +94,7 @@ export default {
   },
   computed: {
     btnDisable() {
-      return !(this.registerInfo.mobile
+      return !(this.registerInfo.account
         && this.registerInfo.encrypt_password
         && this.registerInfo.smsCode);
     },
@@ -132,10 +121,10 @@ export default {
         ? rule.message: '';
     },
     validatedChecker() {
-      const mobile = this.registerInfo.mobile;
+      const mobile = this.registerInfo.account;
       const rule = rulesConfig['mobile'];
 
-      this.validated.mobile = rule.validator(mobile);
+      this.validated.account = rule.validator(mobile);
     },
     handleSmsSuccess(token) {
       this.registerInfo.dragCaptchaToken = token;
@@ -143,7 +132,7 @@ export default {
     },
     handleSubmit() {
       const password = this.registerInfo.encrypt_password;
-      const usertel = this.registerInfo.mobile;
+      const usertel = this.registerInfo.account;
       if(this.submitFlag) {
         const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
         this.registerInfo.encrypt_password = encrypt;
@@ -215,3 +204,5 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+</style>
