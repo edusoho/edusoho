@@ -232,8 +232,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
         $apiResult = $this->createApi('root')->post('/resources/upload_form_init', $params);
         $apiResult['fileId'] = $file['id'];
-        $apiResult['globalId'] = $apiResult['no'];
-        unset($apiResult['no']);
+//        $apiResult['globalId'] = $apiResult['no'];
+//        unset($apiResult['no']);
 
         return $apiResult;
     }
