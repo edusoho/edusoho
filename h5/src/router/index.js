@@ -52,6 +52,13 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "register" */'@/containers/register/index.vue')
   }, {
+    path: '/binding',
+    name: 'binding',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "binding" */'@/containers/register/index.vue')
+  }, {
     path: '/protocol',
     name: 'protocol',
     meta: {
@@ -216,7 +223,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const shouldUpdateMetaTitle = ['register', 'login', 'protocol', 'find'].includes(to.name);
+  const shouldUpdateMetaTitle = ['binding', 'register', 'login', 'protocol', 'find'].includes(to.name);
 
   // 课程后台配置数据
   if (!Object.keys(store.state.courseSettings).length) {

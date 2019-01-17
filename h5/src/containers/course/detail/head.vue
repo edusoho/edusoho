@@ -15,6 +15,7 @@
     <div class="course-detail__head--img"
       v-show="sourceType === 'img' || isEncryptionPlus">
       <img :src="courseSet.cover.large" alt="">
+      <div v-if="seckillActivities">秒杀倒计时 xxxx</div>
     </div>
     <div id="course-detail__head--video"
       ref="video"
@@ -41,7 +42,13 @@ export default {
   props: {
     courseSet: {
       type: Object,
-      default: {}
+      default: () => {
+        return {};
+      },
+    },
+    seckillActivities: {
+      type: Object,
+      default: null
     }
   },
   computed: {

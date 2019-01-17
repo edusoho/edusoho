@@ -77,24 +77,10 @@ export default {
           maskWidth: 0,
         })
         this.dragToEnd = false;
-      })
+      }).catch(err => {
+        Toast.fail(err.message);
+      });
     },
-    // sendSmsCenter() {
-    //   Api.getSmsCenter({
-    //     data: {
-    //       type: 'register',
-    //       mobile: this.info.mobile,
-    //       dragCaptchaToken: this.getToken()
-    //     }
-    //   }).then(res => {
-    //     Toast.success('验证码发送成功');
-    //     this.$emit('success', res);
-    //     this.dragState = {};
-    //   }).catch(err => {
-    //     this.$toast(err);
-    //     this.initDragCaptcha();
-    //   })
-    // },
     handletTouchEnd() {
       if (this.dragToEnd) {
         return;
@@ -106,13 +92,12 @@ export default {
             token: this.getToken()
           }
         }).then(res => {
-          // this.sendSmsCenter();
           Toast.success('验证成功');
           this.$emit('success', this.getToken());
         }).catch(err => {
           Toast.fail(err.message);
           this.initDragCaptcha();
-        })
+        });
       }
     },
     handleTouchMove(e) {

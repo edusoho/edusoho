@@ -32,7 +32,8 @@
     vertical-align: top;
   }
   .find-body {
-    padding-bottom: 227px;
+    // padding-bottom: 227px;
+    padding-bottom: 333px;
   }
   .find-section {
     position: absolute;
@@ -40,7 +41,7 @@
     box-sizing: border-box;
     padding: 15px 9px;
     width: 373px;
-    background: #F5F5F5;
+    // background: #F5F5F5;
     border-top: 1px solid #E1E1E1;
     border-bottom: 1px solid #E1E1E1;
     font-size: 14px;
@@ -54,26 +55,30 @@
       background-color: #fff;
     }
   }
+  .multi-find-section {
+    background: #FFFFFF;
+    padding: 0;
+    .section-title {
+      margin-left: 0;
+      padding: 0 15px;
+      background: #F5F5F5;
+      line-height: 38px;
+    }
+    .section-button-group {
+      padding: 7.5px 0 7.5px 15px;
+    }
+    .find-section-item {
+      float: none;
+      margin: 7.5px 15px 7.5px 0;
+    }
+  }
+  .bg-grey {
+    background-color: $bg-grey;
+  }
+  // 之后会移除
   &-miniprogram {
     .find-body {
       padding-bottom: 333px
-    }
-    .find-section {
-      background: #FFFFFF;
-      padding: 0;
-      .section-title {
-        margin-left: 0;
-        padding: 0 15px;
-        background: #F5F5F5;
-        line-height: 38px;
-      }
-      .section-button-group {
-        padding: 7.5px 0 7.5px 15px;
-        .find-section-item {
-          float: none;
-          margin: 7.5px 15px 7.5px 0;
-        }
-      }
     }
   }
 }

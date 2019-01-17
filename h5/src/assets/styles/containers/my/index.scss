@@ -1,7 +1,6 @@
 .user {
   border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-
+  // border-bottom: 1px solid #eee;
   &-section {
     position: relative;
     padding: 25px 20px 25px 25px;
@@ -24,6 +23,14 @@
     .user-vip {
       font-size: vw(12);
       color: #71777D;
+    }
+    .vip-name {
+      width: 80%;
+      display: inline-block;
+      line-height: 1;
+    }
+    .vip-name-short {
+      width: 50%;
     }
     .vip-img {
       position: relative;
@@ -56,16 +63,18 @@
 }
 
 .orders {
-  margin-top: 1px;
   display: flex;
   flex-direction: column;
-
   &-title {
     margin:vw(25) 0 vw(16) vw(20);
     font-size: vw(18);
     font-family: PingFangSC-Medium;
   }
-  .order {
+  .order, .activity {
+    .tab-list {
+      padding-bottom: 40px;
+      margin-top: vw(20);
+    }
     .e-course {
       padding-bottom: vw(30);
       padding-top: 0;
@@ -73,6 +82,10 @@
         padding-bottom: vw(80);
       }
     }
+  }
+
+  .activity .tab-list {
+    margin-top: 0;
   }
 
   &-container__empty {

@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <e-loading v-if="isLoading"></e-loading>
-    <span class='register-title'>注册账号</span>
+    <span class="register-title">{{ registerType[pathName] }}</span>
 
       <van-field
         v-model="registerInfo.mobile"
@@ -18,10 +18,11 @@
         maxLength="20"
         :error-message="errorMessage.encrypt_password"
         @blur="validateMobileOrPsw('encrypt_password')"
-        placeholder="请设置密码（5-20位字符）"
+        :placeholder="placeHolder[pathName]"
       />
 
       <e-drag
+        ref="dragComponent"
         v-if="dragEnable"
         :key="dragKey"
         @success="handleSmsSuccess"></e-drag>
@@ -48,7 +49,7 @@
       <van-button type="default"
         class="primary-btn mb20"
         :disabled="btnDisable"
-        @click="handleSubmit">注册</van-button>
+        @click="handleSubmit">{{ btnType[pathName] }}</van-button>
 
       <!-- <div class="login-bottom ">
         请详细阅读 <router-link to="/protocol">《用户服务协议》</router-link>
@@ -71,23 +72,37 @@ import { mapActions, mapState } from 'vuex';
 import XXTEA from '@/utils/xxtea.js';
 import { Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js'
+
+const emptyRegisterInfo = {
+  mobile: '',
+  dragCaptchaToken: '',
+  encrypt_password: '',
+  smsCode: '',
+  smsToken: '',
+  type: 'register'
+};
+const registerType = {
+  binding: '绑定手机',
+  register: '注册账号'
+}
+const btnType = {
+  binding: '绑定',
+  register: '注册'
+}
+const placeHolder = {
+  binding: '请输入密码',
+  register: '请设置密码（5-20位字符）'
+}
+
 export default {
   components: {
     EDrag
   },
   data() {
     return {
-      registerInfo: {
-        mobile: '',
-        dragCaptchaToken: '',
-        encrypt_password: '',
-        smsCode: '',
-        smsToken: '',
-        type: 'register'
-      },
+      registerInfo: emptyRegisterInfo,
       dragEnable: false,
       dragKey: 0,
-      submitFlag: true,
       errorMessage: {
         mobile: '',
         encrypt_password: ''
@@ -100,22 +115,27 @@ export default {
         showCount: false,
         num: 120,
         codeBtnDisable: false
-      }
+      },
+      pathName: this.$route.name,
+      registerType,
+      btnType,
+      placeHolder
     }
   },
   computed: {
+    ...mapState({
+      isLoading: state => state.isLoading
+    }),
     btnDisable() {
       return !(this.registerInfo.mobile
         && this.registerInfo.encrypt_password
         && this.registerInfo.smsCode);
     },
-    ...mapState({
-      isLoading: state => state.isLoading
-    })
   },
   methods: {
     ...mapActions([
       'addUser',
+      'setMobile',
       'sendSmsCenter',
       'userLogin'
     ]),
@@ -142,14 +162,44 @@ export default {
       this.handleSendSms();
     },
     handleSubmit() {
-      const password = this.registerInfo.encrypt_password;
-      const usertel = this.registerInfo.mobile;
-      if(this.submitFlag) {
-        const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
-        this.registerInfo.encrypt_password = encrypt;
-        this.submitFlag = false;
+      const registerInfo = Object.assign({}, this.registerInfo);
+      const password = registerInfo.encrypt_password;
+      const mobile = registerInfo.mobile;
+      const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
+
+      registerInfo.encrypt_password = encrypt;
+
+      // 手机绑定
+      if (this.pathName === 'binding') {
+        this.setMobile({
+          query: {
+            mobile,
+          },
+          data: {
+            password,
+            smsCode: registerInfo.smsCode,
+            smsToken: registerInfo.smsToken
+          }
+        })
+        .then(res => {
+          Toast.success({
+            duration: 2000,
+            message: '绑定成功'
+          });
+          const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
+          var jumpToLogin = () => {
+            this.$router.replace({ path: redirect });
+          }
+          setTimeout(jumpToLogin, 2000);
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+        return;
       }
-      this.addUser(this.registerInfo)
+
+      // 手机注册
+      this.addUser(registerInfo)
       .then(res => {
         Toast.success({
           duration: 2000,
@@ -157,14 +207,14 @@ export default {
         });
         const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
         var jumpToLogin = () => {
-          this.$router.replace({path: redirect});
+          this.$router.replace({ path: redirect });
         }
         setTimeout(jumpToLogin, 2000);
       })
       .then(() => {
         this.userLogin({
-          username: usertel,
-          password: password
+          password,
+          username: mobile,
         })
       })
       .catch(err => {
@@ -172,7 +222,12 @@ export default {
       });
     },
     clickSmsBtn() {
-      this.dragEnable = true
+      if (!this.dragEnable) {
+        this.dragEnable = true
+        return;
+      }
+      // 验证码组件更新数据
+      this.$refs.dragComponent.initDragCaptcha();
     },
     handleSendSms() {
       this.sendSmsCenter(this.registerInfo)
@@ -187,12 +242,12 @@ export default {
             this.dragKey ++;
             this.registerInfo.dragCaptchaToken = '';
             this.registerInfo.smsToken = '';
-            Toast.fail(err.message);
+            break;
           case 4030303:
-            this.dragEnable = true
-            Toast.fail(err.message);
+            this.dragEnable = true;
             break;
         }
+        Toast.fail(err.message);
       });
     },
     // 倒计时

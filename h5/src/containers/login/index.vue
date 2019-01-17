@@ -1,7 +1,7 @@
 <template>
   <div class="login" :style="{ height: bodyHeight + 'px'}">
-    <span class='login-title'>登录账号</span>
-    <img class='login-avatarimg' src="" />
+    <span class="login-title">登录账号</span>
+    <img class="login-avatarimg" src="" />
     <van-field v-model="username"
       :autosize="{ maxHeight: 24 }"
       type="textarea"
@@ -15,7 +15,7 @@
       placeholder="请输入密码" />
     <van-button type="default" class="primary-btn mb20" @click="onSubmit" :disabled="btnDisable">登录</van-button>
     <div class="login-bottom">
-      <!-- <router-link to="/register" class='login-account'>找回密码</router-link> -->
+      <!-- <router-link to="/register" class="login-account">找回密码</router-link> -->
       还没有注册帐号？
       <span class="login-account" @click="jumpRegister">立即注册</span>
     </div>
@@ -47,6 +47,8 @@ export default {
       query: {
         type: 'register'
       }
+    }).catch(err => {
+      Toast.fail(err.message)
     });
   },
   computed: {
@@ -68,8 +70,13 @@ export default {
           message: '登录成功'
         });
         const redirect = this.$route.query.redirect || '/';
+        const callbackUrl = this.$route.query.callback || '';
         const jumpAction = () => {
-          this.$router.replace({path: redirect});
+          if (callbackUrl) {
+            window.location.href = callbackUrl
+          } else {
+            this.$router.replace({path: redirect});
+          }
         }
         setTimeout(jumpAction, 2000);
       }).catch(err => {
@@ -77,7 +84,9 @@ export default {
       })
     },
     jumpRegister() {
-      if (this.registerSettings.mode == 'closed' || this.registerSettings.mode == 'email') {
+      if (!this.registerSettings
+        || this.registerSettings.mode == 'closed'
+        || this.registerSettings.mode == 'email') {
         Toast('网校未开启手机注册，请联系管理员');
         return;
       }
@@ -98,6 +107,8 @@ export default {
       } else {
         this.faceSetting = 0;
       }
+    }).catch(err => {
+      Toast.fail(err.message)
     });
   },
 }

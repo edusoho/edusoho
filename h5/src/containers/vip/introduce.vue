@@ -78,16 +78,10 @@ import 'swiper/dist/css/swiper.css';
         return this.$refs.mySwiper.swiper
       }
     },
-    created() {
-      const query = Object.keys(this.$route.query);
-      if (!query.includes('vipSeq')) {
-        this.setActiveIndex(0);
-      } else {
-        this.setActiveIndex(Number(this.$route.query.vipSeq));
+    watch: {
+      activeIndex(index) {
+        this.swiper.slideTo(index, 1000, false)
       }
-    },
-    updated() {
-      this.swiper.slideTo(this.activeIndex, 1000, false)
     },
     methods: {
       vipPopShow() {

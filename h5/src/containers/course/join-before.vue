@@ -1,14 +1,16 @@
 <template>
   <div :class="isClassCourse ? '' : 'join-before'">
     <detail-head
-      :price="details.price" :courseSet="details.courseSet"></detail-head>
+      :price="details.price" :courseSet="details.courseSet"
+      :seckillActivities="marketingActivities.seckill"></detail-head>
 
-    <detail-plan @getLearnExpiry="getLearnExpiry"></detail-plan>
+    <detail-plan @getLearnExpiry="getLearnExpiry" @switchPlan="switchPlan"></detail-plan>
     <div class="segmentation"></div>
 
     <!-- 优惠活动 -->
-    <template v-if="!isClassCourse && Number(details.price) !== 0 && unreceivedCoupons.length">
-      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
+    <template v-if="showOnsale">
+      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons"
+        :activities="marketingActivities"/>
       <div class="segmentation"></div>
     </template>
 
@@ -37,8 +39,12 @@
     <!-- 学员评价 -->
     <review-list ref="review" :targetId="details.courseSet.id" :reviews="details.reviews" title="学员评价" type="course" defaulValue="暂无评价"></review-list>
 
-    <e-footer v-if="!isClassCourse" :disabled="!accessToJoin" @click.native="handleJoin">
+    <!-- 加入学习 -->
+    <e-footer v-if="!isClassCourse && !marketingActivities.seckill" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
+    <!-- 秒杀 -->
+    <e-footer v-if="showSeckill" :half="true" @click.native="handleJoin">原价购买</e-footer>
+    <e-footer v-if="showSeckill" :half="true" @click.native="">去秒杀</e-footer>
   </div>
 </template>
 <script>
@@ -74,6 +80,7 @@
         },
         unreceivedCoupons: [],
         miniCoupons: [],
+        marketingActivities: {},
       };
     },
     components: {
@@ -110,10 +117,19 @@
           vipAccess = !vipExpired;
         }
         return vipAccess;
+      },
+      showOnsale() {
+        return !this.isClassCourse && Number(this.details.price) !== 0
+          && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities));
+      },
+      showSeckill() {
+        return !this.isClassCourse && Number(this.details.price) !== 0
+         && this.marketingActivities.seckill && this.accessToJoin;
       }
     },
     mounted() {
       if (!this.isClassCourse) {
+        // 获取促销优惠券
         Api.searchCoupon({
           params: {
             targetId: this.details.courseSet.id,
@@ -124,6 +140,16 @@
 
           this.miniCoupons = this.unreceivedCoupons.length > 3 ?
             this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
+        }).catch(err => {
+          console.error(err);
+        });
+        // 获取营销活动
+        Api.coursesActivities({
+          query: { id: this.details.id }
+        }).then(res => {
+          this.marketingActivities = res;
+        }).catch(err => {
+          console.error(err);
         });
       }
 
@@ -227,6 +253,18 @@
         this.learnExpiry = data.val;
         this.startDateStr = data.startDateStr;
         this.endDateStr = data.endDateStr;
+      },
+      // 切换计划
+      switchPlan() {
+        // 获取营销活动
+        this.marketingActivities = {};
+        Api.coursesActivities({
+          query: { id: this.details.id }
+        }).then(res => {
+          this.marketingActivities = res;
+        }).catch(err => {
+          console.error(err);
+        });
       },
       // 创建订单
       getOrder() {
