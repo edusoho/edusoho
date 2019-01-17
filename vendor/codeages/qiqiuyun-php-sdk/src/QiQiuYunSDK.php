@@ -110,7 +110,7 @@ class QiQiuYunSDK
     /**
      * @return \QiQiuYun\SDK\Service\PushService
      */
-    public function getPushService()
+    public function getPushServie()
     {
         return $this->getService('Push');
     }

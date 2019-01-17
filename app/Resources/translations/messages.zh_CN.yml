@@ -9431,6 +9431,7 @@ exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enbale: 云短信相关设置未开启!
+exception.setting.attachment.setting_enbale: 云附件未开启!
 exception.sms.code_invalid: 短信验证码错误
 exception.sms.type_error: sms类型错误
 exception.sms.send_failed: 发送失败！
@@ -9800,3 +9801,5 @@ admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级�
 
 exception.coupon.receive.failed: 优惠券领取失败
 exception.coupon.plugin.not.installed: 优惠券插件未安装
+
+course.question.question_background: 问题背景

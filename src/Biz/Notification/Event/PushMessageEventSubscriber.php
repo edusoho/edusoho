@@ -416,7 +416,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'title' => "《{$threadPost['thread']['title']}》",
                     'description' => json_encode(array('threadId' => $threadPost['threadId'], 'courseId' => $threadPost['target']['id'], 'lessonId' => $threadPost['thread']['relationId'], 'questionCreatedTime' => $threadPost['thread']['createdTime'], 'questionTitle' => $threadPost['thread']['title'], 'postContent' => $threadPost['content'], 'message' => "{$currentUser['nickname']}《{$threadPost['thread']['title']}》回复中@了你")),
                 );
-                $this->getPushDeviceService()->getPushSdk()->notifications($message);
+                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
             }
         }
     }
@@ -448,7 +448,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'title' => "《{$thread['title']}》",
                     'description' => json_encode($body),
                 );
-                $this->getPushDeviceService()->getPushSdk()->notifications($message);
+                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -495,7 +495,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'title' => "《{$thread['title']}》",
                     'description' => json_encode($body),
                 );
-                $this->getPushDeviceService()->getPushSdk()->notifications($message);
+                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -541,7 +541,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'title' => "《{$thread['title']}》",
                     'description' => json_encode($body),
                 );
-                $this->getPushDeviceService()->getPushSdk()->notifications($message);
+                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -588,7 +588,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'title' => "《{$thread['title']}》",
                     'description' => json_encode($body),
                 );
-                $this->getPushDeviceService()->getPushSdk()->notifications($message);
+                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -877,7 +877,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'title' => $thread['title'],
                     'description' => json_encode(array('threadId' => $thread['id'], 'courseId' => $thread['target']['id'], 'lessonId' => $thread['relationId'], 'questionCreatedTime' => $thread['createdTime'], 'questionTitle' => $thread['title'], 'message' => !empty($thread['title']) ? "您的课程有新的提问《{$thread['title']}》" : "有一个{$questionType}类型的提问")),
                 );
-                $this->getPushDeviceService()->getPushSdk()->notifications($message);
+                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
             }
         }
     }
@@ -968,7 +968,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'title' => "《{$threadPost['thread']['title']}》",
                     'description' => json_encode($body),
                 );
-                $this->getPushDeviceService()->getPushSdk()->notifications($message);
+                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -1505,7 +1505,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'title' => $thread['title'],
                     'description' => json_encode($body),
                 );
-                $this->getPushDeviceService()->getPushSdk()->notifications($message);
+                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -1578,7 +1578,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'title' => $thread['title'],
                     'description' => json_encode($body),
                 );
-                $this->getPushDeviceService()->getPushSdk()->notifications($message);
+                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -1699,7 +1699,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'title' => "《{$threadPost['thread']['title']}》",
                     'description' => json_encode($body),
                 );
-                $this->getPushDeviceService()->getPushSdk()->notifications($message);
+                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -1767,7 +1767,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'title' => "《{$threadPost['thread']['title']}》",
                     'description' => json_encode($body),
                 );
-                $this->getPushDeviceService()->getPushSdk()->notifications($message);
+                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
             }
         } else {
             if ($this->isIMEnabled()) {
