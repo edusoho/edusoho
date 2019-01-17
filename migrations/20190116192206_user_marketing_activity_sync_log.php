@@ -34,9 +34,9 @@ class UserMarketingActivitySyncLog extends Migration
         ');
     }
 
-    protected function getConnection()
+    public function getConnection()
     {
-        $biz = $this->getBiz();
+        $biz = $this->getContainer();
 
         return $biz['db'];
     }
