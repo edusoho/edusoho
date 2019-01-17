@@ -9,6 +9,9 @@ use Biz\Common\CommonException;
 
 class PushDeviceLogin extends AbstractResource
 {
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function add(ApiRequest $request)
     {
         $user = $this->getCurrentUser();
