@@ -18,6 +18,7 @@
       />
 
       <van-field
+        v-show="accountType === 'mobile'"
         v-model="resetInfo.encrypt_password"
         type="password"
         maxLength="20"
@@ -27,6 +28,7 @@
       />
 
       <van-field
+        v-show="accountType === 'mobile'"
         v-model="resetInfo.smsCode"
         type="text"
         center
@@ -38,7 +40,7 @@
           slot="button"
           size="small"
           type="primary"
-          :disabled="count.codeBtnDisable || !validated.account"
+          :disabled="(count.codeBtnDisable || !validated.account)"
           @click="clickSmsBtn">
           发送验证码
           <span v-show="count.showCount">({{ count.num }})</span>
@@ -100,9 +102,10 @@ export default {
       isLoading: state => state.isLoading
     }),
     btnDisable() {
-      return !(this.resetInfo.account
+      return !((this.resetInfo.account
         && this.resetInfo.encrypt_password
-        && this.resetInfo.smsCode);
+        && this.resetInfo.smsCode)
+        || this.accountType === 'email');
     },
     accountType() {
       return this.resetInfo['account'].includes('@') ? 'email' : 'mobile';
@@ -134,9 +137,19 @@ export default {
     },
     handleSmsSuccess(token) {
       this.resetInfo.dragCaptchaToken = token;
+      if (this.accountType === 'email') {
+        this.handleSubmit();
+        return;
+      }
       this.handleSendSms();
     },
     handleSubmit() {
+      // 邮箱时只验证滑动验证码
+      if (!this.dragEnable && this.accountType === 'email') {
+        this.dragEnable = true
+        return;
+      }
+
       const resetInfo = Object.assign({}, this.resetInfo);
       const password = resetInfo.encrypt_password;
       const account = resetInfo.account;
@@ -153,8 +166,10 @@ export default {
         })
         .then(res => {
           Dialog.alert({
-            message: '验证链接已发送到\ ' + email,
-          }).then(() => {});
+            message: '验证链接已发送到\ ' + account,
+          }).then(() => {
+            this.$router.replace({ name: 'login' });
+          });
         })
         .catch(err => {
           Toast.fail(err.message);
