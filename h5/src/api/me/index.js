@@ -82,6 +82,12 @@ export default [
     method: 'GET'
   }, {
     // 邮箱重置密码
+    /*
+     * @params dragCaptchaToken
+     * @return {
+     *   "id":"25","nickname":"806338233", ...
+     * }
+     */
     // 4040104: 没有该用户
     // 4030106: discuz论坛用户，请到论坛重置密码
     // 4030301: 验证失败
@@ -89,7 +95,8 @@ export default [
     // 4030303: 验证码失效
     name: 'resetPasswordByEmail',
     url: '/user/{email}/password/email',
-    method: 'PATCH'
+    method: 'PATCH',
+    disableLoading: true
   }, {
     /*
      * @params dragCaptchaToken
@@ -103,7 +110,8 @@ export default [
     // 4030303: 验证码失效
     name: 'resetPasswordSMS',
     url: '/user/{mobile}/sms_reset_password',
-    method: 'POST'
+    method: 'POST',
+    disableLoading: true
   }, {
     // 手机重置密码短信校验
     /*
@@ -114,7 +122,8 @@ export default [
     // 5000305: 参数缺失
     name: 'resetPasswordSMSValidate',
     url: '/user/{mobile}/sms_reset_password/{smsCode}',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }, {
     // 通过手机重置密码
     /*
@@ -132,6 +141,7 @@ export default [
     // 4030303: 验证码失效
     name: 'resetPasswordByMobile',
     url: '/user/{mobile}/password/mobile',
-    method: 'PATCH'
+    method: 'PATCH',
+    disableLoading: true
   }
 ];

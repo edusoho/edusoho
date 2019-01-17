@@ -37,7 +37,7 @@ export default {
       handler(to) {
         const redirect = to.query.redirect || '';
 
-        this.isQrcode = to.query.loginToken ? true : false;
+        this.isQrcode = !!to.query.loginToken;
 
         this.showLeftArrow =
           !['my', 'find', 'learning', 'prelogin', 'preview', 'coupon_receive'].includes(to.name);

@@ -4,30 +4,30 @@
     <span class='register-title'>找回密码</span>
 
       <e-drag
+        ref="dragComponent"
         v-if="dragEnable"
         :key="dragKey"
         @success="handleSmsSuccess"></e-drag>
 
       <van-field
-        v-model="registerInfo.account"
+        v-model="resetInfo.account"
         placeholder="请输入手机号或邮箱号"
-        maxLength="11"
         :error-message="errorMessage.account"
         @blur="validateAccountOrPsw('account')"
         @keyup="validatedChecker()"
       />
 
       <van-field
-        v-model="registerInfo.encrypt_password"
+        v-model="resetInfo.encrypt_password"
         type="password"
         maxLength="20"
         :error-message="errorMessage.encrypt_password"
-        @blur="validateMobileOrPsw('encrypt_password')"
+        @blur="validateAccountOrPsw('encrypt_password')"
         placeholder="请设置密码（5-20位字符）"
       />
 
       <van-field
-        v-model="registerInfo.smsCode"
+        v-model="resetInfo.smsCode"
         type="text"
         center
         clearable
@@ -48,16 +48,27 @@
       <van-button type="default"
         class="primary-btn mb20"
         :disabled="btnDisable"
-        @click="handleSubmit">注册</van-button>
+        @click="handleSubmit">确认</van-button>
   </div>
 </template>
 
 <script>
+import Api from '@/api'
 import EDrag from '@/containers/components/e-drag';
 import { mapActions, mapState } from 'vuex';
 import XXTEA from '@/utils/xxtea.js';
-import { Toast } from 'vant';
+import { Dialog, Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js'
+
+const emptyresetInfo = {
+  account: '',
+  accountType: '',
+  dragCaptchaToken: '',
+  encrypt_password: '',
+  smsCode: '',
+  smsToken: '',
+  type: 'register'
+};
 
 export default {
   name: 'password-reset',
@@ -66,17 +77,9 @@ export default {
   },
   data() {
     return {
-      registerInfo: {
-        account: '',
-        dragCaptchaToken: '',
-        encrypt_password: '',
-        smsCode: '',
-        smsToken: '',
-        type: 'register'
-      },
+      resetInfo: emptyresetInfo,
       dragEnable: false,
       dragKey: 0,
-      submitFlag: true,
       errorMessage: {
         account: '',
         encrypt_password: ''
@@ -89,28 +92,30 @@ export default {
         showCount: false,
         num: 120,
         codeBtnDisable: false
-      }
+      },
     }
   },
   computed: {
-    btnDisable() {
-      return !(this.registerInfo.account
-        && this.registerInfo.encrypt_password
-        && this.registerInfo.smsCode);
-    },
     ...mapState({
       isLoading: state => state.isLoading
-    })
+    }),
+    btnDisable() {
+      return !(this.resetInfo.account
+        && this.resetInfo.encrypt_password
+        && this.resetInfo.smsCode);
+    },
+    accountType() {
+      return this.resetInfo['account'].includes('@') ? 'email' : 'mobile';
+    },
   },
   methods: {
     ...mapActions([
-      'addUser',
-      'sendSmsCenter',
       'userLogin'
     ]),
-    validateMobileOrPsw(type = 'mobile') {
-      const ele = this.registerInfo[type];
-      const rule = rulesConfig[type];
+    validateAccountOrPsw(type = 'account') {
+      const ele = this.resetInfo[type];
+      const rule = type === 'account' ?
+        rulesConfig[this.accountType] : rulesConfig[type]; // 规则：账号／密码
 
       if (ele.length == 0) {
         this.errorMessage[type] = '';
@@ -121,52 +126,76 @@ export default {
         ? rule.message: '';
     },
     validatedChecker() {
-      const mobile = this.registerInfo.account;
-      const rule = rulesConfig['mobile'];
+      const account = this.resetInfo.account;
+      const type = this.accountType;
+      const rule = rulesConfig[type];
 
-      this.validated.account = rule.validator(mobile);
+      this.validated.account = rule.validator(account);
     },
     handleSmsSuccess(token) {
-      this.registerInfo.dragCaptchaToken = token;
+      this.resetInfo.dragCaptchaToken = token;
       this.handleSendSms();
     },
     handleSubmit() {
-      const password = this.registerInfo.encrypt_password;
-      const usertel = this.registerInfo.account;
-      if(this.submitFlag) {
-        const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
-        this.registerInfo.encrypt_password = encrypt;
-        this.submitFlag = false;
-      }
-      this.addUser(this.registerInfo)
-      .then(res => {
-        Toast.success({
-          duration: 2000,
-          message: '注册成功'
-        });
-        const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
-        var jumpToLogin = () => {
-          this.$router.replace({path: redirect});
-        }
-        setTimeout(jumpToLogin, 2000);
-      })
-      .then(() => {
-        this.userLogin({
-          username: usertel,
-          password: password
+      const resetInfo = Object.assign({}, this.resetInfo);
+      const password = resetInfo.encrypt_password;
+      const account = resetInfo.account;
+      const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
+
+      resetInfo.encrypt_password = encrypt;
+
+      // 邮箱重置
+      if (this.accountType === 'email') {
+        const dragCaptchaToken = this.resetInfo.dragCaptchaToken;
+        Api.resetPasswordByEmail({
+          query: { email: account },
+          data: { dragCaptchaToken },
         })
+        .then(res => {
+          Dialog.alert({
+            message: '验证链接已发送到\ ' + email,
+          }).then(() => {});
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+        return
+      }
+
+      // 手机重置
+      Api.resetPasswordByMobile({
+        query: { mobile: account },
+        data: {
+          smsToken: resetInfo.smsToken,
+          smsCode: resetInfo.smsCode,
+          encrypt_password: resetInfo.encrypt_password,
+        }
+      })
+      .then(res => {
+        this.$router.replace({ name: 'login' });
       })
       .catch(err => {
         Toast.fail(err.message);
       });
+
     },
     clickSmsBtn() {
-      this.dragEnable = true
+      if (!this.dragEnable) {
+        this.dragEnable = true
+        return;
+      }
+      // 验证码组件更新数据
+      this.$refs.dragComponent.initDragCaptcha();
     },
     handleSendSms() {
-      this.sendSmsCenter(this.registerInfo)
+      const mobile = this.resetInfo.account;
+      const dragCaptchaToken = this.resetInfo.dragCaptchaToken;
+      Api.resetPasswordSMS({
+        query: { mobile },
+        data: { dragCaptchaToken },
+      })
       .then(res => {
-        this.registerInfo.smsToken = res.smsToken;
+        this.resetInfo.smsToken = res.smsToken;
         this.countDown();
       })
       .catch(err => {
@@ -174,14 +203,14 @@ export default {
           case 4030301:
           case 4030302:
             this.dragKey ++;
-            this.registerInfo.dragCaptchaToken = '';
-            this.registerInfo.smsToken = '';
-            Toast.fail(err.message);
+            this.resetInfo.dragCaptchaToken = '';
+            this.resetInfo.smsToken = '';
+            break;
           case 4030303:
-            this.dragEnable = true
-            Toast.fail(err.message);
+            this.dragEnable = true;
             break;
         }
+        Toast.fail(err.message);
       });
     },
     // 倒计时
@@ -203,6 +232,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>
