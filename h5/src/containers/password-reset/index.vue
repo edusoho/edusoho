@@ -5,7 +5,6 @@
 
       <e-drag
         ref="dragComponent"
-        v-if="dragEnable"
         :key="dragKey"
         @success="handleSmsSuccess"></e-drag>
 
@@ -80,7 +79,6 @@ export default {
   data() {
     return {
       resetInfo: emptyresetInfo,
-      dragEnable: false,
       dragKey: 0,
       errorMessage: {
         account: '',
@@ -134,19 +132,8 @@ export default {
     },
     handleSmsSuccess(token) {
       this.resetInfo.dragCaptchaToken = token;
-      if (this.accountType === 'email') {
-        this.handleSubmit();
-        return;
-      }
-      this.handleSendSms();
     },
     handleSubmit() {
-      // 邮箱时只验证滑动验证码
-      if (!this.dragEnable && this.accountType === 'email') {
-        this.dragEnable = true
-        return;
-      }
-
       const resetInfo = Object.assign({}, this.resetInfo);
       const password = resetInfo.encrypt_password;
       const account = resetInfo.account;
@@ -164,7 +151,8 @@ export default {
         .then(res => {
           Dialog.alert({
             message: '验证链接已发送到\ ' + account,
-          }).then(() => {
+          })
+          .then(() => {
             this.$router.replace({
               name: 'login',
               params: {
@@ -174,6 +162,13 @@ export default {
           });
         })
         .catch(err => {
+          switch(err.code) {
+            case 4030301:
+            case 4030302:
+              this.dragKey ++;
+              this.resetInfo.dragCaptchaToken = '';
+              break;
+          }
           Toast.fail(err.message);
         });
         return
@@ -189,12 +184,17 @@ export default {
         }
       })
       .then(res => {
-        this.$router.replace({
-          name: 'login',
-          params: {
-            username: account
-          },
-        });
+        Dialog.alert({
+          message: '密码重置成功',
+        })
+        .then(() => {
+          this.$router.replace({
+            name: 'login',
+            params: {
+              username: account
+            },
+          });
+        })
       })
       .catch(err => {
         Toast.fail(err.message);
@@ -202,12 +202,7 @@ export default {
 
     },
     clickSmsBtn() {
-      if (!this.dragEnable) {
-        this.dragEnable = true
-        return;
-      }
-      // 验证码组件更新数据
-      this.$refs.dragComponent.initDragCaptcha();
+      this.handleSendSms();
     },
     handleSendSms() {
       const mobile = this.resetInfo.account;
@@ -227,9 +222,6 @@ export default {
             this.dragKey ++;
             this.resetInfo.dragCaptchaToken = '';
             this.resetInfo.smsToken = '';
-            break;
-          case 4030303:
-            this.dragEnable = true;
             break;
         }
         Toast.fail(err.message);
