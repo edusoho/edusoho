@@ -1,7 +1,7 @@
 <template>
   <e-panel title="优惠">
     <!-- 砍价 -->
-    <van-cell v-if="activities.cut" class="course-detail__cell" is-link @click="">
+    <van-cell v-if="activities.cut" class="course-detail__cell" is-link @click="activityHandle(activities.cut.id)">
       <template slot="title">
         <span class="text-12">砍价：</span>
         <van-tag class="ml5" style="background-color: #ffaa00">砍价</van-tag>
@@ -9,7 +9,7 @@
       </template>
     </van-cell>
     <!-- 拼团 -->
-    <van-cell v-if="activities.groupon" class="course-detail__cell" is-link @click="">
+    <van-cell v-if="activities.groupon" class="course-detail__cell" is-link @click="activityHandle(activities.groupon.id)">
       <template slot="title">
         <span class="text-12">拼团：</span>
         <van-tag class="ml5" style="background-color: #ffaa00">拼团</van-tag>
