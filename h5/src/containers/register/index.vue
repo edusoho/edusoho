@@ -67,6 +67,8 @@
   </div>
 </template>
 <script>
+import activityMixin from '@/mixins/activity';
+import redirectMixin from '@/mixins/saveRedirect';
 import EDrag from '@/containers/components/e-drag';
 import { mapActions, mapState } from 'vuex';
 import XXTEA from '@/utils/xxtea.js';
@@ -98,6 +100,7 @@ export default {
   components: {
     EDrag
   },
+  mixins: [activityMixin, redirectMixin],
   data() {
     return {
       registerInfo: emptyRegisterInfo,
@@ -186,11 +189,7 @@ export default {
             duration: 2000,
             message: '绑定成功'
           });
-          const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
-          var jumpToLogin = () => {
-            this.$router.replace({ path: redirect });
-          }
-          setTimeout(jumpToLogin, 2000);
+          this.afterLogin();
         })
         .catch(err => {
           Toast.fail(err.message);
@@ -205,11 +204,7 @@ export default {
           duration: 2000,
           message: '注册成功'
         });
-        const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
-        var jumpToLogin = () => {
-          this.$router.replace({ path: redirect });
-        }
-        setTimeout(jumpToLogin, 2000);
+        this.afterLogin();
       })
       .then(() => {
         this.userLogin({
