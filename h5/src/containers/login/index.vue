@@ -14,10 +14,9 @@
       :error-message="errorMessage.password"
       placeholder="请输入密码" />
     <van-button type="default" class="primary-btn mb20" @click="onSubmit" :disabled="btnDisable">登录</van-button>
-    <div class="login-bottom">
-      <router-link to="/setting/password/reset" class="login-account">找回密码</router-link>
-      还没有注册账号？
-      <span class="login-account" @click="jumpRegister">立即注册</span>
+    <div class="login-bottom text-center">
+      <router-link to="/setting/password/reset" class="login-account">忘记密码？ &nbsp;|</router-link>
+      <span class="login-account" @click="jumpRegister">&nbsp; 立即注册 &nbsp;</span>
     </div>
     <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="face-icon" v-if="faceSetting">
       <img src="static/images/face.png" alt="人脸识别登录图标">
