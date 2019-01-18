@@ -120,7 +120,7 @@
       },
       showOnsale() {
         return !this.isClassCourse && Number(this.details.price) !== 0
-          && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities));
+          && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities).length);
       },
       showSeckill() {
         return !this.isClassCourse && Number(this.details.price) !== 0

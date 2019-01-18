@@ -15,7 +15,7 @@
     <div class="course-detail__head--img"
       v-show="sourceType === 'img' || isEncryptionPlus">
       <img :src="courseSet.cover.large" alt="">
-      <div v-if="seckillActivities">秒杀倒计时 xxxx</div>
+      <countDown v-if="seckillActivities" :activity="seckillActivities"></countDown>
     </div>
     <div id="course-detail__head--video"
       ref="video"
@@ -28,8 +28,12 @@ import loadScript from 'load-script';
 import { mapState } from 'vuex';
 import Api from '@/api'
 import { Toast } from 'vant';
+import countDown from '@/containers/components/e-marketing/e-count-down/index';
 
 export default {
+  components: {
+    countDown
+  },
   data() {
     return {
       isEncryptionPlus: false,

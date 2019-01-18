@@ -1,13 +1,13 @@
 <template>
   <module-frame containerClass="setting-groupon" :isActive="active" :isIncomplete="incomplete">
     <div slot="preview" class="groupon-container">
-      <groupon
+      <activity
         :activity="copyModuleData.activity"
         :tag="copyModuleData.tag"
         :showTitle="radio"
         :type="moduleData.type"
         :feedback="false">
-      </groupon>
+      </activity>
     </div>
     <div slot="setting" class="groupon-allocate">
       <header class="title">{{ activityTitle }}</header>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import groupon from '@/containers/components/e-marketing/e-activity';
+import activity from '@/containers/components/e-marketing/e-activity';
 import moduleFrame from '../module-frame';
 import courseModal from '../course/modal/course-modal';
 import settingCell from '../module-frame/setting-cell';
@@ -55,7 +55,7 @@ export default {
   components: {
     moduleFrame,
     courseModal,
-    groupon,
+    activity,
     settingCell
   },
   props: {
