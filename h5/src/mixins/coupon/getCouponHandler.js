@@ -93,23 +93,6 @@ export default {
       }).catch(err => {
         Toast.fail(err.message);
       });
-    },
-    grouponHandle(activityId) {
-      const params = {
-        domainUri: 'http://lvliujie.st.edusoho.cn',
-        itemUri: '',
-        source: 'h5'
-      };
-      Api.marketingActivities({
-        query: {
-          activityId
-        },
-        data: params
-      }).then(res => {
-        window.location.href = res.url;
-      }).catch(err => {
-        console.log(err.message);
-      });
     }
   }
 };

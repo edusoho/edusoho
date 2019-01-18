@@ -53,6 +53,7 @@
   import vipList from '../components/e-vip-list/e-vip-list.vue';
   import * as types from '@/store/mutation-types';
   import getCouponMixin from '@/mixins/coupon/getCouponHandler';
+  import activityMixin from '@/mixins/activity/index';
   import Api from '@/api';
   import { mapState } from 'vuex';
   import { Toast } from 'vant';
@@ -66,7 +67,7 @@
       'e-vip-list': vipList,
       'e-market-part': marketPart
     },
-    mixins: [getCouponMixin],
+    mixins: [getCouponMixin, activityMixin],
     props: {
       feedback: {
         type: Boolean,

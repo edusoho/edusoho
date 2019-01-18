@@ -40,10 +40,11 @@ import EPopup from '@/components/popup';
 import coupon from '@/containers/components/e-coupon/e-coupon';
 import miniCoupon from '@/containers/components/e-mini-coupon/e-mini-coupon';
 import getCouponMixin from '@/mixins/coupon/getCouponHandler';
+import activityMixin from '@/mixins/activity/index';
 
 export default {
   name: 'onsale',
-  mixins: [getCouponMixin],
+  mixins: [getCouponMixin, activityMixin],
   components: {
     coupon,
     miniCoupon,
