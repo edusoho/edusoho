@@ -94,7 +94,7 @@ export default {
         Toast.fail(err.message);
       });
     },
-    grouponHandle(activityId) {
+    activityHandle(activityId) {
       const params = {
         domainUri: 'http://lvliujie.st.edusoho.cn',
         itemUri: '',

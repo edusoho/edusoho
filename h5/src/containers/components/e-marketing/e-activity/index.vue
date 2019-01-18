@@ -102,7 +102,7 @@ export default {
       if (!this.feedback) return;
       if ((this.type !== 'seckill' && status === 'ongoing')
         || (this.type === 'seckill' && this.seckilling)) {
-        this.$emit('grouponHandle', this.activityId)
+        this.$emit('activityHandle', this.activityId)
       }
     },
     expire(seckilling) {

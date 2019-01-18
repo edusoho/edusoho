@@ -4,7 +4,7 @@
       <span class="head-left" :class="activity.type">{{ type2symbol[activity.type] }}</span>
       <span class="head-right" :class="activity.status">{{ type2label[activity.type] + status2label[activity.status] }}</span>
     </div>
-    <div class="activity-cell__body">
+    <div class="activity-cell__body" @click="activityHandle(activityId)">
       <div class="marketing-groupon__image-container" :class="{ 'marketing-groupon__image-empty': !activity.cover }">
         <img v-if="activity.cover" class="marketing-groupon__image" :src="activity.cover">
       </div>
@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import getCouponMixin from '@/mixins/coupon/getCouponHandler';
+
 const type2label = {
   cut: '砍价',
   groupon: '拼团',
@@ -54,12 +56,14 @@ export default {
       type2symbol,
       type2label,
       status2label,
+      activityId: Number(this.activity.activityId)
     };
   },
+  mixins: [getCouponMixin],
   methods: {
     viewDetail(e) {
       // const { activityId, courseId } = activity;
-    },
+    }
   }
 }
 </script>

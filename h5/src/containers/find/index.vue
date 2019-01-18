@@ -38,7 +38,7 @@
         :showTitle="part.data.titleShow"
         :type="part.type"
         :tag="part.data.tag"
-        @grouponHandle="grouponHandle"
+        @activityHandle="activityHandle"
         :feedback="feedback"></e-market-part>
     </div>
   </div>
