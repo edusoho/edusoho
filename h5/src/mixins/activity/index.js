@@ -3,9 +3,8 @@ import Api from '@/api';
 export default {
   methods: {
     activityHandle(activityId) {
-      console.log('activityId', activityId, location.origin);
       const params = {
-        domainUri: 'http://lvliujie.st.edusoho.cn',
+        domainUri: location.origin,
         itemUri: '',
         source: 'h5'
       };
