@@ -207,6 +207,13 @@ const routes = [
       title: ''
     },
     component: () => import(/* webpackChunkName: "password_reset" */'@/containers/password-reset/index.vue')
+  }, {
+    path: '/share/redirect',
+    name: 'share_redirect',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "share_redirect" */'@/containers/share-redirect/index.vue')
   }
 ];
 

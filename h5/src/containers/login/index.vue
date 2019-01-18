@@ -25,11 +25,14 @@
 
 </template>
 <script>
+import activityMixin from '@/mixins/activity';
+import redirectMixin from '@/mixins/saveRedirect';
 import { mapActions } from 'vuex';
 import { Toast } from 'vant';
 import Api from '@/api'
 
 export default {
+  mixins: [activityMixin, redirectMixin],
   data() {
     return {
       username: '',
@@ -68,16 +71,7 @@ export default {
           duration: 2000,
           message: '登录成功'
         });
-        const redirect = this.$route.query.redirect || '/';
-        const callbackUrl = this.$route.query.callback || '';
-        const jumpAction = () => {
-          if (callbackUrl) {
-            window.location.href = callbackUrl
-          } else {
-            this.$router.replace({path: redirect});
-          }
-        }
-        setTimeout(jumpAction, 2000);
+        this.afterLogin();
       }).catch(err => {
         Toast.fail(err.message);
       })

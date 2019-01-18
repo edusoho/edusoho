@@ -1,8 +1,9 @@
 import Api from '@/api';
+import { Toast } from 'vant';
 
 export default {
   methods: {
-    activityHandle(activityId) {
+    activityHandle(activityId, addTicket = false) {
       const params = {
         domainUri: location.origin,
         itemUri: '',
@@ -14,9 +15,11 @@ export default {
         },
         data: params
       }).then(res => {
-        window.location.href = res.url;
+        const symbol = res.url.indexOf('?') !== -1 ? '&' : '?';
+        const url = addTicket ? `${res.url}${symbol}ticket=${res.ticket}` : res.url;
+        window.location.href = url;
       }).catch(err => {
-        console.log(err.message);
+        Toast.fail(err.message);
       });
     }
   }
