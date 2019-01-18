@@ -89,7 +89,8 @@ function apiConfig(type, queryString) {
       params: {
         name: queryString,
         statuses: 'ongoing,unstart',
-        type: type
+        type: type,
+        productRemaind_GT: '0'
       }
     }
   }
