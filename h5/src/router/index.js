@@ -200,6 +200,13 @@ const routes = [
       title: '会员专区'
     },
     component: () => import(/* webpackChunkName: "vip" */'@/containers/vip/index.vue')
+  }, {
+    path: '/setting/password/reset',
+    name: 'password_reset',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "password_reset" */'@/containers/password-reset/index.vue')
   }
 ];
 
@@ -216,7 +223,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const shouldUpdateMetaTitle = ['binding', 'register', 'login', 'protocol', 'find'].includes(to.name);
+  const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name);
 
   // 课程后台配置数据
   if (!Object.keys(store.state.courseSettings).length) {

@@ -86,14 +86,13 @@ export default {
         return;
       }
       if (this.dragState.currentLeft) {
+        const token = this.getToken();
         this.dragToEnd = true;
         Api.dragValidate({
-          query: {
-            token: this.getToken()
-          }
+          query: { token }
         }).then(res => {
           Toast.success('验证成功');
-          this.$emit('success', this.getToken());
+          this.$emit('success', token);
         }).catch(err => {
           Toast.fail(err.message);
           this.initDragCaptcha();

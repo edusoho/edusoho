@@ -74,7 +74,7 @@ import { dateTimeDown } from '@/utils/date-toolkit';
             this.seckillClass = 'seckill-closed';
             this.counting = false;
             this.clearInterval();
-            this.$emit('timesUp', this.seckilling)
+            this.$emit('timesUp')
           }
         }, 1000);
       },

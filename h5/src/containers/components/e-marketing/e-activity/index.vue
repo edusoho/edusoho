@@ -1,5 +1,5 @@
 <template>
-  <div class="e-groupon">
+  <div class="e-groupon" @click="getMarketUrl(activity.status)">
     <div class="e-coupon__title" v-if="showTitle === 'show'">{{ activityTitle }}</div>
     <div class="e-groupon__tag" v-if="tag.length">{{ tag }}</div>
     <div class="e-groupon__image-container" :class="{ 'e-groupon__image-empty': !activity.cover }">
@@ -12,7 +12,7 @@
         <div class="type-tag" v-if="type !== 'groupon'">{{ type === 'cut' ? '砍价享' : '秒杀价' }}</div>
         <div class="context-sale__sale-price">￥{{ activityPrice }}</div>
         <div v-if="activity.originPrice" class="context-sale__origin-price">原价{{ activity.originPrice }} 元</div>
-        <a class="context-sale__shopping" :class="activity.status" href="javascript:;" @click="getMarketUrl(activity.status)">
+        <a class="context-sale__shopping" :class="activity.status" href="javascript:;">
           {{ grouponStatus }}
         </a>
       </div>
@@ -53,7 +53,6 @@ export default {
   data () {
     return {
       counting: true,
-      seckilling: false,
       activityId: Number(this.activity.id),
     }
   },
@@ -100,14 +99,10 @@ export default {
   methods: {
     getMarketUrl(status) {
       if (!this.feedback) return;
-      if ((this.type !== 'seckill' && status === 'ongoing')
-        || (this.type === 'seckill' && this.seckilling)) {
-        this.$emit('grouponHandle', this.activityId)
-      }
+      this.$emit('activityHandle', this.activityId)
     },
-    expire(seckilling) {
+    expire() {
       this.counting = false;
-      this.seckilling = seckilling;
     }
   }
 }

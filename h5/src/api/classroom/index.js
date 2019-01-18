@@ -10,6 +10,7 @@ export default [
     url: '/classrooms/{classroomId}/members',
     method: 'POST'
   }, {
+    // 获取班级评论
     name: 'getClassroomReviews',
     url: '/classrooms/{id}/reviews',
     method: 'GET'
@@ -18,6 +19,7 @@ export default [
     name: 'getClassList',
     url: '/classrooms'
   }, {
+    // 退出班级
     name: 'deleteClassroom',
     url: '/me/classroom_members/{id}',
     method: 'DELETE',

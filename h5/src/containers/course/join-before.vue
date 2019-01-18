@@ -44,7 +44,7 @@
       {{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
     <!-- 秒杀 -->
     <e-footer v-if="showSeckill" :half="true" @click.native="handleJoin">原价购买</e-footer>
-    <e-footer v-if="showSeckill" :half="true" @click.native="">去秒杀</e-footer>
+    <e-footer v-if="showSeckill" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
   </div>
 </template>
 <script>
@@ -58,12 +58,13 @@
   import { mapActions, mapState } from 'vuex';
   import redirectMixin from '@/mixins/saveRedirect';
   import Api from '@/api';
+  import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 
   const TAB_HEIGHT = 44;
 
   export default {
     name: 'joinBefore',
-    mixins: [redirectMixin],
+    mixins: [redirectMixin, getCouponMixin],
     data() {
       return {
         tabs: ['课程介绍', '课程目录', '学员评价'],

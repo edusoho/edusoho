@@ -2,17 +2,17 @@
   <div class="marketing-groupon activity-cell" @click="viewDetail">
     <div class="activity-cell__head">
       <span class="head-left" :class="activity.type">{{ type2symbol[activity.type] }}</span>
-      <span class="head-right" :class="activity.result">{{ type2label[activity.type] + status2label[activity.result] }}</span>
+      <span class="head-right" :class="activity.status">{{ type2label[activity.type] + status2label[activity.status] }}</span>
     </div>
-    <div class="activity-cell__body">
+    <div class="activity-cell__body" @click="activityHandle(activityId)">
       <div class="marketing-groupon__image-container" :class="{ 'marketing-groupon__image-empty': !activity.cover }">
         <img v-if="activity.cover" class="marketing-groupon__image" :src="activity.cover">
       </div>
       <div class="marketing-groupon__context e-groupon__context">
         <div class="context-title text-overflow">{{ activity.name }}</div>
         <div class="context-sale">
-          <span v-if="payAmount" class="context-sale__sale-price">{{ payAmount }}元</span>
-          <span v-if="originPrice" class="context-sale__origin-price">{{ originPrice }}元</span>
+          <span v-if="activity.price" class="context-sale__sale-price">{{ activity.price }}元</span>
+          <span v-if="activity.originPrice" class="context-sale__origin-price">{{ activity.originPrice }}元</span>
           <span class="context-sale__shopping">{{ type2label[activity.type] }}详情</span>
         </div>
       </div>
@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import activityMixin from '@/mixins/activity/index';
+
 const type2label = {
   cut: '砍价',
   groupon: '拼团',
@@ -34,9 +36,9 @@ const type2symbol = {
 };
 
 const status2label = {
-  success: '成功',
+  successed: '成功',
   ongoing: '进行中',
-  fail: '失败',
+  failed: '失败',
 };
 
 export default {
@@ -54,23 +56,14 @@ export default {
       type2symbol,
       type2label,
       status2label,
+      activityId: Number(this.activity.activityId)
     };
   },
-  computed: {
-    payAmount() {
-      return this.activity.rule && this.activity.rule.payAmount;
-    },
-    originPrice() {
-      return this.activity.rule && this.activity.rule.originPrice;
-    },
-    type() {
-      return this.activity.type;
-    },
-  },
+  mixins: [activityMixin],
   methods: {
     viewDetail(e) {
       // const { activityId, courseId } = activity;
-    },
+    }
   }
 }
 </script>

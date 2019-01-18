@@ -25,6 +25,7 @@ export default {
     localStorage.setItem('user', JSON.stringify(payload));
   },
   [types.SMS_CENTER](state, payload) {
+    // 看起来像是没用的，后续需要验证
     state.smsToken = payload;
   },
   [types.SET_NICKNAME](state, payload) {

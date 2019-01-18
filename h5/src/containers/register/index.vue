@@ -4,7 +4,6 @@
     <span class="register-title">{{ registerType[pathName] }}</span>
 
       <van-field
-        ref="mobile"
         v-model="registerInfo.mobile"
         placeholder="请输入手机号"
         maxLength="11"
@@ -26,7 +25,6 @@
         ref="dragComponent"
         v-if="dragEnable"
         :key="dragKey"
-        :info="registerInfo"
         @success="handleSmsSuccess"></e-drag>
 
       <van-field
@@ -105,11 +103,6 @@ export default {
       registerInfo: emptyRegisterInfo,
       dragEnable: false,
       dragKey: 0,
-      options: [{
-        model: 'email'
-      }, {
-        model: 'mobile'
-      }],
       errorMessage: {
         mobile: '',
         encrypt_password: ''

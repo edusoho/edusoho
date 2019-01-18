@@ -2,7 +2,7 @@ import Api from '@/api';
 
 export default {
   methods: {
-    grouponHandle(activityId) {
+    activityHandle(activityId) {
       console.log('activityId', activityId, location.origin);
       const params = {
         domainUri: 'http://lvliujie.st.edusoho.cn',
