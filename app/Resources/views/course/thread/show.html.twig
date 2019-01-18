@@ -53,7 +53,11 @@
 
     {% if isManager or app.user.id == author.id %}
       <div class="thread-footer" >
-        <a href="{{ path('course_thread_edit', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> {{'thread.edit_btn'|trans}}</a>
+        {% if thread.source == 'app' %}
+          <a class="btn color-gray" title="{{ 'course.thread.edit_hint'|trans }}"><span class="glyphicon glyphicon-edit"></span> {{'thread.edit_btn'|trans}} </a>
+        {% else %}
+          <a href="{{ path('course_thread_edit', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> {{'thread.edit_btn'|trans}}</a>
+        {% endif %}
         {% if isManager %}
           <a href="javascript:;" class="btn btn-link" data-url="{{ path('course_thread_delete', {courseId:course.id, threadId:thread.id}) }}" data-after-url="{{ path('my_course_show', {id:course.id, tab: 'threads'}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.delete_confirm_message'|trans}}"><span class="glyphicon glyphicon-remove-sign"></span> {{'thread.delete_btn'|trans}}</a>
           {% if thread.isStick %}
