@@ -82,7 +82,8 @@ const dateTimeDown = date => {
   hour = hour ? `${hour}小时` : '';
   minute = minute ? `${minute}分` : '';
   second = second ? `${second}秒` : '';
-  return day + hour + minute + second;
+  const time = day + hour + minute + second;
+  return time;
 };
 
 // days（传时间戳）
