@@ -29,7 +29,7 @@
                   <span class="label label-info" title="{{'my.learning.thread.question_tips'|trans}}">{{'my.thread.question'|trans}}</span>
                 {% endif  %}
 
-                <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+                <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
 
                 {% if thread.nice %}
                   <span class="label label-warning" title="{{'my.learning.thread.essence_tips'|trans}}">{{'my.learning.thread.essence'|trans}}</span>
@@ -38,7 +38,7 @@
               </div>
               <div class="color-gray text-normal">
                 {% if classroom %}
-                  <span>{{'my.learning.thread.target_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-primary">{{ classroom.title }}</a></span>
+                  <span>{{'my.learning.thread.target_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-primary" target="_blank">{{ classroom.title }}</a></span>
                 {% else %}
                   <span>{{ setting('classroom.name')|default("classroom") }}{{'my.learning.thread.deleted'|trans}}</span>
                 {% endif %}
