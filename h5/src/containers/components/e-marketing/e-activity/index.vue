@@ -7,7 +7,7 @@
     </div>
     <countDown v-if="type === 'seckill'" :activity="activity" @timesUp="expire"></countDown>
     <div class="e-groupon__context">
-      <div class="context-title text-overflow">{{ activity.name || '拼团活动' }}</div>
+      <div class="context-title text-overflow">{{ activity.name || '活动名称' }}</div>
       <div class="context-sale clearfix">
         <div class="type-tag" v-if="type !== 'groupon'">{{ type === 'cut' ? '砍价享' : '秒杀价' }}</div>
         <div class="context-sale__sale-price">￥{{ activityPrice }}</div>
