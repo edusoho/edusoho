@@ -125,7 +125,7 @@
           && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities).length);
       },
       showSeckill() {
-        return Number(this.details.price) !== 0
+        return Number(this.planDetails.price) !== 0
          && this.marketingActivities.seckill && this.accessToJoin;
       }
     },

@@ -40,7 +40,6 @@
 
 <script>
 import marketingMixins from '@admin/mixins/marketing';
-import head from '@admin/config/modal-config';
 import courseTable from './course-table';
 import { mapMutations, mapState, mapActions } from 'vuex';
 import { VALUE_DEFAULT, TYPE_TEXT_DEFAULT } from '@admin/config/module-default-config';
@@ -127,7 +126,6 @@ export default {
       keyWord: '',
       courseSets: this.courseList,
       courseListIds: [],
-      head,
       valueDefault: VALUE_DEFAULT,
       typeTextDefault: TYPE_TEXT_DEFAULT,
       hideLoading: false
