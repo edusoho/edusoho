@@ -302,7 +302,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $this->getUploadFileInitDao()->update($file['id'], array('globalId' => $initParams['globalId']));
         }
 
-        $this->getLogger()->info("initUpload 上传文件： #{$file['id']}");
+        $this->getLogger()->info("initFormUpload 上传文件： #{$file['id']}");
 
         return $initParams;
     }

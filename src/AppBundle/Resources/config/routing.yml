@@ -280,8 +280,8 @@ player_local_media:
     defaults: { _controller: AppBundle:Player:localMedia}
 
 course_thread_player_show:
-    path: /course/thread/file/{id}/play/show
-    defaults: { _controller: AppBundle:Course/Thread:playShow}
+    path: /course/thread/file/{id}/player/show
+    defaults: { _controller: AppBundle:Course/Thread:playerShow}
 
 hls_stream:
     path: /hls/{id}/stream/{level}/{token}.m3u8
@@ -2500,7 +2500,7 @@ attachment_preview:
   defaults: { _controller: AppBundle:File/Attachment:preview }
   methods: [GET]
 
-attachment_direct_video:
+attachment_direct_video_preview:
   path: /attachment/{id}/directVideoPreview
   defaults: { _controller: AppBundle:File/Attachment:directVideoPreview }
   methods: [GET]

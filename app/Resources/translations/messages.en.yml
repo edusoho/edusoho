@@ -8122,6 +8122,7 @@ exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enbale: Cloud SMS related settings are not enabled!
+exception.setting.attachment.setting_enbale: Cloud Attachement settings are not enabled!
 exception.sms.code_invalid: SMS verification code error
 exception.sms.type_error:
 exception.sms.send_failed:
@@ -8494,4 +8495,4 @@ admin.user_manage.lock_user.access_deniedexception_message: 没有封禁该角�
 admin.course_manage.manage.tags: 标签
 admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级中允许显示班级人数
 course.thread.edit_hint: Editor mobile side question capabilities are coming soon, stay tuned!
-
+course.question.question_background: Question Background
