@@ -20,8 +20,7 @@ class PushDeviceLogin extends AbstractResource
         if (!ArrayToolkit::requireds($params, array('provider', 'provider_reg_id', 'device_token', 'os', 'os_version', 'model'))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-
-        $device = $this->getPushDeviceService()->getPushSdk()->registerDevices($params);
+        $device = $this->getPushDeviceService()->getPushSdk()->registerDevice($params);
 
         $localDevice = $this->getPushDeviceService()->getPushDeviceByRegId($device['reg_id']);
         if (!empty($localDevice)) {
