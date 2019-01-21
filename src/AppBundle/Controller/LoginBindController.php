@@ -39,13 +39,12 @@ class LoginBindController extends BaseController
         ));
         $params = array(
             'type' => $type,
-            'token' => $token['token']
+            'token' => $token['token'],
         );
 
         if ($request->query->get('os')) {
             $params['os'] = $request->query->get('os');
         }
-
 
         $callbackUrl = $this->generateUrl('login_bind_callback', $params, true);
 
@@ -58,8 +57,8 @@ class LoginBindController extends BaseController
     {
         $userAgent = $this->getWebExtension()->parseUserAgent($request->headers->get('User-Agent'));
         if (!empty($userAgent)
-            && !empty($userAgent['os']) && $userAgent['os']['name'] == 'Android'
-            && !empty($userAgent['client']) && $userAgent['client']['name'] == 'WeChat') {
+            && !empty($userAgent['os']) && 'Android' == $userAgent['os']['name']
+            && !empty($userAgent['client']) && 'WeChat' == $userAgent['client']['name']) {
             return true;
         }
 
@@ -79,7 +78,7 @@ class LoginBindController extends BaseController
         $this->validateToken($request, $type);
         $callbackParams = array(
             'type' => $type,
-            'token' => $token
+            'token' => $token,
         );
 
         if ($os) {
