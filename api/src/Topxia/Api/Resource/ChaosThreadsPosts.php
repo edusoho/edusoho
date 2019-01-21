@@ -84,7 +84,7 @@ class ChaosThreadsPosts extends BaseResource
 
         $courseThreads = $this->getCourseThreadService()->searchThreads(array('ids' => $threadIds), 'postedNotStick', $start, $limit);
 
-        if (empty($threadPosts) || empty($courseThreads)) {
+        if (empty($courseThreads)) {
             return array();
         }
 
@@ -107,8 +107,8 @@ class ChaosThreadsPosts extends BaseResource
                 $thread['lessonId'] = $thread['taskId'];
                 $course = $courses[$thread['courseId']];
                 $thread['course'] = $this->filterCourse($course);
-                $thread['content'] = isset($threadPosts[$thread['id']]) ? convertAbsoluteUrl($threadPosts[$thread['id']]['content']) : '';
                 $thread['threadContent'] = convertAbsoluteUrl($thread['content']);
+                $thread['content'] = isset($threadPosts[$thread['id']]) ? convertAbsoluteUrl($threadPosts[$thread['id']]['content']) : '';
                 $thread['notReadPostNum'] = isset($posts[$thread['id']]) ? count($posts[$thread['id']]) : 0;
                 $courseThreads[$key] = $thread;
             } else {

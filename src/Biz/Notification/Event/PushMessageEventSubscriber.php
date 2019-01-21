@@ -413,10 +413,17 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'])),
                     'title' => "{$currentUser['nickname']}《{$threadPost['thread']['title']}》回复中@了你",
-                    'description' => json_encode(array('threadId' => $threadPost['threadId'], 'courseId' => $threadPost['target']['id'], 'lessonId' => $threadPost['thread']['relationId'], 'questionCreatedTime' => $threadPost['thread']['createdTime'], 'questionTitle' => $threadPost['thread']['title'], 'postContent' => $threadPost['content'], 'message' => "{$currentUser['nickname']}《{$threadPost['thread']['title']}》回复中@了你")),
+                    'description' => "{$currentUser['nickname']}《{$threadPost['thread']['title']}》回复中@了你",
                 );
-                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push_message',
+                    'push',
+                    '回复中@',
+                    array('result' => $result, 'message' => $message)
+                );
             }
         }
     }
@@ -445,10 +452,17 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'])),
                     'title' => "您的{$threadType}《{$thread['title']}》被管理员置顶",
-                    'description' => json_encode($body),
+                    'description' => "您的{$threadType}《{$thread['title']}》被管理员置顶",
                 );
-                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push_message',
+                    'push',
+                    '问题被置顶',
+                    array('result' => $result, 'message' => $message)
+                );
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -492,10 +506,17 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'])),
                     'title' => "您的{$threadType}《{$thread['title']}》被管理员取消置顶",
-                    'description' => json_encode($body),
+                    'description' => "您的{$threadType}《{$thread['title']}》被管理员取消置顶",
                 );
-                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push_message',
+                    'push',
+                    '问题取消置顶',
+                    array('result' => $result, 'message' => $message)
+                );
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -538,10 +559,17 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'])),
                     'title' => "您的{$threadType}《{$thread['title']}》被管理员取消加精",
-                    'description' => json_encode($body),
+                    'description' => "您的{$threadType}《{$thread['title']}》被管理员取消加精",
                 );
-                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push_message',
+                    'push',
+                    '问题取消加精',
+                    array('result' => $result, 'message' => $message)
+                );
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -585,10 +613,17 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'])),
                     'title' => "您的{$threadType}《{$thread['title']}》被管理员加精",
-                    'description' => json_encode($body),
+                    'description' => "您的{$threadType}《{$thread['title']}》被管理员加精",
                 );
-                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push_message',
+                    'push',
+                    '问题被加精',
+                    array('result' => $result, 'message' => $message)
+                );
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -876,14 +911,14 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'pass_through_type' => 'normal',
                     'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'])),
                     'title' => "有一个{$questionType}类型的提问",
-                    'description' => !empty($thread['content']) ? $this->plainText(strip_tags($thread['content']), 10) : '',
+                    'description' => !empty($thread['content']) ? $this->plainText(strip_tags($thread['content']), 10) : "有一个{$questionType}类型的提问",
                 );
                 $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
                 $this->getLogService()->info(
                     'push_message',
                     'push',
-                    '创建问题推送',
-                    array('result' => $result)
+                    '创建问题',
+                    array('result' => $result, 'message' => $message)
                 );
             }
         }
@@ -972,10 +1007,17 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'])),
                     'title' => isset($threadPost['thread']['title']) ? "《{$threadPost['thread']['title']}》" : '收到一条新回答',
-                    'description' => json_encode($body),
+                    'description' => isset($threadPost['thread']['title']) ? "《{$threadPost['thread']['title']}》" : '收到一条新回答',
                 );
-                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push_message',
+                    'push',
+                    '回答',
+                    array('result' => $result, 'message' => $message)
+                );
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -1509,10 +1551,17 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'])),
                     'title' => "问题被[{$user['nickname']}]编辑",
-                    'description' => json_encode($body),
+                    'description' => "问题被[{$user['nickname']}]编辑",
                 );
-                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push_message',
+                    'push',
+                    '编辑提问',
+                    array('result' => $result, 'message' => $message)
+                );
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -1582,10 +1631,17 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'])),
                     'title' => "您的{$threadType}《{$thread['title']}》被[{$user['nickname']}]删除",
-                    'description' => json_encode($body),
+                    'description' => "您的{$threadType}《{$thread['title']}》被[{$user['nickname']}]删除",
                 );
-                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push_message',
+                    'push',
+                    '删除提问',
+                    array('result' => $result, 'message' => $message)
+                );
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -1703,10 +1759,17 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'])),
                     'title' => "有回答被[{$user['nickname']}]编辑",
-                    'description' => json_encode($body),
+                    'description' => "有回答被[{$user['nickname']}]编辑",
                 );
-                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push_message',
+                    'push',
+                    '问题被编辑',
+                    array('result' => $result, 'message' => $message)
+                );
             }
         } else {
             if ($this->isIMEnabled()) {
@@ -1771,10 +1834,17 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'])),
                     'title' => "有回答被[{$user['nickname']}]删除",
-                    'description' => json_encode($body),
+                    'description' => "有回答被[{$user['nickname']}]删除",
                 );
-                $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push_message',
+                    'push',
+                    '回答被删除',
+                    array('result' => $result, 'message' => $message)
+                );
             }
         } else {
             if ($this->isIMEnabled()) {
