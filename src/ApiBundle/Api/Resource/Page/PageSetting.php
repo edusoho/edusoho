@@ -109,19 +109,19 @@ class PageSetting extends AbstractResource
     protected function paramFilter($discoverySettings)
     {
         foreach ($discoverySettings as &$discoverySetting) {
-            $discoverySetting = $this->handleSetting($discoverySetting);
+            $discoverySetting = $this->handleSetting($discoverySetting, 'add');
         }
 
         return $discoverySettings;
     }
 
-    protected function handleSetting($discoverySetting)
+    protected function handleSetting($discoverySetting, $mode = 'get')
     {
-        if ('course_list' == $discoverySetting['type']) {
+        if ('course_list' == $discoverySetting['type'] && $mode = 'get') {
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
         }
-        if ('classroom_list' == $discoverySetting['type']) {
+        if ('classroom_list' == $discoverySetting['type'] && $mode = 'get') {
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
         }
         $pageDiscoveryFilter = new PageDiscoveryFilter();
