@@ -33,7 +33,7 @@ class MarketingPlatformServiceImpl extends BaseService implements MarketingPlatf
 
         return $client->get(
             '/activities/'.$activityId,
-            array(),
+            array('from' => 'edusoho'),
             array('MERCHANT-USER-ID: '.$systemUser['id'])
         );
     }
