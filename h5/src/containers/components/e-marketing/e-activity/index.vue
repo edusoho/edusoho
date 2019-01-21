@@ -5,7 +5,7 @@
     <div class="e-groupon__image-container" :class="{ 'e-groupon__image-empty': !activity.cover }">
       <img v-if="activity.cover" class="e-groupon__image" :src="activity.cover" alt="">
     </div>
-    <countDown v-if="type === 'seckill'" :activity="activity" @timesUp="expire"></countDown>
+    <countDown v-if="type === 'seckill' && counting" :activity="activity" @timesUp="expire"></countDown>
     <div class="e-groupon__context">
       <div class="context-title text-overflow">{{ activity.name || '活动名称' }}</div>
       <div class="context-sale clearfix">
@@ -70,6 +70,10 @@ export default {
     },
     grouponStatus() {
       const status = this.activity.status;
+      if (status === 'ongoing' && !this.counting) {
+        this.activity.status = 'closed';
+        return '已结束';
+      };
       switch (this.type) {
         case 'groupon':
           if(status === 'unstart') return '活动未开始';
@@ -80,7 +84,6 @@ export default {
           if(status === 'unstart') return '秒杀未开始';
           if(status === 'closed') return '已结束';
           if(status === 'ongoing') {
-            if (!this.counting) return '已结束';
             const nowStamp = new Date().getTime();
             const startStamp = new Date(this.activity.startTime).getTime();
             const endStamp = new Date(this.activity.endTime).getTime();

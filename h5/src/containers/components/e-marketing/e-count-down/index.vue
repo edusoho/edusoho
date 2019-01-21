@@ -37,9 +37,11 @@ import { dateTimeDown } from '@/utils/date-toolkit';
         get() {
           const status = this.activity.status;
           if(status === 'unstart') {
+            this.counting = false;
             return '秒杀未开始';
           }
           if(status === 'closed') {
+            this.counting = false;
             this.seckillClass = 'seckill-closed';
             return '秒杀已结束';
           }
