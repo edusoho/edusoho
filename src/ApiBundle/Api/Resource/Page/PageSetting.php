@@ -110,19 +110,19 @@ class PageSetting extends AbstractResource
     {
         $discoverySettings = $this->getH5SettingService()->filter($discoverySettings);
         foreach ($discoverySettings as &$discoverySetting) {
-            $discoverySetting = $this->handleSetting($discoverySetting, 'add');
+            $discoverySetting = $this->handleSetting($discoverySetting);
         }
 
         return $discoverySettings;
     }
 
-    protected function handleSetting($discoverySetting, $mode = 'get')
+    protected function handleSetting($discoverySetting)
     {
-        if ('course_list' == $discoverySetting['type'] && 'get' == $mode) {
+        if ('course_list' == $discoverySetting['type']) {
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
         }
-        if ('classroom_list' == $discoverySetting['type'] && 'get' == $mode) {
+        if ('classroom_list' == $discoverySetting['type']) {
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
         }
         $pageDiscoveryFilter = new PageDiscoveryFilter();
