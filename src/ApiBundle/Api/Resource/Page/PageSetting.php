@@ -7,9 +7,6 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\User\UserException;
 use ApiBundle\Api\Annotation\Access;
-use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
-use ApiBundle\Api\Resource\Course\CourseFilter;
-use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 use ApiBundle\Api\Resource\Filter;
 
 class PageSetting extends AbstractResource
@@ -109,14 +106,13 @@ class PageSetting extends AbstractResource
         return $discoverySettings;
     }
 
-    protected function paramFilter($paramStr)
+    protected function paramFilter($discoverySettings)
     {
-        $discoverySettings = json_decode($paramStr);
         foreach ($discoverySettings as &$discoverySetting) {
             $discoverySetting = $this->handleSetting($discoverySetting);
         }
 
-        return json_encode($discoverySettings);
+        return $discoverySettings;
     }
 
     protected function handleSetting($discoverySetting)
@@ -124,30 +120,13 @@ class PageSetting extends AbstractResource
         if ('course_list' == $discoverySetting['type']) {
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
-            $courseFilter = new CourseFilter();
-            $courseFilter->setMode(Filter::PUBLIC_MODE);
-            foreach ($discoverySetting['data']['items'] as &$course) {
-                $courseFilter->filter($course);
-                unset($course['summary']);
-                unset($course['courseSet']['summary']);
-            }
         }
         if ('classroom_list' == $discoverySetting['type']) {
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
-            $classroomFilter = new ClassroomFilter();
-            $classroomFilter->setMode(Filter::PUBLIC_MODE);
-            foreach ($discoverySetting['data']['items'] as &$classroom) {
-                $classroomFilter->filter($classroom);
-                unset($classroom['about']);
-            }
         }
-        if ('vip' == $discoverySetting['type']) {
-            $vipLevelFilter = new VipLevelFilter();
-            $vipLevelFilter->setMode(Filter::PUBLIC_MODE);
-            foreach ($discoverySetting['data']['items'] as &$vipLevel) {
-                $vipLevelFilter->filter($vipLevel);
-            }
-        }
+        $pageDiscoveryFilter = new PageDiscoveryFilter();
+        $pageDiscoveryFilter->setMode(Filter::PUBLIC_MODE);
+        $pageDiscoveryFilter->filter($discoverySetting);
 
         return $discoverySetting;
     }
