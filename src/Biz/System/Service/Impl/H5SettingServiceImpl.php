@@ -22,6 +22,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $discoverySettings = $this->getDefaultDiscovery($portal);
         }
 
+        return $this->filter($discoverySettings);
+    }
+
+    public function filter($discoverySettings, $usage = 'show')
+    {
         foreach ($discoverySettings as $key => &$discoverySetting) {
             $method = $this->getMethod($discoverySetting['type']);
             $method .= 'Filter';
