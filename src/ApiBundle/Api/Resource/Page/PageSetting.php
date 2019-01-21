@@ -117,11 +117,11 @@ class PageSetting extends AbstractResource
 
     protected function handleSetting($discoverySetting, $mode = 'get')
     {
-        if ('course_list' == $discoverySetting['type'] && $mode = 'get') {
+        if ('course_list' == $discoverySetting['type'] && 'get' == $mode) {
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
         }
-        if ('classroom_list' == $discoverySetting['type'] && $mode = 'get') {
+        if ('classroom_list' == $discoverySetting['type'] && 'get' == $mode) {
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
         }
         $pageDiscoveryFilter = new PageDiscoveryFilter();
