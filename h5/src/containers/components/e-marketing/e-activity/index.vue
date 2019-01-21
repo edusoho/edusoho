@@ -11,7 +11,7 @@
       <div class="context-sale clearfix">
         <div class="type-tag" v-if="type !== 'groupon'">{{ type === 'cut' ? '砍价享' : '秒杀价' }}</div>
         <div class="context-sale__sale-price">￥{{ activityPrice }}</div>
-        <div v-if="activity.originPrice" class="context-sale__origin-price">原价{{ activity.originPrice }} 元</div>
+        <div v-if="activity.originPrice" class="context-sale__origin-price">原价￥{{ activity.originPrice }}</div>
         <a class="context-sale__shopping" :class="activity.status" href="javascript:;">
           {{ grouponStatus }}
         </a>
