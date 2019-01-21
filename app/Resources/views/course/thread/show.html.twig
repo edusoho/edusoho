@@ -18,18 +18,7 @@
         {% if thread.type == 'question' %}
         <span class="label label-info">{{'thread.status.question'|trans}}</span>
         {% endif %}
-        {% if thread.title == '' %}
-          {% if thread.questionType == 'video' %}
-            {% set questionType = 'course.thread.question_type.video'|trans %}
-          {% elseif thread.questionType == 'image' %}
-            {% set questionType = 'course.thread.question_type.image'|trans %}
-          {% elseif thread.questionType == 'audio' %}
-            {% set questionType = 'course.thread.question_type.audio'|trans %}
-          {% else %}
-            {% set questionType = 'course.thread.question_type.content'|trans %}
-          {% endif %}
-        {% endif %}
-        {{ thread.title|default('course.thread.question.title'|trans({'%questionType%':questionType|default('course.thread.question_type.content'|trans)})) }}
+        {{ thread.title }}
       </h2>
       <div class="thread-metas">
         By {{  web_macro.user_link(author, 'link-primary') }}
@@ -53,9 +42,13 @@
 
     {% if isManager or app.user.id == author.id %}
       <div class="thread-footer" >
-        <a href="{{ path('course_thread_edit', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> {{'thread.edit_btn'|trans}}</a>
+        {% if thread.source == 'app' %}
+          <a class="btn color-gray" title="{{ 'course.thread.edit_hint'|trans }}"><span class="glyphicon glyphicon-edit"></span> {{'thread.edit_btn'|trans}} </a>
+        {% else %}
+          <a href="{{ path('course_thread_edit', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> {{'thread.edit_btn'|trans}}</a>
+        {% endif %}
         {% if isManager %}
-          <a href="javascript:;" class="btn btn-link" data-url="{{ path('course_thread_delete', {courseId:course.id, threadId:thread.id}) }}" data-after-url="{{ path('my_course_show', {id:course.id, tab: 'threads'}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.delete_confirm_message'|trans}}"><span class="glyphicon glyphicon-remove-sign"></span> {{'thread.delete_btn'|trans}}</a>
+          <a href="javascript:;" class="btn btn-link" data-url="{{ path('course_thread_delete', {courseId:course.id, threadId:thread.id}) }}" data-after-url="{{ path('my_course_show', {id:course.id, tab: thread.type, type: thread.type|default('tasks')}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.delete_confirm_message'|trans}}"><span class="glyphicon glyphicon-remove-sign"></span> {{'thread.delete_btn'|trans}}</a>
           {% if thread.isStick %}
             <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unstick', { courseId:course.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.stick_cancel_confirm_message'|trans}}"><span class="glyphicon glyphicon-minus-sign"></span> {{'thread.stick_cancel_btn'|trans}}</a>
           {% else %}

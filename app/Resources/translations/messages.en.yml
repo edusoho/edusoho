@@ -8495,5 +8495,5 @@ admin.sts_discovery_feature_tip: 更多功能敬请期待。。。
 admin.user_manage.lock_user.access_deniedexception_message: 没有封禁该角色的权限
 admin.course_manage.manage.tags: 标签
 admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级中允许显示班级人数
-
+course.thread.edit_hint: Editor mobile side question capabilities are coming soon, stay tuned!
 course.question.question_background: Question Background
