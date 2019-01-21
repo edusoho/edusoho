@@ -71,15 +71,20 @@ class ChaosThreadsPosts extends BaseResource
         $currentUser = $this->getCurrentUser();
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
+        if ($this->getCurrentUser()->isTeacher()) {
+            $members = $this->getCourseMemberService()->findTeacherMembersByUserId($currentUser['id']);
+            $courseSetIds = ArrayToolkit::column($members, 'courseSetId');
+            $threads = $this->getCourseThreadService()->searchThreads(array('courseSetIds' => $courseSetIds, 'type' => 'question'), array(), 0, PHP_INT_MAX);
+            $questionIds = ArrayToolkit::column($threads, 'id');
+        }
+        $threadPosts = $this->getCourseThreadService()->getMyLatestReplyPerThread(0, PHP_INT_MAX);
+        $threadPosts = ArrayToolkit::index($threadPosts, 'threadId');
+        $threadIds = ArrayToolkit::column($threadPosts, 'threadId');
+        $threadIds = isset($questionIds) ? array_merge($questionIds, $threadIds) : $threadIds;
 
-        $total = $this->getCourseThreadService()->getMyReplyThreadCount();
-        $start = -1 == $start ? rand(0, $total - 1) : $start;
+        $courseThreads = $this->getCourseThreadService()->searchThreads(array('ids' => $threadIds), 'postedNotStick', $start, $limit);
 
-        $posts = $this->getCourseThreadService()->getMyLatestReplyPerThread($start, $limit);
-        $threadIds = ArrayToolkit::column($posts, 'threadId');
-        $courseThreads = $this->getCourseThreadService()->searchThreads(array('ids' => $threadIds), 'createdNotStick', $start, $limit);
-
-        if (empty($posts) || empty($courseThreads)) {
+        if (empty($threadPosts) || empty($courseThreads)) {
             return array();
         }
 
@@ -98,10 +103,12 @@ class ChaosThreadsPosts extends BaseResource
         foreach ($courseThreads as $key => $thread) {
             if (isset($courses[$thread['courseId']])) {
                 $thread = ArrayToolkit::rename($thread, array('private' => 'isPrivate'));
+                $thread['threadId'] = $thread['id'];
                 $thread['lessonId'] = $thread['taskId'];
                 $course = $courses[$thread['courseId']];
                 $thread['course'] = $this->filterCourse($course);
-                $thread['content'] = convertAbsoluteUrl($thread['content']);
+                $thread['content'] = isset($threadPosts[$thread['id']]) ? convertAbsoluteUrl($threadPosts[$thread['id']]['content']) : '';
+                $thread['threadContent'] = convertAbsoluteUrl($thread['content']);
                 $thread['notReadPostNum'] = isset($posts[$thread['id']]) ? count($posts[$thread['id']]) : 0;
                 $courseThreads[$key] = $thread;
             } else {
@@ -150,6 +157,9 @@ class ChaosThreadsPosts extends BaseResource
         return $this->getServiceKernel()->createService('Group:ThreadService');
     }
 
+    /**
+     * @return \Biz\Course\Service\Impl\CourseServiceImpl
+     */
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
