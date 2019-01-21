@@ -4,47 +4,40 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Marketing\MarketingAPIFactory;
-use ApiBundle\Api\Annotation\ResponseFilter;
+use Biz\Marketing\Service\UserMarketingActivityService;
 
 class MeMarketingActivity extends AbstractResource
 {
-    /**
-     * @ResponseFilter(class="ApiBundle\Api\Resource\MarketingActivity\MarketingActivityFilter", mode="public"))
-     */
     public function search(ApiRequest $request)
     {
         $user = $this->getCurrentUser();
-        $conditions = $request->query->all();
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $conditions['page'] = ceil(($offset + 1) / $limit);
-        $conditions['limit'] = $limit;
-        $conditions['mobile'] = $user['verifiedMobile'];
-        if (isset($conditions['itemType'])) {
-            $conditions['item_type'] = $conditions['itemType'];
-            unset($conditions['itemType']);
+        if (!empty($user['verifiedMobile'])) {
+            try {
+                $this->getUserMarketingActivityService()->syncByMobile($user['verifiedMobile']);
+            } catch (\Exception $e) {
+            }
         }
 
-        $systemUser = $this->getUserService()->getUserByType('system');
-        $this->getMarketingPlatformService()->simpleLogin($systemUser['id']);
-        $client = MarketingAPIFactory::create();
-
-        $pages = $client->get(
-            '/user_activities',
-            $conditions,
-            array('MERCHANT-USER-ID: '.$systemUser['id'])
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $conditions = array(
+            'userId' => $user['id'],
         );
+        $activities = $this->getUserMarketingActivityService()->searchActivities(
+            $conditions,
+            array('joinedTime' => 'DESC'),
+            $offset,
+            $limit
+        );
+        $total = $this->getUserMarketingActivityService()->searchActivityCount($conditions);
 
-        return $this->makePagingObject($pages['data'], $pages['paging']['total'], $offset, $limit);
+        return $this->makePagingObject($activities, $total, $offset, $limit);
     }
 
-    protected function getUserService()
+    /**
+     * @return UserMarketingActivityService
+     */
+    protected function getUserMarketingActivityService()
     {
-        return $this->service('User:UserService');
-    }
-
-    protected function getMarketingPlatformService()
-    {
-        return $this->service('Marketing:MarketingPlatformService');
+        return $this->service('Marketing:UserMarketingActivityService');
     }
 }
