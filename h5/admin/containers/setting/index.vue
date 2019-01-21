@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div class="help-block" v-if="portal === 'miniprogram'">
-      <div class="mbl">使用班级配置功能，小程序版本需要升级到1.3.1及以上</div>
-      使用优惠券配置功能，小程序版本需要升级到1.3.2及以上
-    </div>
+    <div class="help-block" v-if="portal === 'miniprogram'"></div>
     <div class="setting-page" :class="{'setting-page-miniprogram': portal === 'miniprogram' && supportGrouponVersion}">
       <img class="find-head-img" :src="portal === 'miniprogram' ? 'static/images/miniprogram_head.jpg' : 'static/images/find_head_url.jpg'" alt="">
       <div class="find-navbar" :class="{'find-navbar-miniprogram': portal === 'miniprogram'}">
@@ -33,27 +30,30 @@
       </div>
 
       <!-- h5配置——底部添加组件按钮 -->
-      <div class="find-section clearfix" v-if="portal === 'h5' || !supportGrouponVersion">
+      <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportGrouponVersion">
         <div class="section-title">点击添加组件</div>
         <div class="section-button-group">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-            v-for="(item, index) in baseModules" :key="index" v-if="(item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list' && portal === 'miniprogram')) && (item.default.type !== 'coupon' || (supportCouponVersion && item.default.type === 'coupon' && portal === 'miniprogram')) || (portal === 'h5')">
+            v-show="item.default.type !== 'vip' || item.default.type === 'vip' && vipSetupStatus"
+            v-for="(item, index) in baseModules" :key="index" v-if="(item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list' && portal === 'miniprogram')) && (item.default.type !== 'coupon' || (supportCouponVersion && item.default.type === 'coupon' && portal === 'miniprogram')) && (item.default.type !== 'vip' || (supportVipVersion && item.default.type === 'vip' && portal === 'miniprogram')) || (portal === 'h5')">
             {{ item.name }}
           </el-button>
         </div>
       </div>
 
       <!-- 小程序配置——底部添加组件按钮 -->
-      <div class="find-section clearfix" v-if="portal === 'miniprogram' && supportGrouponVersion">
+      <div class="multi-find-section find-section clearfix" v-if="supportGrouponVersion">
         <div class="section-title">基础组件</div>
-        <div class="section-button-group">
+        <div class="section-button-group clearfix">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
             v-for="(item, index) in baseModules" :key="`base-${index}`">
             {{ item.name }}
           </el-button>
         </div>
-        <div class="section-title">营销组件 <a class="color-primary pull-right text-12" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a></div>
-        <div class="section-button-group">
+        <div class="section-title">营销组件
+          <a class="color-primary pull-right text-12" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a>
+        </div>
+        <div class="section-button-group clearfix">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
             v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
             {{ item.name }}
@@ -115,7 +115,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLoading']),
+    ...mapState(['isLoading', 'vipLevels', 'vipSettings', 'vipSetupStatus', 'vipPlugin']),
     stopDraggleClasses() {
       return '.module-frame__setting, .find-footer, .search__container, .el-dialog__header, .el-dialog__footer';
     },
@@ -123,7 +123,8 @@ export default {
       return pathName2Portal[this.pathName];
     },
     supportGrouponVersion() {
-      return this.supportVersion('1.4.0');
+      return true;
+      // return this.supportVersion('1.4.0');
     },
     supportClassroomVersion() {
       return this.supportVersion('1.3.1');
@@ -131,6 +132,9 @@ export default {
     supportCouponVersion() {
       return this.supportVersion('1.3.2');
     },
+    supportVipVersion() {
+      return this.supportVersion('1.3.4') && this.vipSetupStatus;
+    }
   },
   created() {
     // 获取小程序版本号
@@ -189,6 +193,47 @@ export default {
       this.modules.splice(index, 1);
     },
     addModule(data, index) {
+      /*
+       * 后台会员组件交互处理:
+       * 会员插件未安装：隐藏按钮 (vipSetupStatus)
+       * 会员插件未升级：/admin/app/upgrades (vipPlugin)
+       * 未开通会员功能：/admin/setting/vip (vipSettings)
+       * 开通会员但未配置会员等级：/admin/setting/vip/level (vipLevels)
+      */
+      switch(data.default.type) {
+        case 'vip':
+          if (!this.vipSetupStatus) {
+            return;
+          } else if (needUpgrade('1.7.26', this.vipPlugin.version)) {
+            this.$confirm('请升级会员插件', '提示', {
+              confirmButtonText: '去升级',
+              cancelButtonText: '取消',
+            }).then(() => {
+              window.open(window.location.origin + '/admin/app/upgrades');
+            }).catch(() => {});
+            return;
+          } else if (!this.vipSettings || !this.vipSettings.enabled || !this.vipSettings.h5Enabled) {
+            this.$confirm('会员功能未开通', '提示', {
+              confirmButtonText: '去开通',
+              cancelButtonText: '取消',
+            }).then(() => {
+              window.open(window.location.origin + '/admin/setting/vip');
+            }).catch(() => {});
+            return;
+          } else if (!this.vipLevels || !this.vipLevels.length) {
+            this.$confirm('请先设置会员等级', '提示', {
+              confirmButtonText: '去设置',
+              cancelButtonText: '取消',
+            }).then(() => {
+              window.open(window.location.origin + '/admin/setting/vip/level');
+            }).catch(() => {});
+            return;
+          }
+          break;
+        default:
+          break;
+      }
+
       // 新增一个模块
       if (this.typeCount.getCounterByType(data.default.type) >= 5) {
         this.$message({

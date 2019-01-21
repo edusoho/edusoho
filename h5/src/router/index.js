@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { Toast } from 'vant';
 import store from '@/store';
 import * as types from '@/store/mutation-types';
 import Router from 'vue-router';
@@ -51,6 +52,13 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "register" */'@/containers/register/index.vue')
   }, {
+    path: '/binding',
+    name: 'binding',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "binding" */'@/containers/register/index.vue')
+  }, {
     path: '/protocol',
     name: 'protocol',
     meta: {
@@ -101,6 +109,20 @@ const routes = [
       title: '所有班级'
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/more/classroom/index.vue')
+  }, {
+    path: '/course/explore/vip',
+    name: 'vip_course',
+    meta: {
+      title: '会员课程'
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/vip/more/course-list.vue')
+  }, {
+    path: '/classroom/explore/vip',
+    name: 'vip_classroom',
+    meta: {
+      title: '会员班级'
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/vip/more/classroom-list.vue')
   }, {
     path: '/course/:id',
     name: 'course',
@@ -171,6 +193,27 @@ const routes = [
       title: '优惠券领取'
     },
     component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/coupon/index.vue')
+  }, {
+    path: '/vip',
+    name: 'vip',
+    meta: {
+      title: '会员专区'
+    },
+    component: () => import(/* webpackChunkName: "vip" */'@/containers/vip/index.vue')
+  }, {
+    path: '/setting/password/reset',
+    name: 'password_reset',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "password_reset" */'@/containers/password-reset/index.vue')
+  }, {
+    path: '/share/redirect',
+    name: 'share_redirect',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "share_redirect" */'@/containers/share-redirect/index.vue')
   }
 ];
 
@@ -187,11 +230,15 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const shouldUpdateMetaTitle = ['register', 'login', 'protocol', 'find'].includes(to.name);
+  const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name);
+
+  // 课程后台配置数据
   if (!Object.keys(store.state.courseSettings).length) {
     store.dispatch('getGlobalSettings', {
       type: 'course',
       key: 'courseSettings'
+    }).catch(err => {
+      Toast.fail(err.message);
     });
   }
 
@@ -199,17 +246,25 @@ router.beforeEach((to, from, next) => {
     window.location.href = location.origin + to.fullPath;
   }
 
-  if (!Object.keys(store.state.settings).length) {
-    // 获取全局设置
-    store.dispatch('getGlobalSettings', {
-      type: 'site',
-      key: 'settings'
-    }).then(res => {
-      if (shouldUpdateMetaTitle) {
-        to.meta.title = res.name;
-      }
-      next();
-    });
+  // 站点后台设置、会员后台配置
+  if (!Object.keys(store.state.settings).length || !Object.keys(store.state.vipSettings).length) {
+    Promise.all([
+      store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' }),
+      store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' })])
+      .then(([vipRes, siteRes]) => {
+      // 动态更新 navbar title
+        if (shouldUpdateMetaTitle) {
+          to.meta.title = siteRes.name;
+        }
+        // vip 前端元素判断（vip 插件已安装(升级) && vip 插件已开启 && vip 等级已设置）
+        if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
+          store.dispatch('setVipSwitch', true).then(() => next());
+        } else {
+          next();
+        }
+      }).catch(err => {
+        Toast.fail(err.message);
+      });
   } else if (shouldUpdateMetaTitle) {
     to.meta.title = store.state.settings.name;
     next();

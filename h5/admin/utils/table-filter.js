@@ -1,12 +1,13 @@
 import { formatTime } from '@/utils/date-toolkit';
 
-const tableFilter = (item, label) => {
-
-  if (label.toLocaleLowerCase().includes('price')) {
-    if (!item[label]) {
+const tableFilter = (item, label, subProperty) => {
+  const labelStr = subProperty ? subProperty.toLocaleLowerCase() : label.toLocaleLowerCase();
+  const labelField = subProperty ? item[label][subProperty] : item[label];
+  if (labelStr.includes('price')) {
+    if (!labelField) {
       return '未设置';
     }
-    return `${item[label]}元`;
+    return `${labelField}元`;
   }
 
   switch (label) {
@@ -16,13 +17,14 @@ const tableFilter = (item, label) => {
       }
       const date = new Date(item['deadline']);
       return formatTime(date).slice(0, 10);
+    case 'createdTime':
+     if (!item['createdTime']) {
+        return '未知日期'
+      }
+      const date1 = new Date(item['createdTime']);
+      return formatTime(date1);
     case 'delete':
       return `移除`;
-    case 'price':
-      if (!item['price']) {
-        return '未设置';
-      }
-      return `${item['price']}元`;
     case 'generatedNum':
       return `${item['unreceivedNum']} / ${item['generatedNum']}`;
     case 'rate':
@@ -46,6 +48,10 @@ const tableFilter = (item, label) => {
       }
       return `${discountType + item.rate + text} / ${targetType}`;
     default:
+      // 有子属性的返回子属性
+      if (subProperty) {
+        return item[label][subProperty];
+      }
       return item[label]
   }
 }

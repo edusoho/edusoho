@@ -8,70 +8,62 @@
       	@fetchCourse="fetchCourse">
       </e-course-list>
     </div>
-    <div slot="setting" class="course-allocate">
-      <header class="title">{{typeLabel}}列表设置</header>
-      <div class="course-item-setting clearfix">
+    <div slot="setting">
+      <header class="title">
+        {{typeLabel}}列表设置
+        <div class="text-12 color-gray mts" v-if="portal === 'miniprogram' && typeLabel === '班级'">使用班级配置功能，小程序版本需要升级到1.3.1及以上</div>
+      </header>
+      <div class="default-allocate__content clearfix">
         <!-- 列表名称 -->
-        <div class="course-item-setting__section clearfix">
-          <p class="pull-left section-left required-option">列表名称：</p>
-          <div class="section-right">
-            <el-input size="mini" v-model="copyModuleData.data.title" maxLength="15" placeholder="请输入列表名称" clearable></el-input>
-          </div>
-        </div>
+        <setting-cell title="列表名称：" leftClass="required-option">
+          <el-input size="mini" v-model="copyModuleData.data.title" maxLength="15" placeholder="请输入列表名称" clearable></el-input>
+        </setting-cell>
+
         <!-- 课程来源 -->
-        <div class="course-item-setting__section mtl clearfix">
-          <p class="pull-left section-left">{{typeLabel}}来源：</p>
-          <div class="section-right">
-            <el-radio v-model="sourceType" label="condition">{{typeLabel}}分类</el-radio>
-            <el-radio v-model="sourceType" label="custom">自定义</el-radio>
-          </div>
-        </div>
+        <setting-cell :title="typeLabel + '来源：'">
+          <el-radio v-model="sourceType" label="condition">{{typeLabel}}分类</el-radio>
+          <el-radio v-model="sourceType" label="custom">自定义</el-radio>
+        </setting-cell>
+
         <!-- 课程分类 -->
-        <div class="course-item-setting__section mtl clearfix">
-          <p class="pull-left section-left">{{typeLabel}}分类：</p>
-          <div class="section-right">
-            <el-cascader v-show="sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="this.type === 'course_list' ? courseCategories : classCategories" :props="cascaderProps" v-model="categoryTempId" filterable change-on-select></el-cascader>
-            </el-input>
-            <div class="required-option" v-show="sourceType === 'custom'">
-              <el-button size="mini" @click="openModal">选择{{typeLabel}}</el-button>
-            </div>
+        <setting-cell :title="typeLabel + '分类：'">
+          <el-cascader v-show="sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="this.type === 'course_list' ? courseCategories : classCategories" :props="cascaderProps" v-model="categoryTempId" filterable change-on-select></el-cascader>
+          </el-input>
+          <div class="required-option" v-show="sourceType === 'custom'">
+            <el-button size="mini" @click="openModal">选择{{typeLabel}}</el-button>
           </div>
-          <draggable v-show="sourceType === 'custom' && copyModuleData.data.items.length" v-model="copyModuleData.data.items" class="section__course-container">
-            <div class="section__course-item" v-for="(courseItem, index) in copyModuleData.data.items" :key="index">
-              <div class="section__course-item__title text-overflow">{{ courseItem.displayedTitle || courseItem.title }}</div>
-              <i class="h5-icon h5-icon-cuowu1 section__course-item__icon-delete" @click="deleteCourse(index)"></i>
-            </div>
-          </draggable>
-        </div>
+        </setting-cell>
+
+        <draggable v-show="sourceType === 'custom' && copyModuleData.data.items.length" v-model="copyModuleData.data.items" class="default-draggable__list">
+          <div class="default-draggable__item" v-for="(courseItem, index) in copyModuleData.data.items" :key="index">
+            <div class="default-draggable__title text-overflow">{{ courseItem.displayedTitle || courseItem.title }}</div>
+            <i class="h5-icon h5-icon-cuowu1 default-draggable__icon-delete" @click="deleteCourse(index)"></i>
+          </div>
+        </draggable>
+
         <!-- 排列顺序 -->
-        <div class="course-item-setting__section mtl clearfix"
-          v-show="sourceType === 'condition'">
-          <p class="pull-left section-left">排列顺序：</p>
-          <div class="section-right">
-            <div class="section-right__item pull-left">
-              <el-select v-model="sort" placeholder="顺序" size="mini">
-                <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
-            <div class="section-right__item pull-right" v-show="showDateOptions">
-              <el-select v-model="lastDays" placeholder="时间区间" size="mini">
-                <el-option v-for="item in dateOptions" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
-          </div>
-        </div>
-        <!-- 显示个数 -->
-        <div v-show="sourceType === 'condition'" class="course-item-setting__section mtl clearfix">
-          <p class="pull-left section-left">显示个数：</p>
-          <div class="section-right">
-            <el-select v-model="limit" placeholder="请选择个数" size="mini">
-              <el-option v-for="item in [1,2,3,4,5,6,7,8]" :key="item" :label="item" :value="item">
+        <setting-cell title="排列顺序：" v-show="sourceType === 'condition'">
+          <div class="section-right__item pull-left">
+            <el-select v-model="sort" placeholder="顺序" size="mini">
+              <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </div>
-        </div>
+          <div class="section-right__item pull-right" v-show="showDateOptions">
+            <el-select v-model="lastDays" placeholder="时间区间" size="mini">
+              <el-option v-for="item in dateOptions" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+        </setting-cell>
+
+        <!-- 显示个数 -->
+        <setting-cell title="显示个数：" v-show="sourceType === 'condition'">
+          <el-select v-model="limit" placeholder="请选择个数" size="mini">
+            <el-option v-for="item in limitOptions" :key="item" :label="item" :value="item">
+            </el-option>
+          </el-select>
+        </setting-cell>
       </div>
     </div>
     <course-modal slot="modal"
@@ -86,10 +78,12 @@
 <script>
 import draggable from 'vuedraggable';
 import courseList from '@/containers/components/e-course-list/e-course-list';
-import courseModal from './modal/course-modal'
-import moduleFrame from '../module-frame'
+import courseModal from './modal/course-modal';
+import moduleFrame from '../module-frame';
+import settingCell from '../module-frame/setting-cell';
 import { mapMutations, mapState, mapActions } from 'vuex';
 import treeDigger from '@admin/utils/tree-digger';
+import pathName2Portal from '@admin/config/api-portal-config';
 
 const optionLabel = {
   'course_list': '课程',
@@ -102,6 +96,7 @@ export default {
     draggable,
     courseModal,
     moduleFrame,
+    settingCell
   },
   props: {
     active: {
@@ -139,6 +134,7 @@ export default {
         label: 'name',
         value: 'id',
       },
+      pathName: this.$route.name,
       categoryTempId: [this.moduleData.data.categoryId.toString()],
       categoryDiggered: false,
       dateOptions: [{
@@ -230,7 +226,10 @@ export default {
       set(value) {
         this.copyModuleData.data.categoryId = value;
       },
-    }
+    },
+    portal() {
+      return pathName2Portal[this.pathName];
+    },
   },
   watch: {
     copyModuleData: {

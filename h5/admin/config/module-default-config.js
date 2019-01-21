@@ -56,7 +56,26 @@ const MODULE_DEFAULT = {
     moduleType: '',
     data: {
       activity: {},
-      tag: ''
+      tag: '',
+      titleShow: 'show'
+    }
+  },
+  cut: {
+    type: 'cut',
+    moduleType: '',
+    data: {
+      activity: {},
+      tag: '',
+      titleShow: 'show'
+    }
+  },
+  seckill: {
+    type: 'seckill',
+    moduleType: '',
+    data: {
+      activity: {},
+      tag: '',
+      titleShow: 'show'
     }
   },
   coupon: {
@@ -64,6 +83,16 @@ const MODULE_DEFAULT = {
     moduleType: '',
     data: {
       items: [],
+      titleShow: 'show'
+    }
+  },
+  vip: {
+    type: 'vip',
+    moduleType: '',
+    data: {
+      items: [],
+      sort: 'asc',
+      title: '',
       titleShow: 'show'
     }
   }
@@ -85,6 +114,9 @@ const BASE_MODULE = [
   }, {
     name: '优惠券',
     default: MODULE_DEFAULT.coupon,
+  }, {
+    name: '会员专区',
+    default: MODULE_DEFAULT.vip,
   }
 ];
 
@@ -92,7 +124,13 @@ const MARKETING_MODULE = [
   {
     name: '拼团活动',
     default: MODULE_DEFAULT.groupon,
-  }
+  }, {
+    name: '砍价',
+    default: MODULE_DEFAULT.cut,
+  }, {
+    name: '秒杀',
+    default: MODULE_DEFAULT.seckill,
+  },
 ]
 
 const VALUE_DEFAULT = {
@@ -106,6 +144,12 @@ const VALUE_DEFAULT = {
     key: 'name'
   },
   coupon: {
+    key: 'name'
+  },
+  cut: {
+    key: 'name'
+  },
+  seckill: {
     key: 'name'
   }
 }
@@ -122,6 +166,12 @@ const TYPE_TEXT_DEFAULT = {
   },
   coupon: {
     text: '优惠券'
+  },
+  cut: {
+    text: '活动'
+  },
+  seckill: {
+    text: '活动'
   }
 }
 

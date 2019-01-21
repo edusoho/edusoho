@@ -13,6 +13,10 @@ const state = {
   user: {},
   csrfToken: '',
   draft: {},
+  vipLevels: [],
+  vipSettings: {},
+  vipSetupStatus: false,
+  vipPlugin: {},
 };
 
 

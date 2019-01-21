@@ -20,8 +20,7 @@
           font-size: 14px;
         }
         .section-right {
-          display: inline-block;
-          width: 212px;
+          position: relative;
           line-height: 28px;
         }
       }
@@ -31,15 +30,22 @@
 
 // 复写 h5 单位样式
 .e-groupon {
-  margin: 10px 20px;
+  padding: 25px 20px;
   border-radius: 4px;
+  .e-coupon__title {
+    line-height: 1;
+    font-size: 18px;
+    color: #2B333B;
+    margin-bottom: 20px;
+  }
   &__tag {
-    top: 20px;
+    top: 73px;
     left: 14px;
     padding: 0 6px;
     font-size: 12px;
     line-height: 24px;
     &:after {
+      top: 0;
       right: -6px;
       border-left-width: 6px;
       border-right-width: 6px;
@@ -53,22 +59,34 @@
   &__context {
     padding: 10px 10px 20px 10px;
     .context-title {
-
+      font-size: 14px;
     }
     .context-sale {
       margin-top:8px;
+      line-height: 26px;
       &__sale-price {
-
+        font-size: 14px;
       }
       &__origin-price {
         margin-left: 5px;
         font-size: 12px;
       }
       &__shopping {
-        padding: 6px 16px;
-        font-size: 14px;
-        border-radius: 2px;
+        padding: 8px 14px;
+        font-size: 12px;
+        border-radius: 42px;
       }
+      .type-tag {
+        top: 4px;
+      }
+    }
+  }
+  .seckill-countdown-container {
+    padding-left: 10px;
+    padding-right: 10px;
+    line-height: 36px;
+    .status-title {
+      font-size: 14px;
     }
   }
 }

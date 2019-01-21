@@ -6,8 +6,8 @@
     :close-on-click-modal="false">
     <div class="course-modal__header" slot="title">
       <span class="header__title">选择{{typeText}}</span>
-      <span class="header__subtitle">仅显示已发布{{typeText}}</span>
-      <a v-if="type === 'groupon'" class="color-primary pull-right text-12 mrl" :href="createMarketingUrl" target="_blank">创建拼团活动</a>
+      <span class="header__subtitle">仅显示{{type === 'coupon' ? '未过期的' : '已发布'}}{{typeText}}</span>
+      <a v-if="['groupon', 'seckill', 'cut'].includes(type)" class="color-primary pull-right text-12 mrl" :href="`${createMarketingUrl}_${type}`" target="_blank">创建活动</a>
     </div>
     <div class="course-modal__body">
       <div class="search__container">
@@ -40,10 +40,59 @@
 
 <script>
 import marketingMixins from '@admin/mixins/marketing';
-import head from '@admin/config/modal-config';
 import courseTable from './course-table';
 import { mapMutations, mapState, mapActions } from 'vuex';
 import { VALUE_DEFAULT, TYPE_TEXT_DEFAULT } from '@admin/config/module-default-config';
+
+function apiConfig(type, queryString) {
+  return {
+    'classroom_list': {
+      apiName: 'getClassList',
+      params: {
+        title: queryString
+      }
+    },
+    'course_list': {
+      apiName: 'getCourseList',
+      params: {
+        courseSetTitle: queryString
+      }
+    },
+    'groupon': {
+      apiName: 'getMarketingList',
+      params: {
+        name: queryString,
+        statuses: 'ongoing,unstart',
+        type: type,
+      }
+    },
+    'coupon': {
+      apiName: 'getCouponList',
+      params: {
+        name: queryString,
+        unexpired: 1,
+        unreceivedNumGt: 0
+      }
+    },
+    'cut': {
+      apiName: 'getMarketingList',
+      params: {
+        name: queryString,
+        statuses: 'ongoing,unstart',
+        type: type
+      }
+    },
+    'seckill': {
+      apiName: 'getMarketingList',
+      params: {
+        name: queryString,
+        statuses: 'ongoing,unstart',
+        type: type,
+        productRemaind_GT: '0'
+      }
+    }
+  }
+}
 
 export default {
   name: 'course-modal',
@@ -54,7 +103,9 @@ export default {
   props: {
     courseList: {
       type: Array,
-      default: [],
+      default: () => {
+        return [];
+      },
     },
     visible: {
       type: Boolean,
@@ -74,7 +125,6 @@ export default {
       keyWord: '',
       courseSets: this.courseList,
       courseListIds: [],
-      head,
       valueDefault: VALUE_DEFAULT,
       typeTextDefault: TYPE_TEXT_DEFAULT,
       hideLoading: false
@@ -161,58 +211,11 @@ export default {
       this.courseSets = [...this.courseSets, item];
     },
     searchHandler(queryString, cb) {
+      const apiConfigObj = apiConfig(this.type, queryString);
       this.hideLoading = false;
-      if (this.type === 'classroom_list') {
-        this.getClassList({
-          title: queryString
-        }).then(res => {
-          cb(res.data);
-        }).catch((err) => {
-          this.hideLoading = true;
-          this.$message({
-            message: err.message,
-            type: 'error'
-          });
-        });
-        return;
-      }
-      if (this.type === 'groupon') {
-        this.getMarketingList({
-          name: queryString,
-          statuses: 'ongoing,unstart',
-          type: this.type,
-          itemType: 'course'
-        }).then(res => {
-          cb(res.data);
-        }).catch((err) => {
-          this.hideLoading = true;
-          this.$message({
-            message: err.message,
-            type: 'error'
-          });
-        });
-        return;
-      }
-      if (this.type === 'coupon') {
-        this.getCouponList({
-          name: queryString,
-          unexpired: 1,
-          unreceivedNumGt: 0
-        }).then(res => {
-          cb(res.data);
-        }).catch((err) => {
-          this.hideLoading = true;
-          this.$message({
-            message: err.message,
-            type: 'error'
-          });
-        });
-        return;
-      }
-
-      this.getCourseList({
-        courseSetTitle: queryString
-      }).then(res => {
+      this[apiConfigObj[this.type].apiName](
+        apiConfigObj[this.type].params
+      ).then(res => {
         cb(res.data);
       }).catch((err) => {
         this.hideLoading = true;
@@ -221,6 +224,7 @@ export default {
           type: 'error'
         });
       });
+      return;
     }
   }
 }

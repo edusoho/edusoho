@@ -1,15 +1,16 @@
 <template>
   <div class="course-detail classroom-detail">
     <div class="join-before">
-      <detail-head :cover="details.cover"></detail-head>
+      <detail-head :cover="details.cover" :seckillActivities="marketingActivities.seckill"></detail-head>
 
       <detail-plan :details="planDetails" :joinStatus="details.joinStatus"
         @getLearnExpiry="getLearnExpiry"></detail-plan>
       <div class="segmentation"></div>
 
       <!-- 优惠活动 -->
-      <template v-if="Number(planDetails.price) !== 0 && unreceivedCoupons.length" >
-        <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
+      <template v-if="showOnsale" >
+        <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons"
+          :activities="marketingActivities"/>
         <div class="segmentation"></div>
       </template>
 
@@ -43,8 +44,12 @@
       <!-- 学员评价 -->
       <review-list ref="review" :targetId="details.classId" :reviews="details.reviews" title="学员评价" type="classroom" defaulValue="暂无评价"></review-list>
 
-      <e-footer :disabled="!accessToJoin" @click.native="handleJoin">
-      {{details.access.code | filterJoinStatus('classroom')}}</e-footer>
+      <!-- 加入学习 -->
+      <e-footer v-if="!marketingActivities.seckill" :disabled="!accessToJoin" @click.native="handleJoin">
+      {{details.access.code | filterJoinStatus('classroom', vipAccessToJoin)}}</e-footer>
+      <!-- 秒杀 -->
+      <e-footer v-if="showSeckill" :half="true" @click.native="handleJoin">原价购买</e-footer>
+      <e-footer v-if="showSeckill" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
     </div>
 
   </div>
@@ -60,12 +65,14 @@
   import onsale from '../course/detail/onsale'
   import moreMask from '@/components/more-mask';
   import redirectMixin from '@/mixins/saveRedirect';
+  import { mapState } from 'vuex';
   import Api from '@/api';
+  import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 
   const TAB_HEIGHT = 44;
 
   export default {
-    mixins: [redirectMixin],
+    mixins: [redirectMixin, getCouponMixin],
     components: {
       directory,
       detailHead,
@@ -93,15 +100,37 @@
         learnExpiry: '永久有效',
         unreceivedCoupons: [],
         miniCoupons: [],
+        marketingActivities: {},
       }
     },
     computed: {
+      ...mapState(['user']),
       accessToJoin() {
         return this.details.access.code === 'success'
           || this.details.access.code === 'user.not_login';
       },
+      vipAccessToJoin() {
+        let vipAccess = false;
+        if (!this.details.vipLevel || !this.user.vip) {
+          return false;
+        }
+        if (this.details.vipLevel.seq <= this.user.vip.seq) {
+          const vipExpired = new Date(this.user.vip.deadline).getTime() < new Date().getTime();
+          vipAccess = !vipExpired;
+        }
+        return vipAccess;
+      },
+      showOnsale() {
+        return Number(this.planDetails.price) !== 0
+          && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities).length);
+      },
+      showSeckill() {
+        return Number(this.planDetails.price) !== 0
+         && this.marketingActivities.seckill && this.accessToJoin;
+      }
     },
     mounted() {
+      // 获取促销优惠券
       Api.searchCoupon({
         params: {
           targetId: this.details.classId,
@@ -112,7 +141,18 @@
 
         this.miniCoupons = this.unreceivedCoupons.length > 3 ?
           this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
-      })
+      }).catch(err => {
+        console.error(err);
+      });
+      // 获取营销活动
+      Api.classroomsActivities({
+        query: { id: this.details.classId }
+      }).then(res => {
+        this.marketingActivities = res;
+      }).catch(err => {
+        console.error(err);
+      });
+
       window.addEventListener('touchmove', this.handleScroll);
       window.addEventListener('scroll', this.handleScroll);
       setTimeout(() => {
@@ -159,13 +199,18 @@
         }, 400)
       },
       handleJoin() {
-        if (!this.accessToJoin) {
+        // 会员免费学
+        const vipAccessToJoin = this.vipAccessToJoin;
+
+        // 禁止加入
+        if (!this.accessToJoin && !vipAccessToJoin) {
           return;
         }
+
         const details = this.details;
         const planDetails = this.planDetails;
-        const canJoinIn = details.access.code === 'success'
-          || Number(details.buyable ) === 1 || (+planDetails.price) === 0;
+        const canJoinIn = Number(details.buyable ) === 1
+          || (+planDetails.price) === 0 || vipAccessToJoin;
 
         if (!this.$store.state.token) {
           this.$router.push({
@@ -179,7 +224,7 @@
 
         if (!canJoinIn) return;
 
-        if (+planDetails.price) {
+        if (+planDetails.price && !vipAccessToJoin) {
           this.$router.push({
             name: 'order',
             params: {

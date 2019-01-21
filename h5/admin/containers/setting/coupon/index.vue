@@ -5,29 +5,27 @@
     </div>
     <div slot="setting" class="coupon-allocate">
       <header class="title">
-        优惠券设置（已过期的优惠券不做展示）
+        优惠券设置（仅显示未过期的优惠券）
+        <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">使用优惠券配置功能，小程序版本需要升级到1.3.2及以上</div>
       </header>
-      <div class="coupon-allocate__content">
-        <div class="mbm text-14" @change="showTitle">
-          <span class="coupon-title">标题栏：</span>
+      <div class="default-allocate__content">
+        <!-- 标题栏 -->
+        <setting-cell title="标题栏：">
           <el-radio v-model="radio" label="show">显示</el-radio>
           <el-radio v-model="radio" label="unshow">不显示</el-radio>
-        </div>
-        <div class="coupon-select__section">
-          <span class="text-14 required-option">优惠券选择：</span>
+        </setting-cell>
+
+        <!-- 优惠券选择 -->
+        <setting-cell title="优惠券选择：" leftClass="required-option">
           <el-button size="mini" @click="addCoupon">添加优惠券</el-button>
-        </div>
-        <div class="coupon-list-container" v-if="copyModuleData.data.items">
-          <draggable v-model="copyModuleData.data.items" class="section__course-container">
-            <el-tag
-              class="courseLink coupon-list-item text-overflow"
-              closable
-              :disable-transitions="true"
-              v-for="(item, index) in copyModuleData.data.items"
-              @close="handleClose(index)"
-              :key="item.id">
-              <span>{{ item.name }}</span>
-            </el-tag>
+        </setting-cell>
+
+        <div v-if="copyModuleData.data.items">
+          <draggable v-model="copyModuleData.data.items" class="default-draggable__list">
+            <div class="default-draggable__item" v-for="(item, index) in copyModuleData.data.items" :key="index">
+              <div class="default-draggable__title text-overflow">{{ item.name }}</div>
+              <i class="h5-icon h5-icon-cuowu1 default-draggable__icon-delete" @click="handleClose(index)"></i>
+            </div>
           </draggable>
         </div>
       </div>
@@ -45,16 +43,19 @@
 </template>
 <script>
 import Api from '@admin/api';
-import moduleFrame from '../module-frame'
+import moduleFrame from '../module-frame';
+import settingCell from '../module-frame/setting-cell';
 import courseModal from '../course/modal/course-modal';
 import coupon from '@/containers/components/e-coupon-list/e-coupon-list';
 import draggable from 'vuedraggable';
+import pathName2Portal from '@admin/config/api-portal-config';
 
 export default {
   components: {
     moduleFrame,
     courseModal,
     draggable,
+    settingCell,
     'e-coupon': coupon
   },
   data() {
@@ -109,6 +110,9 @@ export default {
         this.copyModuleData.data.titleShow = value;
       },
     },
+    portal() {
+      return pathName2Portal[this.pathName];
+    }
   },
   watch: {
     copyModuleData: {
@@ -116,7 +120,10 @@ export default {
         this.$emit('updateModule', data);
       },
       deep: true,
-    }
+    },
+    radio(value) {
+      this.showTitle(value);
+    },
   },
   methods: {
     modalVisibleHandler(visible) {

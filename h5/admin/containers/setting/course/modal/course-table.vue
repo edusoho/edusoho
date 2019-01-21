@@ -17,7 +17,7 @@
               v-if="index !== 0"
               :class="[ tdClass(item.col), { 'delete': item.label === 'delete' }]"
               @click="deleteItem(item.label === 'delete', courseIndex)">
-              {{ course | tableFilter(item.label)}}</span>
+              {{ course | tableFilter(item.label, item.subProperty)}}</span>
             <el-tooltip
               v-if="index === 0"
               :disabled="course[item.label].length <= 20"

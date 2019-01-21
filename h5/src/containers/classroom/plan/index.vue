@@ -8,6 +8,11 @@
     </e-panel>
 
     <div class="course-detail__validity">
+      <div v-if="details.vipLevel && vipSwitch" class="mb15">
+        <span class="mr20">会员免费</span>
+        <img class="vipIcon" :src="details.vipLevel.icon" />
+        <router-link :to="{ path: '/vip', query: { id: details.vipLevel.id } }" class="color-primary">{{details.vipLevel.name}}免费学</router-link>
+      </div>
       <service v-if="details.service.length" :services="details.service" ></service>
       <div>
         <span>学习有效期：</span>
@@ -18,6 +23,7 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 import service from '../service';
 import { formatFullTime } from '@/utils/date-toolkit.js';
 
@@ -50,6 +56,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['vipSwitch']),
     learnExpiryHtml() {
       const memberInfo = this.joinStatus;
       const learnExpiryData = this.details.expiryValue;

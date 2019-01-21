@@ -11,6 +11,8 @@ import '@/assets/styles/main.scss';
 import App from '@/App';
 import Api from '@/api';
 import {
+  Row,
+  Col,
   Button,
   NavBar,
   Tab,
@@ -25,7 +27,8 @@ import {
   Popup,
   Rate,
   Cell,
-  Tag
+  Tag,
+  Toast
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -43,6 +46,8 @@ Vue.component('van-rate', Rate);
 Vue.component('van-cell', Cell);
 
 Vue.use(filters);
+Vue.use(Row);
+Vue.use(Col);
 Vue.use(Tag);
 Vue.use(Popup);
 Vue.use(plugins);
@@ -80,5 +85,7 @@ Api.getSettings({
     components: { App },
     template: '<App/>'
   });
+}).catch(err => {
+  Toast.fail(err.message);
 });
 

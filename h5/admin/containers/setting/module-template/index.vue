@@ -25,11 +25,16 @@
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
       @updateModule="updateHandler(module, index)"></coupon>
 
-    <!-- 营销组件——拼团活动 -->
-    <marketing-groupon v-if="module.type === moduleDefault.groupon.type"
+    <!-- 会员 -->
+    <vip v-if="module.type === moduleDefault.vip.type"
       :active="isActive" :moduleData="module" :incomplete="validateFuc"
-      @updateModule="updateHandler(module, index)"></marketing-groupon>
+      @updateModule="updateHandler(module, index)"></vip>
 
+    <!-- 营销组件——拼团，砍价，秒杀 -->
+    <marketing-activity
+      v-if="[moduleDefault.groupon.type, moduleDefault.cut.type, moduleDefault.seckill.type].includes(module.type)"
+      :active="isActive" :moduleData="module" :incomplete="validateFuc" :key="index"
+      @updateModule="updateHandler(module, index)"></marketing-activity>
     <img class="icon-delete" src="static/images/delete.png" @click="handleRemove(module, index)" v-show="isActive">
   </div>
 </template>
@@ -39,7 +44,8 @@ import Carousel from '../carousel';
 import Course from '../course';
 import Poster from '../poster';
 import Coupon from '../coupon';
-import MarketingGroupon from '../marketing-groupon';
+import Vip from '../vip';
+import MarketingActivity from '../marketing-activity';
 import validate from '@admin/utils/module-validator';
 import { MODULE_DEFAULT } from '@admin/config/module-default-config';
 
@@ -48,13 +54,16 @@ export default {
     'carousel': Carousel,
     'course': Course,
     'poster': Poster,
-    'marketing-groupon': MarketingGroupon,
-    'coupon': Coupon
+    'marketing-activity': MarketingActivity,
+    'coupon': Coupon,
+    'vip': Vip
   },
   props: {
     module: {
       type: Object,
-      default: {},
+      default: () => {
+        return {};
+      },
     },
     active: {
       type: Boolean,

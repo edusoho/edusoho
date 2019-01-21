@@ -27,17 +27,21 @@ export default {
     }),
   },
   computed: {
-    ...mapState(['title'])
+    ...mapState(['title']),
+    routerKeepAlive() {
+      return this.$route.meta.keepAlive;
+    },
   },
   watch: {
     '$route': {
       handler(to) {
         const redirect = to.query.redirect || '';
 
-        this.isQrcode = to.query.loginToken ? true : false;
+        this.isQrcode = !!to.query.loginToken;
 
         this.showLeftArrow =
-          !['my', 'find', 'learning', 'prelogin', 'preview', 'coupon_receive'].includes(to.name);
+          !['my','find','learning','prelogin','preview','coupon_receive','share_redirect']
+          .includes(to.name);
 
         if(redirect === 'learning') {
           this.setNavbarTitle('我的学习')

@@ -2,10 +2,12 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img :class="[typeList==='course_list' ? 'e-course__img' : 'e-class__img']" v-bind:src="imgSrc">
+        <img :class="imgClass" v-bind:src="imgSrc">
       </div>
       <div class="e-course__right pull-left">
-        <div v-if="type === 'confirmOrder'" class="e-course__title course-confirm-title">{{ title }}</div>
+        <div v-if="type === 'confirmOrder'" class="e-course__title course-confirm-title">
+          {{ title }}<span class="grey-medium" v-if="typeList === 'vip'"> x {{vipDuration}}</span>
+        </div>
         <div v-else>
           <div class="e-course__title text-overflow">{{ title }}</div>
           <div v-if="typeList==='classroom_list'" class="e-course__count">
@@ -52,11 +54,15 @@
       typeList: {
         type: String,
         default: 'course_list'
+      },
+      duration: {
+        type: Number,
+        default: 0
       }
     },
     data() {
       return {
-        pathName: this.$route.name,
+        pathName: this.$route.name
       };
     },
     computed: {
@@ -81,6 +87,16 @@
         } else {
           return false
         }
+      },
+      imgClass() {
+        if (this.typeList === 'classroom_list') return 'e-class__img';
+        if (this.typeList === 'vip') return 'e-vip__img';
+        return 'e-course__img';
+      },
+      vipDuration() {
+        if (this.order.unitType === 'month') return `${this.duration}个月`
+        if (this.order.unitType === 'year') return `${this.duration}年`
+        return `${this.duration}天`
       }
     },
     watch: {
@@ -106,6 +122,7 @@
         if (!this.feedback) {
           return;
         }
+        if (this.typeList === 'vip') return;
         const isOrder = this.type === 'order';
         const id = this.course.id || this.order.targetId;
         if (e.target.tagName === 'SPAN') {

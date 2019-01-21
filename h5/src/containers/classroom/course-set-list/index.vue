@@ -3,12 +3,12 @@
     <template v-if="courseSets.length">
       <moreMask v-if="!disableMask && (courseSets.length > 5)" :forceShow="true" @maskLoadMore="loadMore">
         <template v-for="item in partCourseSets">
-          <course :course="item" style="padding-left: 0;padding-right: 0;"></course>
+          <course :feedback="feedback" :course="item" style="padding-left: 0;padding-right: 0;"></course>
         </template>
       </moreMask>
       <template v-else>
         <template v-for="item in courseSets">
-          <course :course="item" style="padding-left: 0;padding-right: 0;"></course>
+          <course :feedback="feedback" :course="item" style="padding-left: 0;padding-right: 0;"></course>
         </template>
       </template>
     </template>
@@ -37,6 +37,10 @@ export default {
     disableMask: {
       type: Boolean,
       default: false,
+    },
+    feedback: {
+      type: Boolean,
+      default: true,
     }
   },
   data() {

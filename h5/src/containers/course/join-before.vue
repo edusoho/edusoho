@@ -1,14 +1,16 @@
 <template>
   <div :class="isClassCourse ? '' : 'join-before'">
     <detail-head
-      :price="details.price" :courseSet="details.courseSet"></detail-head>
+      :price="details.price" :courseSet="details.courseSet"
+      :seckillActivities="marketingActivities.seckill"></detail-head>
 
-    <detail-plan @getLearnExpiry="getLearnExpiry"></detail-plan>
+    <detail-plan @getLearnExpiry="getLearnExpiry" @switchPlan="switchPlan"></detail-plan>
     <div class="segmentation"></div>
 
     <!-- 优惠活动 -->
-    <template v-if="!isClassCourse && Number(details.price) !== 0 && unreceivedCoupons.length">
-      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
+    <template v-if="showOnsale">
+      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons"
+        :activities="marketingActivities"/>
       <div class="segmentation"></div>
     </template>
 
@@ -37,8 +39,12 @@
     <!-- 学员评价 -->
     <review-list ref="review" :targetId="details.courseSet.id" :reviews="details.reviews" title="学员评价" type="course" defaulValue="暂无评价"></review-list>
 
-    <e-footer v-if="!isClassCourse" :disabled="!accessToJoin" @click.native="handleJoin">
-      {{details.access.code | filterJoinStatus}}</e-footer>
+    <!-- 加入学习 -->
+    <e-footer v-if="!isClassCourse && !marketingActivities.seckill" :disabled="!accessToJoin" @click.native="handleJoin">
+      {{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
+    <!-- 秒杀 -->
+    <e-footer v-if="showSeckill" :half="true" @click.native="handleJoin">原价购买</e-footer>
+    <e-footer v-if="showSeckill" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
   </div>
 </template>
 <script>
@@ -52,12 +58,13 @@
   import { mapActions, mapState } from 'vuex';
   import redirectMixin from '@/mixins/saveRedirect';
   import Api from '@/api';
+  import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 
   const TAB_HEIGHT = 44;
 
   export default {
     name: 'joinBefore',
-    mixins: [redirectMixin],
+    mixins: [redirectMixin, getCouponMixin],
     data() {
       return {
         tabs: ['课程介绍', '课程目录', '学员评价'],
@@ -74,6 +81,7 @@
         },
         unreceivedCoupons: [],
         miniCoupons: [],
+        marketingActivities: {},
       };
     },
     components: {
@@ -89,6 +97,7 @@
       ...mapState('course', {
         details: state => state.details
       }),
+      ...mapState(['user']),
       summary () {
         return this.details.summary || this.details.courseSet.summary;
       },
@@ -99,9 +108,29 @@
         return this.details.access.code === 'success'
           || this.details.access.code === 'user.not_login';
       },
+      vipAccessToJoin() {
+        let vipAccess = false;
+        if (!this.details.vipLevel || !this.user.vip) {
+          return false;
+        }
+        if (this.details.vipLevel.seq <= this.user.vip.seq) {
+          const vipExpired = new Date(this.user.vip.deadline).getTime() < new Date().getTime();
+          vipAccess = !vipExpired;
+        }
+        return vipAccess;
+      },
+      showOnsale() {
+        return !this.isClassCourse && Number(this.details.price) !== 0
+          && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities).length);
+      },
+      showSeckill() {
+        return !this.isClassCourse && Number(this.details.price) !== 0
+         && this.marketingActivities.seckill && this.accessToJoin;
+      }
     },
     mounted() {
       if (!this.isClassCourse) {
+        // 获取促销优惠券
         Api.searchCoupon({
           params: {
             targetId: this.details.courseSet.id,
@@ -112,6 +141,16 @@
 
           this.miniCoupons = this.unreceivedCoupons.length > 3 ?
             this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
+        }).catch(err => {
+          console.error(err);
+        });
+        // 获取营销活动
+        Api.coursesActivities({
+          query: { id: this.details.id }
+        }).then(res => {
+          this.marketingActivities = res;
+        }).catch(err => {
+          console.error(err);
         });
       }
 
@@ -172,14 +211,13 @@
           :(scrollTop >= tops.directoryTop ? 2 : 1);
       },
       handleJoin(){
-        if (!this.accessToJoin) {
+        // 会员免费学
+        const vipAccessToJoin = this.vipAccessToJoin;
+
+        // 禁止加入
+        if (!this.accessToJoin && !vipAccessToJoin) {
           return;
         }
-        const endDate = this.details.learningExpiryDate.expiryEndDate;
-        const endDateStamp = new Date(endDate).getTime();
-        const todayStamp = new Date().getTime();
-        let isPast = todayStamp < endDateStamp;
-        endDate == 0 ? (isPast = true) : (isPast = todayStamp < endDateStamp);
 
         if (!this.$store.state.token) {
           this.$router.push({
@@ -192,24 +230,23 @@
           return;
         }
 
-        if (Number(this.details.buyable) && isPast) {
-          if (+this.details.price) {
-            const expiryMode = this.details.learningExpiryDate.expiryMode;
-            const expiryScopeStr = `${this.startDateStr} 至 ${this.endDateStr}`;
-            const expiryStr = (expiryMode === 'date') ? expiryScopeStr : this.learnExpiry
-            this.$router.push({
-              name: 'order',
-              params: {
-                id: this.details.id,
-              },
-              query: {
-                expiryScope: expiryStr,
-                targetType: 'course',
-              }
-            });
+        const endDate = this.details.learningExpiryDate.expiryEndDate;
+        const endDateStamp = new Date(endDate).getTime();
+        const todayStamp = new Date().getTime();
+        let isPast = todayStamp < endDateStamp;
+        endDate == 0 ? (isPast = true) : (isPast = todayStamp < endDateStamp);
+        if (Number(this.details.buyable) && isPast || vipAccessToJoin) {
+          if (+this.details.price && !vipAccessToJoin) {
+            this.getOrder();
           } else {
             this.joinCourse({
               id: this.details.id
+            }).then(res => {
+              // 返回空对象，表示加入失败，需要去创建订单购买
+              if (!(Object.keys(res).length === 0)) return;
+              this.getOrder();
+            }).catch(err => {
+              console.error(err)
             });
           }
         }
@@ -218,6 +255,34 @@
         this.learnExpiry = data.val;
         this.startDateStr = data.startDateStr;
         this.endDateStr = data.endDateStr;
+      },
+      // 切换计划
+      switchPlan() {
+        // 获取营销活动
+        this.marketingActivities = {};
+        Api.coursesActivities({
+          query: { id: this.details.id }
+        }).then(res => {
+          this.marketingActivities = res;
+        }).catch(err => {
+          console.error(err);
+        });
+      },
+      // 创建订单
+      getOrder() {
+        const expiryMode = this.details.learningExpiryDate.expiryMode;
+        const expiryScopeStr = `${this.startDateStr} 至 ${this.endDateStr}`;
+        const expiryStr = (expiryMode === 'date') ? expiryScopeStr : this.learnExpiry
+        this.$router.push({
+          name: 'order',
+          params: {
+            id: this.details.id,
+          },
+          query: {
+            expiryScope: expiryStr,
+            targetType: 'course',
+          }
+        });
       }
     },
   }

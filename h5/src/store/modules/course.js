@@ -49,7 +49,10 @@ const actions = {
         id
       }
     }).then(res => {
-      commit(types.JOIN_COURSE, res);
+      // 返回空对象，表示加入失败，需要去创建订单购买
+      if (!(Object.keys(res).length === 0)) {
+        commit(types.JOIN_COURSE, res);
+      }
       return res;
     });
   }

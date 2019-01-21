@@ -1,15 +1,17 @@
 <template>
   <div class="orders">
-    <span class='orders-title'>我的订单</span>
-    <div class="orders-container__empty" v-if="isEmptyOrder && isFirstRequestCompile">
+    <div class="orders-container__empty" v-if="list.length === 0 && isFirstRequestCompile">
       <img src="static/images/orderEmpty.png" >
       <span>暂无订单记录</span>
     </div>
 
     <div class="order" v-else>
-      <van-list style="padding-bottom: 40px; margin-top: 0;" v-model="loading" :finished="finished" @load="onLoad">
-        <e-course v-for="order in orderList" :key="order.id" :order="order"
-          type="order" :typeList="order.targetType"></e-course>
+      <van-list class="tab-list" v-model="loading" :finished="finished" @load="onLoad">
+        <e-course v-for="order in list"
+          :key="order.id"
+          :order="order"
+          type="order"
+          :typeList="order.targetType"/>
       </van-list>
     </div>
   </div>
@@ -25,11 +27,11 @@ export default {
   },
   data() {
     return {
-      orderList: [],
-      isEmptyOrder: true,
+      list: [],
       isFirstRequestCompile: false,
       loading: false,
       finished: false,
+      offset: 0,
     }
   },
   created() {
@@ -38,17 +40,17 @@ export default {
     onLoad() {
       const params = { offset: this.offset }
       Api.getMyOrder({params}).then(({data, paging}) => {
-        this.orderList = [...this.orderList, ...data];
-        this.offset = this.orderList.length
+        this.isFirstRequestCompile = true;
+        this.list = [...this.list, ...data];
+        this.offset = this.list.length
 
-        if (this.orderList.length) this.isEmptyOrder = false;
-
-        if (this.orderList.length == paging.total) {
+        if (this.list.length == paging.total) {
           this.finished = true
         }
         this.loading = false
       }).catch(err => {
         Toast.fail(err.message)
+        this.isFirstRequestCompile = true;
         this.loading = false
       });
     }

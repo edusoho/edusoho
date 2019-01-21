@@ -16,7 +16,13 @@
     </ul>
 
     <div class="course-detail__validity">
-      <service v-if="details.services.length" :services="details.services" ></service>
+      <div v-if="details.vipLevel && vipSwitch" class="mb15">
+        <span class="mr20">会员免费</span>
+        <img class="vipIcon" :src="details.vipLevel.icon" />
+        <router-link class="color-primary" :to="{ path: '/vip', query: { id: details.vipLevel.id } }">
+          {{details.vipLevel.name}}免费学</router-link>
+      </div>
+      <service v-if="details.services.length" :services="details.services" />
       <div>
         <span class="mr20">学习有效期</span>
         <span class="dark" v-html="learnExpiryHtml"></span>
@@ -32,6 +38,7 @@
 import * as types from '@/store/mutation-types';
 import service from '@/containers/classroom/service';
 import { mapMutations, mapState, mapActions } from 'vuex';
+import { Toast } from 'vant';
 
 export default {
   data() {
@@ -87,7 +94,7 @@ export default {
       details: state => state.details,
       selectedPlanId: state => state.selectedPlanId
     }),
-    ...mapState(['courseSettings']),
+    ...mapState(['courseSettings', 'vipSwitch']),
     learnExpiryHtml() {
       const memberInfo = this.details.member;
       const learnExpiryData = this.details.learningExpiryDate;
@@ -149,6 +156,10 @@ export default {
 
       this.getCourseDetail({
         courseId: item.id
+      }).then(() => {
+        this.$emit('switchPlan');
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     },
     filterPrice () {

@@ -9,7 +9,8 @@
     <lazyLoading
       :courseList="courseList"
       :isAllData="true"
-      :tagShow="false"
+      :normalTagShow="false"
+      :vipTagShow="true"
       :courseItemType="courseItemType"
       :isRequestCompile="isRequestCompile"
       @needRequest="sendRequest"
@@ -108,7 +109,6 @@
           if (!isAllClassroom) {
             this.offset = this.courseList.length;
           }
-          console.log(data,111);
           this.isAllClassroom = isAllClassroom;
           this.isRequestCompile = true;
         }).catch((err) => {

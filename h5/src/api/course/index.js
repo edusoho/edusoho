@@ -28,10 +28,12 @@ export default [
     name: 'getCourseSets',
     url: '/course_sets'
   }, {
+    // 根据计划 id 查询计划详情
     name: 'getCourse',
     url: '/course_sets/{courseId}',
     method: 'GET'
   }, {
+    // 获取课程评论
     name: 'getCourseReviews',
     url: '/courseSet/{id}/reviews',
     method: 'GET'
@@ -40,6 +42,12 @@ export default [
     name: 'getCourseByCourseSet',
     url: '/course_sets/{id}/courses',
     method: 'GET',
+    disableLoading: true
+  }, {
+    // 退出课程
+    name: 'deleteCourse',
+    url: '/me/course_members/{id}',
+    method: 'DELETE',
     disableLoading: true
   }
 ];

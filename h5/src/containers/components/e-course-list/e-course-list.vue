@@ -15,8 +15,10 @@
         :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
         :courseType="typeList === 'course_list' ? item.courseSet.type : ''"
         :typeList="typeList"
-        :tagShow="tagShow"
+        :normalTagShow="normalTagShow"
+        :vipTagShow="vipTagShow"
         :type="type"
+        :isVip="item.vipLevelId"
         :feedback="feedback">
       </e-class>
     </div>
@@ -47,9 +49,25 @@ import { mapState } from 'vuex';
         type: String,
         default: 'course_list'
       },
-      tagShow: {
+      normalTagShow: {
         type: Boolean,
         default: true
+      },
+      vipTagShow: {
+        type: Boolean,
+        default: false
+      },
+      moreType: {
+        type: String,
+        default: 'normal'
+      },
+      vipName: {
+        type: String,
+        default: '会员'
+      },
+      levelId: {
+        type: Number,
+        default: 1
       }
     },
     components: {
@@ -140,10 +158,19 @@ import { mapState } from 'vuex';
         if (!this.feedback) {
           return;
         }
-        let routeName = this.typeList === 'course_list' ? 'more_course' : 'more_class';
-        this.$router.push({
-          name: routeName
-        });
+        if (this.moreType === 'vip') {
+          this.$router.push({
+            name: this.typeList === 'course_list' ? 'vip_course' : 'vip_classroom',
+            query: {
+              vipName: this.vipName,
+              levelId: this.levelId
+            }
+          });
+        } else {
+          this.$router.push({
+            name: this.typeList === 'course_list' ? 'more_course' : 'more_class'
+          });
+        }
       },
       fetchCourse() {
         if (this.sourceType === 'custom') return;

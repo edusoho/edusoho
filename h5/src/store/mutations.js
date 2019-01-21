@@ -25,6 +25,7 @@ export default {
     localStorage.setItem('user', JSON.stringify(payload));
   },
   [types.SMS_CENTER](state, payload) {
+    // 看起来像是没用的，后续需要验证
     state.smsToken = payload;
   },
   [types.SET_NICKNAME](state, payload) {
@@ -36,6 +37,10 @@ export default {
   [types.SET_AVATAR](state, payload) {
     state.user = payload;
     localStorage.setItem('user', JSON.stringify(payload));
+  },
+  [types.BIND_MOBILE](state, payload) {
+    state.user.verifiedMobile = payload.verifiedMobile;
+    localStorage.setItem('user', JSON.stringify(state.user));
   },
   [types.GET_SETTINGS](state, { key, setting }) {
     state[key] = setting;

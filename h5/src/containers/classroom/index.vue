@@ -10,11 +10,10 @@
   import joinBefore from './join-before.vue';
   import { mapState } from 'vuex';
   import Api from '@/api';
+  import { Toast } from 'vant';
 
   export default {
     components: {
-      joinAfter,
-      joinBefore
     },
     data() {
       return {
@@ -32,6 +31,7 @@
           cover: '',
           reviews: [],
           classId: 0,
+          vipLevel: null,
         },
         planDetails: {
           title: '',
@@ -40,6 +40,7 @@
           studentNum: 0,
           expiryMode: 'forever',
           expiryValue: '0',
+          vipLevel: null,
         },
         currentComp: '',
       };
@@ -73,21 +74,21 @@
         const summary = res.about;
         const joinStatus = !isEmpty && res.member;
         const {
-          courses, teachers, assistants, buyable,
-          headTeacher, access, reviews, expiryMode,
+          courses, teachers, assistants, buyable, vipLevel,
+          headTeacher, access, reviews, expiryMode, member,
           expiryValue, title, price, studentNum, service,
         } = res;
         const cover = res.cover.large;
         const classId = res.id;
         const planDetails = {
           title, service, price, studentNum,
-          expiryMode, expiryValue,
+          expiryMode, expiryValue, vipLevel,
         };
 
         this.planDetails = planDetails;
         this.details = {
-          summary, joinStatus, isEmpty, courses, classId, buyable,
-          teachers, assistants, headTeacher, access, cover, reviews,
+          summary, joinStatus, isEmpty, courses, classId, buyable, vipLevel,
+          teachers, assistants, headTeacher, access, cover, reviews, member,
         }
       },
       getComponent(status) {

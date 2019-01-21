@@ -3,6 +3,7 @@
 @import '../../../src/assets/styles/modules/e-course-lists/index.scss';
 @import '../../../src/assets/styles/modules/e-poster/index.scss';
 @import '../../../src/assets/styles/modules/e-swipe/index.scss';
+@import '../../../src/assets/styles/modules/e-vip-list/index.scss';
 @import '../../../src/assets/styles/modules/e-marketing/index.scss';
 
 // 引入 admin 文件夹中的组件样式
@@ -13,6 +14,7 @@
 @import '../modules/course-modal/index.scss';
 @import '../modules/course-table/index.scss';
 @import "../modules/poster/index.scss";
-@import "../modules/marketing-groupon/index.scss";
+@import "../modules/marketing-activity/index.scss";
 @import "../modules/footer/index.scss";
 @import "../modules/coupon/index.scss";
+@import "../modules/vip/index.scss";
