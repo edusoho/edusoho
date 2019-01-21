@@ -874,7 +874,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => implode(',', $reg_ids),
                     'pass_through_type' => 'normal',
-                    'title' => $thread['title'],
+                    'title' => '提问',
                     'description' => json_encode(array('threadId' => $thread['id'], 'courseId' => $thread['target']['id'], 'lessonId' => $thread['relationId'], 'questionCreatedTime' => $thread['createdTime'], 'questionTitle' => $thread['title'], 'message' => !empty($thread['title']) ? "您的课程有新的提问《{$thread['title']}》" : "有一个{$questionType}类型的提问")),
                 );
                 $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
