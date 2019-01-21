@@ -64,7 +64,6 @@ function apiConfig(type, queryString) {
         name: queryString,
         statuses: 'ongoing,unstart',
         type: type,
-        itemType: 'course'
       }
     },
     'coupon': {
