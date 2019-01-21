@@ -49,15 +49,18 @@ const head = {
     }, {
       col: 1,
       title: '商品原价',
-      label: 'originPrice',
+      label: 'rule',
+      subProperty: 'originPrice',
     }, {
       col: 1,
       title: '团长价格',
-      label: 'ownerPrice',
+      label: 'rule',
+      subProperty: 'ownerPrice',
     }, {
       col: 1,
       title: '团员价格',
-      label: 'memberPrice',
+      label: 'rule',
+      subProperty: 'memberPrice',
     }, {
       col: 3,
       title: '创建时间',
