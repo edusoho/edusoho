@@ -11,6 +11,7 @@ use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\MarketingActivity\MarketingActivityFilter;
 
 class PageSetting extends AbstractResource
 {
@@ -126,6 +127,10 @@ class PageSetting extends AbstractResource
                 foreach ($discoverySetting['data']['items'] as &$vipLevel) {
                     $vipLevelFilter->filter($vipLevel);
                 }
+            }
+            if (in_array($discoverySetting['type'], array('cut', 'seckill', 'groupon'))) {
+                $marketingActivityFilter = new MarketingActivityFilter();
+                $data['activity'] = $marketingActivityFilter->filter($discoverySetting['activity']);
             }
         }
 
