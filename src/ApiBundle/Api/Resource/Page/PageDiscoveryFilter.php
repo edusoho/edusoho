@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Coupon\CouponFilter;
 use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\MarketingActivity\MarketingActivityFilter;
 
 class PageDiscoveryFilter extends Filter
 {
@@ -55,6 +56,11 @@ class PageDiscoveryFilter extends Filter
                     $couponFilter->filter($couponBatch['currentUserCoupon']);
                 }
             }
+        }
+
+        if (in_array($data['type'], array('cut', 'seckill', 'groupon'))) {
+            $marketingActivityFilter = new MarketingActivityFilter();
+            $data['activity'] = $marketingActivityFilter->filter($data['data']['activity']);
         }
     }
 }

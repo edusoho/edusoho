@@ -157,9 +157,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         if (empty($remoteActvity) || isset($remoteActvity['error'])) {
             return false;
         }
-        $discoverySetting['data']['activity']['status'] = $remoteActvity['status'];
-        $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
-        $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
+        $discoverySetting['data']['activity'] = $remoteActvity;
 
         return $discoverySetting;
     }
@@ -171,9 +169,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         if (empty($remoteActvity) || isset($remoteActvity['error'])) {
             return false;
         }
-        $discoverySetting['data']['activity']['status'] = $remoteActvity['status'];
-        $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
-        $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
+        $discoverySetting['data']['activity'] = $remoteActvity;
 
         return $discoverySetting;
     }
@@ -185,9 +181,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         if (empty($remoteActvity) || isset($remoteActvity['error'])) {
             return false;
         }
-        $discoverySetting['data']['activity']['status'] = $remoteActvity['status'];
-        $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
-        $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
+        $discoverySetting['data']['activity'] = $remoteActvity;
 
         return $discoverySetting;
     }
