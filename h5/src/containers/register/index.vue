@@ -222,6 +222,10 @@ export default {
         return;
       }
       // 验证码组件更新数据
+      if (!this.$refs.dragComponent.dragToEnd) {
+        Toast('请先完成拼图验证');
+        return;
+      }
       this.$refs.dragComponent.initDragCaptcha();
     },
     handleSendSms() {

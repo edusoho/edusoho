@@ -202,6 +202,10 @@ export default {
 
     },
     clickSmsBtn() {
+      if (!this.$refs.dragComponent.dragToEnd) {
+        Toast('请先完成拼图验证');
+        return;
+      }
       this.handleSendSms();
     },
     handleSendSms() {
