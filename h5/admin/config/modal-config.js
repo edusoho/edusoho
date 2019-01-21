@@ -80,7 +80,7 @@ const head = {
       label: 'originPrice',
     }, {
       col: 1,
-      title: '最低售价',
+      title: '秒杀价',
       label: 'rule',
       subProperty: 'lowestPrice',
     }, {
