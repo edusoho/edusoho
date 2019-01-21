@@ -110,6 +110,8 @@ class PageSetting extends AbstractResource
                 $courseFilter->setMode(Filter::PUBLIC_MODE);
                 foreach ($discoverySetting['data']['items'] as &$course) {
                     $courseFilter->filter($course);
+                    unset($course['summary']);
+                    unset($course['courseSet']['summary']);
                 }
             }
             if ('classroom_list' == $discoverySetting['type']) {
@@ -118,6 +120,7 @@ class PageSetting extends AbstractResource
                 $classroomFilter->setMode(Filter::PUBLIC_MODE);
                 foreach ($discoverySetting['data']['items'] as &$classroom) {
                     $classroomFilter->filter($classroom);
+                    unset($classroom['about']);
                 }
             }
             if ('vip' == $discoverySetting['type']) {
