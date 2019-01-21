@@ -95,7 +95,7 @@
   </div>
   <div class="time">
     {% if uploadFile.type in ['video', 'audio'] and uploadFile.storage == 'cloud' %}
-      {{ uploadFile.length|date('i:s') }}
+      {{ uploadFile.length|activity_length_format }}
     {% else %}
       {{ uploadFile.ext|upper }}
     {% endif %}
