@@ -103,7 +103,7 @@ class FaceSession extends AbstractResource
         }
 
         $user = $this->getUserService()->getUser($session['user']['id']);
-        $this->getLogService()->info('mobile', 'face_login', "{$user['nickname']}通过人脸识别登录", array('unLoginUser' => $user));
+        $this->getLogService()->info('mobile', 'face_login', "{$user['nickname']}通过人脸识别登录", array('loginUser' => $user));
 
         return $session;
     }
