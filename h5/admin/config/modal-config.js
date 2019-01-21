@@ -83,7 +83,7 @@ const head = {
       label: 'originPrice',
     }, {
       col: 1,
-      title: '秒杀价',
+      title: '最低售价',
       label: 'rule',
       subProperty: 'lowestPrice',
     }, {
@@ -114,7 +114,7 @@ const head = {
       subProperty: 'originPrice'
     }, {
       col: 1,
-      title: '最低售价',
+      title: '秒杀价',
       label: 'rule',
       subProperty: 'seckillPrice'
     }, {
