@@ -10,7 +10,8 @@ export default {
   },
   methods: {
     afterLogin() {
-      const redirect = decodeURIComponent(this.$route.query.redirect) || '/';
+      const redirect = this.$route.query.redirect
+        ? decodeURIComponent(this.$route.query.redirect) : '/';
       const callbackType = this.$route.query.callbackType;
       const acitivityId = this.$route.query.acitivityId;
       const jumpAction = () => {
