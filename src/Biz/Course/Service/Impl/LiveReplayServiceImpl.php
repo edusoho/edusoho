@@ -107,6 +107,11 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             'nickname' => $user->isLogin() ? $user['nickname'] : 'guest',
         );
 
+        //用来计算当前直播用户数量
+        if ($user->isLogin()) {
+            $args['userId'] = $user['id'];
+        }
+
         if ($ssl) {
             $args['protocol'] = 'https';
         }
