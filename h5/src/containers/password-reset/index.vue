@@ -175,6 +175,10 @@ export default {
       }
 
       // 手机重置
+      if (!this.$refs.dragComponent.dragToEnd) {
+        Toast('请先完成拼图验证');
+        return;
+      }
       Api.resetPasswordByMobile({
         query: { mobile: account },
         data: {
