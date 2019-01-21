@@ -118,11 +118,11 @@ class SmsController extends BaseController
 
     public function changeLinkAction(Request $request)
     {
-        $url = $request->getHost();
+        $url = $request->getSchemeAndHttpHost();
         $url .= $request->query->get('url');
 
         $shortUrl = SmsToolkit::getShortLink($url);
-        $url = empty($shortUrl) ? 'http://'.$url : $shortUrl;
+        $url = empty($shortUrl) ? $url : $shortUrl;
 
         return $this->createJsonResponse(array('url' => $url.' '));
     }
