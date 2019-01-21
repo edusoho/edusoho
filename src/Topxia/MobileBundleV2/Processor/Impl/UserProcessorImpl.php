@@ -352,7 +352,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $device = $this->controller->getPushDeviceService()->getPushDeviceByUserId($user['id']);
             if (!empty($device)) {
                 $device = $this->controller->getPushDeviceService()->updatePushDevice($device['id'], array('userId' => 0));
-                $this->controller->getPushDeviceService()->getPushSdk()->setDeviceActive($device['reg_id'], 0);
+                $this->controller->getPushDeviceService()->getPushSdk()->setDeviceActive($device['regId'], 0);
             }
             $this->log('user_logout', '用户退出', array(
                 'userToken' => $user, )
