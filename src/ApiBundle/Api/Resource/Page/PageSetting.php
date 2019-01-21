@@ -130,7 +130,7 @@ class PageSetting extends AbstractResource
             }
             if (in_array($discoverySetting['type'], array('cut', 'seckill', 'groupon'))) {
                 $marketingActivityFilter = new MarketingActivityFilter();
-                $data['activity'] = $marketingActivityFilter->filter($discoverySetting['activity']);
+                $data['activity'] = $marketingActivityFilter->filter($discoverySetting['data']['activity']);
             }
         }
 
