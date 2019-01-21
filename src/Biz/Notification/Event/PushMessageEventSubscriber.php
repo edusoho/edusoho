@@ -413,7 +413,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'title' => "《{$threadPost['thread']['title']}》",
+                    'title' => "{$currentUser['nickname']}《{$threadPost['thread']['title']}》回复中@了你",
                     'description' => json_encode(array('threadId' => $threadPost['threadId'], 'courseId' => $threadPost['target']['id'], 'lessonId' => $threadPost['thread']['relationId'], 'questionCreatedTime' => $threadPost['thread']['createdTime'], 'questionTitle' => $threadPost['thread']['title'], 'postContent' => $threadPost['content'], 'message' => "{$currentUser['nickname']}《{$threadPost['thread']['title']}》回复中@了你")),
                 );
                 $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
@@ -445,7 +445,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'title' => "《{$thread['title']}》",
+                    'title' => "您的{$threadType}《{$thread['title']}》被管理员置顶",
                     'description' => json_encode($body),
                 );
                 $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
@@ -492,7 +492,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'title' => "《{$thread['title']}》",
+                    'title' => "您的{$threadType}《{$thread['title']}》被管理员取消置顶",
                     'description' => json_encode($body),
                 );
                 $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
@@ -538,7 +538,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'title' => "《{$thread['title']}》",
+                    'title' => "您的{$threadType}《{$thread['title']}》被管理员取消加精",
                     'description' => json_encode($body),
                 );
                 $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
@@ -585,7 +585,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'title' => "《{$thread['title']}》",
+                    'title' => "您的{$threadType}《{$thread['title']}》被管理员加精",
                     'description' => json_encode($body),
                 );
                 $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
@@ -874,14 +874,14 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => implode(',', $reg_ids),
                     'pass_through_type' => 'normal',
-                    'title' => '提问',
+                    'title' => "有一个{$questionType}类型的提问",
                     'description' => json_encode(array('threadId' => $thread['id'], 'courseId' => $thread['target']['id'], 'lessonId' => $thread['relationId'], 'questionCreatedTime' => $thread['createdTime'], 'questionTitle' => $thread['title'], 'message' => !empty($thread['title']) ? "您的课程有新的提问《{$thread['title']}》" : "有一个{$questionType}类型的提问")),
                 );
                 $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
                 $this->getLogService()->info(
-                    'create_thread',
-                    'create',
-                    'push message',
+                    'push_message',
+                    'push',
+                    '创建问题推送',
                     array('result' => $result)
                 );
             }
@@ -971,7 +971,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'title' => "《{$threadPost['thread']['title']}》",
+                    'title' => isset($threadPost['thread']['title']) ? "《{$threadPost['thread']['title']}》" : '收到一条新回答',
                     'description' => json_encode($body),
                 );
                 $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
@@ -1508,7 +1508,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'title' => $thread['title'],
+                    'title' => "问题被[{$user['nickname']}]编辑",
                     'description' => json_encode($body),
                 );
                 $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
@@ -1581,7 +1581,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'title' => $thread['title'],
+                    'title' => "您的{$threadType}《{$thread['title']}》被[{$user['nickname']}]删除",
                     'description' => json_encode($body),
                 );
                 $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
@@ -1702,7 +1702,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'title' => "《{$threadPost['thread']['title']}》",
+                    'title' => "有回答被[{$user['nickname']}]编辑",
                     'description' => json_encode($body),
                 );
                 $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
@@ -1770,7 +1770,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'title' => "《{$threadPost['thread']['title']}》",
+                    'title' => "有回答被[{$user['nickname']}]删除",
                     'description' => json_encode($body),
                 );
                 $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
