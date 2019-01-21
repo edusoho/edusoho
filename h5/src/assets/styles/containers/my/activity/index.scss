@@ -34,13 +34,13 @@
     }
     .head-right {
       float: right;
-      &.fail{
+      &.failed{
         color: #B0BDC9;
       }
       &.ongoing {
         color: #FFAA00;
       }
-      &.success{
+      &.successed{
         color: #29B046;
       }
     }
