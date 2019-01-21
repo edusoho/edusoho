@@ -12,11 +12,11 @@ export default {
     afterLogin() {
       const redirect = this.$route.query.redirect
         ? decodeURIComponent(this.$route.query.redirect) : '/';
-      const callbackType = this.$route.query.callbackType;
+      const type = this.$route.query.type;
       const acitivityId = this.$route.query.acitivityId;
       const jumpAction = () => {
-        if (callbackType && acitivityId) {
-          switch (callbackType) {
+        if (type && acitivityId) {
+          switch (type) {
             case 'marketing':
               this.activityHandle(acitivityId);
               break;
