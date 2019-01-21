@@ -20,6 +20,8 @@ class PageDiscoveryFilter extends Filter
             $courseFilter->setMode(Filter::PUBLIC_MODE);
             foreach ($data['data']['items'] as &$course) {
                 $courseFilter->filter($course);
+                unset($course['summary']);
+                unset($course['courseSet']['summary']);
             }
         }
 
@@ -28,6 +30,7 @@ class PageDiscoveryFilter extends Filter
             $classroomFilter->setMode(Filter::PUBLIC_MODE);
             foreach ($data['data']['items'] as &$classroom) {
                 $classroomFilter->filter($classroom);
+                unset($classroom['about']);
             }
         }
 
