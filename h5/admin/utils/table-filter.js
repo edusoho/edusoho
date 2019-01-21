@@ -1,12 +1,13 @@
 import { formatTime } from '@/utils/date-toolkit';
 
 const tableFilter = (item, label, subProperty) => {
-
-  if (label.toLocaleLowerCase().includes('price')) {
-    if (!item[label]) {
+  const labelStr = subProperty ? subProperty.toLocaleLowerCase() : label.toLocaleLowerCase();
+  const labelField = subProperty ? item[label][subProperty] : item[label];
+  if (labelStr.includes('price')) {
+    if (!labelField) {
       return '未设置';
     }
-    return `${item[label]}元`;
+    return `${labelField}元`;
   }
 
   switch (label) {
@@ -24,11 +25,6 @@ const tableFilter = (item, label, subProperty) => {
       return formatTime(date1);
     case 'delete':
       return `移除`;
-    case 'price':
-      if (!item['price']) {
-        return '未设置';
-      }
-      return `${item['price']}元`;
     case 'generatedNum':
       return `${item['unreceivedNum']} / ${item['generatedNum']}`;
     case 'rate':
