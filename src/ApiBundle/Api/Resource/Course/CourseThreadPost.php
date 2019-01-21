@@ -120,7 +120,7 @@ class CourseThreadPost extends AbstractResource
                     } else {
                         $post['attachments']['pictures'][] = array(
                             'id' => $file['id'],
-                            'thumbnail' => !isset($file['thumbnail']) ? $file['thumbnail'] : '',
+                            'thumbnail' => isset($file['thumbnail']) ? $file['thumbnail'] : '',
                         );
                     }
 
