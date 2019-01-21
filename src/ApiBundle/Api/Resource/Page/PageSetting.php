@@ -108,9 +108,9 @@ class PageSetting extends AbstractResource
 
     protected function paramFilter($discoverySettings)
     {
-        foreach ($discoverySettings as &$discoverySetting) {
-            $discoverySetting = $this->handleSetting($discoverySetting, 'add');
-        }
+        // foreach ($discoverySettings as &$discoverySetting) {
+        //     $discoverySetting = $this->handleSetting($discoverySetting, 'add');
+        // }
 
         return $discoverySettings;
     }
