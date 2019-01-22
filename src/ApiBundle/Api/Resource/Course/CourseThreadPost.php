@@ -20,8 +20,10 @@ class CourseThreadPost extends AbstractResource
         if (!empty($posts)) {
             $posts = $this->readPosts($courseId, $posts);
         }
+        $post = array_shift($posts);
+        $this->getOCUtil()->single($post, array('userId'));
 
-        return array_shift($posts);
+        return $post;
     }
 
     public function search(ApiRequest $request, $courseId, $threadId)
