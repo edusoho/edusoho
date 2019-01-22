@@ -77,7 +77,7 @@ import rulesConfig from '@/utils/rule-config.js'
 
 const emptyRegisterInfo = {
   mobile: '',
-  dragCaptchaToken: '',
+  dragCaptchaToken: undefined, // 默认不需要滑动验证
   encrypt_password: '',
   smsCode: '',
   smsToken: '',
@@ -218,7 +218,7 @@ export default {
     },
     clickSmsBtn() {
       if (!this.dragEnable) {
-        this.dragEnable = true
+        this.handleSendSms();
         return;
       }
       // 验证码组件更新数据
@@ -235,6 +235,9 @@ export default {
         this.countDown();
       })
       .catch(err => {
+        if (this.dragEnable) {
+          Toast.fail(err.message);
+        }
         switch(err.code) {
           case 4030301:
           case 4030302:
@@ -246,7 +249,6 @@ export default {
             this.dragEnable = true;
             break;
         }
-        Toast.fail(err.message);
       });
     },
     // 倒计时
