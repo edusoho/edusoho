@@ -67,14 +67,10 @@ $tag-color: #FF5353;
         color: #FFFFFF;
         font-size: vw(12);
         border-radius: vw(42);
-        &.unstart {
-          background: #FF9800;
-          opacity: 0.4;
-        }
         &.ongoing {
           background: #FF9800;
         }
-        &.closed {
+        &.unstart, &.closed {
           background: #E1E1E1;
         }
       }

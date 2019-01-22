@@ -79,9 +79,8 @@ const dateTimeDown = date => {
   let minute = parseInt((diff / 60) % 60, 10);
   let second = parseInt(diff % 60, 10);
   day = day ? `${day}天` : '';
-  // hour = hour ? `${hour}小时` : '';
-  hour = `${hour || '0'}小时`;
-  minute = `${minute || '0'}分`;
+  hour = (day || hour) ? `${hour || '0'}小时` : '';
+  minute = (day || hour || minute) ? `${minute || '0'}分` : '';
   second = `${second || '0'}秒`;
   const time = day + hour + minute + second;
   return time;
