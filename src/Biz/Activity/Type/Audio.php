@@ -17,7 +17,7 @@ class Audio extends Activity
      */
     public function create($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('media', 'hasText'))) {
+        if (!ArrayToolkit::requireds($fields, array('media'))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $media = json_decode($fields['media'], true);
@@ -27,7 +27,7 @@ class Audio extends Activity
         }
         $media['mediaId'] = $media['id'];
         $audio = ArrayToolkit::parts($media, array('mediaId'));
-        $audio['hasText'] = $fields['hasText'];
+        $audio['hasText'] = isset($fields['hasText']) ? $fields['hasText'] : 0;
         $audioActivity = $this->getAudioActivityDao()->create($audio);
 
         return $audioActivity;

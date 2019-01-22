@@ -28,9 +28,12 @@
           <div class="color-gray text-normal">
             {% if course %}
               <span>
-                {{'my.learning.thread.target_course'|trans({'%showUrl%': path('course_show', {id:course.id}), '%courseTitle%': course.title})|raw}}
-                -
-                <a href="{{ path('course_show',{id: courseSets[course.courseSetId].id}) }}" class="link-primary">
+                {{'my.learning.thread.target_course_from'|trans}}
+                {% if course.title %}
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="link-primary">{{ course.title }}</a>
+                  -
+                {% endif %}
+                <a href="{{ path('course_set_show',{id: courseSets[course.courseSetId].id}) }}" class="link-primary">
                   {{ courseSets[course.courseSetId].title }}
                 </a>
               </span>

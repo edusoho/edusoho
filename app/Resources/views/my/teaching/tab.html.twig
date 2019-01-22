@@ -1,12 +1,20 @@
 <ul class="nav nav-pills">
 	<li class="{% if threadType == 'course' %}active{% endif %}">
-    <a href="{{path('my_teaching_threads', {type:'discussion'}) }}">
-      {{'my.teaching.threads_discussion'|trans}}
+    <a href="{{path('my_teaching_threads', {type: type}) }}">
+      {% if type == 'discussion' %}
+        {{'my.teaching.threads_discussion'|trans}}
+      {% elseif type == 'question' %}
+        {{'my.teaching.threads_question'|trans}}
+      {% endif %}
     </a>
   </li>
 	<li class="{% if threadType == 'classroom' %}active{% endif %}">
-    <a href="{{path('my_teaching_classroom_threads', {type:'discussion'}) }}">
-      {{'my.teaching.classroom.threads_discussion'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})}}
+    <a href="{{path('my_teaching_classroom_threads', {type: type}) }}">
+      {% if type == 'discussion' %}
+        {{'my.teaching.classroom.threads_discussion'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})}}
+      {% elseif type == 'question' %}
+        {{'my.teaching.classroom.threads_question'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})}}
+      {% endif %}
     </a>
   </li>
 </ul>

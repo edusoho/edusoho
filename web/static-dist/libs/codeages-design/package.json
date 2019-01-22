@@ -1,7 +1,7 @@
 {
   "name": "codeages-design",
-  "version": "0.1.6",
-  "description": "前端组件库",
+  "version": "0.1.7",
+  "description": "a Web Design Language",
   "main": "src/codeages-design.js",
   "scripts": {
     "dev": "webpack --watch",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ketuzhong/codeages-design.git"
+    "url": "git+https://github.com/codeages-design/codeages-design.git"
   },
   "keywords": [
     "component"
@@ -18,9 +18,9 @@
   "author": "Joe Zhong, Benz Lee",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ketuzhong/codeages-design/issues"
+    "url": "https://github.com/codeages-design/codeages-design/issues"
   },
-  "homepage": "https://github.com/ketuzhong/codeages-design#readme",
+  "homepage": "https://github.com/codeages-design/codeages-design#readme",
   "babel": {
     "presets": [
       ["env", {
