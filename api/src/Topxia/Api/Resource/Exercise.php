@@ -232,7 +232,7 @@ class Exercise extends BaseResource
                 }
             }
         }
-        $res['items'] = $items;
+        $res['items'] = array_reverse($items);
 
         return $res;
     }
