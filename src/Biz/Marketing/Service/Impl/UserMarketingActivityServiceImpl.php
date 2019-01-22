@@ -30,9 +30,8 @@ class UserMarketingActivityServiceImpl extends BaseService implements UserMarket
             throw UserException::NOTFOUND_USER();
         }
 
-        $lastSyncLog = $this->getUserMarketingActivitySynclogService()->getLastSyncLogByTargetAndTargetValue(UserMarketingActivitySynclogService::TARGET_MOBILE, $mobile);
         $args = array(
-            'start_time' => empty($lastSyncLog) ? 0 : $lastSyncLog['rangeEndTime'],
+            'start_time' => 0,
             'end_time' => time(),
             'target' => UserMarketingActivitySynclogService::TARGET_MOBILE,
             'target_value' => $mobile,
