@@ -15,7 +15,11 @@
     <div class="course-detail__head--img"
       v-show="sourceType === 'img' || isEncryptionPlus">
       <img :src="courseSet.cover.large" alt="">
-      <countDown v-if="seckillActivities" :activity="seckillActivities"></countDown>
+      <countDown
+        v-if="seckillActivities.type === 'seckill' && counting"
+        :activity="seckillActivities"
+        @timesUp="expire">
+      </countDown>
     </div>
     <div id="course-detail__head--video"
       ref="video"
@@ -40,7 +44,8 @@ export default {
       mediaOpts: {},
       isCoverOpen: false,
       isPlaying: false,
-      player: null
+      player: null,
+      counting: true
     };
   },
   props: {
@@ -170,6 +175,9 @@ export default {
       }
       return Promise.resolve(window.VideoPlayerSDK);
     },
+    expire() {
+      this.counting = false;
+    }
   }
 }
 </script>

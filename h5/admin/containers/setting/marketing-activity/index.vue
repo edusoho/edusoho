@@ -89,8 +89,8 @@ export default {
     },
     activityTitle() {
       const type = this.moduleData.type;
-      if (type === 'seckill') return '秒杀';
-      if (type === 'cut') return '帮砍价';
+      if (type === 'seckill') return '秒杀设置';
+      if (type === 'cut') return '砍价设置';
       return '活动设置';
     },
     radio: {
