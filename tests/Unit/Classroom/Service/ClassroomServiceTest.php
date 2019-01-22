@@ -2050,7 +2050,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->addHeadTeacher($classroom['id'], $teacher1['id']);
         $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $teachers = $this->getClassroomService()->findTeachers($classroom['id']);
-        $this->assertEquals(count($teachers), 5); // classroom.creator也是classroom的teacher
+        $this->assertEquals(count($teachers), 4);
         $courseIds = array($course3['id']);
         $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $teachers = $this->getClassroomService()->findTeachers($classroom['id']);
