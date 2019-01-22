@@ -3,7 +3,11 @@
     <div class="course-detail__head--img">
       <img :src="cover" alt="">
     </div>
-    <countDown v-if="seckillActivities" :activity="seckillActivities"></countDown>
+    <countDown
+      v-if="seckillActivities.type === 'seckill' && counting"
+      :activity="seckillActivities"
+      @timesUp="expire">
+    </countDown>
   </div>
 </template>
 <script>
@@ -15,6 +19,7 @@ export default {
   },
   data() {
     return {
+      counting: true
     };
   },
   props: {
@@ -27,5 +32,10 @@ export default {
       default: null,
     }
   },
+  methods: {
+    expire() {
+      this.counting = false;
+    }
+  }
 }
 </script>
