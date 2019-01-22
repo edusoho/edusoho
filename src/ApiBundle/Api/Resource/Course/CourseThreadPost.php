@@ -10,6 +10,17 @@ use AppBundle\Common\ArrayToolkit;
 
 class CourseThreadPost extends AbstractResource
 {
+    public function get(ApiRequest $request, $courseId, $postId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        $post = $this->getCourseThreadService()->getPost($courseId, $postId);
+
+        $posts = $this->addAttachments(array($post));
+
+        return array_shift($posts);
+    }
+
     public function search(ApiRequest $request, $courseId, $threadId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
