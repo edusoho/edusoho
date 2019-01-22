@@ -138,14 +138,16 @@ export default {
   },
   created() {
     // 获取小程序版本号
-    Api.getMPVersion().then(res => {
-      this.currentMPVersion = res.current_version.version
-    }).catch((err) => {
-      this.$message({
-        message: err.message,
-        type: 'error'
+    if (this.portal === 'miniprogram') {
+      Api.getMPVersion().then(res => {
+        this.currentMPVersion = res.current_version.version
+      }).catch((err) => {
+        this.$message({
+          message: err.message,
+          type: 'error'
+        });
       });
-    });
+    }
 
     // 请求发现页配置
     this.load();

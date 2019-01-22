@@ -28,6 +28,10 @@ import { dateTimeDown } from '@/utils/date-toolkit';
     },
     created() {
       this.countDownTime()
+      if (Object.values(this.activity).length) {
+        this.startStamp = new Date(this.activity.startTime).getTime()
+        this.endStamp = new Date(this.activity.endTime).getTime()
+      }
     },
     beforeDestroy() {
       this.clearInterval()
@@ -36,6 +40,7 @@ import { dateTimeDown } from '@/utils/date-toolkit';
       statusTitle: {
         get() {
           const status = this.activity.status;
+          console.log(status,'status')
           if(status === 'unstart') {
             this.counting = false;
             return '秒杀未开始';
@@ -48,17 +53,21 @@ import { dateTimeDown } from '@/utils/date-toolkit';
           if(status === 'ongoing') {
             if (!this.counting) return '秒杀已结束';
             if (this.activity.productRemaind == 0) {
+              this.counting = false;
               this.seckillClass = 'seckill-closed';
+              this.$emit('sellOut', true)
               return '商品已售空';
             }
             const nowStamp = new Date().getTime();
             if ((this.startStamp < nowStamp) && (nowStamp < this.endStamp)) {
               this.seckilling = true;
+              this.counting = true;
               this.seckillClass = 'seckill-ongoing';
               return `距离结束仅剩<span class="ml10 mlm">${this.endCountDownText}</span>`;
             };
             if (this.startStamp > nowStamp) {
               this.seckilling = false;
+              this.counting = true;
               this.seckillClass = 'seckill-unstart';
               return `距离开抢<span class="ml10 mlm">${this.buyCountDownText}</span>`;
             };

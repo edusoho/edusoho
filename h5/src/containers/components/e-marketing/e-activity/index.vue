@@ -5,14 +5,19 @@
     <div class="e-groupon__image-container" :class="{ 'e-groupon__image-empty': !activity.cover }">
       <img v-if="activity.cover" class="e-groupon__image" :src="activity.cover" alt="">
     </div>
-    <countDown v-if="type === 'seckill' && counting" :activity="activity" @timesUp="expire"></countDown>
+    <countDown
+      v-if="type === 'seckill' && counting && !isEmpty"
+      :activity="activity"
+      @timesUp="expire"
+      @sellOut="sellOut">
+    </countDown>
     <div class="e-groupon__context">
       <div class="context-title text-overflow">{{ activity.name || '活动名称' }}</div>
       <div class="context-sale clearfix">
         <div class="type-tag" v-if="type !== 'groupon'">{{ type === 'cut' ? '砍价享' : '秒杀价' }}</div>
         <div class="context-sale__sale-price">￥{{ activityPrice }}</div>
         <div v-if="activity.originPrice" class="context-sale__origin-price">原价￥{{ activity.originPrice }}</div>
-        <a class="context-sale__shopping" :class="activity.status" href="javascript:;">
+        <a class="context-sale__shopping" :class="[activity.status, {'bg-grey': isEmpty}]" href="javascript:;">
           {{ grouponStatus }}
         </a>
       </div>
@@ -53,6 +58,7 @@ export default {
   data () {
     return {
       counting: true,
+      isEmpty: false,
       activityId: Number(this.activity.id),
     }
   },
@@ -84,6 +90,7 @@ export default {
           if(status === 'unstart') return '秒杀未开始';
           if(status === 'closed') return '已结束';
           if(status === 'ongoing') {
+            if (this.activity.productRemaind == 0) return '已售空';
             const nowStamp = new Date().getTime();
             const startStamp = new Date(this.activity.startTime).getTime();
             const endStamp = new Date(this.activity.endTime).getTime();
@@ -106,6 +113,9 @@ export default {
     },
     expire() {
       this.counting = false;
+    },
+    sellOut() {
+      this.isEmpty = true;
     }
   }
 }
