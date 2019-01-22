@@ -67,6 +67,9 @@ $tag-color: #FF5353;
         color: #FFFFFF;
         font-size: vw(12);
         border-radius: vw(42);
+        &.bg-grey {
+          background: #E1E1E1 !important;
+        }
         &.ongoing {
           background: #FF9800;
         }

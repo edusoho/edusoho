@@ -4,9 +4,10 @@
       <img :src="cover" alt="">
     </div>
     <countDown
-      v-if="seckillActivities.type === 'seckill' && counting"
+      v-if="seckillActivities && counting && !isEmpty"
       :activity="seckillActivities"
-      @timesUp="expire">
+      @timesUp="expire"
+      @sellOut="sellOut">
     </countDown>
   </div>
 </template>
@@ -19,7 +20,8 @@ export default {
   },
   data() {
     return {
-      counting: true
+      counting: true,
+      isEmpty: false
     };
   },
   props: {
@@ -35,6 +37,10 @@ export default {
   methods: {
     expire() {
       this.counting = false;
+    },
+    sellOut() {
+      this.isEmpty = true
+      this.$emit('goodsEmpty')
     }
   }
 }
