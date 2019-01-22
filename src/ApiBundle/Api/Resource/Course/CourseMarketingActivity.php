@@ -41,7 +41,12 @@ class CourseMarketingActivity extends AbstractResource
             $activities = ArrayToolkit::group($activities, 'type');
 
             foreach ($activities as $type => $activity) {
-                $activities[$type] = current($activity);
+                $firstActivity = current($activity);
+                if ('seckill' == $firstActivity['type'] && 0 == $firstActivity['productRemaind']) {
+                    unset($activities[$type]);
+                } else {
+                    $activities[$type] = current($activity);
+                }
             }
 
             return $activities;
