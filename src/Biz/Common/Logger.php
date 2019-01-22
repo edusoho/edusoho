@@ -170,6 +170,8 @@ class Logger
      */
     const LIVE = 'live';
 
+    const PUSH = 'push';
+
     const ACTION_REFRESH_LEARNING_PROGRESS = 'refresh_learning_progress';
 
     const ACTION_SYNC_WHEN_TASK_CREATE = 'sync_when_task_create';
@@ -381,6 +383,10 @@ class Logger
                 'update_live_activity' => '更新直播活动',
                 'generate_live_replay' => '生成录播回放',
             ),
+            self::PUSH => array(
+                'course_thread_create' => '课程提问',
+                'course_thread_post_create' => '课程问题回复',
+            ),
         );
     }
 
@@ -467,6 +473,7 @@ class Logger
             self::ANNOUNCEMENT => '公告',
             self::OPEN_COURSE => '公开课',
             self::LIVE => '直播',
+            self::PUSH => '推送',
         );
     }
 }

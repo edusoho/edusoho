@@ -15,11 +15,11 @@ class CourseThreadPost extends AbstractResource
         $this->getCourseService()->tryTakeCourse($courseId);
 
         $post = $this->getCourseThreadService()->getPost($courseId, $postId);
-
-        $posts = $this->addAttachments(array($post));
+        $posts = array($post);
         if (!empty($posts)) {
             $posts = $this->readPosts($courseId, $posts);
         }
+        $posts = $this->addAttachments($posts);
         $post = array_shift($posts);
         $this->getOCUtil()->single($post, array('userId'));
 
