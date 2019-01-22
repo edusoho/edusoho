@@ -20,7 +20,8 @@ export default [
     // 获取全局设置
     name: 'getSettings',
     url: '/settings/{type}',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }, {
     // 后台配置保存草稿数据
     name: 'saveDraftDate',

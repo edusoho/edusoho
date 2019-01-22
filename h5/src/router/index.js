@@ -229,9 +229,55 @@ const router = new Router({
   routes
 });
 
+// 检查会员开关配置（会员页面需要有限判断，其他页面异步滞后判断减少页面等待时间）
+const setVipSwitch = () => new Promise((resolve, reject) => {
+  if (!Object.keys(store.state.vipSettings).length) {
+    return store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' })
+      .then(vipRes => {
+        // vip 前端元素判断（vip 插件已安装(升级) && vip 插件已开启 && vip 等级已设置）
+        if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
+          return store.dispatch('setVipSwitch', true).then(() => resolve());
+        }
+        return resolve(vipRes);
+      })
+      .catch(err => {
+        Toast.fail(err.message);
+        return reject(err);
+      });
+  }
+  return resolve();
+});
+
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name);
 
+  // 站点后台设置、会员后台配置
+  if (!Object.keys(store.state.settings).length) {
+    store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' })
+      .then(siteRes => {
+        // 动态更新 navbar title
+        if (shouldUpdateMetaTitle) {
+          to.meta.title = siteRes.name;
+        }
+        if (to.name === 'vip') {
+          setVipSwitch().then(() => next());
+        } else {
+          next();
+        }
+      })
+      .catch(err => {
+        Toast.fail(err.message);
+      });
+  } else if (shouldUpdateMetaTitle) {
+    to.meta.title = store.state.settings.name;
+    next();
+  } else {
+    next();
+  }
+});
+
+// 异步加载配置
+router.afterEach(to => {
   // 课程后台配置数据
   if (!Object.keys(store.state.courseSettings).length) {
     store.dispatch('getGlobalSettings', {
@@ -241,31 +287,8 @@ router.beforeEach((to, from, next) => {
       Toast.fail(err.message);
     });
   }
-
-  // 站点后台设置、会员后台配置
-  if (!Object.keys(store.state.settings).length || !Object.keys(store.state.vipSettings).length) {
-    Promise.all([
-      store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' }),
-      store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' })])
-      .then(([vipRes, siteRes]) => {
-      // 动态更新 navbar title
-        if (shouldUpdateMetaTitle) {
-          to.meta.title = siteRes.name;
-        }
-        // vip 前端元素判断（vip 插件已安装(升级) && vip 插件已开启 && vip 等级已设置）
-        if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
-          store.dispatch('setVipSwitch', true).then(() => next());
-        } else {
-          next();
-        }
-      }).catch(err => {
-        Toast.fail(err.message);
-      });
-  } else if (shouldUpdateMetaTitle) {
-    to.meta.title = store.state.settings.name;
-    next();
-  } else {
-    next();
+  if (to.name !== 'vip') {
+    setVipSwitch();
   }
 });
 export default router;
