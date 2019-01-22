@@ -17,6 +17,9 @@ class CourseThreadPost extends AbstractResource
         $post = $this->getCourseThreadService()->getPost($courseId, $postId);
 
         $posts = $this->addAttachments(array($post));
+        if (!empty($posts)) {
+            $posts = $this->readPosts($courseId, $posts);
+        }
 
         return array_shift($posts);
     }

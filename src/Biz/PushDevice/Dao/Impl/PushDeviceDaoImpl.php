@@ -27,6 +27,7 @@ class PushDeviceDaoImpl extends GeneralDaoImpl implements PushDeviceDao
     public function declares()
     {
         return array(
+            'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'id = :id',
                 'userId = :userId',

@@ -909,7 +909,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => implode(',', $reg_ids),
                     'pass_through_type' => 'normal',
-                    'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'])),
+                    'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'], 'type' => 'course.thread.create')),
                     'title' => "有一个{$questionType}类型的提问",
                     'description' => !empty($thread['content']) ? $this->plainText(strip_tags($thread['content']), 10) : "有一个{$questionType}类型的提问",
                 );
@@ -1007,7 +1007,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'])),
+                    'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'], 'type' => 'course.thread.post.create')),
                     'title' => '收到一条新回答',
                     'description' => isset($threadPost['thread']['title']) ? "《{$threadPost['thread']['title']}》" : '收到一条新回答',
                 );
