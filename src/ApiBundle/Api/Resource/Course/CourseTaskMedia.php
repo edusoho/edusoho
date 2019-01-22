@@ -119,6 +119,7 @@ class CourseTaskMedia extends AbstractResource
         $agentInWhiteList = $this->getPlayerService()->agentInWhiteList($request->headers->get('user-agent'));
 
         $isEncryptionPlus = false;
+        $context = array();
         if ('video' == $file['type'] && 'cloud' == $file['storage']) {
             $videoPlayer = $this->getPlayerService()->getVideoFilePlayer($file, $agentInWhiteList, array(), $ssl);
             $isEncryptionPlus = $videoPlayer['isEncryptionPlus'];

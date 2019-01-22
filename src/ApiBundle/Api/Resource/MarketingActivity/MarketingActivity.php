@@ -28,6 +28,11 @@ class MarketingActivity extends AbstractResource
             unset($conditions['itemType']);
         }
 
+        if (isset($conditions['productRemaind_GT'])) {
+            $conditions['product_remaind_GT'] = $conditions['productRemaind_GT'];
+            unset($conditions['productRemaind_GT']);
+        }
+
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions['page'] = ceil(($offset + 1) / $limit);
         $conditions['limit'] = $limit;

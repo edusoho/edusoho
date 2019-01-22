@@ -88,7 +88,7 @@ class ExerciseResult extends BaseResource
                 $materialMap[$item['questionId']] = array();
             }
 
-            if ($item['questionParentId'] != 0 && isset($materialMap[$item['questionParentId']])) {
+            if (0 != $item['questionParentId'] && isset($materialMap[$item['questionParentId']])) {
                 $materialMap[$item['questionParentId']][] = $item;
                 continue;
             }
@@ -120,7 +120,7 @@ class ExerciseResult extends BaseResource
 
         $data = array();
         foreach ($answers['data'] as $questionId => $value) {
-            $data[$questionId] = $value['answer'];
+            $data[$questionId] = empty($value['answer']) ? '' : $value['answer'];
         }
 
         return array('data' => $data);
