@@ -31,6 +31,11 @@
               <input type="hidden" name="courseIds[]" value="{{course.id}}" />
               <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>
               <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+              {% if course.type == 'live' %}
+                <span class="tags">
+                  <span class="tag-live"></span>
+                </span>
+              {% endif %}
                 <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
               </a>
               <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="{{'classroom.delete_btn'|trans}}" style="font-size:35px;" data-id="{{course.id}}" data-url="{{path('classroom_manage_course_remove', {id: classroom.id, courseId: course.id})}}">× </button>
@@ -64,20 +69,25 @@
                         <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
                       {% endif %}
                       <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title }}</a>
-                      <div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{course.title|sub_text(20)}}</div>
 
+                      {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|sub_text(20) }}</div>{% endif %}
+
+                      {# 直播课程会判断是否正在直播，区分是否正在直播 #}
                       {% if course.type == 'live' %}
+                        <span class="label label-warning">{{'classroom.live_course_playing'|trans}}</span>
+                        <span class="label label-success">{{'classroom.live'|trans}}</span>
                         {% set lesson = course['lesson']|default(null) %}
                         {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
                           <span class="label label-warning">{{'classroom.live_course_playing'|trans}}</span>
                         {% else %}
-                          <span class="label label-success">{{'classroom.live'|trans}}</span>
+                          {# <span class="label label-success">{{'classroom.live'|trans}}</span> #}
                         {% endif %}
                     {% endif %}
                     </h4>
 
                     {% if course.type == 'live' %}
                       {% set lesson = course.lesson|default(null) %}
+                      {# {{ dump(course)}} #}
                       {% if lesson %}
                         <div class="live-course-lesson mbm">
                           <span class="color-success fsm mrm">{{ lesson.startTime|date('m-d H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
