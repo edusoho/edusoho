@@ -983,22 +983,22 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
 //        if ($threadPost['thread']['type'] == 'question') {
             $devices = $this->getPushDeviceService()->getPushDeviceByUserId($threadPost['thread']['userId']);
-            if (!empty($devices['regId'])) {
-                $message = array(
+        if (!empty($devices['regId'])) {
+            $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
-                    'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'], 'type' => '')),
+                    'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'], 'type' => 'course.thread.post.create')),
                     'title' => '收到一条新回答',
                     'description' => isset($threadPost['thread']['title']) ? "《{$threadPost['thread']['title']}》" : '收到一条新回答',
                 );
-                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
-                $this->getLogService()->info(
+            $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+            $this->getLogService()->info(
                     'push',
                     'course_thread_post_create',
                     '老师回答-推送消息',
                     array('result' => $result, 'message' => $message)
                 );
-            }
+        }
 //        } else {
             if ($this->isIMEnabled()) {
                 $from = array(
