@@ -37,7 +37,7 @@ const type2symbol = {
 
 const status2label = {
   successed: '成功',
-  ongoing: '进行中',
+  ongoing: '中',
   failed: '失败',
 };
 
