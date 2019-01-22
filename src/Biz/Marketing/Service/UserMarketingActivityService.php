@@ -10,7 +10,5 @@ interface UserMarketingActivityService
 
     public function syncByMobile($mobile);
 
-    public function syncAll();
-
     public function findByJoinedIdAndType($joinedId, $type);
 }

@@ -15,7 +15,7 @@ class UserMarketingActivitySyncLog extends Migration
                 `args` varchar(255) NOT NULL DEFAULT '0',
                 `data` text COMMENT '同步的数据',
                 `target` varchar(32) NOT NULL DEFAULT '' COMMENT '同步对象 all全部 mobile手机号',
-                `target_value` varchar(50) DEFAULT '0' COMMENT '同步对象值',
+                `targetValue` varchar(50) DEFAULT '0' COMMENT '同步对象值',
                 `rangeStartTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '同步范围开始时间',
                 `rangeEndTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '同步范围结束时间',
                 `createdTime` int(10) unsigned NOT NULL DEFAULT '0',

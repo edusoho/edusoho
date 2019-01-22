@@ -11,7 +11,7 @@ class UserMarketingActivitySynclogDaoImpl extends GeneralDaoImpl implements User
 
     public function getLastSyncLogByTargetAndTargetValue($target, $targetValue)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE `target` = ? AND `target_value` = ? ORDER BY id DESC LIMIT 1";
+        $sql = "SELECT * FROM {$this->table()} WHERE `target` = ? AND `targetValue` = ? ORDER BY id DESC LIMIT 1";
 
         return $this->db()->fetchAssoc($sql, array($target, $targetValue)) ?: null;
     }

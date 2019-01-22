@@ -3,9 +3,9 @@
 namespace Biz\Marketing\Dao\Impl;
 
 use Biz\Marketing\Dao\UserMarketingActivityDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class UserMarketingActivityDaoImpl extends GeneralDaoImpl implements UserMarketingActivityDao
+class UserMarketingActivityDaoImpl extends AdvancedDaoImpl implements UserMarketingActivityDao
 {
     protected $table = 'user_marketing_activity';
 

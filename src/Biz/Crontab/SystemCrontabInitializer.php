@@ -191,10 +191,6 @@ class SystemCrontabInitializer
                 'class' => 'Biz\CloudPlatform\Job\CloudConsultFreshJob',
                 'misfire_policy' => 'executing',
             ),
-            'SyncUserMarketingActivityJob' => array(
-                'expression' => '0 * * * *',
-                'class' => 'Biz\Marketing\Job\SyncUserMarketingActivityJob',
-            ),
         );
         $defaultJob = array(
             'pool' => 'default',

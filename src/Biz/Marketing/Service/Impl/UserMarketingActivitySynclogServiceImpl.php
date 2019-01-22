@@ -22,7 +22,7 @@ class UserMarketingActivitySynclogServiceImpl extends BaseService implements Use
                 'args',
                 'data',
                 'target',
-                'target_value',
+                'targetValue',
                 'rangeStartTime',
                 'rangeEndTime',
             )

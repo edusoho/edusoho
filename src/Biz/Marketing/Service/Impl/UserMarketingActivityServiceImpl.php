@@ -10,6 +10,7 @@ use Biz\User\Service\UserService;
 use Biz\Marketing\Service\UserMarketingActivitySynclogService;
 use Biz\Marketing\MarketingAPIFactory;
 use Biz\User\UserException;
+use AppBundle\Common\ArrayToolkit;
 
 class UserMarketingActivityServiceImpl extends BaseService implements UserMarketingActivityService
 {
@@ -30,52 +31,59 @@ class UserMarketingActivityServiceImpl extends BaseService implements UserMarket
             throw UserException::NOTFOUND_USER();
         }
 
-        $args = array(
-            'start_time' => 0,
-            'end_time' => time(),
-            'target' => UserMarketingActivitySynclogService::TARGET_MOBILE,
-            'target_value' => $mobile,
-        );
-        $activities = $this->getRemoteActivitiesByArgs($args);
-
-        foreach ($activities as $activitiy) {
-            $this->syncActivityByUser($user, $activitiy);
-        }
-
-        $this->getUserMarketingActivitySynclogService()->createSyncLog(array(
-            'args' => $args,
-            'data' => $activities,
-            'target' => UserMarketingActivitySynclogService::TARGET_MOBILE,
-            'target_value' => $mobile,
-            'rangeStartTime' => $args['start_time'],
-            'rangeEndTime' => $args['end_time'],
-        ));
-    }
-
-    public function syncAll()
-    {
-        $lastSyncLog = $this->getUserMarketingActivitySynclogService()->getLastSyncLogByTargetAndTargetValue(UserMarketingActivitySynclogService::TARGET_ALL, '0');
+        $lastSyncLog = $this->getUserMarketingActivitySynclogService()->getLastSyncLogByTargetAndTargetValue(UserMarketingActivitySynclogService::TARGET_MOBILE, $mobile);
         $args = array(
             'start_time' => empty($lastSyncLog) ? 0 : $lastSyncLog['rangeEndTime'],
             'end_time' => time(),
-            'target' => UserMarketingActivitySynclogService::TARGET_ALL,
-            'target_value' => '0',
+            'target' => UserMarketingActivitySynclogService::TARGET_MOBILE,
+            'target_value' => $mobile,
         );
         $activities = $this->getRemoteActivitiesByArgs($args);
 
+        $createActivities = array();
+        $updateActivities = array();
+
         foreach ($activities as $activitiy) {
-            $user = $this->getUserService()->getUserByVerifiedMobile($activitiy['mobile']);
-            if (empty($user)) {
-                continue;
+            $oldActivitiy = $this->findByJoinedIdAndType($activitiy['joinedId'], $activitiy['type']);
+            if (empty($oldActivitiy)) {
+                $createActivities[] = array(
+                    'userId' => $user['id'],
+                    'mobile' => $activitiy['mobile'],
+                    'activityId' => $activitiy['activityId'],
+                    'joinedId' => $activitiy['joinedId'],
+                    'name' => $activitiy['name'],
+                    'type' => $activitiy['type'],
+                    'status' => $activitiy['status'],
+                    'cover' => $activitiy['cover'],
+                    'itemType' => $activitiy['itemType'],
+                    'itemSourceId' => $activitiy['itemSourceId'],
+                    'originPrice' => $activitiy['originPrice'],
+                    'price' => $activitiy['price'],
+                    'joinedTime' => $activitiy['joinedTime'],
+                );
+            } else {
+                $updateActivities[] = array(
+                    'id' => $oldActivitiy['id'],
+                    'status' => $activitiy['status'],
+                    'price' => $activitiy['price'],
+                    'updatedTime' => time(),
+                );
             }
-            $this->syncActivityByUser($user, $activitiy);
+        }
+
+        if (!empty($createActivities)) {
+            $this->getUserMarketingActivityDao()->batchCreate($createActivities);
+        }
+
+        if (!empty($updateActivities)) {
+            $this->getUserMarketingActivityDao()->batchUpdate(ArrayToolkit::column($updateActivities, 'id'), $updateActivities);
         }
 
         $this->getUserMarketingActivitySynclogService()->createSyncLog(array(
             'args' => $args,
             'data' => $activities,
-            'target' => UserMarketingActivitySynclogService::TARGET_ALL,
-            'target_value' => '0',
+            'target' => UserMarketingActivitySynclogService::TARGET_MOBILE,
+            'targetValue' => $mobile,
             'rangeStartTime' => $args['start_time'],
             'rangeEndTime' => $args['end_time'],
         ));
@@ -102,33 +110,6 @@ class UserMarketingActivityServiceImpl extends BaseService implements UserMarket
         }
 
         return $activities;
-    }
-
-    protected function syncActivityByUser($user, $activitiy)
-    {
-        $oldActivitiy = $this->findByJoinedIdAndType($activitiy['joinedId'], $activitiy['type']);
-        if (empty($oldActivitiy)) {
-            $this->getUserMarketingActivityDao()->create(array(
-                'userId' => $user['id'],
-                'mobile' => $activitiy['mobile'],
-                'activityId' => $activitiy['activityId'],
-                'joinedId' => $activitiy['joinedId'],
-                'name' => $activitiy['name'],
-                'type' => $activitiy['type'],
-                'status' => $activitiy['status'],
-                'cover' => $activitiy['cover'],
-                'itemType' => $activitiy['itemType'],
-                'itemSourceId' => $activitiy['itemSourceId'],
-                'originPrice' => $activitiy['originPrice'],
-                'price' => $activitiy['price'],
-                'joinedTime' => $activitiy['joinedTime'],
-            ));
-        } else {
-            $this->getUserMarketingActivityDao()->update($oldActivitiy['id'], array(
-                'status' => $activitiy['status'],
-                'price' => $activitiy['price'],
-            ));
-        }
     }
 
     /**
