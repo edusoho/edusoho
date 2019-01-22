@@ -158,7 +158,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function grouponFilter($discoverySetting, $usage = 'show')
     {
         $activity = $discoverySetting['data']['activity'];
-        $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        try {
+            $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        } catch (\Exception $e) {
+            $remoteActvity = null;
+        }
         if (empty($remoteActvity) || isset($remoteActvity['error'])) {
             return false;
         }
@@ -170,7 +174,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function seckillFilter($discoverySetting, $usage = 'show')
     {
         $activity = $discoverySetting['data']['activity'];
-        $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        try {
+            $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        } catch (\Exception $e) {
+            $remoteActvity = null;
+        }
         if (empty($remoteActvity) || isset($remoteActvity['error'])) {
             return false;
         }
@@ -182,7 +190,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function cutFilter($discoverySetting, $usage = 'show')
     {
         $activity = $discoverySetting['data']['activity'];
-        $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        try {
+            $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        } catch (\Exception $e) {
+            $remoteActvity = null;
+        }
         if (empty($remoteActvity) || isset($remoteActvity['error'])) {
             return false;
         }
