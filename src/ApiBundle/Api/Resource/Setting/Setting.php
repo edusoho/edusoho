@@ -195,9 +195,20 @@ class Setting extends AbstractResource
     public function getLogin()
     {
         $clients = OAuthClientFactory::clients();
+        return $this->getLoginConnect($clients);
+    }
+
+    private function getLoginConnect($clients)
+    {
         $default = $this->getDefaultLoginConnect($clients);
         $loginConnect = $this->getSettingService()->get('login_bind', array());
         $loginConnect = array_merge($default, $loginConnect);
+        foreach ($clients as $type => $client) {
+            $loginConnect["{$type}_secret"] = '';
+            if ('weixinmob' == $type) {
+                $default['weixinmob_mp_secret'] = '';
+            }
+        }
         return $loginConnect;
     }
 
