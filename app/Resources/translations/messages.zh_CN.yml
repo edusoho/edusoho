@@ -2761,7 +2761,7 @@ user.register: 注册
 user.register.sms.sms_send: 短信推送
 user.register.sms.sms_send_to: 发送对象
 user.register.sms.in_classroom: %classroom.name%内
-user.register.sms.send_sms_nums: 预计发送量
+user.register.sms.send_sms_nums: 预计通知人数
 user.register.sms.send_content: 发送内容
 user.register.sms.start_regist: 现已开始报名
 user.register.sms.link_address: 链接地址

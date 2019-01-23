@@ -2302,7 +2302,7 @@ user.register: Sign Up
 user.register.sms.sms_send: 'Send massage'
 user.register.sms.sms_send_to: 'Send to'
 user.register.sms.in_classroom: 'In %classroom.name%'
-user.register.sms.send_sms_nums: 'Estimated sending message number'
+user.register.sms.send_sms_nums: 'Estimated sending user number'
 user.register.sms.send_content: Text
 user.register.sms.start_regist: 'In registering'
 user.register.sms.link_address: 'Link address'
