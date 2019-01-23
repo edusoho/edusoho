@@ -8,8 +8,12 @@ use Biz\Marketing\Util\MarketingUtils;
 
 class MarketingActivityFilter extends Filter
 {
+    protected $simpleFields = array(
+        'id', 'name', 'type', 'status', 'item_origin_price', 'item_type', 'item_source_id', 'order', 'rule', 'item_cover', 'product_remaind', 'created_time', 'start_time', 'end_time',
+    );
+
     protected $publicFields = array(
-        'id', 'name', 'type', 'about', 'status', 'item_origin_price', 'item_type', 'item_source_id', 'order', 'rule', 'item_cover', 'product_remaind', 'created_time', 'start_time', 'end_time',
+        'about',
     );
 
     protected function publicFields(&$data)
