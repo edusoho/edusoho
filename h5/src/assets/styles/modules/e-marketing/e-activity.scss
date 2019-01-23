@@ -8,8 +8,8 @@ $tag-color: #FF5353;
   overflow: hidden;
   &__tag {
     position: absolute;
-    top: vw(73);
-    left: vw(14);
+    top: vw(10);
+    left: vw(-6);
     padding: 0 vw(12) 0 vw(6);
     background: $tag-color;
     color: #FFFFFF;
@@ -26,6 +26,7 @@ $tag-color: #FF5353;
     }
   }
   &__image-container {
+    position: relative;
     width: 100%;
     height: vw(188);
   }
