@@ -134,6 +134,10 @@ export default {
       this.resetInfo.dragCaptchaToken = token;
     },
     handleSubmit() {
+      if (!this.$refs.dragComponent.dragToEnd) {
+        Toast('请先完成拼图验证');
+        return;
+      }
       const resetInfo = Object.assign({}, this.resetInfo);
       const password = resetInfo.encrypt_password;
       const account = resetInfo.account;
@@ -175,10 +179,6 @@ export default {
       }
 
       // 手机重置
-      if (!this.$refs.dragComponent.dragToEnd) {
-        Toast('请先完成拼图验证');
-        return;
-      }
       Api.resetPasswordByMobile({
         query: { mobile: account },
         data: {
