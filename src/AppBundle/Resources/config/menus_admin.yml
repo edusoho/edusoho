@@ -353,6 +353,14 @@ admin:
                             name: admin.course.open_course.basic_tab
                             disable: true
                             router_name: admin_open_course
+                            children:
+                                admin_open_course_add:
+                                    name: admin.course.open_course.basic_tab.create_btn
+                                    router_name: course_set_manage_create
+                                    router_params:
+                                        default: 'open'
+                                    group: topBtn
+                                    blank: 1
                         admin_open_course_recommend_list:
                             name: admin.course.open_course.recommend_list_tab
                             disable: true
@@ -368,6 +376,14 @@ admin:
                                 status: coming
                             router_name: admin_live_course
                             disable: true
+                            children:
+                                admin_live_course_add:
+                                    name: admin.course.live.basic_tab.create_btn
+                                    router_name: course_set_manage_create
+                                    router_params:
+                                        default: 'live'
+                                    group: topBtn
+                                    blank: 1
                 admin_course_thread:
                     name: admin.course.thread_menu
                     children:

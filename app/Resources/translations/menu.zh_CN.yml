@@ -96,11 +96,13 @@ admin.course.classroom.basic_tab.delete_submit_btn: 删除班级
 
 ##公开课管理模块
 admin.course.open_course.basic_tab: 公开课管理
+admin.course.open_course.basic_tab.create_btn: 创建公开课
 admin.course.open_course.recommend_list_tab: 公开课推荐
 admin.course.open_course.analysis_tab: 公开课统计
 
 ##直播管理模块
 admin.course.live.basic_tab: 直播管理
+admin.course.live.basic_tab.create_btn: 创建直播
 
 ##话题管理模块
 admin.course.thread.course_thread_tab: 课程话题
