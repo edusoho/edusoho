@@ -6,7 +6,7 @@
       <div class="e-groupon__tag" v-if="tag.length">{{ tag }}</div>
     </div>
     <countDown
-      v-if="activityData && type === 'seckill' && counting && !isEmpty"
+      v-if="activityData && type === 'seckill' && counting && !isEmpty && activity.status === 'ongoing'"
       :activity="activity"
       @timesUp="expire"
       @sellOut="sellOut">
