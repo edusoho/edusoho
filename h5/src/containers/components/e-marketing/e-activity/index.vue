@@ -6,7 +6,7 @@
       <div class="e-groupon__tag" v-if="tag.length">{{ tag }}</div>
     </div>
     <countDown
-      v-if="activity && type === 'seckill' && counting && !isEmpty"
+      v-if="activityData && type === 'seckill' && counting && !isEmpty"
       :activity="activity"
       @timesUp="expire"
       @sellOut="sellOut">
@@ -17,7 +17,7 @@
         <div class="type-tag" v-if="type !== 'groupon'">{{ type === 'cut' ? '砍价享' : '秒杀价' }}</div>
         <div class="context-sale__sale-price">￥{{ activityPrice }}</div>
         <div v-if="activity.originPrice" class="context-sale__origin-price">原价￥{{ activity.originPrice }}</div>
-        <a v-if="isEmpty" class="context-sale__shopping" :class="[activity.status, {'bg-grey': isEmpty}]" href="javascript:;">
+        <a v-if="!isEmpty" class="context-sale__shopping" :class="[activity.status, {'bg-grey': isEmpty}]" href="javascript:;">
           {{ grouponStatus }}
         </a>
       </div>
@@ -62,6 +62,9 @@ export default {
     }
   },
   computed: {
+    activityData() {
+      return !!(Object.values(this.activity).length);
+    },
     activityId() {
       return Number(this.activity.id);
     },

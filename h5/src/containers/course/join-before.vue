@@ -4,6 +4,7 @@
       :price="details.price"
       :courseSet="details.courseSet"
       @goodsEmpty="sellOut"
+      :seckillData="seckillData"
       :seckillActivities="marketingActivities.seckill"></detail-head>
 
     <detail-plan @getLearnExpiry="getLearnExpiry" @switchPlan="switchPlan"></detail-plan>
@@ -45,8 +46,8 @@
     <e-footer v-if="!isClassCourse && !marketingActivities.seckill" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
     <!-- 秒杀 -->
-    <e-footer v-if="showSeckill" :half="true" @click.native="handleJoin">原价购买</e-footer>
-    <e-footer v-if="showSeckill && !isEmpty" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
+    <e-footer v-if="showSeckill" :half="seckillData" @click.native="handleJoin">原价购买</e-footer>
+    <e-footer v-if="seckillData && showSeckill && !isEmpty" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
   </div>
 </template>
 <script>
@@ -138,7 +139,11 @@
       showSeckill() {
         return !this.isClassCourse && Number(this.details.price) !== 0
           && this.marketingActivities.seckill && this.accessToJoin;
-      }
+      },
+      seckillData() {
+        if (!this.marketingActivities.seckill) return false;
+        return !!(Object.values(this.marketingActivities.seckill).length);
+      },
     },
     mounted() {
       if (!this.isClassCourse) {
