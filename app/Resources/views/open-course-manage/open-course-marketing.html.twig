@@ -31,12 +31,12 @@
 
               <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="form.btn.delete" style="font-size:35px;" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{courseSet.id}}">× </button>
 
-              <div class="course-body">
-                <div style="float:right;" class="color-gray mrm mls">
+              <div class="course-body clearfix">
+                <div class="color-gray mrm mls pull-right">
                   {% include 'open-course-manage/course-set-price-interval.html.twig' %}
                 </div>
 
-                <h4 class="course-title"><a href="{{ showUrl }}" target="_blank">{{ courseSet.title }}</a>
+                <h4 class="course-title text-overflow mv0">
                 {% if courseSet.type == 'normal' or courseSet.type == 'live' %}
                   {% if courseSet.serializeMode=='serialized' %}
                     <span class="label label-success ">{{ 'my.teaching.open_course.recommend_setting.serializeMode.live'|trans }}</span>
@@ -53,6 +53,7 @@
                     <span class="label label-success">{{ 'my.teaching.open_course.recommend_setting.live'|trans }}</span>
                   {% endif %}
                 {% endif %}
+                <a href="{{ showUrl }}" target="_blank">{{ courseSet.title }}</a>
                 </h4>
 
                 {% if courseSet.type == 'live' %}
@@ -64,7 +65,7 @@
                     </div>
                   {% endif %}
                 {% else %}
-                  <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
+                  <div class="course-about ellipsis text-sm">{{ courseSet.subtitle }}</div>
                 {% endif %}
 
                 <div class="course-footer clearfix">
