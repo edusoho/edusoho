@@ -122,7 +122,7 @@ const BASE_MODULE = [
 
 const MARKETING_MODULE = [
   {
-    name: '拼团活动',
+    name: '拼团',
     default: MODULE_DEFAULT.groupon,
   }, {
     name: '砍价',

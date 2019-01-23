@@ -6,7 +6,7 @@
 
     <div slot="setting">
       <header class="title">
-        会员专区
+        会员设置
         <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">
         使用会员专区配置功能，小程序版本需要升级到1.3.4及以上</div>
       </header>

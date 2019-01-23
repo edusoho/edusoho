@@ -1,7 +1,9 @@
 <template>
   <div :class="isClassCourse ? '' : 'join-before'">
     <detail-head
-      :price="details.price" :courseSet="details.courseSet"
+      :price="details.price"
+      :courseSet="details.courseSet"
+      @goodsEmpty="sellOut"
       :seckillActivities="marketingActivities.seckill"></detail-head>
 
     <detail-plan @getLearnExpiry="getLearnExpiry" @switchPlan="switchPlan"></detail-plan>
@@ -44,7 +46,7 @@
       {{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
     <!-- 秒杀 -->
     <e-footer v-if="showSeckill" :half="true" @click.native="handleJoin">原价购买</e-footer>
-    <e-footer v-if="showSeckill" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
+    <e-footer v-if="showSeckill && !isEmpty" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
   </div>
 </template>
 <script>
@@ -79,6 +81,7 @@
           courseTop: 0,
           reviewTop: 0,
         },
+        isEmpty: false,
         unreceivedCoupons: [],
         miniCoupons: [],
         marketingActivities: {},
@@ -283,6 +286,9 @@
             targetType: 'course',
           }
         });
+      },
+      sellOut() {
+        this.isEmpty = true;
       }
     },
   }

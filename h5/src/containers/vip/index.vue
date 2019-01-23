@@ -181,7 +181,7 @@ export default {
       this.$router.push({name: 'find'});
       return;
     }
-    Api.getVipLevels().then((res) => {
+    Api.getVipLevels({ disableLoading: false }).then((res) => {
       if (!res.length) {
         this.$router.push({name: 'find'});
         return;

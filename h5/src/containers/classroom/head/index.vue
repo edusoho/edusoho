@@ -3,7 +3,12 @@
     <div class="course-detail__head--img">
       <img :src="cover" alt="">
     </div>
-    <countDown v-if="seckillActivities" :activity="seckillActivities"></countDown>
+    <countDown
+      v-if="seckillActivities && counting && !isEmpty"
+      :activity="seckillActivities"
+      @timesUp="expire"
+      @sellOut="sellOut">
+    </countDown>
   </div>
 </template>
 <script>
@@ -15,6 +20,8 @@ export default {
   },
   data() {
     return {
+      counting: true,
+      isEmpty: false
     };
   },
   props: {
@@ -27,5 +34,14 @@ export default {
       default: null,
     }
   },
+  methods: {
+    expire() {
+      this.counting = false;
+    },
+    sellOut() {
+      this.isEmpty = true
+      this.$emit('goodsEmpty')
+    }
+  }
 }
 </script>
