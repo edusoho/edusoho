@@ -18,16 +18,6 @@ class MarketingActivityFilter extends Filter
 
     protected function simpleFields(&$data)
     {
-        $this->paramFilter($data);
-    }
-
-    protected function publicFields(&$data)
-    {
-        $this->paramFilter($data);
-    }
-
-    protected function paramFilter(&$data)
-    {
         $data['originPrice'] = $data['item_origin_price'] / 100;
         unset($data['item_origin_price']);
 
