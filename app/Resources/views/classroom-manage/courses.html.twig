@@ -39,7 +39,7 @@
                 <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
               </a>
               <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="{{'classroom.delete_btn'|trans}}" style="font-size:35px;" data-id="{{course.id}}" data-url="{{path('classroom_manage_course_remove', {id: classroom.id, courseId: course.id})}}">× </button>
-                  <div class="course-body">
+                  <div class="course-body clearfix">
                    <div class="color-gray mrm mls pull-right">
                       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                           <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.originPrice * setting('coin.cash_rate')}}">
@@ -62,7 +62,7 @@
                       {% endif %}
                     </div>
 
-                    <h4 class="course-title text-overflow mb0">
+                    <h4 class="course-title text-overflow mv0">
                       {% if course.serializeMode=='serialized' %}
                         <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
                       {% elseif course.serializeMode=='finished' %}
@@ -71,23 +71,10 @@
                       <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title }}</a>
 
                       {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|sub_text(20) }}</div>{% endif %}
-
-                      {# 直播课程会判断是否正在直播，区分是否正在直播 #}
-                      {% if course.type == 'live' %}
-                        <span class="label label-warning">{{'classroom.live_course_playing'|trans}}</span>
-                        <span class="label label-success">{{'classroom.live'|trans}}</span>
-                        {% set lesson = course['lesson']|default(null) %}
-                        {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                          <span class="label label-warning">{{'classroom.live_course_playing'|trans}}</span>
-                        {% else %}
-                          {# <span class="label label-success">{{'classroom.live'|trans}}</span> #}
-                        {% endif %}
-                    {% endif %}
                     </h4>
 
                     {% if course.type == 'live' %}
                       {% set lesson = course.lesson|default(null) %}
-                      {# {{ dump(course)}} #}
                       {% if lesson %}
                         <div class="live-course-lesson mbm">
                           <span class="color-success fsm mrm">{{ lesson.startTime|date('m-d H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
@@ -95,10 +82,10 @@
                         </div>
                       {% endif %}
                     {% else %}
-                      <div class="pull-right cd-mr40"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
+                      <div class="course-manage-btn"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
                     {% endif %}
-
-                    <div class="course-footer cd-mt32 clearfix">
+              
+                    <div class="course-footer clearfix">
                       {% set teacher = users[course.teacherIds|first]|default(null) %}
                       {% if teacher %}
                         <div class="teacher">
