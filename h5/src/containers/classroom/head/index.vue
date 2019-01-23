@@ -4,7 +4,7 @@
       <img :src="cover" alt="">
     </div>
     <countDown
-      v-if="seckillData && counting && !isEmpty"
+      v-if="showOnsale && seckillData && counting && !isEmpty"
       :activity="seckillActivities"
       @timesUp="expire"
       @sellOut="sellOut">
@@ -38,6 +38,10 @@ export default {
     seckillActivities: {
       type: Object,
       default: null,
+    },
+    showOnsale: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {

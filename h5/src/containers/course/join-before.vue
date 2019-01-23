@@ -5,6 +5,7 @@
       :courseSet="details.courseSet"
       @goodsEmpty="sellOut"
       :seckillData="seckillData"
+      :showOnsale="showOnsale"
       :seckillActivities="marketingActivities.seckill"></detail-head>
 
     <detail-plan @getLearnExpiry="getLearnExpiry" @switchPlan="switchPlan"></detail-plan>
@@ -128,9 +129,9 @@
       },
       showOnsale() {
         return !this.isClassCourse && Number(this.details.price) !== 0
-          && (this.unreceivedCoupons.length
+          && (!!(this.unreceivedCoupons.length
             || Object.keys(this.marketingActivities).length
-            && !this.onlySeckill);
+            && !this.onlySeckill));
       },
       onlySeckill() {
         return Object.keys(this.marketingActivities).length === 1

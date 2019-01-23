@@ -16,7 +16,7 @@
       v-show="sourceType === 'img' || isEncryptionPlus">
       <img :src="courseSet.cover.large" alt="">
       <countDown
-        v-if="seckillData && counting && !isEmpty"
+        v-if="showOnsale && seckillData && counting && !isEmpty"
         :activity="seckillActivities"
         @timesUp="expire"
         @sellOut="sellOut">
@@ -62,6 +62,10 @@ export default {
       default: null
     },
     seckillData: {
+      type: Boolean,
+      default: false
+    },
+    showOnsale: {
       type: Boolean,
       default: false
     }

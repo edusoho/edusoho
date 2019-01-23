@@ -5,6 +5,7 @@
         :cover="details.cover"
         @goodsEmpty="sellOut"
         :seckillData="seckillData"
+        :showOnsale="showOnsale"
         :seckillActivities="marketingActivities.seckill"></detail-head>
 
       <detail-plan :details="planDetails" :joinStatus="details.joinStatus"
@@ -130,9 +131,9 @@
       },
       showOnsale() {
         return Number(this.planDetails.price) !== 0
-          && (this.unreceivedCoupons.length
+          && (!!(this.unreceivedCoupons.length
             || Object.keys(this.marketingActivities).length
-            && !this.onlySeckill);
+            && !this.onlySeckill));
       },
       onlySeckill() {
         return Object.keys(this.marketingActivities).length === 1

@@ -13,7 +13,7 @@
       <template slot="title">
         <span class="text-12">砍价：</span>
         <van-tag class="ml5" style="background-color: #ffaa00">砍价</van-tag>
-        <span class="text-12 dark">最后48小时砍价活动，最低可砍至0元！</span>
+        <span class="text-12 dark">最后48小时砍价活动，最低可砍至1分钱！</span>
       </template>
     </van-cell>
     <!-- 优惠券 -->
