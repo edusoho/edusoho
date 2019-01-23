@@ -204,10 +204,12 @@ class Setting extends AbstractResource
         $loginConnect = $this->getSettingService()->get('login_bind', array());
         $loginConnect = array_merge($default, $loginConnect);
         foreach ($clients as $type => $client) {
-            $loginConnect["{$type}_secret"] = '';
-            if ('weixinmob' == $type) {
-                $default['weixinmob_mp_secret'] = '';
+            if (isset($loginConnect["{$type}_secret"])) {
+                unset($loginConnect["{$type}_secret"]);
             }
+        }
+        if (isset($loginConnect['weixinmob_mp_secret'])) {
+            unset($loginConnect['weixinmob_mp_secret']);
         }
         return $loginConnect;
     }
@@ -228,11 +230,7 @@ class Setting extends AbstractResource
         foreach ($clients as $type => $client) {
             $default["{$type}_enabled"] = 0;
             $default["{$type}_key"] = '';
-            $default["{$type}_secret"] = '';
             $default["{$type}_set_fill_account"] = 0;
-            if ('weixinmob' == $type) {
-                $default['weixinmob_mp_secret'] = '';
-            }
         }
 
         return $default;
