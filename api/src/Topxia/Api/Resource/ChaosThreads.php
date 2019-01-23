@@ -206,8 +206,6 @@ class ChaosThreads extends BaseResource
             return array();
         }
 
-        $conditions['courseIds'] = ArrayToolkit::column($userCourses, 'courseId');
-
         $total = $this->getCourseThreadService()->countThreads($conditions);
 
         $start = $start == -1 ? rand(0, $total - 1) : $start;
