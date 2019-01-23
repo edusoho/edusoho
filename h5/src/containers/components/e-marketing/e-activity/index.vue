@@ -1,9 +1,9 @@
 <template>
   <div class="e-groupon" @click="getMarketUrl(activity.status)">
     <div class="e-coupon__title" v-if="showTitle === 'show'">{{ activityTitle }}</div>
-    <div class="e-groupon__tag" v-if="tag.length">{{ tag }}</div>
     <div class="e-groupon__image-container" :class="{ 'e-groupon__image-empty': !activity.cover }">
       <img v-if="activity.cover" class="e-groupon__image" :src="activity.cover" alt="">
+      <div class="e-groupon__tag" v-if="tag.length">{{ tag }}</div>
     </div>
     <countDown
       v-if="type === 'seckill' && counting && !isEmpty"

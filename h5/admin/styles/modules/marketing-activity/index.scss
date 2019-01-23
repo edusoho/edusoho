@@ -39,8 +39,8 @@
     margin-bottom: 20px;
   }
   &__tag {
-    top: 73px;
-    left: 14px;
+    top: 10px;
+    left: -6px;
     padding: 0 6px;
     font-size: 12px;
     line-height: 24px;
@@ -54,6 +54,7 @@
     }
   }
   &__image-container {
+    position: relative;
     height: 188px;
   }
   &__context {
