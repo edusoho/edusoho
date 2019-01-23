@@ -44,7 +44,7 @@ class CourseSetManageController extends BaseController
             array(
                 'userProfile' => $userProfile,
                 'courseTypes' => $visibleCourseTypes,
-                'defaultType' => $defaultType
+                'defaultType' => $defaultType,
             )
         );
     }
