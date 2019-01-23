@@ -235,18 +235,23 @@ export default {
         this.countDown();
       })
       .catch(err => {
-        if (this.dragEnable) {
-          Toast.fail(err.message);
-        }
         switch(err.code) {
           case 4030301:
           case 4030302:
             this.dragKey ++;
             this.registerInfo.dragCaptchaToken = '';
             this.registerInfo.smsToken = '';
+            Toast.fail(err.message);
             break;
           case 4030303:
-            this.dragEnable = true;
+            if (this.dragEnable) {
+              Toast.fail(err.message);
+            } else {
+              this.dragEnable = true;
+            }
+            break;
+          default:
+            Toast.fail(err.message);
             break;
         }
       });
