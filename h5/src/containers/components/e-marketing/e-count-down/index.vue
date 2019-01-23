@@ -40,7 +40,6 @@ import { dateTimeDown } from '@/utils/date-toolkit';
       statusTitle: {
         get() {
           const status = this.activity.status;
-          console.log(status,'status')
           if(status === 'unstart') {
             this.counting = false;
             return '秒杀未开始';
