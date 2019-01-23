@@ -52,6 +52,12 @@ class PageDiscoveryFilter extends Filter
                     $vipLevelFilter->setMode(Filter::PUBLIC_MODE);
                     $vipLevelFilter->filter($couponBatch['target']);
                 }
+                if ('course' == $couponBatch['targetType'] && !empty($couponBatch['target'])) {
+                    unset($couponBatch['target']['summary']);
+                }
+                if ('classroom' == $couponBatch['targetType'] && !empty($couponBatch['target'])) {
+                    unset($couponBatch['target']['about']);
+                }
                 if (!empty($couponBatch['currentUserCoupon'])) {
                     $couponFilter->filter($couponBatch['currentUserCoupon']);
                 }
@@ -59,6 +65,7 @@ class PageDiscoveryFilter extends Filter
         }
         if (in_array($data['type'], array('cut', 'seckill', 'groupon'))) {
             $marketingActivityFilter = new MarketingActivityFilter();
+            $vipLevelFilter->setMode(Filter::SIMPLE_MODE);
             $marketingActivityFilter->filter($data['data']['activity']);
         }
     }
