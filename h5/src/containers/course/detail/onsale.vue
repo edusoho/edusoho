@@ -1,19 +1,19 @@
 <template>
   <e-panel title="优惠">
-    <!-- 砍价 -->
-    <van-cell v-if="activities.cut" class="course-detail__cell" is-link @click="activityHandle(activities.cut.id)">
-      <template slot="title">
-        <span class="text-12">砍价：</span>
-        <van-tag class="ml5" style="background-color: #ffaa00">砍价</van-tag>
-        <span class="text-12 dark">最后48小时砍价活动，最低可砍至0元！</span>
-      </template>
-    </van-cell>
     <!-- 拼团 -->
     <van-cell v-if="activities.groupon" class="course-detail__cell" is-link @click="activityHandle(activities.groupon.id)">
       <template slot="title">
         <span class="text-12">拼团：</span>
         <van-tag class="ml5" style="background-color: #ffaa00">拼团</van-tag>
         <span class="text-12 dark">跟好友一起买更划算哦！</span>
+      </template>
+    </van-cell>
+    <!-- 砍价 -->
+    <van-cell v-if="activities.cut" class="course-detail__cell" is-link @click="activityHandle(activities.cut.id)">
+      <template slot="title">
+        <span class="text-12">砍价：</span>
+        <van-tag class="ml5" style="background-color: #ffaa00">砍价</van-tag>
+        <span class="text-12 dark">最后48小时砍价活动，最低可砍至0元！</span>
       </template>
     </van-cell>
     <!-- 优惠券 -->

@@ -64,14 +64,18 @@
       font-size: vw(13);
     }
   }
-  .face-icon {
+
+  .third-party-action-bar {
     position: absolute;
     bottom: vw(50);
-    left: 50%;
-    margin-left: vw(-20);
-    img {
-      width: vw(40);
-      height: vw(40);
+    .third-party-action-button {
+      img {
+        width: vw(40);
+        height: vw(40);
+      }
+      &:not(:first-child) {
+        margin-left: 20px;
+      }
     }
   }
 }
