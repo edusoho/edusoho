@@ -71,11 +71,12 @@
   import { mapState } from 'vuex';
   import Api from '@/api';
   import getCouponMixin from '@/mixins/coupon/getCouponHandler';
+  import getActivityMixin from '@/mixins/activity/index';
 
   const TAB_HEIGHT = 44;
 
   export default {
-    mixins: [redirectMixin, getCouponMixin],
+    mixins: [redirectMixin, getCouponMixin, getActivityMixin],
     components: {
       directory,
       detailHead,
@@ -103,7 +104,9 @@
         learnExpiry: '永久有效',
         unreceivedCoupons: [],
         miniCoupons: [],
-        marketingActivities: {},
+        marketingActivities: {
+          seckill: {}
+        },
         isEmpty: false
       }
     },
@@ -126,11 +129,17 @@
       },
       showOnsale() {
         return Number(this.planDetails.price) !== 0
-          && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities).length);
+          && (this.unreceivedCoupons.length
+            || Object.keys(this.marketingActivities).length
+            && !this.onlySeckill);
+      },
+      onlySeckill() {
+        return Object.keys(this.marketingActivities).length === 1
+          && this.marketingActivities.seckill;
       },
       showSeckill() {
         return Number(this.planDetails.price) !== 0
-         && this.marketingActivities.seckill && this.accessToJoin;
+          && this.marketingActivities.seckill && this.accessToJoin;
       }
     },
     mounted() {

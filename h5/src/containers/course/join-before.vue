@@ -61,12 +61,13 @@
   import redirectMixin from '@/mixins/saveRedirect';
   import Api from '@/api';
   import getCouponMixin from '@/mixins/coupon/getCouponHandler';
+  import getActivityMixin from '@/mixins/activity/index';
 
   const TAB_HEIGHT = 44;
 
   export default {
     name: 'joinBefore',
-    mixins: [redirectMixin, getCouponMixin],
+    mixins: [redirectMixin, getCouponMixin, getActivityMixin],
     data() {
       return {
         tabs: ['课程介绍', '课程目录', '学员评价'],
@@ -84,7 +85,9 @@
         isEmpty: false,
         unreceivedCoupons: [],
         miniCoupons: [],
-        marketingActivities: {},
+        marketingActivities: {
+          seckill: {}
+        },
       };
     },
     components: {
@@ -124,11 +127,17 @@
       },
       showOnsale() {
         return !this.isClassCourse && Number(this.details.price) !== 0
-          && (this.unreceivedCoupons.length || Object.keys(this.marketingActivities).length);
+          && (this.unreceivedCoupons.length
+            || Object.keys(this.marketingActivities).length
+            && !this.onlySeckill);
+      },
+      onlySeckill() {
+        return Object.keys(this.marketingActivities).length === 1
+          && this.marketingActivities.seckill;
       },
       showSeckill() {
         return !this.isClassCourse && Number(this.details.price) !== 0
-         && this.marketingActivities.seckill && this.accessToJoin;
+          && this.marketingActivities.seckill && this.accessToJoin;
       }
     },
     mounted() {
@@ -224,9 +233,10 @@
 
         if (!this.$store.state.token) {
           this.$router.push({
-            name: 'login',
+            name: 'prelogin',
             query: {
-              redirect: this.redirect
+              redirect: this.redirect,
+              doLogin: 1
             }
           });
           return;
