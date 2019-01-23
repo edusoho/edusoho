@@ -32,8 +32,16 @@ class UserMarketingActivityServiceImpl extends BaseService implements UserMarket
         }
 
         $lastSyncLog = $this->getUserMarketingActivitySynclogService()->getLastSyncLogByTargetAndTargetValue(UserMarketingActivitySynclogService::TARGET_MOBILE, $mobile);
+        if (empty($lastSyncLog)) {
+            $startTime = 0;
+        } elseif (empty($lastSyncLog['data'])) {
+            $startTime = $lastSyncLog['rangeStartTime'];
+        } else {
+            $startTime = $lastSyncLog['rangeEndTime'];
+        }
+
         $args = array(
-            'start_time' => empty($lastSyncLog) ? 0 : $lastSyncLog['rangeEndTime'],
+            'start_time' => $startTime,
             'end_time' => time(),
             'target' => UserMarketingActivitySynclogService::TARGET_MOBILE,
             'target_value' => $mobile,
