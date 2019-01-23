@@ -57,12 +57,14 @@ export default {
   },
   data () {
     return {
-      counting: true,
+      counting: false,
       isEmpty: false,
-      activityId: Number(this.activity.id),
     }
   },
   computed: {
+    activityId() {
+      return Number(this.activity.id);
+    },
     activityTitle() {
       if (this.type === 'seckill') return '秒杀';
       if (this.type === 'cut') return '砍价';
