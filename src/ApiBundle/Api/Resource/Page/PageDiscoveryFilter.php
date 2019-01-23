@@ -63,6 +63,7 @@ class PageDiscoveryFilter extends Filter
                 }
             }
         }
+
         if (in_array($data['type'], array('cut', 'seckill', 'groupon'))) {
             $marketingActivityFilter = new MarketingActivityFilter();
             $marketingActivityFilter->setMode(Filter::SIMPLE_MODE);
