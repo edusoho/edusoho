@@ -53,6 +53,7 @@ class BuildCommand extends BaseCommand
     {
         $this->initServiceKernel();
         $output->writeln('<info>Start build.</info>');
+        $output->writeln('<comment>注意：编制安装包前，请确保已经执行过静态资源编译和H5编译！</comment>');
         $this->initBuild($input, $output);
 
         $this->buildDatabase();
@@ -259,7 +260,7 @@ class BuildCommand extends BaseCommand
         $toDeletes = array();
 
         foreach ($finder as $dir) {
-            if ($dir->getFilename() == 'Tests') {
+            if ('Tests' == $dir->getFilename()) {
                 $toDeletes[] = $dir->getRealpath();
             }
         }
@@ -304,6 +305,8 @@ class BuildCommand extends BaseCommand
         $this->filesystem->mirror("{$this->rootDirectory}/web/themes/default", "{$this->distDirectory}/web/themes/default");
         $this->filesystem->mirror("{$this->rootDirectory}/web/themes/jianmo", "{$this->distDirectory}/web/themes/jianmo");
         $this->filesystem->mirror("{$this->rootDirectory}/web/themes/default-b", "{$this->distDirectory}/web/themes/default-b");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/activities", "{$this->distDirectory}/web/activities");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/h5", "{$this->distDirectory}/web/h5");
 
         $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/app", "{$this->distDirectory}/web/static-dist/app");
         $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/autumntheme", "{$this->distDirectory}/web/static-dist/autumntheme");
@@ -327,7 +330,7 @@ class BuildCommand extends BaseCommand
         foreach ($finder as $file) {
             $filename = $file->getFilename();
 
-            if ($filename == 'package.json' || preg_match('/-debug.js$/', $filename) || preg_match('/-debug.css$/', $filename)) {
+            if ('package.json' == $filename || preg_match('/-debug.js$/', $filename) || preg_match('/-debug.css$/', $filename)) {
                 $this->filesystem->remove($file->getRealpath());
             }
         }
@@ -341,6 +344,15 @@ class BuildCommand extends BaseCommand
                 continue;
             }
             $this->filesystem->mirror($dir->getRealpath(), "{$this->distDirectory}/web/bundles/{$dir->getFilename()}");
+        }
+
+        $finder = new Finder();
+        $finder->directories()->in("{$this->rootDirectory}/web/static-dist");
+        foreach ($finder as $dir) {
+            $dirName = $dir->getFilename();
+            if (preg_match('/activity$/', $dirName)) {
+                $this->filesystem->mirror($dir->getRealpath(), "{$this->distDirectory}/web/static-dist/{$dirName}");
+            }
         }
     }
 
@@ -361,7 +373,7 @@ class BuildCommand extends BaseCommand
         $finder->files()->in($this->distDirectory)->ignoreDotFiles(false);
 
         foreach ($finder as $dir) {
-            if ($dir->getBasename() == '.DS_Store') {
+            if ('.DS_Store' == $dir->getBasename()) {
                 $this->filesystem->remove($dir->getRealpath());
             }
         }

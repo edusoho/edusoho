@@ -304,3 +304,8 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    task_testpaper_event_subscriber:
+        class: Biz\Task\Event\TestpaperSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }

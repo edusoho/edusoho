@@ -57,7 +57,7 @@
 
 {%- macro user_link(user, class, card = true) -%}
   {% if user %}
-    <a class="link-dark {{ class }}" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+    <a class="link-dark {{ class }}" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
   {% else %}
     <a class="link-dark {{ class }}" href="javascript:;"><del>{{'user.not_exist'|trans}}</del></a>
   {% endif %}

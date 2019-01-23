@@ -318,17 +318,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroomDao()->update($id, $fields);
 
         $arguments = $fields;
-
-        if (!empty($arguments['expiryMode']) && !empty($arguments['expiryValue']) && $this->canUpdateMembersDeadline($classroom, $arguments['expiryMode'])
-        ) {
-            $deadline = ClassroomToolkit::buildMemberDeadline(array(
-                'expiryMode' => $arguments['expiryMode'],
-                'expiryValue' => $arguments['expiryValue'],
-            ));
-
-            $this->updateMembersDeadlineByClassroomId($id, $deadline);
-        }
-
         $arguments['tagIds'] = $tagIds;
 
         $this->dispatchEvent('classroom.update', new Event(array(

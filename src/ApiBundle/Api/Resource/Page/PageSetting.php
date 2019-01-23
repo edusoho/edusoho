@@ -7,9 +7,6 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\User\UserException;
 use ApiBundle\Api\Annotation\Access;
-use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
-use ApiBundle\Api\Resource\Course\CourseFilter;
-use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 use ApiBundle\Api\Resource\Filter;
 
 class PageSetting extends AbstractResource
@@ -83,7 +80,7 @@ class PageSetting extends AbstractResource
 
     protected function addDiscovery($portal, $mode = 'draft', $content = array())
     {
-        $this->getSettingService()->set("{$portal}_{$mode}_discovery", $content);
+        $this->getSettingService()->set("{$portal}_{$mode}_discovery", $this->paramFilter($content));
 
         return $this->getDiscovery($portal, $mode);
     }
@@ -103,33 +100,36 @@ class PageSetting extends AbstractResource
         }
         $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode, 'setting');
         foreach ($discoverySettings as &$discoverySetting) {
-            if ('course_list' == $discoverySetting['type']) {
-                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
-                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
-                $courseFilter = new CourseFilter();
-                $courseFilter->setMode(Filter::PUBLIC_MODE);
-                foreach ($discoverySetting['data']['items'] as &$course) {
-                    $courseFilter->filter($course);
-                }
-            }
-            if ('classroom_list' == $discoverySetting['type']) {
-                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
-                $classroomFilter = new ClassroomFilter();
-                $classroomFilter->setMode(Filter::PUBLIC_MODE);
-                foreach ($discoverySetting['data']['items'] as &$classroom) {
-                    $classroomFilter->filter($classroom);
-                }
-            }
-            if ('vip' == $discoverySetting['type']) {
-                $vipLevelFilter = new VipLevelFilter();
-                $vipLevelFilter->setMode(Filter::PUBLIC_MODE);
-                foreach ($discoverySetting['data']['items'] as &$vipLevel) {
-                    $vipLevelFilter->filter($vipLevel);
-                }
-            }
+            $discoverySetting = $this->handleSetting($discoverySetting);
         }
 
         return $discoverySettings;
+    }
+
+    protected function paramFilter($discoverySettings)
+    {
+        $discoverySettings = $this->getH5SettingService()->filter($discoverySettings);
+        foreach ($discoverySettings as &$discoverySetting) {
+            $discoverySetting = $this->handleSetting($discoverySetting);
+        }
+
+        return $discoverySettings;
+    }
+
+    protected function handleSetting($discoverySetting)
+    {
+        if ('course_list' == $discoverySetting['type']) {
+            $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
+            $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
+        }
+        if ('classroom_list' == $discoverySetting['type']) {
+            $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+        }
+        $pageDiscoveryFilter = new PageDiscoveryFilter();
+        $pageDiscoveryFilter->setMode(Filter::PUBLIC_MODE);
+        $pageDiscoveryFilter->filter($discoverySetting);
+
+        return $discoverySetting;
     }
 
     protected function getCourseCondition($portal, $mode = 'published')

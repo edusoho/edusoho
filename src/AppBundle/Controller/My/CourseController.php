@@ -356,7 +356,7 @@ class CourseController extends CourseBaseController
             $isLearned = 1;
             array_map(function ($course) use ($members, &$isLearned) {
                 $member = $members[$course['id']];
-                if ($member['learnedNum'] < $course['compulsoryTaskNum'] or 0 == $course['compulsoryTaskNum']) {
+                if ($member['learnedCompulsoryTaskNum'] < $course['compulsoryTaskNum'] or 0 == $course['compulsoryTaskNum']) {
                     $isLearned = 0;
                 }
             }, $courses);

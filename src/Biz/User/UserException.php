@@ -90,6 +90,8 @@ class UserException extends AbstractException
 
     const LOCK_SELF_DENIED = 4030142;
 
+    const DATEFIELD_INVALID = 5000143;
+
     public $messages = array(
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.login_limit',
@@ -132,5 +134,6 @@ class UserException extends AbstractException
         4030140 => 'exception.user.lock_denied',
         5000141 => 'exception.user.not_match_bind_email',
         4030142 => 'exception.user.lock_self_denied',
+        5000143 => 'exception.user.datefield_invalid',
     );
 }

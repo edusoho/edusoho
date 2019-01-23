@@ -5,7 +5,6 @@ namespace Biz\Marketing\Service\Impl;
 use Biz\BaseService;
 use Biz\Marketing\Service\MarketingPlatformService;
 use Biz\Marketing\MarketingAPIFactory;
-use ApiBundle\Api\Util\AssetHelper;
 use Biz\User\UserException;
 
 class MarketingPlatformServiceImpl extends BaseService implements MarketingPlatformService
@@ -22,7 +21,6 @@ class MarketingPlatformServiceImpl extends BaseService implements MarketingPlatf
             array(
                 'user_id' => $user['id'],
                 'user_name' => $user['nickname'],
-                'user_avatar' => AssetHelper::getFurl($user['largeAvatar'], 'avatar.png'),
             )
         );
     }
@@ -35,7 +33,7 @@ class MarketingPlatformServiceImpl extends BaseService implements MarketingPlatf
 
         return $client->get(
             '/activities/'.$activityId,
-            array(),
+            array('from' => 'edusoho'),
             array('MERCHANT-USER-ID: '.$systemUser['id'])
         );
     }

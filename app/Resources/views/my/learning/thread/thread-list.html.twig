@@ -14,7 +14,7 @@
               <span class="label label-info" title="{{ 'my.learning.thread.question_tips'|trans }}">{{ 'my.learning.thread.question'|trans }}</span>
             {% endif %}
 
-            <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+            <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
 
             {% if thread.taskId %}
               <span class="label" title="{{'my.learning.thread.task_id'|trans({'%taskId%': thread.taskId})}}">L{{ thread.taskId }}</span>
@@ -28,9 +28,12 @@
           <div class="color-gray text-normal">
             {% if course %}
               <span>
-                {{'my.learning.thread.target_course'|trans({'%showUrl%': path('course_show', {id:course.id}), '%courseTitle%': course.title})|raw}}
-                -
-                <a href="{{ path('course_show',{id: courseSets[course.courseSetId].id}) }}" class="link-primary">
+                {{'my.learning.thread.target_course_from'|trans}}
+                {% if course.title %}
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="link-primary" target="_blank">{{ course.title }}</a>
+                  -
+                {% endif %}
+                <a href="{{ path('course_set_show',{id: courseSets[course.courseSetId].id}) }}" class="link-primary" target="_blank">
                   {{ courseSets[course.courseSetId].title }}
                 </a>
               </span>

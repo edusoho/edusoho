@@ -10,13 +10,13 @@ class AlipayLegacyWapTrade extends BaseTrade
 
     public function getCustomFields($params)
     {
+        $customFields = array();
         if (empty($params['wap_pay'])) {
-            $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-            $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+            $customFields['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+            $customFields['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
         }
-        unset($params['wap_pay']);
 
-        return $params;
+        return $customFields;
     }
 
     public function getCustomResponse($trade)

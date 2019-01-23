@@ -147,6 +147,7 @@ class ThreadController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
         return $this->render('my/learning/thread/questions.html.twig', array(
+            'threadType' => 'course',
             'courses' => $courses,
             'users' => $users,
             'threads' => $threads,
