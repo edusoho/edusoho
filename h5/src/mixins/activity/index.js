@@ -3,7 +3,8 @@ import { Toast } from 'vant';
 
 export default {
   methods: {
-    activityHandle(activityId, addTicket = false, callback) {
+    // addTicket 存在时表示需要重新拼接ticket参数（微营销分享中需要）
+    activityHandle(activityId, callback, addTicket = false) {
       if (!activityId || (addTicket && !callback)) {
         Toast.fail('缺少分享参数');
         console.error('缺少分享参数 activityId 或 callback');
