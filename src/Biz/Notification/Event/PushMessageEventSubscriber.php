@@ -968,6 +968,67 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $threadType = $this->getThreadType($threadPost['thread']['type']);
         $threadPostType = !empty($threadPost['postType']) ? ServiceKernel::instance()->trans('course.thread.question_type.'.$threadPost['postType']) : '';
 
+        //学生追问，老师收到推送
+        if ($threadPost['thread']['userId'] == $user['id'] && $threadPost['thread']['type'] == 'question') {
+            if (!empty($thread['target']['teacherIds'])) {
+                $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($thread['target']['teacherIds']);
+                $reg_ids = ArrayToolkit::column($devices, 'regId');
+                if (!empty($reg_ids)) {
+                    $message = array(
+                        'reg_ids' => implode(',', $reg_ids),
+                        'pass_through_type' => 'normal',
+                        'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'], 'type' => 'course.thread.create')),
+                        'title' => '课程追问',
+                        'description' => !empty($thread['content']) ? $this->plainText(strip_tags($thread['content']), 10) : "有一个{$threadPostType}类型的追问",
+                    );
+                    $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                    $this->getLogService()->info(
+                        'push',
+                        'course_thread_create',
+                        '课程追问-推送消息',
+                        array('result' => $result, 'message' => $message)
+                    );
+                }
+            }
+
+            if ($this->isIMEnabled()) {
+                $body = array(
+                    'type' => 'question.answered',
+                    'threadId' => $threadPost['threadId'],
+                    'threadType' => $threadPost['thread']['type'],
+                    'courseId' => $threadPost['target']['id'],
+                    'lessonId' => $threadPost['thread']['relationId'],
+                    'questionCreatedTime' => $threadPost['thread']['createdTime'],
+                    'questionTitle' => $threadPost['thread']['title'],
+                    'postContent' => $threadPost['content'],
+                    'title' => "{$threadType}追问",
+                    'message' => !empty($threadPost['thread']['content']) ? $this->plainText(strip_tags($threadPost['thread']['content']), 10) : "你有一个{$threadType}的追问",
+                );
+
+                $from = array(
+                    'type' => $threadPost['target']['type'],
+                    'id' => $threadPost['target']['id'],
+                );
+
+                $to = array(
+                    'type' => 'user',
+                    'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
+                );
+
+                foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
+                    if ($i >= 3) {
+                        break;
+                    }
+                    $to['id'] = $teacherId;
+
+                    $this->createPushJob($from, $to, $body);
+                }
+            }
+
+            return;
+        }
+
+        //回复收到
         $body = array(
             'type' => 'question.answered',
             'threadId' => $threadPost['threadId'],
@@ -981,40 +1042,40 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'message' => !empty($threadPost['thread']['title']) ? "[{$postUser['nickname']}]回复了你的{$threadType}《{$threadPost['thread']['title']}》" : "[{$postUser['nickname']}]回复了你的{$threadPostType}{$threadType}",
         );
 
-//        if ($threadPost['thread']['type'] == 'question') {
+        if ($threadPost['thread']['type'] == 'question') {
             $devices = $this->getPushDeviceService()->getPushDeviceByUserId($threadPost['thread']['userId']);
-        if (!empty($devices['regId'])) {
-            $message = array(
+            if (!empty($devices['regId'])) {
+                $message = array(
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
                     'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'], 'type' => 'course.thread.post.create')),
                     'title' => '收到一条新回答',
-                    'description' => isset($threadPost['thread']['title']) ? "《{$threadPost['thread']['title']}》" : '收到一条新回答',
+                    'description' => isset($threadPost['thread']['content']) ? $this->plainText(strip_tags($threadPost['thread']['content']), 10) : "有一个{$threadPostType}类型的回答",
                 );
-            $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
-            $this->getLogService()->info(
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
                     'push',
                     'course_thread_post_create',
                     '老师回答-推送消息',
                     array('result' => $result, 'message' => $message)
                 );
-        }
-//        } else {
-            if ($this->isIMEnabled()) {
-                $from = array(
-                    'type' => $threadPost['target']['type'],
-                    'id' => $threadPost['target']['id'],
-                );
-
-                $to = array(
-                    'type' => 'user',
-                    'id' => $threadPost['thread']['userId'],
-                    'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
-                );
-
-                $this->createPushJob($from, $to, $body);
             }
-//        }
+        }
+
+        if ($this->isIMEnabled()) {
+            $from = array(
+                'type' => $threadPost['target']['type'],
+                'id' => $threadPost['target']['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $threadPost['thread']['userId'],
+                'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
     }
 
     public function onGroupThreadPostCreate(Event $event)
