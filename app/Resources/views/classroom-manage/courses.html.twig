@@ -23,7 +23,7 @@
         {{ web_macro.flash_messages() }}
         <div class="form-group" id="courses-form-group">
           <div class="col-md-12 controls">
-            <ul class="course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
+            <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
 
               {% for course in courses %}
 
@@ -38,9 +38,9 @@
               {% endif %}
                 <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
               </a>
-              <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="{{'classroom.delete_btn'|trans}}" style="font-size:35px;" data-id="{{course.id}}" data-url="{{path('classroom_manage_course_remove', {id: classroom.id, courseId: course.id})}}">× </button>
+              <button class="close course-close-btn js-delete-btn mrl mts mll" data-role="item-delete" type="button" title="{{'classroom.delete_btn'|trans}}" data-id="{{course.id}}" data-url="{{path('classroom_manage_course_remove', {id: classroom.id, courseId: course.id})}}">× </button>
                   <div class="course-body clearfix">
-                   <div class="color-gray mrm mls pull-right">
+                   <div class="color-gray mls pull-right cd-mr40">
                       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                           <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.originPrice * setting('coin.cash_rate')}}">
                             {% if course.originPrice > 0 %}
