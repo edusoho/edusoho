@@ -56,12 +56,17 @@ export default (module, startValidate) => {
   }
 
   // 营销活动——拼团
-  if (module.type == 'groupon') {
+  if (['groupon', 'seckill', 'cut'].includes(module.type)) {
+    const typeText = {
+      'seckill': '秒杀',
+      'cut': '砍价',
+      'groupon': '拼团'
+    }
     const activityExist = module.data.activity.id;
     if (!activityExist) {
       if (!startValidate) return true;
       Vue.prototype.$message({
-        message: '请完善拼团模块信息！',
+        message: `请完善${typeText[module.type]}模块信息！`,
         type: 'error'
       });
       return true;
