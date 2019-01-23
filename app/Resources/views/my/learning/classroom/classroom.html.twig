@@ -36,13 +36,13 @@
             <div class="pull-right">
               {% if 'assistant' in members[classroom.id].role %}
                 <span class="color-gray">{{'my.learning.classroom.study_days'|trans({'%day%':classroom.day})}}</span><br>
-                <a href="{{ path('classroom_manage_testpaper',{id:classroom.id}) }}" class="btn btn-info btn-sm mts">{{ 'my.teaching.classroom.manage_btn'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)}) }}</a>
+                <a href="{{ path('classroom_manage_testpaper',{id:classroom.id}) }}" class="btn btn-info btn-sm mts" target="_blank">{{ 'my.teaching.classroom.manage_btn'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)}) }}</a>
               {% elseif "student" in members[classroom.id].role %}
                 <span class="color-gray">{{'my.learning.classroom.study_days'|trans({'%day%':classroom.day})}}</span><br>
-                <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-info btn-sm mts">{{'my.learning.classroom.contiune_study'|trans}}</a>
+                <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-info btn-sm mts" target="_blank">{{'my.learning.classroom.contiune_study'|trans}}</a>
               {% else %}
                 <span class="color-gray">{{'my.learning.classroom.auditor'|trans}}</span><br>
-                <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-info btn-sm mts">{{'my.learning.classroom.join_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</a>
+                <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-info btn-sm mts" target="_blank">{{'my.learning.classroom.join_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</a>
               {% endif %}
             </div>
             
