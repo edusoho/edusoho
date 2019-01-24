@@ -5,7 +5,6 @@ import { Toast } from 'vant';
 const activityHandle = (activityId, callback, addTicket = false) => {
   if (!activityId || (addTicket && !callback)) {
     Toast.fail('缺少分享参数');
-    console.error('缺少分享参数 activityId 或 callback');
     return;
   }
   const params = {
