@@ -4,7 +4,6 @@
       :price="details.price"
       :courseSet="details.courseSet"
       @goodsEmpty="sellOut"
-      :showOnsale="showOnsale"
       :seckillActivities="marketingActivities.seckill"></detail-head>
 
     <detail-plan @getLearnExpiry="getLearnExpiry" @switchPlan="switchPlan"></detail-plan>

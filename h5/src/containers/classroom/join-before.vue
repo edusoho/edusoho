@@ -4,7 +4,6 @@
       <detail-head
         :cover="details.cover"
         @goodsEmpty="sellOut"
-        :showOnsale="showOnsale"
         :seckillActivities="marketingActivities.seckill"></detail-head>
 
       <detail-plan :details="planDetails" :joinStatus="details.joinStatus"
