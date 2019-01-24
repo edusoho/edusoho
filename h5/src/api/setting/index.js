@@ -41,11 +41,13 @@ export default [
   {
     name: 'weixinConfig',
     url: '/settings/weixinConfig',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   },
   {
     name: 'loginConfig',
     url: '/settings/login',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }
 ];

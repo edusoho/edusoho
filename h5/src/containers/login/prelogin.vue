@@ -16,7 +16,7 @@
       let code = location.search.match(/\?code.*&/g);
       if (code) {
         Toast.loading({
-          message: '正在登陆'
+          message: '正在登录'
         });
         code = code[0].slice(6, -1);
         await Api.login({
