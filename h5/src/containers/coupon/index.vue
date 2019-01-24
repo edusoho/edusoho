@@ -55,7 +55,8 @@
         this.$router.push({
           name: 'prelogin',
           query: {
-            redirect: this.$route.fullPath
+            redirect: this.$route.fullPath,
+            doLogin: 1
           }
         });
         return;

@@ -238,6 +238,7 @@
             name: 'prelogin',
             query: {
               redirect: this.redirect,
+              doLogin: 1
             }
           });
           return;

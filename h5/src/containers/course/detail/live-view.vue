@@ -33,7 +33,8 @@ export default {
       this.$router.push({
         name: 'prelogin',
         query: {
-          redirect: this.redirect
+          redirect: this.redirect,
+          doLogin: 1
         }
       });
       return;

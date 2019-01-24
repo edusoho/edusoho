@@ -56,7 +56,7 @@ axios.interceptors.response.use(res => {
         store.commit(types.USER_LOGOUT);
         router.replace({ // 待解决：replace 会导致返回按钮的功能有问题
           name: 'prelogin',
-          query: { redirect: router.currentRoute.fullPath }
+          query: { redirect: router.currentRoute.fullPath, doLogin: 1 }
         }, () => {
           window.location.reload(); // redirect 为 '/' 时，需要刷新才能进入对应页面的问题
         });
