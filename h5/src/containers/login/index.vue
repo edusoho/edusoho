@@ -18,11 +18,9 @@
       <router-link to="/setting/password/reset" class="login-account">忘记密码？ &nbsp;|</router-link>
       <span class="login-account" @click="jumpRegister">&nbsp; 立即注册 &nbsp;</span>
     </div>
-    <div class="third-party-action-bar">
-      <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="third-party-action-button" v-if="faceSetting">
-        <img src="static/images/face.png" alt="人脸识别登录图标">
-      </router-link>
-    </div>
+    <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="face-icon" v-if="faceSetting">
+      <img src="static/images/face.png" alt="人脸识别登录图标">
+    </router-link>
   </div>
 
 </template>

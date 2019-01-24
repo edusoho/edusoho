@@ -251,10 +251,6 @@ const setVipSwitch = () => new Promise((resolve, reject) => {
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name);
 
-  if (location.search && !['prelogin'].includes(to.name)) {
-    window.location.href = location.origin + to.fullPath;
-  }
-
   // 站点后台设置、会员后台配置
   if (!Object.keys(store.state.settings).length) {
     store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' })

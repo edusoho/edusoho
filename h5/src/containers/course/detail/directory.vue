@@ -241,10 +241,9 @@
         const details = this.details;
 
         !details.allowAnonymousPreview && this.$route.push({
-          name: 'prelogin',
+          name: 'login',
           query: {
             redirect: this.redirect,
-            doLogin: 1
           }
         });
         if (!this.joinStatus
