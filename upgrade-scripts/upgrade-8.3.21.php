@@ -49,8 +49,6 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'updateActivityLearnLogComment',
-            'updateCourseTaskResultComment',
             'initUserMarketingActivityTables',
         );
 
@@ -93,24 +91,24 @@ class EduSohoUpgrade extends AbstractUpdater
 
         return 1;
     }
-
-    protected function updateActivityLearnLogComment()
-    {
-        if ($this->isTableExist('activity_learn_log')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_learn_log` CHANGE `watchTime` `watchTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '观看时长（秒）';");
-            $this->getConnection()->exec("ALTER TABLE `activity_learn_log` CHANGE `learnedTime` `learnedTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '学习时长（秒）';");
-        }
-
-        return 1;
-    }
-
-    protected function updateCourseTaskResultComment()
-    {
-        if ($this->isTableExist('course_task_result')) {
-            $this->getConnection()->exec("ALTER TABLE `course_task_result` CHANGE `time` `time` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '任务进行时长（秒）';");
-            $this->getConnection()->exec("ALTER TABLE `course_task_result` CHANGE `watchTime` `watchTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '任务观看时长（秒）';");
-        }
-    }
+//
+//    protected function updateActivityLearnLogComment()
+//    {
+//        if ($this->isTableExist('activity_learn_log')) {
+//            $this->getConnection()->exec("ALTER TABLE `activity_learn_log` CHANGE `watchTime` `watchTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '观看时长（秒）';");
+//            $this->getConnection()->exec("ALTER TABLE `activity_learn_log` CHANGE `learnedTime` `learnedTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '学习时长（秒）';");
+//        }
+//
+//        return 1;
+//    }
+//
+//    protected function updateCourseTaskResultComment()
+//    {
+//        if ($this->isTableExist('course_task_result')) {
+//            $this->getConnection()->exec("ALTER TABLE `course_task_result` CHANGE `time` `time` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '任务进行时长（秒）';");
+//            $this->getConnection()->exec("ALTER TABLE `course_task_result` CHANGE `watchTime` `watchTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '任务观看时长（秒）';");
+//        }
+//    }
 
     protected function initUserMarketingActivityTables()
     {
