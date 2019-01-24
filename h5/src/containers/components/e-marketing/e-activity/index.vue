@@ -17,7 +17,7 @@
         <div class="type-tag" v-if="type !== 'groupon'">{{ type === 'cut' ? '砍价享' : '秒杀价' }}</div>
         <div class="context-sale__sale-price">￥{{ activityPrice }}</div>
         <div v-if="activity.originPrice" class="context-sale__origin-price">原价￥{{ activity.originPrice }}</div>
-        <a v-if="!isEmpty" class="context-sale__shopping" :class="[activity.status, {'bg-grey': isEmpty}]" href="javascript:;">
+        <a class="context-sale__shopping" :class="[activity.status, {'bg-grey': isEmpty}]" href="javascript:;">
           {{ grouponStatus }}
         </a>
       </div>
