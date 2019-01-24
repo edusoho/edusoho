@@ -108,7 +108,7 @@ class PageSetting extends AbstractResource
 
     protected function paramFilter($discoverySettings)
     {
-        $discoverySettings = $this->getH5SettingService()->filter($discoverySettings);
+        $discoverySettings = $this->getH5SettingService()->filter($discoverySettings, 'setting');
         foreach ($discoverySettings as &$discoverySetting) {
             $discoverySetting = $this->handleSetting($discoverySetting);
         }
