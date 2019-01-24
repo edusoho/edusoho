@@ -87,7 +87,9 @@
           Toast.clear()
           this.goOriginLogin()
         }
-      })
+      }).catch(err => {
+        Toast.fail(err.message);
+      });
     }
   }
 }
