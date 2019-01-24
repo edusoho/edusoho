@@ -46,7 +46,7 @@
     <e-footer v-if="!isClassCourse && (!marketingActivities.seckill || ((marketingActivities.seckill && isEmpty) || details.price == 0))" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
     <!-- 秒杀 -->
-    <e-footer v-if="showSeckill" :half="!!showSeckill" @click.native="handleJoin">原价购买</e-footer>
+    <e-footer v-if="showSeckill" :disabled="!accessToJoin" :half="!!showSeckill" @click.native="handleJoin">{{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
     <e-footer v-if="showSeckill" :half="!!showSeckill" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
   </div>
 </template>
@@ -138,7 +138,7 @@
       },
       showSeckill() {
         return !this.isClassCourse && Number(this.details.price) !== 0
-          && this.marketingActivities.seckill && this.accessToJoin && !this.isEmpty;
+          && this.marketingActivities.seckill && !this.isEmpty;
       },
     },
     mounted() {
