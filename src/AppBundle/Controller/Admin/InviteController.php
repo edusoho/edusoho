@@ -15,12 +15,16 @@ class InviteController extends BaseController
         $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
 
         $page = $request->query->get('page', 0);
+        $firstPage = 1;
 
-        if (!empty($conditions['nickname']) && empty($page)) {
+        if (!empty($conditions['nickname'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
             $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
             unset($conditions['nickname']);
-            $invitedRecord = $this->getInvitedRecordByUserIdAndConditions($user, $conditions);
+
+            if (empty($page) || $page == $firstPage) {
+                $invitedRecord = $this->getInvitedRecordByUserIdAndConditions($user, $conditions);
+            }
         }
 
         $recordCount = $this->getInviteRecordService()->countRecords($conditions);
