@@ -55,7 +55,7 @@ axios.interceptors.response.use(res => {
       if (code === statusCode.EXPIRED_CREDENTIAL || code === statusCode.TOKEN_NOT_EXIST) {
         store.commit(types.USER_LOGOUT);
         router.replace({ // 待解决：replace 会导致返回按钮的功能有问题
-          name: 'login',
+          name: 'prelogin',
           query: { redirect: router.currentRoute.fullPath }
         }, () => {
           window.location.reload(); // redirect 为 '/' 时，需要刷新才能进入对应页面的问题
