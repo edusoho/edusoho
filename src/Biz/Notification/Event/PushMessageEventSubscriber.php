@@ -970,16 +970,16 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
         //学生追问，老师收到推送
         if ($threadPost['thread']['userId'] == $user['id'] && $threadPost['thread']['type'] == 'question') {
-            if (!empty($thread['target']['teacherIds'])) {
-                $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($thread['target']['teacherIds']);
+            if (!empty($threadPost['target']['teacherIds'])) {
+                $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($threadPost['target']['teacherIds']);
                 $reg_ids = ArrayToolkit::column($devices, 'regId');
                 if (!empty($reg_ids)) {
                     $message = array(
                         'reg_ids' => implode(',', $reg_ids),
                         'pass_through_type' => 'normal',
-                        'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'], 'type' => 'course.thread.create')),
+                        'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'type' => 'course.thread.create')),
                         'title' => '课程追问',
-                        'description' => !empty($thread['content']) ? $this->plainText(strip_tags($thread['content']), 10) : "有一个{$threadPostType}类型的追问",
+                        'description' => !empty($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "有一个{$threadPostType}类型的追问",
                     );
                     $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
                     $this->getLogService()->info(
@@ -1015,7 +1015,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
                 );
 
-                foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
+                foreach (array_values($threadPost['target']['teacherIds']) as $i => $teacherId) {
                     if ($i >= 3) {
                         break;
                     }
