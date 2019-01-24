@@ -208,7 +208,7 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "password_reset" */'@/containers/password-reset/index.vue')
   }, {
-    path: '/share/redirect',
+    path: '/share/redirect', // 分享路由，微营销暂时不使用
     name: 'share_redirect',
     meta: {
       title: ''

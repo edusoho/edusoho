@@ -42,7 +42,7 @@
       </div>
 
       <!-- 小程序配置——底部添加组件按钮 -->
-      <div class="multi-find-section find-section clearfix" v-if="supportGrouponVersion">
+      <div class="multi-find-section find-section clearfix" v-if="portal === 'h5' || supportGrouponVersion">
         <div class="section-title">基础组件</div>
         <div class="section-button-group clearfix">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
@@ -123,8 +123,7 @@ export default {
       return pathName2Portal[this.pathName];
     },
     supportGrouponVersion() {
-      return true;
-      // return this.supportVersion('1.4.0');
+      return this.supportVersion('1.4.0');
     },
     supportClassroomVersion() {
       return this.supportVersion('1.3.1');
@@ -142,6 +141,7 @@ export default {
       Api.getMPVersion().then(res => {
         this.currentMPVersion = res.current_version.version
       }).catch((err) => {
+        this.currentMPVersion = '0.0.0';
         this.$message({
           message: err.message,
           type: 'error'

@@ -51,13 +51,7 @@
     },
   methods: {
     goLogin() {
-      if (this.isWeixin()) {
-        Toast.loading({
-          message: '请稍后'
-        });
-        this.redirectIfWeChatEnabled()
-      }
-
+      this.redirectIfWeChatEnabled()
     },
     goOriginLogin(){
       this.$router.push({
@@ -69,9 +63,16 @@
     },
     isWeixin(){
       const ua = navigator.userAgent.toLowerCase();
-      return (ua.match(/MicroMessenger/i) == 'micromessenger') ? true : false;
+      return ua.match(/MicroMessenger/i) == 'micromessenger';
     },
     async redirectIfWeChatEnabled() {
+      if (!this.isWeixin()) {
+        this.goOriginLogin()
+        return;
+      }
+      Toast.loading({
+        message: '请稍后'
+      });
       Api.loginConfig({}).then(res => {
         if (res.weixinmob_enabled == 1) {
           const redirect = this.$route.query.redirect || '/';
@@ -86,7 +87,9 @@
           Toast.clear()
           this.goOriginLogin()
         }
-      })
+      }).catch(err => {
+        Toast.fail(err.message);
+      });
     }
   }
 }

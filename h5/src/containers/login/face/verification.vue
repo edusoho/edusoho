@@ -159,7 +159,7 @@ export default {
     },
     isWeixin(){
       const ua = navigator.userAgent.toLowerCase();
-      return (ua.match(/MicroMessenger/i) == 'micromessenger') ? true : false;
+      return ua.match(/MicroMessenger/i) == 'micromessenger';
     },
     feedbackAction() {
       if (!this.isWeixin()) {
