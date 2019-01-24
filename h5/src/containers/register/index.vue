@@ -75,14 +75,6 @@ import XXTEA from '@/utils/xxtea.js';
 import { Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js'
 
-const emptyRegisterInfo = {
-  mobile: '',
-  dragCaptchaToken: undefined, // 默认不需要滑动验证
-  encrypt_password: '',
-  smsCode: '',
-  smsToken: '',
-  type: 'register'
-};
 const registerType = {
   binding: '绑定手机',
   register: '注册账号'
@@ -103,7 +95,14 @@ export default {
   mixins: [activityMixin, redirectMixin],
   data() {
     return {
-      registerInfo: emptyRegisterInfo,
+      registerInfo: {
+        mobile: '',
+        dragCaptchaToken: undefined, // 默认不需要滑动验证
+        encrypt_password: '',
+        smsCode: '',
+        smsToken: '',
+        type: 'register'
+      },
       dragEnable: false,
       dragKey: 0,
       errorMessage: {

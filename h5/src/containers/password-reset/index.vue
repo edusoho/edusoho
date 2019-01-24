@@ -61,16 +61,6 @@ import XXTEA from '@/utils/xxtea.js';
 import { Dialog, Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js'
 
-const emptyresetInfo = {
-  account: '',
-  accountType: '',
-  dragCaptchaToken: '',
-  encrypt_password: '',
-  smsCode: '',
-  smsToken: '',
-  type: 'register'
-};
-
 export default {
   name: 'password-reset',
   components: {
@@ -78,7 +68,15 @@ export default {
   },
   data() {
     return {
-      resetInfo: emptyresetInfo,
+      resetInfo: {
+        account: '',
+        accountType: '',
+        dragCaptchaToken: '',
+        encrypt_password: '',
+        smsCode: '',
+        smsToken: '',
+        type: 'register'
+      },
       dragKey: 0,
       errorMessage: {
         account: '',
