@@ -7,7 +7,7 @@
 {% elseif liveAccount.isExpired %}
   <div class="course-select disabled" data-toggle="tooltip" data-placement="top" title="{{'my.teaching.course_set.select_type.live_open_course.valid_service'|trans}}" data-type="{{ type }}">
 {% else %}
-  <div class="course-select js-courseSetType" data-type="{{ type }}">
+  <div class="course-select js-courseSetType {% if defaultType|default('normal') == type %}active{% endif %}" data-type="{{ type }}">
 {% endif %}
     {% block type_icon %}
       <i class="es-icon es-icon-zhibokecheng "></i>
