@@ -4,7 +4,6 @@
       :price="details.price"
       :courseSet="details.courseSet"
       @goodsEmpty="sellOut"
-      :seckillData="seckillData"
       :showOnsale="showOnsale"
       :seckillActivities="marketingActivities.seckill"></detail-head>
 
@@ -44,11 +43,11 @@
     <review-list ref="review" :targetId="details.courseSet.id" :reviews="details.reviews" title="学员评价" type="course" defaulValue="暂无评价"></review-list>
 
     <!-- 加入学习 -->
-    <e-footer v-if="!isClassCourse && !marketingActivities.seckill" :disabled="!accessToJoin" @click.native="handleJoin">
+    <e-footer v-if="!isClassCourse && !marketingActivities.seckill || (marketingActivities.seckill && isEmpty)" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
     <!-- 秒杀 -->
-    <e-footer v-if="showSeckill" :half="seckillData" @click.native="handleJoin">原价购买</e-footer>
-    <e-footer v-if="seckillData && showSeckill && !isEmpty" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
+    <e-footer v-if="showSeckill" :half="!!showSeckill" @click.native="handleJoin">原价购买</e-footer>
+    <e-footer v-if="showSeckill" :half="!!showSeckill" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
   </div>
 </template>
 <script>
@@ -84,7 +83,7 @@
           courseTop: 0,
           reviewTop: 0,
         },
-        isEmpty: false,
+        isEmpty: true,
         unreceivedCoupons: [],
         miniCoupons: [],
         marketingActivities: {
@@ -139,11 +138,7 @@
       },
       showSeckill() {
         return !this.isClassCourse && Number(this.details.price) !== 0
-          && this.marketingActivities.seckill && this.accessToJoin;
-      },
-      seckillData() {
-        if (!this.marketingActivities.seckill) return false;
-        return !!(Object.values(this.marketingActivities.seckill).length);
+          && this.marketingActivities.seckill && this.accessToJoin && !this.isEmpty;
       },
     },
     mounted() {
@@ -167,6 +162,7 @@
           query: { id: this.details.id }
         }).then(res => {
           this.marketingActivities = res;
+          this.isEmpty = res.seckill ? !+res.seckill.productRemaind : true;
         }).catch(err => {
           console.error(err);
         });
