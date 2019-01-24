@@ -82,9 +82,14 @@ export default {
     },
     grouponStatus() {
       const status = this.activity.status;
+      const typeText = {
+        'seckill': '秒杀',
+        'cut': '砍价',
+        'groupon': '拼团'
+      }
       if (status === 'ongoing' && !this.counting) {
         this.activity.status = 'closed';
-        return '已结束';
+        return `${typeText[type]}已结束`;
       };
       switch (this.type) {
         case 'groupon':
