@@ -4,6 +4,8 @@
       <detail-head
         :cover="details.cover"
         @goodsEmpty="sellOut"
+        :seckillData="seckillData"
+        :showOnsale="showOnsale"
         :seckillActivities="marketingActivities.seckill"></detail-head>
 
       <detail-plan :details="planDetails" :joinStatus="details.joinStatus"
@@ -51,8 +53,8 @@
       <e-footer v-if="!marketingActivities.seckill" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus('classroom', vipAccessToJoin)}}</e-footer>
       <!-- 秒杀 -->
-      <e-footer v-if="showSeckill" :half="true" @click.native="handleJoin">原价购买</e-footer>
-      <e-footer v-if="showSeckill && !isEmpty" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
+      <e-footer v-if="showSeckill" :half="seckillData" @click.native="handleJoin">原价购买</e-footer>
+      <e-footer v-if="showSeckill && !isEmpty && seckillData" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
     </div>
 
   </div>
@@ -71,11 +73,12 @@
   import { mapState } from 'vuex';
   import Api from '@/api';
   import getCouponMixin from '@/mixins/coupon/getCouponHandler';
+  import getActivityMixin from '@/mixins/activity/index';
 
   const TAB_HEIGHT = 44;
 
   export default {
-    mixins: [redirectMixin, getCouponMixin],
+    mixins: [redirectMixin, getCouponMixin, getActivityMixin],
     components: {
       directory,
       detailHead,
@@ -103,7 +106,9 @@
         learnExpiry: '永久有效',
         unreceivedCoupons: [],
         miniCoupons: [],
-        marketingActivities: {},
+        marketingActivities: {
+          seckill: {}
+        },
         isEmpty: false
       }
     },
@@ -126,9 +131,9 @@
       },
       showOnsale() {
         return Number(this.planDetails.price) !== 0
-          && (this.unreceivedCoupons.length
+          && (!!(this.unreceivedCoupons.length
             || Object.keys(this.marketingActivities).length
-            && !this.onlySeckill);
+            && !this.onlySeckill));
       },
       onlySeckill() {
         return Object.keys(this.marketingActivities).length === 1
@@ -137,7 +142,11 @@
       showSeckill() {
         return Number(this.planDetails.price) !== 0
           && this.marketingActivities.seckill && this.accessToJoin;
-      }
+      },
+      seckillData() {
+        if (!this.marketingActivities.seckill) return false;
+        return !!(Object.values(this.marketingActivities.seckill).length);
+      },
     },
     mounted() {
       // 获取促销优惠券

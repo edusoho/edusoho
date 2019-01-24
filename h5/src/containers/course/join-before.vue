@@ -4,6 +4,8 @@
       :price="details.price"
       :courseSet="details.courseSet"
       @goodsEmpty="sellOut"
+      :seckillData="seckillData"
+      :showOnsale="showOnsale"
       :seckillActivities="marketingActivities.seckill"></detail-head>
 
     <detail-plan @getLearnExpiry="getLearnExpiry" @switchPlan="switchPlan"></detail-plan>
@@ -45,8 +47,8 @@
     <e-footer v-if="!isClassCourse && !marketingActivities.seckill" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
     <!-- 秒杀 -->
-    <e-footer v-if="showSeckill" :half="true" @click.native="handleJoin">原价购买</e-footer>
-    <e-footer v-if="showSeckill && !isEmpty" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
+    <e-footer v-if="showSeckill" :half="seckillData" @click.native="handleJoin">原价购买</e-footer>
+    <e-footer v-if="seckillData && showSeckill && !isEmpty" :half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
   </div>
 </template>
 <script>
@@ -61,12 +63,13 @@
   import redirectMixin from '@/mixins/saveRedirect';
   import Api from '@/api';
   import getCouponMixin from '@/mixins/coupon/getCouponHandler';
+  import getActivityMixin from '@/mixins/activity/index';
 
   const TAB_HEIGHT = 44;
 
   export default {
     name: 'joinBefore',
-    mixins: [redirectMixin, getCouponMixin],
+    mixins: [redirectMixin, getCouponMixin, getActivityMixin],
     data() {
       return {
         tabs: ['课程介绍', '课程目录', '学员评价'],
@@ -84,7 +87,9 @@
         isEmpty: false,
         unreceivedCoupons: [],
         miniCoupons: [],
-        marketingActivities: {},
+        marketingActivities: {
+          seckill: {}
+        },
       };
     },
     components: {
@@ -124,9 +129,9 @@
       },
       showOnsale() {
         return !this.isClassCourse && Number(this.details.price) !== 0
-          && (this.unreceivedCoupons.length
+          && (!!(this.unreceivedCoupons.length
             || Object.keys(this.marketingActivities).length
-            && !this.onlySeckill);
+            && !this.onlySeckill));
       },
       onlySeckill() {
         return Object.keys(this.marketingActivities).length === 1
@@ -135,7 +140,11 @@
       showSeckill() {
         return !this.isClassCourse && Number(this.details.price) !== 0
           && this.marketingActivities.seckill && this.accessToJoin;
-      }
+      },
+      seckillData() {
+        if (!this.marketingActivities.seckill) return false;
+        return !!(Object.values(this.marketingActivities.seckill).length);
+      },
     },
     mounted() {
       if (!this.isClassCourse) {
@@ -230,9 +239,10 @@
 
         if (!this.$store.state.token) {
           this.$router.push({
-            name: 'login',
+            name: 'prelogin',
             query: {
-              redirect: this.redirect
+              redirect: this.redirect,
+              doLogin: 1
             }
           });
           return;

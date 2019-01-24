@@ -22,16 +22,10 @@ import { dateTimeDown } from '@/utils/date-toolkit';
         seckilling: false,
         buyCountDownText: '',
         endCountDownText: '',
-        endStamp: new Date(this.activity.endTime).getTime(),
-        startStamp: new Date(this.activity.startTime).getTime()
       }
     },
     created() {
       this.countDownTime()
-      if (Object.values(this.activity).length) {
-        this.startStamp = new Date(this.activity.startTime).getTime()
-        this.endStamp = new Date(this.activity.endTime).getTime()
-      }
     },
     beforeDestroy() {
       this.clearInterval()
@@ -74,6 +68,12 @@ import { dateTimeDown } from '@/utils/date-toolkit';
         },
         set() {}
       },
+      startStamp() {
+        return new Date(this.activity.startTime).getTime();
+      },
+      endStamp() {
+        return new Date(this.activity.endTime).getTime();
+      }
     },
     methods: {
       countDownTime() {

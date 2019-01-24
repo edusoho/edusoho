@@ -4,7 +4,7 @@
       <img :src="cover" alt="">
     </div>
     <countDown
-      v-if="seckillActivities && counting && !isEmpty"
+      v-if="showOnsale && seckillData && counting && !isEmpty"
       :activity="seckillActivities"
       @timesUp="expire"
       @sellOut="sellOut">
@@ -24,6 +24,12 @@ export default {
       isEmpty: false
     };
   },
+  computed: {
+    seckillData() {
+      if (!this.seckillActivities) return false;
+      return !!(Object.values(this.seckillActivities).length);
+    },
+  },
   props: {
     cover: {
       type: String,
@@ -32,6 +38,10 @@ export default {
     seckillActivities: {
       type: Object,
       default: null,
+    },
+    showOnsale: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
