@@ -1928,11 +1928,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
+        $courses = $this->getClassroomCourseDao()->search(array('classroomId' => $id), array('seq' => 'desc'), 0, 1);
+        $maxSeqCourse = empty($courses) ? array() : $courses[0];
+        $seq = empty($maxSeqCourse) ? 1 : $maxSeqCourse['seq'] + 1;
+
         $classroomCourse = array(
             'classroomId' => $id,
             'courseId' => $courseId,
             'courseSetId' => $course['courseSetId'],
             'parentCourseId' => $course['parentId'],
+            'seq' => $seq,
         );
 
         $classroomCourse = $this->getClassroomCourseDao()->create($classroomCourse);
