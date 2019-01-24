@@ -241,7 +241,7 @@
         const details = this.details;
 
         !details.allowAnonymousPreview && this.$route.push({
-          name: 'login',
+          name: 'prelogin',
           query: {
             redirect: this.redirect
           }

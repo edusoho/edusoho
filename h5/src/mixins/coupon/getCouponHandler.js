@@ -14,7 +14,7 @@ export default {
       // 未登录跳转登录页面
       if (!this.$store.state.token) {
         this.$router.push({
-          name: 'login',
+          name: 'prelogin',
           query: {
             redirect: this.$route.fullPath
           }

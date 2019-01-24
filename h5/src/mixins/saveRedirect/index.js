@@ -1,3 +1,5 @@
+import activityHandle from '@/mixins/activity/request';
+
 /* 需要到登录权限的页面／组件，跳转前把当前路由记录下来 */
 export default {
   data() {
@@ -19,7 +21,7 @@ export default {
         if (callbackType) {
           switch (callbackType) {
             case 'marketing':
-              this.activityHandle(activityId, callback);
+              activityHandle(activityId, callback);
               break;
             default:
               break;
