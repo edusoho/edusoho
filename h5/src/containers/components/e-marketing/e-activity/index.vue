@@ -87,20 +87,20 @@ export default {
       };
       switch (this.type) {
         case 'groupon':
-          if(status === 'unstart') return '活动未开始';
+          if(status === 'unstart') return '拼团未开始';
           if(status === 'ongoing') return '去拼团';
-          if(status === 'closed') return '活动已结束';
+          if(status === 'closed') return '拼团已结束';
           break;
         case 'seckill':
           if(status === 'unstart') return '秒杀未开始';
-          if(status === 'closed') return '已结束';
+          if(status === 'closed') return '秒杀已结束';
           if(status === 'ongoing') {
-            if (this.activity.productRemaind == 0) return '已售空';
+            if (this.activity.productRemaind == 0) return '商品已售空';
             const nowStamp = new Date().getTime();
             const startStamp = new Date(this.activity.startTime).getTime();
             const endStamp = new Date(this.activity.endTime).getTime();
             if ((startStamp < nowStamp) && (nowStamp < endStamp)) return '马上秒'
-            if (startStamp > nowStamp) return '提醒我'
+            if (startStamp > nowStamp) return '秒杀未开始'
           }
           break;
         case 'cut':
