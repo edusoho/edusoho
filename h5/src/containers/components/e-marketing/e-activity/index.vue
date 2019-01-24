@@ -17,7 +17,7 @@
         <div class="type-tag" v-if="type !== 'groupon'">{{ type === 'cut' ? '砍价享' : '秒杀价' }}</div>
         <div class="context-sale__sale-price">￥{{ activityPrice }}</div>
         <div v-if="activity.originPrice" class="context-sale__origin-price">原价￥{{ activity.originPrice }}</div>
-        <a class="context-sale__shopping" :class="[activity.status, {'bg-grey': isEmpty}]" href="javascript:;">
+        <a class="context-sale__shopping" :class="[activity.status, {'bg-grey': isEmpty || bgGrey}]" href="javascript:;">
           {{ grouponStatus }}
         </a>
       </div>
@@ -58,7 +58,8 @@ export default {
   data () {
     return {
       counting: true,
-      isEmpty: false
+      isEmpty: false,
+      bgGrey: false
     }
   },
   computed: {
@@ -100,7 +101,10 @@ export default {
             const startStamp = new Date(this.activity.startTime).getTime();
             const endStamp = new Date(this.activity.endTime).getTime();
             if ((startStamp < nowStamp) && (nowStamp < endStamp)) return '马上秒'
-            if (startStamp > nowStamp) return '秒杀未开始'
+            if (startStamp > nowStamp) {
+              this.bgGrey = true;
+              return '秒杀未开始'
+            }
           }
           break;
         case 'cut':
