@@ -8361,6 +8361,7 @@ log.module.role: 角色
 log.module.thread: 话题
 log.module.mobile: 手机客户端
 log.module.wap: 微网校
+log.module.push: 推送
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8489,6 +8490,8 @@ log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
 log.action.system.update_block: 更新编辑区
 log.action.system.update_app_version: 更新版本
+log.action.push.course_thread_create: 提问推送
+log.action.push.course_thread_post_create: 回答推送
 log.action.classroom.create: 新增班级
 log.action.classroom.update: 修改班级
 log.action.classroom.delete: 删除班级
