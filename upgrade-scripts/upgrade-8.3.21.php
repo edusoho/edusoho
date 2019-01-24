@@ -51,6 +51,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'updateActivityLearnLogComment',
             'updateCourseTaskResultComment',
+            'initUserMarketingActivityTables',
         );
 
         $funcNames = array();
@@ -86,6 +87,13 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
+    protected function resetCrontabJobNum()
+    {
+        \Biz\Crontab\SystemCrontabInitializer::init();
+
+        return 1;
+    }
+
     protected function updateActivityLearnLogComment()
     {
         if ($this->isTableExist('activity_learn_log')) {
@@ -102,6 +110,46 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("ALTER TABLE `course_task_result` CHANGE `time` `time` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '任务进行时长（秒）';");
             $this->getConnection()->exec("ALTER TABLE `course_task_result` CHANGE `watchTime` `watchTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '任务观看时长（秒）';");
         }
+    }
+
+    protected function initUserMarketingActivityTables()
+    {
+        $this->getConnection()->exec("
+            CREATE TABLE IF NOT EXISTS `user_marketing_activity` (
+                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+                `mobile` varchar(32) NOT NULL DEFAULT '' COMMENT '手机号',
+                `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '活动id',
+                `joinedId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入id',
+                `name` varchar(255) NOT NULL DEFAULT '' COMMENT '活动名称',
+                `type` varchar(32) NOT NULL DEFAULT '' COMMENT '活动类型',
+                `status` varchar(32) NOT NULL DEFAULT '' COMMENT '活动状态',
+                `cover` varchar(255) NOT NULL DEFAULT '' COMMENT '活动图片',
+                `itemType` varchar(32) NOT NULL DEFAULT '' COMMENT '商品类型',
+                `itemSourceId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
+                `originPrice` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '原价',
+                `price` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '活动价',
+                `joinedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入活动时间',
+                `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+                `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+                PRIMARY KEY (`id`),
+                KEY `joinedId_type` (`joinedId`,`type`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户参与的营销活动表';
+        ");
+
+        $this->getConnection()->exec("
+            CREATE TABLE IF NOT EXISTS `user_marketing_activity_sync_log` (
+                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                `args` varchar(255) NOT NULL DEFAULT '0',
+                `data` text COMMENT '同步的数据',
+                `target` varchar(32) NOT NULL DEFAULT '' COMMENT '同步对象 all全部 mobile手机号',
+                `targetValue` varchar(50) DEFAULT '0' COMMENT '同步对象值',
+                `rangeStartTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '同步范围开始时间',
+                `rangeEndTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '同步范围结束时间',
+                `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='同步日志表';   
+        ");
 
         return 1;
     }
@@ -120,6 +168,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
         if (empty($pluginApp)) {
             $this->logger('warning', '网校未安装'.$pluginCode);
+
             return $page + 1;
         }
         try {
@@ -153,10 +202,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $pluginCode = $plugin[0];
         $pluginPackageId = $plugin[1];
 
-        $this->logger('warning', '升级'.$pluginCode);
+        $this->logger('warning', '升级' . $pluginCode);
         $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
         if (empty($pluginApp)) {
-            $this->logger('warning', '网校未安装'.$pluginCode);
+            $this->logger('warning', '网校未安装' . $pluginCode);
+
             return $page + 1;
         }
 
