@@ -2,7 +2,7 @@
   <div class="preview-container">
     <div class="image-container clearfix">
       <div class="phone-img" :class="{'phone-img-mp': isMiniprogramSetting}">
-        <img  src="static/images/phone_shell.png">
+        <img src="static/images/phone_shell.png">
         <mobile-preview class="preview-iframe" :feedback="false"></mobile-preview>
       </div>
       <div class="code-container" :class="{'code-container-mp': isMiniprogramSetting}">
