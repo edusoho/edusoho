@@ -82,6 +82,9 @@ class ChaosThreadsPosts extends BaseResource
         $threadIds = ArrayToolkit::column($threadPosts, 'threadId');
         $threadIds = isset($questionIds) ? array_merge($questionIds, $threadIds) : $threadIds;
 
+        if (empty($threadIds)) {
+            return array();
+        }
         $courseThreads = $this->getCourseThreadService()->searchThreads(array('ids' => $threadIds), 'postedNotStick', $start, $limit);
 
         if (empty($courseThreads)) {
