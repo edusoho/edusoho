@@ -2,38 +2,41 @@
 
 namespace ApiBundle\Api\Resource\MarketingActivity;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Marketing\MarketingAPIFactory;
 use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use ApiBundle\Api\Exception\ErrorCode;
 
 class MarketingActivityUrl extends AbstractResource
 {
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function add(ApiRequest $request, $activityId)
     {
         $params = $request->request->all();
-        if (!ArrayToolkit::requireds($params, array('domainUri', 'itemUri', 'source', 'grouponId'))) {
+        if (!ArrayToolkit::requireds($params, array('domainUri', 'itemUri', 'source'))) {
             throw new BadRequestHttpException('params missed', null, ErrorCode::INVALID_ARGUMENT);
         }
         $user = $this->getCurrentUser();
-        if (empty($user['verifiedMobile'])) {
-            throw $this->createNotFoundException('mobile not found');
-        }
         $client = MarketingAPIFactory::create('/h5');
         try {
             $activityUrl = $client->post(
                 '/activity_by_mobile',
                 array(
                     'activityId' => $activityId,
-                    'mobile' => $user['verifiedMobile'],
+                    'mobile' => empty($user['verifiedMobile']) ? '' : $user['verifiedMobile'],
+                    'isLogin' => 0 == $user['id'] ? 0 : 1,
                     'domainUri' => $params['domainUri'],
                     'itemUri' => $params['itemUri'],
                     'source' => $params['source'],
-                    'grouponId' => $params['grouponId'],
                 )
             );
         } catch (\Exception $e) {
-            throw $this->createNotFoundException($e->getMessage());
+            throw new BadRequestHttpException($e->getMessage(), null, ErrorCode::BAD_REQUEST);
         }
 
         return $activityUrl;

@@ -1117,6 +1117,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             }
         }
 
+        if (!empty($fields['title'])) {
+            $fields['title'] = $this->purifyHtml($fields['title'], true);
+        }
+
+        if (!empty($fields['subtitle'])) {
+            $fields['subtitle'] = $this->purifyHtml($fields['subtitle'], true);
+        }
+
         if (!empty($fields['summary'])) {
             $fields['summary'] = $this->purifyHtml($fields['summary'], true);
         }

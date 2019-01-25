@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Coupon\CouponFilter;
 use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\MarketingActivity\MarketingActivityFilter;
 
 class PageDiscoveryFilter extends Filter
 {
@@ -19,6 +20,8 @@ class PageDiscoveryFilter extends Filter
             $courseFilter->setMode(Filter::PUBLIC_MODE);
             foreach ($data['data']['items'] as &$course) {
                 $courseFilter->filter($course);
+                unset($course['summary']);
+                unset($course['courseSet']['summary']);
             }
         }
 
@@ -27,6 +30,7 @@ class PageDiscoveryFilter extends Filter
             $classroomFilter->setMode(Filter::PUBLIC_MODE);
             foreach ($data['data']['items'] as &$classroom) {
                 $classroomFilter->filter($classroom);
+                unset($classroom['about']);
             }
         }
 
@@ -48,10 +52,22 @@ class PageDiscoveryFilter extends Filter
                     $vipLevelFilter->setMode(Filter::PUBLIC_MODE);
                     $vipLevelFilter->filter($couponBatch['target']);
                 }
+                if ('course' == $couponBatch['targetType'] && !empty($couponBatch['target'])) {
+                    unset($couponBatch['target']['summary']);
+                }
+                if ('classroom' == $couponBatch['targetType'] && !empty($couponBatch['target'])) {
+                    unset($couponBatch['target']['about']);
+                }
                 if (!empty($couponBatch['currentUserCoupon'])) {
                     $couponFilter->filter($couponBatch['currentUserCoupon']);
                 }
             }
+        }
+
+        if (in_array($data['type'], array('cut', 'seckill', 'groupon'))) {
+            $marketingActivityFilter = new MarketingActivityFilter();
+            $marketingActivityFilter->setMode(Filter::SIMPLE_MODE);
+            $marketingActivityFilter->filter($data['data']['activity']);
         }
     }
 }
