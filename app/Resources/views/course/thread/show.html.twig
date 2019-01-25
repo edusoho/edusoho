@@ -18,7 +18,18 @@
         {% if thread.type == 'question' %}
         <span class="label label-info">{{'thread.status.question'|trans}}</span>
         {% endif %}
-        {{ thread.title }}
+          {% if thread.title == '' %}
+            {% if thread.questionType == 'video' %}
+              {% set questionType = 'course.thread.question_type.video'|trans %}
+            {% elseif thread.questionType == 'image' %}
+              {% set questionType = 'course.thread.question_type.image'|trans %}
+            {% elseif thread.questionType == 'audio' %}
+              {% set questionType = 'course.thread.question_type.audio'|trans %}
+            {% else %}
+              {% set questionType = 'course.thread.question_type.content'|trans %}
+            {% endif %}
+        {% endif %}
+        {{ thread.title|default('course.thread.question.title'|trans({'%questionType%':questionType|default('course.thread.question_type.content'|trans)})) }}
       </h2>
       <div class="thread-metas">
         By {{  web_macro.user_link(author, 'link-primary') }}

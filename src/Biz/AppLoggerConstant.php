@@ -180,6 +180,13 @@ class AppLoggerConstant implements LoggerConstantInterface
      */
     const MOBILE = 'mobile';
 
+    /**
+     *  [$PUSH 推送]
+     *
+     * $var string
+     */
+    const PUSH = 'push';
+
     public function getActions()
     {
         return array(
@@ -236,6 +243,11 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'close_course',
                 'update_draft',
                 'join_course',
+            ),
+
+            self::PUSH => array(
+                'course_thread_create',
+                'course_thread_post_create',
             ),
 
             self::USER => array(
@@ -482,6 +494,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::CRONTAB,
             self::LIVE,
             self::MOBILE,
+            self::PUSH,
 //            self::COIN,
 //            self::COUPON,
 //            self::DISCOUNT,

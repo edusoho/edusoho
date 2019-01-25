@@ -5819,6 +5819,7 @@ admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
 admin.developer_xapi_address: XAPI address
 admin.developer_face_address: AI Face API address
+admin.developer_push_address: Push API address
 admin.developer_setting.cloud_api_server_address: 'Cloud services API address'
 admin.developer_setting.address: Address
 admin.developer_setting.im_api_address: 'IMAPI Address'
@@ -7100,6 +7101,7 @@ log.module.role: 'Role'
 log.module.thread: 'Thread'
 log.module.mobile: 'Mobile'
 log.module.wap: 'Wap'
+log.module.push: 'Push'
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -7227,6 +7229,8 @@ log.action.system.customerServiceSetting: 'Customer service'
 log.action.system.setting_userCenter: 'User center settings'
 log.action.system.update_block: 'Update block'
 log.action.system.update_app_version: 'Update Version'
+log.action.push.course_thread_create: 'Ask question push'
+log.action.push.course_thread_post_create: 'Answer question push'
 log.action.classroom.create: 'Add classroom'
 log.action.classroom.update: 'Update classroom'
 log.action.classroom.delete: 'Delete classroom'

@@ -108,6 +108,14 @@ class QiQiuYunSDK
     }
 
     /**
+     * @return \QiQiuYun\SDK\Service\PushService
+     */
+    public function getPushService()
+    {
+        return $this->getService('Push');
+    }
+
+    /**
      * 创建API请求认证类实例
      *
      * @param string $accessKey
