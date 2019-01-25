@@ -107,7 +107,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $count = $this->getQuestionService()->searchCount($conditions);
             $questions = $this->getQuestionService()->search(
                 $conditions,
-                array('createdTime' => 'DESC'),
+                array('id' => 'DESC'),
                 0,
                 $count
             );

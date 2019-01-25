@@ -64,6 +64,7 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
         );
 
         $declares['orderbys'] = array(
+            'id',
             'createdTime',
             'updatedTime',
         );
