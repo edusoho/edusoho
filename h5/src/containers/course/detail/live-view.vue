@@ -33,7 +33,7 @@ export default {
       this.$router.push({
         name: 'login',
         query: {
-          redirect: this.redirect
+          redirect: this.redirect,
         }
       });
       return;

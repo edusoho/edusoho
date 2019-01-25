@@ -1,12 +1,23 @@
 <template>
   <module-frame containerClass="setting-groupon" :isActive="active" :isIncomplete="incomplete">
     <div slot="preview" class="groupon-container">
-      <groupon :activity="copyModuleData.activity" :tag="copyModuleData.tag"></groupon>
+      <activity
+        :activity="copyModuleData.activity"
+        :tag="copyModuleData.tag"
+        :showTitle="radio"
+        :type="moduleData.type"
+        :feedback="false">
+      </activity>
     </div>
     <div slot="setting" class="groupon-allocate">
-      <header class="title">活动设置</header>
+      <header class="title">{{ activityTitle }}</header>
       <div class="groupon-item-setting clearfix">
         <div class="groupon-item-setting__section clearfix">
+          <!-- 标题栏 -->
+          <setting-cell title="标题栏：" class="mbm">
+            <el-radio v-model="radio" label="show">显示</el-radio>
+            <el-radio v-model="radio" label="unshow">不显示</el-radio>
+          </setting-cell>
           <p class="pull-left section-left">活动：</p>
           <div class="section-right">
             <div class="required-option">
@@ -22,28 +33,30 @@
         </div>
         <div class="groupon-item-setting__section clearfix">
           <p class="pull-left section-left">活动标签：</p>
-          <div class="section-right">
+          <div class="section-right pull-left">
             <el-input size="mini" v-model="copyModuleData.tag" maxLength="8" placeholder="请输入活动名称" clearable></el-input>
           </div>
         </div>
       </div>
     </div>
-    <course-modal slot="modal" :visible="modalVisible" limit=1 :courseList="courseSets" @visibleChange="modalVisibleHandler" @updateCourses="getUpdatedCourses" type="groupon">
+    <course-modal slot="modal" :visible="modalVisible" limit=1 :courseList="courseSets" @visibleChange="modalVisibleHandler" @updateCourses="getUpdatedCourses" :type="moduleData.type">
     </course-modal>
   </module-frame>
 </template>
 
 <script>
-import groupon from '@/containers/components/e-marketing/e-groupon';
+import activity from '@/containers/components/e-marketing/e-activity';
 import moduleFrame from '../module-frame';
 import courseModal from '../course/modal/course-modal';
+import settingCell from '../module-frame/setting-cell';
 
 export default {
   name: 'marketing-groupon',
   components: {
     moduleFrame,
     courseModal,
-    groupon,
+    activity,
+    settingCell
   },
   props: {
     active: {
@@ -73,6 +86,20 @@ export default {
     },
     activityName() {
       return this.moduleData.data.activity.name;
+    },
+    activityTitle() {
+      const type = this.moduleData.type;
+      if (type === 'seckill') return '秒杀设置';
+      if (type === 'cut') return '砍价设置';
+      return '拼团设置';
+    },
+    radio: {
+      get() {
+        return this.copyModuleData.titleShow;
+      },
+      set(value) {
+        this.copyModuleData.titleShow = value;
+      }
     },
   },
   methods: {

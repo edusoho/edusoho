@@ -39,6 +39,8 @@
 import Api from '@/api'
 import axios from 'axios'
 import { mapState } from 'vuex';
+import { Toast } from 'vant';
+
 export default {
   data () {
     return {
@@ -66,6 +68,8 @@ export default {
       query: {
         type: 'payment'
       }
+    }).catch(err => {
+      Toast.fail(err.message)
     })
     if (this.paySettings.alipayEnabled && !this.inWechat) {
       this.payWay = 'Alipay_LegacyH5';
@@ -85,6 +89,8 @@ export default {
         }
       }).then(res => {
         this.detail = Object.assign({}, res)
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     } else {
       // 从我的订单入口进入
@@ -99,6 +105,8 @@ export default {
           })
         }
         this.detail = Object.assign({}, res)
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     }
   },
@@ -132,13 +140,15 @@ export default {
           return;
         }
         window.location.href = res.payUrl
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     },
     isWeixinBrowser (){
       return /micromessenger/.test(navigator.userAgent.toLowerCase())
     },
     getTradeInfo(tradeSn) {
-      // 轮询问检测微信内支付是否支付成功
+      // 轮询问检测微信外支付是否支付成功
       return Api.getTrade({
         query: {
           tradesSn: tradeSn,
@@ -151,6 +161,8 @@ export default {
         this.timeoutId = setTimeout(() => {
           this.getTradeInfo(tradeSn);
         },2000)
+      }).catch(err => {
+        Toast.fail(err.message)
       })
     }
   }

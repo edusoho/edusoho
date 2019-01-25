@@ -21,6 +21,8 @@
   </div>
 </template>
 <script>
+import activityMixin from '@/mixins/activity';
+import redirectMixin from '@/mixins/saveRedirect';
 import { mapActions } from 'vuex';
 import { Toast } from 'vant';
 import axios from 'axios';
@@ -28,6 +30,7 @@ import Api from '@/api';
 import * as types from '@/store/mutation-types';
 
 export default {
+  mixins: [activityMixin, redirectMixin],
   data() {
     return {
       regular: false,
@@ -120,11 +123,7 @@ export default {
               user: loginUser,
             });
           }
-          const redirect = decodeURIComponent(this.$route.query.redirect || 'find');
-          const jumpAction = () => {
-            this.$router.push({path: redirect});
-          }
-          setTimeout(jumpAction, 3000);
+          this.afterLogin();
         } else {
           if (res.lastFailed === 1) {
             Toast.fail({
@@ -160,7 +159,7 @@ export default {
     },
     isWeixin(){
       const ua = navigator.userAgent.toLowerCase();
-      return (ua.match(/MicroMessenger/i) == 'micromessenger') ? true : false;
+      return ua.match(/MicroMessenger/i) == 'micromessenger';
     },
     feedbackAction() {
       if (!this.isWeixin()) {

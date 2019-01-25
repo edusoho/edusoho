@@ -15,6 +15,12 @@
     <div class="course-detail__head--img"
       v-show="sourceType === 'img' || isEncryptionPlus">
       <img :src="courseSet.cover.large" alt="">
+      <countDown
+        v-if="seckillActivities && seckillActivities.status === 'ongoing' && counting && !isEmpty"
+        :activity="seckillActivities"
+        @timesUp="expire"
+        @sellOut="sellOut">
+      </countDown>
     </div>
     <div id="course-detail__head--video"
       ref="video"
@@ -27,21 +33,33 @@ import loadScript from 'load-script';
 import { mapState } from 'vuex';
 import Api from '@/api'
 import { Toast } from 'vant';
+import countDown from '@/containers/components/e-marketing/e-count-down/index';
 
 export default {
+  components: {
+    countDown
+  },
   data() {
     return {
       isEncryptionPlus: false,
       mediaOpts: {},
       isCoverOpen: false,
       isPlaying: false,
-      player: null
+      player: null,
+      counting: true,
+      isEmpty: false
     };
   },
   props: {
     courseSet: {
       type: Object,
-      default: {}
+      default: () => {
+        return {};
+      },
+    },
+    seckillActivities: {
+      type: Object,
+      default: null
     }
   },
   computed: {
@@ -159,6 +177,13 @@ export default {
       }
       return Promise.resolve(window.VideoPlayerSDK);
     },
+    expire() {
+      this.counting = false;
+    },
+    sellOut() {
+      this.isEmpty = true
+      this.$emit('goodsEmpty')
+    }
   }
 }
 </script>

@@ -243,7 +243,7 @@
         !details.allowAnonymousPreview && this.$route.push({
           name: 'login',
           query: {
-            redirect: this.redirect
+            redirect: this.redirect,
           }
         });
         if (!this.joinStatus

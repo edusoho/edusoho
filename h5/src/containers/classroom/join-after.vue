@@ -178,8 +178,8 @@
       },
       callConfirm(message, callback) {
         Dialog.confirm({
+          message,
           title: '',
-          message: message,
         }).then(() => {
           callback();
         }).catch(() => {})

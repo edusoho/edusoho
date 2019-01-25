@@ -16,11 +16,12 @@
         :class="imageMode[part.data.responsive]"
         :poster="part.data"
         :feedback="feedback"></e-poster>
-      <e-groupon
-        v-if="part.type == 'groupon'"
-        :tag="part.data.tag"
+      <e-market-part
         class="gray-border-bottom"
-        :activity="part.data.activity"></e-groupon>
+        v-if="['groupon', 'cut', 'seckill'].includes(part.type)"
+        :tag="part.data.tag"
+        :type="part.type"
+        :activity="part.data.activity"></e-market-part>
       <div class="coupon-preview__container gray-border-bottom" v-if="part.type == 'coupon'">
         <e-coupon-list
           :coupons="part.data.items"
@@ -45,7 +46,7 @@
   import courseList from '@/containers/components/e-course-list/e-course-list.vue';
   import poster from '@/containers/components/e-poster/e-poster.vue';
   import swipe from '@/containers/components/e-swipe/e-swipe.vue';
-  import groupon from '@/containers/components/e-marketing/e-groupon';
+  import marketPart from '@/containers/components/e-marketing/e-activity';
   import coupon from '@/containers/components/e-coupon-list/e-coupon-list';
   import vipList from '@/containers/components/e-vip-list/e-vip-list';
   import { mapActions } from 'vuex';
@@ -55,7 +56,7 @@
       'e-course-list': courseList,
       'e-swipe': swipe,
       'e-poster': poster,
-      'e-groupon': groupon,
+      'e-market-part': marketPart,
       'e-coupon-list': coupon,
       'e-vip-list': vipList
     },

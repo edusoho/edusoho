@@ -49,15 +49,18 @@ const head = {
     }, {
       col: 1,
       title: '商品原价',
-      label: 'originPrice',
+      label: 'rule',
+      subProperty: 'originPrice',
     }, {
       col: 1,
       title: '团长价格',
-      label: 'ownerPrice',
+      label: 'rule',
+      subProperty: 'ownerPrice',
     }, {
       col: 1,
       title: '团员价格',
-      label: 'memberPrice',
+      label: 'rule',
+      subProperty: 'memberPrice',
     }, {
       col: 3,
       title: '创建时间',
@@ -66,6 +69,67 @@ const head = {
       col: 0,
       title: '操作',
       label: 'delete',
+    }
+  ],
+  cut: [
+    {
+      col: 3,
+      title: '活动名称',
+      label: 'name',
+    },
+     {
+      col: 2,
+      title: '商品原价',
+      label: 'originPrice',
+    }, {
+      col: 1,
+      title: '最低售价',
+      label: 'rule',
+      subProperty: 'lowestPrice',
+    }, {
+      col: 1,
+      title: '砍价次数',
+      label: 'rule',
+      subProperty: 'times'
+    }, {
+      col: 3,
+      title: '创建时间',
+      label: 'createdTime',
+    }, {
+      col: 0,
+      title: '操作',
+      label: 'delete'
+    }
+  ],
+  seckill: [
+    {
+      col: 3,
+      title: '活动名称',
+      label: 'name',
+    },
+     {
+      col: 2,
+      title: '商品原价',
+      label: 'rule',
+      subProperty: 'originPrice'
+    }, {
+      col: 1,
+      title: '秒杀价',
+      label: 'rule',
+      subProperty: 'seckillPrice'
+    }, {
+      col: 1,
+      title: '商品个数',
+      label: 'rule',
+      subProperty: 'productSum'
+    }, {
+      col: 3,
+      title: '创建时间',
+      label: 'createdTime',
+    }, {
+      col: 0,
+      title: '操作',
+      label: 'delete'
     }
   ],
   coupon: [
@@ -95,7 +159,7 @@ const head = {
       title: '操作',
       label: 'delete'
     }
-  ]
+  ],
 };
 
 export default head;

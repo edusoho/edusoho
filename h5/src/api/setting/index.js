@@ -20,7 +20,8 @@ export default [
     // 获取全局设置
     name: 'getSettings',
     url: '/settings/{type}',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }, {
     // 后台配置保存草稿数据
     name: 'saveDraftDate',
@@ -36,5 +37,17 @@ export default [
     name: 'updateFile',
     url: '/files',
     method: 'POST'
+  },
+  {
+    name: 'weixinConfig',
+    url: '/settings/weixinConfig',
+    method: 'GET',
+    disableLoading: true
+  },
+  {
+    name: 'loginConfig',
+    url: '/settings/login',
+    method: 'GET',
+    disableLoading: true
   }
 ];

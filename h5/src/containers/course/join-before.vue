@@ -1,14 +1,18 @@
 <template>
   <div :class="isClassCourse ? '' : 'join-before'">
     <detail-head
-      :price="details.price" :courseSet="details.courseSet"></detail-head>
+      :price="details.price"
+      :courseSet="details.courseSet"
+      @goodsEmpty="sellOut"
+      :seckillActivities="marketingActivities.seckill"></detail-head>
 
-    <detail-plan @getLearnExpiry="getLearnExpiry"></detail-plan>
+    <detail-plan @getLearnExpiry="getLearnExpiry" @switchPlan="switchPlan"></detail-plan>
     <div class="segmentation"></div>
 
     <!-- 优惠活动 -->
-    <template v-if="!isClassCourse && Number(details.price) !== 0 && unreceivedCoupons.length">
-      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons" />
+    <template v-if="showOnsale">
+      <onsale :unreceivedCoupons="unreceivedCoupons" :miniCoupons="miniCoupons"
+        :activities="marketingActivities"/>
       <div class="segmentation"></div>
     </template>
 
@@ -37,8 +41,12 @@
     <!-- 学员评价 -->
     <review-list ref="review" :targetId="details.courseSet.id" :reviews="details.reviews" title="学员评价" type="course" defaulValue="暂无评价"></review-list>
 
-    <e-footer v-if="!isClassCourse" :disabled="!accessToJoin" @click.native="handleJoin">
+    <!-- 加入学习 -->
+    <e-footer v-if="!isClassCourse && (!marketingActivities.seckill || ((marketingActivities.seckill && isEmpty) || details.price == 0))" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
+    <!-- 秒杀 -->
+    <e-footer v-if="showSeckill" :disabled="!accessToJoin" :half="!!showSeckill" @click.native="handleJoin">{{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
+    <e-footer v-if="showSeckill" :half="!!showSeckill" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
   </div>
 </template>
 <script>
@@ -52,12 +60,14 @@
   import { mapActions, mapState } from 'vuex';
   import redirectMixin from '@/mixins/saveRedirect';
   import Api from '@/api';
+  import getCouponMixin from '@/mixins/coupon/getCouponHandler';
+  import getActivityMixin from '@/mixins/activity/index';
 
   const TAB_HEIGHT = 44;
 
   export default {
     name: 'joinBefore',
-    mixins: [redirectMixin],
+    mixins: [redirectMixin, getCouponMixin, getActivityMixin],
     data() {
       return {
         tabs: ['课程介绍', '课程目录', '学员评价'],
@@ -72,8 +82,12 @@
           courseTop: 0,
           reviewTop: 0,
         },
+        isEmpty: true,
         unreceivedCoupons: [],
         miniCoupons: [],
+        marketingActivities: {
+          seckill: {}
+        },
       };
     },
     components: {
@@ -110,10 +124,25 @@
           vipAccess = !vipExpired;
         }
         return vipAccess;
-      }
+      },
+      showOnsale() {
+        return !this.isClassCourse && Number(this.details.price) !== 0
+          && (!!(this.unreceivedCoupons.length
+            || Object.keys(this.marketingActivities).length
+            && !this.onlySeckill));
+      },
+      onlySeckill() {
+        return Object.keys(this.marketingActivities).length === 1
+          && this.marketingActivities.seckill;
+      },
+      showSeckill() {
+        return !this.isClassCourse && Number(this.details.price) !== 0
+          && this.marketingActivities.seckill && !this.isEmpty;
+      },
     },
     mounted() {
       if (!this.isClassCourse) {
+        // 获取促销优惠券
         Api.searchCoupon({
           params: {
             targetId: this.details.courseSet.id,
@@ -124,6 +153,17 @@
 
           this.miniCoupons = this.unreceivedCoupons.length > 3 ?
             this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
+        }).catch(err => {
+          console.error(err);
+        });
+        // 获取营销活动
+        Api.coursesActivities({
+          query: { id: this.details.id }
+        }).then(res => {
+          this.marketingActivities = res;
+          this.isEmpty = res.seckill ? !+res.seckill.productRemaind : true;
+        }).catch(err => {
+          console.error(err);
         });
       }
 
@@ -196,7 +236,7 @@
           this.$router.push({
             name: 'login',
             query: {
-              redirect: this.redirect
+              redirect: this.redirect,
             }
           });
           return;
@@ -228,6 +268,18 @@
         this.startDateStr = data.startDateStr;
         this.endDateStr = data.endDateStr;
       },
+      // 切换计划
+      switchPlan() {
+        // 获取营销活动
+        this.marketingActivities = {};
+        Api.coursesActivities({
+          query: { id: this.details.id }
+        }).then(res => {
+          this.marketingActivities = res;
+        }).catch(err => {
+          console.error(err);
+        });
+      },
       // 创建订单
       getOrder() {
         const expiryMode = this.details.learningExpiryDate.expiryMode;
@@ -243,6 +295,9 @@
             targetType: 'course',
           }
         });
+      },
+      sellOut() {
+        this.isEmpty = true;
       }
     },
   }

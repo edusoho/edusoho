@@ -14,6 +14,7 @@ export default [
   }, {
     name: 'getVipLevels',
     url: '/plugins/vip/vip_levels',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }
 ];

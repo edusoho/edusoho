@@ -55,7 +55,7 @@
         this.$router.push({
           name: 'login',
           query: {
-            redirect: this.$route.fullPath
+            redirect: this.$route.fullPath,
           }
         });
         return;

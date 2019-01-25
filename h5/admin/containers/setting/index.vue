@@ -30,7 +30,7 @@
       </div>
 
       <!-- h5配置——底部添加组件按钮 -->
-      <div class="find-section clearfix" v-if="portal === 'h5' || !supportGrouponVersion">
+      <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportGrouponVersion">
         <div class="section-title">点击添加组件</div>
         <div class="section-button-group">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
@@ -42,16 +42,18 @@
       </div>
 
       <!-- 小程序配置——底部添加组件按钮 -->
-      <div class="find-section clearfix" v-if="portal === 'miniprogram' && supportGrouponVersion">
+      <div class="multi-find-section find-section clearfix" v-if="portal === 'h5' || supportGrouponVersion">
         <div class="section-title">基础组件</div>
-        <div class="section-button-group">
+        <div class="section-button-group clearfix">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
             v-for="(item, index) in baseModules" :key="`base-${index}`">
             {{ item.name }}
           </el-button>
         </div>
-        <div class="section-title">营销组件 <a class="color-primary pull-right text-12" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a></div>
-        <div class="section-button-group">
+        <div class="section-title">营销组件
+          <a class="color-primary pull-right text-12" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a>
+        </div>
+        <div class="section-button-group clearfix">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
             v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
             {{ item.name }}
@@ -135,14 +137,17 @@ export default {
   },
   created() {
     // 获取小程序版本号
-    Api.getMPVersion().then(res => {
-      this.currentMPVersion = res.current_version.version
-    }).catch((err) => {
-      this.$message({
-        message: err.message,
-        type: 'error'
+    if (this.portal === 'miniprogram') {
+      Api.getMPVersion().then(res => {
+        this.currentMPVersion = res.current_version.version
+      }).catch((err) => {
+        this.currentMPVersion = '0.0.0';
+        this.$message({
+          message: err.message,
+          type: 'error'
+        });
       });
-    });
+    }
 
     // 请求发现页配置
     this.load();
@@ -190,7 +195,8 @@ export default {
       this.modules.splice(index, 1);
     },
     addModule(data, index) {
-      /* 后台会员组件交互处理:
+      /*
+       * 后台会员组件交互处理:
        * 会员插件未安装：隐藏按钮 (vipSetupStatus)
        * 会员插件未升级：/admin/app/upgrades (vipPlugin)
        * 未开通会员功能：/admin/setting/vip (vipSettings)

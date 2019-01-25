@@ -3,15 +3,15 @@
     <e-loading v-if="isLoading"></e-loading>
     <div class="user-section gray-border-bottom clearfix">
       <div v-if="user">
-        <img v-if="user.avatar" class='user-img' :src="user.avatar.large" />
+        <img v-if="user.avatar" class="user-img" :src="user.avatar.large" />
         <div class="user-middle">
-          <div class='user-name'>{{ user.nickname }}</div>
-          <span class='user-vip' v-if="vipInfo">
+          <div class="user-name">{{ user.nickname }}</div>
+          <span class="user-vip" v-if="vipInfo">
             <img v-if="vipInfo.icon" :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="vipInfo.icon">
             <span v-if="!vipDated">{{ vipInfo.vipName }}</span>
-            <span class="grey" v-else>{{ vipInfo.vipName }}已过期</span>
+            <span class="grey vip-name vip-name-short text-overflow" v-else>{{ vipInfo.vipName }}已过期</span>
           </span>
-          <span class='user-vip' v-else>
+          <span class="user-vip" v-else>
             您还不是会员
           </span>
         </div>
@@ -21,7 +21,7 @@
         </div>
       </div>
       <router-link :to="{path: '/login', query: { redirect : '/vip'}}" v-else>
-        <img class='user-img' src="static/images/avatar.png" />
+        <img class="user-img" src="static/images/avatar.png" />
         <div class="user-middle single-middle">
           <div :class="['user-vip', !user ? 'text-middle' : '']">
             立即登录，查看会员权益
@@ -46,9 +46,9 @@
       v-if="courseData"
       class="gray-border-bottom"
       :courseList="courseData"
-      :vipName="levels[this.currentLevelIndex].name"
+      :vipName="levels[currentLevelIndex].name"
       :moreType="'vip'"
-      :levelId="Number(levels[this.currentLevelIndex].id)"
+      :levelId="Number(levels[currentLevelIndex].id)"
       :typeList="'course_list'"/>
 
     <!-- 会员免费班级 -->
@@ -56,14 +56,14 @@
       v-if="classroomData"
       class="gray-border-bottom"
       :moreType="'vip'"
-      :levelId="Number(levels[this.currentLevelIndex].id)"
+      :levelId="Number(levels[currentLevelIndex].id)"
       :courseList="classroomData"
-      :vipName="levels[this.currentLevelIndex].name"
+      :vipName="levels[currentLevelIndex].name"
       :typeList="'classroom_list'"/>
 
     <!-- 加入会员 -->
     <e-popup class="vip-popup" v-if="priceItems[currentLevelIndex]"
-     :show.sync="vipPopShow" :title="btnStatus + levels[this.currentLevelIndex].name" contentClass="vip-popup__content">
+     :show.sync="vipPopShow" :title="btnStatus + levels[currentLevelIndex].name" contentClass="vip-popup__content">
       <div class="vip-popup__header text-14">选择{{ btnStatus }}时长</div>
       <div class="vip-popup__body">
         <van-row gutter="20">
@@ -101,7 +101,7 @@ export default {
   data() {
     return {
       user: {},
-      vipInfo: {},
+      vipInfo: null,
       vipUser: {},
       levels: [{
         courses: {
@@ -130,7 +130,7 @@ export default {
       if (!this.vipInfo) return false;
       const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
       const nowStamp = new Date().getTime();
-      return nowStamp > deadlineStamp ? true : false;
+      return nowStamp > deadlineStamp;
     },
     courseData() {
       const data = this.levels[this.currentLevelIndex].courses.data;
@@ -157,7 +157,7 @@ export default {
       return dataFormat;
     },
     vipDeadline() {
-      if (!Object.values(this.vipInfo).length) return false;
+      if (!Object.values(this.vipInfo).length) return '';
       const time = new Date(this.vipInfo.deadline);
       return formatFullTime(time);
     },
@@ -165,7 +165,7 @@ export default {
       if (!this.vipInfo) return '开通';
       const currentSeq = Number(this.levels[this.currentLevelIndex].seq);
       const userSeq = this.vipInfo.seq;
-      if (userSeq > currentSeq) return false;
+      if (userSeq > currentSeq) return '';
       if (this.vipDated) return '开通';
       return userSeq < currentSeq ? '升级' : '续费';
     },
@@ -181,7 +181,7 @@ export default {
       this.$router.push({name: 'find'});
       return;
     }
-    Api.getVipLevels().then((res) => {
+    Api.getVipLevels({ disableLoading: false }).then((res) => {
       if (!res.length) {
         this.$router.push({name: 'find'});
         return;
@@ -287,11 +287,7 @@ export default {
       } else {
         topSize = this.$refs.joinBtnTop.getBoundingClientRect().bottom;
       }
-      if (topSize < num) {
-        this.bottomBtnShow = true;
-      } else {
-        this.bottomBtnShow = false;
-      }
+      this.bottomBtnShow = topSize < num;
     },
     popShow() {
       if (!this.user) {
