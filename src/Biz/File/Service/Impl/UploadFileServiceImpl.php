@@ -262,7 +262,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $params['userId'] = $user['id'];
         $params = ArrayToolkit::parts($params, array(
             'id',
-            'directives',
             'userId',
             'targetId',
             'targetType',
@@ -389,7 +388,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $file = $this->getUploadFileInitDao()->update($params['id'], array('status' => 'ok'));
 
-            if ('cloud' == $file['storage'] && 'video' == $file['type']) {
+            if ('cloud' == $file['storage'] && 'video' == $file['type'] && 'direct' != $params['uploadType']) {
                 $fields['audioConvertStatus'] = 'doing';
             }
 
