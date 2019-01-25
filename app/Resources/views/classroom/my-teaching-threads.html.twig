@@ -41,14 +41,14 @@
                     {% if thread.type == 'question' %}
                       <span class="label label-info" title="{{'classroom.question'|trans}}">{{'classroom.question_label'|trans}}</span>
                     {% endif  %}
-                    <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+                    <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
                     {% if thread.nice %}
                       <span class="label label-warning" title="{{'classroom.nice_thread'|trans}}">{{'classroom.nice_thread_label'|trans}}</span>
                     {% endif %}
                   </div>
                   <div class="color-gray text-normal">
                     {% if classroom %}
-                      <span>{{'classroom.thread_post'|trans({'%name%':setting('classroom.name')|default('classroom'|trans) })}}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-primary">{{ classroom.title }}</a></span>
+                      <span>{{'classroom.thread_post'|trans({'%name%':setting('classroom.name')|default('classroom'|trans) })}}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-primary" target="_blank">{{ classroom.title }}</a></span>
                     {% else %}
                       <span>{{'classroom.deleted_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans) })}}</span>
                     {% endif %}

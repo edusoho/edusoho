@@ -14,7 +14,7 @@
             {% endif %}
             {% if (cloudFile.type == 'video' and cloudFile.audioConvertStatus == 'success') %}
               <div class="time">
-                {{ cloudFile.length|default(0)|date('i:s') }}
+                {{ cloudFile.length|default(0)|activity_length_format }}
               </div>
             {% endif %}
           </div>

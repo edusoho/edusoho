@@ -48,8 +48,12 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
     public function onCourseTaskFinish(Event $event)
     {
-        $user = $this->getCurrentUser();
-        if (empty($user) || !$user->isLogin()) {
+        $user = $event->getArgument('user');
+        if (empty($user)) {
+            return;
+        }
+
+        if ($user instanceof CurrentUser && !$user->isLogin()) {
             return;
         }
 

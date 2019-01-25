@@ -2022,6 +2022,10 @@ my_classroom_discussions:
     path: /my/classroom/discussions
     defaults: { _controller: AppBundle:My/Classroom:classroomDiscussions }
 
+my_classroom_questions:
+    path: /my/classroom/questions
+    defaults: { _controller: AppBundle:My/Classroom:classroomQuestions }
+
 my_questions:
     path: /my/questions
     defaults: { _controller: AppBundle:My/Thread:questions }

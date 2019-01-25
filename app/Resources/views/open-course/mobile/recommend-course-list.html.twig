@@ -17,7 +17,9 @@
         <a href="{{ showUrl }}" title="{{ course.title }}">{{ course.title }}</a>
       </div>
       <div class="metas">
-        <span class="pull-right">{{ 'open_course.student_num'|trans({'%num%':course.studentNum}) }}</span>
+        {% if setting('course.show_student_num_enabled', '1') == 1  %}
+          <span class="pull-right">{{ 'open_course.student_num'|trans({'%num%':course.studentNum}) }}</span>
+        {% endif %}
         {{ teacher.nickname }}
       </div>
     </div>

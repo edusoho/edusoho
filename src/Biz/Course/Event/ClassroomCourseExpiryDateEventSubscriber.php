@@ -36,13 +36,6 @@ class ClassroomCourseExpiryDateEventSubscriber extends EventSubscriber implement
                         'expiryValue' => $fields['expiryValue'],
                     ));
                 }
-
-                if ($this->canUpdateCoursesMembersDeadline($classroom, $fields['expiryMode'])) {
-                    $this->updateCoursesStudentsDeadline($classroom['id'], array(
-                        'expiryValue' => $fields['expiryValue'],
-                        'expiryMode' => $fields['expiryMode'],
-                    ));
-                }
             }
 
             $db->commit();

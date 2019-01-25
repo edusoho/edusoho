@@ -11,7 +11,7 @@
   <div class="panel-heading">{{'my.learning.question'|trans}}
   </div>
   <div class="panel-body">
-
+    {% include 'my/learning/thread/tab.html.twig' with {type: 'question'} %}
     {% if threads %}
 	    {% include 'my/learning/thread/thread-list.html.twig'  with {type: 'question'} %}
     {% else %}

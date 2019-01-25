@@ -15,6 +15,10 @@ services:
         class: ApiBundle\Security\Firewall\ThirdPartyOAuth2AuthenticationListener
         arguments: ['@service_container']
 
+    api_h5_third_party_oauth2_authentication_listener:
+        class: ApiBundle\Security\Firewall\H5ThirdPartyOAuth2AuthenticationListener
+        arguments: ['@service_container']
+
     api_token_header_listener:
         class: ApiBundle\Security\Firewall\XAuthTokenAuthenticationListener
         arguments: ['@service_container']
@@ -44,7 +48,7 @@ services:
     api_firewall:
         class: ApiBundle\Security\Firewall\Firewall
         arguments:
-            - ['@api_basic_authentication_listener', '@api_token_header_listener', '@api_old_token_header_listener', '@api_third_party_oauth2_authentication_listener', '@api_session_authentication_listener', '@api_web_lib_listener', '@api_anonymous_listener']
+            - ['@api_basic_authentication_listener', '@api_token_header_listener', '@api_old_token_header_listener', '@api_h5_third_party_oauth2_authentication_listener', '@api_third_party_oauth2_authentication_listener', '@api_session_authentication_listener', '@api_web_lib_listener', '@api_anonymous_listener']
 
     api_resource_kernel:
         class: ApiBundle\Api\ResourceKernel

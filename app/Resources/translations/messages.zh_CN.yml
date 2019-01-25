@@ -1252,11 +1252,13 @@ course.order.end_time: 结束时间
 course.replay_manage: 录播管理
 course.replay_manage.content_title: 录播管理
 course.replay_manage.empty: 暂无直播内容！
-course.replay_manage.tips: 提示：上传录像文件后无法再生成在线录像!
+course.replay_manage.tips: >
+  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
+  <div class="cd-text-medium"><b>注意，上传视频文件后无法再使用录制文件作为回放。</b></div>
 course.replay_manage.unpublished: 未发布
 course.replay_manage.live_not_stop: 直播未结束
-course.replay_manage.ungenerated: 未录制回放
-course.replay_manage.generated: 已录制回放
+course.replay_manage.ungenerated: 未生成回放
+course.replay_manage.generated: 已生成回放
 course.replay_manage.video_generated.file_exsist: 已上传录像
 course.replay_manage.video_generated.file_not_exsist: 回放视频文件已删除
 course.replay_manage.record: 录制
@@ -1998,11 +2000,13 @@ course.live.replay_manage.upload_mode_not_cloud_tips: >
 course.live.replay_manage.file_empty_tips: 暂无视频文件，请先上传。
 course.live.replay_manage.content_title: 录播管理
 course.live.replay_manage.lesson_empty_tips: 暂无课时内容！
-course.live.replay_manage.upload_tips: 提示：上传录像文件后 <b>无法再生成</b> 在线录像
+course.live.replay_manage.upload_tips: >
+  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
+  <div class="cd-text-medium"><b>注意，上传视频文件后无法再使用录制文件作为回放。</b></div>
 course.live.replay_manage.lesson_status.unpublished: 未发布
 course.live.replay_manage.lesson_status.published: 直播未结束
-course.live.replay_manage.lesson_replay_status.ungenerated: 未录制回放
-course.live.replay_manage.lesson_replay_status.generated: 已录制回放
+course.live.replay_manage.lesson_replay_status.ungenerated: 未生成回放
+course.live.replay_manage.lesson_replay_status.generated: 已生成回放
 course.live.replay_manage.lesson_replay_status.videoGenerated: 已上传录像
 course.live.replay_manage.lesson_replay_status.videoGenerated_and_file_empty: 回放视频文件已删除
 course.live.replay_manage.lesson_edit_btn: 编辑
@@ -2485,7 +2489,7 @@ classroom.expiry_mode_rule_tips: >
   ● 有效期修改规则
   <br>
   1. 未发布状态：任意修改，且保存的有效期设置，将在发布后生效<br>
-  2. 发布状态：只能修改当前有效期方式下的具体数值，如果是修改有效天数，则只会影响后续加入班级的学员，不影响已加入班级的学员；如果修改有效日期，则会所有学员，包括已加入班级和后续加入的班级<br>
+  2. 发布状态：只能修改当前有效期方式下的具体数值，如果是修改有效天数，则只会影响后续加入班级的学员，不影响已加入班级的学员；如果修改有效日期，则只会影响后续加入班级的学员，不影响已加入班级的学员<br>
   3. 关闭状态：无法修改<br>
   4. 在学员管理中，可以针对单个学员修改其有效期<br>
   <br>
@@ -2757,7 +2761,7 @@ user.register: 注册
 user.register.sms.sms_send: 短信推送
 user.register.sms.sms_send_to: 发送对象
 user.register.sms.in_classroom: %classroom.name%内
-user.register.sms.send_sms_nums: 预计发送量
+user.register.sms.send_sms_nums: 预计通知人数
 user.register.sms.send_content: 发送内容
 user.register.sms.start_regist: 现已开始报名
 user.register.sms.link_address: 链接地址
@@ -4291,6 +4295,8 @@ my.learning.note.delete: 删除笔记
 
 # 我的问答
 my.learning.question: 我的问答
+my.learning.class.question: 课程问答
+my.learning.classroom.question: 班级问答
 my.learning.question.empty: 暂无提问的记录
 my.learning.question.course_thread: 课程话题
 my.learning.question.classroom_thread: %classroomName%话题
@@ -9358,6 +9364,11 @@ user.learn.statistics.learned.seconds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
+user.learn.statistics.manage.describe_tips: >
+  <div style='width:250px;'>
+    <h5 style='color:blue;margin:5px 0;'>用户数据说明</h5>
+    <P style='margin:0;'>用户数据每日00:00-02:00间更新。</p>
+  </div>
 
 
 admin.datalab.setting.modal_title: 提示：

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+if [ $# -gt 1 ]; then
+	istring=''
+	#去掉回车
+	date=`date | tr -s ["\n"]`
+	for (( i = 2; i <= $#; i++ ))
+	do
+		string=$string" "${!i}
+	done
+	c="["$date"]"": "$string
+	echo "" >> $1
+	echo $c >> $1
+fi

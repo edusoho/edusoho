@@ -22,6 +22,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $discoverySettings = $this->getDefaultDiscovery($portal);
         }
 
+        return $this->filter($discoverySettings, $usage);
+    }
+
+    public function filter($discoverySettings, $usage = 'show')
+    {
         foreach ($discoverySettings as $key => &$discoverySetting) {
             $method = $this->getMethod($discoverySetting['type']);
             $method .= 'Filter';
@@ -153,13 +158,47 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function grouponFilter($discoverySetting, $usage = 'show')
     {
         $activity = $discoverySetting['data']['activity'];
-        $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        try {
+            $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        } catch (\Exception $e) {
+            $remoteActvity = null;
+        }
         if (empty($remoteActvity) || isset($remoteActvity['error'])) {
             return false;
         }
-        $discoverySetting['data']['activity']['status'] = $remoteActvity['status'];
-        $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
-        $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
+        $discoverySetting['data']['activity'] = $remoteActvity;
+
+        return $discoverySetting;
+    }
+
+    public function seckillFilter($discoverySetting, $usage = 'show')
+    {
+        $activity = $discoverySetting['data']['activity'];
+        try {
+            $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        } catch (\Exception $e) {
+            $remoteActvity = null;
+        }
+        if (empty($remoteActvity) || isset($remoteActvity['error'])) {
+            return false;
+        }
+        $discoverySetting['data']['activity'] = $remoteActvity;
+
+        return $discoverySetting;
+    }
+
+    public function cutFilter($discoverySetting, $usage = 'show')
+    {
+        $activity = $discoverySetting['data']['activity'];
+        try {
+            $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        } catch (\Exception $e) {
+            $remoteActvity = null;
+        }
+        if (empty($remoteActvity) || isset($remoteActvity['error'])) {
+            return false;
+        }
+        $discoverySetting['data']['activity'] = $remoteActvity;
 
         return $discoverySetting;
     }
