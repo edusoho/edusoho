@@ -598,7 +598,7 @@ EOD;
                         'data' => $data,
                     ));
                 } else {
-                    $this->getBlockService()->updateBlockTemplate($block['id'], array(
+                    $this->getBlockService()->updateBlockTemplate($block['blockTemplateId'], array(
                         'content' => $content,
                         'data' => $data,
                     ));
