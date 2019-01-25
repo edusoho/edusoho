@@ -467,7 +467,6 @@ class Logger
             self::ANNOUNCEMENT => '公告',
             self::OPEN_COURSE => '公开课',
             self::LIVE => '直播',
-            self::PUSH => '推送',
         );
     }
 }
