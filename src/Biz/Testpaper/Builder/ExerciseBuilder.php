@@ -111,7 +111,9 @@ class ExerciseBuilder implements TestpaperBuilderInterface
                 0,
                 $count
             );
+
             $questionIds = array_rand($questions, $exercise['itemCount']);
+            $questionIds = is_array($questionIds) ? $questionIds : array($questionIds);
             $randomQuestions = array();
             foreach ($questionIds as $id) {
                 $randomQuestions[$id] = $questions[$id];
