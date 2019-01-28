@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Testpaper;
 
-use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\UserService;
@@ -134,9 +133,6 @@ class TestpaperController extends BaseController
         $total = $this->makeTestpaperTotal($testpaper, $questions);
 
         $favorites = $this->getQuestionService()->findUserFavoriteQuestions($testpaperResult['userId']);
-        $favorites = array_map(function ($favorite) {
-            return ArrayToolkit::parts($favorite, array('id', 'questionId'));
-        }, $favorites);
 
         $student = $this->getUserService()->getUser($testpaperResult['userId']);
 
@@ -145,9 +141,6 @@ class TestpaperController extends BaseController
         $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-
-        $user = $this->getCurrentUser();
-        $isTeacher = $this->getCourseMemberService()->isCourseTeacher($activity['fromCourseId'], $user['id']) || $user->isAdmin() || $user->isSuperAdmin();
 
         return $this->render('testpaper/result.html.twig', array(
             'questions' => $questions,
@@ -164,7 +157,6 @@ class TestpaperController extends BaseController
             'action' => $request->query->get('action', ''),
             'target' => $testpaperActivity,
             'activity' => $activity,
-            'isTeacher' => $isTeacher,
         ));
     }
 
@@ -436,14 +428,6 @@ class TestpaperController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
-    }
-
-    /**
-     * @return MemberService
-     */
-    protected function getCourseMemberService()
-    {
-        return $this->createService('Course:MemberService');
     }
 
     /**
