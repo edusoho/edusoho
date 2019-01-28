@@ -388,8 +388,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $file = $this->getUploadFileInitDao()->update($params['id'], array('status' => 'ok'));
 
-            if ('cloud' == $file['storage'] && 'video' == $file['type'] && 'direct' != $params['uploadType']) {
+            if ('cloud' == $file['storage'] && 'video' == $file['type']) {
                 $fields['audioConvertStatus'] = 'doing';
+            }
+
+            if (isset($params['uploadType']) && 'direct' == $params['uploadType']) {
+                $fields['audioConvertStatus'] = '';
             }
 
             $file = array_merge($file, $fields);
