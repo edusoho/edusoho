@@ -1050,7 +1050,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'pass_through_type' => 'normal',
                     'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'], 'type' => 'course.thread.post.create')),
                     'title' => '课程回答',
-                    'description' => isset($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "有一个{$threadPostType}类型的回答",
+                    'description' => !empty($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "有一个{$threadPostType}类型的回答",
                 );
                 $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
                 $this->getLogService()->info(
