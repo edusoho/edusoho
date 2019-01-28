@@ -6757,6 +6757,8 @@ notification.truename-authenticate.pass: Your personal real name authentication,
 notification.truename-authenticate.reject: 'Your personal real name certification, audit failed! Reason for rejection:'
 notification.thread.post_create: %who% replied to you on discussion %thread%.
 notification.thread.post_at: %who% mentioned you in a reply to discussion %thread%.
+notification.question.post_create: %who% in %thread% answer you
+notification.question.post_ask: %who% in %thread% ask you
 notification.thread.at: %who% mentioned you in the discussion %thread%.
 notification.role: You are set to "%role%" by %who%.
 notification.questionRemind: Course %courseTitle% has new question %question%, please answer in time.
