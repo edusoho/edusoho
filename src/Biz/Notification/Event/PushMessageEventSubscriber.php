@@ -1001,8 +1001,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'questionCreatedTime' => $threadPost['thread']['createdTime'],
                     'questionTitle' => $threadPost['thread']['title'],
                     'postContent' => $threadPost['content'],
-                    'title' => "{$threadType}追问",
-                    'message' => !empty($threadPost['thread']['content']) ? $this->plainText(strip_tags($threadPost['thread']['content']), 10) : "你有一个{$threadType}的追问",
+                    'title' => "{$threadPostType}追问",
+                    'message' => !empty($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "你有一个{$threadPostType}的追问",
                 );
 
                 $from = array(
@@ -1038,7 +1038,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'questionCreatedTime' => $threadPost['thread']['createdTime'],
             'questionTitle' => $threadPost['thread']['title'],
             'postContent' => $threadPost['content'],
-            'title' => "{$threadType}回复",
+            'title' => "{$threadType}回答",
             'message' => !empty($threadPost['thread']['title']) ? "[{$postUser['nickname']}]回复了你的{$threadType}《{$threadPost['thread']['title']}》" : "[{$postUser['nickname']}]回复了你的{$threadPostType}{$threadType}",
         );
 
@@ -1049,8 +1049,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'reg_ids' => $devices['regId'],
                     'pass_through_type' => 'normal',
                     'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'], 'type' => 'course.thread.post.create')),
-                    'title' => '收到一条新回答',
-                    'description' => isset($threadPost['thread']['content']) ? $this->plainText(strip_tags($threadPost['thread']['content']), 10) : "有一个{$threadPostType}类型的回答",
+                    'title' => '课程回答',
+                    'description' => !empty($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "有一个{$threadPostType}类型的回答",
                 );
                 $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
                 $this->getLogService()->info(

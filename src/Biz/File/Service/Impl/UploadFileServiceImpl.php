@@ -262,7 +262,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $params['userId'] = $user['id'];
         $params = ArrayToolkit::parts($params, array(
             'id',
-            'directives',
             'userId',
             'targetId',
             'targetType',
@@ -391,6 +390,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             if ('cloud' == $file['storage'] && 'video' == $file['type']) {
                 $fields['audioConvertStatus'] = 'doing';
+            }
+
+            if (isset($params['uploadType']) && 'direct' == $params['uploadType']) {
+                unset($fields['audioConvertStatus']);
             }
 
             $file = array_merge($file, $fields);

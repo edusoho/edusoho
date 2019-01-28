@@ -24,6 +24,7 @@ class UploaderFinish extends AbstractResource
 
         $params = $request->query->all();
         $params['id'] = $fileId;
+        $params['uploadType'] = 'direct';
 
         if (empty($params)) {
             throw CommonException::ERROR_PARAMETER_MISSING();

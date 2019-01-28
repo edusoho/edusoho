@@ -230,6 +230,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 $params['directives']['watermarks'] = $watermarks;
             }
         }
+
         $apiResult = $this->createApi('root')->post('/resources/upload_form_init', $params);
         $apiResult['fileId'] = $file['id'];
         $apiResult['globalId'] = $apiResult['no'];
