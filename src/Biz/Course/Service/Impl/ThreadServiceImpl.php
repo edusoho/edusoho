@@ -11,6 +11,7 @@ use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\Util\TextHelper;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\User\Service\NotificationService;
 use Biz\Course\Dao\Impl\ThreadPostDaoImpl;
@@ -408,6 +409,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $thread = $this->getThread($post['courseId'], $post['threadId']);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
 
         if (empty($thread)) {
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
@@ -437,6 +439,33 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             'latestPostTime' => $post['createdTime'],
         );
         $this->getThreadDao()->update($thread['id'], $threadFields);
+        $user = $this->getCurrentUser();
+
+        if ('question' == $thread['type']) {
+            if ($user['id'] == $thread['userId']) {
+                foreach ($course['teacherIds'] as $teacherId) {
+                    if ('question' == $thread['type']) {
+                        $this->getNotifiactionService()->notify($teacherId, 'question-post-ask', array(
+                            'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+                            'id' => $post['id'],
+                            'content' => TextHelper::truncate($post['content'], 50),
+                            'thread' => empty($thread) ? null : array('id' => $thread['id'], 'title' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType'])),
+                            'post' => $post,
+                            'courseId' => $course['id'],
+                        ));
+                    }
+                }
+            } else {
+                $this->getNotifiactionService()->notify($thread['userId'], 'question-answer', array(
+                    'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+                    'id' => $post['id'],
+                    'content' => TextHelper::truncate($post['content'], 50),
+                    'thread' => empty($thread) ? null : array('id' => $thread['id'], 'title' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType'])),
+                    'post' => $post,
+                    'courseId' => $course['id'],
+                ));
+            }
+        }
 
         $this->dispatchEvent('course.thread.post.create', $post);
 

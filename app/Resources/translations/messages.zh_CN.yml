@@ -8058,6 +8058,8 @@ notification.role: 您被 %who% 设置为“%role%”身份。
 notification.questionRemind: 课程《%courseTitle%》有新问题 %question%，请及时回答。
 notification.discount.reject: 您的打折活动%discount%，未通过管理员审核。
 notification.discount.pass: 您的打折活动%discount%，已通过管理员审核。
+notification.question.post_create: %who% 在 %thread% 回答了你
+notification.question.post_ask: %who% 在 %thread% 追问了你
 
 notification.group-profile.chownout: 您的小组 %group% 被管理员转移给了用户 %who%。
 notification.group-profile.chownin: 您获得了小组 %group% 的管理权限。
