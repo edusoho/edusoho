@@ -68,7 +68,7 @@ class CourseThreadPost extends AbstractResource
         $fileIds = isset($params['fileIds']) ? $params['fileIds'] : array();
 
         if (empty($params['content'])) {
-            $fields['postType'] = $this->getPostType($params['fileIds']);
+            $params['postType'] = $this->getPostType($params['fileIds']);
         }
         unset($params['fileIds']);
         $post = $this->getCourseThreadService()->createPost($params);
