@@ -165,7 +165,7 @@ class ThreadController extends CourseBaseController
         ));
     }
 
-    public function playShowAction(Request $request, $id)
+    public function playerShowAction(Request $request, $id)
     {
         return $this->forward('AppBundle:Player:show', array(
             'id' => $id,

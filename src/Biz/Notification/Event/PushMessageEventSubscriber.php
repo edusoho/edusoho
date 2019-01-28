@@ -2,6 +2,7 @@
 
 namespace Biz\Notification\Event;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudData\Service\CloudDataService;
@@ -837,6 +838,12 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             );
             $this->createSearchJob('update', $args);
         }
+
+        if ($thread['target']['type'] != 'course' || 'question' != $thread['type']) {
+            return;
+        }
+
+        $questionType = ServiceKernel::instance()->trans('course.thread.question_type.'.$thread['questionType']);
         if ($this->isIMEnabled()) {
             if ($thread['target']['type'] != 'course' || 'question' != $thread['type']) {
                 return;
@@ -873,6 +880,26 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $to['id'] = $teacherId;
 
                 $this->createPushJob($from, $to, $body);
+            }
+        }
+        if (!empty($thread['target']['teacherIds'])) {
+            $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($thread['target']['teacherIds']);
+            $reg_ids = ArrayToolkit::column($devices, 'regId');
+            if (!empty($reg_ids)) {
+                $message = array(
+                    'reg_ids' => implode(',', $reg_ids),
+                    'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'], 'type' => 'course.thread.create')),
+                    'title' => '课程提问',
+                    'description' => !empty($thread['content']) ? $this->plainText(strip_tags($thread['content']), 10) : "有一个{$questionType}类型的提问",
+                );
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push',
+                    'course_thread_create',
+                    '创建问题-推送消息',
+                    array('result' => $result, 'message' => $message)
+                );
             }
         }
     }
@@ -934,23 +961,108 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.create');
 
         $user = $this->getBiz()->offsetGet('user');
-        if ($this->isIMEnabled()) {
-            //            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
-            //                return;
-            //            }
-            //
-            //            if ($threadPost['thread']['type'] != 'question') {
-            //                return;
-            //            }
-            if ($threadPost['thread']['userId'] == $user['id']) {
-                return;
+        if ($threadPost['thread']['userId'] == $user['id'] && $threadPost['thread']['type'] != 'question') {
+            return;
+        }
+        $postUser = $this->getUserService()->getUser($threadPost['userId']);
+        $threadType = $this->getThreadType($threadPost['thread']['type']);
+        $threadPostType = !empty($threadPost['postType']) ? ServiceKernel::instance()->trans('course.thread.question_type.'.$threadPost['postType']) : '';
+
+        //学生追问，老师收到推送
+        if ($threadPost['thread']['userId'] == $user['id'] && $threadPost['thread']['type'] == 'question') {
+            if (!empty($threadPost['target']['teacherIds'])) {
+                $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($threadPost['target']['teacherIds']);
+                $reg_ids = ArrayToolkit::column($devices, 'regId');
+                if (!empty($reg_ids)) {
+                    $message = array(
+                        'reg_ids' => implode(',', $reg_ids),
+                        'pass_through_type' => 'normal',
+                        'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'type' => 'course.thread.create')),
+                        'title' => '课程追问',
+                        'description' => !empty($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "有一个{$threadPostType}类型的追问",
+                    );
+                    $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                    $this->getLogService()->info(
+                        'push',
+                        'course_thread_create',
+                        '课程追问-推送消息',
+                        array('result' => $result, 'message' => $message)
+                    );
+                }
             }
 
-            //            foreach ($threadPost['target']['teacherIds'] as $teacherId) {
-            //                if ($teacherId != $threadPost['userId']) {
-            //                    continue;
-            //                }
-            $postUser = $this->getUserService()->getUser($threadPost['userId']);
+            if ($this->isIMEnabled()) {
+                $body = array(
+                    'type' => 'question.answered',
+                    'threadId' => $threadPost['threadId'],
+                    'threadType' => $threadPost['thread']['type'],
+                    'courseId' => $threadPost['target']['id'],
+                    'lessonId' => $threadPost['thread']['relationId'],
+                    'questionCreatedTime' => $threadPost['thread']['createdTime'],
+                    'questionTitle' => $threadPost['thread']['title'],
+                    'postContent' => $threadPost['content'],
+                    'title' => "{$threadPostType}追问",
+                    'message' => !empty($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "你有一个{$threadPostType}的追问",
+                );
+
+                $from = array(
+                    'type' => $threadPost['target']['type'],
+                    'id' => $threadPost['target']['id'],
+                );
+
+                $to = array(
+                    'type' => 'user',
+                    'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
+                );
+
+                foreach (array_values($threadPost['target']['teacherIds']) as $i => $teacherId) {
+                    if ($i >= 3) {
+                        break;
+                    }
+                    $to['id'] = $teacherId;
+
+                    $this->createPushJob($from, $to, $body);
+                }
+            }
+
+            return;
+        }
+
+        //回复收到
+        $body = array(
+            'type' => 'question.answered',
+            'threadId' => $threadPost['threadId'],
+            'threadType' => $threadPost['thread']['type'],
+            'courseId' => $threadPost['target']['id'],
+            'lessonId' => $threadPost['thread']['relationId'],
+            'questionCreatedTime' => $threadPost['thread']['createdTime'],
+            'questionTitle' => $threadPost['thread']['title'],
+            'postContent' => $threadPost['content'],
+            'title' => "{$threadType}回答",
+            'message' => !empty($threadPost['thread']['title']) ? "[{$postUser['nickname']}]回复了你的{$threadType}《{$threadPost['thread']['title']}》" : "[{$postUser['nickname']}]回复了你的{$threadPostType}{$threadType}",
+        );
+
+        if ($threadPost['thread']['type'] == 'question') {
+            $devices = $this->getPushDeviceService()->getPushDeviceByUserId($threadPost['thread']['userId']);
+            if (!empty($devices['regId'])) {
+                $message = array(
+                    'reg_ids' => $devices['regId'],
+                    'pass_through_type' => 'normal',
+                    'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'], 'type' => 'course.thread.post.create')),
+                    'title' => '课程回答',
+                    'description' => !empty($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "有一个{$threadPostType}类型的回答",
+                );
+                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+                $this->getLogService()->info(
+                    'push',
+                    'course_thread_post_create',
+                    '老师回答-推送消息',
+                    array('result' => $result, 'message' => $message)
+                );
+            }
+        }
+
+        if ($this->isIMEnabled()) {
             $from = array(
                 'type' => $threadPost['target']['type'],
                 'id' => $threadPost['target']['id'],
@@ -962,24 +1074,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
             );
 
-            $threadType = $this->getThreadType($threadPost['thread']['type']);
-            $threadPostType = !empty($threadPost['postType']) ? ServiceKernel::instance()->trans('course.thread.question_type.'.$threadPost['postType']) : '';
-
-            $body = array(
-                'type' => 'question.answered',
-                'threadId' => $threadPost['threadId'],
-                'threadType' => $threadPost['thread']['type'],
-                'courseId' => $threadPost['target']['id'],
-                'lessonId' => $threadPost['thread']['relationId'],
-                'questionCreatedTime' => $threadPost['thread']['createdTime'],
-                'questionTitle' => $threadPost['thread']['title'],
-                'postContent' => $threadPost['content'],
-                'title' => "{$threadType}回复",
-                'message' => !empty($threadPost['thread']['title']) ? "[{$postUser['nickname']}]回复了你的{$threadType}《{$threadPost['thread']['title']}》" : "[{$postUser['nickname']}]回复了你的{$threadPostType}{$threadType}",
-            );
-
             $this->createPushJob($from, $to, $body);
-            //            }
         }
     }
 
@@ -2159,6 +2254,11 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         return $this->createService('IM:ConversationService');
     }
 
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
+    }
+
     /**
      * @return PushService
      */
@@ -2231,6 +2331,14 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         ));
 
         $this->getQueueService()->pushJob($notifyJob);
+    }
+
+    /**
+     * @return \Biz\PushDevice\Service\Impl\PushDeviceServiceImpl
+     */
+    protected function getPushDeviceService()
+    {
+        return $this->createService('PushDevice:PushDeviceService');
     }
 
     public function getThreadType($type)

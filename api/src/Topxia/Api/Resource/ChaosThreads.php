@@ -206,13 +206,11 @@ class ChaosThreads extends BaseResource
             return array();
         }
 
-        $conditions['courseIds'] = ArrayToolkit::column($userCourses, 'courseId');
-
         $total = $this->getCourseThreadService()->countThreads($conditions);
 
         $start = $start == -1 ? rand(0, $total - 1) : $start;
 
-        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, 'createdNotStick', $start, $limit);
+        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, 'postedNotStick', $start, $limit);
 
         if (empty($courseThreads)) {
             return array();

@@ -10,6 +10,22 @@ use AppBundle\Common\ArrayToolkit;
 
 class CourseThreadPost extends AbstractResource
 {
+    public function get(ApiRequest $request, $courseId, $postId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        $post = $this->getCourseThreadService()->getPost($courseId, $postId);
+        $posts = array($post);
+        if (!empty($posts)) {
+            $posts = $this->readPosts($courseId, $posts);
+        }
+        $posts = $this->addAttachments($posts);
+        $post = array_shift($posts);
+        $this->getOCUtil()->single($post, array('userId'));
+
+        return $post;
+    }
+
     public function search(ApiRequest $request, $courseId, $threadId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
@@ -91,9 +107,7 @@ class CourseThreadPost extends AbstractResource
                 $post = $this->getCourseThreadService()->readPost($post['id']);
             }
 
-            if ($post['source'] == 'web') {
-                $post['content'] = $this->filterHtml($post['content']);
-            }
+            $post['content'] = !empty($post['content']) ? $this->filterHtml($post['content']) : $post['content'];
         }
 
         return $posts;
@@ -125,7 +139,7 @@ class CourseThreadPost extends AbstractResource
                     } else {
                         $post['attachments']['pictures'][] = array(
                             'id' => $file['id'],
-                            'thumbnail' => $file['thumbnail'],
+                            'thumbnail' => isset($file['thumbnail']) ? $file['thumbnail'] : '',
                         );
                     }
 

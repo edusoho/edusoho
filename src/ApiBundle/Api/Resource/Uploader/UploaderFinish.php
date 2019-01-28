@@ -4,7 +4,9 @@ namespace ApiBundle\Api\Resource\Uploader;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\Common\CommonException;
+use Biz\File\UploadFileException;
+use Biz\System\SettingException;
 
 class UploaderFinish extends AbstractResource
 {
@@ -12,19 +14,20 @@ class UploaderFinish extends AbstractResource
     {
         $cloudAttachment = $this->getSettingService()->get('cloud_attachment', array());
         if (!($cloudAttachment['course'])) {
-            throw new BadRequestHttpException('云附件未开启', null, 4031601);
+            throw SettingException::FORBIDDEN_CLOUD_ATTACHMENT();
         }
 
         $file = $this->getUploadFileService()->getUploadFileInit($fileId);
         if (empty($file)) {
-            throw new BadRequestHttpException('上传文件不存在', null, 4042001);
+            throw UploadFileException::NOTFOUND_FILE();
         }
 
         $params = $request->query->all();
         $params['id'] = $fileId;
+        $params['uploadType'] = 'direct';
 
         if (empty($params)) {
-            throw new BadRequestHttpException('参数错误', null, 5000306);
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         $file = $this->getUploadFileService()->finishedUpload($params);
