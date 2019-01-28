@@ -462,7 +462,7 @@ class ThreadController extends CourseBaseController
                 //notify不应该在这里做的，应该在Service里面做
                 $this->getThreadService()->postAtNotifyEvent($post, $users);
 
-                if ($thread['userId'] != $currentUser->id) {
+                if ($thread['userId'] != $currentUser->id && $thread['type'] != 'question') {
                     $message = array(
                         'userId' => $currentUser['id'],
                         'userName' => $currentUser['nickname'],
@@ -477,7 +477,7 @@ class ThreadController extends CourseBaseController
                 }
 
                 foreach ($users as $user) {
-                    if ($thread['userId'] != $user['id']) {
+                    if ($thread['userId'] != $user['id'] && $thread['type'] != 'question') {
                         if ($user['id'] != $userId) {
                             $message = array(
                                 'userId' => $currentUser['id'],
