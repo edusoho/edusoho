@@ -393,7 +393,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             }
 
             if (isset($params['uploadType']) && 'direct' == $params['uploadType']) {
-                $fields['audioConvertStatus'] = '';
+                unset($fields['audioConvertStatus']);
             }
 
             $file = array_merge($file, $fields);
