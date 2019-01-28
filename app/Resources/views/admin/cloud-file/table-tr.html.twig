@@ -25,7 +25,7 @@
                 {% endif %}
               {% endif %}
               {% if cloudFile.useType == 'course.thread.post' %}
-                {% if thread.source|default('web') == 'app' %}
+                {% if post.source|default('web') == 'app' %}
                   <a class="btn btn-info btn-xs" href="#modal" data-toggle="modal" data-url="{{ path('attachment_direct_video_preview', {id: cloudFile.id}) }}">{{ 'cloud_file.preview'|trans }}</a>
                 {% endif %}
               {% endif %}
