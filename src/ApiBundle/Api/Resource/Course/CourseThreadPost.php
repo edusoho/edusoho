@@ -50,8 +50,11 @@ class CourseThreadPost extends AbstractResource
         $params['courseId'] = $courseId;
         $params['source'] = 'app';
         $fileIds = isset($params['fileIds']) ? $params['fileIds'] : array();
-        unset($params['fileIds']);
 
+        if (empty($params['content'])) {
+            $fields['postType'] = $this->getPostType($params['fileIds']);
+        }
+        unset($params['fileIds']);
         $post = $this->getCourseThreadService()->createPost($params);
         if (isset($fileIds)) {
             $this->getUploadFileService()->createUseFiles($fileIds, $post['id'], 'course.thread.post', 'attachment');
@@ -134,6 +137,23 @@ class CourseThreadPost extends AbstractResource
         }
 
         return $posts;
+    }
+
+    protected function getPostType($fileIds)
+    {
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds, false);
+        $types = ArrayToolkit::column($files, 'type');
+
+        switch ($types) {
+            case in_array('video', $types):
+                return 'video';
+            case in_array('image', $types):
+                return 'image';
+            case in_array('audio', $types):
+                return 'audio';
+            default:
+                return 'content';
+        }
     }
 
     /**
