@@ -1396,10 +1396,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileUsedDao()->count($conditions);
     }
 
-    public function searchUseFiles($conditions, $bindFile = true, $sort = 'DESC')
+    public function searchUseFiles($conditions, $bindFile = true, $sort = array('createdTime' => 'DESC'))
     {
         $limit = $this->countUseFile($conditions);
-        $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime' => $sort), 0, $limit);
+        $attachments = $this->getFileUsedDao()->search($conditions, $sort, 0, $limit);
 
         if ($bindFile) {
             $this->bindFiles($attachments);
