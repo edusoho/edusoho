@@ -12,7 +12,7 @@ class FileUsedDaoImpl extends AdvancedDaoImpl implements FileUsedDao
     public function declares()
     {
         return array(
-            'timestamps' => array('createdTime', 'id'),
+            'timestamps' => array('createdTime'),
             'conditions' => array(
                 'id = :id',
                 'type = :type',
@@ -25,6 +25,7 @@ class FileUsedDaoImpl extends AdvancedDaoImpl implements FileUsedDao
             ),
             'orderbys' => array(
                 'createdTime',
+                'id'
             ),
         );
     }
