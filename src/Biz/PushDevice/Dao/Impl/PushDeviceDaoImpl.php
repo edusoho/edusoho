@@ -19,6 +19,11 @@ class PushDeviceDaoImpl extends GeneralDaoImpl implements PushDeviceDao
         return $this->getByFields(array('userId' => $userId));
     }
 
+    public function findByUserId($userId)
+    {
+        return $this->findByFields(array('userId' => $userId));
+    }
+
     public function findByUserIds($userIds)
     {
         return $this->findInField('userId', $userIds);
