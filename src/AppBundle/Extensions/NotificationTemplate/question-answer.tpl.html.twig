@@ -9,11 +9,6 @@
         {% set who = macro.link(data.user.nickname, path('user_show', {id:data.user.id})) %}
         {% set thread = macro.link(data.thread.title, path('course_thread_show', {courseId: data.courseId, threadId: data.thread.id})) %}
         {{ 'notification.question.post_create'|trans({'%who%':who, '%thread%':thread})|raw }}
-        {% if data.content|default('') %}
-          <blockquote>
-            {{ data.content }}
-          </blockquote>
-        {% endif %}
     </div>
     <div class="notification-footer">
       {{ notification.createdTime|date_format }}
