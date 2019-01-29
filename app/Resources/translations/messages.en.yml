@@ -8150,7 +8150,7 @@ exception.order.not_found: 没有找到相应订单！
 exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
-exception.order.vip_order_not_exist: 孭s s f
+exception.order.vip_order_not_exist: 开通会员的订单不存在，开通会员失败
 exception.order.not_found_order_items: 订单商品不存在
 
 exception.file.not_found: 文件不存在
