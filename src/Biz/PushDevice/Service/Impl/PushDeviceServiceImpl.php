@@ -53,6 +53,11 @@ class PushDeviceServiceImpl extends BaseService implements PushDeviceService
         return $this->getPushDeviceDao()->getByUserId($userId);
     }
 
+    public function findPushDevicesByUserId($userId)
+    {
+        return $this->getPushDeviceDao()->findByUserId($userId);
+    }
+
     public function findPushDeviceByUserIds($userIds)
     {
         if (empty($userIds)) {
