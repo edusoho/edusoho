@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
 
 class Setting extends AbstractResource
 {
@@ -14,7 +15,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'face', 'miniprogram'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram'))) {
             throw CommonException::ERROR_PARAMETER();
         }
 
@@ -190,6 +191,51 @@ class Setting extends AbstractResource
             'newest_version' => empty($authorizations['newest_version']) ? array('version' => '0.0.0') : $authorizations['newest_version'],
         );
     }
+
+    public function getLogin()
+    {
+        $clients = OAuthClientFactory::clients();
+        return $this->getLoginConnect($clients);
+    }
+
+    private function getLoginConnect($clients)
+    {
+        $default = $this->getDefaultLoginConnect($clients);
+        $loginConnect = $this->getSettingService()->get('login_bind', array());
+        $loginConnect = array_merge($default, $loginConnect);
+        foreach ($clients as $type => $client) {
+            if (isset($loginConnect["{$type}_secret"])) {
+                unset($loginConnect["{$type}_secret"]);
+            }
+        }
+        if (isset($loginConnect['weixinmob_mp_secret'])) {
+            unset($loginConnect['weixinmob_mp_secret']);
+        }
+        return $loginConnect;
+    }
+
+    private function getDefaultLoginConnect($clients)
+    {
+        $default = array(
+            'login_limit' => 0,
+            'enabled' => 0,
+            'verify_code' => '',
+            'captcha_enabled' => 0,
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 5,
+            'ip_temporary_lock_allowed_times' => 20,
+            'temporary_lock_minutes' => 20,
+        );
+
+        foreach ($clients as $type => $client) {
+            $default["{$type}_enabled"] = 0;
+            $default["{$type}_key"] = '';
+            $default["{$type}_set_fill_account"] = 0;
+        }
+
+        return $default;
+    }
+
 
     /**
      * @return \Biz\System\Service\SettingService

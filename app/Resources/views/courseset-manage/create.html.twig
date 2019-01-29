@@ -21,7 +21,7 @@
             {% set typeCount = courseTypes|length %}
             {% for key,type in courseTypes %}
               <div class="{% if typeCount <= 4 %}col-md-3 {% else %}col-md-2 course-five-types {% endif %}">
-                {% include type.template with {type: key} %}
+                {% include type.template with {type: key, defaultType: defaultType} %}
               </div>
             {% endfor %}
           </div>

@@ -24,11 +24,11 @@ class SmsController extends BaseController
         $smsType = 'sms_'.$targetType.'_publish';
         $smsInfo = $this->getCloudSmsInfo();
 
-        if ($targetType == 'classroom') {
+        if ('classroom' == $targetType) {
             $item = $this->getClassroomService()->getClassroom($id);
             $mobileNum = $this->getUserService()->countUserHasMobile($mobileNeedVerified);
             $url = $this->generateUrl('classroom_show', array('id' => $id));
-        } elseif ($targetType == 'course') {
+        } elseif ('course' == $targetType) {
             $item = $this->getCourseSetService()->getCourseSet($id);
             $url = $this->generateUrl('course_show', array('id' => $item['defaultCourseId']));
 
@@ -68,7 +68,7 @@ class SmsController extends BaseController
         $description = '';
         $courseSet = array();
 
-        if ($targetType == 'classroom') {
+        if ('classroom' == $targetType) {
             $classroom = $this->getClassroomService()->getClassroom($id);
             $classroomSetting = $this->getSettingService()->get('classroom');
             $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
@@ -76,7 +76,7 @@ class SmsController extends BaseController
             $parameters['classroom_title'] = $classroomName.'：《'.$classroom['title'].'》';
             $description = $parameters['classroom_title'].'发布';
             $students = $this->getUserService()->findUsersHasMobile($index, $onceSendNum, $mobileNeedVerified);
-        } elseif ($targetType == 'course') {
+        } elseif ('course' == $targetType) {
             $courseSet = $this->getCourseSetService()->getCourseSet($id);
             $courseSet['title'] = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
             $parameters['course_title'] = '课程'.'：《'.$courseSet['title'].'》';
@@ -100,7 +100,7 @@ class SmsController extends BaseController
 
         $parameters['url'] = $url.' ';
         if (!empty($students)) {
-            if ($targetType == 'course' && $courseSet['parentId']) {
+            if ('course' == $targetType && $courseSet['parentId']) {
                 $studentIds = ArrayToolkit::column($students, 'userId');
             } else {
                 $studentIds = ArrayToolkit::column($students, 'id');
@@ -118,11 +118,11 @@ class SmsController extends BaseController
 
     public function changeLinkAction(Request $request)
     {
-        $url = $request->getHost();
+        $url = $request->getSchemeAndHttpHost();
         $url .= $request->query->get('url');
 
         $shortUrl = SmsToolkit::getShortLink($url);
-        $url = empty($shortUrl) ? 'http://'.$url : $shortUrl;
+        $url = empty($shortUrl) ? $url : $shortUrl;
 
         return $this->createJsonResponse(array('url' => $url.' '));
     }
