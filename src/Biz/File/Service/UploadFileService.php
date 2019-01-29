@@ -163,7 +163,7 @@ interface UploadFileService
 
     public function countUseFile($conditions);
 
-    public function searchUseFiles($conditions, $bindFile = true);
+    public function searchUseFiles($conditions, $bindFile = true, $sort = 'DESC');
 
     //file-used api
     public function createUseFiles($fileIds, $targetId, $targetType, $type);
