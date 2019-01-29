@@ -74,8 +74,12 @@ class ChaosThreadsPosts extends BaseResource
         if ($this->getCurrentUser()->isTeacher()) {
             $members = $this->getCourseMemberService()->findTeacherMembersByUserId($currentUser['id']);
             $courseSetIds = ArrayToolkit::column($members, 'courseSetId');
-            $threads = $this->getCourseThreadService()->searchThreads(array('courseSetIds' => $courseSetIds, 'type' => 'question'), array(), 0, PHP_INT_MAX);
-            $questionIds = ArrayToolkit::column($threads, 'id');
+            if (empty($courseSets)) {
+                $questionIds = array();
+            } else {
+                $threads = $this->getCourseThreadService()->searchThreads(array('courseSetIds' => $courseSetIds, 'type' => 'question'), array(), 0, PHP_INT_MAX);
+                $questionIds = ArrayToolkit::column($threads, 'id');
+            }
         }
         $threadPosts = $this->getCourseThreadService()->getMyLatestReplyPerThread(0, PHP_INT_MAX);
         $threadPosts = ArrayToolkit::index($threadPosts, 'threadId');
