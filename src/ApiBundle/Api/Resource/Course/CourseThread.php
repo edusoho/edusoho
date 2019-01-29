@@ -75,7 +75,7 @@ class CourseThread extends AbstractResource
             $limit
         );
 
-        $attachments = $this->getUploadFileService()->searchUseFiles(array('targetType' => 'course.thread', 'targetIds' => ArrayToolkit::column($threads, 'id')));
+        $attachments = $this->getUploadFileService()->searchUseFiles(array('targetType' => 'course.thread', 'targetIds' => ArrayToolkit::column($threads, 'id')), true, 'ASC');
         $attachments = ArrayToolkit::group($attachments, 'targetId');
         foreach ($threads as &$thread) {
             if ($thread['source'] == 'app') {
