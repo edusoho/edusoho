@@ -23,13 +23,13 @@ class PushDeviceLogin extends AbstractResource
         $device = $this->getPushDeviceService()->getPushSdk()->registerDevice($params);
 
         $localDevice = $this->getPushDeviceService()->getPushDeviceByRegId($device['reg_id']);
+        if (!empty($user['id'])) {
+            $this->logoutPushDevice($user['id']);
+        }
+
         if (!empty($localDevice)) {
             return $this->getPushDeviceService()->updatePushDevice($localDevice['id'], array('userId' => $user['id']));
         } else {
-            if (!empty($user['id'])) {
-                $this->logoutPushDevice($user['id']);
-            }
-
             return $this->getPushDeviceService()->createPushDevice(array('userId' => $user['id'], 'regId' => $device['reg_id']));
         }
     }
