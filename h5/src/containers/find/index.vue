@@ -4,7 +4,7 @@
     <div class="find-page__part" v-for="(part, index) in parts" :key="index">
       <e-swipe v-if="part.type === 'slide_show'" :slides="part.data"></e-swipe>
       <e-course-list
-        v-if="['classroom_list', 'course_list'].includes(part.type) && part.data.items.length"
+        v-if="['classroom_list', 'course_list'].includes(part.type)"
         class="gray-border-bottom"
         :courseList="part.data"
         :typeList="part.type"
