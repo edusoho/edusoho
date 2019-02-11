@@ -4,7 +4,6 @@ namespace ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class EntryPointController extends Controller
@@ -22,6 +21,7 @@ class EntryPointController extends Controller
     public function startAction(Request $request)
     {
         $kernel = $this->container->get('api_resource_kernel');
+
         return $this->get('api_response_viewer')->view($kernel->handle($request));
     }
 }

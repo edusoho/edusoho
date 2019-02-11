@@ -1,13 +1,27 @@
 <div class="well well-sm text-sm color-gray mtl clearfix" style="line-height:60px">
-  <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
+  {% if targetType == 'course.thread' %}
+    {% set thread = data('CourseThreadByThreadId', {courseId: null, threadId: targetId}) %}
+    {% if thread.type == 'question' and thread.source == 'app' and attachment.file.type == 'video' %}
+      {% set video = 'direct-question-video' %}
+    {% endif %}
+  {% endif %}
+  {% if targetType == 'course.thread.post' %}
+    {% set post = data('CourseThreadPost', {courseId: null, postId: targetId}) %}
+    {% if post.thread.type == 'question' and post.source == 'app' and attachment.file.type == 'video' %}
+      {% set video = 'direct-question-video' %}
+    {% endif %}
+  {% endif %}
+  <img class="mrm" {% if attachment.file.type|default('') %}src="{{ asset(attachment.file.thumbnail|default('assets/img/default/cloud_' ~ attachment.file.type ~ '.png')) }}"{% else %}src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}"{% endif %} height="60px" width="107px">
   {{ attachment.file.filename }}
   <span class="pull-right">
-  	{% set can_preview_type = attachment.file.type in ['video', 'audio', 'ppt', 'document']  and  attachment.file.ext not in ['xlsx', 'xls'] %}
-  	{% set can_preview = attachment.file.type in ['video', 'ppt', 'document'] and attachment.file.processStatus|default(null) == "ok" %}
+  	{% set can_preview_type = attachment.file.type in ['video', 'audio', 'ppt', 'document', 'image']  and  attachment.file.ext not in ['xlsx', 'xls'] %}
+  	{% set can_preview = attachment.file.type in ['video', 'ppt', 'document', 'image'] and attachment.file.processStatus|default(null) == "ok" %}
     {% if can_preview_type and (not can_preview) %}
        {% set can_preview = attachment.file.type in ['audio'] %}
     {% endif %}
-  	{% if not (can_preview_type and can_preview )%}
+    {% if video|default('') and video|default('') == 'direct-question-video' %}
+        <a  class="attachment-preview btn btn-sm btn-info"  href="#attachment-modal"  data-toggle="modal" data-url="{{ path('attachment_direct_video_preview', {'id': attachment.file.id}) }}">{{ 'attachments.preview.preview_btn'|trans }}</a>
+  	{% elseif not (can_preview_type and can_preview ) and video|default('') != 'direct-question-video' and attachment.file.type != 'image' %}
   		<a  class="attachment-preview btn btn-sm btn-default"  href="javascript:;" data-toggle="tooltip" data-placement="top" title="
   		{% if not can_preview_type %}{{ 'attachments.preview.failed_tips'|trans }}{% else %}{{ 'attachments.preview.success_tips'|trans }}{% endif %}">{{ 'attachments.preview.preview_btn'|trans }}</a>
   	 {% else %}

@@ -38,6 +38,7 @@ class ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
 
     /**
      * @param $type
+     *
      * @return \AppBundle\Component\OAuthClient\AbstractOauthClient
      */
     protected function createOAuthClient($type)

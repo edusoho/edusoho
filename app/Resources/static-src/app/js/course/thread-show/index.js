@@ -1,16 +1,18 @@
 import notify from 'common/notify';
 
-var editor = CKEDITOR.replace('post_content', {
-  toolbar: 'Thread',
-  fileSingleSizeLimit: app.fileSingleSizeLimit,
-  filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl')
-});
-editor.on('change', () => {
-  $('#post_content').val(editor.getData());
-});
-editor.on('blur', () => {
-  $('#post_content').val(editor.getData());
-});
+if ($('#post_content').length != 0) {
+  var editor = CKEDITOR.replace('post_content', {
+    toolbar: 'Thread',
+    fileSingleSizeLimit: app.fileSingleSizeLimit,
+    filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl')
+  });
+  editor.on('change', () => {
+    $('#post_content').val(editor.getData());
+  });
+  editor.on('blur', () => {
+    $('#post_content').val(editor.getData());
+  });
+}
 
 let $form = $('#thread-post-form');
 
@@ -21,6 +23,7 @@ let validator = $form.validate({
     }
   }
 });
+
 
 $('.js-btn-thread-post-form-save').click(() => {
   if (validator.form()) {

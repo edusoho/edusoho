@@ -206,19 +206,17 @@ class ChaosThreads extends BaseResource
             return array();
         }
 
-        $conditions['courseIds'] = ArrayToolkit::column($userCourses, 'courseId');
-
         $total = $this->getCourseThreadService()->countThreads($conditions);
 
         $start = $start == -1 ? rand(0, $total - 1) : $start;
 
-        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, 'createdNotStick', $start, $limit);
+        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, 'postedNotStick', $start, $limit);
 
         if (empty($courseThreads)) {
             return array();
         }
 
-        $courseIds = ArrayToolkit::column($courseThreads, "courseId");
+        $courseIds = ArrayToolkit::column($courseThreads, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
 
@@ -227,6 +225,8 @@ class ChaosThreads extends BaseResource
         }
 
         $courses = $this->multicallFilter('Course', $courses);
+        $posts = $this->getCourseThreadService()->searchThreadPosts(array('threadIds' => ArrayToolkit::column($courseThreads, 'id'), 'isRead' => 0, 'exceptedUserId' => $currentUser['id']), array(), 0, PHP_INT_MAX);
+        $posts = ArrayToolkit::group($posts, 'threadId');
 
         foreach ($courseThreads as $key => $thread) {
             if (isset($courses[$thread['courseId']])) {
@@ -235,11 +235,13 @@ class ChaosThreads extends BaseResource
                 $course = $courses[$thread['courseId']];
                 $thread['course'] = $this->filterCourse($course);
                 $thread['content'] = convertAbsoluteUrl($thread['content']);
+                $thread['notReadPostNum'] = isset($posts[$thread['id']]) ? count($posts[$thread['id']]) : 0;
                 $courseThreads[$key] = $thread;
             } else {
                 unset($courseThreads[$key]);
             }
         }
+
         return $courseThreads;
     }
 
@@ -255,6 +257,7 @@ class ChaosThreads extends BaseResource
             'largePicture',
             'createdTime',
         );
+
         return ArrayToolkit::parts($course, $keys);
     }
 

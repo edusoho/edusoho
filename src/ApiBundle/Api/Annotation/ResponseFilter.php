@@ -62,5 +62,4 @@ class ResponseFilter
     {
         $this->mode = $mode;
     }
-
 }

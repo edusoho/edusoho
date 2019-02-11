@@ -273,9 +273,9 @@ class ThreadServiceTest extends BaseTestCase
 
     /**
      * @group current
-     * @expectedException \Biz\Course\ThreadException
+     * @expectedException \Biz\Course\CourseException
      */
-    public function testPostOnNotExistThread()
+    public function testPostOnNotExistCourse()
     {
         $notExistThread = array(
             'id' => 999,

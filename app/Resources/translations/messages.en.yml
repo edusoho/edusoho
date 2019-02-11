@@ -1236,6 +1236,11 @@ course.task.preview.free_join_tips: 'Like it Click to enroll the course'
 course.task.preview.buy_tips: 'Like it? Buy Now（CNY:%price%)'
 course.task.preview.free_learn_tips: 'enroll for free'
 course.thread: Discussions
+course.thread.question_type.video: video
+course.thread.question_type.image: image
+course.thread.question_type.audio: audio
+course.thread.question_type.content: content
+course.thread.question.title: This is a %questionType% question
 course.task.preview.free_learn_tips: 'Join for free'
 course.task.classroom_sync_job_executing_tips: 'Classroom synchronization, please publish later'
 course.task.learning.remaining.watch_time: 'remaining watch length'
@@ -1299,6 +1304,8 @@ course.plan_info: >
 
 course.tab.tasks: 'Syllabus'
 course.tab.threads: 'Discussions'
+course.tab.discussions: 'Discussions'
+course.tab.questions: 'Questions'
 course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
@@ -3059,6 +3066,8 @@ thread.all_answer: 'All answers'
 thread.add_btn: Add
 thread.browse: View
 thread.empty: 'No discussion now'
+discussion.empty: 'No discussion now'
+question.empty: 'No discussion now'
 thread.status.stick: 'Bumped up'
 thread.status.essence: 'Excellent'
 thread.status.top: Headline
@@ -5816,6 +5825,7 @@ admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
 admin.developer_xapi_address: XAPI address
 admin.developer_face_address: AI Face API address
+admin.developer_push_address: Push API address
 admin.developer_setting.cloud_api_server_address: 'Cloud services API address'
 admin.developer_setting.address: Address
 admin.developer_setting.im_api_address: 'IMAPI Address'
@@ -6753,6 +6763,8 @@ notification.truename-authenticate.pass: Your personal real name authentication,
 notification.truename-authenticate.reject: 'Your personal real name certification, audit failed! Reason for rejection:'
 notification.thread.post_create: %who% replied to you on discussion %thread%.
 notification.thread.post_at: %who% mentioned you in a reply to discussion %thread%.
+notification.question.post_create: %who% in %thread% answer you
+notification.question.post_ask: %who% in %thread% ask you
 notification.thread.at: %who% mentioned you in the discussion %thread%.
 notification.role: You are set to "%role%" by %who%.
 notification.questionRemind: Course %courseTitle% has new question %question%, please answer in time.
@@ -7097,6 +7109,7 @@ log.module.role: 'Role'
 log.module.thread: 'Thread'
 log.module.mobile: 'Mobile'
 log.module.wap: 'Wap'
+log.module.push: 'Push'
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -7224,6 +7237,8 @@ log.action.system.customerServiceSetting: 'Customer service'
 log.action.system.setting_userCenter: 'User center settings'
 log.action.system.update_block: 'Update block'
 log.action.system.update_app_version: 'Update Version'
+log.action.push.course_thread_create: 'Ask question push'
+log.action.push.course_thread_post_create: 'Answer question push'
 log.action.classroom.create: 'Add classroom'
 log.action.classroom.update: 'Update classroom'
 log.action.classroom.delete: 'Delete classroom'
@@ -8123,7 +8138,8 @@ exception.thread.not_found_member:
 exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
-exception.sms.setting_enbale: Cloud SMS related settings are not enabled!
+exception.sms.setting_enable: Cloud SMS related settings are not enabled!
+exception.setting.attachment.setting_enable: Cloud Attachement settings are not enabled!
 exception.sms.code_invalid: SMS verification code error
 exception.sms.type_error:
 exception.sms.send_failed:
@@ -8495,3 +8511,5 @@ admin.sts_discovery_feature_tip: 更多功能敬请期待。。。
 admin.user_manage.lock_user.access_deniedexception_message: 没有封禁该角色的权限
 admin.course_manage.manage.tags: 标签
 admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级中允许显示班级人数
+course.thread.edit_hint: Editor mobile side question capabilities are coming soon, stay tuned!
+course.question.question_background: Question Background

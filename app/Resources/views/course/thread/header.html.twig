@@ -1,20 +1,13 @@
 <div class="nav-filter clearfix">
 
   <div class="btn-group">
-    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{'thread.create_discussion_btn'|trans}} <span class="caret"></span></button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="{{ path('course_thread_create', {courseId:course.id, type:'discussion'}) }}">{{'thread.create_discussion_btn'|trans}}</a></li>
-      <li><a href="{{ path('course_thread_create', {courseId:course.id, type:'question'}) }}">{{'thread.create_question_btn'|trans}}</a></li>
-    </ul>
+    <a class="btn btn-default btn-sm" href="{{ path('course_thread_create', {courseId:course.id, type:type}) }}">{% if type == 'discussion' %}{{'thread.create_discussion_btn'|trans}}{% else %}{{'thread.create_question_btn'|trans}}{% endif %}</a>
   </div>
 
 
   <ul class="nav nav-pills nav-pills-sm">
-    <li{% if filters.type == 'all' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('my_course_show', {id: course.id, tab:'threads'}|merge(filters)|merge({type:'all'})) }}">{{'course.thread.nav.all_btn'|trans}}</a></li>
-
-    <li{% if filters.type == 'question' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('my_course_show', {id: course.id, tab:'threads'}|merge(filters)|merge({type:'question'})) }}">{{'course.thread.nav.question_btn'|trans}}</a></li>
-
-    <li{% if filters.type == 'elite' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('my_course_show', {id: course.id, tab:'threads'}|merge(filters)|merge({type:'elite'})) }}">{{'course.thread.nav.nice_btn'|trans}}</a></li>
+    <li{% if filters.type == type and filters.isElite != 1 %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('my_course_show', {id: course.id, tab:type}|merge({type:type})) }}">{{'course.thread.nav.all_btn'|trans}}</a></li>
+    <li{% if filters.isElite == 1 %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('my_course_show', {id: course.id, tab:type}|merge(filters)|merge({isElite:1})) }}">{{'course.thread.nav.nice_btn'|trans}}</a></li>
 
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -27,8 +20,8 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu hidden-xs">
-        <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a class="js-nav" href="{{ path('my_course_show', {id: course.id, tab:'threads'}|merge(filters)|merge({sort:'posted'})) }}">{{'course.thread.nav.posted'|trans}}</a></li>
-        <li class="{% if filters.sort == 'created' %}active{% endif %}"><a href="{{ path('my_course_show', {id: course.id, tab:'threads'}|merge(filters)|merge({sort:'created'})) }}">{{'course.thread.nav.created'|trans}}</a></li>
+        <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a class="js-nav" href="{{ path('my_course_show', {id: course.id, tab:type}|merge(filters)|merge({sort:'posted'})) }}">{{'course.thread.nav.posted'|trans}}</a></li>
+        <li class="{% if filters.sort == 'created' %}active{% endif %}"><a href="{{ path('my_course_show', {id: course.id, tab:type}|merge(filters)|merge({sort:'created'})) }}">{{'course.thread.nav.created'|trans}}</a></li>
       </ul>
     </li>
   </ul>

@@ -1404,6 +1404,11 @@ course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）�
 course.task.preview.free_learn_tips: 免费加入学习
 course.task.classroom_sync_job_executing_tips: 班级课程同步中，请稍后发布
 course.thread: 讨论区
+course.thread.question_type.video: 「视频」
+course.thread.question_type.image: 「图片」
+course.thread.question_type.audio: 「语音」
+course.thread.question.title: 这是一个%questionType%问题
+course.thread.question_type.content: 「文字」
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
 course.thread.hit_times: %hitNum%次浏览
@@ -1462,6 +1467,8 @@ course.plan_info: >
 # 课程扩展
 course.tab.tasks: '目录'
 course.tab.threads: '话题'
+course.tab.discussions: '话题'
+course.tab.questions: '问题'
 course.tab.notes: '笔记'
 course.tab.material: '资料区'
 course.tab.reviews: '评价'
@@ -3666,6 +3673,8 @@ thread.all_answer: 所有答案
 thread.add_btn: 添加
 thread.browse: 浏览
 thread.empty: 暂无话题
+discussion.empty: 暂无话题
+question.empty: 暂无问题
 thread.status.stick: 置顶
 thread.status.essence: 精华
 thread.status.top: 头条
@@ -7116,6 +7125,7 @@ admin.developer_setting.debug_label: 调试
 admin.developer_setting.app_center_api_address: 应用中心API地址
 admin.developer_xapi_address: XAPI 推送地址
 admin.developer_face_address: 人脸识别API地址
+admin.developer_push_address: 消息推送API地址
 admin.developer_setting.cloud_api_server_address: 云服务API地址
 admin.developer_setting.address: 地址
 admin.developer_setting.im_api_address: IMAPI地址
@@ -8054,6 +8064,8 @@ notification.role: 您被 %who% 设置为“%role%”身份。
 notification.questionRemind: 课程《%courseTitle%》有新问题 %question%，请及时回答。
 notification.discount.reject: 您的打折活动%discount%，未通过管理员审核。
 notification.discount.pass: 您的打折活动%discount%，已通过管理员审核。
+notification.question.post_create: %who% 在 %thread% 回答了你
+notification.question.post_ask: %who% 在 %thread% 追问了你
 
 notification.group-profile.chownout: 您的小组 %group% 被管理员转移给了用户 %who%。
 notification.group-profile.chownin: 您获得了小组 %group% 的管理权限。
@@ -8357,6 +8369,7 @@ log.module.role: 角色
 log.module.thread: 话题
 log.module.mobile: 手机客户端
 log.module.wap: 微网校
+log.module.push: 推送
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8485,6 +8498,8 @@ log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
 log.action.system.update_block: 更新编辑区
 log.action.system.update_app_version: 更新版本
+log.action.push.course_thread_create: 提问推送
+log.action.push.course_thread_post_create: 回答推送
 log.action.classroom.create: 新增班级
 log.action.classroom.update: 修改班级
 log.action.classroom.delete: 删除班级
@@ -9431,7 +9446,8 @@ exception.thread.not_found_member: 成员不存在
 exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
-exception.sms.setting_enbale: 云短信相关设置未开启!
+exception.sms.setting_enable: 云短信相关设置未开启!
+exception.setting.attachment.setting_enable: 云附件未开启!
 exception.sms.code_invalid: 短信验证码错误
 exception.sms.type_error: sms类型错误
 exception.sms.send_failed: 发送失败！
@@ -9801,3 +9817,5 @@ admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级�
 
 exception.coupon.receive.failed: 优惠券领取失败
 exception.coupon.plugin.not.installed: 优惠券插件未安装
+course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
+course.question.question_background: 问题背景

@@ -52,11 +52,11 @@
       <li role="presentation" id="{{ key }}"
           class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
         <a
-            {% if member|default(false) %}
-              href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-            {% else %}
-              href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-            {% endif %}
+		  {% if member|default(false) %}
+            href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs, type: key|default('tasks')}) }}"
+		  {% else %}
+			href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+		  {% endif %}
         >
           {{ tab.name|trans }}
           {% if key == 'tasks' and categoryTag|default(null) %}

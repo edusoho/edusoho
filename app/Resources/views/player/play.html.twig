@@ -53,6 +53,7 @@
           {% if context.subtitles is defined and context.hideSubtitle|default(0) == 0%}
             data-subtitles="{{ context.subtitles|json_encode }}"
           {% endif %}
+          data-remeber-last-pos="{{ remeberLastPos }}"
           data-timelimit="{{ context.watchTimeLimit|default('')}}"
           data-starttime="{{ context.starttime|default('')}}"
           data-lesson-id="{{ context.lessonId|default(0)}}"
