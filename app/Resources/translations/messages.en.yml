@@ -8127,8 +8127,8 @@ exception.thread.not_found_member:
 exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
-exception.sms.setting_enbale: Cloud SMS related settings are not enabled!
-exception.setting.attachment.setting_enbale: Cloud Attachement settings are not enabled!
+exception.sms.setting_enable: Cloud SMS related settings are not enabled!
+exception.setting.attachment.setting_enable: Cloud Attachement settings are not enabled!
 exception.sms.code_invalid: SMS verification code error
 exception.sms.type_error:
 exception.sms.send_failed:
