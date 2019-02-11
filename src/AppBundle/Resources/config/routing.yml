@@ -2115,7 +2115,7 @@ course_thread_edit:
    defaults: { _controller: AppBundle:Course/Thread:edit }
 
 course_thread_ask_video_show:
-    path: /course/thread/{threadId}/askVideo/show
+    path: /course/thread/{threadId}/ask_video/show
     defaults: { _controller: AppBundle:Course/Thread:askVideo }
 
 course_thread_post_delete:
@@ -2501,7 +2501,7 @@ attachment_preview:
   methods: [GET]
 
 attachment_direct_video_preview:
-  path: /attachment/{id}/directVideoPreview
+  path: /attachment/{id}/direct_video_preview
   defaults: { _controller: AppBundle:File/Attachment:directVideoPreview }
   methods: [GET]
 
