@@ -9,7 +9,7 @@
         {% set questionType = 'course.thread.question_type.image'|trans %}
       {% elseif thread.questionType == 'audio' %}
         {% set questionType = 'course.thread.question_type.audio'|trans %}
-      {% else %}
+      {% elseif thread.questionType == 'content' %}
         {% set questionType = 'course.thread.question_type.content'|trans %}
       {% endif %}
     {% endif %}
