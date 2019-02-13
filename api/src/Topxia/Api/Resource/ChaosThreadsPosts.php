@@ -74,7 +74,7 @@ class ChaosThreadsPosts extends BaseResource
         if ($this->getCurrentUser()->isTeacher()) {
             $members = $this->getCourseMemberService()->findTeacherMembersByUserId($currentUser['id']);
             $courseIds = ArrayToolkit::column($members, 'courseId');
-            if (empty($courses)) {
+            if (empty($courseIds)) {
                 $questionIds = array();
             } else {
                 $threads = $this->getCourseThreadService()->searchThreads(array('courseIds' => $courseIds, 'type' => 'question'), array(), 0, PHP_INT_MAX);
