@@ -1,5 +1,5 @@
 import Emitter from 'common/es-event-emitter';
-import screenfull from 'screenfull';
+import screenfull from 'es-screenfull';
 
 export default class PPT extends Emitter {
   constructor({element, slides, watermark}) {

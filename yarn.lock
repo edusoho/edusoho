@@ -2643,6 +2643,11 @@ es-post-message@^1.0.1:
   dependencies:
     component-emitter "^1.2.1"
 
+es-screenfull@3.0.2-patch:
+  version "3.0.2-patch"
+  resolved "https://registry.yarnpkg.com/es-screenfull/-/es-screenfull-3.0.2-patch.tgz#54b4c85152e2958bffcdb23f75fb5f5ae9ac5371"
+  integrity sha512-JJ9aHF+0VdlO0+IAVbcF3SYoTcLDKIYdzW2YWE3C0hC0nN3WN/as28jr/8jwN1W9Hr+sKHD305pzU0kJmIciWQ==
+
 es-swfobject@latest:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/es-swfobject/-/es-swfobject-3.0.0.tgz#daa955a04ce71e7c22461cea5d2dcc738a0e6268"
@@ -6861,11 +6866,6 @@ schema-utils@^0.3.0:
   integrity sha1-9YdyIs4+kx7a4DnxfrNxbnE3+M8=
   dependencies:
     ajv "^5.0.0"
-
-screenfull@3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/screenfull/-/screenfull-3.0.2.tgz#9fbcce07bad4c680a8f90f2bfc9c41788af55d0c"
-  integrity sha1-n7zOB7rUxoCo+Q8r/JxBeIr1XQw=
 
 select2@3.5.1:
   version "3.5.1"
