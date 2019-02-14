@@ -16,7 +16,7 @@
 
     <div class="form-group" id="courses-form-group">
       <div class="col-md-12 controls">
-        <ul class="course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
+        <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
 
           {% for recommendId, courseSet in courseSets %}
             {% set showUrl = path('course_show',{id: courseSet.defaultCourseId}) %}
@@ -26,17 +26,22 @@
 
               <span class="glyphicon glyphicon-resize-vertical sort-handle" style="padding: 50px 20px 0 20px"></span>
               <a class="course-picture-link" href="{{ showUrl }}" target="_blank">
+                {% if courseSet.type == 'live' %}
+                  <span class="tags">
+                    <span class="tag-live"></span>
+                  </span>
+                {% endif %}
                 <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}">
               </a>
 
-              <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="form.btn.delete" style="font-size:35px;" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{courseSet.id}}">× </button>
+              <button class="close js-delete-btn course-close-btn mrl mts mll" data-role="item-delete" type="button" title="form.btn.delete" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{courseSet.id}}">× </button>
 
-              <div class="course-body">
-                <div style="float:right;" class="color-gray mrm mls">
+              <div class="course-body clearfix">
+                <div class="color-gray cd-mr40 mls pull-right">
                   {% include 'open-course-manage/course-set-price-interval.html.twig' %}
                 </div>
 
-                <h4 class="course-title"><a href="{{ showUrl }}" target="_blank">{{ courseSet.title }}</a>
+                <h4 class="course-title text-overflow mv0">
                 {% if courseSet.type == 'normal' or courseSet.type == 'live' %}
                   {% if courseSet.serializeMode=='serialized' %}
                     <span class="label label-success ">{{ 'my.teaching.open_course.recommend_setting.serializeMode.live'|trans }}</span>
@@ -44,28 +49,10 @@
                     <span class="label label-warning ">{{ 'my.teaching.open_course.recommend_setting.serializeMode.finished'|trans }}</span>
                   {% endif %}
                 {% endif %}
-
-                {% if courseSet.type == 'live' %}
-                  {% set task = courseSet['task']|default(null) %}
-                  {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
-                    <span class="label label-warning">{{ 'my.teaching.open_course.recommend_setting.onlive'|trans }}</span>
-                  {% else %}
-                    <span class="label label-success">{{ 'my.teaching.open_course.recommend_setting.live'|trans }}</span>
-                  {% endif %}
-                {% endif %}
+                <a href="{{ showUrl }}" target="_blank" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
                 </h4>
 
-                {% if courseSet.type == 'live' %}
-                  {% set task = courseSet.task|default(null) %}
-                  {% if task %}
-                    <div class="live-course-lesson mbm">
-                      <span class="color-success fsm mrm">{{ task.startTime|date('n月j日 H:i') }} ~ {{ task.endTime|date('H:i') }}</span>
-                      <span class="color-gray fsm mrm">{{'my.teaching.open_course.recommend_setting.task_number'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%task_number%':task.number })}}</span>
-                    </div>
-                  {% endif %}
-                {% else %}
-                  <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
-                {% endif %}
+                <div class="course-about ellipsis text-sm">{{ courseSet.subtitle }}</div>
 
                 <div class="course-footer clearfix">
                   {% set teacher = users[courseSet.teacherIds|first|default(courseSet.creator)] %}

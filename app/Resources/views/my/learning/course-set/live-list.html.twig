@@ -14,19 +14,19 @@
           {% for courseSet in courseSets %}
             {% set task = courseSet['task'] %}
             <li class="course-item clearfix">
-              <a class="course-picture-link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
+              <a class="course-picture-link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">
                 <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}">
               </a>
               <div class="course-body">
-                <h4 class="course-title"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
-                  {% if courseSet.serializeMode=='serialize' %}
+                <h4 class="course-title"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">{{ courseSet.title }}</a>
+                  {% if courseSet.serializeMode =='serialized' %}
                     <span class="label label-success ">{{'my.learning.live.course_updating'|trans}}</span>
-                  {% elseif courseSet.serializeMode=='finished' %}
+                  {% elseif courseSet.serializeMode =='finished' %}
                     <span class="label label-warning ">{{'my.learning.live.course_finished'|trans}}</span>
                   {% endif %}
                 </h4>
-                <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
-                <div class="live-course-lesson mtm">
+                <div class="course-about ellipsis text-sm">{{ courseSet.subtitle }}</div>
+                <div class="live-course-lesson mtm mb0">
                   <span class="color-success fsl mrl">{{ task.startTime|date('site.date_format'|trans) }} ~ {{ task.endTime|date('H:i') }}</span>
                   <span class="color-gray fsl mrl">{{'my.learning.live.course_number'|trans({'%number%': task.number})}}</span>
                 </div>
