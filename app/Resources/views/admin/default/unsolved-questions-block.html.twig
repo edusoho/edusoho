@@ -10,11 +10,22 @@
         </thead>
         <tbody class="tbody">
           {% for question in questions %}
+            {% if question.title == '' %}
+              {% if question.questionType == 'video' %}
+                {% set questionType = 'course.thread.question_type.video'|trans %}
+              {% elseif question.questionType == 'image' %}
+                {% set questionType = 'course.thread.question_type.image'|trans %}
+              {% elseif question.questionType == 'audio' %}
+                {% set questionType = 'course.thread.question_type.audio'|trans %}
+              {% elseif question.questionType == 'content' %}
+                {% set questionType = 'course.thread.question_type.content'|trans %}
+              {% endif %}
+            {% endif %}
             {% set course =  courses[question.courseId]|default(null) %}
   	        <tr>
   	          <td>
                 <a class="link-primary" href="{{ path('course_thread_show', {courseId:question.courseId, threadId:question.id}) }}" target="_blank">
-                  {{ question.title }}
+                  {{ question.title|default('course.thread.question.title'|trans({'%questionType%':questionType|default('course.thread.question_type.content'|trans)})) }}
                 </a>
   	          </td>
               <td class="pull-right prl">
