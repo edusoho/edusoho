@@ -131,6 +131,9 @@ const filters = [
         case 'created':
           status = '去支付';
           break;
+        case 'paying':
+          status = '去支付';
+          break;
         case 'success':
           status = '已付款';
           break;

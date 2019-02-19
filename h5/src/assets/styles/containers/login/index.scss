@@ -64,14 +64,23 @@
       font-size: vw(13);
     }
   }
-  .face-icon {
+  .social-login {
     position: absolute;
     bottom: vw(50);
-    left: 50%;
-    margin-left: vw(-20);
-    img {
-      width: vw(40);
-      height: vw(40);
+    .social-login-button {
+      img {
+        width: vw(40);
+        height: vw(40);
+      }
+      &:not(:first-child) {
+        margin-left: 20px;
+      }
+      i {
+        font-size: vw(40);
+        position: relative;
+        bottom: vw(4);
+        color: #1ec354;
+      }
     }
   }
 }

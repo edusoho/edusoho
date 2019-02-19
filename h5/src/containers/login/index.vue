@@ -18,9 +18,14 @@
       <router-link to="/setting/password/reset" class="login-account">忘记密码？ &nbsp;|</router-link>
       <span class="login-account" @click="jumpRegister">&nbsp; 立即注册 &nbsp;</span>
     </div>
-    <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="face-icon" v-if="faceSetting">
-      <img src="static/images/face.png" alt="人脸识别登录图标">
-    </router-link>
+    <div class="social-login">
+      <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="social-login-button" v-if="faceSetting">
+        <img src="static/images/face.png" alt="人脸识别登录图标">
+      </router-link>
+      <a class="social-login-button" v-if="Number(loginConfig.weixinmob_enabled) && isWeixinBrowser" @click="wxLogin">
+        <i class="h5-icon h5-icon-weixin1"></i>
+      </a>
+    </div>
   </div>
 
 </template>
@@ -29,7 +34,7 @@ import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
 import { mapActions } from 'vuex';
 import { Toast } from 'vant';
-import Api from '@/api'
+import Api from '@/api';
 
 export default {
   mixins: [activityMixin, redirectMixin],
@@ -41,7 +46,8 @@ export default {
         password: ''
       },
       faceSetting: 0,
-      bodyHeight: 520
+      bodyHeight: 520,
+      loginConfig: {},
     }
   },
   async created () {
@@ -56,7 +62,10 @@ export default {
   computed: {
     btnDisable() {
       return !(this.username && this.password);
-    }
+    },
+    isWeixinBrowser (){
+      return /micromessenger/.test(navigator.userAgent.toLowerCase())
+    },
   },
   methods: {
     ...mapActions([
@@ -86,21 +95,39 @@ export default {
       this.$router.push({
         name: 'register',
         query: {
-          redirect: this.$route.query.redirect || ''
+          redirect: this.$route.query.redirect || '/'
         }
       })
+    },
+    wxLogin() {
+      this.$router.replace({
+        path: '/auth/social',
+        query: {
+          type: 'wx',
+          weixinmob_key: this.loginConfig.weixinmob_key,
+          redirect: this.$route.query.redirect || '/'
+        }
+      });
     }
   },
 
   mounted() {
     this.bodyHeight = document.documentElement.clientHeight - 46;
     this.username = this.$route.params.username || '';
+    // 人脸登录配置
     Api.settingsFace({}).then(res => {
       if (Number(res.login.enabled)) {
         this.faceSetting = Number(res.login.h5_enabled);
       } else {
         this.faceSetting = 0;
       }
+    }).catch(err => {
+      Toast.fail(err.message)
+    });
+
+    // 第三方登录配置
+    Api.loginConfig({}).then(res => {
+      this.loginConfig = res;
     }).catch(err => {
       Toast.fail(err.message)
     });
