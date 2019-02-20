@@ -971,7 +971,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
         //学生追问，老师收到推送
         if ($threadPost['thread']['userId'] == $user['id'] && $threadPost['thread']['type'] == 'question') {
-//推送
+            //推送
 //            if (!empty($threadPost['target']['teacherIds'])) {
 //                $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($threadPost['target']['teacherIds']);
 //                $reg_ids = ArrayToolkit::column($devices, 'regId');
