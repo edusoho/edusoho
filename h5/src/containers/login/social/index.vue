@@ -18,7 +18,6 @@ export default {
       ? JSON.parse(localStorage.getItem('socialBinded_wx'))
       : this.socialBinded['wx'];
     this.setSocialStatus({ key: 'wx', status: socialBinded_wx });
-    window.open('http://www.baidu.com')
     let code = location.search.match(/\?code.*&/g);
     if (!code) {
       this.wxLogin();
