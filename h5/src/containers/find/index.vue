@@ -32,14 +32,14 @@
         :sort="part.data.sort"
         :feedback="feedback"></e-vip-list>
       <e-market-part
-        class="gray-border-bottom"
-        v-if="['groupon', 'cut', 'seckill'].includes(part.type)"
-        :activity="part.data.activity"
-        :showTitle="part.data.titleShow"
-        :type="part.type"
-        :tag="part.data.tag"
-        @activityHandle="activityHandle"
-        :feedback="feedback"></e-market-part>
+          class="gray-border-bottom"
+          v-if="['groupon', 'cut', 'seckill'].includes(part.type)"
+          :activity="part.data.activity"
+          :showTitle="part.data.titleShow"
+          :type="part.type"
+          :tag="part.data.tag"
+          @activityHandle="activityHandle"
+          :feedback="feedback"></e-market-part>
     </div>
   </div>
 </template>
