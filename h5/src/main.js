@@ -28,7 +28,8 @@ import {
   Rate,
   Cell,
   Tag,
-  Toast
+  Toast,
+  Lazyload
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -53,6 +54,7 @@ Vue.use(Popup);
 Vue.use(plugins);
 Vue.use(utils);
 Vue.use(EdusohoUI);
+Vue.use(Lazyload);
 
 Vue.config.productionTip = false;
 

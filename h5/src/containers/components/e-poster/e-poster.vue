@@ -1,6 +1,6 @@
 <template>
   <div class="e-poster">
-    <img class="e-poster__img" :src="poster.image.uri" @click="jumpTo(link)">
+    <img class="e-poster__img" v-lazy="poster.image.uri" @click="jumpTo(link)">
   </div>
 </template>
 
