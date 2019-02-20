@@ -9819,3 +9819,4 @@ exception.coupon.receive.failed: 优惠券领取失败
 exception.coupon.plugin.not.installed: 优惠券插件未安装
 course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
 course.question.question_background: 问题背景
+course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%分钟（%watchLimit%倍视频时长），不能再继续观看。
