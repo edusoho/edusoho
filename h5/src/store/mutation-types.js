@@ -21,3 +21,4 @@ export const SMS_CENTER = 'SMS_CENTER';
 export const SET_AVATAR = 'SET_AVATAR';
 export const SET_NICKNAME = 'SET_NICKNAME';
 export const BIND_MOBILE = 'BIND_MOBILE';
+export const SET_SOCIAL_STATUS = 'SET_SOCIAL_STATUS';

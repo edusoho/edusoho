@@ -1,5 +1,5 @@
 <template>
-  <div>授权页面</div>
+  <div></div>
 </template>
 
 <script>
@@ -7,16 +7,18 @@ import redirectMixin from '@/mixins/saveRedirect';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
 import { Toast } from 'vant';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   mixins: [redirectMixin],
   name: 'social-wx',
-  data () {
-    return {
-
-    }
-  },
   async created() {
+    // 获取微信绑定状态
+    const socialBinded_wx = localStorage.getItem('socialBinded_wx')
+      ? JSON.parse(localStorage.getItem('socialBinded_wx'))
+      : this.socialBinded['wx'];
+    this.setSocialStatus({ key: 'wx', status: socialBinded_wx });
+    window.open('http://www.baidu.com')
     let code = location.search.match(/\?code.*&/g);
     if (!code) {
       this.wxLogin();
@@ -26,27 +28,39 @@ export default {
       message: '正在登陆'
     });
     code = code[0].slice(6, -1);
-    console.log(code)
     await Api.login({
       params: {
         code: code,
         type: 'weixinmob'
       }
     }).then(res => {
-      this.$store.commit(types.USER_LOGIN, res);
+      this.userLogin(res);
       Toast.clear()
       Toast.success({
         duration: 2000,
         message: '登录成功'
       });
-      this.$router.go(-2);
+      const routerDepth = this.socialBinded.wx ? -2 : -8;
+      localStorage.setItem('socialBinded_wx', true);
+      this.$router.go(routerDepth);
       this.afterLogin();
     }).catch(err => {
+      // 更新微信绑定状态
+      const socialBinded_wx = false;
+      localStorage.setItem('socialBinded_wx', socialBinded_wx);
+
       window.location.href = '/login/bind/weixinmob?os=h5&_target_path='
         + encodeURIComponent(location.pathname + location.hash);
     })
   },
+  computed: {
+    ...mapState(['socialBinded']),
+  },
   methods: {
+    ...mapMutations({
+      setSocialStatus: types.SET_SOCIAL_STATUS,
+      userLogin: types.USER_LOGIN,
+    }),
     wxLogin() {
       Toast.loading({
         message: '请稍后'

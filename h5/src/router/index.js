@@ -259,13 +259,14 @@ router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name);
 
   // 已登录用户不进入 prelogin/login/register 路由
-  if (['prelogin', 'login', 'register'].includes(to.name) && store.state.token) {
+  // 已登录用户进入 auth_social 路由，返回到首页，解决反复进入微信授权页面的问题
+  if (['prelogin', 'login', 'register', 'auth_social'].includes(to.name) && store.state.token) {
     next(to.query.redirect || '/');
     return;
   }
 
-  // 已登录用户进入 auth_social 路由，返回到首页，解决反复进入微信授权页面的问题
-  if (to.name === 'auth_social' && store.state.token) {
+  // 未登录用户 信息设置页 跳转到首页
+  if (['settings'].includes(to.name) && !store.state.token) {
     next('/');
     return;
   }
