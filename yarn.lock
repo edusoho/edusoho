@@ -2597,10 +2597,10 @@ es-abstract@^1.7.0:
     is-callable "^1.1.3"
     is-regex "^1.0.4"
 
-es-ckeditor@4.7.2-patch9:
-  version "4.7.2-patch9"
-  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch9.tgz#fb2502c03a2eba83132379b09a16b5f262308767"
-  integrity sha512-xFsEyDMfgqpwis7oJwZhWf3jp1rJnJuI/MAUWDoEBnirPo+M+GtAh1XbcNHHzbPKO6Y+fOLg+QbE94CvNCa5fg==
+es-ckeditor@4.7.2-patch10:
+  version "4.7.2-patch10"
+  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch10.tgz#b4c2482234ce613fc09d30ad8335d026de00c24b"
+  integrity sha512-DrsDGTXD/tNGhb2aP/IHb2MdREMG11o7BbgqwqUEZEcZQIvuyH/LR22H1Z9jSl4cIwhuNG0MacSdNnQbNsN86Q==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
