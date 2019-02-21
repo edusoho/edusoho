@@ -2,7 +2,7 @@
 {% set questionTypeDict = getQuestionTypes() %}
 {% set resultStatus = paperResult.status|default(null) %}
 
-{% if show_answers(paperResult) or resultStatus == 'doing' or not paperResult|default(null) %}
+{% if show_answers(paperResult|default(null)) or resultStatus == 'doing' or not paperResult|default(null) %}
 
   <form id='teacherCheckForm' autocomplete="off">
 

@@ -21,7 +21,7 @@
 	</div>
 	{% if not question.isDeleted|default(0) %}
 
-	  {% if show_answers(paperResult) %}
+	  {% if show_answers(paperResult|default(null)) %}
 		{% set questionResult = question.testResult.status|default('noAnswer') %}
 
 		<div class="testpaper-question-footer clearfix">
