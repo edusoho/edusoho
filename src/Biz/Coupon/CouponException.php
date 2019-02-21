@@ -18,7 +18,7 @@ class CouponException extends AbstractException
 
     const PLUGIN_NOT_INSTALLED = 5004505;
 
-    const INVALID = 5004506;
+    const INVALID = 4044506;
 
     const RECEIVED = 5004507;
 
@@ -30,7 +30,7 @@ class CouponException extends AbstractException
         5004503 => 'exception.coupon.type_invalid',
         5004504 => 'exception.coupon.receive.failed',
         5004505 => 'exception.coupon.plugin.not.installed',
-        5004506 => 'exception.coupon.invalid',
+        4044506 => 'exception.coupon.invalid',
         5004507 => 'exception.coupon.received',
         5004508 => 'exception.coupon.finished',
     );
