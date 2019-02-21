@@ -9801,3 +9801,6 @@ admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级�
 
 exception.coupon.receive.failed: 优惠券领取失败
 exception.coupon.plugin.not.installed: 优惠券插件未安装
+exception.coupon.invalid: 优惠券已失效
+exception.coupon.received: 优惠券已领过
+exception.coupon.finished: 优惠券已领完
