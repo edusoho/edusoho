@@ -65,7 +65,7 @@
       {% endif %}
     {% endif %}
 
-    {% if show_answers(paperResult) %}
+    {% if show_answers(paperResult|default(null)) %}
       <div class="panel panel-default ">
         <div class="panel-heading">
           {{'testpaper.answer.answer_card'|trans}}
