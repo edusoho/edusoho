@@ -9,7 +9,7 @@ $('.js-course-list-group').on('click', '.js-delete-btn',  (event) => {
 });
 
 sortList({
-  element: '.course-list-group',
+  element: '#course-list-group',
   itemSelector: 'li.course-item',
   ajax: false
 });
