@@ -6,11 +6,6 @@
 
 {% block detail_content %}
 
-  <ul class="breadcrumb">
-    <li><a href="{{ path('my_course_show', {id: course.id, 'tab': 'threads'}) }}">{{'course.thread'|trans}}</a></li>
-    <li class="active">{% if thread.type == 'question' %}{{'thread.hover_tips.question'|trans}}{% else %}{{'thread.hover_tips.thread'|trans}}{% endif %}</li>
-  </ul>
-
   <div class="thread">
     <div class="thread-header">
       {{ web_macro.user_avatar(author, 'pull-right') }}
