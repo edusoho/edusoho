@@ -22,9 +22,10 @@
       <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="social-login-button" v-if="faceSetting">
         <img src="static/images/face.png" alt="人脸识别登录图标">
       </router-link>
-      <a class="social-login-button" v-if="Number(loginConfig.weixinmob_enabled) && isWeixinBrowser" @click="wxLogin">
+      <!-- 微信环境内，自动登录微信账号 -->
+      <!-- <a class="social-login-button" v-if="Number(loginConfig.weixinmob_enabled) && isWeixinBrowser" @click="wxLogin">
         <i class="h5-icon h5-icon-weixin1"></i>
-      </a>
+      </a> -->
     </div>
   </div>
 
@@ -114,6 +115,9 @@ export default {
   mounted() {
     this.bodyHeight = document.documentElement.clientHeight - 46;
     this.username = this.$route.params.username || '';
+    Toast.loading({
+      message: '请稍后'
+    });
     // 人脸登录配置
     Api.settingsFace({}).then(res => {
       if (Number(res.login.enabled)) {
@@ -127,9 +131,14 @@ export default {
 
     // 第三方登录配置
     Api.loginConfig({}).then(res => {
+      Toast.clear()
       this.loginConfig = res;
+      if (Number(res.weixinmob_enabled) && this.isWeixinBrowser) {
+        this.wxLogin();
+      }
     }).catch(err => {
       Toast.fail(err.message)
+      Toast.clear()
     });
   },
 }
