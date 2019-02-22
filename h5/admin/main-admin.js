@@ -35,6 +35,7 @@ import {
 import {
   Swipe,
   SwipeItem,
+  Lazyload
 } from 'vant';
 // 按需引入组件
 Vue.component('van-swipe', Swipe);
@@ -56,6 +57,7 @@ Vue.use(utils);
 Vue.use(Dropdown);
 Vue.use(DropdownItem);
 Vue.use(DropdownMenu);
+Vue.use(Lazyload);
 
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

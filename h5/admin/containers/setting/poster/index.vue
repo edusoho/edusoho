@@ -198,19 +198,18 @@ export default {
     beforeUpload(file) {
       const type = file.type;
       const size = file.size / 1024 / 1024;
+      let message = '';
 
       if (type.indexOf('image') === -1) {
-        this.$message({
-          message: '文件类型仅支持图片格式',
-          type: 'error'
-        });
-        return false;
+        message = '文件类型仅支持图片格式';
+      } else if (size > 2) {
+        message = '文件大小不得超过 2 MB';
       }
 
-      if (size > 2) {
+      if (message) {
         this.$message({
-          message: '文件大小不得超过 2 MB',
-          type: 'error'
+          type: 'error',
+          message,
         });
         return false;
       }
