@@ -39,7 +39,7 @@ export default {
         duration: 2000,
         message: '登录成功'
       });
-      const routerDepth = this.socialBinded.wx ? -2 : -8;
+      const routerDepth = this.socialBinded.wx ? -2 : -7;
       localStorage.setItem('socialBinded_wx', true);
       this.$router.go(routerDepth);
       this.afterLogin();
