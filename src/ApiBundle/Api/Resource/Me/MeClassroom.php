@@ -37,18 +37,18 @@ class MeClassroom extends AbstractResource
 
     private function getClassrooms($conditions, $orderBy, $offset, $limit)
     {
-        $sortClassrooms = array();
         $classroomIds = ArrayToolkit::column(
             $this->getClassroomService()->searchMembers($conditions, array(), $offset, $limit),
             'classroomId'
         );
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
-
+        
+        $classroomsRef = array();
         foreach ($classroomIds as $classroomId) {
-            $sortClassrooms[] = $classrooms[$classroomId];
+            $classroomsRef[] = $classrooms[$classroomId];
         }
 
-        return $sortClassrooms;
+        return $classroomsRef;
     }
 
     /**
