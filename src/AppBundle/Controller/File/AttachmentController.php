@@ -74,6 +74,16 @@ class AttachmentController extends BaseController
         ));
     }
 
+    public function directVideoPreviewAction(Request $request, $id)
+    {
+        $ssl = $request->isSecure() ? true : false;
+        $file = $this->getUploadFileService()->getDownloadMetas($id, $ssl);
+
+        return $this->render('attachment/direct-video-preview.html.twig', array(
+            'url' => $file['url'],
+        ));
+    }
+
     public function playerAction(Request $request, $id)
     {
         $user = $this->getUser();

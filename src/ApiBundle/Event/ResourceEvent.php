@@ -12,7 +12,6 @@ class ResourceEvent extends Event
 
     private $resourceProxy;
 
-
     public function __construct(Request $request, ResourceProxy $resourceProxy)
     {
         $this->request = $request;

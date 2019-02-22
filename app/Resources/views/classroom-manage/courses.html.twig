@@ -23,7 +23,7 @@
         {{ web_macro.flash_messages() }}
         <div class="form-group" id="courses-form-group">
           <div class="col-md-12 controls">
-            <ul class="course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
+            <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
 
               {% for course in courses %}
 
@@ -31,11 +31,16 @@
               <input type="hidden" name="courseIds[]" value="{{course.id}}" />
               <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>
               <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+              {% if course.type == 'live' %}
+                <span class="tags">
+                  <span class="tag-live"></span>
+                </span>
+              {% endif %}
                 <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
               </a>
-              <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="{{'classroom.delete_btn'|trans}}" style="font-size:35px;" data-id="{{course.id}}" data-url="{{path('classroom_manage_course_remove', {id: classroom.id, courseId: course.id})}}">× </button>
-                  <div class="course-body">
-                   <div class="color-gray mrm mls pull-right">
+              <button class="close course-close-btn js-delete-btn mrl mts mll" data-role="item-delete" type="button" title="{{'classroom.delete_btn'|trans}}" data-id="{{course.id}}" data-url="{{path('classroom_manage_course_remove', {id: classroom.id, courseId: course.id})}}">× </button>
+                  <div class="course-body clearfix">
+                   <div class="color-gray mls pull-right cd-mr40">
                       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                           <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.originPrice * setting('coin.cash_rate')}}">
                             {% if course.originPrice > 0 %}
@@ -57,38 +62,19 @@
                       {% endif %}
                     </div>
 
-                    <h4 class="course-title text-overflow mb0">
+                    <h4 class="course-title text-overflow mv0">
                       {% if course.serializeMode=='serialized' %}
                         <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
                       {% elseif course.serializeMode=='finished' %}
                         <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
                       {% endif %}
                       <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title }}</a>
-                      <div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{course.title|sub_text(20)}}</div>
 
-                      {% if course.type == 'live' %}
-                        {% set lesson = course['lesson']|default(null) %}
-                        {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                          <span class="label label-warning">{{'classroom.live_course_playing'|trans}}</span>
-                        {% else %}
-                          <span class="label label-success">{{'classroom.live'|trans}}</span>
-                        {% endif %}
-                    {% endif %}
+                      {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|sub_text(20) }}</div>{% endif %}
                     </h4>
-
-                    {% if course.type == 'live' %}
-                      {% set lesson = course.lesson|default(null) %}
-                      {% if lesson %}
-                        <div class="live-course-lesson mbm">
-                          <span class="color-success fsm mrm">{{ lesson.startTime|date('m-d H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                          <span class="color-gray fsm mrm">{{'classroom.task_num'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%':lesson.number})}}</span>
-                        </div>
-                      {% endif %}
-                    {% else %}
-                      <div class="pull-right cd-mr40"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
-                    {% endif %}
-
-                    <div class="course-footer cd-mt32 clearfix">
+                    <div class="course-manage-btn"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
+              
+                    <div class="course-footer clearfix">
                       {% set teacher = users[course.teacherIds|first]|default(null) %}
                       {% if teacher %}
                         <div class="teacher">

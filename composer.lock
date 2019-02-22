@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c6a6f02defc882a3bfa5285f75c3a8a",
+    "content-hash": "63d2b49ca6b42e793fe38a49370ea15e",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -529,16 +529,16 @@
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
-            "version": "v0.3.1",
+            "version": "v0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "332f28fd146beb3e63c7aff6319c416e263aefa8"
+                "reference": "d38db1f37fcf68df7ebdeee8f3ea4415eaa6e129"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/332f28fd146beb3e63c7aff6319c416e263aefa8",
-                "reference": "332f28fd146beb3e63c7aff6319c416e263aefa8",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/d38db1f37fcf68df7ebdeee8f3ea4415eaa6e129",
+                "reference": "d38db1f37fcf68df7ebdeee8f3ea4415eaa6e129",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -574,7 +574,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2018-11-28T08:02:52+00:00"
+            "time": "2019-01-16T08:12:43+00:00"
         },
         {
             "name": "codeages/rate-limiter",
@@ -1617,12 +1617,12 @@
             "version": "v2.4.8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/doctrine2.git",
+                "url": "https://github.com/doctrine/orm.git",
                 "reference": "5aedac1e5c5caaeac14798822c70325dc242d467"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/5aedac1e5c5caaeac14798822c70325dc242d467",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/5aedac1e5c5caaeac14798822c70325dc242d467",
                 "reference": "5aedac1e5c5caaeac14798822c70325dc242d467",
                 "shasum": "",
                 "mirrors": [

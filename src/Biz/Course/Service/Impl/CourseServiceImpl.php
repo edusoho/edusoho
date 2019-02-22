@@ -609,8 +609,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $updateFields['compulsoryTaskNum'] = $this->getTaskService()->countTasks(
                     array('courseId' => $id, 'isOptional' => 0)
                 );
-            } elseif ('threadNum' === $field) {
-                $updateFields['threadNum'] = $this->countThreadsByCourseId($id);
+            } elseif ('discussionNum' === $field) {
+                $updateFields['discussionNum'] = $this->countThreadsByCourseIdAndType($id, 'discussion');
+            } elseif ('questionNum' === $field) {
+                $updateFields['questionNum'] = $this->countThreadsByCourseIdAndType($id, 'question');
             } elseif ('ratingNum' === $field) {
                 $ratingFields = $this->getReviewService()->countRatingByCourseId($id);
                 $updateFields = array_merge($updateFields, $ratingFields);
@@ -896,6 +898,11 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'role' => 'student',
             )
         );
+    }
+
+    public function countThreadsByCourseIdAndType($courseId, $type)
+    {
+        return $this->getCourseThreadService()->countThreads(array('courseId' => $courseId, 'type' => $type));
     }
 
     // Refactor: 该函数不属于CourseService
@@ -2515,6 +2522,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCourseLessonService()
     {
         return $this->createService('Course:LessonService');
+    }
+
+    /**
+     * @return \Biz\Course\Service\Impl\ThreadServiceImpl
+     */
+    protected function getCourseThreadService()
+    {
+        return $this->createService('Course:ThreadService');
     }
 
     /**

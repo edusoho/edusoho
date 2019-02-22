@@ -4,18 +4,9 @@
 {% set thread = thread|default(null) %}
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/course/thread-form/index.js'])%}
 
-{% set nav = 'threads' %}
+{% set nav = type %}
 
 {% block detail_content %}
-  <ul class="breadcrumb">
-    <li><a href="{{ path('my_course_show', {id:course.id, tab: 'threads'}) }}">{{'course.thread'|trans}}</a></li>
-    {% if thread %}
-      <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|plain_text(10) }}</a></li>
-      <li class="active">{% if type == 'question' %}{{'course.thread.form.question.edit_btn'|trans}}{% else %}{{'course.thread.form.edit_btn'|trans}}{% endif %}</li>
-    {% else %}
-      <li class="active">{% if type == 'question' %}{{'course.thread.form.question.create_btn'|trans}}{% else %}{{'course.thread.form.create_btn'|trans}}{% endif %}</li>
-    {% endif %}
-  </ul>
 
   <form id="thread-form" class="form-vertical" method="post"
     {% if thread %}

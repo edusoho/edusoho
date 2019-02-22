@@ -4,6 +4,11 @@
 
 {% do script(['libs/jquery-validation.js','app/js/courseset/create/index.js']) %}
 
+{% set liveAccount = get_live_account() %}
+{% if defaultType == 'live' and (liveAccount.error is defined or not setting('live-course.live_course_enabled') or liveAccount.isExpired) %}
+  {% set defaultType = 'normal' %}
+{% endif %}
+
 {% block content %}
   <div class="row">
     <div class="panel panel-default panel-page panel-create-course">
@@ -21,7 +26,7 @@
             {% set typeCount = courseTypes|length %}
             {% for key,type in courseTypes %}
               <div class="{% if typeCount <= 4 %}col-md-3 {% else %}col-md-2 course-five-types {% endif %}">
-                {% include type.template with {type: key} %}
+                {% include type.template with {type: key, defaultType: defaultType} %}
               </div>
             {% endfor %}
           </div>
@@ -46,7 +51,7 @@
                      class="cd-btn cd-btn-primary" type="submit">{{ 'form.btn.create'|trans }}</button>
               <a class="btn btn-fat btn-link link-gray course-cancel-btn" href="{{ app.request.headers.get('Referer') }}">{{ 'form.btn.cancel'|trans }}</a>
             </div>
-            <input type="hidden" name="type" value="normal"/>
+            <input type="hidden" name="type" value="{{ defaultType }}"/>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"></div>
         </div>
       </form>

@@ -11,6 +11,7 @@ use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\Util\TextHelper;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\User\Service\NotificationService;
 use Biz\Course\Dao\Impl\ThreadPostDaoImpl;
@@ -145,8 +146,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::COURSEID_REQUIRED());
         }
 
+        $thread = $this->filterThread($thread);
         $trimedThreadTitle = empty($thread['title']) ? '' : trim($thread['title']);
-        if (empty($trimedThreadTitle)) {
+        if (empty($trimedThreadTitle) and !isset($thread['source'])) {
             $this->createNewException(ThreadException::TITLE_REQUIRED());
         }
 
@@ -174,6 +176,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $trusted = empty($hasCourseManagerRole) ? false : true;
         //更新thread过滤html
         $thread['content'] = $this->biz['html_helper']->purify($thread['content'], $trusted);
+        $thread['content'] = $this->filter_Emoji($thread['content']);
+        $thread['title'] = $this->filter_Emoji($thread['title']);
 
         $thread['createdTime'] = time();
         $thread['latestPostUserId'] = $thread['userId'];
@@ -181,6 +185,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['private'] = 'published' === $course['status'] ? 0 : 1;
 
         $thread = $this->getThreadDao()->create($thread);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         foreach ($course['teacherIds'] as $teacherId) {
             if ($teacherId == $thread['userId']) {
@@ -195,10 +200,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 'threadId' => $thread['id'],
                 'threadUserId' => $thread['userId'],
                 'threadUserNickname' => $this->getCurrentUser()->nickname,
-                'threadTitle' => $thread['title'],
+                'threadTitle' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType']),
                 'threadType' => $thread['type'],
                 'courseId' => $course['id'],
-                'courseTitle' => $course['title'],
+                'courseTitle' => !empty($course['title']) ? $courseSet['title'].'-'.$course['title'] : $courseSet['title'],
             ));
         }
 
@@ -215,14 +220,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
-        $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-update');
-        $fields['title'] = $this->sensitiveFilter($fields['title'], 'course-thread-update');
+        $fields['content'] = isset($fields['content']) ? $this->sensitiveFilter($fields['content'], 'course-thread-update') : $thread['content'];
+        $fields['title'] = isset($fields['title']) ? $this->sensitiveFilter($fields['title'], 'course-thread-update') : $thread['title'];
 
         if ($this->getCurrentUser()->getId() != $thread['userId']) {
             $this->getCourseService()->tryManageCourse($thread['courseId'], 'admin_course_thread');
         }
 
-        $fields = ArrayToolkit::parts($fields, array('title', 'content'));
+        $fields = ArrayToolkit::parts($fields, array('title', 'content', 'askVideoThumbnail'));
 
         if (empty($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
@@ -231,8 +236,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($courseId);
         $trusted = empty($hasCourseManagerRole) ? false : true;
         //更新thread过滤html
-        $fields['content'] = $this->biz['html_helper']->purify($fields['content'], $trusted);
+        $fields['content'] = isset($fields['content']) ? $this->biz['html_helper']->purify($fields['content'], $trusted) : $thread['content'];
 
+        $thread['content'] = $this->filter_Emoji($thread['content']);
+        $thread['title'] = $this->filter_Emoji($thread['title']);
         $thread = $this->getThreadDao()->update($threadId, $fields);
         $this->dispatchEvent('course.thread.update', new Event($thread));
 
@@ -402,12 +409,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $thread = $this->getThread($post['courseId'], $post['threadId']);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
 
         if (empty($thread)) {
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $post['content'] = $this->sensitiveFilter($post['content'], 'course-thread-post-create');
+        $post['content'] = $this->filter_Emoji($post['content']);
 
         $this->getCourseService()->tryTakeCourse($post['courseId']);
 
@@ -430,6 +439,33 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             'latestPostTime' => $post['createdTime'],
         );
         $this->getThreadDao()->update($thread['id'], $threadFields);
+        $user = $this->getCurrentUser();
+
+        if ('question' == $thread['type']) {
+            if ($user['id'] == $thread['userId']) {
+                foreach ($course['teacherIds'] as $teacherId) {
+                    if ('question' == $thread['type']) {
+                        $this->getNotifiactionService()->notify($teacherId, 'question-post-ask', array(
+                            'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+                            'id' => $post['id'],
+                            'content' => TextHelper::truncate($post['content'], 50),
+                            'thread' => empty($thread) ? null : array('id' => $thread['id'], 'title' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType'])),
+                            'post' => $post,
+                            'courseId' => $course['id'],
+                        ));
+                    }
+                }
+            } else {
+                $this->getNotifiactionService()->notify($thread['userId'], 'question-answer', array(
+                    'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+                    'id' => $post['id'],
+                    'content' => TextHelper::truncate($post['content'], 50),
+                    'thread' => empty($thread) ? null : array('id' => $thread['id'], 'title' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType'])),
+                    'post' => $post,
+                    'courseId' => $course['id'],
+                ));
+            }
+        }
 
         $this->dispatchEvent('course.thread.post.create', $post);
 
@@ -465,6 +501,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->dispatchEvent('course.thread.post.update', $post);
 
         return $post;
+    }
+
+    public function readPost($postId)
+    {
+        return $this->getThreadPostDao()->update($postId, array('isRead' => 1));
     }
 
     public function deletePost($courseId, $id)
@@ -510,6 +551,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $conditions;
     }
 
+    protected function filterThread($thread)
+    {
+        return ArrayToolkit::parts($thread, array('title', 'content', 'type', 'videoAskTime', 'videoId', 'courseId', 'taskId', 'source', 'questionType'));
+    }
+
     protected function filterSort($sort)
     {
         if (is_array($sort)) {
@@ -539,9 +585,29 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $orderBys;
     }
 
+    protected function filter_Emoji($str)
+    {
+        $str = preg_replace_callback(
+            '/./u',
+            function (array $match) {
+                return strlen($match[0]) >= 4 ? '[emoji]' : $match[0];
+            },
+            $str);
+
+        return $str;
+    }
+
     protected function sensitiveFilter($str, $type)
     {
         return $this->getSensitiveService()->sensitiveCheck($str, $type);
+    }
+
+    /**
+     * @return \Biz\Course\Service\Impl\CourseSetServiceImpl
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**

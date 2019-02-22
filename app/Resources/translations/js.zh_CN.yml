@@ -543,6 +543,7 @@ course.question_marker.back_to_questions: 返回题目
 
 classroom.manage.tag_required_hint: 请输入标签
 classroom.manage.delete_course_hint: 是否要从班级移除该课程？
+classroom.manage.delete_course_hint_title: 移除课程
 classroom.manage.delete_course_success_hint: 课程移除成功
 classroom.manage.delete_course_fail_hint: 课程移除失败
 classroom.manage.expiry_mode_days_error_hint: 请输入有效期天数

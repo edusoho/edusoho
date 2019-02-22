@@ -11,7 +11,7 @@ use Biz\Common\CommonException;
 class ApiConf
 {
     /**
-     * @var boolean
+     * @var bool
      */
     private $isRequiredAuth;
 

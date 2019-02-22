@@ -22,7 +22,7 @@
     </div>
     <div class="editor-text">{{ post.content|cdn|raw }}</div>
     {% include 'attachment/widget/list.html.twig' with {targetType:'course.thread.post', targetId:post.id|default(0)} %}
-    {% if app.user.id != author.id %}
+    {% if app.user.id != author.id and thread.type != 'question' %}
     <div class="thread-post-action" data-user="{{ author.nickname }}"><a class="js-call-username" href="#thread-post-form" >{{'thread.reply'|trans}}</a></div>
     {% endif %}
   </div>

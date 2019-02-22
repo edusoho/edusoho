@@ -201,6 +201,44 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
+    public function initFormUpload($file)
+    {
+        $params = array(
+            'extno' => $file['id'],
+            'bucket' => $file['bucket'],
+            'reskey' => $file['hashId'],
+            'hash' => $file['hash'],
+            'name' => $file['fileName'],
+            'size' => $file['fileSize'],
+            'uploadType' => $file['uploadType'],
+        );
+        if ('attachment' == $file['targetType']) {
+            $params['type'] = $file['targetType'];
+        }
+
+        if ('subtitle' == $file['targetType']) {
+            $params['type'] = 'sub';
+        }
+        if (isset($file['directives'])) {
+            $params['directives'] = $file['directives'];
+        }
+
+        if ('video' == $file['type']) {
+            $watermarks = $this->getVideoWatermarkImages();
+
+            if (!empty($watermarks)) {
+                $params['directives']['watermarks'] = $watermarks;
+            }
+        }
+
+        $apiResult = $this->createApi('root')->post('/resources/upload_form_init', $params);
+        $apiResult['fileId'] = $file['id'];
+        $apiResult['globalId'] = $apiResult['no'];
+        unset($apiResult['no']);
+
+        return $apiResult;
+    }
+
     public function initUpload($file)
     {
         $params = array(
@@ -298,6 +336,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
         $download = $this->createApi('leaf')->get("/resources/{$file['globalId']}/download", $params);
+
         $download['type'] = 'url';
 
         return $download;

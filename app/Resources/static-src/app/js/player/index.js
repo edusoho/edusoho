@@ -40,6 +40,7 @@ class Show {
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
     this.autoplay = container.data('autoplay');
+    this.remeberLastPos = container.data('remeberLastPos');
     let $iframe = $(window.parent.document.getElementById('task-content-iframe'));
     if ($iframe.length > 0 && parseInt($iframe.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
       DurationStorage.del(this.userId, this.fileId);
@@ -104,7 +105,6 @@ class Show {
       }
     );
   }
-
   transToTextrack(subtitles) {
     let textTracks = [];
     if (subtitles) {

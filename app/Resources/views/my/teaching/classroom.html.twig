@@ -19,10 +19,10 @@
               <a class="course-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
                 <img class="course-picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
               </a>
-              <div class="course-body">
+              <div class="course-body clearfix">
                 {% if members[classroom.id].role == "headTeacher"  or is_granted('ROLE_ADMIN') %}
-                  <div style="float:right;" class="color-gray mrm mls">
-                  <span class="glyphicon glyphicon-cog"></span> <a href="{{path('classroom_manage',{id:classroom.id})}}">{{'my.teaching.classroom.manage_btn'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})}}</a>
+                  <div class="color-gray mrm mls pull-right">
+                  <span class="glyphicon glyphicon-cog"></span><a target="_blank" href="{{path('classroom_manage',{id:classroom.id})}}">{{'my.teaching.classroom.manage_btn'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})}}</a>
                   </div>
                 {% endif %}
                 <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>

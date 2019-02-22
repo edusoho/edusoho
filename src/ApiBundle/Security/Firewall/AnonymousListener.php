@@ -44,7 +44,7 @@ class AnonymousListener implements ListenerInterface
             'email' => 'fakeUser',
             'locale' => 'zh_CN',
             'roles' => array(),
-            'currentIp' => $clientIp
+            'currentIp' => $clientIp,
         );
 
         $currentUser = new CurrentUser();

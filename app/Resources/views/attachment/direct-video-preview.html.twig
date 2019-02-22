@@ -1,0 +1,18 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set closeClear = 1 %}
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}
+    {{ 'attachments.preview'|trans }}
+{% endblock %}
+
+{% block body %}
+    <div style="overflow: hidden; text-align: center;">
+      <video controls="" autoplay="" name="media"><source src="{{ url }}" type="video/mp4"></video>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'attachments.modal.upload.close_btn'|trans }}</button>
+{% endblock %}

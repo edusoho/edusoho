@@ -1,4 +1,4 @@
-<div class="course-select js-courseSetType active" data-type="{{ type }}">
+<div class="course-select js-courseSetType {% if defaultType|default('normal') == type %}active{% endif %}" data-type="{{ type }}">
   <i class="es-icon es-icon-putongkecheng "></i>
   <div class="course-type">{{ 'my.teaching.course_set.select_type.course'|trans }}</div>
   <div class="course-intro">{{ 'my.teaching.course_set.select_type.course.tips'|trans }}</div>

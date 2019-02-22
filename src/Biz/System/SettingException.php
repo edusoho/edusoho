@@ -32,9 +32,11 @@ class SettingException extends AbstractException
 
     const AI_FACE_DISABLE = 5000812;
 
+    const FORBIDDEN_CLOUD_ATTACHMENT = 4030813;
+
     public $messages = array(
         4030801 => 'exception.setting.forbidden_mobile_register',
-        4030802 => 'exception.sms.setting_enbale',
+        4030802 => 'exception.sms.setting_enable',
         4030803 => 'exception.setting.forbidden_setting_nickname',
         4040804 => 'exception.setting.third_party_auth_not_found',
         4030805 => 'exception.setting.forbidden_third_party_auth',
@@ -45,5 +47,6 @@ class SettingException extends AbstractException
         5000810 => 'exception.setting.coin_img_size_limit',
         5000811 => 'exception.setting.no_copyright',
         5000812 => 'exception.setting.ai_face_disable',
+        4030813 => 'exception.setting.attachment.setting_enable',
     );
 }
