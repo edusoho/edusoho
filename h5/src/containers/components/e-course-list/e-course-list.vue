@@ -149,10 +149,6 @@ import { mapState } from 'vuex';
         this.fetchCourse();
       },
     },
-    created() {
-      if (!this.pathName.includes('Setting')) return
-      this.fetchCourse();
-    },
     methods: {
       jumpTo(source) {
         if (!this.feedback) {
