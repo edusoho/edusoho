@@ -1,0 +1,147 @@
+.mobile-bind-modal {
+  position: relative;
+  left: 50%;
+  margin-left: -379px ;
+
+  @media(max-width: @screen-xs-max) {
+    width: 408px;
+    margin-left: -180px !important;
+  }
+
+  @media(max-width: @screen-xs-min) {
+    margin-left: -150px !important;
+  }
+
+  .modal-content {
+    padding: 24px;
+    border-radius: 2px;
+    width: 758px;
+    height: 358px;
+    @media(max-width: @screen-xs-max) {
+      width: 408px;
+      height: 604px;
+    }
+
+    @media(max-width: @screen-xs-min) {
+      width: 300px;
+    }
+
+    .modal-header {
+      padding: 0 !important;
+      border-bottom: 0 !important;
+      h4 {
+        font-size: 16px;
+        line-height: 16px;
+      }
+
+      .close {
+        font-size: 12px;
+        color: #919191;
+        line-height: 16px;
+        padding-top: 2px;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 0 !important;
+    padding-top: 32px !important;
+  }
+
+  .modal-footer {
+    border: 0 !important;
+    text-align: left;
+    padding: 0 !important;
+  }
+
+  .mobile-bind-form {
+    width: 360px;
+    @media(max-width: @screen-xs-min) {
+      width: 252px;
+    }
+
+    height: 214px;
+
+    .sms-send-btn {
+      color: #0080ee;
+      border-color: #0080eeb3;
+
+      &:hover {
+        border-color: #0080ee;
+        box-shadow: 0 6px 6px 0 rgba(26, 155, 242, 0.3);
+      }
+    }
+  }
+
+  .divider-vertical {
+    float: left;
+    width: 2px;
+    height: 262px;
+    margin-left: 24px;
+    border: 1px solid #DEF1FF;
+
+    @media(max-width: @screen-xs-max) {
+      display: none;
+    }
+  }
+
+  .bind-reasons {
+    float: right;
+    @media(max-width: @screen-xs-max) {
+      float: left;
+      margin-top: 70px;
+    }
+
+    .title {
+      font-size: 14px;
+      color: #313131;
+      line-height: 14px;
+    }
+    .contents {
+      width: 300px;
+      height: 184px;
+      @media(max-width: @screen-xs-max) {
+        width: 360px;
+      }
+
+      @media(max-width: @screen-xs-min) {
+        width: 252px;
+      }
+
+      padding: 16px;
+      background: #EDF7FF;
+      border-radius: 4px;
+      margin-top: 16px;
+
+      >p {
+        font-size: 12px;
+        color: #616161;
+        text-align: justify;
+        line-height: 20px;
+        margin: 0;
+      }
+
+      .middle {
+        margin-top: 16px;
+        margin-bottom: 16px;
+      }
+    }
+  }
+
+  .bind-submit-btn {
+    width: 360px;
+
+    @media(max-width: @screen-xs-min) {
+      width: 252px;
+    }
+
+    margin-top: -4px;
+    background-color: #0081E6;
+    border-color: #0081E6;
+    color: #fff;
+
+    &:hover {
+      box-shadow: 0 6px 6px 0 rgba(26, 155, 242, 0.3);
+    }
+  }
+}
