@@ -47,5 +47,8 @@ export default {
   },
   [types.SET_NAVBAR_TITLE](state, payload) {
     state.title = payload;
+  },
+  [types.SET_SOCIAL_STATUS](state, { key, status }) {
+    state.socialBinded[key] = status;
   }
 };

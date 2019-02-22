@@ -17,7 +17,10 @@ const state = {
   courseSettings: {},
   title: '',
   vipSettings: {},
-  vipSwitch: false
+  vipSwitch: false,
+  socialBinded: {
+    wx: true
+  }
 };
 
 

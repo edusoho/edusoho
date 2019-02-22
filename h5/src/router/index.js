@@ -214,6 +214,13 @@ const routes = [
       title: ''
     },
     component: () => import(/* webpackChunkName: "share_redirect" */'@/containers/share-redirect/index.vue')
+  }, {
+    path: '/auth/social',
+    name: 'auth_social',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "auth_social" */'@/containers/login/social/index.vue')
   }
 ];
 
@@ -250,6 +257,19 @@ const setVipSwitch = () => new Promise((resolve, reject) => {
 
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name);
+
+  // 已登录用户不进入 prelogin/login/register 路由
+  // 已登录用户进入 auth_social 路由，返回到首页，解决反复进入微信授权页面的问题
+  if (['prelogin', 'login', 'register', 'auth_social'].includes(to.name) && store.state.token) {
+    next(to.query.redirect || '/');
+    return;
+  }
+
+  // 未登录用户 信息设置页 跳转到首页
+  if (['settings'].includes(to.name) && !store.state.token) {
+    next('/');
+    return;
+  }
 
   // 站点后台设置、会员后台配置
   if (!Object.keys(store.state.settings).length) {
