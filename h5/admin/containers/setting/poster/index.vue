@@ -4,7 +4,7 @@
       <div class="image-mask" v-show="!copyModuleData.image.uri">
         广告图片
       </div>
-      <poster :class="imageMode[copyModuleData.responsive]" :poster="copyModuleData" :feedback="false"></poster>
+      <poster v-show="copyModuleData.image.uri" :class="imageMode[copyModuleData.responsive]" :poster="copyModuleData" :feedback="false"></poster>
     </div>
 
     <div slot="setting" class="poster-allocate">
