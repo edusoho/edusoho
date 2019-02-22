@@ -10,12 +10,6 @@
 
 {% block detail_content %}
 
-<ul class="breadcrumb">
-  <li><a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}">{{'course.thread'|trans}}</a></li>
-  <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}">{{ thread.title|plain_text(10) }}</a></li>
-  <li class="active">{{'course.thread.post_form.edit_btn'|trans}}</li>
-</ul>
-
 <form id="thread-post-form" method="post"
   {% if post %}
     action="{{ path('course_thread_post_edit', {courseId:course.id, threadId:post.threadId, postId:post.id}) }}"

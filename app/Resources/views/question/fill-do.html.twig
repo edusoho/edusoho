@@ -7,7 +7,7 @@
 
   {% if not question.isDeleted|default(0) %}
 
-	{% if show_answers(paperResult) %}
+	{% if show_answers(paperResult|default(null)) %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 		    <ul>

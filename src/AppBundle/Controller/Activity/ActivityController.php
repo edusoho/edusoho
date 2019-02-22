@@ -19,6 +19,10 @@ class ActivityController extends BaseController
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
+        if ('video' == $activity['mediaType']) {
+            $activity['watchStatus'] = $this->checkVideoWatchStatus($activity);
+        }
+
         $activityConfigManage = $this->get('activity_config_manager');
         if ($activityConfigManage->isLtcActivity($activity['mediaType'])) {
             $container = $this->get('activity_runtime_container');
@@ -166,6 +170,18 @@ class ActivityController extends BaseController
         $config = $this->get('extension.manager')->getActivities();
 
         return $config[$type];
+    }
+
+    protected function checkVideoWatchStatus($activity)
+    {
+        $isLimit = $this->setting('magic.lesson_watch_limit');
+        if ($isLimit) {
+            $type = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+
+            return $type->getWatchStatus($activity);
+        }
+
+        return array('status' => 'ok');
     }
 
     /**

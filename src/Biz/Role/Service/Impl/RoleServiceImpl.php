@@ -34,6 +34,10 @@ class RoleServiceImpl extends BaseService implements RoleService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
+        if (!preg_match('/(^(?![^0-9a-zA-Z]+$))(?![0-9]+$).+/', $role['code'])) {
+            $this->createNewException(RoleException::CODE_NOT_ALLL_DIGITAL());
+        }
+
         return $this->getRoleDao()->create($role);
     }
 
