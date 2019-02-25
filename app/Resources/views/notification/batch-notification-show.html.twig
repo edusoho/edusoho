@@ -8,8 +8,8 @@
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
     {% if batchnotification %}
-      <h2 style="margin-top:0">
-        {{ batchnotification.title }}
+      <h2 class="mt0">
+        {{ batchnotification.title|raw }}
       </h2>
       <p class="color-gray">
         {{'notification.site_notification.publish_time'|trans}} ：{{ batchnotification.sendedTime|date_format }}

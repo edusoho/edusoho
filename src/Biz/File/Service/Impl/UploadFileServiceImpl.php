@@ -228,6 +228,84 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $auth;
     }
 
+    /**
+     * 传入的参数：
+     *
+     *   targetId 目标Id
+     *   targetType 目标类型
+     *   hash 文件hash
+     *   fileName 文件名称
+     *   fileSize 文件大小
+     *   uploadType 上传类型（direct表示直传不转码）
+     *
+     * @param array $params
+     *
+     * @throws
+     *
+     * @return array
+     *               globalId
+     *               Url 上传地址
+     *               token 上传token
+     *               fileId  upload_init id
+     */
+    public function initFormUpload($params)
+    {
+        $user = $this->getCurrentUser();
+
+        if (empty($user)) {
+            throw $this->createServiceException('用户未登录，上传初始化失败！');
+        }
+
+        if (!ArrayToolkit::requireds($params, array('targetId', 'targetType', 'hash'))) {
+            throw $this->createServiceException('参数缺失，上传初始化失败！');
+        }
+        $params['userId'] = $user['id'];
+        $params = ArrayToolkit::parts($params, array(
+            'id',
+            'userId',
+            'targetId',
+            'targetType',
+            'bucket',
+            'hash',
+            'fileSize',
+            'fileName',
+            'uploadType',
+        ));
+
+        $setting = $this->getSettingService()->get('storage');
+        $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
+        $implementor = $this->getFileImplementor($params['storage']);
+
+        if (isset($params['id'])) {
+            $file = $this->getUploadFileInitDao()->get($params['id']);
+            $initParams = $implementor->resumeUpload($file, $params);
+
+            if ('ok' == $initParams['resumed'] && $file && 'ok' != $file['status']) {
+                $this->getUploadFileInitDao()->update($file['id'], array(
+                    'filename' => $params['fileName'],
+                    'fileSize' => $params['fileSize'],
+                    'targetId' => $params['targetId'],
+                    'targetType' => $params['targetType'],
+                ));
+
+                return $initParams;
+            }
+        }
+
+        $preparedFile = $implementor->prepareUpload($params);
+        $file = $this->getUploadFileInitDao()->create($preparedFile);
+        $params = array_merge($params, $file);
+        $initParams = $implementor->initFormUpload($params);
+
+        if ('cloud' == $params['storage']) {
+            $file = $this->getUploadFileInitDao()->update($file['id'], array('globalId' => $initParams['globalId']));
+        }
+
+        $this->getLogger()->info("initFormUpload 上传文件： #{$file['id']}");
+
+        return $initParams;
+    }
+
     public function initUpload($params)
     {
         $user = $this->getCurrentUser();
@@ -312,6 +390,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             if ('cloud' == $file['storage'] && 'video' == $file['type']) {
                 $fields['audioConvertStatus'] = 'doing';
+            }
+
+            if (isset($params['uploadType']) && 'direct' == $params['uploadType']) {
+                unset($fields['audioConvertStatus']);
             }
 
             $file = array_merge($file, $fields);
@@ -1292,7 +1374,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileUsedDao()->batchCreate($useFiles);
     }
 
-    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
+    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type, $bindFile = true)
     {
         $conditions = array(
             'type' => $type,
@@ -1302,7 +1384,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $limit = $this->getFileUsedDao()->count($conditions);
         $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, $limit);
-        $this->bindFiles($attachments);
+        if ($bindFile) {
+            $this->bindFiles($attachments);
+        }
 
         return $attachments;
     }
@@ -1312,10 +1396,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileUsedDao()->count($conditions);
     }
 
-    public function searchUseFiles($conditions, $bindFile = true)
+    public function searchUseFiles($conditions, $bindFile = true, $sort = array('createdTime' => 'DESC'))
     {
         $limit = $this->countUseFile($conditions);
-        $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, $limit);
+        $attachments = $this->getFileUsedDao()->search($conditions, $sort, 0, $limit);
 
         if ($bindFile) {
             $this->bindFiles($attachments);

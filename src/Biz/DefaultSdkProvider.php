@@ -81,6 +81,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        $biz['qiQiuYunSdk.push'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateSdk($biz, $that->getPushConfig($biz));
+            if (!empty($sdk)) {
+                $service = $sdk->getPushService();
+            }
+
+            return $service;
+        };
     }
 
     public function generateSdk($biz, $serviceConfig)
@@ -197,6 +207,24 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return array('ai' => array('host' => $hostUrl));
+    }
+
+    public function getPushConfig(Biz $biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', array());
+
+        if (isset($developerSetting['push_url']) && !empty($developerSetting['push_url'])) {
+            $urlSegs = explode('://', $developerSetting['push_url']);
+            if (2 == count($urlSegs)) {
+                $hostUrl = $urlSegs[1];
+            }
+        }
+        if (empty($hostUrl)) {
+            $hostUrl = '';
+        }
+
+        return array('push' => array('host' => $hostUrl));
     }
 
     public function getPlayV2Config($biz)

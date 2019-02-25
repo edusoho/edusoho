@@ -3,9 +3,9 @@
 	  {% include 'question/part/question-stem.html.twig' %}
   </div>
 
-	{% if not question.isDeleted|default(0) and (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted')
-	or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished')
-	or (setting('questions.testpaper_answers_show_mode','submitted') == 'hide'  and paperResult.status|default(null) in ['reviewing', 'finished'] and paperResult.type not in ['testpaper']) %}
+  {% if not question.isDeleted|default(0) %}
+
+	{% if show_answers(paperResult|default(null)) %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 		  	{{'course.question_manage.manage.right_answer'|trans}} <strong class="color-success">
@@ -25,7 +25,7 @@
 		</div>
 
 		{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
-	{% elseif not question.isDeleted|default(0) %}
+	{% else %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-footer__input pull-left js-testpaper-question-label">
 				<label class="radio-inline {% if question.testResult.answer[0]|default(0) == 1 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="1" {% if question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}> {{'site.question.determine.true'|trans}}</label>
@@ -37,7 +37,7 @@
 		  </div>
 		</div>
 
-		{% if showAnswer|default(0) %}
+	  {% if showAnswer|default(0) %}
 			<div class="testpaper-preview-answer clearfix mtl mbl">
 			  <div class="testpaper-question-result">
 				  {{'course.question_manage.answer'|trans}} <strong class="color-success">{% if question.answer[0] == 1 %} {{'site.question.determine.true'|trans}} {% else %} {{'site.question.determine.false'|trans}} {% endif %}</strong class="color-success">
@@ -46,6 +46,7 @@
 	  {% endif %}
 
 	{% endif %}
+  {% endif %}
 
 	{% include 'question/part/show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}
 </div>

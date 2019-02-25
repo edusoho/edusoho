@@ -1,4 +1,10 @@
- {% import _self as forms %}
+{% import _self as forms %}
+{% if cloudFile.useType|default('') =='course.thread' %}
+  {% set thread = data('CourseThreadByThreadId', {courseId: null, threadId: cloudFile.targetId|default(0)}) %}
+{% endif %}
+{% if cloudFile.useType|default('') == 'course.thread.post' %}
+  {% set post = data('CourseThreadPost', {courseId: null, postId: cloudFile.targetId|default(0)}) %}
+{% endif %}
   <tr>
     <td>
         <div class="materials-table-img">
@@ -10,6 +16,18 @@
             {% if cloudFile.audioConvertStatus == 'error' %}
               {% if setting("developer.debug")|default(0) %}
               <a class="js-reconvert-btn btn btn-warning btn-xs" data-url='{{ path('admin_cloud_file_reconvert', {globalId:cloudFile.globalId}) }}' data-loading-text="{{ 'cloud_file.re_transcoding.submiting'|trans }}">{{ 'cloud_file.re_transcoding_btn'|trans }}</a>
+              {% endif %}
+            {% endif %}
+            {% if cloudFile.type == 'video' %}
+              {% if cloudFile.useType == 'course.thread' %}
+                {% if thread.source|default('web') == 'app' %}
+                  <a class="btn btn-info btn-xs" href="#modal" data-toggle="modal" data-url="{{ path('attachment_direct_video_preview', {id: cloudFile.id}) }}">{{ 'cloud_file.preview'|trans }}</a>
+                {% endif %}
+              {% endif %}
+              {% if cloudFile.useType == 'course.thread.post' %}
+                {% if post.source|default('web') == 'app' %}
+                  <a class="btn btn-info btn-xs" href="#modal" data-toggle="modal" data-url="{{ path('attachment_direct_video_preview', {id: cloudFile.id}) }}">{{ 'cloud_file.preview'|trans }}</a>
+                {% endif %}
               {% endif %}
             {% endif %}
             {% if (cloudFile.type == 'video' and cloudFile.audioConvertStatus == 'success') %}

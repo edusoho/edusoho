@@ -771,6 +771,11 @@ class MobileBaseController extends BaseController
         return $this->createService('Classroom:ClassroomService');
     }
 
+    public function getPushDeviceService()
+    {
+        return $this->createService('PushDevice:PushDeviceService');
+    }
+
     protected function getDiscountService()
     {
         return $this->createService('Discount:Discount.DiscountService');

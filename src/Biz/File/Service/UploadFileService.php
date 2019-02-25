@@ -163,7 +163,7 @@ interface UploadFileService
 
     public function countUseFile($conditions);
 
-    public function searchUseFiles($conditions, $bindFile = true);
+    public function searchUseFiles($conditions, $bindFile = true, $sort = array('createdTime' => 'DESC'));
 
     //file-used api
     public function createUseFiles($fileIds, $targetId, $targetType, $type);
@@ -174,7 +174,7 @@ interface UploadFileService
 
     public function deleteUseFile($id);
 
-    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
+    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type, $bindFile = true);
 
     public function searchCloudFilesFromLocal($conditions, $orderBy, $start, $limit);
 

@@ -17,6 +17,10 @@ class EditorController extends BaseController
 {
     public function uploadAction(Request $request)
     {
+        $mode = $request->request->get('uploadMode', '');
+        if ('paste' == $mode) {
+            return $this->pasteImage($request);
+        }
         $isWebuploader = 0;
         try {
             $token = $request->query->get('token');
@@ -82,6 +86,50 @@ class EditorController extends BaseController
 
                 return new Response($response);
             }
+        }
+    }
+
+    protected function pasteImage(Request $request)
+    {
+        try {
+            $token = $request->query->get('token');
+
+            $maker = new UploadToken();
+            $token = $maker->parse($token);
+
+            if (empty($token)) {
+                $this->createNewException(CommonException::EXPIRED_UPLOAD_TOKEN());
+            }
+
+            $file = $request->files->get('upload');
+
+            if ('image' == $token['type']) {
+                if (!FileToolkit::isImageFile($file)) {
+                    $this->createNewException(FileToolkitException::NOT_IMAGE());
+                }
+            } else {
+                $this->createNewException(FileException::FILE_TYPE_ERROR());
+            }
+
+            $record = $this->getFileService()->uploadFile($token['group'], $file);
+
+            $parsed = $this->getFileService()->parseFileUri($record['uri']);
+            FileToolkit::reduceImgQuality($parsed['fullpath'], 7);
+
+            $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').DIRECTORY_SEPARATOR.$parsed['path'];
+
+            return $this->createJsonResponse(array(
+                'uploaded' => 1,
+                'url' => $url,
+                'fileName' => '',
+            ));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array(
+                'uploaded' => 0,
+                'error' => array(
+                    'message' => $e->getMessage(),
+                ),
+            ));
         }
     }
 

@@ -55,6 +55,7 @@ class ThreadController extends CourseBaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('course/tabs/threads.html.twig', array(
+            'type' => $conditions['type'],
             'courseSet' => $courseSet,
             'course' => $course,
             'member' => $member,
@@ -118,6 +119,12 @@ class ThreadController extends CourseBaseController
             $elitePosts = array();
         }
 
+        if ('question' == $thread['type'] && !in_array($user['id'], array_merge($course['teacherIds'], array($thread['userId'])))) {
+            $canPost = false;
+        } else {
+            $canPost = true;
+        }
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         $this->getThreadService()->hitThread($courseId, $threadId);
@@ -139,7 +146,30 @@ class ThreadController extends CourseBaseController
             'users' => $users,
             'isManager' => $isManager,
             'isMemberNonExpired' => $isMemberNonExpired,
+            'canPost' => $canPost,
             'paginator' => $paginator,
+        ));
+    }
+
+    public function askVideoAction(Request $request, $threadId)
+    {
+        $thread = $this->getThreadService()->getThread(null, $threadId);
+        $user = $this->getCurrentUser();
+
+        return $this->render('course/thread/preview-modal.html.twig', array(
+            'courseId' => $thread['courseId'],
+            'taskId' => $thread['taskId'],
+            'videoAskTime' => $thread['videoAskTime'],
+            'fileId' => $thread['videoId'],
+            'userId' => $user['id'],
+        ));
+    }
+
+    public function playerShowAction(Request $request, $id)
+    {
+        return $this->forward('AppBundle:Player:show', array(
+            'id' => $id,
+            'remeberLastPos' => false,
         ));
     }
 
@@ -432,7 +462,7 @@ class ThreadController extends CourseBaseController
                 //notify不应该在这里做的，应该在Service里面做
                 $this->getThreadService()->postAtNotifyEvent($post, $users);
 
-                if ($thread['userId'] != $currentUser->id) {
+                if ($thread['userId'] != $currentUser->id && $thread['type'] != 'question') {
                     $message = array(
                         'userId' => $currentUser['id'],
                         'userName' => $currentUser['nickname'],
@@ -447,7 +477,7 @@ class ThreadController extends CourseBaseController
                 }
 
                 foreach ($users as $user) {
-                    if ($thread['userId'] != $user['id']) {
+                    if ($thread['userId'] != $user['id'] && $thread['type'] != 'question') {
                         if ($user['id'] != $userId) {
                             $message = array(
                                 'userId' => $currentUser['id'],
@@ -612,7 +642,7 @@ class ThreadController extends CourseBaseController
         $filters = array();
         $filters['type'] = $request->query->get('type');
 
-        if (!in_array($filters['type'], array('all', 'question', 'elite'))) {
+        if (!in_array($filters['type'], array('all', 'question', 'discussion'))) {
             $filters['type'] = 'all';
         }
 
@@ -621,20 +651,21 @@ class ThreadController extends CourseBaseController
         if (!in_array($filters['sort'], array('created', 'posted', 'createdNotStick', 'postedNotStick'))) {
             $filters['sort'] = 'posted';
         }
+        $filters['isElite'] = $request->query->get('isElite');
 
         return $filters;
     }
 
     protected function convertFiltersToConditions($course, $filters)
     {
-        $conditions = array('courseId' => $course['id']);
+        $conditions = array('courseId' => $course['id'], 'isElite' => isset($filters['isElite']) ? $filters['isElite'] : '');
 
         switch ($filters['type']) {
             case 'question':
                 $conditions['type'] = 'question';
                 break;
-            case 'elite':
-                $conditions['isElite'] = 1;
+            case 'discussion':
+                $conditions['type'] = 'discussion';
                 break;
             default:
                 break;

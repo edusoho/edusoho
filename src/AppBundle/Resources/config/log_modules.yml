@@ -393,3 +393,10 @@ mobile:
     regist_device:
         notDisplay: 1
 
+push:
+    course_thread_create:
+        modalField: all
+    course_thread_post_create:
+        modalField: all
+
+

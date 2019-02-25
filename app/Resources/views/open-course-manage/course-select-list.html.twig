@@ -19,8 +19,8 @@
       <a class="course-picture-link" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">
         <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'course.png') }}" alt="{{ courseSet.title }}">
       </a>
-      <div class="course-body">
-        <div style="float:right;" class="color-gray mrm mls">
+      <div class="course-body clearfix">
+        <div class="color-gray mrm mls pull-right">
           {% include 'open-course-manage/course-set-price-interval.html.twig' %}
 
           {% if setting('course.show_student_num_enabled', '1') == 1 %}
@@ -30,7 +30,7 @@
 
         </div>
 
-        <h4 class="course-title"><a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">{{ courseSet.title }}</a>
+        <h4 class="course-title text-overflow mv0">
         {% if courseSet.serializeMode=='serialized' %}
           <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
         {% elseif courseSet.serializeMode=='finished' %}
@@ -45,6 +45,7 @@
               <span class="label label-success">{{'course.block_grid.live'|trans}}</span>
             {% endif %}
         {% endif %}
+        <a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
         </h4>
 
         {% if courseSet.type == 'live' %}
@@ -56,7 +57,7 @@
             </div>
           {% endif %}
         {% else %}
-          <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
+          <div class="course-about ellipsis text-sm">{{ courseSet.subtitle }}</div>
         {% endif %}
 
         <div class="course-footer clearfix">

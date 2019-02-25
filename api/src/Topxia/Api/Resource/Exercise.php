@@ -127,6 +127,7 @@ class Exercise extends BaseResource
 
     private function filterItem($items, $itemSetResults)
     {
+        krsort($items);
         $newItmes = array();
         $materialMap = array();
         foreach ($items as $item) {
@@ -232,7 +233,7 @@ class Exercise extends BaseResource
                 }
             }
         }
-        $res['items'] = array_reverse($items);
+        $res['items'] = $items;
 
         return $res;
     }

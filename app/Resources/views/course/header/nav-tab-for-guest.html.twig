@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs {% if mobile %} es-mobile-nav {% endif %}" role="tablist">
+<ul class="nav nav-tabs nav-tabs--course  {% if mobile %} es-mobile-nav {% endif %}" role="tablist">
 	{% for key, tab in metas.tabs if( key not in ['material', 'threads']  or navMember|default(null))  %}
 		{% if mobile %}
 			{% if not  member|default(null)  and loop.index <= 3 %}

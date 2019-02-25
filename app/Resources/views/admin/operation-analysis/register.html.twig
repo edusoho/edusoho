@@ -7,10 +7,8 @@
   {% if tab=="trend" %}
 	 <div id="line-data">
    </div>
-   <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'>  
-   </input>
+   <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'>
    <input id="registerStartDate"  type="hidden" value='{% if registerStartDate %}{{registerStartDate}}{% endif %}'>  
-   </input>
   {% elseif tab=="detail" %}
     {% include 'admin/operation-analysis/register.table.html.twig' %}
   {% endif %}

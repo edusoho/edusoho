@@ -25,6 +25,7 @@ class FileUsedDaoImpl extends AdvancedDaoImpl implements FileUsedDao
             ),
             'orderbys' => array(
                 'createdTime',
+                'id',
             ),
         );
     }

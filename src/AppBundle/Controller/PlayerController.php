@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id, $isPart = false, $context = array())
+    public function showAction(Request $request, $id, $isPart = false, $context = array(), $remeberLastPos = true)
     {
         $ssl = $request->isSecure() ? true : false;
 
@@ -58,6 +58,7 @@ class PlayerController extends BaseController
             'agentInWhiteList' => $agentInWhiteList,
             'isEncryptionPlus' => $isEncryptionPlus,
             'cloudSdk' => isset($cloudSdk) ? $cloudSdk : null,
+            'remeberLastPos' => $remeberLastPos,
         );
 
         if ($isPart) {

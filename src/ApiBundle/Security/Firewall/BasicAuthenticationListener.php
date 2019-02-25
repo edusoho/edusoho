@@ -20,7 +20,6 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
         $user = $this->validUser($username, $request->headers->get('PHP_AUTH_PW'));
         $token = $this->createTokenFromRequest($request, $user['id']);
         $this->getTokenStorage()->setToken($token);
-
     }
 
     private function validUser($username, $password)

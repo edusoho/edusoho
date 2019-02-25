@@ -56,10 +56,21 @@
           {% set courseSet = courseSets[question.courseSetId]|default(null) %}
           {% set course = courses[question.courseId]|default(null) %}
           {% set task = tasks[question.taskId]|default(null) %}
+          {% if question.title == '' %}
+            {% if question.questionType == 'video' %}
+              {% set questionType = 'course.thread.question_type.video'|trans %}
+            {% elseif question.questionType == 'image' %}
+              {% set questionType = 'course.thread.question_type.image'|trans %}
+            {% elseif question.questionType == 'audio' %}
+              {% set questionType = 'course.thread.question_type.audio'|trans %}
+            {% elseif question.questionType == 'content' %}
+              {% set questionType = 'course.thread.question_type.content'|trans %}
+            {% endif %}
+          {% endif %}
           <tr data-role="item">
             <td><input value="{{question.id}}" type="checkbox" data-role="batch-item"> </td>
             <td>
-              <a href="{{ path('course_thread_show', {courseId:question.courseId, threadId:question.id}) }}" target="_blank"><strong>{{ question.title }}</strong></a>
+              <a href="{{ path('course_thread_show', {courseId:question.courseId, threadId:question.id}) }}" target="_blank"><strong>{{ question.title|default('course.thread.question.title'|trans({'%questionType%':questionType|default('course.thread.question_type.content'|trans)})) }}</strong></a>
 
               <div class="short-long-text">
                 <div class="short-text text-sm text-muted">{{ question.content|plain_text(60) }} <span class="trigger">({{'admin.course_thread.expand_td'|trans}})</span></div>

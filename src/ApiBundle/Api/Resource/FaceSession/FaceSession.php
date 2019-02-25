@@ -74,7 +74,7 @@ class FaceSession extends AbstractResource
     public function add(ApiRequest $request)
     {
         $loginToken = $request->request->get('loginToken');
-        
+
         $user = $this->getCurrentUser();
         $type = $request->request->get('type', 'register');
         if ('register' == $type && !$user->isLogin()) {

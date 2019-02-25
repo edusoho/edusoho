@@ -24,12 +24,13 @@ class Viewer
             $result = array(
                 'status' => $status,
                 'headers' => array(),
-                'response' => $result
+                'response' => $result,
             );
         }
 
         $response = new JsonResponse($result, $status);
         $response->headers->set('Access-Control-Allow-Origin', '*');
+
         return $response;
     }
 }

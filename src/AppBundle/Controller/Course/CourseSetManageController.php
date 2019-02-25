@@ -37,11 +37,14 @@ class CourseSetManageController extends BaseController
         $user = $this->getUser();
         $userProfile = $this->getUserService()->getUserProfile($user->getId());
 
+        $defaultType = $request->query->get('default', CourseSetService::NORMAL_TYPE);
+
         return $this->render(
             'courseset-manage/create.html.twig',
             array(
                 'userProfile' => $userProfile,
                 'courseTypes' => $visibleCourseTypes,
+                'defaultType' => $defaultType,
             )
         );
     }
