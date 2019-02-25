@@ -40,7 +40,7 @@ const tableFilter = (item, label, subProperty) => {
         targetType = target ? target.title : '全部课程';
       }
       if (item.targetType === 'vip') {
-        targetType = '会员';
+        targetType = target ? target.name : '全部会员';
       }
       if (item.type === 'minus') {
         discountType = '抵价';
