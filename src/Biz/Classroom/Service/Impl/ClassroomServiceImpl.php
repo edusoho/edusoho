@@ -584,6 +584,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->getClassroomMemberDao()->update($deleteMembers[$userId]['id'], $deleteMembers[$userId]);
             }
         }
+
+        $this->updateClassroom($id, array('teacherIds' => $newTeacherIds));
     }
 
     public function publishClassroom($id)
