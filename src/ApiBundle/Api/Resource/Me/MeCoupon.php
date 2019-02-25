@@ -47,7 +47,12 @@ class MeCoupon extends AbstractResource
         $result = $this->getCouponBatchService()->receiveCoupon($token, $user['id']);
 
         if ('success' != $result['code']) {
-            throw CouponException::RECEIVE_FAILED();
+            if (isset($result['exception'])) {
+                $exceptionMethod = $result['exception']['method'];
+                throw $result['exception']['class']::$exceptionMethod();
+            } else {
+                throw CouponException::RECEIVE_FAILED();
+            }
         }
 
         $coupon = $this->getCouponService()->getCoupon($result['id']);
