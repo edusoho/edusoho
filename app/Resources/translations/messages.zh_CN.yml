@@ -146,6 +146,16 @@ site.bind.unfinished: 未绑定
 site.setting.email_finished: 已设置邮箱
 site.bind.mobile_finished: 已绑定手机
 
+#全局手机号绑定提醒
+site.mobile_bind.ignore: 跳过
+site.mobile_bind.title: 手机号绑定
+site.mobile_bind.login_password: 您的登录密码
+site.mobile_bind.phone_number: 手机号码
+site.mobile_bind.reasons: 绑定手机号的三大理由
+site.mobile_bind.reasons.network_office_regulations: 1、网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份。
+site.mobile_bind.reasons.login_while_third_party_fail: 2、第三方登陆出现故障时，仍能用手机号顺利登录，课程学习不受影响。
+site.mobile_bind.reasons.login_while_forget_password: 3、即使您忘记了第三方帐号的密码，仍能使用绑定的手机号和密码登录。
+
 # email 模板
 email.password_reset: >
   亲爱的%nickname%
@@ -2937,6 +2947,7 @@ user.settings.security.level: 安全等级
 user.settings.security.high_level: 高
 user.settings.security.middle_level: 中
 user.settings.security.low_level: 低
+user.settings.security.mobile_bind_tips: 网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份，为了您的账号安全，请绑定手机号。
 user.settings.security.login_password_tips: 经常更改密码有助于保护您的帐号安全
 user.settings.security.pay_password_tips: 用于支付时的二次密码校验，加强账户安全性
 user.settings.security.questions: 安全问题
@@ -6914,6 +6925,8 @@ admin.user_auth.Term_service_settings.details: 条款内容
 admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
 admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+admin.user_auth.mobile_bind_tips: >
+  据国家《互联网跟帖评论服务管理规定》，<b>不得向未认证真实身份信息的用户提供跟帖评论服务</b>。这里的跟帖评论服务，是指互联网站、应用程序、互动传播平台以及其他具有新闻舆论属性和社会动员功能的传播平台，以<b>发帖、回复、留言、“弹幕”</b>等方式，为用户提供发表文字、符号、表情、图片、音视频等信息的服务。绑定手机号符合实名认证的规定，为规避法律风险，建议选用<b>“手机注册”</b>。切换成“手机注册”后，对于之前未绑定手机号的用户，会在每日首次登录成功后弹框提醒用户绑定手机号（用户可选择跳过此步骤）。
 admin.login_connect.User_login_restrictions: 用户登录限制
 admin.login_connect.open: 开启
 admin.login_connect.closed: 关闭

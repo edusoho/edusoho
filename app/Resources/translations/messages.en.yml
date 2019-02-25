@@ -133,6 +133,15 @@ site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_sec
 site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
 site.user_password.error_tips: Bad credentials.
 
+site.mobile_bind.ignore: 跳过
+site.mobile_bind.title: 手机号绑定
+site.mobile_bind.login_password: 您的登录密码
+site.mobile_bind.phone_number: 手机号码
+site.mobile_bind.reasons: 绑定手机号的三大理由
+site.mobile_bind.reasons.network_office_regulations: 1、网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份。
+site.mobile_bind.reasons.login_while_third_party_fail: 2、第三方登陆出现故障时，仍能用手机号顺利登录，课程学习不受影响。
+site.mobile_bind.reasons.login_while_forget_password: 3、即使您忘记了第三方帐号的密码，仍能使用绑定的手机号和密码登录。
+
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
 email.email_change: "Dear %nickname%,\nYour requirement of email address reset is received. Please click the link below to verify your account：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
@@ -2451,6 +2460,7 @@ user.settings.security.return_btn: 'Back to security setting'
 user.settings.security.scene_not_open: 'Scene unopened'
 user.settings.security.use_scene_not_open: 'This usage scenario is unopened'
 user.settings.security.level: Security level
+user.settings.security.mobile_bind_tips: 网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份，为了您的账号安全，请绑定手机号。
 user.settings.security.high_level: 'High'
 user.settings.security.middle_level: 'Medium'
 user.settings.security.low_level: 'Low'
@@ -5646,6 +5656,8 @@ admin.user_auth.Term_service_settings.details: Terms
 admin.user_auth.Name_setting: Name
 admin.user_auth.Name_setting.user_name: 'Username'
 admin.user_auth.Name_setting.help_block: 'Note: After editing the site field, all the relevant field names will be changed accordingly to the edited name'
+admin.user_auth.mobile_bind_tips: >
+  据国家《互联网跟帖评论服务管理规定》，<b>不得向未认证真实身份信息的用户提供跟帖评论服务</b>。这里的跟帖评论服务，是指互联网站、应用程序、互动传播平台以及其他具有新闻舆论属性和社会动员功能的传播平台，以<b>发帖、回复、留言、“弹幕”</b>等方式，为用户提供发表文字、符号、表情、图片、音视频等信息的服务。绑定手机号符合实名认证的规定，为规避法律风险，建议选用<b>“手机注册”</b>。切换成“手机注册”后，对于之前未绑定手机号的用户，会在每日首次登录成功后弹框提醒用户绑定手机号（用户可选择跳过此步骤）。
 admin.login_connect.User_login_restrictions: 'User login restrictions'
 admin.login_connect.open: 'Turned on'
 admin.login_connect.closed: Close
