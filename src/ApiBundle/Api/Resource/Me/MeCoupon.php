@@ -4,8 +4,6 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Card\Service\CardService;
-use Biz\Coupon\Service\CouponService;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use Biz\Coupon\CouponException;
 use Biz\Common\CommonException;
@@ -56,8 +54,20 @@ class MeCoupon extends AbstractResource
         }
 
         $coupon = $this->getCouponService()->getCoupon($result['id']);
-        if (in_array($coupon['targetType'], array('course', 'classroom')) && !empty($coupon['targetId'])) {
-            $type = 'course' == $coupon['targetType'] ? 'courseSet' : $coupon['targetType'];
+        if (!empty($coupon['targetId'])) {
+            switch ($coupon['targetType']) {
+                case 'course':
+                    $type = 'courseSet';
+                    break;
+
+                case 'vip':
+                    $type = 'vipLevel';
+                    break;
+
+                default:
+                    $type = $couponBatch['targetType'];
+                    break;
+            }
             $this->getOCUtil()->single($coupon, array('targetId'), $type);
         }
 

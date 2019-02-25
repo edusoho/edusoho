@@ -77,8 +77,20 @@ class OrderInfo extends AbstractResource
             $orderInfo['availableCoupons'] = $product->availableDeducts['coupon'];
 
             foreach ($orderInfo['availableCoupons'] as &$availableCoupon) {
-                if (in_array($availableCoupon['targetType'], array('course', 'classroom')) && !empty($availableCoupon['targetId'])) {
-                    $type = 'course' == $availableCoupon['targetType'] ? 'courseSet' : $availableCoupon['targetType'];
+                if (!empty($availableCoupon['targetId'])) {
+                    switch ($availableCoupon['targetType']) {
+                        case 'course':
+                            $type = 'courseSet';
+                            break;
+
+                        case 'vip':
+                            $type = 'vipLevel';
+                            break;
+
+                        default:
+                            $type = $availableCoupon['targetType'];
+                            break;
+                    }
                     $this->getOCUtil()->single($availableCoupon, array('targetId'), $type);
                 }
             }
