@@ -41,14 +41,13 @@ class MeClassroom extends AbstractResource
             $this->getClassroomService()->searchMembers($conditions, array(), $offset, $limit),
             'classroomId'
         );
-        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
-        
-        $classroomsRef = array();
-        foreach ($classroomIds as $classroomId) {
-            $classroomsRef[] = $classrooms[$classroomId];
-        }
 
-        return $classroomsRef;
+        $classrooms = ArrayToolkit::orderByArray(
+            $this->getClassroomService()->findClassroomsByIds($classroomIds),
+            $classroomIds
+        );
+
+        return array_values($classrooms);
     }
 
     /**
