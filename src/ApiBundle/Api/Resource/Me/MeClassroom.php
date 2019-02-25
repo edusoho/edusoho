@@ -42,7 +42,12 @@ class MeClassroom extends AbstractResource
             'classroomId'
         );
 
-        return array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
+        $classrooms = ArrayToolkit::orderByArray(
+            $this->getClassroomService()->findClassroomsByIds($classroomIds),
+            $classroomIds
+        );
+
+        return array_values($classrooms);
     }
 
     /**
