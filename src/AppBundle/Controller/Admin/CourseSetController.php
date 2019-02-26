@@ -546,8 +546,8 @@ class CourseSetController extends BaseController
             unset($conditions['title']);
         }
 
-        if (isset($conditions['creator']) && '' == $conditions['creator']) {
-            unset($conditions['creator']);
+        if (isset($conditions['creatorName']) && '' == $conditions['creatorName']) {
+            unset($conditions['creatorName']);
         }
 
         $count = $this->getCourseSetService()->countCourseSets($conditions);
