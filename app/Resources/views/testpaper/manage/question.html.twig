@@ -37,8 +37,8 @@ tr.placeholder:before {
     <div class="clearfix mbm">
       <button data-url="{{ path('course_set_manage_question_picker',{id:courseSet.id, testpaperId:testpaper.id}) }}" class="cd-btn cd-btn-info cd-btn-sm pull-right" data-role="pick-item"><i class="cd-icon cd-icon-add cd-text-sm"></i> {{'course.testpaper_manage.question.create_btn'|trans}}</button>
       <ul class="nav nav-pills nav-mini" id="testpaper-question-nav">
-        {% for type,count in testpaper['metas']['counts'] if count > 0 %}
-          <li {% if loop.index == 1 %}class="active"{% endif %}><a href="javascript:" data-type="{{ type }}" data-name="{{ questionTypesDict[type] }}" class="testpaper-nav-link">{{ questionTypesDict[type] }}</a></li>
+        {% for type, typeDict in questionTypesDict if typeDict %}
+          <li {% if loop.index == 1 %}class="active"{% endif %}><a href="javascript:" data-type="{{ type }}" data-name="{{ typeDict }}" class="testpaper-nav-link">{{ typeDict }}</a></li>
         {% endfor %}
       </ul>
     </div>
@@ -57,7 +57,7 @@ tr.placeholder:before {
             <th width="20%">{{'course.testpaper_manage.question.operation'|trans}}</th>
           </tr>
         </thead>
-        {% for type,count in testpaper['metas']['counts'] if count > 0 %}
+        {% for type, typeDict in questionTypesDict if typeDict %}
           <tbody data-type="{{ type }}" id="testpaper-items-{{ type }}" class="testpaper-table-tbody {% if loop.index != 1 %}hide{% endif %}" data-role="question-body">
             {% for question in questions[type]|default(null) if question %}
               {% if not question.isDeleted|default(null) %}
