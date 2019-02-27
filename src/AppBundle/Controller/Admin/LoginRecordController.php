@@ -74,7 +74,7 @@ class LoginRecordController extends BaseController
         $conditions = array(
             'userId' => $user['id'],
             'action' => 'login_success',
-            'module' => 'user',
+            'modules' => array('user', 'mobile'),
         );
 
         $paginator = new Paginator(
