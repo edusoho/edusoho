@@ -2947,7 +2947,7 @@ user.settings.security.level: 安全等级
 user.settings.security.high_level: 高
 user.settings.security.middle_level: 中
 user.settings.security.low_level: 低
-user.settings.security.mobile_bind_tips: 网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份，为了您的帐号安全，请绑定手机号。
+user.settings.security.mobile_bind_daily_tips: 网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份，为了您的帐号安全，请绑定手机号。
 user.settings.security.login_password_tips: 经常更改密码有助于保护您的帐号安全
 user.settings.security.pay_password_tips: 用于支付时的二次密码校验，加强账户安全性
 user.settings.security.questions: 安全问题

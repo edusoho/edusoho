@@ -2460,7 +2460,7 @@ user.settings.security.return_btn: 'Back to security setting'
 user.settings.security.scene_not_open: 'Scene unopened'
 user.settings.security.use_scene_not_open: 'This usage scenario is unopened'
 user.settings.security.level: Security level
-user.settings.security.mobile_bind_tips: 网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份，为了您的帐号安全，请绑定手机号。
+user.settings.security.mobile_bind_daily_tips: 网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份，为了您的帐号安全，请绑定手机号。
 user.settings.security.high_level: 'High'
 user.settings.security.middle_level: 'Medium'
 user.settings.security.low_level: 'Low'
