@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
@@ -10,21 +11,43 @@ import { Toast } from 'vant';
 import { mapMutations, mapState } from 'vuex';
 
 export default {
-  mixins: [redirectMixin],
+  mixins: [activityMixin, redirectMixin],
   name: 'social-wx',
   async created() {
+    if (this.$store.state.token) {
+      // 判断非首次登陆后的跳转
+      const firstDirect = localStorage.getItem('first_direct')
+      if (firstDirect == 1) {
+        this.$router.replace({
+          path: this.$route.query.redirect || '/',
+        });
+        return;
+      }
+
+      // 判断首次登陆后的跳转
+      Toast.loading({
+        message: '请稍后'
+      });
+      this.afterLogin();
+      localStorage.setItem('first_direct', 1);
+      return;
+    }
     // 获取微信绑定状态
     const socialBinded_wx = localStorage.getItem('socialBinded_wx')
       ? JSON.parse(localStorage.getItem('socialBinded_wx'))
       : this.socialBinded['wx'];
+
     this.setSocialStatus({ key: 'wx', status: socialBinded_wx });
+
     let code = location.search.match(/\?code.*&/g);
+
     if (!code) {
+      localStorage.setItem('first_direct', 0);
       this.wxLogin();
       return;
     }
     Toast.loading({
-      message: '正在登陆'
+      message: '正在登录'
     });
     code = code[0].slice(6, -1);
     await Api.login({
@@ -39,10 +62,12 @@ export default {
         duration: 2000,
         message: '登录成功'
       });
-      const routerDepth = this.socialBinded.wx ? -2 : -7;
+      let routerDepth = this.socialBinded.wx ? -2 : -7;
+      if (this.$route.query.callbackType) {
+        routerDepth = routerDepth + 1;
+      }
       localStorage.setItem('socialBinded_wx', true);
       this.$router.go(routerDepth);
-      this.afterLogin();
     }).catch(err => {
       // 更新微信绑定状态
       const socialBinded_wx = false;

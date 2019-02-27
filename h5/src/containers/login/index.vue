@@ -52,6 +52,13 @@ export default {
     }
   },
   async created () {
+    if (this.$store.state.token) {
+      Toast.loading({
+        message: '请稍后'
+      });
+      this.afterLogin();
+      return;
+    }
     this.registerSettings = await Api.getSettings({
       query: {
         type: 'register'
@@ -106,7 +113,9 @@ export default {
         query: {
           type: 'wx',
           weixinmob_key: this.loginConfig.weixinmob_key,
-          redirect: this.$route.query.redirect || '/'
+          redirect: this.$route.query.redirect || '/',
+          callbackType: this.$route.query.callbackType,
+          activityId: this.$route.query.activityId,
         }
       });
     }

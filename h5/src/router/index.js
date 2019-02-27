@@ -260,7 +260,7 @@ router.beforeEach((to, from, next) => {
 
   // 已登录用户不进入 prelogin/login/register 路由
   // 已登录用户进入 auth_social 路由，返回到首页，解决反复进入微信授权页面的问题
-  if (['prelogin', 'login', 'register', 'auth_social'].includes(to.name) && store.state.token) {
+  if (['prelogin', 'register'].includes(to.name) && store.state.token) {
     next(to.query.redirect || '/');
     return;
   }
