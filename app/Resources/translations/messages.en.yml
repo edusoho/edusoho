@@ -8213,6 +8213,7 @@ exception.user.mobile_or_email_invalid:
 exception.user.gender_invalid:
 exception.user.birthday_invalid:
 exception.user.qq_invalid:
+exception.user.weixin_invalid: wechat is invalid
 exception.user.site_invalid:
 exception.user.weibo_invalid:
 exception.user.blog_invalid:
