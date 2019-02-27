@@ -48,6 +48,8 @@ class Token extends AbstractResource
             }
         }
 
+        $this->getUserService()->markLoginInfo();
+
         return $user;
     }
 
