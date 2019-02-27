@@ -702,6 +702,7 @@ validate.before.message: 开始日期应早于结束日期
 validate.after.message: 结束日期应晚于开始日期
 validate.feature.message: 购买截止时间需在当前时间之后
 validate.valid_qq_input.message: 请输入正确的QQ号
+validate.valid_weixin_input.message: 请输入正确的微信号
 validate.valid_mobile_input.message: 请输入正确的手机号
 validate.valid_chinese_input.message: 必须是中文字
 validate.chinese_limit.message: 长度必须小于等于 {0} 字符,一个中文为2个字符

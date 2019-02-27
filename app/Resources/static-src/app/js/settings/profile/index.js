@@ -34,6 +34,7 @@ $('#user-profile-form').validate({
       maxlength: 24
     },
     'profile[qq]': 'qq',
+    'profile[weixin]': 'weixin',
     'profile[weibo]': 'url',
     'profile[blog]': 'url',
     'profile[site]': 'url',

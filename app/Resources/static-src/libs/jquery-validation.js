@@ -311,6 +311,10 @@ $.validator.addMethod('qq', function(value, element) {
   return this.optional(element) || /^[1-9]\d{4,}$/.test(value);
 }, Translator.trans('validate.valid_qq_input.message'));
 
+$.validator.addMethod('weixin', function(value, element) {
+  return this.optional(element) || /^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/.test(value);
+}, Translator.trans('validate.valid_weixin_input.message'));
+
 $.validator.addMethod('mobile', function(value, element) {
   return this.optional(element) || /^1\d{10}$/.test(value);
 }, Translator.trans('validate.valid_mobile_input.message'));

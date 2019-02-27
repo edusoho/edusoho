@@ -9519,6 +9519,7 @@ exception.user.mobile_or_email_invalid: 非法的手机号或邮箱地址
 exception.user.gender_invalid: 性别不正确
 exception.user.birthday_invalid: 生日格式错误
 exception.user.qq_invalid: qq不正确
+exception.user.weixin_invalid: 微信不正确
 exception.user.site_invalid: 个人空间不正确
 exception.user.weibo_invalid: 微博地址不正确
 exception.user.blog_invalid: 博客地址不正确
