@@ -15,7 +15,7 @@
       <div class="panel-heading"><h4>{{ 'admin.app_upgrades.count_tips'|trans({'%appUpgradesCount%': apps|length}) }}</h4></div>
     {% endif %}
     {% if status|default(null) %}
-      <div class="alert alert-danger">{{ 'upfradesadmin.app_upgrades.accessKey_or_secretKey_error_tips'|trans({'%settingCloudUrl%': path('admin_setting_cloud')})|raw }}</div>
+      <div class="alert alert-danger">{{ 'admin.app_upgrades.accessKey_or_secretKey_error_tips'|trans({'%settingCloudUrl%': path('admin_setting_cloud')})|raw }}</div>
     {% else %}
       {% if apps %}
         <table class="table table-striped table-hover" id="app-table-container">
