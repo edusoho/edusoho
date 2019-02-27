@@ -40,7 +40,7 @@ class KernelH5RequestListener
                 ->get('router')
                 ->getMatcher()
                 ->match($pathInfo);
-        } catch (ResourceNotFoundException $ne){
+        } catch (ResourceNotFoundException $ne) {
             return;
         }
 
