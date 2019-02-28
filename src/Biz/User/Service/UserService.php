@@ -160,11 +160,11 @@ interface UserService
      */
     public function register($registration, $type = 'default');
 
-    public function markLoginInfo();
+    public function markLoginInfo($type = null);
 
     public function markLoginFailed($userId, $ip);
 
-    public function markLoginSuccess($userId, $ip);
+    public function refreshLoginSecurityFields($userId, $ip);
 
     public function checkLoginForbidden($userId, $ip);
 

@@ -11,16 +11,11 @@ class Token extends AbstractResource
 {
     public function add(ApiRequest $request)
     {
-        $type = $request->request->get('type');
         $user = $this->getCurrentUser()->toArray();
 
         $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
 
         $this->appendUser($user);
-
-        if ($type) {
-            $this->getLogService()->info('mobile', 'user_login', "通过{$type}登录");
-        }
 
         return array(
             'token' => $token,
