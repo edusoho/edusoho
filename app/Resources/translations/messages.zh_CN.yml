@@ -6327,6 +6327,7 @@ admin.edu_cloud.edu_video.normal: 标准
 admin.edu_cloud.edu_video.high: 高品质
 admin.edu_cloud.edu_video.play_speed: 倍速播放：
 admin.edu_cloud.edu_video.play_speed_tips: 开启后，云视频任务及音频任务支持倍速播放。
+admin.edu_cloud.edu_video.not_support_play_speed_tips: 目前系统自动生成的直播回放视频、本地视频、第三方视频（腾讯、优酷等）不支持倍速播放；
 admin.edu_cloud.edu_video.auto_play: 云视频自动播放
 admin.edu_cloud.edu_video.video_header: 云视频片头：
 admin.edu_cloud.edu_video.video_header_edit_btn: 编辑
@@ -7601,7 +7602,7 @@ admin.payment_setting.alipay_api_type.mobile.hint: >
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_secret: MD5密钥
 admin.payment_setting.alipay_hint: >
-  登录【支付宝商家服务】-【我的商家服务】-【签约管理】，可<a href="%alipayUrl%" target="_blank">查看PID和MD5秘钥</a>。
+  登录【蚂蚁金服·开放平台】-【服务市场】-【密钥管理】，可<a href="%alipayUrl%" target="_blank">查看PID和MD5秘钥</a>。
 admin.payment_setting.alipay_account: 支付宝账户
 admin.payment_setting.alipay_mobile_payment_hint: 如需开启移动客户端支付，需填写支付宝账户。
 admin.payment_setting.open_alipay_api: 启用支付宝交易关闭接口
@@ -7693,15 +7694,13 @@ admin.coin_model.currency_tips: >
   <br>
   2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
   <br>
-  3、虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算
+  3、使用方式一旦保存（使用方式和汇率），请勿随意改动
   <br>
-  4、虚拟币用于标价后，移动端仍显示人民币价格（移动端暂不支持虚拟币支付）
+  4、使用方式的切换会使课程价格会根据汇率变动
   <br>
-  5、使用方式一旦保存（使用方式和汇率），请勿随意改动
+  5、如有参加促销活动的课程，修改价格都将有相应的折扣
   <br>
-  6、使用方式的切换会使课程价格会根据汇率变动
-  <br>
-  7、如有参加促销活动的课程，修改价格都将有相应的折扣
+  6、虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算
 
 admin.coin_course_set.tips: >
   1元人民币兑换<strong class="text-info">%cashRate%</strong>%coinName%
