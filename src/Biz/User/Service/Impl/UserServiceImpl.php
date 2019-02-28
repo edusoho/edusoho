@@ -1252,7 +1252,6 @@ class UserServiceImpl extends BaseService implements UserService
         if ('system' == $user['type']) {
             return false;
         }
-        $this->getLogService()->info('user', 'login_success', '登录成功');
     }
 
     public function markLoginFailed($userId, $ip)

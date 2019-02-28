@@ -81,6 +81,7 @@ class UserLoginTokenListener
 
         if (empty($user['loginSessionId']) || strlen($user['loginSessionId']) <= 0) {
             $sessionId = $request->getSession()->getId();
+            $this->getUserService()->markLoginInfo();
             $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
             $this->getUserService()->markLoginSuccess($user['id'], $request->getClientIp());
 

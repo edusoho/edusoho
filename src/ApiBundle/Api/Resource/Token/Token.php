@@ -19,7 +19,7 @@ class Token extends AbstractResource
         $this->appendUser($user);
 
         if ($type) {
-            $this->getLogService()->info('mobile', 'login', "通过{$type}登录");
+            $this->getLogService()->info('mobile', 'user_login', "通过{$type}登录");
         }
 
         return array(
@@ -47,8 +47,6 @@ class Token extends AbstractResource
                 $user['vip'] = null;
             }
         }
-
-        $this->getUserService()->markLoginInfo();
 
         return $user;
     }

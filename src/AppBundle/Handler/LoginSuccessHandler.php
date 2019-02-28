@@ -55,10 +55,16 @@ class LoginSuccessHandler
         $this->getUserService()->markLoginInfo();
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
         $this->getUserService()->markLoginSuccess($user['id'], $request->getClientIp());
+        $this->getLogService()->info('user', 'login_success', '登录成功');
     }
 
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User:UserService');
+    }
+
+    protected function getLogService()
+    {
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 }
