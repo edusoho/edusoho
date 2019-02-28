@@ -65,7 +65,7 @@ class MeCoupon extends AbstractResource
                     break;
 
                 default:
-                    $type = $couponBatch['targetType'];
+                    $type = $coupon['targetType'];
                     break;
             }
             $this->getOCUtil()->single($coupon, array('targetId'), $type);
