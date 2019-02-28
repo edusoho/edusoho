@@ -20,6 +20,7 @@ class LogDaoImpl extends GeneralDaoImpl implements LogDao
                 'module = :module',
                 'module IN (:modules)',
                 'action = :action',
+                'action IN ( :actions )',
                 'action NOT IN ( :excludeActions )',
                 'level = :level',
                 'userId = :userId',

@@ -73,7 +73,7 @@ class LoginRecordController extends BaseController
 
         $conditions = array(
             'userId' => $user['id'],
-            'action' => 'login_success',
+            'actions' => array('login_success', 'user_login'),
             'modules' => array('user', 'mobile'),
         );
 
