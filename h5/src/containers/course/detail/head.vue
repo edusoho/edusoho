@@ -76,15 +76,12 @@ export default {
     }
   },
   watch: {
-    taskId: {
-      immediate: true,
-      handler(v, oldVal) {
-        if (['video', 'audio'].includes(this.sourceType)) {
-          window.scrollTo(0, 0);
-          this.initPlayer();
-        }
+    taskId () {
+      if (['video', 'audio'].includes(this.sourceType)) {
+        window.scrollTo(0, 0);
+        this.initPlayer();
       }
-    }
+    },
   },
   /*
   * 试看需要传preview=1
