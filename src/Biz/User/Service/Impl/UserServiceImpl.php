@@ -1806,7 +1806,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->update($userId, $code);
     }
 
-    public function findUnlockedUserMobilesByUserIds($userIds, $needVerified = false)
+    public function findUnlockedUserMobilesByUserIds($userIds)
     {
         if (empty($userIds)) {
             return array();
@@ -1817,19 +1817,12 @@ class UserServiceImpl extends BaseService implements UserService
             'userIds' => $userIds,
         );
 
-        if ($needVerified) {
-            $conditions['hasVerifiedMobile'] = true;
-            $count = $this->countUsers($conditions);
-            $users = $this->searchUsers($conditions, array('createdTime' => 'ASC'), 0, $count);
-            $mobiles = ArrayToolkit::column($users, 'verifiedMobile');
+        $conditions['hasVerifiedMobile'] = true;
+        $count = $this->countUsers($conditions);
+        $users = $this->searchUsers($conditions, array('createdTime' => 'ASC'), 0, $count);
+        $mobiles = ArrayToolkit::column($users, 'verifiedMobile');
 
-            return $mobiles;
-        } else {
-            $profiles = $this->searchUserProfiles(array('mobileNotEqual' => '', 'ids' => $userIds), array('id' => 'ASC'), 0, PHP_INT_MAX);
-            $profileMobiles = ArrayToolkit::column($profiles, 'mobile');
-
-            return array_unique($profileMobiles);
-        }
+        return $mobiles;
     }
 
     public function updateUserLocale($id, $locale)

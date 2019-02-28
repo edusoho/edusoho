@@ -34,7 +34,7 @@ interface UserService
 
     public function findUsersHasMobile($start, $limit, $isVerified = false);
 
-    public function findUnlockedUserMobilesByUserIds($userIds, $needVerified = false);
+    public function findUnlockedUserMobilesByUserIds($userIds);
 
     public function getUserByEmail($email);
 
