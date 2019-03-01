@@ -133,14 +133,14 @@ site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_sec
 site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
 site.user_password.error_tips: Bad credentials.
 
-site.mobile_bind.ignore: 跳过
-site.mobile_bind.title: 手机号绑定
-site.mobile_bind.login_password: 您的登录密码
-site.mobile_bind.phone_number: 手机号码
-site.mobile_bind.reasons: 绑定手机号的三大理由
-site.mobile_bind.reasons.network_office_regulations: 1、网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份。
-site.mobile_bind.reasons.login_while_third_party_fail: 2、第三方登录出现故障时，仍能用手机号顺利登录，课程学习不受影响。
-site.mobile_bind.reasons.login_while_forget_password: 3、即使您忘记了第三方帐号的密码，仍能使用绑定的手机号和密码登录。
+site.mobile_bind.ignore: skip
+site.mobile_bind.title: Bind phone number
+site.mobile_bind.login_password: Your login password
+site.mobile_bind.phone_number: Phone number
+site.mobile_bind.reasons: Three reasons to bind mobile phone numbers
+site.mobile_bind.reasons.network_office_regulations: 1.The Internet Office requires Internet registered users to provide real identity based on mobile phone numbers and the like.
+site.mobile_bind.reasons.login_while_third_party_fail: 2.When the third-party login fails, the mobile phone number can still be successfully logged in, and the course learning is not affected.
+site.mobile_bind.reasons.login_while_forget_password: 3.Even if you forget the password for a third-party account, you can still log in with the phone number and password you have bound.
 
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
@@ -2460,7 +2460,7 @@ user.settings.security.return_btn: 'Back to security setting'
 user.settings.security.scene_not_open: 'Scene unopened'
 user.settings.security.use_scene_not_open: 'This usage scenario is unopened'
 user.settings.security.level: Security level
-user.settings.security.mobile_bind_daily_tips: 网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份，为了您的帐号安全，请绑定手机号。
+user.settings.security.mobile_bind_daily_tips: 'The Internet Information Office stipulates that Internet registered users should provide real identity based on mobile phone numbers, etc. For the security of your account, please bind the mobile phone number.'
 user.settings.security.high_level: 'High'
 user.settings.security.middle_level: 'Medium'
 user.settings.security.low_level: 'Low'
