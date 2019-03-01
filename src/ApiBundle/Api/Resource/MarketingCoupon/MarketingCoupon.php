@@ -6,9 +6,9 @@ use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Biz\Coupon\Service\CouponService;
 use Biz\User\Service\UserService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MarketingCoupon extends AbstractResource
 {
@@ -23,7 +23,7 @@ class MarketingCoupon extends AbstractResource
         $postData = $request->request->all();
 
         if (empty($postData['mobile'])) {
-            throw new NotFoundHttpException('undefined user');
+            throw CommonException::ERROR_PARAMETER();
         }
 
         $user = $this->getUserService()->getUserByVerifiedMobile($postData['mobile']);

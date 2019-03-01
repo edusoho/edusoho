@@ -33,6 +33,7 @@
     }
   }
   .course-body {
+    position: relative;
     margin: 15px 15px 0px 245px;
     @media (max-width: 600px) {
       margin-left: 15px;
@@ -49,6 +50,7 @@
   .course-title {
     margin: 10px 0 10px;
     word-break: break-all;
+    line-height: 24px;
     a {
       color: #555;
       font-weight: bold;
@@ -66,6 +68,12 @@
   .course-about {
     margin: 0 0 15px;
     color: #666;
+  }
+
+  .course-footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
   }
 
   .teacher {
@@ -103,5 +111,35 @@
 .courses-selected {
   .course-body {
     margin: 15px 15px 0px 300px;
+  }
+
+  .course-manage-btn {
+    position: absolute;
+    top: 41px;
+    right: 15px;
+  }
+
+  .course-close-btn {
+    position: absolute;
+    right: 15px;
+    font-size: 35px;
+    z-index: 10;
+  }
+
+  .course-picture-link {
+    position: relative;
+  }
+  .tags {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .tag-live {
+    display: inline-block;
+    width: 40px;
+    height: 50px;
+    background: url("@{img-src}tag_live.png") no-repeat;
+    background-image: -webkit-image-set(url("@{img-src}tag_live.png") 1x,url("@{img-src}tag_live@2x.png") 2x);
   }
 }

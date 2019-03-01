@@ -280,7 +280,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                     'lessonId' => 1234,
                     'questionTitle' => 'thread title',
                     'postContent' => 'this is a content',
-                    'title' => '问答回复',
+                    'title' => '问答回答',
                     'message' => '[]回复了你的问答《thread title》',
                     'questionCreatedTime' => 1511610055,
                 ),

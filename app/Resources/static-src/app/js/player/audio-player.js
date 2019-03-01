@@ -33,6 +33,17 @@ class AudioPlayer extends Emitter {
         }
       });
     }
+    
+    const remeberLastPos = self.options.customPos < self.options.mediaLength;
+
+    //范晓铖要改SDK，消除string和int的奇怪判断
+    if (remeberLastPos && self.options.customPos) {
+      self.options.customPos = self.options.customPos.toString();
+    } else if (!self.options.customPos) {
+      self.options.customPos = 0;
+    } else {
+      self.options.customPos = '0';
+    }
 
     extConfig = Object.assign(extConfig, {
       id: 'lesson-player',
@@ -41,7 +52,7 @@ class AudioPlayer extends Emitter {
       autoplay: true, //音频自动播放开启
       customPos: self.options.customPos,
       disableModeSelection: self.options.disableModeSelection,
-      remeberLastPos: true,
+      remeberLastPos: remeberLastPos,
       sequentialMode: true,
     });
     var player = new AudioPlayerSDK(extConfig);

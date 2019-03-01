@@ -34,7 +34,7 @@ interface UserService
 
     public function findUsersHasMobile($start, $limit, $isVerified = false);
 
-    public function findUnlockedUserMobilesByUserIds($userIds, $needVerified = false);
+    public function findUnlockedUserMobilesByUserIds($userIds);
 
     public function getUserByEmail($email);
 
@@ -160,11 +160,11 @@ interface UserService
      */
     public function register($registration, $type = 'default');
 
-    public function markLoginInfo();
+    public function markLoginInfo($type = null);
 
     public function markLoginFailed($userId, $ip);
 
-    public function markLoginSuccess($userId, $ip);
+    public function refreshLoginSecurityFields($userId, $ip);
 
     public function checkLoginForbidden($userId, $ip);
 

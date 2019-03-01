@@ -5,10 +5,12 @@ namespace AppBundle\Controller;
 use ApiBundle\Api\Resource\Setting\Setting;
 use AppBundle\Controller\OAuth2\OAuthUser;
 use Biz\Sensitive\Service\SensitiveService;
+use Biz\System\SettingException;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\SimpleValidator;
+use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 
@@ -18,11 +20,9 @@ class LoginBindController extends BaseController
     {
         if ($request->query->has('_target_path')) {
             $targetPath = $request->query->get('_target_path');
-
             if ('' == $targetPath) {
                 $targetPath = $this->generateUrl('homepage');
             }
-
             if (!in_array($targetPath, $this->getBlacklist())) {
                 $request->getSession()->set('_target_path', $targetPath);
             }
@@ -37,8 +37,16 @@ class LoginBindController extends BaseController
             'times' => $this->isAndroidAndWechat($request) ? 0 : 1,
             'duration' => 3600,
         ));
+        $params = array(
+            'type' => $type,
+            'token' => $token['token'],
+        );
 
-        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token['token']), true);
+        if ($request->query->get('os')) {
+            $params['os'] = $request->query->get('os');
+        }
+
+        $callbackUrl = $this->generateUrl('login_bind_callback', $params, true);
 
         $url = $client->getAuthorizeUrl($callbackUrl);
 
@@ -49,8 +57,8 @@ class LoginBindController extends BaseController
     {
         $userAgent = $this->getWebExtension()->parseUserAgent($request->headers->get('User-Agent'));
         if (!empty($userAgent)
-            && !empty($userAgent['os']) && $userAgent['os']['name'] == 'Android'
-            && !empty($userAgent['client']) && $userAgent['client']['name'] == 'WeChat') {
+            && !empty($userAgent['os']) && 'Android' == $userAgent['os']['name']
+            && !empty($userAgent['client']) && 'WeChat' == $userAgent['client']['name']) {
             return true;
         }
 
@@ -66,10 +74,18 @@ class LoginBindController extends BaseController
     {
         $code = $request->query->get('code');
         $token = $request->query->get('token', '');
-
+        $os = $request->query->get('os', '');
         $this->validateToken($request, $type);
+        $callbackParams = array(
+            'type' => $type,
+            'token' => $token,
+        );
 
-        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token), true);
+        if ($os) {
+            $callbackParams['os'] = $os;
+        }
+
+        $callbackUrl = $this->generateUrl('login_bind_callback', $callbackParams, true);
         $oauthClient = $this->createOAuthClient($type);
         $token = $oauthClient->getAccessToken($code, $callbackUrl);
 
@@ -106,7 +122,7 @@ class LoginBindController extends BaseController
             }
         } else {
             $oUser = $oauthClient->getUserInfo($token);
-            $this->storeOauthUserToSession($request, $oUser, $type);
+            $this->storeOauthUserToSession($request, $oUser, $type, $os);
 
             return $this->redirect($this->generateUrl('oauth2_login_index'));
         }
@@ -124,7 +140,6 @@ class LoginBindController extends BaseController
         $oauthUser->mode = $registerSetting['mode'];
         $oauthUser->captchaEnabled = $registerSetting['captchaEnabled'];
         $oauthUser->os = $os;
-
         $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
     }
 
@@ -142,17 +157,17 @@ class LoginBindController extends BaseController
     {
         $token = $request->query->get('token', '');
         if (empty($token)) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $token = $this->getTokenService()->verifyToken('login.bind', $token);
         $tokenData = $token['data'];
         if ($tokenData['type'] != $type) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         if ($tokenData['sessionId'] != $request->getSession()->getId()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
     }
 
@@ -235,15 +250,15 @@ class LoginBindController extends BaseController
         $settings = $this->setting('login_bind');
 
         if (empty($settings)) {
-            throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
+            $this->createNewException(SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG());
         }
 
         if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
-            throw new \RuntimeException(sprintf('第三方登录(%s)系统参数尚未配置，请先配置。', $type));
+            $this->createNewException(SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG());
         }
 
         if (!$settings[$type.'_enabled']) {
-            throw new \RuntimeException(sprintf('第三方登录(%s)未开启', $type));
+            $this->createNewException(SettingException::FORBIDDEN_THIRD_PARTY_AUTH());
         }
 
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);

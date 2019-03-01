@@ -82,7 +82,7 @@ class CourseSetServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException  \Biz\Common\CommonException
      */
     public function testCreateError()
     {

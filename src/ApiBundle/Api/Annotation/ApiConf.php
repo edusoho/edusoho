@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Api\Annotation;
 
+use Biz\Common\CommonException;
+
 /**
  * @Annotation
  * @Target({"METHOD"})
@@ -9,7 +11,7 @@ namespace ApiBundle\Api\Annotation;
 class ApiConf
 {
     /**
-     * @var boolean
+     * @var bool
      */
     private $isRequiredAuth;
 
@@ -18,7 +20,7 @@ class ApiConf
         foreach ($data as $key => $value) {
             $method = 'set'.str_replace('_', '', $key);
             if (!method_exists($this, $method)) {
-                throw new \BadMethodCallException(sprintf('Unknown property "%s" on annotation "%s".', $key, get_class($this)));
+                throw CommonException::NOTFOUND_METHOD();
             }
             $this->$method($value);
         }

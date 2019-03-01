@@ -146,6 +146,16 @@ site.bind.unfinished: 未绑定
 site.setting.email_finished: 已设置邮箱
 site.bind.mobile_finished: 已绑定手机
 
+#全局手机号绑定提醒
+site.mobile_bind.ignore: 跳过
+site.mobile_bind.title: 手机号绑定
+site.mobile_bind.login_password: 您的登录密码
+site.mobile_bind.phone_number: 手机号码
+site.mobile_bind.reasons: 绑定手机号的三大理由
+site.mobile_bind.reasons.network_office_regulations: 1、网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份。
+site.mobile_bind.reasons.login_while_third_party_fail: 2、第三方登陆出现故障时，仍能用手机号顺利登录，课程学习不受影响。
+site.mobile_bind.reasons.login_while_forget_password: 3、即使您忘记了第三方帐号的密码，仍能使用绑定的手机号和密码登录。
+
 # email 模板
 email.password_reset: >
   亲爱的%nickname%
@@ -1252,11 +1262,13 @@ course.order.end_time: 结束时间
 course.replay_manage: 录播管理
 course.replay_manage.content_title: 录播管理
 course.replay_manage.empty: 暂无直播内容！
-course.replay_manage.tips: 提示：上传录像文件后无法再生成在线录像!
+course.replay_manage.tips: >
+  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
+  <div class="cd-text-medium"><b>注意，上传视频文件后无法再使用录制文件作为回放。</b></div>
 course.replay_manage.unpublished: 未发布
 course.replay_manage.live_not_stop: 直播未结束
-course.replay_manage.ungenerated: 未录制回放
-course.replay_manage.generated: 已录制回放
+course.replay_manage.ungenerated: 未生成回放
+course.replay_manage.generated: 已生成回放
 course.replay_manage.video_generated.file_exsist: 已上传录像
 course.replay_manage.video_generated.file_not_exsist: 回放视频文件已删除
 course.replay_manage.record: 录制
@@ -1402,6 +1414,11 @@ course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）�
 course.task.preview.free_learn_tips: 免费加入学习
 course.task.classroom_sync_job_executing_tips: 班级课程同步中，请稍后发布
 course.thread: 讨论区
+course.thread.question_type.video: 「视频」
+course.thread.question_type.image: 「图片」
+course.thread.question_type.audio: 「语音」
+course.thread.question.title: 这是一个%questionType%问题
+course.thread.question_type.content: 「文字」
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
 course.thread.hit_times: %hitNum%次浏览
@@ -1460,6 +1477,8 @@ course.plan_info: >
 # 课程扩展
 course.tab.tasks: '目录'
 course.tab.threads: '话题'
+course.tab.discussions: '话题'
+course.tab.questions: '问题'
 course.tab.notes: '笔记'
 course.tab.material: '资料区'
 course.tab.reviews: '评价'
@@ -1998,11 +2017,13 @@ course.live.replay_manage.upload_mode_not_cloud_tips: >
 course.live.replay_manage.file_empty_tips: 暂无视频文件，请先上传。
 course.live.replay_manage.content_title: 录播管理
 course.live.replay_manage.lesson_empty_tips: 暂无课时内容！
-course.live.replay_manage.upload_tips: 提示：上传录像文件后 <b>无法再生成</b> 在线录像
+course.live.replay_manage.upload_tips: >
+  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放，或点击<i class="glyphicon glyphicon-paperclip color-gray mh5"></i>来上传一个视频文件作为回放。
+  <div class="cd-text-medium"><b>注意，上传视频文件后无法再使用录制文件作为回放。</b></div>
 course.live.replay_manage.lesson_status.unpublished: 未发布
 course.live.replay_manage.lesson_status.published: 直播未结束
-course.live.replay_manage.lesson_replay_status.ungenerated: 未录制回放
-course.live.replay_manage.lesson_replay_status.generated: 已录制回放
+course.live.replay_manage.lesson_replay_status.ungenerated: 未生成回放
+course.live.replay_manage.lesson_replay_status.generated: 已生成回放
 course.live.replay_manage.lesson_replay_status.videoGenerated: 已上传录像
 course.live.replay_manage.lesson_replay_status.videoGenerated_and_file_empty: 回放视频文件已删除
 course.live.replay_manage.lesson_edit_btn: 编辑
@@ -2485,7 +2506,7 @@ classroom.expiry_mode_rule_tips: >
   ● 有效期修改规则
   <br>
   1. 未发布状态：任意修改，且保存的有效期设置，将在发布后生效<br>
-  2. 发布状态：只能修改当前有效期方式下的具体数值，如果是修改有效天数，则只会影响后续加入班级的学员，不影响已加入班级的学员；如果修改有效日期，则会所有学员，包括已加入班级和后续加入的班级<br>
+  2. 发布状态：只能修改当前有效期方式下的具体数值，如果是修改有效天数，则只会影响后续加入班级的学员，不影响已加入班级的学员；如果修改有效日期，则只会影响后续加入班级的学员，不影响已加入班级的学员<br>
   3. 关闭状态：无法修改<br>
   4. 在学员管理中，可以针对单个学员修改其有效期<br>
   <br>
@@ -2558,6 +2579,7 @@ classroom.total_task_count: >
   %taskNum%个%taskName%
 classroom.expiry_mode: 有效期
 classroom.forever: 永久
+classroom.end_date: 截止日期
 classroom.course_tips: >
   若%name%课程被移除，则该课程内所有学习数据将被清空。
 classroom.total_price: 共计
@@ -2756,7 +2778,7 @@ user.register: 注册
 user.register.sms.sms_send: 短信推送
 user.register.sms.sms_send_to: 发送对象
 user.register.sms.in_classroom: %classroom.name%内
-user.register.sms.send_sms_nums: 预计发送量
+user.register.sms.send_sms_nums: 预计通知人数
 user.register.sms.send_content: 发送内容
 user.register.sms.start_regist: 现已开始报名
 user.register.sms.link_address: 链接地址
@@ -2925,6 +2947,7 @@ user.settings.security.level: 安全等级
 user.settings.security.high_level: 高
 user.settings.security.middle_level: 中
 user.settings.security.low_level: 低
+user.settings.security.mobile_bind_tips: 网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份，为了您的账号安全，请绑定手机号。
 user.settings.security.login_password_tips: 经常更改密码有助于保护您的帐号安全
 user.settings.security.pay_password_tips: 用于支付时的二次密码校验，加强账户安全性
 user.settings.security.questions: 安全问题
@@ -3661,6 +3684,8 @@ thread.all_answer: 所有答案
 thread.add_btn: 添加
 thread.browse: 浏览
 thread.empty: 暂无话题
+discussion.empty: 暂无话题
+question.empty: 暂无问题
 thread.status.stick: 置顶
 thread.status.essence: 精华
 thread.status.top: 头条
@@ -3823,7 +3848,7 @@ my.teaching.live_schedule_menu: 教学课表
 my.teaching.hints_block: (当前仅展示直播课程)
 my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
-my.teaching.question_menu: 学员问题
+my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
 my.teaching.testpaper_check_menu: 试卷批阅
 my.teaching.homework_check_menu: 作业批阅
@@ -3835,9 +3860,11 @@ my.teaching.open_course.normal: 录播公开课
 my.teaching.open_course.live: 直播公开课
 my.teaching.open_course.live_remind: 直播提醒
 my.teaching.threads_discussion: 课程学员话题
+my.teaching.threads_question: 课程学员问答
 my.teaching.classroom.threads_discussion: %classroom%学员话题
 my.teaching.classroom.threads_discussion.nickname: 话题作者
 my.teaching.classroom.threads_event.nickname: 活动发起人
+my.teaching.classroom.threads_question: %classroom%学员问答
 my.teaching.classroom.threads_question.nickname: 话题作者
 my.teaching.classroom: 所教%classroom%
 my.teaching.classroom.manage_btn: 管理%classroom%
@@ -4235,7 +4262,7 @@ my.learning.thread.browse: 浏览
 my.learning.thread.question_empty: 你还没提过问题
 my.learning.thread.empty: 你还没有发表过话题
 my.learning.thread.task_id: 课时%taskId%
-my.learning.thread.target_course: "来自<a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a>\n"
+my.learning.thread.target_course_from: 来自
 my.learning.thread.target_course_deleted: 课程已删除
 
 # 我的课程
@@ -4288,6 +4315,8 @@ my.learning.note.delete: 删除笔记
 
 # 我的问答
 my.learning.question: 我的问答
+my.learning.class.question: 课程问答
+my.learning.classroom.question: 班级问答
 my.learning.question.empty: 暂无提问的记录
 my.learning.question.course_thread: 课程话题
 my.learning.question.classroom_thread: %classroomName%话题
@@ -5663,6 +5692,7 @@ admin.custom_page_manage.custom_page_tag: 标签
 admin.custom_page_manage.custom_page_template: 模版
 admin.custom_page_manage.custom_page_default_template: 默认模版
 admin.custom_page_manage.custom_page_no_nav_template: 无导航栏
+admin.custom_page_manage.custom_page_blank_template: 空白页
 
 # 移动端内容管理
 admin.mobile_manage.open_tips: >
@@ -6297,6 +6327,7 @@ admin.edu_cloud.edu_video.normal: 标准
 admin.edu_cloud.edu_video.high: 高品质
 admin.edu_cloud.edu_video.play_speed: 倍速播放：
 admin.edu_cloud.edu_video.play_speed_tips: 开启后，云视频任务及音频任务支持倍速播放。
+admin.edu_cloud.edu_video.not_support_play_speed_tips: 目前系统自动生成的直播回放视频、本地视频、第三方视频（腾讯、优酷等）不支持倍速播放；
 admin.edu_cloud.edu_video.auto_play: 云视频自动播放
 admin.edu_cloud.edu_video.video_header: 云视频片头：
 admin.edu_cloud.edu_video.video_header_edit_btn: 编辑
@@ -6895,6 +6926,8 @@ admin.user_auth.Term_service_settings.details: 条款内容
 admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
 admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+admin.user_auth.mobile_bind_tips: >
+  据国家《互联网跟帖评论服务管理规定》，<b>不得向未认证真实身份信息的用户提供跟帖评论服务</b>。这里的跟帖评论服务，是指互联网站、应用程序、互动传播平台以及其他具有新闻舆论属性和社会动员功能的传播平台，以<b>发帖、回复、留言、“弹幕”</b>等方式，为用户提供发表文字、符号、表情、图片、音视频等信息的服务。绑定手机号符合实名认证的规定，为规避法律风险，建议选用<b>“手机注册”</b>。切换成“手机注册”后，对于之前未绑定手机号的用户，会在每日首次登录成功后弹框提醒用户绑定手机号（用户可选择跳过此步骤）。
 admin.login_connect.User_login_restrictions: 用户登录限制
 admin.login_connect.open: 开启
 admin.login_connect.closed: 关闭
@@ -7106,6 +7139,7 @@ admin.developer_setting.debug_label: 调试
 admin.developer_setting.app_center_api_address: 应用中心API地址
 admin.developer_xapi_address: XAPI 推送地址
 admin.developer_face_address: 人脸识别API地址
+admin.developer_push_address: 消息推送API地址
 admin.developer_setting.cloud_api_server_address: 云服务API地址
 admin.developer_setting.address: 地址
 admin.developer_setting.im_api_address: IMAPI地址
@@ -7568,7 +7602,7 @@ admin.payment_setting.alipay_api_type.mobile.hint: >
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_secret: MD5密钥
 admin.payment_setting.alipay_hint: >
-  登录【支付宝商家服务】-【我的商家服务】-【签约管理】，可<a href="%alipayUrl%" target="_blank">查看PID和MD5秘钥</a>。
+  登录【蚂蚁金服·开放平台】-【服务市场】-【密钥管理】，可<a href="%alipayUrl%" target="_blank">查看PID和MD5秘钥</a>。
 admin.payment_setting.alipay_account: 支付宝账户
 admin.payment_setting.alipay_mobile_payment_hint: 如需开启移动客户端支付，需填写支付宝账户。
 admin.payment_setting.open_alipay_api: 启用支付宝交易关闭接口
@@ -7587,7 +7621,7 @@ admin.payment_setting.llpay_public_key: 公钥
 admin.payment_setting.llpay_private_key: 密钥
 admin.payment_setting.llpay_application_tips: >
  使用前提：
-  <p>1、在连连支付平台申请账户并开通，<a target="_blank" href="%qiqiuyuUrl%">点此查看</a>操作。</p>
+  <p>1、在连连支付平台申请账户并开通，<a target="_blank" href="%qiqiuyuUrl%">点此查看申请说明</a>。</p>
   <p>2、在账户开通后，前往连连支付商户站 - 安全中心 - 安全信息 - 商户秘钥维护，选择签名方式为rsa签名方式。</p>
   <p>3、选择rsa签名方式后，请根据连连支付提示生成对应公钥和密钥文件，将文件内容复制后粘帖至对应处。</p>
 
@@ -7660,15 +7694,13 @@ admin.coin_model.currency_tips: >
   <br>
   2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
   <br>
-  3、虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算
+  3、使用方式一旦保存（使用方式和汇率），请勿随意改动
   <br>
-  4、虚拟币用于标价后，移动端仍显示人民币价格（移动端暂不支持虚拟币支付）
+  4、使用方式的切换会使课程价格会根据汇率变动
   <br>
-  5、使用方式一旦保存（使用方式和汇率），请勿随意改动
+  5、如有参加促销活动的课程，修改价格都将有相应的折扣
   <br>
-  6、使用方式的切换会使课程价格会根据汇率变动
-  <br>
-  7、如有参加促销活动的课程，修改价格都将有相应的折扣
+  6、虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算
 
 admin.coin_course_set.tips: >
   1元人民币兑换<strong class="text-info">%cashRate%</strong>%coinName%
@@ -8044,6 +8076,8 @@ notification.role: 您被 %who% 设置为“%role%”身份。
 notification.questionRemind: 课程《%courseTitle%》有新问题 %question%，请及时回答。
 notification.discount.reject: 您的打折活动%discount%，未通过管理员审核。
 notification.discount.pass: 您的打折活动%discount%，已通过管理员审核。
+notification.question.post_create: %who% 在 %thread% 回答了你
+notification.question.post_ask: %who% 在 %thread% 追问了你
 
 notification.group-profile.chownout: 您的小组 %group% 被管理员转移给了用户 %who%。
 notification.group-profile.chownin: 您获得了小组 %group% 的管理权限。
@@ -8347,6 +8381,7 @@ log.module.role: 角色
 log.module.thread: 话题
 log.module.mobile: 手机客户端
 log.module.wap: 微网校
+log.module.push: 推送
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8475,6 +8510,8 @@ log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
 log.action.system.update_block: 更新编辑区
 log.action.system.update_app_version: 更新版本
+log.action.push.course_thread_create: 提问推送
+log.action.push.course_thread_post_create: 回答推送
 log.action.classroom.create: 新增班级
 log.action.classroom.update: 修改班级
 log.action.classroom.delete: 删除班级
@@ -9299,6 +9336,7 @@ admin.cashflow.keyword_default: --选择类型--
 order.pay_check_msg.parameters_error: 参数错误
 order.pay_check_msg.coin_amount_error: 金额错误
 order.pay_check_msg.coupon_had_been_used: 优惠码已经被使用了
+order.pay_check_msg.product_not_found: 该类型产品找不到
 order.pay_check_msg.unpurchasable_product: 未开放购买
 order.pay_check_msg.order_not_exist: 订单不存在
 order.pay_check_msg.user_not_login: 用户未登录，不能支付
@@ -9353,6 +9391,11 @@ user.learn.statistics.learned.seconds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
+user.learn.statistics.manage.describe_tips: >
+  <div style='width:250px;'>
+    <h5 style='color:blue;margin:5px 0;'>用户数据说明</h5>
+    <P style='margin:0;'>用户数据每日00:00-02:00间更新。</p>
+  </div>
 
 
 admin.datalab.setting.modal_title: 提示：
@@ -9375,8 +9418,22 @@ exception.common_frequent_operation: 操作过于频繁，请稍后再试！
 exception.common_parameter_missing: 参数缺失，请重试！
 exception.common_parameter_error: 参数错误，请重试！
 exception.common_drag_captcha_frequent: 验证码请求次数过于频繁，请稍后再试！
+exception.common_method_not_found: 方法不存在
+exception.common_plugin_is_not_install: 插件未安装
+exception.common_service_provider_not_found: 服务提供者未注册
+exception.common_not_allowed_method: 不允许的方法
+exception.common_expired_upload_token: 上传授权码已过期，请刷新页面后重试
+exception.common_not_found_api: API资源不存在
 
 exception.article.notfound: 资讯不存在!
+exception.article.not_found_category: 文章分类不存在,操作失败！
+exception.article.error_property: 属性不存在，更新失败！
+exception.article.duplicate_like: 不可重复对一条资讯点赞！
+exception.article.error_source_url: 来源地址不正确！
+exception.article.category_empty_name: 名称不能为空，保存栏目失败
+exception.article.category_empty_code: 编码不能为空，保存栏目失败
+exception.article.category_code_invalid: 编码含有非法字符，保存栏目失败
+exception.article.category_numeric_code: 编码不能全为数字，保存栏目失败
 exception.user.unlogin: 未登陆，请登陆后操作!
 exception.user.message_forbidden: 不支持向该用户发送私信!
 exception.user.discuz_user_reset_password: 请通过论坛找回密码！
@@ -9385,35 +9442,101 @@ exception.form.expire: 页面已过期，请重新提交数据！
 exception.user.register_error: 用户数据异常，注册失败！
 exception.user.mobile_registered: 该手机号码已被注册！
 exception.user.register_limit: 注册次数已达最大限制!
+exception.user.not_match_auth: 用户不匹配
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
+exception.thread.not_found: 话题不存在
+exception.thread.not_found_post: 发布不存在
+exception.thread.title_required: 标题不能为空
+exception.thread.content_required: 内容不能为空
+exception.thread.targetid_required: 所属类型id不能为空
+exception.thread.member_existed: 成员已经存在
+exception.thread.member_number_limit: 成员人数限制
+exception.thread.parentid_invalid: 父id错误
+exception.thread.type_invalid: 类型错误
+exception.thread.not_found_member: 成员不存在
+exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
-exception.sms.setting_enbale: 云短信相关设置未开启!
+exception.sms.setting_enable: 云短信相关设置未开启!
+exception.setting.attachment.setting_enable: 云附件未开启!
 exception.sms.code_invalid: 短信验证码错误
+exception.sms.type_error: sms类型错误
+exception.sms.send_failed: 发送失败！
+exception.sms.bind_mobile_not_found: 用户没有被绑定的手机号
+exception.sms.mobile_username_not_match: 手机与用户名不匹配
+exception.sms.error_mobile: 手机号错误
+exception.sms.need_wait: 请等待120秒再申请!
 
 exception.setting.forbidden_mobile_register: 系统未开启手机注册，请联系管理员
 exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员
 exception.user.reset_password_email_send: 重设密码邮件发送失败，请联系管理员。
 exception.setting.forbidden_setting_nickname: 修改昵称未开启，请联系管理员
+exception.setting.third_party_auth_not_found: 第三方登录系统参数尚未配置，请先配置。
+exception.setting.forbidden_third_party_auth: 第三方登录未开启
+exception.setting.cloud_access_key_not_set: 未设置教育云授权码！
+exception.setting.cloud_access_key_error: AccessKey不正确！
+exception.setting.oauth_client_type_invalid: OAuth客户端类型错误
+exception.setting.cloud_video_disable: 请到我的教育云开启云视频
+exception.setting.coin_img_size_limit: 图片大小不正确，请上传超过50*50的等比例图片
+exception.setting.no_copyright: 您无权操作
+exception.setting.ai_face_disable: 人脸识别未开启
 
 exception.order.not_found: 没有找到相应订单！
 exception.order.beyond_authority: 没有权限操作此订单！
 exception.order.closed_order: 无法操作已关闭订单！
 exception.order.unknown_action: 未知操作方法！
+exception.order.vip_order_not_exist: 开通会员的订单不存在，开通会员失败。
+exception.order.not_found_order_items: 订单商品不存在
 
 exception.file.not_found: 文件不存在
 exception.file.group_invalid: 文件组无效
 exception.file.not_upload: 文件未上传
 exception.file.handle_error: 文件处理
+exception.file.upload_not_allowed: 该文件格式，不允许上传。
+exception.file.parse_uri_failed: 解析文件URI失败！
+exception.file.directory_un_writable: 文件上传路径不可写，文件上传失败。
+exception.file.ext_parse_failed: 获取文件扩展名失败！
+exception.file.type_error: 上传类型不正确
+exception.file.size_limit: 上传文件大小不能超过2MB
+exception.file.empty_error: 上传文件不能为空
+exception.file.auth_url_invalid: 上传授权域名不正确，请输入合法的域名
 
 exception.user.update_nickname_error: 昵称修改异常
 exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
 exception.user.permission_denied: 暂无权限访问
+exception.user.lock: 账户被封禁，请联系管理员
+exception.user.token_not_found: token不存在
+exception.user.no_user_provider: user provider不存在
+exception.user.email_invalid: 邮箱地址格式错误
+exception.user.email_existed: 邮箱地址已被注册
+exception.user.mobile_invalid: 非法的手机号
+exception.user.mobile_existed: 手机号已被注册
+exception.user.password_invalid: 密码校验失败
+exception.user.mobile_or_email_invalid: 非法的手机号或邮箱地址
+exception.user.gender_invalid: 性别不正确
+exception.user.birthday_invalid: 生日格式错误
+exception.user.qq_invalid: qq不正确
+exception.user.weixin_invalid: 微信不正确
+exception.user.site_invalid: 个人空间不正确
+exception.user.weibo_invalid: 微博地址不正确
+exception.user.blog_invalid: 博客地址不正确
+exception.user.client_type_invalid: 客户端类型不正确
+exception.user.follow_self: 不能关注自己
+exception.user.follow_black: 不能关注黑名单中的用户
+exception.user.duplicate_follow: 已经关注过了，不要重复关注
+exception.user.roles_invalid: 角色不正确
+exception.user.unfollow_error: 不能对没有关注过的用户取消关注
+exception.user.idcard_invalid: 身份证号错误
+exception.user.truename_invalid: 真实姓名错误
+exception.user.lock_denied: 没有封禁该角色的权限
+exception.user.not_match_bind_email: 与绑定邮箱不符
 exception.user_lock: 账户被封禁，请联系管理员
 exception.user.password_error: 用户名密码错误
-
+exception.user.login_limit: 登录限制！
+exception.user.lock_self_denied: 您不能封禁自己
+exception.user.datefield_invalid: 日期类型字段没有按日期格式填写
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败
@@ -9421,10 +9544,273 @@ exception.parsed.failed.youku: 获取优酷视频信息失败
 exception.parser.not.support: 不支持该视频类型
 
 exception.announcement.notfound: 公告不存在
+exception.announcement.type_invalid: 公告类型不存在
 exception.batch_notification.notfound: 全站通知不存在
+exception.batch_notification.published: 全站通知已发布
 
 lesson_count_no_more_than_300: 课时总数不能超过300个
+exception.lesson.not_found: 课时不存在
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
+exception.task.not_found: 任务不存在
+exception.task.unpublished_task: 任务未发布
+exception.task.task_mode_error: 任务模式错误
+exception.task.can_not_do: 不能做任务
+exception.task.can_not_finish: 不能完成任务
+exception.task.task_is_locked: 任务未解锁
+exception.task.forbidden_create_task: 无权创建任务
+exception.task.forbidden_update_task: 无权更新任务
+exception.task.forbidden_publish_task: 无权发布任务
+exception.task.forbidden_unpublish_task: 无权取消发布任务
+exception.task.forbidden_delete_task: 无权删除任务
+exception.task.lessonid_invalid: 错误的课时id
+exception.task.access_denied: 没有权限
+exception.task.categoryid_invalid: 错误的章节id
+exception.task.forbidden_preview_task: 无权预览任务
+exception.course.not_found: 教学计划不存在
+exception.course.forbidden_take_course: 不能访问教学计划
+exception.course.learnmode_invalid: 学习模式错误
+exception.course.coursetype_invalid: 课程类型错误
+exception.course.count_no_more_than_10: 计划数不得超过10个！
+exception.course.forbidden_delete_published: 不能删除已发布的教学计划
+exception.course.have_sub_courses: 该教学计划被班级引用，请先移除班级计划
+exception.course.count_no_less_than_1: 课程下至少需保留一个教学计划
+exception.course.course_not_published: 教学计划未发布
+exception.course.not_found_chapter: 章节不存在
+exception.course.chain_not_registered: 访问链未注册
+exception.course.expirymode_invalid: 有效期类型错误
+exception.course.expirydays_required: 有效天数不能为空
+exception.course.expirystartdate_required: 有效期开始日期不能为空
+exception.course.expiryenddate_required: 有效期结束日期不能为空
+exception.course.expirydate_end_later_than_start: 有效期结束日期不能早于开始日期
+exception.course.not_match_courseset: 教学计划不在课程中
+exception.course.chapter_type_invalid: 章节类型错误
+exception.course.forbidden_manage_course: 无权管理教学计划
+exception.course.closed_course: 教学计划已关闭
+exception.course.unbuyable_course: 教学计划未开放购买
+exception.course.expired_course: 教学计划已过期
+exception.course.buy_expired: 教学计划已过购买期限
+exception.course.reach_max_student_num: 达到最大人数限制，不可加入
+exception.course.not_arrive: 教学计划还未开始
+exception.course.search_order_closed: 查询订单已关闭，请联系管理员
+exception.course.forbidden_learn_course: 无权学习教学计划
+exception.courseset.not_found: 课程不存在
+exception.courseset.forbidden_manage: 无权管理课程
+exception.courseset.sub_courseset_exist: 该课程在班级下引用，请先删除引用课程！
+exception.courseset.live_student_num_required: 直播课程发布前需要在计划设置中设置课程人数
+exception.courseset.published_course_required: 发布课程时请确保课程下至少有一个已发布的教学计划
+exception.courseset.unpublished: 课程未发布
+exception.courseset.no_course: 课程中没有可用的教学计划
+exception.courseset.unlock_failed: 解锁课程失败
+exception.classroom.not_found: 班级不存在
+exception.classroom.forbidden_manage_classroom: 没有管理班级的权限
+exception.classroom.forbidden_take_classroom: 不能在这个班级学习
+exception.classroom.forbidden_handle_classroom: 不能批阅这个班级的作业
+exception.classroom.forbidden_look_classroom: 不能查看这个班级
+exception.classroom.unpublished_classroom: 班级未发布
+exception.classroom.chain_not_registered:
+exception.classroom.unjoin: 未加入班级
+exception.classroom.empty_title: 班级名称不能为空！
+exception.classroom.forbidden_update_expiry_date: 已发布的班级不允许修改班级原先的有效期模式
+exception.classroom.forbidden_delete_not_draft: 只有未发布班级可以删除，操作失败。
+exception.classroom.not_found_member: 学员不存在
+exception.classroom.forbidden_become_auditor: 该用户不能成为该班级的旁听生！
+exception.classroom.forbidden_become_student: 该用户不能成为该班级学员！
+exception.classroom.expiry_earlier_than_current: 设置的有效期小于当前时间！
+exception.classroom.forbidden_not_student: 用户不是该班级的学员
+exception.classroom.forbidden_wave: 存在不允许增减的字段
+exception.classroom.duplicate_join: 用户已经是学员，不能添加！
+exception.classroom.recommend_required_numeric: 推荐班级序号只能为数字！
+exception.classroom.member_level_limit: 用户不能以会员身份加入班级！
+exception.classroom.member_not_in_classroom: 学员未加入班级
+exception.classroom.closed_classroom: 班级已关闭
+exception.classroom.unbuyable_classroom: 班级不可购买
+exception.classroom.expired_classroom: 班级已过期
+exception.classroom.forbidden_auditor_learn: 旁听生无权学习
+exception.classroom.expired_member: 学员已到有效期
+exception.classroom.forbidden_create_thread_event: 无权限创建活动
+exception.course.member.not_found: 课程中没有该成员
+exception.course.member.not_member: 不是课程成员
+exception.course.member.duplicate_member: 用户已加入教学计划
+exception.course.member.expired_member: 学员已过期
+exception.course.member.not_student: 成员不是学生
+exception.course.member.non_expired: 学员未过期
+exception.page.error_mode: 错误的参数'mode'
+exception.page.error_type: 错误的参数'type'
+exception.page.error_portal: 错误的参数'portal'
+exception.category.not_found: 类别不存在
+exception.category.not_found_group: 类别组不存在
+exception.category.empty_name: 名称不能为空
+exception.category.empty_code: 编码不能为空
+exception.category.code_invalid: 编码含有非法字符，保存分类失败
+exception.category.code_digit_invalid: 编码不能全为数字，保存分类失败
+exception.category.code_unavailable: 编码不可用，保存分类失败
+exception.category.not_found_parent_category: 父分类不存在，保存分类失败
+exception.testpaper.not_found: 试卷不存在
+exception.testpaper.draft: 该试卷未发布，如有疑问请联系老师！
+exception.testpaper.closed: 该试卷已关闭，如有疑问请联系老师！
+exception.testpaper.forbidden_resit: 该试卷只能考一次，不能再考！
+exception.testpaper.forbidden_access_testpaper: 不可以访问其他学生的试卷!
+exception.testpaper.forbidden_duplicate_commit_testpaper: 试卷已经做完，不能重复提交!
+exception.testpaper.reviewing: 试卷正在批阅！不能重新考试!
+exception.testpaper.not_testpaper_task: 试卷不属于当前任务！
+exception.testpaper.not_found_exercise: 练习不存在
+exception.testpaper.status_invalid: 试卷状态不合法!
+exception.testpaper.not_found_result: 试卷结果不存在
+exception.testpaper.modify_committed_testpaper: 已经交卷的试卷不能修改!
+exception.testpaper.doing: 试卷还未提交
+exception.testpaper.redo_interval_exist: 教师设置了重考间隔
+exception.uploadfile.file_not_found: 文件不存在
+exception.uploadfile.forbidden_manage_file: 没有权限管理资源
+exception.uploadfile.error_status: 状态不正确
+exception.uploadfile.permission_denied: 您无权访问此文件！
+exception.uploadfile.implementor_not_allowed: 不合法的实现类
+exception.uploadfile.failed: 完成上传失败
+exception.uploadfile.globalId_required: 缺少globalId
+exception.uploadfile.local_convert_not_support: 本地文件暂不支持转换
+exception.uploadfile.extension_not_allowed: 该文件格式，不允许上传。
+exception.uploadfile.not_found_attachment: 附件不存在
+exception.activity.watch_video_limit: 您的视频观看时长已达限制，无法继续观看！
+exception.activity.not_found: 教学活动不存在
+exception.activity.not_in_course: 教学计划中没有该教学活动
+exception.activity.not_match_media: 与详细信息不匹配
+exception.player.not_support_type: 播放器不支持该文件类型
+exception.player.file_type_invalid: 文件类型错误
+exception.question.not_found: 题目不存在
+exception.question.forbidden_preview_question: 无权预览题目
+exception.question.unexpected_answer: 答案错误
+exception.userfield.not_found: 用户字段不存在
+exception.userfield.title_required: 标题不能为空
+exception.userfield.seq_required: 序号不能为空
+exception.userfield.seq_invalid: 序号不合法
+exception.userfield.type_invalid: 类型不合法
+exception.userfield.duplicate_title: 自定义字段与默认字段相同
+exception.material.not_found: 教学资料不存在
+exception.material.link_required: 资料链接地址不能为空
+exception.tag.not_found: 标签不存在
+exception.tag.not_found_group: 标签组不存在
+exception.tag.empty_name: 标签名不能为空
+exception.tag.duplicate_name: 该标签名已存在
+exception.tag.empty_group_name: 标签组名字未填写，请添加
+exception.tag.duplicate_group_name: 标签组名字已存在，请重新填写
+exception.marker.not_found: 驻点不存在
+exception.marker.field_second_required: 驻点时间不能为空
+exception.conversation.not_found: 会话不存在
+exception.conversation.field_no_required: IM云端返回的会话id不能为空
+exception.conversation.field_userid_required: 用户id不能为空
+exception.conversation.field_memberids_required_array: 会话中用户列表必须是数组
+exception.conversation.create_conversation_failed: 创建会话失败
+exception.conversation.not_found_member: 成员不存在
+exception.conversation.quit_conversation_failed: 退出会话失败
+exception.conversation.join_conversation_failed: 加入会话失败
+exception.conversation.empty_members: 会话没有成员
+exception.conversation.is_full: 会话人数已满
+exception.org.not_found: 组织机构不存在
+exception.card.type_required: 缺少必要字段，请明确卡的类型
+exception.card.error_type: 卡的类型不存在
+exception.group.not_found: 小组不存在
+exception.group.duplicate_join: 已在小组内，不要重复加入
+exception.group.not_found_member: 成员不存在
+exception.group.title_required: 缺少标题
+exception.comment.not_found: 评论不存在
+exception.comment.forbidden_delete: 无权限删除评论！
+exception.comment.objecttype_invalid: 不存在当前这种评论对象
+exception.group.thread.not_found: 话题不存在
+exception.group.thread.title_required: 缺少标题
+exception.group.thread.content_required: 缺少内容
+exception.group.thread.groupid_required: 缺少小组id
+exception.group.thread.userid_required: 缺少用户id
+exception.group.thread.sort_invalid: 错误的排序方式
+exception.group.thread.collect_own_thread: 不能收藏自己的话题
+exception.group.thread.already_collect: 已经收藏这个话题了
+exception.group.thread.not_found_collection: 你没有收藏这个话题
+exception.block.not_found: 此编辑区不存在
+exception.block.not_found_template: 此编辑区模板不存在
+exception.block.empty_history: 此编辑区数据不存在，更新失败
+exception.block.empty_codes: 获取内容失败，不允许查询空编号所对应的内容!
+exception.opencourse.not_found: 课程不存在
+exception.opencourse.not_found_lesson: 课时不存在
+exception.opencourse.lesson_type_invalid: 课时类型不正确
+exception.opencourse.favor_unpublished: 不能收藏未发布课程
+exception.opencourse.duplicate_favor: 该收藏已经存在，请不要重复收藏!
+exception.opencourse.cancel_unfavor: 你未收藏本课程，取消收藏失败!
+exception.opencourse.status_invalid: 非法状态
+exception.opencourse.forbidden_manage_course: 您不是课程的教师或管理员，无权操作！
+exception.opencourse.itemids_invalid: 课时数错误
+exception.opencourse.is_not_member: 您不是课程成员
+exception.opencourse.check_password_required: 未输入正确的校验密码
+exception.blacklist.forbidden_take: 没有权限
+exception.blacklist.duplicate_add: 已在黑名单中，不要重复添加
+exception.blacklist.not_found: 黑名单不存在
+exception.course.note.not_found: 笔记不存在
+exception.course.note.no_permission: 没有权限
+exception.course.note.duplicate_like: 不可重复对一条笔记点赞！
+exception.review.not_found: 课程评价不存在
+exception.message.not_found_sender_or_receiver: 发送方或接收方不存在
+exception.message.send_to_self: 不能给自己发消息
+exception.message.empty_message: 消息为空
+exception.message.not_found_conversation: 会话不存在
+exception.message.delete_denied: 您无权删除此私信
+exception.coupon.not_found: 优惠券不存在
+exception.coupon.status_invalid: 非法的优惠券状态
+exception.coupon.type_invalid: 非法的优惠券类型
+exception.sign.duplicate_sign: 今日已签到!
+exception.search.failed: 搜索失败，请稍后再试.
+exception.app.get_package_failed: 应用包不存在或网络超时，读取包信息失败
+exception.app.not_found: App不存在
+exception.app.delete_cache_failed: 删除缓存失败
+exception.app.extract_failed: 无法解压缩安装包！
+exception.role.forbidden_modify: 该权限不能修改！
+exception.role.code_not_all_digital: code不能全为数字
+exception.content.not_found: 内容不存在
+exception.content.type_required: 内容类型不能为空
+exception.content.title_required: 内容标题不能为空
+exception.download_activity.not_download_activity: 不是下载资料活动
+exception.download_activity.file_not_in_activity: 不是该活动的文件
+exception.live_activity.not_found: 无此直播
+exception.live_activity.roomtype_invalid: 直播间类型错误
+exception.live_activity.live_time_invalid: 开始时间或直播时长有误
+exception.live_activity.create_liveroom_failed: 创建直播间失败
+exception.live_activity.live_status_invalid: 直播状态不合法
+exception.course.thread.not_found: 课程话题不存在
+exception.course.thread.not_in_course: 课程话题不在教学计划中
+exception.course.thread.not_found_post: 课程话题回复不存在
+exception.course.thread.post_not_in_course: 课程话题回复不在教学计划中
+exception.course.thread.title_required: 课程话题标题缺失
+exception.course.thread.type_invalid: 课程话题类型错误
+exception.course.thread.courseid_required: 计划id缺失
+exception.classroom.review.not_found: 班级评价不存在
+exception.classroom.review.no_more_than_5: 评分不能超过5
+exception.classroom.review.permission_denied: 没有权限
+exception.subtitle.not_found: 字幕不存在
+exception.subtitle.no_more_than_4: 最多添加4个字幕
+exception.money_card.money_invalid: 钱不能小于0
+exception.money_card.coin_invalid: 币值不能小于0
+exception.money_card.cardlength_invalid: 卡长过小
+exception.money_card.number_invalid: 卡号不能小于0
+exception.money_card.not_found: 充值卡不存在
+exception.money_card.lock_used_card: 不能作废已使用状态的充值卡
+exception.money_card.not_found_batch: 批次不存在
+exception.money_card.duplicate_card: 卡号有重复
+exception.money_card.batch_status_equal_invalid: 在批次被作废的情况下，不能启用批次下的充值卡
+exception.money_card.unlock_not_invalid_card: 只能启用作废状态的充值卡
+exception.reward_point.account.not_found: 积分账号不存在
+exception.reward_point.account.already_open: 积分账号已创建
+exception.reward_point.account.userid_invalid: 用户id错误
+exception.reward_point.account.balance_insufficient: 余额不足
+exception.question_marker.not_found: 弹题不存在
+exception.order_pay_check.instance_error: 不是ProductDealerService实例
+exception.live_replay.not_found: 直播回放不存在
+exception.cloud_file.not_found: 云文件不存在
+exception.cloud_file.not_found_player: 云播放器不存在
+exception.token.invalid: token不存在或已过期
+exception.token.not_match_user: token与用户不匹配
+exception.token.not_match_course: token与教学计划不匹配
+exception.filetoolkit.not_image: 图片格式不正确
+exception.filetoolkit.not_flash: 您上传的不是flash文件
+exception.filetoolkit.file_type_error: 文件类型不正确
+exception.course.draft.not_found: 教学计划草稿不存在
+exception.task_result.not_found: 学习任务结果不存在
+exception.discovery_column.not_found: 发现栏目不存在
 
 course.unname_title: 未命名计划
 
@@ -9442,3 +9828,9 @@ admin.sts_discovery_feature_tip: 更多功能敬请期待。。。
 admin.user_manage.lock_user.access_deniedexception_message: 没有封禁该角色的权限
 admin.course_manage.manage.tags: 标签
 admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级中允许显示班级人数
+
+exception.coupon.receive.failed: 优惠券领取失败
+exception.coupon.plugin.not.installed: 优惠券插件未安装
+course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
+course.question.question_background: 问题背景
+course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%分钟（%watchLimit%倍视频时长），不能再继续观看。

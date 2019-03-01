@@ -2,7 +2,7 @@
 
 namespace Biz\Card\DetailProcessor;
 
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Biz\Card\CardException;
 
 class DetailFactory
 {
@@ -11,12 +11,12 @@ class DetailFactory
      *
      * @return DetailProcessor
      *
-     * @throws InvalidArgumentException
+     * @throws CardException
      */
     public static function create($cardType)
     {
         if (empty($cardType) || !in_array($cardType, array('coupon', 'moneyCard'))) {
-            throw new InvalidArgumentException('卡的类型不存在');
+            throw CardException::TYPE_INVALID();
         }
 
         if ($cardType == 'coupon') {

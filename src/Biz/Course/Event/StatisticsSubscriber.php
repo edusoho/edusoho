@@ -106,7 +106,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $thread = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($thread['courseId'], array(
-            'threadNum',
+            $thread['type'].'Num',
         ));
     }
 

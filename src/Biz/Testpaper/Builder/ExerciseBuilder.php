@@ -64,7 +64,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
                 $questionIds[] = $question['parentId'] > 0 ? $question['parentId'] : $question['id'];
             }
 
-            $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+            $randomQuestions = $this->getQuestionService()->findQuestionsByIds($questionIds);
         } else {
             $conditions = array(
                 'types' => $exercise['metas']['questionTypes'],
@@ -107,18 +107,20 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $count = $this->getQuestionService()->searchCount($conditions);
             $questions = $this->getQuestionService()->search(
                 $conditions,
-                array('createdTime' => 'DESC'),
+                array('id' => 'DESC'),
                 0,
                 $count
             );
-            if (empty($orders)) {
-                shuffle($questions);
-            }
 
-            $questions = array_slice($questions, 0, $exercise['itemCount']);
+            $questionIds = array_rand($questions, $exercise['itemCount']);
+            $questionIds = is_array($questionIds) ? $questionIds : array($questionIds);
+            $randomQuestions = array();
+            foreach ($questionIds as $id) {
+                $randomQuestions[$id] = $questions[$id];
+            }
         }
 
-        return $this->formatQuestions($questions, $itemResults, $orders);
+        return $this->formatQuestions($randomQuestions, $itemResults, $orders);
     }
 
     public function filterFields($fields, $mode = 'create')

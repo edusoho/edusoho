@@ -4,10 +4,11 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Biz\Task\TaskResultException;
 
 class CourseTaskResult extends AbstractResource
 {
@@ -16,7 +17,7 @@ class CourseTaskResult extends AbstractResource
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (!$course) {
-            throw new NotFoundHttpException('教学计划不存在');
+            throw CourseException::NOTFOUND_COURSE();
         }
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 
@@ -31,6 +32,7 @@ class CourseTaskResult extends AbstractResource
             'courseTaskId' => $task['id'],
             'userId' => $user['id'],
         );
+
         return $this->getTaskResultService()->createTaskResult($taskResult);
     }
 
@@ -39,11 +41,11 @@ class CourseTaskResult extends AbstractResource
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (!$course) {
-            throw new NotFoundHttpException('教学计划不存在');
+            throw CourseException::NOTFOUND_COURSE();
         }
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
         if (!$taskResult) {
-            throw new NotFoundHttpException('学习任务结果不存在');
+            throw TaskResultException::NOTFOUND_TASK_RESULT();
         }
 
         $fields = $request->request->all();
@@ -56,7 +58,7 @@ class CourseTaskResult extends AbstractResource
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (!$course) {
-            throw new NotFoundHttpException('教学计划不存在');
+            throw CourseException::NOTFOUND_COURSE();
         }
 
         return $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);

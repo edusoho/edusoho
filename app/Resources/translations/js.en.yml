@@ -1,4 +1,4 @@
-site.flash_not_install_hint: Flash player is not installed in your browser or version is too low, please install the Flash player. <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install</a>
+site.flash_not_install_hint: Flash player is not installed or it is disabled or its version is too low in your browser, please make sure the flash player can work properly. <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install</a>
 site.date_format_dhis: 'Days %day% Hours %hour% Minutes %minutes% seconds %seconds%'
 site.date_format_his: 'Hours %hours% Minutes %minutes% Seconds %seconds%'
 site.date_format_is: 'Minutes %minutes% seconds %seconds%'
@@ -599,6 +599,7 @@ course.question_marker.back_to_questions: back to questions
 
 classroom.manage.tag_required_hint: Please enter a tag
 classroom.manage.delete_course_hint: Do you want to remove the course from the class?
+classroom.manage.delete_course_hint_title: Course removal
 classroom.manage.delete_course_success_hint: The course was removed successfully
 classroom.manage.delete_course_fail_hint: Course removal failed
 classroom.manage.expiry_mode_days_error_hint: Please enter the number of valid days
@@ -761,6 +762,7 @@ validate.before.message: The start date should be earlier than the end date
 validate.after.message: The end date should be later than the start date
 validate.feature.message: The deadline for purchase is after the current time
 validate.valid_qq_input.message: Please enter the correct QQ number
+validate.valid_weixin_input.message: Please enter the correct wecaht number
 validate.valid_mobile_input.message: please enter a valid phone number
 validate.valid_chinese_input.message: Must be Chinese characters
 validate.chinese_limit.message: The length must be less than or equal to {0} characters, one for 2 characters

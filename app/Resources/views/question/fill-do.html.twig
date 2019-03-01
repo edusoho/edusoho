@@ -1,13 +1,13 @@
 {% if not role|default(null) == 'teacher' %}
 
 <div class="testpaper-question testpaper-question-fill js-testpaper-question {% if setting('magic.testpaper_watermark') %}js-testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
-	<div class="testpaper-question-body">
+  <div class="testpaper-question-body">
 	  {% include 'question/part/question-stem.html.twig' %}
   </div>
 
-	{% if not question.isDeleted|default(0) and (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' )
-	or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished' )
-  or (setting('questions.testpaper_answers_show_mode','submitted') == 'hide'  and paperResult.status|default(null) in ['reviewing', 'finished'] and paperResult.type not in ['testpaper']) %}
+  {% if not question.isDeleted|default(0) %}
+
+	{% if show_answers(paperResult|default(null)) %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 		    <ul>
@@ -25,21 +25,21 @@
 			    	  	{{'question.answer'|trans}}　<strong class="color-danger">{{ userAnswer }}</strong>。
 			    	  {% endif %}
 			    	</li>
-		    	{% endfor %}
+		      {% endfor %}
 		    </ul>
 
 		    {% if question.testResult.status|default('noAnswer') == "right" %}
 			    <p class="color-success">{{'question.answer.true'|trans}}</p>
-			  {% elseif question.testResult.status|default('noAnswer') == "partRight" %}
+			{% elseif question.testResult.status|default('noAnswer') == "partRight" %}
 			    <p class="text-warning">{{'question.answer.part_true'|trans}}
 				    {% if showScore|default(1) %}
 							{{'question.score'|trans({'%testResult.score%': question.testResult.score|default(0)})}}
 				    {% endif %}
 			    </p>
-			  {% else %}
+			{% else %}
 			    <p class="color-danger">{{'question.answer.wrong'|trans}}</p>
-			  {% endif %}
-			</div>
+			{% endif %}
+		  </div>
 
 			<div class="testpaper-question-actions pull-right mts">
 				{% include 'question/part/flag.html.twig' with { flags:['favorite', 'analysis'] } %}
@@ -47,7 +47,7 @@
 		</div>
 		{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
 
-	{% elseif not question.isDeleted|default(0) %}
+	{% else %}
 	  <div class="testpaper-question-footer clearfix">
 			{% set input_index = 1 %}
 			{% for answer in question.answer %}
@@ -75,6 +75,7 @@
 	  {% endif %}
 
 	{% endif %}
+  {% endif %}
 
 	{% include 'question/part/show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}
 </div>

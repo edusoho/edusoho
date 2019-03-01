@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Course\Dao\ThreadDao;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
@@ -10,11 +11,12 @@ use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\Util\TextHelper;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\User\Service\NotificationService;
 use Biz\Course\Dao\Impl\ThreadPostDaoImpl;
 use Biz\Sensitive\Service\SensitiveService;
-use Biz\Thread\ThreadException;
+use Biz\Course\ThreadException;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -38,7 +40,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThreadDao()->get($threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         return $thread;
@@ -48,7 +50,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         $thread = $this->getThreadDao()->get($threadId);
         if (!empty($thread) && !empty($courseId) && $thread['courseId'] != $courseId) {
-            throw $this->createNotFoundException("Thread#{$threadId} Not Found in Course#{$courseId}");
+            $this->createNewException(ThreadException::NOT_MATCH_COURSE());
         }
 
         return $thread;
@@ -141,22 +143,23 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function createThread($thread)
     {
         if (empty($thread['courseId'])) {
-            throw $this->createServiceException('Course ID can not be empty.');
+            $this->createNewException(ThreadException::COURSEID_REQUIRED());
         }
 
+        $thread = $this->filterThread($thread);
         $trimedThreadTitle = empty($thread['title']) ? '' : trim($thread['title']);
-        if (empty($trimedThreadTitle)) {
-            throw $this->createServiceException('thread title is null');
+        if (empty($trimedThreadTitle) and !isset($thread['source'])) {
+            $this->createNewException(ThreadException::TITLE_REQUIRED());
         }
 
         if (empty($thread['type']) || !in_array($thread['type'], array('discussion', 'question'))) {
-            throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
+            $this->createNewException(ThreadException::TYPE_INVALID());
         }
 
         $event = $this->dispatchEvent('course.thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
-            $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
+            $this->createNewException(\Biz\Thread\ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
         $thread['content'] = $this->sensitiveFilter($thread['content'], 'course-thread-create');
@@ -173,6 +176,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $trusted = empty($hasCourseManagerRole) ? false : true;
         //更新thread过滤html
         $thread['content'] = $this->biz['html_helper']->purify($thread['content'], $trusted);
+        $thread['content'] = $this->filter_Emoji($thread['content']);
+        $thread['title'] = $this->filter_Emoji($thread['title']);
 
         $thread['createdTime'] = time();
         $thread['latestPostUserId'] = $thread['userId'];
@@ -180,6 +185,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['private'] = 'published' === $course['status'] ? 0 : 1;
 
         $thread = $this->getThreadDao()->create($thread);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         foreach ($course['teacherIds'] as $teacherId) {
             if ($teacherId == $thread['userId']) {
@@ -194,10 +200,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 'threadId' => $thread['id'],
                 'threadUserId' => $thread['userId'],
                 'threadUserNickname' => $this->getCurrentUser()->nickname,
-                'threadTitle' => $thread['title'],
+                'threadTitle' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType']),
                 'threadType' => $thread['type'],
                 'courseId' => $course['id'],
-                'courseTitle' => $course['title'],
+                'courseTitle' => !empty($course['title']) ? $courseSet['title'].'-'.$course['title'] : $courseSet['title'],
             ));
         }
 
@@ -211,27 +217,29 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
-        $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-update');
-        $fields['title'] = $this->sensitiveFilter($fields['title'], 'course-thread-update');
+        $fields['content'] = isset($fields['content']) ? $this->sensitiveFilter($fields['content'], 'course-thread-update') : $thread['content'];
+        $fields['title'] = isset($fields['title']) ? $this->sensitiveFilter($fields['title'], 'course-thread-update') : $thread['title'];
 
         if ($this->getCurrentUser()->getId() != $thread['userId']) {
             $this->getCourseService()->tryManageCourse($thread['courseId'], 'admin_course_thread');
         }
 
-        $fields = ArrayToolkit::parts($fields, array('title', 'content'));
+        $fields = ArrayToolkit::parts($fields, array('title', 'content', 'askVideoThumbnail'));
 
         if (empty($fields)) {
-            throw $this->createInvalidArgumentException('Fields Required');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
         //if user can manage course, we trusted rich editor content
         $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($courseId);
         $trusted = empty($hasCourseManagerRole) ? false : true;
         //更新thread过滤html
-        $fields['content'] = $this->biz['html_helper']->purify($fields['content'], $trusted);
+        $fields['content'] = isset($fields['content']) ? $this->biz['html_helper']->purify($fields['content'], $trusted) : $thread['content'];
 
+        $thread['content'] = $this->filter_Emoji($thread['content']);
+        $thread['title'] = $this->filter_Emoji($thread['title']);
         $thread = $this->getThreadDao()->update($threadId, $fields);
         $this->dispatchEvent('course.thread.update', new Event($thread));
 
@@ -243,7 +251,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThreadDao()->get($threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
         $this->getCourseService()->tryManageCourse($thread['courseId']);
 
@@ -260,7 +268,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $thread = $this->getThreadDao()->update($thread['id'], array('isStick' => 1));
@@ -275,7 +283,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $thread = $this->getThreadDao()->update($thread['id'], array('isStick' => 0));
@@ -290,7 +298,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $thread = $this->getThreadDao()->update($thread['id'], array('isElite' => 1));
@@ -305,7 +313,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $thread = $this->getThreadDao()->update($thread['id'], array('isElite' => 0));
@@ -391,22 +399,24 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $requiredKeys = array('courseId', 'threadId', 'content');
 
         if (!ArrayToolkit::requireds($post, $requiredKeys)) {
-            throw $this->createInvalidArgumentException('Fields Required');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $event = $this->dispatchEvent('course.thread.post.before_create', $post);
 
         if ($event->isPropagationStopped()) {
-            $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
+            $this->createNewException(\Biz\Thread\ThreadException::FORBIDDEN_TIME_LIMIT());
         }
 
         $thread = $this->getThread($post['courseId'], $post['threadId']);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("Thread#{$post['threadId']} Not Found");
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $post['content'] = $this->sensitiveFilter($post['content'], 'course-thread-post-create');
+        $post['content'] = $this->filter_Emoji($post['content']);
 
         $this->getCourseService()->tryTakeCourse($post['courseId']);
 
@@ -429,6 +439,33 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             'latestPostTime' => $post['createdTime'],
         );
         $this->getThreadDao()->update($thread['id'], $threadFields);
+        $user = $this->getCurrentUser();
+
+        if ('question' == $thread['type']) {
+            if ($user['id'] == $thread['userId']) {
+                foreach ($course['teacherIds'] as $teacherId) {
+                    if ('question' == $thread['type']) {
+                        $this->getNotifiactionService()->notify($teacherId, 'question-post-ask', array(
+                            'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+                            'id' => $post['id'],
+                            'content' => TextHelper::truncate($post['content'], 50),
+                            'thread' => empty($thread) ? null : array('id' => $thread['id'], 'title' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType'])),
+                            'post' => $post,
+                            'courseId' => $course['id'],
+                        ));
+                    }
+                }
+            } else {
+                $this->getNotifiactionService()->notify($thread['userId'], 'question-answer', array(
+                    'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+                    'id' => $post['id'],
+                    'content' => TextHelper::truncate($post['content'], 50),
+                    'thread' => empty($thread) ? null : array('id' => $thread['id'], 'title' => !empty($thread['title']) ? $thread['title'] : $this->trans('course.thread.question_type.'.$thread['questionType'])),
+                    'post' => $post,
+                    'courseId' => $course['id'],
+                ));
+            }
+        }
 
         $this->dispatchEvent('course.thread.post.create', $post);
 
@@ -442,7 +479,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post = $this->getPost($courseId, $id);
 
         if (empty($post)) {
-            throw $this->createNotFoundException("Post #{$id} Not Found");
+            $this->createNewException(ThreadException::NOTFOUND_POST());
         }
 
         $user = $this->getCurrentUser();
@@ -451,7 +488,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $fields = ArrayToolkit::parts($fields, array('content'));
 
         if (empty($fields)) {
-            throw $this->createInvalidArgumentException('Fields Required');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         //if user can manage course, we trusted rich editor content
@@ -466,6 +503,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $post;
     }
 
+    public function readPost($postId)
+    {
+        return $this->getThreadPostDao()->update($postId, array('isRead' => 1));
+    }
+
     public function deletePost($courseId, $id)
     {
         $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
@@ -473,11 +515,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post = $this->getThreadPostDao()->get($id);
 
         if (empty($post)) {
-            throw $this->createNotFoundException("Post #{$id} Not Found");
+            $this->createNewException(ThreadException::NOTFOUND_POST());
         }
 
         if ($post['courseId'] != $courseId) {
-            throw $this->createAccessDeniedException("No Such Post#{$id} in Course#{$courseId}");
+            $this->createNewException(ThreadException::POST_NOT_MATCH_COURSE());
         }
 
         $this->getThreadPostDao()->delete($post['id']);
@@ -493,7 +535,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         if (isset($conditions['keywordType'], $conditions['keyword'])) {
             if (!in_array($conditions['keywordType'], array('title', 'content', 'courseId', 'courseTitle'))) {
-                throw $this->createInvalidArgumentException('Invalid keywordType');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
             $conditions[$conditions['keywordType']] = $conditions['keyword'];
@@ -507,6 +549,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         return $conditions;
+    }
+
+    protected function filterThread($thread)
+    {
+        return ArrayToolkit::parts($thread, array('title', 'content', 'type', 'videoAskTime', 'videoId', 'courseId', 'taskId', 'source', 'questionType'));
     }
 
     protected function filterSort($sort)
@@ -532,15 +579,35 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 $orderBys = array('hitNum' => 'DESC');
                 break;
             default:
-                throw $this->createInvalidArgumentException('Invalid sort');
+                $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         return $orderBys;
     }
 
+    protected function filter_Emoji($str)
+    {
+        $str = preg_replace_callback(
+            '/./u',
+            function (array $match) {
+                return strlen($match[0]) >= 4 ? '[emoji]' : $match[0];
+            },
+            $str);
+
+        return $str;
+    }
+
     protected function sensitiveFilter($str, $type)
     {
         return $this->getSensitiveService()->sensitiveCheck($str, $type);
+    }
+
+    /**
+     * @return \Biz\Course\Service\Impl\CourseSetServiceImpl
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**

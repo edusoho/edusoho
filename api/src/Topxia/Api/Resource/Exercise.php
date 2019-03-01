@@ -127,6 +127,7 @@ class Exercise extends BaseResource
 
     private function filterItem($items, $itemSetResults)
     {
+        krsort($items);
         $newItmes = array();
         $materialMap = array();
         foreach ($items as $item) {

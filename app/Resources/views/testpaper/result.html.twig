@@ -65,7 +65,7 @@
       {% endif %}
     {% endif %}
 
-    {% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
+    {% if show_answers(paperResult|default(null)) %}
       <div class="panel panel-default ">
         <div class="panel-heading">
           {{'testpaper.answer.answer_card'|trans}}

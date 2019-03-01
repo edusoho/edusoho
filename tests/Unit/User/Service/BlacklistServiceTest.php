@@ -66,7 +66,7 @@ class BlacklistServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\User\BlacklistException
      */
     public function testFindBlacklistsByUserIdWithWrongUserId()
     {
@@ -125,7 +125,7 @@ class BlacklistServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\User\BlacklistException
      */
     public function testDeleteBlacklistByUserIdAndBlackIdWithWrongUserId()
     {
@@ -153,7 +153,7 @@ class BlacklistServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\BlacklistException
      */
     public function testDeleteBlacklistByUserIdAndBlackIdWithEmptyBlack()
     {
@@ -197,7 +197,7 @@ class BlacklistServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\User\UserException
      */
     public function testCanTakeBlacklistWithEmptyOwnerId()
     {

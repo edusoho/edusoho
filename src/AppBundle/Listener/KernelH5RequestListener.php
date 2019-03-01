@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use AppBundle\Common\DeviceToolkit;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class KernelH5RequestListener
@@ -33,10 +34,15 @@ class KernelH5RequestListener
         }
 
         $pathInfo = $request->getPathInfo();
-        $route = $this->container
-            ->get('router')
-            ->getMatcher()
-            ->match($pathInfo);
+
+        try {
+            $route = $this->container
+                ->get('router')
+                ->getMatcher()
+                ->match($pathInfo);
+        } catch (ResourceNotFoundException $ne) {
+            return;
+        }
 
         $h5 = empty($route['_h5']) ? array() : $route['_h5'];
         if (empty($h5)) {

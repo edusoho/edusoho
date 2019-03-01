@@ -2,9 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Util\UploadToken;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\FileToolkit;
+use Biz\Common\CommonException;
+use Biz\Content\FileException;
 use Biz\Content\Service\FileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +17,10 @@ class EditorController extends BaseController
 {
     public function uploadAction(Request $request)
     {
+        $mode = $request->request->get('uploadMode', '');
+        if ('paste' == $mode) {
+            return $this->pasteImage($request);
+        }
         $isWebuploader = 0;
         try {
             $token = $request->query->get('token');
@@ -22,7 +29,7 @@ class EditorController extends BaseController
             $token = $maker->parse($token);
 
             if (empty($token)) {
-                throw $this->createAccessDeniedException('上传授权码已过期，请刷新页面后重试！');
+                $this->createNewException(CommonException::EXPIRED_UPLOAD_TOKEN());
             }
 
             $isWebuploader = $request->query->get('isWebuploader', 0);
@@ -35,16 +42,16 @@ class EditorController extends BaseController
 
             if ('image' == $token['type']) {
                 if (!FileToolkit::isImageFile($file)) {
-                    throw $this->createAccessDeniedException('您上传的不是图片文件，请重新上传。');
+                    $this->createNewException(FileToolkitException::NOT_IMAGE());
                 }
             } elseif ('flash' == $token['type']) {
                 $errors = FileToolkit::validateFileExtension($file, 'swf');
 
                 if (!empty($errors)) {
-                    throw $this->createAccessDeniedException('您上传的不是Flash文件，请重新上传。');
+                    $this->createNewException(FileToolkitException::NOT_FLASH());
                 }
             } else {
-                throw $this->createAccessDeniedException('上传类型不正确！');
+                $this->createNewException(FileException::FILE_TYPE_ERROR());
             }
 
             $record = $this->getFileService()->uploadFile($token['group'], $file);
@@ -69,7 +76,7 @@ class EditorController extends BaseController
                 return new Response($response);
             }
         } catch (\Exception $e) {
-            $message = $e->getMessage();
+            $message = $this->trans($e->getMessage());
 
             if ($isWebuploader) {
                 return $this->createJsonResponse(array('message' => $message));
@@ -82,6 +89,50 @@ class EditorController extends BaseController
         }
     }
 
+    protected function pasteImage(Request $request)
+    {
+        try {
+            $token = $request->query->get('token');
+
+            $maker = new UploadToken();
+            $token = $maker->parse($token);
+
+            if (empty($token)) {
+                $this->createNewException(CommonException::EXPIRED_UPLOAD_TOKEN());
+            }
+
+            $file = $request->files->get('upload');
+
+            if ('image' == $token['type']) {
+                if (!FileToolkit::isImageFile($file)) {
+                    $this->createNewException(FileToolkitException::NOT_IMAGE());
+                }
+            } else {
+                $this->createNewException(FileException::FILE_TYPE_ERROR());
+            }
+
+            $record = $this->getFileService()->uploadFile($token['group'], $file);
+
+            $parsed = $this->getFileService()->parseFileUri($record['uri']);
+            FileToolkit::reduceImgQuality($parsed['fullpath'], 7);
+
+            $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').DIRECTORY_SEPARATOR.$parsed['path'];
+
+            return $this->createJsonResponse(array(
+                'uploaded' => 1,
+                'url' => $url,
+                'fileName' => '',
+            ));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array(
+                'uploaded' => 0,
+                'error' => array(
+                    'message' => $e->getMessage(),
+                ),
+            ));
+        }
+    }
+
     public function downloadAction(Request $request)
     {
         $token = $request->query->get('token');
@@ -90,13 +141,13 @@ class EditorController extends BaseController
         $url = str_replace('+', '%2B', $url);
         $url = str_replace('#', '%23', $url);
         if (!preg_match('/^https?\:\/\/formula\.edusoho\.net/', $url)) {
-            throw $this->createAccessDeniedException('上传授权域名不正确，请输入合法的域名！');
+            $this->createNewException(FileException::FILE_AUTH_URL_INVALID());
         }
         $maker = new UploadToken();
         $token = $maker->parse($token);
 
         if (empty($token)) {
-            throw $this->createAccessDeniedException('上传授权码已过期，请刷新页面后重试！');
+            $this->createNewException(CommonException::EXPIRED_UPLOAD_TOKEN());
         }
 
         $name = date('Ymdhis').'_formula.jpg';

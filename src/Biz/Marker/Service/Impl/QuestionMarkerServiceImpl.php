@@ -4,7 +4,9 @@ namespace Biz\Marker\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Marker\MarkerException;
 use Biz\Marker\Service\MarkerService;
+use Biz\Marker\QuestionMarkerException;
 use Biz\Marker\Service\QuestionMarkerService;
 
 class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerService
@@ -24,7 +26,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         $marker = $this->getMarkerService()->getMarker($markerId);
 
         if (empty($marker)) {
-            throw $this->createNotFoundException('Marker Not Found');
+            $this->createNewException(MarkerException::NOTFOUND_MARKER());
         }
 
         return $this->getQuestionMarkerDao()->findByMarkerId($markerId);
@@ -104,7 +106,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         $questionMarker = $this->getQuestionMarker($id);
 
         if (empty($questionMarker)) {
-            throw $this->createServiceException('Question Not Found');
+            $this->createNewException(QuestionMarkerException::NOTFOUND_QUESTION_MARKER());
         }
 
         $this->getQuestionMarkerDao()->delete($questionMarker['id']);

@@ -19,7 +19,7 @@ class AudioTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreateWithMediaEmpty()
     {
@@ -31,7 +31,7 @@ class AudioTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testCreateWithMediaIdEmpty()
     {
@@ -57,7 +57,7 @@ class AudioTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testUpdateWithMediaEmpty()
     {
@@ -82,7 +82,7 @@ class AudioTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testUpdateWithMediaIdEmpty()
     {
@@ -98,8 +98,8 @@ class AudioTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage 教学活动不存在
+     * @expectedException \Biz\Activity\ActivityException
+     * @expectedExceptionMessage exception.activity.not_found
      */
     public function testUpdateWithEmptyActivity()
     {

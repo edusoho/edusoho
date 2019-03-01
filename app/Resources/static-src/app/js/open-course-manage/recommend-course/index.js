@@ -1,16 +1,15 @@
 import sortList from 'common/sortable';
 
-$('.course-list-group').on('click', '.close', function () {
-  let recommendId = $(this).data('recommendId');
-  let courseId = $(this).data('id');
-  $.post($(this).data('cancelUrl')).done(function () {
-
+$('.js-course-list-group').on('click', '.js-delete-btn',  (event) => {
+  const $target = $(event.target);
+  const courseId = $target.data('id');
+  $.post($target.data('cancelUrl')).done(() => {
     $('.item-' + courseId).remove();
   });
 });
 
 sortList({
-  element: '.course-list-group',
+  element: '#course-list-group',
   itemSelector: 'li.course-item',
   ajax: false
 });

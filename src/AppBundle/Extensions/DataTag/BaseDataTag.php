@@ -3,6 +3,7 @@
 namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseDataTag
@@ -34,7 +35,7 @@ abstract class BaseDataTag
     protected function checkArguments(array $arguments, $requires)
     {
         if (!ArrayToolkit::requireds($arguments, $requires)) {
-            throw new \InvalidArgumentException('missing argument');
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
     }
 

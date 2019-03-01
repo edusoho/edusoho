@@ -19,24 +19,26 @@
 			{% endfor %}
 		</ul>
 	</div>
-	{% if not question.isDeleted|default(0) and (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted')
-	or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished')
-	or (setting('questions.testpaper_answers_show_mode','submitted') == 'hide'  and paperResult.status|default(null) in ['reviewing', 'finished'] and paperResult.type not in ['testpaper']) %}
+	{% if not question.isDeleted|default(0) %}
+
+	  {% if show_answers(paperResult|default(null)) %}
+		{% set questionResult = question.testResult.status|default('noAnswer') %}
+
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 		  	{{'course.question_manage.question.true_answer'|trans}} <strong class="color-success">{{ keys|join(',') }}</strong>，
-				{% if question.testResult.status|default('noAnswer') == 'right' %}
-					{{'course.question_manage.question.answer_right'|trans}}
-				{% elseif question.testResult.status|default('noAnswer') == 'partRight' %}
-          {{ 'course.question_manage.question.answer_part_right'|trans({'%keyAnswer%':keys_answer|join(',')})|raw }}
-					{% if showScore|default(1) %}
-						{{'course.question_manage.question.score'|trans({'%testResult.score%': question.testResult.score})}}
-					{% endif %}
-				{% elseif question.testResult.status|default('noAnswer') == 'wrong' %}
-				{{'course.question_manage.question.your_answer'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>。{{'course.question_manage.question.answer_wrong'|trans}}
-				{% elseif question.testResult.status|default('noAnswer') == 'noAnswer' %}
-				  {{'course.question_manage.question.answer_empty'|trans}}
-				{% endif %}
+			{% if questionResult == 'right' %}
+			  {{'course.question_manage.question.answer_right'|trans}}
+			{% elseif questionResult == 'partRight' %}
+              {{ 'course.question_manage.question.answer_part_right'|trans({'%keyAnswer%':keys_answer|join(',')})|raw }}
+			  {% if showScore|default(1) %}
+			    {{'course.question_manage.question.score'|trans({'%testResult.score%': question.testResult.score})}}
+			  {% endif %}
+			{% elseif questionResult == 'wrong' %}
+			  {{'course.question_manage.question.your_answer'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>。{{'course.question_manage.question.answer_wrong'|trans}}
+			{% elseif questionResult == 'noAnswer' %}
+			  {{'course.question_manage.question.answer_empty'|trans}}
+			{% endif %}
 		  </div>
 
 			<div class="testpaper-question-actions pull-right mts">
@@ -45,7 +47,7 @@
 		</div>
 		{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
 
-	{% elseif not question.isDeleted|default(0) %}
+	  {% else %}
 		<div class="testpaper-question-footer clearfix">
 
 		  <div class="testpaper-question-footer__input pull-left js-testpaper-question-label">
@@ -60,7 +62,7 @@
 		  </div>
 
 		  <div class="testpaper-question-actions pull-right mts">
-				{% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
+		    {% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
 		  </div>
 		</div>
 
@@ -71,6 +73,7 @@
 				</div>
 			</div>
 		{% endif %}
+	  {% endif %}
 	{% endif %}
 
 	{% include 'question/part/show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}

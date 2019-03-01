@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
+use Biz\Course\LiveReplayException;
 use Biz\Course\Service\LiveReplayService;
 use Biz\System\Service\LogService;
 use Biz\Util\EdusohoLiveClient;
@@ -59,7 +60,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         $replay = $this->getLessonReplayDao()->get($id);
 
         if (empty($replay)) {
-            throw $this->createNotFoundException('Live replay not found');
+            $this->createNewException(LiveReplayException::NOTFOUND_LIVE_REPLAY());
         }
 
         $fields = ArrayToolkit::parts($fields, array('hidden', 'title'));
@@ -105,6 +106,11 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             'user' => $user->isLogin() ? $user['email'] : '',
             'nickname' => $user->isLogin() ? $user['nickname'] : 'guest',
         );
+
+        //用来计算当前直播用户数量
+        if ($user->isLogin()) {
+            $args['userId'] = $user['id'];
+        }
 
         if ($ssl) {
             $args['protocol'] = 'https';

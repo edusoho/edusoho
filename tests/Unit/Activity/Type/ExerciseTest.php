@@ -110,8 +110,8 @@ class ExerciseTest extends BaseTypeTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage 教学活动不存在
+     * @expectedException \Biz\Activity\ActivityException
+     * @expectedExceptionMessage exception.activity.not_found
      */
     public function testUpdate()
     {

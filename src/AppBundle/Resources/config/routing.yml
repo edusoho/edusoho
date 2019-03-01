@@ -279,6 +279,10 @@ player_local_media:
     path: /player/{id}/file/{token}
     defaults: { _controller: AppBundle:Player:localMedia}
 
+course_thread_player_show:
+    path: /course/thread/file/{id}/player/show
+    defaults: { _controller: AppBundle:Course/Thread:playerShow}
+
 hls_stream:
     path: /hls/{id}/stream/{level}/{token}.m3u8
     defaults: { _controller: AppBundle:HLSVideo:stream}
@@ -2022,6 +2026,10 @@ my_classroom_discussions:
     path: /my/classroom/discussions
     defaults: { _controller: AppBundle:My/Classroom:classroomDiscussions }
 
+my_classroom_questions:
+    path: /my/classroom/questions
+    defaults: { _controller: AppBundle:My/Classroom:classroomQuestions }
+
 my_questions:
     path: /my/questions
     defaults: { _controller: AppBundle:My/Thread:questions }
@@ -2109,6 +2117,10 @@ course_thread_post:
 course_thread_edit:
    path:  /course/{courseId}/thread/{threadId}/edit
    defaults: { _controller: AppBundle:Course/Thread:edit }
+
+course_thread_ask_video_show:
+    path: /course/thread/{threadId}/ask_video/show
+    defaults: { _controller: AppBundle:Course/Thread:askVideo }
 
 course_thread_post_delete:
    path:  /course/{courseId}/thread/{threadId}/post/{postId}/delete
@@ -2490,6 +2502,11 @@ attachment_delete:
 attachment_preview:
   path: /attachment/{id}/preview
   defaults: { _controller: AppBundle:File/Attachment:preview }
+  methods: [GET]
+
+attachment_direct_video_preview:
+  path: /attachment/{id}/direct_video_preview
+  defaults: { _controller: AppBundle:File/Attachment:directVideoPreview }
   methods: [GET]
 
 attachment_player:

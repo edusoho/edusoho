@@ -8,6 +8,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\MediaParser\ParserProxy;
 
@@ -22,7 +23,7 @@ class FileChooserController extends BaseController
         $currentUser = $this->getUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('Permission denied, you can not access this page!');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
         $conditions = $request->query->all();
         $conditions = $this->filterMaterialConditions($conditions, $currentUser);
@@ -56,7 +57,7 @@ class FileChooserController extends BaseController
         $user = $this->getUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('Permission denied, you can not access this page!');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $mySharingContacts = $this->getUploadFileService()->findMySharingContacts($user['id']);
@@ -69,7 +70,7 @@ class FileChooserController extends BaseController
         $currentUser = $this->getUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('Permission denied, you can not access this page!');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $query = $request->query->all();

@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 		var $modal = $form.parents('.modal');
 
 		$form.find(".btn").on('click', function(){
-			$.post($form.attr('action'), $form.serialize(), function(html) {
+			$.get($form.attr('action'), $form.serialize(), function(html) {
                 $modal.html(html);
             })
 		});

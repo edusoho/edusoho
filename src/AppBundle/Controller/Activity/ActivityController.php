@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\Activity;
 
+use Biz\Activity\ActivityException;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
@@ -14,7 +16,11 @@ class ActivityController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
         if (empty($activity)) {
-            throw $this->createNotFoundException('activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
+        }
+
+        if ('video' == $activity['mediaType']) {
+            $activity['watchStatus'] = $this->checkVideoWatchStatus($activity);
         }
 
         $activityConfigManage = $this->get('activity_config_manager');
@@ -37,7 +43,7 @@ class ActivityController extends BaseController
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         if (empty($activity)) {
-            throw $this->createNotFoundException('activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
         $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
@@ -140,13 +146,13 @@ class ActivityController extends BaseController
         $activity = $this->getActivityService()->getActivity($activityId);
 
         if (empty($activity)) {
-            throw $this->createResourceNotFoundException('activity', $activityId);
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         $eventName = $request->request->get('eventName');
 
         if (empty($eventName)) {
-            throw $this->createNotFoundException('activity event is empty');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $data = $request->request->get('data', array());
@@ -164,6 +170,18 @@ class ActivityController extends BaseController
         $config = $this->get('extension.manager')->getActivities();
 
         return $config[$type];
+    }
+
+    protected function checkVideoWatchStatus($activity)
+    {
+        $isLimit = $this->setting('magic.lesson_watch_limit');
+        if ($isLimit) {
+            $type = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+
+            return $type->getWatchStatus($activity);
+        }
+
+        return array('status' => 'ok');
     }
 
     /**

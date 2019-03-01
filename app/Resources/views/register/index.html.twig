@@ -109,6 +109,7 @@
 
 					<input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
 					<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+					<input type="hidden" name="registerVisitId" value="">
 				</form>
 
 				{% if setting('login_bind.enabled') %}

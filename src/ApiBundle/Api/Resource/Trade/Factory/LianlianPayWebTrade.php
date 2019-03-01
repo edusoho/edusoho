@@ -41,6 +41,7 @@ class LianlianPayWebTrade extends BaseTrade
             $tail = substr($user['verifiedMobile'], -4, 4);
             $bindPhone = $head.'****'.$tail;
         }
+
         return $bindPhone;
     }
 }

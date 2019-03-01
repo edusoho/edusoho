@@ -3,6 +3,10 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
+use Biz\Course\CourseException;
+use Biz\Course\CourseSetException;
+use Biz\Course\MemberException;
+use Biz\Order\OrderException;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
@@ -14,6 +18,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\User\UserException;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,30 +56,20 @@ class CourseController extends CourseBaseController
 
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
-            throw $this->createNotFoundException('该教学计划不存在！');
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         if (empty($courseSet)) {
-            throw $this->createNotFoundException('该教学计划所属课程不存在！');
+            $this->createNewException(CourseSetException::NOTFOUND_COURSESET());
         }
 
         if (empty($preview) && $user->isLogin() && $this->canCourseShowRedirect($request)) {
-            $lastCourseMember = $this->getMemberService()->searchMembers(
-                array(
-                    'userId' => $user['id'],
-                    'courseSetId' => $course['courseSetId'],
-                ),
-                array('lastLearnTime' => 'desc'),
-                0,
-                1
-            );
-            if (!empty($lastCourseMember)) {
-                $lastCourseMember = reset($lastCourseMember);
-                $course = $this->getCourseService()->getCourse($lastCourseMember['courseId']);
+            $courseMember = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
+            if (!empty($courseMember)) {
                 //周期课程且未开始时，不做跳转
                 if ('date' != $course['expiryMode'] || $course['expiryStartDate'] < time()) {
-                    return $this->redirect(($this->generateUrl('my_course_show', array('id' => $lastCourseMember['courseId']))));
+                    return $this->redirect(($this->generateUrl('my_course_show', array('id' => $id))));
                 }
             }
         }
@@ -198,7 +193,7 @@ class CourseController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('不允许未登录访问');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $this->getMemberService()->quitCourseByDeadlineReach($user['id'], $id);
@@ -618,13 +613,13 @@ class CourseController extends CourseBaseController
         $order = $this->getOrderService()->getOrderBySn($sn);
 
         if (empty($order)) {
-            throw $this->createNotFoundException('订单不存在!');
+            $this->createNewException(OrderException::NOTFOUND_ORDER());
         }
 
         $course = $this->getCourseService()->getCourse($order['targetId']);
 
         if (empty($course)) {
-            throw $this->createNotFoundException('课程不存在，或已删除。');
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
@@ -680,7 +675,7 @@ class CourseController extends CourseBaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         if (empty($member)) {
-            throw $this->createAccessDeniedException('member not exist');
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
 
         $user = $this->getCurrentUser();

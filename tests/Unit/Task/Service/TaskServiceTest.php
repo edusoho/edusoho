@@ -49,7 +49,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testCreateTaskWhenInvalidArgument()
     {
@@ -105,7 +105,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Task\TaskException
      */
     public function testTaskFinishWhenUserNotGetTask()
     {
@@ -235,7 +235,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Biz\Task\TaskException
      */
     public function testPreUpdateTaskCheck()
     {
@@ -255,9 +255,9 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Course\CourseException
      */
-    public function testPublishTaskWithAccessDeniedException1()
+    public function testPublishTaskWithAccessDeniedException()
     {
         $courseSet = $this->createNewCourseSet();
         $course = $this->createNewCourse($courseSet['id']);
@@ -298,9 +298,9 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Course\CourseException
      */
-    public function testUnpublishTaskWithAccessDeniedException1()
+    public function testUnpublishTaskWithAccessDeniedException()
     {
         $courseSet = $this->createNewCourseSet();
         $course = $this->createNewCourse($courseSet['id']);
@@ -317,7 +317,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Biz\Task\TaskException
      */
     public function testUnpublishTaskWithAccessDeniedException2()
     {
@@ -840,7 +840,7 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Task\TaskException
      */
     public function testUpdateTasksOptionalByLessonIdException()
     {

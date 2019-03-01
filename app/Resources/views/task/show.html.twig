@@ -3,7 +3,7 @@
 {% block title %}{{ 'course.task.learning'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = "" %}
-{% do script(['libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
+{% do script(['libs/ltc-sdk-server.js', 'libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
 
 {% block body %}
   {% set preview = app.request.query.get('preview')  %}
@@ -39,7 +39,8 @@
             data-last-learn-time="{{ taskResult.lastLearnTime|default(0) }}"
             data-user-id="{{ taskResult.userId|default(0) }}"
             data-file-id="{{ media.id|default(0) }}"
-            src="{{ path('course_task_activity_show',{courseId:task.courseId, id:task.id, preview:app.request.get('preview') }) }}"
+            data-url="{{ path('course_task_activity_show',{courseId:task.courseId, id:task.id, preview:app.request.get('preview') }) }}"
+            src="{{ path('course_task_activity_show',{courseId:task.courseId, id:task.id, preview:app.request.get('preview'), blank:true }) }}"
             style="width:100%;height:100%;border:0px"
             allowfullscreen webkitallowfullscreen>
           </iframe>

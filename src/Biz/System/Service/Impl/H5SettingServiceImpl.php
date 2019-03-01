@@ -6,6 +6,8 @@ use Biz\BaseService;
 use Biz\System\Service\H5SettingService;
 use AppBundle\Common\TimeMachine;
 use Doctrine\Common\Inflector\Inflector;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
 {
@@ -20,6 +22,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $discoverySettings = $this->getDefaultDiscovery($portal);
         }
 
+        return $this->filter($discoverySettings, $usage);
+    }
+
+    public function filter($discoverySettings, $usage = 'show')
+    {
         foreach ($discoverySettings as $key => &$discoverySetting) {
             $method = $this->getMethod($discoverySetting['type']);
             $method .= 'Filter';
@@ -49,20 +56,27 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $discoverySetting['data']['items'] = $courses;
         }
 
-        if ('custom' == $discoverySetting['data']['sourceType'] && 'show' == $usage) {
+        if ('custom' == $discoverySetting['data']['sourceType']) {
             $courses = $discoverySetting['data']['items'];
             foreach ($courses as $key => $course) {
                 $existCourse = $this->getCourseService()->getCourse($course['id']);
-                if (empty($existCourse) || 'published' != $existCourse['status']) {
+                $discoverySetting['data']['items'][$key] = $existCourse;
+                if (empty($existCourse)) {
+                    unset($discoverySetting['data']['items'][$key]);
+                    continue;
+                }
+                if ('show' == $usage && 'published' != $existCourse['status']) {
                     unset($discoverySetting['data']['items'][$key]);
                     continue;
                 }
                 $existCourseSet = $this->getCourseSetService()->getCourseSet($existCourse['courseSetId']);
-                if (empty($existCourseSet) || 'published' != $existCourseSet['status']) {
+                if ('show' == $usage && 'published' != $existCourseSet['status']) {
                     unset($discoverySetting['data']['items'][$key]);
+                    continue;
                 }
             }
         }
+        $discoverySetting['data']['items'] = array_values($discoverySetting['data']['items']);
 
         return $discoverySetting;
     }
@@ -84,29 +98,39 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $discoverySetting['data']['items'] = $classrooms;
         }
 
-        if ('custom' == $discoverySetting['data']['sourceType'] && 'show' == $usage) {
+        if ('custom' == $discoverySetting['data']['sourceType']) {
             $classrooms = $discoverySetting['data']['items'];
             foreach ($classrooms as $key => $classroom) {
                 $existClassroom = $this->getClassroomService()->getClassroom($classroom['id']);
-                if (empty($existClassroom) || 'published' != $existClassroom['status'] || empty($existClassroom['showable'])) {
+                $discoverySetting['data']['items'][$key] = $existClassroom;
+                if (empty($existClassroom)) {
                     unset($discoverySetting['data']['items'][$key]);
+                    continue;
+                }
+
+                if ('show' == $usage && 'published' != $existClassroom['status'] || empty($existClassroom['showable'])) {
+                    unset($discoverySetting['data']['items'][$key]);
+                    continue;
                 }
             }
         }
+        $discoverySetting['data']['items'] = array_values($discoverySetting['data']['items']);
 
         return $discoverySetting;
     }
 
     public function slideShowFilter($discoverySetting, $usage = 'show')
     {
-        if (!empty($discoverySetting['data']['link'])) {
-            $link = $discoverySetting['data']['link'];
-            $id = isset($link['target']['id']) ? $link['target']['id'] : 0;
-            $target = empty($id) ? null : $this->getTarget($link['type'], $id);
-            if (empty($target)) {
-                $link['target'] = null;
-                $link['url'] = '';
-                $discoverySetting['data']['link'] = $link;
+        foreach ($discoverySetting['data'] as &$slideShow) {
+            if (!empty($slideShow['link'])) {
+                $link = $slideShow['link'];
+                $id = isset($link['target']['id']) ? $link['target']['id'] : 0;
+                $target = empty($id) ? null : $this->getTarget($link['type'], $id);
+                if (empty($target)) {
+                    $link['target'] = null;
+                    $link['url'] = '';
+                    $slideShow['link'] = $link;
+                }
             }
         }
 
@@ -134,13 +158,103 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function grouponFilter($discoverySetting, $usage = 'show')
     {
         $activity = $discoverySetting['data']['activity'];
-        $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        try {
+            $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        } catch (\Exception $e) {
+            $remoteActvity = null;
+        }
         if (empty($remoteActvity) || isset($remoteActvity['error'])) {
             return false;
         }
-        $discoverySetting['data']['activity']['status'] = $remoteActvity['status'];
-        $discoverySetting['data']['activity']['name'] = $remoteActvity['name'];
-        $discoverySetting['data']['activity']['about'] = $remoteActvity['about'];
+        $discoverySetting['data']['activity'] = $remoteActvity;
+
+        return $discoverySetting;
+    }
+
+    public function seckillFilter($discoverySetting, $usage = 'show')
+    {
+        $activity = $discoverySetting['data']['activity'];
+        try {
+            $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        } catch (\Exception $e) {
+            $remoteActvity = null;
+        }
+        if (empty($remoteActvity) || isset($remoteActvity['error'])) {
+            return false;
+        }
+        $discoverySetting['data']['activity'] = $remoteActvity;
+
+        return $discoverySetting;
+    }
+
+    public function cutFilter($discoverySetting, $usage = 'show')
+    {
+        $activity = $discoverySetting['data']['activity'];
+        try {
+            $remoteActvity = $this->getMarketingPlatformService()->getActivity($activity['id']);
+        } catch (\Exception $e) {
+            $remoteActvity = null;
+        }
+        if (empty($remoteActvity) || isset($remoteActvity['error'])) {
+            return false;
+        }
+        $discoverySetting['data']['activity'] = $remoteActvity;
+
+        return $discoverySetting;
+    }
+
+    public function couponFilter($discoverySetting, $usage = 'show')
+    {
+        $batches = $discoverySetting['data']['items'];
+        $batches = ArrayToolkit::index($batches, 'id');
+        $batchIds = ArrayToolkit::column($batches, 'id');
+        if ('show' == $usage && $this->isPluginInstalled('Coupon')) {
+            $batches = $this->getCouponBatchService()->fillUserCurrentCouponByBatches($batches);
+        }
+
+        $currentBatches = array();
+        if ($this->isPluginInstalled('Coupon')) {
+            $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
+        }
+        foreach ($batches as $key => &$batch) {
+            $batchId = $batch['id'];
+            if (empty($currentBatches[$batchId])) {
+                unset($batches[$key]);
+                continue;
+            }
+
+            if ('show' == $usage && $currentBatches[$batchId]['deadline'] + 86400 < time()) {
+                unset($batches[$key]);
+                continue;
+            }
+            if (!empty($currentBatches[$batchId])) {
+                $batch['money'] = $currentBatches[$batchId]['money'];
+                $batch['usedNum'] = $currentBatches[$batchId]['usedNum'];
+                $batch['unreceivedNum'] = $currentBatches[$batchId]['unreceivedNum'];
+                if ($this->isPluginInstalled('Vip') && 'vip' == $currentBatches[$batchId]['targetType'] && !empty($currentBatches[$batchId]['targetId'])) {
+                    $batch['target'] = $this->getLevelService()->getLevel($currentBatches[$batchId]['targetId']);
+                }
+            }
+        }
+        $discoverySetting['data']['items'] = array_values($batches);
+
+        return $discoverySetting;
+    }
+
+    public function vipFilter($discoverySetting, $usage = 'show')
+    {
+        if ($this->isPluginInstalled('Vip')) {
+            try {
+                $levels = $this->getLevelService()->findEnabledLevels();
+                foreach ($levels as &$level) {
+                    $level['freeCourseNum'] = $this->getLevelService()->getFreeCourseNumByLevelId($level['id']);
+                    $level['freeClassroomNum'] = $this->getLevelService()->getFreeClassroomNumByLevelId($level['id']);
+                }
+                $discoverySetting['data']['items'] = 'desc' == $discoverySetting['data']['sort'] ? array_reverse($levels) : $levels;
+            } catch (\Exception $e) {
+                throw CommonException::NOTFOUND_METHOD();
+            }
+        }
 
         return $discoverySetting;
     }
@@ -160,6 +274,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
         if ('classroom' == $type) {
             return $this->getClassroomService()->getClassroom($id);
+        }
+
+        if ('vip' == $type) {
+            return $this->getLevelService()->getLevel($id);
         }
 
         return null;
@@ -234,6 +352,13 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         }
 
         return array();
+    }
+
+    protected function isPluginInstalled($code)
+    {
+        $app = $this->getAppService()->getAppByCode($code);
+
+        return !empty($app);
     }
 
     public function getDefaultDiscovery($portal)
@@ -332,5 +457,25 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     protected function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->biz->service('VipPlugin:Vip:LevelService');
+    }
+
+    protected function getCouponService()
+    {
+        return $this->biz->service('Coupon:CouponService');
+    }
+
+    protected function getCouponBatchService()
+    {
+        return $this->biz->service('CouponPlugin:Coupon:CouponBatchService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->biz->service('CloudPlatform:AppService');
     }
 }

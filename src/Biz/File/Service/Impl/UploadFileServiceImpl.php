@@ -3,8 +3,10 @@
 namespace Biz\File\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\File\Dao\FileUsedDao;
 use Biz\File\Dao\UploadFileDao;
+use Biz\File\UploadFileException;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\File\Dao\UploadFileTagDao;
@@ -17,6 +19,7 @@ use Biz\File\Dao\UploadFileCollectDao;
 use Biz\File\FireWall\FireWallFactory;
 use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
+use Biz\User\UserException;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Codeages\Biz\Framework\Event\Event;
@@ -212,7 +215,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
-            throw $this->createAccessDeniedException('用户未登录，上传初始化失败！');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $setting = $this->getSettingService()->get('storage');
@@ -225,7 +228,27 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $auth;
     }
 
-    public function initUpload($params)
+    /**
+     * 传入的参数：
+     *
+     *   targetId 目标Id
+     *   targetType 目标类型
+     *   hash 文件hash
+     *   fileName 文件名称
+     *   fileSize 文件大小
+     *   uploadType 上传类型（direct表示直传不转码）
+     *
+     * @param array $params
+     *
+     * @throws
+     *
+     * @return array
+     *               globalId
+     *               Url 上传地址
+     *               token 上传token
+     *               fileId  upload_init id
+     */
+    public function initFormUpload($params)
     {
         $user = $this->getCurrentUser();
 
@@ -235,6 +258,64 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         if (!ArrayToolkit::requireds($params, array('targetId', 'targetType', 'hash'))) {
             throw $this->createServiceException('参数缺失，上传初始化失败！');
+        }
+        $params['userId'] = $user['id'];
+        $params = ArrayToolkit::parts($params, array(
+            'id',
+            'userId',
+            'targetId',
+            'targetType',
+            'bucket',
+            'hash',
+            'fileSize',
+            'fileName',
+            'uploadType',
+        ));
+
+        $setting = $this->getSettingService()->get('storage');
+        $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
+        $implementor = $this->getFileImplementor($params['storage']);
+
+        if (isset($params['id'])) {
+            $file = $this->getUploadFileInitDao()->get($params['id']);
+            $initParams = $implementor->resumeUpload($file, $params);
+
+            if ('ok' == $initParams['resumed'] && $file && 'ok' != $file['status']) {
+                $this->getUploadFileInitDao()->update($file['id'], array(
+                    'filename' => $params['fileName'],
+                    'fileSize' => $params['fileSize'],
+                    'targetId' => $params['targetId'],
+                    'targetType' => $params['targetType'],
+                ));
+
+                return $initParams;
+            }
+        }
+
+        $preparedFile = $implementor->prepareUpload($params);
+        $file = $this->getUploadFileInitDao()->create($preparedFile);
+        $params = array_merge($params, $file);
+        $initParams = $implementor->initFormUpload($params);
+
+        if ('cloud' == $params['storage']) {
+            $file = $this->getUploadFileInitDao()->update($file['id'], array('globalId' => $initParams['globalId']));
+        }
+
+        $this->getLogger()->info("initFormUpload 上传文件： #{$file['id']}");
+
+        return $initParams;
+    }
+
+    public function initUpload($params)
+    {
+        $user = $this->getCurrentUser();
+
+        if (empty($user)) {
+            $this->createNewException(UserException::UN_LOGIN());
+        }
+
+        if (!ArrayToolkit::requireds($params, array('targetId', 'targetType', 'hash'))) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $params['userId'] = $user['id'];
@@ -311,6 +392,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 $fields['audioConvertStatus'] = 'doing';
             }
 
+            if (isset($params['uploadType']) && 'direct' == $params['uploadType']) {
+                unset($fields['audioConvertStatus']);
+            }
+
             $file = array_merge($file, $fields);
 
             $file = $this->getUploadFileDao()->create($file);
@@ -318,7 +403,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $result = $implementor->finishedUpload($file, $params);
 
             if (empty($result) || !$result['success']) {
-                throw $this->createServiceException('uploadFile失败，完成上传失败！');
+                $this->createNewException(UploadFileException::UPLOAD_FAILED());
             }
 
             $file = $this->getUploadFileDao()->update($file['id'], array(
@@ -364,8 +449,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $this->getUploadFileInitDao()->update($file['id'], $fields);
         } catch (\Exception $e) {
-            $msg = $e->getMessage();
-            throw $this->createServiceException($msg);
+            throw $e;
         }
     }
 
@@ -404,7 +488,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $file = $this->getFile($id);
 
         if (empty($file)) {
-            throw $this->createServiceException('file not exist.');
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         $convertHash = $this->getFileImplementor($file['storage'])->reconvert($file['globalId'], $options);
@@ -515,7 +599,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function collectFile($userId, $fileId)
     {
         if (empty($userId) || empty($fileId)) {
-            throw $this->createInvalidArgumentException('参数错误，请重新输入');
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $collection = $this->getUploadFileCollectDao()->getByUserIdAndFileId($userId, $fileId);
@@ -789,7 +873,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $file = $this->getFile($id);
 
         if (empty($file)) {
-            throw $this->createServiceException(sprintf('文件%s不存在，转换失败', $id));
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         $file = $this->getFileImplementor($file['storage'])->saveConvertResult($file, $result);
@@ -808,7 +892,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $file = $this->getFile($id);
 
         if (empty($file)) {
-            throw $this->createServiceException(sprintf('文件%s不存在，转换失败', $id));
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         $file['convertParams']['convertor'] = 'HLSEncryptedVideo';
@@ -832,13 +916,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $statuses = array('none', 'waiting', 'doing', 'success', 'error');
 
         if (!in_array($status, $statuses)) {
-            throw $this->createServiceException('状态不正确，变更文件转换状态失败！');
+            $this->createNewException(UploadFileException::ERROR_STATUS());
         }
 
         $file = $this->getFile($id);
 
         if (empty($file)) {
-            throw $this->createServiceException(sprintf('文件%s不存在，转换失败', $id));
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         $file = $this->getFileImplementor($file['storage'])->convertFile($file, $status, $result, $callback);
@@ -857,7 +941,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $file = $this->getFile($id);
 
         if (empty($file)) {
-            throw $this->createServiceException('file not exist.');
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         // $status = $file['convertStatus'] == 'success' ? 'success' : 'waiting';
@@ -877,11 +961,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $file = $this->getFile($id);
 
         if (empty($file)) {
-            throw $this->createServiceException('file not exist.');
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         if (!in_array($status, array('none', 'doing', 'success', 'error'))) {
-            throw $this->createServiceException('status not exist.');
+            $this->createNewException(UploadFileException::ERROR_STATUS());
         }
 
         $fields = array(
@@ -948,13 +1032,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            throw $this->createAccessDeniedException('您无权访问此文件！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $file = $this->getFullFile($fileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         if ($user->isAdmin()) {
@@ -962,7 +1046,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         if (!$user->isAdmin() && $user['id'] != $file['createdUserId']) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            $this->createNewException(UploadFileException::PERMISSION_DENIED());
         }
 
         return $file;
@@ -973,13 +1057,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            throw $this->createAccessDeniedException('您无权访问此文件！');
+            $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
         $file = $this->getFileByGlobalId($globalFileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         if ($user->isAdmin()) {
@@ -987,7 +1071,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         if (!$user->isAdmin() && $user['id'] != $file['createdUserId']) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            $this->createNewException(UploadFileException::PERMISSION_DENIED());
         }
 
         return $file;
@@ -998,7 +1082,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $file = $this->getFullFile($fileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         $user = $this->getCurrentUser();
@@ -1021,7 +1105,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (in_array($user['id'], $targetUserIds)) {
             return $file;
         }
-        throw $this->createAccessDeniedException('您无权访问此文件！');
+        $this->createNewException(UploadFileException::PERMISSION_DENIED());
     }
 
     public function canManageFile($fileId)
@@ -1290,7 +1374,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileUsedDao()->batchCreate($useFiles);
     }
 
-    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
+    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type, $bindFile = true)
     {
         $conditions = array(
             'type' => $type,
@@ -1300,7 +1384,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $limit = $this->getFileUsedDao()->count($conditions);
         $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, $limit);
-        $this->bindFiles($attachments);
+        if ($bindFile) {
+            $this->bindFiles($attachments);
+        }
 
         return $attachments;
     }
@@ -1310,10 +1396,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileUsedDao()->count($conditions);
     }
 
-    public function searchUseFiles($conditions, $bindFile = true)
+    public function searchUseFiles($conditions, $bindFile = true, $sort = array('createdTime' => 'DESC'))
     {
         $limit = $this->countUseFile($conditions);
-        $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, $limit);
+        $attachments = $this->getFileUsedDao()->search($conditions, $sort, 0, $limit);
 
         if ($bindFile) {
             $this->bindFiles($attachments);
@@ -1460,14 +1546,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     /**
      * @param  $key
      *
-     * @throws \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @throws UploadFileException
+     * @throws \Exception
      *
      * @return FileImplementor
      */
     protected function getFileImplementor($key)
     {
         if (!array_key_exists($key, self::$implementor)) {
-            throw $this->createServiceException(sprintf('`%s` File Implementor is not allowed.', $key));
+            $this->createNewException(UploadFileException::IMPLEMENTOR_NOT_ALLOWED());
         }
 
         return $this->biz->service(self::$implementor[$key]);

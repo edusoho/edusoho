@@ -194,7 +194,7 @@ $.validator.addMethod('idcardNumber', function(value, element, params) {
     }
     return true;
   };
-  return this.optional(element) || _check(value);
+  return this.optional(element) || _check($.trim(value));
 }, Translator.trans('validate.idcard_number_input.message'));
 
 $.validator.addMethod('visible_character', function(value, element, params) {
@@ -311,6 +311,10 @@ $.validator.addMethod('qq', function(value, element) {
   return this.optional(element) || /^[1-9]\d{4,}$/.test(value);
 }, Translator.trans('validate.valid_qq_input.message'));
 
+$.validator.addMethod('weixin', function(value, element) {
+  return this.optional(element) || /^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/.test(value);
+}, Translator.trans('validate.valid_weixin_input.message'));
+
 $.validator.addMethod('mobile', function(value, element) {
   return this.optional(element) || /^1\d{10}$/.test(value);
 }, Translator.trans('validate.valid_mobile_input.message'));
@@ -320,7 +324,7 @@ $.validator.addMethod('url', function(value, element) {
 }, Translator.trans('validate.valid_url_input.message'));
 
 $.validator.addMethod('chinese', function(value, element) {
-  return this.optional(element) || /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i.test(value);
+  return this.optional(element) || /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i.test($.trim(value));
 }, Translator.trans('validate.valid_chinese_input.message'));
 
 $.validator.addMethod('chinese_limit', function(value, element, params) {

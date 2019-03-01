@@ -392,7 +392,7 @@ class OpenCourseServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\OpenCourse\OpenCourseException
      */
     public function testUpdateLiveStatusException()
     {

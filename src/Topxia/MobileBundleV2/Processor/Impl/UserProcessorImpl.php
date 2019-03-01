@@ -349,6 +349,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $token = $this->controller->getToken($this->request);
         if (!empty($token)) {
             $user = $this->controller->getUserByToken($this->request);
+            $device = $this->controller->getPushDeviceService()->getPushDeviceByUserId($user['id']);
+            if (!empty($device)) {
+                $device = $this->controller->getPushDeviceService()->updatePushDevice($device['id'], array('userId' => 0));
+                $this->controller->getPushDeviceService()->getPushSdk()->setDeviceActive($device['regId'], 0);
+            }
             $this->log('user_logout', '用户退出', array(
                 'userToken' => $user, )
             );
@@ -673,7 +678,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'site' => $this->getSiteInfo($this->request, $version),
         );
 
-        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", array('qrCodeToken' => $oldToken, 'loginToken' => $newToken));
+        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", array('qrCodeToken' => $oldToken, 'loginToken' => $newToken, 'loginUser' => $user));
 
         return $result;
     }

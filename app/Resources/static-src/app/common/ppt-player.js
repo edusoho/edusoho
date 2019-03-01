@@ -1,5 +1,5 @@
 import Emitter from 'common/es-event-emitter';
-import screenfull from 'screenfull';
+import screenfull from 'es-screenfull';
 
 export default class PPT extends Emitter {
   constructor({element, slides, watermark}) {
@@ -180,7 +180,11 @@ export default class PPT extends Emitter {
   }
 
   _onFullScreen() {
+    const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     if (!screenfull.enabled) {
+      if(isIOS) {
+        $('#task-content-iframe', parent.document).toggleClass('ios-full-screen');
+      }
       return;
     }
     if (screenfull.isFullscreen) {

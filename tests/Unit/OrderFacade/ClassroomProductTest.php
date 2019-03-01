@@ -10,28 +10,30 @@ class ClassroomProductTest extends BaseTestCase
 {
     public function testValidate()
     {
-        $courseProduct = new ClassroomProduct();
-        $courseProduct->setBiz($this->getBiz());
+        $classroomProduct = new ClassroomProduct();
+        $classroomProduct->setBiz($this->getBiz());
 
         $this->mockBiz('Classroom:ClassroomService', array(
             array('functionName' => 'getClassroom', 'returnValue' => array('buyable' => true)),
             array('functionName' => 'canJoinClassroom', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
-        $this->assertEquals(null, $courseProduct->validate());
+        $this->assertEquals(null, $classroomProduct->validate());
     }
 
     /**
-     * @expectedException  \Biz\OrderFacade\Exception\OrderPayCheckException;
+     * @expectedException  \Biz\OrderFacade\Exception\OrderPayCheckException
      */
     public function testValidateOnErrorWhenClassroomUnPurchasable()
     {
-        $courseProduct = new ClassroomProduct();
-        $courseProduct->setBiz($this->getBiz());
+        $classroomProduct = new ClassroomProduct();
+        $classroomProduct->setBiz($this->getBiz());
 
         $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName' => 'getClassroom', 'returnValue' => array('buyable' => true)),
+            array('functionName' => 'getClassroom', 'returnValue' => array()),
             array('functionName' => 'canJoinClassroom', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
+
+        $classroomProduct->validate();
     }
 
     /**
@@ -39,13 +41,13 @@ class ClassroomProductTest extends BaseTestCase
      */
     public function testValidateWithError()
     {
-        $courseProduct = new ClassroomProduct();
-        $courseProduct->setBiz($this->getBiz());
+        $classroomProduct = new ClassroomProduct();
+        $classroomProduct->setBiz($this->getBiz());
 
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => 'error', 'msg' => 'wrong')),
         ));
 
-        $courseProduct->validate();
+        $classroomProduct->validate();
     }
 }

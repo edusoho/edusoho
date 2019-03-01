@@ -108,7 +108,7 @@ class LearnStatisticsServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Biz\Common\CommonException
      */
     public function testSearchLearnDataError()
     {
@@ -317,8 +317,8 @@ class LearnStatisticsServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     * @expectedExceptionMessage 用户不存在！
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.not_found
      */
     public function testGetUserOverviewWithUserNotFound()
     {

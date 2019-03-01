@@ -1,4 +1,4 @@
-site.flash_not_install_hint: 您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。<a target="_blank" href="http://www.adobe.com/go/getflashplayer">点击安装</a>
+site.flash_not_install_hint: 您的浏览器可能存在未安装flash播放器，未开启flash播放器，flash低于11版本的情况，请先确认flash播放器能够正常使用。<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
 site.date_format_dhis: %days%天%hours%小时%minutes%分钟%seconds%秒
 site.date_format_his: %hours%小时%minutes%分钟%seconds%秒
 site.date_format_is: %minutes%分钟%seconds%秒
@@ -543,6 +543,7 @@ course.question_marker.back_to_questions: 返回题目
 
 classroom.manage.tag_required_hint: 请输入标签
 classroom.manage.delete_course_hint: 是否要从班级移除该课程？
+classroom.manage.delete_course_hint_title: 移除课程
 classroom.manage.delete_course_success_hint: 课程移除成功
 classroom.manage.delete_course_fail_hint: 课程移除失败
 classroom.manage.expiry_mode_days_error_hint: 请输入有效期天数
@@ -701,6 +702,7 @@ validate.before.message: 开始日期应早于结束日期
 validate.after.message: 结束日期应晚于开始日期
 validate.feature.message: 购买截止时间需在当前时间之后
 validate.valid_qq_input.message: 请输入正确的QQ号
+validate.valid_weixin_input.message: 请输入正确的微信号
 validate.valid_mobile_input.message: 请输入正确的手机号
 validate.valid_chinese_input.message: 必须是中文字
 validate.chinese_limit.message: 长度必须小于等于 {0} 字符,一个中文为2个字符

@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use AppBundle\Controller\BaseController;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class EsBarController extends BaseController
@@ -20,7 +21,7 @@ class EsBarController extends BaseController
         $user = $this->getUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $conditions = array(
@@ -71,7 +72,7 @@ class EsBarController extends BaseController
         $user = $this->getUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $memberConditions = array(
@@ -114,7 +115,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $notifications = $this->getNotificationService()->searchNotificationsByUserId($user->id, 0, 15);
@@ -133,7 +134,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
         $conditions = array(

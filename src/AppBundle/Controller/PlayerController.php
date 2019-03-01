@@ -3,10 +3,13 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\FileToolkit;
+use Biz\File\UploadFileException;
+use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
 use Biz\User\Service\TokenService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\File\Service\UploadFileService;
+use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\MaterialLib\Service\MaterialLibService;
@@ -14,16 +17,16 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id, $isPart = false, $context = array())
+    public function showAction(Request $request, $id, $isPart = false, $context = array(), $remeberLastPos = true)
     {
         $ssl = $request->isSecure() ? true : false;
 
         $file = $this->getUploadFileService()->getFullFile($id);
         if (empty($file)) {
-            throw $this->createNotFoundException('file not found');
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
         if (!in_array($file['type'], array('audio', 'video'))) {
-            throw $this->createAccessDeniedException("player does not support  file type: {$file['type']}");
+            $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
         }
 
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
@@ -55,6 +58,7 @@ class PlayerController extends BaseController
             'agentInWhiteList' => $agentInWhiteList,
             'isEncryptionPlus' => $isEncryptionPlus,
             'cloudSdk' => isset($cloudSdk) ? $cloudSdk : null,
+            'remeberLastPos' => $remeberLastPos,
         );
 
         if ($isPart) {
@@ -79,16 +83,16 @@ class PlayerController extends BaseController
         $file = $this->getUploadFileService()->getFile($id);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         if (!in_array($file['type'], array('audio', 'video'))) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
         }
 
         $token = $this->getTokenService()->verifyToken('local.media', $token);
         if (!$token || $token['userId'] != $this->getCurrentUser()->getId()) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
@@ -108,7 +112,7 @@ class PlayerController extends BaseController
         $token = $this->getTokenService()->verifyToken('hls.stream', $token);
 
         if (empty($token)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $dataId = is_array($token['data']) ? $token['data']['globalId'] : $token['data'];
@@ -120,7 +124,7 @@ class PlayerController extends BaseController
         $file = $this->getMaterialLibService()->get($globalId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         if (empty($file['metas']['levels'][$level]['key'])) {
@@ -170,7 +174,7 @@ class PlayerController extends BaseController
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
 
         if (empty($token)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
         $dataId = is_array($token['data']) ? $token['data']['globalId'] : $token['data'];
@@ -182,7 +186,7 @@ class PlayerController extends BaseController
         $file = $this->getMaterialLibService()->get($globalId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
         $streams = array();

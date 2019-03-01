@@ -3,9 +3,10 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
+use Biz\Course\MemberException;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Api\Resource\Classroom;
+use Biz\Thread\ThreadException;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
@@ -20,7 +21,7 @@ class ThreadController extends CourseBaseController
     {
         $courseMember = $this->getCourseMember($request, $course);
         if (empty($courseMember)) {
-            throw $this->createAccessDeniedException();
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
@@ -54,6 +55,7 @@ class ThreadController extends CourseBaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('course/tabs/threads.html.twig', array(
+            'type' => $conditions['type'],
             'courseSet' => $courseSet,
             'course' => $course,
             'member' => $member,
@@ -94,7 +96,7 @@ class ThreadController extends CourseBaseController
         $thread = $this->getThreadService()->getThread($course['id'], $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException('话题不存在，或已删除。');
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $paginator = new Paginator(
@@ -115,6 +117,12 @@ class ThreadController extends CourseBaseController
             $elitePosts = $this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, 10);
         } else {
             $elitePosts = array();
+        }
+
+        if ('question' == $thread['type'] && !in_array($user['id'], array_merge($course['teacherIds'], array($thread['userId'])))) {
+            $canPost = false;
+        } else {
+            $canPost = true;
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
@@ -138,7 +146,30 @@ class ThreadController extends CourseBaseController
             'users' => $users,
             'isManager' => $isManager,
             'isMemberNonExpired' => $isMemberNonExpired,
+            'canPost' => $canPost,
             'paginator' => $paginator,
+        ));
+    }
+
+    public function askVideoAction(Request $request, $threadId)
+    {
+        $thread = $this->getThreadService()->getThread(null, $threadId);
+        $user = $this->getCurrentUser();
+
+        return $this->render('course/thread/preview-modal.html.twig', array(
+            'courseId' => $thread['courseId'],
+            'taskId' => $thread['taskId'],
+            'videoAskTime' => $thread['videoAskTime'],
+            'fileId' => $thread['videoId'],
+            'userId' => $user['id'],
+        ));
+    }
+
+    public function playerShowAction(Request $request, $id)
+    {
+        return $this->forward('AppBundle:Player:show', array(
+            'id' => $id,
+            'remeberLastPos' => false,
         ));
     }
 
@@ -194,7 +225,7 @@ class ThreadController extends CourseBaseController
                         'threadId' => $thread['id'],
                     )));
                 } catch (\Exception $e) {
-                    return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                    return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
                 }
             }
         }
@@ -223,7 +254,7 @@ class ThreadController extends CourseBaseController
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
 
         $user = $this->getCurrentUser();
@@ -266,7 +297,7 @@ class ThreadController extends CourseBaseController
                     )));
                 }
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                return $this->createMessageResponse('error', $this->trans($e->getMessage()), '错误提示', 1, $request->getPathInfo());
             }
         }
 
@@ -431,7 +462,7 @@ class ThreadController extends CourseBaseController
                 //notify不应该在这里做的，应该在Service里面做
                 $this->getThreadService()->postAtNotifyEvent($post, $users);
 
-                if ($thread['userId'] != $currentUser->id) {
+                if ($thread['userId'] != $currentUser->id && $thread['type'] != 'question') {
                     $message = array(
                         'userId' => $currentUser['id'],
                         'userName' => $currentUser['nickname'],
@@ -446,7 +477,7 @@ class ThreadController extends CourseBaseController
                 }
 
                 foreach ($users as $user) {
-                    if ($thread['userId'] != $user['id']) {
+                    if ($thread['userId'] != $user['id'] && $thread['type'] != 'question') {
                         if ($user['id'] != $userId) {
                             $message = array(
                                 'userId' => $currentUser['id'],
@@ -522,7 +553,7 @@ class ThreadController extends CourseBaseController
         $post = $this->getThreadService()->getPost($courseId, $postId);
 
         if (empty($post)) {
-            throw $this->createNotFoundException();
+            $this->createNewException(ThreadException::NOTFOUND_POST());
         }
 
         $user = $this->getCurrentUser();
@@ -611,7 +642,7 @@ class ThreadController extends CourseBaseController
         $filters = array();
         $filters['type'] = $request->query->get('type');
 
-        if (!in_array($filters['type'], array('all', 'question', 'elite'))) {
+        if (!in_array($filters['type'], array('all', 'question', 'discussion'))) {
             $filters['type'] = 'all';
         }
 
@@ -620,20 +651,21 @@ class ThreadController extends CourseBaseController
         if (!in_array($filters['sort'], array('created', 'posted', 'createdNotStick', 'postedNotStick'))) {
             $filters['sort'] = 'posted';
         }
+        $filters['isElite'] = $request->query->get('isElite');
 
         return $filters;
     }
 
     protected function convertFiltersToConditions($course, $filters)
     {
-        $conditions = array('courseId' => $course['id']);
+        $conditions = array('courseId' => $course['id'], 'isElite' => isset($filters['isElite']) ? $filters['isElite'] : '');
 
         switch ($filters['type']) {
             case 'question':
                 $conditions['type'] = 'question';
                 break;
-            case 'elite':
-                $conditions['isElite'] = 1;
+            case 'discussion':
+                $conditions['type'] = 'discussion';
                 break;
             default:
                 break;

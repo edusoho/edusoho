@@ -2,6 +2,7 @@
 
 namespace Biz\Activity\Type;
 
+use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
@@ -105,7 +106,7 @@ class Exercise extends Activity
         $exercise = $this->get($targetId);
 
         if (!$exercise) {
-            throw $this->createNotFoundException('教学活动不存在');
+            throw ActivityException::NOTFOUND_ACTIVITY();
         }
 
         $filterFields = $this->filterFields($fields);

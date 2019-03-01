@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Activity;
 
+use Biz\Activity\ActivityException;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Player\Service\PlayerService;
@@ -13,7 +14,7 @@ class DocController extends BaseActivityController implements ActivityActionInte
     public function showAction(Request $request, $activity)
     {
         if (empty($activity)) {
-            throw $this->createNotFoundException('activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         $doc = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
@@ -33,7 +34,7 @@ class DocController extends BaseActivityController implements ActivityActionInte
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if (empty($activity)) {
-            throw $this->createNotFoundException('activity not found');
+            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
         $doc = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);

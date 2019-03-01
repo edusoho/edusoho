@@ -5,6 +5,7 @@ namespace Biz\UserLearnStatistics\Service\Impl;
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -14,6 +15,7 @@ use Biz\Course\Service\ReviewService;
 use Biz\Course\Service\ThreadService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use Biz\UserLearnStatistics\Dao\DailyStatisticsDao;
 use Biz\UserLearnStatistics\Service\LearnStatisticsService;
 use AppBundle\Common\ArrayToolkit;
@@ -120,7 +122,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     public function searchLearnData($conditions, $fields = array())
     {
         if (!ArrayToolkit::requireds($conditions, array('createdTime_GE', 'createdTime_LT'))) {
-            throw $this->createInvalidArgumentException('Invalid Arguments');
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $learnedSeconds = $this->getActivityLearnLogService()->sumLearnTimeGroupByUserId($conditions);
@@ -284,7 +286,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createNotFoundException('用户不存在！');
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $learnCourseIds = $this->getCourseService()->findUserLearnCourseIds($userId);

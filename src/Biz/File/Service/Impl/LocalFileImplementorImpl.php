@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\File\Dao\UploadFileDao;
 use Biz\File\Service\FileImplementor;
 use AppBundle\Common\FileToolkit;
+use Biz\File\UploadFileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Biz\User\Service\UserService;
 
@@ -31,7 +32,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         if ($errors) {
             @unlink($originalFile->getRealPath());
-            throw $this->createServiceException('该文件格式，不允许上传。');
+            $this->createNewException(UploadFileException::EXTENSION_NOT_ALLOWED());
         }
 
         $uploadFile = array();
@@ -69,7 +70,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     public function convertFile($file, $status, $result = null, $callback = null)
     {
-        throw $this->createServiceException('本地文件暂不支持转换');
+        $this->createNewException(UploadFileException::LOCAL_CONVERT_NOT_SUPPORT());
     }
 
     public function updateFile($file, $fields)
@@ -142,7 +143,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         if ($errors) {
             @unlink($originalFile->getRealPath());
-            throw $this->createServiceException('该文件格式，不允许上传。');
+            $this->createNewException(UploadFileException::EXTENSION_NOT_ALLOWED());
         }
 
         $targetPath = $this->getFilePath($targetType, $targetId);

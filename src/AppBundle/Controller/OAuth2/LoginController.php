@@ -6,6 +6,7 @@ use AppBundle\Common\TimeMachine;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
 use AppBundle\Controller\LoginBindController;
+use Biz\Common\CommonException;
 use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\Common\BizSms;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +32,7 @@ class LoginController extends LoginBindController
         $appid = $request->query->get('appid');
 
         if (!in_array($os, array('iOS', 'Android'))) {
-            throw $this->createNotFoundException();
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $client = $this->createOAuthClient($type);
