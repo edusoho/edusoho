@@ -1256,7 +1256,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
         if ($type) {
-            $this->getLogService()->info('mobile', 'user_login', "通过{$type}登录");
+            $this->getLogService()->info('mobile', 'login_success', "通过{$type}登录");
         } else {
             $this->getLogService()->info('user', 'login_success', '登录成功');
         }
