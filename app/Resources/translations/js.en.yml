@@ -762,6 +762,7 @@ validate.before.message: The start date should be earlier than the end date
 validate.after.message: The end date should be later than the start date
 validate.feature.message: The deadline for purchase is after the current time
 validate.valid_qq_input.message: Please enter the correct QQ number
+validate.valid_weixin_input.message: Please enter the correct wecaht number
 validate.valid_mobile_input.message: please enter a valid phone number
 validate.valid_chinese_input.message: Must be Chinese characters
 validate.chinese_limit.message: The length must be less than or equal to {0} characters, one for 2 characters

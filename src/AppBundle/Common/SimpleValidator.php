@@ -96,6 +96,11 @@ class SimpleValidator
         return (bool) preg_match('/^[1-9]\d{4,}$/', $value);
     }
 
+    public static function weixin($value)
+    {
+        return (bool) preg_match('/^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/', $value);
+    }
+
     public static function integer($value)
     {
         return (bool) preg_match('/^[+-]?\d{1,9}$/', $value);

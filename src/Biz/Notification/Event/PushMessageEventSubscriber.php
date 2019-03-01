@@ -1231,7 +1231,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $testType = '';
             if ('testpaper' == $testpaperResult['type']) {
                 $testType = '试卷';
-            } elseif ('testpaper' == $testpaperResult['type']) {
+            } elseif ('homework' == $testpaperResult['type']) {
                 $testType = '作业';
             }
 
