@@ -95,7 +95,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->update($id, $rawPassword);
 
-        $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
+        $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
         return true;
     }
@@ -597,7 +597,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->update($id, $fields);
 
-        $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
+        $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
         return true;
     }
@@ -1236,7 +1236,7 @@ class UserServiceImpl extends BaseService implements UserService
         ));
     }
 
-    public function markLoginInfo()
+    public function markLoginInfo($type = null)
     {
         $user = $this->getCurrentUser();
 
@@ -1252,7 +1252,14 @@ class UserServiceImpl extends BaseService implements UserService
         if ('system' == $user['type']) {
             return false;
         }
-        $this->getLogService()->info('user', 'login_success', '登录成功');
+
+        $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
+
+        if ($type) {
+            $this->getLogService()->info('mobile', 'login_success', "通过{$type}登录");
+        } else {
+            $this->getLogService()->info('user', 'login_success', '登录成功');
+        }
     }
 
     public function markLoginFailed($userId, $ip)
@@ -1303,7 +1310,7 @@ class UserServiceImpl extends BaseService implements UserService
         );
     }
 
-    public function markLoginSuccess($userId, $ip)
+    public function refreshLoginSecurityFields($userId, $ip)
     {
         $fields = array(
             'lockDeadline' => 0,

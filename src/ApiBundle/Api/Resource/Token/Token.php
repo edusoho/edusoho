@@ -17,10 +17,7 @@ class Token extends AbstractResource
         $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
 
         $this->appendUser($user);
-
-        if ($type) {
-            $this->getLogService()->info('mobile', 'login', "通过{$type}登录");
-        }
+        $this->getUserService()->markLoginInfo($type);
 
         return array(
             'token' => $token,
