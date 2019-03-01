@@ -25,7 +25,7 @@ const activityHandle = (activityId, callback, addTicket = false) => {
     const url = addTicket ? `${callback}${symbol}ticket=${res.ticket}` : res.url;
     if (!isWeixinBrowser) {
       Dialog.confirm({
-        message: '将去微信完成活动',
+        message: '去微信完成活动', // 请在微信客户端打开链接
         confirmButtonText: '复制链接',
         title: ''
       }).then(() => {
