@@ -955,7 +955,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
         if (!$this->canTakeCourse($course)) {
-            $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
+            throw $this->createAccessDeniedException("You have no access to the course#{$courseId} before you buy it");
         }
         $user = $this->getCurrentUser();
         $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
