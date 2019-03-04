@@ -2,19 +2,20 @@
 
 {% set modal_class = 'mobile-bind-modal' %}
 {% set hide_footer = true %}
+{% do script(['libs/jquery-validation.js', 'app/js/mobile-bind/index.js'])%}
 
 {% block modal_header %}
   <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+    <button type="button" class="close cd-link-assist" data-dismiss="modal" aria-hidden="true">
       {{'site.mobile_bind.ignore'|trans}}
     </button>
-    <h4 class="modal-title">{{ 'site.mobile_bind.title'|trans }}</h4>
+    <h4 class="modal-title mobile-bind__title">{{ 'site.mobile_bind.title'|trans }}</h4>
   </div>
 {% endblock %}
-{% do script(['libs/jquery-validation.js', 'app/js/mobile-bind/index.js'])%}
+
 
 {% block body %}
-  <form id="mobile-bind-form" class="form-vertical form-vertical-smal mobile-bind-form pull-left" action="{{ path('settings_bind_mobile')}}" data-user-id="{{app.user.id}}">
+  <form id="mobile-bind-form" class="mobile-bind-form" action="{{ path('settings_bind_mobile')}}" data-user-id="{{app.user.id}}">
     <div class="form-group cd-form-group">
       <label class="control-label" for="password">{{'site.mobile_bind.login_password'|trans}}</label>
       <div class="controls">
@@ -46,21 +47,20 @@
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-    <button id="submit-btn" type="button" class="btn cd-btn cd-btn-lg bind-submit-btn" data-toggle="form-submit"  data-target="#mobile-bind-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">
+    <button id="submit-btn" type="button" class="btn cd-btn cd-btn-lg mobile-bind-form__btn cd-btn-primary" data-toggle="form-submit"  data-target="#mobile-bind-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">
       {{'form.btn.submit'|trans}}
     </button>
   </form>
 
-  <div class="divider-vertical"></div>
+  <div class="mobile-bind-form__divider hidden-xs"></div>
 
-  <div class="bind-reasons">
-    <h4 class="title">{{ 'site.mobile_bind.reasons'|trans }}</h4>
-    <div class="contents">
+  <div class="mobile-bind-reasons">
+    <h4 class="mobile-bind-reasons__title"><i class="es-icon es-icon-attention cd-mr8"></i>{{ 'site.mobile_bind.reasons'|trans }}</h4>
+    <div class="mobile-bind-reasons__contents">
       <p>{{ 'site.mobile_bind.reasons.network_office_regulations'|trans }}</p>
-      <p class="middle">{{ 'site.mobile_bind.reasons.login_while_third_party_fail'|trans }}</p>
+      <p class="cd-mv16">{{ 'site.mobile_bind.reasons.login_while_third_party_fail'|trans }}</p>
       <p>{{ 'site.mobile_bind.reasons.login_while_forget_password'|trans }}</p>
     </div>
   </div>
-  <script></script>
 {% endblock %}
 

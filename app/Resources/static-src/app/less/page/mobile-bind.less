@@ -1,7 +1,7 @@
 .mobile-bind-modal {
   position: relative;
   left: 50%;
-  margin-left: -379px ;
+  margin-left: -379px;
 
   @media(max-width: @screen-xs-max) {
     width: 408px;
@@ -13,10 +13,10 @@
   }
 
   .modal-content {
-    padding: 24px;
-    border-radius: 2px;
     width: 758px;
     height: 358px;
+    padding: 24px;
+    border-radius: 2px;
     @media(max-width: @screen-xs-max) {
       width: 408px;
       height: 604px;
@@ -27,79 +27,75 @@
     }
 
     .modal-header {
-      padding: 0 !important;
-      border-bottom: 0 !important;
-      h4 {
+      padding: 0;
+      border: none;
+      .mobile-bind__title {
         font-size: 16px;
-        line-height: 16px;
+        line-height: 1;
       }
 
       .close {
-        font-size: 12px;
-        color: #919191;
-        line-height: 16px;
         padding-top: 2px;
+        font-size: 12px;
+        line-height: 16px;
+        opacity: 1;
+        &:hover {
+          opacity: 0.8;
+        }
       }
     }
-  }
 
-  .modal-body {
-    padding: 0 !important;
-    padding-top: 32px !important;
-  }
-
-  .modal-footer {
-    border: 0 !important;
-    text-align: left;
-    padding: 0 !important;
+    .modal-body {
+      padding: 32px 0 0;
+    }
   }
 
   .mobile-bind-form {
+    float: left;
     width: 360px;
+    height: 214px;
     @media(max-width: @screen-xs-min) {
       width: 252px;
     }
-
-    height: 214px;
-
-    .sms-send-btn {
-      color: #0080ee;
-      border-color: #0080eeb3;
-
-      &:hover {
-        border-color: #0080ee;
-        box-shadow: 0 6px 6px 0 rgba(26, 155, 242, 0.3);
-      }
-    }
   }
 
-  .divider-vertical {
+  .mobile-bind-form__divider {
     float: left;
     width: 2px;
     height: 262px;
     margin-left: 24px;
-    border: 1px solid #DEF1FF;
+    border: 1px dashed @brand-primary;
+  }
 
-    @media(max-width: @screen-xs-max) {
-      display: none;
+  .mobile-bind-form__btn {
+    width: 360px;
+    margin-top: -4px;
+    @media(max-width: @screen-xs-min) {
+      width: 252px;
     }
   }
 
-  .bind-reasons {
+  .mobile-bind-reasons {
     float: right;
     @media(max-width: @screen-xs-max) {
       float: left;
       margin-top: 70px;
     }
-
-    .title {
+    i {
+      color: @brand-primary;
+    }
+    .mobile-bind-reasons__title {
       font-size: 14px;
       color: #313131;
       line-height: 14px;
     }
-    .contents {
+    .mobile-bind-reasons__contents {
       width: 300px;
       height: 184px;
+      margin-top: 16px;
+      padding: 16px;
+      background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), .1);
+      border-radius: 4px;
       @media(max-width: @screen-xs-max) {
         width: 360px;
       }
@@ -107,41 +103,14 @@
       @media(max-width: @screen-xs-min) {
         width: 252px;
       }
-
-      padding: 16px;
-      background: #EDF7FF;
-      border-radius: 4px;
-      margin-top: 16px;
-
-      >p {
+      p {
+        margin: 0;
         font-size: 12px;
         color: #616161;
         text-align: justify;
         line-height: 20px;
-        margin: 0;
-      }
-
-      .middle {
-        margin-top: 16px;
-        margin-bottom: 16px;
       }
     }
   }
 
-  .bind-submit-btn {
-    width: 360px;
-
-    @media(max-width: @screen-xs-min) {
-      width: 252px;
-    }
-
-    margin-top: -4px;
-    background-color: #0081E6;
-    border-color: #0081E6;
-    color: #fff;
-
-    &:hover {
-      box-shadow: 0 6px 6px 0 rgba(26, 155, 242, 0.3);
-    }
-  }
 }
