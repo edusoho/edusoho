@@ -119,7 +119,7 @@ class ThreadController extends CourseBaseController
             $elitePosts = array();
         }
 
-        if ('question' == $thread['type'] && !in_array($user['id'], array_merge($course['teacherIds'], array($thread['userId'])))) {
+        if ('question' == $thread['type'] && $user['id'] != $thread['userId'] && !$this->getMemberService()->isCourseTeacher($course['id'], $user['id'])) {
             $canPost = false;
         } else {
             $canPost = true;
