@@ -882,26 +882,27 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $this->createPushJob($from, $to, $body);
             }
         }
-        if (!empty($thread['target']['teacherIds'])) {
-            $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($thread['target']['teacherIds']);
-            $reg_ids = ArrayToolkit::column($devices, 'regId');
-            if (!empty($reg_ids)) {
-                $message = array(
-                    'reg_ids' => implode(',', $reg_ids),
-                    'pass_through_type' => 'normal',
-                    'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'], 'type' => 'course.thread.create')),
-                    'title' => '课程提问',
-                    'description' => !empty($thread['content']) ? $this->plainText(strip_tags($thread['content']), 10) : "有一个{$questionType}类型的提问",
-                );
-                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
-                $this->getLogService()->info(
-                    'push',
-                    'course_thread_create',
-                    '创建问题-推送消息',
-                    array('result' => $result, 'message' => $message)
-                );
-            }
-        }
+//推送
+//        if (!empty($thread['target']['teacherIds'])) {
+//            $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($thread['target']['teacherIds']);
+//            $reg_ids = ArrayToolkit::column($devices, 'regId');
+//            if (!empty($reg_ids)) {
+//                $message = array(
+//                    'reg_ids' => implode(',', $reg_ids),
+//                    'pass_through_type' => 'normal',
+//                    'payload' => json_encode(array('courseId' => $thread['target']['id'], 'threadId' => $thread['id'], 'type' => 'course.thread.create')),
+//                    'title' => '课程提问',
+//                    'description' => !empty($thread['content']) ? $this->plainText(strip_tags($thread['content']), 10) : "有一个{$questionType}类型的提问",
+//                );
+//                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+//                $this->getLogService()->info(
+//                    'push',
+//                    'course_thread_create',
+//                    '创建问题-推送消息',
+//                    array('result' => $result, 'message' => $message)
+//                );
+//            }
+//        }
     }
 
     /**
@@ -970,26 +971,27 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
         //学生追问，老师收到推送
         if ($threadPost['thread']['userId'] == $user['id'] && $threadPost['thread']['type'] == 'question') {
-            if (!empty($threadPost['target']['teacherIds'])) {
-                $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($threadPost['target']['teacherIds']);
-                $reg_ids = ArrayToolkit::column($devices, 'regId');
-                if (!empty($reg_ids)) {
-                    $message = array(
-                        'reg_ids' => implode(',', $reg_ids),
-                        'pass_through_type' => 'normal',
-                        'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'type' => 'course.thread.create')),
-                        'title' => '课程追问',
-                        'description' => !empty($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "有一个{$threadPostType}类型的追问",
-                    );
-                    $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
-                    $this->getLogService()->info(
-                        'push',
-                        'course_thread_create',
-                        '课程追问-推送消息',
-                        array('result' => $result, 'message' => $message)
-                    );
-                }
-            }
+            //推送
+//            if (!empty($threadPost['target']['teacherIds'])) {
+//                $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($threadPost['target']['teacherIds']);
+//                $reg_ids = ArrayToolkit::column($devices, 'regId');
+//                if (!empty($reg_ids)) {
+//                    $message = array(
+//                        'reg_ids' => implode(',', $reg_ids),
+//                        'pass_through_type' => 'normal',
+//                        'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'type' => 'course.thread.create')),
+//                        'title' => '课程追问',
+//                        'description' => !empty($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "有一个{$threadPostType}类型的追问",
+//                    );
+//                    $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+//                    $this->getLogService()->info(
+//                        'push',
+//                        'course_thread_create',
+//                        '课程追问-推送消息',
+//                        array('result' => $result, 'message' => $message)
+//                    );
+//                }
+//            }
 
             if ($this->isIMEnabled()) {
                 $body = array(
@@ -1042,25 +1044,26 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'message' => !empty($threadPost['thread']['title']) ? "[{$postUser['nickname']}]回复了你的{$threadType}《{$threadPost['thread']['title']}》" : "[{$postUser['nickname']}]回复了你的{$threadPostType}{$threadType}",
         );
 
-        if ($threadPost['thread']['type'] == 'question') {
-            $devices = $this->getPushDeviceService()->getPushDeviceByUserId($threadPost['thread']['userId']);
-            if (!empty($devices['regId'])) {
-                $message = array(
-                    'reg_ids' => $devices['regId'],
-                    'pass_through_type' => 'normal',
-                    'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'], 'type' => 'course.thread.post.create')),
-                    'title' => '课程回答',
-                    'description' => !empty($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "有一个{$threadPostType}类型的回答",
-                );
-                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
-                $this->getLogService()->info(
-                    'push',
-                    'course_thread_post_create',
-                    '老师回答-推送消息',
-                    array('result' => $result, 'message' => $message)
-                );
-            }
-        }
+//推送
+//        if ($threadPost['thread']['type'] == 'question') {
+//            $devices = $this->getPushDeviceService()->getPushDeviceByUserId($threadPost['thread']['userId']);
+//            if (!empty($devices['regId'])) {
+//                $message = array(
+//                    'reg_ids' => $devices['regId'],
+//                    'pass_through_type' => 'normal',
+//                    'payload' => json_encode(array('courseId' => $threadPost['target']['id'], 'threadId' => $threadPost['threadId'], 'postId' => $threadPost['id'], 'type' => 'course.thread.post.create')),
+//                    'title' => '课程回答',
+//                    'description' => !empty($threadPost['content']) ? $this->plainText(strip_tags($threadPost['content']), 10) : "有一个{$threadPostType}类型的回答",
+//                );
+//                $result = $this->getPushDeviceService()->getPushSdk()->pushMessage($message);
+//                $this->getLogService()->info(
+//                    'push',
+//                    'course_thread_post_create',
+//                    '老师回答-推送消息',
+//                    array('result' => $result, 'message' => $message)
+//                );
+//            }
+//        }
 
         if ($this->isIMEnabled()) {
             $from = array(
