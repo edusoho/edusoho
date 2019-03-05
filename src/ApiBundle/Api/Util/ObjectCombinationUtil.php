@@ -13,7 +13,6 @@ class ObjectCombinationUtil
         'course' => 'Course:CourseService',
         'courseSet' => 'Course:CourseSetService',
         'classroom' => 'Classroom:ClassroomService',
-        'vipLevel' => 'VipPlugin:Vip:LevelService',
     );
 
     private $methodMap = array(
@@ -21,7 +20,6 @@ class ObjectCombinationUtil
         'course' => 'findCoursesByIds',
         'courseSet' => 'findCourseSetsByIds',
         'classroom' => 'findClassroomsByIds',
-        'vipLevel' => 'findLevelsByIds',
     );
 
     public function __construct($biz)
@@ -40,10 +38,6 @@ class ObjectCombinationUtil
             return;
         }
 
-        if ('vipLevel' == $targetObjectType && !$this->isPluginInstalled('Vip')) {
-            return;
-        }
-
         $targetIds = $this->findTargetIds($sourceObj, $targetIdFields);
 
         $targetObjects = $this->findTargetObjects($targetObjectType, $targetIds);
@@ -59,10 +53,6 @@ class ObjectCombinationUtil
     public function multiple(&$sourceObjects, array $targetIdFields, $targetObjectType = 'user')
     {
         if (!$sourceObjects) {
-            return;
-        }
-
-        if ('vipLevel' == $targetObjectType && !$this->isPluginInstalled('Vip')) {
             return;
         }
 
@@ -190,12 +180,5 @@ class ObjectCombinationUtil
         } else {
             array_push($sourceArr, $idValue);
         }
-    }
-
-    private function isPluginInstalled($code)
-    {
-        $app = $this->biz->service('CloudPlatform:AppService')->getAppByCode($code);
-
-        return !empty($app);
     }
 }

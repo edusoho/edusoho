@@ -11,6 +11,7 @@ use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Biz\Coupon\Service\CouponService;
 
 class OrderInfo extends AbstractResource
 {
@@ -77,22 +78,7 @@ class OrderInfo extends AbstractResource
             $orderInfo['availableCoupons'] = $product->availableDeducts['coupon'];
 
             foreach ($orderInfo['availableCoupons'] as &$availableCoupon) {
-                if (!empty($availableCoupon['targetId'])) {
-                    switch ($availableCoupon['targetType']) {
-                        case 'course':
-                            $type = 'courseSet';
-                            break;
-
-                        case 'vip':
-                            $type = 'vipLevel';
-                            break;
-
-                        default:
-                            $type = $availableCoupon['targetType'];
-                            break;
-                    }
-                    $this->getOCUtil()->single($availableCoupon, array('targetId'), $type);
-                }
+                $availableCoupon['target'] = $this->getCouponService()->getCouponTargetByTargetTypeAndTargetId($availableCoupon['targetType'], $availableCoupon['targetId']);
             }
         }
 
@@ -181,6 +167,14 @@ class OrderInfo extends AbstractResource
         $product->init($params);
 
         return $product;
+    }
+
+    /**
+     * @return CouponService
+     */
+    private function getCouponService()
+    {
+        return $this->service('Coupon:CouponService');
     }
 
     /**

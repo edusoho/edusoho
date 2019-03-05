@@ -54,22 +54,7 @@ class MeCoupon extends AbstractResource
         }
 
         $coupon = $this->getCouponService()->getCoupon($result['id']);
-        if (!empty($coupon['targetId'])) {
-            switch ($coupon['targetType']) {
-                case 'course':
-                    $type = 'courseSet';
-                    break;
-
-                case 'vip':
-                    $type = 'vipLevel';
-                    break;
-
-                default:
-                    $type = $coupon['targetType'];
-                    break;
-            }
-            $this->getOCUtil()->single($coupon, array('targetId'), $type);
-        }
+        $coupon['target'] = $this->getCouponService()->getCouponTargetByTargetTypeAndTargetId($coupon['targetType'], $coupon['targetId']);
 
         return $coupon;
     }
