@@ -121,7 +121,7 @@ export default {
 
       const player = await Api.getMedia(this.getParams())
 
-      const timeLimit = player.media.timeLimit;
+      const timelimit = player.media.timeLimit;
       // 试看判断
       // const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
 
@@ -138,8 +138,11 @@ export default {
         autoplay: true,
         disableFullscreen: this.sourceType === 'audio',
         isAudio: this.sourceType === 'audio',
-        timeLimit: timeLimit
-        // resId: media.resId,
+        pluck: {
+          timelimit: timelimit,
+        },
+        resId: media.resId,
+        disableDataUpload: true,
         // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
       this.mediaOpts = Object.assign({
