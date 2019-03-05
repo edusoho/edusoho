@@ -4,8 +4,6 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Card\Service\CardService;
-use Biz\Coupon\Service\CouponService;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use Biz\Coupon\CouponException;
 use Biz\Common\CommonException;
@@ -47,14 +45,16 @@ class MeCoupon extends AbstractResource
         $result = $this->getCouponBatchService()->receiveCoupon($token, $user['id']);
 
         if ('success' != $result['code']) {
-            throw CouponException::RECEIVE_FAILED();
+            if (isset($result['exception'])) {
+                $exceptionMethod = $result['exception']['method'];
+                throw $result['exception']['class']::$exceptionMethod();
+            } else {
+                throw CouponException::RECEIVE_FAILED();
+            }
         }
 
         $coupon = $this->getCouponService()->getCoupon($result['id']);
-        if (in_array($coupon['targetType'], array('course', 'classroom')) && !empty($coupon['targetId'])) {
-            $type = 'course' == $coupon['targetType'] ? 'courseSet' : $coupon['targetType'];
-            $this->getOCUtil()->single($coupon, array('targetId'), $type);
-        }
+        $coupon['target'] = $this->getCouponService()->getCouponTargetByTargetTypeAndTargetId($coupon['targetType'], $coupon['targetId']);
 
         return $coupon;
     }

@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Coupon;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\CourseSet\CourseSetFilter;
 use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
+use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 
 class CouponFilter extends Filter
 {
@@ -16,7 +17,7 @@ class CouponFilter extends Filter
     {
         $data['deadline'] = date('c', $data['deadline']);
 
-        if (in_array($data['targetType'], array('course', 'classroom')) && !empty($data['target'])) {
+        if (!empty($data['target'])) {
             $targetFilter = $this->getFilter($data['targetType']);
             $targetFilter->setMode(Filter::SIMPLE_MODE);
             $targetFilter->filter($data['target']);
@@ -29,6 +30,7 @@ class CouponFilter extends Filter
         $filters = array(
             'course' => new CourseSetFilter(),
             'classroom' => new ClassroomFilter(),
+            'vip' => new VipLevelFilter(),
         );
 
         return $filters[$type];
