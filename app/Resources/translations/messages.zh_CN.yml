@@ -7503,11 +7503,13 @@ admin.coin_model.deduction_tips: >
   <br>
   2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
   <br>
-  3、使用方式的切换会使课程价格根据汇率变动
+  3、使用方式一旦保存（使用方式和汇率），请勿随意改动
   <br>
-  4、如有参加促销活动的课程，修改价格都将有相应的折扣
+  4、使用方式的切换会使课程价格根据汇率变动
   <br>
-  5、虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）
+  5、如有参加促销活动的课程，修改价格都将有相应的折扣
+  <br>
+  6、虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）
 
 #系统后台运营
 admin.article_setting.name: 频道名称
@@ -9835,4 +9837,4 @@ exception.coupon.finished: 优惠券已领完
 
 course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
 course.question.question_background: 问题背景
-course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%分钟（%watchLimit%倍视频时长），不能再继续观看。
+course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%（%watchLimit%倍视频时长），不能再继续观看。

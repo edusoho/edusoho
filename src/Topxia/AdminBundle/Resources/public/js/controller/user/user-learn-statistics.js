@@ -22,17 +22,16 @@ define(function(require, exports, module){
       $form.submit();
     });
 
-    $('#startDate').datetimepicker('setStartDate', $('#startDate').data('minTime'));
-
     $('#startDate').datetimepicker({
       autoclose: true,
       format: 'yyyy-mm-dd',
       minView: 2
     }).on('changeDate', function() {
-      var startDate = $('#endDate').val().substring(0, 16);
+      var startDate = $('#startDate').val().substring(0, 16);
       $('#endDate').datetimepicker('setStartDate', startDate);
     });
 
+    $('#startDate').datetimepicker('setStartDate', $('#startDate').data('minTime'));
     $('#startDate').datetimepicker('setEndDate', $('#endDate').val().substring(0, 16));
 
     $('#endDate').datetimepicker({
