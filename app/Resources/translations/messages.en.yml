@@ -8531,5 +8531,5 @@ admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级�
 course.thread.edit_hint: Editor mobile side question capabilities are coming soon, stay tuned!
 course.question.question_background: Question Background
 
-course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%分钟（%watchLimit%倍视频时长），不能再继续观看。
+course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%（%watchLimit%倍视频时长），不能再继续观看。
 exception.role.code_not_all_digital: code不能全为数字
