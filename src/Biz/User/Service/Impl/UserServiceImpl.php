@@ -1243,7 +1243,6 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($user)) {
             return;
         }
-
         $this->getUserDao()->update($user['id'], array(
             'loginIp' => $user['currentIp'],
             'loginTime' => time(),
@@ -1255,7 +1254,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
-        if ($type) {
+        if (in_array($type, array('weixinweb', 'qq', 'weibo', 'app'))) {
             $this->getLogService()->info('mobile', 'login_success', "通过{$type}登录");
         } else {
             $this->getLogService()->info('user', 'login_success', '登录成功');

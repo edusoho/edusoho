@@ -720,7 +720,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'user' => $this->controller->filterUser($user),
         );
 
-        $this->controller->getUserService()->markLoginInfo(MobileBaseController::MOBILE_MODULE);
+        $this->controller->getUserService()->markLoginInfo('app');
 
         //登录后获取通知
         $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
