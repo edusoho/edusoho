@@ -15,7 +15,7 @@
 
 
 {% block body %}
-  <form id="mobile-bind-form" class="mobile-bind-form" action="{{ path('settings_bind_mobile')}}" data-user-id="{{app.user.id}}">
+  <form id="mobile-bind-form" class="mobile-bind-form" method="post" action="{{ path('settings_bind_mobile')}}" data-user-id="{{app.user.id}}">
     <div class="form-group cd-form-group">
       <label class="control-label" for="password">{{'site.mobile_bind.login_password'|trans}}</label>
       <div class="controls">
