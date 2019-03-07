@@ -1,5 +1,6 @@
 import SmsSender from 'app/common/widget/sms-sender';
 import Cookies from 'js-cookie';
+import notify from 'common/notify';
 
 export default class MobileBind {
   constructor() {
