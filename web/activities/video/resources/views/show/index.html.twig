@@ -5,7 +5,7 @@
   <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="lesson-content">
     <div class="alert alert-danger mv20 mh20">
       <i class="es-icon es-icon-info"></i>
-        {{'course.activity.video.beyond_watch_limit_tip'|trans({'%watchedTime%': activity.watchStatus.watchedTime|duration_text, '%watchLimit%': (activity.watchStatus.watchedTime / activity.length)|round})}}
+        {{'course.activity.video.beyond_watch_limit_tip'|trans({'%watchedTime%': activity.watchStatus.watchLimitTime|duration_text, '%watchLimit%': (activity.watchStatus.watchLimitTime / activity.length)|round})}}
     </div>
   </div>
 {% elseif video.mediaSource|default('self') == 'self' %}
