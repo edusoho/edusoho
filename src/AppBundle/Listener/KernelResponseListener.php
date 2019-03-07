@@ -72,7 +72,7 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
             '/login/weixinmob', '/login/bind/weixinmob/existbind',
             '/captcha_num', '/register/captcha/check', '/edu_cloud/sms_send',
             '/edu_cloud/sms_check/sms_bind', '/settings/check_login_password',
-            '/register/email_or_mobile/check',
+            '/register/email_or_mobile/check', '/settings/bind_mobile',
         );
     }
 
