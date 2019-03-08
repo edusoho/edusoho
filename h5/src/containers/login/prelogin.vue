@@ -15,7 +15,7 @@ export default {
       this.$router.push({
         name: 'login',
         query: {
-          redirect: this.$route.query.redirect || ''
+          redirect: this.$route.query.redirect || '/'
         }
       })
     },

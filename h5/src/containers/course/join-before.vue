@@ -200,7 +200,9 @@
         // 滚动节流
         setTimeout(() => {
           Object.keys(refs).forEach(item => {
-            this.tops[`${item}Top`] = refs[item].$el.getBoundingClientRect().top
+            if (refs[item]) {
+              this.tops[`${item}Top`] = refs[item].$el.getBoundingClientRect().top
+            }
           })
           this.scrollFlag = false;
           this.tabsClass = this.tops.aboutTop - TAB_HEIGHT <= 0 ? 'van-tabs--fixed' : '';

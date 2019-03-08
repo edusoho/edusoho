@@ -1,6 +1,9 @@
 <template>
   <div class="e-poster">
-    <img class="e-poster__img" :src="poster.image.uri" @click="jumpTo(link)">
+    <a v-if="poster.link.type == 'url' && feedback" :href="linkUrl">
+      <img class="e-poster__img" v-lazy="poster.image.uri">
+    </a>
+    <img v-else class="e-poster__img" v-lazy="poster.image.uri" @click="jumpTo(link)">
   </div>
 </template>
 
@@ -21,6 +24,17 @@
         link: this.poster.link
       };
     },
+    computed: {
+      linkUrl() {
+        const outterLink = this.poster.link.type == 'url' && this.feedback;
+        if (!outterLink) return 'javascripts;';
+        const url = this.poster.link.url && this.poster.link.url.trim();
+        if (!url) return 'javascripts:;';
+        const exsitsProtcol = (/^(\/\/)|(http:\/\/)|(https:\/\/)/).exec(url);
+        if (!exsitsProtcol) return 'http://' + url;
+        return url;
+      },
+    },
     methods: {
       jumpTo(data) {
         if (!this.feedback) return;
@@ -40,10 +54,6 @@
           this.$router.push({
             path: `/vip`
           });
-          return;
-        }
-        if (data.type == 'url' && data.url) {
-          window.location.href = data.url;
           return;
         }
       }

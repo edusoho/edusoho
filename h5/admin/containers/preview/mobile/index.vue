@@ -21,6 +21,7 @@
         v-if="['groupon', 'cut', 'seckill'].includes(part.type)"
         :tag="part.data.tag"
         :type="part.type"
+        :showTitle="part.data.titleShow"
         :activity="part.data.activity"></e-market-part>
       <div class="coupon-preview__container gray-border-bottom" v-if="part.type == 'coupon'">
         <e-coupon-list

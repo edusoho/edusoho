@@ -2,7 +2,7 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img :class="course.imgSrc.className" v-bind:src="course.imgSrc.url">
+        <img :class="course.imgSrc.className" v-lazy="course.imgSrc.url">
         <div v-if="normalTagShow">
           <span class="tag tag-live" v-if="courseType === 'live'">直播</span>
           <span class="tag tag-discount" v-if="discountNum">{{discountNum}}</span>

@@ -9,7 +9,7 @@
           </div>
           <!-- url -->
           <a v-else :href="slide.link.url || 'javascript:;'">
-            <img v-bind:src="slide.image.uri">
+            <img v-lazy="slide.image.uri">
           </a>
           <div class="text-overflow item-container__title">{{ slide.title }}</div>
         </div>

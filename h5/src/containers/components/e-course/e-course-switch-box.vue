@@ -19,11 +19,11 @@
       </span>
       <span class="switch-box__state">
         <p :class="order.status"
-          v-if="order.status !== 'created'">
+          v-if="order.status !== 'created' && order.status !== 'paying'">
           {{ order.status | filterOrderStatus}}
         </p>
         <span class="order-pay"
-          v-if="order.status === 'created'"
+          v-if="order.status === 'created' || order.status === 'paying'"
           @click="goToPay"
           >{{ order.status | filterOrderStatus}}</span>
       </span>

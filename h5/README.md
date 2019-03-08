@@ -28,6 +28,9 @@ npm run analyze:admin
 
 ```
 
+开发中所有接口使用的服务器域名配置在 config/index.js proxyTable 配置里。
+**后台开发时**需要当前用户具有管理员权限，需要在 admin/api/interceptors.js 里配置 h5 里登录的管理员权限用户的token （h5 登录时 网络请求的 /token 接口里有）
+
 ## 发布到测试站
 
 1、安装 composer 中的依赖

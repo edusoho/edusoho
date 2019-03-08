@@ -43,13 +43,13 @@
             </div>
 
             <div v-if="lesson.tasks.length === 1">
-              <div class="lesson-cell__lesson text-overflow">
+              <div class="lesson-cell__lesson text-overflow" @click="lessonCellClick(lesson.tasks[0])">
                 <i class="h5-icon h5-icon-dot color-primary text-18"></i>
                 <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
 
                 <div class="lesson-cell">
                   <span class="lesson-cell__number">{{ filterNumber(lesson.tasks[0], 0, true) }}</span>
-                  <div class="lesson-cell__content ml3" @click="lessonCellClick(lesson.tasks[0])">
+                  <div class="lesson-cell__content ml3">
                     <span>{{ lesson.tasks[0] | taskType }}{{ lesson.tasks[0] | filterTask }}</span>
                   </div>
                   <div :class="['lesson-cell__status', details.member ? '' : lesson.tasks[0].tagStatus]">

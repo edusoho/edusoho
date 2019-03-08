@@ -14,7 +14,7 @@
     </div>
     <div class="course-detail__head--img"
       v-show="sourceType === 'img' || isEncryptionPlus">
-      <img :src="courseSet.cover.large" alt="">
+      <img v-if="courseSet.cover" :src="courseSet.cover.large" alt="">
       <countDown
         v-if="seckillActivities && seckillActivities.status === 'ongoing' && counting && !isEmpty"
         :activity="seckillActivities"
@@ -76,15 +76,12 @@ export default {
     }
   },
   watch: {
-    taskId: {
-      immediate: true,
-      handler(v, oldVal) {
-        if (['video', 'audio'].includes(this.sourceType)) {
-          window.scrollTo(0, 0);
-          this.initPlayer();
-        }
+    taskId () {
+      if (['video', 'audio'].includes(this.sourceType)) {
+        window.scrollTo(0, 0);
+        this.initPlayer();
       }
-    }
+    },
   },
   /*
   * 试看需要传preview=1
@@ -123,6 +120,8 @@ export default {
       this.$refs.video && (this.$refs.video.innerHTML = '');
 
       const player = await Api.getMedia(this.getParams())
+
+      const timelimit = player.media.timeLimit;
       // 试看判断
       // const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
 
@@ -138,8 +137,12 @@ export default {
         playlist: media.url,
         autoplay: true,
         disableFullscreen: this.sourceType === 'audio',
-        isAudio: this.sourceType === 'audio'
-        // resId: media.resId,
+        isAudio: this.sourceType === 'audio',
+        pluck: {
+          timelimit: timelimit,
+        },
+        resId: media.resId,
+        disableDataUpload: true,
         // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
       this.mediaOpts = Object.assign({

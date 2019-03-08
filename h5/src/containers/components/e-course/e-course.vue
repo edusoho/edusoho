@@ -2,7 +2,7 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img :class="imgClass" v-bind:src="imgSrc">
+        <img :class="imgClass" v-lazy="imgSrc">
       </div>
       <div class="e-course__right pull-left">
         <div v-if="type === 'confirmOrder'" class="e-course__title course-confirm-title">

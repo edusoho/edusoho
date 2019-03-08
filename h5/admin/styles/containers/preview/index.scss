@@ -55,7 +55,7 @@
 
   // h5 组件 vw 单位复写
   .e-course {
-    padding: 0 10px 20px;
+    padding: 0 0 20px;
     &__left {
       border-radius: 2px;
       .e-class__img {
@@ -76,8 +76,6 @@
   }
 
   .e-course-list {
-    margin-left: -10px;
-    margin-right: -10px;
     &__header {
       padding: 10px;
     }
@@ -153,6 +151,11 @@
         background-color: $primary-color;
       }
     }
+  }
+
+  .e-groupon {
+    padding-right: 0;
+    padding-left: 0;
   }
 }
 

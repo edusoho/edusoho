@@ -111,7 +111,7 @@ import { mapState } from 'vuex';
       },
       courseItemData: {
         get() {
-          return !this.courseList.items.length ? true : false;
+          return !this.courseList.items.length;
         },
         set() {}
       },
