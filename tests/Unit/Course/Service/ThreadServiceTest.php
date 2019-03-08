@@ -273,7 +273,7 @@ class ThreadServiceTest extends BaseTestCase
 
     /**
      * @group current
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Biz\Course\CourseException
      */
     public function testPostOnNotExistCourse()
     {

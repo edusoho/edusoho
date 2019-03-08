@@ -1,5 +1,6 @@
 import SmsSender from 'app/common/widget/sms-sender';
 import Cookies from 'js-cookie';
+import notify from 'common/notify';
 
 export default class MobileBind {
   constructor() {
@@ -8,18 +9,6 @@ export default class MobileBind {
     this.initCheckCookie();
     this.initValidator();
     this.initMobileCodeSendBtn();
-    this.initEvent();
-  }
-
-  initEvent() {
-    $('#mobile-bind-modal').on('click', '#submit-btn', event => this._submit(event));
-  }
-
-  _submit() {
-    if (this.validator && this.validator.form()) {
-      this.$form.submit();
-      $('.modal').modal('hide');
-    }
   }
 
   initCheckCookie() {
@@ -71,6 +60,13 @@ export default class MobileBind {
           required: Translator.trans('site.captcha_code.required')
         }
       },
+      submitSuccess(data) {
+        notify('success', Translator.trans(data.message));
+        $('.modal').modal('hide');
+      },
+      submitError(data) {
+        notify('danger',  Translator.trans(data.responseJSON.message));
+      }
     });
   }
 

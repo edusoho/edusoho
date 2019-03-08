@@ -153,7 +153,7 @@ site.mobile_bind.login_password: 您的登录密码
 site.mobile_bind.phone_number: 手机号码
 site.mobile_bind.reasons: 绑定手机号的三大理由
 site.mobile_bind.reasons.network_office_regulations: 1、网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份。
-site.mobile_bind.reasons.login_while_third_party_fail: 2、第三方登陆出现故障时，仍能用手机号顺利登录，课程学习不受影响。
+site.mobile_bind.reasons.login_while_third_party_fail: 2、第三方登录出现故障时，仍能用手机号顺利登录，课程学习不受影响。
 site.mobile_bind.reasons.login_while_forget_password: 3、即使您忘记了第三方帐号的密码，仍能使用绑定的手机号和密码登录。
 
 # email 模板
@@ -2947,7 +2947,7 @@ user.settings.security.level: 安全等级
 user.settings.security.high_level: 高
 user.settings.security.middle_level: 中
 user.settings.security.low_level: 低
-user.settings.security.mobile_bind_tips: 网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份，为了您的账号安全，请绑定手机号。
+user.settings.security.mobile_bind_daily_tips: 网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份，为了您的帐号安全，请绑定手机号。
 user.settings.security.login_password_tips: 经常更改密码有助于保护您的帐号安全
 user.settings.security.pay_password_tips: 用于支付时的二次密码校验，加强账户安全性
 user.settings.security.questions: 安全问题
@@ -6327,7 +6327,7 @@ admin.edu_cloud.edu_video.normal: 标准
 admin.edu_cloud.edu_video.high: 高品质
 admin.edu_cloud.edu_video.play_speed: 倍速播放：
 admin.edu_cloud.edu_video.play_speed_tips: 开启后，云视频任务及音频任务支持倍速播放。
-admin.edu_cloud.edu_video.not_support_play_speed_tips: 目前系统自动生成的直播回放视频、本地视频、第三方视频（腾讯、优酷等）不支持倍速播放；
+admin.edu_cloud.edu_video.not_support_play_speed_tips: 目前系统自动生成的直播回放视频、本地视频、第三方视频（腾讯、优酷等）不支持倍速播放。
 admin.edu_cloud.edu_video.auto_play: 云视频自动播放
 admin.edu_cloud.edu_video.video_header: 云视频片头：
 admin.edu_cloud.edu_video.video_header_edit_btn: 编辑
@@ -7503,13 +7503,13 @@ admin.coin_model.deduction_tips: >
   <br>
   2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
   <br>
-  3、虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）
+  3、使用方式一旦保存（使用方式和汇率），请勿随意改动
   <br>
-  4、使用方式一旦保存（使用方式和汇率），请勿随意改动
+  4、使用方式的切换会使课程价格根据汇率变动
   <br>
-  5、使用方式的切换会使课程价格根据汇率变动
+  5、如有参加促销活动的课程，修改价格都将有相应的折扣
   <br>
-  6、如有参加促销活动的课程，修改价格都将有相应的折扣
+  6、虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）
 
 #系统后台运营
 admin.article_setting.name: 频道名称
@@ -9831,6 +9831,10 @@ admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级�
 
 exception.coupon.receive.failed: 优惠券领取失败
 exception.coupon.plugin.not.installed: 优惠券插件未安装
+exception.coupon.invalid: 优惠券已失效
+exception.coupon.received: 优惠券已领过
+exception.coupon.finished: 优惠券已领完
+
 course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
 course.question.question_background: 问题背景
-course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%分钟（%watchLimit%倍视频时长），不能再继续观看。
+course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%（%watchLimit%倍视频时长），不能再继续观看。

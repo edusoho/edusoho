@@ -952,7 +952,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
         if (!$this->canTakeCourse($course)) {
             throw $this->createAccessDeniedException("You have no access to the course#{$courseId} before you buy it");

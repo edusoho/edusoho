@@ -15,6 +15,9 @@ use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use CouponPlugin\Biz\Coupon\Service\CouponBatchService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseSetService;
+use VipPlugin\Biz\Vip\Service\LevelService;
 
 class CouponServiceImpl extends BaseService implements CouponService
 {
@@ -424,6 +427,58 @@ class CouponServiceImpl extends BaseService implements CouponService
         );
 
         return $coupon;
+    }
+
+    public function getCouponTargetByTargetTypeAndTargetId($targetType, $targetId)
+    {
+        $target = null;
+        if (empty($targetType) || empty($targetId)) {
+            return $target;
+        }
+        switch ($targetType) {
+            case 'course':
+                $target = $this->getCourseSetService()->getCourseSet($targetId);
+                break;
+
+            case 'vip':
+                if ($this->isPluginInstalled('Vip')) {
+                    $target = $this->getLevelService()->getLevel($targetId);
+                }
+                break;
+
+            case 'classroom':
+                $target = $this->getClassroomService()->getClassroom($targetId);
+                break;
+
+            default:
+                break;
+        }
+
+        return $target;
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    private function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return LevelService
+     */
+    private function getLevelService()
+    {
+        return $this->biz->service('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    private function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
