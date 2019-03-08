@@ -32,6 +32,10 @@
     <span class="security-level">{{ security_level }}</span>
   </div>
 
+  {% if (setting('auth.register_mode') == 'email_or_mobile' or setting('auth.register_mode') == 'mobile') and not hasVerifiedMobile %}
+    <div class="cd-alert cd-alert-warning">{{ 'user.settings.security.mobile_bind_daily_tips'|trans }}</div>
+  {% endif %}
+
   <div class="es-setting">
     <span class="setting-icon"><i class="cd-icon cd-icon-lock"></i></span>
     <span class="setting-title">{{'user.fields.login_password'|trans}}</span>

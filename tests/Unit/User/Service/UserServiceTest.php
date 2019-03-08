@@ -2284,7 +2284,7 @@ class UserServiceTest extends BaseTestCase
         $this->assertNotNull($result);
     }
 
-    public function testMarkLoginSuccess()
+    public function testRefreshLoginSecurityFields()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
@@ -2293,7 +2293,7 @@ class UserServiceTest extends BaseTestCase
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $ip = '152.0.1';
-        $result = $this->getUserService()->markLoginSuccess($registeredUser['id'], $ip);
+        $result = $this->getUserService()->refreshLoginSecurityFields($registeredUser['id'], $ip);
         $this->assertNull($result);
     }
 

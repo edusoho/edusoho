@@ -1,52 +1,47 @@
 define(function(require, exports, module){
-  require("jquery.bootstrap-datetimepicker");
+  require('jquery.bootstrap-datetimepicker');
   var Notify = require('common/bootstrap-notify');
 
   exports.run = function(){
-    $form = $("#user-search");
+    var $form = $('#user-search');
 
     $(document).keyup(function(event){
       if(event.keyCode ==13){
-        $("#search").trigger("click");
+        $('#search').trigger('click');
       }
     });
 
     $form.on('click', '#default-search', function () {
-      $("[name='nickname']").val('');
-      $("[name='isDefault']").val('true');
+      $('[name=\'nickname\']').val('');
+      $('[name=\'isDefault\']').val('true');
       $form.submit();
     });
 
     $form.on('click', '#search', function() {
-      $("[name='isDefault']").val('false');
+      $('[name=\'isDefault\']').val('false');
       $form.submit();
     });
 
-    $("#startDate").datetimepicker({
+    $('#startDate').datetimepicker({
       autoclose: true,
       format: 'yyyy-mm-dd',
       minView: 2
     }).on('changeDate', function() {
-      var startDate = $("#endDate").val().substring(0, 16);
-      $("#endDate").datetimepicker('setStartDate', startDate);
-      var minDate = $("#startDate").data('minTime')
-
-      if ($("#startDate").val().substring(0, 16) <= minDate) {
-        $("#startDate").val(minDate);
-        $("#startDate").datetimepicker('setStartDate', minDate);
-      }
+      var startDate = $('#startDate').val().substring(0, 16);
+      $('#endDate').datetimepicker('setStartDate', startDate);
     });
 
-    $("#startDate").datetimepicker('setEndDate', $("#endDate").val().substring(0, 16));
+    $('#startDate').datetimepicker('setStartDate', $('#startDate').data('minTime'));
+    $('#startDate').datetimepicker('setEndDate', $('#endDate').val().substring(0, 16));
 
-    $("#endDate").datetimepicker({
+    $('#endDate').datetimepicker({
       autoclose: true,
       format: 'yyyy-mm-dd',
       minView: 2
     }).on('changeDate', function() {
-      $("#startDate").datetimepicker('setEndDate', $("#endDate").val().substring(0, 16));
+      $('#startDate').datetimepicker('setEndDate', $('#endDate').val().substring(0, 16));
     });
 
-    $("#endDate").datetimepicker('setStartDate', $("#startDate").val().substring(0, 16));
+    $('#endDate').datetimepicker('setStartDate', $('#startDate').val().substring(0, 16));
   };
 });

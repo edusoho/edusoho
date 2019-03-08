@@ -1,5 +1,4 @@
 import EsWebUploader from 'common/es-webuploader.js';
-import notify from 'common/notify';
 
 let editor = CKEDITOR.replace('profile_about', {
   toolbar: 'Simple',
@@ -28,7 +27,7 @@ let validator = $('#user-profile-form').validate({
   },
   ajax: true,
   submitSuccess(data) {
-    notify('success', Translator.trans('settings.user_profile.save_success_hint'));
+    cd.message({type: 'success', message: Translator.trans('settings.user_profile.save_success_hint')});
     
     setTimeout(function() {
       window.location.reload();

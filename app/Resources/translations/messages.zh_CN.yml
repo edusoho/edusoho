@@ -146,6 +146,16 @@ site.bind.unfinished: 未绑定
 site.setting.email_finished: 已设置邮箱
 site.bind.mobile_finished: 已绑定手机
 
+#全局手机号绑定提醒
+site.mobile_bind.ignore: 跳过
+site.mobile_bind.title: 手机号绑定
+site.mobile_bind.login_password: 您的登录密码
+site.mobile_bind.phone_number: 手机号码
+site.mobile_bind.reasons: 绑定手机号的三大理由
+site.mobile_bind.reasons.network_office_regulations: 1、网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份。
+site.mobile_bind.reasons.login_while_third_party_fail: 2、第三方登录出现故障时，仍能用手机号顺利登录，课程学习不受影响。
+site.mobile_bind.reasons.login_while_forget_password: 3、即使您忘记了第三方帐号的密码，仍能使用绑定的手机号和密码登录。
+
 # email 模板
 email.password_reset: >
   亲爱的%nickname%
@@ -2937,6 +2947,7 @@ user.settings.security.level: 安全等级
 user.settings.security.high_level: 高
 user.settings.security.middle_level: 中
 user.settings.security.low_level: 低
+user.settings.security.mobile_bind_daily_tips: 网信办规定，互联网注册用户要提供基于移动电话号码等的真实身份，为了您的帐号安全，请绑定手机号。
 user.settings.security.login_password_tips: 经常更改密码有助于保护您的帐号安全
 user.settings.security.pay_password_tips: 用于支付时的二次密码校验，加强账户安全性
 user.settings.security.questions: 安全问题
@@ -6316,6 +6327,7 @@ admin.edu_cloud.edu_video.normal: 标准
 admin.edu_cloud.edu_video.high: 高品质
 admin.edu_cloud.edu_video.play_speed: 倍速播放：
 admin.edu_cloud.edu_video.play_speed_tips: 开启后，云视频任务及音频任务支持倍速播放。
+admin.edu_cloud.edu_video.not_support_play_speed_tips: 目前系统自动生成的直播回放视频、本地视频、第三方视频（腾讯、优酷等）不支持倍速播放。
 admin.edu_cloud.edu_video.auto_play: 云视频自动播放
 admin.edu_cloud.edu_video.video_header: 云视频片头：
 admin.edu_cloud.edu_video.video_header_edit_btn: 编辑
@@ -6914,6 +6926,8 @@ admin.user_auth.Term_service_settings.details: 条款内容
 admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
 admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+admin.user_auth.mobile_bind_tips: >
+  据国家《互联网跟帖评论服务管理规定》，<b>不得向未认证真实身份信息的用户提供跟帖评论服务</b>。这里的跟帖评论服务，是指互联网站、应用程序、互动传播平台以及其他具有新闻舆论属性和社会动员功能的传播平台，以<b>发帖、回复、留言、“弹幕”</b>等方式，为用户提供发表文字、符号、表情、图片、音视频等信息的服务。绑定手机号符合实名认证的规定，为规避法律风险，建议选用<b>“手机注册”</b>。切换成“手机注册”后，对于之前未绑定手机号的用户，会在每日首次登录成功后弹框提醒用户绑定手机号（用户可选择跳过此步骤）。
 admin.login_connect.User_login_restrictions: 用户登录限制
 admin.login_connect.open: 开启
 admin.login_connect.closed: 关闭
@@ -7489,13 +7503,13 @@ admin.coin_model.deduction_tips: >
   <br>
   2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
   <br>
-  3、虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）
+  3、使用方式一旦保存（使用方式和汇率），请勿随意改动
   <br>
-  4、使用方式一旦保存（使用方式和汇率），请勿随意改动
+  4、使用方式的切换会使课程价格根据汇率变动
   <br>
-  5、使用方式的切换会使课程价格根据汇率变动
+  5、如有参加促销活动的课程，修改价格都将有相应的折扣
   <br>
-  6、如有参加促销活动的课程，修改价格都将有相应的折扣
+  6、虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）
 
 #系统后台运营
 admin.article_setting.name: 频道名称
@@ -7588,7 +7602,7 @@ admin.payment_setting.alipay_api_type.mobile.hint: >
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_secret: MD5密钥
 admin.payment_setting.alipay_hint: >
-  登录【支付宝商家服务】-【我的商家服务】-【签约管理】，可<a href="%alipayUrl%" target="_blank">查看PID和MD5秘钥</a>。
+  登录【蚂蚁金服·开放平台】-【服务市场】-【密钥管理】，可<a href="%alipayUrl%" target="_blank">查看PID和MD5秘钥</a>。
 admin.payment_setting.alipay_account: 支付宝账户
 admin.payment_setting.alipay_mobile_payment_hint: 如需开启移动客户端支付，需填写支付宝账户。
 admin.payment_setting.open_alipay_api: 启用支付宝交易关闭接口
@@ -7680,15 +7694,13 @@ admin.coin_model.currency_tips: >
   <br>
   2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
   <br>
-  3、虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算
+  3、使用方式一旦保存（使用方式和汇率），请勿随意改动
   <br>
-  4、虚拟币用于标价后，移动端仍显示人民币价格（移动端暂不支持虚拟币支付）
+  4、使用方式的切换会使课程价格会根据汇率变动
   <br>
-  5、使用方式一旦保存（使用方式和汇率），请勿随意改动
+  5、如有参加促销活动的课程，修改价格都将有相应的折扣
   <br>
-  6、使用方式的切换会使课程价格会根据汇率变动
-  <br>
-  7、如有参加促销活动的课程，修改价格都将有相应的折扣
+  6、虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算
 
 admin.coin_course_set.tips: >
   1元人民币兑换<strong class="text-info">%cashRate%</strong>%coinName%
@@ -9506,6 +9518,7 @@ exception.user.mobile_or_email_invalid: 非法的手机号或邮箱地址
 exception.user.gender_invalid: 性别不正确
 exception.user.birthday_invalid: 生日格式错误
 exception.user.qq_invalid: qq不正确
+exception.user.weixin_invalid: 微信不正确
 exception.user.site_invalid: 个人空间不正确
 exception.user.weibo_invalid: 微博地址不正确
 exception.user.blog_invalid: 博客地址不正确
@@ -9818,6 +9831,10 @@ admin.setting_classroom.classroom_operation_mode.allow_show_user_count: 班级�
 
 exception.coupon.receive.failed: 优惠券领取失败
 exception.coupon.plugin.not.installed: 优惠券插件未安装
+exception.coupon.invalid: 优惠券已失效
+exception.coupon.received: 优惠券已领过
+exception.coupon.finished: 优惠券已领完
+
 course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
 course.question.question_background: 问题背景
-course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%分钟（%watchLimit%倍视频时长），不能再继续观看。
+course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%（%watchLimit%倍视频时长），不能再继续观看。

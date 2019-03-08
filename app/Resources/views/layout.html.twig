@@ -136,5 +136,11 @@
   {% include 'script_boot.html.twig' %}
 {% endblock %}
 
+{% if setting('auth.register_mode') == 'mobile' and app.user.isLogin()|default(false) and app.user.verifiedMobile is empty  %}
+  <div id="mobile-bind-modal" class="modal" >
+    {% include 'mobile-bind-modal.html.twig' %}
+  </div>
+{% endif %}
+
 </body>
 </html>

@@ -1,4 +1,3 @@
-import notify from 'common/notify';
 import WebUploader from './fex-webuploader/webuploader.js';
 import SWF_PATH from './fex-webuploader/Uploader.swf';
 
@@ -52,23 +51,24 @@ class EsWebUploader {
     uploader.on('uploadSuccess', function(file, response) {
       console.log('uploadSuccess: ', file, response);
       self.onUploadSuccess(file, response);
+      uploader.removeFile(file, true);
     });
     uploader.on('uploadError', function(file, response) {
       console.log('uploadError : ', file, response);
-      notify('error', Translator.trans('uploader.error_hint'));
+      cd.message({type: 'danger', message: Translator.trans('uploader.error_hint')});
     });
 
     uploader.on('error', function(type) {
       console.log('error : ', type);
       switch (type) {
       case 'Q_EXCEED_SIZE_LIMIT':
-        notify('error', Translator.trans('uploader.size_limit_hint'));
+        cd.message({type: 'danger', message: Translator.trans('uploader.size_limit_hint')});
         break;
       case 'Q_EXCEED_NUM_LIMIT':
-        notify('error', Translator.trans('uploader.num_limit_hint'));
+        cd.message({type: 'danger', message: Translator.trans('uploader.num_limit_hint')});
         break;
       case 'Q_TYPE_DENIED':
-        notify('error', Translator.trans('uploader.type_denied_limit_hint'));
+        cd.message({type: 'danger', message: Translator.trans('uploader.type_denied_limit_hint')});
         break;
       default:
         break;

@@ -8,9 +8,9 @@
 {% block main %}
     <form id="user-search" class="form-inline well well-sm" action="" method="get" novalidate="">
       <div class="form-group ">
-        <input class="form-control" type="text" id="startDate" name="startDate" value="{{ app.request.query.get('startDate') }}" data-min-time="{{ recordEndTime }}" placeholder="{{ 'user.learn.statistics.start_time'|trans }}">
+        <input class="form-control" type="text" id="startDate" name="startDate" value="{{ app.request.query.get('startDate') }}" data-min-time="{{ recordEndTime }}" placeholder="{{ 'user.learn.statistics.start_time'|trans }}"  autocomplete="off">
         -
-        <input class="form-control" type="text" id="endDate" name="endDate" value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'user.learn.statistics.end_time'|trans }}">
+        <input class="form-control" type="text" id="endDate" name="endDate" value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'user.learn.statistics.end_time'|trans }}" autocomplete="off">
         <input class="form-control" type="text" name="nickname" placeholder="{{'user.learn.statistics.nickname'|trans}}" value="{{ app.request.query.get('nickname') }}">
         <input type="hidden" name="isDefault" value="{{ isDefault|default(false) }}">
       </div>

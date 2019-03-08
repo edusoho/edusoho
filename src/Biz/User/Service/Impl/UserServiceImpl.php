@@ -95,7 +95,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->update($id, $rawPassword);
 
-        $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
+        $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
         return true;
     }
@@ -597,7 +597,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->update($id, $fields);
 
-        $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
+        $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
         return true;
     }
@@ -1236,14 +1236,13 @@ class UserServiceImpl extends BaseService implements UserService
         ));
     }
 
-    public function markLoginInfo()
+    public function markLoginInfo($type = null)
     {
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
             return;
         }
-
         $this->getUserDao()->update($user['id'], array(
             'loginIp' => $user['currentIp'],
             'loginTime' => time(),
@@ -1252,7 +1251,14 @@ class UserServiceImpl extends BaseService implements UserService
         if ('system' == $user['type']) {
             return false;
         }
-        $this->getLogService()->info('user', 'login_success', '登录成功');
+
+        $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
+
+        if (in_array($type, array('weixinweb', 'qq', 'weibo', 'app'))) {
+            $this->getLogService()->info('mobile', 'login_success', "通过{$type}登录");
+        } else {
+            $this->getLogService()->info('user', 'login_success', '登录成功');
+        }
     }
 
     public function markLoginFailed($userId, $ip)
@@ -1303,7 +1309,7 @@ class UserServiceImpl extends BaseService implements UserService
         );
     }
 
-    public function markLoginSuccess($userId, $ip)
+    public function refreshLoginSecurityFields($userId, $ip)
     {
         $fields = array(
             'lockDeadline' => 0,
@@ -1806,7 +1812,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->update($userId, $code);
     }
 
-    public function findUnlockedUserMobilesByUserIds($userIds, $needVerified = false)
+    public function findUnlockedUserMobilesByUserIds($userIds)
     {
         if (empty($userIds)) {
             return array();
@@ -1817,19 +1823,12 @@ class UserServiceImpl extends BaseService implements UserService
             'userIds' => $userIds,
         );
 
-        if ($needVerified) {
-            $conditions['hasVerifiedMobile'] = true;
-            $count = $this->countUsers($conditions);
-            $users = $this->searchUsers($conditions, array('createdTime' => 'ASC'), 0, $count);
-            $mobiles = ArrayToolkit::column($users, 'verifiedMobile');
+        $conditions['hasVerifiedMobile'] = true;
+        $count = $this->countUsers($conditions);
+        $users = $this->searchUsers($conditions, array('createdTime' => 'ASC'), 0, $count);
+        $mobiles = ArrayToolkit::column($users, 'verifiedMobile');
 
-            return $mobiles;
-        } else {
-            $profiles = $this->searchUserProfiles(array('mobileNotEqual' => '', 'ids' => $userIds), array('id' => 'ASC'), 0, PHP_INT_MAX);
-            $profileMobiles = ArrayToolkit::column($profiles, 'mobile');
-
-            return array_unique($profileMobiles);
-        }
+        return $mobiles;
     }
 
     public function updateUserLocale($id, $locale)

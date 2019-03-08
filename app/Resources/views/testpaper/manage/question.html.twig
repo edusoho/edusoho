@@ -57,7 +57,7 @@ tr.placeholder:before {
             <th width="20%">{{'course.testpaper_manage.question.operation'|trans}}</th>
           </tr>
         </thead>
-        {% for type,count in testpaper['metas']['counts'] if count > 0 %}
+        {% for type, typeDict in questionTypesDict if typeDict %}
           <tbody data-type="{{ type }}" id="testpaper-items-{{ type }}" class="testpaper-table-tbody {% if loop.index != 1 %}hide{% endif %}" data-role="question-body">
             {% for question in questions[type]|default(null) if question %}
               {% if not question.isDeleted|default(null) %}
