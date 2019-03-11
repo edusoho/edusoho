@@ -99,11 +99,11 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         foreach ($classrooms as $classroom) {
-            $ids = json_decode(str_replace('"', '', $classroom['teacherIds']), true);
+
+            $ids = json_decode($classroom['teacherIds'], true);
             if (empty($ids)) {
                 continue ;
             }
-            var_dump($ids);
             $this->classroomUpdateHelper->add('id', $classroom['id'], array('teacherIds' => array_values($ids)));
         }
 
