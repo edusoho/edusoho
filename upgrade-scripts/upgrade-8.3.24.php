@@ -103,7 +103,7 @@ class EduSohoUpgrade extends AbstractUpdater
             if (empty($ids)) {
                 continue ;
             }
-            $this->classroomUpdateHelper->add('id', $classroom['id'], array('teacherIds' => json_encode(array_values($ids))));
+            $this->classroomUpdateHelper->add('id', $classroom['id'], array('teacherIds' => array_values($ids)));
         }
 
         $this->classroomUpdateHelper->flush();
