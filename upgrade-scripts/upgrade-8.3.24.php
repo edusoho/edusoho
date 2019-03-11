@@ -99,7 +99,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         foreach ($classrooms as $classroom) {
-            $ids = json_decode(str_replace("\"", '', $classroom['teacherIds']), true);
+            $ids = json_decode(str_replace('"', '', $classroom['teacherIds']), true);
             if (empty($ids)) {
                 continue ;
             }
