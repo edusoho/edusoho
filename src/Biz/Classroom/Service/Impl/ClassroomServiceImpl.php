@@ -585,7 +585,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             }
         }
 
-        $this->updateClassroom($id, array('teacherIds' => $newTeacherIds));
+        $this->updateClassroom($id, array('teacherIds' => array_values($newTeacherIds)));
     }
 
     public function publishClassroom($id)
