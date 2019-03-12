@@ -9,9 +9,10 @@
     </div>
   </div>
   <label class="image-upload-label">
-    <input type="file" name="file" class="js-upload-input hidden" accept="image/bmp,image/jpeg,image/png, image/jpg"
-    data-token="{{ upload_token( uploadToken|default('default'), 'image') }}" 
-    data-file-upload="{{path('file_upload')}}" 
+    <input type="file" name="file" class="js-upload-input hidden"
+    accept="{% if app.request.headers.get('User-Agent') matches '/MicroMessenger/' %}image/*{% else %}image/bmp,image/jpeg,image/png,image/jpg{% endif %}"
+    data-token="{{ upload_token( uploadToken|default('default'), 'image') }}"
+    data-file-upload="{{path('file_upload')}}"
     data-crop="{{ path('file_img_crop') }}"
     data-save-url="{{ saveUrl }}"
     data-target-img="#{{ targetImg }}"
