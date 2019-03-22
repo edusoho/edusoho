@@ -17,7 +17,7 @@ const env = process.env.NODE_ENV === 'testing'
 
 const platform = process.env.PLATFROM
 
-const rootHtml = rootHtml ? 'index.html' : 'admin.html'
+const rootHtml = platform === 'h5' ? 'index.html' : 'admin.html'
 
 const webpackConfig = merge(baseWebpackConfig, {
     module: {
