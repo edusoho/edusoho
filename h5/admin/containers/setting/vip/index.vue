@@ -35,7 +35,7 @@
 import moduleFrame from '../module-frame';
 import settingCell from '../module-frame/setting-cell';
 import vipList from '@/containers/components/e-vip-list/e-vip-list';
-import pathName2Portal from '@admin/config/api-portal-config';
+import pathName2Portal from 'admin/config/api-portal-config';
 import { mapState } from 'vuex';
 
 export default {

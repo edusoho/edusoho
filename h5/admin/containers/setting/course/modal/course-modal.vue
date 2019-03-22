@@ -39,10 +39,10 @@
 </template>
 
 <script>
-import marketingMixins from '@admin/mixins/marketing';
+import marketingMixins from 'admin/mixins/marketing';
 import courseTable from './course-table';
 import { mapMutations, mapState, mapActions } from 'vuex';
-import { VALUE_DEFAULT, TYPE_TEXT_DEFAULT } from '@admin/config/module-default-config';
+import { VALUE_DEFAULT, TYPE_TEXT_DEFAULT } from 'admin/config/module-default-config';
 
 function apiConfig(type, queryString) {
   return {

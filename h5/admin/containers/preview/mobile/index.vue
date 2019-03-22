@@ -1,6 +1,6 @@
 <template>
   <div class="find-page">
-    <div class="find-page__part" v-for="part in parts">
+    <div class="find-page__part" v-for="(part, index) in parts" :key="index">
       <e-swipe
         v-if="part.type == 'slide_show'"
         :slides="part.data"
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import pathName2Portal from '@admin/config/api-portal-config';
+  import pathName2Portal from 'admin/config/api-portal-config';
   import courseList from '@/containers/components/e-course-list/e-course-list.vue';
   import poster from '@/containers/components/e-poster/e-poster.vue';
   import swipe from '@/containers/components/e-swipe/e-swipe.vue';

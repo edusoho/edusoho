@@ -12,21 +12,21 @@ const tableFilter = (item, label, subProperty) => {
 
   switch (label) {
     case 'deadline':
-     if (!item['deadline']) {
-        return '未知日期'
+      if (!item.deadline) {
+        return '未知日期';
       }
-      const date = new Date(item['deadline']);
+      const date = new Date(item.deadline);
       return formatTime(date).slice(0, 10);
     case 'createdTime':
-     if (!item['createdTime']) {
-        return '未知日期'
+      if (!item.createdTime) {
+        return '未知日期';
       }
-      const date1 = new Date(item['createdTime']);
+      const date1 = new Date(item.createdTime);
       return formatTime(date1);
     case 'delete':
-      return `移除`;
+      return '移除';
     case 'generatedNum':
-      return `${item['unreceivedNum']} / ${item['generatedNum']}`;
+      return `${item.unreceivedNum} / ${item.generatedNum}`;
     case 'rate':
       let targetType = '全部商品';
       let discountType = '折扣';
@@ -52,8 +52,8 @@ const tableFilter = (item, label, subProperty) => {
       if (subProperty) {
         return item[label][subProperty];
       }
-      return item[label]
+      return item[label];
   }
-}
+};
 
 export default tableFilter;

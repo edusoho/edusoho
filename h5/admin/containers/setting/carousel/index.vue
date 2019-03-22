@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import Api from '@admin/api';
-import { MODULE_DEFAULT } from '@admin/config/module-default-config';
+import Api from 'admin/api';
+import { MODULE_DEFAULT } from 'admin/config/module-default-config';
 import item from './item';
 import moduleFrame from '../module-frame';
 import courseModal from '../course/modal/course-modal';

@@ -33,11 +33,13 @@
       <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportGrouponVersion">
         <div class="section-title">点击添加组件</div>
         <div class="section-button-group">
-          <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-            v-show="item.default.type !== 'vip' || item.default.type === 'vip' && vipSetupStatus"
-            v-for="(item, index) in baseModules" :key="index" v-if="(item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list' && portal === 'miniprogram')) && (item.default.type !== 'coupon' || (supportCouponVersion && item.default.type === 'coupon' && portal === 'miniprogram')) && (item.default.type !== 'vip' || (supportVipVersion && item.default.type === 'vip' && portal === 'miniprogram')) || (portal === 'h5')">
-            {{ item.name }}
-          </el-button>
+          <div v-for="(item, index) in baseModules" :key="index">
+            <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+              v-show="item.default.type !== 'vip' || item.default.type === 'vip' && vipSetupStatus"
+              v-if="(item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list' && portal === 'miniprogram')) && (item.default.type !== 'coupon' || (supportCouponVersion && item.default.type === 'coupon' && portal === 'miniprogram')) && (item.default.type !== 'vip' || (supportVipVersion && item.default.type === 'vip' && portal === 'miniprogram')) || (portal === 'h5')">
+              {{ item.name }}
+            </el-button>
+          </div>
         </div>
       </div>
 
@@ -79,13 +81,13 @@
   </div>
 </template>
 <script>
-import Api from '@admin/api';
-import * as types from '@admin/store/mutation-types';
-import { BASE_MODULE, MARKETING_MODULE } from '@admin/config/module-default-config';
-import ModuleCounter from '@admin/utils/module-counter';
-import needUpgrade from '@admin/utils/version-compare';
-import pathName2Portal from '@admin/config/api-portal-config';
-import marketingMixins from '@admin/mixins/marketing';
+import Api from 'admin/api';
+import * as types from 'admin/store/mutation-types';
+import { BASE_MODULE, MARKETING_MODULE } from 'admin/config/module-default-config';
+import ModuleCounter from 'admin/utils/module-counter';
+import needUpgrade from 'admin/utils/version-compare';
+import pathName2Portal from 'admin/config/api-portal-config';
+import marketingMixins from 'admin/mixins/marketing';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import moduleTemplate from './module-template';
 import findFooter from './footer';
@@ -117,7 +119,8 @@ export default {
   computed: {
     ...mapState(['isLoading', 'vipLevels', 'vipSettings', 'vipSetupStatus', 'vipPlugin']),
     stopDraggleClasses() {
-      return '.module-frame__setting, .find-footer, .search__container, .el-dialog__header, .el-dialog__footer';
+      return '.module-frame__setting, .find-footer,'
+        + '.search__container, .el-dialog__header, .el-dialog__footer';
     },
     portal() {
       return pathName2Portal[this.pathName];
@@ -214,7 +217,9 @@ export default {
               window.open(window.location.origin + '/admin/app/upgrades');
             }).catch(() => {});
             return;
-          } else if (!this.vipSettings || !this.vipSettings.enabled || !this.vipSettings.h5Enabled) {
+          } else if (!this.vipSettings
+            || !this.vipSettings.enabled
+            || !this.vipSettings.h5Enabled) {
             this.$confirm('会员功能未开通', '提示', {
               confirmButtonText: '去开通',
               cancelButtonText: '取消',

@@ -4,12 +4,14 @@
 
 const path = require('path')
 
+const platform = process.env.PLATFROM
+
 module.exports = {
   dev: {
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/h5/',
-    assetsPublicPathAdmin: '/h5/admin/',
+    assetsPublicPath: platform === 'h5' ?
+      '/h5/' : '/h5/admin/',
 
     proxyTable: {
       '/api': {
@@ -52,15 +54,15 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
-    indexAdmin: path.resolve(__dirname, '../dist/admin/index.html'),
+    index: platform === 'h5' ?
+      path.resolve(__dirname, '../dist/index.html') : path.resolve(__dirname, '../dist/admin/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsRootAdmin: path.resolve(__dirname, '../dist/admin'),
+    assetsRoot: platform === 'h5' ?
+      path.resolve(__dirname, '../dist') : path.resolve(__dirname, '../dist/admin'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/h5/',
-    assetsPublicPathAdmin: '/h5/admin/',
+    assetsPublicPath: platform === 'h5' ?
+      '/h5/' : '/h5/admin/',
 
     /**
      * Source Maps

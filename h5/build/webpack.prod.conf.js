@@ -15,6 +15,10 @@ const env = process.env.NODE_ENV === 'testing'
     ? require('../config/test.env')
     : require('../config/prod.env')
 
+const platform = process.env.PLATFROM
+
+const rootHtml = rootHtml ? 'index.html' : 'admin.html'
+
 const webpackConfig = merge(baseWebpackConfig, {
     module: {
         rules: utils.styleLoaders({
@@ -64,9 +68,9 @@ const webpackConfig = merge(baseWebpackConfig, {
         // see https://github.com/ampedandwired/html-webpack-plugin
         new HtmlWebpackPlugin({
             filename: process.env.NODE_ENV === 'testing'
-                ? 'index.html'
+                ? rootHtml
                 : config.build.index,
-            template: 'index.html',
+            template: rootHtml,
             inject: true,
             minify: {
                 removeComments: true,

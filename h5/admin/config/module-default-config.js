@@ -101,37 +101,37 @@ const MODULE_DEFAULT = {
 const BASE_MODULE = [
   {
     name: '轮播图',
-    default: MODULE_DEFAULT.slideShow,
+    default: MODULE_DEFAULT.slideShow
   }, {
     name: '课程列表',
-    default: MODULE_DEFAULT.courseList,
+    default: MODULE_DEFAULT.courseList
   }, {
     name: '班级列表',
-    default: MODULE_DEFAULT.classList,
+    default: MODULE_DEFAULT.classList
   }, {
     name: '图片广告',
-    default: MODULE_DEFAULT.poster,
+    default: MODULE_DEFAULT.poster
   }, {
     name: '优惠券',
-    default: MODULE_DEFAULT.coupon,
+    default: MODULE_DEFAULT.coupon
   }, {
     name: '会员专区',
-    default: MODULE_DEFAULT.vip,
+    default: MODULE_DEFAULT.vip
   }
 ];
 
 const MARKETING_MODULE = [
   {
     name: '拼团',
-    default: MODULE_DEFAULT.groupon,
+    default: MODULE_DEFAULT.groupon
   }, {
     name: '砍价',
-    default: MODULE_DEFAULT.cut,
+    default: MODULE_DEFAULT.cut
   }, {
     name: '秒杀',
-    default: MODULE_DEFAULT.seckill,
-  },
-]
+    default: MODULE_DEFAULT.seckill
+  }
+];
 
 const VALUE_DEFAULT = {
   classroom_list: {
@@ -152,7 +152,7 @@ const VALUE_DEFAULT = {
   seckill: {
     key: 'name'
   }
-}
+};
 
 const TYPE_TEXT_DEFAULT = {
   course_list: {
@@ -173,6 +173,8 @@ const TYPE_TEXT_DEFAULT = {
   seckill: {
     text: '活动'
   }
-}
+};
 
-export { MODULE_DEFAULT, BASE_MODULE, MARKETING_MODULE, VALUE_DEFAULT, TYPE_TEXT_DEFAULT };
+export {
+  MODULE_DEFAULT, BASE_MODULE, MARKETING_MODULE, VALUE_DEFAULT, TYPE_TEXT_DEFAULT
+};

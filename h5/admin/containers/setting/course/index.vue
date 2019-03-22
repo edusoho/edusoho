@@ -28,7 +28,6 @@
         <!-- 课程分类 -->
         <setting-cell :title="typeLabel + '分类：'">
           <el-cascader v-show="sourceType === 'condition'" size="mini" placeholder="请输入列表名称" :options="this.type === 'course_list' ? courseCategories : classCategories" :props="cascaderProps" v-model="categoryTempId" filterable change-on-select></el-cascader>
-          </el-input>
           <div class="required-option" v-show="sourceType === 'custom'">
             <el-button size="mini" @click="openModal">选择{{typeLabel}}</el-button>
           </div>
@@ -82,8 +81,8 @@ import courseModal from './modal/course-modal';
 import moduleFrame from '../module-frame';
 import settingCell from '../module-frame/setting-cell';
 import { mapMutations, mapState, mapActions } from 'vuex';
-import treeDigger from '@admin/utils/tree-digger';
-import pathName2Portal from '@admin/config/api-portal-config';
+import treeDigger from 'admin/utils/tree-digger';
+import pathName2Portal from 'admin/config/api-portal-config';
 
 const optionLabel = {
   'course_list': '课程',
@@ -303,19 +302,19 @@ export default {
       this.copyModuleData.data.items.splice(index, 1);
     },
     fetchCourse({params, index}) {
-    	if (this.sourceType === 'custom') return;
-    	if (this.type === 'course_list') {
-	      this.getCourseList(params).then(res => {
-	        this.moduleData.data.items = res.data;
-	      }).catch((err) => {
+      if (this.sourceType === 'custom') return;
+      if (this.type === 'course_list') {
+        this.getCourseList(params).then(res => {
+          this.moduleData.data.items = res.data;
+        }).catch((err) => {
           this.$message({
             message: err.message,
             type: 'error'
           });
         });
-	      return;
+        return;
       }
-    	this.getClassList(params).then(res => {
+      this.getClassList(params).then(res => {
         this.moduleData.data.items = res.data;
       }).catch((err) => {
         this.$message({
