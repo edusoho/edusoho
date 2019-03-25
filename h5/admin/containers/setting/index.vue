@@ -269,6 +269,7 @@ export default {
         this.modules = Object.values(res);
         this.moduleCountInit();
       }).catch((err) => {
+        this.moduleCountInit();
         this.$message({
           message: err.message,
           type: 'error'

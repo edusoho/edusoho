@@ -26,8 +26,8 @@ module.exports = {
     context: path.resolve(__dirname, '../'),
     entry: {
         app: platform === 'h5'
-              ? ['babel-polyfill', './src/main.js']
-              : ['babel-polyfill', './admin/main-admin.js'],
+              ? './src/main.js'
+              : './admin/main-admin.js',
         vendor: ['vue', 'vuex', 'vue-router', 'axios']
     },
     output: {
