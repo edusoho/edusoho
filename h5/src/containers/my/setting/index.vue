@@ -4,11 +4,31 @@
     <div class="my_setting-item" v-for="(item, index) in settings" @click="handleSetting(index)">
       <span class="my_setting-title title-18">{{item.name}}</span>
       <div class="my_setting-content">
-        <img :src="item.info" alt="" v-if="!index" class="my_setting-avatar">
+        <img :src="item.info || option.img" alt="" v-if="!index" class="my_setting-avatar">
         <span v-if="index">{{item.info}}</span>
         <img src="static/images/more.png" alt="" class="my_setting-more">
       </div>
-      <van-uploader :after-read="onRead" v-if="!index"></van-uploader>
+      <van-uploader :before-read="beforeUpload" v-if="!index">
+        <van-popup v-model="dialogVisible" position="top" :overlay="false">
+          <div class="cropper-container">
+            <vueCropper
+              ref="cropper"
+              v-show="option.img"
+              :img="option.img"
+              :fixed="option.fixed"
+              :enlarge="option.enlarge"
+              :autoCrop="option.autoCrop"
+              :fixedNumber="option.fixedNumber"
+              :autoCropWidth="option.autoCropWidth"
+              :autoCropHeight="option.autoCropHeight"
+            ></vueCropper>
+          </div>
+        <div class="dialog-footer">
+          <van-button @click="dialogVisible = false">取 消</van-button>
+          <van-button type="primary" @click="stopCropFn">确 定</van-button>
+        </div>
+        </van-popup>
+      </van-uploader>
     </div>
     <div class="log-out-btn title-18" @click="logout"><span>退出登录</span></div>
   </div>
@@ -20,7 +40,12 @@ import Api from '@/api';
 import * as types from '@/store/mutation-types';
 import store from '@/store';
 import { Dialog } from 'vant';
+import { VueCropper } from 'vue-cropper';
+
 export default {
+  components: {
+    VueCropper
+  },
   data() {
     return {
       settings: [{
@@ -32,7 +57,19 @@ export default {
       // }, {
       //   name: '手机',
       //   info: ''
-      }]
+      }],
+      dialogVisible: false,
+      imageCropped: false,
+      option: {
+        img: '',
+        autoCrop: true,
+        autoCropWidth: 200,
+        autoCropHeight: 200,
+        fixedNumber: [1, 1],
+        fixed: true,
+        high: false,
+        enlarge: 2,
+      }
     }
   },
   computed: {
@@ -83,13 +120,47 @@ export default {
         })
       })
     },
-    onRead(file) {
+    stopCropFn() {
+      const $cropper = this.$refs.cropper[0];
+      $cropper.stopCrop()
+      this.dialogVisible = false;
+      $cropper.getCropData((data) => {
+        this.imageCropped = true;
+        this.uploadImg(data);
+        this.option.img = data;
+      })
+    },
+    beforeUpload(file) {
+      const type = file.type;
+      const size = file.size / 1024 / 1024;
+
+      if (type.indexOf('image') === -1) {
+        Toast.fail('文件类型仅支持图片格式');
+        return;
+      }
+
+      if (size > 2) {
+        Toast.fail('文件大小不得超过 2 MB');
+        return;
+      }
+
+      this.dialogVisible = true;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.option.img = reader.result;
+      }
+      reader.readAsDataURL(file)
+    },
+    uploadImg(file) {
+      if (!this.imageCropped) return;
+      this.imageCropped = false;
+      let formData = new FormData()
+      formData.append('file', file)
+      formData.append('group', 'user')
       Api.updateFile({
-        data: {
-          file: file.content,
-          group:'user'
-        }
-      }).then(res => {
+        data: formData
+      })
+      .then(res => {
         this.$set(this.settings[0], 'info', file.content);
         this.setAvatar({
           avatarId: res.id
@@ -99,7 +170,30 @@ export default {
           Toast.fail(err.message)
         })
       })
+      .catch((err) => {
+        Toast.fail(err.message)
+      });
     }
   }
 }
 </script>
+<style>
+  .van-popup {
+    height: 100%;
+  }
+  .cropper-container {
+    height: 85%;
+  }
+  .dialog-footer {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    width: 100%;
+    padding-top: 40px;
+    background: #fff;
+    text-align: center;
+  }
+  .dialog-footer .van-button {
+    margin: 0 20px;
+  }
+</style>
