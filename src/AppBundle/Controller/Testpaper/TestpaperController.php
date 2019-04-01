@@ -262,8 +262,7 @@ class TestpaperController extends BaseController
 
             $formData = $request->request->all();
 
-            $endTime = $activity['startTime'] + $activity['length'] * 60;
-            if ($activity['startTime'] && time() > $endTime) {
+            if ($activity['startTime'] && $formData['usedTime'] > $activity['length'] * 60) {
                 $formData['usedTime'] = 0;
             }
 
