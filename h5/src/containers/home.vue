@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <van-tabbar v-model="active" @change="onChange">
+    <van-tabbar v-model="active" @change="onChange" :class="{'van-tabbar--iphonex' : firstVisit}">
       <van-tabbar-item v-for="item in items" :key="item.type">
         <span>{{ item.type }}</span>
         <template slot="icon" slot-scope="props">
@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       active: 0,
+      firstVisit: 0,
       items,
     }
   },
@@ -44,6 +45,13 @@ export default {
     }
   },
   created() {
+    // iphonex 首次进入底部间距优化
+    localStorage.setItem('firstVisit', 0);
+    const isFirstVisit = Number(localStorage.getItem('firstVisit'));
+    if (!isFirstVisit) {
+      this.firstVisit = 1;
+      localStorage.setItem('firstVisit', 1);
+    }
     const {preview, token} = this.$route.query
     if (!isNaN(preview) || preview == 1) { // 手机预览页面
       this.$router.push({
@@ -57,6 +65,7 @@ export default {
   },
   methods: {
     onChange(index) {
+      this.firstVisit = 0;
       this.$router.push({
         name: this.items[index].name
       })
