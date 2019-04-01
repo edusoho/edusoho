@@ -30,7 +30,7 @@ class TestUserCommand extends BaseCommand
         $verifiedMobile = $input->getArgument('verifiedMobile');
         $password = $input->getArgument('password');
         $user = array(
-            'verifiedMobile' => $verifiedMobile,
+            'mobile' => $verifiedMobile,
             'password' => $password,
         );
         $user['nickname'] = '体验管理员';
