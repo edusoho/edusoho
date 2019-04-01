@@ -2,6 +2,7 @@
   <div class="find-page">
     <e-loading v-if="isLoading"></e-loading>
     <div class="find-page__part" v-for="(part, index) in parts" :key="index">
+      <!-- 尝试下jsx重构代码 -->
       <e-swipe v-if="part.type === 'slide_show'" :slides="part.data"></e-swipe>
       <e-course-list
         v-if="['classroom_list', 'course_list'].includes(part.type)"
