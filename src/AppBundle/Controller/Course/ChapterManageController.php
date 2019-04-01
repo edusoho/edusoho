@@ -35,10 +35,6 @@ class ChapterManageController extends BaseController
 
     protected function editor($chapterId, $courseId, $fields)
     {
-        if (empty($fields['title'])) {
-            return $this->getCourseService()->getChapter($courseId, $chapterId);
-        }
-
         return $this->getCourseService()->updateChapter($courseId, $chapterId, array('title' => $fields['title']));
     }
 

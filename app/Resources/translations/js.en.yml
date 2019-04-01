@@ -424,8 +424,8 @@ coin.invite_url_copy_success_hint: The link was copied successfully
 course.buy.discount_hint: Dicounted
 course.buy.price_free_hint: Go study
 
-course.chapter: '%chapter_name% %number% : %title%'
-course.unit: '%part_name% %number% : %title%'
+course.chapter: '%chapter_name% %number% %colon% %title%'
+course.unit: '%part_name% %number% %colon% %title%'
 course.lesson: '%part_name% %number% : %title%'
 course.catalogue.task_status.task: '%taskName%.%taskNumber%:%taskTitle%'
 

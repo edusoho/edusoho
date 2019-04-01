@@ -62,11 +62,11 @@ class PagedCourseLesson {
         },
 
         'getChapterName': function(data, context) {
-          return Translator.trans('course.chapter', { chapter_name: context.i18n.i18nChapterName, number: data.number, title: data.title });
+          return Translator.trans('course.chapter', { chapter_name: context.i18n.i18nChapterName, number: data.number, title: data.title, colon: (data.title ? ':' : '') });
         },
 
         'getUnitName': function(data, context) {
-          return Translator.trans('course.unit', { part_name: context.i18n.i18nUnitName, number: data.number, title: data.title });
+          return Translator.trans('course.unit', { part_name: context.i18n.i18nUnitName, number: data.number, title: data.title, colon: (data.title ? ':' : '') });
         },
 
         'getLessonName': function(data, context) {

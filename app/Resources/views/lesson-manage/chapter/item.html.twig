@@ -2,9 +2,12 @@
   {% if chapter.type == 'unit' %}
     <div class="item-line"></div>
   {% endif %}
+  {% if chapter.title %}
+    {% set colon = '：' %}
+  {% endif %}
   <div class="item-content">
     <a class="js-toggle-show js-toggle-{{ chapter.type }} cd-link-assist" href="javascript:;">
-      <i class="es-icon es-icon-keyboardarrowdown cd-mr16"></i></a>{{'course.plan_task.which_chapter'|trans({'%chapterNumber%':chapter.number, '%chapter%':course_chapter_alias(chapter.type)|trans, '%title%':chapter.title|sub_text(30)})|raw }}
+      <i class="es-icon es-icon-keyboardarrowdown cd-mr16"></i></a>{{'course.plan_task.which_chapter'|trans({'%chapterNumber%':chapter.number, '%chapter%':course_chapter_alias(chapter.type)|trans, '%colon%':colon|default(), '%title%':chapter.title|sub_text(30)})|raw }}
   </div>
   {# 章可以创建课时，节
   节只能创建课时 #}
