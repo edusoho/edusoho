@@ -69,6 +69,15 @@ class DeviceToolkit
 
     public static function getBrowse()
     {
+        try {
+            return self::matchBrowser();
+        } catch (\Exception $e) {
+            return '未知浏览器';
+        }
+    }
+
+    private static function matchBrowser()
+    {
         if (!isset($_SERVER['HTTP_USER_AGENT'])) {
             return '未知浏览器';
         }
@@ -96,6 +105,14 @@ class DeviceToolkit
             preg_match("/Edge\/([\d\.]+)/", $agent, $version);
             $exp[0] = 'Edge';
             $exp[1] = $version[1];
+        } elseif (false !== stripos($agent, 'QQBrowserLite')) {
+            preg_match("/QQBrowserLite\/([\d\.]+)/", $agent, $version);
+            $exp[0] = 'QQ Lite浏览器';
+            $exp[1] = $version[1];
+        } elseif (false !== stripos($agent, 'QQBrowser')) {
+            preg_match("/QQBrowser\/([\d\.]+)/", $agent, $version);
+            $exp[0] = 'QQ浏览器';
+            $exp[1] = $version[1];
         } elseif (false !== stripos($agent, 'Chrome')) {
             preg_match("/Chrome\/([\d\.]+)/", $agent, $version);
             $exp[0] = 'Chrome';
@@ -103,10 +120,6 @@ class DeviceToolkit
         } elseif (false !== stripos($agent, 'rv:') && false !== stripos($agent, 'Gecko')) {
             preg_match("/rv:([\d\.]+)/", $agent, $version);
             $exp[0] = 'IE';
-            $exp[1] = $version[1];
-        } elseif (false !== stripos($agent, 'QQBrowser')) {
-            preg_match("/QQBrowser([\d\.]+)/", $agent, $version);
-            $exp[0] = 'QQ浏览器';
             $exp[1] = $version[1];
         } elseif (false !== stripos($agent, 'MetaSr')) {
             preg_match("/MetaSr([\d\.]+)/", $agent, $version);
