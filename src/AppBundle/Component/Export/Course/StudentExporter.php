@@ -97,11 +97,11 @@ class StudentExporter extends Exporter
             $member[] = $gender[$profile['gender']];
             $member[] = $profile['qq'] ? $profile['qq'] : '-';
             $member[] = $profile['weixin'] ? $profile['weixin'] : '-';
+            $member[] = $profile['weibo'] ? $profile['weibo'] : '-';
             $member[] = $profile['mobile'] ? $profile['mobile'] : '-';
             $member[] = $profile['company'] ? $profile['company'] : '-';
             $member[] = $profile['job'] ? $profile['job'] : '-';
             $member[] = $user['title'] ? $user['title'] : '-';
-            $member[] = $profile['weibo'] ? $profile['weibo'] : '-';
 
             foreach ($fields as $value) {
                 $member[] = $profile[$value] ? str_replace(array(PHP_EOL, '"'), '', $profile[$value]) : '-';
