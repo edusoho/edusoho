@@ -992,6 +992,10 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(UserException::QQ_INVALID());
         }
 
+        if (!empty($fields['weixin']) && !SimpleValidator::weixin($fields['qq'])) {
+            $this->createNewException(UserException::WEIXIN_INVALID());
+        }
+
         if (!empty($fields['about'])) {
             $currentUser = $this->biz['user'];
             $trusted = $currentUser->isAdmin();
