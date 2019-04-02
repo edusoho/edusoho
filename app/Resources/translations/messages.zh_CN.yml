@@ -8180,7 +8180,7 @@ activity.live.replay_guid: >
 
 activity.live.default_notice: >
   <p>直播将于%startTimeFormat%开始，于%endTimeFormat%结束<p>
-  (请在课前10分钟内提早进入)
+  (直播开始前120分钟内可进入直播教室)
 
 #积分
 admin.reward_point: 积分
