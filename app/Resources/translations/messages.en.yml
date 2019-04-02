@@ -5418,7 +5418,7 @@ admin.edu_cloud.edu_sms.all_user: All_user
 admin.edu_cloud.edu_sms.course_user: Course_user
 admin.edu_cloud.edu_sms.study_task_tips: 'Your course: 《Course name》 - Study task《Study task name》 has been published! link address'
 admin.edu_cloud.edu_sms.study_task_notify_live: 'Task release notification (live)'
-admin.edu_cloud.edu_sms.study_task_notify_normal_course: 'Task release notification (General course)-'
+admin.edu_cloud.edu_sms.study_task_notify_normal_course: 'Task release notification (General course)'
 admin.edu_cloud.edu_sms.study_task_notify_tips: 'Course: Your course "course name- study task "task name" will start at [start  time ]! Link'
 admin.edu_cloud.edu_sms.live_broadcast_advance_one_day_notify: 'Live notification  (advance 1 Days)'
 admin.edu_cloud.edu_sms.live_broadcast_advance_one_hour_notify: 'Live notification (advance 1 Hours)'
