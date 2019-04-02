@@ -260,11 +260,11 @@ class TestpaperController extends BaseController
                 return $this->createJsonResponse(array('result' => false, 'message' => '考试未开始，不能提交！'));
             }
 
-            if ($activity['endTime'] && time() > $activity['endTime']) {
-                return $this->createJsonResponse(array('result' => false, 'message' => '考试时间已过，不能再提交！'));
-            }
-
             $formData = $request->request->all();
+
+            if ($activity['startTime'] && $formData['usedTime'] > $activity['length'] * 60) {
+                $formData['usedTime'] = 0;
+            }
 
             $paperResult = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
