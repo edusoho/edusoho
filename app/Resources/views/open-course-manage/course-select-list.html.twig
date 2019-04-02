@@ -61,7 +61,8 @@
         {% endif %}
 
         <div class="course-footer clearfix">
-          {% set teacher = users[courseSet.teacherIds|first|default(courseSet.creator)] %}
+          {% set defaultCourse = courses[courseSet.defaultCourseId]|default(null) %}
+          {% set teacher = users[defaultCourse.teacherIds|first|default(null)]|default(null) %}
           {% if teacher %}
             <div class="teacher">
               <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'course.png') }}" class="teacher-avatar"></a>

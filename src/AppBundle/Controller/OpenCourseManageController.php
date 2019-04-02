@@ -408,12 +408,16 @@ class OpenCourseManageController extends BaseController
             }
         }
 
+        $courseIds = ArrayToolkit::column($recommendedCourses, 'defaultCourseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         $users = $this->_getTeacherUsers($commendedCourseSets);
 
         return $this->render(
             'open-course-manage/open-course-marketing.html.twig',
             array(
                 'courseSets' => $recommendedCourses,
+                'courses' => $courses,
                 'users' => $users,
                 'course' => $course,
             )
@@ -455,6 +459,8 @@ class OpenCourseManageController extends BaseController
 
     protected function _getTeacherUsers(array $courses)
     {
+        $courseIds = ArrayToolkit::column($courses, 'defaultCourseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $teachers = ArrayToolkit::column($courses, 'teacherIds');
 
         if (empty($teachers)) {
@@ -462,9 +468,6 @@ class OpenCourseManageController extends BaseController
         }
 
         $userIds = call_user_func_array('array_merge', $teachers);
-
-        $creators = ArrayToolkit::column($courses, 'creator');
-        $userIds = array_merge($userIds, $creators);
 
         return $this->getUserService()->findUsersByIds($userIds);
     }
@@ -480,6 +483,9 @@ class OpenCourseManageController extends BaseController
         $courseSetIds = ArrayToolkit::column($courseSets, 'id');
         $coursesPrice = $this->_findCoursesPriceInterval($courseSetIds);
 
+        $courseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         $users = $this->_getTeacherUsers($courseSets);
 
         return $this->render(
@@ -487,6 +493,7 @@ class OpenCourseManageController extends BaseController
             array(
                 'users' => $users,
                 'courseSets' => $courseSets,
+                'courses' => $courses,
                 'coursesPrice' => $coursesPrice,
                 'paginator' => $paginator,
                 'courseId' => $id,
@@ -562,6 +569,9 @@ class OpenCourseManageController extends BaseController
         $conditions = array('title' => $key);
         list($paginator, $courseSets) = $this->_getPickCourseData($request, $id, $conditions);
 
+        $courseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         $users = $this->_getTeacherUsers($courseSets);
 
         return $this->render(
@@ -569,6 +579,7 @@ class OpenCourseManageController extends BaseController
             array(
                 'users' => $users,
                 'courseSets' => $courseSets,
+                'courses' => $courses,
                 'filter' => $filter,
                 'courseId' => $id,
                 'title' => $key,
