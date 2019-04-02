@@ -734,7 +734,7 @@ class OpenCourseManageController extends BaseController
                 $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title'].',' : '-'.',';
 
                 foreach ($fields as $key => $value) {
-                    $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key].',' : '-'.',';
+                    $member .= $profiles[$courseMember['userId']][$key] ? '"'.str_replace(array(PHP_EOL, '"'), '', $profiles[$courseMember['userId']][$key]).'",' : '-'.',';
                 }
             } else {
                 $member .= '-,-,';
