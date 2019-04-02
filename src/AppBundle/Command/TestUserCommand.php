@@ -34,7 +34,7 @@ class TestUserCommand extends BaseCommand
             'password' => $password,
         );
         $user['nickname'] = '体验管理员';
-        $user['email'] = $mobile . '@example.com';
+        $user['email'] = $mobile.'@example.com';
         $user = $this->getUserService()->register($user, array('email', 'mobile'));
         $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'));
         $this->getUserService()->lockUser(1);
