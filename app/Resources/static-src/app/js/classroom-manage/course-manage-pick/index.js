@@ -60,6 +60,7 @@ $('#enterSearch').keydown(function (event) {
 $('#all-courses').on('click', function () {
 
   $.post($(this).data('url'), $('.form-search').serialize(), function (data) {
+    $('#enterSearch').val('');
     $('.courses-list').html(data);
 
     recheckSelectedCourse();
