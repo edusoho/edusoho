@@ -992,7 +992,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(UserException::QQ_INVALID());
         }
 
-        if (!empty($fields['weixin']) && !SimpleValidator::weixin($fields['qq'])) {
+        if (!empty($fields['weixin']) && !SimpleValidator::weixin($fields['weixin'])) {
             $this->createNewException(UserException::WEIXIN_INVALID());
         }
 
