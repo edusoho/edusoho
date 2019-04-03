@@ -27,6 +27,7 @@ $('#search').on('click', function () {
     $.post($(this).data('url'), $('.form-search').serialize(), function (data) {
 
       $('.courses-list').html(data);
+      recheckSelectedCourse();
     });
   }
 
@@ -38,14 +39,7 @@ $('.courses-list').on('click', '.pagination li', function () {
     $.post(url, $('.form-search').serialize(), function (data) {
       $('.courses-list').html(data);
 
-      for (var i = 0; i < ids.length; i++) {
-        var idArr = ids[i].split(':');
-        var sid = idArr[0];
-        var id = idArr[1];
-        $('[name=course-' + sid + ']').attr('checked', 'checked');
-        $('[data-id=' + sid + ']').addClass('select');
-        $('#course-select-' + sid).val(id);
-      }
+      recheckSelectedCourse();
     });
   }
 });
@@ -66,7 +60,9 @@ $('#enterSearch').keydown(function (event) {
 $('#all-courses').on('click', function () {
 
   $.post($(this).data('url'), $('.form-search').serialize(), function (data) {
-    $('#modal').html(data);
+    $('.courses-list').html(data);
+
+    recheckSelectedCourse();
   });
 
 });
@@ -112,3 +108,14 @@ $('.courses-list').on('click', '.course-item-cbx', function () {
     ids.push(sid + ':' + id);
   }
 });
+
+function recheckSelectedCourse() {
+  for (var i = 0; i < ids.length; i++) {
+    var idArr = ids[i].split(':');
+    var sid = idArr[0];
+    var id = idArr[1];
+    $('[name=course-' + sid + ']').attr('checked', 'checked');
+    $('[data-id=' + sid + ']').addClass('select');
+    $('#course-select-' + sid).val(id);
+  }
+}
