@@ -13,10 +13,6 @@ class TestUserCommand extends BaseCommand
     {
         $this->setName('topxia:testuser')
             ->addArgument(
-                'mobile',
-                InputArgument::OPTIONAL
-            )
-            ->addArgument(
                 'verifiedMobile',
                 InputArgument::OPTIONAL
             )
@@ -31,10 +27,11 @@ class TestUserCommand extends BaseCommand
         $output->writeln('<info>添加测试用户开始</info>');
 
         $this->initServiceKernel();
-        $mobile = $input->getArgument('mobile');
+        $mobile = $input->getArgument('verifiedMobile');
         $password = $input->getArgument('password');
         $user = array(
             'mobile' => $mobile,
+            'verifiedMobile' => $mobile,
             'password' => $password,
         );
         $user['nickname'] = '体验管理员';
