@@ -17,6 +17,10 @@ class TestUserCommand extends BaseCommand
                 InputArgument::OPTIONAL
             )
             ->addArgument(
+                'verifiedMobile',
+                InputArgument::OPTIONAL
+            )
+            ->addArgument(
                 'password',
                 InputArgument::OPTIONAL
             );
