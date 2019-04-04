@@ -44,6 +44,7 @@ export default class QuestionManage{
     this.$element.find('[data-role="batch-select"]').prop('checked',false);
     this.$element.find('[data-role="batch-item"]').prop('checked',false);
   }
+
   _confirmSave() {
     let isOk = this._validateScore();
 
@@ -51,29 +52,10 @@ export default class QuestionManage{
       return ;
     }
 
-    if( $('[name="passedScore"]').length > 0){
-      let passedScoreErrorMsg = $('.passedScoreDiv').siblings('.help-block').html();
-      if ($.trim(passedScoreErrorMsg) != ''){
-        return ;
-      }
-    }
     this.questionsCount = 0;
     this.questions = [];
     let stats = this._calTestpaperStats();
 
-    if($('[name="passedScore"]').length > 0){
-      let passedScore = $('input[name="passedScore"]').val();
-      if( passedScore > stats.total.score){
-        notify('danger', Translator.trans('activity.testpaper_manage.setting_pass_score_error_hint', {'passedScore':passedScore, 'totalScore':stats.total.score}));
-        return;
-      }
-      if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(passedScore)) {
-        notify('danger', Translator.trans('activity.testpaper_manage.pass_score_error_hint'));
-        $(this).focus();
-        return;
-      }
-    }
-    
     let html='';
     $.each(stats, function(index, statsItem){
       let tr = '<tr>';
@@ -85,6 +67,8 @@ export default class QuestionManage{
     });
 
     this.$modal.find('.detail-tbody').html(html);
+
+    this._showSubjectiveRemaskIfNoEssay();
 
     this.$modal.modal('show');
   }
@@ -160,11 +144,46 @@ export default class QuestionManage{
     return stats;
   }
 
+  _showSubjectiveRemaskIfNoEssay() {
+    let $remask = $('.js-subjective-remask');
+    let $essay = $('#testpaper-table tr[data-type="essay"]');
+
+    if ($essay.length > 0 && !$remask.hasClass('hidden')) {
+        $remask.addClass('hidden');
+    }
+
+    if ($essay.length === 0 && $remask.hasClass('hidden')) {
+        $remask.removeClass('hidden');
+    }
+  }
+
   _submitSave(event) {
     let passedScore = 0;
     let $target = $(event.currentTarget);
-    if ($('input[name="passedScore"]:visible').length > 0) {
+
+    if ($('[name="passedScore"]').length > 0) {
+      let passedScoreErrorMsg = $('.passedScoreDiv').siblings('.help-block').html();
+      if ($.trim(passedScoreErrorMsg) !== '') {
+        return ;
+      }
+    }
+
+    this.questionsCount = 0;
+    this.questions = [];
+    let stats = this._calTestpaperStats();
+
+    if ($('[name="passedScore"]:visible').length > 0) {
       passedScore = $('input[name="passedScore"]').val();
+      if (passedScore > stats.total.score) {
+        notify('danger', Translator.trans('activity.testpaper_manage.setting_pass_score_error_hint', {'passedScore':passedScore, 'totalScore':stats.total.score}));
+        return;
+      }
+
+      if (!/^(([1-9]\d{0,2})|([0]))(\.(\d))?$/.test(passedScore)) {
+        notify('danger', Translator.trans('activity.testpaper_manage.pass_score_error_hint'));
+        $(this).focus();
+        return;
+      }
     }
 
     if (this.questionsCount > 2000) {

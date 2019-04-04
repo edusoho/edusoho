@@ -119,6 +119,8 @@ class ActivityExtension extends \Twig_Extension
                 'bootstrap' => $cdn.'/static-dist/libs/bootstrap/dist/js/bootstrap.min.js',
                 'editor' => $cdn.'/static-dist/libs/es-ckeditor/ckeditor.js',
                 'scrollbar' => $cdn.'/static-dist/libs/perfect-scrollbar.js',
+                'es-ckeditor-highlight' => $cdn.'/static-dist/libs/es-ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js',
+                'es-ckeditor-highlight-zenburn.css' => $cdn.'/static-dist/libs/es-ckeditor/plugins/codesnippet/lib/highlight/styles/zenburn.css',
             ),
             'context' => $context,
             'editorConfig' => array(

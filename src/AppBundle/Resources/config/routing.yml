@@ -1680,6 +1680,7 @@ course_manage_task_update:
 course_manage_task_delete:
     path:  /course/{courseId}/task/{taskId}/delete
     defaults: { _controller: AppBundle:TaskManage:delete }
+    methods: [POST]
 
 course_manage_task_replay_edit:
   path: /course/{courseId}/task/{taskId}/replay/edit

@@ -52,13 +52,20 @@ class CourseController extends BaseController
 
         $users = $this->getUsers($courseSets);
 
+        $template = 'classroom-manage/course/course-pick-modal.html.twig';
+        $page = $this->get('request')->query->get('page');
+        if (!empty($page)) {
+            $template = 'course/course-select-list.html.twig';
+        }
+
         return $this->render(
-            'classroom-manage/course/course-pick-modal.html.twig',
+            $template,
             array(
                 'users' => $users,
                 'courseSets' => $courseSets,
                 'classroomId' => $classroomId,
                 'paginator' => $paginator,
+                'type' => 'ajax_pagination',
             )
         );
     }

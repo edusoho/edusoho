@@ -30,7 +30,8 @@
   <label class="col-md-2 control-label" for="categoryId">{{ 'course.base.category'|trans }}</label>
   <div class="col-md-8 controls">
     <select id="categoryId" name="categoryId" class="form-control width-input width-input-large">
-      {{ select_options(category_choices('course'), courseSet.categoryId, 'course.base.category'|trans) }}
+      {% set course_category_choices = { 0: 'course.base.category'|trans } + category_choices('course') %}
+      {{ select_options(course_category_choices, courseSet.categoryId) }}
     </select>
     <div class="help-block" style="display:none;"></div>
   </div>
