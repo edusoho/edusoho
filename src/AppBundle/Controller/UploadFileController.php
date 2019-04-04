@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\MessageToolkit;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
@@ -70,15 +71,21 @@ class UploadFileController extends BaseController
         $this->getLogService()->info('upload_file', 'download', "文件Id #{$fileId}");
 
         if ($file['storage'] == 'cloud') {
-            return $this->downloadCloudFile($file, $ssl);
+            return $this->downloadCloudFile($request, $file, $ssl);
         } else {
             return $this->downloadLocalFile($request, $file);
         }
     }
 
-    protected function downloadCloudFile($file, $ssl)
+    protected function downloadCloudFile(Request $request, $file, $ssl)
     {
         $file = $this->getUploadFileService()->getDownloadMetas($file['id'], $ssl);
+
+        if (!empty($file['error'])) {
+            $this->setFlashMessage('danger', MessageToolkit::convertMessageToKey($file['error']));
+
+            return $this->redirect($request->server->get('HTTP_REFERER'));
+        }
 
         return $this->redirect($file['url']);
     }

@@ -1,5 +1,9 @@
 {% for course in recommendCourses if course %}
-  {% set teacher = data('User',{userId:course.creator}) %}
+  {% set defaultCourse = data('Course', {courseId:course.defaultCourseId}) %}
+  {% set teacherId = defaultCourse.teacherIds|first|default(null) %}
+  {% if teacherId %}
+    {% set teacher = data('User',{userId:teacherId}) %}
+  {% endif %}
   {% if course.type == 'open' or course.type == 'liveOpen' %}
     {% set showUrl = path('open_course_show',{courseId:course.id}) %}
   {% else %}
@@ -20,7 +24,9 @@
         {% if setting('course.show_student_num_enabled', '1') == 1  %}
           <span class="pull-right">{{ 'open_course.student_num'|trans({'%num%':course.studentNum}) }}</span>
         {% endif %}
-        {{ teacher.nickname }}
+        {% if teacher|default(null) %}
+          {{ teacher.nickname }}
+        {% endif %}
       </div>
     </div>
   </div>
