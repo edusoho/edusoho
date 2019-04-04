@@ -13,7 +13,7 @@
 <tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
   <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
   <td>
-    <a class="link-dark" href="{{ fileShowUrl }}" target="_blank" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >
+    <a class="link-dark" href="{{ fileShowUrl }}" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >
       {% if uploadFile.storage == 'cloud' %}
         <i class="glyphicon glyphicon-cloud color-gray" title="{{'course.course_files.cloud_file'|trans}}"></i>
       {% endif %}

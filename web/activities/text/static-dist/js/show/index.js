@@ -1,4 +1,4 @@
-var load = window.ltc.load('jquery', 'scrollbar');
+var load = window.ltc.load('es-ckeditor-highlight', 'es-ckeditor-highlight-zenburn.css', 'jquery', 'scrollbar');
 load.then(function(){
   var context = window.ltc.getContext();
   window.ltc.api({
@@ -9,6 +9,9 @@ load.then(function(){
   }, function(result) {
     var $content = $(result['content']);
     $('.text-activity-content').append($content);
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightBlock(block);
+    });
   });
 
   $('#text-activity').perfectScrollbar();

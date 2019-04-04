@@ -19,6 +19,7 @@
   {% else %}
     {% set targetType = 'coursematerial' %}
   {% endif %}
+  {{ web_macro.flash_messages() }}
   <div role="courseset-manage-file">
     <div class="courseset-manage-body__title">
       <a class="cd-btn cd-btn-info cd-btn-sm  courseset-manage-body__btn"

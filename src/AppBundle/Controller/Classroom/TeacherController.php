@@ -20,11 +20,10 @@ class TeacherController extends BaseController
 
         $members = ArrayToolkit::index($members, 'userId');
 
-        $headTeacherIds = ArrayToolkit::column($headTeacher, 'userId');
         $teacherIds = $this->getClassroomService()->findTeachers($classroomId);
         $assisantIds = $this->getClassroomService()->findAssistants($classroomId);
 
-        $teacherIds = array_unique(array_merge($headTeacherIds, $teacherIds, $assisantIds));
+        $teacherIds = array_unique(array_merge($teacherIds, $assisantIds));
         $newTeacherIds = array();
         foreach ($teacherIds as $key => $value) {
             $newTeacherIds[] = $value;

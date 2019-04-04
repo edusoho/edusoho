@@ -367,8 +367,8 @@ coin.invite_url_copy_success_hint: 已复制邀请链接到剪切板，快去分
 course.buy.discount_hint: 已优惠
 course.buy.price_free_hint: 去学习
 
-course.chapter: '第%number%%chapter_name%: %title%'
-course.unit: '第%number%%part_name%: %title%'
+course.chapter: '第%number%%chapter_name%%colon% %title%'
+course.unit: '第%number%%part_name%%colon% %title%'
 course.lesson: '%part_name% %number% : %title%'
 course.catalogue.task_status.task: %taskName%%taskNumber%： %taskTitle%
 
