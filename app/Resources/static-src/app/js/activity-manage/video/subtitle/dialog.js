@@ -59,6 +59,9 @@ class SubtitleDialog {
       this._destroyUploader();
     }
     let uploader = new UploaderSDK({
+      sdkBaseUri: app.cloudSdkBaseUri,
+      disableDataUpload: app.cloudDisableLogReport,
+      disableSentry: app.cloudDisableLogReport,
       initUrl: $elem.data('initUrl'),
       finishUrl: $elem.data('finishUrl'),
       id: this.upload_id,

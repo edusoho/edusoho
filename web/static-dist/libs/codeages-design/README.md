@@ -2,16 +2,15 @@
 
 a Web Design Language
 
-### install
+## install
 
-```bash
+```
 yarn add codeages-design
 ```
 
-### Quick Start
+## Quick Start
 
-```js
-import 'jquery';
+```
 import cd from 'codeages-design';
 import 'codeages-design/src/less/codeages-design.less';
 
@@ -21,6 +20,6 @@ window.cd = cd;
 cd.loading();
 ```
 
-### Browser Support
+## Browser Support
 
 Modern browsers and Internet Explorer 9+
