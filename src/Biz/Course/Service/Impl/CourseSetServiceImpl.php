@@ -612,7 +612,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $noteNum = $this->getNoteService()->countCourseNoteByCourseSetId($id);
                 $updateFields['noteNum'] = $noteNum;
             } elseif ('studentNum' === $field) {
-                $updateFields['studentNum'] = $this->countStudentNumById($id);
+                $updateFields['studentNum'] = $this->getCourseMemberService()->countStudentMemberByCourseSetId($id);
             } elseif ('materialNum' === $field) {
                 $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(
                     array('courseSetId' => $id, 'source' => 'coursematerial')

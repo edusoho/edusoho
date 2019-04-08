@@ -326,6 +326,7 @@ class CourseSetController extends BaseController
             $courseSet['isLearnedNum'] = $isLearnedNum;
             $courseSet['taskCount'] = $taskCount;
             $courseSet['courseCount'] = $courseCount;
+            $courseSet['studentNum'] = $this->getMemberService()->countStudentMemberByCourseSetId($courseSetId);
         }
 
         return $this->render(
