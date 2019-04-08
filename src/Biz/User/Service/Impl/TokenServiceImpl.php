@@ -2,6 +2,7 @@
 
 namespace Biz\User\Service\Impl;
 
+use AppBundle\Common\DateToolkit;
 use Biz\BaseService;
 use Biz\User\Service\TokenService;
 
@@ -106,6 +107,7 @@ class TokenServiceImpl extends BaseService implements TokenService
 
     protected function _makeTokenValue($length)
     {
+        mt_srand(DateToolkit::getMicroSecond());
         $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
         return substr(str_shuffle(str_repeat($pool, $length)), 0, $length);

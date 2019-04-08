@@ -3,6 +3,7 @@
 namespace Biz\Xapi\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DateToolkit;
 use Biz\BaseService;
 use Biz\Task\Service\TaskService;
 use Biz\User\UserException;
@@ -12,7 +13,6 @@ use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
-use QiQiuYun\SDK\QiQiuYunSDK;
 
 class XapiServiceImpl extends BaseService implements XapiService
 {
@@ -54,7 +54,7 @@ class XapiServiceImpl extends BaseService implements XapiService
 
     protected function generateUUID()
     {
-        mt_srand((float) microtime() * 10000);
+        mt_srand(DateToolkit::getMicroSecond());
         $charid = strtoupper(md5(uniqid(rand(), true)));
         $hyphen = chr(45);
         $uuid = ''.substr($charid, 0, 8).$hyphen.substr($charid, 8, 4).$hyphen.substr($charid, 12, 4).$hyphen.substr($charid, 16, 4).$hyphen.substr($charid, 20, 12);

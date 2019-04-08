@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Common\DateToolkit;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -72,7 +73,7 @@ class GenerateXapiDataCommand extends BaseCommand
 
     private function generateUUID()
     {
-        mt_srand((float) microtime() * 10000);
+        mt_srand(DateToolkit::getMicroSecond());
         $charid = strtoupper(md5(uniqid(rand(), true)));
         $hyphen = chr(45);
         $uuid = ''.substr($charid, 0, 8).$hyphen.substr($charid, 8, 4).$hyphen.substr($charid, 12, 4).$hyphen.substr($charid, 16, 4).$hyphen.substr($charid, 20, 12);
