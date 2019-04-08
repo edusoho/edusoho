@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DateToolkit;
 use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +35,7 @@ class OnlineController extends BaseController
         if (function_exists('com_create_guid')) {
             return com_create_guid();
         } else {
-            mt_srand((float) microtime() * 10000);
+            mt_srand(DateToolkit::getMicroSecond());
             $charid = strtoupper(md5(uniqid(rand(), true)));
             $hyphen = chr(45);
             $uuid = substr($charid, 0, 8).$hyphen

@@ -268,9 +268,9 @@ class TestpaperController extends BaseController
 
             $paperResult = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
-            if ($activity['finishType'] === 'submit') {
+            if ('submit' === $activity['finishType']) {
                 $response = array('result' => true, 'message' => '');
-            } elseif ($activity['finishType'] === 'score'
+            } elseif ('score' === $activity['finishType']
                 && 'finished' === $paperResult['status']
                 && $paperResult['score'] >= ceil($activity['finishData'] * $activity['ext']['testpaper']['score'])) {
                 $response = array('result' => true, 'message' => '');
