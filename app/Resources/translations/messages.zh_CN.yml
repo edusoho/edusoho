@@ -6563,7 +6563,7 @@ admin.edu_cloud.edu_sms.all_user: 所有用户
 admin.edu_cloud.edu_sms.course_user: 课程用户
 admin.edu_cloud.edu_sms.study_task_tips: 您的课程：《课程名称》－学习任务：《学习任务名称》已发布！链接地址
 admin.edu_cloud.edu_sms.study_task_notify_live: 学习任务发布通知（直播）
-admin.edu_cloud.edu_sms.study_task_notify_normal_course: 学习任务发布通知（普通课程）-
+admin.edu_cloud.edu_sms.study_task_notify_normal_course: 学习任务发布通知（普通课程）
 admin.edu_cloud.edu_sms.study_task_notify_tips: 课程：《课程名称》－学习任务：《学习任务名称》将在［开播时间］开播！链接地址
 admin.edu_cloud.edu_sms.live_broadcast_advance_one_day_notify: 直播开播前通知（提前1天）
 admin.edu_cloud.edu_sms.live_broadcast_advance_one_hour_notify: 直播开播前通知（提前1小时）
@@ -8180,7 +8180,7 @@ activity.live.replay_guid: >
 
 activity.live.default_notice: >
   <p>直播将于%startTimeFormat%开始，于%endTimeFormat%结束<p>
-  (请在课前10分钟内提早进入)
+  (直播开始前120分钟内可进入直播教室)
 
 #积分
 admin.reward_point: 积分

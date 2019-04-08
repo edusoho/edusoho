@@ -5418,7 +5418,7 @@ admin.edu_cloud.edu_sms.all_user: All_user
 admin.edu_cloud.edu_sms.course_user: Course_user
 admin.edu_cloud.edu_sms.study_task_tips: 'Your course: 《Course name》 - Study task《Study task name》 has been published! link address'
 admin.edu_cloud.edu_sms.study_task_notify_live: 'Task release notification (live)'
-admin.edu_cloud.edu_sms.study_task_notify_normal_course: 'Task release notification (General course)-'
+admin.edu_cloud.edu_sms.study_task_notify_normal_course: 'Task release notification (General course)'
 admin.edu_cloud.edu_sms.study_task_notify_tips: 'Course: Your course "course name- study task "task name" will start at [start  time ]! Link'
 admin.edu_cloud.edu_sms.live_broadcast_advance_one_day_notify: 'Live notification  (advance 1 Days)'
 admin.edu_cloud.edu_sms.live_broadcast_advance_one_hour_notify: 'Live notification (advance 1 Hours)'
@@ -6859,6 +6859,21 @@ message_response.upload_pic_format_error.message: Upload image format is wrong, 
 
 classroom.manage.side_nav.setting: %classroom% setting
 classroom.manage.side_nav.manage: %classroom% config
+
+
+activity.live.replay_guid_1: >
+  Teachers: When recording a live course, you need to click
+  <span class='color-info'>recording panel</span>after recording is complete, click the
+  <span class='color-info'>pause btn</span>after the recording ending,
+  <span class='color-info'>the recording management of the class </span> management clicks to generate playback.
+activity.live.replay_guid: >
+  Teachers: Live platform
+  <span class='color-info'>after class </span>and
+  <span class='color-info'>live time</span> after the end, <span class='color-info'>the recording management of the class </span> management clicks to generate playback.
+
+activity.live.default_notice: >
+  <p>The live broadcast starts at %startTimeFormat% and ends at %endTimeFormat%<p>
+  (You can enter the live broadcasting classroom within 120 minutes before it starts.)
 
 
 #积分
