@@ -204,6 +204,7 @@ class StudentExporterTest extends BaseTestCase
                 'company',
                 'job',
                 'title',
+                'weibo',
                 '111',
             ),
             array(
@@ -219,6 +220,7 @@ class StudentExporterTest extends BaseTestCase
                 'company2',
                 'job2',
                 'title2',
+                'weibo2',
                 '222',
             ),
         ), $result);

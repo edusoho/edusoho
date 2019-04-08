@@ -482,7 +482,7 @@ class ClassroomManageController extends BaseController
             $member .= $users[$classroomMember['userId']]['title'] ? $users[$classroomMember['userId']]['title'].',' : '-'.',';
 
             foreach ($fields as $key => $value) {
-                $member .= $profiles[$classroomMember['userId']][$key] ? $profiles[$classroomMember['userId']][$key].',' : '-'.',';
+                $member .= $profiles[$classroomMember['userId']][$key] ? '"'.str_replace(array(PHP_EOL, '"'), '', $profiles[$classroomMember['userId']][$key]).'",' : '-'.',';
             }
 
             $students[] = $member;
