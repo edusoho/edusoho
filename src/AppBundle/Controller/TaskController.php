@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
@@ -13,7 +14,6 @@ use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\User\Service\TokenService;
 use Biz\User\UserException;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use AppBundle\Common\ArrayToolkit;
@@ -46,7 +46,7 @@ class TaskController extends BaseController
             $media = !empty($media) ? $media : array();
         } catch (AccessDeniedException $accessDeniedException) {
             return $this->handleAccessDeniedException($accessDeniedException, $request, $id);
-        } catch (ServiceAccessDeniedException $deniedException) {
+        } catch (CourseException $deniedException) {
             return $this->handleAccessDeniedException($deniedException, $request, $id);
         }
 
