@@ -8,6 +8,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use AppBundle\Common\TimeMachine;
@@ -211,6 +212,7 @@ class ClassroomServiceTest extends BaseTestCase
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
         ));
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->mockBiz(
             'Classroom:ClassroomDao',
@@ -242,6 +244,7 @@ class ClassroomServiceTest extends BaseTestCase
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
         ));
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->mockBiz(
             'Classroom:ClassroomDao',

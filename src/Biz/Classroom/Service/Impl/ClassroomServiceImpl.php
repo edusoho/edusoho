@@ -1755,7 +1755,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function recommendClassroom($id, $number)
     {
-        $this->tryAdminClassroom($id);
+        $user = $this->getCurrentUser();
+        if (!$user->hasPermission('admin_classroom_set_recommend')) {
+            $this->createNewException(UserException::PERMISSION_DENIED());
+        }
 
         if (!is_numeric($number)) {
             $this->createNewException(ClassroomException::RECOMMEND_REQUIRED_NUMERIC());
@@ -1775,7 +1778,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function cancelRecommendClassroom($id)
     {
-        $this->tryAdminClassroom($id);
+        $user = $this->getCurrentUser();
+        if (!$user->hasPermission('admin_classroom_cancel_recommend')) {
+            $this->createNewException(UserException::PERMISSION_DENIED());
+        }
 
         $classroom = $this->getClassroomDao()->update(
             $id,
