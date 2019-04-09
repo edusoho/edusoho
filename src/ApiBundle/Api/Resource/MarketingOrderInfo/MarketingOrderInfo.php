@@ -19,6 +19,10 @@ class MarketingOrderInfo extends AbstractResource
             array('MERCHANT-USER-ID: '.$systemUser['id'])
         );
 
+        if (isset($orderInfo['error'])) {
+            throw new NotFoundHttpException('订单不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+        }
+
         return $orderInfo;
     }
 
