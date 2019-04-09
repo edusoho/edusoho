@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class MarketingOrderInfoFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'status', 'targetId', 'targetType', 'cover', 'title', 'mobile', 'payAmount', 'merchantName',
+        'id', 'status', 'targetId', 'targetType', 'cover', 'title', 'mobile', 'payAmount', 'merchantName', 'createdTime',
     );
 
     protected function publicFields(&$data)
