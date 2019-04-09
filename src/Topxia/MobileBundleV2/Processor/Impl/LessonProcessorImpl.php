@@ -533,6 +533,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                                 );
 
                                 $lesson['headUrl'] = $headUrl['url'];
+                                $lesson['headLength'] = $headLeaderInfo['length'];
                             }
 
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
