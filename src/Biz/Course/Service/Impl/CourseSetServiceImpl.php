@@ -814,11 +814,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         //只有一个计划时，直接同步计划的价格到课程上
         if (1 === count($courses)) {
             $course = array_shift($courses);
-            $price = array('minPrice' => $course['price'], 'maxPrice' => $course['price']);
 
-            if ($course['locked']) {
-                $price = array('minPrice' => $course['originPrice'], 'maxPrice' => $course['originPrice']);
-            }
+            //考虑打折的情况, 未解锁的班级课程使用教学计划的原价
+            $coursePrice = $course['locked'] ? $course['originPrice'] : $course['price'];
+            $price = array('minPrice' => $coursePrice, 'maxPrice' => $coursePrice);
         } else {
             $price = $this->getCourseService()->getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
         }
