@@ -815,6 +815,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (1 === count($courses)) {
             $course = array_shift($courses);
             $price = array('minPrice' => $course['price'], 'maxPrice' => $course['price']);
+
+            if ($course['locked']) {
+                $price = array('minPrice' => $course['originPrice'], 'maxPrice' => $course['originPrice']);
+            }
         } else {
             $price = $this->getCourseService()->getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
         }
