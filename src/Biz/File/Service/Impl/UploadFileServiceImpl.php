@@ -994,7 +994,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         );
 
         $fields = array(
-            'convertStatus' => $statusMap[$result['status']],
+            'convertStatus' => empty($statusMap[$result['status']]) ? 'none' : $statusMap[$result['status']],
             'audioConvertStatus' => 'none',
             'mp4ConvertStatus' => 'none',
             'updatedTime' => time(),

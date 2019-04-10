@@ -13,14 +13,12 @@ class VideoMediaStatusUpdateJob extends AbstractJob
         if (isset($results['data']) && !empty($results['data'])) {
             $successNum = 0;
             foreach ($results['data'] as $result) {
-                if (!empty($result['status'])) {
-                    $file = $this->getUploadFileService()->setResourceConvertStatus($result['resourceNo'], $result);
+                $file = $this->getUploadFileService()->setResourceConvertStatus($result['resourceNo'], $result);
 
-                    if (empty($file)) {
-                        continue;
-                    }
-                    ++$successNum;
+                if (empty($file)) {
+                    continue;
                 }
+                ++$successNum;
             }
 
             $this->getSchedulerService()->updateJob($this->id, array('args' => $results['next']));
