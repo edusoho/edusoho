@@ -63,7 +63,7 @@ class SettingController extends BaseController
         if ('POST' === $request->getMethod()) {
             $settingMobile = $request->request->all();
 
-            $mobile = array_merge($settingMobile, $operationMobile);
+            $mobile = array_merge($settingMobile, $operationMobile, $courseGrids);
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
