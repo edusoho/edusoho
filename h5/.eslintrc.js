@@ -63,5 +63,6 @@ module.exports = {
     }],
     "no-useless-escape": "off",
     "no-console": 'off',
+    'linebreak-style': 'off'
   }
 }
