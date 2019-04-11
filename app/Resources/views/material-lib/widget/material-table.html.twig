@@ -3,15 +3,15 @@
     <a class="cd-btn cd-btn-primary js-upload-file-btn cd-mr32" data-toggle="modal" data-backdrop="static"  data-target="#modal"
       data-url="{{ path('uploader_batch_upload', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="{{'material_lib.btn.upload_files'|trans}}"   data-placement="bottom" >{{'material_lib.btn.upload_files'|trans}}
     </a>
-    <a class="cd-btn cd-btn-primary cd-mr32" disabled href="javascript:;">下载资料
+    <a class="cd-btn cd-btn-primary cd-mr32" disabled href="javascript:;" >下载资料
     </a>
-    <a class="cd-btn cd-btn-primary cd-mr32" disabled href="javascript:;">添加标签
+    <a class="cd-btn cd-btn-primary cd-mr32 js-batch-tag-btn" disabled href="javascript:;" data-role="batch-tag">{{'material_lib.btn.add_tag'|trans}}
     </a>
-    <a class="cd-btn cd-btn-primary cd-mr32" href="javascript:;">分享资料
+    <a class="cd-btn cd-btn-primary cd-mr32" href="javascript:;" id="shareMaterials" data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_my_sharing') }}">{{'material_lib.my_sharing.my_btn'|trans}}
     </a>
-    <a class="cd-btn cd-btn-primary cd-mr32" disabled href="javascript:;">共享资料
+    <a class="cd-btn cd-btn-primary cd-mr32 js-batch-share-btn" disabled href="javascript:;" data-role="batch-share" data-url="{{ path('material_batch_share') }}">共享资料
     </a>
-    <a class="cd-btn cd-btn-danger" disabled href="javascript:;">删除资料
+    <a class="cd-btn cd-btn-danger js-batch-delete-btn" disabled href="javascript:;" data-role="batch-dalete" data-url="{{ path('material_delete_modal_show') }}">删除资料
     </a>
   </div>
 </div>

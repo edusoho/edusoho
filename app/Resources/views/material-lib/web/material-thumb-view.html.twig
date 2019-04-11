@@ -61,12 +61,15 @@
       </div>
     </div>
   </div>
+
+  {% include 'material-lib/widget/material-table.html.twig' %}
+
   <div id="material-lib-items-panel">
-    <a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
+    {# <a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
     data-url="{{ path('uploader_batch_upload', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="{{'material_lib.btn.upload_files'|trans}}"   data-placement="bottom" >{{'material_lib.btn.upload_files'|trans}}
     </a>
     <a class="btn btn-info js-manage-batch-btn" href="javascript:;">{{'material_lib.btn.batch_manage'|trans}}
-    </a>
+    </a> #}
     <span id="material-lib-batch-btn-bar" style="display:none;">
       <a class="btn btn-info js-batch-tag-btn" data-role="batch-tag">{{'material_lib.btn.add_tag'|trans}}
       </a>
