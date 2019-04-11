@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="material-btn-group cd-mb8">
+    <a class="cd-btn cd-btn-primary js-upload-file-btn cd-mr32" data-toggle="modal" data-backdrop="static"  data-target="#modal"
+      data-url="{{ path('uploader_batch_upload', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="{{'material_lib.btn.upload_files'|trans}}"   data-placement="bottom" >{{'material_lib.btn.upload_files'|trans}}
+    </a>
+    <a class="cd-btn cd-btn-primary cd-mr32" disabled href="javascript:;">下载资料
+    </a>
+    <a class="cd-btn cd-btn-primary cd-mr32" disabled href="javascript:;">添加标签
+    </a>
+    <a class="cd-btn cd-btn-primary cd-mr32" href="javascript:;">分享资料
+    </a>
+    <a class="cd-btn cd-btn-primary cd-mr32" disabled href="javascript:;">共享资料
+    </a>
+    <a class="cd-btn cd-btn-danger" disabled href="javascript:;">删除资料
+    </a>
+  </div>
+</div>
+{# 
+<div class="material-common-table">
+  <table>
+    <thead>
+      <tr>
+        <th width="5%"><input type="checkbox" data-role="batch-select">全选</th>
+        <th width="30%">文件名称</th>
+        <th>类型</th>
+        <th>大小</th>
+        <th>上传时间</th>
+        <th>转码状态</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td>
+          <input value="2769" type="checkbox" data-role="batch-item">
+        </td>
+        <td>
+
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div> #}
