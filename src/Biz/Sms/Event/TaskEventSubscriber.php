@@ -123,15 +123,17 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             return array();
         }
 
-        $tasks = array($task['id']);
+        $taskIds = array($task['id']);
 
         $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
         foreach ($courses as $course) {
             $copiedTask = $this->getTaskService()->getCourseTaskByCourseIdAndCopyId($course['id'], $task['id']);
-            $tasks[] = $copiedTask['id'];
+            if (!empty($copiedTask)) {
+                $taskIds[] = $copiedTask['id'];
+            }
         }
 
-        return $tasks;
+        return $taskIds;
     }
 
     /**
