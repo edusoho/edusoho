@@ -3,9 +3,11 @@
 namespace Biz\Sms\Event;
 
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Course\Service\CourseService;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsException;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -63,14 +65,18 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
         if ($this->getSmsService()->isOpen($smsType)) {
             $processor = SmsProcessorFactory::create('task');
-            $return = $processor->getUrls($task['id'], $smsType);
-            $callbackUrls = $return['urls'];
-            $count = ceil($return['count'] / 1000);
-            try {
-                $api = CloudAPIFactory::create('root');
-                $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
-            } catch (\Exception $e) {
-                throw SmsException::FAILED_SEND();
+            $api = CloudAPIFactory::create('root');
+
+            $taskIds = $this->getTargetTaskIds($task);
+            foreach ($taskIds as $taskId) {
+                $return = $processor->getUrls($taskId, $smsType);
+                $callbackUrls = $return['urls'];
+                $count = ceil($return['count'] / 1000);
+                try {
+                    $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
+                } catch (\Exception $e) {
+                    throw SmsException::FAILED_SEND();
+                }
             }
         }
     }
@@ -89,7 +95,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 'misfire_threshold' => 60 * 60,
                 'args' => array(
                     'targetType' => 'task',
-                    'targetId' => $task['id'],
+                    'targetIds' => $this->getTargetTaskIds($task),
                 ),
             );
             $this->createJob($startJob);
@@ -104,11 +110,28 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 'misfire_threshold' => 60 * 10,
                 'args' => array(
                     'targetType' => 'task',
-                    'targetId' => $task['id'],
+                    'targetIds' => $this->getTargetTaskIds($task),
                 ),
             );
             $this->createJob($startJob);
         }
+    }
+
+    private function getTargetTaskIds($task)
+    {
+        if (empty($task)) {
+            return array();
+        }
+
+        $tasks = array($task['id']);
+
+        $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        foreach ($courses as $course) {
+            $copiedTask = $this->getTaskService()->getCourseTaskByCourseIdAndCopyId($course['id'], $task['id']);
+            $tasks[] = $copiedTask['id'];
+        }
+
+        return $tasks;
     }
 
     /**
@@ -140,6 +163,22 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getSmsService()
     {
         return $this->getBiz()->service('Sms:SmsService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 
     private function createJob($startJob)
