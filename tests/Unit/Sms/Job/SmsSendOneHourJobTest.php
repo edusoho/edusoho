@@ -51,7 +51,7 @@ class SmsSendOneHourJobTest extends BaseTestCase
         ReflectionUtils::setStaticProperty(new CloudAPIFactory(), 'api', $mockedApi);
 
         $job = new SmsSendOneHourJob(array(), $this->biz);
-        $job->args = array('targetType' => 'LiveOpenLesson', 'targetId' => 112);
+        $job->args = array('targetType' => 'LiveOpenLesson', 'targetIds' => array(112));
         $job->execute();
 
         $smsService->shouldHaveReceived('isOpen')->times(1);
@@ -87,7 +87,7 @@ class SmsSendOneHourJobTest extends BaseTestCase
         );
 
         $job = new SmsSendOneHourJob(array(), $this->biz);
-        $job->args = array('targetType' => '', 'targetId' => 112);
+        $job->args = array('targetType' => '', 'targetIds' => array(112));
         $job->execute();
 
         $smsService->shouldHaveReceived('isOpen')->times(1);

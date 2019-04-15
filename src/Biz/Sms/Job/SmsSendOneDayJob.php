@@ -17,18 +17,22 @@ class SmsSendOneDayJob extends AbstractJob
         $dayIsOpen = $this->getSmsService()->isOpen($smsType);
 
         if ($dayIsOpen) {
-            try {
-                $targetType = $this->args['targetType'];
-                $targetId = $this->args['targetId'];
-                $processor = SmsProcessorFactory::create($targetType);
-                $return = $processor->getUrls($targetId, $smsType);
-                $callbackUrls = $return['urls'];
-                $count = ceil($return['count'] / 1000);
+            $targetType = $this->args['targetType'];
+            $targetIds = $this->args['targetIds'];
 
-                $api = CloudAPIFactory::create('leaf');
-                $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
-            } catch (\Exception $e) {
-                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_day', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", array('error' => $e->getMessage()));
+            $api = CloudAPIFactory::create('leaf');
+
+            foreach ($targetIds as $targetId) {
+                try {
+                    $processor = SmsProcessorFactory::create($targetType);
+                    $return = $processor->getUrls($targetId, $smsType);
+                    $callbackUrls = $return['urls'];
+                    $count = ceil($return['count'] / 1000);
+
+                    $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
+                } catch (\Exception $e) {
+                    $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_day', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", array('error' => $e->getMessage()));
+                }
             }
         }
     }
