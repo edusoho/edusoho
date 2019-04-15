@@ -8549,3 +8549,16 @@ course.question.question_background: Question Background
 
 course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%（%watchLimit%倍视频时长），不能再继续观看。
 exception.role.code_not_all_digital: code不能全为数字
+
+material.common_table.th.file_name: 文件名称
+material.common_table.th.file_type: 类型
+material.common_table.th.file_size: 大小
+material.common_table.th.upload_time: 上传时间
+material.common_table.th.transcode_status: 转码状态
+material.common_table.th.manage: 操作
+material.common_table.file.local: 本地
+material.common_table.quality.sd: 标清
+material.common_table.quality.hd: 高清
+material.common_table.quality.shd: 超清
+material.common_table.transcode_success: 转码成功
+material.common_table.transcode_error: 转码失败

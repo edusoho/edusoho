@@ -2,13 +2,13 @@
   <table class="table table-striped">
     <thead>
       <tr class="cd-dark-major cd-text-medium">
-        <th width="8%"><input type="checkbox" data-role="batch-select" class="cd-mr8">全选</th>
-        <th width="25%">文件名称</th>
-        <th>类型</th>
-        <th>大小</th>
-        <th>上传时间</th>
-        <th width="25%">转码状态</th>
-        <th>操作</th>
+        <th width="8%"><input type="checkbox" data-role="batch-select" class="cd-mr8">{{ 'form.checkbox.batch_select'|trans }}</th>
+        <th width="25%">{{ 'material.common_table.th.file_name'|trans }}</th>
+        <th>{{ 'material.common_table.th.file_type'|trans }}</th>
+        <th>{{ 'material.common_table.th.file_size'|trans }}</th>
+        <th>{{ 'material.common_table.th.upload_time'|trans }}</th>
+        <th width="25%">{{ 'material.common_table.th.transcode_status'|trans }}</th>
+        <th>{{ 'material.common_table.th.manage'|trans }}</th>
       </tr>
     </thead>
     <tbody>
@@ -18,17 +18,13 @@
           <input class="" value="{{uploadFile.id}}" type="checkbox"  data-link-count="{{ uploadFile.usedCount }}" data-file-name="{{ uploadFile.filename }}">
         </td>
         <td class="cd-dark-major vertical-middle">
-          {% if uploadFile.storage == 'local' or (uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'ppt', 'document'] and uploadFile.convertStatus != "success") %}
-            <img class="img-responsive pull-left cd-mr8" width="100px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
-          {% else %}
-            <img class="img-responsive pull-left cd-mr8" width="100px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
-          {% endif %}
+          <img class="img-responsive pull-left cd-mr8" width="100px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
 
           <div class="material-table-info">
             <p class="title text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">
               {# 修改为本地文件添加图标作为识别的标志，暂时使用这个图标 #}
               {% if uploadFile.storage != 'cloud' %}
-                本地<i class="es-icon es-icon-home"></i>
+                {{ 'material.common_table.file.local'|trans }}<i class="es-icon es-icon-home"></i>
               {% endif %}
               {{ uploadFile.filename }}
             </p>
@@ -49,54 +45,55 @@
           <div>{{ uploadFile.fileSize|file_size }}</div>
           {% if uploadFile.type in ['video', 'audio'] and uploadFile.storage == 'cloud' %}
             {{ uploadFile.length|activity_length_format }}
+          {% else %}
+            {{ uploadFile.ext|upper }}
           {% endif %}
         </td>
         <td class="cd-dark-major vertical-middle">{{ uploadFile.createdTime|date('Y-m-d H:i') }}</td>
         {# 静态的效果 #}
         <td class="vertical-middle">
-          <div class="clearfix">
-            <span class="cd-tag cd-tag-blue cd-mr8 pull-left">超清</span>
-            <div class="cd-progress cd-progress-success material-progress">
-              <div class="progress-bar">
-                <div class="progress-outer">
-                  <div class="progress-inner" style="width: 50%;"></div>
-                </div>
+          {% if uploadFile.storage == "cloud" %}
+            {% if uploadFile.type == 'video' %}
+              {% for transcodingQuality, status in uploadFile.transcodingStatus %}
+              <div class="clearfix">
+                <span class="cd-tag cd-tag-blue cd-mr8 pull-left">{{ ('material.common_table.quality.' ~ transcodingQuality)|trans }}</span>
+                {% if status.status == 'ok' %}
+                  <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+                {% elseif status.status == 'error'%}
+                  <span class="cd-text-danger">{{ 'material.common_table.transcode_error'|trans }}</span>
+                {% else %}
+                  <div class="cd-progress cd-progress-success material-progress">
+                    <div class="progress-bar">
+                      <div class="progress-outer">
+                        <div class="progress-inner" style="width: {{ status.process }}%;"></div>
+                      </div>
+                    </div>
+                    <div class="progress-text">{{ status.process }}%</div>
+                  </div>
+                {% endif %}
               </div>
-              <div class="progress-text">50%</div>
-            </div>
-          </div>
-          <div class="clearfix">
-            <span class="cd-tag pull-left cd-mr8">高清</span>
-            <div class="cd-progress cd-progress-success material-progress">
-              <div class="progress-bar">
-                <div class="progress-outer">
-                  <div class="progress-inner" style="width: 0;"></div>
-                </div>
-              </div>
-              <div class="progress-text">0%</div>
-            </div>
-          </div>
-          <div class="clearfix">
-            <span class="cd-tag cd-mr8 pull-left">标清</span>
-            {% if loop.index == odd %}
-              {# 设计稿交互需要优化 #}
-              <span class="cd-text-danger cd-text-sm">{{'material_lib.upload_file.convert_status.error'|trans}}</span>
-            {% else %}
-              <span class="cd-text-success">转码成功</span></div>
+              {% endfor %}
+            {% elseif uploadFile.type in ['ppt', 'document'] %}
+              {% if uploadFile.convertStatus == 'error' %}
+                <span class="cd-text-danger">{{ 'material.common_table.transcode_error'|trans }}</span>
+              {% elseif uploadFile.convertStatus in ['doing','waiting'] %}
+                <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+              {% endif %}
             {% endif %}
+          {% endif %}
         </td>
         <td class="vertical-middle">
           <div class="btn-group">
-            <button type="button" class="cd-btn btn cd-btn-primary btn-group--left">编辑</button>
+            <button type="button" class="cd-btn btn cd-btn-primary btn-group--left" href="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">{{'material_lib.btn.edit'|trans}}</button>
             <button type="button" class="cd-btn cd-btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
               <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
               <span class="sr-only">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu btn-group__menu text-center">
-              <li><a href="#">下载</a></li>
-              <li><a href="#">删除</a></li>
-              <li><a href="#">收藏</a></li>
-              <li><a href="#">字幕管理</a></li>
+              <li><a target="_blank"href="{{ path('material_download', {fileId:uploadFile.id}) }}">{{'material_lib.btn.download'|trans}}</a></li>
+              <li><a href="{{ path('material_delete_modal_show') }}">{{'material_lib.btn.delete'|trans}}</a></li>
+              <li><a href="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}">{{'material_lib.btn.collect'|trans}}</a></li>
+              <li><a target="_blank" href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:path('material_lib_browsing')}) }}">{{'material_lib.btn.subtitle_manage'|trans}}</a></li>
             </ul>
           </div>
         </td>

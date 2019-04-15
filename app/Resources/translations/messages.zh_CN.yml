@@ -1,4 +1,4 @@
-Bad credentials.: 用户名或密码错误
+materialBad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
 site.alipay: 支付宝
@@ -9839,3 +9839,17 @@ exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系�
 course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
 course.question.question_background: 问题背景
 course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%（%watchLimit%倍视频时长），不能再继续观看。
+
+material.common_table.th.file_name: 文件名称
+material.common_table.th.file_type: 类型
+material.common_table.th.file_size: 大小
+material.common_table.th.upload_time: 上传时间
+material.common_table.th.transcode_status: 转码状态
+material.common_table.th.manage: 操作
+material.common_table.file.local: 本地
+material.common_table.quality.sd: 标清
+material.common_table.quality.hd: 高清
+material.common_table.quality.shd: 超清
+material.common_table.transcode_success: 转码成功
+material.common_table.transcode_error: 转码失败
+
