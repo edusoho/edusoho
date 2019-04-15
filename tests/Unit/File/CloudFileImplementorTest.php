@@ -21,7 +21,7 @@ class CloudFileImplementorTest extends BaseTestCase
         $result = $this->getCloudFileImplementor()->getFile(array(
             'convertParams' => array(),
             'metas' => '{}',
-            'metas2' => '{"a":"1"}'
+            'metas2' => '{"a":"1"}',
         ));
         $this->assertEquals(array(), $result['convertParams']);
         $this->assertEquals(array(), $result['metas']);
@@ -40,14 +40,14 @@ class CloudFileImplementorTest extends BaseTestCase
             'type' => 'video',
             'processStatus' => array(
                 'status' => 'none',
-                "code" => 0,
+                'code' => 0,
             ),
             'transcodingStatus' => array(
-                "sd" => array(
-                    "errorCode" => "0",
-                    "status" => "none",
-                    "process" => "0"
-                )
+                'sd' => array(
+                    'errorCode' => '0',
+                    'status' => 'none',
+                    'process' => '0',
+                ),
             ),
         ));
 
@@ -73,14 +73,14 @@ class CloudFileImplementorTest extends BaseTestCase
             'type' => 'video',
             'processStatus' => array(
                 'status' => 'none',
-                "code" => 0,
+                'code' => 0,
             ),
             'transcodingStatus' => array(
-                "sd" => array(
-                    "errorCode" => "0",
-                    "status" => "none",
-                    "process" => "0"
-                )
+                'sd' => array(
+                    'errorCode' => '0',
+                    'status' => 'none',
+                    'process' => '0',
+                ),
             ),
         ));
 
@@ -247,7 +247,7 @@ class CloudFileImplementorTest extends BaseTestCase
             'type' => 'ppt',
             'processStatus' => array(
                 'status' => 'none',
-                "code" => 0,
+                'code' => 0,
             ),
         ));
 
@@ -562,7 +562,7 @@ class CloudFileImplementorTest extends BaseTestCase
         $result = $this->getCloudFileImplementor()->finishedUpload(array(
             'globalId' => 1,
             'id' => 1,
-            'targetType' => 'attachment'
+            'targetType' => 'attachment',
         ), array(
             'length' => 10,
             'size' => 10,
@@ -598,7 +598,7 @@ class CloudFileImplementorTest extends BaseTestCase
                     'type' => 'ppt',
                     'processStatus' => array(
                         'status' => 'none',
-                        "code" => 0,
+                        'code' => 0,
                     ),
                 ),
             ),
