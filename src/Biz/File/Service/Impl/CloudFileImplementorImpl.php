@@ -40,7 +40,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function getFileByGlobalId($globalId)
     {
-        $cloudFile = $this->createApi('root', 'v2')->get('/resources/' . $globalId);
+        $cloudFile = $this->createApi('root', 'v2')->get('/resources/'.$globalId);
         $localFile = $this->getUploadFileDao()->getByGlobalId($globalId);
 
         return $this->mergeCloudFile($localFile, $cloudFile);
@@ -51,7 +51,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
      *
      * @param $targetType
      * @param $targetId
-     * @param array $fileInfo
+     * @param array             $fileInfo
      * @param UploadedFile|null $originalFile
      *
      * @return array
@@ -77,7 +77,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['hashId'] = $fileInfo['key'];
         $uploadFile['filename'] = $fileInfo['filename'];
         $uploadFile['ext'] = pathinfo($uploadFile['filename'], PATHINFO_EXTENSION);
-        $uploadFile['fileSize'] = (int)$fileInfo['size'];
+        $uploadFile['fileSize'] = (int) $fileInfo['size'];
         $uploadFile['etag'] = empty($fileInfo['etag']) ? '' : $fileInfo['etag'];
         $uploadFile['length'] = empty($fileInfo['length']) ? 0 : intval($fileInfo['length']);
 
@@ -160,7 +160,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function updateFile($globalId, $fields)
     {
         if (!empty($globalId)) {
-            $cloudFile = $this->createApi('root')->post('/resources/' . $globalId, $fields);
+            $cloudFile = $this->createApi('root')->post('/resources/'.$globalId, $fields);
             $localFile = $this->getUploadFileDao()->getByGlobalId($globalId);
 
             return $this->mergeCloudFile($localFile, $cloudFile);
@@ -191,7 +191,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $file['createdTime'] = $file['updatedTime'];
 
         // 以下参数在cloud模式下弃用，填充随机值
-        $keySuffix = date('Ymdhis') . '-' . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
+        $keySuffix = date('Ymdhis').'-'.substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
         $key = "{$params['targetType']}-{$params['targetId']}/{$keySuffix}";
         $file['hashId'] = $key;
         $file['etag'] = $file['hashId'];
@@ -435,7 +435,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function search($conditions)
     {
-        $url = '/resources?' . http_build_query($conditions);
+        $url = '/resources?'.http_build_query($conditions);
         $result = $this->createApi('root', 'v2')->get($url);
         $cloudFiles = $result['data'];
 
@@ -495,7 +495,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             return array();
         }
 
-        $videoWatermarkImage = $this->biz['env']['base_url'] . $this->biz['topxia.upload.public_url_path'] . '/' . $setting['video_embed_watermark_image'];
+        $videoWatermarkImage = $this->biz['env']['base_url'].$this->biz['topxia.upload.public_url_path'].'/'.$setting['video_embed_watermark_image'];
         $pathinfo = pathinfo($videoWatermarkImage);
 
         $images = array();
@@ -552,7 +552,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
         if ('video' == $file['type'] && !empty($file['transcodingStatus'])) {
             foreach ($file['transcodingStatus'] as $transcodingQuality) {
-                if ($transcodingQuality['status'] == 'ok') {
+                if ('ok' == $transcodingQuality['status']) {
                     $file['convertStatus'] = $statusMap['ok'];
                     break;
                 }
@@ -624,7 +624,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
      */
     protected function createApi($node = 'root', $version = AbstractCloudAPI::DEFAULT_API_VERSION)
     {
-        $apiType = $node . '-' . $version;
+        $apiType = $node.'-'.$version;
         if (!isset($this->cloudApis[$apiType])) {
             $this->cloudApis[$apiType] = CloudAPIFactory::create($node, $version);
         }
@@ -640,7 +640,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
      */
     public function setApi($node = 'root', $mockApi)
     {
-        $apiNode = $node . 'Api';
+        $apiNode = $node.'Api';
         $this->$apiNode = $mockApi;
     }
 

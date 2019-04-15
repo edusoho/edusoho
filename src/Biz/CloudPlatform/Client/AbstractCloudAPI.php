@@ -115,7 +115,7 @@ class AbstractCloudAPI
     {
         $requestId = substr(md5(uniqid('', true)), -16);
 
-        $url = $this->apiUrl . '/' . $this->apiVersion . $uri;
+        $url = $this->apiUrl.'/'.$this->apiVersion.$uri;
 
         if ($this->isWithoutNetwork()) {
             if ($this->debug && $this->logger) {
