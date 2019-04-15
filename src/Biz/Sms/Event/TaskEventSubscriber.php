@@ -121,7 +121,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         if ($dayIsOpen && $task['startTime'] >= (time() + 24 * 60 * 60)) {
             //24小时期限，在预定时间前1小时内有效
             $startJob = array(
-                'name' => 'SmsSendOneDayJob_task_'.$task['id'],
+                'name' => 'SmsSendOneDayJob_task_'.implode('_', $targetIds),
                 'expression' => intval($task['startTime'] - 24 * 60 * 60),
                 'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
                 'misfire_threshold' => 60 * 60,
@@ -136,7 +136,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         if ($hourIsOpen && $task['startTime'] >= (time() + 60 * 60)) {
             //1小时期限，在预定时间前10分钟内有效
             $startJob = array(
-                'name' => 'SmsSendOneHourJob_task_'.$task['id'],
+                'name' => 'SmsSendOneHourJob_task_'.implode('_', $targetIds),
                 'expression' => intval($task['startTime'] - 60 * 60),
                 'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
                 'misfire_threshold' => 60 * 10,
