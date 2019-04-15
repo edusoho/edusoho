@@ -2,11 +2,13 @@
 
 namespace Biz\Sms\Event;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\CourseService;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsException;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
+use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -25,6 +27,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             'course.task.publish' => 'onTaskPublish',
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
+            'course.task.create.sync' => 'onTaskCreateSync',
         );
     }
 
@@ -47,7 +50,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $this->deleteJob($task);
 
             if ('published' == $task['status']) {
-                $this->registerJob($task);
+                $this->registerJob($task, array($task['id']));
             }
         }
     }
@@ -56,8 +59,34 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $task = $event->getSubject();
 
+        if (empty($task)) {
+            return;
+        }
+
+        $targetIds = array($task['id']);
+
+        if ($this->isTaskCreateSyncFinished($task)) {
+            $targetIds = array_merge($targetIds, $this->getTargetTaskIds($task));
+        }
+
+        $this->sendTaskPublishSms($task, $targetIds);
+    }
+
+    public function onTaskCreateSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        if ('published' == $task['status'] && $this->isTaskCreateSyncFinished($task)) {
+            $targetIds = $this->getTargetTaskIds($task);
+
+            $this->sendTaskPublishSms($task, $targetIds);
+        }
+    }
+
+    protected function sendTaskPublishSms($task, $targetIds)
+    {
         if ('live' == $task['type']) {
-            $this->registerJob($task);
+            $this->registerJob($task, $targetIds);
             $smsType = 'sms_live_lesson_publish';
         } else {
             $smsType = 'sms_normal_lesson_publish';
@@ -67,9 +96,8 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $processor = SmsProcessorFactory::create('task');
             $api = CloudAPIFactory::create('root');
 
-            $taskIds = $this->getTargetTaskIds($task);
-            foreach ($taskIds as $taskId) {
-                $return = $processor->getUrls($taskId, $smsType);
+            foreach ($targetIds as $targetId) {
+                $return = $processor->getUrls($targetId, $smsType);
                 $callbackUrls = $return['urls'];
                 $count = ceil($return['count'] / 1000);
                 try {
@@ -81,7 +109,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         }
     }
 
-    protected function registerJob($task)
+    protected function registerJob($task, $targetIds)
     {
         $dayIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_day');
         $hourIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_hour');
@@ -95,7 +123,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 'misfire_threshold' => 60 * 60,
                 'args' => array(
                     'targetType' => 'task',
-                    'targetIds' => $this->getTargetTaskIds($task),
+                    'targetIds' => $targetIds,
                 ),
             );
             $this->createJob($startJob);
@@ -110,7 +138,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 'misfire_threshold' => 60 * 10,
                 'args' => array(
                     'targetType' => 'task',
-                    'targetIds' => $this->getTargetTaskIds($task),
+                    'targetIds' => $targetIds,
                 ),
             );
             $this->createJob($startJob);
@@ -123,17 +151,23 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             return array();
         }
 
-        $taskIds = array($task['id']);
-
         $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-        foreach ($courses as $course) {
-            $copiedTask = $this->getTaskService()->getCourseTaskByCourseIdAndCopyId($course['id'], $task['id']);
-            if (!empty($copiedTask)) {
-                $taskIds[] = $copiedTask['id'];
-            }
-        }
+        $tasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
+        $taskIds = ArrayToolkit::column($tasks, 'id');
 
         return $taskIds;
+    }
+
+    private function isTaskCreateSyncFinished($task)
+    {
+        $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        $tasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
+
+        if (count($tasks) == count($courses)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -181,6 +215,14 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @return TaskDao
+     */
+    protected function getTaskDao()
+    {
+        return $this->getBiz()->dao('Task:TaskDao');
     }
 
     private function createJob($startJob)

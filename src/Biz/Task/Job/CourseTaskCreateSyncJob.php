@@ -13,6 +13,7 @@ use Biz\System\Service\LogService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class CourseTaskCreateSyncJob extends AbstractJob
@@ -64,6 +65,8 @@ class CourseTaskCreateSyncJob extends AbstractJob
             }
 
             $taskHelper->flush();
+
+            $this->dispatchEvent('course.task.create.sync', new Event($task));
 
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_create', 'course.log.task.create.sync.success_tips', array('taskId' => $task['id']));
         } catch (\Exception $e) {
@@ -234,5 +237,16 @@ class CourseTaskCreateSyncJob extends AbstractJob
     private function getMaterialDao()
     {
         return $this->biz->dao('Course:CourseMaterialDao');
+    }
+
+    protected function dispatchEvent($eventName, $subject, $arguments = array())
+    {
+        if ($subject instanceof Event) {
+            $event = $subject;
+        } else {
+            $event = new Event($subject, $arguments);
+        }
+
+        return $this->biz['dispatcher']->dispatch($eventName, $event);
     }
 }
