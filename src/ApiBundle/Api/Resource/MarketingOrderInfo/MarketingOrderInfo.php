@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\MarketingOrderInfo;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Marketing\MarketingAPIFactory;
+use Biz\Order\OrderException;
 
 class MarketingOrderInfo extends AbstractResource
 {
@@ -20,7 +21,7 @@ class MarketingOrderInfo extends AbstractResource
         );
 
         if (isset($orderInfo['error'])) {
-            throw new NotFoundHttpException('订单不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw OrderException::NOTFOUND_ORDER();
         }
 
         return $orderInfo;
