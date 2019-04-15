@@ -28,6 +28,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
             'course.task.create.sync' => 'onTaskCreateSync',
+            'course.task.publish.sync' => 'onTaskPublishSync',
         );
     }
 
@@ -59,24 +60,27 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $task = $event->getSubject();
 
-        if (empty($task)) {
-            return;
-        }
-
         $targetIds = array($task['id']);
 
-        if ($this->isTaskCreateSyncFinished($task)) {
-            $targetIds = array_merge($targetIds, $this->getTargetTaskIds($task));
-        }
-
         $this->sendTaskPublishSms($task, $targetIds);
+    }
+
+    public function onTaskPublishSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        if ('published' == $task['status'] && $this->isTaskCreateSyncFinished($task)) {
+            $targetIds = $this->getTargetTaskIds($task);
+
+            $this->sendTaskPublishSms($task, $targetIds);
+        }
     }
 
     public function onTaskCreateSync(Event $event)
     {
         $task = $event->getSubject();
 
-        if ('published' == $task['status'] && $this->isTaskCreateSyncFinished($task)) {
+        if ('published' == $task['status']) {
             $targetIds = $this->getTargetTaskIds($task);
 
             $this->sendTaskPublishSms($task, $targetIds);
