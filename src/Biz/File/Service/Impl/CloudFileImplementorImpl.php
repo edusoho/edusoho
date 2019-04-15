@@ -638,10 +638,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
      * @param string $node
      * @param $mockApi
      */
-    public function setApi($node = 'root', $mockApi)
+    public function setApi($node = 'root', $mockApi, $version = AbstractCloudAPI::DEFAULT_API_VERSION)
     {
-        $apiNode = $node.'Api';
-        $this->$apiNode = $mockApi;
+        $apiType = $node.'-'.$version;
+        $this->cloudApis[$apiType] = $mockApi;
     }
 
     /**
