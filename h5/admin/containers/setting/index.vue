@@ -81,13 +81,13 @@
   </div>
 </template>
 <script>
-import Api from 'admin/api';
-import * as types from 'admin/store/mutation-types';
-import { BASE_MODULE, MARKETING_MODULE } from 'admin/config/module-default-config';
-import ModuleCounter from 'admin/utils/module-counter';
-import needUpgrade from 'admin/utils/version-compare';
-import pathName2Portal from 'admin/config/api-portal-config';
-import marketingMixins from 'admin/mixins/marketing';
+import Api from '@admin/api';
+import * as types from '@admin/store/mutation-types';
+import { BASE_MODULE, MARKETING_MODULE } from '@admin/config/module-default-config';
+import ModuleCounter from '@admin/utils/module-counter';
+import needUpgrade from '@admin/utils/version-compare';
+import pathName2Portal from '@admin/config/api-portal-config';
+import marketingMixins from '@admin/mixins/marketing';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import moduleTemplate from './module-template';
 import findFooter from './footer';
