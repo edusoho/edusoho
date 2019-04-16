@@ -62,7 +62,8 @@
     </div>
   </div>
 
-  {% include 'material-lib/widget/material-button.html.twig' %}
+  {% set uploaderToken = uploader_token('materiallib', app.user.id, 'private') %}
+  {% include 'material-lib/widget/material-button.html.twig' with { uploaderToken: uploaderToken } %}
 
   <div id="material-lib-items-panel">
     {# <a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
