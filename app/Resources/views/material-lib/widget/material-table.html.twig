@@ -1,12 +1,13 @@
-<div class="material-common-table">
+<div class="material-common-table table-responsive">
   <table class="table table-striped">
     <thead>
       <tr class="cd-dark-major cd-text-medium">
-        <th width="8%"><input type="checkbox" data-role="batch-select" class="cd-mr8">{{ 'form.checkbox.batch_select'|trans }}</th>
-        <th width="25%">{{ 'material.common_table.th.file_name'|trans }}</th>
+        <th width="8%"><input type="checkbox" data-role="batch-select" class="{% if size|default('') == 'sm'%} mrs {% else %}
+        cd-mr8 {% endif %}">{{ 'form.checkbox.batch_select'|trans }}</th>
+        <th width="{% if size|default('') == 'sm' %}22% {% else %}25%{% endif %}">{{ 'material.common_table.th.file_name'|trans }}</th>
         <th>{{ 'material.common_table.th.file_type'|trans }}</th>
         <th>{{ 'material.common_table.th.file_size'|trans }}</th>
-        <th>{{ 'material.common_table.th.upload_time'|trans }}</th>
+        <th {% if size|default('') == 'sm' %}width="11%"{% endif %}>{{ 'material.common_table.th.upload_time'|trans }}</th>
         <th width="25%">{{ 'material.common_table.th.transcode_status'|trans }}</th>
         <th>{{ 'material.common_table.th.manage'|trans }}</th>
       </tr>
@@ -96,16 +97,16 @@
         <td class="vertical-middle">
           <div class="btn-group">
             {% if uploadFile.createdUserId == app.user.id %}
-              <a class="cd-btn btn cd-btn-primary btn-group--left js-detail-btn" data-toggle="tooltip" data-placement="bottom" href="javascript:;" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
+              <a class="cd-btn btn cd-btn-primary {% if size|default('') == 'sm' %}cd-btn-sm{% endif %} btn-group--left js-detail-btn" data-toggle="tooltip" data-placement="bottom" href="javascript:;" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
               {{'material_lib.btn.edit'|trans}}
               </a>
             {% endif %}
             {% if uploadFile.storage == "cloud" and uploadFile.createdUserId != app.user.id %}
-              <a class="cd-btn btn cd-btn-primary btn-group--left js-detail-btn" data-toggle="tooltip" data-placement="bottom" href="javascript:;"  data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
+              <a class="cd-btn btn cd-btn-primary {% if size|default('') == 'sm' %}cd-btn-sm{% endif %} btn-group--left js-detail-btn" data-toggle="tooltip" data-placement="bottom" href="javascript:;"  data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
               {{'material_lib.btn.view'|trans}}
               </a>
             {% endif %}
-            <button type="button" class="cd-btn cd-btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <button type="button" class="cd-btn cd-btn-primary dropdown-toggle {% if size|default('') == 'sm' %}cd-btn-sm{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
               <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
               <span class="sr-only">Toggle Dropdown</span>
             </button>
