@@ -22,6 +22,7 @@ host('124.160.104.77')
 
 desc('Build frontend');
 task('frontend:build', function() {
+    run('yarn install --production');
     run('npm run build');
 })->local();
 
