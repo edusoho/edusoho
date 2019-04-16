@@ -3,7 +3,7 @@ cache:
   paths:
     - node_modules
 
-deploy for beta/1.0.13:
+deploy for develop:
   stage: deploy
   image: codeages/ci-php71:6
   script:
@@ -13,4 +13,4 @@ deploy for beta/1.0.13:
     - chmod 400  ~/.ssh/deployerkey
     - dep deploy dev
   only:
-    - beta/1.0.13
+    - develop
