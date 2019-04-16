@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="help-block" v-if="portal === 'miniprogram'"></div>
-    <div class="setting-page" :class="{'setting-page-miniprogram': portal === 'miniprogram' && supportGrouponVersion}">
+    <div class="setting-page" :class="{'setting-page-miniprogram': portal === 'miniprogram' && supportActivityVersion}">
       <img class="find-head-img" :src="portal === 'miniprogram' ? 'static/images/miniprogram_head.jpg' : 'static/images/find_head_url.jpg'" alt="">
       <div class="find-navbar" :class="{'find-navbar-miniprogram': portal === 'miniprogram'}">
         <i class="h5-icon h5-icon-houtui"></i>{{ portal === 'miniprogram' ? '小程序' : '微网校'}}
@@ -30,7 +30,7 @@
       </div>
 
       <!-- h5配置——底部添加组件按钮 -->
-      <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportGrouponVersion">
+      <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportActivityVersion">
         <div class="section-title">点击添加组件</div>
         <div class="section-button-group">
           <div v-for="(item, index) in baseModules" :key="index">
@@ -44,7 +44,7 @@
       </div>
 
       <!-- 小程序配置——底部添加组件按钮 -->
-      <div class="multi-find-section find-section clearfix" v-if="portal === 'h5' || supportGrouponVersion">
+      <div class="multi-find-section find-section clearfix" v-if="portal === 'h5' || supportActivityVersion">
         <div class="section-title">基础组件</div>
         <div class="section-button-group clearfix">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
@@ -125,8 +125,8 @@ export default {
     portal() {
       return pathName2Portal[this.pathName];
     },
-    supportGrouponVersion() {
-      return this.supportVersion('1.4.0');
+    supportActivityVersion() {
+      return this.supportVersion('1.3.6');
     },
     supportClassroomVersion() {
       return this.supportVersion('1.3.1');
