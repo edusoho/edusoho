@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "63d2b49ca6b42e793fe38a49370ea15e",
+    "content-hash": "84e238187d13dd4b465c461b47b9b8c4",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -329,16 +329,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.30",
+            "version": "v0.9.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "8e28cccbd2ff93e8e9e6367e9b34b3eee220e383"
+                "reference": "7ae1b2f37846f36616a4a2f93edc5bf2dc7b159f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/8e28cccbd2ff93e8e9e6367e9b34b3eee220e383",
-                "reference": "8e28cccbd2ff93e8e9e6367e9b34b3eee220e383",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/7ae1b2f37846f36616a4a2f93edc5bf2dc7b159f",
+                "reference": "7ae1b2f37846f36616a4a2f93edc5bf2dc7b159f",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -387,7 +387,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2018-09-05T09:56:57+00:00"
+            "time": "2019-04-11T09:04:25+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
