@@ -4,6 +4,7 @@
 
 {% block title %}{{'course.course_files'|trans}} - {{ parent() }}{% endblock %}
 
+{% block paddingClass %}open-course-file-padding{% endblock %}
 {% set side_nav = 'files' %}
 {% set tab = 'courseLesson' %}
 
@@ -16,18 +17,21 @@
       max-width: 600px;
     }
   </style>
-  <a class="cd-btn cd-btn-info cd-btn-sm pull-right"
+  {# <a class="cd-btn cd-btn-info cd-btn-sm pull-right"
     data-toggle="modal" data-target="#modal"
     data-url="{{path('uploader_batch_upload', {token:uploader_token(targetType, courseSet.id, 'private')}) }}"
   >
     <i class="glyphicon glyphicon-cloud-upload"></i>{{'course.course_files.create_btn'|trans}}
-  </a>
+  </a> #}
   {{'course.course_files.content_title'|trans}}
 {% endblock %}
 
 {% block main_body %}
 <div id="file-manage-panel" data-file-status-url="{{path('course_set_manage_file_status')}}">
-  <table class="table table-striped table-hover" id="course-lesson-table">
+  {% set uploaderToken = uploader_token(targetType, courseSet.id, 'private') %}
+  {% include 'material-lib/widget/material-button.html.twig' with { uploaderToken: uploaderToken, type: 'courseFile' } %}
+  {% include 'material-lib/widget/material-table.html.twig' with { type: 'openCourseFile', size: 'sm' } %}
+  {# <table class="table table-striped table-hover" id="course-lesson-table">
     <thead>
       <tr>
         <th width="5%"><input type="checkbox"  data-role="batch-select"></th>
@@ -48,10 +52,12 @@
       {% endfor %}
 
     </tbody>
-  </table>
+  </table> #}
 
+  {# 全选 #}
   <label class="checkbox-inline mrm mbm"><input type="checkbox" data-role="batch-select"> {{'course.course_files.select_all_btn'|trans}}</label>
 
+  {# 全选删除 #}
   <div class="btn-group mbm">
     <button class="cd-btn cd-btn-danger cd-btn-sm" data-role="batch-delete" data-name="{{'course.course_files.record'|trans}}" data-url="{{ path('open_course_manage_delete_materials_show', {id:courseSet.id, type:tab}) }}">
     <i class="glyphicon glyphicon-trash"></i>
