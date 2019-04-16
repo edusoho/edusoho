@@ -54,25 +54,27 @@
         <td class="vertical-middle">
           {% if uploadFile.storage == "cloud" %}
             {% if uploadFile.type == 'video' %}
-              {% for transcodingQuality, status in uploadFile.transcodingStatus %}
-              <div class="clearfix">
-                <span class="cd-tag cd-tag-blue cd-mr8 pull-left">{{ ('material.common_table.quality.' ~ transcodingQuality)|trans }}</span>
-                {% if status.status == 'ok' %}
-                  <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
-                {% elseif status.status == 'error'%}
-                  <span class="cd-text-danger">{{ 'material.common_table.transcode_error'|trans }}</span>
-                {% else %}
-                  <div class="cd-progress cd-progress-success material-progress">
-                    <div class="progress-bar">
-                      <div class="progress-outer">
-                        <div class="progress-inner" style="width: {{ status.process }}%;"></div>
+              {% if uploadFile.transcodingStatus %}
+                {% for transcodingQuality, status in uploadFile.transcodingStatus %}
+                <div class="clearfix">
+                  <span class="cd-tag cd-tag-blue cd-mr8 pull-left">{{ ('material.common_table.quality.' ~ transcodingQuality)|trans }}</span>
+                  {% if status.status == 'ok' %}
+                    <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+                  {% elseif status.status == 'error'%}
+                    <span class="cd-text-danger">{{ 'material.common_table.transcode_error'|trans }}</span>
+                  {% else %}
+                    <div class="cd-progress cd-progress-success material-progress">
+                      <div class="progress-bar">
+                        <div class="progress-outer">
+                          <div class="progress-inner" style="width: {{ status.process }}%;"></div>
+                        </div>
                       </div>
+                      <div class="progress-text">{{ status.process }}%</div>
                     </div>
-                    <div class="progress-text">{{ status.process }}%</div>
-                  </div>
-                {% endif %}
-              </div>
-              {% endfor %}
+                  {% endif %}
+                </div>
+                {% endfor %}
+              {% endif %}
             {% elseif uploadFile.type in ['ppt', 'document'] %}
               {% if uploadFile.convertStatus == 'error' %}
                 <span class="cd-text-danger">{{ 'material.common_table.transcode_error'|trans }}</span>
