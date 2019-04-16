@@ -1,16 +1,20 @@
-<div id="material-lib-items-panel" class="all mtm">
-  {#a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
-  data-url="{{ path('uploader_batch_upload', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="上传资料"   data-placement="bottom" >上传资料
-  </a>#}
-  <a class="btn btn-info js-manage-batch-btn" href="javascript:;">{{ 'admin.cloud_file.batch_manage_btn'|trans }}
+<div class="material-btn-group mbm all mtm" id="material-lib-items-panel">
+  <a class="btn btn-info js-batch-tag-btn" data-role="batch-tag">{{ 'admin.cloud_file.add_tag'|trans }}
   </a>
-  <a class="btn btn-info js-batch-tag-btn" style="display:none;" data-role="batch-tag">{{ 'admin.cloud_file.add_tag'|trans }}
+  <a class="btn btn-danger js-batch-delete-btn" data-role="batch-dalete" href="javascript:;" data-url="{{ path('admin_cloud_file_delete_modal_show') }}"  >{{ 'admin.cloud_file.delete_btn'|trans }}
   </a>
-  {#<a class="btn btn-info js-batch-share-btn" style="display:none;" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}"  >共享
-  </a>#}
-  <a class="btn btn-danger js-batch-delete-btn" style="display:none;" data-role="batch-dalete" href="javascript:;" data-url="{{ path('admin_cloud_file_delete_modal_show') }}"  >{{ 'admin.cloud_file.delete_btn'|trans }}
-  </a>
-  <label class="checkbox-inline" style="display:none;" data-role="batch-manage" >
-    <input type="checkbox"  data-role="batch-select"/> {{ 'admin.cloud_file.select_all'|trans }}
-  </label>
 </div>
+
+    {# <a class="cd-btn cd-btn-primary js-upload-file-btn cd-mr32" data-toggle="modal" data-backdrop="static"  data-target="#modal"
+      data-url="{{ path('uploader_batch_upload', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="{{'material_lib.btn.upload_files'|trans}}"   data-placement="bottom" >{{'material_lib.btn.upload_files'|trans}}
+    </a>
+    <a class="cd-btn cd-btn-primary cd-mr32" disabled href="javascript:;" >下载资料
+    </a>
+    <a class="cd-btn cd-btn-primary cd-mr32 js-batch-tag-btn" disabled href="javascript:;" data-role="batch-tag">{{'material_lib.btn.add_tag'|trans}}
+    </a>
+    <a class="cd-btn cd-btn-primary cd-mr32" href="javascript:;" id="shareMaterials" data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_my_sharing') }}">{{'material_lib.my_sharing.my_btn'|trans}}
+    </a>
+    <a class="cd-btn cd-btn-primary cd-mr32 js-batch-share-btn" disabled href="javascript:;" data-role="batch-share" data-url="{{ path('material_batch_share') }}">共享资料
+    </a>
+    <a class="cd-btn cd-btn-danger js-batch-delete-btn" disabled href="javascript:;" data-role="batch-dalete" data-url="{{ path('material_delete_modal_show') }}">删除资料
+    </a> #}
