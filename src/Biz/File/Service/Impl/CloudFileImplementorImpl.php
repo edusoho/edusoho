@@ -560,7 +560,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                     }
                 }
             }
-
         }
 
         return $file;
