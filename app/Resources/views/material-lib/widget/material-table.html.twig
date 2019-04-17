@@ -49,8 +49,8 @@
         </td>
         <td class="cd-dark-major vertical-middle">
           {{ dict_text('fileType', uploadFile.type) }}
-          {% if uploadFile.type in ['video', 'audio'] and uploadFile.storage == 'cloud' %}
-            <div class="cd-mt8"><span class="cd-tag cd-tag-blue">已生成MP4</span></div>
+          {% if uploadFile.storage == 'cloud' and uploadFile.type == 'video' and uploadFile.hasMp4|default(false) %}
+            <div class="cd-mt8"><span class="cd-tag cd-tag-blue">{{'material.common_table..has_mp4'|trans}}</span></div>
           {% endif %}
         </td>
         <td class="cd-dark-major vertical-middle">

@@ -9872,5 +9872,6 @@ material.common_table.quality.shd: 超清
 material.common_table.transcode_success: 转码成功
 material.common_table.transcode_error: 转码失败
 material.common_table.no_need_transcode: 无需转码
+material.common_table..has_mp4: 已生成MP4
 
 
