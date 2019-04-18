@@ -297,8 +297,8 @@ t.add("coin.invite_code_validate_error_hint", "\u9080\u8bf7\u7801\u5fc5\u987b\u6
 t.add("coin.invite_url_copy_success_hint", "\u5df2\u590d\u5236\u9080\u8bf7\u94fe\u63a5\u5230\u526a\u5207\u677f\uff0c\u5feb\u53bb\u5206\u4eab\u5427\uff01", "js", "zh_CN");
 t.add("course.buy.discount_hint", "\u5df2\u4f18\u60e0", "js", "zh_CN");
 t.add("course.buy.price_free_hint", "\u53bb\u5b66\u4e60", "js", "zh_CN");
-t.add("course.chapter", "\u7b2c%number%%chapter_name%: %title%", "js", "zh_CN");
-t.add("course.unit", "\u7b2c%number%%part_name%: %title%", "js", "zh_CN");
+t.add("course.chapter", "\u7b2c%number%%chapter_name%%colon% %title%", "js", "zh_CN");
+t.add("course.unit", "\u7b2c%number%%part_name%%colon% %title%", "js", "zh_CN");
 t.add("course.lesson", "%part_name% %number% : %title%", "js", "zh_CN");
 t.add("course.catalogue.task_status.task", "%taskName%%taskNumber%\uff1a %taskTitle%", "js", "zh_CN");
 t.add("course.thread_replay_failed_hint", "\u53d1\u8868\u56de\u590d\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5", "js", "zh_CN");
