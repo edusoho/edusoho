@@ -252,7 +252,10 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         $lock = new Lock($this->biz);
         $lockName = 'scheduler.job.trigger';
         try {
-            $lock->get($lockName, 20);
+            $result = $lock->get($lockName, 20);
+            if (!$result) {
+                return;
+            }
             $this->biz['db']->beginTransaction();
 
             $jobFired = $this->getAcquiredJob();

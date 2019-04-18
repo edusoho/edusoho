@@ -14,7 +14,7 @@ seajs.config({
         "jquery.perfect-scrollbar": "jquery-plugin/perfect-scrollbar/0.4.8/perfect-scrollbar",
         "jquery.select2": "jquery-plugin/select2/3.4.1/select2",
         "jquery.select2-css": "jquery-plugin/select2/3.4.1/select2.css",
-        "jquery.jcrop": "jquery-plugin/jcrop/2.0.4/jcrop-debug.js",
+        "jquery.jcrop": "jquery-plugin/jcrop/2.0.4/jcrop.js",
         "jquery.jcrop-css": "jquery-plugin/jcrop/2.0.4/jcrop.css",
         "jquery.nouislider": "jquery-plugin/nouislider/5.0.0/nouislider",
         "jquery.nouislider-css": "jquery-plugin/nouislider/5.0.0/nouislider.css",

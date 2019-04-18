@@ -226,15 +226,6 @@ class GeneralDaoImplTest extends IntegrationTestCase
         $this->assertCount(4, $results);
     }
 
-    /**
-     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
-     */
-    public function testInSearchWithException()
-    {
-        $dao = $this->biz->dao('Example:ExampleDao');
-        $dao->search(array('ids' => 1), array(), 0, 100);
-    }
-
     public function testCount()
     {
         foreach ($this->getTestDao() as $dao) {
