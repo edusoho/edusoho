@@ -30,7 +30,7 @@
       </div>
 
       <!-- h5配置——底部添加组件按钮 -->
-      <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportActivityVersion">
+<!--       <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportActivityVersion">
         <div class="section-title">点击添加组件</div>
         <div class="section-button-group">
           <div v-for="(item, index) in baseModules" :key="index">
@@ -41,10 +41,10 @@
             </el-button>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <!-- 小程序配置——底部添加组件按钮 -->
-      <div class="multi-find-section find-section clearfix" v-if="portal === 'h5' || supportActivityVersion">
+      <!-- 底部添加组件按钮 -->
+      <div class="multi-find-section find-section clearfix">
         <div class="section-title">基础组件</div>
         <div class="section-button-group clearfix">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
@@ -52,14 +52,17 @@
             {{ item.name }}
           </el-button>
         </div>
-        <div class="section-title">营销组件
-          <a class="color-primary pull-right text-12" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a>
-        </div>
-        <div class="section-button-group clearfix">
-          <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-            v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
-            {{ item.name }}
-          </el-button>
+        <!-- 小程序微营销发布后再打开营销组件 -->
+        <div v-if="portal === 'h5'">
+          <div class="section-title">营销组件
+            <a class="color-primary pull-right text-12" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a>
+          </div>
+          <div class="section-button-group clearfix">
+            <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+              v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
+              {{ item.name }}
+            </el-button>
+          </div>
         </div>
       </div>
 
@@ -126,16 +129,20 @@ export default {
       return pathName2Portal[this.pathName];
     },
     supportActivityVersion() {
-      return this.supportVersion('1.3.6');
+      return true;
+      // return this.supportVersion('1.3.6');
     },
     supportClassroomVersion() {
-      return this.supportVersion('1.3.1');
+      return true;
+      // return this.supportVersion('1.3.1');
     },
     supportCouponVersion() {
-      return this.supportVersion('1.3.2');
+      return true;
+      // return this.supportVersion('1.3.2');
     },
     supportVipVersion() {
-      return this.supportVersion('1.3.4') && this.vipSetupStatus;
+      return this.vipSetupStatus;
+      // return this.supportVersion('1.3.4') && this.vipSetupStatus;
     }
   },
   created() {

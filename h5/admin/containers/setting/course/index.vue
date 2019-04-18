@@ -134,7 +134,7 @@ export default {
         value: 'id',
       },
       pathName: this.$route.name,
-      categoryTempId: [this.moduleData.data.categoryId.toString()],
+      categoryTempId: [this.moduleData.data.categoryId.toString() || '0'],
       categoryDiggered: false,
       dateOptions: [{
         value: '7',
@@ -223,6 +223,7 @@ export default {
         return this.copyModuleData.data.categoryId;
       },
       set(value) {
+        console.log(value,999999)
         this.copyModuleData.data.categoryId = value;
       },
     },
@@ -242,7 +243,8 @@ export default {
         if (!value.length) {
           return;
         }
-        const endIndex = value.length - 1
+        const endIndex = value.length - 1;
+        console.log('categoryTempIdvalue',value)
         this.moduleData.data.categoryId = value[endIndex];
       },
     },
