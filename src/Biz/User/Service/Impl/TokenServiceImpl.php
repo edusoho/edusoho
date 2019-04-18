@@ -4,6 +4,7 @@ namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use Biz\User\Service\TokenService;
+use Rhumsaa\Uuid\Uuid;
 
 class TokenServiceImpl extends BaseService implements TokenService
 {
@@ -11,7 +12,7 @@ class TokenServiceImpl extends BaseService implements TokenService
     {
         $token = array();
         $token['type'] = $type;
-        $token['token'] = $this->_makeTokenValue(32);
+        $token['token'] = $this->_makeTokenValue();
         $token['data'] = !isset($args['data']) ? '' : $args['data'];
         $token['times'] = empty($args['times']) ? 0 : (int) $args['times'];
         $token['remainedTimes'] = $token['times'];
@@ -22,9 +23,10 @@ class TokenServiceImpl extends BaseService implements TokenService
         return $this->getTokenDao()->create($token);
     }
 
+    //length 被多处调用，length参数可认为是无效,插件等外部调用清除后，去掉length参数
     public function makeFakeTokenString($length = 32)
     {
-        return $this->_makeTokenValue($length);
+        return $this->_makeTokenValue();
     }
 
     public function verifyToken($type, $value, array $data = array())
@@ -104,11 +106,12 @@ class TokenServiceImpl extends BaseService implements TokenService
         return;
     }
 
-    protected function _makeTokenValue($length)
+    //去掉了length参数，token标准化，不允许自定义长度
+    protected function _makeTokenValue()
     {
-        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $uuid = Uuid::uuid1();
 
-        return substr(str_shuffle(str_repeat($pool, $length)), 0, $length);
+        return $uuid->getHex();
     }
 
     protected function getTokenDao()

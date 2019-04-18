@@ -270,6 +270,7 @@ class Lesson extends BaseResource
                                 );
 
                                 $lesson['headUrl'] = $headUrl['url'];
+                                $lesson['headLength'] = $headLeaderInfo['length'];
                             }
 
                             $data = array(

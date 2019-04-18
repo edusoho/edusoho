@@ -160,5 +160,5 @@ interface MemberService
 
     public function findMembersByIds($ids);
 
-    public function countStudentMemberByCourseSetId($couseSetId);
+    public function countStudentMemberByCourseSetId($courseSetId);
 }

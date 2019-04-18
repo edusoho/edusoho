@@ -34,7 +34,6 @@ class OnlineController extends BaseController
         if (function_exists('com_create_guid')) {
             return com_create_guid();
         } else {
-            mt_srand((float) microtime() * 10000);
             $charid = strtoupper(md5(uniqid(rand(), true)));
             $hyphen = chr(45);
             $uuid = substr($charid, 0, 8).$hyphen

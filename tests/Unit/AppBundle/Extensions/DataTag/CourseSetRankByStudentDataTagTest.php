@@ -40,6 +40,10 @@ class CourseSetRankByStudentDataTagTest extends BaseTestCase
                 'functionName' => 'findCourseTeachers',
                 'returnValue' => array(),
             ),
+            array(
+                'functionName' => 'countStudentMemberByCourseSetId',
+                'returnValue' => 3,
+            ),
         ));
         $this->mockBiz('Course:CourseMemberDao', array(
             array(

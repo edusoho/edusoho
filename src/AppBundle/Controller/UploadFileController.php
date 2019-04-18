@@ -70,7 +70,7 @@ class UploadFileController extends BaseController
 
         $this->getLogService()->info('upload_file', 'download', "文件Id #{$fileId}");
 
-        if ($file['storage'] == 'cloud') {
+        if ('cloud' == $file['storage']) {
             return $this->downloadCloudFile($request, $file, $ssl);
         } else {
             return $this->downloadLocalFile($request, $file);
@@ -119,7 +119,7 @@ class UploadFileController extends BaseController
 
         $conditions['currentUserId'] = $user['id'];
 
-        if ($conditions['source'] == 'upload') {
+        if ('upload' == $conditions['source']) {
             $conditions['createdUserId'] = $user['id'];
         }
 
@@ -158,7 +158,7 @@ class UploadFileController extends BaseController
         if (array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])) {
             $course = $this->getCourseService()->getCourse($conditions['targetId']);
 
-            if ($course['parentId'] > 0 && $course['locked'] == 1) {
+            if ($course['parentId'] > 0 && 1 == $course['locked']) {
                 $conditions['targetId'] = $course['parentId'];
             }
         }

@@ -24,4 +24,12 @@ class DateToolkit
 
         return $range;
     }
+
+    /**
+     * @return int
+     */
+    public static function getMicroSecond()
+    {
+        return (int) (microtime(true) * 1000000);
+    }
 }

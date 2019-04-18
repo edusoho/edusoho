@@ -27,7 +27,8 @@ define(function(require, exports, module) {
 	            selectHeight = (cropedHeight) * (naturalHeight/scaledHeight);
             /*$picture.css('height', scaledHeight);
 */
-	        var img = $.Jcrop($picture, {
+
+	        var img = $picture.Jcrop({
 	            trueSize: [naturalWidth, naturalHeight],
 	            setSelect: [0, 0, selectWidth, selectHeight],
 	            aspectRatio: ratio,
@@ -47,7 +48,7 @@ define(function(require, exports, module) {
             postData = {};
           }
 
-          postData = $.extend(this.get("img").tellScaled(), postData, {width: this.element.width(), height: this.element.height(), group: self.get('group')});
+          postData = $.extend(self.element.data('Jcrop').ui.selection.last, postData, {width: this.element.width(), height: this.element.height(), group: self.get('group')});
           //由于小数精度问题，jcrop计算出的x、y初始坐标可能小于0，比如-2.842170943040401e-14, 应当修正此类非法数据
           postData.x = postData.x > 0 ? postData.x : 0;
           postData.y = postData.y > 0 ? postData.y : 0;

@@ -42,6 +42,8 @@
   app.uploadUrl = '{{ path("file_upload") }}';
   app.imgCropUrl = '{{ path("file_img_crop") }}';
   app.lessonCopyEnabled = '{{ setting("course.copy_enabled","0") }}';
+  app.cloudSdkBaseUri = '{{ setting("developer.cloud_sdk_cdn", "") ? "//"~setting("developer.cloud_sdk_cdn", "") : "" }}';
+  app.cloudDisableLogReport = {{ setting("developer.disable_log_report", 0) }};
   app.cloudPlayerSdkUrl = '{{ cloud_sdk_url("player") }}';
   app.cloudPlayServer = '{{ setting("developer.cloud_play_server", "") }}';
   app.cloudVideoPlayerSdkUrl = '{{ cloud_sdk_url("video") }}';

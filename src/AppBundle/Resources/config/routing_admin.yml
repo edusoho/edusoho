@@ -716,7 +716,7 @@ admin_cloud_video_overview:
     defaults: { _controller: AppBundle:Admin/EduCloud:videoOverview }
 
 admin_cloud_video_overview_renew:
-    path:  /cloud/video/renew
+    path:  /cloud/video/renew/modal
     defaults: { _controller: AppBundle:Admin/EduCloud:showRenewVideo }
 
 admin_cloud_setting_video:
@@ -2122,12 +2122,12 @@ admin_classroom_thread_batch_delete:
 admin_classroom_set_recommend:
     path:   /classroom/{id}/recommend
     defaults: { _controller: AppBundle:Admin/ClassroomAdmin:recommend }
-    permissions: [admin_classroom_manage]
+    permissions: [admin_classroom_set_recommend]
 
 admin_classroom_cancel_recommend:
     path:   /classroom/{id}/recommend/cancel
     defaults: { _controller: AppBundle:Admin/ClassroomAdmin:cancelRecommend }
-    permissions: [admin_classroom_manage]
+    permissions: [admin_classroom_cancel_recommend]
 
 admin_classroom_recommend_list:
     path:   /classroom/recommend/list

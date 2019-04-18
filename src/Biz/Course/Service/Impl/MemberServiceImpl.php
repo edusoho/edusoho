@@ -967,6 +967,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'studentNum' => $this->getCourseStudentCount($courseId),
         );
         $this->getCourseDao()->update($courseId, $fields);
+        $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('studentNum'));
 
         $this->dispatchEvent('classroom.course.join', new Event($course, array('member' => $member)));
 
@@ -1260,10 +1261,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByIds($ids);
     }
 
-    public function countStudentMemberByCourseSetId($couseSetId)
+    public function countStudentMemberByCourseSetId($courseSetId)
     {
         $conditions = array(
-            'courseSetId' => $couseSetId,
+            'courseSetId' => $courseSetId,
             'role' => 'student',
         );
 

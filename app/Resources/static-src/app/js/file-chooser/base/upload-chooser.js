@@ -19,6 +19,9 @@ export default class UploaderChooser extends Chooser {
 
     this._sdk = new UploaderSDK({
       id: $uploader.attr('id'),
+      sdkBaseUri: app.cloudSdkBaseUri,
+      disableDataUpload: app.cloudDisableLogReport,
+      disableSentry: app.cloudDisableLogReport,
       initUrl: $uploader.data('initUrl'),
       finishUrl: $uploader.data('finishUrl'),
       accept: $uploader.data('accept'),

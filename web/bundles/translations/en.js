@@ -359,8 +359,8 @@ t.add("coin.invite_code_validate_error_hint", "The invitate code must be 5 muber
 t.add("coin.invite_url_copy_success_hint", "The link was copied successfully", "js", "en");
 t.add("course.buy.discount_hint", "Dicounted", "js", "en");
 t.add("course.buy.price_free_hint", "Go study", "js", "en");
-t.add("course.chapter", "%chapter_name% %number% : %title%", "js", "en");
-t.add("course.unit", "%part_name% %number% : %title%", "js", "en");
+t.add("course.chapter", "%chapter_name% %number% %colon% %title%", "js", "en");
+t.add("course.unit", "%part_name% %number% %colon% %title%", "js", "en");
 t.add("course.lesson", "%part_name% %number% : %title%", "js", "en");
 t.add("course.catalogue.task_status.task", "%taskName%.%taskNumber%:%taskTitle%", "js", "en");
 t.add("course.thread_replay_failed_hint", "Posted reply failed, please try again", "js", "en");
