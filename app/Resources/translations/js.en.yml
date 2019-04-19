@@ -1380,3 +1380,5 @@ admin.shortcut_delete_success_hint: Delete frequently used links successfully!
 
 task_show.user_login_protect_tip: User unLogin
 admin.course_manage.manage.tags_select.placeholder: 输入标签名称关键字
+
+exception.common_frequent_operation: 操作过于频繁，请稍后重试
