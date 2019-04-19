@@ -1,5 +1,7 @@
 import notify from 'common/notify';
 import BatchSelect from 'app/common/widget/batch-select';
+import DetailWidget from 'app/js/material-lib/index/detail';
+import Select from 'app/common/input-select';
 
 var $panel = $('#file-manage-panel');
 new BatchSelect($panel);
@@ -100,5 +102,44 @@ function asyncLoadFiles() {
       }
     }
   });
+
+
 }
 
+var detailBtnActive = true;
+
+$('.js-detail-btn').on('click', function (){
+  if (detailBtnActive) {
+    detailBtnActive = false;
+    var container = $("#file-manage-panel");
+    $.ajax({
+      type: 'GET',
+      url: $(this).data('url'),
+    }).done(function(resp){
+      $(container).hide();
+      $(container).prev().hide();
+      //$(container).parent().prev().html(Translator.trans('material_lib.detail.content_title'));
+      $(container).parent().append(resp);
+
+      if($('.nav.nav-tabs').length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+        $('.nav.nav-tabs').lavaLamp();
+      }
+
+      Select('#tags', 'remote');
+
+      new DetailWidget({
+        element: $('#material-detail'),
+        callback: function() {
+          let $form = $('#material-search-form');
+          $form.show();
+          $form.prev().show();
+          self.renderTable();
+        }
+      });
+    }).fail(function() {
+      notify('danger', Translator.trans('material_lib.have_no_permission_hint'));
+    }).always(function() {
+      detailBtnActive = true;
+    });
+  }
+});

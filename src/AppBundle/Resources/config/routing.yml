@@ -2201,6 +2201,9 @@ course_set_manage_retry_transcode:
    defaults: { _controller: AppBundle:Course/CourseSetFileManage:retryTranscode }
    methods: [POST]
 
+course_set_manage_file_detail:
+  path:  /course_set/{courseSetId}/manage/file/{fileId}/detail
+  defaults: { _controller: AppBundle:Course/CourseSetFileManage:detail }
 
 course_set_manage_publish:
   path: /course_set/{id}/manage/publish

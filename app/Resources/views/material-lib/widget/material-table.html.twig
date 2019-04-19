@@ -100,16 +100,19 @@
         </td>
         <td class="vertical-middle">
           <div class="btn-group">
-            {% if uploadFile.createdUserId == app.user.id %}
-              <a class="cd-btn btn cd-btn-primary {% if size|default('') == 'sm' %}cd-btn-sm{% endif %} btn-group--left js-detail-btn" data-toggle="tooltip" data-placement="bottom" href="javascript:;" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
-              {{'material_lib.btn.edit'|trans}}
-              </a>
-            {% endif %}
-            {% if uploadFile.storage == "cloud" and uploadFile.createdUserId != app.user.id %}
-              <a class="cd-btn btn cd-btn-primary {% if size|default('') == 'sm' %}cd-btn-sm{% endif %} btn-group--left js-detail-btn" data-toggle="tooltip" data-placement="bottom" href="javascript:;"  data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
-              {{'material_lib.btn.view'|trans}}
-              </a>
-            {% endif %}
+            <a class="cd-btn btn cd-btn-primary {% if size|default('') == 'sm' %}cd-btn-sm{% endif %} btn-group--left js-detail-btn" data-toggle="tooltip" data-placement="bottom" href="javascript:;" data-url="
+               {% if type|default('') == 'courseFile' %}
+                  {{ path('course_set_manage_file_detail', {courseSetId:courseSet.id , fileId:uploadFile.id}) }}
+               {% else %}
+                  {{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}
+               {% endif %}
+            ">
+              {% if uploadFile.createdUserId == app.user.id %}
+                 {{'material_lib.btn.edit'|trans}}
+              {% else %}
+                {{'material_lib.btn.view'|trans}}
+              {% endif %}
+            </a>
             <button type="button" class="cd-btn cd-btn-primary dropdown-toggle {% if size|default('') == 'sm' %}cd-btn-sm{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
               <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
               <span class="sr-only">Toggle Dropdown</span>
