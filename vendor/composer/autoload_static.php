@@ -64,6 +64,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
             'Sensio\\Bundle\\FrameworkExtraBundle\\' => 35,
             'Sensio\\Bundle\\DistributionBundle\\' => 33,
         ),
+        'R' => 
+        array (
+            'Rhumsaa\\Uuid\\' => 13,
+        ),
         'Q' => 
         array (
             'QiQiuYun\\SDK\\' => 13,
@@ -238,6 +242,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'Sensio\\Bundle\\DistributionBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/sensio/distribution-bundle',
+        ),
+        'Rhumsaa\\Uuid\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ramsey/uuid/src',
         ),
         'QiQiuYun\\SDK\\' => 
         array (

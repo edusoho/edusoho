@@ -31,10 +31,26 @@ class TaskSmsProcessor extends BaseSmsProcessor
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
             if ($classroom) {
-                $count = $this->getClassroomService()->searchMemberCount(array(
+                if ($course['locked']) {
+                    $excludeStudents = $this->getCourseMemberService()->searchMembers(
+                        array('courseId' => $course['parentId'], 'role' => 'student'),
+                        array(),
+                        0,
+                        PHP_INT_MAX
+                    );
+                    $excludeStudentIds = ArrayToolkit::column($excludeStudents, 'userId');
+                }
+
+                $conditions = array(
                     'classroomId' => $classroom['id'],
                     'role' => 'student',
-                ));
+                );
+
+                if (!empty($excludeStudentIds)) {
+                    $conditions['excludeUserIds'] = $excludeStudentIds;
+                }
+
+                $count = $this->getClassroomService()->searchMemberCount($conditions);
             }
         } else {
             $count = $this->getCourseMemberService()->countMembers(array('courseId' => $course['id'], 'role' => 'student'));
@@ -101,8 +117,23 @@ class TaskSmsProcessor extends BaseSmsProcessor
             $classroom = $this->getClassroomService()->getClassroomByCourseId($task['courseId']);
 
             if ($classroom) {
-                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'student'),
-                    array('createdTime' => 'Desc'), $index, 1000);
+                $course = $this->getCourseService()->getCourse($task['courseId']);
+                if ($course['locked']) {
+                    $excludeStudents = $this->getCourseMemberService()->searchMembers(
+                        array('courseId' => $course['parentId'], 'role' => 'student'),
+                        array(),
+                        0,
+                        PHP_INT_MAX
+                    );
+                    $excludeStudentIds = ArrayToolkit::column($excludeStudents, 'userId');
+                }
+
+                $conditions = array('classroomId' => $classroom['id'], 'role' => 'student');
+                if (!empty($excludeStudentIds)) {
+                    $conditions['excludeUserIds'] = $excludeStudentIds;
+                }
+
+                $students = $this->getClassroomService()->searchMembers($conditions, array('createdTime' => 'Desc'), $index, 1000);
             }
         } else {
             $students = $this->getCourseMemberService()->searchMembers(array('courseId' => $task['courseId'], 'role' => 'student'),

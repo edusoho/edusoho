@@ -29,10 +29,6 @@ class DynamicQueryBuilder extends QueryBuilder
             return $this;
         }
 
-        if ($this->matchInCondition($where)) {
-            return $this->addWhereIn($where);
-        }
-
         if ($likeType = $this->matchLikeCondition($where)) {
             return $this->addWhereLike($where, $likeType);
         }
@@ -42,25 +38,6 @@ class DynamicQueryBuilder extends QueryBuilder
 
     public function andStaticWhere($where)
     {
-        return parent::andWhere($where);
-    }
-
-    private function addWhereIn($where)
-    {
-        $conditionName = $this->getConditionName($where);
-
-        if (!is_array($this->conditions[$conditionName])) {
-            throw new DaoException('IN search parameter must be an Array type');
-        }
-
-        $marks = array();
-        foreach (array_values($this->conditions[$conditionName]) as $index => $value) {
-            $marks[] = ":{$conditionName}_{$index}";
-            $this->conditions["{$conditionName}_{$index}"] = $value;
-        }
-
-        $where = str_replace(":{$conditionName}", implode(',', $marks), $where);
-
         return parent::andWhere($where);
     }
 
@@ -85,7 +62,11 @@ class DynamicQueryBuilder extends QueryBuilder
     public function execute()
     {
         foreach ($this->conditions as $field => $value) {
-            $this->setParameter(":{$field}", $value);
+            if (is_array($value)) {
+                $this->setParameter(":{$field}", $value, Connection::PARAM_STR_ARRAY);
+            } else {
+                $this->setParameter(":{$field}", $value);
+            }
         }
 
         return parent::execute();
@@ -99,11 +80,6 @@ class DynamicQueryBuilder extends QueryBuilder
         }
 
         return strtolower($matches[1]);
-    }
-
-    private function matchInCondition($where)
-    {
-        return preg_match('/\s+(IN)\s+/i', $where);
     }
 
     private function getConditionName($where)

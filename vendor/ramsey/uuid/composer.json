@@ -1,0 +1,47 @@
+{
+    "name": "ramsey/uuid",
+    "description": "A PHP 5.3+ library for generating RFC 4122 version 1, 3, 4, and 5 universally unique identifiers (UUID).",
+    "type": "library",
+    "keywords": ["uuid", "identifier", "guid"],
+    "homepage": "https://github.com/ramsey/uuid",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ben Ramsey",
+            "homepage": "http://benramsey.com"
+        },
+        {
+            "name": "Marijn Huizendveld",
+            "email": "marijn.huizendveld@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ramsey/uuid/issues",
+        "source": "https://github.com/ramsey/uuid"
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "paragonie/random_compat": "^1.0|^2.0"
+    },
+    "require-dev": {
+        "moontoast/math": "~1.1",
+        "symfony/console": "~2.3|~3.0",
+        "doctrine/dbal": ">=2.3",
+        "phpunit/phpunit": "~4.1|~5.0",
+        "satooshi/php-coveralls": "~0.6",
+        "squizlabs/php_codesniffer": "^2.3",
+        "jakub-onderka/php-parallel-lint": "^0.9.0"
+    },
+    "bin": ["bin/uuid"],
+    "suggest": {
+        "moontoast/math": "Support for converting UUID to 128-bit integer (in string form).",
+        "symfony/console": "Support for use of the bin/uuid command line tool.",
+        "doctrine/dbal": "Allow the use of a UUID as doctrine field type."
+    },
+    "autoload": {
+        "psr-4": {"Rhumsaa\\Uuid\\": "src/"}
+    },
+    "replace": {
+        "rhumsaa/uuid": "self.version"
+    }
+}

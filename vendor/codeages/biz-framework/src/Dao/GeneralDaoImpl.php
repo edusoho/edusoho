@@ -100,7 +100,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             if (preg_match('/^\w+$/', $column)) {
                 $builder->addSelect($column);
             } else {
-                throw $this->createDaoException('Illegal column name: '.$column);
+                throw $this->createDaoException('Illegal column name: '. $column);
             }
         }
 
