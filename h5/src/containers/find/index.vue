@@ -5,7 +5,7 @@
       <!-- 尝试下jsx重构代码 -->
       <e-swipe v-if="part.type === 'slide_show'" :slides="part.data"></e-swipe>
       <e-course-list
-        v-if="['classroom_list', 'course_list'].includes(part.type)"
+        v-if="['classroom_list', 'course_list'].includes(part.type) && part.data.items.length"
         class="gray-border-bottom"
         :courseList="part.data"
         :typeList="part.type"
