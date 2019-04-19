@@ -130,10 +130,9 @@ $('.js-detail-btn').on('click', function (){
       new DetailWidget({
         element: $('#material-detail'),
         callback: function() {
-          let $form = $('#material-search-form');
-          $form.show();
-          $form.prev().show();
-          self.renderTable();
+          $(container).show();
+          $(container).prev().show();
+          asyncLoadFiles();
         }
       });
     }).fail(function() {

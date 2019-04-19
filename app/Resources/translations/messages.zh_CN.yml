@@ -98,7 +98,7 @@ site.date_format_H_i: Y年n月d日 H:i
 site.date_more: 等
 site.data_last_picture: 已经到最后一张图片了哦
 site.cloud.file.convert_failed_tips: 转码失败，请联系管理员。
-site.cloud.file.converting_tips: 正在转码，请稍后尝试。
+site.cloud.file.converting_tips: 课程内容准备中，请稍后查看。
 site.cloud.file.not_find_tips: 文件不存在。
 site.services.homeworkReview.shortName: 练
 site.services.homeworkReview.fullName: 24小时作业批阅
