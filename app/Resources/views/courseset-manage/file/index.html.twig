@@ -4,6 +4,7 @@
   {% set layout = 'courseset-manage/courseset-layout.html.twig' %}
 {% endif %}
 {% extends layout %}
+
 {% do script(['libs/jquery-validation.js', 'libs/select2.js','app/js/course-manage-file/index/index.js']) %}
 
 {% block title %}{{'course.course_files'|trans}} - {{ parent() }}{% endblock %}

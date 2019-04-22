@@ -142,6 +142,10 @@ site.mobile_bind.reasons.network_office_regulations: 1.The Internet Office requi
 site.mobile_bind.reasons.login_while_third_party_fail: 2.When the third-party login fails, the mobile phone number can still be successfully logged in, and the course learning is not affected.
 site.mobile_bind.reasons.login_while_forget_password: 3.Even if you forget the password for a third-party account, you can still log in with the phone number and password you have bound.
 
+site.cloud.file.convert_failed_tips: 转码失败，请联系管理员。
+site.cloud.file.converting_tips: 课程内容准备中，请稍后查看。
+site.cloud.file.not_find_tips: 文件不存在。
+
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
 email.email_change: "Dear %nickname%,\nYour requirement of email address reset is received. Please click the link below to verify your account：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"

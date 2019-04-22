@@ -76,6 +76,8 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     {
         $task = $event->getSubject();
         $this->syncTaskStatus($task, true);
+
+        $this->dispatchEvent('course.task.publish.sync', new Event($task));
     }
 
     public function onCourseTaskUnpublish(Event $event)
@@ -186,5 +188,18 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     private function getSchedulerService()
     {
         return $this->getBiz()->service('Scheduler:SchedulerService');
+    }
+
+    protected function dispatchEvent($eventName, $subject, $arguments = array())
+    {
+        if ($subject instanceof Event) {
+            $event = $subject;
+        } else {
+            $event = new Event($subject, $arguments);
+        }
+
+        $biz = $this->getBiz();
+
+        return $biz['dispatcher']->dispatch($eventName, $event);
     }
 }
