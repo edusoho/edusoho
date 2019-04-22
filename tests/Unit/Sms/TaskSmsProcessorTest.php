@@ -32,6 +32,7 @@ class TaskSmsProcessorTest extends BaseTestCase
                     'returnValue' => array(
                         'id' => 1,
                         'parentId' => 1,
+                        'locked' => 1,
                     ),
                     'withParams' => array(1),
                 ),

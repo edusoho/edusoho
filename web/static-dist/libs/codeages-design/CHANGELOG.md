@@ -1,3 +1,13 @@
+# 0.1.7 (2018-12-29)
+
+* select组件  parent参数支持可配置
+
+```
+     this.options = {
+      parent: props.parent || document,
+    };
+```
+
 # 0.1.6 (2018-03-08)
 
 * 添加色板内容

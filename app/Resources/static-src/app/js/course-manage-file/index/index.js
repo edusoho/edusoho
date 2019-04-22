@@ -1,8 +1,36 @@
-import notify from 'common/notify';
 import BatchSelect from 'app/common/widget/batch-select';
+import DetailWidget from 'app/js/material-lib/index/detail';
+import Select from 'app/common/input-select';
 
 var $panel = $('#file-manage-panel');
 new BatchSelect($panel);
+
+Select('#modal-tags', 'remote');
+let $form = $('#tag-form');
+  let validator = $form.validate({
+    rules: {
+      tags: {
+        required: true,
+      },
+    }
+});
+
+const codeErrorTip = () => {
+  $('#cd-modal').on('show.bs.modal', function (event) {
+    // do something...
+    const $btn = $(event.relatedTarget);
+    const title = $btn.data('title');
+    const reason = $btn.data('reason');
+    const solution = $btn.data('solution');
+    $('.js-error-tip').html(
+      `<div class="mbl">文件名称：<span class="cd-ml8">${title}</span></div><div class="mbl">转码状态：<span class="cd-ml8">转码失败</span></div><div class="mbl">错误原因：<span class="cd-text-danger cd-ml8">${reason}</span></div><div>解决方案：<span class="cd-text-info cd-ml8">${solution}</span></div>`
+    )
+  })
+}
+
+$panel.on('click', '.js-cd-modal', () => {
+  codeErrorTip();
+})
 
 $panel.on('click', '.convert-file-btn', function () {
   console.log('re');
@@ -34,6 +62,22 @@ $('button', '.panel-heading').on('click', function () {
   });
 });
 
+
+const onClickTagBatchBtn = (event) => {
+  let $target = $(event.currentTarget);
+  let ids = [];
+  $panel.find('[data-role=batch-item]:checked').each(function() {
+    ids.push(this.value);
+  });
+  $('#select-tag-items').val(ids);
+  $('#tag-modal').modal('show');
+}
+
+$panel.on('click', '.js-batch-tag-btn', (event) => {
+  onClickTagBatchBtn(event);
+});
+
+
 $('[rel=\'tooltip\']').tooltip();
 
 asyncLoadFiles();
@@ -52,10 +96,18 @@ $('[data-role=batch-delete]').click(function () {
     $('#modal').html('');
     $('#modal').load($(this).data('url'), { ids: ids });
     $('#modal').modal('show');
-  } else {
-    notify('danger',Translator.trans('notify.file_not_select.message'));
-    return;
   }
+});
+
+$('.js-delete-btn').click((event) =>  {
+  const $target = $(event.target);
+  const id = $target.data('id');
+  const url = $target.data('url');
+  let ids = [];
+  ids.push(id);
+  $('#modal').html('');
+  $('#modal').load(url, { ids: ids });
+  $('#modal').modal('show');
 });
 
 function asyncLoadFiles() {
@@ -100,5 +152,43 @@ function asyncLoadFiles() {
       }
     }
   });
+
+
 }
 
+var detailBtnActive = true;
+
+$('.js-detail-btn').on('click', function (){
+  if (detailBtnActive) {
+    detailBtnActive = false;
+    var container = $('#file-manage-panel');
+    $.ajax({
+      type: 'GET',
+      url: $(this).data('url'),
+    }).done(function(resp){
+      $(container).hide();
+      $(container).prev().hide();
+      //$(container).parent().prev().html(Translator.trans('material_lib.detail.content_title'));
+      $(container).parent().append(resp);
+
+      if($('.nav.nav-tabs').length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+        $('.nav.nav-tabs').lavaLamp();
+      }
+
+      Select('#tags', 'remote');
+
+      new DetailWidget({
+        element: $('#material-detail'),
+        callback: function() {
+          $(container).show();
+          $(container).prev().show();
+          asyncLoadFiles();
+        }
+      });
+    }).fail(function() {
+      cd.message({type: 'danger', message: Translator.trans('material_lib.have_no_permission_hint')});
+    }).always(function() {
+      detailBtnActive = true;
+    });
+  }
+});

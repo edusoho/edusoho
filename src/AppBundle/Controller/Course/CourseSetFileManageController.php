@@ -77,6 +77,52 @@ class CourseSetFileManageController extends BaseController
         ));
     }
 
+    public function detailAction(Request $request, $courseSetId, $fileId)
+    {
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        $currentUser = $this->getCurrentUser();
+        $materialCount = $this->getMaterialService()->countMaterials(
+            array(
+                'courseSetId' => $courseSetId,
+                'fileId' => $fileId,
+            )
+        );
+
+        if (!$materialCount) {
+            $this->createNewException(MaterialException::NOTFOUND_MATERIAL());
+        }
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if ('local' == $file['storage'] || $currentUser['id'] != $file['createdUserId']) {
+            $fileTags = $this->getUploadFileTagService()->findByFileId($fileId);
+            $tags = $this->getTagService()->findTagsByIds(ArrayToolkit::column($fileTags, 'tagId'));
+            $file['tags'] = ArrayToolkit::column($tags, 'name');
+
+            return $this->render('material-lib/web/static-detail.html.twig', array(
+                'material' => $file,
+                'thumbnails' => '',
+                'editUrl' => $this->generateUrl('material_edit', array('fileId' => $file['id'])),
+            ));
+        } else {
+            try {
+                if ('video' == $file['type']) {
+                    $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($file['globalId']);
+                }
+            } catch (\RuntimeException $e) {
+                $thumbnails = array();
+            }
+
+            return $this->render('admin/cloud-file/detail.html.twig', array(
+                'material' => $file,
+                'thumbnails' => empty($thumbnails) ? '' : $thumbnails,
+                'params' => $request->query->all(),
+                'editUrl' => $this->generateUrl('material_edit', array('fileId' => $file['id'])),
+            ));
+        }
+    }
+
     public function fileStatusAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
@@ -244,6 +290,24 @@ class CourseSetFileManageController extends BaseController
     protected function getSubtitleService()
     {
         return $this->getBiz()->service('Subtitle:SubtitleService');
+    }
+
+    protected function getUploadFileTagService()
+    {
+        return $this->createService('File:UploadFileTagService');
+    }
+
+    /**
+     * @return TagService
+     */
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy:TagService');
+    }
+
+    protected function getCloudFileService()
+    {
+        return $this->createService('CloudFile:CloudFileService');
     }
 
     protected function createPrivateFileDownloadResponse(Request $request, $file)

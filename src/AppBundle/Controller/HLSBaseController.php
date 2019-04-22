@@ -302,7 +302,7 @@ abstract class HLSBaseController extends BaseController
 
     protected function makeFakeTokenString()
     {
-        $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+        $fakeKey = $this->getTokenService()->makeFakeTokenString();
 
         return $this->responseEnhanced($fakeKey);
     }

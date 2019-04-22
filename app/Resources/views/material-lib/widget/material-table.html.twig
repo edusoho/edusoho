@@ -1,4 +1,4 @@
-<div class="material-common-table table-responsive">
+<div class="material-common-table">
   <table class="table table-striped">
     <thead>
       <tr class="cd-dark-major cd-text-medium">
@@ -6,7 +6,7 @@
         cd-mr8 {% endif %}">{{ 'form.checkbox.batch_select'|trans }}</th>
         <th width="{% if size|default('') == 'sm' %}22% {% else %}25%{% endif %}">{{ 'material.common_table.th.file_name'|trans }}</th>
         <th>{{ 'material.common_table.th.file_type'|trans }}</th>
-        <th>{{ 'material.common_table.th.file_size'|trans }}</th>
+        <th>大小时长</th>
         <th {% if size|default('') == 'sm' %}width="11%"{% endif %}>{{ 'material.common_table.th.upload_time'|trans }}</th>
         <th width="25%">{{ 'material.common_table.th.transcode_status'|trans }}</th>
         <th>{{ 'material.common_table.th.manage'|trans }}</th>
@@ -16,20 +16,29 @@
     {% for uploadFile in files %}
       <tr>
         <td class="vertical-middle">
-          <input class="" value="{{uploadFile.id}}" type="checkbox"  data-link-count="{{ uploadFile.usedCount }}" data-file-name="{{ uploadFile.filename }}">
+          <input class="" value="{{uploadFile.id}}" type="checkbox"  data-role="batch-item"  data-link-count="{{ uploadFile.usedCount }}" data-file-name="{{ uploadFile.filename }}">
         </td>
         <td class="cd-dark-major vertical-middle">
-          <img class="img-responsive pull-left cd-mr8" width="100px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
-
+          <div class="material-table-cover pull-left cd-mr8">
+            <div class="material-course-mask">
+              {% if type|default is empty %}
+                <i class="glyphicon glyphicon-star material-course-star js-collect-btn left {% if collections[uploadFile.id]|default(0) %} material-collection {% endif %}"
+                  data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"
+                ></i>
+              {% endif %}
+              <a class="cd-btn cd-btn-info cd-btn-sm material-course-preview-btn" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >{{'material_lib.btn.preview'|trans}}
+              </a>
+            </div>
+            <img class="img-responsive " width="100px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
+          </div>
           <div class="material-table-info">
             <p class="title text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">
-              {# 修改为本地文件添加图标作为识别的标志，暂时使用这个图标 #}
-              {% if uploadFile.storage != 'cloud' %}
-                {{ 'material.common_table.file.local'|trans }}<i class="es-icon es-icon-home"></i>
-              {% endif %}
               {{ uploadFile.filename }}
             </p>
             <p class="status-parent">
+              {% if uploadFile.storage != 'cloud' %}
+                <span class="cd-tag cd-tag-blue">{{ 'material.common_table.file.local'|trans }}</span> 
+              {% endif %}
               {% if type|default('') == 'courseFile' %}
                {% if (uploadFile.targetType == 'coursematerial' and uploadFile.usedCount <= 1) or (uploadFile.targetType != 'coursematerial' and uploadFile.usedCount < 1) %}
                   <span class="cd-tag">{{'course.course_files.use_status.unused'|trans}}</span>
@@ -49,8 +58,8 @@
         </td>
         <td class="cd-dark-major vertical-middle">
           {{ dict_text('fileType', uploadFile.type) }}
-          {% if uploadFile.type in ['video', 'audio'] and uploadFile.storage == 'cloud' %}
-            <div class="cd-mt8"><span class="cd-tag cd-tag-blue">已生成MP4</span></div>
+          {% if uploadFile.storage == 'cloud' and uploadFile.type == 'video' and uploadFile.hasMp4|default(false) %}
+            <div class="cd-mt8"><span class="cd-tag cd-tag-blue">{{'material.common_table..has_mp4'|trans}}</span></div>
           {% endif %}
         </td>
         <td class="cd-dark-major vertical-middle">
@@ -71,7 +80,7 @@
                   {% if status.status == 'ok' %}
                     <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
                   {% elseif status.status == 'error'%}
-                    <span class="cd-text-danger">{{ 'material.common_table.transcode_error'|trans }}</span>
+                    <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
                   {% else %}
                     <div class="cd-progress cd-progress-success material-progress">
                       <div class="progress-bar">
@@ -87,25 +96,32 @@
               {% endif %}
             {% elseif uploadFile.type in ['ppt', 'document'] %}
               {% if uploadFile.convertStatus == 'error' %}
-                <span class="cd-text-danger">{{ 'material.common_table.transcode_error'|trans }}</span>
+                <a class="cd-text-danger" href="javascript:;" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
               {% elseif uploadFile.convertStatus in ['doing','waiting'] %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
               {% endif %}
+            {% else %}
+              {{ 'material.common_table.no_need_transcode'|trans }}
             {% endif %}
+          {% else %}
+            --
           {% endif %}
         </td>
         <td class="vertical-middle">
           <div class="btn-group">
-            {% if uploadFile.createdUserId == app.user.id %}
-              <a class="cd-btn btn cd-btn-primary {% if size|default('') == 'sm' %}cd-btn-sm{% endif %} btn-group--left js-detail-btn" data-toggle="tooltip" data-placement="bottom" href="javascript:;" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
-              {{'material_lib.btn.edit'|trans}}
-              </a>
-            {% endif %}
-            {% if uploadFile.storage == "cloud" and uploadFile.createdUserId != app.user.id %}
-              <a class="cd-btn btn cd-btn-primary {% if size|default('') == 'sm' %}cd-btn-sm{% endif %} btn-group--left js-detail-btn" data-toggle="tooltip" data-placement="bottom" href="javascript:;"  data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
-              {{'material_lib.btn.view'|trans}}
-              </a>
-            {% endif %}
+            <a class="cd-btn btn cd-btn-primary {% if size|default('') == 'sm' %}cd-btn-sm{% endif %} btn-group--left js-detail-btn" data-toggle="tooltip" data-placement="bottom" href="javascript:;" data-url="
+               {% if type|default('') == 'courseFile' %}
+                  {{ path('course_set_manage_file_detail', {courseSetId:courseSet.id , fileId:uploadFile.id}) }}
+               {% else %}
+                  {{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}
+               {% endif %}
+            ">
+              {% if uploadFile.createdUserId == app.user.id %}
+                 {{'material_lib.btn.edit'|trans}}
+              {% else %}
+                {{'material_lib.btn.view'|trans}}
+              {% endif %}
+            </a>
             <button type="button" class="cd-btn cd-btn-primary dropdown-toggle {% if size|default('') == 'sm' %}cd-btn-sm{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
               <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
               <span class="sr-only">Toggle Dropdown</span>
@@ -113,9 +129,18 @@
             <ul class="dropdown-menu btn-group__menu text-center">
               {# 下载 #}
               <li>
-                <a href="javascript:;"  data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
-                  {{'material_lib.btn.download'|trans}}
-                </a>
+                {% if type|default is empty %}
+                  <a href="javascript:;" data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
+                    {{'material_lib.btn.download'|trans}}
+                  </a>
+                  {% else %}
+                    {% if courseSet.type in ['open','liveOpen'] %}
+                      {% set fileShowUrl = path('open_course_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
+                    {% else %}
+                      {% set fileShowUrl = path('course_set_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
+                    {% endif %}
+                    <a class="link-dark" href="{{ fileShowUrl }}">{{'material_lib.btn.download'|trans}}</a>
+                  {% endif %}
               </li>
 
 
@@ -126,7 +151,7 @@
 
                 {% if type|default is not empty %}
                   <li>
-                    <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete_modal_show') }}" data-id="{{uploadFile.id }}">
+                    <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path }}" data-id="{{uploadFile.id }}">
                       {{'material_lib.btn.delete'|trans}}
                     </a>
                   </li>
@@ -135,7 +160,7 @@
                 {% if type|default is empty %}
                   {% if source|default('') != 'public' %}
                     <li>
-                      <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete_modal_show') }}" data-id="{{uploadFile.id }}">
+                      <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{path }}" data-id="{{uploadFile.id }}">
                         {{'material_lib.btn.delete'|trans}}
                       </a>
                     </li>
@@ -166,9 +191,10 @@
               {% endif %}
 
               {# 字幕管理 #}
+
               {% if uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
                 <li>
-                  <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:path('material_lib_browsing')}) }}" data-toggle="tooltip" data-placement="bottom">
+                  <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto: subtitlePath}) }}" data-toggle="tooltip" data-placement="bottom">
                     {{'material_lib.btn.subtitle_manage'|trans}}
                   </a>
                 </li>
@@ -189,4 +215,26 @@
     {% endfor %}
     </tbody>
   </table>
+  <div id="cd-modal" class="cd-modal cd-fade cd-in modal">
+    <div class="cd-modal-dialog" id="cd-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="cd-icon cd-icon-close"></i>
+          </button>
+          <h4 class="modal-title">转码失败提示</h4>
+        </div>
+        <div class="modal-body">
+          <div class="cd-pb24 cd-dark-major js-error-tip">
+            
+          </div>
+        </div>
+        <div class="modal-footer text-center">
+          <button class="cd-btn cd-btn-primary material-confirm-modal-btn" type="button" data-dismiss="modal">
+            确定
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

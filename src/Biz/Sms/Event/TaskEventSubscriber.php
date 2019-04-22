@@ -2,10 +2,14 @@
 
 namespace Biz\Sms\Event;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Course\Service\CourseService;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsException;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
+use Biz\Task\Dao\TaskDao;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -23,6 +27,8 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             'course.task.publish' => 'onTaskPublish',
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
+            'course.task.create.sync' => 'onTaskCreateSync',
+            'course.task.publish.sync' => 'onTaskPublishSync',
         );
     }
 
@@ -54,23 +60,52 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $task = $event->getSubject();
 
-        if ('live' == $task['type']) {
-            $this->registerJob($task);
-            $smsType = 'sms_live_lesson_publish';
-        } else {
-            $smsType = 'sms_normal_lesson_publish';
-        }
+        $this->sendTasksPublishSms(array($task));
+    }
 
-        if ($this->getSmsService()->isOpen($smsType)) {
-            $processor = SmsProcessorFactory::create('task');
-            $return = $processor->getUrls($task['id'], $smsType);
-            $callbackUrls = $return['urls'];
-            $count = ceil($return['count'] / 1000);
-            try {
-                $api = CloudAPIFactory::create('root');
-                $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
-            } catch (\Exception $e) {
-                throw SmsException::FAILED_SEND();
+    public function onTaskPublishSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        if ('published' == $task['status'] && $this->isTaskCreateSyncFinished($task)) {
+            $tasks = $this->getCopiedTasks($task);
+
+            $this->sendTasksPublishSms($tasks);
+        }
+    }
+
+    public function onTaskCreateSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        if ('published' == $task['status']) {
+            $tasks = $this->getCopiedTasks($task);
+
+            $this->sendTasksPublishSms($tasks);
+        }
+    }
+
+    protected function sendTasksPublishSms($tasks)
+    {
+        foreach ($tasks as $task) {
+            if ('live' == $task['type']) {
+                $this->registerJob($task);
+                $smsType = 'sms_live_lesson_publish';
+            } else {
+                $smsType = 'sms_normal_lesson_publish';
+            }
+
+            if ($this->getSmsService()->isOpen($smsType)) {
+                $processor = SmsProcessorFactory::create('task');
+                $return = $processor->getUrls($task['id'], $smsType);
+                $callbackUrls = $return['urls'];
+                $count = ceil($return['count'] / 1000);
+                try {
+                    $api = CloudAPIFactory::create('root');
+                    $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
+                } catch (\Exception $e) {
+                    throw SmsException::FAILED_SEND();
+                }
             }
         }
     }
@@ -111,6 +146,30 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         }
     }
 
+    private function getCopiedTasks($task)
+    {
+        if (empty($task)) {
+            return array();
+        }
+
+        $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        $tasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
+
+        return $tasks;
+    }
+
+    private function isTaskCreateSyncFinished($task)
+    {
+        $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        $tasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
+
+        if (count($tasks) == count($courses)) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @return SchedulerService
      */
@@ -123,6 +182,12 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $this->deleteByJobName('SmsSendOneDayJob_task_'.$task['id']);
         $this->deleteByJobName('SmsSendOneHourJob_task_'.$task['id']);
+
+        $copiedTasks = $this->getCopiedTasks($task);
+        foreach ($copiedTasks as $copiedTask) {
+            $this->deleteByJobName('SmsSendOneDayJob_task_'.$copiedTask['id']);
+            $this->deleteByJobName('SmsSendOneHourJob_task_'.$copiedTask['id']);
+        }
     }
 
     private function deleteByJobName($jobName)
@@ -140,6 +205,30 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getSmsService()
     {
         return $this->getBiz()->service('Sms:SmsService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @return TaskDao
+     */
+    protected function getTaskDao()
+    {
+        return $this->getBiz()->dao('Task:TaskDao');
     }
 
     private function createJob($startJob)
