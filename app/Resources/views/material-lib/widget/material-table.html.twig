@@ -6,7 +6,7 @@
         cd-mr8 {% endif %}">{{ 'form.checkbox.batch_select'|trans }}</th>
         <th width="{% if size|default('') == 'sm' %}22% {% else %}25%{% endif %}">{{ 'material.common_table.th.file_name'|trans }}</th>
         <th>{{ 'material.common_table.th.file_type'|trans }}</th>
-        <th>{{ 'material.common_table.th.file_size'|trans }}</th>
+        <th>大小时长</th>
         <th {% if size|default('') == 'sm' %}width="11%"{% endif %}>{{ 'material.common_table.th.upload_time'|trans }}</th>
         <th width="25%">{{ 'material.common_table.th.transcode_status'|trans }}</th>
         <th>{{ 'material.common_table.th.manage'|trans }}</th>
@@ -19,17 +19,26 @@
           <input class="" value="{{uploadFile.id}}" type="checkbox"  data-role="batch-item"  data-link-count="{{ uploadFile.usedCount }}" data-file-name="{{ uploadFile.filename }}">
         </td>
         <td class="cd-dark-major vertical-middle">
-          <img class="img-responsive pull-left cd-mr8" width="100px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
-
+          <div class="material-table-cover pull-left cd-mr8">
+            <div class="material-course-mask">
+              {% if type|default is empty %}
+                <i class="glyphicon glyphicon-star material-course-star js-collect-btn left {% if collections[uploadFile.id]|default(0) %} material-collection {% endif %}"
+                  data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"
+                ></i>
+              {% endif %}
+              <a class="cd-btn cd-btn-info cd-btn-sm material-course-preview-btn" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >{{'material_lib.btn.preview'|trans}}
+              </a>
+            </div>
+            <img class="img-responsive " width="100px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
+          </div>
           <div class="material-table-info">
             <p class="title text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">
-              {# 修改为本地文件添加图标作为识别的标志，暂时使用这个图标 #}
-              {% if uploadFile.storage != 'cloud' %}
-                {{ 'material.common_table.file.local'|trans }}<i class="es-icon es-icon-home"></i>
-              {% endif %}
               {{ uploadFile.filename }}
             </p>
             <p class="status-parent">
+              {% if uploadFile.storage != 'cloud' %}
+                <span class="cd-tag cd-tag-blue">{{ 'material.common_table.file.local'|trans }}</span> 
+              {% endif %}
               {% if type|default('') == 'courseFile' %}
                {% if (uploadFile.targetType == 'coursematerial' and uploadFile.usedCount <= 1) or (uploadFile.targetType != 'coursematerial' and uploadFile.usedCount < 1) %}
                   <span class="cd-tag">{{'course.course_files.use_status.unused'|trans}}</span>

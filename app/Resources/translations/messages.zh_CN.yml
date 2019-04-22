@@ -863,7 +863,7 @@ material_lib.btn.download: 下载
 material_lib.btn.cancel_share: 取消共享
 material_lib.btn.share: 共享
 material_lib.btn.delete: 删除
-material_lib.btn.preview: 资料预览
+material_lib.btn.preview: 预览
 material_lib.btn.convert_again: 重新转码
 material_lib.btn.upload_files: 上传资料
 material_lib.btn.batch_manage: 批量管理

@@ -70,3 +70,45 @@
 .cd-link-danger {
   .cd-link-base(@brand-danger);
 }
+
+.material-table-cover {
+  position: relative;
+}
+
+.material-course-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,.5);
+  .opacity(0);
+  .es-transition;
+  &:hover {
+    .es-transition;
+    .opacity(1);
+  }
+  .material-course-preview-btn {
+    position: absolute;
+    top: 35%;
+    left: 28%;
+    text-align: center;
+    font-size: 12px;
+    padding: 2px 10px;
+    .border-radius(2px);
+  }
+}
+
+.material-course-star  {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  font-size: 12px;
+  color: #fff;
+  &.material-collection {
+    color: #ffa51f;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}

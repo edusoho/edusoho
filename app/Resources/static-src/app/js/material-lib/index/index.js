@@ -223,10 +223,10 @@ class MaterialWidget {
     $.get($target.data('url'), function(data) {
       if (data) {
         $target.addClass('material-collection');
-        notify('success', Translator.trans('site.collect_cuccess_hint'));
+        cd.message({type:'success', message: Translator.trans('site.collect_cuccess_hint')});
       } else {
         $target.removeClass('material-collection');
-        notify('success', Translator.trans('site.uncollect_cuccess_hint'));
+        cd.message({type:'success', message: Translator.trans('site.uncollect_cuccess_hint')});
       }
     });
   }
