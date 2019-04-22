@@ -38,6 +38,7 @@
     font-size: 12px;
     line-height: 1;
     &:hover {
+      cursor: pointer;
       .cd-transition;
       color: @cd-dark-major !important;
       background-color: fade(@brand-primary, 8%) !important;
@@ -60,4 +61,12 @@
       margin-right: 8px;
     }
   }
+}
+
+.material-confirm-modal-btn {
+  width: 60%;
+}
+
+.cd-link-danger {
+  .cd-link-base(@brand-danger);
 }

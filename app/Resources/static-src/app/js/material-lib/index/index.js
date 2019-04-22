@@ -25,6 +25,10 @@ class MaterialWidget {
       this.submitForm(event);
     });
 
+    this.element.on('click', '.js-cd-modal', (event) => {
+      this.codeErrorTip(event);
+    })
+
     this.element.on('click', '.js-source-btn', (event) => {
       this.onClickSourseBtn(event);
     });
@@ -93,6 +97,19 @@ class MaterialWidget {
       this.onClickPagination(event);
     });
   
+  }
+
+  codeErrorTip() {
+    $('#cd-modal').on('show.bs.modal', function (event) {
+      // do something...
+      const $btn = $(event.relatedTarget);
+      const title = $btn.data('title');
+      const reason = $btn.data('reason');
+      const solution = $btn.data('solution');
+      $('.js-error-tip').html(
+        `<div class="mbl">文件名称：<span class="cd-ml8">${title}</span></div><div class="mbl">转码状态：<span class="cd-ml8">转码失败</span></div><div class="mbl">错误原因：<span class="cd-text-danger cd-ml8">${reason}</span></div><div>解决方案：<span class="cd-text-info cd-ml8">${solution}</span></div>`
+      )
+    })
   }
   submitForm(event) {
     this.renderTable();
@@ -250,7 +267,13 @@ class MaterialWidget {
     $('#modal').modal('show');
   }
   onClickShareBatchBtn(event) {
-    if (confirm(Translator.trans('meterial_lib.confirm_share_resource_hint'))) {
+    cd.confirm({
+      title: '共享',
+      content: Translator.trans('meterial_lib.confirm_share_resource_hint'),
+      okText: '确定',
+      cancelText: '取消',
+      className: '',
+    }).on('ok', () => {
       let $target = $(event.currentTarget);
       let ids = [];
       $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
@@ -259,7 +282,10 @@ class MaterialWidget {
 
       this._fileShare(ids, $target.data('url'));
       $('#material-lib-items-panel').find('[data-role=batch-item]').show();
-    }
+      console.log('点击确定按钮后的回调函数');
+    }).on('cancel', () => {
+      console.log('点击取消按钮后的回调函数');
+    })
   }
   onClickTagBatchBtn(event) {
     let self = this;
@@ -282,17 +308,32 @@ class MaterialWidget {
     this.renderTable();
   }
   onClickShareBtn(event) {
-    if (confirm(Translator.trans('meterial_lib.confirm_share_resource_hint'))) {
+    cd.confirm({
+      title: '共享',
+      content: Translator.trans('meterial_lib.confirm_share_resource_hint'),
+      okText: '确定',
+      cancelText: '取消',
+      className: '',
+    }).on('ok', () => {
       let $target = $(event.currentTarget);
 
       let ids = [];
       ids.push($target.data('fileId'));
 
       this._fileShare(ids, $target.data('url'));
-    }
+      console.log('点击确定按钮后的回调函数');
+    }).on('cancel', () => {
+      console.log('点击取消按钮后的回调函数');
+    })
   }
   onClickUnshareBtn(event) {
-    if (confirm(Translator.trans('meterial_lib.confirm_unshare_resource_hint'))) {
+    cd.confirm({
+      title: '取消共享',
+      content: Translator.trans('meterial_lib.confirm_unshare_resource_hint'),
+      okText: '确定',
+      cancelText: '取消',
+      className: '',
+    }).on('ok', () => {
       let self = this;
       let $target = $(event.currentTarget);
 
@@ -302,7 +343,10 @@ class MaterialWidget {
           self.renderTable();
         }
       });
-    }
+      console.log('点击确定按钮后的回调函数');
+    }).on('cancel', () => {
+      console.log('点击取消按钮后的回调函数');
+    })
   }
   onClickPagination(event) {
     let $target = $(event.currentTarget);
@@ -346,7 +390,7 @@ class MaterialWidget {
         $('[data-role=batch-select]').attr('checked',false);
       } else if (mode == 'normal') {
         $('#material-lib-batch-bar').hide();
-        $('#material-lib-items-panel').find('[data-role=batch-item]').hide();
+        // $('#material-lib-items-panel').find('[data-role=batch-item]').hide();
       }
       let $temp = $table.find('.js-paginator');
       self.element.find('[data-role=paginator]').html($temp.html());
