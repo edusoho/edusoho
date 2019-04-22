@@ -1,7 +1,7 @@
 <div class="material-common-table">
   <table class="table table-striped">
     <thead>
-      <tr class="cd-dark-major cd-text-medium">
+      <tr class="cd-dark-major cd-text-medium js-tr-item">
         <th width="8%"><input type="checkbox" data-role="batch-select" class="{% if size|default('') == 'sm'%} mrs {% else %}
         cd-mr8 {% endif %}">{{ 'form.checkbox.batch_select'|trans }}</th>
         <th width="{% if size|default('') == 'sm' %}22% {% else %}25%{% endif %}">{{ 'material.common_table.th.file_name'|trans }}</th>
@@ -93,10 +93,12 @@
                   {% endif %}
                 </div>
                 {% endfor %}
+              {%  else  %}
+                等待转码
               {% endif %}
             {% elseif uploadFile.type in ['ppt', 'document'] %}
               {% if uploadFile.convertStatus == 'error' %}
-                <a class="cd-text-danger" href="javascript:;" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
+                <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
               {% elseif uploadFile.convertStatus in ['doing','waiting'] %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
               {% endif %}
@@ -139,7 +141,7 @@
                     {% else %}
                       {% set fileShowUrl = path('course_set_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
                     {% endif %}
-                    <a class="link-dark" href="{{ fileShowUrl }}">{{'material_lib.btn.download'|trans}}</a>
+                    <a class="link-dark" class="js-download-btn" href="{{ fileShowUrl }}">{{'material_lib.btn.download'|trans}}</a>
                   {% endif %}
               </li>
 

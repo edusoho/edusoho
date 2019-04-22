@@ -3400,7 +3400,7 @@ search.free_classrooms: 免费%classroom%
 
 
 #云资源
-cloud_file.preview: 资料预览
+cloud_file.preview: 预览
 cloud_file.re_transcoding_btn: 重新转码
 cloud_file.re_transcoding.submiting: 正在提交...
 cloud_file.download_btn: 下载
@@ -7788,7 +7788,7 @@ admin.cloud_file.keyword_type.course: 按课程
 admin.cloud_file.keyword_type.title: 按标题
 admin.cloud_file.keyword_type.user: 按用户
 admin.cloud_file.batch_manage_btn: 批量管理
-admin.cloud_file.delete_btn: 删除
+admin.cloud_file.delete_btn: 删除资料
 admin.cloud_file.select_all: 全选
 admin.cloud_file.add_tag: 添加标签
 admin.cloud_file.network_error_hint: 网络问题，无法连接%edusoho%开放云平台

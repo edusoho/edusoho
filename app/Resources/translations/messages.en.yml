@@ -2834,7 +2834,7 @@ search.live_courses: 'Live courses'
 search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
-cloud_file.preview: 'File preview'
+cloud_file.preview: 'preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
 cloud_file.download_btn: Download
@@ -6359,7 +6359,7 @@ admin.cloud_file.keyword_type.course: 'By course'
 admin.cloud_file.keyword_type.title: 'By title'
 admin.cloud_file.keyword_type.user: 'By user'
 admin.cloud_file.batch_manage_btn: 'Manage'
-admin.cloud_file.delete_btn: Delete
+admin.cloud_file.delete_btn: Delete data
 admin.cloud_file.select_all: 'Select all'
 admin.cloud_file.add_tag: 'Add tag'
 admin.cloud_file.network_error_hint: 'Network issue，could not connect %edusoho%.'

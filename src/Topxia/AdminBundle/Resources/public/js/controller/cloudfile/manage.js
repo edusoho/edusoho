@@ -30,7 +30,7 @@ define(function(require, exports, module) {
         'click .js-manage-batch-btn': 'onClickManageBtn',
         'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
         'click .js-batch-share-btn': 'onClickShareBatchBtn',
-        'click .js-batch-tag-btn': 'onClickTagBatchBtn',
+        'click .js-batch-tag-btn': 'onClickTagBatchBtn'
       },
       setup: function() {
         this.set('model', 'normal');
@@ -39,6 +39,7 @@ define(function(require, exports, module) {
         this._initHeader();
         this._initSelect2();
         this.initTagForm();
+        
       },
       initTagForm: function(event) {
         var $form = $("#tag-form");
