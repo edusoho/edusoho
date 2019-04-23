@@ -226,6 +226,7 @@ class MaterialWidget {
     if ($target.closest('ul').siblings('input[name="sourceFrom"]').val() == 'my') {
       this.attribute = 'mine';
       $('#myShare').removeClass('hide');
+      $('.js-material-btn-group').removeClass('hide');
       $('#shareMaterials').removeClass('hide');
       $('.js-manage-batch-btn').removeClass('hide');
       $('.js-upload-file-btn').removeClass('hide');
@@ -236,6 +237,7 @@ class MaterialWidget {
     } else {
       this.attribute = 'others';
       $('#myShare').addClass('hide');
+      $('.js-material-btn-group').addClass('hide');
       $('#shareMaterials').addClass('hide');
       $('.js-manage-batch-btn').addClass('hide');
       $('.js-upload-file-btn').addClass('hide');
