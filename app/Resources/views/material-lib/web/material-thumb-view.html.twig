@@ -91,5 +91,6 @@
     <div class="material-list-container" id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
   </div>
 </form>
+{% include 'material-lib/widget/error-modal.html.twig' %}
 {% include 'material-lib/widget/tag-modal.html.twig' with { tagPath: path('material_batch_tag_show') } %}
 {% endblock %}

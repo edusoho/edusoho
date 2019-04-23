@@ -50,6 +50,9 @@
   margin-bottom: 0;
   .progress-bar {
     width: 70%;
+    @media (max-width: @screen-xs-min) {
+      width: 60%;
+    }
   }
 }
 
@@ -132,6 +135,10 @@
       width: 190px !important;
     }
   }
+  .control-label {
+    color: rgba(51,51,51,0.88);
+    font-weight: normal;
+  }
   .form-label {
     vertical-align: -webkit-baseline-middle;
     color: rgba(51,51,51,0.88);
@@ -153,4 +160,23 @@
     color: #fff;
     background-color: @brand-primary;
   }
+}
+
+.material-table-info {
+  @media (max-width: @screen-xs-min) {
+    width: 124px;
+  }
+}
+
+
+.material-btn-group__btn {
+  margin-right: 32px;
+  @media (max-width: @screen-xs-min) {
+    margin-right: 16px;
+    margin-bottom: 12px;
+  }
+}
+
+.padding-top7 {
+  padding-top: 7px;
 }

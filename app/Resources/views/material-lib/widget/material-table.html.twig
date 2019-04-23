@@ -1,4 +1,4 @@
-<div class="material-common-table table-responsive">
+<div class="material-common-table hidden-xs">
   <table class="table table-striped">
     <thead>
       <tr class="cd-dark-major cd-text-medium">
@@ -230,4 +230,87 @@
       </div>
     </div>
   </div>
+</div>
+
+
+<div class="material-common-table visible-xs">
+  <table class="table table-striped">
+    <thead>
+      <tr class="cd-dark-major cd-text-medium">
+        <th width="8px"><input type="checkbox" data-role="batch-select" class="{% if size|default('') == 'sm'%} mrs {% else %}
+        cd-mr8 {% endif %}"></th>
+        <th width="124px">{{ 'material.common_table.th.file_name'|trans }}</th>
+        <th width="150px">{{ 'material.common_table.th.transcode_status'|trans }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for uploadFile in files %}
+      <tr class="js-tr-item">
+        <td class="vertical-middle" width="8px">
+          <input class="" value="{{uploadFile.id}}" type="checkbox"  data-role="batch-item"  data-link-count="{{ uploadFile.usedCount }}" data-file-name="{{ uploadFile.filename }}">
+        </td>
+        <td class="cd-dark-major vertical-middle" width="124px">
+          <div class="material-table-cover">
+            <div class="material-course-mask">
+              {% if type|default is empty %}
+                <i class="glyphicon glyphicon-star material-course-star js-collect-btn left {% if collections[uploadFile.id]|default(0) %} material-collection {% endif %}"
+                  data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"
+                ></i>
+              {% endif %}
+              <a class="cd-btn cd-btn-info cd-btn-sm material-course-preview-btn" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >{{'material_lib.btn.preview'|trans}}
+              </a>
+            </div>
+            <img width="124px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
+          </div>
+          <div class="material-table-info text-center">
+            <p class="title mb0 text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">
+              {{ uploadFile.filename }}
+            </p>
+          </div>
+        </td>
+        <td class="vertical-middle">
+          {% if uploadFile.storage == "cloud" %}
+            {% if uploadFile.type == 'video' %}
+              {% if uploadFile.transcodingStatus|default(false) %}
+                {% for transcodingQuality, status in uploadFile.transcodingStatus %}
+                <div class="clearfix {% if loop.index == 3 %}mb0{% else %}mbm{% endif %}">
+                  <span class="cd-tag cd-tag-blue cd-mr8 pull-left">{{ ('material.common_table.quality.' ~ transcodingQuality)|trans }}</span>
+                  {% if status.status == 'ok' %}
+                    <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+                  {% elseif status.status == 'error'%}
+                    <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
+                  {% else %}
+                    <div class="cd-progress cd-progress-success material-progress">
+                      <div class="progress-bar">
+                        <div class="progress-outer">
+                          <div class="progress-inner" style="width: {{ status.process }}%;"></div>
+                        </div>
+                      </div>
+                      <div class="progress-text">{{ status.process }}%</div>
+                    </div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              {%  else  %}
+                等待转码
+              {% endif %}
+            {% elseif uploadFile.type in ['ppt', 'document'] %}
+              {% if uploadFile.convertStatus == 'error' %}
+                <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
+              {% elseif uploadFile.convertStatus in ['doing','waiting'] %}
+                <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+              {% endif %}
+            {% else %}
+              {{ 'material.common_table.no_need_transcode'|trans }}
+            {% endif %}
+          {% else %}
+            --
+          {% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="20"><div class="empty">{{'material_lib.upload_file.empty'|trans}}</div></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
 </div>
