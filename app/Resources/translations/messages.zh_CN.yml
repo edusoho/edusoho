@@ -3407,6 +3407,7 @@ cloud_file.download_btn: 下载
 cloud_file.process_status: 转码状态
 cloud_file.process_status.ok: 转码成功
 cloud_file.process_status.waiting: 转码中
+cloud_file.process_status.doing: 正在转码
 cloud_file.process_status.error: 转码失败
 cloud_file.transcoding_tips: 视频还没有转码完成，请等待转码完成......
 cloud_file.transcoding_tips.error_code_40110.reason: 当前文件格式异常，不支持进行转码
@@ -7782,11 +7783,12 @@ admin.cloud_attachment.select_all: 全选
 
 admin.cloud_file.material_tag_show_match_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
 admin.cloud_file.material_tag_show_match_hint: 标签来自网校课程标签，由网校管理员统一管理。
-admin.cloud_file.keyword_placeholder: 输入关键词
+admin.cloud_file.keyword_placeholder: 请输入关键词
+admin.cloud_file.select_placeholeder: 请选择
 admin.cloud_file.keyword_type: 按来源
-admin.cloud_file.keyword_type.course: 按课程
-admin.cloud_file.keyword_type.title: 按标题
-admin.cloud_file.keyword_type.user: 按用户
+admin.cloud_file.keyword_type.course: 课程
+admin.cloud_file.keyword_type.title: 名称
+admin.cloud_file.keyword_type.user: 上传者
 admin.cloud_file.batch_manage_btn: 批量管理
 admin.cloud_file.delete_btn: 删除资料
 admin.cloud_file.select_all: 全选
