@@ -75,7 +75,7 @@
             {% if uploadFile.type == 'video' %}
               {% if uploadFile.transcodingStatus|default(false) %}
                 {% for transcodingQuality, status in uploadFile.transcodingStatus %}
-                <div class="clearfix">
+                <div class="clearfix {% if loop.index == 3 %}mb0{% else %}mbm{% endif %}">
                   <span class="cd-tag cd-tag-blue cd-mr8 pull-left">{{ ('material.common_table.quality.' ~ transcodingQuality)|trans }}</span>
                   {% if status.status == 'ok' %}
                     <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>

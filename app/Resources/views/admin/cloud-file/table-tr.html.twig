@@ -80,20 +80,20 @@
       {% if cloudFile.type == 'video' %}
         {% if cloudFile.transcodingStatus|default(false) %}
           {% for transcodingQuality, status in cloudFile.transcodingStatus %}
-          <div class="clearfix">
+          <div class="clearfix {% if loop.index == 3 %}mb0{% else %}mbm{% endif %}">
             <span class="label label-info mrm pull-left">{{ ('material.common_table.quality.' ~ transcodingQuality)|trans }}</span>
             {% if status.status == 'ok' %}
               <span class="color-success">{{ 'material.common_table.transcode_success'|trans }}</span>
             {% elseif status.status == 'error'%}
               <a class="color-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{cloudFile.filename}}" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
             {% else %}
-              <div class="ad-progress ad-progress-success material-progress {% if loop.index == 3 %}mb0{% endif %}">
+              <div class="ad-progress ad-progress-success material-progress">
                 <div class="progress-bar">
                   <div class="progress-outer">
-                    <div class="progress-inner" style="width: {{ 10 }}%;"></div>
+                    <div class="progress-inner" style="width: {{ status.process }}%;"></div>
                   </div>
                 </div>
-                <div class="progress-text">{{ 10 }}%</div>
+                <div class="progress-text">{{ status.process }}%</div>
               </div>
             {% endif %}
           </div>
