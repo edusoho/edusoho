@@ -3,9 +3,7 @@
     <button class="cd-btn cd-btn-primary js-upload-file-btn cd-mr32" data-toggle="modal" data-backdrop="static"  data-target="#modal"
       data-url="{{ path('uploader_batch_upload', {token:uploaderToken }) }}" title="{{'material_lib.btn.upload_files'|trans}}"  type="button" data-placement="bottom" >{{'material_lib.btn.upload_files'|trans}}
     </button>
-    {# 批量下载功能？？？ #}
-    <button class="cd-btn cd-btn-primary cd-mr32 js-batch-download" type="button">下载资料</button>
-    {# </a> #}
+    <button class="cd-btn cd-btn-primary cd-mr32 js-batch-download" disabled type="button">下载资料</button>
     <button class="cd-btn cd-btn-primary cd-mr32 js-batch-tag-btn" disabled type="button" data-role="batch-tag">{{'material_lib.btn.add_tag'|trans}}
     </button>
     {% if type|default('') != 'courseFile' %}

@@ -1,7 +1,7 @@
 <div class="material-common-table">
   <table class="table table-striped">
     <thead>
-      <tr class="cd-dark-major cd-text-medium js-tr-item">
+      <tr class="cd-dark-major cd-text-medium">
         <th width="8%"><input type="checkbox" data-role="batch-select" class="{% if size|default('') == 'sm'%} mrs {% else %}
         cd-mr8 {% endif %}">{{ 'form.checkbox.batch_select'|trans }}</th>
         <th width="{% if size|default('') == 'sm' %}22% {% else %}25%{% endif %}">{{ 'material.common_table.th.file_name'|trans }}</th>
@@ -14,7 +14,7 @@
     </thead>
     <tbody>
     {% for uploadFile in files %}
-      <tr>
+      <tr class="js-tr-item">
         <td class="vertical-middle">
           <input class="" value="{{uploadFile.id}}" type="checkbox"  data-role="batch-item"  data-link-count="{{ uploadFile.usedCount }}" data-file-name="{{ uploadFile.filename }}">
         </td>
@@ -181,15 +181,6 @@
                     </li>
                   {% endif %}
                 {% endif %}
-              {% endif %}
-
-              {# 收藏和取消收藏 #}
-              {% if type|default is empty %}
-                <li>
-                  <a class="js-collect-btn" href="javascript:;" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}">
-                    {% if collections[uploadFile.id]|default(0) %}取消收藏{% else %}收藏{% endif %}
-                  </a>
-                </li>
               {% endif %}
 
               {# 字幕管理 #}

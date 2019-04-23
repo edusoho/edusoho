@@ -14,10 +14,10 @@ class BatchSelect {
     this.$element.find('[data-role="batch-select"]').prop('checked',checked);
     this.$element.find('[data-role="batch-item"]:visible').prop('checked',checked);
     if (checked) {
-      $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-share-btn').attr('disabled', false);
+      $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-share-btn, .js-batch-download').attr('disabled', false);
     } else {
       if (this.$element.find('[data-role="batch-item"]:checked').length == 0) {
-        $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-share-btn').attr('disabled', true);
+        $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-share-btn, .js-batch-download').attr('disabled', true);
       }
     }
   }
@@ -26,9 +26,9 @@ class BatchSelect {
     let itemLength = this.$element.find('[data-role="batch-item"]').length;
     let itemCheckedLength = this.$element.find('[data-role="batch-item"]:checked').length;
     if (itemCheckedLength !== 0) {
-      $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-share-btn').attr('disabled', false);
+      $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-share-btn, .js-batch-download').attr('disabled', false);
     } else {
-      $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-share-btn').attr('disabled', true);
+      $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-share-btn, .js-batch-download').attr('disabled', true);
     }
     if (itemLength == itemCheckedLength) {
       this.$element.find('[data-role="batch-select"]').prop('checked',true);

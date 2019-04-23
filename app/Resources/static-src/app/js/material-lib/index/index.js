@@ -116,13 +116,12 @@ class MaterialWidget {
   batchDownload() {
     const self = this;
     let urls = [];
-    $('#materials-form').find('[data-role=batch-item]:checked').each((event) => {
-      const $target = $(event.target);
-      const downloadUrl = $target.closest('.js-tr-item').find('.js-download-btn').data(url);
+    $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
+      const downloadUrl = $(this).closest('.js-tr-item').find('.js-download-btn').data('url');
       console.log(downloadUrl);
       urls.push(downloadUrl);
     });
-    for (var i = 0;i < urls.length;i++){  //循环遍历调用downloadFile方法
+    for (var i = 0;i < urls.length;i++) {  //循环遍历调用downloadFile方法
       const url = urls[i];
       self.downloadFile(url);         
     }
