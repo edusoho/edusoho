@@ -30,7 +30,8 @@ define(function(require, exports, module) {
         'click .js-manage-batch-btn': 'onClickManageBtn',
         'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
         'click .js-batch-share-btn': 'onClickShareBatchBtn',
-        'click .js-batch-tag-btn': 'onClickTagBatchBtn'
+        'click .js-batch-tag-btn': 'onClickTagBatchBtn',
+        'click .js-cd-modal': 'codeErrorTip'
       },
       setup: function() {
         this.set('model', 'normal');
@@ -55,6 +56,19 @@ define(function(require, exports, module) {
           required: true,
           display: Translator.trans('admin.cloud_file.tag_required_hint')
         });
+      },
+      codeErrorTip: function() {
+        $('#error-modal').on('show.bs.modal', function(event) {
+          var $btn = $(event.relatedTarget);
+          var title = $btn.data('title');
+          var reason = $btn.data('reason');
+          var solution = $btn.data('solution');
+          $('.js-error-tip').html(
+           '<div class="mbl">文件名称：<span class="mlm">' + title + 
+           '</span></div><div class="mbl">转码状态：<span class="mlm">转码失败</span></div><div class="mbl">错误原因：<span class="color-danger mlm">' + reason + 
+           '</span></div><div>解决方案：<span class="color-info mlm">' +  solution + 
+           '</span></div>')
+        })
       },
       onClickUseTypeNav: function(event) {
         var $target = $(event.currentTarget);

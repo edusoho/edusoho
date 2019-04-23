@@ -85,7 +85,7 @@
             {% if status.status == 'ok' %}
               <span class="color-success">{{ 'material.common_table.transcode_success'|trans }}</span>
             {% elseif status.status == 'error'%}
-              <a class="color-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{cloudFile.filename}}" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
+              <a class="color-danger js-cd-modal" href="" data-toggle="modal" data-target="#error-modal" data-title="{{cloudFile.filename}}" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
             {% else %}
               <div class="ad-progress ad-progress-success material-progress">
                 <div class="progress-bar">
