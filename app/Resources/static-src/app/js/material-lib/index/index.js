@@ -106,8 +106,7 @@ class MaterialWidget {
     iframe.style.display = "none";
     iframe.style.height = 0;
     iframe.src = url; 
-    document.body.appendChild(iframe);  // 这一行必须，iframe挂在到dom树上才会发请求
-    // 5分钟之后删除（onload方法对于下载链接不起作用，就先抠脚一下吧）
+    document.body.appendChild(iframe);
     setTimeout(()=>{
       iframe.remove();
     }, 5 * 60 * 1000);
@@ -121,7 +120,7 @@ class MaterialWidget {
       console.log(downloadUrl);
       urls.push(downloadUrl);
     });
-    for (var i = 0;i < urls.length;i++) {  //循环遍历调用downloadFile方法
+    for (let i = 0;i < urls.length;i++) {
       const url = urls[i];
       self.downloadFile(url);         
     }

@@ -15,6 +15,29 @@ let $form = $('#tag-form');
     }
 });
 
+const downloadFile = (url) => {
+  const iframe = document.createElement("iframe");
+  iframe.style.display = "none";
+  iframe.style.height = 0;
+  iframe.src = url;
+  document.body.appendChild(iframe);
+  setTimeout(() => {
+    iframe.remove();
+  }, 5 * 60 * 1000);
+};
+
+const batchDownload = () => {
+  let urls = [];
+  $('#file-manage-panel').find('[data-role=batch-item]:checked').each(function() {
+    const downloadUrl = $(this).closest('.js-tr-item').find('.js-download-btn').data('url');
+    urls.push(downloadUrl);
+  });
+  for (let i = 0;i < urls.length;i++) {
+    const url = urls[i];
+    downloadFile(url);
+  }
+}
+
 const codeErrorTip = () => {
   $('#cd-modal').on('show.bs.modal', function (event) {
     // do something...
@@ -30,6 +53,10 @@ const codeErrorTip = () => {
 
 $panel.on('click', '.js-cd-modal', () => {
   codeErrorTip();
+})
+
+$panel.on('click', '.js-batch-download', () => {
+  batchDownload();
 })
 
 $panel.on('click', '.convert-file-btn', function () {

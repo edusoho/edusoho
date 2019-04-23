@@ -5,7 +5,7 @@
 {% if cloudFile.useType|default('') == 'course.thread.post' %}
   {% set post = data('CourseThreadPost', {courseId: null, postId: cloudFile.targetId|default(0)}) %}
 {% endif %}
-  <tr>
+  <tr class="js-tr-item">
     <td class="vertical-middle vertical-middle">
       <input value="{{ cloudFile.globalId }}" data-download="{{ path('admin_cloud_file_download', {globalId:cloudFile.globalId}) }}" type="checkbox" data-role="batch-item" data-file-id="{{ cloudFile.id }}" data-link-count="{{ cloudFile.usedCount }}" data-file-name="{{ cloudFile.filename }}"/>
     </td>
@@ -129,7 +129,7 @@
         <ul class="dropdown-menu pull-right">
           <li>
             {% if pageType  == 'file' %}
-              <a href="{{ path('admin_cloud_file_download', {globalId:cloudFile.globalId}) }}" target="__blank"><span class="glyphicon glyphicon-download-alt"></span>{{ 'cloud_file.download_btn'|trans }}</a>
+              <a class="js-download-btn" data-url={{ path('admin_cloud_file_download', {globalId:cloudFile.globalId}) }} href="{{ path('admin_cloud_file_download', {globalId:cloudFile.globalId}) }}" target="__blank"><span class="glyphicon glyphicon-download-alt"></span>{{ 'cloud_file.download_btn'|trans }}</a>
             {% endif %}
           </li>
           <li>

@@ -31,7 +31,9 @@ define(function(require, exports, module) {
         'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
         'click .js-batch-share-btn': 'onClickShareBatchBtn',
         'click .js-batch-tag-btn': 'onClickTagBatchBtn',
-        'click .js-cd-modal': 'codeErrorTip'
+        'click .js-cd-modal': 'codeErrorTip',
+        'click .js-batch-download': 'batchDownload',
+
       },
       setup: function() {
         this.set('model', 'normal');
@@ -57,6 +59,31 @@ define(function(require, exports, module) {
           display: Translator.trans('admin.cloud_file.tag_required_hint')
         });
       },
+
+      downloadFile(url) {
+        var iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.style.height = 0;
+        iframe.src = url;
+        document.body.appendChild(iframe);
+        setTimeout(function(){
+          iframe.remove();
+        }, 5 * 60 * 1000);
+      },
+
+      batchDownload() {
+        var self = this;
+        var urls = [];
+        $('#materials-table').find('[data-role=batch-item]:checked').each(function() {
+          var downloadUrl = $(this).closest('.js-tr-item').find('.js-download-btn').data('url');
+          urls.push(downloadUrl);
+        });
+        for (var i = 0;i < urls.length;i++) {
+          var url = urls[i];
+          self.downloadFile(url);   
+        }
+      },
+
       codeErrorTip: function() {
         $('#error-modal').on('show.bs.modal', function(event) {
           var $btn = $(event.relatedTarget);

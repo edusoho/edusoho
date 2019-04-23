@@ -29,7 +29,7 @@
               <a class="cd-btn cd-btn-info cd-btn-sm material-course-preview-btn" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >{{'material_lib.btn.preview'|trans}}
               </a>
             </div>
-            <img class="img-responsive " width="100px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
+            <img class="img-responsive" width="100px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
           </div>
           <div class="material-table-info">
             <p class="title text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">
@@ -141,7 +141,7 @@
                     {% else %}
                       {% set fileShowUrl = path('course_set_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
                     {% endif %}
-                    <a class="link-dark" class="js-download-btn" href="{{ fileShowUrl }}">{{'material_lib.btn.download'|trans}}</a>
+                    <a class="link-dark js-download-btn" data-url="{{ fileShowUrl }}"  href="{{ fileShowUrl }}">{{'material_lib.btn.download'|trans}}</a>
                   {% endif %}
               </li>
 
