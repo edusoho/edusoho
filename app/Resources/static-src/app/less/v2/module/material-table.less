@@ -112,3 +112,45 @@
     cursor: pointer;
   }
 }
+
+.material-search-list {
+  @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+    .form-input-width {
+      width: 130px !important;
+    }
+  }
+  @media (min-width: @screen-sm-max) {
+    .form-input-width {
+      width: 130px !important;
+    }
+
+    .form-input-width-sm {
+      width: 172px !important;
+    }
+
+    .form-input-width-md {
+      width: 190px !important;
+    }
+  }
+  .form-label {
+    vertical-align: -webkit-baseline-middle;
+    color: rgba(51,51,51,0.88);
+    font-weight: normal;
+    width: 70px;
+    margin-right: 4px;
+  }
+  .material-search-list__btn {
+    padding-left: 42px;
+    padding-right: 42px;
+  }
+
+  .material-tag__label {
+    padding: 4px 14px;
+    color: #555;
+    font-size: 14px;
+    line-height: 20px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: @brand-primary;
+  }
+}
