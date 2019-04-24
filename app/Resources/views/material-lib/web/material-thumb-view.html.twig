@@ -31,8 +31,13 @@
     <div class="hidden-xs">
       <div class="form-inline row mbl">
         <div class="col-sm-4 col-md-5">
-          <label class="form-label ">关键字：</label>
-          <input class="form-control form-input-width-md form-input-width" type="text" placeholder="{{'material_lib.search.input_placeholder'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
+          <label class="form-label">关键字：</label>
+          <select class="form-control form-input-width">
+            <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
+            <option value="title">{{ '名称'|trans }}</option>
+            <option value="course">{{'课程'|trans}}</option>
+          </select>
+          <input class="form-control form-input-width mll" type="text" placeholder="{{'material_lib.search.input_placeholder'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
         </div>
         <div class="col-sm-8 col-md-7 form-group">
           <label class="form-label">上传时间：</label>
@@ -68,8 +73,18 @@
     <div class="visible-xs form-horizontal">
      <div class="form-group row">
         <label class="col-xs-3 control-label padding-top7  pr0">关键字：</label>
-        <div class="col-xs-9">
-          <input class="form-control" type="text" placeholder="{{'material_lib.search.input_placeholder'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
+        <div class="col-xs-4 pr0">
+          <select class="form-control form-input-width">
+            <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
+            <option value="title">{{ '名称'|trans }}</option>
+            <option value="course">{{'课程'|trans}}</option>
+          </select>
+        </div>
+        <div class="col-xs-1 pl0 pr0 text-center">
+          <span class="search-space">&nbsp;</span>
+        </div>
+        <div class="col-xs-4 pl0">
+          <input class="form-control" type="text" placeholder="{{'关键字'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
         </div>
       </div>
       <div class="form-group row">
@@ -120,22 +135,6 @@
   {% include 'material-lib/widget/material-button.html.twig' with { uploaderToken: uploaderToken, path: path } %}
 
   <div id="material-lib-items-panel">
-    {# <a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
-    data-url="{{ path('uploader_batch_upload', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="{{'material_lib.btn.upload_files'|trans}}"   data-placement="bottom" >{{'material_lib.btn.upload_files'|trans}}
-    </a>
-    <a class="btn btn-info js-manage-batch-btn" href="javascript:;">{{'material_lib.btn.batch_manage'|trans}}
-    </a> #}
-    <span id="material-lib-batch-btn-bar" style="display:none;">
-      <a class="btn btn-info js-batch-tag-btn" data-role="batch-tag">{{'material_lib.btn.add_tag'|trans}}
-      </a>
-      <a class="btn btn-info js-batch-share-btn" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}"  >{{'material_lib.btn.share'|trans}}
-      </a>
-      <a class="btn btn-danger js-batch-delete-btn" data-role="batch-dalete" href="javascript:;" data-url="{{ path('material_delete_modal_show') }}"  >{{'material_lib.btn.delete'|trans}}
-      </a>
-      <label class="checkbox-inline" data-role="batch-manage" >
-        <input type="checkbox"  data-role="batch-select"/> {{'site.datagrid.radios.all'|trans}}
-      </label>
-    </span>
     <div class="material-list-container" id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
   </div>
 </form>
