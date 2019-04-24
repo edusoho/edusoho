@@ -548,7 +548,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'error' => 'error',
         );
 
-        $file['convertStatus'] = $statusMap[$file['processStatus']['status']];
+        if (is_array($file['processStatus'])) {
+            $file['convertStatus'] = $statusMap[$file['processStatus']['status']];
+        } else {
+            $file['convertStatus'] = $statusMap[$file['processStatus']];
+        }
 
         if ('video' == $file['type']) {
             $file['hasMp4'] = !empty($file['mp4Levels']);
