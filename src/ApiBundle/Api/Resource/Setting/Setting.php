@@ -26,10 +26,14 @@ class Setting extends AbstractResource
 
     public function getHasPluginInstalled($request)
     {
-        $pluginCodes = $request->query->get('pluginCodes', array());
+        $pluginCodes = $request->query->get('pluginCodes', '');
         if (empty($pluginCodes)) {
             throw CommonException::ERROR_PARAMETER();
         }
+        if (!is_array($pluginCodes)) {
+            $pluginCodes = explode(',', $pluginCodes);
+        }
+
         $results = array();
         foreach ($pluginCodes as $pluginCode) {
             $results[$pluginCode] = $this->isPluginInstalled($pluginCode) ? true : false;
