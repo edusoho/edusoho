@@ -31,34 +31,34 @@
     <div class="hidden-xs">
       <div class="form-inline row mbl">
         <div class="col-sm-4 col-md-5">
-          <label class="form-label">关键字：</label>
+          <label class="form-label">{{ 'admin.cashflow.keyword'|trans }}：</label>
           <select class="form-control form-input-width">
             <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
-            <option value="title">{{ '名称'|trans }}</option>
-            <option value="course">{{'课程'|trans}}</option>
+            <option value="title">{{ 'my.teaching.course_set.title'|trans }}</option>
+            <option value="course">{{'admin.cloud_file.keyword_type.course'|trans}}</option>
           </select>
           <input class="form-control form-input-width mll" type="text" placeholder="{{'material_lib.search.input_placeholder'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
         </div>
         <div class="col-sm-8 col-md-7 form-group">
-          <label class="form-label">上传时间：</label>
+          <label class="form-label">{{ 'material.common_table.th.upload_time'|trans }}：</label>
           <input class="form-control input-time form-input-width-sm" type="text" id="startDate" name="startDate" value="" placeholder="{{'material_lib.search.conditions.start_time'|trans}}"><span class="input-space">-</span><input class="form-control input-time form-input-width-sm" type="text" id="endDate" name="endDate" value="" placeholder="{{'material_lib.search.conditions.finish_time'|trans}}" >
         </div>
       </div>
       <div class="form-inline row">
         <div class="col-sm-4 col-md-5 form-group">
-          <label class="form-label">转码状态：</label>
+          <label class="form-label">{{ 'material.common_table.th.transcode_status'|trans }}：</label>
           <select class="form-control js-process-status-select form-input-width-md" name="processStatus">
             <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
-            <option value="waiting">{{ '等待转码'|trans }}</option>
+            <option value="wait">{{ 'material.common_table.transcode_waiting'|trans }}</option>
             <option value="ok">{{'material_lib.search.conditions.convert_status.success'|trans}}</option>
             <option value="waiting">{{'material_lib.search.conditions.convert_status.doing'|trans}}</option>
             <option value="error">{{'material_lib.search.conditions.convert_status.error'|trans}}</option>
-            <option value="">{{ '文件不支持'|trans }}</option>
-            <option value="">{{ '无需转码'|trans }}</option>
+            <option value="notSupport">{{ 'material.common_table.transcode_file_not_support'|trans }}</option>
+            <option value="noNeed">{{ 'material.common_table.no_need_transcode'|trans }}</option>
           </select>
         </div>
         <div class="col-sm-8 col-md-7">
-            <label class="form-label">使用情况：</label>
+            <label class="form-label">{{ 'admin.operation_invite.coupon.use_status_th'|trans }}：</label>
             <select class="form-control js-use-status-select form-input-width-md" name="useStatus">
               <option value="">{{'material_lib.search.conditions.use_status'|trans}}</option>
               <option value="unused">{{'material_lib.search.conditions.use_status.using'|trans}}</option>
@@ -72,23 +72,23 @@
     </div>
     <div class="visible-xs form-horizontal">
      <div class="form-group row">
-        <label class="col-xs-3 control-label padding-top7  pr0">关键字：</label>
+        <label class="col-xs-3 control-label padding-top7  pr0">{{ 'admin.cashflow.keyword'|trans }}：</label>
         <div class="col-xs-4 pr0">
           <select class="form-control form-input-width">
             <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
-            <option value="title">{{ '名称'|trans }}</option>
-            <option value="course">{{'课程'|trans}}</option>
+            <option value="title">{{ 'my.teaching.course_set.title'|trans }}</option>
+            <option value="course">{{'admin.cloud_file.keyword_type.course'|trans}}</option>
           </select>
         </div>
         <div class="col-xs-1 pl0 pr0 text-center">
           <span class="search-space">&nbsp;</span>
         </div>
         <div class="col-xs-4 pl0">
-          <input class="form-control" type="text" placeholder="{{'关键字'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
+          <input class="form-control" type="text" placeholder="{{'admin.cashflow.keyword'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-xs-3 control-label padding-top7  pr0">上传时间：</label>
+        <label class="col-xs-3 control-label padding-top7  pr0">{{ 'material.common_table.th.upload_time'|trans }}：</label>
         <div class="col-xs-4 pr0">
           <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="{{'material_lib.search.conditions.start_time'|trans}}">
         </div>
@@ -100,21 +100,21 @@
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-xs-3 control-label padding-top7  pr0">转码状态：</label>
+        <label class="col-xs-3 control-label padding-top7  pr0">{{ 'material.common_table.th.transcode_status'|trans }}：</label>
         <div class="col-xs-9">
           <select class=" form-control js-process-status-select " name="processStatus">
             <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
-            <option value="waiting">{{ '等待转码'|trans }}</option>
+            <option value="wait">{{ 'material.common_table.transcode_waiting'|trans }}</option>
             <option value="ok">{{'material_lib.search.conditions.convert_status.success'|trans}}</option>
             <option value="waiting">{{'material_lib.search.conditions.convert_status.doing'|trans}}</option>
             <option value="error">{{'material_lib.search.conditions.convert_status.error'|trans}}</option>
-            <option value="">{{ '文件不支持'|trans }}</option>
-            <option value="">{{ '无需转码'|trans }}</option>
+            <option value="notSupport">{{ 'material.common_table.transcode_file_not_support'|trans }}</option>
+            <option value="noNeed">{{ 'material.common_table.no_need_transcode'|trans }}</option>
           </select>
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-xs-3 control-label padding-top7  pr0">使用情况：</label>
+        <label class="col-xs-3 control-label padding-top7  pr0">{{ 'admin.operation_invite.coupon.use_status_th'|trans }}：</label>
         <div class="col-xs-9">
           <select class="form-control js-use-status-select " name="useStatus">
             <option value="">{{'material_lib.search.conditions.use_status'|trans}}</option>

@@ -6,7 +6,7 @@
         cd-mr8 {% endif %}">{{ 'form.checkbox.batch_select'|trans }}</th>
         <th width="{% if size|default('') == 'sm' %}22% {% else %}25%{% endif %}">{{ 'material.common_table.th.file_name'|trans }}</th>
         <th>{{ 'material.common_table.th.file_type'|trans }}</th>
-        <th>大小时长</th>
+        <th>{{ 'material.common_table.th.file_size_time'|trans }}</th>
         <th {% if size|default('') == 'sm' %}width="11%"{% endif %}>{{ 'material.common_table.th.upload_time'|trans }}</th>
         <th width="25%">{{ 'material.common_table.th.transcode_status'|trans }}</th>
         <th>{{ 'material.common_table.th.manage'|trans }}</th>
@@ -94,7 +94,7 @@
                 </div>
                 {% endfor %}
               {%  else  %}
-                等待转码
+                {{ 'material.common_table.transcode_waiting'|trans }}
               {% endif %}
             {% elseif uploadFile.type in ['ppt', 'document'] %}
               {% if uploadFile.convertStatus == 'error' %}
@@ -145,12 +145,9 @@
                   {% endif %}
               </li>
 
-
-
               {% if uploadFile.createdUserId == app.user.id %}
                 {# 删除判断 #}
   
-
                 {% if type|default is not empty %}
                   <li>
                     <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path }}" data-id="{{uploadFile.id }}">
@@ -184,7 +181,6 @@
               {% endif %}
 
               {# 字幕管理 #}
-
               {% if uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
                 <li>
                   <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto: subtitlePath}) }}" data-toggle="tooltip" data-placement="bottom">
@@ -192,13 +188,6 @@
                   </a>
                 </li>
               {% endif %}
-
-              {# 需要添加条件判断 #}
-              {# <li><a target="_blank"href="{{ path('material_download', {fileId:uploadFile.id}) }}">{{'material_lib.btn.download'|trans}}</a></li>
-              <li><a href="{{ path('material_delete_modal_show') }}">{{'material_lib.btn.delete'|trans}}</a></li>
-              <li><a href="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}">{{'material_lib.btn.collect'|trans}}</a></li>
-              <li><a href="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}">{{'material_lib.btn.collect'|trans}}</a></li>
-              <li><a target="_blank" href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:path('material_lib_browsing')}) }}">{{'material_lib.btn.subtitle_manage'|trans}}</a></li> #}
             </ul>
           </div>
         </td>
@@ -208,30 +197,7 @@
     {% endfor %}
     </tbody>
   </table>
-  <div id="cd-modal" class="cd-modal cd-fade cd-in modal">
-    <div class="cd-modal-dialog" id="cd-modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-            <i class="cd-icon cd-icon-close"></i>
-          </button>
-          <h4 class="modal-title">转码失败提示</h4>
-        </div>
-        <div class="modal-body">
-          <div class="cd-pb24 cd-dark-major js-error-tip">
-            
-          </div>
-        </div>
-        <div class="modal-footer text-center">
-          <button class="cd-btn cd-btn-primary material-confirm-modal-btn" type="button" data-dismiss="modal">
-            确定
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
-
 
 <div class="material-common-table visible-xs">
   <table class="table table-striped">
@@ -292,7 +258,7 @@
                 </div>
                 {% endfor %}
               {%  else  %}
-                等待转码
+                {{ 'material.common_table.transcode_waiting'|trans }}
               {% endif %}
             {% elseif uploadFile.type in ['ppt', 'document'] %}
               {% if uploadFile.convertStatus == 'error' %}
