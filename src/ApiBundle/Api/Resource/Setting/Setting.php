@@ -15,13 +15,27 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled'))) {
             throw CommonException::ERROR_PARAMETER();
         }
 
         $method = "get${type}";
 
         return $this->$method($request);
+    }
+
+    public function getHasPluginInstalled($request)
+    {
+        $pluginCodes = $request->query->get('pluginCodes', array());
+        if (empty($pluginCodes)) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+        $results = array();
+        foreach ($pluginCodes as $pluginCode) {
+            $results[$pluginCode] = $this->isPluginInstalled($pluginCode) ? true : false;
+        }
+
+        return $results;
     }
 
     public function getSite($request = null)
@@ -195,6 +209,7 @@ class Setting extends AbstractResource
     public function getLogin()
     {
         $clients = OAuthClientFactory::clients();
+
         return $this->getLoginConnect($clients);
     }
 
@@ -211,6 +226,7 @@ class Setting extends AbstractResource
         if (isset($loginConnect['weixinmob_mp_secret'])) {
             unset($loginConnect['weixinmob_mp_secret']);
         }
+
         return $loginConnect;
     }
 
@@ -235,7 +251,6 @@ class Setting extends AbstractResource
 
         return $default;
     }
-
 
     /**
      * @return \Biz\System\Service\SettingService
