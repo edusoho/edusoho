@@ -32,10 +32,9 @@
       <div class="form-inline row mbl">
         <div class="col-sm-4 col-md-5">
           <label class="form-label">{{ 'admin.cashflow.keyword'|trans }}：</label>
-          <select class="form-control form-input-width">
-            <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
-            <option value="title">{{ 'my.teaching.course_set.title'|trans }}</option>
-            <option value="course">{{'admin.cloud_file.keyword_type.course'|trans}}</option>
+          <select name="keywordType" class="form-control form-input-width">
+            <option value="title">{{ 'material_lib.search.type.title'|trans }}</option>
+            <option value="course">{{'material_lib.search.type.course'|trans}}</option>
           </select>
           <input class="form-control form-input-width mll" type="text" placeholder="{{'material_lib.search.input_placeholder'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
         </div>
@@ -49,23 +48,23 @@
           <label class="form-label">{{ 'material.common_table.th.transcode_status'|trans }}：</label>
           <select class="form-control js-process-status-select form-input-width-md" name="processStatus">
             <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
-            <option value="wait">{{ 'material.common_table.transcode_waiting'|trans }}</option>
+            <option value="waiting">{{ 'material.common_table.transcode_waiting'|trans }}</option>
             <option value="ok">{{'material_lib.search.conditions.convert_status.success'|trans}}</option>
-            <option value="waiting">{{'material_lib.search.conditions.convert_status.doing'|trans}}</option>
+            <option value="processing">{{'material_lib.search.conditions.convert_status.doing'|trans}}</option>
             <option value="error">{{'material_lib.search.conditions.convert_status.error'|trans}}</option>
-            <option value="notSupport">{{ 'material.common_table.transcode_file_not_support'|trans }}</option>
-            <option value="noNeed">{{ 'material.common_table.no_need_transcode'|trans }}</option>
+            <option value="nonsupport">{{ 'material.common_table.transcode_file_not_support'|trans }}</option>
+            <option value="noneed">{{ 'material.common_table.no_need_transcode'|trans }}</option>
           </select>
         </div>
         <div class="col-sm-8 col-md-7">
             <label class="form-label">{{ 'admin.operation_invite.coupon.use_status_th'|trans }}：</label>
             <select class="form-control js-use-status-select form-input-width-md" name="useStatus">
-              <option value="">{{'material_lib.search.conditions.use_status'|trans}}</option>
+              <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
               <option value="unused">{{'material_lib.search.conditions.use_status.using'|trans}}</option>
               <option value="used">{{'material_lib.search.conditions.use_status.used'|trans}}</option>
             </select>
             {# <span class="input-group-btn js-search-btn"> #}
-            <button class="cd-btn cd-btn-primary cd-ml24 material-search-list__btn">{{'material_lib.search.search_btn'|trans}}</button>
+            <button class="cd-btn cd-btn-primary cd-ml24 material-search-list__btn js-search-btn">{{'material_lib.search.search_btn'|trans}}</button>
           {# </span> #}
           </div>
       </div>
@@ -74,10 +73,9 @@
      <div class="form-group row">
         <label class="col-xs-3 control-label padding-top7  pr0">{{ 'admin.cashflow.keyword'|trans }}：</label>
         <div class="col-xs-4 pr0">
-          <select class="form-control form-input-width">
-            <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
-            <option value="title">{{ 'my.teaching.course_set.title'|trans }}</option>
-            <option value="course">{{'admin.cloud_file.keyword_type.course'|trans}}</option>
+          <select name="keywordType" class="form-control form-input-width">
+            <option value="title">{{ 'material_lib.search.type.title'|trans }}</option>
+            <option value="course">{{'material_lib.search.type.course'|trans}}</option>
           </select>
         </div>
         <div class="col-xs-1 pl0 pr0 text-center">
@@ -104,12 +102,12 @@
         <div class="col-xs-9">
           <select class=" form-control js-process-status-select " name="processStatus">
             <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
-            <option value="wait">{{ 'material.common_table.transcode_waiting'|trans }}</option>
+            <option value="waiting">{{ 'material.common_table.transcode_waiting'|trans }}</option>
             <option value="ok">{{'material_lib.search.conditions.convert_status.success'|trans}}</option>
-            <option value="waiting">{{'material_lib.search.conditions.convert_status.doing'|trans}}</option>
+            <option value="processing">{{'material_lib.search.conditions.convert_status.doing'|trans}}</option>
             <option value="error">{{'material_lib.search.conditions.convert_status.error'|trans}}</option>
-            <option value="notSupport">{{ 'material.common_table.transcode_file_not_support'|trans }}</option>
-            <option value="noNeed">{{ 'material.common_table.no_need_transcode'|trans }}</option>
+            <option value="nonsupport">{{ 'material.common_table.transcode_file_not_support'|trans }}</option>
+            <option value="noneed">{{ 'material.common_table.no_need_transcode'|trans }}</option>
           </select>
         </div>
       </div>
@@ -117,14 +115,14 @@
         <label class="col-xs-3 control-label padding-top7  pr0">{{ 'admin.operation_invite.coupon.use_status_th'|trans }}：</label>
         <div class="col-xs-9">
           <select class="form-control js-use-status-select " name="useStatus">
-            <option value="">{{'material_lib.search.conditions.use_status'|trans}}</option>
+            <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
             <option value="unused">{{'material_lib.search.conditions.use_status.using'|trans}}</option>
             <option value="used">{{'material_lib.search.conditions.use_status.used'|trans}}</option>
           </select>
         </div>
       </div>
       <div class="form-group phm mb0">
-        <button class="cd-btn cd-btn-primary btn-block">{{'material_lib.search.search_btn'|trans}}</button>
+        <button class="cd-btn cd-btn-primary btn-block js-search-btn">{{'material_lib.search.search_btn'|trans}}</button>
       </div>
 
     </div>

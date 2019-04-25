@@ -59,7 +59,7 @@
         <td class="cd-dark-major vertical-middle">
           {{ dict_text('fileType', uploadFile.type) }}
           {% if uploadFile.storage == 'cloud' and uploadFile.type == 'video' and uploadFile.hasMp4|default(false) %}
-            <div class="cd-mt8"><span class="cd-tag cd-tag-blue">{{'material.common_table..has_mp4'|trans}}</span></div>
+            <div class="cd-mt8"><span class="cd-tag cd-tag-blue">{{'material.common_table.label.has_mp4'|trans}}</span></div>
           {% endif %}
         </td>
         <td class="cd-dark-major vertical-middle">
@@ -115,7 +115,7 @@
                 <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
               {% endif %}
             {% else %}
-              {{ 'material.common_table.no_need_transcode'|trans }}
+              {{ 'gimaterial.common_table.no_need_transcode'|trans }}
             {% endif %}
           {% else %}
             --
@@ -159,7 +159,7 @@
 
               {% if uploadFile.createdUserId == app.user.id %}
                 {# 删除判断 #}
-  
+
                 {% if type|default is not empty %}
                   <li>
                     <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path }}" data-id="{{uploadFile.id }}">
