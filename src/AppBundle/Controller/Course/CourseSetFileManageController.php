@@ -93,7 +93,7 @@ class CourseSetFileManageController extends BaseController
             $this->createNewException(MaterialException::NOTFOUND_MATERIAL());
         }
 
-        $file = $this->getUploadFileService()->getFile($fileId);
+        $file = $this->getUploadFileService()->getFullFile($fileId);
 
         if ('local' == $file['storage'] || $currentUser['id'] != $file['createdUserId']) {
             $fileTags = $this->getUploadFileTagService()->findByFileId($fileId);
@@ -203,7 +203,7 @@ class CourseSetFileManageController extends BaseController
             if (isset($convertStatus['error'])) {
                 return $this->createJsonResponse(array('status' => 'error', 'message' => $convertStatus['error']));
             }
-            if (isset($convertStatus['status']) && $convertStatus['status'] == 'ok') {
+            if (isset($convertStatus['status']) && 'ok' == $convertStatus['status']) {
                 $this->getUploadFileService()->setAudioConvertStatus($fileId, 'doing');
             }
         }

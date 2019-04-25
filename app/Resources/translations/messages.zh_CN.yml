@@ -786,7 +786,7 @@ material_lib.public: 公共资料
 material_lib.favorite: 收藏夹
 material_lib.sharing: 来自分享
 material_lib.search.search_btn: 搜索
-material_lib.search.input_placeholder: 输入标题关键字
+material_lib.search.input_placeholder: 输入关键字
 material_lib.search.tags: 标签：
 material_lib.search.conditions: 筛选：
 material_lib.search.conditions.start_time: 起始时间
@@ -9875,9 +9875,13 @@ material.common_table.quality.shd: 超清
 material.common_table.transcode_waiting: 等待转码
 material.common_table.transcode_file_not_support: 文件不支持
 material.common_table.transcode_success: 转码成功
+material.common_table.transcode_doing: 转码中
 material.common_table.transcode_error: 转码失败
 material.common_table.transcode_error_tip: 转码失败提示
 material.common_table.no_need_transcode: 无需转码
-material.common_table..has_mp4: 已生成MP4
+material.common_table.label.has_mp4: 已生成MP4
+material_lib.search.type.title: 文件名称
+material_lib.search.type.course: 课程名称
+
 
 

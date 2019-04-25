@@ -8,7 +8,7 @@
 
 {% block body %}
   {% if file.type in ['video', 'audio', 'ppt', 'document', 'image', 'flash'] %}
-    {% if file.type in ['video', 'ppt', 'document'] and file.processStatus != "ok" %}
+    {% if file.type in ['video', 'ppt', 'document'] and file.convertStatus != "success" %}
       <div class="text-center">
         {{'admin.cloud_file.preview.failed_tips'|trans}}
       </div>

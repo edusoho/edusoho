@@ -1235,11 +1235,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $conditions['existGlobalId'] = 0;
         }
 
-        if (!empty($conditions['keyword'])) {
-            $conditions['filenameLike'] = $conditions['keyword'];
-            unset($conditions['keyword']);
-        }
-
         if (!empty($conditions['startDate'])) {
             $conditions['startDate'] = strtotime($conditions['startDate']);
         }
@@ -1256,8 +1251,48 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $conditions['startCount'] = 1;
         }
 
+        $conditions = $this->filterKeyWords($conditions);
         $conditions = $this->filterSourceForm($conditions);
         $conditions = $this->filterTag($conditions);
+
+        return $conditions;
+    }
+
+    protected function filterKeyWords($conditions)
+    {
+        if (!empty($conditions['keywordType']) && !empty($conditions['keyword'])) {
+            $keywordType = $conditions['keywordType'];
+            $keyword = $conditions['keyword'];
+
+            if ('course' == $keywordType) {
+                $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keyword);
+                if (empty($courseSets)) {
+                    $conditions['ids'] = array(-1);
+                } else {
+                    $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+                    $courseMaterials = $this->getMaterialService()->searchMaterials(
+                        array('courseSetIds' => $courseSetIds),
+                        array('createdTime' => 'DESC'),
+                        0,
+                        PHP_INT_MAX
+                    );
+                    $fileIds = ArrayToolkit::column($courseMaterials, 'fileId');
+                    $fileIds = empty($fileIds) ? array(-1) : $fileIds;
+
+                    if (!empty($conditions['ids'])) {
+                        $intersect = array_intersect($conditions['ids'], $fileIds);
+                        $conditions['ids'] = empty($intersect) ? array(-1) : $intersect;
+                    } else {
+                        $conditions['ids'] = $fileIds;
+                    }
+                }
+            } elseif ('title' == $keywordType) {
+                $conditions['filenameLike'] = $keyword;
+            }
+        }
+
+        unset($conditions['keywordType']);
+        unset($conditions['keyword']);
 
         return $conditions;
     }
@@ -1622,5 +1657,18 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getFireWallFactory()
     {
         return $this->biz['file_fire_wall_factory'];
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return \Biz\Course\Service\MaterialService
+     */
+    protected function getMaterialService()
+    {
+        return $this->createService('Course:MaterialService');
     }
 }

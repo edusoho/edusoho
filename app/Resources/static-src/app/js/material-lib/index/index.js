@@ -22,7 +22,7 @@ class MaterialWidget {
   }
   initEvent() {
     this.element.on('click', '.js-search-btn', (event) => {
-      this.submitForm(event);
+      this.onClickSearchBtn(event);
     });
 
     this.element.on('click', '.js-cd-modal', (event) => {
@@ -77,14 +77,6 @@ class MaterialWidget {
       this.onClickReconvertBtn(event);
     });
 
-    this.element.on('change', '.js-process-status-select', (event) => {
-      this.onClickProcessStatusBtn(event);
-    });
-
-    this.element.on('change', '.js-use-status-select', (event) => {
-      this.onClickUseStatusBtn(event);
-    });
-
     this.element.on('click', '.js-share-btn', (event) => {
       this.onClickShareBtn(event);
     });
@@ -137,10 +129,7 @@ class MaterialWidget {
       )
     })
   }
-  submitForm(event) {
-    this.renderTable();
-    event.preventDefault();
-  }
+
   onClickTabs(event) {
     let $target = $(event.currentTarget);
     $target.closest('.js-material-tabs').find('.active').removeClass('active');
@@ -164,6 +153,13 @@ class MaterialWidget {
     }
     this.renderTable();
   }
+
+  // 搜索
+  onClickSearchBtn(event) {
+    this.renderTable();
+    event.preventDefault();
+  }
+
   // 下拉菜单编辑
   onClickDetailBtn(event) {
     if (!this.DetailBtnActive) {
@@ -329,12 +325,7 @@ class MaterialWidget {
     $('#select-tag-items').val(ids);
     $('#tag-modal').modal('show');
   }
-  onClickProcessStatusBtn(event) {
-    this.renderTable();
-  }
-  onClickUseStatusBtn(event) {
-    this.renderTable();
-  }
+
   onClickShareBtn(event) {
     cd.confirm({
       title: '共享',
@@ -406,7 +397,7 @@ class MaterialWidget {
     $.ajax({
       type: 'GET',
       url: this.renderUrl,
-      data: this.element.serialize()
+      data: this.element.find(':visible,input[type="hidden"]').serialize()
     }).done(function(resp){
       $table.html(resp);
       $('[data-toggle="tooltip"]').tooltip();
@@ -462,7 +453,7 @@ class MaterialWidget {
       autoclose: true,
     }).on('changeDate', function() {
       $('#endDate').datetimepicker('setStartDate', $('#startDate').val().substring(0, 16));
-      self.renderTable();
+      //self.renderTable();
     });
 
     $('#startDate').datetimepicker('setEndDate', $('#endDate').val().substring(0, 16));
@@ -472,7 +463,7 @@ class MaterialWidget {
     }).on('changeDate', function() {
 
       $('#startDate').datetimepicker('setEndDate', $('#endDate').val().substring(0, 16));
-      self.renderTable();
+      //self.renderTable();
     });
 
     $('#endDate').datetimepicker('setStartDate', $('#startDate').val().substring(0, 16));
