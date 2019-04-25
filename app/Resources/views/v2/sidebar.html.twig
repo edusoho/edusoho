@@ -21,6 +21,13 @@
     </li>
     {{ slot('my.account.menu.extension', {'sideNav': side_nav}) }}
     {{ slot('my.account.menu.extension.invoice', {'sideNav': side_nav}) }}
+
+    {% if is_plugin_installed('BusinessDrainage') %}
+      <li class="cd-sidebar__item {% if side_nav == 'my-exchange' %} active {% endif %}">
+        <a href="{{path('business_drainage_ecard_my_exchange')}}">{{'兑换卡券'|trans}}</a>
+      </li>
+    {% endif %}
+
     <li class="cd-sidebar__heading">
       {{'user.settings.menu_heading'|trans}}
     </li>
