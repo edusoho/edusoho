@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Event;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\System\Service\LogService;
@@ -48,6 +49,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $subject = $event->getSubject();
         $course = $subject['newCourse'];
         $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($course['courseSetId']);
+        $this->updateCopiedCourseSetPrice($course['courseSetId']);
     }
 
     public function onCourseStatusChange(Event $event)
@@ -137,6 +139,16 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $task = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($task['courseId'], $fields);
+    }
+
+    protected function updateCopiedCourseSetPrice($courseSetId)
+    {
+        $copiedCourseSets = $this->getCourseSetService()->findCourseSetsByParentIdAndLocked($courseSetId, 1);
+        $copiedCourseSetIds = ArrayToolkit::column($copiedCourseSets, 'id');
+
+        foreach ($copiedCourseSetIds as $copiedCourseSetId) {
+            $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($copiedCourseSetId);
+        }
     }
 
     /**

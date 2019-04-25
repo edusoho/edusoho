@@ -63,7 +63,7 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'categoryId = :categoryId',
                 'categoryId IN (:categoryIds)',
                 'title LIKE :title',
-                'creator LIKE :creator',
+                'creator = :creator',
                 'type = :type',
                 'recommended = :recommended',
                 'id NOT IN (:excludeIds)',
