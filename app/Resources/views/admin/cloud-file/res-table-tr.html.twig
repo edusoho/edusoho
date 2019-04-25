@@ -99,7 +99,7 @@
           </div>
           {% endfor %}
         {% else %}
-          等待转码
+          {{ 'material.common_table.transcode_waiting'|trans }}
         {% endif %}
       {% elseif cloudFile.type in ['ppt', 'document'] %}
         {% if cloudFile.convertStatus == 'error' %}

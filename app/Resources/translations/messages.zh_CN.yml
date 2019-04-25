@@ -793,7 +793,7 @@ material_lib.search.conditions.start_time: 起始时间
 material_lib.search.conditions.finish_time: 结束时间
 material_lib.search.conditions.convert_status: 转码状态
 material_lib.search.conditions.convert_status.success: 转码成功
-material_lib.search.conditions.convert_status.doing: 转码中
+material_lib.search.conditions.convert_status.doing: 正在转码
 material_lib.search.conditions.convert_status.error: 转码失败
 material_lib.search.conditions.use_status: 使用状态
 material_lib.search.conditions.use_status.using: 未使用
@@ -861,8 +861,8 @@ material_lib.btn.view: 查看
 material_lib.btn.subtitle_manage: 字幕管理
 material_lib.btn.download: 下载
 material_lib.btn.cancel_share: 取消共享
-material_lib.btn.share: 共享
-material_lib.btn.delete: 删除
+material_lib.btn.share: 共享资料
+material_lib.btn.delete: 删除资料
 material_lib.btn.preview: 预览
 material_lib.btn.convert_again: 重新转码
 material_lib.btn.upload_files: 上传资料
@@ -9864,6 +9864,7 @@ course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务�
 material.common_table.th.file_name: 文件名称
 material.common_table.th.file_type: 类型
 material.common_table.th.file_size: 大小
+material.common_table.th.file_size_time: 大小时长
 material.common_table.th.upload_time: 上传时间
 material.common_table.th.transcode_status: 转码状态
 material.common_table.th.manage: 操作
@@ -9871,10 +9872,13 @@ material.common_table.file.local: 本地
 material.common_table.quality.sd: 标清
 material.common_table.quality.hd: 高清
 material.common_table.quality.shd: 超清
+material.common_table.transcode_waiting: 等待转码
+material.common_table.transcode_file_not_support: 文件不支持
 material.common_table.transcode_success: 转码成功
 material.common_table.transcode_waiting: 等待转码
 material.common_table.transcode_doing: 转码中
 material.common_table.transcode_error: 转码失败
+material.common_table.transcode_error_tip: 转码失败提示
 material.common_table.no_need_transcode: 无需转码
 material.common_table..has_mp4: 已生成MP4
 
