@@ -40,7 +40,7 @@ if [ "$SKIP" = 'n' ]; then
 # 生成h5静态资源文件
 h5repertory="edusoho-h5/index.html";
 if [ ! -f "$h5repertory" ]; then
-git clone git@coding.codeages.net:edusoho/edusoho-h5.git;
+git clone git@coding.codeages.work:edusoho/edusoho-h5.git;
 fi
 
 # 打包edusoho-h5
