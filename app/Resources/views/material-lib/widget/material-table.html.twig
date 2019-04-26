@@ -5,7 +5,7 @@
         <th width="8%"><input type="checkbox" data-role="batch-select" class="{% if size|default('') == 'sm'%} mrs {% else %}
         cd-mr8 {% endif %}">{{ 'form.checkbox.batch_select'|trans }}</th>
         <th width="{% if size|default('') == 'sm' %}22% {% else %}25%{% endif %}">{{ 'material.common_table.th.file_name'|trans }}</th>
-        <th>{{ 'material.common_table.th.file_type'|trans }}</th>
+        <th width="9%">{{ 'material.common_table.th.file_type'|trans }}</th>
         <th>{{ 'material.common_table.th.file_size_time'|trans }}</th>
         <th {% if size|default('') == 'sm' %}width="11%"{% endif %}>{{ 'material.common_table.th.upload_time'|trans }}</th>
         <th width="25%">{{ 'material.common_table.th.transcode_status'|trans }}</th>
