@@ -10,7 +10,9 @@
       </activity>
     </div>
     <div slot="setting" class="groupon-allocate">
-      <header class="title">{{ activityTitle }}</header>
+      <header class="title">{{ activityTitle }}
+        <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">使用营销活动配置功能，小程序版本需要升级到1.3.6及以上</div>
+      </header>
       <div class="groupon-item-setting clearfix">
         <div class="groupon-item-setting__section clearfix">
           <!-- 标题栏 -->
@@ -49,6 +51,7 @@ import activity from '@/containers/components/e-marketing/e-activity';
 import moduleFrame from '../module-frame';
 import courseModal from '../course/modal/course-modal';
 import settingCell from '../module-frame/setting-cell';
+import pathName2Portal from 'admin/config/api-portal-config';
 
 export default {
   name: 'marketing-groupon',
@@ -75,6 +78,7 @@ export default {
     return {
       modalVisible: false,
       courseSets: [],
+      pathName: this.$route.name
     }
   },
   computed: {
@@ -101,6 +105,9 @@ export default {
         this.copyModuleData.titleShow = value;
       }
     },
+    portal() {
+      return pathName2Portal[this.pathName];
+    }
   },
   methods: {
     modalVisibleHandler(visible) {
