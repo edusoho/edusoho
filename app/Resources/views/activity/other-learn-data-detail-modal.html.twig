@@ -19,13 +19,11 @@
           <td>{{ taskResult.createdTime|date("Y-m-d H:i:s") }}</td>
           {% if taskResult.status == 'finish'%}
             <td>{{ taskResult.finishedTime|date("Y-m-d H:i:s") }}</td>
-            <td>{% if taskResult.time > 0 %}{{ (taskResult.time / 60)|number_format(1) }}{% else %}0{% endif %}</td>
-            <td>{% if taskResult.watchTime > 0 %}{{ (taskResult.watchTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
           {% else %}
             <td>-</td>
-            <td>-</td>
-            <td>-</td>
           {% endif %}
+          <td>{% if taskResult.time > 0 %}{{ (taskResult.time / 60)|number_format(1) }}{% else %}0{% endif %}</td>
+          <td>{% if taskResult.watchTime > 0 %}{{ (taskResult.watchTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
         </tr>
       {% endfor %}
     </tbody>
