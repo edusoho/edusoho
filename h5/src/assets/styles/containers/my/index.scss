@@ -1,6 +1,7 @@
 .user {
   border-top: 1px solid #eee;
-  // border-bottom: 1px solid #eee;
+  border-bottom: vw(10) solid #F9F9F9;
+
   &-section {
     position: relative;
     padding: 25px 20px 25px 25px;
@@ -54,6 +55,58 @@
     img {
       width: 100%;
       height: auto;
+    }
+  }
+}
+
+.coupon-code-entrance {
+  border-bottom: vw(10) solid #F9F9F9;
+  background-color: #fff;
+  padding-right: vw(20);
+  padding-left: vw(20);
+  line-height: vw(50);
+  font-size: vw(14);
+  color: #2B333B;
+  .van-icon-arrow {
+    color: #71777D;
+    line-height: vw(50);
+  }
+}
+
+.coupon-covert-container {
+  padding: vw(15);
+  .title {
+    text-align: center;
+  }
+  .coupon-input {
+    font-size: vw(16);
+    border-bottom: 1px solid #D8D8D8;
+  }
+  .covert-submit {
+    width: 100%;
+    font-size: vw(18);
+    margin-top: vw(30);
+    line-height: vw(45);
+  }
+  .error-code {
+    display: inline-block;
+    margin-top: vw(10);
+    color: #FF2121;
+    &.coupon-input {
+      border-bottom: 1px solid #FF2121;
+    }
+  }
+  .coupon-covert-popup {
+    text-align: center;
+    width: vw(244);
+    min-height: vw(124);
+    border-radius: vw(4);
+    box-sizing: border-box;
+    padding: vw(30) vw(20) vw(10);
+    .modal-content {
+      padding-bottom: vw(20);
+      font-size: vw(14);
+      border-bottom: 1px solid #F6F6F6;
     }
   }
 }
