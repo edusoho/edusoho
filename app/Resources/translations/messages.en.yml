@@ -6364,6 +6364,13 @@ admin.cloud_file.select_all: 'Select all'
 admin.cloud_file.add_tag: 'Add tag'
 admin.cloud_file.network_error_hint: 'Network issue，could not connect %edusoho%.'
 admin.cloud_file.detail_not_found_tips: 'File is not found.'
+admin.cloud_file.keyword: Keyword
+admin.cloud_file.upload_time: Upload Time
+admin.cloud_file.transcode_status: Transcode Status
+admin.cloud_file.use_status: Use Status
+admin.cloud_file.detail_loading_hints: loading
+
+
 admin.cloud_file.detail.content_title: Detail
 admin.cloud_file.detail.basic_info: 'Basic Info'
 admin.cloud_file.detail.cover_img: 'Cover'

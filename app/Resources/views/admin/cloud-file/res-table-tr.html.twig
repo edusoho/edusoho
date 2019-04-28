@@ -99,13 +99,25 @@
           </div>
           {% endfor %}
         {% else %}
-          {{ 'material.common_table.transcode_waiting'|trans }}
+          {% if cloudFile.convertStatus == 'error' %}
+            <a class="cd-text-danger" href="javascript:;" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
+          {% elseif cloudFile.convertStatus == 'doing' %}
+            <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
+          {% elseif cloudFile.convertStatus == 'waiting' %}
+            <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+          {% elseif  cloudFile.convertStatus == 'success' %}
+            <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+          {% endif %}
         {% endif %}
       {% elseif cloudFile.type in ['ppt', 'document'] %}
         {% if cloudFile.convertStatus == 'error' %}
-          <a class="color-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
-        {% elseif cloudFile.convertStatus in ['doing','waiting'] %}
-          <span class="color-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+          <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{cloudFile.filename}}" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
+        {% elseif cloudFile.convertStatus == 'doing' %}
+          <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
+        {% elseif cloudFile.convertStatus == 'waiting' %}
+          <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+        {% elseif  cloudFile.convertStatus == 'success' %}
+          <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
         {% endif %}
       {% else %}
         {{ 'material.common_table.no_need_transcode'|trans }}

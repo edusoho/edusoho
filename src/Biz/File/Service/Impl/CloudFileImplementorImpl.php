@@ -546,6 +546,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'processing' => 'doing',
             'ok' => 'success',
             'error' => 'error',
+            'nonsupport' => 'nonsupport',
+            'noneed' => 'noneed',
         );
 
         if (is_array($file['processStatus'])) {

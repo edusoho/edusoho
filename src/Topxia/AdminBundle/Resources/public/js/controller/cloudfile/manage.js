@@ -25,8 +25,6 @@ define(function(require, exports, module) {
         'click .js-reconvert-btn': 'onClickReconvertBtn',
         'click .js-search-type option': 'onClickSearchTypeBtn',
         'click .js-refresh-btn': 'onClickRefreshBtn',
-        'change .js-process-status-select': 'onClickProcessStatusBtn',
-        'change .js-use-status-select': 'onClickUseStatusBtn',
         'click .js-manage-batch-btn': 'onClickManageBtn',
         'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
         'click .js-batch-share-btn': 'onClickShareBatchBtn',
@@ -210,12 +208,6 @@ define(function(require, exports, module) {
         var self = this;
         var $target = $(event.currentTarget);
         $("#search-type").val($target.data("value"));
-      },
-      onClickProcessStatusBtn: function(event) {
-        this.renderTable();
-      },
-      onClickUseStatusBtn: function(event) {
-        this.renderTable();
       },
       submitForm: function(event) {
         this.renderTable();
@@ -512,7 +504,6 @@ define(function(require, exports, module) {
           autoclose: true,
         }).on('changeDate', function() {
           $("#endDate").datetimepicker('setStartDate', $("#startDate").val().substring(0, 16));
-          self.renderTable();
         });
 
         $("#startDate").datetimepicker('setEndDate', $("#endDate").val().substring(0, 16));
@@ -521,7 +512,6 @@ define(function(require, exports, module) {
           autoclose: true,
         }).on('changeDate', function() {
           $("#startDate").datetimepicker('setEndDate', $("#endDate").val().substring(0, 16));
-          self.renderTable();
         });
 
         $("#endDate").datetimepicker('setStartDate', $("#startDate").val().substring(0, 16));
