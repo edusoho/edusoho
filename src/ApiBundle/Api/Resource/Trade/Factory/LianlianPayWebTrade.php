@@ -37,9 +37,7 @@ class LianlianPayWebTrade extends BaseTrade
     {
         $bindPhone = '';
         if (!empty($user['verifiedMobile'])) {
-            $head = substr($user['verifiedMobile'], 0, 3);
-            $tail = substr($user['verifiedMobile'], -4, 4);
-            $bindPhone = $head.'****'.$tail;
+            $bindPhone = substr_replace($user['verifiedMobile'], '****', -4, 4);
         }
 
         return $bindPhone;
