@@ -221,6 +221,13 @@ const routes = [
       title: ''
     },
     component: () => import(/* webpackChunkName: "auth_social" */'@/containers/login/social/index.vue')
+  }, {
+    path: '/coupon/covert',
+    name: 'couponCovert',
+    meta: {
+      title: '兑换卡券'
+    },
+    component: () => import(/* webpackChunkName: "auth_social" */'@/containers/coupon/covert/index.vue')
   }
 ];
 

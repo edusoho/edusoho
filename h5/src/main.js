@@ -72,6 +72,21 @@ Api.getSettings({
     return hash.match(/#.*\?/g)[0].slice(1, -1);
   };
   const isWhiteList = whiteList.includes(getPathNameByHash(hashStr));
+
+  const hashParamArray = getPathNameByHash(hashStr).split('/');
+  const hashHasToken = hashParamArray.includes('loginToken');
+
+  if (hashHasToken) {
+    const tokenIndex = hashParamArray.indexOf('loginToken');
+    const tokenFromUrl = hashParamArray[tokenIndex + 1];
+    const courseId = hashParamArray[hashParamArray.indexOf('course') + 1];
+    console.log(courseId, 'courseIdFromUrl');
+    localStorage.setItem('token', tokenFromUrl);
+    if (courseId) {
+      window.location.href = `${location.origin}/h5/index.html#/course/${courseId}`;
+    }
+  }
+
   if (!isWhiteList) {
     if (parseInt(res.version, 10) !== 2) {
       // 如果没有开通微网校，则跳回老版本网校 TODO
