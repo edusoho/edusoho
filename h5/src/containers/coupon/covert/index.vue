@@ -37,14 +37,16 @@ export default {
 
   methods: {
     checkCode(code) {
-      const reg = /^[a-z0-9A-Z]{8}$/;
-      const correctCode = reg.test(code);
-      if (!correctCode) {
-        this.isErrorCode = true;
-        this.errorText = '8位数字、英文字母组成';
-        return
+      if (code.length >= 8) {
+        const reg = /^[a-z0-9A-Z]{8}$/;
+        const correctCode = reg.test(code);
+        if (!correctCode) {
+          this.isErrorCode = true;
+          this.errorText = '8位数字、英文字母组成';
+          return
+        }
+        this.isErrorCode = false
       }
-      this.isErrorCode = false
     },
     codeCovert(code) {
       Api.couponCheck({
