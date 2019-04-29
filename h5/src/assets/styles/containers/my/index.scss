@@ -106,8 +106,11 @@
     padding: vw(30) vw(20) vw(10);
     .modal-content {
       padding-bottom: vw(20);
-      font-size: vw(14);
+      font-size: vw(15);
       border-bottom: 1px solid #F6F6F6;
+    }
+    .text-15 {
+      font-size: vw(15);
     }
   }
 }

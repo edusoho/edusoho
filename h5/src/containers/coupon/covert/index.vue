@@ -13,7 +13,7 @@
       <div class="modal-content">
         兑换成功<div>恭喜您获得{{courseTitle}}课程</div>
       </div>
-      <div class="color-primary mt5 text-14" @click="toStudy">去学习</div>
+      <div class="color-primary mt10 text-15" @click="toStudy">去学习</div>
     </van-popup>
   </div>
 </template>
