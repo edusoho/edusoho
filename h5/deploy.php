@@ -5,7 +5,7 @@ require 'recipe/common.php';
 
 // Configuration
 
-set('repository', 'git@coding.codeages.net:edusoho/edusoho-h5.git');
+set('repository', 'git@coding.codeages.work:edusoho/edusoho-h5.git');
 set('git_tty', false); // [Optional] Allocate tty for git on first deployment
 set('writable_mode', 'acl');
 
