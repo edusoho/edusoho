@@ -7795,6 +7795,10 @@ admin.cloud_file.select_all: 全选
 admin.cloud_file.add_tag: 添加标签
 admin.cloud_file.network_error_hint: 网络问题，无法连接%edusoho%开放云平台
 admin.cloud_file.detail_not_found_tips: 该文件不是云文件，或者对应云文件已经损坏！
+admin.cloud_file.keyword: 关键字：
+admin.cloud_file.upload_time: 上传时间：
+admin.cloud_file.transcode_status: 转码状态：
+admin.cloud_file.use_status: 使用情况：
 
 admin.cloud_file.detail.content_title: 资源详情
 admin.cloud_file.detail.basic_info: 基本信息

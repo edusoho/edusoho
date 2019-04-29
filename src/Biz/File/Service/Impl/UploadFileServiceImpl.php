@@ -991,6 +991,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'processing' => 'doing',
             'ok' => 'success',
             'error' => 'error',
+            'nonsupport' => 'nonsupport',
+            'noneed' => 'noneed',
         );
 
         $fields = array(
