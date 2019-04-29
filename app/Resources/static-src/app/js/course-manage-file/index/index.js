@@ -209,7 +209,7 @@ $('.js-detail-btn').on('click', function (){
         callback: function() {
           $(container).show();
           $(container).prev().show();
-          asyncLoadFiles();
+          window.location.reload();
         }
       });
     }).fail(function() {

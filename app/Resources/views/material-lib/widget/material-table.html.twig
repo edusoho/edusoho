@@ -95,7 +95,7 @@
                 {% endfor %}
               {% else %}
                 {% if uploadFile.convertStatus == 'error' %}
-                  <a class="cd-text-danger" href="javascript:;" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
+                  转码异常
                 {% elseif uploadFile.convertStatus == 'doing' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
                 {% elseif uploadFile.convertStatus == 'waiting' %}
@@ -106,7 +106,7 @@
               {% endif %}
             {% elseif uploadFile.type in ['ppt', 'document'] %}
               {% if uploadFile.convertStatus == 'error' %}
-                <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
+                转码异常
               {% elseif uploadFile.convertStatus == 'doing' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
               {% elseif uploadFile.convertStatus == 'waiting' %}
@@ -270,12 +270,24 @@
                 </div>
                 {% endfor %}
               {%  else  %}
-                {{ 'material.common_table.transcode_waiting'|trans }}
+                {% if uploadFile.convertStatus == 'error' %}
+                  转码异常
+                {% elseif uploadFile.convertStatus == 'doing' %}
+                  <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
+                {% elseif uploadFile.convertStatus == 'waiting' %}
+                  <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+                {% elseif  uploadFile.convertStatus == 'success' %}
+                  <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+                {% endif %}
               {% endif %}
             {% elseif uploadFile.type in ['ppt', 'document'] %}
               {% if uploadFile.convertStatus == 'error' %}
-                <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.reason')|trans }}" data-solution="{{ ('cloud_file.transcoding_tips.error_code_' ~ status.errorCode ~ '.solution')|trans }}">{{ 'material.common_table.transcode_error'|trans }}</a>
-              {% elseif uploadFile.convertStatus in ['doing','waiting'] %}
+                转码异常
+              {% elseif uploadFile.convertStatus == 'doing' %}
+                <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
+              {% elseif uploadFile.convertStatus == 'waiting' %}
+                <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+              {% elseif  uploadFile.convertStatus == 'success' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
               {% endif %}
             {% else %}
