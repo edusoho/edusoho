@@ -83,7 +83,7 @@ Api.getSettings({
     store.state.token = tokenFromUrl;
     localStorage.setItem('token', tokenFromUrl);
     if (courseId) {
-      window.location.href = `${location.origin}/h5/index.html#/course/${courseId}/backUrl='%20'`;
+      window.location.href = `${location.origin}/h5/index.html#/course/${courseId}?backUrl=%2F`;
     }
   }
 
