@@ -37,7 +37,7 @@ export default {
 
   methods: {
     checkCode(code) {
-      if (code.length >= 8) {
+      if (code.length > 7) {
         const reg = /^[a-z0-9A-Z]{8}$/;
         const correctCode = reg.test(code);
         if (!correctCode) {
@@ -45,6 +45,9 @@ export default {
           this.errorText = '8位数字、英文字母组成';
           return
         }
+        this.isErrorCode = false
+      }
+      if (!code.length) {
         this.isErrorCode = false
       }
     },
@@ -78,8 +81,10 @@ export default {
     toStudy() {
       const courseId = this.courseId;
       if (courseId) {
+        // 跳转详情页后可直接返回到我的页面
+        const myUrl = encodeURIComponent('/my/orders');
         this.$router.push({
-          path: `/course/${courseId}`,
+          path: `/course/${courseId}?backUrl=${myUrl}`,
         });
       }
     }
