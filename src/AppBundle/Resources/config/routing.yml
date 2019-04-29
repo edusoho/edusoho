@@ -1413,6 +1413,10 @@ open_course_manage_files_delete:
     defaults: { _controller: AppBundle:OpenCourseFileManage:deleteCourseFiles }
     methods: [POST]
 
+open_course_manage_files_batch_tag_add:
+  path: /open/course/{id}/batch/tag/add
+  defaults: { _controller: AppBundle:OpenCourseFileManage:batchTagAdd }
+
 open_course_manage_course_pick:
     path: /open/course/{id}/manage/recommend/pick/{filter}
     defaults: { _controller: AppBundle:OpenCourseManage:pick,filter:'openCourse'}
@@ -2204,6 +2208,10 @@ course_set_manage_retry_transcode:
 course_set_manage_file_detail:
   path:  /course_set/{courseSetId}/manage/file/{fileId}/detail
   defaults: { _controller: AppBundle:Course/CourseSetFileManage:detail }
+
+course_set_manage_files_batch_tag_add:
+  path: /course_set/{id}/batch/tag/add
+  defaults: { _controller: AppBundle:Course/CourseSetFileManage:batchTagAdd }
 
 course_set_manage_publish:
   path: /course_set/{id}/manage/publish
