@@ -8,7 +8,7 @@
       {% if setting('siteTrace.enabled')|default(false) %}
         {{ setting('siteTrace.script')|raw }}
       {% endif %}
-      <div class="pull-right">{% if setting('site.copyright') %}{{'课程内容版权均归'|trans}}<a href="/">{{ setting('site.copyright') }}</a>{{'所有'|trans}}{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a>{% endif %}</div>
+      <div class="pull-right">{% if setting('site.copyright') %}{{'课程内容版权均归'|trans}}<a href="/">{{ setting('site.copyright') }}</a>{{'所有'|trans}}{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://beian.miit.gov.cn" target="_blank">{{ setting('site.icp') }}</a>{% endif %}</div>
 
       <div class="pull-right mhs"><a href="{{ path('course_set_archive') }}">{{'课程存档'|trans}}</a></div>
     </div>
