@@ -80,11 +80,10 @@ Api.getSettings({
     const tokenIndex = hashParamArray.indexOf('loginToken');
     const tokenFromUrl = hashParamArray[tokenIndex + 1];
     const courseId = hashParamArray[hashParamArray.indexOf('course') + 1];
-    console.log(courseId, 'courseIdFromUrl');
     store.state.token = tokenFromUrl;
     localStorage.setItem('token', tokenFromUrl);
     if (courseId) {
-      window.location.href = `${location.origin}/h5/index.html#/course/${courseId}`;
+      window.location.href = `${location.origin}/h5/index.html#/course/${courseId}/backUrl='%20'`;
     }
   }
 
