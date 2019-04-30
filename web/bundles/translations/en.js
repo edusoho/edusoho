@@ -1218,4 +1218,5 @@ t.add("admin.shortcut_add_success_hint", "The current page has been added as a p
 t.add("admin.shortcut_delete_success_hint", "Delete frequently used links successfully!", "js", "en");
 t.add("task_show.user_login_protect_tip", "User unLogin", "js", "en");
 t.add("admin.course_manage.manage.tags_select.placeholder", "\u8f93\u5165\u6807\u7b7e\u540d\u79f0\u5173\u952e\u5b57", "js", "en");
+t.add("exception.common_frequent_operation", "\u64cd\u4f5c\u8fc7\u4e8e\u9891\u7e41\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5", "js", "en");
 })(Translator);
