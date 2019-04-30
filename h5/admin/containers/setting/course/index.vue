@@ -134,7 +134,7 @@ export default {
         value: 'id',
       },
       pathName: this.$route.name,
-      categoryTempId: [this.moduleData.data.categoryId.toString()],
+      categoryTempId: this.moduleData.data.categoryIdArray || ['0'],
       categoryDiggered: false,
       dateOptions: [{
         value: '7',
@@ -242,7 +242,9 @@ export default {
         if (!value.length) {
           return;
         }
-        const endIndex = value.length - 1
+        const endIndex = value.length - 1;
+        // 多级分类需要拿到最后等级的id
+        this.moduleData.data.categoryIdArray = value;
         this.moduleData.data.categoryId = value[endIndex];
       },
     },
@@ -260,7 +262,7 @@ export default {
         this.categoryDiggered = true;
 
         if (categoryExist) return;
-        this.categoryTempId = ['0'];
+        // this.categoryTempId = ['0'];
       },
       immediate: true,
     },
