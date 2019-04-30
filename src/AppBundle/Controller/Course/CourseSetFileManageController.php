@@ -255,6 +255,23 @@ class CourseSetFileManageController extends BaseController
         $this->createNewException(CommonException::NOT_ALLOWED_METHOD());
     }
 
+    public function batchTagAddAction(Request $request, $id)
+    {
+        $this->getCourseSetService()->tryManageCourseSet($id);
+
+        $data = $request->request->all();
+        $fileIds = preg_split('/,/', $data['fileIds']);
+
+        $this->getMaterialLibService()->batchTagEdit($fileIds, $data['tags']);
+
+        return $this->redirect($this->generateUrl('course_set_manage_files', array('id' => $id)));
+    }
+
+    protected function getMaterialLibService()
+    {
+        return $this->createService('MaterialLib:MaterialLibService');
+    }
+
     /**
      * @return CourseSetService
      */

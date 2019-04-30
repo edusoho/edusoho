@@ -32,7 +32,7 @@
     {{ web_macro.paginator(paginator) }}
   </nav>
   {% include 'material-lib/widget/error-modal.html.twig' %}
-  {% include 'material-lib/widget/tag-modal.html.twig' %}
+  {% include 'material-lib/widget/tag-modal.html.twig' with {tagPath : path('open_course_manage_files_batch_tag_add', {id:courseSet.id})} %}
 
 </div>
 {% endblock %}
