@@ -273,7 +273,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // 未登录用户 信息设置页 跳转到首页
-  if (['settings'].includes(to.name) && !store.state.token) {
+  if (['settings', 'couponCovert'].includes(to.name) && !store.state.token) {
     next('/');
     return;
   }
