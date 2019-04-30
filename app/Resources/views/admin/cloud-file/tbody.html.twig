@@ -1,7 +1,7 @@
 {% for material in materials %}
   {% set createdUser = createdUsers[material.createdUserId|default(0)]|default(null) %}
   {% if pageType == 'attachment'%}
-    {% include 'admin/cloud-file/table-tr.html.twig' with {createdUser:createdUser, cloudFile:material} %}
+    {% include 'admin/cloud-file/res-table-tr.html.twig' with {createdUser:createdUser, cloudFile:material, type:'attachment'} %}
   {% else %}
     {% include 'admin/cloud-file/res-table-tr.html.twig' with {createdUser:createdUser, cloudFile:material} %}
   {% endif %}

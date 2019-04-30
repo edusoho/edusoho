@@ -8,6 +8,9 @@
           <th>{{ 'type'|trans }}</th>
           <th>{{ 'material.common_table.th.file_size_time'|trans }}</th>
           <th>{{ 'cloud_file.upload_time'|trans }}</th>
+          {% if pageType == 'attachment'%}
+            <th class="text-center">{{ 'cloud_file.application'|trans }}</th>
+          {% endif %}
           <th width="25%">{{ 'material.common_table.th.transcode_status'|trans }}</th>
           <th>{{ 'operation'|trans }}</th>
         </tr>
