@@ -130,7 +130,7 @@ export default {
     },
     supportActivityVersion() {
       return true;
-      // return this.supportVersion('1.3.6');
+      // return this.supportVersion('1.3.7');
     },
     supportClassroomVersion() {
       return true;
