@@ -53,11 +53,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $course = ArrayToolkit::parts($course, array('title', 'type', 'about', 'categoryId'));
+        $course = ArrayToolkit::parts($course, array('title', 'type', 'about', 'categoryId', 'orgCode'));
         $course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
         $course['userId'] = $this->getCurrentUser()->id;
         $course['teacherIds'] = array($course['userId']);
+        $course = $this->fillOrgId($course);
 
         $course = $this->getOpenCourseDao()->create($course);
 
@@ -1085,6 +1086,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'recommendedTime' => 0,
             'studentNum' => 0,
             'updateTime' => time(),
+            'orgCode' => '1.',
+            'orgId' => '1',
         ));
 
         if (isset($fields['tags'])) {
@@ -1102,6 +1105,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         if (isset($fields['about'])) {
             $fields['about'] = $this->purifyHtml($fields['about'], true);
         }
+
+        $fields = $this->fillOrgId($fields);
 
         return $fields;
     }
