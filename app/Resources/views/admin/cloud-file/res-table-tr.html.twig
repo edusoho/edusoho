@@ -66,10 +66,15 @@
       {% endif %}
     </td>
     <td class="text-center vertical-middle">
+      {% if pageType == 'attachment' %}
+        <span style="display:block">{{ cloudFile.createdTime|date('Y-m-d') }}</span>
+        {{ cloudFile.createdTime|date('H:i:s') }}
+      {% else %}
       <span style="display:block">{{ cloudFile.createdTime|date('Y-m-d H:i:s') }}</span>
+      {% endif %}
     </td>
-    {% if pageType  == 'attachment' %}
-      <td class="text-center">
+    {% if pageType == 'attachment' %}
+      <td class="text-center vertical-middle">
         <span style="display:block">{{ forms.showType(cloudFile.useType) }}</span>
       </td>
     {% endif %}
@@ -130,7 +135,7 @@
     <td class="es-materillib-table text-center vertical-middle">
       <div class="btn-group ">
         {% if pageType  == 'attachment' %}
-          <a class="btn btn-default btn-sm" href="{{ path('admin_cloud_file_download', {globalId:cloudFile.globalId}) }}"  target="__blank"><span class="glyphicon glyphicon-download-alt"></span> {{ 'cloud_file.download_btn'|trans }}</a>
+          <a class="btn btn-default btn-sm" href="{{ path('admin_cloud_file_download', {globalId:cloudFile.globalId}) }}"  target="__blank">{{ 'cloud_file.download_btn'|trans }}</a>
         {% else %}
           <a class="btn btn-default btn-sm js-detail-btn " data-url="{{ path('admin_cloud_file_detail', {globalId:cloudFile.globalId}) }}">{{ 'cloud_file.edit_btn'|trans }}</a>
         {% endif %}
