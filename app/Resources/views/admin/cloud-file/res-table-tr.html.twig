@@ -70,7 +70,7 @@
         <span style="display:block">{{ cloudFile.createdTime|date('Y-m-d') }}</span>
         {{ cloudFile.createdTime|date('H:i:s') }}
       {% else %}
-      <span style="display:block">{{ cloudFile.createdTime|date('Y-m-d H:i:s') }}</span>
+        <span style="display:block">{{ cloudFile.createdTime|date('Y-m-d H:i:s') }}</span>
       {% endif %}
     </td>
     {% if pageType == 'attachment' %}
