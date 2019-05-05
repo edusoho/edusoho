@@ -1,6 +1,6 @@
 <div class="bottom cloud-search-section">
   <div class="form-inline row">
-    <div class="form-group col-sm-5">
+    <div class="form-group col-sm-4">
       <label>{{ 'admin.cloud_file.transcode_status'|trans }}</label>
       <select class="form-control js-process-status-select form-control-input-md" name="convertStatus">
         <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
@@ -18,6 +18,9 @@
       <input class="form-control form-control-input-sm mrm" type="text" id="startDate" name="startDate" value="" placeholder="{{ 'form.placeholder.start_date'|trans }}">
       -
       <input class="form-control form-control-input-sm mlm" type="text" id="endDate" name="endDate" value="" placeholder="{{ 'form.placeholder.end_date'|trans }}">
+    </div>
+    <div class="form-group es-materials-filter col-sm-2">
+      <button class="form-space btn btn-primary cloud-search-btn">{{ 'form.btn.search'|trans }}</button>
     </div>
   </div>
 </div>
