@@ -212,7 +212,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
 
     public function countRepeatedLessonsByCourseId($courseId)
     {
-        $sql = "SELECT count(*) as num from {$this->table()} where courseId = ? group by categoryId having num > 1;";
+        $sql = "SELECT count(*) AS num FROM {$this->table()} WHERE courseId = ? GROUP BY categoryId HAVING num > 1;";
 
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
