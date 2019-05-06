@@ -32,6 +32,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
         $this->registerCurrency($biz);
 
         $this->registerPayments($biz);
+
+        $this->registerIapOptions($biz);
     }
 
     private function registerProduct(Container $biz)
@@ -171,4 +173,17 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             return $currency;
         };
     }
+
+    private function registerIapOptions(Container $biz)
+    {
+        $biz['iap.options'] = function ($biz) {
+            $mobileSetting = $biz->service('System:SettingService')->get('mobile', array());
+
+            return array(
+                'bundleId' => $mobileSetting['bundleId'],
+                'product' => $biz->service('System:SettingService')->get('mobile_iap_product', array()),
+            );
+        };
+    }
+
 }
