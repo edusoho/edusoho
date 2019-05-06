@@ -185,5 +185,4 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             );
         };
     }
-
 }
