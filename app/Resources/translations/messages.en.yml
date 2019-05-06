@@ -23,6 +23,7 @@ site.data.part: Part
 site.data.title: Title
 site.data.score: Score
 site.data.count: Count
+site.copy: Copy
 site.datagrid.empty: 'No data'
 site.datagrid.filter.all_records: 'All'
 site.datagrid.filter.last_one_week: 'Last 7 days'
