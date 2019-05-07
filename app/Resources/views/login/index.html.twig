@@ -33,7 +33,7 @@
         <div class="form-group mbl">
           <label class="control-label" for="login_username">{{ 'user.login.account_label'|trans }}</label>
           <div class="controls">
-            <input class="form-control input-lg" id="login_username" type="text" name="_username" value="{{ last_username }}" required
+            <input class="form-control input-lg" id="login_username" type="text" name="_username" value="{% if app.request.query.get('account') %}{{ app.request.query.get('account') }}{% else %}{{ last_username }}{% endif %}" required
               placeholder='{{ 'user.login.account_placeholder'|trans }}'/>
             <div class="help-block"></div>
           </div>
