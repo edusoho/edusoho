@@ -6,7 +6,7 @@ let threadContent = 'thread_content';
 
 new AttachmentActions($userThreadForm);
 let editor = CKEDITOR.replace(threadContent, {
-  toolbar: 'Thread',
+  toolbar: 'Full',
   fileSingleSizeLimit: app.fileSingleSizeLimit,
   filebrowserImageUploadUrl: $('#' + threadContent).data('imageUploadUrl'),
   allowedContent: true,

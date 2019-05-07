@@ -19,7 +19,12 @@ class Helper
     }
     public static function xml2array($xml)
     {
-        return json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        libxml_disable_entity_loader(true);
+        $data = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        if (!is_array($data)) {
+            $data = [];
+        }
+        return $data;
     }
     public static function sign($data, $key)
     {

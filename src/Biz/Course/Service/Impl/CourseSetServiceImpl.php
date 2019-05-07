@@ -1140,6 +1140,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields['audiences'] = json_decode($fields['audiences'], true);
         }
 
+        $fields = $this->fillOrgId($fields);
+
         return $fields;
     }
 
@@ -1165,6 +1167,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'orgCode',
             )
         );
+        $courseSet = $this->fillOrgId($courseSet);
 
         $courseSet['status'] = 'draft';
 
