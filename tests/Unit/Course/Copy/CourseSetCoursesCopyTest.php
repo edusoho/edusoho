@@ -17,6 +17,7 @@ class CourseSetCoursesCopeTest extends BaseTestCase
         $course2 = $this->getCourseDao()->create(array('id' => 35, 'courseSetId' => 1, 'title' => '', 'type' => '', 'originPrice' => '10', 'status' => 'published'));
         $source = array(
             'id' => 1,
+            'defaultCourseId' => $course2['id'],
         );
         $options = array(
             'newCourseSet' => array(
