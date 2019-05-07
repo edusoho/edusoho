@@ -22,7 +22,7 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
         '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
-        '5500a79e13a6ff0c087268676dcb4c2f' => __DIR__ . '/..' . '/wenqinruan/omnipay-alipay/src/Common/helpers.php',
+        '299dfe369c68155fbe2a6dcdb576d58e' => __DIR__ . '/..' . '/codeages/omnipay-alipay/src/Common/helpers.php',
         '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         'c65d09b6820da036953a371c8c73a9b1' => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook/polyfills.php',
@@ -265,15 +265,15 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         ),
         'Omnipay\\WechatPay\\' => 
         array (
-            0 => __DIR__ . '/..' . '/canuonifeng/omnipay-wechatpay/src',
+            0 => __DIR__ . '/..' . '/codeages/omnipay-wechatpay/src',
         ),
         'Omnipay\\Alipay\\Tests\\' => 
         array (
-            0 => __DIR__ . '/..' . '/wenqinruan/omnipay-alipay/tests',
+            0 => __DIR__ . '/..' . '/codeages/omnipay-alipay/tests',
         ),
         'Omnipay\\Alipay\\' => 
         array (
-            0 => __DIR__ . '/..' . '/wenqinruan/omnipay-alipay/src',
+            0 => __DIR__ . '/..' . '/codeages/omnipay-alipay/src',
         ),
         'Monolog\\' => 
         array (
