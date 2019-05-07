@@ -63,16 +63,14 @@ class ClassroomController extends BaseController
 
             $todayTimeStart = strtotime(date('Y-m-d', time()));
             $todayTimeEnd = strtotime(date('Y-m-d', time() + 24 * 3600));
-            $conditions= array();
-            count($courseIds) > 1 ? $conditions['courseIds'] = $courseIds : $conditions['courseId'] = '0';
 
-            $todayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(array_merge($conditions, array('createdTime_GE' => $todayTimeStart, 'finishedTime_LE' => $todayTimeEnd, 'status' => 'finish')));
+            $todayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(array('courseIds' => (!empty($courseIds)) ? $courseIds : array(-1), 'createdTime_GE' => $todayTimeStart, 'status' => 'finish'));
             $threadCount = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $classroom['id'], 'type' => 'discussion', 'startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd, 'status' => 'open'));
-            unset($conditions);
             $classrooms[$key]['threadCount'] = $threadCount;
 
             $classrooms[$key]['todayFinishedTaskNum'] = $todayFinishedTaskNum;
         }
+
         return $this->render('my/teaching/classroom.html.twig', array(
             'classrooms' => $classrooms,
             'members' => $members,
