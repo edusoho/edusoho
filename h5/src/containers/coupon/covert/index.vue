@@ -8,7 +8,7 @@
       clearable
       v-on:input="checkCode(code)"/>
       <span v-if="isErrorCode" class="error-code text-14">{{errorText}}</span>
-    <van-button type="info" class="covert-submit" :disabled="!code || isErrorCode" @click="codeCovert(code)">确认</van-button>
+    <van-button type="info" class="covert-submit" :disabled="btnDisable || isErrorCode" @click="codeCovert(code)">确认</van-button>
     <van-popup v-model="popupShow" class="coupon-covert-popup" :closeOnClickOverlay="closeOnClickOverlay">
       <div class="modal-content">
         兑换成功<div>恭喜您获得{{courseTitle}}课程</div>
@@ -27,7 +27,7 @@ export default {
       code: '',
       popupShow: false,
       closeOnClickOverlay: false,
-      btnDisable: false,
+      btnDisable: true,
       isErrorCode: false,
       errorText: '',
       courseId: '',
@@ -45,11 +45,14 @@ export default {
           this.errorText = '8位数字、英文字母组成';
           return
         }
-        this.isErrorCode = false
+        this.isErrorCode = false;
+        this.btnDisable = false;
+        this.errorText = '';
+        return;
       }
-      if (!code.length) {
-        this.isErrorCode = false
-      }
+      this.isErrorCode = false;
+      this.btnDisable = true;
+      this.errorText = '';
     },
     codeCovert(code) {
       Api.couponCheck({
