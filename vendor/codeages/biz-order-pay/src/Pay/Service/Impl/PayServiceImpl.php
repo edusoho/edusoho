@@ -238,7 +238,6 @@ class PayServiceImpl extends BaseService implements PayService
             'trade_sn' => $trade['trade_sn'],
             'status' => 'paid',
             'pay_amount' => $data['pay_amount'],
-            'receipt' => $data['receipt'],
         );
         $this->updateTradeToPaidAndTransferAmount($data);
         $trade = $this->getPayTradeDao()->get($trade['id']);
@@ -301,8 +300,8 @@ class PayServiceImpl extends BaseService implements PayService
 
                 $this->commit();
             } catch (\Exception $e) {
-                $this->getTargetlogService()->log(TargetlogService::INFO, 'pay.error', $data['trade_sn'], "交易号{$data['trade_sn']}处理失败, {$e->getMessage()}", $data);
                 $this->rollback();
+                $this->getTargetlogService()->log(TargetlogService::INFO, 'pay.error', $data['trade_sn'], "交易号{$data['trade_sn']}处理失败, {$e->getMessage()}", $data);
             }
 
             $this->dispatch('payment_trade.paid', $trade, $data);
