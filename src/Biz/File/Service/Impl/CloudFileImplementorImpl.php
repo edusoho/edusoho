@@ -2,6 +2,7 @@
 
 namespace Biz\File\Service\Impl;
 
+use AppBundle\Common\CloudFileStatusToolkit;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\AbstractCloudAPI;
 use Biz\Common\CommonException;
@@ -33,14 +34,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function getFullFile($file)
     {
-        $cloudFile = $this->createApi('leaf', 'v2')->get("/resources/{$file['globalId']}");
+        $cloudFile = $this->createApi('leaf', 'v1')->get("/resources/{$file['globalId']}");
 
         return $this->mergeCloudFile($file, $cloudFile);
     }
 
     public function getFileByGlobalId($globalId)
     {
-        $cloudFile = $this->createApi('root', 'v2')->get('/resources/'.$globalId);
+        $cloudFile = $this->createApi('root', 'v1')->get('/resources/'.$globalId);
         $localFile = $this->getUploadFileDao()->getByGlobalId($globalId);
 
         return $this->mergeCloudFile($localFile, $cloudFile);
@@ -379,7 +380,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         foreach ($globalIdsChunks as $globalIdsChunk) {
             $conditions['limit'] = count($globalIdsChunk);
             $conditions['nos'] = implode(',', $globalIdsChunk);
-            $result = $this->createApi('root', 'v2')->get('/resources', $conditions);
+            $result = $this->createApi('root', 'v1')->get('/resources', $conditions);
             if (!empty($result['data'])) {
                 $data = array_merge($data, $result['data']);
                 $count += $result['count'];
@@ -436,7 +437,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function search($conditions)
     {
         $url = '/resources?'.http_build_query($conditions);
-        $result = $this->createApi('root', 'v2')->get($url);
+        $result = $this->createApi('root', 'v1')->get($url);
         $cloudFiles = $result['data'];
 
         $cloudFiles = ArrayToolkit::index($cloudFiles, 'no');
@@ -540,33 +541,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             return $file;
         }
 
-        $statusMap = array(
-            'none' => 'none',
-            'waiting' => 'waiting',
-            'processing' => 'doing',
-            'ok' => 'success',
-            'error' => 'error',
-            'nonsupport' => 'nonsupport',
-            'noneed' => 'noneed',
-        );
+        $processStatus = $file['processStatus'];
 
-        if (is_array($file['processStatus'])) {
-            $file['convertStatus'] = $statusMap[$file['processStatus']['status']];
-        } else {
-            $file['convertStatus'] = $statusMap[$file['processStatus']];
-        }
-
-        if ('video' == $file['type']) {
-            $file['hasMp4'] = !empty($file['mp4Levels']);
-            if (!empty($file['transcodingStatus'])) {
-                foreach ($file['transcodingStatus'] as $transcodingQuality) {
-                    if ('ok' == $transcodingQuality['status']) {
-                        $file['convertStatus'] = $statusMap['ok'];
-                        break;
-                    }
-                }
-            }
-        }
+        $file['convertStatus'] = CloudFileStatusToolkit::convertProcessStatus($processStatus);
 
         return $file;
     }
@@ -606,6 +583,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
                 if (isset($file['directives']['watermarks'])) {
                     $file['convertParams']['hasVideoWatermark'] = 1;
+                }
+
+                if (isset($file['metas']['mp4levels']) && !empty($file['metas']['mp4levels'])) {
+                    $file['hasMp4'] = 1;
                 }
             } elseif (in_array($file['type'], array('ppt', 'document'))) {
                 $file['convertParams'] = array(

@@ -2,6 +2,7 @@
 
 namespace Biz\File\Service\Impl;
 
+use AppBundle\Common\CloudFileStatusToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\File\Dao\FileUsedDao;
@@ -726,6 +727,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'start' => $start,
             'limit' => $limit,
         );
+
+        if (isset($conditions['errorType'])) {
+            $cloudFileConditions['errorType'] = $conditions['errorType'];
+        }
+
         if (isset($conditions['resType'])) {
             $cloudFileConditions['resType'] = $conditions['resType'];
         }
@@ -792,6 +798,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $cloudFileConditions = array(
             'processStatus' => $conditions['processStatus'],
         );
+
+        if (isset($conditions['errorType'])) {
+            $cloudFileConditions['errorType'] = $conditions['errorType'];
+        }
+
         $globalArray = array_chunk($globalIds, 20);
         $count = 0;
 
@@ -985,29 +996,25 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return array();
         }
 
-        $statusMap = array(
-            'none' => 'none',
-            'waiting' => 'waiting',
-            'processing' => 'doing',
-            'ok' => 'success',
-            'error' => 'error',
-            'nonsupport' => 'nonsupport',
-            'noneed' => 'noneed',
-        );
+        $convertStatus = CloudFileStatusToolkit::convertProcessStatus($result['status']);
+
+        if ('error' == $convertStatus && isset($result['errorType']) && 'client' == $result['errorType']) {
+            $convertStatus = 'nonsupport';
+        }
 
         $fields = array(
-            'convertStatus' => empty($statusMap[$result['status']]) ? 'none' : $statusMap[$result['status']],
+            'convertStatus' => $convertStatus,
             'audioConvertStatus' => 'none',
             'mp4ConvertStatus' => 'none',
             'updatedTime' => time(),
         );
 
         if ($result['audio']) {
-            $fields['audioConvertStatus'] = $statusMap[$result['status']];
+            $fields['audioConvertStatus'] = $convertStatus;
         }
 
         if ($result['mp4']) {
-            $fields['mp4ConvertStatus'] = $statusMap[$result['status']];
+            $fields['mp4ConvertStatus'] = $convertStatus;
         }
 
         return $this->getUploadFileDao()->update($file['id'], $fields);
@@ -1235,6 +1242,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if ($this->hasProcessStatusCondition($conditions)) {
             $conditions['storage'] = 'cloud';
             $conditions['existGlobalId'] = 0;
+            $conditions = array_merge($conditions, CloudFileStatusToolkit::getTranscodeFilterStatusCondition($conditions['processStatus']));
         }
 
         if (!empty($conditions['startDate'])) {

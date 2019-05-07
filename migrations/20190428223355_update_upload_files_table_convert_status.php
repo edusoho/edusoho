@@ -11,7 +11,7 @@ class UpdateUploadFilesTableConvertStatus extends Migration
     {
         $this->getConnection()->exec("
             ALTER TABLE `upload_files` CHANGE `convertStatus` `convertStatus`
-              ENUM('none','waiting','doing','success','error','nonsupport','noneed') CHARACTER SET utf8
+              ENUM('none','waiting','doing','success','error','nonsupport','noneed','unknow') CHARACTER SET utf8
               NOT NULL DEFAULT 'none' COMMENT '文件转换状态';
         ");
     }
