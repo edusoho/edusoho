@@ -34,7 +34,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function getFullFile($file)
     {
-        $cloudFile = $this->createApi('leaf', 'v1')->get("/resources/{$file['globalId']}");
+        $cloudFile = $this->createApi('leaf', 'v1')->get("/resources/{$file['globalId']}", array("canNoSdInMetas" => 1));
 
         return $this->mergeCloudFile($file, $cloudFile);
     }
