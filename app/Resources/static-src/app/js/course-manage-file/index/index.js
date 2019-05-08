@@ -12,6 +12,11 @@ let $form = $('#tag-form');
       tags: {
         required: true,
       },
+    },
+    messages: {
+      tags: {
+        required: Translator.trans('course_set.manage.tag_required_hint'),
+      }
     }
 });
 

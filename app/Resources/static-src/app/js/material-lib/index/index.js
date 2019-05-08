@@ -1,4 +1,3 @@
-import notify from 'common/notify';
 import DetailWidget from './detail';
 import BatchSelect from 'app/common/widget/batch-select';
 import Select from 'app/common/input-select';
@@ -191,7 +190,7 @@ class MaterialWidget {
           }
         });
       }).fail(function() {
-        notify('danger', Translator.trans('material_lib.have_no_permission_hint'));
+        cd.message({type: 'danger', message: Translator.trans('material_lib.have_no_permission_hint')});
       }).always(function() {
         self.DetailBtnActive = false;
       });
@@ -283,7 +282,7 @@ class MaterialWidget {
       ids.push(this.value);
     });
     if (ids == '') {
-      notify('danger', Translator.trans('meterial_lib.select_resource_delete_hint'));
+      cd.message({type: 'danger', message: Translator.trans('meterial_lib.select_resource_delete_hint')});
       return;
     }
     $('#modal').html('');
@@ -319,7 +318,7 @@ class MaterialWidget {
       ids.push(this.value);
     });
     if (ids == '') {
-      notify('danger', Translator.trans('meterial_lib.select_resource_operate_hint'));
+      cd.message({type: 'danger', message: Translator.trans('meterial_lib.select_resource_operate_hint')});
       return;
     }
     $('#select-tag-items').val(ids);
@@ -358,7 +357,7 @@ class MaterialWidget {
 
       $.post($target.data('url'), function(response) {
         if (response) {
-          notify('success', Translator.trans('meterial_lib.unshare_resource_success_hint'));
+          cd.message({type: 'success', message: Translator.trans('meterial_lib.unshare_resource_success_hint')});
           self.renderTable();
         }
       });
@@ -381,10 +380,10 @@ class MaterialWidget {
       type: 'POST',
       url: $target.data('url'),
     }).done(function(response) {
-      notify('success', Translator.trans('subtitle.status.success'));
+      cd.message({type: 'success', message: Translator.trans('subtitle.status.success')});
       $target.parents('.materials-list').replaceWith($(response));
     }).fail(function() {
-      notify('danger', Translator.trans('subtitle.status.error'));
+      cd.message({type: 'danger', message: Translator.trans('subtitle.status.error')});
     }).always(function() {
       $target.button('reset');
     });
@@ -400,6 +399,7 @@ class MaterialWidget {
       data: this.element.find(':visible,input[type="hidden"]').serialize()
     }).done(function(resp){
       $table.html(resp);
+      $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-share-btn, .js-batch-download').attr('disabled', true);
       $('[data-toggle="tooltip"]').tooltip();
       let mode = self.model;
       let attribute = self.attribute;
@@ -409,7 +409,6 @@ class MaterialWidget {
         $('[data-role=batch-select]').attr('checked',false);
       } else if (mode == 'normal') {
         $('#material-lib-batch-bar').hide();
-        // $('#material-lib-items-panel').find('[data-role=batch-item]').hide();
       }
       let $temp = $table.find('.js-paginator');
       self.element.find('[data-role=paginator]').html($temp.html());
@@ -433,15 +432,15 @@ class MaterialWidget {
   _fileShare(ids, url) {
     let self = this;
     if (ids == '') {
-      notify('danger', Translator.trans('meterial_lib.select_share_resource_hint'));
+      cd.message({type: 'danger', message: Translator.trans('meterial_lib.select_share_resource_hint')});
       return;
     }
     $.post(url, { 'ids': ids }, function(data) {
       if (data) {
-        notify('success', Translator.trans('meterial_lib.share_resource_success_hint'));
+        cd.message({type: 'success', message: Translator.trans('meterial_lib.share_resource_success_hint')});
         self.renderTable();
       } else {
-        notify('danger', Translator.trans('meterial_lib.share_resource_erroe_hint'));
+        cd.message({type: 'danger', message: Translator.trans('meterial_lib.share_resource_erroe_hint')});
         self.renderTable();
       }
     });
@@ -499,7 +498,7 @@ $('#modal').on('click','.file-delete-form-btn', function(event) {
   $.post($form.attr('action'), $form.serialize(), function(data) {
     if (data) {
       $('#modal').modal('hide');
-      notify('success', Translator.trans('meterial_lib.delete_resource_success_hint'));
+      cd.message({type: 'success', message: Translator.trans('meterial_lib.delete_resource_success_hint')});
       materialWidget.renderTable(true);
     }
     $('#material-lib-items-panel').find('[data-role=batch-item]').show();
