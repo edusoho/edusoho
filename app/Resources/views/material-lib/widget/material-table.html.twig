@@ -108,6 +108,8 @@
                   <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
                 {% elseif  uploadFile.convertStatus == 'success' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+                {% elseif uploadFile.convertStatus == 'noneed' %}
+                  {{ 'material.common_table.no_need_transcode'|trans }}
                 {% endif %}
               {% endif %}
             {% elseif uploadFile.type in ['ppt', 'document'] %}
@@ -119,6 +121,8 @@
                 <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
               {% elseif  uploadFile.convertStatus == 'success' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+              {% elseif uploadFile.convertStatus == 'noneed' %}
+                {{ 'material.common_table.no_need_transcode'|trans }}
               {% endif %}
             {% else %}
               {{ 'material.common_table.no_need_transcode'|trans }}
@@ -284,6 +288,8 @@
                   <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
                 {% elseif  uploadFile.convertStatus == 'success' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+                {% elseif uploadFile.convertStatus == 'noneed' %}
+                  {{ 'material.common_table.no_need_transcode'|trans }}
                 {% endif %}
               {% endif %}
             {% elseif uploadFile.type in ['ppt', 'document'] %}
@@ -294,7 +300,9 @@
               {% elseif uploadFile.convertStatus == 'waiting' %}
                 <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
               {% elseif  uploadFile.convertStatus == 'success' %}
-                <span>{{ 'material.common_table.transcode_success'|trans }}</span>
+                <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+              {% elseif uploadFile.convertStatus == 'noneed' %}
+                {{ 'material.common_table.no_need_transcode'|trans }}
               {% endif %}
             {% else %}
               {{ 'material.common_table.no_need_transcode'|trans }}

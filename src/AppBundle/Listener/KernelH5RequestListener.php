@@ -68,6 +68,9 @@ class KernelH5RequestListener
         $query = http_build_query($params);
         if (in_array($route['_route'], array('my_course_show', 'course_show'))) {
             $pathInfo = $this->container->get('router')->generate('course_show', array('id' => $route['id']), UrlGeneratorInterface::ABSOLUTE_PATH);
+            if (isset($params['loginToken'])) {
+                $pathInfo = $pathInfo.'/loginToken/'.$params['loginToken'];
+            }
         }
 
         if (in_array($route['_route'], array('classroom_reviews', 'classroom_introductions'))) {
