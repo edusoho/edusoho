@@ -112,6 +112,8 @@
             <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
           {% elseif  cloudFile.convertStatus == 'success' %}
             <span class="color-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+          {% elseif  cloudFile.convertStatus == 'noneed' %}
+            {{ 'material.common_table.no_need_transcode'|trans }}
           {% endif %}
         {% endif %}
       {% elseif cloudFile.type in ['ppt', 'document'] %}
@@ -123,6 +125,8 @@
           <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
         {% elseif  cloudFile.convertStatus == 'success' %}
           <span class="color-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+        {% elseif  cloudFile.convertStatus == 'noneed' %}
+          {{ 'material.common_table.no_need_transcode'|trans }}
         {% endif %}
       {% else %}
         {{ 'material.common_table.no_need_transcode'|trans }}
