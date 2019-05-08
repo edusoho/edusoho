@@ -1,5 +1,5 @@
 import DetailWidget from './detail';
-import BatchSelect from 'app/common/widget/batch-select';
+import BatchSelect from 'app/common/widget/res-batch-select';
 import Select from 'app/common/input-select';
 
 class MaterialWidget {

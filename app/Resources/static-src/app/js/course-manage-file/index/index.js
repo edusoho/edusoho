@@ -1,4 +1,4 @@
-import BatchSelect from 'app/common/widget/batch-select';
+import BatchSelect from 'app/common/widget/res-batch-select';
 import DetailWidget from 'app/js/material-lib/index/detail';
 import Select from 'app/common/input-select';
 
