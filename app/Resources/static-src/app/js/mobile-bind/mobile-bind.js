@@ -4,8 +4,8 @@ import notify from 'common/notify';
 
 export default class MobileBind {
   constructor() {
-    this.$smsCode = $('.js-sms-send');
     this.$form = $('#mobile-bind-form');
+    this.$smsCode = this.$form.find('.js-sms-send');
     this.initCheckCookie();
     this.initValidator();
     this.initMobileCodeSendBtn();
