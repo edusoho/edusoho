@@ -4812,6 +4812,7 @@ admin.course_manage.chooser.course_category: 课程分类
 admin.course_manage.chooser.course_status: 课程状态
 admin.course_manage.chooser.num: 编号
 admin.course_manage.chooser.name: 名称
+admin.course_manage.chooser.plan_name: 教学计划名称
 admin.course_manage.chooser.student_num: 学员数
 admin.course_manage.chooser.status: 状态
 admin.course_manage.chooser.creator: 创建者

@@ -3958,6 +3958,7 @@ admin.course_manage.chooser.course_category: Category
 admin.course_manage.chooser.course_status: 'Course Status'
 admin.course_manage.chooser.num: Id
 admin.course_manage.chooser.name: Name
+admin.course_manage.chooser.plan_name: Plan Name
 admin.course_manage.chooser.student_num: 'Student num'
 admin.course_manage.chooser.status: Status
 admin.course_manage.chooser.creator: Creator

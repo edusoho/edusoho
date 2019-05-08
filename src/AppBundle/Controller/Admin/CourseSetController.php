@@ -551,16 +551,31 @@ class CourseSetController extends BaseController
             unset($conditions['creatorName']);
         }
 
+        $withCoursePlan = false;
+        if (!empty($conditions['withPlan'])) {
+            $withCoursePlan = true;
+            unset($conditions['withPlan']);
+        }
+
         $count = $this->getCourseSetService()->countCourseSets($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $courseSets = $this->getCourseSetService()->searchCourseSets(
-            $conditions,
-            null,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        if ($withCoursePlan) {
+            $courseSets = $this->searchCourseSetWithCourses(
+                $conditions,
+                null,
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        } else {
+            $courseSets = $this->getCourseSetService()->searchCourseSets(
+                $conditions,
+                null,
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
 
@@ -574,8 +589,36 @@ class CourseSetController extends BaseController
                 'courseSets' => $courseSets,
                 'categories' => $categories,
                 'paginator' => $paginator,
+                'withCoursePlan' => $withCoursePlan,
             )
         );
+    }
+
+    private function searchCourseSetWithCourses($conditions, $orderbys, $start, $limit)
+    {
+        $conditions['status'] = 'published'; //计划模式下，只取发布的课程和计划
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderbys, $start, $limit);
+
+        if (empty($courseSets)) {
+            return array();
+        }
+
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(array_keys($courseSets));
+        if (!empty($courses)) {
+            foreach ($courses as $course) {
+                if ('published' != $course['status']) {
+                    continue;
+                }
+                if (empty($courseSets[$course['courseSetId']]['courses'])) {
+                    $courseSets[$course['courseSetId']]['courses'] = array($course);
+                } else {
+                    $courseSets[$course['courseSetId']]['courses'][] = $course;
+                }
+            }
+        }
+
+        return array_values($courseSets);
     }
 
     public function courseListAction(Request $request, $id)
