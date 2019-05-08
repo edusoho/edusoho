@@ -107,9 +107,9 @@
           {% if cloudFile.convertStatus == 'error' %}
             <a class="color-danger js-cd-modal" href="" data-toggle="modal" data-target="#error-modal" data-title="{{cloudFile.filename}}" data-reason="{{ (get_transcode_error_message_key('code', cloudFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key('code', cloudFile.errorCode) ~ '.solution')|trans }}">{{ ('material.common_table.transcode_error.' ~ cloudFile.errorType|default('server'))|trans }}&nbsp;></a>
           {% elseif cloudFile.convertStatus == 'doing' %}
-            <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
+            <span class="color-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
           {% elseif cloudFile.convertStatus == 'waiting' %}
-            <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+            <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
           {% elseif  cloudFile.convertStatus == 'success' %}
             <span class="color-success">{{ 'material.common_table.transcode_success'|trans }}</span>
           {% endif %}
@@ -118,9 +118,9 @@
         {% if cloudFile.convertStatus == 'error' %}
           <a class="color-danger js-cd-modal" href="" data-toggle="modal" data-target="#error-modal" data-title="{{cloudFile.filename}}"  data-reason="{{ (get_transcode_error_message_key('code', cloudFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key('code', cloudFile.errorCode) ~ '.solution')|trans }}">{{ ('material.common_table.transcode_error.' ~ cloudFile.errorType|default('server'))|trans }}&nbsp;></a>
         {% elseif cloudFile.convertStatus == 'doing' %}
-          <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
+          <span class="color-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
         {% elseif cloudFile.convertStatus == 'waiting' %}
-          <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+          <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
         {% elseif  cloudFile.convertStatus == 'success' %}
           <span class="color-success">{{ 'material.common_table.transcode_success'|trans }}</span>
         {% endif %}

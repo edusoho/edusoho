@@ -105,7 +105,7 @@
                 {% elseif uploadFile.convertStatus == 'doing' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
                 {% elseif uploadFile.convertStatus == 'waiting' %}
-                  <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+                  <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
                 {% elseif  uploadFile.convertStatus == 'success' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
                 {% endif %}
@@ -116,7 +116,7 @@
               {% elseif uploadFile.convertStatus == 'doing' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
               {% elseif uploadFile.convertStatus == 'waiting' %}
-                <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+                <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
               {% elseif  uploadFile.convertStatus == 'success' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
               {% endif %}
@@ -281,7 +281,7 @@
                 {% elseif uploadFile.convertStatus == 'doing' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
                 {% elseif uploadFile.convertStatus == 'waiting' %}
-                  <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+                  <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
                 {% elseif  uploadFile.convertStatus == 'success' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
                 {% endif %}
@@ -292,9 +292,9 @@
               {% elseif uploadFile.convertStatus == 'doing' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
               {% elseif uploadFile.convertStatus == 'waiting' %}
-                <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+                <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
               {% elseif  uploadFile.convertStatus == 'success' %}
-                <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+                <span>{{ 'material.common_table.transcode_success'|trans }}</span>
               {% endif %}
             {% else %}
               {{ 'material.common_table.no_need_transcode'|trans }}
