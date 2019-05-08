@@ -9888,7 +9888,7 @@ course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务�
 material.common_table.th.file_name: 文件名称
 material.common_table.th.file_type: 类型
 material.common_table.th.file_size: 大小
-material.common_table.th.file_size_time: 大小时长
+material.common_table.th.file_size_time: 大小/时长
 material.common_table.th.upload_time: 上传时间
 material.common_table.th.transcode_status: 转码状态
 material.common_table.th.manage: 操作

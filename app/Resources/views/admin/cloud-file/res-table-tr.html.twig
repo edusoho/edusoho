@@ -53,19 +53,19 @@
         </div>
     </td>
 
-    <td class="text-center vertical-middle">
+    <td class=" vertical-middle">
       <div class="mbs">{{ dict_text('fileType', cloudFile.type) }}</div>
       {% if cloudFile.mp4ConvertStatus|default('none') == 'success' %}
         <div class="label label-info label-info--admin mtm">{{ 'cloud_file.mc_yes_status_tips'|trans }}</div>
       {% endif %}
     </td>
-    <td class="text-center vertical-middle">
+    <td class=" vertical-middle">
       {{ cloudFile.fileSize|file_size }}
       {% if cloudFile.type in ['video', 'audio'] %}
-        <div>{{ cloudFile.length|activity_length_format }}</div>
+        <div class="text-sm color-gray">{{ cloudFile.length|activity_length_format }}</div>
       {% endif %}
     </td>
-    <td class="text-center vertical-middle">
+    <td class=" vertical-middle">
       {% if pageType == 'attachment' %}
         <span style="display:block">{{ cloudFile.createdTime|date('Y-m-d') }}</span>
         {{ cloudFile.createdTime|date('H:i:s') }}
@@ -74,7 +74,7 @@
       {% endif %}
     </td>
     {% if pageType == 'attachment' %}
-      <td class="text-center vertical-middle">
+      <td class=" vertical-middle">
         <span style="display:block">{{ forms.showType(cloudFile.useType) }}</span>
       </td>
     {% endif %}
@@ -132,7 +132,7 @@
     {% endif %}
 
     </td>
-    <td class="es-materillib-table text-center vertical-middle">
+    <td class="es-materillib-table vertical-middle">
       <div class="btn-group ">
         {% if pageType  == 'attachment' %}
           <a class="btn btn-default btn-sm" href="{{ path('admin_cloud_file_download', {globalId:cloudFile.globalId}) }}"  target="__blank">{{ 'cloud_file.download_btn'|trans }}</a>

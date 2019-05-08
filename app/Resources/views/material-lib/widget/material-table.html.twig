@@ -2,8 +2,7 @@
   <table class="table table-striped">
     <thead>
       <tr class="cd-dark-major cd-text-medium">
-        <th width="8%"><input type="checkbox" data-role="batch-select" class="{% if size|default('') == 'sm'%} mrs {% else %}
-        cd-mr8 {% endif %}">{{ 'form.checkbox.batch_select'|trans }}</th>
+        <th><input type="checkbox" data-role="batch-select"></th>
         <th width="{% if size|default('') == 'sm' %}22% {% else %}25%{% endif %}">{{ 'material.common_table.th.file_name'|trans }}</th>
         <th width="{% if size|default('') == 'sm' %}11% {% else %}10%{% endif %}">{{ 'material.common_table.th.file_type'|trans }}</th>
         <th>{{ 'material.common_table.th.file_size_time'|trans }}</th>
@@ -65,7 +64,7 @@
         <td class="cd-dark-major vertical-middle">
           <div>{{ uploadFile.fileSize|file_size }}</div>
           {% if uploadFile.type in ['video', 'audio'] and uploadFile.storage == 'cloud' %}
-            {{ uploadFile.length|activity_length_format }}
+            <span class="cd-text-sm cd-dark-minor">{{ uploadFile.length|activity_length_format }}</span>
           {% endif %}
         </td>
         <td class="cd-dark-major vertical-middle">{{ uploadFile.createdTime|date('Y-m-d H:i:s') }}</td>
