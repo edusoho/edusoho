@@ -2,8 +2,7 @@
   <table class="table table-striped">
     <thead>
       <tr class="cd-dark-major cd-text-medium">
-        <th width="8%"><input type="checkbox" data-role="batch-select" class="{% if size|default('') == 'sm'%} mrs {% else %}
-        cd-mr8 {% endif %}">{{ 'form.checkbox.batch_select'|trans }}</th>
+        <th><input type="checkbox" data-role="batch-select"></th>
         <th width="{% if size|default('') == 'sm' %}22% {% else %}25%{% endif %}">{{ 'material.common_table.th.file_name'|trans }}</th>
         <th width="{% if size|default('') == 'sm' %}11% {% else %}10%{% endif %}">{{ 'material.common_table.th.file_type'|trans }}</th>
         <th>{{ 'material.common_table.th.file_size_time'|trans }}</th>
@@ -32,9 +31,16 @@
             <img class="img-responsive" width="100px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
           </div>
           <div class="material-table-info">
-            <p class="title text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">
+            <p class="title text-overflow mbs" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">
               {{ uploadFile.filename }}
             </p>
+            {% if type|default is empty %}
+              {% if source in ['public','sharing','favorite'] %}
+                <p class="color-gray text-overflow text-sm mbs" title="{{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}">
+                  {{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }} 上传
+                </p>
+              {% endif %}
+            {% endif %}
             <p class="status-parent">
               {% if uploadFile.storage != 'cloud' %}
                 <span class="cd-tag cd-tag-blue">{{ 'material.common_table.file.local'|trans }}</span>
@@ -65,7 +71,7 @@
         <td class="cd-dark-major vertical-middle">
           <div>{{ uploadFile.fileSize|file_size }}</div>
           {% if uploadFile.type in ['video', 'audio'] and uploadFile.storage == 'cloud' %}
-            {{ uploadFile.length|activity_length_format }}
+            <span class="cd-text-sm cd-dark-minor">{{ uploadFile.length|activity_length_format }}</span>
           {% endif %}
         </td>
         <td class="cd-dark-major vertical-middle">{{ uploadFile.createdTime|date('Y-m-d H:i:s') }}</td>
@@ -99,7 +105,7 @@
                 {% elseif uploadFile.convertStatus == 'doing' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
                 {% elseif uploadFile.convertStatus == 'waiting' %}
-                  <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+                  <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
                 {% elseif  uploadFile.convertStatus == 'success' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
                 {% elseif uploadFile.convertStatus == 'noneed' %}
@@ -112,7 +118,7 @@
               {% elseif uploadFile.convertStatus == 'doing' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
               {% elseif uploadFile.convertStatus == 'waiting' %}
-                <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+                <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
               {% elseif  uploadFile.convertStatus == 'success' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
               {% elseif uploadFile.convertStatus == 'noneed' %}
@@ -279,7 +285,7 @@
                 {% elseif uploadFile.convertStatus == 'doing' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
                 {% elseif uploadFile.convertStatus == 'waiting' %}
-                  <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+                  <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
                 {% elseif  uploadFile.convertStatus == 'success' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
                 {% elseif uploadFile.convertStatus == 'noneed' %}
@@ -292,7 +298,7 @@
               {% elseif uploadFile.convertStatus == 'doing' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
               {% elseif uploadFile.convertStatus == 'waiting' %}
-                <span class="cd-text-success">{{ 'material.common_table.transcode_waiting'|trans }}</span>
+                <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
               {% elseif  uploadFile.convertStatus == 'success' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
               {% elseif uploadFile.convertStatus == 'noneed' %}

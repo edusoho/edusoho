@@ -3,13 +3,13 @@
     <table class="table table-striped table-hover mtl" id="materials-table" data-url="{{ path('admin_cloud_file_render_table')}}">
       <thead>
         <tr>
-          <th {% if pageType != 'attachment'%}width="8%"{% endif %}><input type="checkbox" data-role="batch-select" class="mrs"> {% if pageType != 'attachment'%}{{ 'site.datagrid.radios.all'|trans }}{% endif %}</th>
+          <th><input type="checkbox" data-role="batch-select"></th>
           <th width="25%">{{ 'material.common_table.th.file_name'|trans }}</th>
           <th>{{ 'type'|trans }}</th>
           <th>{{ 'material.common_table.th.file_size_time'|trans }}</th>
           <th>{{ 'cloud_file.upload_time'|trans }}</th>
           {% if pageType == 'attachment'%}
-            <th class="text-center">{{ 'cloud_file.application'|trans }}</th>
+            <th>{{ 'cloud_file.application'|trans }}</th>
           {% endif %}
           <th width="25%">{{ 'material.common_table.th.transcode_status'|trans }}</th>
           <th {% if pageType == 'attachment'%}width="10%"{% endif %}>{{ 'operation'|trans }}</th>

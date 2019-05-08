@@ -1,4 +1,4 @@
-import BatchSelect from 'app/common/widget/batch-select';
+import BatchSelect from 'app/common/widget/res-batch-select';
 import DetailWidget from 'app/js/material-lib/index/detail';
 import Select from 'app/common/input-select';
 
@@ -12,6 +12,11 @@ let $form = $('#tag-form');
       tags: {
         required: true,
       },
+    },
+    messages: {
+      tags: {
+        required: Translator.trans('course_set.manage.tag_required_hint'),
+      }
     }
 });
 
