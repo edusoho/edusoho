@@ -31,9 +31,14 @@
             <img class="img-responsive" width="100px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
           </div>
           <div class="material-table-info">
-            <p class="title text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">
+            <p class="title text-overflow mbs" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">
               {{ uploadFile.filename }}
             </p>
+            {% if source in ['public','sharing','favorite'] %}
+              <p class="color-gray text-overflow text-sm mbs" title="{{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}">
+                {{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }} 上传
+              </p>
+            {% endif %}
             <p class="status-parent">
               {% if uploadFile.storage != 'cloud' %}
                 <span class="cd-tag cd-tag-blue">{{ 'material.common_table.file.local'|trans }}</span>
