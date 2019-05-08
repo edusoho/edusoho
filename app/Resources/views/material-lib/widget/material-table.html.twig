@@ -34,10 +34,12 @@
             <p class="title text-overflow mbs" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">
               {{ uploadFile.filename }}
             </p>
-            {% if source in ['public','sharing','favorite'] %}
-              <p class="color-gray text-overflow text-sm mbs" title="{{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}">
-                {{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }} 上传
-              </p>
+            {% if type|default is empty %}
+              {% if source in ['public','sharing','favorite'] %}
+                <p class="color-gray text-overflow text-sm mbs" title="{{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}">
+                  {{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }} 上传
+                </p>
+              {% endif %}
             {% endif %}
             <p class="status-parent">
               {% if uploadFile.storage != 'cloud' %}

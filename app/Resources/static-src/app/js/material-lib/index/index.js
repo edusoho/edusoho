@@ -451,6 +451,7 @@ class MaterialWidget {
     let self = this;
     $('#startDate').datetimepicker({
       autoclose: true,
+      language: document.documentElement.lang,
     }).on('changeDate', function() {
       $('#endDate').datetimepicker('setStartDate', $('#startDate').val().substring(0, 16));
       //self.renderTable();
@@ -460,6 +461,7 @@ class MaterialWidget {
 
     $('#endDate').datetimepicker({
       autoclose: true,
+      language: document.documentElement.lang,
     }).on('changeDate', function() {
 
       $('#startDate').datetimepicker('setEndDate', $('#endDate').val().substring(0, 16));
@@ -477,6 +479,11 @@ class MaterialWidget {
       rules: {
         tags: {
           required: true,
+        }
+      },
+      messages: {
+        tags: {
+          required: Translator.trans('course_set.manage.tag_required_hint'),
         },
       }
     });

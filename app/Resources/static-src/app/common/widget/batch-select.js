@@ -23,7 +23,7 @@ class BatchSelect {
   }
 
   _item2Batch(event) {
-    let itemLength = this.$element.find('[data-role="batch-item"]').length;
+    let itemLength = this.$element.find('[data-role="batch-item"]:visible').length;
     let itemCheckedLength = this.$element.find('[data-role="batch-item"]:checked').length;
     if (itemCheckedLength !== 0) {
       $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-share-btn, .js-batch-download').attr('disabled', false);
