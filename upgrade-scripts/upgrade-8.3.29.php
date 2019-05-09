@@ -53,6 +53,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'databaseUpdate',
             'deleteOpenCourseChannelBlockTemplate',
         );
 
@@ -96,7 +97,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if (empty($blockTemplate)) {
             return 1;
-        }var_dump(111);
+        }
 
         $deleteSql = "DELETE FROM block_template WHERE title = '公开课频道 - 首页 - 头部轮播图';";
         $this->getConnection()->exec($deleteSql);
@@ -105,6 +106,17 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('info', "删除公开课频道编辑区，{$blockTemplateJson}");
         return 1;
 
+    }
+
+    protected function databaseUpdate()
+    {
+        $this->getConnection()->exec("
+            ALTER TABLE `upload_files` CHANGE `convertStatus` `convertStatus`
+              ENUM('none','waiting','doing','success','error','nonsupport','noneed','unknow') CHARACTER SET utf8
+              NOT NULL DEFAULT 'none' COMMENT '文件转换状态';
+        ");
+
+        return 1;
     }
 
     protected function isFieldExist($table, $filedName)
