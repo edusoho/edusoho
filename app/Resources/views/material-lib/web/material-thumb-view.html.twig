@@ -36,7 +36,7 @@
             <option value="title">{{ 'material_lib.search.type.title'|trans }}</option>
             <option value="course">{{'material_lib.search.type.course'|trans}}</option>
           </select>
-          <input class="form-control form-input-width mll" type="text" placeholder="{{'material_lib.search.input_placeholder'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
+          <input class="form-control form-input-width mll" type="text" placeholder="{{'material_lib.search.input_placeholder'|trans}}" maxlength="50" name="keyword" value="{{ app.request.get('keyword') }}">
         </div>
         <div class="col-sm-8 col-md-7 form-group">
           <label class="form-label">{{ 'material.common_table.th.upload_time'|trans }}：</label>
