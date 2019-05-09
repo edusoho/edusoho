@@ -91,7 +91,7 @@
                   {% if status.status == 'ok' %}
                     <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
                   {% elseif status.status == 'error'%}
-                    <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key('code', status.error_code) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key('code', status.error_code) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}&nbsp;></a>
+                    <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key(status.error_code) ~ '.reason')|trans }}"  data-solution="{{ (get_transcode_error_message_key(status.error_code) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}&nbsp;></a>
                   {% else %}
                     <div class="cd-progress cd-progress-success material-progress">
                       <div class="progress-bar">
@@ -106,7 +106,7 @@
                 {% endfor %}
               {% else %}
                 {% if uploadFile.convertStatus == 'error' %}
-                  <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key('code', uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key('code', uploadFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ uploadFile.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ uploadFile.errorType|default('server'))|trans }}&nbsp;></a>
+                  <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ uploadFile.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ uploadFile.errorType|default('server'))|trans }}&nbsp;></a>
                 {% elseif uploadFile.convertStatus == 'doing' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
                 {% elseif uploadFile.convertStatus == 'waiting' %}
@@ -119,7 +119,7 @@
               {% endif %}
             {% elseif uploadFile.type in ['ppt', 'document'] %}
               {% if uploadFile.convertStatus == 'error' %}
-                <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key('code', uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key('code', uploadFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ uploadFile.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ uploadFile.errorType|default('server'))|trans }}&nbsp;></a>
+                <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ uploadFile.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ uploadFile.errorType|default('server'))|trans }}&nbsp;></a>
               {% elseif uploadFile.convertStatus == 'doing' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
               {% elseif uploadFile.convertStatus == 'waiting' %}
@@ -271,7 +271,7 @@
                   {% if status.status == 'ok' %}
                     <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
                   {% elseif status.status == 'error'%}
-                    <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key('code', uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key('code', uploadFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}</a>
+                    <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.solution')|trans }} data-status="{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}"">{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}</a>
                   {% else %}
                     <div class="cd-progress cd-progress-success material-progress">
                       <div class="progress-bar">
@@ -286,7 +286,7 @@
                 {% endfor %}
               {%  else  %}
                 {% if uploadFile.convertStatus == 'error' %}
-                  <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key('code', uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key('code', uploadFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ status.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ status.errorType|default('server'))|trans }}&nbsp;></a>
+                  <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ status.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ status.errorType|default('server'))|trans }}&nbsp;></a>
                 {% elseif uploadFile.convertStatus == 'doing' %}
                   <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
                 {% elseif uploadFile.convertStatus == 'waiting' %}
@@ -299,7 +299,7 @@
               {% endif %}
             {% elseif uploadFile.type in ['ppt', 'document'] %}
               {% if uploadFile.convertStatus == 'error' %}
-                <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key('code', uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key('code', uploadFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ status.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ status.errorType|default('server'))|trans }}&nbsp;></a>
+                <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ status.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ status.errorType|default('server'))|trans }}&nbsp;></a>
               {% elseif uploadFile.convertStatus == 'doing' %}
                 <span class="cd-text-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
               {% elseif uploadFile.convertStatus == 'waiting' %}
