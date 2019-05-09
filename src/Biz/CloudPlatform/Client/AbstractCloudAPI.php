@@ -174,11 +174,6 @@ class AbstractCloudAPI
             throw new CloudAPIIOException("Connect api server timeout (url: {$url}).");
         }
 
-        if (empty($curlinfo['starttransfer_time'])) {
-            $this->logger && $this->logger->error("[{$requestId}] API_TIMEOUT", $context);
-            throw new CloudAPIIOException("Request api server timeout (url:{$url}).");
-        }
-
         if ($curlinfo['http_code'] >= 500) {
             $this->logger && $this->logger->error("[{$requestId}] API_RESOPNSE_ERROR", $context);
             throw new CloudAPIIOException("Api server internal error (url:{$url}).");
