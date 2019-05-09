@@ -545,6 +545,19 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
         $file['convertStatus'] = CloudFileStatusToolkit::convertProcessStatus($processStatus);
 
+        if (!empty($file['levelsStatus'])) {
+            $isAllLevelsOk = true;
+            foreach ($file['levelsStatus'] as $levelStatus) {
+                if ($levelStatus['status'] != 'ok') {
+                    $isAllLevelsOk = false;
+                    break;
+                }
+            }
+            if ($isAllLevelsOk) {
+                unset($file['levelsStatus']);
+            }
+        }
+
         return $file;
     }
 
