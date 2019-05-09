@@ -36,11 +36,16 @@
             </p>
             {% if type|default is empty %}
               {% if source in ['public','sharing','favorite'] %}
-                <p class="color-gray text-overflow text-sm mbs" title="{{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}">
-                  {{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }} 上传
+                <p class="color-gray text-overflow text-sm mbs" >
+                  <span data-toggle="tooltip" data-placement="top" title="{{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}">{{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}</span> {{ 'cloud_file.upload'|trans }}
                 </p>
               {% endif %}
+            {% else %}
+              <p class="color-gray text-overflow text-sm mbs">
+                <span data-toggle="tooltip" data-placement="top" title="{{ users[uploadFile.updatedUserId|default(0)].nickname|default('') }}">{{ users[uploadFile.updatedUserId|default(0)].nickname|default('') }}</span> {{ 'cloud_file.upload'|trans }}
+              </p>
             {% endif %}
+
             <p class="status-parent">
               {% if uploadFile.storage != 'cloud' %}
                 <span class="cd-tag cd-tag-blue">{{ 'material.common_table.file.local'|trans }}</span>
