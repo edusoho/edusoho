@@ -1119,9 +1119,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
     }
 
-    public function countRepeatedLessonsByCourseId($courseId)
+    public function countLessonsByMultipleTask($courseId)
     {
-        return $this->getTaskDao()->countRepeatedLessonsByCourseId($courseId);
+        return $this->getTaskDao()->countLessonsByMultipleTask($courseId);
     }
 
     /**

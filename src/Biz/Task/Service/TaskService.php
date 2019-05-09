@@ -248,5 +248,5 @@ interface TaskService
 
     public function updateTasksOptionalByLessonId($lessonId, $isOptional = 0);
 
-    public function countRepeatedLessonsByCourseId($courseId);
+    public function countLessonsByMultipleTask($courseId);
 }
