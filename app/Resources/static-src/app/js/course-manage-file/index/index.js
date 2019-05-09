@@ -50,8 +50,9 @@ const codeErrorTip = () => {
     const title = $btn.data('title');
     const reason = $btn.data('reason');
     const solution = $btn.data('solution');
+    const status = $btn.data('status');
     $('.js-error-tip').html(
-      `<div class="mbl">文件名称：<span class="cd-ml8">${title}</span></div><div class="mbl">转码状态：<span class="cd-ml8">转码失败</span></div><div class="mbl">错误原因：<span class="cd-text-danger cd-ml8">${reason}</span></div><div>解决方案：<span class="cd-text-info cd-ml8">${solution}</span></div>`
+      `<div class="mbl clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.file_name')}：</span><span class="pull-left error-content">${title}</span></div><div class="mbl clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.transcoding')}：</span><span class="pull-left error-content">${status}</span></div><div class="mbl clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.error_reason')}：</span><span class="cd-text-danger error-content pull-left">${reason}</span></div><div class="clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.solution_way')}：</span><span class="cd-text-info error-content pull-left">${solution}</span></div>`
     )
   })
 }
