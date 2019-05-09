@@ -271,7 +271,7 @@
                   {% if status.status == 'ok' %}
                     <span class="cd-text-success">{{ 'material.common_table.transcode_success'|trans }}</span>
                   {% elseif status.status == 'error'%}
-                    <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.solution')|trans }} data-status="{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}"">{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}</a>
+                    <a class="cd-link-danger js-cd-modal" href="" data-toggle="modal" data-target="#cd-modal" data-title="{{uploadFile.filename}}" data-reason="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(uploadFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}</a>
                   {% else %}
                     <div class="cd-progress cd-progress-success material-progress">
                       <div class="progress-bar">
