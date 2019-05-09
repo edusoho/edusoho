@@ -1,11 +1,10 @@
 {% import 'macro.html.twig' as web_macro %}
-<div class="row">
-{% for uploadFile in files %}
-   {% include 'material-lib/web/widget/thumb-item.html.twig' with {uploadFile:uploadFile} %}
-{% else %}
-   <div class="empty">{{'material_lib.upload_file.empty'|trans}}</div>
-{% endfor %}
-</div>
 
+
+<div class="row">
+  {% set deletePath = path('material_delete_modal_show') %}
+  {% set subtitlePath = path('material_lib_browsing') %}
+  {% include 'material-lib/widget/material-table.html.twig' with { path: deletePath, subtitlePath: subtitlePath } %}
+</div>
 {{ web_macro.ajax_paginator(paginator) }}
 

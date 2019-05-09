@@ -19,7 +19,7 @@
 
       {% if material.type == 'video' %}
         <div class="tab-pane" id="cover-tab">
-          {% if material.processStatus|default('none') == 'ok' %}
+          {% if material.convertStatus|default('none') == 'success' %}
           <form class="form-horizontal" id="cover-form">
             <div class="form-group">
               <label for="name" class="col-md-2 control-label">{{'material_lib.detail.cover_image'|trans}}</label>

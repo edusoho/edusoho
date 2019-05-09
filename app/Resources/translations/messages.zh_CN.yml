@@ -1,4 +1,4 @@
-Bad credentials.: 用户名或密码错误
+materialBad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
 site.alipay: 支付宝
@@ -99,7 +99,7 @@ site.date_format_H_i: Y年n月d日 H:i
 site.date_more: 等
 site.data_last_picture: 已经到最后一张图片了哦
 site.cloud.file.convert_failed_tips: 转码失败，请联系管理员。
-site.cloud.file.converting_tips: 正在转码，请稍后尝试。
+site.cloud.file.converting_tips: 课程内容准备中，请稍后查看。
 site.cloud.file.not_find_tips: 文件不存在。
 site.services.homeworkReview.shortName: 练
 site.services.homeworkReview.fullName: 24小时作业批阅
@@ -787,14 +787,14 @@ material_lib.public: 公共资料
 material_lib.favorite: 收藏夹
 material_lib.sharing: 来自分享
 material_lib.search.search_btn: 搜索
-material_lib.search.input_placeholder: 输入标题关键字
+material_lib.search.input_placeholder: 输入关键字
 material_lib.search.tags: 标签：
 material_lib.search.conditions: 筛选：
 material_lib.search.conditions.start_time: 起始时间
 material_lib.search.conditions.finish_time: 结束时间
 material_lib.search.conditions.convert_status: 转码状态
 material_lib.search.conditions.convert_status.success: 转码成功
-material_lib.search.conditions.convert_status.doing: 转码中
+material_lib.search.conditions.convert_status.doing: 正在转码
 material_lib.search.conditions.convert_status.error: 转码失败
 material_lib.search.conditions.use_status: 使用状态
 material_lib.search.conditions.use_status.using: 未使用
@@ -862,9 +862,9 @@ material_lib.btn.view: 查看
 material_lib.btn.subtitle_manage: 字幕管理
 material_lib.btn.download: 下载
 material_lib.btn.cancel_share: 取消共享
-material_lib.btn.share: 共享
-material_lib.btn.delete: 删除
-material_lib.btn.preview: 资料预览
+material_lib.btn.share: 共享资料
+material_lib.btn.delete: 删除资料
+material_lib.btn.preview: 预览
 material_lib.btn.convert_again: 重新转码
 material_lib.btn.upload_files: 上传资料
 material_lib.btn.batch_manage: 批量管理
@@ -3401,15 +3401,54 @@ search.free_classrooms: 免费%classroom%
 
 
 #云资源
-cloud_file.preview: 资料预览
+cloud_file.preview: 预览
 cloud_file.re_transcoding_btn: 重新转码
 cloud_file.re_transcoding.submiting: 正在提交...
 cloud_file.download_btn: 下载
 cloud_file.process_status: 转码状态
 cloud_file.process_status.ok: 转码成功
 cloud_file.process_status.waiting: 转码中
+cloud_file.process_status.doing: 正在转码
 cloud_file.process_status.error: 转码失败
 cloud_file.transcoding_tips: 视频还没有转码完成，请等待转码完成......
+cloud_file.transcoding_tips.error_code_41001.reason: 当前文件格式异常，不支持进行转码
+cloud_file.transcoding_tips.error_code_41001.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
+cloud_file.transcoding_tips.error_code_51009.reason: 当前文件格式异常，不支持进行转码
+cloud_file.transcoding_tips.error_code_51009.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
+cloud_file.transcoding_tips.error_code_41002.reason: 当前文件被删除，不支持进行转码
+cloud_file.transcoding_tips.error_code_41002.solution: 此文件的源文件被删除，无法进行转码，请重新上传后进行转码操作
+cloud_file.transcoding_tips.error_code_41003.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_41003.solution: 请使用Office软件将源文件内容重新保存后，上传进行转码操作
+cloud_file.transcoding_tips.error_code_41004.reason: 当前文件被加密，不支持转码
+cloud_file.transcoding_tips.error_code_41004.solution: 请将源文件解密后，再上传进行转码操作
+cloud_file.transcoding_tips.error_code_41005.reason: 当前文件超过转码支持大小，不支持转码
+cloud_file.transcoding_tips.error_code_41005.solution: 请将源文件缩小至100MB以下（删减源文件内容或将源文件变为多个文件内容上传），再上传进行转码操作
+cloud_file.transcoding_tips.error_code_41006.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_41006.solution: 当前文件无法正常打开，请选择其他正常文件上传进行转码操作
+
+cloud_file.transcoding_tips.error_code_51001.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51001.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51002.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51002.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51003.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51003.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51004.reason: 文档中存在异常内容，导致转码失败
+cloud_file.transcoding_tips.error_code_51004.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51005.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51005.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51006.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51006.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51007.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51007.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51008.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51008.solution: 请联系运营人员处理
+
+cloud_file.transcoding_tips.default_error_message.reason: 文件转码失败
+cloud_file.transcoding_tips.default_error_message.solution: 请联系运营人员处理
+
+
+
+
 cloud_file.material_thumbnail_generate: 生成截图中...
 cloud_file.screen_shot_btn: 截图
 cloud_file.search_empty: 没有搜索到任何资源......
@@ -7765,17 +7804,22 @@ admin.cloud_attachment.select_all: 全选
 
 admin.cloud_file.material_tag_show_match_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
 admin.cloud_file.material_tag_show_match_hint: 标签来自网校课程标签，由网校管理员统一管理。
-admin.cloud_file.keyword_placeholder: 输入关键词
+admin.cloud_file.keyword_placeholder: 请输入关键词
+admin.cloud_file.select_placeholeder: 请选择
 admin.cloud_file.keyword_type: 按来源
-admin.cloud_file.keyword_type.course: 按课程
-admin.cloud_file.keyword_type.title: 按标题
-admin.cloud_file.keyword_type.user: 按用户
+admin.cloud_file.keyword_type.course: 课程
+admin.cloud_file.keyword_type.title: 名称
+admin.cloud_file.keyword_type.user: 上传者
 admin.cloud_file.batch_manage_btn: 批量管理
-admin.cloud_file.delete_btn: 删除
+admin.cloud_file.delete_btn: 删除资料
 admin.cloud_file.select_all: 全选
 admin.cloud_file.add_tag: 添加标签
 admin.cloud_file.network_error_hint: 网络问题，无法连接%edusoho%开放云平台
 admin.cloud_file.detail_not_found_tips: 该文件不是云文件，或者对应云文件已经损坏！
+admin.cloud_file.keyword: 关键字：
+admin.cloud_file.upload_time: 上传时间：
+admin.cloud_file.transcode_status: 转码状态：
+admin.cloud_file.use_status: 使用情况：
 
 admin.cloud_file.detail.content_title: 资源详情
 admin.cloud_file.detail.basic_info: 基本信息
@@ -9841,3 +9885,29 @@ exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系�
 course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
 course.question.question_background: 问题背景
 course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%（%watchLimit%倍视频时长），不能再继续观看。
+
+material.common_table.th.file_name: 文件名称
+material.common_table.th.file_type: 类型
+material.common_table.th.file_size: 大小
+material.common_table.th.file_size_time: 大小/时长
+material.common_table.th.upload_time: 上传时间
+material.common_table.th.transcode_status: 转码状态
+material.common_table.th.manage: 操作
+material.common_table.file.local: 本地
+material.common_table.quality.sd: 标清
+material.common_table.quality.hd: 高清
+material.common_table.quality.shd: 超清
+material.common_table.transcode_waiting: 等待转码
+material.common_table.transcode_file_not_support: 文件不支持
+material.common_table.transcode_success: 转码成功
+material.common_table.transcode_doing: 转码中
+material.common_table.transcode_error.server: 转码失败
+material.common_table.transcode_error.client: 文件不支持
+material.common_table.transcode_error_tip: 失败提示
+material.common_table.no_need_transcode: 无需转码
+material.common_table.label.has_mp4: 已生成MP4
+material_lib.search.type.title: 文件名称
+material_lib.search.type.course: 课程名称
+
+
+

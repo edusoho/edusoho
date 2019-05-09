@@ -8,7 +8,9 @@ use Topxia\Service\Common\ServiceKernel;
 
 class AbstractCloudAPI
 {
-    const VERSION = 'v1';
+    const DEFAULT_API_VERSION = 'v1';
+
+    protected $apiVersion = self::DEFAULT_API_VERSION;
 
     protected $userAgent = 'EduSoho Cloud API Client 1.0';
 
@@ -43,12 +45,23 @@ class AbstractCloudAPI
             $this->setApiUrl($options['apiUrl']);
         }
 
+        if (!empty($options['apiVersion'])) {
+            $this->setApiVersion($options['apiVersion']);
+        }
+
         $this->debug = empty($options['debug']) ? false : true;
     }
 
     public function setApiUrl($url)
     {
         $this->apiUrl = rtrim($url, '/');
+
+        return $this;
+    }
+
+    public function setApiVersion($apiVersion)
+    {
+        $this->apiVersion = $apiVersion;
 
         return $this;
     }
@@ -102,7 +115,7 @@ class AbstractCloudAPI
     {
         $requestId = substr(md5(uniqid('', true)), -16);
 
-        $url = $this->apiUrl.'/'.self::VERSION.$uri;
+        $url = $this->apiUrl.'/'.$this->apiVersion.$uri;
 
         if ($this->isWithoutNetwork()) {
             if ($this->debug && $this->logger) {

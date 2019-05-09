@@ -13,3 +13,73 @@
     border-radius: 4px;
   }
 }
+
+
+.ad-progress {
+  position: relative;
+  margin-bottom: 0;
+  &.ad-progress-sm {
+    .progress-inner {
+      height: 4px;
+    }
+  }
+  .progress-bar {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 100%;
+    padding-right: 40px;
+    margin-right: -40px;
+    background: none;
+  }
+  .progress-outer {
+    width: 100%;
+    display: inline-block;
+    background-color: rgba(0, 0, 0, .08);
+    border-radius: 6px;
+  }
+  .progress-inner {
+    width: 0%;
+    height: 8px;
+    background: @brand-primary;
+    font-size: 12px;
+    line-height: 20px;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    -webkit-transition: width 0.6s ease;
+    -o-transition: width 0.6s ease;
+    transition: width 0.6s ease;
+    background-image: -webkit-linear-gradient(-45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-image: -o-linear-gradient(-45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-image: linear-gradient(-45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    -webkit-background-size: 20px 20px;
+    &.active {
+      -webkit-animation: progress-inner 2s linear infinite;
+      -moz-animation: progress-inner 2s linear infinite;
+      -o-animation: progress-inner 2s linear infinite;
+      animation: progress-inner 2s linear infinite;
+    }
+  }
+  .progress-text {
+    display: inline-block;
+    vertical-align: middle;
+    width: 30px;
+    margin-left: 4px;
+    text-align: left;
+    font-size: 12px;
+    line-height: 1;
+  }
+  &.ad-progress-success {
+    .progress-inner {
+      background-color: #18AD3A;
+      background-image: none;
+    }
+  }
+}
+
+.material-progress {
+  .progress-bar {
+    width: 70%;
+    box-shadow: none;
+  }
+}
