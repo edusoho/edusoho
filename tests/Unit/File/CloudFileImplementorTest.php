@@ -30,7 +30,7 @@ class CloudFileImplementorTest extends BaseTestCase
 
     public function testGetFullFile()
     {
-        $api = CloudAPIFactory::create('leaf', 'v2');
+        $api = CloudAPIFactory::create('leaf', 'v1');
         $mockObject = \Mockery::mock($api);
         $mockObject->shouldReceive('get')->times(1)->andReturn(array(
             'no' => 1,
@@ -38,23 +38,13 @@ class CloudFileImplementorTest extends BaseTestCase
             'size' => 100,
             'name' => 'test.file',
             'type' => 'video',
-            'processStatus' => array(
-                'status' => 'none',
-                'code' => 0,
-            ),
-            'transcodingStatus' => array(
-                'sd' => array(
-                    'errorCode' => '0',
-                    'status' => 'none',
-                    'process' => '0',
-                ),
-            ),
+            'processStatus' => 'none',
         ));
 
-        $this->getCloudFileImplementor()->setApi('leaf', $mockObject, 'v2');
+        $this->getCloudFileImplementor()->setApi('leaf', $mockObject, 'v1');
         $result = $this->getCloudFileImplementor()->getFullFile(array('globalId' => 1));
         $this->assertEquals('cloud', $result['storage']);
-        $this->assertEquals('none', $result['convertStatus']);
+        $this->assertEquals('noneed', $result['convertStatus']);
     }
 
     public function testGetFileByGlobalId()
@@ -63,7 +53,7 @@ class CloudFileImplementorTest extends BaseTestCase
             array('functionName' => 'getByGlobalId', 'returnValue' => array('globalId' => 1)),
         ));
 
-        $api = CloudAPIFactory::create('root', 'v2');
+        $api = CloudAPIFactory::create('root', 'v1');
         $mockObject = \Mockery::mock($api);
         $mockObject->shouldReceive('get')->times(1)->andReturn(array(
             'no' => 1,
@@ -71,23 +61,13 @@ class CloudFileImplementorTest extends BaseTestCase
             'size' => 100,
             'name' => 'test.file',
             'type' => 'video',
-            'processStatus' => array(
-                'status' => 'none',
-                'code' => 0,
-            ),
-            'transcodingStatus' => array(
-                'sd' => array(
-                    'errorCode' => '0',
-                    'status' => 'none',
-                    'process' => '0',
-                ),
-            ),
+            'processStatus' => 'none',
         ));
 
-        $this->getCloudFileImplementor()->setApi('root', $mockObject, 'v2');
+        $this->getCloudFileImplementor()->setApi('root', $mockObject, 'v1');
         $result = $this->getCloudFileImplementor()->getFileByGlobalId(1);
         $this->assertEquals('cloud', $result['storage']);
-        $this->assertEquals('none', $result['convertStatus']);
+        $this->assertEquals('noneed', $result['convertStatus']);
     }
 
     public function testAddFile()
@@ -245,10 +225,7 @@ class CloudFileImplementorTest extends BaseTestCase
             'size' => 100,
             'name' => 'testnew.file',
             'type' => 'ppt',
-            'processStatus' => array(
-                'status' => 'none',
-                'code' => 0,
-            ),
+            'processStatus' => 'none',
         ));
 
         $this->getCloudFileImplementor()->setApi('root', $mockObject);
@@ -596,15 +573,12 @@ class CloudFileImplementorTest extends BaseTestCase
                     'extno' => 2,
                     'name' => 'test.file',
                     'type' => 'ppt',
-                    'processStatus' => array(
-                        'status' => 'none',
-                        'code' => 0,
-                    ),
+                    'processStatus' => 'none',
                 ),
             ),
         ));
 
-        $this->getCloudFileImplementor()->setApi('root', $mockObject, 'v2');
+        $this->getCloudFileImplementor()->setApi('root', $mockObject, 'v1');
 
         $result = $this->getCloudFileImplementor()->search(array('id' => 1));
         $this->assertEquals(1, count($result['data']));
