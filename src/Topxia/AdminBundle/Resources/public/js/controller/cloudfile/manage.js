@@ -88,10 +88,11 @@ define(function(require, exports, module) {
           var title = $btn.data('title');
           var reason = $btn.data('reason');
           var solution = $btn.data('solution');
+          var status = $btn.data('status');
           $('.js-error-tip').html(
-           '<div class="mbl">文件名称：<span class="mlm">' + title + 
-           '</span></div><div class="mbl">转码状态：<span class="mlm">转码失败</span></div><div class="mbl">错误原因：<span class="color-danger mlm">' + reason + 
-           '</span></div><div>解决方案：<span class="color-info mlm">' +  solution + 
+           '<div class="mbl clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.file_name') +'：</span><span class="pull-left error-content">' + title + 
+           '</span></div><div class="mbl clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.transcoding') +'：</span><span class="pull-left error-content">' + status + '</span></div><div class="mbl clearfix"><span class="pull-left error-label">' + Translator.trans('material.common_table.error_reason') + '：</span><span class="color-danger pull-left error-content">' + reason +
+           '</span></div><div class="clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.solution_way') +'：</span><span class="color-info pull-left error-content">' +  solution + 
            '</span></div>')
         })
       },
