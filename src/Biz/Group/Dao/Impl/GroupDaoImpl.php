@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class GroupDaoImpl extends GeneralDaoImpl implements GroupDao
 {
-    protected $table = '`groups`';
+    protected $table = 'groups';
 
     public function findByTitle($title)
     {
