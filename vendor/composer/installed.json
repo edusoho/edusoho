@@ -6126,61 +6126,6 @@
         ]
     },
     {
-        "name": "codeages/omnipay-wechatpay",
-        "version": "v1.1.2",
-        "version_normalized": "1.1.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/omnipay-wechatpay.git",
-            "reference": "a7811dfcae37d78aa3abc9ae7d80c74d58254bad"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/omnipay-wechatpay/zipball/a7811dfcae37d78aa3abc9ae7d80c74d58254bad",
-            "reference": "a7811dfcae37d78aa3abc9ae7d80c74d58254bad",
-            "shasum": "",
-            "mirrors": [
-                {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
-                    "preferred": true
-                }
-            ]
-        },
-        "require": {
-            "omnipay/common": "~2.0"
-        },
-        "require-dev": {
-            "omnipay/tests": "~2.0"
-        },
-        "time": "2019-04-30T07:34:06+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Omnipay\\WechatPay\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Wechat gateway for Omnipay payment processing library",
-        "homepage": "https://github.com/canuonifeng/omnipay-wechatpay",
-        "keywords": [
-            "app",
-            "gateway",
-            "omnipay",
-            "pay",
-            "payment",
-            "php",
-            "php53",
-            "purchase",
-            "sdk",
-            "wechat",
-            "微信支付"
-        ]
-    },
-    {
         "name": "codeages/omnipay-alipay",
         "version": "v2.3.5",
         "version_normalized": "2.3.5.0",
@@ -6287,5 +6232,60 @@
             "MIT"
         ],
         "description": "order, pay module"
+    },
+    {
+        "name": "codeages/omnipay-wechatpay",
+        "version": "v1.1.3",
+        "version_normalized": "1.1.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/omnipay-wechatpay.git",
+            "reference": "1c59c247d33305fbefd4cfeff71988d9c8789e6f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/omnipay-wechatpay/zipball/1c59c247d33305fbefd4cfeff71988d9c8789e6f",
+            "reference": "1c59c247d33305fbefd4cfeff71988d9c8789e6f",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "omnipay/common": "~2.0"
+        },
+        "require-dev": {
+            "omnipay/tests": "~2.0"
+        },
+        "time": "2019-05-09T03:14:36+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Omnipay\\WechatPay\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Wechat gateway for Omnipay payment processing library",
+        "homepage": "https://github.com/canuonifeng/omnipay-wechatpay",
+        "keywords": [
+            "app",
+            "gateway",
+            "omnipay",
+            "pay",
+            "payment",
+            "php",
+            "php53",
+            "purchase",
+            "sdk",
+            "wechat",
+            "微信支付"
+        ]
     }
 ]

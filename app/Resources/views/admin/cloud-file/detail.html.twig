@@ -17,7 +17,7 @@
 
       {% if material.type == 'video' %}
       <div class="tab-pane es-piece" id="cover-tab">
-        {% if material.processStatus == 'ok' %}
+        {% if material.convertStatus|default(false) == 'success' %}
         <form id="cover-form" action="{{ editUrl }}">
           <div class="piece-header">{{ 'admin.cloud_file.current_cover_img'|trans }}</div>
           <div class="form-group">

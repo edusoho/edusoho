@@ -4,12 +4,17 @@
   {% set layout = 'courseset-manage/courseset-layout.html.twig' %}
 {% endif %}
 {% extends layout %}
-{% do script(['app/js/course-manage-file/index/index.js']) %}
+
+{% do script(['libs/jquery-validation.js', 'libs/select2.js','app/js/course-manage-file/index/index.js']) %}
 
 {% block title %}{{'course.course_files'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'files' %}
 {% set tab = 'courseLesson' %}
+
+{% block paddingClass %}
+  material-table-padding
+{% endblock %}
 
 
 
@@ -22,55 +27,32 @@
   {{ web_macro.flash_messages() }}
   <div role="courseset-manage-file">
     <div class="courseset-manage-body__title">
-      <a class="cd-btn cd-btn-info cd-btn-sm  courseset-manage-body__btn"
-        data-toggle="modal" data-target="#modal"
-        data-url="{{path('uploader_batch_upload', {token:uploader_token(targetType, courseSet.id, 'private')}) }}"
-      >
-        <i class="glyphicon glyphicon-cloud-upload mrs"></i>{{'course.course_files.create_btn'|trans}}
-      </a>
       {{'course.course_files.content_title'|trans}}
     </div>
 
     <div id="file-manage-panel" data-file-status-url="{{path('course_set_manage_file_status')}}">
-      <table class="table table-striped table-hover" id="course-lesson-table">
-        <thead>
-          <tr>
-            <th width="5%"><input type="checkbox"  data-role="batch-select"></th>
-            <th width="30%">{{'course.course_files.name'|trans}}</th>
-            <th>{{'course.course_files.type'|trans}}</th>
-            <th>{{'course.course_files.size'|trans}}</th>
-            <th>{{'course.course_files.use_status'|trans}}</th>
-            <th>{{'course.course_files.last_update'|trans}}</th>
-            <th>{{'course.course_files.operation'|trans}}</th>
-          </tr>
-        </thead>
-        <tbody>
+    {% set uploaderToken = uploader_token(targetType, courseSet.id, 'private') %}
+    {% if courseSet.type == 'normal' or courseSet.type =='live'  %}
+      {% set path = path('course_set_manage_delete_materials_show', {id:courseSet.id, type:tab}) %}
+    {% else %}
+      {% set path = path('open_course_manage_delete_materials_show', {id:courseSet.id, type:tab}) %}
+    {% endif %}
+    {% if courseSet.type == 'open' %}
+      {% set goto = path('open_course_manage_files', {id:courseSet.id}) %}
+    {% else %}
+      {% set goto = path('course_set_manage_files', {id:courseSet.id}) %}
+    {% endif %}
 
-          {% for uploadFile in files if uploadFile %}
-            {% include 'courseset-manage/file/tbody-tr.html.twig' %}
-          {% else %}
-            <tr class="empty"><td colspan="20">{{'course.course_files.empty'|trans}}</td></tr>
-          {% endfor %}
-
-        </tbody>
-      </table>
-
-      <label class="checkbox-inline mrm mbm"><input type="checkbox" data-role="batch-select"> {{'course.course_files.select_all_btn'|trans}}</label>
-
-      <div class="btn-group mbm">
-        {% if courseSet.type == 'normal' or courseSet.type =='live'  %}
-          <button class="cd-btn cd-btn-danger cd-btn-sm" data-role="batch-delete" data-name="{{'course.course_files.record'|trans}}" data-url="{{ path('course_set_manage_delete_materials_show', {id:courseSet.id, type:tab}) }}">
-        {% elseif courseSet.type == 'open' or courseSet.type == 'liveOpen' %}
-          <button class="cd-btn cd-btn-danger cd-btn-sm" data-role="batch-delete" data-name="{{'course.course_files.record'|trans}}" data-url="{{ path('open_course_manage_delete_materials_show', {id:courseSet.id, type:tab}) }}">
-        {% endif %}
-        <i class="glyphicon glyphicon-trash"></i>
-        {{'form.btn.remove'|trans}}</button>
-      </div>
+     {% include 'material-lib/widget/material-button.html.twig' with { uploaderToken: uploaderToken, path: path, type: 'courseFile' } %}
+      
+     {% include 'material-lib/widget/material-table.html.twig' with { path: path, subtitlePath: goto, type: 'courseFile' } %}
 
       <nav class="text-center">
         {{ web_macro.paginator(paginator) }}
       </nav>
 
     </div>
+    {% include 'material-lib/widget/error-modal.html.twig' %}
+    {% include 'material-lib/widget/tag-modal.html.twig' with {tagPath : path('course_set_manage_files_batch_tag_add', {id:courseSet.id})} %}
   </div>
 {% endblock %}

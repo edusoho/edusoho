@@ -2,6 +2,7 @@
 
 namespace Biz\File\Service\Impl;
 
+use AppBundle\Common\CloudFileStatusToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\File\Dao\FileUsedDao;
@@ -726,6 +727,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'start' => $start,
             'limit' => $limit,
         );
+
+        if (isset($conditions['errorType'])) {
+            $cloudFileConditions['errorType'] = $conditions['errorType'];
+        }
+
         if (isset($conditions['resType'])) {
             $cloudFileConditions['resType'] = $conditions['resType'];
         }
@@ -792,6 +798,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $cloudFileConditions = array(
             'processStatus' => $conditions['processStatus'],
         );
+
+        if (isset($conditions['errorType'])) {
+            $cloudFileConditions['errorType'] = $conditions['errorType'];
+        }
+
         $globalArray = array_chunk($globalIds, 20);
         $count = 0;
 
@@ -985,27 +996,25 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return array();
         }
 
-        $statusMap = array(
-            'none' => 'none',
-            'waiting' => 'waiting',
-            'processing' => 'doing',
-            'ok' => 'success',
-            'error' => 'error',
-        );
+        $convertStatus = CloudFileStatusToolkit::convertProcessStatus($result['status']);
+
+        if ('error' == $convertStatus && isset($result['errorType']) && 'client' == $result['errorType']) {
+            $convertStatus = 'nonsupport';
+        }
 
         $fields = array(
-            'convertStatus' => empty($statusMap[$result['status']]) ? 'none' : $statusMap[$result['status']],
+            'convertStatus' => $convertStatus,
             'audioConvertStatus' => 'none',
             'mp4ConvertStatus' => 'none',
             'updatedTime' => time(),
         );
 
         if ($result['audio']) {
-            $fields['audioConvertStatus'] = $statusMap[$result['status']];
+            $fields['audioConvertStatus'] = $convertStatus;
         }
 
         if ($result['mp4']) {
-            $fields['mp4ConvertStatus'] = $statusMap[$result['status']];
+            $fields['mp4ConvertStatus'] = $convertStatus;
         }
 
         return $this->getUploadFileDao()->update($file['id'], $fields);
@@ -1233,11 +1242,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if ($this->hasProcessStatusCondition($conditions)) {
             $conditions['storage'] = 'cloud';
             $conditions['existGlobalId'] = 0;
-        }
-
-        if (!empty($conditions['keyword'])) {
-            $conditions['filenameLike'] = $conditions['keyword'];
-            unset($conditions['keyword']);
+            $conditions = array_merge($conditions, CloudFileStatusToolkit::getTranscodeFilterStatusCondition($conditions['processStatus']));
         }
 
         if (!empty($conditions['startDate'])) {
@@ -1256,8 +1261,48 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $conditions['startCount'] = 1;
         }
 
+        $conditions = $this->filterKeyWords($conditions);
         $conditions = $this->filterSourceForm($conditions);
         $conditions = $this->filterTag($conditions);
+
+        return $conditions;
+    }
+
+    protected function filterKeyWords($conditions)
+    {
+        if (!empty($conditions['keywordType']) && !empty($conditions['keyword'])) {
+            $keywordType = $conditions['keywordType'];
+            $keyword = $conditions['keyword'];
+
+            if ('course' == $keywordType) {
+                $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keyword);
+                if (empty($courseSets)) {
+                    $conditions['ids'] = array(-1);
+                } else {
+                    $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+                    $courseMaterials = $this->getMaterialService()->searchMaterials(
+                        array('courseSetIds' => $courseSetIds),
+                        array('createdTime' => 'DESC'),
+                        0,
+                        PHP_INT_MAX
+                    );
+                    $fileIds = ArrayToolkit::column($courseMaterials, 'fileId');
+                    $fileIds = empty($fileIds) ? array(-1) : $fileIds;
+
+                    if (!empty($conditions['ids'])) {
+                        $intersect = array_intersect($conditions['ids'], $fileIds);
+                        $conditions['ids'] = empty($intersect) ? array(-1) : $intersect;
+                    } else {
+                        $conditions['ids'] = $fileIds;
+                    }
+                }
+            } elseif ('title' == $keywordType) {
+                $conditions['filenameLike'] = $keyword;
+            }
+        }
+
+        unset($conditions['keywordType']);
+        unset($conditions['keyword']);
 
         return $conditions;
     }
@@ -1622,5 +1667,18 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getFireWallFactory()
     {
         return $this->biz['file_fire_wall_factory'];
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return \Biz\Course\Service\MaterialService
+     */
+    protected function getMaterialService()
+    {
+        return $this->createService('Course:MaterialService');
     }
 }

@@ -22,13 +22,12 @@
   <div class="eduyun-main">
 
     <form class="form-inline es-materials-manage" id="materials-form">
-      {% include 'admin/cloud-file/form/course-user-search.html.twig' %}
       {% include 'admin/cloud-file/form/nav.html.twig' %}
       {% include 'admin/cloud-file/form/tags.html.twig' %}
-      {% include 'admin/cloud-file/form/filter.html.twig' with {'pageType': 'file'} %}
+      {% include 'admin/cloud-file/form/res-filter.html.twig' with {'pageType': 'file'} %}
       {% include 'admin/cloud-file/form/sort.html.twig' %}
       {% include 'admin/cloud-file/form/batch.html.twig' %}
-      {% include 'admin/cloud-file/table.html.twig'  with {'pageType': 'file'} %}
+      {% include 'admin/cloud-file/resource-table.html.twig'  with {'pageType': 'file'} %}
     </form>
   </div>
 
