@@ -657,6 +657,16 @@ user_info_fill:
     defaults: { _controller: AppBundle:User:fillInfoWhenBuy }
     methods: [POST]
 
+user_course_set_stick:
+  path: /user/course_set/{courseSetId}/stick
+  defaults: { _controller: AppBundle:User:stickCourseSet }
+  methods: [POST]
+
+user_course_set_unstick:
+  path: /user/course_set/{courseSetId}/unstick
+  defaults: { _controller: AppBundle:User:unStickCourseSet }
+  methods: [POST]
+
 my_page_show:
     path:  /my/page/show
     defaults: { _controller: AppBundle:User:pageShow }

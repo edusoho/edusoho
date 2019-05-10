@@ -183,11 +183,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $result;
     }
 
-    public function searchMembers($conditions, $orderBy, $start, $limit)
+    public function searchMembers($conditions, $orderBy, $start, $limit, $columns = array())
     {
         $conditions = $this->prepareConditions($conditions);
 
-        return $this->getMemberDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getMemberDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function countMembers($conditions)
@@ -195,6 +195,34 @@ class MemberServiceImpl extends BaseService implements MemberService
         $conditions = $this->prepareConditions($conditions);
 
         return $this->getMemberDao()->count($conditions);
+    }
+
+    public function stickMyCourseByCourseSetId($courseSetId)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $this->createNewException(UserException::UN_LOGIN());
+        }
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        return $this->getMemberDao()->update(
+            array('courseSetId' => $courseSet['id'], 'userId' => $user['id'], 'role' => 'teacher'),
+            array('stickyTime' => time())
+        );
+    }
+
+    public function unStickMyCourseByCourseSetId($courseSetId)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $this->createNewException(UserException::UN_LOGIN());
+        }
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        return $this->getMemberDao()->update(
+            array('courseSetId' => $courseSet['id'], 'userId' => $user['id'], 'role' => 'teacher'),
+            array('stickyTime' => 0)
+        );
     }
 
     public function findWillOverdueCourses()
