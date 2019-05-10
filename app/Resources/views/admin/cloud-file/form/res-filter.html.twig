@@ -1,0 +1,45 @@
+<div class="bottom cloud-search-section">
+  <div class="form-inline row mbl">
+    <div class="form-group col-sm-5">
+      <label>{{ 'admin.cloud_file.keyword'|trans }}</label>
+      <select class="form-control form-control-input form-csearch-type js-search-type" name="searchType">{{ 'admin.cloud_file.keyword_type'|trans }} <span class="caret" ></span>
+        <option value="title"><a href="javascript:;" >{{ 'admin.cloud_file.keyword_type.title'|trans }}</a></option>
+        <option value="course"><a href="javascript:;" >{{ 'admin.cloud_file.keyword_type.course'|trans }}</a></option>
+        <option value="user"><a href="javascript:;" >{{ 'admin.cloud_file.keyword_type.user'|trans }}</a></option>
+      </select>
+      <input class="form-control form-control-input form-space" maxlength="50" name="keywords" placeholder="{{ 'admin.cloud_file.keyword_placeholder'|trans }}">
+    </div>
+    
+    <div class="form-group es-materials-filter col-sm-6">
+      <label>{{ 'admin.cloud_file.upload_time'|trans }}</label>
+      <input class="form-control form-control-input-sm mrm" type="text" id="startDate" autocomplete="off" name="startDate" value="" placeholder="{{ 'form.placeholder.start_date'|trans }}">
+      -
+      <input class="form-control form-control-input-sm mlm" type="text" id="endDate" autocomplete="off" name="endDate" value="" placeholder="{{ 'form.placeholder.end_date'|trans }}">
+    </div>
+  </div>
+  <div class="form-inline row">
+    <div class="form-group col-sm-5">
+    <label>{{ 'admin.cloud_file.transcode_status'|trans }}</label>
+      <select class="form-control js-process-status-select form-control-input-md" name="convertStatus">
+        <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
+        <option value="waiting">{{ 'material.common_table.transcode_waiting'|trans }}</option>
+        <option value="success">{{'material_lib.search.conditions.convert_status.success'|trans}}</option>
+        <option value="doing">{{'material_lib.search.conditions.convert_status.doing'|trans}}</option>
+        <option value="error">{{'material_lib.search.conditions.convert_status.error'|trans}}</option>
+        <option value="nonsupport">{{ 'material.common_table.transcode_file_not_support'|trans }}</option>
+        <option value="noneed">{{ 'material.common_table.no_need_transcode'|trans }}</option>
+      </select>
+    </div>
+    {% if pageType == 'file' %}
+      <div class="form-group col-sm-6">
+        <label>{{ 'admin.cloud_file.use_status'|trans }}</label>
+        <select class="form-control js-use-status-select form-control-input-md" name="useStatus">
+          <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
+          <option value="unused">{{ 'cloud_file.use_status.unused'|trans }}</option>
+          <option value="used">{{ 'cloud_file.use_status.used'|trans }}</option>
+        </select>
+        <button class="form-space btn btn-primary cloud-search-btn">{{ 'form.btn.search'|trans }}</button>
+      </div>
+    {% endif %}
+  </div>
+</div>

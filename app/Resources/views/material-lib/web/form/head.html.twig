@@ -1,6 +1,6 @@
 <div class="text-sm pull-right">
-		<a class="btn btn-primary" id="myShare" href="javascript:;" data-toggle="modal" data-backdrop="static"data-target="#modal" data-url="{{ path('material_lib_show_sharing_history') }}">{{'material_lib.sharing_history.history_btn'|trans}}</a>
-		<a class="btn btn-info" id="shareMaterials" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_my_sharing') }}">{{'material_lib.my_sharing.my_btn'|trans}}</a>
+		<a class="cd-btn cd-btn-info" id="myShare" href="javascript:;" data-toggle="modal" data-backdrop="static"data-target="#modal" data-url="{{ path('material_lib_show_sharing_history') }}">{{'material_lib.sharing_history.history_btn'|trans}}</a>
+		<a class="cd-btn cd-btn-info" id="shareMaterials" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_my_sharing') }}">{{'material_lib.my_sharing.my_btn'|trans}}</a>
 		{#<a class="btn btn-default {% if source == "upload" %} active {% endif %}" href="{{ path('material_lib_browsing', {type: type|default('all'), viewMode: viewMode|default('thumb'), source: 'upload'}) }}">来自上传</a>
 
 		<a class="btn btn-default {% if source == "shared" %} active {% endif %}" href="{{ path('material_lib_browsing', {type: type|default('all'), viewMode: viewMode|default('thumb'), source: 'shared'}) }}">来自分享</a>

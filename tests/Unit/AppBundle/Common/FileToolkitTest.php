@@ -96,10 +96,7 @@ class FileTookitTest extends BaseTestCase
         $extension = FileToolkit::getFileTypeByExtension('xlsx');
         $this->assertEquals('document', $extension);
 
-        $extension = FileToolkit::getFileTypeByExtension('wps');
-        $this->assertEquals('document', $extension);
-
-        $extension = FileToolkit::getFileTypeByExtension('odt');
+        $extension = FileToolkit::getFileTypeByExtension('txt');
         $this->assertEquals('document', $extension);
     }
 
@@ -120,9 +117,6 @@ class FileTookitTest extends BaseTestCase
 
     public function testGetFileTypeByOtherExtension()
     {
-        $extension = FileToolkit::getFileTypeByExtension('txt');
-        $this->assertEquals('other', $extension);
-
         $extension = FileToolkit::getFileTypeByExtension('md');
         $this->assertEquals('other', $extension);
 

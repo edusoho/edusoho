@@ -479,16 +479,16 @@
         },
         {
             "name": "codeages/omnipay-wechatpay",
-            "version": "v1.1.2",
+            "version": "v1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/omnipay-wechatpay.git",
-                "reference": "a7811dfcae37d78aa3abc9ae7d80c74d58254bad"
+                "reference": "1c59c247d33305fbefd4cfeff71988d9c8789e6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/omnipay-wechatpay/zipball/a7811dfcae37d78aa3abc9ae7d80c74d58254bad",
-                "reference": "a7811dfcae37d78aa3abc9ae7d80c74d58254bad",
+                "url": "https://api.github.com/repos/codeages/omnipay-wechatpay/zipball/1c59c247d33305fbefd4cfeff71988d9c8789e6f",
+                "reference": "1c59c247d33305fbefd4cfeff71988d9c8789e6f",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -528,7 +528,7 @@
                 "wechat",
                 "微信支付"
             ],
-            "time": "2019-04-30T07:34:06+00:00"
+            "time": "2019-05-09T03:14:36+00:00"
         },
         {
             "name": "codeages/plugin-bundle",

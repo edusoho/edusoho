@@ -8,6 +8,7 @@
 {% endif %}
 
 <div class="mask">
+{# 收藏和取消收藏 #}
   <div class="icon-operation">
     <i
       class="glyphicon glyphicon-star js-collect-btn left {% if collections[uploadFile.id]|default(0) %} material-collection {% endif %}"
@@ -24,6 +25,7 @@
       aria-expanded="false"
     ></i>
     <ul class="dropdown-menu">
+    {# 编辑 #}
       {% if uploadFile.createdUserId == app.user.id %}
         <li>
           <a href="javascript:;" class="js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
@@ -39,7 +41,7 @@
           </a>
         </li>
       {% endif %}
-
+      {# 字幕管理 #}
       {% if uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
         <li>
           <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:path('material_lib_browsing')}) }}" data-toggle="tooltip" data-placement="bottom">
@@ -47,7 +49,7 @@
           </a>
         </li>
       {% endif %}
-
+      {# 下载 #}
       <li>
         <a href="javascript:;"  data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
           <i class="glyphicon glyphicon-save prm"></i>{{'material_lib.btn.download'|trans}}
@@ -55,7 +57,7 @@
       </li>
 
       {% if uploadFile.createdUserId == app.user.id %}
-
+        {# 共享和取消共享 #}
         {% if uploadFile.isPublic %}
           <li>
             <a href="javascript:;" class="js-unshare-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_unshare', {fileId:uploadFile.id}) }}">
@@ -69,7 +71,7 @@
             </a>
           </li>
         {% endif %}
-
+        {# 删除判断 #}
         {% if source != 'public' %}
           <li>
             <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete_modal_show') }}" data-id="{{uploadFile.id }}">
@@ -80,6 +82,7 @@
       {% endif %}
     </ul>
   </div>
+  {# 资料预览 #}
   <div class="btn-operation">
       <!-- 选择一种状态 -->
 
