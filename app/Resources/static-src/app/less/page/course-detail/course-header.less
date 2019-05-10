@@ -160,6 +160,11 @@
        margin: 0;
        padding: 0;
       }
+
+      .buy-btn-group {
+        right: -10px;
+        bottom: 20px;
+      }
       .course-detail-title {
         margin-right: 12px;
         width: 74px;
@@ -186,7 +191,6 @@
         }
         @media(max-width: @screen-sm-max) {
           padding-left: 15px;
-          min-height: 158px;
           margin: 0px -15px 10px -15px;
           padding-top: 0;
           background-color: transparent;
@@ -196,10 +200,13 @@
             min-height: 158px;
           }
         }
-        &.not-activity {
-          @media(max-width: @screen-xs-min) {
-            min-height: auto;
-          }
+        @media (min-width: @screen-xs-min) and (max-width: @screen-sm-max) {
+          margin-right: 0;
+          margin-bottom: 24px;
+          min-height: auto !important;
+        }
+        @media (max-width: @screen-xs-min) {
+          min-height: auto !important;
         }
         .course-detail-content {
           position: relative;

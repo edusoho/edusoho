@@ -319,6 +319,12 @@ class RegisterController extends BaseController
             $this->createNewException(UserException::NOTFOUND_USER());
         }
 
+        $authSettings = $this->getSettingService()->get('auth', array());
+        $dragCaptchaToken = $request->request->get('dragCaptchaToken');
+
+        //拖动校验
+        $this->dragCaptchaValidator(array('dragCaptchaToken' => $dragCaptchaToken), $authSettings);
+
         $this->getAuthService()->changeEmail($user['id'], $token['data']['password'], $newEmail);
         $user = $this->getUserService()->getUser($user['id']);
 
