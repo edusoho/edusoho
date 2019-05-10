@@ -68,7 +68,7 @@ interface TaskDao extends AdvancedDaoInterface
 
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
 
-    public function countLessonsByMultipleTasks($courseId);
+    public function countLessonsWithMultipleTasks($courseId);
 
     public function analysisTaskDataByTime($startTime, $endTime);
 
