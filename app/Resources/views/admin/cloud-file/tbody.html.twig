@@ -1,6 +1,10 @@
 {% for material in materials %}
   {% set createdUser = createdUsers[material.createdUserId|default(0)]|default(null) %}
-  {% include 'admin/cloud-file/table-tr.html.twig' with {createdUser:createdUser, cloudFile:material} %}
+  {% if pageType == 'attachment'%}
+    {% include 'admin/cloud-file/res-table-tr.html.twig' with {createdUser:createdUser, cloudFile:material, type:'attachment'} %}
+  {% else %}
+    {% include 'admin/cloud-file/res-table-tr.html.twig' with {createdUser:createdUser, cloudFile:material} %}
+  {% endif %}
 {% else %}
   <tr>
     <td class="empty" colspan="10" style="color:#999;padding:80px;">{{ 'cloud_file.search_empty'|trans }}</td>

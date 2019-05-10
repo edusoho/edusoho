@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7bf0c4dc436d8c922fc7dadb182df82f",
+    "content-hash": "bff90ab9369753aefbead276ee9c9d31",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -236,59 +236,6 @@
             "time": "2017-01-06T23:20:00+00:00"
         },
         {
-            "name": "canuonifeng/omnipay-wechatpay",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/canuonifeng/omnipay-wechatpay.git",
-                "reference": "d0503c495b621bd4fda4290d8342009bd57c7222"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/canuonifeng/omnipay-wechatpay/zipball/d0503c495b621bd4fda4290d8342009bd57c7222",
-                "reference": "d0503c495b621bd4fda4290d8342009bd57c7222",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "omnipay/common": "~2.0"
-            },
-            "require-dev": {
-                "omnipay/tests": "~2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Omnipay\\WechatPay\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Wechat gateway for Omnipay payment processing library",
-            "homepage": "https://github.com/canuonifeng/omnipay-wechatpay",
-            "keywords": [
-                "app",
-                "gateway",
-                "omnipay",
-                "pay",
-                "payment",
-                "php",
-                "php53",
-                "purchase",
-                "sdk",
-                "wechat",
-                "微信支付"
-            ],
-            "time": "2017-10-12T07:49:28+00:00"
-        },
-        {
             "name": "cerdic/css-tidy",
             "version": "v1.5.5",
             "source": {
@@ -391,16 +338,16 @@
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.26",
+            "version": "v0.1.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "c6747df7f87b224429a24f16675338c68171289c"
+                "reference": "86512c97984aadedbfc679d00d2c005622d3bab7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/c6747df7f87b224429a24f16675338c68171289c",
-                "reference": "c6747df7f87b224429a24f16675338c68171289c",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/86512c97984aadedbfc679d00d2c005622d3bab7",
+                "reference": "86512c97984aadedbfc679d00d2c005622d3bab7",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -410,9 +357,9 @@
                 ]
             },
             "require": {
-                "canuonifeng/omnipay-wechatpay": "^1.1",
                 "codeages/biz-framework": "^0.9",
-                "wenqinruan/omnipay-alipay": "^2.3"
+                "codeages/omnipay-alipay": "^2.3",
+                "codeages/omnipay-wechatpay": "^1.1"
             },
             "require-dev": {
                 "mockery/mockery": "^0.9.9",
@@ -431,7 +378,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2018-11-01T07:45:03+00:00"
+            "time": "2019-05-06T06:42:52+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -469,6 +416,119 @@
             ],
             "description": "Rate limiter with Biz Framework.",
             "time": "2017-08-24T02:38:11+00:00"
+        },
+        {
+            "name": "codeages/omnipay-alipay",
+            "version": "v2.3.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeages/omnipay-alipay.git",
+                "reference": "0bd24ae441ddb3aa5973a2888206c7fe2a71ef25"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codeages/omnipay-alipay/zipball/0bd24ae441ddb3aa5973a2888206c7fe2a71ef25",
+                "reference": "0bd24ae441ddb3aa5973a2888206c7fe2a71ef25",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "omnipay/common": "~2.0"
+            },
+            "require-dev": {
+                "omnipay/tests": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Omnipay\\Alipay\\": "src/",
+                    "Omnipay\\Alipay\\Tests\\": "tests/"
+                },
+                "files": [
+                    "src/Common/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Wenqin Ruan",
+                    "email": "ruanwenqinrl@gmail.com"
+                }
+            ],
+            "description": "Alipay gateway for Omnipay payment processing library",
+            "homepage": "https://github.com/wenqinruan/omnipay-alipay",
+            "keywords": [
+                "alipay",
+                "gateway",
+                "merchant",
+                "omnipay",
+                "pay",
+                "payment",
+                "php53",
+                "purchase"
+            ],
+            "time": "2017-09-26T12:37:40+00:00"
+        },
+        {
+            "name": "codeages/omnipay-wechatpay",
+            "version": "v1.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeages/omnipay-wechatpay.git",
+                "reference": "1c59c247d33305fbefd4cfeff71988d9c8789e6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codeages/omnipay-wechatpay/zipball/1c59c247d33305fbefd4cfeff71988d9c8789e6f",
+                "reference": "1c59c247d33305fbefd4cfeff71988d9c8789e6f",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "omnipay/common": "~2.0"
+            },
+            "require-dev": {
+                "omnipay/tests": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Omnipay\\WechatPay\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Wechat gateway for Omnipay payment processing library",
+            "homepage": "https://github.com/canuonifeng/omnipay-wechatpay",
+            "keywords": [
+                "app",
+                "gateway",
+                "omnipay",
+                "pay",
+                "payment",
+                "php",
+                "php53",
+                "purchase",
+                "sdk",
+                "wechat",
+                "微信支付"
+            ],
+            "time": "2019-05-09T03:14:36+00:00"
         },
         {
             "name": "codeages/plugin-bundle",
@@ -4596,66 +4656,6 @@
                 "UUID RFC4122"
             ],
             "time": "2017-09-10T21:34:32+00:00"
-        },
-        {
-            "name": "wenqinruan/omnipay-alipay",
-            "version": "v2.3.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wenqinruan/omnipay-alipay.git",
-                "reference": "7f906729a1685dda30e15186a827ccc098427e54"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wenqinruan/omnipay-alipay/zipball/7f906729a1685dda30e15186a827ccc098427e54",
-                "reference": "7f906729a1685dda30e15186a827ccc098427e54",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "omnipay/common": "~2.0"
-            },
-            "require-dev": {
-                "omnipay/tests": "~2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Omnipay\\Alipay\\": "src/",
-                    "Omnipay\\Alipay\\Tests\\": "tests/"
-                },
-                "files": [
-                    "src/Common/helpers.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Wenqin Ruan",
-                    "email": "ruanwenqinrl@gmail.com"
-                }
-            ],
-            "description": "Alipay gateway for Omnipay payment processing library",
-            "homepage": "https://github.com/wenqinruan/omnipay-alipay",
-            "keywords": [
-                "alipay",
-                "gateway",
-                "merchant",
-                "omnipay",
-                "pay",
-                "payment",
-                "php53",
-                "purchase"
-            ],
-            "time": "2018-03-22T02:11:38+00:00"
         },
         {
             "name": "willdurand/js-translation-bundle",

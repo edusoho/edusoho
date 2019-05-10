@@ -23,6 +23,7 @@ site.data.part: Part
 site.data.title: Title
 site.data.score: Score
 site.data.count: Count
+site.copy: Copy
 site.datagrid.empty: 'No data'
 site.datagrid.filter.all_records: 'All'
 site.datagrid.filter.last_one_week: 'Last 7 days'
@@ -141,6 +142,10 @@ site.mobile_bind.reasons: Three reasons to bind mobile phone numbers
 site.mobile_bind.reasons.network_office_regulations: 1.The Internet Office requires Internet registered users to provide real identity based on mobile phone numbers and the like.
 site.mobile_bind.reasons.login_while_third_party_fail: 2.When the third-party login fails, the mobile phone number can still be successfully logged in, and the course learning is not affected.
 site.mobile_bind.reasons.login_while_forget_password: 3.Even if you forget the password for a third-party account, you can still log in with the phone number and password you have bound.
+
+site.cloud.file.convert_failed_tips: 转码失败，请联系管理员。
+site.cloud.file.converting_tips: 课程内容准备中，请稍后查看。
+site.cloud.file.not_find_tips: 文件不存在。
 
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
@@ -2830,7 +2835,7 @@ search.live_courses: 'Live courses'
 search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
-cloud_file.preview: 'File preview'
+cloud_file.preview: 'preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
 cloud_file.download_btn: Download
@@ -2839,6 +2844,41 @@ cloud_file.process_status.ok: Success
 cloud_file.process_status.waiting: Converting
 cloud_file.process_status.error: 'Convert failed'
 cloud_file.transcoding_tips: 'Video transcoding is not completed, please wait ...'
+cloud_file.transcoding_tips.error_code_41001.reason: 当前文件格式异常，不支持进行转码
+cloud_file.transcoding_tips.error_code_41001.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
+cloud_file.transcoding_tips.error_code_51009.reason: 当前文件格式异常，不支持进行转码
+cloud_file.transcoding_tips.error_code_51009.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
+cloud_file.transcoding_tips.error_code_41002.reason: 当前文件被删除，不支持进行转码
+cloud_file.transcoding_tips.error_code_41002.solution: 此文件的源文件被删除，无法进行转码，请重新上传后进行转码操作
+cloud_file.transcoding_tips.error_code_41003.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_41003.solution: 请使用Office软件将源文件内容重新保存后，上传进行转码操作
+cloud_file.transcoding_tips.error_code_41004.reason: 当前文件被加密，不支持转码
+cloud_file.transcoding_tips.error_code_41004.solution: 请将源文件解密后，再上传进行转码操作
+cloud_file.transcoding_tips.error_code_41005.reason: 当前文件超过转码支持大小，不支持转码
+cloud_file.transcoding_tips.error_code_41005.solution: 请将源文件缩小至100MB以下（删减源文件内容或将源文件变为多个文件内容上传），再上传进行转码操作
+cloud_file.transcoding_tips.error_code_41006.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_41006.solution: 当前文件无法正常打开，请选择其他正常文件上传进行转码操作
+
+cloud_file.transcoding_tips.error_code_51001.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51001.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51002.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51002.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51003.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51003.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51004.reason: 文档中存在异常内容，导致转码失败
+cloud_file.transcoding_tips.error_code_51004.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51005.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51005.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51006.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51006.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51007.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51007.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51008.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51008.solution: 请联系运营人员处理
+
+cloud_file.transcoding_tips.default_error_message.reason: 文件转码失败
+cloud_file.transcoding_tips.default_error_message.solution: 请联系运营人员处理
+
 my.teaching.open_course.title: Name
 cloud_file.material_thumbnail_generate: 'Producing screenshots...'
 cloud_file.screen_shot_btn: Screenshots
@@ -6337,11 +6377,18 @@ admin.cloud_file.keyword_type.course: 'By course'
 admin.cloud_file.keyword_type.title: 'By title'
 admin.cloud_file.keyword_type.user: 'By user'
 admin.cloud_file.batch_manage_btn: 'Manage'
-admin.cloud_file.delete_btn: Delete
+admin.cloud_file.delete_btn: Delete data
 admin.cloud_file.select_all: 'Select all'
 admin.cloud_file.add_tag: 'Add tag'
 admin.cloud_file.network_error_hint: 'Network issue，could not connect %edusoho%.'
 admin.cloud_file.detail_not_found_tips: 'File is not found.'
+admin.cloud_file.keyword: Keyword
+admin.cloud_file.upload_time: Upload Time
+admin.cloud_file.transcode_status: Transcode Status
+admin.cloud_file.use_status: Use Status
+admin.cloud_file.detail_loading_hints: loading
+
+
 admin.cloud_file.detail.content_title: Detail
 admin.cloud_file.detail.basic_info: 'Basic Info'
 admin.cloud_file.detail.cover_img: 'Cover'
@@ -6537,7 +6584,7 @@ material_lib.public: 'Public resource'
 material_lib.favorite: Favorite
 material_lib.sharing: 'From sharing'
 material_lib.search.search_btn: Search
-material_lib.search.input_placeholder: 'Input title keywords'
+material_lib.search.input_placeholder: 'Input keywords'
 material_lib.search.tags: 'Tag: '
 material_lib.search.conditions: 'Filter: '
 material_lib.search.conditions.start_time: 'Start time'
@@ -6610,8 +6657,8 @@ material_lib.btn.view: View
 material_lib.btn.subtitle_manage: 'Subtitles'
 material_lib.btn.download: Download
 material_lib.btn.cancel_share: Cancel
-material_lib.btn.share: Share
-material_lib.btn.delete: Delete
+material_lib.btn.share: Share data
+material_lib.btn.delete: Delete data
 material_lib.btn.preview: 'Data preview'
 material_lib.btn.convert_again: Re-transcoding
 material_lib.btn.upload_files: 'Upload material'
@@ -8550,3 +8597,26 @@ course.question.question_background: Question Background
 
 course.activity.video.beyond_watch_limit_tip: 您已观看本视频学习任务达到%watchedTime%（%watchLimit%倍视频时长），不能再继续观看。
 exception.role.code_not_all_digital: code不能全为数字
+
+material.common_table.th.file_name: 文件名称
+material.common_table.th.file_type: 类型
+material.common_table.th.file_size: 大小
+material.common_table.th.file_size_time: 大小/时长
+material.common_table.th.upload_time: 上传时间
+material.common_table.th.transcode_status: 转码状态
+material.common_table.th.manage: 操作
+material.common_table.file.local: 本地
+material.common_table.quality.sd: 标清
+material.common_table.quality.hd: 高清
+material.common_table.quality.shd: 超清
+material.common_table.transcode_waiting: 等待转码
+material.common_table.transcode_file_not_support: 文件不支持
+material.common_table.transcode_success: 转码成功
+material.common_table.transcode_doing: 转码中
+material.common_table.transcode_error.server: 转码失败
+material.common_table.transcode_error.client: 文件不支持
+material.common_table.transcode_error_tip: 失败提示
+material.common_table.no_need_transcode: 无需转码
+material.common_table.label.has_mp4: 已生成MP4
+material_lib.search.type.title: 文件名称
+material_lib.search.type.course: 课程名称

@@ -54,7 +54,7 @@
     "tiben/crontab-manager": "1.2.1",
     "codeages/qiqiuyun-php-sdk": "0.3.2",
     "phpdocumentor/reflection-docblock": "2.0.5",
-    "codeages/biz-order-pay": "0.1.26",
+    "codeages/biz-order-pay": "0.1.28",
     "ramsey/uuid": "^2.9"
   },
   "require-dev": {

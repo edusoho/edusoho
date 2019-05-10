@@ -15,7 +15,7 @@
   {{ attachment.file.filename }}
   <span class="pull-right">
   	{% set can_preview_type = attachment.file.type in ['video', 'audio', 'ppt', 'document', 'image']  and  attachment.file.ext not in ['xlsx', 'xls'] %}
-  	{% set can_preview = attachment.file.type in ['video', 'ppt', 'document', 'image'] and attachment.file.processStatus|default(null) == "ok" %}
+  	{% set can_preview = attachment.file.type in ['video', 'ppt', 'document', 'image'] and attachment.file.convertStatus|default(null) == "success" %}
     {% if can_preview_type and (not can_preview) %}
        {% set can_preview = attachment.file.type in ['audio'] %}
     {% endif %}

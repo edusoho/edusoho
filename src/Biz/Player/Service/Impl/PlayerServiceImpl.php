@@ -82,7 +82,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
     public function getVideoPlayUrl($file, $context, $ssl)
     {
         if ('cloud' == $file['storage']) {
-            if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
+            if (!empty($file['metas2'])) {
                 if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
                     $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
                     $context['hideBeginning'] = $this->isHiddenVideoHeader($hideBeginning);

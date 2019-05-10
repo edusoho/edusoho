@@ -1,6 +1,5 @@
-import notify from 'common/notify';
 import DetailWidget from './detail';
-import BatchSelect from 'app/common/widget/batch-select';
+import BatchSelect from 'app/common/widget/res-batch-select';
 import Select from 'app/common/input-select';
 
 class MaterialWidget {
@@ -22,8 +21,12 @@ class MaterialWidget {
   }
   initEvent() {
     this.element.on('click', '.js-search-btn', (event) => {
-      this.submitForm(event);
+      this.onClickSearchBtn(event);
     });
+
+    this.element.on('click', '.js-cd-modal', (event) => {
+      this.codeErrorTip(event);
+    })
 
     this.element.on('click', '.js-source-btn', (event) => {
       this.onClickSourseBtn(event);
@@ -73,14 +76,6 @@ class MaterialWidget {
       this.onClickReconvertBtn(event);
     });
 
-    this.element.on('change', '.js-process-status-select', (event) => {
-      this.onClickProcessStatusBtn(event);
-    });
-
-    this.element.on('change', '.js-use-status-select', (event) => {
-      this.onClickUseStatusBtn(event);
-    });
-
     this.element.on('click', '.js-share-btn', (event) => {
       this.onClickShareBtn(event);
     });
@@ -92,12 +87,49 @@ class MaterialWidget {
     this.element.on('click', '.pagination li', (event) => {
       this.onClickPagination(event);
     });
-  
+    this.element.on('click', '.js-batch-download', (event) => {
+      this.batchDownload(event);
+    });
   }
-  submitForm(event) {
-    this.renderTable();
-    event.preventDefault();
+
+  downloadFile(url) {
+    const iframe = document.createElement("iframe");
+    iframe.style.display = "none";
+    iframe.style.height = 0;
+    iframe.src = url; 
+    document.body.appendChild(iframe);
+    setTimeout(()=>{
+      iframe.remove();
+    }, 5 * 60 * 1000);
   }
+
+  batchDownload() {
+    const self = this;
+    let urls = [];
+    $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
+      const downloadUrl = $(this).closest('.js-tr-item').find('.js-download-btn').data('url');
+      console.log(downloadUrl);
+      urls.push(downloadUrl);
+    });
+    for (let i = 0;i < urls.length;i++) {
+      const url = urls[i];
+      self.downloadFile(url);
+    }
+  }
+  codeErrorTip() {
+    $('#cd-modal').on('show.bs.modal', function (event) {
+      // do something...
+      const $btn = $(event.relatedTarget);
+      const title = $btn.data('title');
+      const reason = $btn.data('reason');
+      const solution = $btn.data('solution');
+      const status = $btn.data('status');
+      $('.js-error-tip').html(
+        `<div class="mbl clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.file_name')}：</span><span class="pull-left error-content">${title}</span></div><div class="mbl clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.transcoding')}：</span><span class="pull-left error-content">${status}</span></div><div class="mbl clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.error_reason')}：</span><span class="cd-text-danger error-content pull-left">${reason}</span></div><div class="clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.solution_way')}：</span><span class="cd-text-info error-content pull-left">${solution}</span></div>`
+      )
+    })
+  }
+
   onClickTabs(event) {
     let $target = $(event.currentTarget);
     $target.closest('.js-material-tabs').find('.active').removeClass('active');
@@ -121,6 +153,13 @@ class MaterialWidget {
     }
     this.renderTable();
   }
+
+  // 搜索
+  onClickSearchBtn(event) {
+    this.renderTable();
+    event.preventDefault();
+  }
+
   // 下拉菜单编辑
   onClickDetailBtn(event) {
     if (!this.DetailBtnActive) {
@@ -152,7 +191,7 @@ class MaterialWidget {
           }
         });
       }).fail(function() {
-        notify('danger', Translator.trans('material_lib.have_no_permission_hint'));
+        cd.message({type: 'danger', message: Translator.trans('material_lib.have_no_permission_hint')});
       }).always(function() {
         self.DetailBtnActive = false;
       });
@@ -182,6 +221,7 @@ class MaterialWidget {
     if ($target.closest('ul').siblings('input[name="sourceFrom"]').val() == 'my') {
       this.attribute = 'mine';
       $('#myShare').removeClass('hide');
+      $('.js-material-btn-group').removeClass('hide');
       $('#shareMaterials').removeClass('hide');
       $('.js-manage-batch-btn').removeClass('hide');
       $('.js-upload-file-btn').removeClass('hide');
@@ -192,6 +232,7 @@ class MaterialWidget {
     } else {
       this.attribute = 'others';
       $('#myShare').addClass('hide');
+      $('.js-material-btn-group').addClass('hide');
       $('#shareMaterials').addClass('hide');
       $('.js-manage-batch-btn').addClass('hide');
       $('.js-upload-file-btn').addClass('hide');
@@ -206,10 +247,10 @@ class MaterialWidget {
     $.get($target.data('url'), function(data) {
       if (data) {
         $target.addClass('material-collection');
-        notify('success', Translator.trans('site.collect_cuccess_hint'));
+        cd.message({type:'success', message: Translator.trans('site.collect_cuccess_hint')});
       } else {
         $target.removeClass('material-collection');
-        notify('success', Translator.trans('site.uncollect_cuccess_hint'));
+        cd.message({type:'success', message: Translator.trans('site.uncollect_cuccess_hint')});
       }
     });
   }
@@ -242,7 +283,7 @@ class MaterialWidget {
       ids.push(this.value);
     });
     if (ids == '') {
-      notify('danger', Translator.trans('meterial_lib.select_resource_delete_hint'));
+      cd.message({type: 'danger', message: Translator.trans('meterial_lib.select_resource_delete_hint')});
       return;
     }
     $('#modal').html('');
@@ -250,7 +291,13 @@ class MaterialWidget {
     $('#modal').modal('show');
   }
   onClickShareBatchBtn(event) {
-    if (confirm(Translator.trans('meterial_lib.confirm_share_resource_hint'))) {
+    cd.confirm({
+      title: '共享',
+      content: Translator.trans('meterial_lib.confirm_share_resource_hint'),
+      okText: '确定',
+      cancelText: '取消',
+      className: '',
+    }).on('ok', () => {
       let $target = $(event.currentTarget);
       let ids = [];
       $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
@@ -259,7 +306,10 @@ class MaterialWidget {
 
       this._fileShare(ids, $target.data('url'));
       $('#material-lib-items-panel').find('[data-role=batch-item]').show();
-    }
+      console.log('点击确定按钮后的回调函数');
+    }).on('cancel', () => {
+      console.log('点击取消按钮后的回调函数');
+    })
   }
   onClickTagBatchBtn(event) {
     let self = this;
@@ -269,40 +319,53 @@ class MaterialWidget {
       ids.push(this.value);
     });
     if (ids == '') {
-      notify('danger', Translator.trans('meterial_lib.select_resource_operate_hint'));
+      cd.message({type: 'danger', message: Translator.trans('meterial_lib.select_resource_operate_hint')});
       return;
     }
     $('#select-tag-items').val(ids);
     $('#tag-modal').modal('show');
   }
-  onClickProcessStatusBtn(event) {
-    this.renderTable();
-  }
-  onClickUseStatusBtn(event) {
-    this.renderTable();
-  }
+
   onClickShareBtn(event) {
-    if (confirm(Translator.trans('meterial_lib.confirm_share_resource_hint'))) {
+    cd.confirm({
+      title: '共享',
+      content: Translator.trans('meterial_lib.confirm_share_resource_hint'),
+      okText: '确定',
+      cancelText: '取消',
+      className: '',
+    }).on('ok', () => {
       let $target = $(event.currentTarget);
 
       let ids = [];
       ids.push($target.data('fileId'));
 
       this._fileShare(ids, $target.data('url'));
-    }
+      console.log('点击确定按钮后的回调函数');
+    }).on('cancel', () => {
+      console.log('点击取消按钮后的回调函数');
+    })
   }
   onClickUnshareBtn(event) {
-    if (confirm(Translator.trans('meterial_lib.confirm_unshare_resource_hint'))) {
+    cd.confirm({
+      title: '取消共享',
+      content: Translator.trans('meterial_lib.confirm_unshare_resource_hint'),
+      okText: '确定',
+      cancelText: '取消',
+      className: '',
+    }).on('ok', () => {
       let self = this;
       let $target = $(event.currentTarget);
 
       $.post($target.data('url'), function(response) {
         if (response) {
-          notify('success', Translator.trans('meterial_lib.unshare_resource_success_hint'));
+          cd.message({type: 'success', message: Translator.trans('meterial_lib.unshare_resource_success_hint')});
           self.renderTable();
         }
       });
-    }
+      console.log('点击确定按钮后的回调函数');
+    }).on('cancel', () => {
+      console.log('点击取消按钮后的回调函数');
+    })
   }
   onClickPagination(event) {
     let $target = $(event.currentTarget);
@@ -318,10 +381,10 @@ class MaterialWidget {
       type: 'POST',
       url: $target.data('url'),
     }).done(function(response) {
-      notify('success', Translator.trans('subtitle.status.success'));
+      cd.message({type: 'success', message: Translator.trans('subtitle.status.success')});
       $target.parents('.materials-list').replaceWith($(response));
     }).fail(function() {
-      notify('danger', Translator.trans('subtitle.status.error'));
+      cd.message({type: 'danger', message: Translator.trans('subtitle.status.error')});
     }).always(function() {
       $target.button('reset');
     });
@@ -334,9 +397,10 @@ class MaterialWidget {
     $.ajax({
       type: 'GET',
       url: this.renderUrl,
-      data: this.element.serialize()
+      data: this.element.find(':visible,input[type="hidden"]').serialize()
     }).done(function(resp){
       $table.html(resp);
+      $('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-share-btn, .js-batch-download').attr('disabled', true);
       $('[data-toggle="tooltip"]').tooltip();
       let mode = self.model;
       let attribute = self.attribute;
@@ -346,7 +410,6 @@ class MaterialWidget {
         $('[data-role=batch-select]').attr('checked',false);
       } else if (mode == 'normal') {
         $('#material-lib-batch-bar').hide();
-        $('#material-lib-items-panel').find('[data-role=batch-item]').hide();
       }
       let $temp = $table.find('.js-paginator');
       self.element.find('[data-role=paginator]').html($temp.html());
@@ -370,15 +433,15 @@ class MaterialWidget {
   _fileShare(ids, url) {
     let self = this;
     if (ids == '') {
-      notify('danger', Translator.trans('meterial_lib.select_share_resource_hint'));
+      cd.message({type: 'danger', message: Translator.trans('meterial_lib.select_share_resource_hint')});
       return;
     }
     $.post(url, { 'ids': ids }, function(data) {
       if (data) {
-        notify('success', Translator.trans('meterial_lib.share_resource_success_hint'));
+        cd.message({type: 'success', message: Translator.trans('meterial_lib.share_resource_success_hint')});
         self.renderTable();
       } else {
-        notify('danger', Translator.trans('meterial_lib.share_resource_erroe_hint'));
+        cd.message({type: 'danger', message: Translator.trans('meterial_lib.share_resource_erroe_hint')});
         self.renderTable();
       }
     });
@@ -388,19 +451,21 @@ class MaterialWidget {
     let self = this;
     $('#startDate').datetimepicker({
       autoclose: true,
+      language: document.documentElement.lang,
     }).on('changeDate', function() {
       $('#endDate').datetimepicker('setStartDate', $('#startDate').val().substring(0, 16));
-      self.renderTable();
+      //self.renderTable();
     });
 
     $('#startDate').datetimepicker('setEndDate', $('#endDate').val().substring(0, 16));
 
     $('#endDate').datetimepicker({
       autoclose: true,
+      language: document.documentElement.lang,
     }).on('changeDate', function() {
 
       $('#startDate').datetimepicker('setEndDate', $('#endDate').val().substring(0, 16));
-      self.renderTable();
+      //self.renderTable();
     });
 
     $('#endDate').datetimepicker('setStartDate', $('#startDate').val().substring(0, 16));
@@ -414,6 +479,11 @@ class MaterialWidget {
       rules: {
         tags: {
           required: true,
+        }
+      },
+      messages: {
+        tags: {
+          required: Translator.trans('course_set.manage.tag_required_hint'),
         },
       }
     });
@@ -429,7 +499,7 @@ $('#modal').on('click','.file-delete-form-btn', function(event) {
   $.post($form.attr('action'), $form.serialize(), function(data) {
     if (data) {
       $('#modal').modal('hide');
-      notify('success', Translator.trans('meterial_lib.delete_resource_success_hint'));
+      cd.message({type: 'success', message: Translator.trans('meterial_lib.delete_resource_success_hint')});
       materialWidget.renderTable(true);
     }
     $('#material-lib-items-panel').find('[data-role=batch-item]').show();

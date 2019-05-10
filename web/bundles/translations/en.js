@@ -919,7 +919,7 @@ t.add("admin.cloud_file.tag_required_hint", "tag", "js", "en");
 t.add("admin.cloud_file.detail_show_error_hint", "Opps, something went wrong", "js", "en");
 t.add("admin.cloud_file.re_transcode_success_hint", "Retranscoding successfully!", "js", "en");
 t.add("admin.cloud_file.re_transcode_fail_hint", "Retranscoding failed!", "js", "en");
-t.add("admin.cloud_file.detail_loading_hint", "Loading, please wait...", "js", "en");
+t.add("admin.cloud_file.detail_loading_hints", "Loading, please wait...", "js", "en");
 t.add("admin.cloud_file.select_course_placeholder", "Select Course", "js", "en");
 t.add("admin.cloud_file.select_user_placeholder", "Select User", "js", "en");
 t.add("admin.coin.edit_success_hint", "operation Successful", "js", "en");
@@ -1219,4 +1219,8 @@ t.add("admin.shortcut_delete_success_hint", "Delete frequently used links succes
 t.add("task_show.user_login_protect_tip", "User unLogin", "js", "en");
 t.add("admin.course_manage.manage.tags_select.placeholder", "\u8f93\u5165\u6807\u7b7e\u540d\u79f0\u5173\u952e\u5b57", "js", "en");
 t.add("exception.common_frequent_operation", "\u64cd\u4f5c\u8fc7\u4e8e\u9891\u7e41\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5", "js", "en");
+t.add("material.common_table.file_name", "\u6587\u4ef6\u540d\u79f0", "js", "en");
+t.add("material.common_table.transcoding", "\u8f6c\u7801\u72b6\u6001", "js", "en");
+t.add("material.common_table.error_reason", "\u9519\u8bef\u539f\u56e0", "js", "en");
+t.add("material.common_table.solution_way", "\u89e3\u51b3\u65b9\u6848", "js", "en");
 })(Translator);

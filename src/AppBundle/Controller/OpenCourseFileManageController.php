@@ -187,6 +187,23 @@ class OpenCourseFileManageController extends BaseController
         return $this->createJsonResponse($this->getUploadFileService()->findFilesByIds($fileIds, 1));
     }
 
+    public function batchTagAddAction(Request $request, $id)
+    {
+        $this->getOpenCourseService()->tryManageOpenCourse($id);
+
+        $data = $request->request->all();
+        $fileIds = preg_split('/,/', $data['fileIds']);
+
+        $this->getMaterialLibService()->batchTagEdit($fileIds, $data['tags']);
+
+        return $this->redirect($this->generateUrl('open_course_manage_files', array('id' => $id)));
+    }
+
+    protected function getMaterialLibService()
+    {
+        return $this->createService('MaterialLib:MaterialLibService');
+    }
+
     /**
      * @return OpenCourseService
      */

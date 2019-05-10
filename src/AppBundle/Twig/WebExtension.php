@@ -3,6 +3,7 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\CloudFileStatusToolkit;
 use AppBundle\Common\ConvertIpToolkit;
 use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\ExtensionManager;
@@ -170,6 +171,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
             new \Twig_SimpleFunction('arrays_key_convert', array($this, 'arraysKeyConvert')),
             new \Twig_SimpleFunction('is_system_generated_email', array($this, 'isSystemGeneratedEmail')),
+            new \Twig_SimpleFunction('get_transcode_error_message_key', array($this, 'getTranscodeErrorMessageKeyByCode')),
         );
     }
 
@@ -1823,6 +1825,11 @@ class WebExtension extends \Twig_Extension
     public function isSystemGeneratedEmail($email)
     {
         return UserToolkit::isEmailGeneratedBySystem($email);
+    }
+
+    public function getTranscodeErrorMessageKeyByCode($code)
+    {
+        return CloudFileStatusToolkit::getTranscodeErrorMessageKeyByCode($code);
     }
 
     /**

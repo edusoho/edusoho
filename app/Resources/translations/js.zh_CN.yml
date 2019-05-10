@@ -1020,7 +1020,7 @@ admin.cloud_file.tag_required_hint: 标签
 admin.cloud_file.detail_show_error_hint: Opps,出错了
 admin.cloud_file.re_transcode_success_hint: 重新转码成功!
 admin.cloud_file.re_transcode_fail_hint: 重新转码失败!
-admin.cloud_file.detail_loading_hint: 正在加载，请等待......
+admin.cloud_file.detail_loading_hints: 正在加载，请等待......
 admin.cloud_file.select_course_placeholder: 选择课程
 admin.cloud_file.select_user_placeholder: 选择用户
 admin.coin.edit_success_hint: 操作成功
@@ -1324,3 +1324,9 @@ task_show.user_login_protect_tip: 该账号未登录或已被踢
 
 admin.course_manage.manage.tags_select.placeholder: 输入标签名称关键字
 exception.common_frequent_operation: 操作过于频繁，请稍后重试
+
+
+material.common_table.file_name: 文件名称
+material.common_table.transcoding: 转码状态
+material.common_table.error_reason: 错误原因
+material.common_table.solution_way: 解决方案

@@ -5,111 +5,137 @@
 {% block page_body %}
 <form id="material-search-form" action="{{ path('material_lib_browsing') }}" method="get" novalidate>
   <input type="hidden" class="js-page" name="page" value="1">
-  <div class="source-btn" role="group" aria-label="...">
-    <ul class="nav nav-tabs">
+  <div class="source-btn row" role="group" aria-label="...">
+    <ul class="nav nav-tabs col-sm-6 mb0">
       <li class="active" data-value="my"><a href="javascript:;" class="js-source-btn">{{'material_lib.my'|trans}}</a></li>
       <li class="" data-value="public"><a href="javascript:;" class="js-source-btn">{{'material_lib.public'|trans}}</a></li>
       <li class="" data-value="favorite"><a href="javascript:;" class="js-source-btn">{{'material_lib.favorite'|trans}}</a></li>
       <li class="" data-value="sharing"><a href="javascript:;" class="js-source-btn">{{'material_lib.sharing'|trans}}</a></li>
     </ul>
+     <div class="btn-group col-sm-6 hidden-xs">
+      {% include 'material-lib/web/form/head.html.twig' %}
+    </div>
     <input type="hidden" name="sourceFrom" value="my">
-  </div>
-  <div class="form-group clearfix material-search-list">
-    <div class="col-sm-4">
-      <div class="input-group">
-        <input class="form-control" type="text" placeholder="{{'material_lib.search.input_placeholder'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
-        <span class="input-group-btn js-search-btn">
-          <button class="btn btn-primary">{{'material_lib.search.search_btn'|trans}}</button>
-        </span>
-      </div>
-    </div>
-    <div class="col-sm-8 btn-group">
-    {% include 'material-lib/web/form/head.html.twig' %}
-    </div>
   </div>
   {% include 'material-lib/web/form/nav.html.twig' %}
   <div class="material-search-list material-tag js-material-tag">
     <span  class="all">{{'material_lib.search.tags'|trans}}</span>
       <div class="right-content">
         {% for tag in tags %}
-          <span class="label label-default" data-id="{{ tag.id }}">{{ tag.name }}</span>
+          <span class="label label-default material-tag__label" data-id="{{ tag.id }}">{{ tag.name }}</span>
         {% endfor %}
         <input type="hidden" name="tagId">
       </div>
   </div>
   <div class="material-search-list bottom">
-    <span class="all">{{'material_lib.search.conditions'|trans}}</span>
-    <div class="right-content ">
-      <div class="row">
-        <div class="col-sm-6">
-        <input class="form-control input-time" type="text" id="startDate" name="startDate" value="" placeholder="{{'material_lib.search.conditions.start_time'|trans}}"><span class="input-space">-</span><input class="form-control input-time" type="text" id="endDate" name="endDate" value="" placeholder="{{'material_lib.search.conditions.finish_time'|trans}}" ></div>
-        <div class="col-sm-2">
-          <select class="form-control js-process-status-select" name="processStatus">
-            <option value="">{{'material_lib.search.conditions.convert_status'|trans}}</option>
+    <div class="hidden-xs">
+      <div class="form-inline row mbl">
+        <div class="col-sm-4 col-md-5">
+          <label class="form-label">{{ 'admin.cashflow.keyword'|trans }}：</label>
+          <select name="keywordType" class="form-control form-input-width">
+            <option value="title">{{ 'material_lib.search.type.title'|trans }}</option>
+            <option value="course">{{'material_lib.search.type.course'|trans}}</option>
+          </select>
+          <input class="form-control form-input-width mll" type="text" placeholder="{{'material_lib.search.input_placeholder'|trans}}" maxlength="50" name="keyword" value="{{ app.request.get('keyword') }}">
+        </div>
+        <div class="col-sm-8 col-md-7 form-group">
+          <label class="form-label">{{ 'material.common_table.th.upload_time'|trans }}：</label>
+          <input class="form-control input-time form-input-width-sm" autocomplete="off" type="text" id="startDate" name="startDate" value="" placeholder="{{'material_lib.search.conditions.start_time'|trans}}"><span class="input-space">-</span><input class="form-control input-time form-input-width-sm" autocomplete="off" type="text" id="endDate" name="endDate" value="" placeholder="{{'material_lib.search.conditions.finish_time'|trans}}" >
+        </div>
+      </div>
+      <div class="form-inline row">
+        <div class="col-sm-4 col-md-5 form-group">
+          <label class="form-label">{{ 'material.common_table.th.transcode_status'|trans }}：</label>
+          <select class="form-control js-process-status-select form-input-width-md" name="processStatus">
+            <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
+            <option value="waiting">{{ 'material.common_table.transcode_waiting'|trans }}</option>
             <option value="ok">{{'material_lib.search.conditions.convert_status.success'|trans}}</option>
-            <option value="waiting">{{'material_lib.search.conditions.convert_status.doing'|trans}}</option>
+            <option value="processing">{{'material_lib.search.conditions.convert_status.doing'|trans}}</option>
             <option value="error">{{'material_lib.search.conditions.convert_status.error'|trans}}</option>
+            <option value="nonsupport">{{ 'material.common_table.transcode_file_not_support'|trans }}</option>
+            <option value="noneed">{{ 'material.common_table.no_need_transcode'|trans }}</option>
           </select>
         </div>
-        <div class="col-sm-2">
-          <select class="form-control js-use-status-select" name="useStatus">
-            <option value="">{{'material_lib.search.conditions.use_status'|trans}}</option>
+        <div class="col-sm-8 col-md-7">
+            <label class="form-label">{{ 'admin.operation_invite.coupon.use_status_th'|trans }}：</label>
+            <select class="form-control js-use-status-select form-input-width-md" name="useStatus">
+              <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
+              <option value="unused">{{'material_lib.search.conditions.use_status.using'|trans}}</option>
+              <option value="used">{{'material_lib.search.conditions.use_status.used'|trans}}</option>
+            </select>
+            {# <span class="input-group-btn js-search-btn"> #}
+            <button class="cd-btn cd-btn-primary cd-ml24 material-search-list__btn js-search-btn">{{'material_lib.search.search_btn'|trans}}</button>
+          {# </span> #}
+          </div>
+      </div>
+    </div>
+    <div class="visible-xs form-horizontal pvm phm">
+     <div class="form-group row">
+        <label class="col-xs-3 control-label padding-top7  pr0">{{ 'admin.cashflow.keyword'|trans }}：</label>
+        <div class="col-xs-4 pr0">
+          <select name="keywordType" class="form-control form-input-width">
+            <option value="title">{{ 'material_lib.search.type.title'|trans }}</option>
+            <option value="course">{{'material_lib.search.type.course'|trans}}</option>
+          </select>
+        </div>
+        <div class="col-xs-1 pl0 pr0 text-center">
+          <span class="search-space">&nbsp;</span>
+        </div>
+        <div class="col-xs-4 pl0">
+          <input class="form-control" type="text" placeholder="{{'admin.cashflow.keyword'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-xs-3 control-label padding-top7  pr0">{{ 'material.common_table.th.upload_time'|trans }}：</label>
+        <div class="col-xs-4 pr0">
+          <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="{{'material_lib.search.conditions.start_time'|trans}}">
+        </div>
+        <div class="col-xs-1 pl0 pr0 text-center">
+          <span class="search-space">—</span>
+        </div>
+        <div class="col-xs-4 pl0 ">
+          <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="{{'material_lib.search.conditions.finish_time'|trans}}" >
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-xs-3 control-label padding-top7  pr0">{{ 'material.common_table.th.transcode_status'|trans }}：</label>
+        <div class="col-xs-9">
+          <select class=" form-control js-process-status-select " name="processStatus">
+            <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
+            <option value="waiting">{{ 'material.common_table.transcode_waiting'|trans }}</option>
+            <option value="ok">{{'material_lib.search.conditions.convert_status.success'|trans}}</option>
+            <option value="processing">{{'material_lib.search.conditions.convert_status.doing'|trans}}</option>
+            <option value="error">{{'material_lib.search.conditions.convert_status.error'|trans}}</option>
+            <option value="nonsupport">{{ 'material.common_table.transcode_file_not_support'|trans }}</option>
+            <option value="noneed">{{ 'material.common_table.no_need_transcode'|trans }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-xs-3 control-label padding-top7  pr0">{{ 'admin.operation_invite.coupon.use_status_th'|trans }}：</label>
+        <div class="col-xs-9">
+          <select class="form-control js-use-status-select " name="useStatus">
+            <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
             <option value="unused">{{'material_lib.search.conditions.use_status.using'|trans}}</option>
             <option value="used">{{'material_lib.search.conditions.use_status.used'|trans}}</option>
           </select>
         </div>
       </div>
+      <div class="form-group phm mb0">
+        <button class="cd-btn cd-btn-primary btn-block js-search-btn">{{'material_lib.search.search_btn'|trans}}</button>
+      </div>
+
     </div>
   </div>
+
+  {% set uploaderToken = uploader_token('materiallib', app.user.id, 'private') %}
+  {% set path = path('material_delete_modal_show') %}
+  {% include 'material-lib/widget/material-button.html.twig' with { uploaderToken: uploaderToken, path: path } %}
+
   <div id="material-lib-items-panel">
-    <a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
-    data-url="{{ path('uploader_batch_upload', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="{{'material_lib.btn.upload_files'|trans}}"   data-placement="bottom" >{{'material_lib.btn.upload_files'|trans}}
-    </a>
-    <a class="btn btn-info js-manage-batch-btn" href="javascript:;">{{'material_lib.btn.batch_manage'|trans}}
-    </a>
-    <span id="material-lib-batch-btn-bar" style="display:none;">
-      <a class="btn btn-info js-batch-tag-btn" data-role="batch-tag">{{'material_lib.btn.add_tag'|trans}}
-      </a>
-      <a class="btn btn-info js-batch-share-btn" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}"  >{{'material_lib.btn.share'|trans}}
-      </a>
-      <a class="btn btn-danger js-batch-delete-btn" data-role="batch-dalete" href="javascript:;" data-url="{{ path('material_delete_modal_show') }}"  >{{'material_lib.btn.delete'|trans}}
-      </a>
-      <label class="checkbox-inline" data-role="batch-manage" >
-        <input type="checkbox"  data-role="batch-select"/> {{'site.datagrid.radios.all'|trans}}
-      </label>
-    </span>
     <div class="material-list-container" id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
   </div>
 </form>
-<div id="tag-modal" class="modal in" aria-hidden="false" data-backdrop="static" style="">
-  <div class="modal-dialog ">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">×</button>
-        <h4 class="modal-title">{{'material_lib.tag_manage'|trans}}</h4>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal" id="tag-form" action="{{ path('material_batch_tag_show') }}" method="post">
-          <div class="form-group" id="form">
-            <div class="col-md-2 control-label">
-              <label for="modal-tags">{{'material_lib.tag_manage.tag'|trans}}</label>
-            </div>
-
-            <div class="col-md-8 controls">
-              <input type="text" id="modal-tags" data-url="{{ path('material_tag_show_match') }}" name="tags" required="required" class="width-full" tabindex="-1" value="" data-explain="{{'material_lib.tag_manage.tag_explain'|trans}}">
-              <div class="help-block">{{'material_lib.tag_manage.tag_explain'|trans}}</div>
-            </div>
-
-          </div>
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          <input id="select-tag-items" name="fileIds" type="hidden" value="">
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
-        <button id="tag-create-btn" data-submiting-text="{{'form.btn.save.submiting'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form ">{{'form.btn.save'|trans}}</button>
-      </div>
-    </div>
-  </div>
-</div>
+{% include 'material-lib/widget/error-modal.html.twig' %}
+{% include 'material-lib/widget/tag-modal.html.twig' with { tagPath: path('material_batch_tag_show') } %}
 {% endblock %}

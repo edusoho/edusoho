@@ -61,10 +61,13 @@
 
                 {% if orderDeduct.snapshot.couponCode is defined %}
                   <span class="pull-right">
-                  <a class="es-icon es-icon-help text-normal link-gray"
-                     data-toggle="popover" data-trigger="hover"
-                     data-placement="left"
-                     data-content="{{ 'order.use_coupon'|trans }} {{ orderDeduct.snapshot.couponCode }}"></a>
+                  <span class="text-muted">{{ orderDeduct.snapshot.couponCode }}</span>
+                  <input type="text" style="width: 10px;height: 10px;opacity: 0;" id="copy-content" value="{{ orderDeduct.snapshot.couponCode }}">
+                  <a href="javascript:;" class="btn btn-success btn-xs" id="copy">{{ 'site.copy'|trans }}<a/>
+{#                  <a class="es-icon es-icon-help text-normal link-gray"#}
+{#                     data-toggle="popover" data-trigger="hover"#}
+{#                     data-placement="left"#}
+{#                     data-content="{{ 'order.use_coupon'|trans }} {{ orderDeduct.snapshot.couponCode }}"></a>#}
                 </span>
                 {% endif %}
               </td>
@@ -183,5 +186,6 @@
 
 {% block footer %}
   <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+  <script>app.load('order/copy')</script>
 {% endblock %}
 

@@ -4,8 +4,8 @@
     "type": "library",
     "require": {
         "codeages/biz-framework": "^0.9",
-        "wenqinruan/omnipay-alipay": "^2.3",
-        "canuonifeng/omnipay-wechatpay": "^1.1"
+        "codeages/omnipay-alipay": "^2.3",
+        "codeages/omnipay-wechatpay": "^1.1"
     },
     "license": "MIT",
     "autoload": {

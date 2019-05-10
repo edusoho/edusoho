@@ -42,6 +42,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function countCourses($conditions)
     {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
         return $this->getOpenCourseDao()->count($conditions);
     }
 

@@ -2,6 +2,7 @@
 
 namespace Biz\CloudPlatform;
 
+use Biz\CloudPlatform\Client\AbstractCloudAPI;
 use Biz\CloudPlatform\Client\CloudAPI;
 use Biz\CloudPlatform\Client\EventCloudAPI;
 use Biz\CloudPlatform\Client\FailoverCloudAPI;
@@ -14,7 +15,7 @@ class CloudAPIFactory
 {
     private static $api;  //单元测试用
 
-    public static function create($type = 'root')
+    public static function create($type = 'root', $apiVersion = AbstractCloudAPI::DEFAULT_API_VERSION)
     {
         if (empty(self::$api)) {
             /**
@@ -51,9 +52,10 @@ class CloudAPIFactory
                         'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
                         'apiUrl' => empty($storage['cloud_api_server']) ? '' : $storage['cloud_api_server'],
                         'debug' => empty($developer['debug']) ? false : true,
+                        'apiVersion' => $apiVersion,
                     ));
                     $api->setLogger($logger);
-    
+
                     $serverConfigFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/api_server.json';
                     $api->setApiServerConfigPath($serverConfigFile);
                     $api->setApiType($type);
@@ -63,6 +65,7 @@ class CloudAPIFactory
                         'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
                         'apiUrl' => empty($storage['cloud_api_server']) ? '' : $storage['cloud_api_server'],
                         'debug' => empty($developer['debug']) ? false : true,
+                        'apiVersion' => $apiVersion,
                     ));
                     $api->setLogger($logger);
                 }
