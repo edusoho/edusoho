@@ -2297,8 +2297,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             'types' => CourseToolkit::getUserDisplayedChapterTypes(),
         );
         $chapterUnitCount = $this->getChapterDao()->count($chapterConditions);
+        $repeatedLessons = $this->getTaskService()->countLessonsWithMultipleTasks($course['id']);
 
-        return $chapterUnitCount + $course['compulsoryTaskNum'];
+        return $chapterUnitCount + $course['compulsoryTaskNum'] + count($repeatedLessons);
     }
 
     public function sortCourse($courseSetId, $ids)
