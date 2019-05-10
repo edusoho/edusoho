@@ -6,7 +6,7 @@
       :class="[{'error-code': isErrorCode}, 'e-input', 'coupon-input']"
       placeholder="请输入8位兑换码"
       clearable
-      v-on:input="checkCode(code)"/>
+      v-on:input="checkCodeChange(code)"/>
       <span v-if="isErrorCode" class="error-code text-14">{{errorText}}</span>
     <van-button type="info" class="covert-submit" :disabled="btnDisable || isErrorCode" @click="codeCovert(code)">确认</van-button>
     <van-popup v-model="popupShow" class="coupon-covert-popup" :closeOnClickOverlay="closeOnClickOverlay">
@@ -35,8 +35,26 @@ export default {
     };
   },
 
+  watch: {
+    code(val, oldVal) {
+      const lengthDiff = oldVal.length - val.length;
+      // 粘贴内容的自动识别填充
+      if (Math.abs(lengthDiff) > 8) {
+        const spliceCode = this.spliceCode(val);
+        this.code = spliceCode ? spliceCode : val;
+        this.isErrorCode = false;
+        this.btnDisable = false;
+        this.errorText = '';
+      }
+    }
+  },
+
   methods: {
-    checkCode(code) {
+    spliceCode(code) {
+      const reg = /[a-z0-9A-Z]{8}/;
+      return code.match(reg) ? code.match(reg)[0] : false;
+    },
+    checkCodeChange(code) {
       if (code.length > 7) {
         const reg = /^[a-z0-9A-Z]{8}$/;
         const correctCode = reg.test(code);
