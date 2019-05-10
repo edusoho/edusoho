@@ -899,7 +899,7 @@ class FileToolkit
     {
         $extension = strtolower($extension);
 
-        if (in_array($extension, array('vob','mp4', 'avi', 'flv', 'f4v', 'wmv', 'mov', 'rmvb', 'mkv', 'mpg', 'm4v', 'webm', 'rm', 'mpeg', 'asf', 'ts', 'mts'))) {
+        if (in_array($extension, array('vob', 'mp4', 'avi', 'flv', 'f4v', 'wmv', 'mov', 'rmvb', 'mkv', 'mpg', 'm4v', 'webm', 'rm', 'mpeg', 'asf', 'ts', 'mts'))) {
             return 'video';
         } elseif (in_array($extension, array('mp3', 'wma', 'wav'))) {
             return 'audio';

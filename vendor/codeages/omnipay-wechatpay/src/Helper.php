@@ -9,14 +9,16 @@ class Helper
         $xml = "<{$root}>";
         foreach ($arr as $key => $val) {
             if (is_numeric($val)) {
-                $xml .= '<' . $key . '>' . $val . '</' . $key . '>';
+                $xml .= '<'.$key.'>'.$val.'</'.$key.'>';
             } else {
-                $xml .= '<' . $key . '><![CDATA[' . $val . ']]></' . $key . '>';
+                $xml .= '<'.$key.'><![CDATA['.$val.']]></'.$key.'>';
             }
         }
         $xml .= '</xml>';
+
         return $xml;
     }
+
     public static function xml2array($xml)
     {
         libxml_disable_entity_loader(true);
@@ -24,14 +26,17 @@ class Helper
         if (!is_array($data)) {
             $data = array();
         }
+
         return $data;
     }
+
     public static function sign($data, $key)
     {
         unset($data['sign']);
         ksort($data);
         $query = urldecode(http_build_query($data));
         $query .= "&key={$key}";
+
         return strtoupper(md5($query));
     }
 }
