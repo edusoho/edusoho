@@ -27,9 +27,7 @@
                       {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
                     </a>
                     {% if courseSet.stickyTime|default('') %}
-                      <div class="course-sticky-mask">
-                        <span class="course-sticky-tag">置顶</span>
-                      </div>
+                      <span class="course-sticky-tag">{{ 'group.thread.stick_label'|trans }}</span>
                     {% endif %}
 
                   </div>

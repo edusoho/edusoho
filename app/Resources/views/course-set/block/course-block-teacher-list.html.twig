@@ -26,13 +26,15 @@
                         </span>
                       {% endif %}
                       {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
+                      {% if courseSet.stickyTime|default('') %}
+                        <span class="course-sticky-tag">{{ 'group.thread.stick_label'|trans }}</span>
+                      {% endif %}
                     </a>
                     <div class="course-sticky-mask">
                       {% if not  courseSet.stickyTime|default('') %}
-                        <button class="course-sticky-btn js-course-sticky" data-url="{{ path('user_course_set_stick', {courseSetId: courseSet.id}) }}" type="button"><i class="es-icon es-icon-sticky"></i>置顶</button>
+                        <button class="course-sticky-btn js-course-sticky" data-url="{{ path('user_course_set_stick', {courseSetId: courseSet.id}) }}" type="button"><i class="es-icon es-icon-sticky"></i>{{ 'thread.stick_btn'|trans }}</button>
                       {% else %}
-                        <button class="course-sticky-btn js-course-unsticky" data-url="{{ path('user_course_set_unstick', {courseSetId: courseSet.id}) }}" type="button"><i class="es-icon es-icon-reply course-sticky-btn__icon"></i><span class="cd-ml16">取消置顶</span></button>
-                        <span class="course-sticky-tag">置顶</span>
+                        <button class="course-sticky-btn js-course-unsticky" data-url="{{ path('user_course_set_unstick', {courseSetId: courseSet.id}) }}" type="button"><i class="es-icon es-icon-reply course-sticky-btn__icon"></i><span class="cd-ml16">{{ 'thread.stick_cancel_btn'|trans }}</span></button>
                       {% endif %}
                       </div>
 

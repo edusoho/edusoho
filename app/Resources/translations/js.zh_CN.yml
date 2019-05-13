@@ -1323,3 +1323,6 @@ admin.shortcut_delete_success_hint: 删除常用链接成功！
 task_show.user_login_protect_tip: 该账号未登录或已被踢
 
 admin.course_manage.manage.tags_select.placeholder: 输入标签名称关键字
+
+course.stick.success: 置顶成功！
+course.cancel.stick.success: 取消置顶成功！

@@ -1,5 +1,3 @@
-import notify from 'common/notify';
-
 $('.js-course-sticky').on('click', function (event) {
   let $btn = $(this);
   $btn.attr('disabled', true);
@@ -7,7 +5,7 @@ $('.js-course-sticky').on('click', function (event) {
     'url': $btn.data('url'),
     'type': 'post',
     success: function (response) {
-      notify('success', Translator.trans('置顶成功！'));
+      cd.message({type:'success', message: Translator.trans('course.stick.success')});
       window.location.reload();
     },
     error: function (response) {
@@ -23,7 +21,7 @@ $('.js-course-unsticky').on('click', function () {
     'url': $btn.data('url'),
     'type': 'post',
     success: function (response) {
-      notify('success', Translator.trans('取消置顶成功！'));
+      cd.message({type:'success', message: Translator.trans('course.cancel.stick.success')});
       window.location.reload();
     },
     error: function (response) {
