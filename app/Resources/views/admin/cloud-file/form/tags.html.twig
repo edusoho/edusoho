@@ -2,8 +2,8 @@
   <li class="all active"><span>{{ 'tag'|trans }}：</span></li>
   {% for tag in tags %}
     <li class="js-tag-btn item">
-      <a class="label label-default active-show" href="javascript:;" data-value="{{ tag.id }}" >{{ tag.name }}</a>
-      <a class="label label-primary active-hide" href="javascript:;" data-value="{{ tag.id }}" >{{ tag.name }}</a>
+      <a class="label label-default label-tags active-show" href="javascript:;" data-value="{{ tag.id }}" >{{ tag.name }}</a>
+      <a class="label label-primary label-tags label-tags--highlight active-hide" href="javascript:;" data-value="{{ tag.id }}" >{{ tag.name }}</a>
     </li>
   {% endfor %}
     <input type="hidden" name="tags">

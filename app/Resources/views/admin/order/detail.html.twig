@@ -62,7 +62,7 @@
                 {% if orderDeduct.snapshot.couponCode is defined %}
                   <span class="pull-right">
                   <span class="text-muted">{{ orderDeduct.snapshot.couponCode }}</span>
-                  <input type="text" style="width: 10px;height: 0px;opacity: 0;" id="copy-content" value="{{ orderDeduct.snapshot.couponCode }}">
+                  <input type="text" style="width: 10px;height: 10px;opacity: 0;" id="copy-content" value="{{ orderDeduct.snapshot.couponCode }}">
                   <a href="javascript:;" class="btn btn-success btn-xs" id="copy">{{ 'site.copy'|trans }}<a/>
 {#                  <a class="es-icon es-icon-help text-normal link-gray"#}
 {#                     data-toggle="popover" data-trigger="hover"#}

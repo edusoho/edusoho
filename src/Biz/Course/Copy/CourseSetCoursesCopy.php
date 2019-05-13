@@ -39,7 +39,8 @@ class CourseSetCoursesCopy extends AbstractCopy
             $newCourse = $this->getCourseDao()->create($newCourse);
 
             $newCourses[] = $newCourse;
-            if ('default' == $newCourse['courseType']) {
+
+            if ($originCourse['id'] == $courseSet['defaultCourseId']) {
                 $defaultCourseId = $newCourse['id'];
             }
 
