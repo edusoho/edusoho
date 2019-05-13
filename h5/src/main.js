@@ -113,7 +113,7 @@ Api.getSettings({
   }
 
   // 已登录状态直接跳转详情页
-  if (hasToken) {
+  if (hasToken && Number(GetUrlParam('needLogin'))) {
     window.location.href = `${location.href}&backUrl=%2F`;
   }
 
