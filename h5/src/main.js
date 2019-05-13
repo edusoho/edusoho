@@ -109,7 +109,7 @@ Api.getSettings({
   const hasToken = window.localStorage.getItem('token');
   if (!hasToken && Number(GetUrlParam('needLogin'))) {
     window.location.href = `${location.origin}/h5/index.html#/login?redirect=/course/${
-      courseId}&backUrl=%2F&account=${GetUrlParam('account')}`;
+      courseId}&skipUrl=%2F&account=${GetUrlParam('account')}`;
   }
 
   // 已登录状态直接跳转详情页
