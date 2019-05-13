@@ -37,7 +37,7 @@ export default {
 
   watch: {
     code(val, oldVal) {
-      const lengthDiff = oldVal.length - val.length;
+      const lengthDiff = val.length - oldVal.length;
       // 粘贴内容的自动识别填充
       if (Math.abs(lengthDiff) > 8) {
         const spliceCode = this.spliceCode(val);
