@@ -767,13 +767,13 @@ class TaskServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'search',
                     'returnValue' => array(array()),
-                    'withParams' => array(array('courseId' => 2, 'role' => 'teacher'), array(), 0, PHP_INT_MAX),
+                    'withParams' => array(array('courseId' => 2, 'role' => 'teacher'), array(), 0, PHP_INT_MAX, array()),
                     'runTimes' => 1,
                 ),
                 array(
                     'functionName' => 'search',
                     'returnValue' => array(array('id' => 2, 'userId' => 1)),
-                    'withParams' => array(array('courseId' => 3, 'role' => 'teacher'), array(), 0, PHP_INT_MAX),
+                    'withParams' => array(array('courseId' => 3, 'role' => 'teacher'), array(), 0, PHP_INT_MAX, array()),
                     'runTimes' => 1,
                 ),
             )
