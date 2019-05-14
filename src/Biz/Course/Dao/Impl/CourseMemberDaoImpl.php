@@ -443,6 +443,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'seq',
                 'learnedCompulsoryTaskNum',
                 'deadline',
+                'stickyTime',
             ),
             'conditions' => array(
                 'id NOT IN (:excludeIds)',
