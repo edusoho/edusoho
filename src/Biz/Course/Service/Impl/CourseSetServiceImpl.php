@@ -345,6 +345,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->searchCourseSets($conditions, array('createdTime' => 'DESC'), $start, $limit);
     }
 
+    public function searchCourseSetsByTeacherOrderByStickTime($conditions, $orderBy, $userId, $start, $limit)
+    {
+        //屏蔽预约课程
+        $conditions['excludeTypes'] = array('reservation');
+
+        return $this->getCourseSetDao()->searchCourseSetsByTeacherOrderByStickTime($conditions, $orderBy, $userId, $start, $limit);
+    }
+
     public function findCourseSetsByCourseIds(array $courseIds)
     {
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);

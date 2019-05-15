@@ -629,9 +629,10 @@ class UserController extends BaseController
             20
         );
 
-        $sets = $this->getCourseSetService()->searchUserTeachingCourseSets(
-            $user['id'],
+        $sets = $this->getCourseSetService()->searchCourseSetsByTeacherOrderByStickTime(
             $conditions,
+            array('createdTime' => 'DESC'),
+            $user['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
