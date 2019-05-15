@@ -26,10 +26,10 @@
                         </span>
                       {% endif %}
                       {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
-                      {% if courseSet.stickyTime|default('') %}
-                        <span class="course-sticky-tag">{{ 'group.thread.stick_label'|trans }}</span>
-                      {% endif %}
                     </a>
+                    {% if courseSet.stickyTime|default('') %}
+                      <span class="course-sticky-tag">{{ 'group.thread.stick_label'|trans }}</span>
+                    {% endif %}
                     <div class="course-sticky-mask">
                       {% if not  courseSet.stickyTime|default('') %}
                         <button class="course-sticky-btn js-course-sticky" data-url="{{ path('user_course_set_stick', {courseSetId: courseSet.id}) }}" type="button"><i class="es-icon es-icon-sticky"></i>{{ 'thread.stick_btn'|trans }}</button>
