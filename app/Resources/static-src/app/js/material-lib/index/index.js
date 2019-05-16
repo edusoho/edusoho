@@ -413,6 +413,18 @@ class MaterialWidget {
       }
       let $temp = $table.find('.js-paginator');
       self.element.find('[data-role=paginator]').html($temp.html());
+      console.log($('.js-test-popover').length);
+      $('.js-test-popover').popover({
+        placement: 'top',
+        trigger: 'click',
+        html: true,
+        title: `<div>转码状态介绍<a class="" href="http://www.qiqiuyu.com/faq/868/detail" target="_blank">详情</a></div>`,
+        content: `
+        <div class="material-table-popover cd-text-sm">
+          <p class="mb0">转码失败：文件转码失败，请提供文件信息，联系运营人员处理。</p>
+          <p class="mb0">文件不支持：上传的文件格式不支持转码，请点击高亮的“文件不支持”，会显示解决方案。</p>
+        </div>`
+      });
     }).fail(function(){
       self._loaded_error();
     });
