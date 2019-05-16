@@ -1223,4 +1223,6 @@ t.add("material.common_table.file_name", "\u6587\u4ef6\u540d\u79f0", "js", "en")
 t.add("material.common_table.transcoding", "\u8f6c\u7801\u72b6\u6001", "js", "en");
 t.add("material.common_table.error_reason", "\u9519\u8bef\u539f\u56e0", "js", "en");
 t.add("material.common_table.solution_way", "\u89e3\u51b3\u65b9\u6848", "js", "en");
+t.add("course.stick.success", "Top success!", "js", "en");
+t.add("course.cancel.stick.success", "Unpinned successfully!", "js", "en");
 })(Translator);
