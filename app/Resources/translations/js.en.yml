@@ -555,7 +555,8 @@ material_lib.content_title: Teaching Lib
 material_lib.detail.content_title: Resource detail
 material_lib.have_no_permission_hint: Sorry, you have no permission
 meterial_lib.select_resource_delete_hint: Please select you want to delete the resource
-meterial_lib.confirm_share_resource_hint: Sure you want to share this resource
+meterial_lib.confirm_share_resource_hint: Sure you want to share these resources?
+meterial_lib.confirm_share_resource_hint_single: Sure you want to share this resource?
 meterial_lib.confirm_unshare_resource_hint: Sure you want to cancel the share the resource
 meterial_lib.select_resource_operate_hint: Please select your resource to operate 
 meterial_lib.select_share_resource_hint: Please select you want to share resource

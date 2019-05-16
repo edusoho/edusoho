@@ -498,7 +498,8 @@ material_lib.content_title: 教学资料库
 material_lib.detail.content_title: 资源详情
 material_lib.have_no_permission_hint: 抱歉，您无权操作此文件
 meterial_lib.select_resource_delete_hint: 请先选择你要删除的资源
-meterial_lib.confirm_share_resource_hint: 确定要分享这些资源吗？
+meterial_lib.confirm_share_resource_hint: 请确认将此资料共享到公共资源库?
+meterial_lib.confirm_share_resource_hint_single: 请确认将此资料共享到公共资源库?
 meterial_lib.confirm_unshare_resource_hint: 确定要取消分享这个资源吗？
 meterial_lib.select_resource_operate_hint: 请先选择你要操作的资源
 meterial_lib.select_share_resource_hint: 请先选择你要分享的资源
