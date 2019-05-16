@@ -418,7 +418,7 @@ class MaterialWidget {
         placement: 'top',
         trigger: 'click',
         html: true,
-        title: `<div>转码状态介绍<a class="" href="http://www.qiqiuyu.com/faq/868/detail" target="_blank">详情</a></div>`,
+        title: `<div class="clearfix">转码状态介绍<a class="pull-left" href="http://www.qiqiuyu.com/faq/868/detail" target="_blank">详情</a></div>`,
         content: `
         <div class="material-table-popover cd-text-sm">
           <p class="mb0">转码失败：文件转码失败，请提供文件信息，联系运营人员处理。</p>
