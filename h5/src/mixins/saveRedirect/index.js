@@ -29,7 +29,14 @@ export default {
           }
           return;
         }
-        this.$router.replace({ path: redirect, query: { backUrl } });
+        if (backUrl) {
+          this.$router.replace({
+            path: redirect,
+            query: { backUrl }
+          });
+          return;
+        }
+        this.$router.replace({ path: redirect });
       };
       setTimeout(jumpAction, 2000);
     }
