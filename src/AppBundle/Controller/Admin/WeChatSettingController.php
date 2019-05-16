@@ -49,6 +49,7 @@ class WeChatSettingController extends BaseController
             $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
             $this->setFlashMessage('success', 'site.save.success');
         }
+
         return $this->render('admin/system/wechat-setting.html.twig', array(
             'loginConnect' => $loginConnect,
             'payment' => $payment,
