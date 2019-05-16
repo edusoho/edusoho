@@ -413,17 +413,30 @@ class MaterialWidget {
       }
       let $temp = $table.find('.js-paginator');
       self.element.find('[data-role=paginator]').html($temp.html());
-      console.log($('.js-test-popover').length);
-      $('.js-test-popover').popover({
+      $('.js-table-popover').popover({
         placement: 'top',
-        trigger: 'click',
+        trigger: 'manual',
         html: true,
-        title: `<div class="clearfix">转码状态介绍<a class="pull-left" href="http://www.qiqiuyu.com/faq/868/detail" target="_blank">详情</a></div>`,
+        animation: false,
+        title: `<div class="clearfix material-table-popover">${Translator.trans('material.common_table.transcoding_intro')}<a class="pull-right cd-text-sm" href="http://www.qiqiuyu.com/faq/868/detail" target="_blank">${Translator.trans('material.common_table.transcoding_more')}</a></div>`,
         content: `
-        <div class="material-table-popover cd-text-sm">
-          <p class="mb0">转码失败：文件转码失败，请提供文件信息，联系运营人员处理。</p>
-          <p class="mb0">文件不支持：上传的文件格式不支持转码，请点击高亮的“文件不支持”，会显示解决方案。</p>
+        <div class="cd-text-sm">
+          <p class="mb0"><strong>${Translator.trans('subtitle.status.error')}：</strong>${Translator.trans('material.common_table.fail_error_tip')}</p>
+          <p class="mb0"><strong>${Translator.trans('material.common_table.fail_not_support')}：</strong>${Translator.trans('material.common_table.not_support_error_tip')}</p>
         </div>`
+      }).on('mouseenter', function () {
+        const _this = this;
+        $(this).popover('show');
+        $('.popover').on('mouseleave', function () {
+            $(_this).popover('hide');
+        });
+      }).on('mouseleave', function () {
+        var _this = this;
+        setTimeout(function () {
+          if (!$('.popover:hover').length) {
+            $(_this).popover("hide");
+          }
+        }, 300);
       });
     }).fail(function(){
       self._loaded_error();
