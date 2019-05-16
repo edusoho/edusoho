@@ -76,18 +76,26 @@ export default {
     }
   },
   watch: {
-    taskId () {
-      if (['video', 'audio'].includes(this.sourceType)) {
-        window.scrollTo(0, 0);
-        this.initPlayer();
+    taskId (value, oldValue) {
+      if (value > 0 && oldValue > 0) {
+        this.initHead();
       }
     },
+  },
+  created() {
+    this.initHead();
   },
   /*
   * 试看需要传preview=1
   * eg: /api/courses/1/task_medias/1?preview=1
   */
   methods: {
+    initHead() {
+      if (['video', 'audio'].includes(this.sourceType)) {
+        window.scrollTo(0, 0);
+        this.initPlayer();
+      }
+    },
     viewAudioDoc() {
        this.isCoverOpen = true;
     },
