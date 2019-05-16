@@ -1168,4 +1168,6 @@ t.add("material.common_table.file_name", "\u6587\u4ef6\u540d\u79f0", "js", "zh_C
 t.add("material.common_table.transcoding", "\u8f6c\u7801\u72b6\u6001", "js", "zh_CN");
 t.add("material.common_table.error_reason", "\u9519\u8bef\u539f\u56e0", "js", "zh_CN");
 t.add("material.common_table.solution_way", "\u89e3\u51b3\u65b9\u6848", "js", "zh_CN");
+t.add("course.stick.success", "\u7f6e\u9876\u6210\u529f\uff01", "js", "zh_CN");
+t.add("course.cancel.stick.success", "\u53d6\u6d88\u7f6e\u9876\u6210\u529f\uff01", "js", "zh_CN");
 })(Translator);

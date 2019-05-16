@@ -323,4 +323,6 @@ interface CourseSetService
     public function cloneCourseSet($courseSetId, $params);
 
     public function refreshHotSeq();
+
+    public function searchCourseSetsByTeacherOrderByStickTime($conditions, $orderBy, $userId, $start, $limit);
 }

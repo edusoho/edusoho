@@ -30,6 +30,33 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
         return $this->db()->fetchAll($sql, array($title));
     }
 
+    public function searchCourseSetsByTeacherOrderByStickTime($conditions, $orderBy, $userId, $start, $limit)
+    {
+        $courseSetAlias = 'course_set_v8'; //course_set_v8
+        foreach ($conditions as $key => $condition) {
+            $conditions[$courseSetAlias.'_'.$key] = $condition;
+            unset($conditions[$key]);
+        }
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("{$courseSetAlias}.*, max(course_member.stickyTime) as stickyTime, course_member.courseSetId")
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->innerJoin($courseSetAlias, 'course_member', 'course_member', "course_member.courseSetId={$courseSetAlias}.id")
+            ->addOrderBy('stickyTime', 'DESC')
+            ->groupBy('course_member.courseSetId')
+            ->andWhere("{$courseSetAlias}.status = :{$courseSetAlias}_status")
+            ->andWhere("{$courseSetAlias}.parentId = :{$courseSetAlias}_parentId")
+            ->andWhere("{$courseSetAlias}.type NOT IN (:{$courseSetAlias}_excludeTypes)")
+            ->andStaticWhere("course_member.role = 'teacher'")
+            ->andStaticWhere("course_member.userId = {$userId}");
+
+        foreach ($orderBy ?: array() as $order => $sort) {
+            $builder->addOrderBy($order, $sort);
+        }
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function analysisCourseSetDataByTime($startTime, $endTime)
     {
         $conditions = array(

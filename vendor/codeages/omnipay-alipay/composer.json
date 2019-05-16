@@ -1,5 +1,5 @@
 {
-  "name": "wenqinruan/omnipay-alipay",
+  "name": "codeages/omnipay-alipay",
   "type": "library",
   "description": "Alipay gateway for Omnipay payment processing library",
   "keywords": [
@@ -12,14 +12,8 @@
     "payment",
     "purchase"
   ],
-  "homepage": "https://github.com/wenqinruan/omnipay-alipay",
+  "homepage": "https://github.com/codeages/omnipay-alipay",
   "license": "MIT",
-  "authors": [
-    {
-      "name": "Wenqin Ruan",
-      "email": "ruanwenqinrl@gmail.com"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "Omnipay\\Alipay\\": "src/",
