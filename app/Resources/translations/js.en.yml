@@ -1304,6 +1304,7 @@ admin.system.payment.wxpay_key_input.message: Please input the merchant platform
 admin.system.payment.llpay_key_input.message: Please input the merchant account number
 admin.system.payment.llpay_accessKey_input.message: Please input the public key
 admin.system.payment.llpay_secretKey_input.message: Please input the secret key
+admin.system.wechat.notification_open: 请先开启“网页扫码登录”和“微信内授权登录”。
 admin.system.user_fields.truename: truename
 admin.system.user_fields.mobile: mobile
 admin.system.user_fields.company: company

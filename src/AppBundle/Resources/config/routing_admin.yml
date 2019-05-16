@@ -2370,5 +2370,9 @@ admin_wechat_app_access:
     defaults: { _controller: AppBundle:Admin/Cloud:accessWechat }
 
 admin_course_tag_match:
-  path:  /course_set/tag/match
-  defaults: { _controller: AppBundle:Admin/CourseSet:courseTagMatch }
+    path:  /course_set/tag/match
+    defaults: { _controller: AppBundle:Admin/CourseSet:courseTagMatch }
+
+admin_setting_wechat_auth:
+    path: /wechat/auth/setting
+    defaults: { _controller: AppBundle:Admin/WeChatSetting:index}

@@ -327,6 +327,9 @@ admin.system.finance.payment_tab: Payment
 admin.system.finance.coin_tab: Virtual Coin
 admin.system.finance.refund_tab: Refund
 
+##微信授权设置模块
+admin.system.wechat_auth_menu: WeChat Authorization Information
+
 ##移动端设置模块
 admin.system.mobile.h5: Mobile Site Setting
 admin.system.mobile.basic_tab: Mobile Setting

@@ -329,6 +329,9 @@ admin.system.finance.payment_tab: 支付
 admin.system.finance.coin_tab: 虚拟币
 admin.system.finance.refund_tab: 退款
 
+##微信授权设置模块
+admin.system.wechat_auth_menu: 微信授权信息
+
 ##移动端设置模块
 admin.system.mobile.h5: 微网校设置
 admin.system.mobile.basic_tab: APP 设置
