@@ -1,3 +1,26 @@
+/*icon字体路径变量*/
+$--font-path: "~element-ui/lib/theme-chalk/fonts";
+
+/*按需引入用到的组件的scss文件和基础scss文件*/
+@import "~element-ui/packages/theme-chalk/src/icon.scss";
+@import "~element-ui/packages/theme-chalk/src/select.scss";
+@import "~element-ui/packages/theme-chalk/src/button.scss";
+@import "~element-ui/packages/theme-chalk/src/message.scss";
+@import "~element-ui/packages/theme-chalk/src/upload.scss";
+@import "~element-ui/packages/theme-chalk/src/input.scss";
+@import "~element-ui/packages/theme-chalk/src/radio.scss";
+@import "~element-ui/packages/theme-chalk/src/option.scss";
+@import "~element-ui/packages/theme-chalk/src/cascader.scss";
+@import "~element-ui/packages/theme-chalk/src/dialog.scss";
+@import "~element-ui/packages/theme-chalk/src/tag.scss";
+@import "~element-ui/packages/theme-chalk/src/autocomplete.scss";
+@import "~element-ui/packages/theme-chalk/src/tooltip.scss";
+@import "~element-ui/packages/theme-chalk/src/loading.scss";
+@import "~element-ui/packages/theme-chalk/src/dropdown.scss";
+@import "~element-ui/packages/theme-chalk/src/dropdown-item.scss";
+@import "~element-ui/packages/theme-chalk/src/dropdown-menu.scss";
+@import "~element-ui/packages/theme-chalk/src/message-box.scss";
+
 .el-cascader {
   width: 100%;
 }

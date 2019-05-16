@@ -42,13 +42,13 @@
   </module-frame>
 </template>
 <script>
-import Api from '@admin/api';
+import Api from 'admin/api';
 import moduleFrame from '../module-frame';
 import settingCell from '../module-frame/setting-cell';
 import courseModal from '../course/modal/course-modal';
 import coupon from '@/containers/components/e-coupon-list/e-coupon-list';
 import draggable from 'vuedraggable';
-import pathName2Portal from '@admin/config/api-portal-config';
+import pathName2Portal from 'admin/config/api-portal-config';
 
 export default {
   components: {

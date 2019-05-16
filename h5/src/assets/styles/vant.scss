@@ -12,6 +12,12 @@
   z-index: 1001;
 }
 
+.van-tabbar--iphonex {
+  @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+    padding-bottom: 34px;
+  }
+}
+
 .van-swipe__indicators {
   bottom: vw(45);
   .van-swipe__indicator {
@@ -39,4 +45,10 @@
 
 .van-dialog__message {
   text-align: center;
+}
+
+.van-button--info {
+  color: #fff;
+  background-color: #1989fa;
+  border: 1px solid #1989fa;
 }

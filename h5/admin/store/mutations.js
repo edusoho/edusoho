@@ -18,5 +18,5 @@ export default {
   },
   [types.GET_SETTINGS](state, { key, setting }) {
     state[key] = setting;
-  },
+  }
 };

@@ -12,7 +12,9 @@ const portfinder = require('portfinder')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
+const platform = process.env.PLATFROM
 
+const rootHtml = platform === 'h5' ? 'index.html' : 'admin.html'
 const devWebpackConfig = merge(baseWebpackConfig, {
     module: {
         rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
@@ -25,7 +27,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         clientLogLevel: 'warning',
         historyApiFallback: {
             rewrites: [
-                { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
+                { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, rootHtml) },
             ],
         },
         hot: true,
@@ -53,8 +55,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         new webpack.NoEmitOnErrorsPlugin(),
         // https://github.com/ampedandwired/html-webpack-plugin
         new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: 'index.html',
+            filename: rootHtml,
+            template: rootHtml,
             inject: true
         }),
         // copy custom static assets

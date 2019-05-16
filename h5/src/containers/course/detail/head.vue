@@ -121,6 +121,11 @@ export default {
 
       const player = await Api.getMedia(this.getParams())
 
+      if (player.mediaType === 'video' && !player.media.url) {
+        Toast('课程内容准备中，请稍候查看')
+        return;
+      }
+
       const timelimit = player.media.timeLimit;
       // 试看判断
       // const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)

@@ -1,12 +1,10 @@
 import axios from 'axios';
-import store from '@admin/store';
-import router from '@admin/router';
-import * as types from '@admin/store/mutation-types';
+import store from 'admin/store';
 
 // 状态码
-const statusCode = {
-  EXPIRED_CREDENTIAL: 5
-};
+// const statusCode = {
+//   EXPIRED_CREDENTIAL: 5
+// };
 
 axios.interceptors.request.use(config => {
   config.headers.Accept = 'application/vnd.edusoho.v2+json';
@@ -14,7 +12,7 @@ axios.interceptors.request.use(config => {
   const env = process.env.NODE_ENV;
 
   if (env !== 'production') {
-    config.headers['X-Auth-Token'] = 'nuv4epjegao08s0g4kcsgs8g8000w4';
+    config.headers['X-Auth-Token'] = 'ohfj4haw06osokks4k4o4kkck4gw4cw';
   } else {
     config.headers['X-Requested-With'] = 'XMLHttpRequest';
     config.headers['X-CSRF-Token'] = store.state.csrfToken;
@@ -33,7 +31,7 @@ axios.interceptors.response.use(res => {
 
   switch (error.response.status) {
     case 401:
-      const code = error.response.data.error.code;
+      // const code = error.response.data.error.code;
 
       break;
     default:

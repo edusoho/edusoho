@@ -55,7 +55,7 @@ Vue.use(plugins);
 Vue.use(utils);
 Vue.use(EdusohoUI);
 Vue.use(Lazyload);
-
+Vue.use(Toast);
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
@@ -72,6 +72,21 @@ Api.getSettings({
     return hash.match(/#.*\?/g)[0].slice(1, -1);
   };
   const isWhiteList = whiteList.includes(getPathNameByHash(hashStr));
+
+  const hashParamArray = getPathNameByHash(hashStr).split('/');
+  const hashHasToken = hashParamArray.includes('loginToken');
+
+  if (hashHasToken) {
+    const tokenIndex = hashParamArray.indexOf('loginToken');
+    const tokenFromUrl = hashParamArray[tokenIndex + 1];
+    const courseId = hashParamArray[hashParamArray.indexOf('course') + 1];
+    store.state.token = tokenFromUrl;
+    localStorage.setItem('token', tokenFromUrl);
+    if (courseId) {
+      window.location.href = `${location.origin}/h5/index.html#/course/${courseId}?backUrl=%2F`;
+    }
+  }
+
   if (!isWhiteList) {
     if (parseInt(res.version, 10) !== 2) {
       // 如果没有开通微网校，则跳回老版本网校 TODO
@@ -88,6 +103,6 @@ Api.getSettings({
     template: '<App/>'
   });
 }).catch(err => {
-  Toast.fail(err.message);
+  console.log(err.message);
 });
 

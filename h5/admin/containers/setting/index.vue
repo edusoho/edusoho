@@ -30,7 +30,7 @@
       </div>
 
       <!-- h5配置——底部添加组件按钮 -->
-      <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportActivityVersion">
+<!--       <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportActivityVersion">
         <div class="section-title">点击添加组件</div>
         <div class="section-button-group">
           <div v-for="(item, index) in baseModules" :key="index">
@@ -41,10 +41,10 @@
             </el-button>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <!-- 小程序配置——底部添加组件按钮 -->
-      <div class="multi-find-section find-section clearfix" v-if="portal === 'h5' || supportActivityVersion">
+      <!-- 底部添加组件按钮 -->
+      <div class="multi-find-section find-section clearfix">
         <div class="section-title">基础组件</div>
         <div class="section-button-group clearfix">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
@@ -81,13 +81,13 @@
   </div>
 </template>
 <script>
-import Api from '@admin/api';
-import * as types from '@admin/store/mutation-types';
-import { BASE_MODULE, MARKETING_MODULE } from '@admin/config/module-default-config';
-import ModuleCounter from '@admin/utils/module-counter';
-import needUpgrade from '@admin/utils/version-compare';
-import pathName2Portal from '@admin/config/api-portal-config';
-import marketingMixins from '@admin/mixins/marketing';
+import Api from 'admin/api';
+import * as types from 'admin/store/mutation-types';
+import { BASE_MODULE, MARKETING_MODULE } from 'admin/config/module-default-config';
+import ModuleCounter from 'admin/utils/module-counter';
+import needUpgrade from 'admin/utils/version-compare';
+import pathName2Portal from 'admin/config/api-portal-config';
+import marketingMixins from 'admin/mixins/marketing';
 import ObjectArray2ObjectByKey from '@/utils/array2object';
 import moduleTemplate from './module-template';
 import findFooter from './footer';
@@ -126,16 +126,20 @@ export default {
       return pathName2Portal[this.pathName];
     },
     supportActivityVersion() {
-      return this.supportVersion('1.3.6');
+      return true;
+      // return this.supportVersion('1.3.7');
     },
     supportClassroomVersion() {
-      return this.supportVersion('1.3.1');
+      return true;
+      // return this.supportVersion('1.3.1');
     },
     supportCouponVersion() {
-      return this.supportVersion('1.3.2');
+      return true;
+      // return this.supportVersion('1.3.2');
     },
     supportVipVersion() {
-      return this.supportVersion('1.3.4') && this.vipSetupStatus;
+      return this.vipSetupStatus;
+      // return this.supportVersion('1.3.4') && this.vipSetupStatus;
     }
   },
   created() {

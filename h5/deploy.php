@@ -5,7 +5,7 @@ require 'recipe/common.php';
 
 // Configuration
 
-set('repository', 'git@coding.codeages.net:edusoho/edusoho-h5.git');
+set('repository', 'git@coding.codeages.work:edusoho/edusoho-h5.git');
 set('git_tty', false); // [Optional] Allocate tty for git on first deployment
 set('writable_mode', 'acl');
 
@@ -22,6 +22,7 @@ host('124.160.104.77')
 
 desc('Build frontend');
 task('frontend:build', function() {
+    run('yarn install --production');
     run('npm run build');
 })->local();
 

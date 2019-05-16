@@ -221,6 +221,13 @@ const routes = [
       title: ''
     },
     component: () => import(/* webpackChunkName: "auth_social" */'@/containers/login/social/index.vue')
+  }, {
+    path: '/coupon/covert',
+    name: 'couponCovert',
+    meta: {
+      title: '兑换卡券'
+    },
+    component: () => import(/* webpackChunkName: "auth_social" */'@/containers/coupon/covert/index.vue')
   }
 ];
 
@@ -266,7 +273,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // 未登录用户 信息设置页 跳转到首页
-  if (['settings'].includes(to.name) && !store.state.token) {
+  if (['settings', 'couponCovert'].includes(to.name) && !store.state.token) {
     next('/');
     return;
   }

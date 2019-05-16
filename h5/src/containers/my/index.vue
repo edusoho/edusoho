@@ -2,7 +2,11 @@
   <div>
     <e-loading v-if="isLoading"></e-loading>
     <user></user>
-
+    <router-link :to="{name: 'couponCovert'}">
+      <div class="coupon-code-entrance" v-if="hasBusinessDrainage">兑换卡券
+        <i class="van-icon van-icon-arrow pull-right"></i>
+      </div>
+    </router-link>
     <van-tabs v-model="activeIndex" class="after-tabs e-learn">
       <van-tab v-for="(item, index) in tabs" :title="item" :key="index"></van-tab>
     </van-tabs>
@@ -16,6 +20,7 @@ import activity from './activity';
 import User from './user.vue';
 import { mapState } from 'vuex';
 import preloginMixin from '@/mixins/preLogin';
+import Api from '@/api';
 
 export default {
   mixins: [preloginMixin],
@@ -28,6 +33,7 @@ export default {
     return {
       activeIndex: 0,
       tabs: ['我的订单', '我的活动'],
+      hasBusinessDrainage: false
     };
   },
   computed: {
@@ -39,6 +45,9 @@ export default {
     setTimeout(() => {
       window.scrollTo(0,0);
     }, 100)
+    Api.hasPluginInstalled().then(res => {
+      this.hasBusinessDrainage = res.BusinessDrainage
+    })
   }
 }
 </script>

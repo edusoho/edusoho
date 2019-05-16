@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import store from '@admin/store';
-import * as types from '@admin/store/mutation-types';
+import store from 'admin/store';
+import * as types from 'admin/store/mutation-types';
 import Router from 'vue-router';
 
 Vue.use(Router);
@@ -12,7 +12,7 @@ const routes = [
     meta: {
       title: 'h5后台配置'
     },
-    component: () => import(/* webpackChunkName: "setting" */'@admin/containers/setting/index.vue')
+    component: () => import(/* webpackChunkName: "setting" */'admin/containers/setting/index.vue')
   },
   {
     path: '/preview',
@@ -20,7 +20,7 @@ const routes = [
     meta: {
       title: '发现页预览'
     },
-    component: () => import(/* webpackChunkName: "preview" */'@admin/containers/preview/index.vue')
+    component: () => import(/* webpackChunkName: "preview" */'admin/containers/preview/index.vue')
   },
   {
     path: '/miniprogram',
@@ -28,7 +28,7 @@ const routes = [
     meta: {
       title: '小程序后台配置'
     },
-    component: () => import(/* webpackChunkName: "miniprogramSetting" */'@admin/containers/setting/index.vue')
+    component: () => import(/* webpackChunkName: "miniprogramSetting" */'admin/containers/setting/index.vue')
   }
 ];
 
@@ -40,7 +40,7 @@ if (!store.state.csrfToken && env === 'production') {
   if (csrfTag && csrfTag.content) {
     store.commit(types.GET_CSRF_TOKEN, csrfTag.content);
   } else {
-    new Error('csrfToken 不存在');
+    throw new Error('csrfToken 不存在');
   }
 }
 
@@ -51,25 +51,25 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   // 获取会员后台配置
   if (!Object.keys(store.state.vipSettings).length) {
-
     Promise.all([
       store.dispatch('setVipSetupStatus'),
       store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' })
-      ]).then(([vipPlugin, vipRes]) => {
-        return vipRes;
-      }).then((vipRes) => {
-        if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
-           store.dispatch('setVipLevels').then(() => next())
-        } else {
-          next();
-        }
-      }).catch(err => {
-        Vue.prototype.$message({
-          message: err.message,
-          type: 'error'
-        });
+    ]).then(([vipPlugin, vipRes]) => {
+      console.log(vipPlugin, 8888);
+      return vipRes;
+    }).then(vipRes => {
+      if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
+        store.dispatch('setVipLevels').then(() => next());
+      } else {
         next();
+      }
+    }).catch(err => {
+      Vue.prototype.$message({
+        message: err.message,
+        type: 'error'
       });
+      next();
+    });
   } else {
     next();
   }

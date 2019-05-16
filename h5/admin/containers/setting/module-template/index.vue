@@ -46,8 +46,8 @@ import Poster from '../poster';
 import Coupon from '../coupon';
 import Vip from '../vip';
 import MarketingActivity from '../marketing-activity';
-import validate from '@admin/utils/module-validator';
-import { MODULE_DEFAULT } from '@admin/config/module-default-config';
+import validate from 'admin/utils/module-validator';
+import { MODULE_DEFAULT } from 'admin/config/module-default-config';
 
 export default {
   components: {

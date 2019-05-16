@@ -77,7 +77,7 @@
   </module-frame>
 </template>
 <script>
-import Api from '@admin/api';
+import Api from 'admin/api';
 import moduleFrame from '../module-frame';
 import settingCell from '../module-frame/setting-cell';
 import courseModal from '../course/modal/course-modal';

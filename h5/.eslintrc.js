@@ -62,6 +62,7 @@ module.exports = {
       "functions": "ignore"
     }],
     "no-useless-escape": "off",
-    "no-console": process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    "no-console": 'off',
+    'linebreak-style': 'off'
   }
 }

@@ -7,6 +7,23 @@
 - [视频播放器文档](/doc/player.md)
 - [需求文档](https://pro.modao.cc/app/43be7ceee9ba1239e1366453d273907de9ac2043#screen=sFAABE922B31526366021396)
 
+
+## 分支说明
+
+1、beta/x.x.x 是当前迭代开发分支
+
+2、release/x.x.x 是当前迭代待发布分支，每次发布成功后需要 新建一个版本的tag作为标记。例如：
+
+```
+git tag -a v1.0.12 -m 'v1.0.12' // 新建tag
+
+git push origin v1.0.12         // push 到远程
+```
+
+然后提交 mergeRequest 合并到 master、develop 分支（后续可以自动化）
+
+3、master 稳定分支
+
 ## Build Setup
 
 ``` bash
@@ -54,82 +71,36 @@ sudo chmod 600 ~/.ssh/deployerkey
 php vendor/bin/dep deploy dev
 ```
 
-## 班级、计划加入逻辑
+##  目录说明
 
-加入计划判断链
+```
+...
+- admin           // 后台配置开发目录
+  + api           // 接口配置
+  + config        // 业务配置文件
+  + containers    // 后台页面（里面一个文件夹代表一个页面，页面入口为 index.vue）
+  + mixins        // mixins 复用模块
+  + router        // 路由
+  + store         // vuex 文件
+  + styles        // 样式(里面页面级样式在 container 文件夹内，组件级样式在 modules 文件夹里)
+  + utils         // 工具类
+  + App-admin.vue // 项目单页入口
+  + main-admin.js。// 打包入口
+- src              // h5 微网校开发目录
+  + api            // 接口配置
+  + assets         // 存放字体和样式
+  + components     // 全局组件
+  + config         // 业务配置文件
+  + containers     // 页面（一个文件夹代表一个页面，页面入口为 index.vue）
+  + filters        // 全局过滤器
+  + mixins         // mixins 复用模块
+  + router         // 路由
+  + store          // vuex
+  + utils          // 工具类
+  + App.vue        // 项目单页入口
+  + admn.js        // 打包入口
+- static          // 静态资源，图片等
+...
+```
 
-1.计划不存在：course.not_found
-2.草稿状态计划：course.unpublished
-3.计划已关闭：course.closed
-4.计划不可购买（加入）：course.not_buyable
-4.1.如果仅vip加入且用户会员等级不够：course.only_vip_join_way
-5.计划有效期已过期：course.expired
-6.加入截止日期到期：course.buy_expired
-7.学员达到上限：course.reach_max_student_num
-
-
-8.用户未登录：user.not_login
-9.用户被锁定：user.locked
-10.计划学员已存在（已加入）：member.member_exist
-
-
-加入班级判断链
-
-1.班级不存在：classroom.not_found
-2.草稿状态班级：classroom.unpublished
-3.班级已关闭：classroom.closed
-4.班级不可购买（加入）：classroom.not_buyable
-4.1.如果仅vip加入且用户会员等级不够：course.only_vip_join_way（这里有问题，应该是classroom.only_vip_join_way
-）
-5.班级有效期已过期：classroom.expired
-
-
-6.用户未登录：user.not_login
-7.用户被锁定：user.locked
-8.课程学员已存在（已加入，不包括旁听生）：member.member_exist
-
-## 计划、班级学习逻辑
-
-计划学习判断链
-
-1.计划不存在：course.not_found
-2.草稿状态计划：course.unpublished
-3.计划有效期已过期：course.expired
-4.学习有效期开始时间未到：course.not_arrive
-
-5-8前提：用户不是管理员
-5.用户未登录：user.not_login
-6.用户被锁定（封禁）：user.locked
-7.用户未加入：member.not_found
-8.学习有效期已过：member.expired
-
-9-14前提：计划是vip免费加入／用户不是计划教师／用户是vip免费学加入的
-9.网站关闭vip：vip.vip_closed
-10.用户未登录：vip.not_login
-11.非vip：vip.not_member
-12.vip已过期：vip.member_expired
-13.用户当前的vip会员等级或计划允许免费加入的vip等级不存在：vip.level_not_exist
-14.当前用户会员等级比计划允许免费加入的等级低：vip.level_low
-
-
-班级学习判断链
-
-1.班级不存在：classroom.not_found
-2.草稿状态班级：classroom.unpublished
-3.班级有效期已过期：classroom.expired
-
-与计划不同，这里没加管理员判断
-4.用户未登录：user.not_login
-5.用户被锁定（封禁）：user.locked
-6.用户未加入：member.not_found
-7.用户是旁听生：member.auditor
-8.学习有效期已过：member.expired
-
-9-14前提：班级是vip免费加入／用户不是助教、老师、班主任／用户是vip免费学加入的
-9.网站关闭vip：vip.vip_closed
-10.用户未登录：vip.not_login
-11.非vip：vip.not_member
-12.vip已过期：vip.member_expired
-13.用户当前的vip会员等级或计划允许免费加入的vip等级不存在：vip.level_not_exist
-14.当前用户会员等级比计划允许免费加入的等级低：vip.level_low
 

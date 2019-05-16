@@ -64,7 +64,7 @@
 </template>
 
 <script>
-  import Api from '@admin/api';
+  import Api from 'admin/api';
   import { VueCropper } from 'vue-cropper';
 
   export default {

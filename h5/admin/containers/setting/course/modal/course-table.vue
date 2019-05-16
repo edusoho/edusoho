@@ -38,8 +38,8 @@
 
 <script>
 import draggable from 'vuedraggable';
-import head from '@admin/config/modal-config';
-import tableFilter from '@admin/utils/table-filter.js';
+import head from 'admin/config/modal-config';
+import tableFilter from 'admin/utils/table-filter.js';
 
 export default {
   name: 'course-table',

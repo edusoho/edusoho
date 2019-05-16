@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 // API配置
-import config from '@admin/api/config';
+import config from 'admin/api/config';
 
 // 拦截器
-import '@admin/api/interceptors';
+import 'admin/api/interceptors';
 import { parseUrl, addPrefix } from './utils';
 
 const Api = {};

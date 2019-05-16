@@ -5,7 +5,7 @@
       :class="[{hide: isQrcode}, 'nav-bar']"
       :title="title"
       :left-arrow="showLeftArrow"
-      @click-left="$router.go(-1)"/>
+      @click-left="backFn()"/>
     <router-view></router-view>
   </div>
 </template>
@@ -25,6 +25,14 @@ export default {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
+    backFn() {
+      const query = this.$route.query;
+      if (query.backUrl) {
+        this.$router.push({ path: query.backUrl })
+        return;
+      }
+      this.$router.go(-1);
+    }
   },
   computed: {
     ...mapState(['title']),

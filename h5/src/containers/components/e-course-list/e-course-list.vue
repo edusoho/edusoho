@@ -1,5 +1,5 @@
 <template>
-  <div class="e-course-list">
+  <div class="e-course-list" v-if="courseList.items.length">
     <div class="e-course-list__header">
       <div class="clearfix">
         <span class="e-course-list__list-title text-overflow">{{ courseList.title }}</span>
