@@ -87,6 +87,7 @@
     "vue-jest": "^1.0.2",
     "vue-template-compiler": "^2.5.2",
     "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^2.9.7"
   },
   "engines": {
