@@ -66,7 +66,8 @@ class LessonReplay extends BaseResource
                 $response['url'] = $this->getEsLiveReplayUrl($globalId, $options);
                 $response['extra']['provider'] = 'longinus';
             } else {
-                $response = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
+                $protocol = $request->isSecure() ? 'https' : 'http';
+                $response = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
             }
         } catch (\Exception $e) {
             return $this->error('503', '获取回放失败！');

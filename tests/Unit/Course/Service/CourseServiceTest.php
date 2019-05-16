@@ -1005,13 +1005,21 @@ class CourseServiceTest extends BaseTestCase
             ),
         ));
 
+        $mockedTaskService = $this->mockBiz('Task:TaskService', array(
+            array(
+                'functionName' => 'countLessonsWithMultipleTasks',
+                'withParams' => array(123),
+                'returnValue' => array(2, 3, 4),
+            ),
+        ));
+
         $courseInfo = array(
             'id' => 123,
             'compulsoryTaskNum' => 3,
         );
         $result = $this->getCourseService()->countCourseItems($courseInfo);
 
-        $this->assertEquals(5, $result);
+        $this->assertEquals(8, $result);
     }
 
     public function testAppendReservationConditionsWithClosed()

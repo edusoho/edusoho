@@ -63,10 +63,9 @@ class ClassroomController extends BaseController
 
             $todayTimeStart = strtotime(date('Y-m-d', time()));
             $todayTimeEnd = strtotime(date('Y-m-d', time() + 24 * 3600));
-            $todayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(array('courseIds' => $courseIds, 'createdTime' => $todayTimeStart, 'finishedTime' => $todayTimeEnd, 'status' => 'finish'));
 
+            $todayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(array('courseIds' => (!empty($courseIds)) ? $courseIds : array(-1), 'createdTime_GE' => $todayTimeStart, 'status' => 'finish'));
             $threadCount = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $classroom['id'], 'type' => 'discussion', 'startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd, 'status' => 'open'));
-
             $classrooms[$key]['threadCount'] = $threadCount;
 
             $classrooms[$key]['todayFinishedTaskNum'] = $todayFinishedTaskNum;

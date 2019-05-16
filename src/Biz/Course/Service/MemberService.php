@@ -12,7 +12,7 @@ interface MemberService
 
     public function removeCourseStudent($courseId, $userId);
 
-    public function searchMembers($conditions, $orderBy, $start, $limit);
+    public function searchMembers($conditions, $orderBy, $start, $limit, $columns = array());
 
     /**
      * @before searchMemberCount
@@ -22,6 +22,10 @@ interface MemberService
      * @return mixed
      */
     public function countMembers($conditions);
+
+    public function stickMyCourseByCourseSetId($courseSetId);
+
+    public function unStickMyCourseByCourseSetId($courseSetId);
 
     public function findWillOverdueCourses();
 

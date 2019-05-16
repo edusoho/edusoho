@@ -395,6 +395,7 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         unset($tmp['id']);
         unset($tmp['createdTime']);
         unset($tmp['updatedTime']);
+        unset($tmp['stickyTime']);
 
         $res[] = $tmp;
 

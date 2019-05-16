@@ -519,6 +519,20 @@ class UserController extends BaseController
         ));
     }
 
+    public function stickCourseSetAction(Request $request, $courseSetId)
+    {
+        $this->getCourseMemberService()->stickMyCourseByCourseSetId($courseSetId);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function unStickCourseSetAction(Request $request, $courseSetId)
+    {
+        $this->getCourseMemberService()->unStickMyCourseByCourseSetId($courseSetId);
+
+        return $this->createJsonResponse(true);
+    }
+
     protected function saveUserInfo($request, $user)
     {
         $formData = $request->request->all();
@@ -615,12 +629,48 @@ class UserController extends BaseController
             20
         );
 
-        $sets = $this->getCourseSetService()->searchUserTeachingCourseSets(
-            $user['id'],
+        $sets = $this->getCourseSetService()->searchCourseSetsByTeacherOrderByStickTime(
             $conditions,
+            array('createdTime' => 'DESC'),
+            $user['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $sets = ArrayToolkit::index($sets, 'id');
+
+        //这里迫于当前逻辑是未发布计划也会算在内，所以这里没有找courseIds也没有加published条件
+//        $teachedCourseIds = $this->getCourseService()->searchCourses(
+//            array('userId' => $user['id']),
+//            array(),
+//            0,
+//            PHP_INT_MAX,
+//            array('courseId')
+//        );
+
+        $setIds = ArrayToolkit::column($sets, 'id');
+
+        $stickSeqCourseSetMembers = $this->getCourseMemberService()->searchMembers(
+            array('userId' => $user['id'], 'courseSetIds' => $setIds),
+            array('stickyTime' => 'DESC', 'createdTime' => 'DESC'),
+            0,
+            PHP_INT_MAX,
+            array('courseSetId', 'stickyTime')
+        );
+
+        foreach ($stickSeqCourseSetMembers as $stickSeqCourseSetMember) {
+            if (!empty($stickSeqCourseSetMember['stickyTime']) && isset($sets[$stickSeqCourseSetMember['courseSetId']])) {
+                $sets[$stickSeqCourseSetMember['courseSetId']]['stickyTime'] = $stickSeqCourseSetMember['stickyTime'];
+            }
+        }
+
+        if (count($sets) > 1) {
+            $stickSeqCourseSetIds = ArrayToolkit::column($stickSeqCourseSetMembers, 'courseSetId');
+
+            usort($sets, function ($a, $b) use ($stickSeqCourseSetIds) {
+                return (array_search($a['id'], $stickSeqCourseSetIds) < array_search($b['id'], $stickSeqCourseSetIds)) ? -1 : 1;
+            });
+        }
 
         return $this->render('user/course-sets.html.twig', array(
             'user' => $user,

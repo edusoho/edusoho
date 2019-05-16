@@ -1382,8 +1382,10 @@ task_show.user_login_protect_tip: User unLogin
 admin.course_manage.manage.tags_select.placeholder: 输入标签名称关键字
 
 exception.common_frequent_operation: 操作过于频繁，请稍后重试
-
 material.common_table.file_name: 文件名称
 material.common_table.transcoding: 转码状态
 material.common_table.error_reason: 错误原因
 material.common_table.solution_way: 解决方案
+
+course.stick.success: Top success!
+course.cancel.stick.success: Unpinned successfully!

@@ -34,7 +34,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function getFullFile($file)
     {
-        $cloudFile = $this->createApi('leaf', 'v1')->get("/resources/{$file['globalId']}", array("canNoSdInMetas" => 1));
+        $cloudFile = $this->createApi('leaf', 'v1')->get("/resources/{$file['globalId']}", array('canNoSdInMetas' => 1));
 
         return $this->mergeCloudFile($file, $cloudFile);
     }
@@ -548,7 +548,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         if (!empty($file['levelsStatus'])) {
             $isAllLevelsOk = true;
             foreach ($file['levelsStatus'] as $levelStatus) {
-                if ($levelStatus['status'] != 'ok') {
+                if ('ok' != $levelStatus['status']) {
                     $isAllLevelsOk = false;
                     break;
                 }
