@@ -32,14 +32,13 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
 
     public function searchCourseSetsByTeacherOrderByStickTime($conditions, $orderBy, $userId, $start, $limit)
     {
-        $courseSetAlias = 'csv'; //course_set_v8
+        $courseSetAlias = 'course_set_v8'; //course_set_v8
         foreach ($conditions as $key => $condition) {
             $conditions[$courseSetAlias.'_'.$key] = $condition;
             unset($conditions[$key]);
         }
         $builder = $this->createQueryBuilder($conditions)
             ->select("{$courseSetAlias}.*, max(course_member.stickyTime) as stickyTime, course_member.courseSetId")
-            ->from($this->table, $courseSetAlias)
             ->setFirstResult($start)
             ->setMaxResults($limit)
             ->innerJoin($courseSetAlias, 'course_member', 'course_member', "course_member.courseSetId={$courseSetAlias}.id")
