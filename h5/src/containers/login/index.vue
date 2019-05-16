@@ -123,7 +123,7 @@ export default {
 
   mounted() {
     this.bodyHeight = document.documentElement.clientHeight - 46;
-    this.username = this.$route.params.username || '';
+    this.username = this.$route.params.username || this.$route.query.account || '';
     Toast.loading({
       message: '请稍后'
     });

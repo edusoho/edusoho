@@ -78,7 +78,7 @@ export default {
       if (!Object.values(this.activity).length) return '00.00';
       if (this.type === 'seckill') return this.activity.rule.seckillPrice;
       if (this.type === 'cut') return this.activity.rule.lowestPrice;
-      if (this.type === 'groupon') return this.activity.rule.memberPrice;
+      if (this.type === 'groupon') return this.activity.rule.ownerPrice;
     },
     grouponStatus() {
       const status = this.activity.status;
