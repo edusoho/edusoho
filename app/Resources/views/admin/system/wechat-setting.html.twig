@@ -138,7 +138,7 @@
         </div>
       </div>
 
-      <div data-sub="account" {% if not wechatSetting.wechat_notification_enabled %}style="display:none;"{% endif %}>
+      <div data-sub="account" class="{% if not wechatSetting.wechat_notification_enabled %}hidden{% endif %}">
         <div class="form-group group-field">
           <div class="col-md-4 control-label">
             <label for="account_name">{{'admin.setting_wechat_auth.account_name'|trans}}</label>
