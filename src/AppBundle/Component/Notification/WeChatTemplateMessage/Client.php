@@ -100,13 +100,9 @@ class Client
         return $result;
     }
 
-    public function getIndustry($templateId)
+    public function getIndustry()
     {
-        $params = array(
-            'template_id' => $templateId,
-        );
-
-        $result = $this->getRequest($this->baseUrl.'/'.self::INDUSTRY_GET, $params);
+        $result = $this->getRequest($this->baseUrl.'/'.self::INDUSTRY_GET, array());
 
         $rawResult = json_decode($result, true);
 
@@ -132,7 +128,7 @@ class Client
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
             $this->logger && $this->logger->error('WECHAT_ADD_TEMPLATE_ERROR', $rawResult);
 
-            return $rawResult;
+            return array();
         }
 
         return $result;
@@ -231,6 +227,7 @@ class Client
         }
 
         $curl = curl_init();
+        $params = json_encode($params);
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
@@ -240,6 +237,10 @@ class Client
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: '.strlen($params),
+        ));
         curl_setopt($curl, CURLOPT_URL, $url.'?'.http_build_query(array('access_token' => $this->accessToken)));
 
         // curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
