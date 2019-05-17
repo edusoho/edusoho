@@ -32,6 +32,18 @@ define(function(require, exports, module) {
           if ($this.context.id == 'wechat_notification_enabled' && isEnable == '0') {
             var weixinmobChecked = $('#weixinmob_enabled').val();
             var weixinwebChecked = $('#weixinweb_enabled').val();
+            var uploader = new WebUploader({
+              element: '#qrcode-upload'
+            });
+
+            uploader.on('uploadSuccess', function(file, response ) {
+              $('.js-code-img').attr('src', response.url);
+              $('#account_code').val(response.url);
+              if ($('.es-qrcode').hasClass('hidden')) {
+                $('es-qrcode').removeClass('hidden');
+                $('code-help-block').addClass('hidden');
+              }
+            });
             if (weixinmobChecked == '0' || weixinwebChecked == '0') {
               Notify.danger(Translator.trans('admin.system.wechat.notification_open'), 3);
               return;
@@ -115,7 +127,7 @@ define(function(require, exports, module) {
           var subItem = $(this).parents('form').children().children('[data-sub="account"]');
 
           if (checked == '1') {
-            subItem.removeClass('hidden');
+            subItem.css('display', 'block');
             validator.addItem({
               element: '[name="wechatSetting[account_name]"]',
               required: true,
@@ -125,7 +137,7 @@ define(function(require, exports, module) {
               required: true,
             });
           } else {
-            subItem.addClass('hidden');
+            subItem.css('display', 'none');
             validator.removeItem('[name="wechatSetting[account_name]"]');
             validator.removeItem('[name="wechatSetting[account_code]"]');
           }
