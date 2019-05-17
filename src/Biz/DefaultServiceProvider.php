@@ -213,8 +213,9 @@ class DefaultServiceProvider implements ServiceProviderInterface
                     'key' => $loginBind['weixinmob_key'],
                     'secret' => $loginBind['weixinmob_secret'],
                 ));
+                $token = $client->getAccessToken();
 
-                $client->setAccessToken($client->getAccessToken());
+                $client->setAccessToken($token['access_token']);
 
                 return $client;
             }

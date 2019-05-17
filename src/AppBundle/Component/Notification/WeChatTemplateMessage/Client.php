@@ -132,7 +132,7 @@ class Client
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
             $this->logger && $this->logger->error('WECHAT_ADD_TEMPLATE_ERROR', $rawResult);
 
-            return array();
+            return $rawResult;
         }
 
         return $result;
