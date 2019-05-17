@@ -54,7 +54,6 @@ class Client
 
     public function setAccessToken($token)
     {
-        var_dump($token);
         $this->accessToken = $token;
     }
 
