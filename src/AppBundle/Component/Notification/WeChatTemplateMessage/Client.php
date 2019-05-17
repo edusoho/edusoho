@@ -37,6 +37,8 @@ class Client
 
     protected $timeout = 30;
 
+    protected $accessToken = '';
+
     public function __construct($config)
     {
         $this->config = $config;
@@ -50,6 +52,11 @@ class Client
         $this->logger = $logger;
     }
 
+    public function setAccessToken($token)
+    {
+        $this->accessToken = $token;
+    }
+
     public function getAccessToken()
     {
         $params = array(
@@ -61,8 +68,8 @@ class Client
 
         $rawToken = json_decode($result, true);
 
-        if (isset($rawToken['errmsg']) && $rawToken['errmsg'] != 'ok') {
-            $this->logger && $this->logger->error('WEIXIN_ACCESS_TOKEN_ERROR', $rawToken);
+        if (isset($rawToken['errmsg']) && 'ok' != $rawToken['errmsg']) {
+            $this->logger && $this->logger->error('WECHAT_ACCESS_TOKEN_ERROR', $rawToken);
 
             return array();
         }
@@ -80,9 +87,118 @@ class Client
             'industry_id2' => $industryTwo,
         ];
 
-        $this->
+        $result = $this->postRequest($this->baseUrl.'/'.self::INDUSTRY_SET, $params);
+
+        $rawResult = json_decode($result, true);
+
+        if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
+            $this->logger && $this->logger->error('WECHAT_SET_INDUSTRY_ERROR', $rawResult);
+
+            return array();
+        }
+
+        return $result;
     }
 
+    public function getIndustry($templateId)
+    {
+        $params = array(
+            'template_id' => $templateId,
+        );
+
+        $result = $this->getRequest($this->baseUrl.'/'.self::INDUSTRY_GET, $params);
+
+        $rawResult = json_decode($result, true);
+
+        if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
+            $this->logger && $this->logger->error('WECHAT_GET_INDUSTRY_ERROR', $rawResult);
+
+            return array();
+        }
+
+        return $result;
+    }
+
+    public function addTemplate($shortId)
+    {
+        $params = array(
+            'template_id_short' => $shortId,
+        );
+
+        $result = $this->postRequest($this->baseUrl.'/'.self::TEMPLATE_ADD, $params);
+
+        $rawResult = json_decode($result, true);
+
+        if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
+            $this->logger && $this->logger->error('WECHAT_ADD_TEMPLATE_ERROR', $rawResult);
+
+            return array();
+        }
+
+        return $result;
+    }
+
+    public function getTemplateList()
+    {
+        $result = $this->getRequest($this->baseUrl.'/'.self::TEMPLATE_LIST, array());
+
+        $rawResult = json_decode($result, true);
+
+        if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
+            $this->logger && $this->logger->error('WECHAT_GET_TEMPLATE_LIST_ERROR', $rawResult);
+
+            return array();
+        }
+
+        return $result;
+    }
+
+    public function deleteTemplate($templateId)
+    {
+        $params = array(
+            'template_id' => $templateId,
+        );
+        $result = $this->postRequest($this->baseUrl.'/'.self::TEMPLATE_DEL, $params);
+
+        $rawResult = json_decode($result, true);
+
+        if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
+            $this->logger && $this->logger->error('WECHAT_DEL_TEMPLATE_ERROR', $rawResult);
+
+            return array();
+        }
+
+        return $result;
+    }
+
+    public function sendTemplateMessage($to, $templateId, $data, $options = array())
+    {
+        $params = array(
+            'touser' => $to,
+            'template_id' => $templateId,
+            'data' => $data,
+        );
+
+        if (!empty($options['url'])) {
+            $params['url'] = $options['url'];
+        }
+
+        if (!empty($options['miniprogram'])) {
+            $params['miniprogram'] = $options['miniprogram'];
+        }
+
+        $result = $this->postRequest($this->baseUrl.'/'.self::MESSAGE_SEND, $params);
+
+        $rawResult = json_decode($result, true);
+
+        if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
+            $this->logger && $this->logger->error('WECHAT_SEND_MESSAGE_ERROR', $rawResult);
+
+            return array();
+        }
+
+        return $result;
+    }
 
     public function getRequest($url, $params)
     {
@@ -94,6 +210,8 @@ class Client
         curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 0);
+
+        $params['access_token'] = $this->accessToken;
 
         $url = $url.'?'.http_build_query($params);
 
@@ -122,7 +240,7 @@ class Client
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_URL, $url.'?'.http_build_query(array('access_token' => $this->accessToken)));
 
         // curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
 
@@ -132,6 +250,4 @@ class Client
 
         return $response;
     }
-
-
 }

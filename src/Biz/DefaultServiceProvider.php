@@ -2,6 +2,7 @@
 
 namespace Biz;
 
+use AppBundle\Component\Notification\WeChatTemplateMessage\Client;
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
 use Biz\Course\Util\CourseRenderViewResolver;
@@ -203,5 +204,22 @@ class DefaultServiceProvider implements ServiceProviderInterface
             "\/course_set\/(\d)+\/manage\/(\S)+/i",
             "\/my\/teaching\/course_sets/",
         );
+
+        $biz['wechat.template_message_client'] = function ($biz) {
+            $setting = $biz->service('System:SettingService');
+            $loginBind = $setting->get('login_bind', array());
+            if (!empty($loginBind['weixinmob_enabled'])) {
+                $client = new Client(array(
+                    'key' => $loginBind['weixinmob_key'],
+                    'secret' => $loginBind['weixinmob_secret'],
+                ));
+
+                $client->setAccessToken($client->getAccessToken());
+
+                return $client;
+            }
+
+            return null;
+        };
     }
 }
