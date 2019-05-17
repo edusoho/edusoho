@@ -7,20 +7,20 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var uploader = new WebUploader({
-            element: '#qrcode-upload'
+          element: '#qrcode-upload'
         });
 
         uploader.on('uploadSuccess', function(file, response ) {
-            $('.js-code-img').attr('src', response.url);
-            $('#account_code').val(response.url);
-            if ($('.es-qrcode').hasClass('hidden')) {
-              $('es-qrcode').removeClass('hidden');
-              $('code-help-block').addClass('hidden');
-            }
+          $('.js-code-img').attr('src', response.url);
+          $('#account_code').val(response.url);
+          if ($('.es-qrcode').hasClass('hidden')) {
+            $('es-qrcode').removeClass('hidden');
+            $('code-help-block').addClass('hidden');
+          }
         });
 
         var validator = new Validator({
-            element: '#wechat-setting-form',
+          element: '#wechat-setting-form',
         });
 
         $('[data-toggle="switch"]').on('click', function() {

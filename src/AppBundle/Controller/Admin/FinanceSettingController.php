@@ -1,4 +1,4 @@
-<?php
+'<?php
 
 namespace AppBundle\Controller\Admin;
 
@@ -59,7 +59,6 @@ class FinanceSettingController extends BaseController
             $payment = array_merge($formerPayment, $payment);
 
             $this->getSettingService()->set('payment', $payment);
-            $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
