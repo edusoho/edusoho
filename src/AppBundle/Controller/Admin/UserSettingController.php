@@ -136,7 +136,7 @@ class UserSettingController extends BaseController
             $formerLoginConnect = $this->getSettingService()->get('login_bind');
             $loginConnect = array_merge($formerLoginConnect, $loginConnect);
             $loginConnect = $this->decideEnabledLoginConnect($loginConnect);
-            
+
             $this->getSettingService()->set('login_bind', $loginConnect);
         }
 
