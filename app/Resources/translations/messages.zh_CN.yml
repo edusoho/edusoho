@@ -7174,6 +7174,48 @@ admin.setting_course.classroom.classroom_list_default_seq.help_block: 地址：�
 admin.setting_course.custom_chapter_name: 设置章节名称
 admin.setting_course.custom_chapter_name_enabled_hint: 开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。
 
+#微信授权设置
+admin.setting_wechat_auth.web_scan_login: 网页扫码登录
+admin.setting_wechat_auth.wechat_auth_login: 微信内授权登录
+admin.setting_wechat_auth.wechat_notification: 微信服务号通知
+admin.setting_wechat_auth.wechat_pay: 微信支付
+admin.setting_wechat_auth.web_scan_login_hint: >
+  开通后，网站PC端将支持微信扫码登录，请先到 <a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a> 
+  申请<a target="_blank" href="https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN">网站应用开发</a>；
+  申请条件：在微信开放平台注册并且完成实名认证。
+admin.setting_wechat_auth.wechat_auth_login_hint: >
+  开通后，支持使用微信号在手机端微信APP<br>
+  内快捷注册或登录网站。如何开通：<br>
+  1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；<br>
+  2.一个已认证的微信开放平台帐号；<br> 
+  3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
+admin.setting_wechat_auth.wechat_notification_hint: >
+  开通后，绑定微信并且关注服务号的用户即<br>
+  可收取微信服务号通知。如何开通：<br>
+  1.先开通微信内授权登录；<br>
+  2.已开通模板消息功能插件；<br>
+  3.已设置IP白名单。
+admin.setting_wechat_auth.wechat_pay_hint: >
+  开通后，可在PC端、微信APP、WAP内<br>
+  选择微信支付，仅支持配置<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">公众号支付</a><br>
+  支付。
+admin.setting_wechat_auth.web_secret_hint: APP ID和APP Secret来自<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>创建的网站应用。
+admin.setting_wechat_auth.account_secret_hint: APP ID和APP Secret来自<a target="_blank" href="https://mp.weixin.qq.com">微信公众平台</a>服务号内，在左侧栏【开发】-【基本配置】-【开发者ID】中。
+admin.setting_wechat_auth.account_number_hint: 商户号来自微信公众平台内左侧栏【微信支付】-【商户信息】
+admin.setting_wechat_auth.api_secret_key_hint: 微信商户平台API密钥需要登录微信商户平台，在【账户设置】-【API安全】中设置密匙
+admin.setting_wechat_auth.tutorial_button: 查看教程
+admin.setting_wechat_auth.web_appid: 网站AppID
+admin.setting_wechat_auth.web_secret: 网站AppSecret
+admin.setting_wechat_auth.account_appid: 服务号AppID
+admin.setting_wechat_auth.account_secret: 服务号AppSecret
+admin.setting_wechat_auth.account_name: 服务号名称
+admin.setting_wechat_auth.account_code: 服务号二维码
+admin.setting_wechat_auth.account_number: 商户号
+admin.setting_wechat_auth.mp_token: MP文件验证码
+admin.setting_wechat_auth.api_secret_key: 微信商户平台API密钥
+admin.setting_wechat_auth.account_code_empty: 暂未设置二维码
+admin.setting_wechat_auth.account_code_view: 查看大图
+
 #开发者设置
 admin.developer_setting.content_title: 开发者设置
 admin.developer_setting.debug_label: 调试

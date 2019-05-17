@@ -1016,6 +1016,12 @@ admin:
                         admin_setting_refund:
                             name: admin.system.finance.refund_tab
                             disable: true
+                admin_setting_wechat:
+                    name: admin.system.wechat_auth_menu
+                    children:
+                        admin_setting_wechat_auth:
+                            name: admin.system.wechat_auth_menu
+                            disable: true
                 admin_setting_mobile_iap_product:
                     name: admin.system.mobile_iap_product_menu
                     disable: true
