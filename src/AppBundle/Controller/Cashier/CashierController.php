@@ -112,6 +112,7 @@ class CashierController extends BaseController
                         'isBindWechat' => $isBindWechat,
                         'isSubscribeWechat' => $isSubscribeWechat,
                         'userBinds' => $userBinds,
+                        'userInfos' => $userInfos,
                     ),
                 ));
             }

@@ -1224,9 +1224,9 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(UserException::NOTFOUND_USER());
         }
 
-        if (!$this->typeInOAuthClient($type)) {
-            $this->createNewException(UserException::CLIENT_TYPE_INVALID());
-        }
+//        if (!$this->typeInOAuthClient($type)) {
+//            $this->createNewException(UserException::CLIENT_TYPE_INVALID());
+//        }
 
         $type = $this->convertOAuthType($type);
 

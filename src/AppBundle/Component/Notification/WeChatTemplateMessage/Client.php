@@ -113,6 +113,7 @@ class Client
             'user_list' => $userList,
         );
 
+        var_dump($params);
         $result = $this->postRequest($this->baseUrl.'/'.self::BATCH_GET_USER_INFO, $params);
 
         $rawResult = json_decode($result, true);
