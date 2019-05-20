@@ -4741,6 +4741,13 @@ admin.mobile_manage.discovery_column.new: Latest
 admin.mobile_manage.discovery_column.edit_btn: Edit
 admin.mobile_manage.discovery_column.delete_btn: Delete
 admin.mobile_manage.discovery_column.empty: 'No Category'
+admin.wechat_notification.switch: WeChat Notification Switch
+admin.wechat_notification.template: WeChat Notification Template
+admin.wechat_notification.template_name: Template Name
+admin.wechat_notification.template_content_sample: Template Content Sample
+admin.wechat_notification.send_object: Send Object
+admin.wechat_notification.operation: Operation
+admin.wechat_notification.template_content: Notification Content
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
