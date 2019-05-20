@@ -7674,6 +7674,10 @@ admin.payment_setting.pay_disabled_tips: 支付关闭时的提示信息
 admin.payment_setting.payment_hint: 开启后，网站收入将自动到达配置的支付宝、微信支付或网银帐号中。
 admin.payment_setting.payment: 支付功能
 admin.payment_setting.api_status: 接口状态
+admin.payment_setting.api_open: 已开启
+admin.payment_setting.api_close: 已关闭
+admin.payment_setting.api_open.direct: 前往开启
+admin.payment_setting.api_close.direct: 前往关闭
 admin.payment_setting.api_type: 接口类型
 admin.payment_setting.alipay_api_type.direct: 电脑网站支付接口
 admin.payment_setting.alipay_api_type.direct.hint: >

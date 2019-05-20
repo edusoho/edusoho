@@ -47,47 +47,47 @@ define(function(require, exports, module) {
             }
         });
 
-        $('[name=wxpay_enabled]').change(function(e) {
-            var radio = e.target.value;
-            var subItem = $(this).parents('fieldset').children('[data-sub="wxpay"]');
+        // $('[name=wxpay_enabled]').change(function(e) {
+        //     var radio = e.target.value;
+        //     var subItem = $(this).parents('fieldset').children('[data-sub="wxpay"]');
 
-            if (radio == '1') {
-                $('.submit-error').addClass('hidden');
-                subItem.removeClass('hidden');
-                validator.addItem({
-                  element: '[name="wxpay_appid"]',
-                  required: true,
-                  errormessageRequired: Translator.trans('admin.system.payment.wxpay_appid_input.message')
-                });
-                validator.addItem({
-                    element: '[name="wxpay_secret"]',
-                    required: true,
-                    errormessageRequired: Translator.trans('admin.system.payment.wxpay_secret_input.message')
-                });
-                validator.addItem({
-                  element: '[name="wxpay_mp_secret"]',
-                  required: true,
-                  errormessageRequired: Translator.trans('admin.system.payment.wxpay_mp_secret_input.message')
-                });
-                validator.addItem({
-                    element: '[name=wxpay_account]',
-                    required: true,
-                    errormessageRequired: Translator.trans('admin.system.payment.wxpay_account_input.message')
-                });
-                validator.addItem({
-                    element: '[name=wxpay_key]',
-                    required: true,
-                    errormessageRequired: Translator.trans('admin.system.payment.wxpay_key_input.message')
-                });
-            } else {
-                subItem.addClass('hidden');
-                validator.removeItem('[name="wxpay_appid"]');
-                validator.removeItem('[name="wxpay_secret"]');
-                validator.removeItem('[name="wxpay_mp_secret"]');
-                validator.removeItem('[name="wxpay_account"]');
-                validator.removeItem('[name="wxpay_key"]');
-            }
-        });
+        //     if (radio == '1') {
+        //         $('.submit-error').addClass('hidden');
+        //         subItem.removeClass('hidden');
+        //         validator.addItem({
+        //           element: '[name="wxpay_appid"]',
+        //           required: true,
+        //           errormessageRequired: Translator.trans('admin.system.payment.wxpay_appid_input.message')
+        //         });
+        //         validator.addItem({
+        //             element: '[name="wxpay_secret"]',
+        //             required: true,
+        //             errormessageRequired: Translator.trans('admin.system.payment.wxpay_secret_input.message')
+        //         });
+        //         validator.addItem({
+        //           element: '[name="wxpay_mp_secret"]',
+        //           required: true,
+        //           errormessageRequired: Translator.trans('admin.system.payment.wxpay_mp_secret_input.message')
+        //         });
+        //         validator.addItem({
+        //             element: '[name=wxpay_account]',
+        //             required: true,
+        //             errormessageRequired: Translator.trans('admin.system.payment.wxpay_account_input.message')
+        //         });
+        //         validator.addItem({
+        //             element: '[name=wxpay_key]',
+        //             required: true,
+        //             errormessageRequired: Translator.trans('admin.system.payment.wxpay_key_input.message')
+        //         });
+        //     } else {
+        //         subItem.addClass('hidden');
+        //         validator.removeItem('[name="wxpay_appid"]');
+        //         validator.removeItem('[name="wxpay_secret"]');
+        //         validator.removeItem('[name="wxpay_mp_secret"]');
+        //         validator.removeItem('[name="wxpay_account"]');
+        //         validator.removeItem('[name="wxpay_key"]');
+        //     }
+        // });
 
         // $('[name=heepay_enabled]').change(function(e) {
         //     var radio = e.target.value;
@@ -174,7 +174,7 @@ define(function(require, exports, module) {
         });
 
         $('input[name="alipay_enabled"]:checked').change();
-        $('input[name="wxpay_enabled"]:checked').change();
+        //$('input[name="wxpay_enabled"]:checked').change();
         // $('input[name="heepay_enabled"]:checked').change();
         // $('input[name="quickpay_enabled"]:checked').change();
         $('input[name="llpay_enabled"]:checked').change();
