@@ -2,9 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 
 class WeChatNotificationController extends BaseController

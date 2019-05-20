@@ -2,9 +2,6 @@
 
 namespace AppBundle\Component\Notification\WeChatTemplateMessage;
 
-use Biz\Common\CommonException;
-use Topxia\Service\Common\ServiceKernel;
-
 class TemplateUtil
 {
     public static function templates()
