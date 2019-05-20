@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Cashier;
 use AppBundle\Controller\BaseController;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\System\Service\SettingService;
 use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
@@ -78,8 +79,54 @@ class CashierController extends BaseController
         $tradeSn = $request->query->get('trade_sn');
         $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
 
+        return $this->successForward($trade);
+    }
+
+    private function successForward($trade)
+    {
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        if (!empty($wechatSetting['wechat_notification_enabled'])) {
+            $isBindWechat = false;
+            $isSubscribeWechat = false;
+
+            $user = $this->getCurrentUser();
+            $userBinds = $this->getUserService()->findUserBindByTypeAndUserId('weixin', $user['id']);
+            if (!empty($userBinds)) {
+                $isBindWechat = true;
+                $userLists = array();
+                foreach ($userBinds as $userBind) {
+                    $userLists[] = array(
+                        'openid' => $userBind['fromId'],
+                    );
+                }
+                $biz = $this->getBiz();
+                $userInfos = $biz['wechat.template_message_client']->batchGetUserInfo($userLists);
+                if (!empty($userInfos)) {
+                    $isSubscribeWechat = true;
+                }
+            }
+            if (!($isBindWechat && $isSubscribeWechat)) {
+                return $this->forward('AppBundle:Cashier/Cashier:guide', array(
+                    'trade' => $trade,
+                    'options' => array(
+                        'isBindWechat' => $isBindWechat,
+                        'isSubscribeWechat' => $isSubscribeWechat,
+                        'userBinds' => $userBinds,
+                    ),
+                ));
+            }
+        }
+
         return $this->forward("AppBundle:Cashier/Cashier:{$trade['type']}Success", array(
             'trade' => $trade,
+        ));
+    }
+
+    public function guideAction($trade, $options)
+    {
+        return $this->render('cashier/guide.html.twig', array(
+            'trade' => $trade,
+            'options' => $options,
         ));
     }
 
@@ -179,9 +226,12 @@ class CashierController extends BaseController
         return $this->createService('Order:OrderService');
     }
 
-    private function getWorkflowService()
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
     {
-        return $this->createService('Order:WorkflowService');
+        return $this->createService('System:SettingService');
     }
 
     /**

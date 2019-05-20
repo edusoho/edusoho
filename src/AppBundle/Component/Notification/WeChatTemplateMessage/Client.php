@@ -123,7 +123,13 @@ class Client
             return array();
         }
 
-        return $rawResult;
+        foreach ($rawResult['user_info_list'] as $key => &$userInfo) {
+            if (0 == $userInfo['subscribe']) {
+                unset($rawResult['user_info_list'][$key]);
+            }
+        }
+
+        return $rawResult['user_info_list'];
     }
 
     public function setIndustry($industryOne, $industryTwo)

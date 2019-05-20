@@ -1216,6 +1216,23 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserBindDao()->getByToIdAndType($type, $toId);
     }
 
+    public function findUserBindByTypeAndUserId($type, $toId)
+    {
+        $user = $this->getUserDao()->get($toId);
+
+        if (empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
+        if (!$this->typeInOAuthClient($type)) {
+            $this->createNewException(UserException::CLIENT_TYPE_INVALID());
+        }
+
+        $type = $this->convertOAuthType($type);
+
+        return $this->getUserBindDao()->findByToIdAndType($type, $toId);
+    }
+
     public function bindUser($type, $fromId, $toId, $token)
     {
         $user = $this->getUserDao()->get($toId);
