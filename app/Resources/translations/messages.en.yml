@@ -6284,6 +6284,10 @@ admin.payment_setting.pay_disabled_tips: 'Tips when close the payment'
 admin.payment_setting.payment_hint: 'If turned on, the site revenue will transfer automatically to configured alipay account, wechat pay account or online banking account.'
 admin.payment_setting.payment: 'Payment function'
 admin.payment_setting.api_status: 'Interface status'
+admin.payment_setting.api_open: Opened
+admin.payment_setting.api_close: Closed
+admin.payment_setting.api_open.direct: To Open
+admin.payment_setting.api_close.direct: To Close
 admin.payment_setting.api_type: 'Interface type'
 admin.payment_setting.alipay_api_type.direct: 'PC website payments'
 admin.payment_setting.alipay_api_type.direct.hint: >

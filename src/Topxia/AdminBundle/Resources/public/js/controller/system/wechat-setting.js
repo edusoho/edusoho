@@ -7,20 +7,20 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var uploader = new WebUploader({
-            element: '#qrcode-upload'
+          element: '#qrcode-upload'
         });
 
         uploader.on('uploadSuccess', function(file, response ) {
-            $('.js-code-img').attr('src', response.url);
-            $('#account_code').val(response.url);
-            if ($('.es-qrcode').hasClass('hidden')) {
-              $('es-qrcode').removeClass('hidden');
-              $('code-help-block').addClass('hidden');
-            }
+          $('.js-code-img').attr('src', response.url);
+          $('#account_code').val(response.url);
+          if ($('.es-qrcode').hasClass('hidden')) {
+            $('es-qrcode').removeClass('hidden');
+            $('code-help-block').addClass('hidden');
+          }
         });
 
         var validator = new Validator({
-            element: '#wechat-setting-form',
+          element: '#wechat-setting-form',
         });
 
         $('[data-toggle="switch"]').on('click', function() {
@@ -36,6 +36,18 @@ define(function(require, exports, module) {
               Notify.danger(Translator.trans('admin.system.wechat.notification_open'), 3);
               return;
             }
+            var uploader = new WebUploader({
+              element: '#qrcode-upload'
+            });
+
+            uploader.on('uploadSuccess', function(file, response ) {
+              $('.js-code-img').attr('src', response.url);
+              $('#account_code').val(response.url);
+              if ($('.es-qrcode').hasClass('hidden')) {
+                $('es-qrcode').removeClass('hidden');
+                $('code-help-block').addClass('hidden');
+              }
+            });
           }
 
           if ($this.context.id == 'weixinweb_enabled' || $this.context.id == 'weixinmob_enabled') {
