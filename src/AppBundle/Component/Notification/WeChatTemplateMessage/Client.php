@@ -8,6 +8,10 @@ use Topxia\Service\Common\ServiceKernel;
 
 class Client
 {
+    const GET_USER_INFO = 'cgi-bin/user/info';
+
+    const BATCH_GET_USER_INFO = 'cgi-bin/user/info/batchget'; //POST
+
     const INDUSTRY_SET = 'cgi-bin/template/api_set_industry';
 
     const INDUSTRY_GET = 'cgi-bin/template/get_industry';
@@ -78,6 +82,48 @@ class Client
             'expires_in' => $rawToken['expires_in'],
             'access_token' => $rawToken['access_token'],
         );
+    }
+
+    public function getUserInfo($openId, $lang = 'zh_CN')
+    {
+        $params = array(
+            'openid' => $openId,
+            'lang' => $lang,
+        );
+        $result = $this->getRequest($this->baseUrl.'/'.self::GET_USER_INFO, $params);
+
+        $rawResult = json_decode($result, true);
+
+        if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
+            $this->logger && $this->logger->error('WECHAT_GET_USER_INFO_ERROR', $rawResult);
+
+            return array();
+        }
+
+        return $rawResult;
+    }
+
+    public function batchGetUserInfo($userList)
+    {
+        if (empty($userList)) {
+            return array();
+        }
+
+        $params = array(
+            'user_list' => $userList,
+        );
+
+        $result = $this->postRequest($this->baseUrl.'/'.self::BATCH_GET_USER_INFO, $params);
+
+        $rawResult = json_decode($result, true);
+
+        if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
+            $this->logger && $this->logger->error('WECHAT_BATCH_GET_USER_INFO_ERROR', $rawResult);
+
+            return array();
+        }
+
+        return $rawResult;
     }
 
     public function setIndustry($industryOne, $industryTwo)
