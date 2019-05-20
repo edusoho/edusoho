@@ -97,7 +97,7 @@ class Client
             return array();
         }
 
-        return $result;
+        return $rawResult;
     }
 
     public function getIndustry()
@@ -112,7 +112,7 @@ class Client
             return array();
         }
 
-        return $result;
+        return $rawResult;
     }
 
     public function addTemplate($shortId)
@@ -131,7 +131,7 @@ class Client
             return array();
         }
 
-        return $result;
+        return $rawResult;
     }
 
     public function getTemplateList()
@@ -146,7 +146,7 @@ class Client
             return array();
         }
 
-        return $result;
+        return $rawResult;
     }
 
     public function deleteTemplate($templateId)
@@ -164,7 +164,7 @@ class Client
             return array();
         }
 
-        return $result;
+        return $rawResult;
     }
 
     public function sendTemplateMessage($to, $templateId, $data, $options = array())
@@ -193,7 +193,7 @@ class Client
             return array();
         }
 
-        return $result;
+        return $rawResult;
     }
 
     public function getRequest($url, $params)
