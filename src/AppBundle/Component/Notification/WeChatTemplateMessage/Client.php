@@ -88,7 +88,7 @@ class Client
     {
         $params = array(
             'openid' => $openId,
-            'lang' => $lang
+            'lang' => $lang,
         );
         $result = $this->getRequest($this->baseUrl.'/'.self::GET_USER_INFO, $params);
 
@@ -124,9 +124,7 @@ class Client
         }
 
         return $rawResult;
-
     }
-
 
     public function setIndustry($industryOne, $industryTwo)
     {
