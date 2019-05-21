@@ -11,7 +11,7 @@
     </div>
     <div slot="setting" class="groupon-allocate">
       <header class="title">{{ activityTitle }}
-        <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">使用营销活动配置功能，小程序版本需要升级到1.3.7及以上</div>
+        <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">营销活动配置即将发布，敬请期待...</div>
       </header>
       <div class="groupon-item-setting clearfix">
         <div class="groupon-item-setting__section clearfix">

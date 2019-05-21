@@ -240,7 +240,7 @@
 
         const details = this.details;
 
-        !details.allowAnonymousPreview && this.$route.push({
+        !details.allowAnonymousPreview && this.$router.push({
           name: 'login',
           query: {
             redirect: this.redirect,

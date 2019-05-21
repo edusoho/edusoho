@@ -76,18 +76,26 @@ export default {
     }
   },
   watch: {
-    taskId () {
-      if (['video', 'audio'].includes(this.sourceType)) {
-        window.scrollTo(0, 0);
-        this.initPlayer();
+    taskId (value, oldValue) {
+      if (value > 0 && oldValue > 0) {
+        this.initHead();
       }
     },
+  },
+  created() {
+    this.initHead();
   },
   /*
   * 试看需要传preview=1
   * eg: /api/courses/1/task_medias/1?preview=1
   */
   methods: {
+    initHead() {
+      if (['video', 'audio'].includes(this.sourceType)) {
+        window.scrollTo(0, 0);
+        this.initPlayer();
+      }
+    },
     viewAudioDoc() {
        this.isCoverOpen = true;
     },
@@ -119,7 +127,21 @@ export default {
     async initPlayer (){
       this.$refs.video && (this.$refs.video.innerHTML = '');
 
-      const player = await Api.getMedia(this.getParams())
+      const player = await Api.getMedia(this.getParams()).catch((err)=> {
+        const courseId = Number(this.details.id);
+        // 后台课程设置里设置了不允许未登录用户观看免费试看的视频
+        if (err.code == 4040101) {
+          this.$router.push({
+            name: 'login',
+            query: {
+              redirect: `/course/${courseId}`
+            }
+          })
+        }
+        Toast.fail(err.message);
+      })
+
+      if (!player) return;
 
       if (player.mediaType === 'video' && !player.media.url) {
         Toast('课程内容准备中，请稍候查看')

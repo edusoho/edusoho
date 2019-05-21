@@ -71,20 +71,50 @@ Api.getSettings({
     if (hasQuery === -1) return hash.slice(1);
     return hash.match(/#.*\?/g)[0].slice(1, -1);
   };
+
+  // 获取指定参数
+  const GetUrlParam = paraName => {
+    const url = document.location.toString();
+    const arrObj = url.split('?');
+    if (arrObj.length > 1) {
+      const arrPara = arrObj[1].split('&');
+      let arr;
+      for (let i = 0; i < arrPara.length; i += 1) {
+        arr = arrPara[i].split('=');
+        if (arr != null && arr[0] === paraName) {
+          return arr[1];
+        }
+      }
+      return '';
+    }
+    return '';
+  };
+
   const isWhiteList = whiteList.includes(getPathNameByHash(hashStr));
 
   const hashParamArray = getPathNameByHash(hashStr).split('/');
   const hashHasToken = hashParamArray.includes('loginToken');
+  const courseId = hashParamArray[hashParamArray.indexOf('course') + 1];
 
   if (hashHasToken) {
     const tokenIndex = hashParamArray.indexOf('loginToken');
     const tokenFromUrl = hashParamArray[tokenIndex + 1];
-    const courseId = hashParamArray[hashParamArray.indexOf('course') + 1];
     store.state.token = tokenFromUrl;
     localStorage.setItem('token', tokenFromUrl);
     if (courseId) {
       window.location.href = `${location.origin}/h5/index.html#/course/${courseId}?backUrl=%2F`;
     }
+  }
+
+  const hasToken = window.localStorage.getItem('token');
+  if (!hasToken && Number(GetUrlParam('needLogin'))) {
+    window.location.href = `${location.origin}/h5/index.html#/login?redirect=/course/${
+      courseId}&skipUrl=%2F&account=${GetUrlParam('account')}`;
+  }
+
+  // 已登录状态直接跳转详情页
+  if (hasToken && Number(GetUrlParam('needLogin'))) {
+    window.location.href = `${location.href}&backUrl=%2F`;
   }
 
   if (!isWhiteList) {
