@@ -28,7 +28,7 @@ class TemplateUtil
                 'object' => '试卷提交学员',
                 'status' => 0,
             ),
-            'normalTaskUpdate' => array(
+            'taskUpdate' => array(
                 'id' => 'TM408917738',
                 'name' => '课程更新提醒（普通任务和直播任务）',
                 'content' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}',
