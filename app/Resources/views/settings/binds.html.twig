@@ -6,7 +6,7 @@
 
 {% set settings = setting('login_bind', []) %}
 
-{% do script(['app/js/settings/binds/index.js']) %}
+{% do script(['libs/jquery-intro.js', 'app/js/settings/binds/index.js']) %}
 
 {% block page_title %}
   {{ 'user.settings.oauth.content_title'|trans }}
@@ -27,10 +27,11 @@
             <a class="btn cd-btn cd-btn-ghost-default js-unbind-btn" data-url="{{ path('settings_binds_unbind', {'type':type}) }}" href="javascript:;">{{ 'form.btn.bind_cancel'|trans }}</a>
           {% else %}
             <span class="es-setting-status">{{'user.fields.mobile_label.no_bind'|trans}}</span>
-            <a class="btn cd-btn cd-btn-ghost-default" href="{{ path('settings_binds_bind', {'type':type}) }}">{{ 'form.btn.bind_account'|trans }}</a>
+            <a class="btn cd-btn cd-btn-ghost-default {% if type == 'weixinweb' %}js-wechat-btn{% endif %}" href="javascript:;">{{ 'form.btn.bind_account'|trans }}</a>
           {% endif %}
         </span>
       </div>
     {% endif %}
+
   {% endfor %}
 {% endblock %}

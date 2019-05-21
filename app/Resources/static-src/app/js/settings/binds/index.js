@@ -1,5 +1,3 @@
-import notify from 'common/notify';
-
 $('.js-unbind-btn').on('click', function() {
   let $this = $(this);
   let url = $this.data('url');
@@ -11,10 +9,35 @@ $('.js-unbind-btn').on('click', function() {
     cancelText: Translator.trans('site.close'),
   }).on('ok', () => {
     $.post(url, function (data) {
-      notify('success', Translator.trans(data.message));
+      cd.message({type: 'success', message: Translator.trans(data.message)});
       setTimeout(function() {
         window.location.reload();
       }, 3000);
     });
   });
 });
+
+const wechatIntro = () => {
+  const doneLabel = '<i class="es-icon es-icon-close01"></i>';
+  const customClass = 'wechat-inform-intro';
+  introJs().setOptions({
+    steps: [{
+      element: '.js-wechat-btn',
+      intro: `<div class="wechat-inform-title cd-text-warning"><i class="es-icon es-icon-xinxi cd-mr8"></i>提示</div>
+      <div class="wechat-inform-content">
+        <div>为享受更好的服务，建议您开启微信课程通知。</div>
+        <div>点这里绑定微信，并关注服务号即可开启课程通知。</div>
+      </div>`,
+    }],
+    skipLabel: doneLabel,
+    doneLabel: doneLabel,
+    showBullets: false,
+    tooltipPosition: 'down',
+    showStepNumbers: false,
+    exitOnEsc: false,
+    exitOnOverlayClick: false,
+    tooltipClass: customClass
+  }).start();
+}
+
+wechatIntro();
