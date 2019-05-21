@@ -5,7 +5,6 @@ namespace AppBundle\Command;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
-use AppBundle\Command\BaseCommand;
 use Codeages\Biz\Framework\Queue\Worker;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -54,7 +53,7 @@ class WorkerCommand extends BaseCommand
         $currentUser = new CurrentUser();
         $systemUser = $this->getUserService()->getUserByType('system');
         $systemUser['currentIp'] = '127.0.0.1';
-        
+
         $currentUser->fromArray($systemUser);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $serviceKernel->setCurrentUser($currentUser);

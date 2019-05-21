@@ -20,7 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
 use CustomBundle\Biz\Common\CustomSystemInitializer;
-use AppBundle\Common\SystemQueueCrontabinitializer;
 
 class SystemInitializer
 {
