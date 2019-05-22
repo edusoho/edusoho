@@ -78,7 +78,16 @@
 .wechat-pendant {
   position: fixed;
   right: 64px;
-  top: 76px;
+  @media (min-width: @screen-xs-min) {
+    top: 76px;
+  }
+  @media (max-width: @screen-xs-min) {
+    bottom: 58px;
+    right: 16px;
+    width: 68px;
+    height: 68px;
+    padding: 7px;
+  }
   width: 100px;
   height: 100px;
   padding: 11px;
@@ -91,14 +100,16 @@
     cursor: pointer;
   }
   .border-radius(50%);
-  .tooltip {
-    margin-top: -18px;
-    .tooltip-arrow {
-      border-bottom-color: @brand-warning;
-    }
-    .tooltip-inner {
-      background-color: @brand-warning;
-      font-weight: bold;
+  @media (min-width: @screen-xs-min) {
+    .tooltip {
+      margin-top: -18px;
+      .tooltip-arrow {
+        border-bottom-color: @brand-warning;
+      }
+      .tooltip-inner {
+        background-color: @brand-warning;
+        font-weight: bold;
+      }
     }
   }
 }
@@ -107,6 +118,11 @@
   width: 78px;
   height: 78px;
   padding: 11px;
+  @media (max-width: @screen-xs-min) {
+    width: 54px;
+    height: 54px;
+    padding: 7px;
+  }
   .border-radius(50%);
   background: rgba(255,165,31,0.30);
   .box-shadow(0 4px 20px 1px rgba(255,165,31,0.20));
@@ -122,6 +138,14 @@
     line-height: 56px;
     color: #fff;
   }
+  @media (max-width: @screen-xs-min) {
+    width: 40px;
+    height: 40px;
+    i {
+      font-size: 24px;
+      line-height: 40px;
+    }
+  }
 }
 .wechat-pendant__close {
   position: absolute;
@@ -136,6 +160,13 @@
   color: #fff;
   .border-radius(50%);
   z-index: 1050;
+  @media (max-width: @screen-xs-min) {
+    right: 0;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+    line-height: 16px;
+  }
 }
 
 .wechat-inform-qrcode {
@@ -150,6 +181,14 @@
   text-align: center;
   .border-radius(8px);
   .box-shadow(0 0 12px 0 rgba(216,216,216,0.50));
+  @media (max-width: @screen-xs-min) {
+    z-index: 1060;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
 }
 
 .wechat-inform-qrcode__close {
@@ -215,4 +254,21 @@
   margin-left: -5px;
   border-width: 0 8px 8px;
   border-bottom-color: @brand-warning;
+}
+
+.wechat-inform-qrcode-mask {
+  @media (max-width: @screen-xs-min) {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.50);
+    z-index: 1050;
+    display: none;
+  }
+}
+
+.wechat-inform-body {
+  overflow: hidden;
 }

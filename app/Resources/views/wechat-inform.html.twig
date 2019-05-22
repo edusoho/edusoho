@@ -15,8 +15,9 @@
 			<div class="wechat-inform-qrcode__tip">扫描下方二维码，授权开启课程通知</div>
 			<img class="wechat-inform-qrcode__img" src="{{ asset('static-dist/app/img/qrcode.jpg') }}">
 		</div>
+		<div class="wechat-inform-qrcode-mask js-wechat-mask"></div>
 
-		<div class="wechat-inform-entrance js-inform-wechat-entrance hidden-xs">
+		<div class="wechat-inform-entrance js-inform-wechat-entrance">
 			<div class="wechat-inform-entrance__triangle"></div>
 			<a class="wechat-inform-entrance__link" href="{{ path('settings_binds')}}" target="_blank">“微信通知”可在“个人设置-第三方登录”中开启</a>
 		</div>
