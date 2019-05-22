@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class CommonException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 03;
+    const EXCEPTION_MODULE = 03;
 
     const FORBIDDEN_DRAG_CAPTCHA_ERROR = 4030301;
 
