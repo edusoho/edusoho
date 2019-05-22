@@ -40,6 +40,7 @@ use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
 use Biz\Common\BizDragCaptcha;
 use AppBundle\Component\RateLimit\SmsRateLimiter;
 use Biz\Util\EdusohoLiveClient;
+use Codeages\Biz\Framework\Queue\Driver\DatabaseQueue;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -237,6 +238,14 @@ class DefaultServiceProvider implements ServiceProviderInterface
             }
 
             return null;
+        };
+
+        $biz['lock.flock.directory'] = function ($biz) {
+            return $biz['run_dir'];
+        };
+
+        $biz['queue.connection.database'] = function ($biz) {
+            return new DatabaseQueue('database', $biz);
         };
     }
 }
