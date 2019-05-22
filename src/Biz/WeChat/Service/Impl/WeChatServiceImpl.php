@@ -8,20 +8,11 @@ use Biz\Common\CommonException;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Biz\WeChat\Dao\UserWeChatDao;
+use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
-class WeChatServiceImpl extends BaseService
+class WeChatServiceImpl extends BaseService implements WeChatService
 {
-    const OFFICIAL_TYPE = 'official'; //公众号
-
-    const OPEN_TYPE = 'open_app'; //开放平台应用
-
-    const LANG = 'zh_CN'; //国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语，默认为zh-CN
-
-    const REFRESH_NUM = 200;
-
-    const FRESH_TIME = 7200; //过期时间 2小时
-
     public function getWeChatUser($id)
     {
         return $this->getUserWeChatDao()->get($id);
