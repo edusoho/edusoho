@@ -14,7 +14,7 @@ class TemplateUtil
                 'object' => '课程学员',
                 'status' => 0,
             ),
-            'exerciseResult' => array(
+            'homeworkResult' => array(
                 'id' => 'OPENTM400905764',
                 'name' => '作业结果通知',
                 'content' => '{{first.DATA}}<br>作业名称：{{keyword1.DATA}}<br>所属课程：{{keyword2.DATA}}<br>辅导老师：{{keyword3.DATA}}<br>{{remark.DATA}}',
