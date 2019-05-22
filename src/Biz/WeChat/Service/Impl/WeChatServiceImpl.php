@@ -20,6 +20,8 @@ class WeChatServiceImpl extends BaseService
 
     const REFRESH_NUM = 200;
 
+    const FRESH_TIME = 7200; //过期时间 2小时
+
     public function getWeChatUser($id)
     {
         return $this->getUserWeChatDao()->get($id);
@@ -33,6 +35,21 @@ class WeChatServiceImpl extends BaseService
     public function findWeChatUsersByUserIdAndType($userId, $type)
     {
         return $this->getUserWeChatDao()->findByUserIdAndType($userId, $type);
+    }
+
+    //@TODO 不用批量接口
+    public function getOfficialWeChatUserByUserId($userId)
+    {
+        $weChatUser = $this->getUserWeChatDao()->getByUserIdAndType($userId, self::OFFICIAL_TYPE);
+        if (empty($weChatUser)) {
+            return array();
+        }
+
+        if ($weChatUser['lastRefreshTime'] < time() - self::FRESH_TIME) {
+            $this->batchFreshOfficialWeChatUsers(array($weChatUser));
+        }
+
+        return $this->getUserWeChatDao()->getByUserIdAndType($userId, self::OFFICIAL_TYPE);
     }
 
     public function createWeChatUser($fields)
@@ -93,7 +110,6 @@ class WeChatServiceImpl extends BaseService
 
     public function refreshOfficialWeChatUsers($lifeTime = 86400, $refreshNum = self::REFRESH_NUM)
     {
-        $biz = $this->biz;
         $conditions = array(
             'type' => self::OFFICIAL_TYPE,
             'lastRefreshTime_LT' => time() - $lifeTime,
@@ -110,7 +126,12 @@ class WeChatServiceImpl extends BaseService
             //这里加日志
             return;
         }
+        $this->batchFreshOfficialWeChatUsers($weChatUsers);
+    }
 
+    public function batchFreshOfficialWeChatUsers($weChatUsers)
+    {
+        $biz = $this->biz;
         $userList = $this->convertWeChatUsersToOfficialRequestParams($weChatUsers);
 
         $freshWeChatUsers = $biz['wechat.template_message_client']->batchGetUserInfo($userList);
