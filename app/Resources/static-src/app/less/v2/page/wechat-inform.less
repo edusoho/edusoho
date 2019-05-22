@@ -1,4 +1,4 @@
-.wechat-inform-intro {
+.wechat-intro-intro {
   margin-top: 16px;
   padding: 32px 16px;
   min-width: 368px;
@@ -20,16 +20,194 @@
     top: -4px;
   }
 }
-.wechat-inform-content {
+.wechat-intro-content {
   font-size: 16px;
   line-height: 23px;
   color: #333;
   font-weight: bold;
 }
 
-.wechat-inform-title {
+.wechat-intro-title {
   margin-bottom: 16px;
   font-size: 18px;
   line-height: 1;
   text-align: center;
+}
+
+.wechat-inform-section {
+  margin-top: 64px;
+}
+
+.wechat-inform-content__qcode {
+  width: 240px;
+  height: 240px;
+  padding: 10px;
+  .box-shadow(0 0 12px 0 rgba(216,216,216,0.50));
+  img {
+    width: 100%;
+  }
+}
+
+.wechat-inform-content__img {
+  img {
+    width: 224px;
+    height: 224px;
+  }
+}
+
+.wechat-inform-content__tip {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #95cba3;
+}
+
+.wechat-inform-title {
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.wechat-inform-subtitle {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.wechat-pendant {
+  position: fixed;
+  right: 64px;
+  top: 76px;
+  width: 100px;
+  height: 100px;
+  padding: 11px;
+  background: rgba(255,165,31,0.30);
+  .box-shadow(0 4px 20px 1px rgba(255,165,31,0.20));
+  z-index: 10;
+  &:hover,
+  &:focus,
+  &:active {
+    cursor: pointer;
+  }
+  .border-radius(50%);
+  .tooltip {
+    margin-top: -18px;
+    .tooltip-arrow {
+      border-bottom-color: @brand-warning;
+    }
+    .tooltip-inner {
+      background-color: @brand-warning;
+      font-weight: bold;
+    }
+  }
+}
+
+.wechat-pendant__outer {
+  width: 78px;
+  height: 78px;
+  padding: 11px;
+  .border-radius(50%);
+  background: rgba(255,165,31,0.30);
+  .box-shadow(0 4px 20px 1px rgba(255,165,31,0.20));
+}
+.wechat-pendant__inner {
+  background-color: @brand-warning;
+  width: 56px;
+  height: 56px;
+  text-align: center;
+  .border-radius(50%);
+  i {
+    font-size: 38px;
+    line-height: 56px;
+    color: #fff;
+  }
+}
+.wechat-pendant__close {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 18px;
+  background-color: @brand-warning;
+  color: #fff;
+  .border-radius(50%);
+  z-index: 1050;
+}
+
+.wechat-inform-qrcode {
+  position: fixed;
+  right: 64px;
+  top: 76px;
+  background-color: #fff;
+  width: 280px;
+  height: 320px;
+  padding: 24px;
+  z-index: 10;
+  text-align: center;
+  .border-radius(8px);
+  .box-shadow(0 0 12px 0 rgba(216,216,216,0.50));
+}
+
+.wechat-inform-qrcode__close {
+  i {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: #999;
+    &:hover,
+    &:focus,
+    &:active {
+      cursor: pointer;
+    }
+  }
+}
+
+.wechat-inform-qrcode__tip {
+  font-weight: bold;
+  color: @brand-warning;
+}
+
+.wechat-inform-qrcode__img {
+  margin-top: 16px;
+  width: 100%;
+  padding: 6px;
+  .box-shadow(0 0 12px 0 rgba(216,216,216,0.50));
+}
+
+.wechat-inform-entrance {
+  position: fixed;
+  top: 64px;
+  right: 10px;
+  width: 320px;
+  padding: 8px 12px;
+  background-color: @brand-warning;
+  color: #fff;
+  font-weight: bold;
+  z-index: 1000;
+  display: none;
+  .wechat-inform-entrance__link {
+    color: #fff;
+    &:hover,
+    &:focus,
+    &:active {
+      color: #fff;
+    }
+  }
+}
+
+.wechat-inform-entrance__triangle {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  margin-left: -5px;
+  border-width: 0 8px 8px;
+  border-bottom-color: @brand-warning;
 }

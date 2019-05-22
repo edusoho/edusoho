@@ -71,7 +71,6 @@
 
 {% block body %}
   <div class="es-wrap">
-
     {% block header %}
       {% include 'site-hint.html.twig' %}
       {% include 'default/header.html.twig' %}
@@ -104,6 +103,12 @@
     {% endif %}
   {% endblock %}
 
+  {% block wechatInform %}
+
+    {% if (siteNav|default() == '/') %}
+      {% include 'wechat-inform.html.twig' %}
+    {% endif %}
+  {% endblock %}
   {% block floatConsult %}
   
     {% set cloudConsultPath = cloudConsultPath() %}

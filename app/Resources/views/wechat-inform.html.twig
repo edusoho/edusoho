@@ -1,0 +1,23 @@
+	{% do script(['app/js/wechat-inform/index.js']) %}
+
+	<div class="js-wechat-inform">
+		<div class="wechat-pendant js-wechat-pendant" data-toggle="tooltip" data-placement="bottom" data-container=".wechat-pendant" title="开启课程通知">
+			<div class="wechat-pendant__outer">
+				<div class="wechat-pendant__inner">
+					<i class="es-icon es-icon-qr-code"></i>
+				</div>
+			</div>
+			<i class="cd-icon cd-icon-close wechat-pendant__close js-wechat-close-btn"></i>
+		</div>
+
+		<div class="wechat-inform-qrcode js-wechat-qrcode hidden">
+			<div class="wechat-inform-qrcode__close js-wechat-close-btn"><i class="cd-icon cd-icon-close"></i></div>
+			<div class="wechat-inform-qrcode__tip">扫描下方二维码，授权开启课程通知</div>
+			<img class="wechat-inform-qrcode__img" src="{{ asset('static-dist/app/img/qrcode.jpg') }}">
+		</div>
+
+		<div class="wechat-inform-entrance js-inform-wechat-entrance">
+			<div class="wechat-inform-entrance__triangle"></div>
+			<a class="wechat-inform-entrance__link" href="{{ path('settings_binds')}}" target="_blank">“微信通知”可在“个人设置-第三方登录”中开启</a>
+		</div>
+	</div>
