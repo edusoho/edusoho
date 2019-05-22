@@ -8,18 +8,11 @@ use Biz\Common\CommonException;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Biz\WeChat\Dao\UserWeChatDao;
+use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
-class WeChatServiceImpl extends BaseService
+class WeChatServiceImpl extends BaseService implements WeChatService
 {
-    const OFFICIAL_TYPE = 'official'; //公众号
-
-    const OPEN_TYPE = 'open_app'; //开放平台应用
-
-    const LANG = 'zh_CN'; //国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语，默认为zh-CN
-
-    const REFRESH_NUM = 200;
-
     public function getWeChatUser($id)
     {
         return $this->getUserWeChatDao()->get($id);
@@ -33,6 +26,21 @@ class WeChatServiceImpl extends BaseService
     public function findWeChatUsersByUserIdAndType($userId, $type)
     {
         return $this->getUserWeChatDao()->findByUserIdAndType($userId, $type);
+    }
+
+    //@TODO 不用批量接口
+    public function getOfficialWeChatUserByUserId($userId)
+    {
+        $weChatUser = $this->getUserWeChatDao()->getByUserIdAndType($userId, self::OFFICIAL_TYPE);
+        if (empty($weChatUser)) {
+            return array();
+        }
+
+        if ($weChatUser['lastRefreshTime'] < time() - self::FRESH_TIME) {
+            $this->batchFreshOfficialWeChatUsers(array($weChatUser));
+        }
+
+        return $this->getUserWeChatDao()->getByUserIdAndType($userId, self::OFFICIAL_TYPE);
     }
 
     public function createWeChatUser($fields)
@@ -93,7 +101,6 @@ class WeChatServiceImpl extends BaseService
 
     public function refreshOfficialWeChatUsers($lifeTime = 86400, $refreshNum = self::REFRESH_NUM)
     {
-        $biz = $this->biz;
         $conditions = array(
             'type' => self::OFFICIAL_TYPE,
             'lastRefreshTime_LT' => time() - $lifeTime,
@@ -110,7 +117,12 @@ class WeChatServiceImpl extends BaseService
             //这里加日志
             return;
         }
+        $this->batchFreshOfficialWeChatUsers($weChatUsers);
+    }
 
+    public function batchFreshOfficialWeChatUsers($weChatUsers)
+    {
+        $biz = $this->biz;
         $userList = $this->convertWeChatUsersToOfficialRequestParams($weChatUsers);
 
         $freshWeChatUsers = $biz['wechat.template_message_client']->batchGetUserInfo($userList);
