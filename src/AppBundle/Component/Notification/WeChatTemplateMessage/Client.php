@@ -12,6 +12,8 @@ class Client
 
     const BATCH_GET_USER_INFO = 'cgi-bin/user/info/batchget'; //POST
 
+    const GET_USER_LIST = 'cgi-bin/user/get'; //GET
+
     const INDUSTRY_SET = 'cgi-bin/template/api_set_industry';
 
     const INDUSTRY_GET = 'cgi-bin/template/get_industry';
@@ -35,6 +37,8 @@ class Client
 
     protected $config;
 
+    protected $appId;
+
     protected $userAgent = 'EduSoho Client 1.0';
 
     protected $connectTimeout = 30;
@@ -46,7 +50,13 @@ class Client
     public function __construct($config)
     {
         $this->config = $config;
+        $this->appId = $config['key'];
         $this->setLogger();
+    }
+
+    public function getAppId()
+    {
+        return $this->appId;
     }
 
     public function setLogger()
@@ -103,6 +113,12 @@ class Client
         return $rawResult;
     }
 
+    /**
+     * @param $userList
+     *
+     * @return array
+     *               通过已有的openId获取详细信息
+     */
     public function batchGetUserInfo($userList)
     {
         if (empty($userList)) {
@@ -119,6 +135,27 @@ class Client
 
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
             $this->logger && $this->logger->error('WECHAT_BATCH_GET_USER_INFO_ERROR', $rawResult);
+
+            return array();
+        }
+
+        return $rawResult['user_info_list'];
+    }
+
+    //获取服务号的所有用户，分页
+    public function getUserList($nextOpenId = '')
+    {
+        $params = array();
+
+        if ($nextOpenId) {
+            $params['next_openid'] = $nextOpenId;
+        }
+
+        $result = $this->getRequest($this->baseUrl.'/'.self::GET_USER_LIST, $params);
+        $rawResult = json_decode($result, true);
+
+        if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
+            $this->logger && $this->logger->error('WECHAT_GET_USER_LIST_ERROR', $rawResult);
 
             return array();
         }
