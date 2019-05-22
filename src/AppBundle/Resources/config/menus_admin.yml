@@ -603,6 +603,18 @@ admin:
                                     name: admin.operation.mobile.discovery_column_tab.create_btn
                                     group: topBtn
                                     mode: modal
+                admin_operation_wechat_notification:
+                    name: admin.operation.wechat_notification
+                    group: 2
+                    children:
+                        admin_operation_wechat_notification_record:
+                            name: admin.operation.wechat.notification_record_tab
+                            disable: true
+                            router_name: admin_wechat_notification_record
+                        admin_operation_wechat_notification_manage:
+                            name: admin.operation.wechat.notification_manage
+                            disable: true
+                            router_name: admin_wechat_notification_manage
                 admin_operation_analysis_register:
                     name: admin.operation.analysis_menu
                     group: 3

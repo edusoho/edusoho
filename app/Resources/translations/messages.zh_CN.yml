@@ -5772,6 +5772,15 @@ admin.mobile_manage.discovery_column.edit_btn: 编辑
 admin.mobile_manage.discovery_column.delete_btn: 删除
 admin.mobile_manage.discovery_column.empty: 暂无分类记录
 
+# 微信通知管理
+admin.wechat_notification.switch: 微信通知开关
+admin.wechat_notification.template: 微信通知模板
+admin.wechat_notification.template_name: 模板名称
+admin.wechat_notification.template_content_sample: 模板内容示例
+admin.wechat_notification.send_object: 发送对象
+admin.wechat_notification.operation: 操作
+admin.wechat_notification.template_content: 通知内容
+
 # 数据统计
 admin.operation_analysis.data_type_placeholder: --选择数据类型--
 admin.operation_analysis.this_month: 本月
