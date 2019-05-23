@@ -5,7 +5,6 @@ export default class wechatInform {
 		this.$section = $('.js-wechat-inform');
 		this.$pendant = $('.js-wechat-pendant');
 		this.$qrcode = $('.js-wechat-qrcode');
-		this.$entrance = $('.js-inform-wechat-entrance');
 		this.$mask = $('.js-wechat-mask');
 		this.init();
 	}
@@ -19,26 +18,26 @@ export default class wechatInform {
     this.$section.on('click', '.js-wechat-pendant', (event) => this.showQrcode(event));
 	}
 	closeWechatInform(event) {
-		const self = this;
 		const $target = $(event.currentTarget);
 		event.stopPropagation();
-		$target.parent().hide();
-
+    $target.parent().hide();
+    let messageClass;
 		if (isMobileDevice()) {
-			this.$mask.hide();
+      this.$mask.hide();
+      messageClass = 'cd-text-sm';
 			$('body').removeClass('wechat-inform-body');
-		} else {
-			if (self.$section.hasClass('js-switch-language')) {
-				$('.js-triangle').addClass('wechat-inform-entrance__triangle--right');
-			}
-			$('html, body').animate({scrollTop: '0px'}, 800, () => {
-				self.$entrance.fadeIn('normal', () => {
-					setTimeout(() => {
-						self.$entrance.fadeOut('normal');
-					}, 3000);
-				});
-			});
-		}
+    } else {
+      messageClass = 'cd-text-md';
+    }
+    cd.message({
+      type: 'info', 
+      message: `<span class="${messageClass}">“微信通知”可在“个人设置-第三方登录”开启。</span>`,
+      delay: '100000',
+      action: {
+        title: `<span class="${messageClass}">前往开启</span>`,
+        url: this.$section.data('url')
+      },
+    })
 	}
 	showQrcode(event) {
 		const $target = $(event.currentTarget);
