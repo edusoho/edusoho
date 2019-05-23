@@ -104,8 +104,7 @@
   {% endblock %}
 
   {% block wechatInform %}
-
-    {% if (siteNav|default() == '/') %}
+    {% if (siteNav|default() == '/') and  app.request.headers.get('User-Agent') matches '/MicroMessenger/' %}
       {% include 'wechat-inform.html.twig' %}
     {% endif %}
   {% endblock %}
