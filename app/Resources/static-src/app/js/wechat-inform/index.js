@@ -28,6 +28,9 @@ export default class wechatInform {
 			this.$mask.hide();
 			$('body').removeClass('wechat-inform-body');
 		} else {
+			if (self.$section.hasClass('js-switch-language')) {
+				$('.js-triangle').addClass('wechat-inform-entrance__triangle--right');
+			}
 			$('html, body').animate({scrollTop: '0px'}, 800, () => {
 				self.$entrance.fadeIn('normal', () => {
 					setTimeout(() => {
