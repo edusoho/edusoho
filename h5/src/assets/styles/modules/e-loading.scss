@@ -28,6 +28,11 @@
       background-color: $primary-color;
     }
   }
+  &.warning {
+    .spot {
+      background-color: #FFA51F;
+    }
+  }
   &.default {
     .spot {
       position: absolute;
@@ -60,6 +65,35 @@
         animation-delay: .4s;
       }
     }
+  }
+}
+
+.loading-content {
+  position: relative;
+}
+.es-switch-loading {
+  bottom: 70vh;
+  top: auto;
+  text-align: center;
+  &.default .spot {
+    // -webkit-animation: none;
+    animation-duration: 2s;
+    -webkit-animation-duration: 2s;
+    &:nth-child(2) {
+      width: 71.43%;
+      height: 71.43%;
+    }
+    &:nth-child(3) {
+      width: 42.86%;
+      height: 42.86%;
+    }
+  }
+  .code-img {
+    position: relative;
+    top: 27px;
+    z-index: 1;
+    width: 25px;
+    height: 25px;
   }
 }
 
