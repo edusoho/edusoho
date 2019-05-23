@@ -1000,7 +1000,6 @@ class SettingsController extends BaseController
 
     protected function getLoginQrcode()
     {
-
     }
 
     /**
