@@ -141,6 +141,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 'unionId' => $unionId,
                 'userId' => $userId,
                 'data' => $freshWeChatUser,
+                'isSubscribe' => $freshWeChatUser['subscribe'],
                 'lastRefreshTime' => time(),
             );
             $batchUpdateHelper->add('id', $weChatUser['id'], $updateField);
