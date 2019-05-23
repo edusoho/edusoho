@@ -20,6 +20,7 @@ parameters:
         topxia.upload.private_directory: "%topxia.upload.private_directory%"
         plugin.config_file: "%kernel.root_dir%/config/plugin_installed.php"
         service_proxy_enabled: "%service_proxy_enabled%"
+        run_dir: "%kernel.root_dir%/run"
 
     biz_db_options:
         dbname: "%database_name%"
