@@ -4741,6 +4741,13 @@ admin.mobile_manage.discovery_column.new: Latest
 admin.mobile_manage.discovery_column.edit_btn: Edit
 admin.mobile_manage.discovery_column.delete_btn: Delete
 admin.mobile_manage.discovery_column.empty: 'No Category'
+admin.wechat_notification.switch: WeChat Notification Switch
+admin.wechat_notification.template: WeChat Notification Template
+admin.wechat_notification.template_name: Template Name
+admin.wechat_notification.template_content_sample: Template Content Sample
+admin.wechat_notification.send_object: Send Object
+admin.wechat_notification.operation: Operation
+admin.wechat_notification.template_content: Notification Content
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
@@ -8619,6 +8626,8 @@ exception.course.draft.not_found: 教学计划草稿不存在
 exception.task_result.not_found: 学习任务结果不存在
 exception.discovery_column.not_found: 发现栏目不存在
 exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
+
+exception.wechat.notify_setting_not_enabled: 微信通知未开启
 
 course.unname_title: unname course
 
