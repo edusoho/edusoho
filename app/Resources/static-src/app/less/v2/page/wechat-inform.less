@@ -274,3 +274,30 @@
 .wechat-inform-body {
   overflow: hidden;
 }
+
+.wechat-pay-inform {
+  .wechat-inform-title {
+    color: @brand-danger;
+  }
+  .wechat-pay-inform__btn {
+    margin-top: 64px;
+    width: 120px;
+  }
+  .wechat-pay-inform__feedback {
+    font-size: 24px;
+    color: @brand-success;
+    i {
+      color: #fff;
+      line-height: 32px;
+      font-size: 24px;
+    }
+  }
+  .wechat-pay-inform__icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-color: @brand-success;
+    .border-radius(50%);
+    margin-right: 8px;
+  }
+}
