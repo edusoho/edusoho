@@ -182,6 +182,16 @@ class LoginController extends BaseController
         ));
     }
 
+    public function wechatQrcodeAction(Request $request)
+    {
+        $loginUrl = $this->generateUrl('login', array(), true);
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode', array('text' => $loginUrl), true),
+        );
+
+        return $this->createJsonResponse($response);
+    }
+
     protected function getTargetPath(Request $request)
     {
         if ($request->query->get('goto')) {

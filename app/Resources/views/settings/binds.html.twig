@@ -6,6 +6,8 @@
 
 {% set settings = setting('login_bind', []) %}
 
+{% set weChatUser = data('WeChatUser', {userId: app.user.id|default(-1)}) %}
+
 {% do script(['libs/jquery-intro.js', 'app/js/settings/binds/index.js']) %}
 
 {% block page_title %}
@@ -31,14 +33,19 @@
           {% endif %}
         </span>
       </div>
+      <input type="hidden" name="wechat_notification_enabled" id="wechat_notification_enabled" value="{{setting('wechat.wechat_notification_enabled')|default(false)}}">
 
-      {% if type == 'weixinweb' %}
+      {% if type == 'weixinweb' and clients['weixinweb'].status|default(null) == 'bind' and setting('wechat.wechat_notification_enabled')|default(false) %}
         <div class="wechat-inform-section text-center">
           <div class="wechat-inform-title">为享受更好的服务，建议您开启微信课程通知。</div>
           <div class="wechat-inform-subtitle cd-text-danger">扫码关注服务号，即可成功开启课程通知。</div>
           <div class="wechat-inform-content cd-mt40 row">
             <div class="wechat-inform-content__qcode col-xs-offset-2 col-xs-4">
-              <img src="{{ asset('static-dist/app/img/qrcode.jpg') }}">
+              {% if weChatUser %}
+                <img src="{{ setting('wechat.account_code') }}">
+              {% else %}
+                <img src="{{ loginQrcode }}">
+              {% endif %}
             </div>
             <div class="wechat-inform-content__img col-xs-offset-1 col-xs-4">
               <img src="{{ asset('static-dist/app/img/wechat-inform/wechat-follow.png') }}" srcset="{{ asset('static-dist/app/img/wechat-inform/wechat-follow.png') }} 1x, {{ asset('static-dist/app/img/wechat-inform/wechat-follow@2x.png') }} 2x">

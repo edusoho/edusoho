@@ -9,6 +9,7 @@ use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserFieldService;
+use Biz\WeChat\Service\WeChatService;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\FileToolkit;
@@ -826,9 +827,13 @@ class SettingsController extends BaseController
 
             $clients[$userBind['type']]['status'] = 'bind';
         }
+        $loginUrl = $this->generateUrl('login', array(), true);
+        $loginQrcode = $this->generateUrl('common_qrcode', array('text' => $loginUrl), true);
 
         return $this->render('settings/binds.html.twig', array(
             'clients' => $clients,
+            'loginQrcode' => $loginQrcode,
+            'user' => $user,
         ));
     }
 
@@ -993,6 +998,11 @@ class SettingsController extends BaseController
         return $client;
     }
 
+    protected function getLoginQrcode()
+    {
+
+    }
+
     /**
      * @return FileService
      */
@@ -1055,6 +1065,14 @@ class SettingsController extends BaseController
     protected function getAccountService()
     {
         return $this->getBiz()->service('Pay:AccountService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->getBiz()->service('WeChat:WeChatService');
     }
 
     protected function downloadImg($url)
