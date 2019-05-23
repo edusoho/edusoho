@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\User\CurrentUser;
 use Endroid\QrCode\QrCode;
 use Biz\User\Service\UserService;
@@ -27,6 +28,18 @@ class CommonController extends BaseController
         );
 
         return new Response($img, 200, $headers);
+    }
+
+    public function weChatOfficialSubscribeAction(Request $request)
+    {
+        $weChatSetting = $this->getSettingService()->get('wechat', array());
+        if (empty($weChatSetting['wechat_notification_enabled'])) {
+            throw new AccessDeniedException('无法获取微信公众号二维码');
+        }
+
+        return $this->render('common/wechat-subscribe.html.twig', array(
+            'qrcodeUrl' => $weChatSetting['account_code'],
+        ));
     }
 
     public function parseQrcodeAction(Request $request, $token)
