@@ -15,16 +15,17 @@
   </div> #}
   <div class="wechat-pay-inform text-center">
     <div class="wechat-pay-inform__feedback">
-      <div class="wechat-pay-inform__icon"><i class="cd-icon cd-icon-check"></i></div>支付成功！
+      <div class="wechat-pay-inform__icon"><i class="cd-icon cd-icon-check"></i></div>支付成功
     </div>
     <div class="wechat-inform-section text-center cd-mt24">
       <div class="wechat-inform-title">为享受更好的服务，建议您开启微信课程通知。</div>
       <div class="wechat-inform-content cd-mt40 row">
-        <div class="wechat-inform-content__qcode col-xs-offset-2 col-xs-4">
+        <div class="wechat-inform-content__qcode col-sm-offset-2 col-sm-4">
           <img src="{{ asset('static-dist/app/img/qrcode.jpg') }}">
         </div>
-        <div class="wechat-inform-content__img col-xs-offset-1 col-xs-4">
-          <img src="{{ asset('static-dist/app/img/wechat-inform/wechat-scan.png') }}" srcset="{{ asset('static-dist/app/img/wechat-inform/wechat-scan.png') }} 1x, {{ asset('static-dist/app/img/wechat-inform/wechat-scan@2x.png') }} 2x">
+        <div class="wechat-inform-content__img col-sm-offset-1 col-sm-4">
+          <img class="hidden-xs" src="{{ asset('static-dist/app/img/wechat-inform/wechat-scan.png') }}" srcset="{{ asset('static-dist/app/img/wechat-inform/wechat-scan.png') }} 1x, {{ asset('static-dist/app/img/wechat-inform/wechat-scan@2x.png') }} 2x">
+          <img class="visible-xs" src="{{ asset('static-dist/app/img/wechat-inform/wechat-scan-mobile.png') }}" srcset="{{ asset('static-dist/app/img/wechat-inform/wechat-scan-mobile.png') }} 1x, {{ asset('static-dist/app/img/wechat-inform/wechat-scan-mobile@2x.png') }} 2x">
           <div class="wechat-inform-content__tip">扫码关注服务号，即可接收课程通知。</div>
         </div>
       </div>
