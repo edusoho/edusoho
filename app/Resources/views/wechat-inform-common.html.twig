@@ -12,12 +12,9 @@
       </div>
       <div class="wechat-inform-content__img col-sm-offset-1 col-sm-4">
         <img class="hidden-xs" src="{{ asset('static-dist/app/img/wechat-inform/wechat-scan.png') }}" srcset="{{ asset('static-dist/app/img/wechat-inform/wechat-scan.png') }} 1x, {{ asset('static-dist/app/img/wechat-inform/wechat-scan@2x.png') }} 2x">
-        <img class="visible-xs" src="{{ asset('static-dist/app/img/wechat-inform/wechat-follow-mobile.png') }}" srcset="{{ asset('static-dist/app/img/wechat-inform/wechat-follow-mobile.png') }} 1x, {{ asset('static-dist/app/img/wechat-inform/wechat-follow-mobile@2x.png') }} 2x">
-        {% if options.isBindWechat %}
-          <div class="wechat-inform-content__tip hidden-xs">扫码关注服务号，即可接收课程通知。</div>
-        {% else %}
-          <div class="wechat-inform-content__tip visible-xs">长按识别二维码关注服务号，即可接受课程通知。</div>
-        {% endif %}
+        <img class="visible-xs" src="{{ asset('static-dist/app/img/wechat-inform/wechat-scan-mobile.png') }}" srcset="{{ asset('static-dist/app/img/wechat-inform/wechat-scan-mobile.png') }} 1x, {{ asset('static-dist/app/img/wechat-inform/wechat-scan-mobile@2x.png') }} 2x">
+        <div class="wechat-inform-content__tip hidden-xs">扫码关注服务号，即可接收课程通知。</div>
+        <div class="wechat-inform-content__tip visible-xs">长按识别二维码关注服务号，即可接受课程通知。</div>
       </div>
     </div>
   </div>
