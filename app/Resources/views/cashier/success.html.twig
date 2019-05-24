@@ -6,13 +6,15 @@
 {% set step = '3' %}
 
 {% block order_body %}
-  {# <div class="cd-feedback">
-    <div class="feedback-icon"><i class="cd-icon cd-icon-check cd-text-success"></i></div>
-    <div class="feedback-title"><span class="cd-text-success">{{'pay_center.finish_title'|trans}}</span></div>
-    <div class="feedback-content js-turn" data-url='{{ goto }}'>
-      {{'pay_center.finish_tips'|trans|raw}}
+  {% if (is_mobile_client() == false or (is_mobile_client() and (app.request.headers.get('User-Agent') matches '/MicroMessenger/'))) %}
+    {% include 'wechat-inform-common.html.twig' with {type: 'pay'} %}
+  {% else %}
+    <div class="cd-feedback js-feedback">
+      <div class="feedback-icon"><i class="cd-icon cd-icon-check cd-text-success"></i></div>
+      <div class="feedback-title"><span class="cd-text-success">{{'pay_center.finish_title'|trans}}</span></div>
+      <div class="feedback-content js-turn" data-url='{{ goto }}'>
+        {{'pay_center.finish_tips'|trans|raw}}
+      </div>
     </div>
-  </div> #}
-
-  {% include 'wechat-inform-common.html.twig' with {type: 'pay'} %}
+  {% endif %}
 {% endblock %}
