@@ -8627,6 +8627,8 @@ exception.task_result.not_found: 学习任务结果不存在
 exception.discovery_column.not_found: 发现栏目不存在
 exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
 
+exception.wechat.notify_setting_not_enabled: 微信通知未开启
+
 course.unname_title: unname course
 
 admin.index.course_order: "course order"
