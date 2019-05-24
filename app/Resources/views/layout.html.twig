@@ -97,7 +97,7 @@
   </div>
 
   {% block esBar %}
-    {% if setting('esBar.enabled', 0) %}
+    {% if setting('esBar.enabled', 0) and app.user.isLogin()|default(false) %}
       {% include 'es-bar/index.html.twig' %}
     {% endif %}
   {% endblock %}

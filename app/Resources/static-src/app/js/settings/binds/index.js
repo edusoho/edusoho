@@ -1,3 +1,6 @@
+import 'store';
+const WECHAT_BIND_INTRO = 'WECHAT_BIND_INTRO';
+
 $('.js-unbind-btn').on('click', function() {
   let $this = $(this);
   let url = $this.data('url');
@@ -40,4 +43,9 @@ const wechatIntro = () => {
   }).start();
 }
 
-wechatIntro();
+
+var $notificationEnable = $('#wechat_notification_enabled').val();
+if (!store.get(WECHAT_BIND_INTRO) && $('.wechat-inform-section').length <= 0 && $notificationEnable) {
+  store.set(WECHAT_BIND_INTRO, true);
+  wechatIntro();
+}

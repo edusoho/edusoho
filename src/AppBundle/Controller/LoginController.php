@@ -110,7 +110,7 @@ class LoginController extends BaseController
 
         $currentUser = $this->getCurrentUser();
 
-        if (!empty($faceLoginToken['data']['user']['id']) && (!$currentUser->isLogin() || $currentUser['id'] != $faceLoginToken['data']['user']['id'])) {
+        if (!empty($faceLoginToken['data']['user']['id']) && (!$currentUser->isLogin() || $faceLoginToken['data']['user']['id'] != $currentUser['id'])) {
             $user = $this->getUserService()->getUser($faceLoginToken['data']['user']['id']);
             $currentUser = new CurrentUser();
             $currentUser->fromArray($user);
@@ -180,6 +180,16 @@ class LoginController extends BaseController
             'targetPath' => $targetPath,
             'displayName' => $displayName,
         ));
+    }
+
+    public function wechatQrcodeAction(Request $request)
+    {
+        $loginUrl = $this->generateUrl('login', array(), true);
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode', array('text' => $loginUrl), true),
+        );
+
+        return $this->createJsonResponse($response);
     }
 
     protected function getTargetPath(Request $request)
