@@ -6,7 +6,7 @@
 {% set step = '3' %}
 
 {% block order_body %}
-  {% if (is_mobile_client() == false or (is_mobile_client() and (app.request.headers.get('User-Agent') matches '/MicroMessenger/'))) %}
+  {% if (is_mobile_client() == false or (is_mobile_client() and (app.request.headers.get('User-Agent') matches '/MicroMessenger/'))) and options|default(null) %}
     {% include 'wechat-inform-common.html.twig' with {type: 'pay'} %}
   {% else %}
     <div class="cd-feedback js-feedback">
