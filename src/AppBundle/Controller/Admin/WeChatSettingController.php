@@ -42,6 +42,8 @@ class WeChatSettingController extends BaseController
             }
 
             $loginConnect['weixinmob_mp_secret'] = $payment['wxpay_mp_secret'];
+            $payment['wxpay_appid'] = $loginConnect['weixinmob_key'];
+            $payment['wxpay_secret'] = $loginConnect['weixinmob_secret'];
 
             $this->getSettingService()->set('payment', $payment);
             $this->getSettingService()->set('login_bind', $loginConnect);
