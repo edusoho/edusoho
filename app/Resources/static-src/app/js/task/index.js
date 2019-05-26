@@ -1,7 +1,6 @@
 import TaskShow from './task';
 import { Browser } from 'common/utils';
 import Cookies from 'js-cookie';
-
 let $taskContent = $('#task-content-iframe');
 $taskContent.attr('src', $taskContent.data('url'));
 new TaskShow({
@@ -26,3 +25,14 @@ if ($adBtn.length > 0) {
     $('.js-dashboard-footer').removeClass('dashboard-footer--audio');
   });
 }
+
+// 微信通知
+const src = $('.js-wechat-qrcode-btn').data('img');
+$('.js-wechat-qrcode-btn').popover({
+  trigger: 'click',
+  placement: 'bottom',
+  html: 'true',
+  animation: false,
+  container: 'body',
+  content: `<img class="wechat-inform-task-qrcode" src="${src}">`
+})
