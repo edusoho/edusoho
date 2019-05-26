@@ -1,6 +1,9 @@
+import Vue from 'vue';
 import Api from '@/api';
+import VueClipboard from 'vue-clipboard2';
 import { Toast, Dialog } from 'vant';
-import clipboard from '@/utils/clipboard';
+
+Vue.use(VueClipboard);
 
 const isWeixinBrowser = /micromessenger/.test(navigator.userAgent.toLowerCase());
 
@@ -30,8 +33,10 @@ const activityHandle = (activityId, callback, addTicket = false) => {
         title: ''
       }).then(() => {
         try {
-          clipboard(url, () => {
+          Vue.prototype.$copyText(url).then(() => {
             Toast.success('复制成功');
+          }, () => {
+            Toast.fail('请更换浏览器复制');
           });
         } catch (err) {
           Toast.fail('请更换浏览器复制');
