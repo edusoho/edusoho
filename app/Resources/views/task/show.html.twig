@@ -27,7 +27,9 @@
           <i class="es-icon es-icon-chevronleft"></i>{{ 'course.task.learning.back_course_btn'|trans }}
         </a>
         {{ 'course.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}{{ task.number }}：{{ task.title }}
-        <span class="pull-right cd-text-lg js-wechat-qrcode-btn wechat-inform-task" data-img="{{ asset('static-dist/app/img/qrcode.jpg') }}"><span class="wechat-inform-task__tip cd-mr8">扫一扫， 开启课程通知</span><i class="es-icon es-icon-qr-code"></i></span>
+        {% if setting('wechat.wechat_notification_enabled')|default(false) %}
+          <span class="pull-right cd-text-lg js-wechat-qrcode-btn wechat-inform-task" data-img="{{ asset('static-dist/app/img/qrcode.jpg') }}"><span class="wechat-inform-task__tip cd-mr8">扫一扫， 开启课程通知</span><i class="es-icon es-icon-qr-code"></i></span>
+        {% endif %}
       </div>
       <div class="dashboard-body">
         <div class="{% if task.type in ['exercise' , 'homework' ,'testpaper'] %} mobile-scroll-wrapper {% endif %} all-wrapper">

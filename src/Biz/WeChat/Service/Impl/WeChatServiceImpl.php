@@ -18,6 +18,11 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $this->getUserWeChatDao()->get($id);
     }
 
+    public function getWeChatUserByUserIdAndType($userId, $type)
+    {
+        return $this->getUserWeChatDao()->getByUserIdAndType($userId, $type);
+    }
+
     public function findWeChatUsersByUserId($userId)
     {
         return $this->getUserWeChatDao()->findByUserId($userId);
@@ -140,6 +145,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             $updateField = array(
                 'unionId' => $unionId,
                 'userId' => $userId,
+                'isSubscribe' => $freshWeChatUser['subscribe'],
                 'data' => $freshWeChatUser,
                 'lastRefreshTime' => time(),
             );

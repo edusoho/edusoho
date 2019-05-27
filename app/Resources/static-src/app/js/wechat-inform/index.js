@@ -11,12 +11,14 @@ export default class wechatInform {
 
 	init() {
 		this.bindEvent();
+    this.initImg();
 	}
 
-	bindEvent() {
-		this.$section.on('click', '.js-wechat-close-btn', (event) => this.closeWechatInform(event));
+  bindEvent() {
+    this.$section.on('click', '.js-wechat-close-btn', (event) => this.closeWechatInform(event));
     this.$section.on('click', '.js-wechat-pendant', (event) => this.showQrcode(event));
 	}
+  
 	closeWechatInform(event) {
 		const $target = $(event.currentTarget);
 		event.stopPropagation();
@@ -39,6 +41,7 @@ export default class wechatInform {
       },
     })
 	}
+
 	showQrcode(event) {
 		const $target = $(event.currentTarget);
 		if (isMobileDevice()) {
@@ -48,6 +51,16 @@ export default class wechatInform {
 		$target.addClass('hidden');
 		this.$qrcode.removeClass('hidden');
 	}
+
+  initImg() {
+    var $target = $('.js-wechat-pendant');
+    if (typeof($target.data('url')) != 'undefined') {
+      $.get($target.data('url'), res => {
+        $('.wechat-inform-qrcode__img').attr('src', res.img);
+      });
+    }
+  }
+
 }
 
 new wechatInform();

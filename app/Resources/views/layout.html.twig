@@ -104,7 +104,7 @@
 
   {% block wechatInform %}
     {% if (siteNav|default() == '/') %}
-      {% if (is_mobile_client() == false or (is_mobile_client() and (app.request.headers.get('User-Agent') matches '/MicroMessenger/'))) %}
+      {% if (is_mobile_client() == false or (is_mobile_client() and (app.request.headers.get('User-Agent') matches '/MicroMessenger/'))) and app.user.isLogin()|default(false) %}
         {% include 'wechat-inform.html.twig' %}
       {% endif %}
     {% endif %}
