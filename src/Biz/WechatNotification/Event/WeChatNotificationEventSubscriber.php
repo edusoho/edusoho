@@ -8,7 +8,6 @@ use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Biz\WechatNotification\QueueJob\WeChatNotificationSendJob;
 use AppBundle\Common\ArrayToolkit;
 
 class WeChatNotificationEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -72,7 +71,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'keyword1' => array('value' => $courseSet['title']),
             'keyword2' => array('value' => ('live' == $task['type']) ? '直播课' : ''),
             'keyword3' => array('value' => $user['nickname']),
-            'keyword4' => array('value' => ('live' == $task['type']) ? date("Y-m-d H:i", $task['startTime']) : date("Y-m-d H:i", $task['updatedTime'])),
+            'keyword4' => array('value' => ('live' == $task['type']) ? date('Y-m-d H:i', $task['startTime']) : date('Y-m-d H:i', $task['updatedTime'])),
             'remark' => array('value' => ('live' == $task['type']) ? '请准时参加' : '请及时前往学习'),
         );
 
@@ -155,7 +154,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'keyword1' => '现金充值或学习卡',
                 'keyword2' => $trade['trade_sn'],
                 'keyword3' => $trade['cash_amount'] / 100,
-                'keyword4' => date("Y-m-d H:i", $trade['pay_time']),
+                'keyword4' => date('Y-m-d H:i', $trade['pay_time']),
                 'remark' => '快去看看课程吧~',
             );
             $options = array('url' => $this->generateUrl('course_set_explore', array(), true));
@@ -167,7 +166,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'first' => '尊敬的客户，您已支付成功',
                 'keyword1' => $trade['title'],
                 'keyword2' => $trade['cash_amount'] / 100,
-                'keyword3' => date("Y-m-d H:i", $trade['pay_time']),
+                'keyword3' => date('Y-m-d H:i', $trade['pay_time']),
                 'remark' => '请前往查看',
             );
             $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
@@ -193,7 +192,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
 
         $batchNum = $membersCount / 100;
-        for ($i = 0; $i < $batchNum; $i++) { 
+        for ($i = 0; $i < $batchNum; ++$i) {
             $batchs[] = ArrayToolkit::column($this->getCourseMemberService()->searchMembers($conditions, array(), $i * 100, 100, array('userId')), 'userId');
         }
 
@@ -205,7 +204,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         switch ($targetType) {
             case 'course':
                 return $this->generateUrl('course_show', array('id' => $targetId), true);
-            
+
             case 'classroom':
                 return $this->generateUrl('classroom_show', array('id' => $targetId), true);
 
