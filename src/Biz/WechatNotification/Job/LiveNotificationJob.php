@@ -26,7 +26,7 @@ class LiveNotificationJob extends AbstractJob
                 return;
             }
 
-            $conditions = array('courseId' => $course['id'], 'role' => 'student',);
+            $conditions = array('courseId' => $course['id'], 'role' => 'student');
             $members = $this->getCourseMemberService()->searchMembers($conditions, array(), 0, PHP_INT_MAX, array('userId'));
             if (empty($members)) {
                 return;

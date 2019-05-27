@@ -43,6 +43,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if ('live' == $task['type']) {
             $key = 'liveTaskUpdate';
+            $this->deleteJob($task);
             $this->registerLiveNotificationJob($task);
         } else {
             $key = 'normalTaskUpdate';
@@ -174,7 +175,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 return;
             }
             $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-            $options = array('url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $orderItems[0]['target_id'));
+            $options = array('url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $orderItems[0]['target_id']));
             $user = empty($user) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $user;
         }
     }
