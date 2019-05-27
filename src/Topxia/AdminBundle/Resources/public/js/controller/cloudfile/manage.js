@@ -233,6 +233,27 @@ define(function(require, exports, module) {
             $('#materials-form').find('[data-role=batch-item]').show();
             $("[data-role=batch-select]").attr("checked", false);
           }
+          $('.js-table-popover').popover({
+            placement: 'top',
+            trigger: 'click',
+            html: true,
+            animation: false,
+            title: '<div class="clearfix">' + Translator.trans('material.common_table.transcoding_intro') + '<a class="pull-right text-sm" href="http://www.qiqiuyu.com/faq/868/detail" target="_blank"> ' + Translator.trans('material.common_table.transcoding_more') + '</a></div>',
+            content: '<div class="text-sm material-table-popover"><p class="mb0"><strong>' + Translator.trans('subtitle.status.error') + '：</strong>' + Translator.trans('material.common_table.fail_error_tip') + '</p><p class="mb0"><strong>' + Translator.trans('material.common_table.fail_not_support') + '：</strong>' + Translator.trans('material.common_table.not_support_error_tip') + '</p></div>'
+            }).on('mouseenter', function () {
+            var _this = this;
+            $(this).popover('show');
+            $('.popover').on('mouseleave', function () {
+                $(_this).popover('hide');
+            });
+          }).on('mouseleave', function () {
+            var _this = this;
+            setTimeout(function () {
+              if (!$('.popover:hover').length) {
+                $(_this).popover("hide");
+              }
+            }, 300);
+          });
         }).fail(function() {
           self._loaded_error();
         });

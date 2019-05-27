@@ -7,7 +7,7 @@
         <th width="{% if size|default('') == 'sm' %}11% {% else %}10%{% endif %}">{{ 'material.common_table.th.file_type'|trans }}</th>
         <th>{{ 'material.common_table.th.file_size_time'|trans }}</th>
         <th {% if size|default('') == 'sm' %}width="11%"{% endif %}>{{ 'material.common_table.th.upload_time'|trans }}</th>
-        <th width="24%">{{ 'material.common_table.th.transcode_status'|trans }}</th>
+        <th width="24%">{{ 'material.common_table.th.transcode_status'|trans }}<a class="es-icon es-icon-help text-normal course-mangae-info__help mls js-table-popover"></a></th>
         <th>{{ 'material.common_table.th.manage'|trans }}</th>
       </tr>
     </thead>
@@ -253,6 +253,9 @@
               <a class="cd-btn cd-btn-info cd-btn-sm material-course-preview-btn" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >{{'material_lib.btn.preview'|trans}}
               </a>
             </div>
+            {% if uploadFile.storage != 'cloud' %}
+              <span class="cd-tag cd-tag-blue material-course-mask__local">{{ 'material.common_table.file.local'|trans }}</span>
+            {% endif %}
             <img width="124px" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
           </div>
           <div class="material-table-info text-center">

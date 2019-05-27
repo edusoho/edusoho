@@ -26,7 +26,7 @@ class MaterialWidget {
 
     this.element.on('click', '.js-cd-modal', (event) => {
       this.codeErrorTip(event);
-    })
+    });
 
     this.element.on('click', '.js-source-btn', (event) => {
       this.onClickSourseBtn(event);
@@ -93,8 +93,8 @@ class MaterialWidget {
   }
 
   downloadFile(url) {
-    const iframe = document.createElement("iframe");
-    iframe.style.display = "none";
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
     iframe.style.height = 0;
     iframe.src = url; 
     document.body.appendChild(iframe);
@@ -126,8 +126,8 @@ class MaterialWidget {
       const status = $btn.data('status');
       $('.js-error-tip').html(
         `<div class="mbl clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.file_name')}：</span><span class="pull-left error-content">${title}</span></div><div class="mbl clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.transcoding')}：</span><span class="pull-left error-content">${status}</span></div><div class="mbl clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.error_reason')}：</span><span class="cd-text-danger error-content pull-left">${reason}</span></div><div class="clearfix"><span class="pull-left error-label">${Translator.trans('material.common_table.solution_way')}：</span><span class="cd-text-info error-content pull-left">${solution}</span></div>`
-      )
-    })
+      );
+    });
   }
 
   onClickTabs(event) {
@@ -309,7 +309,7 @@ class MaterialWidget {
       console.log('点击确定按钮后的回调函数');
     }).on('cancel', () => {
       console.log('点击取消按钮后的回调函数');
-    })
+    });
   }
   onClickTagBatchBtn(event) {
     let self = this;
@@ -329,7 +329,7 @@ class MaterialWidget {
   onClickShareBtn(event) {
     cd.confirm({
       title: '共享',
-      content: Translator.trans('meterial_lib.confirm_share_resource_hint'),
+      content: Translator.trans('meterial_lib.confirm_share_resource_hint_single'),
       okText: '确定',
       cancelText: '取消',
       className: '',
@@ -343,7 +343,7 @@ class MaterialWidget {
       console.log('点击确定按钮后的回调函数');
     }).on('cancel', () => {
       console.log('点击取消按钮后的回调函数');
-    })
+    });
   }
   onClickUnshareBtn(event) {
     cd.confirm({
@@ -365,7 +365,7 @@ class MaterialWidget {
       console.log('点击确定按钮后的回调函数');
     }).on('cancel', () => {
       console.log('点击取消按钮后的回调函数');
-    })
+    });
   }
   onClickPagination(event) {
     let $target = $(event.currentTarget);
@@ -413,6 +413,31 @@ class MaterialWidget {
       }
       let $temp = $table.find('.js-paginator');
       self.element.find('[data-role=paginator]').html($temp.html());
+      $('.js-table-popover').popover({
+        placement: 'top',
+        trigger: 'manual',
+        html: true,
+        animation: false,
+        title: `<div class="clearfix material-table-popover">${Translator.trans('material.common_table.transcoding_intro')}<a class="pull-right cd-text-sm" href="http://www.qiqiuyu.com/faq/868/detail" target="_blank">${Translator.trans('material.common_table.transcoding_more')}</a></div>`,
+        content: `
+        <div class="cd-text-sm">
+          <p class="mb0"><strong>${Translator.trans('subtitle.status.error')}：</strong>${Translator.trans('material.common_table.fail_error_tip')}</p>
+          <p class="mb0"><strong>${Translator.trans('material.common_table.fail_not_support')}：</strong>${Translator.trans('material.common_table.not_support_error_tip')}</p>
+        </div>`
+      }).on('mouseenter', function () {
+        const _this = this;
+        $(this).popover('show');
+        $('.popover').on('mouseleave', function () {
+            $(_this).popover('hide');
+        });
+      }).on('mouseleave', function () {
+        const _this = this;
+        setTimeout(function () {
+          if (!$('.popover:hover').length) {
+            $(_this).popover("hide");
+          }
+        }, 300);
+      });
     }).fail(function(){
       self._loaded_error();
     });
