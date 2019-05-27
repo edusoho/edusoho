@@ -9,6 +9,7 @@ use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Biz\WeChat\Dao\UserWeChatDao;
 use Biz\WeChat\Service\WeChatService;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class WeChatServiceImpl extends BaseService implements WeChatService
@@ -21,6 +22,11 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function findWeChatUsersByUserId($userId)
     {
         return $this->getUserWeChatDao()->findByUserId($userId);
+    }
+
+    public function findSubscribedUsersByUserIdsAndType($userIds, $type)
+    {
+        return $this->getUserWeChatDao()->findSubscribedUsersByUserIdsAndType($userIds, $type);
     }
 
     public function findWeChatUsersByUserIdAndType($userId, $type)
@@ -141,12 +147,27 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 'unionId' => $unionId,
                 'userId' => $userId,
                 'data' => $freshWeChatUser,
+                'isSubscribe' => $freshWeChatUser['subscribe'],
                 'lastRefreshTime' => time(),
             );
             $batchUpdateHelper->add('id', $weChatUser['id'], $updateField);
         }
 
         $batchUpdateHelper->flush();
+    }
+
+    public function getTemplateId($key)
+    {
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        if (empty($wechatSetting['wechat_notification_enabled'])) {
+            return;
+        }
+
+        if (empty($wechatSetting[$key]['status']) || empty($wechatSetting[$key]['templateId'])) {
+            return;
+        }
+
+        return $wechatSetting[$key]['templateId'];
     }
 
     private function convertWeChatUsersToOfficialRequestParams($weChatUsers, $lang = self::LANG)
@@ -182,5 +203,10 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('system:SettingService');
     }
 }
