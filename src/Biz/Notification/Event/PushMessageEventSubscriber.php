@@ -28,6 +28,7 @@ use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use AppBundle\Common\StringToolkit;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Course\Util\CourseTitleUtils;
 
 class PushMessageEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -1145,7 +1146,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 return;
             }
 
-            $member['course'] = $this->convertCourse($course);
+            $course = $this->convertCourse($course);
+            $member['course'] = $course;
             $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
             $imSetting = $this->getSettingService()->get('app_im', array());
@@ -1193,7 +1195,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 return;
             }
 
-            $member['course'] = $this->convertCourse($course);
+            $course = $this->convertCourse($course);
+            $member['course'] = $course;
             $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
             $imSetting = $this->getSettingService()->get('app_im', array());
@@ -1431,6 +1434,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $course['largePicture'] = isset($course['cover']['large']) ? $this->getFileUrl($course['cover']['large']) : '';
         $course['about'] = isset($course['summary']) ? $this->convertHtml($course['summary']) : '';
 
+        $course['title'] = CourseTitleUtils::getDisplayedTitle($course);
         return $course;
     }
 
