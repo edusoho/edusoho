@@ -67,6 +67,18 @@ class Setting extends BaseResource
         return ArrayToolkit::filter($res, $default);
     }
 
+    protected function filterClassroom()
+    {
+        $res = $this->getSettingService()->get('classroom');
+
+        $default = array(
+            'show_student_num_enabled' => '1',
+        );
+        $res = array_merge($default, $res);
+
+        return ArrayToolkit::filter($res, $default);
+    }
+
     protected function filterApp_im()
     {
         $res = $this->getSettingService()->get('app_im');
@@ -151,6 +163,9 @@ class Setting extends BaseResource
     {
         return array(
             'course' => array(
+                'needToken' => false,
+            ),
+            'classroom' => array(
                 'needToken' => false,
             ),
             'app_im' => array(
