@@ -25,6 +25,7 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
                 'lastRefreshTime = :lastRefreshTime',
                 'lastRefreshTime < :lastRefreshTime_LT',
                 'lastRefreshTime > :lastRefreshTime_GT',
+                'userId in (:userIds)',
             ),
             'timestamps' => array(
                 'createdTime',
@@ -34,6 +35,11 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
                 'data' => 'json',
             ),
         );
+    }
+
+    public function findByIds(array $ids)
+    {
+        return $this->findInField('id', $ids);
     }
 
     public function findByUserId($userId)
@@ -61,5 +67,17 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
         $sql = "SELECT openId FROM {$this->table} WHERE type = ? AND openId IN ({$marks})";
 
         return $this->db()->fetchAll($sql, array_merge(array($type), $openIds)) ?: array();
+    }
+
+    public function findSubscribedUsersByUserIdsAndType($userIds, $type)
+    {
+        if (empty($userIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+        $sql = "SELECT openId FROM {$this->table} WHERE type = ? AND userId IN ({$marks}) And isSubscribe = 1";
+
+        return $this->db()->fetchAll($sql, array_merge(array($type), $userIds)) ?: array();
     }
 }
