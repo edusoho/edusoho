@@ -92,6 +92,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
     public function onTaskUpdate(Event $event)
     {
+        $task = $event->getSubject();
         if ('live' == $task['type']) {
             $this->deleteJob($task);
 
@@ -123,12 +124,18 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 0,
                 1
             );
-            $user = $this->getUserService()->getUser($teachers[0]['userId']);
+            if (empty($teachers)) {
+                $nickname = '';
+            } else {
+                $user = $this->getUserService()->getUser($teachers[0]['userId']);
+                $nickname = $user['nickname'];
+            }
+
             $data = array(
                 'first' => array('value' => '同学，你好，你的作业已批阅完成'),
                 'keyword1' => array('value' => $task['title']),
                 'keyword2' => array('value' => $course['courseSetTitle']),
-                'keyword3' => array('value' => $user['nickname']),
+                'keyword3' => array('value' => $nickname),
                 'remark' => array('value' => '作业结果：'.$this->testpaperStatus[$paperResult['passedStatus']]),
             );
         } else {
