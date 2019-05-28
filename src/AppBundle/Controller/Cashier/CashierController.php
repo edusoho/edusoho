@@ -6,6 +6,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\SettingService;
+use Biz\WeChat\Service\WeChatService;
 use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
@@ -85,37 +86,24 @@ class CashierController extends BaseController
     private function successForward($trade)
     {
         $wechatSetting = $this->getSettingService()->get('wechat', array());
-        if (!empty($wechatSetting['wechat_notification_enabled'])) {
+        if (!empty($wechatSetting['wechat_notification_enabled']) && (!$this->isMobileClient() || $this->isWxClient())) {
             $isBindWechat = false;
-            $isSubscribeWechat = false;
+            $loginUrl = $this->generateUrl('login', array('goto' => $wechatSetting['account_code']), true);
+            $qrcode = $this->generateUrl('common_qrcode', array('text' => $loginUrl), true);
 
             $user = $this->getCurrentUser();
-            $userBinds = $this->getUserService()->findUserBindByTypeAndUserId('weixin', $user['id']);
-            if (!empty($userBinds)) {
+            $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($user['id']);
+            if (!empty($weChatUser)) {
                 $isBindWechat = true;
-                $userLists = array();
-                foreach ($userBinds as $userBind) {
-                    $userLists[] = array(
-                        'openid' => $userBind['fromId'],
-                    );
-                }
-                $biz = $this->getBiz();
-                $userInfos = $biz['wechat.template_message_client']->batchGetUserInfo($userLists);
-                if (!empty($userInfos)) {
-                    $isSubscribeWechat = true;
-                }
+                $qrcode = $wechatSetting['account_code'];
             }
-            if (!($isBindWechat && $isSubscribeWechat)) {
-                return $this->forward('AppBundle:Cashier/Cashier:guide', array(
-                    'trade' => $trade,
-                    'options' => array(
-                        'isBindWechat' => $isBindWechat,
-                        'isSubscribeWechat' => $isSubscribeWechat,
-                        'userBinds' => $userBinds,
-                        'userInfos' => $userInfos,
-                    ),
-                ));
-            }
+
+            return $this->forward('AppBundle:Cashier/Cashier:guide', array(
+                'options' => array(
+                    'isBindWechat' => $isBindWechat,
+                    'qrcode' => $qrcode,
+                ),
+            ));
         }
 
         return $this->forward("AppBundle:Cashier/Cashier:{$trade['type']}Success", array(
@@ -123,10 +111,9 @@ class CashierController extends BaseController
         ));
     }
 
-    public function guideAction($trade, $options)
+    public function guideAction($options)
     {
-        return $this->render('cashier/guide.html.twig', array(
-            'trade' => $trade,
+        return $this->render('cashier/success.html.twig', array(
             'options' => $options,
         ));
     }
@@ -233,6 +220,14 @@ class CashierController extends BaseController
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    private function getWeChatService()
+    {
+        return $this->createService('WeChat:WeChatService');
     }
 
     /**

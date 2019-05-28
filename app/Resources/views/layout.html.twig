@@ -63,7 +63,6 @@
   {% block head_scripts %}{% endblock %}
 </head>
 <body class="{% block bodyClass %}{{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}{% endblock %}">
-
 <!--[if lt IE 9]>
 <script src="{{ asset('static-dist/libs/fix-ie.js') }}"></script>
 {% include 'default/ie8-alert.html.twig' %}
@@ -71,7 +70,6 @@
 
 {% block body %}
   <div class="es-wrap">
-
     {% block header %}
       {% include 'site-hint.html.twig' %}
       {% include 'default/header.html.twig' %}
@@ -99,8 +97,16 @@
   </div>
 
   {% block esBar %}
-    {% if setting('esBar.enabled', 0) %}
+    {% if setting('esBar.enabled', 0) and app.user.isLogin()|default(false) %}
       {% include 'es-bar/index.html.twig' %}
+    {% endif %}
+  {% endblock %}
+
+  {% block wechatInform %}
+    {% if (siteNav|default() == '/') %}
+      {% if (is_mobile_client() == false or (is_mobile_client() and (app.request.headers.get('User-Agent') matches '/MicroMessenger/'))) and app.user.isLogin()|default(false) %}
+        {% include 'wechat-inform.html.twig' %}
+      {% endif %}
     {% endif %}
   {% endblock %}
 
