@@ -26,31 +26,13 @@ class EmailRateLimiterTest extends BaseTestCase
         $this->assertNull($result);
     }
 
-    public function testCreateMaxRequestOccurException()
+    public function testCreateEmailMaxRequestOccurException()
     {
         $limiter = new SmsRateLimiter($this->biz);
-        $exception = ReflectionUtils::invokeMethod($limiter, 'createMaxRequestOccurException');
+        $exception = ReflectionUtils::invokeMethod($limiter, 'createEmailMaxRequestOccurException');
         $this->assertEquals(
             'AppBundle\Component\RateLimit\RateLimitException',
             get_class($exception)
         );
-    }
-
-    public function testCreateCaptchaOccurException()
-    {
-        $limiter = new SmsRateLimiter($this->biz);
-        $exception = ReflectionUtils::invokeMethod($limiter, 'createCaptchaOccurException');
-        $this->assertEquals(
-            'Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException',
-            get_class($exception)
-        );
-    }
-
-    public function testSetBiz()
-    {
-        $limiter = new SmsRateLimiter($this->biz);
-        $limiter->setBiz($this->biz);
-        $result = ReflectionUtils::getProperty($limiter, 'biz');
-        $this->assertEquals('Codeages\Biz\Framework\Context\Biz', get_class($result));
     }
 }
