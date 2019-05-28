@@ -17,7 +17,6 @@ class HotGroupDataTag extends BaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
-        return array();
         if (empty($arguments['count'])) {
             throw new \InvalidArgumentException($this->getServiceKernel()->trans('count参数缺失'));
         } else {
