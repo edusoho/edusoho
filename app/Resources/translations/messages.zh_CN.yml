@@ -3133,7 +3133,6 @@ user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样�
 user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一个试试。
 user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员。
 user.settings.email.send_success: 请登录邮箱%email%<br>并点击验证链接以完成验证
-user.settings.email.ip_exceeded_send_limit: 已超过发送限制，1小时后再尝试。
 
 # 个人设置模块-第三方登录
 user.settings.oauth: 第三方登录
@@ -9504,6 +9503,7 @@ exception.thread.type_invalid: 类型错误
 exception.thread.not_found_member: 成员不存在
 exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
+exception.rate_limit_email_max_attempt_reach: 已超过发送限制，1小时后再尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: 云短信相关设置未开启!
 exception.setting.attachment.setting_enable: 云附件未开启!

@@ -2629,7 +2629,6 @@ user.settings.email.new_email_same_old: New eamil is same as old one.
 user.settings.email.new_email_not_unique: The email is not unique, change it.
 user.settings.email.send_error: Eamil send fail, please contact system administrator.
 user.settings.email.send_success: 'Please verify your email address. We’ve sent a confirmation email to:<strong>%email%</strong><br>Click the confirmation link in that email to finish.'
-user.settings.email.ip_exceeded_send_limit: The delivery limit has been exceeded and try again after 1 hour.
 user.settings.oauth: 'Login with third party account'
 user.settings.oauth.content_title: 'Login with third party account'
 user.settings.oauth.weixin: 'WeChat Login'
@@ -8214,6 +8213,7 @@ exception.thread.type_invalid:
 exception.thread.not_found_member:
 exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
+exception.rate_limit_email_max_attempt_reach: 已超过发送限制，1小时后再尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: Cloud SMS related settings are not enabled!
 exception.setting.attachment.setting_enable: Cloud Attachement settings are not enabled!

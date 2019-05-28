@@ -28,6 +28,11 @@ class AbstractRateLimiter
         return RateLimitException::FORBIDDEN_MAX_REQUEST();
     }
 
+    protected function createEmailMaxRequestOccurException()
+    {
+        return RateLimitException::FORBIDDEN_EMAIL_MAX_REQUEST();
+    }
+
     protected function createCaptchaOccurException()
     {
         return new TooManyRequestsHttpException(null, RateLimiterInterface::CAPTCHA_OCCUR_MSG_KEY, null, RateLimiterInterface::CAPTCHA_OCCUR);

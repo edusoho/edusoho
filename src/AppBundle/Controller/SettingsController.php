@@ -720,13 +720,8 @@ class SettingsController extends BaseController
 
             //同一IP限制
             $biz = $this->getBiz();
-            $factory = $biz['ratelimiter.factory'];
-            $limiter = $factory('safe_email_setting', 15, 3600);
-            $remain = $limiter->check($request->getClientIp());
-
-            if ($remain == 0) {
-                return $this->createJsonResponse(array('message' => 'user.settings.email.ip_exceeded_send_limit'), 403);
-            }
+            $rateLimiter = $biz['email_rate_limiter'];
+            $rateLimiter->handle($request);
 
             //拖动校验
             $authSettings = $this->getSettingService()->get('auth', array());
