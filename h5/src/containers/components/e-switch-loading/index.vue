@@ -14,7 +14,7 @@
     <van-popup v-model="show" class="code-popup-body">
       <i class="icon-close h5-icon h5-icon-guanbi" @click="show=false"></i>
       <div class="title text-14">扫描下方二维码，授权开启课程通知</div>
-      <img class="code-img" src='static/images/code_default.png'>
+      <img class="code-img" src='http://gdy.st.edusoho.cn/files/system/2019/05-28/11432083c05c061217.png?version=8.3.29'>
     </van-popup>
   </div>
 </template>

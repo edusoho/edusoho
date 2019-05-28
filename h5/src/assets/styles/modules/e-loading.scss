@@ -74,10 +74,11 @@
 .switch-code-container {
   .es-switch-loading {
     position: fixed;
-    bottom: 70px;
+    bottom: 13vh;
     top: auto;
     right: 0;
     left: 0;
+    z-index: 2;
     text-align: center;
     &.default .spot {
       -webkit-animation: none;

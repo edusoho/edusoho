@@ -88,3 +88,43 @@
     }
   }
 }
+
+.pay-success-container {
+  padding-top: vw(20);
+  text-align: center;
+  .pay-success-text {
+    margin-bottom: vw(24);
+    .h5-icon {
+      color: #70BF85;
+      vertical-align: middle;
+      font-size: vw(28);
+    }
+    .success-text {
+      color: #70BF85;
+      vertical-align: middle;
+    }
+    .color-red {
+      color: #F44E4E;
+    }
+  }
+  .qrcode-img-container img {
+    width: vw(200);
+    height: vw(200);
+  }
+  .press-img-container {
+    img {
+      width: vw(120);
+      height: vw(120);
+    }
+    .press-text {
+      margin-top: vw(8);
+      margin-bottom: vw(25);
+      color: #95CBA3;
+    }
+  }
+  .btn-back-course {
+    height: auto;
+    padding: vw(7) vw(26);
+    line-height: 1;
+  }
+}
