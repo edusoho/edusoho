@@ -827,8 +827,12 @@ class SettingsController extends BaseController
 
             $clients[$userBind['type']]['status'] = 'bind';
         }
-        $loginUrl = $this->generateUrl('login', array(), true);
-        $loginQrcode = $this->generateUrl('common_qrcode', array('text' => $loginUrl), true);
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        $loginQrcode = '';
+        if (!empty($wechatSetting['wechat_notification_enabled'])) {
+            $loginUrl = $this->generateUrl('login', array('goto' => $wechatSetting['account_code']), true);
+            $loginQrcode = $this->generateUrl('common_qrcode', array('text' => $loginUrl), true);
+        }
 
         return $this->render('settings/binds.html.twig', array(
             'clients' => $clients,

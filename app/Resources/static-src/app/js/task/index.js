@@ -27,12 +27,30 @@ if ($adBtn.length > 0) {
 }
 
 // 微信通知
-const src = $('.js-wechat-qrcode-btn').data('img');
-$('.js-wechat-qrcode-btn').popover({
-  trigger: 'click',
-  placement: 'bottom',
-  html: 'true',
-  animation: false,
-  container: 'body',
-  content: `<img class="wechat-inform-task-qrcode" src="${src}">`
-})
+if ($('.js-wechat-qrcode-btn').length > 0) {
+  var $target = $('.js-wechat-qrcode-btn');
+  if (typeof($target.data('url')) != 'undefined') {
+    $.get($target.data('url'), res => {
+      $target.data("img", res.img);
+      const src = res.img;
+      $('.js-wechat-qrcode-btn').popover({
+        trigger: 'click',
+        placement: 'bottom',
+        html: 'true',
+        animation: false,
+        container: 'body',
+        content: `<img class="wechat-inform-task-qrcode" src="${src}">`
+      })
+    });
+  } else {
+    const src = $target.data('img');
+    $('.js-wechat-qrcode-btn').popover({
+      trigger: 'click',
+      placement: 'bottom',
+      html: 'true',
+      animation: false,
+      container: 'body',
+      content: `<img class="wechat-inform-task-qrcode" src="${src}">`
+    })
+  }
+}
