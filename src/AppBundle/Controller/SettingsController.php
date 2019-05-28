@@ -1002,11 +1002,6 @@ class SettingsController extends BaseController
         return $client;
     }
 
-    protected function getLoginQrcode()
-    {
-
-    }
-
     /**
      * @return FileService
      */
