@@ -88,7 +88,7 @@ class CashierController extends BaseController
         $wechatSetting = $this->getSettingService()->get('wechat', array());
         if (!empty($wechatSetting['wechat_notification_enabled']) && (!$this->isMobileClient() || $this->isWxClient())) {
             $isBindWechat = false;
-            $loginUrl = $this->generateUrl('login', array(), true);
+            $loginUrl = $this->generateUrl('login', array('goto' => $wechatSetting['account_code']), true);
             $qrcode = $this->generateUrl('common_qrcode', array('text' => $loginUrl), true);
 
             $user = $this->getCurrentUser();

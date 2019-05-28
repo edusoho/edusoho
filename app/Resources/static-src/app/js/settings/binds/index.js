@@ -43,7 +43,6 @@ const wechatIntro = () => {
   }).start();
 }
 
-
 var $notificationEnable = $('#wechat_notification_enabled').val();
 if (!store.get(WECHAT_BIND_INTRO) && $('.wechat-inform-section').length <= 0 && $notificationEnable) {
   store.set(WECHAT_BIND_INTRO, true);
