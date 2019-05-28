@@ -1,33 +1,33 @@
 import { isMobileDevice } from 'common/utils';
 
 export default class wechatInform {
-	constructor() {
-		this.$section = $('.js-wechat-inform');
-		this.$pendant = $('.js-wechat-pendant');
-		this.$qrcode = $('.js-wechat-qrcode');
-		this.$mask = $('.js-wechat-mask');
-		this.init();
-	}
+  constructor() {
+    this.$section = $('.js-wechat-inform');
+    this.$pendant = $('.js-wechat-pendant');
+    this.$qrcode = $('.js-wechat-qrcode');
+    this.$mask = $('.js-wechat-mask');
+    this.init();
+  }
 
-	init() {
-		this.bindEvent();
+  init() {
+    this.bindEvent();
     this.initImg();
-	}
+  }
 
   bindEvent() {
     this.$section.on('click', '.js-wechat-close-btn', (event) => this.closeWechatInform(event));
     this.$section.on('click', '.js-wechat-pendant', (event) => this.showQrcode(event));
-	}
+  }
   
-	closeWechatInform(event) {
-		const $target = $(event.currentTarget);
-		event.stopPropagation();
+  closeWechatInform(event) {
+    const $target = $(event.currentTarget);
+    event.stopPropagation();
     $target.parent().hide();
     let messageClass;
-		if (isMobileDevice()) {
+    if (isMobileDevice()) {
       this.$mask.hide();
       messageClass = 'cd-text-sm';
-			$('body').removeClass('wechat-inform-body');
+      $('body').removeClass('wechat-inform-body');
     } else {
       messageClass = 'cd-text-md';
     }
@@ -40,17 +40,17 @@ export default class wechatInform {
         url: this.$section.data('url')
       },
     })
-	}
+  }
 
-	showQrcode(event) {
-		const $target = $(event.currentTarget);
-		if (isMobileDevice()) {
-			$('body').addClass('wechat-inform-body');
-			this.$mask.show();
-		}
-		$target.addClass('hidden');
-		this.$qrcode.removeClass('hidden');
-	}
+  showQrcode(event) {
+    const $target = $(event.currentTarget);
+    if (isMobileDevice()) {
+      $('body').addClass('wechat-inform-body');
+      this.$mask.show();
+    }
+    $target.addClass('hidden');
+    this.$qrcode.removeClass('hidden');
+  }
 
   initImg() {
     var $target = $('.js-wechat-pendant');
