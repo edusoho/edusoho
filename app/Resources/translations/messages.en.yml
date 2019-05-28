@@ -2629,6 +2629,7 @@ user.settings.email.new_email_same_old: New eamil is same as old one.
 user.settings.email.new_email_not_unique: The email is not unique, change it.
 user.settings.email.send_error: Eamil send fail, please contact system administrator.
 user.settings.email.send_success: 'Please verify your email address. We’ve sent a confirmation email to:<strong>%email%</strong><br>Click the confirmation link in that email to finish.'
+user.settings.email.ip_exceeded_send_limit: The delivery limit has been exceeded and try again after 1 hour.
 user.settings.oauth: 'Login with third party account'
 user.settings.oauth.content_title: 'Login with third party account'
 user.settings.oauth.weixin: 'WeChat Login'

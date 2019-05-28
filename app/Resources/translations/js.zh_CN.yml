@@ -106,6 +106,7 @@ user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样
 user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一个试试
 user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员
 user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并点击确认邮件中的链接完成修改
+user.settings.email.ip_exceeded_send_limit: 已超过发送限制，1小时后再尝试。
 
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
