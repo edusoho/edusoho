@@ -34,7 +34,7 @@ export default class wechatInform {
     cd.message({
       type: 'info',
       message: `<span class="${messageClass}">“微信通知”可在“个人设置-第三方登录”开启。</span>`,
-      delay: '100000',
+      delay: '3000',
       action: {
         title: `<span class="${messageClass}">前往开启</span>`,
         url: this.$section.data('url')
