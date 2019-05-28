@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class WeChatSettingFilter extends Filter
 {
     protected $publicFields = array(
-        'enabled', 'official_name', 'official_qrcode',
+        'enabled', 'official_qrcode',
     );
 
     protected function publicFields(&$data)

@@ -59,7 +59,6 @@ class Setting extends AbstractResource
 
         $result = array(
             'enabled' => empty($weChatSetting['wechat_notification_enabled']) ? false : true,
-            'official_name' => empty($weChatSetting['account_name']) ? '' : $weChatSetting['account_name'],
             'official_qrcode' => empty($weChatSetting['account_code']) ? '' : $weChatSetting['account_code'],
         );
 
