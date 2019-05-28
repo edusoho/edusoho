@@ -139,14 +139,6 @@
       </div>
 
       <div data-sub="account" class="{% if not wechatSetting.wechat_notification_enabled %}hidden{% endif %}">
-        <div class="form-group group-field">
-          <div class="col-md-4 control-label">
-            <label for="account_name">{{'admin.setting_wechat_auth.account_name'|trans}}</label>
-          </div>
-          <div class="controls col-md-7">
-            <input id="account_name" name="wechatSetting[account_name]" value="{{ wechatSetting.account_name }}" class="form-control"></input>
-          </div>
-        </div>
 
         <div class="form-group group-field">
           <div class="col-md-4 control-label">
@@ -158,7 +150,7 @@
               <span>
                 <img class="js-code-img account-code hidden" src="{{ wechatSetting.account_code }}" alt="">
               </span>
-              <a class="btn btn-default btn-sm js-code-view code-view-button">{{'admin.setting_wechat_auth.account_code_view'|trans}}</a>
+              <a class="btn btn-default btn-sm js-code-view">{{'admin.setting_wechat_auth.account_code_view'|trans}}</a>
             </span>
             <span class="code-help-block {% if wechatSetting.account_code %}hidden{% endif %}">{{'admin.setting_wechat_auth.account_code_empty'|trans|raw}}</span>
             <a class="btn btn-default btn-sm btn-primary" id="qrcode-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_logo_upload') }}">{{'form.btn.set'|trans}}</a>
