@@ -143,5 +143,10 @@ export default [
     url: '/user/{mobile}/password/mobile',
     method: 'PATCH',
     disableLoading: true
+  }, {
+    name: 'weChatNotifyState',
+    url: '/wechat_user_notify_state/official',
+    method: 'GET',
+    disableLoading: true
   }
 ];

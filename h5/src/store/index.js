@@ -17,6 +17,7 @@ const state = {
   courseSettings: {},
   title: '',
   vipSettings: {},
+  wechatSwitch: false,
   vipSwitch: false,
   socialBinded: {
     wx: true

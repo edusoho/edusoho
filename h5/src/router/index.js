@@ -262,6 +262,24 @@ const setVipSwitch = () => new Promise((resolve, reject) => {
   return resolve();
 });
 
+// 检查微信公众号开关配置
+const setWeChatSwitch = () => new Promise((resolve, reject) => {
+  if (!Object.keys(store.state.vipSettings).length) {
+    return store.dispatch('getGlobalSettings', { type: 'wechat', key: 'wechatSettings' })
+      .then(res => {
+        if (res.enabled) {
+          return store.dispatch('setWeChatSwitch', true).then(() => resolve());
+        }
+        return resolve(res);
+      })
+      .catch(err => {
+        Toast.fail(err.message);
+        return reject(err);
+      });
+  }
+  return resolve();
+});
+
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name);
 
@@ -300,6 +318,10 @@ router.beforeEach((to, from, next) => {
     next();
   } else {
     next();
+  }
+
+  if (store.state.token) {
+    setWeChatSwitch();
   }
 });
 
