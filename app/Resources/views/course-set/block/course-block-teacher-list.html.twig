@@ -51,7 +51,7 @@
                         <span class="num"><i class="es-icon es-icon-people"></i>
                           {% if setting('course.show_cover_num_mode') == 'studentNum' %}
                             {{ courseSet.studentNum }}
-                          {% elseif setting('course.show_cover_num_mode', 'studentNum') == 'hitNum' %}
+                          {% elseif setting('course.show_cover_num_mode') == 'hitNum' %}
                             {{ courseSet.hitNum }}
                           {% endif %}
                         </span>
