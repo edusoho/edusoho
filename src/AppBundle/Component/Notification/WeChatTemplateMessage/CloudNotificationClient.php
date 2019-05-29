@@ -153,7 +153,11 @@ class CloudNotificationClient
             'Authorization: '.$this->auth->makeRequestAuthorization($uri, ''),
         ));
 
-        $url = $this->baseUrl.$uri.'?'.http_build_query($params);
+        $url = $this->baseUrl.$uri;
+
+        if (!empty($params)) {
+            $url = $url.'?'.http_build_query($params);
+        }
 
         curl_setopt($curl, CURLOPT_URL, $url);
 
