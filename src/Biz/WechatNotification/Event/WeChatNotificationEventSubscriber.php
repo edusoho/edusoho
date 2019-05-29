@@ -8,7 +8,6 @@ use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use AppBundle\Common\ArrayToolkit;
 
 class WeChatNotificationEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {

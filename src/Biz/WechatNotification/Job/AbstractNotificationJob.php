@@ -6,20 +6,18 @@ use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Biz\System\Service\LogService;
 use Biz\WeChat\Service\WeChatService;
 use Biz\Course\Service\CourseService;
-use AppBundle\Common\ArrayToolkit;
 
 class AbstractNotificationJob extends AbstractJob
 {
-	const OFFICIAL_TYPE = 'official';
+    const OFFICIAL_TYPE = 'official';
 
     const LIMIT_NUM = 1000;
-    
-	public function execute()
-	{
 
-	}
+    public function execute()
+    {
+    }
 
-	protected function sendNotifications($userIds, $templateId, $data, $options = array())
+    protected function sendNotifications($userIds, $templateId, $data, $options = array())
     {
         $subscribedUsers = $this->getWeChatService()->findSubscribedUsersByUserIdsAndType($userIds, self::OFFICIAL_TYPE);
         $batchs = array_chunk($subscribedUsers, self::LIMIT_NUM);

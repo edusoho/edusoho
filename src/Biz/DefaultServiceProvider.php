@@ -258,7 +258,7 @@ class DefaultServiceProvider implements ServiceProviderInterface
             }
 
             return null;
-        }
+        };
 
         $biz['lock.flock.directory'] = function ($biz) {
             return $biz['run_dir'];
