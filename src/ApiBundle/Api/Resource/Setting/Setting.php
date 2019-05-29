@@ -159,7 +159,9 @@ class Setting extends AbstractResource
             $showHitNumEnabled = 0;
         } elseif (($courseSetting['show_student_num_enabled'] == 1) && ($courseSetting['show_cover_num_mode'] == 'studentNum')) {
             $showStudentNumEnabled = 1;
+            $showHitNumEnabled = 0;
         } else {
+            $showStudentNumEnabled = 0;
             $showHitNumEnabled = 1;
         }
         
