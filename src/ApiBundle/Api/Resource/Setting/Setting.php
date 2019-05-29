@@ -159,6 +159,7 @@ class Setting extends AbstractResource
             'part_name' => empty($courseSetting['part_name']) ? '节' : $courseSetting['part_name'],
             'task_name' => empty($courseSetting['task_name']) ? '任务' : $courseSetting['task_name'],
             'show_student_num_enabled' => !isset($courseSetting['show_student_num_enabled']) ? '1' : $courseSetting['show_student_num_enabled'],
+            'show_cover_num_mode' => !isset($courseSetting['show_cover_num_mode']) ? '' : $courseSetting['show_cover_num_mode'],
         );
     }
 
