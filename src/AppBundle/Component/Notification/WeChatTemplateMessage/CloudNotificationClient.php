@@ -31,8 +31,6 @@ class CloudNotificationClient
 
     protected $baseUrl = '';
 
-    protected $config;
-
     protected $userAgent = 'EduSoho Cloud API Client 1.0';
 
     protected $connectTimeout = 30;
@@ -74,7 +72,7 @@ class CloudNotificationClient
         $result = $this->postRequest(self::WECHAT_CONFIG_OPEN, $config);
         $rawResult = json_decode($result, true);
 
-        if (isset($rawResult['success'] && 'false' == $rawResult['success'])) {
+        if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
             $this->logger && $this->logger->error('WECHAT_CONFIG_OPEN_ERROR', $rawResult);
 
             return array();
@@ -88,7 +86,7 @@ class CloudNotificationClient
         $result = $this->postRequest(self::WECHAT_CONFIG_CLOSE);
         $rawResult = json_decode($result, true);
 
-        if (isset($rawResult['success'] && 'false' == $rawResult['success'])) {
+        if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
             $this->logger && $this->logger->error('WECHAT_CONFIG_CLOSE_ERROR', $rawResult);
 
             return array();
@@ -102,7 +100,7 @@ class CloudNotificationClient
         $result = $this->postRequest(self::NOTIFICATIONS_SEND, $list);
         $rawResult = json_decode($result, true);
 
-        if (isset($rawResult['success'] && 'false' == $rawResult['success'])) {
+        if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
             $this->logger && $this->logger->error('WECHAT_NOTIFICATION_SEND_ERROR', $rawResult);
 
             return array();
@@ -116,7 +114,7 @@ class CloudNotificationClient
         $result = $this->getRequest(self::NOTIFICATION_RESULT_GET.$batchId);
         $rawResult = json_decode($result, true);
 
-        if (isset($rawResult['success'] && 'false' == $rawResult['success'])) {
+        if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
             $this->logger && $this->logger->error('NOTIFICATION_RESULT_GET_ERROR', $rawResult);
 
             return array();
@@ -130,7 +128,7 @@ class CloudNotificationClient
         $result = $this->getRequest(self::NOTIFICATIONS_RESULT_BATCH_GET);
         $rawResult = json_decode($result, true);
 
-        if (isset($rawResult['success'] && 'false' == $rawResult['success'])) {
+        if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
             $this->logger && $this->logger->error('NOTIFICATION_RESULT_BATCH_GET_ERROR', $rawResult);
 
             return array();
