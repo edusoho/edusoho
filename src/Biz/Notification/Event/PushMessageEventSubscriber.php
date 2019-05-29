@@ -883,7 +883,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $this->createPushJob($from, $to, $body);
             }
         }
-//推送
+        //推送
 //        if (!empty($thread['target']['teacherIds'])) {
 //            $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($thread['target']['teacherIds']);
 //            $reg_ids = ArrayToolkit::column($devices, 'regId');
@@ -1045,7 +1045,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'message' => !empty($threadPost['thread']['title']) ? "[{$postUser['nickname']}]回复了你的{$threadType}《{$threadPost['thread']['title']}》" : "[{$postUser['nickname']}]回复了你的{$threadPostType}{$threadType}",
         );
 
-//推送
+        //推送
 //        if ($threadPost['thread']['type'] == 'question') {
 //            $devices = $this->getPushDeviceService()->getPushDeviceByUserId($threadPost['thread']['userId']);
 //            if (!empty($devices['regId'])) {
@@ -1435,6 +1435,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $course['about'] = isset($course['summary']) ? $this->convertHtml($course['summary']) : '';
 
         $course['title'] = CourseTitleUtils::getDisplayedTitle($course);
+
         return $course;
     }
 
