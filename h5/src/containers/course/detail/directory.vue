@@ -26,6 +26,7 @@
               <div class="lesson-cell__lesson text-overflow">
                 <i class="h5-icon h5-icon-dot color-primary text-18"></i>
                 <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.title }}</span>
+                <span>05月29号 11：00</span>
               </div>
               <div :class="['box', 'show-box']"
                 v-for="(task, taskIndex) in lesson.tasks">
@@ -44,9 +45,11 @@
 
             <div v-if="lesson.tasks.length === 1">
               <div class="lesson-cell__lesson text-overflow" @click="lessonCellClick(lesson.tasks[0])">
-                <i class="h5-icon h5-icon-dot color-primary text-18"></i>
-                <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
-
+                <i class="h5-icon h5-icon-dot color-primary text-18 pull-left"></i>
+                <div class="lesson-cell__text">
+                  <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
+                  <span>{{ liveStatusText(lesson.tasks[0]) }}</span>
+                </div>
                 <div class="lesson-cell">
                   <span class="lesson-cell__number">{{ filterNumber(lesson.tasks[0], 0, true) }}</span>
                   <div class="lesson-cell__content ml3">
@@ -94,6 +97,14 @@
       ...mapState(['courseSettings', 'user']),
       currentCourseType() {
         return Number(this.details.parentId) ? '班级' : '课程'
+      },
+      liveStatusText() {
+        return function(lesson){
+          console.log(lesson,'lesson')
+          // const now = new Date().getTime();
+          // const startTimeStamp = this.tasks[]
+          return '2'
+        }
       }
     },
     data() {

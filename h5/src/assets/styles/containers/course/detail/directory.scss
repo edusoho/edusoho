@@ -107,6 +107,10 @@
               background:#FF9E6D;
             }
           }
+          &__text {
+            display: flex;
+            justify-content: space-between;
+          }
         }
       }
     }
