@@ -217,12 +217,12 @@ class Setting extends AbstractResource
         return $this->getLoginConnect($clients);
     }
 
-    public function getClassRoom()
+    public function getClassroom()
     {
         $classroomSetting = $this->getSettingService()->get('classroom', array());
 
         return array(
-            'show_student_num_enabled' => !isset($classroomSetting['show_student_num_enabled']) ? '1' : $classroomSetting['show_student_num_enabled'],
+            'show_student_num_enabled' => isset($classroomSetting['show_student_num_enabled']) ? (bool) $classroomSetting['show_student_num_enabled'] : true,
         );
     }
 

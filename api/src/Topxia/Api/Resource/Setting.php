@@ -69,14 +69,11 @@ class Setting extends BaseResource
 
     protected function filterClassroom()
     {
-        $res = $this->getSettingService()->get('classroom');
+        $classroomSetting = $this->getSettingService()->get('classroom', array());
 
-        $default = array(
-            'show_student_num_enabled' => '1',
+        return array(
+            'show_student_num_enabled' => isset($classroomSetting['show_student_num_enabled']) ? (bool) $classroomSetting['show_student_num_enabled'] : true,
         );
-        $res = array_merge($default, $res);
-
-        return ArrayToolkit::filter($res, $default);
     }
 
     protected function filterApp_im()
