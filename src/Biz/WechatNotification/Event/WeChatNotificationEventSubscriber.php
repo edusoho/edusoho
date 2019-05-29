@@ -12,8 +12,6 @@ use AppBundle\Common\ArrayToolkit;
 
 class WeChatNotificationEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
-    const OFFICIAL_TYPE = 'official';
-
     private $testpaperStatus = array('excellent' => '优秀', 'good' => '良好', 'passed' => '合格', 'unpassed' => '不合格');
 
     /**
@@ -42,59 +40,33 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if ('live' == $task['type']) {
             $key = 'liveTaskUpdate';
-            $this->deleteJob($task);
+            $this->deleteLiveNotificationJob($task);
             $this->registerLiveNotificationJob($task);
         } else {
             $key = 'normalTaskUpdate';
         }
 
-        $templateId = $this->getWeChatService()->getTemplateId($key);
-        if (empty($templateId)) {
-            return;
-        }
-
-        $teachers = $this->getCourseMemberService()->searchMembers(
-            array('courseId' => $course['id'], 'role' => 'teacher', 'isVisible' => 1),
-            array('id' => 'asc'),
-            0,
-            1
-        );
-        $user = $this->getUserService()->getUser($teachers[0]['userId']);
-
-        $batchs = $this->getSendBatchs($course['id']);
-        if (empty($batchs)) {
-            return;
-        }
-
-        $data = array(
-            'first' => array('value' => '同学，你好，课程有新任务发布'),
-            'keyword1' => array('value' => $courseSet['title']),
-            'keyword2' => array('value' => ('live' == $task['type']) ? '直播课' : ''),
-            'keyword3' => array('value' => $user['nickname']),
-            'keyword4' => array('value' => ('live' == $task['type']) ? date('Y-m-d H:i', $task['startTime']) : date('Y-m-d H:i', $task['updatedTime'])),
-            'remark' => array('value' => ('live' == $task['type']) ? '请准时参加' : '请及时前往学习'),
-        );
-
-        $options = array('url' => $this->generateUrl('course_task_show', array('courseId' => $course['id'], 'id' => $task['id']), true));
+        $this->deleteLessonPublishJob($task);
+        $this->registerLessonNotifiactionJob($key, $task);
     }
 
     public function onTaskUnpublish(Event $event)
     {
         $task = $event->getSubject();
-        $this->deleteJob($task);
+        $this->deleteLiveNotificationJob($task);
     }
 
     public function onTaskDelete(Event $event)
     {
         $task = $event->getSubject();
-        $this->deleteJob($task);
+        $this->deleteLiveNotificationJob($task);
     }
 
     public function onTaskUpdate(Event $event)
     {
         $task = $event->getSubject();
         if ('live' == $task['type']) {
-            $this->deleteJob($task);
+            $this->deleteLiveNotificationJob($task);
 
             if ('published' == $task['status']) {
                 $this->registerLiveNotificationJob($task);
@@ -186,26 +158,6 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
     }
 
-    private function getSendBatchs($courseId)
-    {
-        $batchs = array();
-        $conditions = array(
-            'courseId' => $courseId,
-            'role' => 'student',
-        );
-        $membersCount = $this->getCourseMemberService()->countMembers($conditions);
-        if (empty($membersCount)) {
-            return $batchs;
-        }
-
-        $batchNum = $membersCount / 100;
-        for ($i = 0; $i < $batchNum; ++$i) {
-            $batchs[] = ArrayToolkit::column($this->getCourseMemberService()->searchMembers($conditions, array(), $i * 100, 100, array('userId')), 'userId');
-        }
-
-        return $batchs;
-    }
-
     private function getOrderTargetDetailUrl($targetType, $targetId)
     {
         switch ($targetType) {
@@ -223,17 +175,37 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
     }
 
+    private function registerLessonNotifiactionJob($key, $task)
+    {
+        $templateId = $this->getWeChatService()->getTemplateId($key);
+        if (!empty($templateId)) {
+            $job = array(
+                'name' => 'WeChatNotitficationJob_LessonPublish_'.$task['id'],
+                'expression' => time(),
+                'class' => 'Biz\WeChatNotification\Job\LessonPublishNotificationJob',
+                'misfire_threshold' => 60 * 60,
+                'args' => array(
+                    'key' => $key,
+                    'taskId' => $task['id'],
+                    'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true),
+                ),
+            );
+            $this->getSchedulerService()->register($job);
+        }
+    }
+
     private function registerLiveNotificationJob($task)
     {
         $hourTemplateId = $this->getWeChatService()->getTemplateId('oneHourBeforeLiveOpen');
         $dayTemplateId = $this->getWeChatService()->getTemplateId('oneDayBeforeLiveOpen');
         if (!empty($hourTemplateId) && $task['startTime'] >= (time() + 24 * 60 * 60)) {
             $job = array(
-                'name' => 'WeChatNotificationSendOneHourJob_liveLesson_'.$task['id'],
+                'name' => 'WeChatNotificationJob_LiveOneHour_'.$task['id'],
                 'expression' => intval($task['startTime'] - 24 * 60 * 60),
                 'class' => 'Biz\WeChatNotification\Job\LiveNotificationJob',
                 'misfire_threshold' => 60 * 60,
                 'args' => array(
+                    'key' => 'oneHourBeforeLiveOpen',
                     'taskId' => $task['id'],
                     'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true),
                 ),
@@ -243,11 +215,12 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if (!empty($dayTemplateId) && $task['startTime'] >= (time() + 60 * 60)) {
             $job = array(
-                'name' => 'WeChatNotificationSendOneDayJob_liveLesson_'.$task['id'],
+                'name' => 'WeChatNotificationJob_LiveOneDay_'.$task['id'],
                 'expression' => intval($task['startTime'] - 60 * 60),
                 'class' => 'Biz\WeChatNotification\Job\LiveNotificationJob',
                 'misfire_threshold' => 60 * 10,
                 'args' => array(
+                    'key' => 'oneDayBeforeLiveOpen',
                     'taskId' => $task['id'],
                     'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true),
                 ),
@@ -256,10 +229,15 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
     }
 
-    private function deleteJob($task)
+    private function deleteLessonPublishJob($task)
     {
-        $this->deleteByJobName('WeChatNotificationSendOneHourJob_liveLesson_'.$task['id']);
-        $this->deleteByJobName('WeChatNotificationSendOneDayJob_liveLesson_'.$task['id']);
+        $this->deleteByJobName('WeChatNotitficationJob_LessonPublish_'.$task['id']);
+    }
+
+    private function deleteLiveNotificationJob($task)
+    {
+        $this->deleteByJobName('WeChatNotificationJob_LiveOneHour_'.$task['id']);
+        $this->deleteByJobName('WeChatNotificationJob_LiveOneDay_'.$task['id']);
     }
 
     private function deleteByJobName($jobName)

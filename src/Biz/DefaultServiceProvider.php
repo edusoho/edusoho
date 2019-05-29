@@ -3,6 +3,7 @@
 namespace Biz;
 
 use AppBundle\Component\Notification\WeChatTemplateMessage\Client;
+use AppBundle\Component\Notification\WeChatTemplateMessage\CloudNotificationClient;
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
 use Biz\Course\Util\CourseRenderViewResolver;
@@ -239,6 +240,25 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
             return null;
         };
+
+        $biz['wechat.cloud_notification_client'] = function ($biz) {
+            $setting = $biz->service('System:SettingService');
+            $storage = $setting->get('storage', array());
+            $loginBind = $setting->get('login_bind', array());
+            if (!empty($loginBind['weixinmob_enabled'])) {
+                $options = array(
+                    'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
+                    'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
+                    'app_id' => $loginBind['weixinmob_key'],
+                    'secret' => $loginBind['weixinmob_secret'],
+                );
+                $client = new CloudNotificationClient($options);
+
+                return $client;
+            }
+
+            return null;
+        }
 
         $biz['lock.flock.directory'] = function ($biz) {
             return $biz['run_dir'];
