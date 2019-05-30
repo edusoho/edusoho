@@ -4,7 +4,6 @@ namespace Tests\Unit\Common;
 
 use Biz\BaseTestCase;
 use Biz\Common\BizDragCaptcha;
-use Biz\Common\CommonException;
 
 class BizDragCaptchaTest extends BaseTestCase
 {
@@ -32,7 +31,7 @@ class BizDragCaptchaTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Biz\Common\CommonException
+     * @expectedException \Biz\Common\CommonException
      * @expectedExceptionMessage exception.common_drag_captcha_required
      */
     public function testCheckErrorWithEmptyDragToken()
@@ -41,7 +40,7 @@ class BizDragCaptchaTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Biz\Common\CommonException
+     * @expectedException \Biz\Common\CommonException
      * @expectedExceptionMessage exception.common_drag_captcha_required
      */
     public function testCheckErrorWithNotArrayToken()
@@ -50,7 +49,7 @@ class BizDragCaptchaTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Biz\Common\CommonException
+     * @expectedException \Biz\Common\CommonException
      * @expectedExceptionMessage exception.common_drag_captcha_expired
      */
     public function testCheckErrorWithEmptyToken()
@@ -61,12 +60,12 @@ class BizDragCaptchaTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Biz\Common\CommonException
+     * @expectedException \Biz\Common\CommonException
      * @expectedExceptionMessage exception.common_drag_captcha_error
      */
     public function testCheckWithErrorCaptcha()
     {
-        $token = $this->getBizDragCaptcha()->generate(array());;
+        $token = $this->getBizDragCaptcha()->generate(array());
         $dragToken = array('token' => $token['token'], 'captcha' => 1000);
         $dragToken = strrev(base64_encode(json_encode($dragToken)));
         $this->getBizDragCaptcha()->check($dragToken);
