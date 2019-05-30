@@ -133,7 +133,6 @@ class WeChatSettingController extends BaseController
     {
         return array(
             'wechat_notification_enabled' => 0,
-            'account_name' => '',
             'account_code' => '',
         );
     }

@@ -129,16 +129,11 @@ define(function(require, exports, module) {
           if (checked == '1') {
             subItem.removeClass('hidden');
             validator.addItem({
-              element: '[name="wechatSetting[account_name]"]',
-              required: true,
-            });
-            validator.addItem({
               element: '[name="wechatSetting[account_code]"]',
               required: true,
             });
           } else {
             subItem.addClass('hidden');
-            validator.removeItem('[name="wechatSetting[account_name]"]');
             validator.removeItem('[name="wechatSetting[account_code]"]');
           }
         });
@@ -200,8 +195,15 @@ define(function(require, exports, module) {
           } else {
             $target.addClass('hidden');
           }
+          event.stopPropagation();
         });
 
+        $('body').on('click', () => {
+          var $target = $('.js-code-img');
+          if (!$target.hasClass('hidden')) {
+            $target.addClass('hidden');
+          }
+        });
     };
 
 });
