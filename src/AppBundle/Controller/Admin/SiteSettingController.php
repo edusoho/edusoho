@@ -249,9 +249,4 @@ class SiteSettingController extends BaseController
     {
         return $this->createService('Content:FileService');
     }
-
-    protected function getH5SettingService()
-    {
-        return $this->createService('System:H5SettingService');
-    }
 }
