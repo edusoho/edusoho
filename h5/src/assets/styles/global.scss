@@ -126,10 +126,6 @@ a {
   margin-top: vw(5) !important;
 }
 
-.ml3 {
-  margin-left: vw(3) !important;
-}
-
 .ml5 {
   margin-left: vw(5) !important;
 }
@@ -147,6 +143,14 @@ a {
   padding-right: vw(20);
 }
 
+.pr10 {
+  padding-right: vw(10);
+}
+
+.pl3 {
+  padding-left: vw(3) !important;
+}
+
 // color
 .color-primary {
   color: $primary-color;
@@ -161,10 +165,7 @@ a {
   color: #b0bdc9;
 }
 .grey-medium {
-  color: #919191;
-}
-.grey-medium {
-  color: #71777D;
+  color: #71777D !important;
 }
 
 // font-family

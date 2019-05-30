@@ -79,13 +79,16 @@
           }
           &__content {
             @extend .flex-column;
-            margin-left: vw(10);
-            flex: 1;
+            width: 100%;
+            padding-left: vw(10);
+            box-sizing: border-box;
+            flex-shrink: 0;
+            // flex: 1;
             span {
               color: #2B333B;
               word-break: break-word;
             }
-            .lesson-cell-child__text {
+            .lesson-cell-last__text {
               color: #b0bdc9;
               margin-top: vw(10);
             }

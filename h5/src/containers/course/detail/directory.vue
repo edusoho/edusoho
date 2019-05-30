@@ -26,18 +26,17 @@
               <div class="lesson-cell__lesson text-overflow">
                 <i class="h5-icon h5-icon-dot color-primary text-18"></i>
                 <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.title }}</span>
-                <span>05月29号 11：00</span>
               </div>
               <div :class="['box', 'show-box']"
                 v-for="(task, taskIndex) in lesson.tasks">
                 <div class="lesson-cell">
                   <span class="lesson-cell__number pull-left" v-if="!Number(lesson.isOptional)">{{ filterNumber(task, taskIndex) }}</span>
-                  <div class="lesson-cell__content" @click="lessonCellClick(task)">
+                  <div :class="['lesson-cell__content', lesson.tasks[taskIndex].type === 'live' ? 'pr10' : '']" @click="lessonCellClick(task)">
                     <div class="lesson-cell__text">
-                      <span>{{ task.title }}</span>
-                      <span v-if="lesson.tasks[taskIndex].type === 'live'" :class="[liveClass(lesson.tasks[0]), 'live-text']">{{ lesson.tasks[0] | liveStatusText }}</span>
+                      <span class="text-overflow">{{ task.title }}</span>
+                      <span v-if="lesson.tasks[taskIndex].type === 'live'" :class="[liveClass(lesson.tasks[taskIndex]), 'live-text', 'ml5']">{{ lesson.tasks[taskIndex] | liveStatusText }}</span>
                     </div>
-                    <span class="lesson-cell-child__text">{{ task | taskType }}{{ task | filterTask }}</span>
+                    <span class="lesson-cell-last__text">{{ task | taskType }}{{ task | filterTask }}</span>
                   </div>
                   <div v-if="!details.member" :class="['lesson-cell__status', details.member ? '' : task.tagStatus]">
                     {{ filterTaskStatus(task) }}
@@ -49,14 +48,14 @@
             <div v-if="lesson.tasks.length === 1">
               <div class="lesson-cell__lesson text-overflow" @click="lessonCellClick(lesson.tasks[0])">
                 <i class="h5-icon h5-icon-dot color-primary text-18 pull-left"></i>
-                <div class="lesson-cell__text">
-                  <span class="ml3">{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
-                  <span :class="[liveClass(lesson.tasks[0]), 'live-text']">{{ lesson.tasks[0] | liveStatusText }}</span>
+                <div class="lesson-cell__text ">
+                  <span class="pl3 text-overflow">{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
+                  <span :class="[liveClass(lesson.tasks[0]), 'live-text', 'ml5']">{{ lesson.tasks[0] | liveStatusText }}</span>
                 </div>
                 <div class="lesson-cell">
                   <span class="lesson-cell__number">{{ filterNumber(lesson.tasks[0], 0, true) }}</span>
-                  <div class="lesson-cell__content ml3">
-                    <span class="lesson-cell-child__text">{{ lesson.tasks[0] | taskType }}{{ lesson.tasks[0] | filterTask }}</span>
+                  <div class="lesson-cell__content pl3">
+                    <span class="lesson-cell-last__text">{{ lesson.tasks[0] | taskType }}{{ lesson.tasks[0] | filterTask }}</span>
                   </div>
                   <div v-if="!details.member" :class="['lesson-cell__status', details.member ? '' : lesson.tasks[0].tagStatus]">
                     {{ filterTaskStatus(lesson.tasks[0]) }}
@@ -119,7 +118,7 @@
           const startTimeStamp = new Date(lesson.startTime * 1000);
           const endTimeStamp = new Date(lesson.endTime * 1000);
           if (now <= startTimeStamp) {
-            return '';
+            return 'grey-medium';
           }
           if (now > endTimeStamp) {
             if (lesson.activity.replayStatus === 'ungenerated') {
