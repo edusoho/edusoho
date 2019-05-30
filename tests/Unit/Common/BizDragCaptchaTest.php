@@ -11,11 +11,13 @@ class BizDragCaptchaTest extends BaseTestCase
     {
         $result = $this->getBizDragCaptcha()->generate(array());
 
-        $this->assertNotNull($result);
+        $this->assertNotNull($result['token']);
+        $this->assertNotNull($result['jigsaw']);
 
         $result = $this->getBizDragCaptcha()->generate(array(), 'test');
 
-        $this->assertNotNull($result);
+        $this->assertNotNull($result['token']);
+        $this->assertNotNull($result['jigsaw']);
     }
 
     public function testGetBackground()
@@ -27,7 +29,7 @@ class BizDragCaptchaTest extends BaseTestCase
         $token = $this->getBizDragCaptcha()->generate(array());
         $result = $this->getBizDragCaptcha()->getBackground($token['token']);
 
-        $this->assertNotNull($result);
+        $this->assertNotFalse(strpos($result, 'gd-jpeg'));
     }
 
     /**
