@@ -8,6 +8,7 @@ use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Biz\Classroom\Service\ClassroomService;
 
 /**
  * 实现业务：将courseset下第一个course的第一个teacher作为courseSet的teacher
@@ -76,6 +77,10 @@ class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscri
         });
 
         $this->getCourseSetService()->updateCourseSetTeacherIds($courseSet['id'], array($teachers[0]['userId']));
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        if (!empty($classroom)) {
+            $this->getClassroomService()->updateClassroomTeachers($classroom['id']);
+        }
     }
 
     /**
@@ -100,5 +105,13 @@ class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscri
     protected function getMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 }
