@@ -171,10 +171,10 @@ class H5SettingServiceTest extends BaseTestCase
                             'type' => 'url',
                             'target' => null,
                             'url' => '',
-                        )
-                    )
+                        ),
+                    ),
                 ),
-            )
+            ),
         );
     }
 
@@ -202,7 +202,7 @@ class H5SettingServiceTest extends BaseTestCase
                 'items' => array(
                     0 => array('id' => 1),
                     1 => array('id' => 2),
-                    2 => array('id' => 3)
+                    2 => array('id' => 3),
                 ),
             ),
         );
@@ -218,8 +218,8 @@ class H5SettingServiceTest extends BaseTestCase
                         'type' => '',
                         'target' => null,
                         'url' => '',
-                    )
-                )
+                    ),
+                ),
             ),
         );
     }
@@ -233,7 +233,7 @@ class H5SettingServiceTest extends BaseTestCase
                     'type' => '',
                     'target' => null,
                     'url' => '',
-                )
+                ),
             ),
         );
     }
@@ -242,8 +242,8 @@ class H5SettingServiceTest extends BaseTestCase
     {
         return array(
             'data' => array(
-                'activity' => array()
-            )
+                'activity' => array(),
+            ),
         );
     }
 
@@ -252,9 +252,9 @@ class H5SettingServiceTest extends BaseTestCase
         return array(
             'data' => array(
                 'activity' => array(
-                    'id' => 0
-                )
-            )
+                    'id' => 0,
+                ),
+            ),
         );
     }
 
@@ -265,9 +265,9 @@ class H5SettingServiceTest extends BaseTestCase
                 'sort' => 'desc',
                 'items' => array(
                     0 => array('id' => 1),
-                    1 => array('id' => 2)
-                )
-            )
+                    1 => array('id' => 2),
+                ),
+            ),
         );
     }
 
@@ -276,8 +276,8 @@ class H5SettingServiceTest extends BaseTestCase
         return array(
             'data' => array(
                 'sort' => 'desc',
-                'items' => array()
-            )
+                'items' => array(),
+            ),
         );
     }
 
