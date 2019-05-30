@@ -84,10 +84,10 @@
             span {
               color: #2B333B;
               word-break: break-word;
-              &:last-child {
-                color: #b0bdc9;
-                margin-top: vw(15);
-              }
+            }
+            .lesson-cell-child__text {
+              color: #b0bdc9;
+              margin-top: vw(10);
             }
           }
           &__number {
@@ -110,6 +110,23 @@
           &__text {
             display: flex;
             justify-content: space-between;
+            .live-text {
+              padding-left: 3px;
+              padding-right: 3px;
+              font-size: vw(14);
+            }
+            .live-done {
+              color: #b0bdc9;
+              border: 1px solid #b0bdc9;
+            }
+            .live-replay {
+              color: #FFA51F;
+              border: 1px solid #FFA51F;
+            }
+            .living {
+              color: $primary-color;
+              border: 1px solid $primary-color;
+            }
           }
         }
       }

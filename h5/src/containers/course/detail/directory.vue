@@ -31,12 +31,15 @@
               <div :class="['box', 'show-box']"
                 v-for="(task, taskIndex) in lesson.tasks">
                 <div class="lesson-cell">
-                  <span class="lesson-cell__number" v-if="!Number(lesson.isOptional)">{{ filterNumber(task, taskIndex) }}</span>
+                  <span class="lesson-cell__number pull-left" v-if="!Number(lesson.isOptional)">{{ filterNumber(task, taskIndex) }}</span>
                   <div class="lesson-cell__content" @click="lessonCellClick(task)">
-                    <span>{{ task.title }}</span>
-                    <span>{{ task | taskType }}{{ task | filterTask }}</span>
+                    <div class="lesson-cell__text">
+                      <span>{{ task.title }}</span>
+                      <span v-if="lesson.tasks[taskIndex].type === 'live'" :class="[liveClass(lesson.tasks[0]), 'live-text']">{{ lesson.tasks[0] | liveStatusText }}</span>
+                    </div>
+                    <span class="lesson-cell-child__text">{{ task | taskType }}{{ task | filterTask }}</span>
                   </div>
-                  <div :class="['lesson-cell__status', details.member ? '' : task.tagStatus]">
+                  <div v-if="!details.member" :class="['lesson-cell__status', details.member ? '' : task.tagStatus]">
                     {{ filterTaskStatus(task) }}
                   </div>
                 </div>
@@ -47,15 +50,15 @@
               <div class="lesson-cell__lesson text-overflow" @click="lessonCellClick(lesson.tasks[0])">
                 <i class="h5-icon h5-icon-dot color-primary text-18 pull-left"></i>
                 <div class="lesson-cell__text">
-                  <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
-                  <span>{{ liveStatusText(lesson.tasks[0]) }}</span>
+                  <span class="ml3">{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
+                  <span :class="[liveClass(lesson.tasks[0]), 'live-text']">{{ lesson.tasks[0] | liveStatusText }}</span>
                 </div>
                 <div class="lesson-cell">
                   <span class="lesson-cell__number">{{ filterNumber(lesson.tasks[0], 0, true) }}</span>
                   <div class="lesson-cell__content ml3">
-                    <span>{{ lesson.tasks[0] | taskType }}{{ lesson.tasks[0] | filterTask }}</span>
+                    <span class="lesson-cell-child__text">{{ lesson.tasks[0] | taskType }}{{ lesson.tasks[0] | filterTask }}</span>
                   </div>
-                  <div :class="['lesson-cell__status', details.member ? '' : lesson.tasks[0].tagStatus]">
+                  <div v-if="!details.member" :class="['lesson-cell__status', details.member ? '' : lesson.tasks[0].tagStatus]">
                     {{ filterTaskStatus(lesson.tasks[0]) }}
                   </div>
                 </div>
@@ -71,6 +74,7 @@
 <script>
   import { mapState, mapMutations } from 'vuex';
   import { Dialog, Toast } from 'vant';
+  import { formatCompleteTime } from '@/utils/date-toolkit';
   import * as types from '@/store/mutation-types';
   import redirectMixin from '@/mixins/saveRedirect';
   import Api from '@/api';
@@ -87,6 +91,17 @@
         default: '',
       }
     },
+    data() {
+      return {
+        directoryArray: [],
+        chapters: [],
+        tasks: [],
+        unit: [],
+        optionalMap: [],
+        unitShow: {},
+        firstLesson: ''
+      }
+    },
     computed: {
       ...mapState('course', {
         details: state => state.details,
@@ -98,24 +113,22 @@
       currentCourseType() {
         return Number(this.details.parentId) ? '班级' : '课程'
       },
-      liveStatusText() {
-        return function(lesson){
-          console.log(lesson,'lesson')
-          // const now = new Date().getTime();
-          // const startTimeStamp = this.tasks[]
-          return '2'
+      liveClass() {
+        return (lesson) => {
+          const now = new Date().getTime();
+          const startTimeStamp = new Date(lesson.startTime * 1000);
+          const endTimeStamp = new Date(lesson.endTime * 1000);
+          if (now <= startTimeStamp) {
+            return '';
+          }
+          if (now > endTimeStamp) {
+            if (lesson.activity.replayStatus === 'ungenerated') {
+              return 'live-done';
+            }
+            return 'live-replay';
+          }
+          return 'living';
         }
-      }
-    },
-    data() {
-      return {
-        directoryArray: [],
-        chapters: [],
-        tasks: [],
-        unit: [],
-        optionalMap: [],
-        unitShow: {},
-        firstLesson: '',
       }
     },
     watch: {
@@ -334,6 +347,7 @@
             let replay = false
             if (nowDate > endDate) {
               if (task.activity.replayStatus == 'videoGenerated') {
+                // 本站文件
                 if (task.mediaSource === 'self') {
                   this.setSourceType({
                     sourceType: 'video',
@@ -365,6 +379,24 @@
           default:
             Toast('暂不支持此类型');
         }
+      },
+    },
+    filters: {
+      liveStatusText(lesson) {
+        const now = new Date().getTime();
+        const startTimeStamp = new Date(lesson.startTime * 1000);
+        const endTimeStamp = new Date(lesson.endTime * 1000);
+        // 直播未开始
+        if (now <= startTimeStamp) {
+          return formatCompleteTime(startTimeStamp);
+        }
+        if (now > endTimeStamp) {
+          if (lesson.activity.replayStatus === 'ungenerated') {
+            return '已结束';
+          }
+          return '回放';
+        }
+        return '直播中';
       }
     }
   }
