@@ -34,6 +34,9 @@ class SiteSettingController extends BaseController
 
     public function siteAction(Request $request)
     {
+        echo "<pre>";
+        var_dump($this->getH5SettingService()->getDiscovery('h5'));
+        exit;
         $site = $this->getSettingService()->get('site', array());
         $default = array(
             'name' => '',
@@ -248,5 +251,10 @@ class SiteSettingController extends BaseController
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
+    }
+
+    protected function getH5SettingService()
+    {
+        return $this->createService('System:H5SettingService');
     }
 }
