@@ -9,6 +9,9 @@ class H5SettingServiceTest extends BaseTestCase
 {
     public function testGetDiscovery()
     {
+        $this->mockBiz('Content:BlockService', array(
+            array('functionName' => 'getPosters', 'returnValue' => array(0 => array('image' => '', 'link' => array('url' => '')))),
+        ));
         $discoverySettings = $this->getH5SettingService()->getDiscovery('h5');
         $this->assertEquals('slide_show', $discoverySettings['slide-1']['type']);
         $this->assertEquals('course_list', $discoverySettings['courseList-1']['type']);
@@ -34,9 +37,7 @@ class H5SettingServiceTest extends BaseTestCase
 
         $discoverySetting = $this->createTypeListByCustom('course_list');
         $discoverySetting = $this->getH5SettingService()->courseListFilter($discoverySetting);
-        $this->assertEmpty($discoverySetting['data']['items'][0]);
-        $this->assertEmpty($discoverySetting['data']['items'][1]);
-        $this->assertEmpty($discoverySetting['data']['items'][2]);
+        $this->assertEmpty($discoverySetting['data']['items']);
         $this->assertEquals('custom', $discoverySetting['data']['sourceType']);
     }
 
@@ -52,8 +53,7 @@ class H5SettingServiceTest extends BaseTestCase
 
         $discoverySetting = $this->createTypeListByCustom('classroom_list');
         $discoverySetting = $this->getH5SettingService()->classroomListFilter($discoverySetting);
-        $this->assertEmpty($discoverySetting['data']['items'][0]);
-        $this->assertEmpty($discoverySetting['data']['items'][1]);
+        $this->assertEmpty($discoverySetting['data']['items']);
         $this->assertEquals('custom', $discoverySetting['data']['sourceType']);
     }
 
@@ -63,8 +63,8 @@ class H5SettingServiceTest extends BaseTestCase
 
         $discoverySetting = $this->getH5SettingService()->slideShowFilter($discoverySetting);
         $this->assertEquals('slide_show', $discoverySetting['type']);
-        $this->assertNull($discoverySetting['date'][0]['link']['target']);
-        $this->assertEmpty($discoverySetting['date'][0]['link']['url']);
+        $this->assertNull($discoverySetting['data'][0]['link']['target']);
+        $this->assertEmpty($discoverySetting['data'][0]['link']['url']);
     }
 
     public function testPosterFilter()
@@ -73,8 +73,8 @@ class H5SettingServiceTest extends BaseTestCase
 
         $discoverySetting = $this->getH5SettingService()->slideShowFilter($discoverySetting);
         $this->assertEquals('poster', $discoverySetting['type']);
-        $this->assertNull($discoverySetting['date'][0]['link']['target']);
-        $this->assertEmpty($discoverySetting['date'][0]['link']['url']);
+        $this->assertNull($discoverySetting['data'][0]['link']['target']);
+        $this->assertEmpty($discoverySetting['data'][0]['link']['url']);
     }
 
     public function testGrouponFilter()
@@ -360,8 +360,8 @@ class H5SettingServiceTest extends BaseTestCase
                 2 => array('id' => 3),
             )),
             array('functionName' => 'findBatchsByIds', 'returnValue' => array(
-                1 => array('deadline' => time(), 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1),
-                2 => array('deadline' => time() - 100000, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1),
+                1 => array('deadline' => time(), 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1, 'targetType' => 'vip', 'targetId' => 1),
+                2 => array('deadline' => time() - 100000, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1,  'targetType' => 'vip', 'targetId' => 1),
             )),
         ));
         $this->mockBiz('VipPlugin:Vip:LevelService', array(
