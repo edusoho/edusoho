@@ -71,10 +71,10 @@ class H5SettingServiceTest extends BaseTestCase
     {
         $discoverySetting = $this->createPoster();
 
-        $discoverySetting = $this->getH5SettingService()->slideShowFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->posterFilter($discoverySetting);
         $this->assertEquals('poster', $discoverySetting['type']);
-        $this->assertNull($discoverySetting['data'][0]['link']['target']);
-        $this->assertEmpty($discoverySetting['data'][0]['link']['url']);
+        $this->assertNull($discoverySetting['data']['link']['target']);
+        $this->assertEmpty($discoverySetting['data']['link']['url']);
     }
 
     public function testGrouponFilter()
