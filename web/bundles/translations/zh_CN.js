@@ -399,7 +399,8 @@ t.add("material_lib.content_title", "\u6559\u5b66\u8d44\u6599\u5e93", "js", "zh_
 t.add("material_lib.detail.content_title", "\u8d44\u6e90\u8be6\u60c5", "js", "zh_CN");
 t.add("material_lib.have_no_permission_hint", "\u62b1\u6b49\uff0c\u60a8\u65e0\u6743\u64cd\u4f5c\u6b64\u6587\u4ef6", "js", "zh_CN");
 t.add("meterial_lib.select_resource_delete_hint", "\u8bf7\u5148\u9009\u62e9\u4f60\u8981\u5220\u9664\u7684\u8d44\u6e90", "js", "zh_CN");
-t.add("meterial_lib.confirm_share_resource_hint", "\u786e\u5b9a\u8981\u5206\u4eab\u8fd9\u4e9b\u8d44\u6e90\u5417\uff1f", "js", "zh_CN");
+t.add("meterial_lib.confirm_share_resource_hint", "\u8bf7\u786e\u8ba4\u5c06\u6b64\u8d44\u6599\u5171\u4eab\u5230\u516c\u5171\u8d44\u6e90\u5e93?", "js", "zh_CN");
+t.add("meterial_lib.confirm_share_resource_hint_single", "\u8bf7\u786e\u8ba4\u5c06\u6b64\u8d44\u6599\u5171\u4eab\u5230\u516c\u5171\u8d44\u6e90\u5e93?", "js", "zh_CN");
 t.add("meterial_lib.confirm_unshare_resource_hint", "\u786e\u5b9a\u8981\u53d6\u6d88\u5206\u4eab\u8fd9\u4e2a\u8d44\u6e90\u5417\uff1f", "js", "zh_CN");
 t.add("meterial_lib.select_resource_operate_hint", "\u8bf7\u5148\u9009\u62e9\u4f60\u8981\u64cd\u4f5c\u7684\u8d44\u6e90", "js", "zh_CN");
 t.add("meterial_lib.select_share_resource_hint", "\u8bf7\u5148\u9009\u62e9\u4f60\u8981\u5206\u4eab\u7684\u8d44\u6e90", "js", "zh_CN");
@@ -1166,7 +1167,12 @@ t.add("admin.course_manage.manage.tags_select.placeholder", "\u8f93\u5165\u6807\
 t.add("exception.common_frequent_operation", "\u64cd\u4f5c\u8fc7\u4e8e\u9891\u7e41\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5", "js", "zh_CN");
 t.add("material.common_table.file_name", "\u6587\u4ef6\u540d\u79f0", "js", "zh_CN");
 t.add("material.common_table.transcoding", "\u8f6c\u7801\u72b6\u6001", "js", "zh_CN");
+t.add("material.common_table.transcoding_intro", "\u8f6c\u7801\u72b6\u6001\u4ecb\u7ecd", "js", "zh_CN");
+t.add("material.common_table.transcoding_more", "\u8be6\u60c5", "js", "zh_CN");
 t.add("material.common_table.error_reason", "\u9519\u8bef\u539f\u56e0", "js", "zh_CN");
+t.add("material.common_table.fail_not_support", "\u6587\u4ef6\u4e0d\u652f\u6301", "js", "zh_CN");
+t.add("material.common_table.fail_error_tip", "\u6587\u4ef6\u8f6c\u7801\u5931\u8d25\uff0c\u8bf7\u63d0\u4f9b\u6587\u4ef6\u4fe1\u606f\uff0c\u8054\u7cfb\u8fd0\u8425\u4eba\u5458\u5904\u7406\u3002", "js", "zh_CN");
+t.add("material.common_table.not_support_error_tip", "\u4e0a\u4f20\u7684\u6587\u4ef6\u683c\u5f0f\u4e0d\u652f\u6301\u8f6c\u7801\uff0c\u8bf7\u70b9\u51fb\u9ad8\u4eae\u7684\u201c\u6587\u4ef6\u4e0d\u652f\u6301\u201d\uff0c\u4f1a\u663e\u793a\u89e3\u51b3\u65b9\u6848\u3002", "js", "zh_CN");
 t.add("material.common_table.solution_way", "\u89e3\u51b3\u65b9\u6848", "js", "zh_CN");
 t.add("course.stick.success", "\u7f6e\u9876\u6210\u529f\uff01", "js", "zh_CN");
 t.add("course.cancel.stick.success", "\u53d6\u6d88\u7f6e\u9876\u6210\u529f\uff01", "js", "zh_CN");
