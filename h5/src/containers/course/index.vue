@@ -58,7 +58,7 @@
     beforeRouteLeave (to, from, next) {
       this.setSourceType({
         sourceType: 'img',
-        taskId: -1
+        taskId: 0
       });
       next();
     }
