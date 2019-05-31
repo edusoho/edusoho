@@ -77,9 +77,9 @@ export default {
   },
   watch: {
     taskId (value, oldValue) {
-      if (value > 0 && oldValue > 0) {
-        this.initHead();
-      }
+      // 未登录情况下，详情页面不需要初始化播放器
+      if (this.$route.name === 'course' && !this.joinStatus) return;
+      if (value > 0) this.initHead();
     },
   },
   created() {
