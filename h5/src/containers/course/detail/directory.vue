@@ -34,7 +34,7 @@
                   <div :class="['lesson-cell__content', lesson.tasks[taskIndex].type === 'live' ? 'pr10' : '']" @click="lessonCellClick(task)">
                     <div class="lesson-cell__text">
                       <span class="text-overflow">{{ task.title }}</span>
-                      <span v-if="lesson.tasks[taskIndex].type === 'live'" :class="[liveClass(lesson.tasks[taskIndex]), 'live-text', 'ml5']">{{ lesson.tasks[taskIndex] | liveStatusText }}</span>
+                      <span v-if="lesson.tasks[taskIndex].type === 'live' && lesson.task[taskIndex].status === 'published'" :class="[liveClass(lesson.tasks[taskIndex]), 'live-text', 'ml5']">{{ lesson.tasks[taskIndex] | liveStatusText }}</span>
                     </div>
                     <span class="lesson-cell-last__text">{{ task | taskType }}{{ task | filterTask }}</span>
                   </div>
@@ -50,7 +50,7 @@
                 <i class="h5-icon h5-icon-dot color-primary text-18 pull-left"></i>
                 <div class="lesson-cell__text ">
                   <span class="pl3 text-overflow">{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
-                  <span :class="[liveClass(lesson.tasks[0]), 'live-text', 'ml5']">{{ lesson.tasks[0] | liveStatusText }}</span>
+                  <span v-if="lesson.tasks[0].status === 'published'" :class="[liveClass(lesson.tasks[0]), 'live-text', 'ml5']">{{ lesson.tasks[0] | liveStatusText }}</span>
                 </div>
                 <div class="lesson-cell">
                   <span class="lesson-cell__number">{{ filterNumber(lesson.tasks[0], 0, true) }}</span>
@@ -255,8 +255,8 @@
         return '';
       },
       lessonCellClick (task) {
-        // 课程错误，不允许学习任务
-        if (this.errorMsg) {
+        // 课程错误和未发布状态，不允许学习任务
+        if (this.errorMsg || task.status === 'create') {
           this.$emit('showDialog');
           return;
         }
