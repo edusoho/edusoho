@@ -7217,7 +7217,6 @@ admin.setting_wechat_auth.web_appid: 网站AppID
 admin.setting_wechat_auth.web_secret: 网站AppSecret
 admin.setting_wechat_auth.account_appid: 服务号AppID
 admin.setting_wechat_auth.account_secret: 服务号AppSecret
-admin.setting_wechat_auth.account_name: 服务号名称
 admin.setting_wechat_auth.account_code: 服务号二维码
 admin.setting_wechat_auth.account_number: 商户号
 admin.setting_wechat_auth.mp_token: MP文件验证码
@@ -9966,5 +9965,14 @@ material.common_table.label.has_mp4: 已生成MP4
 material_lib.search.type.title: 文件名称
 material_lib.search.type.course: 课程名称
 
+# 微信通知
+wechat.notification.open_notification_hint_title: 为享受更好的服务，建议您开启微信课程通知。
+wechat.notification.open_notification_hint_content: 扫码关注服务号，即可成功开启课程通知。
+wechat.notification.account_qrcode_scan: 请扫二维码，关注服务号
+wechat.notification.course_notification_open: 扫一扫，开启课程通知
+wechat.notification.pay_success: 支付成功
+wechat.notification.open_notification_tip: 扫码关注服务号，即可接收课程通知。
+wechat.notification.mobile_open_notification_tip: 长按识别二维码关注服务号，即可接受课程通知。
+wechat.notification.scan_and_bind: 扫码绑定微信并关注服务号，即可接收课程通知。
 
 

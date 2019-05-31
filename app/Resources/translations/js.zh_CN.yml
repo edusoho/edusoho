@@ -1333,3 +1333,13 @@ material.common_table.solution_way: 解决方案
 
 course.stick.success: 置顶成功！
 course.cancel.stick.success: 取消置顶成功！
+
+#微信通知
+wechat.notification.wechat_bind_hover: >
+  <div class="wechat-intro-title cd-text-warning"><i class="es-icon es-icon-xinxi cd-mr8"></i>提示</div>
+    <div class="wechat-intro-content">
+      <div>为享受更好的服务，建议您开启微信课程通知。</div>
+      <div>点这里绑定微信，并关注服务号即可开启课程通知。</div>
+    </div>
+wechat.notification.homepage.open_tip: <span class="%messageClass%">“微信通知”可在“个人设置-第三方登录”开启。</span>
+wechat.notification.homepage.open_tip_title: <span class="%messageClass%">前往开启</span>
