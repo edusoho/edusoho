@@ -11,7 +11,7 @@
           {% if pageType == 'attachment'%}
             <th>{{ 'cloud_file.application'|trans }}</th>
           {% endif %}
-          <th width="25%">{{ 'material.common_table.th.transcode_status'|trans }}</th>
+          <th width="24%">{{ 'material.common_table.th.transcode_status'|trans }}<a class="es-icon es-icon-help text-normal mls js-table-popover"></a></th>
           <th {% if pageType == 'attachment'%}width="10%"{% endif %}>{{ 'operation'|trans }}</th>
         </tr>
       </thead>

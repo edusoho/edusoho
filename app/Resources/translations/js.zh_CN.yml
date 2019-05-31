@@ -498,7 +498,8 @@ material_lib.content_title: 教学资料库
 material_lib.detail.content_title: 资源详情
 material_lib.have_no_permission_hint: 抱歉，您无权操作此文件
 meterial_lib.select_resource_delete_hint: 请先选择你要删除的资源
-meterial_lib.confirm_share_resource_hint: 确定要分享这些资源吗？
+meterial_lib.confirm_share_resource_hint: 请确认将此资料共享到公共资源库?
+meterial_lib.confirm_share_resource_hint_single: 请确认将此资料共享到公共资源库?
 meterial_lib.confirm_unshare_resource_hint: 确定要取消分享这个资源吗？
 meterial_lib.select_resource_operate_hint: 请先选择你要操作的资源
 meterial_lib.select_share_resource_hint: 请先选择你要分享的资源
@@ -1327,7 +1328,12 @@ admin.course_manage.manage.tags_select.placeholder: 输入标签名称关键字
 exception.common_frequent_operation: 操作过于频繁，请稍后重试
 material.common_table.file_name: 文件名称
 material.common_table.transcoding: 转码状态
+material.common_table.transcoding_intro: 转码状态介绍
+material.common_table.transcoding_more: 详情
 material.common_table.error_reason: 错误原因
+material.common_table.fail_not_support: 文件不支持
+material.common_table.fail_error_tip: 文件转码失败，请提供文件信息，联系运营人员处理。
+material.common_table.not_support_error_tip: 上传的文件格式不支持转码，请点击高亮的“文件不支持”，会显示解决方案。
 material.common_table.solution_way: 解决方案
 
 course.stick.success: 置顶成功！

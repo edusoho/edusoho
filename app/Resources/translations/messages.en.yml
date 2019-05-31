@@ -8213,6 +8213,7 @@ exception.thread.type_invalid:
 exception.thread.not_found_member:
 exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
+exception.rate_limit_email_max_attempt_reach: 已超过发送限制，1小时后再尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: Cloud SMS related settings are not enabled!
 exception.setting.attachment.setting_enable: Cloud Attachement settings are not enabled!
