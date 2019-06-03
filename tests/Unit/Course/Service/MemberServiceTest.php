@@ -2,14 +2,12 @@
 
 namespace Tests\Unit\Course\Service;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Biz\OrderFacade\Product\CourseProduct;
 use Biz\User\Service\UserService;
 
 class MemberServiceTest extends BaseTestCase
@@ -91,7 +89,7 @@ class MemberServiceTest extends BaseTestCase
             'userId' => 1,
             'courseSetId' => $courseSet['id'],
             'joinedType' => 'course',
-            'role' => 'teacher'
+            'role' => 'teacher',
         );
 
         $member = $this->getMemberDao()->create($member);
@@ -112,7 +110,7 @@ class MemberServiceTest extends BaseTestCase
             'courseSetId' => $courseSet['id'],
             'joinedType' => 'course',
             'role' => 'teacher',
-            'stickyTime' => time()
+            'stickyTime' => time(),
         );
 
         $member = $this->getMemberDao()->create($member);
@@ -665,7 +663,7 @@ class MemberServiceTest extends BaseTestCase
 
         $this->getMemberService()->batchUpdateMemberDeadlinesByDay($course['id'], array(0 => $user['id']), 1, 'minus');
         $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
-        $this->assertEquals($member['deadline'], (int)$result['deadline']);
+        $this->assertEquals($member['deadline'], (int) $result['deadline']);
 
         $this->getMemberService()->batchUpdateMemberDeadlinesByDay($course['id'], array(0 => $user['id']), 1);
         $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
@@ -688,7 +686,7 @@ class MemberServiceTest extends BaseTestCase
 
         $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], array(0 => $user['id']), time() - 86400);
         $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
-        $this->assertEquals($member['deadline'], (int)$result['deadline']);
+        $this->assertEquals($member['deadline'], (int) $result['deadline']);
 
         $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], array(0 => $user['id']), time() + 86400);
         $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
