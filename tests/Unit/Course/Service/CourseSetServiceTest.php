@@ -2,10 +2,11 @@
 
 namespace Tests\Unit\Course\Service;
 
+use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use AppBundle\Common\ReflectionUtils;
+use Biz\User\CurrentUser;
 
 class CourseSetServiceTest extends BaseTestCase
 {
@@ -90,6 +91,215 @@ class CourseSetServiceTest extends BaseTestCase
             'title' => '新课程开始！',
         );
         $this->getCourseSetService()->createCourseSet($courseSet);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage exception.common_parameter_error
+     */
+    public function testRecommendCourseException()
+    {
+        $courseSet = array(
+            'title' => '新课程',
+            'type' => 'normal',
+        );
+
+        $this->getCourseSetService()->createCourseSet($courseSet);
+        $this->getCourseSetService()->recommendCourse(1, 'a');
+    }
+
+    private function createAndPublishCourseSet($title, $type)
+    {
+        $courseSet = array(
+            'title' => $title,
+            'type' => $type,
+        );
+
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+
+        return $this->getCourseSetService()->getCourseSet($courseSet['id']);
+    }
+
+    public function testRecommendCourse()
+    {
+        $this->createAndPublishCourseSet('新课程哇', 'normal');
+        $number = 0;
+
+        $recommendCourseSet = $this->getCourseSetService()->recommendCourse(1, $number);
+
+        $excepted = array(
+            'id' => 1,
+            'recommended' => 1,
+            'recommendedSeq' => (int) $number,
+            'recommendedTime' => time(),
+        );
+
+        $this->assertArraySternEquals($excepted, $recommendCourseSet);
+    }
+
+    public function testCancelRecommendCourse()
+    {
+        $courseSet = array(
+            'title' => '新课程哇',
+            'type' => 'normal',
+        );
+
+        $this->getCourseSetService()->createCourseSet($courseSet);
+        $this->getCourseSetService()->recommendCourse(1, 20);
+        $this->getCourseSetService()->cancelRecommendCourse(1);
+        $courseSet = $this->getCourseSetService()->getCourseSet(1);
+
+        $excepted = array(
+            'recommended' => 0,
+            'recommendedTime' => 0,
+            'recommendedSeq' => 0,
+        );
+
+        $this->assertArraySternEquals($excepted, $courseSet);
+    }
+
+    public function testFindRandomCourseSets()
+    {
+        $courseSet1 = $this->createAndPublishCourseSet('新课程1', 'normal');
+        sleep(1);
+        $courseSet2 = $this->createAndPublishCourseSet('新课程2', 'normal');
+        sleep(1);
+        $courseSet3 = $this->createAndPublishCourseSet('新课程3', 'open');
+        sleep(1);
+        $this->getCourseSetService()->createCourseSet(array('title' => '新课程4', 'type' => 'normal'));
+        sleep(1);
+        $this->createAndPublishCourseSet('新课程5', 'open');
+        $this->getCourseSetService()->recommendCourse(5, 2321);
+        $courseSet5 = $this->getCourseSetService()->getCourseSet(5);
+
+        $conditionsA = array(
+            'status' => 'published',
+            'recommended' => 1,
+            'parentId' => 0,
+        );
+
+        $conditionsB = array(
+            'status' => 'published',
+            'parentId' => 0,
+        );
+
+        $courseSetsA = $this->getCourseSetService()->findRandomCourseSets($conditionsA, 5);
+
+        $this->assertEquals(1, $this->count($courseSetsA));
+        $this->assertArraySternEquals($courseSetsA[0], $courseSet5);
+
+        $courseSetsB = $this->getCourseSetService()->findRandomCourseSets($conditionsB, 5);
+        $expected = array($courseSet5, $courseSet3, $courseSet2, $courseSet1);
+
+        $this->assertArraySternEquals($expected, $courseSetsB);
+    }
+
+    public function testFavorite()
+    {
+        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
+
+        $result = $this->getCourseSetService()->favorite($courseSet['id']);
+
+        $this->assertTrue($result);
+
+        $result = $this->getCourseSetService()->favorite(2);
+        $this->assertFalse($result);
+    }
+
+    public function testUnfavorite()
+    {
+        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
+        $this->getCourseSetService()->favorite($courseSet['id']);
+
+        $result = $this->getCourseSetService()->unfavorite(3);
+        $this->assertFalse($result);
+
+        $result = $this->getCourseSetService()->unfavorite(1);
+        $this->assertTrue($result);
+
+        $result = $this->getCourseSetService()->favorite(1);
+        $this->assertTrue($result);
+
+        $result = $this->getCourseSetService()->unfavorite(1);
+        $this->assertTrue($result);
+    }
+
+    public function testIsUserFavorite()
+    {
+        $courseSet = $this->createAndPublishCourseSet('课程', 'normal');
+        $this->getCourseSetService()->favorite($courseSet['id']);
+        $result = $this->getCourseSetService()->favorite($courseSet['id']);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @expectedException \Biz\Course\CourseSetException
+     * @expectedExceptionMessage exception.courseset.not_found
+     */
+    public function testIsUserFavoriteException()
+    {
+        $this->getCourseSetService()->isUserFavorite(1, 1);
+    }
+
+    public function testHasCourseSetManageRole()
+    {
+        $result = $this->getCourseSetService()->hasCourseSetManageRole();
+        $this->assertTrue($result);
+        $result = $this->getCourseSetService()->hasCourseSetManageRole(2332);
+        $this->assertTrue($result);
+        $courseSet = $this->createAndPublishCourseSet('课程', 'normal');
+        $result = $this->getCourseSetService()->hasCourseSetManageRole($courseSet['id']);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.unlogin
+     */
+    public function testTryManageCourseSetUnLogin()
+    {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1),
+        ));
+
+        $this->getServiceKernel()->setBiz($this->getBiz());
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $this->getCourseSetService()->tryManageCourseSet(1);
+    }
+
+    /**
+     * @expectedException \Biz\Course\CourseSetException
+     * @expectedExceptionMessage exception.courseset.not_found
+     */
+    public function testTryManageCourseSetNotFoundException()
+    {
+        $this->getCourseSetService()->tryManageCourseSet(1);
+    }
+
+    public function testCountCourseSets()
+    {
+        $this->createAndPublishCourseSet('新课程1', 'normal');
+        $this->createAndPublishCourseSet('新课程2', 'normal');
+        $this->createAndPublishCourseSet('新课程3', 'open');
+        $this->getCourseSetService()->createCourseSet(array('title' => '新课程4', 'type' => 'normal'));
+        $this->createAndPublishCourseSet('新课程5', 'open');
+        $this->getCourseSetService()->recommendCourse(5, 2321);
+        $this->getCourseSetService()->getCourseSet(5);
+
+        $conditions = array('type' => 'normal', 'status' => 'published');
+        $count = $this->getCourseSetService()->countCourseSets($conditions);
+        $this->assertEquals(2, $count);
+
+        $conditions = array();
+        $count = $this->getCourseSetService()->countCourseSets($conditions);
+        $this->assertEquals(5, $count);
     }
 
     public function testFindCourseSetsLikeTitle()
@@ -285,6 +495,9 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertEmpty($result['summary']);
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
