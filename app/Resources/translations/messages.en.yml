@@ -8683,4 +8683,14 @@ wechat.notification.open_notification_tip: Scan code to pay attention to the acc
 wechat.notification.mobile_open_notification_tip: Long press the identification QR code to follow the account to receive the course notice.
 wechat.notification.scan_and_bind: Scan code binding to WeChat and follow the service number to receive course notifications.
 
+# 微信通知模板
+wechat.notification.template.live_start: '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}'
+wechat.notification.template.homework_result: '{{first.DATA}}<br>作业名称：{{keyword1.DATA}}<br>所属课程：{{keyword2.DATA}}<br>辅导老师：{{keyword3.DATA}}<br>{{remark.DATA}}'
+wechat.notification.template.exam_result: '{{first.DATA}}<br>考试科目：{{keyword1.DATA}}<br>考试成绩：{{keyword2.DATA}}<br>{{remark.DATA}'
+wechat.notification.template.lesson_add: '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}'
+wechat.notification.template.charge_success: '{{first.DATA}}<br>充值类型：{{keyword1.DATA}}<br>充值订单号：{{keyword2.DATA}}<br>充值金额：{{keyword3.DATA}}<br>充值时间：{{keyword4.DATA}}<br>{{remark.DATA}}'
+wechat.notification.template.buy_success: '{{first.DATA}}<br>订单详情：{{keyword1.DATA}}<br>订单价格：{{keyword2.DATA}}<br>订单时间：{{keyword3.DATA}}<br>{{remark.DATA}}'
+
+
+
 
