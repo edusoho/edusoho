@@ -45,8 +45,10 @@
     <e-footer v-if="!isClassCourse && (!marketingActivities.seckill || (marketingActivities.seckill && (isEmpty || seckillStatus === '已到期')) || details.price == 0)" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
     <!-- 秒杀 -->
-    <e-footer v-if="showSeckill && seckillStatus !== '已到期'" :disabled="!accessToJoin" :half="!!showSeckill && seckillStatus !== '已到期'" @click.native="handleJoin">{{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
-    <e-footer v-if="showSeckill && seckillStatus !== '已到期'" :half="!!showSeckill && seckillStatus !== '已到期'" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
+    <div v-if="!!showSeckill && seckillStatus !== '已到期'">
+      <e-footer :disabled="!accessToJoin" half="true" @click.native="handleJoin">{{details.access.code | filterJoinStatus('course', vipAccessToJoin)}}</e-footer>
+      <e-footer half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
+    </div>
   </div>
 </template>
 <script>
