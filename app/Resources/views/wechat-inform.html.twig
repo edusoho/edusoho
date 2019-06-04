@@ -16,10 +16,10 @@
     <div class="wechat-inform-qrcode js-wechat-qrcode hidden">
       <div class="wechat-inform-qrcode__close js-wechat-close-btn"><i class="cd-icon cd-icon-close"></i></div>
       {% if weChatUser %}
-        <div class="wechat-inform-qrcode__tip">扫码关注服务号，即可接收课程通知</div>
+        <div class="wechat-inform-qrcode__tip">{{'wechat.notification.open_notification_tip'|trans}}</div>
         <img class="wechat-inform-qrcode__img" src="{{ setting('wechat.account_code') }}">
       {% else %}
-        <div class="wechat-inform-qrcode__tip text-left">扫码绑定微信并关注服务号，即可接收课程通知。</div>
+        <div class="wechat-inform-qrcode__tip text-left">{{'wechat.notification.scan_and_bind'|trans}}</div>
         <img class="wechat-inform-qrcode__img" src="">
       {% endif %}
     </div>

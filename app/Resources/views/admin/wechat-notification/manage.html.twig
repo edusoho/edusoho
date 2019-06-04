@@ -48,7 +48,7 @@
           {% for key,template in templates %}
             <tr>
               <td width="20%">{{ template.name }}</td>
-              <td width="55%"><a class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_show', {key: key}) }}">{{ template.content|sub_text(50)|raw }}</td>
+              <td width="55%"><a class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_show', {key: key}) }}">{{ template.content|trans|sub_text(50)|raw }}</td>
               <td width="15%">{{ template.object }}</td>
               <td width="10%">
                 <label class="form-switch setting-switch {% if template.status %}checked{% endif %}">

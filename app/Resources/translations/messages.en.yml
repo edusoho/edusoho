@@ -5881,46 +5881,45 @@ admin.setting_course.classroom.classroom_list.help_block: 'Class list'
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 'Address: Domain names /classroom/explore, anyone can view all published classes at this page. If you need to set class order, please go to the "site settings" - "Themes" - "Manage". Class order settings are only supported by ink-only theme and simplicity theme.'
 admin.setting_course.custom_chapter_name: Set chapter name
 admin.setting_course.custom_chapter_name_enabled_hint: After opening, add a chapter in the lesson management, the system will automatically generate the chapter name set as follows.
-admin.setting_wechat_auth.web_scan_login: 网页扫码登录
-admin.setting_wechat_auth.wechat_auth_login: 微信内授权登录
-admin.setting_wechat_auth.wechat_notification: 微信服务号通知
-admin.setting_wechat_auth.wechat_pay: 微信支付
+admin.setting_wechat_auth.web_scan_login: Web Scan Login
+admin.setting_wechat_auth.wechat_auth_login: WeChat Authorize Login
+admin.setting_wechat_auth.wechat_notification: WeChat Account Notification
+admin.setting_wechat_auth.wechat_pay: WeChat Pay
 admin.setting_wechat_auth.web_scan_login_hint: >
-  开通后，网站PC端将支持微信扫码登录，请先到 <a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a> 
-  申请<a target="_blank" href="https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN">网站应用开发</a>；
-  申请条件：在微信开放平台注册并且完成实名认证。
+  If approved, users can login the site by scanning qrcode,please go to <a target="_blank" href="https://open.weixin.qq.com">wechat open platform</a> 
+  to apply<a target="_blank" href="https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN">Web application development</a>；
+  'Application conditions: Resiter at the open platform and get certification.'
 admin.setting_wechat_auth.wechat_auth_login_hint: >
-  开通后，支持使用微信号在手机端微信APP<br>
-  内快捷注册或登录网站。如何开通：<br>
-  1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；<br>
-  2.一个已认证的微信开放平台帐号；<br> 
-  3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
+  If turned on, users can register or<br>
+  login the site with wechat id in wechat app. How to access:<br>
+  1.You need a certified <a target= "_blank" href = "https://mp.weixin.qq.com" >wechat service account</a>;<br>
+  2.A certified wechat open platform account;<br>
+  3.Bind the wechat service account with <a target="_blank" href="https://open.weixin.qq.com" >the open platform</a>.
 admin.setting_wechat_auth.wechat_notification_hint: >
-  开通后，绑定微信并且关注服务号的用户即<br>
-  可收取微信服务号通知。如何开通：<br>
-  1.先开通微信内授权登录；<br>
-  2.已开通模板消息功能插件；<br>
-  3.已设置IP白名单。
+  After opening, users who bind WeChat and pay attention to the service number<br>
+  can receive the WeChat service number notification。How to access:<br>
+  1.First open the authorized login in WeChat;<br>
+  2.Template message function plugin has been activated;<br>
+  3.IP whitelist has been set.
 admin.setting_wechat_auth.wechat_pay_hint: >
-  开通后，可在PC端、微信APP、WAP内<br>
-  选择微信支付，仅支持配置<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">公众号支付</a><br>
-  支付。
-admin.setting_wechat_auth.web_secret_hint: APP ID和APP Secret来自<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>创建的网站应用。
-admin.setting_wechat_auth.account_secret_hint: APP ID和APP Secret来自<a target="_blank" href="https://mp.weixin.qq.com">微信公众平台</a>服务号内，在左侧栏【开发】-【基本配置】-【开发者ID】中。
-admin.setting_wechat_auth.account_number_hint: 商户号来自微信公众平台内左侧栏【微信支付】-【商户信息】
-admin.setting_wechat_auth.api_secret_key_hint: 微信商户平台API密钥需要登录微信商户平台，在【账户设置】-【API安全】中设置密匙
-admin.setting_wechat_auth.tutorial_button: 查看教程
-admin.setting_wechat_auth.web_appid: 网站AppID
-admin.setting_wechat_auth.web_secret: 网站AppSecret
-admin.setting_wechat_auth.account_appid: 服务号AppID
-admin.setting_wechat_auth.account_secret: 服务号AppSecret
-admin.setting_wechat_auth.account_name: 服务号名称
-admin.setting_wechat_auth.account_code: 服务号二维码
-admin.setting_wechat_auth.account_number: 商户号
-admin.setting_wechat_auth.mp_token: MP文件验证码
-admin.setting_wechat_auth.api_secret_key: 微信商户平台API密钥
-admin.setting_wechat_auth.account_code_empty: 暂未设置二维码
-admin.setting_wechat_auth.account_code_view: 查看大图
+  After opening, it can be used on the PC side, WeChat APP, WAP<br>
+  to select WeChat payment, only support configuration<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">public account payment</a><br>
+  to pay。
+admin.setting_wechat_auth.web_secret_hint: APP ID and APP Secret can be found at <a target="_blank" href="https://open.weixin.qq.com"> wechat oepn platform </a> - create Web applications.
+admin.setting_wechat_auth.account_secret_hint: APP ID APP Secret can be found at <a target="_blank" href="https://mp.weixin.qq.com/"> wechat public platform </a> - your services account, check the left column "development" - "Basic configuration" - "Developer ID ".
+admin.setting_wechat_auth.account_number_hint: The merchant number is from the left side of the WeChat public platform, 'WeChat Payment' - 'Business Information'
+admin.setting_wechat_auth.api_secret_key_hint: WeChat merchant platform API key needs to log in to the WeChat merchant platform, set the key in 'Account Settings' - 'API Security'
+admin.setting_wechat_auth.tutorial_button: View Tutorial
+admin.setting_wechat_auth.web_appid: Web AppID
+admin.setting_wechat_auth.web_secret: Web AppSecret
+admin.setting_wechat_auth.account_appid: Account AppID
+admin.setting_wechat_auth.account_secret: Account AppSecret
+admin.setting_wechat_auth.account_code: Account Qrcode
+admin.setting_wechat_auth.account_number: Account Number
+admin.setting_wechat_auth.mp_token: MP File verification code
+admin.setting_wechat_auth.api_secret_key: Wechat merchant platform API Key
+admin.setting_wechat_auth.account_code_empty: No QR Code Yet
+admin.setting_wechat_auth.account_code_view: View Larger Image
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
@@ -8627,7 +8626,7 @@ exception.task_result.not_found: 学习任务结果不存在
 exception.discovery_column.not_found: 发现栏目不存在
 exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
 
-exception.wechat.notify_setting_not_enabled: 微信通知未开启
+exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 
 course.unname_title: unname course
 
@@ -8673,3 +8672,25 @@ material.common_table.no_need_transcode: 无需转码
 material.common_table.label.has_mp4: 已生成MP4
 material_lib.search.type.title: 文件名称
 material_lib.search.type.course: 课程名称
+
+# 微信通知
+wechat.notification.open_notification_hint_title: For better service, we recommend that you open the WeChat course notification.
+wechat.notification.open_notification_hint_content: Scan the code to follow the account and you can successfully open the course notification.
+wechat.notification.account_qrcode_scan: Please scan the QR code and pay attention to the account.
+wechat.notification.course_notification_open: Sweep, start the course notification
+wechat.notification.pay_success: Pay Success
+wechat.notification.open_notification_tip: Scan code to pay attention to the account, you can receive the course notice.
+wechat.notification.mobile_open_notification_tip: Long press the identification QR code to follow the account to receive the course notice.
+wechat.notification.scan_and_bind: Scan code binding to WeChat and follow the service number to receive course notifications.
+
+# 微信通知模板
+wechat.notification.template.live_start: '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}'
+wechat.notification.template.homework_result: '{{first.DATA}}<br>作业名称：{{keyword1.DATA}}<br>所属课程：{{keyword2.DATA}}<br>辅导老师：{{keyword3.DATA}}<br>{{remark.DATA}}'
+wechat.notification.template.exam_result: '{{first.DATA}}<br>考试科目：{{keyword1.DATA}}<br>考试成绩：{{keyword2.DATA}}<br>{{remark.DATA}'
+wechat.notification.template.lesson_add: '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}'
+wechat.notification.template.charge_success: '{{first.DATA}}<br>充值类型：{{keyword1.DATA}}<br>充值订单号：{{keyword2.DATA}}<br>充值金额：{{keyword3.DATA}}<br>充值时间：{{keyword4.DATA}}<br>{{remark.DATA}}'
+wechat.notification.template.buy_success: '{{first.DATA}}<br>订单详情：{{keyword1.DATA}}<br>订单价格：{{keyword2.DATA}}<br>订单时间：{{keyword3.DATA}}<br>{{remark.DATA}}'
+
+
+
+
