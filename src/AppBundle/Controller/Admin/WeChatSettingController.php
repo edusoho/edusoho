@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\Exception\RuntimeException;
 
 class WeChatSettingController extends BaseController
 {
@@ -41,7 +40,6 @@ class WeChatSettingController extends BaseController
             if (empty($loginConnect['weixinweb_enabled']) || empty($loginConnect['weixinmob_enabled'])) {
                 $newWeChatSetting['wechat_notification_enabled'] = 0;
             }
-
 
             $loginConnect['weixinmob_mp_secret'] = $payment['wxpay_mp_secret'];
             $payment['wxpay_appid'] = $loginConnect['weixinmob_key'];
