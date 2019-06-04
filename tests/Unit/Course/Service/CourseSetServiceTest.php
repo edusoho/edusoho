@@ -7,6 +7,7 @@ use Biz\BaseTestCase;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\User\CurrentUser;
+use Biz\User\Service\UserService;
 
 class CourseSetServiceTest extends BaseTestCase
 {
@@ -131,7 +132,7 @@ class CourseSetServiceTest extends BaseTestCase
         $excepted = array(
             'id' => 1,
             'recommended' => 1,
-            'recommendedSeq' => (int) $number,
+            'recommendedSeq' => (int)$number,
             'recommendedTime' => time(),
         );
 
@@ -242,8 +243,57 @@ class CourseSetServiceTest extends BaseTestCase
         $this->getCourseSetService()->isUserFavorite(1, 1);
     }
 
+    public function testHasCourseSetManageRoleUnLogin()
+    {
+        $this->createAndPublishCourseSet('课程1', 'normal');
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1),
+        ));
+
+        $this->getServiceKernel()->setBiz($this->getBiz());
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $this->assertFalse($this->getCourseSetService()->hasCourseSetManageRole(1));
+    }
+
+    public function testHasCourseSetManageRoleFalse()
+    {
+        $this->createAndPublishCourseSet('课程1','normal');
+
+        $user = $this->getUserService()->register(array(
+            'nickname' => 'user',
+            'email' => 'user@user.com',
+            'password' => 'user',
+            'createdIp' => '127.0.0.1',
+            'orgCode' => '1.',
+            'orgId' => '1',
+        ));
+
+        $user['currentIp'] = $user['createdIp'];
+        $user['org'] = array('id' => 1);
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->grantPermissionToUser($currentUser);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        var_dump($this->getCurrentUser()->isAdmin());
+        var_dump($this->getCurrentUser()->getRoles());
+        var_dump($this->getCourseSetService()->hasCourseSetManageRole(0));
+        $this->assertFalse();
+        $this->assertFalse($this->getCourseSetService()->hasCourseSetManageRole(3231));
+        $this->assertFalse($this->getCourseSetService()->hasCourseSetManageRole(1));
+    }
+
     public function testHasCourseSetManageRole()
     {
+        $this->createAndPublishCourseSet('课程1', 'normal');
+
         $result = $this->getCourseSetService()->hasCourseSetManageRole();
         $this->assertTrue($result);
         $result = $this->getCourseSetService()->hasCourseSetManageRole(2332);
@@ -399,7 +449,7 @@ class CourseSetServiceTest extends BaseTestCase
             'type' => 'normal',
         );
         $createdA = $this->getCourseSetService()->createCourseSet($courseSetA);
-        $createdA['tags'] = $tagA['name'].','.$tagB['name'].','.$tagC['name'];
+        $createdA['tags'] = $tagA['name'] . ',' . $tagB['name'] . ',' . $tagC['name'];
         $createdA = $this->getCourseSetService()->updateCourseSet($createdA['id'], $createdA);
 
         $courseSetB = array(
@@ -408,7 +458,7 @@ class CourseSetServiceTest extends BaseTestCase
         );
         $createdB = $this->getCourseSetService()->createCourseSet($courseSetB);
         $this->getCourseSetService()->publishCourseSet($createdB['id']);
-        $createdB['tags'] = $tagB['name'].','.$tagC['name'];
+        $createdB['tags'] = $tagB['name'] . ',' . $tagC['name'];
         $createdB = $this->getCourseSetService()->updateCourseSet($createdB['id'], $createdB);
 
         $courseSetC = array(
@@ -418,7 +468,7 @@ class CourseSetServiceTest extends BaseTestCase
         $createdC = $this->getCourseSetService()->createCourseSet($courseSetC);
         $this->getCourseSetService()->publishCourseSet($createdC['id']);
 
-        $createdC['tags'] = $tagC['name'].','.$tagA['name'].','.$tagB['name'];
+        $createdC['tags'] = $tagC['name'] . ',' . $tagA['name'] . ',' . $tagB['name'];
         $createdC = $this->getCourseSetService()->updateCourseSet($createdC['id'], $createdC);
 
         $courseSetD = array(
@@ -527,5 +577,13 @@ class CourseSetServiceTest extends BaseTestCase
     protected function getCourseSetDao()
     {
         return $this->createDao('Course:CourseSetDao');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }
