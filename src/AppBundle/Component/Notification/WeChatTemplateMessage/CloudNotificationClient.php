@@ -73,7 +73,7 @@ class CloudNotificationClient
         $rawResult = json_decode($result, true);
 
         if (!empty($rawResult['error'])) {
-            $this->logger && $this->logger->error('WECHAT_CONFIG_OPEN_ERROR', $rawResult);
+            $this->logger && $this->logger->error('WECHAT_NOTIFICATION_OPEN_ERROR', $rawResult);
 
             return array();
         }
@@ -87,7 +87,7 @@ class CloudNotificationClient
         $rawResult = json_decode($result, true);
 
         if (!empty($rawResult['error'])) {
-            $this->logger && $this->logger->error('WECHAT_CONFIG_CLOSE_ERROR', $rawResult);
+            $this->logger && $this->logger->error('WECHAT_NOTIFICATION_CLOSE_ERROR', $rawResult);
 
             return array();
         }
