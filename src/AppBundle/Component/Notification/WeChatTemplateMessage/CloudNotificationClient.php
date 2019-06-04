@@ -9,15 +9,15 @@ use QiQiuYun\SDK\Auth;
 
 class CloudNotificationClient
 {
-    const WECHAT_CONFIG_OPEN = '/wechat_config/open';
+    const WECHAT_CONFIG_OPEN = '/accounts';
 
-    const WECHAT_CONFIG_CLOSE = '/wechat_config/close';
+    const WECHAT_CONFIG_CLOSE = '/accounts/wechat';
 
-    const NOTIFICATIONS_SEND = '/wechat_notifications';
+    const NOTIFICATIONS_SEND = '/notifications';
 
-    const NOTIFICATION_RESULT_GET = '/wechat_notifications/';
+    const NOTIFICATION_RESULT_GET = '/notifications/';
 
-    const NOTIFICATIONS_RESULT_BATCH_GET = '/wechat_notifications';
+    const NOTIFICATIONS_RESULT_BATCH_GET = '/notifications';
 
     protected $accessKey;
 
@@ -29,7 +29,7 @@ class CloudNotificationClient
 
     protected $logger = null;
 
-    protected $baseUrl = '';
+    protected $baseUrl = 'http://notification-service.cn';
 
     protected $userAgent = 'EduSoho Cloud API Client 1.0';
 
@@ -50,7 +50,7 @@ class CloudNotificationClient
     {
         $this->accessKey = $options['accessKey'];
         $this->secretKey = $options['secretKey'];
-        $this->appId = $options['appId'];
+        $this->appId = $options['app_id'];
         $this->secret = $options['secret'];
     }
 
@@ -68,8 +68,8 @@ class CloudNotificationClient
 
     public function openWechatConfig()
     {
-        $config = array('appId' => $this->appId, 'secret' => $this->secret);
-        $result = $this->postRequest(self::WECHAT_CONFIG_OPEN, $config);
+        $config = array('app_id' => $this->appId, 'app_secret' => $this->secret, 'type' => 'wechat');
+        $result = $this->request('POST', self::WECHAT_CONFIG_OPEN, $config);
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
@@ -83,7 +83,7 @@ class CloudNotificationClient
 
     public function closeWechatConfig()
     {
-        $result = $this->postRequest(self::WECHAT_CONFIG_CLOSE);
+        $result = $this->request('DELETE', self::WECHAT_CONFIG_CLOSE);
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
@@ -97,7 +97,7 @@ class CloudNotificationClient
 
     public function sendWechatNotificaion($list)
     {
-        $result = $this->postRequest(self::NOTIFICATIONS_SEND, $list);
+        $result = $this->request('POST', self::NOTIFICATIONS_SEND, $list);
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
@@ -111,7 +111,7 @@ class CloudNotificationClient
 
     public function getNotificationSendResult($batchId)
     {
-        $result = $this->getRequest(self::NOTIFICATION_RESULT_GET.$batchId);
+        $result = $this->request('GET', self::NOTIFICATION_RESULT_GET.$batchId);
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
@@ -125,7 +125,7 @@ class CloudNotificationClient
 
     public function batchGetNotificationsSendResult()
     {
-        $result = $this->getRequest(self::NOTIFICATIONS_RESULT_BATCH_GET);
+        $result = $this->request('GET', self::NOTIFICATIONS_RESULT_BATCH_GET);
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
@@ -137,59 +137,34 @@ class CloudNotificationClient
         return $rawResult;
     }
 
-    public function getRequest($uri, $params = array())
+    public function request($method, $uri, $params = array())
     {
+        $method = strtoupper($method);
         $curl = curl_init();
-
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
-        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'Authorization: '.$this->auth->makeRequestAuthorization($uri, ''),
-        ));
-
         $url = $this->baseUrl.$uri;
-
-        if (!empty($params)) {
-            $url = $url.'?'.http_build_query($params);
-        }
-
-        curl_setopt($curl, CURLOPT_URL, $url);
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-
-        return $response;
-    }
-
-    public function postRequest($uri, $params = array())
-    {
-        $curl = curl_init();
-        $params = json_encode($params);
-        if (version_compare(phpversion(), '5.4.0', '>=')) {
-            $body = empty($params) ? '' : json_encode($params, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        if ('GET' == $method) {
+            $url = empty($params) ? $url : $url.'?'.http_build_query($params);
         } else {
-            $body = empty($params) ? '' : json_encode($params);
+            if (version_compare(phpversion(), '5.4.0', '>=')) {
+                $body = empty($params) ? '' : json_encode($params, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            } else {
+                $body = empty($params) ? '' : json_encode($params);
+            }
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
         }
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
         curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
-            'Content-Length: '.strlen($params),
-            'Authorization: '.$this->auth->makeRequestAuthorization($uri, $body),
+            'Authorization: '.$this->auth->makeRequestAuthorization($uri, isset($body) ? $body : ''),
         ));
-        curl_setopt($curl, CURLOPT_URL, $this->baseUrl.$uri);
+        curl_setopt($curl, CURLOPT_URL, $url);
 
         $response = curl_exec($curl);
 
