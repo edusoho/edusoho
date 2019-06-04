@@ -360,6 +360,8 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::NOTIFY => array(
                 'create',
                 'check_fail',
+                'wechat_notify_lesson_publish',
+                'wechat_notify_live_play',
             ),
             self::ORDER => array(
                 'pay_result',

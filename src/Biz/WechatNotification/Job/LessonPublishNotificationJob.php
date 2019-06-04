@@ -54,6 +54,7 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
             $options = array('url' => $url);
             $this->sendNotifications($userIds, $templateId, $data, $options);
         } catch (\Exception $e) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'wechat_notify_lesson_publish', "发送微信通知失败:template:{$key}", array('error' => $e->getMessage()));
         }
     }
 }

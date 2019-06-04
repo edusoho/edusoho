@@ -2389,7 +2389,7 @@ admin_wechat_notification_show:
     path: /wechat/notification/show
     defaults: { _controller: AppBundle:Admin/WeChatNotification:show}
 
-admin_wechat_notification_status: 
-    path: /wechat/notification/status
+admin_wechat_notification_template_status: 
+    path: /wechat/notification/template/status
     defaults: { _controller: AppBundle:Admin/WeChatNotification:status}
 

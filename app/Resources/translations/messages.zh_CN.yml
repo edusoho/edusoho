@@ -8639,6 +8639,8 @@ log.action.article.publish: 发布
 log.action.article.unpublish: 取消发布
 log.action.notify.create: 创建
 log.action.notify.check_fail: 检测
+log.action.notify.wechat_notify_lesson_publish: 新增课时微信通知
+log.action.notify.wechat_notify_live_play: 直播开课微信通知
 log.action.order.pay_result: 支付结果
 log.action.order.andit_refund: 退款审核
 log.action.order.refund_cancel: 取消退款
@@ -9974,6 +9976,7 @@ wechat.notification.pay_success: 支付成功
 wechat.notification.open_notification_tip: 扫码关注服务号，即可接收课程通知。
 wechat.notification.mobile_open_notification_tip: 长按识别二维码关注服务号，即可接受课程通知。
 wechat.notification.scan_and_bind: 扫码绑定微信并关注服务号，即可接收课程通知。
+wechat.notification.switch_status_error: 微信服务号通知开关失败
 
 # 微信通知模板
 wechat.notification.template.live_start: '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}'

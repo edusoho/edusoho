@@ -245,19 +245,15 @@ class DefaultServiceProvider implements ServiceProviderInterface
             $setting = $biz->service('System:SettingService');
             $storage = $setting->get('storage', array());
             $loginBind = $setting->get('login_bind', array());
-            if (!empty($loginBind['weixinmob_enabled'])) {
-                $options = array(
-                    'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
-                    'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
-                    'app_id' => $loginBind['weixinmob_key'],
-                    'secret' => $loginBind['weixinmob_secret'],
-                );
-                $client = new CloudNotificationClient($options);
+            $options = array(
+                'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
+                'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
+                'app_id' => empty($loginBind['weixinmob_key']) ? '' : $loginBind['weixinmob_key'],
+                'secret' => empty($loginBind['weixinmob_secret']) ? '' : $loginBind['weixinmob_secret'],
+            );
+            $client = new CloudNotificationClient($options);
 
-                return $client;
-            }
-
-            return null;
+            return $client;
         };
 
         $biz['lock.flock.directory'] = function ($biz) {
