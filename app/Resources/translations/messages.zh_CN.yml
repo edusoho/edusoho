@@ -8639,7 +8639,7 @@ log.action.article.publish: 发布
 log.action.article.unpublish: 取消发布
 log.action.notify.create: 创建
 log.action.notify.check_fail: 检测
-log.action.notify.wechat_notify_lesson_publish: 新增课时微信通知
+log.action.notify.wechat_notify_lesson_publish: 课时新增微信通知
 log.action.notify.wechat_notify_live_play: 直播开课微信通知
 log.action.order.pay_result: 支付结果
 log.action.order.andit_refund: 退款审核
