@@ -4,9 +4,13 @@ namespace Tests\Unit\Course\Service;
 
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Taxonomy\Service\TagService;
 use Biz\User\CurrentUser;
+use Biz\User\Service\UserService;
 
 class CourseSetServiceTest extends BaseTestCase
 {
@@ -131,7 +135,7 @@ class CourseSetServiceTest extends BaseTestCase
         $excepted = array(
             'id' => 1,
             'recommended' => 1,
-            'recommendedSeq' => (int) $number,
+            'recommendedSeq' => (int)$number,
             'recommendedTime' => time(),
         );
 
@@ -302,6 +306,105 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertEquals(5, $count);
     }
 
+    public function testCountUserLearnCourseSets()
+    {
+        $count = $this->getCourseSetService()->countUserLearnCourseSets(-1);
+        $this->assertEquals(0, $count);
+
+        $user = $this->createNormalUser();
+        $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
+        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => $courseSet['id'],
+            'joinedType' => 'course',
+            'role' => 'student',
+        );
+        $this->getMemberDao()->create($member);
+
+        $count = $this->getCourseSetService()->countUserLearnCourseSets($user['id']);
+        $this->assertEquals(1, $count);
+    }
+
+    public function testSearchUserLearnCourseSets()
+    {
+        $result = $this->getCourseSetService()->searchUserLearnCourseSets(-1, 0, 10);
+        $this->assertEmpty($result);
+
+        $user = $this->createNormalUser();
+        $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
+        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => $courseSet['id'],
+            'joinedType' => 'course',
+            'role' => 'student',
+        );
+        $this->getMemberDao()->create($member);
+
+        $result = $this->getCourseSetService()->searchUserLearnCourseSets($user['id'], 0, 10);
+        $this->assertEquals('新课程1', $result[0]['title']);
+    }
+
+    public function testcountUserTeachingCourseSets()
+    {
+        $count = $this->getCourseSetService()->countUserTeachingCourseSets(-1, array());
+        $this->assertEquals(0, $count);
+
+        $user = $this->createNormalUser();
+        $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
+        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => $courseSet['id'],
+            'joinedType' => 'course',
+            'role' => 'teacher',
+        );
+        $this->getMemberDao()->create($member);
+
+        $count = $this->getCourseSetService()->countUserTeachingCourseSets($user['id'], array());
+        $this->assertEquals(1, $count);
+    }
+
+    public function testSearchUserTeachingCourseSets()
+    {
+        $result = $this->getCourseSetService()->searchUserTeachingCourseSets(-1, array(), 0, 10);
+        $this->assertEmpty($result);
+
+        $user = $this->createNormalUser();
+        $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
+        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => $courseSet['id'],
+            'joinedType' => 'course',
+            'role' => 'teacher',
+        );
+        $this->getMemberDao()->create($member);
+
+        $result = $this->getCourseSetService()->searchUserTeachingCourseSets($user['id'], array(), 0, 10);
+        $this->assertEquals('新课程1', $result[0]['title']);
+    }
+
+    public function testSearchCourseSetsByTeacherOrderByStickTime()
+    {
+        $result = $this->getCourseSetService()->searchCourseSetsByTeacherOrderByStickTime(array(), array('createdTime' => 'DESC'), 1, 0, 10);
+        $this->assertEmpty($result);
+    }
+
+    public function testFindCourseSetsByCourseIds()
+    {
+        $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
+        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+
+        $result = $this->getCourseSetService()->findCourseSetsByCourseIds(array($course['id']));
+        $this->assertEquals('新课程1', $result[1]['title']);
+    }
+
     public function testFindCourseSetsLikeTitle()
     {
         $courseSet = array(
@@ -399,7 +502,7 @@ class CourseSetServiceTest extends BaseTestCase
             'type' => 'normal',
         );
         $createdA = $this->getCourseSetService()->createCourseSet($courseSetA);
-        $createdA['tags'] = $tagA['name'].','.$tagB['name'].','.$tagC['name'];
+        $createdA['tags'] = $tagA['name'] . ',' . $tagB['name'] . ',' . $tagC['name'];
         $createdA = $this->getCourseSetService()->updateCourseSet($createdA['id'], $createdA);
 
         $courseSetB = array(
@@ -408,7 +511,7 @@ class CourseSetServiceTest extends BaseTestCase
         );
         $createdB = $this->getCourseSetService()->createCourseSet($courseSetB);
         $this->getCourseSetService()->publishCourseSet($createdB['id']);
-        $createdB['tags'] = $tagB['name'].','.$tagC['name'];
+        $createdB['tags'] = $tagB['name'] . ',' . $tagC['name'];
         $createdB = $this->getCourseSetService()->updateCourseSet($createdB['id'], $createdB);
 
         $courseSetC = array(
@@ -418,7 +521,7 @@ class CourseSetServiceTest extends BaseTestCase
         $createdC = $this->getCourseSetService()->createCourseSet($courseSetC);
         $this->getCourseSetService()->publishCourseSet($createdC['id']);
 
-        $createdC['tags'] = $tagC['name'].','.$tagA['name'].','.$tagB['name'];
+        $createdC['tags'] = $tagC['name'] . ',' . $tagA['name'] . ',' . $tagB['name'];
         $createdC = $this->getCourseSetService()->updateCourseSet($createdC['id'], $createdC);
 
         $courseSetD = array(
@@ -483,7 +586,7 @@ class CourseSetServiceTest extends BaseTestCase
             'expiryMode' => 'forever',
             'courseType' => 'normal',
         );
-        $course = $this->getCourseService()->createCourse($courseFields);
+        $this->getCourseService()->createCourse($courseFields);
         $firstCourse = $this->getCourseService()->updateCourse(1, array('summary' => '计划简介1'));
         $secondCourse = $this->getCourseService()->updateCourse(2, array('summary' => '计划简介2'));
 
@@ -493,6 +596,216 @@ class CourseSetServiceTest extends BaseTestCase
 
         $result = $this->getCourseService()->getCourse($secondCourse['id']);
         $this->assertEmpty($result['summary']);
+    }
+
+    public function testCloneCourseSet()
+    {
+        $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
+        $this->getCourseSetService()->cloneCourseSet($courseSet['id'], array());
+        $result = $this->getCourseSetService()->searchCourseSets(array(), 'latest', 0, 10);
+        $this->assertEquals(2, count($result));
+    }
+
+    public function testUpdateCourseSerializeMode()
+    {
+        $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
+        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+
+        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'updateCourseSerializeMode', array(array(
+            'id' => $courseSet['id'],
+            'serializeMode' => 'none'
+        ), array('serializeMode' => 'serilized')));
+
+        $result = $this->getCourseService()->getCourse($course['id']);
+
+        $this->assertEquals('serilized', $result['serializeMode']);
+    }
+
+    public function testUpdateCourseSetMarketing()
+    {
+        $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
+
+        $result = $this->getCourseSetService()->updateCourseSetMarketing($courseSet['id'], array(
+            'discountId' => 2,
+            'discount' => 0.01
+        ));
+
+        $this->assertEquals(2, $result['discountId']);
+        $this->assertEquals(0.01, $result['discount']);
+    }
+
+    public function testFindTeachingCourseSetsByUserId()
+    {
+        $user = $this->createNormalUser();
+        $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
+        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => $courseSet['id'],
+            'joinedType' => 'course',
+            'role' => 'teacher',
+        );
+        $this->getMemberDao()->create($member);
+
+        $result = $this->getCourseSetService()->findTeachingCourseSetsByUserId($user['id'], true);
+        $this->assertEquals('normal', $result[0]['type']);
+
+        $result = $this->getCourseSetService()->findTeachingCourseSetsByUserId($user['id'], false);
+        $this->assertEquals('normal', $result[1]['type']);
+    }
+
+    public function testFindLearnCourseSetsByUserId()
+    {
+        $user = $this->createNormalUser();
+        $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
+        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => $courseSet['id'],
+            'joinedType' => 'course',
+            'role' => 'student',
+        );
+        $this->getMemberDao()->create($member);
+
+        $result = $this->getCourseSetService()->findLearnCourseSetsByUserId($user['id']);
+        $this->assertEquals('normal', $result[0]['type']);
+    }
+
+    public function testCloseCourseSet()
+    {
+        $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
+        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+
+        $this->mockBiz('Classroom:ClassroomService', array(
+            array('functionName' => 'getClassroomCourseByCourseSetId', 'returnValue' => array('courseId' => $course['id'])),
+        ));
+        $this->getCourseSetService()->closeCourseSet($courseSet['id']);
+
+        $result = $this->getCourseSetService()->getCourseSet($courseSet['id']);
+        $this->assertEquals('closed', $result['status']);
+    }
+
+    public function testCountUserFavorites()
+    {
+        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
+        $this->getCourseSetService()->favorite($courseSet['id']);
+
+        $user = $this->getCurrentUser();
+        $count = $this->getCourseSetService()->countUserFavorites($user['id']);
+
+        $this->assertEquals(1, $count);
+    }
+
+    public function testSearchUserFavorites()
+    {
+        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
+        $this->getCourseSetService()->favorite($courseSet['id']);
+
+        $user = $this->getCurrentUser();
+        $result = $this->getCourseSetService()->searchUserFavorites($user['id'], 0, 10);
+
+        $this->assertEquals($user['id'], $result[0]['userId']);
+    }
+
+    public function testSearchFavorites()
+    {
+        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
+        $this->getCourseSetService()->favorite($courseSet['id']);
+
+        $user = $this->getCurrentUser();
+        $result = $this->getCourseSetService()->searchFavorites(array('userId' => $user['id']), array('createdTime' => 'DESC'), 0, 10);
+
+        $this->assertEquals($user['id'], $result[0]['userId']);
+    }
+
+    public function testFindCourseSetIncomesByCourseSetIds()
+    {
+        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
+
+        $result = $this->getCourseSetService()->findCourseSetIncomesByCourseSetIds(array($courseSet['id']));
+
+        $this->assertEquals("0.00", $result[0]['income']);
+    }
+
+    public function testUpdateMaxRate()
+    {
+        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
+
+        $result = $this->getCourseSetService()->updateMaxRate($courseSet['id'], 2);
+
+        $this->assertEquals("2", $result['maxRate']);
+    }
+
+    public function testHitCourseSet()
+    {
+        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
+
+        $result = $this->getCourseSetService()->hitCourseSet($courseSet['id']);
+
+        $this->assertEquals(1, $result);
+    }
+
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
+     */
+    public function testValidateCourseSetFieldsError()
+    {
+        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'validateCourseSet', array(array()));
+    }
+
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_error
+     */
+    public function testValidateCourseSetError()
+    {
+        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'validateCourseSet', array(array(
+            'title' => 'test',
+            'type' => ''
+        )));
+    }
+
+    public function testCountStudentNumById()
+    {
+        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
+        $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+        $result = ReflectionUtils::invokeMethod($this->getCourseSetService(), 'countStudentNumById', array($courseSet['id']));
+
+        $this->assertEquals(0, $result);
+    }
+
+    protected function mockNewCourseAndPublished($fields = array())
+    {
+        $course = array(
+            'title' => 'test Course',
+            'courseSetId' => 1,
+            'learnMode' => 'lockMode',
+            'expiryDays' => 0,
+            'expiryMode' => 'forever',
+            'courseType' => 'default',
+        );
+
+        $course = array_merge($course, $fields);
+
+        $course = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->publishCourse($course['id']);
+        return $this->getCourseService()->getCourse($course['id']);
+    }
+
+    private function createNormalUser()
+    {
+        $user = array();
+        $user['email'] = 'normal@user.com';
+        $user['nickname'] = 'normal';
+        $user['password'] = 'user';
+        $user = $this->getUserService()->register($user);
+        $user['currentIp'] = '127.0.0.1';
+        $user['roles'] = array('ROLE_USER');
+
+        return $user;
     }
 
     /**
@@ -524,8 +837,27 @@ class CourseSetServiceTest extends BaseTestCase
         return $this->createService('Taxonomy:TagService');
     }
 
+    /**
+     * @return CourseSetDao
+     */
     protected function getCourseSetDao()
     {
         return $this->createDao('Course:CourseSetDao');
+    }
+
+    /**
+     * @return CourseMemberDao
+     */
+    protected function getMemberDao()
+    {
+        return $this->createDao('Course:CourseMemberDao');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }
