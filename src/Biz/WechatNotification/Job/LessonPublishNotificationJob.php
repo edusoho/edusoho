@@ -4,7 +4,7 @@ namespace Biz\WeChatNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
 
-class LiveNotificationJob extends AbstractNotificationJob
+class LessonPublishNotificationJob extends AbstractNotificationJob
 {
     public function execute()
     {
@@ -34,12 +34,22 @@ class LiveNotificationJob extends AbstractNotificationJob
                 return;
             }
 
+            $teachers = $this->getCourseMemberService()->searchMembers(
+                array('courseId' => $course['id'], 'role' => 'teacher', 'isVisible' => 1),
+                array('id' => 'asc'),
+                0,
+                1
+            );
+            $teacher = $this->getUserService()->getUser($teachers[0]['userId']);
+
             $userIds = ArrayToolkit::column($members, 'userId');
             $data = array(
-                'userName' => array('value' => '同学'),
-                'courseName' => array('value' => $courseSet['title']),
-                'date' => array('value' => $task['startTime']),
-                'remark' => array('value' => '不要迟到哦'),
+                'first' => array('value' => '同学，你好，课程有新任务发布'),
+                'keyword1' => array('value' => $courseSet['title']),
+                'keyword2' => array('value' => ('live' == $task['type']) ? '直播课' : ''),
+                'keyword3' => array('value' => $teacher['nickname']),
+                'keyword4' => array('value' => ('live' == $task['type']) ? date('Y-m-d H:i', $task['startTime']) : date('Y-m-d H:i', $task['updatedTime'])),
+                'remark' => array('value' => ('live' == $task['type']) ? '请准时参加' : '请及时前往学习'),
             );
             $options = array('url' => $url);
             $this->sendNotifications($userIds, $templateId, $data, $options);
