@@ -135,7 +135,7 @@ class CourseSetServiceTest extends BaseTestCase
         $excepted = array(
             'id' => 1,
             'recommended' => 1,
-            'recommendedSeq' => (int)$number,
+            'recommendedSeq' => (int) $number,
             'recommendedTime' => time(),
         );
 
@@ -267,7 +267,7 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testHasCourseSetManageRoleFalse()
     {
-        $this->createAndPublishCourseSet('课程1','normal');
+        $this->createAndPublishCourseSet('课程1', 'normal');
 
         $user = $this->getUserService()->register(array(
             'nickname' => 'user',
@@ -547,7 +547,7 @@ class CourseSetServiceTest extends BaseTestCase
             'type' => 'normal',
         );
         $createdA = $this->getCourseSetService()->createCourseSet($courseSetA);
-        $createdA['tags'] = $tagA['name'] . ',' . $tagB['name'] . ',' . $tagC['name'];
+        $createdA['tags'] = $tagA['name'].','.$tagB['name'].','.$tagC['name'];
         $createdA = $this->getCourseSetService()->updateCourseSet($createdA['id'], $createdA);
 
         $courseSetB = array(
@@ -556,7 +556,7 @@ class CourseSetServiceTest extends BaseTestCase
         );
         $createdB = $this->getCourseSetService()->createCourseSet($courseSetB);
         $this->getCourseSetService()->publishCourseSet($createdB['id']);
-        $createdB['tags'] = $tagB['name'] . ',' . $tagC['name'];
+        $createdB['tags'] = $tagB['name'].','.$tagC['name'];
         $createdB = $this->getCourseSetService()->updateCourseSet($createdB['id'], $createdB);
 
         $courseSetC = array(
@@ -566,7 +566,7 @@ class CourseSetServiceTest extends BaseTestCase
         $createdC = $this->getCourseSetService()->createCourseSet($courseSetC);
         $this->getCourseSetService()->publishCourseSet($createdC['id']);
 
-        $createdC['tags'] = $tagC['name'] . ',' . $tagA['name'] . ',' . $tagB['name'];
+        $createdC['tags'] = $tagC['name'].','.$tagA['name'].','.$tagB['name'];
         $createdC = $this->getCourseSetService()->updateCourseSet($createdC['id'], $createdC);
 
         $courseSetD = array(
