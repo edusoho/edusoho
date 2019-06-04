@@ -135,7 +135,7 @@ class CourseSetServiceTest extends BaseTestCase
         $excepted = array(
             'id' => 1,
             'recommended' => 1,
-            'recommendedSeq' => (int)$number,
+            'recommendedSeq' => (int) $number,
             'recommendedTime' => time(),
         );
 
@@ -502,7 +502,7 @@ class CourseSetServiceTest extends BaseTestCase
             'type' => 'normal',
         );
         $createdA = $this->getCourseSetService()->createCourseSet($courseSetA);
-        $createdA['tags'] = $tagA['name'] . ',' . $tagB['name'] . ',' . $tagC['name'];
+        $createdA['tags'] = $tagA['name'].','.$tagB['name'].','.$tagC['name'];
         $createdA = $this->getCourseSetService()->updateCourseSet($createdA['id'], $createdA);
 
         $courseSetB = array(
@@ -511,7 +511,7 @@ class CourseSetServiceTest extends BaseTestCase
         );
         $createdB = $this->getCourseSetService()->createCourseSet($courseSetB);
         $this->getCourseSetService()->publishCourseSet($createdB['id']);
-        $createdB['tags'] = $tagB['name'] . ',' . $tagC['name'];
+        $createdB['tags'] = $tagB['name'].','.$tagC['name'];
         $createdB = $this->getCourseSetService()->updateCourseSet($createdB['id'], $createdB);
 
         $courseSetC = array(
@@ -521,7 +521,7 @@ class CourseSetServiceTest extends BaseTestCase
         $createdC = $this->getCourseSetService()->createCourseSet($courseSetC);
         $this->getCourseSetService()->publishCourseSet($createdC['id']);
 
-        $createdC['tags'] = $tagC['name'] . ',' . $tagA['name'] . ',' . $tagB['name'];
+        $createdC['tags'] = $tagC['name'].','.$tagA['name'].','.$tagB['name'];
         $createdC = $this->getCourseSetService()->updateCourseSet($createdC['id'], $createdC);
 
         $courseSetD = array(
@@ -613,7 +613,7 @@ class CourseSetServiceTest extends BaseTestCase
 
         ReflectionUtils::invokeMethod($this->getCourseSetService(), 'updateCourseSerializeMode', array(array(
             'id' => $courseSet['id'],
-            'serializeMode' => 'none'
+            'serializeMode' => 'none',
         ), array('serializeMode' => 'serilized')));
 
         $result = $this->getCourseService()->getCourse($course['id']);
@@ -627,7 +627,7 @@ class CourseSetServiceTest extends BaseTestCase
 
         $result = $this->getCourseSetService()->updateCourseSetMarketing($courseSet['id'], array(
             'discountId' => 2,
-            'discount' => 0.01
+            'discount' => 0.01,
         ));
 
         $this->assertEquals(2, $result['discountId']);
@@ -726,7 +726,7 @@ class CourseSetServiceTest extends BaseTestCase
 
         $result = $this->getCourseSetService()->findCourseSetIncomesByCourseSetIds(array($courseSet['id']));
 
-        $this->assertEquals("0.00", $result[0]['income']);
+        $this->assertEquals('0.00', $result[0]['income']);
     }
 
     public function testUpdateMaxRate()
@@ -735,7 +735,7 @@ class CourseSetServiceTest extends BaseTestCase
 
         $result = $this->getCourseSetService()->updateMaxRate($courseSet['id'], 2);
 
-        $this->assertEquals("2", $result['maxRate']);
+        $this->assertEquals('2', $result['maxRate']);
     }
 
     public function testHitCourseSet()
@@ -764,7 +764,7 @@ class CourseSetServiceTest extends BaseTestCase
     {
         ReflectionUtils::invokeMethod($this->getCourseSetService(), 'validateCourseSet', array(array(
             'title' => 'test',
-            'type' => ''
+            'type' => '',
         )));
     }
 
@@ -792,6 +792,7 @@ class CourseSetServiceTest extends BaseTestCase
 
         $course = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->publishCourse($course['id']);
+
         return $this->getCourseService()->getCourse($course['id']);
     }
 
