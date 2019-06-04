@@ -9974,6 +9974,8 @@ wechat.notification.pay_success: 支付成功
 wechat.notification.open_notification_tip: 扫码关注服务号，即可接收课程通知。
 wechat.notification.mobile_open_notification_tip: 长按识别二维码关注服务号，即可接受课程通知。
 wechat.notification.scan_and_bind: 扫码绑定微信并关注服务号，即可接收课程通知。
+wechat.notification.record_content: 通知内容
+
 
 # 微信通知模板
 wechat.notification.template.live_start: '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}'

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\Notification\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 
@@ -124,5 +125,13 @@ class WeChatNotificationController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return NotificationService
+     */
+    protected function getNotificationService()
+    {
+        return $this->createService('Notification:NotificationService');
     }
 }
