@@ -45,7 +45,7 @@ class MaterialServiceTest extends BaseTestCase
         $conditions = array(
             'fileIds' => array(1, 2),
             'type' => 'course',
-            'courseSetId' => 1
+            'courseSetId' => 1,
         );
         $count = $this->getMaterialService()->countMaterials($conditions);
         $this->assertEquals(0, $count);
@@ -62,7 +62,7 @@ class MaterialServiceTest extends BaseTestCase
             'fileIds' => array(1, 2),
             'type' => 'openCourse',
             'courseId' => 1,
-            'courseSetId' => 0
+            'courseSetId' => 0,
         );
         $count = $this->getMaterialService()->countMaterials($conditions);
         $this->assertEquals(0, $count);
@@ -192,7 +192,7 @@ class MaterialServiceTest extends BaseTestCase
         $result = $this->getMaterialService()->batchCreateMaterials($materials);
         $this->assertTrue($result);
     }
-    
+
     protected function mockMaterial($fields = array())
     {
         $material = array(
@@ -200,7 +200,7 @@ class MaterialServiceTest extends BaseTestCase
             'courseSetId' => 1,
             'title' => 'test',
             'fileId' => 2,
-            'userId' => 1
+            'userId' => 1,
         );
 
         $material = array_merge($material, $fields);
@@ -217,7 +217,7 @@ class MaterialServiceTest extends BaseTestCase
             'courseSetId' => 1,
             'title' => 'test_1',
             'fileId' => 2,
-            'userId' => 1
+            'userId' => 1,
         );
         $materials[] = $material;
 
@@ -226,7 +226,7 @@ class MaterialServiceTest extends BaseTestCase
             'courseSetId' => 2,
             'title' => 'test_2',
             'fileId' => 2,
-            'userId' => 1
+            'userId' => 1,
         );
         $materials[] = $material;
 
