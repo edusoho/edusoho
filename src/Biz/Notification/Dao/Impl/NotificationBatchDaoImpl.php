@@ -16,9 +16,10 @@ class NotificationBatchDaoImpl extends GeneralDaoImpl implements NotificationBat
             'orderbys' => array('id', 'createdTime', 'updatedTime'),
             'conditions' => array(
                 'id = :id',
-                'notificationId = :notificationId',
+                'eventId = :eventId',
                 'sn = :sn',
-                'status = :status'
+                'status = :status',
+                'strategyId = :strategyId',
             ),
         );
     }

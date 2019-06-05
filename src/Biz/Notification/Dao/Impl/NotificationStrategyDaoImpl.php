@@ -2,12 +2,12 @@
 
 namespace Biz\Notification\Dao\Impl;
 
-use Biz\Notification\Dao\NotificationEventDao;
+use Biz\Notification\Dao\NotificationStrategyDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class NotificationEventDaoImpl extends GeneralDaoImpl implements NotificationEventDao
+class NotificationStrategyDaoImpl extends GeneralDaoImpl implements NotificationStrategyDao
 {
-    protected $table = 'notification_event';
+    protected $table = 'notification_strategy';
 
     public function declares()
     {
@@ -16,16 +16,18 @@ class NotificationEventDaoImpl extends GeneralDaoImpl implements NotificationEve
             'orderbys' => array('id', 'createdTime', 'updatedTime'),
             'conditions' => array(
                 'id = :id',
+                'eventId = :eventId',
+                'type = :type',
             ),
         );
     }
 
-    public function findByEventIds($ids)
+    public function findByEventId($eventId)
     {
-        if (empty($ids)) {
+        if (empty($eventId)) {
             return array();
         }
 
-        return $this->findInField('id', $ids);
+        return $this->findByFields(array('eventId' => $eventId));
     }
 }
