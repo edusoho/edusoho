@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use Biz\Notification\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 
@@ -9,7 +12,26 @@ class WeChatNotificationController extends BaseController
 {
     public function recordAction(Request $request)
     {
+        $paginator = new Paginator(
+            $request,
+            $this->getNotificationService()->countBatches(array()),
+            20
+        );
+        $notifications = $this->getNotificationService()->searchBatches(
+            array(),
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $notifications = ArrayToolkit::index($notifications, 'id');
+        $notificationIds = ArrayToolkit::column($notifications, 'eventId');
+        $notificationEvents = $this->getNotificationService()->findEventsByIds($notificationIds);
+        $notificationEvents = ArrayToolkit::index($notificationEvents, 'id');
+
         return $this->render('admin/wechat-notification/index.html.twig', array(
+            'notifications' => $notifications,
+            'notificationEvents' => $notificationEvents,
         ));
     }
 
@@ -124,5 +146,13 @@ class WeChatNotificationController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return NotificationService
+     */
+    protected function getNotificationService()
+    {
+        return $this->createService('Notification:NotificationService');
     }
 }
