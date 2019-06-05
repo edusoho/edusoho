@@ -9976,6 +9976,11 @@ wechat.notification.pay_success: 支付成功
 wechat.notification.open_notification_tip: 扫码关注服务号，即可接收课程通知。
 wechat.notification.mobile_open_notification_tip: 长按识别二维码关注服务号，即可接受课程通知。
 wechat.notification.scan_and_bind: 扫码绑定微信并关注服务号，即可接收课程通知。
+wechat.notification.record_content: 通知内容
+wechat.notification.record_send_time: 发送时间
+wechat.notification.record_send_status: 发送状态
+wechat.notification.record_number: 接收/发送人数
+wechat.notification.record.empty: 暂无发送记录
 wechat.notification.switch_status_error: 微信服务号通知开关失败
 
 # 微信通知模板

@@ -8685,6 +8685,11 @@ wechat.notification.open_notification_tip: Scan code to pay attention to the acc
 wechat.notification.mobile_open_notification_tip: Long press the identification QR code to follow the account to receive the course notice.
 wechat.notification.scan_and_bind: Scan code binding to WeChat and follow the service number to receive course notifications.
 wechat.notification.switch_status_error: WeChat Account Notification Switch Fail
+wechat.notification.record_content: Notification content
+wechat.notification.record_send_time: Send time
+wechat.notification.record_send_status: Send status
+wechat.notification.record_number: receive/send number
+wechat.notification.record.empty: empty send records
 
 # 微信通知模板
 wechat.notification.template.live_start: '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}'
