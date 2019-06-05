@@ -50,7 +50,7 @@
                 <i class="h5-icon h5-icon-dot color-primary text-18 pull-left"></i>
                 <div class="lesson-cell__text ">
                   <span class="pl3 text-overflow">{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
-                  <span v-if="lesson.tasks[0].status === 'published'" :class="[liveClass(lesson.tasks[0]), 'live-text', 'ml5']">{{ lesson.tasks[0] | liveStatusText }}</span>
+                  <span v-if="lesson.tasks[0].status === 'published' && lesson.tasks[0].type === 'live'" :class="[liveClass(lesson.tasks[0]), 'live-text', 'ml5']">{{ lesson.tasks[0] | liveStatusText }}</span>
                 </div>
                 <div class="lesson-cell">
                   <span class="lesson-cell__number">{{ filterNumber(lesson.tasks[0], 0, true) }}</span>
