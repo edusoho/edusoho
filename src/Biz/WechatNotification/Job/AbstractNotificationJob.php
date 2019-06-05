@@ -24,11 +24,13 @@ class AbstractNotificationJob extends AbstractJob
         foreach ($batchs as $batch) {
             $list = array();
             foreach ($batch as $user) {
-                $list[] = array_merge(array(
-                    'touser' => $user['openId'],
+                $list[] = array(
+                    'channel' => 'wechat',
+                    'to_id' => $user['openId'],
                     'template_id' => $templateId,
-                    'data' => $data,
-                ), $options);
+                    'template_args' => $data,
+                    'goto' => $options,
+                );
             }
             $this->getCloudNotificationClient()->sendWechatNotificaion($list);
         }

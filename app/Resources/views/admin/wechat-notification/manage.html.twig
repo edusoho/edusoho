@@ -52,7 +52,7 @@
               <td width="15%">{{ template.object }}</td>
               <td width="10%">
                 <label class="form-switch setting-switch {% if template.status %}checked{% endif %}">
-                  <input type="checkbox" name="switch" value="{{template.status }}" id="weixinweb_enabled" data-toggle="switch" data-url="{{ path('admin_wechat_notification_status', {key: key}) }}">
+                  <input type="checkbox" name="switch" value="{{template.status }}" id="weixinweb_enabled" data-toggle="switch" data-url="{{ path('admin_wechat_notification_template_status', {key: key}) }}">
                 </label>
               </td>
             </tr>

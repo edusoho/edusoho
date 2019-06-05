@@ -27,7 +27,7 @@ class WeChatSettingController extends BaseController
             $fields = $request->request->all();
             $loginConnect = array_merge($loginConnect, ArrayToolkit::trim($fields['loginConnect']));
             $payment = array_merge($payment, ArrayToolkit::trim($fields['payment']));
-            $wechatSetting = array_merge($wechatSetting, ArrayToolkit::trim($fields['wechatSetting']));
+            $newWeChatSetting = ArrayToolkit::trim($fields['wechatSetting']);
 
             $loginConnect = $this->decideEnabledLoginConnect($loginConnect);
 
@@ -38,7 +38,7 @@ class WeChatSettingController extends BaseController
             }
 
             if (empty($loginConnect['weixinweb_enabled']) || empty($loginConnect['weixinmob_enabled'])) {
-                $wechatSetting['wechat_notification_enabled'] = 0;
+                $newWeChatSetting['wechat_notification_enabled'] = 0;
             }
 
             $loginConnect['weixinmob_mp_secret'] = $payment['wxpay_mp_secret'];
@@ -47,8 +47,17 @@ class WeChatSettingController extends BaseController
 
             $this->getSettingService()->set('payment', $payment);
             $this->getSettingService()->set('login_bind', $loginConnect);
-            $this->getSettingService()->set('wechat', $wechatSetting);
             $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
+
+            if (!$this->handleCloudNotifiaction($wechatSetting, $newWeChatSetting)) {
+                return $this->render('admin/system/wechat-setting.html.twig', array(
+                    'loginConnect' => $loginConnect,
+                    'payment' => $payment,
+                    'wechatSetting' => $wechatSetting,
+                ));
+            }
+            $wechatSetting = array_merge($wechatSetting, $newWeChatSetting);
+            $this->getSettingService()->set('wechat', $wechatSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
@@ -57,6 +66,35 @@ class WeChatSettingController extends BaseController
             'payment' => $payment,
             'wechatSetting' => $wechatSetting,
         ));
+    }
+
+    protected function handleCloudNotifiaction($oldSetting, $newSetting)
+    {
+        if ($oldSetting['wechat_notification_enabled'] == $newSetting['wechat_notification_enabled']) {
+            return true;
+        }
+
+        $client = $this->getCloudNotificationClient();
+
+        try {
+            if (1 == $newSetting['wechat_notification_enabled']) {
+                $result = $client->openWechatNotification();
+            } else {
+                $result = $client->closeWechatNotification();
+            }
+        } catch (\RuntimeException $e) {
+            $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
+
+            return false;
+        }
+
+        if (empty($result)) {
+            $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
+
+            return false;
+        }
+
+        return true;
     }
 
     private function decideEnabledLoginConnect($loginConnect)
@@ -152,6 +190,13 @@ class WeChatSettingController extends BaseController
         if (!empty($val)) {
             file_put_contents($dir.'/MP_verify_'.$val.'.txt', $val);
         }
+    }
+
+    private function getCloudNotificationClient()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['wechat.cloud_notification_client'];
     }
 
     protected function getSettingService()

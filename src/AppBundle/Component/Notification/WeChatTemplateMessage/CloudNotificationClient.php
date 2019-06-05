@@ -9,9 +9,9 @@ use QiQiuYun\SDK\Auth;
 
 class CloudNotificationClient
 {
-    const WECHAT_CONFIG_OPEN = '/accounts';
+    const WECHAT_NOTIFICATION_OPEN = '/accounts';
 
-    const WECHAT_CONFIG_CLOSE = '/accounts/wechat';
+    const WECHAT_NOTIFICATION_CLOSE = '/accounts/wechat';
 
     const NOTIFICATIONS_SEND = '/notifications';
 
@@ -66,14 +66,14 @@ class CloudNotificationClient
         $this->logger = $logger;
     }
 
-    public function openWechatConfig()
+    public function openWechatNotification()
     {
         $config = array('app_id' => $this->appId, 'app_secret' => $this->secret, 'type' => 'wechat');
-        $result = $this->request('POST', self::WECHAT_CONFIG_OPEN, $config);
+        $result = $this->request('POST', self::WECHAT_NOTIFICATION_OPEN, $config);
         $rawResult = json_decode($result, true);
 
-        if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
-            $this->logger && $this->logger->error('WECHAT_CONFIG_OPEN_ERROR', $rawResult);
+        if (!empty($rawResult['error'])) {
+            $this->logger && $this->logger->error('WECHAT_NOTIFICATION_OPEN_ERROR', $rawResult);
 
             return array();
         }
@@ -81,13 +81,13 @@ class CloudNotificationClient
         return $rawResult;
     }
 
-    public function closeWechatConfig()
+    public function closeWechatNotification()
     {
-        $result = $this->request('DELETE', self::WECHAT_CONFIG_CLOSE);
+        $result = $this->request('DELETE', self::WECHAT_NOTIFICATION_CLOSE);
         $rawResult = json_decode($result, true);
 
-        if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
-            $this->logger && $this->logger->error('WECHAT_CONFIG_CLOSE_ERROR', $rawResult);
+        if (!empty($rawResult['error'])) {
+            $this->logger && $this->logger->error('WECHAT_NOTIFICATION_CLOSE_ERROR', $rawResult);
 
             return array();
         }
@@ -100,7 +100,7 @@ class CloudNotificationClient
         $result = $this->request('POST', self::NOTIFICATIONS_SEND, $list);
         $rawResult = json_decode($result, true);
 
-        if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
+        if (!empty($rawResult['error'])) {
             $this->logger && $this->logger->error('WECHAT_NOTIFICATION_SEND_ERROR', $rawResult);
 
             return array();
@@ -114,7 +114,7 @@ class CloudNotificationClient
         $result = $this->request('GET', self::NOTIFICATION_RESULT_GET.$batchId);
         $rawResult = json_decode($result, true);
 
-        if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
+        if (!empty($rawResult['error'])) {
             $this->logger && $this->logger->error('NOTIFICATION_RESULT_GET_ERROR', $rawResult);
 
             return array();
@@ -128,7 +128,7 @@ class CloudNotificationClient
         $result = $this->request('GET', self::NOTIFICATIONS_RESULT_BATCH_GET);
         $rawResult = json_decode($result, true);
 
-        if (isset($rawResult['success']) && 'false' == $rawResult['success']) {
+        if (!empty($rawResult['error'])) {
             $this->logger && $this->logger->error('NOTIFICATION_RESULT_BATCH_GET_ERROR', $rawResult);
 
             return array();
