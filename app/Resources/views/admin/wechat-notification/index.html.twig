@@ -17,8 +17,9 @@
     </tr>
   </thead>
   <tbody>
-  {% for notification in notifications|default([]) %}
-    {% include 'admin/wechat-notification/notification-tr.html.twig' %}
+  {% for notification in notifications %}
+    {% set event = notificationEvents[notification.eventId] %}
+    {% include 'admin/wechat-notification/notification-tr.html.twig' with {event: event} %}
   {% else %}
     <tr>
       <td colspan="20">

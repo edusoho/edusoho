@@ -27,6 +27,7 @@ class WeChatNotificationController extends BaseController
         $notifications = ArrayToolkit::index($notifications, 'id');
         $notificationIds = ArrayToolkit::column($notifications, 'eventId');
         $notificationEvents = $this->getNotificationService()->findEventsByIds($notificationIds);
+        $notificationEvents = ArrayToolkit::index($notificationEvents, 'id');
 
         return $this->render('admin/wechat-notification/index.html.twig', array(
             'notifications' => $notifications,

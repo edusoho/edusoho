@@ -1,0 +1,10 @@
+{% import 'admin/macro.html.twig' as admin_macro %}
+<tr id="notification-table-tr-{{ notification.id }}">
+  <td>{{ event.content|sub_text(10) }}</td>
+  <td>{{ notification.createdTime|date('Y-m-d H:i:s') }}</td>
+  <td>{{ '--' }}</td>
+  <td>{{ '--' }}</td>
+  <td>
+    <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal">{{'site.btn.detail'|trans}}</a>
+  </td>
+</tr>
