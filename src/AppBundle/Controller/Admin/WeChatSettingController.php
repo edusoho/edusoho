@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use QiQiuYun\SDK\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 
@@ -49,7 +50,7 @@ class WeChatSettingController extends BaseController
             $this->getSettingService()->set('login_bind', $loginConnect);
             $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
 
-            if (!$this->handleCloudNotifiaction($wechatSetting, $newWeChatSetting)) {
+            if (!$this->handleCloudNotifiaction($wechatSetting, $newWeChatSetting, $loginConnect)) {
                 return $this->render('admin/system/wechat-setting.html.twig', array(
                     'loginConnect' => $loginConnect,
                     'payment' => $payment,
@@ -68,21 +69,27 @@ class WeChatSettingController extends BaseController
         ));
     }
 
-    protected function handleCloudNotifiaction($oldSetting, $newSetting)
+    protected function handleCloudNotifiaction($oldSetting, $newSetting, $loginConnect)
     {
         if ($oldSetting['wechat_notification_enabled'] == $newSetting['wechat_notification_enabled']) {
             return true;
         }
 
+        $biz = $this->getBiz();
         $client = $this->getCloudNotificationClient();
 
         try {
             if (1 == $newSetting['wechat_notification_enabled']) {
-                $result = $client->openWechatNotification();
+                $result = $biz['qiQiuYunSdk.notification']->openAccount(NotificationService::CHANNEL_WECHAT, array(
+                    'app_id' => $loginConnect['weixinmob_key'],
+                    'app_secret' => $loginConnect['weixinmob_secret']
+                ));
             } else {
-                $result = $client->closeWechatNotification();
+                $result = $biz['qiQiuYunSdk.notification']->123
+                (NotificationService::CHANNEL_WECHAT);
             }
         } catch (\RuntimeException $e) {
+            throw $e;
             $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
 
             return false;

@@ -91,6 +91,27 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        /*
+         * @param $biz
+         * @return \QiQiuYun\SDK\Service\NotificationService|null
+         */
+        $biz['qiQiuYunSdk.notification'] = function ($biz) use ($that) {
+            $service = null;
+//            $sdk = $that->generateSdk($biz, $that->getNotificationConfig($biz));
+            $sdk = new \QiQiuYun\SDK\QiQiuYunSDK(
+                array(
+                    'access_key' => 'T7YARlmDmknXijWTCaRfdBo3O82K63RD',
+                    'secret_key' => 'LB5uBY4ysvo7NeJCU2ZWawxHu91opQCu',
+                    'service' => $that->getNotificationConfig($biz),
+                )
+            );
+            if (!empty($sdk)) {
+                $service = $sdk->getNotificationService();
+            }
+
+            return $service;
+        };
     }
 
     public function generateSdk($biz, $serviceConfig)
@@ -243,5 +264,23 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return array('playv2' => array('host' => $url['host']));
+    }
+
+    public function getNotificationConfig($biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', array());
+
+        if (empty($developerSetting['cloud_notification_server'])) {
+            return array();
+        }
+
+        $url = parse_url($developerSetting['cloud_notification_server']);
+
+        if (empty($url['host'])) {
+            return array();
+        }
+
+        return array('notification' => array('host' => $url['host']));
     }
 }
