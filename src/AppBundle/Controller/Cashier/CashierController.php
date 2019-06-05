@@ -98,7 +98,8 @@ class CashierController extends BaseController
                 $qrcode = $wechatSetting['account_code'];
             }
 
-            return $this->forward('AppBundle:Cashier/Cashier:guide', array(
+            return $this->forward("AppBundle:Cashier/Cashier:{$trade['type']}Success", array(
+                'trade' => $trade,
                 'options' => array(
                     'isBindWechat' => $isBindWechat,
                     'qrcode' => $qrcode,
@@ -111,13 +112,6 @@ class CashierController extends BaseController
         ));
     }
 
-    public function guideAction($options)
-    {
-        return $this->render('cashier/success.html.twig', array(
-            'options' => $options,
-        ));
-    }
-
     public function rechargeSuccessAction($trade)
     {
         return $this->render('cashier/success.html.twig', array(
@@ -125,7 +119,7 @@ class CashierController extends BaseController
         ));
     }
 
-    public function purchaseSuccessAction($trade)
+    public function purchaseSuccessAction($trade, $options = array())
     {
         $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
 
@@ -141,6 +135,8 @@ class CashierController extends BaseController
 
         return $this->render('cashier/success.html.twig', array(
             'goto' => $this->generateUrl($product->successUrl[0], $product->successUrl[1]),
+            'options' => $options,
+            'product' => $product,
         ));
     }
 
