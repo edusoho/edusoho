@@ -8639,6 +8639,8 @@ log.action.article.publish: 发布
 log.action.article.unpublish: 取消发布
 log.action.notify.create: 创建
 log.action.notify.check_fail: 检测
+log.action.notify.wechat_notify_lesson_publish: 课时新增微信通知
+log.action.notify.wechat_notify_live_play: 直播开课微信通知
 log.action.order.pay_result: 支付结果
 log.action.order.andit_refund: 退款审核
 log.action.order.refund_cancel: 取消退款
@@ -9979,6 +9981,7 @@ wechat.notification.record_send_time: 发送时间
 wechat.notification.record_send_status: 发送状态
 wechat.notification.record_number: 接收/发送人数
 wechat.notification.record.empty: 暂无发送记录
+wechat.notification.switch_status_error: 微信服务号通知开关失败
 
 # 微信通知模板
 wechat.notification.template.live_start: '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}'

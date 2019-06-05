@@ -3,6 +3,7 @@
 namespace Biz;
 
 use AppBundle\Component\Notification\WeChatTemplateMessage\Client;
+use AppBundle\Component\Notification\WeChatTemplateMessage\CloudNotificationClient;
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
 use Biz\Course\Util\CourseRenderViewResolver;
@@ -214,23 +215,16 @@ class DefaultServiceProvider implements ServiceProviderInterface
                     'key' => $loginBind['weixinmob_key'],
                     'secret' => $loginBind['weixinmob_secret'],
                 ));
-                $wechatGlobalAccessToken = $setting->get('_wechat_global_access_token', array());
-
-                //如果剩余时间低于1800秒，则刷新token
-                if (empty($wechatGlobalAccessToken) || isset($wechatGlobalAccessToken['access_token'])
-                    && isset($wechatGlobalAccessToken['expiry_time'])
-                    && $wechatGlobalAccessToken['expiry_time'] < time() + 30 * 60) {
-                    $token = $client->getAccessToken();
-                    if (empty($token)) {
-                        return null;
-                    }
-                    $updateSetting = array(
-                        'expiry_time' => time() + $token['expires_in'],
-                        'access_token' => $token['access_token'],
-                    );
-                    $wechatGlobalAccessToken = array_merge($wechatGlobalAccessToken, $updateSetting);
-                    $setting->set('_wechat_global_access_token', $wechatGlobalAccessToken);
+                $token = $client->getAccessToken();
+                if (empty($token)) {
+                    return null;
                 }
+                $updateSetting = array(
+                    'expiry_time' => time() + $token['expires_in'],
+                    'access_token' => $token['access_token'],
+                );
+                $wechatGlobalAccessToken = $updateSetting;
+                $setting->set('_wechat_global_access_token', $wechatGlobalAccessToken);
 
                 $client->setAccessToken($wechatGlobalAccessToken['access_token']);
 
@@ -238,6 +232,21 @@ class DefaultServiceProvider implements ServiceProviderInterface
             }
 
             return null;
+        };
+
+        $biz['wechat.cloud_notification_client'] = function ($biz) {
+            $setting = $biz->service('System:SettingService');
+            $storage = $setting->get('storage', array());
+            $loginBind = $setting->get('login_bind', array());
+            $options = array(
+                'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
+                'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
+                'app_id' => empty($loginBind['weixinmob_key']) ? '' : $loginBind['weixinmob_key'],
+                'secret' => empty($loginBind['weixinmob_secret']) ? '' : $loginBind['weixinmob_secret'],
+            );
+            $client = new CloudNotificationClient($options);
+
+            return $client;
         };
 
         $biz['lock.flock.directory'] = function ($biz) {
