@@ -68,7 +68,7 @@ class CloudNotificationClient
 
     public function openWechatNotification()
     {
-        $config = array('app_id' => $this->appId, 'app_secret' => $this->secret, 'type' => 'wechat');
+        $config = array('channels' => array('app_id' => $this->appId, 'app_secret' => $this->secret, 'type' => 'wechat'));
         $result = $this->request('POST', self::WECHAT_NOTIFICATION_OPEN, $config);
         $rawResult = json_decode($result, true);
 
@@ -109,9 +109,9 @@ class CloudNotificationClient
         return $rawResult;
     }
 
-    public function getNotificationSendResult($batchId)
+    public function getNotificationSendResult($sn)
     {
-        $result = $this->request('GET', self::NOTIFICATION_RESULT_GET.$batchId);
+        $result = $this->request('GET', self::NOTIFICATION_RESULT_GET.$sn);
         $rawResult = json_decode($result, true);
 
         if (!empty($rawResult['error'])) {
