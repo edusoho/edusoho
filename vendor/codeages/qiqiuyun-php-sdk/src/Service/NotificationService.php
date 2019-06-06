@@ -8,17 +8,26 @@ class NotificationService extends BaseService
 {
     const SNS_MAX_COUNT = 50;
 
-    protected $host = 'notifition-service.qiqiuyun.net';
+    protected $host = 'notification-service.qiqiuyun.net';
 
-    public function openAccount($channel, $params)
+    public function openAccount()
     {
-        $params['type'] = $channel;
-        return $this->request('POST', '/accounts', $params);
+        return $this->request('POST', '/accounts');
     }
 
-    public function closeAccount($channel)
+    public function closeAccount()
     {
-        return $this->request('DELETE', "/accounts/{$channel}");
+        return $this->request('DELETE', '/accounts');
+    }
+
+    public function openChannel($channelType, $params)
+    {
+        return $this->request('POST', "/channels/{$channelType}", $params);
+    }
+
+    public function closeChannel($channelType)
+    {
+        return $this->request('DELETE', "/channels/{$channelType}");
     }
 
     public function sendNotifications($notifications)
@@ -31,11 +40,25 @@ class NotificationService extends BaseService
         return $this->request('GET', "/notifications/{$sn}");
     }
 
+    public function searchNotifications($conditions, $offset = 0, $limit = 30)
+    {
+        $params = array_merge($conditions, array('offset' => $offset, 'limit' => $limit));
+
+        return $this->request('GET', '/notifications', $params);
+    }
+
     public function batchGetNotifications($sns)
     {
         if (self::SNS_MAX_COUNT == count($sns)) {
             throw new SDKException('sn count out of limit');
         }
-        return $this->request('GET', "/notifications", array('sns' => $sns));
+
+        $params = array(
+            'sns' => $sns,
+            'offset' => 0,
+            'limit' => count($sns),
+        );
+
+        return $this->request('GET', '/notifications', $params);
     }
 }
