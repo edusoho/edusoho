@@ -4,7 +4,7 @@ namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use Biz\User\Service\TokenService;
-use Rhumsaa\Uuid\Uuid;
+use mar\Uuid\Uuid;
 
 class TokenServiceImpl extends BaseService implements TokenService
 {

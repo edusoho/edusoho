@@ -5920,6 +5920,7 @@ admin.setting_wechat_auth.mp_token: MP File verification code
 admin.setting_wechat_auth.api_secret_key: Wechat merchant platform API Key
 admin.setting_wechat_auth.account_code_empty: No QR Code Yet
 admin.setting_wechat_auth.account_code_view: View Larger Image
+admin.developer_setting.cloud_notification_api: Notification API
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'

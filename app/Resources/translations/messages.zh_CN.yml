@@ -7225,6 +7225,7 @@ admin.setting_wechat_auth.account_code_empty: 暂未设置二维码
 admin.setting_wechat_auth.account_code_view: 查看大图
 
 #开发者设置
+admin.developer_setting.cloud_notification_api: 通知服务API
 admin.developer_setting.content_title: 开发者设置
 admin.developer_setting.debug_label: 调试
 admin.developer_setting.app_center_api_address: 应用中心API地址
@@ -7261,7 +7262,8 @@ admin.developer_setting.tips: >
       「应用中心API地址」：空<br>
       「云服务API地址」：　http://api.edusoho.net 或 空<br>
       「IMAPI地址」：　http://imapi.edusoho.net/v1/ 或 空<br>
-      「HLS加密视频」：　开启
+      「HLS加密视频」：　开启<br>
+      「通知服务API地址」：　http://notifition-service.qiqiuyun.net 或 空 <br>
     </li>
   </ul>
 admin.developer_setting.mp_service_url_label: 小程序服务平台地址

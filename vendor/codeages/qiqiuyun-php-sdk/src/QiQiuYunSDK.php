@@ -5,6 +5,7 @@ namespace QiQiuYun\SDK;
 use Psr\Log\LoggerInterface;
 use QiQiuYun\SDK\HttpClient\ClientInterface;
 use QiQiuYun\SDK\Exception\SDKException;
+use QiQiuYun\SDK\Service\NotificationService;
 
 class QiQiuYunSDK
 {
@@ -113,6 +114,14 @@ class QiQiuYunSDK
     public function getPushService()
     {
         return $this->getService('Push');
+    }
+
+    /**
+     * @return NotificationService
+     */
+    public function getNotificationService()
+    {
+        return $this->getService('Notification');
     }
 
     /**
