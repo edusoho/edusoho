@@ -24,6 +24,11 @@ class NotificationService extends BaseService
         return $this->request('DELETE', "/accounts/{$channel}");
     }
 
+    public function setChannel()
+    {
+
+    }
+
     public function sendNotifications($notifications)
     {
         return $this->request('POST', '/notifications', $notifications);

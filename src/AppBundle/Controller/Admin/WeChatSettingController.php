@@ -76,8 +76,6 @@ class WeChatSettingController extends BaseController
         }
 
         $biz = $this->getBiz();
-        $client = $this->getCloudNotificationClient();
-
         try {
             if (1 == $newSetting['wechat_notification_enabled']) {
                 $result = $biz['qiQiuYunSdk.notification']->openAccount(NotificationService::CHANNEL_WECHAT, array(
@@ -85,11 +83,9 @@ class WeChatSettingController extends BaseController
                     'app_secret' => $loginConnect['weixinmob_secret']
                 ));
             } else {
-                $result = $biz['qiQiuYunSdk.notification']->123
-                (NotificationService::CHANNEL_WECHAT);
+                $result = $biz['qiQiuYunSdk.notification']->closeAccount(NotificationService::CHANNEL_WECHAT);
             }
         } catch (\RuntimeException $e) {
-            throw $e;
             $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
 
             return false;
@@ -197,13 +193,6 @@ class WeChatSettingController extends BaseController
         if (!empty($val)) {
             file_put_contents($dir.'/MP_verify_'.$val.'.txt', $val);
         }
-    }
-
-    private function getCloudNotificationClient()
-    {
-        $biz = $this->getBiz();
-
-        return $biz['wechat.cloud_notification_client'];
     }
 
     protected function getSettingService()

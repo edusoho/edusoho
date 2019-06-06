@@ -98,6 +98,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
          */
         $biz['qiQiuYunSdk.notification'] = function ($biz) use ($that) {
             $service = null;
+            //
 //            $sdk = $that->generateSdk($biz, $that->getNotificationConfig($biz));
             $sdk = new \QiQiuYun\SDK\QiQiuYunSDK(
                 array(
