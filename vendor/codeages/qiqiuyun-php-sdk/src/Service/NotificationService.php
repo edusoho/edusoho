@@ -13,7 +13,6 @@ class NotificationService extends BaseService
     public function openAccount($channel, $params)
     {
         $params['type'] = $channel;
-
         return $this->request('POST', '/accounts', $params);
     }
 
@@ -37,7 +36,6 @@ class NotificationService extends BaseService
         if (self::SNS_MAX_COUNT == count($sns)) {
             throw new SDKException('sn count out of limit');
         }
-
-        return $this->request('GET', '/notifications', $sns);
+        return $this->request('GET', "/notifications", array('sns' => $sns));
     }
 }
