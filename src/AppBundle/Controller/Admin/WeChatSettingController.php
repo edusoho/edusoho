@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
-use QiQiuYun\SDK\Service\NotificationService;
+use QiQiuYun\SDK\Constants\NotificationChannels;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 
@@ -78,12 +78,12 @@ class WeChatSettingController extends BaseController
         $biz = $this->getBiz();
         try {
             if (1 == $newSetting['wechat_notification_enabled']) {
-                $result = $biz['qiQiuYunSdk.notification']->openAccount(NotificationService::CHANNEL_WECHAT, array(
+                $result = $biz['qiQiuYunSdk.notification']->openAccount(NotificationChannels::CHANNEL_WECHAT, array(
                     'app_id' => $loginConnect['weixinmob_key'],
-                    'app_secret' => $loginConnect['weixinmob_secret']
+                    'app_secret' => $loginConnect['weixinmob_secret'],
                 ));
             } else {
-                $result = $biz['qiQiuYunSdk.notification']->closeAccount(NotificationService::CHANNEL_WECHAT);
+                $result = $biz['qiQiuYunSdk.notification']->closeAccount(NotificationChannels::CHANNEL_WECHAT);
             }
         } catch (\RuntimeException $e) {
             $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');

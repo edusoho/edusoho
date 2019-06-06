@@ -7262,7 +7262,7 @@ admin.developer_setting.tips: >
       「云服务API地址」：　http://api.edusoho.net 或 空<br>
       「IMAPI地址」：　http://imapi.edusoho.net/v1/ 或 空<br>
       「HLS加密视频」：　开启<br>
-      「通知服务API地址」：　http:// 或 空 <br>
+      「通知服务API地址」：　http://notifition-service.qiqiuyun.net 或 空 <br>
     </li>
   </ul>
 admin.developer_setting.mp_service_url_label: 小程序服务平台地址

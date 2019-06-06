@@ -272,11 +272,11 @@ class DefaultSdkProvider implements ServiceProviderInterface
         $setting = $biz->service('System:SettingService');
         $developerSetting = $setting->get('developer', array());
 
-        if (empty($developerSetting['cloud_notification_server'])) {
+        if (empty($developerSetting['cloud_api_notification_server'])) {
             return array();
         }
 
-        $url = parse_url($developerSetting['cloud_notification_server']);
+        $url = parse_url($developerSetting['cloud_api_notification_server']);
 
         if (empty($url['host'])) {
             return array();

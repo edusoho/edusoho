@@ -6,11 +6,9 @@ use QiQiuYun\SDK\Exception\SDKException;
 
 class NotificationService extends BaseService
 {
-    const CHANNEL_WECHAT = 'wechat';
-
     const SNS_MAX_COUNT = 50;
 
-    protected $host = 'notification.test.cn';
+    protected $host = 'notifition-service.qiqiuyun.net';
 
     public function openAccount($channel, $params)
     {
@@ -22,11 +20,6 @@ class NotificationService extends BaseService
     public function closeAccount($channel)
     {
         return $this->request('DELETE', "/accounts/{$channel}");
-    }
-
-    public function setChannel()
-    {
-
     }
 
     public function sendNotifications($notifications)
