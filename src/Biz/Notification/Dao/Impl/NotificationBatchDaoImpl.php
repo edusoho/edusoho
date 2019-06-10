@@ -3,9 +3,9 @@
 namespace Biz\Notification\Dao\Impl;
 
 use Biz\Notification\Dao\NotificationBatchDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class NotificationBatchDaoImpl extends GeneralDaoImpl implements NotificationBatchDao
+class NotificationBatchDaoImpl extends AdvancedDaoImpl implements NotificationBatchDao
 {
     protected $table = 'notification_batch';
 

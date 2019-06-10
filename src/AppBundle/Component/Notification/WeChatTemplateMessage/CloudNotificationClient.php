@@ -68,7 +68,7 @@ class CloudNotificationClient
 
     public function openWechatNotification()
     {
-        $config = array('channels' => array('app_id' => $this->appId, 'app_secret' => $this->secret, 'type' => 'wechat'));
+        $config = array('app_id' => $this->appId, 'app_secret' => $this->secret, 'type' => 'wechat');
         $result = $this->request('POST', self::WECHAT_NOTIFICATION_OPEN, $config);
         $rawResult = json_decode($result, true);
 
