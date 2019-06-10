@@ -98,6 +98,16 @@ export default {
         }
       }).then(res => {
         if (res.status === 'success' && targetId) {
+          // 如果未关注公众号，挑战公众号页面
+          if (this.wechatSwitch) {
+            this.$router.replace({
+              path: '/pay_success',
+              query: {
+                paidUrl: res.paidSuccessUrlH5
+              }
+            })
+            return;
+          }
           this.$router.push({
             path: `/course/${targetId}`,
           })

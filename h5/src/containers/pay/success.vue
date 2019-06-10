@@ -11,6 +11,7 @@
     <div class="press-img-container">
       <img src="static/images/wechat_press.png" alt="">
       <div class="press-text text-14">请长按二维码开启课程通知</div>
+      <div>{{paidUrl}}</div>
     </div>
     <van-button type="primary" class="btn-back-course" @click="backToCourse">返回课程</van-button>
   </div>
@@ -24,7 +25,8 @@ export default {
   data () {
     return {
       targetId: this.$route.query.targetId || '',
-      targetType: this.$route.query.targetType || ''
+      targetType: this.$route.query.targetType || '',
+      paidUrl: this.$route.query.paidUrl || ''
     };
   },
   computed: {
@@ -39,6 +41,10 @@ export default {
   // },
   methods: {
     backToCourse() {
+      if (this.paidUrl) {
+        window.location.href = window.location.origin + this.paidUrl;
+        return;
+      }
       this.$router.replace({
         path: `/${this.targetType}/${this.targetId}`,
       })

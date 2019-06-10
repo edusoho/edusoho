@@ -171,7 +171,7 @@ const routes = [
     meta: {
       title: '支付成功'
     },
-    component: () => import(/* webpackChunkName: "wxpay" */'@/containers/pay/success.vue')
+    component: () => import(/* webpackChunkName: "pay" */'@/containers/pay/success.vue')
   }, {
     path: '/preview',
     name: 'preview',
