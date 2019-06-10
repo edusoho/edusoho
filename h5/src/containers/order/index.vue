@@ -176,6 +176,16 @@ export default {
             num: this.targetNum,
           }
         }).then(() => {
+          if (this.wechatSwitch) {
+            this.$router.replace({
+              path: '/pay_success',
+              query: {
+                targetType: this.targetType,
+                targetId: this.targetId
+              }
+            })
+            return;
+          }
           if (this.targetType === 'vip') {
             this.$router.replace({
               path: `/${this.targetType}`
@@ -183,16 +193,6 @@ export default {
               this.$router.go(-1)
             })
           } else {
-            if (this.wechatSwitch) {
-              this.$router.replace({
-                path: '/pay_success',
-                query: {
-                  targetType: this.targetType,
-                  targetId: this.targetId
-                }
-              })
-              return;
-            }
             this.$router.replace({
               path: `/${this.targetType}/${this.targetId}`
             }, () => {
