@@ -3,6 +3,10 @@ define(function(require, exports, module) {
 
   exports.run = function() {
     $('[data-toggle="switch"]').on('click', function() {
+      if ($('.js-click-enable').length > 0) {
+        Notify.danger(Translator.trans('wechat.notification.cloud_open_tip'));
+        return;
+      }
       var $this = $(this);
       var $parent = $this.parent();
       var isEnable = $this.val();

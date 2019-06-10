@@ -7,6 +7,7 @@ use AppBundle\Common\Paginator;
 use Biz\Notification\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class WeChatNotificationController extends BaseController
 {
@@ -26,7 +27,7 @@ class WeChatNotificationController extends BaseController
 
         $notifications = ArrayToolkit::index($notifications, 'id');
         $notificationIds = ArrayToolkit::column($notifications, 'eventId');
-        $this->getNotificationService()->batchHandleNotifiactionResults($notifications);
+        $this->getNotificationService()->batchHandleNotificationResults($notifications);
         $notificationEvents = $this->getNotificationService()->findEventsByIds($notificationIds);
         $notificationEvents = ArrayToolkit::index($notificationEvents, 'id');
 
@@ -56,6 +57,7 @@ class WeChatNotificationController extends BaseController
         return $this->render('admin/wechat-notification/manage.html.twig', array(
             'wechatSetting' => $wechatSetting,
             'templates' => $templates,
+            'isCloudOpen' => $this->isCloudOpen(),
         ));
     }
 
@@ -75,6 +77,10 @@ class WeChatNotificationController extends BaseController
         $key = $request->query->get('key');
         $templates = TemplateUtil::templates();
         $template = $templates[$key];
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        if (empty($wechatSetting['wechat_notification_enabled'])) {
+            throw new \RuntimeException('未开启微信服务号通知');
+        }
 
         if ($isEnable) {
             $this->addTemplate($template, $key);
@@ -89,7 +95,7 @@ class WeChatNotificationController extends BaseController
     {
         $clinet = $this->getTemplateClient();
         if (empty($clinet)) {
-            throw new \RuntimeException('未开启微信登录');
+            throw new \RuntimeException('获取微信信息错误');
         }
 
         $data = $clinet->addTemplate($template['id']);
@@ -109,7 +115,7 @@ class WeChatNotificationController extends BaseController
     {
         $clinet = $this->getTemplateClient();
         if (empty($clinet)) {
-            throw new \RuntimeException('未开启微信登录');
+            throw new \RuntimeException('获取微信信息错误');
         }
 
         $wechatSetting = $this->getSettingService()->get('wechat');
@@ -128,6 +134,22 @@ class WeChatNotificationController extends BaseController
         $wechatSetting[$key]['status'] = 0;
 
         return $this->getSettingService()->set('wechat', $wechatSetting);
+    }
+
+    protected function isCloudOpen()
+    {
+        try {
+            $api = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return false;
+        }
+
+        if (empty($info['accessCloud'])) {
+            return false;
+        }
+
+        return true;
     }
 
     private function getTemplateSetting($templates, $wechatSetting)

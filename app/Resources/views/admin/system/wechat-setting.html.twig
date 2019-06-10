@@ -6,6 +6,12 @@
 
 {% block main %}
   {{ web_macro.flash_messages() }}
+  {% if not isCloudOpen %}
+    <div class="alert alert-danger">
+      {{ 'wechat.notification.cloud.tips'|trans }}
+      <a href="{{ path('admin_setting_cloud_key_update') }}">{{ 'wechat.notification.cloud_open'|trans }}</a>
+    </div>
+  {% endif %}
   <form id="wechat-setting-form" class="form-horizontal" method="post" novalidate="novalidate">
     <div class="wechat-setting-container">
       <div class="wechat-setting-field">

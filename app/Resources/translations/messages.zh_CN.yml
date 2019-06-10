@@ -9991,6 +9991,8 @@ wechat.notification.switch_status_error: 微信服务号通知开关失败
 wechat.notification.status.success: 发送成功
 wechat.notification.status.fail: 发送失败
 wechat.notification.status.sending: 发送中
+wechat.notification.cloud.tips: 您还未开通教育云，无法正常使用微信服务号通知功能。
+wechat.notification.cloud_open: 前往开通
 
 # 微信通知模板
 wechat.notification.template.live_start: '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}'

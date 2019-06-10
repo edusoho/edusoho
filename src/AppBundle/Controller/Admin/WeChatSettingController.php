@@ -7,6 +7,7 @@ use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class WeChatSettingController extends BaseController
 {
@@ -58,6 +59,7 @@ class WeChatSettingController extends BaseController
                     'loginConnect' => $loginConnect,
                     'payment' => $payment,
                     'wechatSetting' => $wechatSetting,
+                    'isCloudOpen' => $this->isCloudOpen(),
                 ));
             }
             $wechatSetting = array_merge($wechatSetting, $newWeChatSetting);
@@ -69,7 +71,57 @@ class WeChatSettingController extends BaseController
             'loginConnect' => $loginConnect,
             'payment' => $payment,
             'wechatSetting' => $wechatSetting,
+            'isCloudOpen' => $this->isCloudOpen(),
         ));
+    }
+
+    protected function handleCloudNotifiaction($oldSetting, $newSetting, $loginConnect)
+    {
+        if ($oldSetting['wechat_notification_enabled'] == $newSetting['wechat_notification_enabled']) {
+            return true;
+        }
+
+        $biz = $this->getBiz();
+        try {
+            if (1 == $newSetting['wechat_notification_enabled']) {
+                $biz['qiQiuYunSdk.notification']->openAccount();
+                $result = $biz['qiQiuYunSdk.notification']->openChannel(NotificationChannels::CHANNEL_WECHAT, array(
+                    'app_id' => $loginConnect['weixinmob_key'],
+                    'app_secret' => $loginConnect['weixinmob_secret'],
+                ));
+            } else {
+                $biz['qiQiuYunSdk.notification']->closeAccount();
+                $result = $biz['qiQiuYunSdk.notification']->closeChannel(NotificationChannels::CHANNEL_WECHAT);
+            }
+        } catch (\RuntimeException $e) {
+            $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
+
+            return false;
+        }
+
+        if (empty($result)) {
+            $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function isCloudOpen()
+    {
+        try {
+            $api = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return false;
+        }
+
+        if (empty($info['accessCloud'])) {
+            return false;
+        }
+
+        return true;
     }
 
     private function decideEnabledLoginConnect($loginConnect)

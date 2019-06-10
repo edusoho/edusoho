@@ -8,7 +8,7 @@ class NotificationService extends BaseService
 {
     const SNS_MAX_COUNT = 50;
 
-    protected $host = 'notifition-service.qiqiuyun.net';
+    protected $host = 'notification-service.qiqiuyun.net';
 
     public function openAccount()
     {

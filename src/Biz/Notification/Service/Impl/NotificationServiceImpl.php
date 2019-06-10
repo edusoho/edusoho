@@ -73,7 +73,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         return $this->getNotificationStrategyDao()->create($strategy);
     }
 
-    public function batchHandleNotifiactionResults($batchs)
+    public function batchHandleNotificationResults($batchs)
     {
         if (empty($batchs)) {
             return array();
@@ -88,7 +88,6 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         try {
             $result = $this->getSDKNotificationService()->batchGetNotifications($sns);
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
             throw new RuntimeException('获取发送结果错误');
         }
 
