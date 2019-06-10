@@ -7396,6 +7396,10 @@ log.action.notify.create: 'Create'
 log.action.notify.check_fail: 'Check'
 log.action.notify.wechat_notify_lesson_publish: WeChat Notify Lesson Publish
 log.action.notify.wechat_notify_live_play: WeChat Notify Live Play
+log.action.notify.wechat_notify_exam_result: WeChat Notify Exam Result
+log.action.notify.wechat_notify_homework_result: WeChat Notify Homework Result
+log.action.notify.wechat_notify_pay_success: WeChat Notify Pay Success
+log.action.notify.wechat_notify_coin_recharge: WeChat Notify Recharge Success
 log.action.order.pay_result: 'Payment result'
 log.action.order.andit_refund: 'Refund review'
 log.action.order.refund_cancel: 'Cancel refund'
@@ -8691,6 +8695,9 @@ wechat.notification.record_send_time: Send time
 wechat.notification.record_send_status: Send status
 wechat.notification.record_number: receive/send number
 wechat.notification.record.empty: empty send records
+wechat.notification.status.success: Send Success
+wechat.notification.status.fail: Send Fail
+wechat.notification.status.sending: Sending
 
 # 微信通知模板
 wechat.notification.template.live_start: '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}'

@@ -8,6 +8,7 @@ use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Biz\AppLoggerConstant;
 
 class WeChatNotificationEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -80,6 +81,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if ('testpaper' == $paperResult['type']) {
             $key = 'examResult';
+            $logName = 'wechat_notify_exam_result';
             $data = array(
                 'first' => array('value' => '同学，你好，你的试卷已批阅完成'),
                 'keyword1' => array('value' => $task['title']),
@@ -88,6 +90,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             );
         } elseif ('homework' == $paperResult['type']) {
             $key = 'homeworkResult';
+            $logName = 'wechat_notify_homework_result';
             $course = $this->getCourseService()->getCourse($task['courseId']);
             $teachers = $this->getCourseMemberService()->searchMembers(
                 array('courseId' => $course['id'], 'role' => 'teacher', 'isVisible' => 1),
@@ -131,7 +134,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'template_args' => $data,
             'goto' => $options,
         ));
-        $this->getCloudNotificationClient()->sendWechatNotificaion($list);
+        $this->sendCloudWeChatNotification($key, $logName, $list);
     }
 
     public function onPaid(Event $event)
@@ -144,7 +147,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'first' => '尊敬的客户，您已充值成功',
                 'keyword1' => '现金充值或学习卡',
                 'keyword2' => $trade['trade_sn'],
-                'keyword3' => $trade['cash_amount'] / 100,
+                'keyword3' => $trade['amount'] / 100,
                 'keyword4' => date('Y-m-d H:i', $trade['pay_time']),
                 'remark' => '快去看看课程吧~',
             );
@@ -158,7 +161,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                     'template_args' => $data,
                     'goto' => $options,
                 ));
-                $this->getCloudNotificationClient()->sendWechatNotificaion($list);
+                $this->sendCloudWeChatNotification('coinRecharge', 'wechat_notify_coin_recharge', $list);
             }
         }
 
@@ -166,7 +169,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $data = array(
                 'first' => '尊敬的客户，您已支付成功',
                 'keyword1' => $trade['title'],
-                'keyword2' => $trade['cash_amount'] / 100,
+                'keyword2' => $trade['amount'] / 100,
                 'keyword3' => date('Y-m-d H:i', $trade['pay_time']),
                 'remark' => '请前往查看',
             );
@@ -185,9 +188,28 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                     'template_args' => $data,
                     'goto' => $options,
                 ));
-                $this->getCloudNotificationClient()->sendWechatNotificaion($list);
+                $this->sendCloudWeChatNotification('paySuccess', 'wechat_notify_pay_success', $list);
             }
         }
+    }
+
+    protected function sendCloudWeChatNotification($key, $logName, $list)
+    {
+        try {
+            $result = $this->getCloudNotificationClient()->sendNotifications($list);           
+        } catch (\Exception $e) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", array('error' => $e->getMessage()));
+
+            return;
+        }
+
+        if (empty($result['batch_sn'])) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", array('error' => $e->getMessage()));
+
+            return;
+        }
+
+        $this->getNotificationService()->createWeChatNotificationRecord($result['batch_sn'], $key, $list[0]['template_args']);
     }
 
     private function getOrderTargetDetailUrl($targetType, $targetId)
@@ -292,7 +314,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         $biz = $this->getBiz();
 
-        return $biz['wechat.cloud_notification_client'];
+        return $biz['qiQiuYunSdk.notification'];
     }
 
     /**
@@ -347,5 +369,15 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     protected function getOrderService()
     {
         return $this->getBiz()->service('Order:OrderService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->getBiz()->service('Notification:NotificationService');
     }
 }

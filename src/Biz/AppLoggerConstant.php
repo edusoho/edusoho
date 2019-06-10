@@ -362,6 +362,10 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'check_fail',
                 'wechat_notify_lesson_publish',
                 'wechat_notify_live_play',
+                'wechat_notify_exam_result',
+                'wechat_notify_homework_result',
+                'wechat_notify_pay_success',
+                'wechat_notify_coin_recharge',
             ),
             self::ORDER => array(
                 'pay_result',

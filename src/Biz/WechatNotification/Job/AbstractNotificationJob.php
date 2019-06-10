@@ -6,6 +6,7 @@ use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Biz\System\Service\LogService;
 use Biz\WeChat\Service\WeChatService;
 use Biz\Course\Service\CourseService;
+use Biz\AppLoggerConstant;
 
 class AbstractNotificationJob extends AbstractJob
 {
@@ -17,30 +18,46 @@ class AbstractNotificationJob extends AbstractJob
     {
     }
 
-    protected function sendNotifications($userIds, $templateId, $data, $options = array())
+    protected function sendNotifications($key, $logName, $userIds, $templateData)
     {
         $subscribedUsers = $this->getWeChatService()->findSubscribedUsersByUserIdsAndType($userIds, self::OFFICIAL_TYPE);
         $batchs = array_chunk($subscribedUsers, self::LIMIT_NUM);
         foreach ($batchs as $batch) {
             $list = array();
             foreach ($batch as $user) {
-                $list[] = array(
+                $list[] = array_merge(array(
                     'channel' => 'wechat',
                     'to_id' => $user['openId'],
-                    'template_id' => $templateId,
-                    'template_args' => $data,
-                    'goto' => $options,
-                );
+                ), $templateData);
             }
-            $this->getCloudNotificationClient()->sendWechatNotificaion($list);
+            $this->sendWeChatNotification($key, $logName, $list);
         }
+    }
+
+    protected function sendWeChatNotification($key, $logName, $list)
+    {
+        try {
+            $result = $this->getCloudNotificationClient()->sendNotifications($list);           
+        } catch (\Exception $e) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", array('error' => $e->getMessage()));
+
+            return;
+        }
+
+        if (empty($result['batch_sn'])) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", array('error' => $e->getMessage()));
+
+            return;
+        }
+
+        $this->getNotificationService()->createWeChatNotificationRecord($result['batch_sn'], $key, $list[0]['template_args']);
     }
 
     protected function getCloudNotificationClient()
     {
         $biz = $this->biz;
 
-        return $biz['wechat.cloud_notification_client'];
+        return $biz['qiQiuYunSdk.notification'];
     }
 
     /**
@@ -80,5 +97,10 @@ class AbstractNotificationJob extends AbstractJob
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->biz->service('Notification:NotificationService');
     }
 }

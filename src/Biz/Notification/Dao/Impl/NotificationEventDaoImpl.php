@@ -3,9 +3,9 @@
 namespace Biz\Notification\Dao\Impl;
 
 use Biz\Notification\Dao\NotificationEventDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class NotificationEventDaoImpl extends GeneralDaoImpl implements NotificationEventDao
+class NotificationEventDaoImpl extends AdvancedDaoImpl implements NotificationEventDao
 {
     protected $table = 'notification_event';
 
