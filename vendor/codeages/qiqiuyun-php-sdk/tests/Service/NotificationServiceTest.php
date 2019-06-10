@@ -10,7 +10,7 @@ class NotificationServiceTest extends BaseTestCase
     public function testOpenAccount()
     {
         $httpClient = $this->mockHttpClient(array(
-            'success' => 'ok',
+            'success' => 'ok'
         ));
 
         $service = new NotificationService($this->auth, array(), null, $httpClient);

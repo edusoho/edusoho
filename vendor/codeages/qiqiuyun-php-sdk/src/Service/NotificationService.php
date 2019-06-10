@@ -8,7 +8,7 @@ class NotificationService extends BaseService
 {
     const SNS_MAX_COUNT = 50;
 
-    protected $host = 'notification-service.qiqiuyun.net';
+    protected $host = 'notifition-service.qiqiuyun.net';
 
     public function openAccount()
     {
@@ -17,12 +17,13 @@ class NotificationService extends BaseService
 
     public function closeAccount()
     {
-        return $this->request('DELETE', '/accounts');
+        return $this->request('DELETE', "/accounts");
     }
 
     public function openChannel($channelType, $params)
     {
-        return $this->request('POST', "/channels/{$channelType}", $params);
+        $params['type'] = $channelType;
+        return $this->request('POST', "/channels", $params);
     }
 
     public function closeChannel($channelType)
@@ -43,8 +44,7 @@ class NotificationService extends BaseService
     public function searchNotifications($conditions, $offset = 0, $limit = 30)
     {
         $params = array_merge($conditions, array('offset' => $offset, 'limit' => $limit));
-
-        return $this->request('GET', '/notifications', $params);
+        return $this->request('GET', "/notifications", $params); 
     }
 
     public function batchGetNotifications($sns)
@@ -58,7 +58,6 @@ class NotificationService extends BaseService
             'offset' => 0,
             'limit' => count($sns),
         );
-
-        return $this->request('GET', '/notifications', $params);
+        return $this->request('GET', "/notifications", $params);
     }
 }
