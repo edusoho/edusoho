@@ -271,7 +271,7 @@ const setVipSwitch = () => new Promise((resolve, reject) => {
 
 // 检查微信公众号开关配置
 const setWeChatSwitch = () => new Promise((resolve, reject) => {
-  if (!Object.keys(store.state.vipSettings).length) {
+  if (!Object.keys(store.state.wechatSwitch).length) {
     return store.dispatch('getGlobalSettings', { type: 'wechat', key: 'wechatSettings' })
       .then(res => {
         if (res.enabled) {
@@ -280,7 +280,7 @@ const setWeChatSwitch = () => new Promise((resolve, reject) => {
         return resolve(res);
       })
       .catch(err => {
-        Toast.fail(err.message);
+        console.log(err.message);
         return reject(err);
       });
   }

@@ -55,9 +55,7 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      isLoading: state => state.isLoading
-    }),
+    ...mapState(['wechatSwitch', 'isLoading']),
     validPayWay() {
       return this.paySettings.wxpayEnabled ||
         (this.paySettings.alipayEnabled && !this.inWechat);
@@ -133,8 +131,6 @@ export default {
           app_pay: 'Y'
         }
       }).then(res => {
-        debugger;
-        console.log(res,'resres')
         if (this.payWay === 'WechatPay_H5') {
           this.getTradeInfo(res.tradeSn).then(() => {
             window.location.href = res.mwebUrl
@@ -156,9 +152,16 @@ export default {
           tradesSn: tradeSn,
         }
       }).then((res) => {
-        debugger;
-        console.log(res,'resres2')
         if (res.isPaid) {
+          if (this.wechatSwitch) {
+            this.$router.replace({
+              path: '/pay_success',
+              query: {
+                paidUrl: res.paidSuccessUrlH5
+              }
+            })
+            return;
+          }
           window.location.href = window.location.origin + res.paidSuccessUrlH5
           return;
         }

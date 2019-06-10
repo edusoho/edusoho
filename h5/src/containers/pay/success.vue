@@ -1,5 +1,5 @@
 <template>
-  <div class="pay-success-container" v-if="!wechatSwitch">
+  <div class="pay-success-container">
     <div class="pay-success-text">
       <i class="h5-icon h5-icon-check"></i>
       <span class="text-18 success-text">支付成功！</span>
@@ -23,16 +23,24 @@ import { mapState } from 'vuex';
 export default {
   data () {
     return {
-      courseId: 1,
+      targetId: this.$route.query.targetId || '',
+      targetType: this.$route.query.targetType || ''
     };
   },
   computed: {
     ...mapState(['wechatSwitch', 'wechatSettings']),
   },
+  // created() {
+  //   if (!this.wechatSwitch) {
+  //     this.$router.replace({
+  //       path: '/'
+  //     })
+  //   }
+  // },
   methods: {
     backToCourse() {
-      this.$router.push({
-        path: `/course/${this.courseId}`,
+      this.$router.replace({
+        path: `/${this.targetType}/${this.targetId}`,
       })
     }
   }

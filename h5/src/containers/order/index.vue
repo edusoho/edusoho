@@ -101,20 +101,18 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      isLoading: state => state.isLoading
-    }),
+    ...mapState(['wechatSwitch', 'isLoading']),
     total() {
+      const totalNumber = this.course.totalPrice;
       if (!this.itemData) {
-        return Number(this.course.totalPrice).toFixed(2);
+        return totalNumber ? Number(this.course.totalPrice).toFixed(2) : '';
       }
       const minusType = (this.itemData.type === 'minus');
       const couponRate = this.itemData.rate;
-      const totalNumber = this.course.totalPrice;
       if (minusType) {
         return Math.max(totalNumber - couponRate, 0).toFixed(2);
       }
-      return Number(totalNumber * couponRate * 0.1).toFixed(2);
+      return totalNumber ? Number(totalNumber * couponRate * 0.1).toFixed(2) : '';
     },
     couponMoney() {
       if (!this.itemData) {
@@ -185,6 +183,16 @@ export default {
               this.$router.go(-1)
             })
           } else {
+            if (this.wechatSwitch) {
+              this.$router.replace({
+                path: '/pay_success',
+                query: {
+                  targetType: this.targetType,
+                  targetId: this.targetId
+                }
+              })
+              return;
+            }
             this.$router.replace({
               path: `/${this.targetType}/${this.targetId}`
             }, () => {

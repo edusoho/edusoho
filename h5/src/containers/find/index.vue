@@ -42,7 +42,7 @@
         @activityHandle="activityHandle"
         :feedback="feedback"></e-market-part>
     </div>
-    <e-switch-loading v-if="!wechatSwitch"></e-switch-loading>
+    <e-switch-loading v-if="wechatSwitch"></e-switch-loading>
   </div>
 </template>
 
@@ -88,7 +88,7 @@
       };
     },
     computed: {
-      ...mapState(['vipSwitch', 'isLoading', 'wechatSwitch', 'wechatSettings']),
+      ...mapState(['vipSwitch', 'isLoading', 'wechatSwitch']),
     },
     created() {
       const {preview, token} = this.$route.query

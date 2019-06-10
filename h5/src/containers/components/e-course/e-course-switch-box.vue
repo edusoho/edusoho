@@ -81,7 +81,7 @@
     },
     filters: {
       numFilter(value) {
-        return parseFloat(value).toFixed(2)
+        return value ? parseFloat(value).toFixed(2) : '';
       }
     },
     methods: {

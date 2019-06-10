@@ -124,7 +124,7 @@ export const setWeChatSwitch = ({ commit }, isOn) =>
     }
     return Api.weChatNotifyState().then(res => {
       const isWeChatBind = !!(res && res.bind);
-      commit(types.GET_SETTINGS, { key: 'wechatSwitch', setting: isWeChatBind });
+      commit(types.GET_SETTINGS, { key: 'wechatSwitch', setting: !isWeChatBind });
       resolve(isWeChatBind);
       return isWeChatBind;
     }).catch(error => {

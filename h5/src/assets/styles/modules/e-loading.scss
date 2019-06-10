@@ -74,10 +74,10 @@
 .switch-code-container {
   .es-switch-loading {
     position: fixed;
-    bottom: 13vh;
+    bottom: 9vh;
     top: auto;
-    right: 0;
-    left: 0;
+    right: vw(15);
+    left: auto;
     z-index: 2;
     text-align: center;
     &.default .spot {
