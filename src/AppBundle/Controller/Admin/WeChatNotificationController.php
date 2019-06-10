@@ -33,6 +33,7 @@ class WeChatNotificationController extends BaseController
         return $this->render('admin/wechat-notification/index.html.twig', array(
             'notifications' => $notifications,
             'notificationEvents' => $notificationEvents,
+            'paginator' => $paginator,
         ));
     }
 
