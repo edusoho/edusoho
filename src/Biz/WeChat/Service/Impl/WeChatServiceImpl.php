@@ -11,12 +11,19 @@ use Biz\WeChat\Dao\UserWeChatDao;
 use Biz\WeChat\Service\WeChatService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use QiQiuYun\SDK\Constants\NotificationChannels;
 
 class WeChatServiceImpl extends BaseService implements WeChatService
 {
     public function getWeChatUser($id)
     {
         return $this->getUserWeChatDao()->get($id);
+    }
+
+    public function getWeChatUserByTypeAndUnionId($type, $unionId)
+    {
+        return $this->getUserWeChatDao()->getByTypeAndUnionId($type, $unionId);
     }
 
     public function findWeChatUsersByUserId($userId)
@@ -51,7 +58,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
     public function createWeChatUser($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('appId', 'type', 'openId'))) {
+        if (!ArrayToolkit::requireds($fields, array('appId', 'type'))) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -76,10 +83,10 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $this->getUserWeChatDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
-    public function batchSyncOfficialWeChatUsers()
+    public function batchSyncOfficialWeChatUsers($nextOpenId = '')
     {
         $biz = $this->biz;
-        $weChatUsersList = $biz['wechat.template_message_client']->getUserList();
+        $weChatUsersList = $biz['wechat.template_message_client']->getUserList($nextOpenId);
         if (!empty($weChatUsersList['data']['openid'])) {
             $openIds = array_values($weChatUsersList['data']['openid']);
             $existOpenIds = ArrayToolkit::column($this->getUserWeChatDao()->findOpenIdsInListsByType($openIds, self::OFFICIAL_TYPE), 'openId');
@@ -103,9 +110,13 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 $this->getUserWeChatDao()->batchCreate($saveData);
             }
         }
+
+        return array(
+            'next_openid' => $weChatUsersList['next_openid'],
+        );
     }
 
-    public function refreshOfficialWeChatUsers($lifeTime = 86400, $refreshNum = self::REFRESH_NUM)
+    public function refreshOfficialWeChatUsers($lifeTime = WeChatService::FRESH_TIME, $refreshNum = self::REFRESH_NUM)
     {
         $conditions = array(
             'type' => self::OFFICIAL_TYPE,
@@ -170,6 +181,74 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $wechatSetting[$key]['templateId'];
     }
 
+    public function handleCloudNotification($oldSetting, $newSetting, $loginConnect)
+    {
+        if ($oldSetting['wechat_notification_enabled'] == $newSetting['wechat_notification_enabled']) {
+            return true;
+        }
+
+        $biz = $this->biz;
+        try {
+            if (1 == $newSetting['wechat_notification_enabled']) {
+                $biz['qiQiuYunSdk.notification']->openAccount();
+                $result = $biz['qiQiuYunSdk.notification']->openChannel(NotificationChannels::CHANNEL_WECHAT, array(
+                    'app_id' => $loginConnect['weixinmob_key'],
+                    'app_secret' => $loginConnect['weixinmob_secret'],
+                ));
+                $this->registerJobs();
+            } else {
+                $biz['qiQiuYunSdk.notification']->closeAccount();
+                $result = $biz['qiQiuYunSdk.notification']->closeChannel(NotificationChannels::CHANNEL_WECHAT);
+                $this->deleteJobs();
+            }
+        } catch (\RuntimeException $e) {
+            return false;
+        }
+
+        if (empty($result)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getJobs()
+    {
+        $jobs = array(
+            array(
+                'name' => 'WeChatUsersSyncJob',
+                'expression' => '*/60 * * * *',
+                'class' => 'Biz\WeChat\Job\WeChatUsersSync',
+                'misfire_threshold' => 60 * 10,
+            ),
+            array(
+                'name' => 'WeChatUserFreshJob',
+                'expression' => '*/5 * * * *',
+                'class' => 'Biz\WeChat\Job\WeChatUserFreshJob',
+                'misfire_threshold' => 60 * 5,
+            ),
+        );
+
+        return $jobs;
+    }
+
+    private function registerJobs()
+    {
+        $jobs = $this->getJobs();
+        foreach ($jobs as $job) {
+            $this->getSchedulerService()->register($job);
+        }
+    }
+
+    private function deleteJobs()
+    {
+        $jobs = $this->getJobs();
+
+        foreach ($jobs as $job) {
+            $this->getSchedulerService()->deleteJobByName($job['name']);
+        }
+    }
+
     private function convertWeChatUsersToOfficialRequestParams($weChatUsers, $lang = self::LANG)
     {
         $userList = array();
@@ -205,8 +284,19 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('system:SettingService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }

@@ -14,11 +14,23 @@ interface WeChatService
 
     const FRESH_TIME = 7200; //过期时间 2小时
 
-    public function batchSyncOfficialWeChatUsers();
+    const WECHAT_MAX_USER_COUNT = 10000;
+
+    public function getWeChatUserByTypeAndUnionId($type, $unionId);
+
+    public function batchSyncOfficialWeChatUsers($nextOpenId = '');
 
     public function getOfficialWeChatUserByUserId($userId);
 
     public function batchFreshOfficialWeChatUsers($weChatUsers);
 
-    public function refreshOfficialWeChatUsers($lifeTime = 86400, $refreshNum = self::REFRESH_NUM);
+    public function refreshOfficialWeChatUsers($lifeTime = self::FRESH_TIME, $refreshNum = self::REFRESH_NUM);
+
+    public function handleCloudNotification($oldSetting, $newSetting, $loginConnect);
+
+    public function getTemplateId($key);
+
+    public function createWeChatUser($fields);
+
+    public function updateWeChatUser($id, $fields);
 }

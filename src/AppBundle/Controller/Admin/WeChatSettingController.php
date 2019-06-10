@@ -3,7 +3,8 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
-use QiQiuYun\SDK\Constants\NotificationChannels;
+use Biz\System\Service\SettingService;
+use Biz\WeChat\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -51,7 +52,9 @@ class WeChatSettingController extends BaseController
             $this->getSettingService()->set('login_bind', $loginConnect);
             $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
 
-            if (!$this->handleCloudNotifiaction($wechatSetting, $newWeChatSetting, $loginConnect)) {
+            if (!$this->getWeChatService()->handleCloudNotification($wechatSetting, $newWeChatSetting, $loginConnect)) {
+                $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
+
                 return $this->render('admin/system/wechat-setting.html.twig', array(
                     'loginConnect' => $loginConnect,
                     'payment' => $payment,
@@ -216,8 +219,19 @@ class WeChatSettingController extends BaseController
         }
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->createService('WeChat:WeChatService');
     }
 }

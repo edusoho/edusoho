@@ -63,7 +63,7 @@ class AbstractNotificationJob extends AbstractJob
     /**
      * @return LogService
      */
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->biz->service('System:LogService');
     }
@@ -71,7 +71,7 @@ class AbstractNotificationJob extends AbstractJob
     /**
      * @return WeChatService
      */
-    private function getWeChatService()
+    protected function getWeChatService()
     {
         return $this->biz->service('WeChat:WeChatService');
     }
