@@ -56,7 +56,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $this->getUserWeChatDao()->getByUserIdAndType($userId, self::OFFICIAL_TYPE);
     }
 
-    public function reateWeChatUser($fields)
+    public function createWeChatUser($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('appId', 'type'))) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
