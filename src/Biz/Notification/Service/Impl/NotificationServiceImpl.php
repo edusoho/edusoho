@@ -79,7 +79,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
             return array();
         }
 
-        $batchs = array_filter($batchs, function($item){
+        $batchs = array_filter($batchs, function ($item) {
             if ('finished' != $item['status']) {
                 return true;
             }
@@ -124,7 +124,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
             'sn' => $sn,
             'status' => 'created',
         );
-        
+
         return $this->createBatch($batch);
     }
 

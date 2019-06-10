@@ -196,7 +196,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     protected function sendCloudWeChatNotification($key, $logName, $list)
     {
         try {
-            $result = $this->getCloudNotificationClient()->sendNotifications($list);           
+            $result = $this->getCloudNotificationClient()->sendNotifications($list);
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", array('error' => $e->getMessage()));
 
