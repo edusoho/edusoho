@@ -1343,3 +1343,6 @@ wechat.notification.wechat_bind_hover: >
     </div>
 wechat.notification.homepage.open_tip: <span class="%messageClass%">“微信通知”可在“个人设置-第三方登录”开启。</span>
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">前往开启</span>
+wechat.notification.cloud_open_tip: 请先开启教育云
+
+

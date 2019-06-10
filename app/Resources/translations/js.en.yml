@@ -1400,3 +1400,5 @@ wechat.notification.wechat_bind_hover: >
     </div>
 wechat.notification.homepage_open_tip: <span class="%messageClass%">"WeChat notification" can be opened in "Personal Settings - Third Party Login"。</span>
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">go to open</span>
+wechat.notification.cloud_open_tip: Please open ES Cloud
+

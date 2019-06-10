@@ -6,6 +6,7 @@ use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use QiQiuYun\SDK\Constants\NotificationChannels;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class WeChatSettingController extends BaseController
 {
@@ -55,6 +56,7 @@ class WeChatSettingController extends BaseController
                     'loginConnect' => $loginConnect,
                     'payment' => $payment,
                     'wechatSetting' => $wechatSetting,
+                    'isCloudOpen' => $this->isCloudOpen(),
                 ));
             }
             $wechatSetting = array_merge($wechatSetting, $newWeChatSetting);
@@ -66,6 +68,7 @@ class WeChatSettingController extends BaseController
             'loginConnect' => $loginConnect,
             'payment' => $payment,
             'wechatSetting' => $wechatSetting,
+            'isCloudOpen' => $this->isCloudOpen(),
         ));
     }
 
@@ -96,6 +99,22 @@ class WeChatSettingController extends BaseController
         if (empty($result)) {
             $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
 
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function isCloudOpen()
+    {
+        try {
+            $api = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return false;
+        }
+
+        if (empty($info['accessCloud'])) {
             return false;
         }
 

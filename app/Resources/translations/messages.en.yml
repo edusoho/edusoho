@@ -8698,6 +8698,8 @@ wechat.notification.record.empty: empty send records
 wechat.notification.status.success: Send Success
 wechat.notification.status.fail: Send Fail
 wechat.notification.status.sending: Sending
+wechat.notification.cloud.tips: You have not yet opened an education cloud and cannot use the WeChat service number notification function
+wechat.notification.cloud_open: Go to the opening
 
 # 微信通知模板
 wechat.notification.template.live_start: '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}'

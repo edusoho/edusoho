@@ -5,6 +5,12 @@
 {% set menu = 'admin_operation_wechat_notification_manage' %}
 
 {% block main %}
+  {% if not isCloudOpen %}
+    <div class="alert alert-danger js-click-enable">
+      {{ 'wechat.notification.cloud.tips'|trans }}
+      <a href="{{ path('admin_setting_cloud_key_update') }}">{{ 'wechat.notification.cloud_open'|trans }}</a>
+    </div>
+  {% endif %}
   <div class="form-horizontal">
     <fieldset>
       <legend>{{'admin.wechat_notification.switch'|trans}}</legend>
