@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\WechatNotification\Event;
+namespace Biz\WeChatNotification\Event;
 
 use Biz\Course\Service\CourseService;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
