@@ -322,7 +322,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         if ($member['deadline'] > time()) {
-            return $vipNonExpired;
+            return false;
         }
 
         return !$vipNonExpired;
