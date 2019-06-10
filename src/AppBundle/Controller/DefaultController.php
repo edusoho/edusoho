@@ -16,69 +16,11 @@ use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\User\Service\BatchNotificationService;
 use Symfony\Component\HttpFoundation\Response;
-use QiQiuYun\SDK\Auth;
-use QiQiuYun\SDK\HttpClient\Client;
 
 class DefaultController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $data = \QiQiuYun\SDK\json_decode('[
-    {
-        "channel":"wechat",
-        "to_id":"o6_bmjrPTlm6_2sgVt7hMZOPfL2M",
-        "title":"xxx",
-        "content":"xxxxxx",
-        "template_id":"xxxxx",
-        "template_args":{
-            "first":{
-                "value":"恭喜你购买成功！",
-                "color":"#173177"
-            },
-            "keyword1":{
-                "value":"巧克力",
-                "color":"#173177"
-            },
-            "keyword2":{
-                "value":"39.8元",
-                "color":"#173177"
-            },
-            "keyword3":{
-                "value":"2014年9月22日",
-                "color":"#173177"
-            },
-            "remark":{
-                "value":"欢迎再次购买！",
-                "color":"#173177"
-            }
-        },
-        "goto":{
-            "type":"url/miniprogram",
-            "url":"xxxx",
-            "appid":"xxxxxx",
-            "pagepath":"xxxxx"
-        }
-    }
-]', true);
-
-        $options = array(
-        );
-        if (version_compare(phpversion(), '5.4.0', '>=')) {
-            $options['body'] = empty($data) ? '' : json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        } else {
-            $options['body'] = empty($data) ? '' : json_encode($data);
-        }
-        $auth = new Auth('T7YARlmDmknXijWTCaRfdBo3O82K63RD', 'LB5uBY4ysvo7NeJCU2ZWawxHu91opQCu');
-        $headers = array();
-        $uri = '/notifications';
-        $headers['Authorization'] = $auth->makeRequestAuthorization($uri, $options['body']);
-        $headers['Content-Type'] = 'application/json';
-        $options['headers'] = $headers;
-        $client = new Client(array());
-        $url = "http://notification.test.cn{$uri}";
-        $response = $client->request('POST', $url, $options);
-        $result = json_decode($response->getBody(), true);
-        var_dump($response->getBody());
         $user = $this->getCurrentUser();
 
         if (!empty($user['id'])) {
