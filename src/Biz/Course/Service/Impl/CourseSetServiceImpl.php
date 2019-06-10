@@ -2,28 +2,28 @@
 
 namespace Biz\Course\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\AppLoggerConstant;
 use Biz\BaseService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
+use Biz\Content\Service\FileService;
 use Biz\Course\CourseSetException;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\User\Service\UserService;
-use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\LogService;
-use Biz\Content\Service\FileService;
-use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Dao\FavoriteDao;
+use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Course\Service\MaterialService;
-use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseDeleteService;
+use Biz\System\Service\LogService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\User\Service\UserService;
 use Biz\User\UserException;
+use Codeages\Biz\Framework\Event\Event;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -164,6 +164,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function isUserFavorite($userId, $courseSetId)
     {
         $courseSet = $this->getCourseSet($courseSetId);
+
+        if (empty($courseSet)) {
+            throw $this->createNewException(CourseSetException::NOTFOUND_COURSESET());
+        }
         $favorite = $this->getFavoriteDao()->getByUserIdAndCourseSetId($userId, $courseSet['id'], 'course');
 
         return !empty($favorite);
@@ -212,6 +216,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (empty($courseSetId)) {
+            return 'ced';
+
             return $user->isTeacher();
         }
 
