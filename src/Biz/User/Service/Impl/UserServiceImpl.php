@@ -1178,9 +1178,10 @@ class UserServiceImpl extends BaseService implements UserService
 
         $bind = $this->getUserBindByTypeAndUserId($type, $toId);
         if ($bind) {
-            $type = $this->convertOAuthType($type);
-            $this->getUserBindDao()->deleteByTypeAndToId($type, $toId);
+            $convertedType = $this->convertOAuthType($type);
+            $this->getUserBindDao()->deleteByTypeAndToId($convertedType, $toId);
             $currentUser = $this->getCurrentUser();
+            $this->dispatchEvent('user.unbind', new Event($user, array('bind' => $bind, 'bindType' => $type, 'convertedType' => $convertedType)));
             $this->getLogService()->info('user', 'unbind', sprintf('用户名%s解绑成功，操作用户为%s', $user['nickname'], $currentUser['nickname']));
         }
 
@@ -1248,16 +1249,18 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(UserException::CLIENT_TYPE_INVALID());
         }
 
-        $type = $this->convertOAuthType($type);
+        $convertedType = $this->convertOAuthType($type);
 
-        $this->getUserBindDao()->create(array(
-            'type' => $type,
+        $bind = $this->getUserBindDao()->create(array(
+            'type' => $convertedType,
             'fromId' => $fromId,
             'toId' => $toId,
             'token' => empty($token['token']) ? '' : $token['token'],
             'createdTime' => time(),
             'expiredTime' => empty($token['expiredTime']) ? 0 : $token['expiredTime'],
         ));
+
+        $this->dispatchEvent('user.bind', new Event($user, array('bind' => $bind, 'bindType' => $type, 'convertedType' => $convertedType)));
     }
 
     public function markLoginInfo($type = null)

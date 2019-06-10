@@ -3,7 +3,8 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
-use QiQiuYun\SDK\Constants\NotificationChannels;
+use Biz\System\Service\SettingService;
+use Biz\WeChat\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 
@@ -50,7 +51,9 @@ class WeChatSettingController extends BaseController
             $this->getSettingService()->set('login_bind', $loginConnect);
             $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
 
-            if (!$this->handleCloudNotifiaction($wechatSetting, $newWeChatSetting, $loginConnect)) {
+            if (!$this->getWeChatService()->handleCloudNotification($wechatSetting, $newWeChatSetting, $loginConnect)) {
+                $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
+
                 return $this->render('admin/system/wechat-setting.html.twig', array(
                     'loginConnect' => $loginConnect,
                     'payment' => $payment,
@@ -67,39 +70,6 @@ class WeChatSettingController extends BaseController
             'payment' => $payment,
             'wechatSetting' => $wechatSetting,
         ));
-    }
-
-    protected function handleCloudNotifiaction($oldSetting, $newSetting, $loginConnect)
-    {
-        if ($oldSetting['wechat_notification_enabled'] == $newSetting['wechat_notification_enabled']) {
-            return true;
-        }
-
-        $biz = $this->getBiz();
-        try {
-            if (1 == $newSetting['wechat_notification_enabled']) {
-                $biz['qiQiuYunSdk.notification']->openAccount();
-                $result = $biz['qiQiuYunSdk.notification']->openChannel(NotificationChannels::CHANNEL_WECHAT, array(
-                    'app_id' => $loginConnect['weixinmob_key'],
-                    'app_secret' => $loginConnect['weixinmob_secret'],
-                ));
-            } else {
-                $biz['qiQiuYunSdk.notification']->closeAccount();
-                $result = $biz['qiQiuYunSdk.notification']->closeChannel(NotificationChannels::CHANNEL_WECHAT);
-            }
-        } catch (\RuntimeException $e) {
-            $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
-
-            return false;
-        }
-
-        if (empty($result)) {
-            $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
-
-            return false;
-        }
-
-        return true;
     }
 
     private function decideEnabledLoginConnect($loginConnect)
@@ -197,8 +167,19 @@ class WeChatSettingController extends BaseController
         }
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->createService('WeChat:WeChatService');
     }
 }

@@ -9,7 +9,15 @@ class WeChatUsersSync extends AbstractJob
 {
     public function execute()
     {
-        $this->getWeChatService()->batchSyncOfficialWeChatUsers();
+        $this->refresh();
+    }
+
+    private function refresh($nextOpenId = '')
+    {
+        $result = $this->getWeChatService()->batchSyncOfficialWeChatUsers($nextOpenId);
+        if (!empty($result['next_openid'])) {
+            $this->refresh($result['next_openid']);
+        }
     }
 
     /**
