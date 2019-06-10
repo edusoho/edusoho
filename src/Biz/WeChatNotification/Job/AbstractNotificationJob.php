@@ -2,6 +2,11 @@
 
 namespace Biz\WeChatNotification\Job;
 
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
+use Biz\Notification\Service\NotificationService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Biz\System\Service\LogService;
 use Biz\WeChat\Service\WeChatService;
@@ -84,23 +89,43 @@ class AbstractNotificationJob extends AbstractJob
         return $this->biz->service('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
         return $this->biz->service('Notification:NotificationService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->biz->service('User:UserService');
     }
 }
