@@ -66,6 +66,7 @@ class NotificationServiceTest extends BaseTestCase
             'title' => 'test Events',
             'content' => 'test Contents',
             'totalCount' => 10,
+            'status' => 'created',
         );
 
         $fields = array_merge($defaultFields, $fields);
