@@ -971,7 +971,7 @@ course.teaching_plan.expiry_date.anytime: >
 course.teaching_plan.expiry_date.real_time: >
   <b>固定周期：</b>有固定的学习开始日期和结束日期
 course.teaching_plan.expiry_date.overdue_tips: 过期后无法继续学习，系统会在到期前10天提醒学员。
-course.teaching_plan.expiry_date.forever_mode: 永久有效
+course.teaching_plan.expiry_date.forever_mode: 长期有效
 course.teaching_plan.expiry_date.anywhere_mode: 随到随学
 course.teaching_plan.expiry_date.date_mode: 固定周期
 course.teaching_plan.expiry_date.end_date_mode: 按截止日期
@@ -1301,7 +1301,7 @@ course.expiry_date.end_date_mode: >
 course.expiry_date.date_mode: >
   开始：%expiryStartDate% &nbsp;
   截止：%expiryEndDate%
-course.expiry_date.forever_mode: 永久有效
+course.expiry_date.forever_mode: 长期有效
 course.expiry_date.expiryStartDate: >
   课程将于%expiryStartDate%开始授课，请耐心等待
 course.expiry_date.overdue: （已到期）
@@ -2345,7 +2345,7 @@ classroom.manage.set_info.buy.help_block: 关闭后%name%将无法在线购买�
 classroom.manage.set_info.classroom_period: 班级有效期
 classroom.manage.set_info.classroom_period.end_date: 截止日期
 classroom.manage.set_info.classroom_period.days: 有效期天数
-classroom.manage.set_info.classroom_period.forever: 永久有效
+classroom.manage.set_info.classroom_period.forever: 长期有效
 classroom.manage.set_info.date_help: 设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
 classroom.manage.set_info.days_help: 设置该值后，%user_name%只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
 classroom.manage.set_info.view_period_rules: 查看有效期规则
@@ -2520,7 +2520,7 @@ classroom.expiry_mode_rule_tips: >
   5. 班级过期后，除评价以外，所有项只允许查看，不允许操作，操作都会提示：当前班级已过有效期<br>
 classroom.expiry_mode_end_date: 截止日期
 classroom.expiry_mode_days: 有效期天数
-classroom.expiry_mode_forever: 永久有效
+classroom.expiry_mode_forever: 长期有效
 classroom.edit_expiry_mode: 修改学员有效期
 classroom.expiry_mode.first_publish_tips: 班级首次发布后，有效期类型不能再更改，只允许修改有效日期。
 classroom.not_edit: 班级不能修改
@@ -8849,7 +8849,7 @@ log.attr.course.update_course.expiryMode: 学习有效期模式
 log.attr.course.update_course.expiryMode.date: 固定周期
 log.attr.course.update_course.expiryMode.end_date: 截止日期
 log.attr.course.update_course.expiryMode.days: 按有效期天数
-log.attr.course.update_course.expiryMode.forever: 永久有效
+log.attr.course.update_course.expiryMode.forever: 长期有效
 log.attr.course.update_course.expiryDays: 有效期天数
 log.attr.course.update_course.expiryStartDate: 有效开始日期
 log.attr.course.update_course.expiryEndDate: 有效结束日期
@@ -8888,7 +8888,7 @@ log.attr.classroom.status.closed: 已关闭
 log.attr.classroom.expiryMode: 学习有效期模式
 log.attr.classroom.expiryMode.date: 截止日期
 log.attr.classroom.expiryMode.days: 有效期天数
-log.attr.classroom.expiryMode.forever: 永久有效
+log.attr.classroom.expiryMode.forever: 长期有效
 log.attr.classroom.expiryValue: 有效期
 log.attr.classroom.smallPicture: 小图
 log.attr.classroom.middlePicture: 中图

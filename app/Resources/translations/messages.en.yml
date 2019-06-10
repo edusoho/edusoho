@@ -7608,7 +7608,7 @@ log.attr.course.update_course.expiryMode: 学习有效期模式
 log.attr.course.update_course.expiryMode.date: 固定周期
 log.attr.course.update_course.expiryMode.end_date: 截止日期
 log.attr.course.update_course.expiryMode.days: 按有效期天数
-log.attr.course.update_course.expiryMode.forever: 永久有效
+log.attr.course.update_course.expiryMode.forever: 长期有效
 log.attr.course.update_course.expiryDays: 有效期天数
 log.attr.course.update_course.expiryStartDate: 有效开始日期
 log.attr.course.update_course.expiryEndDate: 有效结束日期
@@ -7647,7 +7647,7 @@ log.attr.classroom.status.closed: 已关闭
 log.attr.classroom.expiryMode: 学习有效期模式
 log.attr.classroom.expiryMode.date: 截止日期
 log.attr.classroom.expiryMode.days: 有效期天数
-log.attr.classroom.expiryMode.forever: 永久有效
+log.attr.classroom.expiryMode.forever: 长期有效
 log.attr.classroom.expiryValue: 有效期
 log.attr.classroom.smallPicture: 小图
 log.attr.classroom.middlePicture: 中图
