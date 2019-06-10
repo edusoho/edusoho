@@ -6,18 +6,18 @@ use Tests\Unit\Base\BaseDaoTestCase;
 
 class NotificationEventDaoTest extends BaseDaoTestCase
 {
-	public function testFindByEventIds()
-	{
-		$result = $this->getNotificationEventDao()->findByEventIds(array());
-		$this->assertEmpty($result);
+    public function testFindByEventIds()
+    {
+        $result = $this->getNotificationEventDao()->findByEventIds(array());
+        $this->assertEmpty($result);
 
-		$event = $this->getDefaultMockFields();
-		$event = $this->getNotificationEventDao()->create($event);
-		$result = $this->getNotificationEventDao()->findByEventIds(array($event['id']));
-		$this->assertEquals(10, $result[0]['totalCount']);
-	}
+        $event = $this->getDefaultMockFields();
+        $event = $this->getNotificationEventDao()->create($event);
+        $result = $this->getNotificationEventDao()->findByEventIds(array($event['id']));
+        $this->assertEquals(10, $result[0]['totalCount']);
+    }
 
-	public function testDeclares()
+    public function testDeclares()
     {
         $result = $this->createDao('Notification:NotificationEventDao')->declares();
         $declare = array(
