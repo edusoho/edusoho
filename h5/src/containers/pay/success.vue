@@ -25,7 +25,7 @@ export default {
     return {
       targetId: this.$route.query.targetId || '',
       targetType: this.$route.query.targetType || '',
-      paidUrl: this.$route.query.paidUrl || '%2F'
+      paidUrl: this.$route.query.paidUrl
     };
   },
   computed: {
@@ -41,7 +41,7 @@ export default {
   methods: {
     backToCourse() {
       if (this.paidUrl) {
-        window.location.href = window.location.origin + this.paidUrl;
+        window.location.href = this.paidUrl;
         return;
       }
       this.$router.replace({

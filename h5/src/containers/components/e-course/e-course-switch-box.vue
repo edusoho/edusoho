@@ -92,7 +92,8 @@
             id: this.order.id,
             source: 'order',
             sn: this.order.sn,
-            targetId: this.order.targetId
+            targetId: this.order.targetId,
+            targetType: this.order.targetType
           }
         });
       }

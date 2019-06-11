@@ -103,13 +103,14 @@ export default {
             this.$router.replace({
               path: '/pay_success',
               query: {
-                paidUrl: res.paidSuccessUrlH5
+                targetType: this.targetType,
+                targetId: targetId
               }
             })
             return;
           }
           this.$router.push({
-            path: `/course/${targetId}`,
+            path: `/${this.targetType}/${targetId}`,
           })
         }
         this.detail = Object.assign({}, res)
@@ -167,7 +168,7 @@ export default {
             this.$router.replace({
               path: '/pay_success',
               query: {
-                paidUrl: res.paidSuccessUrlH5
+                paidUrl: window.location.origin + res.paidSuccessUrlH5
               }
             })
             return;
