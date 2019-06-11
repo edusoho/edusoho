@@ -165,10 +165,10 @@ class Client
 
     public function setIndustry($industryOne, $industryTwo)
     {
-        $params = [
+        $params = array(
             'industry_id1' => $industryOne,
             'industry_id2' => $industryTwo,
-        ];
+        );
 
         $result = $this->postRequest($this->baseUrl.'/'.self::INDUSTRY_SET, $params);
 
