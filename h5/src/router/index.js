@@ -250,6 +250,8 @@ const router = new Router({
   routes
 });
 
+const isWeixinBrowser = /micromessenger/.test(navigator.userAgent.toLowerCase());
+
 // 检查会员开关配置（会员页面需要有限判断，其他页面异步滞后判断减少页面等待时间）
 const setVipSwitch = () => new Promise((resolve, reject) => {
   if (!Object.keys(store.state.vipSettings).length) {
@@ -271,7 +273,7 @@ const setVipSwitch = () => new Promise((resolve, reject) => {
 
 // 检查微信公众号开关配置
 const setWeChatSwitch = () => new Promise((resolve, reject) => {
-  if (!Object.keys(store.state.wechatSwitch).length) {
+  if (!Object.keys(store.state.wechatSwitch).length && isWeixinBrowser) {
     return store.dispatch('getGlobalSettings', { type: 'wechat', key: 'wechatSettings' })
       .then(res => {
         if (res.enabled) {
