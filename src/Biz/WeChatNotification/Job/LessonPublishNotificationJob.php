@@ -58,4 +58,9 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
         );
         $this->sendNotifications($key, 'wechat_notify_lesson_publish', $userIds, $templateData);
     }
+
+    protected function getUserService()
+    {
+        return $this->biz->service('User:UserService');
+    }
 }

@@ -144,12 +144,12 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $payTemplateId = $this->getWeChatService()->getTemplateId('paySuccess');
         if (!empty($chargeTemplateId) && 'recharge' == $trade['type']) {
             $data = array(
-                'first' => '尊敬的客户，您已充值成功',
-                'keyword1' => '现金充值或学习卡',
-                'keyword2' => $trade['trade_sn'],
-                'keyword3' => $trade['amount'] / 100,
-                'keyword4' => date('Y-m-d H:i', $trade['pay_time']),
-                'remark' => '快去看看课程吧~',
+                'first' => array('value' => '尊敬的客户，您已充值成功'),
+                'keyword1' => array('value' => '现金充值或学习卡'),
+                'keyword2' => array('value' => $trade['trade_sn']),
+                'keyword3' => array('value' => $trade['amount'] / 100),
+                'keyword4' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
+                'remark' => array('value' => '快去看看课程吧~'),
             );
             $options = array('type' => 'url', 'url' => $this->generateUrl('course_set_explore', array(), true));
             $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']);
@@ -167,11 +167,11 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if (!empty($payTemplateId)) {
             $data = array(
-                'first' => '尊敬的客户，您已支付成功',
-                'keyword1' => $trade['title'],
-                'keyword2' => $trade['amount'] / 100,
-                'keyword3' => date('Y-m-d H:i', $trade['pay_time']),
-                'remark' => '请前往查看',
+                'first' => array('value' => '尊敬的客户，您已支付成功'),
+                'keyword1' => array('value' => $trade['title']),
+                'keyword2' => array('value' => $trade['amount'] / 100),
+                'keyword3' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
+                'remark' => array('value' => '请前往查看'),
             );
             $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
             if (empty($order)) {
@@ -203,13 +203,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        if (empty($result['batch_sn'])) {
-            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}");
+        if (empty($result['sn'])) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", $result);
 
             return;
         }
 
-        $this->getNotificationService()->createWeChatNotificationRecord($result['batch_sn'], $key, $list[0]['template_args']);
+        $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $key, $list[0]['template_args']);
     }
 
     private function getOrderTargetDetailUrl($targetType, $targetId)
