@@ -36,11 +36,11 @@
                     </div>
                     <div class="metas clearfix">
                       {% if setting('course.show_student_num_enabled', '1') == 1  %}
-                        <span class="num"><i class="es-icon es-icon-people"></i>
+                        <span class="num">
                           {% if setting('course.show_cover_num_mode') == 'studentNum' %}
-                            {{ courseSet.studentNum }}
+                            <i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}
                           {% elseif setting('course.show_cover_num_mode') == 'hitNum' %}
-                            {{ courseSet.hitNum }}
+                            <i class="es-icon es-icon-view"></i>{{ courseSet.hitNum }}
                           {% endif %}
                         </span>
                       {% endif %}
