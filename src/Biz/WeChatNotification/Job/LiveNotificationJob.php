@@ -40,7 +40,7 @@ class LiveNotificationJob extends AbstractNotificationJob
             'date' => array('value' => $task['startTime']),
             'remark' => array('value' => '不要迟到哦'),
         );
-        $options = array('url' => $url);
+        $options = array('url' => $url, 'type' => 'url');
         $templateData = array(
             'template_id' => $templateId,
             'template_args' => $data,

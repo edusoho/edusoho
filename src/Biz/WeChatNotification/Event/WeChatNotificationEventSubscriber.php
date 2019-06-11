@@ -121,7 +121,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        $options = array('url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true));
+        $options = array('type' => 'url', 'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true));
         $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($paperResult['userId']);
         if (empty($weChatUser['isSubscribe'])) {
             return;
@@ -151,7 +151,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'keyword4' => date('Y-m-d H:i', $trade['pay_time']),
                 'remark' => '快去看看课程吧~',
             );
-            $options = array('url' => $this->generateUrl('course_set_explore', array(), true));
+            $options = array('type' => 'url', 'url' => $this->generateUrl('course_set_explore', array(), true));
             $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']);
             if (!empty($weChatUser['isSubscribe'])) {
                 $list = array(array(
@@ -178,7 +178,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 return;
             }
             $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-            $options = array('url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $orderItems[0]['target_id']));
+            $options = array('type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $orderItems[0]['target_id']));
             $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
             if (!empty($weChatUser['isSubscribe'])) {
                 $list = array(array(
