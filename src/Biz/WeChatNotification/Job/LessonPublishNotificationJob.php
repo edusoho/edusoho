@@ -3,7 +3,6 @@
 namespace Biz\WeChatNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\WeChatNotification\Job\AbstractNotificationJob;
 
 class LessonPublishNotificationJob extends AbstractNotificationJob
 {
