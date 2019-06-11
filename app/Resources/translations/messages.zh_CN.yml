@@ -7150,7 +7150,7 @@ admin.setting_course.course_operation_mode.allow_show_user_count: 课程中允�
 admin.setting_course.course_operation_mode.course_set_number: 课程封面人数显示
 admin.setting_course.course_operation_mode.course_set_number.help_block: 管理员可以控制课程封面的人数显示
 admin.setting_course.cover_number.student_num: 显示加入人数
-admin.setting_course.cover_number.hit_num: 显示封面点击人数
+admin.setting_course.cover_number.hit_num: 显示封面点击数
 admin.setting_course.customer_chapter_section_name: 章节名称自定义
 admin.setting_course.customer_task_name: 任务名称自定义
 admin.setting_course.customer_chapter_section_name.tips: 系统中的"章"、"节"会被设置的名称所替代
