@@ -1260,7 +1260,7 @@ class UserServiceImpl extends BaseService implements UserService
             'expiredTime' => empty($token['expiredTime']) ? 0 : $token['expiredTime'],
         ));
 
-        $this->dispatchEvent('user.bind', new Event($user, array('bind' => $bind, 'bindType' => $type, 'convertedType' => $convertedType)));
+        $this->dispatchEvent('user.bind', new Event($user, array('bind' => $bind, 'bindType' => $type, 'convertedType' => $convertedType, 'token' => $token)));
     }
 
     public function markLoginInfo($type = null)
