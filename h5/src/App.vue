@@ -20,7 +20,7 @@ export default {
     return {
       showLeftArrow: false,
       isQrcode: false,
-      isShare:false
+      isShare: false
     };
   },
   methods: {
@@ -33,11 +33,12 @@ export default {
         this.$router.push({ path: query.backUrl });
         return;
       }
-      if(this.isShare){ //如果是从分享页进来
-         this.$router.push({ path: '/'});
-         return
+      //从空白页进来，无回退页，直接回退到首页
+      if (this.isShare) {
+        this.$router.push({ path: "/" });
+        return;
       }
-       this.$router.go(-1)
+      this.$router.go(-1);
     }
   },
   computed: {
@@ -48,8 +49,9 @@ export default {
   },
   watch: {
     $route: {
-      handler(to,from) {
-        this.isShare=from.fullPath==='/'?true:false //需要返回首页标记
+      handler(to, from) {
+        //需要返回首页标记
+        this.isShare = from.fullPath === "/" ? true : false;
 
         const redirect = to.query.redirect || "";
 
