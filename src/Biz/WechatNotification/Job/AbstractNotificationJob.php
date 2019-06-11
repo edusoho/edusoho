@@ -44,8 +44,8 @@ class AbstractNotificationJob extends AbstractJob
             return;
         }
 
-        if (empty($result['batch_sn'])) {
-            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", array('error' => $e->getMessage()));
+        if (empty($result['sn'])) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", array('error' => '未获取sn'));
 
             return;
         }

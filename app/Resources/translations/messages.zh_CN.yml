@@ -9995,9 +9995,13 @@ wechat.notification.cloud.tips: 您还未开通教育云，无法正常使用微
 wechat.notification.cloud_open: 前往开通
 
 # 微信通知模板
-wechat.notification.template.live_start: '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}'
-wechat.notification.template.homework_result: '{{first.DATA}}<br>作业名称：{{keyword1.DATA}}<br>所属课程：{{keyword2.DATA}}<br>辅导老师：{{keyword3.DATA}}<br>{{remark.DATA}}'
-wechat.notification.template.exam_result: '{{first.DATA}}<br>考试科目：{{keyword1.DATA}}<br>考试成绩：{{keyword2.DATA}}<br>{{remark.DATA}'
-wechat.notification.template.lesson_add: '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}'
-wechat.notification.template.charge_success: '{{first.DATA}}<br>充值类型：{{keyword1.DATA}}<br>充值订单号：{{keyword2.DATA}}<br>充值金额：{{keyword3.DATA}}<br>充值时间：{{keyword4.DATA}}<br>{{remark.DATA}}'
-wechat.notification.template.buy_success: '{{first.DATA}}<br>订单详情：{{keyword1.DATA}}<br>订单价格：{{keyword2.DATA}}<br>订单时间：{{keyword3.DATA}}<br>{{remark.DATA}}'
+wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[课程名]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
+wechat.notification.template.homework_result: '同学，你好，你的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
+wechat.notification.template.exam_result: '同学，你好，你的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
+wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]<br>请及时前往学习'
+wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值或学习卡<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
+wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[实际支付价格]<br>订单时间：[支付时间]<br>请前往查看'
+
+
+
+

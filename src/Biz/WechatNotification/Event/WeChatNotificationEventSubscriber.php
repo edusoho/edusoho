@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\WechatNotification\Event;
+namespace Biz\WeChatNotification\Event;
 
 use Biz\Course\Service\CourseService;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
@@ -203,7 +203,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        if (empty($result['batch_sn'])) {
+        if (empty($result['sn'])) {
             $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", array('error' => $e->getMessage()));
 
             return;

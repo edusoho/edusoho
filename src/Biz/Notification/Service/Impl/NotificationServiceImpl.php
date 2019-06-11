@@ -103,7 +103,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
     {
         $templates = TemplateUtil::templates();
         $template = $templates[$key];
-        $content = $this->spliceContent($this->trans($template['content']), $data);
+        $content = $this->spliceContent($template['detail'], $data);
         $event = array(
             'title' => $template['name'],
             'content' => $content,

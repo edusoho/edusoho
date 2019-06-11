@@ -3,6 +3,7 @@
 namespace Biz\WeChatNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\WeChatNotification\Job\AbstractNotificationJob;
 
 class LessonPublishNotificationJob extends AbstractNotificationJob
 {
@@ -57,5 +58,10 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
             'goto' => $options,
         );
         $this->sendNotifications($key, 'wechat_notify_lesson_publish', $userIds, $templateData);
+    }
+
+    protected function getUserService()
+    {
+        return $this->biz->service('User:UserService');
     }
 }
