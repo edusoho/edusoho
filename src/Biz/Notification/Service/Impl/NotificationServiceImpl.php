@@ -103,7 +103,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
     {
         $templates = TemplateUtil::templates();
         $template = $templates[$key];
-        $content = $this->spliceContent($this->trans($template['content']), $data);
+        $content = $this->spliceContent($template['detail'], $data);
         $event = array(
             'title' => $template['name'],
             'content' => $content,
@@ -130,7 +130,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
     protected function spliceContent($content, $data)
     {
         foreach ($data as $key => $value) {
-            $content = str_replace('{{'.$key.'.DATA}}', $value, $content);
+            $content = str_replace('{{'.$key.'.DATA}}', $value['value'], $content);
         }
 
         return $content;

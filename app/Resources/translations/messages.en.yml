@@ -8702,12 +8702,12 @@ wechat.notification.cloud.tips: You have not yet opened an education cloud and c
 wechat.notification.cloud_open: Go to the opening
 
 # 微信通知模板
-wechat.notification.template.live_start: '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}'
-wechat.notification.template.homework_result: '{{first.DATA}}<br>作业名称：{{keyword1.DATA}}<br>所属课程：{{keyword2.DATA}}<br>辅导老师：{{keyword3.DATA}}<br>{{remark.DATA}}'
-wechat.notification.template.exam_result: '{{first.DATA}}<br>考试科目：{{keyword1.DATA}}<br>考试成绩：{{keyword2.DATA}}<br>{{remark.DATA}'
-wechat.notification.template.lesson_add: '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}'
-wechat.notification.template.charge_success: '{{first.DATA}}<br>充值类型：{{keyword1.DATA}}<br>充值订单号：{{keyword2.DATA}}<br>充值金额：{{keyword3.DATA}}<br>充值时间：{{keyword4.DATA}}<br>{{remark.DATA}}'
-wechat.notification.template.buy_success: '{{first.DATA}}<br>订单详情：{{keyword1.DATA}}<br>订单价格：{{keyword2.DATA}}<br>订单时间：{{keyword3.DATA}}<br>{{remark.DATA}}'
+wechat.notification.template.live_start: 'Hello, classmate.<br>It is hereby notified that the [course name] you are enrolled in will start in the [live class start time].<br>Don't be late.'
+wechat.notification.template.homework_result: 'Classmate, hello, your homework has been reviewed.<br>Job Name: [Task Name]]<br>Course: [course name]<br>Tutor: [Teacher User Name]<br>Homework result: [homework result]'
+wechat.notification.template.exam_result: 'Hello, your class has been reviewed.<br>Examination subject: [task name]<br>Test score: [test score]<br>Keep up the good work'
+wechat.notification.template.lesson_add: 'Classmate, hello, the course has a new task to post<br>Course Name: [Course Name]<br>Course category:<br>Course Teacher: [Teacher User Name]<br>Course time: [Task release time]<br>Please go to study in time.'
+wechat.notification.template.charge_success: 'Dear customer, you have recharged successfully<br>Recharge type: cash recharge or study card<br>Recharge order number: [order number]<br>Recharge amount: [actual payment price]<br>Recharge time: [payment time]<br>Go and see the course~'
+wechat.notification.template.buy_success: 'Dear customer, you have paid successfully<br>Order details: [product name]<br>Order price: [actual payment price]<br>Order time: [payment time]<br>Please go to view'
 
 
 
