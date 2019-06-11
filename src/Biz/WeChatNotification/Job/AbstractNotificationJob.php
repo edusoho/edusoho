@@ -12,6 +12,7 @@ use Biz\System\Service\LogService;
 use Biz\WeChat\Service\WeChatService;
 use Biz\Course\Service\CourseService;
 use Biz\AppLoggerConstant;
+use AppBundle\Common\ArrayToolkit;
 
 class AbstractNotificationJob extends AbstractJob
 {
@@ -25,6 +26,16 @@ class AbstractNotificationJob extends AbstractJob
 
     protected function sendNotifications($key, $logName, $userIds, $templateData)
     {
+        if (empty($userIds)) {
+            return;
+        }
+        $users = $this->getUserService()->searchUsers(
+            array('userIds' => $userIds, 'locked' => 0), 
+            array(), 
+            0, 
+            PHP_INT_MAX
+        );
+        $userIds = ArrayToolkit::column($users, 'id');
         $subscribedUsers = $this->getWeChatService()->findSubscribedUsersByUserIdsAndType($userIds, self::OFFICIAL_TYPE);
         $batchs = array_chunk($subscribedUsers, self::LIMIT_NUM);
         foreach ($batchs as $batch) {
@@ -55,7 +66,7 @@ class AbstractNotificationJob extends AbstractJob
             return;
         }
 
-        $this->getNotificationService()->createWeChatNotificationRecord($result['batch_sn'], $key, $list[0]['template_args']);
+        $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $key, $list[0]['template_args']);
     }
 
     protected function getCloudNotificationClient()

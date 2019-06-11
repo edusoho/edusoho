@@ -130,7 +130,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
     protected function spliceContent($content, $data)
     {
         foreach ($data as $key => $value) {
-            $content = str_replace('{{'.$key.'.DATA}}', $value, $content);
+            $content = str_replace('{{'.$key.'.DATA}}', $value['value'], $content);
         }
 
         return $content;
