@@ -217,16 +217,8 @@ class DefaultServiceProvider implements ServiceProviderInterface
                 ));
                 $token = $client->getAccessToken();
                 if (empty($token)) {
-                    return null;
+                    $client->setAccessToken($token['access_token']);
                 }
-                $updateSetting = array(
-                    'expiry_time' => time() + $token['expires_in'],
-                    'access_token' => $token['access_token'],
-                );
-                $wechatGlobalAccessToken = $updateSetting;
-                $setting->set('_wechat_global_access_token', $wechatGlobalAccessToken);
-
-                $client->setAccessToken($wechatGlobalAccessToken['access_token']);
 
                 return $client;
             }
