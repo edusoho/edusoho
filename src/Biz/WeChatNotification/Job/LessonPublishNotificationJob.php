@@ -45,7 +45,7 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
         $data = array(
             'first' => array('value' => '同学，你好，课程有新任务发布'),
             'keyword1' => array('value' => $courseSet['title']),
-            'keyword2' => array('value' => ('live' == $task['type']) ? '直播课' : '普通课'),
+            'keyword2' => array('value' => ('live' == $courseSet['type']) ? '直播课' : '普通课'),
             'keyword3' => array('value' => $teacher['nickname']),
             'keyword4' => array('value' => ('live' == $task['type']) ? date('Y-m-d H:i', $task['startTime']) : date('Y-m-d H:i', $task['updatedTime'])),
             'remark' => array('value' => ('live' == $task['type']) ? '请准时参加' : '请及时前往学习'),
