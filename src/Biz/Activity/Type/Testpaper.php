@@ -112,11 +112,13 @@ class Testpaper extends Activity
         $user = $this->getCurrentUser();
 
         $activity = $this->getActivityService()->getActivity($activityId, true);
-        $testpaper = $activity['ext']['testpaper'];
+//        $testpaper = $activity['ext']['testpaper'];
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
 
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId(
             $user['id'],
-            $testpaper['id'],
+            $testpaperActivity['mediaId'],
             $activity['fromCourseId'],
             $activity['id'],
             'testpaper'
@@ -136,8 +138,8 @@ class Testpaper extends Activity
             return true;
         }
 
-        $passScore = ceil($testpaper['score'] * $activity['finishData']);
-        if ('score' === $activity['finishType'] && $result['score'] >= $passScore) {
+//        $passScore = ceil($testpaper['score'] * $activity['finishData']);
+        if ('score' === $activity['finishType'] && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
             return true;
         }
 

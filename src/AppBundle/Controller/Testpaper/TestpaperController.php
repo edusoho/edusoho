@@ -255,6 +255,7 @@ class TestpaperController extends BaseController
 
         if ('POST' === $request->getMethod()) {
             $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId'], true);
+            $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
             if ($activity['startTime'] && $activity['startTime'] > time()) {
                 return $this->createJsonResponse(array('result' => false, 'message' => '考试未开始，不能提交！'));
@@ -272,7 +273,7 @@ class TestpaperController extends BaseController
                 $response = array('result' => true, 'message' => '');
             } elseif ('score' === $activity['finishType']
                 && 'finished' === $paperResult['status']
-                && $paperResult['score'] >= ceil($activity['finishData'] * $activity['ext']['testpaper']['score'])) {
+                && $paperResult['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
                 $response = array('result' => true, 'message' => '');
             } else {
                 $response = array('result' => false, 'message' => '');
