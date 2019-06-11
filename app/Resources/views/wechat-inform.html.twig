@@ -15,12 +15,12 @@
 
     <div class="wechat-inform-qrcode js-wechat-qrcode hidden">
       <div class="wechat-inform-qrcode__close js-wechat-close-btn"><i class="cd-icon cd-icon-close"></i></div>
-      {% if weChatUser and weChatUser.isSubscribe == 0 %}
+      {% if weChatUser and weChatUser.isSubscribe != 1 %}
         <div class="wechat-inform-qrcode__tip">{{'wechat.notification.open_notification_tip'|trans}}</div>
         <img class="wechat-inform-qrcode__img" src="{{ setting('wechat.account_code') }}">
-      {% else %}
+      {% elseif not weChatUser %}
         <div class="wechat-inform-qrcode__tip text-left">{{'wechat.notification.scan_and_bind'|trans}}</div>
-        <img class="wechat-inform-qrcode__img" src="{{ path('common_qrcode', {'text': path('login', {'goto':path('common_wechat_subscribe_wap') })}) }}">
+        <img class="wechat-inform-qrcode__img" src="{{ path('common_qrcode', {'text': url('login', {'goto':path('common_wechat_subscribe_wap', true) })}) }}">
       {% endif %}
     </div>
     <div class="wechat-inform-qrcode-mask js-wechat-mask"></div>
