@@ -9,7 +9,7 @@ class TemplateUtil
         $templates = array(
             'oneHourBeforeLiveOpen' => array(
                 'id' => 'TM00080',
-                'name' => '直播课开课通知(一小时前)',
+                'name' => '直播开课通知(一小时前)',
                 'content' => 'wechat.notification.template.live_start',
                 'detail' => '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}',
                 'object' => '课程学员',
@@ -17,7 +17,7 @@ class TemplateUtil
             ),
             'oneDayBeforeLiveOpen' => array(
                 'id' => 'TM00080',
-                'name' => '直播课开课通知(一天前)',
+                'name' => '直播开课通知(一天前)',
                 'content' => 'wechat.notification.template.live_start',
                 'detail' => '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}',
                 'object' => '课程学员',
