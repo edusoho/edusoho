@@ -30,9 +30,9 @@ class AbstractNotificationJob extends AbstractJob
             return;
         }
         $users = $this->getUserService()->searchUsers(
-            array('userIds' => $userIds, 'locked' => 0), 
-            array(), 
-            0, 
+            array('userIds' => $userIds, 'locked' => 0),
+            array(),
+            0,
             PHP_INT_MAX
         );
         $userIds = ArrayToolkit::column($users, 'id');
