@@ -112,7 +112,6 @@ class Testpaper extends Activity
         $user = $this->getCurrentUser();
 
         $activity = $this->getActivityService()->getActivity($activityId, true);
-//        $testpaper = $activity['ext']['testpaper'];
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
 
@@ -138,7 +137,6 @@ class Testpaper extends Activity
             return true;
         }
 
-//        $passScore = ceil($testpaper['score'] * $activity['finishData']);
         if ('score' === $activity['finishType'] && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
             return true;
         }
