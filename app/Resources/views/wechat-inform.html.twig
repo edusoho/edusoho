@@ -21,7 +21,7 @@
           <img class="wechat-inform-qrcode__img" src="{{ setting('wechat.account_code') }}">
         {% elseif not weChatUser %}
           <div class="wechat-inform-qrcode__tip text-left">{{'wechat.notification.scan_and_bind'|trans}}</div>
-          <img class="wechat-inform-qrcode__img" src="{{ path('common_qrcode', {'text': url('login_bind', {'type' : 'weixinmob','_target_path':path('common_wechat_subscribe_wap') }, true)}) }}">
+          <img class="wechat-inform-qrcode__img" src="">
         {% endif %}
       </div>
       <div class="wechat-inform-qrcode-mask js-wechat-mask"></div>
