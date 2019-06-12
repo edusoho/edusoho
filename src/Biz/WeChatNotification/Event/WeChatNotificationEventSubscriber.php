@@ -171,6 +171,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'keyword1' => array('value' => $trade['title']),
                 'keyword2' => array('value' => ($trade['amount'] / 100).'元'),
                 'keyword3' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
+                'keyword4' => array('value' => '无'),
                 'remark' => array('value' => '请前往查看'),
             );
             $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);

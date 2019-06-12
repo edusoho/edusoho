@@ -67,7 +67,7 @@ class TemplateUtil
                 'id' => 'OPENTM417184648',
                 'name' => '购买成功通知',
                 'content' => 'wechat.notification.template.buy_success',
-                'detail' => '{{first.DATA}}<br>订单详情：{{keyword1.DATA}}<br>订单价格：{{keyword2.DATA}}<br>订单时间：{{keyword3.DATA}}<br>{{remark.DATA}}',
+                'detail' => '{{first.DATA}}<br>订单详情：{{keyword1.DATA}}<br>订单价格：{{keyword2.DATA}}<br>订单时间：{{keyword3.DATA}}<br>会员到期日：{{keyword4.DATA}}<br>{{remark.DATA}}',
                 'object' => '购买者',
                 'status' => 0,
             ),
