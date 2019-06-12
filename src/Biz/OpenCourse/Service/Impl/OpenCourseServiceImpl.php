@@ -277,10 +277,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $course = $this->tryManageOpenCourse($id);
 
-        if (empty($course)) {
-            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
-        }
-
         $this->dispatchEvent('open.course.close', $course);
 
         return $this->getOpenCourseDao()->update($id, array('status' => 'closed'));
