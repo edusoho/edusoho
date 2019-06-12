@@ -132,7 +132,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             array('lastRefreshTime' => 'ASC'),
             0,
             $refreshNum,
-            array('id', 'openId')
+            array('id', 'openId', 'unionId')
         );
 
         if (empty($weChatUsers)) {
