@@ -86,6 +86,7 @@ class CashierController extends BaseController
     private function successForward($trade)
     {
         $wechatSetting = $this->getSettingService()->get('wechat', array());
+        $options = array();
         if (!empty($wechatSetting['wechat_notification_enabled']) && (!$this->isMobileClient() || $this->isWxClient())) {
             $isBindWechat = false;
             $loginUrl = $this->generateUrl('login', array('goto' => $wechatSetting['account_code']), true);
@@ -98,17 +99,14 @@ class CashierController extends BaseController
                 $qrcode = $wechatSetting['account_code'];
             }
 
-            return $this->forward("AppBundle:Cashier/Cashier:{$trade['type']}Success", array(
-                'trade' => $trade,
-                'options' => array(
-                    'isBindWechat' => $isBindWechat,
-                    'qrcode' => $qrcode,
-                ),
-            ));
+            if (empty($weChatUser['isSubscribe'])) {
+                $options = array('isBindWechat' => $isBindWechat, 'qrcode' => $qrcode);
+            }
         }
 
         return $this->forward("AppBundle:Cashier/Cashier:{$trade['type']}Success", array(
             'trade' => $trade,
+            'options' => $options,
         ));
     }
 

@@ -48,6 +48,22 @@ class NotificationServiceTest extends BaseTestCase
         $this->assertEquals('test Events', $event['title']);
     }
 
+    public function testCreateStrategy()
+    {
+        $strategy = $this->createStrategy();
+        $this->assertEquals('wechat', $strategy['type']);
+    }
+
+    public function testCreateWeChatNotificationRecord()
+    {
+        $data = array('userName' => array('value' => 'testName'));
+        $result = $this->getNotificationService()->createWeChatNotificationRecord('testSn', 'oneHourBeforeLiveOpen', $data);
+        $this->assertEquals('testSn', $result['sn']);
+
+        $event = $this->getNotificationService()->getEvent($result['eventId']);
+        $this->assertNotFalse(strpos($event['content'], 'testName'));
+    }
+
     protected function createBatch($fields = array())
     {
         $defaultFields = array(
@@ -72,6 +88,19 @@ class NotificationServiceTest extends BaseTestCase
         $fields = array_merge($defaultFields, $fields);
 
         return $this->getNotificationService()->createEvent($fields);
+    }
+
+    protected function createStrategy($fields = array())
+    {
+        $defaultFields = array(
+            'eventId' => 1,
+            'type' => 'wechat',
+            'seq' => 1,
+        );
+
+        $fields = array_merge($defaultFields, $fields);
+
+        return $this->getNotificationService()->createStrategy($fields);
     }
 
     /**
