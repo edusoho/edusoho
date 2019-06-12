@@ -99,7 +99,6 @@ export default class BasePayment {
     Api.trade.create({ data: params, async: false, promise: false }).done(res => {
       trade = res;
     }).error(res => {
-      console.log(res);
       let response = JSON.parse(res.responseText);
       if (response.error.code == 2) {
         notify('danger', response.error.message);
