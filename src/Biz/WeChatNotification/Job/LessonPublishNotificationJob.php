@@ -50,7 +50,7 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
             'keyword4' => array('value' => ('live' == $task['type']) ? date('Y-m-d H:i', $task['startTime']) : date('Y-m-d H:i', $task['updatedTime'])),
             'remark' => array('value' => ('live' == $task['type']) ? '请准时参加' : '请及时前往学习'),
         );
-        $options = array('url' => $url);
+        $options = array('url' => $url, 'type' => 'url');
         $templateData = array(
             'template_id' => $templateId,
             'template_args' => $data,
