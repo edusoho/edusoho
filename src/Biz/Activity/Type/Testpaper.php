@@ -114,7 +114,6 @@ class Testpaper extends Activity
         $activity = $this->getActivityService()->getActivity($activityId, true);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId(
             $user['id'],
             $testpaperActivity['mediaId'],
@@ -147,7 +146,7 @@ class Testpaper extends Activity
     protected function filterFields($fields)
     {
         if (!empty($fields['finishType'])) {
-            if ($fields['finishType'] == 'score') {
+            if ('score' == $fields['finishType']) {
                 $testPaper = $this->getTestpaperService()->getTestpaper($fields['testpaperId']);
                 $fields['finishCondition'] = array(
                     'type' => 'score',
