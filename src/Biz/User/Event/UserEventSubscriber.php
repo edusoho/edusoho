@@ -31,20 +31,7 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
             if (empty($token['openid'])) {
                 return;
             }
-            $weChatUser = $this->getWeChatService()->getWeChatUserByTypeAndOpenId(WeChatService::OFFICIAL_TYPE, $token['openid']);
-            if (empty($weChatUser)) {
-                $this->getWeChatService()->createWeChatUser(array(
-                   'type' => WeChatService::OFFICIAL_TYPE,
-                   'appId' => $this->getSettingService()->node('login_bind.weixinmob_key', ''),
-                   'unionId' => $bind['fromId'],
-                   'openId' => $token['openid'],
-                   'userId' => $user['id'],
-                ));
-            } else {
-                $this->getWeChatService()->updateWeChatUser($weChatUser['id'], array(
-                    'userId' => $user['id'],
-                ));
-            }
+            $this->getWeChatService()->freshOfficialWeChatUserWhenLogin($user, $bind, $token);
         }
     }
 

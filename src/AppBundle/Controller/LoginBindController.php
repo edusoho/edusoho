@@ -103,12 +103,13 @@ class LoginBindController extends BaseController
                 return $this->redirect($this->generateUrl('register'));
             }
 
-            if ('weixinmob' == $type) {
-                $this->getWeChatService()->freshOfficialWeChatUserWhenLogin($user, $bind, $token);
-            }
-
             if ($this->getCurrentUser()->getId() != $user['id']) {
                 $this->authenticateUser($user);
+            }
+
+            if ('weixinmob' == $type) {
+                $user = $this->getCurrentUser();
+                $this->getWeChatService()->freshOfficialWeChatUserWhenLogin($user, $bind, $token);
             }
 
             if ($this->getAuthService()->hasPartnerAuth()) {

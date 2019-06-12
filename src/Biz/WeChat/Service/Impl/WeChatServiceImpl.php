@@ -145,10 +145,10 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function freshOfficialWeChatUserWhenLogin($user, $bind, $token)
     {
         if (empty($user)) {
-            return ;
+            return;
         }
 
-        try{
+        try {
             $weChatUser = $this->getWeChatUserByTypeAndOpenId(WeChatService::OFFICIAL_TYPE, $token['openid']);
             if (empty($weChatUser)) {
                 $this->createWeChatUser(array(
@@ -158,7 +158,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                     'openId' => $token['openid'],
                     'userId' => $user['id'],
                 ));
-            } else {
+            } elseif ($weChatUser['id'] != $user['id']) {
                 $this->updateWeChatUser($weChatUser['id'], array(
                     'userId' => $user['id'],
                 ));
@@ -166,7 +166,6 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         } catch (\Exception $e) {
             $this->getLogger()->error('WeChatFreshOfficialUser_'.$e->getMessage(), $e->getTrace());
         }
-
     }
 
     public function batchFreshOfficialWeChatUsers($weChatUsers)
