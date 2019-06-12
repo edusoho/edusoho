@@ -21,4 +21,6 @@ interface UserBindDao extends GeneralDaoInterface
     public function deleteByTypeAndToId($type, $toId);
 
     public function findByTypeAndFromIds($type, $fromIds);
+
+    public function findByTypeAndToIds($type, $toIds);
 }

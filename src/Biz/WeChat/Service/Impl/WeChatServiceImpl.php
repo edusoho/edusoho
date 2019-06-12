@@ -175,9 +175,9 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
         $freshWeChatUsers = $biz['wechat.template_message_client']->batchGetUserInfo($userList);
         $freshWeChatUsers = ArrayToolkit::index($freshWeChatUsers, 'openid');
-        $fromIds = ArrayToolkit::column($freshWeChatUsers, 'unionid');
+        $userIds = ArrayToolkit::column($freshWeChatUsers, 'userId');
 
-        $userBinds = $this->getUserService()->findUserBindByTypeAndFromIds('weixin', $fromIds);
+        $userBinds = $this->getUserService()->findUserBindByTypeAndToIds('weixin', $userIds);
         $userBinds = ArrayToolkit::index($userBinds, 'fromId');
 
         $batchUpdateHelper = new BatchUpdateHelper($this->getUserWeChatDao());
@@ -185,6 +185,8 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             $freshWeChatUser = isset($freshWeChatUsers[$weChatUser['openId']]) ? $freshWeChatUsers[$weChatUser['openId']] : array();
 
             $unionId = !empty($freshWeChatUser['unionid']) ? $freshWeChatUser['unionid'] : $weChatUser['unionId'];
+            if (empty($unionId)) {
+            }
             $userId = !empty($unionId) && !empty($userBinds[$unionId]) ? $userBinds[$unionId]['toId'] : 0;
             $updateField = array(
                 'unionId' => $unionId,

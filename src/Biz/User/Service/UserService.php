@@ -266,6 +266,8 @@ interface UserService
 
     public function findUserBindByTypeAndFromIds($type, $fromIds);
 
+    public function findUserBindByTypeAndToIds($type, $toIds);
+
     public function findUserBindByTypeAndUserId($type, $toId);
 
     public function getUserBindByToken($token);
