@@ -96,8 +96,8 @@ class BalloonCloudVideoPlayer extends Emitter {
       remeberLastPos: remeberLastPos,
       customPos: self.options.customPos,
       videoHeaderLength: self.options.videoHeaderLength,
-      autoplay: self.options.autoplay,
-      strictMode: !self.options.strictMode
+      autoplay: self.options.autoplay
+      // strictMode: !self.options.strictMode
     });
 
     var player = new VideoPlayerSDK(extConfig);
@@ -115,9 +115,9 @@ class BalloonCloudVideoPlayer extends Emitter {
       player.setCurrentTime(self.options.customPos);
     });
 
-    player.on('unableConfirm', function (e) {
-      $('.js-back-link', parent.document)[0].click();
-    });
+    // player.on('unableConfirm', function (e) {
+    //   $('.js-back-link', parent.document)[0].click();
+    // });
 
     player.on('ended', function(e) {
       self.emit('ended', e);

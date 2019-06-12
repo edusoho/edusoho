@@ -36,10 +36,10 @@
 			{% endif %}
       
       <div class="course-detail-remask">
-				{% if setting('course.show_student_num_enabled', '1') == 1 %}
+        {% if setting('course.show_student_num_enabled', '1') == 1 %}
           <i class="es-icon es-icon-people"></i>
-					{{ 'course.students_count'|trans({'%studentsNum%':courseSet.studentNum|default(0)})|raw }}
-				{% endif %}
+          {{ 'course.students_count'|trans({'%studentsNum%':courseSet.studentNum|default(0)})|raw }}
+        {% endif %}
         <div class="score pull-right mb0">
 					{{ web_macro.star(courseSet.rating|default(0)) }}
           <span class="vertical-middle">{{'course.mask.rating_num'|trans({'%ratingNum%':courseSet.ratingNum|default(0)})}}</span>

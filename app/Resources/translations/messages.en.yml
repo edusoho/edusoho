@@ -5847,10 +5847,6 @@ admin.setting_course.course_operation_mode: 'Course operation mode'
 admin.setting_course.course_operation_mode.free_try_view: 'Free preview / free task allows users who are not login to watch'
 admin.setting_course.course_operation_mode.free_try_view.help_block: 'If this setting is allowed, users not login (visitors) can watch the free preview or free tasks'
 admin.setting_course.course_operation_mode.allow_show_user_count: 'The number of student allowed to display in the course'
-admin.setting_course.course_operation_mode.course_set_number: 'Display the number of course covers'
-admin.setting_course.course_operation_mode.course_set_number.help_block: 'The administrator can control the number of people on the cover of the course'
-admin.setting_course.cover_number.student_num: 'Joined number'
-admin.setting_course.cover_number.hit_num: 'Hit number'
 admin.setting_course.customer_chapter_section_name: 'Custom chapter name'
 admin.setting_course.customer_task_name: 'Custom task name'
 admin.setting_course.customer_chapter_section_name.tips: 系统中的"章"、"节"会被设置的名称所替代
@@ -7608,7 +7604,7 @@ log.attr.course.update_course.expiryMode: 学习有效期模式
 log.attr.course.update_course.expiryMode.date: 固定周期
 log.attr.course.update_course.expiryMode.end_date: 截止日期
 log.attr.course.update_course.expiryMode.days: 按有效期天数
-log.attr.course.update_course.expiryMode.forever: 永久有效
+log.attr.course.update_course.expiryMode.forever: 长期有效
 log.attr.course.update_course.expiryDays: 有效期天数
 log.attr.course.update_course.expiryStartDate: 有效开始日期
 log.attr.course.update_course.expiryEndDate: 有效结束日期
@@ -7647,7 +7643,7 @@ log.attr.classroom.status.closed: 已关闭
 log.attr.classroom.expiryMode: 学习有效期模式
 log.attr.classroom.expiryMode.date: 截止日期
 log.attr.classroom.expiryMode.days: 有效期天数
-log.attr.classroom.expiryMode.forever: 永久有效
+log.attr.classroom.expiryMode.forever: 长期有效
 log.attr.classroom.expiryValue: 有效期
 log.attr.classroom.smallPicture: 小图
 log.attr.classroom.middlePicture: 中图
