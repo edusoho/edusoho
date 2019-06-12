@@ -1,4 +1,6 @@
 {% extends 'layout.html.twig' %}
+
+{% set weChatUser = data('WeChatUser', {userId: app.user.id|default(null)}) %}
 {% block content %}
-  <img src="{{ qrcodeUrl }}" alt="">
+  {% include 'wechat-inform-common.html.twig' with {type: '', 'goto' : ''} %}
 {% endblock %}

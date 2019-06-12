@@ -1,3 +1,4 @@
+{% do script(['app/js/wechat-inform-common/index.js']) %}
 <div class="wechat-pay-inform text-center">
   {% if type|default('') == 'pay' %}
     <div class="wechat-pay-inform__feedback">
@@ -5,10 +6,14 @@
     </div>
   {% endif %}
   <div class="wechat-inform-section text-center cd-mt24">
-    <div class="wechat-inform-title">{{ 'wechat.notification.open_notification_hint_title'|trans }}</div>
+    <div class="wechat-inform-title text-center">{{ 'wechat.notification.open_notification_hint_title'|trans }}</div>
     <div class="wechat-inform-content cd-mt40 row">
       <div class="wechat-inform-content__qcode col-sm-offset-2 col-sm-4">
-        <img src="{{ options.qrcode }}">
+        {% if weChatUser.isSubscribe|default(false) %}
+          <img src="{{ setting('wechat.account_code') }}">
+        {% elseif not weChatUser %}
+          <img class="js-qrcode" data-url="{{ path('login_wechat_qrcode') }}" src="">
+        {% endif %}
       </div>
       <div class="wechat-inform-content__img col-sm-offset-1 col-sm-4">
         <img class="hidden-xs" src="{{ asset('static-dist/app/img/wechat-inform/wechat-scan.png') }}" srcset="{{ asset('static-dist/app/img/wechat-inform/wechat-scan.png') }} 1x, {{ asset('static-dist/app/img/wechat-inform/wechat-scan@2x.png') }} 2x">
@@ -18,7 +23,7 @@
       </div>
     </div>
   </div>
-  <div class="hidden-xs text-center">
+  <div class="{% if goto|default(null) %}hidden-xs{% endif %} text-center">
     <a class="cd-btn cd-btn-primary wechat-pay-inform__btn" href="{{ goto }}">{{'course.task.learning.back_course_btn'|trans}}</a>
   </div>
 </div>
