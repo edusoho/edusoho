@@ -8702,7 +8702,7 @@ wechat.notification.cloud.tips: You have not yet opened an education cloud and c
 wechat.notification.cloud_open: Go to the opening
 
 # 微信通知模板
-wechat.notification.template.live_start: 'Hello, classmate.<br>It is hereby notified that the [course name] you are enrolled in will start in the [live class start time].<br>Don't be late.'
+wechat.notification.template.live_start: Hello, classmate.<br>It is hereby notified that the [course name] you are enrolled in will start in the [live class start time].<br>Don't be late.
 wechat.notification.template.homework_result: 'Classmate, hello, your homework has been reviewed.<br>Job Name: [Task Name]]<br>Course: [course name]<br>Tutor: [Teacher User Name]<br>Homework result: [homework result]'
 wechat.notification.template.exam_result: 'Hello, your class has been reviewed.<br>Examination subject: [task name]<br>Test score: [test score]<br>Keep up the good work'
 wechat.notification.template.lesson_add: 'Classmate, hello, the course has a new task to post<br>Course Name: [Course Name]<br>Course category: [Course category]<br>Course Teacher: [Teacher User Name]<br>Course time: [Task release time]<br>Please go to study in time.'

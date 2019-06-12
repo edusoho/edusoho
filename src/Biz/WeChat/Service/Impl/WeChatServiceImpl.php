@@ -185,8 +185,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             $freshWeChatUser = isset($freshWeChatUsers[$weChatUser['openId']]) ? $freshWeChatUsers[$weChatUser['openId']] : array();
 
             $unionId = !empty($freshWeChatUser['unionid']) ? $freshWeChatUser['unionid'] : $weChatUser['unionId'];
-            if (empty($unionId)) {
-            }
+
             $userId = !empty($unionId) && !empty($userBinds[$unionId]) ? $userBinds[$unionId]['toId'] : 0;
             $updateField = array(
                 'unionId' => $unionId,
