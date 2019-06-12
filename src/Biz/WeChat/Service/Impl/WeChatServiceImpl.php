@@ -26,6 +26,11 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $this->getUserWeChatDao()->getByTypeAndUnionId($type, $unionId);
     }
 
+    public function getWeChatUserByTypeAndOpenId($type, $openId)
+    {
+        return $this->getUserWeChatDao()->getByTypeAndOpenId($type, $openId);
+    }
+
     public function findWeChatUsersByUserId($userId)
     {
         return $this->getUserWeChatDao()->findByUserId($userId);
@@ -152,7 +157,8 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $batchUpdateHelper = new BatchUpdateHelper($this->getUserWeChatDao());
         foreach ($weChatUsers as $weChatUser) {
             $freshWeChatUser = isset($freshWeChatUsers[$weChatUser['openId']]) ? $freshWeChatUsers[$weChatUser['openId']] : array();
-            $unionId = !empty($freshWeChatUser['unionid']) ? $freshWeChatUser['unionid'] : null;
+
+            $unionId = !empty($freshWeChatUser['unionid']) ? $freshWeChatUser['unionid'] : $weChatUser['unionId'];
             $userId = !empty($unionId) && !empty($userBinds[$unionId]) ? $userBinds[$unionId]['toId'] : 0;
             $updateField = array(
                 'unionId' => $unionId,

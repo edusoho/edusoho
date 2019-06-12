@@ -18,6 +18,8 @@ interface WeChatService
 
     public function getWeChatUserByTypeAndUnionId($type, $unionId);
 
+    public function getWeChatUserByTypeAndOpenId($type, $openId);
+
     public function batchSyncOfficialWeChatUsers($nextOpenId = '');
 
     public function getOfficialWeChatUserByUserId($userId);

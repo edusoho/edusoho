@@ -15,4 +15,6 @@ interface UserWeChatDao extends AdvancedDaoInterface
     public function getByUserIdAndType($userId, $type);
 
     public function getByTypeAndUnionId($type, $unionId);
+
+    public function getByTypeAndOpenId($type, $openId);
 }

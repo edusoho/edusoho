@@ -62,6 +62,11 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
         return $this->getByFields(array('type' => $type, 'unionId' => $unionId));
     }
 
+    public function getByTypeAndOpenId($type, $openId)
+    {
+        return $this->getByFields(array('type' => $type, 'unionId' => $openId));
+    }
+
     public function findOpenIdsInListsByType($openIds, $type)
     {
         if (empty($openIds)) {
