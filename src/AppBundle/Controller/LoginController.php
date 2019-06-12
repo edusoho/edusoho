@@ -131,7 +131,7 @@ class LoginController extends BaseController
     {
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
-            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->getTargetPath($request));
         }
 
         if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
@@ -187,7 +187,7 @@ class LoginController extends BaseController
     {
         $wechatSetting = $this->getSettingService()->get('wechat', array());
         if (!empty($wechatSetting['wechat_notification_enabled'])) {
-            $loginUrl = $this->generateUrl('login', array('goto' => $wechatSetting['account_code']), true);
+            $loginUrl = $this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->generateUrl('common_wechat_subscribe_wap')), true);
             $response = array(
                 'img' => $this->generateUrl('common_qrcode', array('text' => $loginUrl), true),
             );

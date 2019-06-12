@@ -29,7 +29,7 @@
         </a>
         {{ 'course.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}{{ task.number }}：{{ task.title }}
         {% if setting('wechat.wechat_notification_enabled')|default(false) and not weChatUser.isSubscribe|default(false) %}
-          <span class="pull-right cd-text-lg js-wechat-qrcode-btn wechat-inform-task" data-img="{{ setting('wechat.account_code') }}" {% if not weChatUser %}data-url="{{ path('login_wechat_qrcode') }}"{% endif %}><span class="wechat-inform-task__tip cd-mr8 hidden-xs">{{ 'wechat.notification.course_notification_open'|trans}}</span><i class="es-icon es-icon-qr-code"></i></span>
+          <span class="pull-right cd-text-lg js-wechat-qrcode-btn wechat-inform-task hidden-xs" data-img="{{ setting('wechat.account_code') }}" {% if not weChatUser %}data-url="{{ path('login_wechat_qrcode') }}"{% endif %}><span class="wechat-inform-task__tip cd-mr8">{{ 'wechat.notification.course_notification_open'|trans}}</span><i class="es-icon es-icon-qr-code"></i></span>
         {% endif %}
       </div>
       <div class="dashboard-body">
