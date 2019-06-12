@@ -32,11 +32,6 @@ class CommonController extends BaseController
 
     public function weChatOfficialSubscribeAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin() && $this->getWebExtension()->isWechatLoginBind()) {
-            return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->generateUrl('common_wechat_subscribe_wap'))));
-        }
-
         $weChatSetting = $this->getSettingService()->get('wechat', array());
         if (empty($weChatSetting['wechat_notification_enabled'])) {
             throw new AccessDeniedException('无法获取微信公众号二维码');
