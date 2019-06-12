@@ -47,6 +47,7 @@ class Show {
       DurationStorage.set(this.userId, this.fileId, $iframe.data('lastLearnTime'));
     }
     this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
+    // this.strictMode = container.data('strict');
 
     this.initView();
     this.initEvent();
@@ -102,6 +103,7 @@ class Show {
         autoplay: this.autoplay,
         customPos: customPos,
         mediaLength: this.fileLength,
+        // strictMode: this.strictMode
       }
     );
   }

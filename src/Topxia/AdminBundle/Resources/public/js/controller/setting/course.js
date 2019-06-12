@@ -11,7 +11,7 @@ define(function(require, exports, module) {
         $(".buy-userinfo-list").sortable({
             'distance': 20
         });
-      
+
         if ($("[name=buy_fill_userinfo]:checked").val() == 1) $("#buy-userinfo-list").hide();
         if ($("[name=buy_fill_userinfo]:checked").val() == 0) {
             $("#buy-userinfo-list").hide();
@@ -111,7 +111,7 @@ define(function(require, exports, module) {
                 $form.find('[name=live_logo]').val(response.url);
                 $("#live-course-logo-remove").show();
                 Notify.success(Translator.trans('admin.setting.course.upload_live_course_logo_success_hint'));
-                
+
             });
 
             $("#live-course-logo-remove").on('click', function(){

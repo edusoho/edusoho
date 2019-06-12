@@ -36,7 +36,7 @@
             </div>
             <div class="metas clearfix">
               {% if setting('course.show_student_num_enabled', '1') == 1  %}
-              <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
+                <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
               {% endif %}
               <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
               {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
