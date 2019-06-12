@@ -35,7 +35,7 @@
       </div>
       <input type="hidden" name="wechat_notification_enabled" id="wechat_notification_enabled" value="{{setting('wechat.wechat_notification_enabled')|default(false)}}">
 
-      {% if type == 'weixinweb' and clients['weixinweb'].status|default(null) == 'bind' and setting('wechat.wechat_notification_enabled')|default(false) %}
+      {% if type == 'weixinweb' and clients['weixinweb'].status|default(null) == 'bind' and setting('wechat.wechat_notification_enabled')|default(false) and not weChatUser.isSubscribe|default(false) %}
         <div class="wechat-inform-section text-center">
           <div class="wechat-inform-title">{{ 'wechat.notification.open_notification_hint_title'|trans }}</div>
           <div class="wechat-inform-subtitle cd-text-danger">{{ 'wechat.notification.open_notification_hint_content'|trans }}</div>

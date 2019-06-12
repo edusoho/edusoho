@@ -9998,9 +9998,9 @@ wechat.notification.cloud_open: 前往开通
 wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[课程名]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
 wechat.notification.template.homework_result: '同学，你好，你的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
 wechat.notification.template.exam_result: '同学，你好，你的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
-wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]<br>请及时前往学习'
+wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]<br>请及时前往学习'
 wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值或学习卡<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
-wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[实际支付价格]<br>订单时间：[支付时间]<br>请前往查看'
+wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[实际支付价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
 
 
 

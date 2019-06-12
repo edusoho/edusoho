@@ -47,7 +47,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
 
         $this->deleteLessonPublishJob($task);
-        $this->registerLessonNotifiactionJob($key, $task);
+        $this->registerLessonNotificationJob($key, $task);
     }
 
     public function onTaskUnpublish(Event $event)
@@ -83,7 +83,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $key = 'examResult';
             $logName = 'wechat_notify_exam_result';
             $data = array(
-                'first' => array('value' => '同学，你好，你的试卷已批阅完成'),
+                'first' => array('value' => '同学，您好，你的试卷已批阅完成'),
                 'keyword1' => array('value' => $task['title']),
                 'keyword2' => array('value' => $paperResult['score']),
                 'remark' => array('value' => '再接再厉哦'),
@@ -106,7 +106,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             }
 
             $data = array(
-                'first' => array('value' => '同学，你好，你的作业已批阅完成'),
+                'first' => array('value' => '同学，您好，你的作业已批阅完成'),
                 'keyword1' => array('value' => $task['title']),
                 'keyword2' => array('value' => $course['courseSetTitle']),
                 'keyword3' => array('value' => $nickname),
@@ -147,7 +147,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'first' => array('value' => '尊敬的客户，您已充值成功'),
                 'keyword1' => array('value' => '现金充值或学习卡'),
                 'keyword2' => array('value' => $trade['trade_sn']),
-                'keyword3' => array('value' => $trade['amount'] / 100),
+                'keyword3' => array('value' => ($trade['amount'] / 100).'元'),
                 'keyword4' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
                 'remark' => array('value' => '快去看看课程吧~'),
             );
@@ -169,8 +169,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $data = array(
                 'first' => array('value' => '尊敬的客户，您已支付成功'),
                 'keyword1' => array('value' => $trade['title']),
-                'keyword2' => array('value' => $trade['amount'] / 100),
+                'keyword2' => array('value' => ($trade['amount'] / 100).'元'),
                 'keyword3' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
+                'keyword4' => array('value' => '无'),
                 'remark' => array('value' => '请前往查看'),
             );
             $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
@@ -229,12 +230,12 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
     }
 
-    private function registerLessonNotifiactionJob($key, $task)
+    private function registerLessonNotificationJob($key, $task)
     {
         $templateId = $this->getWeChatService()->getTemplateId($key);
         if (!empty($templateId)) {
             $job = array(
-                'name' => 'WeChatNotitficationJob_LessonPublish_'.$task['id'],
+                'name' => 'WeChatNotificationJob_LessonPublish_'.$task['id'],
                 'expression' => time(),
                 'class' => 'Biz\WeChatNotification\Job\LessonPublishNotificationJob',
                 'misfire_threshold' => 60 * 60,
@@ -254,7 +255,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $dayTemplateId = $this->getWeChatService()->getTemplateId('oneDayBeforeLiveOpen');
         if (!empty($hourTemplateId) && $task['startTime'] >= (time() + 24 * 60 * 60)) {
             $job = array(
-                'name' => 'WeChatNotificationJob_LiveOneHour_'.$task['id'],
+                'name' => 'WeChatNotificationJob_LiveOneDay_'.$task['id'],
                 'expression' => intval($task['startTime'] - 24 * 60 * 60),
                 'class' => 'Biz\WeChatNotification\Job\LiveNotificationJob',
                 'misfire_threshold' => 60 * 60,
@@ -269,7 +270,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if (!empty($dayTemplateId) && $task['startTime'] >= (time() + 60 * 60)) {
             $job = array(
-                'name' => 'WeChatNotificationJob_LiveOneDay_'.$task['id'],
+                'name' => 'WeChatNotificationJob_LiveOneHour_'.$task['id'],
                 'expression' => intval($task['startTime'] - 60 * 60),
                 'class' => 'Biz\WeChatNotification\Job\LiveNotificationJob',
                 'misfire_threshold' => 60 * 10,
@@ -285,7 +286,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
     private function deleteLessonPublishJob($task)
     {
-        $this->deleteByJobName('WeChatNotitficationJob_LessonPublish_'.$task['id']);
+        $this->deleteByJobName('WeChatNotificationJob_LessonPublish_'.$task['id']);
     }
 
     private function deleteLiveNotificationJob($task)

@@ -102,6 +102,11 @@ define(function(require, exports, module) {
 
           if (checked == '1' || wxpayChecked == '1') {
             subItem.removeClass('hidden');
+          } else {
+            subItem.addClass('hidden');
+          }
+
+          if (checked == '1') {
             validator.addItem({
               element: '[name="loginConnect[weixinmob_key]"]',
               required: true,
@@ -115,7 +120,6 @@ define(function(require, exports, module) {
               required: true,
             });
           } else {
-            subItem.addClass('hidden');
             validator.removeItem('[name="loginConnect[weixinmob_key]"]');
             validator.removeItem('[name="loginConnect[weixinmob_secret]"]');
             validator.removeItem('[name="payment[wxpay_mp_secret]"]');
@@ -162,6 +166,11 @@ define(function(require, exports, module) {
 
           if (checked == '1' || weixinmobChecked == '1') {
             mobItem.removeClass('hidden');
+          } else {
+            mobItem.addClass('hidden');
+          }
+
+          if (checked == '1') {
             validator.addItem({
               element: '[name="loginConnect[weixinmob_key]"]',
               required: true,
@@ -175,17 +184,16 @@ define(function(require, exports, module) {
               required: true,
             });
           } else {
-            mobItem.addClass('hidden');
             validator.removeItem('[name="loginConnect[weixinmob_key]"]');
             validator.removeItem('[name="loginConnect[weixinmob_secret]"]');
             validator.removeItem('[name="payment[wxpay_mp_secret]"]');
           }
         });
 
-        $('input[name="loginConnect[weixinweb_enabled]"]').change();
-        $('input[name="loginConnect[weixinmob_enabled]"]').change();
-        $('input[name="wechatSetting[wechat_notification_enabled]"]').change();
-        $('input[name="payment[wxpay_enabled]"]').change();
+        $('input[name="loginConnect[weixinweb_enabled]"][type="checkbox"][value="1"]').change();
+        $('input[name="loginConnect[weixinmob_enabled]"][type="checkbox"][value="1"]').change();
+        $('input[name="wechatSetting[wechat_notification_enabled]"][type="checkbox"][value="1"]').change();
+        $('input[name="payment[wxpay_enabled]"][type="checkbox"][value="1"]').change();
 
         $('#wechat-setting-form').on('click', '.js-code-view', (event) => {
           var $target = $('.js-code-img');
