@@ -187,7 +187,7 @@ class LoginController extends BaseController
     {
         $wechatSetting = $this->getSettingService()->get('wechat', array());
         if (!empty($wechatSetting['wechat_notification_enabled'])) {
-            $loginUrl = $this->generateUrl('login_bind', array('type' => 'wexinmob', '_target_path' => $this->generateUrl('common_wechat_subscribe_wap')), true);
+            $loginUrl = $this->generateUrl('common_wechat_subscribe_wap', array(), true);
             $response = array(
                 'img' => $this->generateUrl('common_qrcode', array('text' => $loginUrl), true),
             );
