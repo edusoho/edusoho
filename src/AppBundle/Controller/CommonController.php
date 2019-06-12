@@ -33,8 +33,8 @@ class CommonController extends BaseController
     public function weChatOfficialSubscribeAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        if ($user->isLogin()) {
-            return $this->redirect($this->generateUrl('login_bind', array('type' => 'wexinmob', '_target_path' => $this->generateUrl('common_wechat_subscribe_wap'))));
+        if (!$user->isLogin()) {
+            return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->generateUrl('common_wechat_subscribe_wap'))));
         }
 
         $weChatSetting = $this->getSettingService()->get('wechat', array());
