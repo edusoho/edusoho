@@ -4,9 +4,97 @@ namespace Tests\Unit\OpenCourse\Service;
 
 use Biz\BaseTestCase;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\User\CurrentUser;
+use Biz\User\Service\UserService;
 
 class OpenCourseServiceTest extends BaseTestCase
 {
+    /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.permission_denied
+     */
+    public function testCreateCoursePermissionDenyException()
+    {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1),
+        ));
+
+        $this->getServiceKernel()->setBiz($this->getBiz());
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $course = array(
+            'title' => 'liveOpenCourse',
+            'type' => 'liveOpen',
+            'userId' => 1,
+            'createdTime' => time(),
+        );
+
+        $this->getOpenCourseService()->createCourse($course);
+    }
+
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
+     */
+    public function testCreateCourseException()
+    {
+        $course = array(
+            'type' => 'open',
+            'userId' => 1,
+            'createdTime' => time(),
+        );
+
+        $this->getOpenCourseService()->createCourse($course);
+    }
+
+    public function testCreateCourse()
+    {
+        $time = time();
+        $course = array(
+            'title' => 'liveOpenCourse',
+            'type' => 'liveOpen',
+            'userId' => 1,
+            'createdTime' => $time,
+        );
+
+        $excepted = array(
+            'id' => '1',
+            'title' => 'liveOpenCourse',
+            'subtitle' => '',
+            'status' => 'draft',
+            'type' => 'liveOpen',
+            'lessonNum' => '0',
+            'categoryId' => '0',
+            'tags' => array(),
+            'smallPicture' => '',
+            'middlePicture' => '',
+            'largePicture' => '',
+            'about' => '',
+            'teacherIds' => array(1),
+            'studentNum' => '0',
+            'hitNum' => '0',
+            'likeNum' => '0',
+            'postNum' => '0',
+            'userId' => '1',
+            'parentId' => '0',
+            'locked' => '0',
+            'recommended' => '0',
+            'recommendedSeq' => '0',
+            'recommendedTime' => '0',
+            'createdTime' => (string) $time,
+            'updatedTime' => (string) $time,
+            'orgId' => '1',
+            'orgCode' => '1.',
+        );
+        $created = $this->getOpenCourseService()->createCourse($course);
+        $this->assertEquals($excepted, $created);
+    }
+
     /**
      * open_course.
      */
@@ -56,14 +144,111 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals(1, $courseCount);
     }
 
+    /**
+     * @expectedException \Biz\OpenCourse\OpenCourseException
+     * @expectedExceptionMessage exception.opencourse.not_found
+     */
+    public function testUpdateCourseNotFoundException()
+    {
+        $this->getOpenCourseService()->updateCourse(1, array());
+    }
+
+    /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.unlogin
+     */
+    public function testTryManageOpenCourseUnLogin()
+    {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1),
+        ));
+
+        $this->getServiceKernel()->setBiz($this->getBiz());
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $this->getOpenCourseService()->tryManageOpenCourse(1);
+    }
+
+    /**
+     * @expectedException \Biz\OpenCourse\OpenCourseException
+     * @expectedExceptionMessage exception.opencourse.not_found
+     */
+    public function testTryManageOpenCourseNotFoundOpenCourse()
+    {
+        $this->getOpenCourseService()->tryManageOpenCourse(2333);
+    }
+
+    /**
+     * @expectedException \Biz\OpenCourse\OpenCourseException
+     * @expectedExceptionMessage exception.opencourse.forbidden_manage_course
+     */
+    public function testTryManageOpenCourseForbidden()
+    {
+        $course = $this->_createOpenCourse();
+
+        $user = $this->getUserService()->register(array(
+            'nickname' => 'user',
+            'email' => 'user@user.com',
+            'password' => 'user',
+            'createdIp' => '127.0.0.1',
+            'orgCode' => '1.',
+            'orgId' => '1',
+        ));
+
+        $user['currentIp'] = $user['createdIp'];
+        $user['org'] = array('id' => 1);
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->grantPermissionToUser($currentUser);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $this->getOpenCourseService()->tryManageOpenCourse($course['id']);
+    }
+
+    /**
+     * @expectedException \Biz\OpenCourse\OpenCourseException
+     * @expectedExceptionMessage exception.opencourse.not_found
+     */
+    public function testTryAdminCourseNotFoundException()
+    {
+        $this->getOpenCourseService()->tryManageOpenCourse(1);
+    }
+
+    /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.unlogin
+     */
+    public function testTryAdminCourseUnLoginException()
+    {
+        $course = $this->_createOpenCourse();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1),
+        ));
+
+        $this->getServiceKernel()->setBiz($this->getBiz());
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $this->getOpenCourseService()->tryManageOpenCourse($course['id']);
+    }
+
     public function testUpdateCourse()
     {
         $course1 = $this->_createLiveOpenCourse();
-        $updateFields = array('title' => 'liveOpenCourseTitle');
+        $updateFields = array('title' => 'title2');
 
-        $updatecCourse = $this->getOpenCourseService()->updateCourse($course1['id'], $updateFields);
+        $updatedCourse = $this->getOpenCourseService()->updateCourse($course1['id'], $updateFields);
 
-        $this->assertEquals($updateFields['title'], $updatecCourse['title']);
+        $this->assertEquals($updateFields['title'], $updatedCourse['title']);
     }
 
     public function testDeleteCourse()
@@ -798,5 +983,13 @@ class OpenCourseServiceTest extends BaseTestCase
     protected function getOpenCourseService()
     {
         return $this->createService('OpenCourse:OpenCourseService');
+    }
+
+    /**
+     * @return UserService
+     */
+    private function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }
