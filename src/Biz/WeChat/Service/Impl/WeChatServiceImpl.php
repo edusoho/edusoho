@@ -142,6 +142,33 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $this->batchFreshOfficialWeChatUsers($weChatUsers);
     }
 
+    public function freshOfficialWeChatUserWhenLogin($user, $bind, $token)
+    {
+        if (empty($user)) {
+            return ;
+        }
+
+        try{
+            $weChatUser = $this->getWeChatUserByTypeAndOpenId(WeChatService::OFFICIAL_TYPE, $token['openid']);
+            if (empty($weChatUser)) {
+                $this->createWeChatUser(array(
+                    'type' => WeChatService::OFFICIAL_TYPE,
+                    'appId' => $this->getSettingService()->node('login_bind.weixinmob_key', ''),
+                    'unionId' => $bind['fromId'],
+                    'openId' => $token['openid'],
+                    'userId' => $user['id'],
+                ));
+            } else {
+                $this->updateWeChatUser($weChatUser['id'], array(
+                    'userId' => $user['id'],
+                ));
+            }
+        } catch (\Exception $e) {
+            $this->getLogger()->error('WeChatFreshOfficialUser_'.$e->getMessage(), $e->getTrace());
+        }
+
+    }
+
     public function batchFreshOfficialWeChatUsers($weChatUsers)
     {
         $biz = $this->biz;

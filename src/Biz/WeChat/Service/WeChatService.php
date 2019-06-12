@@ -24,6 +24,8 @@ interface WeChatService
 
     public function getOfficialWeChatUserByUserId($userId);
 
+    public function freshOfficialWeChatUserWhenLogin($user, $bind, $token);
+
     public function batchFreshOfficialWeChatUsers($weChatUsers);
 
     public function refreshOfficialWeChatUsers($lifeTime = self::FRESH_TIME, $refreshNum = self::REFRESH_NUM);
