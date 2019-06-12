@@ -175,7 +175,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
         $freshWeChatUsers = $biz['wechat.template_message_client']->batchGetUserInfo($userList);
         $freshWeChatUsers = ArrayToolkit::index($freshWeChatUsers, 'openid');
-        $userIds = ArrayToolkit::column($freshWeChatUsers, 'userId');
+        $userIds = ArrayToolkit::column($weChatUsers, 'userId');
 
         $userBinds = $this->getUserService()->findUserBindByTypeAndToIds('weixin', $userIds);
         $userBinds = ArrayToolkit::index($userBinds, 'fromId');
