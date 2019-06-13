@@ -106,7 +106,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
 
         if (empty($task)) {
-            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:获取任务失败");
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, '发送微信通知失败:获取任务失败');
 
             return;
         }
