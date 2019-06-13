@@ -23,7 +23,10 @@
       </div>
     </div>
   </div>
-  <div class="{% if goto|default('') is not empty %}hidden-xs{% endif %} text-center">
-    <a class="cd-btn cd-btn-primary wechat-pay-inform__btn" href="{{ goto }}">{{ btnText|default('form.btn.return')|trans}}</a>
-  </div>
+  {% if goto|default('') is not empty %}
+    <div class="text-center">
+      <a class="cd-btn cd-btn-primary wechat-pay-inform__btn" href="{{ goto }}">{{ btnText|default('form.btn.return')|trans}}</a>
+    </div>
+  {% endif %}
+
 </div>
