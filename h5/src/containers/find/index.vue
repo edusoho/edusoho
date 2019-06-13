@@ -33,15 +33,16 @@
         :sort="part.data.sort"
         :feedback="feedback"></e-vip-list>
       <e-market-part
-          class="gray-border-bottom"
-          v-if="['groupon', 'cut', 'seckill'].includes(part.type)"
-          :activity="part.data.activity"
-          :showTitle="part.data.titleShow"
-          :type="part.type"
-          :tag="part.data.tag"
-          @activityHandle="activityHandle"
-          :feedback="feedback"></e-market-part>
+        class="gray-border-bottom"
+        v-if="['groupon', 'cut', 'seckill'].includes(part.type)"
+        :activity="part.data.activity"
+        :showTitle="part.data.titleShow"
+        :type="part.type"
+        :tag="part.data.tag"
+        @activityHandle="activityHandle"
+        :feedback="feedback"></e-market-part>
     </div>
+    <e-switch-loading v-if="wechatSwitch"></e-switch-loading>
   </div>
 </template>
 
@@ -51,6 +52,7 @@
   import marketPart from '../components/e-marketing/e-activity/index.vue';
   import swipe from '../components/e-swipe/e-swipe.vue';
   import couponList from '../components/e-coupon-list/e-coupon-list.vue';
+  import swithLoading from '../components/e-switch-loading/index.vue';
   import vipList from '../components/e-vip-list/e-vip-list.vue';
   import * as types from '@/store/mutation-types';
   import getCouponMixin from '@/mixins/coupon/getCouponHandler';
@@ -66,7 +68,8 @@
       'e-poster': poster,
       'e-coupon-list': couponList,
       'e-vip-list': vipList,
-      'e-market-part': marketPart
+      'e-market-part': marketPart,
+      'e-switch-loading': swithLoading
     },
     mixins: [getCouponMixin, activityMixin],
     props: {
@@ -85,7 +88,7 @@
       };
     },
     computed: {
-      ...mapState(['vipSwitch', 'isLoading']),
+      ...mapState(['vipSwitch', 'isLoading', 'wechatSwitch']),
     },
     created() {
       const {preview, token} = this.$route.query

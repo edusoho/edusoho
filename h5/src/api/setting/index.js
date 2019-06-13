@@ -49,5 +49,11 @@ export default [
     url: '/settings/login',
     method: 'GET',
     disableLoading: true
+  },
+  {
+    name: 'wechatConfig',
+    url: '/setting/wechat',
+    method: 'GET',
+    disableLoading: true
   }
 ];

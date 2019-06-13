@@ -113,3 +113,21 @@ export const setVipSwitch = ({ commit }, isOn) =>
       return levelsExist;
     });
   });
+
+// 全局公众号显示开关
+export const setWeChatSwitch = ({ commit }, isOn) =>
+  new Promise(resolve => {
+    if (!isOn) {
+      commit(types.GET_SETTINGS, { key: 'wechatSwitch', setting: isOn });
+      resolve(isOn);
+      return isOn;
+    }
+    return Api.weChatNotifyState().then(res => {
+      const isWeChatBind = !!(res && res.bind);
+      commit(types.GET_SETTINGS, { key: 'wechatSwitch', setting: !isWeChatBind });
+      resolve(isWeChatBind);
+      return isWeChatBind;
+    }).catch(error => {
+      console.log(error.message);
+    });
+  });
