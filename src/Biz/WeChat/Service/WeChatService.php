@@ -12,7 +12,7 @@ interface WeChatService
 
     const REFRESH_NUM = 200;
 
-    const FRESH_TIME = 7200; //过期时间 2小时
+    const FRESH_TIME = 1800; //过期时间 半小时
 
     const WECHAT_MAX_USER_COUNT = 10000;
 
