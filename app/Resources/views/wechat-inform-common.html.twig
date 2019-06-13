@@ -9,10 +9,10 @@
     <div class="wechat-inform-title text-center">{{ 'wechat.notification.open_notification_hint_title'|trans }}</div>
     <div class="wechat-inform-content cd-mt40 row">
       <div class="wechat-inform-content__qcode col-sm-offset-2 col-sm-4">
-        {% if weChatUser.isSubscribe|default(false) %}
-          <img src="{{ setting('wechat.account_code') }}">
-        {% elseif not weChatUser %}
+        {% if not weChatUser %}
           <img class="js-qrcode" data-url="{{ path('login_wechat_qrcode') }}" src="">
+        {% elseif not weChatUser.isSubscribe|default(false) %}
+          <img src="{{ setting('wechat.account_code') }}">
         {% endif %}
       </div>
       <div class="wechat-inform-content__img col-sm-offset-1 col-sm-4">
@@ -23,7 +23,7 @@
       </div>
     </div>
   </div>
-  <div class="{% if goto|default(null) %}hidden-xs{% endif %} text-center">
+  <div class="{% if goto|default('') is not empty %}hidden-xs{% endif %} text-center">
     <a class="cd-btn cd-btn-primary wechat-pay-inform__btn" href="{{ goto }}">{{ btnText|default('form.btn.return')|trans}}</a>
   </div>
 </div>
