@@ -163,7 +163,7 @@ export default {
       this.course = res;
     }).catch(err => {
       //购买后返回会造成重复下单报错
-      this.$router.go(-1)
+      this.$router.go(-1);
     })
   },
   methods: {
