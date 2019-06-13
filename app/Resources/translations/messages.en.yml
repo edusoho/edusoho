@@ -5907,8 +5907,8 @@ admin.setting_wechat_auth.wechat_pay_hint: >
   to pay。
 admin.setting_wechat_auth.web_secret_hint: APP ID and APP Secret can be found at <a target="_blank" href="https://open.weixin.qq.com"> wechat oepn platform </a> - create Web applications.
 admin.setting_wechat_auth.account_secret_hint: APP ID APP Secret can be found at <a target="_blank" href="https://mp.weixin.qq.com/"> wechat public platform </a> - your services account, check the left column "development" - "Basic configuration" - "Developer ID ".
-admin.setting_wechat_auth.account_number_hint: The merchant number is from the left side of the WeChat public platform, 'WeChat Payment' - 'Business Information'
-admin.setting_wechat_auth.api_secret_key_hint: WeChat merchant platform API key needs to log in to the WeChat merchant platform, set the key in 'Account Settings' - 'API Security'
+admin.setting_wechat_auth.account_number_hint: The merchant number is from the left side of the <a target="_blank" href="https://mp.weixin.qq.com/"> wechat public platform </a>, 'WeChat Payment' - 'Business Information'
+admin.setting_wechat_auth.api_secret_key_hint: WeChat merchant platform API key needs to log in to <a target="_blank" href="https://pay.weixin.qq.com"> the WeChat merchant platform </a>, set the key in 'Account Settings' - 'API Security'
 admin.setting_wechat_auth.tutorial_button: View Tutorial
 admin.setting_wechat_auth.web_appid: Web AppID
 admin.setting_wechat_auth.web_secret: Web AppSecret
