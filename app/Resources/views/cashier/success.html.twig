@@ -6,7 +6,7 @@
 {% set step = '3' %}
 {% set weChatNotify = setting('wechat.wechat_notification_enabled')|default(false)  %}
 {% set weChatUser = data('WeChatUser', {userId: app.user.id|default(null)}) %}
-{% set informPlatForm =  is_mobile_client() == false or (is_mobile_client() and (app.request.headers.get('User-Agent') matches '/MicroMessenger/')) %}
+{% set informPlatform =  is_mobile_client() == false or (is_mobile_client() and (app.request.headers.get('User-Agent') matches '/MicroMessenger/')) %}
 {% set informProduct = product.targetType|default('null') in ['course', 'classroom'] %}
 {% block order_body %}
   {% if weChatNotify and not weChatUser.isSubscribe|default(false) and informPlatform and informProduct %}
