@@ -93,7 +93,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     public function onTestpaperReviewd(Event $event)
     {
         $paperResult = $event->getSubject();
-        $task = $this->getTaskService()->getTask($paperResult['lessonId']);
+        $activity = $this->getActivityService()->getActivity($paperResult['lessonId']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        if (empty($task)) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'wechat_notification_error', '发送微信通知失败:获取任务失败', $paperResult);
+
+            return;
+        }
 
         if ('testpaper' == $paperResult['type']) {
             $key = 'examResult';
@@ -436,6 +442,11 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     protected function getNotificationService()
     {
         return $this->getBiz()->service('Notification:NotificationService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     protected function getTaskDao()
