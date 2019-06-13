@@ -40,7 +40,15 @@ const wechatIntro = () => {
 }
 
 var $notificationEnable = $('#wechat_notification_enabled').val();
-if (!store.get(WECHAT_BIND_INTRO) && $('.wechat-inform-section').length <= 0 && $notificationEnable) {
+if (!store.get(WECHAT_BIND_INTRO) && $('#wechat_notification_enabled').data('status') !== 'bind' && $notificationEnable) {
   store.set(WECHAT_BIND_INTRO, true);
   wechatIntro();
 }
+
+let $target = $("#wechat-login-qrcode");
+if (typeof($target.data('url')) != 'undefined') {
+  $.get($target.data('url'), res => {
+    $target.attr('src', res.img);
+  });
+}
+
