@@ -21,6 +21,107 @@ class MemberServiceTest extends BaseTestCase
         $this->getMemberService()->becomeStudentAndCreateOrder(1, 1, array());
     }
 
+    /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.not_found
+     */
+    public function testBecomeStudentAndCreateOrderWithNotExistUser()
+    {
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'tryManageCourse', 'returnValue' => array()),
+        ));
+
+        $this->getMemberService()->becomeStudentAndCreateOrder(-1, 1, array('price' => 0.01, 'remark' => 'test'));
+    }
+
+    /**
+     * @expectedException \Biz\Course\CourseException
+     * @expectedExceptionMessage exception.course.not_found
+     */
+    public function testBecomeStudentAndCreateOrderWithNotExistCourse()
+    {
+        $user = $this->createNormalUser();
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'tryManageCourse', 'returnValue' => array()),
+            array('functionName' => 'getCourse', 'returnValue' => array()),
+        ));
+
+        $this->getMemberService()->becomeStudentAndCreateOrder($user['id'], 1, array('price' => 0.01, 'remark' => 'test'));
+    }
+
+    /**
+     * @expectedException \Biz\Course\MemberException
+     * @expectedExceptionMessage exception.course.member.duplicate_member
+     */
+    public function testBecomeStudentAndCreateOrderIsDuplicateMember()
+    {
+        $user = $this->createNormalUser();
+        $course = $this->mockNewCourse();
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'deadline' => time() + 3600,
+        );
+        $this->getMemberDao()->create($member);
+
+        $this->getMemberService()->becomeStudentAndCreateOrder($user['id'], $course['id'], array('price' => 0.01, 'remark' => 'test'));
+    }
+
+    public function testBecomeStudentAndCreateOrderByAdminAdded()
+    {
+        $newUser = $this->createNormalUser();
+        $newCourse = $this->mockNewCourse();
+        $this->getCourseService()->publishCourse($newCourse['id']);
+        $this->mockNewCourseSet();
+
+        list($course, $member, $order) = $this->getMemberService()->becomeStudentAndCreateOrder($newUser['id'], $newCourse['id'], array('price' => 0, 'remark' => 'test', 'isAdminAdded' => 1));
+        $this->assertNotEmpty($member);
+        $this->assertEquals(0, $order['id']);
+    }
+
+    public function testStickMyCourseByCourseSetId()
+    {
+        $courseSet = $this->mockNewCourseSet();
+        $member = array(
+            'courseId' => 3,
+            'userId' => 1,
+            'courseSetId' => $courseSet['id'],
+            'joinedType' => 'course',
+            'role' => 'teacher',
+        );
+
+        $member = $this->getMemberDao()->create($member);
+        $oldStickyTime = $member['stickyTime'];
+
+        $this->getMemberService()->stickMyCourseByCourseSetId($courseSet['id']);
+        $member = $this->getMemberService()->getCourseMember(3, 1);
+
+        $this->assertNotEquals($oldStickyTime, $member['stickyTime']);
+    }
+
+    public function testUnStickMyCourseByCourseSetId()
+    {
+        $courseSet = $this->mockNewCourseSet();
+        $member = array(
+            'courseId' => 3,
+            'userId' => 1,
+            'courseSetId' => $courseSet['id'],
+            'joinedType' => 'course',
+            'role' => 'teacher',
+            'stickyTime' => time(),
+        );
+
+        $member = $this->getMemberDao()->create($member);
+        $oldStickyTime = $member['stickyTime'];
+
+        $this->getMemberService()->unStickMyCourseByCourseSetId($courseSet['id']);
+        $member = $this->getMemberService()->getCourseMember(3, 1);
+
+        $this->assertNotEquals($oldStickyTime, $member['stickyTime']);
+    }
+
     public function testFindWillOverdueCourses()
     {
         $user = $this->getCurrentUser();
@@ -368,6 +469,230 @@ class MemberServiceTest extends BaseTestCase
         $this->assertCount(2, $results);
     }
 
+    public function testFindMembersByUserIdAndJoinType()
+    {
+        $user = $this->createNormalUser();
+        $course = $this->mockNewCourse();
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'student',
+        );
+        $this->getMemberDao()->create($member);
+
+        $results = $this->getMemberService()->findMembersByUserIdAndJoinType($user['id']);
+
+        $this->assertCount(1, $results);
+    }
+
+    public function testCancelTeacherInAllCourses()
+    {
+        $user = $this->createNormalUser();
+        $course = $this->mockNewCourse();
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'teacher',
+        );
+        $this->getMemberDao()->create($member);
+
+        $this->getMemberService()->cancelTeacherInAllCourses($user['id']);
+        $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
+
+        $this->assertEmpty($result);
+    }
+
+    public function testQuitCourseByDeadlineReach()
+    {
+        $user = $this->createNormalUser();
+        $course = $this->mockNewCourse();
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'student',
+            'deadline' => time() - 84600,
+        );
+        $this->getMemberDao()->create($member);
+
+        $this->getMemberService()->quitCourseByDeadlineReach($user['id'], $course['id']);
+        $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
+
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * @expectedException \Biz\Course\CourseException
+     * @expectedExceptionMessage exception.course.not_found
+     */
+    public function testQuitCourseByDeadlineReachWithNotExistCourse()
+    {
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'getCourse', 'returnValue' => array()),
+        ));
+
+        $this->getMemberService()->quitCourseByDeadlineReach(1, -1);
+    }
+
+    /**
+     * @expectedException \Biz\Course\MemberException
+     * @expectedExceptionMessage exception.course.member.not_found
+     */
+    public function testQuitCourseByDeadlineReachWithNotExistMember()
+    {
+        $user = $this->createNormalUser();
+        $course = $this->mockNewCourse();
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'teacher',
+        );
+        $this->getMemberDao()->create($member);
+
+        $this->getMemberService()->quitCourseByDeadlineReach($user['id'], $course['id']);
+    }
+
+    /**
+     * @expectedException \Biz\Course\MemberException
+     * @expectedExceptionMessage exception.course.member.non_expired
+     */
+    public function testQuitCourseByDeadlineReachWithNonExpired()
+    {
+        $user = $this->createNormalUser();
+        $course = $this->mockNewCourse();
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'student',
+            'deadline' => time() + 84600,
+        );
+        $this->getMemberDao()->create($member);
+
+        $this->getMemberService()->quitCourseByDeadlineReach($user['id'], $course['id']);
+    }
+
+    public function testFindTeacherMembersByUserIdAndCourseSetId()
+    {
+        $user = $this->createNormalUser();
+        $member = array(
+            'courseId' => 1,
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'teacher',
+            'deadline' => time() + 84600,
+        );
+        $this->getMemberDao()->create($member);
+
+        $members = $this->getMemberService()->findTeacherMembersByUserIdAndCourseSetId($user['id'], 1);
+
+        $this->assertEquals(1, $members[0]['courseId']);
+    }
+
+    public function testCountQuestionsByCourseIdAndUserId()
+    {
+        $this->mockCourseThread(array('courseId' => 1, 'userId' => 1, 'type' => 'question'));
+
+        $result = $this->getMemberService()->countQuestionsByCourseIdAndUserId(1, 1);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCountDiscussionsByCourseIdAndUserId()
+    {
+        $this->mockCourseThread(array('courseId' => 1, 'userId' => 1, 'type' => 'discussion'));
+
+        $result = $this->getMemberService()->countDiscussionsByCourseIdAndUserId(1, 1);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCountActivitiesByCourseIdAndUserId()
+    {
+        $this->mockTaskResult(array('userId' => 3, 'courseTaskId' => 12, 'time' => 1, 'courseId' => 1));
+
+        $result = $this->getMemberService()->countActivitiesByCourseIdAndUserId(1, 3);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCountPostsByCourseIdAndUserId()
+    {
+        $thread = $this->mockCourseThread(array('courseId' => 1, 'userId' => 1, 'type' => 'discussion'));
+        $this->mockCourseThreadPost(array('userId' => 1, 'threadId' => $thread['id']));
+
+        $result = $this->getMemberService()->countPostsByCourseIdAndUserId(1, 1);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testSearchMemberCountGroupByFields()
+    {
+        $member = array(
+            'courseId' => 1,
+            'userId' => 2,
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'student',
+            'deadline' => time() + 84600,
+        );
+        $this->getMemberDao()->create($member);
+        $result = $this->getMemberService()->searchMemberCountGroupByFields(array('courseId' => 1), 'courseId', 0, 10);
+
+        $this->assertEquals(1, $result[0]['count']);
+    }
+
+    public function testBatchUpdateMemberDeadlinesByDay()
+    {
+        $user = $this->createNormalUser();
+        $course = $this->mockNewCourse();
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'student',
+            'deadline' => time(),
+        );
+        $this->getMemberDao()->create($member);
+
+        $this->getMemberService()->batchUpdateMemberDeadlinesByDay($course['id'], array(0 => $user['id']), 1, 'minus');
+        $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
+        $this->assertEquals($member['deadline'], (int) $result['deadline']);
+
+        $this->getMemberService()->batchUpdateMemberDeadlinesByDay($course['id'], array(0 => $user['id']), 1);
+        $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
+        $this->assertEquals($member['deadline'] + 1 * 24 * 60 * 60, $result['deadline']);
+    }
+
+    public function testBatchUpdateMemberDeadlinesByDate()
+    {
+        $user = $this->createNormalUser();
+        $course = $this->mockNewCourse();
+        $member = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'role' => 'student',
+            'deadline' => time(),
+        );
+        $this->getMemberDao()->create($member);
+
+        $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], array(0 => $user['id']), time() - 86400);
+        $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
+        $this->assertEquals($member['deadline'], (int) $result['deadline']);
+
+        $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], array(0 => $user['id']), time() + 86400);
+        $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
+        $this->assertEquals($member['deadline'] + 24 * 60 * 60, $result['deadline']);
+    }
+
     protected function mockNewCourseSet($fields = array())
     {
         $courseSetFields = array(
@@ -394,6 +719,49 @@ class MemberServiceTest extends BaseTestCase
         $course = array_merge($course, $fields);
 
         return $this->getCourseService()->createCourse($course);
+    }
+
+    protected function mockCourseThread($fields = array())
+    {
+        $defaultFields = array(
+            'courseId' => 1,
+            'taskId' => 1,
+            'userId' => 1,
+            'type' => 'discussion',
+            'title' => 'course thread title',
+            'content' => 'course thread content',
+            'courseSetId' => 1,
+        );
+
+        $fields = array_merge($defaultFields, $fields);
+
+        return $this->getThreadDao()->create($fields);
+    }
+
+    protected function mockCourseThreadPost($fields = array())
+    {
+        $defaultFields = array(
+            'courseId' => 1,
+            'taskId' => 1,
+            'threadId' => 1,
+            'userId' => 1,
+            'content' => 'post content',
+        );
+
+        $fields = array_merge($defaultFields, $fields);
+
+        return $this->getThreadPostDao()->create($fields);
+    }
+
+    protected function mockTaskResult($fields = array())
+    {
+        $taskReult = array_merge($this->getDefaultMockFields(), $fields);
+        $this->getTaskResultDao()->create($taskReult);
+    }
+
+    protected function getDefaultMockFields()
+    {
+        return array('activityId' => 1, 'courseTaskId' => 2, 'time' => 1, 'watchTime' => 1);
     }
 
     protected function createNewCourse($courseSetId)
@@ -470,5 +838,20 @@ class MemberServiceTest extends BaseTestCase
     protected function getMemberDao()
     {
         return $this->createDao('Course:CourseMemberDao');
+    }
+
+    protected function getThreadDao()
+    {
+        return $this->createDao('Course:ThreadDao');
+    }
+
+    protected function getTaskResultDao()
+    {
+        return $this->createDao('Task:TaskResultDao');
+    }
+
+    protected function getThreadPostDao()
+    {
+        return $this->createDao('Course:ThreadPostDao');
     }
 }

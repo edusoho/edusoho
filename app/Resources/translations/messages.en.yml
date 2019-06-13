@@ -5258,7 +5258,7 @@ admin.edu_cloud.edu_video.open_radio: Enable
 admin.edu_cloud.edu_video.close_radio: Close
 #TODO trans
 admin.edu_cloud.edu_video.normal_mode_tips: 'Select normal mode, <span class="text-success">new upload</span> video files are played in the mobile browser by default in the common format, which enhances the compatibility of video lessons with mobile browsers;<br/> <span class="text-danger">But the normal mode video is at risk of being stolen in some cases, please be cautious. </span>'
-admin.edu_cloud.edu_video.encryption_mode_tips: 'Choosing an encryption mode can greatly improve the security of the video, but it may cause the video class to not play properly on some old mobile browsers.'
+admin.edu_cloud.edu_video.encryption_mode_tips: 'Choosing an encryption mode can greatly improve the security of the video, but it may cause the video class to not play properly on some old mobile browsers.<br/>Mobile browsers that do not support playback (including but not limited to): Android QQ browser, Firefox browser, Android UC browser, Android quark browser, 360 browser, 360, Huawei, Samsung, Qihoo, one plus mobile phone Bring your own browser.'
 
 admin.edu_cloud.edu_video.transcode_quality: 'Transcode quality'
 admin.edu_cloud.edu_video.transcode_quality_low: "Smooth <span class = \"text-muted\"> (for PPT) </ span>\n"
@@ -7661,7 +7661,7 @@ log.attr.course.update_course.expiryMode: 学习有效期模式
 log.attr.course.update_course.expiryMode.date: 固定周期
 log.attr.course.update_course.expiryMode.end_date: 截止日期
 log.attr.course.update_course.expiryMode.days: 按有效期天数
-log.attr.course.update_course.expiryMode.forever: 永久有效
+log.attr.course.update_course.expiryMode.forever: 长期有效
 log.attr.course.update_course.expiryDays: 有效期天数
 log.attr.course.update_course.expiryStartDate: 有效开始日期
 log.attr.course.update_course.expiryEndDate: 有效结束日期
@@ -7700,7 +7700,7 @@ log.attr.classroom.status.closed: 已关闭
 log.attr.classroom.expiryMode: 学习有效期模式
 log.attr.classroom.expiryMode.date: 截止日期
 log.attr.classroom.expiryMode.days: 有效期天数
-log.attr.classroom.expiryMode.forever: 永久有效
+log.attr.classroom.expiryMode.forever: 长期有效
 log.attr.classroom.expiryValue: 有效期
 log.attr.classroom.smallPicture: 小图
 log.attr.classroom.middlePicture: 中图
@@ -8270,6 +8270,7 @@ exception.thread.type_invalid:
 exception.thread.not_found_member:
 exception.thread.access_denied: 该权限或资源不能访问
 exception.rate_limit_max_attempt_reach: 请求发送次数过多，请稍后尝试!
+exception.rate_limit_email_max_attempt_reach: 已超过发送限制，1小时后再尝试!
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: Cloud SMS related settings are not enabled!
 exception.setting.attachment.setting_enable: Cloud Attachement settings are not enabled!

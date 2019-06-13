@@ -3510,7 +3510,7 @@ CREATE TABLE `upload_files` (
   `description` text,
   `status` enum('uploading','ok') NOT NULL DEFAULT 'ok' COMMENT '文件上传状态',
   `convertHash` varchar(128) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
-  `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none' COMMENT '文件转换状态',
+  `convertStatus` enum('none','waiting','doing','success','error','nonsupport','noneed','unknow') NOT NULL DEFAULT 'none' COMMENT '文件转换状态',
   `convertParams` text COMMENT '文件转换参数',
   `metas` text COMMENT '元信息',
   `metas2` text COMMENT '元信息',

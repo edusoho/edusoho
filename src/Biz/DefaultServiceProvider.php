@@ -4,6 +4,7 @@ namespace Biz;
 
 use AppBundle\Component\Notification\WeChatTemplateMessage\Client;
 use AppBundle\Component\Notification\WeChatTemplateMessage\CloudNotificationClient;
+use AppBundle\Component\RateLimit\EmailRateLimiter;
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
 use Biz\Course\Util\CourseRenderViewResolver;
@@ -185,6 +186,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['sms_rate_limiter'] = function ($biz) {
             return new SmsRateLimiter($biz);
+        };
+
+        $biz['email_rate_limiter'] = function ($biz) {
+            return new EmailRateLimiter($biz);
         };
 
         $biz['render_view_resolvers'] = function ($biz) {

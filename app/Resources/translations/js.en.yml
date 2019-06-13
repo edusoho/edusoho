@@ -555,7 +555,8 @@ material_lib.content_title: Teaching Lib
 material_lib.detail.content_title: Resource detail
 material_lib.have_no_permission_hint: Sorry, you have no permission
 meterial_lib.select_resource_delete_hint: Please select you want to delete the resource
-meterial_lib.confirm_share_resource_hint: Sure you want to share this resource
+meterial_lib.confirm_share_resource_hint: Sure you want to share these resources?
+meterial_lib.confirm_share_resource_hint_single: Sure you want to share this resource?
 meterial_lib.confirm_unshare_resource_hint: Sure you want to cancel the share the resource
 meterial_lib.select_resource_operate_hint: Please select your resource to operate 
 meterial_lib.select_share_resource_hint: Please select you want to share resource
@@ -1385,7 +1386,12 @@ admin.course_manage.manage.tags_select.placeholder: 输入标签名称关键字
 exception.common_frequent_operation: 操作过于频繁，请稍后重试
 material.common_table.file_name: 文件名称
 material.common_table.transcoding: 转码状态
+material.common_table.transcoding_intro: 转码状态介绍
+material.common_table.transcoding_more: 详情
 material.common_table.error_reason: 错误原因
+material.common_table.fail_not_support: 文件不支持
+material.common_table.fail_error_tip: 文件转码失败，请提供文件信息，联系运营人员处理。
+material.common_table.not_support_error_tip: 上传的文件格式不支持转码，请点击高亮的“文件不支持”，会显示解决方案。
 material.common_table.solution_way: 解决方案
 
 course.stick.success: Top success!

@@ -719,6 +719,15 @@ class SettingsController extends BaseController
         if ('POST' === $request->getMethod()) {
             $data = $request->request->all();
 
+            //同一IP限制
+            $biz = $this->getBiz();
+            $rateLimiter = $biz['email_rate_limiter'];
+            $rateLimiter->handle($request);
+
+            //拖动校验
+            $authSettings = $this->getSettingService()->get('auth', array());
+            $this->dragCaptchaValidator($data, $authSettings);
+
             $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
 
             if (!$isPasswordOk) {
@@ -1000,6 +1009,17 @@ class SettingsController extends BaseController
         $client = OAuthClientFactory::create($type, $config);
 
         return $client;
+    }
+
+    protected function dragCaptchaValidator($registration, $authSettings)
+    {
+        if (array_key_exists('captcha_enabled', $authSettings) && (1 == $authSettings['captcha_enabled']) && empty($registration['mobile'])) {
+            $biz = $this->getBiz();
+            $bizDragCaptcha = $biz['biz_drag_captcha'];
+
+            $dragcaptchaToken = empty($registration['dragCaptchaToken']) ? '' : $registration['dragCaptchaToken'];
+            $bizDragCaptcha->check($dragcaptchaToken);
+        }
     }
 
     /**

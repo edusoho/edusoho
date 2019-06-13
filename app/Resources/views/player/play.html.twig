@@ -27,6 +27,7 @@
           data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(false) }}"
           data-player="{{player}}"
           data-agentInWhiteList="{{agentInWhiteList}}"
+          data-strict="{{setting('storage.support_mobile', 0)}}"
           data-autoplay="{{ context.autoplay|default(setting('storage.video_auto_play', true)) }}"
           {% if not file.convertParams.hasVideoWatermark|default(0) and setting('storage.video_watermark') >0 and setting('storage.video_watermark_image') %}
             data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null) }}"
