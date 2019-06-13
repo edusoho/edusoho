@@ -95,23 +95,15 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $paperResult = $event->getSubject();
         $activity = $this->getActivityService()->getActivity($paperResult['lessonId']);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        if (empty($task)) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'wechat_notification_error', "发送微信通知失败:获取任务失败", $paperResult);
+
+            return;
+        }
+
         if ('testpaper' == $paperResult['type']) {
             $key = 'examResult';
             $logName = 'wechat_notify_exam_result';
-        } elseif ('homework' == $paperResult['type']) {
-            $key = 'homeworkResult';
-            $logName = 'wechat_notify_homework_result';
-        } else {
-            return;
-        }
-
-        if (empty($task)) {
-            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, '发送微信通知失败:获取任务失败');
-
-            return;
-        }
-
-        if ('testpaper' == $paperResult['type']) {
             $data = array(
                 'first' => array('value' => '同学，您好，你的试卷已批阅完成'),
                 'keyword1' => array('value' => $task['title']),
@@ -119,6 +111,8 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'remark' => array('value' => '再接再厉哦'),
             );
         } elseif ('homework' == $paperResult['type']) {
+            $key = 'homeworkResult';
+            $logName = 'wechat_notify_homework_result';
             $course = $this->getCourseService()->getCourse($task['courseId']);
             $teachers = $this->getCourseMemberService()->searchMembers(
                 array('courseId' => $course['id'], 'role' => 'teacher', 'isVisible' => 1),
@@ -140,6 +134,8 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'keyword3' => array('value' => $nickname),
                 'remark' => array('value' => '作业结果：'.$this->testpaperStatus[$paperResult['passedStatus']]),
             );
+        } else {
+            return;
         }
 
         $templateId = $this->getWeChatService()->getTemplateId($key);
