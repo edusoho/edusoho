@@ -9972,6 +9972,7 @@ material.common_table.no_need_transcode: 无需转码
 material.common_table.label.has_mp4: 已生成MP4
 material_lib.search.type.title: 文件名称
 material_lib.search.type.course: 课程名称
+classroom.back_btn_text: 返回班级
 
 # 微信通知
 wechat.notification.open_notification_hint_title: 为享受更好的服务，建议您开启微信课程通知。

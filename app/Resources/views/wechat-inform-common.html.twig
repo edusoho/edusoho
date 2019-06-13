@@ -24,6 +24,6 @@
     </div>
   </div>
   <div class="{% if goto|default(null) %}hidden-xs{% endif %} text-center">
-    <a class="cd-btn cd-btn-primary wechat-pay-inform__btn" href="{{ goto }}">{{'course.task.learning.back_course_btn'|trans}}</a>
+    <a class="cd-btn cd-btn-primary wechat-pay-inform__btn" href="{{ goto }}">{{ btnText|trans|default('form.btn.return'|trans)}}</a>
   </div>
 </div>
