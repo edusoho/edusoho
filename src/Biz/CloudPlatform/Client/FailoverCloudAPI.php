@@ -233,7 +233,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
         curl_setopt($curl, CURLOPT_TIMEOUT, 3);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_URL, 'http://api-common.b0.upaiyun.com/serverList.json');
+        curl_setopt($curl, CURLOPT_URL, 'http://serverlist.edusoho.net/serverList.json');
 
         $response = curl_exec($curl);
 

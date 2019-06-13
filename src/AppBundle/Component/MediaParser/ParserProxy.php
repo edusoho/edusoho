@@ -68,7 +68,7 @@ class ParserProxy
 
     public function prepareYoukuMediaUri($video)
     {
-        if ('youku' == $video['mediaSource']) {
+        if (in_array($video['mediaSource'], array('youku', 'qqvideo'))) {
             return $this->prepareMediaUri($video);
         }
 

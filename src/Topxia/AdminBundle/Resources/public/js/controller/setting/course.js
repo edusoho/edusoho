@@ -8,30 +8,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        if($('#show-student-num-open').data('showable') == 1) {
-          $('#show-student-num-open').attr('checked','checked');
-          if($('#show-student-num').data('showmode') == 'studentNum') {
-            $('#show-student-num').attr('checked','checked');
-          } else {
-            $('#show-hit-num').attr('checked','checked');
-          }
-        } else {
-          $('#show-student-num-close').attr('checked','checked');
-          if ($('#show-student-num').data('showmode') == 'studentNum') {
-            $('#show-student-num').attr('checked','checked');
-          } else {
-            $('#show-hit-num').attr('checked','checked');
-          }
-          $('#show_cover_num_mode').attr('hidden','hidden');
-        }
-
-        $('#show-student-num-close').click(function(){
-          $('#show_cover_num_mode').attr('hidden','hidden');
-        });
-        $('#show-student-num-open').click(function(){
-          $('#show_cover_num_mode').removeAttr('hidden');
-        });
-
         $(".buy-userinfo-list").sortable({
             'distance': 20
         });
