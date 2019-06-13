@@ -7211,8 +7211,8 @@ admin.setting_wechat_auth.wechat_pay_hint: >
   支付。
 admin.setting_wechat_auth.web_secret_hint: APP ID和APP Secret来自<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>创建的网站应用。
 admin.setting_wechat_auth.account_secret_hint: APP ID和APP Secret来自<a target="_blank" href="https://mp.weixin.qq.com">微信公众平台</a>服务号内，在左侧栏【开发】-【基本配置】-【开发者ID】中。
-admin.setting_wechat_auth.account_number_hint: 商户号来自微信公众平台内左侧栏【微信支付】-【商户信息】
-admin.setting_wechat_auth.api_secret_key_hint: 微信商户平台API密钥需要登录微信商户平台，在【账户设置】-【API安全】中设置密匙
+admin.setting_wechat_auth.account_number_hint: 商户号来自<a target="_blank" href="https://mp.weixin.qq.com">微信公众平台</a>内左侧栏【微信支付】-【商户信息】
+admin.setting_wechat_auth.api_secret_key_hint: 微信商户平台API密钥需要登录<a target="_blank" href="https://pay.weixin.qq.com">微信商户平台</a>，在【账户设置】-【API安全】中设置密匙
 admin.setting_wechat_auth.tutorial_button: 查看教程
 admin.setting_wechat_auth.web_appid: 网站AppID
 admin.setting_wechat_auth.web_secret: 网站AppSecret

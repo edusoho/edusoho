@@ -28,7 +28,11 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
         }
 
         $conditions = array('courseId' => $course['id'], 'role' => 'student');
-        $members = $this->getCourseMemberService()->searchMembers($conditions, array(), 0, PHP_INT_MAX, array('userId'));
+        if ($courseSet['parentId']) {
+            $members = $this->findClassroomMembers($task, $course);
+        } else {
+            $members = $this->getCourseMemberService()->searchMembers($conditions, array(), 0, PHP_INT_MAX, array('userId'));
+        }
         if (empty($members)) {
             return;
         }
@@ -59,8 +63,39 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
         $this->sendNotifications($key, 'wechat_notify_lesson_publish', $userIds, $templateData);
     }
 
+    protected function findClassroomMembers($task, $course)
+    {
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($task['courseId']);
+
+        if (empty($classroom)) {
+            return array();
+        }
+
+        if ($course['locked']) {
+            $excludeStudents = $this->getCourseMemberService()->searchMembers(
+                array('courseId' => $course['parentId'], 'role' => 'student'),
+                array(),
+                0,
+                PHP_INT_MAX
+            );
+            $excludeStudentIds = ArrayToolkit::column($excludeStudents, 'userId');
+        }
+
+        $conditions = array('classroomId' => $classroom['id'], 'role' => 'student');
+        if (!empty($excludeStudentIds)) {
+            $conditions['excludeUserIds'] = $excludeStudentIds;
+        }
+
+        return $this->getClassroomService()->searchMembers($conditions, array(), 0, PHP_INT_MAX);
+    }
+
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->biz->service('Classroom:ClassroomService');
     }
 }
