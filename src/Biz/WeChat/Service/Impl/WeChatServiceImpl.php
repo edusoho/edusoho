@@ -132,7 +132,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             array('lastRefreshTime' => 'ASC'),
             0,
             $refreshNum,
-            array('id', 'openId', 'unionId')
+            array('id', 'openId', 'unionId', 'userId')
         );
 
         if (empty($weChatUsers)) {
@@ -175,11 +175,16 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
         $freshWeChatUsers = $biz['wechat.template_message_client']->batchGetUserInfo($userList);
         $freshWeChatUsers = ArrayToolkit::index($freshWeChatUsers, 'openid');
+
         $userIds = ArrayToolkit::column($weChatUsers, 'userId');
+        $unionIds = ArrayToolkit::column($weChatUsers, 'unionId');
 
-        $userBinds = $this->getUserService()->findUserBindByTypeAndToIds('weixin', $userIds);
-        $userBinds = ArrayToolkit::index($userBinds, 'fromId');
+        $userBindsByToIds = $this->getUserService()->findUserBindByTypeAndToIds('weixin', $userIds);
+        $userBindsByToIds = ArrayToolkit::index($userBindsByToIds, 'fromId');
+        $userBindsByUnionIds = $userBinds = $this->getUserService()->findUserBindByTypeAndFromIds('weixin', $unionIds);
+        $userBindsByUnionIds = ArrayToolkit::index($userBindsByUnionIds, 'fromId');
 
+        $userBinds = array_merge($userBindsByToIds, $userBindsByUnionIds);
         $batchUpdateHelper = new BatchUpdateHelper($this->getUserWeChatDao());
         foreach ($weChatUsers as $weChatUser) {
             $freshWeChatUser = isset($freshWeChatUsers[$weChatUser['openId']]) ? $freshWeChatUsers[$weChatUser['openId']] : array();
