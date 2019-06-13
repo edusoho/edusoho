@@ -21,7 +21,6 @@ class DefaultController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $this->getBiz()->service('WeChat:WeChatService')->refreshOfficialWeChatUsers(0, 200);
         $user = $this->getCurrentUser();
 
         if (!empty($user['id'])) {
