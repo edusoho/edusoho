@@ -1,6 +1,6 @@
 {% import 'admin/macro.html.twig' as admin_macro %}
 <tr id="notification-table-tr-{{ notification.id }}">
-  <td>{{ event.content|sub_text(10) }}</td>
+  <td>{{ event.content|sub_text(20) }}</td>
   <td>{{ notification.createdTime|date('Y-m-d H:i:s') }}</td>
   <td>
     {% if event.status == 'finish' %}
