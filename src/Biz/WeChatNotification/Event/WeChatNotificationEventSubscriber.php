@@ -96,7 +96,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $activity = $this->getActivityService()->getActivity($paperResult['lessonId']);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
         if (empty($task)) {
-            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'wechat_notification_error', "发送微信通知失败:获取任务失败", $paperResult);
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'wechat_notification_error', '发送微信通知失败:获取任务失败', $paperResult);
 
             return;
         }
