@@ -1,4 +1,6 @@
 import { isMobileDevice } from 'common/utils';
+import 'store';
+const WECHAT_QRCODE_SHOW = 'WECHAT_QRCODE_SHOW_';
 
 export default class wechatInform {
   constructor() {
@@ -6,10 +8,15 @@ export default class wechatInform {
     this.$pendant = $('.js-wechat-pendant');
     this.$qrcode = $('.js-wechat-qrcode');
     this.$mask = $('.js-wechat-mask');
+    this.todayDate = new Date().getDate();
+    this.key = WECHAT_QRCODE_SHOW + this.$section.data('userId');
     this.init();
   }
 
   init() {
+    if (!store.get(this.key) || store.get(this.key) != this.todayDate) {
+      this.$section.removeClass('hidden');
+    }
     this.bindEvent();
     this.initImg();
   }
@@ -20,6 +27,9 @@ export default class wechatInform {
   }
   
   closeWechatInform(event) {
+    if (!store.get(this.key) || store.get(this.key) != this.todayDate) {
+      store.set(this.key, this.todayDate);
+    }
     const $target = $(event.currentTarget);
     event.stopPropagation();
     $target.parent().hide();
