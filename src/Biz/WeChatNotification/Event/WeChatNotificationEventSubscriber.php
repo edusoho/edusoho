@@ -292,7 +292,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'class' => 'Biz\WeChatNotification\Job\LiveNotificationJob',
                 'misfire_threshold' => 60 * 60,
                 'args' => array(
-                    'key' => 'oneHourBeforeLiveOpen',
+                    'key' => 'oneDayBeforeLiveOpen',
                     'taskId' => $task['id'],
                     'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true),
                 ),
@@ -307,7 +307,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'class' => 'Biz\WeChatNotification\Job\LiveNotificationJob',
                 'misfire_threshold' => 60 * 10,
                 'args' => array(
-                    'key' => 'oneDayBeforeLiveOpen',
+                    'key' => 'oneHourBeforeLiveOpen',
                     'taskId' => $task['id'],
                     'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true),
                 ),
