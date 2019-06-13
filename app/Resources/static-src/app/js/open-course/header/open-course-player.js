@@ -1,6 +1,6 @@
 import EsMessenger from 'app/common/messenger';
 import swfobject from 'es-swfobject';
-
+import { getSupportedPlayer } from 'common/video-player-judge';
 import CourseAd from './course-ad';
 
 class OpenCoursePlayer {
@@ -71,6 +71,10 @@ class OpenCoursePlayer {
   }
 
   onVideo() {
+    if (getSupportedPlayer() === 'flash') {
+      this.flashTip();
+      return;
+    }
     let lesson = this.lesson;
             
     if (lesson.type == 'video' || lesson.type == 'audio') {
@@ -89,6 +93,10 @@ class OpenCoursePlayer {
   }
 
   onSWF() {
+    if (!swfobject.hasFlashPlayerVersion('11')) {
+      this.flashTip();
+      return;
+    }
     let lesson = this.lesson;
     let $swfContent = $('#lesson-preview-swf-player');
 
@@ -200,6 +208,17 @@ class OpenCoursePlayer {
       courseUrl: this.$element.data('get-recommend-course-url')
     });
     this.courseAd.show();
+  }
+
+  flashTip(flag) {
+    const html = `
+    <div class="alert alert-warning alert-dismissible fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+      </button>
+      ${Translator.trans('site.flash_not_install_hint')}
+    </div>`;
+    $('#lesson-preview-swf-player').html(html).show();
   }
 
 }
