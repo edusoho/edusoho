@@ -540,10 +540,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $this->fillLessonMediaFields($lesson);
 
-        if (isset($fields['title'])) {
-            $fields['title'] = $this->purifyHtml($fields['title']);
-        }
-
         $lesson['status'] = 'unpublished';
         $lesson['number'] = $this->_getNextLessonNumber($lesson['courseId']);
         $lesson['seq'] = $this->_getNextCourseItemSeq($lesson['courseId']);
