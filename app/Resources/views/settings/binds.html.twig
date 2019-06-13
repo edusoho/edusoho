@@ -29,7 +29,7 @@
             <a class="btn cd-btn cd-btn-ghost-default js-unbind-btn" data-url="{{ path('settings_binds_unbind', {'type':type}) }}" href="javascript:;">{{ 'form.btn.bind_cancel'|trans }}</a>
           {% else %}
             <span class="es-setting-status">{{'user.fields.mobile_label.no_bind'|trans}}</span>
-            <a class="btn cd-btn cd-btn-ghost-default {% if type == 'weixinweb' %}js-wechat-btn{% endif %}" href="javascript:;">{{ 'form.btn.bind_account'|trans }}</a>
+            <a class="btn cd-btn cd-btn-ghost-default {% if type == 'weixinweb' %}js-wechat-btn{% endif %}" data-url="{{ path('settings_binds_unbind', {'type':type}) }}" href="javascript:;">{{ 'form.btn.bind_account'|trans }}</a>
           {% endif %}
         </span>
       </div>
