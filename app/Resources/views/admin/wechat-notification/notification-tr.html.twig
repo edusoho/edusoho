@@ -3,10 +3,8 @@
   <td>{{ event.content|sub_text(10) }}</td>
   <td>{{ notification.createdTime|date('Y-m-d H:i:s') }}</td>
   <td>
-    {% if event.status == 'success' %}
-      {{ "wechat.notification.status.success"|trans }}
-    {% elseif event.status == 'fail' %}
-      {{ "wechat.notification.status.fail"|trans }}
+    {% if event.status == 'finish' %}
+      {{ "wechat.notification.status.finish"|trans }}
     {% else %}
       {{ "wechat.notification.status.sending"|trans }}
     {% endif %}
