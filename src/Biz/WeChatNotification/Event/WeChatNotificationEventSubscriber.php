@@ -9,6 +9,7 @@ use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Biz\AppLoggerConstant;
+use AppBundle\Common\ArrayToolkit;
 
 class WeChatNotificationEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -26,6 +27,8 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'course.task.delete' => 'onTaskDelete',
             'exam.reviewed' => 'onTestpaperReviewd',
             'payment_trade.paid' => 'onPaid',
+            'course.task.create.sync' => 'onTaskCreateSync',
+            'course.task.publish.sync' => 'onTaskPublishSync',
         );
     }
 
@@ -38,16 +41,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        if ('live' == $task['type']) {
-            $key = 'liveTaskUpdate';
-            $this->deleteLiveNotificationJob($task);
-            $this->registerLiveNotificationJob($task);
-        } else {
-            $key = 'normalTaskUpdate';
-        }
-
-        $this->deleteLessonPublishJob($task);
-        $this->registerLessonNotificationJob($key, $task);
+        $this->sendTasksPublishNotification(array($task));
     }
 
     public function onTaskUnpublish(Event $event)
@@ -71,6 +65,28 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             if ('published' == $task['status']) {
                 $this->registerLiveNotificationJob($task);
             }
+        }
+    }
+
+    public function onTaskPublishSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        if ('published' == $task['status'] && $this->isTaskCreateSyncFinished($task)) {
+            $tasks = $this->getCopiedTasks($task);
+
+            $this->sendTasksPublishNotification($tasks);
+        }
+    }
+
+    public function onTaskCreateSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        if ('published' == $task['status']) {
+            $tasks = $this->getCopiedTasks($task);
+
+            $this->sendTasksPublishNotification($tasks);
         }
     }
 
@@ -213,6 +229,22 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $key, $list[0]['template_args']);
     }
 
+    protected function sendTasksPublishNotification($tasks)
+    {
+        foreach ($tasks as $task) {
+            if ('live' == $task['type']) {
+                $key = 'liveTaskUpdate';
+                $this->deleteLiveNotificationJob($task);
+                $this->registerLiveNotificationJob($task);
+            } else {
+                $key = 'normalTaskUpdate';
+            }
+
+            $this->deleteLessonPublishJob($task);
+            $this->registerLessonNotificationJob($key, $task);
+        }
+    }
+
     private function getOrderTargetDetailUrl($targetType, $targetId)
     {
         switch ($targetType) {
@@ -282,6 +314,30 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             );
             $this->getSchedulerService()->register($job);
         }
+    }
+
+    private function getCopiedTasks($task)
+    {
+        if (empty($task)) {
+            return array();
+        }
+
+        $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        $tasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
+
+        return $tasks;
+    }
+
+    private function isTaskCreateSyncFinished($task)
+    {
+        $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        $tasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
+
+        if (count($tasks) == count($courses)) {
+            return true;
+        }
+
+        return false;
     }
 
     private function deleteLessonPublishJob($task)
@@ -380,5 +436,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     protected function getNotificationService()
     {
         return $this->getBiz()->service('Notification:NotificationService');
+    }
+
+    protected function getTaskDao()
+    {
+        return $this->getBiz()->dao('Task:TaskDao');
     }
 }
