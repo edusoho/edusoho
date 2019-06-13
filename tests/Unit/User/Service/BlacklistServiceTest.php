@@ -184,13 +184,12 @@ class BlacklistServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'getByUserIdAndBlackId',
                     'returnValue' => array('id' => 1),
-                )
+                ),
             )
         );
 
         $this->getBlacklistService()->addBlacklist($blacklist);
     }
-
 
     public function testDeleteBlacklistByUserIdAndBlackId()
     {
