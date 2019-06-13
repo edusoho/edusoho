@@ -14,7 +14,7 @@
       {% set btnText = 'course.task.learning.back_course_btn'|trans %}
     {% elseif product.targetType|default('null') == 'classroom' %}
       {% set btnText = 'classroom.back_btn_text'|trans %}
-    {% endif %}
+    {% endif
     {% include 'wechat-inform-common.html.twig' with {'type': 'pay', 'weChatUser' : weChatUser, 'btnText': btnText} %}
   {% else %}
     <div class="cd-feedback js-feedback">
