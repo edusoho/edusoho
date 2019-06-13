@@ -162,7 +162,9 @@ export default {
     }).then(res => {
       this.course = res;
     }).catch(err => {
-      Toast.fail(err.message)
+      //个人课程购买后按返回键，造成重复下单，报错，直接返回详情页
+        this.$router.go(-1)
+     // Toast.fail(err.message)
     })
   },
   methods: {
