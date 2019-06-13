@@ -145,7 +145,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
                 $eventHelper->add('id', $batch['eventId'], array(
                     'totalCount' => $results[$batch['sn']]['total_count'],
                     'succeedCount' => $results[$batch['sn']]['succeed_count'],
-                    'status' => empty($results[$batch['sn']]['failure_reason']) ? 'success' : 'fail',
+                    'status' => 'finish',
                     'reason' => empty($results[$batch['sn']]['failure_reason']) ? '' : $results[$batch['sn']]['failure_reason'],
                 ));
                 $batchHelper->add('id', $batch['id'], array('status' => 'finished'));

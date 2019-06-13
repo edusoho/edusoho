@@ -17,6 +17,9 @@ class NotificationEventDaoImpl extends AdvancedDaoImpl implements NotificationEv
             'conditions' => array(
                 'id = :id',
             ),
+            'serializes' => array(
+                'reason' => 'json',
+            ),
         );
     }
 

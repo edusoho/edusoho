@@ -4748,6 +4748,10 @@ admin.wechat_notification.template_content_sample: Template Content Sample
 admin.wechat_notification.send_object: Send Object
 admin.wechat_notification.operation: Operation
 admin.wechat_notification.template_content: Notification Content
+admin.wechat_notification.template_content_detail: Detail
+admin.wechat_notification.failure_reason: Failure Reason
+admin.wechat_notification.failure_number: Failure Number
+admin.wechat_notification.failure_reason.empty: No Failure Reason
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
@@ -5886,25 +5890,16 @@ admin.setting_wechat_auth.wechat_auth_login: WeChat Authorize Login
 admin.setting_wechat_auth.wechat_notification: WeChat Account Notification
 admin.setting_wechat_auth.wechat_pay: WeChat Pay
 admin.setting_wechat_auth.web_scan_login_hint: >
-  If approved, users can login the site by scanning qrcode,please go to <a target="_blank" href="https://open.weixin.qq.com">wechat open platform</a> 
-  to apply<a target="_blank" href="https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN">Web application development</a>；
-  'Application conditions: Resiter at the open platform and get certification.'
+  If approved, users can login the site by scanning qrcode.<br>Please fill in the website AppID and the website AppSecret in the form on the right.
 admin.setting_wechat_auth.wechat_auth_login_hint: >
-  If turned on, users can register or<br>
-  login the site with wechat id in wechat app. How to access:<br>
-  1.You need a certified <a target= "_blank" href = "https://mp.weixin.qq.com" >wechat service account</a>;<br>
-  2.A certified wechat open platform account;<br>
-  3.Bind the wechat service account with <a target="_blank" href="https://open.weixin.qq.com" >the open platform</a>.
+  If turned on, users can register or login the site with wechat id in wechat app.<br>
+  Please fill in the service number AppID and service number AppSecretMP file verification code in the form on the right.
 admin.setting_wechat_auth.wechat_notification_hint: >
-  After opening, users who bind WeChat and pay attention to the service number<br>
-  can receive the WeChat service number notification。How to access:<br>
-  1.First open the authorized login in WeChat;<br>
-  2.Template message function plugin has been activated;<br>
-  3.IP whitelist has been set.
+  After the activation, the user who binds WeChat and pays attention to the service number can receive the WeChat service number template message.<br>
+  Please open the webpage scan code login and the authorized login in WeChat, and fill in the service number QR code in the form on the right.
 admin.setting_wechat_auth.wechat_pay_hint: >
-  After opening, it can be used on the PC side, WeChat APP, WAP<br>
-  to select WeChat payment, only support configuration<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">public account payment</a><br>
-  to pay。
+  After opening, it can be used on the PC side, WeChat APP, WAP to select WeChat payment, only support configuration<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html"> public account payment </a>to pay。<br>
+  Please fill in the service number AppID, service number AppSecret, MP file verification code, merchant number and WeChat merchant platform API key in the form on the right.
 admin.setting_wechat_auth.web_secret_hint: APP ID and APP Secret can be found at <a target="_blank" href="https://open.weixin.qq.com"> wechat oepn platform </a> - create Web applications.
 admin.setting_wechat_auth.account_secret_hint: APP ID APP Secret can be found at <a target="_blank" href="https://mp.weixin.qq.com/"> wechat public platform </a> - your services account, check the left column "development" - "Basic configuration" - "Developer ID ".
 admin.setting_wechat_auth.account_number_hint: The merchant number is from the left side of the <a target="_blank" href="https://mp.weixin.qq.com/"> wechat public platform </a>, 'WeChat Payment' - 'Business Information'
@@ -5920,6 +5915,7 @@ admin.setting_wechat_auth.mp_token: MP File verification code
 admin.setting_wechat_auth.api_secret_key: Wechat merchant platform API Key
 admin.setting_wechat_auth.account_code_empty: No QR Code Yet
 admin.setting_wechat_auth.account_code_view: View Larger Image
+admin.setting_wechat_auth.account_code_download: Download QR code
 admin.developer_setting.cloud_notification_api: Notification API
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
@@ -8697,8 +8693,7 @@ wechat.notification.record_send_time: Send time
 wechat.notification.record_send_status: Send status
 wechat.notification.record_number: receive/send number
 wechat.notification.record.empty: empty send records
-wechat.notification.status.success: Send Success
-wechat.notification.status.fail: Send Fail
+wechat.notification.status.finish: Send Finish
 wechat.notification.status.sending: Sending
 wechat.notification.cloud.tips: You have not yet opened an education cloud and cannot use the WeChat service number notification function
 wechat.notification.cloud_open: Go to the opening

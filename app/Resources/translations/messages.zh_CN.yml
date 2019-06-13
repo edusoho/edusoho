@@ -5780,6 +5780,10 @@ admin.wechat_notification.template_content_sample: 模板内容示例
 admin.wechat_notification.send_object: 发送对象
 admin.wechat_notification.operation: 操作
 admin.wechat_notification.template_content: 通知内容
+admin.wechat_notification.template_content_detail: 详情
+admin.wechat_notification.failure_reason: 失败原因
+admin.wechat_notification.failure_number: 失败人数
+admin.wechat_notification.failure_reason.empty: 暂无失败原因
 
 # 数据统计
 admin.operation_analysis.data_type_placeholder: --选择数据类型--
@@ -7190,25 +7194,16 @@ admin.setting_wechat_auth.wechat_auth_login: 微信内授权登录
 admin.setting_wechat_auth.wechat_notification: 微信服务号通知
 admin.setting_wechat_auth.wechat_pay: 微信支付
 admin.setting_wechat_auth.web_scan_login_hint: >
-  开通后，网站PC端将支持微信扫码登录，请先到 <a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a> 
-  申请<a target="_blank" href="https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN">网站应用开发</a>；
-  申请条件：在微信开放平台注册并且完成实名认证。
+  开通后，网站PC端将支持微信扫码登录。<br>请先填写右侧表单中的网站AppID及网站AppSecret。
 admin.setting_wechat_auth.wechat_auth_login_hint: >
-  开通后，支持使用微信号在手机端微信APP<br>
-  内快捷注册或登录网站。如何开通：<br>
-  1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；<br>
-  2.一个已认证的微信开放平台帐号；<br> 
-  3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
+  开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。<br>
+  请先填写右侧表单中的服务号AppID、服务号AppSecretMP文件验证码。
 admin.setting_wechat_auth.wechat_notification_hint: >
-  开通后，绑定微信并且关注服务号的用户即<br>
-  可收取微信服务号通知。如何开通：<br>
-  1.先开通微信内授权登录；<br>
-  2.已开通模板消息功能插件；<br>
-  3.已设置IP白名单。
+  开通后，绑定微信并且关注服务号的用户即可收取微信服务号模板消息。<br>
+  请先开启网页扫码登录和微信内授权登录，并填写右侧表单中的服务号二维码。
 admin.setting_wechat_auth.wechat_pay_hint: >
-  开通后，可在PC端、微信APP、WAP内<br>
-  选择微信支付，仅支持配置<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">公众号支付</a><br>
-  支付。
+  开通后，可在PC端、微信APP、WAP内选择微信支付，仅支持配置<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">公众号支付</a>支付。<br>
+  请先填写右侧表单中的服务号AppID、服务号AppSecret、MP文件验证码、商户号以及微信商户平台API密钥。
 admin.setting_wechat_auth.web_secret_hint: APP ID和APP Secret来自<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>创建的网站应用。
 admin.setting_wechat_auth.account_secret_hint: APP ID和APP Secret来自<a target="_blank" href="https://mp.weixin.qq.com">微信公众平台</a>服务号内，在左侧栏【开发】-【基本配置】-【开发者ID】中。
 admin.setting_wechat_auth.account_number_hint: 商户号来自<a target="_blank" href="https://mp.weixin.qq.com">微信公众平台</a>内左侧栏【微信支付】-【商户信息】
@@ -7224,6 +7219,7 @@ admin.setting_wechat_auth.mp_token: MP文件验证码
 admin.setting_wechat_auth.api_secret_key: 微信商户平台API密钥
 admin.setting_wechat_auth.account_code_empty: 暂未设置二维码
 admin.setting_wechat_auth.account_code_view: 查看大图
+admin.setting_wechat_auth.account_code_download: 下载二维码
 
 #开发者设置
 admin.developer_setting.cloud_notification_api: 通知服务API
@@ -9991,8 +9987,7 @@ wechat.notification.record_send_status: 发送状态
 wechat.notification.record_number: 接收/发送人数
 wechat.notification.record.empty: 暂无发送记录
 wechat.notification.switch_status_error: 微信服务号通知开关失败
-wechat.notification.status.success: 发送成功
-wechat.notification.status.fail: 发送失败
+wechat.notification.status.finish: 发送完成
 wechat.notification.status.sending: 发送中
 wechat.notification.cloud.tips: 您还未开通教育云，无法正常使用微信服务号通知功能。
 wechat.notification.cloud_open: 前往开通
