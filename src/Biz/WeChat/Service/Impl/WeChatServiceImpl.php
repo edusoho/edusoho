@@ -13,6 +13,7 @@ use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use QiQiuYun\SDK\Constants\NotificationChannels;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class WeChatServiceImpl extends BaseService implements WeChatService
 {
@@ -225,6 +226,10 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             return true;
         }
 
+        if (!$this->isCloudOpen()) {
+            return false;
+        }
+
         $biz = $this->biz;
         try {
             if (1 == $newSetting['wechat_notification_enabled']) {
@@ -268,6 +273,22 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         );
 
         return $jobs;
+    }
+
+    protected function isCloudOpen()
+    {
+        try {
+            $api = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return false;
+        }
+
+        if (empty($info['accessCloud'])) {
+            return false;
+        }
+
+        return true;
     }
 
     private function registerJobs()
