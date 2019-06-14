@@ -54,7 +54,7 @@
         <div class="setting-label">
           <label class="setting-title">{{'admin.setting_wechat_auth.wechat_notification'|trans}}</label>
           <label class="form-switch setting-switch {% if wechatSetting.wechat_notification_enabled %}checked{% endif %}">
-            <input type="checkbox" name="wechatSetting[wechat_notification_enabled]" value="{{ wechatSetting.wechat_notification_enabled }}" id="wechat_notification_enabled" data-toggle="switch">
+            <input type="checkbox" name="wechatSetting[wechat_notification_enabled]" value="{{ wechatSetting.wechat_notification_enabled }}" id="wechat_notification_enabled" data-toggle="switch" {% if not isCloudOpen %}disabled{% endif %}>
             <input type="hidden" name="wechatSetting[wechat_notification_enabled]" value="{{ wechatSetting.wechat_notification_enabled }}">
           </label>
         </div>
