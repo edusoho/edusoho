@@ -12,7 +12,7 @@ class NotificationEventAlterReason extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("ALTER TABLE `notification_event` modify column `reason` text COMMENT '失败原因';");
-        $connection->exec("ALTER TABLE `notification_event` modify COLUMN `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT 'sending,finish';");
+        $connection->exec("ALTER TABLE `notification_event` modify COLUMN `status` varchar(32) NOT NULL DEFAULT 'sending' COMMENT 'sending,finish';");
     }
 
     /**
