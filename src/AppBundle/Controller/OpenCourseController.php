@@ -555,9 +555,9 @@ class OpenCourseController extends BaseOpenCourseController
                 $lesson['convertStatus'] = empty($file['convertStatus']) ? 'none' : $file['convertStatus'];
                 $lesson['storage'] = $file['storage'];
             }
-        } else {
+        } elseif (in_array($lesson['mediaSource'], array('youku', 'NeteaseOpenCourse', 'qqvideo'))) {
             $proxy = new ParserProxy();
-            $lesson = $proxy->prepareYoukuMediaUri($lesson);
+            $lesson = $proxy->prepareMediaUri($lesson);
         }
 
         if ('liveOpen' == $lesson['type']) {
