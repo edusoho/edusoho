@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
+use QiQiuYun\SDK\Constants\NotificationChannelTypes;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -85,13 +86,13 @@ class WeChatSettingController extends BaseController
         try {
             if (1 == $newSetting['wechat_notification_enabled']) {
                 $biz['qiQiuYunSdk.notification']->openAccount();
-                $result = $biz['qiQiuYunSdk.notification']->openChannel(NotificationChannels::CHANNEL_WECHAT, array(
+                $result = $biz['qiQiuYunSdk.notification']->openChannel(NotificationChannelTypes::WECHAT, array(
                     'app_id' => $loginConnect['weixinmob_key'],
                     'app_secret' => $loginConnect['weixinmob_secret'],
                 ));
             } else {
                 $biz['qiQiuYunSdk.notification']->closeAccount();
-                $result = $biz['qiQiuYunSdk.notification']->closeChannel(NotificationChannels::CHANNEL_WECHAT);
+                $result = $biz['qiQiuYunSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT);
             }
         } catch (\RuntimeException $e) {
             $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
