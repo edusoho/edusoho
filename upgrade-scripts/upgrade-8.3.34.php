@@ -117,8 +117,8 @@ class EduSohoUpgrade extends AbstractUpdater
               `content` text NOT NULL COMMENT '通知主体',
               `totalCount` int(10) unsigned NOT NULL COMMENT '通知数量',
               `succeedCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '通知发送成功数量',
-              `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT 'sending,fail,success',
-              `reason` varchar(128) NOT NULL DEFAULT '' COMMENT '失败原因',
+              `status` varchar(32) NOT NULL DEFAULT 'sending' COMMENT 'sending,finish',
+              `reason` text COMMENT '失败原因',
               `createdTime` int(10) unsigned NOT NULL,
               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
