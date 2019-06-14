@@ -76,7 +76,7 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
         $marks = str_repeat('?,', count($openIds) - 1).'?';
         $sql = "SELECT openId FROM {$this->table} WHERE openId IN ({$marks}) AND type = ?";
 
-        return $this->db()->fetchAll($sql, array_merge(array($type), $openIds)) ?: array();
+        return $this->db()->fetchAll($sql, array_merge($openIds, array($type))) ?: array();
     }
 
     public function findSubscribedUsersByUserIdsAndType($userIds, $type)
@@ -88,6 +88,6 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
         $marks = str_repeat('?,', count($userIds) - 1).'?';
         $sql = "SELECT openId FROM {$this->table} WHERE userId IN ({$marks}) AND type = ? AND isSubscribe = 1";
 
-        return $this->db()->fetchAll($sql, array_merge(array($type), $userIds)) ?: array();
+        return $this->db()->fetchAll($sql, array_merge($userIds, array($type))) ?: array();
     }
 }
