@@ -43,7 +43,8 @@ class NotificationSendTable extends Migration
           `seq` int(11) unsigned NOT NULL,
           `createdTime` int(10) unsigned NOT NULL,
           `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
-          PRIMARY KEY (`id`)
+          PRIMARY KEY (`id`),
+          KEY `eventId` (`eventId`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
     }
 

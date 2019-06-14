@@ -59,12 +59,12 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
 
     public function getByTypeAndUnionId($type, $unionId)
     {
-        return $this->getByFields(array('type' => $type, 'unionId' => $unionId));
+        return $this->getByFields(array('unionId' => $unionId, 'type' => $type));
     }
 
     public function getByTypeAndOpenId($type, $openId)
     {
-        return $this->getByFields(array('type' => $type, 'openId' => $openId));
+        return $this->getByFields(array('openId' => $openId, 'type' => $type));
     }
 
     public function findOpenIdsInListsByType($openIds, $type)
@@ -74,7 +74,7 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
         }
 
         $marks = str_repeat('?,', count($openIds) - 1).'?';
-        $sql = "SELECT openId FROM {$this->table} WHERE type = ? AND openId IN ({$marks})";
+        $sql = "SELECT openId FROM {$this->table} WHERE openId IN ({$marks}) AND type = ?";
 
         return $this->db()->fetchAll($sql, array_merge(array($type), $openIds)) ?: array();
     }
@@ -86,7 +86,7 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
         }
 
         $marks = str_repeat('?,', count($userIds) - 1).'?';
-        $sql = "SELECT openId FROM {$this->table} WHERE type = ? AND userId IN ({$marks}) And isSubscribe = 1";
+        $sql = "SELECT openId FROM {$this->table} WHERE userId IN ({$marks}) AND type = ? AND isSubscribe = 1";
 
         return $this->db()->fetchAll($sql, array_merge(array($type), $userIds)) ?: array();
     }

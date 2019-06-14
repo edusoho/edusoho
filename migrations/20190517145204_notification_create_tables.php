@@ -22,7 +22,10 @@ class NotificationCreateTables extends Migration
           `lastRefreshTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上一次数据更新时间',
           `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
           `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
-          PRIMARY KEY (`id`)
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `openId_type` (`openId`,`type`),
+          KEY `unionId_type` (`unionId`,`type`),
+          KEY `userId_type` (`userId`,`type`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
     }
 

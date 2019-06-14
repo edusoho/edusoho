@@ -11,7 +11,7 @@ class UserWechatAddIsSubscribe extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("ALTER TABLE `user_wechat` ADD COLUMN `isSubscribe` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否订阅服务号';");
+        $connection->exec("ALTER TABLE `user_wechat` ADD COLUMN `isSubscribe` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否订阅服务号' AFTER `unionId`;");
     }
 
     /**
