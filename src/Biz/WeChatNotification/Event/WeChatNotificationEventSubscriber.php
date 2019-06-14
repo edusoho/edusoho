@@ -255,7 +255,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         switch ($targetType) {
             case 'course':
-                return $this->generateUrl('course_show', array('id' => $targetId), true);
+                return $this->generateUrl('my_course_show', array('id' => $targetId), true);
 
             case 'classroom':
                 return $this->generateUrl('classroom_show', array('id' => $targetId), true);
@@ -280,7 +280,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'args' => array(
                     'key' => $key,
                     'taskId' => $task['id'],
-                    'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true),
+                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), true),
                 ),
             );
             $this->getSchedulerService()->register($job);
@@ -300,7 +300,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'args' => array(
                     'key' => 'oneDayBeforeLiveOpen',
                     'taskId' => $task['id'],
-                    'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true),
+                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), true),
                 ),
             );
             $this->getSchedulerService()->register($job);
@@ -315,7 +315,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'args' => array(
                     'key' => 'oneHourBeforeLiveOpen',
                     'taskId' => $task['id'],
-                    'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true),
+                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), true),
                 ),
             );
             $this->getSchedulerService()->register($job);
