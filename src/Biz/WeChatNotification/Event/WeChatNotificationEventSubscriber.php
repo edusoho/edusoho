@@ -131,7 +131,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'first' => array('value' => '同学，您好，你的作业已批阅完成'.PHP_EOL),
                 'keyword1' => array('value' => $task['title']),
                 'keyword2' => array('value' => $course['courseSetTitle']),
-                'keyword3' => array('value' => $nickname.PHP_EOL),
+                'keyword3' => array('value' => $nickname),
                 'remark' => array('value' => '作业结果：'.$this->testpaperStatus[$paperResult['passedStatus']]),
             );
         } else {
