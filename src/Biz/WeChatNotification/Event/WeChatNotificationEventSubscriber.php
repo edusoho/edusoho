@@ -105,9 +105,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $key = 'examResult';
             $logName = 'wechat_notify_exam_result';
             $data = array(
-                'first' => array('value' => "同学，您好，你的试卷已批阅完成\r\n"),
+                'first' => array('value' => '同学，您好，你的试卷已批阅完成'.PHP_EOL),
                 'keyword1' => array('value' => $task['title']),
-                'keyword2' => array('value' => $paperResult['score']."\r\n"),
+                'keyword2' => array('value' => $paperResult['score'].PHP_EOL),
                 'remark' => array('value' => '再接再厉哦'),
             );
         } elseif ('homework' == $paperResult['type']) {
@@ -128,10 +128,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             }
 
             $data = array(
-                'first' => array('value' => "同学，您好，你的作业已批阅完成\r\n"),
+                'first' => array('value' => '同学，您好，你的作业已批阅完成'.PHP_EOL),
                 'keyword1' => array('value' => $task['title']),
                 'keyword2' => array('value' => $course['courseSetTitle']),
-                'keyword3' => array('value' => $nickname."\r\n"),
+                'keyword3' => array('value' => $nickname.PHP_EOL),
                 'remark' => array('value' => '作业结果：'.$this->testpaperStatus[$paperResult['passedStatus']]),
             );
         } else {
@@ -166,11 +166,11 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $payTemplateId = $this->getWeChatService()->getTemplateId('paySuccess');
         if (!empty($chargeTemplateId) && 'recharge' == $trade['type']) {
             $data = array(
-                'first' => array('value' => "尊敬的客户，您已充值成功\r\n"),
+                'first' => array('value' => '尊敬的客户，您已充值成功'.PHP_EOL),
                 'keyword1' => array('value' => '现金充值或学习卡'),
                 'keyword2' => array('value' => $trade['trade_sn']),
                 'keyword3' => array('value' => ($trade['amount'] / 100).'元'),
-                'keyword4' => array('value' => date('Y-m-d H:i', $trade['pay_time'])."\r\n"),
+                'keyword4' => array('value' => date('Y-m-d H:i', $trade['pay_time']).PHP_EOL),
                 'remark' => array('value' => '快去看看课程吧~'),
             );
             $options = array('type' => 'url', 'url' => $this->generateUrl('course_set_explore', array(), true));
@@ -189,11 +189,11 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if (!empty($payTemplateId)) {
             $data = array(
-                'first' => array('value' => "尊敬的客户，您已支付成功\r\n"),
+                'first' => array('value' => '尊敬的客户，您已支付成功'.PHP_EOL),
                 'keyword1' => array('value' => $trade['title']),
                 'keyword2' => array('value' => ($trade['amount'] / 100).'元'),
                 'keyword3' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
-                'keyword4' => array('value' => "无\r\n"),
+                'keyword4' => array('value' => '无'.PHP_EOL),
                 'remark' => array('value' => '请前往查看'),
             );
             $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
