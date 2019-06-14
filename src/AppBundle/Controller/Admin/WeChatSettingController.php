@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
+use QiQiuYun\SDK\Constants\NotificationChannelTypes;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
