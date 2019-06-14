@@ -44,8 +44,8 @@ define(function(require, exports, module) {
               $('.js-code-img').attr('src', response.url);
               $('#account_code').val(response.url);
               if ($('.es-qrcode').hasClass('hidden')) {
-                $('es-qrcode').removeClass('hidden');
-                $('code-help-block').addClass('hidden');
+                $('.es-qrcode').removeClass('hidden');
+                $('.code-help-block').addClass('hidden');
               }
             });
           }
