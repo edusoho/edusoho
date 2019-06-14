@@ -47,11 +47,11 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
 
         $userIds = ArrayToolkit::column($members, 'userId');
         $data = array(
-            'first' => array('value' => ('live' == $task['type']) ? '同学，您好，课程有新的直播任务发布' : '同学，您好，课程有新的任务发布'),
+            'first' => array('value' => ('live' == $task['type']) ? "同学，您好，课程有新的直播任务发布\r\n" : "同学，您好，课程有新的任务发布\r\n"),
             'keyword1' => array('value' => $courseSet['title']),
             'keyword2' => array('value' => ('live' == $courseSet['type']) ? '直播课' : '普通课'),
             'keyword3' => array('value' => $teacher['nickname']),
-            'keyword4' => array('value' => ('live' == $task['type']) ? date('Y-m-d H:i', $task['startTime']) : date('Y-m-d H:i', $task['updatedTime'])),
+            'keyword4' => array('value' => ('live' == $task['type']) ? date('Y-m-d H:i', $task['startTime'])."\r\n" : date('Y-m-d H:i', $task['updatedTime'])."\r\n"),
             'remark' => array('value' => ('live' == $task['type']) ? '请准时参加' : '请及时前往学习'),
         );
         $options = array('url' => $url, 'type' => 'url');
