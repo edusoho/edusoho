@@ -42,7 +42,7 @@
         @activityHandle="activityHandle"
         :feedback="feedback"></e-market-part>
     </div>
-    <e-switch-loading v-if="wechatSwitch"></e-switch-loading>
+    <e-switch-loading v-if="wechatSwitch && showFlag" :closeDate="closeDate"></e-switch-loading>
   </div>
 </template>
 
@@ -85,6 +85,8 @@
           'responsive',
           'size-fit',
         ],
+        showFlag: true,
+        closeDate: ''
       };
     },
     computed: {
@@ -92,6 +94,13 @@
     },
     created() {
       const {preview, token} = this.$route.query
+      const userId = JSON.parse(localStorage.getItem('user')).id;
+      const closeDate = `closedDate-${userId}`;
+      const now = new Date();
+      const today = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+      this.closeDate = closeDate;
+      // 判断用户当天是否手动触发过关闭
+      this.showFlag = localStorage.getItem(closeDate) !== today;
 
       if (preview == 1) {
         Api.discoveries({

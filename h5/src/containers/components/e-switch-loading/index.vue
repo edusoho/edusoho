@@ -29,13 +29,22 @@
         show: false
       }
     },
+    props: {
+      closeDate: {
+        type: String,
+        default: ''
+      }
+    },
     computed: {
       ...mapState(['wechatSettings']),
     },
     methods: {
       closeLoading() {
+        const now = new Date();
+        const today = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
         this.isLoading = false;
         this.show = false;
+        localStorage.setItem(this.closeDate, today);
       }
     }
   }
