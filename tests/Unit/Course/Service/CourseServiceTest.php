@@ -207,12 +207,12 @@ class CourseServiceTest extends BaseTestCase
         $this->assertArrayEquals(array(
             'expiryMode' => 'end_date',
             'expiryStartDate' => null,
-            'expiryEndDate' => strtotime($course['expiryEndDate'] . ' 23:59:59'),
+            'expiryEndDate' => strtotime($course['expiryEndDate'].' 23:59:59'),
             'expiryDays' => 0,
         ), $result);
 
         //happy pass2 timestamp
-        $course['expiryEndDate'] = strtotime($course['expiryEndDate'] . ' 23:59:59');
+        $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
         $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
         $this->assertArrayEquals(array(
             'expiryMode' => 'end_date',
@@ -245,13 +245,13 @@ class CourseServiceTest extends BaseTestCase
         $this->assertArrayEquals(array(
             'expiryMode' => 'date',
             'expiryStartDate' => strtotime($course['expiryStartDate']),
-            'expiryEndDate' => strtotime($course['expiryEndDate'] . ' 23:59:59'),
+            'expiryEndDate' => strtotime($course['expiryEndDate'].' 23:59:59'),
             'expiryDays' => 0,
         ), $result);
 
         //happy pass2 timestamp
         $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
-        $course['expiryEndDate'] = strtotime($course['expiryEndDate'] . ' 23:59:59');
+        $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
         $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'validateExpiryMode', array($course));
         $this->assertArrayEquals(array(
             'expiryMode' => 'date',
@@ -431,14 +431,14 @@ class CourseServiceTest extends BaseTestCase
         $course = $this->defaultCourse('course title 1', $courseSet);
         $createCourse = $this->getCourseService()->createCourse($course);
 
-        $fields = array("title" => 'test Title');
+        $fields = array('title' => 'test Title');
 
         $this->getCourseService()->updateBaseInfo($createCourse['id'], $fields);
         $course = $this->getCourseService()->getCourse($createCourse['id']);
         $this->assertEquals('test Title', $course['title']);
 
         $this->getCourseService()->publishCourse($createCourse['id']);
-        $fields = array("services" => array("service"));
+        $fields = array('services' => array('service'));
 
         $this->getCourseService()->updateBaseInfo($createCourse['id'], $fields);
         $course = $this->getCourseService()->getCourse($createCourse['id']);
@@ -681,8 +681,8 @@ class CourseServiceTest extends BaseTestCase
         $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
 
         $result = $this->getCourseService()->findPriceIntervalByCourseSetIds(array(1));
-        $this->assertEquals("0.00", $result[1]['minPrice']);
-        $this->assertEquals("0.00", $result[1]['maxPrice']);
+        $this->assertEquals('0.00', $result[1]['minPrice']);
+        $this->assertEquals('0.00', $result[1]['maxPrice']);
     }
 
     public function testCanJoinCourse()
@@ -690,7 +690,7 @@ class CourseServiceTest extends BaseTestCase
         $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
 
         $result = $this->getCourseService()->canJoinCourse($defaultCourse['id']);
-        $this->assertEquals("course.unpublished", $result['code']);
+        $this->assertEquals('course.unpublished', $result['code']);
     }
 
     public function testCanLearnCourse()
@@ -698,7 +698,7 @@ class CourseServiceTest extends BaseTestCase
         $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
 
         $result = $this->getCourseService()->canLearnCourse($defaultCourse['id']);
-        $this->assertEquals("course.unpublished", $result['code']);
+        $this->assertEquals('course.unpublished', $result['code']);
     }
 
     public function testCanLearnTask()
@@ -706,7 +706,7 @@ class CourseServiceTest extends BaseTestCase
         $defaultTask = $this->createTask('default', 1);
 
         $result = $this->getCourseService()->canLearnTask($defaultTask['id']);
-        $this->assertEquals("course.not_found", $result['code']);
+        $this->assertEquals('course.not_found', $result['code']);
     }
 
     public function testSortCourseItems()
@@ -959,7 +959,7 @@ class CourseServiceTest extends BaseTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array('functionName' => 'findActivities', 'returnValue' => array(
                 array('id' => 1, 'ext' => array('mediaId' => 1, 'replayStatus' => 'draft', 'liveProvider' => 'test'), 'content' => 'test Content1'),
-                array('id' => 2, 'ext' => array('mediaId' => 1, 'replayStatus' => 'draft', 'liveProvider' => 'test'), 'content' => 'test Content2')
+                array('id' => 2, 'ext' => array('mediaId' => 1, 'replayStatus' => 'draft', 'liveProvider' => 'test'), 'content' => 'test Content2'),
             )),
         ));
         $this->mockBiz('Task:TaskResultService', array(
@@ -972,7 +972,7 @@ class CourseServiceTest extends BaseTestCase
         $result = $this->getCourseService()->convertTasks(
             array(
                 array('id' => 1, 'activityId' => 1, 'type' => 'live', 'isFree' => 1, 'createdUserId' => 1, 'categoryId' => 1),
-                array('id' => 2, 'activityId' => 2, 'type' => 'doc', 'isFree' => 1, 'createdUserId' => 1, 'categoryId' => 1)
+                array('id' => 2, 'activityId' => 2, 'type' => 'doc', 'isFree' => 1, 'createdUserId' => 1, 'categoryId' => 1),
             ),
             array('type' => 'live', 'summary' => '', 'id' => 9, 'courseSetId' => 5)
         );
@@ -987,13 +987,13 @@ class CourseServiceTest extends BaseTestCase
     {
         $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'filledTaskByActivity', array(
             array('type' => 'video'),
-            array('ext' => array('mediaSource' => 'add', 'mediaUri' => '/'))
+            array('ext' => array('mediaSource' => 'add', 'mediaUri' => '/')),
         ));
         $this->assertEquals('add', $result['mediaSource']);
 
         $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'filledTaskByActivity', array(
             array('type' => 'audio'),
-            array('ext' => array('hasText' => 'test Text'), 'content' => 'test Content')
+            array('ext' => array('hasText' => 'test Text'), 'content' => 'test Content'),
         ));
         $this->assertEquals('self', $result['mediaSource']);
         $this->assertTrue($result['hasText']);
@@ -1579,19 +1579,19 @@ class CourseServiceTest extends BaseTestCase
     {
         $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'buildCourseExpiryDataFromClassroom', array(
             'days',
-            0
+            0,
         ));
         $this->assertEquals('forever', $result['expiryMode']);
 
         $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'buildCourseExpiryDataFromClassroom', array(
             'days',
-            1
+            1,
         ));
         $this->assertEquals(1, $result['expiryDays']);
 
         $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'buildCourseExpiryDataFromClassroom', array(
             'date',
-            1
+            1,
         ));
         $this->assertEquals('end_date', $result['expiryMode']);
     }
@@ -1610,7 +1610,7 @@ class CourseServiceTest extends BaseTestCase
         $result = $this->getCourseService()->fillCourseTryLookVideo(
             array(
                 array('status' => 'published', 'tryLookable' => 1, 'id' => 1),
-                array('status' => 'published', 'tryLookable' => 1, 'id' => 2)
+                array('status' => 'published', 'tryLookable' => 1, 'id' => 2),
             )
         );
         $this->assertEquals(1, $result[0]['tryLookVideo']);
@@ -1621,7 +1621,7 @@ class CourseServiceTest extends BaseTestCase
     {
         $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'prepareUserLearnCondition', array(
             1,
-            array('type' => 'live', 'classroomId' => 1, 'locked' => 1)
+            array('type' => 'live', 'classroomId' => 1, 'locked' => 1),
         ));
         $this->assertEquals('live', $result['c.type']);
         $this->assertEquals(1, $result['m.classroomId']);
@@ -1633,7 +1633,7 @@ class CourseServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'processFields', array(
             array('status' => 'published'),
             array('buyExpiryTime' => time(), 'about' => 'about', 'summary' => 'summary', 'goals' => 1, 'audiences' => 1, 'tryLookLength' => 10),
-            array('status' => 'published', 'type' => 'normal')
+            array('status' => 'published', 'type' => 'normal'),
         ));
         $this->assertEquals('about', $result['about']);
         $this->assertEquals(1, $result['goals']);
