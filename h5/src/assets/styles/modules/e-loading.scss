@@ -74,7 +74,7 @@
 .switch-code-container {
   .es-switch-loading {
     position: fixed;
-    bottom: 9vh;
+    bottom: vw(60);
     top: auto;
     right: vw(15);
     left: auto;
@@ -131,6 +131,14 @@
       right: vw(10);
       top: vw(10);
       color: #999;
+    }
+  }
+}
+
+.van-tabbar--iphonex {
+  &+.find-page {
+    .es-switch-loading {
+      bottom: vw(94);
     }
   }
 }
