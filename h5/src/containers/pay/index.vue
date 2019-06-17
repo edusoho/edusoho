@@ -55,9 +55,7 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      isLoading: state => state.isLoading
-    }),
+    ...mapState(['wechatSwitch', 'isLoading']),
     validPayWay() {
       return this.paySettings.wxpayEnabled ||
         (this.paySettings.alipayEnabled && !this.inWechat);
@@ -100,8 +98,19 @@ export default {
         }
       }).then(res => {
         if (res.status === 'success' && targetId) {
+          // 如果未关注公众号，挑战公众号页面
+          if (this.wechatSwitch) {
+            this.$router.replace({
+              path: '/pay_success',
+              query: {
+                targetType: this.targetType,
+                targetId: targetId
+              }
+            })
+            return;
+          }
           this.$router.push({
-            path: `/course/${targetId}`,
+            path: `/${this.targetType}/${targetId}`,
           })
         }
         this.detail = Object.assign({}, res)
@@ -155,6 +164,15 @@ export default {
         }
       }).then((res) => {
         if (res.isPaid) {
+          if (this.wechatSwitch) {
+            this.$router.replace({
+              path: '/pay_success',
+              query: {
+                paidUrl: window.location.origin + res.paidSuccessUrlH5
+              }
+            })
+            return;
+          }
           window.location.href = window.location.origin + res.paidSuccessUrlH5
           return;
         }

@@ -28,6 +28,11 @@
       background-color: $primary-color;
     }
   }
+  &.warning {
+    .spot {
+      background-color: #FFA51F;
+    }
+  }
   &.default {
     .spot {
       position: absolute;
@@ -59,6 +64,81 @@
         -webkit-animation-delay: .4s;
         animation-delay: .4s;
       }
+    }
+  }
+}
+
+.loading-content {
+  position: relative;
+}
+.switch-code-container {
+  .es-switch-loading {
+    position: fixed;
+    bottom: vw(60);
+    top: auto;
+    right: vw(15);
+    left: auto;
+    z-index: 2;
+    text-align: center;
+    &.default .spot {
+      -webkit-animation: none;
+      &:nth-child(1) {
+        opacity: 0.3;
+        width: 100%;
+        height: 100%;
+      }
+      &:nth-child(2) {
+        opacity: 0.5;
+        width: 79%;
+        height: 79%;
+      }
+      &:nth-child(3) {
+        width: 45px;
+        height: 45px;
+      }
+    }
+    .code-img {
+      position: relative;
+      top: 27px;
+      z-index: 1;
+      width: 25px;
+      height: 25px;
+    }
+    .loading-close-icon {
+      position: absolute;
+      right: vw(3);
+      top: vw(-3);
+      font-size: vw(18);
+      color: #FFA51F;
+    }
+  }
+  .code-popup-body {
+    width: vw(280);
+    height: vw(320);
+    text-align: center;
+    border-radius: vw(8);
+    .title {
+      color: #FFA51F;
+      margin-top: vw(40);
+      margin-bottom: vw(15);
+    }
+    .code-img {
+      width: vw(220);
+      height: vw(220);
+    }
+    .icon-close {
+      position: absolute;
+      right: vw(10);
+      top: vw(10);
+      color: #999;
+    }
+  }
+}
+
+.van-tabbar--iphonex {
+  &+.find-page {
+    .es-switch-loading {
+      bottom: vw(94);
     }
   }
 }

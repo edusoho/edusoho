@@ -51,6 +51,12 @@
   color: $primary-color!important;
 }
 
+.van-button--primary {
+  color: #fff;
+  background-color: $primary-color;
+  border: 1px solid $primary-color;
+}
+
 .van-button--info {
   color: #fff;
   background-color: #1989fa;

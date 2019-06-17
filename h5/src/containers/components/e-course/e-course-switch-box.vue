@@ -81,7 +81,7 @@
     },
     filters: {
       numFilter(value) {
-        return parseFloat(value).toFixed(2)
+        return value ? parseFloat(value).toFixed(2) : '';
       }
     },
     methods: {
@@ -92,7 +92,8 @@
             id: this.order.id,
             source: 'order',
             sn: this.order.sn,
-            targetId: this.order.targetId
+            targetId: this.order.targetId,
+            targetType: this.order.targetType
           }
         });
       }

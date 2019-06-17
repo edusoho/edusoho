@@ -166,6 +166,13 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "wxpay" */'@/containers/wxpay/index.vue')
   }, {
+    path: '/pay_success',
+    name: 'paySuccess',
+    meta: {
+      title: '支付成功'
+    },
+    component: () => import(/* webpackChunkName: "pay" */'@/containers/pay/success.vue')
+  }, {
     path: '/preview',
     name: 'preview',
     meta: {
@@ -243,6 +250,8 @@ const router = new Router({
   routes
 });
 
+const isWeixinBrowser = /micromessenger/.test(navigator.userAgent.toLowerCase());
+
 // 检查会员开关配置（会员页面需要有限判断，其他页面异步滞后判断减少页面等待时间）
 const setVipSwitch = () => new Promise((resolve, reject) => {
   if (!Object.keys(store.state.vipSettings).length) {
@@ -256,6 +265,24 @@ const setVipSwitch = () => new Promise((resolve, reject) => {
       })
       .catch(err => {
         Toast.fail(err.message);
+        return reject(err);
+      });
+  }
+  return resolve();
+});
+
+// 检查微信公众号开关配置
+const setWeChatSwitch = () => new Promise((resolve, reject) => {
+  if (!Object.keys(store.state.wechatSwitch).length && isWeixinBrowser) {
+    return store.dispatch('getGlobalSettings', { type: 'wechat', key: 'wechatSettings' })
+      .then(res => {
+        if (res.enabled) {
+          return store.dispatch('setWeChatSwitch', true).then(() => resolve());
+        }
+        return resolve(res);
+      })
+      .catch(err => {
+        console.log(err.message);
         return reject(err);
       });
   }
@@ -300,6 +327,10 @@ router.beforeEach((to, from, next) => {
     next();
   } else {
     next();
+  }
+
+  if (store.state.token) {
+    setWeChatSwitch();
   }
 });
 
