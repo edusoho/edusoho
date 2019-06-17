@@ -2,7 +2,13 @@
 
 namespace Tests\Unit\Course\Service;
 
+use Biz\Activity\Dao\ActivityDao;
+use Biz\Activity\Service\ActivityService;
 use Biz\BaseTestCase;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\File\Service\UploadFileService;
+use Biz\Task\Strategy\Impl\DefaultStrategy;
+use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use Biz\Course\Service\CourseService;
@@ -419,6 +425,26 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($result['courseType'], $course['courseType']);
     }
 
+    public function testUpdateBaseInfo()
+    {
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('course title 1', $courseSet);
+        $createCourse = $this->getCourseService()->createCourse($course);
+
+        $fields = array('title' => 'test Title');
+
+        $this->getCourseService()->updateBaseInfo($createCourse['id'], $fields);
+        $course = $this->getCourseService()->getCourse($createCourse['id']);
+        $this->assertEquals('test Title', $course['title']);
+
+        $this->getCourseService()->publishCourse($createCourse['id']);
+        $fields = array('services' => array('service'));
+
+        $this->getCourseService()->updateBaseInfo($createCourse['id'], $fields);
+        $course = $this->getCourseService()->getCourse($createCourse['id']);
+        $this->assertEquals(1, $course['showServices']);
+    }
+
     /**
      * @group current
      */
@@ -578,6 +604,173 @@ class CourseServiceTest extends BaseTestCase
         $this->assertTrue($isCoursesSummaryEmpty);
     }
 
+    public function testFindCourseItems()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->getCourseService()->publishCourse($defaultCourse['id']);
+        $this->createActivity(array('title' => 'activity 1'));
+        $defaultTask = $this->createTask('default', $defaultCourse['id']);
+
+        $result = $this->getCourseService()->findCourseItems($defaultCourse['id']);
+        $this->assertEquals($defaultTask['title'], $result['task-1']['title']);
+    }
+
+    public function testFindCourseItemsByPaging()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->getCourseService()->publishCourse($defaultCourse['id']);
+
+        $result = $this->getCourseService()->findCourseItemsByPaging($defaultCourse['id']);
+        $this->assertEmpty($result[1]);
+    }
+
+    /**
+     * @expectedException \Biz\Course\CourseException
+     * @expectedExceptionMessage exception.course.not_found
+     */
+    public function testFindCourseItemsByPagingWithExistCourse()
+    {
+        $this->getCourseService()->findCourseItemsByPaging(1);
+    }
+
+    public function testFindStudentsByCourseId()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $result = $this->getCourseService()->findStudentsByCourseId($defaultCourse['id']);
+        $this->assertEmpty($result);
+    }
+
+    public function testFindTeachersByCourseId()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $result = $this->getCourseService()->findTeachersByCourseId($defaultCourse['id']);
+        $this->assertEquals($defaultCourse['id'], $result[0]['courseId']);
+    }
+
+    public function testCountThreadsByCourseId()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $count = $this->getCourseService()->countThreadsByCourseId($defaultCourse['id']);
+        $this->assertEquals(0, $count);
+    }
+
+    public function testGetUserRoleInCourse()
+    {
+        $user = $this->getCurrentUser();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $result = $this->getCourseService()->getUserRoleInCourse($defaultCourse['id'], $user['id']);
+        $this->assertEquals('teacher', $result);
+    }
+
+    public function testFindUserTeachingCoursesByCourseSetId()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $result = $this->getCourseService()->findUserTeachingCoursesByCourseSetId($defaultCourse['id']);
+        $this->assertEmpty($result);
+
+        $result = $this->getCourseService()->findUserTeachingCoursesByCourseSetId($defaultCourse['id'], false);
+        $this->assertEquals('第二个教学计划', $result[1]['title']);
+    }
+
+    public function testFindPriceIntervalByCourseSetIds()
+    {
+        $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $result = $this->getCourseService()->findPriceIntervalByCourseSetIds(array(1));
+        $this->assertEquals('0.00', $result[1]['minPrice']);
+        $this->assertEquals('0.00', $result[1]['maxPrice']);
+    }
+
+    public function testCanJoinCourse()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $result = $this->getCourseService()->canJoinCourse($defaultCourse['id']);
+        $this->assertEquals('course.unpublished', $result['code']);
+    }
+
+    public function testCanLearnCourse()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $result = $this->getCourseService()->canLearnCourse($defaultCourse['id']);
+        $this->assertEquals('course.unpublished', $result['code']);
+    }
+
+    public function testCanLearnTask()
+    {
+        $defaultTask = $this->createTask('default', 1);
+
+        $result = $this->getCourseService()->canLearnTask($defaultTask['id']);
+        $this->assertEquals('course.not_found', $result['code']);
+    }
+
+    public function testSortCourseItems()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->getCourseService()->publishCourse($defaultCourse['id']);
+
+        $result = $this->getCourseService()->sortCourseItems($defaultCourse['id'], array());
+        $this->assertEmpty($result);
+    }
+
+    public function testDeleteChapter()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $mockChapter = $this->createChapter($defaultCourse['id'], 'test Chapter');
+
+        $this->getCourseService()->deleteChapter($defaultCourse['id'], $mockChapter['id']);
+        $result = $this->getCourseService()->getChapter($defaultCourse['id'], $mockChapter['id']);
+        $this->assertEmpty($result);
+    }
+
+    public function testDeleteChapterWithNoChapter()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->mockBiz('Course:CourseChapterDao', array(
+            array('functionName' => 'get', 'returnValue' => array()),
+        ));
+
+        $result = $this->getCourseService()->deleteChapter($defaultCourse['id'], 1);
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_error
+     */
+    public function testDeleteChapterWithErrorParam()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->mockBiz('Course:CourseChapterDao', array(
+            array('functionName' => 'get', 'returnValue' => array('courseId' => 10)),
+        ));
+
+        $this->getCourseService()->deleteChapter($defaultCourse['id'], 1);
+    }
+
+    public function testCountUserLearningCourses()
+    {
+        $count = $this->getCourseService()->countUserLearningCourses(1);
+
+        $this->assertEquals(0, $count);
+    }
+
+    public function testFindUserLearningCourses()
+    {
+        $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findLearningMembers', 'returnValue' => array(array('courseId' => 1, 'learnedNum' => 1))),
+        ));
+
+        $result = $this->getCourseService()->findUserLearningCourses(1, 0, 5);
+        $this->assertEquals(1, $result[0]['memberLearnedNum']);
+    }
+
     public function testFindLearnedCoursesByCourseIdAndUserId()
     {
         $course1 = $this->defaultCourse('test course 1', array('id' => 1));
@@ -635,6 +828,9 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $result = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($createCourse1['id'], $user['id']);
+        $this->assertEmpty($result);
     }
 
     public function testFindUserLearnCourseIds()
@@ -657,6 +853,308 @@ class CourseServiceTest extends BaseTestCase
         $result = $this->getCourseService()->countUserLearnCourses(1);
 
         $this->assertEquals(3, $result);
+    }
+
+    public function testCountUserLearnedCourses()
+    {
+        $count = $this->getCourseService()->countUserLearnedCourses(1);
+
+        $this->assertEquals(0, $count);
+    }
+
+    public function testFindUserLearnedCourses()
+    {
+        $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findLearnedMembers', 'returnValue' => array(array('courseId' => 1, 'learnedNum' => 3))),
+        ));
+
+        $result = $this->getCourseService()->findUserLearnedCourses(1, 0, 5);
+        $this->assertEquals(3, $result[0]['memberLearnedNum']);
+    }
+
+    public function testFindUserTeachCourseCount()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->getCourseService()->publishCourse($defaultCourse['id']);
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findByUserIdAndRole', 'returnValue' => array(array('courseId' => 1))),
+        ));
+
+        $count = $this->getCourseService()->findUserTeachCourseCount(array('userId' => 1));
+        $this->assertEquals(1, $count);
+    }
+
+    public function testFindUserTeachCourses()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->getCourseService()->publishCourse($defaultCourse['id']);
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findByUserIdAndRole', 'returnValue' => array(array('courseId' => 1))),
+        ));
+
+        $result = $this->getCourseService()->findUserTeachCourses(array('userId' => 1), 0, 10);
+        $this->assertEquals('第二个教学计划', $result[0]['title']);
+    }
+
+    public function testAnalysisCourseDataByTime()
+    {
+        $result = $this->getCourseService()->analysisCourseDataByTime(time(), time() + 86400);
+        $this->assertEmpty($result);
+    }
+
+    public function testFindUserManageCoursesByCourseSetId()
+    {
+        $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $result = $this->getCourseService()->findUserManageCoursesByCourseSetId(1, 1);
+        $this->assertEquals('第二个教学计划', $result[1]['title']);
+    }
+
+    public function testFillMembersWithUserInfo()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'fillMembersWithUserInfo', array(array(0 => array('userId' => 1))));
+        $this->assertEquals('admin', $result[0]['nickname']);
+    }
+
+    public function testPrepareCourseConditionsWithDate()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), '_prepareCourseConditions', array(array('date' => 'today', 'creator' => 'admin', 'nickname' => 'admin')));
+        $this->assertEquals(strtotime('today'), $result['startTimeGreaterThan']);
+    }
+
+    public function testSearchByStudentNumAndTimeZone()
+    {
+        $result = $this->getCourseService()->searchByStudentNumAndTimeZone(array(), 0, 5);
+        $this->assertEmpty($result);
+    }
+
+    public function testSearchByRatingAndTimeZone()
+    {
+        $result = $this->getCourseService()->searchByRatingAndTimeZone(array(), 0, 5);
+        $this->assertEmpty($result);
+    }
+
+    public function testFindCourseTasksAndChapters()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->getCourseService()->publishCourse($defaultCourse['id']);
+
+        $this->mockBiz('Task:TaskService', array(
+            array('functionName' => 'findTasksByCourseId', 'returnValue' => array()),
+        ));
+        $this->mockBiz('Course:CourseChapterDao', array(
+            array('functionName' => 'findChaptersByCourseId', 'returnValue' => array(array('type' => 'lesson'), array('type' => 'chapter'))),
+        ));
+
+        $result = $this->getCourseService()->findCourseTasksAndChapters($defaultCourse['id']);
+        $this->assertEquals('chapter', $result[0]['itemType']);
+    }
+
+    public function testConvertTasks()
+    {
+        $this->mockBiz('Course:CourseSetService', array(
+            array('functionName' => 'getCourseSet', 'returnValue' => array('summary' => 'test Summary')),
+        ));
+        $this->mockBiz('Activity:ActivityService', array(
+            array('functionName' => 'findActivities', 'returnValue' => array(
+                array('id' => 1, 'ext' => array('mediaId' => 1, 'replayStatus' => 'draft', 'liveProvider' => 'test'), 'content' => 'test Content1'),
+                array('id' => 2, 'ext' => array('mediaId' => 1, 'replayStatus' => 'draft', 'liveProvider' => 'test'), 'content' => 'test Content2'),
+            )),
+        ));
+        $this->mockBiz('Task:TaskResultService', array(
+            array('functionName' => 'countTaskResults', 'returnValue' => array(1)),
+        ));
+        $this->mockBiz('Course:CourseChapterDao', array(
+            array('functionName' => 'findChaptersByCourseId', 'returnValue' => array(array('type' => 'lesson', 'seq' => 1), array('type' => 'unit', 'seq' => 2))),
+        ));
+
+        $result = $this->getCourseService()->convertTasks(
+            array(
+                array('id' => 1, 'activityId' => 1, 'type' => 'live', 'isFree' => 1, 'createdUserId' => 1, 'categoryId' => 1),
+                array('id' => 2, 'activityId' => 2, 'type' => 'doc', 'isFree' => 1, 'createdUserId' => 1, 'categoryId' => 1),
+            ),
+            array('type' => 'live', 'summary' => '', 'id' => 9, 'courseSetId' => 5)
+        );
+        $this->assertEquals('live', $result[0]['type']);
+        $this->assertEquals('draft', $result[0]['replayStatus']);
+        $this->assertEquals('test Summary', $result[0]['summary']);
+        $this->assertEquals('test Content1', $result[0]['content']);
+        $this->assertEquals(1, $result[0]['memberNum'][0]);
+    }
+
+    public function testFilledTaskByActivity()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'filledTaskByActivity', array(
+            array('type' => 'video'),
+            array('ext' => array('mediaSource' => 'add', 'mediaUri' => '/')),
+        ));
+        $this->assertEquals('add', $result['mediaSource']);
+
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'filledTaskByActivity', array(
+            array('type' => 'audio'),
+            array('ext' => array('hasText' => 'test Text'), 'content' => 'test Content'),
+        ));
+        $this->assertEquals('self', $result['mediaSource']);
+        $this->assertTrue($result['hasText']);
+        $this->assertEquals('test Content', $result['mediaText']);
+    }
+
+    public function testFindUserLearningCourseCountNotInClassroom()
+    {
+        $count = $this->getCourseService()->findUserLearningCourseCountNotInClassroom(1);
+        $this->assertEquals(0, $count);
+
+        $count = $this->getCourseService()->findUserLearningCourseCountNotInClassroom(1, array('type' => 'live'));
+        $this->assertEquals(0, $count);
+    }
+
+    public function testFindUserLearningCoursesNotInClassroom()
+    {
+        $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findMembersNotInClassroomByUserIdAndRoleAndIsLearned', 'returnValue' => array(array('courseId' => 1, 'learnedNum' => 3))),
+        ));
+
+        $result = $this->getCourseService()->findUserLearningCoursesNotInClassroom(1, 0, 5);
+        $this->assertEquals(3, $result[0]['memberLearnedNum']);
+
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned', 'returnValue' => array(array('courseId' => 1, 'learnedNum' => 5))),
+        ));
+
+        $result = $this->getCourseService()->findUserLearningCoursesNotInClassroom(1, 0, 5, array('type' => 'live'));
+        $this->assertEquals(5, $result[0]['memberLearnedNum']);
+    }
+
+    public function testFindUserLeanedCourseCount()
+    {
+        $count = $this->getCourseService()->findUserLeanedCourseCount(1);
+        $this->assertEquals(0, $count);
+
+        $count = $this->getCourseService()->findUserLeanedCourseCount(1, array('type' => 'live'));
+        $this->assertEquals(0, $count);
+    }
+
+    public function testFindUserLearnedCoursesNotInClassroom()
+    {
+        $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findMembersNotInClassroomByUserIdAndRoleAndIsLearned', 'returnValue' => array(array('courseId' => 1, 'learnedNum' => 3))),
+        ));
+
+        $result = $this->getCourseService()->findUserLearnedCoursesNotInClassroom(1, 0, 5);
+        $this->assertEquals(3, $result[0]['memberLearnedNum']);
+
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned', 'returnValue' => array(array('courseId' => 1, 'learnedNum' => 5))),
+        ));
+
+        $result = $this->getCourseService()->findUserLearnedCoursesNotInClassroom(1, 0, 5, array('type' => 'live'));
+        $this->assertEquals(5, $result[0]['memberLearnedNum']);
+    }
+
+    public function testFindUserLearnCourseCountNotInClassroom()
+    {
+        $count = $this->getCourseService()->findUserLearnCourseCountNotInClassroom(1);
+        $this->assertEquals(0, $count);
+    }
+
+    public function testFindUserLearnCoursesNotInClassroom()
+    {
+        $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findMembersNotInClassroomByUserIdAndRole', 'returnValue' => array(array('courseId' => 1))),
+        ));
+
+        $result = $this->getCourseService()->findUserLearnCoursesNotInClassroom(1, 0, 5);
+        $this->assertEquals('第二个教学计划', $result[1]['title']);
+    }
+
+    public function testFindUserLearnCoursesNotInClassroomWithType()
+    {
+        $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findMembersNotInClassroomByUserIdAndRoleAndType', 'returnValue' => array(array('courseId' => 1))),
+        ));
+
+        $result = $this->getCourseService()->findUserLearnCoursesNotInClassroomWithType(1, 'live', 0, 5);
+        $this->assertEquals('第二个教学计划', $result[1]['title']);
+    }
+
+    public function testFindUserTeachCourseCountNotInClassroom()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->getCourseService()->publishCourse($defaultCourse['id']);
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findMembersNotInClassroomByUserIdAndRole', 'returnValue' => array(array('courseId' => 1))),
+        ));
+
+        $count = $this->getCourseService()->findUserTeachCourseCountNotInClassroom(array('userId' => 1));
+        $this->assertEquals(1, $count);
+    }
+
+    public function testFindUserTeachCoursesNotInClassroom()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->getCourseService()->publishCourse($defaultCourse['id']);
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findMembersNotInClassroomByUserIdAndRole', 'returnValue' => array(array('courseId' => 1))),
+        ));
+
+        $result = $this->getCourseService()->findUserTeachCoursesNotInClassroom(array('userId' => 1), 0, 5);
+        $this->assertEquals('第二个教学计划', $result[0]['title']);
+    }
+
+    public function testFindUserFavoritedCourseCountNotInClassroom()
+    {
+        $this->mockBiz('Course:FavoriteDao', array(
+            array('functionName' => 'findCourseFavoritesNotInClassroomByUserId', 'returnValue' => array(array())),
+        ));
+
+        $count = $this->getCourseService()->findUserFavoritedCourseCountNotInClassroom(1);
+        $this->assertEquals(0, $count);
+
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->getCourseService()->publishCourse($defaultCourse['id']);
+        $this->mockBiz('Course:FavoriteDao', array(
+            array('functionName' => 'findCourseFavoritesNotInClassroomByUserId', 'returnValue' => array(array('courseId' => 1))),
+        ));
+
+        $count = $this->getCourseService()->findUserFavoritedCourseCountNotInClassroom(1);
+        $this->assertEquals(1, $count);
+    }
+
+    public function testFindUserFavoritedCoursesNotInClassroom()
+    {
+        $this->mockBiz('Course:FavoriteDao', array(
+            array('functionName' => 'findCourseFavoritesNotInClassroomByUserId', 'returnValue' => array(array('courseId' => 1))),
+        ));
+        $this->mockBiz('Course:CourseDao', array(
+            array('functionName' => 'search', 'returnValue' => array(array('id' => 1))),
+        ));
+        $result = $this->getCourseService()->findUserFavoritedCoursesNotInClassroom(1, 0, 5);
+        $this->assertEquals(1, $result[0]['id']);
+    }
+
+    public function testFindUserFavoriteCoursesNotInClassroomWithCourseType()
+    {
+        $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->mockBiz('Course:FavoriteDao', array(
+            array('functionName' => 'findUserFavoriteCoursesNotInClassroomWithCourseType', 'returnValue' => array(array('id' => 1))),
+        ));
+        $result = $this->getCourseService()->findUserFavoriteCoursesNotInClassroomWithCourseType(1, 'live', 0, 5);
+        $this->assertEquals('第二个教学计划', $result[1]['title']);
+    }
+
+    public function testCountUserFavoriteCourseNotInClassroomWithCourseType()
+    {
+        $this->mockBiz('Course:FavoriteDao', array(
+            array('functionName' => 'countUserFavoriteCoursesNotInClassroomWithCourseType', 'returnValue' => 1),
+        ));
+
+        $count = $this->getCourseService()->countUserFavoriteCourseNotInClassroomWithCourseType(1, 'live');
+        $this->assertEquals(1, $count);
     }
 
     public function testBatchConvert()
@@ -1046,6 +1544,102 @@ class CourseServiceTest extends BaseTestCase
         $this->assertTrue(empty($conditions['excludeTypes']));
     }
 
+    public function testCountCoursesByCourseSetId()
+    {
+        $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+
+        $count = $this->getCourseService()->countCoursesByCourseSetId(1);
+        $this->assertEquals(1, $count);
+    }
+
+    public function testGetFavoritedCourseByUserIdAndCourseSetId()
+    {
+        $this->mockBiz('Course:FavoriteDao', array(
+            array('functionName' => 'getByUserIdAndCourseSetId', 'returnValue' => array('courseId' => 1)),
+        ));
+
+        $result = $this->getCourseService()->getFavoritedCourseByUserIdAndCourseSetId(1, 1);
+        $this->assertEquals(1, $result['courseId']);
+    }
+
+    public function testCalculateLearnProgressByUserIdAndCourseIds()
+    {
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
+        $this->getCourseService()->publishCourse($defaultCourse['id']);
+        $this->mockBiz('Course:MemberService', array(
+            array('functionName' => 'countMembers', 'returnValue' => 1),
+            array('functionName' => 'searchMembers', 'returnValue' => array(array('courseId' => 1, 'learnedNum' => 4))),
+        ));
+
+        $result = $this->getCourseService()->calculateLearnProgressByUserIdAndCourseIds(1, array(1));
+        $this->assertEquals(4, $result[0]['learnedNum']);
+    }
+
+    public function testBuildCourseExpiryDataFromClassroom()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'buildCourseExpiryDataFromClassroom', array(
+            'days',
+            0,
+        ));
+        $this->assertEquals('forever', $result['expiryMode']);
+
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'buildCourseExpiryDataFromClassroom', array(
+            'days',
+            1,
+        ));
+        $this->assertEquals(1, $result['expiryDays']);
+
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'buildCourseExpiryDataFromClassroom', array(
+            'date',
+            1,
+        ));
+        $this->assertEquals('end_date', $result['expiryMode']);
+    }
+
+    public function testFillCourseTryLookVideo()
+    {
+        $this->mockBiz('Activity:ActivityService', array(
+            array('functionName' => 'findActivitySupportVideoTryLook', 'returnValue' => array(
+                array('id' => 1, 'fromCourseId' => 1),
+            )),
+        ));
+        $this->mockBiz('Task:TaskService', array(
+            array('functionName' => 'findTasksByActivityIds', 'returnValue' => array(array('activityId' => 1, 'status' => 'published'))),
+        ));
+
+        $result = $this->getCourseService()->fillCourseTryLookVideo(
+            array(
+                array('status' => 'published', 'tryLookable' => 1, 'id' => 1),
+                array('status' => 'published', 'tryLookable' => 1, 'id' => 2),
+            )
+        );
+        $this->assertEquals(1, $result[0]['tryLookVideo']);
+        $this->assertEquals(0, $result[1]['tryLookVideo']);
+    }
+
+    public function testPrepareUserLearnCondition()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'prepareUserLearnCondition', array(
+            1,
+            array('type' => 'live', 'classroomId' => 1, 'locked' => 1),
+        ));
+        $this->assertEquals('live', $result['c.type']);
+        $this->assertEquals(1, $result['m.classroomId']);
+        $this->assertEquals(1, $result['m.locked']);
+    }
+
+    public function testProcessFields()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getCourseService(), 'processFields', array(
+            array('status' => 'published'),
+            array('buyExpiryTime' => time(), 'about' => 'about', 'summary' => 'summary', 'goals' => 1, 'audiences' => 1, 'tryLookLength' => 10),
+            array('status' => 'published', 'type' => 'normal'),
+        ));
+        $this->assertEquals('about', $result['about']);
+        $this->assertEquals(1, $result['goals']);
+        $this->assertEquals(10, $result['tryLookLength']);
+    }
+
     protected function createNewCourseSet()
     {
         $courseSetFields = array(
@@ -1114,6 +1708,67 @@ class CourseServiceTest extends BaseTestCase
         return $this->getCourseService()->createCourse($course);
     }
 
+    protected function createTask($type, $courseId)
+    {
+        $field = array(
+            'mode' => 'lesson',
+            'courseId' => $courseId,
+            'title' => 'task title',
+            'seq' => '1',
+            'type' => 'video',
+            'activityId' => '1',
+            'mediaSource' => 'self',
+            'isFree' => '0',
+            'isOptional' => '0',
+            'startTime' => '0',
+            'endTime' => '0',
+            'length' => '300',
+            'status' => 'create',
+            'createdUserId' => '1',
+        );
+        if ('default' == $type) {
+            $task = $this->getDefaultStrategy()->createTask($field);
+        } else {
+            $task = $this->getNormalStrategy()->createTask($field);
+        }
+
+        return $task;
+    }
+
+    protected function createActivity($fields)
+    {
+        $fields = array_merge($this->getDefaultMockFields(), $fields);
+
+        return $this->getActivityDao()->create($fields);
+    }
+
+    protected function createChapter($courseId, $title)
+    {
+        $fields = array(
+            'courseId' => $courseId,
+            'title' => $title,
+            'type' => 'lesson',
+            'status' => 'created',
+        );
+
+        return $this->getCourseService()->createChapter($fields);
+    }
+
+    protected function getDefaultMockFields()
+    {
+        return array(
+            'title' => 'activity',
+            'mediaId' => 0,
+            'mediaType' => 'text',
+            'content' => '124',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
+            'fromUserId' => 1,
+            'startTime' => time() - 1000,
+            'endTime' => time(),
+        );
+    }
+
     /**
      * @return CourseService
      */
@@ -1173,5 +1828,31 @@ class CourseServiceTest extends BaseTestCase
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    private function getActivityDao()
+    {
+        return $this->createDao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return CourseMemberDao
+     */
+    protected function getMemberDao()
+    {
+        return $this->createDao('Course:CourseMemberDao');
+    }
+
+    private function getDefaultStrategy()
+    {
+        return new DefaultStrategy($this->biz);
+    }
+
+    private function getNormalStrategy()
+    {
+        return new NormalStrategy($this->biz);
     }
 }

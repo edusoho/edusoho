@@ -16,7 +16,7 @@
       {% if data.type == 'delete' %}
         {% set thread = '<strong>“' ~ data.title ~ '”</strong>' %}
       {% elseif data.type == 'reply' %}
-        {% set thread = macro.link(data.title, path('group_thread_show', {id:data.id, threadId:data.threadId})~'page='~data.page~'#post-'~data.post) %}
+        {% set thread = macro.link(data.title, path('group_thread_show', {id:data.id, threadId:data.threadId})~'?page='~data.page~'#post-'~data.post) %}
       {% elseif data.type == 'type-modify' %}
         {% set url = data.targetType~'_thread_show' %}
         {% set urlId = data.targetType~'Id'%}
