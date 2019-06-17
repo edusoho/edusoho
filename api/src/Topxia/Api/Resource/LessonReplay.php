@@ -66,26 +66,19 @@ class LessonReplay extends BaseResource
                 $response['extra']['provider'] = 'longinus';
             } else {
                 $protocol = $request->isSecure() ? 'https' : 'http';
-                $response = $this->getOtherProviderReplays($protocol, $activity, $visibleReplays, $user, $device);
+                $replays = array();
+
+                foreach ($visibleReplays as $index => $visibleReplay) {
+                    $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[$index]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
+                    $replays[$index]['title'] = $visibleReplay['title'];
+                }
+
+                $response = $replays[0];
+                $response['replays'] = $replays;
             }
         } catch (\Exception $e) {
             return $this->error('503', '获取回放失败！');
         }
-
-        return $response;
-    }
-
-    protected function getOtherProviderReplays($protocol, $activity, $visibleReplays, $user, $device)
-    {
-        $replays = array();
-
-        foreach ($visibleReplays as $index => $visibleReplay) {
-            $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[$index]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
-            $replays[$index]['title'] = $visibleReplay['title'];
-        }
-
-        $response = $replays[0];
-        $response['replays'] = $replays;
 
         return $response;
     }
