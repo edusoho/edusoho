@@ -3,6 +3,7 @@
 namespace Tests\Unit\DiscovieryColumn\Service;
 
 use Biz\BaseTestCase;
+use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
 
 class DiscoveryColumnServiceTest extends BaseTestCase
 {
@@ -57,36 +58,7 @@ class DiscoveryColumnServiceTest extends BaseTestCase
         $this->assertEquals($result, null);
     }
 
-    public function testFindDiscoveryColumnByTitle()
-    {
-        $origin = $this->createDiscoveryColumn();
-        $resTitle = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle('test');
-        $this->assertArrayEquals($origin, $resTitle[0]);
-    }
-
-    public function testGetAllDiscoveryColumns()
-    {
-        $result = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
-        $this->assertEquals(count($result), 0);
-
-        $origin = $this->createDiscoveryColumn();
-        $result = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
-        $this->assertArrayEquals(array($origin), $result);
-    }
-
-    public function testSortDiscoveryColumns()
-    {
-        $column1 = $this->createDiscoveryColumn();
-        $column2 = $this->createDiscoveryColumn();
-        $columnIds = array($column2['id'], $column1['id']);
-        $this->getDiscoveryColumnService()->sortDiscoveryColumns($columnIds);
-        $result = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
-        $sortedColumn1 = $this->getDiscoveryColumnService()->getDiscoveryColumn($column1['id']);
-        $sortedColumn2 = $this->getDiscoveryColumnService()->getDiscoveryColumn($column2['id']);
-        $this->assertArrayEquals($result, array($sortedColumn2, $sortedColumn1));
-    }
-
-    public function getDisplayData()
+    public function testGetDisplayData()
     {
         $this->createDiscoveryColumn();
         $fakeCourseSets = array(
@@ -99,7 +71,62 @@ class DiscoveryColumnServiceTest extends BaseTestCase
         $columns = $this->getDiscoveryColumnService()->getDisplayData();
 
         $this->assertEquals($fakeCourseSets, $columns[0]['data']);
-        $this->assertEquals(1, $columns[0]['actualCount']);
+        $this->assertEquals(2, $columns[0]['actualCount']);
+        $fields = array(
+            'title' => 'test',
+            'type' => 'live',
+            'categoryId' => 2,
+            'showCount' => 4,
+            'seq' => 2,
+            'orderType' => 'recommend',
+        );
+
+        $this->getDiscoveryColumnService()->addDiscoveryColumn($fields);
+        $this->assertEquals($fakeCourseSets, $columns[0]['data']);
+        $this->assertEquals(2, $columns[0]['actualCount']);
+
+        $fields = array(
+            'title' => 'test',
+            'type' => 'classroom',
+            'categoryId' => 2,
+            'orderType' => 'new',
+            'showCount' => 4,
+            'seq' => 2,
+        );
+
+        $this->getDiscoveryColumnService()->addDiscoveryColumn($fields);
+        $this->mockBiz('Classroom:ClassroomService', array(
+            array('functionName' => 'searchClassrooms', 'returnValue' => $fakeCourseSets),
+        ));
+        $columns = $this->getDiscoveryColumnService()->getDisplayData();
+
+        $this->assertEquals($fakeCourseSets, $columns[0]['data']);
+        $this->assertEquals(2, $columns[0]['actualCount']);
+    }
+
+    public function testSortDiscoveryColumns()
+    {
+        $fields = array(
+            'title' => 'test',
+            'type' => 'live',
+            'categoryId' => 2,
+            'showCount' => 4,
+            'seq' => 3,
+            'orderType' => 'recommend',
+        );
+        $fields1 = array(
+            'title' => 'test',
+            'type' => 'classroom',
+            'categoryId' => 2,
+            'orderType' => 'new',
+            'showCount' => 4,
+            'seq' => 3,
+        );
+        $column1 = $this->getDiscoveryColumnService()->addDiscoveryColumn($fields);
+        $column2 = $this->getDiscoveryColumnService()->addDiscoveryColumn($fields1);
+        $this->getDiscoveryColumnService()->sortDiscoveryColumns(array($column1['id'], $column2['id']));
+        $result = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
+        $this->assertEquals(1, $result[0]['seq']);
     }
 
     private function createDiscoveryColumn()
@@ -116,6 +143,9 @@ class DiscoveryColumnServiceTest extends BaseTestCase
         return $this->getDiscoveryColumnService()->addDiscoveryColumn($fields);
     }
 
+    /**
+     * @return DiscoveryColumnService
+     */
     protected function getDiscoveryColumnService()
     {
         return $this->createService('DiscoveryColumn:DiscoveryColumnService');
