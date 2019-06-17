@@ -66,14 +66,34 @@ class LessonReplay extends BaseResource
                 $response['url'] = $this->getEsLiveReplayUrl($globalId, $options);
                 $response['extra']['provider'] = 'longinus';
             } else {
-                $protocol = $request->isSecure() ? 'https' : 'http';
-                $response = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
+                $this->prepareOtherReplayResponse($request, $activity, $visibleReplays, $user, $device, $response);
             }
         } catch (\Exception $e) {
             return $this->error('503', '获取回放失败！');
         }
 
         return $response;
+    }
+
+    protected function prepareOtherReplayResponse($request, $activity, $visibleReplays, $user, $device, &$response)
+    {
+        $protocol = $request->isSecure() ? 'https' : 'http';
+        $response = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
+
+        if (count($visibleReplays) > 1) {
+            $firstResponse = $response;
+            $response['replays'] = array();
+            array_push($response['replays'], $firstResponse);
+            foreach ($visibleReplays as $k => $v) {
+                if ($k == 0) {
+                    $response['replays'][0]['title'] = $v['title'];
+                    continue;
+                }
+                $visibleReplay = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[$k]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
+                $visibleReplay['title'] = $v['title'];
+                array_push($response['replays'], $visibleReplay);
+            }
+        }
     }
 
     public function filter($res)
