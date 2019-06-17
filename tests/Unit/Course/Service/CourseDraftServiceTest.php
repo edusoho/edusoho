@@ -72,7 +72,7 @@ class CourseDraftServiceTest extends BaseTestCase
         $draft1 = $this->getCourseDraftService()->createCourseDraft($draft);
 
         $draft2 = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId(1, 2, $this->getCurrentUser()->getId());
-        $draft3 = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId(1, 2, $this->getCurrentUser()->getId());
+        $draft3 = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId(5, 2, $this->getCurrentUser()->getId());
 
         $this->assertEquals($draft1['title'], $draft2['title']);
         $this->assertEmpty($draft3);
