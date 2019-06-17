@@ -80,7 +80,7 @@ class LessonReplay extends BaseResource
         $replays = array();
 
         foreach ($visibleReplays as $index => $visibleReplay) {
-            $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[$k]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
+            $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[$index]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
         }
 
         $response = $replays[0];
