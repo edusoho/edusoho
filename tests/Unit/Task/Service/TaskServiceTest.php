@@ -815,7 +815,7 @@ class TaskServiceTest extends BaseTestCase
         ));
         $this->mockBiz('Task:TaskResultService', array(
             array('functionName' => 'findUserTaskResultsByTaskIds', 'returnValue' => array(
-                array('courseTaskId' => 1)
+                array('courseTaskId' => 1),
             )),
         ));
         $this->mockBiz('Course:MemberService', array(
