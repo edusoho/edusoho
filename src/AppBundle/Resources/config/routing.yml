@@ -107,6 +107,10 @@ common_qrcode:
     path:  /common/qrcode
     defaults: { _controller: AppBundle:Common:qrcode }
 
+common_wechat_subscribe_wap:
+    path: /common/subscribe/wap
+    defaults: { _controller: AppBundle:Common:weChatOfficialSubscribe }
+
 user_terms:
     path:  /userterms
     defaults: { _controller: AppBundle:Register:userTerms }
@@ -3171,3 +3175,7 @@ client_time_check:
 drag_captcha:
     path:     /drag_captcha/{token}
     defaults: { _controller: AppBundle:Common:dragCaptcha }
+
+login_wechat_qrcode:
+    path:     /login/wechat/qrcode
+    defaults: { _controller: AppBundle:Login:wechatQrcode }

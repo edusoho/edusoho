@@ -1305,6 +1305,7 @@ admin.system.payment.wxpay_key_input.message: Please input the merchant platform
 admin.system.payment.llpay_key_input.message: Please input the merchant account number
 admin.system.payment.llpay_accessKey_input.message: Please input the public key
 admin.system.payment.llpay_secretKey_input.message: Please input the secret key
+admin.system.wechat.notification_open: Please open "Web Scan URL Login" and "WeChat Authorized Login" first
 admin.system.user_fields.truename: truename
 admin.system.user_fields.mobile: mobile
 admin.system.user_fields.company: company
@@ -1395,3 +1396,15 @@ material.common_table.solution_way: 解决方案
 
 course.stick.success: Top success!
 course.cancel.stick.success: Unpinned successfully!
+
+#微信通知
+wechat.notification.wechat_bind_hover: >
+  <div class="wechat-intro-title cd-text-warning"><i class="es-icon es-icon-xinxi cd-mr8"></i>Prompt</div>
+    <div class="wechat-intro-content">
+      <div>For better service, we recommend that you open the WeChat course notification.</div>
+      <div>Click here to bind WeChat and follow the service number to start the course notification.</div>
+    </div>
+wechat.notification.homepage_open_tip: <span class="%messageClass%">"WeChat notification" can be opened in "Personal Settings - Third Party Login"。</span>
+wechat.notification.homepage.open_tip_title: <span class="%messageClass%">go to open</span>
+wechat.notification.cloud_open_tip: Please open ES Cloud
+

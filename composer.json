@@ -52,7 +52,7 @@
     "piwik/device-detector": "3.7.7",
     "codeages/web-lib": "^0.1.1",
     "tiben/crontab-manager": "1.2.1",
-    "codeages/qiqiuyun-php-sdk": "0.3.2",
+    "codeages/qiqiuyun-php-sdk": "0.3.3",
     "phpdocumentor/reflection-docblock": "2.0.5",
     "codeages/biz-order-pay": "0.1.28",
     "ramsey/uuid": "^2.9"

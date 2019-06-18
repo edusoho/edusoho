@@ -36,6 +36,35 @@ class UserBindDaoImpl extends GeneralDaoImpl implements UserBindDao
         return $this->db()->fetchAll($sql, array($toId));
     }
 
+    public function findByTypeAndFromIds($type, $fromIds)
+    {
+        if (empty($fromIds)) {
+            return array();
+        }
+        $marks = str_repeat('?,', count($fromIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE type = ? AND fromId IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, array_merge(array($type), $fromIds)) ?: array();
+    }
+
+    public function findByTypeAndToIds($type, $toIds)
+    {
+        if (empty($toIds)) {
+            return array();
+        }
+        $marks = str_repeat('?,', count($toIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE type = ? AND toId IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, array_merge(array($type), $toIds)) ?: array();
+    }
+
+    public function findByToIdAndType($type, $toId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE toId = ? AND type = ? ORDER BY createdTime DESC";
+
+        return $this->db()->fetchAll($sql, array($toId, $type));
+    }
+
     public function deleteByTypeAndToId($type, $toId)
     {
         return $this->db()->delete($this->table, array('type' => $type, 'toId' => $toId));

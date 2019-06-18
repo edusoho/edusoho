@@ -1,6 +1,7 @@
 /app/cache
 /app/logs
 /app/data
+/app/run
 /app/config/plugin_installed.php
 /app/config/plugin.php
 /app/config/parameters.yml

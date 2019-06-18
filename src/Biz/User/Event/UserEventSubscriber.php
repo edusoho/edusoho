@@ -2,6 +2,8 @@
 
 namespace Biz\User\Event;
 
+use Biz\System\Service\SettingService;
+use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -14,7 +16,43 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
             'user.registered' => 'onUserRegistered',
             'user.follow' => 'onUserFollowed',
             'user.unfollow' => 'onUserUnfollowed',
+            'user.bind' => 'onUserBind',
+            'user.unbind' => 'onUserUnbind',
         );
+    }
+
+    public function onUserBind(Event $event)
+    {
+        $user = $event->getSubject();
+        $type = $event->getArgument('bindType');
+        $bind = $event->getArgument('bind');
+        $token = $event->getArgument('token');
+        if (in_array($type, array('weixinmob'))) {
+            if (empty($token['openid'])) {
+                return;
+            }
+
+            try {
+                $this->getWeChatService()->freshOfficialWeChatUserWhenLogin($user, $bind, $token);
+            } catch (\Exception $e) {
+                $this->getLogger()->error($e);
+            }
+        }
+    }
+
+    public function onUserUnbind(Event $event)
+    {
+        $user = $event->getSubject();
+        $type = $event->getArgument('bindType');
+        $bind = $event->getArgument('bind');
+        if (in_array($type, array('weixinmob', 'weixinweb'))) {
+            $weChatUser = $this->getWeChatService()->getWeChatUserByTypeAndUnionId(WeChatService::OFFICIAL_TYPE, $bind['fromId']);
+            if (!empty($weChatUser)) {
+                $this->getWeChatService()->updateWeChatUser($weChatUser['id'], array(
+                    'userId' => 0,
+                ));
+            }
+        }
     }
 
     public function onUserRegistered(Event $event)
@@ -54,7 +92,7 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $auth = $this->getSettingService()->get('auth', array());
 
         if (empty($auth['welcome_enabled'])
-            || $auth['welcome_enabled'] != 'opened'
+            || 'opened' != $auth['welcome_enabled']
             || empty($auth['welcome_sender'])) {
             return;
         }
@@ -71,13 +109,13 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
             return;
         }
 
-// TODO
+        // TODO
 
-//if (strlen($welcomeBody) >= 1000) {
+        //if (strlen($welcomeBody) >= 1000) {
 
 //    $welcomeBody = $this->getWebExtension()->plainTextFilter($welcomeBody, 1000);
 
-//}
+        //}
         if ($senderUser['id'] != $user['id']) {
             $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $welcomeBody);
             $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
@@ -102,6 +140,9 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
         return $welcomeBody;
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
@@ -120,5 +161,24 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getNotificationService()
     {
         return $this->getBiz()->service('User:NotificationService');
+    }
+
+    /**
+     * @return Log
+     */
+    protected function getLogger()
+    {
+        $biz = $this->getBiz();
+        $logger = $biz['logger'];
+
+        return $logger;
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->getBiz()->service('WeChat:WeChatService');
     }
 }

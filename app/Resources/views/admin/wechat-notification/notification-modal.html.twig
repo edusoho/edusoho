@@ -1,0 +1,38 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'admin.wechat_notification.template_content_detail'|trans}}{% endblock %}
+
+{% set hide_footer = true %}
+
+{% block body %}
+  
+  <label>{{'admin.wechat_notification.template_content'|trans}}</label>
+  <div class="clearfix well">
+    <div>{{ notification.content|raw }}</div>
+  </div>
+  {% if notification.reason %}
+    <table class="table table-striped table-hover" id="notification-table" style="word-break:break-all;">
+      <thead>
+        <tr>
+          <th width="70%">{{ 'admin.wechat_notification.failure_reason'|trans }}</th>
+          <th width="30%">{{ 'admin.wechat_notification.failure_number'|trans }}</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for failureReason in notification.reason %}
+        <tr>
+          <td>{{ failureReason.message }}</td>
+          <td>{{ failureReason.count }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="20">
+            <div class="empty">{{'admin.wechat_notification.failure_reason.empty'|trans}}</div>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+{% endblock %}

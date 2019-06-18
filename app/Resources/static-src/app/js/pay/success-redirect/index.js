@@ -1,5 +1,8 @@
 let item = $('.js-turn');
-countDown(item.find('.js-countdown').text());
+if ($('.js-feedback').length) {
+  countDown(item.find('.js-countdown').text());
+}
+
 
 function countDown(num) {
   item.find('.js-countdown').text(num);

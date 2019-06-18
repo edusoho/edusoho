@@ -5,6 +5,8 @@ namespace AppBundle\Controller\Cashier;
 use AppBundle\Controller\BaseController;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\System\Service\SettingService;
+use Biz\WeChat\Service\WeChatService;
 use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
@@ -106,6 +108,7 @@ class CashierController extends BaseController
 
         return $this->render('cashier/success.html.twig', array(
             'goto' => $this->generateUrl($product->successUrl[0], $product->successUrl[1]),
+            'product' => $product,
         ));
     }
 
@@ -179,9 +182,20 @@ class CashierController extends BaseController
         return $this->createService('Order:OrderService');
     }
 
-    private function getWorkflowService()
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
     {
-        return $this->createService('Order:WorkflowService');
+        return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    private function getWeChatService()
+    {
+        return $this->createService('WeChat:WeChatService');
     }
 
     /**

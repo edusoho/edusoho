@@ -4,75 +4,23 @@
     <div class="col-md-3 control-label">
       <label>{{ 'admin.payment_setting.api_status'|trans }}</label>
     </div>
-    <div class="controls col-md-3 radios">
-      {{ radios('wxpay_enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, payment.wxpay_enabled) }}
+    <div class="controls col-md-1">
+      <p class="form-control-static">
+        {% if payment.wxpay_enabled %}
+          {{ 'admin.payment_setting.api_open'|trans }}
+        {% else %}
+          {{ 'admin.payment_setting.api_close'|trans }}
+        {% endif %}
+      </p>
     </div>
-    <div class="controls col-md-4 radios">
-      <a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">{{ 'admin.payment_setting.wxpay_application'|trans }}</a>
-    </div>
-  </div>
-  <div data-sub="wxpay" {% if not payment.wxpay_enabled %} class="hidden" {% endif %}>
-    <div class="form-group" style="margin-top: -15px;">
-      <div class="col-md-3 help-block">
-      </div>
-      <div class="col-md-9 help-block">
-        {{ 'admin.payment_setting.wxpay_application_hint'|trans({'%wxpayUrl%': 'http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html'})|raw }}
-        <div class="alert alert-info text-left" role="alert">
-          {{ 'admin.payment_setting.wxpay_application_tips'|trans({'%qiqiuyuUrl%': 'http://www.qiqiuyu.com/article/892'})|raw }}
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="wxpay_appid">AppID</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="wxpay_appid" name="wxpay_appid" class="form-control" value="{{payment.wxpay_appid}}">
-        <div class="help-block">{{ 'admin.payment_setting.wxpay_appid_word'|trans({'%wxpayUrl%': 'https://mp.weixin.qq.com/'})|raw }}</div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="wxpay_secret">AppSecret</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="wxpay_secret" name="wxpay_secret" class="form-control" value="{{payment.wxpay_secret}}">
-        <div class="help-block">
-          <div class="help-block">{{ 'admin.payment_setting.wxpay_secret_word'|trans({'%wxpayUrl%': 'https://mp.weixin.qq.com/'})|raw }}</div>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="wxpay_secret">{{ 'admin.payment_setting.wxpay_secret'|trans }}</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="wxpay_secret" name="wxpay_mp_secret" class="form-control" value="{{payment.wxpay_mp_secret|default()}}">
-        <div class="help-block">
-          <div class="help-block">{{ 'admin.payment_setting.wxpay_mp_secret_hint'|trans({'%wxpMPHelpUrl%': 'http://www.qiqiuyu.com/faq/269/detail'})|raw }}</div>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="wxpay_account">{{ 'admin.payment_setting.wxpay_account'|trans }}</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="wxpay_account" name="wxpay_account" class="form-control" value="{{payment.wxpay_account}}">
-        <div class="help-block">{{ 'admin.payment_setting.wxpay_account_hint'|trans({'%wxpayUrl%': 'https://mp.weixin.qq.com/'})|raw }}</div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="wxpay_key">{{ 'admin.payment_setting.wxpay_key'|trans }}</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="wxpay_key" name="wxpay_key" class="form-control" value="{{payment.wxpay_key}}">
-        <div class="help-block">
-          {{ 'admin.payment_setting.wxpay_key_hint'|trans({'%wxpayUrl%': 'https://pay.weixin.qq.com/service_provider/index.shtml'})|raw }}
-        </div>
-      </div>
+    <div class="controls col-md-2 form-control-static">
+      <a target="_blank" href="{{ path('admin_setting_wechat_auth') }}">
+      {% if payment.wxpay_enabled %}
+        {{ 'admin.payment_setting.api_close.direct'|trans }}
+      {% else %}
+        {{ 'admin.payment_setting.api_open.direct'|trans }}
+      {% endif %}
+      </a>
     </div>
   </div>
 
