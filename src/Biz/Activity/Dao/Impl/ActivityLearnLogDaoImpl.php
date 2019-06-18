@@ -96,6 +96,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
     {
         $conditions['learnedTime_GE'] = 0;
         $conditions['learnedTime_LE'] = 24 * 60 * 60;
+        $conditions['event_NEQ'] = 'watching';
 
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(`learnedTime`) as learnedTime, `userId`')
