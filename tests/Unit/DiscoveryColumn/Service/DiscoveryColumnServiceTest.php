@@ -3,6 +3,7 @@
 namespace Tests\Unit\DiscovieryColumn\Service;
 
 use Biz\BaseTestCase;
+use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
 
 class DiscoveryColumnServiceTest extends BaseTestCase
 {
@@ -86,7 +87,7 @@ class DiscoveryColumnServiceTest extends BaseTestCase
         $this->assertArrayEquals($result, array($sortedColumn2, $sortedColumn1));
     }
 
-    public function getDisplayData()
+    public function testGetDisplayData()
     {
         $this->createDiscoveryColumn();
         $fakeCourseSets = array(
@@ -99,7 +100,37 @@ class DiscoveryColumnServiceTest extends BaseTestCase
         $columns = $this->getDiscoveryColumnService()->getDisplayData();
 
         $this->assertEquals($fakeCourseSets, $columns[0]['data']);
-        $this->assertEquals(1, $columns[0]['actualCount']);
+        $this->assertEquals(2, $columns[0]['actualCount']);
+        $fields = array(
+            'title' => 'test',
+            'type' => 'live',
+            'categoryId' => 2,
+            'showCount' => 4,
+            'seq' => 2,
+            'orderType' => 'recommend',
+        );
+
+        $this->getDiscoveryColumnService()->addDiscoveryColumn($fields);
+        $this->assertEquals($fakeCourseSets, $columns[0]['data']);
+        $this->assertEquals(2, $columns[0]['actualCount']);
+
+        $fields = array(
+            'title' => 'test',
+            'type' => 'classroom',
+            'categoryId' => 2,
+            'orderType' => 'new',
+            'showCount' => 4,
+            'seq' => 2,
+        );
+
+        $this->getDiscoveryColumnService()->addDiscoveryColumn($fields);
+        $this->mockBiz('Classroom:ClassroomService', array(
+            array('functionName' => 'searchClassrooms', 'returnValue' => $fakeCourseSets),
+        ));
+        $columns = $this->getDiscoveryColumnService()->getDisplayData();
+
+        $this->assertEquals($fakeCourseSets, $columns[0]['data']);
+        $this->assertEquals(2, $columns[0]['actualCount']);
     }
 
     private function createDiscoveryColumn()
@@ -116,6 +147,9 @@ class DiscoveryColumnServiceTest extends BaseTestCase
         return $this->getDiscoveryColumnService()->addDiscoveryColumn($fields);
     }
 
+    /**
+     * @return DiscoveryColumnService
+     */
     protected function getDiscoveryColumnService()
     {
         return $this->createService('DiscoveryColumn:DiscoveryColumnService');
