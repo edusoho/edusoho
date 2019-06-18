@@ -8,6 +8,7 @@ use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\User\CurrentUser;
+use Biz\System\Service\SettingService;
 
 class LoginController extends BaseController
 {
@@ -110,7 +111,7 @@ class LoginController extends BaseController
 
         $currentUser = $this->getCurrentUser();
 
-        if (!empty($faceLoginToken['data']['user']['id']) && (!$currentUser->isLogin() || $currentUser['id'] != $faceLoginToken['data']['user']['id'])) {
+        if (!empty($faceLoginToken['data']['user']['id']) && (!$currentUser->isLogin() || $faceLoginToken['data']['user']['id'] != $currentUser['id'])) {
             $user = $this->getUserService()->getUser($faceLoginToken['data']['user']['id']);
             $currentUser = new CurrentUser();
             $currentUser->fromArray($user);
@@ -130,7 +131,7 @@ class LoginController extends BaseController
     {
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
-            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->getTargetPath($request));
         }
 
         if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
@@ -182,6 +183,21 @@ class LoginController extends BaseController
         ));
     }
 
+    public function wechatQrcodeAction(Request $request)
+    {
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        if (!empty($wechatSetting['wechat_notification_enabled'])) {
+            $loginUrl = $this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->generateUrl('common_wechat_subscribe_wap')), true);
+            $response = array(
+                'img' => $this->generateUrl('common_qrcode', array('text' => $loginUrl), true),
+            );
+
+            return $this->createJsonResponse($response);
+        }
+
+        return $this->createJsonResponse(array('img' => ''));
+    }
+
     protected function getTargetPath(Request $request)
     {
         if ($request->query->get('goto')) {
@@ -224,5 +240,13 @@ class LoginController extends BaseController
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 }

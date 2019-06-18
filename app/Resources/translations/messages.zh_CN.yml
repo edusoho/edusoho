@@ -5772,6 +5772,19 @@ admin.mobile_manage.discovery_column.edit_btn: 编辑
 admin.mobile_manage.discovery_column.delete_btn: 删除
 admin.mobile_manage.discovery_column.empty: 暂无分类记录
 
+# 微信通知管理
+admin.wechat_notification.switch: 微信通知开关
+admin.wechat_notification.template: 微信通知模板
+admin.wechat_notification.template_name: 模板名称
+admin.wechat_notification.template_content_sample: 模板内容示例
+admin.wechat_notification.send_object: 发送对象
+admin.wechat_notification.operation: 操作
+admin.wechat_notification.template_content: 通知内容
+admin.wechat_notification.template_content_detail: 详情
+admin.wechat_notification.failure_reason: 失败原因
+admin.wechat_notification.failure_number: 失败人数
+admin.wechat_notification.failure_reason.empty: 暂无失败原因
+
 # 数据统计
 admin.operation_analysis.data_type_placeholder: --选择数据类型--
 admin.operation_analysis.this_month: 本月
@@ -7175,7 +7188,41 @@ admin.setting_course.classroom.classroom_list_default_seq.help_block: 地址：�
 admin.setting_course.custom_chapter_name: 设置章节名称
 admin.setting_course.custom_chapter_name_enabled_hint: 开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。
 
+#微信授权设置
+admin.setting_wechat_auth.web_scan_login: 网页扫码登录
+admin.setting_wechat_auth.wechat_auth_login: 微信内授权登录
+admin.setting_wechat_auth.wechat_notification: 微信服务号通知
+admin.setting_wechat_auth.wechat_pay: 微信支付
+admin.setting_wechat_auth.web_scan_login_hint: >
+  开通后，网站PC端将支持微信扫码登录。<br>请先填写右侧表单中的网站AppID及网站AppSecret。
+admin.setting_wechat_auth.wechat_auth_login_hint: >
+  开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。<br>
+  请先填写右侧表单中的服务号AppID、服务号AppSecretMP文件验证码。
+admin.setting_wechat_auth.wechat_notification_hint: >
+  开通后，绑定微信并且关注服务号的用户即可收取微信服务号模板消息。<br>
+  请先开启网页扫码登录和微信内授权登录，并填写右侧表单中的服务号二维码。
+admin.setting_wechat_auth.wechat_pay_hint: >
+  开通后，可在PC端、微信APP、WAP内选择微信支付，仅支持配置<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">公众号支付</a>支付。<br>
+  请先填写右侧表单中的服务号AppID、服务号AppSecret、MP文件验证码、商户号以及微信商户平台API密钥。
+admin.setting_wechat_auth.web_secret_hint: APP ID和APP Secret来自<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>创建的网站应用。
+admin.setting_wechat_auth.account_secret_hint: APP ID和APP Secret来自<a target="_blank" href="https://mp.weixin.qq.com">微信公众平台</a>服务号内，在左侧栏【开发】-【基本配置】-【开发者ID】中。
+admin.setting_wechat_auth.account_number_hint: 商户号来自<a target="_blank" href="https://mp.weixin.qq.com">微信公众平台</a>内左侧栏【微信支付】-【商户信息】
+admin.setting_wechat_auth.api_secret_key_hint: 微信商户平台API密钥需要登录<a target="_blank" href="https://pay.weixin.qq.com">微信商户平台</a>，在【账户设置】-【API安全】中设置密匙
+admin.setting_wechat_auth.tutorial_button: 查看教程
+admin.setting_wechat_auth.web_appid: 网站AppID
+admin.setting_wechat_auth.web_secret: 网站AppSecret
+admin.setting_wechat_auth.account_appid: 服务号AppID
+admin.setting_wechat_auth.account_secret: 服务号AppSecret
+admin.setting_wechat_auth.account_code: 服务号二维码
+admin.setting_wechat_auth.account_number: 商户号
+admin.setting_wechat_auth.mp_token: MP文件验证码
+admin.setting_wechat_auth.api_secret_key: 微信商户平台API密钥
+admin.setting_wechat_auth.account_code_empty: 暂未设置二维码
+admin.setting_wechat_auth.account_code_view: 查看大图
+admin.setting_wechat_auth.account_code_download: 下载二维码
+
 #开发者设置
+admin.developer_setting.cloud_notification_api: 通知服务API
 admin.developer_setting.content_title: 开发者设置
 admin.developer_setting.debug_label: 调试
 admin.developer_setting.app_center_api_address: 应用中心API地址
@@ -7212,7 +7259,8 @@ admin.developer_setting.tips: >
       「应用中心API地址」：空<br>
       「云服务API地址」：　http://api.edusoho.net 或 空<br>
       「IMAPI地址」：　http://imapi.edusoho.net/v1/ 或 空<br>
-      「HLS加密视频」：　开启
+      「HLS加密视频」：　开启<br>
+      「通知服务API地址」：　http://notifition-service.qiqiuyun.net 或 空 <br>
     </li>
   </ul>
 admin.developer_setting.mp_service_url_label: 小程序服务平台地址
@@ -7633,6 +7681,10 @@ admin.payment_setting.pay_disabled_tips: 支付关闭时的提示信息
 admin.payment_setting.payment_hint: 开启后，网站收入将自动到达配置的支付宝、微信支付或网银帐号中。
 admin.payment_setting.payment: 支付功能
 admin.payment_setting.api_status: 接口状态
+admin.payment_setting.api_open: 已开启
+admin.payment_setting.api_close: 已关闭
+admin.payment_setting.api_open.direct: 前往开启
+admin.payment_setting.api_close.direct: 前往关闭
 admin.payment_setting.api_type: 接口类型
 admin.payment_setting.alipay_api_type.direct: 电脑网站支付接口
 admin.payment_setting.alipay_api_type.direct.hint: >
@@ -8586,6 +8638,12 @@ log.action.article.publish: 发布
 log.action.article.unpublish: 取消发布
 log.action.notify.create: 创建
 log.action.notify.check_fail: 检测
+log.action.notify.wechat_notify_lesson_publish: 课时新增微信通知
+log.action.notify.wechat_notify_live_play: 直播开课微信通知
+log.action.notify.wechat_notify_exam_result: 考试结果微信通知
+log.action.notify.wechat_notify_homework_result: 作业结果微信通知
+log.action.notify.wechat_notify_pay_success: 支付成功微信通知
+log.action.notify.wechat_notify_coin_recharge: 充值成功微信通知
 log.action.order.pay_result: 支付结果
 log.action.order.andit_refund: 退款审核
 log.action.order.refund_cancel: 取消退款
@@ -9860,6 +9918,8 @@ exception.course.draft.not_found: 教学计划草稿不存在
 exception.task_result.not_found: 学习任务结果不存在
 exception.discovery_column.not_found: 发现栏目不存在
 
+exception.wechat.notify_setting_not_enabled: 微信通知未开启
+
 course.unname_title: 未命名计划
 
 admin.index.course_order: 课程订单
@@ -9910,6 +9970,36 @@ material.common_table.no_need_transcode: 无需转码
 material.common_table.label.has_mp4: 已生成MP4
 material_lib.search.type.title: 文件名称
 material_lib.search.type.course: 课程名称
+classroom.back_btn_text: 返回班级
+
+# 微信通知
+wechat.notification.open_notification_hint_title: 为享受更好的服务，建议您开启微信课程通知。
+wechat.notification.open_notification_hint_content: 扫码关注服务号，即可成功开启课程通知。
+wechat.notification.account_qrcode_scan: 请扫二维码，关注服务号
+wechat.notification.course_notification_open: 扫一扫，开启课程通知
+wechat.notification.pay_success: 支付成功
+wechat.notification.open_notification_tip: 扫码关注服务号，即可接收课程通知。
+wechat.notification.mobile_open_notification_tip: 长按识别二维码关注服务号，即可接受课程通知。
+wechat.notification.scan_and_bind: 扫码绑定微信并关注服务号，即可接收课程通知。
+wechat.notification.record_content: 通知内容
+wechat.notification.record_send_time: 发送时间
+wechat.notification.record_send_status: 发送状态
+wechat.notification.record_number: 接收/发送人数
+wechat.notification.record.empty: 暂无发送记录
+wechat.notification.switch_status_error: 微信服务号通知开关失败
+wechat.notification.status.finish: 发送完成
+wechat.notification.status.sending: 发送中
+wechat.notification.cloud.tips: 您还未开通教育云，无法正常使用微信服务号通知功能。
+wechat.notification.cloud_open: 前往开通
+
+# 微信通知模板
+wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[课程名]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
+wechat.notification.template.homework_result: '同学，你好，你的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
+wechat.notification.template.exam_result: '同学，你好，你的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
+wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]<br>请及时前往学习'
+wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值或学习卡<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
+wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
+
 
 
 

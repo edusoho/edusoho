@@ -1178,9 +1178,10 @@ class UserServiceImpl extends BaseService implements UserService
 
         $bind = $this->getUserBindByTypeAndUserId($type, $toId);
         if ($bind) {
-            $type = $this->convertOAuthType($type);
-            $this->getUserBindDao()->deleteByTypeAndToId($type, $toId);
+            $convertedType = $this->convertOAuthType($type);
+            $this->getUserBindDao()->deleteByTypeAndToId($convertedType, $toId);
             $currentUser = $this->getCurrentUser();
+            $this->dispatchEvent('user.unbind', new Event($user, array('bind' => $bind, 'bindType' => $type, 'convertedType' => $convertedType)));
             $this->getLogService()->info('user', 'unbind', sprintf('用户名%s解绑成功，操作用户为%s', $user['nickname'], $currentUser['nickname']));
         }
 
@@ -1192,6 +1193,20 @@ class UserServiceImpl extends BaseService implements UserService
         $type = $this->convertOAuthType($type);
 
         return $this->getUserBindDao()->getByTypeAndFromId($type, $fromId);
+    }
+
+    public function findUserBindByTypeAndFromIds($type, $fromIds)
+    {
+        $type = $this->convertOAuthType($type);
+
+        return $this->getUserBindDao()->findByTypeAndFromIds($type, $fromIds);
+    }
+
+    public function findUserBindByTypeAndToIds($type, $toIds)
+    {
+        $type = $this->convertOAuthType($type);
+
+        return $this->getUserBindDao()->findByTypeAndToIds($type, $toIds);
     }
 
     public function getUserBindByToken($token)
@@ -1216,6 +1231,19 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserBindDao()->getByToIdAndType($type, $toId);
     }
 
+    public function findUserBindByTypeAndUserId($type, $toId)
+    {
+        $user = $this->getUserDao()->get($toId);
+
+        if (empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
+        $type = $this->convertOAuthType($type);
+
+        return $this->getUserBindDao()->findByToIdAndType($type, $toId);
+    }
+
     public function bindUser($type, $fromId, $toId, $token)
     {
         $user = $this->getUserDao()->get($toId);
@@ -1228,16 +1256,18 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(UserException::CLIENT_TYPE_INVALID());
         }
 
-        $type = $this->convertOAuthType($type);
+        $convertedType = $this->convertOAuthType($type);
 
-        $this->getUserBindDao()->create(array(
-            'type' => $type,
+        $bind = $this->getUserBindDao()->create(array(
+            'type' => $convertedType,
             'fromId' => $fromId,
             'toId' => $toId,
             'token' => empty($token['token']) ? '' : $token['token'],
             'createdTime' => time(),
             'expiredTime' => empty($token['expiredTime']) ? 0 : $token['expiredTime'],
         ));
+
+        $this->dispatchEvent('user.bind', new Event($user, array('bind' => $bind, 'bindType' => $type, 'convertedType' => $convertedType, 'token' => $token)));
     }
 
     public function markLoginInfo($type = null)

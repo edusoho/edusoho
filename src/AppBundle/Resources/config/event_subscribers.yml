@@ -315,3 +315,9 @@ services:
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }
+
+    wechat_notification_event_subscriber:
+        class: Biz\WeChatNotification\Event\WeChatNotificationEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }

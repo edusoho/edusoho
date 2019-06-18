@@ -4741,6 +4741,17 @@ admin.mobile_manage.discovery_column.new: Latest
 admin.mobile_manage.discovery_column.edit_btn: Edit
 admin.mobile_manage.discovery_column.delete_btn: Delete
 admin.mobile_manage.discovery_column.empty: 'No Category'
+admin.wechat_notification.switch: WeChat Notification Switch
+admin.wechat_notification.template: WeChat Notification Template
+admin.wechat_notification.template_name: Template Name
+admin.wechat_notification.template_content_sample: Template Content Sample
+admin.wechat_notification.send_object: Send Object
+admin.wechat_notification.operation: Operation
+admin.wechat_notification.template_content: Notification Content
+admin.wechat_notification.template_content_detail: Detail
+admin.wechat_notification.failure_reason: Failure Reason
+admin.wechat_notification.failure_number: Failure Number
+admin.wechat_notification.failure_reason.empty: No Failure Reason
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
@@ -5874,6 +5885,38 @@ admin.setting_course.classroom.classroom_list.help_block: 'Class list'
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 'Address: Domain names /classroom/explore, anyone can view all published classes at this page. If you need to set class order, please go to the "site settings" - "Themes" - "Manage". Class order settings are only supported by ink-only theme and simplicity theme.'
 admin.setting_course.custom_chapter_name: Set chapter name
 admin.setting_course.custom_chapter_name_enabled_hint: After opening, add a chapter in the lesson management, the system will automatically generate the chapter name set as follows.
+admin.setting_wechat_auth.web_scan_login: Web Scan Login
+admin.setting_wechat_auth.wechat_auth_login: WeChat Authorize Login
+admin.setting_wechat_auth.wechat_notification: WeChat Account Notification
+admin.setting_wechat_auth.wechat_pay: WeChat Pay
+admin.setting_wechat_auth.web_scan_login_hint: >
+  If approved, users can login the site by scanning qrcode.<br>Please fill in the website AppID and the website AppSecret in the form on the right.
+admin.setting_wechat_auth.wechat_auth_login_hint: >
+  If turned on, users can register or login the site with wechat id in wechat app.<br>
+  Please fill in the service number AppID and service number AppSecretMP file verification code in the form on the right.
+admin.setting_wechat_auth.wechat_notification_hint: >
+  After the activation, the user who binds WeChat and pays attention to the service number can receive the WeChat service number template message.<br>
+  Please open the webpage scan code login and the authorized login in WeChat, and fill in the service number QR code in the form on the right.
+admin.setting_wechat_auth.wechat_pay_hint: >
+  After opening, it can be used on the PC side, WeChat APP, WAP to select WeChat payment, only support configuration<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html"> public account payment </a>to pay。<br>
+  Please fill in the service number AppID, service number AppSecret, MP file verification code, merchant number and WeChat merchant platform API key in the form on the right.
+admin.setting_wechat_auth.web_secret_hint: APP ID and APP Secret can be found at <a target="_blank" href="https://open.weixin.qq.com"> wechat oepn platform </a> - create Web applications.
+admin.setting_wechat_auth.account_secret_hint: APP ID APP Secret can be found at <a target="_blank" href="https://mp.weixin.qq.com/"> wechat public platform </a> - your services account, check the left column "development" - "Basic configuration" - "Developer ID ".
+admin.setting_wechat_auth.account_number_hint: The merchant number is from the left side of the <a target="_blank" href="https://mp.weixin.qq.com/"> wechat public platform </a>, 'WeChat Payment' - 'Business Information'
+admin.setting_wechat_auth.api_secret_key_hint: WeChat merchant platform API key needs to log in to <a target="_blank" href="https://pay.weixin.qq.com"> the WeChat merchant platform </a>, set the key in 'Account Settings' - 'API Security'
+admin.setting_wechat_auth.tutorial_button: View Tutorial
+admin.setting_wechat_auth.web_appid: Web AppID
+admin.setting_wechat_auth.web_secret: Web AppSecret
+admin.setting_wechat_auth.account_appid: Account AppID
+admin.setting_wechat_auth.account_secret: Account AppSecret
+admin.setting_wechat_auth.account_code: Account Qrcode
+admin.setting_wechat_auth.account_number: Account Number
+admin.setting_wechat_auth.mp_token: MP File verification code
+admin.setting_wechat_auth.api_secret_key: Wechat merchant platform API Key
+admin.setting_wechat_auth.account_code_empty: No QR Code Yet
+admin.setting_wechat_auth.account_code_view: View Larger Image
+admin.setting_wechat_auth.account_code_download: Download QR code
+admin.developer_setting.cloud_notification_api: Notification API
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
@@ -6244,6 +6287,10 @@ admin.payment_setting.pay_disabled_tips: 'Tips when close the payment'
 admin.payment_setting.payment_hint: 'If turned on, the site revenue will transfer automatically to configured alipay account, wechat pay account or online banking account.'
 admin.payment_setting.payment: 'Payment function'
 admin.payment_setting.api_status: 'Interface status'
+admin.payment_setting.api_open: Opened
+admin.payment_setting.api_close: Closed
+admin.payment_setting.api_open.direct: To Open
+admin.payment_setting.api_close.direct: To Close
 admin.payment_setting.api_type: 'Interface type'
 admin.payment_setting.alipay_api_type.direct: 'PC website payments'
 admin.payment_setting.alipay_api_type.direct.hint: >
@@ -7343,6 +7390,12 @@ log.action.article.publish: 'Publish'
 log.action.article.unpublish: 'Cancel publish'
 log.action.notify.create: 'Create'
 log.action.notify.check_fail: 'Check'
+log.action.notify.wechat_notify_lesson_publish: WeChat Notify Lesson Publish
+log.action.notify.wechat_notify_live_play: WeChat Notify Live Play
+log.action.notify.wechat_notify_exam_result: WeChat Notify Exam Result
+log.action.notify.wechat_notify_homework_result: WeChat Notify Homework Result
+log.action.notify.wechat_notify_pay_success: WeChat Notify Pay Success
+log.action.notify.wechat_notify_coin_recharge: WeChat Notify Recharge Success
 log.action.order.pay_result: 'Payment result'
 log.action.order.andit_refund: 'Refund review'
 log.action.order.refund_cancel: 'Cancel refund'
@@ -8577,6 +8630,8 @@ exception.task_result.not_found: 学习任务结果不存在
 exception.discovery_column.not_found: 发现栏目不存在
 exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
 
+exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
+
 course.unname_title: unname course
 
 admin.index.course_order: "course order"
@@ -8621,3 +8676,36 @@ material.common_table.no_need_transcode: 无需转码
 material.common_table.label.has_mp4: 已生成MP4
 material_lib.search.type.title: 文件名称
 material_lib.search.type.course: 课程名称
+classroom.back_btn_text: 返回班级
+
+# 微信通知
+wechat.notification.open_notification_hint_title: For better service, we recommend that you open the WeChat course notification.
+wechat.notification.open_notification_hint_content: Scan the code to follow the account and you can successfully open the course notification.
+wechat.notification.account_qrcode_scan: Please scan the QR code and pay attention to the account.
+wechat.notification.course_notification_open: Sweep, start the course notification
+wechat.notification.pay_success: Pay Success
+wechat.notification.open_notification_tip: Scan code to pay attention to the account, you can receive the course notice.
+wechat.notification.mobile_open_notification_tip: Long press the identification QR code to follow the account to receive the course notice.
+wechat.notification.scan_and_bind: Scan code binding to WeChat and follow the service number to receive course notifications.
+wechat.notification.switch_status_error: WeChat Account Notification Switch Fail
+wechat.notification.record_content: Notification content
+wechat.notification.record_send_time: Send time
+wechat.notification.record_send_status: Send status
+wechat.notification.record_number: receive/send number
+wechat.notification.record.empty: empty send records
+wechat.notification.status.finish: Send Finish
+wechat.notification.status.sending: Sending
+wechat.notification.cloud.tips: You have not yet opened an education cloud and cannot use the WeChat service number notification function
+wechat.notification.cloud_open: Go to the opening
+
+# 微信通知模板
+wechat.notification.template.live_start: Hello, classmate.<br>It is hereby notified that the [course name] you are enrolled in will start in the [live class start time].<br>Don't be late.
+wechat.notification.template.homework_result: 'Classmate, hello, your homework has been reviewed.<br>Job Name: [Task Name]]<br>Course: [course name]<br>Tutor: [Teacher User Name]<br>Homework result: [homework result]'
+wechat.notification.template.exam_result: 'Hello, your class has been reviewed.<br>Examination subject: [task name]<br>Test score: [test score]<br>Keep up the good work'
+wechat.notification.template.lesson_add: 'Classmate, hello, the course has a new task to post<br>Course Name: [Course Name]<br>Course category: [Course category]<br>Course Teacher: [Teacher User Name]<br>Course time: [Task release time]<br>Please go to study in time.'
+wechat.notification.template.charge_success: 'Dear customer, you have recharged successfully<br>Recharge type: cash recharge or study card<br>Recharge order number: [order number]<br>Recharge amount: [actual payment price]<br>Recharge time: [payment time]<br>Go and see the course~'
+wechat.notification.template.buy_success: 'Dear customer, you have paid successfully<br>Order details: [product name]<br>Order price: [Order price]<br>Order time: [payment time]<br>Member due date: none<br>Please go to view'
+
+
+
+

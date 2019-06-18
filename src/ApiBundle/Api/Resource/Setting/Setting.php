@@ -15,7 +15,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat'))) {
             throw CommonException::ERROR_PARAMETER();
         }
 
@@ -51,6 +51,21 @@ class Setting extends AbstractResource
             'url' => $siteSetting['url'],
             'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
         );
+    }
+
+    public function getWeChat($request)
+    {
+        $weChatSetting = $this->getSettingService()->get('wechat', array());
+
+        $result = array(
+            'enabled' => empty($weChatSetting['wechat_notification_enabled']) ? false : true,
+            'official_qrcode' => empty($weChatSetting['account_code']) ? '' : $weChatSetting['account_code'],
+        );
+
+        $filter = new WeChatSettingFilter();
+        $filter->filter($result);
+
+        return $result;
     }
 
     public function getWap($request = null)

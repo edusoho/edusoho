@@ -2370,5 +2370,30 @@ admin_wechat_app_access:
     defaults: { _controller: AppBundle:Admin/Cloud:accessWechat }
 
 admin_course_tag_match:
-  path:  /course_set/tag/match
-  defaults: { _controller: AppBundle:Admin/CourseSet:courseTagMatch }
+    path:  /course_set/tag/match
+    defaults: { _controller: AppBundle:Admin/CourseSet:courseTagMatch }
+
+admin_setting_wechat_auth:
+    path: /wechat/auth/setting
+    defaults: { _controller: AppBundle:Admin/WeChatSetting:index}
+
+admin_wechat_notification_record: 
+    path: /wechat/notification/record
+    defaults: { _controller: AppBundle:Admin/WeChatNotification:record}
+
+admin_wechat_notification_record_detail: 
+    path: /wechat/notification/record/{id}/detail
+    defaults: { _controller: AppBundle:Admin/WeChatNotification:recordDetail}
+
+admin_wechat_notification_manage: 
+    path: /wechat/notification/manage
+    defaults: { _controller: AppBundle:Admin/WeChatNotification:manage}
+
+admin_wechat_notification_show: 
+    path: /wechat/notification/show
+    defaults: { _controller: AppBundle:Admin/WeChatNotification:show}
+
+admin_wechat_notification_template_status: 
+    path: /wechat/notification/template/status
+    defaults: { _controller: AppBundle:Admin/WeChatNotification:status}
+

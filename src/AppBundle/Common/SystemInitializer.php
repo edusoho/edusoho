@@ -41,6 +41,7 @@ class SystemInitializer
         $this->_initThemes();
         $this->_initCoin();
         $this->_initJob();
+        $this->_initQueueJob();
         $this->_initOrg();
         $this->_initRole();
         $this->_initUserBalance();
@@ -616,6 +617,17 @@ EOD;
         SystemCrontabInitializer::init();
 
         $this->output->writeln(' ...<info>成功</info>');
+    }
+
+    protected function _initQueueJob()
+    {
+        $this->output->write('  DataBase消息队列初始化');
+        try {
+            SystemQueueCrontabinitializer::init();
+            $this->output->writeln(' ...<info>成功</info>');
+        } catch (\Exception $e) {
+            $this->output->writeln(' ...<info>失败</info>'.$e->getMessage());
+        }
     }
 
     protected function _initSystemUsers()

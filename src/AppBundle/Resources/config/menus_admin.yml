@@ -603,6 +603,18 @@ admin:
                                     name: admin.operation.mobile.discovery_column_tab.create_btn
                                     group: topBtn
                                     mode: modal
+                admin_operation_wechat_notification:
+                    name: admin.operation.wechat_notification
+                    group: 2
+                    children:
+                        admin_operation_wechat_notification_record:
+                            name: admin.operation.wechat.notification_record_tab
+                            disable: true
+                            router_name: admin_wechat_notification_record
+                        admin_operation_wechat_notification_manage:
+                            name: admin.operation.wechat.notification_manage
+                            disable: true
+                            router_name: admin_wechat_notification_manage
                 admin_operation_analysis_register:
                     name: admin.operation.analysis_menu
                     group: 3
@@ -1015,6 +1027,12 @@ admin:
                             router_name: admin_coin_settings
                         admin_setting_refund:
                             name: admin.system.finance.refund_tab
+                            disable: true
+                admin_setting_wechat:
+                    name: admin.system.wechat_auth_menu
+                    children:
+                        admin_setting_wechat_auth:
+                            name: admin.system.wechat_auth_menu
                             disable: true
                 admin_setting_mobile_iap_product:
                     name: admin.system.mobile_iap_product_menu

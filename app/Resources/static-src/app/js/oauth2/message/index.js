@@ -13,9 +13,7 @@ if (os === 'iOS') {
 } else if (os === 'Android') {
   window.android.login(token);
 } else {
-  if (os === 'h5') {
-    gotoUrl = h5GotoUrl
-  }
+  gotoUrl = h5GotoUrl;
   if (duration > 0 && gotoUrl) {
     countDown($countDown, duration, gotoUrl);
   }
