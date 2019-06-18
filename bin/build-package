@@ -67,8 +67,7 @@ echo "h5静态资源生成成功";
 # 打包edusoho-h5
 
 # remove node modules folder and caches folder
-echo $(tput setaf 2)remove old
- and app/caches using  command  $(tput bold)rm -rf app/caches node_modules $(tput sgr 0)
+echo $(tput setaf 2)remove old node_modules and app/caches using  command  $(tput bold)rm -rf app/caches node_modules $(tput sgr 0)
 rm -rf app/caches node_modules
 # yarn install --production;
 yarn;
