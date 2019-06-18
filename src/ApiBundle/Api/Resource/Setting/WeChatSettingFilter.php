@@ -12,6 +12,7 @@ class WeChatSettingFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        $data['official_qrcode'] = $this->convertFilePath($data['official_qrcode']);
+        $index = strpos($data['official_qrcode'], '//');
+        $data['official_qrcode'] = (false !== $index && 0 === $index) ? $data['official_qrcode'] : $this->convertFilePath($data['official_qrcode']);
     }
 }

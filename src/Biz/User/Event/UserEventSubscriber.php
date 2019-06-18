@@ -31,7 +31,12 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
             if (empty($token['openid'])) {
                 return;
             }
-            $this->getWeChatService()->freshOfficialWeChatUserWhenLogin($user, $bind, $token);
+
+            try {
+                $this->getWeChatService()->freshOfficialWeChatUserWhenLogin($user, $bind, $token);
+            } catch (\Exception $e) {
+                $this->getLogger()->error($e);
+            }
         }
     }
 
@@ -156,6 +161,17 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getNotificationService()
     {
         return $this->getBiz()->service('User:NotificationService');
+    }
+
+    /**
+     * @return Log
+     */
+    protected function getLogger()
+    {
+        $biz = $this->getBiz();
+        $logger = $biz['logger'];
+
+        return $logger;
     }
 
     /**

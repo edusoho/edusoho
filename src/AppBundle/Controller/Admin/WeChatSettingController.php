@@ -75,39 +75,6 @@ class WeChatSettingController extends BaseController
         ));
     }
 
-    protected function handleCloudNotifiaction($oldSetting, $newSetting, $loginConnect)
-    {
-        if ($oldSetting['wechat_notification_enabled'] == $newSetting['wechat_notification_enabled']) {
-            return true;
-        }
-
-        $biz = $this->getBiz();
-        try {
-            if (1 == $newSetting['wechat_notification_enabled']) {
-                $biz['qiQiuYunSdk.notification']->openAccount();
-                $result = $biz['qiQiuYunSdk.notification']->openChannel(NotificationChannels::CHANNEL_WECHAT, array(
-                    'app_id' => $loginConnect['weixinmob_key'],
-                    'app_secret' => $loginConnect['weixinmob_secret'],
-                ));
-            } else {
-                $biz['qiQiuYunSdk.notification']->closeAccount();
-                $result = $biz['qiQiuYunSdk.notification']->closeChannel(NotificationChannels::CHANNEL_WECHAT);
-            }
-        } catch (\RuntimeException $e) {
-            $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
-
-            return false;
-        }
-
-        if (empty($result)) {
-            $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
-
-            return false;
-        }
-
-        return true;
-    }
-
     protected function isCloudOpen()
     {
         try {

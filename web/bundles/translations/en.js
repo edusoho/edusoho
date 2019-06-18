@@ -1144,6 +1144,7 @@ t.add("admin.system.payment.wxpay_key_input.message", "Please input the merchant
 t.add("admin.system.payment.llpay_key_input.message", "Please input the merchant account number", "js", "en");
 t.add("admin.system.payment.llpay_accessKey_input.message", "Please input the public key", "js", "en");
 t.add("admin.system.payment.llpay_secretKey_input.message", "Please input the secret key", "js", "en");
+t.add("admin.system.wechat.notification_open", "Please open \"Web Scan URL Login\" and \"WeChat Authorized Login\" first", "js", "en");
 t.add("admin.system.user_fields.truename", "truename", "js", "en");
 t.add("admin.system.user_fields.mobile", "mobile", "js", "en");
 t.add("admin.system.user_fields.company", "company", "js", "en");
@@ -1231,4 +1232,8 @@ t.add("material.common_table.not_support_error_tip", "\u4e0a\u4f20\u7684\u6587\u
 t.add("material.common_table.solution_way", "\u89e3\u51b3\u65b9\u6848", "js", "en");
 t.add("course.stick.success", "Top success!", "js", "en");
 t.add("course.cancel.stick.success", "Unpinned successfully!", "js", "en");
+t.add("wechat.notification.wechat_bind_hover", "<div class=\"wechat-intro-title cd-text-warning\"><i class=\"es-icon es-icon-xinxi cd-mr8\"><\/i>Prompt<\/div>\n  <div class=\"wechat-intro-content\">\n    <div>For better service, we recommend that you open the WeChat course notification.<\/div>\n    <div>Click here to bind WeChat and follow the service number to start the course notification.<\/div>\n  <\/div>\n", "js", "en");
+t.add("wechat.notification.homepage_open_tip", "<span class=\"%messageClass%\">\"WeChat notification\" can be opened in \"Personal Settings - Third Party Login\"\u3002<\/span>", "js", "en");
+t.add("wechat.notification.homepage.open_tip_title", "<span class=\"%messageClass%\">go to open<\/span>", "js", "en");
+t.add("wechat.notification.cloud_open_tip", "Please open ES Cloud", "js", "en");
 })(Translator);
