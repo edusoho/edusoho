@@ -31,9 +31,7 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      isLoading: state => state.isLoading
-    }),
+    ...mapState(['wechatSwitch', 'isLoading'])
   },
   mounted() {
     const { pay_amount, title, sn, openid } = this.$route.query;
@@ -54,6 +52,15 @@ export default {
           data.platformCreatedResult,
           (res) => {
             if (res.err_msg == 'get_brand_wcpay_request:ok') {
+              if (this.wechatSwitch) {
+                this.$router.replace({
+                  path: '/pay_success',
+                  query: {
+                    paidUrl: data.paidSuccessUrlH5
+                  }
+                })
+                return;
+              }
               location.href = data.paidSuccessUrlH5;
               // this.$router.push({ path: data.paidSuccessUrlH5 });
             } else {

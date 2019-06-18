@@ -101,20 +101,18 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      isLoading: state => state.isLoading
-    }),
+    ...mapState(['wechatSwitch', 'isLoading']),
     total() {
+      const totalNumber = this.course.totalPrice;
       if (!this.itemData) {
-        return Number(this.course.totalPrice).toFixed(2);
+        return totalNumber ? Number(this.course.totalPrice).toFixed(2) : '';
       }
       const minusType = (this.itemData.type === 'minus');
       const couponRate = this.itemData.rate;
-      const totalNumber = this.course.totalPrice;
       if (minusType) {
         return Math.max(totalNumber - couponRate, 0).toFixed(2);
       }
-      return Number(totalNumber * couponRate * 0.1).toFixed(2);
+      return totalNumber ? Number(totalNumber * couponRate * 0.1).toFixed(2) : '';
     },
     couponMoney() {
       if (!this.itemData) {
@@ -162,7 +160,8 @@ export default {
     }).then(res => {
       this.course = res;
     }).catch(err => {
-      Toast.fail(err.message)
+      //购买后返回会造成重复下单报错
+      this.$router.go(-1);
     })
   },
   methods: {
@@ -178,6 +177,16 @@ export default {
             num: this.targetNum,
           }
         }).then(() => {
+          if (this.wechatSwitch) {
+            this.$router.replace({
+              path: '/pay_success',
+              query: {
+                targetType: this.targetType,
+                targetId: this.targetId
+              }
+            })
+            return;
+          }
           if (this.targetType === 'vip') {
             this.$router.replace({
               path: `/${this.targetType}`

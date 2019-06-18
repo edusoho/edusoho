@@ -89,7 +89,7 @@ export default {
       }
       if (status === 'ongoing' && !this.counting) {
         this.activity.status = 'closed';
-        return `${typeText[type]}已结束`;
+        return `${typeText[this.type]}已结束`;
       };
       switch (this.type) {
         case 'groupon':

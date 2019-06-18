@@ -48,11 +48,13 @@
       <review-list ref="review" :targetId="details.classId" :reviews="details.reviews" title="学员评价" type="classroom" defaulValue="暂无评价"></review-list>
 
       <!-- 加入学习 -->
-      <e-footer v-if="!marketingActivities.seckill || ((marketingActivities.seckill && isEmpty) || planDetails.price == 0)" :disabled="!accessToJoin" @click.native="handleJoin">
+      <e-footer v-if="!marketingActivities.seckill || (marketingActivities.seckill && (isEmpty || seckillStatus === '已到期')) || planDetails.price == 0" :disabled="!accessToJoin" @click.native="handleJoin">
       {{details.access.code | filterJoinStatus('classroom', vipAccessToJoin)}}</e-footer>
       <!-- 秒杀 -->
-      <e-footer v-if="showSeckill" :disabled="!accessToJoin" :half="!!showSeckill" @click.native="handleJoin">{{details.access.code | filterJoinStatus('classroom', vipAccessToJoin)}}</e-footer>
-      <e-footer v-if="showSeckill" :half="!!showSeckill" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
+      <div v-if="!!showSeckill && seckillStatus !== '已到期'" >
+        <e-footer :disabled="!accessToJoin" half="true" @click.native="handleJoin">{{details.access.code | filterJoinStatus('classroom', vipAccessToJoin)}}</e-footer>
+        <e-footer half="true" @click.native="activityHandle(marketingActivities.seckill.id)">去秒杀</e-footer>
+      </div>
     </div>
 
   </div>
@@ -72,6 +74,7 @@
   import Api from '@/api';
   import getCouponMixin from '@/mixins/coupon/getCouponHandler';
   import getActivityMixin from '@/mixins/activity/index';
+  import { dateTimeDown } from '@/utils/date-toolkit';
 
   const TAB_HEIGHT = 44;
 
@@ -137,9 +140,15 @@
         return Object.keys(this.marketingActivities).length === 1
           && this.marketingActivities.seckill;
       },
+      seckillStatus() {
+        const seckillData = this.marketingActivities.seckill;
+        const endTime = dateTimeDown(new Date(seckillData.endTime).getTime());
+        return endTime;
+      },
       showSeckill() {
+        const seckillData = this.marketingActivities.seckill;
         return Number(this.planDetails.price) !== 0
-          && this.marketingActivities.seckill && !this.isEmpty;
+          && seckillData && seckillData.status==='ongoing' && !this.isEmpty;
       },
     },
     mounted() {

@@ -79,15 +79,18 @@
           }
           &__content {
             @extend .flex-column;
-            margin-left: vw(10);
-            flex: 1;
+            width: 100%;
+            padding-left: vw(10);
+            box-sizing: border-box;
+            flex-shrink: 0;
+            // flex: 1;
             span {
               color: #2B333B;
               word-break: break-word;
-              &:last-child {
-                color: #b0bdc9;
-                margin-top: vw(15);
-              }
+            }
+            .lesson-cell-last__text {
+              color: #b0bdc9;
+              margin-top: vw(10);
             }
           }
           &__number {
@@ -105,6 +108,27 @@
             }
             &.is-tryLook{
               background:#FF9E6D;
+            }
+          }
+          &__text {
+            display: flex;
+            justify-content: space-between;
+            .live-text {
+              padding-left: 3px;
+              padding-right: 3px;
+              font-size: vw(14);
+            }
+            .live-done {
+              color: #b0bdc9;
+              border: 1px solid #b0bdc9;
+            }
+            .live-replay {
+              color: #FFA51F;
+              border: 1px solid #FFA51F;
+            }
+            .living {
+              color: $primary-color;
+              border: 1px solid $primary-color;
             }
           }
         }
