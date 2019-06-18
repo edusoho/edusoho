@@ -71,6 +71,8 @@ class Live {
           }
         }
       });
+      timestamp = Date.parse( new Date() ).toString();
+      timestamp = timestamp.substr(0,10);
     }, 60000);
 
   }
