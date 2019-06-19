@@ -34,9 +34,6 @@
 
   export default {
     props: ['item', 'num', 'feedback'],
-    created(){
-      console.log(this.item)
-    },
     computed: {
       couponStatus() {
         // 后台不判断优惠券状态

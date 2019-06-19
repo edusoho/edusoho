@@ -86,7 +86,7 @@
           'size-fit',
         ],
         showFlag: true,
-        closeDate: ''
+        closeDate: 'closedDate'
       };
     },
     computed: {
@@ -94,13 +94,6 @@
     },
     created() {
       const {preview, token} = this.$route.query
-      const userId = JSON.parse(localStorage.getItem('user')).id;
-      const closeDate = `closedDate-${userId}`;
-      const now = new Date();
-      const today = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
-      this.closeDate = closeDate;
-      // 判断用户当天是否手动触发过关闭
-      this.showFlag = localStorage.getItem(closeDate) !== today;
 
       if (preview == 1) {
         Api.discoveries({
@@ -126,6 +119,18 @@
         .catch((err) => {
           Toast.fail(err.message);
         });
+
+      //判断token有无
+      if(!this.$store.state.token){
+         this.showFlag=false
+      }else{
+        const userId = JSON.parse(localStorage.getItem('user')).id;
+        this.closeDate = `closedDate-${userId}`;
+        const now=new Date();
+        const today = `${ now.getFullYear()}-${ now.getMonth()+1}-${ now.getDate()}`;
+        // 判断用户当天是否手动触发过关闭
+        this.showFlag = localStorage.getItem(this.closeDate) !== today;
+      }
     },
     methods: {
       fetchCourse({params, index, typeList}) {
@@ -142,7 +147,7 @@
 
           this.parts[index].data.items = res.data;
         })
-      },
-    },
+      }
+    }
   }
 </script>
