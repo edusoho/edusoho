@@ -9,9 +9,11 @@ const tableFilter = (item, label, subProperty) => {
     }
     return `${labelField}元`;
   }
-
   switch (label) {
     case 'deadline':
+      if (item.deadlineMode && item.deadlineMode === 'day') {
+        return `领取${item.fixedDay}天后有效`;
+      }
       if (!item.deadline) {
         return '未知日期';
       }
