@@ -12,7 +12,7 @@
               <!-- 非有效期模式 -->
               <span v-if="item.deadlineMode==='time'" class="text-10">{{  timeExpire(item.createdTime,item.deadline) }}</span>
               <!-- 有效期模式且用户未领取 -->
-              <span v-if="item.deadlineMode==='day' && !item.currentUserCoupon" class="text-10">{{timeCalculation(item.fixedDay)}}</span>
+              <span v-if="item.deadlineMode==='day' && !item.currentUserCoupon" class="text-10">领取后{{item.fixedDay}}天有效</span>
               <!-- 有效期模式且用户已经领取 -->
               <span v-if="item.deadlineMode==='day' && item.currentUserCoupon" class="text-10">{{ timeExpire(item.createdTime, item.currentUserCoupon.deadline) }}</span>
           </div>
