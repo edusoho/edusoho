@@ -223,7 +223,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 continue;
             }
 
-            if ('show' == $usage && $currentBatches[$batchId]['deadline'] + 86400 < time()) {
+            if ('show' == $usage && $currentBatches[$batchId]['deadline'] + 86400 < time() && $currentBatches[$batchId]['deadline'] > 0) {
                 unset($batches[$key]);
                 continue;
             }
