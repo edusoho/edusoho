@@ -12,7 +12,10 @@
       <th width="40%">{{ 'wechat.notification.record_content'|trans }}</th>
       <th width="20%">{{ 'wechat.notification.record_send_time'|trans }}</th>
       <th width="10%">{{ 'wechat.notification.record_send_status'|trans }}</th>
-      <th width="20%">{{ 'wechat.notification.record_number'|trans }}</th>
+      <th width="20%">
+        {{ 'wechat.notification.record_number'|trans }}
+        <a class="gray-primary" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'wechat.notification.record_number_tips'|trans }}"><i class="glyphicon glyphicon-question-sign text-muted"></i></a>
+      </th>
       <th width="10%">{{'operation'|trans}}</th>
     </tr>
   </thead>

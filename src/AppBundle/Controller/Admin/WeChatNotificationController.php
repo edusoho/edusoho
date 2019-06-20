@@ -79,7 +79,7 @@ class WeChatNotificationController extends BaseController
         $template = $templates[$key];
         $wechatSetting = $this->getSettingService()->get('wechat', array());
         if (empty($wechatSetting['wechat_notification_enabled'])) {
-            throw new \RuntimeException('未开启微信服务号通知');
+            throw new \RuntimeException($this->trans('wechat.notification.service_not_open'));
         }
 
         if ($isEnable) {
@@ -95,13 +95,13 @@ class WeChatNotificationController extends BaseController
     {
         $clinet = $this->getTemplateClient();
         if (empty($clinet)) {
-            throw new \RuntimeException('获取微信信息错误');
+            throw new \RuntimeException($this->trans('wechat.notification.empty_token'));
         }
 
         $data = $clinet->addTemplate($template['id']);
 
         if (empty($data)) {
-            throw new \RuntimeException('模板操作失败');
+            throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
         }
 
         $wechatSetting = $this->getSettingService()->get('wechat');
@@ -115,19 +115,19 @@ class WeChatNotificationController extends BaseController
     {
         $clinet = $this->getTemplateClient();
         if (empty($clinet)) {
-            throw new \RuntimeException('获取微信信息错误');
+            throw new \RuntimeException($this->trans('wechat.notification.empty_token'));
         }
 
         $wechatSetting = $this->getSettingService()->get('wechat');
 
         if (empty($wechatSetting[$key]['templateId'])) {
-            throw new \RuntimeException('模版不存在');
+            throw new \RuntimeException($this->trans('wechat.notification.template_not_exist'));
         }
 
         $data = $clinet->deleteTemplate($wechatSetting[$key]['templateId']);
 
         if (empty($data)) {
-            throw new \RuntimeException('模板操作失败');
+            throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
         }
 
         $wechatSetting[$key]['templateId'] = '';
