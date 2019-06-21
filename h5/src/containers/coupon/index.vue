@@ -7,13 +7,11 @@
           <span class="e-coupon__price" v-html="priceHtml(item)"></span>
           <div class="e-coupon__name">
             <div class="text-overflow text-14 coupon-name">{{ item.name }}</div>
-             <!-- 兼容老版本优惠券无有效期功能 -->
-              <span v-if="!item.deadlineMode" class="text-10">{{ timeExpire(item.createdTime,item.deadline,) }}</span>
+             <!-- 兼容老版本优惠券无有效期功能或者非有效期模式-->
+              <span v-if="!item.deadlineMode || item.deadlineMode==='time'" class="text-10">{{ timeExpire(item.createdTime,item.deadline) }}</span>
             <!-- 新版优惠券功能 -->
               <!-- 非有效期模式 -->
-              <span v-if="item.deadlineMode==='time'" class="text-10">{{  timeExpire(item.createdTime,item.deadline) }}</span>
-              <!-- 有效期模式且用户未领取 -->
-              <span v-if="item.deadlineMode==='day' && !item.currentUserCoupon" class="text-10">领取后{{item.fixedDay}}天有效</span>
+              <span v-if="item.deadlineMode==='day' && !item.currentUserCoupon" class="text-10">领取后{{item.fixedDay}}天内有效</span>
               <!-- 有效期模式且用户已经领取 -->
               <span v-if="item.deadlineMode==='day' && item.currentUserCoupon" class="text-10">{{ timeExpire(item.createdTime, item.currentUserCoupon.deadline) }}</span>
           </div>
