@@ -88,26 +88,26 @@ class PlayerServiceTest extends BaseTestCase
     public function testGetDocFilePlayer()
     {
         $this->mockBiz('File:UploadFileService', array(
-            array('functionName' => 'getFullFile', 'returnValue' => array(),'withParams' => array(1)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'success'),'withParams' => array(2)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'error'),'withParams' => array(3)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'processing'),'withParams' => array(4)),
+            array('functionName' => 'getFullFile', 'returnValue' => array(), 'withParams' => array(1)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'success'), 'withParams' => array(2)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'error'), 'withParams' => array(3)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'processing'), 'withParams' => array(4)),
         ));
         $this->mockBiz('MaterialLib:MaterialLibService', array(
             array('functionName' => 'player', 'returnValue' => array('url' => 'www.baidu.com')),
         ));
 
         $result = $this->getPlayerService()->getDocFilePlayer(array('mediaId' => 1), true);
-        $this->assertEquals("抱歉，文档文件不存在，暂时无法学习。", $result[1]['message']);
+        $this->assertEquals('抱歉，文档文件不存在，暂时无法学习。', $result[1]['message']);
 
         $result = $this->getPlayerService()->getDocFilePlayer(array('mediaId' => 2), true);
-        $this->assertEquals("www.baidu.com", $result[0]['url']);
+        $this->assertEquals('www.baidu.com', $result[0]['url']);
 
         $result = $this->getPlayerService()->getDocFilePlayer(array('mediaId' => 3), true);
-        $this->assertEquals("文档转换失败，请到课程文件管理中，重新转换。", $result[1]['message']);
+        $this->assertEquals('文档转换失败，请到课程文件管理中，重新转换。', $result[1]['message']);
 
         $result = $this->getPlayerService()->getDocFilePlayer(array('mediaId' => 4), true);
-        $this->assertEquals("文档还在转换中，还不能查看，请稍等。", $result[1]['message']);
+        $this->assertEquals('文档还在转换中，还不能查看，请稍等。', $result[1]['message']);
     }
 
     /**
@@ -126,26 +126,26 @@ class PlayerServiceTest extends BaseTestCase
     public function testGetPptFilePlayer()
     {
         $this->mockBiz('File:UploadFileService', array(
-            array('functionName' => 'getFullFile', 'returnValue' => array(),'withParams' => array(1)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'success'),'withParams' => array(2)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'error'),'withParams' => array(3)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'processing'),'withParams' => array(4)),
+            array('functionName' => 'getFullFile', 'returnValue' => array(), 'withParams' => array(1)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'success'), 'withParams' => array(2)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'error'), 'withParams' => array(3)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'processing'), 'withParams' => array(4)),
         ));
         $this->mockBiz('MaterialLib:MaterialLibService', array(
             array('functionName' => 'player', 'returnValue' => array('url' => 'www.baidu.com')),
         ));
 
         $result = $this->getPlayerService()->getPptFilePlayer(array('mediaId' => 1), true);
-        $this->assertEquals("抱歉，PPT文件不存在，暂时无法学习。", $result[1]['message']);
+        $this->assertEquals('抱歉，PPT文件不存在，暂时无法学习。', $result[1]['message']);
 
         $result = $this->getPlayerService()->getPptFilePlayer(array('mediaId' => 2), true);
-        $this->assertEquals("www.baidu.com", $result[0]['url']);
+        $this->assertEquals('www.baidu.com', $result[0]['url']);
 
         $result = $this->getPlayerService()->getPptFilePlayer(array('mediaId' => 3), true);
-        $this->assertEquals("PPT文档转换失败，请到课程文件管理中，重新转换。", $result[1]['message']);
+        $this->assertEquals('PPT文档转换失败，请到课程文件管理中，重新转换。', $result[1]['message']);
 
         $result = $this->getPlayerService()->getPptFilePlayer(array('mediaId' => 4), true);
-        $this->assertEquals("PPT文档还在转换中，还不能查看，请稍等。", $result[1]['message']);
+        $this->assertEquals('PPT文档还在转换中，还不能查看，请稍等。', $result[1]['message']);
     }
 
     public function testMakeToken($value = '')
