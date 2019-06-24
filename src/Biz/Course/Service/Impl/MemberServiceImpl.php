@@ -507,7 +507,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $teachers = ArrayToolkit::group($teachers, 'isVisible');
 
         $visibleTeacherIds = empty($teachers[1]) ? array() : ArrayToolkit::column($teachers[1], 'id');
-        $fields = array('teacherIds' => $visibleTeacherIds);
+        $fields = array('teacherIds' => array_unique($visibleTeacherIds));
         $course = $this->getCourseDao()->update($courseId, $fields);
     }
 
