@@ -84,6 +84,8 @@ class BalloonCloudVideoPlayer extends Emitter {
 
     const remeberLastPos = (self.options.customPos && self.options.remeberLastPos) ? true : false;
 
+
+    const lang = (document.documentElement.lang == 'zh_CN') ? 'zh-CN' : document.documentElement.lang;
     self.options.customPos = self.options.customPos.toString();
     extConfig = Object.assign(extConfig, {
       id: $(self.options.element).attr('id'),
@@ -97,7 +99,8 @@ class BalloonCloudVideoPlayer extends Emitter {
       customPos: self.options.customPos,
       videoHeaderLength: self.options.videoHeaderLength,
       autoplay: self.options.autoplay,
-      strictMode: !self.options.strictMode
+      strictMode: !self.options.strictMode,
+      language: lang
     });
 
     var player = new VideoPlayerSDK(extConfig);
