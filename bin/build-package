@@ -79,6 +79,7 @@ npm run compile
 fi
 #commit static file
 git add web/static-dist
+git add web/h5
 git commit -m "fix: #$(date +%Y%m%d) 保存已编译的静态资源"
 
 # build package
