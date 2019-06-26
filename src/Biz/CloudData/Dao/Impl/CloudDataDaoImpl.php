@@ -16,6 +16,15 @@ class CloudDataDaoImpl extends GeneralDaoImpl implements CloudDataDao
             'serializes' => array(
                 'body' => 'json',
             ),
+            'conditions' => array(
+                'name = :name',
+                'timestamp = :timestamp',
+                'createdUserId = :createdUserId',
+            ),
+            'orderbys' => array(
+                'updatedTime',
+                'createdTime',
+            ),
         );
     }
 }
