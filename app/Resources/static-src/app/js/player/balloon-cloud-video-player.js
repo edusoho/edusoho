@@ -84,6 +84,8 @@ class BalloonCloudVideoPlayer extends Emitter {
 
     const remeberLastPos = (self.options.customPos && self.options.remeberLastPos) ? true : false;
 
+
+    const lang = (document.documentElement.lang == 'zh_CN') ? 'zh-CN' : document.documentElement.lang;
     self.options.customPos = self.options.customPos.toString();
     extConfig = Object.assign(extConfig, {
       id: $(self.options.element).attr('id'),
@@ -96,8 +98,9 @@ class BalloonCloudVideoPlayer extends Emitter {
       remeberLastPos: remeberLastPos,
       customPos: self.options.customPos,
       videoHeaderLength: self.options.videoHeaderLength,
-      autoplay: self.options.autoplay
-      // strictMode: !self.options.strictMode
+      autoplay: self.options.autoplay,
+      strictMode: !self.options.strictMode,
+      language: lang
     });
 
     var player = new VideoPlayerSDK(extConfig);
@@ -115,9 +118,9 @@ class BalloonCloudVideoPlayer extends Emitter {
       player.setCurrentTime(self.options.customPos);
     });
 
-    // player.on('unableConfirm', function (e) {
-    //   $('.js-back-link', parent.document)[0].click();
-    // });
+    player.on('unableConfirm', function (e) {
+      $('.js-back-link', parent.document)[0].click();
+    });
 
     player.on('ended', function(e) {
       self.emit('ended', e);
