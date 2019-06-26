@@ -2,7 +2,7 @@ import { formatFullTime } from '@/utils/date-toolkit';
 
 export default {
   methods: {
-    timeExpire({ createdTime, deadline }) {
+    timeExpire(createdTime, deadline) {
       if (!createdTime) {
         deadline = formatFullTime(new Date(deadline));
         return `有效期截止：${deadline}`;
@@ -11,6 +11,12 @@ export default {
       createdTime = formatFullTime(new Date(createdTime));
       deadline = formatFullTime(new Date(deadline));
       return `${createdTime} 至 ${deadline}`;
+    },
+    timeCalculation(num) {
+      const date = new Date();
+      let deadline = date.setDate(new Date().getDate() + Number(num)); // N天后的日期
+      deadline = formatFullTime(new Date(deadline));
+      return `有效期至：${deadline}`;
     },
     priceHtml({ rate, type }, needStyle = true) {
       const intPrice = parseInt(rate, 10);

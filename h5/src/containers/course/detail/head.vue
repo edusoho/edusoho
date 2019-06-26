@@ -32,7 +32,7 @@
 import loadScript from 'load-script';
 import { mapState } from 'vuex';
 import Api from '@/api'
-import { Toast } from 'vant';
+import { Toast,Dialog } from 'vant';
 import countDown from '@/containers/components/e-marketing/e-count-down/index';
 
 export default {
@@ -140,8 +140,8 @@ export default {
         }
         Toast.fail(err.message);
       })
-
-      if (!player) return;
+      console.log(player)
+      if (!player) return; //如果没有初始化成功
 
       if (player.mediaType === 'video' && !player.media.url) {
         Toast('课程内容准备中，请稍候查看')
@@ -165,6 +165,7 @@ export default {
         autoplay: true,
         disableFullscreen: this.sourceType === 'audio',
         isAudio: this.sourceType === 'audio',
+        strictMode:!media.supportMobile, //视频是否加密 1表示普通  0表示加密
         pluck: {
           timelimit: timelimit,
         },
@@ -182,6 +183,12 @@ export default {
         const player = new SDK(options);
         player.on('playing', () => {
           this.isPlaying = true;
+        });
+        player.on('unablePlay', () => { //加密模式下在不支持的浏览器下提示
+        this.$refs.video.innerHTML = ''
+          Dialog.alert({
+            message: '当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。'
+          }).then(() => {});
         });
         player.on('paused', () => {
           this.isPlaying = false;

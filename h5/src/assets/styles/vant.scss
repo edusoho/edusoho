@@ -47,6 +47,10 @@
   text-align: center;
 }
 
+.van-dialog__confirm, .van-dialog__confirm:active {
+  color: $primary-color!important;
+}
+
 .van-button--primary {
   color: #fff;
   background-color: $primary-color;

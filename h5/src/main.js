@@ -57,7 +57,7 @@ Vue.use(EdusohoUI);
 Vue.use(Lazyload);
 Vue.use(Toast);
 Vue.config.productionTip = false;
-
+Vue.config.devtools = true;
 /* eslint-disable no-new */
 
 Api.getSettings({
