@@ -223,7 +223,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 continue;
             }
 
-            if ('show' == $usage && $currentBatches[$batchId]['deadline'] + 86400 < time()) {
+            if ('show' == $usage && $currentBatches[$batchId]['deadline'] + 86400 < time() && $currentBatches[$batchId]['deadline'] > 0) {
                 unset($batches[$key]);
                 continue;
             }
@@ -231,6 +231,12 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $batch['money'] = $currentBatches[$batchId]['money'];
                 $batch['usedNum'] = $currentBatches[$batchId]['usedNum'];
                 $batch['unreceivedNum'] = $currentBatches[$batchId]['unreceivedNum'];
+                if (isset($currentBatches[$batchId]['fixedDay'])) {
+                    $batch['fixedDay'] = intval($currentBatches[$batchId]['fixedDay']);
+                }
+                if (isset($currentBatches[$batchId]['deadlineMode'])) {
+                    $batch['deadlineMode'] = $currentBatches[$batchId]['deadlineMode'];
+                }
                 if ($this->isPluginInstalled('Vip') && 'vip' == $currentBatches[$batchId]['targetType'] && !empty($currentBatches[$batchId]['targetId'])) {
                     $batch['target'] = $this->getLevelService()->getLevel($currentBatches[$batchId]['targetId']);
                 }

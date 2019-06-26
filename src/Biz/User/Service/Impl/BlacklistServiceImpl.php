@@ -46,7 +46,7 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
             $this->createNewException(UserException::NOTFOUND_USER());
         }
 
-        $black = $this->getByUserIdAndBlackId($blacklist['userId'], $blackUser['id']);
+        $black = $this->getBlacklistDao()->getByUserIdAndBlackId($blacklist['userId'], $blackUser['id']);
         if (!empty($black)) {
             $this->createNewException(BlacklistException::DUPLICATE_ADD());
         }
@@ -76,6 +76,7 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
             $this->createNewException(UserException::NOTFOUND_USER());
         }
         $user = $this->getCurrentUser();
+
         if ($user['id'] == $userId || $user->isAdmin()) {
             return true;
         }

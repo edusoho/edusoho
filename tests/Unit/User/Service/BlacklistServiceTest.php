@@ -4,6 +4,7 @@ namespace Tests\Unit\User\Service;
 
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
+use Biz\User\Service\BlacklistService;
 
 class BlacklistServiceTest extends BaseTestCase
 {
@@ -91,6 +92,103 @@ class BlacklistServiceTest extends BaseTestCase
             )
         );
         $this->getBlacklistService()->findBlacklistsByUserId(2);
+    }
+
+    public function testAddBlacklist()
+    {
+        $blacklist = array('userId' => 1, 'blackId' => 2);
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUser',
+                    'returnValue' => array('id' => 1, 'nickname' => 'test'),
+                    'withParams' => array(1),
+                ),
+                array(
+                    'functionName' => 'getUser',
+                    'returnValue' => array('id' => 2, 'nickname' => 'stu1'),
+                    'withParams' => array(2),
+                ),
+            )
+        );
+
+        $result = $this->getBlacklistService()->addBlacklist($blacklist);
+
+        $this->assertEquals(1, $result['userId']);
+    }
+
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
+     */
+    public function testAddBlacklistWhenInvalidArgument()
+    {
+        $blacklist = array('userId' => 1);
+
+        $this->getBlacklistService()->addBlacklist($blacklist);
+    }
+
+    /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.not_found
+     */
+    public function testAddBlacklistWithEmptyBlack()
+    {
+        $blacklist = array('userId' => 1, 'blackId' => 2);
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUser',
+                    'returnValue' => array('id' => 1, 'nickname' => 'test'),
+                    'withParams' => array(1),
+                ),
+                array(
+                    'functionName' => 'getUser',
+                    'returnValue' => array(),
+                    'withParams' => array(2),
+                ),
+            )
+        );
+
+        $this->getBlacklistService()->addBlacklist($blacklist);
+    }
+
+    /**
+     * @expectedException \Biz\User\BlacklistException
+     * @expectedExceptionMessage exception.blacklist.duplicate_add
+     */
+    public function testAddBlacklistWithDuplicateAdd()
+    {
+        $blacklist = array('userId' => 1, 'blackId' => 2);
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUser',
+                    'returnValue' => array('id' => 1, 'nickname' => 'test'),
+                    'withParams' => array(1),
+                ),
+                array(
+                    'functionName' => 'getUser',
+                    'returnValue' => array('id' => 2, 'nickname' => 'stu1'),
+                    'withParams' => array(2),
+                ),
+            )
+        );
+
+        $this->mockBiz(
+            'User:BlacklistDao',
+            array(
+                array(
+                    'functionName' => 'getByUserIdAndBlackId',
+                    'returnValue' => array('id' => 1),
+                ),
+            )
+        );
+
+        $this->getBlacklistService()->addBlacklist($blacklist);
     }
 
     public function testDeleteBlacklistByUserIdAndBlackId()
@@ -240,6 +338,9 @@ class BlacklistServiceTest extends BaseTestCase
         $this->assertFalse($result);
     }
 
+    /**
+     * @return BlacklistService
+     */
     protected function getBlacklistService()
     {
         return $this->createService('User:BlacklistService');

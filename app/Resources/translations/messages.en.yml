@@ -5896,7 +5896,7 @@ admin.setting_wechat_auth.wechat_auth_login_hint: >
   Please fill in the service number AppID and service number AppSecretMP file verification code in the form on the right.
 admin.setting_wechat_auth.wechat_notification_hint: >
   After the activation, the user who binds WeChat and pays attention to the service number can receive the WeChat service number template message.<br>
-  Please open the webpage scan code login and the authorized login in WeChat, and fill in the service number QR code in the form on the right.
+  Please enable web scan code login and authorized login on WeChat first, and <span class="text-danger">enable service number template message pluginin WeChat background</span> .
 admin.setting_wechat_auth.wechat_pay_hint: >
   After opening, it can be used on the PC side, WeChat APP, WAP to select WeChat payment, only support configuration<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html"> public account payment </a>to pay。<br>
   Please fill in the service number AppID, service number AppSecret, MP file verification code, merchant number and WeChat merchant platform API key in the form on the right.
@@ -8697,6 +8697,11 @@ wechat.notification.status.finish: Send Finish
 wechat.notification.status.sending: Sending
 wechat.notification.cloud.tips: You have not yet opened an education cloud and cannot use the WeChat service number notification function
 wechat.notification.cloud_open: Go to the opening
+wechat.notification.record_number_tips: Students must be bound to WeChat and follow the service number to receive notifications, so the actual number sent will be less than expected.
+wechat.notification.template_open_error: The template failed to open. It may be that the service number template message plug-in is not enabled or the network school IP address is not added to the WeChat background IP whitelist. Please go to <a href="http://www.qiqiuyu.com/faq/878/detail" target ="_blank">View the tutorial</a>
+wechat.notification.service_not_open: WeChat service number notification is not enabled
+wechat.notification.empty_token: Get WeChat information error
+wechat.notification.template_not_exist: Template does not exist
 
 # 微信通知模板
 wechat.notification.template.live_start: Hello, classmate.<br>It is hereby notified that the [course name] you are enrolled in will start in the [live class start time].<br>Don't be late.

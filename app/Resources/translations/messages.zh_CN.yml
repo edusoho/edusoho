@@ -7200,7 +7200,7 @@ admin.setting_wechat_auth.wechat_auth_login_hint: >
   请先填写右侧表单中的服务号AppID、服务号AppSecretMP文件验证码。
 admin.setting_wechat_auth.wechat_notification_hint: >
   开通后，绑定微信并且关注服务号的用户即可收取微信服务号模板消息。<br>
-  请先开启网页扫码登录和微信内授权登录，并填写右侧表单中的服务号二维码。
+  请先开启网页扫码登录和微信内授权登录，并<span class="text-danger">在微信后台启用服务号模板消息插件</span>。
 admin.setting_wechat_auth.wechat_pay_hint: >
   开通后，可在PC端、微信APP、WAP内选择微信支付，仅支持配置<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">公众号支付</a>支付。<br>
   请先填写右侧表单中的服务号AppID、服务号AppSecret、MP文件验证码、商户号以及微信商户平台API密钥。
@@ -9991,6 +9991,11 @@ wechat.notification.status.finish: 发送完成
 wechat.notification.status.sending: 发送中
 wechat.notification.cloud.tips: 您还未开通教育云，无法正常使用微信服务号通知功能。
 wechat.notification.cloud_open: 前往开通
+wechat.notification.record_number_tips: 学员必须绑定微信并关注服务号以后才能收到通知，因此实际发送数量会比预期发送数量少。
+wechat.notification.template_open_error: 模板打开失败，可能是未启用服务号模板消息插件或未在微信后台IP白名单中添加网校IP，请前往<a href="http://www.qiqiuyu.com/faq/878/detail" target="_blank">查看教程</a>
+wechat.notification.service_not_open: 未开启微信服务号通知
+wechat.notification.empty_token: 获取微信信息错误
+wechat.notification.template_not_exist: 模板不存在
 
 # 微信通知模板
 wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[课程名]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'

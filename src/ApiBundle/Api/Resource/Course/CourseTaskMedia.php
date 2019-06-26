@@ -135,6 +135,8 @@ class CourseTaskMedia extends AbstractResource
         }
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
+        $supportMobile = intval($this->getSettingService()->node('storage.support_mobile', 0));
+
         return array(
             'resId' => $file['globalId'],
             'url' => isset($url) ? $url : null,
@@ -143,6 +145,7 @@ class CourseTaskMedia extends AbstractResource
             'timeLimit' => isset($context['watchTimeLimit']) ? $context['watchTimeLimit'] : 0,
             'agentInWhiteList' => $agentInWhiteList,
             'isEncryptionPlus' => $isEncryptionPlus,
+            'supportMobile' => $supportMobile,
         );
     }
 
