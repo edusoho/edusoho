@@ -63,7 +63,6 @@ class LocalImageCrop {
       group: this.group
     });
     this.lastFile = $(this.uploadInput)[0].files[0];
-    console.log(this.lastFile);
     imageCrop.afterCrop = (res) => {
       this.afterCrop(res);
     };
@@ -128,6 +127,7 @@ class LocalImageCrop {
     }).catch(function(res) {
       console.log(res);
     });
+
   }
 }
 
