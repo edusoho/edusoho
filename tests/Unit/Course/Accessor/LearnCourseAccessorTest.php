@@ -17,9 +17,6 @@ class LearnCourseAccessorTest extends BaseTestCase
         $result = $accessor->access(array('status' => 'draft', 'id' => 1));
         $this->assertEquals('course.unpublished', $result['code']);
 
-        $result = $accessor->access(array('status' => 'published', 'expiryMode' => 'date', 'expiryEndDate' => 0, 'id' => 1));
-        $this->assertEquals('course.expired', $result['code']);
-
         $result = $accessor->access(array('status' => 'published', 'expiryMode' => 'date', 'expiryStartDate' => time() + 5000, 'expiryEndDate' => time() + 5000, 'id' => 1));
         $this->assertEquals('course.not_arrive', $result['code']);
 
@@ -27,13 +24,4 @@ class LearnCourseAccessorTest extends BaseTestCase
         $this->assertNull($result);
     }
 
-    public function testIsExpired()
-    {
-        $accessor = new LearnCourseAccessor($this->getBiz());
-        $result = ReflectionUtils::invokeMethod($accessor, 'isExpired', array(array('expiryMode' => 'forever')));
-        $this->assertFalse($result);
-
-        $result = ReflectionUtils::invokeMethod($accessor, 'isExpired', array(array('expiryMode' => 'mode')));
-        $this->assertFalse($result);
-    }
 }
