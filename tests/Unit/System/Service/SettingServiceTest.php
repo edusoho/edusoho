@@ -6,6 +6,13 @@ use Biz\BaseTestCase;
 
 class SettingServiceTest extends BaseTestCase
 {
+    public function testNode()
+    {
+        $this->getSettingService()->set('site', array('name' => 'edusoho', 'url' => 'www.edusoho.com'));
+        $result = $this->getSettingService()->node('site.name');
+        $this->assertEquals('edusoho', $result);
+    }
+
     public function testGet()
     {
         $this->getSettingService()->set('site', array('name' => 'edusoho', 'url' => 'www.edusoho.com'));
@@ -30,6 +37,11 @@ class SettingServiceTest extends BaseTestCase
         $foundSetting = $this->getSettingService()->get('site');
 
         $this->assertEquals(0, count($foundSetting));
+    }
+
+    public function testSetByNamespace()
+    {
+        $this->getSettingService()->setByNamespace('/Biz', 'Setting', '123');
     }
 
     public function testIsReservationOpen()
