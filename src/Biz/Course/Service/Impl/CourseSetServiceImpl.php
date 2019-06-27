@@ -216,8 +216,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (empty($courseSetId)) {
-            return 'ced';
-
             return $user->isTeacher();
         }
 
