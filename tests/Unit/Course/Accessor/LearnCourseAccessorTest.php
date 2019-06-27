@@ -3,7 +3,6 @@
 namespace Tests\Unit\Course\Accessor;
 
 use Biz\BaseTestCase;
-use AppBundle\Common\ReflectionUtils;
 use Biz\Course\Accessor\LearnCourseAccessor;
 
 class LearnCourseAccessorTest extends BaseTestCase
@@ -23,5 +22,4 @@ class LearnCourseAccessorTest extends BaseTestCase
         $result = $accessor->access(array('status' => 'published', 'expiryMode' => 'date', 'expiryStartDate' => 0, 'expiryEndDate' => time() + 5000, 'id' => 1));
         $this->assertNull($result);
     }
-
 }
