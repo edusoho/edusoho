@@ -13,6 +13,125 @@ class ItemHelper
         $this->biz = $biz;
     }
 
+    public function convertToTree($items)
+    {
+        $firstChapterIndex = $this->getFirstChapterIndex($items);
+        $result = $this->getTreeItems($items, $firstChapterIndex);
+
+        return $result;
+    }
+
+    /**
+     * 严格的 章->节->课时 结构，如果缺少层级，则补上空结构(利于 android，ios 数据组装)
+     */
+    private function getTreeItems($items, $firstChapterIndex)
+    {
+        $result = array();
+
+        $nowChapterIndex = -1;
+        $nowUnitIndex = -1;
+        $lastItem = 'default';
+
+        // 如果第一章上方还有内容，则归入未分类章
+        if (0 != $firstChapterIndex) {
+            $result[] = $this->getBlankChapterOrUnit('chapter');
+            $lastItem = 'chapter';
+            ++$nowChapterIndex;
+        }
+
+        foreach ($items as $index => $item) {
+            $item['isExist'] = 1;
+
+            if ('chapter' == $item['type']) {
+                // 创建新章前，保证之前结构完整性
+                if ('unit' == $lastItem) {
+                    $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $this->getBlankLesson();
+                }
+
+                if ('chapter' == $lastItem) {
+                    $result[$nowChapterIndex]['children'][] = $this->getBlankChapterOrUnit('unit');
+                    ++$nowUnitIndex;
+                    $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $this->getBlankLesson();
+                }
+
+                ++$nowChapterIndex;
+                $nowUnitIndex = -1; //新章创建后，应重置当前节
+                $result[$nowChapterIndex] = $item;
+                $lastItem = 'chapter';
+            } elseif ('unit' == $item['type']) {
+                ++$nowUnitIndex;
+                $result[$nowChapterIndex]['children'][] = $item;
+                $lastItem = 'unit';
+            } elseif ('lesson' == $item['type']) {
+                // 如果章下面直接是课时，则补全节
+                if ('chapter' == $lastItem) {
+                    ++$nowUnitIndex;
+                    $result[$nowChapterIndex]['children'][] = $this->getBlankChapterOrUnit('unit');
+                }
+
+                $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $item;
+                $lastItem = 'lesson';
+            }
+        }
+
+        // 如果以章/节结束，则补齐剩余结构
+        if ('lesson' != $lastItem) {
+            if ('chapter' == $lastItem) {
+                $result[$nowChapterIndex]['children'][] = $this->getBlankChapterOrUnit('unit');
+                ++$nowUnitIndex;
+            }
+            $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $this->getBlankLesson();
+        }
+
+        return $result;
+    }
+
+    private function getBlankLesson()
+    {
+        return array(
+            'id' => '',
+            'courseId' => '',
+            'type' => '',
+            'number' => 0,
+            'seq' => '',
+            'title' => '',
+            'createdTime' => '',
+            'updatedTime' => '',
+            'copyId' => '',
+            'status' => '',
+            'isOptional' => '',
+            'published_number' => '',
+            'itemType' => '',
+            'isExist' => 0,
+        );
+    }
+
+    private function getBlankChapterOrUnit($type)
+    {
+        return array(
+            'type' => $type,
+            'isExist' => 0,
+            'seq' => '',
+            'number' => '',
+            'title' => '',
+            'task' => null,
+        );
+    }
+
+    private function getFirstChapterIndex($items)
+    {
+        $firstChapterIndex = 0;
+
+        foreach ($items as $index => $item) {
+            if ('chapter' == $item['type']) {
+                $firstChapterIndex = $index;
+                break;
+            }
+        }
+
+        return $firstChapterIndex;
+    }
+
     public function convertToLeadingItemsV1($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
     {
         $courseId = $course['id'];
