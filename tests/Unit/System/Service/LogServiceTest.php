@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\System\Service;
 
+use AppBundle\Common\ReflectionUtils;
 use Biz\System\Service\LogService;
 use Biz\BaseTestCase;
 
@@ -45,6 +46,43 @@ class LogServiceTest extends BaseTestCase
         $this->getLogService()->info('coin', 'add', 'this is info message', array());
         $logs = $this->getLogService()->searchLogs(array(), 'created', 0, 100);
         $this->assertTrue(sizeof($logs) > 1);
+
+        $this->getLogService()->info('coin', 'add', 'this is info message', array());
+        $logs = $this->getLogService()->searchLogs(array(), 'createdByAsc', 0, 100);
+        $this->assertTrue(sizeof($logs) > 1);
+    }
+
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_error
+     */
+    public function testSearchWithErrorParams()
+    {
+        $this->getLogService()->searchLogs(array(), 'lastest', 0, 100);
+    }
+
+    public function testOldSearch()
+    {
+        $logs = $this->getLogService()->searchOldLogs(array(), 'created', 0, 100);
+        $this->assertTrue(0 == sizeof($logs));
+
+        $logs = $this->getLogService()->searchOldLogs(array(), 'createdByAsc', 0, 100);
+        $this->assertTrue(0 == sizeof($logs));
+    }
+
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_error
+     */
+    public function testOldSearchWithErrorParams()
+    {
+        $this->getLogService()->searchOldLogs(array(), 'lastest', 0, 100);
+    }
+
+    public function testSearchOldLogCount()
+    {
+        $count = $this->getLogService()->searchOldLogCount(array());
+        $this->assertTrue(0 == $count);
     }
 
     public function testCount()
@@ -78,6 +116,27 @@ class LogServiceTest extends BaseTestCase
         $actions = $this->getLogService()->getActionsByModule('course');
 
         $this->assertNotEmpty($actions);
+    }
+
+    public function testPrepareSearchConditions()
+    {
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUserByNickname',
+                    'returnValue' => array('id' => 1),
+                ),
+            )
+        );
+        $result = ReflectionUtils::invokeMethod($this->getLogService(), 'prepareSearchConditions', array(array(
+            'nickname' => 'stu_1',
+            'startDateTime' => 1561543220,
+            'endDateTime' => 1561553220,
+        )));
+
+        $this->assertEquals(strtotime(1561543220), $result['startDateTime']);
+        $this->assertEquals(strtotime(1561553220), $result['endDateTime']);
     }
 
     /**
