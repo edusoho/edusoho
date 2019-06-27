@@ -66,16 +66,18 @@ class TestpaperSyncSubscriberTest extends BaseTestCase
                 'id' => 2,
             )
         );
-        $this->mockBiz('Course:CourseSetDao', array(
+        $this->mockBiz('Course:CourseDao', array(
             array('functionName' => 'findCoursesByParentIdAndLocked', 'returnValue' => array(array('courseSetId' => 1))),
         ));
         $this->mockBiz('Testpaper:TestpaperDao', array(
             array('functionName' => 'findTestpapersByCopyIdAndCourseSetIds', 'returnValue' => array(array('id' => 1))),
         ));
-        $this->mockBiz('Testpaper:TestpaperItemDao', array(
+        $mockTestpaperItemDao = $this->mockBiz('Testpaper:TestpaperItemDao', array(
             array('functionName' => 'create', 'returnValue' => array()),
         ));
+
         $subscriber->onTestpaperItemCreate($event);
+        $mockTestpaperItemDao->shouldHaveReceived('create');
     }
 
     public function testOnTestpaperItemUpdate()
@@ -109,17 +111,19 @@ class TestpaperSyncSubscriberTest extends BaseTestCase
                 'id' => 2,
             )
         );
-        $this->mockBiz('Course:CourseSetDao', array(
+        $this->mockBiz('Course:CourseDao', array(
             array('functionName' => 'findCoursesByParentIdAndLocked', 'returnValue' => array(array('courseSetId' => 1))),
         ));
         $this->mockBiz('Testpaper:TestpaperDao', array(
             array('functionName' => 'findTestpapersByCopyIdAndCourseSetIds', 'returnValue' => array(array('id' => 1))),
         ));
-        $this->mockBiz('Testpaper:TestpaperItemDao', array(
+        $mockTestpaperItemDao = $this->mockBiz('Testpaper:TestpaperItemDao', array(
             array('functionName' => 'findTestpaperItemsByCopyIdAndLockedTestIds', 'returnValue' => array(array('id' => 1))),
             array('functionName' => 'update', 'returnValue' => array()),
         ));
+
         $subscriber->onTestpaperItemUpdate($event);
+        $mockTestpaperItemDao->shouldHaveReceived('update');
     }
 
     public function testOnTestpaperItemDelete()
@@ -150,16 +154,18 @@ class TestpaperSyncSubscriberTest extends BaseTestCase
                 'id' => 2,
             )
         );
-        $this->mockBiz('Course:CourseSetDao', array(
+        $this->mockBiz('Course:CourseDao', array(
             array('functionName' => 'findCoursesByParentIdAndLocked', 'returnValue' => array(array('courseSetId' => 1))),
         ));
         $this->mockBiz('Testpaper:TestpaperDao', array(
             array('functionName' => 'findTestpapersByCopyIdAndCourseSetIds', 'returnValue' => array(array('id' => 1))),
         ));
-        $this->mockBiz('Testpaper:TestpaperItemDao', array(
+        $mockTestpaperItemDao = $this->mockBiz('Testpaper:TestpaperItemDao', array(
             array('functionName' => 'findTestpaperItemsByCopyIdAndLockedTestIds', 'returnValue' => array(array('id' => 1))),
-            array('functionName' => 'update', 'returnValue' => array()),
+            array('functionName' => 'delete', 'returnValue' => array()),
         ));
+
         $subscriber->onTestpaperItemDelete($event);
+        $mockTestpaperItemDao->shouldHaveReceived('delete');
     }
 }
