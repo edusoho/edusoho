@@ -22,7 +22,12 @@ class ItemHelper
     }
 
     /**
-     * 严格的 章->节->课时 结构，如果缺少层级，则补上空结构(利于 android，ios 数据组装)
+     * 章->节->课时 结构
+     * 向上补全结构，不向下补全结构：
+     * 章->无->课时，则补全节
+     * 章->节->无，则不补全
+     * 无->节->课时，则补全章
+     * 无->无->课时，则补全章/节
      */
     private function getTreeItems($items, $firstChapterIndex)
     {
@@ -43,24 +48,15 @@ class ItemHelper
             $item['isExist'] = 1;
 
             if ('chapter' == $item['type']) {
-                // 创建新章前，保证之前结构完整性
-                if ('unit' == $lastItem) {
-                    $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $this->getBlankLesson();
-                }
-
-                if ('chapter' == $lastItem) {
-                    $result[$nowChapterIndex]['children'][] = $this->getBlankChapterOrUnit('unit');
-                    ++$nowUnitIndex;
-                    $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $this->getBlankLesson();
-                }
-
                 ++$nowChapterIndex;
                 $nowUnitIndex = -1; //新章创建后，应重置当前节
                 $result[$nowChapterIndex] = $item;
+                $result[$nowChapterIndex]['children'] = array();
                 $lastItem = 'chapter';
             } elseif ('unit' == $item['type']) {
                 ++$nowUnitIndex;
                 $result[$nowChapterIndex]['children'][] = $item;
+                $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
                 $lastItem = 'unit';
             } elseif ('lesson' == $item['type']) {
                 // 如果章下面直接是课时，则补全节
@@ -74,36 +70,7 @@ class ItemHelper
             }
         }
 
-        // 如果以章/节结束，则补齐剩余结构
-        if ('lesson' != $lastItem) {
-            if ('chapter' == $lastItem) {
-                $result[$nowChapterIndex]['children'][] = $this->getBlankChapterOrUnit('unit');
-                ++$nowUnitIndex;
-            }
-            $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $this->getBlankLesson();
-        }
-
         return $result;
-    }
-
-    private function getBlankLesson()
-    {
-        return array(
-            'id' => '',
-            'courseId' => '',
-            'type' => '',
-            'number' => 0,
-            'seq' => '',
-            'title' => '',
-            'createdTime' => '',
-            'updatedTime' => '',
-            'copyId' => '',
-            'status' => '',
-            'isOptional' => '',
-            'published_number' => '',
-            'itemType' => '',
-            'isExist' => 0,
-        );
     }
 
     private function getBlankChapterOrUnit($type)
@@ -111,10 +78,6 @@ class ItemHelper
         return array(
             'type' => $type,
             'isExist' => 0,
-            'seq' => '',
-            'number' => '',
-            'title' => '',
-            'task' => null,
         );
     }
 
