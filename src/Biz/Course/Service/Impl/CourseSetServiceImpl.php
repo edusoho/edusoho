@@ -1152,9 +1152,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields['audiences'] = json_decode($fields['audiences'], true);
         }
 
-        $fields = $this->fillOrgId($fields);
-
-        return $fields;
+        return $this->fillOrgId($fields);
     }
 
     /**

@@ -241,9 +241,8 @@ class DefaultServiceProvider implements ServiceProviderInterface
                 'app_id' => empty($loginBind['weixinmob_key']) ? '' : $loginBind['weixinmob_key'],
                 'secret' => empty($loginBind['weixinmob_secret']) ? '' : $loginBind['weixinmob_secret'],
             );
-            $client = new CloudNotificationClient($options);
 
-            return $client;
+            return new CloudNotificationClient($options);
         };
 
         $biz['lock.flock.directory'] = function ($biz) {
