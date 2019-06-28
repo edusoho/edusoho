@@ -35,7 +35,6 @@ class UsingCoupon extends Coupon implements CouponInterface
             ));
         }
 
-        $user = $this->getUserService()->getUser($coupon['userId']);
         $this->dispatchEvent('coupon.use', $coupon);
 
         $this->getLogService()->info(

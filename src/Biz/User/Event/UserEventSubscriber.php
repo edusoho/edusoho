@@ -42,7 +42,6 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
     public function onUserUnbind(Event $event)
     {
-        $user = $event->getSubject();
         $type = $event->getArgument('bindType');
         $bind = $event->getArgument('bind');
         if (in_array($type, array('weixinmob', 'weixinweb'))) {
@@ -169,9 +168,8 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getLogger()
     {
         $biz = $this->getBiz();
-        $logger = $biz['logger'];
 
-        return $logger;
+        return $biz['logger'];
     }
 
     /**
