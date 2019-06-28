@@ -83,7 +83,7 @@ class ItemHelper
 
     private function getFirstChapterIndex($items)
     {
-        $firstChapterIndex = 0;
+        $firstChapterIndex = -1;
 
         foreach ($items as $index => $item) {
             if ('chapter' == $item['type']) {
