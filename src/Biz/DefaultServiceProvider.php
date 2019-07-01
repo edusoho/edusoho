@@ -3,7 +3,6 @@
 namespace Biz;
 
 use AppBundle\Component\Notification\WeChatTemplateMessage\Client;
-use AppBundle\Component\Notification\WeChatTemplateMessage\CloudNotificationClient;
 use AppBundle\Component\RateLimit\EmailRateLimiter;
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
