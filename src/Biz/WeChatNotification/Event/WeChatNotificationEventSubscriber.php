@@ -329,7 +329,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
 
         $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-        
+
         return $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
     }
 

@@ -21,7 +21,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
         ));
         $this->mockBiz('Course:CourseSetService', array(
             array(
-                'functionName' => 'getCourseSet', 
+                'functionName' => 'getCourseSet',
                 'returnValue' => array('id' => 123, 'status' => 'published'),
                 'withParams' => array(123),
             ),
@@ -70,12 +70,12 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
         $subscriber = new WeChatNotificationEventSubscriber($this->biz);
         $this->mockBiz('WeChat:WeChatService', array(
             array(
-                'functionName' => 'getTemplateId', 
+                'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
                 'withParams' => array('oneHourBeforeLiveOpen'),
             ),
             array(
-                'functionName' => 'getTemplateId', 
+                'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
                 'withParams' => array('oneDayBeforeLiveOpen'),
             ),
@@ -159,17 +159,17 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
         $this->getSettingService()->set('storage', array('cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey'));
         $weChatService = $this->mockBiz('WeChat:WeChatService', array(
             array(
-                'functionName' => 'getTemplateId', 
+                'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
                 'withParams' => array('examResult'),
             ),
             array(
-                'functionName' => 'getTemplateId', 
+                'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
                 'withParams' => array('homeworkResult'),
             ),
             array(
-                'functionName' => 'getOfficialWeChatUserByUserId', 
+                'functionName' => 'getOfficialWeChatUserByUserId',
                 'returnValue' => array('id' => 2, 'isSubscribe' => 1, 'openId' => 'testOpenId'),
                 'withParams' => array('2'),
             ),
@@ -196,17 +196,17 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
         $this->getSettingService()->set('storage', array('cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey'));
         $weChatService = $this->mockBiz('WeChat:WeChatService', array(
             array(
-                'functionName' => 'getTemplateId', 
+                'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
                 'withParams' => array('coinRecharge'),
             ),
             array(
-                'functionName' => 'getTemplateId', 
+                'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
                 'withParams' => array('paySuccess'),
             ),
             array(
-                'functionName' => 'getOfficialWeChatUserByUserId', 
+                'functionName' => 'getOfficialWeChatUserByUserId',
                 'returnValue' => array('id' => 2, 'isSubscribe' => 1, 'openId' => 'testOpenId'),
                 'withParams' => array('2'),
             ),
@@ -217,12 +217,12 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
 
         $this->mockBiz('Order:OrderService', array(
             array(
-                'functionName' => 'getOrderBySn', 
+                'functionName' => 'getOrderBySn',
                 'returnValue' => array('id' => 111),
                 'withParams' => array('orderSn'),
             ),
             array(
-                'functionName' => 'findOrderItemsByOrderId', 
+                'functionName' => 'findOrderItemsByOrderId',
                 'returnValue' => array(array('target_type' => 'course', 'target_id' => 123)),
                 'withParams' => array(111),
             ),
@@ -236,7 +236,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
     {
         $this->mockBiz('WeChat:WeChatService', array(
             array(
-                'functionName' => 'getTemplateId', 
+                'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
                 'withParams' => array($key),
             ),
