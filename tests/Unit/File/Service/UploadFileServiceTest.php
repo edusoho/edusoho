@@ -2336,14 +2336,12 @@ class UploadFileServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterKeyWords', array(array(
             'keywordType' => 'course',
             'keyword' => 'keyword',
-
         )));
         $this->assertEquals(1, $result['ids'][0]);
 
         $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterKeyWords', array(array(
             'keywordType' => 'title',
             'keyword' => 'keyword',
-
         )));
         $this->assertEquals('keyword', $result['filenameLike']);
     }
@@ -2360,7 +2358,7 @@ class UploadFileServiceTest extends BaseTestCase
         $this->mockBiz('File:UploadFileTagDao', $params);
 
         $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterTag', array(array(
-            'tagId' => 1
+            'tagId' => 1,
         )));
         $this->assertEquals(1, $result['ids'][0]);
     }
