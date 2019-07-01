@@ -2286,6 +2286,85 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
+    public function testUpdateTags()
+    {
+        $params = array(
+            array(
+                'functionName' => 'deleteByFileId',
+                'runTimes' => 1,
+                'returnValue' => array(),
+            ),
+            array(
+                'functionName' => 'create',
+                'runTimes' => 1,
+                'returnValue' => array(),
+            ),
+        );
+        $this->mockBiz('File:UploadFileTagDao', $params);
+
+        $params = array(
+            array(
+                'functionName' => 'getTagByName',
+                'runTimes' => 1,
+                'returnValue' => array('id' => 1),
+            ),
+        );
+        $this->mockBiz('Taxonomy:TagService', $params);
+        ReflectionUtils::invokeMethod($this->getUploadFileService(), 'updateTags', array(array('id' => 1), array('tags' => 'name,name1')));
+    }
+
+    public function testFilterKeyWords()
+    {
+        $params = array(
+            array(
+                'functionName' => 'findCourseSetsLikeTitle',
+                'runTimes' => 1,
+                'returnValue' => array(array('id' => 1)),
+            ),
+        );
+        $this->mockBiz('Course:CourseSetService', $params);
+
+        $params = array(
+            array(
+                'functionName' => 'searchMaterials',
+                'runTimes' => 1,
+                'returnValue' => array(array('fileId' => 1)),
+            ),
+        );
+        $this->mockBiz('Course:MaterialService', $params);
+
+        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterKeyWords', array(array(
+            'keywordType' => 'course',
+            'keyword' => 'keyword',
+
+        )));
+        $this->assertEquals(1, $result['ids'][0]);
+
+        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterKeyWords', array(array(
+            'keywordType' => 'title',
+            'keyword' => 'keyword',
+
+        )));
+        $this->assertEquals('keyword', $result['filenameLike']);
+    }
+
+    public function testFilterTag()
+    {
+        $params = array(
+            array(
+                'functionName' => 'findByTagId',
+                'runTimes' => 1,
+                'returnValue' => array(array('fileId' => 1)),
+            ),
+        );
+        $this->mockBiz('File:UploadFileTagDao', $params);
+
+        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterTag', array(array(
+            'tagId' => 1
+        )));
+        $this->assertEquals(1, $result['ids'][0]);
+    }
+
     protected function createUser($user)
     {
         $userInfo = array();
