@@ -74,8 +74,9 @@ class LoginController extends LoginBindController
             $password = $request->request->get('password');
 
             $this->loginAttemptCheck($oauthUser->account, $request);
+            $token = $request->getSession()->get('oauth_token');
 
-            $isSuccess = $this->bindUser($oauthUser, $password);
+            $isSuccess = $this->bindUser($oauthUser, $password, $token);
 
             return $isSuccess ?
                 $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success'))) :
@@ -90,13 +91,13 @@ class LoginController extends LoginBindController
         }
     }
 
-    protected function bindUser(OAuthUser $oauthUser, $password)
+    protected function bindUser(OAuthUser $oauthUser, $password, $token)
     {
         $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
 
         $isCorrectPassword = $this->getUserService()->verifyPassword($user['id'], $password);
         if ($isCorrectPassword) {
-            $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], null);
+            $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], $token);
             $this->authenticatedOauthUser();
 
             return true;

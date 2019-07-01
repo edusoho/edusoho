@@ -138,6 +138,7 @@ admin.operation.notification_menu: '全站站内通知'
 admin.operation.block_menu: 编辑区管理
 admin.operation.content_menu: 自定义页面管理
 admin.operation.mobile_menu: '移动端内容管理'
+admin.operation.wechat_notification: 微信通知
 admin.operation.analysis_menu: 数据统计
 admin.operation.sensitive_words_menu: 敏感词管理
 admin.operation.reward_point_menu:　积分管理
@@ -182,6 +183,10 @@ admin.operation.mobile.selection_setting_tab: 每周精选设置
 admin.operation.mobile.discovery_column_tab: '发现页栏目管理'
 
 admin.operation.mobile.discovery_column_tab.create_btn: '添加栏目'
+
+##微信通知管理模块
+admin.operation.wechat.notification_record_tab: 发送记录
+admin.operation.wechat.notification_manage: 设置
 
 ##数据统计模块
 admin.operation.analysis.basic_tab: 数据统计
@@ -328,6 +333,9 @@ admin.system.operation.reward_point: 积分
 admin.system.finance.payment_tab: 支付
 admin.system.finance.coin_tab: 虚拟币
 admin.system.finance.refund_tab: 退款
+
+##微信授权设置模块
+admin.system.wechat_auth_menu: 微信授权信息
 
 ##移动端设置模块
 admin.system.mobile.h5: 微网校设置

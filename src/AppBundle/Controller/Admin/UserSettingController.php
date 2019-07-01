@@ -133,9 +133,11 @@ class UserSettingController extends BaseController
         if ($request->isMethod('POST')) {
             $loginConnect = $request->request->all();
             $loginConnect = ArrayToolkit::trim($loginConnect);
+            $formerLoginConnect = $this->getSettingService()->get('login_bind');
+            $loginConnect = array_merge($formerLoginConnect, $loginConnect);
             $loginConnect = $this->decideEnabledLoginConnect($loginConnect);
+
             $this->getSettingService()->set('login_bind', $loginConnect);
-            $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
         }
 
         return $this->render('admin/system/login-connect.html.twig', array(

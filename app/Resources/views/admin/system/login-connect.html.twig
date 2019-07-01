@@ -88,7 +88,7 @@
       </div>
     </fieldset>
     <fieldset id="third_login" {% if loginConnect.enabled|default(null) == 0 %} style="display:none"{% endif %}>
-      {% for type, client in clients %}
+      {% for type, client in clients if type not in ['weixinmob', 'weixinweb']%}
         <fieldset data-role="oauth2-setting" data-type="{{ type }}">
           <legend>{{ client.admin_name }}</legend>
           <div class="form-group">
@@ -136,26 +136,8 @@
                 <div class="controls col-md-8">
                   <input type="text" id="{{ type }}_secret" name="{{ type }}_secret" class="form-control"
                     value="{{ loginConnect[type ~ '_secret'] }}">
-                  {% if type =='weixinweb' %}
-                    <div class="help-block">{{ 'admin.login_connect.type.weixinweb.help_block'|trans|raw }}</div>
-                  {% elseif type =='weixinmob' %}
-                    <div class="help-block">{{ 'admin.login_connect.type.weixinmob.help_block'|trans|raw }}
-                    </div>
-                  {% endif %}
                 </div>
               </div>
-              {% if type == 'weixinmob' %}
-                <div class="form-group">
-                  <div class="col-md-3 control-label">
-                    <label for="weixinmob_mp_secret">{{ client.mp_secret_setting_label }}</label>
-                  </div>
-                  <div class="controls col-md-8">
-                    <input type="text" id="weixinmob_mp_secret" name="weixinmob_mp_secret" class="form-control"
-                      value="{{ loginConnect['weixinmob_mp_secret'] }}">
-                    <p class="help-block">{{ 'admin.login_connect.type.weixinmob.MP_verify.help_block'|trans }}</p>
-                  </div>
-                </div>
-              {% endif %}
               {% if type == 'weibo' %}
                 <div class="form-group">
                   <div class="col-md-3 control-label">
@@ -166,6 +148,36 @@
                   </div>
                 </div>
               {% endif %}
+        </fieldset>
+      {% endfor %}
+
+      {% for type, client in clients if type in ['weixinmob', 'weixinweb']%}
+        <fieldset>
+          <legend>{{ client.admin_name }}</legend>
+          <div class="form-group">
+            <div class="col-md-3 control-label">
+              <label>{{ client.admin_name }}</label>
+            </div>
+            <div class="controls col-md-1">
+              <p class="form-control-static">
+                {% if loginConnect[type ~ '_enabled'] %}
+                  {{ 'admin.payment_setting.api_open'|trans }}
+                {% else %}
+                  {{ 'admin.payment_setting.api_close'|trans }}
+                {% endif %}
+              </p>
+            </div>
+            <div class="controls col-md-2 form-control-static">
+              <a target="_blank" href="{{ path('admin_setting_wechat_auth') }}">
+              {% if loginConnect[type ~ '_enabled'] %}
+                {{ 'admin.payment_setting.api_close.direct'|trans }}
+              {% else %}
+                {{ 'admin.payment_setting.api_open.direct'|trans }}
+              {% endif %}
+              </a>
+            </div>
+          </div>
+
         </fieldset>
       {% endfor %}
 

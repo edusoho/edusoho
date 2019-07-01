@@ -25,6 +25,11 @@
         <label for="password">{{'user.fields.login_password'|trans}}</label>
         <input type="password" class="form-control" name="password" id="password">
       </div>
+      {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
+        <div class="form-group cd-mb24 js-drag-jigsaw {% if setting('auth.register_mode') == 'mobile' %}hidden{% endif%}">
+          {% include 'common/drag.html.twig' with { auth: true } %}
+        </div>
+      {% endif %}
     </form>
   {% else %}
     <div class="alert cd-alert cd-alert-warning">

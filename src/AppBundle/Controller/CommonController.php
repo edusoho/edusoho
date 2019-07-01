@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\User\CurrentUser;
+use Biz\WeChat\Service\WeChatService;
 use Endroid\QrCode\QrCode;
 use Biz\User\Service\UserService;
 use Biz\User\Service\TokenService;
@@ -27,6 +29,26 @@ class CommonController extends BaseController
         );
 
         return new Response($img, 200, $headers);
+    }
+
+    public function weChatOfficialSubscribeAction(Request $request)
+    {
+        $weChatSetting = $this->getSettingService()->get('wechat', array());
+        if (empty($weChatSetting['wechat_notification_enabled'])) {
+            throw new AccessDeniedException('无法获取微信公众号二维码');
+        }
+
+        $user = $this->getCurrentUser();
+        if ($user->isLogin()) {
+            $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($user['id']);
+            if (!empty($weChatUser['isSubscribe'])) {
+                return $this->redirect($this->generateUrl('homepage'));
+            }
+        }
+
+        return $this->render('common/wechat-subscribe.html.twig', array(
+            'qrcodeUrl' => $weChatSetting['account_code'],
+        ));
     }
 
     public function parseQrcodeAction(Request $request, $token)
@@ -143,5 +165,13 @@ class CommonController extends BaseController
     protected function getSchedulerService()
     {
         return $this->getBiz()->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->getBiz()->service('WeChat:WeChatService');
     }
 }

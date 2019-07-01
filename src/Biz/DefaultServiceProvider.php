@@ -2,6 +2,9 @@
 
 namespace Biz;
 
+use AppBundle\Component\Notification\WeChatTemplateMessage\Client;
+use AppBundle\Component\Notification\WeChatTemplateMessage\CloudNotificationClient;
+use AppBundle\Component\RateLimit\EmailRateLimiter;
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
 use Biz\Course\Util\CourseRenderViewResolver;
@@ -39,6 +42,7 @@ use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
 use Biz\Common\BizDragCaptcha;
 use AppBundle\Component\RateLimit\SmsRateLimiter;
 use Biz\Util\EdusohoLiveClient;
+use Codeages\Biz\Framework\Queue\Driver\DatabaseQueue;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -184,6 +188,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return new SmsRateLimiter($biz);
         };
 
+        $biz['email_rate_limiter'] = function ($biz) {
+            return new EmailRateLimiter($biz);
+        };
+
         $biz['render_view_resolvers'] = function ($biz) {
             return array(
                 new CourseRenderViewResolver($biz),
@@ -203,5 +211,46 @@ class DefaultServiceProvider implements ServiceProviderInterface
             "\/course_set\/(\d)+\/manage\/(\S)+/i",
             "\/my\/teaching\/course_sets/",
         );
+
+        $biz['wechat.template_message_client'] = function ($biz) {
+            $setting = $biz->service('System:SettingService');
+            $loginBind = $setting->get('login_bind', array());
+            if (!empty($loginBind['weixinmob_enabled'])) {
+                $client = new Client(array(
+                    'key' => $loginBind['weixinmob_key'],
+                    'secret' => $loginBind['weixinmob_secret'],
+                ));
+                $token = $client->getAccessToken();
+                if (!empty($token)) {
+                    $client->setAccessToken($token['access_token']);
+                }
+
+                return $client;
+            }
+
+            return null;
+        };
+
+        $biz['wechat.cloud_notification_client'] = function ($biz) {
+            $setting = $biz->service('System:SettingService');
+            $storage = $setting->get('storage', array());
+            $loginBind = $setting->get('login_bind', array());
+            $options = array(
+                'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
+                'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
+                'app_id' => empty($loginBind['weixinmob_key']) ? '' : $loginBind['weixinmob_key'],
+                'secret' => empty($loginBind['weixinmob_secret']) ? '' : $loginBind['weixinmob_secret'],
+            );
+
+            return new CloudNotificationClient($options);
+        };
+
+        $biz['lock.flock.directory'] = function ($biz) {
+            return $biz['run_dir'];
+        };
+
+        $biz['queue.connection.database'] = function ($biz) {
+            return new DatabaseQueue('database', $biz);
+        };
     }
 }

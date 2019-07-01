@@ -9,6 +9,7 @@ use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserFieldService;
+use Biz\WeChat\Service\WeChatService;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\FileToolkit;
@@ -718,6 +719,15 @@ class SettingsController extends BaseController
         if ('POST' === $request->getMethod()) {
             $data = $request->request->all();
 
+            //同一IP限制
+            $biz = $this->getBiz();
+            $rateLimiter = $biz['email_rate_limiter'];
+            $rateLimiter->handle($request);
+
+            //拖动校验
+            $authSettings = $this->getSettingService()->get('auth', array());
+            $this->dragCaptchaValidator($data, $authSettings);
+
             $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
 
             if (!$isPasswordOk) {
@@ -826,9 +836,17 @@ class SettingsController extends BaseController
 
             $clients[$userBind['type']]['status'] = 'bind';
         }
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        $loginQrcode = '';
+        if (!empty($wechatSetting['wechat_notification_enabled'])) {
+            $loginUrl = $this->generateUrl('login', array('goto' => $wechatSetting['account_code']), true);
+            $loginQrcode = $this->generateUrl('common_qrcode', array('text' => $loginUrl), true);
+        }
 
         return $this->render('settings/binds.html.twig', array(
             'clients' => $clients,
+            'loginQrcode' => $loginQrcode,
+            'user' => $user,
         ));
     }
 
@@ -993,6 +1011,17 @@ class SettingsController extends BaseController
         return $client;
     }
 
+    protected function dragCaptchaValidator($registration, $authSettings)
+    {
+        if (array_key_exists('captcha_enabled', $authSettings) && (1 == $authSettings['captcha_enabled']) && empty($registration['mobile'])) {
+            $biz = $this->getBiz();
+            $bizDragCaptcha = $biz['biz_drag_captcha'];
+
+            $dragcaptchaToken = empty($registration['dragCaptchaToken']) ? '' : $registration['dragCaptchaToken'];
+            $bizDragCaptcha->check($dragcaptchaToken);
+        }
+    }
+
     /**
      * @return FileService
      */
@@ -1055,6 +1084,14 @@ class SettingsController extends BaseController
     protected function getAccountService()
     {
         return $this->getBiz()->service('Pay:AccountService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->getBiz()->service('WeChat:WeChatService');
     }
 
     protected function downloadImg($url)

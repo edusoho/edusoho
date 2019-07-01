@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Task\Service;
 
+use AppBundle\Common\ReflectionUtils;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Task\Dao\TaskDao;
@@ -228,7 +229,7 @@ class TaskServiceTest extends BaseTestCase
     public function testPreCreateTaskCheck()
     {
         $this->mockBiz('Activity:ActivityService', array(
-           array('functionName' => 'preCreateCheck', 'returnValue' => ''),
+            array('functionName' => 'preCreateCheck', 'returnValue' => ''),
         ));
 
         $this->getTaskService()->preCreateTaskCheck(array('mediaType' => 'live'));
@@ -454,7 +455,7 @@ class TaskServiceTest extends BaseTestCase
             array('functionName' => 'findUserTaskResultsByTaskIds', 'returnValue' => array(
                 array('courseTaskId' => $task1['id']),
                 array('courseTaskId' => $task['id']),
-                ),
+            ),
             ),
         ));
 
@@ -643,6 +644,193 @@ class TaskServiceTest extends BaseTestCase
         $tasks = $this->getTaskService()->findPublishedTasksByCourseSetId(1);
 
         $this->assertEquals(1, count($tasks));
+    }
+
+    public function testFindCurrentLiveTasks()
+    {
+        $this->mockBiz('Task:TaskDao', array(
+            array('functionName' => 'search', 'returnValue' => array(
+                array('id' => 1),
+            )),
+            array('functionName' => 'count', 'returnValue' => 1),
+        ));
+
+        $tasks = $this->getTaskService()->findCurrentLiveTasks();
+
+        $this->assertEquals(1, count($tasks));
+    }
+
+    public function testFindFutureLiveTasks()
+    {
+        $this->mockBiz('Task:TaskDao', array(
+            array('functionName' => 'search', 'returnValue' => array(
+                array('id' => 1),
+            )),
+            array('functionName' => 'count', 'returnValue' => 1),
+        ));
+
+        $tasks = $this->getTaskService()->findFutureLiveTasks();
+
+        $this->assertEquals(1, count($tasks));
+    }
+
+    public function testFindPastLivedCourseSetIds()
+    {
+        $this->mockBiz('Task:TaskDao', array(
+            array('functionName' => 'findPastLivedCourseSetIds', 'returnValue' => array(
+                array('id' => 1, 'fromCourseSetId' => 2),
+            )),
+        ));
+
+        $tasks = $this->getTaskService()->findPastLivedCourseSetIds();
+
+        $this->assertEquals(1, count($tasks));
+    }
+
+    /**
+     * @expectedException \Biz\Task\TaskException
+     * @expectedExceptionMessage exception.task.task_is_locked
+     */
+    public function testTryTakeTaskWithLockedTask()
+    {
+        $this->mockBiz('Task:TaskDao', array(
+            array('functionName' => 'get', 'returnValue' => array('isFree' => false, 'courseId' => 1)),
+        ));
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'tryTakeCourse', 'returnValue' => array('id' => 1)),
+            array('functionName' => 'canTakeCourse', 'returnValue' => false),
+        ));
+
+        $this->getTaskService()->tryTakeTask(1);
+    }
+
+    public function testCountTasksByChpaterId()
+    {
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->createNewCourse($courseSet['id']);
+
+        $task = $this->mockSimpleTask($course['id'], $courseSet['id']);
+        $task = $this->getTaskService()->createTask($task);
+
+        $count = $this->getTaskService()->countTasksByChpaterId($task['categoryId']);
+        $this->assertEquals(1, $count);
+    }
+
+    public function testFindToLearnTasksByCourseIdForMission()
+    {
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->createNewCourse($courseSet['id']);
+
+        $task = $this->mockSimpleTask($course['id'], $courseSet['id']);
+        $this->getTaskService()->createTask($task);
+
+        $result = $this->getTaskService()->findToLearnTasksByCourseIdForMission($course['id']);
+        $this->assertEmpty($result);
+    }
+
+    public function testGetToLearnTaskWithFreeMode()
+    {
+        $this->mockBiz('Task:TaskResultService', array(
+            array('functionName' => 'findUserFinishedTaskResultsByCourseId', 'returnValue' => array(
+                array('courseTaskId' => 1),
+            )),
+            array('functionName' => 'findUserProgressingTaskResultByCourseId', 'returnValue' => array(
+                array('courseTaskId' => 1),
+            )),
+        ));
+        $this->mockBiz('Task:TaskDao', array(
+            array('functionName' => 'search', 'returnValue' => array(
+                array('id' => 1, 'title' => 'test'),
+            )),
+        ));
+        $result = ReflectionUtils::invokeMethod($this->getTaskService(), 'getToLearnTaskWithFreeMode', array(1));
+        $this->assertEquals('test', $result['title']);
+    }
+
+    public function testGetToLearnTasksWithLockMode()
+    {
+        $this->mockBiz('Task:TaskResultService', array(
+            array('functionName' => 'getUserLatestFinishedTaskResultByCourseId', 'returnValue' => array(
+                array('id' => 1, 'courseTaskId' => 1),
+            )),
+        ));
+        $this->mockBiz('Task:TaskDao', array(
+            array('functionName' => 'search', 'returnValue' => array(
+                array('id' => 1, 'title' => 'test', 'seq' => 1),
+                array('id' => 2, 'title' => 'test2', 'seq' => 2),
+            )),
+        ));
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'getCourse', 'returnValue' => array('isHideUnpublish' => true)),
+        ));
+        $result = ReflectionUtils::invokeMethod($this->getTaskService(), 'getToLearnTasksWithLockMode', array(1));
+        $this->assertEquals('test', $result[0][0]['title']);
+        $this->assertEquals('test2', $result[0][1]['title']);
+    }
+
+    public function testTrigger()
+    {
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->createNewCourse($courseSet['id']);
+
+        $task = $this->mockSimpleTask($course['id'], $courseSet['id']);
+        $task = $this->getTaskService()->createTask($task);
+        $this->mockBiz('Activity:ActivityService', array(
+            array('functionName' => 'trigger', 'returnValue' => array()),
+        ));
+        $this->mockBiz('Task:TaskResultService', array(
+            array('functionName' => 'getUserTaskResultByTaskId', 'returnValue' => array('id' => 1)),
+        ));
+
+        $result = $this->getTaskService()->trigger($task['id'], 'test');
+        $this->assertEquals(1, $result['id']);
+    }
+
+    public function testSumCourseSetLearnedTimeByCourseSetId()
+    {
+        $result = $this->getTaskService()->sumCourseSetLearnedTimeByCourseSetId(1);
+        $this->assertEmpty($result);
+    }
+
+    public function testAnalysisTaskDataByTime()
+    {
+        $result = $this->getTaskService()->analysisTaskDataByTime(time(), time() + 86400);
+        $this->assertEmpty($result);
+    }
+
+    public function testCountLessonsWithMultipleTasks()
+    {
+        $result = $this->getTaskService()->analysisTaskDataByTime(time(), time() + 86400);
+
+        $this->assertEmpty($result);
+    }
+
+    public function testFillTaskResultAndLockStatus()
+    {
+        $this->mockBiz('Activity:ActivityService', array(
+            array('functionName' => 'findActivities', 'returnValue' => array(
+                array('id' => 1),
+                array('id' => 2),
+            )),
+        ));
+        $this->mockBiz('Task:TaskResultService', array(
+            array('functionName' => 'findUserTaskResultsByTaskIds', 'returnValue' => array(
+                array('courseTaskId' => 1),
+            )),
+        ));
+        $this->mockBiz('Course:MemberService', array(
+            array('functionName' => 'isCourseTeacher', 'returnValue' => array('role' => 'USER_TEACHER')),
+        ));
+
+        $result = ReflectionUtils::invokeMethod($this->getTaskService(), 'fillTaskResultAndLockStatus', array(
+            array(
+                array('activityId' => 1, 'id' => 1),
+                array('activityId' => 2, 'id' => 2),
+            ),
+            array('learnMode' => 'lockMode', 'id' => 1),
+            array(array('activityId' => 1, 'id' => 1), array('activityId' => 2, 'id' => 2)),
+        ));
+        $this->assertEquals(1, $result[0]['activityId']);
     }
 
     public function testGetMaxSeqByCourseId()

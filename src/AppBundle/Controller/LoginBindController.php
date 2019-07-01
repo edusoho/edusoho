@@ -11,6 +11,7 @@ use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\SimpleValidator;
 use Biz\User\TokenException;
+use Biz\WeChat\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 
@@ -104,6 +105,11 @@ class LoginBindController extends BaseController
 
             if ($this->getCurrentUser()->getId() != $user['id']) {
                 $this->authenticateUser($user);
+            }
+
+            if ('weixinmob' == $type) {
+                $user = $this->getCurrentUser();
+                $this->getWeChatService()->freshOfficialWeChatUserWhenLogin($user, $bind, $token);
             }
 
             if ($this->getAuthService()->hasPartnerAuth()) {
@@ -298,5 +304,13 @@ class LoginBindController extends BaseController
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->createService('WeChat:WeChatService');
     }
 }

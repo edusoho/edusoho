@@ -1,0 +1,32 @@
+{% do script(['app/js/wechat-inform-common/index.js']) %}
+<div class="wechat-pay-inform text-center">
+  {% if type|default('') == 'pay' %}
+    <div class="wechat-pay-inform__feedback">
+      <div class="wechat-pay-inform__icon"><i class="cd-icon cd-icon-check"></i></div>{{'wechat.notification.pay_success'|trans}}
+    </div>
+  {% endif %}
+  <div class="wechat-inform-section text-center cd-mt24">
+    <div class="wechat-inform-title text-center">{{ 'wechat.notification.open_notification_hint_title'|trans }}</div>
+    <div class="wechat-inform-content cd-mt40 row">
+      <div class="wechat-inform-content__qcode col-sm-offset-2 col-sm-4">
+        {% if not weChatUser %}
+          <img class="js-qrcode" data-url="{{ path('login_wechat_qrcode') }}" src="">
+        {% elseif not weChatUser.isSubscribe|default(false) %}
+          <img src="{{ setting('wechat.account_code') }}">
+        {% endif %}
+      </div>
+      <div class="wechat-inform-content__img col-sm-offset-1 col-sm-4">
+        <img class="hidden-xs" src="{{ asset('static-dist/app/img/wechat-inform/wechat-scan.png') }}" srcset="{{ asset('static-dist/app/img/wechat-inform/wechat-scan.png') }} 1x, {{ asset('static-dist/app/img/wechat-inform/wechat-scan@2x.png') }} 2x">
+        <img class="visible-xs" src="{{ asset('static-dist/app/img/wechat-inform/wechat-scan-mobile.png') }}" srcset="{{ asset('static-dist/app/img/wechat-inform/wechat-scan-mobile.png') }} 1x, {{ asset('static-dist/app/img/wechat-inform/wechat-scan-mobile@2x.png') }} 2x">
+        <div class="wechat-inform-content__tip hidden-xs">{{ 'wechat.notification.open_notification_tip'|trans }}</div>
+        <div class="wechat-inform-content__tip visible-xs">{{ 'wechat.notification.mobile_open_notification_tip'|trans }}</div>
+      </div>
+    </div>
+  </div>
+  {% if goto|default('') is not empty %}
+    <div class="text-center">
+      <a class="cd-btn cd-btn-primary wechat-pay-inform__btn" href="{{ goto }}">{{ btnText|default('form.btn.return')|trans}}</a>
+    </div>
+  {% endif %}
+
+</div>

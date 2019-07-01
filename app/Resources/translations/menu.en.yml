@@ -138,6 +138,7 @@ admin.operation.notification_menu: 'Site Notices'
 admin.operation.block_menu: Area Control 
 admin.operation.content_menu: Customize pages
 admin.operation.mobile_menu: 'App contents'
+admin.operation.wechat_notification: WeChat Notification
 admin.operation.analysis_menu: Statistics
 admin.operation.sensitive_words_menu: Sensitive Words
 admin.operation.reward_point_menu:　Reward Point
@@ -183,6 +184,10 @@ admin.operation.mobile.selection_setting_tab: Weekly selected setting
 admin.operation.mobile.discovery_column_tab: 'Explore Page Category'
 
 admin.operation.mobile.discovery_column_tab.create_btn: 'Add Category'
+
+##微信通知管理模块
+admin.operation.wechat.notification_record_tab: Send Record
+admin.operation.wechat.notification_manage: Setting
 
 ##数据统计模块
 admin.operation.analysis.basic_tab: Statistics
@@ -326,6 +331,9 @@ admin.system.operation.reward_point: Reward Point
 admin.system.finance.payment_tab: Payment
 admin.system.finance.coin_tab: Virtual Coin
 admin.system.finance.refund_tab: Refund
+
+##微信授权设置模块
+admin.system.wechat_auth_menu: WeChat Authorization Information
 
 ##移动端设置模块
 admin.system.mobile.h5: Mobile Site Setting

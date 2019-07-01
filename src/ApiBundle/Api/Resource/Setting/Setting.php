@@ -15,7 +15,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat'))) {
             throw CommonException::ERROR_PARAMETER();
         }
 
@@ -51,6 +51,21 @@ class Setting extends AbstractResource
             'url' => $siteSetting['url'],
             'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
         );
+    }
+
+    public function getWeChat($request)
+    {
+        $weChatSetting = $this->getSettingService()->get('wechat', array());
+
+        $result = array(
+            'enabled' => empty($weChatSetting['wechat_notification_enabled']) ? false : true,
+            'official_qrcode' => empty($weChatSetting['account_code']) ? '' : $weChatSetting['account_code'],
+        );
+
+        $filter = new WeChatSettingFilter();
+        $filter->filter($result);
+
+        return $result;
     }
 
     public function getWap($request = null)
@@ -154,23 +169,11 @@ class Setting extends AbstractResource
     {
         $courseSetting = $this->getSettingService()->get('course', array());
 
-        if ($courseSetting['show_student_num_enabled'] == 0) {
-            $showStudentNumEnabled = 0;
-            $showHitNumEnabled = 0;
-        } elseif (($courseSetting['show_student_num_enabled'] == 1) && ($courseSetting['show_cover_num_mode'] == 'studentNum')) {
-            $showStudentNumEnabled = 1;
-            $showHitNumEnabled = 0;
-        } else {
-            $showStudentNumEnabled = 0;
-            $showHitNumEnabled = 1;
-        }
-        
         return array(
             'chapter_name' => empty($courseSetting['chapter_name']) ? '章' : $courseSetting['chapter_name'],
             'part_name' => empty($courseSetting['part_name']) ? '节' : $courseSetting['part_name'],
             'task_name' => empty($courseSetting['task_name']) ? '任务' : $courseSetting['task_name'],
-            'show_student_num_enabled' => $showStudentNumEnabled,
-            'show_hit_num_enabled' => $showHitNumEnabled,
+            'show_student_num_enabled' => !isset($courseSetting['show_student_num_enabled']) ? '1' : $courseSetting['show_student_num_enabled'],
         );
     }
 
@@ -227,6 +230,15 @@ class Setting extends AbstractResource
         $clients = OAuthClientFactory::clients();
 
         return $this->getLoginConnect($clients);
+    }
+
+    public function getClassroom()
+    {
+        $classroomSetting = $this->getSettingService()->get('classroom', array());
+
+        return array(
+            'show_student_num_enabled' => isset($classroomSetting['show_student_num_enabled']) ? (bool) $classroomSetting['show_student_num_enabled'] : true,
+        );
     }
 
     private function getLoginConnect($clients)

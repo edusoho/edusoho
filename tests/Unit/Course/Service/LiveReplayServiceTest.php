@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Course\Service;
 
+use Biz\Util\EdusohoLiveClient;
 use Mockery;
 use Biz\BaseTestCase;
 
@@ -98,6 +99,20 @@ class LiveReplayServiceTest extends BaseTestCase
         $this->assertEquals($fields['hidden'], $result['hidden']);
     }
 
+    /**
+     * @expectedException \Biz\Course\LiveReplayException
+     * @expectedExceptionMessage exception.live_replay.not_found
+     */
+    public function testUpdateEmptyReplay()
+    {
+        $fields = array(
+            'title' => 'live replay update',
+            'hidden' => 1,
+        );
+
+        $this->getLiveReplayService()->updateReplay(1, $fields);
+    }
+
     public function testUpdateReplayByLessonId()
     {
         $replay1 = $this->createLiveReplay();
@@ -158,6 +173,107 @@ class LiveReplayServiceTest extends BaseTestCase
         $this->assertEquals(1, count($replays));
         $this->assertEquals($replay1['title'], $replays[0]['title']);
         $this->assertEquals($replay1['globalId'], $replays[0]['globalId']);
+    }
+
+    public function testEntryReplay()
+    {
+        $liveClient = new EdusohoLiveClient();
+        $mockLiveClient = Mockery::mock($liveClient);
+
+        $mockLiveClient->shouldReceive('entryReplay')->times(1)->andReturn(array('success' => 'ok'));
+        $this->getLiveReplayService()->setLiveClient($mockLiveClient);
+
+        $result = $this->getLiveReplayService()->entryReplay(1, 1, 'ESLive');
+
+        $this->assertEquals(array('success' => 'ok'), $result);
+    }
+
+    public function testUpdateReplayShow()
+    {
+        $result = $this->getLiveReplayService()->updateReplayShow(array(), 1);
+        $this->assertFalse($result);
+
+        $replay1 = $this->createLiveReplay1();
+        $replay2 = $this->createLiveReplay2();
+
+        $result1 = $this->getLiveReplayService()->updateReplayShow(array(), 1);
+        $result2 = $this->getLiveReplayService()->updateReplayShow(array(), 2);
+        $updateReplay1 = $this->getLiveReplayService()->getReplay($replay1['id']);
+        $updateReplay2 = $this->getLiveReplayService()->getReplay($replay2['id']);
+
+        $this->assertTrue($result1);
+        $this->assertTrue($result2);
+        $this->assertEquals(1, $updateReplay1['hidden']);
+        $this->assertEquals(1, $updateReplay2['hidden']);
+
+        $result1 = $this->getLiveReplayService()->updateReplayShow(array(1), 1);
+        $result2 = $this->getLiveReplayService()->updateReplayShow(array(2), 2);
+        $updateReplay1 = $this->getLiveReplayService()->getReplay($replay1['id']);
+        $updateReplay2 = $this->getLiveReplayService()->getReplay($replay2['id']);
+
+        $this->assertTrue($result1);
+        $this->assertTrue($result2);
+        $this->assertEquals(0, $updateReplay1['hidden']);
+        $this->assertEquals(0, $updateReplay2['hidden']);
+    }
+
+    public function testGenerateReplay()
+    {
+        $liveClient = new EdusohoLiveClient();
+        $mockLiveClient = Mockery::mock($liveClient);
+
+        $replay = array(
+            'id' => 1,
+            'subject' => 'live replay',
+            'resourceNo' => '5aac664d11ca403a853749sssss12345',
+        );
+
+        $replayList['data'] = json_encode(array($replay));
+        $mockLiveClient->shouldReceive('createReplayList')->times(1)->andReturn($replayList);
+        $this->getLiveReplayService()->setLiveClient($mockLiveClient);
+
+        $this->mockBiz(
+            'Activity:ActivityService',
+            array(
+                array(
+                    'functionName' => 'getActivity',
+                    'returnValue' => array('id' => 1),
+                ),
+                array(
+                    'functionName' => 'updateActivity',
+                    'returnValue' => array(),
+                ),
+            )
+        );
+
+        $result = $this->getLiveReplayService()->generateReplay(1, 1, 1, 'ESLive', 'live');
+        $this->assertEquals($result, array($replay));
+    }
+
+    public function testGenerateReplayWithException()
+    {
+        $liveClient = new EdusohoLiveClient();
+        $mockLiveClient = Mockery::mock($liveClient);
+
+        $mockLiveClient->shouldReceive('createReplayList')->times(1)->andThrow('Biz\CloudPlatform\Client\CloudAPIIOException');
+        $this->getLiveReplayService()->setLiveClient($mockLiveClient);
+
+        $result = $this->getLiveReplayService()->generateReplay(1, 1, 1, 'ESLive', 'live');
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testGenerateReplayReturnError()
+    {
+        $liveClient = new EdusohoLiveClient();
+        $mockLiveClient = Mockery::mock($liveClient);
+
+        $mockLiveClient->shouldReceive('createReplayList')->times(1)->andReturn(array('error' => 'error'));
+        $this->getLiveReplayService()->setLiveClient($mockLiveClient);
+
+        $this->getLiveReplayService()->generateReplay(1, 1, 1, 'ESLive', 'live');
     }
 
     protected function createLiveReplay()

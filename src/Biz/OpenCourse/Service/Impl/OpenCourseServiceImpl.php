@@ -277,10 +277,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $course = $this->tryManageOpenCourse($id);
 
-        if (empty($course)) {
-            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
-        }
-
         $this->dispatchEvent('open.course.close', $course);
 
         return $this->getOpenCourseDao()->update($id, array('status' => 'closed'));
@@ -543,10 +539,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
 
         $this->fillLessonMediaFields($lesson);
-
-        if (isset($fields['title'])) {
-            $fields['title'] = $this->purifyHtml($fields['title']);
-        }
 
         $lesson['status'] = 'unpublished';
         $lesson['number'] = $this->_getNextLessonNumber($lesson['courseId']);
@@ -1108,9 +1100,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $fields['about'] = $this->purifyHtml($fields['about'], true);
         }
 
-        $fields = $this->fillOrgId($fields);
-
-        return $fields;
+        return $this->fillOrgId($fields);
     }
 
     protected function hasOpenCourseManagerRole($courseId, $userId)

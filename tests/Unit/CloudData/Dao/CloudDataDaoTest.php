@@ -14,6 +14,15 @@ class CloudDataDaoTest extends BaseTestCase
                 'serializes' => array(
                     'body' => 'json',
                 ),
+                'conditions' => array(
+                    'name = :name',
+                    'timestamp = :timestamp',
+                    'createdUserId = :createdUserId',
+                ),
+                'orderbys' => array(
+                    'updatedTime',
+                    'createdTime',
+                ),
             ),
             $this->getCloudDataDao()->declares()
         );
