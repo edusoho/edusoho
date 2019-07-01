@@ -39,6 +39,8 @@ class CloudNotificationClient
 
     protected $auth;
 
+    protected $testRequest;
+
     public function __construct($options)
     {
         $this->setKey($options);
@@ -139,6 +141,10 @@ class CloudNotificationClient
 
     public function request($method, $uri, $params = array())
     {
+        if (isset($this->testRequest)) {
+            return $this->testRequest->request($method, $uri, $params);
+        }
+
         $method = strtoupper($method);
         $curl = curl_init();
         $url = $this->baseUrl.$uri;
