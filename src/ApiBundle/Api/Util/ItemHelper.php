@@ -60,10 +60,6 @@ class ItemHelper
                     ++$nowUnitIndex;
                     $result[$nowChapterIndex]['children'][] = $this->getBlankChapterOrUnit('unit');
                 }
-                // 将"预习"与"任务学习"交换位置
-                if ('preparation' == $item['tasks'][0]['mode']) {
-                    list($item['tasks'][0], $item['tasks'][1]) = array($item['tasks'][1], $item['tasks'][0]);
-                }
 
                 $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $item;
                 $lastItem = 'lesson';
