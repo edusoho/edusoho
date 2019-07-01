@@ -462,7 +462,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getGroupService()->waveGroup($thread['groupId'], 'postNum', -1);
 
-        $this->getGroupService()->waveMember($thread['groupId'], $thread['userId'], 'postNum', -1);
+        $this->getGroupService()->waveMember($thread['groupId'], $post['userId'], 'postNum', -1);
 
         $this->waveThread($threadId, 'postNum', -1);
 
