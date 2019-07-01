@@ -23,11 +23,7 @@ class ItemHelper
 
     /**
      * 章->节->课时 结构
-     * 向上补全结构，不向下补全结构：
-     * 章->无->课时，则补全节
-     * 章->节->无，则不补全
-     * 无->节->课时，则补全章
-     * 无->无->课时，则补全章/节
+     * 向上补全结构，向下补全至节
      */
     private function getTreeItems($items, $firstChapterIndex)
     {
@@ -64,7 +60,7 @@ class ItemHelper
                     ++$nowUnitIndex;
                     $result[$nowChapterIndex]['children'][] = $this->getBlankChapterOrUnit('unit');
                 }
-                // 将预习与主课程交换位置
+                // 将"预习"与"任务学习"交换位置
                 if ('preparation' == $item['tasks'][0]['mode']) {
                     list($item['tasks'][0], $item['tasks'][1]) = array($item['tasks'][1], $item['tasks'][0]);
                 }
@@ -72,6 +68,13 @@ class ItemHelper
                 $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $item;
                 $lastItem = 'lesson';
             }
+        }
+
+        // 以章结尾，补全节
+        if ('chapter' == $lastItem) {
+            ++$nowUnitIndex;
+            $result[$nowChapterIndex]['children'][] = $this->getBlankChapterOrUnit('unit');
+            $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
         }
 
         return $result;
