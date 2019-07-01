@@ -28,9 +28,9 @@ upgradefile="scripts/upgrade-${version}.php";
 
 if [ ! -f "$upgradefile" ]; then
     echo "升级脚本不存在，请确是否需要升级脚本，确认开其他发者是否已经上传了升级脚本${upgradefile}, 如需处理${upgradefile} 输入n，继续输入y  y|n";
-    read LINE; 
+    read LINE;
     if [ "$LINE" == "N" ] || [ "$LINE" == "n" ] || [ "$LINE" == "" ]; then
-        echo "升级包制作中止，请创建升级脚本 ${upgradefile}"; 
+        echo "升级包制作中止，请创建升级脚本 ${upgradefile}";
         exit 1
     fi
 fi
@@ -47,7 +47,7 @@ fi
 cd edusoho-h5;
 git pull;
 echo "输入要打包的h5版本号,不输入就是 master分支";
-read LINE; 
+read LINE;
 if ['' == "$LINE"]; then
 git checkout master;
 git pull;
@@ -66,7 +66,7 @@ cd ../
 echo "h5静态资源生成成功";
 # 打包edusoho-h5
 
-# remove node modules folder and caches folder 
+# remove node modules folder and caches folder
 echo $(tput setaf 2)remove old node_modules and app/caches using  command  $(tput bold)rm -rf app/caches node_modules $(tput sgr 0)
 rm -rf app/caches node_modules
 # yarn install --production;
@@ -79,7 +79,8 @@ npm run compile
 fi
 #commit static file
 git add web/static-dist
-git commit -m "add static file"
+git add web/h5
+git commit -m "fix: #$(date +%Y%m%d) 保存已编译的静态资源"
 
 # build package
 echo $(tput setaf 2) build package  using command  $(tput bold)app/console build:upgrade-package $1 $2  $(tput sgr 0)

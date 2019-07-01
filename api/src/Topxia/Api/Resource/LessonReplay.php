@@ -22,8 +22,8 @@ class LessonReplay extends BaseResource
             return array('message' => 'Access Denied');
         }
 
-        if ($activity['ext']['replayStatus'] == 'videoGenerated') {
-            return json_decode($this->sendRequest('GET', $this->getHttpHost() . $app['url_generator']->generate('get_lesson', array('id' => $task['id'])), array(sprintf('X-Auth-Token: %s', $request->headers->get('X-Auth-Token')))), true);
+        if ('videoGenerated' == $activity['ext']['replayStatus']) {
+            return json_decode($this->sendRequest('GET', $this->getHttpHost().$app['url_generator']->generate('get_lesson', array('id' => $task['id'])), array(sprintf('X-Auth-Token: %s', $request->headers->get('X-Auth-Token')))), true);
         }
 
         $device = $request->query->get('device');
@@ -45,13 +45,12 @@ class LessonReplay extends BaseResource
             'extra' => array(
                 'provider' => '',
                 'lessonId' => $activity['id'],
-
             ),
             'device' => $device,
         );
         try {
             // if liveProvider is edusoho light live we you video as replay;
-            if ($activity['ext']['liveProvider'] == 5) {
+            if (5 == $activity['ext']['liveProvider']) {
                 //获取globalid
                 $globalId = $visibleReplays[0]['globalId'];
                 $options = array(
@@ -61,13 +60,21 @@ class LessonReplay extends BaseResource
                     'format' => $request->query->get('format', ''),
                     'type' => 'apiLessonReplay',
                     'replayId' => $visibleReplays[0]['id'],
-                    'duration' => '3600'
+                    'duration' => '3600',
                 );
                 $response['url'] = $this->getEsLiveReplayUrl($globalId, $options);
                 $response['extra']['provider'] = 'longinus';
             } else {
                 $protocol = $request->isSecure() ? 'https' : 'http';
-                $response = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
+                $replays = array();
+
+                foreach ($visibleReplays as $index => $visibleReplay) {
+                    $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[$index]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
+                    $replays[$index]['title'] = $visibleReplay['title'];
+                }
+
+                $response = $replays[0];
+                $response['replays'] = $replays;
             }
         } catch (\Exception $e) {
             return $this->error('503', '获取回放失败！');
@@ -100,7 +107,7 @@ class LessonReplay extends BaseResource
         }
 
         if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-            if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+            if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
                 $tokenFields = array(
                     'data' => array(
                         'id' => $file['id'],
@@ -114,7 +121,7 @@ class LessonReplay extends BaseResource
 
                 $token = $this->getTokenService()->makeToken('hls.playlist', $tokenFields);
 
-                return $this->getHttpHost() . "/hls/0/playlist/{$token['token']}.m3u8?hideBeginning=1&format={$options['format']}&line=" . $options['line'];
+                return $this->getHttpHost()."/hls/0/playlist/{$token['token']}.m3u8?hideBeginning=1&format={$options['format']}&line=".$options['line'];
             } else {
                 throw new \RuntimeException('当前视频格式不能被播放！');
             }
@@ -180,13 +187,13 @@ class LessonReplay extends BaseResource
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
-        if (strtoupper($method) == 'POST') {
+        if ('POST' == strtoupper($method)) {
             curl_setopt($curl, CURLOPT_POST, 1);
             $params = http_build_query($params);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
         } else {
             if (!empty($params)) {
-                $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
+                $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
             }
         }
         curl_setopt($curl, CURLOPT_URL, $url);

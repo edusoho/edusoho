@@ -326,8 +326,6 @@ class Client
         ));
         curl_setopt($curl, CURLOPT_URL, $url.'?'.http_build_query(array('access_token' => $this->accessToken)));
 
-        // curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
-
         $response = curl_exec($curl);
 
         curl_close($curl);

@@ -176,4 +176,9 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     {
         return $this->biz->service('System:LogService');
     }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
+    }
 }

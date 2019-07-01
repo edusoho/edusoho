@@ -29,13 +29,11 @@ class ClassroomCourseExpiryDateEventSubscriber extends EventSubscriber implement
         try {
             $db->beginTransaction();
 
-            if (!empty($fields['expiryMode'])) {
-                if ($this->canUpdateCoursesExpiryDate($classroom, $fields['expiryMode'])) {
-                    $this->updateCoursesExpiryDate($classroom['id'], array(
-                        'expiryMode' => $fields['expiryMode'],
-                        'expiryValue' => $fields['expiryValue'],
-                    ));
-                }
+            if (!empty($fields['expiryMode']) && $this->canUpdateCoursesExpiryDate($classroom, $fields['expiryMode'])) {
+                $this->updateCoursesExpiryDate($classroom['id'], array(
+                    'expiryMode' => $fields['expiryMode'],
+                    'expiryValue' => $fields['expiryValue'],
+                ));
             }
 
             $db->commit();
