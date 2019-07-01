@@ -3,7 +3,7 @@
 namespace Biz;
 
 use AppBundle\Component\Notification\WeChatTemplateMessage\Client;
-use AppBundle\Component\Notification\WeChatTemplateMessage\CloudNotificationClientTest;
+use AppBundle\Component\Notification\WeChatTemplateMessage\CloudNotificationClient;
 use AppBundle\Component\RateLimit\EmailRateLimiter;
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
@@ -241,7 +241,7 @@ class DefaultServiceProvider implements ServiceProviderInterface
                 'app_id' => empty($loginBind['weixinmob_key']) ? '' : $loginBind['weixinmob_key'],
                 'secret' => empty($loginBind['weixinmob_secret']) ? '' : $loginBind['weixinmob_secret'],
             );
-            $client = new CloudNotificationClientTest($options);
+            $client = new CloudNotificationClient($options);
 
             return $client;
         };
