@@ -607,7 +607,7 @@ class UploadFileServiceTest extends BaseTestCase
             'description' => 'description',
             'targetId' => 1,
             'useType' => 'type',
-            'usedCount' => 10
+            'usedCount' => 10,
         ));
         $this->assertTrue($result);
     }
@@ -1092,7 +1092,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'runTimes' => 1,
                 'withParams' => array(1),
                 'returnValue' => array('storage' => 'cloud'),
-            )
+            ),
         );
         $this->mockBiz('File:UploadFileDao', $params);
 
@@ -1122,7 +1122,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'runTimes' => 1,
                 'withParams' => array('storage'),
                 'returnValue' => array('upload_mode' => 'cloud'),
-            )
+            ),
         );
         $this->mockBiz('System:SettingService', $params);
 
@@ -1148,7 +1148,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'runTimes' => 1,
                 'withParams' => array('storage'),
                 'returnValue' => array('upload_mode' => 'cloud'),
-            )
+            ),
         );
         $this->mockBiz('System:SettingService', $params);
 
@@ -1189,7 +1189,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'functionName' => 'create',
                 'runTimes' => 1,
                 'returnValue' => array('id' => 1),
-            )
+            ),
         );
         $this->mockBiz('File:UploadFileInitDao', $params);
 
@@ -1199,7 +1199,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'functionName' => 'info',
                 'runTimes' => 1,
                 'returnValue' => array(),
-            )
+            ),
         );
         $this->mockBiz('logger', $params);
 
@@ -1209,7 +1209,7 @@ class UploadFileServiceTest extends BaseTestCase
             'hash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
             'id' => 1,
             'fileName' => 'test',
-            'fileSize' => 1024
+            'fileSize' => 1024,
         ));
         $this->assertEquals('ok', $result['resumed']);
 
@@ -1230,7 +1230,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'runTimes' => 1,
                 'withParams' => array('storage'),
                 'returnValue' => array('upload_mode' => 'cloud'),
-            )
+            ),
         );
         $this->mockBiz('System:SettingService', $params);
 
@@ -1271,7 +1271,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'functionName' => 'create',
                 'runTimes' => 1,
                 'returnValue' => array('id' => 1),
-            )
+            ),
         );
         $this->mockBiz('File:UploadFileInitDao', $params);
 
@@ -1281,7 +1281,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'functionName' => 'info',
                 'runTimes' => 1,
                 'returnValue' => array(),
-            )
+            ),
         );
         $this->mockBiz('logger', $params);
 
@@ -1291,7 +1291,7 @@ class UploadFileServiceTest extends BaseTestCase
             'hash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
             'id' => 1,
             'fileName' => 'test',
-            'fileSize' => 1024
+            'fileSize' => 1024,
         ));
         $this->assertEquals('ok', $result['resumed']);
 
@@ -1312,7 +1312,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'runTimes' => 1,
                 'withParams' => array('storage'),
                 'returnValue' => array('upload_mode' => 'cloud'),
-            )
+            ),
         );
         $this->mockBiz('System:SettingService', $params);
 
@@ -1360,7 +1360,7 @@ class UploadFileServiceTest extends BaseTestCase
         $result = $this->getUploadFileService()->finishedUpload(array(
             'size' => 1024,
             'uploadType' => 'direct',
-            'id' => 4
+            'id' => 4,
         ));
         $this->assertEquals('headLeader', $result['targetType']);
         $this->assertEquals(4, $result['id']);
@@ -1379,7 +1379,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'runTimes' => 1,
                 'withParams' => array('storage'),
                 'returnValue' => array('upload_mode' => 'cloud'),
-            )
+            ),
         );
         $this->mockBiz('System:SettingService', $params);
 
@@ -1415,7 +1415,7 @@ class UploadFileServiceTest extends BaseTestCase
         $this->getUploadFileService()->finishedUpload(array(
             'size' => 1024,
             'uploadType' => 'direct',
-            'id' => 4
+            'id' => 4,
         ));
     }
 
@@ -1432,7 +1432,7 @@ class UploadFileServiceTest extends BaseTestCase
         );
         $this->mockBiz('File:LocalFileImplementor', $params);
 
-        $result =$this->getUploadFileService()->moveFile('video', 1);
+        $result = $this->getUploadFileService()->moveFile('video', 1);
         $this->assertEquals(0, $result['success']);
         $this->assertEquals(10, $result['length']);
     }
@@ -1456,7 +1456,7 @@ class UploadFileServiceTest extends BaseTestCase
         $mockUploadFileInitDao = $this->mockBiz('File:UploadFileInitDao', $params);
 
         $this->getUploadFileService()->setFileProcessed(array('globalId' => 1));
-        $mockUploadFileInitDao->shouldHaveReceived("update");
+        $mockUploadFileInitDao->shouldHaveReceived('update');
     }
 
     public function testDeleteByGlobalId()
@@ -1563,7 +1563,7 @@ class UploadFileServiceTest extends BaseTestCase
                     'type' => 'video',
                     'targetType' => 'courselesson',
                     'targetId' => 2,
-                    'convertParams' => array('convertor' => 'HLSEncryptedVideo')
+                    'convertParams' => array('convertor' => 'HLSEncryptedVideo'),
                 ),
             ),
             array(
@@ -1576,7 +1576,7 @@ class UploadFileServiceTest extends BaseTestCase
                     'type' => 'video',
                     'targetType' => 'courselesson',
                     'targetId' => 2,
-                    'convertParams' => array('convertor' => 'HLSVideo', 'videoQuality' => 'low')
+                    'convertParams' => array('convertor' => 'HLSVideo', 'videoQuality' => 'low'),
                 ),
             ),
             array(
@@ -1847,7 +1847,7 @@ class UploadFileServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromCloud', array(array(), 'created', 0, PHP_INT_MAX));
         $this->assertEmpty($result);
         $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromCloud', array(
-            array('processStatus' => 'draft', 'errorType' => '', 'resType' => ''), 'lastest', 0, PHP_INT_MAX
+            array('processStatus' => 'draft', 'errorType' => '', 'resType' => ''), 'lastest', 0, PHP_INT_MAX,
         ));
         $this->assertEquals('cloud', $result);
     }
@@ -1883,7 +1883,7 @@ class UploadFileServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromLocal', array(array(), 'created', 0, PHP_INT_MAX));
         $this->assertEmpty($result);
         $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromLocal', array(
-            array('processStatus' => 'draft', 'errorType' => '', 'resType' => ''), 'lastest', 0, PHP_INT_MAX
+            array('processStatus' => 'draft', 'errorType' => '', 'resType' => ''), 'lastest', 0, PHP_INT_MAX,
         ));
         $this->assertEquals(1, $result[0]['id']);
     }
@@ -1919,7 +1919,7 @@ class UploadFileServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFileCountFromCloud', array(array()));
         $this->assertEmpty($result);
         $count = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFileCountFromCloud', array(
-            array('processStatus' => 'draft', 'errorType' => '', 'resType' => '')
+            array('processStatus' => 'draft', 'errorType' => '', 'resType' => ''),
         ));
         $this->assertEquals(11, $count);
     }
