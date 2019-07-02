@@ -785,7 +785,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         if ($task['isFree'] || $this->getCourseService()->canTakeCourse($task['courseId'])) {
             $isAllowed = true;
         }
-        
+
         if ($isAllowed) {
             return $this->createCourseStrategy($task['courseId'])->canLearnTask($task);
         }
