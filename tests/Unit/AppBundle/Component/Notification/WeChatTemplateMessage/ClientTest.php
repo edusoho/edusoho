@@ -35,8 +35,7 @@ class ClientTest extends BaseTestCase
         ReflectionUtils::setProperty($client, 'request', $request);
         $result = $client->getAccessToken();
         $this->assertEmpty($result1);
-        $this->assertEquals('ACCESS_TOKEN',$result['access_token']);
-
+        $this->assertEquals('ACCESS_TOKEN', $result['access_token']);
     }
 
     public function testGetUserInfo()
@@ -63,8 +62,7 @@ class ClientTest extends BaseTestCase
 
         ReflectionUtils::setProperty($client, 'request', $request);
         $result = $client->getUserInfo('o6_bmjrPTlm6_2sgVt7hMZOPfL2M');
-        $this->assertEquals('Band',$result['nickname']);
-
+        $this->assertEquals('Band', $result['nickname']);
     }
 
     public function testBatchGetUserInfo()
@@ -80,9 +78,9 @@ class ClientTest extends BaseTestCase
                         array(
                             'user_list' => array(
                                 array(
-                                    "openid"=>"otvxTs4dckWG7imySrJd6jSi0CWE",
-                                    "lang"=> "zh_CN",
-                                )
+                                    'openid' => 'otvxTs4dckWG7imySrJd6jSi0CWE',
+                                    'lang' => 'zh_CN',
+                                ),
                             ),
                         ),
                     ),
@@ -94,14 +92,12 @@ class ClientTest extends BaseTestCase
 
         ReflectionUtils::setProperty($client, 'request', $request);
         $result = $client->batchGetUserInfo(array(array(
-            "openid"=>"otvxTs4dckWG7imySrJd6jSi0CWE",
-            "lang"=> "zh_CN",
+            'openid' => 'otvxTs4dckWG7imySrJd6jSi0CWE',
+            'lang' => 'zh_CN',
         )));
 
-        $this->assertEquals('otvxTs4dckWG7imySrJd6jSi0CWE',$result[0]['openid']);
-
+        $this->assertEquals('otvxTs4dckWG7imySrJd6jSi0CWE', $result[0]['openid']);
     }
-
 
     public function testGetUserList()
     {
@@ -114,7 +110,7 @@ class ClientTest extends BaseTestCase
                     'withParams' => array(
                         'https://api.weixin.qq.com/cgi-bin/user/get',
                         array(
-                              'next_openid' => 'NEXT_OPENID'
+                              'next_openid' => 'NEXT_OPENID',
                             ),
                         ),
                 'returnValue' => '{"total":2,"count":2,"data":{"openid":["OPENID1","OPENID2"]},"next_openid":"NEXT_OPENID"}',
@@ -125,8 +121,7 @@ class ClientTest extends BaseTestCase
 
         ReflectionUtils::setProperty($client, 'request', $request);
         $result = $client->getUserList('NEXT_OPENID');
-        $this->assertEquals(2,$result['total']);
-
+        $this->assertEquals(2, $result['total']);
     }
 
     public function testSetIndustry()
@@ -151,9 +146,8 @@ class ClientTest extends BaseTestCase
         );
 
         ReflectionUtils::setProperty($client, 'request', $request);
-        $result = $client->setIndustry('1','4');
+        $result = $client->setIndustry('1', '4');
         $this->assertEquals('ok', $result['errmsg']);
-
     }
 
     public function testGetIndustry()
@@ -178,7 +172,6 @@ class ClientTest extends BaseTestCase
         ReflectionUtils::setProperty($client, 'request', $request);
         $result = $client->getIndustry();
         $this->assertEquals('运输与仓储', $result['primary_industry']['first_class']);
-
     }
 
     public function testAddTemplate()
@@ -194,7 +187,7 @@ class ClientTest extends BaseTestCase
                     'withParams' => array(
                         'https://api.weixin.qq.com/cgi-bin/template/api_add_template',
                         array(
-                            'template_id_short' => 'TM00015'
+                            'template_id_short' => 'TM00015',
                         ),
                     ),
                     'returnValue' => '{"errcode":0,"errmsg":"ok","template_id":"Doclyl5uP7Aciu-qZ7mJNPtWkbkYnWBWVja26EGbNyk"}',
@@ -207,7 +200,6 @@ class ClientTest extends BaseTestCase
         $result = $client->addTemplate('TM00015');
         $this->assertEmpty($result1);
         $this->assertEquals('Doclyl5uP7Aciu-qZ7mJNPtWkbkYnWBWVja26EGbNyk', $result['template_id']);
-
     }
 
     public function testGetTemplateList()
@@ -232,7 +224,6 @@ class ClientTest extends BaseTestCase
         ReflectionUtils::setProperty($client, 'request', $request);
         $result = $client->getTemplateList();
         $this->assertEquals('iPk5sOIt5X_flOVKn5GrTFpncEYTojx6ddbt8WYoV5s', $result['template_list'][0]['template_id']);
-
     }
 
     public function testDeleteTemplate()
@@ -258,7 +249,6 @@ class ClientTest extends BaseTestCase
         ReflectionUtils::setProperty($client, 'request', $request);
         $result = $client->deleteTemplate('Dyvp3-Ff0cnail_CDSzk1fIc6-9lOkxsQE7exTJbwUE');
         $this->assertEquals('ok', $result['errmsg']);
-
     }
 
     public function testSendTemplateMessage()
@@ -275,9 +265,9 @@ class ClientTest extends BaseTestCase
                         array(
                             'touser' => 'OPENID',
                             'template_id' => 'ngqIpbwh8bUfcSsECmogfXcV14J0tQlEpBO27izEYtY',
-                            'data' => array('first'=>array('value'=>'恭喜你购买成功！','color'=>'#173177')),
+                            'data' => array('first' => array('value' => '恭喜你购买成功！', 'color' => '#173177')),
                             'url' => 'http://weixin.qq.com/download',
-                            'miniprogram' => array('appid'=>'xiaochengxuappid12345','pagepath'=>'index?foo=bar')
+                            'miniprogram' => array('appid' => 'xiaochengxuappid12345', 'pagepath' => 'index?foo=bar'),
                         ),
                     ),
                     'returnValue' => '{"errcode" : 0,"errmsg" : "ok","msgid":200228332}',
@@ -287,11 +277,8 @@ class ClientTest extends BaseTestCase
         );
 
         ReflectionUtils::setProperty($client, 'request', $request);
-        $result = $client->sendTemplateMessage('OPENID', 'ngqIpbwh8bUfcSsECmogfXcV14J0tQlEpBO27izEYtY', array('first'=>array('value'=>'恭喜你购买成功！','color'=>'#173177')), $options = array('url'=>'http://weixin.qq.com/download','miniprogram'=>array('appid'=>'xiaochengxuappid12345','pagepath'=>'index?foo=bar')));
+        $result = $client->sendTemplateMessage('OPENID', 'ngqIpbwh8bUfcSsECmogfXcV14J0tQlEpBO27izEYtY', array('first' => array('value' => '恭喜你购买成功！', 'color' => '#173177')), $options = array('url' => 'http://weixin.qq.com/download', 'miniprogram' => array('appid' => 'xiaochengxuappid12345', 'pagepath' => 'index?foo=bar')));
 
         $this->assertEquals('200228332', $result['msgid']);
-
     }
-
-
 }

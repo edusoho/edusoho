@@ -12,7 +12,7 @@ class LearnCourseAccessor extends AccessorAdapter
             return $this->buildResult('course.not_found');
         }
 
-        if ($course['status'] === 'draft') {
+        if ('draft' === $course['status']) {
             return $this->buildResult('course.unpublished', array('courseId' => $course['id']));
         }
 
@@ -25,6 +25,6 @@ class LearnCourseAccessor extends AccessorAdapter
 
     private function isNotArriving($course)
     {
-        return $course['expiryMode'] == 'date' and $course['expiryStartDate'] > time();
+        return 'date' == $course['expiryMode'] and $course['expiryStartDate'] > time();
     }
 }
