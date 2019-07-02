@@ -16,5 +16,7 @@
 	  </a>
     </li>
   {% endfor %}
-  {% include 'classroom/classroom-price.html.twig' %}
+  {% if priceShow|default(false) %}
+  	{% include 'classroom/classroom-price.html.twig' %}
+  {% endif %}
 </ul>

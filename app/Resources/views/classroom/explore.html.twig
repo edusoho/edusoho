@@ -89,7 +89,7 @@
               </a>
             </div>
             <div class="class-serve">
-              {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}
+              {% include 'classroom/service-block.html.twig' with {'services':classroom.service, 'priceShow':true} %}
             </div>
             <ul class="class-data clearfix">
               <li><i class="es-icon es-icon-book"></i>{{classroom.courseNum}}</li>
