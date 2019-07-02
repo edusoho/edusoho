@@ -19,6 +19,15 @@ class Log
     const ALERT = 'alter'; //7
     const EMERGENCY = 'emergency'; //8
 
+    const LEVEL_DEBUG = 1;
+    const LEVEL_INFO = 2;
+    const LEVEL_NOTICE = 3;
+    const LEVEL_WARNING = 4;
+    const LEVEL_ERROR = 5;
+    const LEVEL_CRITICAL = 6;
+    const LEVEL_ALERT = 7;
+    const LEVEL_EMERGENCY = 8;
+
     /**
      * @var
      * same to TargetLogService level
@@ -50,34 +59,37 @@ class Log
 
     public function getLevelId()
     {
+        $levelId = self::LEVEL_DEBUG;
         switch ($this->level) {
             case self::DEBUG:
-                return 1;
+                $levelId = self::LEVEL_DEBUG;
                 break;
             case self::INFO:
-                return 2;
+                $levelId = self::LEVEL_INFO;
                 break;
             case self::NOTICE:
-                return 3;
+                $levelId = self::LEVEL_NOTICE;
                 break;
             case self::WARNING:
-                return 4;
+                $levelId = self::LEVEL_WARNING;
                 break;
             case self::ERROR:
-                return 5;
+                $levelId = self::LEVEL_ERROR;
                 break;
             case self::CRITICAL:
-                return 6;
+                $levelId = self::LEVEL_CRITICAL;
                 break;
             case self::ALERT:
-                return 7;
+                $levelId = self::LEVEL_ALERT;
                 break;
             case self::EMERGENCY:
-                return 8;
+                $levelId = self::LEVEL_EMERGENCY;
                 break;
             default:
-                return 1;
+                $levelId = self::LEVEL_DEBUG;
         }
+
+        return $levelId;
     }
 
     public function getModule()
