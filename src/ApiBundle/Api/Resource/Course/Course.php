@@ -41,7 +41,12 @@ class Course extends AbstractResource
         $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
         $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
 
-        $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
+        if (!empty($member)) {
+            $course['access'] = $this->getCourseService()->canLearnCourse($courseId);
+        } else {
+            $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
+        }
+
         $course = $this->convertFields($course);
 
         return $course;

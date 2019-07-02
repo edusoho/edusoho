@@ -47,6 +47,8 @@ class Client
 
     protected $accessToken = '';
 
+    protected $request;
+
     public function __construct($config)
     {
         $this->config = $config;
@@ -281,6 +283,10 @@ class Client
 
     public function getRequest($url, $params)
     {
+        if (isset($this->request)) {
+            return $this->request->getRequest($url, $params);
+        }
+
         $curl = curl_init();
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);

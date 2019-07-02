@@ -24,6 +24,16 @@ class NotificationServiceTest extends BaseTestCase
         $this->assertEquals(0, $count);
     }
 
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
+     */
+    public function testCreateBatchException()
+    {
+        $batch = array('eventId' => 1);
+        $this->getNotificationService()->createBatch($batch);
+    }
+
     public function testCreateBatch()
     {
         $batch = $this->createBatch();
@@ -33,6 +43,59 @@ class NotificationServiceTest extends BaseTestCase
         $this->assertEquals($batch, $getBatch);
     }
 
+    public function testGetBatch()
+    {
+        $expected = $this->createBatch();
+        $notification = $this->getNotificationService()->getBatch($expected['id']);
+        $this->assertArraySternEquals($expected, $notification);
+    }
+
+    public function testSearchBatchesOrderBy()
+    {
+        $notification1 = $this->createBatch();
+        sleep(1);
+        $fields = array(
+            'sn' => 'testNotify',
+            'eventId' => 2,
+            'strategyId' => 2,
+        );
+        $notification2 = $this->createBatch($fields);
+        $notifications = $this->getNotificationService()->searchBatches(array(), array('createdTime' => 'DESC'), 0, 100);
+        $this->assertArraySternEquals(array($notification2, $notification1), $notifications);
+
+        $notifications = $this->getNotificationService()->searchBatches(array(), array('id' => 'ASC'), 0, 100);
+        $this->assertArraySternEquals(array($notification1, $notification2), $notifications);
+
+        $notifications = $this->getNotificationService()->searchBatches(array(), array('updatedTime' => 'ASC'), 0, 100);
+        $this->assertArraySternEquals(array($notification1, $notification2), $notifications);
+    }
+
+    public function testSearchBatchesConditions()
+    {
+        $notification1 = $this->createBatch();
+        sleep(1);
+        $fields = array(
+            'sn' => 'testNotify',
+            'eventId' => 2,
+            'strategyId' => 2,
+        );
+        $notification2 = $this->createBatch($fields);
+        $notifications = $this->getNotificationService()->searchBatches(array('id' => $notification1['id']), array(), 0, 100);
+        $this->assertArraySternEquals(array($notification1), $notifications);
+
+        $notifications = $this->getNotificationService()->searchBatches(array('eventId' => $notification1['eventId']), array(), 0, 100);
+        $this->assertArraySternEquals(array($notification1), $notifications);
+
+        $notifications = $this->getNotificationService()->searchBatches(array('sn' => $notification2['sn']), array(), 0, 100);
+        $this->assertArraySternEquals(array($notification2), $notifications);
+
+        $notifications = $this->getNotificationService()->searchBatches(array('status' => $notification2['status']), array('id' => 'ASC'), 0, 100);
+        $this->assertArraySternEquals(array($notification1, $notification2), $notifications);
+
+        $notifications = $this->getNotificationService()->searchBatches(array('strategyId' => $notification2['strategyId']), array(), 0, 100);
+        $this->assertArraySternEquals(array($notification2), $notifications);
+    }
+
     public function testFindEventsByIds()
     {
         $event = $this->createEvent();
@@ -40,6 +103,17 @@ class NotificationServiceTest extends BaseTestCase
         $result = $this->getNotificationService()->findEventsByIds(array($event['id']));
 
         $this->assertCount(1, $result);
+        $this->assertArraySternEquals($event, $result[0]);
+    }
+
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
+     */
+    public function testCreateEventException()
+    {
+        $event = array('title' => 'eventTitle');
+        $this->getNotificationService()->createEvent($event);
     }
 
     public function testCreateEvent()
@@ -48,10 +122,34 @@ class NotificationServiceTest extends BaseTestCase
         $this->assertEquals('test Events', $event['title']);
     }
 
+    public function testGetEvent()
+    {
+        $expected = $this->createEvent();
+        $event = $this->getNotificationService()->getEvent($expected['id']);
+
+        $this->assertArraySternEquals($expected, $event);
+    }
+
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
+     */
+    public function testCreateStrategyException()
+    {
+        $strategy = array('eventId' => 1);
+        $this->getNotificationService()->createStrategy($strategy);
+    }
+
     public function testCreateStrategy()
     {
         $strategy = $this->createStrategy();
         $this->assertEquals('wechat', $strategy['type']);
+    }
+
+    public function testBatchHandleNotificationResultsWithEmptyBatches()
+    {
+        $batches = $this->getNotificationService()->batchHandleNotificationResults(array());
+        $this->assertEmpty($batches);
     }
 
     public function testCreateWeChatNotificationRecord()
