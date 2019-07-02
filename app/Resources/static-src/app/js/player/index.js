@@ -103,7 +103,8 @@ class Show {
         autoplay: this.autoplay,
         customPos: customPos,
         mediaLength: this.fileLength,
-        strictMode: this.strictMode
+        strictMode: this.strictMode,
+        remeberLastPos: this.remeberLastPos
       }
     );
   }

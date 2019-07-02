@@ -33,7 +33,7 @@ class AudioPlayer extends Emitter {
         }
       });
     }
-    
+    const lang = (document.documentElement.lang == 'zh_CN') ? 'zh-CN' : document.documentElement.lang;
     const remeberLastPos = self.options.customPos < self.options.mediaLength;
 
     //范晓铖要改SDK，消除string和int的奇怪判断
@@ -54,6 +54,7 @@ class AudioPlayer extends Emitter {
       disableModeSelection: self.options.disableModeSelection,
       remeberLastPos: remeberLastPos,
       sequentialMode: true,
+      language: lang
     });
     var player = new AudioPlayerSDK(extConfig);
 
