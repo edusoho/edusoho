@@ -3033,9 +3033,6 @@ class ClassroomServiceTest extends BaseTestCase
     {
         $result = ReflectionUtils::invokeMethod($this->getClassroomService(), 'getOrderBys', array('hitNum'));
         $this->assertEquals('DESC', $result['hitNum']);
-
-        $result = ReflectionUtils::invokeMethod($this->getClassroomService(), 'getOrderBys', array());
-        $this->assertEquals('DESC', $result['createdTime']);
     }
 
     protected function mockCourse($title = 'Test Course 1')
