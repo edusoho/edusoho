@@ -2,6 +2,8 @@
 
 namespace AppBundle\Common;
 
+use AppBundle\Common\Exception\RuntimeException;
+
 class ClassroomToolkit
 {
     public static function buildMemberDeadline(array $expiryDate)
@@ -14,7 +16,7 @@ class ClassroomToolkit
 
         if ($expiryDate['expiryMode'] == 'date') {
             if ($deadline < time()) {
-                throw new \Exception('有效期的设置时间小于当前时间！');
+                throw new RuntimeException('有效期的设置时间小于当前时间！');
             }
         }
 

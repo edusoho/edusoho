@@ -36,7 +36,7 @@ class ArrayToolkit
 
     public static function columns(array $array, array $columnNames)
     {
-        if (empty($array) or empty($columnNames)) {
+        if (empty($array) || empty($columnNames)) {
             return array();
         }
 
