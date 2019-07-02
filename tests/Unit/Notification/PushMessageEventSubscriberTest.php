@@ -639,6 +639,363 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         );
     }
 
+    public function testOnCouponUpdate()
+    {
+        $coupon = array(
+            'id' => 1,
+            'code' => 'x22232423',
+            'type' => 'minus',
+            'status' => 'receive',
+            'rate' => 10,
+            'userId' => 1,
+            'deadline' => time(),
+            'batchId' => 10,
+        );
+
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onCouponUpdate(new Event($coupon));
+        $result = $this->getQueueService()->getJob()->getBody();
+
+        $this->assertArrayEquals(
+                    array(
+                        'type' => 'coupon.receive',
+                        'couponId' => 1,
+                        'title' => '获得新的优惠券',
+                        'message' => '您有一张价值10元的优惠券领取成功',
+                    ),
+            $result['body']
+        );
+    }
+
+    public function testOnBatchNotificationPublish()
+    {
+        $fields = array(
+            'id' => 1,
+            'type' => 'text',
+            'fromId' => 1,
+            'title' => 'asmd',
+            'content' => 'sdncsdn',
+            'targetType' => 'global',
+            'targetId' => 0,
+            'createdTime' => 0,
+            'sendedTime' => 0,
+            'published' => 0,
+        );
+
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onBatchNotificationPublish(new Event($fields));
+        $result = $this->getQueueService()->getJob()->getBody();
+
+        $this->assertArrayEquals(
+            array(
+                'type' => 'batch_notification.publish',
+                'targetType' => 'batch_notification',
+                'targetId' => 1,
+                'title' => 'asmd',
+                'message' => 'sdncsdn',
+                'source' => 'notification',
+            ),
+            $result['body']
+        );
+    }
+
+    public function testOnGroupThreadDelete()
+    {
+        $thread = array(
+            'id' => 1,
+            'title' => 'title',
+            'content' => 'classroom thread content',
+            'userId' => 2,
+            'targetId' => 1,
+            'targetType' => 'classroom',
+            'type' => 'question',
+            'groupId' => 1,
+            'postNum' => 1,
+            'hitNum' => 1,
+            'createdTime' => time() - 3600,
+            'updatedTime' => time(),
+        );
+        $this->enableCloudSearch();
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onGroupThreadDelete(new Event($thread));
+        $result = $this->getQueueService()->getJob()->getBody();
+        $this->assertArrayEquals(
+            array(
+                'category' => 'thread',
+                'id' => 'group_1',
+            ),
+            $result['args']
+        );
+    }
+
+    public function testOnOpenCourseDelete()
+    {
+        $this->enableCloudSearch();
+        $course = array(
+            'id' => 1,
+            'title' => 'liveOpenCourse',
+            'type' => 'liveOpen',
+            'userId' => 1,
+            'createdTime' => time(),
+            'smallPicture' => '',
+            'middlePicture' => '',
+            'largePicture' => '',
+            'about' => '',
+        );
+
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onOpenCourseDelete(new Event($course));
+        $result = $this->getQueueService()->getJob()->getBody();
+        $this->assertArrayEquals(
+            array(
+                'category' => 'openCourse',
+                'id' => '1',
+            ),
+            $result['args']
+        );
+    }
+
+    public function testOnOpenCourseCreate()
+    {
+        $this->enableCloudSearch();
+        $course = array(
+            'id' => 1,
+            'title' => 'liveOpenCourse',
+            'type' => 'liveOpen',
+            'userId' => 1,
+            'createdTime' => time(),
+            'smallPicture' => '',
+            'middlePicture' => '',
+            'largePicture' => '',
+            'about' => '',
+        );
+
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onOpenCourseCreate(new Event($course));
+        $result = $this->getQueueService()->getJob()->getBody();
+        $this->assertArrayEquals(
+            array(
+                'category' => 'openCourse',
+            ),
+            $result['args']
+        );
+    }
+
+    public function testOnOpenCourseUpdate()
+    {
+        $this->enableCloudSearch();
+        $course = array(
+            'id' => 1,
+            'title' => 'liveOpenCourse',
+            'type' => 'liveOpen',
+            'userId' => 1,
+            'status' => 'published',
+            'createdTime' => time(),
+            'smallPicture' => '',
+            'middlePicture' => '',
+            'largePicture' => '',
+            'about' => '',
+        );
+
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onOpenCourseUpdate(new Event(array('course' => $course)));
+        $result = $this->getQueueService()->getJob()->getBody();
+
+        $this->assertArrayEquals(
+            array(
+                'category' => 'openCourse',
+            ),
+            $result['args']
+        );
+    }
+
+    public function testOnCourseLessonCreate()
+    {
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('search_enabled' => true),
+                    'withParams' => array('cloud_search', array()),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('enable' => true),
+                    'withParams' => array('mobile'),
+                ),
+            )
+        );
+        $taskFields = array(
+            'id' => 1,
+            'title' => 'test task',
+            'mediaType' => 'text',
+            'mode' => 'lesson',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
+            'finishType' => 'time',
+            'status' => 'created',
+            'type' => 'live',
+            'startTime' => time(),
+        );
+
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onCourseLessonCreate(new Event($taskFields));
+        $result = $this->getQueueService()->getJob()->getBody();
+        $this->assertArrayEquals(
+            array(
+                'category' => 'lesson',
+            ),
+            $result['args']
+        );
+    }
+
+    public function testOnCourseLessonUpdate()
+    {
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('search_enabled' => true),
+                    'withParams' => array('cloud_search', array()),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('enable' => true),
+                    'withParams' => array('mobile'),
+                ),
+            )
+        );
+        $task = array(
+            'id' => 1,
+            'title' => 'test task',
+            'mediaType' => 'text',
+            'mode' => 'lesson',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
+            'finishType' => 'time',
+            'status' => 'published',
+            'type' => 'live',
+            'startTime' => time(),
+        );
+        $oldTask = array(
+            'id' => 1,
+            'title' => 'test task',
+            'mediaType' => 'text',
+            'mode' => 'lesson',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
+            'finishType' => 'time',
+            'status' => 'created',
+            'type' => 'live',
+            'startTime' => time(),
+        );
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onCourseLessonUpdate(new Event($task, $oldTask));
+        $result = $this->getQueueService()->getJob()->getBody();
+        $this->assertArrayEquals(
+            array(
+                'category' => 'lesson',
+            ),
+            $result['args']
+        );
+    }
+
+    public function testOnCourseLessonDelete()
+    {
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('search_enabled' => true),
+                    'withParams' => array('cloud_search', array()),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('enable' => true),
+                    'withParams' => array('mobile'),
+                ),
+            )
+        );
+        $task = array(
+            'id' => 1,
+            'title' => 'test task',
+            'mediaType' => 'text',
+            'mode' => 'lesson',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
+            'finishType' => 'time',
+            'status' => 'published',
+            'type' => 'live',
+            'startTime' => time(),
+        );
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onCourseLessonDelete(new Event($task));
+        $result = $this->getQueueService()->getJob()->getBody();
+        $this->assertArrayEquals(
+            array(
+                'category' => 'lesson',
+            ),
+            $result['args']
+        );
+    }
+
+    public function testOnClassroomUpdate()
+    {
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('search_enabled' => true),
+                    'withParams' => array('cloud_search', array()),
+                ),
+            )
+        );
+        $textClassroom1 = array(
+            'id' => 1,
+            'title' => 'test11',
+            'status' => 'published',
+        );
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onClassroomUpdate(new Event(array(
+            'userId' => 1,
+            'classroom' => $textClassroom1,
+            'fields' => array(1), )));
+        $result1 = $this->getQueueService()->getJob()->getBody();
+        $textClassroom2 = array(
+            'id' => 1,
+            'title' => 'test11',
+            'status' => 'closed',
+        );
+        $subscriber->onClassroomUpdate(new Event(array(
+            'userId' => 1,
+            'classroom' => $textClassroom2,
+            'fields' => array(1), )));
+        $result2 = $this->getQueueService()->getJob()->getBody();
+        $this->assertArrayEquals(
+            array(
+                'type' => 'update',
+                'args' => array(
+                    'category' => 'classroom',
+                ),
+            ),
+            $result1
+        );
+
+        $this->assertArrayEquals(
+            array(
+                'type' => 'delete',
+                'args' => array(
+                    'category' => 'classroom',
+                ),
+            ),
+            $result2
+        );
+    }
+
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
@@ -917,5 +1274,10 @@ class PushMessageEventSubscriberTest extends BaseTestCase
             'title' => 'thread title',
             'type' => 'question',
         );
+    }
+
+    private function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }
