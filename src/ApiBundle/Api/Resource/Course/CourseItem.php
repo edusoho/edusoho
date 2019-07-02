@@ -31,6 +31,8 @@ class CourseItem extends AbstractResource
         $request->query->has('format') ? $format = $request->query->get('format') : $format = 0;
 
         if ($format) {
+            $filter = new CourseItemWithLessonFilter();
+            $filter->filters($items);
             $items = $this->convertToTree($items);
         }
 
