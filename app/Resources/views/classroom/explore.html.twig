@@ -89,8 +89,19 @@
               </a>
             </div>
             <div class="class-serve">
-              {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}
+              {% include 'classroom/service-block.html.twig' with {'services':classroom.service, 'priceShow':true} %}
             </div>
+            {% set classroom = classroom|wrap('classroom.price') %}
+            <span class="class-price">
+              <span class="
+                {% if classroom.price == 0 %}
+                      color-success
+                {% else %}
+                      color-danger
+                {% endif %}">
+                {{ classroom.priceWrapper.priceText }}
+              </span>
+            </span>
             <ul class="class-data clearfix">
               <li><i class="es-icon es-icon-book"></i>{{classroom.courseNum}}</li>
               {% if setting('classroom.show_student_num_enabled', '1') == 1 %}
