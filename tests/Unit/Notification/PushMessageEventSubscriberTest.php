@@ -657,12 +657,12 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         $result = $this->getQueueService()->getJob()->getBody();
 
         $this->assertArrayEquals(
-                    array(
-                        'type' => 'coupon.receive',
-                        'couponId' => 1,
-                        'title' => '获得新的优惠券',
-                        'message' => '您有一张价值10元的优惠券领取成功',
-                    ),
+            array(
+                'type' => 'coupon.receive',
+                'couponId' => 1,
+                'title' => '获得新的优惠券',
+                'message' => '您有一张价值10元的优惠券领取成功',
+            ),
             $result['body']
         );
     }
@@ -970,10 +970,13 @@ class PushMessageEventSubscriberTest extends BaseTestCase
             'title' => 'test11',
             'status' => 'closed',
         );
-        $subscriber->onClassroomUpdate(new Event(array(
-            'userId' => 1,
-            'classroom' => $textClassroom2,
-            'fields' => array(1), )));
+        $subscriber->onClassroomUpdate(new Event(
+            array(
+                'userId' => 1,
+                'classroom' => $textClassroom2,
+                'fields' => array(1),
+            )
+        ));
         $result2 = $this->getQueueService()->getJob()->getBody();
         $this->assertArrayEquals(
             array(
