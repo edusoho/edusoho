@@ -2,6 +2,7 @@
 
 namespace AppBundle\Component\Export;
 
+use AppBundle\Common\Exception\UnexpectedValueException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Factory
@@ -48,7 +49,7 @@ class Factory
             $map = array_merge($map, $this->container->get($names[0].'_export_map')->getMap());
         }
         if (empty($map[$name])) {
-            throw new \RuntimeException('exporter class could be found');
+            throw new UnexpectedValueException('exporter class could not be found');
         }
 
         return $map[$name];
