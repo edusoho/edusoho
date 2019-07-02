@@ -5262,7 +5262,7 @@ admin.edu_cloud.edu_video.open_radio: Enable
 admin.edu_cloud.edu_video.close_radio: Close
 #TODO trans
 admin.edu_cloud.edu_video.normal_mode_tips: 'Select normal mode, <span class="text-success">new upload</span> video files are played in the mobile browser by default in the common format, which enhances the compatibility of video lessons with mobile browsers;<br/> <span class="text-danger">But the normal mode video is at risk of being stolen in some cases, please be cautious. </span>'
-admin.edu_cloud.edu_video.encryption_mode_tips: 'Choosing an encryption mode can greatly improve the security of the video, but it may cause the video class to not play properly on some old mobile browsers.<br/>Mobile browsers that do not support playback (including but not limited to): Android QQ browser, Firefox browser, Android UC browser, Android quark browser, 360 browser, 360, Huawei, Samsung, Qihoo, one plus mobile phone Bring your own browser.'
+admin.edu_cloud.edu_video.encryption_mode_tips: 'Choosing an encryption mode can greatly improve the security of the video, but it may cause the video class to not play properly on some old mobile browsers.'
 
 admin.edu_cloud.edu_video.transcode_quality: 'Transcode quality'
 admin.edu_cloud.edu_video.transcode_quality_low: "Smooth <span class = \"text-muted\"> (for PPT) </ span>\n"
