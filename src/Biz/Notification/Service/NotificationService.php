@@ -15,4 +15,12 @@ interface NotificationService
     public function findEventsByIds($ids);
 
     public function createEvent($event);
+
+    public function getEvent($id);
+
+    public function createStrategy($strategy);
+
+    public function batchHandleNotificationResults($batches);
+
+    public function createWeChatNotificationRecord($sn, $key, $data);
 }
