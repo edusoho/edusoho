@@ -2,7 +2,7 @@
 
 namespace AppBundle\Common;
 
-use AppBundle\Common\Exception\RuntimeException;
+use AppBundle\Common\Exception\UnexpectedValueException;
 
 class ClassroomToolkit
 {
@@ -16,7 +16,7 @@ class ClassroomToolkit
 
         if ('date' == $expiryDate['expiryMode']) {
             if ($deadline < time()) {
-                throw new RuntimeException('有效期的设置时间小于当前时间！');
+                throw new UnexpectedValueException('有效期的设置时间小于当前时间！');
             }
         }
 
