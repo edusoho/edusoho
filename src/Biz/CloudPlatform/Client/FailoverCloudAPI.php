@@ -2,6 +2,9 @@
 
 namespace Biz\CloudPlatform\Client;
 
+use AppBundle\Common\Exception\AccessDeniedException;
+use AppBundle\Common\Exception\RuntimeException;
+
 class FailoverCloudAPI extends AbstractCloudAPI
 {
     const FAILOVER_COUNT = 3;
@@ -65,7 +68,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         if ($lockMode == 'blocking') {
             if (!flock($fp, LOCK_EX)) {
                 fclose($fp);
-                throw new \RuntimeException('Lock server config file failed.');
+                throw new AccessDeniedException('Lock server config file failed.');
             }
         } elseif ($lockMode == 'nonblocking') {
             if (!flock($fp, LOCK_EX | LOCK_NB)) {
@@ -104,7 +107,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         $leafs = $servers['leafs'];
 
         if (empty($leafs)) {
-            throw new \RuntimeException('No leafs server.');
+            throw new RuntimeException('No leafs server.');
         }
 
         $newLeaf = array();
@@ -128,7 +131,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         }
 
         if (empty($newLeaf)) {
-            throw new \RuntimeException('New leaf server is empty.');
+            throw new RuntimeException('New leaf server is empty.');
         }
 
         if ($newLeaf['used_count'] > 3) {
@@ -197,7 +200,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
             $servers = $this->getServerListFromCdn();
 
             if (empty($servers) || empty($servers['root']) || empty($servers['leafs'])) {
-                throw new \RuntimeException('Requested API Server list from CDN failed.');
+                throw new RuntimeException('Requested API Server list from CDN failed.');
             }
         }
 
