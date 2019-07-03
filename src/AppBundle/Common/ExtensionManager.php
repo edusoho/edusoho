@@ -5,6 +5,7 @@ namespace AppBundle\Common;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\Exception\InvalidArgumentException;
 
 /**
  * Class ExtensionManager.
@@ -60,7 +61,7 @@ class ExtensionManager
     public static function instance()
     {
         if (empty(self::$_instance)) {
-            throw new \RuntimeException(self::getServiceKernel()->trans('ExtensionManager尚未实例化。'));
+            throw new InvalidArgumentException(self::getServiceKernel()->trans('ExtensionManager尚未实例化。'));
         }
 
         return self::$_instance;
@@ -104,7 +105,7 @@ class ExtensionManager
         $this->loadDataTagClassmap();
 
         if (!isset($this->dataTagClassmap[$name])) {
-            throw new \RuntimeException(self::getServiceKernel()->trans('数据标签`%name%`尚未定义。', array('%name%' => $name)));
+            throw new InvalidArgumentException(self::getServiceKernel()->trans('数据标签`%name%`尚未定义。', array('%name%' => $name)));
         }
 
         $class = $this->dataTagClassmap[$name];

@@ -9,6 +9,8 @@ use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use AppBundle\Common\Exception\UnexpectedValueException;
+use AppBundle\Common\Exception\InvalidArgumentException;
 
 class FileToolkit
 {
@@ -968,7 +970,7 @@ class FileToolkit
     public static function remove($filepath)
     {
         if (empty($filepath)) {
-            throw new \RuntimeException('filepath to be deleted is empty');
+            throw new InvalidArgumentException('filepath to be deleted is empty');
         }
 
         $isRemoved = false;
@@ -988,7 +990,7 @@ class FileToolkit
 
         if (!$isRemoved) {
             $prefixString = join(' || ', $prefixArr);
-            throw new \RuntimeException("{$filepath} is not allowed to be deleted without prefix {$prefixString}");
+            throw new UnexpectedValueException("{$filepath} is not allowed to be deleted without prefix {$prefixString}");
         }
     }
 

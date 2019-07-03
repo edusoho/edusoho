@@ -25,6 +25,6 @@ class LearnCourseAccessor extends AccessorAdapter
 
     private function isNotArriving($course)
     {
-        return 'date' == $course['expiryMode'] and $course['expiryStartDate'] > time();
+        return 'date' == $course['expiryMode'] && $course['expiryStartDate'] > time();
     }
 }
