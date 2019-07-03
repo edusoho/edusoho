@@ -1516,7 +1516,7 @@ class OpenCourseServiceTest extends BaseTestCase
         );
 
         $result = ReflectionUtils::invokeMethod($this->getOpenCourseService(), '_filterCourseFields', array(
-            array('tags' => 1, 'about' => 'about')
+            array('tags' => 1, 'about' => 'about'),
         ));
         $this->assertEquals('about', $result['about']);
         $this->assertEquals(1, $result['tags'][0]);
@@ -1546,7 +1546,7 @@ class OpenCourseServiceTest extends BaseTestCase
         );
 
         $result = ReflectionUtils::invokeMethod($this->getOpenCourseService(), '_prepareCourseConditions', array(
-            array('creator' => 'creator', 'categoryId' => 1, 'nickname' => 'nickname')
+            array('creator' => 'creator', 'categoryId' => 1, 'nickname' => 'nickname'),
         ));
         $this->assertEquals(1, $result['userId']);
     }
