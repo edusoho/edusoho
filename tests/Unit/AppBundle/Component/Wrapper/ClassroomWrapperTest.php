@@ -15,7 +15,7 @@ class ClassroomWrapperTest extends BaseTestCase
         $classroom = array('price' => 0);
         $result = $wrapper->price($classroom);
         $this->assertEquals(
-            $result['priceWrapper']['priceText'], 
+            $result['priceWrapper']['priceText'],
             self::getContainer()->get('translator')->trans('course.block_grid.price_free')
         );
 
@@ -23,7 +23,7 @@ class ClassroomWrapperTest extends BaseTestCase
         $result = $wrapper->price($classroom);
         $this->assertEquals($result['priceWrapper']['currencyType'], 'RMB');
         $this->assertEquals(
-            $result['priceWrapper']['priceText'], 
+            $result['priceWrapper']['priceText'],
             $classroom['price'].$currency
         );
 
@@ -44,7 +44,7 @@ class ClassroomWrapperTest extends BaseTestCase
         $result = $wrapper->price($classroom);
         $this->assertEquals($result['priceWrapper']['currencyType'], 'coin');
         $this->assertEquals(
-            $result['priceWrapper']['priceText'], 
+            $result['priceWrapper']['priceText'],
             '0.5'.self::getContainer()->get('translator')->trans('finance.coin')
         );
     }

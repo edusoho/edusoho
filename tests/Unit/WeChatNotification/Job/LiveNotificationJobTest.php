@@ -11,40 +11,40 @@ class LiveNotificationJobTest extends BaseTestCase
     {
         $weChatService = $this->mockBiz('WeChat:WeChatService', array(
             array(
-                'functionName' => 'getTemplateId', 
+                'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
                 'withParams' => array('oneDayBeforeLiveOpen'),
             ),
             array(
-                'functionName' => 'findSubscribedUsersByUserIdsAndType', 
+                'functionName' => 'findSubscribedUsersByUserIdsAndType',
                 'returnValue' => array(),
                 'withParams' => array(array(), 'official'),
             ),
         ));
         $this->mockBiz('Task:TaskService', array(
             array(
-                'functionName' => 'getTask', 
+                'functionName' => 'getTask',
                 'returnValue' => array('status' => 'published', 'courseId' => 3, 'startTime' => time()),
                 'withParams' => array(1),
             ),
         ));
         $this->mockBiz('Course:CourseService', array(
             array(
-                'functionName' => 'getCourse', 
+                'functionName' => 'getCourse',
                 'returnValue' => array('status' => 'published', 'courseSetId' => 4, 'id' => 5, 'locked' => 0, 'parentId' => 10),
                 'withParams' => array(3),
             ),
         ));
         $this->mockBiz('Course:CourseSetService', array(
             array(
-                'functionName' => 'getCourseSet', 
+                'functionName' => 'getCourseSet',
                 'returnValue' => array('status' => 'published', 'parentId' => 1, 'title' => 'test CourseSet', 'type' => 'live'),
                 'withParams' => array(4),
             ),
         ));
         $this->mockBiz('Course:MemberService', array(
             array(
-                'functionName' => 'searchMembers', 
+                'functionName' => 'searchMembers',
                 'returnValue' => array(array('userId' => 12)),
             ),
         ));
