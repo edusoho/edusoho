@@ -5,6 +5,7 @@ namespace Biz\CloudPlatform\Client;
 use Biz\System\Service\SettingService;
 use Psr\Log\LoggerInterface;
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\Exception\UnexpectedValueException;
 
 class AbstractCloudAPI
 {
@@ -211,7 +212,7 @@ class AbstractCloudAPI
         $matched = preg_match('/:\/\/.*?(\/.*)$/', $url, $matches);
 
         if (!$matched) {
-            throw new \RuntimeException('Make AuthToken Error.');
+            throw new UnexpectedValueException('Make AuthToken Error.');
         }
 
         $text = $matches[1]."\n".json_encode($params)."\n".$this->secretKey;
