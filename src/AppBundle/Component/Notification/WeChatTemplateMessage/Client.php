@@ -85,7 +85,7 @@ class Client
         $rawToken = json_decode($result, true);
 
         if (isset($rawToken['errmsg']) && 'ok' != $rawToken['errmsg']) {
-            $this->logger && $this->logger->error('WECHAT_ACCESS_TOKEN_ERROR', $rawToken);
+            $this->logger && $this->logger->error('WECHAT_ACCESS_TOKEN_ERROR', array('params' => $params, 'error' => $rawToken));
 
             return array();
         }
@@ -107,7 +107,7 @@ class Client
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
-            $this->logger && $this->logger->error('WECHAT_GET_USER_INFO_ERROR', $rawResult);
+            $this->logger && $this->logger->error('WECHAT_GET_USER_INFO_ERROR', array('params' => $params, 'error' => $rawResult));
 
             return array();
         }
@@ -136,7 +136,7 @@ class Client
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
-            $this->logger && $this->logger->error('WECHAT_BATCH_GET_USER_INFO_ERROR', $rawResult);
+            $this->logger && $this->logger->error('WECHAT_BATCH_GET_USER_INFO_ERROR', array('params' => $params, 'error' => $rawResult));
 
             return array();
         }
@@ -157,7 +157,7 @@ class Client
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
-            $this->logger && $this->logger->error('WECHAT_GET_USER_LIST_ERROR', $rawResult);
+            $this->logger && $this->logger->error('WECHAT_GET_USER_LIST_ERROR', array('params' => $params, 'error' => $rawResult));
 
             return array();
         }
@@ -177,7 +177,7 @@ class Client
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
-            $this->logger && $this->logger->error('WECHAT_SET_INDUSTRY_ERROR', $rawResult);
+            $this->logger && $this->logger->error('WECHAT_SET_INDUSTRY_ERROR', array('params' => $params, 'error' => $rawResult));
 
             return array();
         }
@@ -192,7 +192,7 @@ class Client
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
-            $this->logger && $this->logger->error('WECHAT_GET_INDUSTRY_ERROR', $rawResult);
+            $this->logger && $this->logger->error('WECHAT_GET_INDUSTRY_ERROR', array('params' => array(), 'error' => $rawResult));
 
             return array();
         }
@@ -211,7 +211,7 @@ class Client
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
-            $this->logger && $this->logger->error('WECHAT_ADD_TEMPLATE_ERROR', $rawResult);
+            $this->logger && $this->logger->error('WECHAT_ADD_TEMPLATE_ERROR', array('params' => $params, 'error' => $rawResult));
 
             return array();
         }
@@ -226,7 +226,7 @@ class Client
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
-            $this->logger && $this->logger->error('WECHAT_GET_TEMPLATE_LIST_ERROR', $rawResult);
+            $this->logger && $this->logger->error('WECHAT_GET_TEMPLATE_LIST_ERROR', array('params' => array(), 'error' => $rawResult));
 
             return array();
         }
@@ -244,7 +244,7 @@ class Client
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
-            $this->logger && $this->logger->error('WECHAT_DEL_TEMPLATE_ERROR', $rawResult);
+            $this->logger && $this->logger->error('WECHAT_DEL_TEMPLATE_ERROR', array('params' => $params, 'error' => $rawResult));
 
             return array();
         }
@@ -273,7 +273,7 @@ class Client
         $rawResult = json_decode($result, true);
 
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
-            $this->logger && $this->logger->error('WECHAT_SEND_MESSAGE_ERROR', $rawResult);
+            $this->logger && $this->logger->error('WECHAT_SEND_MESSAGE_ERROR', array('params' => $params, 'error' => $rawResult));
 
             return array();
         }

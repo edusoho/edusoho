@@ -10,7 +10,7 @@ interface WeChatService
 
     const LANG = 'zh_CN'; //国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语，默认为zh-CN
 
-    const REFRESH_NUM = 200;
+    const REFRESH_NUM = 100;
 
     const FRESH_TIME = 1800; //过期时间 半小时
 
