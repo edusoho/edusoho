@@ -9,6 +9,7 @@ class LiveNotificationJobTest extends BaseTestCase
 {
     public function testExecute()
     {
+        $this->getSettingService()->set('storage', array('cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey'));
         $weChatService = $this->mockBiz('WeChat:WeChatService', array(
             array(
                 'functionName' => 'getTemplateId',
@@ -17,8 +18,8 @@ class LiveNotificationJobTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findSubscribedUsersByUserIdsAndType',
-                'returnValue' => array(),
-                'withParams' => array(array(), 'official'),
+                'returnValue' => array(array('openId' => 'test')),
+                'withParams' => array(array(12), 'official'),
             ),
         ));
         $this->mockBiz('Task:TaskService', array(
@@ -48,6 +49,12 @@ class LiveNotificationJobTest extends BaseTestCase
                 'returnValue' => array(array('userId' => 12)),
             ),
         ));
+        $this->mockBiz('User:UserService', array(
+            array(
+                'functionName' => 'searchUsers',
+                'returnValue' => array(array('id' => 12)),
+            ),
+        ));
 
         $job = new LiveNotificationJob(array(), $this->biz);
         $job->args = array('key' => 'oneDayBeforeLiveOpen', 'taskId' => 1, 'url' => 'www.test.com');
@@ -55,5 +62,10 @@ class LiveNotificationJobTest extends BaseTestCase
 
         $this->assertEmpty($result);
         $weChatService->shouldHaveReceived('findSubscribedUsersByUserIdsAndType');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

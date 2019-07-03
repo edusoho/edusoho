@@ -325,25 +325,25 @@ class BaseTestCase extends TestCase
         foreach ($params as $param) {
             $expectation = $mockObj->shouldReceive($param['functionName']);
 
-            if (isset($param['runTimes'])) {
+            if (!empty($param['runTimes'])) {
                 $expectation = $expectation->times($param['runTimes']);
             }
 
-            if (isset($param['withParams'])) {
+            if (!empty($param['withParams'])) {
                 $expectation = $expectation->withArgs($param['withParams']);
             } else {
                 $expectation = $expectation->withAnyArgs();
             }
 
-            if (isset($param['returnValue'])) {
+            if (!empty($param['returnValue'])) {
                 $expectation->andReturn($param['returnValue']);
             }
 
-            if (isset($param['andReturnValues'])) {
+            if (!empty($param['andReturnValues'])) {
                 $expectation->andReturnValues($param['andReturnValues']);
             }
 
-            if (isset($param['throwException'])) {
+            if (!empty($param['throwException'])) {
                 $expectation->andThrow($param['throwException']);
             }
         }
