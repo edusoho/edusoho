@@ -30,7 +30,7 @@ class LessonPublishNotificationJobTest extends BaseTestCase
             array('functionName' => 'searchMembers', 'returnValue' => array(array('id' => 1))),
         ));
         $this->mockBiz('User:UserService', array(
-            array('functionName' => 'getUser', 'returnValue' => array('nickname' => 'testName'))
+            array('functionName' => 'getUser', 'returnValue' => array('nickname' => 'testName')),
         ));
 
         $job = new LessonPublishNotificationJob(array(), $this->biz);
