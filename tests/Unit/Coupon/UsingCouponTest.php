@@ -10,7 +10,7 @@ use Biz\Coupon\State\UsingCoupon;
 class UsingCouponTest extends BaseTestCase
 {
     /**
-     * @expectedException \Exception
+     * @expectedException \AppBundle\Common\Exception\AccessDeniedException
      */
     public function testUsing()
     {

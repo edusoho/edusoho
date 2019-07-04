@@ -4,6 +4,7 @@ namespace AppBundle\Extensions\DataTag;
 
 use Biz\File\Service\UploadFileService;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Exception\InvalidArgumentException;
 
 class AttachmentListDataTag extends BaseDataTag implements DataTag
 {
@@ -19,7 +20,7 @@ class AttachmentListDataTag extends BaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         if (!ArrayToolKit::requireds($arguments, array('targetType', 'targetId'))) {
-            throw new \Exception('缺少参数，无法获取附件列表');
+            throw new InvalidArgumentException('缺少参数，无法获取附件列表');
         }
         $type = 'attachment';
         $targetType = $arguments['targetType'];
