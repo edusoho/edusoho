@@ -250,11 +250,11 @@ class BlockServiceImpl extends BaseService implements BlockService
     public function recovery($blockId, $history)
     {
         $block = $this->getBlockDao()->get($blockId);
-        $blockTemplate = $this->getBlockTemplateDao()->get($block['blockTemplateId']);
         if (empty($block)) {
             $this->createNewException(BlockException::NOTFOUND_BLOCK());
         }
 
+        $blockTemplate = $this->getBlockTemplateDao()->get($block['blockTemplateId']);
         if ('template' == $blockTemplate['mode'] && empty($history['data'])) {
             $this->createNewException(BlockException::EMPTY_HISTORY());
         }
