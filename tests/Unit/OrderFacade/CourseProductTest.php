@@ -30,7 +30,7 @@ class CourseProductTest extends BaseTestCase
         $courseProduct->setBiz($this->getBiz());
 
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array()),
+            array('functionName' => 'getCourse', 'returnValue' => array('buyable' => 0)),
             array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
 
