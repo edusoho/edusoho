@@ -3,29 +3,26 @@
 namespace ApiBundle\Api\Util;
 
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class ItemHelper
 {
     private $biz;
+
+    private $blankChapter = array('type' => 'chapter', 'isExist' => 0);
+
+    private $blankUnit = array('type' => 'unit', 'isExist' => 0);
 
     public function __construct($biz)
     {
         $this->biz = $biz;
     }
 
-    public function convertToTree($items)
-    {
-        $firstChapterIndex = $this->getFirstChapterIndex($items);
-        $result = $this->getTreeItems($items, $firstChapterIndex);
-
-        return $result;
-    }
-
     /**
      * 章->节->课时 结构
      * 向上补全结构，向下补全至节
      */
-    private function getTreeItems($items, $firstChapterIndex)
+    public function convertToTree($items)
     {
         $result = array();
 
@@ -34,8 +31,8 @@ class ItemHelper
         $lastItem = 'default';
 
         // 如果第一章上方还有内容，则归入未分类章
-        if (0 != $firstChapterIndex) {
-            $result[] = $this->getBlankChapterOrUnit('chapter');
+        if ('chapter' != $items[0]['type']) {
+            $result[] = $this->blankChapter;
             $lastItem = 'chapter';
             ++$nowChapterIndex;
         }
@@ -43,59 +40,46 @@ class ItemHelper
         foreach ($items as $index => $item) {
             $item['isExist'] = 1;
 
-            if ('chapter' == $item['type']) {
-                ++$nowChapterIndex;
-                $nowUnitIndex = -1; //新章创建后，应重置当前节
-                $result[$nowChapterIndex] = $item;
-                $result[$nowChapterIndex]['children'] = array();
-                $lastItem = 'chapter';
-            } elseif ('unit' == $item['type']) {
-                ++$nowUnitIndex;
-                $result[$nowChapterIndex]['children'][] = $item;
-                $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
-                $lastItem = 'unit';
-            } elseif ('lesson' == $item['type']) {
-                // 如果章下面直接是课时，则补全节
-                if ('chapter' == $lastItem) {
-                    ++$nowUnitIndex;
-                    $result[$nowChapterIndex]['children'][] = $this->getBlankChapterOrUnit('unit');
-                }
+            switch ($item['type']) {
+                case 'chapter':
+                    ++$nowChapterIndex;
+                    $nowUnitIndex = -1; //新章创建后，应重置当前节
+                    $result[$nowChapterIndex] = $item;
+                    $result[$nowChapterIndex]['children'] = array();
+                    break;
 
-                $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $item;
-                $lastItem = 'lesson';
+                case 'unit':
+                    ++$nowUnitIndex;
+                    $result[$nowChapterIndex]['children'][] = $item;
+                    $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
+                    break;
+
+                case 'lesson':
+                    // 如果章下面直接是课时，则补全节
+                    if ('chapter' == $lastItem) {
+                        ++$nowUnitIndex;
+                        $result[$nowChapterIndex]['children'][] = $this->blankUnit;
+                    }
+                    // 在对应节下面加入课程
+                    $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $item;
+                    break;
+
+                default:
+                    throw new ServiceException('item type not support');
+                    break;
             }
+
+            $lastItem = $item['type'];
         }
 
         // 以章结尾，补全节
         if ('chapter' == $lastItem) {
             ++$nowUnitIndex;
-            $result[$nowChapterIndex]['children'][] = $this->getBlankChapterOrUnit('unit');
+            $result[$nowChapterIndex]['children'][] = $this->blankUnit;
             $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
         }
 
         return $result;
-    }
-
-    private function getBlankChapterOrUnit($type)
-    {
-        return array(
-            'type' => $type,
-            'isExist' => 0,
-        );
-    }
-
-    private function getFirstChapterIndex($items)
-    {
-        $firstChapterIndex = -1;
-
-        foreach ($items as $index => $item) {
-            if ('chapter' == $item['type']) {
-                $firstChapterIndex = $index;
-                break;
-            }
-        }
-
-        return $firstChapterIndex;
     }
 
     public function convertToLeadingItemsV1($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
