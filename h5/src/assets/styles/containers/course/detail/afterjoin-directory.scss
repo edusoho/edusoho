@@ -1,0 +1,227 @@
+.afterjoin-directory {
+    p{
+        margin: 0px;
+        padding: 0px;
+    }
+    .icon-weiwancheng,.icon-yiwanchengliang{
+        color: #408FFB;
+    }
+    .icon-weixuexi{
+        color: #DCDCDC
+    }
+    .wrapper{
+        overflow: hidden; 
+        width: 100%; 
+        background-color: #fff; 
+        height:300px;
+    }
+    .swiper-directory{
+        margin: vw(12) 0 vw(10) 0;
+        .swiper-directory-active{
+            color: rgba(64,143,251,1)!important;
+            background:rgba(64,143,251,0.08)!important;
+            .chapter-title{
+                color:rgba(64,143,251,1)!important;
+            }
+            .chapter-des{
+                color:rgba(64,143,251,1)!important;
+            }
+            .iconfont{
+                color:rgba(64,143,251,1)!important;
+            }
+        }
+        .nochapter{
+            padding: vw(0) vw(21);
+            line-height:vw(68);
+        }
+        .haschapter{
+            padding: vw(10) vw(14);
+        }
+        .chapter{
+            // width:vw(250);
+            height:vw(68);
+            margin-left: vw(15);
+            background:rgba(245,245,245,1);;
+            box-sizing: border-box;
+            .icon-wuzhangjieliang{
+                font-size: vw(30);
+                vertical-align: middle;
+                margin-right: vw(20);
+            }
+            .iconfont{
+                color: #BEBEBE
+            }
+            .chapter-title{
+                width: 100%;
+                font-size:vw(16);
+                font-family:PingFangSC-Regular;
+                font-weight:400;
+                color:#333333;
+                line-height:vw(22);
+            }
+            .chapter-des{
+                font-size:vw(14);
+                margin-top:vw(6);
+                font-family:PingFangSC-Regular;
+                font-weight:400;
+                color:#999999;
+                line-height:vw(20);
+            }
+        }
+    }
+    .bl{
+        display: block!important;
+        .iconfont{
+            color: #BEBEBE
+        }
+    }
+    .noneItem{
+        text-align: center;
+        color: #919191;
+        font-size: vw(16);
+        .nodata{
+            width: vw(180);
+            margin: vw(30) 0;
+        }
+    }
+    .util-directory{
+        box-sizing: border-box;
+        padding-left: vw(15);
+        height: vw(30);
+        border-bottom: vw(1) solid rgba(235,235,235,1);
+        width:vw(345);
+        margin-top: vw(15);
+        margin-left: vw(15);
+        font-size:vw(16);
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(51,51,51,1);
+        line-height:vw(22);
+    }
+    .lesson-directory{
+        margin-top: vw(10);
+        margin-left: vw(15);
+        width: vw(345);
+        color: #333333;
+        border:1px solid rgba(245,245,245,1);
+        .lessonactive{
+            color: #408FFB;
+        }
+        .tryLes{
+            padding: vw(0) vw(2);
+            display: inline-block!important;
+            line-height: vw(18)!important;
+            vertical-align: top;
+            background:rgba(249,153,49,1);
+            border-radius:vw(4);
+            color: #fff;
+            text-align: center;
+            margin-right: vw(10);
+            font-size: vw(12)
+        }
+        .lesson-title{
+            font-size: vw(14);
+            width: 100%;
+            height:vw(40);
+            background:rgba(245,245,245,1);
+            line-height: vw(40);
+            box-sizing: border-box;
+            padding: 0 vw(15);
+            div{
+                display: inline-block;
+            }
+            .lesson-title-r{
+                .lesson-title-des{
+                    display: inline-block;
+                    line-height: vw(40);
+                    box-sizing: border-box;
+                    i{
+                        margin-right: vw(8);
+                    }
+                    .l22{
+                        .tryLes{
+                            vertical-align: middle
+                        }
+                    }
+                    .ks{
+                        width: vw(220);
+                        display: inline-block;
+                        vertical-align: top;
+                    }
+                }
+            }
+            .icon-shipin{
+                font-size: vw(16);
+                color:rgba(190,190,190,1);
+            }
+            .lesson-title-l{
+                float: right;
+                color:#999999;
+                span{
+                    margin-right: vw(9)
+                }
+            }
+            .iconfont{
+                font-size: vw(16);
+            }
+        }
+        .zb-ks{
+            height: vw(60);
+            padding: vw(10) vw(12);
+            .lesson-title-l{
+                line-height: vw(40)
+            }
+            .zbtime{
+                color: #408FFB;
+                font-size: vw(12);
+                margin-left: vw(26);
+                margin-top: vw(3);
+                .end{
+                    border:vw(1) solid #999999;
+                    color: #999999;
+                }
+                .back{
+                    border:vw(1) solid #F99931;
+                    color: #F99931;
+                }
+            }
+            .bl{
+                line-height: normal!important;
+            }
+        }
+        .lesson-items{
+            box-sizing: border-box;
+            padding: vw(12) vw(15) vw(12) vw(15);
+            
+            .litem{
+                padding: vw(12) vw(0);
+                height: vw(20);
+                line-height: vw(20);
+                div{
+                    display: inline-block;
+                }
+                .litem-r{
+                    color: #666666;
+                    font-size: vw(14);
+                    width: vw(220);
+                    .iconfont{
+                        font-size: vw(16);
+                        color: #BEBEBE;
+                        margin-right: vw(8)
+                    }
+                }
+                .litem-l{
+                    color:#999999;
+                    float:right;
+                    font-size: vw(14);
+                    span{
+                        margin-right: vw(9)
+                    }
+                    .iconfont{
+                        font-size: vw(16);
+                    }
+                }
+            }
+        }
+    }
+}
