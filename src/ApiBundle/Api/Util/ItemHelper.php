@@ -3,7 +3,6 @@
 namespace ApiBundle\Api\Util;
 
 use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class ItemHelper
 {
@@ -24,17 +23,21 @@ class ItemHelper
      */
     public function convertToTree($items)
     {
-        $result = array();
+        $treeItems = array();
 
-        $nowChapterIndex = -1;
-        $nowUnitIndex = -1;
-        $lastItem = 'default';
+        if (empty($items)) {
+            return $treeItems;
+        }
+
+        $nowChapterIndex = $nowUnitIndex = -1;
 
         // 如果第一章上方还有内容，则归入未分类章
         if ('chapter' != $items[0]['type']) {
-            $result[] = $this->blankChapter;
+            $treeItems[] = $this->blankChapter;
             $lastItem = 'chapter';
             ++$nowChapterIndex;
+        } else {
+            $lastItem = 'default';
         }
 
         foreach ($items as $index => $item) {
@@ -44,28 +47,27 @@ class ItemHelper
                 case 'chapter':
                     ++$nowChapterIndex;
                     $nowUnitIndex = -1; //新章创建后，应重置当前节
-                    $result[$nowChapterIndex] = $item;
-                    $result[$nowChapterIndex]['children'] = array();
+                    $treeItems[$nowChapterIndex] = $item;
+                    $treeItems[$nowChapterIndex]['children'] = array();
                     break;
 
                 case 'unit':
                     ++$nowUnitIndex;
-                    $result[$nowChapterIndex]['children'][] = $item;
-                    $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
+                    $treeItems[$nowChapterIndex]['children'][] = $item;
+                    $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
                     break;
 
                 case 'lesson':
                     // 如果章下面直接是课时，则补全节
                     if ('chapter' == $lastItem) {
                         ++$nowUnitIndex;
-                        $result[$nowChapterIndex]['children'][] = $this->blankUnit;
+                        $treeItems[$nowChapterIndex]['children'][] = $this->blankUnit;
                     }
                     // 在对应节下面加入课程
-                    $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $item;
+                    $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $item;
                     break;
 
                 default:
-                    throw new ServiceException('item type not support');
                     break;
             }
 
@@ -75,11 +77,11 @@ class ItemHelper
         // 以章结尾，补全节
         if ('chapter' == $lastItem) {
             ++$nowUnitIndex;
-            $result[$nowChapterIndex]['children'][] = $this->blankUnit;
-            $result[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
+            $treeItems[$nowChapterIndex]['children'][] = $this->blankUnit;
+            $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
         }
 
-        return $result;
+        return $treeItems;
     }
 
     public function convertToLeadingItemsV1($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
