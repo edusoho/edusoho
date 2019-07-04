@@ -2,6 +2,8 @@
 
 namespace AppBundle\Component\Activity;
 
+use AppBundle\Common\Exception\InvalidArgumentException;
+
 class ActivityProxy
 {
     private $activityConfig;
@@ -52,7 +54,7 @@ class ActivityProxy
                 $resp = $this->render($routeInfo['relativePath'], $parameters);
                 break;
             default:
-                throw new \RuntimeException('Bad route info in activity');
+                throw new InvalidArgumentException('Bad route info in activity');
         }
 
         return $resp;
@@ -68,7 +70,7 @@ class ActivityProxy
     public function renderPhp($absolutePath)
     {
         if (!file_exists($absolutePath)) {
-            throw new \RuntimeException('The php file not found.');
+            throw new InvalidArgumentException('The php file not found.');
         }
 
         return require $absolutePath;
@@ -81,7 +83,7 @@ class ActivityProxy
             $pathInfo = pathinfo($relativePath);
 
             if (!in_array($pathInfo['extension'], $this->allowedExt)) {
-                throw new \RuntimeException('Bad file extension in routes, please check.');
+                throw new InvalidArgumentException('Bad file extension in routes, please check.');
             }
 
             return array(

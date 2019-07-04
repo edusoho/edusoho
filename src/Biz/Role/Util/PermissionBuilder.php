@@ -381,7 +381,6 @@ class PermissionBuilder
 
         foreach ($parents as $key => $value) {
             $value['code'] = $key;
-            $value['name'] = $value['name'];
             $menus[$key] = $value;
 
             if (isset($value['children'])) {
