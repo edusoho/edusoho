@@ -152,8 +152,8 @@ class OrgServiceTest extends BaseTestCase
         $this->getOrgService()->createOrg($org);
 
         $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode();
-
-        $expectedOrg = $this->getOrgService()->getOrg($this->getCurrentUser()['orgId']);
+        $user = $this->getCurrentUser();
+        $expectedOrg = $this->getOrgService()->getOrg($user['orgId']);
         $expected = $this->getOrgService()->findOrgsByPrefixOrgCode($expectedOrg['code']);
 
         $this->assertArraySternEquals($expected, $orgs);

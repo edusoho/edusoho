@@ -13,7 +13,9 @@ let validator = $form.validate({
 });
 
 $form.on('click', '#classroom-create-btn', (event) => {
+  const $target = $(event.target);
   if (validator && validator.form()) {
+    $target.button('loading');
     $form.submit();
   }
 });

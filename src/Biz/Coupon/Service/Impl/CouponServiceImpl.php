@@ -319,7 +319,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             $targetId = $course ? $course['courseSetId'] : null;
         }
 
-        return !('all' == $coupon['targetType'] or ($coupon['targetType'] == $targetType && ($coupon['targetId'] == $targetId || 0 == $coupon['targetId'])));
+        return !('all' == $coupon['targetType'] || ($coupon['targetType'] == $targetType && ($coupon['targetId'] == $targetId || 0 == $coupon['targetId'])));
     }
 
     public function getCouponByCode($code, $lock = false)
