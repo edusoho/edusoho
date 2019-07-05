@@ -1601,6 +1601,7 @@ course.testpaper_manage: 课程试卷
 course.testpaper_manage.testpaper: 试卷
 course.testpaper_manage.content_title: 课程试卷
 course.testpaper_manage.create_btn: 创建试卷
+course.testpaper_manage.import_btn: 导入试卷
 course.testpaper_manage.name: 名称
 course.testpaper_manage.status: 状态
 course.testpaper_manage.statistics: 题目统计
@@ -1633,6 +1634,7 @@ course.testpaper_manage.edit_btn: 编辑试卷信息
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
 course.testpaper_manage.delete_btn: 删除试卷
+course.testpaper_manage.import: 导入试卷
 course.testpaper_manage.create: 创建试卷
 course.testpaper_manage.create.bread_crumbs: >
   <li><a href="%testpaperManageUrl%">试卷管理</a></li>

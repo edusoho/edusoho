@@ -1,0 +1,53 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/testpaper-manage/read/index.js']) %}
+
+{% do css(['questionplusplugin/css/main.css']) %}
+
+{% block title %}
+  {{ 'course.testpaper_manage.import'|trans }}
+{% endblock %}
+
+{% block body %}
+  <input type="hidden" id="courseSet_Id" value="{{ courseSet.id }}"/>
+  <div class="tab-content js-content" id="import-testpaper-box">
+    <div class="tab-pane js-course-tasks-pane active">
+      <form class="form-horizontal js-step1-view" id="import-step-form" method="post"
+            action="{{ path('course_set_manage_testpaper_read', {id: courseSet.id}) }}" enctype="multipart/form-data">
+        <div class="cd-form-group mb0 clearfix">
+          <div class="upload-file-box" id="upload-file-box">
+            <p class="cd-mb24 color088 text-16 text-align">全新导入机制，导入更高效</p>
+            <div class="upload-area js-upload-area text-align">
+              <label id="upload-btn" for="form_file" class="btn cd-btn cd-btn-lg cd-btn-primary"
+                     data-loading-text="{{ 'plugins.questionplus.uploading'|trans }}">{{ 'plugins.questionplus.upload_document'|trans }}</label>
+              <input type="file" id="form_file" name="importFile" class="hidden" value="" required="required" accept=".docx">
+              <p class="mt16 text-14">{{ 'plugins.questionplus.drag_document_hint'|trans }}</p>
+              <div class="upload-file__tip mt16">
+                <p class="color088 text-14">
+                  <span>仅支持DOCX格式，</span>
+                  <a href="{{ asset('/assets/files/questions_import_example.docx') }}">模板下载</a>
+                </p>
+                <p class="text-14"><a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">DOC如何转换成DOCX?</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+      <div class="js-step2-view hidden"></div>
+      <div class="tab-pane js-course-tasks-pane active hidden js-step3-view"></div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  {% if is_plugin_installed('QuestionPlus') %}
+    <p class="mb0" style="text-align: left"><a href="javascript:;" id="old-template-btn">仍然使用旧模板</a></p>
+  {% endif %}
+  <button class="btn hidden"></button>
+  <button type="button" class="btn cd-btn cd-btn-lg cd-btn-flat-default pull-right js-step3-btn hidden" data-dismiss="modal">取消</button>
+  <button type="button" id="re-import-btn"
+          class="btn cd-btn cd-btn-lg cd-btn-flat-default pull-right js-step2-btn js-step3-btn re-import-btn hidden">{{ 'plugins.questionplus.reupload_document'|trans }}</button>
+{% endblock %}
