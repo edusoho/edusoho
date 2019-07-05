@@ -56,7 +56,6 @@ class CourseThreadEventSubscriberTest extends BaseTestCase
         $this->mockBiz('User:StatusService', array(
             array(
                 'functionName' => 'publishStatus',
-                'times' => 1,
             ),
         ));
 
@@ -70,7 +69,7 @@ class CourseThreadEventSubscriberTest extends BaseTestCase
         $eventSubscriber = new CourseThreadEventSubscriber($this->biz);
         $eventSubscriber->onThreadPostCreate($event);
 
-        $this->createService('User:StatusService')->shouldHaveReceived('publishStatus');
+        $this->createService('User:StatusService')->shouldHaveReceived('publishStatus')->times(1);
     }
 
     public function testOnThreadPostCreateWithoutParentId()
@@ -106,7 +105,6 @@ class CourseThreadEventSubscriberTest extends BaseTestCase
         $this->mockBiz('User:StatusService', array(
             array(
                 'functionName' => 'publishStatus',
-                'times' => 1,
             ),
         ));
 
@@ -120,6 +118,6 @@ class CourseThreadEventSubscriberTest extends BaseTestCase
         $eventSubscriber = new CourseThreadEventSubscriber($this->biz);
         $eventSubscriber->onThreadPostCreate($event);
 
-        $this->createService('User:StatusService')->shouldHaveReceived('publishStatus');
+        $this->createService('User:StatusService')->shouldHaveReceived('publishStatus')->times(1);
     }
 }
