@@ -9,19 +9,23 @@
      <!-- 课程目录 -->
     <div class="join-after__content">
       <div v-if="active == 1">
-        <div class="progress-bar">
+        <div class="progress-bar" id="progress-bar">
           <div class="progress-bar__content">
             <div class="progress-bar__rate" :style="{'width': progress}"></div>
           </div>
           <div class="progress-bar__text">{{ progress }}</div>
         </div>
 
-        <directory
+        <!-- <directory
           @showDialog="showDialog"
           :hiddeTitle=true
           :errorMsg="errorMsg"
           class="join-after-dirctory"
-          :tryLookable="details.tryLookable"></directory>
+          :tryLookable="details.tryLookable"></directory> -->
+        <afterjoin-directory
+        @showDialog="showDialog"
+        :errorMsg="errorMsg"
+        ></afterjoin-directory>
       </div>
 
       <div v-if="active == 0">
@@ -54,11 +58,13 @@ import Directory from './detail/directory';
 import DetailHead from './detail/head';
 import DetailPlan from './detail/plan';
 import Teacher from './detail/teacher';
+import afterjoinDirectory from './detail/afterjoin-directory';
 import { mapState } from 'vuex';
 import { Dialog, Toast } from 'vant';
 import Api from '@/api';
 
 export default {
+  inheritAttrs:true,
   props: {
     details: {
       type: Object,
@@ -108,7 +114,8 @@ export default {
     DetailHead,
     DetailPlan,
     Teacher,
-    reviewList
+    reviewList,
+    afterjoinDirectory
   },
   methods: {
     showDialog() {
