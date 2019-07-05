@@ -3,7 +3,6 @@
 namespace AppBundle\Twig;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use AppBundle\Common\ArrayToolkit;
 
 class QuestionTypeExtension extends \Twig_Extension
 {
