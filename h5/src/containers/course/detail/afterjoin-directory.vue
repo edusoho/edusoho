@@ -9,7 +9,7 @@
         :hasChapter="hasChapter"
       ></swiper-directory>
       <div ref="wrapper" class="wrapper" v-if="item.length>0">
-        <div >
+        <div>
           <template v-if="chapterNum>0">
             <div v-for="(list, index) in item[slideIndex].children" :key="index" class="pd-bo">
               <util-directory :util="list"></util-directory>
@@ -42,6 +42,10 @@ import BScroll from "better-scroll";
 import Api from "@/api";
 import { mapState, mapMutations } from "vuex";
 import { connect } from "net";
+const options = {
+  click: true,
+  taps: true
+};
 export default {
   name: "afterjoinDirectory",
   components: {
@@ -68,7 +72,7 @@ export default {
   computed: {
     ...mapState("course", {
       OptimizationCourseLessons: state => state.OptimizationCourseLessons,
-      nextStudy:state => state.nextStudy
+      nextStudy: state => state.nextStudy
     }),
     hasChapter: function() {
       if (this.chapterNum == 0) {
@@ -82,16 +86,21 @@ export default {
       handler: "processItem",
       immediate: true
     },
-    nextStudy:function(val,oldvalue){
-      if(val!==oldvalue){
-        this.taskId=Number(val.nextTask.id);
-        this.scroll.scrollToElement(document.getElementById(this.taskId));
-        this.scroll.refresh();
-      }
-
+    nextStudy: {
+      handler: "getNextStudy",
+      immediate: true
     }
   },
   methods: {
+    getNextStudy() {
+      if (this.nextStudy.nextTask) {
+        this.taskId = Number(this.nextStudy.nextTask.id);
+        if (this.scroll) {
+          this.scroll.scrollToElement(document.getElementById(this.taskId));
+          this.scroll.refresh();
+        }
+      }
+    },
     //处理数据
     processItem() {
       let res = this.OptimizationCourseLessons;
@@ -103,7 +112,6 @@ export default {
         this.noItem = false;
         this.level = res.length == 1 && res[0].isExist == 0 ? 2 : 3;
         if (this.level == 2) {
-          console.log(res[0].children);
           this.item = res[0].children;
         } else {
           this.item = res;
@@ -123,19 +131,35 @@ export default {
     },
     //初始化BScroll，定位到指定目录
     newScroll() {
-      const options = {
-        click: true,
-        taps: true
-      };
       const WRAPPER = this.$refs.wrapper;
       const DOCUMENTHEIGHT = document.documentElement.clientHeight;
-      const APPHEIGHT = document.getElementById("app").clientHeight;
-      const PROCESSHEIGHT = document.getElementById("progress-bar")==null?
-                      0:document.getElementById("progress-bar").clientHeight;
-      const SWIPERHEIGHT = document.getElementById("swiper-directory")==null?
-                      0 : document.getElementById("swiper-directory").clientHeight;
-      WRAPPER.style.height =DOCUMENTHEIGHT - APPHEIGHT - PROCESSHEIGHT - SWIPERHEIGHT + "px";
-      this.scroll = new BScroll(WRAPPER, options);
+      const IMGHEIGHT =
+        document.getElementById("course-detail__head--img") == null
+          ? 0
+          : document.getElementById("course-detail__head--img").clientHeight;
+      const MARGINTOP = 10;
+      const PROCESSHEIGHT =
+        document.getElementById("progress-bar") == null
+          ? 0
+          : document.getElementById("progress-bar").clientHeight;
+      const SWIPERHEIGHT =
+        document.getElementById("swiper-directory") == null
+          ? 0
+          : document.getElementById("swiper-directory").clientHeight;
+      const NAVHEIGHT = 46;
+      const TABSHEIGHT = 44;
+      if (WRAPPER) {
+        WRAPPER.style.height =
+          DOCUMENTHEIGHT -
+          IMGHEIGHT -
+          PROCESSHEIGHT -
+          SWIPERHEIGHT -
+          MARGINTOP -
+          NAVHEIGHT -
+          TABSHEIGHT +
+          "px";
+        this.scroll = new BScroll(WRAPPER, options);
+      }
     },
     //类型操作
     judgType(item, list, index) {
