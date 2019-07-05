@@ -1408,3 +1408,11 @@ wechat.notification.homepage_open_tip: <span class="%messageClass%">"WeChat noti
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">go to open</span>
 wechat.notification.cloud_open_tip: Please open ES Cloud
 
+#试卷导入引导
+document.import.intro_hover: >
+  <div class="document-import-intro-title cd-text-warning"><i class="es-icon es-icon-xinxi cd-mr8"></i>提示</div>
+  <div class="document-import-intro-content">
+    <div align="center">New import function,Just try.</div>
+  </div>
+document.import.skip_btn: I know!
+
