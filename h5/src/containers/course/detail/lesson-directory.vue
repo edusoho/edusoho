@@ -56,7 +56,7 @@
 
   </div>
   <div v-else class="noneItem">
-    <img src="static/images/none.png" class="nodata"/>
+    <img src="static/images/none.png" class="notask"/>
     <p>暂时还没有课时哦...</p>
   </div>
 </template>
@@ -84,17 +84,13 @@ export default {
     },
   data(){
     return{
-      currentTask:-1
+      currentTask:''
     }
   },
   watch:{
-    //监听lesson
-    lesson: {
-      handler: 'lessonPosition',
+    taskId:{
+      handler: 'getTaskId',
       immediate: true
-    },
-    taskId:function(val){
-      this.currentTask=val
     }
   },
   computed:{
@@ -109,14 +105,8 @@ export default {
         setSourceType: types.SET_SOURCETYPE
       }),
     //获取lesson位置
-    lessonPosition(){
-        // this.lesson.forEach((item,index)=>{
-        //   if(item.tasks[0].mode=="lesson"){
-        //     this.$set(this.lesson[index],'index',0)
-        //   }else{
-        //     this.$set(this.lesson[index],'index',1)
-        //   }
-        // })
+    getTaskId(){
+       this.currentTask=this.taskId
     },
     //直播双行显示判断
     doubleLine(type){

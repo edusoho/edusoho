@@ -12,7 +12,7 @@
         <i class="van-icon van-icon-arrow van-nav-bar__arrow"></i>
       </div>
     </div>
-    <div class="course-detail__head--img"
+    <div class="course-detail__head--img" id="course-detail__head--img"
       v-show="sourceType === 'img' || isEncryptionPlus">
       <img v-if="courseSet.cover" :src="courseSet.cover.large" alt="">
       <countDown

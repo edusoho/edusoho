@@ -53,6 +53,9 @@
     &.after-tabs {
       margin-bottom: 0;
     }
+    &__nav--line{
+      padding-bottom: 0px;
+    }
     .van-tab {
       color: #2b333b;
       @extend .font-family-PFM;
@@ -62,6 +65,7 @@
     }
     &__line {
       background-color: $primary-color;
+      bottom:0px;
     }
     &--fixed {
       position: fixed;
@@ -290,12 +294,13 @@
   // join-after component
   .join-after {
     &__content {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      top: vw(300);
-      overflow: auto;
+      // position: absolute;
+      // left: 0;
+      // right: 0;
+      // bottom: 0;
+      // top: vw(300);
+      // overflow: auto;
+      margin-top: 44px;
       .e-panel-body {
         img {
           width: 100%;
@@ -314,9 +319,9 @@
     box-shadow: 0px 5px 5px #f8f9fa;
   }
   .progress-bar {
-    height: vw(70);
-    margin-left: vw(20);
-    margin-right: vw(20);
+    height: vw(49);
+    padding: 0 vw(20);
+    box-shadow: 0px 2px 6px 0px rgba(49,49,49,0.1);
     display: flex;
     align-items: center;
     &__content {

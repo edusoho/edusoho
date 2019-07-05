@@ -1,4 +1,5 @@
 .afterjoin-directory {
+    margin-top: vw(10);
     p{
         margin: 0px;
         padding: 0px;
@@ -85,6 +86,10 @@
         .nodata{
             width: vw(180);
             margin: vw(30) 0;
+        }
+        .notask{
+            width: vw(140);
+            margin: vw(15) 0;
         }
     }
     .util-directory{

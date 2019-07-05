@@ -8,7 +8,7 @@
 
      <!-- 课程目录 -->
     <div class="join-after__content">
-      <div v-if="active == 1">
+      <div v-show="active == 1">
         <div class="progress-bar" id="progress-bar">
           <div class="progress-bar__content">
             <div class="progress-bar__rate" :style="{'width': progress}"></div>
@@ -28,7 +28,7 @@
         ></afterjoin-directory>
       </div>
 
-      <div v-if="active == 0">
+      <div v-show="active == 0">
         <!-- 课程计划 -->
         <detail-plan @switchPlan="showDialog"></detail-plan>
 
@@ -46,7 +46,7 @@
       </div>
 
       <!-- 学员评价 -->
-      <div v-if="active == 2">
+      <div v-show="active == 2">
         <review-list ref="review" :targetId="details.courseSet.id" :reviews="details.reviews" title="学员评价" defaulValue="暂无评价" type="course"></review-list>
       </div>
     </div>
