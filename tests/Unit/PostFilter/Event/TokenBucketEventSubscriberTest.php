@@ -4,6 +4,7 @@ namespace Tests\Unit\PostFilter\Event;
 
 use Biz\BaseTestCase;
 use Biz\PostFilter\Event\TokenBucketEventSubscriber;
+use Biz\PostFilter\Service\TokenBucketService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -31,16 +32,15 @@ class TokenBucketEventSubscriberTest extends BaseTestCase
 
     public function testBeforeWithManageRole()
     {
-        $event = new Event(array());
-
-        $eventSubscriber = new TokenBucketEventSubscriber($this->biz);
-
         $this->mockBiz('PostFilter:TokenBucketService', array(
             array(
                 'functionName' => 'hasToken',
-                'times' => 1
-            )
+                'times' => 1,
+            ),
         ));
+
+        $event = new Event(array());
+        $eventSubscriber = new TokenBucketEventSubscriber($this->biz);
         $eventSubscriber->before($event);
 
         $this->getTokenBucketService()->shouldNotHaveReceived('hasToken');
@@ -48,23 +48,19 @@ class TokenBucketEventSubscriberTest extends BaseTestCase
 
     public function testBefore()
     {
-        $event = new Event(array());
-
-        $eventSubscriber = new TokenBucketEventSubscriber($this->biz);
-
         $this->mockBiz('PostFilter:TokenBucketService', array(
             array(
                 'functionName' => 'hasToken',
                 'times' => 1,
                 'withParams' => array('127.0.0.1', 'thread'),
-                'returnValue' => false
+                'returnValue' => false,
             ),
             array(
                 'functionName' => 'hasToken',
-                'times' => 1,
+                'times' => 2,
                 'withParams' => array(3, 'threadLoginedUser'),
-                'returnValue' => true
-            )
+                'returnValue' => true,
+            ),
         ));
 
         $currentUser = new CurrentUser();
@@ -75,13 +71,38 @@ class TokenBucketEventSubscriberTest extends BaseTestCase
             'roles' => array('ROLE_USER'),
         ));
 
+        $currentUser->setPermissions(array());
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $event = new Event(array());
+        $eventSubscriber = new TokenBucketEventSubscriber($this->biz);
         $eventSubscriber->before($event);
 
-        $this->getTokenBucketService()->shouldHaveReceiver('hasToken')->times(1);
         $this->assertTrue($event->isPropagationStopped());
+
+        $biz = $this->getBiz();
+        unset($biz['@PostFilter:TokenBucketService']);
     }
 
+    public function testIncrTokenWithManageRole()
+    {
+        $this->mockBiz('PostFilter:TokenBucketService', array(
+            array(
+                'functionName' => 'incrToken',
+                'times' => 1,
+            ),
+        ));
 
+        $event = new Event(array());
+        $eventSubscriber = new TokenBucketEventSubscriber($this->biz);
+        $eventSubscriber->incrToken($event);
+
+        $this->getTokenBucketService()->shouldNotHaveReceived('incrToken');
+    }
+
+    /**
+     * @return TokenBucketService
+     */
     private function getTokenBucketService()
     {
         return $this->createService('PostFilter:TokenBucketService');
