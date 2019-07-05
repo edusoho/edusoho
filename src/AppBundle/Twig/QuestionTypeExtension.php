@@ -61,10 +61,9 @@ class QuestionTypeExtension extends \Twig_Extension
     public function getQuestionTypeSeq()
     {
         $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
-        $container = $this->container;
 
         $typeSeq = array();
-        array_walk($questionExtension, function ($value, $type) use (&$typeSeq, $container) {
+        array_walk($questionExtension, function ($value, $type) use (&$typeSeq) {
             $typeSeq[$type] = $value['seqNum'];
         });
 
@@ -79,10 +78,9 @@ class QuestionTypeExtension extends \Twig_Extension
 
         $newTypes = array();
         $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
-        $container = $this->container;
 
         $typeSeq = array();
-        array_walk($questionExtension, function ($value, $type) use (&$typeSeq, $container) {
+        array_walk($questionExtension, function ($value, $type) use (&$typeSeq) {
             $typeSeq[$type] = $value['seqNum'];
         });
         $typeSeq = array_flip($typeSeq);
