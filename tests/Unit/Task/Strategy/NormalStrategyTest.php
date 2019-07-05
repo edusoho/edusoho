@@ -589,8 +589,7 @@ class NormalStrategyTest extends BaseTestCase
 
         $result = $this->getNormalStrategy()->prepareCourseItems(1, $tasks, 1);
 
-        $this->assertFalse(isset($result['chapter-2']));
-        $this->assertCount(2, $result);
+        $this->assertFalse(isset($result['task-2']));
     }
 
     public function testPublishTask()
