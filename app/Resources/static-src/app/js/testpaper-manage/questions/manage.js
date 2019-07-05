@@ -9,6 +9,7 @@ export default class QuestionManage{
     this.questions = [];
     this.questionsCount = 0;
     this._initEvent();
+    this.initTypeSort();
   }
 
   _initEvent() {
@@ -185,17 +186,56 @@ export default class QuestionManage{
         return;
       }
     }
+    let questionTypeSeq = [];
+    $("input[name='questionTypeSeq']").each(function(){
+        questionTypeSeq.push($(this).val());
+    })
 
     if (this.questionsCount > 2000) {
         notify('danger', Translator.trans('activity.testpaper_manage.questions_length_hint'));
     }else{
         $target.button('loading').addClass('disabled');
-        $.post(this.$element.attr('action'),{questions: JSON.stringify(this.questions),passedScore: passedScore},function(result) {
+        $.post(this.$element.attr('action'),{questions: JSON.stringify(this.questions),passedScore: passedScore, questionTypeSeq: JSON.stringify(questionTypeSeq)},function(result) {
           if (result.goto) {
             window.location.href = result.goto;
           }
         });
     }
 
+  }
+
+  initTypeSort() {
+    var $group = $('#testpaper-question-nav');
+    var adjustment;
+    $('#testpaper-question-nav').sortable({
+      handle: '.js-move-icon',
+      itemSelector : '.question-type-table',
+      placeholder: '<li class="question-type-table question-type-placehoder"></li>', 
+      onDrop: function ($item, container, _super, event) {
+        $item.removeClass('dragged').removeAttr('style');
+        $('body').removeClass('dragging');
+      },
+      onDragStart: function(item, container, _super) {
+        var offset = item.offset(),
+          pointer = container.rootGroup.pointer;
+        adjustment = {
+          left: pointer.left - offset.left,
+          top: pointer.top - offset.top
+        };
+        _super(item, container);
+      },
+      onDrag: function(item, position) {
+        const height = item.height();
+        const width = item.width();
+        item.css({
+          left: position.left - adjustment.left,
+          top: position.top - adjustment.top
+        });
+        $('.question-type-placehoder').css({
+          'height': height,
+          'width': width,
+        });
+      },
+    });
   }
 }

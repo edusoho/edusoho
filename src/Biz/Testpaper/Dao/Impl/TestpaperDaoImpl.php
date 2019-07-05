@@ -81,6 +81,7 @@ class TestpaperDaoImpl extends AdvancedDaoImpl implements TestpaperDao
         $declares['serializes'] = array(
             'metas' => 'json',
             'passedCondition' => 'json',
+            'questionTypeSeq' => 'delimiter',
         );
 
         return $declares;

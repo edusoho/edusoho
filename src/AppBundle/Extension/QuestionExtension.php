@@ -30,6 +30,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                     'analysis' => 'question/analysis/single-choice.html.twig',
                 ),
                 'hasMissScore' => 0,
+                'seqNum' => 1,
             ),
             'choice' => array(
                 'name' => 'question.type.multiple_choice',
@@ -43,6 +44,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                     'analysis' => 'question/analysis/choice.html.twig',
                 ),
                 'hasMissScore' => 1,
+                'seqNum' => 2,
             ),
             'essay' => array(
                 'name' => 'question.type.essay',
@@ -56,6 +58,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                     'analysis' => 'question/analysis/essay.html.twig',
                 ),
                 'hasMissScore' => 0,
+                'seqNum' => 3,
             ),
             'uncertain_choice' => array(
                 'name' => 'question.type.uncertain_choice',
@@ -69,6 +72,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                     'analysis' => 'question/analysis/uncertain_choice.html.twig',
                 ),
                 'hasMissScore' => 1,
+                'seqNum' => 4,
             ),
             'determine' => array(
                 'name' => 'question.type.determine',
@@ -82,6 +86,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                     'analysis' => 'question/analysis/determine.html.twig',
                 ),
                 'hasMissScore' => 0,
+                'seqNum' => 5,
             ),
             'fill' => array(
                 'name' => 'question.type.fill',
@@ -95,6 +100,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                     'analysis' => 'question/analysis/fill.html.twig',
                 ),
                 'hasMissScore' => 0,
+                'seqNum' => 6,
             ),
             'material' => array(
                 'name' => 'question.type.material',
@@ -108,6 +114,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                     'analysis' => 'question/analysis/material.html.twig',
                 ),
                 'hasMissScore' => 0,
+                'seqNum' => 7,
             ),
         );
     }

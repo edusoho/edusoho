@@ -141,6 +141,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             'copyId',
             'pattern',
             'metas',
+            'questionTypeSeq',
         ));
 
         return $fields;
