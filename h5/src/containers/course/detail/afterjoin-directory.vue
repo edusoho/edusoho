@@ -1,6 +1,6 @@
 <template>
   <div class="afterjoin-directory">
-    <div v-if="!noItem">
+    <div v-if="lessonNum>0">
       <swiper-directory
         v-if="chapterNum>0 || unitNum>0"
         :item="item"
@@ -8,19 +8,22 @@
         @changeChapter="changeChapter"
         :hasChapter="hasChapter"
       ></swiper-directory>
-      <div
-        ref="wrapper"
-        class="wrapper"
-        v-if="item.length>0"
-      >
-        <div>
+      <div ref="wrapper" class="wrapper" v-if="item.length>0">
+        <div >
           <template v-if="chapterNum>0">
-            <div v-for="(list, index) in item[slideIndex].children" :key="index">
-              <util-directory :util="list" v-if="chapterNum>0"></util-directory>
-              <lesson-directory v-bind="$attrs" v-on="$listeners" :lesson="list.children" :taskId="taskId"></lesson-directory>
+            <div v-for="(list, index) in item[slideIndex].children" :key="index" class="pd-bo">
+              <util-directory :util="list"></util-directory>
+              <lesson-directory
+                v-bind="$attrs"
+                v-on="$listeners"
+                :lesson="list.children"
+                :taskId="taskId"
+              ></lesson-directory>
             </div>
           </template>
-          <lesson-directory v-else :lesson="item[slideIndex].children" :taskId="taskId"></lesson-directory>
+          <div v-else class="pd-bo">
+            <lesson-directory :lesson="item[slideIndex].children" :taskId="taskId"></lesson-directory>
+          </div>
         </div>
       </div>
     </div>
@@ -38,6 +41,7 @@ import lessonDirectory from "./lesson-directory.vue";
 import BScroll from "better-scroll";
 import Api from "@/api";
 import { mapState, mapMutations } from "vuex";
+import { connect } from "net";
 export default {
   name: "afterjoinDirectory",
   components: {
@@ -49,81 +53,89 @@ export default {
     return {
       scroll: "",
       item: [],
-      level: 3,//目录层数
+      level: 3, //目录层数
       chapterNum: 0, //章节数
       unitNum: 0, //节数
+      lessonNum: 0, //课时数
       noItem: false, //无数据
       currentChapter: 0, //章节数目的索引,
       currentUnit: 0, //章节数目的索引
       currentLesson: 0, //课时数目的索引
       slideIndex: 0, //顶部滑动的索引
-      taskId: 3960
+      taskId: -1
     };
   },
   computed: {
     ...mapState("course", {
-      OptimizationCourseLessons: state => state.OptimizationCourseLessons
+      OptimizationCourseLessons: state => state.OptimizationCourseLessons,
+      nextStudy:state => state.nextStudy
     }),
-    hasChapter:function(){
-        if(this.chapterNum==0){
-          return false
-        }
-        return true
+    hasChapter: function() {
+      if (this.chapterNum == 0) {
+        return false;
+      }
+      return true;
     }
   },
   watch: {
     OptimizationCourseLessons: {
       handler: "processItem",
       immediate: true
+    },
+    nextStudy:function(val,oldvalue){
+      if(val!==oldvalue){
+        this.taskId=Number(val.nextTask.id);
+        this.scroll.scrollToElement(document.getElementById(this.taskId));
+        this.scroll.refresh();
+      }
+
     }
   },
   methods: {
     //处理数据
     processItem() {
       let res = this.OptimizationCourseLessons;
-      const options = {
-        click: true
-      };
+      const that = this;
       this.chapterNum = 0; //章节数
       this.unitNum = 0; //节数
+      this.lessonNum = 0; //课时数
       if (res.length == 1) {
-        if (
-          res[0].children.length == 1 &&
-          res[0].children[0].children.length == 0
-        ) {
-          this.noItem = true;
-          this.item = [];
+        this.noItem = false;
+        this.level = res.length == 1 && res[0].isExist == 0 ? 2 : 3;
+        if (this.level == 2) {
+          console.log(res[0].children);
+          this.item = res[0].children;
         } else {
-          this.noItem = false;
-
-          this.level = res.length == 1 && res[0].isExist == 0 ? 2 : 3;
-          if (this.level == 2) {
-            console.log(res[0].children);
-            this.item = res[0].children;
-          } else {
-            this.item = res;
-          }
-          this.mapChild(this.item);
-
-          // //初始化BScroll，定位到指定目录
-          this.$nextTick(() => {
-            this.scroll = new BScroll(this.$refs.wrapper, options);
-            this.scroll.scrollToElement(document.getElementById(this.taskId));
-            this.scroll.refresh();
-          });
+          this.item = res;
         }
+        this.mapChild(this.item);
+        this.$nextTick(() => {
+          that.newScroll();
+        });
       } else if (res.length > 1) {
         this.noItem = false;
         this.item = res;
         this.mapChild(this.item);
-
-        //初始化BScroll，定位到指定目录
         this.$nextTick(() => {
-          this.scroll = new BScroll(this.$refs.wrapper, options);
-          this.scroll.scrollToElement(document.getElementById(this.taskId));
-          this.scroll.refresh();
+          that.newScroll();
         });
       }
+    },
+    //初始化BScroll，定位到指定目录
+    newScroll() {
+      const options = {
+        click: true,
+        taps: true
+      };
+      const WRAPPER = this.$refs.wrapper;
+      const DOCUMENTHEIGHT = document.documentElement.clientHeight;
+      const APPHEIGHT = document.getElementById("app").clientHeight;
+      const PROCESSHEIGHT = document.getElementById("progress-bar")==null?
+                      0:document.getElementById("progress-bar").clientHeight;
+      const SWIPERHEIGHT = document.getElementById("swiper-directory")==null?
+                      0 : document.getElementById("swiper-directory").clientHeight;
+      WRAPPER.style.height =DOCUMENTHEIGHT - APPHEIGHT - PROCESSHEIGHT - SWIPERHEIGHT + "px";
+      this.scroll = new BScroll(WRAPPER, options);
     },
     //类型操作
     judgType(item, list, index) {
@@ -158,6 +170,10 @@ export default {
         }
       } else if (item.type == "lesson") {
         this.currentLesson = index;
+        //实际课时数
+        if (item.isExist) {
+          this.lessonNum = this.lessonNum + 1;
+        }
         if (item.tasks != null) {
           this.computedNum(item.tasks.length - 1, "tasksNum");
           this.mapChild(item.tasks);
@@ -194,14 +210,14 @@ export default {
     },
     //计算目录值
     computedNum(nums, types) {
-      let current
+      let current;
       if (this.level == 3) {
-        current=this.currentChapter
+        current = this.currentChapter;
       } else {
-        current=this.currentUnit
+        current = this.currentUnit;
       }
       let num = this.item[current][types] + nums;
-       this.$set(this.item[current], types, num);
+      this.$set(this.item[current], types, num);
     },
     //递归遍历目录
     mapChild(list) {

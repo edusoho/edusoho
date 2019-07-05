@@ -1,4 +1,4 @@
-import { formatTimeByNumber } from '@/utils/date-toolkit';
+import { formatTimeByNumber, formatCompleteTime } from '@/utils/date-toolkit';
 
 const filters = [
   {
@@ -70,6 +70,51 @@ const filters = [
           return '';
         default:
           return '';
+      }
+    }
+  },
+  {
+    name: 'filterTaskTime',
+    handler(task) {
+      if (task.status !== 'published') {
+        return '';
+      }
+      switch (task.type) {
+        case 'video':
+        case 'audio':
+          if (task.mediaSource !== 'self' && task.type !== 'audio') {
+            return '';
+          }
+          return `${formatTimeByNumber(task.length)}`;
+        case 'live':
+          const now = new Date().getTime();
+          const startTimeStamp = new Date(task.startTime * 1000);
+          const endTimeStamp = new Date(task.endTime * 1000);
+          // 直播未开始
+          if (now <= startTimeStamp) {
+            return `${formatCompleteTime(startTimeStamp)}开始`;
+          }
+          if (now > endTimeStamp) {
+            if (task.activity.replayStatus === 'ungenerated') {
+              return '已结束';
+            }
+            return '回放';
+          }
+          return '直播中';
+        // case 'testpaper':
+        //   const nowTime = new Date().getTime();
+        //   const testStartTime = new Date(task.startTime * 1000);
+        //   // 考试未开始
+        //   if (nowTime <= testStartTime) {
+        //     return `${formatCompleteTime(startTimeStamp)}开始`;
+        //   }
+        //   return '';
+        case 'text':
+        case 'doc':
+        case 'ppt':
+          return '';
+        default:
+          return '暂不支持';
       }
     }
   },

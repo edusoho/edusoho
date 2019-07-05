@@ -13,10 +13,13 @@
         overflow: hidden; 
         width: 100%; 
         background-color: #fff; 
-        height:300px;
+        touch-action: none;
+        .pd-bo{
+            padding-bottom: vw(20)
+        }
     }
     .swiper-directory{
-        margin: vw(12) 0 vw(10) 0;
+        padding: vw(12) 0 vw(10) 0;
         .swiper-directory-active{
             color: rgba(64,143,251,1)!important;
             background:rgba(64,143,251,0.08)!important;
@@ -105,7 +108,7 @@
         color: #333333;
         border:1px solid rgba(245,245,245,1);
         .lessonactive{
-            color: #408FFB;
+            color: #408FFB!important;
         }
         .tryLes{
             padding: vw(0) vw(2);

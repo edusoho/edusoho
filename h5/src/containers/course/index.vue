@@ -33,6 +33,9 @@
     watch: {
       joinStatus(status) {
         this.getComponent(status);
+        if(status){
+          this.getStudyTask();
+        }
       }
     },
     created(){
@@ -46,7 +49,8 @@
     },
     methods: {
       ...mapActions('course', [
-        'getCourseDetail'
+        'getCourseDetail',
+        'getNextStudy'
       ]),
       ...mapMutations('course', {
         setSourceType: types.SET_SOURCETYPE
@@ -54,6 +58,14 @@
       getComponent(status) {
         this.currentComp = status ? joinAfter : joinBefore;
       },
+      //获取学习状态
+      getStudyTask(){
+        this.getNextStudy({
+          courseId: this.$route.params.id
+        }).then(() => {}).catch(err => {
+          Toast.fail(err.message)
+        })
+      }
     },
     beforeRouteLeave (to, from, next) {
       this.setSourceType({

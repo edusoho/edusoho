@@ -7,7 +7,9 @@ const state = {
   sourceType: 'img', //
   details: {},
   taskId: 0, // 任务id
-  courseLessons: [] // 课程中所有任务
+  courseLessons: [], // 课程中所有任务
+  nextStudy: {}, // 下一次学习
+  OptimizationCourseLessons: [] // 优化后的课程中所有任务
 };
 
 const hasJoinedCourse = course => course.member;
@@ -15,6 +17,12 @@ const hasJoinedCourse = course => course.member;
 const mutations = {
   [types.GET_COURSE_LESSONS](currentState, payload) {
     currentState.courseLessons = payload;
+  },
+  [types.GET_OPTIMIZATION_COURSE_LESSONS](currentState, payload) {
+    currentState.OptimizationCourseLessons = payload;
+  },
+  [types.GET_NEXT_STUDY](currentState, payload) {
+    currentState.nextStudy = payload;
   },
   [types.GET_COURSE_DETAIL](currentState, payload) {
     currentState.selectedPlanId = payload.id;
@@ -36,11 +44,13 @@ const actions = {
     const query = { courseId };
     return Promise.all([
       Api.getCourseDetail({ query }),
-      Api.getCourseLessons({ query })
-    ]).then(([courseDetail, coursePlan]) => {
+      Api.getCourseLessons({ query }),
+      Api.getOptimizationCourseLessons({ query })
+    ]).then(([courseDetail, coursePlan, OptimizationCoursePlan]) => {
       commit(types.GET_COURSE_DETAIL, courseDetail);
       commit(types.GET_COURSE_LESSONS, coursePlan);
-      return [courseDetail, coursePlan];
+      commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
+      return [courseDetail, coursePlan, OptimizationCoursePlan];
     });
   },
   joinCourse({ commit }, { id }) {
@@ -54,6 +64,12 @@ const actions = {
         commit(types.JOIN_COURSE, res);
       }
       return res;
+    });
+  },
+  getNextStudy({ commit }, { courseId }) {
+    const query = { courseId };
+    return Api.getNextStudy({ query }).then(nextStudy => {
+      commit(types.GET_NEXT_STUDY, nextStudy);
     });
   }
 };

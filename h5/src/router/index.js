@@ -28,6 +28,14 @@ const routes = [
         },
         component: () =>
           import(/* webpackChunkName: "loginPrelogin" */'@/containers/login/prelogin.vue')
+      },
+      { // 用于测试
+        path: '/course/afterjoin-directory',
+        name: 'afterjoin-directory',
+        meta: {
+          title: '课程目录测试'
+        },
+        component: () => import(/* webpackChunkName: "course" */'@/containers/course/detail/afterjoin-directory.vue')
       }
     ]
   }, {

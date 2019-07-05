@@ -40,8 +40,8 @@
       
       <!-- task任务 -->
       <div class="lesson-items" v-if="lessonItem.tasks.length>1" >
-        <div class="litem" v-for="(taskItem,taskIndex) in lessonItem.tasks" :id="taskItem.id" :key="taskIndex" v-if="taskItem.mode!='lesson'" @click="lessonCellClick(taskItem)">
-          <div class="litem-r text-overflow" :class="{ 'lessonactive': (currentTask==taskItem.id) }">
+        <div class="litem" v-for="(taskItem,taskIndex) in lessonItem.tasks" :id="taskItem.id"  :key="taskIndex" v-if="taskItem.mode!='lesson'" @click="lessonCellClick(taskItem)">
+          <div class="litem-r text-overflow" :class="{ 'lessonactive': (currentTask==Number(taskItem.id)) }">
             <!-- <span class="tryLes">试听</span> -->
             <i class="iconfont" :class="iconfont(taskItem.type)"></i>{{ Number(taskItem.isOptional) ? '选修 ' : '课时' }}{{ Number(taskItem.isOptional) ? ' ' : `${taskItem.number}:${lessonItem.title}`}}
           </div>
@@ -84,7 +84,7 @@ export default {
     },
   data(){
     return{
-      currentTask:this.taskId
+      currentTask:-1
     }
   },
   watch:{
@@ -92,6 +92,9 @@ export default {
     lesson: {
       handler: 'lessonPosition',
       immediate: true
+    },
+    taskId:function(val){
+      this.currentTask=val
     }
   },
   computed:{
@@ -133,8 +136,6 @@ export default {
         }
 
         this.currentTask=task.id;
-        console.log(task.id)
-        console.log(this.currentTask)
         const details = this.details;
 
         !details.allowAnonymousPreview && this.$router.push({

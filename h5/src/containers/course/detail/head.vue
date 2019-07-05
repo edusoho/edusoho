@@ -198,10 +198,11 @@ export default {
     },
     loadPlayerSDK () {
       if (!window.VideoPlayerSDK) {
-
-        const scrptSrc = '//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
-          + (Date.now() / 1000 / 60);
-          // Cache SDK for 1 min.
+        const VEDIOURL='//service-cdn.cg-dev.cn/js-sdk/video-player/sdk-v1.js?v='
+      //const VEDIOURL='//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
+      // const scrptSrc = VEDIOURL + (Date.now() / 1000 / 60);
+      const scrptSrc =  VEDIOURL+ (Date.now() / 1000 / 60);
+      // Cache SDK for 1 min.
 
         return new Promise((resolve, reject) => {
           loadScript(scrptSrc, (err) => {
