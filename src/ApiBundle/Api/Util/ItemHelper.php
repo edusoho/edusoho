@@ -45,6 +45,12 @@ class ItemHelper
 
             switch ($item['type']) {
                 case 'chapter':
+                    // 如果上一章没有节或课时，则补全节
+                    if ('chapter' == $lastItem) {
+                        ++$nowUnitIndex;
+                        $treeItems[$nowChapterIndex]['children'][] = $this->blankUnit;
+                        $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
+                    }
                     ++$nowChapterIndex;
                     $nowUnitIndex = -1; //新章创建后，应重置当前节
                     $treeItems[$nowChapterIndex] = $item;
