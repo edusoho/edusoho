@@ -3179,3 +3179,8 @@ drag_captcha:
 login_wechat_qrcode:
     path:     /login/wechat/qrcode
     defaults: { _controller: AppBundle:Login:wechatQrcode }
+
+
+test_tiku:
+    path:     /test
+    defaults: { _controller: AppBundle:Cloud:testTiku }
