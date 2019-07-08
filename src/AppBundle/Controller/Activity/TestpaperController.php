@@ -30,7 +30,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
 
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
-        if (!$testpaperResult || ($testpaperResult['status'] == 'doing' && !$testpaperResult['updateTime']) || $testpaper['status'] != 'open') {
+        if (!$testpaperResult || ('doing' == $testpaperResult['status'] && !$testpaperResult['updateTime']) || 'open' != $testpaper['status']) {
             return $this->render('activity/testpaper/show.html.twig', array(
                 'activity' => $activity,
                 'testpaperActivity' => $testpaperActivity,
@@ -38,7 +38,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
                 'testpaper' => $testpaper,
                 'courseId' => $activity['fromCourseId'],
             ));
-        } elseif ($testpaperResult['status'] === 'finished') {
+        } elseif ('finished' === $testpaperResult['status']) {
             return $this->forward('AppBundle:Testpaper/Testpaper:showResult', array(
                 'resultId' => $testpaperResult['id'],
             ));
