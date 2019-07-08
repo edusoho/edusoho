@@ -404,6 +404,11 @@ class ManageController extends BaseController
             }
             $fields['questions'] = json_decode($fields['questions'], true);
 
+            if (empty($fields['questionTypeSeq'])) {
+                return $this->createMessageResponse('error', '题型排序错误');
+            }
+            $fields['questionTypeSeq'] = json_decode($fields['questionTypeSeq'], true);
+
             if (count($fields['questions']) > 2000) {
                 return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
             }
@@ -563,6 +568,12 @@ class ManageController extends BaseController
             'data' => $data,
             'analysis' => $analysis,
             'task' => $task,
+        ));
+    }
+
+    public function reEditAction(Request $request)
+    {
+        return $this->render('testpaper/manage/re-edit.html.twig', array(
         ));
     }
 

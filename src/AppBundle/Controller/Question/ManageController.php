@@ -370,6 +370,12 @@ class ManageController extends BaseController
         return $this->createJsonResponse($typesNum);
     }
 
+    public function reEditAction(Request $request)
+    {
+        return $this->render('question-manage/re-edit.html.twig', array(
+        ));
+    }
+
     protected function getQuestionConfig()
     {
         return $this->get('extension.manager')->getQuestionTypes();
