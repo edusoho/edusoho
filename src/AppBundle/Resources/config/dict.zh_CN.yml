@@ -228,6 +228,7 @@ userKeyWordType:
     verifiedMobile: 手机号
     email: 邮件地址
     loginIp: 登录IP
+    idcard: 身份证号
 
 jobCycle:
     once: 一次
