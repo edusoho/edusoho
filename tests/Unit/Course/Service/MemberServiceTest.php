@@ -225,7 +225,7 @@ class MemberServiceTest extends BaseTestCase
      * @expectedException \Biz\Course\CourseException
      * @expectedExceptionMessage exception.course.not_found
      */
-    public function testRemoveStudentWithExistCourse()
+    public function testRemoveStudentWithNotExistCourse()
     {
         $this->getMemberService()->removeStudent(1, 1);
     }
@@ -234,7 +234,7 @@ class MemberServiceTest extends BaseTestCase
      * @expectedException \Biz\Course\MemberException
      * @expectedExceptionMessage exception.course.member.not_found
      */
-    public function testRemoveStudentWithExistMember()
+    public function testRemoveStudentWithNotExistMember()
     {
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array('id' => 1)),
@@ -356,7 +356,7 @@ class MemberServiceTest extends BaseTestCase
      * @expectedException \Biz\Course\MemberException
      * @expectedExceptionMessage exception.course.member.not_found
      */
-    public function testRemarkStudentWithExistMember()
+    public function testRemarkStudentWithNotExistMember()
     {
         $this->mockBiz('Course:CourseMemberDao', array(
             array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array()),
@@ -531,7 +531,7 @@ class MemberServiceTest extends BaseTestCase
         $this->assertEquals(0, $member['locked']);
     }
 
-    public function testBatchCreateMembersWithExistMembers()
+    public function testBatchCreateMembersWithNotExistMembers()
     {
         $result = $this->getMemberService()->batchCreateMembers(array());
         $this->assertNull($result);
@@ -664,7 +664,7 @@ class MemberServiceTest extends BaseTestCase
      * @expectedException \Biz\User\UserException
      * @expectedExceptionMessage exception.user.not_found
      */
-    public function testRemoveCourseStudentWithExistUser()
+    public function testRemoveCourseStudentWithNotExistUser()
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
@@ -684,7 +684,7 @@ class MemberServiceTest extends BaseTestCase
      * @expectedException \Biz\Course\MemberException
      * @expectedExceptionMessage exception.course.member.not_found
      */
-    public function testRemoveCourseStudentWithExistMember()
+    public function testRemoveCourseStudentWithNotExistMember()
     {
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'tryManageCourse', 'returnValue' => array()),
@@ -697,7 +697,7 @@ class MemberServiceTest extends BaseTestCase
      * @expectedException \Biz\Course\MemberException
      * @expectedExceptionMessage exception.course.member.not_student
      */
-    public function testRemoveCourseStudentWithNotStudennt()
+    public function testRemoveCourseStudentWithNotStudent()
     {
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'tryManageCourse', 'returnValue' => array()),
@@ -737,7 +737,7 @@ class MemberServiceTest extends BaseTestCase
         $this->assertCount(2, $results);
     }
 
-    public function testBatchBecomeStudentsWithExistMemberIds()
+    public function testBatchBecomeStudentsWithNotExistMemberIds()
     {
         $result = $this->getMemberService()->batchBecomeStudents(1, array());
 
@@ -748,7 +748,7 @@ class MemberServiceTest extends BaseTestCase
      * @expectedException \Biz\Course\CourseException
      * @expectedExceptionMessage exception.course.not_found
      */
-    public function testBatchBecomeStudentsWithExistCourse()
+    public function testBatchBecomeStudentsWithNotExistCourse()
     {
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array()),
@@ -892,7 +892,7 @@ class MemberServiceTest extends BaseTestCase
      * @expectedException \Biz\Course\CourseException
      * @expectedExceptionMessage exception.course.not_found
      */
-    public function testBecomeStudentWithExistCourse()
+    public function testBecomeStudentWithNotExistCourse()
     {
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array()),
@@ -962,7 +962,7 @@ class MemberServiceTest extends BaseTestCase
      * @expectedException \Biz\Order\OrderException
      * @expectedExceptionMessage exception.order.not_found
      */
-    public function testBecomeStudentWithExistOrder()
+    public function testBecomeStudentWithNotExistOrder()
     {
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array('status' => 'published', 'expiryMode' => 'days', 'expiryDays' => 1)),
@@ -981,7 +981,7 @@ class MemberServiceTest extends BaseTestCase
      * @expectedException \Biz\Order\OrderException
      * @expectedExceptionMessage exception.order.not_found
      */
-    public function testBecomeStudentWithExistOrder2()
+    public function testBecomeStudentWithNotExistOrder2()
     {
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array('status' => 'published', 'expiryMode' => 'date', 'expiryEndDate' => date('Y-m-d', time()))),
