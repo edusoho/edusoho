@@ -152,6 +152,45 @@ class NotificationServiceTest extends BaseTestCase
         $this->assertEmpty($batches);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage 获取发送结果错误
+     */
+    public function testBatchHandleNotificationResultsException()
+    {
+        $batches = array(
+            array(
+                'status' => 'unfinished',
+                'sn' => 'test',
+            ),
+        );
+
+        $biz = $this->getBiz();
+        $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
+        $exception = new \Exception();
+        $mockNotificationService->shouldReceive('batchGetNotifications')->andThrow($exception);
+        $biz['qiQiuYunSdk.notification'] = $mockNotificationService;
+
+        $this->getNotificationService()->batchHandleNotificationResults($batches);
+    }
+
+    public function testBatchHandleNotificationResultsWithEmptyResultData()
+    {
+        $batches = array(
+            array(
+                'status' => 'unfinished',
+                'sn' => 'test',
+            ),
+        );
+        $biz = $this->getBiz();
+        $mockNotificationService = \Mockery::mock('QiQiuYun\SDK\Service\NotificationService');
+        $mockNotificationService->shouldReceive('batchGetNotifications')->andReturn(array('data' => ''));
+        $biz['qiQiuYunSdk.notification'] = $mockNotificationService;
+
+        $result = $this->getNotificationService()->batchHandleNotificationResults($batches);
+        $this->assertEmpty($result);
+    }
+
     public function testCreateWeChatNotificationRecord()
     {
         $data = array('userName' => array('value' => 'testName'));
