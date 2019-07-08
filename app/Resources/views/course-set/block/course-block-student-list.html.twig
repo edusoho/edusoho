@@ -40,7 +40,13 @@
                     </div>
                     <div class="metas clearfix">
                       {% if setting('course.show_student_num_enabled', '1') == 1  %}
-                        <span class="num"><i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}</span>
+                        <span class="num">
+                          {% if setting('course.show_cover_num_mode') == 'studentNum' %}
+                            <i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}
+                          {% elseif setting('course.show_cover_num_mode') == 'hitNum' %}
+                            <i class="es-icon es-icon-view"></i>{{ course.hitNum }}
+                          {% endif %}
+                        </span>
                       {% endif %}
                       <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
                       {% set course = courseSet.course|default(null) %}

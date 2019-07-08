@@ -55,7 +55,7 @@ class ClassroomCourseExpiryDateEventSubscriber extends EventSubscriber implement
 
     protected function canUpdateCoursesExpiryDate($classroom, $expiryMode)
     {
-        if ($classroom['status'] == 'draft') {
+        if ('draft' == $classroom['status']) {
             return true;
         }
 
@@ -68,7 +68,7 @@ class ClassroomCourseExpiryDateEventSubscriber extends EventSubscriber implement
 
     protected function canUpdateCoursesMembersDeadline($classroom, $expiryMode)
     {
-        if ($expiryMode == $classroom['expiryMode'] && $expiryMode != 'days') {
+        if ($expiryMode == $classroom['expiryMode'] && 'days' != $expiryMode) {
             return true;
         }
 
@@ -77,7 +77,7 @@ class ClassroomCourseExpiryDateEventSubscriber extends EventSubscriber implement
 
     protected function updateCoursesStudentsDeadline($classroomId, $fields)
     {
-        if ($fields['expiryMode'] == 'date') {
+        if ('date' == $fields['expiryMode']) {
             $this->getCourseMemberService()->updateMembersDeadlineByClassroomId($classroomId, $fields['expiryValue']);
         }
     }
