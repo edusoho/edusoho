@@ -202,7 +202,7 @@ class ManageController extends BaseController
             'questions' => $essayQuestions,
             'student' => $student,
             'accuracy' => $accuracy,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
             'total' => $total,
             'source' => $source,
             'targetId' => $targetId,
@@ -508,7 +508,7 @@ class ManageController extends BaseController
             'paperResult' => array(),
             'total' => $total,
             'attachments' => $attachments,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
         ));
     }
 
@@ -538,7 +538,7 @@ class ManageController extends BaseController
             'analyses' => ArrayToolkit::groupIndex($analyses, 'questionId', 'choiceIndex'),
             'paper' => $paper,
             'questions' => $questions,
-            'questionTypes' => $this->getCheckedQuestionType($paper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($paper),
             'relatedData' => $relatedData,
             'targetType' => $targetType,
         ));
@@ -655,20 +655,6 @@ class ManageController extends BaseController
         }
 
         return $essayQuestions;
-    }
-
-    protected function getCheckedQuestionType($testpaper)
-    {
-        $questionTypes = array();
-        if (!empty($testpaper['metas']['counts'])) {
-            foreach ($testpaper['metas']['counts'] as $type => $count) {
-                if ($count > 0) {
-                    $questionTypes[] = $type;
-                }
-            }
-        }
-
-        return $questionTypes;
     }
 
     protected function getQuestionTypes()
