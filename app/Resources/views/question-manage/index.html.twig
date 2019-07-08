@@ -6,7 +6,7 @@
 {% set parentId = parentQuestion.id|default(0) %}
 
 {% set side_nav = 'question' %}
-{% do script(['app/js/question-manage/index.js',]) %}
+{% do script(['libs/jquery-intro.js', 'app/js/question-manage/index.js',]) %}
 
 {% block main %}
 
@@ -16,6 +16,7 @@
     <div class="courseset-manage-body__title">
       <div class="courseset-manage-body__btn">
         {{ slot('course_set.questions_import_btn.extension', {'courseSet': courseSet}) }}
+        <a href="#" class="cd-btn cd-btn-info cd-btn-sm js-import-btn"><i class="cd-icon cd-icon-add cd-text-sm"></i>题目导入</a>
         {% for type,name in questionTypes %}
           {% if loop.index <= 3 %}
             <a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:type,parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="cd-btn cd-btn-info cd-btn-sm"><i class="cd-icon cd-icon-add cd-text-sm"></i>{{ name|trans }}</a>
