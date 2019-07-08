@@ -2,10 +2,10 @@
 
 {% set modal_class = 'cd-modal-dialog' %}
 
-{% do script(['libs/jquery-validation.js', 'app/js/testpaper-manage/read/index.js']) %}
+{% do script(['libs/jquery-validation.js', 'app/js/question-manage/read/index.js']) %}
 
 {% block title %}
-  {{ 'course.testpaper_manage.import'|trans }}
+  {{ 'course.question_manage.import.modal_title'|trans }}
 {% endblock %}
 
 {% block body %}
@@ -25,7 +25,7 @@
   <div class="tab-content js-content" id="import-testpaper-box">
     <div class="tab-pane js-course-tasks-pane active">
       <form class="form-horizontal js-step1-view" id="import-step-form" method="post"
-            action="{{ path('course_set_manage_testpaper_read', {id: courseSet.id}) }}" enctype="multipart/form-data">
+            action="{{ path('course_set_manage_question_read', {id: courseSet.id}) }}" enctype="multipart/form-data">
         <div class="cd-form-group mb0 clearfix">
           <div class="upload-file-box" id="upload-file-box">
             <p class="cd-mb24 color088 text-16 text-align">{{ 'course.question_manage.import.new_hint'|trans }}</p>

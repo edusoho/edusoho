@@ -115,8 +115,8 @@ const registerEvent = function($importBox) {
   }
 
   $oldTemplate.click(function() {
-    let courseSetId = $('#courseSet_Id').val();
-    let url = `/course_set/${courseSetId}/manage/testpaper/plumber`;
+    let url = $form.attr('action');
+    url = url.replace(/read/g, 'plumber');
 
     $.ajax({
       type: 'get',

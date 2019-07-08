@@ -1596,6 +1596,20 @@ course.question_manage.manage.steom_tips: >
   点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对
 course.question_manage.manage.material: 材料
 course.question_manage.edit: 编辑题目
+course.question_manage.import.btn: 导入题目
+course.question_manage.import.modal_title: 题目导入
+course.question_manage.import.new_hint: 全新导入机制，导入更高效
+course.question_manage.import.drag_document_hint: 或将文档拖拽至此
+course.question_manage.import.docx_support_hint: 仅支持DOCX格式，
+course.question_manage.import.download_template: 模板下载
+course.question_manage.import.doc_to_docx_hint: DOC如何转换成DOCX?
+course.question_manage.import.upload_document: 上传文档
+course.question_manage.import.reupload_document: 重新上传文档
+course.question_manage.import.uploading: 上传中...
+course.question_manage.import.use_old_template: 仍然使用旧模板
+course.question_manage.impport.cancle: 取消
+course.question_manage.import.docx_support_hint2: 请上传DOCX格式的Word文档
+course.question_manage.import.doc_to_docx_hint2: DOC如何转换成DOCX可<a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">点击此处</a>进行查看
 
 course.testpaper_manage: 课程试卷
 course.testpaper_manage.testpaper: 试卷
