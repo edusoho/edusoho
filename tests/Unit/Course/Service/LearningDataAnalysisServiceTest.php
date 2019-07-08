@@ -62,7 +62,7 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
                 'taskCount' => 100,
                 'progress' => 30.0,
                 'taskResultCount' => 30,
-                'toLearnTasks' => null,
+                'toLearnTasks' => array(),
                 'taskPerDay' => 0,
                 'planStudyTaskCount' => 0,
                 'planProgressProgress' => 0,

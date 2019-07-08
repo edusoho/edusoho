@@ -1182,7 +1182,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(),
+                'returnValue' => array('id' => 1),
             ),
             array(
                 'arguments' => true,
@@ -1264,7 +1264,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(),
+                'returnValue' => array('id' => 1),
             ),
             array(
                 'arguments' => true,

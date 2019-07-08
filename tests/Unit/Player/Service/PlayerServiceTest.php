@@ -126,7 +126,7 @@ class PlayerServiceTest extends BaseTestCase
     public function testGetPptFilePlayer()
     {
         $this->mockBiz('File:UploadFileService', array(
-            array('functionName' => 'getFullFile', 'returnValue' => array(), 'withParams' => array(1)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'live'), 'withParams' => array(1)),
             array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'success'), 'withParams' => array(2)),
             array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'error'), 'withParams' => array(3)),
             array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'processing'), 'withParams' => array(4)),
