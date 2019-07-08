@@ -71,8 +71,8 @@ export default {
   },
   computed: {
     ...mapState("course", {
-      OptimizationCourseLessons: state => state.OptimizationCourseLessons,
-      nextStudy: state => state.nextStudy
+      nextStudy: state => state.nextStudy,
+      OptimizationCourseLessons: state => state.OptimizationCourseLessons
     }),
     hasChapter: function() {
       if (this.chapterNum == 0) {
@@ -82,12 +82,12 @@ export default {
     }
   },
   watch: {
-    OptimizationCourseLessons: {
-      handler: "processItem",
-      immediate: true
-    },
     nextStudy: {
       handler: "getNextStudy",
+      immediate: true
+    },
+    OptimizationCourseLessons: {
+      handler: "processItem",
       immediate: true
     }
   },
@@ -204,7 +204,7 @@ export default {
         }
       } else {
         //找到下一次学习对应的课时对应的滑动索引
-        if (item.id == Number(this.taskId)) {
+        if (item.id == this.taskId) {
           this.slideIndex =
             this.level == 3 ? this.currentChapter : this.currentUnit;
         }
