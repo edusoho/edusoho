@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Task\Strategy;
 
-use Biz\Task\Strategy\Impl\DefaultStrategy;
-use Biz\BaseTestCase;
-use Mockery;
 use AppBundle\Common\ReflectionUtils;
+use Biz\BaseTestCase;
+use Biz\Task\Strategy\Impl\DefaultStrategy;
+use Mockery;
 
 class DefaultStrategyTest extends BaseTestCase
 {
@@ -21,6 +21,122 @@ class DefaultStrategyTest extends BaseTestCase
     {
         $result = $this->getDefaultStrategy()->canLearnTask(array('id' => 1));
         $this->assertTrue($result);
+    }
+
+    public function testGetTasksListJsonData()
+    {
+        $this->mockTasks();
+        $result = $this->getDefaultStrategy()->getTasksListJsonData(1);
+
+        $this->assertEquals('lesson-manage/default-list.html.twig', $result['template']);
+        $this->assertNotEmpty($result['data']['items']['chapter-1']);
+    }
+
+    public function testGetTasksJsonData()
+    {
+        $this->mockTasks();
+
+        $result = $this->getDefaultStrategy()->getTasksJsonData(array('courseId' => 1, 'categoryId' => 1));
+
+        $this->assertEquals('lesson-manage/default/lesson.html.twig', $result['template']);
+        $this->assertEquals(1, $result['data']['lesson']['id']);
+        $this->assertNotEmpty($result['data']['course']);
+        $this->assertNotEmpty($result['data']['lesson']['tasks']);
+    }
+
+    private function mockTasks()
+    {
+        $tasks = array(
+            array(
+                'id' => 1,
+                'categoryId' => 1,
+                'title' => 'task1 title',
+                'mode' => 'preparation',
+            ),
+            array(
+                'id' => 2,
+                'categoryId' => 1,
+                'title' => 'task2 title',
+                'mode' => 'lesson',
+            ),
+            array(
+                'id' => 3,
+                'categoryId' => 1,
+                'title' => 'task3 title',
+                'mode' => 'exercise',
+            ),
+        );
+
+        $this->mockBiz('Course:CourseService', array(
+            array(
+                'functionName' => 'getCourse',
+                'withParams' => array(1),
+                'returnValue' => array(
+                    'id' => 1,
+                ),
+            ),
+        ));
+        $this->mockBiz('Task:TaskService', array(
+            array(
+                'functionName' => 'findTasksFetchActivityByCourseId',
+                'withParams' => array(1),
+                'returnValue' => $tasks,
+            ),
+            array(
+                'functionName' => 'findTasksFetchActivityByChapterId',
+                'withParams' => array(1),
+                'returnValue' => $tasks,
+            ),
+        ));
+        $this->mockBiz('Course:CourseChapterDao', array(
+                array(
+                    'functionName' => 'findChaptersByCourseId',
+                    'returnValue' => array(
+                        array(
+                            'id' => 1,
+                            'courseId' => 1,
+                            'type' => 'lesson',
+                            'seq' => 1,
+                        ),
+                        array(
+                            'id' => 2,
+                            'courseId' => 1,
+                            'type' => 'lesson',
+                            'seq' => 2,
+                        ),
+                    ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array(1),
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+    }
+
+    /**
+     * @expectedException \Biz\Task\TaskException
+     * @expectedExceptionMessage exception.task.task_mode_error
+     */
+    public function testCreateTaskModeErrorException()
+    {
+        $this->getDefaultStrategy()->createTask(array('mode' => 'testMode'));
+    }
+
+    /**
+     * @expectedException \Biz\Task\TaskException
+     * @expectedExceptionMessage exception.task.not_found
+     */
+    public function testCreateTaskNotFoundTaskException()
+    {
+        $task = array(
+            'categoryId' => 1,
+            'mode' => 'exercise',
+        );
+        $this->getDefaultStrategy()->createTask($task);
     }
 
     public function testCreateTask()
@@ -51,7 +167,7 @@ class DefaultStrategyTest extends BaseTestCase
                     'functionName' => 'getByChapterIdAndMode',
                     'returnValue' => array(
                         'id' => 2,
-                        'status' => 'publishTask',
+                        'status' => 'published',
                         'isOptional' => '0',
                     ),
                     'whitParams' => array(2),
@@ -103,6 +219,15 @@ class DefaultStrategyTest extends BaseTestCase
         $this->assertEquals('published', $task['status']);
     }
 
+    /**
+     * @expectedException \Biz\Task\TaskException
+     * @expectedExceptionMessage exception.task.task_mode_error
+     */
+    public function testUpdateTaskModeErrorException()
+    {
+        $this->getDefaultStrategy()->updateTask(1, array('mode' => 'testMode'));
+    }
+
     public function testUpdateTask()
     {
         $this->mockTask();
@@ -126,6 +251,50 @@ class DefaultStrategyTest extends BaseTestCase
         $task = $this->getDefaultStrategy()->updateTask('30', $field);
         $this->getCourseService()->shouldHaveReceived('updateChapter')->times(1);
         $this->assertEquals('new title', $task['title']);
+    }
+
+    public function testDeleteTaskWithEmptyTask()
+    {
+        $result = $this->getDefaultStrategy()->deleteTask(array());
+        $this->assertNull($result);
+    }
+
+    public function testDeleteTaskWithMode()
+    {
+        $task = array(
+            'id' => 1,
+            'activityId' => 1,
+            'mode' => 'exercise',
+        );
+
+        $this->mockBiz('Task:TaskDao', array(
+            array(
+                'functionName' => 'delete',
+                'withParams' => array(1),
+                'runTimes' => 1,
+            ),
+        ));
+        $this->mockBiz('Task:TaskResultService', array(
+                array(
+                    'functionName' => 'deleteUserTaskResultByTaskId',
+                    'withParams' => array(1),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $this->mockBiz('Activity:ActivityService', array(
+                array(
+                    'functionName' => 'deleteActivity',
+                    'withParams' => array(1),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+
+        $this->getDefaultStrategy()->deleteTask($task);
+        $this->getTaskDao()->shouldHaveReceived('delete')->times(1);
+        $this->getTaskResultService()->shouldHaveReceived('deleteUserTaskResultByTaskId')->times(1);
+        $this->getActivityService()->shouldHaveReceived('deleteActivity')->times(1);
     }
 
     public function testDeleteTask()
@@ -209,10 +378,26 @@ class DefaultStrategyTest extends BaseTestCase
                 ),
             )
         );
+
+        $this->mockBiz('Course:LessonService', array(
+                array(
+                    'functionName' => 'deleteLesson',
+                    'withParams' => array(1, 1),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'countLessons',
+                    'withParams' => array(array('id' => 1)),
+                    'returnValue' => 1,
+                ),
+            )
+        );
+
         $this->getDefaultStrategy()->deleteTask($task);
         $this->getTaskDao()->shouldHaveReceived('delete')->times(2);
         $this->getTaskResultService()->shouldHaveReceived('deleteUserTaskResultByTaskId')->times(2);
         $this->getActivityService()->shouldHaveReceived('deleteActivity')->times(2);
+        $this->getCourseLessonService()->shouldHaveReceived('deleteLesson')->times(1);
     }
 
     public function testPrepareCourseItems()
@@ -234,6 +419,12 @@ class DefaultStrategyTest extends BaseTestCase
                             'courseId' => 1,
                             'type' => 'lesson',
                             'seq' => 2,
+                        ),
+                        array(
+                            'id' => 3,
+                            'courseId' => 1,
+                            'type' => 'exercise',
+                            'seq' => 3,
                         ),
                     ),
                 ),
@@ -382,5 +573,10 @@ class DefaultStrategyTest extends BaseTestCase
     private function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    private function getCourseLessonService()
+    {
+        return $this->createService('Course:LessonService');
     }
 }
