@@ -29,6 +29,8 @@ class QuestionTypeExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('getQuestionTypes', array($this, 'getQuestionTypes')),
             new \Twig_SimpleFunction('getQuestionTypeTemplate', array($this, 'getQuestionTypeTemplate')),
+            new \Twig_SimpleFunction('getQuestionTypeSeq', array($this, 'getQuestionTypeSeq')),
+            new \Twig_SimpleFunction('sortQuestionTypes', array($this, 'sortQuestionTypes')),
         );
     }
 
@@ -54,6 +56,39 @@ class QuestionTypeExtension extends \Twig_Extension
         }
 
         return $questionExtension[$type]['templates'][$showAction];
+    }
+
+    public function getQuestionTypeSeq()
+    {
+        $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
+
+        $typeSeq = array();
+        array_walk($questionExtension, function ($value, $type) use (&$typeSeq) {
+            $typeSeq[$type] = $value['seqNum'];
+        });
+
+        return $typeSeq;
+    }
+
+    public function sortQuestionTypes($types, $questionTypeSeq = array())
+    {
+        if (empty($questionTypeSeq)) {
+            return $types;
+        }
+
+        $newTypes = array();
+        $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
+
+        $typeSeq = array();
+        array_walk($questionExtension, function ($value, $type) use (&$typeSeq) {
+            $typeSeq[$type] = $value['seqNum'];
+        });
+        $typeSeq = array_flip($typeSeq);
+        foreach ($questionTypeSeq as $seq) {
+            $newTypes[$typeSeq[$seq]] = $types[$typeSeq[$seq]];
+        }
+
+        return $newTypes;
     }
 
     public function getName()
