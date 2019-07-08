@@ -6,7 +6,7 @@
 {% set side_nav = 'testpaper' %}
 {% set parentId = parentId | default(null) %}
 
-{% do script(['app/js/testpaper-manage/index.js']) %}
+{% do script(['libs/jquery-intro.js', 'app/js/testpaper-manage/index.js']) %}
 
 {% block main %}
 
@@ -15,6 +15,8 @@
       <div class="courseset-manage-body__btn">
         <a href="{{ path('course_set_manage_testpaper_create',{id:courseSet.id}) }}"
           class="cd-btn cd-btn-info cd-btn-sm pull-right mls"><i class="cd-icon cd-icon-add cd-text-sm"></i>{{ 'course.testpaper_manage.create_btn'|trans }}</a>
+        <a href="#"
+          class="cd-btn cd-btn-info cd-btn-sm pull-right mls js-import-btn"><i class="cd-icon cd-icon-add cd-text-sm"></i>{{ '导入试卷'|trans }}</a>
         {{ slot('course_set.testpaper_import_btn.extension', {'courseSet': courseSet}) }}
       </div>
     </div>
