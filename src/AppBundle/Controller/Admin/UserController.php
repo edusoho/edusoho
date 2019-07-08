@@ -538,7 +538,7 @@ class UserController extends BaseController
 
     protected function getUserProfileConditions($conditions)
     {
-        if ($conditions['keywordType'] == 'verifiedMobile') {
+        if ('verifiedMobile' == $conditions['keywordType']) {
             return array('mobile' => $conditions['keyword']);
         } else {
             return array('idcard' => $conditions['keyword']);

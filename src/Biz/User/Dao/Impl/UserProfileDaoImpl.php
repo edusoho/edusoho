@@ -82,11 +82,11 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
             $conditions['qq'] = "{$conditions['qq']}%";
         }
 
-        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'truename') {
+        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && 'truename' == $conditions['keywordType']) {
             $conditions['truename'] = "%{$conditions['keyword']}%";
         }
 
-        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'idcardLike') {
+        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && 'idcardLike' == $conditions['keywordType']) {
             $conditions['idcardLike'] = "%{$conditions['keyword']}%";
         }
 
