@@ -1,0 +1,12 @@
+  <div class="subject-item__operation">
+    <span><i class="es-icon es-icon-exam"></i>编辑</span>
+    <span><i class="es-icon es-icon-delete"></i>删除</span>
+    {% if type == 'material' %}
+      <span><i class="es-icon es-icon-add"></i>添加子问题</span>
+    {% endif %}
+    <span><i class="es-icon es-icon-add"></i>在此题后添加新题</span>
+  </div>
+  <div class="subject-item__footer">
+    <span>难度：</span><span class="cd-mr24 color-success">{{ difficulty }}</span>
+    <span>分数：</span><span class="color-success">{{ score }}分</span>
+  </div>
