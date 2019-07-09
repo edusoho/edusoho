@@ -115,6 +115,18 @@
         .lessonactive{
             color: #408FFB!important;
         }
+        .end{
+            border:vw(1) solid #999999;
+            color: #999999;
+        }
+        .back{
+            border:vw(1) solid #F99931;
+            color: #F99931;
+        }
+        .play{
+            color: #408FFB;
+        }
+
         .tryLes{
             padding: vw(0) vw(2);
             display: inline-block!important;
@@ -184,14 +196,6 @@
                 font-size: vw(12);
                 margin-left: vw(26);
                 margin-top: vw(3);
-                .end{
-                    border:vw(1) solid #999999;
-                    color: #999999;
-                }
-                .back{
-                    border:vw(1) solid #F99931;
-                    color: #F99931;
-                }
             }
             .bl{
                 line-height: normal!important;
@@ -202,6 +206,8 @@
             padding: vw(12) vw(15) vw(12) vw(15);
             
             .litem{
+                display: flex;
+                justify-content: space-between;
                 padding: vw(12) vw(0);
                 height: vw(20);
                 line-height: vw(20);
@@ -211,7 +217,6 @@
                 .litem-r{
                     color: #666666;
                     font-size: vw(14);
-                    width: vw(220);
                     .iconfont{
                         font-size: vw(16);
                         color: #BEBEBE;
@@ -220,7 +225,7 @@
                 }
                 .litem-l{
                     color:#999999;
-                    float:right;
+                    display: flex;
                     font-size: vw(14);
                     span{
                         margin-right: vw(9)
