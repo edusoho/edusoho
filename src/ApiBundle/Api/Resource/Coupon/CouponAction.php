@@ -59,14 +59,15 @@ class CouponAction extends AbstractResource
             return $this->error($result['message']);
         }
 
-        return $this->success();
+        return $this->success($result);
     }
 
-    private function success()
+    private function success($result)
     {
         return array(
             'success' => true,
             'message' => '领取成功，请在卡包中查看',
+            'data' => $result,
         );
     }
 
