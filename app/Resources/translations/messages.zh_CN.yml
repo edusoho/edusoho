@@ -5420,6 +5420,7 @@ admin.setting.site.master_email: 管理员邮箱地址
 admin.setting.site.copyright: 课程内容版权方
 admin.setting.site.copyright.help_block: 您可以填写网站名称或公司名称。
 admin.setting.site.icp: ICP备案号
+admin.setting.site.icp_url: ICP备案链接
 admin.setting.site.website_statistics_analysis: 网站统计分析代码部署
 admin.setting.site.analytics: 统计分析代码
 admin.setting.site.analytics.help_block: >
