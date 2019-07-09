@@ -5,6 +5,11 @@
 
 {% set step = '2' %}
 {% block order_body %}
+  {% if order.item.target_status == 'closed' %}
+    <div class="alert cd-alert cd-alert-warning alert-dismissible mb5" role="alert">
+      {{ ('par_center.'~order.item.target_type~'.close')|trans }}
+    </div>
+  {% endif %}
   <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
     {{ 'pay_center.pay.submit_tips'|trans }}
   </div>

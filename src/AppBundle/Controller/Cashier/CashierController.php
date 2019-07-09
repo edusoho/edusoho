@@ -3,6 +3,8 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\SettingService;
@@ -43,6 +45,16 @@ class CashierController extends BaseController
             return $this->createMessageResponse('info', $this->trans('cashier.order.status.changed_tips'));
         }
 
+        $orderItem = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+
+        $order['item'] = empty($orderItem) ? array() : array_shift($orderItem);
+        if (!empty($order['item']) && 'course' === $order['item']['target_type']) {
+            $courseSet = $this->getCourseSetService()->getCourseSet($order['item']['target_id']);
+            $order['item']['target_status'] = empty($courseSet['status']) ? '' : $courseSet['status'];
+        } elseif (!empty($order['item']) && 'classroom' === $order['item']['target_type']) {
+            $classroom = $this->getClassroomService()->getClassroom($order['item']['target_id']);
+            $order['item']['target_status'] = empty($classroom['status']) ? '' : $classroom['status'];
+        }
         $payments = $this->getPayService()->findEnabledPayments();
 
         return $this->render(
@@ -212,5 +224,21 @@ class CashierController extends BaseController
         $rateLimiter = $this->getBiz()->offsetGet('ratelimiter.factory');
 
         return $rateLimiter($name, $maxAllowance, $period);
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }
