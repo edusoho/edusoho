@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Question;
 
+use AppBundle\Common\FileToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Question\QuestionException;
 use Biz\Task\Service\TaskService;
@@ -82,6 +83,26 @@ class ManageController extends BaseController
             'courses' => $courses,
             'searchCourses' => $searchCourses,
             'showTasks' => $showTasks,
+        ));
+    }
+
+    public function readAction(Request $request, $id)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        if ($request->isMethod('POST')) {
+            $file = $request->files->get('importFile');
+            $ext = FileToolkit::getFileExtension($file);
+
+            if ('docx' == $ext) {
+                return $this->createJsonResponse(array('success' => true));
+            } else {
+                return $this->render('question-manage/read-error.html.twig');
+            }
+        }
+
+        return $this->render('question-manage/read-modal.html.twig', array(
+            'courseSet' => $courseSet,
         ));
     }
 

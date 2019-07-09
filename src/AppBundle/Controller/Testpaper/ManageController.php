@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Testpaper;
 
+use AppBundle\Common\FileToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
@@ -109,6 +110,26 @@ class ManageController extends BaseController
             'types' => $types,
             'questionNums' => $questionNums,
             'courses' => $manageCourses,
+        ));
+    }
+
+    public function readAction(Request $request, $id)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        if ($request->isMethod('POST')) {
+            $file = $request->files->get('importFile');
+            $ext = FileToolkit::getFileExtension($file);
+
+            if ('docx' == $ext) {
+                return $this->createJsonResponse(array('success' => true));
+            } else {
+                return $this->render('testpaper/manage/read-error.html.twig');
+            }
+        }
+
+        return $this->render('testpaper/manage/read-modal.html.twig', array(
+            'courseSet' => $courseSet,
         ));
     }
 
