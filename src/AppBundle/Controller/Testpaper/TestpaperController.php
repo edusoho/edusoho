@@ -99,7 +99,7 @@ class TestpaperController extends BaseController
             'favorites' => ArrayToolkit::column($favorites, 'questionId'),
             'total' => $total,
             'attachments' => $attachments,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
             'showTypeBar' => 1,
             'showHeader' => 0,
             'isDone' => true,
@@ -152,7 +152,7 @@ class TestpaperController extends BaseController
             'student' => $student,
             'source' => $request->query->get('source', 'course'),
             'attachments' => $attachments,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
             'task' => $task,
             'action' => $request->query->get('action', ''),
             'target' => $testpaperActivity,
@@ -182,20 +182,6 @@ class TestpaperController extends BaseController
         }
 
         return $this->createJsonResponse($response);
-    }
-
-    protected function getCheckedQuestionType($testpaper)
-    {
-        $questionTypes = array();
-        if (!empty($testpaper['metas']['counts'])) {
-            foreach ($testpaper['metas']['counts'] as $type => $count) {
-                if ($count > 0) {
-                    $questionTypes[] = $type;
-                }
-            }
-        }
-
-        return $questionTypes;
     }
 
     public function testSuspendAction(Request $request, $resultId)

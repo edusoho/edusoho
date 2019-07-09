@@ -1018,6 +1018,38 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $firstResults;
     }
 
+    public function getCheckedQuestionTypeBySeq($testpaper)
+    {
+        $questionTypes = array();
+        if (!empty($testpaper['metas']['counts'])) {
+            foreach ($testpaper['metas']['counts'] as $type => $count) {
+                if ($count > 0) {
+                    $questionTypes[] = $type;
+                }
+            }
+        }
+
+        if (empty($testpaper['questionTypeSeq'])) {
+            return $questionTypes;
+        }
+
+        global $kernel;
+        $typesConfig = $kernel->getContainer()->get('extension.manager')->getQuestionTypes();
+        $typeSeq = array();
+        $newTypes = array();
+        array_walk($typesConfig, function ($value, $type) use (&$typeSeq) {
+            $typeSeq[$type] = $value['seqNum'];
+        });
+        $typeSeq = array_flip($typeSeq);
+        foreach ($testpaper['questionTypeSeq'] as $seq) {
+            if (in_array($typeSeq[$seq], $questionTypes)) {
+                $newTypes[] = $typeSeq[$seq];
+            }
+        }
+
+        return $newTypes;
+    }
+
     private function getUserMaxScore($userResults)
     {
         if (1 === count($userResults)) {
