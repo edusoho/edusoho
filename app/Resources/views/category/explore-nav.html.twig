@@ -6,6 +6,10 @@
 {% if group == 'classroom' %}
   {% set path = 'classroom_explore' %}
   {% set orderByDefault = 'createdTime' %}
+{% elseif group == 'open_course' %}
+  {% set path = 'open_course_explore' %}
+  {% set orderByDefault = 'createdTime' %}
+  {% set group = 'course' %}
 {% else %}
   {% set path = 'course_set_explore' %}
   {% set orderByDefault = 'latest' %}
@@ -78,7 +82,6 @@
       </ul>
     </div>
   {% endif %}
-
   {% for tagGroup in tagGroups %}
     {% if group in tagGroup.scope %}
       {% if tagGroup.id not in selectedTagGroups %}

@@ -2,33 +2,38 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\Paginator;
-use Biz\Course\MaterialException;
-use Biz\OpenCourse\OpenCourseException;
-use Biz\User\Service\AuthService;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Component\MediaParser\ParserProxy;
-use Biz\User\Service\TokenService;
-use Biz\Taxonomy\Service\TagService;
+use Biz\Article\Service\CategoryService;
+use Biz\Course\MaterialException;
 use Biz\Course\Service\CourseService;
-use Biz\Thread\Service\ThreadService;
-use Biz\System\Service\SettingService;
-use Biz\File\Service\UploadFileService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MaterialService;
+use Biz\File\Service\UploadFileService;
+use Biz\OpenCourse\OpenCourseException;
+use Biz\OpenCourse\Service\OpenCourseRecommendedService;
+use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Thread\Service\ThreadService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Cookie;
-use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 
 class OpenCourseController extends BaseOpenCourseController
 {
-    public function exploreAction(Request $request)
+    public function exploreAction(Request $request, $category)
     {
-        $queryParam = $request->query->all();
-        $conditions = $this->_filterConditions($queryParam);
+        $conditions = $request->query->all();
+
+        list($conditions, $tags) = $this->_filterConditionTags($conditions);
+        list($conditions, $categoryArray, $categoryParent) = $this->_filterConditionCategories($conditions, $category);
+        $conditions = $this->_filterConditions($conditions);
 
         $pageSize = 18;
 
@@ -45,6 +50,10 @@ class OpenCourseController extends BaseOpenCourseController
             'courses' => $courses,
             'paginator' => $paginator,
             'teachers' => $teachers,
+            'category' => $category,
+            'categoryArray' => $categoryArray,
+            'categoryParent' => $categoryParent,
+            'tags' => $tags,
         ));
     }
 
@@ -707,12 +716,13 @@ class OpenCourseController extends BaseOpenCourseController
         return array_merge($currentPageCourses, $courses);
     }
 
-    private function _filterConditions($queryParam)
+    private function _filterConditions($conditions)
     {
-        $conditions = array('status' => 'published');
+        $conditions['status'] = 'published';
+        $conditions['parentId'] = 0;
 
-        if (!empty($queryParam['fliter']['type']) && 'all' != $queryParam['fliter']['type']) {
-            $conditions['type'] = $queryParam['fliter']['type'];
+        if (!empty($conditions['fliter']['type']) && 'all' != $conditions['fliter']['type']) {
+            $conditions['type'] = $conditions['fliter']['type'];
         }
 
         /*if (isset($queryParam['orderBy']) && $queryParam['orderBy'] == 'recommendedSeq') {
@@ -745,6 +755,74 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         return $this->getUserService()->findUsersByIds($userIds);
+    }
+
+    private function _filterConditionTags($conditions)
+    {
+        $selectedTag = '';
+        $selectedTagGroupId = '';
+        $tags = array();
+
+        if (empty($conditions['tag'])) {
+            return array($conditions, $tags);
+        }
+
+        if (!empty($conditions['tag']['tags'])) {
+            $tags = $conditions['tag']['tags'];
+        }
+
+        if (!empty($conditions['tag']['selectedTag'])) {
+            $selectedTag = $conditions['tag']['selectedTag']['tag'];
+            $selectedTagGroupId = $conditions['tag']['selectedTag']['group'];
+        }
+
+        if (isset($tags[$selectedTagGroupId]) && $tags[$selectedTagGroupId] == $selectedTag) {
+            unset($tags[$selectedTagGroupId]);
+        } else {
+            $tags[$selectedTagGroupId] = $selectedTag;
+        }
+
+        $tags = array_filter($tags);
+        if (empty($tags)) {
+            return array($conditions, $tags);
+        }
+
+        $conditions['tagIds'] = array_values($tags);
+
+        $tagOwnerIds = $this->getTagService()->findOwnerIdsByTagIdsAndOwnerType($conditions['tagIds'], 'openCourse');
+        $conditions['courseIds'] = empty($tagOwnerIds) ? array(-1) : $tagOwnerIds;
+
+        unset($conditions['tagIds']);
+
+        return array($conditions, $tags);
+    }
+
+    private function _filterConditionCategories($conditions, $category)
+    {
+        $categoryArray = array();
+        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+        $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
+
+        if (!empty($subCategory) && empty($thirdLevelCategory)) {
+            $conditions['code'] = $subCategory;
+        } elseif (!empty($thirdLevelCategory)) {
+            $conditions['code'] = $thirdLevelCategory;
+        } else {
+            $conditions['code'] = $category;
+        }
+
+        if (!empty($conditions['code'])) {
+            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+            $conditions['categoryId'] = $categoryArray['id'];
+            unset($conditions['code']);
+        }
+
+        $categoryParent = array();
+        if (!empty($categoryArray['parentId'])) {
+            $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
+        }
+
+        return array($conditions, $categoryArray, $categoryParent);
     }
 
     /**
@@ -846,5 +924,13 @@ class OpenCourseController extends BaseOpenCourseController
     protected function getLiveReplayService()
     {
         return $this->createService('Course:LiveReplayService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 }
