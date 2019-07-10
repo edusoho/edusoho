@@ -88,7 +88,8 @@ export default {
     },
     OptimizationCourseLessons: {
       handler: "processItem",
-      immediate: true
+      immediate: true,
+      deep:true
     }
   },
   methods: {
@@ -103,6 +104,7 @@ export default {
     },
     //处理数据
     processItem() {
+      console.log(1)
       let res = this.OptimizationCourseLessons;
       const that = this;
       this.chapterNum = 0; //章节数
@@ -210,7 +212,15 @@ export default {
         }
         //task下放入task中type=lesson的索引
         if (this.level == 3) {
-          if (item.mode == "lesson") {
+          //非默认教学计划
+          if(item.mode==null){
+            this.$set(
+              this.item[this.currentChapter].children[this.currentUnit]
+                .children[this.currentLesson],
+              "index",
+              0
+            );
+          }else if (item.mode == "lesson") {
             this.$set(
               this.item[this.currentChapter].children[this.currentUnit]
                 .children[this.currentLesson],
@@ -219,7 +229,14 @@ export default {
             );
           }
         } else {
-          if (item.mode == "lesson") {
+          if(item.mode==null){
+            this.$set(
+              this.item[this.currentChapter].children[this.currentUnit]
+                .children[this.currentLesson],
+              "index",
+              0
+            );
+          }else if (item.mode == "lesson") {
             this.$set(
               this.item[this.currentUnit].children[this.currentLesson],
               "index",

@@ -1,35 +1,35 @@
 <template>
-  <div v-if="lesson.length>0">
+  <div v-if="hasLesson">
     <div class="lesson-directory" v-for="(lessonItem,lessonIndex) in lesson" :key="lessonIndex">
       <div
         class="lesson-title"
         :id="lessonItem.tasks[lessonItem.index].id"
-        :class="{'zb-ks' : doubleLine(lessonItem.tasks[lessonItem.index].type)}"
+        :class="{'zb-ks' : doubleLine(lessonItem.tasks[lessonItem.index])}"
         @click="lessonCellClick(lessonItem.tasks[lessonItem.index])"
       >
         <div class="lesson-title-r">
           <div class="lesson-title-des">
             <!-- 非直播考试-->
-            <div class="bl l22" v-if="!doubleLine(lessonItem.tasks[lessonItem.index].type)">
+            <div class="bl l22" v-if="!doubleLine(lessonItem.tasks[lessonItem.index])">
               <!-- <span class="tryLes">试听</span> -->
               <span
                 class="text-overflow ks"
                 :class="{ 'lessonactive': (currentTask==lessonItem.tasks[lessonItem.index].id) }"
               >
-                <i class="iconfont" :class="iconfont(lessonItem.tasks[lessonItem.index].type)"></i>
+                <i class="iconfont" :class="iconfont(lessonItem.tasks[lessonItem.index])"></i>
                 {{ Number(lessonItem.tasks[lessonItem.index].isOptional) ? '选修 ' : '课时' }}{{ Number(lessonItem.tasks[lessonItem.index].isOptional) ? ' ' : `${lessonItem.tasks[lessonItem.index].number}:${lessonItem.title}`}}
               </span>
             </div>
 
             <!-- 直播或者考试-->
-            <div class="bl" v-if="doubleLine(lessonItem.tasks[lessonItem.index].type)">
+            <div class="bl" v-if="doubleLine(lessonItem.tasks[lessonItem.index])">
               <!-- <span class="tryLes">试听</span> -->
               <div class="il-bl">
                 <span
                   class="bl text-overflow ks"
                   :class="{ 'lessonactive': (currentTask==lessonItem.tasks[lessonItem.index].id) }"
                 >
-                  <i class="iconfont" :class="iconfont(lessonItem.tasks[lessonItem.index].type)"></i>
+                  <i class="iconfont" :class="iconfont(lessonItem.tasks[lessonItem.index])"></i>
                   {{ Number(lessonItem.tasks[lessonItem.index].isOptional) ? '选修 ' : '课时' }}{{ Number(lessonItem.tasks[lessonItem.index].isOptional) ? ' ' : `${lessonItem.tasks[lessonItem.index].number}:${lessonItem.title}`}}
                 </span>
                 <span class="bl zbtime">
@@ -66,8 +66,8 @@
             :class="{ 'lessonactive': (currentTask==Number(taskItem.id)) }"
           >
             <!-- <span class="tryLes">试听</span> -->
-            <i class="iconfont" :class="iconfont(taskItem.type)"></i>
-            {{ Number(taskItem.isOptional) ? '选修 ' : '课时' }}{{ Number(taskItem.isOptional) ? ' ' : `${taskItem.number}:${lessonItem.title}`}}
+            <i class="iconfont" :class="iconfont(taskItem)"></i>
+            {{ Number(taskItem.isOptional) ? '选修 ' : '课时' }}{{ Number(taskItem.isOptional) ? ' ' : `${taskItem.number}:${taskItem.title}`}}
           </div>
           <div class="litem-l clearfix">
             <span :class="[liveClass(taskItem),'text-overflow']">{{ taskItem | filterTaskTime }}</span>
@@ -120,7 +120,14 @@ export default {
       details: state => state.details,
       joinStatus: state => state.joinStatus,
       selectedPlanId: state => state.selectedPlanId
-    })
+    }),
+    hasLesson(){
+      if(this.lesson.length>0){
+        return true
+      }else {
+        return false
+      }
+    }
   },
   methods: {
     ...mapMutations("course", {
@@ -131,8 +138,12 @@ export default {
       this.currentTask = this.taskId;
     },
     //直播双行显示判断
-    doubleLine(type) {
-      let isDouble;
+    doubleLine(task) {
+      if(!task.type){
+        return
+      }
+      let type=task.type;
+      let isDouble=false;
       if (type === "live") {
         isDouble = true;
       } else {
@@ -234,7 +245,8 @@ export default {
       }
     },
     //任务图标(缺少下载)
-    iconfont(type) {
+    iconfont(task) {
+      let type=task.type;
       switch (type) {
         case "audio":
           return "icon-yinpin";
