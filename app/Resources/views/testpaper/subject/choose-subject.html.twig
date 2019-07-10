@@ -103,6 +103,7 @@
       <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.title }}
     </div>
     <div class="subject-item__body">
+      <div class="subject-item__mask"></div>
       {% set options = item.options %}
       {% if item.type == 'judge' %}
         {% for option in options %}

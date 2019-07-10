@@ -25,13 +25,14 @@ export default class sbList {
     if (!this.$element.length) {
       return;
     }
+    const self = this;
     let listTop = this.$element.offset().top;
     $(window).scroll(function(event) {
-      this.$element.width(width);
+      self.$element.width(width);
       if ($(window).scrollTop() >= listTop) {
-        this.$element.addClass('sb-fixed');
+        self.$element.addClass('sb-fixed');
       } else {
-        this.$element.removeClass('sb-fixed');
+        self.$element.removeClass('sb-fixed');
       }
     });
   }
