@@ -28,20 +28,20 @@ class WorkerCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $queueName = $input->getArgument('name') ?: 'default';
-
-        $queue = $this->getBiz()['queue.connection.'.$queueName];
+        $biz = $this->getBiz();
+        $queue = $biz['queue.connection.'.$queueName];
 
         $options = array(
             'once' => $input->getOption('once'),
             'stop_when_idle' => $input->getOption('stop-when-idle'),
             'tries' => (int) $input->getOption('tries'),
-            'lock_file' => sprintf('%s/queue-worker-%s-%s.lock', $this->getBiz()['run_dir'], $queueName, $input->getArgument('process-no')),
+            'lock_file' => sprintf('%s/queue-worker-%s-%s.lock', $biz['run_dir'], $queueName, $input->getArgument('process-no')),
         );
 
         $this->initServiceKernel();
-        $lock = $this->getBiz()['lock.factory']->createLock($options['lock_file']);
+        $lock = $biz['lock.factory']->createLock($options['lock_file']);
 
-        $worker = new Worker($queue, $this->getBiz()['queue.failer'], $lock, $this->getBiz()['logger'], $options);
+        $worker = new Worker($queue, $biz['queue.failer'], $lock, $biz['logger'], $options);
         $worker->run();
     }
 
