@@ -1,12 +1,12 @@
 <template>
     <div class="swiper-directory" id="swiper-directory">
-        <van-swipe :show-indicators="false" :loop="false" :touchable="true" :width="265" :initial-swipe="slideIndex" @change="changeChapter">
+        <van-swipe :show-indicators="false" :loop="false" :touchable="true" :width="265" :initial-swipe="slideIndex" @change="changeChapter" ref="chapterSwipe">
             <van-swipe-item v-for="(items, index) in item" :key="index" >
-                <div class="chapter nochapter" v-if="items.isExist==0" :class="[current===index] ? 'swiper-directory-active':''">
+                <div class="chapter nochapter" v-if="items.isExist==0" :class="[current===index] ? 'swiper-directory-active':''" @click="handleChapter(index)">
                     <i class="iconfont icon-wuzhangjieliang"></i>
                     无章节
                 </div>
-                <div class="chapter haschapter" v-if="items.isExist==1" :class="[current===index ? 'swiper-directory-active' : '']">
+                <div class="chapter haschapter" v-if="items.isExist==1" :class="[current===index ? 'swiper-directory-active' : '']" @click="handleChapter(index)">
                     <p class="chapter-title text-overflow" >第{{items.number}}{{hasChapter?'章':'节'}}：{{items.title}}</p>
                     <p class="chapter-des text-overflow">{{hasChapter? `节${items.unitNum}`:''}} 课时({{items.lessonNum}}) 学习任务({{items.tasksNum}})</p>
                 </div>
@@ -33,13 +33,16 @@ export default {
     },
     data(){
         return{
-            current:this.slideIndex
+            current:this.slideIndex || 0
         }
     },
     methods:{
          changeChapter(index) {
             this.current=index
             this.$emit('changeChapter', index)
+        },
+        handleChapter(index){
+            this.$refs.chapterSwipe.swipeTo(index);
         }
     }
 }

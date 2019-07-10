@@ -92,7 +92,8 @@ export default {
   computed: {
     ...mapState('course', {
       details: state => state.details,
-      selectedPlanId: state => state.selectedPlanId
+      selectedPlanId: state => state.selectedPlanId,
+      joinStatus: state => state.joinStatus,
     }),
     ...mapState(['courseSettings', 'vipSwitch']),
     learnExpiryHtml() {
@@ -147,20 +148,31 @@ export default {
     }
   },
   methods: {
-    ...mapActions ('course', [
-      'getCourseDetail'
+    ...mapActions('course', [
+        'getCourseDetail',
+        'getJoinAfterDetail'
     ]),
     handleClick (item, index){
       this.items.map(item => item.active = false);
       item.active = true;
-
-      this.getCourseDetail({
-        courseId: item.id
-      }).then(() => {
-        this.$emit('switchPlan');
-      }).catch(err => {
-        Toast.fail(err.message)
-      })
+      //根据是否加入来获取不同目录
+      if(this.joinStatus){
+          this.getJoinAfterDetail({
+            courseId: item.id
+          }).then(() => {
+             this.$emit('switchPlan');
+          }).catch(err => {
+            Toast.fail(err.message)
+          })
+      }else{
+          this.getCourseDetail({
+            courseId: item.id
+          }).then(() => {
+            this.$emit('switchPlan');
+          }).catch(err => {
+            Toast.fail(err.message)
+          });
+      }
     },
     filterPrice () {
       const details = this.details;

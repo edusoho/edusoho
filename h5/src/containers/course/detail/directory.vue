@@ -34,7 +34,7 @@
                   <div :class="['lesson-cell__content', lesson.tasks[taskIndex].type === 'live' ? 'pr10' : '']" @click="lessonCellClick(task)">
                     <div class="lesson-cell__text">
                       <span class="text-overflow">{{ task.title }}</span>
-                      <span v-if="lesson.tasks[taskIndex].type === 'live' && lesson.task[taskIndex].status === 'published'" :class="[liveClass(lesson.tasks[taskIndex]), 'live-text', 'ml5']">{{ lesson.tasks[taskIndex] | liveStatusText }}</span>
+                      <span v-if="lesson.tasks[taskIndex].type === 'live' && lesson.tasks[taskIndex].status === 'published'" :class="[liveClass(lesson.tasks[taskIndex]), 'live-text', 'ml5']">{{ lesson.tasks[taskIndex] | liveStatusText }}</span>
                     </div>
                     <span class="lesson-cell-last__text">{{ task | taskType }}{{ task | filterTask }}</span>
                   </div>
