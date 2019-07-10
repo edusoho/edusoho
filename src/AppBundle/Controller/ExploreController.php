@@ -147,7 +147,7 @@ class ExploreController extends BaseController
         list($conditions, $categoryArray, $categoryParent) = $this->mergeConditionsByCategory($conditions, $category);
         $conditions = $this->_filterOpenCourseConditions($conditions);
         $pageSize = 18;
-        var_dump($conditions);
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getOpenCourseService()->countCourses($conditions),
