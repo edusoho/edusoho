@@ -30,7 +30,12 @@
         padding-right: vw(20);
         color: #9BA5B0;
         font-size: vw(14);
-        border-top: 1px solid #eee
+        border-top: 1px solid #eee;
+        .icon-arrow-right{
+          margin-left: vw(4);
+          color:#ccc;
+          font-size: vw(14);
+        }
       }
     }
     .gray-dark {
@@ -137,6 +142,17 @@
 .order .coupon-popup__content {
   top: vw(95);
   background: #f5f5f5;
+  .coupon-number-change{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 vw(20);
+    line-height: vw(46);
+    background-color: #fff;
+    font-size: vw(14);
+    z-index:10001;
+    position: relative;
+    margin: vw(10) 0 vw(5) 0;
+  }
 }
 
 .coupon-popup {
