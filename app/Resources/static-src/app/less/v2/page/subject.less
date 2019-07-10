@@ -146,8 +146,8 @@
 }
 
 .subject-list__body {
-  margin-top: 16px;
-  max-height: 240px;
+  padding-top: 16px;
+  max-height: 258px;
   overflow-y: scroll;
 }
 
@@ -161,6 +161,7 @@
 }
 
 .subject-list-item__num {
+  position: relative;
   width: 24px;
   height: 24px;
   margin: auto;
@@ -175,4 +176,57 @@
     color: #fff;
     border: 1px solid #ed3e3e;
   }
+}
+.subject-batch {
+  font-size: 12px;
+}
+.subject-batch-checkbox {
+  margin-left: 4px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  line-height: 14px;
+}
+.sb-checkbox {
+  position: absolute;
+  top: -8px;
+  left: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  &:before {
+    position: absolute;
+    content: '';
+    top: 2px;
+    left: -6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+  }
+  > input {
+    display: none;
+  }
+  &.checked:after {
+    .transform(rotate(45deg));
+    position: absolute;
+    left: -3px;
+    top: 2px;
+    display: table;
+    width: 3px;
+    height: 6px;
+    border: 1px solid #fff;
+    border-top: 0;
+    border-left: 0;
+    content: ' ';
+    animation-name: checkbox-check;
+    animation-duration: .2s;
+  }
+}
+
+.sb-fixed {
+  position: fixed;
+  top: 0;
+  width: 266px;
 }

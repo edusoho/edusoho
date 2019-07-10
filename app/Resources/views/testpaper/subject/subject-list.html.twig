@@ -1,4 +1,4 @@
-<div class="subject-list subject-rect cd-mt16">
+<div class="subject-list subject-rect js-subject-list cd-mt16">
   <div class="subject-rect__title">题目列表</div>
   <div class="subject-list__tip">第<span>2、7</span>题有违规</div>
 
@@ -56,14 +56,6 @@
     "flag": 1,
   },
   {
-    "type": '材料题',
-    "flag": 0,
-  },
-  {
-    "type": '材料题',
-    "flag": 1,
-  },
-  {
     "type": '判断题',
     "flag": 0,
   },
@@ -74,14 +66,36 @@
   {
     "type": '填空题',
     "flag": 0,
+  },
+  {
+    "type": '材料题',
+    "flag": 0,
+  },
+  {
+    "type": '材料题',
+    "flag": 1,
   }
 ] %}
   <div class="subject-list__body row">
     {% for item in data %}
       <div class="col-sm-3 subject-list-item">
-        <div class="subject-list-item__num {% if item.flag %}subject-list-item__num--error{% endif %}">{{ loop.index }}</div>{{ item.type }}
+        <div class="subject-list-item__num {% if item.flag %}subject-list-item__num--error{% endif %}">
+          {{ loop.index }}
+          {% if item.type != '材料题' %}
+            <label class="sb-checkbox cd-checkbox js-show-checkbox hidden"><input type="checkbox" data-toggle="cd-checkbox"></label>
+          {% endif %}
+        </div>
+        {{ item.type }}
       </div>
     {% endfor %}
   </div>
-  <button class="cd-btn cd-btn-primary btn-block" type="button">批量操作</button>
+  <button class="cd-btn cd-btn-primary btn-block js-batch-btn" type="button">批量操作</button>
+  <div class="subject-batch js-subject-wrap hidden">
+    <label class="cd-checkbox subject-batch-checkbox js-batch-select"><input type="checkbox" data-toggle="cd-checkbox"> 全选</label>
+    <div class="row">
+      <div class="col-sm-6"><a href="javascript:;">批量设置分数</a></div>
+      <div class="col-sm-6 text-right"><a href="javascript:;">批量设置难度</a></div>
+    </div>
+    <button class="cd-btn cd-btn-primary btn-block cd-mt8 js-finish-btn" type="button">完成</button>
+  </div>
 </div>
