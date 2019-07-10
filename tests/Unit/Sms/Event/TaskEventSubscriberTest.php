@@ -81,7 +81,7 @@ class TaskEventSubscriberTest extends BaseTestCase
                 ),
                 array(
                     'functionName' => 'getJobByName',
-                    'returnValue' => array(),
+                    'returnValue' => null,
                 ),
             )
         );
