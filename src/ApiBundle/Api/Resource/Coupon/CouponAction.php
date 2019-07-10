@@ -52,6 +52,13 @@ class CouponAction extends AbstractResource
 
                 return $this->error($message['message']);
             }
+
+            if ($batch['deadlineMode'] == 'day') {
+                //ES优惠券领取时，对于优惠券过期时间会加86400秒，所以计算deadline时对于固定天数模式应与设置有效期模式一致，都为当天凌晨00:00:00
+                $fields['deadline'] = strtotime(date("Y-m-d")) + 24 * 60 * 60 * $batch['fixedDay'];
+
+                $this->getCouponService()->updateCoupon($coupon['id'], $fields);
+            }
         }
         $result = $this->getCouponService()->checkCoupon($code, $id, $type);
 
