@@ -3,71 +3,8 @@
 {% block content %}
   <div class="row">
     <div class="col-sm-3">
-      <div class="subject-data subject-rect">
-        <div class="subject-rect__title">题目统计</div>
-        {% block subtitle %}
-          <div class="subject-data__subtitle clearfix">
-            <span>共200道题</span>
-            <span class="pull-right">总分100分</span>
-          </div>
-        {% endblock %}
-        <div class="subject-data__item clearfix">
-          <span>单选题</span>
-          <span class="pull-right subject-data__num">共6道题</span>
-        </div>
-        <div class="subject-data__item clearfix">
-          <span>多选题</span>
-          <span class="pull-right subject-data__num">共3道题</span>
-        </div>
-        <div class="subject-data__item clearfix">
-          <span>不定项</span>
-          <span class="pull-right subject-data__num">共3道题</span>
-        </div>
-        <div class="subject-data__item clearfix">
-          <span>判断题</span>
-          <span class="pull-right subject-data__num">共3道题</span>
-        </div>
-        <div class="subject-data__item clearfix">
-          <span>填空题</span>
-          <span class="pull-right subject-data__num">共1道题</span>
-        </div>
-        <div class="subject-data__item clearfix">
-          <span>问答题</span>
-          <span class="pull-right subject-data__num">共3道题</span>
-        </div>
-        <div class="subject-data__item clearfix">
-          <span>材料题</span>
-          <span class="pull-right subject-data__num">共3道题</span>
-        </div>
-      </div>
-      <div class="subject-list subject-rect cd-mt16">
-        <div class="subject-rect__title">题目列表</div>
-        <div class="subject-list__tip">第<span>2、7</span>题有违规</div>
-        <div class="subject-list__body row">
-          <div class="col-sm-3 subject-list-item">
-            <div class="subject-list-item__num">1</div>单选题
-          </div>
-          <div class="col-sm-3 subject-list-item">
-            <div class="subject-list-item__num subject-list-item__num--error">2</div>多选题
-          </div>
-          <div class="col-sm-3 subject-list-item">
-            <div class="subject-list-item__num">3</div>不定项
-          </div>
-          <div class="col-sm-3 subject-list-item">
-            <div class="subject-list-item__num">4</div>填空题
-          </div>
-          <div class="col-sm-3 subject-list-item">
-            <div class="subject-list-item__num">5</div>问答题
-          </div>
-          <div class="col-sm-3 subject-list-item">
-            <div class="subject-list-item__num">6</div>材料题
-          </div>
-          <div class="col-sm-3 subject-list-item">
-            <div class="subject-list-item__num subject-list-item__num--error">7</div>材料题
-          </div>
-        </div>
-        <button class="cd-btn cd-btn-primary btn-block" type="button">批量操作</button>
-      </div>
+      {% include 'testpaper/subject/subject-num.html.twig' with { totolNum: 200, totolScore: 100 } %}
+      {% include 'testpaper/subject/subject-list.html.twig' %}
     </div>
     <div class="col-sm-9">
       {% block testpaper %}{% endblock %}

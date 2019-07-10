@@ -1,0 +1,87 @@
+<div class="subject-list subject-rect cd-mt16">
+  <div class="subject-rect__title">题目列表</div>
+  <div class="subject-list__tip">第<span>2、7</span>题有违规</div>
+
+{% set data = [
+  {
+    "type": '单选题',
+    "flag": 1,
+  },
+  {
+    "type": '单选题',
+    "flag": 0,
+  },
+  {
+    "type": '单选题',
+    "flag": 1,
+  },
+  {
+    "type": '单选题',
+    "flag": 0,
+  },
+  {
+    "type": '单选题',
+    "flag": 1,
+  },
+  {
+    "type": '多选题',
+    "flag": 0,
+  },
+{
+    "type": '多选题',
+    "flag": 1,
+  },
+  {
+    "type": '多选题',
+    "flag": 0,
+  },
+  {
+    "type": '不定项',
+    "flag": 1,
+  },
+  {
+    "type": '不定项',
+    "flag": 0,
+  },
+  {
+    "type": '不定项',
+    "flag": 1,
+  },
+  {
+    "type": '问答题',
+    "flag": 0,
+  },
+{
+    "type": '问答题',
+    "flag": 1,
+  },
+  {
+    "type": '材料题',
+    "flag": 0,
+  },
+  {
+    "type": '材料题',
+    "flag": 1,
+  },
+  {
+    "type": '判断题',
+    "flag": 0,
+  },
+  {
+    "type": '判断题',
+    "flag": 1,
+  },
+  {
+    "type": '填空题',
+    "flag": 0,
+  }
+] %}
+  <div class="subject-list__body row">
+    {% for item in data %}
+      <div class="col-sm-3 subject-list-item">
+        <div class="subject-list-item__num {% if item.flag %}subject-list-item__num--error{% endif %}">{{ loop.index }}</div>{{ item.type }}
+      </div>
+    {% endfor %}
+  </div>
+  <button class="cd-btn cd-btn-primary btn-block" type="button">批量操作</button>
+</div>
