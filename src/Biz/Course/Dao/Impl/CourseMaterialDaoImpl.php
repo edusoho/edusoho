@@ -65,6 +65,11 @@ class CourseMaterialDaoImpl extends AdvancedDaoImpl implements CourseMaterialDao
         return $this->findByFields(array('lessonId' => $lessonId, 'source' => $source));
     }
 
+    public function findMaterialsByCourseIdAndLessonId($courseId, $lessonId)
+    {
+        return $this->findByFields(array('courseId' => $courseId, 'lessonId' => $lessonId));
+    }
+
     public function findMaterialsByIds($ids)
     {
         return $this->findInField('id', $ids);
