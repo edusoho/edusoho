@@ -10,7 +10,6 @@ use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\ClassroomException;
 use Biz\Common\CommonException;
-use Biz\Content\FileException;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
@@ -106,21 +105,23 @@ class CourseTaskMedia extends AbstractResource
             if (0 == $material['fileId']) {
                 $media = array(
                     'type' => 'link',
-                    'url' => $material['link'],
                     'fileName' => '',
                     'ext' => '',
                 );
             } else {
                 $file = $this->getUploadFileService()->getFile($material['fileId']);
-                $url = $this->getFileUrl($file, $ssl);
                 $media = array(
                     'type' => $file['storage'],
-                    'url' => $url,
                     'fileName' => $file['filename'],
                     'ext' => $file['ext'],
                 );
             }
 
+            // TODO 文件后缀所属类型
+            $media['courseId'] = $course['id'];
+            $media['taskId'] = $task['id'];
+            $media['materialId'] = $material['id'];
+            $media['fileId'] = $material['fileId'];
             $media['title'] = $material['title'];
             $media['description'] = $material['description'];
             $media['fileSize'] = $material['fileSize'];
@@ -128,29 +129,6 @@ class CourseTaskMedia extends AbstractResource
         }
 
         return $medias;
-    }
-
-    /**
-     * 如果是云平台文件，则获取url；
-     * 如果是本地文件，则走私有文件api(/api/courses/{courseId}/tasks/{taskId}/materials/{materialId})，这里返回空
-     */
-    private function getFileUrl($file, $ssl)
-    {
-        if (empty($file)) {
-            throw FileException::FILE_EMPTY_ERROR();
-        }
-
-        $url = '';
-
-        if ('cloud' == $file['storage']) {
-            $file = $this->getUploadFileService()->getDownloadMetas($file['id'], $ssl);
-            // 如果云平台对文件报错，静默处理
-            if (isset($file['url'])) {
-                $url = $file['url'];
-            }
-        }
-
-        return $url;
     }
 
     protected function getVideo($course, $task, $activity, $request, $ssl = false)

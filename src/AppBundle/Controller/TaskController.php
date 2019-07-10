@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Content\FileException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -13,6 +14,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\User\Service\TokenService;
+use Biz\User\TokenException;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -424,6 +426,32 @@ class TaskController extends BaseController
         $action = $config[$task['type']]['controller'].':finishCondition';
 
         return $this->forward($action, array('activity' => $activity));
+    }
+
+    public function downloadFileByTokenAction(Request $request, $courseId, $taskId, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('file_download', $token);
+
+        if (!$token) {
+            throw TokenException::TOKEN_INVALID();
+        }
+
+        $fileId = $token['data']['fileId'];
+        $tokenTaskId = $token['data']['taskId'];
+        $tokenCourseId = $token['data']['courseId'];
+
+        if ($tokenTaskId != $taskId || $tokenCourseId != $courseId) {
+            throw TokenException::TOKEN_INVALID();
+        }
+
+        if (empty($fileId)) {
+            throw FileException::FILE_NOT_FOUND();
+        }
+
+        return $this->forward('AppBundle:UploadFile:download', array(
+            'request' => $request,
+            'fileId' => $fileId,
+        ));
     }
 
     /**
