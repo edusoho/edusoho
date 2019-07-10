@@ -27,36 +27,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OpenCourseController extends BaseOpenCourseController
 {
-    public function exploreAction(Request $request, $category)
-    {
-        $conditions = $request->query->all();
-
-        list($conditions, $tags) = $this->_filterConditionTags($conditions);
-        list($conditions, $categoryArray, $categoryParent) = $this->_filterConditionCategories($conditions, $category);
-        $conditions = $this->_filterConditions($conditions);
-
-        $pageSize = 18;
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getOpenCourseService()->countCourses($conditions),
-            $pageSize
-        );
-
-        $courses = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', $pageSize);
-        $teachers = $this->findCourseTeachers($courses);
-
-        return $this->render('open-course/explore.html.twig', array(
-            'courses' => $courses,
-            'paginator' => $paginator,
-            'teachers' => $teachers,
-            'category' => $category,
-            'categoryArray' => $categoryArray,
-            'categoryParent' => $categoryParent,
-            'tags' => $tags,
-        ));
-    }
-
     public function createAction(Request $request)
     {
         $course = $request->request->all();
@@ -681,57 +651,6 @@ class OpenCourseController extends BaseOpenCourseController
         return $replays;
     }
 
-    private function _getPageRecommendedCourses(Request $request, $conditions, $orderBy, $pageSize)
-    {
-        $conditions['recommended'] = 1;
-
-        $recommendCount = $this->getOpenCourseService()->countCourses($conditions);
-        $currentPage = $request->query->get('page') ? $request->query->get('page') : 1;
-        $recommendPage = intval($recommendCount / $pageSize);
-        $recommendLeft = $recommendCount % $pageSize;
-
-        $currentPageCourses = $this->getOpenCourseService()->searchCourses(
-            $conditions,
-            array('recommendedSeq' => 'ASC'),
-            ($currentPage - 1) * $pageSize,
-            $pageSize
-        );
-
-        if (0 == count($currentPageCourses)) {
-            $start = ($pageSize - $recommendLeft) + ($currentPage - $recommendPage - 2) * $pageSize;
-            $limit = $pageSize;
-        } elseif (count($currentPageCourses) > 0 && count($currentPageCourses) <= $pageSize) {
-            $start = 0;
-            $limit = $pageSize - count($currentPageCourses);
-        }
-
-        $conditions['recommended'] = 0;
-
-        $courses = $this->getOpenCourseService()->searchCourses(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $start, $limit
-        );
-
-        return array_merge($currentPageCourses, $courses);
-    }
-
-    private function _filterConditions($conditions)
-    {
-        $conditions['status'] = 'published';
-        $conditions['parentId'] = 0;
-
-        if (!empty($conditions['fliter']['type']) && 'all' != $conditions['fliter']['type']) {
-            $conditions['type'] = $conditions['fliter']['type'];
-        }
-
-        /*if (isset($queryParam['orderBy']) && $queryParam['orderBy'] == 'recommendedSeq') {
-        $conditions['recommended'] = 1;
-        }*/
-
-        return $conditions;
-    }
-
     private function _loginMemberMobileBind($userMobile)
     {
         $user = $this->getCurrentUser();
@@ -755,74 +674,6 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         return $this->getUserService()->findUsersByIds($userIds);
-    }
-
-    private function _filterConditionTags($conditions)
-    {
-        $selectedTag = '';
-        $selectedTagGroupId = '';
-        $tags = array();
-
-        if (empty($conditions['tag'])) {
-            return array($conditions, $tags);
-        }
-
-        if (!empty($conditions['tag']['tags'])) {
-            $tags = $conditions['tag']['tags'];
-        }
-
-        if (!empty($conditions['tag']['selectedTag'])) {
-            $selectedTag = $conditions['tag']['selectedTag']['tag'];
-            $selectedTagGroupId = $conditions['tag']['selectedTag']['group'];
-        }
-
-        if (isset($tags[$selectedTagGroupId]) && $tags[$selectedTagGroupId] == $selectedTag) {
-            unset($tags[$selectedTagGroupId]);
-        } else {
-            $tags[$selectedTagGroupId] = $selectedTag;
-        }
-
-        $tags = array_filter($tags);
-        if (empty($tags)) {
-            return array($conditions, $tags);
-        }
-
-        $conditions['tagIds'] = array_values($tags);
-
-        $tagOwnerIds = $this->getTagService()->findOwnerIdsByTagIdsAndOwnerType($conditions['tagIds'], 'openCourse');
-        $conditions['courseIds'] = empty($tagOwnerIds) ? array(-1) : $tagOwnerIds;
-
-        unset($conditions['tagIds']);
-
-        return array($conditions, $tags);
-    }
-
-    private function _filterConditionCategories($conditions, $category)
-    {
-        $categoryArray = array();
-        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
-        $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
-
-        if (!empty($subCategory) && empty($thirdLevelCategory)) {
-            $conditions['code'] = $subCategory;
-        } elseif (!empty($thirdLevelCategory)) {
-            $conditions['code'] = $thirdLevelCategory;
-        } else {
-            $conditions['code'] = $category;
-        }
-
-        if (!empty($conditions['code'])) {
-            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
-            $conditions['categoryId'] = $categoryArray['id'];
-            unset($conditions['code']);
-        }
-
-        $categoryParent = array();
-        if (!empty($categoryArray['parentId'])) {
-            $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
-        }
-
-        return array($conditions, $categoryArray, $categoryParent);
     }
 
     /**
