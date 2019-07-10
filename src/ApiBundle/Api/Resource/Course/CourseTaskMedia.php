@@ -106,7 +106,7 @@ class CourseTaskMedia extends AbstractResource
                 $media = array(
                     'type' => 'link',
                     'fileName' => '',
-                    'ext' => '',
+                    'ext' => 'link',
                 );
             } else {
                 $file = $this->getUploadFileService()->getFile($material['fileId']);
@@ -117,11 +117,11 @@ class CourseTaskMedia extends AbstractResource
                 );
             }
 
-            // TODO 文件后缀所属类型
             $media['courseId'] = $course['id'];
             $media['taskId'] = $task['id'];
             $media['materialId'] = $material['id'];
             $media['fileId'] = $material['fileId'];
+            $media['fileType'] = $this->getExtType($media['ext']);
             $media['title'] = $material['title'];
             $media['description'] = $material['description'];
             $media['fileSize'] = $material['fileSize'];
@@ -129,6 +129,34 @@ class CourseTaskMedia extends AbstractResource
         }
 
         return $medias;
+    }
+
+    private function getExtType($ext)
+    {
+        $types = array(
+            'video' => array('mpeg', 'mpg', 'mpe', 'mlv', 'dat', '2v', 'vob', 'rmvb', 'mov', 'qt', 'asf', 'avi', 'wmv', 'mkv', 'mp4', 'flv'),
+            'audio' => array('mp3', 'wma', 'aac', 'cda', 'wav', 'voc', 'cda'),
+            'image' => array('jpg', 'jpeg', 'png', 'gif'),
+            'package' => array('zip', 'zipx', 'rar', '7z', 'dmg', 'tar'),
+            'txt' => array('txt'),
+            'pdf' => array('pdf'),
+            'doc' => array('doc', 'docx'),
+            'xls' => array('xls', 'xlsx'),
+            'ppt' => array('ppt', 'pptx'),
+            'flash' => array('flash'),
+            'link' => array('link'),
+        );
+
+        $belongs = 'other';
+
+        foreach ($types as $type => $contains) {
+            if (in_array($ext, $contains)) {
+                $belongs = $type;
+                break;
+            }
+        }
+
+        return $belongs;
     }
 
     protected function getVideo($course, $task, $activity, $request, $ssl = false)

@@ -13,9 +13,6 @@ use Biz\User\Service\TokenService;
 
 class CourseTaskMaterial extends AbstractResource
 {
-    /**
-     * TODO 需要权限
-     */
     public function get(ApiRequest $request, $courseId, $taskId, $materialId)
     {
         $canLearn = $this->getCourseService()->canLearnTask($taskId);
