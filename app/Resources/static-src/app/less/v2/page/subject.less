@@ -7,6 +7,21 @@
   border-radius: 4px;
   background-color: #fff;
   text-align: center;
+  input {
+    text-align: center;
+    width: 100%;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background-color: #fff;
+    .es-transition;
+    &:hover,
+    &:focus,
+    &.active {
+      background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), .1);
+      .es-transition;
+    }
+  }
 }
 
 .subject-item {
