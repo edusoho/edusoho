@@ -65,7 +65,6 @@
         });
       },
       getComponent(status) {
-        console.log(this.selectedPlanIndex)
         if(status){
            this.getNextStudy({
               courseId: this.selectedPlanId
