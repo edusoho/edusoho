@@ -67,9 +67,9 @@ const actions = {
   getJoinAfterDetail({ commit }, { courseId }) {
     const query = { courseId };
     return Promise.all([
-      Api.getNextStudy({ query }),
-      Api.getOptimizationCourseLessons({ query })
-    ]).then(([nextStudy, OptimizationCoursePlan]) => {
+      Api.getOptimizationCourseLessons({ query }),
+      Api.getNextStudy({ query })
+    ]).then(([OptimizationCoursePlan, nextStudy]) => {
       commit(types.GET_NEXT_STUDY, nextStudy);
       commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
       return [nextStudy, OptimizationCoursePlan];
