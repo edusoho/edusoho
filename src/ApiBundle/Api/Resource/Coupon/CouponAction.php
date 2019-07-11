@@ -40,6 +40,10 @@ class CouponAction extends AbstractResource
 
         $coupon = $this->getCouponService()->getCouponByCode($code);
 
+        if (empty($coupon)) {
+            return $this->error(sprintf('该优惠券不存在'));
+        }
+
         if ($coupon['status'] == 'receive') {
             return $this->error(sprintf('优惠券%s已经被领取过', $code));
         }
@@ -47,10 +51,8 @@ class CouponAction extends AbstractResource
         if ($this->isPluginInstalled('Coupon')) {
             $coupon = $this->getCouponService()->getCouponByCode($code);
             $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
-            if (empty($batch['h5MpsEnable'])) {
-                $message = array('useable' => 'no', 'message' => '该优惠卷无法通过微网校渠道发放');
-
-                return $this->error($message['message']);
+            if (empty($batch['codeEnable'])) {
+                return $this->error('该优惠卷无法通过优惠码渠道发放');
             }
 
             if ($batch['deadlineMode'] == 'day') {
