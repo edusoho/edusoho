@@ -8,7 +8,7 @@
                 </div>
                 <div class="chapter haschapter" v-if="items.isExist==1" :class="[current===index ? 'swiper-directory-active' : '']" @click="handleChapter(index)">
                     <p class="chapter-title text-overflow" >第{{items.number}}{{hasChapter?'章':'节'}}：{{items.title}}</p>
-                    <p class="chapter-des text-overflow">{{hasChapter? `节${items.unitNum}`:''}} 课时({{items.lessonNum}}) 学习任务({{items.tasksNum}})</p>
+                    <p class="chapter-des text-overflow">{{hasChapter? `节(${items.unitNum})`:''}} 课时({{items.lessonNum}}) 学习任务({{items.tasksNum}})</p>
                 </div>
             </van-swipe-item>
         </van-swipe>

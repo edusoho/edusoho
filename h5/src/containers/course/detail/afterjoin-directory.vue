@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div v-else class="noneItem">
+    <div v-if="nodata" class="noneItem">
       <img src="static/images/none.png" class="nodata" />
       <p>暂时还没有课程哦...</p>
     </div>
@@ -66,7 +66,8 @@ export default {
       currentUnit: 0, //章节数目的索引
       currentLesson: 0, //课时数目的索引
       slideIndex: 0, //顶部滑动的索引
-      taskId: -1
+      taskId: -1,
+      nodata:false
     };
   },
   computed: {
@@ -87,9 +88,7 @@ export default {
       immediate: true
     },
     OptimizationCourseLessons: {
-      handler: "processItem",
-      immediate: true,
-      deep:true
+      handler: "processItem"
     }
   },
   methods: {
@@ -104,10 +103,11 @@ export default {
     },
     //处理数据
     processItem() {
-      if(!this.OptimizationCourseLessons){
+      let res = this.OptimizationCourseLessons;
+      if(res.length==0){
+        this.nodata=true;
         return
       }
-      let res = this.OptimizationCourseLessons;
       const that = this;
       this.chapterNum = 0; //章节数
       this.unitNum = 0; //节数
