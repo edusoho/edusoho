@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use Biz\Course\MaterialException;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
@@ -41,8 +42,12 @@ class CourseTaskMaterial extends AbstractResource
         );
         $token = $this->getTokenService()->makeToken('file_download', $tokenFields);
 
+        $scheme = AssetHelper::getScheme();
+        $host = $request->headers->get('host');
+        $domain = "{$scheme}//{$host}";
+
         return array(
-            'url' => "/course/{$courseId}/task/{$taskId}/token/{$token['token']}/download",
+            'url' => "{$domain}/course/{$courseId}/task/{$taskId}/token/{$token['token']}/download",
         );
     }
 
