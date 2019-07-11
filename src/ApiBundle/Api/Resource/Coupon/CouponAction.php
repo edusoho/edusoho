@@ -55,7 +55,7 @@ class CouponAction extends AbstractResource
                 return $this->error('该优惠卷无法通过优惠码渠道发放');
             }
 
-            if ($batch['deadlineMode'] == 'day') {
+            if (isset($batch['deadlineMode']) && $batch['deadlineMode'] == 'day') {
                 //ES优惠券领取时，对于优惠券过期时间会加86400秒，所以计算deadline时对于固定天数模式应与设置有效期模式一致，都为当天凌晨00:00:00
                 $fields['deadline'] = strtotime(date("Y-m-d")) + 24 * 60 * 60 * $batch['fixedDay'];
 
