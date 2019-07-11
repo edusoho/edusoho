@@ -5,7 +5,12 @@
 {% block content %}
   <div class="row">
     <div class="col-sm-3">
-      {% include 'testpaper/subject/subject-num.html.twig' with { totolNum: 200, totolScore: 100 } %}
+      <div class="subject-data subject-rect js-subject-data">
+        <div class="subject-rect__title">题目统计
+          {% block subtitle %}{% endblock %}
+        </div>
+        {% include 'testpaper/subject/subject-num.html.twig' %}
+      </div>
       {% include 'testpaper/subject/subject-list.html.twig' %}
     </div>
     <div class="col-sm-9">

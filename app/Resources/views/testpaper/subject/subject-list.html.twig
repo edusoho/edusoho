@@ -94,7 +94,7 @@
     "flag": 1,
   }
 ] %}
-  <div class="subject-list__body row">
+  <div class="subject-list__body js-subject-list-body row">
     {% for item in data %}
       <div class="col-sm-3 subject-list-item">
         <div class="subject-list-item__num {% if item.flag %}subject-list-item__num--error{% endif %} js-subject-anchor" data-anchor="{{'#' ~ loop.index }}">

@@ -1,4 +1,9 @@
 {% extends 'testpaper/subject/layout.html.twig' %}
 
+{% set totolNum =  19 %}
+
 {% block subtitle %}
+  <div class="subject-data__subtitle subject-data__subtitle--question">
+    <span>共{{ totolNum }}道题</span>
+  </div>
 {% endblock %}
