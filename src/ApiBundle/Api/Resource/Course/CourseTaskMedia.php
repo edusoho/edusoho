@@ -54,10 +54,20 @@ class CourseTaskMedia extends AbstractResource
         }
         $media = $this->$method($course, $task, $activity, $request->getHttpRequest(), $ssl);
 
-        return array(
-            'mediaType' => $activity['mediaType'],
-            'media' => $media,
-        );
+        return $this->getReturnByMediaType($activity['mediaType'], $media);
+    }
+
+    private function getReturnByMediaType($mediaType, $media)
+    {
+        $result = array('mediaType' => $mediaType);
+
+        if ('download' == $mediaType) {
+            $result["{$mediaType}_media"] = $media;
+        } else {
+            $result['media'] = $media;
+        }
+
+        return $result;
     }
 
     protected function checkPreview($course, $task)

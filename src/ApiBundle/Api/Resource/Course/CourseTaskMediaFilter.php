@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class CourseTaskMediaFilter extends Filter
 {
     protected $publicFields = array(
-        'mediaType', 'media',
+        'mediaType', 'media', 'download_media',
     );
 
     protected function publicFields(&$data)
