@@ -4,75 +4,93 @@
 
 {% set data = [
   {
-    "type": '单选题',
+    "name": '单选题',
+    "type": 'single_choice',
     "flag": 1,
   },
   {
-    "type": '单选题',
+    "name": '单选题',
+    "type": 'single_choice',
     "flag": 0,
   },
   {
-    "type": '单选题',
+    "name": '单选题',
+    "type": 'single_choice',
     "flag": 1,
   },
   {
-    "type": '单选题',
+    "name": '单选题',
+    "type": 'single_choice',
     "flag": 0,
   },
   {
-    "type": '单选题',
+    "name": '单选题',
+    "type": 'single_choice',
     "flag": 1,
   },
   {
-    "type": '多选题',
+    "name": '多选题',
+    "type": 'choice',
     "flag": 0,
   },
-{
-    "type": '多选题',
+  {
+    "name": '多选题',
+    "type": 'choice',
     "flag": 1,
   },
   {
-    "type": '多选题',
+    "name": '多选题',
+    "type": 'choice',
     "flag": 0,
   },
   {
-    "type": '不定项',
+    "name": '不定项',
+    "type": 'uncertain_choice',
     "flag": 1,
   },
   {
-    "type": '不定项',
+    "name": '不定项',
+    "type": 'uncertain_choice',
     "flag": 0,
   },
   {
-    "type": '不定项',
+    "name": '不定项',
+    "type": 'uncertain_choice',
     "flag": 1,
   },
   {
-    "type": '问答题',
+    "name": '问答题',
+    "type": 'eassy',
     "flag": 0,
   },
-{
-    "type": '问答题',
+  {
+    "name": '问答题',
+    "type": 'eassy',
     "flag": 1,
   },
   {
-    "type": '判断题',
+    "name": '判断题',
+    "type": 'determine',
     "flag": 0,
   },
   {
-    "type": '判断题',
+    "name": '判断题',
+    "type": 'determine',
     "flag": 1,
   },
   {
-    "type": '填空题',
+    "name": '填空题',
+    "type": 'fill',
     "flag": 0,
   },
   {
-    "type": '材料题',
+    "name": '材料题',
+    "type": 'material',
     "flag": 0,
   },
   {
-    "type": '材料题',
+    "name": '材料题',
+    "type": 'material',
     "flag": 1,
   }
 ] %}
@@ -81,11 +99,11 @@
       <div class="col-sm-3 subject-list-item">
         <div class="subject-list-item__num {% if item.flag %}subject-list-item__num--error{% endif %} js-subject-anchor" data-anchor="{{'#' ~ loop.index }}">
           {{ loop.index }}
-          {% if item.type != '材料题' %}
-            <label class="sb-checkbox cd-checkbox js-show-checkbox hidden"><input type="checkbox" data-toggle="cd-checkbox"></label>
+          {% if item.type != 'material' %}
+            <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="{{ item.type }}" data-name="{{ item.name }}"><input type="checkbox" data-toggle="cd-checkbox"></label>
           {% endif %}
         </div>
-        {{ item.type }}
+        {{ item.name }}
       </div>
     {% endfor %}
   </div>
@@ -94,7 +112,7 @@
     <label class="cd-checkbox subject-batch-checkbox js-batch-select"><input type="checkbox" data-toggle="cd-checkbox"> 全选</label>
     <div class="row">
       <div class="col-sm-6"><a href="javascript:;">批量设置分数</a></div>
-      <div class="col-sm-6 text-right"><a href="javascript:;">批量设置难度</a></div>
+      <div class="col-sm-6 text-right"><a href="javascript:;" class="js-difficult-setting">批量设置难度</a></div>
     </div>
     <button class="cd-btn cd-btn-primary btn-block cd-mt8 js-finish-btn" type="button">完成</button>
   </div>
