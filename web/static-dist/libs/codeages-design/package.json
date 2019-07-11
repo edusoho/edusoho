@@ -1,6 +1,6 @@
 {
   "name": "codeages-design",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "a Web Design Language",
   "main": "src/codeages-design.js",
   "scripts": {
