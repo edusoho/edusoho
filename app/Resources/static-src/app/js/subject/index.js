@@ -6,6 +6,8 @@ export default class sbList {
     this.$sbCheckbox = $('.js-show-checkbox');
     this.$finishBtn = $('.js-finish-btn');
     this.$allBtn = $('.js-batch-select');
+    this.$anchor = $('.js-subject-anchor');
+    this.flag = true;
     this.init();
   }
 
@@ -18,7 +20,7 @@ export default class sbList {
     this.$element.on('click','.js-batch-select', event => this.batchSelect(event));
     this.$element.on('click','.js-batch-btn', event =>this.batchBtnClick(event));
     this.$element.on('click','.js-finish-btn',event => this.finishBtnClick(event));
-    this.$element.on('click','*[data-anchor]',event => this.quickToQuestion(event));
+    this.$element.on('click','*[data-anchor]',event => this.quickToQuestion(event, this.flag));
   }
 
   sbListFixed() {
@@ -52,11 +54,15 @@ export default class sbList {
     const $target = $(event.target);
     $target.toggleClass('hidden');
     this.toggleClass();
+    this.$anchor.addClass('sb-cursor-default');
+    this.flag = false;
   }
 
   finishBtnClick(event) {
     this.$batchBtn.toggleClass('hidden');
     this.toggleClass();
+    this.$anchor.removeClass('sb-cursor-default');
+    this.flag = true;
   }
 
   toggleClass() {
@@ -64,7 +70,10 @@ export default class sbList {
     this.$sbCheckbox.toggleClass('hidden');
   }
 
-  quickToQuestion(event) {
+  quickToQuestion(event, flag) {
+    if (!flag) {
+      return;
+    }
     const $target = $(event.currentTarget);
     const position = $($target.data('anchor')).offset();
     $(document).scrollTop(position.top);
