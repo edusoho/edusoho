@@ -103,7 +103,6 @@ export default {
   watch: {
     selectedPlanId: (val, oldVal) => {
       val !== oldVal && (this.active = 0)
-      console.log(this.active, 'active')
     },
   },
   async created() {

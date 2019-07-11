@@ -51,13 +51,33 @@ const actions = {
       return [coursePlan, OptimizationCoursePlan];
     });
   },
+  getBeforeCourse({ commit }, { courseId }) {
+    const query = { courseId };
+    return Promise.all([
+      Api.getCourseLessons({ query })
+    ]).then(([coursePlan]) => {
+      commit(types.GET_COURSE_LESSONS, coursePlan);
+      return [coursePlan];
+    });
+  },
+  getAfterCourse({ commit }, { courseId }) {
+    const query = { courseId };
+    return Promise.all([
+      Api.getOptimizationCourseLessons({ query }),
+      Api.getNextStudy({ query })
+    ]).then(([OptimizationCoursePlan, nextStudy]) => {
+      commit(types.GET_NEXT_STUDY, nextStudy);
+      commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
+      return [OptimizationCoursePlan, nextStudy];
+    });
+  },
   getCourseDetail({ commit }, { courseId }) {
     const query = { courseId };
     return Promise.all([
       Api.getCourseDetail({ query })
     ]).then(([courseDetail]) => {
       commit(types.GET_COURSE_DETAIL, courseDetail);
-      return [courseDetail];
+      return courseDetail;
     });
   },
   getNextStudy({ commit }, { courseId }) {

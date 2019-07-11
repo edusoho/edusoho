@@ -37,41 +37,55 @@
       }
     },
     created(){
-      this.getCourse({
+      this.getCourseDetail({
          courseId: this.$route.params.id
-      }).then(() => {
-        this.getDetail();
-      }).catch(err => {
-          Toast.fail(err.message)
-      });
-
+        }).then((res) => {
+           if(res.member){
+             this.getAfCourse(this.$route.params.id);
+           }else{
+             this.getBeCourse(this.$route.params.id);
+           }
+        }).catch(err => {
+            Toast.fail(err.message)
+        });
     },
     methods: {
       ...mapActions('course', [
         'getCourse',
         'getCourseDetail',
-        'getNextStudy'
+        'getNextStudy',
+        'getBeforeCourse',
+        'getAfterCourse'
       ]),
       ...mapMutations('course', {
         setSourceType: types.SET_SOURCETYPE
       }),
-      getDetail(){
-        this.getCourseDetail({
-         courseId: this.$route.params.id
+      getBeCourse(id){
+        this.getBeforeCourse({
+           courseId: id
         }).then(() => {
             this.getComponent(this.joinStatus);
         }).catch(err => {
             Toast.fail(err.message)
-        });
+        })
+      },
+      getAfCourse(id){
+        this.getAfterCourse({
+          courseId: id
+        }).then(() => {
+          this.getComponent(this.joinStatus);
+        }).catch(err => {
+          Toast.fail(err.message)
+        })
       },
       getComponent(status) {
-        if(status){
-           this.getNextStudy({
-              courseId: this.selectedPlanId
-            }).then(() => {}).catch(err => {
-                Toast.fail(err.message)
-            });
-        }
+        // if(status){
+        //    this.getNextStudy({
+        //       courseId: this.selectedPlanId
+        //     }).then(() => {}).catch(err => {
+        //         Toast.fail(err.message)
+        //     });
+        // }
         this.currentComp = status ? joinAfter : joinBefore;
       },
       //获取加入后课程目录和学习状态
