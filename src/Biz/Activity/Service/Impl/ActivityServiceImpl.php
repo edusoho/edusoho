@@ -30,6 +30,37 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $activity = $this->fetchMedia($activity);
         }
 
+        $activity = $this->getActivityFinishCondition($activity);
+
+        return $activity;
+    }
+
+    protected function getActivityFinishCondition($activity)
+    {
+        if (ArrayToolkit::requireds($activity, array('mediaType', 'finishType', 'finishData'))) {
+            $this->createInvalidArgumentException('params missed');
+        }
+
+        $type = $activity['mediaType'];
+        $finishType = $activity['finishType'];
+        $finishData = $activity['finishData'];
+
+        if ('testpapaer' == $type && 'score' == $finishType) {
+            if (!isset($activity['ext'])) {
+                $activity = $this->fetchMedia($activity);
+            }
+            $finishData = $activity['ext']['finishCondition']['finishScore'];
+        }
+
+        $text = "mobile.task.finish_tips.{$type}.{$finishType}";
+        $text = $this->trans($text, array('%finishData%' => $finishData));
+
+        $activity['finishCondition'] = array(
+            'type' => $finishType,
+            'data' => $finishData,
+            'text' => $text,
+        );
+
         return $activity;
     }
 
