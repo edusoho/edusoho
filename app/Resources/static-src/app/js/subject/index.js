@@ -1,4 +1,5 @@
 import notify from 'common/notify';
+import QuestionOperate from './operate';
 
 export default class sbList {
   constructor() {
@@ -13,15 +14,18 @@ export default class sbList {
     this.$diffiultyModal = $('.js-difficulty-modal');
     this.$scoreModal = $('.js-score-modal');
     this.scoreValidator = null;
-
+    this.selectQuestion = [];
+    this.questionOperate = null;
     this.init();
   }
 
   init() {
+    this.questionOperate = new QuestionOperate({});
     this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
+    this.setDifficulty();
   }
 
   confirmFresh() {
@@ -167,13 +171,15 @@ export default class sbList {
 
     self.$element.find('.js-show-checkbox.checked').each(function(){
       let type = $(this).data('type'),
-        name = $(this).data('name');
+        name = $(this).data('name'),
+        order = $(this).data('order');
 
       if (typeof stats[type] == 'undefined') {
         stats[type] = {name:name, count:1};
       } else {
         stats[type]['count']++;
       }
+      self.selectQuestion.push(order);
     });
 
     return stats;
@@ -215,6 +221,17 @@ export default class sbList {
     if (this.scoreValidator.form()) {
       this.$scoreModal.modal('hide');
     }
+  }
+
+  setDifficulty() {
+    let self = this;
+    $('.js-difficulty-btn').click(function(){
+      let difficulty = $("input[name='difficultyRadios']:checked").val();
+      let text = $("input[name='difficultyRadios']:checked").next().text();
+      self.questionOperate.modifyDifficulty(self.selectQuestion, difficulty, text);
+      self.selectQuestion = [];
+      self.$diffiultyModal.modal('hide');
+    });
   }
 }
 
