@@ -62,7 +62,7 @@ class CourseTaskMedia extends AbstractResource
         $result = array('mediaType' => $mediaType);
 
         if ('download' == $mediaType) {
-            $result["{$mediaType}_media"] = $media;
+            $result["{$mediaType}Media"] = $media;
         } else {
             $result['media'] = $media;
         }
