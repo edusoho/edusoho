@@ -16,4 +16,11 @@ export default class QuestionOperate {
       // }
     });
   }
+
+  modifyScore(selectQuestion, score) {
+    let self = this;
+    $.each(selectQuestion, function(index, questionId) {
+      self.$itemList.find(`#${questionId}`).find('.js-score').html(`${score}分`);
+    })
+  }
 }

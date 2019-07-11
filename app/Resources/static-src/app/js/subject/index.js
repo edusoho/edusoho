@@ -219,6 +219,10 @@ export default class sbList {
 
   batchSetScore() {
     if (this.scoreValidator.form()) {
+      let score = $('input[name="score"]').val();
+      this.questionOperate.modifyScore(this.selectQuestion, score);
+      this.selectQuestion = [];
+
       this.$scoreModal.modal('hide');
     }
   }
