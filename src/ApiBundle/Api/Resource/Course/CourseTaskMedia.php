@@ -117,6 +117,7 @@ class CourseTaskMedia extends AbstractResource
                     'type' => 'link',
                     'fileName' => '',
                     'ext' => 'link',
+                    'url' => $material['link'],
                 );
             } else {
                 $file = $this->getUploadFileService()->getFile($material['fileId']);
@@ -124,6 +125,7 @@ class CourseTaskMedia extends AbstractResource
                     'type' => $file['storage'],
                     'fileName' => $file['filename'],
                     'ext' => $file['ext'],
+                    'url' => '',
                 );
             }
 
