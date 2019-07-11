@@ -106,11 +106,10 @@
       <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.title }}
     </div>
     <div class="subject-item__body">
-      <div class="subject-item__mask"></div>
       {% set options = item.options %}
       {% if item.type == 'judge' %}
         {% for option in options %}
-          <label class="cd-radio single-item {% if option.check == 1 %}checked{% endif %}">
+          <label class="cd-radio single-item subject-forbid {% if option.check == 1 %}checked{% endif %}">
             <input type="radio" data-toggle="cd-radio" name="right" value="true"><span class="single-item__text">{{ option.text }}</span>
           </label>
         {% endfor %}
@@ -118,11 +117,11 @@
         
         {% for option in options %}
           {% if item.type == 'radio' %}
-            <label class="cd-radio single-item {% if option.check == 1 %}checked{% endif %}">
+            <label class="cd-radio single-item subject-forbid {% if option.check == 1 %}checked{% endif %}">
               <input type="radio" data-toggle="cd-radio" name="right" value="{{'option' ~ loop.index }}"><span>{{ option.order}}. </span><span class="single-item__text {% if option.flag == 1 %}single-item__text--danger{% endif %}">{% if option.flag == 1 %}缺少选项，请点击“编辑”进行设置。{% else %}{{ option.text }}{% endif %}</span>
             </label>
           {% else %}
-            <label class="cd-checkbox single-item {% if option.check == 1 %}checked{% endif %}">
+            <label class="cd-checkbox single-item subject-forbid {% if option.check == 1 %}checked{% endif %}">
               <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ option.order}}. </span><span class="single-item__text {% if option.flag == 1 %}single-item__text--danger{% endif %}">{% if option.flag == 1 %}缺少选项，请点击“编辑”进行设置。{% else %}{{ option.text }}{% endif %}</span>
             </label>
           {% endif %}
