@@ -44,7 +44,7 @@ class CourseTaskMaterial extends AbstractResource
 
         $scheme = AssetHelper::getScheme();
         $host = $request->headers->get('host');
-        $domain = "{$scheme}//{$host}";
+        $domain = "{$scheme}://{$host}";
 
         return array(
             'url' => "{$domain}/course/{$courseId}/task/{$taskId}/token/{$token['token']}/download",
