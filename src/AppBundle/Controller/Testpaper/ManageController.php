@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Testpaper;
 
+use AppBundle\Common\FileToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
@@ -112,6 +113,26 @@ class ManageController extends BaseController
         ));
     }
 
+    public function readAction(Request $request, $id)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        if ($request->isMethod('POST')) {
+            $file = $request->files->get('importFile');
+            $ext = FileToolkit::getFileExtension($file);
+
+            if ('docx' == $ext) {
+                return $this->createJsonResponse(array('success' => true));
+            } else {
+                return $this->render('testpaper/manage/read-error.html.twig');
+            }
+        }
+
+        return $this->render('testpaper/manage/read-modal.html.twig', array(
+            'courseSet' => $courseSet,
+        ));
+    }
+
     public function checkListAction(Request $request, $targetId, $targetType, $type)
     {
         $courseIds = array($targetId);
@@ -202,7 +223,7 @@ class ManageController extends BaseController
             'questions' => $essayQuestions,
             'student' => $student,
             'accuracy' => $accuracy,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
             'total' => $total,
             'source' => $source,
             'targetId' => $targetId,
@@ -508,7 +529,7 @@ class ManageController extends BaseController
             'paperResult' => array(),
             'total' => $total,
             'attachments' => $attachments,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
         ));
     }
 
@@ -538,7 +559,7 @@ class ManageController extends BaseController
             'analyses' => ArrayToolkit::groupIndex($analyses, 'questionId', 'choiceIndex'),
             'paper' => $paper,
             'questions' => $questions,
-            'questionTypes' => $this->getCheckedQuestionType($paper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($paper),
             'relatedData' => $relatedData,
             'targetType' => $targetType,
         ));
@@ -661,20 +682,6 @@ class ManageController extends BaseController
         }
 
         return $essayQuestions;
-    }
-
-    protected function getCheckedQuestionType($testpaper)
-    {
-        $questionTypes = array();
-        if (!empty($testpaper['metas']['counts'])) {
-            foreach ($testpaper['metas']['counts'] as $type => $count) {
-                if ($count > 0) {
-                    $questionTypes[] = $type;
-                }
-            }
-        }
-
-        return $questionTypes;
     }
 
     protected function getQuestionTypes()
