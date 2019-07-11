@@ -103,8 +103,8 @@ export default {
       }
     },
     //处理数据
-    processItem(newvalue,oldvalue) {
-      if(newvalue==oldvalue){
+    processItem() {
+      if(!this.OptimizationCourseLessons){
         return
       }
       let res = this.OptimizationCourseLessons;

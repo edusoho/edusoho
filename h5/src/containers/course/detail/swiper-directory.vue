@@ -33,7 +33,14 @@ export default {
     },
     data(){
         return{
-            current:this.slideIndex || 0
+            current:this.slideIndex|| 0
+        }
+    },
+    watch:{
+        slideIndex:function (val, oldVal){
+            if(val!=oldVal){
+                this.current=val || 0
+            }
         }
     },
     methods:{
