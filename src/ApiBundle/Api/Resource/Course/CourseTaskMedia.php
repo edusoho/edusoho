@@ -12,6 +12,7 @@ use Biz\Classroom\ClassroomException;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
@@ -53,10 +54,20 @@ class CourseTaskMedia extends AbstractResource
         }
         $media = $this->$method($course, $task, $activity, $request->getHttpRequest(), $ssl);
 
-        return array(
-            'mediaType' => $activity['mediaType'],
-            'media' => $media,
-        );
+        return $this->getReturnByMediaType($activity['mediaType'], $media);
+    }
+
+    private function getReturnByMediaType($mediaType, $media)
+    {
+        $result = array('mediaType' => $mediaType);
+
+        if ('download' == $mediaType) {
+            $result["{$mediaType}_media"] = $media;
+        } else {
+            $result['media'] = $media;
+        }
+
+        return $result;
     }
 
     protected function checkPreview($course, $task)
@@ -89,6 +100,73 @@ class CourseTaskMedia extends AbstractResource
         if (empty($allowAnonymousPreview) && !$user->isLogin()) {
             throw UserException::UN_LOGIN();
         }
+    }
+
+    protected function getDownload($course, $task, $activity, $request, $ssl = false)
+    {
+        $medias = array();
+        $materials = $this->getMaterialService()->findMaterialsByCourseIdAndLessonId($course['id'], $activity['id']);
+
+        if (empty($materials)) {
+            return $medias;
+        }
+
+        foreach ($materials as $material) {
+            if (0 == $material['fileId']) {
+                $media = array(
+                    'type' => 'link',
+                    'fileName' => '',
+                    'ext' => 'link',
+                );
+            } else {
+                $file = $this->getUploadFileService()->getFile($material['fileId']);
+                $media = array(
+                    'type' => $file['storage'],
+                    'fileName' => $file['filename'],
+                    'ext' => $file['ext'],
+                );
+            }
+
+            $media['courseId'] = $course['id'];
+            $media['taskId'] = $task['id'];
+            $media['materialId'] = $material['id'];
+            $media['fileId'] = $material['fileId'];
+            $media['fileType'] = $this->getExtType($media['ext']);
+            $media['title'] = $material['title'];
+            $media['description'] = $material['description'];
+            $media['fileSize'] = $material['fileSize'];
+            $medias[] = $media;
+        }
+
+        return $medias;
+    }
+
+    private function getExtType($ext)
+    {
+        $types = array(
+            'video' => array('mpeg', 'mpg', 'mpe', 'mlv', 'dat', '2v', 'vob', 'rmvb', 'mov', 'qt', 'asf', 'avi', 'wmv', 'mkv', 'mp4', 'flv'),
+            'audio' => array('mp3', 'wma', 'aac', 'cda', 'wav', 'voc', 'cda'),
+            'image' => array('jpg', 'jpeg', 'png', 'gif'),
+            'package' => array('zip', 'zipx', 'rar', '7z', 'dmg', 'tar'),
+            'txt' => array('txt'),
+            'pdf' => array('pdf'),
+            'doc' => array('doc', 'docx'),
+            'xls' => array('xls', 'xlsx'),
+            'ppt' => array('ppt', 'pptx'),
+            'flash' => array('flash'),
+            'link' => array('link'),
+        );
+
+        $belongs = 'other';
+
+        foreach ($types as $type => $contains) {
+            if (in_array($ext, $contains)) {
+                $belongs = $type;
+                break;
+            }
+        }
+
+        return $belongs;
     }
 
     protected function getVideo($course, $task, $activity, $request, $ssl = false)
@@ -292,5 +370,13 @@ class CourseTaskMedia extends AbstractResource
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    /**
+     * @return MaterialService
+     */
+    protected function getMaterialService()
+    {
+        return $this->getBiz()->service('Course:MaterialService');
     }
 }
