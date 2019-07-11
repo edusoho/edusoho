@@ -198,6 +198,11 @@
     color: #fff;
     border: 1px solid #ed3e3e;
   }
+  &:hover,
+  &:focus,
+  &.active {
+    cursor: pointer;
+  }
 }
 .subject-batch {
   font-size: 12px;
@@ -253,11 +258,10 @@
   width: 266px;
 }
 
-.subject-item__mask {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
+.sb-cursor-default {
+  cursor: default !important;
+}
+
+.subject-forbid {
+  pointer-events: none;
 }

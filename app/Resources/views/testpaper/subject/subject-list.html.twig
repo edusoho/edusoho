@@ -97,7 +97,7 @@
   <div class="subject-list__body row">
     {% for item in data %}
       <div class="col-sm-3 subject-list-item">
-        <div class="subject-list-item__num {% if item.flag %}subject-list-item__num--error{% endif %}">
+        <div class="subject-list-item__num {% if item.flag %}subject-list-item__num--error{% endif %} js-subject-anchor" data-anchor="{{'#' ~ loop.index }}">
           {{ loop.index }}
           {% if item.type != 'material' %}
             <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="{{ item.type }}" data-name="{{ item.name }}"><input type="checkbox" data-toggle="cd-checkbox"></label>

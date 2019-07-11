@@ -8,6 +8,8 @@ export default class sbList {
     this.$sbCheckbox = $('.js-show-checkbox');
     this.$finishBtn = $('.js-finish-btn');
     this.$allBtn = $('.js-batch-select');
+    this.$anchor = $('.js-subject-anchor');
+    this.flag = true;
     this.$modal = $('#question-difficulty-modal');
     this.init();
   }
@@ -27,6 +29,8 @@ export default class sbList {
   initEvent() {
     this.$element.on('click','.js-batch-select', event => this.batchSelect(event));
     this.$element.on('click','.js-batch-btn', event =>this.batchBtnClick(event));
+    this.$element.on('click','.js-finish-btn',event => this.finishBtnClick(event));
+    this.$element.on('click','*[data-anchor]',event => this.quickToQuestion(event, this.flag));
     this.$element.on('click','.js-finish-btn', event => this.finishBtnClick(event));
     this.$element.on('click','.js-difficult-setting', event => this.showModal(event, this.$modal));
   }
@@ -62,16 +66,29 @@ export default class sbList {
     const $target = $(event.target);
     $target.toggleClass('hidden');
     this.toggleClass();
+    this.$anchor.addClass('sb-cursor-default');
+    this.flag = false;
   }
 
   finishBtnClick(event) {
     this.$batchBtn.toggleClass('hidden');
     this.toggleClass();
+    this.$anchor.removeClass('sb-cursor-default');
+    this.flag = true;
   }
 
   toggleClass() {
     this.$batchWrap.toggleClass('hidden');
     this.$sbCheckbox.toggleClass('hidden');
+  }
+
+  quickToQuestion(event, flag) {
+    if (!flag) {
+      return;
+    }
+    const $target = $(event.currentTarget);
+    const position = $($target.data('anchor')).offset();
+    $(document).scrollTop(position.top);
   }
 
   showModal(event, modal) {
@@ -99,10 +116,10 @@ export default class sbList {
 
     self.$element.find('.js-show-checkbox.checked').each(function(){
       let type = $(this).data('type'),
-          name = $(this).data('name');
+        name = $(this).data('name');
 
       if (typeof stats[type] == 'undefined') {
-        stats[type] = {name:name, count:1};;
+        stats[type] = {name:name, count:1};
       } else {
         stats[type]['count']++;
       }
