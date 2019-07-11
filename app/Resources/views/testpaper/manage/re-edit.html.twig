@@ -1,5 +1,11 @@
 {% extends 'testpaper/subject/layout.html.twig' %}
 
+{% set totolScore =  200 %}
+
+{% block subtitle %}
+  <span class="pull-right">总分{{ totolScore }}分</span>
+{% endblock %}
+
 {% block testpaper %}
   <div class="subject-title"><input name="testpaperTitle" value="试卷名称" placeholder="此处可编辑试卷名称，最多输入50个字符"></div>
 {% endblock %}
