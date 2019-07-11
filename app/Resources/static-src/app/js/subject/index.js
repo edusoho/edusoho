@@ -27,7 +27,8 @@ export default class sbList {
   }
 
   initEvent() {
-    this.$element.on('click','.js-batch-select', event => this.batchSelect(event));
+    this.$element.on('click','.js-batch-select', event => this.batchToItem(event));
+    this.$element.on('click','.js-show-checkbox', event => this.itemToBatch(event));
     this.$element.on('click','.js-batch-btn', event =>this.batchBtnClick(event));
     this.$element.on('click','.js-finish-btn',event => this.finishBtnClick(event));
     this.$element.on('click','*[data-anchor]',event => this.quickToQuestion(event, this.flag));
@@ -51,14 +52,35 @@ export default class sbList {
     });
   }
 
-  batchSelect(event) {
+  batchToItem(event) {
     if (event.currentTarget !== event.target) {
       return;
     }
-    this.$sbCheckbox.each(function() {
-      const $this = $(this);
-      $this[0].click();
-    });
+    const $target = $(event.currentTarget);
+    let checked = $target.hasClass('checked');
+    if (checked) {
+      this.$sbCheckbox.removeClass('checked');
+    } else {
+      this.$sbCheckbox.addClass('checked');
+    }
+  }
+
+  itemToBatch(event) {
+    if (event.currentTarget !== event.target) {
+      return;
+    }
+    const $target = $(event.currentTarget);
+    let itemLength = this.$sbCheckbox.length;
+    const self = this;
+    setTimeout(function(){
+      let $checkBox = $('.js-subject-list-body').find('.checked');
+      let itemCheckedLength = $checkBox.length;
+      if (itemLength == itemCheckedLength) {
+        self.$allBtn.addClass('checked');
+      } else {
+        self.$allBtn.removeClass('checked');
+      }
+    }, 100);
   }
 
   batchBtnClick(event) {
@@ -68,6 +90,7 @@ export default class sbList {
     this.$anchor.addClass('sb-cursor-default');
     this.flag = false;
   }
+
 
   finishBtnClick(event) {
     this.$batchBtn.toggleClass('hidden');
