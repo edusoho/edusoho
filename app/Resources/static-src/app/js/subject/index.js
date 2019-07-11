@@ -18,6 +18,7 @@ export default class sbList {
     this.$element.on('click','.js-batch-select', event => this.batchSelect(event));
     this.$element.on('click','.js-batch-btn', event =>this.batchBtnClick(event));
     this.$element.on('click','.js-finish-btn',event => this.finishBtnClick(event));
+    this.$element.on('click','*[data-anchor]',event => this.quickToQuestion(event));
   }
 
   sbListFixed() {
@@ -61,6 +62,12 @@ export default class sbList {
   toggleClass() {
     this.$batchWrap.toggleClass('hidden');
     this.$sbCheckbox.toggleClass('hidden');
+  }
+
+  quickToQuestion(event) {
+    const $target = $(event.currentTarget);
+    const position = $($target.data('anchor')).offset();
+    $(document).scrollTop(position.top);
   }
 }
 

@@ -3,6 +3,7 @@
     "title": '科目汇总表的总范围是（）',
     "type": 'radio',
     "flag": 1,
+    "order": 1,
     "options": [
       {
         "order": 'A',
@@ -42,6 +43,7 @@
     "title": '科目汇总表的总范围是（）',
     "type": 'checkbox',
     "flag": 1,
+    "order": 2,
     "options": [
       {
         "order": 'A',
@@ -81,6 +83,7 @@
     "title": '科目汇总表的总范围是全部账户的借、贷方发生额。',
     "type": 'judge',
     "flag": 0,
+    "order": 3,
     'difficulty': '一般',
     'score': '5',
     "options": [
@@ -98,7 +101,7 @@
 
 
 {% for item in singleData %}
-  <div class="subject-item">
+  <div class="subject-item" id="{{ item.order }}">
     <div class="subject-item__title">
       <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.title }}
     </div>
