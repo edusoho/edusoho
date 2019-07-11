@@ -1,0 +1,34 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% block title %}
+  批量设置分数
+{% endblock %}
+
+{% block body %}
+  <p style="color: black" class="cd-ml40 cd-mb24 js-selected"></p>
+  <form class="form-horizontal" id="batch-set-score-form">
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="score">分值</label>
+      </div>
+      <div class="col-md-9 controls">
+        <input id="score" type="text" class="form-control" name="score" required="required" placeholder="请输入小于1000的正整数">
+      </div>
+    </div>
+    <div class="row form-group  miss-score-field">
+      <div class="col-md-3 control-label">
+        <label for="missScore">漏选分值</label>
+      </div>
+      <div class="col-md-9 controls">
+        <input id="missScore" type="text" class="form-control" name="missScore" placeholder="请输入小于1000的正整数">
+      </div>
+    </div>
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn cd-btn cd-btn-lg cd-btn-primary pull-right js-batch-score-confirm">{{ 'form.btn.confirm'|trans }}</button>
+  <button type="button" class="btn cd-btn cd-btn-lg cd-btn-flat-default pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}

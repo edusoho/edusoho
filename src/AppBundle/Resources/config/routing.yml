@@ -2344,6 +2344,10 @@ course_set_manage_question_check_num:
   defaults: { _controller: AppBundle:Question/Manage:showQuestionTypesNum }
   methods: [POST]
 
+question_batch_set_score:
+  path: /question/re_edit/batch_set/score
+  defaults: { _controller: AppBundle:Question/Manage:batchSetScore }
+
 #testpaper
 course_set_manage_testpaper:
   path: /course_set/{id}/manage/testpaper

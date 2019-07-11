@@ -391,6 +391,11 @@ class ManageController extends BaseController
         return $this->createJsonResponse($typesNum);
     }
 
+    public function batchSetScoreAction()
+    {
+        return $this->render('testpaper/subject/batch-set-score-modal.html.twig');
+    }
+
     protected function getQuestionConfig()
     {
         return $this->get('extension.manager')->getQuestionTypes();
