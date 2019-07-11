@@ -2,17 +2,13 @@
 
 {% do script(['app/js/subject/index.js']) %}
 
-{% set totolNum =  19 %}
-
 {% block content %}
   <div class="row">
     <div class="col-sm-3">
       <div class="subject-data subject-rect js-subject-data">
-        <div class="subject-rect__title">题目统计</div>
-          <div class="subject-data__subtitle clearfix">
-            <span>共{{ totolNum }}道题</span>
-            {% block subtitle %}{% endblock %}
-          </div>
+        <div class="subject-rect__title">题目统计
+          {% block subtitle %}{% endblock %}
+        </div>
         {% include 'testpaper/subject/subject-num.html.twig' %}
       </div>
       {% include 'testpaper/subject/subject-list.html.twig' %}
