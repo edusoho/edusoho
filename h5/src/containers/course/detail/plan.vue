@@ -149,30 +149,21 @@ export default {
   },
   methods: {
     ...mapActions('course', [
+        'getCourse',
         'getCourseDetail',
-        'getJoinAfterDetail'
+        'getNextStudy'
     ]),
     handleClick (item, index){
       this.items.map(item => item.active = false);
       item.active = true;
-      //根据是否加入来获取不同目录
-      if(this.joinStatus){
-          this.getJoinAfterDetail({
-            courseId: item.id
-          }).then(() => {
-             this.$emit('switchPlan');
-          }).catch(err => {
-            Toast.fail(err.message)
-          })
-      }else{
-          this.getCourseDetail({
-            courseId: item.id
-          }).then(() => {
-            this.$emit('switchPlan');
-          }).catch(err => {
-            Toast.fail(err.message)
-          });
-      }
+      this.getCourseDetail({
+        courseId: item.id
+      }).then(() => {
+        this.$emit('switchPlan');
+      }).catch(err => {
+        Toast.fail(err.message)
+      })
+
     },
     filterPrice () {
       const details = this.details;

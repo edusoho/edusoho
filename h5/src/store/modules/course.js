@@ -40,15 +40,33 @@ const mutations = {
 };
 
 const actions = {
+  getCourse({ commit }, { courseId }) {
+    const query = { courseId };
+    return Promise.all([
+      Api.getCourseLessons({ query }),
+      Api.getOptimizationCourseLessons({ query })
+    ]).then(([coursePlan, OptimizationCoursePlan]) => {
+      commit(types.GET_COURSE_LESSONS, coursePlan);
+      commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
+      return [coursePlan, OptimizationCoursePlan];
+    });
+  },
   getCourseDetail({ commit }, { courseId }) {
     const query = { courseId };
     return Promise.all([
-      Api.getCourseDetail({ query }),
-      Api.getCourseLessons({ query })
-    ]).then(([courseDetail, coursePlan]) => {
+      Api.getCourseDetail({ query })
+    ]).then(([courseDetail]) => {
       commit(types.GET_COURSE_DETAIL, courseDetail);
-      commit(types.GET_COURSE_LESSONS, coursePlan);
-      return [courseDetail, coursePlan];
+      return [courseDetail];
+    });
+  },
+  getNextStudy({ commit }, { courseId }) {
+    const query = { courseId };
+    return Promise.all([
+      Api.getNextStudy({ query })
+    ]).then(([nextStudy]) => {
+      commit(types.GET_NEXT_STUDY, nextStudy);
+      return [nextStudy];
     });
   },
   joinCourse({ commit }, { id }) {
@@ -62,17 +80,6 @@ const actions = {
         commit(types.JOIN_COURSE, res);
       }
       return res;
-    });
-  },
-  getJoinAfterDetail({ commit }, { courseId }) {
-    const query = { courseId };
-    return Promise.all([
-      Api.getOptimizationCourseLessons({ query }),
-      Api.getNextStudy({ query })
-    ]).then(([OptimizationCoursePlan, nextStudy]) => {
-      commit(types.GET_NEXT_STUDY, nextStudy);
-      commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
-      return [nextStudy, OptimizationCoursePlan];
     });
   }
 };

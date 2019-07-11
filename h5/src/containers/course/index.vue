@@ -24,7 +24,8 @@
       ...mapState('course', {
         selectedPlanIndex: state => state.selectedPlanIndex,
         joinStatus: state => state.joinStatus,
-        details:  state => state.details
+        details:  state => state.details,
+        selectedPlanId: state => state.selectedPlanId,
       }),
       ...mapState({
         isLoading: state => state.isLoading
@@ -33,29 +34,45 @@
     watch: {
       joinStatus(status) {
         this.getComponent(status);
-        if(status){
-          this.getJoinAfter();
-        }
       }
     },
     created(){
-      this.getCourseDetail({
-        courseId: this.$route.params.id
+      this.getCourse({
+         courseId: this.$route.params.id
       }).then(() => {
-        this.getComponent(this.joinStatus);
+        this.getDetail();
       }).catch(err => {
-        Toast.fail(err.message)
-      })
+          Toast.fail(err.message)
+      });
+
     },
     methods: {
       ...mapActions('course', [
+        'getCourse',
         'getCourseDetail',
-        'getJoinAfterDetail'
+        'getNextStudy'
       ]),
       ...mapMutations('course', {
         setSourceType: types.SET_SOURCETYPE
       }),
+      getDetail(){
+        this.getCourseDetail({
+         courseId: this.$route.params.id
+        }).then(() => {
+            this.getComponent(this.joinStatus);
+        }).catch(err => {
+            Toast.fail(err.message)
+        });
+      },
       getComponent(status) {
+        console.log(this.selectedPlanIndex)
+        if(status){
+           this.getNextStudy({
+              courseId: this.selectedPlanId
+            }).then(() => {}).catch(err => {
+                Toast.fail(err.message)
+            });
+        }
         this.currentComp = status ? joinAfter : joinBefore;
       },
       //获取加入后课程目录和学习状态

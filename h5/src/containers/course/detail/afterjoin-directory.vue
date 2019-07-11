@@ -88,8 +88,12 @@ export default {
       immediate: true
     },
     OptimizationCourseLessons: {
-      handler: "processItem"
+      handler: "processItem",
+      deep:true
     }
+  },
+  created(){
+    this.processItem()
   },
   methods: {
     getNextStudy() {
@@ -104,6 +108,7 @@ export default {
     //处理数据
     processItem() {
       let res = this.OptimizationCourseLessons;
+      console.log(res)
       if(res.length==0){
         this.nodata=true;
         return
