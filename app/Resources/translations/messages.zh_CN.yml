@@ -1851,7 +1851,7 @@ course.plan_task.activity_manage.download: 下载资料
 course.plan_task.activity_manage.download.choose_file: 选择资料
 course.plan_task.activity_manage.download.link_file: 网络链接资料
 course.plan_task.activity_manage.download.delete_btn: 删除
-course.plan_task.activity_manage.download.file_tips: 注意：资料文件在移动端上无法被下载!
+course.plan_task.activity_manage.download.file_tips: 资料文件支持在PC和APP中下载使用，暂不支持在微网校和小程序中使用!
 course.plan_task.activity_manage.download.downloaded_tips: 下载过资料
 course.plan_task.activity_manage.download.edit: 编辑
 course.plan_task.activity_manage.download.converting_tips: >
