@@ -5,91 +5,109 @@
 {% set data = [
   {
     "name": '单选题',
+    "order": 1,
     "type": 'single_choice',
     "flag": 1,
   },
   {
     "name": '单选题',
+    "order": 2,
     "type": 'single_choice',
     "flag": 0,
   },
   {
     "name": '单选题',
+    "order": 3,
     "type": 'single_choice',
     "flag": 1,
   },
   {
     "name": '单选题',
+    "order": 4,
     "type": 'single_choice',
     "flag": 0,
   },
   {
     "name": '单选题',
+    "order": 5,
     "type": 'single_choice',
     "flag": 1,
   },
   {
     "name": '多选题',
+    "order": 6,
     "type": 'choice',
     "flag": 0,
   },
   {
     "name": '多选题',
+    "order": 7,
     "type": 'choice',
     "flag": 1,
   },
   {
     "name": '多选题',
+    "order": 8,
     "type": 'choice',
     "flag": 0,
   },
   {
     "name": '不定项',
+    "order": 9,
     "type": 'uncertain_choice',
     "flag": 1,
   },
   {
     "name": '不定项',
+    "order": 10,
     "type": 'uncertain_choice',
     "flag": 0,
   },
   {
     "name": '不定项',
+    "order": 11,
     "type": 'uncertain_choice',
     "flag": 1,
   },
   {
     "name": '问答题',
+    "order": 12,
     "type": 'eassy',
     "flag": 0,
   },
   {
     "name": '问答题',
+    "order": 13,
     "type": 'eassy',
     "flag": 1,
   },
   {
     "name": '判断题',
+    "order": 14,
     "type": 'determine',
     "flag": 0,
   },
   {
     "name": '判断题',
+    "order": 15,
     "type": 'determine',
     "flag": 1,
   },
   {
     "name": '填空题',
+    "order": 16,
     "type": 'fill',
     "flag": 0,
   },
   {
     "name": '材料题',
+    "order": 17,
     "type": 'material',
     "flag": 0,
   },
   {
     "name": '材料题',
+    "order": 18,
     "type": 'material',
     "flag": 1,
   }
@@ -100,7 +118,7 @@
         <div class="subject-list-item__num {% if item.flag %}subject-list-item__num--error{% endif %} js-subject-anchor" data-anchor="{{'#' ~ loop.index }}">
           {{ loop.index }}
           {% if item.type != 'material' %}
-            <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="{{ item.type }}" data-name="{{ item.name }}"><input type="checkbox" data-toggle="cd-checkbox"></label>
+            <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="{{ item.type }}" data-name="{{ item.name }}" data-order="{{ item.order }}"><input type="checkbox" data-toggle="cd-checkbox"></label>
           {% endif %}
         </div>
         {{ item.name }}
@@ -111,7 +129,7 @@
   <div class="subject-batch js-subject-wrap hidden">
     <label class="cd-checkbox subject-batch-checkbox js-batch-select"><input type="checkbox" data-toggle="cd-checkbox"> 全选</label>
     <div class="row">
-      <div class="col-sm-6"><a href="javascript:;">批量设置分数</a></div>
+      <div class="col-sm-6"><a href="javascript:;" class="js-score-setting">批量设置分数</a></div>
       <div class="col-sm-6 text-right"><a href="javascript:;" class="js-difficult-setting">批量设置难度</a></div>
     </div>
     <button class="cd-btn cd-btn-primary btn-block cd-mt8 js-finish-btn" type="button">完成</button>
