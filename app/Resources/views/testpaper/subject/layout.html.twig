@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% do script(['app/js/subject/index.js']) %}
+{% do script(['libs/jquery-validation.js', 'app/js/subject/index.js']) %}
 
 {% block content %}
   <div class="row">
@@ -20,5 +20,9 @@
   </div>
   {% block question_difficulty_modal %}
     {% include 'testpaper/subject/question-difficulty-modal.html.twig' %}
+  {% endblock %}
+
+  {% block batch_set_score_modal %}
+    {% include 'testpaper/subject/batch-set-score-modal.html.twig' %}
   {% endblock %}
 {% endblock %}
