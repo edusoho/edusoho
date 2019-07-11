@@ -36,7 +36,7 @@ class CourseTaskMaterial extends AbstractResource
                 'materialId' => $materialId,
                 'fileId' => $material['fileId'],
             ),
-            'times' => 1,
+            'times' => 0,
             'userId' => $this->getCurrentUser()->getId(),
             'duration' => 30 * 60,
         );
