@@ -58,7 +58,7 @@
           v-for="(taskItem,taskIndex) in lessonItem.tasks"
           :id="taskItem.id"
           :key="taskIndex"
-          v-if="taskItem.mode!='lesson'"
+          v-if="showTask(taskItem,taskIndex)"
           @click="lessonCellClick(taskItem)"
         >
           <div
@@ -150,6 +150,19 @@ export default {
         isDouble = false;
       }
       return isDouble;
+    },
+    showTask(taskItem,taskIndex){
+      let result=true
+      if(taskItem.mode==null ){
+        if(taskIndex==0){
+          result=false
+        }
+      }
+      if(taskItem.mode=='lesson'){
+        result=false
+      }
+      return result
+
     },
     lessonCellClick(task) {
       // 课程错误和未发布状态，不允许学习任务

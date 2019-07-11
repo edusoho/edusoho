@@ -103,8 +103,10 @@ export default {
       }
     },
     //处理数据
-    processItem() {
-      console.log(1)
+    processItem(newvalue,oldvalue) {
+      if(newvalue==oldvalue){
+        return
+      }
       let res = this.OptimizationCourseLessons;
       const that = this;
       this.chapterNum = 0; //章节数
