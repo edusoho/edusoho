@@ -31,7 +31,6 @@ export default class sbList {
     this.$element.on('click','.js-batch-btn', event =>this.batchBtnClick(event));
     this.$element.on('click','.js-finish-btn',event => this.finishBtnClick(event));
     this.$element.on('click','*[data-anchor]',event => this.quickToQuestion(event, this.flag));
-    this.$element.on('click','.js-finish-btn', event => this.finishBtnClick(event));
     this.$element.on('click','.js-difficult-setting', event => this.showModal(event, this.$diffiultyModal));
   }
 
