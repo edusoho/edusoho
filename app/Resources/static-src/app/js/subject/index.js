@@ -10,7 +10,7 @@ export default class sbList {
     this.$allBtn = $('.js-batch-select');
     this.$anchor = $('.js-subject-anchor');
     this.flag = true;
-    this.$modal = $('#question-difficulty-modal');
+    this.$diffiultyModal = $('.js-diffiulty-modal');
     this.init();
   }
 
@@ -32,7 +32,7 @@ export default class sbList {
     this.$element.on('click','.js-finish-btn',event => this.finishBtnClick(event));
     this.$element.on('click','*[data-anchor]',event => this.quickToQuestion(event, this.flag));
     this.$element.on('click','.js-finish-btn', event => this.finishBtnClick(event));
-    this.$element.on('click','.js-difficult-setting', event => this.showModal(event, this.$modal));
+    this.$element.on('click','.js-difficult-setting', event => this.showModal(event, this.$diffiultyModal));
   }
 
   sbListFixed() {
@@ -95,7 +95,7 @@ export default class sbList {
     let stats = this.statChosedQuestion();
     var keys = Object.keys(stats);
     if (keys.length == 0) {
-      notify('danger', Translator.trans('请选择题目'));
+      cd.message({ type: 'danger', message: Translator.trans('请选择题目') });
       return;
     }
     let html = '';
