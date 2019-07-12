@@ -592,6 +592,12 @@ class ManageController extends BaseController
         ));
     }
 
+    public function reEditAction(Request $request)
+    {
+        return $this->render('testpaper/manage/re-edit.html.twig', array(
+        ));
+    }
+
     protected function fillGraphData($testpaper, $userFirstResults)
     {
         $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());

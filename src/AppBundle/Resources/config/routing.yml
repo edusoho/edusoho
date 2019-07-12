@@ -3187,3 +3187,11 @@ drag_captcha:
 login_wechat_qrcode:
     path:     /login/wechat/qrcode
     defaults: { _controller: AppBundle:Login:wechatQrcode }
+
+testpaper_re_edit:
+  path: /testpaper/re_edit
+  defaults: { _controller: AppBundle:Testpaper/Manage:reEdit }
+
+question_re_edit:
+  path: /question/re_edit
+  defaults: { _controller: AppBundle:Question/Manage:reEdit }

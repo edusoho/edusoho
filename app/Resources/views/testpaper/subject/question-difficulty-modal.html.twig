@@ -1,0 +1,36 @@
+<div id="question-difficulty-modal" class="modal in js-difficulty-modal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body task-state-modal">
+        <div class="title font-blod text-left">
+          {{'批量设置难度'|trans}}
+          <button data-dismiss="modal" class="close"><i class="cd-icon cd-icon-close"></i></button>
+        </div>
+        <div class="content text-left ph20">
+          <span class="text-14">
+            {{'已选：'|trans}}
+          </span>
+          <span class="text-14 js-select">
+          </span>
+        </div>
+        <div class="mt20 ml5">
+          <span>难度：</span>
+          <label class="cd-radio mr20">
+            <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="easy" checked=""><span>简单</span>
+          </label>
+          <label class="cd-radio mr20 checked">
+            <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="normal" checked=""><span>一般</span>
+          </label>
+          <label class="cd-radio mr20">
+            <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="difficult" checked=""><span>困难</span>
+          </label>
+        </div>
+        <div class="text-right mt20">
+          <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</a>
+          <button class="btn btn-primary js-difficulty-btn" id="difficulty-set-btn" data-loading-text="{{'form.btn.hand_in.submiting'|trans}}..">
+          {{'form.btn.confirm'|trans}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
