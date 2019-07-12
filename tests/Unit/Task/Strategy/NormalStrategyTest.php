@@ -101,6 +101,7 @@ class NormalStrategyTest extends BaseTestCase
                     'courseId' => 1,
                     'categoryId' => 1,
                     'title' => 'updatedTaskTitle',
+                    'isLesson' => 1
                 ),
             ),
         ));
