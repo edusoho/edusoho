@@ -20,18 +20,33 @@ class CourseItem extends AbstractResource
             throw CourseException::NOTFOUND_COURSE();
         }
 
-        return $this->convertToLeadingItems(
+        $items = $this->convertToLeadingItems(
             $this->getCourseService()->findCourseItems($courseId),
             $course,
             $request->getHttpRequest()->isSecure(),
             $request->query->get('fetchSubtitlesUrls', 0),
             $request->query->get('onlyPublished', 0)
         );
+
+        $request->query->has('format') ? $format = $request->query->get('format') : $format = 0;
+
+        if ($format) {
+            $filter = new CourseItemWithLessonFilter();
+            $filter->filters($items);
+            $items = $this->convertToTree($items);
+        }
+
+        return $items;
     }
 
     protected function convertToLeadingItems($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
     {
         return $this->container->get('api.util.item_helper')->convertToLeadingItemsV1($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask);
+    }
+
+    protected function convertToTree($items)
+    {
+        return $this->container->get('api.util.item_helper')->convertToTree($items);
     }
 
     protected function getCourseService()
