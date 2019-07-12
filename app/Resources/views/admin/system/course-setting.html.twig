@@ -143,7 +143,25 @@
     <div class="form-group">
       <label class="col-md-3 control-label">{{ 'admin.setting_course.course_operation_mode.allow_show_user_count'|trans }}</label>
       <div class="col-md-8 controls radios">
-        {{ radios('show_student_num_enabled', {'1':'admin.setting_course.open'|trans, '0':'admin.setting_course.closed'|trans}, courseSetting.show_student_num_enabled|default('1') ) }}
+        <label>
+          <input id="show-student-num-open" type="radio" name="show_student_num_enabled" value="1" data-showable="{{ courseSetting.show_student_num_enabled|default('1') }}"> {{ 'admin.setting_course.open'|trans }}
+        </label>
+        <label>
+          <input id="show-student-num-close" type="radio" name="show_student_num_enabled" value="0"> {{ 'admin.setting_course.closed'|trans }}
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" id='show_cover_num_mode'>
+      <label class="col-md-3 control-label">{{ 'admin.setting_course.course_operation_mode.course_set_number'|trans }}</label>
+      <div class="col-md-8 controls radios">
+        <label>
+          <input id="show-student-num" type="radio" name="show_cover_num_mode" value="studentNum" data-showmode="{{ courseSetting.show_cover_num_mode|default("studentNum") }}"> {{ 'admin.setting_course.cover_number.student_num'|trans }}
+        </label>
+        <label>
+          <input id="show-hit-num" type="radio" name="show_cover_num_mode" value="hitNum"> {{ 'admin.setting_course.cover_number.hit_num'|trans }}
+        </label>
+        <div class="help-block">{{ 'admin.setting_course.course_operation_mode.course_set_number.help_block'|trans }}</div>
       </div>
     </div>
 

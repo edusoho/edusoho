@@ -6,6 +6,15 @@ use Biz\BaseTestCase;
 
 class PushDevice extends BaseTestCase
 {
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
+     */
+    public function testCreatePushDeviceException()
+    {
+        $this->getPushDeviceService()->createPushDevice(array());
+    }
+
     public function testCreatePushDevice()
     {
         $fields = array(
@@ -42,6 +51,9 @@ class PushDevice extends BaseTestCase
 
     public function testGetPushDeviceByUserId()
     {
+        $result = $this->getPushDeviceService()->findPushDevicesByUserId(23333);
+        $this->assertEmpty($result);
+
         $device = $this->createPushDevice();
         $result = $this->getPushDeviceService()->getPushDeviceByUserId($device['userId']);
 
@@ -50,6 +62,9 @@ class PushDevice extends BaseTestCase
 
     public function testFindPushDeviceByUserIds()
     {
+        $result = $this->getPushDeviceService()->findPushDeviceByUserIds(array());
+        $this->assertEmpty($result);
+
         $device = $this->createPushDevice();
         $result = $this->getPushDeviceService()->findPushDeviceByUserIds(array($device['userId']));
 
@@ -62,6 +77,16 @@ class PushDevice extends BaseTestCase
         $result = $this->getPushDeviceService()->searchPushDevices(array(), array(), 0, PHP_INT_MAX);
 
         $this->assertEquals(1, count($result));
+    }
+
+    public function testDeletePushDevice()
+    {
+        $device = $this->createPushDevice();
+        $count = $this->getPushDeviceService()->deletePushDevice($device['id']);
+        $result = $this->getPushDeviceService()->getPushDevice($device['id']);
+
+        $this->assertEquals(1, $count);
+        $this->assertEmpty($result);
     }
 
     protected function createPushDevice()

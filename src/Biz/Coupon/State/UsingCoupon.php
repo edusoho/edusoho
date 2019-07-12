@@ -4,12 +4,13 @@ namespace Biz\Coupon\State;
 
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
+use AppBundle\Common\Exception\AccessDeniedException;
 
 class UsingCoupon extends Coupon implements CouponInterface
 {
     public function using()
     {
-        throw new \Exception('Can not using coupon which status is using!');
+        throw new AccessDeniedException('Can not using coupon which status is using!');
     }
 
     public function used($params)
@@ -35,7 +36,6 @@ class UsingCoupon extends Coupon implements CouponInterface
             ));
         }
 
-        $user = $this->getUserService()->getUser($coupon['userId']);
         $this->dispatchEvent('coupon.use', $coupon);
 
         $this->getLogService()->info(

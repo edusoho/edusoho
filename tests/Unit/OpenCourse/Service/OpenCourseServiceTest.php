@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\OpenCourse\Service;
 
+use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Content\Service\FileService;
 use Biz\OpenCourse\Service\OpenCourseService;
@@ -352,6 +353,78 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->mockUploadService();
         $updated = $this->getOpenCourseService()->changeCoursePicture($course['id'], $data);
         $this->assertNotEmpty($updated['smallPicture']);
+    }
+
+    public function testUpdateLiveLesson()
+    {
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'search',
+                'runTimes' => 1,
+                'returnValue' => array(),
+                'withParams' => array(array('courseId' => 1), array('startTime' => 'DESC'), 0, 1),
+            ),
+            array(
+                'functionName' => 'search',
+                'runTimes' => 1,
+                'returnValue' => array(array('id' => 1)),
+                'withParams' => array(array('courseId' => 2), array('startTime' => 'DESC'), 0, 1),
+            ),
+            array(
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array('id' => 1, 'courseId' => 2, 'type' => 'liveOpen'),
+            ),
+            array(
+                'functionName' => 'update',
+                'runTimes' => 1,
+                'returnValue' => array('id' => 1, 'type' => 'liveOpen', 'mediaId' => 1, 'courseId' => 1),
+            ),
+            array(
+                'functionName' => 'create',
+                'runTimes' => 1,
+                'returnValue' => array('id' => 1, 'type' => 'live', 'mediaId' => 0, 'courseId' => 1, 'status' => 'published'),
+            ),
+            array(
+                'functionName' => 'count',
+                'runTimes' => 1,
+                'returnValue' => 1,
+            ),
+            array(
+                'functionName' => 'getLessonMaxSeqByCourseId',
+                'runTimes' => 1,
+                'returnValue' => 1,
+            ),
+        ));
+
+        $this->mockBiz('OpenCourse:LiveCourseService', array(
+            array(
+                'functionName' => 'editLiveRoom',
+                'runTimes' => 1,
+                'returnValue' => array(),
+            ),
+            array(
+                'functionName' => 'createLiveRoom',
+                'runTimes' => 1,
+                'returnValue' => array('id' => 1, 'provider' => 7),
+            ),
+        ));
+
+        $this->mockBiz('OpenCourse:OpenCourseDao', array(
+            array(
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array('id' => 1, 'status' => 'published', 'type' => 'live', 'courseId' => 1),
+            ),
+            array(
+                'functionName' => 'update',
+                'runTimes' => 1,
+                'returnValue' => array('id' => 1, 'status' => 'published', 'type' => 'live', 'courseId' => 1, 'largePicture' => '', 'middlePicture' => '', 'smallPicture' => '', 'about' => ''),
+            ),
+        ));
+
+        ReflectionUtils::invokeMethod($this->getOpenCourseService(), 'updateLiveLesson', array(array('id' => 2, 'title' => 'title'), array('authUrl' => 'www.baidu.com', 'jumpUrl' => 'www.qq.com')));
+        ReflectionUtils::invokeMethod($this->getOpenCourseService(), 'updateLiveLesson', array(array('id' => 1, 'title' => 'title'), array('authUrl' => 'www.baidu.com', 'jumpUrl' => 'www.qq.com', 'startTime' => time(), 'length' => 10)));
     }
 
     public function testUpdateCourse()
@@ -918,6 +991,16 @@ class OpenCourseServiceTest extends BaseTestCase
      * @expectedException \Biz\OpenCourse\OpenCourseException
      * @expectedExceptionMessage exception.opencourse.not_found_lesson
      */
+    public function testPublishLessonException()
+    {
+        $course = $this->_createOpenCourse();
+        $this->getOpenCourseService()->publishLesson($course['id'], 1);
+    }
+
+    /**
+     * @expectedException \Biz\OpenCourse\OpenCourseException
+     * @expectedExceptionMessage exception.opencourse.not_found_lesson
+     */
     public function testGenerateLessonVideoReplayLessonNotFound()
     {
         $course = $this->_createOpenCourse();
@@ -941,6 +1024,31 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->getOpenCourseService()->generateLessonVideoReplay($course['id'], $lesson['id'], 1);
     }
 
+    public function testGenerateLessonVideoReplay()
+    {
+        $this->mockBiz('OpenCourse:OpenCourseLessonDao', array(
+            array(
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array('id' => 1, 'courseId' => 1),
+            ),
+            array(
+                'functionName' => 'update',
+                'runTimes' => 1,
+                'returnValue' => array('id' => 1, 'type' => 'live'),
+            ),
+        ));
+
+        $this->mockBiz('File:UploadFileService', array(array(
+            'functionName' => 'getFile',
+            'runTimes' => 1,
+            'returnValue' => array('id' => 1, 'filename' => 'name'),
+        )));
+
+        $result = $this->getOpenCourseService()->generateLessonVideoReplay(1, 1, 1);
+        $this->assertEquals(1, $result['id']);
+    }
+
     public function testLiveLessonTimeCheck()
     {
         $course1 = $this->_createLiveOpenCourse();
@@ -954,6 +1062,15 @@ class OpenCourseServiceTest extends BaseTestCase
 
         $result3 = $this->getOpenCourseService()->liveLessonTimeCheck($course1['id'], '', strtotime(date('Y-m-d').' 9:00:00'), 10);
         $this->assertEquals('success', $result3[0]);
+    }
+
+    /**
+     * @expectedException \Biz\OpenCourse\OpenCourseException
+     * @expectedExceptionMessage exception.opencourse.not_found
+     */
+    public function testLiveLessonTimeCheckWithExistCourse()
+    {
+        $this->getOpenCourseService()->liveLessonTimeCheck(1, '', strtotime('+1 day') + 10, 540);
     }
 
     public function testFindFinishedLivesWithinTwoHours()
@@ -1126,6 +1243,47 @@ class OpenCourseServiceTest extends BaseTestCase
     }
 
     /**
+     * @expectedException \Biz\OpenCourse\OpenCourseException
+     * @expectedExceptionMessage exception.opencourse.not_found
+     */
+    public function testSetCourseTeachers()
+    {
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUser',
+                    'returnValue' => array('id' => 2),
+                    'withParams' => array(3),
+                ),
+            )
+        );
+
+        $this->mockBiz(
+            'OpenCourse:OpenCourseMemberDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array('id' => 1)),
+                ),
+                array(
+                    'functionName' => 'getByUserIdAndCourseId',
+                    'returnValue' => array('id' => 1),
+                ),
+                array(
+                    'functionName' => 'create',
+                    'returnValue' => array('isVisible' => 1, 'userId' => 3),
+                ),
+                array(
+                    'functionName' => 'delete',
+                    'returnValue' => array(),
+                ),
+            )
+        );
+        $this->getOpenCourseService()->setCourseTeachers(1, array(array('id' => 3)));
+    }
+
+    /**
      * @expectedException \Biz\Common\CommonException
      * @expectedExceptionMessage exception.common_parameter_error
      */
@@ -1183,6 +1341,15 @@ class OpenCourseServiceTest extends BaseTestCase
 
         $nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson2['id']);
         $this->assertEquals(empty($nextLesson), true);
+    }
+
+    /**
+     * @expectedException \Biz\OpenCourse\OpenCourseException
+     * @expectedExceptionMessage exception.opencourse.not_found
+     */
+    public function testGetNextLessonWithExistLesson()
+    {
+        $this->getOpenCourseService()->getNextLesson(1, 1);
     }
 
     public function testGetTodayOpenLiveCourseNumber()
@@ -1332,6 +1499,56 @@ class OpenCourseServiceTest extends BaseTestCase
         $teachers = $this->getOpenCourseService()->findCourseTeachers($course['id']);
         $this->assertEquals($this->getCurrentUser()->getId(), $teachers[0]['userId']);
         $this->assertEquals('teacher', $teachers[0]['role']);
+    }
+
+    public function testFilterCourseFields()
+    {
+        $this->mockBiz(
+            'Taxonomy:TagService',
+            array(
+                array(
+                    'functionName' => 'findTagsByNames',
+                    'returnValue' => array(
+                        array('id' => 1),
+                    ),
+                ),
+            )
+        );
+
+        $result = ReflectionUtils::invokeMethod($this->getOpenCourseService(), '_filterCourseFields', array(
+            array('tags' => 1, 'about' => 'about'),
+        ));
+        $this->assertEquals('about', $result['about']);
+        $this->assertEquals(1, $result['tags'][0]);
+    }
+
+    public function testPrepareCourseConditions()
+    {
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUserByNickname',
+                    'returnValue' => array('id' => 1),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Taxonomy:CategoryService',
+            array(
+                array(
+                    'functionName' => 'findCategoryChildrenIds',
+                    'returnValue' => array(
+                        array(1, 2),
+                    ),
+                ),
+            )
+        );
+
+        $result = ReflectionUtils::invokeMethod($this->getOpenCourseService(), '_prepareCourseConditions', array(
+            array('creator' => 'creator', 'categoryId' => 1, 'nickname' => 'nickname'),
+        ));
+        $this->assertEquals(1, $result['userId']);
     }
 
     private function mookOrg($name)

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Component\OAuthClient;
 
+use AppBundle\Common\Exception\UnexpectedValueException;
+
 class WeiboOAuthClient extends AbstractOAuthClient
 {
     public function getAuthorizeUrl($callbackUrl)
@@ -76,11 +78,11 @@ class WeiboOAuthClient extends AbstractOAuthClient
             return;
         }
         if ($userInfo['error_code'] == '21321') {
-            throw new \Exception('unaudited');
+            throw new UnexpectedValueException('unaudited');
         }
         if ($userInfo['error_code'] == '10006') {
-            throw new \Exception('unAuthorize');
+            throw new UnexpectedValueException('unAuthorize');
         }
-        throw new \Exception($userInfo['error']);
+        throw new UnexpectedValueException($userInfo['error']);
     }
 }

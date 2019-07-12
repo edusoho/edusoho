@@ -88,7 +88,9 @@ class CourseController extends CourseBaseController
 
         $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
 
-        $this->getCourseService()->hitCourse($id);
+        if (!($this->getMemberService()->isCourseTeacher($id, $user['id']))) {
+            $this->getCourseService()->hitCourse($id);
+        }
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
 
