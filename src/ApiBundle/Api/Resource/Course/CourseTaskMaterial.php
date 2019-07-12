@@ -11,7 +11,6 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CourseTaskMaterial extends AbstractResource
 {
@@ -39,18 +38,16 @@ class CourseTaskMaterial extends AbstractResource
             ),
             'times' => 0,
             'userId' => $this->getCurrentUser()->getId(),
-            'duration' => 60 * 60,
+            'duration' => 30 * 60,
         );
         $token = $this->getTokenService()->makeToken('file_download', $tokenFields);
 
-        $url = $this->generateUrl('course_task_token_download', array(
-            'courseId' => $courseId,
-            'taskId' => $taskId,
-            'token' => $token['token']
-        ), UrlGeneratorInterface::ABSOLUTE_URL);
+        $scheme = AssetHelper::getScheme();
+        $host = $request->headers->get('host');
+        $domain = "{$scheme}://{$host}";
 
         return array(
-            'url' => $url,
+            'url' => "{$domain}/course/{$courseId}/task/{$taskId}/token/{$token['token']}/download",
         );
     }
 
