@@ -25,7 +25,7 @@ class ItemHelper
     {
         if (empty($items)) {
             $blankTree[] = $this->blankChapter;
-            $blankTree[0]['children'] = $this->blankUnit;
+            $blankTree[0]['children'][0] = $this->blankUnit;
 
             return $blankTree;
         }
