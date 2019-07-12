@@ -291,7 +291,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         $hourTemplateId = $this->getWeChatService()->getTemplateId('oneHourBeforeLiveOpen');
         $dayTemplateId = $this->getWeChatService()->getTemplateId('oneDayBeforeLiveOpen');
-        if (!empty($hourTemplateId) && $task['startTime'] >= (time() + 24 * 60 * 60)) {
+        if (!empty($dayTemplateId) && $task['startTime'] >= (time() + 24 * 60 * 60)) {
             $job = array(
                 'name' => 'WeChatNotificationJob_LiveOneDay_'.$task['id'],
                 'expression' => intval($task['startTime'] - 24 * 60 * 60),
@@ -306,7 +306,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $this->getSchedulerService()->register($job);
         }
 
-        if (!empty($dayTemplateId) && $task['startTime'] >= (time() + 60 * 60)) {
+        if (!empty($hourTemplateId) && $task['startTime'] >= (time() + 60 * 60)) {
             $job = array(
                 'name' => 'WeChatNotificationJob_LiveOneHour_'.$task['id'],
                 'expression' => intval($task['startTime'] - 60 * 60),
@@ -329,9 +329,8 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
 
         $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-        $tasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
 
-        return $tasks;
+        return $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
     }
 
     private function isTaskCreateSyncFinished($task)

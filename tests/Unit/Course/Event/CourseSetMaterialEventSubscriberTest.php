@@ -253,6 +253,62 @@ class CourseSetMaterialEventSubscriberTest extends BaseTestCase
         $this->assertTrue(!$result);
     }
 
+    public function testOnOpenCourseLessonUpdateWithExistMaterial()
+    {
+        $courseSetMaterialEventSubscriber = new CourseSetMaterialEventSubscriber($this->biz);
+        $event = new Event(array(
+            'lesson' => array(
+                'type' => 'course',
+                'mediaId' => 1,
+                'courseId' => 2,
+                'id' => 5,
+            ),
+            'sourceLesson' => array(
+                'type' => 'course',
+                'mediaId' => 2,
+                'courseId' => 2,
+                'id' => 5,
+            ),
+        ));
+
+        $mockMaterialService = $this->mockBiz('Course:MaterialService', array(
+            array('functionName' => 'searchMaterials', 'returnValue' => array()),
+            array('functionName' => 'uploadMaterial', 'returnValue' => array()),
+        ));
+        $courseSetMaterialEventSubscriber->onOpenCourseLessonUpdate($event);
+
+        $mockMaterialService->shouldHaveReceived('uploadMaterial');
+    }
+
+    public function testOnOpenCourseLessonUpdateWithMockMaterial()
+    {
+        $courseSetMaterialEventSubscriber = new CourseSetMaterialEventSubscriber($this->biz);
+        $event = new Event(array(
+            'lesson' => array(
+                'type' => 'course',
+                'mediaId' => 1,
+                'courseId' => 2,
+                'id' => 5,
+                'mediaSource' => 'self',
+            ),
+            'sourceLesson' => array(
+                'type' => 'course',
+                'mediaId' => 2,
+                'courseId' => 2,
+                'id' => 5,
+            ),
+        ));
+
+        $mockMaterialService = $this->mockBiz('Course:MaterialService', array(
+            array('functionName' => 'searchMaterials', 'returnValue' => array(array('id' => 1, 'fileId' => 2))),
+            array('functionName' => 'updateMaterial', 'returnValue' => array()),
+            array('functionName' => 'uploadMaterial', 'returnValue' => array()),
+        ));
+        $courseSetMaterialEventSubscriber->onOpenCourseLessonUpdate($event);
+
+        $mockMaterialService->shouldHaveReceived('uploadMaterial');
+    }
+
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
@@ -292,6 +348,63 @@ class CourseSetMaterialEventSubscriberTest extends BaseTestCase
 
         $material = $this->getMaterialService()->addMaterial(array('courseId' => 2, 'courseSetId' => 2, 'title' => 1, 'fileId' => 2, 'type' => 'openCourse', 'lessonId' => 5), array());
         $result = $courseSetMaterialEventSubscriber->onOpenCourseLessonDelete($event);
+    }
+
+    public function testOnLiveFileReplay()
+    {
+        $courseSetMaterialEventSubscriber = new CourseSetMaterialEventSubscriber($this->biz);
+        $event = new Event(array(
+            'lesson' => array(
+                'courseId' => 2,
+                'type' => 'course',
+            ),
+        ));
+        $result = $courseSetMaterialEventSubscriber->onLiveFileReplay($event);
+
+        $this->assertTrue(!$result);
+        $event = new Event(array(
+            'lesson' => array(
+                'replayStatus' => '',
+                'type' => 'live',
+            ),
+        ));
+        $result = $courseSetMaterialEventSubscriber->onLiveFileReplay($event);
+        $this->assertTrue(!$result);
+
+        $event = new Event(array(
+            'lesson' => array(
+                'replayStatus' => 'videoGenerated',
+                'type' => 'live',
+                'courseId' => 10,
+                'id' => 1,
+                'mediaId' => 10,
+            ),
+        ));
+        $mockMaterialService = $this->mockBiz(
+            'Course:MaterialService',
+            array(
+                array(
+                    'functionName' => 'searchMaterials',
+                    'returnValue' => false,
+                ),
+                array(
+                    'functionName' => 'uploadMaterial',
+                    'returnValue' => array(),
+                    'withParams' => array(
+                        array(
+                            'courseId' => 10,
+                            'lessonId' => 1,
+                            'fileId' => 10,
+                            'source' => 'courselesson',
+                            'type' => 'course',
+                        ),
+                    ),
+                ),
+            )
+        );
+        $courseSetMaterialEventSubscriber->onLiveFileReplay($event);
+
+        $mockMaterialService->shouldHaveReceived('uploadMaterial');
     }
 
     public function testOnLiveOpenFileReplay()

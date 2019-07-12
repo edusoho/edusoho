@@ -216,8 +216,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (empty($courseSetId)) {
-            return 'ced';
-
             return $user->isTeacher();
         }
 
@@ -1154,9 +1152,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields['audiences'] = json_decode($fields['audiences'], true);
         }
 
-        $fields = $this->fillOrgId($fields);
-
-        return $fields;
+        return $this->fillOrgId($fields);
     }
 
     /**

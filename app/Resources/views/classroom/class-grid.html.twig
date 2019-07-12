@@ -13,6 +13,9 @@
       {% endif %}
     </div>
   </div>
-  <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
-  <div class="metas">{{ 'classroom.courses_count'|trans({'%courseNum%': '<span>%d</span>'|format(classroom.courseNum) })|raw }}</div>
+  <h3 class="text-left ph5"><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+  <div class="metas text-left phm">
+    {{ 'classroom.courses_count'|trans({'%courseNum%': '<span>%d</span>'|format(classroom.courseNum) })|raw }}
+    {% include 'classroom/classroom-price.html.twig' %}
+  </div>
 </div>

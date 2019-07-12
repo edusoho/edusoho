@@ -4,6 +4,7 @@ namespace Biz\Testpaper\Builder;
 
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
+use AppBundle\Common\Exception\UnexpectedValueException;
 
 class TestpaperBuilder implements TestpaperBuilderInterface
 {
@@ -27,7 +28,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         $result = $testpaperPattern->getTestpaperQuestions($testpaper, $testpaper['metas']);
 
         if ('ok' != $result['status']) {
-            throw new \RuntimeException("Build testpaper #{$result['id']} items error.");
+            throw new UnexpectedValueException("Build testpaper #{$result['id']} items error.");
         }
 
         $items = $this->createQuestionItems($result['items']);

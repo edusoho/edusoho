@@ -2,6 +2,9 @@
 
 namespace Biz\CloudPlatform\Client;
 
+use AppBundle\Common\Exception\AccessDeniedException;
+use AppBundle\Common\Exception\RuntimeException;
+
 class FailoverCloudAPI extends AbstractCloudAPI
 {
     const FAILOVER_COUNT = 3;
@@ -34,7 +37,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
 
             return $result;
         } catch (CloudAPIIOException $e) {
-            if ($this->apiType !== 'leaf') {
+            if ('leaf' !== $this->apiType) {
                 throw $e;
             }
 
@@ -62,12 +65,12 @@ class FailoverCloudAPI extends AbstractCloudAPI
     {
         $fp = fopen($this->serverConfigPath, 'r+');
 
-        if ($lockMode == 'blocking') {
+        if ('blocking' == $lockMode) {
             if (!flock($fp, LOCK_EX)) {
                 fclose($fp);
-                throw new \RuntimeException('Lock server config file failed.');
+                throw new AccessDeniedException('Lock server config file failed.');
             }
-        } elseif ($lockMode == 'nonblocking') {
+        } elseif ('nonblocking' == $lockMode) {
             if (!flock($fp, LOCK_EX | LOCK_NB)) {
                 fclose($fp);
 
@@ -87,7 +90,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         rewind($fp);
         fwrite($fp, json_encode($data));
 
-        if ($lockMode != 'none') {
+        if ('none' != $lockMode) {
             flock($fp, LOCK_UN);
         }
 
@@ -104,7 +107,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         $leafs = $servers['leafs'];
 
         if (empty($leafs)) {
-            throw new \RuntimeException('No leafs server.');
+            throw new RuntimeException('No leafs server.');
         }
 
         $newLeaf = array();
@@ -128,7 +131,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         }
 
         if (empty($newLeaf)) {
-            throw new \RuntimeException('New leaf server is empty.');
+            throw new RuntimeException('New leaf server is empty.');
         }
 
         if ($newLeaf['used_count'] > 3) {
@@ -156,7 +159,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
 
         $this->apiType = $type;
 
-        if ($type == 'leaf') {
+        if ('leaf' == $type) {
             $this->apiUrl = $this->servers['current_leaf'];
         }
     }
@@ -174,7 +177,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         } else {
             $data = file_get_contents($path);
 
-            if (trim($data) == '') {
+            if ('' == trim($data)) {
                 $self = $this;
                 $this->servers = $this->refreshServerConfigFile(function () use ($self) {
                     return $self->getServerList();
@@ -197,7 +200,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
             $servers = $this->getServerListFromCdn();
 
             if (empty($servers) || empty($servers['root']) || empty($servers['leafs'])) {
-                throw new \RuntimeException('Requested API Server list from CDN failed.');
+                throw new RuntimeException('Requested API Server list from CDN failed.');
             }
         }
 

@@ -54,8 +54,6 @@ class CourseSetWrapper extends Wrapper
 
     protected function getWrapList()
     {
-        $list = array('price');
-
-        return $list;
+        return array('price');
     }
 }

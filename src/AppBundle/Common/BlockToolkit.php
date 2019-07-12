@@ -4,6 +4,7 @@ namespace AppBundle\Common;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\Exception\InvalidArgumentException;
 
 class BlockToolkit
 {
@@ -12,7 +13,7 @@ class BlockToolkit
         if (file_exists($jsonFile)) {
             $blockMeta = json_decode(file_get_contents($jsonFile), true);
             if (empty($blockMeta)) {
-                throw new \RuntimeException(ServiceKernel::instance()->trans('插件元信息文件%blockMeta%格式不符合JSON规范，解析失败，请检查元信息文件格式',
+                throw new InvalidArgumentException(ServiceKernel::instance()->trans('插件元信息文件%blockMeta%格式不符合JSON规范，解析失败，请检查元信息文件格式',
                     array('%blockMeta%' => $blockMeta)));
             }
 
@@ -78,7 +79,7 @@ class BlockToolkit
         $metas = file_get_contents($metaFilePath);
         $metas = json_decode($metas, true);
         if (empty($metas)) {
-            throw new \RuntimeException(ServiceKernel::instance()->trans('插件元信息文件%metaFilePath%格式不符合JSON规范，解析失败，请检查元信息文件格式', array('%metaFilePath%' => $metaFilePath)));
+            throw new InvalidArgumentException(ServiceKernel::instance()->trans('插件元信息文件%metaFilePath%格式不符合JSON规范，解析失败，请检查元信息文件格式', array('%metaFilePath%' => $metaFilePath)));
         }
 
         foreach ($metas as $code => $meta) {

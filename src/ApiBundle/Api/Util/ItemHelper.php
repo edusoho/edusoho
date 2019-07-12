@@ -8,9 +8,86 @@ class ItemHelper
 {
     private $biz;
 
+    private $blankChapter = array('type' => 'chapter', 'isExist' => 0);
+
+    private $blankUnit = array('type' => 'unit', 'isExist' => 0);
+
     public function __construct($biz)
     {
         $this->biz = $biz;
+    }
+
+    /**
+     * 章->节->课时 结构
+     * 向上补全结构，向下补全至节
+     */
+    public function convertToTree($items)
+    {
+        $treeItems = array();
+
+        if (empty($items)) {
+            return $treeItems;
+        }
+
+        $nowChapterIndex = $nowUnitIndex = -1;
+
+        // 如果第一章上方还有内容，则归入未分类章
+        if ('chapter' != $items[0]['type']) {
+            $treeItems[] = $this->blankChapter;
+            $lastItem = 'chapter';
+            ++$nowChapterIndex;
+        } else {
+            $lastItem = 'default';
+        }
+
+        foreach ($items as $index => $item) {
+            $item['isExist'] = 1;
+
+            switch ($item['type']) {
+                case 'chapter':
+                    // 如果上一章没有节或课时，则补全节
+                    if ('chapter' == $lastItem) {
+                        ++$nowUnitIndex;
+                        $treeItems[$nowChapterIndex]['children'][] = $this->blankUnit;
+                        $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
+                    }
+                    ++$nowChapterIndex;
+                    $nowUnitIndex = -1; //新章创建后，应重置当前节
+                    $treeItems[$nowChapterIndex] = $item;
+                    $treeItems[$nowChapterIndex]['children'] = array();
+                    break;
+
+                case 'unit':
+                    ++$nowUnitIndex;
+                    $treeItems[$nowChapterIndex]['children'][] = $item;
+                    $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
+                    break;
+
+                case 'lesson':
+                    // 如果章下面直接是课时，则补全节
+                    if ('chapter' == $lastItem) {
+                        ++$nowUnitIndex;
+                        $treeItems[$nowChapterIndex]['children'][] = $this->blankUnit;
+                    }
+                    // 在对应节下面加入课程
+                    $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'][] = $item;
+                    break;
+
+                default:
+                    break;
+            }
+
+            $lastItem = $item['type'];
+        }
+
+        // 以章结尾，补全节
+        if ('chapter' == $lastItem) {
+            ++$nowUnitIndex;
+            $treeItems[$nowChapterIndex]['children'][] = $this->blankUnit;
+            $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
+        }
+
+        return $treeItems;
     }
 
     public function convertToLeadingItemsV1($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)

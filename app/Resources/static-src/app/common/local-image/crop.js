@@ -7,7 +7,7 @@ class LocalImageCrop {
     this.selectBtn = props.selectBtn;
     this.imgs = props.imgs;
     this.group = props.group;
-    
+    this.lastFile = {};
     this.uploadInput = props.uploadInput || '.js-upload-input';
     this.modal = props.modal || '#modal';
 
@@ -48,7 +48,6 @@ class LocalImageCrop {
       imgs: this.imgs,
       post: false
     });
-
     $this.button('loading');
   }
 
@@ -63,7 +62,7 @@ class LocalImageCrop {
       cropedHeight: this.imgs.large[1],
       group: this.group
     });
-
+    this.lastFile = $(this.uploadInput)[0].files[0];
     imageCrop.afterCrop = (res) => {
       this.afterCrop(res);
     };
@@ -77,7 +76,8 @@ class LocalImageCrop {
     let $input = $(this.uploadInput);
 
     fromData.append('token', $input.data('token'));
-    fromData.append('file', $input[0].files[0]);
+    const file = $input[0].files[0] ? $input[0].files[0]: this.lastFile;
+    fromData.append('file', file);
 
     let uploadImage = function() {
       return new Promise(function(resolve, reject) {
