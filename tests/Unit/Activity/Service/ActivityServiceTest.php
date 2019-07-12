@@ -117,7 +117,7 @@ class ActivityServiceTest extends BaseTestCase
         );
         $this->getActivityService()->deleteActivity($savedActivity['id']);
 
-        $savedActivity = $this->getActivityService()->getActivity($savedActivity['id']);
+        $savedActivity = $this->getActivityService()->getActivity($savedActivity['id'], true);
         $this->assertNull($savedActivity);
     }
 
@@ -435,7 +435,7 @@ class ActivityServiceTest extends BaseTestCase
             )
         );
 
-        $activity = $this->getActivityService()->getActivity(1);
+        $activity = $this->getActivityService()->getActivity(1, true);
 
         $this->assertEquals(array('id' => 111, 'title' => 'title'), $activity);
     }
