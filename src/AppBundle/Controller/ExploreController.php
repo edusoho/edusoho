@@ -336,10 +336,6 @@ class ExploreController extends BaseController
             $conditions['type'] = $conditions['fliter']['type'];
         }
 
-        /*if (isset($queryParam['orderBy']) && $queryParam['orderBy'] == 'recommendedSeq') {
-        $conditions['recommended'] = 1;
-        }*/
-
         return $conditions;
     }
 

@@ -8,13 +8,12 @@
   {% set orderByDefault = 'createdTime' %}
 {% elseif group == 'open_course' %}
   {% set path = 'open_course_explore' %}
-  {% set orderByDefault = 'createdTime' %}
   {% set group = 'course' %}
 {% else %}
   {% set path = 'course_set_explore' %}
   {% set orderByDefault = 'latest' %}
 {% endif %}
-{% set orderBy = request.query.get('orderBy', orderByDefault) %}
+{% set orderBy = request.query.get('orderBy', orderByDefault|default(null)) %}
 
 <div class="tabs-wrapper">
   <div class="tabs-mark-group plm ptm clearfix">

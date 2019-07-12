@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Component\MediaParser\ParserProxy;
-use Biz\Article\Service\CategoryService;
 use Biz\Course\MaterialException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -775,13 +774,5 @@ class OpenCourseController extends BaseOpenCourseController
     protected function getLiveReplayService()
     {
         return $this->createService('Course:LiveReplayService');
-    }
-
-    /**
-     * @return CategoryService
-     */
-    protected function getCategoryService()
-    {
-        return $this->createService('Taxonomy:CategoryService');
     }
 }
