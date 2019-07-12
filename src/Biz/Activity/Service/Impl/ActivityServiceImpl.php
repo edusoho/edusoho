@@ -2,7 +2,6 @@
 
 namespace Biz\Activity\Service\Impl;
 
-use Biz\Activity\Config\Activity;
 use Biz\BaseService;
 use Biz\Activity\Dao\ActivityDao;
 use AppBundle\Common\ArrayToolkit;
@@ -30,12 +29,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $activity = $this->fetchMedia($activity);
         }
 
-        $activity = $this->getActivityFinishCondition($activity);
-
         return $activity;
     }
 
-    protected function getActivityFinishCondition($activity)
+    public function getActivityFinishCondition($activity)
     {
         if (ArrayToolkit::requireds($activity, array('mediaType', 'finishType', 'finishData'))) {
             $this->createInvalidArgumentException('params missed');
