@@ -30,8 +30,6 @@ interface MaterialService
 
     public function findMaterialsByLessonIdAndSource($lessonId, $source);
 
-    public function findMaterialsByCourseIdAndLessonId($courseId, $lessonId);
-
     public function searchMaterials($conditions, $orderBy, $start, $limit);
 
     public function countMaterials($conditions);

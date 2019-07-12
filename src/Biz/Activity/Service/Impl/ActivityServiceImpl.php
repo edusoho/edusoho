@@ -53,7 +53,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $text = "mobile.task.finish_tips.{$type}.{$finishType}";
-        $text = $this->trans($text, array('%finishData%' => $finishData));
+
+        try {
+            $text = $this->trans($text, array('%finishData%' => $finishData));
+        } catch (\Exception $e) {
+            // 如果新增类型，而翻译文件未配置，会报错
+            $text = '';
+        }
 
         $activity['finishCondition'] = array(
             'type' => $finishType,

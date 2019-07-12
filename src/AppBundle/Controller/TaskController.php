@@ -9,7 +9,9 @@ use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
+use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
+use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -436,16 +438,24 @@ class TaskController extends BaseController
             throw TokenException::TOKEN_INVALID();
         }
 
+        $task = $this->getTaskService()->getTask($taskId);
+
+        if (empty($task)) {
+            throw TaskException::NOTFOUND_TASK();
+        }
+
+        $fileIds = $this->getMaterialService()->findMaterialsByLessonIdAndSource($task['activityId'], 'coursematerial');
+
         $fileId = $token['data']['fileId'];
         $tokenTaskId = $token['data']['taskId'];
         $tokenCourseId = $token['data']['courseId'];
 
-        if ($tokenTaskId != $taskId || $tokenCourseId != $courseId) {
-            throw TokenException::TOKEN_INVALID();
+        if (!in_array($fileId, $fileIds)) {
+            throw FileException::FILE_NOT_FOUND();
         }
 
-        if (empty($fileId)) {
-            throw FileException::FILE_NOT_FOUND();
+        if ($tokenTaskId != $taskId || $tokenCourseId != $courseId || empty($fileId)) {
+            throw TokenException::TOKEN_INVALID();
         }
 
         return $this->forward('AppBundle:UploadFile:download', array(
@@ -647,5 +657,13 @@ class TaskController extends BaseController
     protected function getActivityConfig()
     {
         return $this->get('extension.manager')->getActivities();
+    }
+
+    /**
+     * @return MaterialService
+     */
+    protected function getMaterialService()
+    {
+        return $this->createService('Course:MaterialService');
     }
 }

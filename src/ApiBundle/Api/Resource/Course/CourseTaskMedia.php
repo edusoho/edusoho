@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\FileToolkit;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\ClassroomException;
@@ -105,7 +106,7 @@ class CourseTaskMedia extends AbstractResource
     protected function getDownload($course, $task, $activity, $request, $ssl = false)
     {
         $medias = array();
-        $materials = $this->getMaterialService()->findMaterialsByCourseIdAndLessonId($course['id'], $activity['id']);
+        $materials = $this->getMaterialService()->findMaterialsByLessonIdAndSource($activity['id'], 'coursematerial');
 
         if (empty($materials)) {
             return $medias;
@@ -122,8 +123,10 @@ class CourseTaskMedia extends AbstractResource
             } else {
                 $file = $this->getUploadFileService()->getFile($material['fileId']);
                 $media = array(
+                    // TODO 待IOS开发完成，就抽象为 link 和 file，file不再区local和cloud
                     'type' => $file['storage'],
-                    'fileName' => $file['filename'],
+                    'fileName' => $material['title'],
+                    // TODO 待IOS开发完成，如果不需要就去掉，彻底不要 $file
                     'ext' => $file['ext'],
                     'url' => '',
                 );
@@ -133,7 +136,7 @@ class CourseTaskMedia extends AbstractResource
             $media['taskId'] = $task['id'];
             $media['materialId'] = $material['id'];
             $media['fileId'] = $material['fileId'];
-            $media['fileType'] = $this->getExtType($media['ext']);
+            $media['fileType'] = FileToolkit::getDownloadTaskTypeByExtension(($media['ext']));
             $media['title'] = $material['title'];
             $media['description'] = $material['description'];
             $media['fileSize'] = $material['fileSize'];
@@ -141,34 +144,6 @@ class CourseTaskMedia extends AbstractResource
         }
 
         return $medias;
-    }
-
-    private function getExtType($ext)
-    {
-        $types = array(
-            'video' => array('mpeg', 'mpg', 'mpe', 'mlv', 'dat', '2v', 'vob', 'rmvb', 'mov', 'qt', 'asf', 'avi', 'wmv', 'mkv', 'mp4', 'flv'),
-            'audio' => array('mp3', 'wma', 'aac', 'cda', 'wav', 'voc', 'cda'),
-            'image' => array('jpg', 'jpeg', 'png', 'gif'),
-            'package' => array('zip', 'zipx', 'rar', '7z', 'dmg', 'tar'),
-            'txt' => array('txt'),
-            'pdf' => array('pdf'),
-            'doc' => array('doc', 'docx'),
-            'xls' => array('xls', 'xlsx'),
-            'ppt' => array('ppt', 'pptx'),
-            'flash' => array('flash'),
-            'link' => array('link'),
-        );
-
-        $belongs = 'other';
-
-        foreach ($types as $type => $contains) {
-            if (in_array($ext, $contains)) {
-                $belongs = $type;
-                break;
-            }
-        }
-
-        return $belongs;
     }
 
     protected function getVideo($course, $task, $activity, $request, $ssl = false)
