@@ -100,9 +100,8 @@ class JWTAuth
     public static function urlSafeBase64Encode($originString)
     {
         $data = base64_encode($originString);
-        $data = str_replace(array('+', '/', '='), array('-', '_', ''), $data);
 
-        return $data;
+        return str_replace(array('+', '/', '='), array('-', '_', ''), $data);
     }
 
     protected function makePayload(array $payload)

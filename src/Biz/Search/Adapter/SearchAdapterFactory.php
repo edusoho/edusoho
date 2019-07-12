@@ -3,6 +3,7 @@
 namespace Biz\Search\Adapter;
 
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\Exception\UnexpectedValueException;
 
 class SearchAdapterFactory
 {
@@ -15,7 +16,7 @@ class SearchAdapterFactory
             $class = __NAMESPACE__."\\{$type}SearchAdapter";
 
             if (!file_exists(__DIR__."/{$type}SearchAdapter.php")) {
-                throw new \RuntimeException("{$class} not found", 1);
+                throw new UnexpectedValueException("{$class} not found", 1);
             }
             $biz = ServiceKernel::instance()->getBiz();
             self::$cached[$type] = new $class($biz);

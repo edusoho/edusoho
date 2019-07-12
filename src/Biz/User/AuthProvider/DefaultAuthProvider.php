@@ -2,6 +2,8 @@
 
 namespace Biz\User\AuthProvider;
 
+use AppBundle\Common\Exception\UnexpectedValueException;
+
 class DefaultAuthProvider implements AuthProvider
 {
     public function checkConnect()
@@ -76,7 +78,7 @@ class DefaultAuthProvider implements AuthProvider
 
     public function getAvatar($userId, $size = 'middle')
     {
-        throw new \RuntimeException();
+        throw new UnexpectedValueException('');
     }
 
     public function getProviderName()

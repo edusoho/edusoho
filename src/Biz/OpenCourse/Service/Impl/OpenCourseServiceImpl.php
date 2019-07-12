@@ -1100,9 +1100,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $fields['about'] = $this->purifyHtml($fields['about'], true);
         }
 
-        $fields = $this->fillOrgId($fields);
-
-        return $fields;
+        return $this->fillOrgId($fields);
     }
 
     protected function hasOpenCourseManagerRole($courseId, $userId)

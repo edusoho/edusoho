@@ -6367,8 +6367,7 @@ admin.edu_cloud.edu_video.open_radio: 开启
 admin.edu_cloud.edu_video.close_radio: 关闭
 admin.edu_cloud.edu_video.normal_mode_tips: >
   选择普通模式，<span class="text-success">新上传</span>的视频文件在手机浏览器下默认使用通用格式播放，增强了视频课时对手机浏览器的兼容性；<br/><span class="text-danger">但普通模式的视频在某些情况下有被盗的风险，请谨慎开启。</span>
-admin.edu_cloud.edu_video.encryption_mode_tips: >
-  选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。<br/>暂不支持播放的手机浏览器（包括但不限于）：安卓QQ浏览器、火狐浏览器、安卓UC浏览器、安卓夸克浏览器、360浏览器、360、华为、三星、奇虎、一加手机自带浏览器。
+admin.edu_cloud.edu_video.encryption_mode_tips: '选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。'
 admin.edu_cloud.edu_video.transcode_quality: 视频转码画质
 admin.edu_cloud.edu_video.transcode_quality_low: >
   流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%
@@ -7160,6 +7159,10 @@ admin.setting_course.course_operation_mode: 课程运营模式
 admin.setting_course.course_operation_mode.free_try_view: 免费试看/免费任务允许未登录用户观看
 admin.setting_course.course_operation_mode.free_try_view.help_block: 如果允许此项设置，未登录用户（游客）可观看免费试看/免费任务
 admin.setting_course.course_operation_mode.allow_show_user_count: 课程中允许显示课程人数
+admin.setting_course.course_operation_mode.course_set_number: 课程封面人数显示
+admin.setting_course.course_operation_mode.course_set_number.help_block: 管理员可以控制课程封面的人数显示
+admin.setting_course.cover_number.student_num: 显示加入人数
+admin.setting_course.cover_number.hit_num: 显示封面点击数
 admin.setting_course.customer_chapter_section_name: 章节名称自定义
 admin.setting_course.customer_task_name: 任务名称自定义
 admin.setting_course.customer_chapter_section_name.tips: 系统中的"章"、"节"会被设置的名称所替代

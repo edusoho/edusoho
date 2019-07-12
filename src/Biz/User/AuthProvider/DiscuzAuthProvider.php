@@ -4,6 +4,7 @@ namespace Biz\User\AuthProvider;
 
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
+use AppBundle\Common\Exception\UnexpectedValueException;
 
 class DiscuzAuthProvider extends BaseService implements AuthProvider
 {
@@ -20,7 +21,7 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
         $result = uc_user_register($registration['nickname'], $registration['password'], $registration['email']);
         if ($result < 0) {
             $result = $this->convertApiResult($result);
-            throw new \RuntimeException("{$result[0]}:{$result[1]}");
+            throw new UnexpectedValueException("{$result[0]}:{$result[1]}");
         }
 
         $registration['id'] = $result;

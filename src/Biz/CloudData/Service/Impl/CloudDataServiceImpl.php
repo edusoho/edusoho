@@ -10,14 +10,16 @@ use Biz\CloudPlatform\CloudAPIFactory;
 
 class CloudDataServiceImpl extends BaseService implements CloudDataService
 {
+    private $cloudApi;
+
     public function push($name, array $body = array(), $timestamp = 0, $level = 'normal')
     {
         try {
-            return CloudAPIFactory::create('event')->push($name, $body, $timestamp);
+            return $this->createCloudApi()->push($name, $body, $timestamp);
         } catch (\Exception $e) {
             $this->getLogService()->error('cloud_data', 'push', "{$name} 事件发送失败", array('message' => $e->getMessage()));
 
-            if ($level == 'important') {
+            if ('important' == $level) {
                 $user = $this->getCurrentUser();
                 $fields = array(
                     'name' => $name,
@@ -61,5 +63,24 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function createCloudApi()
+    {
+        if (!$this->cloudApi) {
+            $this->cloudApi = CloudAPIFactory::create('event');
+        }
+
+        return $this->cloudApi;
+    }
+
+    /**
+     * 仅给单元测试Mock用
+     *
+     * @param $api
+     */
+    public function setCloudApi($api)
+    {
+        $this->cloudApi = $api;
     }
 }

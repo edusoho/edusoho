@@ -20,7 +20,7 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         $this->validateFields($flow);
         $this->checkUserAccountExist($flow['userId']);
         $flow = $this->filterFields($flow);
-        if ('admin_deduction' == $flow['way'] or 'admin_grant' == $flow['way']) {
+        if ('admin_deduction' == $flow['way'] || 'admin_grant' == $flow['way']) {
             $this->getLogService()->info('admin_reward_point_account_flow', $flow['type'], '积分账户', $flow);
         } else {
             $this->getLogService()->info('reward_point_account_flow', $flow['type'], '积分账户', $flow);

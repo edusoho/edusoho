@@ -2,13 +2,26 @@
 
 namespace Tests\Unit\Org\Service;
 
-use Biz\System\Service\SettingService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\User\CurrentUser;
 use Biz\BaseTestCase;
+use Biz\Org\Service\OrgService;
+use Biz\System\Service\SettingService;
+use Biz\User\CurrentUser;
 
 class OrgServiceTest extends BaseTestCase
 {
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
+     */
+    public function testCreateOrgException()
+    {
+        $org = array(
+            'name' => 'name',
+        );
+        $this->getOrgService()->createOrg($org);
+    }
+
     public function testGetOrg()
     {
         $user = $this->setCurrent();
@@ -57,6 +70,29 @@ class OrgServiceTest extends BaseTestCase
         $this->assertEquals('edusoho', $org['name']);
     }
 
+    /**
+     * @expectedException \Biz\Org\OrgException
+     * @expectedExceptionMessage exception.org.not_found
+     */
+    public function testUpdateOrgNotFoundException()
+    {
+        $this->getOrgService()->updateOrg(1, array());
+    }
+
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
+     */
+    public function testUpdateOrgException()
+    {
+        $org = $this->mookOrg('edusoho');
+        $org = $this->getOrgService()->createOrg($org);
+        $fields = array(
+            'name' => 'name',
+        );
+        $this->getOrgService()->updateOrg($org['id'], $fields);
+    }
+
     public function testUpdateOrg()
     {
         $org = $this->mookOrg($name = 'edusoho');
@@ -66,6 +102,34 @@ class OrgServiceTest extends BaseTestCase
         $org['name'] = 'updateEdu';
         $updateOrg = $this->getOrgService()->updateOrg($org['id'], $org);
         $this->assertEquals('updateEdu', $updateOrg['name']);
+    }
+
+    /**
+     * @expectedException \Biz\Org\OrgException
+     * @expectedExceptionMessage exception.org.not_found
+     */
+    public function testDeleteOrgNotFoundException()
+    {
+        $this->getOrgService()->deleteOrg(1);
+    }
+
+    public function testDeleteOrgHasParentId()
+    {
+        $parent = $this->mookOrg('parent');
+        $parent = $this->getOrgService()->createOrg($parent);
+        $child = array(
+            'name' => 'child',
+            'code' => 'child',
+            'parentId' => $parent['id'],
+        );
+        $child = $this->getOrgService()->createOrg($child);
+
+        $parent = $this->getOrgService()->getOrg($parent['id']);
+        $this->assertEquals(1, $parent['childrenNum']);
+
+        $this->getOrgService()->deleteOrg($child['id']);
+        $parent = $this->getOrgService()->getOrg($parent['id']);
+        $this->assertEquals(0, $parent['childrenNum']);
     }
 
     public function testDeleteOrg()
@@ -82,7 +146,20 @@ class OrgServiceTest extends BaseTestCase
         $this->assertNull($getOrg);
     }
 
-    public function testfindOrgsByPrefixOrgCode()
+    public function testFindOrgsByPrefixOrgCodeWithNull()
+    {
+        $org = $this->mookOrg('edusoho');
+        $this->getOrgService()->createOrg($org);
+
+        $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode();
+        $user = $this->getCurrentUser();
+        $expectedOrg = $this->getOrgService()->getOrg($user['orgId']);
+        $expected = $this->getOrgService()->findOrgsByPrefixOrgCode($expectedOrg['code']);
+
+        $this->assertArraySternEquals($expected, $orgs);
+    }
+
+    public function testFindOrgsByPrefixOrgCode()
     {
         $org = $this->mookOrg($name = 'edusoho');
         $org = $this->getOrgService()->createOrg($org);
@@ -96,6 +173,21 @@ class OrgServiceTest extends BaseTestCase
 
         $this->assertEquals(2, count($orgs));
         $this->assertEquals(1, count($orgsless));
+    }
+
+    public function testIsCodeAvailable()
+    {
+        $result = $this->getOrgService()->isCodeAvaliable('code', 'code');
+        $this->assertTrue($result);
+
+        $org = $this->mookOrg('code');
+        $org = $this->getOrgService()->createOrg($org);
+
+        $result = $this->getOrgService()->isCodeAvaliable($org['code'], $org['code']);
+        $this->assertTrue($result);
+
+        $result = $this->getOrgService()->isCodeAvaliable($org['code'], 'adeadeafaefea');
+        $this->assertFalse($result);
     }
 
     public function testSwitchOrg()
@@ -190,6 +282,73 @@ class OrgServiceTest extends BaseTestCase
         $this->assertEquals($org1['orgCode'], $courseSet['orgCode']);
     }
 
+    public function testGetOrgByCode()
+    {
+        $org = $this->mookOrg('edusoho');
+        $expected = $this->getOrgService()->createOrg($org);
+
+        $org = $this->getOrgService()->getOrgByCode($org['code']);
+
+        $this->assertArraySternEquals($expected, $org);
+
+        $org = $this->getOrgService()->getOrgByCode('22311de');
+        $this->assertEmpty($org);
+    }
+
+    public function testGeFullOrgNameById()
+    {
+        $org = $this->mookOrg('edusoho');
+        $expected = $this->getOrgService()->createOrg($org);
+
+        $orgName = $this->getOrgService()->geFullOrgNameById($expected['id']);
+
+        $this->assertEquals($expected['name'], $orgName);
+
+        $child = array(
+            'name' => 'child',
+            'code' => 'child',
+            'parentId' => $expected['id'],
+        );
+        $child = $this->getOrgService()->createOrg($child);
+
+        $orgName = $this->getOrgService()->geFullOrgNameById($child['id']);
+
+        $this->assertEquals('edusoho->child', $orgName);
+    }
+
+    public function testIsNameAvailable()
+    {
+        $result = $this->getOrgService()->isNameAvaliable('code', 0, 1);
+        $this->assertTrue($result);
+
+        $org = $this->mookOrg('edusoho');
+        $org = $this->getOrgService()->createOrg($org);
+
+        $result = $this->getOrgService()->isNameAvaliable($org['name'], $org['parentId'], $org['id']);
+        $this->assertTrue($result);
+
+        $result = $this->getOrgService()->isNameAvaliable($org['name'], $org['parentId'], 22333);
+        $this->assertFalse($result);
+    }
+
+    public function testFindRelatedModuleCounts()
+    {
+        $parent = $this->mookOrg('parent');
+        $parent = $this->getOrgService()->createOrg($parent);
+        $child = array(
+            'name' => 'child',
+            'code' => 'child',
+            'parentId' => $parent['id'],
+        );
+        $child = $this->getOrgService()->createOrg($child);
+
+        $count = $this->getOrgService()->findRelatedModuleCounts($parent['id']);
+        $this->assertCount(1, $count);
+
+        $count = $this->getOrgService()->findRelatedModuleCounts($child['id']);
+        $this->assertCount(0, $count);
+    }
+
     private function mookOrg($name)
     {
         $org = array();
@@ -225,6 +384,9 @@ class OrgServiceTest extends BaseTestCase
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return OrgService
+     */
     public function getOrgService()
     {
         return $this->createService('Org:OrgService');
