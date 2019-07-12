@@ -132,6 +132,7 @@
     },
     watch: {
       selectedPlanId: {
+        deep:true,
         immediate: true,
         handler(v) {
           if (!this.courseLessons.length) return;

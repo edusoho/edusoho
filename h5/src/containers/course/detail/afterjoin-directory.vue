@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div v-if="nodata" class="noneItem">
+    <div v-if="lessonNum==0" class="noneItem">
       <img src="static/images/none.png" class="nodata" />
       <p>暂时还没有课程哦...</p>
     </div>
@@ -88,7 +88,9 @@ export default {
       immediate: true
     },
     OptimizationCourseLessons: {
-      handler: "processItem"
+      handler: "processItem",
+     // immediate: true,
+      deep:true,
     }
   },
   created(){
@@ -107,9 +109,7 @@ export default {
     //处理数据
     processItem(){
       let res = this.OptimizationCourseLessons;
-      console.log(111)
       if(res.length==0){
-        this.nodata=true;
         return
       }
       const that = this;

@@ -11,6 +11,7 @@
   import { mapState, mapActions, mapMutations } from 'vuex';
   import * as types from '@/store/mutation-types';
   import { Toast } from 'vant';
+import { debug } from 'util';
 
   export default {
     components: {
@@ -33,21 +34,19 @@
     },
     watch: {
       joinStatus(status) {
-        this.getComponent(status);
+        this.joinStatusChange(status);
       }
     },
     created(){
       this.getCourseDetail({
-         courseId: this.$route.params.id
-        }).then((res) => {
-           if(res.member){
-             this.getAfCourse(this.$route.params.id);
-           }else{
-             this.getBeCourse(this.$route.params.id);
-           }
-        }).catch(err => {
-            Toast.fail(err.message)
-        });
+        courseId: this.$route.params.id
+      }).then(res => {
+        if (res.member) {
+          this.getAfCourse(this.$route.params.id);
+        } else {
+          this.getBeCourse(this.$route.params.id);
+        }
+      })
     },
     methods: {
       ...mapActions('course', [
@@ -60,6 +59,15 @@
       ...mapMutations('course', {
         setSourceType: types.SET_SOURCETYPE
       }),
+      joinStatusChange(status) {
+        this.currentComp = '';
+
+        if (status) {
+          this.getAfCourse(this.$route.params.id);
+        } else {
+          this.getBeCourse(this.$route.params.id);
+        }
+      },
       getBeCourse(id){
         this.getBeforeCourse({
            courseId: id
@@ -79,13 +87,6 @@
         })
       },
       getComponent(status) {
-        // if(status){
-        //    this.getNextStudy({
-        //       courseId: this.selectedPlanId
-        //     }).then(() => {}).catch(err => {
-        //         Toast.fail(err.message)
-        //     });
-        // }
         this.currentComp = status ? joinAfter : joinBefore;
       },
       //获取加入后课程目录和学习状态

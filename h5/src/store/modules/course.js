@@ -60,15 +60,14 @@ const actions = {
       return [coursePlan];
     });
   },
-  getAfterCourse({ commit }, { courseId }) {
+  getAfterCourse({ commit, dispatch }, { courseId }) {
     const query = { courseId };
     return Promise.all([
-      Api.getOptimizationCourseLessons({ query }),
-      Api.getNextStudy({ query })
-    ]).then(([OptimizationCoursePlan, nextStudy]) => {
-      commit(types.GET_NEXT_STUDY, nextStudy);
+      Api.getOptimizationCourseLessons({ query })
+    ]).then(([OptimizationCoursePlan]) => {
       commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
-      return [OptimizationCoursePlan, nextStudy];
+      dispatch('getNextStudy', { courseId });
+      return [OptimizationCoursePlan];
     });
   },
   getCourseDetail({ commit }, { courseId }) {
