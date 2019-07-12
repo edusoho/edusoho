@@ -29,12 +29,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
     {
         $task = parent::updateTask($id, $fields);
 
-        $conditions = array(
-            'courseId' => $task['courseId'],
-            'categoryId' => $task['categoryId'],
-        );
-        $categoryTaskCount = $this->getTaskService()->countTasks($conditions);
-        if ($categoryTaskCount <= 1) {
+        if ($task['isLesson']) {
             $this->getCourseService()->updateChapter(
                 $task['courseId'],
                 $task['categoryId'],

@@ -6,7 +6,7 @@
   {% set file = task.activity.ext.file|default(null) %}
 {% endif %}
 
-<i class="es-icon mrs {{activity_metas(activity.mediaType).icon}} {{shouldDisplayTaskAsLesson|default(false)?'hidden':''}} {{isLesson|default(false)?'js-display-when-single-task js-lesson-icon ':''}}" data-role="task"></i>
+<i class="es-icon mrs {{activity_metas(activity.mediaType).icon}} {{isLesson|default(false)?'js-display-when-single-task js-lesson-icon ':''}}" data-role="task"></i>
 
 {% if displayAllInfo|default(false) %}
     {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}<span class="number mls">{{ taskNum }}</span>：
