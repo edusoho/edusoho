@@ -112,6 +112,7 @@ export default {
       if(res.length==0){
         return
       }
+      console.log(this.OptimizationCourseLessons)
       const that = this;
       this.chapterNum = 0; //章节数
       this.unitNum = 0; //节数
@@ -171,6 +172,7 @@ export default {
     },
     //类型操作
     judgType(item, list, index) {
+
       if (item.type == "chapter") {
         //设置节课时任务默认数量
         this.currentChapter = index;
@@ -237,8 +239,7 @@ export default {
         } else {
           if(item.mode==null){
             this.$set(
-              this.item[this.currentChapter].children[this.currentUnit]
-                .children[this.currentLesson],
+              this.item[this.currentUnit].children[this.currentLesson],
               "index",
               0
             );
