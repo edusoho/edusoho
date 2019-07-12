@@ -23,11 +23,14 @@ class ItemHelper
      */
     public function convertToTree($items)
     {
-        $treeItems = array();
-
         if (empty($items)) {
-            return $treeItems;
+            $blankTree[] = $this->blankChapter;
+            $blankTree[0]['children'] = $this->blankUnit;
+
+            return $blankTree;
         }
+
+        $treeItems = array();
 
         $nowChapterIndex = $nowUnitIndex = -1;
 
