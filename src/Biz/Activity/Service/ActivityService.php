@@ -65,5 +65,5 @@ interface ActivityService
 
     public function findFinishedLivesWithinTwoHours();
 
-    public function getActivityFinishCondition($activity);
+    public function getActivityFinishCondition($activity, $course);
 }
