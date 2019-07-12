@@ -148,7 +148,12 @@ export default class sbList {
     let stats = this.statChosedQuestion();
 
     let $missScoreField = $('.miss-score-field');
-    if (stats.hasOwnProperty('choice') || stats.hasOwnProperty('uncertain_choice')) {
+
+    if ($('input[name="isTestpaper"]').val() != 1) {
+      if (!$missScoreField.hasClass('hidden')) {
+        $missScoreField.addClass('hidden');
+      }
+    } else if (stats.hasOwnProperty('choice') || stats.hasOwnProperty('uncertain_choice')) {
       if ($missScoreField.hasClass('hidden')) {
         $missScoreField.removeClass('hidden');
       }
