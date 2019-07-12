@@ -32,10 +32,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activity;
     }
 
-    public function getActivityFinishCondition($activity, $course)
+    public function getActivityFinishCondition($activity)
     {
-        if (ArrayToolkit::requireds($activity, array('mediaType', 'finishType', 'finishData')) ||
-            ArrayToolkit::requireds($course, array('enableFinish'))) {
+        if (ArrayToolkit::requireds($activity, array('mediaType', 'finishType', 'finishData'))) {
             $this->createInvalidArgumentException('params missed');
         }
 
@@ -60,7 +59,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $activity['finishCondition'] = array(
-            'enableFinish' => $course['enableFinish'],
             'type' => $finishType,
             'data' => $finishData,
             'text' => $text,

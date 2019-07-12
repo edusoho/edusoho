@@ -7,7 +7,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\CourseException;
-use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -32,18 +31,12 @@ class CourseTask extends AbstractResource
     {
         $task = $this->getTaskService()->getTask($taskId);
 
-        $course = $this->getCourseService()->getCourse($courseId);
-
-        if (empty($course)) {
-            throw CourseException::NOTFOUND_COURSE();
-        }
-
         if (!$task) {
             throw TaskException::NOTFOUND_TASK();
         }
 
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], true);
-        $task['activity'] = $this->getActivityService()->getActivityFinishCondition($task['activity'], $course);
+        $task['activity'] = $this->getActivityService()->getActivityFinishCondition($task['activity']);
         $task['result'] = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 
         return $task;
@@ -71,13 +64,5 @@ class CourseTask extends AbstractResource
     private function getActivityService()
     {
         return $this->service('Activity:ActivityService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->service('Course:CourseService');
     }
 }
