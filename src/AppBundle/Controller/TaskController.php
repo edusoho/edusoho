@@ -444,7 +444,12 @@ class TaskController extends BaseController
             throw TaskException::NOTFOUND_TASK();
         }
 
-        $fileIds = $this->getMaterialService()->findMaterialsByLessonIdAndSource($task['activityId'], 'coursematerial');
+        $materials = $this->getMaterialService()->findMaterialsByLessonIdAndSource($task['activityId'], 'coursematerial');
+        $fileIds = array();
+
+        foreach ($materials as $material) {
+            $fileIds[] = $material['fileId'];
+        }
 
         $fileId = $token['data']['fileId'];
         $tokenTaskId = $token['data']['taskId'];
