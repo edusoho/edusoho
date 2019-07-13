@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     ...mapActions('course', [
-        'getCourse',
+        'getCourseLessons',
         'getCourseDetail',
         'getNextStudy',
         'getBeforeCourse',
@@ -158,28 +158,18 @@ export default {
     handleClick (item, index){
       this.items.map(item => item.active = false);
       item.active = true;
-      this.getLessonCourse(item.id);
+     // this.getBeCourse(item.id)
+      this.getCourseLessons({courseId:item.id}).then(()=>{
+        this.$emit('switchPlan');
+      }).catch(()=>{
+        this.$emit('switchPlan');
+      })
     },
-     getLessonCourse(id){
-        this.getCourse({
-           courseId: id
-        }).then(() => {
-           this.getCourseDetail({
-              courseId: id
-            }).then((res) => {
-
-            }).catch(err => {
-                Toast.fail(err.message)
-            });
-        }).catch(err => {
-            Toast.fail(err.message)
-        })
-      },
      getBeCourse(id){
         this.getBeforeCourse({
            courseId: id
          }).then(() => {
-            this.$emit('switchPlan');
+           this.getAfCourse(id)
         }).catch(err => {
             Toast.fail(err.message)
         })
@@ -188,7 +178,7 @@ export default {
        this.getAfterCourse({
           courseId: id
         }).then(() => {
-          this.$emit('switchPlan');
+          this.getDetail(id)
         }).catch(err => {
           Toast.fail(err.message)
         })

@@ -33,29 +33,22 @@ import { debug } from 'util';
       }),
     },
     watch: {
-      joinStatus(status) {
-        this.joinStatusChange(status);
+      joinStatus: {
+        handler: "joinStatusChange",
       }
     },
     created(){
-      this.getCourse({
+      //this.getBeCourse()
+      this.getCourseLessons({
            courseId: this.$route.params.id
-        }).then(() => {
-          this.getCourseDetail({
-            courseId: this.$route.params.id
-          }).then(res => {
-            this.joinStatusChange(res.member)
-          })
-        }).catch(err => {
-            Toast.fail(err.message)
+        }).then(res=>{
+          this.joinStatusChange(res.member)
         })
-
     },
     methods: {
       ...mapActions('course', [
-        'getCourse',
+        'getCourseLessons',
         'getCourseDetail',
-        'getNextStudy',
         'getBeforeCourse',
         'getAfterCourse'
       ]),
@@ -70,26 +63,30 @@ import { debug } from 'util';
           this.currentComp =joinBefore;
         }
       },
-      // getBeCourse(id){
-      //   this.getBeforeCourse({
-      //      courseId: id
-      //   }).then(() => {
-      //       this.getComponent(this.joinStatus);
-      //   }).catch(err => {
-      //       Toast.fail(err.message)
-      //   })
-      // },
-      // getAfCourse(id){
-      //   this.getAfterCourse({
-      //     courseId: id
-      //   }).then(() => {
-      //     this.getComponent(this.joinStatus);
-      //   }).catch(err => {
-      //     Toast.fail(err.message)
-      //   })
-      // },
-      getComponent(status) {
-        this.currentComp = status ? joinAfter : joinBefore;
+      getBeCourse(){
+        this.getBeforeCourse({
+           courseId: this.$route.params.id
+        }).then(() => {
+            this.getAfCourse();
+        }).catch(err => {
+            Toast.fail(err.message)
+        })
+      },
+      getAfCourse(){
+        this.getAfterCourse({
+          courseId: this.$route.params.id
+        }).then(() => {
+          this.getDetail();
+        }).catch(err => {
+          Toast.fail(err.message)
+        })
+      },
+      getDetail(){
+        this.getCourseDetail({
+          courseId: this.$route.params.id
+        }).then(res => {
+          this.joinStatusChange(res.member)
+        })
       },
       //获取加入后课程目录和学习状态
       getJoinAfter(){

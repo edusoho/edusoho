@@ -68,12 +68,13 @@ export default {
       currentLesson: 0, //课时数目的索引
       slideIndex: 0, //顶部滑动的索引
       taskId: -1,
-
+      nodata:false
     };
   },
   computed: {
     ...mapState("course", {
       nextStudy: state => state.nextStudy,
+      selectedPlanId: state => state.selectedPlanId,
       OptimizationCourseLessons: state => state.OptimizationCourseLessons
     }),
     hasChapter: function() {
@@ -88,7 +89,7 @@ export default {
       handler: "getNextStudy",
       immediate: true
     },
-    OptimizationCourseLessons: {
+    selectedPlanId: {
       handler: "processItem",
       immediate: true,
       deep:true,
@@ -108,7 +109,7 @@ export default {
       }
     },
     //处理数据
-    processItem(){
+    processItem(val){
       let res = this.OptimizationCourseLessons;
       if(res.length==0){
          this.nodata=true;
@@ -171,11 +172,12 @@ export default {
           TABSHEIGHT +
           "px";
         this.scroll = new BScroll(WRAPPER, options);
+        this.scroll.scrollToElement(document.getElementById(this.taskId));
+        this.scroll.refresh();
       }
     },
     //类型操作
     judgType(item, list, index) {
-
       if (item.type == "chapter") {
         //设置节课时任务默认数量
         this.currentChapter = index;
