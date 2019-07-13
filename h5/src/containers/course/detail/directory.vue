@@ -135,6 +135,7 @@
         deep:true,
         immediate: true,
         handler(v) {
+          console.log(v)
           if (!this.courseLessons.length) return;
           let task = 0;
           let unit = 0;

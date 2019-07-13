@@ -236,7 +236,6 @@
           :(scrollTop >= tops.directoryTop ? 2 : 1);
       },
       handleJoin(){
-        this.getAfCourse(this.details.id);
         // 会员免费学
         const vipAccessToJoin = this.vipAccessToJoin;
 

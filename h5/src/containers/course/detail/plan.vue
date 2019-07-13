@@ -158,18 +158,23 @@ export default {
     handleClick (item, index){
       this.items.map(item => item.active = false);
       item.active = true;
-      this.getCourseDetail({
-         courseId: item.id
-      }).then((res) => {
-          if(res.member){
-             this.getAfCourse(item.id);
-           }else{
-             this.getBeCourse(item.id);
-           }
-      }).catch(err => {
-          Toast.fail(err.message)
-      });
+      this.getLessonCourse(item.id);
     },
+     getLessonCourse(id){
+        this.getCourse({
+           courseId: id
+        }).then(() => {
+           this.getCourseDetail({
+              courseId: id
+            }).then((res) => {
+
+            }).catch(err => {
+                Toast.fail(err.message)
+            });
+        }).catch(err => {
+            Toast.fail(err.message)
+        })
+      },
      getBeCourse(id){
         this.getBeforeCourse({
            courseId: id

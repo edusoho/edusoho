@@ -40,15 +40,16 @@ const mutations = {
 };
 
 const actions = {
-  getCourse({ commit }, { courseId }) {
+  getCourse({ commit, dispatch }, { courseId }) {
     const query = { courseId };
     return Promise.all([
-      Api.getCourseLessons({ query }),
-      Api.getOptimizationCourseLessons({ query })
-    ]).then(([coursePlan, OptimizationCoursePlan]) => {
+      Api.getCourseLessons({ query })
+      // Api.getOptimizationCourseLessons({ query })
+    ]).then(([coursePlan]) => {
       commit(types.GET_COURSE_LESSONS, coursePlan);
-      commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
-      return [coursePlan, OptimizationCoursePlan];
+      dispatch('getAfterCourse', { courseId });
+      // commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
+      return [coursePlan];
     });
   },
   getBeforeCourse({ commit }, { courseId }) {

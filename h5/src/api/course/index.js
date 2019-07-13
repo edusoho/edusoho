@@ -30,7 +30,8 @@ export default [
     // 下次学习课时
     name: 'getNextStudy',
     url: '/me/course_learning_progress/{courseId}',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }, {
     // 获取课程列表数据
     name: 'getCourseList',

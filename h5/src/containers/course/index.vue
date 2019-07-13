@@ -38,15 +38,18 @@ import { debug } from 'util';
       }
     },
     created(){
-      this.getCourseDetail({
-        courseId: this.$route.params.id
-      }).then(res => {
-        if (res.member) {
-          this.getAfCourse(this.$route.params.id);
-        } else {
-          this.getBeCourse(this.$route.params.id);
-        }
-      })
+      this.getCourse({
+           courseId: this.$route.params.id
+        }).then(() => {
+          this.getCourseDetail({
+            courseId: this.$route.params.id
+          }).then(res => {
+            this.joinStatusChange(res.member)
+          })
+        }).catch(err => {
+            Toast.fail(err.message)
+        })
+
     },
     methods: {
       ...mapActions('course', [
@@ -61,31 +64,30 @@ import { debug } from 'util';
       }),
       joinStatusChange(status) {
         this.currentComp = '';
-
         if (status) {
-          this.getAfCourse(this.$route.params.id);
+          this.currentComp =joinAfter
         } else {
-          this.getBeCourse(this.$route.params.id);
+          this.currentComp =joinBefore;
         }
       },
-      getBeCourse(id){
-        this.getBeforeCourse({
-           courseId: id
-        }).then(() => {
-            this.getComponent(this.joinStatus);
-        }).catch(err => {
-            Toast.fail(err.message)
-        })
-      },
-      getAfCourse(id){
-        this.getAfterCourse({
-          courseId: id
-        }).then(() => {
-          this.getComponent(this.joinStatus);
-        }).catch(err => {
-          Toast.fail(err.message)
-        })
-      },
+      // getBeCourse(id){
+      //   this.getBeforeCourse({
+      //      courseId: id
+      //   }).then(() => {
+      //       this.getComponent(this.joinStatus);
+      //   }).catch(err => {
+      //       Toast.fail(err.message)
+      //   })
+      // },
+      // getAfCourse(id){
+      //   this.getAfterCourse({
+      //     courseId: id
+      //   }).then(() => {
+      //     this.getComponent(this.joinStatus);
+      //   }).catch(err => {
+      //     Toast.fail(err.message)
+      //   })
+      // },
       getComponent(status) {
         this.currentComp = status ? joinAfter : joinBefore;
       },

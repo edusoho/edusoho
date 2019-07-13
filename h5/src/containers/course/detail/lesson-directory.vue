@@ -1,6 +1,7 @@
 <template>
-  <div v-if="hasLesson">
-    <div class="lesson-directory" v-for="(lessonItem,lessonIndex) in lesson" :key="lessonIndex">
+
+  <div >
+    <div v-if="hasLesson" class="lesson-directory" v-for="(lessonItem,lessonIndex) in lesson" :key="lessonIndex">
       <div
         class="lesson-title"
         :id="lessonItem.tasks[lessonItem.index].id"
@@ -76,11 +77,12 @@
         </div>
       </div>
     </div>
+    <div v-if="taskNumber==0" class="noneItem">
+      <img src="static/images/none.png" class="notask" />
+      <p>暂时还没有课时哦...</p>
+    </div>
   </div>
-  <div v-else class="noneItem">
-    <img src="static/images/none.png" class="notask" />
-    <p>暂时还没有课时哦...</p>
-  </div>
+  
 </template>
 <script>
 import redirectMixin from "@/mixins/saveRedirect";
@@ -100,6 +102,10 @@ export default {
       default: ""
     },
     taskId: {
+      type: Number,
+      default: -1
+    },
+    taskNumber: {
       type: Number,
       default: -1
     }

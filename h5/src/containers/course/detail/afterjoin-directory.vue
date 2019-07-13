@@ -18,17 +18,18 @@
                 v-on="$listeners"
                 :lesson="list.children"
                 :taskId="taskId"
+                :taskNumber="item[slideIndex].lessonNum"
               ></lesson-directory>
             </div>
           </template>
           <div v-else class="pd-bo">
-            <lesson-directory :lesson="item[slideIndex].children" :taskId="taskId"></lesson-directory>
+            <lesson-directory :lesson="item[slideIndex].children" :taskId="taskId" :taskNumber="item[slideIndex].lessonNum"></lesson-directory>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="lessonNum==0" class="noneItem">
+    <div v-if="nodata&&lessonNum==0" class="noneItem">
       <img src="static/images/none.png" class="nodata" />
       <p>暂时还没有课程哦...</p>
     </div>
@@ -67,7 +68,7 @@ export default {
       currentLesson: 0, //课时数目的索引
       slideIndex: 0, //顶部滑动的索引
       taskId: -1,
-      nodata:false
+
     };
   },
   computed: {
@@ -89,7 +90,7 @@ export default {
     },
     OptimizationCourseLessons: {
       handler: "processItem",
-     // immediate: true,
+      immediate: true,
       deep:true,
     }
   },
@@ -110,9 +111,10 @@ export default {
     processItem(){
       let res = this.OptimizationCourseLessons;
       if(res.length==0){
+         this.nodata=true;
         return
       }
-      console.log(this.OptimizationCourseLessons)
+      this.nodata=false;
       const that = this;
       this.chapterNum = 0; //章节数
       this.unitNum = 0; //节数
@@ -137,6 +139,7 @@ export default {
           that.newScroll();
         });
       }
+      this.nodata=true;
     },
     //初始化BScroll，定位到指定目录
     newScroll() {
