@@ -1324,8 +1324,8 @@ card_info:
     defaults: { _controller: AppBundle:My/Card:cardInfo }
 
 open_course_explore:
-    path:  /open/course/explore
-    defaults: { _controller: AppBundle:OpenCourse:explore }
+    path:  /open/course/explore/{category}
+    defaults: { _controller: AppBundle:Explore:openCourse, category:'' }
 
 open_course_manage:
     path:  /open/course/{id}/manage

@@ -2,52 +2,30 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\Paginator;
-use Biz\Course\MaterialException;
-use Biz\OpenCourse\OpenCourseException;
-use Biz\User\Service\AuthService;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Component\MediaParser\ParserProxy;
-use Biz\User\Service\TokenService;
-use Biz\Taxonomy\Service\TagService;
+use Biz\Course\MaterialException;
 use Biz\Course\Service\CourseService;
-use Biz\Thread\Service\ThreadService;
-use Biz\System\Service\SettingService;
-use Biz\File\Service\UploadFileService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MaterialService;
+use Biz\File\Service\UploadFileService;
+use Biz\OpenCourse\OpenCourseException;
+use Biz\OpenCourse\Service\OpenCourseRecommendedService;
+use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Thread\Service\ThreadService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Cookie;
-use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 
 class OpenCourseController extends BaseOpenCourseController
 {
-    public function exploreAction(Request $request)
-    {
-        $queryParam = $request->query->all();
-        $conditions = $this->_filterConditions($queryParam);
-
-        $pageSize = 18;
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getOpenCourseService()->countCourses($conditions),
-            $pageSize
-        );
-
-        $courses = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', $pageSize);
-        $teachers = $this->findCourseTeachers($courses);
-
-        return $this->render('open-course/explore.html.twig', array(
-            'courses' => $courses,
-            'paginator' => $paginator,
-            'teachers' => $teachers,
-        ));
-    }
-
     public function createAction(Request $request)
     {
         $course = $request->request->all();
@@ -670,56 +648,6 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         return $replays;
-    }
-
-    private function _getPageRecommendedCourses(Request $request, $conditions, $orderBy, $pageSize)
-    {
-        $conditions['recommended'] = 1;
-
-        $recommendCount = $this->getOpenCourseService()->countCourses($conditions);
-        $currentPage = $request->query->get('page') ? $request->query->get('page') : 1;
-        $recommendPage = intval($recommendCount / $pageSize);
-        $recommendLeft = $recommendCount % $pageSize;
-
-        $currentPageCourses = $this->getOpenCourseService()->searchCourses(
-            $conditions,
-            array('recommendedSeq' => 'ASC'),
-            ($currentPage - 1) * $pageSize,
-            $pageSize
-        );
-
-        if (0 == count($currentPageCourses)) {
-            $start = ($pageSize - $recommendLeft) + ($currentPage - $recommendPage - 2) * $pageSize;
-            $limit = $pageSize;
-        } elseif (count($currentPageCourses) > 0 && count($currentPageCourses) <= $pageSize) {
-            $start = 0;
-            $limit = $pageSize - count($currentPageCourses);
-        }
-
-        $conditions['recommended'] = 0;
-
-        $courses = $this->getOpenCourseService()->searchCourses(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $start, $limit
-        );
-
-        return array_merge($currentPageCourses, $courses);
-    }
-
-    private function _filterConditions($queryParam)
-    {
-        $conditions = array('status' => 'published');
-
-        if (!empty($queryParam['fliter']['type']) && 'all' != $queryParam['fliter']['type']) {
-            $conditions['type'] = $queryParam['fliter']['type'];
-        }
-
-        /*if (isset($queryParam['orderBy']) && $queryParam['orderBy'] == 'recommendedSeq') {
-        $conditions['recommended'] = 1;
-        }*/
-
-        return $conditions;
     }
 
     private function _loginMemberMobileBind($userMobile)

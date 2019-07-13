@@ -6,11 +6,14 @@
 {% if group == 'classroom' %}
   {% set path = 'classroom_explore' %}
   {% set orderByDefault = 'createdTime' %}
+{% elseif group == 'open_course' %}
+  {% set path = 'open_course_explore' %}
+  {% set group = 'course' %}
 {% else %}
   {% set path = 'course_set_explore' %}
   {% set orderByDefault = 'latest' %}
 {% endif %}
-{% set orderBy = request.query.get('orderBy', orderByDefault) %}
+{% set orderBy = request.query.get('orderBy', orderByDefault|default(null)) %}
 
 <div class="tabs-wrapper">
   <div class="tabs-mark-group plm ptm clearfix">
@@ -78,7 +81,6 @@
       </ul>
     </div>
   {% endif %}
-
   {% for tagGroup in tagGroups %}
     {% if group in tagGroup.scope %}
       {% if tagGroup.id not in selectedTagGroups %}
