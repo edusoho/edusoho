@@ -21,7 +21,7 @@
           </div>
 
        <div class="lesson-cell__hour text-overflow" v-if="lesson.type === 'lesson'"
-            :class="{'lesson-show': unitShow[lesson.show]|| (tasks[chapterIndex][0].type === 'lesson' && lessonIndex==0)}">
+            :class="{'lesson-show': unitShow[lesson.show]|| (tasks[chapterIndex][0].type === 'lesson')}">
             <div v-if="lesson.tasks.length > 1">
               <div class="lesson-cell__lesson text-overflow">
                 <i class="h5-icon h5-icon-dot color-primary text-18"></i>
