@@ -3,17 +3,20 @@ export default [
     // 课程详情页
     name: 'getCourseDetail',
     url: '/pages/h5/courses/{courseId}',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }, {
     // 获取计划目录
     name: 'getCourseLessons',
     url: '/courses/{courseId}/item_with_lessons',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }, {
     // 优化目录获取计划结构
     name: 'getOptimizationCourseLessons',
     url: '/courses/{courseId}/item_with_lessons?format=tree&onlyPublished=1',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   },
   {
     // 加入课程

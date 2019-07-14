@@ -41,17 +41,35 @@ const mutations = {
 
 const actions = {
   async getCourseLessons({ dispatch }, { courseId }) {
-    await dispatch('getBeforeCourse', { courseId });
+    // await dispatch('getBeforeCourse', { courseId });
     let s;
     try {
       await dispatch('getNextStudy', { courseId });
-      await dispatch('getAfterCourse', { courseId });
-      s = await dispatch('getCourseDetail', { courseId });
+      s = await dispatch('getCourse', { courseId });
+      // await dispatch('getAfterCourse', { courseId });
+      // s = await dispatch('getCourseDetail', { courseId });
     } catch (e) {
-      await dispatch('getAfterCourse', { courseId });
-      s = await dispatch('getCourseDetail', { courseId });
+      // await dispatch('getAfterCourse', { courseId });
+      s = await dispatch('getCourse', { courseId });
+      // s = await dispatch('getCourseDetail', { courseId });
     }
-    return s;
+    return s[2];
+  },
+  getCourse({ commit }, { courseId }) {
+    const query = { courseId };
+    commit('UPDATE_LOADING_STATUS', true, { root: true }); // -> 'someMutation'
+    return Promise.all([
+      Api.getCourseLessons({ query }),
+      Api.getOptimizationCourseLessons({ query }),
+      Api.getCourseDetail({ query })
+    ]).then(([coursePlan, OptimizationCoursePlan, courseDetail]) => {
+      commit(types.GET_COURSE_LESSONS, coursePlan);
+      commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
+      commit(types.GET_COURSE_DETAIL, courseDetail);
+      commit('UPDATE_LOADING_STATUS', false, { root: true }); // -> 'someMutation'
+      console.log(3);
+      return [coursePlan, OptimizationCoursePlan, courseDetail];
+    });
   },
   getBeforeCourse({ commit }, { courseId }) {
     const query = { courseId };
