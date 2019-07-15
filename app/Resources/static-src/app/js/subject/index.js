@@ -29,9 +29,9 @@ export default class sbList {
   }
 
   confirmFresh() {
-    $(window).on('beforeunload',function(){
-      return Translator.trans('admin.block.not_saved_data_hint');
-    });
+    // $(window).on('beforeunload',function(){
+    //   return Translator.trans('admin.block.not_saved_data_hint');
+    // });
   }
 
   initEvent() {
@@ -222,7 +222,7 @@ export default class sbList {
       let score = $('input[name="score"]').val();
       this.questionOperate.modifyScore(this.selectQuestion, score);
       this.selectQuestion = [];
-
+      cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
       this.$scoreModal.modal('hide');
     }
   }
@@ -234,6 +234,7 @@ export default class sbList {
       let text = $("input[name='difficultyRadios']:checked").next().text();
       self.questionOperate.modifyDifficulty(self.selectQuestion, difficulty, text);
       self.selectQuestion = [];
+      cd.message({ type: 'success', message: Translator.trans('难度修改成功') });
       self.$diffiultyModal.modal('hide');
     });
   }
