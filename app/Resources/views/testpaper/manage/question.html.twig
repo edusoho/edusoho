@@ -41,7 +41,7 @@ tr.placeholder:before {
       <ul class="nav nav-pills nav-mini" id="testpaper-question-nav">
         {% for type, name in questionTypesDict %}
           <li class="question-type-table{% if loop.index == 1 %} active{% endif %}">
-            <a href="javascript:" data-type="{{ type }}" data-name="{{ questionTypesDict[type] }}" class="testpaper-nav-link"><span class="js-move-icon mrm"><i class="es-icon es-icon-yidong"></i></span><span class="mlm">{{ questionTypesDict[type] }}</span></a>
+            <a href="javascript:" data-type="{{ type }}" data-name="{{ questionTypesDict[type] }}" class="testpaper-nav-link"><span class="js-move-icon mrm"><i class="es-icon es-icon-yidong"></i></span><span class="mlm">{{ questionTypesDict[type] }}</span><span class="js-count-{{ type }}">({{ count(questions[type]|default([])) }})</span></a>
             <input type="hidden" name="questionTypeSeq" value="{{ questionTypesSeq[type] }}">
           </li>
         {% endfor %}

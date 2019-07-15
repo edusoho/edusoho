@@ -17,6 +17,7 @@ export default class QuestionManage{
     this.$typeNav.on('click','li', event => this._changeNav(event));
     this.$element.on('click','.js-request-save',event => this._confirmSave(event));
     this.$modal.on('click','.js-confirm-submit',event => this._submitSave(event));
+    this.$element.on('lengthChange','[data-role="question-body"]', event => this.changeQuestionCount(event));
   }
 
   _showPickerModal() {
@@ -202,6 +203,13 @@ export default class QuestionManage{
         });
     }
 
+  }
+
+  changeQuestionCount(event) {
+    let $target = $(event.currentTarget);
+    let type = $target.data('type');
+    let count = $target.find('tr').length;
+    $('.js-count-' + type).html('(' + count + ')');
   }
 
   initTypeSort() {

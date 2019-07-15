@@ -20,7 +20,7 @@ export default class sbList {
   }
 
   init() {
-    this.questionOperate = new QuestionOperate({});
+    this.questionOperate = new QuestionOperate();
     this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
@@ -29,9 +29,9 @@ export default class sbList {
   }
 
   confirmFresh() {
-    // $(window).on('beforeunload',function(){
-    //   return Translator.trans('admin.block.not_saved_data_hint');
-    // });
+    $(window).on('beforeunload',function(){
+      return Translator.trans('admin.block.not_saved_data_hint');
+    });
   }
 
   initEvent() {
@@ -132,7 +132,7 @@ export default class sbList {
     }
     let html = '';
     $.each(stats, function(index, statsItem){
-      let tr = statsItem.count + statsItem.name + '，';
+      let tr = statsItem.count + '道' + statsItem.name + '，';
       html += tr;
     });
     html = html.substring(0, html.length - 1) + '。';
