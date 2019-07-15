@@ -150,48 +150,16 @@ export default {
   methods: {
     ...mapActions('course', [
         'getCourseLessons',
-        'getCourseDetail',
-        'getNextStudy',
-        'getBeforeCourse',
-        'getAfterCourse'
     ]),
     handleClick (item, index){
       this.items.map(item => item.active = false);
       item.active = true;
-     // this.getBeCourse(item.id)
       this.getCourseLessons({courseId:item.id}).then(()=>{
         this.$emit('switchPlan');
       }).catch(()=>{
         this.$emit('switchPlan');
       })
     },
-     getBeCourse(id){
-        this.getBeforeCourse({
-           courseId: id
-         }).then(() => {
-           this.getAfCourse(id)
-        }).catch(err => {
-            Toast.fail(err.message)
-        })
-      },
-      getAfCourse(id){
-       this.getAfterCourse({
-          courseId: id
-        }).then(() => {
-          this.getDetail(id)
-        }).catch(err => {
-          Toast.fail(err.message)
-        })
-      },
-     getDetail(id){
-        this.getCourseDetail({
-         courseId: id
-        }).then(() => {
-            this.$emit('switchPlan');
-        }).catch(err => {
-            Toast.fail(err.message)
-        });
-      },
     filterPrice () {
       const details = this.details;
 

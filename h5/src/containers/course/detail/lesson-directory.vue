@@ -172,8 +172,12 @@ export default {
     },
     lessonCellClick(task) {
       // 课程错误和未发布状态，不允许学习任务
-      if (this.errorMsg || task.status === "create") {
+      if (this.errorMsg) {
         this.$emit("showDialog");
+        return;
+      }
+      if(task.status === "create"){
+        Toast("敬请期待");
         return;
       }
 
@@ -329,8 +333,8 @@ export default {
     },
     //直播状态样式
     liveClass(lesson) {
-      if (lesson.type != "live") {
-        return;
+      if (lesson.status!='published'||lesson.type != "live") {
+        return "nopublished";
       }
       const now = new Date().getTime();
       const startTimeStamp = new Date(lesson.startTime * 1000);

@@ -41,17 +41,12 @@ const mutations = {
 
 const actions = {
   async getCourseLessons({ dispatch }, { courseId }) {
-    // await dispatch('getBeforeCourse', { courseId });
     let s;
     try {
       await dispatch('getNextStudy', { courseId });
       s = await dispatch('getCourse', { courseId });
-      // await dispatch('getAfterCourse', { courseId });
-      // s = await dispatch('getCourseDetail', { courseId });
     } catch (e) {
-      // await dispatch('getAfterCourse', { courseId });
       s = await dispatch('getCourse', { courseId });
-      // s = await dispatch('getCourseDetail', { courseId });
     }
     return s[2];
   },
@@ -67,7 +62,6 @@ const actions = {
       commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
       commit(types.GET_COURSE_DETAIL, courseDetail);
       commit('UPDATE_LOADING_STATUS', false, { root: true }); // -> 'someMutation'
-      console.log(3);
       return [coursePlan, OptimizationCoursePlan, courseDetail];
     });
   },

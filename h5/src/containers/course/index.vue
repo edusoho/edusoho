@@ -48,9 +48,6 @@ import { debug } from 'util';
     methods: {
       ...mapActions('course', [
         'getCourseLessons',
-        'getCourseDetail',
-        'getBeforeCourse',
-        'getAfterCourse'
       ]),
       ...mapMutations('course', {
         setSourceType: types.SET_SOURCETYPE
@@ -62,31 +59,6 @@ import { debug } from 'util';
         } else {
           this.currentComp =joinBefore;
         }
-      },
-      getBeCourse(){
-        this.getBeforeCourse({
-           courseId: this.$route.params.id
-        }).then(() => {
-            this.getAfCourse();
-        }).catch(err => {
-            Toast.fail(err.message)
-        })
-      },
-      getAfCourse(){
-        this.getAfterCourse({
-          courseId: this.$route.params.id
-        }).then(() => {
-          this.getDetail();
-        }).catch(err => {
-          Toast.fail(err.message)
-        })
-      },
-      getDetail(){
-        this.getCourseDetail({
-          courseId: this.$route.params.id
-        }).then(res => {
-          this.joinStatusChange(res.member)
-        })
       },
       //获取加入后课程目录和学习状态
       getJoinAfter(){

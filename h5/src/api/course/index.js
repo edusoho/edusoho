@@ -14,7 +14,7 @@ export default [
   }, {
     // 优化目录获取计划结构
     name: 'getOptimizationCourseLessons',
-    url: '/courses/{courseId}/item_with_lessons?format=tree&onlyPublished=1',
+    url: '/courses/{courseId}/item_with_lessons?format=tree',
     method: 'GET',
     disableLoading: true
   },

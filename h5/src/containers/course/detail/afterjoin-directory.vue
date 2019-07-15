@@ -23,7 +23,12 @@
             </div>
           </template>
           <div v-else class="pd-bo">
-            <lesson-directory :lesson="item[slideIndex].children" :taskId="taskId" :taskNumber="item[slideIndex].lessonNum"></lesson-directory>
+            <lesson-directory 
+            :lesson="item[slideIndex].children" 
+            :taskId="taskId" 
+            :taskNumber="item[slideIndex].lessonNum" 
+            v-bind="$attrs"
+            v-on="$listeners"></lesson-directory>
           </div>
         </div>
       </div>
