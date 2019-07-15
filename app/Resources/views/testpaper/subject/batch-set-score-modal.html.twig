@@ -8,12 +8,15 @@
         <h4 class="modal-title">批量设置分数</h4>
       </div>
 
-      <div class="modal-body">
-        <p style="color: black" class="cd-ml40 cd-mb24">
-          <span class="text-14">{{'已选：'|trans}}</span>
-          <span class="text-14 js-select"></span>
-        </p>
-        <form class="form-horizontal" id="batch-set-score-form">
+      <div class="modal-body task-state-modal">
+        <div class="content text-left ph20">
+          <span class="text-14">
+            {{'已选：'|trans}}
+          </span>
+          <span class="text-14 js-select">
+          </span>
+        </div>
+        <form class="form-horizontal mt20" id="batch-set-score-form">
           <div class="row form-group">
             <div class="col-md-3 control-label">
               <label for="score">分值</label>
@@ -35,7 +38,7 @@
 
       <div class="modal-footer">
         <button type="button" class="btn cd-btn cd-btn-lg cd-btn-primary pull-right js-batch-score-confirm">{{ 'form.btn.confirm'|trans }}</button>
-        <button type="button" class="btn cd-btn cd-btn-lg cd-btn-flat-default pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+        <a href="javascript:;" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</a>
       </div>
     </div>
   </div>
