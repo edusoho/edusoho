@@ -5,6 +5,7 @@ namespace AppBundle\Controller\My;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Order\OrderException;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Order\Service\OrderRefundService;
 use Biz\OrderFacade\Service\OrderRefundService as LocalOrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
@@ -85,13 +86,7 @@ class OrderController extends BaseController
                 continue;
             }
 
-            if ('course' === $order['item']['target_type']) {
-                $courseSet = $this->getCourseSetService()->getCourseSet($order['item']['target_id']);
-                $order['item']['target_status'] = empty($courseSet['status']) ? '' : $courseSet['status'];
-            } elseif ('classroom' === $order['item']['target_type']) {
-                $classroom = $this->getClassroomService()->getClassroom($order['item']['target_id']);
-                $order['item']['target_status'] = empty($classroom['status']) ? '' : $classroom['status'];
-            }
+            $order['product'] = $this->getOrderFacadeService()->getOrderProductByOrderItem($order['item']);
         }
 
         return $this->render('my-order/order/index.html.twig', array(
@@ -202,5 +197,13 @@ class OrderController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return OrderFacadeService
+     */
+    private function getOrderFacadeService()
+    {
+        return $this->createService('OrderFacade:OrderFacadeService');
     }
 }
