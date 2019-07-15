@@ -2,19 +2,19 @@
 
 namespace AppBundle\Controller\My;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Order\Service\OrderRefundService;
 use Biz\OrderFacade\Service\OrderRefundService as LocalOrderRefundService;
+use Codeages\Biz\Order\Service\OrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Service\WorkflowService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
 
 class OrderController extends BaseController
 {
@@ -82,11 +82,7 @@ class OrderController extends BaseController
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
             $order['refund'] = empty($orderRefunds[$order['id']]) ? array() : $orderRefunds[$order['id']];
 
-            if (empty($order['item'])) {
-                continue;
-            }
-
-            $order['product'] = $this->getOrderFacadeService()->getOrderProductByOrderItem($order['item']);
+            $order['product'] = empty($order['item']) ? null : $this->getOrderFacadeService()->getOrderProductByOrderItem($order['item']);
         }
 
         return $this->render('my-order/order/index.html.twig', array(
