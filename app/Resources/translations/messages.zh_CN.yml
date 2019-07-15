@@ -1802,6 +1802,7 @@ course.plan_task.new_task_name: 新计划名称
 course.plan_task.activity_manage.activity_file_empty: 抱歉，%type%文件不存在，暂时无法学习。
 course.plan_task.activity_manage.preview_failed_tips: 当前%taskName%不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
+course.plan_task.activity_manage.help_block: 建议标题字数控制在15字以内，否则会影响手机端浏览
 course.plan_task.activity_manage.setup_is_option: 设为选修
 course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
 course.plan_task.activity_manage.choose_teach_way: >
@@ -7161,6 +7162,10 @@ admin.setting_course.course_operation_mode: 课程运营模式
 admin.setting_course.course_operation_mode.free_try_view: 免费试看/免费任务允许未登录用户观看
 admin.setting_course.course_operation_mode.free_try_view.help_block: 如果允许此项设置，未登录用户（游客）可观看免费试看/免费任务
 admin.setting_course.course_operation_mode.allow_show_user_count: 课程中允许显示课程人数
+admin.setting_course.course_operation_mode.course_set_number: 课程封面人数显示
+admin.setting_course.course_operation_mode.course_set_number.help_block: 管理员可以控制课程封面的人数显示
+admin.setting_course.cover_number.student_num: 显示加入人数
+admin.setting_course.cover_number.hit_num: 显示封面点击数
 admin.setting_course.customer_chapter_section_name: 章节名称自定义
 admin.setting_course.customer_task_name: 任务名称自定义
 admin.setting_course.customer_chapter_section_name.tips: 系统中的"章"、"节"会被设置的名称所替代
@@ -7195,7 +7200,7 @@ admin.setting_wechat_auth.wechat_auth_login: 微信内授权登录
 admin.setting_wechat_auth.wechat_notification: 微信服务号通知
 admin.setting_wechat_auth.wechat_pay: 微信支付
 admin.setting_wechat_auth.web_scan_login_hint: >
-  开通后，网站PC端将支持微信扫码登录。<br>请先填写右侧表单中的网站AppID及网站AppSecret。
+  开通后，网站PC端将支持微信扫码登录，App端将支持微信授权登录。<br>请先填写右侧表单中的网站AppID及网站AppSecret。
 admin.setting_wechat_auth.wechat_auth_login_hint: >
   开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。<br>
   请先填写右侧表单中的服务号AppID、服务号AppSecretMP文件验证码。
