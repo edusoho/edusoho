@@ -92,7 +92,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isIndexExist('course_task', 'categoryId')) {
-            $this->getDb()->exec('
+            $this->getConnection()->exec('
                     ALTER TABLE course_task ADD INDEX categoryId (`categoryId`);
                 ');
         }
@@ -108,6 +108,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 $lessons = $this->getCourseChapterDao()->search(array('type' => 'lesson'), array(), $page * $length, $length, array('id', 'title'));
                 $lessons = \AppBundle\Common\ArrayToolkit::index($lessons, 'id');
                 $categoryIds = \AppBundle\Common\ArrayToolkit::column($lessons, 'id');
+                if (empty($categoryIds)) {
+                    continue;
+                }
                 $tasks = $this->searchTasksByCategoryIds($categoryIds);
 
                 foreach ($tasks as $task) {
