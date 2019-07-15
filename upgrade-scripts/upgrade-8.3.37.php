@@ -49,7 +49,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'createNotificationTable',
+            'updateTaskIsLessonAndChapterTitle',
         );
 
         $funcNames = array();
@@ -85,7 +85,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function createNotificationTable()
+    protected function updateTaskIsLessonAndChapterTitle()
     {
         if (!$this->isFieldExist('course_task', 'isLesson')) {
             $this->getConnection()->exec("ALTER TABLE `course_task` ADD `isLesson` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否为固定课时' AFTER `mode`;");
