@@ -61,12 +61,15 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         $chapter = $this->getChapterDao()->get($task['categoryId']);
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
         $tasks = array($task);
-        $chapter['tasks'] = $tasks;
         if (1 == $taskNum) {
             $template = 'lesson-manage/normal/lesson.html.twig';
+        } elseif ($task['isLesson']) {
+            $template = 'lesson-manage/normal/lesson.html.twig';
+            $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($task['categoryId']);
         } else {
             $template = 'lesson-manage/normal/tasks.html.twig';
         }
+        $chapter['tasks'] = $tasks;
 
         return array(
             'data' => array(
