@@ -208,7 +208,12 @@ export default class QuestionManage{
   changeQuestionCount(event) {
     let $target = $(event.currentTarget);
     let type = $target.data('type');
-    let count = $target.find('tr').length;
+    let count = 0;
+    if (type == 'material') {
+      count = $target.find('tr.is-sub-question').length;
+    } else {
+      count = $target.find('tr').length;
+    }
     $('.js-count-' + type).html('(' + count + ')');
   }
 
