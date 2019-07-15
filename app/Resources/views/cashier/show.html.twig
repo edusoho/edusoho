@@ -6,13 +6,14 @@
 {% set step = '2' %}
 {% block order_body %}
   {% if not product.productEnable %}
-    <div class="alert cd-alert cd-alert-warning alert-dismissible mb5" role="alert">
+    <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
       {{ ('pay_center.'~product.targetType~'.close')|trans }}
     </div>
+  {% else %}
+    <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
+      {{ 'pay_center.pay.submit_tips'|trans }}
+    </div>
   {% endif %}
-  <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
-    {{ 'pay_center.pay.submit_tips'|trans }}
-  </div>
 
   <div class="order-center-card clearfix">
     <div class="order-center-card__img">
