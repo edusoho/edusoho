@@ -29,9 +29,9 @@ export default class sbList {
   }
 
   confirmFresh() {
-    // $(window).on('beforeunload',function(){
-    //   return Translator.trans('admin.block.not_saved_data_hint');
-    // });
+    $(window).on('beforeunload',function(){
+      return Translator.trans('admin.block.not_saved_data_hint');
+    });
   }
 
   initEvent() {
