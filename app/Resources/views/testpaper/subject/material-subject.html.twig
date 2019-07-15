@@ -1,0 +1,46 @@
+{% set data = [
+  {
+    "title": '请简要谈谈你对在线教育的看法。',
+    "type": 'material',
+    'difficulty': '一般',
+    'score': '5',
+    'order': 6
+  },
+  {
+    "title": '甲公司的长期股权投资权益法核算下的账面价值与计算基础是否有差异。',
+    "type": 'subMaterial',
+    "answer": '从 2015 年 4 月起，Ant Design 在蚂蚁金服中后台产品线迅速推广，对接多条业务线，覆盖系统 800 个以上。定位于中台业务的 Ant Design 兼顾专业和非专业的设计人员，具有学习成本低、上手速度快、实现效果好等特点，并且提供从界面设计到前端开发的全链路生态，可以大大提升设计和开发的效率',
+    'difficulty': '一般',
+    'score': '5',
+    'order':'',
+    'subOrder': '1',
+    'parentId': '1'
+  },
+  {
+    "title": '分别计算甲公司2X15年12月3日所得税负债或资产的账面余额。',
+    "type": 'subMaterial',
+    "answer": '从 2015 年 4 月起，Ant Design 在蚂蚁金服中后台产品线迅速推广，对接多条业务线，覆盖系统 800 个以上。定位于中台业务的 Ant Design 兼顾专业和非专业的设计人员，具有学习成本低、上手速度快、实现效果好等特点，并且提供从界面设计到前端开发的全链路生态，可以大大提升设计和开发的效率',
+    'difficulty': '一般',
+    'order':'',
+    'score': '5',
+    'subOrder': '2',
+    'parentId': '1'
+  }
+] %}
+
+{% for item in data %}
+  <div class="subject-item {% if item.type == 'subMaterial' %}subject-sub-item{% endif %}" id="{{ item.order }}">
+    {% if item.type == 'material' %}
+      <div class="subject-item__title">
+        <span class="subject-item__number">{{ item.order }}</span>
+        {{ item.title }}
+      </div>
+    {% else %}
+      <div class="subject-item__body">
+        <span>{{ '（' ~ item.subOrder ~ '）'  }}</span><span>{{ item.title }}</span>
+        <div class="subject-sub-item__answer"><span class="subject-sub-item__label">答案：</span><span class="">{{ item.answer }}</span></div>
+      </div>
+    {% endif %}
+    {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
+  </div>
+{% endfor %}

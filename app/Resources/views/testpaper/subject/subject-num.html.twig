@@ -1,0 +1,37 @@
+{% set data = [
+  {
+    "type": '单选题',
+    'num': '6',
+  },
+  {
+    "type": '多选题',
+    'num': '3',
+  },
+  {
+    "type": '不定项',
+    'num': '3',
+  },
+  {
+    "type": '判断题',
+    'num': '3',
+  },
+  {
+    "type": '填空题',
+    'num': '1',
+  },
+  {
+    "type": '问答题',
+    'num': '3',
+  },
+  {
+    "type": '材料题',
+    'num': '3',
+  }
+] %}
+
+{% for item in data %}
+  <div class="subject-data__item clearfix">
+    <span>{{ item.type }}</span>
+    <span class="pull-right subject-data__num">共{{ item.num }}道题</span>
+  </div>
+{% endfor %}

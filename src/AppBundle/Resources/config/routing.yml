@@ -2296,6 +2296,10 @@ course_set_manage_question:
   path: /course_set/{id}/manage/question
   defaults: { _controller: AppBundle:Question/Manage:index }
 
+course_set_manage_question_read:
+  path: /course_set/{id}/manage/question/read
+  defaults: { _controller: AppBundle:Question/Manage:read }
+
 course_set_manage_question_create:
   path: /course_set/{id}/manage/question/{type}/create
   defaults: { _controller: AppBundle:Question/Manage:create }
@@ -2348,6 +2352,10 @@ course_set_manage_testpaper:
 course_set_manage_testpaper_create:
   path: /course_set/{id}/manage/testpaper/create
   defaults: { _controller: AppBundle:Testpaper/Manage:create }
+
+course_set_manage_testpaper_read:
+  path: /course_set/{id}/manage/testpaper/read
+  defaults: { _controller: AppBundle:Testpaper/Manage:read }
 
 course_set_manage_testpaper_update:
     path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/update
@@ -3179,3 +3187,11 @@ drag_captcha:
 login_wechat_qrcode:
     path:     /login/wechat/qrcode
     defaults: { _controller: AppBundle:Login:wechatQrcode }
+
+testpaper_re_edit:
+  path: /testpaper/re_edit
+  defaults: { _controller: AppBundle:Testpaper/Manage:reEdit }
+
+question_re_edit:
+  path: /question/re_edit
+  defaults: { _controller: AppBundle:Question/Manage:reEdit }
