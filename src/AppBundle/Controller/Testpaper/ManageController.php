@@ -471,6 +471,7 @@ class ManageController extends BaseController
             'passedScoreDefault' => $passedScoreDefault,
             'courseTasks' => $courseTasks,
             'courses' => $manageCourses,
+            'subCounts' => empty($questions['material']) ? 0 : array_sum(array_column($questions['material'], 'subCount')),
         ));
     }
 

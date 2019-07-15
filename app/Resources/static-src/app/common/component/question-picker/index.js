@@ -59,6 +59,7 @@ export default class QuestionPicker {
           $tbody = this.$questionAppendForm.find('tbody');
         }
         $tbody.append(html).removeClass('hide');
+        $tbody.trigger('lengthChange');
       }
       this._refreshSeqs();
       questionSubjectiveRemask(this.$questionAppendForm);
