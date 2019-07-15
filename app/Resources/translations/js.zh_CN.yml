@@ -1355,5 +1355,7 @@ user.account.order_pay_course_close_title: 该课程已关闭
 user.account.order_pay_course_close_hint: 该订单的课程已关闭，确定还要支付？
 user.account.order_pay_classroom_close_title: 该班级已关闭
 user.account.order_pay_classroom_close_hint: 该订单的班级已关闭，确定还要支付？
+user.account.order_pay_vip_close_title: 该Vip等级已关闭
+user.account.order_pay_vip_close_hint: 该订单的Vip等级已关闭，确定还要支付？
 user.account.order_pay: 继续
 user.account.order_not_pay: 不支付
