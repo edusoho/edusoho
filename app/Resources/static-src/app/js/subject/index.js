@@ -14,6 +14,7 @@ export default class sbList {
     this.$diffiultyModal = $('.js-difficulty-modal');
     this.$scoreModal = $('.js-score-modal');
     this.scoreValidator = null;
+    this.totalScore = 0;
     this.selectQuestion = [];
     this.questionOperate = null;
     this.init();
@@ -25,6 +26,7 @@ export default class sbList {
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
+    this.initTotalScore();
     this.setDifficulty();
   }
 
@@ -146,7 +148,12 @@ export default class sbList {
     let stats = this.statChosedQuestion();
 
     let $missScoreField = $('.miss-score-field');
-    if (stats.hasOwnProperty('choice') || stats.hasOwnProperty('uncertain_choice')) {
+
+    if ($('input[name="isTestpaper"]').val() != 1) {
+      if (!$missScoreField.hasClass('hidden')) {
+        $missScoreField.addClass('hidden');
+      }
+    } else if (stats.hasOwnProperty('choice') || stats.hasOwnProperty('uncertain_choice')) {
       if ($missScoreField.hasClass('hidden')) {
         $missScoreField.removeClass('hidden');
       }
@@ -217,11 +224,19 @@ export default class sbList {
     }, 'Please enter a lesser value.' );
   }
 
+  initTotalScore() {
+
+  }
+
   batchSetScore() {
     if (this.scoreValidator.form()) {
       let score = $('input[name="score"]').val();
       this.questionOperate.modifyScore(this.selectQuestion, score);
       this.selectQuestion = [];
+      let $totalScore = $('.js-total-score');
+      if ($totalScore.length === 1) {
+        $totalScore.html(`总分${this.totalScore}分`);
+      }
       cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
       this.$scoreModal.modal('hide');
     }
