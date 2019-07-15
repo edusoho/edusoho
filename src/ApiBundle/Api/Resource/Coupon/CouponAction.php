@@ -41,7 +41,7 @@ class CouponAction extends AbstractResource
         $coupon = $this->getCouponService()->getCouponByCode($code);
 
         if (empty($coupon)) {
-            return $this->error(sprintf('该优惠券不存在'));
+            return $this->error('该优惠券不存在');
         }
 
         if ($coupon['status'] == 'receive') {
