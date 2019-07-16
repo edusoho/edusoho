@@ -294,13 +294,13 @@
   // join-after component
   .join-after {
     &__content {
-      // position: absolute;
-      // left: 0;
-      // right: 0;
-      // bottom: 0;
-      // top: vw(300);
-      // overflow: auto;
-      margin-top: 44px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: vw(300);
+      overflow: auto;
+     // margin-top: 44px;
       .e-panel-body {
         img {
           width: 100%;
@@ -319,9 +319,9 @@
     box-shadow: 0px 5px 5px #f8f9fa;
   }
   .progress-bar {
-    height: vw(49);
-    padding: 0 vw(20);
-    box-shadow: 0px 2px 6px 0px rgba(49,49,49,0.1);
+    height: vw(44);
+    padding: 15px vw(20) 0 vw(20) ;
+    //box-shadow: 0px 2px 6px 0px rgba(49,49,49,0.1);
     display: flex;
     align-items: center;
     &__content {

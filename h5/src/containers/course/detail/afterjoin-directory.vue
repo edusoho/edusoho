@@ -155,7 +155,7 @@ export default {
         document.getElementById("course-detail__head--img") == null
           ? 0
           : document.getElementById("course-detail__head--img").clientHeight;
-      const MARGINTOP = 10;
+      const MARGINTOP = 0;
       const PROCESSHEIGHT =
         document.getElementById("progress-bar") == null
           ? 0
