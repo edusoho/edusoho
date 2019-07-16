@@ -3195,3 +3195,7 @@ testpaper_re_edit:
 question_re_edit:
   path: /question/re_edit
   defaults: { _controller: AppBundle:Question/Manage:reEdit }
+
+subject_edit_template:
+  path: /subject/edit/{type}
+  defaults: { _controller: AppBundle:Testpaper/Manage:editTemplate }

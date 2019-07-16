@@ -599,6 +599,11 @@ class ManageController extends BaseController
         ));
     }
 
+    public function editTemplateAction(Request $request, $type)
+    {
+        return $this->render("testpaper/subject/type/{$type}.html.twig", array());
+    }
+
     protected function fillGraphData($testpaper, $userFirstResults)
     {
         $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());
