@@ -1,4 +1,3 @@
-import notify from 'common/notify';
 import QuestionOperate from './operate';
 
 export default class sbList {
@@ -81,7 +80,10 @@ export default class sbList {
     if (event.currentTarget !== event.target) {
       return;
     }
-    const $target = $(event.currentTarget);
+    this.countNumber();
+  }
+
+  countNumber() {
     let itemLength = this.$sbCheckbox.length;
     const self = this;
     setTimeout(function(){
@@ -117,12 +119,14 @@ export default class sbList {
   }
 
   quickToQuestion(event, flag) {
-    if (!flag) {
-      return;
-    }
     const $target = $(event.currentTarget);
-    const position = $($target.data('anchor')).offset();
-    $(document).scrollTop(position.top);
+    if (!flag) {
+      $target.find('.js-show-checkbox').toggleClass('checked');
+      this.countNumber();
+    } else {
+      const position = $($target.data('anchor')).offset();
+      $(document).scrollTop(position.top);
+    }
   }
 
   showModal(event, modal) {
@@ -219,7 +223,7 @@ export default class sbList {
       }
     });
 
-    $.validator.addMethod( "noMoreThan", function(value, element, param) {
+    $.validator.addMethod( 'noMoreThan', function(value, element, param) {
       return value <= $(param).val();
     }, 'Please enter a lesser value.' );
   }
@@ -246,8 +250,8 @@ export default class sbList {
   setDifficulty() {
     let self = this;
     $('.js-difficulty-btn').click(function(){
-      let difficulty = $("input[name='difficultyRadios']:checked").val();
-      let text = $("input[name='difficultyRadios']:checked").next().text();
+      let difficulty = $('input[name=\'difficultyRadios\']:checked').val();
+      let text = $('input[name=\'difficultyRadios\']:checked').next().text();
       self.questionOperate.modifyDifficulty(self.selectQuestion, difficulty, text);
       self.selectQuestion = [];
       self.$diffiultyModal.modal('hide');
