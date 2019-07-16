@@ -172,12 +172,12 @@ class Setting extends AbstractResource
         if ($courseSetting['show_student_num_enabled'] == 0) {
             $showStudentNumEnabled = 0;
             $showHitNumEnabled = 0;
-        } elseif (($courseSetting['show_student_num_enabled'] == 1) && ($courseSetting['show_cover_num_mode'] == 'studentNum')) {
-            $showStudentNumEnabled = 1;
-            $showHitNumEnabled = 0;
-        } else {
+        } elseif (($courseSetting['show_student_num_enabled'] == 1) && (isset($courseSetting['show_cover_num_mode'])) && ($courseSetting['show_cover_num_mode'] == 'hitNum')) {
             $showStudentNumEnabled = 0;
             $showHitNumEnabled = 1;
+        } else {
+            $showStudentNumEnabled = 1;
+            $showHitNumEnabled = 0;
         }
 
         return array(
