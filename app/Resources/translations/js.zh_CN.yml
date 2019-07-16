@@ -1351,4 +1351,11 @@ wechat.notification.homepage.open_tip: <span class="%messageClass%">“微信通
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">前往开启</span>
 wechat.notification.cloud_open_tip: 请先开启教育云
 
-
+user.account.order_pay_course_close_title: 该课程已关闭
+user.account.order_pay_course_close_hint: 该订单的课程已关闭，确定还要支付？
+user.account.order_pay_classroom_close_title: 该班级已关闭
+user.account.order_pay_classroom_close_hint: 该订单的班级已关闭，确定还要支付？
+user.account.order_pay_vip_close_title: 该会员等级已关闭
+user.account.order_pay_vip_close_hint: 该订单的会员等级已关闭，确定还要支付？
+user.account.order_pay: 继续
+user.account.order_not_pay: 不支付

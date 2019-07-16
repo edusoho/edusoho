@@ -1408,3 +1408,11 @@ wechat.notification.homepage_open_tip: <span class="%messageClass%">"WeChat noti
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">go to open</span>
 wechat.notification.cloud_open_tip: Please open ES Cloud
 
+user.account.order_pay_course_close_title: The course is closed
+user.account.order_pay_course_close_hint: The course in this order has been closed.Confirmed to pay?
+user.account.order_pay_classroom_close_title: The classroom is closed
+user.account.order_pay_classroom_close_hint: The classroom in this order has been closed.Confirmed to pay?
+user.account.order_pay_vip_close_title: The vip level is closed
+user.account.order_pay_vip_close_hint: The vip level in this order has been closed.Confirmed to pay?
+user.account.order_pay: Continue
+user.account.order_not_pay: Not paying

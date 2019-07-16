@@ -585,6 +585,9 @@ pay_center.order.detail: 'Order detail：%title%'
 pay_center.verify_mobile: 'Verify your phone number that binded with your bank card'
 pay_center.verify_mobile.mobile: 'Phone number that binded with your bank card'
 pay_center.verify_mobile.input_placeholder: 'Phone number'
+pay_center.course.close: The course in this order has been closed.Please pay carefully.
+pay_center.classroom.close: The classroom in this order has been closed.Please pay carefully.
+pay_center.vip.close: The vip level in this order has been closed.Please pay carefully.
 upload.content_title: 'Upload'
 upload.content_title.uploading_tips: 'Uploading now, please do not close the window'
 upload.upload_tips: 'Please drag files to here, or click add files button'

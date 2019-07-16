@@ -669,6 +669,9 @@ pay_center.order.detail: 订单详情：%title%
 pay_center.verify_mobile: 核实银行预留手机
 pay_center.verify_mobile.mobile: 银行预留手机号
 pay_center.verify_mobile.input_placeholder: 手机号码
+pay_center.course.close: 该课程已关闭，请谨慎支付
+pay_center.classroom.close: 该班级已关闭，请谨慎支付
+pay_center.vip.close: 该会员等级已关闭，请谨慎支付
 
 # 上传模块
 upload.content_title: 上传文件
