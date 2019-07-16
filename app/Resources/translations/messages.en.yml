@@ -4456,6 +4456,7 @@ admin.setting.site.master_email: 'Administrator email'
 admin.setting.site.copyright: 'Site Copyright Owner'
 admin.setting.site.copyright.help_block: 'You can enter website name and company name.'
 admin.setting.site.icp: ICP
+admin.setting.site.icp_url: ICP Link
 admin.setting.site.website_statistics_analysis: 'Website analytics code deployment'
 admin.setting.site.analytics: 'Analytics Code'
 admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc.</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a href=\"http://ta.qq.com/\" target=\"_blank\">Tencent Analytics</a> Or <a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ</a></p>\n"
