@@ -211,6 +211,10 @@ class NormalStrategyTest extends BaseTestCase
         $course = array('id' => 1);
         $chapter = array('id' => 1);
         $activity = array('id' => 1);
+        $tasks = array(
+            array('id' => 1),
+            array('id' => 2)
+        );
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'getCourse',
@@ -228,6 +232,10 @@ class NormalStrategyTest extends BaseTestCase
                 'functionName' => 'countTasksByChpaterId',
                 'withParams' => array(2),
                 'returnValue' => 2,
+            ),
+            array(
+                'functionName' => 'findTasksFetchActivityByChapterId',
+                'returnValue' => $tasks
             ),
         ));
         $this->mockBiz('Course:CourseChapterDao', array(
@@ -258,6 +266,19 @@ class NormalStrategyTest extends BaseTestCase
             'courseId' => 1,
             'categoryId' => 2,
             'activityId' => 1,
+            'isLesson' => true,
+        );
+        $result = $this->getNormalStrategy()->getTasksJsonData($task);
+        $this->assertEquals($course, $result['data']['course']);
+        $this->assertEquals(1, $result['data']['lesson']['id']);
+        $this->assertCount(2, $result['data']['tasks']);
+        $this->assertEquals('lesson-manage/normal/lesson.html.twig', $result['template']);
+
+        $task = array(
+            'courseId' => 1,
+            'categoryId' => 2,
+            'activityId' => 1,
+            'isLesson' => false
         );
         $result = $this->getNormalStrategy()->getTasksJsonData($task);
         $this->assertEquals($course, $result['data']['course']);
