@@ -1,4 +1,6 @@
 import sortList from 'common/sortable';
+import notify from 'common/notify';
+
 
 export default class Manage {
   constructor(element) {
@@ -132,6 +134,7 @@ export default class Manage {
         self.handleEmptyShow();
         self._flushTaskNumber();
         $.post($this.data('url'), function(data) {
+          notify('success', Translator.trans('site.delete_success_hint'));
           self.sortList();
         });
       });

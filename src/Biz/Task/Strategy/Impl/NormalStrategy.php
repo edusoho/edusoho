@@ -96,16 +96,6 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
             $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
             $this->getActivityService()->deleteActivity($task['activityId']);
 
-            //课时下面只有一个任务时，则把课时也删除
-            $conditions = array(
-                'courseId' => $task['courseId'],
-                'categoryId' => $task['categoryId'],
-            );
-            $categoryTaskCount = $this->getTaskDao()->count($conditions);
-            if (empty($categoryTaskCount)) {
-                $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
-            }
-
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();

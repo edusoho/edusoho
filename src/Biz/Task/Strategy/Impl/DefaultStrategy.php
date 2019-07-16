@@ -100,27 +100,9 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
         try {
             $this->biz['db']->beginTransaction();
-            $allTasks = array();
-            if ('lesson' == $task['mode']) {
-                $allTasks = $this->getTaskDao()->findByCourseIdAndCategoryId(
-                    $task['courseId'],
-                    $task['categoryId']
-                );
-            } else {
-                array_push($allTasks, $task);
-            }
-            foreach ($allTasks as $_task) {
-                $this->getTaskDao()->delete($_task['id']);
-                $this->getTaskResultService()->deleteUserTaskResultByTaskId($_task['id']);
-                $this->getActivityService()->deleteActivity($_task['activityId']);
-            }
-
-            if ('lesson' == $task['mode']) {
-                $lessonCount = $this->getCourseLessonService()->countLessons(array('id' => $task['categoryId']));
-                if ($lessonCount > 0) {
-                    $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
-                }
-            }
+            $this->getTaskDao()->delete($task['id']);
+            $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
+            $this->getActivityService()->deleteActivity($task['activityId']);
 
             $this->biz['db']->commit();
         } catch (\Exception $e) {
