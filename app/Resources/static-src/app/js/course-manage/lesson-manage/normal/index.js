@@ -31,7 +31,29 @@ class NormalManage extends BaseManage {
 
   _triggerLessonIconAsTaskNumUpdated(container, isMulTasks) {
   }
+
+  sortablelist() {
+    // 前台排序 章，课时，任务 的序号
+    let sortableElements = ['.js-task-manage-lesson[show-num=1]', '.js-task-manage-chapter'];
+    for (let j = 0; j < sortableElements.length; j++) {
+      this._sortNumberByClassName(sortableElements[j]);
+    }
+    this._sortUnitNumber();
+    this._sortTaskNumber();
+  }
+
+  _sortTaskNumber() {
+    let num;
+    this.$element.find('.js-lesson-box').each(function () {
+      let $task = $(this).find('.js-task-manage-item');
+      num = 0;
+      $task.each(function () {
+        $(this).find('.number').text(num++);
+      });
+    });
+  }
 }
+
 
 new NormalManage('#sortable-list');
 
