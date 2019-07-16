@@ -213,7 +213,7 @@ class NormalStrategyTest extends BaseTestCase
         $activity = array('id' => 1);
         $tasks = array(
             array('id' => 1),
-            array('id' => 2)
+            array('id' => 2),
         );
         $this->mockBiz('Course:CourseService', array(
             array(
@@ -235,7 +235,7 @@ class NormalStrategyTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findTasksFetchActivityByChapterId',
-                'returnValue' => $tasks
+                'returnValue' => $tasks,
             ),
         ));
         $this->mockBiz('Course:CourseChapterDao', array(
@@ -278,7 +278,7 @@ class NormalStrategyTest extends BaseTestCase
             'courseId' => 1,
             'categoryId' => 2,
             'activityId' => 1,
-            'isLesson' => false
+            'isLesson' => false,
         );
         $result = $this->getNormalStrategy()->getTasksJsonData($task);
         $this->assertEquals($course, $result['data']['course']);
