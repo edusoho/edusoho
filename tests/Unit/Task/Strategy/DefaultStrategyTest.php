@@ -303,30 +303,9 @@ class DefaultStrategyTest extends BaseTestCase
             'Task:TaskDao',
             array(
                 array(
-                    'functionName' => 'findByCourseIdAndCategoryId',
-                    'returnValue' => array(
-                        array(
-                            'id' => 1,
-                            'title' => 'task title1',
-                            'activityId' => 1,
-                        ),
-                        array(
-                            'id' => 2,
-                            'title' => 'task title2',
-                            'activityId' => 2,
-                        ),
-                    ),
-                    'whitParams' => array(1, 1),
-                ),
-                array(
                     'functionName' => 'delete',
                     'withParams' => array(1),
                     'runTimes' => 1,
-                ),
-                array(
-                    'functionName' => 'delete',
-                    'withParams' => array(2),
-                    'runTimes' => 2,
                 ),
             )
         );
@@ -338,11 +317,6 @@ class DefaultStrategyTest extends BaseTestCase
                     'withParams' => array(1),
                     'runTimes' => 1,
                 ),
-                array(
-                    'functionName' => 'deleteUserTaskResultByTaskId',
-                    'withParams' => array(2),
-                    'runTimes' => 2,
-                ),
             )
         );
         $this->mockBiz(
@@ -353,11 +327,6 @@ class DefaultStrategyTest extends BaseTestCase
                     'withParams' => array(1),
                     'runTimes' => 1,
                 ),
-                array(
-                    'functionName' => 'deleteActivity',
-                    'withParams' => array(2),
-                    'runTimes' => 2,
-                ),
             )
         );
 
@@ -366,6 +335,7 @@ class DefaultStrategyTest extends BaseTestCase
             'mode' => 'lesson',
             'courseId' => '1',
             'categoryId' => '1',
+            'activityId' => '1'
         );
 
         $this->mockBiz(
@@ -379,25 +349,10 @@ class DefaultStrategyTest extends BaseTestCase
             )
         );
 
-        $this->mockBiz('Course:LessonService', array(
-                array(
-                    'functionName' => 'deleteLesson',
-                    'withParams' => array(1, 1),
-                    'runTimes' => 1,
-                ),
-                array(
-                    'functionName' => 'countLessons',
-                    'withParams' => array(array('id' => 1)),
-                    'returnValue' => 1,
-                ),
-            )
-        );
-
         $this->getDefaultStrategy()->deleteTask($task);
-        $this->getTaskDao()->shouldHaveReceived('delete')->times(2);
-        $this->getTaskResultService()->shouldHaveReceived('deleteUserTaskResultByTaskId')->times(2);
-        $this->getActivityService()->shouldHaveReceived('deleteActivity')->times(2);
-        $this->getCourseLessonService()->shouldHaveReceived('deleteLesson')->times(1);
+        $this->getTaskDao()->shouldHaveReceived('delete')->times(1);
+        $this->getTaskResultService()->shouldHaveReceived('deleteUserTaskResultByTaskId')->times(1);
+        $this->getActivityService()->shouldHaveReceived('deleteActivity')->times(1);
     }
 
     public function testPrepareCourseItems()
