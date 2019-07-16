@@ -1,33 +1,117 @@
+/*
+题目对象：
+{
+    "stem" : "", //required
+    "type" : "", //required
+    "options" : [], //required: choice、single_choice、uncertain_choice、determine
+    "answer" : "", //required:  essay 
+    "answers" : [], //required: choice、single_choice、ncertain_choice、determine
+    "score" : 2.0,
+    "missScore" : 1.0,
+    "analysis" : "",
+    "attachments" : {},
+    "subQuestions" : [],
+    "difficulty" : "simple|normal|difficulty",
+    "errors" : [
+        {
+            "element" : "stem",
+            "index" : 0,
+            "code" : 40487,
+            "message" : "题干有特殊字符"
+        },
+        {
+           "element" : "options",
+            "index" : 2,
+            "code" : 40402,
+            "message" : "缺少C选项" 
+        }
+    ]
+}
+*/
 export default class QuestionOperate {
   constructor() {
-    this.questions = $('.js-cached-data').html();
-    this.selectQuestion = [];
+    this.questions = this._toJson($('.js-cached-data').html());
+    this.tokenList = this._toJson($('.js-cached-token').html());
     this.$statList = $('.js-subject-data');
     this.$itemList = $('.js-item-list');
+    this.flag = false;
   }
 
   modifyDifficulty(selectQuestion, difficulty, text) {
     let self = this;
-    $.each(selectQuestion, function(index, position){
-      // if (typeof self.questions[position] != 'undefined') {
-      //   self.questions[position]['difficulty'] = difficulty;
-        self.$itemList.find('#' + position).find('.js-difficulty').html(text);
+    $.each(selectQuestion, function(index, token){
+      // if (typeof self.questions[token] != 'undefined') {
+      //   this.updateQuestionItem(tokne, 'difficulty', difficulty);
+        self.$itemList.find('#' + token).find('.js-difficulty').html(text);
       // }
     });
   }
 
   modifyScore(selectQuestion, score) {
     let self = this;
-    $.each(selectQuestion, function(index, position) {
-      self.$itemList.find(`#${position}`).find('.js-score').html(`${score}分`);
+    $.each(selectQuestion, function(index, token) {
+      self.$itemList.find(`#${token}`).find('.js-score').html(`${score}分`);
     });
   }
 
-  addQuestion(position, question) {
-    this.questions.splice(position, 0, question);
+  addQuestion(preToken, token, question) {
+    if (!this.isUpdating()) {
+      return;
+    }
+    this.flag = true;
+    this.questions.push({token:question});
+    position = this.tokenList.indexOf(preToken);
+    this.tokenList.splice(position, 0, token);
+    this.flag = false;
   }
 
-  deleteQuestion(position) {
-    this.questions.splice(position, 1);
+  deleteQuestion(deleteToken) {
+    if (!this.isUpdating()) {
+      return;
+    }
+    this.flag = true;
+    this.questions[deleteToken] = undefined;
+    position = this.tokenList.indexOf(preToken);
+    this.tokenList.splice(position, 1);
+    this.flag = false;
+  }
+
+  updateQuestion(token, question) {
+    if (!this.isUpdating()) {
+      return;
+    }
+    this.flag = true;
+    this.questions[token] = question;
+    this.flag = false;
+  }
+
+  updateQuestionItem(token, itemKey, itemValue) {
+    if (!this.isUpdating()) {
+      return;
+    }
+    this.flag = true;
+    this.questions[token][itemKey] = itemValue;
+    this.flag = false;
+  }
+
+  getQuestion(token) {
+    return this.questions[token];
+  }
+
+  isUpdating() {
+    if (this.flag == true) {
+      cd.message({ type: 'danger', message: Translator.trans('题目正在修改中,请稍侯') });
+      return false;
+    }
+
+    return true;
+  }
+
+  _toJson(str) {
+    let json = {};
+    if (str) {
+      json = $.parseJSON(str.replace(/[\r\n\t]/g, ''));
+    }
+    return json;
   }
 }
