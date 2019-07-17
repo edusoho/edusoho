@@ -13,9 +13,6 @@ class CloudConsultFreshJobTest extends BaseTestCase
         $job = new CloudConsultFreshJob(array(), $this->biz);
         $result = $job->execute();
         $this->assertNull($result);
-
-//        $memberService->shouldHaveReceived('findMemberUserIdsByCourseId')->times(2);
-//        $analysisDao->shouldHaveReceived('batchRefreshUserLearningData')->times(2);
     }
 
     public function testExcute()
