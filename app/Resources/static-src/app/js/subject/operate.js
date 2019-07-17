@@ -41,11 +41,11 @@ export default class QuestionOperate {
   init() {
     let cachedData = this._toJson($('.js-cached-data').html());
     for (var i = 0; i < cachedData.length; i++) {
-      let token = this._getToken;
+      let token = this._getToken();
       this.questions[token] = cachedData[i];
       this.tokenList.push(token);
-      index = ++i;
-      $(`[data-anchor=${index}]`).data('anchor', token);     
+      let index = ++i;
+      $(`[data-anchor="#${index}"]`).data('anchor', '#' + token);
       $('#' + index).attr('id', token);
     }
     this.flag = false;
@@ -132,6 +132,7 @@ export default class QuestionOperate {
   _random() {
     return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
   }
+
   _getToken() {
     return (this._random()+this._random()+"-"+this._random()+"-"+this._random()+"-"+this._random()+"-"+this._random()+this._random()+this._random());
   }
