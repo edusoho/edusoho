@@ -90,6 +90,10 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
             $conditions['idcardLike'] = "%{$conditions['keyword']}%";
         }
 
+        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && 'idcard' == $conditions['keywordType']) {
+            $conditions['idcard'] = trim($conditions['keyword']);
+        }
+
         return parent::createQueryBuilder($conditions);
     }
 
