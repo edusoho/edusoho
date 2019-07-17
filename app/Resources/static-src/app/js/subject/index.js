@@ -1,4 +1,5 @@
 import QuestionOperate from './operate';
+import showCkEditor from './edit';
 
 export default class sbList {
   constructor() {
@@ -22,13 +23,15 @@ export default class sbList {
   }
 
   init() {
+    new showCkEditor();
     this.questionOperate = new QuestionOperate();
-    this.confirmFresh();
+    // this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
     this.initTotalScore();
     this.setDifficulty();
+    // this.showCkEditor();
   }
 
   confirmFresh() {
