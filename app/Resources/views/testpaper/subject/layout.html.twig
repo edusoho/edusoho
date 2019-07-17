@@ -19,12 +19,13 @@
       {% include 'testpaper/subject/choose-subject.html.twig' %}
       {% include 'testpaper/subject/answer-subject.html.twig' %}
       {% include 'testpaper/subject/material-subject.html.twig' %}
-      {# {% include 'testpaper/subject/type/choice.html.twig' %} #}
       {% block edit %}
         {% include 'testpaper/subject/type/choice.html.twig' %}
         {% include 'testpaper/subject/type/single_choice.html.twig' %}
+        {% include 'testpaper/subject/type/uncertain_choice.html.twig' %}
         {% include 'testpaper/subject/type/essay.html.twig' %}
-        {# {% include 'testpaper/subject/type/question-edit-layout.html.twig' %} #}
+        {% include 'testpaper/subject/type/determine.html.twig' %}
+        {% include 'testpaper/subject/type/fill.html.twig' %}
       {% endblock %}
       <div class="text-center cd-mt24">
         <button class="cd-btn cd-btn-primary subject-button" type="button">完成导入</button>

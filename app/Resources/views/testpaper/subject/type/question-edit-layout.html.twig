@@ -40,7 +40,9 @@
         </div>
       </div>
     </div>
-    {% include 'testpaper/subject/type/change-subject.html.twig' %}
-    <div class="text-center"><button class="cd-btn cd-btn-primary cd-mt40 cd-mb8 subject-button">完成编辑</button></div>
+    {% block change %}
+      {% include 'testpaper/subject/type/change-subject.html.twig' with { type: type|default('') } %}
+    {% endblock %}
+    <div class="text-center"><button class="cd-btn cd-btn-primary cd-mt24 cd-mb8 subject-button">完成编辑</button></div>
   </form>
 </div>
