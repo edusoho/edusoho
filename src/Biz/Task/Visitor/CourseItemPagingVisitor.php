@@ -76,7 +76,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
                 }
                 if (isset($lessonInfos[$lessonId]['isSingleTaskLesson'])) {
                     $lessonInfos[$lessonId]['isSingleTaskLesson'] = false;
-                    if($item['isLesson']){
+                    if ($item['isLesson']) {
                         $lessonInfos[$lessonId]['taskId'] = $item['id'];
                     }
                 } else {
@@ -90,7 +90,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             if ('task' == $item['itemType']) {
                 $lessonId = $item['categoryId'];
                 $lessonInfo = $lessonInfos[$lessonId];
-                if (!empty($lessonInfo['isSingleTaskLesson'])||$item['isLesson']) {
+                if (!empty($lessonInfo['isSingleTaskLesson']) || $item['isLesson']) {
                     $currentLesson = $lessonInfo['lesson'];
                     $item['isSingleTaskLesson'] = true;
                     $item['seq'] = $currentLesson['seq'];
