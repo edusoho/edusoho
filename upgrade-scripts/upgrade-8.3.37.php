@@ -49,6 +49,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'addColumnAndIndex',
             'updateTaskIsLessonAndChapterTitle',
         );
 
@@ -85,7 +86,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function updateTaskIsLessonAndChapterTitle()
+    protected function addColumnAndIndex()
     {
         if (!$this->isFieldExist('course_task', 'isLesson')) {
             $this->getConnection()->exec("ALTER TABLE `course_task` ADD `isLesson` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否为固定课时' AFTER `mode`;");
@@ -97,6 +98,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 ');
         }
 
+        return 1;
+    }
+
+    protected function updateTaskIsLessonAndChapterTitle()
+    {
         $count = $this->getCourseChapterDao()->count(array());
         if ($count > 0) {
             $length = 1000;
@@ -105,26 +111,45 @@ class EduSohoUpgrade extends AbstractUpdater
             foreach ($page_arr as $page) {
                 $updateTasks = array();
                 $updateChapters = array();
+                $updateSeqTasks = array();
                 $lessons = $this->getCourseChapterDao()->search(array('type' => 'lesson'), array(), $page * $length, $length, array('id', 'title'));
                 $lessons = \AppBundle\Common\ArrayToolkit::index($lessons, 'id');
                 $categoryIds = \AppBundle\Common\ArrayToolkit::column($lessons, 'id');
                 if (empty($categoryIds)) {
                     continue;
                 }
-                $tasks = $this->searchTasksByCategoryIds($categoryIds);
+
+                $tasks = $this->searchTasksGroupByCategoryId($categoryIds);
+                $tasks = \AppBundle\Common\ArrayToolkit::index($tasks, 'categoryId');
 
                 foreach ($tasks as $task) {
                     $updateTasks[$task['id']]['isLesson'] = 1;
                     if (!empty($lessons[$task['categoryId']]) && $lessons[$task['categoryId']]['title'] != $task['title']) {
                         $updateChapters[$task['categoryId']]['title'] = $task['title'];
                     }
+                    if ($task['minSeq'] != $task['seq']) {
+                        $updateSeqTasks[] = $task;
+                    }
                 }
+                /*
+                 * 判断task是否为课时的默认任务（以创建时间为标准），更新course_task isLesson字段
+                 */
                 if (!empty($updateTasks)) {
                     $this->batchUpdate('course_task', array_keys($updateTasks), $updateTasks, 'id');
                 }
 
+                /*
+                 * 更新course_chapter课时名称和默认task一致
+                 */
                 if (!empty($updateChapters)) {
                     $this->batchUpdate('course_chapter', array_keys($updateChapters), $updateChapters, 'id');
+                }
+
+                /*
+                * 更新course_task中课时的默认task seq错乱的特殊情况
+                */
+                if (!empty($updateSeqTasks)) {
+                    $this->updateTaskSeq($updateSeqTasks);
                 }
             }
         }
@@ -132,10 +157,45 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    protected function updateTaskSeq($updateSeqTasks)
+    {
+        $updateTasks = array();
+        $updateSeqCategoryIds = \AppBundle\Common\ArrayToolkit::column($updateSeqTasks, 'categoryId');
+        $tasks = $this->searchTasksByCategoryIds($updateSeqCategoryIds);
+        $tasks = \AppBundle\Common\ArrayToolkit::group($tasks, 'categoryId');
+
+        foreach ($updateSeqTasks as $task) {
+            $updateTask = $tasks[$task['categoryId']][0];
+            $updateTasks[$updateTask['id']]['seq'] = $task['seq'];
+            $updateTasks[$task['id']]['seq'] = $updateTask['seq'];
+        }
+        $this->batchUpdate('course_task', array_keys($updateTasks), $updateTasks, 'id');
+    }
+
+    /**
+     * @param $categoryIds
+     *
+     * @return array
+     *               查询课时最新创建的task
+     */
+    protected function searchTasksGroupByCategoryId($categoryIds)
+    {
+        $marks = str_repeat('?,', count($categoryIds) - 1).'?';
+        $sql = "SELECT ANY_VALUE(`id`) as id ,ANY_VALUE(`title`) as title,ANY_VALUE(`seq`) as seq,min(ANY_VALUE(`seq`)) as minSeq, `categoryId` FROM `course_task` t where `categoryId` IN({$marks}) GROUP BY `categoryId`;";
+
+        return $this->getConnection()->fetchAll($sql, $categoryIds) ?: array();
+    }
+
+    /**
+     * @param $categoryIds
+     *
+     * @return array
+     *               查询课时所有的task
+     */
     protected function searchTasksByCategoryIds($categoryIds)
     {
         $marks = str_repeat('?,', count($categoryIds) - 1).'?';
-        $sql = "SELECT ANY_VALUE(`id`) as id ,ANY_VALUE(`title`) as title,`categoryId` FROM `course_task` t where `categoryId` IN({$marks}) GROUP BY `categoryId` ORDER BY ANY_VALUE(`createdTime`) ASC;";
+        $sql = "SELECT ANY_VALUE(`id`) as id ,ANY_VALUE(`title`) as title,ANY_VALUE(`seq`) as seq,`categoryId` FROM `course_task` t where `categoryId` IN({$marks}) order by `categoryId`,ANY_VALUE(`seq`);";
 
         return $this->getConnection()->fetchAll($sql, $categoryIds) ?: array();
     }
