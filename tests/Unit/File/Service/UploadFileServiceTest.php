@@ -5,7 +5,6 @@ namespace Tests\Unit\File\Service;
 use AppBundle\Common\ReflectionUtils;
 use Biz\File\Service\UploadFileService;
 use Biz\BaseTestCase;
-use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 
 class UploadFileServiceTest extends BaseTestCase
