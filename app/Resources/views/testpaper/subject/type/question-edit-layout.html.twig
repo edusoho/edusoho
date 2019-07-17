@@ -2,13 +2,16 @@
   <form class="form-horizontal">
     <div class="row">
       <div class="col-sm-8">
-        <textarea class="form-control" style="height:190px;" id="question-stem-field">请简要谈谈你对在线教育的看法。</textarea>
-        {# 需要云附件开启设置才能显示 #}
-        <div class="cd-mt24">
-          <button class="cd-btn cd-btn-ghost-primary" type="button">上传题干附件</button>
+        <div class="subject-edit-item__order">6</div>
+        <div class="cd-ml24">
+          <textarea class="form-control" style="height:190px;" id="question-stem-field">请简要谈谈你对在线教育的看法。</textarea>
+          {# 需要云附件开启设置才能显示 #}
+          <div class="cd-mt24">
+            <button class="cd-btn cd-btn-ghost-primary" type="button">上传题干附件</button>
+          </div>
+          {% block subject %}
+          {% endblock %}
         </div>
-        {% block subject %}
-        {% endblock %}
       </div>
       <div class="col-sm-4">
         <div class="form-group edit-form-group cd-mb24">

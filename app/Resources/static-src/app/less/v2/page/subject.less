@@ -279,9 +279,15 @@
 
 
 .subject-edit-item {
+  .subject-edit-item__order {
+    position: absolute;
+    left: 16px;
+    .subject-item__number;
+  }
   .edit-form-group {
     
   }
+  
   .edit-form-group__label {
     font-size: 16px;
     color: @cd-dark-major;
@@ -298,9 +304,6 @@
       }
     }
   }
-  .edit-subject-item {
-    
-  }
 
   .edit-subject-item__input {
     width: 240px;
@@ -310,9 +313,14 @@
     border-color: @cd-dark-major;
   }
 
+  .edit-subject-item__order {
+    display: inline-block;
+    width: 20px;
+  }
+
   .edit-subject-item__delete {
     position: absolute;
-    right: 12px;
+    right: 0;
     top: 6px;
     i {
       font-size: 18px;
