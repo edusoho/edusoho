@@ -889,14 +889,14 @@ class UserServiceTest extends BaseTestCase
             array(
                 'functionName' => 'getByVerifiedMobile',
                 'returnValue' => array(
-                    'id' => 2
-                )
+                    'id' => 2,
+                ),
             ),
             array(
                 'functionName' => 'get',
                 'returnValue' => array(
-                    'id' => 1
-                )
+                    'id' => 1,
+                ),
             ),
         ));
 
@@ -1241,8 +1241,8 @@ class UserServiceTest extends BaseTestCase
         $this->mockBiz('User:UserDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => null
-            )
+                'returnValue' => null,
+            ),
         ));
 
         $this->getUserService()->changeAvatar(222, array());
@@ -1263,20 +1263,20 @@ class UserServiceTest extends BaseTestCase
      */
     public function testChangeAvatarByFileIdWirhRecordEmpty()
     {
-        list($naturalSize, $scaledSize) = FileToolkit::getImgInfo(__DIR__ . '/../Fixtures/test.jpg', 270, 270);
+        list($naturalSize, $scaledSize) = FileToolkit::getImgInfo(__DIR__.'/../Fixtures/test.jpg', 270, 270);
         $this->mockBiz('Content:FileService', array(
             array(
                 'functionName' => 'getImgFileMetaInfo',
                 'returnValue' => array(
                     'test',
                     $naturalSize,
-                    $scaledSize
-                )
+                    $scaledSize,
+                ),
             ),
             array(
                 'functionName' => 'getFile',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
 
         $this->getUserService()->changeAvatarByFileId($this->getCurrentUser()->getId(), 1);
@@ -1284,7 +1284,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testChangeAvatarByFileId()
     {
-        $filePath = __DIR__ . '/../Fixtures/test.jpg';
+        $filePath = __DIR__.'/../Fixtures/test.jpg';
         list($naturalSize, $scaledSize) = FileToolkit::getImgInfo($filePath, 270, 270);
         $this->mockBiz('Content:FileService', array(
             array(
@@ -1292,21 +1292,21 @@ class UserServiceTest extends BaseTestCase
                 'returnValue' => array(
                     'test',
                     $naturalSize,
-                    $scaledSize
-                )
+                    $scaledSize,
+                ),
             ),
             array(
                 'functionName' => 'getFile',
                 'returnValue' => array(
                     'id' => 1,
-                    'uri' => 'ade'
-                )
+                    'uri' => 'ade',
+                ),
             ),
             array(
                 'functionName' => 'parseFileUri',
                 'returnValue' => array(
-                    'fullpath' => $filePath
-                )
+                    'fullpath' => $filePath,
+                ),
             ),
             array(
                 'functionName' => 'deleteFileByUri',
@@ -1314,18 +1314,18 @@ class UserServiceTest extends BaseTestCase
             array(
                 'functionName' => 'uploadFile',
                 'returnValue' => array(
-                    'id' => 1
-                )
+                    'id' => 1,
+                ),
             ),
             array(
                 'functionName' => 'getFilesByIds',
                 'returnValue' => array(
                     array(
                         'id' => 1,
-                        'uri' => $filePath
-                    )
-                )
-            )
+                        'uri' => $filePath,
+                    ),
+                ),
+            ),
         ));
 
         $user = $this->createUser('user');
@@ -1338,7 +1338,7 @@ class UserServiceTest extends BaseTestCase
     public function testChangeAvatarFromImgUrl()
     {
         $user1 = $this->createUser('user1');
-        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__ . '/../Fixtures/test.jpg', array(
+        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/../Fixtures/test.jpg', array(
             'mock' => true,
         ));
         $this->assertEquals($user1['id'], $result['id']);
@@ -1347,7 +1347,7 @@ class UserServiceTest extends BaseTestCase
     public function testChangeAvatarFromImgUrlWithDeleteOriginFile()
     {
         $user1 = $this->createUser('user1');
-        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__ . '/../Fixtures/test.jpg', array(
+        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/../Fixtures/test.jpg', array(
             'mock' => true,
             'deleteOriginFile' => 0,
         ));
@@ -1368,7 +1368,7 @@ class UserServiceTest extends BaseTestCase
     public function testGetSimpleUser()
     {
         $user1 = $this->createUser('user1');
-        $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__ . '/../Fixtures/test.jpg', array(
+        $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/../Fixtures/test.jpg', array(
             'mock' => true,
         ));
 
@@ -1438,8 +1438,8 @@ class UserServiceTest extends BaseTestCase
         $this->mockBiz('User:UserDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => null
-            )
+                'returnValue' => null,
+            ),
         ));
 
         $result = $this->getUserService()->changeUserOrg(1, '1.');
@@ -1465,7 +1465,7 @@ class UserServiceTest extends BaseTestCase
         $this->mockBiz('Org:OrgService', array(
             array(
                 'functionName' => 'getOrgByOrgCode',
-                'returnValue' => array()
+                'returnValue' => array(),
             ),
         ));
 
@@ -1852,10 +1852,10 @@ class UserServiceTest extends BaseTestCase
     public function testApplyUserApprovalTwice()
     {
         $file = new \Symfony\Component\HttpFoundation\File\UploadedFile(
-            __DIR__ . '/../Fixtures/test.gif',
+            __DIR__.'/../Fixtures/test.gif',
             'original.gif',
             'image/gif',
-            filesize(__DIR__ . '/../Fixtures/test.gif'),
+            filesize(__DIR__.'/../Fixtures/test.gif'),
             null
         );
 
@@ -2539,7 +2539,7 @@ class UserServiceTest extends BaseTestCase
     public function testMarkLoginInfo()
     {
         $user = $this->biz['user'];
-        $user['currentIp'] = '127.2.1.' . rand(1, 255);
+        $user['currentIp'] = '127.2.1.'.rand(1, 255);
         $this->biz['user'] = $user;
         $this->getUserService()->markLoginInfo();
 
