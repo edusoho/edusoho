@@ -104,7 +104,6 @@ export default class sbList {
     const $target = $(event.target);
     $target.toggleClass('hidden');
     this.toggleClass();
-    this.$anchor.addClass('sb-cursor-default');
     this.flag = false;
   }
 
@@ -112,7 +111,6 @@ export default class sbList {
   finishBtnClick(event) {
     this.$batchBtn.toggleClass('hidden');
     this.toggleClass();
-    this.$anchor.removeClass('sb-cursor-default');
     this.flag = true;
   }
 
