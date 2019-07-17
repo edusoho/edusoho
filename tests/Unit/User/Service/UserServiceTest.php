@@ -3,6 +3,7 @@
 namespace Tests\Unit\User\Service;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
@@ -191,6 +192,45 @@ class UserServiceTest extends BaseTestCase
         $this->assertNull($foundUser);
     }
 
+    public function testGetUserAndProfileNull()
+    {
+        $user = $this->getUserService()->getUserAndProfile(999);
+        $this->assertNull($user);
+    }
+
+    public function testGetUserAndProfile()
+    {
+        $id = 2;
+        $this->mockBiz('User:UserDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array($id),
+                'returnValue' => array(
+                    'id' => $id,
+                ),
+            ),
+        ));
+
+        $this->mockBiz('User:UserProfileDao', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array($id),
+                'returnValue' => array(
+                    'id' => $id,
+                    'name' => 'test',
+                ),
+            ),
+        ));
+
+        $expected = array(
+            'id' => $id,
+            'name' => 'test',
+        );
+
+        $user = $this->getUserService()->getUserAndProfile($id);
+        $this->assertEquals($expected, $user);
+    }
+
     public function testGetUserByNickname()
     {
         $userInfo = array(
@@ -233,6 +273,16 @@ class UserServiceTest extends BaseTestCase
         $keyword = 'test_nickname';
         $result = $this->getUserService()->getUserByLoginField($keyword);
         $this->assertEquals($result['id'], $registeredUser['id']);
+
+        $keyword = 'admin@admin.com';
+        $this->mockBiz('User:UserDao', array(
+            array(
+                'functionName' => 'getByEmail',
+                'returnValue' => array('type' => 'system'),
+            ),
+        ));
+        $result = $this->getUserService()->getUserByLoginField($keyword);
+        $this->assertNull($result);
     }
 
     public function testGetUserByVerifiedMobile()
@@ -378,6 +428,20 @@ class UserServiceTest extends BaseTestCase
         $this->assertEmpty($foundUserProfiles);
     }
 
+    public function testSearchUserProfiles()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+
+        $result = $this->getUserService()->searchUserProfiles(array(), array('id' => 'DESC'), 0, 10);
+        $this->assertCount(3, $result);
+
+        $result = $this->getUserService()->searchUserProfiles(array('ids' => array($user1['id'], $user2['id'])), array('id' => 'DESC'), 0, 10);
+        $this->assertCount(2, $result);
+        $this->assertEquals($user2['id'], $result[0]['id']);
+        $this->assertEquals($user1['id'], $result[1]['id']);
+    }
+
     /**
      * @group current
      */
@@ -472,7 +536,7 @@ class UserServiceTest extends BaseTestCase
     /**
      * @group tmp
      */
-    public function testcountUsers()
+    public function testCountUsers()
     {
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
@@ -714,6 +778,16 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.password_invalid
+     */
+    public function testChangePasswordInvalidException()
+    {
+        $user = $this->createUser('user');
+        $this->getUserService()->changePassword($user['id'], 'test password invalid');
+    }
+
+    /**
      * @expectedException \Biz\Common\CommonException
      */
     public function testChangePayPasswordOne()
@@ -725,6 +799,15 @@ class UserServiceTest extends BaseTestCase
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changePayPassword($registeredUser['id'], '');
+    }
+
+    /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.not_found
+     */
+    public function testChangePayPasswordWithUserNotFound()
+    {
+        $this->getUserService()->changePayPassword(233, 'newpassword');
     }
 
     public function testChangePayPasswordTwice()
@@ -785,6 +868,39 @@ class UserServiceTest extends BaseTestCase
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $result = $this->getUserService()->changeMobile($registeredUser['id'], '');
+    }
+
+    /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.not_found
+     */
+    public function testChangeMobileWithUserNotFoundException()
+    {
+        $this->getUserService()->changeMobile(233, '12312321223');
+    }
+
+    /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.mobile_existed
+     */
+    public function testChangeMobileWithMobileExisted()
+    {
+        $this->mockBiz('User:UserDao', array(
+            array(
+                'functionName' => 'getByVerifiedMobile',
+                'returnValue' => array(
+                    'id' => 2
+                )
+            ),
+            array(
+                'functionName' => 'get',
+                'returnValue' => array(
+                    'id' => 1
+                )
+            ),
+        ));
+
+        $this->getUserService()->changeMobile(1, '12312312312');
     }
 
     public function testVerifyInSaltOut()
@@ -1116,10 +1232,113 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals(1, count($result));
     }
 
+    /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.not_found
+     */
+    public function testChangeAvatarWithUserNotFoundException()
+    {
+        $this->mockBiz('User:UserDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => null
+            )
+        ));
+
+        $this->getUserService()->changeAvatar(222, array());
+    }
+
+    /**
+     * @expectedException \Biz\Content\FileException
+     * @expectedExceptionMessage exception.file.not_found
+     */
+    public function testChangeAvatarByFileIdWithFileNotFoundException()
+    {
+        $this->getUserService()->changeAvatarByFileId($this->getCurrentUser()->getId(), '');
+    }
+
+    /**
+     * @expectedException \Biz\Content\FileException
+     * @expectedExceptionMessage exception.file.not_found
+     */
+    public function testChangeAvatarByFileIdWirhRecordEmpty()
+    {
+        list($naturalSize, $scaledSize) = FileToolkit::getImgInfo(__DIR__ . '/../Fixtures/test.jpg', 270, 270);
+        $this->mockBiz('Content:FileService', array(
+            array(
+                'functionName' => 'getImgFileMetaInfo',
+                'returnValue' => array(
+                    'test',
+                    $naturalSize,
+                    $scaledSize
+                )
+            ),
+            array(
+                'functionName' => 'getFile',
+                'returnValue' => array()
+            )
+        ));
+
+        $this->getUserService()->changeAvatarByFileId($this->getCurrentUser()->getId(), 1);
+    }
+
+    public function testChangeAvatarByFileId()
+    {
+        $filePath = __DIR__ . '/../Fixtures/test.jpg';
+        list($naturalSize, $scaledSize) = FileToolkit::getImgInfo($filePath, 270, 270);
+        $this->mockBiz('Content:FileService', array(
+            array(
+                'functionName' => 'getImgFileMetaInfo',
+                'returnValue' => array(
+                    'test',
+                    $naturalSize,
+                    $scaledSize
+                )
+            ),
+            array(
+                'functionName' => 'getFile',
+                'returnValue' => array(
+                    'id' => 1,
+                    'uri' => 'ade'
+                )
+            ),
+            array(
+                'functionName' => 'parseFileUri',
+                'returnValue' => array(
+                    'fullpath' => $filePath
+                )
+            ),
+            array(
+                'functionName' => 'deleteFileByUri',
+            ),
+            array(
+                'functionName' => 'uploadFile',
+                'returnValue' => array(
+                    'id' => 1
+                )
+            ),
+            array(
+                'functionName' => 'getFilesByIds',
+                'returnValue' => array(
+                    array(
+                        'id' => 1,
+                        'uri' => $filePath
+                    )
+                )
+            )
+        ));
+
+        $user = $this->createUser('user');
+        $result = $this->getUserService()->changeAvatarByFileId($user['id'], 1);
+
+        $this->assertEmpty($user['smallAvatar']);
+        $this->assertNotEmpty($result['smallAvatar']);
+    }
+
     public function testChangeAvatarFromImgUrl()
     {
         $user1 = $this->createUser('user1');
-        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/../Fixtures/test.jpg', array(
+        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__ . '/../Fixtures/test.jpg', array(
             'mock' => true,
         ));
         $this->assertEquals($user1['id'], $result['id']);
@@ -1128,7 +1347,7 @@ class UserServiceTest extends BaseTestCase
     public function testChangeAvatarFromImgUrlWithDeleteOriginFile()
     {
         $user1 = $this->createUser('user1');
-        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/../Fixtures/test.jpg', array(
+        $result = $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__ . '/../Fixtures/test.jpg', array(
             'mock' => true,
             'deleteOriginFile' => 0,
         ));
@@ -1149,7 +1368,7 @@ class UserServiceTest extends BaseTestCase
     public function testGetSimpleUser()
     {
         $user1 = $this->createUser('user1');
-        $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__.'/../Fixtures/test.jpg', array(
+        $this->getUserService()->changeAvatarFromImgUrl($user1['id'], __DIR__ . '/../Fixtures/test.jpg', array(
             'mock' => true,
         ));
 
@@ -1180,17 +1399,29 @@ class UserServiceTest extends BaseTestCase
     {
         $user1 = $this->createUser('user1');
         $this->getUserService()->changeMobile($user1['id'], '13399893398');
+        $user2 = $this->createUser('user2');
+        $this->getUserService()->updateUserProfile($user2['id'], array('mobile' => '12233322112'));
+
         $results = $this->getUserService()->findUsersHasMobile(0, 10, false);
 
-        $this->assertEquals(1, count($results));
+        $this->assertCount(2, $results);
+
+        $results = $this->getUserService()->findUsersHasMobile(0, 10, true);
+        $this->assertCount(1, $results);
     }
 
     public function testCountUsersHasMobile()
     {
         $user1 = $this->createUser('user1');
         $this->getUserService()->changeMobile($user1['id'], '13399893398');
+        $user2 = $this->createUser('user2');
+        $this->getUserService()->updateUserProfile($user2['id'], array('mobile' => '12233322112'));
+
         $count = $this->getUserService()->countUserHasMobile(false);
 
+        $this->assertEquals(2, $count);
+
+        $count = $this->getUserService()->countUserHasMobile(true);
         $this->assertEquals(1, $count);
     }
 
@@ -1200,6 +1431,46 @@ class UserServiceTest extends BaseTestCase
         $this->createApproval($user1['id']);
         $results = $this->getUserService()->searchApprovals(array('userId' => $user1['id']), array(), 0, 10);
         $this->assertEquals(1, count($results));
+    }
+
+    public function testChangeUserOrgWithUserEmpty()
+    {
+        $this->mockBiz('User:UserDao', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => null
+            )
+        ));
+
+        $result = $this->getUserService()->changeUserOrg(1, '1.');
+
+        $this->assertEmpty($result);
+    }
+
+    public function testChangeUserOrgWithOrgCodeEmpty()
+    {
+        $user1 = $this->createUser('user1');
+
+        $result = $this->getUserService()->changeUserOrg($user1['id'], '');
+        $this->assertEquals('1.', $result['orgCode']);
+        $this->assertEquals(1, $result['orgId']);
+    }
+
+    /**
+     * @expectedException \Biz\Org\OrgException
+     * @expectedExceptionMessage exception.org.not_found
+     */
+    public function testChangeUserOrgException()
+    {
+        $this->mockBiz('Org:OrgService', array(
+            array(
+                'functionName' => 'getOrgByOrgCode',
+                'returnValue' => array()
+            ),
+        ));
+
+        $user = $this->createUser('testUser');
+        $this->getUserService()->changeUserOrg($user['id'], 'test');
     }
 
     public function testChangeUserOrg()
@@ -1244,6 +1515,11 @@ class UserServiceTest extends BaseTestCase
 
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
+
+        $this->getUserService()->batchUpdateOrg($user1['id'], 'test1');
+        $users = $this->getUserService()->findUsersByIds(array($user1['id'], $user2['id']));
+        $this->assertEquals(array('test1', '1.'), ArrayToolkit::column($users, 'orgCode'));
+
         $this->getUserService()->batchUpdateOrg(array($user1['id'], $user2['id']), 'test1');
 
         $users = $this->getUserService()->findUsersByIds(array($user1['id'], $user2['id']));
@@ -1576,10 +1852,10 @@ class UserServiceTest extends BaseTestCase
     public function testApplyUserApprovalTwice()
     {
         $file = new \Symfony\Component\HttpFoundation\File\UploadedFile(
-            __DIR__.'/../Fixtures/test.gif',
+            __DIR__ . '/../Fixtures/test.gif',
             'original.gif',
             'image/gif',
-            filesize(__DIR__.'/../Fixtures/test.gif'),
+            filesize(__DIR__ . '/../Fixtures/test.gif'),
             null
         );
 
@@ -1857,15 +2133,15 @@ class UserServiceTest extends BaseTestCase
         $registeredUser = $this->getUserService()->register($userInfo);
 
         $this->getUserService()->changeUserRoles($registeredUser['id'], array(
-            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER',
-        )
+                'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER',
+            )
         );
         $foundUser = $this->getUserService()->getUser($registeredUser['id']);
         $this->assertEquals(array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'), $foundUser['roles']);
 
         $this->getUserService()->changeUserRoles($registeredUser['id'], array(
-            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN',
-        )
+                'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN',
+            )
         );
         $foundUser = $this->getUserService()->getUser($registeredUser['id']);
         $this->assertEquals(array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'), $foundUser['roles']);
@@ -2263,7 +2539,7 @@ class UserServiceTest extends BaseTestCase
     public function testMarkLoginInfo()
     {
         $user = $this->biz['user'];
-        $user['currentIp'] = '127.2.1.'.rand(1, 255);
+        $user['currentIp'] = '127.2.1.' . rand(1, 255);
         $this->biz['user'] = $user;
         $this->getUserService()->markLoginInfo();
 
@@ -2547,7 +2823,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  @group tmp
+     * @group tmp
      */
     public function testUnBindUserByTypeAndToIdOne()
     {
