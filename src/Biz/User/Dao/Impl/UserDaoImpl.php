@@ -133,6 +133,10 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
             unset($conditions['keyword']);
         }
 
+        if (isset($conditions['idcard'])) {
+            unset($conditions['idcard']);
+        }
+
         if (isset($conditions['keywordUserType'])) {
             $conditions['type'] = "%{$conditions['keywordUserType']}%";
             unset($conditions['keywordUserType']);

@@ -56,7 +56,7 @@ class UserController extends BaseController
             $preConditions = $this->getUserProfileConditions($conditions);
             $profilesCount = $this->getUserService()->searchUserProfileCount($preConditions);
             $userProfiles = $this->getUserService()->searchUserProfiles(
-                array($preConditions),
+                $preConditions,
                 array('id' => 'DESC'),
                 0,
                 $profilesCount
