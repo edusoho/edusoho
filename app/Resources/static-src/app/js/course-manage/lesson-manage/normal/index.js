@@ -1,9 +1,11 @@
 import {hiddenUnpublishTask, addLesson} from './../header-util';
+import LessonIntro from './lesson-intro';
 import BaseManage from './../BaseManage';
 import { TaskListHeaderFixed } from 'app/js/course-manage/help';
 class NormalManage extends BaseManage {
   constructor($container) {
     super($container);
+    new LessonIntro();
   }
 
   _flushTaskNumber() {
