@@ -14,8 +14,10 @@ export default class sbList {
     this.$scoreModal = $('.js-score-modal');
     this.scoreValidator = null;
     this.totalScore = 0;
+    this.totalNum = 0;
     this.selectQuestion = [];
     this.questionOperate = null;
+    this.$itemList = $('.js-item-list');
     this.init();
   }
 
@@ -44,6 +46,9 @@ export default class sbList {
     this.$element.on('click', '.js-difficult-setting', event => this.showModal(event, this.$diffiultyModal));
     this.$element.on('click', '.js-score-setting', event => this.showScoreModal(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
+    this.$itemList.on('click', '.js-subject-item-edit', event => this.editSubjectItem(event));
+    this.$itemList.on('click', '.js-finish-edit', event => this.finishEdit(event));
+    this.$itemList.on('click', '.js-subject-item-delete', event => this.deleteSubjectItem(event));
   }
 
   sbListFixed() {
@@ -153,15 +158,11 @@ export default class sbList {
 
     let $missScoreField = $('.miss-score-field');
 
-    if ($('input[name="isTestpaper"]').val() != 1) {
-      if (!$missScoreField.hasClass('hidden')) {
-        $missScoreField.addClass('hidden');
-      }
+    if (!this.isTestpaper()) {
+      $missScoreField.addClass('hidden');
     } else if (stats.hasOwnProperty('choice') || stats.hasOwnProperty('uncertain_choice')) {
-      if ($missScoreField.hasClass('hidden')) {
-        $missScoreField.removeClass('hidden');
-      }
-    } else if (!$missScoreField.hasClass('hidden')) {
+      $missScoreField.removeClass('hidden');
+    } else {
       $missScoreField.addClass('hidden');
     }
 
@@ -228,6 +229,10 @@ export default class sbList {
     }, 'Please enter a lesser value.' );
   }
 
+  isTestpaper() {
+    return ($('input[name="isTestpaper"]').val() == 1);
+  }
+
   initTotalScore() {
 
   }
@@ -238,11 +243,7 @@ export default class sbList {
       this.questionOperate.modifyScore(this.selectQuestion, score);
       this.selectQuestion = [];
 
-      let $totalScore = $('.js-total-score');
-      if ($totalScore.length === 1) {
-        $totalScore.html(`总分${this.totalScore}分`);
-      }
-
+      this.updateTotalScoreText();
       this.$scoreModal.modal('hide');
     }
   }
@@ -256,6 +257,85 @@ export default class sbList {
       self.selectQuestion = [];
       self.$diffiultyModal.modal('hide');
     });
+  }
+
+  editSubjectItem(event) {
+    const $item = $(event.currentTarget).parent().parent();
+
+    let type = 'choice';
+
+    $.ajax({
+      type: 'post',
+      url: `/subject/edit/${type}`,
+      data: {
+        //题目对象
+      },
+    }).done(function(resp) {
+      $item.addClass('hidden');
+      $item.after($(resp));
+    });
+  }
+
+  finishEdit(event) {
+    const $editItem = $(event.currentTarget).parent().parent();
+    const $item = $('.subject-item.hidden');
+    $editItem.remove();
+    $item.removeClass('hidden');
+  }
+
+  deleteSubjectItem(event) {
+    cd.confirm({
+      title: '确认删除',
+      content: '确定要删除这道题目吗?',
+      okText: '确定',
+      cancelText: '取消',
+    }).on('ok', () => {
+      const question = {};
+      const $item = $(event.currentTarget).parent().parent();
+
+      //todo: 修改总分
+      if (question.type == 'material') {
+      } else {
+      }
+
+      this.updateTotalScoreText();
+
+      if ($item.hasClass('subject-sub-item')) {
+        //todo: 更新子题序号
+        $item.remove();
+        return;
+      }
+
+      const itemId = $item.attr('id');
+      const $listItem = $(`[data-anchor=#${itemId}]`).parent();
+
+      let curItemId = itemId;
+      $item.nextAll('.subject-item').not('.subject-sub-item').each(function() {
+        $(this).attr('id', curItemId).find('.subject-item__number').text(curItemId);
+        curItemId++;
+      });
+
+      curItemId = itemId;
+      $listItem.nextAll('.subject-list-item').each(function() {
+        $(this).find('.subject-list-item__num').attr('data-anchor', `#${curItemId}`).text(curItemId)
+            .find('.sb-checkbox').attr('data-order', curItemId);
+        curItemId++;
+      });
+
+      //todo: 更新题型数量
+      this.totalNum -= 1;
+      $('.js-total-num').text(`共${this.totalNum}道题`);
+
+      //todo: 如果是材料题同时删除子题
+      $listItem.remove();
+      $item.remove();
+    });
+  }
+
+  updateTotalScoreText() {
+    if (this.isTestpaper()) {
+      $('.js-total-score').text(`总分${this.totalScore}分`);
+    }
   }
 }
 
