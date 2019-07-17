@@ -303,11 +303,12 @@ class NormalStrategyTest extends BaseTestCase
             ),
         ));
 
-        $this->getNormalStrategy()->deleteTask($task);
+        $result = $this->getNormalStrategy()->deleteTask($task);
 
         $this->getTaskDao()->shouldHaveReceived('delete')->times(1);
         $this->getTaskResultService()->shouldHaveReceived('deleteUserTaskResultByTaskId')->times(1);
         $this->getActivityService()->shouldHaveReceived('deleteActivity')->times(1);
+        $this->assertTrue($result);
     }
 
     public function testCanLearnTaskWithFreeModeCourse()

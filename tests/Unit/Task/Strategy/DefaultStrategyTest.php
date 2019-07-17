@@ -256,7 +256,7 @@ class DefaultStrategyTest extends BaseTestCase
     public function testDeleteTaskWithEmptyTask()
     {
         $result = $this->getDefaultStrategy()->deleteTask(array());
-        $this->assertNull($result);
+        $this->assertTrue($result);
     }
 
     public function testDeleteTaskWithMode()
@@ -291,10 +291,11 @@ class DefaultStrategyTest extends BaseTestCase
             )
         );
 
-        $this->getDefaultStrategy()->deleteTask($task);
+        $result = $this->getDefaultStrategy()->deleteTask($task);
         $this->getTaskDao()->shouldHaveReceived('delete')->times(1);
         $this->getTaskResultService()->shouldHaveReceived('deleteUserTaskResultByTaskId')->times(1);
         $this->getActivityService()->shouldHaveReceived('deleteActivity')->times(1);
+        $this->assertTrue($result);
     }
 
     public function testDeleteTask()
@@ -335,7 +336,7 @@ class DefaultStrategyTest extends BaseTestCase
             'mode' => 'lesson',
             'courseId' => '1',
             'categoryId' => '1',
-            'activityId' => '1'
+            'activityId' => '1',
         );
 
         $this->mockBiz(
@@ -349,10 +350,11 @@ class DefaultStrategyTest extends BaseTestCase
             )
         );
 
-        $this->getDefaultStrategy()->deleteTask($task);
+        $result = $this->getDefaultStrategy()->deleteTask($task);
         $this->getTaskDao()->shouldHaveReceived('delete')->times(1);
         $this->getTaskResultService()->shouldHaveReceived('deleteUserTaskResultByTaskId')->times(1);
         $this->getActivityService()->shouldHaveReceived('deleteActivity')->times(1);
+        $this->assertTrue($result);
     }
 
     public function testPrepareCourseItems()
