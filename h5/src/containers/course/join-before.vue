@@ -188,7 +188,8 @@
     },
     methods: {
        ...mapActions('course', [
-        'joinCourse'
+        'joinCourse',
+        'getAfterCourse',
        ]),
       onTabClick(index, title) {
         const ref = this.$refs[this.transIndex2Tab(index)];
@@ -252,7 +253,6 @@
           });
           return;
         }
-
         const endDate = this.details.learningExpiryDate.expiryEndDate;
         const endDateStamp = new Date(endDate).getTime();
         const todayStamp = new Date().getTime();
@@ -266,13 +266,24 @@
               id: this.details.id
             }).then(res => {
               // 返回空对象，表示加入失败，需要去创建订单购买
-              if (!(Object.keys(res).length === 0)) return;
-              this.getOrder();
+              if (!(Object.keys(res).length === 0)) {
+              }else {
+                this.getOrder();
+              }
             }).catch(err => {
               console.error(err)
             });
           }
         }
+      },
+      getAfCourse(id){
+        this.getAfterCourse({
+          courseId: id
+        }).then(() => {
+
+        }).catch(err => {
+          Toast.fail(err.message)
+        })
       },
       getLearnExpiry(data) {
         this.learnExpiry = data.val;

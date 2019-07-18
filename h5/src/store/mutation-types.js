@@ -12,7 +12,8 @@ export const SET_SOURCETYPE = 'SET_SOURCETYPE';
 export const SELECTED_PLAN_ID = 'selectedPlanId';
 export const GET_COURSE_DETAIL = 'GET_COURSE_DETAIL';
 export const GET_COURSE_LESSONS = 'GET_COURSE_LESSONS';
-
+export const GET_OPTIMIZATION_COURSE_LESSONS = 'GET_OPTIMIZATION__COURSE_LESSONS';
+export const GET_NEXT_STUDY = 'GET_NEXT_STUDY';
 // register
 export const ADD_USER = 'ADD_USER';
 export const SMS_CENTER = 'SMS_CENTER';

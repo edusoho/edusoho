@@ -6,7 +6,6 @@ import store from '@/store';
 import plugins from '@/plugins';
 import EdusohoUI from '@/components';
 import whiteList from '@/router/config/white-list';
-
 import '@/assets/styles/main.scss';
 import App from '@/App';
 import Api from '@/api';

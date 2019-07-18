@@ -12,7 +12,7 @@
         <i class="van-icon van-icon-arrow van-nav-bar__arrow"></i>
       </div>
     </div>
-    <div class="course-detail__head--img"
+    <div class="course-detail__head--img" id="course-detail__head--img"
       v-show="sourceType === 'img' || isEncryptionPlus">
       <img v-if="courseSet.cover" :src="courseSet.cover.large" alt="">
       <countDown
@@ -198,10 +198,11 @@ export default {
     },
     loadPlayerSDK () {
       if (!window.VideoPlayerSDK) {
-
-        const scrptSrc = '//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
-          + (Date.now() / 1000 / 60);
-          // Cache SDK for 1 min.
+        const VEDIOURL='//service-cdn.cg-dev.cn/js-sdk/video-player/sdk-v1.js?v='
+      //const VEDIOURL='//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
+      // const scrptSrc = VEDIOURL + (Date.now() / 1000 / 60);
+      const scrptSrc =  VEDIOURL+ (Date.now() / 1000 / 60);
+      // Cache SDK for 1 min.
 
         return new Promise((resolve, reject) => {
           loadScript(scrptSrc, (err) => {

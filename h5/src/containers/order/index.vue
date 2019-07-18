@@ -15,7 +15,7 @@
       <div class="order-coupon">
         <div class="coupon-column" @click="showList = true">
           <span>优惠券</span>
-          <span class="red">{{ couponShow }}</span>
+          <span class="red">{{ couponShow }}<i class="iconfont icon-arrow-right"></i></span>
         </div>
         <van-popup class="e-popup full-height-popup coupon-popup" v-model="showList" position="bottom" :overlay="false">
           <van-nav-bar title="优惠券"
@@ -27,6 +27,17 @@
             <i class="h5-icon h5-icon-check"></i>
           </div>
           <div class="e-popup__content coupon-popup__content">
+            <div class="coupon-number-change">
+              <van-field
+                v-model="preferenceCode"
+                center
+                border
+                clearable
+                placeholder="请输入优惠码"
+              >
+                <van-button slot="button" size="small" type="primary" :disabled="!preferenceCode" @click='usePreferenceCode'>使用</van-button>
+              </van-field>
+            </div>
             <coupon v-for="(item, index) in course.availableCoupons"
               :key="index"
               :coupon="item"
@@ -93,6 +104,7 @@ export default {
       showList: false,
       itemData: null,
       couponNumber: 0,
+      preferenceCode:'',//优惠码
       targetType: this.$route.query.targetType,
       targetId: this.$route.params.id,
       targetUnit: this.$route.params.unit,
@@ -215,6 +227,34 @@ export default {
           num: this.targetNum,
         }
       })
+    },
+    //优惠码兑换
+    usePreferenceCode(){
+      const that=this;
+       Api.exchangePreferential({
+         query: {
+          code: this.preferenceCode,
+        },
+          data: {
+            targetType: this.targetType,
+            targetId: this.targetId,
+            action: 'receive',
+          }
+        }).then((res)=>{
+          if(res.success){
+            that.itemData = res.data;
+            let index =that.course.availableCoupons.length||0;
+            that.$set(this.course.availableCoupons,index,res.data);
+            that.preferenceCode='';
+            that.showList = false;
+          }else{
+            if(res.error){
+               Toast.fail(res.error.message)
+            }
+          }
+        }).catch((err)=>{
+          console.log(err)
+        })
     },
     disuse() {
       this.showList = false;

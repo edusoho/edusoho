@@ -8,23 +8,27 @@
 
      <!-- 课程目录 -->
     <div class="join-after__content">
-      <div v-if="active == 1">
-        <div class="progress-bar">
+      <div v-show="active == 1">
+        <div class="progress-bar" id="progress-bar">
           <div class="progress-bar__content">
             <div class="progress-bar__rate" :style="{'width': progress}"></div>
           </div>
           <div class="progress-bar__text">{{ progress }}</div>
         </div>
 
-        <directory
+        <!-- <directory
           @showDialog="showDialog"
           :hiddeTitle=true
           :errorMsg="errorMsg"
           class="join-after-dirctory"
-          :tryLookable="details.tryLookable"></directory>
+          :tryLookable="details.tryLookable"></directory> -->
+        <afterjoin-directory
+        @showDialog="showDialog"
+        :errorMsg="errorMsg"
+        ></afterjoin-directory>
       </div>
 
-      <div v-if="active == 0">
+      <div v-show="active == 0">
         <!-- 课程计划 -->
         <detail-plan @switchPlan="showDialog"></detail-plan>
 
@@ -42,7 +46,7 @@
       </div>
 
       <!-- 学员评价 -->
-      <div v-if="active == 2">
+      <div v-show="active == 2">
         <review-list ref="review" :targetId="details.courseSet.id" :reviews="details.reviews" title="学员评价" defaulValue="暂无评价" type="course"></review-list>
       </div>
     </div>
@@ -54,11 +58,13 @@ import Directory from './detail/directory';
 import DetailHead from './detail/head';
 import DetailPlan from './detail/plan';
 import Teacher from './detail/teacher';
+import afterjoinDirectory from './detail/afterjoin-directory';
 import { mapState } from 'vuex';
 import { Dialog, Toast } from 'vant';
 import Api from '@/api';
 
 export default {
+  inheritAttrs:true,
   props: {
     details: {
       type: Object,
@@ -97,7 +103,6 @@ export default {
   watch: {
     selectedPlanId: (val, oldVal) => {
       val !== oldVal && (this.active = 0)
-      console.log(this.active, 'active')
     },
   },
   async created() {
@@ -108,7 +113,8 @@ export default {
     DetailHead,
     DetailPlan,
     Teacher,
-    reviewList
+    reviewList,
+    afterjoinDirectory
   },
   methods: {
     showDialog() {
