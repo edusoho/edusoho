@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller\Testpaper;
 
+use ExamParser\Parser\Parser;
+use ExamParser\Reader\ReadDocx;
+use Symfony\Component\HttpFoundation\File\File as FileObject;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
@@ -120,9 +123,26 @@ class ManageController extends BaseController
         if ($request->isMethod('POST')) {
             $file = $request->files->get('importFile');
             $ext = FileToolkit::getFileExtension($file);
+            $user = $this->getCurrentUser();
 
             if ('docx' == $ext) {
-                return $this->createJsonResponse(array('success' => true));
+                $result = $this->getFileService()->uploadFile('course_private', $file);
+                $token = $this->getTokenService()->makeToken('upload.course_private_file', array(
+                    'data' => array(
+                        'id' => $result['id'],
+                        'filename' => $file->getClientOriginalName(),
+                        'fileuri' => $result['uri'],
+                    ),
+                    'duration' => 3600,
+                    'userId' => $user['id'],
+                ));
+
+                return $this->createJsonResponse(array(
+                    'url' => $this->generateUrl('testpaper_re_edit', array(
+                        'token' => $token['token'],
+                    )),
+                    'success' => true,
+                ));
             } else {
                 return $this->render('testpaper/manage/read-error.html.twig');
             }
@@ -593,10 +613,41 @@ class ManageController extends BaseController
         ));
     }
 
-    public function reEditAction(Request $request)
+    public function reEditAction(Request $request, $token)
     {
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        if (empty($token)) {
+            throw new \Exception('超过有效期');
+        }
+        $data = $token['data'];
+        $file = $this->getFileService()->parseFileUri($data['fileuri']);
+        $questions = $this->parseQuestions($file['fullpath']);
+
         return $this->render('testpaper/manage/re-edit.html.twig', array(
+            'filename' => $data['filename'],
+            'questions' => $questions,
         ));
+    }
+
+    protected function parseQuestions($fullpath)
+    {
+        $wordRead = new ReadDocx($fullpath);
+        $text = $wordRead->convertImage();
+        $text = preg_replace_callback(
+            '/src=[\'\"](.*?)[\'\"]/',
+            function ($matches) {
+                $file = new FileObject($matches[1]);
+                $result = $this->getFileService()->uploadFile('course', $file);
+                $url = $this->get('web.twig.extension')->getFpath($result['uri']);
+
+                return "src=\"{$url}\"";
+            },
+            $text
+        );
+        $parser = new Parser('question', $text);
+        $parser->parser();
+
+        return $parser->getQuestions();
     }
 
     public function editTemplateAction(Request $request, $type)
@@ -875,5 +926,15 @@ class ManageController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }
