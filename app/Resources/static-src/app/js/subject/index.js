@@ -265,7 +265,8 @@ export default class sbList {
     let $target = $(event.currentTarget);
     let url = $target.parents('.subject-item__operation').data('url');
     let $item = $target.parents('.subject-item');
-    $.post(url, {question:{}}, html=> {
+    let question = this.questionOperate.getQuestion($item.attr('id'));
+    $.get(url, {question: question}, html=> {
       $item.addClass('hidden');
       $item.after(html);
     });

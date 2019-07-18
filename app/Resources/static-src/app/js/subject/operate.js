@@ -95,6 +95,9 @@ export default class QuestionOperate {
   }
 
   getQuestion(token) {
+    if (!this.isUpdating()) {
+      return;
+    }
     return this.questions[token];
   }
 
