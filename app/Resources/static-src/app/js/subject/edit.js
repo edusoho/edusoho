@@ -1,7 +1,7 @@
 export default class showCkEditor {
-  constructor() {
+  constructor(options) {
     this.titleEditorToolBarName = 'Minimal';
-    this.titleFieldId = 'question-stem-field';
+    this.fieldId = options.fieldId;
     this.init();
   }
   init() {
@@ -10,8 +10,8 @@ export default class showCkEditor {
 
 
   initTitleEditor(validator) {
-    let $target = $('#' + this.titleFieldId);
-    let editor = CKEDITOR.replace(this.titleFieldId, {
+    let $target = $('#' + this.fieldId);
+    let editor = CKEDITOR.replace(this.fieldId, {
       toolbar: this.titleEditorToolBarName,
       fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: $target.data('imageUploadUrl'),

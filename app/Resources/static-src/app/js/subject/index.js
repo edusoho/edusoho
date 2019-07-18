@@ -1,5 +1,6 @@
 import QuestionOperate from './operate';
 import showCkEditor from './edit';
+import { numberConvertLetter } from '../../common/unit';
 
 export default class sbList {
   constructor() {
@@ -23,7 +24,7 @@ export default class sbList {
   }
 
   init() {
-    new showCkEditor();
+    // new showCkEditor();
     this.questionOperate = new QuestionOperate();
     // this.confirmFresh();
     this.sbListFixed();
@@ -51,7 +52,9 @@ export default class sbList {
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
     this.$itemList.on('click', '.js-subject-item-edit', event => this.editSubjectItem(event));
     this.$itemList.on('click', '.js-finish-edit', event => this.finishEdit(event));
-    this.$itemList.on('click', '.js-subject-item-delete', event => this.deleteSubjectItem(event));
+    this.$itemList.on('focus', '.js-item-option-edit', event => this.editOption(event));
+    this.$itemList.on('click', '.js-item-option-delete', event => this.deleteOption(event));
+    this.$itemList.on('click', '.js-item-option-add', event => this.addOption(event));
   }
 
   sbListFixed() {
@@ -264,7 +267,19 @@ export default class sbList {
   }
 
   editSubjectItem(event) {
+    const $editItem = $('.subject-edit-item');
+    if ($editItem.length !== 0) {
+      let order = $editItem.find('.subject-edit-item__order').text();
+      cd.message({
+        type: 'warning',
+        message: `请先完成第${order}题的编辑`,
+      });
+      return;
+    }
+
     const $item = $(event.currentTarget).parent().parent();
+    const token = $item.attr('id');
+    let question = this.questionOperate.getQuestion(token);
 
     let type = 'choice';
 
@@ -272,12 +287,53 @@ export default class sbList {
       type: 'post',
       url: `/subject/edit/${type}`,
       data: {
-        //题目对象
+        options: [
+            '这是A选项',
+            '这是B选项',
+            '这是C选项',
+            '这是D选项',
+        ],
       },
     }).done(function(resp) {
       $item.addClass('hidden');
       $item.after($(resp));
+      new showCkEditor({fieldId: 'question-stem-field'});
     });
+  }
+
+  editOption(event) {
+    const $textarea = $('#question-option-field');
+    const $editor = $('#cke_question-option-field');
+    //todo: 保存正在编辑选项的内容
+    $textarea.remove();
+    $editor.remove();
+
+    const $input = $(event.currentTarget);
+    $input.addClass('hidden');
+    $input.after('<textarea class="form-control" style="height:190px;" id="question-option-field"></textarea>');
+    new showCkEditor({fieldId: 'question-option-field'});
+  }
+
+  deleteOption(event) {
+    const $editItem = $(event.currentTarget).parent().parent();
+
+    $editItem.remove();
+  }
+
+  addOption(event) {
+    const $prev = $(event.currentTarget).parent().prev();
+    let $newOption = `
+    <div class="edit-subject-item cd-mb24 form-group">
+      <label class="cd-checkbox col-sm-1 cd-mt8 mlm">
+        <input type="checkbox" data-toggle="cd-checkbox" name="right" value="option1">
+        <span class="cd-dark-major edit-subject-item__order"></span>
+      </label>
+      <div class="col-sm-6 pl0">
+        <input class="form-control edit-subject-item__input js-item-option-edit" type="text" value="">
+        <a class="edit-subject-item__delete cd-link-assist js-item-option-delete" href="javascript:;"><i class="es-icon es-icon-shanchu"></i></a>
+      </div>
+    </div>`;
+    $prev.after($newOption);
   }
 
   finishEdit(event) {
@@ -285,55 +341,6 @@ export default class sbList {
     const $item = $('.subject-item.hidden');
     $editItem.remove();
     $item.removeClass('hidden');
-  }
-
-  deleteSubjectItem(event) {
-    cd.confirm({
-      title: '确认删除',
-      content: '确定要删除这道题目吗?',
-      okText: '确定',
-      cancelText: '取消',
-    }).on('ok', () => {
-      const question = {};
-      const $item = $(event.currentTarget).parent().parent();
-
-      //todo: 修改总分
-      if (question.type == 'material') {
-      } else {
-      }
-
-      this.updateTotalScoreText();
-
-      if ($item.hasClass('subject-sub-item')) {
-        //todo: 更新子题序号
-        $item.remove();
-        return;
-      }
-
-      const itemId = $item.attr('id');
-      const $listItem = $(`[data-anchor=#${itemId}]`).parent();
-
-      let curItemId = itemId;
-      $item.nextAll('.subject-item').not('.subject-sub-item').each(function() {
-        $(this).attr('id', curItemId).find('.subject-item__number').text(curItemId);
-        curItemId++;
-      });
-
-      curItemId = itemId;
-      $listItem.nextAll('.subject-list-item').each(function() {
-        $(this).find('.subject-list-item__num').attr('data-anchor', `#${curItemId}`).text(curItemId)
-            .find('.sb-checkbox').attr('data-order', curItemId);
-        curItemId++;
-      });
-
-      //todo: 更新题型数量
-      this.totalNum -= 1;
-      $('.js-total-num').text(`共${this.totalNum}道题`);
-
-      //todo: 如果是材料题同时删除子题
-      $listItem.remove();
-      $item.remove();
-    });
   }
 
   updateTotalScoreText() {
