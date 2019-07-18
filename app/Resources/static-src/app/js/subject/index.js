@@ -276,7 +276,6 @@ export default class sbList {
       let question = this.questionOperate.getQuestion(token);
 
       if ($item.hasClass('subject-sub-item')) {
-        //todo: 更新子题序号
         let order = $item.find('.subject-sub-item__number').text().replace(/[^0-9]/ig, '');
         $item.nextUntil('[class="subject-item"]').each(function() {
           $(this).find('.subject-sub-item__number').text(`(${order})`);
