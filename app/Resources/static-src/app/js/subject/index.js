@@ -1,8 +1,10 @@
 import QuestionOperate from './operate';
+import showCkEditor from './edit';
 
 export default class sbList {
   constructor() {
     this.$element = $('.js-subject-list');
+    this.$itemList = $('.js-item-list');
     this.$batchBtn = $('.js-batch-btn');
     this.$batchWrap = $('.js-subject-wrap');
     this.$sbCheckbox = $('.js-show-checkbox');
@@ -20,12 +22,14 @@ export default class sbList {
   }
 
   init() {
+    new showCkEditor();
     this.questionOperate = new QuestionOperate();
-    this.confirmFresh();
+    // this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
     this.setDifficulty();
+    // this.showCkEditor();
   }
 
   confirmFresh() {
@@ -43,7 +47,8 @@ export default class sbList {
     this.$element.on('click', '.js-difficult-setting', event => this.showModal(event, this.$diffiultyModal));
     this.$element.on('click', '.js-score-setting', event => this.showScoreModal(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
-    this.$itemList.on('click', '.js-subject-item-delete', event => this.deleteSubjectItem(event));
+    this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
+    this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
   }
 
   sbListFixed() {
@@ -101,14 +106,12 @@ export default class sbList {
     const $target = $(event.target);
     $target.toggleClass('hidden');
     this.toggleClass();
-    this.$anchor.addClass('sb-cursor-default');
     this.flag = false;
   }
 
   finishBtnClick(event) {
     this.$batchBtn.toggleClass('hidden');
     this.toggleClass();
-    this.$anchor.removeClass('sb-cursor-default');
     this.flag = true;
   }
 
@@ -248,6 +251,16 @@ export default class sbList {
       self.selectQuestion = [];
       cd.message({ type: 'success', message: Translator.trans('难度修改成功') });
       self.$diffiultyModal.modal('hide');
+    });
+  }
+
+  itemEdit(event) {
+    let $target = $(event.currentTarget);
+    let url = $target.parents('.subject-item__operation').data('url');
+    let $item = $target.parents('.subject-item');
+    $.post(url, {question:{}}, html=> {
+      $item.addClass('hidden');
+      $item.after(html);
     });
   }
 

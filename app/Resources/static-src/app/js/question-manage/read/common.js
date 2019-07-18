@@ -92,7 +92,7 @@ const registerEvent = function($importBox) {
       success: function(res) {
         $uploadBtn.button('reset');
         if (res.success === true) {
-          // readSuccessCallBack(res);
+          readSuccessCallBack(res);
         } else {
           readErrorCallBack(res);
         }
@@ -104,6 +104,10 @@ const registerEvent = function($importBox) {
         console.log('Read error:', err);
       }
     });
+  }
+
+  function readSuccessCallBack(res) {
+    window.location.href = res.url;
   }
 
   // 读取失败回调

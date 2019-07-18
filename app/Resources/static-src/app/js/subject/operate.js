@@ -30,10 +30,24 @@
 */
 export default class QuestionOperate {
   constructor() {
-    this.questions = this._toJson($('.js-cached-data').html());
-    this.tokenList = this._toJson($('.js-cached-token').html());
+    this.questions = {};
+    this.tokenList = [];
     this.$statList = $('.js-subject-data');
     this.$itemList = $('.js-item-list');
+    this.flag = true;
+    this.init();
+  }
+
+  init() {
+    let cachedData = this._toJson($('.js-cached-data').html());
+    for (var i = 0; i < cachedData.length; i++) {
+      let token = this._getToken();
+      this.questions[token] = cachedData[i];
+      this.tokenList.push(token);
+      let index = ++i;
+      $(`[data-anchor="#${index}"]`).data('anchor', '#' + token);
+      $('#' + index).attr('id', token);
+    }
     this.flag = false;
     this.questionCounts = {};
     this.totalScore = 0;
@@ -105,7 +119,7 @@ export default class QuestionOperate {
       return;
     }
     this.flag = true;
-    this.questions.push({token:question});
+    this.questions[token] = question;
     position = this.tokenList.indexOf(preToken);
     this.tokenList.splice(position, 0, token);
     this.questionCounts['total']++;
@@ -171,5 +185,13 @@ export default class QuestionOperate {
       json = $.parseJSON(str.replace(/[\r\n\t]/g, ''));
     }
     return json;
+  }
+
+  _random() {
+    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  }
+
+  _getToken() {
+    return (this._random()+this._random()+"-"+this._random()+"-"+this._random()+"-"+this._random()+"-"+this._random()+this._random()+this._random());
   }
 }
