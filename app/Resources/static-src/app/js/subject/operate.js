@@ -34,6 +34,8 @@ export default class QuestionOperate {
     this.tokenList = [];
     this.$statList = $('.js-subject-data');
     this.$itemList = $('.js-item-list');
+    this.questionCounts = {};
+    this.totalScore = 0;
     this.flag = true;
     this.init();
   }
@@ -48,14 +50,8 @@ export default class QuestionOperate {
       $(`[data-anchor="#${index}"]`).data('anchor', '#' + token);
       $('#' + index).attr('id', token);
     }
-    this.flag = false;
-    this.questionCounts = {};
-    this.totalScore = 0;
-    this.init();
-  }
-
-  init() {
     this.initQuestionCountsAndTotalScore();
+    this.flag = false;
   }
 
   initQuestionCountsAndTotalScore() {
