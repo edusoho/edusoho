@@ -108,6 +108,7 @@ class ManageController extends BaseController
                     'duration' => 3600,
                     'userId' => $user['id'],
                 ));
+
                 return $this->createJsonResponse(array(
                     'url' => $this->generateUrl('question_re_edit', array(
                         'token' => $token['token'],
@@ -435,12 +436,14 @@ class ManageController extends BaseController
                 $file = new FileObject($matches[1]);
                 $result = $this->getFileService()->uploadFile('course', $file);
                 $url = $this->get('web.twig.extension')->getFpath($result['uri']);
+
                 return "src=\"{$url}\"";
             },
             $text
         );
         $parser = new Parser('question', $text);
         $parser->parser();
+
         return $parser->getQuestions();
     }
 
