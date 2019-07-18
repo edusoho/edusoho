@@ -44,10 +44,6 @@ class CouponAction extends AbstractResource
             return $this->error('该优惠券不存在');
         }
 
-        if ($coupon['status'] == 'receive') {
-            return $this->error(sprintf('优惠券%s已经被领取过', $code));
-        }
-
         if ($this->isPluginInstalled('Coupon')) {
             $coupon = $this->getCouponService()->getCouponByCode($code);
             $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
