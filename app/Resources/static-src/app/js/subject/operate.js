@@ -35,6 +35,52 @@ export default class QuestionOperate {
     this.$statList = $('.js-subject-data');
     this.$itemList = $('.js-item-list');
     this.flag = false;
+    this.questionCounts = {};
+    this.totalScore = 0;
+    this.init();
+  }
+
+  init() {
+    this.initQuestionCountsAndTotalScore();
+  }
+
+  initQuestionCountsAndTotalScore() {
+    this.questionCounts = {
+      'total': 0,
+      'single_choice': 0,
+      'choice': 0,
+      'uncertain_choice': 0,
+      'determine': 0,
+      'fill': 0,
+      'essay': 0,
+      'material': 0,
+    };
+
+    let self = this;
+    Object.keys(this.questions).forEach(function(token) {
+      let question = self.questions[token];
+      self.questionCounts['total']++;
+      self.questionCounts[question['type']]++;
+      if (question['type'] != 'material') {
+        self.totalScore += question['score'];
+      } else {
+        $.each(question['subQuestions'], function(token, subQuestion) {
+          self.totalScore += subQuestion['score'];
+        });
+      }
+    });
+  }
+
+  getQuestionCount(type) {
+    return this.questionCounts[type];
+  }
+
+  getTotalScore() {
+    return this.totalScore;
+  }
+
+  getQuestionOrder(token) {
+    return this.tokenList.indexOf(token) + 1;
   }
 
   modifyDifficulty(selectQuestion, difficulty, text) {
@@ -62,6 +108,8 @@ export default class QuestionOperate {
     this.questions.push({token:question});
     position = this.tokenList.indexOf(preToken);
     this.tokenList.splice(position, 0, token);
+    this.questionCounts['total']++;
+    this.questionCounts[question['type']]++;
     this.flag = false;
   }
 
@@ -70,9 +118,19 @@ export default class QuestionOperate {
       return;
     }
     this.flag = true;
+    const question = this.questions[deleteToken];
     this.questions[deleteToken] = undefined;
     position = this.tokenList.indexOf(preToken);
     this.tokenList.splice(position, 1);
+    this.questionCounts['total']--;
+    this.questionCounts[question['type']]--;
+    if (question['type'] != 'material') {
+      self.totalScore -= question['score'];
+    } else {
+      $.each(question['subQuestions'], function(token, subQuestion) {
+        self.totalScore -= subQuestion['score'];
+      })
+    }
     this.flag = false;
   }
 
