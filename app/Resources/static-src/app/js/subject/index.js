@@ -46,8 +46,8 @@ export default class sbList {
     this.$element.on('click', '.js-difficult-setting', event => this.showModal(event, this.$diffiultyModal));
     this.$element.on('click', '.js-score-setting', event => this.showScoreModal(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
-    this.$itemList.on('click', '.js-subject-item-edit', event => this.editSubjectItem(event));
-    this.$itemList.on('click', '.js-finish-edit', event => this.finishEdit(event));
+    // this.$itemList.on('click', '.js-subject-item-edit', event => this.editSubjectItem(event));
+    // this.$itemList.on('click', '.js-finish-edit', event => this.finishEdit(event));
     this.$itemList.on('click', '.js-subject-item-delete', event => this.deleteSubjectItem(event));
   }
 
@@ -244,6 +244,7 @@ export default class sbList {
       this.selectQuestion = [];
 
       this.updateTotalScoreText();
+      cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
       this.$scoreModal.modal('hide');
     }
   }
@@ -255,6 +256,7 @@ export default class sbList {
       let text = $('input[name=\'difficultyRadios\']:checked').next().text();
       self.questionOperate.modifyDifficulty(self.selectQuestion, difficulty, text);
       self.selectQuestion = [];
+      cd.message({ type: 'success', message: Translator.trans('难度修改成功') });
       self.$diffiultyModal.modal('hide');
     });
   }
