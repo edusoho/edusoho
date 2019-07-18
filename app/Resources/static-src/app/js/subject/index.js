@@ -4,6 +4,7 @@ import showCkEditor from './edit';
 export default class sbList {
   constructor() {
     this.$element = $('.js-subject-list');
+    this.$itemList = $('.js-item-list');
     this.$batchBtn = $('.js-batch-btn');
     this.$batchWrap = $('.js-subject-wrap');
     this.$sbCheckbox = $('.js-show-checkbox');
@@ -47,6 +48,7 @@ export default class sbList {
     this.$element.on('click', '.js-difficult-setting', event => this.showModal(event, this.$diffiultyModal));
     this.$element.on('click', '.js-score-setting', event => this.showScoreModal(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
+    this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
   }
 
   sbListFixed() {
@@ -256,6 +258,16 @@ export default class sbList {
       self.questionOperate.modifyDifficulty(self.selectQuestion, difficulty, text);
       self.selectQuestion = [];
       self.$diffiultyModal.modal('hide');
+    });
+  }
+
+  itemEdit(event) {
+    let $target = $(event.currentTarget);
+    let url = $target.parents('.subject-item__operation').data('url');
+    let $item = $target.parents('.subject-item');
+    $.post(url, {question:{}}, html=> {
+      $item.addClass('hidden');
+      $item.after(html);
     });
   }
 }

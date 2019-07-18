@@ -1,7 +1,7 @@
 {% set singleData = [
   {
     "title": '科目汇总表的总范围是（）',
-    "type": 'radio',
+    "type": 'single_choice',
     "flag": 1,
     "order": 1,
     "options": [
@@ -37,11 +37,12 @@
       },
     ],
     'difficulty': '一般',
-    'score': '5'
+    'score': '5',
+    'errors': [],
   }, 
   {
     "title": '科目汇总表的总范围是（）',
-    "type": 'checkbox',
+    "type": 'choice',
     "flag": 1,
     "order": 2,
     "options": [
@@ -77,11 +78,19 @@
       },
     ],
     'difficulty': '一般',
-    'score': '5'
+    'score': '5',
+    'errors': [
+      {
+        "element" : "stem",
+        "index" : 0,
+        "code" : 40487,
+        "message" : "题干有特殊字符",
+      },
+    ],
   },
   {
     "title": '科目汇总表的总范围是全部账户的借、贷方发生额。',
-    "type": 'judge',
+    "type": 'determine',
     "flag": 0,
     "order": 3,
     'difficulty': '一般',
@@ -96,6 +105,7 @@
         "check": 1
       },
     ],
+    'errors': [],
   }
 ] %}
 
@@ -107,7 +117,7 @@
     </div>
     <div class="subject-item__body">
       {% set options = item.options %}
-      {% if item.type == 'judge' %}
+      {% if item.type == 'determine' %}
         {% for option in options %}
           <label class="cd-radio single-item subject-forbid {% if option.check == 1 %}checked{% endif %}">
             <input type="radio" data-toggle="cd-radio" name="right" value="true"><span class="single-item__text">{{ option.text }}</span>
@@ -116,7 +126,7 @@
       {% else %}
         
         {% for option in options %}
-          {% if item.type == 'radio' %}
+          {% if item.type == 'single_choice' %}
             <label class="cd-radio single-item subject-forbid {% if option.check == 1 %}checked{% endif %}">
               <input type="radio" data-toggle="cd-radio" name="right" value="{{'option' ~ loop.index }}"><span>{{ option.order}}. </span><span class="single-item__text {% if option.flag == 1 %}single-item__text--danger{% endif %}">{% if option.flag == 1 %}缺少选项，请点击“编辑”进行设置。{% else %}{{ option.text }}{% endif %}</span>
             </label>
@@ -128,6 +138,6 @@
         {% endfor %}
       {% endif %}
     </div>
-    {% include 'testpaper/subject/common.html.twig' with { type: '', difficulty: item.difficulty, score: item.score } %}
+    {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
   </div>
 {% endfor %}
