@@ -51,7 +51,6 @@ class UserController extends BaseController
         );
 
         //根据mobile或者idcard查询user_profile获得userIds
-
         if (isset($conditions['keywordType']) && in_array($conditions['keywordType'], $this->keywordType) && !empty($conditions['keyword'])) {
             $preConditions = $this->getUserProfileConditions($conditions);
             $profilesCount = $this->getUserService()->searchUserProfileCount($preConditions);
@@ -67,6 +66,10 @@ class UserController extends BaseController
                 unset($conditions['keywordType']);
                 unset($conditions['keyword']);
                 $conditions['userIds'] = array_merge(ArrayToolkit::column($users, 'userId'), $userIds);
+            } elseif ('idcard' == $conditions['keywordType']) {
+                unset($conditions['keywordType']);
+                unset($conditions['keyword']);
+                $conditions['userIds'] = empty($userIds) ? array(0) : $userIds;
             }
 
             $userCount = $this->getUserService()->countUsers($conditions);
