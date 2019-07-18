@@ -240,12 +240,11 @@ export default class sbList {
       let score = $('input[name="score"]').val();
       this.questionOperate.modifyScore(this.selectQuestion, score);
       this.selectQuestion = [];
-
       let $totalScore = $('.js-total-score');
       if ($totalScore.length === 1) {
         $totalScore.html(`总分${this.totalScore}分`);
       }
-
+      cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
       this.$scoreModal.modal('hide');
     }
   }
@@ -257,6 +256,7 @@ export default class sbList {
       let text = $('input[name=\'difficultyRadios\']:checked').next().text();
       self.questionOperate.modifyDifficulty(self.selectQuestion, difficulty, text);
       self.selectQuestion = [];
+      cd.message({ type: 'success', message: Translator.trans('难度修改成功') });
       self.$diffiultyModal.modal('hide');
     });
   }
