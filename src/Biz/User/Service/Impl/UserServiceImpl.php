@@ -14,6 +14,7 @@ use Biz\Content\FileException;
 use Biz\Content\Service\FileService;
 use Biz\Coupon\Dao\CouponDao;
 use Biz\Coupon\Service\CouponService;
+use Biz\Org\OrgException;
 use Biz\Org\Service\OrgService;
 use Biz\Role\Service\RoleService;
 use Biz\System\Service\IpBlacklistService;
