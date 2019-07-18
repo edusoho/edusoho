@@ -3,8 +3,15 @@
 {% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'app/js/subject/index.js']) %}
 
 {% block content %}
-  <div class="hidden js-cached-data">{{ '' }}</div>
-  <div class="hidden js-cached-token">{{ '' }}</div>
+  <div class="hidden js-cached-data">{{ '[{
+    "title": "唐代诗人李白号____。",
+    "type": "answer",
+    "flag": "1",
+    "answer": "青莲居士|谪仙人",
+    "difficulty": "一般",
+    "order": "4",
+    "score": "5"
+  }]' }}</div>
   <div class="row">
     <div class="col-sm-3">
       <div class="subject-data subject-rect js-subject-data">
@@ -20,12 +27,13 @@
       {% include 'testpaper/subject/choose-subject.html.twig' %}
       {% include 'testpaper/subject/answer-subject.html.twig' %}
       {% include 'testpaper/subject/material-subject.html.twig' %}
-      {# {% include 'testpaper/subject/type/choice.html.twig' %} #}
       {% block edit %}
-        {#{% include 'testpaper/subject/type/choice.html.twig' %}#}
-        {#{% include 'testpaper/subject/type/single_choice.html.twig' %}#}
-        {#{% include 'testpaper/subject/type/essay.html.twig' %}#}
-        {# {% include 'testpaper/subject/type/question-edit-layout.html.twig' %} #}
+        {% include 'testpaper/subject/type/choice.html.twig' %}
+        {% include 'testpaper/subject/type/single_choice.html.twig' %}
+        {% include 'testpaper/subject/type/uncertain_choice.html.twig' %}
+        {% include 'testpaper/subject/type/essay.html.twig' %}
+        {% include 'testpaper/subject/type/determine.html.twig' %}
+        {% include 'testpaper/subject/type/fill.html.twig' %}
       {% endblock %}
       <div class="text-center cd-mt24">
         <button class="cd-btn cd-btn-primary subject-button" type="button">完成导入</button>

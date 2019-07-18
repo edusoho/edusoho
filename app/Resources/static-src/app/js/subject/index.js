@@ -5,6 +5,7 @@ import { numberConvertLetter } from '../../common/unit';
 export default class sbList {
   constructor() {
     this.$element = $('.js-subject-list');
+    this.$itemList = $('.js-item-list');
     this.$batchBtn = $('.js-batch-btn');
     this.$batchWrap = $('.js-subject-wrap');
     this.$sbCheckbox = $('.js-show-checkbox');
@@ -15,8 +16,6 @@ export default class sbList {
     this.$diffiultyModal = $('.js-difficulty-modal');
     this.$scoreModal = $('.js-score-modal');
     this.scoreValidator = null;
-    this.totalScore = 0;
-    this.totalNum = 0;
     this.selectQuestion = [];
     this.questionOperate = null;
     this.$itemList = $('.js-item-list');
@@ -30,7 +29,6 @@ export default class sbList {
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
-    this.initTotalScore();
     this.setDifficulty();
     // this.showCkEditor();
   }
@@ -50,7 +48,7 @@ export default class sbList {
     this.$element.on('click', '.js-difficult-setting', event => this.showModal(event, this.$diffiultyModal));
     this.$element.on('click', '.js-score-setting', event => this.showScoreModal(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
-    this.$itemList.on('click', '.js-subject-item-edit', event => this.editSubjectItem(event));
+    this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-finish-edit', event => this.finishEdit(event));
     this.$itemList.on('focus', '.js-item-option-edit', event => this.editOption(event));
     this.$itemList.on('click', '.js-item-option-delete', event => this.deleteOption(event));
@@ -112,15 +110,12 @@ export default class sbList {
     const $target = $(event.target);
     $target.toggleClass('hidden');
     this.toggleClass();
-    this.$anchor.addClass('sb-cursor-default');
     this.flag = false;
   }
-
 
   finishBtnClick(event) {
     this.$batchBtn.toggleClass('hidden');
     this.toggleClass();
-    this.$anchor.removeClass('sb-cursor-default');
     this.flag = true;
   }
 
@@ -239,10 +234,6 @@ export default class sbList {
     return ($('input[name="isTestpaper"]').val() == 1);
   }
 
-  initTotalScore() {
-
-  }
-
   batchSetScore() {
     if (this.scoreValidator.form()) {
       let score = $('input[name="score"]').val();
@@ -266,7 +257,7 @@ export default class sbList {
     });
   }
 
-  editSubjectItem(event) {
+  itemEdit(event) {
     const $editItem = $('.subject-edit-item');
     if ($editItem.length !== 0) {
       let order = $editItem.find('.subject-edit-item__order').text();
@@ -277,27 +268,12 @@ export default class sbList {
       return;
     }
 
-    const $item = $(event.currentTarget).parent().parent();
-    const token = $item.attr('id');
-    let question = this.questionOperate.getQuestion(token);
-
-    let type = 'choice';
-
-    $.ajax({
-      type: 'post',
-      url: `/subject/edit/${type}`,
-      data: {
-        options: [
-            '这是A选项',
-            '这是B选项',
-            '这是C选项',
-            '这是D选项',
-        ],
-      },
-    }).done(function(resp) {
+    let $target = $(event.currentTarget);
+    let url = $target.parents('.subject-item__operation').data('url');
+    let $item = $target.parents('.subject-item');
+    $.post(url, {question:{}}, html=> {
       $item.addClass('hidden');
-      $item.after($(resp));
-      new showCkEditor({fieldId: 'question-stem-field'});
+      $item.after(html);
     });
   }
 

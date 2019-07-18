@@ -1,5 +1,6 @@
 {% extends 'testpaper/subject/type/question-edit-layout.html.twig' %}
 
+{% set type = 'choice' %}
 {% block subject %}
   {% for option in question.options %}
     <div class="edit-subject-item cd-mb24{% if loop.index == 1 %} cd-mt24{% endif %} form-group">
