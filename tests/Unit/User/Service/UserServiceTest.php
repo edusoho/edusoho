@@ -924,15 +924,6 @@ class UserServiceTest extends BaseTestCase
         $this->assertTrue($this->getUserService()->verifyPassword($registeredUser['id'], 'test_password'));
     }
 
-    /**
-     * @expectedException \Biz\User\UserException
-     */
-    public function testVerifyPayPasswordTwice()
-    {
-        $registeredUser = null;
-        $this->assertFalse($this->getUserService()->verifyPassword($registeredUser['id'], 'password'));
-    }
-
     public function testParseRegistration()
     {
         $auth['register_mode'] = 'email_or_mobile';
@@ -949,6 +940,24 @@ class UserServiceTest extends BaseTestCase
         $registration['emailOrMobile'] = '13777777976';
         $result = $this->getUserService()->parseRegistration($registration);
         $this->assertEquals('13777777976', $result['mobile']);
+    }
+
+    public function testParseRegistrationWithRegisterModeNull()
+    {
+        $this->mockBiz('System:Setting', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array(),
+            ),
+        ));
+
+        $registration = array(
+            'type' => 'email',
+            'email' => 'test@test.com',
+        );
+
+        $result = $this->getUserService()->parseRegistration($registration);
+        $this->assertEquals($registration, $result);
     }
 
     /**
@@ -1538,10 +1547,11 @@ class UserServiceTest extends BaseTestCase
     public function testVerifyPayPassword()
     {
         $user1 = $this->createUser('user1');
-        $result = $this->getUserService()->verifyPassword($user1['id'], 'user');
+        $result = $this->getUserService()->verifyPayPassword($user1['id'], 'user');
         $this->assertFalse($result);
 
-        $result = $this->getUserService()->verifyPassword($user1['id'], 'user1');
+        $this->getUserService()->changePayPassword($user1['id'], 'user');
+        $result = $this->getUserService()->verifyPayPassword($user1['id'], 'user');
         $this->assertTrue($result);
     }
 
@@ -1551,7 +1561,7 @@ class UserServiceTest extends BaseTestCase
     public function testVerifyPayPasswordWithNonExistUser()
     {
         $user1 = $this->createUser('user1');
-        $this->getUserService()->verifyPassword($user1['id'] + 10, 'user');
+        $this->getUserService()->verifyPayPassword($user1['id'] + 10, 'user');
     }
 
     /**
@@ -1566,7 +1576,15 @@ class UserServiceTest extends BaseTestCase
 
     public function testInitSystemUsers()
     {
+        $before = $this->getUserService()->getUserByType('system');
         $this->getUserService()->initSystemUsers();
+        $after = $this->getUserService()->getUserByType('system');
+        $this->assertNull($before);
+        $this->assertNotEmpty($after);
+
+        $this->getUserService()->initSystemUsers();
+        $after2 = $this->getUserService()->getUser($after['id'] + 1);
+        $this->assertEmpty($after2);
     }
 
     public function testGetUserByType()
@@ -3176,6 +3194,63 @@ class UserServiceTest extends BaseTestCase
         $user = $this->getUserService()->initPassword($registeredUser['id'], 'newPassword');
 
         $this->assertEquals('1', $user['passwordInit']);
+    }
+
+    public function testFindUserBindByTypeAndFromIds()
+    {
+        $user = $this->createUser('user1');
+        $this->getUserService()->bindUser('qq', 123123123, $user['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
+
+        $users = $this->getUserService()->findUserBindByTypeAndFromIds('qq', array());
+        $this->assertEmpty($users);
+
+        $users = $this->getUserService()->findUserBindByTypeAndFromIds('qq', array(123123123));
+        $this->assertEquals(1, $users[0]['id']);
+    }
+
+    public function testFindUserBindByTypeAndToIds()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+
+        $this->getUserService()->bindUser('qq', 123123123, $user1['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
+        $this->getUserService()->bindUser('qq', 123123211, $user2['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
+
+        $users = $this->getUserService()->findUserBindByTypeAndToIds('qq', array());
+        $this->assertEmpty($users);
+
+        $users = $this->getUserService()->findUserBindByTypeAndToIds('qq', array($user1['id'], $user2['id']));
+        $this->assertCount(2, $users);
+    }
+
+    /**
+     * @expectedException \Biz\User\UserException
+     * @expectedExceptionMessage exception.user.not_found
+     */
+    public function testFindUserBindByTypeAndUserIdException()
+    {
+        $this->getUserService()->findUserBindByTypeAndUserId('qq', 223);
+    }
+
+    public function testFindUserBindByTypeAndUserId()
+    {
+        $user = $this->createUser('user');
+        $this->getUserService()->bindUser('qq', 123123123, $user['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
+
+        $result = $this->getUserService()->findUserBindByTypeAndUserId('qq', $user['id']);
+        $this->assertEquals(1, $result[0]['id']);
+    }
+
+    public function testCountUserFollowings()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $user3 = $this->createUser('user3');
+
+        $this->getUserService()->follow($user1['id'], $user2['id']);
+        $this->getUserService()->follow($user1['id'], $user3['id']);
+        $count = $this->getUserService()->countUserFollowings($user1['id']);
+        $this->assertEquals(2, $count);
     }
 
     protected function createUser($user)
