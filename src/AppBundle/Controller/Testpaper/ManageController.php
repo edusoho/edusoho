@@ -652,7 +652,26 @@ class ManageController extends BaseController
 
     public function editTemplateAction(Request $request, $type)
     {
-        return $this->render("testpaper/subject/type/{$type}.html.twig", array());
+        $fields = $request->request->all();
+
+        $fields = ArrayToolkit::parts($fields, array(
+            'stem',
+            'type',
+            'options',
+            'answer',
+            'answers',
+            'score',
+            'missScore',
+            'analysis',
+            'attachments',
+            'subQuestions',
+            'difficulty',
+            'errors',
+        ));
+
+        return $this->render("testpaper/subject/type/{$type}.html.twig", array(
+            'question' => $fields,
+        ));
     }
 
     protected function fillGraphData($testpaper, $userFirstResults)

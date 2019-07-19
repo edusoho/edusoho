@@ -37,7 +37,7 @@
       </div>
     {% else %}
       <div class="subject-item__body">
-        <span>{{ '（' ~ item.subOrder ~ '）'  }}</span><span>{{ item.title }}</span>
+        <span class="subject-sub-item__number">{{ '（' ~ item.subOrder ~ '）'  }}</span><span>{{ item.title }}</span>
         <div class="subject-sub-item__answer"><span class="subject-sub-item__label">答案：</span><span class="">{{ item.answer }}</span></div>
       </div>
     {% endif %}
