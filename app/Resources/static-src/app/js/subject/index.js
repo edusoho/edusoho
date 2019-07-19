@@ -30,6 +30,8 @@ export default class sbList {
     this.initScoreValidator();
     this.initTotalScore();
     this.setDifficulty();
+    this.createModal();
+    this.modalShow();
   }
 
   confirmFresh() {
@@ -267,6 +269,32 @@ export default class sbList {
     $.post(url, {question:{}}, html=> {
       $item.addClass('hidden');
       $item.after(html);
+    });
+  }
+
+  modalShow() {
+    $('#cd-modal').on('show.bs.modal', function (event) {
+      const $btn = $(event.relatedTarget);
+      const order = $btn.closest('.js-subject-item').data('order');
+      console.log(order);
+      $('#cd-modal').attr('data-index', order);
+    });
+  
+  }
+  
+
+
+  createModal() {
+    $('.js-create-btn').on('click', (event) => {
+      const $target = $(event.target);
+      const url = $target.data('url');
+      $.post(url).then((res) => {
+        $('#cd-modal').modal('hide');
+        const order = $('#cd-modal').data('index');
+        console.log(order);
+        console.log($('.js-subject-item').eq(0));
+        // $('.js-subject-item').eq(order - 1).insertAfter(res);
+      });
     });
   }
 }

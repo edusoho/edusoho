@@ -10,13 +10,13 @@
       <div class="modal-body create-subject-body">
         <div class="cd-dark-major create-subject-label">选择题型</div>
         <div class="create-subject-list">
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn">单选题</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn">多选题</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn">不定项</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn">判断题</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn">填空题</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn">问答题</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn">材料题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-url="{{ path('subject_edit_template', {type:'choice' })}}">单选题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn" type="button">多选题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn" type="button">不定项</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn" type="button">判断题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn" type="button">填空题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn" type="button">问答题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn" type="button">材料题</button>
         </div>
       </div>
     </div>
