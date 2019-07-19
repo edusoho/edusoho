@@ -30,7 +30,6 @@ export default class sbList {
     this.initScoreValidator();
     this.initTotalScore();
     this.setDifficulty();
-    // this.showCkEditor();
   }
 
   confirmFresh() {
