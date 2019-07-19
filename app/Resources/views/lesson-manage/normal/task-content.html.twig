@@ -6,7 +6,7 @@
   {% set file = task.activity.ext.file|default(null) %}
 {% endif %}
 
-<i class="es-icon mrs {{activity_metas(activity.mediaType).icon}} {{shouldDisplayTaskAsLesson|default(false)?'hidden':''}} {{isLesson|default(false)?'js-display-when-single-task js-lesson-icon ':''}}" data-role="task"></i>
+<i class="es-icon mrs {{activity_metas(activity.mediaType).icon}} js-display-when-single-task js-lesson-icon" data-role="task"></i>
 
 {% if displayAllInfo|default(false) %}
     {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}<span class="number mls">{{ taskNum }}</span>：
@@ -17,10 +17,9 @@
     {{displayText|raw}}
   {% endif %}
 </span>
-
 <span class="{% if task.tasks|default() %}title{% endif %}">{{task.title|sub_text(30)}}</span>
 
-<span class="{{isLesson|default(false)?'js-display-when-single-task':''}}">
+<span>
   {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
     <span class="cd-tag cd-tag-red ml5">{{'course.plan_task.convert_failed'|trans}}</span>
   {% elseif file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}

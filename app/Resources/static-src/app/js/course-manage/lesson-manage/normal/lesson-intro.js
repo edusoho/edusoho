@@ -22,7 +22,12 @@ export default class LessonIntro {
   showAdImage() {
     let $intro = $('#js-intro');
     let img = new Image();
-    img.src = '/assets/img/lessonintro/lessonintro.png';
+    let local = $('.js-data-local').data('local');
+    if (local === 'en') {
+      img.src = '/assets/img/lessonintro/lessonintro-en.jpg';
+    } else {
+      img.src = '/assets/img/lessonintro/lessonintro.jpg';
+    }
     var $img = $(img);
     $intro.find('.modal-body').append($img);
     $intro.modal('show');

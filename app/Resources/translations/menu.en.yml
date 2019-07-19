@@ -141,7 +141,7 @@ admin.operation.mobile_menu: 'App contents'
 admin.operation.wechat_notification: WeChat Notification
 admin.operation.analysis_menu: Statistics
 admin.operation.sensitive_words_menu: Sensitive Words
-admin.operation.reward_point_menu:　Reward Point
+admin.operation.reward_point_menu: Reward Point
 admin.operation.reward_point_mall_menu: Reward Point Mall
 
 ##资讯管理模块
