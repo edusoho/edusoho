@@ -2,22 +2,22 @@
 
 namespace Biz\Task\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskService;
-use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Service\CourseService;
-use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\TaskException;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseSetService;
-use Biz\Activity\Service\ActivityService;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -320,8 +320,18 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (empty($lessonTasks)) {
             return;
         }
-        foreach ($lessonTasks as $task) {
-            $this->deleteTask($task['id']);
+
+        try {
+            $this->biz['db']->beginTransaction();
+
+            foreach ($lessonTasks as $task) {
+                $this->deleteTask($task['id']);
+            }
+
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
         }
     }
 

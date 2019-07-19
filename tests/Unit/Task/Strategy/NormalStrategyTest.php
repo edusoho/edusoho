@@ -303,19 +303,12 @@ class NormalStrategyTest extends BaseTestCase
             ),
         ));
 
-        $this->mockBiz('Course:LessonService', array(
-            array(
-                'functionName' => 'deleteLesson',
-                'runTimes' => 1,
-            ),
-        ));
-
-        $this->getNormalStrategy()->deleteTask($task);
+        $result = $this->getNormalStrategy()->deleteTask($task);
 
         $this->getTaskDao()->shouldHaveReceived('delete')->times(1);
         $this->getTaskResultService()->shouldHaveReceived('deleteUserTaskResultByTaskId')->times(1);
         $this->getActivityService()->shouldHaveReceived('deleteActivity')->times(1);
-        $this->getCourseLessonService()->shouldHaveReceived('deleteLesson')->times(1);
+        $this->assertTrue($result);
     }
 
     public function testCanLearnTaskWithFreeModeCourse()

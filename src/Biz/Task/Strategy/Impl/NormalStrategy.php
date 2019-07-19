@@ -83,38 +83,6 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         );
     }
 
-    public function deleteTask($task)
-    {
-        if (empty($task)) {
-            return true;
-        }
-
-        try {
-            $this->biz['db']->beginTransaction();
-
-            $this->getTaskDao()->delete($task['id']);
-            $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
-            $this->getActivityService()->deleteActivity($task['activityId']);
-
-            //课时下面只有一个任务时，则把课时也删除
-            $conditions = array(
-                'courseId' => $task['courseId'],
-                'categoryId' => $task['categoryId'],
-            );
-            $categoryTaskCount = $this->getTaskDao()->count($conditions);
-            if (empty($categoryTaskCount)) {
-                $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
-            }
-
-            $this->biz['db']->commit();
-        } catch (\Exception $e) {
-            $this->biz['db']->rollback();
-            throw $e;
-        }
-
-        return true;
-    }
-
     /**
      * 任务学习.
      *
