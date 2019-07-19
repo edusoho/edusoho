@@ -1,0 +1,9 @@
+<div class="subject-item" id="{{ item.order }}">
+  <div class="subject-item__title">
+    <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ item.order }}</span> {{ item.stem }}
+  </div>
+  <div class="subject-item__body">
+    <span>答案：</span><span class="{% if item.answer is empty %}color-danger{% endif %}">{% if item.answer is empty %}缺少正确答案，请点击“编辑”进行设置。{% else %}{{ item.answer }}{% endif %}</span>
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with { type: 'answer', difficulty: item.difficulty, score: item.score } %}
+</div>

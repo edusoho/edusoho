@@ -1,0 +1,16 @@
+<div class="subject-item" id="{{ item.order }}">
+  <div class="subject-item__title">
+    <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.stem }}
+  </div>
+  <div class="subject-item__body">
+    {% set answer = item.answer %}
+      <label class="cd-radio single-item subject-forbid {% if answer %}checked{% endif %}">
+        <input type="radio" data-toggle="cd-radio" name="right" value="true"><span class="single-item__text">{{ '正确' }}</span>
+      </label>
+      <label class="cd-radio single-item subject-forbid {% if not answer %}checked{% endif %}">
+        <input type="radio" data-toggle="cd-radio" name="wrong" value="true"><span class="single-item__text">{{ '错误' }}</span>
+      </label>
+    {% endfor %}
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
+</div>

@@ -1,0 +1,15 @@
+<div class="subject-item {% if item.hasSub %}subject-sub-item{% endif %}" id="{{ item.order }}">
+  <div class="subject-item__title">
+    <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.stem }}
+  </div>
+  <div class="subject-item__body">
+    {% set options = item.options %}
+    {% set answers = item.answers %}
+    {% for key,option in options %}
+      <label class="cd-checkbox single-item subject-forbid {% if key in answers %}checked{% endif %}">
+        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ option.order}}. </span><span class="single-item__text {% if option.flag == 1 %}single-item__text--danger{% endif %}">{% if option.flag == 1 %}缺少选项，请点击“编辑”进行设置。{% else %}{{ option.text }}{% endif %}</span>
+      </label>
+    {% endfor %}
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
+</div>
