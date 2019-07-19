@@ -120,14 +120,17 @@ class EduSohoUpgrade extends AbstractUpdater
                 }
 
                 $tasks = $this->searchTasksGroupByCategoryId($categoryIds);
+                $minSeqTasks = $this->searchTasksMinSeqGroupByCategoryId($categoryIds);
                 $tasks = \AppBundle\Common\ArrayToolkit::index($tasks, 'categoryId');
+                $minSeqTasks = \AppBundle\Common\ArrayToolkit::index($minSeqTasks, 'categoryId');
 
                 foreach ($tasks as $task) {
                     $updateTasks[$task['id']]['isLesson'] = 1;
                     if (!empty($lessons[$task['categoryId']]) && $lessons[$task['categoryId']]['title'] != $task['title']) {
                         $updateChapters[$task['categoryId']]['title'] = $task['title'];
                     }
-                    if ($task['minSeq'] != $task['seq']) {
+                    if ($minSeqTasks[$task['categoryId']]['minSeq'] != $task['seq']) {
+                        $task['minSeq'] = $minSeqTasks[$task['categoryId']]['minSeq'];
                         $updateSeqTasks[] = $task;
                     }
                 }
@@ -181,7 +184,23 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function searchTasksGroupByCategoryId($categoryIds)
     {
         $marks = str_repeat('?,', count($categoryIds) - 1).'?';
-        $sql = "SELECT ANY_VALUE(`id`) as id ,ANY_VALUE(`title`) as title,ANY_VALUE(`seq`) as seq,min(ANY_VALUE(`seq`)) as minSeq, `categoryId` FROM `course_task` t where `categoryId` IN({$marks}) GROUP BY `categoryId`;";
+
+        $sql = "select id, title, categoryId, seq from course_task where id IN (select min(id) as id from course_task where `categoryId` IN ({$marks}) GROUP BY `categoryId`);";
+
+        return $this->getConnection()->fetchAll($sql, $categoryIds) ?: array();
+    }
+
+    /**
+     * @param $categoryIds
+     *
+     * @return array
+     *               查询课时最新创建的task及最小排序
+     */
+    protected function searchTasksMinSeqGroupByCategoryId($categoryIds)
+    {
+        $marks = str_repeat('?,', count($categoryIds) - 1).'?';
+
+        $sql = "select min(seq) as minSeq, categoryId from course_task where `categoryId` IN ({$marks}) GROUP BY `categoryId`;";
 
         return $this->getConnection()->fetchAll($sql, $categoryIds) ?: array();
     }
@@ -195,7 +214,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function searchTasksByCategoryIds($categoryIds)
     {
         $marks = str_repeat('?,', count($categoryIds) - 1).'?';
-        $sql = "SELECT ANY_VALUE(`id`) as id ,ANY_VALUE(`title`) as title,ANY_VALUE(`seq`) as seq,`categoryId` FROM `course_task` t where `categoryId` IN({$marks}) order by `categoryId`,ANY_VALUE(`seq`);";
+        $sql = "SELECT `id`,`title`,`seq`,`categoryId` FROM `course_task` t where `categoryId` IN({$marks}) order by `categoryId`,`seq`;";
 
         return $this->getConnection()->fetchAll($sql, $categoryIds) ?: array();
     }
