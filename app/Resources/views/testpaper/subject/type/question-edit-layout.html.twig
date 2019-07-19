@@ -1,16 +1,16 @@
 <div class="subject-item subject-edit-item">
-  <form class="form-horizontal">
+  <form class="form-horizontal" id="subject-edit-item-form">
     <div class="row">
       <div class="col-sm-8">
         <div class="subject-edit-item__order">6</div>
         <div class="cd-ml24">
-          <input class="form-control edit-subject-item__input js-item-option-edit hidden" type="text" value="">
+          <input class="form-control edit-subject-item__input js-item-stem-option-edit hidden" type="text" value="">
           <textarea class="form-control" style="height:190px;" id="question-stem-field"
                     data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
                     data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">请简要谈谈你对在线教育的看法。</textarea>
           {# 需要云附件开启设置才能显示 #}
           <div class="cd-mt24">
-            <button class="cd-btn cd-btn-ghost-primary" type="button">上传题干附件</button>
+            <button class="cd-btn cd-btn-ghost-primary js-upload-stem-attachment" type="button">上传题干附件</button>
           </div>
           {% block subject %}
           {% endblock %}
@@ -47,6 +47,7 @@
     {% block change %}
       {% include 'testpaper/subject/type/change-subject.html.twig' with { type: type|default('') } %}
     {% endblock %}
-    <div class="text-center"><button class="cd-btn cd-btn-primary cd-mt24 cd-mb8 subject-button" type="button">完成编辑</button></div>
+    <input type="hidden" name="type" value="{{ type|default('') }}">
+    <div class="text-center"><button class="cd-btn cd-btn-primary cd-mt24 cd-mb8 subject-button js-finish-edit" type="button">完成编辑</button></div>
   </form>
 </div>
