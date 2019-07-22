@@ -633,12 +633,13 @@ class ManageController extends BaseController
     {
         $wordRead = new ReadDocx($fullpath);
         $text = $wordRead->convertImage();
+        $that = $this;
         $text = preg_replace_callback(
             '/src=[\'\"](.*?)[\'\"]/',
-            function ($matches) {
+            function ($matches) use ($that) {
                 $file = new FileObject($matches[1]);
-                $result = $this->getFileService()->uploadFile('course', $file);
-                $url = $this->get('web.twig.extension')->getFpath($result['uri']);
+                $result = $that->getFileService()->uploadFile('course', $file);
+                $url = $that->get('web.twig.extension')->getFpath($result['uri']);
 
                 return "src=\"{$url}\"";
             },

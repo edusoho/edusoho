@@ -1,0 +1,10 @@
+{% set errors = item.errors|default([]) %}
+<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{{ key }}">
+  <div class="subject-item__title">
+    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">{{ key }}</span> {{ item.stem|raw }}
+  </div>
+  <div class="subject-item__body">
+    <span>答案：</span><span class="{% if errors is not empty %}color-danger{% endif %}">{% if errors is not empty %}缺少正确答案，请点击“编辑”进行设置。{% else %}{{ item.answers[0] }}{% endif %}</span>
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with { type: 'answer', difficulty: item.difficulty, score: item.score } %}
+</div>
