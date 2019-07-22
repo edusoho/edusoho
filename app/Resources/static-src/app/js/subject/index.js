@@ -1,5 +1,5 @@
 import QuestionOperate from './operate';
-import showCkEditor from './edit';
+import showEditor from './edit';
 
 export default class sbList {
   constructor() {
@@ -257,10 +257,11 @@ export default class sbList {
     let url = $target.parents('.subject-item__operation').data('url');
     let $item = $target.parents('.subject-item');
     let question = this.questionOperate.getQuestion($item.attr('id'));
-    $.get(url, {question: question}, html=> {
+    let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
+    $.get(url, {seq: seq, question: question}, html=> {
       $item.addClass('hidden');
       $item.after(html);
-      new showCkEditor().initTitleEditor();
+      showEditor.getEditor(question['type'], $('.js-edit-form'));
     });
   }
 
