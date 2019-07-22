@@ -1,13 +1,14 @@
-<div class="subject-item {% if item.hasSub %}subject-sub-item{% endif %}" id="{{ item.order }}">
+{% set options = item.options %}
+{% set answers = item.answers %}
+{% set errors = item.errors|default([]) %}
+<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{{ key }}">
   <div class="subject-item__title">
-    <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.stem }}
+    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.stem|raw }}
   </div>
   <div class="subject-item__body">
-    {% set options = item.options %}
-    {% set answers = item.answers %}
-    {% for key,option in options %}
-      <label class="cd-checkbox single-item subject-forbid {% if key in answers %}checked{% endif %}">
-        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ option.order}}. </span><span class="single-item__text {% if option.flag == 1 %}single-item__text--danger{% endif %}">{% if option.flag == 1 %}缺少选项，请点击“编辑”进行设置。{% else %}{{ option.text }}{% endif %}</span>
+    {% for option_key,option in options %}
+      <label class="cd-checkbox single-item subject-forbid {% if option_key in answers %}checked{% endif %}">
+        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ option_key }}. </span><span class="single-item__text {% for error in errors if error.element == 'options' and error.index == option_key %}single-item__text--danger{% endfor %}">{% for error in errors if error.element == 'options' and error.index == option_key %}缺少选项，请点击“编辑”进行设置。{% endfor %}{{ option }}</span>
       </label>
     {% endfor %}
   </div>
