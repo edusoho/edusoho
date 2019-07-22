@@ -15,13 +15,37 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'cloud'))) {
             throw CommonException::ERROR_PARAMETER();
         }
 
         $method = "get${type}";
 
         return $this->$method($request);
+    }
+
+    public function getCloud($request = null)
+    {
+        $cloudStatus = $this->getSettingService()->get('cloud_status');
+
+        // 如果云服务未开启/被锁定/未授权，则所有服务不可用，在filter中体现
+        if (!$cloudStatus['enabled'] || $cloudStatus['locked'] || !$cloudStatus['accessCloud']) {
+            $cloudStatus = 0;
+        } else {
+            $cloudStatus = 1;
+        }
+
+        $cloudSms = $this->getSettingService()->get('cloud_sms');
+
+        $result = array(
+            'status' => $cloudStatus,
+            'sms' => $cloudSms
+        );
+
+        $filter = new CloudSettingFilter();
+        $filter->filter($result);
+
+        return $result;
     }
 
     public function getHasPluginInstalled($request)
