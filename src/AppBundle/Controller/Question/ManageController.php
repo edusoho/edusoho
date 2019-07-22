@@ -4,8 +4,10 @@ namespace AppBundle\Controller\Question;
 
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Content\Service\FileService;
 use Biz\Question\QuestionException;
 use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
@@ -430,12 +432,13 @@ class ManageController extends BaseController
     {
         $wordRead = new ReadDocx($fullpath);
         $text = $wordRead->convertImage();
+        $that = $this;
         $text = preg_replace_callback(
             '/src=[\'\"](.*?)[\'\"]/',
-            function ($matches) {
+            function ($matches) use ($that) {
                 $file = new FileObject($matches[1]);
-                $result = $this->getFileService()->uploadFile('course', $file);
-                $url = $this->get('web.twig.extension')->getFpath($result['uri']);
+                $result = $that->getFileService()->uploadFile('course', $file);
+                $url = $that->get('web.twig.extension')->getFpath($result['uri']);
 
                 return "src=\"{$url}\"";
             },
@@ -511,11 +514,17 @@ class ManageController extends BaseController
         return ServiceKernel::instance();
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
     }
 
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');

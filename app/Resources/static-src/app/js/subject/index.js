@@ -1,6 +1,5 @@
 import QuestionOperate from './operate';
 import showCkEditor from './edit';
-import { numberConvertLetter } from '../../common/unit';
 
 export default class sbList {
   constructor() {
@@ -52,6 +51,7 @@ export default class sbList {
     this.$element.on('click', '.js-score-setting', event => this.showScoreModal(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
+    this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
     this.$itemList.on('click', '.js-finish-edit', event => this.finishEdit(event));
     this.$itemList.on('focus', '.js-item-stem-option-edit', event => this.editStemOrOption(event));
     this.$itemList.on('click', '.js-item-option-delete', event => this.deleteOption(event));
@@ -320,6 +320,7 @@ export default class sbList {
       this.selectQuestion = [];
 
       this.updateTotalScoreText();
+      cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
       this.$scoreModal.modal('hide');
     }
   }
@@ -423,6 +424,57 @@ export default class sbList {
     });
   }
 
+  deleteSubjectItem(event) {
+    cd.confirm({
+      title: '确认删除',
+      content: '确定要删除这道题目吗?',
+      okText: '确定',
+      cancelText: '取消',
+    }).on('ok', () => {
+      const $item = $(event.currentTarget).parent().parent();
+      const token = $item.attr('id');
+      let question = this.questionOperate.getQuestion(token);
+
+      if ($item.hasClass('subject-sub-item')) {
+        let order = $item.find('.subject-sub-item__number').text().replace(/[^0-9]/ig, '');
+        $item.nextUntil('[class="subject-item"]').each(function () {
+          $(this).find('.subject-sub-item__number').text(`(${order})`);
+          order++;
+        });
+        this.questionOperate.deleteQuestion(token);
+        this.updateTotalScoreText();
+        $item.remove();
+        return;
+      }
+
+      let order = this.questionOperate.getQuestionOrder(token);
+      $item.nextAll('.subject-item').not('.subject-sub-item').each(function () {
+        $(this).find('.subject-item__number').text(order);
+        order++;
+      });
+
+      order = this.questionOperate.getQuestionOrder(token);
+      const $listItem = $(`[data-anchor=#${token}]`).parent();
+      $listItem.nextAll('.subject-list-item').each(function () {
+        $(this).find('.subject-list-item__num').text(order)
+            .find('.sb-checkbox').attr('data-order', order);
+        order++;
+      });
+
+      this.questionOperate.deleteQuestion(token);
+      this.updateQuestionCountText(question['type']);
+      this.updateTotalScoreText();
+
+      if (question.type == 'material') {
+        $.each(question['subQuestions'], function (token, subQuestion) {
+          $(`#${token}`).remove();
+        });
+      }
+      $listItem.remove();
+      $item.remove();
+    });
+  }
+
   finishEdit(event) {
     const $editItem = $(event.currentTarget).parents('.subject-edit-item');
     const $item = $('.subject-item.hidden');
@@ -437,9 +489,17 @@ export default class sbList {
     }
   }
 
+  updateQuestionCountText(type) {
+    let totalCount = this.questionOperate.getQuestionCount('total');
+    let typeCount = this.questionOperate.getQuestionCount(type);
+    $('.js-total-num').text(`共${totalCount}道题`);
+    $(`[data-type=${type}]`).find('.subject-data__num').text(`共${typeCount}道题`);
+  }
+
   updateTotalScoreText() {
+    let totalScore = this.questionOperate.getTotalScore();
     if (this.isTestpaper()) {
-      $('.js-total-score').text(`总分${this.totalScore}分`);
+      $('.js-total-score').text(`总分${totalScore}分`);
     }
   }
 }
