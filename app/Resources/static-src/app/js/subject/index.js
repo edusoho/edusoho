@@ -1,5 +1,5 @@
 import QuestionOperate from './operate';
-import showCkEditor from './edit';
+import showEditor from './edit';
 
 export default class sbList {
   constructor() {
@@ -18,21 +18,16 @@ export default class sbList {
     this.selectQuestion = [];
     this.questionOperate = null;
     this.$itemList = $('.js-item-list');
-    this.optionCount = 0;
-    this.editFieldId = 'question-stem-field';
-    this.subjectItemValidator = null;
     this.init();
   }
 
   init() {
-    // new showCkEditor();
     this.questionOperate = new QuestionOperate();
-    // this.confirmFresh();
+    this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
     this.setDifficulty();
-    // this.showCkEditor();
   }
 
   confirmFresh() {
@@ -52,10 +47,6 @@ export default class sbList {
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
-    this.$itemList.on('click', '.js-finish-edit', event => this.finishEdit(event));
-    this.$itemList.on('focus', '.js-item-stem-option-edit', event => this.editStemOrOption(event));
-    this.$itemList.on('click', '.js-item-option-delete', event => this.deleteOption(event));
-    this.$itemList.on('click', '.js-item-option-add', event => this.addOption(event));
   }
 
   sbListFixed() {
@@ -188,14 +179,14 @@ export default class sbList {
     self.$element.find('.js-show-checkbox.checked').each(function(){
       let type = $(this).data('type'),
         name = $(this).data('name'),
-        order = $(this).data('order');
+        token = $(this).parents('.js-subject-anchor').data('anchor');
 
       if (typeof stats[type] == 'undefined') {
         stats[type] = {name:name, count:1};
       } else {
         stats[type]['count']++;
       }
-      self.selectQuestion.push(order);
+      self.selectQuestion.push(token.substr(1));
     });
 
     return stats;
@@ -231,82 +222,6 @@ export default class sbList {
     $.validator.addMethod( 'noMoreThan', function(value, element, param) {
       return value <= $(param).val();
     }, 'Please enter a lesser value.' );
-  }
-
-  initSubjectItemValidator() {
-    if ($.validator) {
-      $.validator.prototype.elements = function() {
-        let validator = this,
-            rulesCache = {};
-        return $(this.currentForm)
-            .find('input')
-            .not(':submit, :reset, :image, [disabled]')
-            .not(this.settings.ignore)
-            .filter(function () {
-              if (!this.name && validator.settings.debug && window.console) {
-                console.error("%o has no name assigned", this);
-              }
-              rulesCache[this.name] = true;
-              return true;
-            });
-      }
-    }
-
-    this.subjectItemValidator = $('#subject-edit-item-form').validate({
-      rules: {
-        score: {
-          required: true,
-          digits: true,
-          max: 999,
-          min: 0,
-          es_score: true
-        },
-        missScore: {
-          required: false,
-          digits: true,
-          max: 999,
-          min: 0,
-          noMoreThan: '#score',
-          es_score: true
-        },
-        stem: {
-          required: true,
-        },
-        options: {
-          required: true,
-        },
-        right: {
-          required: true,
-        }
-      },
-      messages: {
-        missScore: {
-          noMoreThan: '漏选分值不得超过题目分值'
-        },
-        stem: {
-          required: '题干内容不得为空'
-        },
-        options: {
-          required: '选项内容不得为空'
-        }
-      },
-      errorPlacement: function(error, element) {
-        let elementName = element.attr('name');
-        if (elementName == 'right') {
-          $('.edit-subject-item__order').addClass('edit-subject-item__order--error');
-          cd.message({
-            type: 'danger',
-            message: Translator.trans('请选择正确答案'),
-          });
-        } else if (elementName == 'stem' && element.hasClass('hidden')) {
-          $('#cke_question-stem-field').after(error);
-        } else if (elementName == 'options' && element.hasClass('hidden')) {
-          error.appendTo(element.parent());
-        } else {
-          error.insertAfter(element);
-        }
-      }
-    });
   }
 
   isTestpaper() {
@@ -351,76 +266,13 @@ export default class sbList {
     let $target = $(event.currentTarget);
     let url = $target.parents('.subject-item__operation').data('url');
     let $item = $target.parents('.subject-item');
-    const token = $item.attr('id');
-    let question = this.questionOperate.getQuestion(token);
-    $.post(url, {question:{}}, html => {
+
+    let question = this.questionOperate.getQuestion($item.attr('id'));
+    let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
+    $.get(url, {seq: seq, question: question}, html=> {
       $item.addClass('hidden');
       $item.after(html);
-      this.initSubjectItemValidator();
-      this.editFieldId = 'question-stem-field';
-      new showCkEditor({fieldId: this.editFieldId});
-      // this.optionCount = question['options'].length;
-      this.optionCount = 4;
-    });
-  }
-
-  editStemOrOption(event) {
-    const $input = $(event.currentTarget);
-    const $textArea = $input.next();
-    const fieldId = $textArea.attr('id');
-
-    $input.addClass('hidden');
-    if (fieldId === 'question-stem-field') {
-      $('.js-upload-stem-attachment').removeClass('hidden');
-    } else {
-      $('.js-upload-stem-attachment').addClass('hidden');
-    }
-
-    new showCkEditor({fieldId: fieldId, oldFieldId: this.editFieldId});
-    this.editFieldId = fieldId;
-  }
-
-  deleteOption(event) {
-    if (this.optionCount <= 2) {
-      cd.message({
-        type: 'danger',
-        message: Translator.trans('选项最少2个'),
-      });
-      return;
-    }
-
-    const $editItem = $(event.currentTarget).parents('.edit-subject-item');
-    let orderText = $editItem.find('.edit-subject-item__order').text();
-    $editItem.nextAll('.edit-subject-item').each(function() {
-      let $order = $(this).find('.edit-subject-item__order');
-      let oldOrderText = $order.text();
-      $order.text(orderText);
-      orderText = oldOrderText;
-    });
-
-    $editItem.remove();
-    this.optionCount--;
-  }
-
-  addOption(event) {
-    if (this.optionCount >= 10) {
-      cd.message({
-        type: 'danger',
-        message: Translator.trans('选项最多10个'),
-      });
-      return;
-    }
-
-    const $prev = $(event.currentTarget).parent().prev();
-    const type = $('[name="type"]').val();
-
-    $.ajax({
-      url: `/subject/option/${type}`,
-      type: 'get',
-      data: {order: this.optionCount+1}
-    }).done(resp => {
-      $prev.after(resp);
-      this.optionCount++;
+      showEditor.getEditor(question['type'], $('.js-edit-form'));
     });
   }
 
@@ -473,20 +325,6 @@ export default class sbList {
       $listItem.remove();
       $item.remove();
     });
-  }
-
-  finishEdit(event) {
-    const $editItem = $(event.currentTarget).parents('.subject-edit-item');
-    const $item = $('.subject-item.hidden');
-    //todo 校验
-    /**
-     * 3. 多选题必须选择两个以上答案
-     */
-    this.subjectItemValidator.resetForm();
-    if (this.subjectItemValidator.form()) {
-      $editItem.remove();
-      $item.removeClass('hidden');
-    }
   }
 
   updateQuestionCountText(type) {

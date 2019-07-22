@@ -1,66 +1,43 @@
-export default class showCkEditor {
-  constructor(options) {
-    this.titleEditorToolBarName = 'Minimal';
-    this.fieldId = options.fieldId;
-    this.oldFieldId = options.oldFieldId;
-    this.init();
-  }
+import BaseQuestion from './type/base-question';
+import Choice from './type/choice-question';
+import SingleChoice from './type/single-choice-question';
+import UncertainChoice from './type/uncertain-choice-question';
+import Determine from './type/determine-question';
+import Fill from './type/fill-question';
+import Essay from './type/essay-question';
+import Material from './type/material-question';
 
-  init() {
-    this.initEditor();
-  }
-
-  initEditor(validator) {
-    let $target = $('#' + this.fieldId);
-    let editor = null;
-
-    if (CKEDITOR.instances[this.oldFieldId]) {
-      editor = CKEDITOR.instances[this.oldFieldId];
-      let $oldTarget = $('#' + this.oldFieldId);
-      $oldTarget.addClass('hidden');
-      let data = editor.getData().replace(/<\s?img[^>]*>/gi, '【图片】').replace(/<p>|<\/p>/gi, '');
-      $oldTarget.prev('input').removeClass('hidden').val(data);
-      CKEDITOR.instances[this.oldFieldId].destroy();
+let questionEditor;
+class showEditor {
+  static getEditor(type, $form) {
+    switch (type) {
+      case 'single_choice':
+        questionEditor = new SingleChoice($form);
+        break;
+      case 'uncertain_choice':
+        questionEditor = new UncertainChoice($form);
+        break;
+      case 'choice':
+        questionEditor = new Choice($form);
+        break;
+      case 'determine':
+        questionEditor = new Determine($form);
+        break;
+      case 'essay':
+        questionEditor = new Essay($form);
+        break;
+      case 'fill':
+        questionEditor = new Fill($form);
+        break;
+      case 'material':
+        questionEditor = new Material($form);
+        break;
+      default:
+        questionEditor = new BaseQuestion($form);
+        questionEditor.initTitleEditor();
+        //questionEditor.initAnalysisEditor();
     }
-
-    if (CKEDITOR.instances[this.fieldId]) {
-      CKEDITOR.instances[this.fieldId].destroy();
-    }
-    editor = CKEDITOR.replace(this.fieldId, {
-      toolbar: this.titleEditorToolBarName,
-      fileSingleSizeLimit: app.fileSingleSizeLimit,
-      filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
-      height: $target.height(),
-      startupFocus: true,
-    });
-    editor.focus();
-
-    editor.on('change', () => {
-      $target.val(editor.getData());
-      console.log(editor.getData());
-    });
-    editor.on('blur', () => {
-      $target.val(editor.getData());
-      console.log(editor.getData());
-      // $target.addClass('hidden');
-      // $(`#cke_${self.fieldId}`).addClass('hidden');
-      // $('.js-upload-stem-attachment').addClass('hidden');
-      let data = editor.getData().replace(/<\s?img[^>]*>/gi, '【图片】').replace(/<p>|<\/p>/gi, '');
-      $target.prev('input').val(data);
-    });
   }
-
-  // initAnalysisEditor() {
-  //   let $target = $('#' + this.analysisFieldId);
-  //   let editor = CKEDITOR.replace(this.analysisFieldId, {
-  //     toolbar: this.titleEditorToolBarName,
-  //     fileSingleSizeLimit: app.fileSingleSizeLimit,
-  //     filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
-  //     height: $target.height()
-  //   });
-
-  //   editor.on('change', () => {
-  //     $target.val(editor.getData());
-  //   });
-  // }
 }
+
+export default showEditor;
