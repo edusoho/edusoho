@@ -58,13 +58,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $text = '';
         }
 
-        $activity['finishCondition'] = array(
+        return array(
             'type' => $finishType,
             'data' => $finishData,
             'text' => $text,
         );
-
-        return $activity;
     }
 
     public function getActivityByCopyIdAndCourseSetId($copyId, $courseSetId)
