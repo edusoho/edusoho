@@ -10,7 +10,7 @@
     {% set answers = item.answers %}
     {% for option_key,option in options %}
       <label class="cd-checkbox single-item subject-forbid {% if key in answers %}checked{% endif %}">
-        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ option_key}}. </span><span class="single-item__text {% if errors is not empty %}single-item__text--danger{% endif %}">{% if errors is not empty %}缺少选项，请点击“编辑”进行设置。{% else %}{{ option }}{% endif %}</span>
+        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ dict_text('questionOption', option_key) }}. </span><span class="single-item__text {% if errors is not empty %}single-item__text--danger{% endif %}">{% if errors is not empty %}缺少选项，请点击“编辑”进行设置。{% else %}{{ option|raw }}{% endif %}</span>
       </label>
     {% endfor %}
   </div>

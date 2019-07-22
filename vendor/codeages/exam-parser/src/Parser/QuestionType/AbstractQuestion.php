@@ -62,7 +62,7 @@ abstract class AbstractQuestion
     protected function matchAnalysis(&$question, $line, &$preNode)
     {
         if (!$this->hasSignal($line) && QuestionElement::ANALYSIS == $preNode) {
-            $question['analysis'] .= $line;
+            $question['analysis'] .= '<br/>'.$line;
 
             return true;
         }

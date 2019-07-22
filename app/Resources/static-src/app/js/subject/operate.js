@@ -116,7 +116,7 @@ export default class QuestionOperate {
     }
     this.flag = true;
     this.questions[token] = question;
-    position = this.tokenList.indexOf(preToken);
+    let position = this.tokenList.indexOf(preToken);
     this.tokenList.splice(position, 0, token);
     this.questionCounts['total']++;
     this.questionCounts[question['type']]++;
@@ -130,7 +130,7 @@ export default class QuestionOperate {
     this.flag = true;
     const question = this.questions[deleteToken];
     this.questions[deleteToken] = undefined;
-    position = this.tokenList.indexOf(preToken);
+    let position = this.tokenList.indexOf(preToken);
     this.tokenList.splice(position, 1);
     this.questionCounts['total']--;
     this.questionCounts[question['type']]--;
