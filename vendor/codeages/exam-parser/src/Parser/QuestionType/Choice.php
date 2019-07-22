@@ -3,6 +3,7 @@
 namespace ExamParser\Parser\QuestionType;
 
 use ExamParser\Constants\QuestionElement;
+use ExamParser\Constants\QuestionErrors;
 use ExamParser\Parser\Parser;
 
 class Choice extends AbstractQuestion
@@ -21,7 +22,6 @@ class Choice extends AbstractQuestion
             $question['type'] = 'uncertain_choice';
             unset($questionLines[0]);
         }
-        $answers = array();
         $preNode = QuestionElement::STEM;
         foreach ($questionLines as $line) {
             //处理选项
@@ -50,6 +50,7 @@ class Choice extends AbstractQuestion
                 $question['stem'] .= preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
             }
         }
+        $this->checkErrors($question);
 
         return $question;
     }
@@ -77,6 +78,7 @@ class Choice extends AbstractQuestion
 
     protected function matchAnswers(&$question, $line, &$preNode)
     {
+        $answers = array();
         if (0 === strpos(trim($line), self::ANSWER_SIGNAL)) {
             preg_match_all('/[A-Z]/', $line, $matches);
             if ($matches) {
@@ -99,5 +101,25 @@ class Choice extends AbstractQuestion
         }
 
         return false;
+    }
+
+    protected function checkErrors(&$question)
+    {
+        //判断题干是否有错
+        if (empty($question[QuestionElement::STEM])) {
+            $question['errors'][] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
+        }
+
+        //判断选项是否有错
+        foreach ($question[QuestionElement::OPTIONS] as $index => $option) {
+            if (empty($option)) {
+                $question['errors'][] = $this->getError(QuestionElement::OPTIONS, QuestionErrors::NO_OPTION, $index);
+            }
+        }
+
+        //判断答案是否有错
+        if (empty($question[QuestionElement::ANSWERS])) {
+            $question['errors'][] = $this->getError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER);
+        }
     }
 }

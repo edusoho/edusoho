@@ -1,0 +1,16 @@
+{% set answer = item.answer %}
+{% set errors = item.errors|default([]) %}
+<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{{ key }}">
+  <div class="subject-item__title">
+    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.stem|raw }}
+  </div>
+  <div class="subject-item__body">
+      <label class="cd-radio single-item subject-forbid {% if answer %}checked{% endif %}">
+        <input type="radio" data-toggle="cd-radio" name="right" value="true"><span class="single-item__text">{{ '正确' }}</span>
+      </label>
+      <label class="cd-radio single-item subject-forbid {% if not answer %}checked{% endif %}">
+        <input type="radio" data-toggle="cd-radio" name="wrong" value="true"><span class="single-item__text">{{ '错误' }}</span>
+      </label>
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
+</div>

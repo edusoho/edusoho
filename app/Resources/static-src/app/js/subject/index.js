@@ -15,9 +15,9 @@ export default class sbList {
     this.$diffiultyModal = $('.js-difficulty-modal');
     this.$scoreModal = $('.js-score-modal');
     this.scoreValidator = null;
-    this.totalScore = 0;
     this.selectQuestion = [];
     this.questionOperate = null;
+    this.$itemList = $('.js-item-list');
     this.init();
   }
 
@@ -28,7 +28,6 @@ export default class sbList {
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
-    this.initTotalScore();
     this.setDifficulty();
     // this.showCkEditor();
   }
@@ -49,6 +48,7 @@ export default class sbList {
     this.$element.on('click', '.js-score-setting', event => this.showScoreModal(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
+    this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
   }
 
   sbListFixed() {
@@ -109,7 +109,6 @@ export default class sbList {
     this.flag = false;
   }
 
-
   finishBtnClick(event) {
     this.$batchBtn.toggleClass('hidden');
     this.toggleClass();
@@ -156,15 +155,11 @@ export default class sbList {
 
     let $missScoreField = $('.miss-score-field');
 
-    if ($('input[name="isTestpaper"]').val() != 1) {
-      if (!$missScoreField.hasClass('hidden')) {
-        $missScoreField.addClass('hidden');
-      }
+    if (!this.isTestpaper()) {
+      $missScoreField.addClass('hidden');
     } else if (stats.hasOwnProperty('choice') || stats.hasOwnProperty('uncertain_choice')) {
-      if ($missScoreField.hasClass('hidden')) {
-        $missScoreField.removeClass('hidden');
-      }
-    } else if (!$missScoreField.hasClass('hidden')) {
+      $missScoreField.removeClass('hidden');
+    } else {
       $missScoreField.addClass('hidden');
     }
 
@@ -231,8 +226,8 @@ export default class sbList {
     }, 'Please enter a lesser value.' );
   }
 
-  initTotalScore() {
-
+  isTestpaper() {
+    return ($('input[name="isTestpaper"]').val() == 1);
   }
 
   batchSetScore() {
@@ -240,10 +235,8 @@ export default class sbList {
       let score = $('input[name="score"]').val();
       this.questionOperate.modifyScore(this.selectQuestion, score);
       this.selectQuestion = [];
-      let $totalScore = $('.js-total-score');
-      if ($totalScore.length === 1) {
-        $totalScore.html(`总分${this.totalScore}分`);
-      }
+
+      this.updateTotalScoreText();
       cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
       this.$scoreModal.modal('hide');
     }
@@ -270,6 +263,71 @@ export default class sbList {
       $item.addClass('hidden');
       $item.after(html);
     });
+  }
+
+  deleteSubjectItem(event) {
+    cd.confirm({
+      title: '确认删除',
+      content: '确定要删除这道题目吗?',
+      okText: '确定',
+      cancelText: '取消',
+    }).on('ok', () => {
+      const $item = $(event.currentTarget).parent().parent();
+      const token = $item.attr('id');
+      let question = this.questionOperate.getQuestion(token);
+
+      if ($item.hasClass('subject-sub-item')) {
+        let order = $item.find('.subject-sub-item__number').text().replace(/[^0-9]/ig, '');
+        $item.nextUntil('[class="subject-item"]').each(function() {
+          $(this).find('.subject-sub-item__number').text(`(${order})`);
+          order++;
+        });
+        this.questionOperate.deleteQuestion(token);
+        this.updateTotalScoreText();
+        $item.remove();
+        return;
+      }
+
+      let order = this.questionOperate.getQuestionOrder(token);
+      $item.nextAll('.subject-item').not('.subject-sub-item').each(function() {
+        $(this).find('.subject-item__number').text(order);
+        order++;
+      });
+
+      order = this.questionOperate.getQuestionOrder(token);
+      const $listItem = $(`[data-anchor=#${token}]`).parent();
+      $listItem.nextAll('.subject-list-item').each(function() {
+        $(this).find('.subject-list-item__num').text(order)
+            .find('.sb-checkbox').attr('data-order', order);
+        order++;
+      });
+
+      this.questionOperate.deleteQuestion(token);
+      this.updateQuestionCountText(question['type']);
+      this.updateTotalScoreText();
+
+      if (question.type == 'material') {
+        $.each(question['subQuestions'], function(token, subQuestion) {
+          $(`#${token}`).remove();
+        });
+      }
+      $listItem.remove();
+      $item.remove();
+    });
+  }
+
+  updateQuestionCountText(type) {
+    let totalCount = this.questionOperate.getQuestionCount('total');
+    let typeCount = this.questionOperate.getQuestionCount(type);
+    $('.js-total-num').text(`共${totalCount}道题`);
+    $(`[data-type=${type}]`).find('.subject-data__num').text(`共${typeCount}道题`);
+  }
+
+  updateTotalScoreText() {
+    let totalScore = this.questionOperate.getTotalScore();
+    if (this.isTestpaper()) {
+      $('.js-total-score').text(`总分${totalScore}分`);
+    }
   }
 }
 

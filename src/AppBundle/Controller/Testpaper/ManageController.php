@@ -633,12 +633,13 @@ class ManageController extends BaseController
     {
         $wordRead = new ReadDocx($fullpath);
         $text = $wordRead->convertImage();
+        $that = $this;
         $text = preg_replace_callback(
             '/src=[\'\"](.*?)[\'\"]/',
-            function ($matches) {
+            function ($matches) use ($that) {
                 $file = new FileObject($matches[1]);
-                $result = $this->getFileService()->uploadFile('course', $file);
-                $url = $this->get('web.twig.extension')->getFpath($result['uri']);
+                $result = $that->getFileService()->uploadFile('course', $file);
+                $url = $that->get('web.twig.extension')->getFpath($result['uri']);
 
                 return "src=\"{$url}\"";
             },
@@ -652,7 +653,26 @@ class ManageController extends BaseController
 
     public function editTemplateAction(Request $request, $type)
     {
-        return $this->render("testpaper/subject/type/{$type}.html.twig", array());
+        $fields = $request->request->all();
+
+        $fields = ArrayToolkit::parts($fields, array(
+            'stem',
+            'type',
+            'options',
+            'answer',
+            'answers',
+            'score',
+            'missScore',
+            'analysis',
+            'attachments',
+            'subQuestions',
+            'difficulty',
+            'errors',
+        ));
+
+        return $this->render("testpaper/subject/type/{$type}.html.twig", array(
+            'question' => $fields,
+        ));
     }
 
     protected function fillGraphData($testpaper, $userFirstResults)
