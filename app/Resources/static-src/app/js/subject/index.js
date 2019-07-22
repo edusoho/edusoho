@@ -234,6 +234,24 @@ export default class sbList {
   }
 
   initSubjectItemValidator() {
+    if ($.validator) {
+      $.validator.prototype.elements = function() {
+        let validator = this,
+            rulesCache = {};
+        return $(this.currentForm)
+            .find('input')
+            .not(':submit, :reset, :image, [disabled]')
+            .not(this.settings.ignore)
+            .filter(function () {
+              if (!this.name && validator.settings.debug && window.console) {
+                console.error("%o has no name assigned", this);
+              }
+              rulesCache[this.name] = true;
+              return true;
+            });
+      }
+    }
+
     this.subjectItemValidator = $('#subject-edit-item-form').validate({
       rules: {
         score: {
@@ -251,6 +269,9 @@ export default class sbList {
           noMoreThan: '#score',
           es_score: true
         },
+        stem: {
+          required: true,
+        },
         options: {
           required: true,
         },
@@ -261,6 +282,28 @@ export default class sbList {
       messages: {
         missScore: {
           noMoreThan: '漏选分值不得超过题目分值'
+        },
+        stem: {
+          required: '题干内容不得为空'
+        },
+        options: {
+          required: '选项内容不得为空'
+        }
+      },
+      errorPlacement: function(error, element) {
+        let elementName = element.attr('name');
+        if (elementName == 'right') {
+          $('.edit-subject-item__order').addClass('edit-subject-item__order--error');
+          cd.message({
+            type: 'danger',
+            message: Translator.trans('请选择正确答案'),
+          });
+        } else if (elementName == 'stem' && element.hasClass('hidden')) {
+          $('#cke_question-stem-field').after(error);
+        } else if (elementName == 'options' && element.hasClass('hidden')) {
+          error.appendTo(element.parent());
+        } else {
+          error.insertAfter(element);
         }
       }
     });
@@ -313,6 +356,7 @@ export default class sbList {
       $item.addClass('hidden');
       $item.after(html);
       this.initSubjectItemValidator();
+      this.editFieldId = 'question-stem-field';
       new showCkEditor({fieldId: this.editFieldId});
       // this.optionCount = question['options'].length;
       this.optionCount = 4;
@@ -384,11 +428,9 @@ export default class sbList {
     const $item = $('.subject-item.hidden');
     //todo 校验
     /**
-     * 1. 选项内容不得为空
-     * 2. 未选择正确答案
      * 3. 多选题必须选择两个以上答案
-     * 4. 分值不能为空，校验规则同批量设置
      */
+    this.subjectItemValidator.resetForm();
     if (this.subjectItemValidator.form()) {
       $editItem.remove();
       $item.removeClass('hidden');

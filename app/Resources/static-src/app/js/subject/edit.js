@@ -18,26 +18,23 @@ export default class showCkEditor {
       editor = CKEDITOR.instances[this.oldFieldId];
       let $oldTarget = $('#' + this.oldFieldId);
       $oldTarget.addClass('hidden');
-      $(`#cke_${this.oldFieldId}`).addClass('hidden');
       let data = editor.getData().replace(/<\s?img[^>]*>/gi, '【图片】').replace(/<p>|<\/p>/gi, '');
-      $oldTarget.prev().removeClass('hidden').val(data);
+      $oldTarget.prev('input').removeClass('hidden').val(data);
+      CKEDITOR.instances[this.oldFieldId].destroy();
     }
 
     if (CKEDITOR.instances[this.fieldId]) {
-      editor = CKEDITOR.instances[this.fieldId];
-      $(`#cke_${this.fieldId}`).removeClass('hidden');
-    } else {
-      editor = CKEDITOR.replace(this.fieldId, {
-        toolbar: this.titleEditorToolBarName,
-        fileSingleSizeLimit: app.fileSingleSizeLimit,
-        filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
-        height: $target.height(),
-        startupFocus: true,
-      });
+      CKEDITOR.instances[this.fieldId].destroy();
     }
+    editor = CKEDITOR.replace(this.fieldId, {
+      toolbar: this.titleEditorToolBarName,
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
+      filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
+      height: $target.height(),
+      startupFocus: true,
+    });
     editor.focus();
 
-    // let self = this;
     editor.on('change', () => {
       $target.val(editor.getData());
       console.log(editor.getData());
@@ -48,8 +45,8 @@ export default class showCkEditor {
       // $target.addClass('hidden');
       // $(`#cke_${self.fieldId}`).addClass('hidden');
       // $('.js-upload-stem-attachment').addClass('hidden');
-      // let data = editor.getData().replace(/<\s?img[^>]*>/gi, '【图片】').replace(/<p>|<\/p>/gi, '');
-      // $target.prev().removeClass('hidden').val(data);
+      let data = editor.getData().replace(/<\s?img[^>]*>/gi, '【图片】').replace(/<p>|<\/p>/gi, '');
+      $target.prev('input').val(data);
     });
   }
 
