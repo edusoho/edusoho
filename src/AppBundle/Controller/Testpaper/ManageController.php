@@ -653,9 +653,9 @@ class ManageController extends BaseController
 
     public function editTemplateAction(Request $request, $type)
     {
-        $fields = $request->request->all();
+        $question = $request->request->all();
 
-        $fields = ArrayToolkit::parts($fields, array(
+        $question = ArrayToolkit::parts($question, array(
             'stem',
             'type',
             'options',
@@ -671,7 +671,7 @@ class ManageController extends BaseController
         ));
 
         return $this->render("testpaper/subject/type/{$type}.html.twig", array(
-            'question' => $fields,
+            'question' => $question,
         ));
     }
 

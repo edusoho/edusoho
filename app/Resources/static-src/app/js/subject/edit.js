@@ -2,12 +2,7 @@ export default class showCkEditor {
   constructor() {
     this.titleEditorToolBarName = 'Minimal';
     this.titleFieldId = 'question-stem-field';
-    this.init();
   }
-  init() {
-    this.initTitleEditor();
-  }
-
 
   initTitleEditor(validator) {
     let $target = $('#' + this.titleFieldId);
@@ -18,10 +13,10 @@ export default class showCkEditor {
       height: $target.height()
     });
 
-    editor.on('change', () => {
-      $target.val(editor.getData());
-      console.log(editor.getData());
-    });
+    // editor.on('change', () => {
+    //   $target.val(editor.getData());
+    //   console.log(editor.getData());
+    // });
     editor.on('blur', () => {
       $target.val(editor.getData());
       console.log(editor.getData());
@@ -42,3 +37,5 @@ export default class showCkEditor {
   //   });
   // }
 }
+
+new showCkEditor();

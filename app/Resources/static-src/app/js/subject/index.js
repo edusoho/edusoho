@@ -22,14 +22,12 @@ export default class sbList {
   }
 
   init() {
-    new showCkEditor();
     this.questionOperate = new QuestionOperate();
     // this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
     this.setDifficulty();
-    // this.showCkEditor();
   }
 
   confirmFresh() {
@@ -181,14 +179,14 @@ export default class sbList {
     self.$element.find('.js-show-checkbox.checked').each(function(){
       let type = $(this).data('type'),
         name = $(this).data('name'),
-        order = $(this).data('order');
+        token = $(this).parents('.js-subject-anchor').data('anchor');
 
       if (typeof stats[type] == 'undefined') {
         stats[type] = {name:name, count:1};
       } else {
         stats[type]['count']++;
       }
-      self.selectQuestion.push(order);
+      self.selectQuestion.push(token.substr(1));
     });
 
     return stats;
@@ -262,6 +260,7 @@ export default class sbList {
     $.get(url, {question: question}, html=> {
       $item.addClass('hidden');
       $item.after(html);
+      new showCkEditor().initTitleEditor();
     });
   }
 

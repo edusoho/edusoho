@@ -96,10 +96,10 @@ export default class QuestionOperate {
   modifyDifficulty(selectQuestion, difficulty, text) {
     let self = this;
     $.each(selectQuestion, function(index, token){
-      // if (typeof self.questions[token] != 'undefined') {
-      //   this.updateQuestionItem(tokne, 'difficulty', difficulty);
+      if (typeof self.questions[token] != 'undefined') {
+        self.updateQuestionItem(token, 'difficulty', difficulty);
         self.$itemList.find('#' + token).find('.js-difficulty').html(text);
-      // }
+      }
     });
   }
 
