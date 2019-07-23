@@ -3199,3 +3199,7 @@ question_re_edit:
 subject_edit_template:
   path: /subject/edit/{type}
   defaults: { _controller: AppBundle:Testpaper/Manage:editTemplate }
+
+subject_show_template:
+  path: /subject/show/{type}
+  defaults: { _controller: AppBundle:Testpaper/Manage:showTemplate }

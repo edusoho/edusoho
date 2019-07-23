@@ -129,7 +129,7 @@ export default class QuestionOperate {
     }
     this.flag = true;
     const question = this.questions[deleteToken];
-    this.questions[deleteToken] = undefined;
+    delete this.questions[deleteToken];
     let position = this.tokenList.indexOf(deleteToken);
     this.tokenList.splice(position, 1);
     this.questionCounts['total']--;
