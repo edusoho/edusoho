@@ -12,7 +12,7 @@ class MessageSettingController extends BaseController
         $message = $this->getSettingService()->get('message', array());
 
         $default = array(
-            'show_comment' => '1',
+            'showable' => '1',
         );
 
         $message = array_merge($default, $message);

@@ -10,7 +10,7 @@
     <div class="row form-group">
       <div class="col-md-2 control-label"><label >{{'admin.article_setting.message_comments_manage'|trans}}</label></div>
       <div class="controls col-md-8 radios">
-        {{ radios('show_comment', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, messageSetting.show_comment|default('1')) }}
+        {{ radios('showable', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, messageSetting.showable|default('1')) }}
       </div>
     </div>
 

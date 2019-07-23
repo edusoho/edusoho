@@ -6,6 +6,7 @@
   {% include 'article/widget/tag-sidebar.html.twig' %}
 
   <!-- 热门评论 -->
+  {% if isShowComment %}
   <div class="panel panel-default hot-comments">
     <div class="panel-heading">
       <h3 class="panel-title">
@@ -35,7 +36,8 @@
     <div class="empty">{{'article.popular_comments_empty'|trans}}</div>
   {% endfor %}
 
+    </div>
   </div>
-</div>
+{% endif %}
 <!-- 推荐资讯 -->
 {{ render(controller('AppBundle:Article:recommendArticlesBlock')) }}
