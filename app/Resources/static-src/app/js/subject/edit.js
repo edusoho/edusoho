@@ -9,31 +9,31 @@ import Material from './type/material-question';
 
 let questionEditor;
 class showEditor {
-  static getEditor(type, $form) {
+  static getEditor(type, $form, questionOperate) {
     switch (type) {
       case 'single_choice':
-        questionEditor = new SingleChoice($form);
+        questionEditor = new SingleChoice($form, questionOperate);
         break;
       case 'uncertain_choice':
-        questionEditor = new UncertainChoice($form);
+        questionEditor = new UncertainChoice($form, questionOperate);
         break;
       case 'choice':
-        questionEditor = new Choice($form);
+        questionEditor = new Choice($form, questionOperate);
         break;
       case 'determine':
-        questionEditor = new Determine($form);
+        questionEditor = new Determine($form, questionOperate);
         break;
       case 'essay':
-        questionEditor = new Essay($form);
+        questionEditor = new Essay($form, questionOperate);
         break;
       case 'fill':
-        questionEditor = new Fill($form);
+        questionEditor = new Fill($form, questionOperate);
         break;
       case 'material':
-        questionEditor = new Material($form);
+        questionEditor = new Material($form, questionOperate);
         break;
       default:
-        questionEditor = new BaseQuestion($form);
+        questionEditor = new BaseQuestion($form, questionOperate);
         questionEditor.initTitleEditor();
         //questionEditor.initAnalysisEditor();
     }

@@ -1,10 +1,12 @@
 import AttachmentActions from '../../attachment/widget/attachment-actions';
+import QuestionOperate from "../operate";
 
 class BaseQuestion {
-  constructor($form) {
+  constructor($form, questionOperate) {
     this.$form = $form;
     this.titleFieldId = 'question-stem-field';
     this.validator = null;
+    this.questionOperate = questionOperate;
     this.titleEditorToolBarName = 'Minimal';
     this._init();
     this.attachmentActions = new AttachmentActions($form);
@@ -20,14 +22,12 @@ class BaseQuestion {
   }
 
   submitForm(event) {
-    const $editItem = $(event.currentTarget).parents('.subject-edit-item');
-    const $item = $('.subject-item.hidden');
+    console.log(11);
+    let self = this;
 
     if (this.validator.form()) {
       $(event.currentTarget).button('loading');
-      $editItem.remove();
-      $item.removeClass('hidden');
-      // this.$form.submit();
+      self.$form.submit();
     }
   }
 
@@ -69,12 +69,12 @@ class BaseQuestion {
 
     editor.on('change', () => {
       $target.val(editor.getData());
-      validator.form();
+      // validator.form();
       $input.val($(self.replacePicture(editor.getData())).text());
     });
     editor.on('blur', () => {
       $target.val(editor.getData());
-      validator.form();
+      // validator.form();
       $input.val($(self.replacePicture(editor.getData())).text());
     });
     editor.on('instanceReady', function() {

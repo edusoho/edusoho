@@ -4,14 +4,14 @@
       <div class="col-sm-8">
         <div class="subject-edit-item__order">{{ seq }}</div>
         <div class="cd-ml24">
-          <input type="text" name="stem" class="form-control" value="{{ question.stem|default('') }}" data-role="edit" style="display: none;">
+          <input type="text" class="form-control" value="{{ question.stem|default('') }}" data-role="edit" style="display: none;">
           <textarea class="form-control" style="height:190px;" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" name="stem">{{ question.stem|default('') }}</textarea>
           {# 需要云附件开启设置才能显示 #}
         </div>
         <div class="cd-mt24 cd-ml24">
           <button class="cd-btn cd-btn-ghost-primary" type="button">上传题干附件</button>
         </div>
-        <div class="cd-ml24">
+        <div class="cd-ml24 cd-mt24">
           {% block subject %}
           {% endblock %}
         </div>

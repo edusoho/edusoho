@@ -272,7 +272,7 @@ export default class sbList {
     $.get(url, {seq: seq, question: question}, html=> {
       $item.addClass('hidden');
       $item.after(html);
-      showEditor.getEditor(question['type'], $('.js-edit-form'));
+      showEditor.getEditor(question['type'], $('.js-edit-form'), this.questionOperate);
     });
   }
 
