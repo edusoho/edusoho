@@ -5,8 +5,8 @@ import QuestionOptions from 'app/common/component/question-options';
 import postal from 'postal';
 
 class Choice extends BaseQuestion {
-  constructor($form) {
-    super($form);
+  constructor($form, object) {
+    super($form, object);
     this.isSubmit =  false;
     this.$submit = null;
     // this.$questionOptions = $('#question-options');

@@ -1,8 +1,9 @@
 import AttachmentActions from '../../attachment/widget/attachment-actions';
 
 class BaseQuestion {
-  constructor($form) {
+  constructor($form, object) {
     this.$form = $form;
+    this.operate = object;
     this.titleFieldId = 'question-stem-field';
     this.validator = null;
     this.titleEditorToolBarName = 'Minimal';
@@ -20,13 +21,44 @@ class BaseQuestion {
   }
 
   submitForm(event) {
-    console.log(11);
     let self = this;
 
-    if (this.validator.form()) {
+    if (self.validator.form()) {
       $(event.currentTarget).button('loading');
-      self.$form.submit();
+      let question = self.getQuestion();
+      self.finishEdit(question);
     }
+  }
+
+  finishEdit(question) {
+    let self = this;
+    let token = $('.js-hidden-token').val();
+    $.each(question, function(name, value){
+      self.operate.updateQuestionItem(token, name, value);
+    });
+    question = self.operate.getQuestion(token);
+    let seq = self.operate.getQuestionOrder(token);
+    $.get(self.$form.data('url'), {seq: seq, question: question, token: token}, html=> {
+      self.$form.parent('.subject-item').replaceWith(html);
+    });
+  }
+
+  getQuestion() {
+    let question = {};
+
+    $('*[data-edit]').each(function(){
+      let name = $(this).data('edit');
+      let value = $(this).val();
+      question[name] = value;
+    });
+    question['difficulty'] = $('input[name=\'difficulty\']:checked').val();
+    question = this.filterQuestion(question);
+
+    return question;
+  }
+
+  filterQuestion(question) {
+    return question;
   }
 
   _initValidate() {
@@ -48,7 +80,8 @@ class BaseQuestion {
         }
       },
       messages: {
-        difficulty: Translator.trans('course.question.create.difficulty_required_error_hint')
+        difficulty: Translator.trans('course.question.create.difficulty_required_error_hint'),
+        stem: {required: Translator.trans('请输入题干')}
       }
     });
     this.validator = validator;
@@ -80,26 +113,13 @@ class BaseQuestion {
 
       $('[data-role="edit"]').one('click', function() {
         $input.val($(self.replacePicture(editor.getData())).text());
+        $target.val(editor.getData());
         editor.destroy();
         $target.hide();
         $input.show();
       });
     });
   }
-
-  // initAnalysisEditor() {
-  //   let $target = $('#' + this.analysisFieldId);
-  //   let editor = CKEDITOR.replace(this.analysisFieldId, {
-  //     toolbar: this.titleEditorToolBarName,
-  //     fileSingleSizeLimit: app.fileSingleSizeLimit,
-  //     filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
-  //     height: $target.height()
-  //   });
-
-  //   editor.on('change', () => {
-  //     $target.val(editor.getData());
-  //   });
-  // }
 
   replacePicture(str) {
     return str.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, '[图片]');

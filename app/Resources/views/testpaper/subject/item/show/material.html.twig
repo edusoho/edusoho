@@ -1,8 +1,14 @@
-<div class="subject-item" id="{{ key }}">
+<div class="subject-item" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
   {% if item.type == 'material' %}
     <div class="subject-item__title">
-      <span class="subject-item__number">{{ item.order }}</span>
-      {{ item.title }}
+      <span class="subject-item__number">
+      {% if seq|default(null) %}
+        {{ seq }}
+      {% else %}
+        {{ item.order }}
+      {% endif %}
+      </span>
+      {{ item.stem }}
     </div>
   {% else %}
     <div class="subject-item__body">
