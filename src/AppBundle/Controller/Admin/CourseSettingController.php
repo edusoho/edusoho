@@ -34,7 +34,7 @@ class CourseSettingController extends BaseController
             'show_cover_num_mode' => 'studentNum',
             'show_review' => '1',
             'show_question' => '1',
-            'show_thread' => '1',
+            'show_discussion' => '1',
             'show_note' => '1',
         );
 
