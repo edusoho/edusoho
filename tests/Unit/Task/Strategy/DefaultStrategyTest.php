@@ -479,7 +479,7 @@ class DefaultStrategyTest extends BaseTestCase
     public function testGetTaskSeq()
     {
         $result = ReflectionUtils::invokeMethod($this->getDefaultStrategy(), 'getTaskSeq', array('lesson', 3));
-        $this->assertEquals(5, $result);
+        $this->assertEquals(4, $result);
     }
 
     private function mockTask()

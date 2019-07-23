@@ -23,6 +23,7 @@ site.data.chapter: 章
 site.data.unit: 节
 site.data.lesson: 课时
 site.data.task: 任务
+site.data.learning_task: 学习任务
 site.data.part: 节
 site.data.title: 标题
 site.data.score: 分
@@ -1050,7 +1051,7 @@ course.marketing_setup.services.show_services: 展示承诺服务
 course.marketing_setup.services.provide_services: 承诺提供服务
 course.marketing_setup.no_permission_tips: 抱歉，您无权管理课程基础设置，如有需要请联系网站管理员！
 course.marketing_setup.reward_point_setting: %name%设置
-course.marketing_setup.study_award:　学习奖励
+course.marketing_setup.study_award: 学习奖励
 course.marketing_setup.task_award: 完成单个活动
 course.marketing_setup.course_award: 完成教学计划
 

@@ -43,7 +43,7 @@ class TaskManageController extends BaseController
         $categoryId = $request->query->get('categoryId', 0);
 
         $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'categoryId' => $categoryId));
-        if ($taskCount >= 5) {
+        if ($taskCount >= 6) {
             return $this->createNewException(TaskException::TASK_NUM_LIMIT());
         }
 

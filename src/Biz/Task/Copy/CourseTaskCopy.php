@@ -92,6 +92,7 @@ class CourseTaskCopy extends AbstractCopy
             'mode',
             'number',
             'type',
+            'isLesson',
             'mediaSource',
             'status',
             'length',

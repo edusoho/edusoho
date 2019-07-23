@@ -30,6 +30,7 @@ class BaseStrategy
             'fromCourseSetId',
             'seq',
             'mode',
+            'isLesson',
             'categoryId',
             'activityId',
             'title',

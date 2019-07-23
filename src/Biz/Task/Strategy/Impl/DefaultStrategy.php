@@ -223,7 +223,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     protected function getTaskSeq($taskMode, $chapterSeq)
     {
-        $taskModes = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
+        $taskModes = array('preparation' => 2, 'lesson' => 1, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
         if (!array_key_exists($taskMode, $taskModes)) {
             throw TaskException::ERROR_TASK_MODE();
         }
