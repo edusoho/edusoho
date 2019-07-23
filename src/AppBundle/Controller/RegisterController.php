@@ -183,6 +183,15 @@ class RegisterController extends BaseController
         ));
     }
 
+    public function privacyPolicyAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('auth', array());
+
+        return $this->render('register/privacy-policy.html.twig', array(
+            'privacyPolicy' => $setting['privacy_policy_body'],
+        ));
+    }
+
     public function emailSendAction(Request $request, $id, $hash)
     {
         $user = $this->checkHash($id, $hash);
