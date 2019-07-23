@@ -12,7 +12,7 @@ class OpenCourseSettingController extends BaseController
         $openCourseSetting = $this->getSettingService()->get('openCourse', array());
 
         $default = array(
-            'show_review' => '1',
+            'show_comment' => '1',
         );
 
         $openCourseSetting = array_merge($default, $openCourseSetting);
