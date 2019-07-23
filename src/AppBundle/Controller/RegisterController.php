@@ -44,6 +44,10 @@ class RegisterController extends BaseController
                     $registration['verifiedMobile'] = $registration['emailOrMobile'];
                 }
 
+                if (!isset($registration['agree_policy']) || $registration['agree_policy'] != 'on') {
+                    return $this->createMessageResponse('info', '请先勾选相关条款或政策');
+                }
+
                 $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
                 $registration['createdIp'] = $request->getClientIp();
                 $authSettings = $this->getSettingService()->get('auth', array());
