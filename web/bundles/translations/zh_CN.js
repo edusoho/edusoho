@@ -547,7 +547,6 @@ t.add("validate.valid_digits_input.message", "\u53ea\u80fd\u8f93\u5165\u6574\u65
 t.add("validate.valid_creditcard_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u4fe1\u7528\u5361\u53f7\u7801", "js", "zh_CN");
 t.add("validate.valid_equal_to_input.message", "\u4f60\u7684\u8f93\u5165\u4e0d\u76f8\u540c", "js", "zh_CN");
 t.add("validate.valid_extension_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u540e\u7f00", "js", "zh_CN");
-t.add("validate.valid_policy_input.message", "\u8bf7\u5148\u540c\u610f\u670d\u52a1\u6761\u6b3e", "js", "zh_CN");
 t.add("validate.max_length.message", "\u6700\u591a\u53ea\u80fd\u8f93\u5165 {0} \u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("validate.min_length.message", "\u6700\u5c11\u9700\u8981\u8f93\u5165 {0} \u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("validate.range_length.message", "\u8bf7\u8f93\u5165\u957f\u5ea6\u5728 {0} \u5230 {1} \u4e4b\u95f4\u7684\u5b57\u7b26\u4e32", "js", "zh_CN");
