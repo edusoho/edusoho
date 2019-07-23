@@ -5860,6 +5860,11 @@ admin.setting_course.course_list_page_seq.help_block: 'Address: Domain names /co
 admin.setting_course.Prevent_copying_rich_text_doc: 'Image-text and document tasks anti copy'
 admin.setting_course.Prevent_copying_test_paper: 'Test paper anti copy'
 admin.setting_course.course_operation_mode: 'Course operation mode'
+admin.setting_course.course_comments_manage: 'Course commnets manage'
+admin.setting_course.course_review: 'Course review'
+admin.setting_course.course_question: 'Course question'
+admin.setting_course.course_thread: 'Course thread'
+admin.setting_course.course_note: 'Course note'
 admin.setting_course.course_operation_mode.free_try_view: 'Free preview / free task allows users who are not login to watch'
 admin.setting_course.course_operation_mode.free_try_view.help_block: 'If this setting is allowed, users not login (visitors) can watch the free preview or free tasks'
 admin.setting_course.course_operation_mode.allow_show_user_count: 'The number of student allowed to display in the course'
@@ -5892,6 +5897,12 @@ admin.setting_course.classroom.course_discount.help_block: 'When purchasing a cl
 admin.setting_course.classroom.classroom_list_default_seq: 'Default order of class list'
 admin.setting_course.classroom.classroom_list.help_block: 'Class list'
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 'Address: Domain names /classroom/explore, anyone can view all published classes at this page. If you need to set class order, please go to the "site settings" - "Themes" - "Manage". Class order settings are only supported by ink-only theme and simplicity theme.'
+admin.setting_course.classroom.classroom_comments_manage: 'Classroom Comments Manage'
+admin.setting_course.classroom.classroom_review: 'Classroom review'
+admin.setting_course.classroom.classroom_thread: 'Classroom thread'
+admin.setting_course.classroom.classroom_note: 'Classroom note'
+admin.setting_course.open_course.open_course_comments_manage: 'Open Course Comments Manage'
+admin.setting_course.open_course.open_course_review: 'Open Course review'
 admin.setting_course.custom_chapter_name: Set chapter name
 admin.setting_course.custom_chapter_name_enabled_hint: After opening, add a chapter in the lesson management, the system will automatically generate the chapter name set as follows.
 admin.setting_wechat_auth.web_scan_login: Web Scan Login
@@ -6226,6 +6237,9 @@ admin.coin_model.tips: '1 Virtual coin balance can not be manually edited.<br>2 
 admin.coin_model.deduction_tips: '1 Virtual coin balance can not be manually edited.<br>2 <a href="%appCenterUrl%"> recharge cards </a>  or <a href="%appCenterUrl%"> Account recharge </a> plug-ins are required to recharge virtual coins.<br>3  Using mode switch will make the course prices changes according to the exchange rate<br>4 Course in promotions will not be affected<br>5 Virtual coin for deduction: When the site use CNY as payment currency, virtual coin can be used to deduct in certain portion.'
 admin.article_setting.name: 'Channel'
 admin.article_setting.pageNum: 'Articles per page'
+admin.article_setting.article_comments_manage: 'Articles comment manage'
+admin.article_setting.message_comments_manage: 'Message comment manage'
+admin.setting_course.article.article_comment: 'Article Comment'
 admin.article_setting.edit: 'Edit articles'
 admin.article_setting.title: 'Article headlines'
 admin.article_setting.category: Column

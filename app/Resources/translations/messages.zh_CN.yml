@@ -7161,6 +7161,11 @@ admin.setting_course.course_list_page_seq.help_block: 地址：域名/course/exp
 admin.setting_course.Prevent_copying_rich_text_doc: 图文、文档任务防复制
 admin.setting_course.Prevent_copying_test_paper: 试卷防复制
 admin.setting_course.course_operation_mode: 课程运营模式
+admin.setting_course.course_comments_manage: 内容管理
+admin.setting_course.course_review: 评价
+admin.setting_course.course_question: 问题（问答）
+admin.setting_course.course_thread: 话题
+admin.setting_course.course_note: 笔记
 admin.setting_course.course_operation_mode.free_try_view: 免费试看/免费任务允许未登录用户观看
 admin.setting_course.course_operation_mode.free_try_view.help_block: 如果允许此项设置，未登录用户（游客）可观看免费试看/免费任务
 admin.setting_course.course_operation_mode.allow_show_user_count: 课程中允许显示课程人数
@@ -7191,10 +7196,19 @@ admin.setting_course.classroom.setting_classroom_name.tips: 请注意：以下�
 admin.setting_course.classroom.course_discount: 课程重合时抵扣购买
 admin.setting_course.classroom.course_discount.help_block: 购买班级时，如果已经购买过其中的课程，支付金额中将会扣除该课程的当前价格。反之，支付金额不受影响，以班级原价购买。
 admin.setting_course.classroom.classroom_list_default_seq: 班级列表页默认排序
+admin.setting_course.classroom.classroom_comments_manage: 班级内容管理
+admin.setting_course.classroom.classroom_review: 评价
+admin.setting_course.classroom.classroom_thread: 话题
+admin.setting_course.classroom.classroom_note: 笔记
 admin.setting_course.classroom.classroom_list.help_block: 班级列表页
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 地址：域名/classroom/explore,任何人都可在此页面查看网站所有已发布班级,如需设置网站首页班级排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 admin.setting_course.custom_chapter_name: 设置章节名称
 admin.setting_course.custom_chapter_name_enabled_hint: 开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。
+admin.setting_course.open_course.open_course_comments_manage: 公开课内容管理
+admin.setting_course.open_course.open_course_review: 评价
+admin.article_setting.article_comments_manage: 资讯内容管理
+admin.article_setting.message_comments_manage: 私信内容管理
+admin.setting_course.article.article_comment: 评价
 
 #微信授权设置
 admin.setting_wechat_auth.web_scan_login: 网页扫码登录

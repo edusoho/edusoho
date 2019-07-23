@@ -319,6 +319,7 @@ admin.system.course.basic_tab: Course
 admin.system.course.questions_tab: Question
 admin.system.course.avatar_tab: Default Avatar
 admin.system.course.classroom_tab: Class
+admin.system.course.open_course_tab: Open Course
 
 ##运营设置模块
 admin.system.operation.article_tab: Article
@@ -326,6 +327,7 @@ admin.system.operation.group_tab: Group
 admin.system.operation.invite_tab: 'Invitation Setting'
 admin.system.operation.wap_tab: Mobile Site
 admin.system.operation.reward_point: Reward Point
+admin.system.operation.message_tab: Message
 
 ##账务设置模块
 admin.system.finance.payment_tab: Payment
