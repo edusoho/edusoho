@@ -192,7 +192,7 @@
   </fieldset>
 
   <fieldset>
-    <legend>{{'admin.user_auth.Term_service_settings'|trans}}</legend>
+    <legend>{{'admin.user_auth.Protocol_settings'|trans}}</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label for="user_terms">{{'admin.user_auth.Term_service_settings.Enable'|trans}}</label>
@@ -211,10 +211,7 @@
         <textarea class="form-control" id="user_terms_body" rows="16" name="user_terms_body" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ auth.user_terms_body }}</textarea>
       </div>
     </div>
-  </fieldset>
 
-  <fieldset>
-    <legend>{{'admin.user_auth.Privacy_policy_settings'|trans}}</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label for="privacy_policy">{{'admin.user_auth.Privacy_policy_settings.Enable'|trans}}</label>
