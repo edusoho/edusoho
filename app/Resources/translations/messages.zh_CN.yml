@@ -1855,7 +1855,7 @@ course.plan_task.activity_manage.download: 下载资料
 course.plan_task.activity_manage.download.choose_file: 选择资料
 course.plan_task.activity_manage.download.link_file: 网络链接资料
 course.plan_task.activity_manage.download.delete_btn: 删除
-course.plan_task.activity_manage.download.file_tips: 注意：资料文件在移动端上无法被下载!
+course.plan_task.activity_manage.download.file_tips: 资料文件支持在PC和APP中下载使用，暂不支持在微网校和小程序中使用!
 course.plan_task.activity_manage.download.downloaded_tips: 下载过资料
 course.plan_task.activity_manage.download.edit: 编辑
 course.plan_task.activity_manage.download.converting_tips: >
@@ -10013,6 +10013,19 @@ wechat.notification.template.lesson_add: '同学，你好，课程有新任务�
 wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值或学习卡<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
 wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
 
-
-
-
+# 移动端使用：课时任务(task)完成条件文案
+mobile.task.finish_tips.audio.end: 听完音频
+mobile.task.finish_tips.discuss.join: 在本课程下发表或者回复一个话题
+mobile.task.finish_tips.doc.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.download.download: 下载过资料
+mobile.task.finish_tips.exercise.submit: 提交过练习
+mobile.task.finish_tips.flash.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.homework.submit: 提交作业
+mobile.task.finish_tips.live.join: 进入参加过直播
+mobile.task.finish_tips.ppt.end: 需要学习到最后一页
+mobile.task.finish_tips.ppt.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.testpapaer.submit: 提交试卷
+mobile.task.finish_tips.testpapaer.score: 考试分数通过 %finishData% 分
+mobile.task.finish_tips.text.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.video.end: 学习到最后
+mobile.task.finish_tips.video.time: 至少学习 %finishData% 分钟

@@ -2,7 +2,6 @@
 
 namespace Biz\Activity\Service\Impl;
 
-use Biz\Activity\Config\Activity;
 use Biz\BaseService;
 use Biz\Activity\Dao\ActivityDao;
 use AppBundle\Common\ArrayToolkit;
@@ -31,6 +30,39 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         return $activity;
+    }
+
+    public function getActivityFinishCondition($activity)
+    {
+        if (ArrayToolkit::requireds($activity, array('mediaType', 'finishType', 'finishData'))) {
+            $this->createInvalidArgumentException('params missed');
+        }
+
+        $type = $activity['mediaType'];
+        $finishType = $activity['finishType'];
+        $finishData = $activity['finishData'];
+
+        if ('testpapaer' == $type && 'score' == $finishType) {
+            if (!isset($activity['ext'])) {
+                $activity = $this->fetchMedia($activity);
+            }
+            $finishData = $activity['ext']['finishCondition']['finishScore'];
+        }
+
+        $text = "mobile.task.finish_tips.{$type}.{$finishType}";
+
+        try {
+            $text = $this->trans($text, array('%finishData%' => $finishData));
+        } catch (\Exception $e) {
+            // 如果新增类型，而翻译文件未配置，会报错
+            $text = '';
+        }
+
+        return array(
+            'type' => $finishType,
+            'data' => $finishData,
+            'text' => $text,
+        );
     }
 
     public function getActivityByCopyIdAndCourseSetId($copyId, $courseSetId)
