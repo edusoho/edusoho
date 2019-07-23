@@ -155,7 +155,7 @@ class HtmlExtension extends \Twig_Extension
             return '';
         }
 
-        $html = preg_replace("/(<img .*?src=\")(.*?)(\".*?>)/is", "[图片]", $html);
+        $html = preg_replace('/(<img .*?src=")(.*?)(".*?>)/is', '[图片]', $html);
         $security = $this->getSettingService()->get('security');
 
         if (!empty($security['safe_iframe_domains'])) {
