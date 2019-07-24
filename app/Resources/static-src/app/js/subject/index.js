@@ -18,6 +18,7 @@ export default class sbList {
     this.selectQuestion = [];
     this.questionOperate = null;
     this.$itemList = $('.js-item-list');
+    this.testpaperTitle = '';
     this.init();
   }
 
@@ -28,6 +29,7 @@ export default class sbList {
     this.initEvent();
     this.initScoreValidator();
     this.setDifficulty();
+    this.initTestpaperTitle();
   }
 
   confirmFresh() {
@@ -47,6 +49,13 @@ export default class sbList {
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
+    this.$itemList.on('change', '.js-testpaper-title', event => this.editTestpaperTitle(event));
+  }
+
+  initTestpaperTitle() {
+    if (this.isTestpaper()) {
+      this.testpaperTitle = $('.js-testpaper-title').val();
+    }
   }
 
   sbListFixed() {
@@ -314,6 +323,37 @@ export default class sbList {
       $listItem.remove();
       $item.remove();
     });
+  }
+
+  editTestpaperTitle(event) {
+    let val = $(event.target).val();
+
+    if ($.trim(val) == '') {
+      cd.message({
+        type: 'danger',
+        message: Translator.trans('subject.testpaper_title_empty_hint'),
+      });
+      $(event.target).val(this.testpaperTitle);
+      return;
+    }
+
+    let length = val.length;
+    for (let i = 0; i < val.length; i++) {
+      if (val.charCodeAt(i) > 127) {
+        length++;
+      }
+    }
+
+    if (length > 50) {
+      cd.message({
+        type: 'danger',
+        message: Translator.trans('subject.testpaper_title_too_long_hint'),
+      });
+      $(event.target).val(this.testpaperTitle);
+      return;
+    }
+
+    this.testpaperTitle = val;
   }
 
   updateQuestionCountText(type) {
