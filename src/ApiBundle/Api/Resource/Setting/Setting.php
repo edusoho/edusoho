@@ -45,24 +45,11 @@ class Setting extends AbstractResource
 
     public function getCloud($request = null)
     {
-        $cloudStatus = $this->getSettingService()->get('cloud_status');
-
-        // 如果云服务未开启/被锁定/未授权，则所有服务不可用，在filter中体现
-        if (!$cloudStatus['enabled'] || $cloudStatus['locked'] || !$cloudStatus['accessCloud']) {
-            $cloudStatus = 0;
-        } else {
-            $cloudStatus = 1;
-        }
-
         $cloudSms = $this->getSettingService()->get('cloud_sms');
 
         $result = array(
-            'status' => $cloudStatus,
-            'sms' => $cloudSms
+            'sms_enabled' => $cloudSms['sms_enabled'],
         );
-
-        $filter = new CloudSettingFilter();
-        $filter->filter($result);
 
         return $result;
     }
