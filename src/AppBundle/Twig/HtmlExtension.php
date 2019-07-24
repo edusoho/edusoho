@@ -31,7 +31,7 @@ class HtmlExtension extends \Twig_Extension
             new \Twig_SimpleFunction('checkboxs', array($this, 'checkboxs'), $options),
             new \Twig_SimpleFunction('field_value', array($this, 'fieldValue'), $options),
             new \Twig_SimpleFunction('countdown', array($this, 'countdown'), $options),
-            new \Twig_SimpleFunction('html_filter', array($this, 'htmlFilter'), $options),
+            new \Twig_SimpleFunction('question_html_filter', array($this, 'questionHtmlFilter'), $options),
         );
     }
 
@@ -149,7 +149,7 @@ class HtmlExtension extends \Twig_Extension
         return $result.$unit;
     }
 
-    public function htmlFilter($html)
+    public function questionHtmlFilter($html)
     {
         if (!isset($html)) {
             return '';
