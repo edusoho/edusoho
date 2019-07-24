@@ -31,7 +31,7 @@ if ($('.js-wechat-qrcode-btn').length > 0) {
   var $target = $('.js-wechat-qrcode-btn');
   if (typeof($target.data('url')) != 'undefined') {
     $.get($target.data('url'), res => {
-      $target.data("img", res.img);
+      $target.data('img', res.img);
       const src = res.img;
       $('.js-wechat-qrcode-btn').popover({
         trigger: 'click',
@@ -40,7 +40,7 @@ if ($('.js-wechat-qrcode-btn').length > 0) {
         animation: false,
         container: 'body',
         content: `<img class="wechat-inform-task-qrcode" src="${src}">`
-      })
+      });
     });
   } else {
     const src = $target.data('img');
@@ -51,6 +51,17 @@ if ($('.js-wechat-qrcode-btn').length > 0) {
       animation: false,
       container: 'body',
       content: `<img class="wechat-inform-task-qrcode" src="${src}">`
-    })
+    });
   }
 }
+
+const height = $('.task-content-iframe').height();
+
+// 监听 popver 事件
+$('.js-learn-prompt').on('show.bs.popover', () => {
+  const popHeight = height - 65;
+  $('.js-video-wrapper').css('height', popHeight);
+});
+$('.js-learn-prompt').on('hidden.bs.popover',  () => {
+  $('.js-video-wrapper').css('height', height);
+});
