@@ -1,5 +1,5 @@
 import TaskShow from './task';
-import { Browser } from 'common/utils';
+import { Browser, isMobileDevice } from 'common/utils';
 import Cookies from 'js-cookie';
 let $taskContent = $('#task-content-iframe');
 $taskContent.attr('src', $taskContent.data('url'));
@@ -55,15 +55,18 @@ if ($('.js-wechat-qrcode-btn').length > 0) {
   }
 }
 
-const height = $('.js-task-content-iframe').height();
-const $prompt = $('.js-learn-prompt');
-const $wrapper = $('.js-video-wrapper');
-// 监听 popver 事件
-$prompt.on('show.bs.popover', () => {
-  const popHeight = height - 65;
-  $wrapper.css('height', popHeight);
-});
 
-$prompt.on('hidden.bs.popover',  () => {
-  $wrapper.css('height', height);
-});
+if (isMobileDevice()) {
+  const height = $('.js-task-content-iframe').height();
+  const $prompt = $('.js-learn-prompt');
+  const $wrapper = $('.js-video-wrapper');
+  // 监听 popver 事件
+  $prompt.on('show.bs.popover', () => {
+    const popHeight = height - 65;
+    $wrapper.css('height', popHeight);
+  });
+
+  $prompt.on('hidden.bs.popover',  () => {
+    $wrapper.css('height', height);
+  });
+}
