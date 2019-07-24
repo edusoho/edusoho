@@ -1,8 +1,8 @@
 import BaseQuestion from './base-question';
 
 class Choice extends BaseQuestion {
-  constructor($form, questionOperate) {
-    super($form, questionOperate);
+  constructor($form, object) {
+    super($form, object);
     this.validator = null;
     this.oldFieldId = 'question-stem-field';
     this.fieldId = '';

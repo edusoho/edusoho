@@ -23,7 +23,7 @@ export default class sbList {
 
   init() {
     this.questionOperate = new QuestionOperate();
-    this.confirmFresh();
+    //this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
@@ -263,16 +263,16 @@ export default class sbList {
       return;
     }
 
+    let self = this;
     let $target = $(event.currentTarget);
     let url = $target.parents('.subject-item__operation').data('url');
     let $item = $target.parents('.subject-item');
 
     let question = this.questionOperate.getQuestion($item.attr('id'));
     let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
-    $.get(url, {seq: seq, question: question}, html=> {
-      $item.addClass('hidden');
-      $item.after(html);
-      showEditor.getEditor(question['type'], $('.js-edit-form'), this.questionOperate);
+    $.get(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
+      $item.replaceWith(html);
+      showEditor.getEditor(question['type'], $('.js-edit-form'), self.questionOperate);
     });
   }
 

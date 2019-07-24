@@ -1,13 +1,12 @@
 import BaseQuestion from './base-question';
 
 class Datermine extends BaseQuestion {
-  constructor($form) {
-    super($form);
+  constructor($form, object) {
+    super($form, object);
 
     this.initTitleEditor(this.validator);
-    // this.initAnalysisEditor();
 
-    this.$answerField = $('[name="answer[]"]');
+    this.$answerField = $('[name="answer"]');
 
     this.init();
   }
@@ -19,7 +18,12 @@ class Datermine extends BaseQuestion {
         required: Translator.trans('course.question.create.right_answer_required_error_hint')
       }
     });
+  }
 
+  filterQuestion(question) {
+    question['answer'] = $('input[name=\'answer\']:checked').val();
+
+    return question;
   }
 }
 

@@ -655,6 +655,7 @@ class ManageController extends BaseController
     {
         $question = $request->query->get('question', array());
         $seq = $request->query->get('seq', 1);
+        $token = $request->query->get('token', '');
 
         $question = ArrayToolkit::parts($question, array(
             'stem',
@@ -674,6 +675,36 @@ class ManageController extends BaseController
         return $this->render("testpaper/subject/type/{$type}.html.twig", array(
             'question' => $question,
             'seq' => $seq,
+            'token' => $token,
+            'type' => $type,
+        ));
+    }
+
+    public function showTemplateAction(Request $request, $type)
+    {
+        $question = $request->query->get('question', array());
+        $seq = $request->query->get('seq', 1);
+        $token = $request->query->get('token', '');
+
+        $question = ArrayToolkit::parts($question, array(
+            'stem',
+            'type',
+            'options',
+            'answer',
+            'answers',
+            'score',
+            'missScore',
+            'analysis',
+            'attachments',
+            'subQuestions',
+            'difficulty',
+        ));
+
+        return $this->render("testpaper/subject/item/show/{$type}.html.twig", array(
+            'item' => $question,
+            'seq' => $seq,
+            'token' => $token,
+            'type' => $type,
         ));
     }
 

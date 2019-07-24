@@ -1,11 +1,10 @@
 import BaseQuestion from './base-question';
 
 class Essay extends BaseQuestion {
-  constructor($form) {
-    super($form);
+  constructor($form, object) {
+    super($form, object);
 
     this.initTitleEditor(this.validator);
-    //this.initAnalysisEditor();
 
     this.answerFieldId = 'question-answer-field';
     this.$answerField = $('#' + this.answerFieldId);
@@ -15,7 +14,10 @@ class Essay extends BaseQuestion {
 
   init() {
     this.$answerField.rules('add', {
-      required: true
+      required: true,
+      messages: {
+        required: Translator.trans('请填写答案')
+      }
     });
     this.$form.on('click', '[data-role="edit"]', event => this.answerClick(event));
   }
@@ -45,6 +47,7 @@ class Essay extends BaseQuestion {
 
       $('[data-role="edit"]').one('click', function() {
         $target.val($(self.replacePicture(editor.getData())).text());
+        $textarea.val(editor.getData());
         editor.destroy();
         $textarea.hide();
         $target.show();
