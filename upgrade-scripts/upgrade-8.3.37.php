@@ -4,6 +4,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
+    private $perPageCount = 2000;
+
     public function __construct($biz)
     {
         parent::__construct($biz);
@@ -101,63 +103,66 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    protected function updateTaskIsLessonAndChapterTitle()
+    protected function updateTaskIsLessonAndChapterTitle($page)
     {
         $count = $this->getCourseChapterDao()->count(array());
-        if ($count > 0) {
-            $length = 1000;
-            $page = $count / $length;
-            $page_arr = $count > $length ? range(0, $page) : array(0);
-            foreach ($page_arr as $page) {
-                $updateTasks = array();
-                $updateChapters = array();
-                $updateSeqTasks = array();
-                $lessons = $this->getCourseChapterDao()->search(array('type' => 'lesson'), array(), $page * $length, $length, array('id', 'title'));
-                $lessons = \AppBundle\Common\ArrayToolkit::index($lessons, 'id');
-                $categoryIds = \AppBundle\Common\ArrayToolkit::column($lessons, 'id');
-                if (empty($categoryIds)) {
-                    continue;
-                }
 
-                $tasks = $this->searchTasksGroupByCategoryId($categoryIds);
-                $minSeqTasks = $this->searchTasksMinSeqGroupByCategoryId($categoryIds);
-                $tasks = \AppBundle\Common\ArrayToolkit::index($tasks, 'categoryId');
-                $minSeqTasks = \AppBundle\Common\ArrayToolkit::index($minSeqTasks, 'categoryId');
+        $start = ($page - 1) * $this->perPageCount;
+        if ($count > $start) {
+            $updateTasks = array();
+            $updateChapters = array();
+            $updateSeqTasks = array();
+            $lessons = $this->getCourseChapterDao()->search(array('type' => 'lesson'), array(), $start, $this->perPageCount, array('id', 'title'));
+            $lessons = \AppBundle\Common\ArrayToolkit::index($lessons, 'id');
+            $categoryIds = \AppBundle\Common\ArrayToolkit::column($lessons, 'id');
+            if (empty($categoryIds)) {
+                $page = $page + 1;
+                return $page;
+            }
 
-                foreach ($tasks as $task) {
-                    $updateTasks[$task['id']]['isLesson'] = 1;
-                    if (!empty($lessons[$task['categoryId']]) && $lessons[$task['categoryId']]['title'] != $task['title']) {
-                        $updateChapters[$task['categoryId']]['title'] = $task['title'];
-                    }
-                    if ($minSeqTasks[$task['categoryId']]['minSeq'] != $task['seq']) {
-                        $task['minSeq'] = $minSeqTasks[$task['categoryId']]['minSeq'];
-                        $updateSeqTasks[] = $task;
-                    }
-                }
-                /*
-                 * 判断task是否为课时的默认任务（以创建时间为标准），更新course_task isLesson字段
-                 */
-                if (!empty($updateTasks)) {
-                    $this->batchUpdate('course_task', array_keys($updateTasks), $updateTasks, 'id');
-                }
+            $tasks = $this->searchTasksGroupByCategoryId($categoryIds);
+            $minSeqTasks = $this->searchTasksMinSeqGroupByCategoryId($categoryIds);
+            $tasks = \AppBundle\Common\ArrayToolkit::index($tasks, 'categoryId');
+            $minSeqTasks = \AppBundle\Common\ArrayToolkit::index($minSeqTasks, 'categoryId');
 
-                /*
-                 * 更新course_chapter课时名称和默认task一致
-                 */
-                if (!empty($updateChapters)) {
-                    $this->batchUpdate('course_chapter', array_keys($updateChapters), $updateChapters, 'id');
+            foreach ($tasks as $task) {
+                $updateTasks[$task['id']]['isLesson'] = 1;
+                if (!empty($lessons[$task['categoryId']]) && $lessons[$task['categoryId']]['title'] != $task['title']) {
+                    $updateChapters[$task['categoryId']]['title'] = $task['title'];
                 }
-
-                /*
-                * 更新course_task中课时的默认task seq错乱的特殊情况
-                */
-                if (!empty($updateSeqTasks)) {
-                    $this->updateTaskSeq($updateSeqTasks);
+                if ($minSeqTasks[$task['categoryId']]['minSeq'] != $task['seq']) {
+                    $task['minSeq'] = $minSeqTasks[$task['categoryId']]['minSeq'];
+                    $updateSeqTasks[] = $task;
                 }
             }
-        }
+            /*
+             * 判断task是否为课时的默认任务（以创建时间为标准），更新course_task isLesson字段
+             */
+            if (!empty($updateTasks)) {
+                $this->batchUpdate('course_task', array_keys($updateTasks), $updateTasks, 'id');
+            }
 
-        return 1;
+            /*
+             * 更新course_chapter课时名称和默认task一致
+             */
+            if (!empty($updateChapters)) {
+                $this->batchUpdate('course_chapter', array_keys($updateChapters), $updateChapters, 'id');
+            }
+
+            /*
+            * 更新course_task中课时的默认task seq错乱的特殊情况
+            */
+            if (!empty($updateSeqTasks)) {
+                $this->updateTaskSeq($updateSeqTasks);
+            }
+            $this->logger('info', "更新task的isLesson字段，当前为第{$page}页，从{$start}条开始");
+
+            $page = $page + 1;
+
+            return $page;
+        } else {
+            return 1;
+        }
     }
 
     protected function updateTaskSeq($updateSeqTasks)
