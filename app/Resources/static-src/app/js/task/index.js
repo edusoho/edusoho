@@ -56,17 +56,40 @@ if ($('.js-wechat-qrcode-btn').length > 0) {
 }
 
 
-if (isMobileDevice()) {
-  const height = $('.js-task-content-iframe').height();
-  const $prompt = $('.js-learn-prompt');
+const videoPopover = ($popover, offset, flag) => {
+  const $iframe = $('.js-task-content-iframe');
   const $wrapper = $('.js-video-wrapper');
-  // 监听 popver 事件
-  $prompt.on('show.bs.popover', () => {
-    const popHeight = height - 65;
-    $wrapper.css('height', popHeight);
+  const height = $iframe.height();
+  const width = $iframe.width();
+  $popover.on('show.bs.popover', () => {
+    const popHeight = height - offset;
+    if (flag) {
+      $wrapper.css('height', popHeight);
+    } else {
+      if ($popover.hasClass('js-next-task')) {
+        const value = offset + 30;
+        $wrapper.css('height', height - value);
+      } else {
+        $wrapper.css('height', height - offset);
+      }
+    }
   });
 
-  $prompt.on('hidden.bs.popover',  () => {
+  $popover.on('shown.bs.popover', () => {
+    $('.popover').css({
+      minWidth: width,
+      left: '15px'
+    }).find('.arrow').hide();
+  });
+
+  $popover.on('hidden.bs.popover',  () => {
     $wrapper.css('height', height);
   });
+}
+
+if (isMobileDevice()) {
+  const $prompt = $('.js-learn-prompt');
+  const $learnedPrompt = $('.js-learned-prompt');
+  videoPopover($prompt, 50, true);
+  videoPopover($learnedPrompt, 115);
 }

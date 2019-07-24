@@ -83,14 +83,16 @@
             data-toggle="popover"
             data-trigger="hover"
             data-placement="top"
+            {% if task.type in ['video'] %}data-container="body"{% endif %}
             data-content='{{ 'activity_manage.finish_tips'|trans }}{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}'>
             <i class="es-icon es-icon-help mrs text-md"></i>{{ 'course.task.learning.finish_condition'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
           </a>
-          <span class="btn text-sm js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
+          <span class="btn text-sm js-learned-prompt color-primary {% if task.type in ['video'] and nextTask %} js-next-task {% endif %} {% if taskResult.status == 'finish' %}open{% endif %}"
               href="javascript:;"
               data-toggle="popover"
               data-trigger="hover"
               data-placement="top"
+              {% if task.type in ['video'] %}data-container="body"{% endif %}
               data-container=".js-learned-prompt"
               data-content='{% include "task/task-finished-prompt.html.twig" %}'
               data-url="{{ path('course_task_finished_prompt', {courseId: course.id, id: task.id}) }}">
