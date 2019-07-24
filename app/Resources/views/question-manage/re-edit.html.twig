@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block testpaper %}
-  {% for key,item in questions if item.type in ['choice', 'determine', 'essay', 'fill', 'single_choice', 'uncertain_choice', ''] %}
+  {% for key,item in questions if item.type in ['choice', 'determine', 'essay', 'fill', 'single_choice', 'uncertain_choice', 'material'] %}
     {% include 'testpaper/subject/item/show/' ~ item.type ~ '.html.twig' %}
   {% endfor %}
 {% endblock %}

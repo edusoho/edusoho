@@ -1,14 +1,12 @@
+{% set subQuestions = item.subQuestions %}
 <div class="subject-item" id="{{ key }}">
-  {% if item.type == 'material' %}
-    <div class="subject-item__title">
-      <span class="subject-item__number">{{ item.order }}</span>
-      {{ item.title }}
-    </div>
-  {% else %}
-    <div class="subject-item__body">
-      <span>{{ '（' ~ item.subOrder ~ '）'  }}</span><span>{{ item.title }}</span>
-      <div class="subject-sub-item__answer"><span class="subject-sub-item__label">答案：</span><span class="">{{ item.answer }}</span></div>
-    </div>
-  {% endif %}
+  <div class="subject-item__title">
+    <span class="subject-item__number">{{ key }}</span>
+    {{ item.stem }}
+  </div>
   {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
 </div>
+
+{% for subKey,subQuestion in subQuestions %}
+  {% include 'testpaper/subject/item/show/sub-' ~ subQuestion.type ~ '.html.twig' with {'item' : subQuestion, 'position' : 'sub', 'key' : key, 'subKey' : subKey} %}
+{% endfor %}

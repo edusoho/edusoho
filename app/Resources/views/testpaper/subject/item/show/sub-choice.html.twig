@@ -1,0 +1,16 @@
+{% set options = item.options %}
+{% set answers = item.answers %}
+{% set errors = item.errors|default([]) %}
+<div class="subject-item subject-sub-item" id="{{ key~'_'~subKey }}">
+  <div class="subject-item__title subject-sub-item__title">
+    <span class="subject-sub-item__number">{{ '(' ~ subKey ~ ')'  }}</span><span>{{ item.stem }}</span>
+  </div>
+  <div class="subject-item__body">
+    {% for option_key,option in options %}
+      <label class="cd-checkbox single-item sub-single-item subject-forbid {% if option_key in answers %}checked{% endif %}">
+        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ dict_text('questionOption', option_key) }}. </span><span class="single-item__text {% for error in errors if error.element == 'options' and error.index == option_key %}single-item__text--danger{% endfor %}">{% for error in errors if error.element == 'options' and error.index == option_key %}缺少选项，请点击“编辑”进行设置。{% endfor %}{{ option }}</span>
+      </label>
+    {% endfor %}
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
+</div>
