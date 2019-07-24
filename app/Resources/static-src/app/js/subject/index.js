@@ -273,10 +273,9 @@ export default class sbList {
   }
 
   modalShow() {
-    $('#cd-modal').on('show.bs.modal', function (event) {
+    $('#cd-modal').on('show.bs.modal', (event) => {
       const $btn = $(event.relatedTarget);
       const order = $btn.closest('.js-subject-item').data('order');
-      console.log(order);
       $('#cd-modal').attr('data-index', order);
     });
   
@@ -291,9 +290,7 @@ export default class sbList {
       $.post(url).then((res) => {
         $('#cd-modal').modal('hide');
         const order = $('#cd-modal').data('index');
-        console.log(order);
-        console.log($('.js-subject-item').eq(0));
-        // $('.js-subject-item').eq(order - 1).insertAfter(res);
+        $('.js-subject-item').eq(order - 1).after(res);
       });
     });
   }
