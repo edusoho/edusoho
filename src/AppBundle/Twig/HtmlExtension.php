@@ -31,7 +31,6 @@ class HtmlExtension extends \Twig_Extension
             new \Twig_SimpleFunction('checkboxs', array($this, 'checkboxs'), $options),
             new \Twig_SimpleFunction('field_value', array($this, 'fieldValue'), $options),
             new \Twig_SimpleFunction('countdown', array($this, 'countdown'), $options),
-            new \Twig_SimpleFunction('question_html_filter', array($this, 'questionHtmlFilter'), $options),
         );
     }
 
@@ -149,47 +148,6 @@ class HtmlExtension extends \Twig_Extension
         return $result.$unit;
     }
 
-    public function questionHtmlFilter($html)
-    {
-        if (!isset($html)) {
-            return '';
-        }
-
-        $html = preg_replace('/(<img .*?src=")(.*?)(".*?>)/is', '[图片]', $html);
-        $security = $this->getSettingService()->get('security');
-
-        if (!empty($security['safe_iframe_domains'])) {
-            $safeDomains = $security['safe_iframe_domains'];
-        } else {
-            $safeDomains = array();
-        }
-
-        $config = array(
-            'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
-            'safeIframeDomains' => $safeDomains,
-        );
-
-        $this->warmUp($config['cacheDir']);
-        $htmlConfig = \HTMLPurifier_Config::createDefault();
-        $htmlConfig->set('Cache.SerializerPath', $config['cacheDir']);
-        $htmlConfig->set('HTML.Allowed', '');
-
-        $htmlpurifier = new \HTMLPurifier($htmlConfig);
-
-        return $htmlpurifier->purify($html);
-    }
-
-    protected function warmUp($cacheDir)
-    {
-        if (!@mkdir($cacheDir, 0777, true) && !is_dir($cacheDir)) {
-            throw new ServiceException('mkdir cache dir error');
-        }
-
-        if (!is_writable($cacheDir)) {
-            chmod($cacheDir, 0777);
-        }
-    }
-
     public function getName()
     {
         return 'topxia_html_twig';
@@ -198,10 +156,5 @@ class HtmlExtension extends \Twig_Extension
     private function trans($key, $parameters = array())
     {
         return $this->container->get('translator')->trans($key, $parameters);
-    }
-
-    protected function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
     }
 }
