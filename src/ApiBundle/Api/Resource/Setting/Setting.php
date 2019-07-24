@@ -34,7 +34,6 @@ class Setting extends AbstractResource
             'oauth_enabled' => (int) $loginSetting['enabled'] ?: 0,
             'weibo_enabled' => (int) $loginSetting['weibo_enabled'] ?: 0,
             'qq_enabled' => (int) $loginSetting['qq_enabled'] ?: 0,
-            'renren_enabled' => 0,
             'weixinweb_enabled' => (int) $loginSetting['weixinweb_enabled'] ?: 0,
             'weixinmob_enabled' => (int) $loginSetting['weixinmob_enabled'] ?: 0,
             'userTerms_enabled' => $authSetting['user_terms'] == 'opened' ? 1 : 0,
