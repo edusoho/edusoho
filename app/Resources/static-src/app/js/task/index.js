@@ -55,13 +55,15 @@ if ($('.js-wechat-qrcode-btn').length > 0) {
   }
 }
 
-const height = $('.task-content-iframe').height();
-
+const height = $('.js-task-content-iframe').height();
+const $prompt = $('.js-learn-prompt');
+const $wrapper = $('.js-video-wrapper');
 // 监听 popver 事件
-$('.js-learn-prompt').on('show.bs.popover', () => {
+$prompt.on('show.bs.popover', () => {
   const popHeight = height - 65;
-  $('.js-video-wrapper').css('height', popHeight);
+  $wrapper.css('height', popHeight);
 });
-$('.js-learn-prompt').on('hidden.bs.popover',  () => {
-  $('.js-video-wrapper').css('height', height);
+
+$prompt.on('hidden.bs.popover',  () => {
+  $wrapper.css('height', height);
 });
