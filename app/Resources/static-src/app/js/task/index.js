@@ -1,5 +1,5 @@
 import TaskShow from './task';
-import { Browser } from 'common/utils';
+import { Browser, isMobileDevice } from 'common/utils';
 import Cookies from 'js-cookie';
 let $taskContent = $('#task-content-iframe');
 $taskContent.attr('src', $taskContent.data('url'));
@@ -31,7 +31,7 @@ if ($('.js-wechat-qrcode-btn').length > 0) {
   var $target = $('.js-wechat-qrcode-btn');
   if (typeof($target.data('url')) != 'undefined') {
     $.get($target.data('url'), res => {
-      $target.data("img", res.img);
+      $target.data('img', res.img);
       const src = res.img;
       $('.js-wechat-qrcode-btn').popover({
         trigger: 'click',
@@ -40,7 +40,7 @@ if ($('.js-wechat-qrcode-btn').length > 0) {
         animation: false,
         container: 'body',
         content: `<img class="wechat-inform-task-qrcode" src="${src}">`
-      })
+      });
     });
   } else {
     const src = $target.data('img');
@@ -51,6 +51,22 @@ if ($('.js-wechat-qrcode-btn').length > 0) {
       animation: false,
       container: 'body',
       content: `<img class="wechat-inform-task-qrcode" src="${src}">`
-    })
+    });
   }
+}
+
+
+if (isMobileDevice()) {
+  const height = $('.js-task-content-iframe').height();
+  const $prompt = $('.js-learn-prompt');
+  const $wrapper = $('.js-video-wrapper');
+  // 监听 popver 事件
+  $prompt.on('show.bs.popover', () => {
+    const popHeight = height - 65;
+    $wrapper.css('height', popHeight);
+  });
+
+  $prompt.on('hidden.bs.popover',  () => {
+    $wrapper.css('height', height);
+  });
 }
