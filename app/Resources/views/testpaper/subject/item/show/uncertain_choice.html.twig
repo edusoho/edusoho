@@ -9,10 +9,20 @@
     {% set options = item.options %}
     {% set answers = item.answers %}
     {% for option_key,option in options %}
-      <label class="cd-checkbox single-item subject-forbid {% if key in answers %}checked{% endif %}">
-        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ dict_text('questionOption', option_key) }}. </span><span class="single-item__text {% if errors is not empty %}single-item__text--danger{% endif %}">{% if errors is not empty %}缺少选项，请点击“编辑”进行设置。{% else %}{{ option|raw }}{% endif %}</span>
+      <label class="cd-checkbox single-item subject-forbid {% if option_key in answers %}checked{% endif %}">
+        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ dict_text('questionOption', option_key) }}. </span>
+        <span class="single-item__text {% if errors['options_'~option_key] is defined %}single-item__text--danger{% endif %}">
+          {% if errors['options_'~option_key] is not defined %}
+            {{ option|raw }}
+          {% elseif errors['options_'~option_key].code == 100002 %}
+            缺少选项，请点击“编辑”进行设置。
+          {% endif %}
+        </span>
       </label>
     {% endfor %}
+    {% if errors.answers is defined and errors.answers.code == 100003 %}
+      <span class="single-item__text--danger">缺少答案，请点击"编辑"进行设置。</span>
+    {% endif %}
   </div>
   {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
 </div>

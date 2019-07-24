@@ -42,6 +42,7 @@ class Fill extends AbstractQuestion
                 $question['stem'] .= (empty($question['stem']) ? '' : '<br/>').preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
             }
         }
+        $question['stemShow'] = preg_replace('/\[\[(\S|\s).*?\]\]/', '___', $question['stem']);
 
         return $question;
     }
@@ -69,13 +70,13 @@ class Fill extends AbstractQuestion
     {
         //判断题干是否有错
         if (empty($question[QuestionElement::STEM])) {
-            $question['errors'][] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
+            $question['errors'][QuestionElement::STEM] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
         }
 
         //判断答案是否有错
         foreach ($question[QuestionElement::ANSWERS] as $key => $answer) {
             if (empty($answer)) {
-                $question['errors'][] = $this->getError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER, $key);
+                $question['errors'][QuestionElement::ANSWERS.'_'.$key] = $this->getError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER, $key);
             }
         }
     }

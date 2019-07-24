@@ -3,14 +3,30 @@
 {% set errors = item.errors|default([]) %}
 <div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{{ key }}">
   <div class="subject-item__title">
-    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.stem|raw }}
+    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">{{ loop.index }}</span>
+    {% if errors.stem is not defined %}
+      <span>{{ item.stem|raw }}</span>
+    {% elseif errors.stem.code == 100001 %}
+      <span class="single-item__text--danger">缺少题干，请点击"编辑"进行设置。</span>
+    {% endif %}
+
   </div>
   <div class="subject-item__body">
     {% for option_key,option in options %}
       <label class="cd-checkbox single-item subject-forbid {% if option_key in answers %}checked{% endif %}">
-        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ dict_text('questionOption', option_key) }}. </span><span class="single-item__text {% for error in errors if error.element == 'options' and error.index == option_key %}single-item__text--danger{% endfor %}">{% for error in errors if error.element == 'options' and error.index == option_key %}缺少选项，请点击“编辑”进行设置。{% endfor %}{{ option }}</span>
+        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ dict_text('questionOption', option_key) }}. </span>
+        <span class="single-item__text {% if errors['options_'~option_key] is defined %}single-item__text--danger{% endif %}">
+          {% if errors['options_'~option_key] is not defined %}
+            {{ option|raw }}
+          {% elseif errors['options_'~option_key].code == 100002 %}
+            缺少选项，请点击“编辑”进行设置。
+          {% endif %}
+        </span>
       </label>
     {% endfor %}
+    {% if errors.answers is defined and errors.answers.code == 100003 %}
+      <span class="single-item__text--danger">缺少答案，请点击"编辑"进行设置。</span>
+    {% endif %}
   </div>
   {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
 </div>

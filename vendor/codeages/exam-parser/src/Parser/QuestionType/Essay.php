@@ -65,12 +65,12 @@ class Essay extends AbstractQuestion
     {
         //判断题干是否有错
         if (empty($question[QuestionElement::STEM])) {
-            $question['errors'][] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
+            $question['errors'][QuestionElement::STEM] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
         }
 
         //判断答案是否有错
         if (empty($question[QuestionElement::ANSWER])) {
-            $question['errors'][] = $this->getError(QuestionElement::ANSWER, QuestionErrors::NO_ANSWER);
+            $question['errors'][QuestionElement::ANSWER] = $this->getError(QuestionElement::ANSWER, QuestionErrors::NO_ANSWER);
         }
     }
 }

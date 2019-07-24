@@ -133,7 +133,7 @@ class ManageController extends BaseController
                         'filename' => $file->getClientOriginalName(),
                         'fileuri' => $result['uri'],
                     ),
-                    'duration' => 3600,
+                    'duration' => 86400,
                     'userId' => $user['id'],
                 ));
 

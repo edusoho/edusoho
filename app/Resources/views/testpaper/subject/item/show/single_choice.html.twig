@@ -8,8 +8,17 @@
   <div class="subject-item__body">
 
     {% for option_key,option in options %}
+
       <label class="cd-radio single-item subject-forbid {% if option_key in answers  %}checked{% endif %}">
-        <input type="radio" data-toggle="cd-radio" name="right" value="{{'option' ~ loop.index }}"><span>{{ dict_text('questionOption', option_key) }}. </span><span class="single-item__text {% if errors is not empty %}single-item__text--danger{% endif %}">{% if errors is not empty %}缺少选项，请点击“编辑”进行设置。{% else %}{{ option }}{% endif %}</span>
+        <input type="radio" data-toggle="cd-radio" name="right" value="{{'option' ~ loop.index }}">
+        <span>{{ dict_text('questionOption', option_key) }}. </span>
+        <span class="single-item__text {% if  errors['options_'~option_key] is defined %}single-item__text--danger{% endif %}">
+          {% if errors['options_'~option_key] is not defined %}
+            {{ option|raw }}
+          {% elseif errors['options_'~option_key].code == 100002 %}
+            缺少选项，请点击“编辑”进行设置。
+          {% endif %}
+        </span>
       </label>
     {% endfor %}
   </div>
