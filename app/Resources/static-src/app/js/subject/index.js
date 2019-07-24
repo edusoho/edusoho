@@ -287,7 +287,7 @@ export default class sbList {
 
       if ($item.hasClass('subject-sub-item')) {
         let order = $item.find('.subject-sub-item__number').text().replace(/[^0-9]/ig, '');
-        $item.nextUntil('[class="subject-item"]').each(function () {
+        $item.nextUntil('[class="subject-item"]').each(function() {
           $(this).find('.subject-sub-item__number').text(`(${order})`);
           order++;
         });
@@ -298,14 +298,14 @@ export default class sbList {
       }
 
       let order = this.questionOperate.getQuestionOrder(token);
-      $item.nextAll('.subject-item').not('.subject-sub-item').each(function () {
+      $item.nextAll('.subject-item').not('.subject-sub-item').each(function() {
         $(this).find('.subject-item__number').text(order);
         order++;
       });
 
       order = this.questionOperate.getQuestionOrder(token);
       const $listItem = $(`[data-anchor=#${token}]`).parent();
-      $listItem.nextAll('.subject-list-item').each(function () {
+      $listItem.nextAll('.subject-list-item').each(function() {
         $(this).find('.subject-list-item__num').text(order)
             .find('.sb-checkbox').attr('data-order', order);
         order++;
@@ -316,7 +316,7 @@ export default class sbList {
       this.updateTotalScoreText();
 
       if (question.type == 'material') {
-        $.each(question['subQuestions'], function (token, subQuestion) {
+        $.each(question['subQuestions'], function(token, subQuestion) {
           $(`#${token}`).remove();
         });
       }
