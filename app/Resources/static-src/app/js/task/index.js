@@ -88,8 +88,8 @@ const videoPopover = ($popover, offset, flag) => {
 }
 
 if (isMobileDevice()) {
-  const $prompt = $('.js-learn-prompt');
-  const $learnedPrompt = $('.js-learned-prompt');
+  const $prompt = $('.js-learn-video-prompt');
+  const $learnedPrompt = $('.js-learned-video-prompt');
   videoPopover($prompt, 50, true);
   videoPopover($learnedPrompt, 115);
 }

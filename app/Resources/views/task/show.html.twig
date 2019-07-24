@@ -78,7 +78,7 @@
               {% endif  %}><strong class="es-icon es-icon-chevronright text-xlg"></strong></a>
         </div>
         <div class="state-opration js-state-opration" data-learnmode="{{course.learnMode|default('freeMode')}}">
-          <a class="btn btn-gray text-sm js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
+          <a class="btn btn-gray text-sm js-learn-prompt {% if task.type in ['video'] %}js-learn-video-prompt{% endif %} {% if taskResult.status != 'finish' %}open{% endif %}"
             href="javascript:;"
             data-toggle="popover"
             data-trigger="hover"
@@ -87,7 +87,7 @@
             data-content='{{ 'activity_manage.finish_tips'|trans }}{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}'>
             <i class="es-icon es-icon-help mrs text-md"></i>{{ 'course.task.learning.finish_condition'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
           </a>
-          <span class="btn text-sm js-learned-prompt color-primary {% if task.type in ['video'] and nextTask %} js-next-task {% endif %} {% if taskResult.status == 'finish' %}open{% endif %}"
+          <span class="btn text-sm js-learned-prompt color-primary {% if task.type in ['video'] %} js-learned-video-prompt {% endif %}{% if task.type in ['video'] and nextTask %} js-next-task{% endif %} {% if taskResult.status == 'finish' %}open{% endif %}"
               href="javascript:;"
               data-toggle="popover"
               data-trigger="hover"
