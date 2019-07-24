@@ -46,7 +46,7 @@ class QuestionExtension extends \Twig_Extension
         return $questionNums;
     }
 
-    public function questionHtmlFilter($html)
+    public function questionHtmlFilter($html, $allowed = '')
     {
         if (!isset($html)) {
             return '';
@@ -69,7 +69,7 @@ class QuestionExtension extends \Twig_Extension
         $this->warmUp($config['cacheDir']);
         $htmlConfig = \HTMLPurifier_Config::createDefault();
         $htmlConfig->set('Cache.SerializerPath', $config['cacheDir']);
-        $htmlConfig->set('HTML.Allowed', '');
+        $htmlConfig->set('HTML.Allowed', $allowed);
 
         $htmlpurifier = new \HTMLPurifier($htmlConfig);
 
