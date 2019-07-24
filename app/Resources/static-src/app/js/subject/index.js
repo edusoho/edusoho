@@ -254,22 +254,20 @@ export default class sbList {
 
   itemEdit(event) {
     const $editItem = $('.subject-edit-item');
+    let $target = $(event.currentTarget);
+    let $item = $target.parents('.subject-item');
+    let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
     if ($editItem.length !== 0) {
-      let order = $editItem.find('.subject-edit-item__order').text();
       cd.message({
         type: 'warning',
-        message: `请先完成第${order}题的编辑`,
+        message: `请先完成第${seq}题的编辑`,
       });
       return;
     }
 
     let self = this;
-    let $target = $(event.currentTarget);
     let url = $target.parents('.subject-item__operation').data('url');
-    let $item = $target.parents('.subject-item');
-
     let question = this.questionOperate.getQuestion($item.attr('id'));
-    let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
     $.get(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
       $item.replaceWith(html);
       showEditor.getEditor(question['type'], $('.js-edit-form'), self.questionOperate);

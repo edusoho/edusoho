@@ -7,6 +7,9 @@ class Choice extends BaseQuestion {
     this.oldFieldId = 'question-stem-field';
     this.fieldId = '';
     this.optionCount = 0;
+    this.errorMessage = {
+      noAnswer: Translator.trans('至少选择2个答案'),
+    };
     this.init();
   }
 
@@ -26,13 +29,11 @@ class Choice extends BaseQuestion {
     this.$form.on('focus', '.js-item-option-edit', event => this.editOption(event));
     this.$form.on('click', '.js-item-option-delete', event => this.deleteOption(event));
     this.$form.on('click', '.js-item-option-add', event => this.addOption(event));
+    this.$form.on('click', '[data-role="edit"]', event => this.editOption(event));
   }
 
   initData() {
     $('.cd-checkbox.checked').find('[name="right"]').attr('checked', true);
-    $('[name=options]').each(function() {
-      $(this).prev().val($(this).val().replace(/<\s?img[^>]*>/gi, '【图片】').replace(/<p>|<\/p>/gi, ''));
-    })
   }
 
   initValidator() {
@@ -41,7 +42,7 @@ class Choice extends BaseQuestion {
         let validator = this,
             rulesCache = {};
         return $(this.currentForm)
-            .find('input')
+            .find('input, textarea')
             .not(':submit, :reset, :image, [disabled]')
             .not(this.settings.ignore)
             .filter(function () {
@@ -56,15 +57,14 @@ class Choice extends BaseQuestion {
         return value <= $(param).val();
       }, 'Please enter a lesser value.' );
       $.validator.addMethod('multi', function(value, element, param) {
-        if ($('[name="type"]').val() != 'choice') {
-          return true;
-        }
         return $('input:checkbox[name="right"]:checked').length > 1;
       });
     }
 
+    let self = this;
     this.$form.validate().destroy();
     this.validator = this.$form.validate({
+      onkeyup: false,
       rules: {
         score: {
           required: true,
@@ -84,7 +84,7 @@ class Choice extends BaseQuestion {
         stem: {
           required: true,
         },
-        'options[]': {
+        options: {
           required: true,
         },
         right: {
@@ -99,7 +99,7 @@ class Choice extends BaseQuestion {
         stem: {
           required: '题干内容不得为空'
         },
-        'options[]': {
+        options: {
           required: '选项内容不得为空'
         }
       },
@@ -107,17 +107,14 @@ class Choice extends BaseQuestion {
         let elementName = element.attr('name');
         if (elementName == 'right') {
           $('.edit-subject-item__order').addClass('edit-subject-item__order--error');
-          let message = $('[name="type"]').val() == 'choice' ? Translator.trans('至少选择2个答案') : Translator.trans('请选择正确答案');
           cd.message({
             type: 'danger',
-            message: message,
+            message: self.errorMessage['noAnswer'],
           });
-        } else if (elementName == 'stem' && element.hasClass('hidden')) {
+        } else if (elementName == 'stem') {
           $('#cke_question-stem-field').after(error);
-        } else if (elementName == 'options[]' && element.hasClass('hidden')) {
+        } else if (elementName == 'options' && element.prev().hasClass('hidden')) {
           error.appendTo(element.parent());
-        } else if (elementName == 'options[]') {
-          error.insertAfter(element.next('[name="options"]'));
         } else {
           error.insertAfter(element);
         }
@@ -126,8 +123,9 @@ class Choice extends BaseQuestion {
   }
 
   editOption(event) {
+    let self = this;
     const $input = $(event.currentTarget);
-    const $textArea = $input.nextAll('[name="options"]').first();
+    const $textArea = $input.next();
     this.fieldId = $textArea.attr('id');
     $input.addClass('hidden');
     // if (fieldId === 'question-stem-field') {
@@ -143,8 +141,7 @@ class Choice extends BaseQuestion {
       editor = CKEDITOR.instances[this.oldFieldId];
       let $oldTarget = $('#' + this.oldFieldId);
       $oldTarget.addClass('hidden');
-      let data = editor.getData().replace(/<\s?img[^>]*>/gi, '【图片】').replace(/<p>|<\/p>/gi, '');
-      $oldTarget.prevAll('input').first().removeClass('hidden').show().val(data);
+      $oldTarget.prevAll('input').first().removeClass('hidden').show().val($(self.replacePicture(editor.getData())).text());
       CKEDITOR.instances[this.oldFieldId].destroy();
     }
     this.oldFieldId = this.fieldId;
@@ -163,13 +160,11 @@ class Choice extends BaseQuestion {
 
     editor.on('change', () => {
       $target.val(editor.getData());
-      let data = editor.getData().replace(/<\s?img[^>]*>/gi, '【图片】').replace(/<p>|<\/p>/gi, '');
-      $target.prev('input').val(data);
+      $target.prev('input').val($(self.replacePicture(editor.getData())).text());
     });
     editor.on('blur', () => {
       $target.val(editor.getData());
-      let data = editor.getData().replace(/<\s?img[^>]*>/gi, '【图片】').replace(/<p>|<\/p>/gi, '');
-      $target.prev('input').val(data);
+      $target.prev('input').val($(self.replacePicture(editor.getData())).text());
     });
   }
 
@@ -221,22 +216,17 @@ class Choice extends BaseQuestion {
   }
 
   submitForm(event) {
-    const $editItem = $(event.currentTarget).parents('.subject-edit-item');
-    const $item = $('.subject-item.hidden');
-    const token = $item.attr('id');
-
     this.validator.resetForm();
     $('.edit-subject-item__order--error').removeClass('edit-subject-item__order--error');
-    // $('.form-error-message').remove();
     if (this.validator.form()) {
       $(event.currentTarget).button('loading');
-      this.saveToCache(token, this.$form.serializeArray());
-      $editItem.remove();
-      $item.removeClass('hidden');
+      this.finishEdit(this.$form.serializeArray());
     }
   }
 
-  saveToCache(token, data) {
+  finishEdit(data) {
+    const token = $('.js-hidden-token').val();
+    let self = this;
     let question = {
       options: [],
       answers: [],
@@ -252,8 +242,14 @@ class Choice extends BaseQuestion {
         question['answers'].push(value);
       }
     });
-    this.questionOperate.updateQuestion(token, question);
-    console.log(question);
+    $.each(question, function(name, value) {
+      self.operate.updateQuestionItem(token, name, value);
+    });
+    question = self.operate.getQuestion(token);
+    let seq = self.operate.getQuestionOrder(token);
+    $.get(self.$form.data('url'), {seq: seq, question: question, token: token}, html => {
+      self.$form.parent('.subject-item').replaceWith(html);
+    });
   }
 }
 

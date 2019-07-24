@@ -1,16 +1,29 @@
 import Choice from './choice-question';
 
 class SingleChoice extends Choice {
-  constructor($form) {
-    super($form);
-    this.checkedRadio = null;
+  constructor($form, object) {
+    super($form, object);
+    this.errorMessage = {
+      noAnswer: Translator.trans('请选择正确答案'),
+    };
   }
 
   initEvent() {
-    this.$form.on('focus', '.js-item-option-edit', event => this.editOption(event));
-    this.$form.on('click', '.js-item-option-delete', event => this.deleteOption(event));
-    this.$form.on('click', '.js-item-option-add', event => this.addOption(event));
+    super.initEvent();
     this.$form.on('change', 'input:radio[name="right"]', event => this.changeRadio(event));
+  }
+
+  initData() {
+    super.initData();
+    $('.cd-radio.checked').find('[name="right"]').attr('checked', true);
+    this.checkedRadio = $('.cd-radio.checked');
+  }
+
+  initValidator() {
+    super.initValidator();
+    $.validator.addMethod('multi', function(value, element, param) {
+      return true;
+    });
   }
 
   changeRadio(event) {

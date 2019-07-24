@@ -138,6 +138,6 @@
         {% endfor %}
       {% endif %}
     </div>
-    {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
+    {% include 'testpaper/subject/common.html.twig' with { type: 'single_choice', difficulty: item.difficulty, score: item.score } %}
   </div>
 {% endfor %}

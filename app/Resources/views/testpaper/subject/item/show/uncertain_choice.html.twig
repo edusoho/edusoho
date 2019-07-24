@@ -1,16 +1,16 @@
 {% set options = item.options %}
 {% set answers = item.answers %}
 {% set errors = item.errors|default([]) %}
-<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{{ key }}">
+<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
   <div class="subject-item__title">
-    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.stem|raw }}
+    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">{{ seq }}</span> {{ item.stem|raw }}
   </div>
   <div class="subject-item__body">
-    {% set options = item.options %}
-    {% set answers = item.answers %}
-    {% for option_key,option in options %}
-      <label class="cd-checkbox single-item subject-forbid {% if key in answers %}checked{% endif %}">
-        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ option_key}}. </span><span class="single-item__text {% if errors is not empty %}single-item__text--danger{% endif %}">{% if errors is not empty %}缺少选项，请点击“编辑”进行设置。{% else %}{{ option }}{% endif %}</span>
+    {% for option_key, option in options %}
+      <label class="cd-checkbox single-item subject-forbid {% if option_key in answers %}checked{% endif %}">
+        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}">
+        <span>{{ (option_key+65)|chr }}. </span>
+        <span class="single-item__text {% if errors is not empty %}single-item__text--danger{% endif %}">{% if errors is not empty %}缺少选项，请点击“编辑”进行设置。{% else %}{{ option|raw }}{% endif %}</span>
       </label>
     {% endfor %}
   </div>

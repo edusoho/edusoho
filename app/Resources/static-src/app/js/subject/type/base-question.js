@@ -1,5 +1,4 @@
 import AttachmentActions from '../../attachment/widget/attachment-actions';
-import QuestionOperate from "../operate";
 
 class BaseQuestion {
   constructor($form, object) {
@@ -72,13 +71,13 @@ class BaseQuestion {
         stem: {
           required: true,
         },
-        // score: {
-        //   required: true,
-        //   number: true,
-        //   max: 999,
-        //   min: 0,
-        //   es_score: true
-        // }
+        score: {
+          required: true,
+          number: true,
+          max: 999,
+          min: 0,
+          es_score: true
+        }
       },
       messages: {
         difficulty: Translator.trans('course.question.create.difficulty_required_error_hint'),
