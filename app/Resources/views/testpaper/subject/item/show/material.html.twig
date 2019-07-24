@@ -5,7 +5,7 @@
     {% if seq|default(null) %}
       {{ seq }}
     {% else %}
-      {{ key }}
+      {{ loop.index }}
     {% endif %}
     </span>
     {% if errors.stem is not defined %}
