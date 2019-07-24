@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
+use AppBundle\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -105,7 +106,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function updateTaskIsLessonAndChapterTitle($page)
     {
-        $count = $this->getCourseChapterDao()->count(array());
+        $count = $this->getCourseChapterDao()->count(array('type' => 'lesson'));
 
         $start = ($page - 1) * $this->perPageCount;
         if ($count > $start) {
@@ -113,17 +114,18 @@ class EduSohoUpgrade extends AbstractUpdater
             $updateChapters = array();
             $updateSeqTasks = array();
             $lessons = $this->getCourseChapterDao()->search(array('type' => 'lesson'), array(), $start, $this->perPageCount, array('id', 'title'));
-            $lessons = \AppBundle\Common\ArrayToolkit::index($lessons, 'id');
-            $categoryIds = \AppBundle\Common\ArrayToolkit::column($lessons, 'id');
+            $lessons = ArrayToolkit::index($lessons, 'id');
+            $categoryIds = ArrayToolkit::column($lessons, 'id');
             if (empty($categoryIds)) {
                 $page = $page + 1;
+
                 return $page;
             }
 
             $tasks = $this->searchTasksGroupByCategoryId($categoryIds);
             $minSeqTasks = $this->searchTasksMinSeqGroupByCategoryId($categoryIds);
-            $tasks = \AppBundle\Common\ArrayToolkit::index($tasks, 'categoryId');
-            $minSeqTasks = \AppBundle\Common\ArrayToolkit::index($minSeqTasks, 'categoryId');
+            $tasks = ArrayToolkit::index($tasks, 'categoryId');
+            $minSeqTasks = ArrayToolkit::index($minSeqTasks, 'categoryId');
 
             foreach ($tasks as $task) {
                 $updateTasks[$task['id']]['isLesson'] = 1;
