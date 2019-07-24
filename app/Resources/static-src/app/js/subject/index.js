@@ -1,5 +1,5 @@
 import QuestionOperate from './operate';
-import showCkEditor from './edit';
+import showEditor from './edit';
 
 export default class sbList {
   constructor() {
@@ -22,14 +22,12 @@ export default class sbList {
   }
 
   init() {
-    new showCkEditor();
     this.questionOperate = new QuestionOperate();
-    // this.confirmFresh();
+    //this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
     this.setDifficulty();
-    // this.showCkEditor();
   }
 
   confirmFresh() {
@@ -181,14 +179,14 @@ export default class sbList {
     self.$element.find('.js-show-checkbox.checked').each(function(){
       let type = $(this).data('type'),
         name = $(this).data('name'),
-        order = $(this).data('order');
+        token = $(this).parents('.js-subject-anchor').data('anchor');
 
       if (typeof stats[type] == 'undefined') {
         stats[type] = {name:name, count:1};
       } else {
         stats[type]['count']++;
       }
-      self.selectQuestion.push(order);
+      self.selectQuestion.push(token.substr(1));
     });
 
     return stats;
@@ -255,12 +253,15 @@ export default class sbList {
   }
 
   itemEdit(event) {
+    let self = this;
     let $target = $(event.currentTarget);
     let url = $target.parents('.subject-item__operation').data('url');
     let $item = $target.parents('.subject-item');
-    $.post(url, {question:{}}, html=> {
-      $item.addClass('hidden');
-      $item.after(html);
+    let question = this.questionOperate.getQuestion($item.attr('id'));
+    let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
+    $.get(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
+      $item.replaceWith(html);
+      showEditor.getEditor(question['type'], $('.js-edit-form'), self.questionOperate);
     });
   }
 

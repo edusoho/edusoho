@@ -20,6 +20,7 @@ class QuestionManage
   importIntro() {
     const doneLabel = Translator.trans('document.import.skip_btn');
     const customClass = 'import-intro';
+    $('.js-import-btn').attr('data-toggle','toggle'); // 禁止按钮点击效果
     introJs().setOptions({
       steps: [{
         element: '.js-import-btn',
@@ -34,6 +35,9 @@ class QuestionManage
       exitOnOverlayClick: false,
       tooltipClass: customClass
     }).start();
+    $(".introjs-button.introjs-skipbutton").on('click', function () {
+      $('.js-import-btn').attr('data-toggle','modal'); // 解禁按钮点击行为
+    });
   }
   
 }

@@ -1,10 +1,16 @@
 {% set errors = item.errors|default([]) %}
-<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{{ key }}">
+<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
   <div class="subject-item__title">
-    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">{{ key }}</span> {{ item.stem|raw }}
+    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">
+    {% if seq|default(null) %}
+      {{ seq }}
+    {% else %}
+      {{ key }}
+    {% endif %}
+    </span> {{ item.stem|raw }}
   </div>
   <div class="subject-item__body">
-    <span>答案：</span><span class="{% if item.answer is empty %}color-danger{% endif %}">{% if item.answer is empty %}缺少正确答案，请点击“编辑”进行设置。{% else %}{{ item.answer }}{% endif %}</span>
+    <span>答案：</span><span class="{% if item.answer is empty %}color-danger{% endif %}">{% if item.answer is empty %}缺少正确答案，请点击“编辑”进行设置。{% else %}{{ item.answer|raw }}{% endif %}</span>
   </div>
-  {% include 'testpaper/subject/common.html.twig' with { type: 'answer', difficulty: item.difficulty, score: item.score } %}
+  {% include 'testpaper/subject/common.html.twig' with { type: 'essay', difficulty: item.difficulty, score: item.score } %}
 </div>
