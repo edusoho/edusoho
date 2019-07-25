@@ -1236,4 +1236,12 @@ t.add("wechat.notification.wechat_bind_hover", "<div class=\"wechat-intro-title 
 t.add("wechat.notification.homepage_open_tip", "<span class=\"%messageClass%\">\"WeChat notification\" can be opened in \"Personal Settings - Third Party Login\"\u3002<\/span>", "js", "en");
 t.add("wechat.notification.homepage.open_tip_title", "<span class=\"%messageClass%\">go to open<\/span>", "js", "en");
 t.add("wechat.notification.cloud_open_tip", "Please open ES Cloud", "js", "en");
+t.add("user.account.order_pay_course_close_title", "The course is closed", "js", "en");
+t.add("user.account.order_pay_course_close_hint", "The course in this order has been closed.Confirmed to pay?", "js", "en");
+t.add("user.account.order_pay_classroom_close_title", "The classroom is closed", "js", "en");
+t.add("user.account.order_pay_classroom_close_hint", "The classroom in this order has been closed.Confirmed to pay?", "js", "en");
+t.add("user.account.order_pay_vip_close_title", "The vip level is closed", "js", "en");
+t.add("user.account.order_pay_vip_close_hint", "The vip level in this order has been closed.Confirmed to pay?", "js", "en");
+t.add("user.account.order_pay", "Continue", "js", "en");
+t.add("user.account.order_not_pay", "Not paying", "js", "en");
 })(Translator);

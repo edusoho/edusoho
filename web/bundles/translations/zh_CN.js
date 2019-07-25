@@ -1181,4 +1181,12 @@ t.add("wechat.notification.wechat_bind_hover", "<div class=\"wechat-intro-title 
 t.add("wechat.notification.homepage.open_tip", "<span class=\"%messageClass%\">\u201c\u5fae\u4fe1\u901a\u77e5\u201d\u53ef\u5728\u201c\u4e2a\u4eba\u8bbe\u7f6e-\u7b2c\u4e09\u65b9\u767b\u5f55\u201d\u5f00\u542f\u3002<\/span>", "js", "zh_CN");
 t.add("wechat.notification.homepage.open_tip_title", "<span class=\"%messageClass%\">\u524d\u5f80\u5f00\u542f<\/span>", "js", "zh_CN");
 t.add("wechat.notification.cloud_open_tip", "\u8bf7\u5148\u5f00\u542f\u6559\u80b2\u4e91", "js", "zh_CN");
+t.add("user.account.order_pay_course_close_title", "\u8be5\u8bfe\u7a0b\u5df2\u5173\u95ed", "js", "zh_CN");
+t.add("user.account.order_pay_course_close_hint", "\u8be5\u8ba2\u5355\u7684\u8bfe\u7a0b\u5df2\u5173\u95ed\uff0c\u786e\u5b9a\u8fd8\u8981\u652f\u4ed8\uff1f", "js", "zh_CN");
+t.add("user.account.order_pay_classroom_close_title", "\u8be5\u73ed\u7ea7\u5df2\u5173\u95ed", "js", "zh_CN");
+t.add("user.account.order_pay_classroom_close_hint", "\u8be5\u8ba2\u5355\u7684\u73ed\u7ea7\u5df2\u5173\u95ed\uff0c\u786e\u5b9a\u8fd8\u8981\u652f\u4ed8\uff1f", "js", "zh_CN");
+t.add("user.account.order_pay_vip_close_title", "\u8be5\u4f1a\u5458\u7b49\u7ea7\u5df2\u5173\u95ed", "js", "zh_CN");
+t.add("user.account.order_pay_vip_close_hint", "\u8be5\u8ba2\u5355\u7684\u4f1a\u5458\u7b49\u7ea7\u5df2\u5173\u95ed\uff0c\u786e\u5b9a\u8fd8\u8981\u652f\u4ed8\uff1f", "js", "zh_CN");
+t.add("user.account.order_pay", "\u7ee7\u7eed", "js", "zh_CN");
+t.add("user.account.order_not_pay", "\u4e0d\u652f\u4ed8", "js", "zh_CN");
 })(Translator);
