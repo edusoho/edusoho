@@ -42,14 +42,14 @@ class Fill extends AbstractQuestion
                 $question['stem'] .= (empty($question['stem']) ? '' : '<br/>').preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
             }
         }
-        $question['stemShow'] = preg_replace('/\[\[(\S|\s).*?\]\]/', '___', $question['stem']);
+        $question['stemShow'] = preg_replace('/\[\[(\S|\s)*?\]\]/', '___', $question['stem']);
 
         return $question;
     }
 
     protected function matchAnswers(&$question, $line, &$preNode)
     {
-        $pattern = '/\[\[(\S|\s).*?\]\]/';
+        $pattern = '/\[\[(\S|\s)*?\]\]/';
 
         if (preg_match_all($pattern, $line, $matches)) {
             foreach ($matches[0] as &$answer) {
