@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Login;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\BatchNotification\BatchNotification;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\MathToolkit;
@@ -13,8 +14,11 @@ use Biz\Common\CommonException;
 use Biz\Sms\SmsException;
 use Biz\System\Service\LogService;
 use Biz\User\Service\AuthService;
+use Biz\User\Service\BatchNotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Event\Event;
+use Topxia\Service\Common\ServiceKernel;
 
 class Login extends AbstractResource
 {
@@ -67,6 +71,13 @@ class Login extends AbstractResource
         $this->appendUser($user);
 
         $token = $this->getLoginToken('sms_login', $user['id'], $fields['smsCode'], $fields['smsToken'], $fields['mobile']);
+
+        // 登录后获取通知
+        $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+        // 积分插件：在登录后加积分
+        $this->getDispatcher()->dispatch('user.login', new Event($user));
+
+        $this->getLogService()->info('sms', 'login', "用户{$user['nickname']}通过短信快捷登录登录成功", array('userId' => $user['id']));
 
         return array(
             'token' => $token,
@@ -140,6 +151,14 @@ class Login extends AbstractResource
     }
 
     /**
+     * @return BatchNotificationService
+     */
+    private function getBatchNotificationService()
+    {
+        return $this->service('User:BatchNotificationService');
+    }
+
+    /**
      * @return LogService
      */
     private function getLogService()
@@ -177,5 +196,12 @@ class Login extends AbstractResource
         $biz = $this->getBiz();
 
         return $biz['biz_sms'];
+    }
+
+    private function getDispatcher()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['dispatcher'];
     }
 }
