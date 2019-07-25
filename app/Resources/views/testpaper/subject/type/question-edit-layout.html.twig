@@ -6,11 +6,15 @@
         <input type="text" name="token" value="{{ token }}" class="hidden js-hidden-token">
         <div class="cd-ml24">
           <input type="text" class="form-control" value="{{ question.stem|default('') }}" data-role="edit" style="display: none;">
+<<<<<<< Updated upstream
           <textarea class="form-control" style="height:190px;" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" data-edit="stem" name="stem">{{ question.stem|default('') }}</textarea>
           {# 需要云附件开启设置才能显示 #}
+=======
+          <textarea class="form-control" style="height:190px;" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"  data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" data-edit="stem" name="stem">{{ question.stem|default('') }}</textarea>
+>>>>>>> Stashed changes
         </div>
-        <div class="cd-mt24 cd-ml24">
-          <button class="cd-btn cd-btn-ghost-primary" type="button">上传题干附件</button>
+        <div class="cd-ml24">
+          {% include 'testpaper/subject/attachment.html.twig' with { target: 'stem', btnTitle:'上传题干附件', attachment: question.attachments.stem|default([]) } %}
         </div>
         <div class="cd-ml24 cd-mt24">
           {% block subject %}
@@ -36,11 +40,10 @@
         <div class="form-group edit-form-group">
           <label class="col-sm-2 control-label ph0 edit-form-group__label">解析</label>
           <div class="col-sm-10">
-            <div class="cd-dark-major pts">{{ question.analysis|default('') }}</div>
-            <a class="color-primary cd-mt24 edit-form-group__operate" href="javascript:;"><i class="es-icon es-icon-exam text-md mrs"></i>编辑解析</a>
-            {# 附件上传需要开启云附件设置 #}
-            <div class="cd-mt24"><button class="cd-btn cd-btn-ghost-primary" type="button">上传解析附件</button></div>
-            <div class="cd-mt24"><span class="cd-dark-major cd-mr16">在线教育的现状.docx</span><a class="color-primary" href="javascript:;"><i class="es-icon es-icon-shanchu text-md mrs"></i>删除</a></div>
+            <div class="cd-dark-major pts js-analysis-content">{{ question_html_filter(question.analysis|default('')) }}</div>
+            <input type="hidden" data-edit="analysis" name="analysis" value="{{ question.analysis|default('') }}">
+            <a class="color-primary cd-mt24 edit-form-group__operate js-analysis-edit" href="javascript:;"><i class="es-icon es-icon-exam text-md mrs"></i>编辑解析</a>
+            {% include 'testpaper/subject/attachment.html.twig' with { target: 'analysis', btnTitle:'上传解析附件', attachment: question.attachments.analysis|default([]) } %}
           </div>
         </div>
       </div>
