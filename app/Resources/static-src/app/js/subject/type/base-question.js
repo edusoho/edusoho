@@ -100,12 +100,12 @@ class BaseQuestion {
 
     editor.on('change', () => {
       $target.val(editor.getData());
-      validator.form();
+      // validator.form();
       $input.val($(self.replacePicture(editor.getData())).text());
     });
     editor.on('blur', () => {
       $target.val(editor.getData());
-      validator.form();
+      // validator.form();
       $input.val($(self.replacePicture(editor.getData())).text());
     });
     editor.on('instanceReady', function() {

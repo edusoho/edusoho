@@ -1,7 +1,7 @@
 {% set singleData = [
   {
     "title": '科目汇总表的总范围是（）',
-    "type": 'single_choice',
+    "type": 'choice',
     "flag": 1,
     "order": 1,
     "options": [
@@ -138,6 +138,6 @@
         {% endfor %}
       {% endif %}
     </div>
-    {% include 'testpaper/subject/common.html.twig' with { type: 'material', difficulty: item.difficulty, score: item.score } %}
+    {% include 'testpaper/subject/common.html.twig' with { type: 'single_choice', difficulty: item.difficulty, score: item.score } %}
   </div>
 {% endfor %}
