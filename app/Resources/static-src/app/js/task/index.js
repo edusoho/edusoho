@@ -87,11 +87,10 @@ const videoPopover = ($popover, offset, flag) => {
   });
 };
 
-const $prompt = $('.js-learn-video-prompt');
-const $learnedPrompt = $('.js-learned-video-prompt');
-
 const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 if (isMobileDevice() && !isIOS) {
+  const $prompt = $('.js-learn-video-prompt');
+  const $learnedPrompt = $('.js-learned-video-prompt');
   videoPopover($prompt, 50, true);
   videoPopover($learnedPrompt, 115);
 }
