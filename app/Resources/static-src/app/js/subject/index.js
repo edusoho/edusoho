@@ -5,6 +5,7 @@ export default class sbList {
   constructor() {
     this.$element = $('.js-subject-list');
     this.$itemList = $('.js-item-list');
+    this.$subjectData = $('.js-subject-data');
     this.$batchBtn = $('.js-batch-btn');
     this.$batchWrap = $('.js-subject-wrap');
     this.$sbCheckbox = $('.js-show-checkbox');
@@ -17,7 +18,6 @@ export default class sbList {
     this.scoreValidator = null;
     this.selectQuestion = [];
     this.questionOperate = null;
-    this.$itemList = $('.js-item-list');
     this.init();
   }
 
@@ -48,6 +48,8 @@ export default class sbList {
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
     this.$itemList.on('click', '.subject-change-btn', event => this.itemConvert(event));
+    this.$subjectData.bind('change', '*[data-type]', (event, type) => this.updateQuestionCountText(type));
+    this.$subjectData.bind('change', '.js-total-score', event => this.updateTotalScoreText());
   }
 
   sbListFixed() {
@@ -235,7 +237,6 @@ export default class sbList {
       this.questionOperate.modifyScore(this.selectQuestion, score);
       this.selectQuestion = [];
 
-      this.updateTotalScoreText();
       cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
       this.$scoreModal.modal('hide');
     }
@@ -298,9 +299,6 @@ export default class sbList {
       $item.replaceWith(html);
       showEditor.getEditor(toType, $('.js-edit-form'), self.questionOperate);
     });
-    console.log(data);
-
-
   }
 
   deleteSubjectItem(event) {
@@ -321,7 +319,6 @@ export default class sbList {
           order++;
         });
         this.questionOperate.deleteQuestion(token);
-        this.updateTotalScoreText();
         $item.remove();
         return;
       }
@@ -341,8 +338,6 @@ export default class sbList {
       });
 
       this.questionOperate.deleteQuestion(token);
-      this.updateQuestionCountText(question['type']);
-      this.updateTotalScoreText();
 
       if (question.type == 'material') {
         $.each(question['subQuestions'], function(token, subQuestion) {
@@ -362,7 +357,7 @@ export default class sbList {
   }
 
   updateTotalScoreText() {
-    let totalScore = this.questionOperate.getTotalScore();
+    let totalScore = parseInt(this.questionOperate.getTotalScore());
     if (this.isTestpaper()) {
       $('.js-total-score').text(`总分${totalScore}分`);
     }
