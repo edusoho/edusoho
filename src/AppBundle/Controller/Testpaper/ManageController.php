@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Testpaper;
 
 use ExamParser\Parser\Parser;
 use ExamParser\Reader\ReadDocx;
+use http\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\File as FileObject;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\Paginator;
@@ -678,6 +679,50 @@ class ManageController extends BaseController
             'token' => $token,
             'type' => $type,
         ));
+    }
+
+    public function convertTemplateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $toType = $data['toType'];
+        if (empty($data['question'])) {
+            throw new InvalidArgumentException('缺少必要参数');
+        }
+        if (in_array($toType, array('choice', 'single_choice', 'uncertain_choice'))) {
+            $question = $this->convertToChoice($toType, $data['question']);
+        }
+
+        return $this->render("testpaper/subject/type/{$toType}.html.twig", array(
+            'question' => $question,
+            'seq' => $data['seq'],
+            'token' => $data['token'],
+            'type' => $toType,
+        ));
+    }
+
+    protected function convertToChoice($toType, $question)
+    {
+        $question['type'] = $toType;
+        $question['answers'] = is_array($question['right']) ? $question['right'] : array($question['right']);
+        if ('single_choice' == $toType) {
+            $question['answers'] = array(reset($question['answers']));
+        }
+        $question = ArrayToolkit::parts($question, array(
+            'stem',
+            'type',
+            'options',
+            'answer',
+            'answers',
+            'score',
+            'missScore',
+            'analysis',
+            'attachments',
+            'subQuestions',
+            'difficulty',
+            'errors',
+        ));
+
+        return $question;
     }
 
     public function showTemplateAction(Request $request, $type)

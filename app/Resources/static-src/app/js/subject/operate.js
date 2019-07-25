@@ -46,7 +46,7 @@ export default class QuestionOperate {
       let token = this._getToken();
       this.questions[token] = cachedData[i];
       this.tokenList.push(token);
-      let index = ++i;
+      let index = i;
       $(`[data-anchor="#${index}"]`).data('anchor', '#' + token);
       $('#' + index).attr('id', token);
     }
