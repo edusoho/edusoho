@@ -122,7 +122,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 return $page;
             }
 
-            $tasks = $this->searchTasksGroupByCategoryId($categoryIds);
+            $tasks = $this->searchTasks($categoryIds);
             $minSeqTasks = $this->searchTasksMinSeqGroupByCategoryId($categoryIds);
             $tasks = ArrayToolkit::index($tasks, 'categoryId');
             $minSeqTasks = ArrayToolkit::index($minSeqTasks, 'categoryId');
@@ -188,11 +188,29 @@ class EduSohoUpgrade extends AbstractUpdater
      * @return array
      *               查询课时最新创建的task
      */
+    protected function searchTasks($categoryIds)
+    {
+        $tasks = $this->searchTasksGroupByCategoryId($categoryIds);
+        if (empty($tasks)) {
+            return array();
+        }
+        $taskIds = ArrayToolkit::column($tasks, 'id');
+
+        $marks = str_repeat('?,', count($taskIds) - 1).'?';
+
+        $sql = "select id, title, categoryId, seq from course_task where id IN ({$marks});";
+
+        return $this->getConnection()->fetchAll($sql, $taskIds) ?: array();
+    }
+
     protected function searchTasksGroupByCategoryId($categoryIds)
     {
+        if (empty($categoryIds)) {
+            return array();
+        }
         $marks = str_repeat('?,', count($categoryIds) - 1).'?';
 
-        $sql = "select id, title, categoryId, seq from course_task where id IN (select min(id) as id from course_task where `categoryId` IN ({$marks}) GROUP BY `categoryId`);";
+        $sql = "select min(id) as id from course_task where `categoryId` IN ({$marks}) GROUP BY `categoryId`";
 
         return $this->getConnection()->fetchAll($sql, $categoryIds) ?: array();
     }
