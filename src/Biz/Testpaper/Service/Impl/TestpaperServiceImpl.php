@@ -1050,6 +1050,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $newTypes;
     }
 
+    public function buildExportTestpaperItems($testpaperId)
+    {
+        return array();
+    }
+
     private function getUserMaxScore($userResults)
     {
         if (1 === count($userResults)) {

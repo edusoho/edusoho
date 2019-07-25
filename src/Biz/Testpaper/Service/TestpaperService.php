@@ -154,4 +154,6 @@ interface TestpaperService
     public function findResultsByTestIdAndActivityId($testId, $activityId);
 
     public function getNextReviewingResult($courseIds, $activityId, $type);
+
+    public function buildExportTestpaperItems($testpaperId);
 }
