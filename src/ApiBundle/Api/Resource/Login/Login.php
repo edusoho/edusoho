@@ -117,6 +117,8 @@ class Login extends AbstractResource
                 $user['vip'] = null;
             }
         }
+        $user['following'] = (string) $this->getUserService()->findUserFollowingCount($user['id']);
+        $user['follower'] = (string) $this->getUserService()->findUserFollowerCount($user['id']);
 
         return $user;
     }
