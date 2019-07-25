@@ -122,6 +122,10 @@ class SmsServiceImpl extends BaseService implements SmsService
             $description = '领取优惠券';
         }
 
+        if ('sms_login' == $smsType) {
+            $description = '手机快捷登录';
+        }
+
         $smsCode = $this->generateSmsCode();
 
         try {

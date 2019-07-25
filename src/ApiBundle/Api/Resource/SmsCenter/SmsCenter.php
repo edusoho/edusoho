@@ -14,6 +14,7 @@ class SmsCenter extends AbstractResource
     private $smsType = array(
         'register' => BizSms::SMS_BIND_TYPE,
         'receive_coupon' => BizSms::SMS_RECEIVE_COUPON,
+        'login' => BizSms::SMS_LOGIN,
     );
 
     /**
