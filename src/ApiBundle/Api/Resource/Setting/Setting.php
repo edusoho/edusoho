@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Biz\System\SettingException;
 
 class Setting extends AbstractResource
 {
@@ -28,6 +29,10 @@ class Setting extends AbstractResource
     {
         $authSetting = $this->getSettingService()->get('auth');
         $loginSetting = $this->getSettingService()->get('login_bind');
+
+        if (empty($loginSetting)) {
+            SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
+        }
 
         $result = array(
             'register_mode' => $authSetting['register_mode'],
