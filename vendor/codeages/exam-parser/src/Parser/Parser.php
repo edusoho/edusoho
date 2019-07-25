@@ -61,7 +61,7 @@ class Parser
 
     protected function filterMaterialSignal($content)
     {
-        $pattern = '/'.PHP_EOL."【材料题开始】[\s\S]*【材料题结束】".PHP_EOL.'/';
+        $pattern = '/'.PHP_EOL."【材料题开始】[\s\S]*?【材料题结束】".PHP_EOL.'/';
         $content = preg_replace_callback(
             $pattern,
             function ($matches) {
@@ -121,7 +121,7 @@ class Parser
         if (0 === strpos(trim($lines[0]), self::CODE_MATERIAL_START_SIGNAL)) {
             $type = 'material';
         } elseif (0 == $count) {
-            if (preg_match('/\[\[(\S|\s).*?\]\]/', $lines[0])) {
+            if (preg_match('/\[\[(\S|\s)*?\]\]/', $lines[0])) {
                 $type = 'fill';
             } elseif (preg_match('/(\<\#正确\#\>|\<\#错误\#\>)/', trim(implode('', $lines)))) {
                 $type = 'determine';
