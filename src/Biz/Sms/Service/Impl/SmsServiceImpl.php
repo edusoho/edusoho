@@ -35,7 +35,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
         $to = implode(',', $mobiles);
         try {
-            $api = $this->createCloudeApi();
+            $api = $this->createCloudApi();
             $result = $api->post('/sms/send', array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters));
         } catch (\RuntimeException $e) {
             $this->createNewException(SmsException::FAILED_SEND());
@@ -118,10 +118,14 @@ class SmsServiceImpl extends BaseService implements SmsService
             $description = '直播公开课';
         }
 
+        if ('sms_receive_coupon' == $smsType) {
+            $description = '领取优惠券';
+        }
+
         $smsCode = $this->generateSmsCode();
 
         try {
-            $api = $this->createCloudeApi();
+            $api = $this->createCloudApi();
             $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'verify' => $smsCode));
             if (isset($result['error'])) {
                 return array('error' => sprintf('发送失败, %s', $result['error']));
@@ -210,7 +214,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         return false;
     }
 
-    protected function createCloudeApi()
+    protected function createCloudApi()
     {
         if (!$this->apiFactory) {
             $this->apiFactory = CloudAPIFactory::create('leaf');
