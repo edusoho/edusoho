@@ -1,0 +1,20 @@
+<div id="analysis-edit-modal" class="modal in js-analysis-modal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body task-state-modal">
+        <div class="title font-blod text-left">
+          {{'解析编辑'|trans}}
+          <button data-dismiss="modal" class="close"><i class="cd-icon cd-icon-close"></i></button>
+        </div>
+        <div>
+          <textarea class="form-control js-analysis-field" style="height:190px;" id="question-analysis-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"  data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"></textarea>
+        </div>
+        <div class="text-right mt20">
+          <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</a>
+          <button class="btn cd-btn-primary js-analysis-btn cd-btn cd-btn-lg" id="analysis-set-btn" data-loading-text="{{'form.btn.hand_in.submiting'|trans}}..">
+          {{'form.btn.confirm'|trans}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
