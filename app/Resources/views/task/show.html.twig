@@ -83,7 +83,7 @@
             data-toggle="popover"
             data-trigger="hover"
             data-placement="top"
-            {% if task.type in ['video'] %}data-container="body"{% endif %}
+            {% if task.type in ['video'] and is_mobile_client() %}data-container="body"{% endif %}
             data-content='{{ 'activity_manage.finish_tips'|trans }}{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}'>
             <i class="es-icon es-icon-help mrs text-md"></i>{{ 'course.task.learning.finish_condition'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
           </a>
@@ -92,8 +92,7 @@
               data-toggle="popover"
               data-trigger="hover"
               data-placement="top"
-              {% if task.type in ['video'] %}data-container="body"{% endif %}
-              data-container=".js-learned-prompt"
+              {% if task.type in ['video'] and is_mobile_client() %}data-container="body"{% else %}data-container=".js-learned-prompt"{% endif %}
               data-content='{% include "task/task-finished-prompt.html.twig" %}'
               data-url="{{ path('course_task_finished_prompt', {courseId: course.id, id: task.id}) }}">
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>{{ 'course.task.learning.finish_btn'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
