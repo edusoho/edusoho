@@ -5,10 +5,12 @@ class BaseQuestion {
     this.$form = $form;
     this.operate = object;
     this.titleFieldId = 'question-stem-field';
+    this.$analysisModal = $('.js-analysis-modal');
     this.validator = null;
     this.titleEditorToolBarName = 'Minimal';
     this._init();
     this.attachmentActions = new AttachmentActions($form);
+    this.editor = null;
   }
 
   _init() {
@@ -18,6 +20,8 @@ class BaseQuestion {
 
   _initEvent() {
     this.$form.on('click', '.subject-button', event => this.submitForm(event));
+    this.$form.on('click', '.js-analysis-edit', event => this.showAnalysisModal(event));
+    this.$analysisModal.on('click', '.js-analysis-btn', event => this.saveAnalysis(event));
   }
 
   submitForm(event) {
@@ -28,6 +32,45 @@ class BaseQuestion {
       let question = self.getQuestion();
       self.finishEdit(question);
     }
+  }
+
+  showAnalysisModal(event) {
+    let self = this;
+    let $target = $(event.currentTarget);
+    let analysis = $target.prev('[data-edit="analysis"]').val();
+    let $textarea = $('.js-analysis-field');
+    $textarea.val(analysis);
+    self.editor = CKEDITOR.replace($textarea.attr('id'), {
+      toolbar: self.titleEditorToolBarName,
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
+      filebrowserImageUploadUrl: $textarea.data('imageUploadUrl'),
+      height: $textarea.height()
+    });
+
+    self.editor.on('change', () => {
+      $textarea.val(self.editor.getData());
+    });
+    self.editor.on('blur', () => {
+      $textarea.val(self.editor.getData());
+    });
+
+    self.editor.on('instanceReady', function() {
+      this.focus();
+
+      self.$analysisModal.on('hide.bs.modal', function() {
+        self.editor.destroy();
+        $textarea.show();
+      });
+    });
+
+    self.$analysisModal.modal('show');
+  }
+
+  saveAnalysis(event) {
+    let data = this.editor.getData();
+    $('[data-edit="analysis"]').val(data);
+    $('.js-analysis-content').html($(this.replacePicture(data)).text());
+    this.$analysisModal.modal('hide');
   }
 
   finishEdit(question) {
@@ -52,6 +95,7 @@ class BaseQuestion {
       question[name] = value;
     });
     question['difficulty'] = $('input[name=\'difficulty\']:checked').val();
+    question['attachments'] = this.getAttachemnts();
     question = this.filterQuestion(question);
 
     return question;
@@ -59,6 +103,25 @@ class BaseQuestion {
 
   filterQuestion(question) {
     return question;
+  }
+
+  getAttachemnts() {
+    let attachments = {};
+    if ($('.js-attachment-list-stem').find('.js-attachment-name').length > 0) {
+      attachments['stem'] = {
+        "fileId" : $('.js-attachment-ids-stem').val(),
+        "fileName" : $('.js-attachment-list-stem').find('.js-attachment-name').text()
+      };
+    }
+
+    if ($('.js-attachment-list-analysis').find('.js-attachment-name').length > 0) {
+      attachments['analysis'] = {
+        "fileId" : $('.js-attachment-ids-analysis').val(),
+        "fileName" : $('.js-attachment-list-analysis').find('.js-attachment-name').text()
+      };
+    }
+    
+    return attachments;
   }
 
   _initValidate() {
