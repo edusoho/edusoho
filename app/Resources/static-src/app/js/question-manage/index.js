@@ -4,7 +4,7 @@ import DeleteAction from '../../common/widget/delete-action';
 import { shortLongText } from '../../common/widget/short-long-text';
 import SelectLinkage from 'app/js/question-manage/widget/select-linkage.js';
 import 'store';
-const QUESTION_IMPORT_INTRO = 'QUESTION_IMPORT_INTRO'
+const QUESTION_IMPORT_INTRO = 'QUESTION_IMPORT_INTRO';
 class QuestionManage
 {
   constructor($container) {
@@ -14,7 +14,7 @@ class QuestionManage
       store.set(QUESTION_IMPORT_INTRO, true);
       this.importIntro();
     }
-    
+
   }
 
   importIntro() {

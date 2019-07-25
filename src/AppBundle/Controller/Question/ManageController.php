@@ -107,7 +107,7 @@ class ManageController extends BaseController
                         'filename' => $file->getClientOriginalName(),
                         'fileuri' => $result['uri'],
                     ),
-                    'duration' => 3600,
+                    'duration' => 86400,
                     'userId' => $user['id'],
                 ));
 
@@ -421,6 +421,7 @@ class ManageController extends BaseController
         $data = $token['data'];
         $file = $this->getFileService()->parseFileUri($data['fileuri']);
         $questions = $this->parseQuestions($file['fullpath']);
+//        var_dump(json_encode($questions));exit();
 
         return $this->render('question-manage/re-edit.html.twig', array(
             'filename' => $data['filename'],

@@ -47,6 +47,7 @@ export default class sbList {
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
+    this.$itemList.on('click', '.subject-change-btn', event => this.itemConvert(event));
   }
 
   sbListFixed() {
@@ -274,6 +275,34 @@ export default class sbList {
     });
   }
 
+  itemConvert(event) {
+    let $target = $(event.currentTarget);
+    let $item = $target.parents('.subject-item');
+    let toType = $target.data('type');
+    let fromType = $target.parents('.subject-change-list').data('fromType');
+    let $form = $target.parents('.js-edit-form');
+    let url = $target.parents('.subject-change-list').data('convertUrl');
+    let question = sbList._serializeArrayConvertToJson($form.serializeArray());
+    let seq = this.questionOperate.getQuestionOrder(question.token);
+    let data = {
+      "seq" : seq,
+      "token" : question.token,
+      "question" : question,
+      "fromType" : fromType,
+      "toType" : toType,
+    };
+    data.fromType = fromType;
+    data.toType = toType;
+    let self  = this;
+    $.post(url, data, html => {
+      $item.replaceWith(html);
+      showEditor.getEditor(toType, $('.js-edit-form'), self.questionOperate);
+    });
+    console.log(data);
+
+
+  }
+
   deleteSubjectItem(event) {
     cd.confirm({
       title: '确认删除',
@@ -337,6 +366,21 @@ export default class sbList {
     if (this.isTestpaper()) {
       $('.js-total-score').text(`总分${totalScore}分`);
     }
+  }
+
+  static _serializeArrayConvertToJson(data){
+    let serializeObj={};
+    for (let item of data) {
+      if (serializeObj[item.name]) {
+        if (!serializeObj[item.name].push) {
+          serializeObj[item.name] = [serializeObj[item.name]];
+        }
+        serializeObj[item.name].push(item.value)
+      } else {
+        serializeObj[item.name] = item.value;
+      }
+    }
+    return serializeObj;
   }
 }
 

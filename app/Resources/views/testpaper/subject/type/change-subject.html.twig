@@ -1,22 +1,23 @@
-
-<div class="row cd-mb16">
-  <div class="col-sm-2 text-left pr0 control-label cd-dark-major cd-ml24">可选择转换题型为：</div>
-  <div class="col-sm-9 subject-change-list">
-  {% if type == 'essay' %}
-    <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button">单选题</button>
-    <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button">不定项选择题</button>
-    <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button">多选择题</button>
-    <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button">填空题</button>
-    <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button">判断题</button>
-  {% elseif type == 'choice' %}
-    <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button">单选题</button>
-    <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button">不定项选择题</button>
-  {% elseif type == 'single_choice' %}
-    <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button">多选择题</button>
-    <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button">不定项选择题</button>
-  {% elseif type == 'uncertain_choice' %}
-    <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button">单选题</button>
-    <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button">多选择题</button>
-  {% endif %}
+{% if type in ['essay', 'choice', 'single_choice', 'uncertain_choice'] %}
+  <div class="row cd-mb16">
+    <div class="col-sm-2 text-left pr0 control-label cd-dark-major cd-ml24">可选择转换题型为：</div>
+    <div class="col-sm-9 subject-change-list" data-convert-url="{{ path('subject_convert_template') }}" data-from-type="{{ type }}">
+    {% if type == 'essay' %}
+      <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="single_choice">单选题</button>
+      <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="uncertain_choice">不定项选择题</button>
+      <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="choice">多选择题</button>
+      <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="fill">填空题</button>
+      <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="determine">判断题</button>
+    {% elseif type == 'choice' %}
+      <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="single_choice">单选题</button>
+      <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="uncertain_choice">不定项选择题</button>
+    {% elseif type == 'single_choice' %}
+      <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="choice">多选择题</button>
+      <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="uncertain_choice">不定项选择题</button>
+    {% elseif type == 'uncertain_choice' %}
+      <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="single_choice">单选题</button>
+      <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="choice">多选择题</button>
+    {% endif %}
+    </div>
   </div>
-</div>
+{% endif %}
