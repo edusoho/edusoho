@@ -49,6 +49,23 @@ class DeviceToolkit
         return false;
     }
 
+    public static function isIOSClient()
+    {
+        //判断手机发送的客户端标志,兼容性有待提高
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $clientkeywords = array(
+                'iphone', 'ipod',
+            );
+
+            // 从HTTP_USER_AGENT中查找手机浏览器的关键字
+            if (preg_match('/('.implode('|', $clientkeywords).')/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static function getMobileDeviceType($userAgent)
     {
         $userAgent = strtolower($userAgent);
