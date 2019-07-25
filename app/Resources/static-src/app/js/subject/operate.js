@@ -41,7 +41,7 @@ export default class QuestionOperate {
   }
 
   init() {
-    let cachedData = this._toJson($('.js-cached-data').html());
+    let cachedData = this._toJson($('.js-cached-data').text());
     for (var i = 0; i < cachedData.length; i++) {
       let token = this._getToken();
       this.questions[token] = cachedData[i];

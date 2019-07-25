@@ -3,7 +3,7 @@
 {% set errors = item.errors|default([]) %}
 <div class="subject-item subject-sub-item" id="{{ key~'_'~subKey }}">
   <div class="subject-item__title subject-sub-item__title">
-    <span class="subject-sub-item__number">{{ '(' ~ subKey ~ ')'  }}</span><span>{{ item.stem }}</span>
+    <span class="subject-sub-item__number">{{ '(' ~ loop.index ~ ')'  }}</span><span>{{ item.stem }}</span>
   </div>
   <div class="subject-item__body">
     {% for option_key,option in options %}

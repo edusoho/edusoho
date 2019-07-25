@@ -2,8 +2,7 @@
 {% set errors = item.errors|default([]) %}
 <div class="subject-item subject-sub-item" id="{{ key~'_'~subKey }}">
   <div class="subject-item__title subject-sub-item__title">
-    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.stem|raw }}
-    <span class="subject-sub-item__number">{{ '(' ~ subKey ~ ')'  }}</span>
+    <span class="subject-sub-item__number">{{ '(' ~ loop.index ~ ')'  }}</span>
     {% if errors.stem is not defined %}<span>{{ item.stem }}</span>{% else %}缺少题干，请点击"编辑"进行设置{% endif %}
   </div>
   <div class="subject-item__body">

@@ -1,7 +1,7 @@
 {% set options = item.options %}
 {% set errors = item.errors|default([]) %}
 {% set answers = item.answers %}
-<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{{ key }}">
+<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{{ loop.index }}">
   <div class="subject-item__title">
     <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">
       {% if seq|default(null) %}
