@@ -2,7 +2,7 @@
   <div class="payPage">
     <e-loading v-if="isLoading"></e-loading>
     <div class="payPage__order">
-      <div class="order__head">
+      <div class="order__head order--line">
         支付方式
       </div>
       <div class="order__infomation">
@@ -75,22 +75,6 @@ export default {
       this.payWay = 'WechatPay_H5';
     }
     const { source, id, sn, targetId } = this.$route.query;
-    if (source !== 'order') {
-      Api.createOrder({
-        data: {
-          targetType: this.targetType,
-          targetId: id,
-          isOrderCreate: 1,
-          couponCode: this.$route.params.couponCode,
-          unit: this.$route.params.unit,
-          num: this.$route.params.num,
-        }
-      }).then(res => {
-        this.detail = Object.assign({}, res)
-      }).catch(err => {
-        Toast.fail(err.message)
-      })
-    } else {
       // 从我的订单入口进入
       Api.getOrderDetail({
         query: {
@@ -117,7 +101,6 @@ export default {
       }).catch(err => {
         Toast.fail(err.message)
       })
-    }
   },
   beforeRouteLeave (to, from, next) {
     clearTimeout(this.timeoutId);

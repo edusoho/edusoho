@@ -2,12 +2,15 @@
   .payPage__order {
     margin: 0 vw(20);
     .order__head {
-      border-bottom: 1px solid #eeeeee;
+     // border-bottom: 1px solid #eeeeee;
       padding: vw(20) 0 vw(12) 0;
       color: #2B333B;
       line-height: vw(18);
       font-size: vw(18);
       font-family: PingFangSC-Medium;
+    }
+    .order--line{
+      border-bottom: 1px solid #eeeeee;
     }
     .order__infomation {
       .title {
@@ -35,7 +38,7 @@
         .payWay__item {
           position: relative;
           border: 1px solid #F5F5F5;
-          padding: vw(12) vw(22);
+          padding: vw(12) vw(20);
           background: #FFFFFF;
           margin-right: 10px;
           .correct {
@@ -46,6 +49,9 @@
             margin: 0.3vw;
             z-index: 5;
           }
+        }
+        .payWay__img{
+          width:vw(100)
         }
         .payWay__item--selected {
           border-color: #408FFB;
