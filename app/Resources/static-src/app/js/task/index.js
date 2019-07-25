@@ -85,11 +85,13 @@ const videoPopover = ($popover, offset, flag) => {
   $popover.on('hidden.bs.popover',  () => {
     $wrapper.css('height', height);
   });
-}
+};
 
-if (isMobileDevice()) {
-  const $prompt = $('.js-learn-video-prompt');
-  const $learnedPrompt = $('.js-learned-video-prompt');
+const $prompt = $('.js-learn-video-prompt');
+const $learnedPrompt = $('.js-learned-video-prompt');
+
+const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+if (isMobileDevice() && !isIOS) {
   videoPopover($prompt, 50, true);
   videoPopover($learnedPrompt, 115);
 }

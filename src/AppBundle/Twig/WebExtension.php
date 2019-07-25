@@ -157,6 +157,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
             new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
+            new \Twig_SimpleFunction('is_not_ios_client', array($this, 'isNotIOSClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
             new \Twig_SimpleFunction('get_classroom_name', array($this, 'getClassroomName')),
             new \Twig_SimpleFunction('pop_reward_point_notify', array($this, 'popRewardPointNotify')),
@@ -239,6 +240,11 @@ class WebExtension extends \Twig_Extension
     public function isMobileClient()
     {
         return DeviceToolkit::isMobileClient();
+    }
+
+    public function isNotIOSClient()
+    {
+        return DeviceToolkit::isNotIOSClient();
     }
 
     public function isESCopyright()
