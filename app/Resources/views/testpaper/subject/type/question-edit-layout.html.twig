@@ -6,13 +6,13 @@
         <input type="text" name="token" value="{{ token }}" class="hidden js-hidden-token">
         <div class="cd-ml24">
           <input type="text" class="form-control" value="{{ question.stem|default('') }}" data-role="edit" style="display: none;">
-          <textarea class="form-control" style="height:190px;" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"  data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" data-edit="stem" name="stem">{{ question.stem|default('') }}</textarea>
+          <textarea class="form-control" style="height:190px;" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" data-edit="stem" name="stem">{{ question.stem|default('') }}</textarea>
           {# 需要云附件开启设置才能显示 #}
         </div>
         <div class="cd-mt24 cd-ml24">
           <button class="cd-btn cd-btn-ghost-primary" type="button">上传题干附件</button>
         </div>
-        <div class="cd-ml24">
+        <div class="cd-ml24 cd-mt24">
           {% block subject %}
           {% endblock %}
         </div>
@@ -32,6 +32,7 @@
             <input class="form-control" type="text" data-edit="score" name="score" value="{{ question.score|default('2') }}">
           </div>
         </div>
+        {% block miss_score %}{% endblock %}
         <div class="form-group edit-form-group">
           <label class="col-sm-2 control-label ph0 edit-form-group__label">解析</label>
           <div class="col-sm-10">
@@ -47,6 +48,7 @@
     {% block change %}
       {% include 'testpaper/subject/type/change-subject.html.twig' with { type: type|default('') } %}
     {% endblock %}
-    <div class="text-center"><button class="cd-btn cd-btn-primary cd-mt24 cd-mb8 subject-button" type="button">完成编辑</button></div>
+    <input type="hidden" name="type" value="{{ type|default('') }}">
+    <div class="text-center"><button class="cd-btn cd-btn-primary cd-mt24 cd-mb8 subject-button js-finish-edit" type="button">完成编辑</button></div>
   </form>
 </div>

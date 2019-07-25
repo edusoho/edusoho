@@ -708,6 +708,16 @@ class ManageController extends BaseController
         ));
     }
 
+    public function optionTemplateAction(Request $request, $type)
+    {
+        $field = $request->query->all();
+
+        return $this->render('testpaper/subject/option.html.twig', array(
+            'type' => $type,
+            'order' => $field['order'],
+        ));
+    }
+
     protected function fillGraphData($testpaper, $userFirstResults)
     {
         $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());

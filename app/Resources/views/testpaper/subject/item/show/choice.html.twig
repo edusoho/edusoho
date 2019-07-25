@@ -1,7 +1,8 @@
 {% set options = item.options %}
 {% set answers = item.answers %}
 {% set errors = item.errors|default([]) %}
-<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{{ loop.index }}">
+
+<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{% if token|default(null) %}{{token}}{% else %}{{ loop.index }}{% endif %}">
   <div class="subject-item__title">
     <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">
       {% if seq|default(null) %}
@@ -15,10 +16,9 @@
     {% elseif errors.stem.code == 100001 %}
       <span class="single-item__text--danger">缺少题干，请点击"编辑"进行设置。</span>
     {% endif %}
-
   </div>
   <div class="subject-item__body">
-    {% for option_key,option in options %}
+    {% for option_key, option in options %}
       <label class="cd-checkbox single-item subject-forbid {% if option_key in answers %}checked{% endif %}">
         <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}"><span>{{ dict_text('questionOption', option_key) }}. </span>
         <span class="single-item__text {% if errors['options_'~option_key] is defined %}single-item__text--danger{% endif %}">
