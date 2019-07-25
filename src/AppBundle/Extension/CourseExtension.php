@@ -2,6 +2,7 @@
 
 namespace AppBundle\Extension;
 
+use Biz\System\Service\SettingService;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Biz\Course\Service\CourseSetService;
@@ -105,67 +106,84 @@ class CourseExtension extends Extension implements ServiceProviderInterface
         return array(
             'for_member' => array(
                 'header' => 'AppBundle:My/Course:headerForMember',
-                'tabs' => array(
-                    'tasks' => array(
-                        'name' => 'course.tab.tasks',
-                        'content' => 'AppBundle:My/Course:tasks',
-                    ),
-                    'discussion' => array(
-                        'name' => 'course.tab.discussions',
-                        'number' => 'discussionNum',
-                        'content' => 'AppBundle:Course/Thread:index',
-                    ),
-                    'question' => array(
-                        'name' => 'course.tab.questions',
-                        'number' => 'questionNum',
-                        'content' => 'AppBundle:Course/Thread:index',
-                    ),
-                    'notes' => array(
-                        'name' => 'course.tab.notes',
-                        'number' => 'noteNum',
-                        'content' => 'AppBundle:Course/Course:notes',
-                    ),
-                    'material' => array(
-                        'name' => 'course.tab.material',
-                        'number' => 'materialNum',
-                        'content' => 'AppBundle:Course/Material:index',
-                    ),
-                    'reviews' => array(
-                        'name' => 'course.tab.reviews',
-                        'number' => 'ratingNum',
-                        'content' => 'AppBundle:Course/Course:reviews',
-                    ),
-                    'summary' => array(
-                        'name' => 'course.tab.summary',
-                        'content' => 'AppBundle:Course/Course:summary',
-                    ),
-                ),
+                'tabs' => $this->getTabs('forMember'),
                 'widgets' => $forMemberWidgets,
             ),
             'for_guest' => array(
                 'header' => 'AppBundle:Course/Course:header',
-                'tabs' => array(
-                    'summary' => array(
-                        'name' => 'course.tab.summary',
-                        'content' => 'AppBundle:Course/Course:summary',
-                    ),
-                    'tasks' => array(
-                        'name' => 'course.tab.tasks',
-                        'content' => 'AppBundle:Course/Course:tasks',
-                    ),
-                    'notes' => array(
-                        'name' => 'course.tab.notes',
-                        'number' => 'noteNum',
-                        'content' => 'AppBundle:Course/Course:notes',
-                    ),
-                    'reviews' => array(
-                        'name' => 'course.tab.reviews',
-                        'number' => 'ratingNum',
-                        'content' => 'AppBundle:Course/Course:reviews',
-                    ),
-                ),
+                'tabs' => $this->getTabs('forGuest'),
                 'widgets' => $forGuestWidgets,
             ),
         );
+    }
+
+    protected function getTabs($for)
+    {
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $tabs = array(
+            'tasks' => array(
+                'name' => 'course.tab.tasks',
+                'content' => 'AppBundle:My/Course:tasks',
+            ),
+            'discussion' => array(
+                'name' => 'course.tab.discussions',
+                'number' => 'discussionNum',
+                'content' => 'AppBundle:Course/Thread:index',
+            ),
+            'question' => array(
+                'name' => 'course.tab.questions',
+                'number' => 'questionNum',
+                'content' => 'AppBundle:Course/Thread:index',
+            ),
+            'notes' => array(
+                'name' => 'course.tab.notes',
+                'number' => 'noteNum',
+                'content' => 'AppBundle:Course/Course:notes',
+            ),
+            'material' => array(
+                'name' => 'course.tab.material',
+                'number' => 'materialNum',
+                'content' => 'AppBundle:Course/Material:index',
+            ),
+            'reviews' => array(
+                'name' => 'course.tab.reviews',
+                'number' => 'ratingNum',
+                'content' => 'AppBundle:Course/Course:reviews',
+            ),
+            'summary' => array(
+                'name' => 'course.tab.summary',
+                'content' => 'AppBundle:Course/Course:summary',
+            ),
+        );
+
+        if ($for == 'forGuest') {
+            unset($tabs['material'], $tabs['discussion'], $tabs['question']);
+        }
+
+        if (isset($courseSetting['show_note']) && $courseSetting['show_note'] == '0') {
+            unset($tabs['notes']);
+        }
+
+        if (isset($courseSetting['show_question']) && $courseSetting['show_question'] == '0') {
+            unset($tabs['question']);
+        }
+
+        if (isset($courseSetting['show_discussion']) && $courseSetting['show_discussion'] == '0') {
+            unset($tabs['discussion']);
+        }
+
+        if (isset($courseSetting['show_review']) && $courseSetting['show_review'] == '0') {
+            unset($tabs['reviews']);
+        }
+
+        return $tabs;
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }
