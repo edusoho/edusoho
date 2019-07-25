@@ -96,6 +96,19 @@
             targetType: this.order.targetType
           }
         });
+        //  this.$router.push({
+        //   name: 'order',
+        //   params: {
+        //     id: this.order.targetId,
+        //   },
+        //   query: {
+        //     orderId: this.order.id,
+        //     source: 'order',
+        //     sn: this.order.sn,
+        //     targetId: this.order.targetId,
+        //     targetType: this.order.targetType
+        //   }
+        // });
       }
     }
   }
