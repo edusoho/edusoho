@@ -1324,8 +1324,8 @@ card_info:
     defaults: { _controller: AppBundle:My/Card:cardInfo }
 
 open_course_explore:
-    path:  /open/course/explore
-    defaults: { _controller: AppBundle:OpenCourse:explore }
+    path:  /open/course/explore/{category}
+    defaults: { _controller: AppBundle:Explore:openCourse, category:'' }
 
 open_course_manage:
     path:  /open/course/{id}/manage
@@ -1659,6 +1659,10 @@ course_task_qrcode:
 course_task_finished_prompt:
     path:  /course/{courseId}/task/{id}/finished_prompt
     defaults: { _controller: AppBundle:Task:taskFinishedPrompt }
+
+course_task_token_download:
+  path: /course/{courseId}/task/{taskId}/token/{token}/download
+  defaults: { _controller: AppBundle:Task:downloadFileByToken }
 
 course_manage_task_pre_create_check:
     path:  /course/{courseId}/task/pre_create_check

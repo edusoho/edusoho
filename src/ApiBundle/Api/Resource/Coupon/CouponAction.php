@@ -40,17 +40,22 @@ class CouponAction extends AbstractResource
 
         $coupon = $this->getCouponService()->getCouponByCode($code);
 
-        if ($coupon['status'] == 'receive') {
-            return $this->error(sprintf('优惠券%s已经被领取过', $code));
+        if (empty($coupon)) {
+            return $this->error('该优惠券不存在');
         }
 
         if ($this->isPluginInstalled('Coupon')) {
             $coupon = $this->getCouponService()->getCouponByCode($code);
             $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
-            if (empty($batch['h5MpsEnable'])) {
-                $message = array('useable' => 'no', 'message' => '该优惠卷无法通过微网校渠道发放');
+            if (empty($batch['codeEnable'])) {
+                return $this->error('该优惠卷无法通过优惠码渠道发放');
+            }
 
-                return $this->error($message['message']);
+            if (isset($batch['deadlineMode']) && $batch['deadlineMode'] == 'day') {
+                //ES优惠券领取时，对于优惠券过期时间会加86400秒，所以计算deadline时对于固定天数模式应与设置有效期模式一致，都为当天凌晨00:00:00
+                $fields['deadline'] = strtotime(date("Y-m-d")) + 24 * 60 * 60 * $batch['fixedDay'];
+
+                $this->getCouponService()->updateCoupon($coupon['id'], $fields);
             }
         }
         $result = $this->getCouponService()->checkCoupon($code, $id, $type);

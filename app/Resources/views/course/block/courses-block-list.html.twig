@@ -44,7 +44,7 @@
                   {% endif %}
                 </span>
               {% endif %}
-              <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
+              <span {% if setting('course.show_student_num_enabled', '1') == 1 %} class="comment" {% endif %}><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
               {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
             </div>
           </div>

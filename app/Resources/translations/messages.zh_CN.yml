@@ -23,6 +23,7 @@ site.data.chapter: 章
 site.data.unit: 节
 site.data.lesson: 课时
 site.data.task: 任务
+site.data.learning_task: 学习任务
 site.data.part: 节
 site.data.title: 标题
 site.data.score: 分
@@ -669,6 +670,9 @@ pay_center.order.detail: 订单详情：%title%
 pay_center.verify_mobile: 核实银行预留手机
 pay_center.verify_mobile.mobile: 银行预留手机号
 pay_center.verify_mobile.input_placeholder: 手机号码
+pay_center.course.close: 该课程已关闭，请谨慎支付
+pay_center.classroom.close: 该班级已关闭，请谨慎支付
+pay_center.vip.close: 该会员等级已关闭，请谨慎支付
 
 # 上传模块
 upload.content_title: 上传文件
@@ -1047,7 +1051,7 @@ course.marketing_setup.services.show_services: 展示承诺服务
 course.marketing_setup.services.provide_services: 承诺提供服务
 course.marketing_setup.no_permission_tips: 抱歉，您无权管理课程基础设置，如有需要请联系网站管理员！
 course.marketing_setup.reward_point_setting: %name%设置
-course.marketing_setup.study_award:　学习奖励
+course.marketing_setup.study_award: 学习奖励
 course.marketing_setup.task_award: 完成单个活动
 course.marketing_setup.course_award: 完成教学计划
 
@@ -1800,6 +1804,7 @@ course.plan_task.new_task_name: 新计划名称
 course.plan_task.activity_manage.activity_file_empty: 抱歉，%type%文件不存在，暂时无法学习。
 course.plan_task.activity_manage.preview_failed_tips: 当前%taskName%不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
+course.plan_task.activity_manage.help_block: 建议标题字数控制在15字以内，否则会影响手机端浏览
 course.plan_task.activity_manage.setup_is_option: 设为选修
 course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
 course.plan_task.activity_manage.choose_teach_way: >
@@ -1851,7 +1856,7 @@ course.plan_task.activity_manage.download: 下载资料
 course.plan_task.activity_manage.download.choose_file: 选择资料
 course.plan_task.activity_manage.download.link_file: 网络链接资料
 course.plan_task.activity_manage.download.delete_btn: 删除
-course.plan_task.activity_manage.download.file_tips: 注意：资料文件在移动端上无法被下载!
+course.plan_task.activity_manage.download.file_tips: 资料文件支持在PC和APP中下载使用，暂不支持在微网校和小程序中使用!
 course.plan_task.activity_manage.download.downloaded_tips: 下载过资料
 course.plan_task.activity_manage.download.edit: 编辑
 course.plan_task.activity_manage.download.converting_tips: >
@@ -5420,6 +5425,7 @@ admin.setting.site.master_email: 管理员邮箱地址
 admin.setting.site.copyright: 课程内容版权方
 admin.setting.site.copyright.help_block: 您可以填写网站名称或公司名称。
 admin.setting.site.icp: ICP备案号
+admin.setting.site.icp_url: ICP备案链接
 admin.setting.site.website_statistics_analysis: 网站统计分析代码部署
 admin.setting.site.analytics: 统计分析代码
 admin.setting.site.analytics.help_block: >
@@ -7197,7 +7203,7 @@ admin.setting_wechat_auth.wechat_auth_login: 微信内授权登录
 admin.setting_wechat_auth.wechat_notification: 微信服务号通知
 admin.setting_wechat_auth.wechat_pay: 微信支付
 admin.setting_wechat_auth.web_scan_login_hint: >
-  开通后，网站PC端将支持微信扫码登录。<br>请先填写右侧表单中的网站AppID及网站AppSecret。
+  开通后，网站PC端将支持微信扫码登录，App端将支持微信授权登录。<br>请先填写右侧表单中的网站AppID及网站AppSecret。
 admin.setting_wechat_auth.wechat_auth_login_hint: >
   开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。<br>
   请先填写右侧表单中的服务号AppID、服务号AppSecretMP文件验证码。
@@ -10008,6 +10014,19 @@ wechat.notification.template.lesson_add: '同学，你好，课程有新任务�
 wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值或学习卡<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
 wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
 
-
-
-
+# 移动端使用：课时任务(task)完成条件文案
+mobile.task.finish_tips.audio.end: 听完音频
+mobile.task.finish_tips.discuss.join: 在本课程下发表或者回复一个话题
+mobile.task.finish_tips.doc.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.download.download: 下载过资料
+mobile.task.finish_tips.exercise.submit: 提交过练习
+mobile.task.finish_tips.flash.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.homework.submit: 提交作业
+mobile.task.finish_tips.live.join: 进入参加过直播
+mobile.task.finish_tips.ppt.end: 需要学习到最后一页
+mobile.task.finish_tips.ppt.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.testpapaer.submit: 提交试卷
+mobile.task.finish_tips.testpapaer.score: 考试分数通过 %finishData% 分
+mobile.task.finish_tips.text.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.video.end: 学习到最后
+mobile.task.finish_tips.video.time: 至少学习 %finishData% 分钟

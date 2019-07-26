@@ -39,3 +39,16 @@ $('#orders-table').on('click', '.js-cancel', function() {
     });
   });
 });
+
+$('#orders-table').on('click', '.js-pay', function () {
+  let $that = $(this);
+
+  cd.confirm({
+    title: Translator.trans('user.account.order_pay_'+ $that.data('type') +'_close_title'),
+    content: Translator.trans('user.account.order_pay_'+ $that.data('type') +'_close_hint'),
+    okText: Translator.trans('user.account.order_not_pay'),
+    cancelText: Translator.trans('user.account.order_pay'),
+  }).on('cancel', () => {
+    window.location.href = $that.data('url');
+  });
+});

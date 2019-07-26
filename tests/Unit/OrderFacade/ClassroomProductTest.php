@@ -29,7 +29,7 @@ class ClassroomProductTest extends BaseTestCase
         $classroomProduct->setBiz($this->getBiz());
 
         $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName' => 'getClassroom', 'returnValue' => array()),
+            array('functionName' => 'getClassroom', 'returnValue' => array('buyable' => 0)),
             array('functionName' => 'canJoinClassroom', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
 

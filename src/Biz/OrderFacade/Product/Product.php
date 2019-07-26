@@ -107,6 +107,13 @@ abstract class Product extends BizAware implements OrderStatusCallback
     public $couponEnable = true;
 
     /**
+     * 商品是否可用（如课程、班级被关闭，VIP购买被关闭）
+     *
+     * @var bool
+     */
+    public $productEnable = true;
+
+    /**
      * 扩展字段
      */
     private $createExtra;

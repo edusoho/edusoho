@@ -32,21 +32,11 @@ class EliteCourseThreadsByTypeDataTagTest extends BaseTestCase
                 'withParams' => array(array(1, 1)),
                 'returnValue' => array(1 => array('id' => 1)),
             ),
-            array(
-                'functionName' => 'findUsersByIds',
-                'withParams' => array(array(0)),
-                'returnValue' => array(),
-            ),
-            array(
-                'functionName' => 'findUsersByIds',
-                'withParams' => array(array(0, 0)),
-                'returnValue' => array(),
-            ),
         ));
-        $thread1 = $this->getThreadDao()->create(array('title' => 'thread1 title', 'content' => 'thread1 content', 'type' => 'question', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1, 'isElite' => 1));
-        $thread2 = $this->getThreadDao()->create(array('title' => 'thread2 title', 'content' => 'thread2 content', 'type' => 'question', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1));
-        $thread3 = $this->getThreadDao()->create(array('title' => 'thread3 title', 'content' => 'thread3 content', 'type' => 'discussion', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1, 'isElite' => 1));
-        $thread4 = $this->getThreadDao()->create(array('title' => 'thread4 title', 'content' => 'thread4 content', 'type' => 'discussion', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1));
+        $thread1 = $this->getThreadDao()->create(array('title' => 'thread1 title', 'content' => 'thread1 content', 'type' => 'question', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1, 'isElite' => 1, 'latestPostUserId' => 1));
+        $thread2 = $this->getThreadDao()->create(array('title' => 'thread2 title', 'content' => 'thread2 content', 'type' => 'question', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1, 'latestPostUserId' => 1));
+        $thread3 = $this->getThreadDao()->create(array('title' => 'thread3 title', 'content' => 'thread3 content', 'type' => 'discussion', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1, 'isElite' => 1, 'latestPostUserId' => 1));
+        $thread4 = $this->getThreadDao()->create(array('title' => 'thread4 title', 'content' => 'thread4 content', 'type' => 'discussion', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1, 'latestPostUserId' => 1));
         $datatag = new EliteCourseThreadsByTypeDataTag();
         //1.count异常情况
         $arguments = array();

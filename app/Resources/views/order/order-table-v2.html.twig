@@ -38,7 +38,11 @@
         <div class="table-action">
           {% if order.status in ['created', 'paying'] %}
             <div class="table-action__item">
-              <a href="{{path('cashier_show', {sn:order.sn})}}" class="cd-link-primary">{{'user.orders.pay'|trans}}</a>
+              {% if order.product and order.product.productEnable %}
+                <a href="{{path('cashier_show', {sn:order.sn})}}" class="cd-link-primary">{{'user.orders.pay'|trans}}</a>
+              {% else %}
+                <a href="javascript:;" class="js-pay" data-type="{{ order.item.target_type }}" data-url="{{ path('cashier_show', {sn:order.sn}) }}">{{'user.orders.pay'|trans}}</a>
+              {% endif %}
             </div>
             <div class="table-action__item cd-dropdown" data-toggle="cd-dropdown">
               <a href="javascript:;" class="cd-link-primary">

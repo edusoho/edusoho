@@ -156,8 +156,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $tagIds = isset($courseFields['tags']) ? $courseFields['tags'] : null;
 
-        unset($courseFields['tags']);
-
         $updatedCourse = $this->getOpenCourseDao()->update($course['id'], $courseFields);
 
         $this->dispatchEvent('open.course.update', array('argument' => $fields, 'course' => $updatedCourse, 'tagIds' => $tagIds, 'userId' => $user['id']));

@@ -30,6 +30,7 @@ class BaseStrategy
             'fromCourseSetId',
             'seq',
             'mode',
+            'isLesson',
             'categoryId',
             'activityId',
             'title',
@@ -61,6 +62,28 @@ class BaseStrategy
         ));
 
         return $this->getTaskDao()->update($id, $fields);
+    }
+
+    public function deleteTask($task)
+    {
+        if (empty($task)) {
+            return true;
+        }
+
+        try {
+            $this->biz['db']->beginTransaction();
+
+            $this->getTaskDao()->delete($task['id']);
+            $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
+            $this->getActivityService()->deleteActivity($task['activityId']);
+
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
+
+        return true;
     }
 
     protected function invalidTask($task)

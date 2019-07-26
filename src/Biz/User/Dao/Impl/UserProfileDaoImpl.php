@@ -82,12 +82,16 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
             $conditions['qq'] = "{$conditions['qq']}%";
         }
 
-        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'truename') {
+        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && 'truename' == $conditions['keywordType']) {
             $conditions['truename'] = "%{$conditions['keyword']}%";
         }
 
-        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'idcard') {
-            $conditions['idcard'] = "%{$conditions['keyword']}%";
+        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && 'idcardLike' == $conditions['keywordType']) {
+            $conditions['idcardLike'] = "%{$conditions['keyword']}%";
+        }
+
+        if (isset($conditions['idcard'])) {
+            $conditions['idcard'] = trim($conditions['idcard']);
         }
 
         return parent::createQueryBuilder($conditions);
@@ -100,7 +104,8 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
             'conditions' => array(
                 'mobile LIKE :mobile',
                 'truename LIKE :truename',
-                'idcard LIKE :idcard',
+                'idcard LIKE :idcardLike',
+                'idcard = :idcard',
                 'id IN (:ids)',
                 'mobile = :tel',
                 'mobile <> :mobileNotEqual',

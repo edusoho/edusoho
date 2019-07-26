@@ -18,6 +18,7 @@ site.data.empty: Empty
 site.data.chapter: Chapter
 site.data.lesson: Lesson
 site.data.task: Task
+site.data.learning_task: Learning Task
 site.data.unit: unit
 site.data.part: Part
 site.data.title: Title
@@ -585,6 +586,9 @@ pay_center.order.detail: 'Order detail：%title%'
 pay_center.verify_mobile: 'Verify your phone number that binded with your bank card'
 pay_center.verify_mobile.mobile: 'Phone number that binded with your bank card'
 pay_center.verify_mobile.input_placeholder: 'Phone number'
+pay_center.course.close: The course in this order has been closed.Please pay carefully.
+pay_center.classroom.close: The classroom in this order has been closed.Please pay carefully.
+pay_center.vip.close: The vip level in this order has been closed.Please pay carefully.
 upload.content_title: 'Upload'
 upload.content_title.uploading_tips: 'Uploading now, please do not close the window'
 upload.upload_tips: 'Please drag files to here, or click add files button'
@@ -925,7 +929,7 @@ course.marketing_setup.services.show_services: 'Show to user'
 course.marketing_setup.services.provide_services: 'Services'
 course.marketing_setup.no_permission_tips: 'Sorry, you can not edit base settings. Contact site administrator for help.'
 course.marketing_setup.reward_point_setting: %name% setting
-course.marketing_setup.study_award:　Study Award
+course.marketing_setup.study_award: Study Award
 course.marketing_setup.task_award: Task Award
 course.marketing_setup.course_award: Course Award
 
@@ -1609,6 +1613,7 @@ course.plan_task.new_task_name: 'Program name'
 course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exists.'
 course.plan_task.activity_manage.preview_failed_tips: 'Please enroll %taskName% to start.'
 course.plan_task.activity_manage.title_name: Title
+course.plan_task.activity_manage.help_block: 'It is recommended that the number of title words be controlled within 15 words, otherwise it will affect the browsing of mobile phones.'
 course.plan_task.activity_manage.setup_is_option: 'Set as optional'
 course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next %taskName% to unlock.'
 course.plan_task.activity_manage.choose_teach_way: '<span class="number">1</span>Please select'
@@ -4455,6 +4460,7 @@ admin.setting.site.master_email: 'Administrator email'
 admin.setting.site.copyright: 'Site Copyright Owner'
 admin.setting.site.copyright.help_block: 'You can enter website name and company name.'
 admin.setting.site.icp: ICP
+admin.setting.site.icp_url: ICP Link
 admin.setting.site.website_statistics_analysis: 'Website analytics code deployment'
 admin.setting.site.analytics: 'Analytics Code'
 admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc.</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a href=\"http://ta.qq.com/\" target=\"_blank\">Tencent Analytics</a> Or <a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ</a></p>\n"
@@ -5894,7 +5900,7 @@ admin.setting_wechat_auth.wechat_auth_login: WeChat Authorize Login
 admin.setting_wechat_auth.wechat_notification: WeChat Account Notification
 admin.setting_wechat_auth.wechat_pay: WeChat Pay
 admin.setting_wechat_auth.web_scan_login_hint: >
-  If approved, users can login the site by scanning qrcode.<br>Please fill in the website AppID and the website AppSecret in the form on the right.
+  After the opening, the PC side of the website will support WeChat scan code login, and the App side will support WeChat authorized login.<br>Please fill in the website AppID and the website AppSecret in the form on the right.
 admin.setting_wechat_auth.wechat_auth_login_hint: >
   If turned on, users can register or login the site with wechat id in wechat app.<br>
   Please fill in the service number AppID and service number AppSecretMP file verification code in the form on the right.
