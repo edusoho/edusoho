@@ -41,17 +41,22 @@ export default class QuestionOperate {
   }
 
   init() {
+    this.initQuestions();
+    this.initQuestionCountsAndTotalScore();
+    this.flag = false;
+  }
+
+  //data-anchor和ID节点从0开始
+  initQuestions() {
     let cachedData = this._toJson($('.js-cached-data').text());
     for (var i = 0; i < cachedData.length; i++) {
       let token = this._getToken();
       this.questions[token] = cachedData[i];
       this.tokenList.push(token);
       let index = i;
-      $(`[data-anchor="#${index}"]`).data('anchor', '#' + token);
+      $(`[data-anchor="#${index}"]`).attr('data-anchor', '#' + token);
       $('#' + index).attr('id', token);
     }
-    this.initQuestionCountsAndTotalScore();
-    this.flag = false;
   }
 
   initQuestionCountsAndTotalScore() {
@@ -103,10 +108,18 @@ export default class QuestionOperate {
     });
   }
 
-  modifyScore(selectQuestion, score) {
+  modifyScore(selectQuestion, scoreObj, isTestpaper) {
     let self = this;
     $.each(selectQuestion, function(index, token) {
       self.$itemList.find(`#${token}`).find('.js-score').html(`${score}分`);
+      let question = self.getQuestion(token);
+      self.updateQuestionItem(token, 'score', scoreObj['score']);
+      if (isTestpaper) {
+        if (question['type'] == 'choice' || question['type'] == 'uncertain_choice') {
+          self.updateQuestionItem(token, 'missScore', scoreObj['missScore']);
+        }
+        self.totalScore += scoreObj['score'] - question['score'];
+      }
     });
   }
 
@@ -120,6 +133,9 @@ export default class QuestionOperate {
     this.tokenList.splice(position, 0, token);
     this.questionCounts['total']++;
     this.questionCounts[question['type']]++;
+    this.totalScore += question['score'];
+    this.triggerTotalScoreChange();
+    this.triggerTypeCountChange(question['type']);
     this.flag = false;
   }
 
@@ -135,12 +151,14 @@ export default class QuestionOperate {
     this.questionCounts['total']--;
     this.questionCounts[question['type']]--;
     if (question['type'] != 'material') {
-      self.totalScore -= question['score'];
+      this.totalScore -= question['score'];
     } else {
       $.each(question['subQuestions'], function(token, subQuestion) {
-        self.totalScore -= subQuestion['score'];
+        this.totalScore -= subQuestion['score'];
       })
     }
+    this.triggerTotalScoreChange();
+    this.triggerTypeCountChange(question['type']);
     this.flag = false;
   }
 
@@ -149,16 +167,30 @@ export default class QuestionOperate {
       return;
     }
     this.flag = true;
+    let oldQuestion = this.questions[token];
     this.questions[token] = question;
+    this.totalScore = this.totalScore - oldQuestion['score'] + question['score'];
+    this.triggerTotalScoreChange();
     this.flag = false;
   }
 
-  updateQuestionItem(token, itemKey, itemValue) {
+  updateQuestionItem(token, itemKey, itemValue, isTrigger = true) {
     if (!this.isUpdating()) {
       return;
     }
     this.flag = true;
+    let oldValue = this.questions[token][itemKey];
     this.questions[token][itemKey] = itemValue;
+    if (itemKey == 'score') {
+      this.totalScore = this.totalScore - oldValue + itemValue;
+      this.triggerTotalScoreChange(isTrigger);
+    }
+    if (itemKey == 'type' && oldValue != itemValue) {
+      this.questionCounts[oldValue]--;
+      this.questionCounts[itemValue]++;
+      this.triggerTypeCountChange(oldValue);
+      this.triggerTypeCountChange(itemValue);
+    }
     this.flag = false;
   }
 
@@ -167,6 +199,20 @@ export default class QuestionOperate {
       return;
     }
     return this.questions[token];
+  }
+
+  triggerTotalScoreChange(isTrigger = true) {
+    if ($('.js-total-score').length > 0 && isTrigger) {
+      $('.js-total-score').trigger('change');
+    }
+  }
+
+  triggerTypeCountChange(type) {
+    $('*[data-type]').trigger('change', [type]);
+  }
+
+  updateQuestionList(seq) {
+
   }
 
   isUpdating() {

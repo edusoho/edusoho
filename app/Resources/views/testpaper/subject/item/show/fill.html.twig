@@ -7,7 +7,7 @@
     {% else %}
       {{ loop.index }}
     {% endif %}
-    </span> {{ item.stemShow|raw }}
+    </span> {{ question_html_filter(item.stem)|raw }}
   </div>
   <div class="subject-item__body">
     <span>答案：</span>
