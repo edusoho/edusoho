@@ -15,9 +15,8 @@ class SmsCenter extends AbstractResource
 {
     private $supportSmsType = array(
         'register' => BizSms::SMS_BIND_TYPE,
-        // TODO 待会换成正规的code
-        'receive_coupon' => BizSms::SMS_FORGET_PASSWORD,
-        'sms_login' => BizSms::SMS_FORGET_PASSWORD
+        'receive_coupon' => BizSms::SMS_LOGIN,
+        'sms_login' => BizSms::SMS_LOGIN,
     );
 
     /**
@@ -68,7 +67,7 @@ class SmsCenter extends AbstractResource
     {
         if ('register' == $smsType) {
             $this->handleRateLimiter($request, 'register_sms_rate_limiter');
-        } else if ('receive_coupon' == $smsType || 'sms_login' == $smsType) {
+        } elseif ('receive_coupon' == $smsType || 'sms_login' == $smsType) {
             $this->handleRateLimiter($request, 'common_sms_rate_limiter');
         }
     }
@@ -77,7 +76,7 @@ class SmsCenter extends AbstractResource
     {
         if ('register' == $smsType) {
             $this->getUserService()->updateSmsRegisterCaptchaStatus($clientIp);
-        } else if ('receive_coupon' == $smsType || 'sms_login' == $smsType) {
+        } elseif ('receive_coupon' == $smsType || 'sms_login' == $smsType) {
             $this->getUserService()->getSmsCommonCaptchaStatus($clientIp, true);
         }
     }

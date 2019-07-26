@@ -2463,6 +2463,7 @@ user.settings.security.input_sms_code: 'Input SMS verification code'
 user.settings.security.change_captcha_code: 'Not clear？Click to change'
 user.settings.security.mobile: Mobile
 user.settings.security.bind_mobile: 'Bound phone number'
+admin.edu_cloud.edu_sms.login: 'Login with SMS'
 user.settings.security.login_password: 'Your login password'
 user.settings.security.content_title: 'Security Setting'
 user.settings.security.reset_pay_password: 'Payment password resetting'

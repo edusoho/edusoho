@@ -1155,6 +1155,7 @@ class EduCloudController extends BaseController
             'sms_enabled' => '0',
             'sms_registration' => 'off',
             'sms_forget_password' => 'on',
+            'sms_login' => 'on',
             'sms_user_pay' => 'on',
             'sms_forget_pay_password' => 'on',
             'sms_bind' => 'on',
