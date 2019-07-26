@@ -56,8 +56,7 @@ class Login extends AbstractResource
         }
 
         // 检查短信验证码
-        // FIXME 暂时兼容教育云
-        $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $fields['mobile'], $fields['smsToken'], $fields['smsCode']);
+        $status = $this->getBizSms()->check(BizSms::SMS_LOGIN, $fields['mobile'], $fields['smsToken'], $fields['smsCode']);
         if (BizSms::STATUS_SUCCESS != $status) {
             throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
         }
