@@ -28,6 +28,7 @@ export default class sbList {
     this.initEvent();
     this.initScoreValidator();
     this.setDifficulty();
+    this.statErrorQuestions();
   }
 
   confirmFresh() {
@@ -181,7 +182,7 @@ export default class sbList {
 
     self.$element.find('.js-show-checkbox.checked').each(function(){
       let type = $(this).data('type'),
-        name = $(this).data('name'),
+        name = $(this).parent().next('.js-type-name').text(),
         token = $(this).parents('.js-subject-anchor').data('anchor');
 
       if (typeof stats[type] == 'undefined') {
@@ -318,7 +319,7 @@ export default class sbList {
           $(this).find('.subject-sub-item__number').text(`(${order})`);
           order++;
         });
-        this.questionOperate.deleteQuestion(token);
+        //this.questionOperate.deleteQuestion(token);
         $item.remove();
         return;
       }
@@ -331,12 +332,7 @@ export default class sbList {
 
       order = this.questionOperate.getQuestionOrder(token);
       const $listItem = $(`[data-anchor=#${token}]`).parent();
-      $listItem.nextAll('.subject-list-item').each(function() {
-        $(this).find('.subject-list-item__num').text(order)
-            .find('.sb-checkbox').attr('data-order', order);
-        order++;
-      });
-
+      this.orderQuestionList(order, $listItem);
       this.questionOperate.deleteQuestion(token);
 
       if (question.type == 'material') {
@@ -346,6 +342,7 @@ export default class sbList {
       }
       $listItem.remove();
       $item.remove();
+      this.statErrorQuestions();
     });
   }
 
@@ -360,6 +357,26 @@ export default class sbList {
     let totalScore = parseInt(this.questionOperate.getTotalScore());
     if (this.isTestpaper()) {
       $('.js-total-score').text(`总分${totalScore}分`);
+    }
+  }
+
+  orderQuestionList(seq, $item) {
+    $item.nextAll('.subject-list-item').each(function() {
+      $(this).find('.js-list-index').text(seq);
+      seq++;
+    });
+  }
+
+  statErrorQuestions() {
+    let errorTip = '第';
+    let isShow = false;
+    this.$element.find('.subject-list-item__num--error').each(function () {
+      errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
+      isShow = true;
+    });
+    errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
+    if (isShow) {
+      $('.js-error-tip').html(errorTip);
     }
   }
 

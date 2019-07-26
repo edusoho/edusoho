@@ -1,16 +1,16 @@
 <div class="subject-list subject-rect js-subject-list cd-mt16">
   <div class="subject-rect__title">题目列表</div>
-  <div class="subject-list__tip">第<span>2、7</span>题有违规</div>
+  <div class="subject-list__tip js-error-tip"></div>
   <div class="subject-list__body js-subject-list-body row">
     {% for key,item in questions %}
       <div class="col-sm-3 subject-list-item">
-        <div class="subject-list-item__num {% if item.errors is defined %}subject-list-item__num--error{% endif %} js-subject-anchor" data-anchor="{{'#' ~ loop.index }}">
-          {{ loop.index }}
+        <div class="subject-list-item__num {% if item.errors is defined %}subject-list-item__num--error{% endif %} js-subject-anchor" data-anchor="{{'#' ~ key }}">
+          <span class="js-list-index">{{ loop.index }}</span>
           {% if item.type != 'material' %}
-            <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="{{ item.type }}" data-name="{{ item.stem }}" data-order="{{ loop.index }}"><input type="checkbox" data-toggle="cd-checkbox"></label>
+            <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="{{ item.type }}"><input type="checkbox" data-toggle="cd-checkbox"></label>
           {% endif %}
         </div>
-        {{ dict_text('questionType', item.type)|slice(0,3) }}
+        <span class="js-type-name">{{ dict_text('questionType', item.type)|slice(0,3) }}</span>
       </div>
     {% endfor %}
   </div>

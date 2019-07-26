@@ -83,6 +83,7 @@ class BaseQuestion {
     let seq = self.operate.getQuestionOrder(token);
     $.get(self.$form.data('url'), {seq: seq, question: question, token: token}, html=> {
       self.$form.parent('.subject-item').replaceWith(html);
+      this.removeErrorClass(token);
     });
   }
 
@@ -122,6 +123,12 @@ class BaseQuestion {
     }
     
     return attachments;
+  }
+
+  removeErrorClass(token) {
+    if ($(`[data-anchor="#${token}"]`).hasClass('subject-list-item__num--error')) {
+      $(`[data-anchor="#${token}"]`).removeClass('subject-list-item__num--error');
+    }
   }
 
   _initValidate() {

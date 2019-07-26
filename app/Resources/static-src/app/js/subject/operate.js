@@ -41,17 +41,22 @@ export default class QuestionOperate {
   }
 
   init() {
+    this.initQuestions();
+    this.initQuestionCountsAndTotalScore();
+    this.flag = false;
+  }
+
+  //data-anchor和ID节点从0开始
+  initQuestions() {
     let cachedData = this._toJson($('.js-cached-data').text());
     for (var i = 0; i < cachedData.length; i++) {
       let token = this._getToken();
       this.questions[token] = cachedData[i];
       this.tokenList.push(token);
       let index = i;
-      $(`[data-anchor="#${index}"]`).data('anchor', '#' + token);
+      $(`[data-anchor="#${index}"]`).attr('data-anchor', '#' + token);
       $('#' + index).attr('id', token);
     }
-    this.initQuestionCountsAndTotalScore();
-    this.flag = false;
   }
 
   initQuestionCountsAndTotalScore() {
@@ -172,6 +177,12 @@ export default class QuestionOperate {
       this.totalScore = this.totalScore - oldValue + itemValue;
       this.triggerTotalScoreChange(isTrigger);
     }
+    if (itemKey == 'type' && oldValue != itemValue) {
+      this.questionCounts[oldValue]--;
+      this.questionCounts[itemValue]++;
+      this.triggerTypeCountChange(oldValue);
+      this.triggerTypeCountChange(itemValue);
+    }
     this.flag = false;
   }
 
@@ -190,6 +201,10 @@ export default class QuestionOperate {
 
   triggerTypeCountChange(type) {
     $('*[data-type]').trigger('change', [type]);
+  }
+
+  updateQuestionList(seq) {
+
   }
 
   isUpdating() {
