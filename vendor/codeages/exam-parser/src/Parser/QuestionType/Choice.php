@@ -46,8 +46,9 @@ class Choice extends AbstractQuestion
                 continue;
             }
 
-            if (QuestionElement::STEM == $preNode) {
-                $question['stem'] .= preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
+            //处理题干
+            if ($this->matchStem($question, $line, $preNode)) {
+                continue;
             }
         }
         $this->checkErrors($question);
@@ -107,19 +108,19 @@ class Choice extends AbstractQuestion
     {
         //判断题干是否有错
         if (empty($question[QuestionElement::STEM])) {
-            $question['errors'][] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
+            $question['errors'][QuestionElement::STEM] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
         }
 
         //判断选项是否有错
         foreach ($question[QuestionElement::OPTIONS] as $index => $option) {
             if (empty($option)) {
-                $question['errors'][] = $this->getError(QuestionElement::OPTIONS, QuestionErrors::NO_OPTION, $index);
+                $question['errors'][QuestionElement::OPTIONS.'_'.$index] = $this->getError(QuestionElement::OPTIONS, QuestionErrors::NO_OPTION, $index);
             }
         }
 
         //判断答案是否有错
         if (empty($question[QuestionElement::ANSWERS])) {
-            $question['errors'][] = $this->getError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER);
+            $question['errors'][QuestionElement::ANSWERS] = $this->getError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER);
         }
     }
 }

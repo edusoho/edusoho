@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Testpaper;
 use ExamParser\Parser\Parser;
 use ExamParser\Reader\ReadDocx;
 use ExamParser\Writer\WriteDocx;
+use http\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\File as FileObject;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\Paginator;
@@ -135,7 +136,7 @@ class ManageController extends BaseController
                         'filename' => $file->getClientOriginalName(),
                         'fileuri' => $result['uri'],
                     ),
-                    'duration' => 3600,
+                    'duration' => 86400,
                     'userId' => $user['id'],
                 ));
 
@@ -641,9 +642,24 @@ class ManageController extends BaseController
         $file = $this->getFileService()->parseFileUri($data['fileuri']);
         $questions = $this->parseQuestions($file['fullpath']);
 
+        $questionAnalysis = array(
+            'choice' => 0,
+            'single_choice' => 0,
+            'uncertain_choice' => 0,
+            'fill' => 0,
+            'essay' => 0,
+            'material' => 0,
+            'determine' => 0,
+        );
+
+        foreach ($questions as $question) {
+            ++$questionAnalysis[$question['type']];
+        }
+
         return $this->render('testpaper/manage/re-edit.html.twig', array(
             'filename' => $data['filename'],
             'questions' => $questions,
+            'questionAnalysis' => $questionAnalysis,
         ));
     }
 
@@ -671,9 +687,9 @@ class ManageController extends BaseController
 
     public function editTemplateAction(Request $request, $type)
     {
-        $question = $request->query->get('question', array());
-        $seq = $request->query->get('seq', 1);
-        $token = $request->query->get('token', '');
+        $question = $request->request->get('question', array());
+        $seq = $request->request->get('seq', 1);
+        $token = $request->request->get('token', '');
 
         $question = ArrayToolkit::parts($question, array(
             'stem',
@@ -698,12 +714,37 @@ class ManageController extends BaseController
         ));
     }
 
-    public function showTemplateAction(Request $request, $type)
+    public function convertTemplateAction(Request $request)
     {
-        $question = $request->query->get('question', array());
-        $seq = $request->query->get('seq', 1);
-        $token = $request->query->get('token', '');
+        $data = $request->request->all();
+        $fromType = $data['fromType'];
+        $toType = $data['toType'];
+        if (empty($data['question'])) {
+            throw new InvalidArgumentException('缺少必要参数');
+        }
+        if (in_array($fromType, array('choice', 'single_choice', 'uncertain_choice')) && in_array($toType, array('choice', 'single_choice', 'uncertain_choice'))) {
+            $question = $this->convertChoice($toType, $data['question']);
+        }
 
+        if (in_array($fromType, array('essay')) && in_array($toType, array('single_choice', 'choice', 'uncertain_choice', 'fill', 'determine'))) {
+            $question = $this->convertEssay($toType, $data['question']);
+        }
+
+        return $this->render("testpaper/subject/type/{$toType}.html.twig", array(
+            'question' => $question,
+            'seq' => $data['seq'],
+            'token' => $data['token'],
+            'type' => $toType,
+        ));
+    }
+
+    protected function convertEssay($toType, $question)
+    {
+        $question['type'] = $toType;
+        if (in_array($toType, array('choice', 'single_choice', 'uncertain_choice'))) {
+            $question['options'] = array();
+            $question['answers'] = array();
+        }
         $question = ArrayToolkit::parts($question, array(
             'stem',
             'type',
@@ -716,7 +757,62 @@ class ManageController extends BaseController
             'attachments',
             'subQuestions',
             'difficulty',
+            'errors',
         ));
+
+        return $question;
+    }
+
+    protected function convertChoice($toType, $question)
+    {
+        $question['type'] = $toType;
+        $question['options'] = empty($question['options']) ? array() : $question['options'];
+        $question['answers'] = isset($question['right']) ? (is_array($question['right']) ? $question['right'] : array($question['right'])) : array();
+        if ('single_choice' == $toType) {
+            $question['answers'] = array(reset($question['answers']));
+        }
+        $question = ArrayToolkit::parts($question, array(
+            'stem',
+            'type',
+            'options',
+            'answer',
+            'answers',
+            'score',
+            'missScore',
+            'analysis',
+            'attachments',
+            'subQuestions',
+            'difficulty',
+            'errors',
+        ));
+
+        return $question;
+    }
+
+    public function showTemplateAction(Request $request, $type)
+    {
+        $question = $request->request->get('question', array());
+        $seq = $request->request->get('seq', 1);
+        $token = $request->request->get('token', '');
+
+        $question = ArrayToolkit::parts($question, array(
+            'stem',
+            'stemShow',
+            'type',
+            'options',
+            'answer',
+            'answers',
+            'score',
+            'missScore',
+            'analysis',
+            'attachments',
+            'subQuestions',
+            'difficulty',
+        ));
+
+        if ('fill' == $type) {
+            $question['stemShow'] = preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $question['stem']);
+        }
 
         return $this->render("testpaper/subject/item/show/{$type}.html.twig", array(
             'item' => $question,

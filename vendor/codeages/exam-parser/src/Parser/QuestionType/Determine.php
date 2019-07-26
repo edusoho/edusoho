@@ -42,8 +42,9 @@ class Determine extends AbstractQuestion
                 continue;
             }
 
-            if (QuestionElement::STEM == $preNode) {
-                $question['stem'] .= preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
+            //处理题干
+            if ($this->matchStem($question, $line, $preNode)) {
+                continue;
             }
         }
 
@@ -65,7 +66,7 @@ class Determine extends AbstractQuestion
 
             $stemStr = str_replace(self::ANSWER_RIGHT_SIGNAL, '', $line);
             $stemStr = str_replace(self::ANSWER_WRONG_SIGNAL, '', $stemStr);
-            $question['stem'] .= preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $stemStr).PHP_EOL;
+            $question['stem'] .= preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $stemStr);
             $preNode = QuestionElement::ANSWER;
 
             return true;
@@ -78,7 +79,7 @@ class Determine extends AbstractQuestion
     {
         //判断题干是否有错
         if (empty($question[QuestionElement::STEM])) {
-            $question['errors'][] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
+            $question['errors'][QuestionElement::STEM] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
         }
     }
 }

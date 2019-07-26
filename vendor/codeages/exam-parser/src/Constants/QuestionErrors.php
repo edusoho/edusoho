@@ -10,6 +10,8 @@ class QuestionErrors
 
     const NO_ANSWER = 100003;
 
+    const NO_SUB_QUESTIONS = 100004;
+
     const UNKNOWN = 999999;
 
     public static function getErrorMsg($code)
@@ -18,6 +20,7 @@ class QuestionErrors
             self::NO_STEM => '缺少题干',
             self::NO_OPTION => '缺少选项',
             self::NO_ANSWER => '缺少正确答案',
+            self::NO_SUB_QUESTIONS => '缺少子题',
             self::UNKNOWN => '未知错误',
         );
 

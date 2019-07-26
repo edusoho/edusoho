@@ -46,7 +46,8 @@ uploader.on('file.finish', (file) => {
     $list = $('[data-role='+currentTarget+']').find('.' + $metas.data('listClass'));
   }
 
-  $.get('/attachment/file/' + file.id + '/show', function (html) {
+  let module = $('input[name="module"]').val();
+  $.get('/attachment/file/' + file.id + '/show', {module: module},function (html) {
     $list.append(html);
     $ids.val(file.id);
     $modal.modal('hide');

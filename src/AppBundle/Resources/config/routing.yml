@@ -3202,6 +3202,7 @@ question_re_edit:
 
 subject_edit_template:
   path: /subject/edit/{type}
+  methods: [POST]
   defaults: { _controller: AppBundle:Testpaper/Manage:editTemplate }
 
 subject_option_template:
@@ -3210,4 +3211,10 @@ subject_option_template:
 
 subject_show_template:
   path: /subject/show/{type}
+  methods: [POST]
   defaults: { _controller: AppBundle:Testpaper/Manage:showTemplate }
+
+subject_convert_template:
+  path: /sublect/convert
+  methods: [POST]
+  defaults: { _controller: AppBundle:Testpaper/Manage:convertTemplate }

@@ -38,17 +38,19 @@ class Fill extends AbstractQuestion
                 continue;
             }
 
-            if (QuestionElement::STEM == $preNode) {
-                $question['stem'] .= preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
+            //处理题干
+            if ($this->matchStem($question, $line, $preNode)) {
+                continue;
             }
         }
+        $question['stemShow'] = preg_replace('/\[\[(\S|\s)*?\]\]/', '___', $question['stem']);
 
         return $question;
     }
 
     protected function matchAnswers(&$question, $line, &$preNode)
     {
-        $pattern = '/\[\[(\S|\s).*?\]\]/';
+        $pattern = '/\[\[(\S|\s)*?\]\]/';
 
         if (preg_match_all($pattern, $line, $matches)) {
             foreach ($matches[0] as &$answer) {
@@ -56,7 +58,7 @@ class Fill extends AbstractQuestion
                 $answer = rtrim($answer, ']');
             }
             $question['answers'] = $matches[0];
-            $question['stem'] .= preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
+            $question['stem'] .= preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $line);
             $preNode = QuestionElement::ANSWERS;
 
             return true;
@@ -69,13 +71,13 @@ class Fill extends AbstractQuestion
     {
         //判断题干是否有错
         if (empty($question[QuestionElement::STEM])) {
-            $question['errors'][] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
+            $question['errors'][QuestionElement::STEM] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
         }
 
         //判断答案是否有错
         foreach ($question[QuestionElement::ANSWERS] as $key => $answer) {
             if (empty($answer)) {
-                $question['errors'][] = $this->getError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER, $key);
+                $question['errors'][QuestionElement::ANSWERS.'_'.$key] = $this->getError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER, $key);
             }
         }
     }
