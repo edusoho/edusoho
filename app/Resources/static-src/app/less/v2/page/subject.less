@@ -51,6 +51,7 @@
 .subject-item__number {
   width: 16px;
   height: 16px;
+  margin-right: 2px;
   display: inline-block;
   font-size: 12px;
   line-height: 14px;
@@ -67,12 +68,27 @@
 
 
 .subject-item__title {
+  display: table;
   margin-bottom: 12px;
   line-height: 18px;
   color: @cd-dark-major;
   p {
     display: inline;
   }
+}
+
+.subject-item__stem {
+  display: table-cell;
+  vertical-align: top;
+}
+
+.subject-sub-item-title {
+  display: table;
+}
+
+.subject-sub-item__stem {
+  display: table-cell;
+  vertical-align: top;
 }
 
 .subject-sub-item__title {
