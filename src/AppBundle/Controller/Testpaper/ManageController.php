@@ -169,6 +169,7 @@ class ManageController extends BaseController
         $questions = $this->getTestpaperService()->buildExportTestpaperItems($testpaperId);
 
         $writer = new WriteDocx($testpaper['name']);
+
         return new Response($writer->write($questions));
     }
 
