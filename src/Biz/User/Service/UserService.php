@@ -377,6 +377,8 @@ interface UserService
 
     public function generateUUID();
 
+    public function getSmsCommonCaptchaStatus($clientIp, $recount = false);
+
     public function getSmsRegisterCaptchaStatus($clientIp, $updateCount = false);
 
     public function updateSmsRegisterCaptchaStatus($clientIp);
