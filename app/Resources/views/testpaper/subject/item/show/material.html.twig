@@ -1,4 +1,5 @@
 {% set subQuestions = item.subQuestions %}
+{% set errors = item.errors|default([]) %}
 <div class="subject-item" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
   <div class="subject-item__title">
     <span class="subject-item__number">

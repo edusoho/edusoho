@@ -3,10 +3,10 @@
 {% block subject %}
   <div class="edit-subject-item cd-mb24 cd-mt24 form-group">
     <label class="cd-radio cd-mt8 mlm sb-block {% if question.answer|default('-1')|join == 1 %}checked{% endif %}">
-      <input type="radio" data-toggle="cd-radio" name="answer" value="1"><span class="cd-dark-major">正确</span>
+      <input type="radio" data-toggle="cd-radio" {% if question.answer|default('-1')|join == 1 %}checked="checked" {% endif %} name="answer" value="1"><span class="cd-dark-major">正确</span>
     </label>
     <label class="cd-radio cd-mt24 mlm {% if question.answer|default(['-1'])|join == 0 %}checked{% endif %}">
-      <input type="radio" data-toggle="cd-radio" name="answer" value="0"><span class="cd-dark-major">错误</span>
+      <input type="radio" data-toggle="cd-radio" {% if question.answer|default('-1')|join == 0 %}checked="checked" {% endif %} name="answer" value="0"><span class="cd-dark-major">错误</span>
     </label>
   </div>
 {% endblock %}
