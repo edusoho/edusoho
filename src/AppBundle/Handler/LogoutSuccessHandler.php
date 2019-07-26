@@ -22,7 +22,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 
         $this->targetUrl = $this->httpUtils->generateUri($request, $goto);
 
-        if ($this->notThisWebsite($request, $this->targetUrl)) {
+        if ($this->checkWebsite($request, $this->targetUrl)) {
             $this->targetUrl = $this->httpUtils->generateUri($request, 'homepage');
         }
 
@@ -53,7 +53,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
         return isset($setting['enabled']) && isset($setting['weixinmob_enabled']) && $setting['enabled'] && $setting['weixinmob_enabled'];
     }
 
-    protected function notThisWebsite($request, $targetUrl)
+    protected function checkWebsite($request, $targetUrl)
     {
         $hostUrl = $request->getUriForPath('');
         if (0 === strpos($targetUrl, $hostUrl)) {
