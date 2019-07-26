@@ -18,6 +18,7 @@ export default class sbList {
     this.scoreValidator = null;
     this.selectQuestion = [];
     this.questionOperate = null;
+    this.testpaperTitle = '';
     this.init();
   }
 
@@ -30,6 +31,7 @@ export default class sbList {
     this.setDifficulty();
     this.createModal();
     this.modalShow();
+    this.initTestpaperTitle();
     this.statErrorQuestions();
   }
 
@@ -50,6 +52,13 @@ export default class sbList {
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
+    this.$itemList.on('change', '.js-testpaper-title', event => this.editTestpaperTitle(event));
+  }
+
+  initTestpaperTitle() {
+    if (this.isTestpaper()) {
+      this.testpaperTitle = $('.js-testpaper-title').val();
+    }
     this.$itemList.on('click', '.subject-change-btn', event => this.itemConvert(event));
     this.$subjectData.bind('change', '*[data-type]', (event, type) => this.updateQuestionCountText(type));
     this.$subjectData.bind('change', '.js-total-score', event => this.updateTotalScoreText());
@@ -237,7 +246,12 @@ export default class sbList {
   batchSetScore() {
     if (this.scoreValidator.form()) {
       let score = $('input[name="score"]').val();
-      this.questionOperate.modifyScore(this.selectQuestion, score);
+      let missScore = $('input[name="missScore"]').val();
+      let scoreObj = {
+        score: score,
+        missScore: missScore,
+      };
+      this.questionOperate.modifyScore(this.selectQuestion, scoreObj, this.isTestpaper());
       this.selectQuestion = [];
 
       cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
@@ -273,7 +287,7 @@ export default class sbList {
     let self = this;
     let url = $target.parents('.subject-item__operation').data('url');
     let question = this.questionOperate.getQuestion($item.attr('id'));
-    $.get(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
+    $.post(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
       $item.replaceWith(html);
       showEditor.getEditor(question['type'], $('.js-edit-form'), self.questionOperate);
     });
@@ -346,6 +360,37 @@ export default class sbList {
       $item.remove();
       this.statErrorQuestions();
     });
+  }
+
+  editTestpaperTitle(event) {
+    let val = $(event.target).val();
+
+    if ($.trim(val) == '') {
+      cd.message({
+        type: 'danger',
+        message: Translator.trans('subject.testpaper_title_empty_hint'),
+      });
+      $(event.target).val(this.testpaperTitle);
+      return;
+    }
+
+    let length = val.length;
+    for (let i = 0; i < val.length; i++) {
+      if (val.charCodeAt(i) > 127) {
+        length++;
+      }
+    }
+
+    if (length > 50) {
+      cd.message({
+        type: 'danger',
+        message: Translator.trans('subject.testpaper_title_too_long_hint'),
+      });
+      $(event.target).val(this.testpaperTitle);
+      return;
+    }
+
+    this.testpaperTitle = val;
   }
 
   updateQuestionCountText(type) {

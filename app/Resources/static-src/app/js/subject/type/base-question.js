@@ -81,7 +81,7 @@ class BaseQuestion {
     });
     question = self.operate.getQuestion(token);
     let seq = self.operate.getQuestionOrder(token);
-    $.get(self.$form.data('url'), {seq: seq, question: question, token: token}, html=> {
+    $.post(self.$form.data('url'), {seq: seq, question: question, token: token}, html=> {
       self.$form.parent('.subject-item').replaceWith(html);
       this.removeErrorClass(token);
     });

@@ -202,7 +202,6 @@ class Choice extends BaseQuestion {
       return;
     }
 
-    const $prev = $(event.currentTarget).parent().prev();
     const type = $('[name="type"]').val();
 
     $.ajax({
@@ -210,7 +209,7 @@ class Choice extends BaseQuestion {
       type: 'get',
       data: {order: this.optionCount+1}
     }).done(resp => {
-      $prev.after(resp);
+      $(event.currentTarget).parent().before(resp);
       this.optionCount++;
     });
   }
@@ -247,7 +246,7 @@ class Choice extends BaseQuestion {
     });
     question = self.operate.getQuestion(token);
     let seq = self.operate.getQuestionOrder(token);
-    $.get(self.$form.data('url'), {seq: seq, question: question, token: token}, html => {
+    $.post(self.$form.data('url'), {seq: seq, question: question, token: token}, html => {
       self.$form.parent('.subject-item').replaceWith(html);
     });
   }

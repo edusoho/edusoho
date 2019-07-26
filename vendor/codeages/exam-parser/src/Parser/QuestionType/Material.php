@@ -3,6 +3,7 @@
 namespace ExamParser\Parser\QuestionType;
 
 use ExamParser\Constants\QuestionElement;
+use ExamParser\Constants\QuestionErrors;
 use ExamParser\Parser\Parser;
 
 class Material extends AbstractQuestion
@@ -48,6 +49,7 @@ class Material extends AbstractQuestion
                 continue;
             }
         }
+        $this->checkErrors($question);
 
         return $question;
     }
@@ -103,5 +105,27 @@ class Material extends AbstractQuestion
         }
 
         return $result;
+    }
+
+    protected function checkErrors(&$question)
+    {
+        //判断题干是否有错
+        if (empty($question[QuestionElement::STEM])) {
+            $question['errors'][QuestionElement::STEM] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
+        }
+
+        //判断是否有子题
+        if (empty($question['subQuestions'])) {
+            $question['errors'][QuestionElement::SUB_QUESTIONS] = $this->getError(QuestionElement::SUB_QUESTIONS, QuestionErrors::NO_SUB_QUESTIONS);
+
+            return;
+        }
+
+        //子题是否有错
+        foreach ($question['subQuestions'] as $subQuestion) {
+            if (!empty($subQuestion['errors'])) {
+                $question['errors']['hasSubError'] = true;
+            }
+        }
     }
 }
