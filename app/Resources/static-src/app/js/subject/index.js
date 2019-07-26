@@ -244,7 +244,12 @@ export default class sbList {
   batchSetScore() {
     if (this.scoreValidator.form()) {
       let score = $('input[name="score"]').val();
-      this.questionOperate.modifyScore(this.selectQuestion, score);
+      let missScore = $('input[name="missScore"]').val();
+      let scoreObj = {
+        score: score,
+        missScore: missScore,
+      };
+      this.questionOperate.modifyScore(this.selectQuestion, scoreObj, this.isTestpaper());
       this.selectQuestion = [];
 
       cd.message({ type: 'success', message: Translator.trans('分数修改成功') });

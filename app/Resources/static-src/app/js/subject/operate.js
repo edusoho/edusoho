@@ -108,10 +108,18 @@ export default class QuestionOperate {
     });
   }
 
-  modifyScore(selectQuestion, score) {
+  modifyScore(selectQuestion, scoreObj, isTestpaper) {
     let self = this;
     $.each(selectQuestion, function(index, token) {
       self.$itemList.find(`#${token}`).find('.js-score').html(`${score}分`);
+      let question = self.getQuestion(token);
+      self.updateQuestionItem(token, 'score', scoreObj['score']);
+      if (isTestpaper) {
+        if (question['type'] == 'choice' || question['type'] == 'uncertain_choice') {
+          self.updateQuestionItem(token, 'missScore', scoreObj['missScore']);
+        }
+        self.totalScore += scoreObj['score'] - question['score'];
+      }
     });
   }
 
