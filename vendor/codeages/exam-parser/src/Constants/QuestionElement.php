@@ -23,4 +23,6 @@ class QuestionElement
     const DIFFICULTY = 'difficulty';
 
     const TYPE = 'type';
+
+    const SUB_QUESTIONS = 'subQuestions';
 }

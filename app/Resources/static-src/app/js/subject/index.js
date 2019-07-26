@@ -285,7 +285,7 @@ export default class sbList {
     let self = this;
     let url = $target.parents('.subject-item__operation').data('url');
     let question = this.questionOperate.getQuestion($item.attr('id'));
-    $.get(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
+    $.post(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
       $item.replaceWith(html);
       showEditor.getEditor(question['type'], $('.js-edit-form'), self.questionOperate);
     });

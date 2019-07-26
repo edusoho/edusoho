@@ -1,8 +1,8 @@
 {% extends 'testpaper/subject/type/question-edit-layout.html.twig' %}
 
 {% block subject %}
-  <div class="cd-mt24">
-    <label class="col-sm-1 ph0 control-label edit-subject-item__label">答案</label>
+  <div class="cd-mb24">
+    <label class="col-sm-1 ph0 control-label">答案：</label>
     <div class="col-sm-11 ph0">
       <input class="form-control cd-dark-major text-sm" type="text" value="{{ question_html_filter(question.answer|default('')) }}" data-role="edit">
       <textarea class="form-control" style="height:190px;display: none;" id="question-answer-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"  data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" data-edit="answer" name="answer">{{ question.answer|default('') }}</textarea>
