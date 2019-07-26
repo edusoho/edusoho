@@ -27,7 +27,7 @@ class Fill extends BaseQuestion {
       for (var i = 0; i < matches.length; i++) {
         let answer = matches[i].substring(2);
         answer = answer.substring(0, answer.length - 2);
-        question['answers'].push(answer.split('|'));
+        question['answers'].push(answer);
       }
     }
 
