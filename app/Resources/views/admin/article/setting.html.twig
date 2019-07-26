@@ -28,6 +28,14 @@
       </div>
     </div>
 
+    <div class="row form-group">
+      <div class="col-md-2 control-label"><label >{{'admin.article_setting.article_comments_manage'|trans}}</label></div>
+      <div class="col-md-1 control-label">{{ 'admin.setting_course.open_course.open_course_review'|trans }}：</div>
+      <div class="controls col-md-7 radios">
+          {{ radios('show_comment', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, articleSetting.show_comment|default('1')) }}
+      </div>
+    </div>
+
     <div class="form-group">
       <div class="col-md-2 control-label"></div>
       <div class="controls col-md-8">

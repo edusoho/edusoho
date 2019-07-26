@@ -36,6 +36,7 @@ class CourseTask extends AbstractResource
         }
 
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], true);
+        $task['activity']['finishCondition'] = $this->getActivityService()->getActivityFinishCondition($task['activity']);
         $task['result'] = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 
         return $task;

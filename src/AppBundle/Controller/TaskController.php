@@ -4,15 +4,19 @@ namespace AppBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Content\FileException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
+use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
+use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\User\Service\TokenService;
+use Biz\User\TokenException;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -426,6 +430,45 @@ class TaskController extends BaseController
         return $this->forward($action, array('activity' => $activity));
     }
 
+    public function downloadFileByTokenAction(Request $request, $courseId, $taskId, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('file_download', $token);
+
+        if (!$token) {
+            throw TokenException::TOKEN_INVALID();
+        }
+
+        $task = $this->getTaskService()->getTask($taskId);
+
+        if (empty($task)) {
+            throw TaskException::NOTFOUND_TASK();
+        }
+
+        $materials = $this->getMaterialService()->findMaterialsByLessonIdAndSource($task['activityId'], 'coursematerial');
+        $fileIds = array();
+
+        foreach ($materials as $material) {
+            $fileIds[] = $material['fileId'];
+        }
+
+        $fileId = $token['data']['fileId'];
+        $tokenTaskId = $token['data']['taskId'];
+        $tokenCourseId = $token['data']['courseId'];
+
+        if (!in_array($fileId, $fileIds)) {
+            throw FileException::FILE_NOT_FOUND();
+        }
+
+        if ($tokenTaskId != $taskId || $tokenCourseId != $courseId || empty($fileId)) {
+            throw TokenException::TOKEN_INVALID();
+        }
+
+        return $this->forward('AppBundle:UploadFile:download', array(
+            'request' => $request,
+            'fileId' => $fileId,
+        ));
+    }
+
     /**
      * 没有权限进行任务的时候的处理逻辑，目前只有学员动态跳转过来的时候跳转到教学计划营销页.
      *
@@ -619,5 +662,13 @@ class TaskController extends BaseController
     protected function getActivityConfig()
     {
         return $this->get('extension.manager')->getActivities();
+    }
+
+    /**
+     * @return MaterialService
+     */
+    protected function getMaterialService()
+    {
+        return $this->createService('Course:MaterialService');
     }
 }

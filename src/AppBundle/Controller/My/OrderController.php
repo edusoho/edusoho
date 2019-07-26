@@ -2,22 +2,25 @@
 
 namespace AppBundle\Controller\My;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Order\OrderException;
-use Codeages\Biz\Order\Service\OrderRefundService;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\OrderFacade\Service\OrderRefundService as LocalOrderRefundService;
+use Codeages\Biz\Order\Service\OrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Service\WorkflowService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
 
 class OrderController extends BaseController
 {
     protected function getTimeRange($fields)
     {
-        if (isset($fields['startTime']) && isset($fields['endTime']) && $fields['startTime'] != '' && $fields['endTime'] != '') {
+        if (isset($fields['startTime']) && isset($fields['endTime']) && '' != $fields['startTime'] && '' != $fields['endTime']) {
             if ($fields['startTime'] > $fields['endTime']) {
                 return false;
             }
@@ -78,6 +81,8 @@ class OrderController extends BaseController
             $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
             $order['refund'] = empty($orderRefunds[$order['id']]) ? array() : $orderRefunds[$order['id']];
+
+            $order['product'] = empty($order['item']) ? null : $this->getOrderFacadeService()->getOrderProductByOrderItem($order['item']);
         }
 
         return $this->render('my-order/order/index.html.twig', array(
@@ -172,5 +177,29 @@ class OrderController extends BaseController
     protected function getLocalOrderRefundService()
     {
         return $this->createService('OrderFacade:OrderRefundService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return OrderFacadeService
+     */
+    private function getOrderFacadeService()
+    {
+        return $this->createService('OrderFacade:OrderFacadeService');
     }
 }

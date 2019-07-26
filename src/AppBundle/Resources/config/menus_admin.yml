@@ -1002,6 +1002,10 @@ admin:
                             disable: true
                             parent: admin_setting_course_setting
                             after: admin_setting_live_course
+                        admin_open_course_setting:
+                            name: admin.system.course.open_course_tab
+                            disable: true
+                            parent: admin_setting_course_setting
                 admin_setting_operation:
                     name: admin.system.operation_menu
                     children:
@@ -1014,6 +1018,10 @@ admin:
                         admin_invite_set:
                             name: admin.system.operation.invite_tab
                             disable: true
+                        admin_message_setting:
+                            name: admin.system.operation.message_tab
+                            disable: true
+                            parent: admin_setting_operation
                 admin_setting_finance:
                     name: admin.system.finance_menu
                     children:

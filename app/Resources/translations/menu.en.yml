@@ -141,7 +141,7 @@ admin.operation.mobile_menu: 'App contents'
 admin.operation.wechat_notification: WeChat Notification
 admin.operation.analysis_menu: Statistics
 admin.operation.sensitive_words_menu: Sensitive Words
-admin.operation.reward_point_menu:　Reward Point
+admin.operation.reward_point_menu: Reward Point
 admin.operation.reward_point_mall_menu: Reward Point Mall
 
 ##资讯管理模块
@@ -319,6 +319,7 @@ admin.system.course.basic_tab: Course
 admin.system.course.questions_tab: Question
 admin.system.course.avatar_tab: Default Avatar
 admin.system.course.classroom_tab: Class
+admin.system.course.open_course_tab: Open Course
 
 ##运营设置模块
 admin.system.operation.article_tab: Article
@@ -326,6 +327,7 @@ admin.system.operation.group_tab: Group
 admin.system.operation.invite_tab: 'Invitation Setting'
 admin.system.operation.wap_tab: Mobile Site
 admin.system.operation.reward_point: Reward Point
+admin.system.operation.message_tab: Message
 
 ##账务设置模块
 admin.system.finance.payment_tab: Payment

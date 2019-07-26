@@ -86,6 +86,9 @@ class ClassroomAdminController extends BaseController
 
         $default = array(
             'explore_default_orderBy' => 'createdTime',
+            'show_review' => '1',
+            'show_thread' => '1',
+            'show_note' => '1',
         );
 
         $classroomSetting = array_merge($default, $classroomSetting);

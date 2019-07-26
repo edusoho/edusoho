@@ -4,7 +4,6 @@ namespace Tests\Unit\PostFilter\Event;
 
 use Biz\BaseTestCase;
 use Biz\PostFilter\Event\TokenBucketEventSubscriber;
-use Biz\PostFilter\Service\TokenBucketService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -32,10 +31,9 @@ class TokenBucketEventSubscriberTest extends BaseTestCase
 
     public function testBeforeWithManageRole()
     {
-        $this->mockBiz('PostFilter:TokenBucketService', array(
+        $service = $this->mockBiz('PostFilter:TokenBucketService', array(
             array(
                 'functionName' => 'hasToken',
-                'times' => 1,
             ),
         ));
 
@@ -43,21 +41,19 @@ class TokenBucketEventSubscriberTest extends BaseTestCase
         $eventSubscriber = new TokenBucketEventSubscriber($this->biz);
         $eventSubscriber->before($event);
 
-        $this->getTokenBucketService()->shouldNotHaveReceived('hasToken');
+        $service->shouldNotHaveReceived('hasToken');
     }
 
     public function testBefore()
     {
-        $this->mockBiz('PostFilter:TokenBucketService', array(
+        $service = $this->mockBiz('PostFilter:TokenBucketService', array(
             array(
                 'functionName' => 'hasToken',
-                'times' => 1,
                 'withParams' => array('127.0.0.1', 'thread'),
                 'returnValue' => false,
             ),
             array(
                 'functionName' => 'hasToken',
-                'times' => 2,
                 'withParams' => array(3, 'threadLoginedUser'),
                 'returnValue' => true,
             ),
@@ -78,18 +74,15 @@ class TokenBucketEventSubscriberTest extends BaseTestCase
         $eventSubscriber = new TokenBucketEventSubscriber($this->biz);
         $eventSubscriber->before($event);
 
+        $service->shouldHaveReceived('hasToken')->times(1);
         $this->assertTrue($event->isPropagationStopped());
-
-        $biz = $this->getBiz();
-        unset($biz['@PostFilter:TokenBucketService']);
     }
 
     public function testIncrTokenWithManageRole()
     {
-        $this->mockBiz('PostFilter:TokenBucketService', array(
+        $service = $this->mockBiz('PostFilter:TokenBucketService', array(
             array(
                 'functionName' => 'incrToken',
-                'times' => 1,
             ),
         ));
 
@@ -97,14 +90,6 @@ class TokenBucketEventSubscriberTest extends BaseTestCase
         $eventSubscriber = new TokenBucketEventSubscriber($this->biz);
         $eventSubscriber->incrToken($event);
 
-        $this->getTokenBucketService()->shouldNotHaveReceived('incrToken');
-    }
-
-    /**
-     * @return TokenBucketService
-     */
-    private function getTokenBucketService()
-    {
-        return $this->createService('PostFilter:TokenBucketService');
+        $service->shouldNotHaveReceived('incrToken');
     }
 }

@@ -39,7 +39,7 @@ class CategoryMarksDataTagTest extends BaseTestCase
         $this->assertArrayEquals(array(
             array('code' => 'first', 'title' => '一级分类'),
             array('code' => 'second', 'title' => '二级分类'),
-            null,
+            array(),
         ), $contents);
     }
 }

@@ -106,6 +106,17 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        $biz['qiQiuYunSdk.sms'] = function ($biz) use ($that) {
+            $service = null;
+
+            $sdk = $that->generateSdk($biz, array());
+            if (!empty($sdk)) {
+                $service = $sdk->getSmsService();
+            }
+
+            return $service;
+        };
     }
 
     public function generateSdk($biz, $serviceConfig)

@@ -325,7 +325,7 @@ class BaseTestCase extends TestCase
         foreach ($params as $param) {
             $expectation = $mockObj->shouldReceive($param['functionName']);
 
-            if (!empty($param['runTimes'])) {
+            if (isset($param['runTimes'])) {
                 $expectation = $expectation->times($param['runTimes']);
             }
 
@@ -335,15 +335,15 @@ class BaseTestCase extends TestCase
                 $expectation = $expectation->withAnyArgs();
             }
 
-            if (!empty($param['returnValue'])) {
+            if (isset($param['returnValue'])) {
                 $expectation->andReturn($param['returnValue']);
             }
 
-            if (!empty($param['andReturnValues'])) {
+            if (isset($param['andReturnValues'])) {
                 $expectation->andReturnValues($param['andReturnValues']);
             }
 
-            if (!empty($param['throwException'])) {
+            if (isset($param['throwException'])) {
                 $expectation->andThrow($param['throwException']);
             }
         }

@@ -28,11 +28,12 @@
       <div class="mates">
         <span class="mrm">{{follower|default(0)}}</span>{{'user.fields.fan'|trans}}<span class="mlm mrm">｜</span><span class="mrm">{{following|default(0)}}</span>{{'user.fields.following'|trans}}
       </div>
+      {% set messageSetting = setting('message') %}
       {% if (not app.user) or (app.user.id != user.id) %}
         <div class="actions">
           <a class="btn btn-primary follow-btn mrl" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>{{'user.btn.following'|trans}}</a>
           <a class="btn btn-default unfollow-btn mrl" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>{{'user.btn.followed'|trans}}</a>
-          {% if can_send_message(user.id) %}
+          {% if can_send_message(user.id) and messageSetting.showable|default('1') != 0 %}
             <button class="btn btn-ghost-white" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'user.btn.send_message'|trans}}</button>
           {% endif %}
         </div>

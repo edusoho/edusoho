@@ -1,4 +1,6 @@
 {% import 'macro.html.twig' as web_macro %}
+{% set openCourseSetting = setting('openCourse') %}
+{% if openCourseSetting.show_comment|default('1') != 0 %}
 <div class="panel panel-default open-course-panel">
   <div class="panel-heading">{{ 'my.teaching.open_course.comment.user_comment'|trans }}</div>
   <div class="panel-body">
@@ -40,4 +42,5 @@
     </div>
   </div>
 </div>
+{% endif %}
 

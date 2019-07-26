@@ -1,15 +1,19 @@
 {% for task in tasks|default() %}
-  
-  <li class="task-manage-item js-task-manage-item drag clearfix {% if task.isOptional %}js-optional-task{% endif %}" id="task-{{ task.id }}" >
+  {% if task.tasks|default() %}
+    {% set isLesson = task.tasks[0].isLesson|default(false) %}
+  {% else %}
+    {% set isLesson = task.isLesson|default(false) %}
+  {% endif %}
+  <li class="task-manage-item js-task-manage-item {{ isLesson ? 'hidden' : 'drag' }} clearfix {% if task.isOptional %}js-optional-task{% endif %}" id="task-{{ task.id }}" >
     <div class="item-content js-item-content text-overflow">
-      {% include 'lesson-manage/normal/task-content.html.twig' with {task: task, taskNum: loop.index, displayAllInfo: true, isShowText: false} %}
+      {% include 'lesson-manage/normal/task-content.html.twig' with {task: task, taskNum: loop.index - 1, displayAllInfo: true, isShowText: false, isLesson: isLesson} %}
     </div>
     <div class="item-actions">
       <a class="cd-mr24" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}">
-        <i class="es-icon es-icon-edit" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}" data-placement="top"></i>
+        <i class="es-icon es-icon-edit" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('site.data.learning_task'|trans)}) }}" data-placement="top"></i>
       </a>
       <a class="cd-mr24" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}" target="_blank">
-        <i class="es-icon es-icon-removeredeye" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.preview'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}" data-placement="top"></i>
+        <i class="es-icon es-icon-removeredeye" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.preview'|trans({'%taskName%':setting('course.task_name')|default('site.data.learning_task'|trans)}) }}" data-placement="top"></i>
       </a>
       
       <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">

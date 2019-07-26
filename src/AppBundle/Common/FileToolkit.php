@@ -920,6 +920,37 @@ class FileToolkit
         }
     }
 
+    public static function getDownloadTaskTypeByExtension($extension)
+    {
+        $extension = strtolower($extension);
+
+        if (in_array($extension, array('mpeg', 'mpg', 'mpe', 'mlv', 'dat', '2v', 'vob', 'rmvb', 'mov', 'qt', 'asf', 'avi', 'wmv', 'mkv', 'mp4', 'flv'))) {
+            return 'video';
+        } elseif (in_array($extension, array('mp3', 'wma', 'aac', 'cda', 'wav', 'voc', 'cda'))) {
+            return 'audio';
+        } elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif'))) {
+            return 'image';
+        } elseif (in_array($extension, array('zip', 'zipx', 'rar', '7z', 'dmg', 'tar'))) {
+            return 'package';
+        } elseif (in_array($extension, array('txt'))) {
+            return 'txt';
+        } elseif (in_array($extension, array('pdf'))) {
+            return 'pdf';
+        } elseif (in_array($extension, array('doc', 'docx'))) {
+            return 'doc';
+        } elseif (in_array($extension, array('xls', 'xlsx'))) {
+            return 'xls';
+        } elseif (in_array($extension, array('ppt', 'pptx'))) {
+            return 'ppt';
+        } elseif (in_array($extension, array('flash'))) {
+            return 'flash';
+        } elseif (in_array($extension, array('link'))) {
+            return 'link';
+        } else {
+            return 'other';
+        }
+    }
+
     public static function formatFileSize($size)
     {
         $currentValue = $currentUnit = null;

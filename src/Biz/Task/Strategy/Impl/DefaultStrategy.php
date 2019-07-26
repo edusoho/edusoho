@@ -93,42 +93,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return $task;
     }
 
-    public function deleteTask($task)
-    {
-        if (empty($task)) {
-            return;
-        }
-        try {
-            $this->biz['db']->beginTransaction();
-            $allTasks = array();
-            if ('lesson' == $task['mode']) {
-                $allTasks = $this->getTaskDao()->findByCourseIdAndCategoryId(
-                    $task['courseId'],
-                    $task['categoryId']
-                );
-            } else {
-                array_push($allTasks, $task);
-            }
-            foreach ($allTasks as $_task) {
-                $this->getTaskDao()->delete($_task['id']);
-                $this->getTaskResultService()->deleteUserTaskResultByTaskId($_task['id']);
-                $this->getActivityService()->deleteActivity($_task['activityId']);
-            }
-
-            if ('lesson' == $task['mode']) {
-                $lessonCount = $this->getCourseLessonService()->countLessons(array('id' => $task['categoryId']));
-                if ($lessonCount > 0) {
-                    $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
-                }
-            }
-
-            $this->biz['db']->commit();
-        } catch (\Exception $e) {
-            $this->biz['db']->rollback();
-            throw $e;
-        }
-    }
-
     protected function validateTaskMode($field)
     {
         if (!empty($field['mode']) && !in_array(
@@ -259,7 +223,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     protected function getTaskSeq($taskMode, $chapterSeq)
     {
-        $taskModes = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
+        $taskModes = array('preparation' => 2, 'lesson' => 1, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
         if (!array_key_exists($taskMode, $taskModes)) {
             throw TaskException::ERROR_TASK_MODE();
         }

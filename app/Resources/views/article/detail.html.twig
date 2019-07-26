@@ -12,6 +12,8 @@
 
 {% block content %}
 
+{% set articleSetting = setting('article') %}
+
   <div class="article-detail row" id="detail-content">
     <!-- 主内容 -->
     <div class="col-md-8 article-detail-main">
@@ -29,16 +31,18 @@
         {% include 'article/part/detail-tags.html.twig' %}
 
         {% include 'article/part/detail-share.html.twig' %}
-        
-        {% include 'article/part/detail-post-form.html.twig' %}
 
-        {% include 'article/part/detail-post-list.html.twig' %}
+        {% if articleSetting.show_comment|default('1') != 0 %}
+          {% include 'article/part/detail-post-form.html.twig' %}
+
+          {% include 'article/part/detail-post-list.html.twig' %}
+        {% endif %}
         
       </section>
     </div>
     
     <aside class="col-md-4 article-sidebar">
-      {% include 'article/widget/sidebar.html.twig' %}
+      {% include 'article/widget/sidebar.html.twig' with {'isShowComment': articleSetting.show_comment|default('1') } %}
     </aside>
     
   </div>

@@ -3,6 +3,8 @@
 
 {% block page_title %}{{ 'course.plan_task.content_title'|trans }}{% endblock %}
 {% block main_body %}
+  {% set locales = app.request.session.get('_locale',app.request.locale)|default('zh_CN') %}
+  <span class="js-data-local hidden" data-local="{{ locales }}"></span>
   {% include 'lesson-manage/header.html.twig' %}
   <ul id="sortable-list" class="task-manage-list sortable-list" data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
     {% for key, item in items %}

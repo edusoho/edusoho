@@ -51,16 +51,33 @@
 
 .inform-dropdown-head__tab {
   float: left;
-  padding: 16px 0;
+  padding: 16px 0px;
   width: 140px;
-  text-align: center;
   font-size: 14px;
+  text-align: center;
   line-height: 1;
   font-weight: 500;
   color: @cd-dark-minor;
   &:first-child {
     .cd-box-shadow-inset(-1px 0 0 0);
   }
+  .es-transition;
+  &:focus,
+  &:hover,
+  &.active {
+    color: @brand-primary;
+    .es-transition;
+  }
+}
+
+.inform-dropdown-head__one_tab {
+  float: left;
+  padding: 16px 120px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1;
+  font-weight: 500;
+  color: @cd-dark-minor;
   .es-transition;
   &:focus,
   &:hover,

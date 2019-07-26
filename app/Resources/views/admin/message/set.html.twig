@@ -1,0 +1,25 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_message_setting' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
+    <div class="row form-group">
+      <div class="col-md-2 control-label"><label >{{'admin.article_setting.message_comments_manage'|trans}}</label></div>
+      <div class="controls col-md-8 radios">
+        {{ radios('showable', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, messageSetting.showable|default('1')) }}
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8">
+        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
