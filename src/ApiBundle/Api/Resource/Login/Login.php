@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\Login;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Resource\BatchNotification\BatchNotification;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\MathToolkit;
@@ -18,7 +17,6 @@ use Biz\User\Service\BatchNotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 
 class Login extends AbstractResource
 {
@@ -70,7 +68,7 @@ class Login extends AbstractResource
         }
         $this->appendUser($user);
 
-        $token = $this->getLoginToken('sms_login', $user['id'], $fields['smsCode'], $fields['smsToken'], $fields['mobile']);
+        $token = $this->getLoginToken($user['id'], $fields['smsCode'], $fields['smsToken'], $fields['mobile']);
 
         // 登录后获取通知
         $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
@@ -81,7 +79,7 @@ class Login extends AbstractResource
 
         return array(
             'token' => $token,
-            'user' => $user
+            'user' => $user,
         );
     }
 
@@ -134,17 +132,17 @@ class Login extends AbstractResource
         return $user;
     }
 
-    private function getLoginToken($tokenType, $userId, $smsCode, $smsToken, $mobile)
+    private function getLoginToken($userId, $smsCode, $smsToken, $mobile)
     {
-        $token = $this->getTokenService()->makeToken($tokenType, array(
-            'times'    => 0,
+        $token = $this->getTokenService()->makeToken('mobile_login', array(
+            'times' => 0,
             'duration' => 60 * 60 * 24 * 7,
-            'userId'   => $userId,
-            'data'     => array(
+            'userId' => $userId,
+            'data' => array(
                 'sms_code' => $smsCode,
                 'sms_token' => $smsToken,
-                'mobile'   => $mobile
-            )
+                'mobile' => $mobile,
+            ),
         ));
 
         return $token['token'];
@@ -189,7 +187,6 @@ class Login extends AbstractResource
     {
         return $this->service('User:UserService');
     }
-
 
     private function getBizSms()
     {
