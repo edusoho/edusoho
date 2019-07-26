@@ -1358,4 +1358,5 @@ document.import.intro_hover: >
     <div align="center">全新导入功能，快来试试吧。</div>
   </div>
 document.import.skip_btn: 知道了
-
+subject.testpaper_title_empty_hint: 试卷名称不能为空
+subject.testpaper_title_too_long_hint: 最多输入50个字符

@@ -12,15 +12,13 @@
       {% endif %}
     </span>
     {% if errors.stem is not defined %}
-      <span>{{ item.stem|raw }}</span>
+      <div class="subject-item__stem">{{ item.stem|raw }}</div>
     {% elseif errors.stem.code == 100001 %}
       <span class="single-item__text--danger">缺少题干，请点击"编辑"进行设置。</span>
     {% endif %}
   </div>
   <div class="subject-item__body">
-
     {% for option_key,option in options %}
-
       <label class="cd-radio single-item subject-forbid {% if option_key in answers  %}checked{% endif %}">
         <input type="radio" data-toggle="cd-radio" name="right" value="{{'option' ~ loop.index }}">
         <span>{{ dict_text('questionOption', option_key) }}. </span>

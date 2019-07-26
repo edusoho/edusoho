@@ -1415,4 +1415,5 @@ document.import.intro_hover: >
     <div align="center">New import function,Just try.</div>
   </div>
 document.import.skip_btn: I know!
-
+subject.testpaper_title_empty_hint: Testpaper title can not be empty
+subject.testpaper_title_too_long_hint: Enter up to 50 characters

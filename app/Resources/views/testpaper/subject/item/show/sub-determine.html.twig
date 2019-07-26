@@ -13,5 +13,5 @@
       <input type="radio" data-toggle="cd-radio" name="wrong" value="true"><span class="single-item__text">{{ '错误' }}</span>
     </label>
   </div>
-  {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
+  {% include 'testpaper/subject/common.html.twig' with {position:position, type: item.type, difficulty: item.difficulty, score: item.score } %}
 </div>

@@ -78,6 +78,17 @@ abstract class AbstractQuestion
         return false;
     }
 
+    protected function matchStem(&$question, $line, &$preNode)
+    {
+        if (QuestionElement::STEM == $preNode) {
+            $question['stem'] .= (empty($question['stem']) ? '' : '<br/>').preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $line);
+
+            return true;
+        }
+
+        return false;
+    }
+
     protected function hasSignal($str)
     {
         return preg_match('/<#\S{1,100}#>/', $str);
