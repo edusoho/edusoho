@@ -30,6 +30,11 @@
 .van-popup{
   overflow: auto;
 }
+.van-checkbox__icon--checked .van-icon {
+  color: #fff;
+  border-color: $primary-color;
+  background-color: $primary-color;
+}
 
 .van-cell {
   padding-left: 0;

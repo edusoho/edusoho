@@ -5,6 +5,11 @@ export default [
     url: '/settings/face',
     method: 'GET'
   }, {
+    // 云短信服务
+    name: 'settingsCloud',
+    url: '/settings/cloud',
+    method: 'GET'
+  }, {
     // 更多课程分类
     name: 'getCourseCategories',
     url: '/categories/course'
