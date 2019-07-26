@@ -51,8 +51,8 @@ class Login extends AbstractResource
             'mobile',
             'smsToken',
             'smsCode',
-        ), true)) {
-            throw CommonException::NOTFOUND_METHOD();
+        ))) {
+            throw CommonException::ERROR_PARAMETER();
         }
 
         // 检查短信验证码
