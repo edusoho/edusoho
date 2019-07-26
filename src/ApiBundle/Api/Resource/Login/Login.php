@@ -51,12 +51,13 @@ class Login extends AbstractResource
             'mobile',
             'smsToken',
             'smsCode',
-        ))) {
+        ), true)) {
             throw CommonException::NOTFOUND_METHOD();
         }
 
         // 检查短信验证码
-        $status = $this->getBizSms()->check(BizSms::SMS_LOGIN, $fields['mobile'], $fields['smsToken'], $fields['smsCode']);
+        // FIXME 暂时兼容教育云
+        $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $fields['mobile'], $fields['smsToken'], $fields['smsCode']);
         if (BizSms::STATUS_SUCCESS != $status) {
             throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
         }
