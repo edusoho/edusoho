@@ -62,7 +62,7 @@ abstract class AbstractQuestion
     protected function matchAnalysis(&$question, $line, &$preNode)
     {
         if (!$this->hasSignal($line) && QuestionElement::ANALYSIS == $preNode) {
-            $question['analysis'] .= $line;
+            $question['analysis'] .= '<br/>'.$line;
 
             return true;
         }
@@ -71,6 +71,17 @@ abstract class AbstractQuestion
             $analysis = str_replace(self::ANALYSIS_SIGNAL, '', $line);
             $question['analysis'] = $analysis;
             $preNode = QuestionElement::ANALYSIS;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function matchStem(&$question, $line, &$preNode)
+    {
+        if (QuestionElement::STEM == $preNode) {
+            $question['stem'] .= (empty($question['stem']) ? '' : '<br/>').preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $line);
 
             return true;
         }

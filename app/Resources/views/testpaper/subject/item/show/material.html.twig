@@ -1,20 +1,25 @@
-<div class="subject-item" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
-  {% if item.type == 'material' %}
-    <div class="subject-item__title">
-      <span class="subject-item__number">
-      {% if seq|default(null) %}
-        {{ seq }}
-      {% else %}
-        {{ item.order }}
-      {% endif %}
-      </span>
-      {{ item.stem }}
-    </div>
-  {% else %}
-    <div class="subject-item__body">
-      <span>{{ '（' ~ item.subOrder ~ '）'  }}</span><span>{{ item.title }}</span>
-      <div class="subject-sub-item__answer"><span class="subject-sub-item__label">答案：</span><span class="">{{ item.answer }}</span></div>
-    </div>
-  {% endif %}
+{% set subQuestions = item.subQuestions %}
+{% set key = (token is defined) ? (seq - 1) : key %}
+<div class="subject-item" id="{% if token is defined %}{{token}}{% else %}{{ key }}{% endif %}">
+  <div class="subject-item__title">
+    <span class="subject-item__number">
+    {% if seq is defined %}
+      {{ seq }}
+    {% else %}
+      {{ loop.index }}
+    {% endif %}
+    </span>
+    {% if errors.stem is not defined %}
+      <span>{{ item.stem|raw }}</span>
+    {% elseif errors.stem.code == 100001 %}
+      <span class="single-item__text--danger">缺少题干，请点击"编辑"进行设置。</span>
+    {% endif %}
+  </div>
   {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
 </div>
+
+{% if token is not defined %}
+  {% for subKey,subQuestion in subQuestions %}
+    {% include 'testpaper/subject/item/show/sub-' ~ subQuestion.type ~ '.html.twig' with {'item' : subQuestion, 'position' : 'sub', 'key' : key, 'subKey' : subKey} %}
+  {% endfor %}
+{% endif %}

@@ -9,7 +9,6 @@ import Material from './type/material-question';
 
 let questionEditor;
 class showEditor {
-
   static getEditor(type, $form, object) {
     switch (type) {
       case 'single_choice':
@@ -38,7 +37,6 @@ class showEditor {
         questionEditor.initTitleEditor();
         //questionEditor.initAnalysisEditor();
     }
-
   }
 }
 

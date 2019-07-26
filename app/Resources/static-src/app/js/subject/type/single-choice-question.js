@@ -1,13 +1,36 @@
-import QuestionChoice from './choice-question';
-import ReactDOM from 'react-dom';
-import React from 'react';
-import QuestionOptions from 'app/common/component/question-options';
+import Choice from './choice-question';
 
-class SingleChoice extends QuestionChoice {
-  initOptions() {
-    ReactDOM.render( <QuestionOptions imageUploadUrl={this.imageUploadUrl} imageDownloadUrl={this.imageDownloadUrl} dataSource={this.dataSource} dataAnswer={this.dataAnswer}  isRadio={true}/>,
-      document.getElementById('question-options')
-    );
+class SingleChoice extends Choice {
+  constructor($form, object) {
+    super($form, object);
+    this.errorMessage = {
+      noAnswer: Translator.trans('请选择正确答案'),
+    };
+  }
+
+  initEvent() {
+    super.initEvent();
+    this.$form.on('change', 'input:radio[name="right"]', event => this.changeRadio(event));
+  }
+
+  initData() {
+    super.initData();
+    $('.cd-radio.checked').find('[name="right"]').attr('checked', true);
+    this.checkedRadio = $('.cd-radio.checked');
+  }
+
+  initValidator() {
+    super.initValidator();
+    $.validator.addMethod('multi', function(value, element, param) {
+      return true;
+    });
+  }
+
+  changeRadio(event) {
+    if (this.checkedRadio) {
+      this.checkedRadio.removeClass('checked');
+    }
+    this.checkedRadio = $(event.currentTarget).parent();
   }
 }
 

@@ -5,6 +5,7 @@ export default class sbList {
   constructor() {
     this.$element = $('.js-subject-list');
     this.$itemList = $('.js-item-list');
+    this.$subjectData = $('.js-subject-data');
     this.$batchBtn = $('.js-batch-btn');
     this.$batchWrap = $('.js-subject-wrap');
     this.$sbCheckbox = $('.js-show-checkbox');
@@ -17,7 +18,6 @@ export default class sbList {
     this.scoreValidator = null;
     this.selectQuestion = [];
     this.questionOperate = null;
-    this.$itemList = $('.js-item-list');
     this.testpaperTitle = '';
     this.init();
   }
@@ -30,6 +30,7 @@ export default class sbList {
     this.initScoreValidator();
     this.setDifficulty();
     this.initTestpaperTitle();
+    this.statErrorQuestions();
   }
 
   confirmFresh() {
@@ -56,6 +57,9 @@ export default class sbList {
     if (this.isTestpaper()) {
       this.testpaperTitle = $('.js-testpaper-title').val();
     }
+    this.$itemList.on('click', '.subject-change-btn', event => this.itemConvert(event));
+    this.$subjectData.bind('change', '*[data-type]', (event, type) => this.updateQuestionCountText(type));
+    this.$subjectData.bind('change', '.js-total-score', event => this.updateTotalScoreText());
   }
 
   sbListFixed() {
@@ -187,7 +191,7 @@ export default class sbList {
 
     self.$element.find('.js-show-checkbox.checked').each(function(){
       let type = $(this).data('type'),
-        name = $(this).data('name'),
+        name = $(this).parent().next('.js-type-name').text(),
         token = $(this).parents('.js-subject-anchor').data('anchor');
 
       if (typeof stats[type] == 'undefined') {
@@ -243,7 +247,6 @@ export default class sbList {
       this.questionOperate.modifyScore(this.selectQuestion, score);
       this.selectQuestion = [];
 
-      this.updateTotalScoreText();
       cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
       this.$scoreModal.modal('hide');
     }
@@ -262,15 +265,49 @@ export default class sbList {
   }
 
   itemEdit(event) {
-    let self = this;
+    const $editItem = $('.subject-edit-item');
     let $target = $(event.currentTarget);
-    let url = $target.parents('.subject-item__operation').data('url');
     let $item = $target.parents('.subject-item');
-    let question = this.questionOperate.getQuestion($item.attr('id'));
     let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
+    if ($editItem.length !== 0) {
+      cd.message({
+        type: 'warning',
+        message: `请先完成第${seq}题的编辑`,
+      });
+      return;
+    }
+
+    let self = this;
+    let url = $target.parents('.subject-item__operation').data('url');
+    let question = this.questionOperate.getQuestion($item.attr('id'));
     $.get(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
       $item.replaceWith(html);
       showEditor.getEditor(question['type'], $('.js-edit-form'), self.questionOperate);
+    });
+  }
+
+  itemConvert(event) {
+    let $target = $(event.currentTarget);
+    let $item = $target.parents('.subject-item');
+    let toType = $target.data('type');
+    let fromType = $target.parents('.subject-change-list').data('fromType');
+    let $form = $target.parents('.js-edit-form');
+    let url = $target.parents('.subject-change-list').data('convertUrl');
+    let question = sbList._serializeArrayConvertToJson($form.serializeArray());
+    let seq = this.questionOperate.getQuestionOrder(question.token);
+    let data = {
+      "seq" : seq,
+      "token" : question.token,
+      "question" : question,
+      "fromType" : fromType,
+      "toType" : toType,
+    };
+    data.fromType = fromType;
+    data.toType = toType;
+    let self  = this;
+    $.post(url, data, html => {
+      $item.replaceWith(html);
+      showEditor.getEditor(toType, $('.js-edit-form'), self.questionOperate);
     });
   }
 
@@ -291,8 +328,7 @@ export default class sbList {
           $(this).find('.subject-sub-item__number').text(`(${order})`);
           order++;
         });
-        this.questionOperate.deleteQuestion(token);
-        this.updateTotalScoreText();
+        //this.questionOperate.deleteQuestion(token);
         $item.remove();
         return;
       }
@@ -305,15 +341,8 @@ export default class sbList {
 
       order = this.questionOperate.getQuestionOrder(token);
       const $listItem = $(`[data-anchor=#${token}]`).parent();
-      $listItem.nextAll('.subject-list-item').each(function() {
-        $(this).find('.subject-list-item__num').text(order)
-            .find('.sb-checkbox').attr('data-order', order);
-        order++;
-      });
-
+      this.orderQuestionList(order, $listItem);
       this.questionOperate.deleteQuestion(token);
-      this.updateQuestionCountText(question['type']);
-      this.updateTotalScoreText();
 
       if (question.type == 'material') {
         $.each(question['subQuestions'], function(token, subQuestion) {
@@ -322,6 +351,7 @@ export default class sbList {
       }
       $listItem.remove();
       $item.remove();
+      this.statErrorQuestions();
     });
   }
 
@@ -364,10 +394,45 @@ export default class sbList {
   }
 
   updateTotalScoreText() {
-    let totalScore = this.questionOperate.getTotalScore();
+    let totalScore = parseInt(this.questionOperate.getTotalScore());
     if (this.isTestpaper()) {
       $('.js-total-score').text(`总分${totalScore}分`);
     }
+  }
+
+  orderQuestionList(seq, $item) {
+    $item.nextAll('.subject-list-item').each(function() {
+      $(this).find('.js-list-index').text(seq);
+      seq++;
+    });
+  }
+
+  statErrorQuestions() {
+    let errorTip = '第';
+    let isShow = false;
+    this.$element.find('.subject-list-item__num--error').each(function () {
+      errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
+      isShow = true;
+    });
+    errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
+    if (isShow) {
+      $('.js-error-tip').html(errorTip);
+    }
+  }
+
+  static _serializeArrayConvertToJson(data){
+    let serializeObj={};
+    for (let item of data) {
+      if (serializeObj[item.name]) {
+        if (!serializeObj[item.name].push) {
+          serializeObj[item.name] = [serializeObj[item.name]];
+        }
+        serializeObj[item.name].push(item.value)
+      } else {
+        serializeObj[item.name] = item.value;
+      }
+    }
+    return serializeObj;
   }
 }
 

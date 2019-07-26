@@ -38,8 +38,9 @@ class Essay extends AbstractQuestion
                 continue;
             }
 
-            if (QuestionElement::STEM == $preNode) {
-                $question['stem'] .= preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
+            //处理题干
+            if ($this->matchStem($question, $line, $preNode)) {
+                continue;
             }
         }
 
@@ -65,12 +66,12 @@ class Essay extends AbstractQuestion
     {
         //判断题干是否有错
         if (empty($question[QuestionElement::STEM])) {
-            $question['errors'][] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
+            $question['errors'][QuestionElement::STEM] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
         }
 
         //判断答案是否有错
         if (empty($question[QuestionElement::ANSWER])) {
-            $question['errors'][] = $this->getError(QuestionElement::ANSWER, QuestionErrors::NO_ANSWER);
+            $question['errors'][QuestionElement::ANSWER] = $this->getError(QuestionElement::ANSWER, QuestionErrors::NO_ANSWER);
         }
     }
 }

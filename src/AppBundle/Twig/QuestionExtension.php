@@ -52,6 +52,7 @@ class QuestionExtension extends \Twig_Extension
             return '';
         }
 
+        $html = preg_replace('/(\[\[(.+?)\]\])/is', '_____', $html);
         $html = preg_replace('/(<img .*?src=")(.*?)(".*?>)/is', '[图片]', $html);
         $security = $this->getSettingService()->get('security');
 

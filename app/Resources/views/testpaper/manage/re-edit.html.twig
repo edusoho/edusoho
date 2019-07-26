@@ -1,11 +1,10 @@
 {% extends 'testpaper/subject/layout.html.twig' %}
 
-{% set totalNum =  19 %}
 {% set totalScore =  200 %}
 
 {% block subtitle %}
   <div class="subject-data__subtitle mts clearfix">
-    <span class="js-total-num">共{{ totalNum }}道题</span>
+    <span class="js-total-num">共{{ questions|length }}道题</span>
     <span class="pull-right js-total-score">总分{{ totalScore }}分</span>
   </div>
 {% endblock %}
@@ -14,3 +13,4 @@
   <div class="subject-title"><input name="testpaperTitle" class="js-testpaper-title" value="试卷名称" placeholder="此处可编辑试卷名称，最多输入50个字符"></div>
   <input type="hidden" name="isTestpaper" value="1">
 {% endblock %}
+{% block edit %}{% endblock %}
