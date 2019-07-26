@@ -29,9 +29,8 @@ export default class sbList {
     this.initEvent();
     this.initScoreValidator();
     this.setDifficulty();
-    this.createModal();
-    this.modalShow();
     this.initTestpaperTitle();
+    this.itemAdd();
     this.statErrorQuestions();
   }
 
@@ -60,6 +59,7 @@ export default class sbList {
       this.testpaperTitle = $('.js-testpaper-title').val();
     }
     this.$itemList.on('click', '.subject-change-btn', event => this.itemConvert(event));
+    this.$itemList.on('click', '.js-item-add', event => this.addModalShow(event));
     this.$subjectData.bind('change', '*[data-type]', (event, type) => this.updateQuestionCountText(type));
     this.$subjectData.bind('change', '.js-total-score', event => this.updateTotalScoreText());
   }
@@ -272,19 +272,14 @@ export default class sbList {
   }
 
   itemEdit(event) {
-    const $editItem = $('.subject-edit-item');
-    let $target = $(event.currentTarget);
-    let $item = $target.parents('.subject-item');
-    let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
-    if ($editItem.length !== 0) {
-      cd.message({
-        type: 'warning',
-        message: `请先完成第${seq}题的编辑`,
-      });
+    if (this.isEditing()) {
       return;
     }
 
     let self = this;
+    let $target = $(event.currentTarget);
+    let $item = $target.parents('.subject-item');
+    let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
     let url = $target.parents('.subject-item__operation').data('url');
     let question = this.questionOperate.getQuestion($item.attr('id'));
     $.post(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
@@ -318,6 +313,35 @@ export default class sbList {
     });
   }
 
+  itemAdd() {
+    let self = this;
+    $('.js-create-btn').on('click', (event) => {
+      const $target = $(event.target);
+      const url = $target.data('url');
+      const token = $('#cd-modal').data('index');
+      const type = $target.data('type');
+      let seq = this.questionOperate.getQuestionOrder(token) + 1;
+      $.post(url, {'seq' : seq}).then((res) => {
+        $('#cd-modal').modal('hide');
+        let index = seq + 1;
+        self.orderQuestionList(index, $(`[data-anchor="#${token}"]`).parent(), $(`#${token}`));
+        $(`[data-anchor="#${token}"]`).parent().after(self.getNewListItem(seq, type, $target.text()));
+        $(`#${token}`).after(res);
+        showEditor.getEditor(type, $('.js-edit-form'), self.questionOperate);
+      });
+    });
+  }
+
+  getNewListItem(seq, type, typeName) {
+    return `<div class="col-sm-3 subject-list-item">
+      <div class="subject-list-item__num  js-subject-anchor" data-anchor="#${seq}">
+        <span class="js-list-index">${seq}</span>
+        <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="${type}"><input type="checkbox" data-toggle="cd-checkbox"></label>
+      </div>
+      <span class="js-type-name">${typeName}</span>
+    </div>`;
+  }
+
   deleteSubjectItem(event) {
     cd.confirm({
       title: '确认删除',
@@ -341,14 +365,8 @@ export default class sbList {
       }
 
       let order = this.questionOperate.getQuestionOrder(token);
-      $item.nextAll('.subject-item').not('.subject-sub-item').each(function() {
-        $(this).find('.subject-item__number').text(order);
-        order++;
-      });
-
-      order = this.questionOperate.getQuestionOrder(token);
       const $listItem = $(`[data-anchor=#${token}]`).parent();
-      this.orderQuestionList(order, $listItem);
+      this.orderQuestionList(order, $listItem, $item);
       this.questionOperate.deleteQuestion(token);
 
       if (question.type == 'material') {
@@ -407,10 +425,17 @@ export default class sbList {
     }
   }
 
-  orderQuestionList(seq, $item) {
-    $item.nextAll('.subject-list-item').each(function() {
-      $(this).find('.js-list-index').text(seq);
-      seq++;
+  orderQuestionList(seq, $listItem, $subjectItem) {
+    let listSeq = seq;
+    let itemSeq = seq;
+    $listItem.nextAll('.subject-list-item').each(function() {
+      $(this).find('.js-list-index').text(listSeq);
+      listSeq++;
+    });
+
+    $subjectItem.nextAll('.subject-item').not('.subject-sub-item').each(function() {
+      $(this).find('.subject-item__number').text(itemSeq);
+      itemSeq++;
     });
   }
 
@@ -442,24 +467,30 @@ export default class sbList {
     return serializeObj;
   }
 
-  modalShow() {
-    $('#cd-modal').on('show.bs.modal', (event) => {
-      const $btn = $(event.relatedTarget);
-      const order = $btn.closest('.js-subject-item').data('order');
-      $('#cd-modal').attr('data-index', order);
-    });
+  addModalShow(event) {
+    if (this.isEditing()) {
+      return;
+    }
+
+    let $target = $(event.currentTarget);
+    let $modal = $('#cd-modal');
+    let token = $target.closest('.js-subject-item').attr('id');
+    $modal.attr('data-index', token);
+    $modal.modal('show');
   }
   
-  createModal() {
-    $('.js-create-btn').on('click', (event) => {
-      const $target = $(event.target);
-      const url = $target.data('url');
-      $.post(url).then((res) => {
-        $('#cd-modal').modal('hide');
-        const order = $('#cd-modal').data('index');
-        $('.js-subject-item').eq(order - 1).after(res);
+  isEditing() {
+    const $editItem = $('.subject-edit-item');
+    if ($editItem.length !== 0) {
+      let seq = this.$itemList.find('.subject-edit-item').find('.js-edit-form-seq').text();
+      cd.message({
+        type: 'warning',
+        message: `请先完成第${seq}题的编辑`,
       });
-    });
+      return true;
+    }
+
+    return false;
   }
 }
 

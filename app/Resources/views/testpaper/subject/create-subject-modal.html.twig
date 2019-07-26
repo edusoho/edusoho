@@ -10,13 +10,13 @@
       <div class="modal-body create-subject-body">
         <div class="cd-dark-major create-subject-label">选择题型</div>
         <div class="create-subject-list">
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-url="{{ path('subject_edit_template', {type:'single_choice' })}}">单选题</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-url="{{ path('subject_edit_template', {type:'choice' })}}">多选题</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-url="{{ path('subject_edit_template', {type:'uncertain_choice' })}}">不定项</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-url="{{ path('subject_edit_template', {type:'determine' })}}">判断题</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-url="{{ path('subject_edit_template', {type:'fill' })}}">填空题</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-url="{{ path('subject_edit_template', {type:'essay' })}}">问答题</button>
-          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-url="{{ path('subject_edit_template', {type:'material' })}}">材料题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="single_choice" data-url="{{ path('subject_edit_template', {type:'single_choice' })}}">单选题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="choice" data-url="{{ path('subject_edit_template', {type:'choice' })}}">多选题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="uncertain_choice" data-url="{{ path('subject_edit_template', {type:'uncertain_choice' })}}">不定项</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="determine" data-url="{{ path('subject_edit_template', {type:'determine' })}}">判断题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="fill" data-url="{{ path('subject_edit_template', {type:'fill' })}}">填空题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="essay" data-url="{{ path('subject_edit_template', {type:'essay' })}}">问答题</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="material" data-url="{{ path('subject_edit_template', {type:'material' })}}">材料题</button>
         </div>
       </div>
     </div>

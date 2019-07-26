@@ -123,20 +123,26 @@ export default class QuestionOperate {
     });
   }
 
-  addQuestion(preToken, token, question) {
+  addQuestion(preToken, question) {
     if (!this.isUpdating()) {
       return;
     }
     this.flag = true;
+    let token = this._getToken();
     this.questions[token] = question;
-    let position = this.tokenList.indexOf(preToken);
+    let position = this.tokenList.indexOf(preToken) + 1;
     this.tokenList.splice(position, 0, token);
     this.questionCounts['total']++;
     this.questionCounts[question['type']]++;
     this.totalScore += question['score'];
+    let index = position + 1;
+    $(`[data-anchor="#${index}"]`).attr('data-anchor', '#' + token);
+    $('#' + index).attr('id', token);
     this.triggerTotalScoreChange();
     this.triggerTypeCountChange(question['type']);
     this.flag = false;
+
+    return token;
   }
 
   deleteQuestion(deleteToken) {
