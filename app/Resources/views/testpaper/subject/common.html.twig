@@ -1,4 +1,4 @@
-<div class="subject-item__operation {% if type == 'subMaterial' %}cd-ml32{% endif %}" data-url="{{ path('subject_edit_template', {type: type}) }}">
+<div class="subject-item__operation {% if position|default(null) == 'sub' %}cd-ml32{% endif %}" data-url="{{ path('subject_edit_template', {type: type}) }}">
   <span class="js-item-edit"><i class="es-icon es-icon-exam"></i>编辑</span>
   <span class="js-item-delete"><i class="es-icon es-icon-shanchu"></i>删除</span>
   {% if type == 'material' %}

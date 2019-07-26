@@ -2,13 +2,13 @@
 {% set errors = item.errors|default([]) %}
 {% set answers = item.answers %}
 
-<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
-  <div class="subject-item__title">
-    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">
+<div class="subject-item subject-sub-item" id="{{ key~'_'~subKey }}">
+  <div class="subject-item__title subject-sub-item__title">
+    <span class="subject-sub-item__number">
       {% if seq|default(null) %}
-        {{ seq }}
+        {{ '(' ~ seq ~ ')'  }}
       {% else %}
-        {{ loop.index }}
+        {{ '(' ~ loop.index ~ ')'  }}
       {% endif %}
     </span>
     {% if errors.stem is not defined %}
@@ -19,7 +19,7 @@
   </div>
   <div class="subject-item__body">
     {% for option_key,option in options %}
-      <label class="cd-radio single-item subject-forbid {% if option_key in answers  %}checked{% endif %}">
+      <label class="cd-radio single-item sub-single-item subject-forbid {% if option_key in answers  %}checked{% endif %}">
         <input type="radio" data-toggle="cd-radio" name="right" value="{{'option' ~ loop.index }}">
         <span>{{ dict_text('questionOption', option_key) }}. </span>
         <span class="single-item__text {% if  errors['options_'~option_key] is defined %}single-item__text--danger{% endif %}">
@@ -32,5 +32,5 @@
       </label>
     {% endfor %}
   </div>
-  {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
+  {% include 'testpaper/subject/common.html.twig' with {position:position, type: item.type, difficulty: item.difficulty, score: item.score } %}
 </div>

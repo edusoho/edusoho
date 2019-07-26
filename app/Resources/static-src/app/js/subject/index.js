@@ -5,6 +5,7 @@ export default class sbList {
   constructor() {
     this.$element = $('.js-subject-list');
     this.$itemList = $('.js-item-list');
+    this.$subjectData = $('.js-subject-data');
     this.$batchBtn = $('.js-batch-btn');
     this.$batchWrap = $('.js-subject-wrap');
     this.$sbCheckbox = $('.js-show-checkbox');
@@ -17,7 +18,6 @@ export default class sbList {
     this.scoreValidator = null;
     this.selectQuestion = [];
     this.questionOperate = null;
-    this.$itemList = $('.js-item-list');
     this.init();
   }
 
@@ -30,6 +30,7 @@ export default class sbList {
     this.setDifficulty();
     this.createModal();
     this.modalShow();
+    this.statErrorQuestions();
   }
 
   confirmFresh() {
@@ -50,6 +51,8 @@ export default class sbList {
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
     this.$itemList.on('click', '.subject-change-btn', event => this.itemConvert(event));
+    this.$subjectData.bind('change', '*[data-type]', (event, type) => this.updateQuestionCountText(type));
+    this.$subjectData.bind('change', '.js-total-score', event => this.updateTotalScoreText());
   }
 
   sbListFixed() {
@@ -181,7 +184,7 @@ export default class sbList {
 
     self.$element.find('.js-show-checkbox.checked').each(function(){
       let type = $(this).data('type'),
-        name = $(this).data('name'),
+        name = $(this).parent().next('.js-type-name').text(),
         token = $(this).parents('.js-subject-anchor').data('anchor');
 
       if (typeof stats[type] == 'undefined') {
@@ -237,7 +240,6 @@ export default class sbList {
       this.questionOperate.modifyScore(this.selectQuestion, score);
       this.selectQuestion = [];
 
-      this.updateTotalScoreText();
       cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
       this.$scoreModal.modal('hide');
     }
@@ -300,9 +302,6 @@ export default class sbList {
       $item.replaceWith(html);
       showEditor.getEditor(toType, $('.js-edit-form'), self.questionOperate);
     });
-    console.log(data);
-
-
   }
 
   deleteSubjectItem(event) {
@@ -322,8 +321,7 @@ export default class sbList {
           $(this).find('.subject-sub-item__number').text(`(${order})`);
           order++;
         });
-        this.questionOperate.deleteQuestion(token);
-        this.updateTotalScoreText();
+        //this.questionOperate.deleteQuestion(token);
         $item.remove();
         return;
       }
@@ -336,15 +334,8 @@ export default class sbList {
 
       order = this.questionOperate.getQuestionOrder(token);
       const $listItem = $(`[data-anchor=#${token}]`).parent();
-      $listItem.nextAll('.subject-list-item').each(function() {
-        $(this).find('.subject-list-item__num').text(order)
-          .find('.sb-checkbox').attr('data-order', order);
-        order++;
-      });
-
+      this.orderQuestionList(order, $listItem);
       this.questionOperate.deleteQuestion(token);
-      this.updateQuestionCountText(question['type']);
-      this.updateTotalScoreText();
 
       if (question.type == 'material') {
         $.each(question['subQuestions'], function(token, subQuestion) {
@@ -353,6 +344,7 @@ export default class sbList {
       }
       $listItem.remove();
       $item.remove();
+      this.statErrorQuestions();
     });
   }
 
@@ -364,9 +356,29 @@ export default class sbList {
   }
 
   updateTotalScoreText() {
-    let totalScore = this.questionOperate.getTotalScore();
+    let totalScore = parseInt(this.questionOperate.getTotalScore());
     if (this.isTestpaper()) {
       $('.js-total-score').text(`总分${totalScore}分`);
+    }
+  }
+
+  orderQuestionList(seq, $item) {
+    $item.nextAll('.subject-list-item').each(function() {
+      $(this).find('.js-list-index').text(seq);
+      seq++;
+    });
+  }
+
+  statErrorQuestions() {
+    let errorTip = '第';
+    let isShow = false;
+    this.$element.find('.subject-list-item__num--error').each(function () {
+      errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
+      isShow = true;
+    });
+    errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
+    if (isShow) {
+      $('.js-error-tip').html(errorTip);
     }
   }
 
@@ -391,11 +403,8 @@ export default class sbList {
       const order = $btn.closest('.js-subject-item').data('order');
       $('#cd-modal').attr('data-index', order);
     });
-  
   }
   
-
-
   createModal() {
     $('.js-create-btn').on('click', (event) => {
       const $target = $(event.target);
