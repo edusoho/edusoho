@@ -118,7 +118,7 @@ class BaseQuestion {
     if ($('.js-attachment-list-analysis').find('.js-attachment-name').length > 0) {
       attachments['analysis'] = {
         "fileId" : $('.js-attachment-ids-analysis').val(),
-        "fileName" : $('.js-attachment-list-analysis').find('.js-attachment-name').text(),
+        "fileName" : $('.js-attachment-list-analysis').find('.js-attachment-name').text()
       };
     }
     
