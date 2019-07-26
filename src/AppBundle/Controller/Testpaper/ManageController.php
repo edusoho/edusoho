@@ -624,9 +624,24 @@ class ManageController extends BaseController
         $file = $this->getFileService()->parseFileUri($data['fileuri']);
         $questions = $this->parseQuestions($file['fullpath']);
 
+        $questionAnalysis = array(
+            'choice' => 0,
+            'single_choice' => 0,
+            'uncertain_choice' => 0,
+            'fill' => 0,
+            'essay' => 0,
+            'material' => 0,
+            'determine' => 0,
+        );
+
+        foreach ($questions as $question) {
+            $questionAnalysis[$question['type']] += 1;
+        }
+
         return $this->render('testpaper/manage/re-edit.html.twig', array(
             'filename' => $data['filename'],
             'questions' => $questions,
+            'questionAnalysis' => $questionAnalysis,
         ));
     }
 

@@ -1,44 +1,6 @@
-{% set data = [
-  {
-    'type': 'single_choice',
-    'name': '单选题',
-    'num': '6',
-  },
-  {
-    'type': 'choice',
-    'name': '多选题',
-    'num': '3',
-  },
-  {
-    'type': 'uncertain_choice',
-    'name': '不定项',
-    'num': '3',
-  },
-  {
-    'type': 'determine',
-    'name': '判断题',
-    'num': '3',
-  },
-  {
-    'type': 'fill',
-    'name': '填空题',
-    'num': '1',
-  },
-  {
-    'type': 'essay',
-    'name': '问答题',
-    'num': '3',
-  },
-  {
-    'type': 'material',
-    'name': '材料题',
-    'num': '3',
-  }
-] %}
-
-{% for item in data %}
-  <div class="subject-data__item clearfix" data-type="{{ item.type }}">
-    <span>{{ item.name }}</span>
-    <span class="pull-right subject-data__num">共{{ item.num }}道题</span>
+{% for type,num in questionAnalysis %}
+  <div class="subject-data__item clearfix" data-type="{{ type }}">
+    <span>{{ dict_text('questionType', type)|slice(0,3) }}</span>
+    <span class="pull-right subject-data__num">共{{ num }}道题</span>
   </div>
 {% endfor %}
