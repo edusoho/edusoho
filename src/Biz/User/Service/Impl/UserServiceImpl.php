@@ -1974,10 +1974,12 @@ class UserServiceImpl extends BaseService implements UserService
      * 发送短信动作是否需要图片拖动验证码
      * 不涉及具体业务
      * 因为后台没有可配置项，暂时先借用『注册防护机制』的规则。
+     *
      * @TODO 建立独立的配置机制。参考『注册防护机制』，建立『短信(接口)防护机制』
      *
      * @param $clientIp
      * @param bool $recount 为true时，当前会变为必填图形验证码
+     *
      * @return string captchaRequired , captchaIgnored 字面意思
      */
     public function getSmsCommonCaptchaStatus($clientIp, $recount = false)
