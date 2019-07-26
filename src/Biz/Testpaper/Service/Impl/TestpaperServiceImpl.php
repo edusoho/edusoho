@@ -1052,7 +1052,41 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function buildExportTestpaperItems($testpaperId)
     {
-        return array();
+        $items = $this->findItemsByTestId($testpaperId);
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+        $exportQuestions = array();
+        $wrapper = $this->getWrapper();
+        foreach ($items as $questionId => $item) {
+            $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
+
+            if (empty($question)) {
+                continue;
+            }
+
+            $question['seq'] = $item['seq'];
+            $question['score'] = $item['score'];
+            if ('material' == $question['type']) {
+                $subQuestions = $this->getQuestionService()->findQuestionsByParentId($questionId);
+                $question['subs'] = $subQuestions;
+            }
+
+            $question = $wrapper->handle($question, 'exportQuestion');
+            $question = ArrayToolkit::parts($question, array(
+                'type',
+                'seq',
+                'stem',
+                'options',
+                'answer',
+                'score',
+                'difficulty',
+                'analysis'
+            ));
+            $exportQuestions[] = $question;
+        }
+
+        return $exportQuestions;
     }
 
     private function getUserMaxScore($userResults)
@@ -1077,6 +1111,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         sort($passedStatus);
 
         return $passedStatus[0];
+    }
+
+    protected function getWrapper()
+    {
+        global $kernel;
+
+        return $kernel->getContainer()->get('web.wrapper');
     }
 
     /**

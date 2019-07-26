@@ -67,11 +67,8 @@ class WriteDocx
             return;
         }
 
-        $this->writeIn("{$question['seq']}{$question['stem']}");
-
-        foreach ($question['options'] as $option) {
-            $this->writeIn("{$option}");
-        }
+        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeOptions($question['options']);
 
         $this->writeIn("【答案】{$question['answer']}");
     }
@@ -82,11 +79,8 @@ class WriteDocx
             return;
         }
 
-        $this->writeIn("{$question['seq']}{$question['stem']}");
-
-        foreach ($question['options'] as $option) {
-            $this->writeIn("{$option}");
-        }
+        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeOptions($question['options']);
 
         $this->writeIn("正确答案：{$question['answer']}");
     }
@@ -97,11 +91,8 @@ class WriteDocx
             return;
         }
 
-        $this->writeIn("{$question['seq']}{$question['stem']}");
-
-        foreach ($question['options'] as $option) {
-            $this->writeIn("{$option}");
-        }
+        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeOptions($question['options']);
 
         $this->writeIn("正确答案：{$question['answer']}");
     }
@@ -112,7 +103,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeIn("{$question['seq']}{$question['stem']}");
+        $this->writeStem($question['seq'], $question['stem']);
     }
 
     protected function buildDetermine($question)
@@ -130,7 +121,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeIn("{$question['seq']}{$question['stem']}");
+        $this->writeStem($question['seq'], $question['stem']);
     }
 
     protected function buildMaterial($question)
@@ -141,7 +132,7 @@ class WriteDocx
 
         $this->writeIn('【材料题开始】');
 
-        $this->writeIn("{$question['seq']}{$question['stem']}");
+        $this->writeStem($question['seq'], $question['stem']);
         $this->section->addLine();
 
         foreach ($question['subs'] as $subQuestion) {
@@ -174,6 +165,18 @@ class WriteDocx
         $this->section->addLine();
     }
 
+    protected function writeStem($seq, $stem)
+    {
+        $this->writeIn("{$seq}{$stem}");
+    }
+
+    protected function writeOptions(array $options)
+    {
+        foreach ($options as $option) {
+            $this->writeIn("{$option}");
+        }
+    }
+
     protected function writeCommonQuestionText($question)
     {
         if (!empty($question['difficulty'])) {
@@ -189,6 +192,10 @@ class WriteDocx
 
     protected function writeIn($questionText)
     {
+        $questionText = str_replace('&nbsp;', ' ', $questionText);
+        $questionText = strip_tags($questionText);
+        $questionText = str_replace('&', '&amp;', $questionText);
+
         $this->section->addText($questionText);
     }
 }
