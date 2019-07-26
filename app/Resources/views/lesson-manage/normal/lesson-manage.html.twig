@@ -26,8 +26,14 @@
   {% include 'lesson-manage/normal/task-content.html.twig' with {task: lesson, taskNum: 1, displayText: displayText, isLesson: true, shouldDisplayTaskAsLesson: shouldDisplayTask, isShowText: isShowText|default(false)} %}
 </div>
 <div class="item-actions">
+  <a href="javascript:;" class="js-lesson-edit-btn cd-mr24" >
+    <i class="es-icon es-icon-edit" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('site.data.lesson'|trans)}) }}" data-placement="top"></i>
+  </a>
   <a class="cd-mr24 js-create-task-btn" href="javascript:;" data-type="task" data-position="{{lesson.id}}" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId: lesson.id}) }}">
-    <i class="cd-icon cd-icon-add" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.create'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}" data-placement="top" ></i>
+    <i class="cd-icon cd-icon-add" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.create'|trans({'%taskName%':setting('course.task_name')|default('site.data.learning_task'|trans)}) }}" data-placement="top" ></i>
+  </a>
+  <a href="javascript:;" class="js-lesson-preview-btn cd-mr24">
+    <i class="es-icon es-icon-removeredeye" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.preview'|trans({'%taskName%':setting('course.task_name')|default('site.data.lesson'|trans)}) }}" data-placement="top"></i>
   </a>
 
   <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
@@ -46,38 +52,12 @@
           {{'course.plan_task.unpublish_btn'|trans}}
         </a>
       </li>
-
-      <li class="hidden">
-        <a href="javascript:;" class="js-hidden-lesson-rename-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_lesson_update', {lessonId:lesson.id,courseId:task.courseId}) }}"></a>
-      </li>
       <li class="hidden">
         <a href="javascript:;" class="js-hidden-lesson-edit-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:'{taskId}',courseId:task.courseId}) }}?customTitle={{ 'course.manage.edit_lesson'|trans }}"></a>
       </li>
       <li class="hidden">
         <a href="javascript:;" class="js-hidden-lesson-preview-btn" data-url="{{ path('course_task_show', {id:'{taskId}',courseId:task.courseId,preview:1}) }}" target="_blank"></a>
       </li>
-
-      {% if shouldDisplayTask %}
-        <li class="js-display-when-mul-tasks">
-            <a href="javascript:;" class="js-lesson-rename-btn">{{ 'course.lesson_manage.rename'|trans }}</a>
-        </li>
-        <li class="js-display-when-single-task hidden">
-            <a href="javascript:;" class="js-lesson-edit-btn" >{{ 'course.manage.edit_lesson'|trans }}</a>
-        </li>
-        <li class="js-display-when-single-task hidden">
-            <a href="javascript:;" class="js-lesson-preview-btn">{{ 'course.manage.preview_lesson'|trans }}</a>
-        </li>
-      {% else %}
-        <li class="js-display-when-mul-tasks hidden">
-            <a href="javascript:;" class="js-lesson-rename-btn">{{ 'course.lesson_manage.rename'|trans }}</a>
-        </li>
-        <li class="js-display-when-single-task">
-            <a href="javascript:;" class="js-lesson-edit-btn">{{ 'course.manage.edit_lesson'|trans }}</a>
-        </li>
-        <li class="js-display-when-single-task">
-            <a href="javascript:;" class="js-lesson-preview-btn">{{ 'course.manage.preview_lesson'|trans }}</a>
-        </li>
-      {% endif %}
       <li>
         <a class='js-set-optional {% if lesson.isOptional == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_set_optional', {courseId:course.id, lessonId:lesson.id}) }}">
           {{'course.lesson_manage.set_optional'|trans}}

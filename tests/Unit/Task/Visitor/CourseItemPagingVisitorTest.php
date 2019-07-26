@@ -128,7 +128,7 @@ class CourseItemPagingVisitorTest extends BaseTestCase
         ));
 
         $result = $visitor->visitDefaultStrategy(new DefaultStrategy($this->getBiz()));
-        $this->assertEquals(1, count($result[0]));
+        $this->assertEquals(0, count($result[0]));
     }
 
     /**
