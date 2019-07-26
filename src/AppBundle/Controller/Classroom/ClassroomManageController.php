@@ -726,7 +726,7 @@ class ClassroomManageController extends BaseController
                 $class['expiryValue'] = 0;
             }
 
-            $classroom = $this->getClassroomService()->updateClassroom($id, $class);
+            $classroom = $this->getClassroomService()->updateClassroomInfo($id, $class);
 
             $this->setFlashMessage('success', 'site.save.success');
         }

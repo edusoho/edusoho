@@ -31,6 +31,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 use AppBundle\Common\TimeMachine;
+use Biz\Taxonomy\TagOwnerManager;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -286,7 +287,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function updateClassroom($id, $fields)
     {
         $user = $this->getCurrentUser();
-        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
         $classroom = $this->getClassroom($id);
         if (empty($classroom)) {
@@ -317,7 +317,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroomDao()->update($id, $fields);
 
         $arguments = $fields;
-        $arguments['tagIds'] = $tagIds;
 
         $this->dispatchEvent('classroom.update', new Event(array(
             'userId' => $user['id'],
@@ -326,6 +325,27 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         )));
 
         return $classroom;
+    }
+
+    public function updateClassroomInfo($id, $fields)
+    {
+        $classroom = $this->getClassroom($id);
+        if (empty($classroom)) {
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
+        }
+
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+        $this->updateClassroomTags($id, $tagIds);
+
+        return $this->updateClassroom($id, $fields);
+    }
+
+    protected function updateClassroomTags($classroomId, $tagIds)
+    {
+        $user = $this->getCurrentUser();
+
+        $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $tagIds, $user['id']);
+        $tagOwnerManager->update();
     }
 
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
