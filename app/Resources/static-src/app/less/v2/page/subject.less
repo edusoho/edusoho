@@ -70,6 +70,14 @@
   margin-bottom: 12px;
   line-height: 18px;
   color: @cd-dark-major;
+  p {
+    display: inline;
+  }
+}
+
+.subject-sub-item__title {
+  margin-left: 32px;
+  display: table;
 }
 
 .subject-item__body {
@@ -82,9 +90,16 @@
   .single-item {
     display: block;
     margin-bottom: 8px;
+    font-size: 12px;
   }
   .single-item__text {
     font-weight: normal;
+  }
+  .sub-single-item {
+    margin-left: 32px;
+  }
+  p {
+    display: inline;
   }
 }
 
@@ -303,7 +318,7 @@
   }
 
   .edit-subject-item__input {
-    width: 240px;
+    //width: 240px;
     height: 30px;
     padding: 4px 12px;
     color: @cd-dark-major;
@@ -313,12 +328,15 @@
   .edit-subject-item__order {
     display: inline-block;
     width: 20px;
+    &.edit-subject-item__order--error {
+      color: #ed3e3e;
+    }
   }
 
   .edit-subject-item__delete {
     position: absolute;
-    right: 0;
-    top: 6px;
+    //right: 0;
+    //top: 6px;
     i {
       font-size: 18px;
     }

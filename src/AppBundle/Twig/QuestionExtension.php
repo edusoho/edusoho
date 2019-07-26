@@ -34,6 +34,7 @@ class QuestionExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFunction('find_question_num_by_course_set_id', array($this, 'findQuestionNumsByCourseSetId')),
+            new \Twig_SimpleFunction('question_html_filter', array($this, 'questionHtmlFilter')),
         );
     }
 
@@ -45,12 +46,58 @@ class QuestionExtension extends \Twig_Extension
         return $questionNums;
     }
 
+    public function questionHtmlFilter($html, $allowed = '')
+    {
+        if (!isset($html)) {
+            return '';
+        }
+
+        $html = preg_replace('/(<img .*?src=")(.*?)(".*?>)/is', '[图片]', $html);
+        $security = $this->getSettingService()->get('security');
+
+        if (!empty($security['safe_iframe_domains'])) {
+            $safeDomains = $security['safe_iframe_domains'];
+        } else {
+            $safeDomains = array();
+        }
+
+        $config = array(
+            'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
+            'safeIframeDomains' => $safeDomains,
+        );
+
+        $this->warmUp($config['cacheDir']);
+        $htmlConfig = \HTMLPurifier_Config::createDefault();
+        $htmlConfig->set('Cache.SerializerPath', $config['cacheDir']);
+        $htmlConfig->set('HTML.Allowed', $allowed);
+
+        $htmlpurifier = new \HTMLPurifier($htmlConfig);
+
+        return $htmlpurifier->purify($html);
+    }
+
+    protected function warmUp($cacheDir)
+    {
+        if (!@mkdir($cacheDir, 0777, true) && !is_dir($cacheDir)) {
+            throw new ServiceException('mkdir cache dir error');
+        }
+
+        if (!is_writable($cacheDir)) {
+            chmod($cacheDir, 0777);
+        }
+    }
+
     /**
      * @return QuestionService
      */
     protected function getQuestionService()
     {
         return $this->biz->service('Question:QuestionService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 
     public function getName()

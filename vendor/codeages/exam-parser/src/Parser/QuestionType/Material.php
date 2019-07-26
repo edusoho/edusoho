@@ -44,7 +44,7 @@ class Material extends AbstractQuestion
             }
 
             if (QuestionElement::STEM == $preNode) {
-                $question['stem'] .= preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
+                $question['stem'] .= (empty($question['stem']) ? '' : '<br/>').preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
             }
         }
 
@@ -69,7 +69,7 @@ class Material extends AbstractQuestion
             }
         }
         foreach ($subQuestions as $lines) {
-            $count = preg_match_all('/\<\#[A-Z]\#\>/', implode(PHP_EOL, $lines));
+            $count = preg_match_all('/\<\#[A-Z]\#\>/', implode(PHP_EOL, $lines), $matches);
             if (0 === strpos(trim($lines[0]), Parser::CODE_MATERIAL_START_SIGNAL)) {
                 $type = 'material';
             } elseif (0 == $count) {

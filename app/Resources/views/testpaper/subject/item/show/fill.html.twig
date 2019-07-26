@@ -1,0 +1,23 @@
+{% set errors = item.errors|default([]) %}
+<div class="subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
+  <div class="subject-item__title">
+    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">
+    {% if seq|default(null) %}
+      {{ seq }}
+    {% else %}
+      {{ loop.index }}
+    {% endif %}
+    </span> {{ item.stemShow|raw }}
+  </div>
+  <div class="subject-item__body">
+    <span>答案：</span>
+    {% for answer_key,answer in item.answers %}
+      {% if errors['answers_'~answer_key] is not defined %}
+        {{ item.answers[answer_key] }}
+      {% elseif errors['answers_'~answer_key].code == 100003 %}
+        <span class="single-item__text--danger">缺少正确答案，请点击“编辑”进行设置。</span>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with { type: 'fill', difficulty: item.difficulty, score: item.score } %}
+</div>

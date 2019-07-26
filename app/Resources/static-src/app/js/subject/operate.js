@@ -34,30 +34,72 @@ export default class QuestionOperate {
     this.tokenList = [];
     this.$statList = $('.js-subject-data');
     this.$itemList = $('.js-item-list');
+    this.questionCounts = {};
+    this.totalScore = 0;
     this.flag = true;
     this.init();
   }
 
   init() {
-    let cachedData = this._toJson($('.js-cached-data').html());
+    let cachedData = this._toJson($('.js-cached-data').text());
     for (var i = 0; i < cachedData.length; i++) {
       let token = this._getToken();
       this.questions[token] = cachedData[i];
       this.tokenList.push(token);
-      let index = ++i;
+      let index = i;
       $(`[data-anchor="#${index}"]`).data('anchor', '#' + token);
       $('#' + index).attr('id', token);
     }
+    this.initQuestionCountsAndTotalScore();
     this.flag = false;
+  }
+
+  initQuestionCountsAndTotalScore() {
+    this.questionCounts = {
+      'total': 0,
+      'single_choice': 0,
+      'choice': 0,
+      'uncertain_choice': 0,
+      'determine': 0,
+      'fill': 0,
+      'essay': 0,
+      'material': 0,
+    };
+
+    let self = this;
+    Object.keys(this.questions).forEach(function(token) {
+      let question = self.questions[token];
+      self.questionCounts['total']++;
+      self.questionCounts[question['type']]++;
+      if (question['type'] != 'material') {
+        self.totalScore += question['score'];
+      } else {
+        $.each(question['subQuestions'], function(token, subQuestion) {
+          self.totalScore += subQuestion['score'];
+        });
+      }
+    });
+  }
+
+  getQuestionCount(type) {
+    return this.questionCounts[type];
+  }
+
+  getTotalScore() {
+    return this.totalScore;
+  }
+
+  getQuestionOrder(token) {
+    return this.tokenList.indexOf(token) + 1;
   }
 
   modifyDifficulty(selectQuestion, difficulty, text) {
     let self = this;
     $.each(selectQuestion, function(index, token){
-      // if (typeof self.questions[token] != 'undefined') {
-      //   this.updateQuestionItem(tokne, 'difficulty', difficulty);
+      if (typeof self.questions[token] != 'undefined') {
+        self.updateQuestionItem(token, 'difficulty', difficulty);
         self.$itemList.find('#' + token).find('.js-difficulty').html(text);
-      // }
+      }
     });
   }
 
@@ -74,8 +116,10 @@ export default class QuestionOperate {
     }
     this.flag = true;
     this.questions[token] = question;
-    position = this.tokenList.indexOf(preToken);
+    let position = this.tokenList.indexOf(preToken);
     this.tokenList.splice(position, 0, token);
+    this.questionCounts['total']++;
+    this.questionCounts[question['type']]++;
     this.flag = false;
   }
 
@@ -84,9 +128,19 @@ export default class QuestionOperate {
       return;
     }
     this.flag = true;
-    this.questions[deleteToken] = undefined;
-    position = this.tokenList.indexOf(preToken);
+    const question = this.questions[deleteToken];
+    delete this.questions[deleteToken];
+    let position = this.tokenList.indexOf(deleteToken);
     this.tokenList.splice(position, 1);
+    this.questionCounts['total']--;
+    this.questionCounts[question['type']]--;
+    if (question['type'] != 'material') {
+      self.totalScore -= question['score'];
+    } else {
+      $.each(question['subQuestions'], function(token, subQuestion) {
+        self.totalScore -= subQuestion['score'];
+      })
+    }
     this.flag = false;
   }
 
@@ -109,6 +163,9 @@ export default class QuestionOperate {
   }
 
   getQuestion(token) {
+    if (!this.isUpdating()) {
+      return;
+    }
     return this.questions[token];
   }
 

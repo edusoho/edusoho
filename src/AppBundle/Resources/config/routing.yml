@@ -3199,3 +3199,16 @@ question_re_edit:
 subject_edit_template:
   path: /subject/edit/{type}
   defaults: { _controller: AppBundle:Testpaper/Manage:editTemplate }
+
+subject_option_template:
+  path: /subject/option/{type}
+  defaults: { _controller: AppBundle:Testpaper/Manage:optionTemplate }
+
+subject_show_template:
+  path: /subject/show/{type}
+  defaults: { _controller: AppBundle:Testpaper/Manage:showTemplate }
+
+subject_convert_template:
+  path: /sublect/convert
+  methods: [POST]
+  defaults: { _controller: AppBundle:Testpaper/Manage:convertTemplate }

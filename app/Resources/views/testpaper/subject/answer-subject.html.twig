@@ -2,7 +2,7 @@
 {% set data = [
   {
     "title": '唐代诗人李白号____。',
-    "type": 'answer',
+    "type": 'fill',
     "flag": 1,
     "answer": '青莲居士|谪仙人',
     'difficulty': '一般',
@@ -11,7 +11,7 @@
   },
   {
     "title": '请简要谈谈你对在线教育的看法。',
-    "type": 'answer',
+    "type": 'fill',
     "flag": 0,
     "order": 5,
     "answer": '从 2015 年 4 月起，Ant Design 在蚂蚁金服中后台产品线迅速推广，对接多条业务线，覆盖系统 800 个以上。定位于中台业务的 Ant Design 兼顾专业和非专业的设计人员，具有学习成本低、上手速度快、实现效果好等特点，并且提供从界面设计到前端开发的全链路生态，可以大大提升设计和开发的效率',
@@ -28,6 +28,6 @@
     <div class="subject-item__body">
       <span>答案：</span><span class="{% if item.flag == 1 %}color-danger{% endif %}">{% if item.flag == 1 %}缺少正确答案，请点击“编辑”进行设置。{% else %}{{ item.answer }}{% endif %}</span>
     </div>
-    {% include 'testpaper/subject/common.html.twig' with { type: 'answer', difficulty: item.difficulty, score: item.score } %}
+    {% include 'testpaper/subject/common.html.twig' with { type: 'fill', difficulty: item.difficulty, score: item.score } %}
   </div>
 {% endfor %}

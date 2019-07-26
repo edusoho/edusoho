@@ -1,14 +1,17 @@
 <div class="subject-item subject-edit-item">
-  <form class="form-horizontal">
+  <form class="form-horizontal js-edit-form" data-url="{{ path('subject_show_template', {type: type}) }}">
     <div class="row">
       <div class="col-sm-8">
-        <div class="subject-edit-item__order">6</div>
+        <div class="subject-edit-item__order">{{ seq }}</div>
+        <input type="text" name="token" value="{{ token }}" class="hidden js-hidden-token">
         <div class="cd-ml24">
-          <textarea class="form-control" style="height:190px;" id="question-stem-field">请简要谈谈你对在线教育的看法。</textarea>
-          {# 需要云附件开启设置才能显示 #}
-          <div class="cd-mt24">
-            <button class="cd-btn cd-btn-ghost-primary" type="button">上传题干附件</button>
-          </div>
+          <input type="text" class="form-control" value="{{ question.stem|default('') }}" data-role="edit" style="display: none;">
+          <textarea class="form-control" style="height:190px;" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" data-edit="stem" name="stem">{{ question.stem|default('') }}</textarea>
+        </div>
+        <div class="cd-ml24">
+          {% include 'testpaper/subject/attachment.html.twig' with { target: 'stem', btnTitle:'上传题干附件', attachment: question.attachments.stem|default([]) } %}
+        </div>
+        <div class="cd-ml24 cd-mt24">
           {% block subject %}
           {% endblock %}
         </div>
@@ -17,25 +20,25 @@
         <div class="form-group edit-form-group cd-mb24">
           <label class="col-sm-2 control-label ph0 edit-form-group__label">难度</label>
           <div class="col-sm-10 cd-radio-group">
-            <label class="cd-radio mtm"><input type="radio" name="difficulty" value="simple" data-toggle="cd-radio">简单</label>
-            <label class="cd-radio mtm cd-ml16 checked"><input type="radio" name="difficulty" value="normal" checked="checked" data-toggle="cd-radio">一般</label>
-            <label class="cd-radio mtm cd-ml16"><input type="radio" name="difficulty" value="difficulty" data-toggle="cd-radio">困难</label>
+            <label class="cd-radio mtm {% if question.difficulty|default('normal') == 'simple' %}checked{% endif %}"><input type="radio" name="difficulty" value="simple" data-toggle="cd-radio" {% if question.difficulty|default('normal') == 'simple' %}checked{% endif %}>{{  'course.question_manage.manage.easy_difficulty'|trans}}</label>
+            <label class="cd-radio mtm cd-ml16 {% if question.difficulty|default('normal') == 'normal' %}checked{% endif %}"><input type="radio" name="difficulty" value="normal" data-toggle="cd-radio" {% if question.difficulty|default('normal') == 'normal' %}checked{% endif %}>{{ 'course.question_manage.manage.normal_difficulty'|trans }}</label>
+            <label class="cd-radio mtm cd-ml16 {% if question.difficulty|default('normal') == 'difficulty' %}checked{% endif %}"><input type="radio" name="difficulty" value="difficulty" data-toggle="cd-radio" {% if question.difficulty|default('normal') == 'difficulty' %}checked{% endif %}>{{ 'course.question_manage.manage.hard_difficulty'|trans }}</label>
           </div>
         </div>
         <div class="form-group edit-form-group cd-mb24">
           <label class="col-sm-2 control-label ph0 edit-form-group__label">分值</label>
           <div class="col-sm-10">
-            <input class="form-control" type="text" name="score" value="2">
+            <input class="form-control" type="text" data-edit="score" name="score" value="{{ question.score|default('2') }}">
           </div>
         </div>
+        {% block miss_score %}{% endblock %}
         <div class="form-group edit-form-group">
           <label class="col-sm-2 control-label ph0 edit-form-group__label">解析</label>
           <div class="col-sm-10">
-            <div class="cd-dark-major pts">这道题不会选A，B也不对，D有明显错误，所以我们选C。</div>
-            <a class="color-primary cd-mt24 edit-form-group__operate" href="javascript:;"><i class="es-icon es-icon-exam text-md mrs"></i>编辑解析</a>
-            {# 附件上传需要开启云附件设置 #}
-            <div class="cd-mt24"><button class="cd-btn cd-btn-ghost-primary" type="button">上传解析附件</button></div>
-            <div class="cd-mt24"><span class="cd-dark-major cd-mr16">在线教育的现状.docx</span><a class="color-primary" href="javascript:;"><i class="es-icon es-icon-shanchu text-md mrs"></i>删除</a></div>
+            <div class="cd-dark-major pts js-analysis-content">{{ question_html_filter(question.analysis|default('')) }}</div>
+            <input type="hidden" data-edit="analysis" name="analysis" value="{{ question.analysis|default('') }}">
+            <a class="color-primary cd-mt24 edit-form-group__operate js-analysis-edit" href="javascript:;"><i class="es-icon es-icon-exam text-md mrs"></i>编辑解析</a>
+            {% include 'testpaper/subject/attachment.html.twig' with { target: 'analysis', btnTitle:'上传解析附件', attachment: question.attachments.analysis|default([]) } %}
           </div>
         </div>
       </div>
@@ -43,6 +46,7 @@
     {% block change %}
       {% include 'testpaper/subject/type/change-subject.html.twig' with { type: type|default('') } %}
     {% endblock %}
-    <div class="text-center"><button class="cd-btn cd-btn-primary cd-mt24 cd-mb8 subject-button" type="button">完成编辑</button></div>
+    <input type="hidden" name="type" value="{{ type|default('') }}">
+    <div class="text-center"><button class="cd-btn cd-btn-primary cd-mt24 cd-mb8 subject-button js-finish-edit" type="button">完成编辑</button></div>
   </form>
 </div>

@@ -1,5 +1,5 @@
 import QuestionOperate from './operate';
-import showCkEditor from './edit';
+import showEditor from './edit';
 
 export default class sbList {
   constructor() {
@@ -15,20 +15,18 @@ export default class sbList {
     this.$diffiultyModal = $('.js-difficulty-modal');
     this.$scoreModal = $('.js-score-modal');
     this.scoreValidator = null;
-    this.totalScore = 0;
     this.selectQuestion = [];
     this.questionOperate = null;
+    this.$itemList = $('.js-item-list');
     this.init();
   }
 
   init() {
-    new showCkEditor();
     this.questionOperate = new QuestionOperate();
-    // this.confirmFresh();
+    //this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
-    this.initTotalScore();
     this.setDifficulty();
     this.createModal();
     this.modalShow();
@@ -50,6 +48,8 @@ export default class sbList {
     this.$element.on('click', '.js-score-setting', event => this.showScoreModal(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
+    this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
+    this.$itemList.on('click', '.subject-change-btn', event => this.itemConvert(event));
   }
 
   sbListFixed() {
@@ -110,7 +110,6 @@ export default class sbList {
     this.flag = false;
   }
 
-
   finishBtnClick(event) {
     this.$batchBtn.toggleClass('hidden');
     this.toggleClass();
@@ -157,15 +156,11 @@ export default class sbList {
 
     let $missScoreField = $('.miss-score-field');
 
-    if ($('input[name="isTestpaper"]').val() != 1) {
-      if (!$missScoreField.hasClass('hidden')) {
-        $missScoreField.addClass('hidden');
-      }
+    if (!this.isTestpaper()) {
+      $missScoreField.addClass('hidden');
     } else if (stats.hasOwnProperty('choice') || stats.hasOwnProperty('uncertain_choice')) {
-      if ($missScoreField.hasClass('hidden')) {
-        $missScoreField.removeClass('hidden');
-      }
-    } else if (!$missScoreField.hasClass('hidden')) {
+      $missScoreField.removeClass('hidden');
+    } else {
       $missScoreField.addClass('hidden');
     }
 
@@ -187,14 +182,14 @@ export default class sbList {
     self.$element.find('.js-show-checkbox.checked').each(function(){
       let type = $(this).data('type'),
         name = $(this).data('name'),
-        order = $(this).data('order');
+        token = $(this).parents('.js-subject-anchor').data('anchor');
 
       if (typeof stats[type] == 'undefined') {
         stats[type] = {name:name, count:1};
       } else {
         stats[type]['count']++;
       }
-      self.selectQuestion.push(order);
+      self.selectQuestion.push(token.substr(1));
     });
 
     return stats;
@@ -232,8 +227,8 @@ export default class sbList {
     }, 'Please enter a lesser value.' );
   }
 
-  initTotalScore() {
-
+  isTestpaper() {
+    return ($('input[name="isTestpaper"]').val() == 1);
   }
 
   batchSetScore() {
@@ -241,10 +236,8 @@ export default class sbList {
       let score = $('input[name="score"]').val();
       this.questionOperate.modifyScore(this.selectQuestion, score);
       this.selectQuestion = [];
-      let $totalScore = $('.js-total-score');
-      if ($totalScore.length === 1) {
-        $totalScore.html(`总分${this.totalScore}分`);
-      }
+
+      this.updateTotalScoreText();
       cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
       this.$scoreModal.modal('hide');
     }
@@ -263,13 +256,133 @@ export default class sbList {
   }
 
   itemEdit(event) {
+    const $editItem = $('.subject-edit-item');
     let $target = $(event.currentTarget);
-    let url = $target.parents('.subject-item__operation').data('url');
     let $item = $target.parents('.subject-item');
-    $.post(url, {question:{}}, html=> {
-      $item.addClass('hidden');
-      $item.after(html);
+    let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
+    if ($editItem.length !== 0) {
+      cd.message({
+        type: 'warning',
+        message: `请先完成第${seq}题的编辑`,
+      });
+      return;
+    }
+
+    let self = this;
+    let url = $target.parents('.subject-item__operation').data('url');
+    let question = this.questionOperate.getQuestion($item.attr('id'));
+    $.get(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
+      $item.replaceWith(html);
+      showEditor.getEditor(question['type'], $('.js-edit-form'), self.questionOperate);
     });
+  }
+
+  itemConvert(event) {
+    let $target = $(event.currentTarget);
+    let $item = $target.parents('.subject-item');
+    let toType = $target.data('type');
+    let fromType = $target.parents('.subject-change-list').data('fromType');
+    let $form = $target.parents('.js-edit-form');
+    let url = $target.parents('.subject-change-list').data('convertUrl');
+    let question = sbList._serializeArrayConvertToJson($form.serializeArray());
+    let seq = this.questionOperate.getQuestionOrder(question.token);
+    let data = {
+      'seq' : seq,
+      'token' : question.token,
+      'question' : question,
+      'fromType' : fromType,
+      'toType' : toType,
+    };
+    data.fromType = fromType;
+    data.toType = toType;
+    let self  = this;
+    $.post(url, data, html => {
+      $item.replaceWith(html);
+      showEditor.getEditor(toType, $('.js-edit-form'), self.questionOperate);
+    });
+    console.log(data);
+
+
+  }
+
+  deleteSubjectItem(event) {
+    cd.confirm({
+      title: '确认删除',
+      content: '确定要删除这道题目吗?',
+      okText: '确定',
+      cancelText: '取消',
+    }).on('ok', () => {
+      const $item = $(event.currentTarget).parent().parent();
+      const token = $item.attr('id');
+      let question = this.questionOperate.getQuestion(token);
+
+      if ($item.hasClass('subject-sub-item')) {
+        let order = $item.find('.subject-sub-item__number').text().replace(/[^0-9]/ig, '');
+        $item.nextUntil('[class="subject-item"]').each(function() {
+          $(this).find('.subject-sub-item__number').text(`(${order})`);
+          order++;
+        });
+        this.questionOperate.deleteQuestion(token);
+        this.updateTotalScoreText();
+        $item.remove();
+        return;
+      }
+
+      let order = this.questionOperate.getQuestionOrder(token);
+      $item.nextAll('.subject-item').not('.subject-sub-item').each(function() {
+        $(this).find('.subject-item__number').text(order);
+        order++;
+      });
+
+      order = this.questionOperate.getQuestionOrder(token);
+      const $listItem = $(`[data-anchor=#${token}]`).parent();
+      $listItem.nextAll('.subject-list-item').each(function() {
+        $(this).find('.subject-list-item__num').text(order)
+          .find('.sb-checkbox').attr('data-order', order);
+        order++;
+      });
+
+      this.questionOperate.deleteQuestion(token);
+      this.updateQuestionCountText(question['type']);
+      this.updateTotalScoreText();
+
+      if (question.type == 'material') {
+        $.each(question['subQuestions'], function(token, subQuestion) {
+          $(`#${token}`).remove();
+        });
+      }
+      $listItem.remove();
+      $item.remove();
+    });
+  }
+
+  updateQuestionCountText(type) {
+    let totalCount = this.questionOperate.getQuestionCount('total');
+    let typeCount = this.questionOperate.getQuestionCount(type);
+    $('.js-total-num').text(`共${totalCount}道题`);
+    $(`[data-type=${type}]`).find('.subject-data__num').text(`共${typeCount}道题`);
+  }
+
+  updateTotalScoreText() {
+    let totalScore = this.questionOperate.getTotalScore();
+    if (this.isTestpaper()) {
+      $('.js-total-score').text(`总分${totalScore}分`);
+    }
+  }
+
+  static _serializeArrayConvertToJson(data){
+    let serializeObj={};
+    for (let item of data) {
+      if (serializeObj[item.name]) {
+        if (!serializeObj[item.name].push) {
+          serializeObj[item.name] = [serializeObj[item.name]];
+        }
+        serializeObj[item.name].push(item.value);
+      } else {
+        serializeObj[item.name] = item.value;
+      }
+    }
+    return serializeObj;
   }
 
   modalShow() {

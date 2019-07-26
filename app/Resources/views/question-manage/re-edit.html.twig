@@ -4,6 +4,12 @@
 
 {% block subtitle %}
   <div class="subject-data__subtitle subject-data__subtitle--question">
-    <span>共{{ totalNum }}道题</span>
+    <span class="js-total-num">共{{ questions|length }}道题</span>
   </div>
+{% endblock %}
+
+{% block testpaper %}
+  {% for key,item in questions if item.type in ['choice', 'determine', 'essay', 'fill', 'single_choice', 'uncertain_choice', 'material'] %}
+    {% include 'testpaper/subject/item/show/' ~ item.type ~ '.html.twig' %}
+  {% endfor %}
 {% endblock %}
