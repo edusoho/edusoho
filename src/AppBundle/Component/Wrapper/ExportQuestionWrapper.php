@@ -48,7 +48,7 @@ class ExportQuestionWrapper extends Wrapper
             'stem',
             'options',
             'answer',
-            'difficulty'
+            'difficulty',
         );
     }
 }

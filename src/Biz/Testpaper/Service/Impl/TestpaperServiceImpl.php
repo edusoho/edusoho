@@ -1081,7 +1081,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 'answer',
                 'score',
                 'difficulty',
-                'analysis'
+                'analysis',
             ));
             $exportQuestions[] = $question;
         }
