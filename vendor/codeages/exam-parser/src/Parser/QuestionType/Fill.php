@@ -38,8 +38,9 @@ class Fill extends AbstractQuestion
                 continue;
             }
 
-            if (QuestionElement::STEM == $preNode) {
-                $question['stem'] .= (empty($question['stem']) ? '' : '<br/>').preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
+            //处理题干
+            if ($this->matchStem($question, $line, $preNode)) {
+                continue;
             }
         }
         $question['stemShow'] = preg_replace('/\[\[(\S|\s)*?\]\]/', '___', $question['stem']);
@@ -57,7 +58,7 @@ class Fill extends AbstractQuestion
                 $answer = rtrim($answer, ']');
             }
             $question['answers'] = $matches[0];
-            $question['stem'] .= preg_replace('/^\d{0,5}(\.|、|。|\s)/', '', $line).PHP_EOL;
+            $question['stem'] .= preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $line);
             $preNode = QuestionElement::ANSWERS;
 
             return true;
