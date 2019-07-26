@@ -1,5 +1,5 @@
 {% set subQuestions = item.subQuestions %}
-{% set key = (token is defined) ? (seq - 1) : key %}
+{% set errors = item.errors|default([]) %}
 <div class="subject-item" id="{% if token is defined %}{{token}}{% else %}{{ key }}{% endif %}">
   <div class="subject-item__title">
     <span class="subject-item__number">
