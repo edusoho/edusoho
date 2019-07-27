@@ -18,6 +18,12 @@ export const userLogin = ({ commit }, { username, password }) => {
   });
 };
 
+// 短信快捷登录
+export const fastLogin = ({ commit }, data) => Api.fastlogin({ data })
+  .then(res => {
+    commit(types.USER_LOGIN, res);
+  });
+
 export const getUserInfo = ({ commit }) => Api.getUserInfo({})
   .then(res => {
     commit(types.USER_INFO, res);

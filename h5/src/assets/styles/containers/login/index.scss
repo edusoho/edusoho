@@ -32,6 +32,7 @@
   align-items: center;
   &-title {
     font-size: vw(20);
+    font-weight:500;
     -webkit-text-fill-color: #2b333b;
     font-family: PingFangSC-Regular;
   }
@@ -45,6 +46,7 @@
     margin-top: vw(30);
     left: 0;
     padding: vw(10) 0;
+    border-bottom: vw(1) solid #D8D8D8;
     &.van-cell:not(:last-child)::after {
       left: 0;
     }
@@ -56,7 +58,33 @@
     font-family: PingFangSC-Regular;
     color: $primary-color;
   }
+  &-change{
+    margin-top: vw(39);
+    text-align: center;
+    font-size: vw(14);
+    color: $primary-color
+  }
 
+  &-agree{
+    color: #BEBEBE;
+    text-align: center;
+    font-size: vw(14);
+    font-family:PingFangSC-Regular;
+    .van-checkbox__label {
+      color: #BEBEBE;
+    }
+    i{
+      color: $primary-color;
+      font-style: normal;
+    }
+    .agree-text{
+      margin-top:vw(10);
+      color: #323133;
+    }
+  }
+  .van-checkbox {
+    justify-content: center;
+  }
   &-bottom {
     width: 100%;
     a {
@@ -64,6 +92,16 @@
       font-size: vw(13);
     }
   }
+
+  &-footer{
+    position: fixed;
+    bottom: vw(56);
+    width: 100%;
+    text-align: center;
+    color: #333333;
+    font-size: vw(14);
+  }
+  
   .social-login {
     position: absolute;
     bottom: vw(50);

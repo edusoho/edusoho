@@ -13,20 +13,13 @@
       class="login-input e-input"
       :error-message="errorMessage.password"
       placeholder="请输入密码" />
+
     <van-button type="default" class="primary-btn mb20" @click="onSubmit" :disabled="btnDisable">登录</van-button>
     <div class="login-bottom text-center">
       <router-link to="/setting/password/reset" class="login-account">忘记密码？ &nbsp;|</router-link>
       <span class="login-account" @click="jumpRegister">&nbsp; 立即注册 &nbsp;</span>
-    </div>
-    <div class="social-login">
-      <router-link :to="{path: 'sts', query: {redirect: this.$route.query.redirect}}" class="social-login-button" v-if="faceSetting">
-        <img src="static/images/face.png" alt="人脸识别登录图标">
-      </router-link>
-      <!-- 微信环境内，自动登录微信账号 -->
-      <!-- <a class="social-login-button" v-if="Number(loginConfig.weixinmob_enabled) && isWeixinBrowser" @click="wxLogin">
-        <i class="h5-icon h5-icon-weixin1"></i>
-      </a> -->
-    </div>
+      <div class="login-change" v-show="cloudSetting" @click="changeLogin">切换手机快捷登录</div>
+    </div>  
   </div>
 
 </template>
@@ -34,11 +27,12 @@
 import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
 import { mapActions } from 'vuex';
-import { Toast } from 'vant';
 import Api from '@/api';
+import { Toast } from 'vant';
+//import passlogin from '@/mixins/login/passlogin';
 
 export default {
-  mixins: [activityMixin, redirectMixin],
+  mixins: [redirectMixin],
   data() {
     return {
       username: '',
@@ -49,6 +43,7 @@ export default {
       faceSetting: 0,
       bodyHeight: 520,
       loginConfig: {},
+      cloudSetting:false
     }
   },
   async created () {
@@ -66,6 +61,7 @@ export default {
     }).catch(err => {
       Toast.fail(err.message)
     });
+    this.getsettingsCloud();
   },
   computed: {
     btnDisable() {
@@ -79,8 +75,18 @@ export default {
     ...mapActions([
       'userLogin'
     ]),
-    onSubmit() {
-      this.userLogin({
+    //网校是否开启短信云服务
+    async getsettingsCloud(){
+      await Api.settingsCloud().then(res=>{
+        if(res.sms_enabled==1){
+          this.cloudSetting=true;
+        }
+      }).catch(err => {
+        Toast.fail(err.message)
+      });
+    },
+    onSubmit(data) {
+     this.userLogin({
         username: this.username,
         password: this.password
       }).then(res => {
@@ -118,6 +124,11 @@ export default {
           activityId: this.$route.query.activityId,
         }
       });
+    },
+    changeLogin(){
+      this.$router.push({
+        name: 'fastlogin',
+      })
     }
   },
 
