@@ -17,6 +17,7 @@
         <e-drag
             ref="dragComponent"
             v-if="dragEnable"
+            limitType="sms_login"
             :key="dragKey"
             @success="handleSmsSuccess"></e-drag>
 
@@ -43,15 +44,14 @@
         <van-button type="default" class="primary-btn mb20" @click="handleSubmit" :disabled="btnDisable">登录</van-button>
         <div class="login-bottom text-center">
             <div class="login-agree">
-                <van-checkbox v-model="agreement" @click="agree" checked-color="#408ffb">
+                <van-checkbox v-model="agreement" @click="checkAgree" checked-color="#408ffb" :icon-size="16">
                     我已阅读并同意《<i @click="lookPrivacyPolicy">用户服务协议</i>》
                  </van-checkbox>
+                 <div class="agree-text">新用户将为您自动注册</div>
             </div>
             <div class="login-change" @click="changeLogin">切换账号密码登录</div>
         </div>  
-        <div class="login-footer">
-            新用户将为您自动注册
-        </div>
+        <!-- <div class="login-footer"> </div> -->
     </div>
 </template>
 <script>
@@ -73,11 +73,10 @@ export default {
         return{
             userinfo: {
                 mobile: '',
-                dragCaptchaToken: undefined, // 默认不需要滑动验证
-                encrypt_password: '',
-                smsCode: '',
-                smsToken: '',
-                type: 'register'
+                dragCaptchaToken: undefined, // 默认不需要滑动验证,图片验证码token
+                smsCode: '',//验证码
+                smsToken: '',//验证码token
+                type:'sms_login',
             },
             registerSettings:null,
             agreement:true,
@@ -85,11 +84,9 @@ export default {
             dragKey: 0,
             errorMessage: {
                 mobile: '',
-                encrypt_password: ''
             },
             validated: {
                 mobile: false,
-                encrypt_password: false
             },
             count: {
                 showCount: false,
@@ -100,8 +97,7 @@ export default {
     },
     computed:{
         btnDisable() {
-            return !(this.mobile
-            && this.userinfo.encrypt_password
+            return !(this.userinfo.mobile
             && this.userinfo.smsCode
             && this.agreement);
         },
@@ -120,7 +116,7 @@ export default {
             'addUser',
             'setMobile',
             'sendSmsCenter',
-            'userLogin'
+            'fastLogin'
         ]),
         //获取隐私政策
          lookPrivacyPolicy(){
@@ -150,64 +146,18 @@ export default {
             this.userinfo.dragCaptchaToken = token;
             this.handleSendSms();
         },
+        //登录
         handleSubmit() {
-            // if (!this.registerSettings
-            //     || this.registerSettings.mode == 'closed'
-            //     || this.registerSettings.mode == 'email') {
-            //     Toast('网校未开启手机注册，请联系管理员');
-            //     return;
-            // }
-
-            const registerInfo = Object.assign({}, this.registerInfo);
-            const password = registerInfo.encrypt_password;
-            const mobile = registerInfo.mobile;
-            const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
-
-            registerInfo.encrypt_password = encrypt;
-
-            // 手机绑定
-            if (this.pathName === 'binding') {
-                this.setMobile({
-                query: {
-                    mobile,
-                },
-                data: {
-                    password,
-                    smsCode: registerInfo.smsCode,
-                    smsToken: registerInfo.smsToken
-                }
-                })
-                .then(res => {
-                Toast.success({
-                    duration: 2000,
-                    message: '绑定成功'
-                });
+            this.fastLogin({
+                mobile: this.userinfo.mobile,
+                smsToken: this.userinfo.smsToken,
+                smsCode: this.userinfo.smsCode,
+                loginType: 'sms',
+            }).then((res) =>{
                 this.afterLogin();
-                })
-                .catch(err => {
+            }).catch((err) =>{
                 Toast.fail(err.message);
-                });
-                return;
-            }
-
-        // 手机注册
-        this.addUser(registerInfo)
-            .then(res => {
-                Toast.success({
-                duration: 2000,
-                message: '注册成功'
-                });
-                this.afterLogin();
             })
-            .then(() => {
-                this.userLogin({
-                password,
-                username: mobile,
-                })
-            })
-            .catch(err => {
-                Toast.fail(err.message);
-            });
         },
         clickSmsBtn() {
             if (!this.dragEnable) {
@@ -223,9 +173,10 @@ export default {
             },
         handleSendSms() {
             this.sendSmsCenter(this.userinfo)
-            .then(res => {
+            .then( (res) => {
                 this.userinfo.smsToken = res.smsToken;
                 this.countDown();
+                this.dragEnable=false;
             })
             .catch(err => {
                 switch(err.code) {
@@ -266,8 +217,8 @@ export default {
             }, 1000);
         },
         //同意协议
-        agree(){
-            this.agree=!this.agree
+        checkAgree(){
+            this.agreement=!this.agreement
         },
         changeLogin(){
             this.$router.push({

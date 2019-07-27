@@ -59,24 +59,32 @@
     color: $primary-color;
   }
   &-change{
+    margin-top: vw(39);
     text-align: center;
     font-size: vw(14);
-    margin-top: vw(39);
     color: $primary-color
   }
 
   &-agree{
-    margin-top: vw(21);
     color: #BEBEBE;
     text-align: center;
-    font-size: vw(16);
+    font-size: vw(14);
     font-family:PingFangSC-Regular;
+    .van-checkbox__label {
+      color: #BEBEBE;
+    }
     i{
       color: $primary-color;
       font-style: normal;
     }
+    .agree-text{
+      margin-top:vw(10);
+      color: #323133;
+    }
   }
-
+  .van-checkbox {
+    justify-content: center;
+  }
   &-bottom {
     width: 100%;
     a {

@@ -1,3 +1,7 @@
+.van-nav-bar__title {
+  color: #fff; 
+}
+
 .van-toast {
   &.van-toast--default {
     padding: 10px;
@@ -55,6 +59,7 @@
 .van-dialog__confirm, .van-dialog__confirm:active {
   color: $primary-color!important;
 }
+
 
 .van-button--primary {
   color: #fff;

@@ -58,6 +58,7 @@ Vue.use(EdusohoUI);
 Vue.use(Lazyload);
 Vue.use(Toast);
 Vue.use(Checkbox);
+Vue.use(Tab).use(Tabs);
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
 /* eslint-disable no-new */
