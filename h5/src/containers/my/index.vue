@@ -8,7 +8,7 @@
       </div>
     </router-link>
     <van-tabs v-model="activeIndex" class="after-tabs e-learn">
-      <van-tab v-for="(item, index) in tabs" :title="item" :key="index"></van-tab>
+      <van-tab v-for="(item, index) in tabs"  :title="item" :key="index"></van-tab>
     </van-tabs>
     <orders v-show="activeIndex === 0"></orders>
     <activity v-show="activeIndex === 1"></activity>

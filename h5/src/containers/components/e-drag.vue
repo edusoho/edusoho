@@ -33,6 +33,10 @@ export default {
     tips: {
       type: String,
       default: '拖动左边滑块完成上方拼图'
+    },
+    limitType:{
+      type:String,
+      default:''
     }
   },
 
@@ -70,7 +74,15 @@ export default {
   },
   methods: {
     initDragCaptcha() {
-      Api.dragCaptcha().then(res => {
+      let data={}
+      if(this.limitType){
+          data={
+            'limitType':this.limitType
+          }
+      }
+      Api.dragCaptcha({
+        data
+      }).then(res => {
         this.imgInfo = { ...res };
         Object.assign(this.dragState, {
           currentLeft: 0,

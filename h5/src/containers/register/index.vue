@@ -232,6 +232,7 @@ export default {
       .then(res => {
         this.registerInfo.smsToken = res.smsToken;
         this.countDown();
+        this.dragEnable=false;
       })
       .catch(err => {
         switch(err.code) {

@@ -46,6 +46,13 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "login" */ '@/containers/login/index.vue')
   }, {
+    path: '/fastlogin',
+    name: 'fastlogin',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "fastlogin" */ '@/containers/login/fastlogin.vue')
+  }, {
     path: '/login/qrcode',
     name: 'login_qrcode',
     meta: {

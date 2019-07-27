@@ -1,3 +1,7 @@
+.van-nav-bar__title {
+  color: #fff; 
+}
+
 .van-toast {
   &.van-toast--default {
     padding: 10px;
@@ -30,6 +34,11 @@
 .van-popup{
   overflow: auto;
 }
+.van-checkbox__icon--checked .van-icon {
+  color: #fff;
+  border-color: $primary-color;
+  background-color: $primary-color;
+}
 
 .van-cell {
   padding-left: 0;
@@ -50,6 +59,7 @@
 .van-dialog__confirm, .van-dialog__confirm:active {
   color: $primary-color!important;
 }
+
 
 .van-button--primary {
   color: #fff;
