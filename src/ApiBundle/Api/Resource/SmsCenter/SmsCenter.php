@@ -7,16 +7,12 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
-use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
-use Biz\User\Service\UserService;
 
 class SmsCenter extends AbstractResource
 {
-    private $supportSmsType = array(
+    private $smsType = array(
         'register' => BizSms::SMS_BIND_TYPE,
-        'receive_coupon' => BizSms::SMS_LOGIN,
-        'sms_login' => BizSms::SMS_LOGIN,
     );
 
     /**
@@ -24,77 +20,36 @@ class SmsCenter extends AbstractResource
      */
     public function add(ApiRequest $request)
     {
-        $smsType = $request->request->get('type', '');
-        $mobile = $request->request->get('mobile', '');
-
-        if (empty($smsType) || empty($mobile)) {
-            throw CommonException::ERROR_PARAMETER();
+        $type = $request->request->get('type');
+        if ('register' == $type) {
+            $auth = $this->getSettingService()->get('auth', array());
+            if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], array('mobile', 'email_or_mobile')))) {
+                throw SettingException::FORBIDDEN_MOBILE_REGISTER();
+            }
         }
 
-        // 根据业务自主检查设置项
-        $this->checkSettingsEnable($smsType);
-        // 根据业务自主调用频控器
-        $this->checkRateLimit($request, $smsType);
+        if (!($type = $request->request->get('type'))
+            || !($mobile = $request->request->get('mobile'))) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
 
-        $bizSmsCode = $this->convertType($smsType);
+        $type = $this->convertType($type);
 
-        // 根据业务自主更新频空器状态
-        $smsToken = $this->getBizSms()->send($bizSmsCode, $mobile);
-
-        $this->updateSmsStatus($request->getHttpRequest()->getClientIp(), $smsType);
+        $smsToken = $this->getBizSms()->send($type, $mobile);
+        $this->getUserService()->updateSmsRegisterCaptchaStatus($request->getHttpRequest()->getClientIp());
 
         return array(
             'smsToken' => $smsToken['token'],
         );
     }
 
-    private function checkSettingsEnable($smsType)
+    private function convertType($type)
     {
-        if ('register' == $smsType) {
-            $auth = $this->getSettingService()->get('auth', array());
-            if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], array('mobile', 'email_or_mobile')))) {
-                throw SettingException::FORBIDDEN_MOBILE_REGISTER();
-            }
-        } elseif ('receive_coupon' == $smsType || 'sms_login' == $smsType) {
-            $cloudSms = $this->getSettingService()->get('cloud_sms');
-            if (!$cloudSms['sms_enabled']) {
-                throw SettingException::FORBIDDEN_SMS_SEND();
-            }
-        }
-    }
-
-    private function checkRateLimit($request, $smsType)
-    {
-        if ('register' == $smsType) {
-            $this->handleRateLimiter($request, 'register_sms_rate_limiter');
-        } elseif ('receive_coupon' == $smsType || 'sms_login' == $smsType) {
-            $this->handleRateLimiter($request, 'common_sms_rate_limiter');
-        }
-    }
-
-    private function updateSmsStatus($clientIp, $smsType)
-    {
-        if ('register' == $smsType) {
-            $this->getUserService()->updateSmsRegisterCaptchaStatus($clientIp);
-        } elseif ('receive_coupon' == $smsType || 'sms_login' == $smsType) {
-            $this->getUserService()->getSmsCommonCaptchaStatus($clientIp, true);
-        }
-    }
-
-    private function convertType($smsType)
-    {
-        if (!array_key_exists($smsType, $this->supportSmsType)) {
+        if (!array_key_exists($type, $this->smsType)) {
             throw CommonException::ERROR_PARAMETER();
         }
 
-        return $this->supportSmsType[$smsType];
-    }
-
-    private function handleRateLimiter(ApiRequest $request, $limiterName)
-    {
-        $biz = $this->biz;
-        $limiter = $biz[$limiterName];
-        $limiter->handle($request->getHttpRequest());
+        return $this->smsType[$type];
     }
 
     /**
@@ -105,17 +60,11 @@ class SmsCenter extends AbstractResource
         return $this->biz['biz_sms'];
     }
 
-    /**
-     * @return UserService
-     */
     private function getUserService()
     {
         return $this->biz->service('User:UserService');
     }
 
-    /**
-     * @return SettingService
-     */
     private function getSettingService()
     {
         return $this->biz->service('System:SettingService');
