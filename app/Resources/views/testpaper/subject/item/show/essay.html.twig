@@ -16,7 +16,10 @@
   </div>
   <div class="subject-item__body">
     {% if errors.answer is not defined %}
-      <span>答案：</span><span>{{ item.answer|raw }}</span>
+      <div class="subject-table">
+        <span class="subject-table-label">答案：</span>
+        <div class="subject-table-cell">{{ item.answer|raw }}</div>
+      </div>
     {% elseif errors.answer.code == 100003 %}
       <span class="single-item__text--danger">缺少正确答案，请点击“编辑”进行设置。</span>
     {% endif %}
