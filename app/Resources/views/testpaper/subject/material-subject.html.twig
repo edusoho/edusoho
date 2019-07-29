@@ -29,7 +29,7 @@
 ] %}
 
 {% for item in data %}
-  <div class="subject-item {% if item.type == 'subMaterial' %}subject-sub-item{% endif %}" id="{{ item.order }}">
+  <div class="subject-item js-subject-item {% if item.type == 'subMaterial' %}subject-sub-item{% endif %}" id="{{ item.order }}">
     {% if item.type == 'material' %}
       <div class="subject-item__title">
         <span class="subject-item__number">{{ item.order }}</span>
