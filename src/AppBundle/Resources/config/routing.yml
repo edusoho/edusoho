@@ -3214,3 +3214,13 @@ subject_convert_template:
   path: /sublect/convert
   methods: [POST]
   defaults: { _controller: AppBundle:Testpaper/Manage:convertTemplate }
+
+testpaper_import_save:
+  path: /testpaper/{token}/import_save
+  methods: [POST]
+  defaults: { _controller: AppBundle:Testpaper/Manage:saveImportTestpaper }
+
+questions_import_save:
+  path: /questions/{token}/import_save
+  methods: [POST]
+  defaults: { _controller: AppBundle:Question/Manage:saveImportQuestions }

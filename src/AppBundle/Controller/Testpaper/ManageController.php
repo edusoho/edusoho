@@ -133,6 +133,7 @@ class ManageController extends BaseController
                         'id' => $result['id'],
                         'filename' => $file->getClientOriginalName(),
                         'fileuri' => $result['uri'],
+                        'courseSetId' => $courseSet['id'],
                     ),
                     'duration' => 86400,
                     'userId' => $user['id'],
@@ -639,9 +640,10 @@ class ManageController extends BaseController
         }
 
         return $this->render('testpaper/manage/re-edit.html.twig', array(
-            'filename' => $data['filename'],
+            'filename' => str_replace('.docx', '', $data['filename']),
             'questions' => $questions,
             'questionAnalysis' => $questionAnalysis,
+            'courseSetId' => $token['data']['courseSetId'],
         ));
     }
 
@@ -802,6 +804,15 @@ class ManageController extends BaseController
             'token' => $token,
             'type' => $type,
         ));
+    }
+
+    public function saveImportTestpaperAction(Request $request, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        $testpaper = $request->request->all();
+        $this->getTestpaperService()->importTestpaper($testpaper, $token);
+
+        return $this->createJsonResponse(true);
     }
 
     public function optionTemplateAction(Request $request, $type)

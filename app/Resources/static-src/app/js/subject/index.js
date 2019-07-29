@@ -51,6 +51,7 @@ export default class sbList {
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
     this.$itemList.on('change', '.js-testpaper-title', event => this.editTestpaperTitle(event));
+    this.$itemList.on('click', '.js-import-btn', event => this.finishImport(event))
   }
 
   initTestpaperTitle() {
@@ -274,10 +275,11 @@ export default class sbList {
     let $target = $(event.currentTarget);
     let $item = $target.parents('.subject-item');
     let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
+    let editSeq = this.questionOperate.getQuestionOrder($('.js-hidden-token').val());
     if ($editItem.length !== 0) {
       cd.message({
         type: 'warning',
-        message: `请先完成第${seq}题的编辑`,
+        message: `请先完成第${editSeq}题的编辑`,
       });
       return;
     }
@@ -409,6 +411,33 @@ export default class sbList {
     $item.nextAll('.subject-list-item').each(function() {
       $(this).find('.js-list-index').text(seq);
       seq++;
+    });
+  }
+
+  finishImport(event) {
+    let hasError = false;
+    // let errorTip = '第';
+    // this.$element.find('.subject-list-item__num--error').each(function () {
+    //   errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
+    //   hasError = true;
+    // });
+    // errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
+    // if (hasError) {
+    //   cd.message({
+    //     type : 'danger',
+    //     message : errorTip
+    //   });
+    //   return ;
+    // }
+
+    let title = '';
+    if (this.isTestpaper()) {
+      title = this.testpaperTitle;
+    }
+    $.post($(event.currentTarget).data('url'), {title: title, questions: this.questionOperate.getQuestions()}, function(resp) {
+      if (resp === true) {
+        window.location.href = $(event.currentTarget).data('redirectUrl');
+      }
     });
   }
 

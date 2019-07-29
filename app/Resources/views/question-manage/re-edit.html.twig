@@ -13,3 +13,7 @@
     {% include 'testpaper/subject/item/show/' ~ item.type ~ '.html.twig' %}
   {% endfor %}
 {% endblock %}
+
+{% block save_btn %}
+  <button class="cd-btn cd-btn-primary subject-button js-import-btn" data-redirect-url="{{ path('course_set_manage_question', {id:courseSetId}) }}" data-url="{{ path('questions_import_save', {token: app.request.get('token')}) }}" type="button">完成导入</button>
+{% endblock %}

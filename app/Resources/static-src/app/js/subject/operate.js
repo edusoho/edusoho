@@ -201,6 +201,10 @@ export default class QuestionOperate {
     return this.questions[token];
   }
 
+  getQuestions() {
+    return this.questions;
+  }
+
   triggerTotalScoreChange(isTrigger = true) {
     if ($('.js-total-score').length > 0 && isTrigger) {
       $('.js-total-score').trigger('change');

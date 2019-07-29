@@ -10,10 +10,13 @@
 {% endblock %}
 
 {% block testpaper %}
-  <div class="subject-title"><input name="testpaperTitle" class="js-testpaper-title" value="试卷名称" placeholder="此处可编辑试卷名称，最多输入50个字符"></div>
+  <div class="subject-title"><input name="testpaperTitle" class="js-testpaper-title" value="{{ filename }}" placeholder="此处可编辑试卷名称，最多输入50个字符"></div>
   <input type="hidden" name="isTestpaper" value="1">
   {% for key,item in questions if item.type in ['choice', 'determine', 'essay', 'fill', 'single_choice', 'uncertain_choice', 'material'] %}
     {% include 'testpaper/subject/item/show/' ~ item.type ~ '.html.twig' %}
   {% endfor %}
+{% endblock %}
+{% block save_btn %}
+  <button class="cd-btn cd-btn-primary subject-button js-import-btn" data-redirect-url="{{ path('course_set_manage_testpaper', {id:courseSetId}) }}" data-url="{{ path('testpaper_import_save', {token: app.request.get('token')}) }}" type="button">完成导入</button>
 {% endblock %}
 {% block edit %}{% endblock %}
