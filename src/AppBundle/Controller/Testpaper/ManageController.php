@@ -815,7 +815,6 @@ class ManageController extends BaseController
             ));
         }
 
-
         return $this->render("testpaper/subject/item/show/{$type}.html.twig", array(
             'item' => $question,
             'seq' => $seq,
