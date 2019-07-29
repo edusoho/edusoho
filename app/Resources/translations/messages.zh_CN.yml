@@ -54,6 +54,7 @@ site.message.warning: 警告信息
 site.message.error: 错误提示
 site.power_by: 好知网
 site.default.must: 必须
+site.default.and: 和
 site.default.student: 学员
 site.default.classroom: 班级
 site.default.reviewing: 已批阅
@@ -2825,8 +2826,10 @@ user.register.emaill_not_useful_tips: >
   <h5>原邮箱已失效？</h5>
   <a class="btn btn-primary" href="%resetEmail%">重新绑定</a>
 user.register.service_protocol: 服务协议
+user.register.privacy_policy: 隐私政策
 user.register.agree_terms: 同意服务协议并注册
 user.register.read_detail: 请详细阅读
+user.register.read_agree: 我已阅读并同意
 user.register.user_service_protocol: 用户服务协议
 user.register.reset_email: 重置邮箱
 user.register.reset_email.origin_email: 原邮箱地址:
@@ -6600,6 +6603,7 @@ admin.edu_cloud.edu_sms.enable_status: 启用状态
 admin.edu_cloud.edu_sms.operation: 操作
 admin.edu_cloud.edu_sms.validation_type: 验证类
 admin.edu_cloud.edu_sms.bind_mobile: 手机绑定
+admin.edu_cloud.edu_sms.login: 手机短信快捷登录
 admin.edu_cloud.edu_sms.verification_code_tips: 您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。
 admin.edu_cloud.edu_sms.singel_user: 单个用户
 admin.edu_cloud.edu_sms.auto_singel_send: 自动单发
@@ -6977,12 +6981,19 @@ admin.user_auth.Setup_welcome_message.title: 欢迎信息标题
 admin.user_auth.Setup_welcome_message.content: 欢迎信息内容
 admin.user_auth.Setup_welcome_message.warning.help_block: 注意： 私信长度不能超过1000个字符
 admin.user_auth.Setup_welcome_message.as_recipient.help_block: 为接收方用户用户名
+admin.user_auth.Protocol_settings: 网校协议设置
 admin.user_auth.Term_service_settings: 服务条款设置
 admin.user_auth.Term_service_settings.Enable: 是否开启服务条款
 admin.user_auth.Term_service_settings.open: 开启
 admin.user_auth.Term_service_settings.closed: 关闭
 admin.user_auth.Term_service_settings.Enable.help_block: 开启后用户注册时必须同意条款才能注册
 admin.user_auth.Term_service_settings.details: 条款内容
+admin.user_auth.Privacy_policy_settings: 隐私政策设置
+admin.user_auth.Privacy_policy_settings.Enable: 是否开启隐私政策
+admin.user_auth.Privacy_policy_settings.open: 开启
+admin.user_auth.Privacy_policy_settings.closed: 关闭
+admin.user_auth.Privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册
+admin.user_auth.Privacy_policy_settings.details: 隐私政策内容
 admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
 admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称

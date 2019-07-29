@@ -35,7 +35,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
         $to = implode(',', $mobiles);
         try {
-            $api = $this->createCloudeApi();
+            $api = $this->createCloudApi();
             $result = $api->post('/sms/send', array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters));
         } catch (\RuntimeException $e) {
             $this->createNewException(SmsException::FAILED_SEND());
@@ -118,10 +118,16 @@ class SmsServiceImpl extends BaseService implements SmsService
             $description = '直播公开课';
         }
 
+        if ('sms_login' == $smsType) {
+            $description = '手机快捷登录';
+            // FIXME 先兼容教育云，待教育云添加新的类型
+            $smsType = 'sms_bind';
+        }
+
         $smsCode = $this->generateSmsCode();
 
         try {
-            $api = $this->createCloudeApi();
+            $api = $this->createCloudApi();
             $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'verify' => $smsCode));
             if (isset($result['error'])) {
                 return array('error' => sprintf('发送失败, %s', $result['error']));
@@ -171,7 +177,7 @@ class SmsServiceImpl extends BaseService implements SmsService
 
     protected function checkSmsType($smsType, $user)
     {
-        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'))) {
+        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind', 'sms_login'))) {
             $this->createNewException(SmsException::ERROR_SMS_TYPE());
         }
 
@@ -210,7 +216,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         return false;
     }
 
-    protected function createCloudeApi()
+    protected function createCloudApi()
     {
         if (!$this->apiFactory) {
             $this->apiFactory = CloudAPIFactory::create('leaf');
