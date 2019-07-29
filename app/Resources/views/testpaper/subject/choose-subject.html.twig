@@ -1,6 +1,6 @@
 {% set singleData = [
   {
-    "title": '科目汇总表的总范围是（）',
+    "title": '科目汇总表科目汇总表的总范科目汇总表的总范科目汇总表的总范科目汇总表的总范科目汇总表的总范科目汇总表的总范科目汇总表的总范科目汇总表的总范科目汇总表的总范科目汇总表的总范的总范围是（）',
     "type": 'choice',
     "flag": 1,
     "order": 1,
@@ -113,7 +113,8 @@
 {% for item in singleData %}
   <div class="subject-item js-subject-item" id="{{ item.order }}" data-order="{{ item.order}}">
     <div class="subject-item__title">
-      <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ loop.index }}</span> {{ item.title }}
+      <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ loop.index }}</span>
+      <div class="subject-item__stem">{{ item.title }}</div>
     </div>
     <div class="subject-item__body">
       {% set options = item.options %}

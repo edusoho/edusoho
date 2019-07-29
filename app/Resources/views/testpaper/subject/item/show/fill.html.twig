@@ -7,10 +7,11 @@
     {% else %}
       {{ loop.index }}
     {% endif %}
-    </span> {{ question_html_filter(item.stem)|raw }}
+    </span>
+    <div class="subject-item__stem">{{ question_html_filter(item.stem)|raw }}</div>
   </div>
   <div class="subject-item__body">
-    <span>答案：</span>
+    <span class="subject-table-label">答案：</span>
     {% for answer_key,answer in item.answers %}
       {% if errors['answers_'~answer_key] is not defined %}
         {{ item.answers[answer_key] }}
