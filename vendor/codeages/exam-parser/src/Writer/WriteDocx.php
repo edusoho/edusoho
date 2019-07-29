@@ -10,6 +10,9 @@ class WriteDocx
 {
     protected $filename;
 
+    /**
+     * @var \PhpOffice\PhpWord\Element\Section
+     */
     protected $section;
 
     public function __construct($filename)
@@ -58,7 +61,7 @@ class WriteDocx
         $this->$method($question);
         $this->writeCommonQuestionText($question);
 
-        $this->section->addLine();
+        $this->section->addTextBreak();
     }
 
     protected function buildSingleChoice($question)
@@ -67,10 +70,10 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeStem($question['stem']);
         $this->writeOptions($question['options']);
 
-        $this->writeIn("【答案】{$question['answer']}");
+        $this->writeText("【答案】{$question['answer']}");
     }
 
     protected function buildChoice($question)
@@ -79,10 +82,10 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeStem($question['stem']);
         $this->writeOptions($question['options']);
 
-        $this->writeIn("正确答案：{$question['answer']}");
+        $this->writeText("正确答案：{$question['answer']}");
     }
 
     protected function buildUncertainChoice($question)
@@ -91,10 +94,10 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeStem($question['stem']);
         $this->writeOptions($question['options']);
 
-        $this->writeIn("正确答案：{$question['answer']}");
+        $this->writeText("正确答案：{$question['answer']}");
     }
 
     protected function buildFill($question)
@@ -103,7 +106,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeStem($question['stem']);
     }
 
     protected function buildDetermine($question)
@@ -112,7 +115,8 @@ class WriteDocx
             return;
         }
 
-        $this->writeIn("{$question['seq']}{$question['stem']}（{$question['answer']}）");
+        $this->writeStem($question['stem']);
+        $this->writeText("（{$question['answer']}）");
     }
 
     protected function buildEssay($question)
@@ -121,7 +125,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeStem($question['stem']);
     }
 
     protected function buildMaterial($question)
@@ -130,72 +134,93 @@ class WriteDocx
             return;
         }
 
-        $this->writeIn('【材料题开始】');
+        $this->writeText('【材料题开始】');
 
-        $this->writeStem($question['seq'], $question['stem']);
-        $this->section->addLine();
+        $this->writeStem($question['stem']);
+        $this->section->addTextBreak();
 
         foreach ($question['subs'] as $subQuestion) {
             $this->buildQuestionText($subQuestion['type'], $subQuestion);
         }
 
-        $this->writeIn('【材料题结束】');
+        $this->writeText('【材料题结束】');
     }
 
     protected function writeDescription()
     {
-        $this->writeIn('请仔细阅读以下导入说明，【导入开始】以后才是导入正文。');
-        $this->writeIn('1. 题号及选项编号不能使用word默认项目编号，可设置取消自动编号，路径如下：文件->选项->校对->自动更正选项->键入时自动套用格式->取消勾选“自动编号列表”；或复制全文，然后右击，选择无格式粘贴。');
-        $this->writeIn('2. 题型包括单项选择题，多项选择题，填空题，判断题，问答题和材料题；');
-        $this->writeIn('同一道题目之间不得有空行（材料题除外）。');
-        $this->writeIn('3. 题目导入图片时，注意不要产生空行；');
-        $this->writeIn('4. 选择题最多包含10个选项，多选题的答案连续填写，如“ABC”；');
-        $this->writeIn('5. 填空题以两个连续的中括号[[]]（注意是英文的中括号）代表空，如果某个空有多个备选答案，则每个答案之间用“|”隔开；');
-        $this->writeIn('6. 判断题的答案只能是“正确”和“错误”；');
-        $this->writeIn('7. 材料题请以【材料题开始】和【材料题结束】两个标签包裹起来，并且题干与子题之间，子题与子题之间都要用空行区分。');
-        $this->writeIn('8. 解析非必填，需要导入解析时，以中括号（注意是中文的中括号）标记开始，注意不要与题目之间有空行；');
-        $this->writeIn('9. 分值全部由系统默认生成，问答题：6分，其余题型：2分，可在导入成功后批量修改；');
-        $this->writeIn('10. 难度全部默认一般，可在导入成功后批量修改。');
+        $this->writeText('请仔细阅读以下导入说明，【导入开始】以后才是导入正文。');
+        $this->writeText('1. 题号及选项编号不能使用word默认项目编号，可设置取消自动编号，路径如下：文件->选项->校对->自动更正选项->键入时自动套用格式->取消勾选“自动编号列表”；或复制全文，然后右击，选择无格式粘贴。');
+        $this->writeText('2. 题型包括单项选择题，多项选择题，填空题，判断题，问答题和材料题；');
+        $this->writeText('同一道题目之间不得有空行（材料题除外）。');
+        $this->writeText('3. 题目导入图片时，注意不要产生空行；');
+        $this->writeText('4. 选择题最多包含10个选项，多选题的答案连续填写，如“ABC”；');
+        $this->writeText('5. 填空题以两个连续的中括号[[]]（注意是英文的中括号）代表空，如果某个空有多个备选答案，则每个答案之间用“|”隔开；');
+        $this->writeText('6. 判断题的答案只能是“正确”和“错误”；');
+        $this->writeText('7. 材料题请以【材料题开始】和【材料题结束】两个标签包裹起来，并且题干与子题之间，子题与子题之间都要用空行区分。');
+        $this->writeText('8. 解析非必填，需要导入解析时，以中括号（注意是中文的中括号）标记开始，注意不要与题目之间有空行；');
+        $this->writeText('9. 分值全部由系统默认生成，问答题：6分，其余题型：2分，可在导入成功后批量修改；');
+        $this->writeText('10. 难度全部默认一般，可在导入成功后批量修改。');
     }
 
     protected function writeStartSignal()
     {
-        $this->section->addLine();
-        $this->writeIn('【导入开始】');
-        $this->section->addLine();
+        $this->section->addTextBreak();
+        $this->writeText('【导入开始】');
+        $this->section->addTextBreak();
     }
 
-    protected function writeStem($seq, $stem)
+    protected function writeStem($stem)
     {
-        $this->writeIn("{$seq}{$stem}");
+        foreach ($stem as $item) {
+            $this->writeIn($item['element'], $item['content']);
+        }
     }
 
     protected function writeOptions(array $options)
     {
         foreach ($options as $option) {
-            $this->writeIn("{$option}");
+            foreach ($option as $item) {
+                $this->writeIn($item['element'], $item['content']);
+            }
         }
     }
 
     protected function writeCommonQuestionText($question)
     {
         if (!empty($question['difficulty'])) {
-            $this->writeIn("【难度】{$question['difficulty']}");
+            $this->writeText("【难度】{$question['difficulty']}");
         }
         if (!empty($question['score'])) {
-            $this->writeIn("【分数】{$question['score']}");
+            $this->writeText("【分数】{$question['score']}");
         }
         if (!empty($question['analysis'])) {
-            $this->writeIn("【解析】{$question['analysis']}");
+            $this->writeText("【解析】");
+            foreach ($question['analysis'] as $item) {
+                $this->writeIn($item['element'], $item['content']);
+            }
         }
     }
 
-    protected function writeIn($questionText)
+    protected function writeIn($element, $content)
+    {
+        $method = 'write'.ucfirst($element);
+        $this->$method($content);
+    }
+
+    protected function writeImg($src)
+    {
+        $this->section->addImage($src);
+    }
+
+    protected function writeText($questionText)
     {
         $questionText = str_replace('&nbsp;', ' ', $questionText);
         $questionText = strip_tags($questionText);
         $questionText = str_replace('&', '&amp;', $questionText);
+        $questionText = trim($questionText);
 
-        $this->section->addText($questionText);
+        if (!empty($questionText)) {
+            $this->section->addText($questionText);
+        }
     }
 }

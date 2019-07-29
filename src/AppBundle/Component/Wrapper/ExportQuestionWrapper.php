@@ -2,28 +2,54 @@
 
 namespace AppBundle\Component\Wrapper;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class ExportQuestionWrapper extends Wrapper
 {
     public function seq($question)
     {
+        $question['seq'] = $question['seq'].'、';
+
         return $question;
     }
 
     public function stem($question)
     {
+        $stem = $question['seq'].$question['stem'];
+        $question['stem'] = $this->explodeTextAndImg($stem);
+
         return $question;
     }
 
     public function options($question)
     {
         $question['options'] = empty($question['metas']['choices']) ? array() : $question['metas']['choices'];
+        foreach ($question['options'] as $index => $option) {
+            $option = $this->numberToCapitalLetter($index).'.'.$option;
+            $question['options'][$index] = $this->explodeTextAndImg($option);
+        }
 
         return $question;
     }
 
     public function answer($question)
     {
-        $question['answer'] = implode($question['answer']);
+        if ('essay' == $question['type']) {
+            $question['answer'] = $this->explodeTextAndImg($question['answer']);
+        } else if ('determine' == $question['type']) {
+            $determineAnswer = array(
+                '错误',
+                '正确',
+            );
+            $answer = (int)$question['answer'];
+            $question['answer'] = $determineAnswer[$answer];
+        } else if (in_array($question['type'], array('choice', 'single_choice', 'uncertain_choice'))) {
+            $choiceAnswer = '';
+            foreach ($question['answer'] as $answer) {
+                $choiceAnswer .= $this->numberToCapitalLetter($answer);
+            }
+            $question['answer'] = $choiceAnswer;
+        }
 
         return $question;
     }
@@ -41,6 +67,75 @@ class ExportQuestionWrapper extends Wrapper
         return $question;
     }
 
+    public function analysis($question)
+    {
+        if (!empty($question['analysis'])) {
+            $question['analysis'] = $this->explodeTextAndImg($question['analysis']);
+        }
+
+        return $question;
+    }
+
+    public function subs($question)
+    {
+        if (empty($question['subs'])) {
+            return $question;
+        }
+
+        foreach ($question['subs'] as $index => $sub) {
+            $sub['seq'] = "（{$sub['seq']}）";
+            $sub = $this->stem($sub);
+            $sub = $this->options($sub);
+            $sub = $this->answer($sub);
+            $sub = $this->difficulty($sub);
+            $sub = $this->analysis($sub);
+            $question['subs'][$index] = $sub;
+        }
+
+        return $question;
+    }
+
+    protected function explodeTextAndImg($text)
+    {
+        $items = array();
+        $webDir = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../web';
+        $result = preg_split('/(<img [^>]*?\/>)/', $text, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+        foreach ($result as $item) {
+            if (preg_match('/<img .*src="(.*)".*\/>/', $item, $matches)) {
+                $items[] = array(
+                    'element' => 'img',
+                    'content' => $webDir.$matches[1],
+                );
+            } else {
+                $items[] = array(
+                    'element' => 'text',
+                    'content' => $this->clean($item),
+                );
+            }
+        }
+
+        return $items;
+    }
+
+    protected function numberToCapitalLetter($number)
+    {
+        if (!is_int($number)) {
+            $number = (int)$number;
+        }
+
+        return chr($number + 65);
+    }
+
+    protected function clean($text)
+    {
+        $text = str_replace('&nbsp;', ' ', $text);
+        $text = strip_tags($text);
+        $text = str_replace('&', '&amp;', $text);
+        $text = trim($text);
+
+        return $text;
+    }
+
     protected function getWrapList()
     {
         return array(
@@ -49,6 +144,8 @@ class ExportQuestionWrapper extends Wrapper
             'options',
             'answer',
             'difficulty',
+            'analysis',
+            'subs',
         );
     }
 }
