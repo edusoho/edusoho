@@ -111,7 +111,7 @@
 
 
 {% for item in singleData %}
-  <div class="subject-item" id="{{ item.order }}">
+  <div class="subject-item js-subject-item" id="{{ item.order }}" data-order="{{ item.order}}">
     <div class="subject-item__title">
       <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ loop.index }}</span>
       <div class="subject-item__stem">{{ item.title }}</div>

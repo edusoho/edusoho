@@ -76,9 +76,14 @@ class BaseQuestion {
   finishEdit(question) {
     let self = this;
     let token = $('.js-hidden-token').val();
-    $.each(question, function(name, value){
-      self.operate.updateQuestionItem(token, name, value);
-    });
+    if (token == '') {
+      let preToken = $('.subject-edit-item').prev('.js-subject-item').attr('id');
+      token = self.operate.addQuestion(preToken, question);
+    } else {
+      $.each(question, function(name, value){
+        self.operate.updateQuestionItem(token, name, value);
+      });
+    }
     question = self.operate.getQuestion(token);
     let seq = self.operate.getQuestionOrder(token);
     $.post(self.$form.data('url'), {seq: seq, question: question, token: token}, html=> {
