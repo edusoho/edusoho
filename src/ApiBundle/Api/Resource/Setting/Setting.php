@@ -7,7 +7,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
-use Biz\System\SettingException;
 
 class Setting extends AbstractResource
 {
@@ -16,47 +15,13 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'cloud', 'user'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat'))) {
             throw CommonException::ERROR_PARAMETER();
         }
 
         $method = "get${type}";
 
         return $this->$method($request);
-    }
-
-    public function getUser($request = null)
-    {
-        $authSetting = $this->getSettingService()->get('auth');
-        $loginSetting = $this->getSettingService()->get('login_bind');
-
-        if (empty($loginSetting)) {
-            SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
-        }
-
-        $result = array(
-            'register_mode' => $authSetting['register_mode'],
-            'oauth_enabled' => (int) $loginSetting['enabled'] ?: 0,
-            'weibo_enabled' => (int) $loginSetting['weibo_enabled'] ?: 0,
-            'qq_enabled' => (int) $loginSetting['qq_enabled'] ?: 0,
-            'weixinweb_enabled' => (int) $loginSetting['weixinweb_enabled'] ?: 0,
-            'weixinmob_enabled' => (int) $loginSetting['weixinmob_enabled'] ?: 0,
-            'userTerms_enabled' => $authSetting['user_terms'] == 'opened' ? 1 : 0,
-            'privacyPolicy_enabled' => $authSetting['privacy_policy'] == 'opened' ? 1 : 0,
-        );
-
-        return $result;
-    }
-
-    public function getCloud($request = null)
-    {
-        $cloudSms = $this->getSettingService()->get('cloud_sms');
-
-        $result = array(
-            'sms_enabled' => $cloudSms['sms_enabled'],
-        );
-
-        return $result;
     }
 
     public function getHasPluginInstalled($request)

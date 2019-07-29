@@ -48,7 +48,6 @@ site.message.warning: Warning
 site.message.error: Error
 site.power_by: howzhi.com
 site.default.must: Must
-site.default.and: And
 site.default.student: Student
 site.default.classroom: Class
 site.default.reviewing: Reviewed
@@ -2355,10 +2354,8 @@ user.register.not_receive_email_tips: "<h5>Not received a confirmation letter?</
 user.register.verify_success_tips: "after verification, you can： <ul>\n  <li><a href=\"%path%\">Back</a></li>\n  <li><a href=\"%homepage%\">Home</a></li>\n</ul>\n"
 user.register.emaill_not_useful_tips: "<h5>original mailbox is invalid?</h5> <a class=\"btn btn-primary\" href=\"%resetEmail%\">Rebind</a>\n"
 user.register.service_protocol: 'Service Agreements'
-user.register.privacy_policy: 'Privacy Policy'
 user.register.agree_terms: 'Agree terms and register'
 user.register.read_detail: 'Please read details'
-user.register.read_agree: 'I have read and agreed'
 user.register.user_service_protocol: 'User service agreement'
 user.register.reset_email: 'Reset email'
 user.register.reset_email.origin_email: 'Previous email address:'
@@ -2463,7 +2460,6 @@ user.settings.security.input_sms_code: 'Input SMS verification code'
 user.settings.security.change_captcha_code: 'Not clear？Click to change'
 user.settings.security.mobile: Mobile
 user.settings.security.bind_mobile: 'Bound phone number'
-admin.edu_cloud.edu_sms.login: 'Login with SMS'
 user.settings.security.login_password: 'Your login password'
 user.settings.security.content_title: 'Security Setting'
 user.settings.security.reset_pay_password: 'Payment password resetting'
@@ -5710,19 +5706,12 @@ admin.user_auth.Setup_welcome_message.title: 'Title of the welcome message'
 admin.user_auth.Setup_welcome_message.content: 'Content of the welcome message'
 admin.user_auth.Setup_welcome_message.warning.help_block: 'Note: Content is limited to 1000 characters'
 admin.user_auth.Setup_welcome_message.as_recipient.help_block: 'Receiver''s username'
-admin.user_auth.Protocol_settings: 'Protocol setting'
 admin.user_auth.Term_service_settings: 'Terms of service settings'
 admin.user_auth.Term_service_settings.Enable: 'Status of terms of service'
 admin.user_auth.Term_service_settings.open: 'Turned on'
 admin.user_auth.Term_service_settings.closed: Closed
 admin.user_auth.Term_service_settings.Enable.help_block: 'Users need to agree the terms to register if turned on'
 admin.user_auth.Term_service_settings.details: Terms
-admin.user_auth.Privacy_policy_settings: 'Privacy policy settings'
-admin.user_auth.Privacy_policy_settings.Enable: 'Status of privacy policy'
-admin.user_auth.Privacy_policy_settings.open: 'Turned on'
-admin.user_auth.Privacy_policy_settings.closed: 'Closed'
-admin.user_auth.Privacy_policy_settings.Enable.help_block: 'Users need to agree the terms to register if turned on'
-admin.user_auth.Privacy_policy_settings.details: 'Privacy Policy'
 admin.user_auth.Name_setting: Name
 admin.user_auth.Name_setting.user_name: 'Username'
 admin.user_auth.Name_setting.help_block: 'Note: After editing the site field, all the relevant field names will be changed accordingly to the edited name'

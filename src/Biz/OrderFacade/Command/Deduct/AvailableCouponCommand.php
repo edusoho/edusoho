@@ -31,8 +31,8 @@ class AvailableCouponCommand extends Command
      * 对可用的优惠券进行排序
      * 1.专属优惠券排在前面
      * 2.面额从大到小
-     * 3.到期日期从近到远
-     * 4.创建日期从远至近
+     * 3.到期日期从小至大
+     * 4.创建日期从小至大
      *
      * @return array
      */
@@ -69,7 +69,7 @@ class AvailableCouponCommand extends Command
             if ($coupon1['deadline'] == $coupon2['deadline']) {
                 return $coupon1['createdTime'] > $coupon2['createdTime'];
             } else {
-                return $coupon1['deadline'] < $coupon2['deadline'];
+                return $coupon1['deadline'] > $coupon2['deadline'];
             }
         } else {
             return $coupon1['deduct_amount'] < $coupon2['deduct_amount'];

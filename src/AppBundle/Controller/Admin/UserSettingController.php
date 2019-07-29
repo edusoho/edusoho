@@ -34,8 +34,6 @@ class UserSettingController extends BaseController
             'welcome_body' => '',
             'user_terms' => 'closed',
             'user_terms_body' => '',
-            'privacy_policy' => 'closed',
-            'privacy_policy_body' => '',
             'captcha_enabled' => 0,
             'register_protective' => 'none',
             'nickname_enabled' => 0,
