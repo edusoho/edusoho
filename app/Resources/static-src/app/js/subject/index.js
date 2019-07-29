@@ -30,7 +30,7 @@ export default class sbList {
     this.initScoreValidator();
     this.setDifficulty();
     this.initTestpaperTitle();
-    this.itemAdd();
+    this.itemClick();
     this.statErrorQuestions();
   }
 
@@ -338,27 +338,53 @@ export default class sbList {
     });
   }
 
-  itemAdd() {
+  itemClick() {
     let self = this;
     $('.js-create-btn').on('click', (event) => {
       const $target = $(event.target);
+      const isSubCreate = $('#cd-modal').attr('data-sub');
       const url = $target.data('url');
       let token = $('#cd-modal').attr('data-index');
       let type = $target.data('type');
-      let seq = this.questionOperate.getQuestionOrder(token) + 1;
-      $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add'}).then((res) => {
-        $('#cd-modal').modal('hide');
-        let index = seq + 1;
-        self.orderQuestionList(index, $(`[data-anchor="#${token}"]`).parent(), $(`#${token}`));
-        $(`[data-anchor="#${token}"]`).parent().after(self.getNewListItem(seq, type, $target.text()));
-        var nextItem = $(`#${token}`).next('.subject-item');
-        if (nextItem.hasClass('subject-sub-item')) {
-          $(`[data-material-token="${token}"]`).last().after(res);
-        } else {
-          $(`#${token}`).after(res);
-        }
-        showEditor.getEditor(type, $('.js-edit-form'), self.questionOperate);
-      });
+      if (isSubCreate == 'false') {
+        self.itemAdd(token, type, url, $target);
+      } else {
+        self.subItemAdd(token, type, url);
+      }
+    });
+  }
+
+  itemAdd(token, type, url, $target) {
+    let self = this;
+    let seq = self.questionOperate.getQuestionOrder(token) + 1;
+    $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add'}).then((res) => {
+      $('#cd-modal').modal('hide');
+      let index = seq + 1;
+      self.orderQuestionList(index, $(`[data-anchor="#${token}"]`).parent(), $(`#${token}`));
+      $(`[data-anchor="#${token}"]`).parent().after(self.getNewListItem(seq, type, $target.text()));
+      var nextItem = $(`#${token}`).next('.subject-item');
+      if (nextItem.hasClass('subject-sub-item')) {
+        $(`[data-material-token="${token}"]`).last().after(res);
+      } else {
+        $(`#${token}`).after(res);
+      }
+      showEditor.getEditor(type, $('.js-edit-form'), self.questionOperate);
+    });
+  }
+
+  subItemAdd(token, type, url) {
+    let self = this;
+    let materialQuestion = this.questionOperate.getQuestion(token);
+    let seq = materialQuestion['subQuestions'].length + 1;
+    $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add', 'isSub' : 1}).then((res) => {
+      $('#cd-modal').modal('hide');
+      var nextItem = $(`#${token}`).next('.subject-item');
+      if (nextItem.hasClass('subject-sub-item')) {
+        $(`[data-material-token="${token}"]`).last().after(res);
+      } else {
+        $(`#${token}`).after(res);
+      }
+      showEditor.getEditor(type, $('.js-edit-form'), self.questionOperate);
     });
   }
 
@@ -507,8 +533,10 @@ export default class sbList {
     let token = $target.closest('.js-subject-item').attr('id');
     if (isAddSub) {
       $modal.find('[data-type="material"]').addClass('hidden');
+      $modal.attr('data-sub', 'true');
     } else {
       $modal.find('[data-type="material"]').removeClass('hidden');
+      $modal.attr('data-sub', 'false');
     }
     $modal.attr('data-index', token);
     $modal.modal('show');

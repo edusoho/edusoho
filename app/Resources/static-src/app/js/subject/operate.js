@@ -117,7 +117,7 @@ export default class QuestionOperate {
   modifyScore(selectQuestion, scoreObj, isTestpaper) {
     let self = this;
     $.each(selectQuestion, function(index, token) {
-      self.$itemList.find(`#${token}`).find('.js-score').html(`${score}分`);
+      self.$itemList.find(`#${token}`).find('.js-score').html(`${scoreObj['score']}分`);
       let question = self.getQuestion(token);
       self.updateQuestionItem(token, 'score', scoreObj['score'], false);
       if (isTestpaper) {
@@ -125,7 +125,7 @@ export default class QuestionOperate {
           self.updateQuestionItem(token, 'missScore', scoreObj['missScore']);
         }
       }
-      this.triggerTotalScoreChange();
+      self.triggerTotalScoreChange();
     });
   }
 
@@ -134,6 +134,9 @@ export default class QuestionOperate {
       return;
     }
     this.flag = true;
+    if (question['type'] == 'material') {
+      question['subQuestions'] = [];
+    }
     let token = this._getToken();
     this.questions[token] = question;
     let position = this.tokenList.indexOf(preToken) + 1;
