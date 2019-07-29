@@ -3,7 +3,7 @@
 {% set type = 'single_choice' %}
 
 {% block subject %}
-  {% for option in question.options %}
+  {% for option in question.options|default([]) %}
     <div class="edit-subject-item cd-mb24 form-group">
       <label class="cd-radio col-sm-1 cd-mt8 mlm{% if loop.index-1 in question.answers %} checked{% endif %}">
         <input type="radio" data-toggle="cd-radio" name="right" value="{{ loop.index-1 }}">

@@ -59,7 +59,8 @@ export default class sbList {
       this.testpaperTitle = $('.js-testpaper-title').val();
     }
     this.$itemList.on('click', '.subject-change-btn', event => this.itemConvert(event));
-    this.$itemList.on('click', '.js-item-add', event => this.addModalShow(event));
+    this.$itemList.on('click', '.js-item-add', event => this.addModalShow(event, false));
+    this.$itemList.on('click', '.js-item-add-sub', event => this.addModalShow(event, true));
     this.$subjectData.bind('change', '*[data-type]', (event, type) => this.updateQuestionCountText(type));
     this.$subjectData.bind('change', '.js-total-score', event => this.updateTotalScoreText());
   }
@@ -277,12 +278,32 @@ export default class sbList {
     }
 
     let self = this;
+    let seq = 0;
+    let token = '';
+    let question = {};
+    let isSub = 0;
     let $target = $(event.currentTarget);
     let $item = $target.parents('.subject-item');
-    let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
     let url = $target.parents('.subject-item__operation').data('url');
-    let question = this.questionOperate.getQuestion($item.attr('id'));
-    $.post(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
+    if (typeof $item.attr('data-material-token') != 'undefined') {
+      seq = $item.data('key');
+      token = $item.attr('data-material-token');
+      question = this.questionOperate.getSubQuestion(token, seq);
+      isSub = 1;
+      seq++;
+    } else {
+      seq = this.questionOperate.getQuestionOrder($item.attr('id'));
+      question = this.questionOperate.getQuestion($item.attr('id'));
+      token = $item.attr('id');
+    }
+    let data = {
+      'seq' : seq,
+      'token' : token,
+      'question' : question,
+      'isSub' : isSub,
+      'method' : 'edit',
+    };
+    $.post(url, data, html=> {
       $item.replaceWith(html);
       showEditor.getEditor(question['type'], $('.js-edit-form'), self.questionOperate);
     });
@@ -296,13 +317,17 @@ export default class sbList {
     let $form = $target.parents('.js-edit-form');
     let url = $target.parents('.subject-change-list').data('convertUrl');
     let question = sbList._serializeArrayConvertToJson($form.serializeArray());
-    let seq = this.questionOperate.getQuestionOrder(question.token);
+    let seq = $('.js-edit-form-seq').text();
+    let isSub = $('.js-sub-judge').val();
+    let method = $('.js-hidden-method').val();
     let data = {
       'seq' : seq,
       'token' : question.token,
       'question' : question,
       'fromType' : fromType,
       'toType' : toType,
+      'isSub' : isSub,
+      'method' : method,
     };
     data.fromType = fromType;
     data.toType = toType;
@@ -318,15 +343,20 @@ export default class sbList {
     $('.js-create-btn').on('click', (event) => {
       const $target = $(event.target);
       const url = $target.data('url');
-      const token = $('#cd-modal').data('index');
-      const type = $target.data('type');
+      let token = $('#cd-modal').attr('data-index');
+      let type = $target.data('type');
       let seq = this.questionOperate.getQuestionOrder(token) + 1;
-      $.post(url, {'seq' : seq}).then((res) => {
+      $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add'}).then((res) => {
         $('#cd-modal').modal('hide');
         let index = seq + 1;
         self.orderQuestionList(index, $(`[data-anchor="#${token}"]`).parent(), $(`#${token}`));
         $(`[data-anchor="#${token}"]`).parent().after(self.getNewListItem(seq, type, $target.text()));
-        $(`#${token}`).after(res);
+        var nextItem = $(`#${token}`).next('.subject-item');
+        if (nextItem.hasClass('subject-sub-item')) {
+          $(`[data-material-token="${token}"]`).last().after(res);
+        } else {
+          $(`#${token}`).after(res);
+        }
         showEditor.getEditor(type, $('.js-edit-form'), self.questionOperate);
       });
     });
@@ -467,7 +497,7 @@ export default class sbList {
     return serializeObj;
   }
 
-  addModalShow(event) {
+  addModalShow(event, isAddSub) {
     if (this.isEditing()) {
       return;
     }
@@ -475,6 +505,11 @@ export default class sbList {
     let $target = $(event.currentTarget);
     let $modal = $('#cd-modal');
     let token = $target.closest('.js-subject-item').attr('id');
+    if (isAddSub) {
+      $modal.find('[data-type="material"]').addClass('hidden');
+    } else {
+      $modal.find('[data-type="material"]').removeClass('hidden');
+    }
     $modal.attr('data-index', token);
     $modal.modal('show');
   }
