@@ -35,6 +35,7 @@ class BaseQuestion {
   }
 
   showAnalysisModal(event) {
+    console.log(1212);
     let self = this;
     let $target = $(event.currentTarget);
     let analysis = $target.prev('[data-edit="analysis"]').val();
@@ -64,6 +65,7 @@ class BaseQuestion {
     });
 
     self.$analysisModal.modal('show');
+    console.log(this.editor);
   }
 
   saveAnalysis(event) {
@@ -114,8 +116,7 @@ class BaseQuestion {
   updataCachedSubQuestion(token, key, question, method) {
     let self = this;
     if (method == 'add') {
-      let preToken = $('.subject-edit-item').prev('.js-subject-item').attr('id');
-      token = self.operate.addSubQuestion(preToken, question);
+      token = self.operate.addSubQuestion(token, question);
     } else {
       $.each(question, function(name, value){
         self.operate.updateSubQuestionItem(token, key, name, value);
