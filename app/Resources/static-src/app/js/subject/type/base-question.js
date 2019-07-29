@@ -76,20 +76,53 @@ class BaseQuestion {
   finishEdit(question) {
     let self = this;
     let token = $('.js-hidden-token').val();
-    if (token == '') {
-      let preToken = $('.subject-edit-item').prev('.js-subject-item').attr('id');
-      token = self.operate.addQuestion(preToken, question);
+    let method = $('.js-hidden-method').val();
+    let isSub = $('.js-sub-judge').val();
+    let key = $('.js-edit-form-seq').text() - 1;
+    let seq = 0;
+    if (isSub == '1') {
+      token = self.updataCachedSubQuestion(token, key, question, method);
+      question = self.operate.getSubQuestion(token, key);
+      seq = key + 1;
+    } else {
+      token = self.updataCachedQuestion(token, question, method);
+      question = self.operate.getQuestion(token);
+      seq = self.operate.getQuestionOrder(token);
+    }
+
+    $.post(self.$form.data('url'), {'seq': seq, 'question': question, 'token': token, 'isSub': isSub}, html=> {
+      self.$form.parent('.subject-item').replaceWith(html);
+      if (isSub != '1') {
+        self.removeErrorClass(token);
+      }
+    });
+  }
+
+  updataCachedQuestion(token, question, method) {
+    let self = this;
+    if (method == 'add') {
+      token = self.operate.addQuestion(token, question);
     } else {
       $.each(question, function(name, value){
         self.operate.updateQuestionItem(token, name, value);
       });
     }
-    question = self.operate.getQuestion(token);
-    let seq = self.operate.getQuestionOrder(token);
-    $.post(self.$form.data('url'), {seq: seq, question: question, token: token}, html=> {
-      self.$form.parent('.subject-item').replaceWith(html);
-      this.removeErrorClass(token);
-    });
+
+    return token;
+  }
+
+  updataCachedSubQuestion(token, key, question, method) {
+    let self = this;
+    if (method == 'add') {
+      let preToken = $('.subject-edit-item').prev('.js-subject-item').attr('id');
+      token = self.operate.addSubQuestion(preToken, question);
+    } else {
+      $.each(question, function(name, value){
+        self.operate.updateSubQuestionItem(token, key, name, value);
+      });
+    }
+
+    return token;
   }
 
   getQuestion() {

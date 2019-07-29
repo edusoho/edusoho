@@ -672,6 +672,8 @@ class ManageController extends BaseController
         $question = $request->request->get('question', array());
         $seq = $request->request->get('seq', 1);
         $token = $request->request->get('token', '');
+        $isSub = $request->request->get('isSub', false);
+        $method = $request->request->get('method', 'edit');
 
         $question = ArrayToolkit::parts($question, array(
             'stem',
@@ -693,6 +695,8 @@ class ManageController extends BaseController
             'seq' => $seq,
             'token' => $token,
             'type' => $type,
+            'isSub' => $isSub,
+            'method' => $method,
         ));
     }
 
@@ -701,6 +705,8 @@ class ManageController extends BaseController
         $data = $request->request->all();
         $fromType = $data['fromType'];
         $toType = $data['toType'];
+        $isSub = $data['isSub'];
+        $method = $request->request->get('method', 'edit');
         if (empty($data['question'])) {
             throw new InvalidArgumentException('缺少必要参数');
         }
@@ -717,6 +723,8 @@ class ManageController extends BaseController
             'seq' => $data['seq'],
             'token' => $data['token'],
             'type' => $toType,
+            'isSub' => $isSub,
+            'method' => $method,
         ));
     }
 
@@ -776,6 +784,7 @@ class ManageController extends BaseController
         $question = $request->request->get('question', array());
         $seq = $request->request->get('seq', 1);
         $token = $request->request->get('token', '');
+        $isSub = $request->request->get('isSub', false);
 
         $question = ArrayToolkit::parts($question, array(
             'stem',
@@ -794,7 +803,18 @@ class ManageController extends BaseController
 
         if ('fill' == $type) {
             $question['stemShow'] = preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $question['stem']);
+            $question['stemShow'] = preg_replace('/(\[\[(.+?)\]\])/is', '_____', $question['stem']);
         }
+
+        if (!empty($isSub)) {
+            return $this->render("testpaper/subject/item/show/sub-{$type}.html.twig", array(
+                'item' => $question,
+                'seq' => $seq,
+                'token' => $token,
+                'type' => $type,
+            ));
+        }
+
 
         return $this->render("testpaper/subject/item/show/{$type}.html.twig", array(
             'item' => $question,
