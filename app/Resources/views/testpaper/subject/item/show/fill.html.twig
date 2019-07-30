@@ -16,7 +16,7 @@
       {% if errors['answers_'~answer_key] is not defined %}
         {{ item.answers[answer_key] }}
       {% elseif errors['answers_'~answer_key].code == 100003 %}
-        <span class="single-item__text--danger">缺少正确答案，请点击“编辑”进行设置。</span>
+        <span class="single-item__text--danger">此空缺少正确答案，请点击“编辑”进行设置。</span>
       {% endif %}
     {% endfor %}
   </div>

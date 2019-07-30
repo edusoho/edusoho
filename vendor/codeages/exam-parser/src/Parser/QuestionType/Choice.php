@@ -51,16 +51,30 @@ class Choice extends AbstractQuestion
                 continue;
             }
         }
+        $this->fillOptions($question);
         $this->checkErrors($question);
 
         return $question;
     }
 
+    //补充空余选项
+    protected function fillOptions(&$question)
+    {
+        $keys = array_keys($question[QuestionElement::OPTIONS]);
+        $endKey = end($keys);
+        for ($index = 0; $index <= $endKey; ++$index) {
+            if (empty($question[QuestionElement::OPTIONS][$index])) {
+                $question[QuestionElement::OPTIONS][$index] = '';
+            }
+        }
+        ksort($question[QuestionElement::OPTIONS]);
+    }
+
     protected function matchOptions(&$question, $line, &$preNode)
     {
         $node = 'default';
-        if (true === strpos($preNode, '-')) {
-            list($node, $index) = explode('-', $preNode);
+        if (false !== strpos($preNode, '_')) {
+            list($node, $index) = explode('_', $preNode);
         }
         if (!$this->hasSignal($line) && QuestionElement::OPTIONS == $node) {
             $question['options'][$index] .= $line;
@@ -69,7 +83,7 @@ class Choice extends AbstractQuestion
         }
         if (preg_match('/<#([A-Z])#>/', $line, $matches)) {
             $question['options'][ord($matches[1]) - 65] = preg_replace('/<#([A-Z])#>/', '', $line);
-            $preNode = QuestionElement::OPTIONS.'-'.(ord($matches[1]) - 65);
+            $preNode = QuestionElement::OPTIONS.'_'.(ord($matches[1]) - 65);
 
             return true;
         }
