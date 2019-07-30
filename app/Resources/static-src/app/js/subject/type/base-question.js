@@ -35,7 +35,6 @@ class BaseQuestion {
   }
 
   showAnalysisModal(event) {
-    console.log(1212);
     let self = this;
     let $target = $(event.currentTarget);
     let analysis = $target.prev('[data-edit="analysis"]').val();
@@ -55,6 +54,8 @@ class BaseQuestion {
       $textarea.val(self.editor.getData());
     });
 
+    self.$analysisModal.modal('show');
+
     self.editor.on('instanceReady', function() {
       this.focus();
 
@@ -63,9 +64,6 @@ class BaseQuestion {
         $textarea.show();
       });
     });
-
-    self.$analysisModal.modal('show');
-    console.log(this.editor);
   }
 
   saveAnalysis(event) {
