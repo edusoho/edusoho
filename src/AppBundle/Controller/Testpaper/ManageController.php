@@ -635,8 +635,13 @@ class ManageController extends BaseController
             'determine' => 0,
         );
 
+        $totalScore = 0;
+
         foreach ($questions as $question) {
             ++$questionAnalysis[$question['type']];
+            if ('material' != $question['type']) {
+                $totalScore += $question['score'];
+            }
         }
 
         return $this->render('testpaper/manage/re-edit.html.twig', array(
@@ -644,6 +649,7 @@ class ManageController extends BaseController
             'questions' => $questions,
             'questionAnalysis' => $questionAnalysis,
             'courseSetId' => $token['data']['courseSetId'],
+            'totalScore' => $totalScore,
         ));
     }
 
