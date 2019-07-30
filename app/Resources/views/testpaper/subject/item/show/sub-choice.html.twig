@@ -11,7 +11,7 @@
       {% endif %}
     </span>
     {% if errors.stem is not defined %}
-      <div class="subject-sub-item__stem">{{ item.stem|raw }}</div>
+      <div class="subject-sub-item__stem">{{ item.stem|striptags('<br><img>')|raw }}</div>
     {% elseif errors.stem.code == 100001 %}
       <span class="single-item__text--danger">缺少题干，请点击"编辑"进行设置。</span>
     {% endif %}
@@ -23,7 +23,7 @@
         <span>{{ dict_text('questionOption', option_key) }}. </span>
         <span class="single-item__text {% if errors['options_'~option_key] is defined %}single-item__text--danger{% endif %}">
           {% if errors['options_'~option_key] is not defined %}
-            {{ option|raw }}
+            {{ option|striptags('<br><img>')|raw }}
           {% elseif errors['options_'~option_key].code == 100002 %}
             缺少选项，请点击“编辑”进行设置。
           {% endif %}
