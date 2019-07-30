@@ -1,7 +1,7 @@
 <div class="subject-item subject-edit-item" id="{{ seq }}">
   <form class="form-horizontal js-edit-form" data-url="{{ path('subject_show_template', {type: type}) }}">
     <div class="row">
-      <div class="col-sm-8">
+      <div class="col-sm-8 js-choose-item">
         <div class="subject-edit-item__order js-edit-form-seq">{{ seq }}</div>
         <input type="hidden" name="token" value="{{ token|default('') }}" class="js-hidden-token">
         <input type="hidden" name="isSub" value="{{ isSub }}" class="js-sub-judge">
