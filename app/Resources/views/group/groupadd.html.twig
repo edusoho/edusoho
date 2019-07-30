@@ -22,7 +22,7 @@
         <div class="form-group">
           <label class="col-md-2 control-label" for="group_about">{{'group.about'|trans}}</label>
           <div class="col-md-7 controls">
-            <textarea name="group[about]" rows="10" id="groupIntroduce" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"></textarea>
+            <textarea name="group[about]" rows="10" id="groupIntroduce" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('default')}) }}" ></textarea>
           </div>
         </div>
 
