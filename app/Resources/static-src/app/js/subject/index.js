@@ -518,6 +518,10 @@ export default class sbList {
     }
     $.post($(event.currentTarget).data('url'), {title: title, questions: this.questionOperate.getQuestions()}, function(resp) {
       if (resp === true) {
+        cd.message({
+          type : 'success',
+          message : '保存成功！',
+        });
         window.location.href = $(event.currentTarget).data('redirectUrl');
       }
     });
