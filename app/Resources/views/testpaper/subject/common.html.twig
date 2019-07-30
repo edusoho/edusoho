@@ -4,9 +4,11 @@
   {% if type == 'material' %}
     <span class="js-item-add-sub"><i class="es-icon es-icon-tianjia"></i>添加子问题</span>
   {% endif %}
-  <span class="js-item-add"><i class="es-icon es-icon-tianjia"></i>在此题后添加新题</span>
+  {% if position|default(null) != 'sub' %}
+  	<span class="js-item-add"><i class="es-icon es-icon-tianjia"></i>在此题后添加新题</span>
+  {% endif %}
 </div>
 <div class="subject-item__footer">
   <span>难度：</span><span class="cd-mr24 color-success js-difficulty">{{ dict_text('difficulty', difficulty) }}</span>
-  <span>分数：</span><span class="color-success js-score">{{ score }}分</span>
+  <span>分数：</span><span class="color-success js-score">{% if type == 'material' %}子题分数之和{% else %}{{ score }}分{% endif %}</span>
 </div>

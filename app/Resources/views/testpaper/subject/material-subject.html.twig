@@ -29,15 +29,18 @@
 ] %}
 
 {% for item in data %}
-  <div class="subject-item {% if item.type == 'subMaterial' %}subject-sub-item{% endif %}" id="{{ item.order }}">
+  <div class="subject-item js-subject-item {% if item.type == 'subMaterial' %}subject-sub-item{% endif %}" id="{{ item.order }}">
     {% if item.type == 'material' %}
       <div class="subject-item__title">
         <span class="subject-item__number">{{ item.order }}</span>
-        {{ item.title }}
+        <div class="subject-item__stem">{{ item.title }}</div>
       </div>
     {% else %}
       <div class="subject-item__body">
-        <span class="subject-sub-item__number">{{ '（' ~ item.subOrder ~ '）'  }}</span><span>{{ item.title }}</span>
+        <div class="subject-sub-item-title">
+          <span class="subject-sub-item__number">{{ '（' ~ item.subOrder ~ '）'  }}</span>
+          <div class="subject-sub-item__stem">{{ item.title }}</div>
+        </div>
         <div class="subject-sub-item__answer"><span class="subject-sub-item__label">答案：</span><span class="">{{ item.answer }}</span></div>
       </div>
     {% endif %}

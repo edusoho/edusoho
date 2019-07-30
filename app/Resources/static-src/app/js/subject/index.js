@@ -30,6 +30,7 @@ export default class sbList {
     this.initScoreValidator();
     this.setDifficulty();
     this.initTestpaperTitle();
+    this.itemClick();
     this.statErrorQuestions();
   }
 
@@ -51,6 +52,7 @@ export default class sbList {
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
     this.$itemList.on('change', '.js-testpaper-title', event => this.editTestpaperTitle(event));
+    this.$itemList.on('click', '.js-import-btn', event => this.finishImport(event))
   }
 
   initTestpaperTitle() {
@@ -58,6 +60,8 @@ export default class sbList {
       this.testpaperTitle = $('.js-testpaper-title').val();
     }
     this.$itemList.on('click', '.subject-change-btn', event => this.itemConvert(event));
+    this.$itemList.on('click', '.js-item-add', event => this.addModalShow(event, false));
+    this.$itemList.on('click', '.js-item-add-sub', event => this.addModalShow(event, true));
     this.$subjectData.bind('change', '*[data-type]', (event, type) => this.updateQuestionCountText(type));
     this.$subjectData.bind('change', '.js-total-score', event => this.updateTotalScoreText());
   }
@@ -270,22 +274,37 @@ export default class sbList {
   }
 
   itemEdit(event) {
-    const $editItem = $('.subject-edit-item');
-    let $target = $(event.currentTarget);
-    let $item = $target.parents('.subject-item');
-    let seq = this.questionOperate.getQuestionOrder($item.attr('id'));
-    if ($editItem.length !== 0) {
-      cd.message({
-        type: 'warning',
-        message: `请先完成第${seq}题的编辑`,
-      });
+    if (this.isEditing()) {
       return;
     }
 
     let self = this;
+    let seq = 0;
+    let token = '';
+    let question = {};
+    let isSub = 0;
+    let $target = $(event.currentTarget);
+    let $item = $target.parents('.subject-item');
     let url = $target.parents('.subject-item__operation').data('url');
-    let question = this.questionOperate.getQuestion($item.attr('id'));
-    $.post(url, {seq: seq, question: question, token: $item.attr('id')}, html=> {
+    if (typeof $item.attr('data-material-token') != 'undefined') {
+      seq = $item.data('key');
+      token = $item.attr('data-material-token');
+      question = this.questionOperate.getSubQuestion(token, seq);
+      isSub = 1;
+      seq++;
+    } else {
+      seq = this.questionOperate.getQuestionOrder($item.attr('id'));
+      question = this.questionOperate.getQuestion($item.attr('id'));
+      token = $item.attr('id');
+    }
+    let data = {
+      'seq' : seq,
+      'token' : token,
+      'question' : question,
+      'isSub' : isSub,
+      'method' : 'edit',
+    };
+    $.post(url, data, html=> {
       $item.replaceWith(html);
       showEditor.getEditor(question['type'], $('.js-edit-form'), self.questionOperate);
     });
@@ -299,13 +318,17 @@ export default class sbList {
     let $form = $target.parents('.js-edit-form');
     let url = $target.parents('.subject-change-list').data('convertUrl');
     let question = sbList._serializeArrayConvertToJson($form.serializeArray());
-    let seq = this.questionOperate.getQuestionOrder(question.token);
+    let seq = $('.js-edit-form-seq').text();
+    let isSub = $('.js-sub-judge').val();
+    let method = $('.js-hidden-method').val();
     let data = {
-      "seq" : seq,
-      "token" : question.token,
-      "question" : question,
-      "fromType" : fromType,
-      "toType" : toType,
+      'seq' : seq,
+      'token' : question.token,
+      'question' : question,
+      'fromType' : fromType,
+      'toType' : toType,
+      'isSub' : isSub,
+      'method' : method,
     };
     data.fromType = fromType;
     data.toType = toType;
@@ -314,6 +337,66 @@ export default class sbList {
       $item.replaceWith(html);
       showEditor.getEditor(toType, $('.js-edit-form'), self.questionOperate);
     });
+  }
+
+  itemClick() {
+    let self = this;
+    $('.js-create-btn').on('click', (event) => {
+      const $target = $(event.target);
+      const isSubCreate = $('#cd-modal').attr('data-sub');
+      const url = $target.data('url');
+      let token = $('#cd-modal').attr('data-index');
+      let type = $target.data('type');
+      if (isSubCreate == 'false') {
+        self.itemAdd(token, type, url, $target);
+      } else {
+        self.subItemAdd(token, type, url);
+      }
+    });
+  }
+
+  itemAdd(token, type, url, $target) {
+    let self = this;
+    let seq = self.questionOperate.getQuestionOrder(token) + 1;
+    $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add'}).then((res) => {
+      $('#cd-modal').modal('hide');
+      let index = seq + 1;
+      self.orderQuestionList(index, $(`[data-anchor="#${token}"]`).parent(), $(`#${token}`));
+      $(`[data-anchor="#${token}"]`).parent().after(self.getNewListItem(seq, type, $target.text()));
+      var nextItem = $(`#${token}`).next('.subject-item');
+      if (nextItem.hasClass('subject-sub-item')) {
+        $(`[data-material-token="${token}"]`).last().after(res);
+      } else {
+        $(`#${token}`).after(res);
+      }
+      showEditor.getEditor(type, $('.js-edit-form'), self.questionOperate);
+    });
+  }
+
+  subItemAdd(token, type, url) {
+    let self = this;
+    let materialQuestion = this.questionOperate.getQuestion(token);
+    let seq = materialQuestion['subQuestions'].length + 1;
+    $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add', 'isSub' : 1}).then((res) => {
+      $('#cd-modal').modal('hide');
+      var nextItem = $(`#${token}`).next('.subject-item');
+      if (nextItem.hasClass('subject-sub-item')) {
+        $(`[data-material-token="${token}"]`).last().after(res);
+      } else {
+        $(`#${token}`).after(res);
+      }
+      showEditor.getEditor(type, $('.js-edit-form'), self.questionOperate);
+    });
+  }
+
+  getNewListItem(seq, type, typeName) {
+    return `<div class="col-sm-3 subject-list-item">
+      <div class="subject-list-item__num  js-subject-anchor" data-anchor="#${seq}">
+        <span class="js-list-index">${seq}</span>
+        <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="${type}"><input type="checkbox" data-toggle="cd-checkbox"></label>
+      </div>
+      <span class="js-type-name">${typeName}</span>
+    </div>`;
   }
 
   deleteSubjectItem(event) {
@@ -339,14 +422,8 @@ export default class sbList {
       }
 
       let order = this.questionOperate.getQuestionOrder(token);
-      $item.nextAll('.subject-item').not('.subject-sub-item').each(function() {
-        $(this).find('.subject-item__number').text(order);
-        order++;
-      });
-
-      order = this.questionOperate.getQuestionOrder(token);
       const $listItem = $(`[data-anchor=#${token}]`).parent();
-      this.orderQuestionList(order, $listItem);
+      this.orderQuestionList(order, $listItem, $item);
       this.questionOperate.deleteQuestion(token);
 
       if (question.type == 'material') {
@@ -405,10 +482,48 @@ export default class sbList {
     }
   }
 
-  orderQuestionList(seq, $item) {
-    $item.nextAll('.subject-list-item').each(function() {
-      $(this).find('.js-list-index').text(seq);
-      seq++;
+  orderQuestionList(seq, $listItem, $subjectItem) {
+    let listSeq = seq;
+    let itemSeq = seq;
+    $listItem.nextAll('.subject-list-item').each(function() {
+      $(this).find('.js-list-index').text(listSeq);
+      listSeq++;
+    });
+
+    $subjectItem.nextAll('.subject-item').not('.subject-sub-item').each(function() {
+      $(this).find('.subject-item__number').text(itemSeq);
+      itemSeq++;
+    });
+  }
+
+  finishImport(event) {
+    let hasError = false;
+    let errorTip = '第';
+    this.$element.find('.subject-list-item__num--error').each(function () {
+      errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
+      hasError = true;
+    });
+    errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
+    if (hasError) {
+      cd.message({
+        type : 'danger',
+        message : errorTip
+      });
+      return ;
+    }
+
+    let title = '';
+    if (this.isTestpaper()) {
+      title = this.testpaperTitle;
+    }
+    $.post($(event.currentTarget).data('url'), {title: title, questions: this.questionOperate.getQuestions()}, function(resp) {
+      if (resp === true) {
+        cd.message({
+          type : 'success',
+          message : '保存成功！',
+        });
+        window.location.href = $(event.currentTarget).data('redirectUrl');
+      }
     });
   }
 
@@ -432,12 +547,45 @@ export default class sbList {
         if (!serializeObj[item.name].push) {
           serializeObj[item.name] = [serializeObj[item.name]];
         }
-        serializeObj[item.name].push(item.value)
+        serializeObj[item.name].push(item.value);
       } else {
         serializeObj[item.name] = item.value;
       }
     }
     return serializeObj;
+  }
+
+  addModalShow(event, isAddSub) {
+    if (this.isEditing()) {
+      return;
+    }
+
+    let $target = $(event.currentTarget);
+    let $modal = $('#cd-modal');
+    let token = $target.closest('.js-subject-item').attr('id');
+    if (isAddSub) {
+      $modal.find('[data-type="material"]').addClass('hidden');
+      $modal.attr('data-sub', 'true');
+    } else {
+      $modal.find('[data-type="material"]').removeClass('hidden');
+      $modal.attr('data-sub', 'false');
+    }
+    $modal.attr('data-index', token);
+    $modal.modal('show');
+  }
+  
+  isEditing() {
+    const $editItem = $('.subject-edit-item');
+    if ($editItem.length !== 0) {
+      let seq = this.$itemList.find('.subject-edit-item').find('.js-edit-form-seq').text();
+      cd.message({
+        type: 'warning',
+        message: `请先完成第${seq}题的编辑`,
+      });
+      return true;
+    }
+
+    return false;
   }
 }
 

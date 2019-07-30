@@ -106,6 +106,7 @@ class ManageController extends BaseController
                         'id' => $result['id'],
                         'filename' => $file->getClientOriginalName(),
                         'fileuri' => $result['uri'],
+                        'courseSetId' => $courseSet['id'],
                     ),
                     'duration' => 86400,
                     'userId' => $user['id'],
@@ -432,15 +433,31 @@ class ManageController extends BaseController
             'determine' => 0,
         );
 
+        $totalScore = 0;
+
         foreach ($questions as $question) {
-            $questionAnalysis[$question['type']] += 1;
+            ++$questionAnalysis[$question['type']];
+            if ('material' != $question['type']) {
+                $totalScore += $question['score'];
+            }
         }
 
         return $this->render('question-manage/re-edit.html.twig', array(
             'filename' => $data['filename'],
             'questions' => $questions,
             'questionAnalysis' => $questionAnalysis,
+            'courseSetId' => $token['data']['courseSetId'],
+            'totalScore' => $totalScore,
         ));
+    }
+
+    public function saveImportQuestionsAction(Request $request, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        $postData = $request->request->all();
+        $this->getQuestionService()->importQuestions($postData['questions'], $token['token']);
+
+        return $this->createJsonResponse(true);
     }
 
     protected function parseQuestions($fullpath)

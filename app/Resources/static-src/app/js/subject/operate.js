@@ -51,11 +51,17 @@ export default class QuestionOperate {
     let cachedData = this._toJson($('.js-cached-data').text());
     for (var i = 0; i < cachedData.length; i++) {
       let token = this._getToken();
-      this.questions[token] = cachedData[i];
+      let question = cachedData[i];
+      this.questions[token] = question;
       this.tokenList.push(token);
       let index = i;
       $(`[data-anchor="#${index}"]`).attr('data-anchor', '#' + token);
-      $('#' + index).attr('id', token);
+      let $item = $('#' + index).attr('id', token);
+      if (question['type'] == 'material') {
+        $.each(question['subQuestions'], function (key, subQuestion) {
+          $item = $item.next(`[data-key="${key}"]`).attr('data-material-token', token);
+        })
+      }
     }
   }
 
@@ -111,32 +117,41 @@ export default class QuestionOperate {
   modifyScore(selectQuestion, scoreObj, isTestpaper) {
     let self = this;
     $.each(selectQuestion, function(index, token) {
-      self.$itemList.find(`#${token}`).find('.js-score').html(`${score}分`);
+      self.$itemList.find(`#${token}`).find('.js-score').html(`${scoreObj['score']}分`);
       let question = self.getQuestion(token);
-      self.updateQuestionItem(token, 'score', scoreObj['score']);
+      self.updateQuestionItem(token, 'score', scoreObj['score'], false);
       if (isTestpaper) {
         if (question['type'] == 'choice' || question['type'] == 'uncertain_choice') {
           self.updateQuestionItem(token, 'missScore', scoreObj['missScore']);
         }
-        self.totalScore += scoreObj['score'] - question['score'];
       }
+      self.triggerTotalScoreChange();
     });
   }
 
-  addQuestion(preToken, token, question) {
+  addQuestion(preToken, question) {
     if (!this.isUpdating()) {
       return;
     }
     this.flag = true;
+    if (question['type'] == 'material') {
+      question['subQuestions'] = [];
+    }
+    let token = this._getToken();
     this.questions[token] = question;
-    let position = this.tokenList.indexOf(preToken);
+    let position = this.tokenList.indexOf(preToken) + 1;
     this.tokenList.splice(position, 0, token);
     this.questionCounts['total']++;
     this.questionCounts[question['type']]++;
     this.totalScore += question['score'];
+    let index = position + 1;
+    $(`[data-anchor="#${index}"]`).attr('data-anchor', '#' + token);
+    $('#' + index).attr('id', token);
     this.triggerTotalScoreChange();
     this.triggerTypeCountChange(question['type']);
     this.flag = false;
+
+    return token;
   }
 
   deleteQuestion(deleteToken) {
@@ -146,7 +161,7 @@ export default class QuestionOperate {
     this.flag = true;
     const question = this.questions[deleteToken];
     delete this.questions[deleteToken];
-    let position = this.tokenList.indexOf(deleteToken);
+    let position = this.tokenList.indexOf(deleteToken) + 1;
     this.tokenList.splice(position, 1);
     this.questionCounts['total']--;
     this.questionCounts[question['type']]--;
@@ -201,6 +216,68 @@ export default class QuestionOperate {
     return this.questions[token];
   }
 
+  getQuestions() {
+    return this.questions;
+  }
+
+  getSubQuestion(token, key) {
+    if (!this.isUpdating()) {
+      return;
+    }
+    return this.questions[token]['subQuestions'][key];
+  }
+
+  addSubQuestion(token, question) {
+    if (!this.isUpdating()) {
+      return;
+    }
+    this.flag = true;
+    this.questions[token]['subQuestions'].push(question);
+    this.totalScore += question['score'];
+    this.triggerTotalScoreChange();
+    this.flag = false;
+
+    return token;
+  }
+
+  updateSubQuestion(token, key, question) {
+    if (!this.isUpdating()) {
+      return;
+    }
+    this.flag = true;
+    let oldQuestion = this.questions[token]['subQuestions'][key];
+    this.questions[token]['subQuestions'][key] = question;
+    this.totalScore = this.totalScore - oldQuestion['score'] + question['score'];
+    this.triggerTotalScoreChange();
+    this.flag = false;
+  }
+
+  updateSubQuestionItem(token, key, itemKey, itemValue, isTrigger = true) {
+    if (!this.isUpdating()) {
+      return;
+    }
+    this.flag = true;
+    let oldValue = this.questions[token]['subQuestions'][key][itemKey];
+    this.questions[token]['subQuestions'][key][itemKey] = itemValue;
+    if (itemKey == 'score') {
+      this.totalScore = this.totalScore - oldValue + itemValue;
+      this.triggerTotalScoreChange(isTrigger);
+    }
+    this.flag = false;
+  }
+
+  deleteSubQuestion(deleteToken, key) {
+    if (!this.isUpdating()) {
+      return;
+    }
+    this.flag = true;
+    const question = this.questions[deleteToken]['subQuestions'][key];
+    this.questions[deleteToken]['subQuestions'][key].splice(key + 1, 1);
+    this.totalScore -= question['score'];
+    this.triggerTotalScoreChange();
+    this.flag = false;
+  }
+
   triggerTotalScoreChange(isTrigger = true) {
     if ($('.js-total-score').length > 0 && isTrigger) {
       $('.js-total-score').trigger('change');
@@ -209,10 +286,6 @@ export default class QuestionOperate {
 
   triggerTypeCountChange(type) {
     $('*[data-type]').trigger('change', [type]);
-  }
-
-  updateQuestionList(seq) {
-
   }
 
   isUpdating() {

@@ -1,9 +1,15 @@
 {% set answer = item.answer %}
 {% set errors = item.errors|default([]) %}
-<div class="subject-item subject-sub-item" id="{{ key~'_'~subKey }}">
+<div class="subject-item subject-sub-item js-subject-item" id="sub{% if seq is defined %}{{seq - 1}}{% else %}{{ subKey }}{% endif %}" data-material-token="{{ token|default('') }}" data-key="{% if seq is defined %}{{seq - 1}}{% else %}{{ subKey }}{% endif %}">
   <div class="subject-item__title subject-sub-item__title">
-    <span class="subject-sub-item__number">{{ '(' ~ loop.index ~ ')'  }}</span>
-    {% if errors.stem is not defined %}<span>{{ item.stem }}</span>{% else %}缺少题干，请点击"编辑"进行设置{% endif %}
+    <span class="subject-sub-item__number">
+      {% if seq|default(null) %}
+        {{ '(' ~ seq ~ ')'  }}
+      {% else %}
+        {{ '(' ~ loop.index ~ ')'  }}
+      {% endif %}
+    </span>
+    {% if errors.stem is not defined %}<div class="subject-sub-item__stem">{{ item.stem|raw }}</div>{% else %}缺少题干，请点击"编辑"进行设置{% endif %}
   </div>
   <div class="subject-item__body">
     <label class="cd-radio single-item sub-single-item subject-forbid {% if answer %}checked{% endif %}">
@@ -13,5 +19,5 @@
       <input type="radio" data-toggle="cd-radio" name="wrong" value="true"><span class="single-item__text">{{ '错误' }}</span>
     </label>
   </div>
-  {% include 'testpaper/subject/common.html.twig' with {position:position, type: item.type, difficulty: item.difficulty, score: item.score } %}
+  {% include 'testpaper/subject/common.html.twig' with {position:'sub', type: item.type, difficulty: item.difficulty, score: item.score } %}
 </div>

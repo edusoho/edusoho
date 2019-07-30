@@ -35,6 +35,7 @@ class BaseQuestion {
   }
 
   showAnalysisModal(event) {
+    console.log(1212);
     let self = this;
     let $target = $(event.currentTarget);
     let analysis = $target.prev('[data-edit="analysis"]').val();
@@ -64,6 +65,7 @@ class BaseQuestion {
     });
 
     self.$analysisModal.modal('show');
+    console.log(this.editor);
   }
 
   saveAnalysis(event) {
@@ -76,15 +78,52 @@ class BaseQuestion {
   finishEdit(question) {
     let self = this;
     let token = $('.js-hidden-token').val();
-    $.each(question, function(name, value){
-      self.operate.updateQuestionItem(token, name, value);
-    });
-    question = self.operate.getQuestion(token);
-    let seq = self.operate.getQuestionOrder(token);
-    $.post(self.$form.data('url'), {seq: seq, question: question, token: token}, html=> {
+    let method = $('.js-hidden-method').val();
+    let isSub = $('.js-sub-judge').val();
+    let key = $('.js-edit-form-seq').text() - 1;
+    let seq = 0;
+    if (isSub == '1') {
+      token = self.updataCachedSubQuestion(token, key, question, method);
+      question = self.operate.getSubQuestion(token, key);
+      seq = key + 1;
+    } else {
+      token = self.updataCachedQuestion(token, question, method);
+      question = self.operate.getQuestion(token);
+      seq = self.operate.getQuestionOrder(token);
+    }
+
+    $.post(self.$form.data('url'), {'seq': seq, 'question': question, 'token': token, 'isSub': isSub}, html=> {
       self.$form.parent('.subject-item').replaceWith(html);
-      this.removeErrorClass(token);
+      if (isSub != '1') {
+        self.removeErrorClass(token);
+      }
     });
+  }
+
+  updataCachedQuestion(token, question, method) {
+    let self = this;
+    if (method == 'add') {
+      token = self.operate.addQuestion(token, question);
+    } else {
+      $.each(question, function(name, value){
+        self.operate.updateQuestionItem(token, name, value);
+      });
+    }
+
+    return token;
+  }
+
+  updataCachedSubQuestion(token, key, question, method) {
+    let self = this;
+    if (method == 'add') {
+      token = self.operate.addSubQuestion(token, question);
+    } else {
+      $.each(question, function(name, value){
+        self.operate.updateSubQuestionItem(token, key, name, value);
+      });
+    }
+
+    return token;
   }
 
   getQuestion() {

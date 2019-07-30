@@ -17,11 +17,11 @@
     <div class="col-sm-9 js-item-list">
       {% block testpaper %}
       {% endblock %}
-      {% include 'testpaper/subject/choose-subject.html.twig' %}
-      {% include 'testpaper/subject/answer-subject.html.twig' %}
-      {% include 'testpaper/subject/material-subject.html.twig' %}
+{#      {% include 'testpaper/subject/choose-subject.html.twig' %}#}
+{#      {% include 'testpaper/subject/answer-subject.html.twig' %}#}
+{#      {% include 'testpaper/subject/material-subject.html.twig' %}#}
       <div class="text-center cd-mt24">
-        <button class="cd-btn cd-btn-primary subject-button" type="button">完成导入</button>
+        {% block save_btn %}{% endblock %}
       </div>
     </div>
   </div>
@@ -35,6 +35,7 @@
     {% include 'testpaper/subject/batch-set-score-modal.html.twig' %}
   {% endblock %}
 
+  {% include 'testpaper/subject/create-subject-modal.html.twig' %}
   {% block analysis_edit_modal %}
     {% include 'testpaper/subject/analysis-edit-modal.html.twig' %}
   {% endblock %}

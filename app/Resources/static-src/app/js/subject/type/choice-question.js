@@ -194,11 +194,17 @@ class Choice extends BaseQuestion {
   }
 
   addOption(event) {
+    let $target = $(event.currentTarget);
+    if($target.attr('disabled') === true) {
+      return;
+    }
+    $target.attr('disabled', true);
     if (this.optionCount >= 10) {
       cd.message({
         type: 'danger',
         message: Translator.trans('选项最多10个'),
       });
+      $target.attr('disabled', false);
       return;
     }
 
@@ -211,12 +217,19 @@ class Choice extends BaseQuestion {
     }).done(resp => {
       $(event.currentTarget).parent().before(resp);
       this.optionCount++;
+      $target.attr('disabled', false);
     });
   }
 
   submitForm(event) {
+    if (this.optionCount < 2) {
+      cd.message({
+        type: 'danger',
+        message: Translator.trans('选项最少2个'),
+      });
+      return;
+    }
     this.validator.resetForm();
-    $('.edit-subject-item__order--error').removeClass('edit-subject-item__order--error');
     if (this.validator.form()) {
       $(event.currentTarget).button('loading');
       this.finishEdit(this.$form.serializeArray());
@@ -224,7 +237,7 @@ class Choice extends BaseQuestion {
   }
 
   finishEdit(data) {
-    const token = $('.js-hidden-token').val();
+    let token = $('.js-hidden-token').val();
     let self = this;
     let question = {
       options: [],
@@ -241,13 +254,24 @@ class Choice extends BaseQuestion {
         question['answers'].push(value);
       }
     });
-    $.each(question, function(name, value) {
-      self.operate.updateQuestionItem(token, name, value);
-    });
-    question = self.operate.getQuestion(token);
-    let seq = self.operate.getQuestionOrder(token);
-    $.post(self.$form.data('url'), {seq: seq, question: question, token: token}, html => {
+    let method = $('.js-hidden-method').val();
+    let isSub = $('.js-sub-judge').val();
+    let key = $('.js-edit-form-seq').text() - 1;
+    let seq = 0;
+    if (isSub == '1') {
+      token = self.updataCachedSubQuestion(token, key, question, method);
+      question = self.operate.getSubQuestion(token, key);
+      seq = key + 1;
+    } else {
+      token = self.updataCachedQuestion(token, question, method);
+      question = self.operate.getQuestion(token);
+      seq = self.operate.getQuestionOrder(token);
+    }
+    $.post(self.$form.data('url'), {'seq': seq, 'question': question, 'token': token, 'isSub': isSub}, html => {
       self.$form.parent('.subject-item').replaceWith(html);
+      if (isSub != '1') {
+        self.removeErrorClass(token);
+      }
     });
   }
 }
