@@ -21,9 +21,10 @@
 ] %}
 
 {% for item in data %}
-  <div class="subject-item" id="{{ item.order }}">
+  <div class="subject-item js-subject-item" id="{{ item.order }}">
     <div class="subject-item__title">
-      <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ item.order }}</span> {{ item.title }}
+      <span class="subject-item__number {% if item.flag == 1 %}subject-item__number--danger{% endif %}">{{ item.order }}</span>
+      <div class="subject-item__stem">{{ item.title }}</div>
     </div>
     <div class="subject-item__body">
       <span>答案：</span><span class="{% if item.flag == 1 %}color-danger{% endif %}">{% if item.flag == 1 %}缺少正确答案，请点击“编辑”进行设置。{% else %}{{ item.answer }}{% endif %}</span>

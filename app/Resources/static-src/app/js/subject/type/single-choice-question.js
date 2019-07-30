@@ -16,7 +16,7 @@ class SingleChoice extends Choice {
   initData() {
     super.initData();
     $('.cd-radio.checked').find('[name="right"]').attr('checked', true);
-    this.checkedRadio = $('.cd-radio.checked');
+    this.checkedRadio = this.$form.find('.cd-radio.checked');
   }
 
   initValidator() {

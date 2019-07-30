@@ -1,7 +1,7 @@
 {% set options = item.options %}
 {% set answers = item.answers %}
 {% set errors = item.errors|default([]) %}
-<div class="subject-item subject-sub-item" id="{{ key~'_'~subKey }}">
+<div class="subject-item subject-sub-item js-subject-item" id="sub{% if seq is defined %}{{seq - 1}}{% else %}{{ subKey }}{% endif %}" data-material-token="{{ token|default('') }}" data-key="{% if seq is defined %}{{seq - 1}}{% else %}{{ subKey }}{% endif %}">
   <div class="subject-item__title subject-sub-item__title">
     <span class="subject-sub-item__number">
       {% if seq|default(null) %}
@@ -11,7 +11,7 @@
       {% endif %}
     </span>
     {% if errors.stem is not defined %}
-      <span>{{ item.stem|raw }}</span>
+      <div class="subject-sub-item__stem">{{ item.stem|raw }}</div>
     {% elseif errors.stem.code == 100001 %}
       <span class="single-item__text--danger">缺少题干，请点击"编辑"进行设置。</span>
     {% endif %}
@@ -31,5 +31,5 @@
       </label>
     {% endfor %}
   </div>
-  {% include 'testpaper/subject/common.html.twig' with {position:position, type: item.type, difficulty: item.difficulty, score: item.score } %}
+  {% include 'testpaper/subject/common.html.twig' with {position:'sub', type: item.type, difficulty: item.difficulty, score: item.score } %}
 </div>
