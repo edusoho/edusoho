@@ -40,7 +40,7 @@
           <div class="form-group edit-form-group">
             <label class="col-sm-2 control-label ph0 edit-form-group__label">解析</label>
             <div class="col-sm-10">
-              <div class="cd-dark-major pts js-analysis-content">{{ question_html_filter(question.analysis|default('')) }}</div>
+              <div class="cd-dark-major pts js-analysis-content edit-form-group__explain">{{ question_html_filter(question.analysis|default('')) }}</div>
               <input type="hidden" data-edit="analysis" name="analysis" value="{{ question.analysis|default('') }}">
               <a class="color-primary cd-mt24 edit-form-group__operate js-analysis-edit" href="javascript:;"><i class="es-icon es-icon-exam text-md mrs"></i>编辑解析</a>
               {% include 'testpaper/subject/attachment.html.twig' with { target: 'analysis', btnTitle:'上传解析附件', attachment: question.attachments.analysis|default([]) } %}
