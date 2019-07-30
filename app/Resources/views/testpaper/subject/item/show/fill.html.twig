@@ -8,7 +8,7 @@
         {{ loop.index }}
       {% endif %}
     </span>
-    <div class="subject-item__stem"> {{ item.stemShow|raw }}</div>
+    <div class="subject-item__stem"> {{ item.stemShow|striptags('<br><img>')|raw }}</div>
   </div>
   <div class="subject-item__body">
     <span class="subject-table-label">答案：</span>
