@@ -1,35 +1,34 @@
-<div id="question-difficulty-modal" class="modal in js-difficulty-modal" aria-hidden="true">
-  <div class="modal-dialog">
+<div id="question-difficulty-modal" class="modal cd-modal in js-difficulty-modal" aria-hidden="true">
+  <div class="modal-dialog cd-modal-dialog">
     <div class="modal-content">
-      <div class="modal-body task-state-modal">
-        <div class="title font-blod text-left">
-          {{'批量设置难度'|trans}}
-          <button data-dismiss="modal" class="close"><i class="cd-icon cd-icon-close"></i></button>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="cd-icon cd-icon-close"></i>
+        </button>
+        <h4 class="modal-title">{{'批量设置难度'|trans}}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="subject-state-content clearfix cd-mb24">
+          <span>{{'已选：'|trans}}</span>
+          <div class="subject-state-content__text js-select"></div>
         </div>
-        <div class="content text-left ph20">
-          <span class="text-14">
-            {{'已选：'|trans}}
-          </span>
-          <span class="text-14 js-select">
-          </span>
-        </div>
-        <div class="mt20 ml20">
-          <span>难度：</span>
-          <label class="cd-radio mr20">
+        <div class="subject-state-form">
+          <label class="cd-dark-major cd-ml16 mrs">难度：</label>
+          <label class="cd-radio cd-mr32">
             <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="simple" checked=""><span>简单</span>
           </label>
-          <label class="cd-radio mr20 checked">
+          <label class="cd-radio cd-mr32 checked">
             <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="normal" checked=""><span>一般</span>
           </label>
-          <label class="cd-radio mr20">
+          <label class="cd-radio cd-mr32">
             <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="difficulty" checked=""><span>困难</span>
           </label>
         </div>
-        <div class="text-right mt20">
-          <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</a>
-          <button class="btn cd-btn-primary js-difficulty-btn cd-btn cd-btn-lg" id="difficulty-set-btn" data-loading-text="{{'form.btn.hand_in.submiting'|trans}}..">
-          {{'form.btn.confirm'|trans}}</button>
-        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</a>
+        <button type="button" class="cd-btn cd-btn-primary js-difficulty-btn" data-loading-text="{{'form.btn.hand_in.submiting'|trans}}..">{{'form.btn.confirm'|trans}}</button>
       </div>
     </div>
   </div>

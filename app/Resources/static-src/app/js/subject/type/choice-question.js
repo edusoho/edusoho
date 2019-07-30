@@ -7,6 +7,7 @@ class Choice extends BaseQuestion {
     this.oldFieldId = 'question-stem-field';
     this.fieldId = '';
     this.optionCount = 0;
+    this.timer = false;
     this.errorMessage = {
       noAnswer: Translator.trans('至少选择2个答案'),
     };
@@ -194,11 +195,15 @@ class Choice extends BaseQuestion {
   }
 
   addOption(event) {
+    const self = this;
+    if (self.timer) clearTimeout(self.timer);
+    self.timer = setTimeout(() => {
+      self.addRealOperate(event);
+    }, 500);
+  }
+
+  addRealOperate(event) {
     let $target = $(event.currentTarget);
-    if($target.attr('disabled') === true) {
-      return;
-    }
-    $target.attr('disabled', true);
     if (this.optionCount >= 10) {
       cd.message({
         type: 'danger',
@@ -217,7 +222,6 @@ class Choice extends BaseQuestion {
     }).done(resp => {
       $(event.currentTarget).parent().before(resp);
       this.optionCount++;
-      $target.attr('disabled', false);
     });
   }
 
