@@ -246,7 +246,7 @@ class Choice extends BaseQuestion {
     $.each(data, function(index, item) {
       let name = item['name'],
           value = item['value'];
-      if ($.inArray(name, ['stem', 'difficulty', 'score', 'missScore', 'type']) !== -1) {
+      if ($.inArray(name, ['stem', 'difficulty', 'score', 'missScore', 'type', 'analysis']) !== -1) {
         question[name] = value;
       } else if (name == 'options') {
         question['options'].push(value);
