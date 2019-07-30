@@ -62,7 +62,7 @@ class Choice extends AbstractQuestion
     {
         $keys = array_keys($question[QuestionElement::OPTIONS]);
         $endKey = end($keys);
-        for ($index = 0; $index <= $endKey; ++$index) {
+        for ($index = 0; $index <= $endKey; $index++) {
             if (empty($question[QuestionElement::OPTIONS][$index])) {
                 $question[QuestionElement::OPTIONS][$index] = '';
             }
@@ -81,7 +81,18 @@ class Choice extends AbstractQuestion
 
             return true;
         }
-        if (preg_match('/<#([A-Z])#>/', $line, $matches)) {
+
+        if (preg_match('/\s([A-Z])(\.|、|。|\\s)/', $line)) {
+            $optionStr = preg_replace('/\s([A-Z])(\.|、|。|\\s)/', PHP_EOL.'<#$1#>', $line);
+            $optionLines = explode(PHP_EOL, $optionStr);
+            foreach ($optionLines as $line) {
+                if (preg_match('/<#([A-Z])#>/', $line, $matches)) {
+                    $question['options'][ord($matches[1]) - 65] = preg_replace('/<#([A-Z])#>/', '', $line);
+                    $preNode = QuestionElement::OPTIONS.'_'.(ord($matches[1]) - 65);
+                }
+            }
+            return true;
+        }else if (preg_match('/<#([A-Z])#>/', $line, $matches)) {
             $question['options'][ord($matches[1]) - 65] = preg_replace('/<#([A-Z])#>/', '', $line);
             $preNode = QuestionElement::OPTIONS.'_'.(ord($matches[1]) - 65);
 
