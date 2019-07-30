@@ -52,7 +52,7 @@ export default class sbList {
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
     this.$itemList.on('change', '.js-testpaper-title', event => this.editTestpaperTitle(event));
-    this.$itemList.on('click', '.js-import-btn', event => this.finishImport(event))
+    this.$itemList.on('click', '.js-import-btn', event => this.finishImport(event));
   }
 
   initTestpaperTitle() {
@@ -125,6 +125,8 @@ export default class sbList {
   }
 
   finishBtnClick(event) {
+    this.$sbCheckbox.removeClass('checked');
+    this.$allBtn.removeClass('checked');
     this.$batchBtn.toggleClass('hidden');
     this.toggleClass();
     this.flag = true;
