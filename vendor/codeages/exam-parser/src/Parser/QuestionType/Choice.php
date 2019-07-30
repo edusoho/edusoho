@@ -77,7 +77,7 @@ class Choice extends AbstractQuestion
             list($node, $index) = explode('_', $preNode);
         }
         if (!$this->hasSignal($line) && QuestionElement::OPTIONS == $node) {
-            $question['options'][$index] .= $line;
+            $question['options'][$index] .= '<br/>'.$line;
 
             return true;
         }
