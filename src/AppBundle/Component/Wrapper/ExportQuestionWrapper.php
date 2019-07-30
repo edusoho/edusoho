@@ -15,8 +15,7 @@ class ExportQuestionWrapper extends Wrapper
 
     public function stem($question)
     {
-        $stem = $question['seq'].$question['stem'];
-        $question['stem'] = $this->explodeTextAndImg($stem);
+        $question['stem'] = $this->explodeTextAndImg($question['stem']);
 
         return $question;
     }
@@ -36,14 +35,14 @@ class ExportQuestionWrapper extends Wrapper
     {
         if ('essay' == $question['type']) {
             $question['answer'] = $this->explodeTextAndImg($question['answer']);
-        } else if ('determine' == $question['type']) {
+        } elseif ('determine' == $question['type']) {
             $determineAnswer = array(
                 '错误',
                 '正确',
             );
-            $answer = (int)$question['answer'];
+            $answer = (int) $question['answer'];
             $question['answer'] = $determineAnswer[$answer];
-        } else if (in_array($question['type'], array('choice', 'single_choice', 'uncertain_choice'))) {
+        } elseif (in_array($question['type'], array('choice', 'single_choice', 'uncertain_choice'))) {
             $choiceAnswer = '';
             foreach ($question['answer'] as $answer) {
                 $choiceAnswer .= $this->numberToCapitalLetter($answer);
@@ -83,6 +82,7 @@ class ExportQuestionWrapper extends Wrapper
         }
 
         foreach ($question['subs'] as $index => $sub) {
+            $sub['isSub'] = 1;
             $sub['seq'] = "（{$sub['seq']}）";
             $sub = $this->stem($sub);
             $sub = $this->options($sub);
@@ -99,7 +99,7 @@ class ExportQuestionWrapper extends Wrapper
     {
         $items = array();
         $webDir = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../web';
-        $result = preg_split('/(<img [^>]*?\/>)/', $text, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+        $result = preg_split('/(<img [^>]*?\/>)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
         foreach ($result as $item) {
             if (preg_match('/<img .*src="(.*)".*\/>/', $item, $matches)) {
                 $items[] = array(
@@ -109,7 +109,7 @@ class ExportQuestionWrapper extends Wrapper
             } else {
                 $items[] = array(
                     'element' => 'text',
-                    'content' => $this->clean($item),
+                    'content' => $item,
                 );
             }
         }
@@ -120,20 +120,10 @@ class ExportQuestionWrapper extends Wrapper
     protected function numberToCapitalLetter($number)
     {
         if (!is_int($number)) {
-            $number = (int)$number;
+            $number = (int) $number;
         }
 
         return chr($number + 65);
-    }
-
-    protected function clean($text)
-    {
-        $text = str_replace('&nbsp;', ' ', $text);
-        $text = strip_tags($text);
-        $text = str_replace('&', '&amp;', $text);
-        $text = trim($text);
-
-        return $text;
     }
 
     protected function getWrapList()

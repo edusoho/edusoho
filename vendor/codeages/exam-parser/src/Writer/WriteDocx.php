@@ -15,6 +15,11 @@ class WriteDocx
      */
     protected $section;
 
+    /**
+     * @var \PhpOffice\PhpWord\Element\TextRun
+     */
+    protected $textRun;
+
     public function __construct($filename)
     {
         $this->filename = $filename;
@@ -61,7 +66,9 @@ class WriteDocx
         $this->$method($question);
         $this->writeCommonQuestionText($question);
 
-        $this->section->addTextBreak();
+        if (empty($question['isSub'])) {
+            $this->section->addTextBreak();
+        }
     }
 
     protected function buildSingleChoice($question)
@@ -70,7 +77,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['stem']);
+        $this->writeStem($question['seq'], $question['stem']);
         $this->writeOptions($question['options']);
 
         $this->writeText("【答案】{$question['answer']}");
@@ -82,7 +89,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['stem']);
+        $this->writeStem($question['seq'], $question['stem']);
         $this->writeOptions($question['options']);
 
         $this->writeText("正确答案：{$question['answer']}");
@@ -94,7 +101,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['stem']);
+        $this->writeStem($question['seq'], $question['stem']);
         $this->writeOptions($question['options']);
 
         $this->writeText("正确答案：{$question['answer']}");
@@ -106,7 +113,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['stem']);
+        $this->writeStem($question['seq'], $question['stem']);
     }
 
     protected function buildDetermine($question)
@@ -115,8 +122,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['stem']);
-        $this->writeText("（{$question['answer']}）");
+        $this->writeStem($question['seq'], $question['stem'], $question['answer']);
     }
 
     protected function buildEssay($question)
@@ -125,7 +131,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['stem']);
+        $this->writeStem($question['seq'], $question['stem']);
     }
 
     protected function buildMaterial($question)
@@ -136,10 +142,10 @@ class WriteDocx
 
         $this->writeText('【材料题开始】');
 
-        $this->writeStem($question['stem']);
-        $this->section->addTextBreak();
+        $this->writeStem($question['seq'], $question['stem']);
 
         foreach ($question['subs'] as $subQuestion) {
+            $this->section->addTextBreak();
             $this->buildQuestionText($subQuestion['type'], $subQuestion);
         }
 
@@ -169,19 +175,27 @@ class WriteDocx
         $this->section->addTextBreak();
     }
 
-    protected function writeStem($stem)
+    protected function writeStem($seq, $stem, $answer = '')
     {
+        $this->useTextRun();
+        $this->writeText($seq);
         foreach ($stem as $item) {
             $this->writeIn($item['element'], $item['content']);
         }
+        if (!empty($answer)) {
+            $this->writeText("（{$answer}）");
+        }
+        $this->cancelTextRun();
     }
 
     protected function writeOptions(array $options)
     {
         foreach ($options as $option) {
+            $this->useTextRun();
             foreach ($option as $item) {
                 $this->writeIn($item['element'], $item['content']);
             }
+            $this->cancelTextRun();
         }
     }
 
@@ -194,11 +208,23 @@ class WriteDocx
             $this->writeText("【分数】{$question['score']}");
         }
         if (!empty($question['analysis'])) {
+            $this->useTextRun();
             $this->writeText("【解析】");
             foreach ($question['analysis'] as $item) {
                 $this->writeIn($item['element'], $item['content']);
             }
+            $this->cancelTextRun();
         }
+    }
+
+    protected function useTextRun()
+    {
+        $this->textRun = $this->section->addTextRun();
+    }
+
+    protected function cancelTextRun()
+    {
+        $this->textRun = null;
     }
 
     protected function writeIn($element, $content)
@@ -209,7 +235,11 @@ class WriteDocx
 
     protected function writeImg($src)
     {
-        $this->section->addImage($src);
+        if (empty($this->textRun)) {
+            $this->section->addImage($src);
+        } else {
+            $this->textRun->addImage($src);
+        }
     }
 
     protected function writeText($questionText)
@@ -219,8 +249,14 @@ class WriteDocx
         $questionText = str_replace('&', '&amp;', $questionText);
         $questionText = trim($questionText);
 
-        if (!empty($questionText)) {
+        if (empty($questionText)) {
+            return;
+        }
+
+        if (empty($this->textRun)) {
             $this->section->addText($questionText);
+        } else {
+            $this->textRun->addText($questionText);
         }
     }
 }
