@@ -1,5 +1,5 @@
-<div class="modal in js-score-modal" aria-hidden="true">
-  <div class="modal-dialog" data-clear="{{ closeClear|default(0) }}">
+<div class="modal cd-modal in js-score-modal" aria-hidden="true">
+  <div class="modal-dialog cd-modal-dialog" data-clear="{{ closeClear|default(0) }}">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -8,28 +8,24 @@
         <h4 class="modal-title">批量设置分数</h4>
       </div>
 
-      <div class="modal-body task-state-modal">
-        <div class="content text-left ph20">
-          <span class="text-14">
-            {{'已选：'|trans}}
-          </span>
-          <span class="text-14 js-select">
-          </span>
+      <div class="modal-body">
+        <div class="subject-state-content clearfix">
+          <span>{{'已选：'|trans}}</span><div class="subject-state-content__text js-select"></div>
         </div>
-        <form class="form-horizontal mt20" id="batch-set-score-form">
-          <div class="row form-group">
-            <div class="col-md-2 control-label">
+        <form class="form-horizontal subject-state-form mt20" id="batch-set-score-form">
+          <div class="form-group cd-mb24">
+            <div class="col-md-3 control-label subject-state-form__label">
               <label for="score">分值</label>
             </div>
-            <div class="col-md-10 controls">
+            <div class="col-md-9 controls pl0">
               <input id="score" type="text" class="form-control" name="score" required="required" placeholder="请输入小于1000的正整数">
             </div>
           </div>
-          <div class="row form-group hidden miss-score-field">
-            <div class="col-md-2 control-label">
+          <div class="form-group hidden miss-score-field cd-mb24">
+            <div class="col-md-3 control-label subject-state-form__label">
               <label for="missScore">漏选分值</label>
             </div>
-            <div class="col-md-10 controls">
+            <div class="col-md-9 controls pl0">
               <input id="missScore" type="text" class="form-control" name="missScore" placeholder="请输入小于1000的正整数">
             </div>
           </div>
@@ -37,8 +33,8 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn cd-btn cd-btn-primary pull-right js-batch-score-confirm">{{ 'form.btn.confirm'|trans }}</button>
-        <a href="javascript:;" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</a>
+        <button type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</a>
+        <button type="button" class="btn cd-btn cd-btn-primary js-batch-score-confirm">{{ 'form.btn.confirm'|trans }}</button>
       </div>
     </div>
   </div>
