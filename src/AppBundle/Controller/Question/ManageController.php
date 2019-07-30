@@ -433,14 +433,24 @@ class ManageController extends BaseController
         );
 
         foreach ($questions as $question) {
-            $questionAnalysis[$question['type']] += 1;
+            ++$questionAnalysis[$question['type']];
         }
 
         return $this->render('question-manage/re-edit.html.twig', array(
             'filename' => $data['filename'],
             'questions' => $questions,
             'questionAnalysis' => $questionAnalysis,
+            'courseSetId' => $token['data']['courseSetId'],
         ));
+    }
+
+    public function saveImportQuestionsAction(Request $request, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        $postData = $request->request->all();
+        $this->getQuestionService()->importQuestions($postData['questions'], $token['token']);
+
+        return $this->createJsonResponse(true);
     }
 
     protected function parseQuestions($fullpath)

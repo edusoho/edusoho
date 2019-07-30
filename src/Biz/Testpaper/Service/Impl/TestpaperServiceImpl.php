@@ -252,6 +252,126 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
+    public function importTestpaper($testpaperData, $token)
+    {
+        $data = $token['data'];
+        $questions = $testpaperData['questions'];
+        $metas = $this->makeImportQuestionsMetas($questions);
+
+        $testpaper = array(
+            'name' => $testpaperData['title'],
+            'courseSetId' => $data['courseSetId'],
+            'metas' => $metas,
+            'pattern' => 'questionType',
+            'courseId' => 0,
+            'itemCount' => count($questions),
+            'type' => 'testpaper',
+            'score' => $metas['totalScore'],
+        );
+        $testpaper = $this->createTestpaper($testpaper);
+
+        $questions = $this->getQuestionService()->importQuestions($questions, $token);
+        $items = $this->itemsAnalyzer($testpaper['id'], $questions);
+
+        $this->createTestpaperItems($items);
+    }
+
+    protected function createTestpaperItems($questions)
+    {
+        $testpaperItems = array();
+        $seq = 1;
+        $fields = array();
+
+        foreach ($questions as $item) {
+            $questionType = $this->getQuestionService()->getQuestionConfig($item['questionType']);
+
+            $item['seq'] = $seq;
+
+            if ('material' != $item['questionType']) {
+                ++$seq;
+            }
+            $item['type'] = 'testpaper';
+
+            if (!in_array($item['questionType'], array('choice', 'uncertain_choice'))) {
+                $item['missScore'] = 0;
+            }
+
+            $fields[] = ArrayToolkit::parts(
+                $item,
+                array(
+                    'testId',
+                    'seq',
+                    'questionId',
+                    'questionType',
+                    'parentId',
+                    'score',
+                    'missScore',
+                    'type',
+                )
+            );
+        }
+
+        return $this->getItemDao()->batchCreate($fields);
+    }
+
+    protected function itemsAnalyzer($testpaperId, $questions)
+    {
+        $result = array();
+        foreach ($questions as $question) {
+            $result[] = array(
+                'testId' => $testpaperId,
+                'questionId' => $question['id'],
+                'questionType' => $question['type'],
+                'parentId' => empty($question['parentId']) ? 0 : $question['parentId'],
+                'score' => $question['score'],
+                'missScore' => empty($question['missScore']) ? 0 : $question['missScore'],
+            );
+        }
+
+        return $result;
+    }
+
+    protected function makeImportQuestionsMetas($questions)
+    {
+        $totalScore = 0;
+        $info = array(
+            'mode' => 'import',
+            'counts' => array(
+                'choice' => 0,
+                'single_choice' => 0,
+                'uncertain_choice' => 0,
+                'fill' => 0,
+                'determine' => 0,
+                'material' => 0,
+                'essay' => 0,
+            ),
+            'scores' => array(
+                'choice' => 0,
+                'single_choice' => 0,
+                'uncertain_choice' => 0,
+                'fill' => 0,
+                'determine' => 0,
+                'material' => 0,
+                'essay' => 0,
+            ),
+            'totalScore' => 0,
+        );
+        foreach ($questions as $question) {
+            ++$info['counts'][$question['type']];
+            if ('material' == $question['type']) {
+                foreach ($question['subQuestions'] as $subQuestion) {
+                    $info['scores'][$question['type']] += $subQuestion['score'];
+                    $info['totalScore'] += $subQuestion['score'];
+                }
+            } else {
+                $info['scores'][$question['type']] += $question['score'];
+                $info['totalScore'] += $question['score'];
+            }
+        }
+
+        return $info;
+    }
+
     /**
      * testpaper_item_result.
      */

@@ -216,6 +216,10 @@ export default class QuestionOperate {
     return this.questions[token];
   }
 
+  getQuestions() {
+    return this.questions;
+  }
+
   getSubQuestion(token, key) {
     if (!this.isUpdating()) {
       return;

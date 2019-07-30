@@ -21,7 +21,7 @@
 {#      {% include 'testpaper/subject/answer-subject.html.twig' %}#}
 {#      {% include 'testpaper/subject/material-subject.html.twig' %}#}
       <div class="text-center cd-mt24">
-        <button class="cd-btn cd-btn-primary subject-button" type="button">完成导入</button>
+        {% block save_btn %}{% endblock %}
       </div>
     </div>
   </div>
