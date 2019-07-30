@@ -337,6 +337,10 @@ class ClassroomManageController extends BaseController
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
 
+            if ($this->getClassroomService()->isClassroomOverDue($id)) {
+                return $this->createJsonResponse(array('success' => 0, 'message' => $this->trans('classroom.joining_date.expired_tips')));
+            }
+
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 
             if (empty($user)) {

@@ -40,10 +40,15 @@ let validator = $form.validate({
 $btn.click(() => {
   if (validator.form()) {
     $btn.button('submiting').addClass('disabled');
-    $.post($form.attr('action'), $form.serialize(), function () {
-      $modal.modal('hide');
-      notify('success', Translator.trans('classroom_manage.student_create_add_success_hint'));
-      window.location.reload();
+    $.post($form.attr('action'), $form.serialize(), function (result) {
+      if (result.success){
+        $modal.modal('hide');
+        notify('success', Translator.trans('classroom_manage.student_create_add_success_hint'));
+        window.location.reload();
+      }else{
+        notify('danger', Translator.trans(result.message));
+        $btn.button('reset').removeClass('disabled');
+      }
     }).error(function () {
       notify('danger', Translator.trans('classroom_manage.student_create_add_failed_hint'));
       $btn.button('reset').removeClass('disabled');

@@ -10044,3 +10044,5 @@ mobile.task.finish_tips.testpapaer.score: 考试分数通过 %finishData% 分
 mobile.task.finish_tips.text.time: 至少学习 %finishData% 分钟
 mobile.task.finish_tips.video.end: 学习到最后
 mobile.task.finish_tips.video.time: 至少学习 %finishData% 分钟
+
+classroom.joining_date.expired_tips: 班级已过有效期！
