@@ -19,6 +19,7 @@ export default class sbList {
     this.selectQuestion = [];
     this.questionOperate = null;
     this.testpaperTitle = '';
+    this.redirect = false;
     this.init();
   }
 
@@ -35,8 +36,11 @@ export default class sbList {
   }
 
   confirmFresh() {
+    let self = this;
     $(window).on('beforeunload',function(){
-      return Translator.trans('admin.block.not_saved_data_hint');
+      if (!self.redirect) {
+        return Translator.trans('admin.block.not_saved_data_hint');
+      }
     });
   }
 
@@ -506,6 +510,7 @@ export default class sbList {
 
   finishImport(event) {
     let hasError = false;
+    let self = this;
     let errorTip = '第';
     this.$element.find('.subject-list-item__num--error').each(function () {
       errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
@@ -530,6 +535,7 @@ export default class sbList {
           type : 'success',
           message : '保存成功！',
         });
+        self.redirect = true;
         window.location.href = $(event.currentTarget).data('redirectUrl');
       }
     });
