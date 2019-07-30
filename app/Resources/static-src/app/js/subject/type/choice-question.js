@@ -213,7 +213,7 @@ class Choice extends BaseQuestion {
     $.ajax({
       url: `/subject/option/${type}`,
       type: 'get',
-      data: {order: this.optionCount+1}
+      data: {order: this.optionCount}
     }).done(resp => {
       $(event.currentTarget).parent().before(resp);
       this.optionCount++;
@@ -246,7 +246,7 @@ class Choice extends BaseQuestion {
     $.each(data, function(index, item) {
       let name = item['name'],
           value = item['value'];
-      if ($.inArray(name, ['stem', 'difficulty', 'score', 'missScore', 'type']) !== -1) {
+      if ($.inArray(name, ['stem', 'difficulty', 'score', 'missScore', 'type', 'analysis']) !== -1) {
         question[name] = value;
       } else if (name == 'options') {
         question['options'].push(value);
@@ -254,6 +254,7 @@ class Choice extends BaseQuestion {
         question['answers'].push(value);
       }
     });
+    question['attachments'] = this.getAttachemnts();
     let method = $('.js-hidden-method').val();
     let isSub = $('.js-sub-judge').val();
     let key = $('.js-edit-form-seq').text() - 1;

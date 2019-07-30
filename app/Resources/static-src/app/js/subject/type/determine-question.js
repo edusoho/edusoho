@@ -21,7 +21,8 @@ class Datermine extends BaseQuestion {
   }
 
   filterQuestion(question) {
-    question['answer'] = $('input[name=\'answer\']:checked').val();
+    let answer = $('input[name=\'answer\']:checked').val();
+    question['answer'] = (answer == 'true') ? true : false;
 
     return question;
   }

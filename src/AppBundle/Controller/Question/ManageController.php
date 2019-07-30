@@ -437,7 +437,11 @@ class ManageController extends BaseController
 
         foreach ($questions as $question) {
             ++$questionAnalysis[$question['type']];
-            if ('material' != $question['type']) {
+            if ('material' == $question['type']) {
+                foreach ($question['subQuestions'] as $subQuestion) {
+                    $totalScore += $subQuestion['score'];
+                }
+            } else {
                 $totalScore += $question['score'];
             }
         }

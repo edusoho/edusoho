@@ -1,5 +1,5 @@
 {% set errors = item.errors|default([]) %}
-<div class="subject-item js-subject-item {% if position|default(null)  ==  'sub' %}subject-sub-item{% endif %}" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
+<div class="subject-item js-subject-item js-subject-main-item" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
   <div class="subject-item__title">
     <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">
     {% if seq|default(null) %}
@@ -18,7 +18,7 @@
     {% if errors.answer is not defined %}
       <div class="subject-table">
         <span class="subject-table-label">答案：</span>
-        <div class="subject-table-cell">{{ item.answer|raw }}</div>
+        <div class="subject-table-cell">{{ item.answer|striptags('<br><img>')|raw }}</div>
       </div>
     {% elseif errors.answer.code == 100003 %}
       <span class="single-item__text--danger">缺少正确答案，请点击“编辑”进行设置。</span>

@@ -24,7 +24,7 @@ export default class sbList {
 
   init() {
     this.questionOperate = new QuestionOperate();
-    //this.confirmFresh();
+    this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();
@@ -363,6 +363,7 @@ export default class sbList {
       let index = seq + 1;
       self.orderQuestionList(index, $(`[data-anchor="#${token}"]`).parent(), $(`#${token}`));
       $(`[data-anchor="#${token}"]`).parent().after(self.getNewListItem(seq, type, $target.text()));
+      self.statErrorQuestions();
       var nextItem = $(`#${token}`).next('.subject-item');
       if (nextItem.hasClass('subject-sub-item')) {
         $(`[data-material-token="${token}"]`).last().after(res);
@@ -400,6 +401,9 @@ export default class sbList {
   }
 
   deleteSubjectItem(event) {
+    if (this.isEditing()) {
+      return;
+    }
     cd.confirm({
       title: '确认删除',
       content: '确定要删除这道题目吗?',
@@ -407,28 +411,32 @@ export default class sbList {
       cancelText: '取消',
     }).on('ok', () => {
       const $item = $(event.currentTarget).parent().parent();
-      const token = $item.attr('id');
-      let question = this.questionOperate.getQuestion(token);
+      let token = $item.attr('id');
 
       if ($item.hasClass('subject-sub-item')) {
+        token = $item.attr('data-material-token');
+        let key = $item.attr('data-key');
+        console.log(key);
+        console.log(token);
         let order = $item.find('.subject-sub-item__number').text().replace(/[^0-9]/ig, '');
-        $item.nextUntil('[class="subject-item"]').each(function() {
+        $item.nextUntil('.js-subject-main-item').each(function() {
           $(this).find('.subject-sub-item__number').text(`(${order})`);
           order++;
         });
-        //this.questionOperate.deleteQuestion(token);
+        this.questionOperate.deleteSubQuestion(token, key);
         $item.remove();
         return;
       }
 
+      let question = this.questionOperate.getQuestion(token);
       let order = this.questionOperate.getQuestionOrder(token);
       const $listItem = $(`[data-anchor=#${token}]`).parent();
       this.orderQuestionList(order, $listItem, $item);
       this.questionOperate.deleteQuestion(token);
 
       if (question.type == 'material') {
-        $.each(question['subQuestions'], function(token, subQuestion) {
-          $(`#${token}`).remove();
+        $item.nextUntil('.js-subject-main-item').each(function() {
+          $(this).remove();
         });
       }
       $listItem.remove();

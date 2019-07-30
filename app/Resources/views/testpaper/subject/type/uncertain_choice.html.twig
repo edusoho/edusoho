@@ -5,7 +5,7 @@
 {% block subject %}
   {% for option in question.options|default([]) %}
     <div class="edit-subject-item cd-mb24 form-group">
-      <label class="cd-checkbox col-sm-1 cd-mt8 mlm{% if loop.index-1 in question.answers %} checked{% endif %}">
+      <label class="cd-checkbox col-sm-1 cd-mt8 mlm{% if loop.index-1 in question.answers|default([]) %} checked{% endif %}">
         <input type="checkbox" data-toggle="cd-checkbox" name="right" value="{{ loop.index-1 }}">
         <span class="cd-dark-major edit-subject-item__order">{{ (loop.index+64)|chr }}. </span>
       </label>

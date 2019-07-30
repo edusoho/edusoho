@@ -143,7 +143,7 @@ export default class QuestionOperate {
     this.tokenList.splice(position, 0, token);
     this.questionCounts['total']++;
     this.questionCounts[question['type']]++;
-    this.totalScore += question['score'];
+    this.totalScore += parseInt(question['score']);
     let index = position + 1;
     $(`[data-anchor="#${index}"]`).attr('data-anchor', '#' + token);
     $('#' + index).attr('id', token);
@@ -166,10 +166,10 @@ export default class QuestionOperate {
     this.questionCounts['total']--;
     this.questionCounts[question['type']]--;
     if (question['type'] != 'material') {
-      this.totalScore -= question['score'];
+      this.totalScore -= parseInt(question['score']);
     } else {
       $.each(question['subQuestions'], function(token, subQuestion) {
-        this.totalScore -= subQuestion['score'];
+        this.totalScore -= parseInt(subQuestion['score']);
       })
     }
     this.triggerTotalScoreChange();
@@ -184,7 +184,7 @@ export default class QuestionOperate {
     this.flag = true;
     let oldQuestion = this.questions[token];
     this.questions[token] = question;
-    this.totalScore = this.totalScore - oldQuestion['score'] + question['score'];
+    this.totalScore = this.totalScore - parseInt(oldQuestion['score']) + parseInt(question['score']);
     this.triggerTotalScoreChange();
     this.flag = false;
   }
@@ -197,7 +197,7 @@ export default class QuestionOperate {
     let oldValue = this.questions[token][itemKey];
     this.questions[token][itemKey] = itemValue;
     if (itemKey == 'score') {
-      this.totalScore = this.totalScore - oldValue + itemValue;
+      this.totalScore = this.totalScore - parseInt(oldValue) + parseInt(itemValue);
       this.triggerTotalScoreChange(isTrigger);
     }
     if (itemKey == 'type' && oldValue != itemValue) {
@@ -205,6 +205,7 @@ export default class QuestionOperate {
       this.questionCounts[itemValue]++;
       this.triggerTypeCountChange(oldValue);
       this.triggerTypeCountChange(itemValue);
+      this.questionTypeChange(itemValue, token);
     }
     this.flag = false;
   }
@@ -233,7 +234,7 @@ export default class QuestionOperate {
     }
     this.flag = true;
     this.questions[token]['subQuestions'].push(question);
-    this.totalScore += question['score'];
+    this.totalScore += parseInt(question['score']);
     this.triggerTotalScoreChange();
     this.flag = false;
 
@@ -247,7 +248,7 @@ export default class QuestionOperate {
     this.flag = true;
     let oldQuestion = this.questions[token]['subQuestions'][key];
     this.questions[token]['subQuestions'][key] = question;
-    this.totalScore = this.totalScore - oldQuestion['score'] + question['score'];
+    this.totalScore = this.totalScore - parseInt(oldQuestion['score']) + parseInt(question['score']);
     this.triggerTotalScoreChange();
     this.flag = false;
   }
@@ -260,7 +261,7 @@ export default class QuestionOperate {
     let oldValue = this.questions[token]['subQuestions'][key][itemKey];
     this.questions[token]['subQuestions'][key][itemKey] = itemValue;
     if (itemKey == 'score') {
-      this.totalScore = this.totalScore - oldValue + itemValue;
+      this.totalScore = this.totalScore - parseInt(oldValue) + parseInt(itemValue);
       this.triggerTotalScoreChange(isTrigger);
     }
     this.flag = false;
@@ -273,7 +274,7 @@ export default class QuestionOperate {
     this.flag = true;
     const question = this.questions[deleteToken]['subQuestions'][key];
     this.questions[deleteToken]['subQuestions'][key].splice(key + 1, 1);
-    this.totalScore -= question['score'];
+    this.totalScore -= parseInt(question['score']);
     this.triggerTotalScoreChange();
     this.flag = false;
   }
@@ -286,6 +287,12 @@ export default class QuestionOperate {
 
   triggerTypeCountChange(type) {
     $('*[data-type]').trigger('change', [type]);
+  }
+
+  questionTypeChange(type, token) {
+    let $list = $('.js-subject-list').find(`[data-anchor=#${token}]`);
+    $list.find('.js-show-checkbox').attr('data-type', type);
+    $list.next('.js-type-name').text(this.getTypeName(type));
   }
 
   isUpdating() {
@@ -303,6 +310,27 @@ export default class QuestionOperate {
       json = $.parseJSON(str.replace(/[\r\n\t]/g, ''));
     }
     return json;
+  }
+
+  getTypeName(type) {
+    switch (type) {
+      case 'single_choice':
+        return '单选题';
+      case 'uncertain_choice':
+        return '不定项';
+      case 'choice':
+        return '多选题';
+      case 'determine':
+        return '判断题';
+      case 'essay':
+        return '问答题';
+      case 'fill':
+        return '填空题';
+      case 'material':
+        return '材料题';
+      default:
+        return '未知题型';
+    }
   }
 
   _random() {

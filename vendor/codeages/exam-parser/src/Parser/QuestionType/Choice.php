@@ -53,6 +53,9 @@ class Choice extends AbstractQuestion
         }
         $this->fillOptions($question);
         $this->checkErrors($question);
+        if (empty($question['type'])) {
+            $question['type'] = 'single_choice';
+        }
 
         return $question;
     }
@@ -77,11 +80,23 @@ class Choice extends AbstractQuestion
             list($node, $index) = explode('_', $preNode);
         }
         if (!$this->hasSignal($line) && QuestionElement::OPTIONS == $node) {
-            $question['options'][$index] .= $line;
+            $question['options'][$index] .= '<br/>'.$line;
 
             return true;
         }
-        if (preg_match('/<#([A-Z])#>/', $line, $matches)) {
+
+        if (preg_match('/\s([A-Z])(\.|、|。|\\s)/', $line)) {
+            $optionStr = preg_replace('/\s([A-Z])(\.|、|。|\\s)/', PHP_EOL.'<#$1#>', $line);
+            $optionLines = explode(PHP_EOL, $optionStr);
+            foreach ($optionLines as $line) {
+                if (preg_match('/<#([A-Z])#>/', $line, $matches)) {
+                    $question['options'][ord($matches[1]) - 65] = preg_replace('/<#([A-Z])#>/', '', $line);
+                    $preNode = QuestionElement::OPTIONS.'_'.(ord($matches[1]) - 65);
+                }
+            }
+
+            return true;
+        } elseif (preg_match('/<#([A-Z])#>/', $line, $matches)) {
             $question['options'][ord($matches[1]) - 65] = preg_replace('/<#([A-Z])#>/', '', $line);
             $preNode = QuestionElement::OPTIONS.'_'.(ord($matches[1]) - 65);
 
