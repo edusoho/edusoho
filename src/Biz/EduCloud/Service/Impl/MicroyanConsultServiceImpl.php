@@ -32,19 +32,16 @@ class MicroyanConsultServiceImpl extends BaseService implements ConsultService
             'cloud_consult_js' => '',
         );
 
-        if (!empty($account['code']) || !empty($jsResource['code']) || !empty($account['error']) || !empty($jsResource['error'])) {
-            $cloudConsult['cloud_consult_is_buy'] = 0;
+        $expectedCodes = array('10000', '10001');
+        $accountCode = empty($account['code']) ? -1 : $account['code'];
+        $jsResourceCode = empty($jsResource['code']) ? -1 : $jsResource['code'];
 
-            $accountCode = empty($account['code']) ? '' : $account['code'];
-            $jsResourceCode = empty($jsResource['code']) ? '' : $jsResource['code'];
-
-            if ('10001' == $accountCode || '10001' == $jsResourceCode) {
-                $cloudConsult['error'] = '帐号已过期,请联系客服人员:4008041114！';
-            }
-        } else {
+        if (empty($account['error']) && empty($jsResource['error']) && !in_array($accountCode, $expectedCodes) && !in_array($jsResourceCode, $expectedCodes)) {
             $cloudConsult['cloud_consult_is_buy'] = 1;
             $cloudConsult['cloud_consult_login_url'] = $account['loginUrl'];
             $cloudConsult['cloud_consult_js'] = $jsResource['install'];
+        } elseif ('10001' == $accountCode || '10001' == $jsResourceCode) {
+            $cloudConsult['error'] = '帐号已过期,请联系客服人员:4008041114！';
         }
 
         return array_merge($defaultSetting, $cloudConsult);
