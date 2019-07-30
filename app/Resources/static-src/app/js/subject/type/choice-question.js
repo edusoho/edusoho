@@ -194,11 +194,17 @@ class Choice extends BaseQuestion {
   }
 
   addOption(event) {
+    let $target = $(event.currentTarget);
+    if($target.attr('disabled') === true) {
+      return;
+    }
+    $target.attr('disabled', true);
     if (this.optionCount >= 10) {
       cd.message({
         type: 'danger',
         message: Translator.trans('选项最多10个'),
       });
+      $target.attr('disabled', false);
       return;
     }
 
@@ -211,6 +217,7 @@ class Choice extends BaseQuestion {
     }).done(resp => {
       $(event.currentTarget).parent().before(resp);
       this.optionCount++;
+      $target.attr('disabled', false);
     });
   }
 

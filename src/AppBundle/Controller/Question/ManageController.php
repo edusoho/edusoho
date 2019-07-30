@@ -106,6 +106,7 @@ class ManageController extends BaseController
                         'id' => $result['id'],
                         'filename' => $file->getClientOriginalName(),
                         'fileuri' => $result['uri'],
+                        'courseSetId' => $courseSet['id'],
                     ),
                     'duration' => 86400,
                     'userId' => $user['id'],
