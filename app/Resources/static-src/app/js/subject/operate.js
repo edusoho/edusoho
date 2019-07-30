@@ -205,6 +205,7 @@ export default class QuestionOperate {
       this.questionCounts[itemValue]++;
       this.triggerTypeCountChange(oldValue);
       this.triggerTypeCountChange(itemValue);
+      this.questionTypeChange(itemValue, token);
     }
     this.flag = false;
   }
@@ -288,6 +289,12 @@ export default class QuestionOperate {
     $('*[data-type]').trigger('change', [type]);
   }
 
+  questionTypeChange(type, token) {
+    let $list = $('.js-subject-list').find(`[data-anchor=#${token}]`);
+    $list.find('.js-show-checkbox').attr('data-type', type);
+    $list.next('.js-type-name').text(this.getTypeName(type));
+  }
+
   isUpdating() {
     if (this.flag == true) {
       cd.message({ type: 'danger', message: Translator.trans('题目正在修改中,请稍侯') });
@@ -303,6 +310,27 @@ export default class QuestionOperate {
       json = $.parseJSON(str.replace(/[\r\n\t]/g, ''));
     }
     return json;
+  }
+
+  getTypeName(type) {
+    switch (type) {
+      case 'single_choice':
+        return '单选题';
+      case 'uncertain_choice':
+        return '不定项';
+      case 'choice':
+        return '多选题';
+      case 'determine':
+        return '判断题';
+      case 'essay':
+        return '问答题';
+      case 'fill':
+        return '填空题';
+      case 'material':
+        return '材料题';
+      default:
+        return '未知题型';
+    }
   }
 
   _random() {
