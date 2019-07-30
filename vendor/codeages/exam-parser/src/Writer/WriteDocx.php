@@ -132,6 +132,13 @@ class WriteDocx
         }
 
         $this->writeStem($question['seq'], $question['stem']);
+
+        $this->useTextRun();
+        $this->writeText("【答案】");
+        foreach ($question['answer'] as $item) {
+            $this->writeIn($item['element'], $item['content']);
+        }
+        $this->cancelTextRun();
     }
 
     protected function buildMaterial($question)

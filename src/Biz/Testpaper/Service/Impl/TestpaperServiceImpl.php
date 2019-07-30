@@ -1181,7 +1181,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         foreach ($items as $questionId => $item) {
             $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
 
-            if (empty($question)) {
+            if (empty($question) || 0 != $question['parentId']) {
                 continue;
             }
 
@@ -1189,6 +1189,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $question['score'] = $item['score'];
             if ('material' == $question['type']) {
                 $subQuestions = $this->getQuestionService()->findQuestionsByParentId($questionId);
+                foreach ($subQuestions as $index => $subQuestion) {
+                    $subQuestions[$index]['seq'] = $items[$subQuestion['id']]['seq']-$question['seq']+1;
+                    $subQuestions[$index]['score'] = $items[$subQuestion['id']]['score'];
+                }
                 $question['subs'] = $subQuestions;
             }
 

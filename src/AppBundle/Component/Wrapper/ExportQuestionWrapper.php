@@ -34,7 +34,7 @@ class ExportQuestionWrapper extends Wrapper
     public function answer($question)
     {
         if ('essay' == $question['type']) {
-            $question['answer'] = $this->explodeTextAndImg($question['answer']);
+            $question['answer'] = $this->explodeTextAndImg(implode($question['answer']));
         } elseif ('determine' == $question['type']) {
             $determineAnswer = array(
                 '错误',
