@@ -19,7 +19,7 @@ class BaseQuestion {
   }
 
   _initEvent() {
-    this.$form.on('click', '.subject-button', event => this.submitForm(event));
+    this.$form.on('click', '.js-finish-edit', event => this.submitForm(event));
     this.$form.on('click', '.js-analysis-edit', event => this.showAnalysisModal(event));
     this.$analysisModal.on('click', '.js-analysis-btn', event => this.saveAnalysis(event));
   }
@@ -95,7 +95,23 @@ class BaseQuestion {
       if (isSub != '1') {
         self.removeErrorClass(token);
       }
+      self.statErrorQuestions();
     });
+  }
+
+  statErrorQuestions() {
+    let errorTip = '第';
+    let isShow = false;
+    $('.js-subject-list').find('.subject-list-item__num--error').each(function () {
+      errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
+      isShow = true;
+    });
+    errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
+    if (isShow) {
+      $('.js-error-tip').html(errorTip);
+    } else {
+      $('.js-error-tip').html('');
+    }
   }
 
   updataCachedQuestion(token, question, method) {

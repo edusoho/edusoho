@@ -273,6 +273,7 @@ class Choice extends BaseQuestion {
       if (isSub != '1') {
         self.removeErrorClass(token);
       }
+      self.statErrorQuestions();
     });
   }
 }
