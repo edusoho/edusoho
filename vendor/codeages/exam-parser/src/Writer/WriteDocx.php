@@ -101,6 +101,7 @@ class WriteDocx
             return;
         }
 
+        $this->writeText('【不定项选择题】');
         $this->writeStem($question['seq'], $question['stem']);
         $this->writeOptions($question['options']);
 
@@ -249,21 +250,22 @@ class WriteDocx
         }
     }
 
-    protected function writeText($questionText)
+    protected function writeText($text)
     {
-        $questionText = str_replace('&nbsp;', ' ', $questionText);
-        $questionText = strip_tags($questionText);
-        $questionText = str_replace('&', '&amp;', $questionText);
-        $questionText = trim($questionText);
+        $text = strip_tags($text);
+        $text = str_replace(array("\n", "\r", "\t"), "<w:br/>", $text);
+        $text = str_replace('&nbsp;', ' ', $text);
+        $text = str_replace('&', '&amp;', $text);
+        $text = trim($text);
 
-        if (empty($questionText)) {
+        if (empty($text)) {
             return;
         }
 
         if (empty($this->textRun)) {
-            $this->section->addText($questionText);
+            $this->section->addText($text);
         } else {
-            $this->textRun->addText($questionText);
+            $this->textRun->addText($text);
         }
     }
 }

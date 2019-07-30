@@ -2300,6 +2300,10 @@ course_set_manage_question_read:
   path: /course_set/{id}/manage/question/read
   defaults: { _controller: AppBundle:Question/Manage:read }
 
+course_set_manage_question_export:
+  path: /course_set/{id}/manage/question/export
+  defaults: { _controller: AppBundle:Question/Manage:export }
+
 course_set_manage_question_create:
   path: /course_set/{id}/manage/question/{type}/create
   defaults: { _controller: AppBundle:Question/Manage:create }

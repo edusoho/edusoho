@@ -1441,6 +1441,8 @@ course.question_manage.import.use_old_template: Use Old Template
 course.question_manage.impport.cancle: Cancel
 course.question_manage.import.docx_support_hint2: Please upload .docx Word file
 course.question_manage.import.doc_to_docx_hint2: <a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">Click here</a>to see how doc convert to docx
+course.question_manage.export_hint: (question export only support new template now)
+course.question_manage.export_btn: export question
 course.testpaper_manage: Testpapers
 course.testpaper_manage.testpaper: Testpaper
 course.testpaper_manage.content_title: Testpaper
