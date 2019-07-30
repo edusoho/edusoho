@@ -30,6 +30,9 @@
         </span>
       </label>
     {% endfor %}
+    {% if errors.answers is defined and errors.answers.code == 100003 %}
+      <span class="single-item__text--danger">缺少答案，请点击"编辑"进行设置。</span>
+    {% endif %}
   </div>
   {% include 'testpaper/subject/common.html.twig' with {position:'sub', type: item.type, difficulty: item.difficulty, score: item.score } %}
 </div>

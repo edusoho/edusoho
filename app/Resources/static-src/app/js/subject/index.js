@@ -24,7 +24,7 @@ export default class sbList {
 
   init() {
     this.questionOperate = new QuestionOperate();
-    //this.confirmFresh();
+    this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
     this.initScoreValidator();

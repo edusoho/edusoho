@@ -53,6 +53,9 @@ class Choice extends AbstractQuestion
         }
         $this->fillOptions($question);
         $this->checkErrors($question);
+        if (empty($question['type'])) {
+            $question['type'] = 'single_choice';
+        }
 
         return $question;
     }
@@ -62,7 +65,7 @@ class Choice extends AbstractQuestion
     {
         $keys = array_keys($question[QuestionElement::OPTIONS]);
         $endKey = end($keys);
-        for ($index = 0; $index <= $endKey; $index++) {
+        for ($index = 0; $index <= $endKey; ++$index) {
             if (empty($question[QuestionElement::OPTIONS][$index])) {
                 $question[QuestionElement::OPTIONS][$index] = '';
             }
@@ -91,8 +94,9 @@ class Choice extends AbstractQuestion
                     $preNode = QuestionElement::OPTIONS.'_'.(ord($matches[1]) - 65);
                 }
             }
+
             return true;
-        }else if (preg_match('/<#([A-Z])#>/', $line, $matches)) {
+        } elseif (preg_match('/<#([A-Z])#>/', $line, $matches)) {
             $question['options'][ord($matches[1]) - 65] = preg_replace('/<#([A-Z])#>/', '', $line);
             $preNode = QuestionElement::OPTIONS.'_'.(ord($matches[1]) - 65);
 
