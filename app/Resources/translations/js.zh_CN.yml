@@ -350,6 +350,7 @@ classroom_manage.student_expiryday_set_failed_hint: 修改失败
 classroom_manage.student_create_field_required_error_hint: 请输入学员邮箱/手机号/用户名
 classroom_manage.student_create_add_success_hint: 添加成功!
 classroom_manage.student_create_add_failed_hint: 添加失败!
+classroom_manage.student_create.price_max_error_hint: 购买价格不能大于班级原价!
 
 classroom_manage.student_manage_remove_hint: 您真的要移除该%username%吗？
 classroom_manage.student_manage_remove_success_hint: 移除%username%成功！

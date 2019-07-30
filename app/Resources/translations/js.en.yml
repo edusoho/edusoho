@@ -412,6 +412,7 @@ classroom_manage.student_manage_remove_success_hint: Remove %username% successfu
 classroom_manage.student_manage_remove_failed_hint: Remove %username% failed, please try again!
 #TODO trans
 classroom_manage.student_manage_remove_assistant_hint: '%username% is the assistant of the class.Please remove the assistant role at first.'
+classroom_manage.student_create.price_max_error_hint: The price can not exceed the orignial price of the classroom.
 
 classroom.member_signed: Checked in
 classroom.sign_keep_days: Continuous %keepDays% day

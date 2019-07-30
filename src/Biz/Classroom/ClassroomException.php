@@ -62,8 +62,6 @@ class ClassroomException extends AbstractException
 
     const FORBIDDEN_CREATE_THREAD_EVENT = 5001827;
 
-    const PRICE_OVER_LIMIT = 5001828;
-
     public $messages = array(
         4041801 => 'exception.classroom.not_found',
         4031802 => 'exception.classroom.forbidden_manage_classroom',
@@ -92,6 +90,5 @@ class ClassroomException extends AbstractException
         4031825 => 'exception.classroom.forbidden_auditor_learn',
         5001826 => 'exception.classroom.expired_member',
         5001827 => 'exception.classroom.forbidden_create_thread_event',
-        5001828 => 'exception.classroom.price_over_limit',
     );
 }

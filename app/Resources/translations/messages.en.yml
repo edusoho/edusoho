@@ -8469,7 +8469,6 @@ exception.classroom.expired_classroom: 班级已过期
 exception.classroom.forbidden_auditor_learn: 旁听生无权学习
 exception.classroom.expired_member: 学员已到有效期
 exception.classroom.forbidden_create_thread_event: 无权限创建活动
-exception.classroom.price_over_limit: 手动填写的购买价格不能超过班级设置的价格
 exception.course.member.not_found: The course doesn't have this student
 exception.course.member.not_member: The user is not a member of this course
 exception.course.member.duplicate_member: 用户已加入教学计划

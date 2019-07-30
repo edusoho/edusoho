@@ -983,11 +983,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             if ($params['price'] > 0) {
                 //支付完成后会自动加入课程
-                try {
-                    $order = $this->createOrder($classroom['id'], $user['id'], $params, 'outside');
-                } catch (\Exception $exception) {
-                    $this->createNewException(ClassroomException::PRICE_OVER_LIMIT());
-                }
+                $order = $this->createOrder($classroom['id'], $user['id'], $params, 'outside');
             } else {
                 $info = array(
                     'orderId' => 0,

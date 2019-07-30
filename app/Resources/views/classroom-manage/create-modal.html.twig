@@ -24,7 +24,7 @@
       </div>
       <div class="col-md-7 controls">
         <div class="input-group">
-          <input type="text" id="buy-price" name="price" value="{{ classroom.price }}" class="form-control">
+          <input type="text" id="buy-price" name="price" value="{{ classroom.price }}" data-price="{{ classroom.price|currency }}" class="form-control">
           <div class="input-group-addon">{{ 'site.currency.CNY'|trans }}</div>
         </div>
         <div class="help-block">
