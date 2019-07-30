@@ -24,11 +24,15 @@ let validator = $form.validate({
     },
     price: {
       currency: true,
+      max: parseFloat($('#buy-price').data('price')),
     }
   },
   messages: {
     queryfield: {
       remote: Translator.trans('classroom_manage.student_create_field_required_error_hint')
+    },
+    price: {
+      max: Translator.trans('classroom_manage.student_create.price_max_error_hint'),
     }
   }
 });
