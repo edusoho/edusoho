@@ -1,6 +1,6 @@
 {% if type in ['essay', 'choice', 'single_choice', 'uncertain_choice'] %}
   <div class="row cd-mv16">
-    <div class="col-sm-2 text-left pr0 control-label cd-dark-major cd-ml32">可选择转换题型为：</div>
+    <div class="col-sm-2 control-label subject-change-lable">可选择转换题型为：</div>
     <div class="col-sm-9 subject-change-list" data-convert-url="{{ path('subject_convert_template') }}" data-from-type="{{ type }}">
     {% if type == 'essay' %}
       <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="single_choice">单选题</button>
