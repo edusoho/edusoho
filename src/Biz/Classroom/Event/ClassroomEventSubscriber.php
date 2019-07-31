@@ -20,7 +20,6 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
             'classroom.course.create' => 'onClassroomCourseChange',
             'classroom.course.delete' => 'onClassroomCourseChange',
             'classroom.course.update' => 'onClassroomCourseChange',
-            'classroom.update' => 'onClassroomUpdate',
             'classReview.add' => 'onReviewCreate',
         );
     }
@@ -42,19 +41,6 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         $fields = array('courseNum' => $courseNum, 'lessonNum' => $taskNum);
         $this->getClassroomService()->updateClassroom($classroomId, $fields);
         $this->getClassroomService()->updateClassroomTeachers($classroomId);
-    }
-
-    public function onClassroomUpdate(Event $event)
-    {
-        $arguments = $event->getSubject();
-        $userId = $arguments['userId'];
-        $classroom = $arguments['classroom'];
-        $fields = $arguments['fields'];
-
-        if (isset($fields['tagIds'])) {
-            $tagOwnerManager = new TagOwnerManager('classroom', $classroom['id'], $fields['tagIds'], $userId);
-            $tagOwnerManager->update();
-        }
     }
 
     public function onReviewCreate(Event $event)
