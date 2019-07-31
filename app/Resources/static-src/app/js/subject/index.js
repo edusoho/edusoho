@@ -173,8 +173,7 @@ export default class sbList {
 
   showScoreModal(event) {
     let stats = this.statChosedQuestion();
-
-    let $missScoreField = $('.miss-score-field');
+    let $missScoreField = $('.js-miss-score-field');
 
     if (!this.isTestpaper()) {
       $missScoreField.addClass('hidden');
