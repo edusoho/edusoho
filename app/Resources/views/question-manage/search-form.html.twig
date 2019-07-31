@@ -28,7 +28,7 @@
     <a class="cd-btn cd-btn-primary cd-btn-sm" href="{{ path('course_set_manage_question_export', {
       id:courseSet.id, type:app.request.query.get('type'), courseId:app.request.query.get('courseId'),
       lessonId:app.request.query.get('lessonId'), keyword:app.request.query.get('keyword')}) }}">
-      {{ 'plugins.questionplus.export_question'|trans }}
+      {{ 'course.question_manage.export_btn'|trans }}
     </a>
   </div>
   <span class="color-gray text-sm cd-ml8">{{ 'course.question_manage.export_hint'|trans }}</span>
