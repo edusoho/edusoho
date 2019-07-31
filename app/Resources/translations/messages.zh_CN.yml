@@ -1610,6 +1610,8 @@ course.question_manage.import.use_old_template: 仍然使用旧模板
 course.question_manage.impport.cancle: 取消
 course.question_manage.import.docx_support_hint2: 请上传DOCX格式的Word文档
 course.question_manage.import.doc_to_docx_hint2: DOC如何转换成DOCX可<a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">点击此处</a>进行查看
+course.question_manage.export_hint: (当前题目导出仅支持新模板)
+course.question_manage.export_btn: 导出题目
 
 course.testpaper_manage: 课程试卷
 course.testpaper_manage.testpaper: 试卷
@@ -1648,6 +1650,7 @@ course.testpaper_manage.edit_btn: 编辑试卷信息
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
 course.testpaper_manage.delete_btn: 删除试卷
+course.testpaper_manage.export: 导出试卷
 course.testpaper_manage.import: 导入试卷
 course.testpaper_manage.create: 创建试卷
 course.testpaper_manage.create.bread_crumbs: >

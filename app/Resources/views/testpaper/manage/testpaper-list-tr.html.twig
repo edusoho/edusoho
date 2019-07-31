@@ -43,6 +43,7 @@
           {#<li><a href="{{ path('course_manage_testpaper_items_reset', {courseId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-repeat"></span> {{'course.testpaper_manage.repead_btn'|trans}}</a></li>#}
           <li><a href="javascript:" data-name='{{'course.testpaper_manage.testpaper'|trans}}' data-role='item-delete' data-url="{{ path('course_set_manage_testpaper_delete', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon-delete mrm"></span> {{'course.testpaper_manage.delete_btn'|trans}}</a></li>
         {% endif %}
+        <li><a href="{{ path('course_set_manage_testpaper_export', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-export mrm"></span>{{ 'course.testpaper_manage.export'|trans }}</a></li>
       </ul>
     </div>
   </td>
