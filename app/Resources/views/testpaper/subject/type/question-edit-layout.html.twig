@@ -11,7 +11,7 @@
         <input type="hidden" name="isSub" value="{{ isSub }}" class="js-sub-judge">
         <input type="hidden" name="method" value="{{ method }}" class="js-hidden-method">
         <div class="cd-ml32">
-          <input type="text" class="form-control" value="{{ question.stem|default('') }}" data-role="edit" style="display: none;">
+          <input type="text" class="form-control" value="{{ question_html_filter(question.stem|default('')) }}" data-role="edit" style="display: none;">
           <textarea class="form-control" style="height:190px;" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" data-edit="stem" name="stem">{{ question.stem|default('') }}</textarea>
         </div>
         <div class="cd-ml32">
