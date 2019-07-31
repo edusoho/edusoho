@@ -1,0 +1,8 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'user.register.privacy_policy'|trans}} - {{ parent() }}{% endblock %}
+{% block content %}
+    <div class="es-section">
+        <div class="section-header"><h1>{{'user.register.privacy_policy'|trans}}</h1></div>
+        {{ privacyPolicy|raw }}
+    </div>
+{% endblock %}
