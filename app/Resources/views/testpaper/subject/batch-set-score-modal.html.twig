@@ -5,35 +5,35 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
           <i class="cd-icon cd-icon-close"></i>
         </button>
-        <h4 class="modal-title">批量设置分数</h4>
+        <h4 class="modal-title">{{ 'course.testpaper_manage.import.re_edit.batch_set_score'|trans }}</h4>
       </div>
 
       <div class="modal-body">
         <div class="subject-state-content clearfix">
-          <span>{{'已选：'|trans}}</span><div class="subject-state-content__text js-select"></div>
+          <span>{{'course.testpaper_manage.import.re_edit.selected'|trans}}</span><div class="subject-state-content__text js-select"></div>
         </div>
         <form class="form-horizontal subject-state-form mt20" id="batch-set-score-form">
           <div class="form-group cd-mb24">
             <div class="col-md-3 control-label subject-state-form__label">
-              <label for="score">分值</label>
+              <label for="score">{{ 'course.testpaper_manage.question.score'|trans }}</label>
             </div>
             <div class="col-md-9 controls pl0">
-              <input id="score" type="text" class="form-control" name="score" required="required" placeholder="请输入小于1000的正整数">
+              <input id="score" type="text" class="form-control" name="score" required="required" placeholder="{{ 'course.testpaper_manage.import.re_edit.score_hint'|trans }}">
             </div>
           </div>
           <div class="form-group hidden miss-score-field cd-mb24">
             <div class="col-md-3 control-label subject-state-form__label">
-              <label for="missScore">漏选分值</label>
+              <label for="missScore">{{ 'course.testpaper_manage.import.re_edit.miss_score'|trans }}</label>
             </div>
             <div class="col-md-9 controls pl0">
-              <input id="missScore" type="text" class="form-control" name="missScore" placeholder="请输入小于1000的正整数">
+              <input id="missScore" type="text" class="form-control" name="missScore" placeholder="{{ 'course.testpaper_manage.import.re_edit.score_hint'|trans }}">
             </div>
           </div>
         </form>
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</a>
+        <button type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
         <button type="button" class="btn cd-btn cd-btn-primary js-batch-score-confirm">{{ 'form.btn.confirm'|trans }}</button>
       </div>
     </div>

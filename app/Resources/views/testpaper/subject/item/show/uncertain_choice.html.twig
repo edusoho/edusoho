@@ -14,7 +14,7 @@
     {% if errors.stem is not defined %}
       <div class="subject-item__stem">{{ item.stem|striptags('<br><img>')|raw }}</div>
     {% elseif errors.stem.code == 100001 %}
-      <span class="single-item__text--danger">缺少题干，请点击"编辑"进行设置。</span>
+      <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_stem'|trans }}</span>
     {% endif %}
   </div>
   <div class="subject-item__body">
@@ -29,14 +29,14 @@
             {% if errors['options_'~option_key] is not defined %}
               {{ option|striptags('<br><img>')|raw }}
             {% elseif errors['options_'~option_key].code == 100002 %}
-              缺少选项，请点击“编辑”进行设置。
+              {{ 'course.testpaper_manage.import.re_edit.error_no_option'|trans }}
             {% endif %}
           </div>
         </div>
       </label>
     {% endfor %}
     {% if errors.answers is defined and errors.answers.code == 100003 %}
-      <span class="single-item__text--danger">缺少答案，请点击"编辑"进行设置。</span>
+      <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_answer'|trans }}</span>
     {% endif %}
   </div>
   {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}

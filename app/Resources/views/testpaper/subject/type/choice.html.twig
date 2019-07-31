@@ -18,11 +18,13 @@
       <a class="col-sm-1 edit-subject-item__delete cd-link-assist js-item-option-delete" href="javascript:;"><i class="es-icon es-icon-shanchu"></i></a>
     </div>
   {% endfor %}
-  <div class="color-primary cd-mv24"><a class="cd-link-primary js-item-option-add" href="javascript:;"><i class="es-icon es-icon-tianjia text-md"></i><span class="text-md mls">添加选项</span></a></div>
+  <div class="color-primary cd-mv24">
+    <a class="cd-link-primary js-item-option-add" href="javascript:;"><i class="es-icon es-icon-tianjia text-md"></i><span class="text-md mls">{{ 'course.testpaper_manage.import.re_edit.add_option'|trans }}</span></a>
+  </div>
 {% endblock %}
 {% block miss_score %}
   <div class="form-group edit-form-group cd-mb24">
-    <label class="col-sm-2 control-label ph0 edit-form-group__label">漏选分值</label>
+    <label class="col-sm-2 control-label ph0 edit-form-group__label">{{ 'course.testpaper_manage.import.re_edit.miss_score'|trans }}</label>
     <div class="col-sm-10">
       <input class="form-control" type="text" name="missScore" value="{{ question.missScore|default('') }}">
     </div>
