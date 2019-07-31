@@ -18,7 +18,9 @@
     <div class="login-bottom text-center">
       <router-link to="/setting/password/reset" class="login-account">忘记密码？ &nbsp;|</router-link>
       <span class="login-account" @click="jumpRegister">&nbsp; 立即注册 &nbsp;</span>
-      <div class="login-change" v-show="cloudSetting" @click="changeLogin">切换手机快捷登录</div>
+      <div class="login-change" v-show="cloudSetting" @click="changeLogin">
+          <img src="static/images/login_change.png" class="login_change-icon"/>切换手机快捷登录
+      </div>
     </div>  
   </div>
 
@@ -80,6 +82,8 @@ export default {
       await Api.settingsCloud().then(res=>{
         if(res.sms_enabled==1){
           this.cloudSetting=true;
+        }else{
+          this.cloudSetting=false;
         }
       }).catch(err => {
         Toast.fail(err.message)

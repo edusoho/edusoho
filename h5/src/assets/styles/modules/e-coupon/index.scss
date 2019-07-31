@@ -276,6 +276,7 @@
   top:46px;
   left: 0;
   right: 0;
+  z-index: 1;
   background: #FED01B;
   text-align: center;
   &-title{
@@ -339,17 +340,38 @@
       .van-cell{
         background-color:transparent!important; 
       }
-      .van-field__error-message {
-        margin-top: vw(6)!important;
+      .van-field__body{
+        padding-left: vw(20);
       }
-      margin:0 auto vw(16) auto;
-      padding: 0 vw(9) 0 vw(20);
+      .van-field__error-message {
+        margin-top: vw(8)!important;
+      }
+      margin:0 auto vw(20) auto;
+      padding: 0 vw(9) 0 vw(0);
       box-sizing: border-box;
       width:vw(305);
-      height: vw(44);
-      line-height: vw(44);
+      height: 44px;
+      line-height: 44px;
       background: #fff;
       border-radius:vw(4);
+    }
+    .mobile-drag{
+      position: fixed;
+      top:46px;
+      bottom: 0px;
+      right: 0px;
+      left:0px;
+      z-index: 20001;
+      background: rgba(0, 0, 0, .6)
+    }
+    .mobile-drag-content{
+      margin: vw(100) auto;
+      padding: vw(20) 0;
+      width: 90%;
+      background: #fff;
+      .e-drag{
+        width: 90%;
+      }
     }
     .receive-login__btn{
       margin:vw(40) auto 0 auto;
@@ -375,6 +397,39 @@
     }
     .code-btn--disabled{
       color: #999999;
+    }
+    .receive-login__text{
+      color: #E54116;
+      text-align: center;
+      .receive-login-tools{
+        display: inline-block;
+        position: relative;
+        margin-top: vw(30);
+        height:20px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(229,65,22,1);
+        line-height:20px;
+        &::before{
+            position: absolute;
+            left: -25px;
+            top:10px;
+            content: '';
+            height: 1px;
+            width: 18px;
+            background:linear-gradient(90deg,rgba(255,159,0,0) 0%,rgba(255,102,0,1) 100%); /* 标准的语法 */
+        }
+        &::after{
+          position: absolute;
+          right: -25px;
+          top:10px;
+          content: '';
+          height: 1px;
+          width: 18px;
+          background:linear-gradient(270deg,rgba(255,159,0,0) 0%,rgba(255,102,0,1) 100%); /* 标准的语法 */
+        }
+      }
     }
   }
 }

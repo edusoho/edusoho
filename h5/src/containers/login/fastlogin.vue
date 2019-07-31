@@ -1,7 +1,7 @@
 <template>
     <div class="login">
         <span class="login-title">手机快捷登录</span>
-        <img class="login-avatarimg" src="" />
+        <span class="login-title">新用户将为您自动注册</span>
         <van-field
             v-model="userinfo.mobile"
             placeholder="请输入手机号"
@@ -43,15 +43,19 @@
         </van-field>
         <van-button type="default" class="primary-btn mb20" @click="handleSubmit" :disabled="btnDisable">登录</van-button>
         <div class="login-bottom text-center">
-            <div class="login-agree">
+            <div class="login-agree" v-if="userTerms || privacyPolicy">
                 <van-checkbox v-model="agreement" @click="checkAgree" checked-color="#408ffb" :icon-size="16">
-                    我已阅读并同意《<i @click="lookPrivacyPolicy">用户服务协议</i>》
+                    我已阅读并同意《<i @click="lookPrivacyPolicy" v-if="userTerms">用户服务协议</i>》
+                    <span v-if="privacyPolicy">和《<i @click="lookPrivacyPolicy" >隐私协议</i>》</span>
                  </van-checkbox>
-                 <div class="agree-text">新用户将为您自动注册</div>
             </div>
-            <div class="login-change" @click="changeLogin">切换账号密码登录</div>
+            <div class="login-change" @click="changeLogin">
+                <img src="static/images/login_change.png" class="login_change-icon"/>切换账号密码登录
+            </div>
         </div>  
-        <!-- <div class="login-footer"> </div> -->
+        <!-- <div class="login-footer"> 
+            新用户将为您自动注册
+        </div> -->
     </div>
 </template>
 <script>
@@ -62,10 +66,11 @@ import { Toast } from 'vant';
 import Api from '@/api';
 import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
+import fastLoginMixin from '@/mixins/fastLogin';
 import { mapActions, mapState } from 'vuex';
 export default {
     name:'fast-login',
-    mixins: [activityMixin, redirectMixin],
+    mixins: [activityMixin, redirectMixin, fastLoginMixin],
     components: {
         EDrag
     },
@@ -78,6 +83,8 @@ export default {
                 smsToken: '',//验证码token
                 type:'sms_login',
             },
+            userTerms:false,//用户协议
+            privacyPolicy:false,//隐私协议
             registerSettings:null,
             agreement:true,
             dragEnable: false,
@@ -110,6 +117,7 @@ export default {
             this.afterLogin();
             return;
          }
+         this.getPrivacySetting();
     },
     methods:{
         ...mapActions([
@@ -118,28 +126,25 @@ export default {
             'sendSmsCenter',
             'fastLogin'
         ]),
+        async getPrivacySetting(){
+            this.registerSettings = await Api.getSettings({
+                query: {
+                    type: 'user'
+                }
+            }).then((res)=>{
+                if(res.userTerms_enabled){
+                    this.userTerms=true
+                }
+                if(res.privacyPolicy_enabled){
+                    this.privacyPolicy=true
+                }
+            }).catch(err => { 
+                Toast.fail(err.message)
+            });
+        },
         //获取隐私政策
          lookPrivacyPolicy(){
-           window.location.href = '/mapi_v2/School/getPrivacyPolicy'
-        },
-        //校验手机号
-        validateMobileOrPsw(type = 'mobile') {
-            const ele = this.userinfo[type];
-            const rule = rulesConfig[type];
-
-            if (ele.length == 0) {
-                this.errorMessage[type] = '';
-                return false;
-            };
-
-            this.errorMessage[type] = !rule.validator(ele)
-                ? rule.message: '';
-        },
-        validatedChecker() {
-            const mobile = this.userinfo.mobile;
-            const rule = rulesConfig['mobile'];
-
-            this.validated.mobile = rule.validator(mobile);
+           window.location.href = window.location.origin+'/mapi_v2/School/getPrivacyPolicy'
         },
         //校验成功
         handleSmsSuccess(token) {
@@ -177,6 +182,7 @@ export default {
                 this.userinfo.smsToken = res.smsToken;
                 this.countDown();
                 this.dragEnable=false;
+                this.userinfo.dragCaptchaToken = '';
             })
             .catch(err => {
                 switch(err.code) {
@@ -204,7 +210,7 @@ export default {
         countDown() {
             this.count.showCount = true;
             this.count.codeBtnDisable = true;
-            this.count.num = 120;
+            this.count.num = 60;
 
             const timer = setInterval(() => {
                 if(this.count.num <= 0) {

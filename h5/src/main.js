@@ -17,6 +17,7 @@ import {
   Tab,
   Tabs,
   Tabbar,
+  Dialog,
   TabbarItem,
   Swipe,
   SwipeItem,
@@ -39,6 +40,7 @@ Vue.component('van-swipe', Swipe);
 Vue.component('van-swipe-item', SwipeItem);
 Vue.component('van-list', List);
 Vue.component('van-button', Button);
+Vue.component('van-dialog', Dialog);
 Vue.component('van-tab', Tab);
 Vue.component('van-tabs', Tabs);
 Vue.component('van-field', Field);
@@ -58,7 +60,7 @@ Vue.use(EdusohoUI);
 Vue.use(Lazyload);
 Vue.use(Toast);
 Vue.use(Checkbox);
-Vue.use(Tab).use(Tabs);
+Vue.use(Tab).use(Tabs).use(Dialog);
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
 /* eslint-disable no-new */

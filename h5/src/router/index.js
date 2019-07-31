@@ -28,14 +28,6 @@ const routes = [
         },
         component: () =>
           import(/* webpackChunkName: "loginPrelogin" */'@/containers/login/prelogin.vue')
-      },
-      { // 用于测试
-        path: '/course/afterjoin-directory',
-        name: 'afterjoin-directory',
-        meta: {
-          title: '课程目录测试'
-        },
-        component: () => import(/* webpackChunkName: "course" */'@/containers/course/detail/afterjoin-directory.vue')
       }
     ]
   }, {
@@ -49,7 +41,7 @@ const routes = [
     path: '/fastlogin',
     name: 'fastlogin',
     meta: {
-      title: ''
+      title: '登录'
     },
     component: () => import(/* webpackChunkName: "fastlogin" */ '@/containers/login/fastlogin.vue')
   }, {
