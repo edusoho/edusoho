@@ -149,8 +149,7 @@ export default {
       }
 
       const timelimit = player.media.timeLimit;
-      // 试看判断
-      // const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
+
 
       this.isEncryptionPlus = player.media.isEncryptionPlus;
       if (player.media.isEncryptionPlus) {
@@ -173,6 +172,12 @@ export default {
         disableDataUpload: true,
         // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
+            // 试看判断
+      // const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
+      // if(!canTryLookable){
+      //   delete options.pluck
+      // }
+
       this.mediaOpts = Object.assign({
         text: player.media.text
       }, options) ;

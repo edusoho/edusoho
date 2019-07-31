@@ -59,10 +59,17 @@
     color: $primary-color;
   }
   &-change{
+    display: flex;
     margin-top: vw(39);
-    text-align: center;
+    justify-content: center;
+    align-items: center;
     font-size: vw(14);
-    color: $primary-color
+    color: $primary-color;
+    .login_change-icon{
+      margin-right: vw(7);
+      width: vw(15);
+      height: vw(15);
+    }
   }
 
   &-agree{
