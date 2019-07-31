@@ -1,7 +1,7 @@
 <template>
     <div class="login">
         <span class="login-title">手机快捷登录</span>
-        <span class="login-title">新用户将为您自动注册</span>
+        <span class="login-des">新用户将为您自动注册</span>
         <van-field
             v-model="userinfo.mobile"
             placeholder="请输入手机号"

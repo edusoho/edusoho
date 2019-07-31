@@ -36,6 +36,11 @@
     -webkit-text-fill-color: #2b333b;
     font-family: PingFangSC-Regular;
   }
+  &-des{
+    font-size: vw(14);
+    color: #B4B4B4;
+    line-height: vw(28);
+  }
   &-hint {
     font-size: vw(15);
     -webkit-text-fill-color: #bdc2c6;
