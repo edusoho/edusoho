@@ -1472,6 +1472,7 @@ course.testpaper_manage.edit_btn: 'Edit the test paper info'
 course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
 course.testpaper_manage.import: Import
+course.testpaper_manage.import.re_edit.miss_score: Miss Score
 course.testpaper_manage.create: Add
 course.testpaper_manage.create.bread_crumbs: '<li><a href="%testpaperManageUrl%">Test paper''</a></li><li class="active">%name%</li>'
 course.testpaper_manage.create.content_title: 'Create testpaper'

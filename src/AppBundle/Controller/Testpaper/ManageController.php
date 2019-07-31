@@ -685,6 +685,7 @@ class ManageController extends BaseController
         $seq = $request->request->get('seq', 1);
         $token = $request->request->get('token', '');
         $isSub = $request->request->get('isSub', false);
+        $isTestpaper = $request->request->get('isTestpaper', true);
         $method = $request->request->get('method', 'edit');
 
         $question = ArrayToolkit::parts($question, array(
@@ -708,6 +709,7 @@ class ManageController extends BaseController
             'token' => $token,
             'type' => $type,
             'isSub' => $isSub,
+            'isTestpaper' => $isTestpaper,
             'method' => $method,
         ));
     }
@@ -718,6 +720,7 @@ class ManageController extends BaseController
         $fromType = $data['fromType'];
         $toType = $data['toType'];
         $isSub = $data['isSub'];
+        $isTestpaper = $data['isTestpaper'];
         $method = $request->request->get('method', 'edit');
         if (empty($data['question'])) {
             throw new InvalidArgumentException('缺少必要参数');
@@ -736,6 +739,7 @@ class ManageController extends BaseController
             'token' => $data['token'],
             'type' => $toType,
             'isSub' => $isSub,
+            'isTestpaper' => $isTestpaper,
             'method' => $method,
         ));
     }

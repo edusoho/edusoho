@@ -1649,6 +1649,7 @@ course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
 course.testpaper_manage.delete_btn: 删除试卷
 course.testpaper_manage.import: 导入试卷
+course.testpaper_manage.import.re_edit.miss_score: 漏选分值
 course.testpaper_manage.create: 创建试卷
 course.testpaper_manage.create.bread_crumbs: >
   <li><a href="%testpaperManageUrl%">试卷管理</a></li>
