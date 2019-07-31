@@ -2,7 +2,7 @@
   <form class="form-horizontal js-edit-form" data-url="{{ path('subject_show_template', {type: type}) }}">
     <div class="row">
       <div class="col-sm-8 js-choose-item">
-        {% if isSub %}
+        {% if isSub == '1' %}
           <div class="subject-sub-item__number subject-sub-item__number--edit">(<span class="js-edit-form-seq">{{ seq  }}</span>)</div>
         {% else %}
           <div class="subject-edit-item__order js-edit-form-seq">{{ seq }}</div>
@@ -54,7 +54,9 @@
       </div>
     </div>
     {% block change %}
-      {% include 'testpaper/subject/type/change-subject.html.twig' with { type: type|default('') } %}
+      {% if isSub == '0' %}
+        {% include 'testpaper/subject/type/change-subject.html.twig' with { type: type|default('') } %}
+      {% endif %}
     {% endblock %}
     <input type="hidden" name="type" data-edit="type" value="{{ type|default('') }}">
     <div class="text-center"><button class="cd-btn cd-btn-primary cd-mt24 cd-mb8 subject-button js-finish-edit" type="button">完成编辑</button></div>

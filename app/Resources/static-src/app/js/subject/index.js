@@ -20,11 +20,12 @@ export default class sbList {
     this.questionOperate = null;
     this.testpaperTitle = '';
     this.redirect = false;
+    this.questionOperate = null;
     this.init();
   }
 
   init() {
-    this.questionOperate = new QuestionOperate();
+    this.initQuestionOperate();
     this.confirmFresh();
     this.sbListFixed();
     this.initEvent();
@@ -33,6 +34,17 @@ export default class sbList {
     this.initTestpaperTitle();
     this.itemClick();
     this.statErrorQuestions();
+  }
+
+  initQuestionOperate() {
+    let self = this;
+    self.questionOperate = new QuestionOperate();
+    self.questionOperate.on('correctQuestion', function(token) {
+      if ($(`[data-anchor="#${token}"]`).hasClass('subject-list-item__num--error')) {
+        $(`[data-anchor="#${token}"]`).removeClass('subject-list-item__num--error');
+        self.statErrorQuestions();
+      }
+    });
   }
 
   confirmFresh() {
@@ -552,6 +564,8 @@ export default class sbList {
     errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
     if (isShow) {
       $('.js-error-tip').html(errorTip);
+    } else {
+      $('.js-error-tip').html('');
     }
   }
 

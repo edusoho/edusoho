@@ -12,25 +12,20 @@
     "attachments" : {},
     "subQuestions" : [],
     "difficulty" : "simple|normal|difficulty",
-    "errors" : [
-        {
-            "element" : "stem",
-            "index" : 0,
-            "code" : 40487,
-            "message" : "题干有特殊字符"
-        },
-        {
-           "element" : "options",
-            "index" : 2,
-            "code" : 40402,
-            "message" : "缺少C选项" 
+    "errors":{
+        "answer":{
+            "element":"answer",
+            "index":-1,
+            "code":100003,
+            "message":"缺少正确答案"
         }
-    ]
+    }
 }
 */
 export default class QuestionOperate {
   constructor() {
     this.questions = {};
+    this.eventManager = {};
     this.tokenList = [];
     this.$statList = $('.js-subject-data');
     this.$itemList = $('.js-item-list');
@@ -177,18 +172,6 @@ export default class QuestionOperate {
     this.flag = false;
   }
 
-  updateQuestion(token, question) {
-    if (!this.isUpdating()) {
-      return;
-    }
-    this.flag = true;
-    let oldQuestion = this.questions[token];
-    this.questions[token] = question;
-    this.totalScore = this.totalScore - parseInt(oldQuestion['score']) + parseInt(question['score']);
-    this.triggerTotalScoreChange();
-    this.flag = false;
-  }
-
   updateQuestionItem(token, itemKey, itemValue, isTrigger = true) {
     if (!this.isUpdating()) {
       return;
@@ -241,18 +224,6 @@ export default class QuestionOperate {
     return token;
   }
 
-  updateSubQuestion(token, key, question) {
-    if (!this.isUpdating()) {
-      return;
-    }
-    this.flag = true;
-    let oldQuestion = this.questions[token]['subQuestions'][key];
-    this.questions[token]['subQuestions'][key] = question;
-    this.totalScore = this.totalScore - parseInt(oldQuestion['score']) + parseInt(question['score']);
-    this.triggerTotalScoreChange();
-    this.flag = false;
-  }
-
   updateSubQuestionItem(token, key, itemKey, itemValue, isTrigger = true) {
     if (!this.isUpdating()) {
       return;
@@ -264,6 +235,7 @@ export default class QuestionOperate {
       this.totalScore = this.totalScore - parseInt(oldValue) + parseInt(itemValue);
       this.triggerTotalScoreChange(isTrigger);
     }
+    this.trigger('sub');
     this.flag = false;
   }
 
@@ -277,6 +249,50 @@ export default class QuestionOperate {
     this.totalScore -= parseInt(question['score']);
     this.triggerTotalScoreChange();
     this.flag = false;
+  }
+
+  correctQuestion(token) {
+    let question = this.questions[token];
+    if (typeof question['errors'] == 'undefined') {
+      return;
+    }
+
+    if (question['type'] == 'material' && typeof question['errors']['hasSubError'] != 'undefined') {
+      question['errors'] = {"hasSubError" : true};
+    } else {
+      delete question['errors'];
+    }
+
+    this.questions[token] = question;
+    this.trigger('correctQuestion', token);
+  }
+
+  correctSubQuestion(token, key) {
+    let material = this.questions[token];
+    let subQuestion = material['subQuestions'][key];
+
+    if (typeof subQuestion['errors'] == 'undefined') {
+      return;
+    }
+
+    delete subQuestion['errors'];
+    material['subQuestions'][key] = subQuestion;
+    let hasSubError = false;
+    $.each(material['subQuestions'], function(index, sub) {
+      if (typeof sub['errors'] != 'undefined') {
+        hasSubError = true;
+      }
+    });
+
+    if (!hasSubError) {
+      delete material['errors']['hasSubError'];
+    }
+
+    if ($.isEmptyObject(material['errors'])) {
+      delete material['errors'];
+      this.trigger('correctQuestion', token);
+    }
+    this.questions[token] = material;
   }
 
   triggerTotalScoreChange(isTrigger = true) {
@@ -330,6 +346,22 @@ export default class QuestionOperate {
         return '材料题';
       default:
         return '未知题型';
+    }
+  }
+
+  on(event, fn) {
+    if (!this.eventManager[event]) {
+      this.eventManager[event] = [fn.bind(this)];
+    } else {
+      this.eventManager[event].push(fn.bind(this));
+    }
+  }
+
+  trigger(event, data) {
+    if (this.eventManager[event]) {
+      this.eventManager[event].map(function(fn) {
+        fn(data);
+      });
     }
   }
 
