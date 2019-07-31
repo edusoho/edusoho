@@ -20,7 +20,7 @@ class BaseQuestion {
   }
 
   _initEvent() {
-    this.$form.on('click', '.subject-button', event => this.submitForm(event));
+    this.$form.on('click', '.js-finish-edit', event => this.submitForm(event));
     this.$form.on('click', '.js-analysis-edit', event => this.showAnalysisModal(event));
     this.$analysisModal.on('click', '.js-analysis-btn', event => this.saveAnalysis(event));
   }
