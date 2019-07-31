@@ -275,10 +275,6 @@ class Choice extends BaseQuestion {
     this.analysisEditor.destroy();
     $.post(self.$form.data('url'), {'seq': seq, 'question': question, 'token': token, 'isSub': isSub}, html => {
       self.$form.parent('.subject-item').replaceWith(html);
-      if (isSub != '1') {
-        self.removeErrorClass(token);
-      }
-      self.statErrorQuestions();
     });
   }
 }

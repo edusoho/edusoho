@@ -89,26 +89,7 @@ class BaseQuestion {
     this.analysisEditor.destroy();
     $.post(self.$form.data('url'), {'seq': seq, 'question': question, 'token': token, 'isSub': isSub}, html=> {
       self.$form.parent('.subject-item').replaceWith(html);
-      if (isSub != '1') {
-        self.removeErrorClass(token);
-      }
-      self.statErrorQuestions();
     });
-  }
-
-  statErrorQuestions() {
-    let errorTip = '第';
-    let isShow = false;
-    $('.js-subject-list').find('.subject-list-item__num--error').each(function () {
-      errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
-      isShow = true;
-    });
-    errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
-    if (isShow) {
-      $('.js-error-tip').html(errorTip);
-    } else {
-      $('.js-error-tip').html('');
-    }
   }
 
   updataCachedQuestion(token, question, method) {
@@ -118,6 +99,7 @@ class BaseQuestion {
     } else {
       $.each(question, function(name, value){
         self.operate.updateQuestionItem(token, name, value);
+        self.operate.correctQuestion(token);
       });
     }
 
@@ -131,6 +113,7 @@ class BaseQuestion {
     } else {
       $.each(question, function(name, value){
         self.operate.updateSubQuestionItem(token, key, name, value);
+        self.operate.correctSubQuestion(token, key);
       });
     }
 
@@ -173,12 +156,6 @@ class BaseQuestion {
     }
     
     return attachments;
-  }
-
-  removeErrorClass(token) {
-    if ($(`[data-anchor="#${token}"]`).hasClass('subject-list-item__num--error')) {
-      $(`[data-anchor="#${token}"]`).removeClass('subject-list-item__num--error');
-    }
   }
 
   _initValidate() {

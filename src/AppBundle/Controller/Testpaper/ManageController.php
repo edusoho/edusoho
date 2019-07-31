@@ -702,7 +702,7 @@ class ManageController extends BaseController
         $question = $request->request->get('question', array());
         $seq = $request->request->get('seq', 1);
         $token = $request->request->get('token', '');
-        $isSub = $request->request->get('isSub', false);
+        $isSub = $request->request->get('isSub', '0');
         $method = $request->request->get('method', 'edit');
 
         $question = ArrayToolkit::parts($question, array(
@@ -814,7 +814,7 @@ class ManageController extends BaseController
         $question = $request->request->get('question', array());
         $seq = $request->request->get('seq', 1);
         $token = $request->request->get('token', '');
-        $isSub = $request->request->get('isSub', false);
+        $isSub = $request->request->get('isSub', '0');
 
         $question = ArrayToolkit::parts($question, array(
             'stem',
