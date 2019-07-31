@@ -17,7 +17,7 @@ class TaskToolbarExtension extends Extension
         );
         $course = $this->getSettingService()->get('course', array());
 
-        if (isset($course['show_note']) && '1' == $course['show_note']) {
+        if (!empty($course['show_note']) || !isset($course['show_note'])) {
             $taskToolBars[] = array(
                 'code' => 'note',
                 'name' => 'course.task_toolbar.notes',
@@ -26,7 +26,7 @@ class TaskToolbarExtension extends Extension
             );
         }
 
-        if (isset($course['show_question']) && '1' == $course['show_question']) {
+        if (!empty($course['show_question']) || !isset($course['show_question'])) {
             $taskToolBars[] = array(
                 'code' => 'question',
                 'name' => 'course.task_toolbar.questions',
