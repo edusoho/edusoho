@@ -22,23 +22,22 @@ class Parser
 
     const CODE_UNCERTAIN_CHOICE_SIGNAL = '<#不定项选择题#>';
 
-    protected $type = '';
-
     protected $body = '';
-
-    protected $testpaperTitle = '';
-
-    protected $testpaperDesc = '';
 
     protected $questions = array();
 
-    public function __construct($type, $body, $options = array())
+    public function __construct($body, $options = array())
     {
-        $this->type = $type;
         $this->body = $body;
+        $this->parser();
     }
 
-    public function parser()
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    protected function parser()
     {
         $content = $this->filterStartSignal();
         $content = $this->filterMaterialSignal($content);
@@ -83,20 +82,6 @@ class Parser
         $contentArray = preg_split($pattern, $content, -1, PREG_SPLIT_NO_EMPTY);
         $index = 0;
         foreach ($contentArray as $elem) {
-            // if (strpos(trim($elem), self::MATERIAL_START_SIGNAL) === 0) {
-            //     $questionArray[$index] = $elem;
-            //     $material = true;
-            // } else if (!empty($material)) {
-            //     $questionArray[$index] .= PHP_EOL.$elem;
-            // } else if (strpos(trim($elem), self::MATERIAL_END_SIGNAL) === 0) {
-            //     $questionArray[$index] .= PHP_EOL.$elem;
-            //     $material = false;
-            //     $index++;
-            // } else {
-            //     $questionArray[$index] = $elem;
-            //     $index++;
-            // }
-
             $questionArray[$index] = $elem;
             ++$index;
         }
@@ -107,7 +92,6 @@ class Parser
     public function matchQuestion($questionStr)
     {
         $questionStr = trim($questionStr);
-        $question = array();
         $lines = explode(PHP_EOL, $questionStr);
         $lines = preg_replace('/^(答案|参考答案|正确答案|\[答案\]|\[参考答案\]|\[正确答案\]|【答案】|【正确答案】|【参考答案】)/', '<#答案#>', $lines);
         $lines = preg_replace('/^(难度|\[难度\]|【难度】)/', '<#难度#>', $lines);
@@ -134,20 +118,6 @@ class Parser
 
         $questionType = QuestionTypeFactory::create($this->toCamelCase($type));
         $this->questions[] = $questionType->convert($lines);
-    }
-
-    public function getQuestions()
-    {
-        return $this->questions;
-    }
-
-    protected function toUnderScore($str)
-    {
-        $dstr = preg_replace_callback('/([A-Z]+)/', function ($matchs) {
-            return '_'.strtolower($matchs[0]);
-        }, $str);
-
-        return trim(preg_replace('/_{2,}/', '_', $dstr), '_');
     }
 
     //下划线命名到驼峰命名

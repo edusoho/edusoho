@@ -17,17 +17,10 @@ class ReaderDocxTest extends BaseTestCase
     {
         $filename = dirname(__DIR__).'/Fixtures/files/example1.docx';
         $wordRead = new ReadDocx($filename);
-        $text = $wordRead->convertImage();
+        $text = $wordRead->getDocumentText();
 
         $tmpName = '/tmp/'.time().'.text';
 
         file_put_contents($tmpName, $text);
-    }
-
-    public function testConvertImage()
-    {
-        $filename = dirname(__DIR__).'/Fixtures/files/example1.docx';
-        $wordRead = new ReadDocx($filename);
-        $wordRead->convertImage();
     }
 }

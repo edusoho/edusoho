@@ -73,27 +73,34 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         //按照题型分组
         $groupQuestions = $this->groupQuestions($questions);
         $courseSetId = $token['data']['courseSetId'];
-        foreach ($groupQuestions as $type => $questionsGroup) {
-            //分组循环处理题目
-            foreach ($questionsGroup as $key => $question) {
-                if ('material' == $question['type']) {
-                    $subQuestions = $question['subQuestions'];
-                    $question['courseSetId'] = $courseSetId;
-                    $savedQuestions[] = $savedQuestion = $this->importQuestion($question);
-                    //材料题子题处理
-                    foreach ($subQuestions as $subQuestion) {
-                        $subQuestion['parentId'] = $savedQuestion['id'];
-                        $subQuestion['courseSetId'] = $courseSetId;
-                        $savedQuestions[] = $this->importQuestion($subQuestion);
+        try {
+            $this->beginTransaction();
+            foreach ($groupQuestions as $type => $questionsGroup) {
+                //分组循环处理题目
+                foreach ($questionsGroup as $key => $question) {
+                    if ('material' == $question['type']) {
+                        $subQuestions = $question['subQuestions'];
+                        $question['courseSetId'] = $courseSetId;
+                        $savedQuestions[] = $savedQuestion = $this->importQuestion($question);
+                        //材料题子题处理
+                        foreach ($subQuestions as $subQuestion) {
+                            $subQuestion['parentId'] = $savedQuestion['id'];
+                            $subQuestion['courseSetId'] = $courseSetId;
+                            $savedQuestions[] = $this->importQuestion($subQuestion);
+                        }
+                    } else {
+                        $question['courseSetId'] = $courseSetId;
+                        $savedQuestions[] = $this->importQuestion($question);
                     }
-                } else {
-                    $question['courseSetId'] = $courseSetId;
-                    $savedQuestions[] = $this->importQuestion($question);
                 }
             }
-        }
+            $this->commit();
 
-        return $savedQuestions;
+            return $savedQuestions;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     protected function groupQuestions($questions)
@@ -112,7 +119,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $question = $this->filterImportQuestion($question);
         $savedQuestion = $this->create($question);
         if (in_array($savedQuestion['type'], array('choice', 'uncertain_choice'))) {
-            $savedQuestion['missScore'] = empty($subQuestion['missScore']) ? 0 : $subQuestion['missScore'];
+            $savedQuestion['missScore'] = empty($question['missScore']) ? 0 : $question['missScore'];
         }
 
         return $savedQuestion;

@@ -2,18 +2,22 @@
   <form class="form-horizontal js-edit-form" data-url="{{ path('subject_show_template', {type: type}) }}">
     <div class="row">
       <div class="col-sm-8 js-choose-item">
-        <div class="subject-edit-item__order js-edit-form-seq">{{ seq }}</div>
+        {% if isSub %}
+          <div class="subject-sub-item__number subject-sub-item__number--edit">(<span class="js-edit-form-seq">{{ seq  }}</span>)</div>
+        {% else %}
+          <div class="subject-edit-item__order js-edit-form-seq">{{ seq }}</div>
+        {% endif %}
         <input type="hidden" name="token" value="{{ token|default('') }}" class="js-hidden-token">
         <input type="hidden" name="isSub" value="{{ isSub }}" class="js-sub-judge">
         <input type="hidden" name="method" value="{{ method }}" class="js-hidden-method">
-        <div class="cd-ml24">
+        <div class="cd-ml32">
           <input type="text" class="form-control" value="{{ question_html_filter(question.stem|default('')) }}" data-role="edit" style="display: none;">
           <textarea class="form-control" style="height:190px;" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" data-edit="stem" name="stem">{{ question.stem|default('') }}</textarea>
         </div>
-        <div class="cd-ml24">
+        <div class="cd-ml32">
           {% include 'testpaper/subject/attachment.html.twig' with { target: 'stem', btnTitle:'上传题干附件', attachment: question.attachments.stem|default([]) } %}
         </div>
-        <div class="cd-ml24 cd-mt24">
+        <div class="cd-ml32 cd-mt24">
           {% block subject %}
           {% endblock %}
         </div>
@@ -31,7 +35,7 @@
           <div class="form-group edit-form-group cd-mb24">
             <label class="col-sm-2 control-label ph0 edit-form-group__label">分值</label>
             <div class="col-sm-10">
-              <input class="form-control" type="text" data-edit="score" name="score" value="{{ question.score|default('') }}">
+              <input class="form-control edit-form-group__input" type="text" data-edit="score" name="score" value="{{ question.score|default('') }}">
             </div>
           </div>
         {% endif %}
