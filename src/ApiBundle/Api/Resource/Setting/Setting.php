@@ -15,13 +15,24 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'cloud'))) {
             throw CommonException::ERROR_PARAMETER();
         }
 
         $method = "get${type}";
 
         return $this->$method($request);
+    }
+
+    public function getCloud($request = null)
+    {
+        $cloudSms = $this->getSettingService()->get('cloud_sms');
+
+        $result = array(
+            'sms_enabled' => $cloudSms['sms_enabled'],
+        );
+
+        return $result;
     }
 
     public function getHasPluginInstalled($request)
