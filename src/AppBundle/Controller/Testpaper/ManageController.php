@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Testpaper;
 
 use ExamParser\Parser\Parser;
 use ExamParser\Reader\ReadDocx;
+use ExamParser\Writer\WriteDocx;
 use http\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\File as FileObject;
 use AppBundle\Common\FileToolkit;
@@ -20,6 +21,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
+use Symfony\Component\HttpFoundation\Response;
 
 class ManageController extends BaseController
 {
@@ -153,6 +155,23 @@ class ManageController extends BaseController
         return $this->render('testpaper/manage/read-modal.html.twig', array(
             'courseSet' => $courseSet,
         ));
+    }
+
+    public function exportAction(Request $request, $courseSetId, $testpaperId)
+    {
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+
+        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
+            return $this->createMessageResponse('error', 'testpaper not found');
+        }
+
+        $questions = $this->getTestpaperService()->buildExportTestpaperItems($testpaperId);
+
+        $writer = new WriteDocx($testpaper['name']);
+
+        return new Response($writer->write($questions));
     }
 
     public function checkListAction(Request $request, $targetId, $targetType, $type)
@@ -660,7 +679,7 @@ class ManageController extends BaseController
     protected function parseQuestions($fullpath)
     {
         $wordRead = new ReadDocx($fullpath);
-        $text = $wordRead->convertImage();
+        $text = $wordRead->getDocumentText();
         $that = $this;
         $text = preg_replace_callback(
             '/src=[\'\"](.*?)[\'\"]/',
@@ -673,8 +692,7 @@ class ManageController extends BaseController
             },
             $text
         );
-        $parser = new Parser('question', $text);
-        $parser->parser();
+        $parser = new Parser($text);
 
         return $parser->getQuestions();
     }

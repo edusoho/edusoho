@@ -68,4 +68,6 @@ interface QuestionService
     public function deleteFavoriteByQuestionId($questionId);
 
     public function batchDeletes($ids);
+
+    public function importQuestions($questions, $token);
 }
