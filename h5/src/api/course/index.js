@@ -3,13 +3,22 @@ export default [
     // 课程详情页
     name: 'getCourseDetail',
     url: '/pages/h5/courses/{courseId}',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }, {
     // 获取计划目录
     name: 'getCourseLessons',
     url: '/courses/{courseId}/item_with_lessons',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }, {
+    // 优化目录获取计划结构
+    name: 'getOptimizationCourseLessons',
+    url: '/courses/{courseId}/item_with_lessons?format=tree',
+    method: 'GET',
+    disableLoading: true
+  },
+  {
     // 加入课程
     name: 'joinCourse',
     url: '/courses/{id}/members',
@@ -18,6 +27,12 @@ export default [
     // 课时播放
     name: 'getMedia',
     url: '/courses/{courseId}/task_medias/{taskId}',
+    method: 'GET'
+  },
+  {
+    // 下次学习课时
+    name: 'getNextStudy',
+    url: '/me/course_learning_progress/{courseId}',
     method: 'GET'
   }, {
     // 获取课程列表数据

@@ -11,6 +11,7 @@
   import { mapState, mapActions, mapMutations } from 'vuex';
   import * as types from '@/store/mutation-types';
   import { Toast } from 'vant';
+import { debug } from 'util';
 
   export default {
     components: {
@@ -24,36 +25,49 @@
       ...mapState('course', {
         selectedPlanIndex: state => state.selectedPlanIndex,
         joinStatus: state => state.joinStatus,
-        details:  state => state.details
+        details:  state => state.details,
+        selectedPlanId: state => state.selectedPlanId,
       }),
       ...mapState({
         isLoading: state => state.isLoading
       }),
     },
     watch: {
-      joinStatus(status) {
-        this.getComponent(status);
+      joinStatus: {
+        handler: "joinStatusChange",
       }
     },
     created(){
-      this.getCourseDetail({
-        courseId: this.$route.params.id
-      }).then(() => {
-        this.getComponent(this.joinStatus);
-      }).catch(err => {
-        Toast.fail(err.message)
-      })
+      //this.getBeCourse()
+      this.getCourseLessons({
+           courseId: this.$route.params.id
+        }).then(res=>{
+          this.joinStatusChange(res.member)
+        })
     },
     methods: {
       ...mapActions('course', [
-        'getCourseDetail'
+        'getCourseLessons',
       ]),
       ...mapMutations('course', {
         setSourceType: types.SET_SOURCETYPE
       }),
-      getComponent(status) {
-        this.currentComp = status ? joinAfter : joinBefore;
+      joinStatusChange(status) {
+        this.currentComp = '';
+        if (status) {
+          this.currentComp =joinAfter
+        } else {
+          this.currentComp =joinBefore;
+        }
       },
+      //获取加入后课程目录和学习状态
+      getJoinAfter(){
+        this.getJoinAfterDetail({
+          courseId: this.$route.params.id
+        }).then((res) => {}).catch(err => {
+          Toast.fail(err.message)
+        })
+      }
     },
     beforeRouteLeave (to, from, next) {
       this.setSourceType({

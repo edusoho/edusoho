@@ -26,5 +26,11 @@ export default [
     method: 'PATCH',
     url: '/plugins/business_drainage/ecard_operation/inner_exchange/code/{code}',
     disableLoading: true
+  }, {
+    // 优惠码兑换
+    name: 'exchangePreferential',
+    method: 'POST',
+    url: '/coupons/{code}/actions',
+    disableLoading: true
   }
 ];

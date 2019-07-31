@@ -92,7 +92,8 @@ export default {
   computed: {
     ...mapState('course', {
       details: state => state.details,
-      selectedPlanId: state => state.selectedPlanId
+      selectedPlanId: state => state.selectedPlanId,
+      joinStatus: state => state.joinStatus,
     }),
     ...mapState(['courseSettings', 'vipSwitch']),
     learnExpiryHtml() {
@@ -147,19 +148,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions ('course', [
-      'getCourseDetail'
+    ...mapActions('course', [
+        'getCourseLessons',
     ]),
     handleClick (item, index){
       this.items.map(item => item.active = false);
       item.active = true;
-
-      this.getCourseDetail({
-        courseId: item.id
-      }).then(() => {
+      this.getCourseLessons({courseId:item.id}).then(()=>{
         this.$emit('switchPlan');
-      }).catch(err => {
-        Toast.fail(err.message)
+      }).catch(()=>{
+        this.$emit('switchPlan');
       })
     },
     filterPrice () {

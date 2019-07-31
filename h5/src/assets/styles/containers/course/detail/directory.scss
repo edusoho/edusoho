@@ -22,7 +22,7 @@
           @extend .title-16;
           height: vw(52);
           line-height:vw(52);
-          background: #F7F7F7;
+          background: #F0F0F0;
           border-radius: 5px;
           padding-left: vw(10);
           padding-right: vw(15);
@@ -37,7 +37,7 @@
           overflow: hidden;
           &.unit-show {
             height: auto;
-            margin:0 vw(10);
+            margin:0 0 0 vw(10);
           }
         }
         .lesson-cell {
@@ -51,9 +51,16 @@
             justify-content: space-between;
             margin-bottom: vw(12);
             padding-right: vw(5);
+            height: vw(52);
+            line-height:vw(52);
+            background: #F7F7F7;
+            border-radius: 5px;
+            padding-left: vw(10);
+            padding-right: vw(15);
+            box-sizing: border-box;
             @extend .title-16;
             i {
-              margin-top: vw(5);
+              margin-top: vw(20);
             }
             &-title {
               max-width: 90%;
@@ -71,6 +78,7 @@
               height: auto;
               margin-top: vw(5);
               padding-top: vw(5);
+              padding-left: vw(10);
               margin-bottom: vw(5);
             }
           }
@@ -79,7 +87,7 @@
           }
           &__content {
             @extend .flex-column;
-            width: 100%;
+            width: 84%;
             padding-left: vw(10);
             box-sizing: border-box;
             flex-shrink: 0;

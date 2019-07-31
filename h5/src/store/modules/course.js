@@ -7,7 +7,9 @@ const state = {
   sourceType: 'img', //
   details: {},
   taskId: 0, // 任务id
-  courseLessons: [] // 课程中所有任务
+  courseLessons: [], // 课程中所有任务
+  nextStudy: {}, // 下一次学习
+  OptimizationCourseLessons: [] // 优化后的课程中所有任务
 };
 
 const hasJoinedCourse = course => course.member;
@@ -15,6 +17,12 @@ const hasJoinedCourse = course => course.member;
 const mutations = {
   [types.GET_COURSE_LESSONS](currentState, payload) {
     currentState.courseLessons = payload;
+  },
+  [types.GET_OPTIMIZATION_COURSE_LESSONS](currentState, payload) {
+    currentState.OptimizationCourseLessons = payload;
+  },
+  [types.GET_NEXT_STUDY](currentState, payload) {
+    currentState.nextStudy = payload;
   },
   [types.GET_COURSE_DETAIL](currentState, payload) {
     currentState.selectedPlanId = payload.id;
@@ -32,15 +40,66 @@ const mutations = {
 };
 
 const actions = {
+  async getCourseLessons({ dispatch }, { courseId }) {
+    let s;
+    try {
+      await dispatch('getNextStudy', { courseId });
+      s = await dispatch('getCourse', { courseId });
+    } catch (e) {
+      s = await dispatch('getCourse', { courseId });
+    }
+    return s[2];
+  },
+  getCourse({ commit }, { courseId }) {
+    const query = { courseId };
+    commit('UPDATE_LOADING_STATUS', true, { root: true }); // -> 'someMutation'
+    return Promise.all([
+      Api.getCourseLessons({ query }),
+      Api.getOptimizationCourseLessons({ query }),
+      Api.getCourseDetail({ query })
+    ]).then(([coursePlan, OptimizationCoursePlan, courseDetail]) => {
+      commit(types.GET_COURSE_LESSONS, coursePlan);
+      commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
+      commit(types.GET_COURSE_DETAIL, courseDetail);
+      commit('UPDATE_LOADING_STATUS', false, { root: true }); // -> 'someMutation'
+      return [coursePlan, OptimizationCoursePlan, courseDetail];
+    });
+  },
+  getBeforeCourse({ commit }, { courseId }) {
+    const query = { courseId };
+    return Promise.all([
+      Api.getCourseLessons({ query })
+    ]).then(([coursePlan]) => {
+      commit(types.GET_COURSE_LESSONS, coursePlan);
+      return [coursePlan];
+    });
+  },
+  getAfterCourse({ commit }, { courseId }) {
+    const query = { courseId };
+    return Promise.all([
+      Api.getOptimizationCourseLessons({ query })
+    ]).then(([OptimizationCoursePlan]) => {
+      commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
+      // dispatch('getNextStudy', { courseId });
+      return [OptimizationCoursePlan];
+    });
+  },
   getCourseDetail({ commit }, { courseId }) {
     const query = { courseId };
     return Promise.all([
-      Api.getCourseDetail({ query }),
-      Api.getCourseLessons({ query })
-    ]).then(([courseDetail, coursePlan]) => {
+      Api.getCourseDetail({ query })
+    ]).then(([courseDetail]) => {
       commit(types.GET_COURSE_DETAIL, courseDetail);
-      commit(types.GET_COURSE_LESSONS, coursePlan);
-      return [courseDetail, coursePlan];
+      return courseDetail;
+    });
+  },
+  getNextStudy({ commit }, { courseId }) {
+    const query = { courseId };
+    return Promise.all([
+      Api.getNextStudy({ query })
+    ]).then(([nextStudy]) => {
+      commit(types.GET_NEXT_STUDY, nextStudy);
+      return [nextStudy];
     });
   },
   joinCourse({ commit }, { id }) {

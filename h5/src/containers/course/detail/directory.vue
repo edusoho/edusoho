@@ -3,7 +3,7 @@
     <!-- 暂无学习任务 -->
     <div v-if="courseLessons.length == 0" class="empty">暂无学习任务</div>
     <div class="directory-list" v-else>
-      <div class="directory-list__item" v-for="(item, chapterIndex) in chapters">
+      <div class="directory-list__item" v-for="(item, chapterIndex) in chapters" :key="chapterIndex">
         <div class="directory-list__item-chapter"
           @click="item.show = !item.show"
           v-if="item.type === 'chapter'">
@@ -13,28 +13,28 @@
 
         <div :class="['directory-list__item-unit',
           {'unit-show': item.show || (item.show && tasks[chapterIndex][0].type === 'lesson')}]"
-          v-for="(lesson, lessonIndex) in tasks[chapterIndex]">
+          v-for="(lesson, lessonIndex) in tasks[chapterIndex]" :key="lessonIndex">
 
           <div class="lesson-cell__unit" v-if="lesson.type === 'unit'">
             <span class="lesson-cell__unit-title text-overflow">第{{ lesson.number }}{{ courseSettings.part_name }}：{{ lesson.title }}</span>
             <i :class="[ unitShow[`${chapterIndex}-${lessonIndex}`] ? 'icon-packup': 'icon-unfold']" @click="lessonToggle(chapterIndex, lessonIndex)"></i>
           </div>
 
-          <div class="lesson-cell__hour text-overflow" v-if="lesson.type === 'lesson'"
-            :class="{'lesson-show': unitShow[lesson.show] || tasks[chapterIndex][0].type === 'lesson'}">
+       <div class="lesson-cell__hour text-overflow" v-if="lesson.type === 'lesson'"
+            :class="{'lesson-show': unitShow[lesson.show]|| (tasks[chapterIndex][0].type === 'lesson')}">
             <div v-if="lesson.tasks.length > 1">
               <div class="lesson-cell__lesson text-overflow">
                 <i class="h5-icon h5-icon-dot color-primary text-18"></i>
                 <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.title }}</span>
               </div>
               <div :class="['box', 'show-box']"
-                v-for="(task, taskIndex) in lesson.tasks">
+                v-for="(task, taskIndex) in lesson.tasks" :key="taskIndex">
                 <div class="lesson-cell">
                   <span class="lesson-cell__number pull-left" v-if="!Number(lesson.isOptional)">{{ filterNumber(task, taskIndex) }}</span>
                   <div :class="['lesson-cell__content', lesson.tasks[taskIndex].type === 'live' ? 'pr10' : '']" @click="lessonCellClick(task)">
                     <div class="lesson-cell__text">
                       <span class="text-overflow">{{ task.title }}</span>
-                      <span v-if="lesson.tasks[taskIndex].type === 'live' && lesson.task[taskIndex].status === 'published'" :class="[liveClass(lesson.tasks[taskIndex]), 'live-text', 'ml5']">{{ lesson.tasks[taskIndex] | liveStatusText }}</span>
+                      <span v-if="lesson.tasks[taskIndex].type === 'live' && lesson.tasks[taskIndex].status === 'published'" :class="[liveClass(lesson.tasks[taskIndex]), 'live-text', 'ml5']">{{ lesson.tasks[taskIndex] | liveStatusText }}</span>
                     </div>
                     <span class="lesson-cell-last__text">{{ task | taskType }}{{ task | filterTask }}</span>
                   </div>
@@ -132,8 +132,10 @@
     },
     watch: {
       selectedPlanId: {
+        deep:true,
         immediate: true,
         handler(v) {
+          console.log(v)
           if (!this.courseLessons.length) return;
           let task = 0;
           let unit = 0;
