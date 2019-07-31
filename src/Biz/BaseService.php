@@ -13,7 +13,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use AppBundle\Common\Exception\AbstractException;
-use Exception;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
@@ -121,7 +120,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
             throw $e;
         }
 
-        throw new Exception();
+        throw new \Exception();
     }
 
     /**

@@ -2,8 +2,8 @@
 
 namespace Biz\Util;
 
+use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\BaseService;
-use Exception;
 
 class MySQLDumper extends BaseService
 {
@@ -41,7 +41,7 @@ class MySQLDumper extends BaseService
         $target .= '.gz';
 
         if (!is_writable(dirname($target))) {
-            throw new Exception('无导出目录写权限，无法导出数据库', 1);
+            throw new AccessDeniedException('无导出目录写权限，无法导出数据库', 1);
         }
 
         $tables = array();
@@ -70,7 +70,7 @@ class MySQLDumper extends BaseService
                     if ($this->getSet('lockread')) {
                         $this->connection->exec('UNLOCK TABLES');
                     }
-                    throw new Exception($e->getMessage());
+                    throw new \Exception($e->getMessage());
                 }
             }
         }
