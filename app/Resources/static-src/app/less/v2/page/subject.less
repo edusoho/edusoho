@@ -49,12 +49,13 @@
 }
 
 .subject-item__number {
-  width: 16px;
-  height: 16px;
-  margin-right: 2px;
+  width: 24px;
+  height: 24px;
+  margin-top: -4px;
+  margin-right: 8px;
   display: inline-block;
   font-size: 12px;
-  line-height: 14px;
+  line-height: 24px;
   vertical-align: text-bottom;
   color: @brand-success;
   border: 1px solid @brand-success;
@@ -109,7 +110,7 @@
 
 .subject-item__body {
   position: relative;
-  margin-left: 18px;
+  margin-left: 32px;
   margin-bottom: 12px;
   font-size: 12px;
   line-height: 16px;
@@ -138,10 +139,32 @@
   color: @cd-dark-major;
 }
 
+.subject-sub-item {
+  .subject-item__body {
+    margin-left: 28px;
+  }
+  .subject-item__operation {
+    left: 42px;
+  }
+  .subject-sub-item__answer {
+    margin-left: 28px;
+  }
+}
+
 .subject-sub-item__answer {
   margin-top: 12px;
   margin-left: 32px;
   display: table;
+}
+
+.subject-sub-item__number {
+  display: inline-block;
+  width: 26px;
+}
+
+.subject-sub-item__number--edit {
+  position: absolute;
+  top: 4px;
 }
 
 .subject-sub-item__label {
@@ -152,7 +175,7 @@
 .subject-item__operation {
   display: none;
   position: absolute;
-  left: 32px;
+  left: 48px;
   bottom: 16px;
   span {
     color: @brand-success;
@@ -321,7 +344,8 @@
 .subject-edit-item {
   .subject-edit-item__order {
     position: absolute;
-    left: 16px;
+    top: 4px;
+    left: 8px;
     .subject-item__number;
   }
 
@@ -337,6 +361,14 @@
     max-height: 74px;
     overflow: hidden;
   }
+
+  .edit-form-group__input {
+    height: 30px;
+    padding: 4px 12px;
+    color: #000;
+    border-color: @tip-color;
+  }
+
   .subject-change-list {
     .subject-change-btn {
       margin-left: 32px;
@@ -353,8 +385,8 @@
   .edit-subject-item__input {
     height: 30px;
     padding: 4px 12px;
-    color: @cd-dark-major;
-    border-color: @cd-dark-major;
+    color: #000;
+    border-color: @tip-color;
   }
 
   .edit-subject-item__order {
