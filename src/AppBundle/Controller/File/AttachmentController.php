@@ -97,11 +97,11 @@ class AttachmentController extends BaseController
         $attachment = $this->getUploadFileService()->getUseFile($id);
         $file = $this->getUploadFileService()->getFile($attachment['fileId']);
 
-        if ($file['storage'] != 'cloud') {
+        if ('cloud' != $file['storage']) {
             $this->createNewException(UploadFileException::NOTFOUND_ATTACHMENT());
         }
 
-        if ($file['targetType'] != 'attachment') {
+        if ('attachment' != $file['targetType']) {
             $this->createNewException(UploadFileException::NOTFOUND_ATTACHMENT());
         }
 
@@ -123,7 +123,7 @@ class AttachmentController extends BaseController
             $this->createNewException(UploadFileException::NOTFOUND_ATTACHMENT());
         }
 
-        if ($attachment['type'] != 'attachment') {
+        if ('attachment' != $attachment['type']) {
             return $this->createMessageResponse('error', '无权下载该资料');
         }
 
@@ -154,7 +154,7 @@ class AttachmentController extends BaseController
     public function deleteAction(Request $request, $id)
     {
         $previewType = $request->query->get('type', 'attachment');
-        if ($previewType == 'attachment') {
+        if ('attachment' == $previewType) {
             $this->getUploadFileService()->deleteUseFile($id);
         } else {
             if ($this->getUploadFileService()->canManageFile($id)) {
