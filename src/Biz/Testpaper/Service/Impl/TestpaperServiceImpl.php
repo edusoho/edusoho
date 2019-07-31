@@ -254,44 +254,44 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function importTestpaper($testpaperData, $token)
     {
-        $data = $token['data'];
-        $questions = $testpaperData['questions'];
-        $metas = $this->makeImportQuestionsMetas($questions);
+        try {
+            $this->beginTransaction();
+            $data = $token['data'];
+            $questions = $testpaperData['questions'];
+            $metas = $this->makeImportQuestionsMetas($questions);
 
-        $testpaper = array(
-            'name' => $testpaperData['title'],
-            'courseSetId' => $data['courseSetId'],
-            'metas' => $metas,
-            'pattern' => 'questionType',
-            'courseId' => 0,
-            'itemCount' => count($questions),
-            'type' => 'testpaper',
-            'score' => $metas['totalScore'],
-        );
-        $testpaper = $this->createTestpaper($testpaper);
-
-        $questions = $this->getQuestionService()->importQuestions($questions, $token);
-        $items = $this->itemsAnalyzer($testpaper['id'], $questions);
-
-        $this->createTestpaperItems($items);
+            $testpaper = array(
+                'name' => $testpaperData['title'],
+                'courseSetId' => $data['courseSetId'],
+                'metas' => $metas,
+                'pattern' => 'questionType',
+                'courseId' => 0,
+                'itemCount' => count($questions),
+                'type' => 'testpaper',
+                'score' => $metas['totalScore'],
+            );
+            $testpaper = $this->createTestpaper($testpaper);
+            $questions = $this->getQuestionService()->importQuestions($questions, $token);
+            $items = $this->itemsAnalyzer($testpaper['id'], $questions);
+            $this->createTestpaperItems($items);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     protected function createTestpaperItems($questions)
     {
-        $testpaperItems = array();
         $seq = 1;
         $fields = array();
-
         foreach ($questions as $item) {
-            $questionType = $this->getQuestionService()->getQuestionConfig($item['questionType']);
-
             $item['seq'] = $seq;
-
             if ('material' != $item['questionType']) {
                 ++$seq;
             }
             $item['type'] = 'testpaper';
-
+            //多选不定项选择之外的missScore漏选分填充
             if (!in_array($item['questionType'], array('choice', 'uncertain_choice'))) {
                 $item['missScore'] = 0;
             }
@@ -1190,7 +1190,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if ('material' == $question['type']) {
                 $subQuestions = $this->getQuestionService()->findQuestionsByParentId($questionId);
                 foreach ($subQuestions as $index => $subQuestion) {
-                    $subQuestions[$index]['seq'] = $items[$subQuestion['id']]['seq']-$question['seq']+1;
+                    $subQuestions[$index]['seq'] = $items[$subQuestion['id']]['seq'] - $question['seq'] + 1;
                     $subQuestions[$index]['score'] = $items[$subQuestion['id']]['score'];
                 }
                 $question['subs'] = $subQuestions;

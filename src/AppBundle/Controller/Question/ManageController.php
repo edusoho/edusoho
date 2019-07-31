@@ -533,7 +533,7 @@ class ManageController extends BaseController
     protected function parseQuestions($fullpath)
     {
         $wordRead = new ReadDocx($fullpath);
-        $text = $wordRead->convertImage();
+        $text = $wordRead->getDocumentText();
         $that = $this;
         $text = preg_replace_callback(
             '/src=[\'\"](.*?)[\'\"]/',
@@ -546,8 +546,7 @@ class ManageController extends BaseController
             },
             $text
         );
-        $parser = new Parser('question', $text);
-        $parser->parser();
+        $parser = new Parser($text);
 
         return $parser->getQuestions();
     }

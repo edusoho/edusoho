@@ -135,7 +135,7 @@ class WriteDocx
         $this->writeStem($question['seq'], $question['stem']);
 
         $this->useTextRun();
-        $this->writeText("【答案】");
+        $this->writeText('【答案】');
         foreach ($question['answer'] as $item) {
             $this->writeIn($item['element'], $item['content']);
         }
@@ -217,7 +217,7 @@ class WriteDocx
         }
         if (!empty($question['analysis'])) {
             $this->useTextRun();
-            $this->writeText("【解析】");
+            $this->writeText('【解析】');
             foreach ($question['analysis'] as $item) {
                 $this->writeIn($item['element'], $item['content']);
             }
@@ -253,7 +253,7 @@ class WriteDocx
     protected function writeText($text)
     {
         $text = strip_tags($text);
-        $text = str_replace(array("\n", "\r", "\t"), "<w:br/>", $text);
+        $text = str_replace(array("\n", "\r", "\t"), '<w:br/>', $text);
         $text = str_replace('&nbsp;', ' ', $text);
         $text = str_replace('&', '&amp;', $text);
         $text = trim($text);

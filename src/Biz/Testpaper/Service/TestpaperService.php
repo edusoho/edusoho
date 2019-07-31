@@ -156,4 +156,6 @@ interface TestpaperService
     public function getNextReviewingResult($courseIds, $activityId, $type);
 
     public function buildExportTestpaperItems($testpaperId);
+
+    public function importTestpaper($testpaperData, $token);
 }

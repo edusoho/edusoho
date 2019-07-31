@@ -45,6 +45,7 @@ class Fill extends AbstractQuestion
         }
         $question['stemShow'] = preg_replace('/\[\[(\S|\s)*?\]\]/', '___', $question['stem']);
         $this->checkErrors($question);
+
         return $question;
     }
 
