@@ -12,9 +12,8 @@ class ParserTest extends BaseTestCase
     {
         $filename = dirname(__DIR__).'/Fixtures/files/example1.docx';
         $wordRead = new ReadDocx($filename);
-        $text = $wordRead->convertImage();
-        $parser = new Parser('question', $text);
-        $parser->parser();
-        json_encode($parser->getQuestions());
+        $text = $wordRead->getDocumentText();
+        $parser = new Parser($text);
+        $parser->getQuestions();
     }
 }

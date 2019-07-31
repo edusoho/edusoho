@@ -8,14 +8,15 @@ class BaseQuestion {
     this.$analysisModal = $('.js-analysis-modal');
     this.validator = null;
     this.titleEditorToolBarName = 'Minimal';
+    this.analysisEditor = null;
     this._init();
     this.attachmentActions = new AttachmentActions($form);
-    this.editor = null;
   }
 
   _init() {
     this._initEvent();
     this._initValidate();
+    this._initAnalysisEditor();
   }
 
   _initEvent() {
@@ -34,40 +35,35 @@ class BaseQuestion {
     }
   }
 
-  showAnalysisModal(event) {
-    let self = this;
-    let $target = $(event.currentTarget);
-    let analysis = $target.prev('[data-edit="analysis"]').val();
+  _initAnalysisEditor() {
+    let analysis = this.$form.find('[data-edit="analysis"]').val();
     let $textarea = $('.js-analysis-field');
     $textarea.val(analysis);
-    self.editor = CKEDITOR.replace($textarea.attr('id'), {
-      toolbar: self.titleEditorToolBarName,
+    this.analysisEditor = CKEDITOR.replace($textarea.attr('id'), {
+      toolbar: this.titleEditorToolBarName,
       fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: $textarea.data('imageUploadUrl'),
       height: $textarea.height()
     });
 
-    self.editor.on('change', () => {
-      $textarea.val(self.editor.getData());
+    this.analysisEditor.on('change', () => {
+      $textarea.val(this.analysisEditor.getData());
     });
-    self.editor.on('blur', () => {
-      $textarea.val(self.editor.getData());
-    });
-
-    self.$analysisModal.modal('show');
-
-    self.editor.on('instanceReady', function() {
-      this.focus();
-
-      self.$analysisModal.on('hide.bs.modal', function() {
-        self.editor.destroy();
-        $textarea.show();
-      });
+    this.analysisEditor.on('blur', () => {
+      $textarea.val(this.analysisEditor.getData());
     });
   }
 
+  showAnalysisModal(event) {
+    let $target = $(event.currentTarget);
+    let analysis = $target.prev('[data-edit="analysis"]').val();
+    this.analysisEditor.setData(analysis);
+
+    this.$analysisModal.modal('show');
+  }
+
   saveAnalysis(event) {
-    let data = this.editor.getData();
+    let data = this.analysisEditor.getData();
     $('[data-edit="analysis"]').val(data);
     $('.js-analysis-content').html($(this.replacePicture(data)).text());
     this.$analysisModal.modal('hide');
@@ -90,28 +86,10 @@ class BaseQuestion {
       seq = self.operate.getQuestionOrder(token);
     }
 
+    this.analysisEditor.destroy();
     $.post(self.$form.data('url'), {'seq': seq, 'question': question, 'token': token, 'isSub': isSub}, html=> {
       self.$form.parent('.subject-item').replaceWith(html);
-      if (isSub != '1') {
-        self.removeErrorClass(token);
-      }
-      self.statErrorQuestions();
     });
-  }
-
-  statErrorQuestions() {
-    let errorTip = '第';
-    let isShow = false;
-    $('.js-subject-list').find('.subject-list-item__num--error').each(function () {
-      errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
-      isShow = true;
-    });
-    errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
-    if (isShow) {
-      $('.js-error-tip').html(errorTip);
-    } else {
-      $('.js-error-tip').html('');
-    }
   }
 
   updataCachedQuestion(token, question, method) {
@@ -121,6 +99,7 @@ class BaseQuestion {
     } else {
       $.each(question, function(name, value){
         self.operate.updateQuestionItem(token, name, value);
+        self.operate.correctQuestion(token);
       });
     }
 
@@ -134,6 +113,7 @@ class BaseQuestion {
     } else {
       $.each(question, function(name, value){
         self.operate.updateSubQuestionItem(token, key, name, value);
+        self.operate.correctSubQuestion(token, key);
       });
     }
 
@@ -176,12 +156,6 @@ class BaseQuestion {
     }
     
     return attachments;
-  }
-
-  removeErrorClass(token) {
-    if ($(`[data-anchor="#${token}"]`).hasClass('subject-list-item__num--error')) {
-      $(`[data-anchor="#${token}"]`).removeClass('subject-list-item__num--error');
-    }
   }
 
   _initValidate() {

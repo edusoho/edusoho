@@ -22,18 +22,27 @@ class ReadDocx
 
     /**
      * @var string
+     *             docx文件地址
      */
     protected $docxPath;
 
     /**
      * @var DOMDocument
+     *                  文档主体xml
      */
     protected $docXml;
 
     /**
      * @var DOMDocument
+     *                  文档资源xml
      */
     protected $relsXml;
+
+    /**
+     * @var string
+     *             解析后的文档text
+     */
+    protected $documentText;
 
     public function __construct($docxPath, $options = array())
     {
@@ -42,6 +51,7 @@ class ReadDocx
             $this->resourceTmpPath = $options['resourceTmpPath'];
         }
         $this->readZip();
+        $this->convertImage();
     }
 
     public function getDocxPath()
@@ -49,53 +59,20 @@ class ReadDocx
         return $this->docxPath;
     }
 
-    protected function readZip()
+    public function getDocumentText()
     {
-        $path = $this->docxPath;
-        $zip = new ZipArchive();
-        if (true === $zip->open($path)) {
-            if (false !== ($index = $zip->locateName(self::DOCUMENT_XML_PATH))) {
-                $xml = $zip->getFromIndex($index);
-            }
-            $zip->close();
-        } else {
-            die('non zip file');
-        }
-
-        if (true === $zip->open($path)) {
-            if (false !== ($index = $zip->locateName(self::DOCUMENT_RELS_XML_PATH))) {
-                $xmlRels = $zip->getFromIndex($index);
-            }
-            $zip->close();
-        } else {
-            die('non zip file');
-        }
-
-        $docXml = new DOMDocument();
-        $docXml->encoding = mb_detect_encoding($xml);
-        $docXml->preserveWhiteSpace = false; //default true
-        $docXml->formatOutput = true; //default true
-        $docXml->loadXML($xml);
-
-        $this->docXml = $docXml;
-
-        $relsXml = new DOMDocument();
-        $relsXml->encoding = mb_detect_encoding($xmlRels);
-        $relsXml->preserveWhiteSpace = false;
-        $relsXml->formatOutput = true;
-        $relsXml->loadXML($xmlRels);
-
-        $this->relsXml = $relsXml;
+        return $this->documentText;
     }
 
-    public function convertImage()
+    protected function readZip()
     {
-        $relsList = $this->relsXml->getElementsByTagName('Relationship');
-        $rels = array();
-        foreach ($relsList as $relXml) {
-            $rels[$relXml->getAttribute('Id')] = $relXml->getAttribute('Target');
-        }
+        $this->docXml = $this->loadXml(self::DOCUMENT_XML_PATH);
+        $this->relsXml = $this->loadXml(self::DOCUMENT_RELS_XML_PATH);
+    }
 
+    protected function convertImage()
+    {
+        $rels = $this->getRels();
         $imagesList = $this->docXml->getElementsByTagName('drawing');
 
         foreach ($imagesList as $key => $imageXml) {
@@ -113,7 +90,6 @@ class ReadDocx
                     $path = $this->resourceTmpPath.'/'.Uuid::uuid4().'.'.$ext;
                     file_put_contents($path, $file);
                     $imageXml->textContent = sprintf('<img src="%s" %s %s>', $path, $htmlCx, $htmlCy);
-                    // $imageXml->textContent = '1234';
                 }
             }
         }
@@ -121,11 +97,46 @@ class ReadDocx
         $paragraphList = $this->docXml->getElementsByTagName('p');
         $text = '';
         foreach ($paragraphList as $paragraph) {
-//            $text .= '<p>'.$paragraph->textContent.'</p>'.PHP_EOL;
             $text .= $paragraph->textContent.PHP_EOL;
         }
 
-        return $text;
+        $this->documentText = $text;
+    }
+
+    protected function loadXml($xmlPath)
+    {
+        $path = $this->getDocxPath();
+        $zip = new ZipArchive();
+        if (true === $zip->open($path)) {
+            if (false !== ($index = $zip->locateName($xmlPath))) {
+                $xml = $zip->getFromIndex($index);
+            }
+            $zip->close();
+        } else {
+            die('non zip file');
+        }
+        $docXml = new DOMDocument();
+        $docXml->encoding = mb_detect_encoding($xml);
+        $docXml->preserveWhiteSpace = false; //default true
+        $docXml->formatOutput = true; //default true
+        $docXml->loadXML($xml);
+
+        return $docXml;
+    }
+
+    /**
+     * @return array
+     *               获取word资源列表
+     */
+    protected function getRels()
+    {
+        $relsList = $this->relsXml->getElementsByTagName('Relationship');
+        $rels = array();
+        foreach ($relsList as $relXml) {
+            $rels[$relXml->getAttribute('Id')] = $relXml->getAttribute('Target');
+        }
+
+        return $rels;
     }
 
     protected function getZipResource($filename)

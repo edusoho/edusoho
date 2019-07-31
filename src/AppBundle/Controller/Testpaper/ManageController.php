@@ -679,7 +679,7 @@ class ManageController extends BaseController
     protected function parseQuestions($fullpath)
     {
         $wordRead = new ReadDocx($fullpath);
-        $text = $wordRead->convertImage();
+        $text = $wordRead->getDocumentText();
         $that = $this;
         $text = preg_replace_callback(
             '/src=[\'\"](.*?)[\'\"]/',
@@ -692,8 +692,7 @@ class ManageController extends BaseController
             },
             $text
         );
-        $parser = new Parser('question', $text);
-        $parser->parser();
+        $parser = new Parser($text);
 
         return $parser->getQuestions();
     }
@@ -703,7 +702,7 @@ class ManageController extends BaseController
         $question = $request->request->get('question', array());
         $seq = $request->request->get('seq', 1);
         $token = $request->request->get('token', '');
-        $isSub = $request->request->get('isSub', false);
+        $isSub = $request->request->get('isSub', '0');
         $method = $request->request->get('method', 'edit');
 
         $question = ArrayToolkit::parts($question, array(
@@ -815,7 +814,7 @@ class ManageController extends BaseController
         $question = $request->request->get('question', array());
         $seq = $request->request->get('seq', 1);
         $token = $request->request->get('token', '');
-        $isSub = $request->request->get('isSub', false);
+        $isSub = $request->request->get('isSub', '0');
 
         $question = ArrayToolkit::parts($question, array(
             'stem',

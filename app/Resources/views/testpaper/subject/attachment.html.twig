@@ -1,6 +1,6 @@
 {% if setting('cloud_attachment.enable') and setting('cloud_attachment.question' ) and setting('storage.upload_mode') == 'cloud' %}
   <div class="cd-mt24">
-    <div class="js-attachment-list js-attachment-list-{{ target }}" style="line-height:60px">
+    <div class="js-attachment-list js-attachment-list-{{ target }}">
       {% if attachment|default(null) %}
         <div class="cd-mt24">
           <span class="cd-dark-major cd-mr16 js-attachment-name">{{attachment.fileName}}</span>

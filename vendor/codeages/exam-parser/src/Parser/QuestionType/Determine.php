@@ -21,7 +21,6 @@ class Determine extends AbstractQuestion
             'analysis' => '',
             'answer' => null,
         );
-        $answers = array();
         $preNode = QuestionElement::STEM;
         foreach ($questionLines as $line) {
             //处理答案

@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block testpaper %}
-  <div class="subject-title"><input name="testpaperTitle" class="js-testpaper-title" value="{{ filename }}" placeholder="{{ 'course.testpaper_manage.import.re_edit.edit_title_hint'|trans }}"></div>
+  <div class="subject-title"><input name="testpaperTitle" class="js-testpaper-title" value="{{ filename }}" placeholder="{{ 'course.testpaper_manage.import.re_edit.edit_title_hint'|trans }}" autocomplete="off"></div>
   <input type="hidden" name="isTestpaper" value="1">
   {% for key,item in questions if item.type in ['choice', 'determine', 'essay', 'fill', 'single_choice', 'uncertain_choice', 'material'] %}
     {% include 'testpaper/subject/item/show/' ~ item.type ~ '.html.twig' %}
