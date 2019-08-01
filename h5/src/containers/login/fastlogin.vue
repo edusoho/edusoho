@@ -45,8 +45,7 @@
         <div class="login-bottom text-center">
             <div class="login-agree" v-if="userTerms || privacyPolicy">
                 <van-checkbox v-model="agreement" @click="checkAgree" checked-color="#408ffb" :icon-size="16">
-                    我已阅读并同意《<i @click="lookPrivacyPolicy" v-if="userTerms">用户服务协议</i>》
-                    <span v-if="privacyPolicy">和《<i @click="lookPrivacyPolicy" >隐私协议</i>》</span>
+                    我已阅读并同意《<i @click="lookPrivacyPolicy" v-if="userTerms">用户服务</i>》<span v-if="privacyPolicy">和《<i @click="lookPrivacyPolicy" >隐私协议</i>》</span>
                  </van-checkbox>
             </div>
             <div class="login-change" @click="changeLogin">
@@ -123,7 +122,7 @@ export default {
         ...mapActions([
             'addUser',
             'setMobile',
-            'sendSmsCenter',
+            'sendSmsSend',
             'fastLogin'
         ]),
         async getPrivacySetting(){
@@ -158,6 +157,7 @@ export default {
                 smsToken: this.userinfo.smsToken,
                 smsCode: this.userinfo.smsCode,
                 loginType: 'sms',
+                client:'h5',
             }).then((res) =>{
                 this.afterLogin();
             }).catch((err) =>{
@@ -177,7 +177,7 @@ export default {
             this.$refs.dragComponent.initDragCaptcha();
             },
         handleSendSms() {
-            this.sendSmsCenter(this.userinfo)
+            this.sendSmsSend(this.userinfo)
             .then( (res) => {
                 this.userinfo.smsToken = res.smsToken;
                 this.countDown();
