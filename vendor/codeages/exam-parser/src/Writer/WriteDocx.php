@@ -38,11 +38,8 @@ class WriteDocx
             $this->buildQuestionText($question['type'], $question);
         }
 
-        header('Content-Type: application/msword');
-        header('Content-Disposition: attachment; filename='.$this->filename.'.docx');
-
         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
-        $objWriter->save('php://output');
+        $objWriter->save($this->filename);
     }
 
     protected function buildQuestionText($type, $question)
