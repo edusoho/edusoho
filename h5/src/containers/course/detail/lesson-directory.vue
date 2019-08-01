@@ -25,7 +25,7 @@
             <!-- 直播或者考试-->
             <div class="bl" v-if="doubleLine(lessonItem.tasks[lessonItem.index])">
               <!-- <span class="tryLes">试听</span> -->
-              <div class="il-bl">
+              <div class="block-inline">
                 <span
                   class="bl text-overflow ks"
                   :class="{ 'lessonactive': (currentTask==lessonItem.tasks[lessonItem.index].id) }"

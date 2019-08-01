@@ -171,6 +171,9 @@ export default {
       return money;
     },
     couponShow() {
+      if (this.course.availableCoupons.length==0) {
+        return '无可用优惠券';
+      }
       if (!this.couponNumber) {
         return this.course.availableCoupons.length + '张可用';
       }

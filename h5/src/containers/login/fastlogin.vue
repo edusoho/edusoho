@@ -6,6 +6,7 @@
             v-model="userinfo.mobile"
             placeholder="请输入手机号"
             maxLength="11"
+            type="number"
             class="login-input e-input"
             border
             clearable
@@ -44,9 +45,8 @@
         <van-button type="default" class="primary-btn mb20" @click="handleSubmit" :disabled="btnDisable">登录</van-button>
         <div class="login-bottom text-center">
             <div class="login-agree" v-if="userTerms || privacyPolicy">
-                <van-checkbox v-model="agreement" @click="checkAgree" checked-color="#408ffb" :icon-size="16">
-                    我已阅读并同意《<i @click="lookPrivacyPolicy" v-if="userTerms">用户服务</i>》<span v-if="privacyPolicy">和《<i @click="lookPrivacyPolicy" >隐私协议</i>》</span>
-                 </van-checkbox>
+                <van-checkbox v-model="agreement" @click="checkAgree" checked-color="#408ffb" :icon-size="16"></van-checkbox>
+                 我已阅读并同意《<i @click="lookPrivacyPolicy" v-if="userTerms">用户服务</i>》<span v-if="privacyPolicy">和《<i @click="lookPrivacyPolicy" >隐私协议</i>》</span>
             </div>
             <div class="login-change" @click="changeLogin">
                 <img src="static/images/login_change.png" class="login_change-icon"/>切换账号密码登录
