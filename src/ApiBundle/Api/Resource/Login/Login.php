@@ -5,8 +5,6 @@ namespace ApiBundle\Api\Resource\Login;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Resource\Filter;
-use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\MathToolkit;
@@ -34,7 +32,7 @@ class Login extends AbstractResource
     );
 
     private $supportClients = array(
-        'app', 'miniprogram', 'h5'
+        'app', 'miniprogram', 'h5',
     );
 
     /**
@@ -138,10 +136,9 @@ class Login extends AbstractResource
             $this->getSDKSmsService()->sendToOne($smsParams);
             $this->getLogService()->info('sms', 'send_register', "管理员给用户 {$nickname}($userId) 发送账号信息短信");
         } catch (\Exception $e) {
-            $this->getLogService()->error('sms', 'send_register', "管理员给用户 {$nickname}({$userId}) 发送账号信息短信失败：" . $e->getMessage());
+            $this->getLogService()->error('sms', 'send_register', "管理员给用户 {$nickname}({$userId}) 发送账号信息短信失败：".$e->getMessage());
             throw $e;
         }
-
     }
 
     private function appendUser(&$user)
@@ -166,8 +163,6 @@ class Login extends AbstractResource
         $user['following'] = $this->getUserService()->findUserFollowingCount($user['id']);
         $user['follower'] = $this->getUserService()->findUserFollowerCount($user['id']);
     }
-
-
 
     private function getLoginToken($userId, $smsCode, $smsToken, $mobile, $client)
     {
@@ -199,7 +194,7 @@ class Login extends AbstractResource
             throw CommonException::ERROR_PARAMETER();
         }
 
-        return $client == 'app' ? DeviceToolkit::getMobileDeviceType($userAgent) : $client;
+        return 'app' == $client ? DeviceToolkit::getMobileDeviceType($userAgent) : $client;
     }
 
     private function afterLogin($user, $newToken, $client, $clientIp)
@@ -239,7 +234,7 @@ class Login extends AbstractResource
             'nickname' => $user['nickname'],
             'currentIp' => $clientIp,
             'roles' => $user['roles'],
-            'type' => $user['type']
+            'type' => $user['type'],
         );
         $currentUser = new CurrentUser();
         $currentUser = $currentUser->fromArray($allowUser);
