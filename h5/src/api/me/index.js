@@ -15,7 +15,7 @@ export default [
     url: '/sms_send',
     method: 'POST',
     disableLoading: true
-  },{
+  }, {
     // 人脸识别 判断用户是否存在
     name: 'getUserIsExisted',
     url: '/users/{type}',

@@ -23,7 +23,7 @@
         <div class="receive-login-input">
             <van-field 
                 v-model="userinfo.smsCode" 
-                type="number"
+                type="text"
                 placeholder="请输入验证码"
                 clearable
                 maxLength="6"

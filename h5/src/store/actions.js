@@ -59,7 +59,7 @@ export const sendSmsSend = ({ commit }, data) =>
       resolve(res);
       return res;
     }).catch(err => reject(err));
-});
+  });
 
 export const sendSmsCenter = ({ commit }, data) =>
   new Promise((resolve, reject) => {

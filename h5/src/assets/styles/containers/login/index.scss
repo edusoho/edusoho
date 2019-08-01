@@ -30,6 +30,9 @@
   box-sizing: border-box;
   padding: vw(50) vw(15);
   align-items: center;
+  .van-checkbox{
+    display: inline;
+  }
   &-title {
     font-size: vw(20);
     font-weight:500;
@@ -65,7 +68,8 @@
   }
   &-change{
     display: flex;
-    margin-top: vw(39);
+    margin: vw(39) auto;
+    width: vw(140);
     justify-content: center;
     align-items: center;
     font-size: vw(14);
