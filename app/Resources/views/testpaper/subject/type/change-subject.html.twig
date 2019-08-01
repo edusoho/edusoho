@@ -1,6 +1,6 @@
 {% if type in ['essay', 'choice', 'single_choice', 'uncertain_choice'] %}
   <div class="row cd-mv16">
-    <div class="col-sm-2 text-left pr0 control-label cd-dark-major cd-ml32">{{ 'course.testpaper_manage.import.re_edit.convert_hint'|trans }}：</div>
+    <div class="col-sm-2 control-label subject-change-lable">{{ 'course.testpaper_manage.import.re_edit.convert_hint'|trans }}：</div>
     <div class="col-sm-9 subject-change-list" data-convert-url="{{ path('subject_convert_template') }}" data-from-type="{{ type }}">
     {% if type == 'essay' %}
       <button class="cd-btn cd-btn-ghost-primary subject-change-btn" type="button" data-type="single_choice">{{ 'question.type.single_choice'|trans }}</button>
