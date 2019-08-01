@@ -2,6 +2,7 @@
 
 namespace Biz\Util;
 
+use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\BaseService;
 
 class MySQLDumper extends BaseService
@@ -40,7 +41,7 @@ class MySQLDumper extends BaseService
         $target .= '.gz';
 
         if (!is_writable(dirname($target))) {
-            throw new \Exception('无导出目录写权限，无法导出数据库', 1);
+            throw new AccessDeniedException('无导出目录写权限，无法导出数据库', 1);
         }
 
         $tables = array();
