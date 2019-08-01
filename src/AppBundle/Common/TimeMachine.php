@@ -17,6 +17,8 @@ class TimeMachine
 
     const ONE_DAY = 86400;
 
+    const ONE_WEEK = 604800;
+
     const ONE_MONTH = 259200;
 
     /**

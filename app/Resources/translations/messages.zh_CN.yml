@@ -6600,6 +6600,7 @@ admin.edu_cloud.edu_sms.enable_status: 启用状态
 admin.edu_cloud.edu_sms.operation: 操作
 admin.edu_cloud.edu_sms.validation_type: 验证类
 admin.edu_cloud.edu_sms.bind_mobile: 手机绑定
+admin.edu_cloud.edu_sms.login: 手机短信快捷登录
 admin.edu_cloud.edu_sms.verification_code_tips: 您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。
 admin.edu_cloud.edu_sms.singel_user: 单个用户
 admin.edu_cloud.edu_sms.auto_singel_send: 自动单发

@@ -429,6 +429,9 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'sms_classroom_buy_notify',
                 'sms_vip_buy_notify',
                 'sms_coin_buy_notify',
+                'sms_login',
+                'sms_register',
+                'send_register'
             ),
             self::TAG => array(
                 'create',
