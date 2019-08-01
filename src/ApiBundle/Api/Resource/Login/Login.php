@@ -15,7 +15,6 @@ use Biz\Sms\SmsException;
 use Biz\Sms\SmsType;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
-use Biz\System\SettingException;
 use Biz\User\CurrentUser;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\BatchNotificationService;
@@ -72,7 +71,6 @@ class Login extends AbstractResource
         // 按手机号获取用户，没有就注册
         $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
         if (empty($user)) {
-            $this->checkMobileRegisterSetting();
             $user = $this->createUser($clientIp, $client, $mobile);
             $this->sendRegisterSms($mobile, $user['id'], $user['nickname'], $user['realPassword']);
             unset($user['realPassword']);
@@ -179,13 +177,6 @@ class Login extends AbstractResource
         ));
 
         return $token['token'];
-    }
-
-    private function checkMobileRegisterSetting()
-    {
-        if (!$this->getUserService()->isMobileRegisterMode()) {
-            throw SettingException::FORBIDDEN_SMS_SEND();
-        }
     }
 
     private function getClient($client, $userAgent)
