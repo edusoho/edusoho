@@ -63,14 +63,7 @@ class Choice extends AbstractQuestion
     //补充空余选项
     protected function fillOptions(&$question)
     {
-        $keys = array_keys($question[QuestionElement::OPTIONS]);
-        $endKey = end($keys);
-        for ($index = 0; $index <= $endKey; ++$index) {
-            if (empty($question[QuestionElement::OPTIONS][$index])) {
-                $question[QuestionElement::OPTIONS][$index] = '';
-            }
-        }
-        ksort($question[QuestionElement::OPTIONS]);
+        $question['options'] = $this->sortOptions($question['options']);
     }
 
     protected function matchOptions(&$question, $line, &$preNode)
@@ -113,7 +106,10 @@ class Choice extends AbstractQuestion
             preg_match_all('/[A-Z]/', $line, $matches);
             if ($matches) {
                 foreach ($matches[0] as $answer) {
-                    $answers[] = ord($answer) - 65;
+                    $answerKey = ord($answer) - 65;
+                    if (isset($question['options'][$answerKey])) {
+                        $answers[] = $answerKey;
+                    }
                 }
             }
             $question['answers'] = $answers;

@@ -97,15 +97,17 @@ abstract class AbstractQuestion
     protected function sortOptions($options)
     {
         ksort($options);
-        $lastKey = end(array_keys($options));
+        $keys = array_keys($options);
+        $lastKey = end($keys);
         $lastKey = $lastKey < 1 ? 1 : $lastKey; //options至少两个选项
         for ($i = 0; $i <= $lastKey; ++$i) {
-            echo $i;
             if (!array_key_exists($i, $options)) {
                 $options[$i] = '';
             }
         }
         ksort($options);
+
+        return $options;
     }
 
     protected function getError($element, $code, $index = -1)
