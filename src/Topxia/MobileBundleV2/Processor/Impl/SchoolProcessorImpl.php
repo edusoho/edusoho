@@ -256,13 +256,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
     public function getPrivacyPolicy()
     {
         $setting = $this->controller->getSettingService()->get('auth', array());
-        $privacyPolicy = '暂无隐私政策';
-        if (array_key_exists('privacy_policy_body', $setting)) {
-            $privacyPolicy = $setting['privacy_policy_body'];
-        }
+
+        $privacyPolicyBody = empty($setting['privacy_policy_body']) ? '' : $setting['privacy_policy_body'];
 
         return $this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', array(
-            'content' => $privacyPolicy,
+            'content' => $privacyPolicyBody,
         ));
     }
 

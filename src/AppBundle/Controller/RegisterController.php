@@ -191,8 +191,10 @@ class RegisterController extends BaseController
     {
         $setting = $this->getSettingService()->get('auth', array());
 
+        $privacyPolicyBody = empty($setting['privacy_policy_body']) ? '' : $setting['privacy_policy_body'];
+
         return $this->render('register/privacy-policy.html.twig', array(
-            'privacyPolicy' => $setting['privacy_policy_body'],
+            'privacyPolicy' => $privacyPolicyBody,
         ));
     }
 
