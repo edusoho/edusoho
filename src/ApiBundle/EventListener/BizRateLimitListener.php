@@ -18,6 +18,7 @@ class BizRateLimitListener
         array('SmsCenter', 'post', 'register_sms_rate_limiter'),
         array('UserSmsResetPassword', 'post', 'sms_rate_limiter'),
         array('Login', 'post', 'sms_rate_limiter'),
+        array('SmsSend', 'post', 'sms_rate_limiter'),
     );
 
     public function handle(ResourceEvent $event)
