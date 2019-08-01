@@ -452,8 +452,6 @@ export default class sbList {
       if ($item.hasClass('subject-sub-item')) {
         token = $item.attr('data-material-token');
         let key = $item.attr('data-key');
-        console.log(key);
-        console.log(token);
         let order = $item.find('.subject-sub-item__number').text().replace(/[^0-9]/ig, '');
         $item.nextUntil('.js-subject-main-item').each(function() {
           $(this).find('.subject-sub-item__number').text(`(${order})`);

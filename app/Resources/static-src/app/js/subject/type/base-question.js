@@ -38,6 +38,10 @@ class BaseQuestion {
   _initAnalysisEditor() {
     let analysis = this.$form.find('[data-edit="analysis"]').val();
     let $textarea = $('.js-analysis-field');
+    if (CKEDITOR.instances[$textarea.attr('id')]) {
+      CKEDITOR.instances[$textarea.attr('id')].destroy();
+    }
+
     $textarea.val(analysis);
     this.analysisEditor = CKEDITOR.replace($textarea.attr('id'), {
       toolbar: this.titleEditorToolBarName,

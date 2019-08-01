@@ -153,7 +153,7 @@ export default class QuestionOperate {
     this.flag = true;
     const question = this.questions[deleteToken];
     delete this.questions[deleteToken];
-    let position = this.tokenList.indexOf(deleteToken) + 1;
+    let position = this.tokenList.indexOf(deleteToken);
     this.tokenList.splice(position, 1);
     this.questionCounts['total']--;
     this.questionCounts[question['type']]--;
@@ -238,8 +238,9 @@ export default class QuestionOperate {
     }
     this.flag = true;
     const question = this.questions[deleteToken]['subQuestions'][key];
-    this.questions[deleteToken]['subQuestions'][key].splice(key + 1, 1);
+    this.questions[deleteToken]['subQuestions'].splice(key, 1);
     this.totalScore -= parseInt(question['score']);
+    this.correctMaterialQuestion(deleteToken);
     this.trigger('updateQuestionScore');
     this.flag = false;
   }
@@ -270,6 +271,12 @@ export default class QuestionOperate {
 
     delete subQuestion['errors'];
     material['subQuestions'][key] = subQuestion;
+    this.questions[token] = material;
+    this.correctMaterialQuestion(token);
+  }
+
+  correctMaterialQuestion(token) {
+    let material = this.questions[token];
     let hasSubError = false;
     $.each(material['subQuestions'], function(index, sub) {
       if (typeof sub['errors'] != 'undefined') {
