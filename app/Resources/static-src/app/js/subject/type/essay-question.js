@@ -16,7 +16,7 @@ class Essay extends BaseQuestion {
     this.$answerField.rules('add', {
       required: true,
       messages: {
-        required: Translator.trans('请填写答案')
+        required: Translator.trans('subject.essay_require_answer')
       }
     });
     this.$form.on('click', '[data-role="edit"]', event => this.answerClick(event));

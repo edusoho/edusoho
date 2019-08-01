@@ -112,7 +112,7 @@ export default class QuestionOperate {
   modifyScore(selectQuestion, scoreObj, isTestpaper) {
     let self = this;
     $.each(selectQuestion, function(index, token) {
-      self.$itemList.find(`#${token}`).find('.js-score').html(`${scoreObj['score']}分`);
+      self.$itemList.find(`#${token}`).find('.js-score').html(`${scoreObj['score']}${Translator.trans('subject.question_score_unit')}`);
       let question = self.getQuestion(token);
       self.updateQuestionItem(token, 'score', scoreObj['score'], false);
       if (isTestpaper) {
@@ -290,7 +290,7 @@ export default class QuestionOperate {
 
   isUpdating() {
     if (this.flag == true) {
-      cd.message({ type: 'danger', message: Translator.trans('题目正在修改中,请稍侯') });
+      cd.message({ type: 'danger', message: Translator.trans('course.question.is_updating_hint') });
       return false;
     }
 

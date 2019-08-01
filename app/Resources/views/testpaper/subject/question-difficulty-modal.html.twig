@@ -5,29 +5,29 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
           <i class="cd-icon cd-icon-close"></i>
         </button>
-        <h4 class="modal-title">{{'批量设置难度'|trans}}</h4>
+        <h4 class="modal-title">{{'course.testpaper_manage.import.re_edit.batch_set_difficulty'|trans}}</h4>
       </div>
       <div class="modal-body">
         <div class="subject-state-content clearfix cd-mb24">
-          <span>{{'已选：'|trans}}</span>
+          <span>{{'course.testpaper_manage.import.re_edit.selected'|trans}}</span>
           <div class="subject-state-content__text js-select"></div>
         </div>
         <div class="subject-state-form">
-          <label class="cd-dark-major cd-ml16 mrs">难度：</label>
+          <label class="cd-dark-major cd-ml16 mrs">{{ 'course.question_manage.manage.difficulty'|trans }}：</label>
           <label class="cd-radio cd-mr32">
-            <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="simple" checked=""><span>简单</span>
+            <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="simple" checked=""><span>{{ 'course.question_manage.manage.easy_difficulty'|trans }}</span>
           </label>
           <label class="cd-radio cd-mr32 checked">
-            <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="normal" checked=""><span>一般</span>
+            <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="normal" checked=""><span>{{ 'course.question_manage.manage.normal_difficulty'|trans }}</span>
           </label>
           <label class="cd-radio cd-mr32">
-            <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="difficulty" checked=""><span>困难</span>
+            <input type="radio" data-toggle="cd-radio" name="difficultyRadios" value="difficulty" checked=""><span>{{ 'course.question_manage.manage.hard_difficulty'|trans }}</span>
           </label>
         </div>
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</a>
+        <button type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
         <button type="button" class="cd-btn cd-btn-primary js-difficulty-btn" data-loading-text="{{'form.btn.hand_in.submiting'|trans}}..">{{'form.btn.confirm'|trans}}</button>
       </div>
     </div>
