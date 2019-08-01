@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\ActivityResource;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -9,7 +10,6 @@ use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ActivityResource extends AbstractResource
 {
