@@ -58,8 +58,13 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
         $attachment = $argument['attachment'];
 
-        $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
-        $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
+        if (isset($attachment['stem'])) {
+            $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
+        }
+
+        if (isset($attachment['analysis'])) {
+            $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
+        }
     }
 
     public function onQuestionUpdate(Event $event)
