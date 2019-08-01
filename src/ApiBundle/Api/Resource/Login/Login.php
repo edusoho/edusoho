@@ -32,7 +32,7 @@ class Login extends AbstractResource
     );
 
     private $supportClients = array(
-        'app', 'miniprogram', 'h5',
+        'app', 'miniProgram', 'h5',
     );
 
     /**
