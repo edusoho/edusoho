@@ -238,7 +238,7 @@ export default class QuestionOperate {
     }
     this.flag = true;
     const question = this.questions[deleteToken]['subQuestions'][key];
-    this.questions[deleteToken]['subQuestions'][key].splice(key + 1, 1);
+    this.questions[deleteToken]['subQuestions'].splice(key + 1, 1);
     this.totalScore -= parseInt(question['score']);
     this.trigger('updateQuestionScore');
     this.flag = false;
