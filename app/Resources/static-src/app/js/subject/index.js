@@ -604,12 +604,21 @@ export default class sbList {
   }
   
   isEditing() {
-    const $editItem = $('.subject-edit-item');
+    const $editItem = $('.js-subject-edit-item');
+    const isSub = $editItem.hasClass('js-sub-edit-item');
+    let parentNum = '';
     if ($editItem.length !== 0) {
-      let seq = this.$itemList.find('.subject-edit-item').find('.js-edit-form-seq').text();
+      const seq = $editItem.find('.js-edit-form-seq').text();
+      if (isSub) {
+        const id = $editItem.find('.js-hidden-token').val();
+        const parentSeq = $(`#${id}`).find('.js-subject-item-number').text();
+        parentNum = $.trim(parentSeq);
+      }
+
+      const message = isSub ? `请先完成材料题${parentNum}的第${seq}道子题的编辑`: `请先完成第${seq}题的编辑`;
       cd.message({
         type: 'warning',
-        message: `请先完成第${seq}题的编辑`,
+        message: message,
       });
       return true;
     }
