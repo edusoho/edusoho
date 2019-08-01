@@ -64,7 +64,7 @@ export default {
                 dragCaptchaToken: undefined, // 默认不需要滑动验证,图片验证码token
                 smsCode: '',//验证码
                 smsToken: '',//验证码token
-                type:'receive_coupon',
+                type:'receive_coupon'
             },
             dragEnable: false,
             dragKey: 0,
@@ -98,12 +98,12 @@ export default {
          ...mapActions([
             'addUser',
             'setMobile',
-            'sendSmsCenter',
+            'sendSmsSend',
             'fastLogin'
         ]),
         //发送验证码
         handleSendSms() {
-            this.sendSmsCenter(this.userinfo)
+            this.sendSmsSend(this.userinfo)
             .then( (res) => {
                 this.userinfo.smsToken = res.smsToken;
                 this.countDown();
@@ -147,6 +147,7 @@ export default {
                 smsToken: this.userinfo.smsToken,
                 smsCode: this.userinfo.smsCode,
                 loginType: 'sms',
+                client:'h5',
             }).then((res) =>{
                 this.$emit('lReceiveCoupon',data);
             }).catch((err) =>{

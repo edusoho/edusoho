@@ -203,9 +203,7 @@ export default {
     },
     loadPlayerSDK () {
       if (!window.VideoPlayerSDK) {
-        const VEDIOURL='//service-cdn.cg-dev.cn/js-sdk/video-player/sdk-v1.js?v='
-      //const VEDIOURL='//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
-      // const scrptSrc = VEDIOURL + (Date.now() / 1000 / 60);
+      const VEDIOURL='//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
       const scrptSrc =  VEDIOURL+ (Date.now() / 1000 / 60);
       // Cache SDK for 1 min.
 

@@ -15,7 +15,7 @@
       <div class="order-coupon">
         <div class="coupon-column" @click="showList = true">
           <span>优惠券</span>
-          <span class="red coupon-money">{{ couponShow }}<span class="coupon-type" v-if="itemData">{{itemData.type | couponType}}</span>
+          <span :class="['red',itemData ? 'coupon-money':'']">{{ couponShow }}<span class="coupon-type" v-if="itemData">{{itemData.type | couponType}}</span>
             <i class="iconfont icon-arrow-right"></i>
           </span>
         </div>

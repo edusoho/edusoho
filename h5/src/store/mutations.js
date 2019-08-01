@@ -28,6 +28,10 @@ export default {
     // 看起来像是没用的，后续需要验证
     state.smsToken = payload;
   },
+  [types.SMS_SEND](state, payload) {
+    // 看起来像是没用的，后续需要验证
+    state.smsToken = payload;
+  },
   [types.SET_NICKNAME](state, payload) {
     state.user = Object.assign({}, state.user, {
       nickname: payload.nickname

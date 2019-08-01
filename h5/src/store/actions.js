@@ -50,6 +50,17 @@ export const setMobile = ({ commit }, { query, data }) =>
     }).catch(err => reject(err));
   });
 
+export const sendSmsSend = ({ commit }, data) =>
+  new Promise((resolve, reject) => {
+    Api.getSmsSend({
+      data
+    }).then(res => {
+      commit(types.SMS_SEND);
+      resolve(res);
+      return res;
+    }).catch(err => reject(err));
+});
+
 export const sendSmsCenter = ({ commit }, data) =>
   new Promise((resolve, reject) => {
     Api.getSmsCenter({
