@@ -129,7 +129,7 @@ class BaseQuestion {
       question[name] = value;
     });
     question['difficulty'] = $('input[name=\'difficulty\']:checked').val();
-    question['attachments'] = this.getAttachemnts();
+    question['attachment'] = this.getAttachemnts();
     question = this.filterQuestion(question);
 
     return question;
@@ -143,14 +143,18 @@ class BaseQuestion {
     let attachments = {};
     if ($('.js-attachment-list-stem').find('.js-attachment-name').length > 0) {
       attachments['stem'] = {
-        "fileId" : $('.js-attachment-ids-stem').val(),
+        "type" : "attachment",
+        "targetType" : "question.stem",
+        "fileIds" : $('.js-attachment-ids-stem').val(),
         "fileName" : $('.js-attachment-list-stem').find('.js-attachment-name').text()
       };
     }
 
     if ($('.js-attachment-list-analysis').find('.js-attachment-name').length > 0) {
       attachments['analysis'] = {
-        "fileId" : $('.js-attachment-ids-analysis').val(),
+        "type" : "attachment",
+        "targetType" : "question.analysis",
+        "fileIds" : $('.js-attachment-ids-analysis').val(),
         "fileName" : $('.js-attachment-list-analysis').find('.js-attachment-name').text()
       };
     }

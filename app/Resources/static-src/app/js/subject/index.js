@@ -400,7 +400,7 @@ export default class sbList {
       self.orderQuestionList(index, $(`[data-anchor="#${token}"]`).parent(), $(`#${token}`));
       $(`[data-anchor="#${token}"]`).parent().after(self.getNewListItem(seq, type, $target.text()));
       self.statErrorQuestions();
-      var nextItem = $(`#${token}`).next('.subject-item');
+      let nextItem = $(`#${token}`).next('.subject-item');
       if (nextItem.hasClass('subject-sub-item')) {
         $(`[data-material-token="${token}"]`).last().after(res);
       } else {
