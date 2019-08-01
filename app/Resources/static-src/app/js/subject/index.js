@@ -45,6 +45,23 @@ export default class sbList {
         self.statErrorQuestions();
       }
     });
+    self.questionOperate.on('addQuestion', function(index, token, type) {
+      $(`[data-anchor="#${index}"]`).attr('data-anchor', '#' + token);
+      self.updateTotalScoreText();
+      self.updateQuestionCountText(type);
+    });
+    self.questionOperate.on('deleteQuestion', function(type) {
+      self.updateTotalScoreText();
+      self.updateQuestionCountText(type);
+    });
+    self.questionOperate.on('updateQuestionScore', function(isTrigger = true) {
+      self.updateTotalScoreText(isTrigger);
+    });
+    self.questionOperate.on('updateQuestionType', function(key, value, oldValue, token) {
+      self.updateQuestionCountText(value);
+      self.updateQuestionCountText(oldValue);
+      self.questionTypeConvert(value, token);
+    });
   }
 
   confirmFresh() {
@@ -500,9 +517,9 @@ export default class sbList {
     $(`[data-type=${type}]`).find('.subject-data__num').text(`共${typeCount}道题`);
   }
 
-  updateTotalScoreText() {
-    let totalScore = parseInt(this.questionOperate.getTotalScore());
-    if (this.isTestpaper()) {
+  updateTotalScoreText(isTrigger = true) {
+    if (this.isTestpaper() && isTrigger) {
+      let totalScore = parseInt(this.questionOperate.getTotalScore());
       $('.js-total-score').text(`总分${totalScore}分`);
     }
   }
@@ -615,6 +632,33 @@ export default class sbList {
     }
 
     return false;
+  }
+
+  questionTypeConvert(type, token) {
+    let $list = $('.js-subject-list').find(`[data-anchor=#${token}]`);
+    $list.find('.js-show-checkbox').attr('data-type', type);
+    $list.next('.js-type-name').text(this.getTypeName(type));
+  }
+
+  getTypeName(type) {
+    switch (type) {
+      case 'single_choice':
+        return '单选题';
+      case 'uncertain_choice':
+        return '不定项';
+      case 'choice':
+        return '多选题';
+      case 'determine':
+        return '判断题';
+      case 'essay':
+        return '问答题';
+      case 'fill':
+        return '填空题';
+      case 'material':
+        return '材料题';
+      default:
+        return '未知题型';
+    }
   }
 }
 

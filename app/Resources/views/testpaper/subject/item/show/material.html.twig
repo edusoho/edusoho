@@ -11,7 +11,7 @@
     {% endif %}
     </span>
     {% if errors.stem is not defined %}
-      <div class="subject-item__stem">{{ item.stem|striptags('<br><img>')|raw }}</div>
+      <div class="subject-item__stem">{{ item.stem|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
     {% elseif errors.stem.code == 100001 %}
       <span class="single-item__text--danger">缺少题干，请点击"编辑"进行设置。</span>
     {% endif %}
