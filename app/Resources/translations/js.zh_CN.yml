@@ -1381,6 +1381,8 @@ subject.difficulty_update_success: 难度修改成功
 subject.question_count: 共%count%道题
 subject.total_score: 总分%totalScore%分
 subject.is_editing_warning: 请先完成第%seq%题的编辑
+subject.sub_is_editing_warning: 请先完成材料题%parentNum%的第%seq%道子题的编辑
+
 subject.question_score_unit: 分
 subject.stem_required: 请输入题干
 subject.choice_option_least_two: 选项最少2个

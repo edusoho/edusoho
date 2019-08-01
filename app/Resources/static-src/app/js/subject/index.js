@@ -621,12 +621,20 @@ export default class sbList {
   }
   
   isEditing() {
-    const $editItem = $('.subject-edit-item');
+    const $editItem = $('.js-subject-edit-item');
+    const isSub = $editItem.hasClass('js-sub-edit-item');
+    let parentNum = '';
     if ($editItem.length !== 0) {
-      let seq = this.$itemList.find('.subject-edit-item').find('.js-edit-form-seq').text();
+      const seq = $editItem.find('.js-edit-form-seq').text();
+      if (isSub) {
+        const id = $editItem.find('.js-hidden-token').val();
+        const parentSeq = $(`#${id}`).find('.js-subject-item-number').text();
+        parentNum = $.trim(parentSeq);
+      }
+      const message = isSub ? Translator.trans('subject.sub_is_editing_warning', {parentNum:parentNum, seq:seq}) :Translator.trans('subject.is_editing_warning', {seq: seq});
       cd.message({
         type: 'warning',
-        message: Translator.trans('subject.is_editing_warning', {seq: seq}),
+        message: message,
       });
       return true;
     }

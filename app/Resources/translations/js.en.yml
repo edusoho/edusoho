@@ -1438,6 +1438,7 @@ subject.difficulty_update_success: Difficulty modified successfully
 subject.question_count: '%count% questions total'
 subject.total_score: '%totalScore% score total'
 subject.is_editing_warning: 'Finish %seq% question before other operation'
+subject.sub_is_editing_warning: 'Please finish editing sub-question %seq% of material %parentNum%'
 subject.question_score_unit: point
 subject.stem_required: Enter stem please
 subject.choice_option_least_two: At least 2 options required
