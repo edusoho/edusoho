@@ -178,7 +178,7 @@ class BaseQuestion {
       },
       messages: {
         difficulty: Translator.trans('course.question.create.difficulty_required_error_hint'),
-        stem: {required: Translator.trans('请输入题干')}
+        stem: {required: Translator.trans('subject.stem_required')}
       }
     });
     this.validator = validator;
@@ -219,7 +219,7 @@ class BaseQuestion {
   }
 
   replacePicture(str) {
-    return str.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, '[图片]');
+    return str.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, `[${Translator.trans('subject.symbol.picture')}]`);
   }
 
   set titleEditorToolBarName(toolbarName) {

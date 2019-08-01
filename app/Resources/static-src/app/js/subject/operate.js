@@ -112,7 +112,7 @@ export default class QuestionOperate {
   modifyScore(selectQuestion, scoreObj, isTestpaper) {
     let self = this;
     $.each(selectQuestion, function(index, token) {
-      self.$itemList.find(`#${token}`).find('.js-score').html(`${scoreObj['score']}分`);
+      self.$itemList.find(`#${token}`).find('.js-score').html(`${scoreObj['score']}${Translator.trans('subject.question_score_unit')}`);
       let question = self.getQuestion(token);
       self.updateQuestionItem(token, 'score', scoreObj['score'], false);
       if (isTestpaper) {
@@ -313,7 +313,7 @@ export default class QuestionOperate {
 
   isUpdating() {
     if (this.flag == true) {
-      cd.message({ type: 'danger', message: Translator.trans('题目正在修改中,请稍侯') });
+      cd.message({ type: 'danger', message: Translator.trans('course.question.is_updating_hint') });
       return false;
     }
 
@@ -331,21 +331,21 @@ export default class QuestionOperate {
   getTypeName(type) {
     switch (type) {
       case 'single_choice':
-        return '单选题';
+        return Translator.trans('course.question.type.single_choice');
       case 'uncertain_choice':
-        return '不定项';
+        return Translator.trans('course.question.type.uncertain_choice');
       case 'choice':
-        return '多选题';
+        return Translator.trans('course.question.type.choice');
       case 'determine':
-        return '判断题';
+        return Translator.trans('course.question.type.determine');
       case 'essay':
-        return '问答题';
+        return Translator.trans('course.question.type.essay');
       case 'fill':
-        return '填空题';
+        return Translator.trans('course.question.type.fill');
       case 'material':
-        return '材料题';
+        return Translator.trans('course.question.type.material');
       default:
-        return '未知题型';
+        return Translator.trans('course.question.type.unknown');
     }
   }
 

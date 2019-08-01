@@ -168,15 +168,15 @@ export default class sbList {
     let stats = this.statChosedQuestion();
     let keys = Object.keys(stats);
     if (keys.length === 0) {
-      cd.message({ type: 'danger', message: Translator.trans('请选择题目') });
+      cd.message({ type: 'danger', message: Translator.trans('subject.select_question_hint') });
       return;
     }
     let html = '';
     $.each(stats, function(index, statsItem){
-      let tr = statsItem.count + '道' + statsItem.name + '，';
+      let tr = statsItem.count + Translator.trans('subject.question_unit') + statsItem.name + Translator.trans('subject.comma');
       html += tr;
     });
-    html = html.substring(0, html.length - 1) + '。';
+    html = html.substring(0, html.length - 1) + Translator.trans('subject.period');
 
     modal.find('.js-select').html(html);
 
@@ -248,7 +248,7 @@ export default class sbList {
       },
       messages: {
         missScore: {
-          noMoreThan: '漏选分值不得超过题目分值'
+          noMoreThan: Translator.trans('subject.miss_score_no_more_than_score'),
         }
       }
     });
@@ -273,7 +273,7 @@ export default class sbList {
       this.questionOperate.modifyScore(this.selectQuestion, scoreObj, this.isTestpaper());
       this.selectQuestion = [];
 
-      cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
+      cd.message({ type: 'success', message: Translator.trans('subject.score_update_success') });
       this.$scoreModal.modal('hide');
     }
   }
@@ -285,7 +285,7 @@ export default class sbList {
       let text = $('input[name=\'difficultyRadios\']:checked').next().text();
       self.questionOperate.modifyDifficulty(self.selectQuestion, difficulty, text);
       self.selectQuestion = [];
-      cd.message({ type: 'success', message: Translator.trans('难度修改成功') });
+      cd.message({ type: 'success', message: Translator.trans('subject.difficulty_update_success') });
       self.$diffiultyModal.modal('hide');
     });
   }
@@ -422,10 +422,10 @@ export default class sbList {
       return;
     }
     cd.confirm({
-      title: '确认删除',
-      content: '确定要删除这道题目吗?',
-      okText: '确定',
-      cancelText: '取消',
+      title: Translator.trans('subject.delete.title'),
+      content: Translator.trans('subject.delete.content'),
+      okText: Translator.trans('site.confirm'),
+      cancelText: Translator.trans('site.cancel'),
     }).on('ok', () => {
       const $item = $(event.currentTarget).parent().parent();
       let token = $item.attr('id');
@@ -496,14 +496,14 @@ export default class sbList {
   updateQuestionCountText(type) {
     let totalCount = this.questionOperate.getQuestionCount('total');
     let typeCount = this.questionOperate.getQuestionCount(type);
-    $('.js-total-num').text(`共${totalCount}道题`);
-    $(`[data-type=${type}]`).find('.subject-data__num').text(`共${typeCount}道题`);
+    $('.js-total-num').text(Translator.trans('subject.question_count', {count: totalCount}));
+    $(`[data-type=${type}]`).find('.subject-data__num').text(Translator.trans('subject.question_count', {count: typeCount}));
   }
 
   updateTotalScoreText() {
     let totalScore = parseInt(this.questionOperate.getTotalScore());
     if (this.isTestpaper()) {
-      $('.js-total-score').text(`总分${totalScore}分`);
+      $('.js-total-score').text(Translator.trans('subject.total_score', {totalScore: totalScore}));
     }
   }
 
@@ -524,12 +524,12 @@ export default class sbList {
   finishImport(event) {
     let hasError = false;
     let self = this;
-    let errorTip = '第';
+    let errorTip = '';
     this.$element.find('.subject-list-item__num--error').each(function () {
       errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
       hasError = true;
     });
-    errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
+    errorTip = Translator.trans('subject.question_error_tip', {seqs: errorTip.substring(0, errorTip.length - 1)});
     if (hasError) {
       cd.message({
         type : 'danger',
@@ -546,7 +546,7 @@ export default class sbList {
       if (resp === true) {
         cd.message({
           type : 'success',
-          message : '保存成功！',
+          message : Translator.trans('subject.save_success'),
         });
         self.redirect = true;
         window.location.href = $(event.currentTarget).data('redirectUrl');
@@ -555,13 +555,13 @@ export default class sbList {
   }
 
   statErrorQuestions() {
-    let errorTip = '第';
+    let errorTip = '';
     let isShow = false;
     this.$element.find('.subject-list-item__num--error').each(function () {
       errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
       isShow = true;
     });
-    errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
+    errorTip = Translator.trans('subject.question_error_tip', {seqs: errorTip.substring(0, errorTip.length - 1)});
     if (isShow) {
       $('.js-error-tip').html(errorTip);
     } else {
@@ -609,7 +609,7 @@ export default class sbList {
       let seq = this.$itemList.find('.subject-edit-item').find('.js-edit-form-seq').text();
       cd.message({
         type: 'warning',
-        message: `请先完成第${seq}题的编辑`,
+        message: Translator.trans('subject.is_editing_warning', {seq: seq}),
       });
       return true;
     }
