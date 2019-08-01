@@ -25,6 +25,8 @@
   {% endif %}
 {% endblock %}
 {% block content %}
+  {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'open_course'})) }}
+
   <div class="open-course-list">
     <div class="row course-list es-open-course-list">
       {% for course in courses if course %}

@@ -32,7 +32,7 @@ class ReceiveCouponTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \AppBundle\Common\Exception\AccessDeniedException
      */
     public function testUsed()
     {
@@ -41,7 +41,7 @@ class ReceiveCouponTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \AppBundle\Common\Exception\AccessDeniedException
      */
     public function testCancelUsing()
     {

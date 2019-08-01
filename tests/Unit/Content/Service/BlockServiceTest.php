@@ -807,6 +807,54 @@ class BlockServiceTest extends BaseTestCase
         $contents = $this->getBlockService()->getContentsByCodes(array());
     }
 
+    public function testGetPostersWithTopBannerEmpty()
+    {
+        $this->mockBiz('System:SettingService', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array('uri' => 'test'),
+            ),
+        ));
+
+        $result = $this->getBlockService()->getPosters();
+        $this->assertEmpty($result);
+    }
+
+    public function testGetPostersWithTopBanner()
+    {
+        $this->mockBiz('System:SettingService', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array('uri' => 'test'),
+            ),
+        ));
+        $this->mockBiz('Content:BlockDao', array(
+            array(
+                'functionName' => 'getByCode',
+                'returnValue' => array(
+                    'data' => array(
+                        'posters' => array(
+                            array(
+                                'status' => 1,
+                                'src' => 'test.png',
+                                'href' => '/test',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ));
+
+        $posters = array(
+            array(
+                'image' => 'test.png',
+                'link' => array('type' => 'url', 'url' => '/test'),
+            ),
+        );
+        $result = $this->getBlockService()->getPosters();
+        $this->assertEquals($posters, $result);
+    }
+
     /**
      * @return UserService
      */

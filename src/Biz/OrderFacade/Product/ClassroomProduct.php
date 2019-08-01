@@ -26,6 +26,7 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         $this->originPrice = $classroom['price'];
         $this->middlePicture = $classroom['middlePicture'];
         $this->maxRate = $classroom['maxRate'];
+        $this->productEnable = 'published' === $classroom['status'] ? true : false;
         $this->cover = array(
             'small' => $classroom['smallPicture'],
             'middle' => $classroom['middlePicture'],

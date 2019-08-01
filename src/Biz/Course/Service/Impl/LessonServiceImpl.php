@@ -50,6 +50,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 
             $taskFields = $this->parseTaskFields($fields);
             $taskFields['categoryId'] = $lesson['id'];
+            $taskFields['isLesson'] = true;
             $task = $this->getTaskService()->createTask($taskFields);
 
             $this->commit();
@@ -143,8 +144,8 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $this->getCourseChapterDao()->delete($lesson['id']);
         $this->getTaskService()->deleteTasksByCategoryId($lesson['courseId'], $lesson['id']);
+        $this->getCourseChapterDao()->delete($lesson['id']);
 
         $this->dispatchEvent('course.lesson.delete', new Event($lesson));
 

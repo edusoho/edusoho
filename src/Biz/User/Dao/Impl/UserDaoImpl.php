@@ -162,7 +162,7 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
 
         $builder = parent::createQueryBuilder($conditions);
         if (array_key_exists('hasVerifiedMobile', $conditions)) {
-            $builder = $builder->andWhere('verifiedMobile != :verifiedMobileNull');
+            $builder->andStaticWhere("verifiedMobile != ''");
         }
 
         $builder->andStaticWhere("type <> 'system'");

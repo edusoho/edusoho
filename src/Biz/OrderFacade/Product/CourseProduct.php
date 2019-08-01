@@ -6,8 +6,8 @@ use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\Course\Util\CourseTitleUtils;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 class CourseProduct extends Product implements OrderStatusCallback
@@ -33,7 +33,9 @@ class CourseProduct extends Product implements OrderStatusCallback
         $course = $this->getCourseService()->getCourse($this->targetId);
         $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $this->targetId));
         $this->successUrl = array('my_course_show', array('id' => $this->targetId));
-        $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $this->courseSet = $courseSet;
+        $this->productEnable = ('published' === $course['status'] && 'published' === $courseSet['status']) ? true : false;
         $this->title = CourseTitleUtils::getDisplayedTitle($course);
         if (empty($this->title) && isset($params['orderItemId'])) {
             $orderItem = $this->getOrderService()->getOrderItem($params['orderItemId']);

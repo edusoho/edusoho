@@ -36,9 +36,12 @@
 			{% endif %}
       
       <div class="course-detail-remask">
-        {% if setting('course.show_student_num_enabled', '1') == 1 %}
-          <i class="es-icon es-icon-people"></i>
-          {{ 'course.students_count'|trans({'%studentsNum%':courseSet.studentNum|default(0)})|raw }}
+        {% if setting('course.show_student_num_enabled', '1') == 1  %}
+          {% if setting('course.show_cover_num_mode') == 'studentNum' %}
+            <i class="es-icon es-icon-people"></i>{{ 'course.students_count'|trans({'%studentsNum%':courseSet.studentNum|default(0)})|raw }}
+          {% elseif setting('course.show_cover_num_mode') == 'hitNum' %}
+            <i class="es-icon es-icon-view"></i>{{ 'course.students_count'|trans({'%studentsNum%':course.hitNum|default(0)})|raw }}
+          {% endif %}
         {% endif %}
         <div class="score pull-right mb0">
 					{{ web_macro.star(courseSet.rating|default(0)) }}

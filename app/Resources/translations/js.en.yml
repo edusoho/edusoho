@@ -1417,3 +1417,12 @@ document.import.intro_hover: >
 document.import.skip_btn: I know!
 subject.testpaper_title_empty_hint: Testpaper title can not be empty
 subject.testpaper_title_too_long_hint: Enter up to 50 characters
+
+user.account.order_pay_course_close_title: The course is closed
+user.account.order_pay_course_close_hint: The course in this order has been closed.Confirmed to pay?
+user.account.order_pay_classroom_close_title: The classroom is closed
+user.account.order_pay_classroom_close_hint: The classroom in this order has been closed.Confirmed to pay?
+user.account.order_pay_vip_close_title: The vip level is closed
+user.account.order_pay_vip_close_hint: The vip level in this order has been closed.Confirmed to pay?
+user.account.order_pay: Continue
+user.account.order_not_pay: Not paying

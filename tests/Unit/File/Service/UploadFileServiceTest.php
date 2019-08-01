@@ -88,6 +88,73 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertEquals($status, 'opened');
     }
 
+    public function testGetAudioServiceStatusWithEmptyAudioService()
+    {
+        $settingParams = array(
+            array(
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'cloud_access_key' => 'abbbcc',
+                    'cloud_secret_key' => 'testddd',
+                ),
+            ),
+        );
+        $this->mockBiz('System:SettingService', $settingParams);
+
+        $params = array(
+            array(
+                'functionName' => 'getAudioServiceStatus',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'audioService' => '',
+                ),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $status = $this->getUploadFileService()->getAudioServiceStatus();
+        $this->assertEquals($status, 'notAllowed');
+    }
+
+    public function testGetAudioServiceStatusWithNeedOpen()
+    {
+        $settingParams = array(
+            array(
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'cloud_access_key' => 'abbbcc',
+                    'cloud_secret_key' => 'testddd',
+                ),
+            ),
+        );
+        $this->mockBiz('System:SettingService', $settingParams);
+
+        $params = array(
+            array(
+                'functionName' => 'getAudioServiceStatus',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'audioService' => 'opened',
+                ),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $params = array(
+            array(
+                'functionName' => 'isSupportEnableAudio',
+                'runTimes' => 1,
+                'returnValue' => false,
+            ),
+        );
+        $this->mockBiz('Course:CourseService', $params);
+
+        $status = $this->getUploadFileService()->getAudioServiceStatus();
+        $this->assertEquals($status, 'needOpen');
+    }
+
     public function testGetFullFile()
     {
         $fileId = 1;
@@ -184,6 +251,12 @@ class UploadFileServiceTest extends BaseTestCase
         $result = $this->getUploadFileService()->getAudioConvertionStatus($ids);
 
         $this->assertEquals($result, '0');
+    }
+
+    public function testGetUploadFileInit()
+    {
+        $result = $this->getUploadFileService()->getUploadFileInit(1);
+        $this->assertEmpty($result);
     }
 
     public function testGetAudioConvertionStatus()
@@ -320,6 +393,22 @@ class UploadFileServiceTest extends BaseTestCase
         unset($biz['@File:UploadFileDao']);
     }
 
+    public function testGetFileByGlobalIdWithEmptyFile()
+    {
+        $params = array(
+            array(
+                'functionName' => 'getByGlobalId',
+                'runTimes' => 1,
+                'withParams' => array(1),
+                'returnValue' => array(),
+            ),
+        );
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $result = $this->getUploadFileService()->getFileByGlobalId(1);
+        $this->assertNull($result);
+    }
+
     public function testGetFileByHashId()
     {
         $hashId = 'materiallib-1/20160418040438-d11n060aceo8g8ws';
@@ -370,6 +459,22 @@ class UploadFileServiceTest extends BaseTestCase
         $biz = $this->getBiz();
         unset($biz['@File:CloudFileImplementor']);
         unset($biz['@File:UploadFileDao']);
+    }
+
+    public function testGetFileByHashIddWithEmptyFile()
+    {
+        $params = array(
+            array(
+                'functionName' => 'getByHashId',
+                'runTimes' => 1,
+                'withParams' => array(1),
+                'returnValue' => array(),
+            ),
+        );
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $result = $this->getUploadFileService()->getFileByHashId(1);
+        $this->assertNull($result);
     }
 
     public function testGetFileByConvertHash()
@@ -719,6 +824,21 @@ class UploadFileServiceTest extends BaseTestCase
             ),
         );
         $this->mockBiz('File:LocalFileImplementor', $params);
+
+        $params = array(
+            array(
+                'functionName' => 'addFile',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'id' => 1,
+                    'storage' => 'cloud',
+                    'filename' => 'test',
+                    'createdUserId' => 1,
+                    'targetType' => 'materiallib',
+                ),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
         $file = $this->getUploadFileService()->addFile('materiallib', 1);
         $this->assertEquals($file['id'], 1);
 
@@ -1182,7 +1302,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(),
+                'returnValue' => array('id' => 1),
             ),
             array(
                 'arguments' => true,
@@ -1264,7 +1384,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(),
+                'returnValue' => array('id' => 1),
             ),
             array(
                 'arguments' => true,
@@ -1301,6 +1421,15 @@ class UploadFileServiceTest extends BaseTestCase
             'hash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
         ));
         $this->assertEquals(2, $result['globalId']);
+    }
+
+    /**
+     * @expectedException \Biz\Common\CommonException
+     * @expectedExceptionMessage exception.common_parameter_missing
+     */
+    public function testInitUploadWithErrorParam()
+    {
+        $this->getUploadFileService()->initUpload(array());
     }
 
     public function testFinishedUpload()
@@ -1479,6 +1608,22 @@ class UploadFileServiceTest extends BaseTestCase
 
         $result = $this->getUploadFileService()->deleteByGlobalId(array('globalId' => 1));
         $this->assertTrue($result);
+    }
+
+    public function testDeleteByGLobalIdWithEmptyFile()
+    {
+        $params = array(
+            array(
+                'functionName' => 'getByGlobalId',
+                'runTimes' => 1,
+                'withParams' => array(1),
+                'returnValue' => array(),
+            ),
+        );
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $result = $this->getUploadFileService()->deleteByGlobalId(1);
+        $this->assertNull($result);
     }
 
     public function testReconvertFile()
@@ -1686,6 +1831,55 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertEmpty($result);
     }
 
+    public function testReconvertOldFile2()
+    {
+        $params = array(
+            array(
+                'functionName' => 'getFile',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'id' => 11,
+                    'storage' => 'cloud',
+                    'type' => 'video',
+                    'targetType' => 'courselesson',
+                    'targetId' => 2,
+                    'convertParams' => array(),
+                ),
+            ),
+            array(
+                'functionName' => 'reconvertOldFile',
+                'runTimes' => 1,
+                'returnValue' => null,
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $params = array(
+            array(
+                'arguments' => true,
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array('id' => 8, 'storage' => 'cloud'),
+            ),
+        );
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $params = array(
+            array(
+                'arguments' => true,
+                'functionName' => 'getCourse',
+                'runTimes' => 1,
+                'withParams' => array(2),
+                'returnValue' => array('id' => 2),
+            ),
+        );
+        $this->mockBiz('Course:CourseService', $params);
+
+        $result = $this->getUploadFileService()->reconvertOldFile(8, null, null);
+        $this->assertEquals('convert_request_failed', $result['error']);
+        $this->assertEquals('文件8转换请求失败！', $result['message']);
+    }
+
     public function testCollectFile()
     {
         $params = array(
@@ -1782,6 +1976,12 @@ class UploadFileServiceTest extends BaseTestCase
     {
         $result = $this->getUploadFileService()->syncFile(array('id' => 11));
         $this->assertEquals(11, $result['id']);
+    }
+
+    public function testSearchFiles()
+    {
+        $result = $this->getUploadFileService()->searchFiles(array(), array('createdTime' => 'DESC'), 0, 10);
+        $this->assertEmpty($result);
     }
 
     public function testSearchUploadFiles()
@@ -1965,6 +2165,34 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertEquals('cloud', $result['storage']);
     }
 
+    /**
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.file_not_found
+     */
+    public function testSaveConvertResultWithEmptyFile()
+    {
+        $params = array(
+            array(
+                'arguments' => true,
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array('storage' => 'cloud'),
+            ),
+        );
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $params = array(
+            array(
+                'functionName' => 'getFile',
+                'runTimes' => 1,
+                'returnValue' => array(),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $this->getUploadFileService()->saveConvertResult(1);
+    }
+
     public function testSaveConvertResult3()
     {
         $params = array(
@@ -1992,13 +2220,41 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'saveConvertResult',
                 'runTimes' => 1,
-                'returnValue' => array('convertStatus' => 'draft', 'metas2' => array()),
+                'returnValue' => array('convertStatus' => 'success', 'metas2' => array(), 'convertParams' => array()),
             ),
         );
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->saveConvertResult3(1);
         $this->assertEquals('cloud', $result['storage']);
+    }
+
+    /**
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.file_not_found
+     */
+    public function testSaveConvertResult3WithEmptyFile()
+    {
+        $params = array(
+            array(
+                'arguments' => true,
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array('storage' => 'cloud'),
+            ),
+        );
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $params = array(
+            array(
+                'functionName' => 'getFile',
+                'runTimes' => 1,
+                'returnValue' => array(),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $this->getUploadFileService()->saveConvertResult3(1);
     }
 
     public function testConvertFile()
@@ -2037,6 +2293,43 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertEquals('cloud', $result['storage']);
     }
 
+    /**
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.error_status
+     */
+    public function testConvertFileWithErrorStatus()
+    {
+        $this->getUploadFileService()->convertFile(1, '');
+    }
+
+    /**
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.file_not_found
+     */
+    public function testConvertFileWithEmptyFile()
+    {
+        $params = array(
+            array(
+                'arguments' => true,
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array('storage' => 'cloud'),
+            ),
+        );
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $params = array(
+            array(
+                'functionName' => 'getFile',
+                'runTimes' => 1,
+                'returnValue' => array(),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $this->getUploadFileService()->convertFile(1, 'none');
+    }
+
     public function testSetFileConverting()
     {
         $params = array(
@@ -2068,6 +2361,34 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertEquals('cloud', $result['storage']);
     }
 
+    /**
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.file_not_found
+     */
+    public function testSetFileConvertingWithEmptyFile()
+    {
+        $params = array(
+            array(
+                'arguments' => true,
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array('storage' => 'cloud'),
+            ),
+        );
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $params = array(
+            array(
+                'functionName' => 'getFile',
+                'runTimes' => 1,
+                'returnValue' => array(),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $this->getUploadFileService()->setFileConverting(1, '');
+    }
+
     public function testSetAudioConvertStatus()
     {
         $params = array(
@@ -2097,6 +2418,62 @@ class UploadFileServiceTest extends BaseTestCase
 
         $result = $this->getUploadFileService()->setAudioConvertStatus(1, 'doing');
         $this->assertEquals('cloud', $result['storage']);
+    }
+
+    /**
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.error_status
+     */
+    public function testSetAudioConvertStatusWithErrorStatus()
+    {
+        $params = array(
+            array(
+                'arguments' => true,
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array('storage' => 'cloud'),
+            ),
+        );
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $params = array(
+            array(
+                'functionName' => 'getFile',
+                'runTimes' => 1,
+                'returnValue' => array('id' => 1),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $this->getUploadFileService()->setAudioConvertStatus(1, '');
+    }
+
+    /**
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.file_not_found
+     */
+    public function testSetAudioConvertStatusWithEmptyFile()
+    {
+        $params = array(
+            array(
+                'arguments' => true,
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array('storage' => 'cloud'),
+            ),
+        );
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $params = array(
+            array(
+                'functionName' => 'getFile',
+                'runTimes' => 1,
+                'returnValue' => array(),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $this->getUploadFileService()->setAudioConvertStatus(1, 'none');
     }
 
     public function testSetResourceConvertStatus()

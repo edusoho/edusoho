@@ -29,12 +29,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
     {
         $task = parent::updateTask($id, $fields);
 
-        $conditions = array(
-            'courseId' => $task['courseId'],
-            'categoryId' => $task['categoryId'],
-        );
-        $categoryTaskCount = $this->getTaskService()->countTasks($conditions);
-        if ($categoryTaskCount <= 1) {
+        if ($task['isLesson']) {
             $this->getCourseService()->updateChapter(
                 $task['courseId'],
                 $task['categoryId'],
@@ -66,12 +61,15 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         $chapter = $this->getChapterDao()->get($task['categoryId']);
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
         $tasks = array($task);
-        $chapter['tasks'] = $tasks;
         if (1 == $taskNum) {
             $template = 'lesson-manage/normal/lesson.html.twig';
+        } elseif ($task['isLesson']) {
+            $template = 'lesson-manage/normal/lesson.html.twig';
+            $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($task['categoryId']);
         } else {
             $template = 'lesson-manage/normal/tasks.html.twig';
         }
+        $chapter['tasks'] = $tasks;
 
         return array(
             'data' => array(
@@ -81,38 +79,6 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
             ),
             'template' => $template,
         );
-    }
-
-    public function deleteTask($task)
-    {
-        if (empty($task)) {
-            return true;
-        }
-
-        try {
-            $this->biz['db']->beginTransaction();
-
-            $this->getTaskDao()->delete($task['id']);
-            $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
-            $this->getActivityService()->deleteActivity($task['activityId']);
-
-            //课时下面只有一个任务时，则把课时也删除
-            $conditions = array(
-                'courseId' => $task['courseId'],
-                'categoryId' => $task['categoryId'],
-            );
-            $categoryTaskCount = $this->getTaskDao()->count($conditions);
-            if (empty($categoryTaskCount)) {
-                $this->getCourseLessonService()->deleteLesson($task['courseId'], $task['categoryId']);
-            }
-
-            $this->biz['db']->commit();
-        } catch (\Exception $e) {
-            $this->biz['db']->rollback();
-            throw $e;
-        }
-
-        return true;
     }
 
     /**

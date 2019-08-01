@@ -126,6 +126,7 @@ class TaskCopy extends AbstractEntityCopy
             'mediaSource',
             'status',
             'length',
+            'isLesson',
         );
     }
 

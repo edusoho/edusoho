@@ -2,19 +2,19 @@
 
 namespace AppBundle\Controller\Cashier;
 
+use AppBundle\Common\MathToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\SettingService;
-use Biz\WeChat\Service\WeChatService;
 use Biz\User\UserException;
+use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
 use Codeages\Biz\Pay\Service\AccountService;
 use Codeages\Biz\Pay\Service\PayService;
 use Codeages\Biz\Pay\Status\PayingStatus;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\MathToolkit;
 
 class CashierController extends BaseController
 {

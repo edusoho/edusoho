@@ -209,6 +209,7 @@ userKeyWordType:
     verifiedMobile: Mobile
     email: Email
     loginIp: Login Ip
+    idcard: IdCard
 
 jobCycle:
     once: Once
