@@ -69,12 +69,38 @@
         </div>
       {% endif %}
 
-      <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('oauth2_login_create') }}">{% if setting('auth.user_terms') == 'opened' %}{{ 'user.register.agree_terms'|trans }}{% else %}{{ 'form.btn.register'|trans }}{% endif %}</button>
+      <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('oauth2_login_create') }}">{{ 'form.btn.register'|trans }}</button>
 
-      {% if setting('auth.user_terms') == 'opened' %}
-        <span class="pull-left third-party-link">{{ 'user.register.read_detail'|trans }}<a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a></span>
+      {% if setting('auth.user_terms') == 'opened' and setting('auth.privacy_policy') == 'opened' %}
+        <div class="form-group mbl">
+          <div class="controls">
+            <input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+            <a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
+            {{ 'site.default.and'|trans }}
+            <a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
+          </div>
+        </div>
+
+        <div class="controls text-center">
+          <a class="third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
+        </div>
+      {% elseif setting('auth.user_terms') == 'opened' %}
+        <div class="form-group mbl">
+          <div class="controls">
+            <input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+            <a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
+            <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
+          </div>
+        </div>
+      {% elseif setting('auth.privacy_policy') == 'opened' %}
+        <div class="form-group mbl">
+          <div class="controls">
+            <input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+            <a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
+            <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
+          </div>
+        </div>
       {% endif %}
-      <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
 
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>

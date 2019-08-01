@@ -253,6 +253,17 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         ));
     }
 
+    public function getPrivacyPolicy()
+    {
+        $setting = $this->controller->getSettingService()->get('auth', array());
+
+        $privacyPolicyBody = empty($setting['privacy_policy_body']) ? '' : $setting['privacy_policy_body'];
+
+        return $this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', array(
+            'content' => $privacyPolicyBody,
+        ));
+    }
+
     public function getSchoolProfile()
     {
         $mobile = $this->controller->getSettingService()->get('mobile', array());

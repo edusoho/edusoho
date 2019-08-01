@@ -73,6 +73,9 @@ export default class Create {
         unsigned_integer: true,
         rangelength: [6, 6],
       },
+      agree_policy: {
+        required: true,
+      },
     };
 
     this.validator = this.$form.validate({
@@ -81,7 +84,10 @@ export default class Create {
         sms_code: {
           required: Translator.trans('site.captcha_code.required'),
           rangelength: Translator.trans('validate.sms_code.message')
-        }
+        },
+        agree_policy: {
+          required: Translator.trans('validate.valid_policy_input.message'),
+        },
       }
     });
   }

@@ -192,7 +192,7 @@
   </fieldset>
 
   <fieldset>
-    <legend>{{'admin.user_auth.Term_service_settings'|trans}}</legend>
+    <legend>{{'admin.user_auth.protocol_settings'|trans}}</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label for="user_terms">{{'admin.user_auth.Term_service_settings.Enable'|trans}}</label>
@@ -212,6 +212,24 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="privacy_policy">{{'admin.user_auth.privacy_policy_settings.Enable'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('privacy_policy', {'opened':'admin.user_auth.privacy_policy_settings.open'|trans, 'closed':'admin.user_auth.privacy_policy_settings.closed'|trans}, auth.privacy_policy) }}
+        <div class="help-block">{{'admin.user_auth.privacy_policy_settings.Enable.help_block'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="privacy_policy_body">{{'admin.user_auth.privacy_policy_settings.details'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea class="form-control" id="privacy_policy_body" rows="16" name="privacy_policy_body" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ auth.privacy_policy_body }}</textarea>
+      </div>
+    </div>
   </fieldset>
 
 

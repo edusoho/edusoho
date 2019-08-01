@@ -13,6 +13,11 @@ define(function(require, exports, module) {
       filebrowserImageUploadUrl: $('#user_terms_body').data('imageUploadUrl')
     });
 
+    CKEDITOR.replace('privacy_policy_body', {
+      toolbar: 'Simple',
+      filebrowserImageUploadUrl: $('#privacy_policy_body').data('imageUploadUrl')
+    });
+
     $('.hiddenJsAction').click(function() {
       $('.dync_visible').hide();
       var protective = $('input[name=register_protective]:checked').val();
