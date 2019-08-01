@@ -8,7 +8,7 @@
         {{ loop.index }}
       {% endif %}
     </span>
-    <div class="subject-item__stem"> {{ item.stemShow|striptags('<br><img>')|raw }}</div>
+    <div class="subject-item__stem"> {{ item.stemShow|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
   </div>
   <div class="subject-item__body">
     <span class="subject-table-label">{{ 'course.testpaper_manage.import.re_edit.answer'|trans }}：</span>

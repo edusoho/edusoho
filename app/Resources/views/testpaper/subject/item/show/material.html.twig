@@ -11,7 +11,7 @@
     {% endif %}
     </span>
     {% if errors.stem is not defined %}
-      <div class="subject-item__stem">{{ item.stem|striptags('<br><img>')|raw }}</div>
+      <div class="subject-item__stem">{{ item.stem|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
     {% elseif errors.stem.code == 100001 %}
       <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_stem'|trans }}</span>
     {% endif %}

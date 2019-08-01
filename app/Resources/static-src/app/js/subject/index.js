@@ -45,6 +45,23 @@ export default class sbList {
         self.statErrorQuestions();
       }
     });
+    self.questionOperate.on('addQuestion', function(index, token, type) {
+      $(`[data-anchor="#${index}"]`).attr('data-anchor', '#' + token);
+      self.updateTotalScoreText();
+      self.updateQuestionCountText(type);
+    });
+    self.questionOperate.on('deleteQuestion', function(type) {
+      self.updateTotalScoreText();
+      self.updateQuestionCountText(type);
+    });
+    self.questionOperate.on('updateQuestionScore', function(isTrigger = true) {
+      self.updateTotalScoreText(isTrigger);
+    });
+    self.questionOperate.on('updateQuestionType', function(key, value, oldValue, token) {
+      self.updateQuestionCountText(value);
+      self.updateQuestionCountText(oldValue);
+      self.questionTypeConvert(value, token);
+    });
   }
 
   confirmFresh() {
@@ -320,6 +337,7 @@ export default class sbList {
       'question' : question,
       'isSub' : isSub,
       'method' : 'edit',
+      'isTestpaper': this.isTestpaper() ? 1 : 0,
     };
     $.post(url, data, html=> {
       $item.replaceWith(html);
@@ -346,6 +364,7 @@ export default class sbList {
       'toType' : toType,
       'isSub' : isSub,
       'method' : method,
+      'isTestpaper': this.isTestpaper() ? 1 : 0,
     };
     data.fromType = fromType;
     data.toType = toType;
@@ -500,9 +519,9 @@ export default class sbList {
     $(`[data-type=${type}]`).find('.subject-data__num').text(Translator.trans('subject.question_count', {count: typeCount}));
   }
 
-  updateTotalScoreText() {
-    let totalScore = parseInt(this.questionOperate.getTotalScore());
-    if (this.isTestpaper()) {
+  updateTotalScoreText(isTrigger = true) {
+    if (this.isTestpaper() && isTrigger) {
+      let totalScore = parseInt(this.questionOperate.getTotalScore());
       $('.js-total-score').text(Translator.trans('subject.total_score', {totalScore: totalScore}));
     }
   }
@@ -615,6 +634,33 @@ export default class sbList {
     }
 
     return false;
+  }
+
+  questionTypeConvert(type, token) {
+    let $list = $('.js-subject-list').find(`[data-anchor=#${token}]`);
+    $list.find('.js-show-checkbox').attr('data-type', type);
+    $list.next('.js-type-name').text(this.getTypeName(type));
+  }
+
+  getTypeName(type) {
+    switch (type) {
+      case 'single_choice':
+        return Translator.trans('course.question.type.single_choice');
+      case 'uncertain_choice':
+        return Translator.trans('course.question.type.uncertain_choice');
+      case 'choice':
+        return Translator.trans('course.question.type.choice');
+      case 'determine':
+        return Translator.trans('course.question.type.determine');
+      case 'essay':
+        return Translator.trans('course.question.type.essay');
+      case 'fill':
+        return Translator.trans('course.question.type.fill');
+      case 'material':
+        return Translator.trans('course.question.type.material');
+      default:
+        return Translator.trans('course.question.type.unknown');
+    }
   }
 }
 
