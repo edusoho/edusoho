@@ -11,12 +11,12 @@
     <div class="subject-item__stem"> {{ item.stemShow|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
   </div>
   <div class="subject-item__body">
-    <span class="subject-table-label">答案：</span>
+    <span class="subject-table-label">{{ 'course.testpaper_manage.import.re_edit.answer'|trans }}：</span>
     {% for answer_key,answer in item.answers %}
       {% if errors['answers_'~answer_key] is not defined %}
         {{ item.answers[answer_key] }}
       {% elseif errors['answers_'~answer_key].code == 100003 %}
-        <span class="single-item__text--danger">此空缺少正确答案，请点击“编辑”进行设置。</span>
+        <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_fill_no_answer'|trans }}</span>
       {% endif %}
     {% endfor %}
   </div>

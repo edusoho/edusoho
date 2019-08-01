@@ -4,7 +4,7 @@
 
 {% block subtitle %}
   <div class="subject-data__subtitle subject-data__subtitle--question">
-    <span class="js-total-num">共{{ questions|length }}道题</span>
+    <span class="js-total-num">{{ 'course.testpaper_manage.import.re_edit.total_count'|trans({'%count%': questions|length}) }}</span>
   </div>
 {% endblock %}
 
@@ -15,5 +15,5 @@
 {% endblock %}
 
 {% block save_btn %}
-  <button class="cd-btn cd-btn-primary subject-button js-import-btn" data-redirect-url="{{ path('course_set_manage_question', {id:courseSetId}) }}" data-url="{{ path('questions_import_save', {token: app.request.get('token')}) }}" type="button">完成导入</button>
+  <button class="cd-btn cd-btn-primary subject-button js-import-btn" data-redirect-url="{{ path('course_set_manage_question', {id:courseSetId}) }}" data-url="{{ path('questions_import_save', {token: app.request.get('token')}) }}" type="button">{{ 'course.testpaper_manage.import.re_edit.finish_import'|trans }}</button>
 {% endblock %}

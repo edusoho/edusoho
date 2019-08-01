@@ -4,7 +4,7 @@ class SingleChoice extends Choice {
   constructor($form, object) {
     super($form, object);
     this.errorMessage = {
-      noAnswer: Translator.trans('请选择正确答案'),
+      noAnswer: Translator.trans('subject.choice_require_answer'),
     };
   }
 

@@ -1475,7 +1475,42 @@ course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
 course.testpaper_manage.export: Export
 course.testpaper_manage.import: Import
+course.testpaper_manage.import.re_edit.add_option: Add Option
+course.testpaper_manage.import.re_edit.upload_stem_attachment: Upload Stem Attachment
+course.testpaper_manage.import.re_edit.edit_analysis: Edit Analysis
+course.testpaper_manage.import.re_edit.upload_analysis_attachment: Upload Analysis Attachment
+course.testpaper_manage.import.re_edit.finish_edit: Finish Edit
+course.testpaper_manage.import.re_edit.total_count: Total %count%
+course.testpaper_manage.import.re_edit.total_score: Total score %totalScore%
+course.testpaper_manage.import.re_edit.edit_title_hint: Edit the testpaper title here and enter up to 50 characters.
+course.testpaper_manage.import.re_edit.finish_import: Finish import
+course.testpaper_manage.import.re_edit.delete_attachment: Delete
+course.testpaper_manage.import.re_edit.batch_set_score: Batch set score
+course.testpaper_manage.import.re_edit.score_hint: Positive number less than 1000
 course.testpaper_manage.import.re_edit.miss_score: Miss Score
+course.testpaper_manage.import.re_edit.selected: 'Selected: '
+course.testpaper_manage.import.re_edit.edit_item: Edit
+course.testpaper_manage.import.re_edit.delete_item: Delete
+course.testpaper_manage.import.re_edit.add_item: Add
+course.testpaper_manage.import.re_edit.add_sub_item: Add Sub Question
+course.testpaper_manage.import.re_edit.material_score_hint: Sum of sub questions' score
+course.testpaper_manage.import.re_edit.new_question_title: Add new question
+course.testpaper_manage.import.re_edit.select_type: Select question type
+course.testpaper_manage.import.re_edit.uncertain_choice: Uncertain Choice
+course.testpaper_manage.import.re_edit.question_statistics: Question Statistics
+course.testpaper_manage.import.re_edit.batch_set_difficulty: Batch Set difficulty
+course.testpaper_manage.import.re_edit.question_list: Question list
+course.testpaper_manage.import.re_edit.batch_operate: Batch Operate
+course.testpaper_manage.import.re_edit.select_all: Select All
+course.testpaper_manage.import.re_edit.finish_batch_operate: Finish
+course.testpaper_manage.import.re_edit.answer: Answer
+course.testpaper_manage.import.re_edit.correct: Correct
+course.testpaper_manage.import.re_edit.wrong: Wrong
+course.testpaper_manage.import.re_edit.convert_hint: Can convert to
+course.testpaper_manage.import.re_edit.error_no_stem: Missing stem, please click "Edit" to set.
+course.testpaper_manage.import.re_edit.error_no_option: Missing option, please click "Edit" to set.
+course.testpaper_manage.import.re_edit.error_no_answer: Missing answer, please click "Edit" to set.
+course.testpaper_manage.import.re_edit.error_fill_no_answer: This blank missing answer, please click "Edit" to set.
 course.testpaper_manage.create: Add
 course.testpaper_manage.create.bread_crumbs: '<li><a href="%testpaperManageUrl%">Test paper''</a></li><li class="active">%name%</li>'
 course.testpaper_manage.create.content_title: 'Create testpaper'

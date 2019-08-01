@@ -11,17 +11,17 @@
     {% if errors.stem is not defined %}
       <div class="subject-sub-item__stem">{{ item.stemShow|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
     {% elseif errors.stem.code == 100001 %}
-      <span class="single-item__text--danger">缺少题干，请点击"编辑"进行设置。</span>
+      <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_stem'|trans }}</span>
     {% endif %}
   </div>
   <div class="subject-item__body">
     <div class="subject-sub-item__answer">
-      <span class="subject-sub-item__label">答案：</span>
+      <span class="subject-sub-item__label">{{ 'course.testpaper_manage.import.re_edit.answer'|trans }}：</span>
         {% for answer_key,answer in item.answers %}
           {% if errors['answers_'~answer_key] is not defined %}
             {{ item.answers[answer_key] }}
           {% elseif errors['answers_'~answer_key].code == 100003 %}
-            <span class="single-item__text--danger">缺少正确答案，请点击“编辑”进行设置。</span>
+            <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_answer'|trans }}</span>
           {% endif %}
         {% endfor %}
     </div>
