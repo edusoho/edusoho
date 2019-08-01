@@ -9,17 +9,17 @@ class Choice extends BaseQuestion {
     this.optionCount = 0;
     this.timer = false;
     this.errorMessage = {
-      noAnswer: Translator.trans('至少选择2个答案'),
+      noAnswer: Translator.trans('subject.choice_answer_least_two'),
     };
     this.init();
   }
 
   init() {
+    this.initTitleEditor(this.validator);
     this.initOptionCount();
     this.initData();
     this.initEvent();
     this.initValidator();
-    this.initTitleEditor(this.validator);
   }
 
   initOptionCount() {
@@ -95,13 +95,13 @@ class Choice extends BaseQuestion {
       },
       messages: {
         missScore: {
-          noMoreThan: '漏选分值不得超过题目分值'
+          noMoreThan: Translator.trans('subject.miss_score_no_more_than_score')
         },
         stem: {
-          required: '题干内容不得为空'
+          required: Translator.trans('subject.validate.stem_required')
         },
         options: {
-          required: '选项内容不得为空'
+          required: Translator.trans('subject.validate.option_required')
         }
       },
       errorPlacement: function(error, element) {
@@ -129,11 +129,6 @@ class Choice extends BaseQuestion {
     const $textArea = $input.next();
     this.fieldId = $textArea.attr('id');
     $input.addClass('hidden');
-    // if (fieldId === 'question-stem-field') {
-    //   $('.js-upload-stem-attachment').removeClass('hidden');
-    // } else {
-    //   $('.js-upload-stem-attachment').addClass('hidden');
-    // }
 
     let $target = $('#' + this.fieldId);
     let editor = null;
@@ -173,7 +168,7 @@ class Choice extends BaseQuestion {
     if (this.optionCount <= 2) {
       cd.message({
         type: 'danger',
-        message: Translator.trans('选项最少2个'),
+        message: Translator.trans('subject.choice_option_least_two'),
       });
       return;
     }
@@ -207,7 +202,7 @@ class Choice extends BaseQuestion {
     if (this.optionCount >= 10) {
       cd.message({
         type: 'danger',
-        message: Translator.trans('选项最多10个'),
+        message: Translator.trans('subject.choice_option_most_ten'),
       });
       $target.attr('disabled', false);
       return;
@@ -229,7 +224,7 @@ class Choice extends BaseQuestion {
     if (this.optionCount < 2) {
       cd.message({
         type: 'danger',
-        message: Translator.trans('选项最少2个'),
+        message: Translator.trans('subject.choice_option_least_two'),
       });
       return;
     }
@@ -258,7 +253,7 @@ class Choice extends BaseQuestion {
         question['answers'].push(value);
       }
     });
-    question['attachments'] = this.getAttachemnts();
+    question['attachment'] = this.getAttachemnts();
     let method = $('.js-hidden-method').val();
     let isSub = $('.js-sub-judge').val();
     let key = $('.js-edit-form-seq').text() - 1;

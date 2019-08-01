@@ -169,11 +169,23 @@ class Setting extends AbstractResource
     {
         $courseSetting = $this->getSettingService()->get('course', array());
 
+        if (0 == $courseSetting['show_student_num_enabled']) {
+            $showStudentNumEnabled = 0;
+            $showHitNumEnabled = 0;
+        } elseif ((1 == $courseSetting['show_student_num_enabled']) && (isset($courseSetting['show_cover_num_mode'])) && ('hitNum' == $courseSetting['show_cover_num_mode'])) {
+            $showStudentNumEnabled = 0;
+            $showHitNumEnabled = 1;
+        } else {
+            $showStudentNumEnabled = 1;
+            $showHitNumEnabled = 0;
+        }
+
         return array(
             'chapter_name' => empty($courseSetting['chapter_name']) ? '章' : $courseSetting['chapter_name'],
             'part_name' => empty($courseSetting['part_name']) ? '节' : $courseSetting['part_name'],
             'task_name' => empty($courseSetting['task_name']) ? '任务' : $courseSetting['task_name'],
-            'show_student_num_enabled' => !isset($courseSetting['show_student_num_enabled']) ? '1' : $courseSetting['show_student_num_enabled'],
+            'show_student_num_enabled' => $showStudentNumEnabled,
+            'show_hit_num_enabled' => $showHitNumEnabled,
         );
     }
 

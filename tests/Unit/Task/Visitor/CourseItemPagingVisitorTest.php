@@ -98,6 +98,39 @@ class CourseItemPagingVisitorTest extends BaseTestCase
         $this->assertEquals(1, $result[0][0]['id']);
     }
 
+    public function testStartPagingWithOffsetTaskId()
+    {
+        $courseId = 1;
+        $visitor = new CourseItemPagingVisitor($this->getBiz(), $courseId, array('direction' => 'down', 'limit' => 25, 'offsetSeq' => 1, 'offsetTaskId' => 1));
+
+        $chapter = $this->getChapterDao()->create(array(
+            'courseId' => $courseId,
+            'type' => 'chapter',
+            'title' => '章节',
+            'number' => 1,
+            'seq' => 0,
+        ));
+
+        $activity = $this->getActivityDao()->create(array('title' => 'activity', 'mediaType' => 'video'));
+
+        $sortIds[] = 'lesson-'.$chapter['id'];
+        $this->getTaskDao()->create(array(
+            'courseId' => $courseId,
+            'title' => 'title',
+            'type' => 'lesson',
+            'mode' => 'lesson',
+            'categoryId' => $chapter['id'],
+            'number' => 0,
+            'seq' => 0,
+            'createdUserId' => 1,
+            'activityId' => $activity['id'],
+            'status' => 'published',
+        ));
+
+        $result = $visitor->visitDefaultStrategy(new DefaultStrategy($this->getBiz()));
+        $this->assertEquals(0, count($result[0]));
+    }
+
     /**
      * @return TaskDao
      */

@@ -19,7 +19,7 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
         } catch (\Exception $e) {
             $this->getLogService()->error('cloud_data', 'push', "{$name} 事件发送失败", array('message' => $e->getMessage()));
 
-            if ($level == 'important') {
+            if ('important' == $level) {
                 $user = $this->getCurrentUser();
                 $fields = array(
                     'name' => $name,

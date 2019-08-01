@@ -208,14 +208,22 @@ class CoinCheckCommandTest extends BaseTestCase
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'getCourse',
-                'returnValue' => array('id' => 1, 'title' => 'course title', 'courseSetId' => 1, 'price' => 100, 'originPrice' => 100, 'maxRate' => 100),
+                'returnValue' => array(
+                    'id' => 1,
+                    'title' => 'course title',
+                    'courseSetId' => 1,
+                    'price' => 100,
+                    'originPrice' => 100,
+                    'maxRate' => 100,
+                    'status' => 'published',
+                ),
             ),
         ));
 
         $this->mockBiz('Course:CourseSetService', array(
             array(
                 'functionName' => 'getCourseSet',
-                'returnValue' => array('id' => 1, 'title' => 'course_set title', 'cover' => array()),
+                'returnValue' => array('id' => 1, 'title' => 'course_set title', 'cover' => array(), 'status' => 'published'),
             ),
         ));
     }

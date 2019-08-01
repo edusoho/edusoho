@@ -141,7 +141,7 @@ admin.operation.mobile_menu: '移动端内容管理'
 admin.operation.wechat_notification: 微信通知
 admin.operation.analysis_menu: 数据统计
 admin.operation.sensitive_words_menu: 敏感词管理
-admin.operation.reward_point_menu:　积分管理
+admin.operation.reward_point_menu: 积分管理
 admin.operation.reward_point_mall_menu: 积分商城
 
 ##资讯管理模块

@@ -9,14 +9,14 @@
         {{ '(' ~ loop.index ~ ')'  }}
       {% endif %}
     </span>
-    {% if errors.stem is not defined %}<div class="subject-sub-item__stem">{{ item.stem|striptags('<br><img>')|raw }}</div>{% else %}缺少题干，请点击"编辑"进行设置{% endif %}
+    {% if errors.stem is not defined %}<div class="subject-sub-item__stem">{{ item.stem|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>{% else %}{{ 'course.testpaper_manage.import.re_edit.error_no_stem'|trans }}{% endif %}
   </div>
   <div class="subject-item__body">
     <label class="cd-radio single-item sub-single-item subject-forbid {% if answer %}checked{% endif %}">
-      <input type="radio" data-toggle="cd-radio" name="right" value="true"><span class="single-item__text">{{ '正确' }}</span>
+      <input type="radio" data-toggle="cd-radio" name="right" value="true"><span class="single-item__text">{{ 'course.testpaper_manage.import.re_edit.correct'|trans }}</span>
     </label>
     <label class="cd-radio single-item sub-single-item subject-forbid {% if not answer %}checked{% endif %}">
-      <input type="radio" data-toggle="cd-radio" name="wrong" value="true"><span class="single-item__text">{{ '错误' }}</span>
+      <input type="radio" data-toggle="cd-radio" name="wrong" value="true"><span class="single-item__text">{{ 'course.testpaper_manage.import.re_edit.wrong'|trans }}</span>
     </label>
   </div>
   {% include 'testpaper/subject/common.html.twig' with {position:'sub', type: item.type, difficulty: item.difficulty, score: item.score } %}

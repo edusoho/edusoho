@@ -140,7 +140,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
             }
         }
 
-        $taskSeqMap = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
+        $taskSeqMap = array('preparation' => 2, 'lesson' => 1, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
         //新增加的task seq不正确，重新排序
         uasort(
             $tasks,

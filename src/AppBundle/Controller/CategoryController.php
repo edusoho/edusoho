@@ -22,6 +22,10 @@ class CategoryController extends BaseController
 
     protected function makeCategories($group)
     {
+        if (in_array($group, array('course', 'open_course'))) {
+            $group = 'course';
+        }
+
         $group = $this->getCategoryService()->getGroupByCode($group);
 
         if (empty($group)) {
@@ -31,7 +35,7 @@ class CategoryController extends BaseController
         $categories = $this->getCategoryService()->getCategoryTree($group['id']);
 
         foreach ($categories as $id => $category) {
-            if ($categories[$id]['parentId'] != '0') {
+            if ('0' != $categories[$id]['parentId']) {
                 unset($categories[$id]);
             }
         }
@@ -61,11 +65,11 @@ class CategoryController extends BaseController
 
         $categoryArray = $this->getCategoryService()->getCategoryByCode($category);
 
-        if (!empty($categoryArray) && $categoryArray['parentId'] == 0) {
+        if (!empty($categoryArray) && 0 == $categoryArray['parentId']) {
             $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['id']);
         }
 
-        if (!empty($categoryArray) && $categoryArray['parentId'] != 0) {
+        if (!empty($categoryArray) && 0 != $categoryArray['parentId']) {
             $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['parentId']);
         }
 

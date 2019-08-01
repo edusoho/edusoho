@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Marketing\Service;
 
+use AppBundle\Common\TimeMachine;
 use Biz\BaseTestCase;
 use Tests\Unit\Marketing\Tools\MockedClassroomMemberServiceImpl;
 use Tests\Unit\Marketing\Tools\MockedCourseMemberServiceImpl;
-use AppBundle\Common\TimeMachine;
 
 class MarketingServiceTest extends BaseTestCase
 {
@@ -26,6 +26,7 @@ class MarketingServiceTest extends BaseTestCase
                         'id' => 12,
                         'price' => 12,
                         'originPrice' => 12,
+                        'status' => 'published',
                         'maxRate' => 1,
                     ),
                 ),
@@ -38,7 +39,7 @@ class MarketingServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'getCourseSet',
                     'withParams' => array(3),
-                    'returnValue' => array('cover' => 'cover'),
+                    'returnValue' => array('cover' => 'cover', 'status' => 'published'),
                 ),
             )
         );
@@ -188,7 +189,15 @@ class MarketingServiceTest extends BaseTestCase
 
         $this->mockBiz('Classroom:ClassroomService', array(
             array('functionName' => 'getClassroom', 'returnValue' => array(
-                'id' => 12, 'title' => 'test classroom', 'price' => '10.00', 'middlePicture' => '', 'maxRate' => 0, 'smallPicture' => '', 'largePicture' => '', )),
+                'id' => 12,
+                'title' => 'test classroom',
+                'price' => '10.00',
+                'middlePicture' => '',
+                'maxRate' => 0,
+                'smallPicture' => '',
+                'largePicture' => '',
+                'status' => 'published',
+            )),
         ));
 
         $biz = $this->getBiz();

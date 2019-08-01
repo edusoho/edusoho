@@ -92,7 +92,7 @@ class OrderFacadeServiceTest extends BaseTestCase
             array('functionName' => 'isCourseStudent', 'returnValue' => false),
         ));
         $this->mockBiz('Course:CourseSetService', array(
-            array('functionName' => 'getCourseSet', 'returnValue' => array('id' => 1, 'title' => 'course set name1', 'cover' => '')),
+            array('functionName' => 'getCourseSet', 'returnValue' => array('id' => 1, 'title' => 'course set name1', 'cover' => '', 'status' => 'published')),
         ));
 
         $biz = $this->getBiz();

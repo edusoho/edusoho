@@ -38,6 +38,10 @@ class BaseQuestion {
   _initAnalysisEditor() {
     let analysis = this.$form.find('[data-edit="analysis"]').val();
     let $textarea = $('.js-analysis-field');
+    if (CKEDITOR.instances[$textarea.attr('id')]) {
+      CKEDITOR.instances[$textarea.attr('id')].destroy();
+    }
+
     $textarea.val(analysis);
     this.analysisEditor = CKEDITOR.replace($textarea.attr('id'), {
       toolbar: this.titleEditorToolBarName,
@@ -129,7 +133,7 @@ class BaseQuestion {
       question[name] = value;
     });
     question['difficulty'] = $('input[name=\'difficulty\']:checked').val();
-    question['attachments'] = this.getAttachemnts();
+    question['attachment'] = this.getAttachemnts();
     question = this.filterQuestion(question);
 
     return question;
@@ -143,14 +147,18 @@ class BaseQuestion {
     let attachments = {};
     if ($('.js-attachment-list-stem').find('.js-attachment-name').length > 0) {
       attachments['stem'] = {
-        "fileId" : $('.js-attachment-ids-stem').val(),
+        "type" : "attachment",
+        "targetType" : "question.stem",
+        "fileIds" : $('.js-attachment-ids-stem').val(),
         "fileName" : $('.js-attachment-list-stem').find('.js-attachment-name').text()
       };
     }
 
     if ($('.js-attachment-list-analysis').find('.js-attachment-name').length > 0) {
       attachments['analysis'] = {
-        "fileId" : $('.js-attachment-ids-analysis').val(),
+        "type" : "attachment",
+        "targetType" : "question.analysis",
+        "fileIds" : $('.js-attachment-ids-analysis').val(),
         "fileName" : $('.js-attachment-list-analysis').find('.js-attachment-name').text()
       };
     }
@@ -178,7 +186,7 @@ class BaseQuestion {
       },
       messages: {
         difficulty: Translator.trans('course.question.create.difficulty_required_error_hint'),
-        stem: {required: Translator.trans('请输入题干')}
+        stem: {required: Translator.trans('subject.stem_required')}
       }
     });
     this.validator = validator;
@@ -219,7 +227,7 @@ class BaseQuestion {
   }
 
   replacePicture(str) {
-    return str.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, '[图片]');
+    return str.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, `[${Translator.trans('subject.symbol.picture')}]`);
   }
 
   set titleEditorToolBarName(toolbarName) {

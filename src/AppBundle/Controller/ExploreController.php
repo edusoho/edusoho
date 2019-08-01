@@ -8,6 +8,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
@@ -134,6 +135,37 @@ class ExploreController extends BaseController
                 'tags' => $tags,
             )
         );
+    }
+
+    public function openCourseAction(Request $request, $category)
+    {
+        $conditions = $request->query->all();
+
+        list($conditions, $tags) = $this->getConditionsByTags($conditions);
+        $conditions = $this->getCourseConditionsByTags($conditions, 'openCourse');
+
+        list($conditions, $categoryArray, $categoryParent) = $this->mergeConditionsByCategory($conditions, $category);
+        $conditions = $this->_filterOpenCourseConditions($conditions);
+        $pageSize = 18;
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getOpenCourseService()->countCourses($conditions),
+            $pageSize
+        );
+
+        $courses = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', $pageSize);
+        $teachers = $this->findCourseTeachers($courses);
+
+        return $this->render('open-course/explore.html.twig', array(
+            'courses' => $courses,
+            'paginator' => $paginator,
+            'teachers' => $teachers,
+            'category' => $category,
+            'categoryArray' => $categoryArray,
+            'categoryParent' => $categoryParent,
+            'tags' => $tags,
+        ));
     }
 
     protected function mergeConditionsByCategory($conditions, $category)
@@ -291,6 +323,71 @@ class ExploreController extends BaseController
         return array($conditions, $filter);
     }
 
+    private function _filterOpenCourseConditions($conditions)
+    {
+        $conditions['status'] = 'published';
+        $conditions['parentId'] = 0;
+
+        if (isset($conditions['ids']) && empty($conditions['ids'])) {
+            $conditions['ids'] = array(-1);
+        }
+
+        if (!empty($conditions['fliter']['type']) && 'all' != $conditions['fliter']['type']) {
+            $conditions['type'] = $conditions['fliter']['type'];
+        }
+
+        return $conditions;
+    }
+
+    private function _getPageRecommendedCourses(Request $request, $conditions, $orderBy, $pageSize)
+    {
+        $conditions['recommended'] = 1;
+
+        $recommendCount = $this->getOpenCourseService()->countCourses($conditions);
+        $currentPage = $request->query->get('page') ? $request->query->get('page') : 1;
+        $recommendPage = intval($recommendCount / $pageSize);
+        $recommendLeft = $recommendCount % $pageSize;
+
+        $currentPageCourses = $this->getOpenCourseService()->searchCourses(
+            $conditions,
+            array('recommendedSeq' => 'ASC'),
+            ($currentPage - 1) * $pageSize,
+            $pageSize
+        );
+
+        if (0 == count($currentPageCourses)) {
+            $start = ($pageSize - $recommendLeft) + ($currentPage - $recommendPage - 2) * $pageSize;
+            $limit = $pageSize;
+        } elseif (count($currentPageCourses) > 0 && count($currentPageCourses) <= $pageSize) {
+            $start = 0;
+            $limit = $pageSize - count($currentPageCourses);
+        }
+
+        $conditions['recommended'] = 0;
+
+        $courses = $this->getOpenCourseService()->searchCourses(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $start, $limit
+        );
+
+        return array_merge($currentPageCourses, $courses);
+    }
+
+    protected function findCourseTeachers($courses)
+    {
+        if (!$courses) {
+            return array();
+        }
+
+        $userIds = array();
+        foreach ($courses as $key => $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+        }
+
+        return $this->getUserService()->findUsersByIds($userIds);
+    }
+
     protected function getConditionsByTags($conditions)
     {
         $selectedTag = '';
@@ -326,16 +423,17 @@ class ExploreController extends BaseController
         return array($conditions, $tags);
     }
 
-    protected function getCourseConditionsByTags($conditions)
+    protected function getCourseConditionsByTags($conditions, $ownerType = 'course-set')
     {
-        $conditions = $this->getCourseService()->appendReservationConditions($conditions);
+        if ('course-set' === $ownerType) {
+            $conditions = $this->getCourseService()->appendReservationConditions($conditions);
+        }
 
         if (empty($conditions['tagIds'])) {
             return $conditions;
         }
 
-        $tagOwnerIds = $this->getTagService()->findOwnerIdsByTagIdsAndOwnerType($conditions['tagIds'], 'course-set');
-
+        $tagOwnerIds = $this->getTagService()->findOwnerIdsByTagIdsAndOwnerType($conditions['tagIds'], $ownerType);
         $conditions['ids'] = empty($tagOwnerIds) ? array() : $tagOwnerIds;
         unset($conditions['tagIds']);
 
@@ -495,5 +593,13 @@ class ExploreController extends BaseController
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return OpenCourseService
+     */
+    protected function getOpenCourseService()
+    {
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 }

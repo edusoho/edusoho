@@ -680,13 +680,14 @@ class ManageController extends BaseController
     {
         $wordRead = new ReadDocx($fullpath);
         $text = $wordRead->getDocumentText();
-        $that = $this;
+        $self = $this;
+        $fileService = $this->getFileService();
         $text = preg_replace_callback(
             '/src=[\'\"](.*?)[\'\"]/',
-            function ($matches) use ($that) {
+            function ($matches) use ($self, $fileService) {
                 $file = new FileObject($matches[1]);
-                $result = $that->getFileService()->uploadFile('course', $file);
-                $url = $that->get('web.twig.extension')->getFpath($result['uri']);
+                $result = $fileService->uploadFile('course', $file);
+                $url = $self->get('web.twig.extension')->getFpath($result['uri']);
 
                 return "src=\"{$url}\"";
             },
@@ -703,6 +704,7 @@ class ManageController extends BaseController
         $seq = $request->request->get('seq', 1);
         $token = $request->request->get('token', '');
         $isSub = $request->request->get('isSub', '0');
+        $isTestpaper = $request->request->get('isTestpaper', 1);
         $method = $request->request->get('method', 'edit');
 
         $question = ArrayToolkit::parts($question, array(
@@ -726,6 +728,7 @@ class ManageController extends BaseController
             'token' => $token,
             'type' => $type,
             'isSub' => $isSub,
+            'isTestpaper' => $isTestpaper,
             'method' => $method,
         ));
     }
@@ -736,6 +739,7 @@ class ManageController extends BaseController
         $fromType = $data['fromType'];
         $toType = $data['toType'];
         $isSub = $data['isSub'];
+        $isTestpaper = $data['isTestpaper'];
         $method = $request->request->get('method', 'edit');
         if (empty($data['question'])) {
             throw new InvalidArgumentException('缺少必要参数');
@@ -754,6 +758,7 @@ class ManageController extends BaseController
             'token' => $data['token'],
             'type' => $toType,
             'isSub' => $isSub,
+            'isTestpaper' => $isTestpaper,
             'method' => $method,
         ));
     }

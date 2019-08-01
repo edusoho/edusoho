@@ -20,6 +20,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserController extends BaseController
 {
+    private $keywordType = array('verifiedMobile', 'idcard');
+
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
@@ -48,12 +50,12 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        //根据mobile查询user_profile获得userIds
-
-        if (isset($conditions['keywordType']) && 'verifiedMobile' == $conditions['keywordType'] && !empty($conditions['keyword'])) {
-            $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
+        //根据mobile或者idcard查询user_profile获得userIds
+        if (isset($conditions['keywordType']) && in_array($conditions['keywordType'], $this->keywordType) && !empty($conditions['keyword'])) {
+            $preConditions = $this->getUserProfileConditions($conditions);
+            $profilesCount = $this->getUserService()->searchUserProfileCount($preConditions);
             $userProfiles = $this->getUserService()->searchUserProfiles(
-                array('mobile' => $conditions['keyword']),
+                $preConditions,
                 array('id' => 'DESC'),
                 0,
                 $profilesCount
@@ -64,6 +66,10 @@ class UserController extends BaseController
                 unset($conditions['keywordType']);
                 unset($conditions['keyword']);
                 $conditions['userIds'] = array_merge(ArrayToolkit::column($users, 'userId'), $userIds);
+            } elseif ('idcard' == $conditions['keywordType']) {
+                unset($conditions['keywordType']);
+                unset($conditions['keyword']);
+                $conditions['userIds'] = empty($userIds) ? array(0) : $userIds;
             }
 
             $userCount = $this->getUserService()->countUsers($conditions);
@@ -530,6 +536,15 @@ class UserController extends BaseController
             foreach ($tokens as $token) {
                 $this->getTokenService()->destoryToken($token['token']);
             }
+        }
+    }
+
+    protected function getUserProfileConditions($conditions)
+    {
+        if ('verifiedMobile' == $conditions['keywordType']) {
+            return array('mobile' => $conditions['keyword']);
+        } else {
+            return array('idcard' => $conditions['keyword']);
         }
     }
 

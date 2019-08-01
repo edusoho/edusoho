@@ -112,7 +112,7 @@ export default class QuestionOperate {
   modifyScore(selectQuestion, scoreObj, isTestpaper) {
     let self = this;
     $.each(selectQuestion, function(index, token) {
-      self.$itemList.find(`#${token}`).find('.js-score').html(`${scoreObj['score']}分`);
+      self.$itemList.find(`#${token}`).find('.js-score').html(`${scoreObj['score']}${Translator.trans('subject.question_score_unit')}`);
       let question = self.getQuestion(token);
       self.updateQuestionItem(token, 'score', scoreObj['score'], false);
       if (isTestpaper) {
@@ -120,8 +120,8 @@ export default class QuestionOperate {
           self.updateQuestionItem(token, 'missScore', scoreObj['missScore']);
         }
       }
-      self.triggerTotalScoreChange();
     });
+    self.trigger('updateQuestionScore');
   }
 
   addQuestion(preToken, question) {
@@ -140,10 +140,7 @@ export default class QuestionOperate {
     this.questionCounts[question['type']]++;
     this.totalScore += parseInt(question['score']);
     let index = position + 1;
-    $(`[data-anchor="#${index}"]`).attr('data-anchor', '#' + token);
-    $('#' + index).attr('id', token);
-    this.triggerTotalScoreChange();
-    this.triggerTypeCountChange(question['type']);
+    this.trigger('addQuestion', [index, token, question['type']]);
     this.flag = false;
 
     return token;
@@ -156,7 +153,7 @@ export default class QuestionOperate {
     this.flag = true;
     const question = this.questions[deleteToken];
     delete this.questions[deleteToken];
-    let position = this.tokenList.indexOf(deleteToken) + 1;
+    let position = this.tokenList.indexOf(deleteToken);
     this.tokenList.splice(position, 1);
     this.questionCounts['total']--;
     this.questionCounts[question['type']]--;
@@ -167,8 +164,7 @@ export default class QuestionOperate {
         this.totalScore -= parseInt(subQuestion['score']);
       })
     }
-    this.triggerTotalScoreChange();
-    this.triggerTypeCountChange(question['type']);
+    this.trigger('deleteQuestion', [question['type']]);
     this.flag = false;
   }
 
@@ -181,14 +177,12 @@ export default class QuestionOperate {
     this.questions[token][itemKey] = itemValue;
     if (itemKey == 'score') {
       this.totalScore = this.totalScore - parseInt(oldValue) + parseInt(itemValue);
-      this.triggerTotalScoreChange(isTrigger);
+      this.trigger('updateQuestionScore', [isTrigger]);
     }
     if (itemKey == 'type' && oldValue != itemValue) {
       this.questionCounts[oldValue]--;
       this.questionCounts[itemValue]++;
-      this.triggerTypeCountChange(oldValue);
-      this.triggerTypeCountChange(itemValue);
-      this.questionTypeChange(itemValue, token);
+      this.trigger('updateQuestionType', [itemKey, itemValue, oldValue, token])
     }
     this.flag = false;
   }
@@ -218,7 +212,7 @@ export default class QuestionOperate {
     this.flag = true;
     this.questions[token]['subQuestions'].push(question);
     this.totalScore += parseInt(question['score']);
-    this.triggerTotalScoreChange();
+    this.trigger('updateQuestionScore');
     this.flag = false;
 
     return token;
@@ -233,9 +227,8 @@ export default class QuestionOperate {
     this.questions[token]['subQuestions'][key][itemKey] = itemValue;
     if (itemKey == 'score') {
       this.totalScore = this.totalScore - parseInt(oldValue) + parseInt(itemValue);
-      this.triggerTotalScoreChange(isTrigger);
+      this.trigger('updateQuestionScore', [isTrigger]);
     }
-    this.trigger('sub');
     this.flag = false;
   }
 
@@ -245,9 +238,10 @@ export default class QuestionOperate {
     }
     this.flag = true;
     const question = this.questions[deleteToken]['subQuestions'][key];
-    this.questions[deleteToken]['subQuestions'][key].splice(key + 1, 1);
+    this.questions[deleteToken]['subQuestions'].splice(key, 1);
     this.totalScore -= parseInt(question['score']);
-    this.triggerTotalScoreChange();
+    this.correctMaterialQuestion(deleteToken);
+    this.trigger('updateQuestionScore');
     this.flag = false;
   }
 
@@ -264,7 +258,7 @@ export default class QuestionOperate {
     }
 
     this.questions[token] = question;
-    this.trigger('correctQuestion', token);
+    this.trigger('correctQuestion', [token]);
   }
 
   correctSubQuestion(token, key) {
@@ -277,6 +271,12 @@ export default class QuestionOperate {
 
     delete subQuestion['errors'];
     material['subQuestions'][key] = subQuestion;
+    this.questions[token] = material;
+    this.correctMaterialQuestion(token);
+  }
+
+  correctMaterialQuestion(token) {
+    let material = this.questions[token];
     let hasSubError = false;
     $.each(material['subQuestions'], function(index, sub) {
       if (typeof sub['errors'] != 'undefined') {
@@ -290,30 +290,14 @@ export default class QuestionOperate {
 
     if ($.isEmptyObject(material['errors'])) {
       delete material['errors'];
-      this.trigger('correctQuestion', token);
+      this.trigger('correctQuestion', [token]);
     }
     this.questions[token] = material;
   }
 
-  triggerTotalScoreChange(isTrigger = true) {
-    if ($('.js-total-score').length > 0 && isTrigger) {
-      $('.js-total-score').trigger('change');
-    }
-  }
-
-  triggerTypeCountChange(type) {
-    $('*[data-type]').trigger('change', [type]);
-  }
-
-  questionTypeChange(type, token) {
-    let $list = $('.js-subject-list').find(`[data-anchor=#${token}]`);
-    $list.find('.js-show-checkbox').attr('data-type', type);
-    $list.next('.js-type-name').text(this.getTypeName(type));
-  }
-
   isUpdating() {
     if (this.flag == true) {
-      cd.message({ type: 'danger', message: Translator.trans('题目正在修改中,请稍侯') });
+      cd.message({ type: 'danger', message: Translator.trans('course.question.is_updating_hint') });
       return false;
     }
 
@@ -328,27 +312,6 @@ export default class QuestionOperate {
     return json;
   }
 
-  getTypeName(type) {
-    switch (type) {
-      case 'single_choice':
-        return '单选题';
-      case 'uncertain_choice':
-        return '不定项';
-      case 'choice':
-        return '多选题';
-      case 'determine':
-        return '判断题';
-      case 'essay':
-        return '问答题';
-      case 'fill':
-        return '填空题';
-      case 'material':
-        return '材料题';
-      default:
-        return '未知题型';
-    }
-  }
-
   on(event, fn) {
     if (!this.eventManager[event]) {
       this.eventManager[event] = [fn.bind(this)];
@@ -360,7 +323,7 @@ export default class QuestionOperate {
   trigger(event, data) {
     if (this.eventManager[event]) {
       this.eventManager[event].map(function(fn) {
-        fn(data);
+        fn.apply(null, data);
       });
     }
   }

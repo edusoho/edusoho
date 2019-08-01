@@ -21,14 +21,19 @@ class CourseSyncSubscriberTest extends BaseTestCase
         );
 
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'findCoursesByCourseSetId', 'returnValue' => array(array('id' => 1))),
+            array('functionName' => 'findCoursesByCourseSetId', 'returnValue' => array(array('id' => 1, 'title' => 'test'))),
         ));
         $mockCourseSetDao = $this->mockBiz('Course:CourseSetDao', array(
             array('functionName' => 'findCourseSetsByParentIdAndLocked', 'returnValue' => array(array('id' => 1))),
+            array('functionName' => 'update', 'returnValue' => array('id' => 1, 'title' => 'testTitle')),
+        ));
+        $mockCourseDao = $this->mockBiz('Course:CourseDao', array(
             array('functionName' => 'update', 'returnValue' => array()),
         ));
+
         $subscriber->onCourseSetUpdate($event);
         $mockCourseSetDao->shouldHaveReceived('update');
+        $mockCourseDao->shouldHaveReceived('update');
     }
 
     public function testUpdateCopiedCourses()

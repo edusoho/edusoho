@@ -45,6 +45,23 @@ export default class sbList {
         self.statErrorQuestions();
       }
     });
+    self.questionOperate.on('addQuestion', function(index, token, type) {
+      $(`[data-anchor="#${index}"]`).attr('data-anchor', '#' + token);
+      self.updateTotalScoreText();
+      self.updateQuestionCountText(type);
+    });
+    self.questionOperate.on('deleteQuestion', function(type) {
+      self.updateTotalScoreText();
+      self.updateQuestionCountText(type);
+    });
+    self.questionOperate.on('updateQuestionScore', function(isTrigger = true) {
+      self.updateTotalScoreText(isTrigger);
+    });
+    self.questionOperate.on('updateQuestionType', function(key, value, oldValue, token) {
+      self.updateQuestionCountText(value);
+      self.updateQuestionCountText(oldValue);
+      self.questionTypeConvert(value, token);
+    });
   }
 
   confirmFresh() {
@@ -168,15 +185,15 @@ export default class sbList {
     let stats = this.statChosedQuestion();
     let keys = Object.keys(stats);
     if (keys.length === 0) {
-      cd.message({ type: 'danger', message: Translator.trans('请选择题目') });
+      cd.message({ type: 'danger', message: Translator.trans('subject.select_question_hint') });
       return;
     }
     let html = '';
     $.each(stats, function(index, statsItem){
-      let tr = statsItem.count + '道' + statsItem.name + '，';
+      let tr = statsItem.count + Translator.trans('subject.question_unit') + statsItem.name + Translator.trans('subject.comma');
       html += tr;
     });
-    html = html.substring(0, html.length - 1) + '。';
+    html = html.substring(0, html.length - 1) + Translator.trans('subject.period');
 
     modal.find('.js-select').html(html);
 
@@ -248,7 +265,7 @@ export default class sbList {
       },
       messages: {
         missScore: {
-          noMoreThan: '漏选分值不得超过题目分值'
+          noMoreThan: Translator.trans('subject.miss_score_no_more_than_score'),
         }
       }
     });
@@ -273,7 +290,7 @@ export default class sbList {
       this.questionOperate.modifyScore(this.selectQuestion, scoreObj, this.isTestpaper());
       this.selectQuestion = [];
 
-      cd.message({ type: 'success', message: Translator.trans('分数修改成功') });
+      cd.message({ type: 'success', message: Translator.trans('subject.score_update_success') });
       this.$scoreModal.modal('hide');
     }
   }
@@ -285,7 +302,7 @@ export default class sbList {
       let text = $('input[name=\'difficultyRadios\']:checked').next().text();
       self.questionOperate.modifyDifficulty(self.selectQuestion, difficulty, text);
       self.selectQuestion = [];
-      cd.message({ type: 'success', message: Translator.trans('难度修改成功') });
+      cd.message({ type: 'success', message: Translator.trans('subject.difficulty_update_success') });
       self.$diffiultyModal.modal('hide');
     });
   }
@@ -320,6 +337,7 @@ export default class sbList {
       'question' : question,
       'isSub' : isSub,
       'method' : 'edit',
+      'isTestpaper': this.isTestpaper() ? 1 : 0,
     };
     $.post(url, data, html=> {
       $item.replaceWith(html);
@@ -346,6 +364,7 @@ export default class sbList {
       'toType' : toType,
       'isSub' : isSub,
       'method' : method,
+      'isTestpaper': this.isTestpaper() ? 1 : 0,
     };
     data.fromType = fromType;
     data.toType = toType;
@@ -381,7 +400,7 @@ export default class sbList {
       self.orderQuestionList(index, $(`[data-anchor="#${token}"]`).parent(), $(`#${token}`));
       $(`[data-anchor="#${token}"]`).parent().after(self.getNewListItem(seq, type, $target.text()));
       self.statErrorQuestions();
-      var nextItem = $(`#${token}`).next('.subject-item');
+      let nextItem = $(`#${token}`).next('.subject-item');
       if (nextItem.hasClass('subject-sub-item')) {
         $(`[data-material-token="${token}"]`).last().after(res);
       } else {
@@ -422,10 +441,10 @@ export default class sbList {
       return;
     }
     cd.confirm({
-      title: '确认删除',
-      content: '确定要删除这道题目吗?',
-      okText: '确定',
-      cancelText: '取消',
+      title: Translator.trans('subject.delete.title'),
+      content: Translator.trans('subject.delete.content'),
+      okText: Translator.trans('site.confirm'),
+      cancelText: Translator.trans('site.cancel'),
     }).on('ok', () => {
       const $item = $(event.currentTarget).parent().parent();
       let token = $item.attr('id');
@@ -433,8 +452,6 @@ export default class sbList {
       if ($item.hasClass('subject-sub-item')) {
         token = $item.attr('data-material-token');
         let key = $item.attr('data-key');
-        console.log(key);
-        console.log(token);
         let order = $item.find('.subject-sub-item__number').text().replace(/[^0-9]/ig, '');
         $item.nextUntil('.js-subject-main-item').each(function() {
           $(this).find('.subject-sub-item__number').text(`(${order})`);
@@ -496,14 +513,14 @@ export default class sbList {
   updateQuestionCountText(type) {
     let totalCount = this.questionOperate.getQuestionCount('total');
     let typeCount = this.questionOperate.getQuestionCount(type);
-    $('.js-total-num').text(`共${totalCount}道题`);
-    $(`[data-type=${type}]`).find('.subject-data__num').text(`共${typeCount}道题`);
+    $('.js-total-num').text(Translator.trans('subject.question_count', {count: totalCount}));
+    $(`[data-type=${type}]`).find('.subject-data__num').text(Translator.trans('subject.question_count', {count: typeCount}));
   }
 
-  updateTotalScoreText() {
-    let totalScore = parseInt(this.questionOperate.getTotalScore());
-    if (this.isTestpaper()) {
-      $('.js-total-score').text(`总分${totalScore}分`);
+  updateTotalScoreText(isTrigger = true) {
+    if (this.isTestpaper() && isTrigger) {
+      let totalScore = parseInt(this.questionOperate.getTotalScore());
+      $('.js-total-score').text(Translator.trans('subject.total_score', {totalScore: totalScore}));
     }
   }
 
@@ -524,12 +541,12 @@ export default class sbList {
   finishImport(event) {
     let hasError = false;
     let self = this;
-    let errorTip = '第';
+    let errorTip = '';
     this.$element.find('.subject-list-item__num--error').each(function () {
       errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
       hasError = true;
     });
-    errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
+    errorTip = Translator.trans('subject.question_error_tip', {seqs: errorTip.substring(0, errorTip.length - 1)});
     if (hasError) {
       cd.message({
         type : 'danger',
@@ -546,7 +563,7 @@ export default class sbList {
       if (resp === true) {
         cd.message({
           type : 'success',
-          message : '保存成功！',
+          message : Translator.trans('subject.save_success'),
         });
         self.redirect = true;
         window.location.href = $(event.currentTarget).data('redirectUrl');
@@ -555,13 +572,13 @@ export default class sbList {
   }
 
   statErrorQuestions() {
-    let errorTip = '第';
+    let errorTip = '';
     let isShow = false;
     this.$element.find('.subject-list-item__num--error').each(function () {
       errorTip = errorTip + $(this).find('.js-list-index').text() + '、';
       isShow = true;
     });
-    errorTip = errorTip.substring(0, errorTip.length - 1) + '题有违规';
+    errorTip = Translator.trans('subject.question_error_tip', {seqs: errorTip.substring(0, errorTip.length - 1)});
     if (isShow) {
       $('.js-error-tip').html(errorTip);
     } else {
@@ -614,8 +631,7 @@ export default class sbList {
         const parentSeq = $(`#${id}`).find('.js-subject-item-number').text();
         parentNum = $.trim(parentSeq);
       }
-
-      const message = isSub ? `请先完成材料题${parentNum}的第${seq}道子题的编辑`: `请先完成第${seq}题的编辑`;
+      const message = isSub ? Translator.trans('subject.sub_is_editing_warning', {parentNum:parentNum, seq:seq}) :Translator.trans('subject.is_editing_warning', {seq: seq});
       cd.message({
         type: 'warning',
         message: message,
@@ -624,6 +640,33 @@ export default class sbList {
     }
 
     return false;
+  }
+
+  questionTypeConvert(type, token) {
+    let $list = $('.js-subject-list').find(`[data-anchor=#${token}]`);
+    $list.find('.js-show-checkbox').attr('data-type', type);
+    $list.next('.js-type-name').text(this.getTypeName(type));
+  }
+
+  getTypeName(type) {
+    switch (type) {
+      case 'single_choice':
+        return Translator.trans('course.question.type.single_choice');
+      case 'uncertain_choice':
+        return Translator.trans('course.question.type.uncertain_choice');
+      case 'choice':
+        return Translator.trans('course.question.type.choice');
+      case 'determine':
+        return Translator.trans('course.question.type.determine');
+      case 'essay':
+        return Translator.trans('course.question.type.essay');
+      case 'fill':
+        return Translator.trans('course.question.type.fill');
+      case 'material':
+        return Translator.trans('course.question.type.material');
+      default:
+        return Translator.trans('course.question.type.unknown');
+    }
   }
 }
 

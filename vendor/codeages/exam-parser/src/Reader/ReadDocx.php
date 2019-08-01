@@ -89,7 +89,7 @@ class ReadDocx
                     $ext = pathinfo($rels[$imageId], PATHINFO_EXTENSION);
                     $path = $this->resourceTmpPath.'/'.Uuid::uuid4().'.'.$ext;
                     file_put_contents($path, $file);
-                    $imageXml->textContent = sprintf('<img src="%s" %s %s>', $path, $htmlCx, $htmlCy);
+                    $imageXml->nodeValue = sprintf('<img src="%s" %s %s>', $path, $htmlCx, $htmlCy);
                 }
             }
         }

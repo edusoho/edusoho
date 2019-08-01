@@ -52,9 +52,9 @@ class CloudDataServiceTest extends BaseTestCase
 
         $this->getCloudDataService()->setCloudApi($mockObject);
 
-        $data = $this->getPushData();
-
         $timestamp = time();
+        $data = $this->getPushData($timestamp);
+
         $result = $this->getCloudDataService()->push('school.thread_post.delete', $data, $timestamp, 'important');
 
         $condition = array(
@@ -77,7 +77,7 @@ class CloudDataServiceTest extends BaseTestCase
         $timestamp = time();
         $fields = array(
             'name' => 'school.thread_post.delete',
-            'body' => $this->getPushData(),
+            'body' => $this->getPushData($timestamp),
             'timestamp' => $timestamp,
             'createdUserId' => $this->getCurrentUser()->getId(),
         );
@@ -101,7 +101,7 @@ class CloudDataServiceTest extends BaseTestCase
         $timestamp = time();
         $fields = array(
             'name' => 'school.thread_post.delete',
-            'body' => $this->getPushData(),
+            'body' => $this->getPushData($timestamp),
             'timestamp' => $timestamp,
             'createdUserId' => $this->getCurrentUser()->getId(),
         );
@@ -120,22 +120,23 @@ class CloudDataServiceTest extends BaseTestCase
         $result = $this->getCloudDataService()->searchCloudDatas($condition, array('createdTime' => 'ASC'), 0, $cloudDataCount);
 
         $this->assertEquals(1, count($result));
-        $this->assertEquals($this->getPushData(), $result[0]['body']);
+        $this->assertEquals($this->getPushData($timestamp), $result[0]['body']);
     }
 
     public function testDeleteCloudData()
     {
+        $time = time();
         $fields = array(
             'name' => 'school.thread_post.delete',
-            'body' => $this->getPushData(),
-            'timestamp' => time(),
+            'body' => $this->getPushData($time),
+            'timestamp' => $time,
             'createdUserId' => $this->getCurrentUser()->getId(),
         );
 
         $cloudData = $this->getCloudDataDao()->create($fields);
 
         $result = $this->getCloudDataDao()->get($cloudData['id']);
-        $this->assertEquals($this->getPushData(), $result['body']);
+        $this->assertEquals($this->getPushData($time), $result['body']);
 
         $this->getCloudDataService()->deleteCloudData($cloudData['id']);
 
@@ -143,7 +144,7 @@ class CloudDataServiceTest extends BaseTestCase
         $this->assertNull($result);
     }
 
-    private function getPushData()
+    private function getPushData($time = null)
     {
         return array(
             'id' => 1,
@@ -152,7 +153,7 @@ class CloudDataServiceTest extends BaseTestCase
             'userId' => 5,
             'target' => array('type' => 'course', 'id' => 1),
             'thread' => array(),
-            'createdTime' => time(),
+            'createdTime' => $time ? $time : time(),
             'postType' => 'content',
         );
     }

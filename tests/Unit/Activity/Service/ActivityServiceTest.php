@@ -242,7 +242,7 @@ class ActivityServiceTest extends BaseTestCase
                 ),
                 array(
                     'functionName' => 'getMyLearnedTimeByActivityId',
-                    'returnValue' => array(),
+                    'returnValue' => 0,
                 ),
             )
         );

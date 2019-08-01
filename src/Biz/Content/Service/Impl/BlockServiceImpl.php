@@ -75,32 +75,6 @@ class BlockServiceImpl extends BaseService implements BlockService
         return $this->getBlockHistoryDao()->get($id);
     }
 
-    public function generateBlockTemplateItems($block)
-    {
-        preg_match_all("/\(\((.+?)\)\)/", $block['template'], $matches);
-        while (list($key, $value) = each($matches[1])) {
-            $matches[1][$key] = trim($value);
-        }
-
-        $templateDatas = ($matches[1]) ? ($matches[1]) : '';
-        $templateItems = array();
-
-        if (empty($templateDatas)) {
-            return $templateItems;
-        } else {
-            $arr = array();
-            foreach ($templateDatas as &$item) {
-                $item = explode(':', $item);
-                $arr[] = array('title' => $item[0], 'type' => $item[1]);
-            }
-
-            $templateItems = ArrayToolkit::index($arr, 'title');
-            $templateItems = array_values($templateItems);
-
-            return $templateItems;
-        }
-    }
-
     public function getBlockByCode($code)
     {
         $user = $this->getCurrentUser();
@@ -250,11 +224,11 @@ class BlockServiceImpl extends BaseService implements BlockService
     public function recovery($blockId, $history)
     {
         $block = $this->getBlockDao()->get($blockId);
-        $blockTemplate = $this->getBlockTemplateDao()->get($block['blockTemplateId']);
         if (empty($block)) {
             $this->createNewException(BlockException::NOTFOUND_BLOCK());
         }
 
+        $blockTemplate = $this->getBlockTemplateDao()->get($block['blockTemplateId']);
         if ('template' == $blockTemplate['mode'] && empty($history['data'])) {
             $this->createNewException(BlockException::EMPTY_HISTORY());
         }
