@@ -337,6 +337,7 @@ export default class sbList {
       'question' : question,
       'isSub' : isSub,
       'method' : 'edit',
+      'isTestpaper': this.isTestpaper() ? 1 : 0,
     };
     $.post(url, data, html=> {
       $item.replaceWith(html);
@@ -363,6 +364,7 @@ export default class sbList {
       'toType' : toType,
       'isSub' : isSub,
       'method' : method,
+      'isTestpaper': this.isTestpaper() ? 1 : 0,
     };
     data.fromType = fromType;
     data.toType = toType;
