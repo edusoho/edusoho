@@ -680,13 +680,14 @@ class ManageController extends BaseController
     {
         $wordRead = new ReadDocx($fullpath);
         $text = $wordRead->getDocumentText();
-        $that = $this;
+        $self = $this;
+        $fileService = $this->getFileService();
         $text = preg_replace_callback(
             '/src=[\'\"](.*?)[\'\"]/',
-            function ($matches) use ($that) {
+            function ($matches) use ($self, $fileService) {
                 $file = new FileObject($matches[1]);
-                $result = $that->getFileService()->uploadFile('course', $file);
-                $url = $that->get('web.twig.extension')->getFpath($result['uri']);
+                $result = $fileService->uploadFile('course', $file);
+                $url = $self->get('web.twig.extension')->getFpath($result['uri']);
 
                 return "src=\"{$url}\"";
             },
