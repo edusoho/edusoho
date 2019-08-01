@@ -15,11 +15,11 @@ class Choice extends BaseQuestion {
   }
 
   init() {
+    this.initTitleEditor(this.validator);
     this.initOptionCount();
     this.initData();
     this.initEvent();
     this.initValidator();
-    this.initTitleEditor(this.validator);
   }
 
   initOptionCount() {
