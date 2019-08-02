@@ -57,13 +57,13 @@
   font-size: 12px;
   line-height: 24px;
   vertical-align: text-bottom;
-  color: @brand-success;
-  border: 1px solid @brand-success;
+  color: @brand-primary;
+  border: 1px solid @brand-primary;
   border-radius: 100%;
   text-align: center;
   &.subject-item__number--danger {
-    color:#ed3e3e;
-    border: 1px solid #ed3e3e;
+    color: @brand-danger;
+    border: 1px solid @brand-danger;
   }
 }
 
@@ -178,7 +178,7 @@
   left: 48px;
   bottom: 16px;
   span {
-    color: @brand-success;
+    color: @brand-primary;
     margin-right: 24px;
     cursor: pointer;
     i {
@@ -236,7 +236,7 @@
 }
 
 .subject-list__tip {
-  color: #ed3e3e;
+  color: @brand-danger;
   font-size: 12px;
   line-height: 16px;
 }
@@ -262,15 +262,15 @@
   height: 24px;
   margin: auto;
   border-radius: 4px;
-  border: 1px solid @brand-success;
+  border: 1px solid @brand-primary;
   text-align: center;
   line-height: 24px;
   font-size: 12px;
   color: @brand-success;
   &.subject-list-item__num--error {
-    background-color: #ed3e3e;
+    background-color: @brand-danger;
     color: #fff;
-    border: 1px solid #ed3e3e;
+    border: 1px solid @brand-danger;
   }
   &:hover,
   &:focus,
@@ -406,7 +406,7 @@
     display: inline-block;
     width: 20px;
     &.edit-subject-item__order--error {
-      color: #ed3e3e;
+      color: @brand-danger;
     }
   }
 
