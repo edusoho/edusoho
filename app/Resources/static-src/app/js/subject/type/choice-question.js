@@ -253,7 +253,7 @@ class Choice extends BaseQuestion {
         question['answers'].push(value);
       }
     });
-    question['attachment'] = this.getAttachemnts();
+    question['attachment'] = this.getAttachments();
     let method = $('.js-hidden-method').val();
     let isSub = $('.js-sub-judge').val();
     let key = $('.js-edit-form-seq').text() - 1;

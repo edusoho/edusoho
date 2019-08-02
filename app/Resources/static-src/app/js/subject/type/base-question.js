@@ -133,7 +133,7 @@ class BaseQuestion {
       question[name] = value;
     });
     question['difficulty'] = $('input[name=\'difficulty\']:checked').val();
-    question['attachment'] = this.getAttachemnts();
+    question['attachment'] = this.getAttachments();
     question = this.filterQuestion(question);
 
     return question;
@@ -143,7 +143,7 @@ class BaseQuestion {
     return question;
   }
 
-  getAttachemnts() {
+  getAttachments() {
     let attachments = {};
     if ($('.js-attachment-list-stem').find('.js-attachment-name').length > 0) {
       attachments['stem'] = {
