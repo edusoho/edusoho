@@ -15,7 +15,7 @@
           <textarea class="form-control" style="height:190px;" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" data-edit="stem" name="stem">{{ question.stem|default('') }}</textarea>
         </div>
         <div class="cd-ml32">
-          {% include 'testpaper/subject/attachment.html.twig' with { target: 'stem', btnTitle:'course.testpaper_manage.import.re_edit.upload_stem_attachment'|trans, attachment: question.attachments.stem|default([]) } %}
+          {% include 'testpaper/subject/attachment.html.twig' with { target: 'stem', btnTitle:'course.testpaper_manage.import.re_edit.upload_stem_attachment'|trans, attachment: question.attachment.stem|default([]) } %}
         </div>
         <div class="cd-ml32 cd-mt24">
           {% block subject %}
@@ -47,7 +47,7 @@
               <div class="cd-dark-major pts js-analysis-content edit-form-group__explain">{{ question_html_filter(question.analysis|default('')) }}</div>
               <input type="hidden" data-edit="analysis" name="analysis" value="{{ question.analysis|default('') }}">
               <a class="color-primary cd-mt24 edit-form-group__operate js-analysis-edit" href="javascript:;"><i class="es-icon es-icon-exam text-md mrs"></i>{{ 'course.testpaper_manage.import.re_edit.edit_analysis'|trans }}</a>
-              {% include 'testpaper/subject/attachment.html.twig' with { target: 'analysis', btnTitle:'course.testpaper_manage.import.re_edit.upload_analysis_attachment'|trans, attachment: question.attachments.analysis|default([]) } %}
+              {% include 'testpaper/subject/attachment.html.twig' with { target: 'analysis', btnTitle:'course.testpaper_manage.import.re_edit.upload_analysis_attachment'|trans, attachment: question.attachment.analysis|default([]) } %}
             </div>
           </div>
         {% endif %}
