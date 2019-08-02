@@ -529,7 +529,7 @@ export default class sbList {
 
   updateTotalScoreText(isTrigger = true) {
     if (this.isTestpaper() && isTrigger) {
-      let totalScore = parseFloat(this.questionOperate.getTotalScore());
+      let totalScore = parseFloat(this.questionOperate.getTotalScore()).toFixed(1);
       $('.js-total-score').text(Translator.trans('subject.total_score', {totalScore: totalScore}));
     }
   }
