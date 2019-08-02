@@ -56,6 +56,9 @@ export default {
         const redirect = to.query.redirect || "";
 
         this.isQrcode = !!to.query.loginToken;
+        if(to.meta.hideTitle){
+          this.isQrcode=true
+        }
 
         this.showLeftArrow = ![
           "my",

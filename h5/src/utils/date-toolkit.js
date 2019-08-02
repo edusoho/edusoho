@@ -44,6 +44,14 @@ const formatFullTime = date => {
   }).join('-');
 };
 
+// 2018年12月6日
+const formatchinaTime = date => {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${year}年${month}月${day}日`
+};
+
 // 2018/12/06 12:03
 const formatTime = date => {
   const year = date.getFullYear();
@@ -95,6 +103,7 @@ const getOffsetDays = (time1, time2) => {
 export {
   formatTime,
   formatFullTime,
+  formatchinaTime,
   formatSimpleTime,
   formatTimeByNumber,
   formatCompleteTime,

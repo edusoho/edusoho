@@ -268,15 +268,18 @@
     }
   }
 }
-
+html,body,#app,.receive-all{
+  height: 100%;
+}
 // 优化链接领取优惠券
 .coupon-receive{
-  position: fixed;
   bottom: 0;
-  top:46px;
+  top:0px;
   left: 0;
   right: 0;
   z-index: 1;
+  min-height: 100%;
+  padding-top: 1px;
   background: #FED01B;
   text-align: center;
   &-title{
@@ -335,7 +338,7 @@
     }
   }
   &-login{
-    margin-top: vw(58);
+    margin-top: vw(40);
     .receive-login-input{
       .van-cell{
         background-color:transparent!important; 
@@ -344,9 +347,9 @@
         padding-left: vw(20);
       }
       .van-field__error-message {
-        margin-top: vw(8)!important;
+        margin-top: vw(14)!important;
       }
-      margin:0 auto vw(20) auto;
+      margin:0 auto vw(34) auto;
       padding: 0 vw(9) 0 vw(0);
       box-sizing: border-box;
       width:vw(305);

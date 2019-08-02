@@ -54,7 +54,11 @@
     margin-top: vw(30);
     left: 0;
     padding: vw(10) 0;
-    border-bottom: vw(1) solid #D8D8D8;
+   // border-bottom: vw(1) solid #D8D8D8;
+    .van-field__body{
+      padding-bottom: vw(15);
+      border-bottom: 0.26667vw solid #D8D8D8;
+    }
     &.van-cell:not(:last-child)::after {
       left: 0;
     }

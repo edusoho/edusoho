@@ -8,7 +8,7 @@ export default [
   {
     // 优惠券引流优化领取优惠券
     name: 'pluginsReceiveCoupon',
-    url: '/plugins/coupon/coupon_receive',
+    url: '/me/coupon',
     method: 'POST'
   },
   {

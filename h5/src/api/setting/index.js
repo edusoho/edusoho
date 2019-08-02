@@ -6,6 +6,11 @@ export default [
     method: 'GET'
   }, {
     // 云短信服务
+    name: 'sitePlugins',
+    url: '/site_plugins/{pluginName}',
+    method: 'GET'
+  },{
+    // 云短信服务
     name: 'settingsCloud',
     url: '/settings/cloud',
     method: 'GET'
