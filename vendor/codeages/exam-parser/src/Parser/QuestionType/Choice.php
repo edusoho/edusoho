@@ -78,19 +78,19 @@ class Choice extends AbstractQuestion
             return true;
         }
 
-        if (preg_match('/\s([A-Z])(\.|、|。|\\s)/', $line)) {
-            $optionStr = preg_replace('/\s([A-Z])(\.|、|。|\\s)/', PHP_EOL.'<#$1#>', $line);
+        if (preg_match('/\s([A-J])(\.|、|。|\\s)/', $line)) {
+            $optionStr = preg_replace('/\s([A-J])(\.|、|。|\\s)/', PHP_EOL.'<#$1#>', $line);
             $optionLines = explode(PHP_EOL, $optionStr);
             foreach ($optionLines as $line) {
-                if (preg_match('/<#([A-Z])#>/', $line, $matches)) {
-                    $question['options'][ord($matches[1]) - 65] = preg_replace('/<#([A-Z])#>/', '', $line);
+                if (preg_match('/<#([A-J])#>/', $line, $matches)) {
+                    $question['options'][ord($matches[1]) - 65] = preg_replace('/<#([A-J])#>/', '', $line);
                     $preNode = QuestionElement::OPTIONS.'_'.(ord($matches[1]) - 65);
                 }
             }
 
             return true;
-        } elseif (preg_match('/<#([A-Z])#>/', $line, $matches)) {
-            $question['options'][ord($matches[1]) - 65] = preg_replace('/<#([A-Z])#>/', '', $line);
+        } elseif (preg_match('/<#([A-J])#>/', $line, $matches)) {
+            $question['options'][ord($matches[1]) - 65] = preg_replace('/<#([A-J])#>/', '', $line);
             $preNode = QuestionElement::OPTIONS.'_'.(ord($matches[1]) - 65);
 
             return true;
@@ -103,7 +103,7 @@ class Choice extends AbstractQuestion
     {
         $answers = array();
         if (0 === strpos(trim($line), self::ANSWER_SIGNAL)) {
-            preg_match_all('/[A-Z]/', $line, $matches);
+            preg_match_all('/[A-J]/', $line, $matches);
             if ($matches) {
                 foreach ($matches[0] as $answer) {
                     $answerKey = ord($answer) - 65;
