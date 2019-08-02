@@ -72,7 +72,7 @@ class Material extends AbstractQuestion
             }
         }
         foreach ($subQuestions as $lines) {
-            $count = preg_match_all('/\<\#[A-Z]\#\>/', implode(PHP_EOL, $lines), $matches);
+            $count = preg_match_all('/\<\#[A-J]\#\>/', implode(PHP_EOL, $lines), $matches);
             if (0 === strpos(trim($lines[0]), Parser::CODE_MATERIAL_START_SIGNAL)) {
                 $type = 'material';
             } elseif (0 == $count) {
