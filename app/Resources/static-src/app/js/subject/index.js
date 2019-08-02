@@ -576,14 +576,17 @@ export default class sbList {
     if (this.isTestpaper()) {
       title = this.testpaperTitle;
     }
-    $.post($(event.currentTarget).data('url'), {title: title, questions: this.questionOperate.getQuestions()}, function(resp) {
+    const $target = $(event.currentTarget);
+    $target.button('loading');
+    $.post($target.data('url'), {title: title, questions: this.questionOperate.getQuestions()}, function(resp) {
       if (resp === true) {
+        $target.button('reset');
         cd.message({
           type : 'success',
           message : Translator.trans('subject.save_success'),
         });
         self.redirect = true;
-        window.location.href = $(event.currentTarget).data('redirectUrl');
+        window.location.href = $target.data('redirectUrl');
       }
     });
   }

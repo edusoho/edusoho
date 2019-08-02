@@ -15,6 +15,6 @@
   {% endfor %}
 {% endblock %}
 {% block save_btn %}
-  <button class="cd-btn cd-btn-primary subject-button js-import-btn" data-redirect-url="{{ path('course_set_manage_testpaper', {id:courseSetId}) }}" data-url="{{ path('testpaper_import_save', {token: app.request.get('token')}) }}" type="button">{{ 'course.testpaper_manage.import.re_edit.finish_import'|trans }}</button>
+  <button class="cd-btn cd-btn-primary subject-button js-import-btn" data-redirect-url="{{ path('course_set_manage_testpaper', {id:courseSetId}) }}" data-url="{{ path('testpaper_import_save', {token: app.request.get('token')}) }}" data-loading-text="{{ 'form.btn.import.submiting'|trans }}" type="button">{{ 'course.testpaper_manage.import.re_edit.finish_import'|trans }}</button>
 {% endblock %}
 {% block edit %}{% endblock %}
