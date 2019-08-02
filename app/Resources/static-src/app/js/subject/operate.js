@@ -264,7 +264,9 @@ export default class QuestionOperate {
     }
 
     this.questions[token] = question;
-    this.trigger('correctQuestion', [token]);
+    if (typeof question['errors'] == 'undefined') {
+      this.trigger('correctQuestion', [token]);
+    }
   }
 
   correctSubQuestion(token, key) {

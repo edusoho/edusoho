@@ -103,8 +103,8 @@ class BaseQuestion {
     } else {
       $.each(question, function(name, value){
         self.operate.updateQuestionItem(token, name, value);
-        self.operate.correctQuestion(token);
       });
+      self.operate.correctQuestion(token);
     }
 
     return token;
@@ -117,8 +117,8 @@ class BaseQuestion {
     } else {
       $.each(question, function(name, value){
         self.operate.updateSubQuestionItem(token, key, name, value);
-        self.operate.correctSubQuestion(token, key);
       });
+      self.operate.correctSubQuestion(token, key);
     }
 
     return token;
