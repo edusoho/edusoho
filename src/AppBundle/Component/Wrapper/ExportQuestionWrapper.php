@@ -101,7 +101,7 @@ class ExportQuestionWrapper extends Wrapper
         $webDir = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../web';
         $result = preg_split('/(<img [^>]*?\/>)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
         foreach ($result as $item) {
-            if (preg_match('/<img .*src="(.*)".*\/>/', $item, $matches)) {
+            if (preg_match('/<img .*src=[\'\"](.*?)[\'\"].*>/', $item, $matches)) {
                 $items[] = array(
                     'element' => 'img',
                     'content' => $webDir.$matches[1],

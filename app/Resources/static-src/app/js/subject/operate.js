@@ -78,10 +78,10 @@ export default class QuestionOperate {
       self.questionCounts['total']++;
       self.questionCounts[question['type']]++;
       if (question['type'] != 'material') {
-        self.totalScore += parseInt(question['score']);
+        self.totalScore = (parseFloat(self.totalScore) + parseFloat(question['score'])).toFixed(1);
       } else {
         $.each(question['subQuestions'], function(token, subQuestion) {
-          self.totalScore += parseInt(subQuestion['score']);
+          self.totalScore = (parseFloat(self.totalScore) + parseFloat(subQuestion['score'])).toFixed(1);
         });
       }
     });
@@ -143,7 +143,7 @@ export default class QuestionOperate {
     this.tokenList.splice(position, 0, token);
     this.questionCounts['total']++;
     this.questionCounts[question['type']]++;
-    this.totalScore += parseInt(question['score']);
+    this.totalScore = (parseFloat(this.totalScore) + parseFloat(question['score'])).toFixed(1);
     let index = position + 1;
     this.trigger('addQuestion', [index, token, question['type']]);
     this.flag = false;
@@ -164,10 +164,10 @@ export default class QuestionOperate {
     this.questionCounts['total']--;
     this.questionCounts[question['type']]--;
     if (question['type'] != 'material') {
-      this.totalScore -= parseInt(question['score']);
+      this.totalScore = (parseFloat(this.totalScore) - parseFloat(question['score'])).toFixed(1);
     } else {
       $.each(question['subQuestions'], function(token, subQuestion) {
-        self.totalScore -= parseInt(subQuestion['score']);
+        self.totalScore = (parseFloat(self.totalScore) - parseFloat(subQuestion['score'])).toFixed(1);
       })
     }
     this.trigger('deleteQuestion', [question['type']]);
@@ -182,7 +182,7 @@ export default class QuestionOperate {
     let oldValue = this.questions[token][itemKey];
     this.questions[token][itemKey] = itemValue;
     if (itemKey == 'score') {
-      this.totalScore = this.totalScore - parseInt(oldValue) + parseInt(itemValue);
+      this.totalScore = (this.totalScore - parseFloat(oldValue) + parseFloat(itemValue)).toFixed(1);
       this.trigger('updateQuestionScore', [isTrigger]);
     }
     if (itemKey == 'type' && oldValue != itemValue) {
@@ -217,7 +217,7 @@ export default class QuestionOperate {
     }
     this.flag = true;
     this.questions[token]['subQuestions'].push(question);
-    this.totalScore += parseInt(question['score']);
+    this.totalScore = (parseFloat(this.totalScore) + parseFloat(question['score'])).toFixed(1);
     this.trigger('updateQuestionScore');
     this.flag = false;
 
@@ -232,7 +232,7 @@ export default class QuestionOperate {
     let oldValue = this.questions[token]['subQuestions'][key][itemKey];
     this.questions[token]['subQuestions'][key][itemKey] = itemValue;
     if (itemKey == 'score') {
-      this.totalScore = this.totalScore - parseInt(oldValue) + parseInt(itemValue);
+      this.totalScore = (this.totalScore - parseFloat(oldValue) + parseFloat(itemValue)).toFixed(1);
       this.trigger('updateQuestionScore', [isTrigger]);
     }
     this.flag = false;
@@ -245,7 +245,7 @@ export default class QuestionOperate {
     this.flag = true;
     const question = this.questions[deleteToken]['subQuestions'][key];
     this.questions[deleteToken]['subQuestions'].splice(key, 1);
-    this.totalScore -= parseInt(question['score']);
+    this.totalScore = (parseFloat(this.totalScore) - parseFloat(question['score'])).toFixed(1);
     this.correctMaterialQuestion(deleteToken);
     this.trigger('updateQuestionScore');
     this.flag = false;
