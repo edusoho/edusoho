@@ -284,7 +284,7 @@ export default class QuestionOperate {
       }
     });
 
-    if (!hasSubError) {
+    if (!hasSubError && typeof material['errors'] != 'undefined') {
       delete material['errors']['hasSubError'];
     }
 

@@ -452,13 +452,15 @@ export default class sbList {
       if ($item.hasClass('subject-sub-item')) {
         token = $item.attr('data-material-token');
         let key = $item.attr('data-key');
-        let order = $item.find('.subject-sub-item__number').text().replace(/[^0-9]/ig, '');
-        $item.nextUntil('.js-subject-main-item').each(function() {
-          $(this).find('.subject-sub-item__number').text(`(${order})`);
-          order++;
-        });
         this.questionOperate.deleteSubQuestion(token, key);
         $item.remove();
+        let order = 0;
+        $(`[data-material-token="${token}"]`).each(function() {
+          $(this).attr('id', `sub${order}`);
+          $(this).attr('data-key', order++);
+          $(this).find('.subject-sub-item__number').text(`(${order})`);
+        });
+
         return;
       }
 
