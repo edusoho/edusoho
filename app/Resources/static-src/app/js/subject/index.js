@@ -176,7 +176,7 @@ export default class sbList {
       $target.find('.js-show-checkbox').toggleClass('checked');
       this.countNumber();
     } else {
-      const position = $($target.data('anchor')).offset();
+      const position = $($target.attr('data-anchor')).offset();
       $(document).scrollTop(position.top);
     }
   }
