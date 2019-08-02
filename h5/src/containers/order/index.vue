@@ -143,6 +143,14 @@ export default {
       timeoutId: -1,
     }
   },
+  created () {
+    if (this.vipOrderType === '升级') {
+      this.targetUnit = undefined;
+      this.targetNum = undefined;
+    }
+    this.confirmOrder();
+    this.getSettings();
+  },
   computed: {
     ...mapState(['wechatSwitch', 'isLoading']),
     total() {
@@ -198,14 +206,10 @@ export default {
       return '元'
     }
   },
-  created () {
-    if (this.vipOrderType === '升级') {
-      this.targetUnit = undefined;
-      this.targetNum = undefined;
+  watch:{
+    $route(to, from) {
+      this.confirmOrder()
     }
-
-    this.confirmOrder();
-    this.getSettings();
   },
   beforeRouteLeave (to, from, next) {
     clearTimeout(this.timeoutId);
