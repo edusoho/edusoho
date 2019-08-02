@@ -8745,6 +8745,22 @@ wechat.notification.template.lesson_add: 'Classmate, hello, the course has a new
 wechat.notification.template.charge_success: 'Dear customer, you have recharged successfully<br>Recharge type: cash recharge or study card<br>Recharge order number: [order number]<br>Recharge amount: [actual payment price]<br>Recharge time: [payment time]<br>Go and see the course~'
 wechat.notification.template.buy_success: 'Dear customer, you have paid successfully<br>Order details: [product name]<br>Order price: [Order price]<br>Order time: [payment time]<br>Member due date: none<br>Please go to view'
 
-
+# 移动端使用：课时任务(task)完成条件文案
+mobile.task.finish_tips.audio.end: audio end
+mobile.task.finish_tips.discuss.join: Post or respond to a topic in this course
+mobile.task.finish_tips.doc.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.download.download: Downloaded materials
+mobile.task.finish_tips.exercise.submit: submitted an exercise
+mobile.task.finish_tips.flash.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.homework.submit: Submit
+mobile.task.finish_tips.live.join: participated in the live broadcast
+mobile.task.finish_tips.ppt.end: Learn at the end page
+mobile.task.finish_tips.ppt.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.testpapaer.submit: Submit
+mobile.task.finish_tips.testpapaer.score: 'Test score %finishData% points'
+mobile.task.finish_tips.text.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.video.end: Learning to the end
+mobile.task.finish_tips.video.time: 'At least learn %finishData% minutes'
+classroom.joining_date.expired_tips: Classroom joining date expired
 
 
