@@ -1449,6 +1449,8 @@ subject.choice_require_answer: must choose a answer
 subject.essay_require_answer: Enter answer please
 subject.symbol.picture: picture
 subject.question_error_tip: 'The %seqs% question has error'
+subject.material_nosub_tip: The first %seq% title material is missing subtopics, please add subtopic first
+subject.question_delete_tip: Please keep at least one topic
 
 user.account.order_pay_course_close_title: The course is closed
 user.account.order_pay_course_close_hint: The course in this order has been closed.Confirmed to pay?

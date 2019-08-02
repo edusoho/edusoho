@@ -440,6 +440,14 @@ export default class sbList {
     if (this.isEditing()) {
       return;
     }
+    let tokenList = this.questionOperate.getTokenList();
+    if (tokenList.length < 2) {
+      cd.message({
+        type : 'danger',
+        message : Translator.trans('subject.question_delete_tip'),
+      });
+      return;
+    }
     cd.confirm({
       title: Translator.trans('subject.delete.title'),
       content: Translator.trans('subject.delete.content'),
@@ -539,6 +547,9 @@ export default class sbList {
   }
 
   finishImport(event) {
+    if (this.isEditing()) {
+      return;
+    }
     let hasError = false;
     let self = this;
     let errorTip = '';
@@ -555,6 +566,10 @@ export default class sbList {
       return ;
     }
 
+    if (!this.isMaterialHasSub()) {
+      return;
+    }
+
     let title = '';
     if (this.isTestpaper()) {
       title = this.testpaperTitle;
@@ -569,6 +584,25 @@ export default class sbList {
         window.location.href = $(event.currentTarget).data('redirectUrl');
       }
     });
+  }
+
+  isMaterialHasSub() {
+    let self = this;
+    let tokenList = self.questionOperate.getTokenList();
+    for (var i = 0;i < tokenList.length;i++) {
+      let token = tokenList[i];
+      let question = self.questionOperate.getQuestion(token);
+      if (question['type'] == 'material' && question['subQuestions'].length == 0) {
+        let seq = self.questionOperate.getQuestionOrder(token);
+        cd.message({
+          type : 'danger',
+          message : Translator.trans('subject.material_nosub_tip', {seq: seq})
+        });
+        return false;
+      }
+    }
+
+    return true;
   }
 
   statErrorQuestions() {

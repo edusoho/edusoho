@@ -99,6 +99,10 @@ export default class QuestionOperate {
     return this.tokenList.indexOf(token) + 1;
   }
 
+  getTokenList() {
+    return this.tokenList;
+  }
+
   modifyDifficulty(selectQuestion, difficulty, text) {
     let self = this;
     $.each(selectQuestion, function(index, token){
@@ -131,6 +135,7 @@ export default class QuestionOperate {
     this.flag = true;
     if (question['type'] == 'material') {
       question['subQuestions'] = [];
+      question['score'] = 0;
     }
     let token = this._getToken();
     this.questions[token] = question;
@@ -150,6 +155,7 @@ export default class QuestionOperate {
     if (!this.isUpdating()) {
       return;
     }
+    let self = this;
     this.flag = true;
     const question = this.questions[deleteToken];
     delete this.questions[deleteToken];
@@ -161,7 +167,7 @@ export default class QuestionOperate {
       this.totalScore -= parseInt(question['score']);
     } else {
       $.each(question['subQuestions'], function(token, subQuestion) {
-        this.totalScore -= parseInt(subQuestion['score']);
+        self.totalScore -= parseInt(subQuestion['score']);
       })
     }
     this.trigger('deleteQuestion', [question['type']]);

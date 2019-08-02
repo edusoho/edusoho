@@ -1392,6 +1392,8 @@ subject.choice_require_answer: 请选择正确答案
 subject.essay_require_answer: 请填写答案
 subject.symbol.picture: 图片
 subject.question_error_tip: 第%seqs%题有违规
+subject.material_nosub_tip: 第%seq%题材料题缺少子题，请先添加子题
+subject.question_delete_tip: 请至少保留一道题目
 
 user.account.order_pay_course_close_title: 该课程已关闭
 user.account.order_pay_course_close_hint: 该订单的课程已关闭，确定还要支付？
