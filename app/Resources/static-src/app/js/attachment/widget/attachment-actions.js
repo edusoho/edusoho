@@ -17,7 +17,7 @@ class AttachmentActions {
         $target.closest('.js-attachment-list').siblings('.js-upload-file').show();
         $target.closest('.js-attachment-list').closest('div').siblings('[data-role="fileId"]').val('');
         $target.closest('div').remove();
-        $('.js-upload-file').show();
+        $target.closest('.form-control').find('.js-upload-file').show();
       }
     }).error(function(response){
       notify('danger', Translator.trans('file.not_found'));
