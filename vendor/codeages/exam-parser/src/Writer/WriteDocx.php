@@ -31,9 +31,6 @@ class WriteDocx
 
         $this->section = $phpWord->addSection();
 
-//        $this->writeDescription();
-//        $this->writeStartSignal();
-
         foreach ($questions as $question) {
             $this->buildQuestionText($question['type'], $question);
         }
@@ -61,7 +58,10 @@ class WriteDocx
         $method = $types[$type];
 
         $this->$method($question);
-        $this->writeCommonQuestionText($question);
+
+        if ('material' != $type) {
+            $this->writeCommonQuestionText($question);
+        }
 
         if (empty($question['isSub'])) {
             $this->section->addTextBreak();
@@ -148,6 +148,7 @@ class WriteDocx
         $this->writeText('【材料题开始】');
 
         $this->writeStem($question['seq'], $question['stem']);
+        $this->writeCommonQuestionText($question);
 
         foreach ($question['subs'] as $subQuestion) {
             $this->section->addTextBreak();
