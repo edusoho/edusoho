@@ -1381,6 +1381,8 @@ subject.difficulty_update_success: 难度修改成功
 subject.question_count: 共%count%道题
 subject.total_score: 总分%totalScore%分
 subject.is_editing_warning: 请先完成第%seq%题的编辑
+subject.sub_is_editing_warning: 请先完成材料题%parentNum%的第%seq%道子题的编辑
+
 subject.question_score_unit: 分
 subject.stem_required: 请输入题干
 subject.choice_option_least_two: 选项最少2个
@@ -1392,6 +1394,8 @@ subject.choice_require_answer: 请选择正确答案
 subject.essay_require_answer: 请填写答案
 subject.symbol.picture: 图片
 subject.question_error_tip: 第%seqs%题有违规
+subject.material_nosub_tip: 第%seq%题材料题缺少子题，请先添加子题
+subject.question_delete_tip: 请至少保留一道题目
 
 user.account.order_pay_course_close_title: 该课程已关闭
 user.account.order_pay_course_close_hint: 该订单的课程已关闭，确定还要支付？

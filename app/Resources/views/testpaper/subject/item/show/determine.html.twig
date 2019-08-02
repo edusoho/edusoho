@@ -2,7 +2,7 @@
 {% set errors = item.errors|default([]) %}
 <div class="subject-item js-subject-item js-subject-main-item" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
   <div class="subject-item__title">
-    <span class="subject-item__number {% if errors is not empty %}subject-item__number--danger{% endif %}">
+    <span class="subject-item__number js-subject-item-number {% if errors is not empty %}subject-item__number--danger{% endif %}">
     {% if seq|default(null) %}
       {{ seq }}
     {% else %}

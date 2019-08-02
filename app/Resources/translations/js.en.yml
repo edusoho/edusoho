@@ -1438,6 +1438,7 @@ subject.difficulty_update_success: Difficulty modified successfully
 subject.question_count: '%count% questions total'
 subject.total_score: '%totalScore% score total'
 subject.is_editing_warning: 'Finish %seq% question before other operation'
+subject.sub_is_editing_warning: 'Please finish editing sub-question %seq% of material %parentNum%'
 subject.question_score_unit: point
 subject.stem_required: Enter stem please
 subject.choice_option_least_two: At least 2 options required
@@ -1449,6 +1450,8 @@ subject.choice_require_answer: must choose a answer
 subject.essay_require_answer: Enter answer please
 subject.symbol.picture: picture
 subject.question_error_tip: 'The %seqs% question has error'
+subject.material_nosub_tip: The first %seq% title material is missing subtopics, please add subtopic first
+subject.question_delete_tip: Please keep at least one topic
 
 user.account.order_pay_course_close_title: The course is closed
 user.account.order_pay_course_close_hint: The course in this order has been closed.Confirmed to pay?

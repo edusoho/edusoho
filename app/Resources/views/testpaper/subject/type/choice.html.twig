@@ -25,7 +25,7 @@
 {% block miss_score %}
   {% if isTestpaper|default(true) %}
     <div class="form-group edit-form-group cd-mb24">
-      <label class="col-sm-2 control-label ph0 edit-form-group__label">{{ 'course.testpaper_manage.import.re_edit.miss_score'|trans }}</label>
+      <label class="col-sm-2 control-label ph0 edit-form-group__label edit-form-group__label--miss">{{ 'course.testpaper_manage.import.re_edit.miss_score'|trans }}</label>
       <div class="col-sm-10">
         <input class="form-control edit-form-group__input" type="text" name="missScore" value="{{ question.missScore|default('') }}">
       </div>

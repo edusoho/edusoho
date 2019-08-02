@@ -69,14 +69,12 @@ class Choice extends BaseQuestion {
       rules: {
         score: {
           required: true,
-          digits: true,
           max: 999,
           min: 0,
           es_score: true
         },
         missScore: {
           required: false,
-          digits: true,
           max: 999,
           min: 0,
           noMoreThan: '[name="score"]',
@@ -253,7 +251,7 @@ class Choice extends BaseQuestion {
         question['answers'].push(value);
       }
     });
-    question['attachment'] = this.getAttachemnts();
+    question['attachment'] = this.getAttachments();
     let method = $('.js-hidden-method').val();
     let isSub = $('.js-sub-judge').val();
     let key = $('.js-edit-form-seq').text() - 1;

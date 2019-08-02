@@ -354,6 +354,11 @@
     color: @cd-dark-major;
     font-weight: normal;
   }
+
+  .edit-form-group__label--miss {
+    margin-top: -12px;
+  }
+
   .edit-form-group__operate {
     display: block;
   }
@@ -376,6 +381,14 @@
         margin-left: 0;
       }
     }
+  }
+
+  .subject-change-lable {
+    width: 150px;
+    margin-left: 32px;
+    padding-right: 0;
+    color: @cd-dark-major;
+    text-align: left !important;
   }
 
   .edit-subject-item {
@@ -445,5 +458,11 @@
     padding-left: 28px;
     text-align: left;
     color: @cd-dark-major;
+    .control-label-required {
+      &:before {
+        color: @brand-danger;
+        top: 0;
+      }
+    }
   }
 }

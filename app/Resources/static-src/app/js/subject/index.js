@@ -249,14 +249,12 @@ export default class sbList {
       rules: {
         score: {
           required: true,
-          digits: true,
           max: 999,
           min: 0,
           es_score: true
         },
         missScore: {
           required: false,
-          digits: true,
           max: 999,
           min: 0,
           noMoreThan: '#score',
@@ -440,6 +438,14 @@ export default class sbList {
     if (this.isEditing()) {
       return;
     }
+    let tokenList = this.questionOperate.getTokenList();
+    if (tokenList.length < 2) {
+      cd.message({
+        type : 'danger',
+        message : Translator.trans('subject.question_delete_tip'),
+      });
+      return;
+    }
     cd.confirm({
       title: Translator.trans('subject.delete.title'),
       content: Translator.trans('subject.delete.content'),
@@ -539,6 +545,9 @@ export default class sbList {
   }
 
   finishImport(event) {
+    if (this.isEditing()) {
+      return;
+    }
     let hasError = false;
     let self = this;
     let errorTip = '';
@@ -555,6 +564,10 @@ export default class sbList {
       return ;
     }
 
+    if (!this.isMaterialHasSub()) {
+      return;
+    }
+
     let title = '';
     if (this.isTestpaper()) {
       title = this.testpaperTitle;
@@ -569,6 +582,25 @@ export default class sbList {
         window.location.href = $(event.currentTarget).data('redirectUrl');
       }
     });
+  }
+
+  isMaterialHasSub() {
+    let self = this;
+    let tokenList = self.questionOperate.getTokenList();
+    for (var i = 0;i < tokenList.length;i++) {
+      let token = tokenList[i];
+      let question = self.questionOperate.getQuestion(token);
+      if (question['type'] == 'material' && question['subQuestions'].length == 0) {
+        let seq = self.questionOperate.getQuestionOrder(token);
+        cd.message({
+          type : 'danger',
+          message : Translator.trans('subject.material_nosub_tip', {seq: seq})
+        });
+        return false;
+      }
+    }
+
+    return true;
   }
 
   statErrorQuestions() {
@@ -621,12 +653,20 @@ export default class sbList {
   }
   
   isEditing() {
-    const $editItem = $('.subject-edit-item');
+    const $editItem = $('.js-subject-edit-item');
+    const isSub = $editItem.hasClass('js-sub-edit-item');
+    let parentNum = '';
     if ($editItem.length !== 0) {
-      let seq = this.$itemList.find('.subject-edit-item').find('.js-edit-form-seq').text();
+      const seq = $editItem.find('.js-edit-form-seq').text();
+      if (isSub) {
+        const id = $editItem.find('.js-hidden-token').val();
+        const parentSeq = $(`#${id}`).find('.js-subject-item-number').text();
+        parentNum = $.trim(parentSeq);
+      }
+      const message = isSub ? Translator.trans('subject.sub_is_editing_warning', {parentNum:parentNum, seq:seq}) :Translator.trans('subject.is_editing_warning', {seq: seq});
       cd.message({
         type: 'warning',
-        message: Translator.trans('subject.is_editing_warning', {seq: seq}),
+        message: message,
       });
       return true;
     }

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Testpaper;
 
 use ExamParser\Writer\WriteDocx;
 use http\Exception\InvalidArgumentException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
@@ -17,7 +18,6 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
-use Symfony\Component\HttpFoundation\Response;
 
 class ManageController extends BaseController
 {
@@ -138,9 +138,19 @@ class ManageController extends BaseController
 
         $questions = $this->getTestpaperService()->buildExportTestpaperItems($testpaperId);
 
-        $writer = new WriteDocx($testpaper['name']);
+        $fileName = $testpaper['name'].'.docx';
+        $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
+        $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
 
-        return new Response($writer->write($questions));
+        $writer = new WriteDocx($path);
+        $writer->write($questions);
+
+        $headers = array(
+            'Content-Type' => 'application/msword',
+            'Content-Disposition' => 'attachment; filename='.$fileName,
+        );
+
+        return new BinaryFileResponse($path, 200, $headers);
     }
 
     public function checkListAction(Request $request, $targetId, $targetType, $type)

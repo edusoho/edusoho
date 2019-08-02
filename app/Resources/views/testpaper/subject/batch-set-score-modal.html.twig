@@ -15,10 +15,10 @@
         <form class="form-horizontal subject-state-form mt20" id="batch-set-score-form">
           <div class="form-group cd-mb24">
             <div class="col-md-3 control-label subject-state-form__label">
-              <label for="score">{{ 'course.testpaper_manage.question.score'|trans }}</label>
+              <label class="control-label-required" for="score">{{ 'course.testpaper_manage.question.score'|trans }}</label>
             </div>
             <div class="col-md-9 controls pl0">
-              <input id="score" type="text" class="form-control" name="score" required="required" placeholder="{{ 'course.testpaper_manage.import.re_edit.score_hint'|trans }}">
+              <input id="score" type="text" class="form-control" name="score" required="required">
             </div>
           </div>
           <div class="form-group hidden js-miss-score-field cd-mb24">
@@ -26,7 +26,7 @@
               <label for="missScore">{{ 'course.testpaper_manage.import.re_edit.miss_score'|trans }}</label>
             </div>
             <div class="col-md-9 controls pl0">
-              <input id="missScore" type="text" class="form-control" name="missScore" placeholder="{{ 'course.testpaper_manage.import.re_edit.score_hint'|trans }}">
+              <input id="missScore" type="text" class="form-control" name="missScore">
             </div>
           </div>
         </form>
