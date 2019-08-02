@@ -114,9 +114,9 @@ class Material extends AbstractQuestion
             $question['errors'][QuestionElement::STEM] = $this->getError(QuestionElement::STEM, QuestionErrors::NO_STEM);
         }
 
-        //判断是否有子题
+        //判断是否有子题;无子题不报错了
         if (empty($question['subQuestions'])) {
-            $question['errors'][QuestionElement::SUB_QUESTIONS] = $this->getError(QuestionElement::SUB_QUESTIONS, QuestionErrors::NO_SUB_QUESTIONS);
+//            $question['errors'][QuestionElement::SUB_QUESTIONS] = $this->getError(QuestionElement::SUB_QUESTIONS, QuestionErrors::NO_SUB_QUESTIONS);
 
             return;
         }

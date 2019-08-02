@@ -77,7 +77,11 @@ class ReadDocx
         $imagesList = $this->docXml->getElementsByTagName('drawing');
 
         foreach ($imagesList as $key => $imageXml) {
-            $imageId = $imageXml->getElementsByTagName('blip')->item(0)->getAttribute('r:embed');
+            $img = $imageXml->getElementsByTagName('blip')->item(0);
+            if (empty($img)) {
+                continue;
+            }
+            $imageId = $img->getAttribute('r:embed');
             $imageExtend = $imageXml->getElementsByTagName('extent')->item(0);
             $cx = (int) ($imageExtend->getAttribute('cx') / self::CM_EMU * self::CM_PX);
             $cy = (int) ($imageExtend->getAttribute('cy') / self::CM_EMU * self::CM_PX);
@@ -114,7 +118,7 @@ class ReadDocx
             }
             $zip->close();
         } else {
-            throw new ExamException("file format is invalid");
+            throw new ExamException('file format is invalid');
         }
         $docXml = new DOMDocument();
         $docXml->encoding = mb_detect_encoding($xml);
@@ -142,7 +146,9 @@ class ReadDocx
 
     /**
      * @param $filename
+     *
      * @return false|string|null
+     *
      * @throws ExamException
      */
     protected function getZipResource($filename)
@@ -157,7 +163,7 @@ class ReadDocx
             }
             $zip->close();
         } else {
-            throw new ExamException("file format is invalid");
+            throw new ExamException('file format is invalid');
         }
 
         return $file;
