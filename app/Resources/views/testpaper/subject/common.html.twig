@@ -9,6 +9,6 @@
   {% endif %}
 </div>
 <div class="subject-item__footer">
-  <span>{{ 'course.testpaper_manage.question.difficulty'|trans }}：</span><span class="cd-mr24 color-success js-difficulty">{{ dict_text('difficulty', difficulty) }}</span>
-  <span>{{ 'site.question.attr.score'|trans }}：</span><span class="color-success js-score">{% if type == 'material' %}{{ 'course.testpaper_manage.import.re_edit.material_score_hint'|trans }}{% else %}{{ score }}{{ 'site.question.attr.score.unit'|trans }}{% endif %}</span>
+  <span>{{ 'course.testpaper_manage.question.difficulty'|trans }}：</span><span class="cd-mr24 color-primary js-difficulty">{{ dict_text('difficulty', difficulty) }}</span>
+  <span>{{ 'site.question.attr.score'|trans }}：</span><span class="color-primary js-score">{% if type == 'material' %}{{ 'course.testpaper_manage.import.re_edit.material_score_hint'|trans }}{% else %}{{ score }}{{ 'site.question.attr.score.unit'|trans }}{% endif %}</span>
 </div>
