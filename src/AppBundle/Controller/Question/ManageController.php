@@ -14,7 +14,7 @@ use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use ExamParser\Writer\WriteDocx;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
@@ -154,9 +154,19 @@ class ManageController extends BaseController
 
         $questions = $this->buildExportQuestions($questions);
 
-        $writer = new WriteDocx(str_replace(',', ' ', $courseSet['title']).'-题目');
+        $fileName = str_replace(',', '', $courseSet['title']).'-题目.docx';
+        $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
+        $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
 
-        return new Response($writer->write($questions));
+        $writer = new WriteDocx($path);
+        $writer->write($questions);
+
+        $headers = array(
+            'Content-Type' => 'application/msword',
+            'Content-Disposition' => 'attachment; filename='.$fileName,
+        );
+
+        return new BinaryFileResponse($path, 200, $headers);
     }
 
     public function createAction(Request $request, $id, $type)
