@@ -392,7 +392,8 @@ export default class sbList {
   itemAdd(token, type, url, $target) {
     let self = this;
     let seq = self.questionOperate.getQuestionOrder(token) + 1;
-    $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add'}).then((res) => {
+    let isTestpaper = this.isTestpaper() ? 1 : 0;
+    $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add', 'isTestpaper' : isTestpaper}).then((res) => {
       $('#cd-modal').modal('hide');
       let index = seq + 1;
       self.orderQuestionList(index, $(`[data-anchor="#${token}"]`).parent(), $(`#${token}`));
@@ -412,7 +413,8 @@ export default class sbList {
     let self = this;
     let materialQuestion = this.questionOperate.getQuestion(token);
     let seq = materialQuestion['subQuestions'].length + 1;
-    $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add', 'isSub' : 1}).then((res) => {
+    let isTestpaper = this.isTestpaper() ? 1 : 0;
+    $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add', 'isSub' : 1, 'isTestpaper' : isTestpaper}).then((res) => {
       $('#cd-modal').modal('hide');
       var nextItem = $(`#${token}`).next('.subject-item');
       if (nextItem.hasClass('subject-sub-item')) {

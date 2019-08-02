@@ -429,7 +429,7 @@ class ManageController extends BaseController
         return $this->forward('AppBundle:Question/QuestionParser:reEdit', array(
             'request' => $request,
             'token' => $token,
-            'type' => 'testpaper',
+            'type' => 'question',
         ));
     }
 
