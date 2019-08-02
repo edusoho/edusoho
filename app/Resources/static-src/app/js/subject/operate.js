@@ -78,10 +78,10 @@ export default class QuestionOperate {
       self.questionCounts['total']++;
       self.questionCounts[question['type']]++;
       if (question['type'] != 'material') {
-        self.totalScore += question['score'];
+        self.totalScore += parseInt(question['score']);
       } else {
         $.each(question['subQuestions'], function(token, subQuestion) {
-          self.totalScore += subQuestion['score'];
+          self.totalScore += parseInt(subQuestion['score']);
         });
       }
     });
