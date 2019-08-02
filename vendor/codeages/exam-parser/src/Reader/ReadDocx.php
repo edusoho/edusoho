@@ -2,6 +2,7 @@
 
 namespace ExamParser\Reader;
 
+use ExamParser\Exception\ExamException;
 use ZipArchive;
 use DOMDocument;
 use Rhumsaa\Uuid\Uuid;
@@ -113,7 +114,7 @@ class ReadDocx
             }
             $zip->close();
         } else {
-            die('non zip file');
+            throw new ExamException("file format is invalid");
         }
         $docXml = new DOMDocument();
         $docXml->encoding = mb_detect_encoding($xml);
@@ -139,6 +140,11 @@ class ReadDocx
         return $rels;
     }
 
+    /**
+     * @param $filename
+     * @return false|string|null
+     * @throws ExamException
+     */
     protected function getZipResource($filename)
     {
         $filename = self::DOCUMENT_PREFIX.$filename;
@@ -151,7 +157,7 @@ class ReadDocx
             }
             $zip->close();
         } else {
-            die('non zip file');
+            throw new ExamException("file format is invalid");
         }
 
         return $file;
