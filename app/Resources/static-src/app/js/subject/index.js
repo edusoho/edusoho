@@ -21,6 +21,7 @@ export default class sbList {
     this.testpaperTitle = '';
     this.redirect = false;
     this.questionOperate = null;
+    this.timer = false;
     this.init();
   }
 
@@ -377,15 +378,19 @@ export default class sbList {
     let self = this;
     $('.js-create-btn').on('click', (event) => {
       const $target = $(event.target);
-      const isSubCreate = $('#cd-modal').attr('data-sub');
-      const url = $target.data('url');
-      let token = $('#cd-modal').attr('data-index');
-      let type = $target.data('type');
-      if (isSubCreate == 'false') {
-        self.itemAdd(token, type, url, $target);
-      } else {
-        self.subItemAdd(token, type, url);
-      }
+      if (self.timer) clearTimeout(self.timer);
+      self.timer = setTimeout(() => {
+        const $modal = $('#cd-modal');
+        const isSubCreate = $modal.attr('data-sub');
+        const url = $target.data('url');
+        let token = $modal.attr('data-index');
+        let type = $target.data('type');
+        if (isSubCreate == 'false') {
+          self.itemAdd(token, type, url, $target);
+        } else {
+          self.subItemAdd(token, type, url);
+        }
+      }, 500);
     });
   }
 
@@ -576,14 +581,17 @@ export default class sbList {
     if (this.isTestpaper()) {
       title = this.testpaperTitle;
     }
-    $.post($(event.currentTarget).data('url'), {title: title, questions: this.questionOperate.getQuestions()}, function(resp) {
+    const $target = $(event.currentTarget);
+    $target.button('loading');
+    $.post($target.data('url'), {title: title, questions: this.questionOperate.getQuestions()}, function(resp) {
       if (resp === true) {
+        $target.button('reset');
         cd.message({
           type : 'success',
           message : Translator.trans('subject.save_success'),
         });
         self.redirect = true;
-        window.location.href = $(event.currentTarget).data('redirectUrl');
+        window.location.href = $target.data('redirectUrl');
       }
     });
   }
