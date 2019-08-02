@@ -69,14 +69,12 @@ class Choice extends BaseQuestion {
       rules: {
         score: {
           required: true,
-          digits: true,
           max: 999,
           min: 0,
           es_score: true
         },
         missScore: {
           required: false,
-          digits: true,
           max: 999,
           min: 0,
           noMoreThan: '[name="score"]',
