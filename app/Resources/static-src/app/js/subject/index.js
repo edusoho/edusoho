@@ -390,6 +390,7 @@ export default class sbList {
       const $target = $(event.target);
       if (self.timer) clearTimeout(self.timer);
       self.timer = setTimeout(() => {
+        $target.attr('disabled', true);
         const $modal = $('#cd-modal');
         const isSubCreate = $modal.attr('data-sub');
         const url = $target.data('url');
@@ -410,6 +411,7 @@ export default class sbList {
     let isTestpaper = this.isTestpaper() ? 1 : 0;
     $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add', 'isTestpaper' : isTestpaper}).then((res) => {
       $('#cd-modal').modal('hide');
+      $('.js-create-btn').attr('disabled', false);
       let index = seq + 1;
       self.orderQuestionList(index, $(`[data-anchor="#${token}"]`).parent(), $(`#${token}`));
       $(`[data-anchor="#${token}"]`).parent().after(self.getNewListItem(seq, type, $target.text()));
