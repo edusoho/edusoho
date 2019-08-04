@@ -17,7 +17,8 @@
   <div class="subject-item__body">
     <div class="subject-sub-item__answer">
       {% if errors.answer is not defined %}
-        <span class="subject-sub-item__label">{{ 'course.testpaper_manage.import.re_edit.answer'|trans }}：</span><span class="">{{ item.answer|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</span>
+        <span class="subject-sub-item__label">{{ 'course.testpaper_manage.import.re_edit.answer'|trans }}：</span>
+        <div>{{ item.answer|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
       {% elseif errors.answer.code == 100003 %}
         <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_answer'|trans }}</span>
       {% endif %}
