@@ -3,7 +3,7 @@
   <div class="subject-list__tip js-error-tip"></div>
   <div class="subject-list__body js-subject-list-body row">
     {% for key,item in questions %}
-      <div class="col-sm-3 subject-list-item">
+      <div class="col-sm-3 subject-list-item js-subject-list-item">
         <div class="subject-list-item__num {% if item.errors is defined %}subject-list-item__num--error{% endif %} js-subject-anchor" data-anchor="{{'#' ~ key }}">
           <span class="js-list-index">{{ loop.index }}</span>
           {% if item.type != 'material' %}

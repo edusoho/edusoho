@@ -262,6 +262,7 @@ class Choice extends BaseQuestion {
       seq = key + 1;
     } else {
       token = self.updataCachedQuestion(token, question, method);
+      self.toggleEditAnchor(key, token);
       question = self.operate.getQuestion(token);
       seq = self.operate.getQuestionOrder(token);
     }

@@ -330,6 +330,12 @@ export default class sbList {
       question = this.questionOperate.getQuestion($item.attr('id'));
       token = $item.attr('id');
     }
+
+    if (!isSub) {
+      const index = seq - 1;
+      const locationId = `#${seq}`;
+      $('.js-subject-list-item').eq(index).find('.js-subject-anchor').attr('data-anchor', locationId);
+    }
     let data = {
       'seq' : seq,
       'token' : token,
@@ -432,7 +438,7 @@ export default class sbList {
   }
 
   getNewListItem(seq, type, typeName) {
-    return `<div class="col-sm-3 subject-list-item">
+    return `<div class="col-sm-3 subject-list-item js-subject-list-item">
       <div class="subject-list-item__num  js-subject-anchor" data-anchor="#${seq}">
         <span class="js-list-index">${seq}</span>
         <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="${type}"><input type="checkbox" data-toggle="cd-checkbox"></label>
