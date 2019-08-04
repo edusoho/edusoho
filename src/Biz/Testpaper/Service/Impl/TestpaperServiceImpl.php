@@ -269,6 +269,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 'itemCount' => count($questions),
                 'type' => 'testpaper',
                 'score' => $metas['totalScore'],
+                'passedCondition' => array(0),
             );
             $testpaper = $this->createTestpaper($testpaper);
             $questions = $this->getQuestionService()->importQuestions($questions, $token);

@@ -17,7 +17,7 @@ class ReaderDocxTest extends BaseTestCase
     {
         $filename = dirname(__DIR__).'/Fixtures/files/example1.docx';
         $wordRead = new ReadDocx($filename);
-        $text = $wordRead->getDocumentText();
+        $text = $wordRead->read();
 
         $tmpName = '/tmp/'.time().'.text';
 

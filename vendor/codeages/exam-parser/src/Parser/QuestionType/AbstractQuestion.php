@@ -67,6 +67,7 @@ abstract class AbstractQuestion
             return true;
         }
 
+        //如果包含解析的关键词，将其过滤
         if (0 === strpos(trim($line), self::ANALYSIS_SIGNAL)) {
             $analysis = str_replace(self::ANALYSIS_SIGNAL, '', $line);
             $question['analysis'] = $analysis;

@@ -352,6 +352,28 @@ export default class sbList {
     let $form = $target.parents('.js-edit-form');
     let url = $target.parents('.subject-change-list').data('convertUrl');
     let question = sbList._serializeArrayConvertToJson($form.serializeArray());
+    if ($('.js-attachment-list').length > 0) {
+      let attachment = {};
+      if ($('.js-attachment-list-stem').find('.js-attachment-name').length > 0) {
+        attachment['stem'] = {
+          "type" : "attachment",
+          "targetType" : "question.stem",
+          "fileIds" : $('.js-attachment-ids-stem').val(),
+          "fileName" : $('.js-attachment-list-stem').find('.js-attachment-name').text()
+        };
+      }
+
+      if ($('.js-attachment-list-analysis').find('.js-attachment-name').length > 0) {
+        attachment['analysis'] = {
+          "type" : "attachment",
+          "targetType" : "question.analysis",
+          "fileIds" : $('.js-attachment-ids-analysis').val(),
+          "fileName" : $('.js-attachment-list-analysis').find('.js-attachment-name').text()
+        };
+      }
+      question['attachment'] = attachment;
+    }
+
     let seq = $('.js-edit-form-seq').text();
     let isSub = $('.js-sub-judge').val();
     let method = $('.js-hidden-method').val();
