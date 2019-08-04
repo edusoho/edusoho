@@ -108,7 +108,7 @@ class QuestionParserController extends BaseController
     protected function parseQuestions($fullpath)
     {
         $wordRead = new ReadDocx($fullpath);
-        $text = $wordRead->getDocumentText();
+        $text = $wordRead->read();
         $self = $this;
         $fileService = $this->getFileService();
         $text = preg_replace_callback(
@@ -124,7 +124,7 @@ class QuestionParserController extends BaseController
         );
         $parser = new Parser($text);
 
-        return $parser->getQuestions();
+        return $parser->parser();
     }
 
     protected function cacheQuestions($questions, $uploadFile)

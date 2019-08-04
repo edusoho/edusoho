@@ -29,7 +29,6 @@ class Parser
     public function __construct($body, $options = array())
     {
         $this->body = $body;
-        $this->parser();
     }
 
     public function getQuestions()
@@ -37,15 +36,17 @@ class Parser
         return $this->questions;
     }
 
-    protected function parser()
+    public function parser()
     {
         $content = $this->filterStartSignal();
         $content = $this->filterMaterialSignal($content);
         $questionsArray = $this->resolveContent($content);
         $questions = array();
         foreach ($questionsArray as $question) {
-            $questions[] = $this->matchQuestion($question);
+            $this->matchQuestion($question);
         }
+
+        return $this->questions;
     }
 
     /**
@@ -67,8 +68,8 @@ class Parser
         $content = preg_replace_callback(
             $pattern,
             function ($matches) {
-                $str = str_replace('【材料题开始】', '<#材料题开始#>', $matches[0]);
-                $str = str_replace('【材料题结束】', '<#材料题结束#>', $str);
+                $str = preg_replace('/【材料题开始】\s*/', '<#材料题开始#>', $matches[0]);
+                $str = preg_replace('/\s*【材料题结束】/', '<#材料题结束#>', $str);
                 $pattern = '/'.PHP_EOL.'{2,}/';
                 $str = preg_replace($pattern, PHP_EOL.'<#材料题子题#>', $str);
 

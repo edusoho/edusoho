@@ -9,15 +9,30 @@ use Rhumsaa\Uuid\Uuid;
 
 class ReadDocx
 {
+    /**
+     * Word2007+ 文档中正文的XML文件相对路径地址
+     */
     const DOCUMENT_XML_PATH = 'word/document.xml';
 
+    /**
+     * Word2007+ 文档中正文资源文件的XML文件相对路径地址
+     */
     const DOCUMENT_RELS_XML_PATH = 'word/_rels/document.xml.rels';
 
+    /**
+     * Word2007+ 文件主目录
+     */
     const DOCUMENT_PREFIX = 'word/';
 
+    /**
+     * Word中厘米和EMU的换算比例
+     */
     const CM_EMU = 360000;
 
-    const CM_PX = 25; //电脑屏幕72ppi，厘米和像素的换算规则
+    /**
+     * 电脑屏幕72ppi，厘米和像素的换算规则
+     */
+    const CM_PX = 25;
 
     protected $resourceTmpPath = '/tmp';
 
@@ -43,7 +58,7 @@ class ReadDocx
      * @var string
      *             解析后的文档text
      */
-    protected $documentText;
+    protected $documentText = '';
 
     public function __construct($docxPath, $options = array())
     {
@@ -51,8 +66,14 @@ class ReadDocx
         if (isset($options['resourceTmpPath'])) {
             $this->resourceTmpPath = $options['resourceTmpPath'];
         }
+    }
+
+    public function read()
+    {
         $this->readZip();
         $this->convertImage();
+
+        return $this->getDocumentText();
     }
 
     public function getDocxPath()
