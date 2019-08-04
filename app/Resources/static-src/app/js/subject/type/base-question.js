@@ -27,7 +27,6 @@ class BaseQuestion {
 
   submitForm(event) {
     let self = this;
-
     if (self.validator.form()) {
       $(event.currentTarget).button('loading');
       let question = self.getQuestion();
@@ -86,6 +85,7 @@ class BaseQuestion {
       seq = key + 1;
     } else {
       token = self.updataCachedQuestion(token, question, method);
+      self.toggleEditAnchor(key, token);
       question = self.operate.getQuestion(token);
       seq = self.operate.getQuestionOrder(token);
     }
@@ -94,6 +94,11 @@ class BaseQuestion {
     $.post(self.$form.data('url'), {'seq': seq, 'question': question, 'token': token, 'isSub': isSub}, html=> {
       self.$form.parent('.subject-item').replaceWith(html);
     });
+  }
+
+  toggleEditAnchor(key, value) {
+    const index = parseInt(key);
+    $('.js-subject-list-item').eq(index).find('.js-subject-anchor').attr('data-anchor', `#${value}`);
   }
 
   updataCachedQuestion(token, question, method) {
