@@ -270,7 +270,11 @@ export default class sbList {
     });
 
     $.validator.addMethod( 'noMoreThan', function(value, element, param) {
-      return parseFloat(value) <= parseFloat($(param).val());
+      if (value == '') {
+        return true;
+      } else {
+        return parseFloat(value) <= parseFloat($(param).val());
+      }
     }, 'Please enter a lesser value.' );
   }
 
