@@ -55,7 +55,7 @@ class Choice extends BaseQuestion {
             });
       };
       $.validator.addMethod('noMoreThan', function(value, element, param) {
-        return value <= $(param).val();
+        return parseFloat(value) <= parseFloat($(param).val());
       }, 'Please enter a lesser value.' );
       $.validator.addMethod('multi', function(value, element, param) {
         return $('input:checkbox[name="right"]:checked').length > 1;
