@@ -97,7 +97,7 @@ class QuestionParserController extends BaseController
         $templateInfo = $this->getTemplateInfo($type);
 
         return $this->render($templateInfo['reEditTemplate'], array(
-            'filename' => mb_substr(str_replace('.docx', '', $data['filename']), 0, 50),
+            'filename' => mb_substr(str_replace('.docx', '', $data['filename']), 0, 50, 'utf-8'),
             'questions' => $questions,
             'questionAnalysis' => $questionAnalysis,
             'courseSetId' => $token['data']['courseSetId'],
