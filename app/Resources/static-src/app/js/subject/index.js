@@ -124,9 +124,9 @@ export default class sbList {
     const $target = $(event.currentTarget);
     let checked = $target.hasClass('checked');
     if (checked) {
-      this.$sbCheckbox.removeClass('checked');
+      this.$element.find('.js-show-checkbox').removeClass('checked');
     } else {
-      this.$sbCheckbox.addClass('checked');
+      this.$element.find('.js-show-checkbox').addClass('checked');
     }
   }
 
@@ -138,7 +138,7 @@ export default class sbList {
   }
 
   countNumber() {
-    let itemLength = this.$sbCheckbox.length;
+    let itemLength = this.$element.find('.js-show-checkbox').length;
     const self = this;
     setTimeout(function(){
       let $checkBox = $('.js-subject-list-body').find('.checked');
@@ -154,21 +154,26 @@ export default class sbList {
   batchBtnClick(event) {
     const $target = $(event.target);
     $target.toggleClass('hidden');
-    this.toggleClass();
+    this.toggleClass(true);
     this.flag = false;
   }
 
   finishBtnClick(event) {
-    this.$sbCheckbox.removeClass('checked');
+    this.$element.find('.js-show-checkbox').removeClass('checked');
     this.$allBtn.removeClass('checked');
     this.$batchBtn.toggleClass('hidden');
-    this.toggleClass();
+    this.toggleClass(false);
     this.flag = true;
   }
 
-  toggleClass() {
-    $('.js-subject-wrap').toggleClass('hidden');
-    $('.js-show-checkbox').toggleClass('hidden');
+  toggleClass(isShow) {
+    if (isShow) {
+      this.$element.find('.js-subject-wrap').removeClass('hidden');
+      this.$element.find('.js-show-checkbox').removeClass('hidden');
+    } else {
+      this.$element.find('.js-subject-wrap').addClass('hidden');
+      this.$element.find('.js-show-checkbox').addClass('hidden');
+    }
   }
 
   quickToQuestion(event, flag) {
