@@ -361,19 +361,19 @@ export default class sbList {
       let attachment = {};
       if ($('.js-attachment-list-stem').find('.js-attachment-name').length > 0) {
         attachment['stem'] = {
-          "type" : "attachment",
-          "targetType" : "question.stem",
-          "fileIds" : $('.js-attachment-ids-stem').val(),
-          "fileName" : $('.js-attachment-list-stem').find('.js-attachment-name').text()
+          'type' : 'attachment',
+          'targetType' : 'question.stem',
+          'fileIds' : $('.js-attachment-ids-stem').val(),
+          'fileName' : $('.js-attachment-list-stem').find('.js-attachment-name').text()
         };
       }
 
       if ($('.js-attachment-list-analysis').find('.js-attachment-name').length > 0) {
         attachment['analysis'] = {
-          "type" : "attachment",
-          "targetType" : "question.analysis",
-          "fileIds" : $('.js-attachment-ids-analysis').val(),
-          "fileName" : $('.js-attachment-list-analysis').find('.js-attachment-name').text()
+          'type' : 'attachment',
+          'targetType' : 'question.analysis',
+          'fileIds' : $('.js-attachment-ids-analysis').val(),
+          'fileName' : $('.js-attachment-list-analysis').find('.js-attachment-name').text()
         };
       }
       question['attachment'] = attachment;
@@ -450,6 +450,7 @@ export default class sbList {
     let isTestpaper = this.isTestpaper() ? 1 : 0;
     $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add', 'isSub' : 1, 'isTestpaper' : isTestpaper}).then((res) => {
       $('#cd-modal').modal('hide');
+      $('.js-create-btn').attr('disabled', false);
       var nextItem = $(`#${token}`).next('.subject-item');
       if (nextItem.hasClass('subject-sub-item')) {
         $(`[data-material-token="${token}"]`).last().after(res);
@@ -723,22 +724,22 @@ export default class sbList {
 
   getTypeName(type) {
     switch (type) {
-      case 'single_choice':
-        return Translator.trans('course.question.type.single_choice');
-      case 'uncertain_choice':
-        return Translator.trans('course.question.type.uncertain_choice');
-      case 'choice':
-        return Translator.trans('course.question.type.choice');
-      case 'determine':
-        return Translator.trans('course.question.type.determine');
-      case 'essay':
-        return Translator.trans('course.question.type.essay');
-      case 'fill':
-        return Translator.trans('course.question.type.fill');
-      case 'material':
-        return Translator.trans('course.question.type.material');
-      default:
-        return Translator.trans('course.question.type.unknown');
+    case 'single_choice':
+      return Translator.trans('course.question.type.single_choice');
+    case 'uncertain_choice':
+      return Translator.trans('course.question.type.uncertain_choice');
+    case 'choice':
+      return Translator.trans('course.question.type.choice');
+    case 'determine':
+      return Translator.trans('course.question.type.determine');
+    case 'essay':
+      return Translator.trans('course.question.type.essay');
+    case 'fill':
+      return Translator.trans('course.question.type.fill');
+    case 'material':
+      return Translator.trans('course.question.type.material');
+    default:
+      return Translator.trans('course.question.type.unknown');
     }
   }
 }
