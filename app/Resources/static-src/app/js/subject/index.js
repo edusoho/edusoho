@@ -639,17 +639,35 @@ export default class sbList {
     }
     const $target = $(event.currentTarget);
     $target.button('loading');
-    $.post($target.data('url'), {title: title, questions: this.questionOperate.getQuestions()}, function(resp) {
-      if (resp === true) {
-        $target.button('reset');
-        cd.message({
-          type : 'success',
-          message : Translator.trans('subject.save_success'),
-        });
-        self.redirect = true;
-        window.location.href = $target.data('redirectUrl');
+    $.ajax({
+      type: "POST",
+      url: $target.data('url'),
+      data: JSON.stringify({title: title, questions: this.questionOperate.getQuestions()}),
+      dataType: "json",
+      contentType: "application/json;charset=utf-8",
+      success: function(resp) {
+        if (resp === true) {
+          $target.button('reset');
+          cd.message({
+            type : 'success',
+            message : Translator.trans('subject.save_success'),
+          });
+          self.redirect = true;
+          window.location.href = $target.data('redirectUrl');
+        }
       }
     });
+    // $.post($target.data('url'), {title: title, questions: this.questionOperate.getQuestions()}, function(resp) {
+    //   if (resp === true) {
+    //     $target.button('reset');
+    //     cd.message({
+    //       type : 'success',
+    //       message : Translator.trans('subject.save_success'),
+    //     });
+    //     self.redirect = true;
+    //     window.location.href = $target.data('redirectUrl');
+    //   }
+    // },'json');
   }
 
   isMaterialHasSub() {

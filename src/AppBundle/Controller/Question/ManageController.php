@@ -438,7 +438,8 @@ class ManageController extends BaseController
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         $data = $token['data'];
         $this->getCourseSetService()->tryManageCourseSet($data['courseSetId']);
-        $postData = $request->request->all();
+        $content = $request->getContent();
+        $postData = json_decode($content, true);
         $this->getQuestionService()->importQuestions($postData['questions'], $token);
 
         return $this->createJsonResponse(true);
