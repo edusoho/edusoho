@@ -461,13 +461,23 @@ export default class sbList {
   }
 
   getNewListItem(seq, type, typeName) {
-    return `<div class="col-sm-3 subject-list-item js-subject-list-item">
-      <div class="subject-list-item__num  js-subject-anchor" data-anchor="#${seq}">
-        <span class="js-list-index">${seq}</span>
-        <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="${type}"><input type="checkbox" data-toggle="cd-checkbox"></label>
-      </div>
-      <span class="js-type-name">${typeName}</span>
-    </div>`;
+    if (type !== 'material'){
+      return `<div class="col-sm-3 subject-list-item js-subject-list-item">
+          <div class="subject-list-item__num  js-subject-anchor" data-anchor="#${seq}">
+            <span class="js-list-index">${seq}</span>
+            <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="${type}"><input type="checkbox" data-toggle="cd-checkbox"></label>
+          </div>
+          <span class="js-type-name">${typeName}</span>
+        </div>`;
+    } else{
+      return `<div class="col-sm-3 subject-list-item js-subject-list-item">
+          <div class="subject-list-item__num  js-subject-anchor" data-anchor="#${seq}">
+            <span class="js-list-index">${seq}</span>
+          </div>
+          <span class="js-type-name">${typeName}</span>
+        </div>`;
+    }
+
   }
 
   deleteSubjectItem(event) {
