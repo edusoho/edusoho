@@ -1,5 +1,6 @@
 import QuestionOperate from './operate';
 import showEditor from './edit';
+import { Browser } from 'common/utils';
 
 export default class sbList {
   constructor() {
@@ -35,6 +36,7 @@ export default class sbList {
     this.initTestpaperTitle();
     this.itemClick();
     this.statErrorQuestions();
+    this.ieImg();
   }
 
   initQuestionOperate() {
@@ -758,6 +760,12 @@ export default class sbList {
       return Translator.trans('course.question.type.material');
     default:
       return Translator.trans('course.question.type.unknown');
+    }
+  }
+
+  ieImg() {
+    if (Browser.ie10 || Browser.ie11) {
+      this.$itemList.addClass('ie-item-list');
     }
   }
 }
