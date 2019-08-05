@@ -276,6 +276,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $items = $this->itemsAnalyzer($testpaper['id'], $questions);
             $this->createTestpaperItems($items);
             $this->commit();
+
+            return $testpaper;
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;

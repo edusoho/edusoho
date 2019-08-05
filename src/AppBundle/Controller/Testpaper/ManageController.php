@@ -785,6 +785,8 @@ class ManageController extends BaseController
     public function saveImportTestpaperAction(Request $request, $token)
     {
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        $data = $token['data'];
+        $this->getCourseSetService()->tryManageCourseSet($data['courseSetId']);
         $testpaper = $request->request->all();
         $this->getTestpaperService()->importTestpaper($testpaper, $token);
 
