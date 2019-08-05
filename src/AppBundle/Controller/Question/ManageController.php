@@ -448,8 +448,10 @@ class ManageController extends BaseController
         $wrapper = $this->getWrapper();
 
         $seq = 1;
+        $num = 1;
         foreach ($questions as $question) {
             $question['seq'] = $seq++;
+            $question['num'] = $num++;
             if ('material' == $question['type']) {
                 $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
                 $subSeq = 1;
@@ -470,6 +472,7 @@ class ManageController extends BaseController
                 'difficulty',
                 'analysis',
                 'subs',
+                'num',
             ));
             $exportQuestions[] = $question;
         }
