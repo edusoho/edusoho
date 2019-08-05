@@ -74,7 +74,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeStem($question['num'], $question['stem']);
         $this->writeOptions($question['options']);
 
         $this->writeText("【答案】{$question['answer']}");
@@ -86,7 +86,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeStem($question['num'], $question['stem']);
         $this->writeOptions($question['options']);
 
         $this->writeText("正确答案：{$question['answer']}");
@@ -99,7 +99,7 @@ class WriteDocx
         }
 
         $this->writeText('【不定项选择题】');
-        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeStem($question['num'], $question['stem']);
         $this->writeOptions($question['options']);
 
         $this->writeText("正确答案：{$question['answer']}");
@@ -111,7 +111,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeStem($question['num'], $question['stem']);
     }
 
     protected function buildDetermine($question)
@@ -120,7 +120,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['seq'], $question['stem'], $question['answer']);
+        $this->writeStem($question['num'], $question['stem'], $question['answer']);
     }
 
     protected function buildEssay($question)
@@ -129,7 +129,7 @@ class WriteDocx
             return;
         }
 
-        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeStem($question['num'], $question['stem']);
 
         $this->useTextRun();
         $this->writeText('【答案】');
@@ -147,7 +147,7 @@ class WriteDocx
 
         $this->writeText('【材料题开始】');
 
-        $this->writeStem($question['seq'], $question['stem']);
+        $this->writeStem($question['num'], $question['stem']);
         $this->writeCommonQuestionText($question);
 
         foreach ($question['subs'] as $subQuestion) {

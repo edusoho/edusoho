@@ -1178,6 +1178,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $exportQuestions = array();
         $wrapper = $this->getWrapper();
+        $num = 1;
         foreach ($items as $questionId => $item) {
             $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
 
@@ -1185,6 +1186,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 continue;
             }
 
+            $question['num'] = $num++;
             $question['seq'] = $item['seq'];
             $question['score'] = $item['score'];
             if ('material' == $question['type']) {
@@ -1207,6 +1209,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 'difficulty',
                 'analysis',
                 'subs',
+                'num',
             ));
             $exportQuestions[] = $question;
         }
