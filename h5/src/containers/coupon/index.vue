@@ -1,8 +1,8 @@
 <template>
   <div class="receive-all">
     <e-loading v-if="isLoading"></e-loading>
-    <fast-receive v-if="cloudSetting ==1" />
-    <pass-receive v-if="cloudSetting ==2"/>
+    <fast-receive v-if="cloudSetting ==1 && sitePlugins==1" />
+    <pass-receive v-if="cloudSetting ==2 || sitePlugins==2"/>
   </div>
 </template>
 <script>
@@ -19,13 +19,12 @@ export default {
   },
   data() {
     return {
-      sitePlugins: false,
+      sitePlugins: 0,
       cloudSetting: 0
     };
   },
   created() {
-   // this.getsitePlugins();
-  this.getsettingsCloud();
+  this.getsitePlugins();
   },
   computed: {
     ...mapState({
@@ -33,6 +32,7 @@ export default {
     })
   },
   methods: {
+    //获取版本号
     getsitePlugins() {
       const that=this;
        Api.sitePlugins({
@@ -41,8 +41,12 @@ export default {
         }
         }).then(res => {
           //当前版本小于支持版本 true  大于false
-          if(res){
-            that.sitePlugins=needUpgrade('2.2.9',res.version);
+          if(Object.keys(res).length>0){
+            if(needUpgrade('2.2.9',res.version)){
+              that.sitePlugins=1
+            }else{
+              that.sitePlugins=2
+            }
             that.getsettingsCloud();
           } 
         })
