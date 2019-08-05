@@ -64,7 +64,7 @@ class Parser
 
     protected function filterMaterialSignal($content)
     {
-        $pattern = '/'.PHP_EOL."【材料题开始】[\s\S]*?【材料题结束】".PHP_EOL.'/';
+        $pattern = '/'.PHP_EOL."{0,1}【材料题开始】[\s\S]*?【材料题结束】".PHP_EOL.'/';
         $content = preg_replace_callback(
             $pattern,
             function ($matches) {

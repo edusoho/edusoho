@@ -167,8 +167,8 @@ export default class sbList {
   }
 
   toggleClass() {
-    this.$batchWrap.toggleClass('hidden');
-    this.$sbCheckbox.toggleClass('hidden');
+    $('.js-subject-wrap').toggleClass('hidden');
+    $('.js-show-checkbox').toggleClass('hidden');
   }
 
   quickToQuestion(event, flag) {

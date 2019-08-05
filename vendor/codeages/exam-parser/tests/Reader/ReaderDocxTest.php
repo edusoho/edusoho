@@ -7,20 +7,21 @@ use ExamParser\Tests\BaseTestCase;
 
 class ReaderDocxTest extends BaseTestCase
 {
-    public function testRead()
+    public function testReadSingleChoice()
     {
-        $filename = dirname(__DIR__).'/Fixtures/files/example1.docx';
-        $wordRead = new ReadDocx($filename);
-    }
-
-    public function testReadDoc()
-    {
-        $filename = dirname(__DIR__).'/Fixtures/files/example1.docx';
+        $filename = dirname(__DIR__).'/Fixtures/files/single_choice.docx';
         $wordRead = new ReadDocx($filename);
         $text = $wordRead->read();
+        $this->assertEquals(0, stripos('单选题', $text));
+    }
 
-        $tmpName = '/tmp/'.time().'.text';
-
-        file_put_contents($tmpName, $text);
+    /**
+     * @expectedException \ExamParser\Exception\ExamException
+     */
+    public function testReadDoc()
+    {
+        $filename = dirname(__DIR__).'/Fixtures/files/questions.doc';
+        $wordRead = new ReadDocx($filename);
+        $wordRead->read();
     }
 }
