@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\Login;
 
 use ApiBundle\Api\Annotation\ApiConf;
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -22,6 +23,7 @@ use Biz\User\Service\BatchNotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -37,6 +39,7 @@ class Login extends AbstractResource
 
     /**
      * @ApiConf(isRequiredAuth=false)
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Token\TokenFilter", mode="public")
      */
     public function add(ApiRequest $request)
     {
@@ -75,13 +78,13 @@ class Login extends AbstractResource
             $this->checkMobileRegisterSetting();
             $user = $this->createUser($clientIp, $client, $mobile);
             $this->sendRegisterSms($mobile, $user['id'], $user['nickname'], $user['realPassword']);
-            unset($user['realPassword']);
         }
+        $user['currentIp'] = $clientIp;
         $this->appendUser($user);
 
         $token = $this->getLoginToken($user['id'], $fields['smsCode'], $fields['smsToken'], $mobile, $client);
 
-        $this->afterLogin($user, $token, $client, $clientIp);
+        $this->afterLogin($user, $token, $client);
 
         $this->getLogService()->info('sms', 'sms_login', "用户{$user['nickname']}通过短信快捷登录登录成功", array('userId' => $user['id']));
 
@@ -110,6 +113,7 @@ class Login extends AbstractResource
 
         $user = $this->getAuthService()->register($newUser);
         $user['realPassword'] = $password;
+        $user['loginTime'] = time();
 
         $this->getLogService()->info('sms', 'sms_login', "用户{$user['nickname']}通过短信快捷登录注册成功", array('userId' => $user['id']));
 
@@ -166,7 +170,7 @@ class Login extends AbstractResource
 
     private function getLoginToken($userId, $smsCode, $smsToken, $mobile, $client)
     {
-        $token = $this->getTokenService()->makeToken('mobile_login', array(
+        $token = $this->getTokenService()->makeToken(MobileBaseController::TOKEN_TYPE, array(
             'times' => 0,
             'duration' => TimeMachine::ONE_MONTH,
             'userId' => $userId,
@@ -197,10 +201,10 @@ class Login extends AbstractResource
         }
     }
 
-    private function afterLogin($user, $newToken, $client, $clientIp)
+    private function afterLogin($user, $newToken, $client)
     {
         // 记录登录时间
-        $this->setCurrentUser($user, $clientIp);
+        $this->setCurrentUser($user);
         $this->getUserService()->markLoginInfo($client);
 
         // 登录后获取通知
@@ -209,13 +213,13 @@ class Login extends AbstractResource
         // 积分插件：在登录后加积分
         $this->getDispatcher()->dispatch('user.login', new Event($user));
 
-        // APP侧需要删除token，以达到同一时间只有一个设备在线的要求
+        // 同一时间只有一个设备在线的要求
         $this->deleteTokens($user, $newToken);
     }
 
     private function deleteTokens($user, $newToken)
     {
-        $delTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], 'mobile_login');
+        $delTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], MobileBaseController::TOKEN_TYPE);
         if (empty($delTokens)) {
             return;
         }
@@ -227,17 +231,10 @@ class Login extends AbstractResource
         }
     }
 
-    private function setCurrentUser($user, $clientIp)
+    private function setCurrentUser($user)
     {
-        $allowUser = array(
-            'id' => $user['id'],
-            'nickname' => $user['nickname'],
-            'currentIp' => $clientIp,
-            'roles' => $user['roles'],
-            'type' => $user['type'],
-        );
         $currentUser = new CurrentUser();
-        $currentUser = $currentUser->fromArray($allowUser);
+        $currentUser = $currentUser->fromArray($user);
         $biz = $this->getBiz();
         $biz['user'] = $currentUser;
     }

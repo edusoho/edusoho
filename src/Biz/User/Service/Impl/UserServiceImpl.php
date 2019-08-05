@@ -1290,7 +1290,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
-        if (in_array($type, array('weixinweb', 'qq', 'weibo', 'app'))) {
+        if (in_array($type, array('weixinweb', 'qq', 'weibo', 'app', 'h5', 'miniProgram'))) {
             $this->getLogService()->info('mobile', 'login_success', "通过{$type}登录");
         } else {
             $this->getLogService()->info('user', 'login_success', '登录成功');
@@ -1995,6 +1995,7 @@ class UserServiceImpl extends BaseService implements UserService
         $registerProtectMode = isset($auth['register_protective']) ? $auth['register_protective'] : 'none';
 
         if (in_array($registerProtectMode, array('middle', 'low'))) {
+            // 注册防护机制为『低』或『中』时，第二次开始就需要图形验证码
             $factory = $this->biz->offsetGet('ratelimiter.factory');
             $rateLimiter = $factory('sms_common_captcha_code', 1, 3600);
             $used = $recount ? 1 : 0;

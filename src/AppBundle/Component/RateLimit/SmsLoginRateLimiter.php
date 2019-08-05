@@ -5,7 +5,7 @@ namespace AppBundle\Component\RateLimit;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
-class CommonSmsRateLimiter extends SmsRateLimiter
+class SmsLoginRateLimiter extends SmsRateLimiter
 {
     public function handle(Request $request)
     {

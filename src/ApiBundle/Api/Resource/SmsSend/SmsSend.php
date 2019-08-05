@@ -36,7 +36,7 @@ class SmsSend extends AbstractResource
 
         $bizSmsCode = $this->convertType($smsType);
 
-        // 根据业务自主更新频空器状态
+        // 根据业务自主更新频控器状态
         $smsToken = $this->getBizSms()->send($bizSmsCode, $mobile);
 
         $this->updateSmsStatus($request->getHttpRequest()->getClientIp(), $smsType);
@@ -48,12 +48,7 @@ class SmsSend extends AbstractResource
 
     private function checkSettingsEnable($smsType)
     {
-        if ('register' == $smsType) {
-            $auth = $this->getSettingService()->get('auth', array());
-            if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], array('mobile', 'email_or_mobile')))) {
-                throw SettingException::FORBIDDEN_MOBILE_REGISTER();
-            }
-        } elseif ('receive_coupon' == $smsType || 'sms_login' == $smsType) {
+        if ('sms_login' == $smsType) {
             $cloudSms = $this->getSettingService()->get('cloud_sms');
             if (!$cloudSms['sms_enabled']) {
                 throw SettingException::FORBIDDEN_SMS_SEND();
@@ -63,18 +58,14 @@ class SmsSend extends AbstractResource
 
     private function checkRateLimit($request, $smsType)
     {
-        if ('register' == $smsType) {
-            $this->handleRateLimiter($request, 'register_sms_rate_limiter');
-        } elseif ('receive_coupon' == $smsType || 'sms_login' == $smsType) {
-            $this->handleRateLimiter($request, 'common_sms_rate_limiter');
+        if ('sms_login' == $smsType) {
+            $this->handleRateLimiter($request, 'sms_login_rate_limiter');
         }
     }
 
     private function updateSmsStatus($clientIp, $smsType)
     {
-        if ('register' == $smsType) {
-            $this->getUserService()->updateSmsRegisterCaptchaStatus($clientIp);
-        } elseif ('receive_coupon' == $smsType || 'sms_login' == $smsType) {
+        if ('sms_login' == $smsType) {
             $this->getUserService()->getSmsCommonCaptchaStatus($clientIp, true);
         }
     }
