@@ -107,7 +107,8 @@ class QuestionParserController extends BaseController
 
     protected function parseQuestions($fullpath)
     {
-        $wordRead = new ReadDocx($fullpath);
+        $tmpPath = $this->get('kernel')->getContainer()->getParameter('topxia.upload.public_directory').'/tmp';
+        $wordRead = new ReadDocx($fullpath, array('resourceTmpPath' => $tmpPath));
         $text = $wordRead->read();
         $self = $this;
         $fileService = $this->getFileService();
