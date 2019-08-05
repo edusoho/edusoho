@@ -152,6 +152,9 @@ export default class sbList {
   }
 
   batchBtnClick(event) {
+    if (this.isEditing()) {
+      return;
+    }
     const $target = $(event.target);
     $target.toggleClass('hidden');
     this.toggleClass(true);
