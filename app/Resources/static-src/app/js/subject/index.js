@@ -335,11 +335,6 @@ export default class sbList {
       token = $item.attr('id');
     }
 
-    if (!isSub) {
-      const index = seq - 1;
-      const locationId = `#${seq}`;
-      $('.js-subject-list-item').eq(index).find('.js-subject-anchor').attr('data-anchor', locationId);
-    }
     let data = {
       'seq' : seq,
       'token' : token,
