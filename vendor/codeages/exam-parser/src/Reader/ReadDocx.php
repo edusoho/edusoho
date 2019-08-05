@@ -63,10 +63,11 @@ class ReadDocx
     public function __construct($docxPath, $options = array())
     {
         $this->docxPath = $docxPath;
-        if (isset($options['resourceTmpPath']) && is_dir($options['resourceTmpPath'])) {
+        if (isset($options['resourceTmpPath'])) {
             $this->resourceTmpPath = $options['resourceTmpPath'];
         }
     }
+
     public function read()
     {
         $this->readZip();

@@ -169,6 +169,5 @@ class WriterDocxTest extends BaseTestCase
         $writeDocx = new WriteDocx('/tmp/export.docx');
         $writeDocx->write($questions);
         $this->assertTrue(is_file('/tmp/export.docx'));
-        $
     }
 }
