@@ -151,6 +151,8 @@ interface TestpaperService
 
     public function findExamFirstResults($testId, $type, $activityId);
 
+    public function getCheckedQuestionTypeBySeq($testpaper);
+
     public function findResultsByTestIdAndActivityId($testId, $activityId);
 
     public function getNextReviewingResult($courseIds, $activityId, $type);
