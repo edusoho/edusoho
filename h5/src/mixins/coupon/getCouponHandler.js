@@ -56,7 +56,7 @@ export default {
       if (coupon.target) {
         const targetId = coupon.target.id;
         // 指定vip
-        if(targetType === ALL_TYPE.vip){
+        if (targetType === ALL_TYPE.vip) {
           this.$router.push({
             path: '/vip',
             query: {
@@ -83,7 +83,7 @@ export default {
 
       // 所有班级或者课程
       this.$router.push({
-        path:'/' 
+        path: '/'
       });
     },
     /* 课程的id 需要转换成计划id 跳转到对应计划详情页 */

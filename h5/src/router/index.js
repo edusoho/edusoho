@@ -205,7 +205,7 @@ const routes = [
     name: 'coupon_receive',
     meta: {
       title: '优惠券领取',
-      hideTitle:true,
+      hideTitle: true
     },
     component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/coupon/index.vue')
   }, {

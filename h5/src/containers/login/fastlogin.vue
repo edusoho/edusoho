@@ -46,7 +46,7 @@
         <div class="login-bottom text-center">
             <div class="login-agree" v-if="userTerms || privacyPolicy">
                 <van-checkbox v-model="agreement" @click="checkAgree" checked-color="#408ffb" :icon-size="16"></van-checkbox>
-                 我已阅读并同意《<i @click="lookPrivacyPolicy" v-if="userTerms">用户服务</i>》<span v-if="privacyPolicy">和《<i @click="lookPrivacyPolicy" >隐私协议</i>》</span>
+                 我已阅读并同意<i @click="lookPrivacyPolicy" v-if="userTerms">《用户服务》</i><span v-if="userTerms && privacyPolicy">和</span><span v-if="privacyPolicy">《<i @click="lookPrivacyPolicy">隐私协议</i>》</span>
             </div>
             <div class="login-change" @click="changeLogin">
                 <img src="static/images/login_change.png" class="login_change-icon"/>切换账号密码登录
@@ -131,10 +131,10 @@ export default {
                     type: 'user'
                 }
             }).then((res)=>{
-                if(res.userTerms_enabled){
+                if(res.auth.user_terms_enabled){
                     this.userTerms=true
                 }
-                if(res.privacyPolicy_enabled){
+                if(res.auth.privacy_policy_enabled){
                     this.privacyPolicy=true
                 }
             }).catch(err => { 

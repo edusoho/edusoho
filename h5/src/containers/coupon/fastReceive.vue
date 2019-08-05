@@ -10,7 +10,14 @@
                 <span>优惠券</span>
             </div>
             <div class='ticket-expire text-overflow'>
-                <span v-if="coupons.deadlineMode==='day'">领取后{{coupons.fixedDay}}天内有效</span>
+                <span v-if="coupons.deadlineMode==='day'">
+                    <span v-if="currentUserCoupon!=null">
+                       优惠券有效至：{{ receiveTimeExpire(currentUserCoupon.deadline)}}
+                    </span>
+                    <span  v-if="currentUserCoupon==null">
+                       领取后{{coupons.fixedDay}}天内有效
+                    </span>
+                </span>
                 <span v-if="coupons.deadlineMode==='time'">
                     <span v-show="!hasReceive">领券截止日期：</span>
                     <span v-show="hasReceive">优惠券有效至：</span>
@@ -29,7 +36,7 @@
             <img src="static/images/coupon-no.png" class="status-icon"/>
             <div class="status-text">{{failmessage}}</div>
         </div>
-        <fast-login v-if="!login && !cantuse" @lReceiveCoupon="lReceiveCoupon"></fast-login>
+        <fast-login v-if="!login && cantuse" @lReceiveCoupon="lReceiveCoupon"></fast-login>
     </div>
 </template>
 <script>
@@ -49,6 +56,7 @@ export default {
     data(){
         return{
             coupons:null,//优惠券信息
+            currentUserCoupon:null,
             login:false,//登录状态
             cantuse:false, //当前优惠券失效了
             hasReceive:false, //是否已经领取了优惠券
@@ -86,13 +94,8 @@ export default {
                 }
             }).then((res)=>{
                 this.coupons=res;
-                //是否已经领取过
-                if(res.currentUserCoupon){
-                    this.hasReceive=true;
-                    return 
-                }
                 //判断优惠券是否已经过期已经是否已经被领完
-                let canUseCoupon= this.canUseCoupon(res);
+                let canUseCoupon= !this.canUseCoupon(res);
                 if(canUseCoupon){
                    this.isLogin();
                 }
@@ -176,6 +179,7 @@ export default {
                     },3000);  
                     return;
                 }else{
+                    this.currentUserCoupon=res;
                     this.successmessage="领取成功，优惠券已放入"
                     this.hasReceive=true;
                 }
@@ -214,20 +218,27 @@ export default {
         },
         //判断优惠券是否可用
         canUseCoupon(coupon){
-            let result=true
-            if(coupon.deadline){
+            let result=false
+            //已经领取过
+            if(coupon.currentUserCoupon!=null){
+                this.currentUserCoupon=coupon.currentUserCoupon;
+                this.successmessage="您已领取过，优惠券已放入";
+                this.hasReceive=true;
+                result=true;
+                return 
+            }else if(coupon.deadline){ //已经过期
                 let ONEDAY=86400000;
-                let d1=new Date();//取今天的日期
+                let d1=new Date();
                 let d2 = new Date(Date.parse(coupon.deadline));
                 if(d1.getTime()>(d2.getTime()+ONEDAY)){
                     this.failmessage="优惠券已过期"
                     this.receiveFail=true;
-                    result=false
+                    result=true
                 }
-            }else if(coupon.unreceivedNum==0){
+            }else if(coupon.unreceivedNum==0){ //已领完
                 this.failmessage="优惠券已领完"
                 this.receiveFail=true;
-                result=false
+                result=true
             }
             this.cantuse=!result;
             return result

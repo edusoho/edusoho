@@ -49,7 +49,7 @@ const formatchinaTime = date => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  return `${year}年${month}月${day}日`
+  return `${year}年${month}月${day}日`;
 };
 
 // 2018/12/06 12:03

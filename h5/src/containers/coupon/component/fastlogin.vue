@@ -64,7 +64,7 @@ export default {
                 dragCaptchaToken: undefined, // 默认不需要滑动验证,图片验证码token
                 smsCode: '',//验证码
                 smsToken: '',//验证码token
-                type:'receive_coupon'
+                type:'sms_login'
             },
             dragEnable: false,
             dragKey: 0,
