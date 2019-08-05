@@ -193,6 +193,9 @@ export default class sbList {
   }
 
   showModal(event, modal) {
+    if (this.isEditing()) {
+      return ;
+    }
     let stats = this.statChosedQuestion();
     let keys = Object.keys(stats);
     if (keys.length === 0) {
@@ -212,6 +215,9 @@ export default class sbList {
   }
 
   showScoreModal(event) {
+    if (this.isEditing()) {
+      return ;
+    }
     let stats = this.statChosedQuestion();
     let $missScoreField = $('.js-miss-score-field');
 
