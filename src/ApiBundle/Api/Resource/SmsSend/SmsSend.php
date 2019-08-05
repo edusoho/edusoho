@@ -15,7 +15,6 @@ class SmsSend extends AbstractResource
 {
     private $supportSmsTypes = array(
         'sms_login' => BizSms::SMS_LOGIN,
-        'receive_coupon' => BizSms::SMS_LOGIN,
     );
 
     /**

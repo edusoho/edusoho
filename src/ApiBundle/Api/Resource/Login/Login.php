@@ -111,7 +111,7 @@ class Login extends AbstractResource
         $user = $this->getAuthService()->register($newUser);
         $user['realPassword'] = $password;
 
-        $this->getLogService()->info('sms', 'sms_register', "用户{$user['nickname']}通过短信快捷登录注册成功", array('userId' => $user['id']));
+        $this->getLogService()->info('sms', 'sms_login', "用户{$user['nickname']}通过短信快捷登录注册成功", array('userId' => $user['id']));
 
         return $user;
     }
@@ -134,9 +134,9 @@ class Login extends AbstractResource
 
         try {
             $this->getSDKSmsService()->sendToOne($smsParams);
-            $this->getLogService()->info('sms', 'send_register', "管理员给用户 {$nickname}($userId) 发送账号信息短信");
+            $this->getLogService()->info('sms', 'send_initial_password', "管理员给用户 {$nickname}($userId) 发送账号信息短信");
         } catch (\Exception $e) {
-            $this->getLogService()->error('sms', 'send_register', "管理员给用户 {$nickname}({$userId}) 发送账号信息短信失败：".$e->getMessage());
+            $this->getLogService()->error('sms', 'send_initial_password', "管理员给用户 {$nickname}({$userId}) 发送账号信息短信失败：".$e->getMessage());
             throw $e;
         }
     }
@@ -168,7 +168,7 @@ class Login extends AbstractResource
     {
         $token = $this->getTokenService()->makeToken('mobile_login', array(
             'times' => 0,
-            'duration' => TimeMachine::ONE_WEEK,
+            'duration' => TimeMachine::ONE_MONTH,
             'userId' => $userId,
             'data' => array(
                 'sms_code' => $smsCode,

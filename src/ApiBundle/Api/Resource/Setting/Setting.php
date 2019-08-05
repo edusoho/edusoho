@@ -35,14 +35,18 @@ class Setting extends AbstractResource
         }
 
         $result = array(
-            'register_mode' => $authSetting['register_mode'],
-            'oauth_enabled' => (int) $loginSetting['enabled'] ?: 0,
-            'weibo_enabled' => (int) $loginSetting['weibo_enabled'] ?: 0,
-            'qq_enabled' => (int) $loginSetting['qq_enabled'] ?: 0,
-            'weixinweb_enabled' => (int) $loginSetting['weixinweb_enabled'] ?: 0,
-            'weixinmob_enabled' => (int) $loginSetting['weixinmob_enabled'] ?: 0,
-            'userTerms_enabled' => $authSetting['user_terms'] == 'opened' ? 1 : 0,
-            'privacyPolicy_enabled' => $authSetting['privacy_policy'] == 'opened' ? 1 : 0,
+            'auth' => array(
+                'register_mode' => $authSetting['register_mode'],
+                'user_terms_enabled' => $authSetting['user_terms'] == 'opened' ? true : false,
+                'privacy_policy_enabled' => $authSetting['privacy_policy'] == 'opened' ? true : false,
+            ),
+            'login_bind' => array(
+                'oauth_enabled' => (int) $loginSetting['enabled'] ? true : false,
+                'weibo_enabled' => (int) $loginSetting['weibo_enabled'] ? true : false,
+                'qq_enabled' => (int) $loginSetting['qq_enabled'] ? true : false,
+                'weixinweb_enabled' => (int) $loginSetting['weixinweb_enabled'] ? true : false,
+                'weixinmob_enabled' => (int) $loginSetting['weixinmob_enabled'] ? true : false,
+            )
         );
 
         return $result;
@@ -53,7 +57,7 @@ class Setting extends AbstractResource
         $cloudSms = $this->getSettingService()->get('cloud_sms');
 
         $result = array(
-            'sms_enabled' => $cloudSms['sms_enabled'],
+            'sms_enabled' => $cloudSms['sms_enabled'] ? true : false,
         );
 
         return $result;
