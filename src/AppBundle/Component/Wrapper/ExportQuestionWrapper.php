@@ -13,6 +13,17 @@ class ExportQuestionWrapper extends Wrapper
         return $question;
     }
 
+    public function num($question)
+    {
+        if (empty($question['num'])) {
+            return $question;
+        }
+
+        $question['num'] = $question['num'].'、';
+
+        return $question;
+    }
+
     public function stem($question)
     {
         $question['stem'] = $this->explodeTextAndImg($question['stem']);
@@ -84,6 +95,7 @@ class ExportQuestionWrapper extends Wrapper
         foreach ($question['subs'] as $index => $sub) {
             $sub['isSub'] = 1;
             $sub['seq'] = "（{$sub['seq']}）";
+            $sub['num'] = $sub['seq'];
             $sub = $this->stem($sub);
             $sub = $this->options($sub);
             $sub = $this->answer($sub);
@@ -136,6 +148,7 @@ class ExportQuestionWrapper extends Wrapper
             'difficulty',
             'analysis',
             'subs',
+            'num',
         );
     }
 }
