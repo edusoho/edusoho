@@ -206,6 +206,15 @@ export default {
         },
         //领取优惠券后跳转指定页面
         useCoupon(){
+            if(this.currentUserCoupon!=null && this.currentUserCoupon.deadline){ //已经过期
+                let ONEDAY=86400000;
+                let d1=new Date();
+                let d2 = new Date(Date.parse(this.currentUserCoupon.deadline));
+                if(d1.getTime()>(d2.getTime()+ONEDAY)){
+                    Toast.fail('优惠券已过期');
+                    return;
+                }
+            }
             this.hasreceiveCoupon(this.coupons);
         },
         //登录后领取优惠券
@@ -218,27 +227,33 @@ export default {
         },
         //判断优惠券是否可用
         canUseCoupon(coupon){
-            let result=false
-            //已经领取过
-            if(coupon.currentUserCoupon!=null){
+            let result=false;
+            if(coupon.currentUserCoupon!=null){ //已经领取过
                 this.currentUserCoupon=coupon.currentUserCoupon;
-                this.successmessage="您已领取过，优惠券已放入";
+                this.successmessage="您已领取过该批次优惠券，优惠券已放入";
                 this.hasReceive=true;
                 result=true;
-                return 
-            }else if(coupon.deadline){ //已经过期
+                this.cantuse=!result;
+                return result;
+            }
+            if(Number(coupon.unreceivedNum)==0){ //已领完
+                this.failmessage="优惠券已领完"
+                this.receiveFail=true;
+                result=true;
+                this.cantuse=!result;
+                return result;
+            }
+           if(coupon.deadline){ //已经过期
                 let ONEDAY=86400000;
                 let d1=new Date();
                 let d2 = new Date(Date.parse(coupon.deadline));
                 if(d1.getTime()>(d2.getTime()+ONEDAY)){
                     this.failmessage="优惠券已过期"
                     this.receiveFail=true;
-                    result=true
+                    result=true;
+                    this.cantuse=!result;
+                    return result;
                 }
-            }else if(coupon.unreceivedNum==0){ //已领完
-                this.failmessage="优惠券已领完"
-                this.receiveFail=true;
-                result=true
             }
             this.cantuse=!result;
             return result

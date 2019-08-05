@@ -1,8 +1,8 @@
 <template>
   <div class="receive-all">
     <e-loading v-if="isLoading"></e-loading>
-    <fast-receive v-if="sitePlugins && cloudSetting ==1" />
-    <pass-receive v-if="!sitePlugins && cloudSetting == 2" />
+    <fast-receive v-if="cloudSetting ==1" />
+    <pass-receive v-if="cloudSetting ==2"/>
   </div>
 </template>
 <script>
@@ -24,8 +24,8 @@ export default {
     };
   },
   created() {
-    this.getsitePlugins();
-    //this.getsettingsCloud();
+   // this.getsitePlugins();
+  this.getsettingsCloud();
   },
   computed: {
     ...mapState({
@@ -41,8 +41,10 @@ export default {
         }
         }).then(res => {
           //当前版本小于支持版本 true  大于false
-          that.sitePlugins=needUpgrade('2.2.9',res.version);
-          that.getsettingsCloud();
+          if(res){
+            that.sitePlugins=needUpgrade('2.2.9',res.version);
+            that.getsettingsCloud();
+          } 
         })
         .catch(err => {
           Toast.fail(err.message);

@@ -302,6 +302,7 @@ html,body,#app,.receive-all{
     background-image: url('../../../static/images/coupon-heade.png');
     .ticket-discount{
       margin-top: vw(40);
+      padding: 0 vw(40);
       font-size: vw(24);
       .rate{
         font-size: vw(48)
@@ -309,10 +310,12 @@ html,body,#app,.receive-all{
     }
     .ticket-expire{
       margin-top: vw(6);
+      padding: 0 vw(40);
       font-size: vw(14);
     }
     .ticket-range{
       margin-top: vw(4);
+      padding: 0 vw(40);
       font-size: vw(14)
     }
   }
