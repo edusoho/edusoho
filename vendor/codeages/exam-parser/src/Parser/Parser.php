@@ -68,8 +68,8 @@ class Parser
         $content = preg_replace_callback(
             $pattern,
             function ($matches) {
-                $str = preg_replace('/【材料题开始】\s*/', '<#材料题开始#>', $matches[0]);
-                $str = preg_replace('/\s*【材料题结束】/', '<#材料题结束#>', $str);
+                $str = preg_replace('/【材料题开始】\s*/', '<#材料题开始#>'.PHP_EOL, $matches[0]);
+                $str = preg_replace('/\s*【材料题结束】/', PHP_EOL.'<#材料题结束#>', $str);
                 $pattern = '/'.PHP_EOL.'{2,}/';
                 $str = preg_replace($pattern, PHP_EOL.'<#材料题子题#>', $str);
 
