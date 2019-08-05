@@ -44,7 +44,7 @@ export default {
     },
     hasreceiveCoupon(coupon) {
       /* 已领券 */
-      const targetType = coupon.targetType; 
+      const targetType = coupon.targetType;
       const allType = Object.values(ALL_TYPE);
 
       if (!allType.includes(targetType)) {
@@ -52,27 +52,19 @@ export default {
         return;
       }
 
-      //vip或指定vip
-      if (targetType === ALL_TYPE.vip) {
-        if(coupon.target){
-          const targetId =  coupon.target.id;
+      // 指定课程或者班级
+      if (coupon.target) {
+        const targetId = coupon.target.id;
+        // 指定vip
+        if (targetType === ALL_TYPE.vip) {
           this.$router.push({
             path: '/vip',
             query: {
               id: targetId
             }
           });
-        }else{
-          this.$router.push({
-            path: '/vip'
-          });
+          return;
         }
-        return;
-      }
-      
-      // 指定课程或者班级
-      if (coupon.target) {
-        const targetId = coupon.target.id;
         this.getPathParams(targetType, targetId).then(({ id }) => {
           if (!id) return;
           this.$router.push({
@@ -81,17 +73,17 @@ export default {
         });
         return;
       }
-       //全站跳转到发现页
-       if(targetType === ALL_TYPE.all){
+      // 全站跳转到发现页
+      if (targetType === ALL_TYPE.all) {
         this.$router.push({
           path: '/'
         });
-        return
+        return;
       }
 
-      //所有班级或者课程
+      // 所有班级或者课程
       this.$router.push({
-        path: `/${targetType}/explore` // course/explore | classroom/explore
+        path: '/'
       });
     },
     /* 课程的id 需要转换成计划id 跳转到对应计划详情页 */

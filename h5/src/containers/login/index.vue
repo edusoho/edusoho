@@ -80,7 +80,7 @@ export default {
     //网校是否开启短信云服务
     async getsettingsCloud(){
       await Api.settingsCloud().then(res=>{
-        if(res.sms_enabled==1){
+        if(res.sms_enabled){
           this.cloudSetting=true;
         }else{
           this.cloudSetting=false;

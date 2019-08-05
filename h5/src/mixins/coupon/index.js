@@ -1,4 +1,4 @@
-import { formatFullTime } from '@/utils/date-toolkit';
+import { formatFullTime, formatchinaTime } from '@/utils/date-toolkit';
 
 export default {
   methods: {
@@ -44,6 +44,10 @@ export default {
     },
     handleClick(coupon) {
       this.$emit('buttonClick', coupon);
+    },
+    receiveTimeExpire(deadline) {
+      deadline = formatchinaTime(new Date(deadline));
+      return deadline;
     }
   }
 };
