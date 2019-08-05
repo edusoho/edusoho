@@ -54,7 +54,7 @@
       </div>
     </div>
     {% block change %}
-      {% if isSub == '0' %}
+      {% if isSub == '0' and method != 'add' %}
         {% include 'testpaper/subject/type/change-subject.html.twig' with { type: type|default('') } %}
       {% endif %}
     {% endblock %}
