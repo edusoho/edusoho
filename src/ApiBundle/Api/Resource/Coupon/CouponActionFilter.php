@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class CouponActionFilter extends Filter
 {
     protected $publicFields = array(
-        'success', 'message', 'data', 'error'
+        'success', 'message', 'data', 'error',
     );
 
     protected function publicFields(&$data)
@@ -20,7 +20,7 @@ class CouponActionFilter extends Filter
             $data['data']['createdTime'] = date('c', $data['data']['createdTime']);
         }
 
-        if (isset($data['data']) && isset($data['data']['receiveTime']) && ($data['data']['receiveTime'] != 0)) {
+        if (isset($data['data']) && isset($data['data']['receiveTime']) && (0 != $data['data']['receiveTime'])) {
             $data['data']['receiveTime'] = date('c', $data['data']['receiveTime']);
         }
     }

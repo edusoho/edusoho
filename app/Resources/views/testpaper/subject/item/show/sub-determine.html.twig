@@ -1,0 +1,23 @@
+{% set answer = item.answer %}
+{% set errors = item.errors|default([]) %}
+<div class="subject-item subject-sub-item js-subject-item" id="sub{% if seq is defined %}{{seq - 1}}{% else %}{{ subKey }}{% endif %}" data-material-token="{{ token|default('') }}" data-key="{% if seq is defined %}{{seq - 1}}{% else %}{{ subKey }}{% endif %}">
+  <div class="subject-item__title subject-sub-item__title">
+    <span class="subject-sub-item__number">
+      {% if seq|default(null) %}
+        {{ '(' ~ seq ~ ')'  }}
+      {% else %}
+        {{ '(' ~ loop.index ~ ')'  }}
+      {% endif %}
+    </span>
+    {% if errors.stem is not defined %}<div class="subject-sub-item__stem">{{ item.stem|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>{% else %}{{ 'course.testpaper_manage.import.re_edit.error_no_stem'|trans }}{% endif %}
+  </div>
+  <div class="subject-item__body">
+    <label class="cd-radio single-item sub-single-item subject-forbid {% if answer %}checked{% endif %}">
+      <input type="radio" data-toggle="cd-radio" name="right" value="true"><span class="single-item__text">{{ 'course.testpaper_manage.import.re_edit.correct'|trans }}</span>
+    </label>
+    <label class="cd-radio single-item sub-single-item subject-forbid {% if not answer %}checked{% endif %}">
+      <input type="radio" data-toggle="cd-radio" name="wrong" value="true"><span class="single-item__text">{{ 'course.testpaper_manage.import.re_edit.wrong'|trans }}</span>
+    </label>
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with {position:'sub', type: item.type, difficulty: item.difficulty, score: item.score } %}
+</div>

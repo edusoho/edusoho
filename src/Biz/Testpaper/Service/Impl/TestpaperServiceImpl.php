@@ -252,6 +252,129 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
+    public function importTestpaper($testpaperData, $token)
+    {
+        try {
+            $this->beginTransaction();
+            $data = $token['data'];
+            $questions = $testpaperData['questions'];
+            $metas = $this->makeImportQuestionsMetas($questions);
+
+            $testpaper = array(
+                'name' => $testpaperData['title'],
+                'courseSetId' => $data['courseSetId'],
+                'metas' => $metas,
+                'pattern' => 'questionType',
+                'courseId' => 0,
+                'itemCount' => count($questions),
+                'type' => 'testpaper',
+                'score' => $metas['totalScore'],
+                'passedCondition' => array(0),
+            );
+            $testpaper = $this->createTestpaper($testpaper);
+            $questions = $this->getQuestionService()->importQuestions($questions, $token);
+            $items = $this->itemsAnalyzer($testpaper['id'], $questions);
+            $this->createTestpaperItems($items);
+            $this->commit();
+
+            return $testpaper;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    protected function createTestpaperItems($questions)
+    {
+        $seq = 1;
+        $fields = array();
+        foreach ($questions as $item) {
+            $item['seq'] = $seq;
+            if ('material' != $item['questionType']) {
+                ++$seq;
+            }
+            $item['type'] = 'testpaper';
+            //多选不定项选择之外的missScore漏选分填充
+            if (!in_array($item['questionType'], array('choice', 'uncertain_choice'))) {
+                $item['missScore'] = 0;
+            }
+
+            $fields[] = ArrayToolkit::parts(
+                $item,
+                array(
+                    'testId',
+                    'seq',
+                    'questionId',
+                    'questionType',
+                    'parentId',
+                    'score',
+                    'missScore',
+                    'type',
+                )
+            );
+        }
+
+        return $this->getItemDao()->batchCreate($fields);
+    }
+
+    protected function itemsAnalyzer($testpaperId, $questions)
+    {
+        $result = array();
+        foreach ($questions as $question) {
+            $result[] = array(
+                'testId' => $testpaperId,
+                'questionId' => $question['id'],
+                'questionType' => $question['type'],
+                'parentId' => empty($question['parentId']) ? 0 : $question['parentId'],
+                'score' => $question['score'],
+                'missScore' => empty($question['missScore']) ? 0 : $question['missScore'],
+            );
+        }
+
+        return $result;
+    }
+
+    protected function makeImportQuestionsMetas($questions)
+    {
+        $totalScore = 0;
+        $info = array(
+            'mode' => 'import',
+            'counts' => array(
+                'single_choice' => 0,
+                'choice' => 0,
+                'essay' => 0,
+                'uncertain_choice' => 0,
+                'determine' => 0,
+                'fill' => 0,
+                'material' => 0,
+            ),
+            'scores' => array(
+                'single_choice' => 0,
+                'choice' => 0,
+                'essay' => 0,
+                'uncertain_choice' => 0,
+                'determine' => 0,
+                'fill' => 0,
+                'material' => 0,
+            ),
+            'totalScore' => 0,
+        );
+        foreach ($questions as $question) {
+            ++$info['counts'][$question['type']];
+            if ('material' == $question['type']) {
+                foreach ($question['subQuestions'] as $subQuestion) {
+                    $info['scores'][$question['type']] += $subQuestion['score'];
+                    $info['totalScore'] += $subQuestion['score'];
+                }
+            } else {
+                $info['scores'][$question['type']] += $question['score'];
+                $info['totalScore'] += $question['score'];
+            }
+        }
+
+        return $info;
+    }
+
     /**
      * testpaper_item_result.
      */
@@ -1018,6 +1141,85 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $firstResults;
     }
 
+    public function getCheckedQuestionTypeBySeq($testpaper)
+    {
+        $questionTypes = array();
+        if (!empty($testpaper['metas']['counts'])) {
+            foreach ($testpaper['metas']['counts'] as $type => $count) {
+                if ($count > 0) {
+                    $questionTypes[] = $type;
+                }
+            }
+        }
+
+        if (empty($testpaper['questionTypeSeq'])) {
+            return $questionTypes;
+        }
+
+        global $kernel;
+        $typesConfig = $kernel->getContainer()->get('extension.manager')->getQuestionTypes();
+        $typeSeq = array();
+        $newTypes = array();
+        array_walk($typesConfig, function ($value, $type) use (&$typeSeq) {
+            $typeSeq[$type] = $value['seqNum'];
+        });
+        $typeSeq = array_flip($typeSeq);
+        foreach ($testpaper['questionTypeSeq'] as $seq) {
+            if (in_array($typeSeq[$seq], $questionTypes)) {
+                $newTypes[] = $typeSeq[$seq];
+            }
+        }
+
+        return $newTypes;
+    }
+
+    public function buildExportTestpaperItems($testpaperId)
+    {
+        $items = $this->findItemsByTestId($testpaperId);
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+        $exportQuestions = array();
+        $wrapper = $this->getWrapper();
+        $num = 1;
+        foreach ($items as $questionId => $item) {
+            $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
+
+            if (empty($question) || 0 != $question['parentId']) {
+                continue;
+            }
+
+            $question['num'] = $num++;
+            $question['seq'] = $item['seq'];
+            $question['score'] = $item['score'];
+            if ('material' == $question['type']) {
+                $subQuestions = $this->getQuestionService()->findQuestionsByParentId($questionId);
+                foreach ($subQuestions as $index => $subQuestion) {
+                    $subQuestions[$index]['seq'] = $items[$subQuestion['id']]['seq'] - $question['seq'] + 1;
+                    $subQuestions[$index]['score'] = $items[$subQuestion['id']]['score'];
+                }
+                $question['subs'] = $subQuestions;
+            }
+
+            $question = $wrapper->handle($question, 'exportQuestion');
+            $question = ArrayToolkit::parts($question, array(
+                'type',
+                'seq',
+                'stem',
+                'options',
+                'answer',
+                'score',
+                'difficulty',
+                'analysis',
+                'subs',
+                'num',
+            ));
+            $exportQuestions[] = $question;
+        }
+
+        return $exportQuestions;
+    }
+
     private function getUserMaxScore($userResults)
     {
         if (1 === count($userResults)) {
@@ -1040,6 +1242,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         sort($passedStatus);
 
         return $passedStatus[0];
+    }
+
+    protected function getWrapper()
+    {
+        global $kernel;
+
+        return $kernel->getContainer()->get('web.wrapper');
     }
 
     /**

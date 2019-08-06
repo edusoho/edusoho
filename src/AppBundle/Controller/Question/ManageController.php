@@ -3,13 +3,17 @@
 namespace AppBundle\Controller\Question;
 
 use AppBundle\Common\Paginator;
+use Biz\Content\Service\FileService;
 use Biz\Question\QuestionException;
 use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
+use ExamParser\Writer\WriteDocx;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,6 +87,56 @@ class ManageController extends BaseController
             'searchCourses' => $searchCourses,
             'showTasks' => $showTasks,
         ));
+    }
+
+    public function readAction(Request $request, $id)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        return $this->forward('AppBundle:Question/QuestionParser:read', array(
+            'request' => $request,
+            'type' => 'question',
+            'courseSet' => $courseSet,
+        ));
+    }
+
+    public function exportAction(Request $request, $id)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        $fields = $request->query->all();
+
+        $conditions = ArrayToolkit::parts($fields, array('type', 'courseId', 'keyword', 'lessonId'));
+        $conditions['courseSetId'] = $courseSet['id'];
+        $conditions['parentId'] = 0;
+
+        $questionCount = $this->getQuestionService()->searchCount($conditions);
+
+        $questions = $this->getQuestionService()->search(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            0,
+            $questionCount
+        );
+
+        if (empty($questions)) {
+            return $this->createMessageResponse('info', '导出题目为空', null, 3000, $this->generateUrl('course_set_manage_question', array('id' => $id)));
+        }
+
+        $questions = $this->buildExportQuestions($questions);
+
+        $fileName = str_replace(',', '', $courseSet['title']).'-题目.docx';
+        $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
+        $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
+
+        $writer = new WriteDocx($path);
+        $writer->write($questions);
+
+        $headers = array(
+            'Content-Type' => 'application/msword',
+            'Content-Disposition' => 'attachment; filename='.$fileName,
+        );
+
+        return new BinaryFileResponse($path, 200, $headers);
     }
 
     public function createAction(Request $request, $id, $type)
@@ -370,6 +424,72 @@ class ManageController extends BaseController
         return $this->createJsonResponse($typesNum);
     }
 
+    public function reEditAction(Request $request, $token)
+    {
+        return $this->forward('AppBundle:Question/QuestionParser:reEdit', array(
+            'request' => $request,
+            'token' => $token,
+            'type' => 'question',
+        ));
+    }
+
+    public function saveImportQuestionsAction(Request $request, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        $data = $token['data'];
+        $this->getCourseSetService()->tryManageCourseSet($data['courseSetId']);
+        $content = $request->getContent();
+        $postData = json_decode($content, true);
+        $this->getQuestionService()->importQuestions($postData['questions'], $token);
+
+        return $this->createJsonResponse(true);
+    }
+
+    protected function buildExportQuestions($questions)
+    {
+        $exportQuestions = array();
+        $wrapper = $this->getWrapper();
+
+        $seq = 1;
+        $num = 1;
+        foreach ($questions as $question) {
+            $question['seq'] = $seq++;
+            $question['num'] = $num++;
+            if ('material' == $question['type']) {
+                $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+                $subSeq = 1;
+                foreach ($subQuestions as $index => $subQuestion) {
+                    $subQuestions[$index]['seq'] = $subSeq++;
+                }
+                $question['subs'] = $subQuestions;
+            }
+
+            $question = $wrapper->handle($question, 'exportQuestion');
+            $question = ArrayToolkit::parts($question, array(
+                'type',
+                'seq',
+                'stem',
+                'options',
+                'answer',
+                'score',
+                'difficulty',
+                'analysis',
+                'subs',
+                'num',
+            ));
+            $exportQuestions[] = $question;
+        }
+
+        return $exportQuestions;
+    }
+
+    protected function getWrapper()
+    {
+        global $kernel;
+
+        return $kernel->getContainer()->get('web.wrapper');
+    }
+
     protected function getQuestionConfig()
     {
         return $this->get('extension.manager')->getQuestionTypes();
@@ -432,5 +552,21 @@ class ManageController extends BaseController
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    /**
+     * @return FileService
+     */
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

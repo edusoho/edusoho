@@ -169,10 +169,10 @@ class Setting extends AbstractResource
     {
         $courseSetting = $this->getSettingService()->get('course', array());
 
-        if ($courseSetting['show_student_num_enabled'] == 0) {
+        if (0 == $courseSetting['show_student_num_enabled']) {
             $showStudentNumEnabled = 0;
             $showHitNumEnabled = 0;
-        } elseif (($courseSetting['show_student_num_enabled'] == 1) && (isset($courseSetting['show_cover_num_mode'])) && ($courseSetting['show_cover_num_mode'] == 'hitNum')) {
+        } elseif ((1 == $courseSetting['show_student_num_enabled']) && (isset($courseSetting['show_cover_num_mode'])) && ('hitNum' == $courseSetting['show_cover_num_mode'])) {
             $showStudentNumEnabled = 0;
             $showHitNumEnabled = 1;
         } else {

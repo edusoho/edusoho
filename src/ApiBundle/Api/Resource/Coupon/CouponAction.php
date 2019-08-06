@@ -19,7 +19,7 @@ class CouponAction extends AbstractResource
                 throw CommonException::ERROR_PARAMETER_MISSING();
             }
 
-            $function = $action . "Coupon";
+            $function = $action.'Coupon';
 
             return \call_user_func(array($this, $function), $request, $code);
         } catch (\Exception $e) {
@@ -28,7 +28,7 @@ class CouponAction extends AbstractResource
                 'error' => array(
                     'code' => $e->getCode(),
                     'message' => $this->container->get('translator')->trans($e->getMessage()),
-                )
+                ),
             );
         }
     }
@@ -51,9 +51,9 @@ class CouponAction extends AbstractResource
                 return $this->error('该优惠卷无法通过优惠码渠道发放');
             }
 
-            if (isset($batch['deadlineMode']) && $batch['deadlineMode'] == 'day') {
+            if (isset($batch['deadlineMode']) && 'day' == $batch['deadlineMode']) {
                 //ES优惠券领取时，对于优惠券过期时间会加86400秒，所以计算deadline时对于固定天数模式应与设置有效期模式一致，都为当天凌晨00:00:00
-                $fields['deadline'] = strtotime(date("Y-m-d")) + 24 * 60 * 60 * $batch['fixedDay'];
+                $fields['deadline'] = strtotime(date('Y-m-d')) + 24 * 60 * 60 * $batch['fixedDay'];
 
                 $this->getCouponService()->updateCoupon($coupon['id'], $fields);
             }
@@ -83,7 +83,7 @@ class CouponAction extends AbstractResource
             'error' => array(
                 'code' => 500,
                 'message' => $message,
-            )
+            ),
         );
     }
 
@@ -102,5 +102,4 @@ class CouponAction extends AbstractResource
     {
         return $this->service('Coupon:CouponService');
     }
-
 }

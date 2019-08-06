@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller\Testpaper;
 
+use ExamParser\Writer\WriteDocx;
+use http\Exception\InvalidArgumentException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
@@ -112,6 +115,44 @@ class ManageController extends BaseController
         ));
     }
 
+    public function readAction(Request $request, $id)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        return $this->forward('AppBundle:Question/QuestionParser:read', array(
+            'request' => $request,
+            'type' => 'testpaper',
+            'courseSet' => $courseSet,
+        ));
+    }
+
+    public function exportAction(Request $request, $courseSetId, $testpaperId)
+    {
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+
+        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
+            return $this->createMessageResponse('error', 'testpaper not found');
+        }
+
+        $questions = $this->getTestpaperService()->buildExportTestpaperItems($testpaperId);
+
+        $fileName = $testpaper['name'].'.docx';
+        $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
+        $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
+
+        $writer = new WriteDocx($path);
+        $writer->write($questions);
+
+        $headers = array(
+            'Content-Type' => 'application/msword',
+            'Content-Disposition' => 'attachment; filename='.$fileName,
+        );
+
+        return new BinaryFileResponse($path, 200, $headers);
+    }
+
     public function checkListAction(Request $request, $targetId, $targetType, $type)
     {
         $courseIds = array($targetId);
@@ -202,7 +243,7 @@ class ManageController extends BaseController
             'questions' => $essayQuestions,
             'student' => $student,
             'accuracy' => $accuracy,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
             'total' => $total,
             'source' => $source,
             'targetId' => $targetId,
@@ -404,6 +445,11 @@ class ManageController extends BaseController
             }
             $fields['questions'] = json_decode($fields['questions'], true);
 
+            if (empty($fields['questionTypeSeq'])) {
+                return $this->createMessageResponse('error', '题型排序错误');
+            }
+            $fields['questionTypeSeq'] = json_decode($fields['questionTypeSeq'], true);
+
             if (count($fields['questions']) > 2000) {
                 return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
             }
@@ -445,6 +491,7 @@ class ManageController extends BaseController
             'passedScoreDefault' => $passedScoreDefault,
             'courseTasks' => $courseTasks,
             'courses' => $manageCourses,
+            'subCounts' => empty($questions['material']) ? 0 : array_sum(array_column($questions['material'], 'subCount')),
         ));
     }
 
@@ -503,7 +550,7 @@ class ManageController extends BaseController
             'paperResult' => array(),
             'total' => $total,
             'attachments' => $attachments,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
         ));
     }
 
@@ -533,7 +580,7 @@ class ManageController extends BaseController
             'analyses' => ArrayToolkit::groupIndex($analyses, 'questionId', 'choiceIndex'),
             'paper' => $paper,
             'questions' => $questions,
-            'questionTypes' => $this->getCheckedQuestionType($paper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($paper),
             'relatedData' => $relatedData,
             'targetType' => $targetType,
         ));
@@ -563,6 +610,197 @@ class ManageController extends BaseController
             'data' => $data,
             'analysis' => $analysis,
             'task' => $task,
+        ));
+    }
+
+    public function reEditAction(Request $request, $token)
+    {
+        return $this->forward('AppBundle:Question/QuestionParser:reEdit', array(
+            'request' => $request,
+            'token' => $token,
+            'type' => 'testpaper',
+        ));
+    }
+
+    public function editTemplateAction(Request $request, $type)
+    {
+        $question = $request->request->get('question', array());
+        $seq = $request->request->get('seq', 1);
+        $token = $request->request->get('token', '');
+        $isSub = $request->request->get('isSub', '0');
+        $isTestpaper = $request->request->get('isTestpaper', 1);
+        $method = $request->request->get('method', 'edit');
+
+        $question = ArrayToolkit::parts($question, array(
+            'stem',
+            'type',
+            'options',
+            'answer',
+            'answers',
+            'score',
+            'missScore',
+            'analysis',
+            'attachment',
+            'subQuestions',
+            'difficulty',
+            'errors',
+        ));
+
+        return $this->render("testpaper/subject/type/{$type}.html.twig", array(
+            'question' => $question,
+            'seq' => $seq,
+            'token' => $token,
+            'type' => $type,
+            'isSub' => $isSub,
+            'isTestpaper' => $isTestpaper,
+            'method' => $method,
+        ));
+    }
+
+    public function convertTemplateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $fromType = $data['fromType'];
+        $toType = $data['toType'];
+        $isSub = $data['isSub'];
+        $isTestpaper = $data['isTestpaper'];
+        $method = $request->request->get('method', 'edit');
+        if (empty($data['question'])) {
+            throw new InvalidArgumentException('缺少必要参数');
+        }
+        if (in_array($fromType, array('choice', 'single_choice', 'uncertain_choice')) && in_array($toType, array('choice', 'single_choice', 'uncertain_choice'))) {
+            $question = $this->convertChoice($toType, $data['question']);
+        }
+
+        if (in_array($fromType, array('essay')) && in_array($toType, array('single_choice', 'choice', 'uncertain_choice', 'fill', 'determine'))) {
+            $question = $this->convertEssay($toType, $data['question']);
+        }
+
+        return $this->render("testpaper/subject/type/{$toType}.html.twig", array(
+            'question' => $question,
+            'seq' => $data['seq'],
+            'token' => $data['token'],
+            'type' => $toType,
+            'isSub' => $isSub,
+            'isTestpaper' => $isTestpaper,
+            'method' => $method,
+        ));
+    }
+
+    protected function convertEssay($toType, $question)
+    {
+        $question['type'] = $toType;
+        if (in_array($toType, array('choice', 'single_choice', 'uncertain_choice'))) {
+            $question['options'] = array();
+            $question['answers'] = array();
+        }
+        $question = ArrayToolkit::parts($question, array(
+            'stem',
+            'type',
+            'options',
+            'answer',
+            'answers',
+            'score',
+            'missScore',
+            'analysis',
+            'attachment',
+            'subQuestions',
+            'difficulty',
+            'errors',
+        ));
+
+        return $question;
+    }
+
+    protected function convertChoice($toType, $question)
+    {
+        $question['type'] = $toType;
+        $question['options'] = empty($question['options']) ? array() : $question['options'];
+        $question['answers'] = isset($question['right']) ? (is_array($question['right']) ? $question['right'] : array($question['right'])) : array();
+        if ('single_choice' == $toType) {
+            $question['answers'] = array(reset($question['answers']));
+        }
+        $question = ArrayToolkit::parts($question, array(
+            'stem',
+            'type',
+            'options',
+            'answer',
+            'answers',
+            'score',
+            'missScore',
+            'analysis',
+            'attachment',
+            'subQuestions',
+            'difficulty',
+            'errors',
+        ));
+
+        return $question;
+    }
+
+    public function showTemplateAction(Request $request, $type)
+    {
+        $question = $request->request->get('question', array());
+        $seq = $request->request->get('seq', 1);
+        $token = $request->request->get('token', '');
+        $isSub = $request->request->get('isSub', '0');
+
+        $question = ArrayToolkit::parts($question, array(
+            'stem',
+            'stemShow',
+            'type',
+            'options',
+            'answer',
+            'answers',
+            'score',
+            'missScore',
+            'analysis',
+            'attachments',
+            'subQuestions',
+            'difficulty',
+        ));
+
+        if ('fill' == $type) {
+            $question['stemShow'] = preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $question['stem']);
+            $question['stemShow'] = preg_replace('/(\[\[(.+?)\]\])/is', '_____', $question['stem']);
+        }
+
+        if (!empty($isSub)) {
+            return $this->render("testpaper/subject/item/show/sub-{$type}.html.twig", array(
+                'item' => $question,
+                'seq' => $seq,
+                'token' => $token,
+                'type' => $type,
+            ));
+        }
+
+        return $this->render("testpaper/subject/item/show/{$type}.html.twig", array(
+            'item' => $question,
+            'seq' => $seq,
+            'token' => $token,
+            'type' => $type,
+        ));
+    }
+
+    public function saveImportTestpaperAction(Request $request, $token)
+    {
+        $content = $request->getContent();
+        $testpaper = json_decode($content, true);
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+        $data = $token['data'];
+        $this->getCourseSetService()->tryManageCourseSet($data['courseSetId']);
+        $this->getTestpaperService()->importTestpaper($testpaper, $token);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function optionTemplateAction(Request $request, $type)
+    {
+        $field = $request->query->all();
+
+        return $this->render('testpaper/subject/option.html.twig', array(
+            'type' => $type,
+            'order' => $field['order'],
         ));
     }
 
@@ -650,20 +888,6 @@ class ManageController extends BaseController
         }
 
         return $essayQuestions;
-    }
-
-    protected function getCheckedQuestionType($testpaper)
-    {
-        $questionTypes = array();
-        if (!empty($testpaper['metas']['counts'])) {
-            foreach ($testpaper['metas']['counts'] as $type => $count) {
-                if ($count > 0) {
-                    $questionTypes[] = $type;
-                }
-            }
-        }
-
-        return $questionTypes;
     }
 
     protected function getQuestionTypes()
@@ -851,5 +1075,15 @@ class ManageController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

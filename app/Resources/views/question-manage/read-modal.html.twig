@@ -1,0 +1,52 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/question-manage/read/index.js']) %}
+
+{% block title %}
+  {{ 'course.question_manage.import.modal_title'|trans }}
+{% endblock %}
+
+{% block body %}
+  <input type="hidden" id="courseSet_Id" value="{{ courseSet.id }}"/>
+  <div class="tab-content js-content" id="import-testpaper-box">
+    <div class="tab-pane js-course-tasks-pane active">
+      <form class="form-horizontal js-step1-view" id="import-step-form" method="post"
+            action="{{ path('course_set_manage_question_read', {id: courseSet.id}) }}" enctype="multipart/form-data">
+        <div class="cd-form-group mb0 clearfix">
+          <div class="cd-pl32 cd-pr32 cd-pv32 bg-color" id="upload-file-box">
+            <p class="cd-mb24 cd-dark-major text-16 text-center">{{ 'course.question_manage.import.new_hint'|trans }}</p>
+            <div class="upload-area js-upload-area text-center">
+              <label id="upload-btn" for="form_file" class="btn cd-btn cd-btn-lg cd-btn-primary"
+                     data-loading-text="{{ 'course.question_manage.import.uploading'|trans }}">{{ 'course.question_manage.import.upload_document'|trans }}</label>
+              <input type="file" id="form_file" name="importFile" class="hidden" value="" required="required" accept=".docx">
+              <p class="cd-mt16 text-14">{{ 'course.question_manage.import.drag_document_hint'|trans }}</p>
+              <div class="upload-file__tip cd-mt16">
+                <p class="cd-dark-major text-14">
+                  <span>{{ 'course.question_manage.import.docx_support_hint'|trans }}</span>
+                  <a class="cd-link-primary" href="{{ asset('/assets/files/questions_import_example.docx') }}">{{ 'course.question_manage.import.download_template'|trans }}</a>
+                </p>
+                <p class="text-14"><a class="cd-link-primary" href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">{{ 'course.question_manage.import.doc_to_docx_hint'|trans }}</a></p>
+                <p><a class="cd-link-primary" href="http://www.qiqiuyu.com/faq/881/detail" target="_blank">{{ 'course.question_manage.import.rule'|trans }}</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+      <div class="js-step2-view hidden"></div>
+      <div class="tab-pane js-course-tasks-pane active hidden js-step3-view"></div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  {% if is_plugin_installed('QuestionPlus') %}
+    <p class="cd-mt8 mb0 text-left"><a class="cd-link-primary" href="javascript:;" id="old-template-btn">{{ 'course.question_manage.import.use_old_template'|trans }}</a></p>
+  {% endif %}
+  <button class="btn hidden"></button>
+  <button type="button" class="btn cd-btn cd-btn-lg cd-btn-flat-default pull-right js-step3-btn hidden" data-dismiss="modal">{{ 'course.question_manage.impport.cancle'|trans }}</button>
+  <button type="button" id="re-import-btn"
+          class="btn cd-btn cd-btn-lg cd-btn-flat-default pull-right js-step2-btn js-step3-btn re-import-btn hidden">{{ 'course.question_manage.import.reupload_document'|trans }}</button>
+{% endblock %}

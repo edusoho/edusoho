@@ -141,6 +141,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             'copyId',
             'pattern',
             'metas',
+            'questionTypeSeq',
         ));
 
         return $fields;
@@ -205,7 +206,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         $score = 0;
         array_walk($items, function ($item) use (&$count, &$score) {
             if (!$item['parentId']) {
-                $count += 1;
+                ++$count;
             }
 
             if ('material' != $item['questionType']) {
@@ -258,7 +259,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
                 $validatedMaterialQuestionNum = 0;
                 foreach ($questions['material'] as $materialQuestion) {
                     if ($materialQuestion['subCount'] > 0) {
-                        $validatedMaterialQuestionNum += 1;
+                        ++$validatedMaterialQuestionNum;
                     }
                 }
                 if ($validatedMaterialQuestionNum < $needCount) {

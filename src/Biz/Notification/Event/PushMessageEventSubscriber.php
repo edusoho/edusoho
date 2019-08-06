@@ -401,7 +401,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $users = $event->getArgument('users');
 
         if ($this->isIMEnabled()) {
-            if ($threadPost['target']['type'] != 'course') {
+            if ('course' != $threadPost['target']['type']) {
                 return;
             }
 
@@ -754,7 +754,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $this->createSearchJob('update', $args);
         }
         if ($this->isIMEnabled()) {
-            if ($thread['target']['type'] != 'course' || 'question' != $thread['type']) {
+            if ('course' != $thread['target']['type'] || 'question' != $thread['type']) {
                 return;
             }
 
@@ -798,7 +798,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         }
 
         if ($this->isIMEnabled()) {
-            if ($thread['target']['type'] != 'course' || 'question' != $thread['type']) {
+            if ('course' != $thread['target']['type'] || 'question' != $thread['type']) {
                 return;
             }
 
@@ -840,13 +840,13 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $this->createSearchJob('update', $args);
         }
 
-        if ($thread['target']['type'] != 'course' || 'question' != $thread['type']) {
+        if ('course' != $thread['target']['type'] || 'question' != $thread['type']) {
             return;
         }
 
         $questionType = ServiceKernel::instance()->trans('course.thread.question_type.'.$thread['questionType']);
         if ($this->isIMEnabled()) {
-            if ($thread['target']['type'] != 'course' || 'question' != $thread['type']) {
+            if ('course' != $thread['target']['type'] || 'question' != $thread['type']) {
                 return;
             }
 
@@ -916,11 +916,11 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $threadPost = $event->getSubject();
         $threadPost = $this->convertThreadPost($threadPost, 'thread.post.create');
         if ($this->isIMEnabled()) {
-            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
+            if ('course' != $threadPost['target']['type'] || empty($threadPost['target']['teacherIds'])) {
                 return;
             }
 
-            if ($threadPost['thread']['type'] != 'question') {
+            if ('question' != $threadPost['thread']['type']) {
                 return;
             }
 
@@ -963,7 +963,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.create');
 
         $user = $this->getBiz()->offsetGet('user');
-        if ($threadPost['thread']['userId'] == $user['id'] && $threadPost['thread']['type'] != 'question') {
+        if ($threadPost['thread']['userId'] == $user['id'] && 'question' != $threadPost['thread']['type']) {
             return;
         }
         $postUser = $this->getUserService()->getUser($threadPost['userId']);
@@ -971,7 +971,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $threadPostType = !empty($threadPost['postType']) ? ServiceKernel::instance()->trans('course.thread.question_type.'.$threadPost['postType']) : '';
 
         //学生追问，老师收到推送
-        if ($threadPost['thread']['userId'] == $user['id'] && $threadPost['thread']['type'] == 'question') {
+        if ($threadPost['thread']['userId'] == $user['id'] && 'question' == $threadPost['thread']['type']) {
             //推送
 //            if (!empty($threadPost['target']['teacherIds'])) {
 //                $devices = $this->getPushDeviceService()->findPushDeviceByUserIds($threadPost['target']['teacherIds']);
@@ -1088,11 +1088,11 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $post = $this->convertThreadPost($post, 'group.thread.post.create');
 
         if ($this->isIMEnabled()) {
-            if ($post['target']['type'] != 'course' || empty($post['target']['teacherIds'])) {
+            if ('course' != $post['target']['type'] || empty($post['target']['teacherIds'])) {
                 return;
             }
 
-            if ($post['thread']['type'] != 'question') {
+            if ('question' != $post['thread']['type']) {
                 return;
             }
 
@@ -1750,7 +1750,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $user = $this->getBiz()->offsetGet('user');
 
         if ($this->isIMEnabled()) {
-            if ($threadPost['target']['type'] != 'course') {
+            if ('course' != $threadPost['target']['type']) {
                 return;
             }
             //
@@ -1808,7 +1808,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             //            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
             //                return;
             //            }
-            if ($threadPost['target']['type'] != 'course') {
+            if ('course' != $threadPost['target']['type']) {
                 return;
             }
             //
