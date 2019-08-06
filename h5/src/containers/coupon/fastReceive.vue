@@ -202,13 +202,6 @@ export default {
         //领取优惠券后跳转指定页面
         useCoupon(){
             if(this.currentUserCoupon!=null && this.currentUserCoupon.deadline){ //已经过期
-                // let ONEDAY=86400000;
-                // let d1=new Date();
-                // let d2 = new Date(Date.parse(this.currentUserCoupon.deadline));
-                // if(d1.getTime()>(d2.getTime()+ONEDAY)){
-                //     Toast.fail('优惠券已过期');
-                //     return;
-                // }
                 if(this.isOld(this.currentUserCoupon.deadline)){
                     Toast.fail('优惠券已过期');
                     return ;
@@ -250,16 +243,6 @@ export default {
                 return true;
             }
            if(coupon.deadline){ //已经过期
-                // let ONEDAY=86400000;
-                // let d1=new Date();
-                // let d2 = new Date(Date.parse(coupon.deadline));
-                // if(d1.getTime()>(d2.getTime()+ONEDAY)){
-                //     this.failmessage="优惠券已过期"
-                //     this.receiveFail=true;
-                //     result=true;
-                //     this.canuse=!result;
-                //     return result;
-                // }
                 if(this.isOld(coupon.deadline)){
                     this.failmessage="优惠券已过期"
                     this.receiveFail=true;
