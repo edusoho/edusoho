@@ -184,7 +184,7 @@ Api Test With 5.5:
     - touch app/data/specialEnv  # 防止 新建uuid 索引报错的问题
     - bin/phpmig migrate
     # 安装codeception(因为版本问题，放到gitlab ci上运行时安装)
-    - composer config repo.packagist composer https://packagist.laravel-china.org
+    - composer config repo.packagist composer https://mirrors.aliyun.com/composer/
     - composer require "codeception/codeception:*" --ignore-platform-reqs
     # install plugin
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin &&  app/console plugin:register Vip
