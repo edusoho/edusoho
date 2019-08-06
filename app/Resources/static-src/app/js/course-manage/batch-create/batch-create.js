@@ -65,10 +65,10 @@ class BatchCreate {
         return ;
       }
 
-      if($selectLength>0){
+      if ($selectLength>0){
         console.log('files', $selectLength);
         self.submitSelectFile($btn, $selectLength);
-      }else{
+      } else {
         self.submitUploaderFile($btn);
       }
 
@@ -79,7 +79,7 @@ class BatchCreate {
     });
 
     $('.js-bath-create-content').on('click', '[data-role=batch-select]', function(){
-      if( $(this).is(":checked") == true){
+      if ( $(this).is(":checked") == true){
         $(this).parents('.js-table-list').find('[data-role=batch-item]').prop('checked', true);
       } else {
         $(this).parents('.js-table-list').find('[data-role=batch-item]').prop('checked', false);
@@ -87,7 +87,7 @@ class BatchCreate {
     });
 
     $('.js-bath-create-content').on('click', '[data-role=batch-item]', function(){
-      if( $(this).is(":checked") != true){
+      if ( $(this).is(":checked") != true){
         $('.js-bath-create-content').find('[data-role=batch-select]').prop('checked', false);
       }
     });
