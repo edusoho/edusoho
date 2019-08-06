@@ -8819,4 +8819,5 @@ mobile.task.finish_tips.video.end: Learning to the end
 mobile.task.finish_tips.video.time: 'At least learn %finishData% minutes'
 classroom.joining_date.expired_tips: Classroom joining date expired
 
-
+# 富文本
+editor.iframe_tips: To use IFrame normally, please set it in [Admin] - [System] -[Security] -[White List Domain]

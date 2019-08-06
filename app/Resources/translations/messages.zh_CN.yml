@@ -10112,3 +10112,6 @@ mobile.task.finish_tips.video.end: 学习到最后
 mobile.task.finish_tips.video.time: 至少学习 %finishData% 分钟
 
 classroom.joining_date.expired_tips: 班级已过有效期！
+
+# 富文本
+editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
