@@ -436,6 +436,7 @@ course.thread_delete_hint: Do you really want to delete this reply?
 course_manage.course_dashboard.student_num: Number of students
 course_manage.course_dashboard.finish_num: Number of completions
 course_manage.course_dashboard.finish_rate: Completion rate
+course.manage.teacher.manage.repeat_tip: Can not add repeatedly.
 
 course_manage.lesson_dashboard.finish_rate: Completion rate
 course_manage.lesson_dashboard.student_num: Person

@@ -379,7 +379,7 @@ course.thread_delete_hint: 您真的要删除该回帖吗？
 course_manage.course_dashboard.student_num: 学员数
 course_manage.course_dashboard.finish_num: 完课人数
 course_manage.course_dashboard.finish_rate: 完课率
-
+course.manage.teacher.manage.repeat_tip: 不能重复添加
 
 course_manage.course_overview.person_unit: 人数
 
