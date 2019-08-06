@@ -12,9 +12,9 @@ function toNum(a) {
 }
 
 const needUpgrade = function needUpgrade(supportVersion, currentVersion) {
-  const a = toNum(supportVersion);
+  const a = toNum(supportVersion); 
   const b = toNum(currentVersion);
-  if (a < b) {
+  if (a <= b) {
     // 支持
     return true;
   }
