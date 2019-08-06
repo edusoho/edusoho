@@ -29,10 +29,11 @@
       </div>
     </div>
     {% if not app.user or (app.user.id != user.id) %}
+      {% set messageSetting = setting('message') %}
       <div class="metas">
         <a class="btn btn-primary btn-xs follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>{{'user.card_show_following'|trans}}</a>
         <a class="btn btn-default btn-xs unfollow-btn" href="javascript:;"  data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %}style="display:none;"{% endif %}>{{'user.card_show_followed'|trans}}</a>
-        {% if can_send_message(user.id) %}
+        {% if can_send_message(user.id) and messageSetting.showable|default('1') != 0 %}
           <a class="btn btn-default btn-xs direct-message-btn" herf="javascript:;" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'user.card_show_message'|trans}}</a>
         {% endif %}
       </div>
