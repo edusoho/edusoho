@@ -15,7 +15,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -78,7 +78,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -134,7 +134,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -188,7 +188,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -252,7 +252,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -279,21 +279,21 @@
     },
     {
         "name": "codeages/biz-framework",
-        "version": "v0.9.31",
-        "version_normalized": "0.9.31.0",
+        "version": "v0.9.32",
+        "version_normalized": "0.9.32.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "7ae1b2f37846f36616a4a2f93edc5bf2dc7b159f"
+            "reference": "a1e64350f9ebda889941cfeb0cc49ff85571ab17"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/7ae1b2f37846f36616a4a2f93edc5bf2dc7b159f",
-            "reference": "7ae1b2f37846f36616a4a2f93edc5bf2dc7b159f",
+            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/a1e64350f9ebda889941cfeb0cc49ff85571ab17",
+            "reference": "a1e64350f9ebda889941cfeb0cc49ff85571ab17",
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -321,7 +321,7 @@
         "suggest": {
             "ramsey/uuid": "Dao UUID primary key feature need this package."
         },
-        "time": "2019-04-11T09:04:25+00:00",
+        "time": "2019-08-01T03:15:36+00:00",
         "bin": [
             "bin/biz"
         ],
@@ -357,7 +357,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -403,7 +403,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -442,7 +442,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -498,7 +498,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -553,7 +553,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -612,7 +612,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -663,7 +663,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -713,7 +713,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -760,7 +760,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -826,7 +826,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -876,7 +876,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -943,7 +943,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1014,7 +1014,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1090,7 +1090,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1172,7 +1172,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1247,7 +1247,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1328,7 +1328,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1407,7 +1407,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1496,7 +1496,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1592,7 +1592,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1667,7 +1667,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1729,7 +1729,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1791,7 +1791,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1872,7 +1872,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1941,7 +1941,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -1996,7 +1996,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2062,7 +2062,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2118,7 +2118,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2222,7 +2222,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2275,7 +2275,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2340,7 +2340,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2399,7 +2399,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2449,7 +2449,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2507,7 +2507,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2592,7 +2592,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2665,7 +2665,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2751,7 +2751,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2803,7 +2803,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2861,7 +2861,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -2967,7 +2967,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3023,7 +3023,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3080,7 +3080,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3146,7 +3146,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3217,7 +3217,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3287,7 +3287,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3342,7 +3342,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3391,7 +3391,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3448,7 +3448,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3505,7 +3505,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3572,7 +3572,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3637,7 +3637,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3695,7 +3695,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3754,7 +3754,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3811,7 +3811,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3869,7 +3869,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3924,7 +3924,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -3999,7 +3999,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4071,7 +4071,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4131,7 +4131,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4189,7 +4189,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4264,7 +4264,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4323,7 +4323,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4384,7 +4384,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4427,7 +4427,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4487,7 +4487,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4565,7 +4565,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4625,7 +4625,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4678,7 +4678,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4751,7 +4751,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4813,7 +4813,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4907,7 +4907,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -4969,7 +4969,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5048,7 +5048,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5116,7 +5116,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5190,7 +5190,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5254,7 +5254,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5320,7 +5320,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5387,7 +5387,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5453,7 +5453,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5517,7 +5517,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5581,7 +5581,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5648,7 +5648,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5708,7 +5708,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5777,7 +5777,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5844,7 +5844,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -5989,7 +5989,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -6037,7 +6037,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -6107,7 +6107,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -6169,7 +6169,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
@@ -6239,7 +6239,7 @@
             "shasum": "",
             "mirrors": [
                 {
-                    "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
                     "preferred": true
                 }
             ]
