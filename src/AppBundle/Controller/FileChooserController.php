@@ -46,6 +46,7 @@ class FileChooserController extends BaseController
             'file-chooser/widget/choose-table.html.twig',
             array(
                 'files' => $files,
+                'batch' => $request->query->get('batch', 0),
                 'createdUsers' => $createdUsers,
                 'paginator' => $paginator,
             )
@@ -79,7 +80,7 @@ class FileChooserController extends BaseController
         $conditions = array();
         $conditions['page'] = $request->query->get('page', 1);
         $conditions['ids'] = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
-        $conditions['type'] = (empty($query['type']) || $query['type'] == 'all') ? null : $query['type'];
+        $conditions['type'] = (empty($query['type']) || 'all' == $query['type']) ? null : $query['type'];
         $conditions['filenameLike'] = empty($query['keyword']) ? null : $query['keyword'];
 
         $paginator = new Paginator(
@@ -102,6 +103,7 @@ class FileChooserController extends BaseController
             'file-chooser/widget/choose-table.html.twig',
             array(
                 'files' => $files,
+                'batch' => $request->query->get('batch', 0),
                 'createdUsers' => $createdUsers,
                 'paginator' => $paginator,
             )
@@ -128,7 +130,7 @@ class FileChooserController extends BaseController
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);
         }
-        $conditions['type'] = (empty($conditions['type']) || ($conditions['type'] == 'all')) ? null : $conditions['type'];
+        $conditions['type'] = (empty($conditions['type']) || ('all' == $conditions['type'])) ? null : $conditions['type'];
 
         return $conditions;
     }
@@ -138,7 +140,7 @@ class FileChooserController extends BaseController
         $courseType = $request->query->get('courseType', 'course');
 
         $conditions = array('type' => $courseType);
-        if ($courseType == 'openCourse') {
+        if ('openCourse' == $courseType) {
             $conditions['courseId'] = $courseId;
         } else {
             $course = $this->getCourseService()->getCourse($courseId);

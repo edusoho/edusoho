@@ -5,11 +5,6 @@
 				<input type="radio" name="file-browser-video-source" value="upload" checked="">
 				{{'file_chooser.materiallib_choose.from_upload'|trans}}
 			</label>
-			<label class="js-material-type prm" data-type="sharing"
-			       data-sharing-contacts-url="{{ path('media_materiallib_contacts') }}">
-				<input type="radio" name="file-browser-video-source" value="shared">
-				{{'file_chooser.materiallib_choose.from_share'|trans}}
-			</label>
 			<label class="js-material-type prm" data-type="public">
 				<input type="radio" name="file-browser-video-source" value="public">
 				{{'file_chooser.materiallib_choose.from_public'|trans}}
@@ -31,7 +26,7 @@
                placeholder="{{'file_chooser.course_file.input_placeholder'|trans({'%placeholder%':placeholder|default(null)})}}">
         <span class="input-group-btn">
           <button type="button" class="btn btn-default js-browser-search mbm"
-                  data-url="{{ path('media_materiallib_choose') }}" data-loading-text="{{'form.btn.search.submiting'|trans}}">{{'form.btn.search'|trans}}</button>
+                  data-url="{{ path('media_materiallib_choose')}}" data-loading-text="{{'form.btn.search.submiting'|trans}}">{{'form.btn.search'|trans}}</button>
         </span>
       </span>
 		</div>
@@ -48,10 +43,10 @@
 <div class="js-material-lib-search-form">
 	<input type="hidden" name="sourceFrom" value="my">
 	<input type="hidden" name="page" value="1">
+  <input type="hidden" name="batch" value="1">
 	<input type="hidden" name="currentUserId">
 	<input type="hidden" name="type" value="{{ fileType|default('') }}">
 	<input type="hidden" name="keyword">
-  <input type="hidden" name="batch" value="0">
 </div>
 <div class="js-material-list chooser-list-parent">
 	<div class="empty">{{'file_chooser.materiallib_choose.wating'|trans}}</div>

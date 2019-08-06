@@ -1,4 +1,5 @@
 import notify from 'common/notify';
+import FileChooser from './file-chooser';
 
 class BatchCreate {
   constructor(options) {
@@ -12,6 +13,7 @@ class BatchCreate {
   init() {
     this.initUploader();
     this.initEvent();
+    const fileChooser = new FileChooser();
   }
 
   initUploader() {
@@ -44,38 +46,76 @@ class BatchCreate {
   }
 
   initEvent() {
+    let self = this;
     $('.js-upload-params').on('change', (event) => {
       this.uploader.setProcess(this.getUploadProcess());
     });
 
     $('.js-batch-create-lesson-btn').on('click', (event) => {
-
-      if (!this.files.length) {
+      let $selectLength = $('.js-bath-create-content').find('input[data-role="batch-item"]:checked').length;
+      if (!this.files.length && $selectLength<1) {
         notify('danger', Translator.trans('uploader.select_one_file'));
         return;
       }
-
       let $btn = $(event.currentTarget);
       $btn.button('loading');
+
       if (!this.validLessonNum($btn)) {
         console.log(this.validLessonNum($btn));
         return ;
       }
 
-      console.log('files', this.files);
+      if($selectLength>0){
+        console.log('files', $selectLength);
+        self.submitSelectFile($btn, $selectLength);
+      }else{
+        self.submitUploaderFile($btn);
+      }
 
-      this.files.map((file, index) => {
-        let isLast = false;
-        if (index + 1 == this.files.length) {
-          isLast = true;
-        }
-        console.log('file', file);
-        this.createLesson($btn, file, isLast);
-      });
     });
 
     $('[data-toggle="popover"]').popover({
       html: true,
+    });
+
+    $('.js-bath-create-content').on('click', '[data-role=batch-select]', function(){
+      if( $(this).is(":checked") == true){
+        $(this).parents('.js-table-list').find('[data-role=batch-item]').prop('checked', true);
+      } else {
+        $(this).parents('.js-table-list').find('[data-role=batch-item]').prop('checked', false);
+      }
+    });
+
+    $('.js-bath-create-content').on('click', '[data-role=batch-item]', function(){
+      if( $(this).is(":checked") != true){
+        $('.js-bath-create-content').find('[data-role=batch-select]').prop('checked', false);
+      }
+    });
+  }
+
+  submitSelectFile($btn, $selectLength) {
+    $('.js-bath-create-content').find('input[data-role="batch-item"]:checked').map((index, event, array) => {
+      let isLast = false;
+      if (index+1 == $selectLength) {
+        isLast = true;
+        console.log('isLast', isLast);
+      }
+      let fileId = $(event).parents('.file-browser-item').data('id');
+      console.log('fileId', fileId);
+      this.createLesson($btn, fileId, isLast);
+    });
+  }
+
+  submitUploaderFile($btn) {
+    console.log('files', this.files);
+    this.files.map((file, index) => {
+      let isLast = false;
+      if (index + 1 == this.files.length) {
+        isLast = true;
+      }
+      console.log('file', file);
+
+      this.createLesson($btn, file.id, isLast);
     });
   }
 
@@ -123,14 +163,14 @@ class BatchCreate {
     return valid;
   }
 
-  createLesson($btn, file, isLast) {
+  createLesson($btn, fileId, isLast) {
     let self = this;
     $.ajax({
       type: 'post',
       url: $btn.data('url'),
       async: false,
       data: {
-        fileId: file.id
+        fileId: fileId
       },
       success: function(response) {
         if (response && response.error) {
