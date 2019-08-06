@@ -42,7 +42,7 @@ export default {
         }).then(res => {
           //当前版本小于支持版本 true  大于false
           if(Object.keys(res).length>0){
-            if(needUpgrade('2.2.9',res.version)){
+            if(needUpgrade('2.2.10',res.version)){
               that.sitePlugins=1
             }else{
               that.sitePlugins=2
