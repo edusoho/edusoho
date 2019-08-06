@@ -10,6 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CloudController extends BaseController
 {
+    public function testTikuAction()
+    {
+        return $this->render('login/test.html.twig', array(
+        ));
+    }
+
     public function setServerAction(Request $request)
     {
         $server = $request->query->get('server');

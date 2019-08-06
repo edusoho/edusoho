@@ -70,3 +70,35 @@
     }
   }
 }
+
+.question-type-table {
+  &.dragged {
+    background-color: #fff;
+    position: absolute;
+    z-index: 2000;
+  }
+  &.active {
+    i:after {
+      background-color: #fff;
+    }
+  }
+  i {
+    position: relative;
+    vertical-align: text-bottom;
+    cursor: move;
+    &:after {
+     content: '';
+     width: 1px;
+     position: absolute;
+     top: 1px;
+     right: -10px;
+     height: 14px;
+     background-color: #428bca;
+    }
+  }
+}
+
+.question-type-placehoder {
+  background-color: #fcffc0 !important;
+  position: absolute;
+}

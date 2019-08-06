@@ -1,0 +1,32 @@
+.subject-title {
+  input {
+    &:hover,
+    &:focus,
+    &.active {
+      background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), .1);
+    }
+  }
+}
+
+.subject-item__operation {
+  span {
+    color: @brand-primary;
+  }
+}
+
+.subject-item__number {
+  color: @brand-primary;
+  border: 1px solid @brand-primary;
+}
+
+.subject-list-item__num {
+  border: 1px solid @brand-primary;
+  color: @brand-primary;
+}
+
+.subject-edit-item {
+  .subject-edit-item__order {
+    color: @brand-primary;
+    border: 1px solid @brand-primary;
+  }
+}

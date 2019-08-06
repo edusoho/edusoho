@@ -10,6 +10,8 @@ use Biz\Question\Service\QuestionService;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
 {
+    protected $defaultQuestionTypeSeq = array('single_choice', 'choice', 'essay', 'uncertain_choice', 'determine', 'fill', 'material');
+
     public function get($id)
     {
         return $this->getQuestionDao()->get($id);
@@ -63,6 +65,85 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function importQuestions($questions, $token)
+    {
+        $savedQuestions = array();
+        //按照题型分组
+        $groupQuestions = $this->groupQuestions($questions);
+        $courseSetId = $token['data']['courseSetId'];
+        try {
+            $this->beginTransaction();
+            foreach ($groupQuestions as $type => $questionsGroup) {
+                //分组循环处理题目
+                foreach ($questionsGroup as $key => $question) {
+                    if ('material' == $question['type']) {
+                        $subQuestions = $question['subQuestions'];
+                        $question['courseSetId'] = $courseSetId;
+                        $savedQuestions[] = $savedQuestion = $this->importQuestion($question);
+                        //材料题子题处理
+                        foreach ($subQuestions as $subQuestion) {
+                            $subQuestion['parentId'] = $savedQuestion['id'];
+                            $subQuestion['courseSetId'] = $courseSetId;
+                            $savedQuestions[] = $this->importQuestion($subQuestion);
+                        }
+                    } else {
+                        $question['courseSetId'] = $courseSetId;
+                        $savedQuestions[] = $this->importQuestion($question);
+                    }
+                }
+            }
+            $this->commit();
+
+            return $savedQuestions;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    protected function groupQuestions($questions)
+    {
+        $questions = ArrayToolkit::group($questions, 'type');
+        $groupQuestions = array();
+        foreach ($this->defaultQuestionTypeSeq as $type) {
+            $groupQuestions[$type] = isset($questions[$type]) ? $questions[$type] : array();
+        }
+
+        return $groupQuestions;
+    }
+
+    protected function importQuestion($question)
+    {
+        $question = $this->filterImportQuestion($question);
+        $savedQuestion = $this->create($question);
+        if (in_array($savedQuestion['type'], array('choice', 'uncertain_choice'))) {
+            $savedQuestion['missScore'] = empty($question['missScore']) ? 0 : $question['missScore'];
+        }
+
+        return $savedQuestion;
+    }
+
+    protected function filterImportQuestion($question)
+    {
+        if (in_array($question['type'], array('choice', 'single_choice', 'uncertain_choice'))) {
+            $question['choices'] = $question['options'];
+            $question['answer'] = $question['answers'];
+            unset($question['options']);
+            unset($question['answers']);
+        }
+
+        if ('determine' == $question['type']) {
+            $result = $question['answer'] ? 1 : 0;
+            $question['answer'] = array($result);
+        }
+
+        if ('essay' == $question['type']) {
+            $question['answer'] = array($question['answer']);
+        }
+
+        return $question;
     }
 
     public function batchCreateQuestions($questions)

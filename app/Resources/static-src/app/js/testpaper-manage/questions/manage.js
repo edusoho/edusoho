@@ -9,6 +9,7 @@ export default class QuestionManage{
     this.questions = [];
     this.questionsCount = 0;
     this._initEvent();
+    this.initTypeSort();
   }
 
   _initEvent() {
@@ -16,6 +17,7 @@ export default class QuestionManage{
     this.$typeNav.on('click','li', event => this._changeNav(event));
     this.$element.on('click','.js-request-save',event => this._confirmSave(event));
     this.$modal.on('click','.js-confirm-submit',event => this._submitSave(event));
+    this.$element.on('lengthChange','[data-role="question-body"]', event => this.changeQuestionCount(event));
   }
 
   _showPickerModal() {
@@ -185,17 +187,68 @@ export default class QuestionManage{
         return;
       }
     }
+    let questionTypeSeq = [];
+    $("input[name='questionTypeSeq']").each(function(){
+        questionTypeSeq.push($(this).val());
+    })
 
     if (this.questionsCount > 2000) {
         notify('danger', Translator.trans('activity.testpaper_manage.questions_length_hint'));
     }else{
         $target.button('loading').addClass('disabled');
-        $.post(this.$element.attr('action'),{questions: JSON.stringify(this.questions),passedScore: passedScore},function(result) {
+        $.post(this.$element.attr('action'),{questions: JSON.stringify(this.questions),passedScore: passedScore, questionTypeSeq: JSON.stringify(questionTypeSeq)},function(result) {
           if (result.goto) {
             window.location.href = result.goto;
           }
         });
     }
 
+  }
+
+  changeQuestionCount(event) {
+    let $target = $(event.currentTarget);
+    let type = $target.data('type');
+    let count = 0;
+    if (type == 'material') {
+      count = $target.find('tr.is-sub-question').length;
+    } else {
+      count = $target.find('tr').length;
+    }
+    $('.js-count-' + type).html('(' + count + ')');
+  }
+
+  initTypeSort() {
+    var $group = $('#testpaper-question-nav');
+    var adjustment;
+    $('#testpaper-question-nav').sortable({
+      handle: '.js-move-icon',
+      itemSelector : '.question-type-table',
+      placeholder: '<li class="question-type-table question-type-placehoder"></li>', 
+      onDrop: function ($item, container, _super, event) {
+        $item.removeClass('dragged').removeAttr('style');
+        $('body').removeClass('dragging');
+      },
+      onDragStart: function(item, container, _super) {
+        var offset = item.offset(),
+          pointer = container.rootGroup.pointer;
+        adjustment = {
+          left: pointer.left - offset.left,
+          top: pointer.top - offset.top
+        };
+        _super(item, container);
+      },
+      onDrag: function(item, position) {
+        const height = item.height();
+        const width = item.width();
+        item.css({
+          left: position.left - adjustment.left,
+          top: position.top - adjustment.top
+        });
+        $('.question-type-placehoder').css({
+          'height': height,
+          'width': width,
+        });
+      },
+    });
   }
 }

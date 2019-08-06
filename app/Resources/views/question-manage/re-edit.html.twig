@@ -1,0 +1,19 @@
+{% extends 'testpaper/subject/layout.html.twig' %}
+
+{% set totalNum =  19 %}
+
+{% block subtitle %}
+  <div class="subject-data__subtitle subject-data__subtitle--question">
+    <span class="js-total-num">{{ 'course.testpaper_manage.import.re_edit.total_count'|trans({'%count%': questions|length}) }}</span>
+  </div>
+{% endblock %}
+
+{% block testpaper %}
+  {% for key,item in questions if item.type in ['choice', 'determine', 'essay', 'fill', 'single_choice', 'uncertain_choice', 'material'] %}
+    {% include 'testpaper/subject/item/show/' ~ item.type ~ '.html.twig' %}
+  {% endfor %}
+{% endblock %}
+
+{% block save_btn %}
+  <button class="cd-btn cd-btn-primary subject-button js-import-btn" data-loading-text="{{ 'form.btn.import.submiting'|trans }}" data-redirect-url="{{ path('course_set_manage_question', {id:courseSetId}) }}" data-url="{{ path('questions_import_save', {token: app.request.get('token')}) }}" type="button">{{ 'course.testpaper_manage.import.re_edit.finish_import'|trans }}</button>
+{% endblock %}

@@ -30,7 +30,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
 
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
-        if (!$testpaperResult || ($testpaperResult['status'] == 'doing' && !$testpaperResult['updateTime']) || $testpaper['status'] != 'open') {
+        if (!$testpaperResult || ('doing' == $testpaperResult['status'] && !$testpaperResult['updateTime']) || 'open' != $testpaper['status']) {
             return $this->render('activity/testpaper/show.html.twig', array(
                 'activity' => $activity,
                 'testpaperActivity' => $testpaperActivity,
@@ -38,7 +38,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
                 'testpaper' => $testpaper,
                 'courseId' => $activity['fromCourseId'],
             ));
-        } elseif ($testpaperResult['status'] === 'finished') {
+        } elseif ('finished' === $testpaperResult['status']) {
             return $this->forward('AppBundle:Testpaper/Testpaper:showResult', array(
                 'resultId' => $testpaperResult['id'],
             ));
@@ -80,7 +80,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
             'paperResult' => array(),
             'total' => $total,
             'attachments' => $attachments,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
         ));
     }
 
@@ -189,20 +189,6 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         );
 
         return $testpapers;
-    }
-
-    protected function getCheckedQuestionType($testpaper)
-    {
-        $questionTypes = array();
-        if (!empty($testpaper['metas']['counts'])) {
-            foreach ($testpaper['metas']['counts'] as $type => $count) {
-                if ($count > 0) {
-                    $questionTypes[] = $type;
-                }
-            }
-        }
-
-        return $questionTypes;
     }
 
     /**

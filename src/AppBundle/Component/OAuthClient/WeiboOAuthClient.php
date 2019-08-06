@@ -77,10 +77,10 @@ class WeiboOAuthClient extends AbstractOAuthClient
         if (!array_key_exists('error_code', $userInfo)) {
             return;
         }
-        if ($userInfo['error_code'] == '21321') {
+        if ('21321' == $userInfo['error_code']) {
             throw new UnexpectedValueException('unaudited');
         }
-        if ($userInfo['error_code'] == '10006') {
+        if ('10006' == $userInfo['error_code']) {
             throw new UnexpectedValueException('unAuthorize');
         }
         throw new UnexpectedValueException($userInfo['error']);
