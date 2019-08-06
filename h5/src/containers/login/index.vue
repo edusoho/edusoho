@@ -130,9 +130,20 @@ export default {
       });
     },
     changeLogin(){
-      this.$router.push({
-        name: 'fastlogin',
-      })
+      /* 需要到登录权限的页面／组件，跳转前把当前路由记录下来，便于登陆后回到页面 */
+      if(this.$route.query.redirect){
+        this.$router.push({
+          name: 'fastlogin',
+          query: {
+              redirect: this.$route.query.redirect
+          }
+        })
+      }else{
+        this.$router.push({
+          name: 'fastlogin',
+        })
+      }
+      
     }
   },
 
