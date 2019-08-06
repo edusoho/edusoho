@@ -27,6 +27,21 @@ function updateChecked(dataSourceUi,id) {
   })
 }
 
+
+function unRepeatItem(dataSourceUi) {
+  let temp = {};
+  return dataSourceUi.reduce(function(item, next) {
+    if (temp[next.id]) {
+      cd.message({ type:'danger', message: Translator.trans('course.manage.teacher.manage.repeat_tip') });
+    } else {
+      temp[next.id] = true;
+      item.push(next);
+    }
+    return item;
+  }, [])
+}
+
+
 export default class PersonaMultiInput extends MultiInput {
   constructor(props) {
     super(props);
@@ -77,8 +92,9 @@ export default class PersonaMultiInput extends MultiInput {
     }
     initItem(this.state.dataSourceUi,data,this.state.dataSourceUi.length+1,this.props);
 
+    const dataSourceUi = unRepeatItem(this.state.dataSourceUi);
     this.setState({
-      dataSourceUi: this.state.dataSourceUi,
+      dataSourceUi: dataSourceUi,
     });
   }
 
