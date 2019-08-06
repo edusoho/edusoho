@@ -14,10 +14,10 @@ export default {
         ? rule.message : '';
     },
     validatedChecker() {
-      const mobile = this.userinfo.mobile;
       if (this.userinfo.mobile.length > 11) {
         this.userinfo.mobile = this.userinfo.mobile.substring(0, 11);
       }
+      const mobile = this.userinfo.mobile;
       const rule = rulesConfig.mobile;
       this.validated.mobile = rule.validator(mobile);
     }

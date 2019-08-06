@@ -24,7 +24,8 @@
 
         <van-field
             v-model="userinfo.smsCode"
-            type="text"
+            ref="smsCode"
+            type="number"
             center
             border
             clearable
@@ -208,6 +209,11 @@ export default {
         },
         // 倒计时
         countDown() {
+            //验证码自动聚焦
+            this.$nextTick(_=>{
+                this.$refs.smsCode.$refs.input.focus()
+            })
+
             this.count.showCount = true;
             this.count.codeBtnDisable = true;
             this.count.num = 60;

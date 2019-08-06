@@ -29,14 +29,14 @@
         <div class="receive-status" v-if="hasReceive && !loginMethods">
             <img src="static/images/coupon-yes.png" class="status-icon"/>
                 <div class="status-text">{{successmessage}}</div>
-                <div class="status-user">{{user.nickname}}账户</div>
+                <div class="status-user">{{username}}账户</div>
             <div class="status__btn" @click="useCoupon()">立即使用</div>
         </div>
          <div class="receive-status" v-if="receiveFail && !loginMethods">
             <img src="static/images/coupon-no.png" class="status-icon"/>
             <div class="status-text">{{failmessage}}</div>
         </div>
-        <fast-login v-if="!login && cantuse" @lReceiveCoupon="lReceiveCoupon"></fast-login>
+        <fast-login v-if="!login && canuse" @lReceiveCoupon="lReceiveCoupon"></fast-login>
     </div>
 </template>
 <script>
@@ -56,13 +56,13 @@ export default {
     data(){
         return{
             coupons:null,//优惠券信息
-            currentUserCoupon:null,
+            currentUserCoupon:null, //领取后的优惠券信息
             login:false,//登录状态
-            cantuse:false, //当前优惠券失效了
+            canuse:false, //当前优惠券失效了
             hasReceive:false, //是否已经领取了优惠券
             receiveFail:false, //优惠券是否能正常使用
-            failmessage:'',
-            successmessage:'',
+            failmessage:'',//失败提示
+            successmessage:'',//成功提示
             loginMethods:false, //登录方式 在手机快捷登录的时候是ture
         }
     },
@@ -73,15 +73,27 @@ export default {
         ...mapState({
             user: state => state.user,
             isLoading: state => state.isLoading,
-            settings:state => state.settings
-        })
+            settings:state => state.settings,
+        }),
+        username:{
+            get:function(){
+                //未登录没有用户名
+                if(!this.$store.state.token){
+                    return;
+                }
+                //是否绑定了手机，有手机号，手机号优先
+                if(this.user.verifiedMobile){
+                    return this.user.verifiedMobile
+                }else{
+                    return this.user.nickname
+                }
+
+            }
+        }
     },
     filters: {
         couponType(type){
-            if(type=='discount'){
-                return '折'
-            }
-            return '元'
+            return type=='discount' ? '折':'元'
         }
     },
     methods:{
@@ -94,9 +106,9 @@ export default {
                 }
             }).then((res)=>{
                 this.coupons=res;
-                //判断优惠券是否已经过期已经是否已经被领完
-                let canUseCoupon= !this.canUseCoupon(res);
-                if(canUseCoupon){
+                //判断优惠券是否还能用
+                let cantUseCoupon= !this.cantUseCoupon(res);
+                if(cantUseCoupon){
                    this.isLogin();
                 }
             }).catch((err)=>{
@@ -104,21 +116,6 @@ export default {
                 Toast.fail(err.message);
             })
         },
-        //是否开启云短信
-        // async getsettingsCloud(){
-        //     await Api.settingsCloud().then(res=>{
-        //         //开启了云短信
-        //         if(res.sms_enabled==1){
-        //             this.cloudSetting=true;
-        //         }else{
-        //             this.cloudSetting=false;
-        //             //跳转登录页
-        //             this.toLogin();
-        //         }
-        //     }).catch(err => {
-        //         Toast.fail(err.message)
-        //     });
-        // },
         //登录后逻辑
         isLogin(){
              if (this.$store.state.token) {
@@ -130,19 +127,17 @@ export default {
                 return;
             }
         },
-        //优惠券类型
+        //优惠券类型过滤
         couponType(coupons){
             //指定优惠
             if(coupons.target){
                 switch (coupons.targetType){
                     case 'course':
-                        return `课程/${coupons.target.title}`
-                        break;
                     case 'classroom':
-                        return `班级/${coupons.target.title}`
+                        return `${coupons.target.title}`
                         break;
                     case 'vip':
-                        return `会员/${coupons.target.name}`
+                        return `${coupons.target.name}`
                         break;
                     default:
                         return ''
@@ -207,12 +202,16 @@ export default {
         //领取优惠券后跳转指定页面
         useCoupon(){
             if(this.currentUserCoupon!=null && this.currentUserCoupon.deadline){ //已经过期
-                let ONEDAY=86400000;
-                let d1=new Date();
-                let d2 = new Date(Date.parse(this.currentUserCoupon.deadline));
-                if(d1.getTime()>(d2.getTime()+ONEDAY)){
+                // let ONEDAY=86400000;
+                // let d1=new Date();
+                // let d2 = new Date(Date.parse(this.currentUserCoupon.deadline));
+                // if(d1.getTime()>(d2.getTime()+ONEDAY)){
+                //     Toast.fail('优惠券已过期');
+                //     return;
+                // }
+                if(this.isOld(this.currentUserCoupon.deadline)){
                     Toast.fail('优惠券已过期');
-                    return;
+                    return ;
                 }
             }
             this.hasreceiveCoupon(this.coupons);
@@ -225,38 +224,51 @@ export default {
             this.loginMethods=true;
             this.newReceiveCoupon(data,true)
         },
+        //判断优惠券是否过期
+        isOld(time){
+            let ONEDAY=86400000;
+            let d1=new Date();
+            let d2 = new Date(Date.parse(time));
+            if(d1.getTime()>(d2.getTime()+ONEDAY)){
+                return true;
+            }
+            return false;
+        },
         //判断优惠券是否可用
-        canUseCoupon(coupon){
-            let result=false;
+        cantUseCoupon(coupon){
             if(coupon.currentUserCoupon!=null){ //已经领取过
                 this.currentUserCoupon=coupon.currentUserCoupon;
                 this.successmessage="您已领取过该批次优惠券，优惠券已放入";
                 this.hasReceive=true;
-                result=true;
-                this.cantuse=!result;
-                return result;
+                this.canuse=false;
+                return true;
             }
             if(Number(coupon.unreceivedNum)==0){ //已领完
                 this.failmessage="优惠券已领完"
                 this.receiveFail=true;
-                result=true;
-                this.cantuse=!result;
-                return result;
+                this.canuse=false;
+                return true;
             }
            if(coupon.deadline){ //已经过期
-                let ONEDAY=86400000;
-                let d1=new Date();
-                let d2 = new Date(Date.parse(coupon.deadline));
-                if(d1.getTime()>(d2.getTime()+ONEDAY)){
+                // let ONEDAY=86400000;
+                // let d1=new Date();
+                // let d2 = new Date(Date.parse(coupon.deadline));
+                // if(d1.getTime()>(d2.getTime()+ONEDAY)){
+                //     this.failmessage="优惠券已过期"
+                //     this.receiveFail=true;
+                //     result=true;
+                //     this.canuse=!result;
+                //     return result;
+                // }
+                if(this.isOld(coupon.deadline)){
                     this.failmessage="优惠券已过期"
                     this.receiveFail=true;
-                    result=true;
-                    this.cantuse=!result;
-                    return result;
+                    this.canuse=false;
+                    return true;
                 }
             }
-            this.cantuse=!result;
-            return result
+            this.canuse=true;
+            return false
         }
     }
 }

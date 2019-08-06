@@ -62,7 +62,6 @@ Vue.use(Toast);
 Vue.use(Checkbox);
 Vue.use(Tab).use(Tabs).use(Dialog);
 Vue.config.productionTip = false;
-Vue.config.devtools = true;
 /* eslint-disable no-new */
 
 Api.getSettings({

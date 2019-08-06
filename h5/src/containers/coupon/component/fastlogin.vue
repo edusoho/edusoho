@@ -23,14 +23,14 @@
         <div class="receive-login-input">
             <van-field 
                 v-model="userinfo.smsCode" 
-                type="text"
+                type="number"
                 placeholder="请输入验证码"
                 clearable
                 maxLength="6"
-                error-message="">
+                ref="smsCode">
                 <div slot="button" @click="clickSmsBtn" :class="['code-btn',cansentCode ? '': 'code-btn--disabled']">
-                <span v-show="!count.showCount">发送验证码</span>
-                <span v-show="count.showCount">{{ count.num }} s</span>
+                    <span v-show="!count.showCount">发送验证码</span>
+                    <span v-show="count.showCount">{{ count.num }} s</span>
                 </div>
             </van-field>
         </div>
@@ -156,6 +156,11 @@ export default {
         },
         // 倒计时
         countDown() {
+            //验证码自动聚焦
+            this.$nextTick(_=>{
+                this.$refs.smsCode.$refs.input.focus()
+            })
+            
             this.count.showCount = true;
             this.count.codeBtnDisable = true;
             this.count.num = 60;
