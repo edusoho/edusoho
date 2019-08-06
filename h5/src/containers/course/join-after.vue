@@ -2,7 +2,7 @@
   <div class="join-after">
     <detail-head :courseSet="details.courseSet"></detail-head>
 
-    <van-tabs v-model="active" :class="tabsClass">
+    <van-tabs v-model="active"  ref="tabs" id="tabs" :class=" tabFixed ? 'isFixed' : '' ">
       <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>
     </van-tabs>
 
@@ -79,8 +79,10 @@ export default {
       active: 1,
       scrollFlag: false,
       tabs: ['课程介绍', '课程目录', '学员评价'],
-      tabsClass: '',
+      tabFixed: false,
       errorMsg: '',
+      offsetTop:'', //tab页距离顶部高度
+      offsetHeight:'' //元素自身的高度
     }
   },
   computed: {
@@ -99,6 +101,17 @@ export default {
     isClassCourse() {
       return Number(this.details.parentId);
     },
+  },
+  mounted(){
+    window.addEventListener('scroll', this.handleScroll);
+    this.$nextTick(function(){
+      const NAVBARHEIGHT=46;
+      const SELFHEIGHT=44;
+      const IMGHEIGHT=document.getElementById("course-detail__head--img").clientHeight;
+      // 这里要得到top的距离和元素自身的高度
+      this.offsetTop = IMGHEIGHT+NAVBARHEIGHT;
+      this.offsetHeight=SELFHEIGHT;
+    });
   },
   watch: {
     selectedPlanId: (val, oldVal) => {
@@ -202,7 +215,16 @@ export default {
         callback();
       }).catch(() => {})
     },
-
-  }
+    handleScroll(){
+      // 得到页面滚动的距离
+      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      console.log(scrollTop)
+      // 判断页面滚动的距离是否大于吸顶元素的位置
+      this.tabFixed = scrollTop > (this.offsetTop - this.offsetHeight);
+    },
+  },
+  destroyed(){
+    window.removeEventListener('scroll', this.handleScroll);
+  },
 }
 </script>
