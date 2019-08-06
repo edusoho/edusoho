@@ -29,16 +29,16 @@ function updateChecked(dataSourceUi,id) {
 
 
 function unRepeatItem(dataSourceUi) {
-	let temp = {};
-	return dataSourceUi.reduce(function(item, next) {
-		if (temp[next.id]) {
-			cd.message({ type:'danger', message: Translator.trans('course.manage.teacher.manage.repeat_tip') });
-		} else {
-			temp[next.id] = true;
-			item.push(next);
-		}
-		return item;
-	}, [])
+  let temp = {};
+  return dataSourceUi.reduce(function(item, next) {
+    if (temp[next.id]) {
+      cd.message({ type:'danger', message: Translator.trans('course.manage.teacher.manage.repeat_tip') });
+    } else {
+      temp[next.id] = true;
+      item.push(next);
+    }
+    return item;
+  }, [])
 }
 
 
