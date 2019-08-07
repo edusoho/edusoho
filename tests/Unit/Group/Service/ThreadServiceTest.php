@@ -787,7 +787,7 @@ class ThreadServiceTest extends BaseTestCase
         $user = array();
         $user['email'] = 'user@user.com';
         $user['nickname'] = 'user';
-        $user['password'] = 'user';
+        $user['password'] = 'user123';
 
         return $this->getUserService()->register($user);
     }
@@ -802,7 +802,7 @@ class ThreadServiceTest extends BaseTestCase
         $user = array();
         $user['email'] = 'user1@user1.com';
         $user['nickname'] = 'user1';
-        $user['password'] = 'user1';
+        $user['password'] = 'user1123';
 
         return $this->getUserService()->register($user);
     }
