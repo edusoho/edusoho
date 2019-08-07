@@ -26,7 +26,7 @@
         <input type="password" class="form-control" name="password" id="password">
       </div>
       {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
-        <div class="form-group cd-mb24 js-drag-jigsaw {% if setting('auth.register_mode') == 'mobile' %}hidden{% endif%}">
+        <div class="form-group cd-mb24 js-drag-jigsaw">
           {% include 'common/drag.html.twig' with { auth: true } %}
         </div>
       {% endif %}
