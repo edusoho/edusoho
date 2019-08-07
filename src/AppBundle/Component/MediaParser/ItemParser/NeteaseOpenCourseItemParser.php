@@ -14,24 +14,26 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
             throw ParserException::PARSED_FAILED_NETEASE();
         }
 
-        $matched = preg_match('/getCurrentMovie.*?id\s*:\s*\'(.*?)\'.*?image\s*:\s*\'(.*?)\'\s*\+\s*\'(.*?)\'\s*\+\s*\'(.*?)\'.*?title\s*:\s*\'(.*?)\'.*?appsrc\s*:\s*\'(.*?)\'.*?src\s*:\s*\'(.*?)\'/s', $response['content'], $matches);
+        $matched = preg_match('/getCurrentMovie.*?id\s*:\s*\'(.*?)\'.*?image\s*:\s*\'(.*?)\'.*?title\s*:\s*\'(.*?)\'.*?host\s*\+\s*\'(.*?)\',/s', $response['content'], $matches);
+        $parseUrl = parse_url($url);
 
-        if (!$matched) {
+        if (!$matched || empty($parseUrl['host'])) {
             throw ParserException::PARSED_FAILED_NETEASE();
         }
 
         $item['id'] = $matches[1];
         $item['uuid'] = 'NeteaseOpenCourse:'.$item['id'];
-        $item['name'] = iconv('gbk', 'utf-8', $matches[5]);
+        $item['name'] = $matches[3];
         $item['page'] = $url;
         $item['pictures'] = array(
-            array('url' => $matches[2].$matches[3].$matches[4]),
+            array('url' => $matches[2]),
         );
 
         $item['files'] = array(
-            array('type' => 'swf', 'url' => $matches[7]),
-            array('type' => 'mp4', 'url' => str_replace('.m3u8', '.mp4', $matches[6])),
-            array('type' => 'm3u8', 'url' => $matches[6]),
+            array(
+                'url' => '//'.$parseUrl['host'].$matches[4],
+                'type' => 'swf',
+            ),
         );
 
         return $item;
