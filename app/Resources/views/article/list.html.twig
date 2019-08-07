@@ -8,7 +8,7 @@
 
 
 {% set bodyClass = 'artcile-cat-page' %}
-
+{% set articleSetting = setting('article') %}
 {% block content %}
 
   {{ render(controller('AppBundle:Article:categoryNav', {categoryCode:categoryCode})) }}
@@ -19,7 +19,7 @@
     </div>
     
     <aside class="col-md-4 article-sidebar">
-      {% include 'article/widget/sidebar.html.twig' %}
+      {% include 'article/widget/sidebar.html.twig' with {'isShowComment': articleSetting.show_comment|default('1') } %}
     </aside>
   </div>
 
