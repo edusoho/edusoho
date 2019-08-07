@@ -124,18 +124,19 @@ class BuildThemeAppCommand extends BaseCommand
 
         $this->output->writeln("<info>    * 制作ZIP包：{$buildDir}/{$filename}.zip</info>");
 
-        $z = new ZipArchive();
-        $z->open("{$buildDir}/{$filename}.zip", ZIPARCHIVE::CREATE);
-        $z->addEmptyDir($filename);
-        self::folderToZip($distDir, $z, strlen("$buildDir/"));
-        $z->close();
+        chdir($buildDir);
+        $command = "zip -r {$filename}.zip {$filename}/";
+        exec($command);
+
+        $zipPath = "{$buildDir}/{$filename}.zip";
+        $this->output->writeln('<question>    * ZIP包大小：'.intval(filesize($zipPath) / 1024).' Kb');
     }
 
     private static function folderToZip($folder, ZipArchive &$zipFile, $exclusiveLength)
     {
         $handle = opendir($folder);
         while (false !== $f = readdir($handle)) {
-            if ($f != '.' && $f != '..') {
+            if ('.' != $f && '..' != $f) {
                 $filePath = "$folder/$f";
 
                 $localPath = substr($filePath, $exclusiveLength);
