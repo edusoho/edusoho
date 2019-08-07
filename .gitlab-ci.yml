@@ -202,6 +202,7 @@ Api Test With 5.5:
   only:
     refs:
       - develop
+      - bugfix/52065-api-test-sql
     variables:
       - $REPOSITORY == "main"
 # 5.5 with js-test-unit:
