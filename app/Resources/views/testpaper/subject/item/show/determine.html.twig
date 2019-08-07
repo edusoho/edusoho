@@ -1,0 +1,27 @@
+{% set answer = item.answer %}
+{% set errors = item.errors|default([]) %}
+<div class="subject-item js-subject-item js-subject-main-item" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
+  <div class="subject-item__title">
+    <span class="subject-item__number js-subject-item-number {% if errors is not empty %}subject-item__number--danger{% endif %}">
+    {% if seq|default(null) %}
+      {{ seq }}
+    {% else %}
+      {{ loop.index }}
+    {% endif %}
+    </span>
+    {% if errors.stem is not defined %}
+      <div class="subject-item__stem">{{ item.stem|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
+    {% elseif errors.stem.code == 100001 %}
+      <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_stem'|trans }}</span>
+    {% endif %}
+  </div>
+  <div class="subject-item__body">
+      <label class="cd-radio single-item subject-forbid {% if answer is sameas(true) or answer is sameas('true') %}checked{% endif %}">
+        <input type="radio" data-toggle="cd-radio" name="right" value="true" {% if answer is sameas(true) or answer is sameas('true') %}checked{% endif %}><span class="single-item__text">{{ 'course.testpaper_manage.import.re_edit.correct'|trans }}</span>
+      </label>
+      <label class="cd-radio single-item subject-forbid {% if answer is sameas(false) or answer is sameas('false') %}checked{% endif %}">
+        <input type="radio" data-toggle="cd-radio" name="wrong" value="false" {% if answer is sameas(false) or answer is sameas('false') %}checked{% endif %}><span class="single-item__text">{{ 'course.testpaper_manage.import.re_edit.wrong'|trans }}</span>
+      </label>
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
+</div>

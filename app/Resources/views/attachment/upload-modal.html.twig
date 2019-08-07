@@ -48,6 +48,7 @@
     <input type="hidden" data-role="metas" data-ids-class="{{ idsClass }}" data-list-class="{{ listClass }}"
            data-file-single-size-limit="{{ single_file_size == 0  ? 2048 * 1024 * 1024 : single_file_size * 1024 * 1024 }}"
            data-url=""/>
+    <input type="hidden" name="module" value="{{ module|default('') }}">
   </div>
 
 

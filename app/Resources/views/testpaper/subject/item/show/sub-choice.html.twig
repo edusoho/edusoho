@@ -1,0 +1,38 @@
+{% set options = item.options %}
+{% set answers = item.answers %}
+{% set errors = item.errors|default([]) %}
+<div class="subject-item subject-sub-item js-subject-item" id="sub{% if seq is defined %}{{seq - 1}}{% else %}{{ subKey }}{% endif %}" data-material-token="{{ token|default('') }}" data-key="{% if seq is defined %}{{seq - 1}}{% else %}{{ subKey }}{% endif %}">
+  <div class="subject-item__title subject-sub-item__title">
+    <span class="subject-sub-item__number">
+      {% if seq|default(null) %}
+        {{ '(' ~ seq ~ ')'  }}
+      {% else %}
+        {{ '(' ~ loop.index ~ ')'  }}
+      {% endif %}
+    </span>
+    {% if errors.stem is not defined %}
+      <div class="subject-sub-item__stem">{{ item.stem|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
+    {% elseif errors.stem.code == 100001 %}
+      <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_stem'|trans }}</span>
+    {% endif %}
+  </div>
+  <div class="subject-item__body">
+    {% for option_key,option in options %}
+      <label class="cd-checkbox single-item sub-single-item subject-forbid {% if option_key in answers %}checked{% endif %}">
+        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}">
+        <span>{{ dict_text('questionOption', option_key) }}. </span>
+        <span class="single-item__text {% if errors['options_'~option_key] is defined %}single-item__text--danger{% endif %}">
+          {% if errors['options_'~option_key] is not defined %}
+            {{ option|striptags('<br><img>')|bbCode2Html|raw|nl2br }}
+          {% elseif errors['options_'~option_key].code == 100002 %}
+            {{ 'course.testpaper_manage.import.re_edit.error_no_option'|trans }}
+          {% endif %}
+        </span>
+      </label>
+    {% endfor %}
+    {% if errors.answers is defined and errors.answers.code == 100003 %}
+      <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_answer'|trans }}</span>
+    {% endif %}
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with {position:'sub', type: item.type, difficulty: item.difficulty, score: item.score } %}
+</div>

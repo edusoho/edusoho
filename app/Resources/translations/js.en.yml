@@ -589,6 +589,14 @@ course.question.create_hint: Added options
 course.question.right_answer_hint: Correct answer
 course.question.right_answer_content_hint: Please enter the option content
 course.question.type.single_choice: single choice
+course.question.type.uncertain_choice: uncertain choice
+course.question.type.choice: choice
+course.question.type.determine: determine
+course.question.type.essay: essay
+course.question.type.fill: fill
+course.question.type.material: material
+course.question.type.unknown: unknown
+course.question.is_updating_hint: question is updating, please wait
 
 course.notebook.delete_hint: Really want to delete the note?
 course.notebook.empty_note_content_notice: please input the note content!
@@ -1410,6 +1418,43 @@ wechat.notification.homepage_open_tip: <span class="%messageClass%">"WeChat noti
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">go to open</span>
 wechat.notification.cloud_open_tip: Please open ES Cloud
 
+#试卷导入引导
+document.import.intro_hover: >
+  <div class="document-import-intro-title cd-text-warning"><i class="es-icon es-icon-xinxi cd-mr8"></i>提示</div>
+  <div class="document-import-intro-content">
+    <div align="center">New import function,Just try.</div>
+  </div>
+document.import.skip_btn: I know!
+subject.testpaper_title_empty_hint: Testpaper title can not be empty
+subject.testpaper_title_too_long_hint: Enter up to 50 characters
+subject.delete.title: Delete confirm
+subject.delete.content: Are you sure you want to delete this question?
+subject.save_success: Save successfully!
+subject.select_question_hint: Select question please
+subject.question_unit: ''
+subject.comma: ,
+subject.period: .
+subject.miss_score_no_more_than_score: Missing score is no more than score
+subject.score_update_success: Score modified successfully
+subject.difficulty_update_success: Difficulty modified successfully
+subject.question_count: '%count% questions total'
+subject.total_score: '%totalScore% score total'
+subject.is_editing_warning: 'Finish %seq% question before other operation'
+subject.sub_is_editing_warning: 'Please finish editing sub-question %seq% of material %parentNum%'
+subject.question_score_unit: point
+subject.stem_required: Enter stem please
+subject.choice_option_least_two: At least 2 options required
+subject.choice_option_most_ten: At most 10 options required
+subject.validate.stem_required: The content of the title must not be empty
+subject.validate.option_required: The content of the option must not be empty
+subject.choice_answer_least_two: At least 2 answers required
+subject.choice_require_answer: must choose a answer
+subject.essay_require_answer: Enter answer please
+subject.symbol.picture: picture
+subject.question_error_tip: 'The %seqs% question has error'
+subject.material_nosub_tip: The first %seq% title material is missing subtopics, please add subtopic first
+subject.question_delete_tip: Please keep at least one topic
+
 user.account.order_pay_course_close_title: The course is closed
 user.account.order_pay_course_close_hint: The course in this order has been closed.Confirmed to pay?
 user.account.order_pay_classroom_close_title: The classroom is closed
@@ -1418,3 +1463,4 @@ user.account.order_pay_vip_close_title: The vip level is closed
 user.account.order_pay_vip_close_hint: The vip level in this order has been closed.Confirmed to pay?
 user.account.order_pay: Continue
 user.account.order_not_pay: Not paying
+

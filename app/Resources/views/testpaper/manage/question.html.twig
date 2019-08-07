@@ -30,6 +30,8 @@ tr.placeholder:before {
 }
 </style>
 {% set questionTypesDict = getQuestionTypes() %}
+{% set questionTypesSeq = getQuestionTypeSeq() %}
+{% set questionTypesDict = sortQuestionTypes(questionTypesDict, testpaper.questionTypeSeq) %}
 <div class="panel-col" id="testpaper-items-manager">
   <div class="courseset-manage-body__title">{{testpaper.name}}</div>
   <div class="clearfix">
@@ -38,7 +40,18 @@ tr.placeholder:before {
       <button data-url="{{ path('course_set_manage_question_picker',{id:courseSet.id, testpaperId:testpaper.id}) }}" class="cd-btn cd-btn-info cd-btn-sm pull-right" data-role="pick-item"><i class="cd-icon cd-icon-add cd-text-sm"></i> {{'course.testpaper_manage.question.create_btn'|trans}}</button>
       <ul class="nav nav-pills nav-mini" id="testpaper-question-nav">
         {% for type, name in questionTypesDict %}
-          <li {% if loop.index == 1 %}class="active"{% endif %}><a href="javascript:" data-type="{{ type }}" data-name="{{ questionTypesDict[type] }}" class="testpaper-nav-link">{{ questionTypesDict[type] }}</a></li>
+          <li class="question-type-table{% if loop.index == 1 %} active{% endif %}">
+            <a href="javascript:" data-type="{{ type }}" data-name="{{ questionTypesDict[type] }}" class="testpaper-nav-link"><span class="js-move-icon mrm"><i class="es-icon es-icon-yidong"></i></span><span class="mlm">{{ questionTypesDict[type] }}</span>
+              <span class="js-count-{{ type }}">
+              {% if type == 'material' %}
+                ({{ subCounts }})
+              {% else %}
+                ({{ count(questions[type]|default([])) }})
+              </span>
+              {% endif %}
+            </a>
+            <input type="hidden" name="questionTypeSeq" value="{{ questionTypesSeq[type] }}">
+          </li>
         {% endfor %}
       </ul>
     </div>

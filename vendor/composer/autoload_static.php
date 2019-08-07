@@ -31,6 +31,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
     );
 
     public static $prefixLengthsPsr4 = array (
+        'Z' => 
+        array (
+            'Zend\\Escaper\\' => 13,
+        ),
         'T' => 
         array (
             'Topxia\\Api\\' => 11,
@@ -77,6 +81,8 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
+            'PhpOffice\\PhpWord\\' => 18,
+            'PhpOffice\\Common\\' => 17,
         ),
         'O' => 
         array (
@@ -102,6 +108,7 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         ),
         'E' => 
         array (
+            'ExamParser\\' => 11,
             'Endroid\\QrCode\\' => 15,
         ),
         'D' => 
@@ -135,6 +142,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
     );
 
     public static $prefixDirsPsr4 = array (
+        'Zend\\Escaper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-escaper/src',
+        ),
         'Topxia\\Api\\' => 
         array (
             0 => __DIR__ . '/../..' . '/api/src/Topxia/Api',
@@ -263,6 +274,14 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
+        'PhpOffice\\PhpWord\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/phpword/src/PhpWord',
+        ),
+        'PhpOffice\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/common/src/Common',
+        ),
         'Omnipay\\WechatPay\\' => 
         array (
             0 => __DIR__ . '/..' . '/codeages/omnipay-wechatpay/src',
@@ -290,6 +309,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'Facebook\\' => 
         array (
             0 => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook',
+        ),
+        'ExamParser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/exam-parser/src',
         ),
         'Endroid\\QrCode\\' => 
         array (
@@ -1016,6 +1039,7 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'PHP_Token_YIELD' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_YIELD_FROM' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'ParseError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ParseError.php',
+        'PclZip' => __DIR__ . '/..' . '/pclzip/pclzip/pclzip.lib.php',
         'RecursiveCallbackFilterIterator' => __DIR__ . '/..' . '/symfony/polyfill-php54/Resources/stubs/RecursiveCallbackFilterIterator.php',
         'SebastianBergmann\\Comparator\\ArrayComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/ArrayComparator.php',
         'SebastianBergmann\\Comparator\\Comparator' => __DIR__ . '/..' . '/sebastian/comparator/src/Comparator.php',

@@ -42,7 +42,7 @@ class MailServiceProvider extends Extension implements ServiceProviderInterface
                 /*
                  * @var Mail $mail
                  */
-                if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
+                if (isset($cloudConfig['status']) && 'enable' == $cloudConfig['status']) {
                     $mail = $biz['cloud_mail']($mailOptions);
                 } else {
                     $mail = $biz['normal_mail']($mailOptions);

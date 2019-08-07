@@ -4,6 +4,7 @@ namespace Tests\Unit\Testpaper\Service;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\CurrentUser;
 
 class TestpaperServiceTest extends BaseTestCase
@@ -360,8 +361,8 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $updatedItem = $this->getTestpaperService()->updateItem($item['id'], $fields);
 
-        $this->assertEquals($fields['score'], $updatedItem['score']);
-        $this->assertEquals($fields['missScore'], $updatedItem['missScore']);
+        $this->assertEquals((int) $fields['score'], (int) $updatedItem['score']);
+        $this->assertEquals((int) $fields['missScore'], (int) $updatedItem['missScore']);
     }
 
     public function testDeleteItem()
@@ -701,7 +702,7 @@ class TestpaperServiceTest extends BaseTestCase
         $result = $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], $fields);
 
         $this->assertEquals($fields['status'], $result['status']);
-        $this->assertEquals($fields['score'], $result['score']);
+        $this->assertEquals((int) $fields['score'], (int) $result['score']);
         $this->assertEquals($fields['rightItemCount'], $result['rightItemCount']);
     }
 
@@ -1915,7 +1916,31 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertArrayEquals($testpaperResult2, $results[2]);
     }
 
-    protected function createTestpaper1()
+    public function testGetCheckedQuestionTypeBySeq()
+    {
+        $customFields = array(
+            'metas' => array(
+                'ranges' => array('courseId' => 0),
+                'counts' => array(
+                    'choice' => 1,
+                    'fill' => 1,
+                    'determine' => 1,
+                ),
+            ),
+        );
+        $testpaper = $this->createTestpaper1($customFields);
+        $checkedQuestionTypes = $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper);
+        $this->assertEquals(array('choice', 'fill', 'determine'), $checkedQuestionTypes);
+    }
+
+    public function testGetCheckedQuestionTypeBySeqEmpty()
+    {
+        $testpaper = $this->createTestpaper1();
+        $checkedQuestionTypes = $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper);
+        $this->assertEmpty($checkedQuestionTypes);
+    }
+
+    protected function createTestpaper1($customFields = array())
     {
         $fields = array(
             'name' => 'testpaper',
@@ -1928,8 +1953,74 @@ class TestpaperServiceTest extends BaseTestCase
             ),
             'type' => 'testpaper',
         );
+        $fields = array_merge($fields, $customFields);
 
         return $this->getTestpaperService()->createTestpaper($fields);
+    }
+
+    public function testBuildExportTestpaperItems()
+    {
+        $customFields = array(
+            'metas' => array(
+                'ranges' => array('courseId' => 0),
+                'counts' => array(
+                    'choice' => 1,
+                    'fill' => 1,
+                    'determine' => 1,
+                    'material' => 1,
+                ),
+            ),
+        );
+        $testpaper = $this->createTestpaper1($customFields);
+        $testpaperItems = $this->createTestpaperItemWithMaterial($testpaper);
+        $result = $this->getTestpaperService()->buildExportTestpaperItems($testpaper['id']);
+        $this->assertEquals($testpaperItems[0]['questionType'], $result[0]['type']);
+    }
+
+    public function testImportTestpaper()
+    {
+        $importData = array(
+            'title' => 'test title',
+            'questions' => array(
+                array(
+                    'stem' => 'question stem',
+                    'type' => 'choice',
+                    'options' => array('option1', 'option2', 'option3', 'option4'),
+                    'score' => '2.0',
+                    'missScore' => '1.0',
+                    'difficulty' => 'normal',
+                    'answers' => array(0, 1),
+                ),
+                array(
+                    'stem' => 'question stem',
+                    'type' => 'material',
+                    'score' => '2.0',
+                    'difficulty' => 'normal',
+                    'subQuestions' => array(
+                        array(
+                            'stem' => 'question stem',
+                            'type' => 'choice',
+                            'options' => array('option1', 'option2', 'option3', 'option4'),
+                            'score' => '2.0',
+                            'missScore' => '1.0',
+                            'difficulty' => 'normal',
+                            'answers' => array(0, 1),
+                        ),
+                    ),
+                ),
+            ),
+        );
+
+        $token = array(
+            'token' => 'testtoken',
+            'data' => array(
+                'courseSetId' => 1,
+            ),
+        );
+
+        $testpaper = $this->getTestpaperService()->importTestpaper($importData, $token);
+        $this->assertEquals($importData['title'], $testpaper['name']);
+        $this->assertEquals($token['data']['courseSetId'], $testpaper['courseSetId']);
     }
 
     protected function createHomework()
@@ -1977,6 +2068,35 @@ class TestpaperServiceTest extends BaseTestCase
         $determineQuestions = $this->generateDetermineQuestions($testpaper['courseSetId'], 1);
 
         $questions = array_merge($choiceQuestions, $fillQuestions, $determineQuestions);
+
+        $items = array();
+        $seq = 1;
+        foreach ($questions as $question) {
+            $fields = array(
+                'testId' => $testpaper['id'],
+                'seq' => $seq,
+                'questionId' => $question['id'],
+                'questionType' => $question['type'],
+                'parentId' => $question['parentId'],
+                'score' => $question['score'],
+                'missScore' => 0,
+                'type' => $testpaper['type'],
+            );
+            $items[] = $this->getTestpaperService()->createItem($fields);
+            ++$seq;
+        }
+
+        return $items;
+    }
+
+    protected function createTestpaperItemWithMaterial($testpaper)
+    {
+        $choiceQuestions = $this->generateChoiceQuestions($testpaper['courseSetId'], 1);
+        $fillQuestions = $this->generateFillQuestions($testpaper['courseSetId'], 1);
+        $determineQuestions = $this->generateDetermineQuestions($testpaper['courseSetId'], 1);
+        $materialQuestions = $this->generateMaterialQuestions($testpaper['courseSetId'], 1);
+        $subChoiceQuestions = $this->generateChoiceQuestions($testpaper['courseSetId'], 1, null, $materialQuestions[0]['id']);
+        $questions = array_merge($choiceQuestions, $fillQuestions, $determineQuestions, $materialQuestions, $subChoiceQuestions);
 
         $items = array();
         $seq = 1;
@@ -2072,7 +2192,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $this->getTestpaperService()->addTestpaperResult($fields);
     }
 
-    protected function generateChoiceQuestions($courseId, $count, $difficulty = null)
+    protected function generateChoiceQuestions($courseId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
@@ -2089,6 +2209,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'courseSetId' => $courseId,
                 'target' => 'course/'.$courseId,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
+                'parentId' => $parentId,
             );
 
             $questions[] = $this->getQuestionService()->create($question);
@@ -2097,7 +2218,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    protected function generateFillQuestions($courseId, $count, $difficulty = null)
+    protected function generateFillQuestions($courseId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
@@ -2107,6 +2228,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'target' => 'course/'.$courseId,
                 'courseSetId' => $courseId,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
+                'parentId' => $parentId,
             );
 
             $questions[] = $this->getQuestionService()->create($question);
@@ -2115,7 +2237,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    protected function generateDetermineQuestions($courseId, $count, $difficulty = null)
+    protected function generateDetermineQuestions($courseId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
@@ -2126,6 +2248,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'courseSetId' => $courseId,
                 'answer' => array(0),
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
+                'parentId' => $parentId,
             );
 
             $questions[] = $this->getQuestionService()->create($question);
@@ -2134,7 +2257,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    protected function generateEssayQuestions($courseId, $count, $difficulty = null)
+    protected function generateEssayQuestions($courseId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
@@ -2145,6 +2268,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'courseSetId' => $courseId,
                 'answer' => array('xxx'),
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
+                'parentId' => $parentId,
             );
 
             $questions[] = $this->getQuestionService()->create($question);
@@ -2192,6 +2316,9 @@ class TestpaperServiceTest extends BaseTestCase
         return $this->createService('Question:QuestionService');
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');

@@ -1,0 +1,26 @@
+<div class="subject-list subject-rect js-subject-list cd-mt16">
+  <div class="subject-rect__title">{{ 'course.testpaper_manage.import.re_edit.question_list'|trans }}</div>
+  <div class="subject-list__tip js-error-tip"></div>
+  <div class="subject-list__body js-subject-list-body row">
+    {% for key,item in questions %}
+      <div class="col-sm-3 subject-list-item js-subject-list-item">
+        <div class="subject-list-item__num {% if item.errors is defined %}subject-list-item__num--error{% endif %} js-subject-anchor" data-anchor="{{'#' ~ key }}">
+          <span class="js-list-index">{{ loop.index }}</span>
+          {% if item.type != 'material' %}
+            <label class="sb-checkbox cd-checkbox js-show-checkbox hidden" data-type="{{ item.type }}"><input type="checkbox" data-toggle="cd-checkbox"></label>
+          {% endif %}
+        </div>
+        <span class="js-type-name">{{ dict_text('questionType', item.type)|slice(0,3) }}</span>
+      </div>
+    {% endfor %}
+  </div>
+  <button class="cd-btn cd-btn-primary btn-block js-batch-btn" type="button">{{ 'course.testpaper_manage.import.re_edit.batch_operate'|trans }}</button>
+  <div class="subject-batch js-subject-wrap hidden">
+    <label class="cd-checkbox subject-batch-checkbox js-batch-select"><input type="checkbox" data-toggle="cd-checkbox"> {{ 'course.testpaper_manage.import.re_edit.select_all'|trans }}</label>
+    <div class="row">
+      <div class="col-sm-6"><a href="javascript:;" class="js-score-setting">{{ 'course.testpaper_manage.import.re_edit.batch_set_score'|trans }}</a></div>
+      <div class="col-sm-6 text-right"><a href="javascript:;" class="js-difficult-setting">{{ 'course.testpaper_manage.import.re_edit.batch_set_difficulty'|trans }}</a></div>
+    </div>
+    <button class="cd-btn cd-btn-primary btn-block cd-mt8 js-finish-btn" type="button">{{ 'course.testpaper_manage.import.re_edit.finish_batch_operate'|trans }}</button>
+  </div>
+</div>
