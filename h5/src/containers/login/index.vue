@@ -143,7 +143,7 @@ export default {
           name: 'fastlogin',
         })
       }
-      
+
     }
   },
 

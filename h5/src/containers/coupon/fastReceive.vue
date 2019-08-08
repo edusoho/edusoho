@@ -171,7 +171,7 @@ export default {
                     Toast.success('领取成功，正在跳转到详情页...')
                     setTimeout(()=>{
                         this.useCoupon();
-                    },3000);  
+                    },3000);
                     return;
                 }else{
                     this.currentUserCoupon=res;

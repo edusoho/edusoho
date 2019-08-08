@@ -160,7 +160,7 @@ export default {
             this.$nextTick(_=>{
                 this.$refs.smsCode.$refs.input.focus()
             })
-            
+
             this.count.showCount = true;
             this.count.codeBtnDisable = true;
             this.count.num = 60;

@@ -48,7 +48,7 @@ export default {
               that.sitePlugins=2
             }
             that.getsettingsCloud();
-          } 
+          }
         })
         .catch(err => {
           Toast.fail(err.message);

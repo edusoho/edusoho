@@ -138,7 +138,7 @@ export default {
                 if(res.auth.privacy_policy_enabled){
                     this.privacyPolicy=true
                 }
-            }).catch(err => { 
+            }).catch(err => {
                 Toast.fail(err.message)
             });
         },
