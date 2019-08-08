@@ -232,13 +232,14 @@ export default {
       if( scrollTop > (this.offsetTop - this.offsetHeight-2)){
         this.tabFixed=true;
         //PROCESSBAR.classList.add("progress-bar-fix");
-        SWIPER.classList.add("swiper-directory-fix");
-        LESSON.style.marginTop=PROCESSHEIGHT+SWIPERHEIGHT+"px";
+       SWIPER ? SWIPER.classList.add("swiper-directory-fix") : null;
+       LESSON ? (LESSON.style.marginTop=PROCESSHEIGHT+SWIPERHEIGHT+"px"): null;
       }else{
         this.tabFixed=false;
         //PROCESSBAR.classList.remove("progress-bar-fix");
-        SWIPER.classList.remove("swiper-directory-fix");
-        LESSON.style.marginTop=0+"px";
+        SWIPER ? SWIPER.classList.remove("swiper-directory-fix") : null;
+       // SWIPER.classList.remove("swiper-directory-fix");
+        LESSON ? (LESSON.style.marginTop=0+"px") : null;
        // LESSON.style.height="auto"
       }
     },

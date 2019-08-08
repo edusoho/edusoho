@@ -99,7 +99,7 @@
         }
     }
     .util-directory{
-        margin-left: vw(15);
+        margin: vw(10) 0 0 vw(15);
         padding-left: vw(15);
         height: vw(30);
         width:vw(345);
@@ -112,7 +112,7 @@
         line-height:vw(22);
     }
     .lesson-directory{
-        margin: vw(10) 0 vw(10) vw(15);
+        margin: vw(10) 0 0 vw(15);
         width: vw(345);
         color: #333333;
         border:1px solid rgba(245,245,245,1);

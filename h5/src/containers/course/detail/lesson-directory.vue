@@ -77,7 +77,7 @@
         </div>
       </div>
     </div>
-    <div v-if="taskNumber==0" class="noneItem">
+    <div v-if="taskNumber==0 && unitNum==0" class="noneItem">
       <img src="static/images/none.png" class="notask" />
       <p>暂时还没有课时哦...</p>
     </div>
@@ -106,6 +106,10 @@ export default {
       default: -1
     },
     taskNumber: {
+      type: Number,
+      default: -1
+    },
+    unitNum: {
       type: Number,
       default: -1
     }

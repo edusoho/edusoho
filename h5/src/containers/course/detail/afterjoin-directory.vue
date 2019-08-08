@@ -18,6 +18,7 @@
                 :lesson="list.children"
                 :taskId="taskId"
                 :taskNumber="item[slideIndex].lessonNum"
+                :unitNum="item[slideIndex].unitNum"
               ></lesson-directory>
             </div>
           </template>
@@ -26,6 +27,7 @@
             :lesson="item[slideIndex].children" 
             :taskId="taskId" 
             :taskNumber="item[slideIndex].lessonNum" 
+            :unitNum="item[slideIndex].unitNum"
             v-bind="$attrs"
             v-on="$listeners"></lesson-directory>
           </div>
@@ -114,6 +116,7 @@ export default {
       let res = this.OptimizationCourseLessons;
       if(res.length==0){
          this.nodata=true;
+         this.lessonNum=0;
         return
       }
       this.nodata=false;
@@ -145,8 +148,14 @@ export default {
     },
     //定位到指定目录
     newScroll() {
-      let app = document.querySelector('#app');
-      let scrolltop=document.getElementById(this.taskId).offsetTop
+      const NARTAB=44;
+      const PROCESSBAR=document.getElementById("progress-bar");
+      const SWIPER = document.getElementById("swiper-directory");
+      const PROCESSHEIGHT =  PROCESSBAR == null ? 0 : PROCESSBAR.offsetHeight;
+      const SWIPERHEIGHT =  SWIPER == null ? 0 : SWIPER.offsetHeight;
+      // 52 有待更改改，测试数据
+      let scrolltop=document.getElementById(this.taskId).offsetTop-
+                    PROCESSHEIGHT-NARTAB-SWIPERHEIGHT-52;
       window.scrollTo({
         top: scrolltop
       })
