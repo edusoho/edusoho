@@ -1,5 +1,5 @@
 <template>
-  <div class="course-detail__head">
+  <div class="course-detail__head" id="course-detail__head">
     <div class="course-detail__nav--btn" @click="viewAudioDoc" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen">
       文稿
     </div>

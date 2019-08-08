@@ -180,10 +180,13 @@ export default {
         Toast("敬请期待");
         return;
       }
+      let nextTask={
+        id:task.id
+      }
+      // 更改store中的当前学习
+      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, {nextTask});
 
-      this.currentTask = task.id;
       const details = this.details;
-
       !details.allowAnonymousPreview &&
         this.$router.push({
           name: "login",

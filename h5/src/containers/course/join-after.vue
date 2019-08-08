@@ -9,7 +9,7 @@
      <!-- 课程目录 -->
     <div class="join-after__content">
       <div v-show="active == 1">
-        <div class="progress-bar" id="progress-bar">
+        <div :class="['progress-bar', tabFixed ? 'progress-bar-fix' : '']" id="progress-bar">
           <div class="progress-bar__content">
             <div class="progress-bar__rate" :style="{'width': progress}"></div>
           </div>
@@ -25,6 +25,7 @@
         <afterjoin-directory
         @showDialog="showDialog"
         :errorMsg="errorMsg"
+        :isFixed="isFixed"
         ></afterjoin-directory>
       </div>
 
@@ -82,7 +83,8 @@ export default {
       tabFixed: false,
       errorMsg: '',
       offsetTop:'', //tab页距离顶部高度
-      offsetHeight:'' //元素自身的高度
+      offsetHeight:'', //元素自身的高度
+      isFixed:false
     }
   },
   computed: {
@@ -107,7 +109,7 @@ export default {
     this.$nextTick(function(){
       const NAVBARHEIGHT=46;
       const SELFHEIGHT=44;
-      const IMGHEIGHT=document.getElementById("course-detail__head--img").clientHeight;
+      const IMGHEIGHT=document.getElementById("course-detail__head").offsetHeight;
       // 这里要得到top的距离和元素自身的高度
       this.offsetTop = IMGHEIGHT+NAVBARHEIGHT;
       this.offsetHeight=SELFHEIGHT;
@@ -216,11 +218,29 @@ export default {
       }).catch(() => {})
     },
     handleScroll(){
+      const PROCESSBAR=document.getElementById("progress-bar");
+      const DOCUMENTHEIGHT = document.documentElement.clientHeight;
+      const SWIPER = document.getElementById("swiper-directory");
+      const PROCESSHEIGHT =  PROCESSBAR == null ? 0 : PROCESSBAR.offsetHeight;
+      const SWIPERHEIGHT =  SWIPER == null ? 0 : SWIPER.offsetHeight;
+      const LESSON = document.getElementById("lesson-directory");
       // 得到页面滚动的距离
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-      console.log(scrollTop)
-      // 判断页面滚动的距离是否大于吸顶元素的位置
-      this.tabFixed = scrollTop > (this.offsetTop - this.offsetHeight);
+      let scrollTop = window.pageYOffset ||
+                      document.documentElement.scrollTop ||
+                      document.body.scrollTop;
+      // 判断页面滚动的距离是否大于吸顶元素的位置,并将课程的高度固定
+      if( scrollTop > (this.offsetTop - this.offsetHeight-2)){
+        this.tabFixed=true;
+        //PROCESSBAR.classList.add("progress-bar-fix");
+        SWIPER.classList.add("swiper-directory-fix");
+        LESSON.style.marginTop=PROCESSHEIGHT+SWIPERHEIGHT+"px";
+      }else{
+        this.tabFixed=false;
+        //PROCESSBAR.classList.remove("progress-bar-fix");
+        SWIPER.classList.remove("swiper-directory-fix");
+        LESSON.style.marginTop=0+"px";
+       // LESSON.style.height="auto"
+      }
     },
   },
   destroyed(){

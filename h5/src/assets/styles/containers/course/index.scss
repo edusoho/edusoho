@@ -332,11 +332,12 @@
   }
   .progress-bar {
    // margin-top: 44px;
-    height: vw(44);
-    padding: 15px vw(20) 0 vw(20) ;
+   // height: vw(44);
+    padding: vw(15) vw(20) vw(15) vw(20) ;
     //box-shadow: 0px 2px 6px 0px rgba(49,49,49,0.1);
     display: flex;
     align-items: center;
+    background: #fff;
     &__content {
       background-color: #f7f7f7;
       border-radius: vw(46);
@@ -358,7 +359,12 @@
       @extend .font-family-PFM;
     }
   }
-
+  .progress-bar-fix{
+    position: fixed;
+    top: 46px;
+    width: 100%;
+    box-sizing: border-box;
+  }
   // 试看
   &.try {
     .directory .e-panel-body {

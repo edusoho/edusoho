@@ -8,8 +8,7 @@
         @changeChapter="changeChapter"
         :hasChapter="hasChapter"
       ></swiper-directory>
-      <div ref="wrapper" class="wrapper" v-if="item.length>0">
-        <div>
+      <div style="overflow:scroll" id="lesson-directory" v-if="item.length>0">
           <template v-if="chapterNum>0">
             <div v-for="(list, index) in item[slideIndex].children" :key="index" class="pd-bo">
               <util-directory :util="list"></util-directory>
@@ -30,11 +29,10 @@
             v-bind="$attrs"
             v-on="$listeners"></lesson-directory>
           </div>
-        </div>
       </div>
     </div>
 
-    <div v-if="nodata&&lessonNum==0" class="noneItem">
+    <div v-if="nodata && lessonNum==0" class="noneItem">
       <img src="static/images/none.png" class="nodata" />
       <p>暂时还没有课程哦...</p>
     </div>
@@ -59,6 +57,7 @@ export default {
     utilDirectory,
     lessonDirectory
   },
+  props:['isFixed'],
   data() {
     return {
       scroll: "",
@@ -92,7 +91,7 @@ export default {
   watch: {
     nextStudy: {
       handler: "getNextStudy",
-      immediate: true
+      immediate: true,
     },
     selectedPlanId: {
       handler: "processItem",
@@ -100,17 +99,14 @@ export default {
       deep:true,
     }
   },
-  created(){
-   // this.processItem()
-  },
   methods: {
     getNextStudy() {
       if (this.nextStudy.nextTask) {
         this.taskId = Number(this.nextStudy.nextTask.id);
-        if (this.scroll) {
-          this.scroll.scrollToElement(document.getElementById(this.taskId));
-          this.scroll.refresh();
-        }
+        // if (this.scroll) {
+        //   this.scroll.scrollToElement(document.getElementById(this.taskId));
+        //   this.scroll.refresh();
+        // }
       }
     },
     //处理数据
@@ -147,39 +143,14 @@ export default {
       }
       this.nodata=true;
     },
-    //初始化BScroll，定位到指定目录
+    //定位到指定目录
     newScroll() {
-      const WRAPPER = this.$refs.wrapper;
-      const DOCUMENTHEIGHT = document.documentElement.clientHeight;
-      const IMGHEIGHT =
-        document.getElementById("course-detail__head--img") == null
-          ? 0
-          : document.getElementById("course-detail__head--img").clientHeight;
-      const MARGINTOP = 0;
-      const PROCESSHEIGHT =
-        document.getElementById("progress-bar") == null
-          ? 0
-          : document.getElementById("progress-bar").clientHeight;
-      const SWIPERHEIGHT =
-        document.getElementById("swiper-directory") == null
-          ? 0
-          : document.getElementById("swiper-directory").clientHeight;
-      const NAVHEIGHT = 46;
-      const TABSHEIGHT = 44;
-      if (WRAPPER) {
-        WRAPPER.style.height =
-          DOCUMENTHEIGHT -
-          IMGHEIGHT -
-          PROCESSHEIGHT -
-          SWIPERHEIGHT -
-          MARGINTOP -
-          NAVHEIGHT -
-          TABSHEIGHT +
-          "px";
-        this.scroll = new BScroll(WRAPPER, options);
-        this.scroll.scrollToElement(document.getElementById(this.taskId));
-        this.scroll.refresh();
-      }
+      let app = document.querySelector('#app');
+      let scrolltop=document.getElementById(this.taskId).offsetTop
+      window.scrollTo({
+        top: scrolltop
+      })
+
     },
     //类型操作
     judgType(item, list, index) {
