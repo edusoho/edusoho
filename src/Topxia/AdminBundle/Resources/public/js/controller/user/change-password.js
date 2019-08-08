@@ -29,10 +29,15 @@ define(function(require, exports, module) {
             }
         });
 
+        Validator.addRule("spaceNoSupport", function(options) {
+            var value = $(options.element).val();
+            return value.indexOf(' ') < 0;
+        }, Translator.trans('validate.have_spaces'));
+
         validator.addItem({
             element: '[name="newPassword"]',
             required: true,
-            rule: 'minlength{min:5} maxlength{max:20}'
+            rule: 'minlength{min:5} maxlength{max:20} spaceNoSupport'
         });
 
         validator.addItem({

@@ -1681,7 +1681,7 @@ class CourseServiceTest extends BaseTestCase
         $user = array();
         $user['email'] = 'normal@user.com';
         $user['nickname'] = 'normal';
-        $user['password'] = 'user';
+        $user['password'] = 'user123';
         $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
         $user['roles'] = array('ROLE_USER');

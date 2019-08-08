@@ -88,6 +88,10 @@ abstract class BaseRegister
         if (!empty($registration['truename']) && !SimpleValidator::truename($registration['truename'])) {
             throw UserException::TRUENAME_INVALID();
         }
+
+        if (!empty($registration['password']) && !SimpleValidator::password($registration['password'])) {
+            throw UserException::PASSWORD_INVALID();
+        }
     }
 
     protected function beforeSave($registration, $user = array())

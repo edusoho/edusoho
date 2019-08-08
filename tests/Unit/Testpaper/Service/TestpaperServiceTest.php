@@ -2304,7 +2304,7 @@ class TestpaperServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'user1',
             'email' => 'user1@admin.com',
-            'password' => 'admin',
+            'password' => 'admin123',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));

@@ -752,6 +752,7 @@ validate.fail: 验证失败
 validate.expiry_days_required_hint: 请输入有效期
 validate.empty_content_hint: 请输入内容!
 validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母开头!长度大于2位
+validate.have_spaces: 密码不能有空格哦
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录

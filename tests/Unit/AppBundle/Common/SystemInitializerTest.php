@@ -568,7 +568,7 @@ EOD;
 
         $fields = array(
             'email' => 'test@edusoho.com',
-            'password' => 'test',
+            'password' => 'test123',
             'nickname' => 'testnickname',
         );
         $result = $initializer->initAdminUser($fields);
