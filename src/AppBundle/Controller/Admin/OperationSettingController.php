@@ -44,6 +44,7 @@ class OperationSettingController extends BaseController
         $default = array(
             'name' => '资讯频道',
             'pageNums' => 20,
+            'show_comment' => '1',
         );
 
         $articleSetting = array_merge($default, $articleSetting);

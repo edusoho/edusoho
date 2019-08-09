@@ -2,14 +2,14 @@
 
 namespace ApiBundle\Api\Resource\SitePlugin;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\AbstractResource;
 
 class SitePlugin extends AbstractResource
 {
     /**
-     * @Access(roles="ROLE_SUPER_ADMIN")
+     * @ApiConf(isRequiredAuth=false)
      */
     public function get(ApiRequest $request, $code)
     {

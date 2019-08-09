@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Biz\System\SettingException;
 
 class Setting extends AbstractResource
 {
@@ -15,13 +16,51 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'cloud', 'user'))) {
             throw CommonException::ERROR_PARAMETER();
         }
 
         $method = "get${type}";
 
         return $this->$method($request);
+    }
+
+    public function getUser($request = null)
+    {
+        $authSetting = $this->getSettingService()->get('auth');
+        $loginSetting = $this->getSettingService()->get('login_bind');
+
+        if (empty($loginSetting)) {
+            SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
+        }
+
+        $result = array(
+            'auth' => array(
+                'register_mode' => $authSetting['register_mode'],
+                'user_terms_enabled' => 'opened' == $authSetting['user_terms'] ? true : false,
+                'privacy_policy_enabled' => 'opened' == $authSetting['privacy_policy'] ? true : false,
+            ),
+            'login_bind' => array(
+                'oauth_enabled' => (int) $loginSetting['enabled'] ? true : false,
+                'weibo_enabled' => (int) $loginSetting['weibo_enabled'] ? true : false,
+                'qq_enabled' => (int) $loginSetting['qq_enabled'] ? true : false,
+                'weixinweb_enabled' => (int) $loginSetting['weixinweb_enabled'] ? true : false,
+                'weixinmob_enabled' => (int) $loginSetting['weixinmob_enabled'] ? true : false,
+            ),
+        );
+
+        return $result;
+    }
+
+    public function getCloud($request = null)
+    {
+        $cloudSms = $this->getSettingService()->get('cloud_sms');
+
+        $result = array(
+            'sms_enabled' => $cloudSms['sms_enabled'] ? true : false,
+        );
+
+        return $result;
     }
 
     public function getHasPluginInstalled($request)

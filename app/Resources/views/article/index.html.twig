@@ -3,6 +3,7 @@
 {% block title %}{{ setting('article.name')|default('article'|trans) }} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = 'artcile-list-page' %}
+{% set articleSetting = setting('article') %}
 {% do script(['app/js/article/list/index.js']) %}
 
 {% block content %}
@@ -23,7 +24,7 @@
     </div>
 
     <aside class="col-md-4 article-sidebar">
-      {% include 'article/widget/sidebar.html.twig' %}
+      {% include 'article/widget/sidebar.html.twig' with {'isShowComment': articleSetting.show_comment|default('1') } %}
     </aside>
   </div>
 

@@ -41,9 +41,10 @@
           </div>
           <div class="metas">
             {% if not app.user or (friend.id != app.user.id) %}
+              {% set messageSetting = setting('message') %}
               <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:friend.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>{{'user.btn.following'|trans}}</a>
               <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:friend.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>{{'user.btn.followed'|trans}}</a>
-              {% if can_send_message(friend.id) %}
+              {% if can_send_message(friend.id) and messageSetting.showable|default('1') != 0 %}
                 <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static"  data-url="{{path('message_create', {toId:friend.id})}}">{{'user.btn.send_message'|trans}}</a>
               {% endif %}
             {% endif %}

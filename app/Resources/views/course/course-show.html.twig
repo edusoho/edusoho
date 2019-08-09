@@ -68,7 +68,7 @@
 
         {{ slot('course.show.sidebar', {'course':course}) }}
 
-        {# 有些widget只有班级计划才显示 #}
+         {#有些widget只有班级计划才显示#}
         {% for key, widget in metas.widgets %}
           {% if (widget.showMode|default('all') == 'classroom' and course.parentId > 0)
           or (widget.showMode|default('all') == 'course' and course.parentId == 0)

@@ -321,6 +321,7 @@ admin.system.course.basic_tab: 课程
 admin.system.course.questions_tab: 题库
 admin.system.course.avatar_tab: 默认图片
 admin.system.course.classroom_tab: 班级
+admin.system.course.open_course_tab: 公开课
 
 ##运营设置模块
 admin.system.operation.article_tab: 资讯
@@ -328,6 +329,7 @@ admin.system.operation.group_tab: 小组
 admin.system.operation.invite_tab: '邀请注册设置'
 admin.system.operation.wap_tab: 手机微网校
 admin.system.operation.reward_point: 积分
+admin.system.operation.message_tab: 私信
 
 ##账务设置模块
 admin.system.finance.payment_tab: 支付

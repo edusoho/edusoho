@@ -27,13 +27,16 @@
         <input type="text" id="itemCount" name="itemCount" required="required" class="form-control width-input width-input-large" value="{{ exercise.itemCount|default(1) }}">
       </div>
     </div>
+    {% set courses = data('CoursesByCourseSetId', {courseSetId: activity.fromCourseSetId}) %}
 
     <div class="form-group">
       <label class="col-sm-2 control-label">{{'course.plan_task.exercise.question_sourse'|trans}}</label>
       <div class="col-sm-10 controls radios">
         <select class="form-control width-150" name="range[courseId]" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:activity.fromCourseSetId})}}" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:activity.fromCourseSetId}) }}">
           <option value="0" {% if not range.courseId|default(0) %}selected{% endif %}>{{'course.plan_task.exercise.question_sourse.course'|trans}}</option>
-          <option value="{{ course.id }}" {% if range.courseId|default(0) == course.id %}selected{% endif %}>{{ get_course_title(course) }}</option>
+          {% for course in courses if course %}
+            <option value="{{ course.id }}" {% if range.courseId|default(0) == course.id %}selected{% endif %}>{{ get_course_title(course) }}</option>
+          {% endfor %}
         </select>
         <select class="form-control width-150" {% if not courseTasks|default(null) %}style="display:none;"{% endif %} name="range[lessonId]" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:activity.fromCourseSetId}) }}">
           <option value="0" {% if not range.lessonId|default(0) %}selected{% endif %}>{{'course.plan_task.exercise.question_sourse.choose'|trans}}</option>

@@ -22,6 +22,10 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 
         $this->targetUrl = $this->httpUtils->generateUri($request, $goto);
 
+        if ($this->checkWebsite($request, $this->targetUrl)) {
+            $this->targetUrl = $this->httpUtils->generateUri($request, 'homepage');
+        }
+
         if ($this->getAuthService()->hasPartnerAuth()) {
             $user = ServiceKernel::instance()->getCurrentUser();
             setcookie('REMEMBERME');
@@ -49,6 +53,16 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
         return isset($setting['enabled']) && isset($setting['weixinmob_enabled']) && $setting['enabled'] && $setting['weixinmob_enabled'];
     }
 
+    protected function checkWebsite($request, $targetUrl)
+    {
+        $hostUrl = $request->getUriForPath('');
+        if (0 === strpos($targetUrl, $hostUrl)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private function getAuthService()
     {
         return ServiceKernel::instance()->createService('User:AuthService');
@@ -56,7 +70,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 
     public function isMicroMessenger($request)
     {
-        return strpos($request->headers->get('User-Agent'), 'MicroMessenger') !== false;
+        return false !== strpos($request->headers->get('User-Agent'), 'MicroMessenger');
     }
 
     protected function getSettingService()

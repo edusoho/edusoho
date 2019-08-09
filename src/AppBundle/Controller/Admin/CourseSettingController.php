@@ -32,6 +32,10 @@ class CourseSettingController extends BaseController
             'testpaperCopy_enabled' => '0',
             'custom_chapter_enabled' => '0',
             'show_cover_num_mode' => 'studentNum',
+            'show_review' => '1',
+            'show_question' => '1',
+            'show_discussion' => '1',
+            'show_note' => '1',
         );
 
         $this->getSettingService()->set('course', $courseSetting);
