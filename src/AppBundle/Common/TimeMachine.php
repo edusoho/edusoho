@@ -17,7 +17,9 @@ class TimeMachine
 
     const ONE_DAY = 86400;
 
-    const ONE_MONTH = 259200;
+    const ONE_WEEK = 604800;
+
+    const ONE_MONTH = 2592000;
 
     /**
      * 转化为 时间字符串, 如 2018-12-22 13:33:54

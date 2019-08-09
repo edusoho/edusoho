@@ -5514,6 +5514,7 @@ admin.edu_cloud.edu_sms.enable_status: 'Enabled'
 admin.edu_cloud.edu_sms.operation: Action
 admin.edu_cloud.edu_sms.validation_type: Validation
 admin.edu_cloud.edu_sms.bind_mobile: 'Phone Binding'
+admin.edu_cloud.edu_sms.login: 'Login with sms'
 admin.edu_cloud.edu_sms.verification_code_tips: 'Your verification code is 123456 (do not divulge), this verification code within 30 minutes of input is valid.'
 admin.edu_cloud.edu_sms.singel_user: 'Single User'
 admin.edu_cloud.edu_sms.auto_singel_send: 'Automatically sent separately'

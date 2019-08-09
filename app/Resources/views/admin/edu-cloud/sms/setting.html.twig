@@ -98,6 +98,18 @@
       <tbody>
         <tr>
           <td>{{'admin.edu_cloud.edu_sms.validation_type'|trans}}</td>
+          <td>{{'admin.edu_cloud.edu_sms.login'|trans}}</td>
+          <td>
+            【<span id="js-sms-school-name">
+                {{ sms_sign_school_name }}
+              </span>】
+            {{ 'admin.edu_cloud.edu_sms.verification_code_tips'|trans }}</td>
+          <td>{{'admin.edu_cloud.edu_sms.singel_user'|trans}}</td>
+          <td>{{'admin.edu_cloud.edu_sms.auto_singel_send'|trans}}</td>
+          <td><input type="hidden" name="sms_login" value="on">{{'admin.edu_cloud.edu_sms.default_open'|trans}}</td>
+        </tr>
+        <tr>
+          <td>{{'admin.edu_cloud.edu_sms.validation_type'|trans}}</td>
           <td>{{'admin.edu_cloud.edu_sms.bind_mobile'|trans}}</td>
           <td>
             【<span id="js-sms-school-name">
@@ -121,6 +133,30 @@
           <td>{{'admin.edu_cloud.edu_sms.auto_singel_send'|trans}}</td>
           <td><input type="hidden" name="sms_forget_password" value="on">{{'admin.edu_cloud.edu_sms.default_open'|trans}}</td>
         </tr>
+        {% if is_plugin_installed('UserImporter') %}
+          <tr>
+            <td>{{'admin.edu_cloud.edu_sms.notify_type'|trans}}</td>
+            <td>{{'admin.edu_cloud.edu_sms.user_importer'|trans}}</td>
+            <td>
+              【<span id="js-sms-school-name">
+                {{ sms_sign_school_name }}
+              </span>】
+                {{ 'admin.edu_cloud.edu_sms.import_user_tips'|trans() }}
+            </td>
+            <td>{{'admin.edu_cloud.edu_sms.singel_user'|trans}}</td>
+            <td>{{'admin.edu_cloud.edu_sms.auto_singel_send'|trans}}</td>
+            <td>
+              <label>
+                <input type="radio" name="sms_import_user" value="on"
+                       {% if (setting('cloud_sms.sms_import_user')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_import_user" value="off"
+                       {% if (setting('cloud_sms.sms_import_user')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+        {% endif %}
         <tr>
           <td>{{'admin.edu_cloud.edu_sms.validation_type'|trans}}</td>
           <td>{{'admin.edu_cloud.edu_sms.pay_password_reset'|trans}}</td>
