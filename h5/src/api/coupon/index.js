@@ -1,10 +1,21 @@
 export default [
   {
+    // 获取优惠券信息
+    name: 'getCouponInfo',
+    url: '/plugins/coupon/coupon_batch/{batchToken}',
+    method: 'get'
+  },
+  {
+    // 优惠券引流优化领取优惠券
+    name: 'pluginsReceiveCoupon',
+    url: '/me/coupon',
+    method: 'POST'
+  },
+  {
     // 领取优惠券
     name: 'receiveCoupon',
     url: '/me/coupons',
-    method: 'POST',
-    disableLoading: true
+    method: 'POST'
   }, {
     // 根据渠道查询优惠券
     name: 'searchCoupon',

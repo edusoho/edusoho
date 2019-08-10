@@ -17,6 +17,7 @@ export const GET_NEXT_STUDY = 'GET_NEXT_STUDY';
 // register
 export const ADD_USER = 'ADD_USER';
 export const SMS_CENTER = 'SMS_CENTER';
+export const SMS_SEND = 'SMS_SEND';
 
 // 个人设置
 export const SET_AVATAR = 'SET_AVATAR';

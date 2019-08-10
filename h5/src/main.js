@@ -17,6 +17,7 @@ import {
   Tab,
   Tabs,
   Tabbar,
+  Dialog,
   TabbarItem,
   Swipe,
   SwipeItem,
@@ -28,7 +29,8 @@ import {
   Cell,
   Tag,
   Toast,
-  Lazyload
+  Lazyload,
+  Checkbox
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -38,12 +40,14 @@ Vue.component('van-swipe', Swipe);
 Vue.component('van-swipe-item', SwipeItem);
 Vue.component('van-list', List);
 Vue.component('van-button', Button);
+Vue.component('van-dialog', Dialog);
 Vue.component('van-tab', Tab);
 Vue.component('van-tabs', Tabs);
 Vue.component('van-field', Field);
 Vue.component('van-uploader', Uploader);
 Vue.component('van-rate', Rate);
 Vue.component('van-cell', Cell);
+Vue.component('van-checkbox', Checkbox);
 
 Vue.use(filters);
 Vue.use(Row);
@@ -55,8 +59,9 @@ Vue.use(utils);
 Vue.use(EdusohoUI);
 Vue.use(Lazyload);
 Vue.use(Toast);
+Vue.use(Checkbox);
+Vue.use(Tab).use(Tabs).use(Dialog);
 Vue.config.productionTip = false;
-Vue.config.devtools = true;
 /* eslint-disable no-new */
 
 Api.getSettings({

@@ -36,6 +36,13 @@
           color:#ccc;
           font-size: vw(14);
         }
+        .coupon-money{
+          font-size: vw(28);
+          font-weight:500;
+        }
+        .coupon-type{
+          font-size: vw(14)
+        }
       }
     }
     .gray-dark {
@@ -75,6 +82,56 @@
     >span {
       font-size: vw(14);
       font-weight: 500;
+    }
+  }
+
+  &-footer{
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: vw(68);
+    padding: 0 vw(20) 0 vw(9);
+    box-sizing: border-box;
+    background: #fff;
+    border-top:vw(1) solid #D8D8D8;
+    .disabled{
+      background: #c1c1c1
+    }
+    &__btn{
+      height: vw(36);
+      width: vw(90);
+      line-height: vw(36);
+      color: #ffff;
+      text-align: center;
+      border-radius: vw(4);
+      background: $primary-color;
+    };
+    &__text{
+      display: flex;
+      font-size: vw(14);
+      align-items: center;
+      .price{
+        padding-right: vw(10);
+        font-size: vw(28);
+        color: #FD4852;
+      }
+      .discount{
+        position: relative;
+        padding-left: vw(10);
+        color: #FFA91B;
+        &::after{
+          position: absolute;
+          left: 0;
+          top:vw(-3);
+          bottom: vw(-3);
+          content: '';
+          width: vw(1);
+          background: #D8D8D8
+      }
+      }
     }
   }
 }

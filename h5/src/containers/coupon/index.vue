@@ -1,83 +1,74 @@
 <template>
-  <div class="coupon-receive-page">
-    <div :class="['coupon-card-bg', 'clearfix', couponStatus]">
-      <div class="coupon-info">{{ message }}</div>
-      <div class="e-coupon__body" v-if="Object.keys(item).length">
-        <div class="e-coupon__header clearfix">
-          <span class="e-coupon__price" v-html="priceHtml(item)"></span>
-          <div class="e-coupon__name">
-            <div class="text-overflow text-14 coupon-name">{{ item.name }}</div>
-             <!-- 兼容老版本优惠券无有效期功能或者非有效期模式-->
-              <span v-if="!item.deadlineMode || item.deadlineMode==='time'" class="text-10">{{ timeExpire(item.createdTime,item.deadline) }}</span>
-            <!-- 新版优惠券功能 -->
-              <!-- 非有效期模式 -->
-              <span v-if="item.deadlineMode==='day' && !item.currentUserCoupon" class="text-10">领取后{{item.fixedDay}}天内有效</span>
-              <!-- 有效期模式且用户已经领取 -->
-              <span v-if="item.deadlineMode==='day' && item.currentUserCoupon" class="text-10">{{ timeExpire(item.createdTime, item.currentUserCoupon.deadline) }}</span>
-          </div>
-          <span class="coupon-button" @click="couponHandle(item, isReceive)">去使用</span>
-        </div>
-        <div class="e-coupon__middle"></div>
-        <div class="e-coupon__bottom text-overflow">
-          可用范围：{{ scopeFilter(item) }}
-        </div>
-      </div>
-    </div>
+  <div class="receive-all">
+    <e-loading v-if="isLoading"></e-loading>
+    <fast-receive v-if="cloudSetting ==1 && sitePlugins==1" />
+    <pass-receive v-if="cloudSetting ==2 || sitePlugins==2"/>
   </div>
 </template>
-
 <script>
-  import Api from '@/api';
-  import { Toast } from 'vant';
-  import couponMixin from '@/mixins/coupon'
-  import getCouponMixin from '@/mixins/coupon/getCouponHandler';
-
-  const ALL_TYPE = {
-    classroom: 'classroom',
-    course: 'course',
-    vip: 'vip',
-    all: 'all'
-  };
-  export default {
-    mixins: [couponMixin, getCouponMixin],
-    data() {
-      return {
-        item: {},
-        message: '',
-        isReceive: true
-      };
-    },
-    computed: {
-      couponStatus() {
-        return Object.keys(this.item).length ? 'coupon-receive-success' : '';
-      }
-    },
-    created() {
-      // 通过链接领取优惠券
-      const token = this.$route.params.token;
-
-      // 未登录跳转登录页面
-      if (!this.$store.state.token) {
-        this.$router.push({
-          name: 'login',
-          query: {
-            redirect: this.$route.fullPath,
-          }
-        });
-        return;
-      }
-
-      if (token) {
-        Api.receiveCoupon({
-          data: { token }
+import { mapState } from 'vuex';
+import Api from "@/api";
+import needUpgrade from '@/utils/version-compare';
+import { Toast } from "vant";
+import fastReceive from "./fastReceive";
+import passReceive from "./passReceive";
+export default {
+  components: {
+    fastReceive,
+    passReceive
+  },
+  data() {
+    return {
+      sitePlugins: 0,
+      cloudSetting: 0
+    };
+  },
+  created() {
+  this.getsitePlugins();
+  },
+  computed: {
+    ...mapState({
+      isLoading: state => state.isLoading,
+    })
+  },
+  methods: {
+    //获取版本号
+    getsitePlugins() {
+      const that=this;
+       Api.sitePlugins({
+         query: {
+          pluginName: 'coupon',
+        }
         }).then(res => {
-          this.item = res;
-          this.message = '恭喜您成功领取了一张优惠券！';
-        }).catch(err => {
-          this.message = '优惠券领取失败！'
+          //当前版本小于支持版本 true  大于false
+          if(Object.keys(res).length>0){
+            if(needUpgrade('2.2.10',res.version)){
+              that.sitePlugins=1
+            }else{
+              that.sitePlugins=2
+            }
+            that.getsettingsCloud();
+          }
+        })
+        .catch(err => {
           Toast.fail(err.message);
         });
-      }
+    },
+    //是否开启云短信
+    getsettingsCloud() {
+       Api.settingsCloud()
+        .then(res => {
+          //开启了云短信
+          if (res.sms_enabled) {
+            this.cloudSetting = 1;
+          } else {
+            this.cloudSetting = 2;
+          }
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
     }
   }
+};
 </script>

@@ -28,14 +28,6 @@ const routes = [
         },
         component: () =>
           import(/* webpackChunkName: "loginPrelogin" */'@/containers/login/prelogin.vue')
-      },
-      { // 用于测试
-        path: '/course/afterjoin-directory',
-        name: 'afterjoin-directory',
-        meta: {
-          title: '课程目录测试'
-        },
-        component: () => import(/* webpackChunkName: "course" */'@/containers/course/detail/afterjoin-directory.vue')
       }
     ]
   }, {
@@ -45,6 +37,13 @@ const routes = [
       title: ''
     },
     component: () => import(/* webpackChunkName: "login" */ '@/containers/login/index.vue')
+  }, {
+    path: '/fastlogin',
+    name: 'fastlogin',
+    meta: {
+      title: '登录'
+    },
+    component: () => import(/* webpackChunkName: "fastlogin" */ '@/containers/login/fastlogin.vue')
   }, {
     path: '/login/qrcode',
     name: 'login_qrcode',
@@ -205,7 +204,8 @@ const routes = [
     path: '/coupon/:token/receive',
     name: 'coupon_receive',
     meta: {
-      title: '优惠券领取'
+      title: '优惠券领取',
+      hideTitle: true
     },
     component: () => import(/* webpackChunkName: "coupon_receive" */'@/containers/coupon/index.vue')
   }, {

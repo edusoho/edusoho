@@ -18,6 +18,10 @@
   >.van-cell {
     margin-top: vw(30);
     font-size: vw(15);
+    .van-field__body{
+      padding-bottom: vw(15);
+      border-bottom: vw(1) solid #D8D8D8;
+    }
   }
   > .login-bottom {
     > a {

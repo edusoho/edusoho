@@ -30,10 +30,19 @@
   box-sizing: border-box;
   padding: vw(50) vw(15);
   align-items: center;
+  .van-checkbox{
+    display: inline;
+  }
   &-title {
     font-size: vw(20);
+    font-weight:500;
     -webkit-text-fill-color: #2b333b;
     font-family: PingFangSC-Regular;
+  }
+  &-des{
+    font-size: vw(14);
+    color: #B4B4B4;
+    line-height: vw(28);
   }
   &-hint {
     font-size: vw(15);
@@ -45,6 +54,11 @@
     margin-top: vw(30);
     left: 0;
     padding: vw(10) 0;
+   // border-bottom: vw(1) solid #D8D8D8;
+    .van-field__body{
+      padding-bottom: vw(15);
+      border-bottom: 0.26667vw solid #D8D8D8;
+    }
     &.van-cell:not(:last-child)::after {
       left: 0;
     }
@@ -56,7 +70,41 @@
     font-family: PingFangSC-Regular;
     color: $primary-color;
   }
+  &-change{
+    display: flex;
+    margin: vw(39) auto;
+    width: vw(140);
+    justify-content: center;
+    align-items: center;
+    font-size: vw(14);
+    color: $primary-color;
+    .login_change-icon{
+      margin-right: vw(7);
+      width: vw(15);
+      height: vw(15);
+    }
+  }
 
+  &-agree{
+    color: #BEBEBE;
+    text-align: center;
+    font-size: vw(14);
+    font-family:PingFangSC-Regular;
+    .van-checkbox__label {
+      color: #BEBEBE;
+    }
+    i{
+      color: $primary-color;
+      font-style: normal;
+    }
+    .agree-text{
+      margin-top:vw(10);
+      color: #323133;
+    }
+  }
+  .van-checkbox {
+    justify-content: center;
+  }
   &-bottom {
     width: 100%;
     a {
@@ -64,6 +112,16 @@
       font-size: vw(13);
     }
   }
+
+  &-footer{
+    position: fixed;
+    bottom: vw(56);
+    width: 100%;
+    text-align: center;
+    color: #333333;
+    font-size: vw(14);
+  }
+  
   .social-login {
     position: absolute;
     bottom: vw(50);

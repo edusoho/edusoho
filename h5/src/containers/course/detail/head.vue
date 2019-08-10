@@ -149,8 +149,7 @@ export default {
       }
 
       const timelimit = player.media.timeLimit;
-      // 试看判断
-      // const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
+
 
       this.isEncryptionPlus = player.media.isEncryptionPlus;
       if (player.media.isEncryptionPlus) {
@@ -173,6 +172,12 @@ export default {
         disableDataUpload: true,
         // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
+      // 试看判断
+      const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
+      if(!canTryLookable){
+        delete options.pluck
+      }
+
       this.mediaOpts = Object.assign({
         text: player.media.text
       }, options) ;
@@ -198,9 +203,7 @@ export default {
     },
     loadPlayerSDK () {
       if (!window.VideoPlayerSDK) {
-        const VEDIOURL='//service-cdn.cg-dev.cn/js-sdk/video-player/sdk-v1.js?v='
-      //const VEDIOURL='//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
-      // const scrptSrc = VEDIOURL + (Date.now() / 1000 / 60);
+      const VEDIOURL='//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
       const scrptSrc =  VEDIOURL+ (Date.now() / 1000 / 60);
       // Cache SDK for 1 min.
 

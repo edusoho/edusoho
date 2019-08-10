@@ -72,7 +72,8 @@
     "vuedraggable": "^2.16.0",
     "vuex": "^2.3.1",
     "webpack": "^3.6.0",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "webpack-parallel-uglify-plugin": "^1.1.1"
   },
   "devDependencies": {
     "babel-jest": "^21.0.2",
@@ -86,6 +87,7 @@
     "node-notifier": "^5.1.2",
     "portfinder": "^1.0.13",
     "selenium-server": "^3.0.1",
+    "vant": "^1.2.1",
     "vue-jest": "^1.0.2",
     "vue-template-compiler": "^2.5.2",
     "webpack-bundle-analyzer": "^2.13.1",

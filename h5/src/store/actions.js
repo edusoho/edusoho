@@ -18,6 +18,12 @@ export const userLogin = ({ commit }, { username, password }) => {
   });
 };
 
+// 短信快捷登录
+export const fastLogin = ({ commit }, data) => Api.fastlogin({ data })
+  .then(res => {
+    commit(types.USER_LOGIN, res);
+  });
+
 export const getUserInfo = ({ commit }) => Api.getUserInfo({})
   .then(res => {
     commit(types.USER_INFO, res);
@@ -39,6 +45,17 @@ export const setMobile = ({ commit }, { query, data }) =>
   new Promise((resolve, reject) => {
     Api.setMobile({ query, data }).then(res => {
       commit(types.BIND_MOBILE, res);
+      resolve(res);
+      return res;
+    }).catch(err => reject(err));
+  });
+
+export const sendSmsSend = ({ commit }, data) =>
+  new Promise((resolve, reject) => {
+    Api.getSmsSend({
+      data
+    }).then(res => {
+      commit(types.SMS_SEND);
       resolve(res);
       return res;
     }).catch(err => reject(err));

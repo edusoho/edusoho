@@ -22,10 +22,10 @@ export default {
         return;
       }
 
-      const token = coupon.token;
 
       /* 未领券 */
       if (!coupon.currentUserCoupon && !isReceive) {
+        const token = coupon.token;
         Api.receiveCoupon({
           data: { token }
         }).then(res => {
@@ -40,10 +40,11 @@ export default {
         });
         return;
       }
-
+      this.hasreceiveCoupon(coupon);
+    },
+    hasreceiveCoupon(coupon) {
       /* 已领券 */
-      const targetType = coupon.targetType === ALL_TYPE.all ?
-        ALL_TYPE.course : coupon.targetType; // 全站优惠券跳转课程列表页
+      const targetType = coupon.targetType;
       const allType = Object.values(ALL_TYPE);
 
       if (!allType.includes(targetType)) {
@@ -51,19 +52,19 @@ export default {
         return;
       }
 
-      if (targetType === ALL_TYPE.vip) {
-        const targetId = coupon.target && coupon.target.id;
-        this.$router.push({
-          path: '/vip',
-          query: {
-            id: targetId
-          }
-        });
-        return;
-      }
-
+      // 指定课程或者班级
       if (coupon.target) {
         const targetId = coupon.target.id;
+        // 指定vip
+        if (targetType === ALL_TYPE.vip) {
+          this.$router.push({
+            path: '/vip',
+            query: {
+              id: targetId
+            }
+          });
+          return;
+        }
         this.getPathParams(targetType, targetId).then(({ id }) => {
           if (!id) return;
           this.$router.push({
@@ -72,9 +73,17 @@ export default {
         });
         return;
       }
+      // 全站跳转到发现页
+      if (targetType === ALL_TYPE.all) {
+        this.$router.push({
+          path: '/'
+        });
+        return;
+      }
 
+      // 所有班级或者课程
       this.$router.push({
-        path: `/${targetType}/explore` // course/explore | classroom/explore
+        path: '/'
       });
     },
     /* 课程的id 需要转换成计划id 跳转到对应计划详情页 */

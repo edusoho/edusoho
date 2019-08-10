@@ -15,9 +15,10 @@ module.exports = {
 
     proxyTable: {
       '/api': {
-        // target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
-        target: 'http://gdy.st.edusoho.cn',
-       // target: 'http://devtest.edusoho.cn',
+      // target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
+      //target: 'http://gdy.st.edusoho.cn',
+        target: 'http://wr.st.edusoho.cn',
+      //  target: 'http://devtest.edusoho.cn',
         changeOrigin: true,
         secure: false,
       }
@@ -33,7 +34,7 @@ module.exports = {
     // Use Eslint Loader?
     // If true, your code will be linted during bundling and
     // linting errors and warnings will be shown in the console.
-    useEslint: true,
+    useEslint: false,
     // If true, eslint errors and warnings will also be shown in the error overlay
     // in the browser.
     showEslintErrorsInOverlay: false,
