@@ -6,6 +6,7 @@
                 type="number"
                 placeholder="请输入手机号码" 
                 clearable
+                :border=false
                 :error-message="errorMessage.mobile"
                 @blur="validateMobileOrPsw('mobile')"
                 @keyup="validatedChecker()"/>
@@ -26,6 +27,7 @@
                 type="number"
                 placeholder="请输入验证码"
                 clearable
+                :border=false
                 maxLength="6"
                 ref="smsCode">
                 <div slot="button" @click="clickSmsBtn" :class="['code-btn',cansentCode ? '': 'code-btn--disabled']">

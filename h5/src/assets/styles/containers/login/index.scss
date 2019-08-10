@@ -31,7 +31,7 @@
   padding: vw(50) vw(15);
   align-items: center;
   .van-checkbox{
-    display: inline;
+    display: inline!important;
   }
   &-title {
     font-size: vw(20);

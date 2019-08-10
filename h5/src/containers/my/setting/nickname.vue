@@ -1,7 +1,10 @@
 <template>
   <div class="my_setting-nickname">
     <e-loading v-if="isLoading"></e-loading>
-    <van-field v-model="nickname" placeholder="请修改您的用户名" class="my_setting-nickname--input"/>
+    <van-field 
+    v-model="nickname"
+     placeholder="请修改您的用户名" 
+     class="my_setting-nickname--input"/>
 
     <van-button type="default"
     @click="modifyNickname"
