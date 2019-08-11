@@ -5,11 +5,13 @@
     <van-field v-model="username"
       :autosize="{ maxHeight: 24 }"
       type="textarea"
+      :border=false
       class="login-input e-input"
       placeholder="邮箱/手机/用户名"/>
 
     <van-field v-model="password"
       type="password"
+      :border=false
       class="login-input e-input"
       :error-message="errorMessage.password"
       placeholder="请输入密码" />

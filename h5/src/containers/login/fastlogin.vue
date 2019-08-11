@@ -7,8 +7,8 @@
             placeholder="请输入手机号"
             maxLength="11"
             type="number"
+            :border=false
             class="login-input e-input"
-            border
             clearable
             :error-message="errorMessage.mobile"
             @blur="validateMobileOrPsw('mobile')"
@@ -26,8 +26,8 @@
             v-model="userinfo.smsCode"
             ref="smsCode"
             type="number"
+            :border=false
             center
-            border
             clearable
             maxLength="6"
             class="login-input e-input"
@@ -53,9 +53,6 @@
                 <img src="static/images/login_change.png" class="login_change-icon"/>切换账号密码登录
             </div>
         </div>  
-        <!-- <div class="login-footer"> 
-            新用户将为您自动注册
-        </div> -->
     </div>
 </template>
 <script>
