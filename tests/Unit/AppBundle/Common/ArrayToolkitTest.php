@@ -167,6 +167,11 @@ class ArrayToolkitTest extends BaseTestCase
 
     public function testTrim()
     {
+        $testArray = 'abc';
+
+        $result = ArrayToolkit::trim($testArray);
+        $this->assertEquals($testArray, $result);
+
         $testArray = array('name' => '   tom', 'names' => array('   tom1', '  tom2 '));
         $result = ArrayToolkit::trim($testArray);
         $this->assertArrayEquals(array('name' => 'tom', 'names' => array('tom1', 'tom2')), $result);
@@ -318,5 +323,41 @@ class ArrayToolkitTest extends BaseTestCase
         $this->assertTrue(ArrayToolkit::isSameValues($compared, $sameArr2));
         $this->assertFalse(ArrayToolkit::isSameValues($compared, $diffArr3));
         $this->assertFalse(ArrayToolkit::isSameValues($compared, $diffArr4));
+    }
+
+    public function testInsert()
+    {
+        $beforeArray = array(
+            'a' => 'a',
+            'b' => 'b',
+            'c' => 'c',
+        );
+
+        $insertArray = array(
+            'a1' => 'a1',
+            'd' => 'd',
+        );
+
+        $expected1 = array(
+            'a' => 'a',
+            'a1' => 'a1',
+            'd' => 'd',
+            'b' => 'b',
+            'c' => 'c',
+        );
+        $result1 = ArrayToolkit::insert($beforeArray, 1, $insertArray);
+
+        $this->assertEquals($expected1, $result1);
+
+        $expected2 = array(
+            'a1' => 'a1',
+            'd' => 'd',
+            'a' => 'a',
+            'b' => 'b',
+            'c' => 'c',
+        );
+        $result2 = ArrayToolkit::insert($beforeArray, 0, $insertArray);
+
+        $this->assertEquals($expected2, $result2);
     }
 }
