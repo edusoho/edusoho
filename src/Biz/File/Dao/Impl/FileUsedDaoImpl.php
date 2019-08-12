@@ -16,6 +16,7 @@ class FileUsedDaoImpl extends AdvancedDaoImpl implements FileUsedDao
             'conditions' => array(
                 'id = :id',
                 'type = :type',
+                'type IN ( :types )',
                 'targetType = :targetType',
                 'targetType IN (:targetTypes)',
                 'targetId = :targetId',

@@ -80,7 +80,14 @@ class FileChooserController extends BaseController
         $conditions = array();
         $conditions['page'] = $request->query->get('page', 1);
         $conditions['ids'] = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
-        $conditions['type'] = (empty($query['type']) || 'all' == $query['type']) ? null : $query['type'];
+
+        $batchCreate = $request->query->get('batch', 0);
+        if ($batchCreate) {
+            //计划批量添加课时只支持以下文件类型
+            $conditions['types'] = array('document', 'video', 'audio', 'ppt', 'flash');
+        } else {
+            $conditions['type'] = (empty($query['type']) || 'all' == $query['type']) ? null : $query['type'];
+        }
         $conditions['filenameLike'] = empty($query['keyword']) ? null : $query['keyword'];
 
         $paginator = new Paginator(
@@ -103,7 +110,7 @@ class FileChooserController extends BaseController
             'file-chooser/widget/choose-table.html.twig',
             array(
                 'files' => $files,
-                'batch' => $request->query->get('batch', 0),
+                'batch' => $batchCreate,
                 'createdUsers' => $createdUsers,
                 'paginator' => $paginator,
             )
@@ -130,7 +137,12 @@ class FileChooserController extends BaseController
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);
         }
-        $conditions['type'] = (empty($conditions['type']) || ('all' == $conditions['type'])) ? null : $conditions['type'];
+
+        if (!empty($conditions['batch'])) {
+            $conditions['types'] = array('document', 'video', 'audio', 'ppt', 'flash');
+        } else {
+            $conditions['type'] = (empty($conditions['type']) || ('all' == $conditions['type'])) ? null : $conditions['type'];
+        }
 
         return $conditions;
     }
