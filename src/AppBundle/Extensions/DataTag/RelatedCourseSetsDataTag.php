@@ -20,12 +20,4 @@ class RelatedCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 
         return $courseSets;
     }
-
-    /**
-     * @return TagService
-     */
-    protected function getTagService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
-    }
 }

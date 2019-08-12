@@ -20,11 +20,11 @@ class WeChatUserDataTag extends BaseDataTag implements DataTag
 
     private function getWeChatService()
     {
-        return ServiceKernel::instance()->createService('WeChat:WeChatService');
+        return $this->createService('WeChat:WeChatService');
     }
 
     private function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 }
