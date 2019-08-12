@@ -16,7 +16,6 @@ class GroupDataTagTest extends BaseTestCase
         $dataTag->getData(array());
     }
 
-
     public function testGetData()
     {
         $group = array(

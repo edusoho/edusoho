@@ -2,8 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class WeChatUserDataTag extends BaseDataTag implements DataTag
 {
     public function getData(array $arguments)

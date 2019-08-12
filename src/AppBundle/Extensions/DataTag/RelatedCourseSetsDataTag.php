@@ -2,8 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Biz\Taxonomy\Service\TagService;
-
 class RelatedCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 {
     public function getData(array $arguments)

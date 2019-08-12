@@ -33,10 +33,8 @@ class CourseThreadPostDataTagTest extends BaseTestCase
             ),
         ));
 
-
         $threadPost = $datatag->getData(array('courseId' => 1, 'postId' => 1));
         $this->assertEquals(1, $threadPost['id']);
         $this->assertEquals(1, $threadPost['thread']['id']);
     }
-
 }
