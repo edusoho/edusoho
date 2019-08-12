@@ -61,7 +61,7 @@ class BuildThemeAppCommand extends BaseCommand
     {
         if (file_exists($themeDir.'/block.json')) {
             $this->filesystem->copy($themeDir.'/block.json', $distDir.'/block.json');
-            BlockToolkit::generateBlcokContent($themeDir.'/block.json', $distDir.'/blocks', $container);
+            BlockToolkit::generateBlockContent($themeDir.'/block.json', $distDir.'/blocks', $container);
         }
     }
 

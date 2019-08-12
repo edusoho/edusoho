@@ -34,6 +34,7 @@ class BlockToolkit
                     'templateName' => $meta['templateName'],
                     'title' => $meta['title'],
                 );
+
                 if (empty($blockTemplate)) {
                     $blockTemplate = $blockService->createBlockTemplate($blockTemplateFields);
                 } else {
@@ -74,7 +75,7 @@ class BlockToolkit
         return $container->get('templating')->render($block['templateName'], $block['data']);
     }
 
-    public static function generateBlcokContent($metaFilePath, $dist, $container)
+    public static function generateBlockContent($metaFilePath, $dist, $container)
     {
         $metas = file_get_contents($metaFilePath);
         $metas = json_decode($metas, true);
