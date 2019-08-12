@@ -17,6 +17,11 @@ class CommonController extends BaseController
     public function qrcodeAction(Request $request)
     {
         $text = $request->get('text');
+
+        if ($this->checkWebsite($request, $text)) {
+            $text = $this->generateUrl('homepage', array(), true);
+        }
+
         $qrCode = new QrCode();
         $qrCode->setText($text);
         $qrCode->setSize(250);
@@ -136,6 +141,16 @@ class CommonController extends BaseController
             'Content-Disposition' => 'inline; filename="image.jpg"', );
 
         return new Response($result, 200, $headers);
+    }
+
+    protected function checkWebsite($request, $targetUrl)
+    {
+        $hostUrl = $request->getUriForPath('');
+        if (0 === strpos($targetUrl, $hostUrl)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
