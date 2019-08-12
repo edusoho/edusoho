@@ -156,10 +156,12 @@ export default {
       // 52 有待更改改，测试数据
       let scrolltop=document.getElementById(this.taskId).offsetTop-
                     PROCESSHEIGHT-NARTAB-SWIPERHEIGHT-52;
+      if(scrolltop<document.documentElement.clientWidth){
+        return
+      }
       window.scrollTo({
         top: scrolltop
       })
-
     },
     //类型操作
     judgType(item, list, index) {
