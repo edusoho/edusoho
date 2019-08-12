@@ -154,6 +154,19 @@ class EduSohoUpgrade extends AbstractUpdater
         return empty($result) ? false : true;
     }
 
+    protected function deleteCache()
+    {
+        $cachePath = $this->biz['cache_directory'];
+        $filesystem = new Filesystem();
+        $filesystem->remove($cachePath);
+
+        clearstatcache(true);
+
+        $this->logger('info', '删除缓存');
+
+        return 1;
+    }
+
     private function makeUUID()
     {
         return sha1(uniqid(mt_rand(), true));
