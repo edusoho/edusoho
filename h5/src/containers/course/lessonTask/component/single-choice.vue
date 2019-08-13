@@ -26,6 +26,7 @@ export default {
   name: 'single_choice',
   data() {
     return {
+      radio: '1',
       singleChoice: {
         "id": "4",
         "type": "single_choice",

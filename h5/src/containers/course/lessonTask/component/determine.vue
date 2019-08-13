@@ -30,9 +30,7 @@ export default {
   name: 'determine',
   data() {
     return {
-      checked: true,
       radio: '1',
-      result: [],
       determine: {
         "id": "4",
         "type": "single_choice",
