@@ -1,0 +1,44 @@
+// .question-bank{
+    .fill{
+        padding: 0 vw(35);
+        .fill-bank{
+            color: $primary-color
+        }
+        .van-field__body{
+            padding-bottom: vw(10);
+            border-bottom: 1px solid #E1E1E1;
+        }
+        .fill-subject{
+            margin-top: vw(30);
+            margin-bottom: vw(10);
+            color: $primary-color;
+            font-size: vw(14)
+        }
+        ::-webkit-input-placeholder { /* WebKit browsers */
+            color: #666666;
+            font-size: vw(14);
+          }
+          
+          ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color: #666666;
+            font-size: vw(14);
+          }
+          
+          :-ms-input-placeholder { /* Internet Explorer 10+ */
+            color: #666666;
+            font-size: vw(14);
+          }
+    }
+    .essay{
+        padding: 0 vw(35);
+        .van-field__body{
+            padding: vw(10);
+            box-sizing: border-box;
+            border-radius:5px;
+            border: 1px solid #CCCCCC;
+        }
+        .essay-input{
+            margin-top: vw(30)
+        }
+    }
+//}
