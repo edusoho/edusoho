@@ -2,7 +2,7 @@ import MaterialLibChoose from './materiallib-choose';
 import CourseFileChoose from './coursefile-choose';
 import Emitter from 'component-emitter';
 
-class FileChooser extends Emitter{
+class FileChooser extends Emitter {
   constructor(options) {
     super();
     this.init();
@@ -18,17 +18,15 @@ class FileChooser extends Emitter{
       e.preventDefault();
       let $this = $(this);
       $this.find('[type="radio"]').prop('checked', 'checked');
-      $('.js-bath-create-content').find('[data-role=batch-item],[data-role=batch-select]').prop('checked', false);
+      $('.js-batch-create-content').find('[data-role=batch-item],[data-role=batch-select]').prop('checked', false);
       $this.closest('li').siblings('li').find('[type="radio"]').prop('checked', false);
       $this.tab('show');
     });
-
   }
 
   initFileChooser() {
-     new MaterialLibChoose($('#chooser-material-panel'));
-     new CourseFileChoose($('#chooser-course-panel'));
-
+    new MaterialLibChoose($('#chooser-material-panel'));
+    new CourseFileChoose($('#chooser-course-panel'));
   }
 
   fileSelect(file) {
@@ -36,10 +34,10 @@ class FileChooser extends Emitter{
     this.emit('select', file);
   }
 
-  fillTitle(file){
+  fillTitle(file) {
     let $title = $('#title');
-    if ($title.length > 0 && $title.val()=='') {
-      let title = file.name.substring(0,file.name.lastIndexOf('.'));
+    if ($title.length > 0 && $title.val() == '') {
+      let title = file.name.substring(0, file.name.lastIndexOf('.'));
       $title.val(title);
     }
   }

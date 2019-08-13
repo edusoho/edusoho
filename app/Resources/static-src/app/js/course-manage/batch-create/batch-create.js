@@ -37,8 +37,8 @@ class BatchCreate {
     });
 
     this.uploader.on('error', (error) => {
-      let status = {'F_DUPLICATE':Translator.trans('uploader.file.exist')};
-      if (!error.message){
+      let status = {'F_DUPLICATE': Translator.trans('uploader.file.exist')};
+      if (!error.message) {
         error.message = status[error.error];
       }
       notify('danger', error.message);
@@ -52,8 +52,8 @@ class BatchCreate {
     });
 
     $('.js-batch-create-lesson-btn').on('click', (event) => {
-      let $selectLength = $('.js-bath-create-content').find('input[data-role="batch-item"]:checked').length;
-      if (!this.files.length && $selectLength<1) {
+      let $selectLength = $('.js-batch-create-content').find('input[data-role="batch-item"]:checked').length;
+      if (!this.files.length && $selectLength < 1) {
         notify('danger', Translator.trans('uploader.select_one_file'));
         return;
       }
@@ -62,10 +62,10 @@ class BatchCreate {
 
       if (!this.validLessonNum($btn)) {
         console.log(this.validLessonNum($btn));
-        return ;
+        return;
       }
 
-      if ($selectLength>0){
+      if ($selectLength > 0) {
         console.log('files', $selectLength);
         self.submitSelectFile($btn, $selectLength);
       } else {
@@ -78,25 +78,25 @@ class BatchCreate {
       html: true,
     });
 
-    $('.js-bath-create-content').on('click', '[data-role=batch-select]', function(){
-      if ( $(this).is(":checked") == true){
+    $('.js-batch-create-content').on('click', '[data-role=batch-select]', function () {
+      if ($(this).is(":checked") == true) {
         $(this).parents('.js-table-list').find('[data-role=batch-item]').prop('checked', true);
       } else {
         $(this).parents('.js-table-list').find('[data-role=batch-item]').prop('checked', false);
       }
     });
 
-    $('.js-bath-create-content').on('click', '[data-role=batch-item]', function(){
-      if ( $(this).is(":checked") != true){
-        $('.js-bath-create-content').find('[data-role=batch-select]').prop('checked', false);
+    $('.js-batch-create-content').on('click', '[data-role=batch-item]', function () {
+      if ($(this).is(":checked") != true) {
+        $('.js-batch-create-content').find('[data-role=batch-select]').prop('checked', false);
       }
     });
   }
 
   submitSelectFile($btn, $selectLength) {
-    $('.js-bath-create-content').find('input[data-role="batch-item"]:checked').map((index, event, array) => {
+    $('.js-batch-create-content').find('input[data-role="batch-item"]:checked').map((index, event, array) => {
       let isLast = false;
-      if (index+1 == $selectLength) {
+      if (index + 1 == $selectLength) {
         isLast = true;
         console.log('isLast', isLast);
       }
@@ -151,7 +151,7 @@ class BatchCreate {
       data: {
         number: this.files.length
       },
-      success: function(response) {
+      success: function (response) {
         if (response && response.error) {
           notify('danger', response.error);
           $btn.button('reset');
@@ -172,14 +172,14 @@ class BatchCreate {
       data: {
         fileId: fileId
       },
-      success: function(response) {
+      success: function (response) {
         if (response && response.error) {
           notify('danger', response.error);
         } else {
           self.$sortable.trigger('addItem', response);
         }
       },
-      error: function(response) {
+      error: function (response) {
         console.log('error', response);
         notify('danger', Translator.trans('uploader.status.error'));
       },

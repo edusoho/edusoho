@@ -51,7 +51,7 @@
 	<input type="hidden" name="currentUserId">
 	<input type="hidden" name="type" value="{{ fileType|default('') }}">
 	<input type="hidden" name="keyword">
-  <input type="hidden" name="batch" value="0">
+  <input type="hidden" name="batch" value="{{ batch|default(0) }}">
 </div>
 <div class="js-material-list chooser-list-parent">
 	<div class="empty">{{'file_chooser.materiallib_choose.wating'|trans}}</div>

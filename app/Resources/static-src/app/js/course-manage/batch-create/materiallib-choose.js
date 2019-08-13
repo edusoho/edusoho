@@ -82,7 +82,6 @@ class MaterialLibChoose extends Chooser {
 
         $('.js-file-owner', self.element).html(html);
       }
-
     }, 'json');
     this.loadShareingContacts = true;
   }
@@ -91,8 +90,6 @@ class MaterialLibChoose extends Chooser {
     $('input[name=keyword]').val($('.js-file-name').val());
     this._loadList();
   }
-
-
 }
 
 export default MaterialLibChoose;
