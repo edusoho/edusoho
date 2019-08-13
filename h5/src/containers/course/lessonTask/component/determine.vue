@@ -33,17 +33,9 @@ export default {
       radio: '1',
       determine: {
         "id": "4",
-        "type": "single_choice",
+        "type": "determine",
         "stem": "<p>测试单选卡夫卡的飞开口道福克斯宽度发发多少发的（）</p>\r\n",
         "score": "2.0",
-        "metas": {
-            "choices": [
-                "<p>选择铁马冰河入梦来选择铁马冰河入梦来选择铁马冰河入梦来选择铁马冰河入梦来</p>\r\n",
-                "<p>选择家祭无忘告乃翁</p>\r\n",
-                "<p>选项日照香炉生紫烟</p>\r\n",
-                "<p>选项葡萄美酒夜光杯</p>\r\n",
-            ]
-        },
         "categoryId": "0",
         "difficulty": "normal",
         "target": "course-20",
