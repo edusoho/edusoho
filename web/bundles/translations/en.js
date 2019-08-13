@@ -351,6 +351,7 @@ t.add("classroom_manage.student_manage_remove_hint", "Do you really want to remo
 t.add("classroom_manage.student_manage_remove_success_hint", "Remove %username% successful!", "js", "en");
 t.add("classroom_manage.student_manage_remove_failed_hint", "Remove %username% failed, please try again!", "js", "en");
 t.add("classroom_manage.student_manage_remove_assistant_hint", "%username% is the assistant of the class.Please remove the assistant role at first.", "js", "en");
+t.add("classroom_manage.student_create.price_max_error_hint", "The price can not exceed the orignial price of the classroom.", "js", "en");
 t.add("classroom.member_signed", "Checked in", "js", "en");
 t.add("classroom.sign_keep_days", "Continuous %keepDays% day", "js", "en");
 t.add("classroom.sign_rank_hint", "Sign in %time% and sign in rank %rank%.", "js", "en");
@@ -615,6 +616,7 @@ t.add("validate.valid_digits_input.message", "Please enter only digits", "js", "
 t.add("validate.valid_creditcard_input.message", "Please enter a valid credit card number.", "js", "en");
 t.add("validate.valid_equal_to_input.message", "Please enter the same value again.", "js", "en");
 t.add("validate.valid_extension_input.message", "Please enter a valid suffix", "js", "en");
+t.add("validate.valid_policy_input.message", "Please agree to the terms", "js", "en");
 t.add("validate.max_length.message", "Please enter no more than {0} characters.", "js", "en");
 t.add("validate.min_length.message", "Please enter at least {0} characters.", "js", "en");
 t.add("validate.range_length.message", "Please enter a value between {0} and {1} characters long.", "js", "en");

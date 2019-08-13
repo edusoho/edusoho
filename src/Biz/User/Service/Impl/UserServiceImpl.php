@@ -20,6 +20,7 @@ use Biz\Role\Service\RoleService;
 use Biz\System\Service\IpBlacklistService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
+use Biz\System\SettingException;
 use Biz\User\Dao\FriendDao;
 use Biz\User\Dao\TokenDao;
 use Biz\User\Dao\UserApprovalDao;
@@ -1289,7 +1290,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
-        if (in_array($type, array('weixinweb', 'qq', 'weibo', 'app'))) {
+        if (in_array($type, array('weixinweb', 'qq', 'weibo', 'app', 'h5', 'miniProgram'))) {
             $this->getLogService()->info('mobile', 'login_success', "通过{$type}登录");
         } else {
             $this->getLogService()->info('user', 'login_success', '登录成功');
@@ -1966,6 +1967,45 @@ class UserServiceImpl extends BaseService implements UserService
             return $uuid;
         } else {
             return $this->generateUUID();
+        }
+    }
+
+    /**
+     * 发送短信动作是否需要图片拖动验证码
+     * 不涉及具体业务
+     * 因为后台没有可配置项，暂时先借用『注册防护机制』的规则。
+     *
+     * @TODO 建立独立的配置机制。参考『注册防护机制』，建立『短信(接口)防护机制』
+     *
+     * @param $clientIp
+     * @param bool $recount 为true时，当前会变为必填图形验证码
+     *
+     * @return string captchaRequired , captchaIgnored 字面意思
+     */
+    public function getSmsCommonCaptchaStatus($clientIp, $recount = false)
+    {
+        $cloudSetting = $this->getSettingService()->get('cloud_sms');
+        $smsEnable = isset($cloudSetting['sms_enabled']) ? $cloudSetting['sms_enabled'] : 0;
+
+        if (!$smsEnable) {
+            throw SettingException::FORBIDDEN_SMS_SEND();
+        }
+
+        $auth = $this->getSettingService()->get('auth');
+        $registerProtectMode = isset($auth['register_protective']) ? $auth['register_protective'] : 'none';
+
+        if (in_array($registerProtectMode, array('middle', 'low'))) {
+            // 注册防护机制为『低』或『中』时，第二次开始就需要图形验证码
+            $factory = $this->biz->offsetGet('ratelimiter.factory');
+            $rateLimiter = $factory('sms_common_captcha_code', 1, 3600);
+            $used = $recount ? 1 : 0;
+            $remained = $rateLimiter->check($clientIp, $used);
+
+            return $remained <= 0 ? 'captchaRequired' : 'captchaIgnored';
+        } elseif ('high' == $registerProtectMode) {
+            return 'captchaRequired';
+        } else {
+            return 'captchaIgnored';
         }
     }
 

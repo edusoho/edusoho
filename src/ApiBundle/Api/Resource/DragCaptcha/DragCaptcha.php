@@ -15,6 +15,7 @@ class DragCaptcha extends AbstractResource
         'reset_password',
         'mobile_register',
         'mobile_reset_password',
+        'sms_login',
     );
 
     /**

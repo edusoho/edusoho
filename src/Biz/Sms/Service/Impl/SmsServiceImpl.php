@@ -118,6 +118,12 @@ class SmsServiceImpl extends BaseService implements SmsService
             $description = '直播公开课';
         }
 
+        if ('sms_login' == $smsType) {
+            $description = '手机快捷登录';
+            // FIXME 先兼容教育云，待教育云添加新的类型
+            $smsType = 'sms_bind';
+        }
+
         $smsCode = $this->generateSmsCode();
 
         try {
@@ -171,7 +177,7 @@ class SmsServiceImpl extends BaseService implements SmsService
 
     protected function checkSmsType($smsType, $user)
     {
-        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'))) {
+        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind', 'sms_login'))) {
             $this->createNewException(SmsException::ERROR_SMS_TYPE());
         }
 

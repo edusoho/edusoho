@@ -68,14 +68,14 @@ class BizSessionHandler implements \SessionHandlerInterface
 
     public function getLock($lockName, $lockTime = 30)
     {
-        $result = $this->biz['db']->fetchAssoc("SELECT GET_LOCK('sess_{$lockName}', {$lockTime}) AS getLock");
+        $result = $this->biz['db']->fetchAssoc("SELECT GET_LOCK(?, ?) AS getLock", array('sess_'.$lockName, $lockTime));
 
         return $result['getLock'];
     }
 
     public function releaseLock($lockName)
     {
-        $result = $this->biz['db']->fetchAssoc("SELECT RELEASE_LOCK('sess_{$lockName}') AS releaseLock");
+        $result = $this->biz['db']->fetchAssoc("SELECT RELEASE_LOCK(?) AS releaseLock", array('sess_'.$lockName));
 
         return $result['releaseLock'];
     }
