@@ -131,7 +131,6 @@ check env:
   only:
     refs:
       - develop
-      - feature/52202-unit-test-rule
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
