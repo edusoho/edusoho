@@ -23,7 +23,7 @@
 
 <script>
   export default {
-    name: 'choice',
+    name: 'choice-type',
     data() {
       return {
         choice: {
