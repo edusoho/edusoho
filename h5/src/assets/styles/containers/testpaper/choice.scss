@@ -1,0 +1,72 @@
+.subject {
+  padding-left: vw(35);
+  padding-right: vw(35);
+}
+
+.subject-stem {
+  display: table;
+  margin-bottom: vw(40);
+  font-size: vw(16);
+  line-height: vw(20);
+  color: #333;
+}
+
+.subject-stem__order {
+  margin-right: vw(8);
+}
+
+.subject-stem__content {
+  display: table-cell;
+}
+
+.subject-option {
+  display: table;
+  margin-bottom: vw(24);
+  .van-checkbox__icon,
+  .van-radio__icon {
+    margin-right: vw(12);
+  }
+  .van-checkbox__label,
+  .van-radio__label {
+    display: table-cell;
+    vertical-align: baseline;
+  }
+
+  .subject-option__content {
+    font-size: vw(14);
+    line-height: vw(18);
+    color: #666;
+  }
+  .van-checkbox__icon--checked,
+  .van-radio__icon--checked {
+    .subject-option__order {
+      background-color: $primary-color;
+      color: #fff;
+    }
+  }
+  .van-checkbox__icon {
+    .subject-option__order--square {
+      border-radius: 4px;
+    }
+  }
+  .subject-option__order {
+    display: inline-block;
+    width: vw(30);
+    height: vw(30);
+    text-align: center;
+    font-size: vw(16);
+    line-height: vw(30);
+    color: $primary-color;
+    border: 1px solid $primary-color;
+    border-radius: 100%;
+  }
+
+  &.subject-option--determine {
+    .van-radio__icon {
+      height: 100%;
+      .subject-option__order {
+        font-size: vw(14);
+      }
+    }
+  }
+}
