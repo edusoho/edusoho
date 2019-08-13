@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: 'single_choice',
+  name: 'single-choice',
   data() {
     return {
       radio: '1',

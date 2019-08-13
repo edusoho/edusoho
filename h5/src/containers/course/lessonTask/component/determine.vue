@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'determine',
+  name: 'determine-type',
   data() {
     return {
       radio: '1',
