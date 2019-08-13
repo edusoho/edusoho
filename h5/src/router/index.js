@@ -11,6 +11,14 @@ Vue.use(Router);
 // 路由懒加载 实现代码分离
 const routes = [
   {
+    path: '/fill',
+    name: 'fill',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "fill" */ '@/containers/course/lessonTask/testPaper.vue')
+  }, 
+  {
     path: '/',
     meta: {
       title: ''

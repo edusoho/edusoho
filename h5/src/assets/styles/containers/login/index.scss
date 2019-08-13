@@ -33,6 +33,9 @@
   .van-checkbox{
     display: inline!important;
   }
+  .van-checkbox__icon{
+    display: inline-block;
+  }
   &-title {
     font-size: vw(20);
     font-weight:500;
