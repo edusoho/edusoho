@@ -27,8 +27,8 @@
 
 <script>
 export default {
-  name: 'single_choice',
-    data() {
+  name: 'determine',
+  data() {
     return {
       checked: true,
       radio: '1',

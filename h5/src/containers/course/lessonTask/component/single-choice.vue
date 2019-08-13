@@ -5,8 +5,8 @@
       <div class="subject-stem__content" v-html="singleChoice.stem"></div>
     </div>
     <van-radio-group v-model="radio">
-      <van-radio class="subject-option" name="1"
-         v-for="(item, index) in singleChoice.metas.choices"
+      <van-radio class="subject-option"
+        v-for="(item, index) in singleChoice.metas.choices"
         :key="item"
         :name="item"
       >
@@ -24,10 +24,8 @@
 <script>
 export default {
   name: 'single_choice',
-    data() {
+  data() {
     return {
-      checked: true,
-      radio: '1',
       singleChoice: {
         "id": "4",
         "type": "single_choice",
