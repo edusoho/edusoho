@@ -1,0 +1,25 @@
+.intro-body {
+  height: 100%;
+  padding: vw(10) vw(10) 0 ;
+  background-color: #f6f6f6;
+}
+
+.intro-panel {
+  margin-bottom: vw(10);
+  padding: vw(10);
+  border-radius: 5px;
+  .van-cell__title {
+    color: #333;
+    font-weight: 500;
+    span {
+      line-height: vw(20);
+    }
+  }
+}
+
+.intro-panel__content {
+  margin-top: vw(10);
+  font-size: vw(14);
+  line-height: vw(18);
+  color: #666;
+}
