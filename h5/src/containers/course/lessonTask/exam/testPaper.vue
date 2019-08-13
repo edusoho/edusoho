@@ -3,13 +3,19 @@
     <head-top></head-top>
     <fill-type :filldata="paperdata.items.fill[0]"></fill-type>
     <essay-type :essaydata="paperdata.items.essay[0]"></essay-type>
+    <choice-type ></choice-type>
+    <determine-type ></determine-type>
+    <single-choice ></single-choice>
   </div>
 </template>
 
 <script>
-import fillType from "./component/fill";
-import essayType from "./component/essay";
-import headTop from "./component/head";
+import fillType from "../component/fill";
+import essayType from "../component/essay";
+import headTop from "../component/head";
+import choiceType from "../component/choice";
+import singleChoice from "../component/single-choice";
+import determineType from "../component/determine";
 export default {
   name: "testPaper",
   data() {
@@ -319,7 +325,10 @@ export default {
   components: {
     fillType,
     essayType,
-    headTop
+    headTop,
+    choiceType,
+    singleChoice,
+    determineType
   }
 };
 </script>

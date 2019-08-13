@@ -1,75 +1,147 @@
 $common-padding: 35;
 
-.head-top{
-    margin: 0 vw($common-padding);
-    padding: vw(22) 0 vw(10) 0;
-    display: flex;
-    justify-content: space-between;
-    font-size: vw(14);
-    border-bottom: vw(1) solid #F5F5F5;
-    .head-left{
-        color: #333333;
-        font-weight:600;
-        .left-color{
-            color: #FF6700;
-            font-weight:400;
-        }
+.head-top {
+  margin: 0 vw($common-padding);
+  padding: vw(22) 0 vw(10) 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: vw(14);
+  border-bottom: vw(1) solid #f5f5f5;
+  .head-left {
+    color: #333333;
+    font-weight: 600;
+    .left-color {
+      color: #ff6700;
+      font-weight: 400;
     }
-    .head-right{
-        color: #919191;
-        font-size: vw(12);
-        font-weight:500;
-        .right-color{
-            color: #408FFB;
-            font-size: vw(18);
-            font-weight:400;
-        }
+  }
+  .head-right {
+    color: #919191;
+    font-size: vw(12);
+    font-weight: 500;
+    .right-color {
+      color: #408ffb;
+      font-size: vw(18);
+      font-weight: 400;
     }
+  }
 }
-.serial-number{
-    float: left;
+.serial-number {
+  float: left;
 }
 // .question-bank{
-    .fill{
-        padding: 0 vw($common-padding);
-        .fill-bank{
-            color: $primary-color
-        }
-        .van-field__body{
-            padding-bottom: vw(10);
-            border-bottom: 1px solid #E1E1E1;
-        }
-        .fill-subject{
-            margin-top: vw(30);
-            margin-bottom: vw(10);
-            color: $primary-color;
-            font-size: vw(14)
-        }
-        ::-webkit-input-placeholder { /* WebKit browsers */
-            color: #666666;
-            font-size: vw(14);
-          }
-          
-          ::-moz-placeholder { /* Mozilla Firefox 19+ */
-            color: #666666;
-            font-size: vw(14);
-          }
-          
-          :-ms-input-placeholder { /* Internet Explorer 10+ */
-            color: #666666;
-            font-size: vw(14);
-          }
+.fill {
+  padding: 0 vw($common-padding);
+  .fill-bank {
+    color: $primary-color;
+  }
+  .van-field__body {
+    padding-bottom: vw(10);
+    border-bottom: 1px solid #e1e1e1;
+  }
+  .fill-subject {
+    margin-top: vw(30);
+    margin-bottom: vw(10);
+    color: $primary-color;
+    font-size: vw(14);
+  }
+  ::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #666666;
+    font-size: vw(14);
+  }
+
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #666666;
+    font-size: vw(14);
+  }
+
+  :-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #666666;
+    font-size: vw(14);
+  }
+}
+.essay {
+  padding: 0 vw($common-padding);
+  .van-field__body {
+    padding: vw(10);
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #cccccc;
+  }
+  .essay-input {
+    margin-top: vw(30);
+  }
+}
+.subject {
+  padding-left: vw(35);
+  padding-right: vw(35);
+}
+.subject-stem {
+  margin-bottom: vw(40);
+  font-size: vw(16);
+  line-height: vw(20);
+  color: #333;
+}
+
+.subject-stem__order {
+  float: left;
+}
+
+p{
+    margin: 0px;
+}
+
+.subject-option {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: vw(24);
+  min-height: vw(40);
+  .van-checkbox__icon,
+  .van-radio__icon {
+    margin-right: vw(12);
+  }
+
+  .subject-option__content {
+    margin-top: vw(8);
+    font-size: vw(14);
+    line-height: vw(18);
+    color: #666;
+  }
+  .van-checkbox__icon--checked,
+  .van-radio__icon--checked {
+    .subject-option__order {
+      background-color: $primary-color;
+      color: #fff;
     }
-    .essay{
-        padding: 0 vw($common-padding);
-        .van-field__body{
-            padding: vw(10);
-            box-sizing: border-box;
-            border-radius:5px;
-            border: 1px solid #CCCCCC;
-        }
-        .essay-input{
-            margin-top: vw(30)
-        }
+  }
+  .van-checkbox__icon {
+    .subject-option__order--square {
+      border-radius: 4px;
     }
+  }
+  .subject-option__order {
+    display: inline-block;
+    width: vw(30);
+    height: vw(30);
+    text-align: center;
+    font-size: vw(16);
+    line-height: vw(30);
+    color: $primary-color;
+    border: 1px solid $primary-color;
+    border-radius: 100%;
+  }
+
+  &.subject-option--determine {
+    .van-radio__icon {
+      height: 100%;
+      .subject-option__order {
+        font-size: vw(14);
+      }
+    }
+  }
+}
 //}
