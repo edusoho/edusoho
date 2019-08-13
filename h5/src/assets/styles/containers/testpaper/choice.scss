@@ -64,13 +64,9 @@
   &.subject-option--determine {
     .van-radio__icon {
       height: 100%;
-    }
-    .subject-option__icon {
-      width: vw(30);
-      height: vw(30);
-      text-align: center;
-      font-size: vw(16);
-      line-height: vw(30);
+      .subject-option__order {
+        font-size: vw(14);
+      }
     }
   }
 }
