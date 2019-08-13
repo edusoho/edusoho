@@ -3,21 +3,9 @@
 namespace Biz\Xapi\Event;
 
 use AppBundle\Common\MathToolkit;
-use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MemberService;
-use Biz\File\Service\UploadFileService;
-use Biz\Marker\Service\MarkerService;
-use Biz\Marker\Service\QuestionMarkerResultService;
-use Biz\Marker\Service\QuestionMarkerService;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
-use Biz\System\Service\SettingService;
-use Biz\Task\Service\TaskService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\CurrentUser;
-use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;

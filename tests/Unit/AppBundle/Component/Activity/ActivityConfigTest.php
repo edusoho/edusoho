@@ -25,7 +25,7 @@ class ActivityConfigTest extends BaseTestCase
     }
 
     /**
-     * @expectedException AppBundle\Common\Exception\UnexpectedValueException
+     * @expectedException \AppBundle\Common\Exception\UnexpectedValueException
      */
     public function testOffsetGetWithNotExist()
     {
