@@ -18,7 +18,7 @@ class CommonController extends BaseController
     {
         $text = $request->get('text');
 
-        if ($this->checkWebsite($request, $text)) {
+        if (0 !== strpos($text, $request->getUriForPath(''))) {
             $text = $this->generateUrl('homepage', array(), true);
         }
 
@@ -141,16 +141,6 @@ class CommonController extends BaseController
             'Content-Disposition' => 'inline; filename="image.jpg"', );
 
         return new Response($result, 200, $headers);
-    }
-
-    protected function checkWebsite($request, $targetUrl)
-    {
-        $hostUrl = $request->getUriForPath('');
-        if (0 === strpos($targetUrl, $hostUrl)) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     /**
