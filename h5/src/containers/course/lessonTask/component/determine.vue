@@ -1,28 +1,28 @@
 <template>
   <div class="subject">
-		<div class="subject-stem">
-			<span class="subject-stem__order">{{ determine.id }}、</span>
-			<div class="subject-stem__content" v-html="determine.stem"></div>
-		</div>
-		<van-radio-group v-model="radio">
-			<van-radio class="subject-option subject-option--determine" name="1">
-				<div class="subject-option__content">对</div>
-				<i
-				slot="icon"
-				slot-scope="props"
-				class="iconfont icon-yes subject-option__order"
-				></i>
-			</van-radio>
-			<van-radio class="subject-option subject-option--determine" name="2">
-				<div class="subject-option__content">错</div>
-				<i
-				slot="icon"
-				slot-scope="props"
-				class="iconfont icon-no subject-option__order"
-				></i>
-			</van-radio>
-		</van-radio-group>
-	</div>
+    <div class="subject-stem">
+      <span class="subject-stem__order">{{ determine.id }}、</span>
+      <div class="subject-stem__content" v-html="determine.stem"></div>
+    </div>
+    <van-radio-group v-model="radio">
+      <van-radio class="subject-option subject-option--determine" name="1">
+        <div class="subject-option__content">对</div>
+        <i
+        slot="icon"
+        slot-scope="props"
+        class="iconfont icon-yes subject-option__order"
+        ></i>
+      </van-radio>
+      <van-radio class="subject-option subject-option--determine" name="2">
+        <div class="subject-option__content">错</div>
+        <i
+        slot="icon"
+        slot-scope="props"
+        class="iconfont icon-no subject-option__order"
+        ></i>
+      </van-radio>
+    </van-radio-group>
+  </div>
 </template>
 
 <script>
