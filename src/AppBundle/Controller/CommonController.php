@@ -17,6 +17,11 @@ class CommonController extends BaseController
     public function qrcodeAction(Request $request)
     {
         $text = $request->get('text');
+
+        if (0 !== strpos($text, $request->getUriForPath(''))) {
+            $text = $this->generateUrl('homepage', array(), true);
+        }
+
         $qrCode = new QrCode();
         $qrCode->setText($text);
         $qrCode->setSize(250);
