@@ -1,10 +1,13 @@
 .intro-body {
   height: 100%;
-  padding: vw(10) vw(10) 0 ;
+  margin-bottom: vw(56);
+  padding-top: vw(10);
   background-color: #f6f6f6;
 }
 
 .intro-panel {
+  margin-left: vw(10);
+  margin-right: vw(10);
   margin-bottom: vw(10);
   padding: vw(10);
   border-radius: 5px;
@@ -12,7 +15,27 @@
     color: #333;
     font-weight: 500;
     span {
+      font-size: vw(20);
       line-height: vw(20);
+    }
+  }
+  .intro-tip {
+    color: #ff6634;
+  }
+  .intro-cell {
+    padding-top: 0;
+    padding-bottom: 0;
+    &.intro-cell--total {
+      margin-bottom: vw(10);
+    }
+    .van-cell__value span{
+      color: #333;
+    }
+    .van-cell__title span {
+      font-size: vw(14);
+      line-height: vw(18);
+      color: #333;
+      font-weight: normal;
     }
   }
 }
@@ -21,5 +44,27 @@
   margin-top: vw(10);
   font-size: vw(14);
   line-height: vw(18);
-  color: #666;
+  color: #333;
+  &.intro-panel__content--title {
+    color: #666;
+  }
+}
+
+.intro-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: vw(6) vw(10);
+  box-sizing: border-box;
+  background-color: #fff;
+  box-shadow: 0px -2px 4px 0px rgba(0,0,0,0.04);
+  .intro-footer__btn {
+    width: 100%;
+    border-radius: 5px;
+    &.van-button--disabled {
+      background-color: #ccc;
+      border-color: #ccc;
+      opacity: 1;
+    }
+  }
 }
