@@ -222,22 +222,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     }
 
     /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->createService('Activity:ActivityService');
-    }
-
-    /**
-     * @return UploadFileService
-     */
-    protected function getUploadFileService()
-    {
-        return $this->createService('File:UploadFileService');
-    }
-
-    /**
      * @return CurrentUser
      */
     protected function getCurrentUser()
@@ -248,99 +232,11 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     }
 
     /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->createService('User:UserService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    /**
-     * @return MemberService
-     */
-    protected function getMemberService()
-    {
-        return $this->createService('Course:MemberService');
-    }
-
-    /**
      * @return XapiService
      */
     protected function getXapiService()
     {
         return $this->createService('Xapi:XapiService');
-    }
-
-    /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->createService('Task:TaskService');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
-    }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->createService('System:SettingService');
-    }
-
-    /**
-     * @return QuestionMarkerResultService
-     */
-    protected function getQuestionMarkerResultService()
-    {
-        return $this->createService('Marker:QuestionMarkerResultService');
-    }
-
-    /**
-     * @return MarkerService
-     */
-    protected function getMarkerService()
-    {
-        return $this->createService('Marker:MarkerService');
-    }
-
-    /**
-     * @return QuestionMarkerService
-     */
-    protected function getQuestionMarkerService()
-    {
-        return $this->createService('Marker:QuestionMarkerService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return \Biz\Taxonomy\Service\TagService
-     */
-    private function getTagService()
-    {
-        return $this->createService('Taxonomy:TagService');
     }
 
     protected function createService($alias)
