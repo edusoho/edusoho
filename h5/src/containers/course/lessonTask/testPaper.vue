@@ -1,5 +1,6 @@
 <template>
   <div>
+    <head-top></head-top>
     <fill-type :filldata="paperdata.items.fill[0]"></fill-type>
     <essay-type :essaydata="paperdata.items.essay[0]"></essay-type>
   </div>
@@ -8,6 +9,7 @@
 <script>
 import fillType from "./component/fill";
 import essayType from "./component/essay";
+import headTop from "./component/head";
 export default {
   name: "testPaper",
   data() {
@@ -316,7 +318,8 @@ export default {
   },
   components: {
     fillType,
-    essayType
+    essayType,
+    headTop
   }
 };
 </script>

@@ -1,6 +1,9 @@
 <template>
   <div class="fill" v-if="filldata">
-        <div v-html="filldata.stem"></div>
+        <div>     
+            <div class="serial-number">1、</div>  
+            <div v-html="filldata.stem"></div>
+        </div>
         <div v-for="(list,index) in filldata.answers" :key="index">
             <div class="fill-subject">填空题（{{index+1}}）</div>
             <van-field
