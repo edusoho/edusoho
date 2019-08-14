@@ -23,7 +23,8 @@
       </van-panel>
     </div>
     <div class="intro-footer">
-      <van-button class="intro-footer__btn" :disabled="disabled" type="primary"><span v-if="result">查看成绩</span><span v-else>开始考试</span></van-button>
+      <van-button class="intro-footer__btn" type="primary" v-if="result" @click="showResult">查看成绩</van-button>
+      <van-button class="intro-footer__btn" type="primary" v-else @click="startTestpaper" :disabled="disabled">开始考试</van-button>
     </div>
   </div>
 </template>
@@ -42,6 +43,8 @@ export default {
       limitTime: '',
       score: '',
       total: 0,
+      testId: '',
+      targetId: '',
       question_type_seq: [],
       obj: {
         "single_choice": '单选题',
@@ -73,9 +76,9 @@ export default {
     }),
   },
   created() {
-    const testId = this.$route.params.testId;
-    const targetId = this.$route.params.targetId;
-    this.getInfo(testId, targetId);
+    this.testId = this.$route.params.testId;
+    this.targetId = this.$route.params.targetId;
+    this.getInfo(this.testId, this.targetId);
   },
   filters: {
     filterStr(index) {
@@ -115,6 +118,24 @@ export default {
         this.result = res.testpaperResult;
         this.question_type_seq = res.testpaper.metas.question_type_seq;
       });
+    },
+    startTestpaper() {
+      this.$router.push({
+        // name暂时模拟了一个
+        name: 'testpaperDo',
+        params: {
+          testId: this.testId,
+          targetId: this.targetId
+        }
+      })
+    },
+    showResult() {
+      this.$router.push({
+        name: 'testpaperResult',
+        params: {
+          resultId: this.result.id,
+        }
+      })
     }
   },
   beforeCreate: () => {
