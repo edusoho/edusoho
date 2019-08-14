@@ -14,7 +14,7 @@ const routes = [
     path: '/intro',
     name: 'testpaperIntro',
     meta: {
-      title: ''
+      title: '考试说明'
     },
     component: () => import(/* webpackChunkName: "intro" */ '@/containers/course/lessonTask/testpaperIntro.vue')
   }, 
