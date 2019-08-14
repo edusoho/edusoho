@@ -39,15 +39,7 @@ export default {
       limitTime: '',
       score: '',
       total: 0,
-      question_type_seq: [
-        "single_choice",
-        "choice",
-        "essay",
-        "uncertain_choice",
-        "determine",
-        "fill",
-        "material"
-      ],
+      question_type_seq: [],
       obj: {
         "single_choice": '单选题',
         "choice": '多选题',
@@ -113,6 +105,7 @@ export default {
         this.doTime = this.info.doTimes;
         this.limitTime = parseInt(this.info.limitTime);
         this.result = res.testpaperResult;
+        this.question_type_seq = res.testpaper.metas.question_type_seq;
       });
     }
   }
