@@ -268,10 +268,8 @@ export default {
           this.$router.push({
             name: 'testpaperIntro',
             params: {
-              testId: testId
-            },
-            query: {
-              targetId: task.id,
+              testId: testId,
+              targetId: task.id
             }
           })
           break;

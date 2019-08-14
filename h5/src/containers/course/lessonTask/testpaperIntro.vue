@@ -74,7 +74,7 @@ export default {
   },
   created() {
     const testId = this.$route.params.testId;
-    const targetId = this.$route.query.targetId;
+    const targetId = this.$route.params.targetId;
     this.getInfo(testId, targetId);
   },
   filters: {
