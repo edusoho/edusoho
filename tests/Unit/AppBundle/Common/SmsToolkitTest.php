@@ -2,8 +2,9 @@
 
 namespace Tests\Unit\AppBundle\Common;
 
-use AppBundle\Common\SmsToolkit;
+
 use Biz\BaseTestCase;
+use AppBundle\Common\SmsToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;

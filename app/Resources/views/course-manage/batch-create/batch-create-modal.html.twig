@@ -9,8 +9,32 @@
 {% do script([cloud_sdk_url('uploader'), 'libs/jquery-sortable.js', 'app/js/course-manage/batch-create/index.js']) %}
 
 {% block body %}
-  {% set mediaType = 'video' %}
-  {% include 'file-chooser/parts/upload-file.html.twig' %}
+  {% set courseType = courseType|default('course') %}
+  <div class="file-chooser-main {% if file|default(null) %}hidden {% endif %} js-batch-create-content">
+    <div class="file-chooser-nav">
+      <ul class="nav nav-pills nav-pills-sm  nav-pills-gray mb0" id="material">
+        <li role="presentation" class="active"><a
+            href="#chooser-upload-panel">{{'course.plan_task.activity_manage.download.upload_files'|trans}}</a></li>
+        <li role="presentation"><a href="#chooser-material-panel">{{'course.plan_task.activity_manage.download.chooser_from_material'|trans}}</a></li>
+        <li role="presentation"><a href="#chooser-course-panel">{{'course.plan_task.activity_manage.download.chooser_from_course'|trans}}</a></li>
+      </ul>
+    </div>
+    <div class="tab-content">
+      {% set mediaType = 'video' %}
+      <div class="tab-pane file-chooser-tab active" id="chooser-upload-panel">
+          {% include 'file-chooser/parts/upload-file.html.twig' %}
+      </div>
+
+      <div class="tab-pane " id="chooser-material-panel">
+        {% include 'file-chooser/parts/batch-create-materiallib-choose.html.twig' with {batch: 1}%}
+      </div>
+      <div class="tab-pane file-chooser-tab" id="chooser-course-panel">
+        {% include 'file-chooser/parts/course-file-choose.html.twig' with {batch: 1} %}
+      </div>
+    </div>
+
+  </div>
+
 {% endblock %}
 
 {% block footer %}

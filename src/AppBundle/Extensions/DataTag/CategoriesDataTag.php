@@ -30,7 +30,5 @@ class CategoriesDataTag extends CourseBaseDataTag implements DataTag
         } else {
             return $this->getCategoryService()->findCategories($group['id']);
         }
-
-        return array();
     }
 }
