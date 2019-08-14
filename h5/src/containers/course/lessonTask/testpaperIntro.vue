@@ -92,7 +92,7 @@ export default {
       const dateNumFun = (num) => +num < 10 ? `0${num}` : num;
       const [Y, M, D, h, m, s] = [ year, dateNumFun(month), dateNumFun(date), dateNumFun(hours), dateNumFun(minutes)];
       return `${Y}年${M}月${D}日${h}:${m}`;
-    }
+    }
   },
   methods: {
     getInfo(testId, taskId) {
