@@ -4,7 +4,6 @@ namespace Biz\Testpaper\Builder;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\TimeMachine;
-use Biz\Testpaper\Builder\ExerciseBuilder;
 
 class ExerciseBuilderTest extends BaseTestCase
 {

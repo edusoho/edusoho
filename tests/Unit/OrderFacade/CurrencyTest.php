@@ -68,7 +68,7 @@ class CurrencyTest extends BaseTestCase
         $this->getSettingService()->set('coin', $coinSetting);
         $currency = new Currency($this->getBiz());
         $result = $currency->formatToCoinCurrency(-1111);
-        
+
         $this->assertEquals('-', $result['sign']);
         $this->assertEquals('测试币', $result['prefix']);
         $this->assertEquals('1111', $result['integer']);
