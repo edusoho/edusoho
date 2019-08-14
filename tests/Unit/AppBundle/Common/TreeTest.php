@@ -34,6 +34,18 @@ class TreeTest extends BaseTestCase
         $this->assertArrayEquals($expectArray, $tree->column('id'));
     }
 
+    public function testTreeEach()
+    {
+        $tree = Tree::buildWithArray($this->getTestArray());
+
+        $testFields = array(0, 'a', 'b', 'c', 'd', 'e', 'f', 'g');
+        $result = $tree->each(function ($tree) use ($testFields) {
+            $tree->data['testField'] = $testFields[$tree->data['id']];
+        });
+
+        $this->assertEquals(range('a', 'g'), $result->column('testField'));
+    }
+
     public function testTreeReduce()
     {
         $tree = Tree::buildWithArray($this->getTestArray());
