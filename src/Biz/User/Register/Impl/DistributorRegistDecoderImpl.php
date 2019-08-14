@@ -24,8 +24,7 @@ class DistributorRegistDecoderImpl extends RegistDecoder
             $user['type'] = 'distributor';
             $user['distributorToken'] = $registration['distributorToken'];
             $this->getLogger()->info('distributor user register sign valid success DistributorRegistDecoderImpl::dealDataBeforeSave', array(
-                'userId' => $user['id'],
-                'token' => $registration['distributorToken'],
+                'registration' => $registration
             ));
         }
 
