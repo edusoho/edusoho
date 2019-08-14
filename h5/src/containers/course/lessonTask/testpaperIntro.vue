@@ -91,8 +91,8 @@ export default {
       const minutes = dateObj.getMinutes();
       const dateNumFun = (num) => +num < 10 ? `0${num}` : num;
       const [Y, M, D, h, m, s] = [ year, dateNumFun(month), dateNumFun(date), dateNumFun(hours), dateNumFun(minutes)];
-      return `${Y}年${M}月${D}日${h}:${m}`;
-     }
+      return `${Y}年${M}月${D}日${h}:${m}`;
+    }
   },
   methods: {
     getInfo(testId, taskId) {
@@ -116,7 +116,12 @@ export default {
         this.question_type_seq = res.testpaper.metas.question_type_seq;
       });
     }
+  },
+  beforeCreate: function() {
+    document.body.className ='bg-color';
+  },
+  beforeDestroy: function() {
+    document.body.removeAttribute('class', 'bg-color');
   }
 }
 </script>
-
