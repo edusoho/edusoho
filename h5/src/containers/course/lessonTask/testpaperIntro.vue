@@ -1,5 +1,6 @@
 <template>
   <div>
+    <e-loading v-if="isLoading"></e-loading>
     <div class="intro-body">
       <van-panel class="panel intro-panel" title="考试名称">
         <div class="intro-panel__content intro-panel__content--title">{{ testpaperTitle }}</div>
@@ -29,7 +30,9 @@
 
 <script>
 import Api from '@/api';
+import { mapState } from 'vuex';
 export default {
+  name: 'testpaperIntro',
   data() {
     return {
       testpaperTitle: '',
@@ -64,10 +67,15 @@ export default {
     disabled: function() {
       const nowTime = new Date().getTime();
       return this.startTime > nowTime ? true: false;
-    }
+    },
+    ...mapState({
+      isLoading: state => state.isLoading,
+    }),
   },
   created() {
-    this.getInfo(17, 668);
+    const testId = this.$route.params.testId;
+    const targetId = this.$route.query.targetId;
+    this.getInfo(testId, targetId);
   },
   filters: {
     filterStr(index) {
@@ -98,7 +106,7 @@ export default {
         }
       }).then(res => {
         this.counts = res.items;
-        this.testpaperTitle = res.testpaper.name;
+        this.testpaperTitle = res.task.title;
         this.score = res.testpaper.score;
         this.info = res.task.activity.testpaperInfo;
         this.startTime = parseInt(this.info.startTime) * 1000;

@@ -112,6 +112,7 @@ const filters = [
         case 'text':
         case 'doc':
         case 'ppt':
+        case 'testpaper':
           return '';
         default:
           return '暂不支持';

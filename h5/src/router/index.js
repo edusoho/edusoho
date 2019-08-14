@@ -11,7 +11,7 @@ Vue.use(Router);
 // 路由懒加载 实现代码分离
 const routes = [
   {
-    path: '/intro',
+    path: '/testpaper',
     name: 'testpaperIntro',
     meta: {
       title: '考试说明'
