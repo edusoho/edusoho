@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\AppBundle\Common;
 
-
 use Biz\BaseTestCase;
 use AppBundle\Common\SmsToolkit;
 use Symfony\Component\HttpFoundation\Request;
