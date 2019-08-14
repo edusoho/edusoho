@@ -17,6 +17,16 @@ class ActivityConfigTest extends BaseTestCase
     {
         $activityConfig = new ActivityConfig(array('type' => 'html'));
         $this->assertEquals('html', $activityConfig->offsetGet('type'));
+        $this->assertEquals('html', $activityConfig['type']);
+    }
+
+    /**
+     * @expectedException \AppBundle\Common\Exception\UnexpectedValueException
+     */
+    public function testOffsetGetWithNotExist()
+    {
+        $config = new ActivityConfig(array());
+        $config->offsetGet('test');
     }
 
     public function testOffsetSet()
