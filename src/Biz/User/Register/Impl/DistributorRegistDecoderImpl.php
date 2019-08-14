@@ -2,6 +2,9 @@
 
 namespace Biz\User\Register\Impl;
 
+use Codeages\PluginBundle\System\PluginConfigurationManager;
+use Topxia\Service\Common\ServiceKernel;
+
 class DistributorRegistDecoderImpl extends RegistDecoder
 {
     protected function validateBeforeSave($registration)
@@ -10,37 +13,43 @@ class DistributorRegistDecoderImpl extends RegistDecoder
 
     protected function dealDataBeforeSave($registration, $user)
     {
+        if (!$this->isPluginInstalled('Drp')) {
+            $this->getLogger()->error('drp plugin is not installed DistributorRegistDecoderImpl::dealDataBeforeSave ', array('trace' => 'drp plugin is not installed!'));
+            return $user;
+        }
         $splitedInfos = $this->splitToken($registration);
 
         // 有效，则注册来源为分销平台
         if ($splitedInfos['valid']) {
             $user['type'] = 'distributor';
             $user['distributorToken'] = $registration['distributorToken'];
+            $this->getLogger()->info('distributor user register sign valid success DistributorRegistDecoderImpl::dealDataBeforeSave', array(
+                'userId' => $user['id'],
+                'token' => $registration['distributorToken'],
+            ));
         }
 
         return $user;
     }
 
+
     protected function dealDataAfterSave($registration, $user)
     {
+        if (!$this->isPluginInstalled('Drp')) {
+            $this->getLogger()->error('drp plugin is not installed DistributorRegistDecoderImpl::dealDataAfterSave ', array('trace' => 'drp plugin is not installed!'));
+            return $user;
+        }
         $splitedInfos = $this->splitToken($registration);
 
         $errMsg = '';
         if ($splitedInfos['valid']) {
             $user['token'] = $registration['distributorToken'];
-            $this->getDistributorUserService()->createJobData($user);
         } else {
             $errMsg .= 'not valid ';
         }
 
-        if ($splitedInfos['rewardable']) {
-            $this->getCouponService()->generateDistributionCoupon($user['id'], $splitedInfos['couponPrice'] / 100, $splitedInfos['couponExpiryDay']);
-        } else {
-            $errMsg .= 'not rewardable ';
-        }
-
         if (!empty($errMsg)) {
-            $this->biz['logger']->error('distributor sign error DistributorRegistDecoderImpl::dealDataAfterSave', array(
+            $this->getLogger()->error('distributor sign  DistributorRegistDecoderImpl::dealDataAfterSave', array(
                 'userId' => $user['id'],
                 'token' => $registration['distributorToken'],
             ));
@@ -67,5 +76,17 @@ class DistributorRegistDecoderImpl extends RegistDecoder
     protected function getCouponService()
     {
         return $this->biz->service('Coupon:CouponService');
+    }
+
+    protected function getLogger()
+    {
+        return $this->biz->offsetGet('drp.plugin.logger');
+    }
+
+    protected function isPluginInstalled($code)
+    {
+        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
+
+        return $pluginManager->isPluginInstalled($code);
     }
 }
