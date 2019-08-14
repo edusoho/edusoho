@@ -2,9 +2,6 @@
 
 namespace Biz\User\Register\Impl;
 
-use Codeages\PluginBundle\System\PluginConfigurationManager;
-use Topxia\Service\Common\ServiceKernel;
-
 class DistributorRegistDecoderImpl extends RegistDecoder
 {
     protected function validateBeforeSave($registration)
@@ -13,10 +10,6 @@ class DistributorRegistDecoderImpl extends RegistDecoder
 
     protected function dealDataBeforeSave($registration, $user)
     {
-        if (!$this->isPluginInstalled('Drp')) {
-            $this->getLogger()->error('drp plugin is not installed DistributorRegistDecoderImpl::dealDataBeforeSave ', array('trace' => 'drp plugin is not installed!'));
-            return $user;
-        }
         $splitedInfos = $this->splitToken($registration);
 
         // 有效，则注册来源为分销平台
@@ -34,10 +27,6 @@ class DistributorRegistDecoderImpl extends RegistDecoder
 
     protected function dealDataAfterSave($registration, $user)
     {
-        if (!$this->isPluginInstalled('Drp')) {
-            $this->getLogger()->error('drp plugin is not installed DistributorRegistDecoderImpl::dealDataAfterSave ', array('trace' => 'drp plugin is not installed!'));
-            return $user;
-        }
         $splitedInfos = $this->splitToken($registration);
 
         $errMsg = '';
@@ -80,12 +69,5 @@ class DistributorRegistDecoderImpl extends RegistDecoder
     protected function getLogger()
     {
         return $this->biz->offsetGet('drp.plugin.logger');
-    }
-
-    protected function isPluginInstalled($code)
-    {
-        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
-
-        return $pluginManager->isPluginInstalled($code);
     }
 }

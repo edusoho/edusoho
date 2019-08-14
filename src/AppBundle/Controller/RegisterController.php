@@ -71,7 +71,9 @@ class RegisterController extends BaseController
 
                 $registration['createdIp'] = $request->getClientIp();
                 $registration['registeredWay'] = 'web';
-                $registration = DistributorCookieToolkit::setCookieTokenToFields($request, $registration, DistributorCookieToolkit::USER);
+                if ($this->isPluginInstalled('Drp')) {
+                    $registration = DistributorCookieToolkit::setCookieTokenToFields($request, $registration, DistributorCookieToolkit::USER);
+                }
 
                 $user = $this->getAuthService()->register($registration);
 
