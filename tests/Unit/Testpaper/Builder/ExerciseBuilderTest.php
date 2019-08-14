@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Testpaper\Tests;
+namespace Biz\Testpaper\Builder;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\TimeMachine;

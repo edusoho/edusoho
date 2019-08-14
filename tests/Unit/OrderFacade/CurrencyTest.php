@@ -57,6 +57,60 @@ class CurrencyTest extends BaseTestCase
         $this->assertEquals('2048.00 虚币', implode('', $currency->formatParts('1024')));
     }
 
+    public function testFormatToCoinCurrency()
+    {
+        $coinSetting = array(
+            'coin_enabled' => 0,
+            'cash_model' => 'currency',
+            'coin_name' => '测试币',
+            'cash_rate' => 1,
+        );
+        $this->getSettingService()->set('coin', $coinSetting);
+        $currency = new Currency($this->getBiz());
+        $result = $currency->formatToCoinCurrency(-1111);
+        
+        $this->assertEquals('-', $result['sign']);
+        $this->assertEquals('测试币', $result['prefix']);
+        $this->assertEquals('1111', $result['integer']);
+        $this->assertEquals('00', $result['decimal']);
+    }
+
+    public function testFormatToMoneyCurrency()
+    {
+        $coinSetting = array(
+            'coin_enabled' => 0,
+            'cash_model' => 'currency',
+            'coin_name' => '测试币',
+            'cash_rate' => 1,
+        );
+        $this->getSettingService()->set('coin', $coinSetting);
+        $currency = new Currency($this->getBiz());
+        $result = $currency->formatToMoneyCurrency(-1111);
+
+        $this->assertEquals('-', $result['sign']);
+        $this->assertEquals('￥', $result['prefix']);
+        $this->assertEquals('1111', $result['integer']);
+        $this->assertEquals('00', $result['decimal']);
+    }
+
+    public function testFormatToMajorCurrency()
+    {
+        $coinSetting = array(
+            'coin_enabled' => 0,
+            'cash_model' => 'currency',
+            'coin_name' => '测试币',
+            'cash_rate' => 1,
+        );
+        $this->getSettingService()->set('coin', $coinSetting);
+        $currency = new Currency($this->getBiz());
+        $result = $currency->formatToMajorCurrency(-1111);
+
+        $this->assertEquals('-', $result['sign']);
+        $this->assertEquals('￥', $result['prefix']);
+        $this->assertEquals('1111', $result['integer']);
+        $this->assertEquals('00', $result['decimal']);
+    }
+
     /**
      * @return SettingService
      */
