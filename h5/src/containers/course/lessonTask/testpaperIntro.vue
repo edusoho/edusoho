@@ -117,10 +117,10 @@ export default {
       });
     }
   },
-  beforeCreate: function() {
+  beforeCreate: () => {
     document.body.className ='bg-color';
   },
-  beforeDestroy: function() {
+  beforeDestroy: () => {
     document.body.removeAttribute('class', 'bg-color');
   }
 }
