@@ -263,6 +263,16 @@ export default {
             }
           });
           break;
+        case 'testpaper':
+          const testId = task.activity.testpaperInfo.testpaperId;
+          this.$router.push({
+            name: 'testpaperIntro',
+            params: {
+              testId: testId,
+              targetId: task.id
+            }
+          })
+          break;
         default:
           Toast("暂不支持此类型");
       }
