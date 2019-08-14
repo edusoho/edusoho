@@ -8,132 +8,130 @@ use Biz\BaseTestCase;
 use Biz\User\Service\Impl\UserServiceImpl;
 use Codeages\Biz\Framework\Dao\Connection;
 use Codeages\Biz\Framework\Service\ServiceProxy;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
 class ActivityRuntimeContainerTest extends BaseTestCase
 {
     public function testShowTwig()
     {
-        $container = $this->getContainer();
+        $activityContainer = $this->createRuntimeContainer();
         $activity = array(
             'title' => 'test title',
             'mediaType' => 'twig_test',
         );
-        $response = $container->get('activity_runtime_container')->show($activity);
+        $response = $activityContainer->show($activity);
         $this->assertEquals('test title', $response->getContent());
     }
 
     public function testShowHtml()
     {
-        $container = $this->getContainer();
+        $activityContainer = $this->createRuntimeContainer();
         $activity = array(
             'title' => 'test title',
             'mediaType' => 'html_test',
         );
-        $response = $container->get('activity_runtime_container')->show($activity);
+        $response = $activityContainer->show($activity);
         $this->assertEquals('test title', $response->getContent());
     }
 
     public function testShowPhp()
     {
-        $container = $this->getContainer();
+        $activityContainer = $this->createRuntimeContainer();
         $activity = array(
             'title' => 'test title',
             'mediaType' => 'php_test',
         );
-        $response = $container->get('activity_runtime_container')->show($activity);
+        $response = $activityContainer->show($activity);
         $this->assertEquals('test title', $response);
     }
 
     public function testCreate()
     {
-        $container = $this->getContainer();
+        $activityContainer = $this->createRuntimeContainer();
         $activity = array(
             'title' => 'test title',
             'mediaType' => 'html_test',
         );
-        $response = $container->get('activity_runtime_container')->create($activity);
+        $response = $activityContainer->create($activity);
         $this->assertEquals('test title', $response->getContent());
     }
 
     public function testContent()
     {
-        $container = $this->getContainer();
+        $activityContainer = $this->createRuntimeContainer();
         $activity = array(
             'title' => 'test title',
             'mediaType' => 'html_test',
         );
-        $response = $container->get('activity_runtime_container')->content($activity);
+        $response = $activityContainer->content($activity);
         $this->assertEquals('test title', $response->getContent());
     }
 
     public function testUpdate()
     {
-        $container = $this->getContainer();
+        $activityContainer = $this->createRuntimeContainer();
         $activity = array(
             'title' => 'test title',
             'mediaType' => 'html_test',
         );
-        $response = $container->get('activity_runtime_container')->update($activity);
+        $response = $activityContainer->update($activity);
         $this->assertEquals('test title', $response->getContent());
     }
 
     public function testFinish()
     {
-        $container = $this->getContainer();
+        $activityContainer = $this->createRuntimeContainer();
         $activity = array(
             'title' => 'test title',
             'mediaType' => 'html_test',
         );
-        $response = $container->get('activity_runtime_container')->finish($activity);
+        $response = $activityContainer->finish($activity);
         $this->assertEquals('test title', $response->getContent());
     }
 
     public function testGetDb()
     {
-        $container = $this->getContainer();
-        $result = $container->get('activity_runtime_container')->getDB();
+        $activityContainer = $this->createRuntimeContainer();
+        $result = $activityContainer->getDB();
         $this->assertTrue($result instanceof Connection);
     }
 
     public function testGetRequest()
     {
-        $container = $this->getContainer();
-        $result = $container->get('activity_runtime_container')->getRequest();
+        $activityContainer = $this->createRuntimeContainer();
+        $result = $activityContainer->getRequest();
         $this->assertTrue($result instanceof Request);
     }
 
     public function testRenderRoute()
     {
-        $container = $this->getContainer();
+        $activityContainer = $this->createRuntimeContainer();
         $activity = array(
             'title' => 'test title',
             'mediaType' => 'html_test',
         );
-        $response = $container->get('activity_runtime_container')->renderRoute($activity, 'show');
+        $response = $activityContainer->renderRoute($activity, 'show');
         $this->assertEquals('test title', $response->getContent());
     }
 
     public function testGetActivityProxy()
     {
-        $container = $this->getContainer();
-        $result = $container->get('activity_runtime_container')->getActivityProxy();
+        $activityContainer = $this->createRuntimeContainer();
+        $result = $activityContainer->getActivityProxy();
         $this->assertTrue($result instanceof ActivityProxy);
     }
 
     public function testGetInstance()
     {
-        $container = $this->getContainer();
-        $activityContainer = $container->get('activity_runtime_container');
+        $activityContainer = $this->createRuntimeContainer();
         $result = $activityContainer::instance();
         $this->assertTrue($result instanceof ActivityRuntimeContainer);
     }
 
     public function testCreateService()
     {
-        $container = $this->getContainer();
-        $activityContainer = $container->get('activity_runtime_container');
+        $activityContainer = $this->createRuntimeContainer();
         $result = $activityContainer->createService('User:UserService');
         $this->assertTrue($result instanceof ServiceProxy);
         $this->assertTrue($result->getClass() instanceof UserServiceImpl);
@@ -141,24 +139,31 @@ class ActivityRuntimeContainerTest extends BaseTestCase
 
     public function testCreateJsonResponse()
     {
-        $container = $this->getContainer();
-        $activityContainer = $container->get('activity_runtime_container');
+        $activityContainer = $this->createRuntimeContainer();
         $result = $activityContainer->createJsonResponse(array('title' => 'test title'));
         $this->assertEquals(array('title' => 'test title'), json_decode($result->getContent(), true));
     }
 
     /**
-     * @expectedException LogicException
+     * @expectedException \LogicException
      * @expectedExceptionMessage You can not use the "render" method if the Templating Component or the Twig Bundle are not available.
      */
     public function testRender()
     {
-        $container = new Container();
+        $container = new ContainerBuilder();
         $container->set('biz', $this->biz);
         $container->setParameter('edusoho.activities_dir', $this->getContainer()->getParameter('edusoho.activities_dir'));
         $container->set('activity_config_manager', $this->getContainer()->get('activity_config_manager'));
         $container->set('request', $this->getContainer()->get('request'));
         $activityContainer = new ActivityRuntimeContainer($container);
         $activityContainer->render('test.html', array());
+    }
+
+    public function createRuntimeContainer()
+    {
+        $container = $this->getContainer()->get('activity_runtime_container');
+        $container->setActivitiesDir($this->getContainer()->getParameter('kernel.root_dir').'/../tests/Unit/AppBundle/Fixtures/activities');
+
+        return $container;
     }
 }

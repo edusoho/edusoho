@@ -3,9 +3,11 @@
 namespace Tests\Unit\Component\Activity;
 
 use AppBundle\Component\Activity\ActivityConfig;
+use AppBundle\Component\Activity\ActivityConfigManager;
 use AppBundle\Component\Activity\ActivityContext;
 use AppBundle\Component\Activity\ActivityProxy;
 use Biz\BaseTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ActivityProxyTest extends BaseTestCase
 {
@@ -50,9 +52,23 @@ class ActivityProxyTest extends BaseTestCase
             'mediaType' => 'html_test',
         ), $activity);
         $activityContainer = $this->getContainer()->get('activity_runtime_container');
-        $activityConfig = new ActivityConfig($this->getContainer()->get('activity_config_manager')->getInstalledActivity($activity['mediaType']));
+        $activityContainer->setActivitiesDir($this->getContainer()->getParameter('kernel.root_dir').'/../tests/Unit/AppBundle/Fixtures/activities');
+        $activityManager = new ActivityConfigManager(
+            $this->getContainer()->getParameter('kernel.cache_dir'),
+            $this->getContainer()->getParameter('kernel.root_dir').'/../tests/Unit/AppBundle/Fixtures/activities',
+            $this->getContainer()->getParameter('kernel.debug')
+        );
+        $activityConfig = new ActivityConfig($activityManager->getInstalledActivity($activity['mediaType']));
         $activityProxy = new ActivityProxy($activityContainer, $activity, $activityConfig);
 
         return array($activityContainer, $activityConfig, $activityProxy);
+    }
+
+    public function setUp()
+    {
+        parent::setUp();
+        $filesystem = new Filesystem();
+        $filesystem->remove($this->getContainer()->getParameter('kernel.cache_dir'));
+        clearstatcache(true);
     }
 }

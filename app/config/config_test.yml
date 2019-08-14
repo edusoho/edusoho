@@ -16,6 +16,3 @@ web_profiler:
 twig:
     paths:
         "%kernel.root_dir%/../tests/Unit/AppBundle/Fixtures/activities": activity
-
-parameters:
-  edusoho.activities_dir: "%kernel.root_dir%/../tests/Unit/AppBundle/Fixtures/activities"
