@@ -123,7 +123,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
         $tabs = array(
             'tasks' => array(
                 'name' => 'course.tab.tasks',
-                'content' => 'AppBundle:My/Course:tasks',
+                'content' => 'forGuest' === $for ? 'AppBundle:Course/Course:tasks' : 'AppBundle:My/Course:tasks', ,
             ),
             'discussion' => array(
                 'name' => 'course.tab.discussions',
@@ -156,23 +156,23 @@ class CourseExtension extends Extension implements ServiceProviderInterface
             ),
         );
 
-        if ($for == 'forGuest') {
+        if ('forGuest' == $for) {
             unset($tabs['material'], $tabs['discussion'], $tabs['question']);
         }
 
-        if (isset($courseSetting['show_note']) && $courseSetting['show_note'] == '0') {
+        if (isset($courseSetting['show_note']) && '0' == $courseSetting['show_note']) {
             unset($tabs['notes']);
         }
 
-        if (isset($courseSetting['show_question']) && $courseSetting['show_question'] == '0') {
+        if (isset($courseSetting['show_question']) && '0' == $courseSetting['show_question']) {
             unset($tabs['question']);
         }
 
-        if (isset($courseSetting['show_discussion']) && $courseSetting['show_discussion'] == '0') {
+        if (isset($courseSetting['show_discussion']) && '0' == $courseSetting['show_discussion']) {
             unset($tabs['discussion']);
         }
 
-        if (isset($courseSetting['show_review']) && $courseSetting['show_review'] == '0') {
+        if (isset($courseSetting['show_review']) && '0' == $courseSetting['show_review']) {
             unset($tabs['reviews']);
         }
 
