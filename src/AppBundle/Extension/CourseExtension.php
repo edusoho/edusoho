@@ -123,7 +123,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
         $tabs = array(
             'tasks' => array(
                 'name' => 'course.tab.tasks',
-                'content' => 'forGuest' === $for ? 'AppBundle:Course/Course:tasks' : 'AppBundle:My/Course:tasks', ,
+                'content' => 'forGuest' === $for ? 'AppBundle:Course/Course:tasks' : 'AppBundle:My/Course:tasks',
             ),
             'discussion' => array(
                 'name' => 'course.tab.discussions',
