@@ -54,6 +54,7 @@ site.message.warning: 警告信息
 site.message.error: 错误提示
 site.power_by: 好知网
 site.default.must: 必须
+site.default.and: 和
 site.default.student: 学员
 site.default.classroom: 班级
 site.default.reviewing: 已批阅
@@ -2881,8 +2882,10 @@ user.register.emaill_not_useful_tips: >
   <h5>原邮箱已失效？</h5>
   <a class="btn btn-primary" href="%resetEmail%">重新绑定</a>
 user.register.service_protocol: 服务协议
+user.register.privacy_policy: 隐私政策
 user.register.agree_terms: 同意服务协议并注册
 user.register.read_detail: 请详细阅读
+user.register.read_agree: 我已阅读并同意
 user.register.user_service_protocol: 用户服务协议
 user.register.reset_email: 重置邮箱
 user.register.reset_email.origin_email: 原邮箱地址:
@@ -6656,6 +6659,7 @@ admin.edu_cloud.edu_sms.enable_status: 启用状态
 admin.edu_cloud.edu_sms.operation: 操作
 admin.edu_cloud.edu_sms.validation_type: 验证类
 admin.edu_cloud.edu_sms.bind_mobile: 手机绑定
+admin.edu_cloud.edu_sms.login: 手机短信快捷登录
 admin.edu_cloud.edu_sms.verification_code_tips: 您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。
 admin.edu_cloud.edu_sms.singel_user: 单个用户
 admin.edu_cloud.edu_sms.auto_singel_send: 自动单发
@@ -7033,12 +7037,19 @@ admin.user_auth.Setup_welcome_message.title: 欢迎信息标题
 admin.user_auth.Setup_welcome_message.content: 欢迎信息内容
 admin.user_auth.Setup_welcome_message.warning.help_block: 注意： 私信长度不能超过1000个字符
 admin.user_auth.Setup_welcome_message.as_recipient.help_block: 为接收方用户用户名
+admin.user_auth.protocol_settings: 网校协议设置
 admin.user_auth.Term_service_settings: 服务条款设置
 admin.user_auth.Term_service_settings.Enable: 是否开启服务条款
 admin.user_auth.Term_service_settings.open: 开启
 admin.user_auth.Term_service_settings.closed: 关闭
 admin.user_auth.Term_service_settings.Enable.help_block: 开启后用户注册时必须同意条款才能注册
 admin.user_auth.Term_service_settings.details: 条款内容
+admin.user_auth.privacy_policy_settings: 隐私政策设置
+admin.user_auth.privacy_policy_settings.Enable: 是否开启隐私政策
+admin.user_auth.privacy_policy_settings.open: 开启
+admin.user_auth.privacy_policy_settings.closed: 关闭
+admin.user_auth.privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册
+admin.user_auth.privacy_policy_settings.details: 隐私政策内容
 admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
 admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
@@ -7218,6 +7229,11 @@ admin.setting_course.course_list_page_seq.help_block: 地址：域名/course/exp
 admin.setting_course.Prevent_copying_rich_text_doc: 图文、文档任务防复制
 admin.setting_course.Prevent_copying_test_paper: 试卷防复制
 admin.setting_course.course_operation_mode: 课程运营模式
+admin.setting_course.course_comments_manage: 内容管理
+admin.setting_course.course_review: 评价
+admin.setting_course.course_question: 问题（问答）
+admin.setting_course.course_thread: 话题
+admin.setting_course.course_note: 笔记
 admin.setting_course.course_operation_mode.free_try_view: 免费试看/免费任务允许未登录用户观看
 admin.setting_course.course_operation_mode.free_try_view.help_block: 如果允许此项设置，未登录用户（游客）可观看免费试看/免费任务
 admin.setting_course.course_operation_mode.allow_show_user_count: 课程中允许显示课程人数
@@ -7248,10 +7264,19 @@ admin.setting_course.classroom.setting_classroom_name.tips: 请注意：以下�
 admin.setting_course.classroom.course_discount: 课程重合时抵扣购买
 admin.setting_course.classroom.course_discount.help_block: 购买班级时，如果已经购买过其中的课程，支付金额中将会扣除该课程的当前价格。反之，支付金额不受影响，以班级原价购买。
 admin.setting_course.classroom.classroom_list_default_seq: 班级列表页默认排序
+admin.setting_course.classroom.classroom_comments_manage: 班级内容管理
+admin.setting_course.classroom.classroom_review: 评价
+admin.setting_course.classroom.classroom_thread: 话题
+admin.setting_course.classroom.classroom_note: 笔记
 admin.setting_course.classroom.classroom_list.help_block: 班级列表页
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 地址：域名/classroom/explore,任何人都可在此页面查看网站所有已发布班级,如需设置网站首页班级排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 admin.setting_course.custom_chapter_name: 设置章节名称
 admin.setting_course.custom_chapter_name_enabled_hint: 开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。
+admin.setting_course.open_course.open_course_comments_manage: 公开课内容管理
+admin.setting_course.open_course.open_course_review: 评价
+admin.article_setting.article_comments_manage: 资讯内容管理
+admin.article_setting.message_comments_manage: 私信内容管理
+admin.setting_course.article.article_comment: 评价
 
 #微信授权设置
 admin.setting_wechat_auth.web_scan_login: 网页扫码登录
@@ -10086,3 +10111,5 @@ mobile.task.finish_tips.testpapaer.score: 考试分数通过 %finishData% 分
 mobile.task.finish_tips.text.time: 至少学习 %finishData% 分钟
 mobile.task.finish_tips.video.end: 学习到最后
 mobile.task.finish_tips.video.time: 至少学习 %finishData% 分钟
+
+classroom.joining_date.expired_tips: 班级已过有效期！

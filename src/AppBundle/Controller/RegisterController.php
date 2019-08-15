@@ -44,6 +44,10 @@ class RegisterController extends BaseController
                     $registration['verifiedMobile'] = $registration['emailOrMobile'];
                 }
 
+                if (!isset($registration['agree_policy']) || $registration['agree_policy'] != 'on') {
+                    return $this->createMessageResponse('info', '请先勾选相关条款或政策');
+                }
+
                 $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
                 $registration['createdIp'] = $request->getClientIp();
                 $authSettings = $this->getSettingService()->get('auth', array());
@@ -180,6 +184,17 @@ class RegisterController extends BaseController
 
         return $this->render('register/user-terms.html.twig', array(
             'userTerms' => $setting['user_terms_body'],
+        ));
+    }
+
+    public function privacyPolicyAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('auth', array());
+
+        $privacyPolicyBody = empty($setting['privacy_policy_body']) ? '' : $setting['privacy_policy_body'];
+
+        return $this->render('register/privacy-policy.html.twig', array(
+            'privacyPolicy' => $privacyPolicyBody,
         ));
     }
 

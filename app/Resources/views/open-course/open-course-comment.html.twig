@@ -1,5 +1,7 @@
 {% import 'macro.html.twig' as web_macro %}
 
+{% set openCourseSetting = setting('openCourse') %}
+{% if openCourseSetting.show_comment|default('1') != 0 %}
 <div class="es-section" id="open-course-comment">
   <div class="gray-darker pbl">{{'my.teaching.open_course.comment.title'|trans}}(<span class="thread-post-num">{{ course.postNum }}</span>)</div>
   {% if app.user %}
@@ -33,3 +35,4 @@
     {{ web_macro.paginator(paginator) }}
   </nav>
 </div>
+{% endif %}

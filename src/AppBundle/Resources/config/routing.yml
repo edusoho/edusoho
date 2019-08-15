@@ -115,6 +115,10 @@ user_terms:
     path:  /userterms
     defaults: { _controller: AppBundle:Register:userTerms }
 
+privacy_policy:
+  path: /privacyPolicy
+  defaults: { _controller: AppBundle:Register:privacyPolicy }
+
 distributor_register:
    path:  /distributor_register
    defaults: { _controller: AppBundle:Distributor:register }

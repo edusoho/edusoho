@@ -5,14 +5,16 @@ namespace ApiBundle\Api\Resource\Setting;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\EncryptionToolkit;
 use Biz\Common\CommonException;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Biz\System\SettingException;
 
 class Setting extends AbstractResource
 {
     private $supportTypes = array(
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
-        'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer'
+        'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer', 'user', 'cloud'
     );
 
     /**
@@ -57,6 +59,44 @@ class Setting extends AbstractResource
             'cloudSdkCdn' => $cloudSdkCdn,
             'cloudPlayServer' => $cloudPlayServer
         );
+    }
+
+    public function getUser($request = null)
+    {
+        $authSetting = $this->getSettingService()->get('auth');
+        $loginSetting = $this->getSettingService()->get('login_bind');
+
+        if (empty($loginSetting)) {
+            SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
+        }
+
+        $result = array(
+            'auth' => array(
+                'register_mode' => $authSetting['register_mode'],
+                'user_terms_enabled' => 'opened' == $authSetting['user_terms'] ? true : false,
+                'privacy_policy_enabled' => 'opened' == $authSetting['privacy_policy'] ? true : false,
+            ),
+            'login_bind' => array(
+                'oauth_enabled' => (int) $loginSetting['enabled'] ? true : false,
+                'weibo_enabled' => (int) $loginSetting['weibo_enabled'] ? true : false,
+                'qq_enabled' => (int) $loginSetting['qq_enabled'] ? true : false,
+                'weixinweb_enabled' => (int) $loginSetting['weixinweb_enabled'] ? true : false,
+                'weixinmob_enabled' => (int) $loginSetting['weixinmob_enabled'] ? true : false,
+            ),
+        );
+
+        return $result;
+    }
+
+    public function getCloud($request = null)
+    {
+        $cloudSms = $this->getSettingService()->get('cloud_sms');
+
+        $result = array(
+            'sms_enabled' => $cloudSms['sms_enabled'] ? true : false,
+        );
+
+        return $result;
     }
 
     public function getHasPluginInstalled($request)

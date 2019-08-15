@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "187f5e805465d57395e17327af22cc39",
+    "content-hash": "383af951fabce8938c5a3d45da46716e",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -276,16 +276,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.31",
+            "version": "v0.9.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "7ae1b2f37846f36616a4a2f93edc5bf2dc7b159f"
+                "reference": "a1e64350f9ebda889941cfeb0cc49ff85571ab17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/7ae1b2f37846f36616a4a2f93edc5bf2dc7b159f",
-                "reference": "7ae1b2f37846f36616a4a2f93edc5bf2dc7b159f",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/a1e64350f9ebda889941cfeb0cc49ff85571ab17",
+                "reference": "a1e64350f9ebda889941cfeb0cc49ff85571ab17",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -334,7 +334,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2019-04-11T09:04:25+00:00"
+            "time": "2019-08-01T03:15:36+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -423,12 +423,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/exam-parser.git",
-                "reference": "88aaf4e15ccb9c322af657157a021b5cd7572de5"
+                "reference": "7dec9c68b5a5c64ced6726687081fa258d78b63d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/88aaf4e15ccb9c322af657157a021b5cd7572de5",
-                "reference": "88aaf4e15ccb9c322af657157a021b5cd7572de5",
+                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/7dec9c68b5a5c64ced6726687081fa258d78b63d",
+                "reference": "7dec9c68b5a5c64ced6726687081fa258d78b63d",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -469,7 +469,7 @@
                 }
             ],
             "description": "Exam Parser",
-            "time": "2019-08-05T08:44:55+00:00"
+            "time": "2019-08-06T01:12:36+00:00"
         },
         {
             "name": "codeages/omnipay-alipay",

@@ -888,6 +888,16 @@ admin_setting_live_course_setting:
     defaults: { _controller: AppBundle:Admin/CourseSetting:liveCourseSetting }
     permissions: [admin_setting_live_course]
 
+admin_open_course_setting:
+    path:  /setting/open-course-setting
+    defaults: { _controller: AppBundle:Admin/OpenCourseSetting:openCourseSetting }
+    permissions: [admin_open_course_setting]
+
+admin_message_setting:
+    path:  /setting/message-setting
+    defaults: { _controller: AppBundle:Admin/MessageSetting:messageSetting }
+    permissions: [admin_message_course]
+
 admin_setting_questions_setting:
     path: /setting/questions-setting
     defaults: { _controller: AppBundle:Admin/CourseSetting:questionsSetting }

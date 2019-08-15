@@ -16,6 +16,7 @@ imageCrop.afterCrop = function(response) {
 
 $('#upload-picture-btn').click(function(e) {
   e.stopPropagation();
+  $('#upload-picture-btn').button('loading');
   imageCrop.crop({
     imgs: {
       large: [525, 350],

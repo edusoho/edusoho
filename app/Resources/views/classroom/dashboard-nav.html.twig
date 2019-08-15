@@ -1,7 +1,7 @@
 <div class="nav-btn-tab">
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="{% if nav == 'introduction' %}active{% endif %}"><a  href="{{ path('classroom_introductions', {id:classroom.id}) }}">{{'classroom.description'|trans}}</a></li>
-
+    {% set classroomSetting = setting('classroom') %}
     {% if is_plugin_installed('ClassroomPlan') %}
       {% set classroomPlan = data('GetClassroomPlanByClassroomId',{classroomId:classroom.id})|default(null) %}
       {% if classroomPlan|default(null) and classroomPlan.status == 'published' and app.user %}
@@ -16,11 +16,15 @@
       {{ render(controller('ClassroomPlanBundle:ClassroomPlan:planNav',{classroomId:classroom.id, nav:nav})) }}
     {% endif %}
   {% if  classroom.showable or ( not classroom.showable and member) %}
-    <li role="presentation" class="{% if nav == 'review' %}active{% endif %}"><a href="{{ path('classroom_reviews', {id:classroom.id}) }}">{{'classroom.reviews'|trans}} <small >({{classroom.ratingNum }})</small></a></li>
-
-    <li role="presentation" class="{% if nav == 'thread' %}active{% endif %}"><a href="{{ path('classroom_threads', {classroomId:classroom.id}) }}">{{'thread'|trans}} <small >({{classroom.threadNum}})</small></a></li>
-
-    <li role="presentation" class="{% if nav == 'note' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}) }}">{{'classroom.note'|trans}} <small >({{ classroom.noteNum }})</small></a></li>
+    {% if classroomSetting.show_review|default(1) != 0 %}
+      <li role="presentation" class="{% if nav == 'review' %}active{% endif %}"><a href="{{ path('classroom_reviews', {id:classroom.id}) }}">{{'classroom.reviews'|trans}} <small >({{classroom.ratingNum }})</small></a></li>
+    {% endif %}
+    {% if classroomSetting.show_thread|default(1) != 0 %}
+      <li role="presentation" class="{% if nav == 'thread' %}active{% endif %}"><a href="{{ path('classroom_threads', {classroomId:classroom.id}) }}">{{'thread'|trans}} <small >({{classroom.threadNum}})</small></a></li>
+    {% endif %}
+    {% if classroomSetting.show_note|default(1) != 0 %}
+      <li role="presentation" class="{% if nav == 'note' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}) }}">{{'classroom.note'|trans}} <small >({{ classroom.noteNum }})</small></a></li>
+    {% endif %}
   {% endif %}
 
     <li role="presentation" class="{% if nav == 'teachers' %}active{% endif %}"><a href="{{ path('classroom_teachers', {classroomId:classroom.id}) }}">{{'classroom.teachers'|trans}}</a></li>

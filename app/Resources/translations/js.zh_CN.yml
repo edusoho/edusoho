@@ -350,6 +350,7 @@ classroom_manage.student_expiryday_set_failed_hint: 修改失败
 classroom_manage.student_create_field_required_error_hint: 请输入学员邮箱/手机号/用户名
 classroom_manage.student_create_add_success_hint: 添加成功!
 classroom_manage.student_create_add_failed_hint: 添加失败!
+classroom_manage.student_create.price_max_error_hint: 购买价格不能大于班级原价!
 
 classroom_manage.student_manage_remove_hint: 您真的要移除该%username%吗？
 classroom_manage.student_manage_remove_success_hint: 移除%username%成功！
@@ -684,6 +685,7 @@ validate.valid_digits_input.message: 只能输入整数
 validate.valid_creditcard_input.message: 请输入有效的信用卡号码
 validate.valid_equal_to_input.message: 你的输入不相同
 validate.valid_extension_input.message: 请输入有效的后缀
+validate.valid_policy_input.message: 请先同意相关条款
 validate.max_length.message: 最多只能输入 {0} 个字符
 validate.min_length.message: 最少需要输入 {0} 个字符
 validate.range_length.message: 请输入长度在 {0} 到 {1} 之间的字符串

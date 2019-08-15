@@ -41,13 +41,14 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             $pattern = '/('.implode('|', $chunkKeyword).')/i';
             $matched = preg_match($pattern, $text, $match);
             if ($matched) {
-                goto last;
+                break;
             }
         }
 
-        return array('success' => false, 'text' => $text);
+        if (!$matched) {
+            return array('success' => false, 'text' => $text);
+        }
 
-        last :
         $keyword = $this->flagReplaceReverse($match[1]);
 
         $bannedKeyword = $this->getSensitiveDao()->getByName($keyword);
@@ -151,13 +152,14 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             $pattern = '/('.implode('|', $chunkKeyword).')/i';
             $matched = preg_match($pattern, $text, $match);
             if ($matched) {
-                goto last;
+                break;
             }
         }
 
-        return false;
+        if (!$matched) {
+            return false;
+        }
 
-        last :
         $keyword = $this->flagReplaceReverse($match[1]);
 
         $bannedKeyword = $this->getSensitiveDao()->getByName($keyword);

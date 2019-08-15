@@ -191,7 +191,10 @@ export default class Register {
         },
         dragCaptchaToken: {
           required: true,
-        }
+        },
+        agree_policy: {
+          required: true,
+        },
       },
       messages: {
         verifiedMobile: {
@@ -205,6 +208,9 @@ export default class Register {
         },
         dragCaptchaToken: {
           required: Translator.trans('auth.register.drag_captcha_tips')
+        },
+        agree_policy: {
+          required: Translator.trans('validate.valid_policy_input.message'),
         },
       },
     };
