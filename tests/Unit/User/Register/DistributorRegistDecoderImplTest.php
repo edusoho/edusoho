@@ -173,7 +173,7 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
                         'merchant_id' => '1',
                         'agency_id' => '1',
                     ),
-                )
+                ),
             )
         );
     }
