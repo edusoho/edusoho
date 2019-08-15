@@ -44,7 +44,10 @@ class RegisterController extends BaseController
                     $registration['verifiedMobile'] = $registration['emailOrMobile'];
                 }
 
-                if (!isset($registration['agree_policy']) || $registration['agree_policy'] != 'on') {
+                $isUserTermsOpened = 'opened' === $this->getSettingService()->node('auth.user_terms') ? true : false;
+                $isPrivacyPolicyOpened = 'opened' === $this->getSettingService()->node('auth.privacy_policy') ? true : false;
+
+                if (($isUserTermsOpened || $isPrivacyPolicyOpened) && 'on' != $registration['agree_policy']) {
                     return $this->createMessageResponse('info', '请先勾选相关条款或政策');
                 }
 
