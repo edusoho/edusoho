@@ -7,8 +7,6 @@ use Biz\BaseTestCase;
 use Biz\CloudPlatform\Client\EduSohoAppClient;
 use Mockery;
 use Symfony\Component\Filesystem\Filesystem;
-use Tests\Unit\AppBundle\Common\Tool\ReflectionTester;
-use Zend\Stdlib\Hydrator\Reflection;
 
 class AppServiceTest extends BaseTestCase
 {
@@ -291,9 +289,8 @@ class AppServiceTest extends BaseTestCase
         $this->_createApp('MAIN');
         $package = array(
             'edusohoMaxVersion' => '8.3.3', 'edusohoMinVersion' => '7.0.0', 'fileName' => 'test', 'fromVersion' => '8.0.0', 'backupDB' => '', 'backupFile' => '',
-            'product' =>
-                array('code' => 'MAIN', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''),
-            'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1');
+            'product' => array('code' => 'MAIN', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''),
+            'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1', );
         $result = ReflectionUtils::invokeMethod($this->getAppService(), 'checkPluginDepend', array($package));
 
         $this->assertEmpty($result);
@@ -303,9 +300,8 @@ class AppServiceTest extends BaseTestCase
     {
         $package = array(
             'edusohoMaxVersion' => '8.3.3', 'edusohoMinVersion' => '7.0.0', 'fileName' => 'test', 'fromVersion' => '8.0.0', 'backupDB' => '', 'backupFile' => '',
-            'product' =>
-                array('code' => 'test', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''),
-            'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1');
+            'product' => array('code' => 'test', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''),
+            'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1', );
         $result = ReflectionUtils::invokeMethod($this->getAppService(), 'tryGetProtocolFromFile', array($package, ''));
 
         $this->assertEquals(2, $result);
