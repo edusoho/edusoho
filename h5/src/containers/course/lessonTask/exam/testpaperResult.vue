@@ -1,7 +1,7 @@
 <template>
   <div>
     <e-loading v-if="isLoading"></e-loading>
-    <div class="result-data">
+    <div class="result-data" ref="data">
       <div class="result-data__item">
         本次得分
         <div class="result-data__bottom data-number-orange data-medium" v-if="isReadOver"><span class=" data-number">{{ result.score }}</span>分</div>
@@ -17,7 +17,7 @@
         <div class="result-data__bottom data-number-gray data-medium"><span class=" data-number">{{ usedTime }}</span>分钟</div>
       </div>
     </div>
-    <div class="result-tag">
+    <div class="result-tag" ref="tag">
       <div class="result-tag-item clearfix">
         <div class="result-tag-item__circle circle-green"></div>正确
       </div>
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="result-subject">
+    <div class="result-subject" :style="{height: calHeight}">
       <van-panel class="result-panel" v-for="(keyItem, index) in question_type_seq" :key="index"  :title="obj[keyItem]">
         <ul class="result-list">
           <li :class="[ 'result-list__item testpaper-number', `circle-${color[item.status]}`]" v-for="(item, index) in subjectList[keyItem]" :key=index>{{ item.seq }}</li>
@@ -62,6 +62,7 @@ export default {
       doTimes: 0,
       again: 1,
       result: {},
+      calHeight: '',
       subjectList: {},
       question_type_seq: [],
       obj: {
@@ -116,6 +117,7 @@ export default {
         this.question_type_seq = res.testpaper.metas.question_type_seq;
         this.isReadOver = this.result.status === 'finished' ? true : false;
         this.getSubjectList(res.items);
+        this.calSubjectHeight();
       });
     },
 
@@ -134,6 +136,13 @@ export default {
         })
         self.subjectList[i] = final;
       }
+    },
+
+    calSubjectHeight() {
+      const dataHeight = this.$refs.data.offsetHeight + this.$refs.tag.offsetHeight + 46;
+      const allHeight = document.documentElement.clientHeight;
+      const finalHeight = allHeight - dataHeight;
+      this.calHeight = `${finalHeight}px`;
     },
     getArray(data, arr) {
       let obj = {};
@@ -163,7 +172,7 @@ export default {
       return timeTip;
     }
   },
-  mounted() {
+  created() {
     this.resultId = this.$route.params.resultId;
     this.testpaperInfo = this.$route.params.testpaperInfo;
     this.title = this.$route.params.title;
@@ -171,6 +180,7 @@ export default {
     this.doTimes = parseInt(this.testpaperInfo.doTimes);
     this.getTestpaperResult(this.resultId);
   },
+
   beforeUpdate (to, from, next) {
     document.body.className = 'bg-color';
   },
