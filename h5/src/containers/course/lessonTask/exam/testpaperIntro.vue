@@ -46,6 +46,7 @@ export default {
       testId: '',
       targetId: '',
       question_type_seq: [],
+      title: '',
       obj: {
         "single_choice": '单选题',
         "choice": '多选题',
@@ -53,7 +54,7 @@ export default {
         "uncertain_choice": '不定项选择题',
         "determine": '判断题',
         "fill": '填空题',
-        "material": '材料题'        
+        "material": '材料题'
       },
       counts: {},
       result: {}
@@ -116,6 +117,7 @@ export default {
         this.doTime = this.info.doTimes;
         this.limitTime = parseInt(this.info.limitTime);
         this.result = res.testpaperResult;
+        this.title = res.task.activity.title;
         this.question_type_seq = res.testpaper.metas.question_type_seq;
       });
     },
@@ -134,6 +136,8 @@ export default {
         name: 'testpaperResult',
         params: {
           resultId: this.result.id,
+          testpaperInfo: this.info,
+          title: this.title,
         }
       })
     }

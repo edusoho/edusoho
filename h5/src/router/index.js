@@ -16,14 +16,21 @@ const routes = [
     meta: {
       title: '考试说明'
     },
-    component: () => import(/* webpackChunkName: "intro" */ '@/containers/course/lessonTask/testpaperIntro.vue')
+    component: () => import(/* webpackChunkName: "intro" */ '@/containers/course/lessonTask/exam/testpaperIntro.vue')
   }, {
     path: '/testpaperDo',
     name: 'testpaperDo',
     meta: {
-      title: '考试说明'
+      title: '模拟考试开始'
     },
-    component: () => import(/* webpackChunkName: "do" */ '@/containers/course/lessonTask/testpaperDo.vue')
+    component: () => import(/* webpackChunkName: "do" */ '@/containers/course/lessonTask/exam/testpaperDo.vue')
+  }, {
+    path: '/result',
+    name: 'testpaperResult',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "result" */ '@/containers/course/lessonTask/exam/testpaperResult.vue')
   }, {
     path: '/fill',
     name: 'fill',
