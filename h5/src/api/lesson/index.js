@@ -19,5 +19,11 @@ export default [
     name: 'testpaperIntro',
     url: '/testpaper_infos/{testId}',
     method: 'GET'
+  }, {
+    // 获得考试成绩
+    name: 'testpaperResult',
+    url: '/testpaper_results/{resultId}',
+    method: 'GET'
   }
+
 ];
