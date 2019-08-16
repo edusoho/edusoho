@@ -14,5 +14,17 @@ export default [
     name: 'requestLiveNo',
     url: '/lessons/{taskId}/live_tickets',
     method: 'POST'
+  },
+  {
+    // 获取考试试卷信息
+    name: 'getExamInfo',
+    url: '/testpapers/{testId}/actions',
+    method: 'POST'
+  },
+  {
+    // 交卷
+    name: 'handExam',
+    url: '/testpaper_result',
+    method: 'POST'
   }
 ];

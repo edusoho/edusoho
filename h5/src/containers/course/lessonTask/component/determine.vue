@@ -1,11 +1,17 @@
 <template>
   <div class="subject">
     <div class="subject-stem">
-      <span class="subject-stem__order">{{ determine.id }}、</span>
-      <div class="subject-stem__content" v-html="determine.stem"></div>
+      <span class="serial-number">{{ number }}、</span>
+      <div class="subject-stem__content" v-html="stem"></div>
     </div>
-    <van-radio-group v-model="radio">
-      <van-radio class="subject-option subject-option--determine" name="1">
+
+    <div class="material-title" v-if="itemdata.parentTitle">
+      <span class="serial-number">问题{{itemdata.materialIndex}}：</span>
+      <div v-html="itemdata.stem"></div>
+    </div>
+
+    <van-radio-group v-model="radio" class="answer-paper" @change="choose()">
+      <van-radio class="subject-option subject-option--determine" :name=1>
         <div class="subject-option__content">对</div>
         <i
         slot="icon"
@@ -13,7 +19,7 @@
         class="iconfont icon-yes subject-option__order"
         ></i>
       </van-radio>
-      <van-radio class="subject-option subject-option--determine" name="2">
+      <van-radio class="subject-option subject-option--determine" :name=0>
         <div class="subject-option__content">错</div>
         <i
         slot="icon"
@@ -30,7 +36,7 @@ export default {
   name: 'determine-type',
   data() {
     return {
-      radio: '1',
+      radio: this.answer[0],
       determine: {
         "id": "4",
         "type": "determine",
@@ -52,7 +58,36 @@ export default {
       },
     }
   },
+  props:{
+    itemdata:{
+      type: Object,
+      default: () => {}
+    },
+    number:{
+      type: Number,
+      default: 1
+    },
+    answer:{
+      type: Array,
+      default: () => []
+    },
+  },
+  computed:{
+    stem:{
+      get(){
+        if(this.itemdata.parentTitle){
+          return this.itemdata.parentTitle.stem
+        }else{
+          return this.itemdata.stem
+        }
+      }
+    }
+  },
   methods: {
+    //向父级提交数据
+    choose(){
+      this.$emit('determineChoose',this.radio,this.itemdata.id)
+    }
   }
 }
 </script>
