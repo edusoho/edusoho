@@ -1,0 +1,142 @@
+.result-data {
+  display: flex;
+  padding-top: vw(20);
+  padding-bottom: vw(10);
+  text-align: center;
+  background-color: #fff;
+  .result-data__item {
+    flex: 1;
+    text-align: center;
+    color: #999;
+    font-size: vw(14);
+    line-height: vw(18);
+  }
+  .result-data__bottom {
+    margin-top: vw(10);
+    line-height: vw(36);
+  }
+}
+.result-tag {
+  margin-top: vw(10);
+  padding: vw(15) vw(10);
+  background-color: #fff;
+}
+.result-tag-item {
+  display: inline-block;
+  margin-right: vw(20);
+  color: #313131;
+  font-size: vw(14);
+  line-height: vw(16);
+}
+
+.result-tag-item__circle {
+  float: left;
+  width: vw(16);
+  height: vw(16);
+  margin-right: vw(8);
+  border-radius: 100%;
+}
+
+.result-panel {
+  margin-top: vw(10);
+  padding-left: vw(10);
+  padding-right: vw(10);
+  .van-panel__header {
+    padding-top: vw(8);
+    padding-bottom: vw(8);
+  }
+  .van-cell__title {
+    color: #313131;
+    font-weight: 500;
+    line-height: vw(18);
+  }
+}
+
+.result-list {
+  padding: vw(20) 0 vw(10);
+  list-style: none;
+}
+
+.result-list__item {
+  display: inline-block;
+  margin-bottom: vw(10);
+  margin-right: vw(12);
+  &:nth-child(9n) {
+    margin-right: 0;
+  }
+}
+
+.result-subject {
+  height: vw(500);
+  overflow-y: scroll;
+}
+
+.data-text-blue {
+  font-size: vw(16);
+  color: $primary-color;
+  font-weight: 500;
+}
+
+.data-number {
+  font-size: vw(32);
+  line-height: vw(36);
+  font-weight: 600;
+}
+.data-number-green {
+  color: #00d041;
+}
+.data-number-orange {
+  color: #ff4910;
+}
+.data-number-gray {
+  color: #666;
+}
+.data-medium {
+  font-weight: 500;
+}
+
+.circle-green {
+  background-color: #00d041;
+}
+
+.circle-orange {
+  background-color: #ff5722;
+}
+
+.circle-brown {
+  background-color: #ff954d;
+}
+
+.circle-gray {
+  background-color: #ccc;
+}
+
+.testpaper-number {
+  width: vw(28);
+  height: vw(28);
+  border-radius: 100%;
+  color: #fff;
+  text-align: center;
+  font-size: vw(14);
+  line-height: vw(28);
+}
+
+.result-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: vw(6) vw(10);
+  box-sizing: border-box;
+  background-color: #fff;
+  box-shadow: 0px -2px 4px 0px rgba(0,0,0,0.04);
+  .result-footer__btn {
+    width: 100%;
+    border-radius: 5px;
+    &.van-button--disabled {
+      background-color: #ccc;
+      border-color: #ccc;
+      opacity: 1;
+    }
+  }
+}
+
