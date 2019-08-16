@@ -37,7 +37,7 @@ const routes = [
     meta: {
       title: ''
     },
-    component: () => import(/* webpackChunkName: "fill" */ '@/containers/course/lessonTask/exam/testPaper.vue')
+    component: () => import(/* webpackChunkName: "fill" */ '@/containers/course/lessonTask/exam/index.vue')
   },
   {
     path: '/',

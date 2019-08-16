@@ -1,20 +1,29 @@
 <template>
-  <div class="fill" v-if="filldata">
-    <div>
-      <div class="serial-number">1、</div>
-      <div v-html="filldata.stem"></div>
+  <div class="fill" >
+    <div class="subject-stem" >
+      <div class="serial-number">{{number}}、</div>
+      <div v-html="stem"></div>
     </div>
-    <div v-for="(list,index) in filldata.answers" :key="index">
-      <div class="fill-subject">填空题（{{index+1}}）</div>
-      <van-field
-        v-model="filldata.answers[index]"
-        class="fill-input"
-        label-width="0px"
-        type="textarea"
-        placeholder="请填写答案"
-        rows="1"
-        autosize
-      />
+     <!-- <div class="material-title">问题1：教师职业最大的特点在区委区是多于职业角色（）。</div> -->
+
+    <div class="material-title" v-if="itemdata.parentTitle">
+      <span class="serial-number">问题{{itemdata.materialIndex}}：</span>
+      <div v-html="itemdata.stem"></div>
+    </div>
+
+    <div class="answer-paper">
+      <div v-for="(i,index) in itemdata.fillnum" :key="index" >
+        <div class="fill-subject">填空题（{{index+1}}）</div>
+        <van-field
+          v-model="answer[index]"
+          class="fill-input"
+          label-width="0px"
+          type="textarea"
+          placeholder="请填写答案"
+          rows="1"
+          autosize
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -26,6 +35,31 @@ export default {
     filldata: {
       type: Object,
       default: () => {}
+    }
+  },
+  props:{
+    itemdata:{
+      type: Object,
+      default: () => {}
+    },
+    answer:{
+      type: Array,
+      default: () => []
+    },
+    number:{
+      type: Number,
+      default: 1
+    }
+  },
+  computed:{
+    stem:{
+      get(){
+        if(this.itemdata.parentTitle){
+          return this.itemdata.parentTitle.stem
+        }else{
+          return this.itemdata.stem
+        }
+      }
     }
   },
   data() {
@@ -56,24 +90,7 @@ export default {
       index: 0
     };
   },
-  created() {},
-  mounted() {
-    //this.replaceString();
-  },
   methods: {
-    replaceString() {
-      const reg = /\[\[.+?\]\]/;
-      if (!reg.test(this.filldata.stem)) {
-        return false;
-      } else {
-        this.filldata.answers.push("");
-        this.$set(this.filldata, "answers", this.filldata.answers);
-        this.filldata.stem = this.filldata.stem.replace(reg, () => {
-          return `<span class="fill-bank">（${++this.index}）</span>`;
-        });
-        this.replaceString(this.filldata.stem);
-      }
-    }
   }
 };
 </script>

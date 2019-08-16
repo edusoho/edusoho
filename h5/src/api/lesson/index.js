@@ -24,6 +24,18 @@ export default [
     name: 'testpaperResult',
     url: '/testpaper_results/{resultId}',
     method: 'GET'
+  },
+  {
+    // 获取考试试卷信息
+    name: 'getExamInfo',
+    url: '/testpapers/{testId}/actions',
+    method: 'POST'
+  },
+  {
+    // 交卷
+    name: 'handExam',
+    url: '/testpaper_result',
+    method: 'POST'
   }
 
 ];
