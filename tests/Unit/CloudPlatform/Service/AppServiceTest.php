@@ -2,9 +2,13 @@
 
 namespace Tests\Unit\CloudPlatform\Service;
 
+use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\CloudPlatform\Client\EduSohoAppClient;
 use Mockery;
+use Symfony\Component\Filesystem\Filesystem;
+use Tests\Unit\AppBundle\Common\Tool\ReflectionTester;
+use Zend\Stdlib\Hydrator\Reflection;
 
 class AppServiceTest extends BaseTestCase
 {
@@ -212,9 +216,27 @@ class AppServiceTest extends BaseTestCase
         $this->assertArrayEquals(array(), $errors);
     }
 
+    public function testBackupDbForPackageUpdateWithBackupDB()
+    {
+        $package = $this->getDefaultPackage('test-backupDB');
+        $this->mockAppClient($package);
+        $errors = $this->getAppService()->backupDbForPackageUpdate(1);
+
+        $this->assertArrayEquals(array(), $errors);
+    }
+
     public function testBackupFileForPackageUpdate()
     {
         $this->mockAppClient();
+        $errors = $this->getAppService()->backupFileForPackageUpdate(1);
+
+        $this->assertArrayEquals(array(), $errors);
+    }
+
+    public function testBackupFileForPackageUpdateWithNotEmptyBackupFile()
+    {
+        $package = $this->getDefaultPackage('test', 'test');
+        $this->mockAppClient($package);
         $errors = $this->getAppService()->backupFileForPackageUpdate(1);
 
         $this->assertArrayEquals(array(), $errors);
@@ -242,6 +264,58 @@ class AppServiceTest extends BaseTestCase
         $errors = $this->getAppService()->beginPackageUpdate(1, 'upgrade');
 
         $this->assertArrayEquals(array(), $errors);
+    }
+
+    public function testBeginPackageUpdateWithIndexNotZero()
+    {
+        $this->mockAppClient();
+        $errors = $this->getAppService()->beginPackageUpdate(1, 'upgrade', 1);
+
+        $this->assertArrayEquals(array(), $errors);
+    }
+
+    public function testBeginPackageUpdateWithHasDeleteDir()
+    {
+        $this->mockAppClient();
+        $package = $this->getDefaultPackage();
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'makePackageFileUnzipDir', array($package));
+        $filesystem = new Filesystem();
+        $filesystem->mkdir($result.'delete');
+        $errors = $this->getAppService()->beginPackageUpdate(1, 'upgrade');
+
+        $this->assertArrayEquals(array(), $errors);
+    }
+
+    public function testCheckPluginDepend()
+    {
+        $this->_createApp('MAIN');
+        $package = array(
+            'edusohoMaxVersion' => '8.3.3', 'edusohoMinVersion' => '7.0.0', 'fileName' => 'test', 'fromVersion' => '8.0.0', 'backupDB' => '', 'backupFile' => '',
+            'product' =>
+                array('code' => 'MAIN', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''),
+            'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1');
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'checkPluginDepend', array($package));
+
+        $this->assertEmpty($result);
+    }
+
+    public function testTryGetProtocolFromFileWithCodeNotMain()
+    {
+        $package = array(
+            'edusohoMaxVersion' => '8.3.3', 'edusohoMinVersion' => '7.0.0', 'fileName' => 'test', 'fromVersion' => '8.0.0', 'backupDB' => '', 'backupFile' => '',
+            'product' =>
+                array('code' => 'test', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''),
+            'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1');
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'tryGetProtocolFromFile', array($package, ''));
+
+        $this->assertEquals(2, $result);
+    }
+
+    public function testDeleteCache()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'deleteCache', array(4));
+
+        $this->assertEmpty($result);
     }
 
     public function testRepairProblem()
@@ -315,14 +389,43 @@ class AppServiceTest extends BaseTestCase
         $this->assertEquals('status', $result);
     }
 
-    private function mockAppClient()
+    public function testSetAppClient()
     {
+        $client = new EduSohoAppClient(array());
+        $mockObject = Mockery::mock($client);
+        $this->getAppService()->setAppClient($mockObject);
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'createAppClient', array());
+
+        $this->assertNotEmpty($result);
+    }
+
+    public function testCreateAppClient()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'createAppClient', array());
+
+        $this->assertNotEmpty($result);
+    }
+
+    public function testGetPackageRootDirectory()
+    {
+        $package = array('product' => array('code' => 'test'));
+        $packageDir = 'xxx';
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'getPackageRootDirectory', array($package, $packageDir));
+
+        $this->assertNotEmpty($result);
+    }
+
+    private function mockAppClient($package = array())
+    {
+        if (empty($package)) {
+            $package = $this->getDefaultPackage();
+        }
         $client = new EduSohoAppClient(array());
         $mockObject = Mockery::mock($client);
 
         $mockObject->shouldReceive('getApps')->times(1)->andReturn(array(array('name' => 'cloud app', 'code' => 'cloudApp', 'description' => '')));
         $mockObject->shouldReceive('getBinded')->times(1)->andReturn(1);
-        $mockObject->shouldReceive('getPackage')->times(1)->andReturn(array('product' => array('code' => 'MAIN', 'name' => 'MAIN'), 'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.0'));
+        $mockObject->shouldReceive('getPackage')->times(1)->andReturn($package);
         $mockObject->shouldReceive('checkUpgradePackages')->times(1)->andReturn(array(array('id' => 1, 'code' => 'MAIN', 'userAccess' => true, 'purchased' => 1)));
         $mockObject->shouldReceive('getMessages')->times(1)->andReturn('message');
         $mockObject->shouldReceive('downloadPackage')->times(1)->andReturn('message');
@@ -332,6 +435,11 @@ class AppServiceTest extends BaseTestCase
         $mockObject->shouldReceive('getAppStatusByCode')->times(1)->andReturn('status');
 
         $this->getAppService()->setAppClient($mockObject);
+    }
+
+    private function getDefaultPackage($backupDB = '', $backupFile = '')
+    {
+        return array('edusohoMaxVersion' => '8.3.3', 'edusohoMinVersion' => '7.0.0', 'fileName' => 'test', 'fromVersion' => '8.0.0', 'backupDB' => $backupDB, 'backupFile' => $backupFile, 'product' => array('code' => 'MAIN', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''), 'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1');
     }
 
     private function _createApp($code)
