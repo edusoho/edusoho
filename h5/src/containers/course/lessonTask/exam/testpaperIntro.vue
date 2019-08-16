@@ -76,7 +76,7 @@ export default {
       isLoading: state => state.isLoading,
     }),
   },
-  created() {
+  mounted() {
     this.testId = this.$route.params.testId;
     this.targetId = this.$route.params.targetId;
     this.getInfo(this.testId, this.targetId);

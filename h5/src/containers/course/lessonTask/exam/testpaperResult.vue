@@ -163,7 +163,7 @@ export default {
       return timeTip;
     }
   },
-  created() {
+  mounted() {
     this.resultId = this.$route.params.resultId;
     this.testpaperInfo = this.$route.params.testpaperInfo;
     this.title = this.$route.params.title;
