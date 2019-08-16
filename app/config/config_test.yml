@@ -12,3 +12,7 @@ framework:
 web_profiler:
     toolbar: false
     intercept_redirects: false
+
+twig:
+    paths:
+        "%kernel.root_dir%/../tests/Unit/AppBundle/Fixtures/activities": activity

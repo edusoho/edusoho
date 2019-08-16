@@ -45,7 +45,7 @@ class BizRateLimitListener
 
     private function getClassName($class)
     {
-        $classStr = str_replace('\\','_', $class);
+        $classStr = str_replace('\\', '_', $class);
 
         return $classStr;
     }
