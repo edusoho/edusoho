@@ -67,6 +67,7 @@
         <img src="static/images/rightslide.png"/>
       </div>
     </div>-->
+
     <!-- 左右滑动按钮 -->
     <div>
       <div :class="['left-slide__btn',current==0 ?'slide-disabled':'']" @click="last()">
@@ -79,6 +80,7 @@
         <i class="iconfont icon-arrow-right"></i>
       </div>
     </div>
+
     <!-- 底部 -->
     <div class="paper-footer">
       <div>
@@ -94,6 +96,7 @@
         </span>
       </div>
     </div>
+
     <!-- 答题卡 -->
     <van-popup
       v-model="cardShow"
@@ -132,6 +135,7 @@
         </div> 
       </div>
     </van-popup>
+
     <!-- 考试时间 -->
     <div :class="['time',timeWarn ? 'warn' : '']" >
         {{time}}
@@ -142,7 +146,7 @@
 <script>
 const WINDOWHEIGHT = document.documentElement.clientHeight - 44;
 import Api from "@/api";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations , mapActions} from "vuex";
 import * as types from "@/store/mutation-types";
 import { Toast,Overlay,Popup,Dialog } from "vant";
 
@@ -152,18 +156,18 @@ import headTop from "../component/head";
 import choiceType from "../component/choice";
 import singleChoice from "../component/single-choice";
 import determineType from "../component/determine";
+import { resolve } from 'url';
 export default {
-  name: "exam",
+  name: "testpaperDo",
   data() {
     return {
-      height: 0,
-      current: 0,
+      height: 0,//滑动卡片当前高度
+      current: 0,//滑动索引
       testpaper: {},
       testpaperResult: {},
       info: [], //试卷信息
       answer: {}, //答案
-      cardShow:false,
-      allType:[],//所有的题目类型
+      cardShow:false,//答题卡显示标记
       card:{},//答题卡
       items:{},//分组题目
       time:null,//倒计时
@@ -171,14 +175,15 @@ export default {
       timeWarn:false,//倒计时警告标记
       isHandExam:false,//是否已交卷
       localtime:null,//本地时间计时器
-      localtimeName:null,
-      localanswerName:null,
-      lastAnswer:null,
-      lastTime:null,
-      costTime:null //异常中断花费时间
+      localtimeName:null,//本地存储的时间key值
+      localanswerName:null,//本地存储的答案key值
+      lastAnswer:null,//本地存储的答案
+      lastTime:null,//本地存储的时间
+      uselocalData:false//是否沿用本地数据
     };
   },
   created() {
+    this.uselocalData=this.$route.query.uselocalData;
     this.getData();
   },
   components: {
@@ -222,21 +227,19 @@ export default {
       this.height = WINDOWHEIGHT;
     });
   },
-  beforeRouteLeave (to, from, next) {
-    if(this.isHandExam){
+  beforeRouteLeave (to, from, next) { //可捕捉离开提醒
+    if(this.info.length==0){
       next();
     }else{
-      this.submitPaper();
-      next();
-       // this.submitPaper()
+      this.submitPaper().then(()=>{
+          next();
+      }).catch(()=>{
+        next(false);
+      });
     }
   },
-  beforeDestroy() {
-    clearInterval(this.timeMeter);        
-    this.timeMeter = null;
-
-    clearInterval(this.localtime);        
-    this.localtime = null;
+  beforeDestroy() { //清楚定时器
+    this.clearTime();
   },
   computed: {
     ...mapState({
@@ -252,58 +255,66 @@ export default {
     },
   },
   methods: {
+    ...mapActions('course', [
+        'handExamdo',
+    ]),
+    //废弃暂存
     getlocalData(){
-      let answer=this.lastAnswer;
-      let time=this.lastTime;
+       // this.lastAnswer=JSON.parse(localStorage.getItem(this.localanswerName));
 
-      if( time && answer){
-          //如果有时间限制
-          if(this.testpaperResult.limitedTime){
-            //超出时间限制
-            let alUsed=Math.ceil((time-(this.testpaperResult.beginTime*1000))/1000/60);
-            if(alUsed>this.testpaperResult.limitedTime){
-                //交卷
-                Object.keys(answer).forEach(key=>{
-                  answer[key]= answer[key].filter(t => t!=='') 
-                })
-                let usedTime=this.testpaperResult.beginTime+this.testpaperResult.limitedTime*60;
-                this.handExamdo(answer,usedTime);
-                return
-            } 
-          }
 
-          //没有时间限制 或者没有超出限制时间
-          this.costTime=time;
+      // let answer=this.lastAnswer;
+      // let time=this.lastTime;
 
-          Dialog.confirm({
-                title: '提示',
-                cancelButtonText:'放弃考试',
-                confirmButtonText:'继续考试',
-                message: '您有未完成的考试，是否继续？'
-            }).then(() => {
-              Object.keys(answer).forEach(key=>{
-                answer[key].forEach((item,index)=>{
-                    this.$set(this.answer[key],index,item)
-                })
-              })
-            })
-            .catch(() => {
-                //交卷
-                Object.keys(answer).forEach(key=>{
-                  answer[key]= answer[key].filter(t => t!=='') 
-                })
-                this.handExamdo(answer)
-            });  
-      }
+      // if( time && answer){
+      //     //如果有时间限制
+      //     if(this.testpaperResult.limitedTime){
+      //       //超出时间限制
+      //       let alUsed=Math.ceil((time-(this.testpaperResult.beginTime*1000))/1000/60);
+      //       if(alUsed>this.testpaperResult.limitedTime){
+      //           //交卷
+      //           Object.keys(answer).forEach(key=>{
+      //             answer[key]= answer[key].filter(t => t!=='') 
+      //           })
+      //           let usedTime=this.testpaperResult.beginTime+this.testpaperResult.limitedTime*60;
+      //           this.handExamdo(answer,usedTime);
+      //           return
+      //       } 
+      //     }
+
+      //     //没有时间限制 或者没有超出限制时间
+      //     this.costTime=time;
+
+      //     Dialog.confirm({
+      //           title: '提示',
+      //           cancelButtonText:'放弃考试',
+      //           confirmButtonText:'继续考试',
+      //           message: '您有未完成的考试，是否继续？'
+      //       }).then(() => {
+      //         Object.keys(answer).forEach(key=>{
+      //           answer[key].forEach((item,index)=>{
+      //               this.$set(this.answer[key],index,item)
+      //           })
+      //         })
+      //       })
+      //       .catch(() => {
+      //           //交卷
+      //           Object.keys(answer).forEach(key=>{
+      //             answer[key]= answer[key].filter(t => t!=='') 
+      //           })
+      //           this.handExamdo(answer)
+      //       });  
+      // }
     },
     getData() {
-      let testId = 16;
+      let testId=this.$route.query.testId;
+      let targetId=this.$route.query.targetId;
       Api.getExamInfo({
         query: {
           testId
         },
         data: {
-          action: "redo",
+          action: "do",
           targetId: 666,
           targetType: "task"
         }
@@ -311,26 +322,26 @@ export default {
         .then(res => {
           //设置导航栏题目
           this.$store.commit(types.SET_NAVBAR_TITLE,res.testpaper.name)
-          //处理数据
+          //赋值数据
           this.items=res.items;
           this.testpaper = res.testpaper;
           this.testpaperResult = res.testpaperResult;
 
-          this.localanswerName=`${this.user.id}-${this.testpaper.id}`;
-          this.localtimeName=`${this.user.id}-${this.testpaper.id}-time`;
-          this.lastAnswer=JSON.parse(localStorage.getItem(this.localanswerName));
+          this.localanswerName=`${this.user.id}-${this.testpaperResult.id}`;
+          this.localtimeName=`${this.user.id}-${this.testpaperResult.id}-time`;
           this.lastTime=localStorage.getItem(this.localtimeName);
+          this.lastAnswer=JSON.parse(localStorage.getItem(this.localanswerName));
 
           //处理数据格式
           this.formatData(res);
 
-          //获取本地数据
-          this.getlocalData();
+          //设置首页高度
+          this.changeswiper(0)
 
           //本地实时存储时间
           this.saveTime();
 
-          //若果限制考试时长，开始计时
+          //如果有限制考试时长，开始计时
           if(this.testpaperResult.limitedTime){
               this.timer();
           }
@@ -344,20 +355,19 @@ export default {
       let paper = res.items;
       let info = [];
       let answer = [];
-      this.allType=Object.keys(paper);
       Object.keys(paper).forEach(key => {
         if (key != "material") {
           paper[key].forEach(item => {
             this.sixType(item.type, item);
           });
         }
-        if (key == "material") {
+        if (key == "material") {//材料题下面有子题需要特殊处理
           paper[key].forEach(item => {
             let title = Object.assign({}, item, { subs: "" });
             item.subs.forEach((sub, index) => {
-              sub.parentTitle = title;
-              sub.parentType = item.type;
-              sub.materialIndex = index+1;
+              sub.parentTitle = title;//子题的父级题干
+              sub.parentType = item.type;//子题的父级题型
+              sub.materialIndex = index+1;//子题的索引值
               this.sixType(sub.type, sub);
             });
           });
@@ -368,8 +378,7 @@ export default {
     sixType(type, item) {
       if (type == "single_choice") {
         let length = item.metas.choices.length;
-        item[item.id] = new Array(length).fill(false);
-        //因为单选和判断题回显有问题，所以这里需要在一开始处理数据时就赋值
+        //刷新页面或意外中断回来要回显，因此要判断本地是否有缓存
         if(this.lastAnswer){
           this.$set(this.answer,item.id,this.lastAnswer[item.id])
         }else{
@@ -378,14 +387,19 @@ export default {
         this.info.push(item);
       }
       if (type == "choice" || type == "uncertain_choice") {
-        let length = item.metas.choices.length;
-        item[item.id] = new Array(length).fill(false);
-        this.$set(this.answer,item.id,[])
+        if(this.lastAnswer){
+          this.$set(this.answer,item.id,this.lastAnswer[item.id])
+        }else{
+          this.$set(this.answer,item.id,[])
+        }
         this.info.push(item);
       }
       if (type == "essay") {
-        item[item.id] = "";
-        this.$set(this.answer,item.id,[""])
+        if(this.lastAnswer){
+          this.$set(this.answer,item.id,this.lastAnswer[item.id])
+        }else{
+          this.$set(this.answer,item.id,[""])
+        }
         this.info.push(item);
       }
 
@@ -394,13 +408,15 @@ export default {
         let { stem, index } = this.fillReplce(fillstem, 0);
         item.stem = stem;
         item.fillnum = index;
-        this.$set(this.answer,item.id , new Array(index).fill(""))
+        if(this.lastAnswer){
+          this.$set(this.answer,item.id,this.lastAnswer[item.id])
+        }else{
+          this.$set(this.answer,item.id,new Array(index).fill(""))
+        }
         this.info.push(item);
       }
 
       if (type == "determine") {
-        item[item.id] = new Array(2).fill(false);
-        //因为单选和判断题回显有问题，所以这里需要在一开始处理数据时就赋值
         if(this.lastAnswer){
           this.$set(this.answer,item.id,this.lastAnswer[item.id])
         }else{
@@ -409,19 +425,9 @@ export default {
         this.info.push(item);
       }
     },
-    //处理富文本
+    //处理富文本，并统计填空题的空格个数
     fillReplce(stem, index) {
       const reg = /\[\[.+?\]\]/;
-      // if(!reg.test(stem)){
-      //     return { stem , index}
-      // }else{
-      //     // s=s.macth(reg,`<span>${index}</span>`);
-      //     // a(s)
-      //     stem=stem.replace(reg,() => {
-      //         return `<span>${++index}</span>`
-      //     });
-      //     this.fillReplce(stem,index)
-      // }
       while (reg.exec(stem)) {
         stem = stem.replace(reg, () => {
           return `<span>${++index}</span>`;
@@ -429,7 +435,7 @@ export default {
       }
       return { stem, index };
     },
-    //切换页面，动态更改索引和设置高度
+    //由于swiper的高度无法自适应内容高度，所以切换页面要动态更改索引和设置高度
     changeswiper(index) {
       this.current = index;
       this.$nextTick(() => {
@@ -539,9 +545,12 @@ export default {
         let time=this.testpaperResult.limitedTime
 
         //如果考试过程中中断，剩余时间=考试限制时间-中断时间
-        if(this.costTime){
-          let gotime=(this.costTime-this.testpaperResult.beginTime*1000)/1000/60;
-          time=this.testpaperResult.limitedTime-gotime
+        if(this.lastTime){
+          let gotime=Math.ceil((Number(this.lastTime)-this.testpaperResult.beginTime*1000)/1000/60);
+          if(gotime>this.testpaperResult.limitedTime){
+            return
+          }
+          time=this.testpaperResult.limitedTime-gotime;
         }
 
         this.timeMeter =setInterval(()=>{
@@ -553,9 +562,6 @@ export default {
             let hours = parseInt(nowTime / ( 1000 * 60 * 60), 10); //计算剩余的小时
             hours = this.checkTime(hours);
             this.time=`${hours}:${minutes}:${seconds}`
-            // this.hours=hours;
-            // this.minutes=minutes;
-            // this.seconds=seconds;
             if(hours==0 && minutes==0 && seconds<60){
               this.timeWarn=true
             }
@@ -566,12 +572,28 @@ export default {
                 //去除空数据
                 answer[key]= answer[key].filter(t => t!=='')
               })
-               this.handExamdo(answer)
-
-              clearInterval(this.timeMeter);        
-              this.timeMeter = null;
+              let datas={
+                answer,
+                resultId:this.testpaperResult.id,
+                userId:this.user.id
+              }
+              this.handExamdo(answer).then(res=>{
+                this.clearTime();
+                //跳转到结果页
+                this.showResult();
+              }).catch((err)=>{
+                Toast.fail(err.message);
+              })
             }
         },1000);
+    },
+    //清空定时器
+    clearTime(){
+      clearInterval(this.timeMeter);        
+      this.timeMeter = null;
+
+      clearInterval(this.localtime);        
+      this.localtime = null;
     },
     checkTime(i) { //将0-9的数字前面加上0，例1变为01
         if (i < 10) {
@@ -596,55 +618,51 @@ export default {
       if(index>0){
          message=`还有题${index}未做，确认交卷吗？`
       }
+      return new Promise((resolve,reject)=>{
+          Dialog.confirm({
+            title: '交卷',
+            cancelButtonText:'确认交卷',
+            confirmButtonText:'检查一下',
+            message: message
+          }).then(() => { reject()})
+          .catch(() => {
+            this.clearTime();
 
-      Dialog.confirm({
-        title: '交卷',
-        cancelButtonText:'确认交卷',
-        confirmButtonText:'检查一下',
-        message: message
-      }).then(() => { })
-      .catch(() => {
-        clearInterval(this.timeMeter);        
-        this.timeMeter = null;
-        this.handExamdo(answer)
-      });
-    },
-    //向后台提交答卷数据
-    async handExamdo(answer,usedTime){
-      if(!usedTime){
-          let usedTime=new Date().getTime()/1000;
-      }
-      //this.$router.replace({path:'/'})
-     // this.isHandExam=true;
-
-      // await Api.handExam({
-      //       data: {
-      //         data: answer,
-      //         resultId: this.testpaperResult.id,
-      //         usedTime: usedTime
-      //       }
-      // })
-      // .then(res => {
-      //   this.isHandExam=true;
-      //   localStorage.removeItem(`${this.user.id}-${this.testpaper.id}`);
-      //   localStorage.removeItem(`${this.user.id}-${this.testpaper.id}-time`);
-      //   //跳转到批阅页
-      //   //this.$router.replace({path:'/'})
-      //    next()
-      //     console.log(res)
-      // })
-      // .catch(err => {
-      //       Toast.fail(err.message);
-      // });
+            let datas={
+              answer,
+              resultId:this.testpaperResult.id,
+              userId:this.user.id
+            }
+            this.handExamdo(datas).then(res=>{
+              resolve();
+              //跳转到结果页
+              this.showResult();
+            }).catch((err)=>{
+                Toast.fail(err.message);
+            })
+          });
+      }) 
     },
     //实时存储答案
     saveAnswer(val){
         localStorage.setItem(this.localanswerName, JSON.stringify(val));
     },
+    //实时存储时间
     saveTime(){
         this.localtime=setInterval(()=>{
             localStorage.setItem(this.localtimeName, new Date().getTime());
         },1000);
+    },
+    //跳转到结果页
+    showResult() {
+      this.$router.push({
+        name: 'testpaperResult',
+        params: {
+          resultId: this.testpaperResult.id,
+         // testpaperInfo: this.info,
+          targetId:this.targetId
+        }
+      })
     }
   }
 };
