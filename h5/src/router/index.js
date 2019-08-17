@@ -20,10 +20,7 @@ const routes = [
   }, {
     path: '/testpaperDo',
     name: 'testpaperDo',
-    meta: {
-      title: '模拟考试开始'
-    },
-    component: () => import(/* webpackChunkName: "do" */ '@/containers/course/lessonTask/exam/testpaperDo.vue')
+    component: () => import(/* webpackChunkName: "do" */ '@/containers/course/lessonTask/exam/index.vue')
   }, {
     path: '/result',
     name: 'testpaperResult',
@@ -31,14 +28,7 @@ const routes = [
       title: ''
     },
     component: () => import(/* webpackChunkName: "result" */ '@/containers/course/lessonTask/exam/testpaperResult.vue')
-  }, {
-    path: '/fill',
-    name: 'fill',
-    meta: {
-      title: ''
-    },
-    component: () => import(/* webpackChunkName: "fill" */ '@/containers/course/lessonTask/exam/index.vue')
-  },
+  }, 
   {
     path: '/',
     meta: {

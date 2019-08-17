@@ -40,7 +40,7 @@
       </van-panel>
 
       <div class="result-footer" v-show="!doTimes && isReadOver">
-        <van-button class="result-footer__btn" type="primary" v-if="again">再考一次</van-button>
+        <van-button class="result-footer__btn" type="primary" v-if="again" @click="startTestpaper()">再考一次</van-button>
         <van-button class="result-footer__btn" type="primary" v-else disabled>在{{remainTime}}后可以再考一次</van-button>
       </div>
     </div>
@@ -65,6 +65,7 @@ export default {
       calHeight: '',
       subjectList: {},
       question_type_seq: [],
+      targetId:null,
       obj: {
         "single_choice": '单选题',
         "choice": '多选题',
@@ -99,8 +100,8 @@ export default {
       return remainTime;
     },
     usedTime: function() {
-      const time = parseInt(this.result.usedTime);
-      return Math.round(time/60);
+      const time = parseInt(this.result.usedTime)-parseInt(this.result.beginTime);
+      return Math.round(time/60/1000);
     }
   },
   methods: {
@@ -139,10 +140,12 @@ export default {
     },
 
     calSubjectHeight() {
-      const dataHeight = this.$refs.data.offsetHeight + this.$refs.tag.offsetHeight + 46;
-      const allHeight = document.documentElement.clientHeight;
-      const finalHeight = allHeight - dataHeight;
-      this.calHeight = `${finalHeight}px`;
+      this.$nextTick(()=>{
+        const dataHeight = this.$refs.data.offsetHeight + this.$refs.tag.offsetHeight + 46;
+        const allHeight = document.documentElement.clientHeight;
+        const finalHeight = allHeight - dataHeight;
+        this.calHeight = `${finalHeight}px`;
+      })
     },
     getArray(data, arr) {
       let obj = {};
@@ -170,12 +173,24 @@ export default {
         timeTip = `${day}天${hours}小时${minutes}分`;
       }
       return timeTip;
-    }
+    },
+    startTestpaper(uselocal) {
+      let uselocalData=uselocal || null
+      this.$router.push({
+        name: 'testpaperDo',
+        query: {
+          testId: this.result.testId,
+          targetId: this.targetId,
+          uselocalData
+        }
+      })
+    },
   },
   created() {
     this.resultId = this.$route.params.resultId;
     this.testpaperInfo = this.$route.params.testpaperInfo;
     this.title = this.$route.params.title;
+    this.targetId = this.$route.params.targetId;
     this.setNavbarTitle(this.title);
     this.doTimes = parseInt(this.testpaperInfo.doTimes);
     this.getTestpaperResult(this.resultId);

@@ -267,7 +267,7 @@ export default {
           const testId = task.activity.testpaperInfo.testpaperId;
           this.$router.push({
             name: 'testpaperIntro',
-            params: {
+            query: {
               testId: testId,
               targetId: task.id
             }

@@ -114,6 +114,26 @@ const actions = {
       }
       return res;
     });
+  },
+  handExamdo({ commit }, datas){
+    let {answer,resultId,usedTime,userId}={...datas}
+    return new Promise((resolve, reject) => {
+      Api.handExam({
+        data: {
+          data: answer,
+          resultId: resultId,
+          usedTime:usedTime || new Date().getTime()/1000
+        }
+      })
+      .then((res) => {
+        localStorage.removeItem(`${userId}-${resultId}`);
+        localStorage.removeItem(`${userId}-${resultId}-time`);
+        resolve(res);
+      })
+      .catch(err => { 
+        reject(err);
+      });
+    })
   }
 };
 
