@@ -37,18 +37,18 @@ export default {
   name: 'testpaperIntro',
   data() {
     return {
-      testpaper:null,
-      testpaperTitle: '',
-      info: {},
-      doTime: '',
-      startTime: '',
-      limitTime: '',
-      score: '',
-      total: 0,
-      testId: '',
-      targetId: '',
-      question_type_seq: [],
-      title: '',
+      testpaper: null,    // 考试数据
+      testpaperTitle: '', // 考试标题
+      info: {},           // 考试类型说明，是否能重考相关信息
+      startTime: null,    // 考试开始时间
+      limitTime: null,    // 考试限制时间/分钟
+      score: null,        // 考试满分
+      total: 0,           // 考试题目总计数量
+      testId: null,       // 考试试卷ID
+      targetId: null,     // 任务ID
+      counts: {},         // 考试题型数量对象
+      result: {},         // 考试结果信息
+      question_type_seq: [],  // 试卷已有题型
       obj: {
         "single_choice": '单选题',
         "choice": '多选题',
@@ -58,8 +58,6 @@ export default {
         "fill": '填空题',
         "material": '材料题'
       },
-      counts: {},
-      result: {}
     }
   },
   computed: {
@@ -117,15 +115,13 @@ export default {
       }).then(res => {
         this.counts = res.items;
         this.testpaperTitle = res.task.title;
-        this.testpaper=res.testpaper;
-        this.score = res.testpaper.score;
+        this.testpaper = res.testpaper;
+        this.score = this.testpaper.score;
         this.info = res.task.activity.testpaperInfo;
         this.startTime = parseInt(this.info.startTime) * 1000;
-        this.doTime = this.info.doTimes;
         this.limitTime = parseInt(this.info.limitTime);
         this.result = res.testpaperResult;
-        this.title = res.task.activity.title;
-        this.question_type_seq = res.testpaper.metas.question_type_seq;
+        this.question_type_seq = this.testpaper.metas.question_type_seq;
         this.hasDoing()
       });
     },
@@ -139,7 +135,7 @@ export default {
            if( time && answer){
              //过滤空数据
               Object.keys(answer).forEach(key=>{
-                answer[key]= answer[key].filter(t => t!=='') 
+                answer[key]= answer[key].filter(t => t!=='')
               })
               //如果有时间限制
               if(this.result.limitedTime){
@@ -158,7 +154,7 @@ export default {
                       this.showResult()
                     });
                     return
-                } 
+                }
               }
               //没有时间限制 或者没有超出限制时间
               Dialog.confirm({
@@ -179,7 +175,7 @@ export default {
                     this.handExamdo(datas).then(res=>{
                       this.showResult()
                     });
-                });  
+                });
           }
       }
     },
@@ -197,11 +193,11 @@ export default {
     showResult() {
       this.$router.push({
         name: 'testpaperResult',
-        params: {
+        query: {
           resultId: this.result.id,
-          testpaperInfo: this.info,
-          title: this.title,
-          targetId:this.targetId
+          doTimes: this.info.doTimes,
+          redoInterval: this.info.redoInterval,
+          targetId: this.targetId
         }
       })
     }
