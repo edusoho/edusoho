@@ -65,7 +65,7 @@ export default {
       targetId: null, // 任务ID
       doTimes: 0, // 考试允许次数
       redoInterval: null, // 重考间隔
-      sumTime: null,      // 重考时间间隔 + 批阅完成时间
+      remainTime: null,   // 再次重考剩余时间
       obj: {              // 题型判断
         "single_choice": '单选题',
         "choice": '多选题',
@@ -88,9 +88,6 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading,
     }),
-    remainTime: function() {
-      return this.dealTimestamp(this.subTime);
-    },
     usedTime: function() {
       const timeInterval = parseInt(this.result.usedTime) - parseInt(this.result.beginTime);
       const time = Math.abs(timeInterval);
@@ -122,8 +119,12 @@ export default {
       const intervalTimestamp = parseInt(interval) * 60 * 1000;
       const nowTimestamp = new Date().getTime();
       const checkedTime = parseInt(this.result.checkedTime) * 1000;
-      this.sumTime = checkedTime + intervalTimestamp;
-      this.again = nowTimestamp >= this.sumTime ? true: false;
+      const sumTime = checkedTime + intervalTimestamp;
+      this.again = nowTimestamp >= sumTime ? true: false;
+      if (!this.again) {
+        const subTime =  Math.abs(sumTime - nowTimestamp);
+        this.remainTime = this.dealTimestamp(subTime);
+      }
     },
 
     getSubjectList(resData) {
@@ -160,21 +161,24 @@ export default {
     },
     dealTimestamp(timestamp) {
       let timeTip = '';
-      const dayStamp = 1000 * 60 * 60 * 24;
+      const minuteStamp = 1000 * 60;
       const hourStamp = 1000 * 60 * 60;
+      const dayStamp = 1000 * 60 * 60 * 24;
       if (timestamp <= hourStamp) {
-        timeTip = Math.round((timestamp / (1000 * 60))) + '分';
+        timeTip = Math.round(timestamp / minuteStamp) + '分';
       }
       else if (hourStamp * 1 < timestamp && timestamp <= dayStamp) {
-        const hours = Math.floor(timestamp / (hourStamp));
-        const minutes = Math.floor(timestamp % (hourStamp));
+        const hours = Math.floor(timestamp / hourStamp);
+        const remainder = timestamp % hourStamp;
+        const minutes = Math.floor(remainder / minuteStamp);
         timeTip = `${hours}小时${minutes}分`;
       }
       else if (timestamp > dayStamp) {
-        const days = Math.floor(timestamp / (dayStamp));
-        const remain = timestamp % (dayStamp);
-        const hours = Math.floor(remain / (hourStamp));
-        const minutes = Math.floor(remain % (hourStamp));
+        const days = Math.floor(timestamp / dayStamp);
+        const remain = timestamp % dayStamp;
+        const hours = Math.floor(remain / hourStamp);
+        const remainder = remain % hourStamp;
+        const minutes = Math.floor(remainder / minuteStamp);
         timeTip = `${days}天${hours}小时${minutes}分`;
       }
       return timeTip;
