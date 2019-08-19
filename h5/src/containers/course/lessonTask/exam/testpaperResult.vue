@@ -39,7 +39,7 @@
         </ul>
       </van-panel>
 
-      <div class="result-footer" v-show="!doTimes && isReadOver">
+      <div class="result-footer" ref="footer" v-show="!doTimes && isReadOver">
         <van-button class="result-footer__btn" type="primary" v-if="again" @click="startTestpaper()">再考一次</van-button>
         <van-button class="result-footer__btn" type="primary" v-else disabled>在{{remainTime}}后可以再考一次</van-button>
       </div>
@@ -55,18 +55,18 @@ export default {
   name: "testpaperResult",
   data() {
     return {
-      isReadOver: false,
-      resultId: '',
-      title: '',
-      testpaperInfo: {},
-      doTimes: 0,
-      again: 1,
-      result: {},
-      calHeight: '',
-      subjectList: {},
-      question_type_seq: [],
-      targetId:null,
-      obj: {
+      isReadOver: false, //是否已批阅
+      resultId: null, // 考试结果ID
+      again: 0,   // 是否再考一次
+      result: {}, // 返回的考试结果对象
+      calHeight: null,  // 题目列表高度
+      subjectList: {},  // 题目列表对象
+      question_type_seq: [],  // 考试已有题型
+      targetId: null, // 任务ID
+      doTimes: 0, // 考试允许次数
+      redoInterval: null, // 重考间隔
+      remainTime: null,   // 再次重考剩余时间
+      obj: {              // 题型判断
         "single_choice": '单选题',
         "choice": '多选题',
         "essay": '问答题',
@@ -75,7 +75,7 @@ export default {
         "fill": '填空题',
         "material": '材料题'
       },
-      color: {
+      color: {              // 题号标签状态判断
         'right': 'green',
         'none': 'brown',
         'wrong': 'orange',
@@ -88,19 +88,9 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading,
     }),
-    remainTime: function() {
-      const interval = this.testpaperInfo.redoInterval;
-      const intervalTimestamp = parseInt(interval) * 60 * 1000;
-      const nowTimestamp = new Date().getTime();
-      const checkedTime = parseInt(this.result.checkedTime) * 1000;
-      const sumTime = checkedTime + intervalTimestamp;
-      const subTime =  Math.abs(sumTimenow - nowTimestamp);
-      this.again = nowTimestamp >= sumTime ? true: false;
-      remainTime = this.dealTimestamp(subTime);
-      return remainTime;
-    },
     usedTime: function() {
-      const time = parseInt(this.result.usedTime)-parseInt(this.result.beginTime);
+      const timeInterval = parseInt(this.result.usedTime) - parseInt(this.result.beginTime);
+      const time = Math.abs(timeInterval);
       return Math.round(time/60/1000);
     }
   },
@@ -117,9 +107,24 @@ export default {
         this.result = res.testpaperResult;
         this.question_type_seq = res.testpaper.metas.question_type_seq;
         this.isReadOver = this.result.status === 'finished' ? true : false;
+        this.setNavbarTitle(res.testpaper.name);
         this.getSubjectList(res.items);
         this.calSubjectHeight();
+        this.judgeTime();
       });
+    },
+
+    judgeTime() {
+      const interval = this.redoInterval;
+      const intervalTimestamp = parseInt(interval) * 60 * 1000;
+      const nowTimestamp = new Date().getTime();
+      const checkedTime = parseInt(this.result.checkedTime) * 1000;
+      const sumTime = checkedTime + intervalTimestamp;
+      this.again = nowTimestamp >= sumTime ? true: false;
+      if (!this.again) {
+        const subTime =  Math.abs(sumTime - nowTimestamp);
+        this.remainTime = this.dealTimestamp(subTime);
+      }
     },
 
     getSubjectList(resData) {
@@ -143,7 +148,8 @@ export default {
       this.$nextTick(()=>{
         const dataHeight = this.$refs.data.offsetHeight + this.$refs.tag.offsetHeight + 46;
         const allHeight = document.documentElement.clientHeight;
-        const finalHeight = allHeight - dataHeight;
+        const footerHeight = (!this.doTimes && this.isReadOver) ? this.$refs.footer.offsetHeight: 0;
+        const finalHeight = allHeight - dataHeight - footerHeight;
         this.calHeight = `${finalHeight}px`;
       })
     },
@@ -155,22 +161,25 @@ export default {
     },
     dealTimestamp(timestamp) {
       let timeTip = '';
-      const dayStamp = 1000 * 60 * 60 * 24;
+      const minuteStamp = 1000 * 60;
       const hourStamp = 1000 * 60 * 60;
+      const dayStamp = 1000 * 60 * 60 * 24;
       if (timestamp <= hourStamp) {
-        timeTip = Math.round((timestamp / (1000 * 60))) + '分';
+        timeTip = Math.round(timestamp / minuteStamp) + '分';
       }
       else if (hourStamp * 1 < timestamp && timestamp <= dayStamp) {
-        const hours = Math.floor(timestamp / (hourStamp));
-        const minutes = Math.floor(timestamp % (hourStamp));
+        const hours = Math.floor(timestamp / hourStamp);
+        const remainder = timestamp % hourStamp;
+        const minutes = Math.floor(remainder / minuteStamp);
         timeTip = `${hours}小时${minutes}分`;
       }
       else if (timestamp > dayStamp) {
-        const days = Math.floor(timestamp / (dayStamp));
-        const remain = timestamp % (dayStamp);
-        const hours = Math.floor(remain / (hourStamp));
-        const minutes = Math.floor(remain % (hourStamp));
-        timeTip = `${day}天${hours}小时${minutes}分`;
+        const days = Math.floor(timestamp / dayStamp);
+        const remain = timestamp % dayStamp;
+        const hours = Math.floor(remain / hourStamp);
+        const remainder = remain % hourStamp;
+        const minutes = Math.floor(remainder / minuteStamp);
+        timeTip = `${days}天${hours}小时${minutes}分`;
       }
       return timeTip;
     },
@@ -185,22 +194,25 @@ export default {
         }
       })
     },
+    getRouteData() {
+      this.resultId = this.$route.query.resultId;
+      this.targetId = this.$route.query.targetId;
+      this.doTimes = parseInt(this.$route.query.doTimes);
+      this.redoInterval = this.$route.query.redoInterval;
+    }
   },
   created() {
-    this.resultId = this.$route.params.resultId;
-    this.testpaperInfo = this.$route.params.testpaperInfo;
-    this.title = this.$route.params.title;
-    this.targetId = this.$route.params.targetId;
-    this.setNavbarTitle(this.title);
-    this.doTimes = parseInt(this.testpaperInfo.doTimes);
+    this.getRouteData();
     this.getTestpaperResult(this.resultId);
   },
 
-  beforeUpdate (to, from, next) {
-    document.body.className = 'bg-color';
+  beforeRouteEnter(to, from, next) {
+    document.getElementById("app").style.background="#f6f6f6"
+    next()
   },
-  beforeDestroy: () => {
-    document.body.removeAttribute('class', 'bg-color');
+  beforeRouteLeave(to, from, next)  {
+    document.getElementById("app").style.background=""
+    next()
   }
 }
 </script>
