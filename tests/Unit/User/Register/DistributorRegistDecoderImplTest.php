@@ -11,7 +11,7 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
     public function testDealDataBeforeSave()
     {
         $settingService = $this->mockSettingService();
-        $this->mockDrpSignService();
+        $this->mockDistributionTokenService();
         $token = $this->mockFeatureDistributorToken();
 
         $distributorUserService = $this->mockBiz(
@@ -56,7 +56,7 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
     public function testDealDataAfterSave()
     {
         $settingService = $this->mockSettingService();
-        $this->mockDrpSignService();
+        $this->mockDistributionTokenService();
         $token = $this->mockFeatureDistributorToken();
 
         $distributorUserService = $this->mockBiz(
@@ -87,7 +87,7 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
 
     public function testDealDataAfterSaveWithErrorInLog()
     {
-        $this->mockDrpSignService();
+        $this->mockDistributionTokenService();
         $logger = $this->mockBiz(
             'logger',
             array(
@@ -159,10 +159,10 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
         return $token;
     }
 
-    private function mockDrpSignService()
+    private function mockDistributionTokenService()
     {
         return $this->mockBiz(
-            'DrpPlugin:Sign:SignService',
+            'DrpPlugin:DistributionToken:DistributionTokenService',
             array(
                 array(
                     'functionName' => 'parseRedirectToken',

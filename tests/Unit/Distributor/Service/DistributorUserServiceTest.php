@@ -48,7 +48,7 @@ class DistributorUserServiceTest extends BaseTestCase
     {
         $time = 1516508150;
         TimeMachine::setMockedTime($time);
-        $this->mockDrpSignService();
+        $this->mockDistributionTokenService();
         $settingService = $this->mockBiz(
             'System:SettingService',
             array(
@@ -180,10 +180,10 @@ class DistributorUserServiceTest extends BaseTestCase
         return $this->createService('Distributor:DistributorUserService');
     }
 
-    private function mockDrpSignService()
+    private function mockDistributionTokenService()
     {
         return $this->mockBiz(
-            'DrpPlugin:Sign:SignService',
+            'DrpPlugin:DistributionToken:DistributionTokenService',
             array(
                 array(
                     'functionName' => 'parseRedirectToken',

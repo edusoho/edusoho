@@ -3,9 +3,7 @@
 namespace Biz\Distributor\Service\Impl;
 
 use AppBundle\Common\Exception\RuntimeException;
-use AppBundle\Common\TimeMachine;
-use Codeages\PluginBundle\System\PluginConfigurationManager;
-use DrpPlugin\Biz\Sign\Service\SignService;
+use DrpPlugin\Biz\DistributionToken\Service\DistributionTokenService;
 use Topxia\Service\Common\ServiceKernel;
 
 class DistributorUserServiceImpl extends BaseDistributorServiceImpl
@@ -25,7 +23,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
         );
         try {
             $this->validateExistedToken($token);
-            $this->getDrpSignService()->parseRedirectToken($token);
+            $this->getDistributionTokenService()->parseRedirectToken($token);
             $tokenInfo['valid'] = true;
         } catch (\Exception $e) {
             $this->getLogger()->error('distributor sign error DistributorUserServiceImpl::decodeToken '.$e->getMessage(), array('token' => $token));
@@ -88,11 +86,11 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
     }
 
     /**
-     * @return SignService
+     * @return DistributionTokenService
      */
-    protected function getDrpSignService()
+    protected function getDistributionTokenService()
     {
-        return $this->biz->service('DrpPlugin:Sign:SignService');
+        return $this->createService('DrpPlugin:DistributionToken:DistributionTokenService');
     }
 
     protected function getLogger()
