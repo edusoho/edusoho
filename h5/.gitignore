@@ -1,5 +1,6 @@
 .DS_Store
 .cache
+css
 node_modules/
 /dist/
 npm-debug.log*
