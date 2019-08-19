@@ -114,7 +114,7 @@ check env:
     - mysql:5.5
     - redis:latest
   script:
-    - sed -i 's/memory_limit.*/memory_limit = 2000M/g' /etc/php/7.0/phpdbg/php.ini
+    - sed -i 's/memory_limit.*/memory_limit = 3000M/g' /etc/php/7.0/phpdbg/php.ini
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitA2B --coverage-clover reports_tmp/phpunit.coverage.xml_1 --log-junit reports_tmp/phpunit.xml_1
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitC2C --coverage-clover reports_tmp/phpunit.coverage.xml_2 --log-junit reports_tmp/phpunit.xml_2
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitD2D --coverage-clover reports_tmp/phpunit.coverage.xml_3 --log-junit reports_tmp/phpunit.xml_3
