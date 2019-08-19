@@ -4,11 +4,9 @@ namespace Biz\Distributor\Service\Impl;
 
 use AppBundle\Common\Exception\RuntimeException;
 use DrpPlugin\Biz\DistributionToken\Service\DistributionTokenService;
-use Topxia\Service\Common\ServiceKernel;
 
 class DistributorUserServiceImpl extends BaseDistributorServiceImpl
 {
-
     /**
      * @param token 分销平台的token，只能使用一次
      *
