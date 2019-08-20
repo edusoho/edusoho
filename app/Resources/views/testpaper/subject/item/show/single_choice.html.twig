@@ -40,6 +40,5 @@
       <div class="subject-item__explain">{{ 'course.testpaper_manage.import.re_edit.explain'|trans }}：{{ item.analysis|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
     {% endif %}
   </div>
-
   {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score } %}
 </div>
