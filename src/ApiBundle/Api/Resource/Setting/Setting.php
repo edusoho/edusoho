@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\Setting;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\EncryptionToolkit;
 use Biz\Common\CommonException;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\System\SettingException;
@@ -14,7 +13,7 @@ class Setting extends AbstractResource
 {
     private $supportTypes = array(
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
-        'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer', 'user', 'cloud'
+        'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer', 'user', 'cloud',
     );
 
     /**
@@ -35,13 +34,12 @@ class Setting extends AbstractResource
     {
         $result = array();
         $types = $request->query->get('types', '');
-        $types = explode(',', $types);
 
         foreach ($types as $type) {
-            if (empty($type)) {
-                continue;
-            }
+            $this->checkType($type);
+        }
 
+        foreach ($types as $type) {
             $result[$type] = $this->get($request, $type);
         }
 
@@ -57,7 +55,7 @@ class Setting extends AbstractResource
 
         return array(
             'cloudSdkCdn' => $cloudSdkCdn,
-            'cloudPlayServer' => $cloudPlayServer
+            'cloudPlayServer' => $cloudPlayServer,
         );
     }
 
