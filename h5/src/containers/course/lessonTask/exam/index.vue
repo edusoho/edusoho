@@ -157,6 +157,7 @@ import choiceType from "../component/choice";
 import singleChoice from "../component/single-choice";
 import determineType from "../component/determine";
 import { resolve } from 'url';
+import { getCountDown } from '@/utils/date-toolkit.js';
 
 import examMixin from '@/mixins/lessonTask/exam.js';
 export default {
@@ -543,24 +544,17 @@ export default {
         if(this.lastTime){
           let gotime=Math.ceil((Number(this.lastTime)-this.testpaperResult.beginTime*1000));
           time=time-gotime
-          //let gotime=Math.ceil((Number(this.lastTime)-this.testpaperResult.beginTime*1000));
-          // if(gotime>=this.testpaperResult.limitedTime){
-          //   let endTime= Number(this.testpaperResult.beginTime * 1000) + Number(this.testpaperResult.limitedTime * 60 * 1000)
-          //   //超过时间时间交卷
-          //   this.submitExam({endTime});
-          //   return
-          // }
-         // time=this.testpaperResult.limitedTime-gotime;
         }
 
         this.timeMeter =setInterval(()=>{
-            let nowTime = Number(time)-(i++ * 1000);
-            let minutes = parseInt(nowTime / 1000 / 60 % 60, 10);//计算剩余的分钟
-            let seconds = parseInt(nowTime / 1000 % 60, 10);//计算剩余的秒数
-            minutes = this.checkTime(minutes);
-            seconds = this.checkTime(seconds);
-            let hours = parseInt(nowTime / ( 1000 * 60 * 60), 10); //计算剩余的小时
-            hours = this.checkTime(hours);
+            // let nowTime = Number(time)-(i++ * 1000);
+            // let minutes = parseInt(nowTime / 1000 / 60 % 60, 10);//计算剩余的分钟
+            // let seconds = parseInt(nowTime / 1000 % 60, 10);//计算剩余的秒数
+            // minutes = this.checkTime(minutes);
+            // seconds = this.checkTime(seconds);
+            // let hours = parseInt(nowTime / ( 1000 * 60 * 60), 10); //计算剩余的小时
+            // hours = this.checkTime(hours);
+            let {hours,minutes,seconds}=getCountDown(time,i++);
             this.time=`${hours}:${minutes}:${seconds}`
             if(hours==0 && minutes==0 && seconds<60){
               this.timeWarn=true

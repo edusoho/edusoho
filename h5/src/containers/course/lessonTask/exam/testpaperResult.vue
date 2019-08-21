@@ -52,6 +52,7 @@ import Api from '@/api';
 import { mapState, mapMutations,mapActions } from 'vuex';
 import * as types from '@/store/mutation-types';
 import examMixin from '@/mixins/lessonTask/exam.js';
+import { getdateTimeDown } from '@/utils/date-toolkit.js';
 export default {
   name: "testpaperResult",
   data() {
@@ -102,8 +103,7 @@ export default {
     },
   },
   created() {
-      this.getInfo();
-      this.getTestpaperResult();
+      this.getTestpaperResult();   
   },
   beforeRouteEnter(to, from, next) {
       document.getElementById("app").style.background="#f6f6f6"
@@ -120,8 +120,8 @@ export default {
     ...mapActions('course', [
         'handExamdo',
        ]),
-    getTestpaperResult() {
-      Api.testpaperResult({
+    async getTestpaperResult() {
+      await Api.testpaperResult({
         query: {
           resultId: this.$route.query.resultId
         }
@@ -139,6 +139,7 @@ export default {
           this.submitExam(answer,endTime)
         })
       });
+      this.getInfo();
     },
     judgeTime() {
       const interval = this.redoInterval;
@@ -152,8 +153,9 @@ export default {
       const sumTime = checkedTime + intervalTimestamp;
       this.again = nowTimestamp >= sumTime ? true: false;
       if (!this.again) {
-        const subTime =  Math.abs(sumTime - nowTimestamp);
-        this.remainTime = this.dealTimestamp(subTime);
+        this.remainTime = getdateTimeDown(sumTime);
+        // const subTime =  Math.abs(sumTime - nowTimestamp);
+        // this.remainTime = this.dealTimestamp(subTime);
       }
     },
     getSubjectList(resData) {
@@ -213,30 +215,30 @@ export default {
             Toast.fail(err.message);
         });
     },
-    dealTimestamp(timestamp) {
-      let timeTip = '';
-      const minuteStamp = 1000 * 60;
-      const hourStamp = 1000 * 60 * 60;
-      const dayStamp = 1000 * 60 * 60 * 24;
-      if (timestamp <= hourStamp) {
-        timeTip = Math.round(timestamp / minuteStamp) + '分';
-      }
-      else if (hourStamp * 1 < timestamp && timestamp <= dayStamp) {
-        const hours = Math.floor(timestamp / hourStamp);
-        const remainder = timestamp % hourStamp;
-        const minutes = Math.floor(remainder / minuteStamp);
-        timeTip = `${hours}小时${minutes}分`;
-      }
-      else if (timestamp > dayStamp) {
-        const days = Math.floor(timestamp / dayStamp);
-        const remain = timestamp % dayStamp;
-        const hours = Math.floor(remain / hourStamp);
-        const remainder = remain % hourStamp;
-        const minutes = Math.floor(remainder / minuteStamp);
-        timeTip = `${days}天${hours}小时${minutes}分`;
-      }
-      return timeTip;
-    },
+    // dealTimestamp(timestamp) {
+    //   let timeTip = '';
+    //   const minuteStamp = 1000 * 60;
+    //   const hourStamp = 1000 * 60 * 60;
+    //   const dayStamp = 1000 * 60 * 60 * 24;
+    //   if (timestamp <= hourStamp) {
+    //     timeTip = Math.round(timestamp / minuteStamp) + '分';
+    //   }
+    //   else if (hourStamp * 1 < timestamp && timestamp <= dayStamp) {
+    //     const hours = Math.floor(timestamp / hourStamp);
+    //     const remainder = timestamp % hourStamp;
+    //     const minutes = Math.floor(remainder / minuteStamp);
+    //     timeTip = `${hours}小时${minutes}分`;
+    //   }
+    //   else if (timestamp > dayStamp) {
+    //     const days = Math.floor(timestamp / dayStamp);
+    //     const remain = timestamp % dayStamp;
+    //     const hours = Math.floor(remain / hourStamp);
+    //     const remainder = remain % hourStamp;
+    //     const minutes = Math.floor(remainder / minuteStamp);
+    //     timeTip = `${days}天${hours}小时${minutes}分`;
+    //   }
+    //   return timeTip;
+    // },
     startTestpaper(KeepDoing) {
       KeepDoing= KeepDoing ? true : false
       this.$router.replace({
