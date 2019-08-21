@@ -4,6 +4,7 @@ namespace AppBundle\Controller\OAuth2\Service;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -70,6 +71,7 @@ class AuthorizationController extends BaseController
 
     public function getUserInfoAction(Request $request, $userId)
     {
+        $fields = $request->query->all();
         $server = $this->getOAuth2Server();
 
         if (!$server->verifyResourceRequest($this->getOAuth2Request(), $this->getOAuth2Response())) {
@@ -86,9 +88,16 @@ class AuthorizationController extends BaseController
         $user['mediumAvatar'] = $this->getFileUrl($user['mediumAvatar']);
         $user['largeAvatar'] = $this->getFileUrl($user['largeAvatar']);
 
-        return $this->createJsonResponse(ArrayToolkit::parts($user, array(
-            'nickname', 'about', 'email', 'title', 'roles', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
-        )));
+        $result = ArrayToolkit::parts($user, array(
+            'nickname', 'verifiedMobile', 'about', 'email', 'title', 'roles', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
+        ));
+
+        if (!empty($fields['client']) && $fields['client'] == 'drp') {
+            $setting = $this->getSettingService()->get('storage');
+            $result['access_key'] = $setting['cloud_access_key'];
+        }
+
+        return $this->createJsonResponse($result);
     }
 
     protected function handleAuthorizeRequest(Request $request)
@@ -194,5 +203,13 @@ class AuthorizationController extends BaseController
     protected function getOAuth2Server()
     {
         return $this->get('oauth2.server');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
