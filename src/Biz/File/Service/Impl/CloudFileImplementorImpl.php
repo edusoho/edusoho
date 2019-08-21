@@ -267,6 +267,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 $params['directives']['watermarks'] = $watermarks;
             }
         }
+        
+        if ('ppt' == $file['type']) {
+            $params['directives'] = array_merge($params['directives'], array('convertAll' => true));
+        }
 
         $apiResult = $this->createApi('root')->post('/resources/upload_init', $params);
 
