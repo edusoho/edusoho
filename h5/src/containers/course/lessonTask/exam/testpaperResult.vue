@@ -1,7 +1,7 @@
 <template>
   <div>
     <e-loading v-if="isLoading"></e-loading>
-    <div class="result-data" ref="data">
+    <div class="result-data" ref="data" v-if="result">
       <div class="result-data__item">
         本次得分
         <div class="result-data__bottom data-number-orange data-medium" v-if="isReadOver"><span class=" data-number">{{ result.score }}</span>分</div>
@@ -39,7 +39,7 @@
         </ul>
       </van-panel>
 
-      <div class="result-footer" ref="footer" v-show="!doTimes && isReadOver">
+      <div class="result-footer" ref="footer" v-if="doTimes==0 && isReadOver">
         <van-button class="result-footer__btn" type="primary" v-if="again" @click="startTestpaper()">再考一次</van-button>
         <van-button class="result-footer__btn" type="primary" v-else disabled>在{{remainTime}}后可以再考一次</van-button>
       </div>
@@ -49,8 +49,9 @@
 
 <script>
 import Api from '@/api';
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations,mapActions } from 'vuex';
 import * as types from '@/store/mutation-types';
+import examMixin from '@/mixins/lessonTask/exam.js';
 export default {
   name: "testpaperResult",
   data() {
@@ -63,7 +64,7 @@ export default {
       subjectList: {},  // 题目列表对象
       question_type_seq: [],  // 考试已有题型
       targetId: null, // 任务ID
-      doTimes: 0, // 考试允许次数
+      doTimes: null, // 考试允许次数
       redoInterval: null, // 重考间隔
       remainTime: null,   // 再次重考剩余时间
       obj: {              // 题型判断
@@ -84,24 +85,45 @@ export default {
       }
     }
   },
+  mixins: [examMixin],
   computed: {
     ...mapState({
       isLoading: state => state.isLoading,
+      user:state => state.user
     }),
     usedTime: function() {
-      const timeInterval = parseInt(this.result.usedTime) - parseInt(this.result.beginTime);
-      const time = Math.abs(timeInterval);
-      return Math.round(time/60/1000);
+      const timeInterval = parseInt(this.result.usedTime) || 0;
+      return Math.round(timeInterval/60);
     }
+  },
+  watch:{
+    doTimes:function() {
+      this.calSubjectHeight();
+    },
+  },
+  created() {
+      this.getInfo();
+      this.getTestpaperResult();
+  },
+  beforeRouteEnter(to, from, next) {
+      document.getElementById("app").style.background="#f6f6f6"
+      next()
+  },
+  beforeRouteLeave(to, from, next)  {
+      document.getElementById("app").style.background=""
+      next()
   },
   methods: {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
-    getTestpaperResult(resultId) {
+    ...mapActions('course', [
+        'handExamdo',
+       ]),
+    getTestpaperResult() {
       Api.testpaperResult({
         query: {
-          resultId: resultId
+          resultId: this.$route.query.resultId
         }
       }).then(res => {
         this.result = res.testpaperResult;
@@ -110,12 +132,20 @@ export default {
         this.setNavbarTitle(res.testpaper.name);
         this.getSubjectList(res.items);
         this.calSubjectHeight();
-        this.judgeTime();
+
+        this.canDoing(this.result,this.user.id).then(()=>{
+          this.startTestpaper('KeepDoing')
+        }).catch(({answer,endTime})=>{
+          this.submitExam(answer,endTime)
+        })
       });
     },
-
     judgeTime() {
       const interval = this.redoInterval;
+      if(interval==0){
+        this.again=true;
+        return
+      }
       const intervalTimestamp = parseInt(interval) * 60 * 1000;
       const nowTimestamp = new Date().getTime();
       const checkedTime = parseInt(this.result.checkedTime) * 1000;
@@ -126,38 +156,62 @@ export default {
         this.remainTime = this.dealTimestamp(subTime);
       }
     },
-
     getSubjectList(resData) {
-      const self = this;
       for (let i in resData) {
         let final = [];
-        resData[i].map(function(one) {
+        resData[i].forEach((one)=>{
           if (i === 'material') {
-            one.subs.map(function(item) {
-              self.getArray(item, final);
+            one.subs.forEach((item)=>{
+              this.getStatus(item, final);
             })
           } else {
-            self.getArray(one, final);
+            this.getStatus(one, final);
           }
         })
-        self.subjectList[i] = final;
+        this.subjectList[i] = final;
       }
     },
-
     calSubjectHeight() {
       this.$nextTick(()=>{
         const dataHeight = this.$refs.data.offsetHeight + this.$refs.tag.offsetHeight + 46;
         const allHeight = document.documentElement.clientHeight;
-        const footerHeight = (!this.doTimes && this.isReadOver) ? this.$refs.footer.offsetHeight: 0;
+        const footerHeight = (this.doTimes==0 && this.isReadOver) ? this.$refs.footer.offsetHeight: 0;
         const finalHeight = allHeight - dataHeight - footerHeight;
         this.calHeight = `${finalHeight}px`;
       })
     },
-    getArray(data, arr) {
+    getStatus(data, arr) {
       let obj = {};
       obj.seq = data.seq;
-      obj.status = data.testResult.status;
+      if(data.testResult){
+        obj.status = data.testResult.status
+      }else{ 
+        obj.status='noAnswer'
+      }
       arr.push(obj);
+    },
+    submitExam(answer,endTime){
+        endTime= endTime ? endTime : new Date().getTime()
+        let datas={
+            answer,
+            resultId:this.result.id,
+            userId:this.user.id,
+            beginTime:Number(this.result.beginTime),
+            endTime
+        }
+        //交卷+跳转到结果页
+        this.handExamdo(datas).then(res=>{
+            this.$router.replace({
+              name: 'testpaperResult',
+              query: {
+                resultId: this.$route.query.resultId,
+                testId:this.$route.query.testId,
+                targetId: this.$route.query.targetId
+              }
+            })
+        }).catch((err)=>{
+            Toast.fail(err.message);
+        });
     },
     dealTimestamp(timestamp) {
       let timeTip = '';
@@ -183,36 +237,34 @@ export default {
       }
       return timeTip;
     },
-    startTestpaper(uselocal) {
-      let uselocalData=uselocal || null
-      this.$router.push({
+    startTestpaper(KeepDoing) {
+      KeepDoing= KeepDoing ? true : false
+      this.$router.replace({
         name: 'testpaperDo',
         query: {
           testId: this.result.testId,
           targetId: this.targetId,
-          uselocalData
+          action:'redo'
         }
       })
     },
-    getRouteData() {
-      this.resultId = this.$route.query.resultId;
+    getInfo() {
+      this.testId = this.$route.query.testId;
       this.targetId = this.$route.query.targetId;
-      this.doTimes = parseInt(this.$route.query.doTimes);
-      this.redoInterval = this.$route.query.redoInterval;
-    }
-  },
-  created() {
-    this.getRouteData();
-    this.getTestpaperResult(this.resultId);
-  },
-
-  beforeRouteEnter(to, from, next) {
-    document.getElementById("app").style.background="#f6f6f6"
-    next()
-  },
-  beforeRouteLeave(to, from, next)  {
-    document.getElementById("app").style.background=""
-    next()
+      Api.testpaperIntro({
+        params: {
+          targetId: this.targetId,
+          targetType: 'task'
+        },
+        query: {
+          testId: this.testId
+        }
+      }).then(res => {
+        this.doTimes =Number(res.task.activity.testpaperInfo.doTimes);
+        this.redoInterval =Number(res.task.activity.testpaperInfo.redoInterval);
+        this.judgeTime();
+      });
+    },
   }
 }
 </script>

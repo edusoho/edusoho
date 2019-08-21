@@ -54,7 +54,7 @@ export default {
   },
   methods:{
     change(){
-      console.log(this.answer[0])
+      //console.log(this.answer[0])
     }
   }
 };

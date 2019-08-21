@@ -115,25 +115,34 @@ const actions = {
       return res;
     });
   },
-  handExamdo({ commit }, datas){
-    let {answer,resultId,usedTime,userId}={...datas}
+  handExamdo({ commit }, datas) {
+    let { answer, resultId, beginTime, endTime, userId } = { ...datas };
+    beginTime *= 1000;
+    let usedTime = Math.ceil((endTime - beginTime) / 1000);
+
+    //如果是不限时间限制，使用时间在本地有记录，如果有时间限制，使用时间在本地无记录
+    let localuseTime=`${userId}-${resultId}-usedTime`;
+    if(localStorage.getItem(localuseTime)){
+      usedTime=localStorage.getItem(localuseTime)
+    }
+
     return new Promise((resolve, reject) => {
       Api.handExam({
         data: {
           data: answer,
-          resultId: resultId,
-          usedTime:usedTime || new Date().getTime()/1000
+          resultId,
+          usedTime
         }
       })
-      .then((res) => {
-        localStorage.removeItem(`${userId}-${resultId}`);
-        localStorage.removeItem(`${userId}-${resultId}-time`);
-        resolve(res);
-      })
-      .catch(err => { 
-        reject(err);
-      });
-    })
+        .then(res => {
+          localStorage.removeItem(`${userId}-${resultId}`);
+          localStorage.removeItem(`${userId}-${resultId}-time`);
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
   }
 };
 
