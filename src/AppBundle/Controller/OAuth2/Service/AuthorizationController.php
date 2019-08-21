@@ -25,7 +25,7 @@ class AuthorizationController extends BaseController
         }
 
         $error = '';
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             try {
                 return $this->handleAuthorizeRequest($request);
             } catch (\Exception $e) {
@@ -92,7 +92,7 @@ class AuthorizationController extends BaseController
             'nickname', 'verifiedMobile', 'about', 'email', 'title', 'roles', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
         ));
 
-        if (!empty($fields['client']) && $fields['client'] == 'drp') {
+        if (!empty($fields['client']) && 'drp' == $fields['client']) {
             $setting = $this->getSettingService()->get('storage');
             $result['access_key'] = $setting['cloud_access_key'];
         }
@@ -126,7 +126,7 @@ class AuthorizationController extends BaseController
         if (empty($path)) {
             return '';
         }
-        if (strpos($path, 'http://') !== false) {
+        if (false !== strpos($path, 'http://')) {
             return $path;
         }
         $path = str_replace('public://', '', $path);
