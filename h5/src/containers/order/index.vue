@@ -348,7 +348,7 @@ export default {
           num: this.targetNum,
         }
       }).then(res => {
-        
+
         if(payment=='free'){
           that.routerChange()
         }else if(payment=='pay'){
