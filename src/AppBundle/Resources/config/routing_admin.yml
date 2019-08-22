@@ -2395,6 +2395,10 @@ admin_wechat_notification_record_detail:
     path: /wechat/notification/record/{id}/detail
     defaults: { _controller: AppBundle:Admin/WeChatNotification:recordDetail}
 
+admin_wechat_fans_list:
+    path: /wechat/fans/list
+    defaults: { _controller: AppBundle:Admin/WeChatNotification:fansList }
+
 admin_wechat_notification_manage: 
     path: /wechat/notification/manage
     defaults: { _controller: AppBundle:Admin/WeChatNotification:manage}

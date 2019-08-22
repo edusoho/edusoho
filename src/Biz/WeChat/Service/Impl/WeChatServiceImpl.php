@@ -47,6 +47,11 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $this->getUserWeChatDao()->findByUserIdAndType($userId, $type);
     }
 
+    public function countWeChatUserJoinUser($conditions)
+    {
+        return $this->getUserWeChatDao()->countWeChatUserJoinUser($conditions);
+    }
+
     //@TODO 不用批量接口
     public function getOfficialWeChatUserByUserId($userId)
     {
@@ -82,6 +87,11 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
         $updateFields = $this->weChatUserFilter($fields);
         $this->getUserWeChatDao()->update($id, $updateFields);
+    }
+
+    public function searchWeChatUsersJoinUser($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getUserWeChatDao()->searchWeChatUsersJoinUser($conditions, $orderBys, $start, $limit);
     }
 
     public function searchWeChatUsers($conditions, $orderBys, $start, $limit, $columns = array())
@@ -125,7 +135,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function refreshOfficialWeChatUsers($lifeTime = WeChatService::FRESH_TIME, $refreshNum = self::REFRESH_NUM)
     {
         $conditions = array(
-            'type' => self::OFFICIAL_TYPE,
+            'type' => WeChatService::OFFICIAL_TYPE,
             'lastRefreshTime_LT' => time() - $lifeTime,
         );
         $weChatUsers = $this->searchWeChatUsers(
@@ -137,9 +147,9 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         );
 
         if (empty($weChatUsers)) {
-            //这里加日志
             return;
         }
+
         $this->batchFreshOfficialWeChatUsers($weChatUsers);
     }
 
@@ -199,6 +209,9 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 'data' => $freshWeChatUser,
                 'isSubscribe' => empty($freshWeChatUser['subscribe']) ? 0 : $freshWeChatUser['subscribe'],
                 'lastRefreshTime' => time(),
+                'nickname' => empty($freshWeChatUser['nickname']) ? '' : $freshWeChatUser['nickname'],
+                'profilePicture' => empty($freshWeChatUser['headimgurl']) ? '' : $freshWeChatUser['headimgurl'],
+                'subscribeTime' => empty($freshWeChatUser['subscribe_time']) ? 0 : $freshWeChatUser['subscribe_time'],
             );
             $batchUpdateHelper->add('id', $weChatUser['id'], $updateField);
         }

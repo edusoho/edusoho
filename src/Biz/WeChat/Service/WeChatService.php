@@ -37,4 +37,10 @@ interface WeChatService
     public function createWeChatUser($fields);
 
     public function updateWeChatUser($id, $fields);
+
+    public function countWeChatUserJoinUser($conditions);
+
+    public function searchWeChatUsersJoinUser($conditions, $orderBys, $start, $limit);
+
+    public function searchWeChatUsers($conditions, $orderBys, $start, $limit, $columns);
 }
