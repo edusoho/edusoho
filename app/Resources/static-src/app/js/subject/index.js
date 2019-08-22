@@ -1,6 +1,7 @@
 import QuestionOperate from './operate';
 import showEditor from './edit';
 import { Browser } from 'common/utils';
+import { debounce } from 'app/common/widget/debounce';
 
 export default class sbList {
   constructor() {
@@ -30,6 +31,7 @@ export default class sbList {
     this.initQuestionOperate();
     this.confirmFresh();
     this.sbListFixed();
+    this.footerButtonFixed();
     this.initEvent();
     this.initScoreValidator();
     this.setDifficulty();
@@ -115,6 +117,26 @@ export default class sbList {
         self.$element.addClass('sb-fixed');
       } else {
         self.$element.removeClass('sb-fixed');
+      }
+    });
+  }
+
+  footerButtonFixed() {
+    const self = this;
+    window.addEventListener('scroll', debounce(self.scrollBottom, 100, true));
+  }
+
+  scrollBottom() {
+    const $fixedFooterElement = $('.js-subject-item-btn');
+    const footerLinkHeight = $('.es-footer-link').length ? $('.es-footer-link').outerHeight(): 0;
+    const footerHeight = $('.es-footer').length ? $('.es-footer').outerHeight(): 0;
+    const bottomHeight = footerLinkHeight + footerHeight;
+    const finalHeight = $(document).height() - $(window).height() - bottomHeight;
+    $(window).scroll(function(event) {
+      if ($(window).scrollTop() < finalHeight) {
+        $fixedFooterElement.addClass('subject-bottom-fixed');
+      } else {
+        $fixedFooterElement.removeClass('subject-bottom-fixed');
       }
     });
   }
