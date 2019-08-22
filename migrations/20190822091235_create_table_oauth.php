@@ -22,7 +22,7 @@ class CreateTableOauth extends Migration
               PRIMARY KEY (`token`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-            CREATE TABLE IF NOT EXISTS `oauth_authorization_code` (
+            CREATE TABLE IF NOT EXISTS `oauth_authorization_code` (php
               `code` varchar(40) NOT NULL,
               `client_id` varchar(50) DEFAULT NULL,
               `expires` datetime NOT NULL,
@@ -86,7 +86,7 @@ class CreateTableOauth extends Migration
         $container = $this->getContainer();
         $db = $container['db'];
 
-        $db->exec("
+        $db->exec('
             DROP TABLE IF EXISTS `oauth_access_token`;
             DROP TABLE IF EXISTS `oauth_authorization_code`;
             DROP TABLE IF EXISTS `oauth_client`;
@@ -94,6 +94,6 @@ class CreateTableOauth extends Migration
             DROP TABLE IF EXISTS `oauth_refresh_token`;
             DROP TABLE IF EXISTS `oauth_scope`;
             DROP TABLE IF EXISTS `oauth_user`;
-        ");
+        ');
     }
 }
