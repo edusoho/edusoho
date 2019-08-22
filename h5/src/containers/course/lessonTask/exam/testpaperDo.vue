@@ -99,6 +99,9 @@ import { getCountDown } from '@/utils/date-toolkit.js';
 
 import examMixin from '@/mixins/lessonTask/exam.js';
 
+//将元素固定在底部，当软键盘弹起的时候不会随着软键盘弹起而跟着上来
+import  fixfoot  from '@/directive/fixfoot/index.js'
+
 let backUrl=''
 
 let listenAction;
@@ -109,47 +112,7 @@ export default {
   name: "testpaperDo",
   mixins: [examMixin],
   directives: {
-    fixfoot: {
-      // 指令的定义
-      inserted: function (el) {
-        const elStyle = el.style;
-        let active = false;
-        originalHeight = document.body.clientHeight;
-        const reset = () => {
-          if (!active) {
-            return;
-          }
-          elStyle.position = 'fixed';
-          active = false;
-        };
-        const hang = () => {
-          if (active) {
-            return;
-          }
-          elStyle.position = 'static';
-          active = true;
-        };
-        const getCurrHeight = () => {
-          const getHeight = document.body.clientHeight;
-          return getHeight;
-        };
-        const check = () => {
-          currHeight = getCurrHeight();
-          if (currHeight != originalHeight) {
-            hang();
-          } else {
-            reset();
-          }
-        };
-        listenAction = () => {
-          check();
-        };
-        window.addEventListener('resize', listenAction);
-      },
-      unbind() {
-        window.removeEventListener('resize',listenAction);
-      }
-    }
+    fixfoot
   },
   data() {
     return {

@@ -1,11 +1,11 @@
-import foot from './fixFoot.js'
-import Vue from 'vue';
+import fixfoot from './fixFoot.js';
 
-const install = function(Vue) {
-    Vue.directive('foot', foot)
-  }
-  window.foot = foot;
-  Vue.use(foot);
-  
-  foot.install = install;
-  export default foot;
+const install = function (Vue) {
+  Vue.directive('fixfoot', fixfoot);
+};
+if (window.Vue) {
+  window['fixfoot'] = fixfoot;
+  Vue.use(install); // eslint-disable-line
+}
+fixfoot.install = install;
+export default fixfoot;
