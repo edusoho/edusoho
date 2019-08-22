@@ -12,7 +12,7 @@ class CreateTableOauth extends Migration
         $container = $this->getContainer();
         $db = $container['db'];
 
-        $db->exec("
+        $db->exec('
             CREATE TABLE IF NOT EXISTS `oauth_access_token` (
               `token` varchar(40) NOT NULL,
               `client_id` varchar(50) DEFAULT NULL,
@@ -21,9 +21,9 @@ class CreateTableOauth extends Migration
               `scope` varchar(50) DEFAULT NULL,
               PRIMARY KEY (`token`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        ");
+        ');
 
-        $db->exec("
+        $db->exec('
             CREATE TABLE IF NOT EXISTS `oauth_authorization_code` (
               `code` varchar(40) NOT NULL,
               `client_id` varchar(50) DEFAULT NULL,
@@ -34,7 +34,7 @@ class CreateTableOauth extends Migration
               `id_token` varchar(255) DEFAULT NULL,
               PRIMARY KEY (`code`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        ");
+        ');
 
         $db->exec("
             CREATE TABLE IF NOT EXISTS `oauth_client` (
@@ -52,15 +52,15 @@ class CreateTableOauth extends Migration
             
         ");
 
-        $db->exec("
+        $db->exec('
             CREATE TABLE IF NOT EXISTS `oauth_client_public_key` (
               `client_id` varchar(50) NOT NULL,
               `public_key` longtext NOT NULL,
               PRIMARY KEY (`client_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        ");
+        ');
 
-        $db->exec("
+        $db->exec('
             CREATE TABLE IF NOT EXISTS `oauth_refresh_token` (
               `token` varchar(40) NOT NULL,
               `client_id` varchar(50) DEFAULT NULL,
@@ -70,18 +70,18 @@ class CreateTableOauth extends Migration
               PRIMARY KEY (`token`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-        ");
+        ');
 
-        $db->exec("
+        $db->exec('
             CREATE TABLE IF NOT EXISTS `oauth_scope` (
               `scope` varchar(255) NOT NULL,
               `description` varchar(255) NOT NULL,
               PRIMARY KEY (`scope`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-        ");
+        ');
 
-        $db->exec("
+        $db->exec('
             CREATE TABLE IF NOT EXISTS `oauth_user` (
               `username` varchar(255) NOT NULL,
               `password` varchar(255) NOT NULL,
@@ -90,7 +90,7 @@ class CreateTableOauth extends Migration
               `scopes` longtext,
               PRIMARY KEY (`username`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        ");
+        ');
     }
 
     /**
