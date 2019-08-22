@@ -9,6 +9,8 @@ load.then(function(){
   }, function(result) {
     var $content = $(result['content']);
     $('.text-activity-content').append($content);
+    const $test = $('#text-activity').find('iframe');
+    $test.addClass('iframe-scroll');
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block);
     });
