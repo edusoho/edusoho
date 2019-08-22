@@ -40,6 +40,6 @@ export default {
     window.addEventListener('resize', listenAction);
   },
   unbind() {
-    window.removeEventListener('resize',listenAction);
+    window.removeEventListener('resize', listenAction);
   }
-}
+};
