@@ -6,10 +6,10 @@
         <div class="intro-panel__content intro-panel__content--title">{{ testpaperTitle }}</div>
       </van-panel>
       <van-panel class="panel intro-panel" v-if=startTime title="开考时间">
-        <div :class="['intro-panel__content',result ?'':'intro-tip']">{{ formateStartTime(startTime) }}</div>
+        <div :class="['intro-panel__content',(result || !disabled) ?'':'intro-tip']">{{ formateStartTime(startTime) }}</div>
       </van-panel>
       <van-panel class="panel intro-panel" title="考试时长">
-        <div :class="['intro-panel__content',result ?'':'intro-tip']" v-if=limitTime>{{ limitTime }}分钟</div>
+        <div :class="['intro-panel__content',(result || !disabled) ?'':'intro-tip']" v-if=limitTime>{{ limitTime }}分钟</div>
         <div class="intro-panel__content" v-else>不限制</div>
       </van-panel>
       <van-panel class="panel intro-panel" title="试卷满分">
@@ -69,14 +69,14 @@ export default {
     }
   },
   computed: {
-    sum: function () {
+    sum() {
       let sum = 0;
       for (let i in this.counts) {
         sum = sum + parseInt(this.counts[i]);
       }
       return sum;
     },
-    disabled: function() {
+    disabled() {
       const nowTime = new Date().getTime();
       return this.startTime > nowTime ? true: false;
     },
@@ -141,7 +141,7 @@ export default {
         this.question_type_seq = this.testpaper.metas.question_type_seq;
  
         this.canDoing(this.result,this.user.id).then(()=>{
-          this.startTestpaper('KeepDoing');
+          this.startTestpaper();
         }).catch(({answer,endTime})=>{
           this.submitExam(answer,endTime)
         })
@@ -163,15 +163,16 @@ export default {
             Toast.fail(err.message);
         });
     },
-    startTestpaper(KeepDoing) {
-      KeepDoing= KeepDoing ? 'true' : false
-      this.$router.replace({
+    startTestpaper() {
+      this.$router.push({
         name: 'testpaperDo',
         query: {
           testId: this.testId,
           targetId: this.targetId,
-          action:'do',
-          KeepDoing
+          action:'do'
+        },
+        params:{
+          KeepDoing:true
         }
       })
     },
@@ -181,7 +182,7 @@ export default {
         query: {
           resultId: this.result.id,
           testId:this.testId,
-          targetId: this.targetId
+          targetId: this.targetId,
         }
       })
     },

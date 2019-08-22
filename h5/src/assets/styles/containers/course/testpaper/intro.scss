@@ -9,14 +9,14 @@
   margin-left: vw(10);
   margin-right: vw(10);
   margin-bottom: vw(10);
-  padding: vw(10);
+  padding:0 vw(10) vw(10) vw(10);
   border-radius: 5px;
   .van-cell__title {
     color: #333;
     font-weight: 500;
     span {
-      font-size: vw(20);
-      line-height: vw(20);
+      font-size: vw(16);
+      line-height: vw(16);
     }
   }
   .intro-tip {

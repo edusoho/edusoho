@@ -20,7 +20,7 @@ const routes = [
   }, {
     path: '/testpaperDo',
     name: 'testpaperDo',
-    component: () => import(/* webpackChunkName: "do" */ '@/containers/course/lessonTask/exam/index.vue')
+    component: () => import(/* webpackChunkName: "do" */ '@/containers/course/lessonTask/exam/test.vue')
   }, {
     path: '/testpaperResult',
     name: 'testpaperResult',

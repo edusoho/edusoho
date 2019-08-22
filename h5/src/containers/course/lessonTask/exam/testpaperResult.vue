@@ -239,14 +239,16 @@ export default {
     //   }
     //   return timeTip;
     // },
-    startTestpaper(KeepDoing) {
-      KeepDoing= KeepDoing ? true : false
+    startTestpaper() {
       this.$router.replace({
         name: 'testpaperDo',
         query: {
           testId: this.result.testId,
           targetId: this.targetId,
           action:'redo'
+        },
+        params:{
+           KeepDoing:true
         }
       })
     },
