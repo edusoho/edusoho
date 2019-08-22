@@ -13,7 +13,6 @@ let url = $('.js-cloud-url').data('url');
 let $element = $('#activity-ppt-content');
 
 initPptPlayer();
-onFullScreen();
 
 function initPptPlayer() {
   new QiQiuYun.Player({
@@ -29,26 +28,5 @@ function initPptPlayer() {
       name: $element.data('userName')
     }
   });
-
 }
 
-
-function onFullScreen() {
-  window.onmessage = function (e) {
-    if (e == null || e == undefined) {
-      return;
-    }
-    var isPageFullScreen = e.data;
-    if (typeof(isPageFullScreen) != 'boolean') {
-      return;
-    }
-    var docContent = $('#task-content-iframe', window.parent.document);
-    if (isPageFullScreen) {
-      docContent.removeClass('screen-full');
-      docContent.width('100%');
-    } else {
-      docContent.addClass('screen-full');
-      docContent.width(window.document.body.offsetWidth + 'px');
-    }
-  };
-}
