@@ -9,15 +9,21 @@
 {% endif %}
 
 {% block body %}
-  <div class="iframe-parent-content" id="activity-ppt-content"
-    data-finish-type="{{ activity.ext.finishType }}"
-    data-finish-detail="{{ activity.ext.finishDetail }}"
-    data-slides="{{ pptPlayer.result.images|default()|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
-  {% if not pptPlayer.error is empty %}
-    <div class="alert alert-danger mv20 mh20">
-      <i class="es-icon es-icon-info"></i>{{ pptPlayer.error.message|raw }}
-    </div>
-  {% endif %}
-  </div>
-{% endblock %}
 
+  {% if not pptPlayer.error is empty %}
+    <div class="iframe-parent-content pv20 ph20">
+      <div class="alert alert-danger"><i class="es-icon es-icon-info"></i>{{ pptPlayer.error.message|raw }}</div>
+    </div>
+  {% else %}
+    <div class="iframe-parent-content iframe-parent-full" id="activity-ppt-content" data-res-no="{{ file.globalId }}"
+        data-token="{{ pptPlayer.result.token }}"
+        data-user-id="{{app.user.id|default(0)}}"
+        data-user-name="{{app.user.username|default('')}}"
+      {% if setting('magic.ppt_watermark') %}
+      data-watermark-url="{{ path('cloud_ppt_watermark') }}">
+      {% endif %}
+    </div>
+     <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('player') }}">
+    {% do script(['libs/base.js','app/js/common.js','app/js/main.js','pptactivity/js/show/index.js'], 1000) %}
+  {% endif %}
+{% endblock %}

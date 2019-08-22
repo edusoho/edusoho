@@ -1,42 +1,54 @@
-import PptPlayer from 'app/common/ppt-player.js';
-import ActivityEmitter from 'app/js/activity/activity-emitter.js';
+let url = $('.js-cloud-url').data('url');
+(function (url) {
+  window.QiQiuYun || (window.QiQiuYun = {});
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url + '?' + ~~(Date.now() / 1000 / 60), false); // 可设置缓存时间。当前缓存时间为1分钟。
+  xhr.send(null);
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  var script = document.createElement('script');
+  script.text = xhr.responseText;
+  firstScriptTag.parentNode.insertBefore(script, firstScriptTag);
+})(url);
 
+let $element = $('#activity-ppt-content');
 
-let emitter = new ActivityEmitter();
-let $content = $('#activity-ppt-content');
-let watermarkUrl = $content.data('watermarkUrl');
+initPptPlayer();
+onFullScreen();
 
-let createPPT = (watermark) => {
-  let ppt = new PptPlayer({
-    element: '#activity-ppt-content',
-    slides: $content.data('slides').split(','),
-    watermark: watermark
+function initPptPlayer() {
+  new QiQiuYun.Player({
+    id: 'activity-ppt-content',
+    playServer: app.cloudPlayServer,
+    sdkBaseUri: app.cloudSdkBaseUri,
+    disableDataUpload: app.cloudDisableLogReport,
+    disableSentry: app.cloudDisableLogReport,
+    resNo: $element.data('resNo'),
+    token: $element.data('token'),
+    user: {
+      id: $element.data('userId'),
+      name: $element.data('userName')
+    }
   });
 
+}
 
-  if ($content.data('finishType') === 'end') {
-    if (ppt.total === 1) {
-      setTimeout(() => {
-        emitter.emit('finish', {page: 1});
-      }, 1000);
-    } else {
-      ppt.once('end', (data) => {
-        emitter.emit('finish',data);
-      });
+
+function onFullScreen() {
+  window.onmessage = function (e) {
+    if (e == null || e == undefined) {
+      return;
     }
-  }
-
-  return ppt;
-};
-
-if (watermarkUrl === undefined) {
-  let ppt = createPPT();
-} else {
-  $.get(watermarkUrl)
-    .then((watermark) => {
-      let ppt = createPPT(watermark);
-    })
-    .fail(error => {
-      console.error(error);
-    });
+    var isPageFullScreen = e.data;
+    if (typeof(isPageFullScreen) != 'boolean') {
+      return;
+    }
+    var docContent = $('#task-content-iframe', window.parent.document);
+    if (isPageFullScreen) {
+      docContent.removeClass('screen-full');
+      docContent.width('100%');
+    } else {
+      docContent.addClass('screen-full');
+      docContent.width(window.document.body.offsetWidth + 'px');
+    }
+  };
 }
