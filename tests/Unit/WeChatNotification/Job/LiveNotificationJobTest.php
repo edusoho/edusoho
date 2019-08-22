@@ -25,7 +25,7 @@ class LiveNotificationJobTest extends BaseTestCase
         $this->mockBiz('Task:TaskService', array(
             array(
                 'functionName' => 'getTask',
-                'returnValue' => array('status' => 'published', 'courseId' => 3, 'startTime' => time()),
+                'returnValue' => array('status' => 'published', 'courseId' => 3, 'title' => 'test', 'startTime' => time()),
                 'withParams' => array(1),
             ),
         ));
