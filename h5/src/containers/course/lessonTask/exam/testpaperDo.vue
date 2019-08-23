@@ -238,7 +238,23 @@ export default {
         }
       })
         .then(res => {
-          //设置导航栏题目
+          this.afterGetData(res);
+        })
+        .catch(err => {
+          /**
+           * 4032207:考试正在批阅中
+           * 4032204：考试只能考一次，不能重复考试
+           */
+          if(err.code==4032207 || err.code==4032204){
+            this.toIntro();
+          } else {
+            Toast.fail(err.message);
+          }
+        });
+    },
+    //获取到数据后进行操作
+    afterGetData(res){
+      //设置导航栏题目
           this.$store.commit(types.SET_NAVBAR_TITLE,res.testpaper.name)
           //赋值数据
           this.items=res.items;
@@ -268,18 +284,6 @@ export default {
 
           //如果有限制考试时长，开始计时
           this.timer();
-        })
-        .catch(err => {
-          /**
-           * 4032207:考试正在批阅中
-           * 4032204：考试只能考一次，不能重复考试
-           */
-          if(err.code==4032207 || err.code==4032204){
-            this.toIntro();
-          } else {
-            Toast.fail(err.message);
-          }
-        });
     },
     //判断是否做题状态
     isDoing(){
