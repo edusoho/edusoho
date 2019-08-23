@@ -473,7 +473,7 @@ export default {
             cancelButtonText:'确认交卷',
             confirmButtonText:'检查一下',
             message: message
-          }).then(() => { 
+          }).then(() => {
             //显示答题卡
             this.cardShow=true;
             reject()

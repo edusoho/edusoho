@@ -139,7 +139,7 @@ export default {
         this.startTime = parseInt(this.info.startTime) * 1000;
         this.limitTime = parseInt(this.info.limitTime);
         this.question_type_seq = this.testpaper.metas.question_type_seq;
- 
+
         this.canDoing(this.result,this.user.id).then(()=>{
           this.startTestpaper();
         }).catch(({answer,endTime})=>{

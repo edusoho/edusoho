@@ -103,7 +103,7 @@ export default {
     },
   },
   created() {
-      this.getTestpaperResult();   
+      this.getTestpaperResult();
   },
   beforeRouteEnter(to, from, next) {
       document.getElementById("app").style.background="#f6f6f6"
@@ -187,7 +187,7 @@ export default {
       obj.seq = data.seq;
       if(data.testResult){
         obj.status = data.testResult.status
-      }else{ 
+      }else{
         obj.status='noAnswer'
       }
       arr.push(obj);

@@ -4,7 +4,7 @@ const install = function (Vue) {
   Vue.directive('fixfoot', fixfoot);
 };
 if (window.Vue) {
-  window['fixfoot'] = fixfoot;
+  window.fixfoot = fixfoot;
   Vue.use(install); // eslint-disable-line
 }
 fixfoot.install = install;

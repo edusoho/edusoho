@@ -114,7 +114,7 @@ const getCountDown = (time, i) => {
 
 // 将0-9的数字前面加上0，例1变为01
 const checkTime = i => {
-  if (i < 10 && i>=0) {
+  if (i < 10 && i >= 0) {
     i = `0${i}`;
   }
   return i;
