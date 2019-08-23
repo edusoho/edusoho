@@ -1668,7 +1668,7 @@ course.testpaper_manage.import.re_edit.total_score: 总分%totalScore%分
 course.testpaper_manage.import.re_edit.edit_title_hint: 此处可编辑试卷名称，最多输入50个字符
 course.testpaper_manage.import.re_edit.finish_import: 完成导入
 course.testpaper_manage.import.re_edit.delete_attachment: 删除
-course.testpaper_manage.import.re_edit.batch_set_score: 批量设置分数
+course.testpaper_manage.import.re_edit.batch_set_score: 设置分数
 course.testpaper_manage.import.re_edit.score_hint: 请输入小于1000的正整数
 course.testpaper_manage.import.re_edit.miss_score: 漏选分值
 course.testpaper_manage.import.re_edit.selected: 已选：
@@ -1681,7 +1681,8 @@ course.testpaper_manage.import.re_edit.new_question_title: 添加新题
 course.testpaper_manage.import.re_edit.select_type: 选择题型
 course.testpaper_manage.import.re_edit.uncertain_choice: 不定项
 course.testpaper_manage.import.re_edit.question_statistics: 题目统计
-course.testpaper_manage.import.re_edit.batch_set_difficulty: 批量设置难度
+course.testpaper_manage.import.re_edit.batch_set_difficulty: 设置难度
+course.testpaper_manage.import.re_edit.batch_set_belong: 设置从属
 course.testpaper_manage.import.re_edit.question_list: 题目列表
 course.testpaper_manage.import.re_edit.batch_operate: 批量操作
 course.testpaper_manage.import.re_edit.select_all: 全选

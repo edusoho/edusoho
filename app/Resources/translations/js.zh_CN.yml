@@ -1381,6 +1381,7 @@ subject.period: 。
 subject.miss_score_no_more_than_score: 漏选分值不得超过题目分值
 subject.score_update_success: 分数修改成功
 subject.difficulty_update_success: 难度修改成功
+subject.belong_update_success: 从属修改成功
 subject.question_count: 共%count%道题
 subject.total_score: 总分%totalScore%分
 subject.is_editing_warning: 请先完成第%seq%题的编辑

@@ -47,6 +47,8 @@ export default class QuestionOperate {
     for (var i = 0; i < cachedData.length; i++) {
       let token = this._getToken();
       let question = cachedData[i];
+      question['courseId'] = 0;
+      question['lessonId'] = 0;
       this.questions[token] = question;
       this.tokenList.push(token);
       let index = i;
@@ -126,6 +128,16 @@ export default class QuestionOperate {
       }
     });
     self.trigger('updateQuestionScore');
+  }
+
+  modifyBelong(selectQuestion, courseId, lessonId) {
+    let self = this;
+    $.each(selectQuestion, function(index, token){
+      if (typeof self.questions[token] != 'undefined') {
+        self.updateQuestionItem(token, 'courseId', courseId);
+        self.updateQuestionItem(token, 'lessonId', lessonId);
+      }
+    });
   }
 
   addQuestion(preToken, question) {

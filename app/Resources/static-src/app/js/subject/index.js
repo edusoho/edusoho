@@ -17,6 +17,7 @@ export default class sbList {
     this.flag = true;
     this.$diffiultyModal = $('.js-difficulty-modal');
     this.$scoreModal = $('.js-score-modal');
+    this.$belongModal = $('.js-belong-modal');
     this.scoreValidator = null;
     this.selectQuestion = [];
     this.questionOperate = null;
@@ -24,12 +25,13 @@ export default class sbList {
     this.redirect = false;
     this.questionOperate = null;
     this.timer = false;
+    this.courseSetId = $('#courseSetId').val();
     this.init();
   }
 
   init() {
     this.initQuestionOperate();
-    this.confirmFresh();
+    //this.confirmFresh();
     this.sbListFixed();
     this.footerButtonFixed();
     this.initEvent();
@@ -39,6 +41,7 @@ export default class sbList {
     this.itemClick();
     this.statErrorQuestions();
     this.ieImg();
+    this.initSelect();
   }
 
   initQuestionOperate() {
@@ -69,6 +72,39 @@ export default class sbList {
     });
   }
 
+  initSelect() {
+    cd.select({
+      el: '#courseBelong',
+      type: 'single'
+    }).on('change', (value, text) => {
+      let url = $('#courseBelong').data('url');
+      let select2 = $('#lessonBelong');
+      $('.js-lesson-options').html('');
+      if (value == 0) {
+        select2.hide();
+        return;
+      }
+
+      $.post(url,{courseId:value},function(result){
+        if (result != '') {
+          let option = '<li class="checked" data-value="0">'+Translator.trans('site.choose_hint')+'</li>';
+          $.each(result,function(index,task){
+            option += '<li data-value="'+task.id+'">'+task.title+'</li>';
+          });
+          $('.js-lesson-options').append(option);
+          select2.show();
+        } else {
+          select2.hide();
+        }
+      });
+    });
+
+    cd.select({
+      el: '#lessonBelong',
+      type: 'single'
+    });
+  }
+
   confirmFresh() {
     let self = this;
     $(window).on('beforeunload',function(){
@@ -85,8 +121,10 @@ export default class sbList {
     this.$element.on('click', '.js-finish-btn', event => this.finishBtnClick(event));
     this.$element.on('click', '*[data-anchor]', event => this.quickToQuestion(event, this.flag));
     this.$element.on('click', '.js-difficult-setting', event => this.showModal(event, this.$diffiultyModal));
+    this.$element.on('click', '.js-belong-setting', event => this.showModal(event, this.$belongModal));
     this.$element.on('click', '.js-score-setting', event => this.showScoreModal(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
+    this.$belongModal.on('click', '.js-batch-set-belong', event => this.batchSetBelong(event));
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
     this.$itemList.on('change', '.js-testpaper-title', event => this.editTestpaperTitle(event));
@@ -322,8 +360,8 @@ export default class sbList {
 
   batchSetScore() {
     if (this.scoreValidator.form()) {
-      let score = $('input[name="score"]').val();
-      let missScore = $('input[name="missScore"]').val();
+      let score = this.$scoreModal.find('input[name="score"]').val();
+      let missScore = this.$scoreModal.find('input[name="missScore"]').val();
       let scoreObj = {
         score: score,
         missScore: missScore,
@@ -334,6 +372,16 @@ export default class sbList {
       cd.message({ type: 'success', message: Translator.trans('subject.score_update_success') });
       this.$scoreModal.modal('hide');
     }
+  }
+
+  batchSetBelong() {
+    let courseId = $('input[name="courseId"]').val();
+    let lessonId = $('input[name="lessonId"]').val();
+    this.questionOperate.modifyBelong(this.selectQuestion, courseId, lessonId);
+    this.selectQuestion = [];
+
+    cd.message({ type: 'success', message: Translator.trans('subject.belong_update_success') });
+    this.$belongModal.modal('hide');
   }
 
   setDifficulty() {
@@ -380,6 +428,7 @@ export default class sbList {
       'isSub' : isSub,
       'method' : 'edit',
       'isTestpaper': this.isTestpaper() ? 1 : 0,
+      'courseSetId': this.courseSetId,
     };
     $.post(url, data, html=> {
       $item.replaceWith(html);
@@ -429,6 +478,7 @@ export default class sbList {
       'isSub' : isSub,
       'method' : method,
       'isTestpaper': this.isTestpaper() ? 1 : 0,
+      'courseSetId': this.courseSetId,
     };
     data.fromType = fromType;
     data.toType = toType;
@@ -464,7 +514,14 @@ export default class sbList {
     let self = this;
     let seq = self.questionOperate.getQuestionOrder(token) + 1;
     let isTestpaper = this.isTestpaper() ? 1 : 0;
-    $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add', 'isTestpaper' : isTestpaper}).then((res) => {
+    let data = {
+      'seq' : seq,
+      'token' : token,
+      'method' : 'add',
+      'isTestpaper' : isTestpaper,
+      'courseSetId': this.courseSetId,
+    };
+    $.post(url, data).then((res) => {
       $('#cd-modal').modal('hide');
       $('.js-create-btn').attr('disabled', false);
       let index = seq + 1;
@@ -486,7 +543,15 @@ export default class sbList {
     let materialQuestion = this.questionOperate.getQuestion(token);
     let seq = materialQuestion['subQuestions'].length + 1;
     let isTestpaper = this.isTestpaper() ? 1 : 0;
-    $.post(url, {'seq' : seq, 'token' : token, 'method' : 'add', 'isSub' : 1, 'isTestpaper' : isTestpaper}).then((res) => {
+    let data = {
+      'seq' : seq,
+      'token' : token,
+      'method' : 'add',
+      'isSub' : 1,
+      'isTestpaper' : isTestpaper,
+      'courseSetId': this.courseSetId,
+    };
+    $.post(url, data).then((res) => {
       $('#cd-modal').modal('hide');
       $('.js-create-btn').attr('disabled', false);
       var nextItem = $(`#${token}`).next('.subject-item');
@@ -679,17 +744,6 @@ export default class sbList {
         }
       }
     });
-    // $.post($target.data('url'), {title: title, questions: this.questionOperate.getQuestions()}, function(resp) {
-    //   if (resp === true) {
-    //     $target.button('reset');
-    //     cd.message({
-    //       type : 'success',
-    //       message : Translator.trans('subject.save_success'),
-    //     });
-    //     self.redirect = true;
-    //     window.location.href = $target.data('redirectUrl');
-    //   }
-    // },'json');
   }
 
   isMaterialHasSub() {
