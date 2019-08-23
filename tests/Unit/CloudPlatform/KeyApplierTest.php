@@ -26,7 +26,7 @@ class KeyApplierTest extends BaseTestCase
             'mobile' => '',
             'edition' => 'opensource',
             'source' => 'apply',
-            'visitorId' => 'visitorId1234'
+            'visitorId' => 'visitorId1234',
         ), $result['params']);
 
         $this->assertArrayEquals(array(
