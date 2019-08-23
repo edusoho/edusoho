@@ -32,9 +32,8 @@
 <script>
 import Api from '@/api';
 import { mapState,mapActions } from 'vuex';
-import { Dialog } from "vant";
+import { Dialog,Toast } from "vant";
 import { formatTime } from '@/utils/date-toolkit.js'
-import { Promise } from 'q';
 import examMixin from '@/mixins/lessonTask/exam.js';
 export default {
   name: 'testpaperIntro',
@@ -88,23 +87,6 @@ export default {
   created() {
     this.getInfo();
   },
-  filters: {
-    // filterStr(index) {
-    //   const str = `${index}题`;
-    //   return str;
-    // },
-    // filterDate(timestamp) {
-    //   const dateObj = new Date(+timestamp)
-    //   const year = dateObj.getFullYear();
-    //   const month = dateObj.getMonth() + 1;
-    //   const date = dateObj.getDate();
-    //   const hours = dateObj.getHours();
-    //   const minutes = dateObj.getMinutes();
-    //   const dateNumFun = (num) => +num < 10 ? `0${num}` : num;
-    //   const [Y, M, D, h, m, s] = [ year, dateNumFun(month), dateNumFun(date), dateNumFun(hours), dateNumFun(minutes)];
-    //   return `${Y}年${M}月${D}日${h}:${m}`;
-    // }
-  },
   beforeRouteEnter(to, from, next) {
     document.getElementById("app").style.background="#f6f6f6"
     next()
@@ -145,7 +127,9 @@ export default {
         }).catch(({answer,endTime})=>{
           this.submitExam(answer,endTime)
         })
-      });
+      }).catch((err)=>{
+            Toast.fail(err.message);
+        });;
     },
     submitExam(answer,endTime){
         endTime= endTime ? endTime : new Date().getTime()
