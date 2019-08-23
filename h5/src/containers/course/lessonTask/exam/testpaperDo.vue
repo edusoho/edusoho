@@ -97,7 +97,11 @@ import itemBank from "../component/itemBank";
 
 import { getCountDown } from '@/utils/date-toolkit.js';
 
+
 import examMixin from '@/mixins/lessonTask/exam.js';
+
+//将元素固定在底部，当软键盘弹起的时候不会随着软键盘弹起而跟着上来
+import  fixfoot  from '@/directive/fixfoot/index.js'
 
 let backUrl=''
 
@@ -109,47 +113,7 @@ export default {
   name: "testpaperDo",
   mixins: [examMixin],
   directives: {
-    fixfoot: {
-      // 指令的定义
-      inserted: function (el) {
-        const elStyle = el.style;
-        let active = false;
-        originalHeight = document.body.clientHeight;
-        const reset = () => {
-          if (!active) {
-            return;
-          }
-          elStyle.position = 'fixed';
-          active = false;
-        };
-        const hang = () => {
-          if (active) {
-            return;
-          }
-          elStyle.position = 'static';
-          active = true;
-        };
-        const getCurrHeight = () => {
-          const getHeight = document.body.clientHeight;
-          return getHeight;
-        };
-        const check = () => {
-          currHeight = getCurrHeight();
-          if (currHeight != originalHeight) {
-            hang();
-          } else {
-            reset();
-          }
-        };
-        listenAction = () => {
-          check();
-        };
-        window.addEventListener('resize', listenAction);
-      },
-      unbind() {
-        window.removeEventListener('resize',listenAction);
-      }
-    }
+    fixfoot
   },
   data() {
     return {
@@ -258,6 +222,7 @@ export default {
         localStorage.setItem(this.localvisitedName, true);
       }
     },
+    //请求接口获取数据
     getData() {
       let testId=this.$route.query.testId;
       let targetId=this.$route.query.targetId;
@@ -281,6 +246,11 @@ export default {
           res.testpaperResult.limitedTime=Number(res.testpaperResult.limitedTime)
           this.testpaperResult = res.testpaperResult;
 
+          //判断是否做题状态
+          if(this.isDoing()){
+            return
+          }
+
           this.localanswerName=`${this.user.id}-${this.testpaperResult.id}`;
           this.localtimeName=`${this.user.id}-${this.testpaperResult.id}-time`;
           this.lastTime=localStorage.getItem(this.localtimeName);
@@ -300,8 +270,25 @@ export default {
           this.timer();
         })
         .catch(err => {
-          Toast.fail(err.message);
+          /**
+           * 4032207:考试正在批阅中
+           * 4032204：考试只能考一次，不能重复考试
+           */
+          if(err.code==4032207 || err.code==4032204){
+            this.toIntro();
+          } else {
+            Toast.fail(err.message);
+          }
         });
+    },
+    //判断是否做题状态
+    isDoing(){
+      if(this.testpaperResult.status != 'doing'){
+        this.showResult();
+        return true
+      }else{
+        return false
+      }
     },
     //异常中断
     interruption(){
@@ -330,9 +317,9 @@ export default {
           paper[key].forEach(item => {
             let title = Object.assign({}, item, { subs: "" });
             item.subs.forEach((sub, index) => {
-              sub.parentTitle = title;//子题的父级题干
-              sub.parentType = item.type;//子题的父级题型
-              sub.materialIndex = index+1;//子题的索引值
+              sub.parentTitle = title;//材料题题干
+              sub.parentType = item.type;//材料题题型
+              sub.materialIndex = index+1;//材料题子题的索引值，在页面要显示
               this.sixType(sub.type, sub);
             });
           });
@@ -343,7 +330,7 @@ export default {
     sixType(type, item) {
       if (type == "single_choice") {
         let length = item.metas.choices.length;
-        //刷新页面或意外中断回来要回显，因此要判断本地是否有缓存
+        //刷新页面或意外中断回来数据会丢失，因此要判断本地是否有缓存数据，如果有要把数据塞回
         if(this.lastAnswer){
           this.$set(this.answer,item.id,this.lastAnswer[item.id])
         }else{
@@ -400,17 +387,20 @@ export default {
       }
       return { stem, index };
     },
-    //答题卡状态判断
+    //答题卡状态判断,finish 0是未完成  1是已完成
     formatStatus(type,id){
       let finish=0
+      //单选题、多选题、不定项选择题、判断题
       if((type=="single_choice"|| type=="choice" || type=="uncertain_choice"|| type=="determine") && this.answer[id].length>0){
           finish=1;
           return finish
       }
+      //问答题
       if(type=="essay" &&  this.answer[id][0]!=''){
           finish=1;
           return finish
       }
+      //填空题，规则：只要填了一个就算完成
       if(type=="fill"){
         finish=Number(this.answer[id].some(item=>{
           return item!=''
@@ -493,7 +483,7 @@ export default {
             this.submitExam(answer).then(res=>{
               resolve();
             }).catch((err)=>{
-                reject()
+                reject();
             })
           });
       })
@@ -502,11 +492,12 @@ export default {
     submitExam(answer,endTime){
       //如果已经遍历过answer就不要再次遍历，直接用
       if(!answer){
-        answer=JSON.parse(JSON.stringify(this.answer))
+        answer=JSON.parse(JSON.stringify(this.answer));
         Object.keys(answer).forEach(key=>{
             answer[key]= answer[key].filter(t => t!=='')
         })
       }
+      //考试结束时间，没有传结束时间则为当前时间
       endTime= endTime ? endTime : new Date().getTime()
 
       let datas={
@@ -547,7 +538,6 @@ export default {
     },
     //跳转到结果页
     showResult() {
-
       this.$router.replace({
         name: 'testpaperResult',
         query: {
@@ -558,6 +548,16 @@ export default {
         }
       })
     },
+    //跳转到说明页
+    toIntro(){
+      this.$router.push({
+          name: 'testpaperIntro',
+          query: {
+            testId: this.$route.query.testId,
+            targetId: this.$route.query.targetId
+        }
+      })
+    }
   }
 };
 </script>

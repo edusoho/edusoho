@@ -2,7 +2,7 @@ let listenAction;
 let originalHeight;
 let currHeight;
 export default {
-  insert(el, binding) {
+  inserted(el) {
     const elStyle = el.style;
     let active = false;
     originalHeight = document.body.clientHeight;
@@ -10,7 +10,6 @@ export default {
       if (!active) {
         return;
       }
-      // elStyle.display = 'flex';
       elStyle.position = 'fixed';
       active = false;
     };
@@ -18,7 +17,6 @@ export default {
       if (active) {
         return;
       }
-      // elStyle.display = 'none'
       elStyle.position = 'static';
       active = true;
     };
