@@ -32,10 +32,14 @@ export default [
     method: 'POST'
   },
   {
-    // 交卷
+    // 考试交卷
     name: 'handExam',
     url: '/testpaper_result',
     method: 'POST'
+  }, {
+    // 获得考试说明信息
+    name: 'getHomeworkIntro',
+    url: '/courses/{courseId}/task_medias/{taskId}',
+    method: 'GET'
   }
-
 ];

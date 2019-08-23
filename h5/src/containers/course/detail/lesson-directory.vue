@@ -273,6 +273,15 @@ export default {
             }
           })
           break;
+        case 'homework':
+          this.$router.push({
+            name: 'homeworkIntro',
+            query: {
+              courseId: this.$route.params.id,
+              taskId: task.id
+            }
+          })
+          break;
         default:
           Toast("暂不支持此类型");
       }
