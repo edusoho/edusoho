@@ -31,7 +31,7 @@ export default class sbList {
 
   init() {
     this.initQuestionOperate();
-    //this.confirmFresh();
+    this.confirmFresh();
     this.sbListFixed();
     this.footerButtonFixed();
     this.initEvent();
