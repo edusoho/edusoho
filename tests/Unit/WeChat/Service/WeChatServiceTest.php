@@ -444,6 +444,24 @@ class WeChatServiceTest extends BaseTestCase
         $this->assertEquals('WeChatUserFreshJob', $result[1]['name']);
     }
 
+    public function testSearchWeChatUsersJoinUser()
+    {
+        $this->mockCreateWeChatUser(array('openId' => 'www'));
+
+        $result = $this->getWeChatService()->searchWeChatUsersJoinUser(array('userId' => 1), array('lastRefreshTime' => 'ASC'), 0, 10);
+
+        $this->assertEquals('1', $result[0]['userId']);
+    }
+
+    public function testCountWeChatUsersJoinUser()
+    {
+        $this->mockCreateWeChatUser(array('openId' => 'www'));
+
+        $result = $this->getWeChatService()->countWeChatUserJoinUser(array('userId' => 1));
+
+        $this->assertEquals(1, $result);
+    }
+
     protected function mockCreateWeChatUser($fields = array())
     {
         $user = $this->getCurrentUser();

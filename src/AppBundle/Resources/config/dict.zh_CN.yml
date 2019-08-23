@@ -485,3 +485,12 @@ questionOption:
     7: H
     8: I
     9: J
+
+weChatFansType:
+    all: 所有粉丝
+    user: 网校学员
+    notUser: 非网校学员
+
+weChatFansKeywordType:
+    nickname: 网校用户名
+    wechatNickname: 微信昵称
