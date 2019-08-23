@@ -1,9 +1,10 @@
 <?php
 
-namespace Coupon\Biz\Coupon\CouponProcessor;
+namespace Biz\Coupon\CouponProcessor;
 
+use Biz\Card\DetailProcessor\DetailProcessor;
+use Biz\Coupon\Service\CouponService;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\Card\DetailProcessor;
 
 class CouponDetailProcessor implements DetailProcessor
 {
@@ -17,8 +18,11 @@ class CouponDetailProcessor implements DetailProcessor
         return $this->getCouponService()->getCouponsByIds($ids);
     }
 
+    /**
+     * @return CouponService
+     */
     protected function getCouponService()
     {
-        return ServiceKernel::instance()->createService('Coupon:CouponService');
+        return ServiceKernel::instance()->getBiz()->service('Coupon:CouponService');
     }
 }
