@@ -11,25 +11,6 @@ Vue.use(Router);
 // 路由懒加载 实现代码分离
 const routes = [
   {
-    path: '/testpaper',
-    name: 'testpaperIntro',
-    meta: {
-      title: '考试说明'
-    },
-    component: () => import(/* webpackChunkName: "intro" */ '@/containers/course/lessonTask/exam/testpaperIntro.vue')
-  }, {
-    path: '/testpaperDo',
-    name: 'testpaperDo',
-    component: () => import(/* webpackChunkName: "do" */ '@/containers/course/lessonTask/exam/index.vue')
-  }, {
-    path: '/testpaperResult',
-    name: 'testpaperResult',
-    meta: {
-      title: ''
-    },
-    component: () => import(/* webpackChunkName: "result" */ '@/containers/course/lessonTask/exam/testpaperResult.vue')
-  },
-  {
     path: '/',
     meta: {
       title: ''
@@ -121,6 +102,24 @@ const routes = [
     path: '/live',
     name: 'live',
     component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
+  }, {
+    path: '/testpaper',
+    name: 'testpaperIntro',
+    meta: {
+      title: '考试说明'
+    },
+    component: () => import(/* webpackChunkName: "testpaperIntro" */ '@/containers/course/lessonTask/exam/testpaperIntro.vue')
+  }, {
+    path: '/testpaperDo',
+    name: 'testpaperDo',
+    component: () => import(/* webpackChunkName: "testpaperDo" */ '@/containers/course/lessonTask/exam/testpaperDo.vue')
+  }, {
+    path: '/testpaperResult',
+    name: 'testpaperResult',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "testpaperResult" */ '@/containers/course/lessonTask/exam/testpaperResult.vue')
   }, {
     path: '/course/explore',
     name: 'more_course',

@@ -177,8 +177,8 @@ export default {
   }
 }
 </script>
-<style>
-  .van-popup {
+<style scode>
+  .my_setting .van-popup {
     height: 100%;
   }
   .cropper-container {
