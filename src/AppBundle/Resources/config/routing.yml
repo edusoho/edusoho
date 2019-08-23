@@ -3240,3 +3240,8 @@ questions_import_save:
   path: /questions/{token}/import_save
   methods: [POST]
   defaults: { _controller: AppBundle:Question/Manage:saveImportQuestions }
+
+coupon_receive:
+  pattern: /coupon/{token}/receive
+  defaults: { _controller: AppBundle:CouponBatch:couponReceive }
+  h5: true

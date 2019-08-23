@@ -423,3 +423,10 @@ web.classroom.setting.assistants_side_nav: Assistants
 web.classroom.content.courses_side_nav: Courses
 web.classroom.content.students_side_nav: Students
 web.classroom.content.testpaper_check_side_nav: Testpaper Review
+
+#coupon
+admin.system.operation.coupon_setting_tab: Coupon Setting
+admin.operation.coupon_menu: Coupon Manage
+admin.operation.coupon_menu.basic_tab: Coupon Manage
+admin.operation.coupon_menu.generate_btn: Generate Coupon
+admin.operation.query_menu.basic_tab: Use Query

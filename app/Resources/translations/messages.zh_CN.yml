@@ -10117,3 +10117,103 @@ classroom.joining_date.expired_tips: 班级已过有效期！
 
 # 富文本
 editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+
+
+
+#coupon
+coupon.usage_detail_title: 优惠码使用详情
+coupon.enable_hint: 优惠码未开启，请先在<a href="%path%"> 系统-运营设置-优惠码 </a>中设置开启
+
+coupon.id: 编号
+coupon.code: 优惠码
+coupon.status: 状态
+coupon.user: 使用者
+coupon.order: 订单信息
+coupon.origin_price: 原价
+coupon.pay_amount: 实付
+coupon.receive_time: 领取时间
+coupon.used_time: 使用时间
+coupon.name: 优惠码名称
+coupon.type: 优惠方式
+coupon.deadline: 有效期至
+coupon.deadline.day.help_block.behind: 领劵当日起
+coupon.deadline.day.help_block.after: 天内可用
+coupon.description: 优惠说明
+coupon.target: 使用对象
+coupon.full_discount_price: 金额设置
+coupon.channel: 发放渠道
+coupon.setting.status: 优惠码状态
+coupon.content: 优惠内容
+coupon.batch.name: 批次名称
+coupon.no_coupon_tip: 无优惠码记录
+coupon.batch: 优惠码批次
+coupon.receive_url: 发放地址
+coupon.batch.prefix: 优惠码前缀
+coupon.operation: 操作
+coupon.total_count: 总数
+coupon.expiry_date: 有效期
+coupon.amount: 已优惠金额
+coupon.target_type: 类型
+
+coupon.type.minus: 抵价
+coupon.type.discount: 打折
+coupon.type.minus_rate: 抵价金额
+coupon.type.discount_rate: 打折
+coupon.type.minus_rate_unit: 元
+coupon.type.discount_rate_unit: 折
+coupon.type.minus_tip: 抵价%rate%元
+coupon.type.discount_tip: 打折%rate%折
+
+coupon.target_type.classroom: 班级
+coupon.target_type.vip: 会员
+coupon.target_type.course: 课程
+coupon.target_type.all: 全站
+coupon.target_type.classroom_all: 全部班级
+coupon.target_type.classroom_specific: 指定班级
+coupon.target_type.vip_all : 全部会员
+coupon.target_type.vip_specific: 指定会员
+coupon.target_type.course_all: 全部课程
+coupon.target_type.course_specific: 指定课程
+coupon.target_type.course_rechoose: 重新选择课程
+coupon.target_type.classroom_rechoose: 重新选择班级
+coupon.target_type.vip_rechoose: 重新选择会员
+
+coupon.status.unused: 未使用
+coupon.status.receive: 已领取
+coupon.status.used: 已使用
+
+coupon.generate_num: 生成数量
+coupon.generate_num_hint: 生成数量必须在1～10000之间
+coupon.generate_num_unit: 个
+coupon.prefix: 优惠码前缀
+coupon.prefix_hint: 优惠码前缀不可重复，不占优惠码位数
+coupon.digits: 优惠码位数
+coupon.digits_hint: 优惠码位数必须在5～15位之间
+coupon.channel_hint: 通过本功能控制优惠券可被领取的方式
+
+coupon.channel_type.link: 通过链接
+coupon.channel_type.code: 通过优惠码
+coupon.channel_type.page_detail: 通过商品详情页
+coupon.channel_type.h5_mps: 小程序/新版微网校
+coupon.channel_type.page_detail_hint: 选中此项则系统将自动获取商品可用的优惠券显示在商品详情页
+coupon.channel_type.wait_hint: （敬请期待）
+coupon.channel.postfix: 发放
+coupon.channel_type.only_h5_mps: (当前只支持小程序/新版微网校)
+
+coupon.generage.btn: 生成
+coupon.generate.loading_text: 正在生成...
+coupon.copy.btn: 复制
+
+coupon.batch.detail: 详情
+coupon.batch.export_csv: 导出CSV文件
+coupon.batch.get_receive_url: 获取发放地址
+coupon.batch.delete: 删除
+
+coupon.query.by_status: 使用状态
+coupon.query.by_type: 按优惠方式
+coupon.query.by_use_start_date: 使用时间起始
+coupon.query.by_use_end_date: 使用时间截止
+coupon.query.by_code: 优惠码
+
+coupon.deadline_mode.day.help_block: >
+  至<br/>领取后%day%天内

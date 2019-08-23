@@ -14,7 +14,7 @@ use Biz\Course\Service\CourseService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
-use CouponPlugin\Biz\Coupon\Service\CouponBatchService;
+use Biz\Coupon\Service\CouponBatchService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
 use VipPlugin\Biz\Vip\Service\LevelService;
@@ -534,7 +534,7 @@ class CouponServiceImpl extends BaseService implements CouponService
      */
     protected function getCouponBatchService()
     {
-        return $this->createService('CouponPlugin:Coupon:CouponBatchService');
+        return $this->createService('Coupon:CouponBatchService');
     }
 
     protected function isPluginInstalled($code)
