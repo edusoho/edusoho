@@ -1510,6 +1510,7 @@ course.testpaper_manage.import.re_edit.batch_operate: Batch Operate
 course.testpaper_manage.import.re_edit.select_all: Select All
 course.testpaper_manage.import.re_edit.finish_batch_operate: Finish
 course.testpaper_manage.import.re_edit.answer: Answer
+course.testpaper_manage.import.re_edit.explain: Explain
 course.testpaper_manage.import.re_edit.correct: Correct
 course.testpaper_manage.import.re_edit.wrong: Wrong
 course.testpaper_manage.import.re_edit.convert_hint: Can convert to

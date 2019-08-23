@@ -19,6 +19,9 @@
         <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_fill_no_answer'|trans }}</span>
       {% endif %}
     {% endfor %}
+    {% if item.analysis is not empty %}
+      <div class="subject-item__explain cd-mt8"><span class="subject-explain-label">{{ 'course.testpaper_manage.import.re_edit.explain'|trans }}：</span>{{ item.analysis|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
+    {% endif %}
   </div>
   {% include 'testpaper/subject/common.html.twig' with { type: 'fill', difficulty: item.difficulty, score: item.score } %}
 </div>
