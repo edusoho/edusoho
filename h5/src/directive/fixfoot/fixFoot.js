@@ -26,7 +26,7 @@ export default {
     };
     const check = () => {
       currHeight = getCurrHeight();
-      if (currHeight != originalHeight) {
+      if (currHeight !== originalHeight) {
         hang();
       } else {
         reset();
