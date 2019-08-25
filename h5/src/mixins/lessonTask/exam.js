@@ -10,7 +10,7 @@ export default {
     // 继续答题或交卷
     canDoing(result, userId) {
       return new Promise((resolve, reject) => {
-        if (result && result.status == 'doing') {
+        if (result && result.status === 'doing') {
           // 获取localstorge数据
           const answerName = `${userId}-${result.id}`;
           // const timeName = `${userId}-${result.id}-time`;
@@ -34,10 +34,12 @@ export default {
           }).then(() => {
             // 如果有时间限制 且超出时间限制，自动交卷
             if (Number(result.limitedTime) > 0) {
-              const alUsed = Math.ceil((new Date().getTime() - (result.beginTime * 1000)) / 1000 / 60);
+              const alUsed = Math.ceil((new Date().getTime() -
+                            (result.beginTime * 1000)) / 1000 / 60);
               if (Number(alUsed) > Number(result.limitedTime)) {
                 // endTime： 如果已经超时，结束时间=开始时间+限制时间，否则结束时间是当前时间
-                const endTime = Number(result.beginTime * 1000) + Number(result.limitedTime * 60 * 1000);
+                const endTime = Number(result.beginTime * 1000) +
+                                Number(result.limitedTime * 60 * 1000);
                 reject({ answer, endTime });
                 return;
               }
