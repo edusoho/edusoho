@@ -115,7 +115,9 @@ const actions = {
       return res;
     });
   },
+  // eslint-disable-next-line no-unused-vars
   handExamdo({ commit }, datas) {
+    // eslint-disable-next-line prefer-const
     let { answer, resultId, beginTime, endTime, userId } = { ...datas };
     beginTime *= 1000;
     let usedTime = Math.ceil((endTime - beginTime) / 1000);

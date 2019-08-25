@@ -1,5 +1,6 @@
-import fixfoot from './fixFoot.js';
+import fixfoot from './fixFoot';
 
+// eslint-disable-next-line func-names
 const install = function (Vue) {
   Vue.directive('fixfoot', fixfoot);
 };

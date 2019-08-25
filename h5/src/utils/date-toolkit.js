@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 // 秒转化为时间
 const formatTimeByNumber = time => {
   time = parseInt(time, 10);
@@ -100,17 +101,6 @@ const getOffsetDays = (time1, time2) => {
   return Math.floor(offsetTime / (3600 * 24 * 1e3));
 };
 
-// 倒计时 01:01:01 传入时间戳
-const getCountDown = (time, i) => {
-  const nowTime = Number(time) - (i * 1000);
-  let minutes = parseInt(nowTime / 1000 / 60 % 60, 10);// 计算剩余的分钟
-  let seconds = parseInt(nowTime / 1000 % 60, 10);// 计算剩余的秒数
-  let hours = parseInt(nowTime / (1000 * 60 * 60), 10); // 计算剩余的小时
-  minutes = checkTime(minutes);
-  seconds = checkTime(seconds);
-  hours = checkTime(hours);
-  return { hours, minutes, seconds };
-};
 
 // 将0-9的数字前面加上0，例1变为01
 const checkTime = i => {
@@ -119,6 +109,19 @@ const checkTime = i => {
   }
   return i;
 };
+
+// 倒计时 01:01:01 传入时间戳
+const getCountDown = (time, i) => {
+  const nowTime = Number(time) - (i * 1000);
+  let minutes = parseInt(nowTime / 1000 / 60 % 60, 10); // 计算剩余的分钟
+  let seconds = parseInt(nowTime / 1000 % 60, 10);// 计算剩余的秒数
+  let hours = parseInt(nowTime / (1000 * 60 * 60), 10); // 计算剩余的小时
+  minutes = checkTime(minutes);
+  seconds = checkTime(seconds);
+  hours = checkTime(hours);
+  return { hours, minutes, seconds };
+};
+
 // 剩余时间 1天1小时1分钟  秒只是在最后60秒显示
 const getdateTimeDown = date => {
   const now = new Date().getTime();

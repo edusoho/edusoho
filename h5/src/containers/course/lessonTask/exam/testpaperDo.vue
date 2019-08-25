@@ -395,7 +395,12 @@ export default {
     formatStatus(type,id){
       let finish=0
       //单选题、多选题、不定项选择题、判断题
-      if((type=="single_choice"|| type=="choice" || type=="uncertain_choice"|| type=="determine") && this.answer[id].length>0){
+      if((type=="single_choice"||
+          type=="choice" ||
+          type=="uncertain_choice"||
+          type=="determine") &&
+          this.answer[id].length>0
+        ){
           finish=1;
           return finish
       }
