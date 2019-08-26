@@ -29,7 +29,7 @@ export default class MobileBind {
     let key = this.$form.data('userId') + '-last-login-in';
 
     if (!Cookies.get(key) || Cookies.get(key) != new Date().getDate()) {
-      $('#mobile-bind-modal').modal('show');
+      $('#mobile-bind-modal').modal();
       Cookies.set(key, new Date().getDate());
     }
   }
