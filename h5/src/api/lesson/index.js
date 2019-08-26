@@ -37,9 +37,15 @@ export default [
     url: '/testpaper_result',
     method: 'POST'
   }, {
-    // 获得考试说明信息
+    // 获得作业说明信息
     name: 'getHomeworkIntro',
     url: '/courses/{courseId}/task_medias/{taskId}',
     method: 'GET'
+  },
+  {
+    // 获取作业信息
+    name: 'getHomeworkInfo',
+    url: '/homeworks/{homeworkId}/results',
+    method: 'POST'
   }
 ];
