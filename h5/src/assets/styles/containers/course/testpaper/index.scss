@@ -155,15 +155,18 @@
                 }
                 .card-item-list{
                     margin-top: vw(20);
+                    display: flex;
+                    flex-wrap: wrap
                 }
                 .list-cicle{
                     margin-right: vw(12);
                     margin-bottom: vw(10);
-                    display: inline-block;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    justify-items: center;
                     width: vw(28);
                     height: vw(28);
-                    line-height: vw(28);
-                    text-align: center;
                     border-radius: 100%;
                     color:#fff;
                     background: rgba(204, 204, 204, 1);

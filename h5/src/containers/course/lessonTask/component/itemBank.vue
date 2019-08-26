@@ -6,6 +6,7 @@
       @change="changeswiper"
       :show-indicators="false"
       :loop="false"
+      :duration="100"
       v-if="testData.length>0"
     >
       <van-swipe-item v-for="(paper,index) in info" :key="paper.id">
