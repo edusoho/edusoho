@@ -1,0 +1,224 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_operation_coupon_manage' %}
+
+{% set script_controller = 'coupon/generate' %}
+
+{% block page_buttons %}{% endblock %}
+
+{% block tabs %}{% endblock %}
+
+{% block main %}
+
+<form id="coupon-generate-form" class="form-horizontal" action="{{ path('admin_coupon_generate') }}" method="post">
+
+  <fieldset>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="name">{{ 'coupon.name'|trans }}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" name="name" class="form-control" id="name">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="type">{{ 'coupon.type'|trans }}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <div class="radios">
+          <label><input type="radio" name="type" value="minus" checked="checked"> {{ 'coupon.type.minus'|trans }}</label>
+          <label><input type="radio" name="type" value="discount"> {{ 'coupon.type.discount'|trans }}</label>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group minus-rate">
+      <div class="col-md-2 control-label">
+        <label for="minus-rate">{{ 'coupon.type.minus_rate'|trans }}</label>
+      </div>
+      <div class="col-md-3 controls">
+        <input type="text" id="minus-rate" name="minus-rate" class="form-control">
+      </div>
+      <div style="margin-top:5px;">{{ 'coupon.type.minus_rate_unit'|trans }}</div>
+    </div>
+    <div class="row form-group discount-rate" style="display:none;">
+      <div class="col-md-2 control-label">
+        <label for="discount-rate">{{ 'coupon.type.discount_rate'|trans }}</label>
+      </div>
+      <div class="col-md-3 controls">
+        <input type="text" id="discount-rate" name="discount-rate" class="form-control">
+      </div>
+      <div style="margin-top:5px;">{{ 'coupon.type.discount_rate_unit'|trans }}</div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="generatedNum">{{ 'coupon.generate_num'|trans }}</label>
+      </div>
+      <div class="col-md-3 controls">
+        <input type="text" id="generatedNum" name="generatedNum" class="form-control">
+        <div class="help-block">{{ 'coupon.generate_num_hint'|trans }}</div>
+      </div>
+      <div style="margin-top:5px;">{{ 'coupon.generate_num_unit'|trans }}</div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="prefix">{{ 'coupon.prefix'|trans }}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" name="prefix" class="form-control" id="prefix" data-url="{{ path('admin_coupon_checkprefix') }}">
+        <div class="help-block">{{ 'coupon.prefix_hint'|trans }}</div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="digits">{{ 'coupon.digits'|trans }}</label>
+      </div>
+      <div class="col-md-3 controls">
+        <input type="text" id="digits" name="digits" class="form-control" value="8">
+        <div class="help-block">{{ 'coupon.digits_hint'|trans }}</div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="coupon-deadline">{{ 'coupon.deadline'|trans }}</label>
+      </div>
+      <div class="col-md-4 controls">
+        <div class="radios">
+          <label style="display:flex;">
+            <input type="radio" name="deadlineMode" class="all-items-input" value="time" checked="checked" style="float: left;">
+            <input type="text" name="deadline" id="coupon-deadline" class="form-control" value="" style="float: left; margin-left: 5px;">
+          </label>
+        </div>
+        <div class="radios">
+          <label>
+            <input type="radio" name="deadlineMode" class="all-items-input" value="day" style="float: left;">
+            <div style="float: left; margin-left: 5px;">{{ 'coupon.deadline.day.help_block.behind'|trans }}</div>
+            <input type="text" id="fixedDay" name="fixedDay" class="form-control" style="width: 70px; float: left; margin-left: 5px;">
+            <div style="float: left; margin-left: 5px">{{ 'coupon.deadline.day.help_block.after'|trans }}</div>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="description">{{ 'coupon.description'|trans }}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="description" name="description" class="form-control">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="target">{{ 'coupon.target'|trans }}</label>
+      </div>
+      <div class="col-md-3 controls">
+        <select class="form-control" name="targetType">
+          <option value="course" selected="selected">{{ 'coupon.target_type.course'|trans }}</option>
+          {% if is_plugin_installed('Vip') and version_compare(plugin_version('Vip'),'1.1.1','>') %}
+            <option value="vip">{{ 'coupon.target_type.vip'|trans }}</option>
+          {% endif %}
+          <option value="classroom">{{ 'coupon.target_type.classroom'|trans }}</option>
+          {# <option value="fullDiscount">满减</option> #}
+          <option value="all">{{ 'coupon.target_type.all'|trans }}</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="row form-group  radio js-fullDiscount-radios" style="display: none;padding-left:0">
+      <div class="col-md-2 control-label">
+        <label for="fullDiscountPrice" style="font-weight:500">{{ 'coupon.full_discount_price'|trans }}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="fullDiscountPrice" name="fullDiscountPrice" class="form-control">
+      </div>
+    </div>
+    
+    <div class="row form-group">
+      <div class="col-md-offset-2 col-md-2 radios">
+        <div class="radio  js-course-radios">
+          <label>
+            <input type="radio" name="courseId" class="all-items-input" value="0" checked="checked">{{ 'coupon.target_type.course_all'|trans }}
+          </label>
+        </div>
+        <div class="radio  js-course-radios">
+          <label>
+            <input type="radio" name="courseId" id="choose-course-input" data-toggle="modal" data-target="#modal"  data-url="{{ path('admin_course_chooser') }}" value="">
+            {{ 'coupon.target_type.course_specific'|trans }}
+          </label>
+        </div>
+        {% if is_plugin_installed('Vip') and version_compare(plugin_version('Vip'),'1.1.1','>') %}
+          <div class="radio js-vip-radios" style="display: none;">
+            <label>
+              <input type="radio" name="vipId" class="all-items-input" value="0" checked="checked">{{ 'coupon.target_type.vip_all'|trans }}
+            </label>
+          </div>
+          <div class="radio js-vip-radios" style="display: none;">
+            <label>
+              <input type="radio" name="vipId" id="choose-vip-input" data-toggle="modal" data-target="#modal"  data-url="{{ path('admin_vip_level_chooser') }}" value="">
+              {{ 'coupon.target_type.vip_specific'|trans }}
+            </label>
+          </div>
+        {% endif %}
+          <div class="radio js-classroom-radios" style="display: none;">
+            <label>
+              <input type="radio" name="classroomId" class="all-items-input" value="0" checked="checked">{{ 'coupon.target_type.classroom_all'|trans }}
+            </label>
+          </div>
+          <div class="radio js-classroom-radios" style="display: none;">
+            <label>
+              <input type="radio" name="classroomId" id="choose-classroom-input"
+              data-toggle="modal" data-target="#modal"  data-url="{{ path('admin_classroom_chooser') }}" value="">
+              {{ 'coupon.target_type.classroom_specific'|trans }}
+            </label>
+          </div>        
+      </div>
+      <div class="col-md-5" style="display:none;" id="course-display">
+        <div class="well" style="width:200px;display:inline-block;margin:0px;"></div>
+        <div class="js-rechoose" style="display:inline-block;">
+          <a style="margin-left:10px;" class="btn btn-primary btn-lg js-rechoose-course" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_course_chooser') }}" >{{ 'coupon.target_type.course_rechoose'|trans }}</a>
+          {% if is_plugin_installed('Vip') and version_compare(plugin_version('Vip'),'1.1.1','>') %}
+            <a style="margin-left:10px; display: none;" class="btn btn-primary btn-lg js-rechoose-vip" data-toggle="modal" data-target="#modal"  data-url="{{ path('admin_vip_level_chooser') }}" >{{ 'coupon.target_type.vip_rechoose'|trans }}</a>
+          {% endif %}
+           <a style="margin-left:10px; display: none;" class="btn btn-primary btn-lg js-rechoose-classroom" data-toggle="modal" data-target="#modal"  data-url="{{ path('admin_classroom_chooser') }}" >{{ 'coupon.target_type.classroom_rechoose'|trans }}</a>
+         </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="progress progress-sm mb0 hidden">
+        <div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" style="width: 1%">
+          1%
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="channel">{{ 'coupon.channel'|trans }} <a class="glyphicon glyphicon-info-sign text-muted pull-center " href="javascript:void(0)" data-toggle="tooltip" title="{{ 'coupon.channel_hint'|trans }}"></a></label>
+      </div>
+      <div class="col-md-6 controls">
+        <input type="hidden" name="channel" id="channel">
+        <div class="radios">
+          <label><input type="checkbox" name="channel[linkEnable]" data-type="channel" value="1"> {{ 'coupon.channel_type.link'|trans }}{{ 'coupon.channel.postfix'|trans }}</label>
+        </div>
+
+        <div class="radios">
+          <label><input type="checkbox" name="channel[codeEnable]" data-type="channel" value="1"> {{ 'coupon.channel_type.code'|trans }}{{ 'coupon.channel.postfix'|trans }}</label>
+        </div>
+
+        <div class="radios">
+          <label><input type="checkbox" name="channel[h5MpsEnable]" data-type="channel" data-channels="page_detail" value="1" > {{ 'coupon.channel_type.page_detail'|trans }}{{ 'coupon.channel.postfix'|trans }}<a class="glyphicon glyphicon-info-sign text-muted pull-center " href="javascript:void(0)" data-toggle="tooltip" title="{{ 'coupon.channel_type.page_detail_hint'|trans }}"></a></label>
+          <span class="text-muted ">{{ "coupon.channel_type.only_h5_mps"|trans }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <button type="submit" class="btn btn-primary save-btn" data-loading-text="{{ 'coupon.generate.loading_text'|trans }}">{{ 'coupon.generage.btn'|trans }}</button>
+        <a href="{{ path('admin_coupon') }}" class="btn btn-link">{{ 'form.btn.cancel'|trans }}</a>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </fieldset>
+
+</form>
+
+{% endblock %}

@@ -90,6 +90,6 @@ class UsingCoupon extends Coupon implements CouponInterface
      */
     private function getCouponBatchService()
     {
-        return $this->biz->service('CouponPlugin:Coupon:CouponBatchService');
+        return $this->biz->service('Coupon:CouponBatchService');
     }
 }

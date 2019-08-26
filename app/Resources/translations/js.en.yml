@@ -1466,3 +1466,12 @@ user.account.order_pay_vip_close_hint: The vip level in this order has been clos
 user.account.order_pay: Continue
 user.account.order_not_pay: Not paying
 
+#coupon
+notify.copy_link_success: 链接复制成功
+confirm.remove_coupon: 确认要删除此批次优惠码？
+notify.remove_coupon_success: 删除优惠码成功!
+notify.remove_coupon_fail: 删除优惠码失败!
+notify.channel_select: 至少选择一个发放渠道
+
+coupon.fixed_day: 有效期
+coupon.fixed_day.message: 请输入领取后有效天数
