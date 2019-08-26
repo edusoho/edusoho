@@ -725,7 +725,7 @@ validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
 validate.raty_star.message: 请打分
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.phone.message: 请输入有效手机号码
-validate.mobile_or_telephone.message: 请输入有效手机号码或者电话号码
+validate.mobile_or_telephone.message: 请输入有效手机号码或者电话号码(区号-电话号码)
 validate.nickname.message: 不允许以1开头的11位纯数字
 validate.password_check.message: 密码错误
 validate.sms_code_input.message: 请输入短信验证码
