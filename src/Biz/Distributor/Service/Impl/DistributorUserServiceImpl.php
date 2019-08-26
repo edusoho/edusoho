@@ -79,6 +79,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
             1
         );
         if (!empty($existedUser)) {
+            $this->getLogger()->error('distributor token already existed DistributorUserServiceImpl::validateExistedToken', array('token' => $token));
             throw new RuntimeException('token already existed');
         }
     }
