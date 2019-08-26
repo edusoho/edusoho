@@ -26,6 +26,7 @@ use Codeages\Biz\Framework\Event\Event;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 
 class Login extends AbstractResource
 {
@@ -110,6 +111,10 @@ class Login extends AbstractResource
             'registeredWay' => $client,
             'createdIp' => $clientIp,
         );
+
+        if ($this->isPluginInstalled('Drp')) {
+            $newUser = DistributorCookieToolkit::setCookieTokenToFields($request->getHttpRequest(), $newUser, DistributorCookieToolkit::USER);
+        }
 
         $user = $this->getAuthService()->register($newUser);
         $user['realPassword'] = $password;
