@@ -59,7 +59,7 @@ class DistributorProductDealerServiceImpl extends BaseService implements Product
     }
 
     /**
-     * @return \DrpPlugin\Biz\Drp\Service\Impl\DrpUserServiceImpl
+     * @return \DrpPlugin\Biz\Drp\Service\DrpUserService
      */
     protected function getDrpUserService()
     {
