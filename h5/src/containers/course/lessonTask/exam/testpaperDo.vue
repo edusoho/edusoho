@@ -18,7 +18,7 @@
     </div>
 
     <!-- 底部 -->
-    <div class="paper-footer" v-fixfoot>
+    <div class="paper-footer" >
       <div>
         <span @click="cardShow=true">
           <i class="iconfont icon-Questioncard"></i>
@@ -101,7 +101,7 @@ import { getCountDown } from '@/utils/date-toolkit.js';
 import examMixin from '@/mixins/lessonTask/exam.js';
 
 //将元素固定在底部，当软键盘弹起的时候不会随着软键盘弹起而跟着上来
-import  fixfoot  from '@/directive/fixfoot/index.js'
+//import  fixfoot  from '@/directive/fixfoot/index.js'
 
 let backUrl=''
 
@@ -113,7 +113,7 @@ export default {
   name: "testpaperDo",
   mixins: [examMixin],
   directives: {
-    fixfoot
+    //fixfoot
   },
   data() {
     return {
@@ -255,7 +255,7 @@ export default {
     //获取到数据后进行操作
     afterGetData(res){
       //设置导航栏题目
-          this.$store.commit(types.SET_NAVBAR_TITLE,res.testpaper.name)
+          this.$store.commit(types.SET_NAVBAR_TITLE,this.$route.query.title)
           //赋值数据
           this.items=res.items;
           this.testpaper = res.testpaper;
@@ -474,7 +474,7 @@ export default {
       })
 
       if(index>0){
-         message=`还有题${index}未做，确认交卷吗？`
+         message=`还有${index}题未做，确认交卷吗？`
       }
       return new Promise((resolve,reject)=>{
           Dialog.confirm({
@@ -520,9 +520,9 @@ export default {
       return new Promise((resolve,reject)=>{
         this.handExamdo(datas).then(res=>{
             this.isHandExam=true;
-            resolve();
+             resolve();
             //跳转到结果页
-            this.showResult();
+             this.showResult();
           }).catch((err)=>{
               reject()
               Toast.fail(err.message);

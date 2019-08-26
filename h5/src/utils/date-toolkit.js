@@ -123,9 +123,10 @@ const getCountDown = (time, i) => {
 };
 
 // 剩余时间 1天1小时1分钟  秒只是在最后60秒显示
-const getdateTimeDown = date => {
+const getdateTimeDown = (date, i) => {
+  date = Number(date) - (i * 1000);
   const now = new Date().getTime();
-  if (now > date) {
+  if (now >= date) {
     return '';
   }
   const diff = parseInt((date - now) / 1000, 10);

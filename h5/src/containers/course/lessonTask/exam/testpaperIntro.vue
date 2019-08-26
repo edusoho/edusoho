@@ -153,7 +153,8 @@ export default {
         query: {
           testId: this.testId,
           targetId: this.targetId,
-          action:'do'
+          title:this.testpaperTitle,
+          action:'do',
         },
         params:{
           KeepDoing:true
