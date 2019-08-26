@@ -527,7 +527,7 @@ $.validator.addMethod('ckeditor_maxlength', function (value, element, params) {
 
 $.validator.addMethod('mobile_or_telephone', function (value, element) {
   var reg_mobile = /^1\d{10}$/;
-  let reg_telephone = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/;
+  let reg_telephone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;
   var result = false;
   var isMobile = reg_mobile.test(value);
   var isTelephone = reg_telephone.test(value);
