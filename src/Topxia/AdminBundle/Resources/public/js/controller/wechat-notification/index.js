@@ -21,6 +21,9 @@ define(function(require, exports, module) {
           $parent.addClass('checked');
         }
         $this.val(reverseEnable);
+        if ($this.data('key') === 'homeworkOrTestPaperReview') {
+          window.location.reload();
+        }
       }).fail(function (xhr, status, error){
         Notify.danger(xhr.responseJSON.error.message);
       })

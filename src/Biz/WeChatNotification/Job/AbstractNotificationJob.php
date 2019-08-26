@@ -24,7 +24,7 @@ class AbstractNotificationJob extends AbstractJob
     {
     }
 
-    protected function sendNotifications($key, $logName, $userIds, $templateData)
+    protected function sendNotifications($key, $logName, $userIds, $templateData, $isSameTemplate = 1)
     {
         if (empty($userIds)) {
             return;
@@ -37,10 +37,14 @@ class AbstractNotificationJob extends AbstractJob
         );
         $userIds = ArrayToolkit::column($users, 'id');
         $subscribedUsers = $this->getWeChatService()->findSubscribedUsersByUserIdsAndType($userIds, self::OFFICIAL_TYPE);
+        $subscribedUsers = ArrayToolkit::index($subscribedUsers, 'userId');
         $batchs = array_chunk($subscribedUsers, self::LIMIT_NUM);
         foreach ($batchs as $batch) {
             $list = array();
             foreach ($batch as $user) {
+                if (!$isSameTemplate) {
+                    $templateData = $templateData[$user['userId']];
+                }
                 $list[] = array_merge(array(
                     'channel' => 'wechat',
                     'to_id' => $user['openId'],

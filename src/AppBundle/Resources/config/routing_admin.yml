@@ -2407,3 +2407,7 @@ admin_wechat_notification_template_status:
     path: /wechat/notification/template/status
     defaults: { _controller: AppBundle:Admin/WeChatNotification:status}
 
+admin_wechat_notification_homework_review_template_status:
+    path: /wechat/notification/homework/review/template/status
+    defaults: { _controller: AppBundle:Admin/WeChatNotification:homeworkReviewTemplateStatus}
+
