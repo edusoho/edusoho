@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Notification\Service\NotificationService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use Biz\WeChat\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -45,6 +46,33 @@ class WeChatNotificationController extends BaseController
 
         return $this->render('admin/wechat-notification/notification-modal.html.twig', array(
             'notification' => $notification,
+        ));
+    }
+
+    public function fansListAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        $conditions = $this->filterConditions($conditions);
+        $conditions['subscribeTimeNotEqual'] = 0;
+
+        $currentNum = $this->getWeChatService()->countWeChatUserJoinUser($conditions);
+        $paginator = new Paginator(
+            $request,
+            $currentNum,
+            20
+        );
+
+        $fans = $this->getWeChatService()->searchWeChatUsersJoinUser(
+            $conditions,
+            array('subscribeTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('admin/wechat-notification/fans-list.html.twig', array(
+            'fans' => $fans,
+            'paginator' => $paginator,
+            'currentNum' => $currentNum,
         ));
     }
 
@@ -101,6 +129,38 @@ class WeChatNotificationController extends BaseController
             'sendTime' => isset($wechatSetting['homeworkOrTestPaperReview']['sendTime']) ? $wechatSetting['homeworkOrTestPaperReview']['sendTime'] : '',
             'key' => 'homeworkOrTestPaperReview',
         ));
+    }
+
+    protected function filterConditions($conditions)
+    {
+        if (isset($conditions['weChatFansType'])) {
+            if ('user' == $conditions['weChatFansType']) {
+                $conditions['userIdNotEqual'] = 0;
+            }
+
+            if ('notUser' == $conditions['weChatFansType']) {
+                $conditions['userId'] = 0;
+            }
+
+            unset($conditions['weChatFansType']);
+        }
+
+        if (isset($conditions['weChatFansKeywordType'])) {
+            if ('wechatNickname' == $conditions['weChatFansKeywordType']) {
+                $conditions['wechatname'] = $conditions['keyword'];
+            }
+
+            if ('nickname' == $conditions['weChatFansKeywordType']) {
+                $conditions['nickname'] = $conditions['keyword'];
+            }
+
+            if (!empty($conditions['keyword'])) {
+                unset($conditions['keyword']);
+            }
+        }
+        unset($conditions['weChatFansKeywordType']);
+
+        return $conditions;
     }
 
     protected function addTemplate($template, $key)
@@ -255,5 +315,13 @@ class WeChatNotificationController extends BaseController
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->createService('WeChat:WeChatService');
     }
 }

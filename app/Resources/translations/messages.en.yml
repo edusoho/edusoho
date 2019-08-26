@@ -8803,6 +8803,15 @@ wechat.notification.template_detail: Detail
 wechat.notification.send_time: Send Time
 wechat.notification.save: save
 wechat.notification.saving: saving
+wechat.notification.form.btn.search_submit_btn: Search
+wechat.notification.fans_list.profile_picture: Profile Picture
+wechat.notification.fans_list.nickname: Nickname
+wechat.notification.fans_list.username: Username
+wechat.notification.fans_list.subscribe_time: Subscribe Time
+wechat.notification.fans_list.tips: The fan list refreshes every 30 minutes
+wechat.notification.fans_list.user_num: User Num:
+wechat.notification.fans_list.fans_list_empty: No fan
+wechat.notification.fans_list.placeholder: Please enter keywords
 
 # 微信通知模板
 wechat.notification.template.live_start: 'Hello, classmate.<br>It is hereby notified that the [course name] you are enrolled in will start in the [live class start time].<br>Don't be late.'

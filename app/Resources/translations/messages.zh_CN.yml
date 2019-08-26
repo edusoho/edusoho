@@ -10095,6 +10095,15 @@ wechat.notification.template_detail: 详情
 wechat.notification.send_time: 发送时间
 wechat.notification.save: 保存
 wechat.notification.saving: 保存中
+wechat.notification.form.btn.search_submit_btn: 搜索
+wechat.notification.fans_list.profile_picture: 微信头像
+wechat.notification.fans_list.nickname: 微信昵称
+wechat.notification.fans_list.username: 网校用户名
+wechat.notification.fans_list.subscribe_time: 关注时间
+wechat.notification.fans_list.tips: 粉丝列表每30分钟刷新一次数据
+wechat.notification.fans_list.user_num: 用户数量：
+wechat.notification.fans_list.fans_list_empty: 暂无粉丝
+wechat.notification.fans_list.placeholder: 请输入关键词
 
 # 微信通知模板
 wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[课程名]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
