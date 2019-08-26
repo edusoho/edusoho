@@ -92,11 +92,6 @@ class AuthorizationController extends BaseController
             'nickname', 'verifiedMobile', 'about', 'email', 'title', 'roles', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
         ));
 
-        if (!empty($fields['client']) && 'drp' == $fields['client']) {
-            $setting = $this->getSettingService()->get('storage');
-            $result['access_key'] = $setting['cloud_access_key'];
-        }
-
         return $this->createJsonResponse($result);
     }
 
