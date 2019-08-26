@@ -5,10 +5,8 @@ namespace Biz\Distributor\Service\Impl;
 use Biz\OrderFacade\Service\ProductDealerService;
 use Biz\OrderFacade\Product\Product;
 use Biz\Distributor\Util\DistributorCookieToolkit;
-use Biz\Distributor\Util\DistributorUtil;
 use Biz\BaseService;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
-use DrpPlugin\Biz\DistributionToken\Service\DistributionTokenService;
 use Topxia\Service\Common\ServiceKernel;
 
 class DistributorProductDealerServiceImpl extends BaseService implements ProductDealerService
