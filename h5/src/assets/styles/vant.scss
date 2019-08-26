@@ -1,7 +1,3 @@
-.van-nav-bar__title {
-  color: #fff; 
-}
-
 .van-toast {
   &.van-toast--default {
     padding: 10px;
@@ -9,6 +5,10 @@
     min-width: 125px;
     min-height: 125px;
   }
+}
+
+.van-nav-bar__title{
+  color: #ffffff;
 }
 
 .van-hairline--bottom::after {

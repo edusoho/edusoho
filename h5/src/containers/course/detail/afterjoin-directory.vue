@@ -8,8 +8,7 @@
         @changeChapter="changeChapter"
         :hasChapter="hasChapter"
       ></swiper-directory>
-      <div ref="wrapper" class="wrapper" v-if="item.length>0">
-        <div>
+      <div style="overflow:scroll" id="lesson-directory" v-if="item.length>0">
           <template v-if="chapterNum>0">
             <div v-for="(list, index) in item[slideIndex].children" :key="index" class="pd-bo">
               <util-directory :util="list"></util-directory>
@@ -19,6 +18,7 @@
                 :lesson="list.children"
                 :taskId="taskId"
                 :taskNumber="item[slideIndex].lessonNum"
+                :unitNum="item[slideIndex].unitNum"
               ></lesson-directory>
             </div>
           </template>
@@ -27,14 +27,14 @@
             :lesson="item[slideIndex].children" 
             :taskId="taskId" 
             :taskNumber="item[slideIndex].lessonNum" 
+            :unitNum="item[slideIndex].unitNum"
             v-bind="$attrs"
             v-on="$listeners"></lesson-directory>
           </div>
-        </div>
       </div>
     </div>
 
-    <div v-if="nodata&&lessonNum==0" class="noneItem">
+    <div v-if="nodata && lessonNum==0" class="noneItem">
       <img src="static/images/none.png" class="nodata" />
       <p>暂时还没有课程哦...</p>
     </div>
@@ -59,6 +59,7 @@ export default {
     utilDirectory,
     lessonDirectory
   },
+  props:['isFixed'],
   data() {
     return {
       scroll: "",
@@ -92,7 +93,7 @@ export default {
   watch: {
     nextStudy: {
       handler: "getNextStudy",
-      immediate: true
+      immediate: true,
     },
     selectedPlanId: {
       handler: "processItem",
@@ -100,17 +101,14 @@ export default {
       deep:true,
     }
   },
-  created(){
-   // this.processItem()
-  },
   methods: {
     getNextStudy() {
       if (this.nextStudy.nextTask) {
         this.taskId = Number(this.nextStudy.nextTask.id);
-        if (this.scroll) {
-          this.scroll.scrollToElement(document.getElementById(this.taskId));
-          this.scroll.refresh();
-        }
+        // if (this.scroll) {
+        //   this.scroll.scrollToElement(document.getElementById(this.taskId));
+        //   this.scroll.refresh();
+        // }
       }
     },
     //处理数据
@@ -118,6 +116,7 @@ export default {
       let res = this.OptimizationCourseLessons;
       if(res.length==0){
          this.nodata=true;
+         this.lessonNum=0;
         return
       }
       this.nodata=false;
@@ -147,39 +146,22 @@ export default {
       }
       this.nodata=true;
     },
-    //初始化BScroll，定位到指定目录
+    //定位到指定目录
     newScroll() {
-      const WRAPPER = this.$refs.wrapper;
-      const DOCUMENTHEIGHT = document.documentElement.clientHeight;
-      const IMGHEIGHT =
-        document.getElementById("course-detail__head--img") == null
-          ? 0
-          : document.getElementById("course-detail__head--img").clientHeight;
-      const MARGINTOP = 0;
-      const PROCESSHEIGHT =
-        document.getElementById("progress-bar") == null
-          ? 0
-          : document.getElementById("progress-bar").clientHeight;
-      const SWIPERHEIGHT =
-        document.getElementById("swiper-directory") == null
-          ? 0
-          : document.getElementById("swiper-directory").clientHeight;
-      const NAVHEIGHT = 46;
-      const TABSHEIGHT = 44;
-      if (WRAPPER) {
-        WRAPPER.style.height =
-          DOCUMENTHEIGHT -
-          IMGHEIGHT -
-          PROCESSHEIGHT -
-          SWIPERHEIGHT -
-          MARGINTOP -
-          NAVHEIGHT -
-          TABSHEIGHT +
-          "px";
-        this.scroll = new BScroll(WRAPPER, options);
-        this.scroll.scrollToElement(document.getElementById(this.taskId));
-        this.scroll.refresh();
+      const NARTAB=44;
+      const PROCESSBAR=document.getElementById("progress-bar");
+      const SWIPER = document.getElementById("swiper-directory");
+      const PROCESSHEIGHT =  PROCESSBAR == null ? 0 : PROCESSBAR.offsetHeight;
+      const SWIPERHEIGHT =  SWIPER == null ? 0 : SWIPER.offsetHeight;
+      // 52 有待更改改，测试数据
+      let scrolltop=document.getElementById(this.taskId).offsetTop-
+                    PROCESSHEIGHT-NARTAB-SWIPERHEIGHT-52;
+      if(scrolltop<document.documentElement.clientWidth){
+        return
       }
+      window.scrollTo({
+        top: scrolltop
+      })
     },
     //类型操作
     judgType(item, list, index) {
