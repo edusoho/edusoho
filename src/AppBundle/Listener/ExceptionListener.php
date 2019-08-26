@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Biz\User\UserException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ExceptionListener
 {
@@ -37,11 +38,15 @@ class ExceptionListener
             $this->setTargetPath($request);
             $exception = $this->convertException($exception);
             if (Response::HTTP_FORBIDDEN === $statusCode && empty($user)) {
-                $response = new RedirectResponse($this->container->get('router')->generate('login'));
+                $response = new RedirectResponse($this->generateUrl('login'));
                 $event->setResponse($response);
             } elseif (false !== strpos(get_parent_class($exception), 'AbstractException')) {
                 // 出现异常跳回原页面
-                $response = new RedirectResponse($request->server->get('HTTP_REFERER'));
+                $targetUrl = $request->server->get('HTTP_REFERER');
+                if ($this->generateUrl('login', array(), UrlGeneratorInterface::ABSOLUTE_URL) == $targetUrl) {
+                    $targetUrl = $this->generateUrl('homepage');
+                }
+                $response = new RedirectResponse($targetUrl);
                 $flashBag = $request->getSession()->getFlashBag();
                 $flashBag->add(
                     'currentThrowedException',
@@ -145,5 +150,10 @@ class ExceptionListener
     protected function trans($id, array $parameters = array())
     {
         return $this->container->get('translator')->trans($id, $parameters);
+    }
+
+    protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 }
