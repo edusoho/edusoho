@@ -71,7 +71,6 @@ class AuthorizationController extends BaseController
 
     public function getUserInfoAction(Request $request, $userId)
     {
-        $fields = $request->query->all();
         $server = $this->getOAuth2Server();
 
         if (!$server->verifyResourceRequest($this->getOAuth2Request(), $this->getOAuth2Response())) {
