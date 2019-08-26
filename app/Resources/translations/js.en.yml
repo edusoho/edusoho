@@ -786,6 +786,7 @@ validate.alphanumeric.message: Must be English letters, numbers and underscores
 validate.raty_star.message: Please score
 validate.reg_invite_code.message: Must consists of five numbers and english characters
 validate.phone.message: Please enter a valid mobile phone number
+validate.mobile_or_telephone.message: Please enter a valid mobile number or phone number
 validate.nickname.message: Do not allow 11-bit pure numbers beginning with 1
 validate.password_check.message: Wrong password
 validate.sms_code_input.message: Please enter the verification code
