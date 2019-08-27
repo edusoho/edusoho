@@ -263,7 +263,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'keyword1' => array('value' => $user['nickname']),
             'keyword2' => array('value' => mb_substr($thread['title'], 0, 30, 'utf-8')),
             'keyword3' => array('value' => date('Y-m-d H:i:s', $thread['createdTime'])),
-            'remark' => array('value' => '')
+            'remark' => array('value' => ''),
         );
         $templateData = array(
             'template_id' => $templateId,
