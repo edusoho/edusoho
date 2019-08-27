@@ -41,7 +41,7 @@
 
       <div class="result-footer" ref="footer" v-if="doTimes==0 && isReadOver">
         <van-button class="result-footer__btn" type="primary" v-if="again" @click="startTestpaper()">再考一次</van-button>
-        <van-button class="result-footer__btn" type="primary" v-else disabled>在{{remainTime}}后可以再考一次</van-button>
+        <van-button class="result-footer__btn" type="primary" v-if="!again && remainTime" disabled>在{{remainTime}}后可以再考一次</van-button>
       </div>
     </div>
   </div>
@@ -68,6 +68,8 @@ export default {
       doTimes: null, // 考试允许次数
       redoInterval: null, // 重考间隔
       remainTime: null,   // 再次重考剩余时间
+      timeMeter:null,// 重考间隔倒计时
+      testpaperTitle:null,// 考试题目
       obj: {              // 题型判断
         "single_choice": '单选题',
         "choice": '多选题',
@@ -113,6 +115,9 @@ export default {
       document.getElementById("app").style.background=""
       next()
   },
+  beforeDestroy() { //清除定时器
+    this.clearTime();
+  },
   methods: {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE
@@ -129,7 +134,6 @@ export default {
         this.result = res.testpaperResult;
         this.question_type_seq = res.testpaper.metas.question_type_seq;
         this.isReadOver = this.result.status === 'finished' ? true : false;
-        this.setNavbarTitle(res.testpaper.name);
         this.getSubjectList(res.items);
         this.calSubjectHeight();
 
@@ -143,6 +147,7 @@ export default {
     },
     judgeTime() {
       const interval = this.redoInterval;
+      let i=0;
       if(interval==0){
         this.again=true;
         return
@@ -153,9 +158,14 @@ export default {
       const sumTime = checkedTime + intervalTimestamp;
       this.again = nowTimestamp >= sumTime ? true: false;
       if (!this.again) {
-        this.remainTime = getdateTimeDown(sumTime);
-        // const subTime =  Math.abs(sumTime - nowTimestamp);
-        // this.remainTime = this.dealTimestamp(subTime);
+        this.timeMeter =setInterval(()=>{
+          i=i++;
+          this.remainTime = getdateTimeDown(sumTime,i);
+          if(this.remainTime==''){
+            this.again=true
+            this.clearTime();
+          }
+        },1000);
       }
     },
     getSubjectList(resData) {
@@ -216,36 +226,17 @@ export default {
             Toast.fail(err.message);
         });
     },
-    // dealTimestamp(timestamp) {
-    //   let timeTip = '';
-    //   const minuteStamp = 1000 * 60;
-    //   const hourStamp = 1000 * 60 * 60;
-    //   const dayStamp = 1000 * 60 * 60 * 24;
-    //   if (timestamp <= hourStamp) {
-    //     timeTip = Math.round(timestamp / minuteStamp) + '分';
-    //   }
-    //   else if (hourStamp * 1 < timestamp && timestamp <= dayStamp) {
-    //     const hours = Math.floor(timestamp / hourStamp);
-    //     const remainder = timestamp % hourStamp;
-    //     const minutes = Math.floor(remainder / minuteStamp);
-    //     timeTip = `${hours}小时${minutes}分`;
-    //   }
-    //   else if (timestamp > dayStamp) {
-    //     const days = Math.floor(timestamp / dayStamp);
-    //     const remain = timestamp % dayStamp;
-    //     const hours = Math.floor(remain / hourStamp);
-    //     const remainder = remain % hourStamp;
-    //     const minutes = Math.floor(remainder / minuteStamp);
-    //     timeTip = `${days}天${hours}小时${minutes}分`;
-    //   }
-    //   return timeTip;
-    // },
+    clearTime(){
+      clearInterval(this.timeMeter);
+      this.timeMeter = null;
+    },
     startTestpaper() {
       this.$router.replace({
         name: 'testpaperDo',
         query: {
           testId: this.result.testId,
           targetId: this.targetId,
+          title:this.testpaperTitle,
           action:'redo'
         },
         params:{
@@ -265,6 +256,8 @@ export default {
           testId: this.testId
         }
       }).then(res => {
+        this.testpaperTitle=res.task.title;
+        this.setNavbarTitle(res.task.title);
         this.doTimes =Number(res.task.activity.testpaperInfo.doTimes);
         this.redoInterval =Number(res.task.activity.testpaperInfo.redoInterval);
         this.judgeTime();
