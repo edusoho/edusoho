@@ -120,7 +120,7 @@ const routes = [
       title: ''
     },
     component: () => import(/* webpackChunkName: "homeworkResult" */ '@/containers/course/lessonTask/homework/homeworkResult.vue')
-  },  {
+  }, {
     path: '/homeworkIntro',
     name: 'homeworkIntro',
     meta: {

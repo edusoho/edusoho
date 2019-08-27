@@ -35,7 +35,7 @@ const filters = [
         case 'testpaper':
           return '考试';
         case 'homework':
-            return '作业';
+          return '作业';
         default:
           return '暂不支持此类型';
       }
