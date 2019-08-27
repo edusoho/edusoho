@@ -9,13 +9,7 @@
       :answer.sync="answer"
     />
 
-    <div class="guide" v-show="isFristVisited" @click="isFristVisited=false">
-      <div class="guide__text">左右切换滑动</div>
-      <div class="guide__gesture">
-        <img src="static/images/leftslide.png"/>
-        <img src="static/images/rightslide.png"/>
-      </div>
-    </div>
+    <guide-page />
 
     <!-- 底部 -->
     <div class="paper-footer" >
@@ -93,15 +87,13 @@ import headTop from "../component/head";
 import choiceType from "../component/choice";
 import singleChoice from "../component/single-choice";
 import determineType from "../component/determine";
+import guidePage from "../component/guide-page";
 import itemBank from "../component/itemBank";
 
 import { getCountDown } from '@/utils/date-toolkit.js';
 
 
 import examMixin from '@/mixins/lessonTask/exam.js';
-
-//将元素固定在底部，当软键盘弹起的时候不会随着软键盘弹起而跟着上来
-//import  fixfoot  from '@/directive/fixfoot/index.js'
 
 let backUrl=''
 
@@ -134,7 +126,6 @@ export default {
       localuseTime:null,
       lastAnswer:null,//本地存储的答案
       lastTime:null,//本地存储的时间
-      isFristVisited:false,//是否第一次进行考试任务
       startTime:null,
       backUrl:''
     };
@@ -144,6 +135,7 @@ export default {
   },
   components: {
     itemBank,
+    guidePage,
     vanOverlay:Overlay
   },
   filters:{
@@ -212,16 +204,6 @@ export default {
     ...mapActions('course', [
         'handExamdo',
     ]),
-    //把当前标记存入localstorge，用于记录是否是第一次访问，控制显示引导页
-    setVisited(){
-      this.localvisitedName=`${this.user.id}-testpaper-visited`;
-      let isVisited=localStorage.getItem(this.localvisitedName);
-
-      if(!localStorage.getItem(this.localvisitedName)){
-        this.isFristVisited=true;
-        localStorage.setItem(this.localvisitedName, true);
-      }
-    },
     //请求接口获取数据
     getData() {
       let testId=this.$route.query.testId;
@@ -272,8 +254,6 @@ export default {
           this.lastTime=localStorage.getItem(this.localtimeName);
           this.lastAnswer=JSON.parse(localStorage.getItem(this.localanswerName));
 
-          this.setVisited();
-
           //处理数据格式
           this.formatData(res);
 
@@ -284,6 +264,7 @@ export default {
 
           //如果有限制考试时长，开始计时
           this.timer();
+
     },
     //判断是否做题状态
     isDoing(){
