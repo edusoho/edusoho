@@ -120,6 +120,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
     protected function getTabs($for)
     {
         $courseSetting = $this->getSettingService()->get('course', array());
+
         $tabs = array(
             'tasks' => array(
                 'name' => 'course.tab.tasks',

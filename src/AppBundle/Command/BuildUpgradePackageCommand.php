@@ -88,7 +88,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
         $fileLines = $this->processFiles($diffFile);
 
-        $this->migrationFiles($fileLines);
+//        $this->migrationFiles($fileLines);
         $this->webAssetsFiles($fileLines);
         $this->invalidFiles($fileLines);
         $this->ingoredFiles($fileLines);

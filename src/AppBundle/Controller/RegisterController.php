@@ -22,7 +22,6 @@ class RegisterController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $fields = $request->query->all();
         $user = $this->getCurrentUser();
 
         if ($user->isLogin()) {

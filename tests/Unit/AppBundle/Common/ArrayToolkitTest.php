@@ -114,6 +114,8 @@ class ArrayToolkitTest extends BaseTestCase
 
     public function testIndex()
     {
+        $result = ArrayToolkit::index(array(), 'name');
+        $this->assertEquals(array(), $result);
         $testArray = array(
             array('id' => 1, 'name' => 'tom1'),
             array('id' => 2, 'name' => 'tom2'),
@@ -159,14 +161,19 @@ class ArrayToolkitTest extends BaseTestCase
 
     public function testFilter()
     {
-        $testArray = array('id' => 1, 'price' => 0.01, 'isStudent' => true, 'name' => 'tom', 'nickname' => 'jerry');
-        $specialArray = array('id' => 0, 'price' => 0.00, 'isStudent' => false, 'name' => 'tom2', 'createdTime' => 0);
+        $testArray = array('id' => 1, 'price' => 0.01, 'isStudent' => true, 'names' => 'tom', 'nickname' => 'jerry');
+        $specialArray = array('id' => 0, 'price' => 0.00, 'isStudent' => false, 'names' => array('tom2'), 'createdTime' => 0);
         $result = ArrayToolkit::filter($testArray, $specialArray);
-        $this->assertArrayEquals(array('id' => 1, 'price' => 0.01, 'isStudent' => true, 'name' => 'tom'), $result);
+        $this->assertArrayEquals(array('id' => 1, 'price' => 0.01, 'isStudent' => true, 'names' => array('tom')), $result);
     }
 
     public function testTrim()
     {
+        $testArray = 'abc';
+
+        $result = ArrayToolkit::trim($testArray);
+        $this->assertEquals($testArray, $result);
+
         $testArray = array('name' => '   tom', 'names' => array('   tom1', '  tom2 '));
         $result = ArrayToolkit::trim($testArray);
         $this->assertArrayEquals(array('name' => 'tom', 'names' => array('tom1', 'tom2')), $result);
@@ -206,6 +213,7 @@ class ArrayToolkitTest extends BaseTestCase
     {
         $testArray = array(
             array(1, 2, 3),
+            array(),
             array(1, 2, 3, 4),
         );
         $result = ArrayToolkit::mergeArraysValue($testArray);
@@ -318,5 +326,41 @@ class ArrayToolkitTest extends BaseTestCase
         $this->assertTrue(ArrayToolkit::isSameValues($compared, $sameArr2));
         $this->assertFalse(ArrayToolkit::isSameValues($compared, $diffArr3));
         $this->assertFalse(ArrayToolkit::isSameValues($compared, $diffArr4));
+    }
+
+    public function testInsert()
+    {
+        $beforeArray = array(
+            'a' => 'a',
+            'b' => 'b',
+            'c' => 'c',
+        );
+
+        $insertArray = array(
+            'a1' => 'a1',
+            'd' => 'd',
+        );
+
+        $expected1 = array(
+            'a' => 'a',
+            'a1' => 'a1',
+            'd' => 'd',
+            'b' => 'b',
+            'c' => 'c',
+        );
+        $result1 = ArrayToolkit::insert($beforeArray, 1, $insertArray);
+
+        $this->assertEquals($expected1, $result1);
+
+        $expected2 = array(
+            'a1' => 'a1',
+            'd' => 'd',
+            'a' => 'a',
+            'b' => 'b',
+            'c' => 'c',
+        );
+        $result2 = ArrayToolkit::insert($beforeArray, 0, $insertArray);
+
+        $this->assertEquals($expected2, $result2);
     }
 }

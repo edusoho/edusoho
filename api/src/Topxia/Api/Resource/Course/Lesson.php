@@ -251,7 +251,7 @@ class Lesson extends BaseResource
                         }
                     }
 
-                    if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
+                    if (!empty($file['metas2']) && $this->isNotEmptyMetas2Contents($file['metas2'])) {
                         if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
                             $headLeaderInfo = $this->getHeadLeaderInfo();
 
@@ -342,6 +342,24 @@ class Lesson extends BaseResource
             $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
 
             return $file;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $metas = array('sd' => array('key' => ''), 'hd' => array('key' => ''), 'shd' => array('key' => ''))
+     *
+     * metas里面只要有任意清晰度则返回true
+     *
+     * @return true or false
+     */
+    protected function isNotEmptyMetas2Contents($metas)
+    {
+        foreach ($metas as $meta) {
+            if (!empty($meta['key'])) {
+                return true;
+            }
         }
 
         return false;
