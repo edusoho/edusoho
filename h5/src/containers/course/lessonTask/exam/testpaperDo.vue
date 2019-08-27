@@ -284,6 +284,7 @@ export default {
 
           //如果有限制考试时长，开始计时
           this.timer();
+
     },
     //判断是否做题状态
     isDoing(){

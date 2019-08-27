@@ -1,5 +1,8 @@
 $common-padding: 35;
 
+.rich-text img{
+  max-width: 100%!important;
+}
 .head-top {
   margin: 0 vw(20) vw(22) vw(20);
   padding: vw(22) 0 vw(10) vw(4);
