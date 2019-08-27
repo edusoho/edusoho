@@ -49,7 +49,7 @@ class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
             );
         }
 
-        $this->sendNotifications($key, 'wechat_notify_lesson_publish', $userIds, $templateData, 0);
+        $this->sendNotifications($key, 'wechat_notify_lesson_publish', $userIds, $templateData);
     }
 
     /**

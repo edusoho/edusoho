@@ -24,7 +24,7 @@ class AbstractNotificationJob extends AbstractJob
     {
     }
 
-    protected function sendNotifications($key, $logName, $userIds, $templateData, $isSameTemplate = 1)
+    protected function sendNotifications($key, $logName, $userIds, $templateData)
     {
         if (empty($userIds)) {
             return;
@@ -42,9 +42,7 @@ class AbstractNotificationJob extends AbstractJob
         foreach ($batchs as $batch) {
             $list = array();
             foreach ($batch as $user) {
-                if (!$isSameTemplate) {
-                    $templateData = $templateData[$user['userId']];
-                }
+                $templateData = isset($templateData[$user['userId']]) ? $templateData[$user['userId']] : array_shift($templateData);
                 $list[] = array_merge(array(
                     'channel' => 'wechat',
                     'to_id' => $user['openId'],
