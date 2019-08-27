@@ -145,6 +145,41 @@ const actions = {
           reject(err);
         });
     });
+  },
+  // eslint-disable-next-line no-unused-vars
+  handHomeworkdo({ commit }, datas) {
+    // eslint-disable-next-line prefer-const
+    let { answer, homeworkResultId, homeworkId, userId } = { ...datas };
+
+    // 如果是不限时间限制，使用时间在本地有记录，如果有时间限制，使用时间在本地无记录
+    const localuseTime = `${userId}-${homeworkResultId}-usedTime`;
+    const usedTime = Number(localStorage.getItem(localuseTime)) || 0;
+    console.log(answer);
+    console.log(homeworkResultId);
+    console.log(homeworkId);
+    console.log(usedTime);
+
+    return new Promise((resolve, reject) => {
+      Api.handHomework({
+        query: {
+          homeworkId,
+          homeworkResultId
+        },
+        data: {
+          data: answer,
+          usedTime
+        }
+      })
+        .then(res => {
+          console.log(res);
+          localStorage.removeItem(`${userId}-${homeworkResultId}`);
+          localStorage.removeItem(localuseTime);
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
   }
 };
 

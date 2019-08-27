@@ -47,5 +47,11 @@ export default [
     name: 'getHomeworkInfo',
     url: '/homeworks/{homeworkId}/results',
     method: 'POST'
+  },
+  {
+    // 作业提交
+    name: 'handHomework',
+    url: '/homeworks/{homeworkId}/results/{homeworkResultId}',
+    method: 'PUT'
   }
 ];
