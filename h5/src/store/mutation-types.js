@@ -14,6 +14,7 @@ export const GET_COURSE_DETAIL = 'GET_COURSE_DETAIL';
 export const GET_COURSE_LESSONS = 'GET_COURSE_LESSONS';
 export const GET_OPTIMIZATION_COURSE_LESSONS = 'GET_OPTIMIZATION__COURSE_LESSONS';
 export const GET_NEXT_STUDY = 'GET_NEXT_STUDY';
+export const HAND_EXAM = 'HAND_EXAM';
 // register
 export const ADD_USER = 'ADD_USER';
 export const SMS_CENTER = 'SMS_CENTER';

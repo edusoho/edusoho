@@ -7,6 +7,7 @@
         v-model="registerInfo.mobile"
         placeholder="请输入手机号"
         maxLength="11"
+        :border=false
         :error-message="errorMessage.mobile"
         @blur="validateMobileOrPsw('mobile')"
         @keyup="validatedChecker()"
@@ -16,6 +17,7 @@
         v-model="registerInfo.encrypt_password"
         type="password"
         maxLength="20"
+         :border=false
         :error-message="errorMessage.encrypt_password"
         @blur="validateMobileOrPsw('encrypt_password')"
         :placeholder="placeHolder[pathName]"
@@ -30,6 +32,7 @@
       <van-field
         v-model="registerInfo.smsCode"
         type="text"
+        :border=false
         center
         clearable
         maxLength="6"

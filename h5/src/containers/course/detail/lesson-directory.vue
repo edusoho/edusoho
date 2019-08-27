@@ -77,7 +77,7 @@
         </div>
       </div>
     </div>
-    <div v-if="taskNumber==0" class="noneItem">
+    <div v-if="taskNumber==0 && unitNum==0" class="noneItem">
       <img src="static/images/none.png" class="notask" />
       <p>暂时还没有课时哦...</p>
     </div>
@@ -106,6 +106,10 @@ export default {
       default: -1
     },
     taskNumber: {
+      type: Number,
+      default: -1
+    },
+    unitNum: {
       type: Number,
       default: -1
     }
@@ -180,10 +184,13 @@ export default {
         Toast("敬请期待");
         return;
       }
+      let nextTask={
+        id:task.id
+      }
+      // 更改store中的当前学习
+      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, {nextTask});
 
-      this.currentTask = task.id;
       const details = this.details;
-
       !details.allowAnonymousPreview &&
         this.$router.push({
           name: "login",
@@ -262,6 +269,16 @@ export default {
               replay
             }
           });
+          break;
+        case 'testpaper':
+          const testId = task.activity.testpaperInfo.testpaperId;
+          this.$router.push({
+            name: 'testpaperIntro',
+            query: {
+              testId: testId,
+              targetId: task.id
+            }
+          })
           break;
         default:
           Toast("暂不支持此类型");

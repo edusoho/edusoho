@@ -30,7 +30,11 @@ import {
   Tag,
   Toast,
   Lazyload,
-  Checkbox
+  Checkbox,
+  CheckboxGroup,
+  Radio,
+  RadioGroup,
+  Panel
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -48,6 +52,10 @@ Vue.component('van-uploader', Uploader);
 Vue.component('van-rate', Rate);
 Vue.component('van-cell', Cell);
 Vue.component('van-checkbox', Checkbox);
+Vue.component('van-checkbox-group', CheckboxGroup);
+Vue.component('van-radio', Radio);
+Vue.component('van-radio-group', RadioGroup);
+Vue.component('van-panel', Panel);
 
 Vue.use(filters);
 Vue.use(Row);
@@ -60,6 +68,10 @@ Vue.use(EdusohoUI);
 Vue.use(Lazyload);
 Vue.use(Toast);
 Vue.use(Checkbox);
+Vue.use(CheckboxGroup);
+Vue.use(Radio);
+Vue.use(RadioGroup);
+Vue.use(Panel);
 Vue.use(Tab).use(Tabs).use(Dialog);
 Vue.config.productionTip = false;
 /* eslint-disable no-new */

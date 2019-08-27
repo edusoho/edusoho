@@ -114,6 +114,37 @@ const actions = {
       }
       return res;
     });
+  },
+  // eslint-disable-next-line no-unused-vars
+  handExamdo({ commit }, datas) {
+    // eslint-disable-next-line prefer-const
+    let { answer, resultId, beginTime, endTime, userId } = { ...datas };
+    beginTime *= 1000;
+    let usedTime = Math.ceil((endTime - beginTime) / 1000);
+
+    // 如果是不限时间限制，使用时间在本地有记录，如果有时间限制，使用时间在本地无记录
+    const localuseTime = `${userId}-${resultId}-usedTime`;
+    if (localStorage.getItem(localuseTime)) {
+      usedTime = localStorage.getItem(localuseTime);
+    }
+
+    return new Promise((resolve, reject) => {
+      Api.handExam({
+        data: {
+          data: answer,
+          resultId,
+          usedTime
+        }
+      })
+        .then(res => {
+          localStorage.removeItem(`${userId}-${resultId}`);
+          localStorage.removeItem(`${userId}-${resultId}-time`);
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
   }
 };
 

@@ -103,6 +103,24 @@ const routes = [
     name: 'live',
     component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
   }, {
+    path: '/testpaper',
+    name: 'testpaperIntro',
+    meta: {
+      title: '考试说明'
+    },
+    component: () => import(/* webpackChunkName: "testpaperIntro" */ '@/containers/course/lessonTask/exam/testpaperIntro.vue')
+  }, {
+    path: '/testpaperDo',
+    name: 'testpaperDo',
+    component: () => import(/* webpackChunkName: "testpaperDo" */ '@/containers/course/lessonTask/exam/testpaperDo.vue')
+  }, {
+    path: '/testpaperResult',
+    name: 'testpaperResult',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "testpaperResult" */ '@/containers/course/lessonTask/exam/testpaperResult.vue')
+  }, {
     path: '/course/explore',
     name: 'more_course',
     meta: {

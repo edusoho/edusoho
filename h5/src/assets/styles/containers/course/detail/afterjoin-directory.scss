@@ -20,7 +20,8 @@
         }
     }
     .swiper-directory{
-        padding: vw(12) 0 vw(10) 0;
+        padding: 0 0 vw(10) 0;
+        background: #fff;
         .swiper-directory-active{
             color: rgba(64,143,251,1)!important;
             background:rgba(64,143,251,0.08)!important;
@@ -73,6 +74,11 @@
             }
         }
     }
+    .swiper-directory-fix{
+        position: fixed;
+        width: 100%;
+        top:104px;
+    }
     .bl{
         display: block!important;
         .iconfont{
@@ -93,12 +99,12 @@
         }
     }
     .util-directory{
-        box-sizing: border-box;
+        margin: vw(10) 0 0 vw(15);
         padding-left: vw(15);
         height: vw(30);
-        border-bottom: vw(1) solid rgba(235,235,235,1);
         width:vw(345);
-        margin-left: vw(15);
+        box-sizing: border-box;
+        border-bottom: vw(1) solid rgba(235,235,235,1);
         font-size:vw(16);
         font-family:PingFangSC-Regular;
         font-weight:400;
@@ -106,8 +112,7 @@
         line-height:vw(22);
     }
     .lesson-directory{
-        margin-top: vw(10);
-        margin-left: vw(15);
+        margin: vw(10) 0 0 vw(15);
         width: vw(345);
         color: #333333;
         border:1px solid rgba(245,245,245,1);
