@@ -2,12 +2,12 @@
   <div class="essay">
     <div class="subject-stem" >
       <div class="serial-number">{{number}}、</div>
-      <div v-html="stem"></div>
+      <div v-html="stem" class="rich-text"></div>
     </div>
 
     <div class="material-title" v-if="itemdata.parentTitle">
       <span class="serial-number">问题{{itemdata.materialIndex}}：</span>
-      <div v-html="itemdata.stem"></div>
+      <div v-html="itemdata.stem" class="rich-text"></div>
     </div>
 
     <div class="answer-paper">
