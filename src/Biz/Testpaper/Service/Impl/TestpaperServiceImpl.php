@@ -476,6 +476,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->count($conditions);
     }
 
+    public function searchTestpaperResultsCountJoinCourseMemberGroupByUserId($conditions)
+    {
+        return $this->getTestpaperResultDao()->searchTestpaperResultsCountJoinCourseMemberGroupByUserId($conditions);
+    }
+
     public function searchTestpaperResults($conditions, $sort, $start, $limit)
     {
         if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {

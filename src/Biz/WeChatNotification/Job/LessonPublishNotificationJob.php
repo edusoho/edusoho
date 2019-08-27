@@ -55,11 +55,11 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
             'remark' => array('value' => ('live' == $task['type']) ? '请准时参加' : '请及时前往学习'),
         );
         $options = array('url' => $url, 'type' => 'url');
-        $templateData = array(
+        $templateData = array(array(
             'template_id' => $templateId,
             'template_args' => $data,
             'goto' => $options,
-        );
+        ));
         $this->sendNotifications($key, 'wechat_notify_lesson_publish', $userIds, $templateData);
     }
 
