@@ -83,6 +83,7 @@ import headTop from "../component/head";
 import choiceType from "../component/choice";
 import singleChoice from "../component/single-choice";
 import determineType from "../component/determine";
+import { setTimeout } from 'timers';
 
 export default {
     name:'item-bank',
@@ -114,6 +115,13 @@ export default {
         },
         current:{
             handler:'slideToNumber'
+        },
+        info:{
+          immediate:true,
+          deep:true,
+          handler(val){
+              console.log(val.length)
+          }
         }
     },
     components: {
@@ -125,9 +133,11 @@ export default {
         determineType
     },
     mounted() {
-        this.$nextTick(() => {
+     setTimeout(()=>{
+       this.$nextTick(() => {
           this.changeswiper(0)
         });
+     },500)
     },
     methods:{
         //由于swiper的高度无法自适应内容高度，所以切换页面要动态更改索引和设置高度
