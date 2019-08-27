@@ -48,7 +48,7 @@
 
   // tabs component
   .van-tabs {
-    margin-bottom: -44px;
+   // margin-bottom: -44px;
     z-index: 800;
     &.after-tabs {
       margin-bottom: 0;
@@ -293,14 +293,26 @@
 
   // join-after component
   .join-after {
-    &__content {
-      position: absolute;
+    .van-tabs--line{
+      padding-top: 0px;
+      .van-tabs__wrap{
+        position: relative;
+      }
+    }
+    .isFixed{
+      position: fixed;
+      top:0;
       left: 0;
       right: 0;
-      bottom: 0;
-      top: vw(300);
+    }
+    &__content {
+      // position: absolute;
+      // left: 0;
+      // right: 0;
+      // bottom: 0;
+      // top: vw(300);
       overflow: auto;
-     // margin-top: 44px;
+      // margin-top: 44px;
       .e-panel-body {
         img {
           width: 100%;
@@ -319,15 +331,18 @@
     box-shadow: 0px 5px 5px #f8f9fa;
   }
   .progress-bar {
-    height: vw(44);
-    padding: 15px vw(20) 0 vw(20) ;
+   // margin-top: 44px;
+   // height: vw(44);
+    // padding: vw(15) vw(20) vw(15) vw(20) ;
+    padding: 15px 20px;
     //box-shadow: 0px 2px 6px 0px rgba(49,49,49,0.1);
     display: flex;
     align-items: center;
+    background: #fff;
     &__content {
       background-color: #f7f7f7;
       border-radius: vw(46);
-      height: vw(30);
+      height: 30px;
       flex: 1;
       align-items: center;
     }
@@ -345,7 +360,12 @@
       @extend .font-family-PFM;
     }
   }
-
+  .progress-bar-fix{
+    position: fixed;
+    top: 44px;
+    width: 100%;
+    box-sizing: border-box;
+  }
   // 试看
   &.try {
     .directory .e-panel-body {
