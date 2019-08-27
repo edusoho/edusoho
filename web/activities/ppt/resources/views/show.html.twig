@@ -10,6 +10,8 @@
 
 {% block body %}
 
+
+
   {% if not pptPlayer.error is empty %}
     <div class="iframe-parent-content pv20 ph20">
       <div class="alert alert-danger"><i class="es-icon es-icon-info"></i>{{ pptPlayer.error.message|raw }}</div>
@@ -19,11 +21,18 @@
         data-token="{{ pptPlayer.result.token }}"
         data-user-id="{{app.user.id|default(0)}}"
         data-user-name="{{app.user.username|default('')}}"
+        data-image-info="{{ pptPlayer.result.images|json_encode() }}"
+        data-type=""
       {% if setting('magic.ppt_watermark') %}
-      data-watermark-url="{{ path('cloud_ppt_watermark') }}">
-      {% endif %}
+      data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}
+      {% if pptPlayer.result.animation is defined %}
+      data-img-type="onlyImg"
+      {% endif %}>
     </div>
-     <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('player') }}">
+    {% if pptPlayer.result.animation is defined %}
+      <button class="cd-btn cd-btn-primary ppt-player-change-btn js-change-ppt-btn" type="button">切换图片模式</button>
+    {% endif %}
+    <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('player') }}">
     {% do script(['libs/base.js','app/js/common.js','app/js/main.js','pptactivity/js/show/index.js'], 1000) %}
   {% endif %}
 {% endblock %}
