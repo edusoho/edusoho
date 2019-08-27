@@ -43,11 +43,9 @@ class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
         $templateData = array();
         foreach ($nums as $num) {
             $data['keyword2'] = array('value' => $num['num']);
-            $options = array('type' => 'miniprogram');
             $templateData[$num['userId']] = array(
                 'template_id' => $templateId,
                 'template_args' => $data,
-                'goto' => $options,
             );
         }
 
