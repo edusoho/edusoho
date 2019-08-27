@@ -41,11 +41,11 @@ class LiveNotificationJob extends AbstractNotificationJob
             'remark' => array('value' => '不要迟到哦'),
         );
         $options = array('url' => $url, 'type' => 'url');
-        $templateData = array(
+        $templateData = array(array(
             'template_id' => $templateId,
             'template_args' => $data,
             'goto' => $options,
-        );
+        ));
         $this->sendNotifications($key, 'wechat_notify_live_play', $userIds, $templateData);
     }
 }

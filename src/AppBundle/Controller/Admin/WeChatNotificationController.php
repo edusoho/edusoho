@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Notification\Service\NotificationService;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Biz\WeChat\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
@@ -101,8 +102,8 @@ class WeChatNotificationController extends BaseController
 
     public function statusAction(Request $request)
     {
-        $isEnable = $request->request->get('isEnable');
         $key = $request->query->get('key');
+        $fields = $request->request->all();
         $templates = TemplateUtil::templates();
         $template = $templates[$key];
         $wechatSetting = $this->getSettingService()->get('wechat', array());
@@ -110,13 +111,24 @@ class WeChatNotificationController extends BaseController
             throw new \RuntimeException($this->trans('wechat.notification.service_not_open'));
         }
 
-        if ($isEnable) {
+        if ($fields['isEnable']) {
             $this->addTemplate($template, $key);
+            $this->setTemplateDetail($key, $fields);
         } else {
             $this->deleteTemplate($template, $key);
         }
 
         return $this->createJsonResponse(true);
+    }
+
+    public function homeworkReviewTemplateStatusAction(Request $request)
+    {
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+
+        return $this->render('admin/wechat-notification/homework-review-notification-setting-modal.html.twig', array(
+            'sendTime' => isset($wechatSetting['homeworkOrTestPaperReview']['sendTime']) ? $wechatSetting['homeworkOrTestPaperReview']['sendTime'] : '',
+            'key' => 'homeworkOrTestPaperReview',
+        ));
     }
 
     protected function filterConditions($conditions)
@@ -158,17 +170,65 @@ class WeChatNotificationController extends BaseController
             throw new \RuntimeException($this->trans('wechat.notification.empty_token'));
         }
 
-        $data = $clinet->addTemplate($template['id']);
+        $wechatSetting = $this->getSettingService()->get('wechat');
+        if (empty($wechatSetting[$key]['templateId'])) {
+            $data = $clinet->addTemplate($template['id']);
 
-        if (empty($data)) {
-            throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
+            if (empty($data)) {
+                throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
+            }
+
+            $wechatSetting[$key]['templateId'] = $data['template_id'];
         }
 
-        $wechatSetting = $this->getSettingService()->get('wechat');
-        $wechatSetting[$key]['templateId'] = $data['template_id'];
         $wechatSetting[$key]['status'] = 1;
+        $this->getSettingService()->set('wechat', $wechatSetting);
+
+        return $this->getSettingService()->get('wechat', $wechatSetting);
+    }
+
+    protected function setTemplateDetail($key, $fields)
+    {
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+
+        if ('homeworkOrTestPaperReview' == $key) {
+            $wechatSetting['homeworkOrTestPaperReview']['sendTime'] = $fields['sendTime'];
+            $this->getSettingService()->set('wechat', array());
+            if (!empty($wechatSetting['homeworkOrTestPaperReview']['templateId']) && !empty($wechatSetting['homeworkOrTestPaperReview']['sendTime'])) {
+                $expression = $this->getSendTimeExpression($fields['sendTime']);
+                $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_HomeWorkOrTestPaperReview');
+                if ($notificationJob) {
+                    $this->getSchedulerService()->deleteJob($notificationJob['id']);
+                }
+                $job = array(
+                    'name' => 'WeChatNotificationJob_HomeWorkOrTestPaperReview',
+                    'expression' => $expression,
+                    'class' => 'Biz\WeChatNotification\Job\HomeWorkOrTestPaperReviewNotificationJob',
+                    'misfire_policy' => 'executing',
+                    'args' => array(
+                        'key' => $key,
+                        'sendTime' => $wechatSetting['homeworkOrTestPaperReview']['sendTime'],
+                    ),
+                );
+                $this->getSchedulerService()->register($job);
+            }
+        }
 
         return $this->getSettingService()->set('wechat', $wechatSetting);
+    }
+
+    protected function getSendTimeExpression($sendTime)
+    {
+        $expression = '';
+        if (!is_array($sendTime)) {
+            $hourAndMinute = explode(':', $sendTime);
+            $minute = ($hourAndMinute[1] < 10) ? $hourAndMinute[1] % 10 : $hourAndMinute[1];
+            $hour = ($hourAndMinute[0] < 10) ? $hourAndMinute[0] % 10 : $hourAndMinute[0];
+
+            $expression = $minute.' '.$hour.' * * *';
+        }
+
+        return $expression;
     }
 
     protected function deleteTemplate($template, $key)
@@ -247,6 +307,14 @@ class WeChatNotificationController extends BaseController
     protected function getNotificationService()
     {
         return $this->createService('Notification:NotificationService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 
     /**

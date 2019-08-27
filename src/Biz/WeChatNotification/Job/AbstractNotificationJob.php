@@ -37,10 +37,12 @@ class AbstractNotificationJob extends AbstractJob
         );
         $userIds = ArrayToolkit::column($users, 'id');
         $subscribedUsers = $this->getWeChatService()->findSubscribedUsersByUserIdsAndType($userIds, self::OFFICIAL_TYPE);
+        $subscribedUsers = ArrayToolkit::index($subscribedUsers, 'userId');
         $batchs = array_chunk($subscribedUsers, self::LIMIT_NUM);
         foreach ($batchs as $batch) {
             $list = array();
             foreach ($batch as $user) {
+                $templateData = isset($templateData[$user['userId']]) ? $templateData[$user['userId']] : array_shift($templateData);
                 $list[] = array_merge(array(
                     'channel' => 'wechat',
                     'to_id' => $user['openId'],

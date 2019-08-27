@@ -7,6 +7,14 @@ class TemplateUtil
     public static function templates()
     {
         $templates = array(
+            'homeworkOrTestPaperReview' => array(
+                'id' => 'OPENTM414077970',
+                'name' => '作业/试卷批改提醒',
+                'content' => 'wechat.notification.template.homework_or_testpaper_need_review',
+                'detail' => '{{first.DATA}}<br>时间：{{keyword1.DATA}}<br>作业数目：{{keyword2.DATA}}<br>{{remark.DATA}}',
+                'object' => '课程教师',
+                'status' => 0,
+            ),
             'askQuestion' => array(
                 'id' => 'OPENTM414529612',
                 'name' => '答疑提醒',

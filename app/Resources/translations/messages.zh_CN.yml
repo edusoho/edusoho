@@ -5844,8 +5844,11 @@ admin.wechat_notification.template_name: 模板名称
 admin.wechat_notification.template_content_sample: 模板内容示例
 admin.wechat_notification.send_object: 发送对象
 admin.wechat_notification.operation: 操作
+admin.wechat_notification.template_switch: 开关
 admin.wechat_notification.template_content: 通知内容
 admin.wechat_notification.template_content_detail: 详情
+admin.wechat_notification.template_setting: 设置
+admin.wechat_notification.template_show: 查看
 admin.wechat_notification.failure_reason: 失败原因
 admin.wechat_notification.failure_number: 失败人数
 admin.wechat_notification.failure_reason.empty: 暂无失败原因
@@ -10086,6 +10089,12 @@ wechat.notification.template_open_error: 模板打开失败，可能是未启用
 wechat.notification.service_not_open: 未开启微信服务号通知
 wechat.notification.empty_token: 获取微信信息错误
 wechat.notification.template_not_exist: 模板不存在
+wechat.notification.homework_or_testpaper_setting_conditions: 以设置的发送时间为截止时间，在过去24小时内提交的作业或试卷没有全部批改完成时，会在指定时间发送通知给课程教师。
+wechat.notification.homework_or_testpaper_setting_conditions_label: 触发条件
+wechat.notification.template_detail: 详情
+wechat.notification.send_time: 发送时间
+wechat.notification.save: 保存
+wechat.notification.saving: 保存中
 wechat.notification.form.btn.search_submit_btn: 搜索
 wechat.notification.fans_list.profile_picture: 微信头像
 wechat.notification.fans_list.nickname: 微信昵称
@@ -10104,6 +10113,7 @@ wechat.notification.template.lesson_add: '同学，你好，课程有新任务�
 wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值或学习卡<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
 wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
 wechat.notification.template.ask_question: '尊敬的老师，您的在教课程中有学员发布了提问<br>[提问者]<br>[问题标题]<br>[问题提交时间]'
+wechat.notification.template.homework_or_testpaper_need_review: '尊敬的老师，您今日仍有作业/试卷未批改<br>时间：[当日日期，精确到天]<br>作业数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: 听完音频
