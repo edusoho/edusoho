@@ -26,7 +26,6 @@ class PptController extends BaseActivityController implements ActivityActionInte
             'slides' => empty($slides) ? array() : $slides,
             'error' => $error,
             'courseId' => $activity['fromCourseId'],
-            'mediaId' => $activity['mediaId'],
         ));
     }
 
