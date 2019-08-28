@@ -122,6 +122,17 @@ class DistributorUserServiceTest extends BaseTestCase
      */
     public function testValidateExistedTokenWithException()
     {
+        $logger = $this->mockBiz(
+            'logger',
+            array(
+                array(
+                    'functionName' => 'error',
+                ),
+            )
+        );
+
+        $this->biz['drp.plugin.logger'] = $logger;
+
         $userService = $this->mockBiz(
             'User:UserService',
             array(
