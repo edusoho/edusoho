@@ -151,13 +151,9 @@ const actions = {
     // eslint-disable-next-line prefer-const
     let { answer, homeworkResultId, homeworkId, userId } = { ...datas };
 
-    // 如果是不限时间限制，使用时间在本地有记录，如果有时间限制，使用时间在本地无记录
+    // 时间取localstorge存储时间，默认值为0
     const localuseTime = `${userId}-${homeworkResultId}-usedTime`;
     const usedTime = Number(localStorage.getItem(localuseTime)) || 0;
-    console.log(answer);
-    console.log(homeworkResultId);
-    console.log(homeworkId);
-    console.log(usedTime);
 
     return new Promise((resolve, reject) => {
       Api.handHomework({
@@ -171,7 +167,6 @@ const actions = {
         }
       })
         .then(res => {
-          console.log(res);
           localStorage.removeItem(`${userId}-${homeworkResultId}`);
           localStorage.removeItem(localuseTime);
           resolve(res);
