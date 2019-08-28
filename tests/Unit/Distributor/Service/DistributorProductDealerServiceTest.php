@@ -43,10 +43,7 @@ class DistributorProductDealerServiceTest extends BaseTestCase
         $product = $this->getDistributorProductDealerService()->dealBeforeCreateProduct($product);
 
         $createExtra = $product->getCreateExtra();
-        $this->assertEquals($token, $createExtra['distributorToken']);
-
-        $logger->shouldHaveReceived('info')->times(2);
-        $drpUserService->shouldHaveReceived('trySaveUserDistributorToken')->times(1);
+        $this->assertEquals(true, empty($createExtra['distributorToken']));
     }
 
     private function getDistributorProductDealerService()
