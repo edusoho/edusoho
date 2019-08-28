@@ -72,7 +72,8 @@ export default {
                 name: 'homeworkDo',
                 query: {
                     targetId: this.taskId,
-                    homeworkId:this.homework.id
+                    homeworkId:this.homework.id,
+                    courseId:this.$route.query.courseId
                 },
                 params:{
                     KeepDoing:true

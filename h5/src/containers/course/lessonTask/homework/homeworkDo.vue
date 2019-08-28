@@ -71,9 +71,12 @@ import determineType from "../component/determine";
 import guidePage from "../component/guide-page";
 import itemBank from "../component/itemBank";
 
+import homeworkMixin from '@/mixins/lessonTask/homework.js';
+
 let backUrl=''
 export default {
   name: "homework-do",
+  mixins: [homeworkMixin],
   data() {
     return {
       info: [], //作业信息
@@ -157,7 +160,16 @@ export default {
           this.afterGetData(res);
         })
         .catch(err => {
-          Toast.fail(err.message);
+         const toast =  Toast.fail(err.message);
+        /**
+         * 4036706:试卷正在批阅中
+         */
+          if(err.code="4036706"){
+              setTimeout(()=>{
+                this.toIntro();
+                toast.clear();
+              },2000)
+          }
         });
     },
     //获取到数据后进行操作
@@ -175,6 +187,8 @@ export default {
 
       this.formatData(res);
 
+      this.interruption();
+
       this.saveTime();
     },
     //判断是否做题状态
@@ -184,6 +198,18 @@ export default {
         return true
       }else{
         return false
+      }
+    },
+    //异常中断
+    interruption(){
+      if(!this.$route.params.KeepDoing){
+          //异常中断或者刷新页面
+            this.canDoing(this.homework,this.user.id).then(()=>{
+
+            }).catch(({answer})=>{
+              this.submitpaper(answer);
+              return;
+            })
       }
     },
     //遍历数据类型去做对应处理
@@ -400,6 +426,16 @@ export default {
         }
       })
     },
+    //跳转到说明页
+    toIntro(){
+      this.$router.push({
+          name: 'homeworkIntro',
+          query: {
+            courseId: this.$route.query.courseId,
+            taskId: this.$route.query.targetId
+        }
+      })
+    }
   }
 };
 </script>
