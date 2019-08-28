@@ -250,35 +250,37 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     protected function askQuestionSendNotification($thread, $userIds)
     {
         $templateId = $this->getWeChatService()->getTemplateId('askQuestion');
-        $user = $this->getUserService()->getUser($thread['userId']);
-        $weChatUsers = $this->getWeChatService()->searchWeChatUsers(
-            array('userIds' => $userIds),
-            array('lastRefreshTime' => 'ASC'),
-            0,
-            PHP_INT_MAX,
-            array('id', 'openId', 'unionId', 'userId')
-        );
-        $data = array(
-            'first' => array('value' => '尊敬的老师，您的在教课程中有学员发布了提问'.PHP_EOL),
-            'keyword1' => array('value' => $user['nickname']),
-            'keyword2' => array('value' => mb_substr($thread['title'], 0, 30, 'utf-8')),
-            'keyword3' => array('value' => date('Y-m-d H:i:s', $thread['createdTime'])),
-            'remark' => array('value' => ''),
-        );
-        $templateData = array(
-            'template_id' => $templateId,
-            'template_args' => $data,
-        );
+        if (!empty($templateId)) {
+            $user = $this->getUserService()->getUser($thread['userId']);
+            $weChatUsers = $this->getWeChatService()->searchWeChatUsers(
+                array('userIds' => $userIds),
+                array('lastRefreshTime' => 'ASC'),
+                0,
+                PHP_INT_MAX,
+                array('id', 'openId', 'unionId', 'userId')
+            );
+            $data = array(
+                'first' => array('value' => '尊敬的老师，您的在教课程中有学员发布了提问'.PHP_EOL),
+                'keyword1' => array('value' => $user['nickname']),
+                'keyword2' => array('value' => mb_substr($thread['title'], 0, 30, 'utf-8')),
+                'keyword3' => array('value' => date('Y-m-d H:i:s', $thread['createdTime'])),
+                'remark' => array('value' => ''),
+            );
+            $templateData = array(
+                'template_id' => $templateId,
+                'template_args' => $data,
+            );
 
-        $list = array();
-        foreach ($weChatUsers as $weChatUser) {
-            $list[] = array_merge(array(
-                'channel' => 'wechat',
-                'to_id' => $weChatUser['openId'],
-            ), $templateData);
+            $list = array();
+            foreach ($weChatUsers as $weChatUser) {
+                $list[] = array_merge(array(
+                    'channel' => 'wechat',
+                    'to_id' => $weChatUser['openId'],
+                ), $templateData);
+            }
+
+            $this->sendCloudWeChatNotification('askQuestion', 'wechat_notify_ask_question', $list);
         }
-
-        $this->sendCloudWeChatNotification('askQuestion', 'wechat_notify_ask_question', $list);
     }
 
     protected function sendCloudWeChatNotification($key, $logName, $list)
