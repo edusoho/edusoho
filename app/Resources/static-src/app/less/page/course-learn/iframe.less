@@ -30,6 +30,29 @@
       padding-right: 20px;
     }
   }
+
+  &.iframe-parent-content--discuss {
+    padding: 20px;
+    .lesson-content-text-body {
+      @media (max-width: @screen-xs-max) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.text-iframe-wrap {
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 100%;
+  overflow: scroll;
+}
+.iframe-scroll {
+  @media (max-width: @screen-xs-max) {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll;
+    z-index: 1;
+  }
 }
 
 .task-preview-modal-content {

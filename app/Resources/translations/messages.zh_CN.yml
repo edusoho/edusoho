@@ -1688,6 +1688,7 @@ course.testpaper_manage.import.re_edit.batch_operate: 批量操作
 course.testpaper_manage.import.re_edit.select_all: 全选
 course.testpaper_manage.import.re_edit.finish_batch_operate: 完成
 course.testpaper_manage.import.re_edit.answer: 答案
+course.testpaper_manage.import.re_edit.explain: 解析
 course.testpaper_manage.import.re_edit.correct: 正确
 course.testpaper_manage.import.re_edit.wrong: 错误
 course.testpaper_manage.import.re_edit.convert_hint: 可选择转换题型为

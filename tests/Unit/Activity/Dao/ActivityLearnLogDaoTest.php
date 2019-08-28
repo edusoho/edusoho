@@ -61,12 +61,11 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         $this->assertEquals('finish', $result[0]['event']);
     }
 
-    public function testCountLearnedDaysByCourseIdAndUserId()
+    public function testCountLearnedDaysByActivityIdsAndUserId()
     {
         $this->mockActivity();
         $log = $this->getDao()->create($this->getDefaultMockFields());
-
-        $result = $this->getDao()->countLearnedDaysByCourseIdAndUserId(1, 1);
+        $result = $this->getDao()->countLearnedDaysByActivityIdsAndUserId(array(1), 1);
 
         $this->assertEquals(1, $result);
     }
