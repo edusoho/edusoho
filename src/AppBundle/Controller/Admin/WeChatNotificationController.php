@@ -100,6 +100,16 @@ class WeChatNotificationController extends BaseController
         ));
     }
 
+    public function showRuleAction(Request $request)
+    {
+        $key = $request->query->get('key');
+        $templates = TemplateUtil::templates();
+
+        return $this->render('admin/wechat-notification/rule-modal.html.twig', array(
+            'template' => $templates[$key],
+        ));
+    }
+
     public function statusAction(Request $request)
     {
         $key = $request->query->get('key');
