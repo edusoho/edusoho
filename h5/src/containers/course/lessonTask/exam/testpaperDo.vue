@@ -4,9 +4,10 @@
 
     <item-bank 
       v-if="info.length>0"
-      :current.sync="current"
+      :current.sync="cardSeq"
       :info="info"
       :answer.sync="answer"
+      :slideIndex.sync="slideIndex"
     />
 
     <!-- 引导页 -->
@@ -109,7 +110,7 @@ export default {
   },
   data() {
     return {
-      current: 0,//滑动索引
+      cardSeq: 0,//点击题卡要滑动的指定位置的索引
       testpaper: {},
       testpaperResult: {},
       info: [], //试卷信息
@@ -127,7 +128,8 @@ export default {
       lastAnswer:null,//本地存储的答案
       lastTime:null,//本地存储的时间
       startTime:null,
-      backUrl:''
+      backUrl:'',
+      slideIndex:0,//题库组件当前所在的划片位置
     };
   },
   created() {
@@ -402,7 +404,7 @@ export default {
     //答题卡定位
     slideToNumber(num){
       let index=Number(num);
-      this.current=index;
+      this.cardSeq=index;
       //关闭弹出层
       this.cardShow=false;
     },

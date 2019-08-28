@@ -118,15 +118,10 @@ export default {
         answer(val){
             this.$emit('update:answer', val)
         },
-        current:{
-            handler:'slideToNumber'
-        },
-        info:{
-          immediate:true,
-          deep:true,
-          handler(val){
-              console.log(val.length)
-          }
+        current(val,oldval){
+          //答题卡定位
+          let index=Number(val);
+          this.$refs.swipe.swipeTo(val-1);
         }
     },
     components: {
@@ -148,7 +143,7 @@ export default {
         //由于swiper的高度无法自适应内容高度，所以切换页面要动态更改索引和设置高度
         changeswiper(index) {
             this.currentIndex = index;
-            this.$emit('update:current', index)
+            this.$emit('update:slideIndex', index)
             this.$nextTick(() => {
                 let docHeight = window.getComputedStyle(this.$refs[`paper${index}`][0])
                 .height;
@@ -222,15 +217,7 @@ export default {
         //判断题选择
         determineChoose(name, id){
             this.$set(this.testAnswer[id], 0, Number(name));
-        },
-        //答题卡定位
-        slideToNumber(num){
-            let index=Number(num);
-            if(num===this.currentIndex){
-                return
-            }
-            this.$refs.swipe.swipeTo(index-1);
-        },
+        }
     }
 }
 </script>
