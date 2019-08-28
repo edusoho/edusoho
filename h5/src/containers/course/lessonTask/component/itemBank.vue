@@ -118,15 +118,9 @@ export default {
         answer(val){
             this.$emit('update:answer', val)
         },
-        current:{
-            handler:'slideToNumber'
-        },
-        info:{
-          immediate:true,
-          deep:true,
-          handler(val){
-              console.log(val.length)
-          }
+        current(val,oldval){
+          let index=Number(val);
+          this.$refs.swipe.swipeTo(val-1);
         }
     },
     components: {
@@ -148,7 +142,7 @@ export default {
         //由于swiper的高度无法自适应内容高度，所以切换页面要动态更改索引和设置高度
         changeswiper(index) {
             this.currentIndex = index;
-            this.$emit('update:current', index)
+            this.$emit('update:slideIndex', index)
             this.$nextTick(() => {
                 let docHeight = window.getComputedStyle(this.$refs[`paper${index}`][0])
                 .height;

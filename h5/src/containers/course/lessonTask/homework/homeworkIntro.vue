@@ -20,8 +20,12 @@
 import Api from '@/api';
 import { mapState,mapActions } from 'vuex';
 import { Dialog,Toast } from "vant";
+
+import homeworkMixin from '@/mixins/lessonTask/homework.js';
+
 export default {
     name:'homework-intro',
+    mixins: [homeworkMixin],
     data(){
         return{
             courseId:null,
@@ -51,6 +55,9 @@ export default {
         next()
     },
     methods:{
+        ...mapActions('course', [
+                'handHomeworkdo',
+            ]),
         getInfo(){
             this.courseId = this.$route.query.courseId;
             this.taskId = this.$route.query.taskId;
@@ -61,12 +68,31 @@ export default {
                 }
             }).then(res => {
                 this.homework=res.homework;
-                console.log(res)
+
+                this.interruption()
             });
         },
-        showResult(){
-
+        //异常中断
+        interruption(){
+            this.canDoing(this.homework.latestHomeworkResult,this.user.id).then(()=>{
+                this.startHomework();
+            }).catch(({answer})=>{
+                this.submitHomework(answer)
+            })
         },
+        //跳转到结果页
+        showResult() {
+            this.$router.push({
+                name: 'homeworkResult',
+                query: {
+                    homeworkId: this.homework.id,
+                    homeworkResultId:this.homework.latestHomeworkResult.id,
+                    courseId: this.$route.query.courseId,
+                    taskId:this.taskId
+                }
+            })
+        },
+        //开始作业
         startHomework(){
             this.$router.push({
                 name: 'homeworkDo',
@@ -79,7 +105,22 @@ export default {
                     KeepDoing:true
                 }
             })
-        }
+        },
+        //交作业
+        submitHomework(answer){
+            let datas={
+                answer,
+                homeworkId:this.homework.id,
+                userId:this.user.id,
+                homeworkResultId:this.homework.latestHomeworkResult.id
+            }
+            //提交作业+跳转到结果页
+            this.handHomeworkdo(datas).then(res=>{
+                this.showResult()
+            }).catch((err)=>{
+                Toast.fail(err.message);
+            });
+        },
     }
 }
 </script>

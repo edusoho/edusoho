@@ -69,6 +69,28 @@
 .result-subject {
   height: vw(500);
   overflow-y: scroll;
+  .result-paner{
+    margin-top:vw(10);
+    padding:0 vw(10);
+    background:#fff;
+    .homework-number {
+      width: vw(34);
+      height: vw(34);
+      border-radius: 100%;
+      color: #fff;
+      text-align: center;
+      font-size: vw(14);
+      line-height: vw(34);
+    }
+    .result-list__item {
+      display: inline-block;
+      margin-bottom: vw(10);
+      margin-right: vw(11);
+      &:nth-child(8n) {
+        margin-right: 0;
+      }
+    }
+  }
 }
 
 .data-text-blue {

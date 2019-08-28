@@ -5,10 +5,11 @@
     <!-- 做题 -->
     <item-bank
       v-if="info.length>0"
-      :current.sync="current"
+      :current.sync="cardSeq"
       :info="info"
       :answer.sync="answer"
       :showScore="false"
+      :slideIndex.sync="slideIndex"
     />
 
     <!-- 引导页 -->
@@ -82,7 +83,7 @@ export default {
       info: [], //作业信息
       answer: {}, //答案
       lastAnswer: null,
-      current: 0, //滑动索引
+      cardSeq: 0, //点击题卡要滑动的指定位置的索引
       homework: null,
       cardShow: false, //答题卡显示标记
       localanswerName:null,
@@ -90,7 +91,8 @@ export default {
       lastUsedTime:null,
       lastAnswer:null,
       usedTime:null,//使用时间，本地实时计时
-      isHandHomework:false
+      isHandHomework:false,//是否已经交完作业
+      slideIndex:0,//题库组件当前所在的划片位置
     };
   },
   components: {
@@ -124,7 +126,7 @@ export default {
     if(this.info.length==0 || this.isHandHomework || this.homework.status!='doing'){
       next();
     }else{
-      this.submitHomework().then(()=>{
+      this.submitpaper().then(()=>{
           next();
       }).catch(()=>{
         next(false);
@@ -322,7 +324,7 @@ export default {
     //答题卡定位
     slideToNumber(num){
       let index=Number(num);
-      this.current=index;
+      this.cardSeq=index;
       //关闭弹出层
       this.cardShow=false;
     },
@@ -421,14 +423,16 @@ export default {
         name: 'homeworkResult',
         query: {
           homeworkId: this.$route.query.homeworkId,
-          homeworkResultId:this.homework.testId,
-          backUrl:backUrl
+          homeworkResultId:this.homework.id,
+          taskId:this.$route.query.targetId,
+          backUrl:backUrl,
+          courseId: this.$route.query.courseId,
         }
       })
     },
     //跳转到说明页
     toIntro(){
-      this.$router.push({
+      this.$router.replace({
           name: 'homeworkIntro',
           query: {
             courseId: this.$route.query.courseId,
