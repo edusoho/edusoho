@@ -9,6 +9,7 @@
       :answer.sync="answer"
     />
 
+    <!-- 引导页 -->
     <guide-page />
 
     <!-- 底部 -->
@@ -75,7 +76,6 @@
 </template>
 
 <script>
-const WINDOWHEIGHT = document.documentElement.clientHeight - 44;
 import Api from "@/api";
 import { mapState, mapMutations , mapActions} from "vuex";
 import * as types from "@/store/mutation-types";

@@ -16,6 +16,7 @@
             :current="currentIndex+1"
             :subject="subject(paper)"
             :score="`${parseFloat(paper.score)}`"
+            :showScore="showScore"
           />
 
           <single-choice
@@ -107,6 +108,10 @@ export default {
         current:{
             type:Number,
             default:0
+        },
+        showScore:{
+            type:Boolean,
+            default:true
         }
     },
     watch:{

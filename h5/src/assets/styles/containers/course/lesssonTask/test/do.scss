@@ -178,6 +178,38 @@
                     margin-right: 0;
                 }
             }
+            .card-homework-item{
+                margin-top: vw(10);
+                padding: 0 vw(10);
+                font-size: vw(14);
+                background: #fff;
+                font-weight:500;
+                .card-item-list{
+                    margin-top: vw(10);
+                    padding-top: vw(20);
+                    display: flex;
+                    flex-wrap: wrap
+                }
+                .list-cicle{
+                    margin-right: vw(11);
+                    margin-bottom: vw(10);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    justify-items: center;
+                    width: vw(34);
+                    height: vw(34);
+                    border-radius: 100%;
+                    color:#fff;
+                    background: rgba(204, 204, 204, 1);
+                }
+                .cicle-active{
+                    background: rgba(64, 143, 251, 1)!important;
+                }
+                .list-cicle:nth-child(8n+0){
+                    margin-right: 0;
+                }
+            }
         }
         
     }
