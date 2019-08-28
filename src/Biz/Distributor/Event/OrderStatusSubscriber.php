@@ -2,8 +2,6 @@
 
 namespace Biz\Distributor\Event;
 
-use AppBundle\Common\ArrayToolkit;
-use Biz\Distributor\Util\DistributorUtil;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
