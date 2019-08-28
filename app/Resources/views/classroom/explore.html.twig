@@ -107,7 +107,9 @@
               {% if setting('classroom.show_student_num_enabled', '1') == 1 %}
                 <li><i class="es-icon es-icon-people"></i>{{classroom.studentNum + classroom.auditorNum }}</li>
               {% endif %}
+              {% if setting('classroom.show_review', '1') == 1 %}
               <li><i class="es-icon es-icon-textsms"></i>{{classroom.threadNum}}</li>
+              {% endif %}
             </ul>
           </div>
         </div>
