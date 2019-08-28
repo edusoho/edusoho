@@ -236,8 +236,8 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
     {
         $subscriber = new WeChatNotificationEventSubscriber($this->biz);
         $this->getSettingService()->set('storage', array('cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey'));
-        $return = array(array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4,'userId' => 1),
-            array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4,'userId' => 1));
+        $return = array(array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4, 'userId' => 1),
+            array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4, 'userId' => 1), );
         $weChatService = $this->mockBiz('WeChat:WeChatService', array(
             array(
                 'functionName' => 'getTemplateId',
@@ -259,8 +259,8 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
     {
         $subscriber = new WeChatNotificationEventSubscriber($this->biz);
         $this->getSettingService()->set('storage', array('cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey'));
-        $return = array(array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4,'userId' => 1),
-            array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4,'userId' => 1));
+        $return = array(array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4, 'userId' => 1),
+            array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4, 'userId' => 1), );
         $weChatService = $this->mockBiz('WeChat:WeChatService', array(
             array(
                 'functionName' => 'getTemplateId',
@@ -354,7 +354,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
                 'functionName' => 'isClassroomTeacher',
                 'returnValue' => true,
                 'withParams' => array('1', '1'),
-            )
+            ),
         ));
 
         $threadService = $this->mockBiz('Thread:ThreadService', array(

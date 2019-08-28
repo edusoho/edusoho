@@ -289,10 +289,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($userId);
             $content = TextHelper::truncate($content, 30);
             $data = array(
-                'first' => array('value' => '亲爱的学员，您在《' . $title . '》中的发表的问题有了新的回答' . PHP_EOL),
+                'first' => array('value' => '亲爱的学员，您在《'.$title.'》中的发表的问题有了新的回答'.PHP_EOL),
                 'keyword1' => array('value' => date('Y-m-d H:i:s', $createdTime)),
                 'keyword2' => array('value' => $content),
-                'remark' => array('value' => '')
+                'remark' => array('value' => ''),
             );
             $list = array(array(
                 'channel' => 'wechat',
@@ -318,17 +318,16 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 array('id', 'openId', 'unionId', 'userId')
             );
             $data = array(
-                'first' => array('value' => '尊敬的老师，您的在教课程中有学员发布了提问' . PHP_EOL),
+                'first' => array('value' => '尊敬的老师，您的在教课程中有学员发布了提问'.PHP_EOL),
                 'keyword1' => array('value' => $user['nickname']),
                 'keyword2' => array('value' => mb_substr($thread['title'], 0, 30, 'utf-8')),
                 'keyword3' => array('value' => date('Y-m-d H:i:s', $thread['createdTime'])),
-                'remark' => array('value' => '')
+                'remark' => array('value' => ''),
             );
             $templateData = array(
                 'template_id' => $templateId,
                 'template_args' => $data,
             );
-
             $list = array();
             foreach ($weChatUsers as $weChatUser) {
                 $list[] = array_merge(array(
