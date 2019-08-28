@@ -15,6 +15,14 @@ class TemplateUtil
                 'object' => '课程教师',
                 'status' => 0,
             ),
+            'askQuestion' => array(
+                'id' => 'OPENTM414529612',
+                'name' => '答疑提醒',
+                'content' => 'wechat.notification.template.ask_question',
+                'detail' => '尊敬的老师，您的在教课程中有学员发布了提问<br>{{keyword1.DATA}}<br>{{keyword2.Data}}<br>时间{{keyword3.Data}}<br>{{remark.DATA}}',
+                'object' => '课程教师',
+                'status' => 0,
+            ),
             'oneHourBeforeLiveOpen' => array(
                 'id' => 'TM00080',
                 'name' => '直播开课通知(一小时前)',
