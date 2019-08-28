@@ -28,7 +28,9 @@
     </div>
     <div class="metas clearfix">
       <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
-      <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+      {% if setting('openCourse.show_comment', '1') == 1 %}
+        <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+      {% endif %}
     </div>
   </div>
 </div>
