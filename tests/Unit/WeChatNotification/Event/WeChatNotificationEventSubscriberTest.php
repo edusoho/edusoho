@@ -250,8 +250,26 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
             ),
         ));
 
+        $courseService = $this->mockBiz('Course:CourseService', array(
+            array(
+                'functionName' => 'getCourse',
+                'returnValue' => array('id' => 1, 'title' => 'test'),
+                'withParams' => array('1'),
+            ),
+        ));
+
+        $courseMemberService = $this->mockBiz('Course:MemberService', array(
+            array(
+                'functionName' => 'findCourseTeachers',
+                'returnValue' => array(array('userIds' => 1), array('userIds' => 2)),
+                'withParams' => array('1'),
+            ),
+        ));
+
         $result = $subscriber->onCourseQuestionCreate($this->getCourseThread());
         $weChatService->shouldHaveReceived('searchWeChatUsers');
+        $courseService->shouldHaveReceived('getCourse');
+        $courseMemberService->shouldHaveReceived('findCourseTeachers');
         $this->assertNull($result);
     }
 
@@ -273,8 +291,23 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
             ),
         ));
 
+        $classroomService = $this->mockBiz('Classroom:ClassroomService', array(
+            array(
+                'functionName' => 'getClassroom',
+                'returnValue' => array('id' => 1, 'title' => 'test'),
+                'withParams' => array('1'),
+            ),
+            array(
+                'functionName' => 'findTeachers',
+                'returnValue' => array(array('userIds' => 1), array('userIds' => 2)),
+                'withParams' => array('1'),
+            ),
+        ));
+
         $result = $subscriber->onClassroomQuestionCreate($this->getThread());
         $weChatService->shouldHaveReceived('searchWeChatUsers');
+        $classroomService->shouldHaveReceived('getClassroom');
+        $classroomService->shouldHaveReceived('findTeachers');
         $this->assertNull($result);
     }
 
@@ -369,6 +402,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
         $weChatService->shouldHaveReceived('getOfficialWeChatUserByUserId');
         $classroomService->shouldHaveReceived('isClassroomTeacher');
         $classroomService->shouldHaveReceived('getClassroom');
+        $threadService->shouldHaveReceived('getThread');
         $this->assertNull($result);
     }
 
@@ -453,6 +487,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
             'createdTime' => time(),
             'userId' => 1,
             'title' => 'title',
+            'courseId' => 1,
         );
         $thread = array_merge($default, $thread);
 
