@@ -26,7 +26,19 @@ class PptController extends BaseActivityController implements ActivityActionInte
             'slides' => empty($slides) ? array() : $slides,
             'error' => $error,
             'courseId' => $activity['fromCourseId'],
+            'mediaId' => $activity['mediaId'],
         ));
+    }
+
+    public function getPptTokenAction(Request $request, $mediaId)
+    {
+        $config = $this->getActivityService()->getActivityConfig('ppt');
+
+        $ppt = $config->get($mediaId);
+        $ssl = $request->isSecure() ? true : false;
+        list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);
+
+        return $this->createJsonResponse(array('result' => $result, 'error' => $error));
     }
 
     public function previewAction(Request $request, $task)

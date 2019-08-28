@@ -3240,3 +3240,7 @@ questions_import_save:
   path: /questions/{token}/import_save
   methods: [POST]
   defaults: { _controller: AppBundle:Question/Manage:saveImportQuestions }
+
+activity_ppt_token:
+  path: /activity/ppt/token/{mediaId}
+  defaults: { _controller: AppBundle:Activity/Ppt:getPptToken }

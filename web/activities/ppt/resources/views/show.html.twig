@@ -8,10 +8,11 @@
   {% do script(['pptactivity/js/show/index.js']) %}
 {% endif %}
 
-{% block body %}
+{% block body %}git stash 
   <div class="iframe-parent-content" id="activity-ppt-content"
     data-finish-type="{{ activity.ext.finishType }}"
     data-finish-detail="{{ activity.ext.finishDetail }}"
+    data-token-url="{{ path('activity_ppt_token', {mediaId: activity.mediaId}) }}"
     data-slides="{{ pptPlayer.result.images|default()|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
   {% if not pptPlayer.error is empty %}
     <div class="alert alert-danger mv20 mh20">
