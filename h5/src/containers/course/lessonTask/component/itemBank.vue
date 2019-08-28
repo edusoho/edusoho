@@ -119,6 +119,7 @@ export default {
             this.$emit('update:answer', val)
         },
         current(val,oldval){
+          //答题卡定位
           let index=Number(val);
           this.$refs.swipe.swipeTo(val-1);
         }
@@ -216,15 +217,7 @@ export default {
         //判断题选择
         determineChoose(name, id){
             this.$set(this.testAnswer[id], 0, Number(name));
-        },
-        //答题卡定位
-        slideToNumber(num){
-            let index=Number(num);
-            if(num===this.currentIndex){
-                return
-            }
-            this.$refs.swipe.swipeTo(index-1);
-        },
+        }
     }
 }
 </script>
