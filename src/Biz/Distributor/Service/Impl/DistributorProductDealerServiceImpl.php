@@ -27,7 +27,10 @@ class DistributorProductDealerServiceImpl extends BaseService implements Product
         $this->getLogger()->info('distributor start order sign valid DistributorProductDealerServiceImpl::dealBeforeCreateProduct', array(
             'distributorToken' => $distributorToken,
         ));
-        $tokenInfo = $this->getDistributorUserService()->decodeToken($distributorToken);
+        $tokenInfo['valid'] = true;
+        if (!empty($this->cookies[$cookieName])) {
+            $tokenInfo = $this->getDistributorUserService()->decodeToken($distributorToken);
+        }
         if ($tokenInfo['valid']) {
             $this->getLogger()->info('distributor order sign valid success DistributorProductDealerServiceImpl::dealBeforeCreateProduct', array(
                 'distributorToken' => $distributorToken,
