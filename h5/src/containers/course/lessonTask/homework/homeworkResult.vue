@@ -111,6 +111,7 @@ export default {
                 this.setNavbarTitle(res.paperName);
                 this.interruption();
                 this.formatData(res);
+                this.calSubjectHeight();
             });
         },
          //异常中断
@@ -180,6 +181,16 @@ export default {
             }).catch((err)=>{
                 Toast.fail(err.message);
             });
+        },
+        calSubjectHeight() {
+            this.$nextTick(()=>{
+                const dataHeight = this.$refs.data.offsetHeight + this.$refs.tag.offsetHeight + 46;
+                const allHeight = document.documentElement.clientHeight;
+                const footerHeight = (this.isReadOver) ?
+                                    this.$refs.footer.offsetHeight: 0;
+                const finalHeight = allHeight - dataHeight - footerHeight;
+                this.calHeight = `${finalHeight}px`;
+            })
         },
     }
 }
