@@ -10114,6 +10114,18 @@ wechat.notification.template.charge_success: '尊敬的客户，您已充值成�
 wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
 wechat.notification.template.ask_question: '尊敬的老师，您的在教课程中有学员发布了提问<br>[提问者]<br>[问题标题]<br>[问题提交时间]'
 wechat.notification.template.homework_or_testpaper_need_review: '尊敬的老师，您今日仍有作业/试卷未批改<br>时间：[当日日期，精确到天]<br>作业数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
+wechat.notification.template.answer_question: '亲爱的学员，您在[课程名或班级名]中的发表的问题有了新的回答。<br>[提问的时间]<br>[回复内容]'
+
+#微信通知规则
+wechat.notification.template.ask_question.rule: '课程或班级中有人发布提问，会发送通知给教师。'
+wechat.notification.template.answer_question.rule: '当教师回答了学员的问题，会发送通知给提问者。'
+wechat.notification.template.homework_or_testpaper_need_review.rule: '针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。'
+wechat.notification.template.live_start.rule: '直播课开始前，会在指定时间发送通知给课程学员。'
+wechat.notification.template.homework_result.rule: '当作业中含有主观题时，老师批阅完成后会将结果发送给学员。'
+wechat.notification.template.exam_result.rule: '当试卷中含有主观题时，老师批阅完成后会将结果发送给学员。'
+wechat.notification.template.lesson_add.rule: '当课程有新的任务发布时，会发一条通知给课程学员。'
+wechat.notification.template.charge_success.rule: '当学员成功充值虚拟币或兑换学习卡时，会发送一条通知。'
+wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员是，会发送一条通知。'
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: 听完音频
