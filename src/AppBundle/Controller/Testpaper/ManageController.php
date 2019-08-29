@@ -630,21 +630,14 @@ class ManageController extends BaseController
         $isSub = $request->request->get('isSub', '0');
         $isTestpaper = $request->request->get('isTestpaper', 1);
         $method = $request->request->get('method', 'edit');
+        $courseSetId = $request->request->get('courseSetId', 0);
 
-        $question = ArrayToolkit::parts($question, array(
-            'stem',
-            'type',
-            'options',
-            'answer',
-            'answers',
-            'score',
-            'missScore',
-            'analysis',
-            'attachment',
-            'subQuestions',
-            'difficulty',
-            'errors',
-        ));
+        $question = $this->filterQuestion($question);
+
+        $user = $this->getCurrentUser();
+        $courses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
+        $courseTasks = empty($question['courseId']) ? array() : $this->getTaskService()->findTasksByCourseId($question['courseId']);
+        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
 
         return $this->render("testpaper/subject/type/{$type}.html.twig", array(
             'question' => $question,
@@ -654,6 +647,9 @@ class ManageController extends BaseController
             'isSub' => $isSub,
             'isTestpaper' => $isTestpaper,
             'method' => $method,
+            'courses' => $courses,
+            'courseSetId' => $courseSetId,
+            'courseTasks' => $courseTasks,
         ));
     }
 
@@ -665,6 +661,7 @@ class ManageController extends BaseController
         $isSub = $data['isSub'];
         $isTestpaper = $data['isTestpaper'];
         $method = $request->request->get('method', 'edit');
+        $courseSetId = $request->request->get('courseSetId', 0);
         if (empty($data['question'])) {
             throw new InvalidArgumentException('缺少必要参数');
         }
@@ -676,6 +673,11 @@ class ManageController extends BaseController
             $question = $this->convertEssay($toType, $data['question']);
         }
 
+        $user = $this->getCurrentUser();
+        $courses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
+        $courseTasks = empty($question['courseId']) ? array() : $this->getTaskService()->findTasksByCourseId($question['courseId']);
+        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
+
         return $this->render("testpaper/subject/type/{$toType}.html.twig", array(
             'question' => $question,
             'seq' => $data['seq'],
@@ -684,6 +686,9 @@ class ManageController extends BaseController
             'isSub' => $isSub,
             'isTestpaper' => $isTestpaper,
             'method' => $method,
+            'courses' => $courses,
+            'courseSetId' => $courseSetId,
+            'courseTasks' => $courseTasks,
         ));
     }
 
@@ -694,20 +699,7 @@ class ManageController extends BaseController
             $question['options'] = array();
             $question['answers'] = array();
         }
-        $question = ArrayToolkit::parts($question, array(
-            'stem',
-            'type',
-            'options',
-            'answer',
-            'answers',
-            'score',
-            'missScore',
-            'analysis',
-            'attachment',
-            'subQuestions',
-            'difficulty',
-            'errors',
-        ));
+        $question = $this->filterQuestion($question);
 
         return $question;
     }
@@ -720,20 +712,7 @@ class ManageController extends BaseController
         if ('single_choice' == $toType) {
             $question['answers'] = array(reset($question['answers']));
         }
-        $question = ArrayToolkit::parts($question, array(
-            'stem',
-            'type',
-            'options',
-            'answer',
-            'answers',
-            'score',
-            'missScore',
-            'analysis',
-            'attachment',
-            'subQuestions',
-            'difficulty',
-            'errors',
-        ));
+        $question = $this->filterQuestion($question);
 
         return $question;
     }
@@ -745,20 +724,7 @@ class ManageController extends BaseController
         $token = $request->request->get('token', '');
         $isSub = $request->request->get('isSub', '0');
 
-        $question = ArrayToolkit::parts($question, array(
-            'stem',
-            'stemShow',
-            'type',
-            'options',
-            'answer',
-            'answers',
-            'score',
-            'missScore',
-            'analysis',
-            'attachments',
-            'subQuestions',
-            'difficulty',
-        ));
+        $question = $this->filterQuestion($question);
 
         if ('fill' == $type) {
             $question['stemShow'] = preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $question['stem']);
@@ -801,6 +767,26 @@ class ManageController extends BaseController
         return $this->render('testpaper/subject/option.html.twig', array(
             'type' => $type,
             'order' => $field['order'],
+        ));
+    }
+
+    protected function filterQuestion($question)
+    {
+        return ArrayToolkit::parts($question, array(
+            'stem',
+            'stemShow',
+            'type',
+            'options',
+            'answer',
+            'answers',
+            'score',
+            'missScore',
+            'analysis',
+            'attachments',
+            'subQuestions',
+            'difficulty',
+            'courseId',
+            'lessonId',
         ));
     }
 

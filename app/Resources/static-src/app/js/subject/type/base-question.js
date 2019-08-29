@@ -17,12 +17,48 @@ class BaseQuestion {
     this._initEvent();
     this._initValidate();
     this._initAnalysisEditor();
+    this._initSelect();
   }
 
   _initEvent() {
     this.$form.on('click', '.js-finish-edit', event => this.submitForm(event));
     this.$form.on('click', '.js-analysis-edit', event => this.showAnalysisModal(event));
     this.$analysisModal.on('click', '.js-analysis-btn', event => this.saveAnalysis(event));
+  }
+
+  _initSelect() {
+    cd.select({
+      el: '#courseEditBelong',
+      type: 'single',
+      parent: '.js-edit-form'
+    }).on('change', (value, text) => {
+      let url = $('#courseEditBelong').data('url');
+      let select2 = $('.js-lessonSelect');
+      $('.js-lesson-edit-options').html('');
+      if (value == 0) {
+        select2.hide();
+        return;
+      }
+
+      $.post(url,{courseId:value},function(result){
+        if (result != '') {
+          let option = '<li class="checked" data-value="0">'+Translator.trans('site.choose_hint')+'</li>';
+          $.each(result,function(index,task){
+            option += '<li data-value="'+task.id+'">'+task.title+'</li>';
+          });
+          $('.js-lesson-edit-options').append(option);
+          select2.show();
+        } else {
+          select2.hide();
+        }
+      });
+    });
+
+    cd.select({
+      el: '#lessonEditBelong',
+      type: 'single',
+      parent: '.js-edit-form'
+    });
   }
 
   submitForm(event) {

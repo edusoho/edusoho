@@ -1491,7 +1491,7 @@ course.testpaper_manage.import.re_edit.total_score: Total score %totalScore%
 course.testpaper_manage.import.re_edit.edit_title_hint: Edit the testpaper title here and enter up to 50 characters.
 course.testpaper_manage.import.re_edit.finish_import: Finish import
 course.testpaper_manage.import.re_edit.delete_attachment: Delete
-course.testpaper_manage.import.re_edit.batch_set_score: Batch set score
+course.testpaper_manage.import.re_edit.batch_set_score: Set Score
 course.testpaper_manage.import.re_edit.score_hint: Positive number less than 1000
 course.testpaper_manage.import.re_edit.miss_score: Miss Score
 course.testpaper_manage.import.re_edit.selected: 'Selected: '
@@ -1504,7 +1504,8 @@ course.testpaper_manage.import.re_edit.new_question_title: Add new question
 course.testpaper_manage.import.re_edit.select_type: Select question type
 course.testpaper_manage.import.re_edit.uncertain_choice: Uncertain Choice
 course.testpaper_manage.import.re_edit.question_statistics: Question Statistics
-course.testpaper_manage.import.re_edit.batch_set_difficulty: Batch Set difficulty
+course.testpaper_manage.import.re_edit.batch_set_difficulty: Set difficulty
+course.testpaper_manage.import.re_edit.batch_set_belong: Set Belong
 course.testpaper_manage.import.re_edit.question_list: Question list
 course.testpaper_manage.import.re_edit.batch_operate: Batch Operate
 course.testpaper_manage.import.re_edit.select_all: Select All

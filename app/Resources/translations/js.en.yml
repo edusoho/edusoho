@@ -1440,6 +1440,7 @@ subject.period: .
 subject.miss_score_no_more_than_score: Missing score is no more than score
 subject.score_update_success: Score modified successfully
 subject.difficulty_update_success: Difficulty modified successfully
+subject.belong_update_success: Belong modified successfully
 subject.question_count: '%count% questions total'
 subject.total_score: '%totalScore% score total'
 subject.is_editing_warning: 'Finish %seq% question before other operation'
