@@ -8812,6 +8812,8 @@ wechat.notification.fans_list.tips: The fan list refreshes every 30 minutes
 wechat.notification.fans_list.user_num: User Num:
 wechat.notification.fans_list.fans_list_empty: No fan
 wechat.notification.fans_list.placeholder: Please enter keywords
+wechat.notification.send_days: Send Days
+wechat.notification.course_remind_conditions: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
 
 # 微信通知模板
 wechat.notification.template.live_start: 'Hello, classmate.<br>It is hereby notified that the [course name] you are enrolled in will start in the [live class start time].<br>Don't be late.'
@@ -8821,7 +8823,7 @@ wechat.notification.template.lesson_add: 'Classmate, hello, the course has a new
 wechat.notification.template.charge_success: 'Dear customer, you have recharged successfully<br>Recharge type: cash recharge or study card<br>Recharge order number: [order number]<br>Recharge amount: [actual payment price]<br>Recharge time: [payment time]<br>Go and see the course~'
 wechat.notification.template.buy_success: 'Dear customer, you have paid successfully<br>Order details: [product name]<br>Order price: [Order price]<br>Order time: [payment time]<br>Member due date: none<br>Please go to view.'
 wechat.notification.template.homework_or_testpaper_need_review: 'Dear teacher, you still have homework/exam papers unmarked today<br>time: [date]<br>homework number: [homework and exam papers number]<br>please correct in time.'
-
+wechat.notification.template.remind_course: 'Dear students, please continue to study today. [name of last teaching plan][date, accurate to day] learning progress: [the learning progress of this teaching plan] if you have completed the learning plan today, please ignore this notice.'
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: audio end

@@ -10104,6 +10104,8 @@ wechat.notification.fans_list.tips: 粉丝列表每30分钟刷新一次数据
 wechat.notification.fans_list.user_num: 用户数量：
 wechat.notification.fans_list.fans_list_empty: 暂无粉丝
 wechat.notification.fans_list.placeholder: 请输入关键词
+wechat.notification.send_days: 发送日
+wechat.notification.course_remind_conditions: 针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。
 
 # 微信通知模板
 wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[课程名]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
@@ -10113,6 +10115,7 @@ wechat.notification.template.lesson_add: '同学，你好，课程有新任务�
 wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值或学习卡<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
 wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
 wechat.notification.template.homework_or_testpaper_need_review: '尊敬的老师，您今日仍有作业/试卷未批改<br>时间：[当日日期，精确到天]<br>作业数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
+wechat.notification.template.remind_course: '亲爱的学员，今日也要坚持学习哦<br>[上一次学习的教学计划名称]<br>[当天日期，精确到天]学习进度：[该教学计划的学习进度]<br>如果今日已完成学习计划，请忽略本通知。'
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: 听完音频
