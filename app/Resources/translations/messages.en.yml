@@ -8821,9 +8821,23 @@ wechat.notification.template.homework_result: 'Classmate, hello, your homework h
 wechat.notification.template.exam_result: 'Hello, your class has been reviewed.<br>Examination subject: [task name]<br>Test score: [test score]<br>Keep up the good work'
 wechat.notification.template.lesson_add: 'Classmate, hello, the course has a new task to post<br>Course Name: [Course Name]<br>Course category: [Course category]<br>Course Teacher: [Teacher User Name]<br>Course time: [Task release time]<br>Please go to study in time.'
 wechat.notification.template.charge_success: 'Dear customer, you have recharged successfully<br>Recharge type: cash recharge or study card<br>Recharge order number: [order number]<br>Recharge amount: [actual payment price]<br>Recharge time: [payment time]<br>Go and see the course~'
-wechat.notification.template.buy_success: 'Dear customer, you have paid successfully<br>Order details: [product name]<br>Order price: [Order price]<br>Order time: [payment time]<br>Member due date: none<br>Please go to view.'
+wechat.notification.template.buy_success: 'Dear customer, you have paid successfully<br>Order details: [product name]<br>Order price: [Order price]<br>Order time: [payment time]<br>Member due date: none<br>Please go to view'
+wechat.notification.template.ask_question: 'Dear teacher, some students in your course have posted questions<br>[questioner]<br>[question title]<br>[question submission time]'
 wechat.notification.template.homework_or_testpaper_need_review: 'Dear teacher, you still have homework/exam papers unmarked today<br>time: [date]<br>homework number: [homework and exam papers number]<br>please correct in time.'
 wechat.notification.template.remind_course: 'Dear students, please continue to study today. [name of last teaching plan][date, accurate to day] learning progress: [the learning progress of this teaching plan] if you have completed the learning plan today, please ignore this notice.'
+wechat.notification.template.answer_question: 'Dear student, there is a new answer to the question you posted in the course name or class name. [time for questions]'
+
+#微信通知规则
+wechat.notification.template.ask_question.rule: 'When someone in the class or class issues a question, a notice is sent to the teacher.'
+wechat.notification.template.answer_question.rule: When the teacher answers the student's question, a notification is sent to the questioner.
+wechat.notification.template.homework_or_testpaper_need_review.rule: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
+wechat.notification.template.live_start.rule: 'A notification will be sent to participants at the designated time before the live class begins.'
+wechat.notification.template.homework_result.rule: 'When the homework contains subjective questions, the teacher will send the results to the students after reviewing.'
+wechat.notification.template.exam_result.rule: 'When there are subjective questions in the test paper, the teacher will send the results to the students after reviewing.'
+wechat.notification.template.lesson_add.rule: 'A notification is sent to participants when new assignments are posted.'
+wechat.notification.template.charge_success.rule: 'A notification will be sent when students successfully recharge their virtual currency or exchange their study card.'
+wechat.notification.template.buy_success.rule: 'A notification is sent when a student has successfully purchased a course, class, or membership.'
+>>>>>>> 3846bc475bce8b7be655b477b65ab2a0a45bc276
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: audio end

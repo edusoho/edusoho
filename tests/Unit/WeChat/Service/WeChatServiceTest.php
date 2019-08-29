@@ -19,6 +19,13 @@ class WeChatServiceTest extends BaseTestCase
         $this->getWeChatService()->createWeChatUser(array());
     }
 
+    public function testFindAllBindUser()
+    {
+        $result = $this->getWeChatService()->findAllBindUserIds();
+
+        $this->assertEquals(array(), $result);
+    }
+
     public function testGetWeChatUserByTypeAndUnionId()
     {
         $this->mockCreateWeChatUser(array('unionId' => 'qqq'));

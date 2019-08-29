@@ -50,6 +50,8 @@ interface CourseMemberDao extends GeneralDaoInterface
      */
     public function findByCourseIds($courseIds);
 
+    public function findLastLearnTimeRecordStudents($userIds);
+
     /**
      * @before findMembersByUserIdAndRole
      *

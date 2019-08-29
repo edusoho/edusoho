@@ -2,7 +2,11 @@
 
 namespace Biz\WeChatNotification\Event;
 
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Course\Service\ThreadService;
+use Biz\Util\TextHelper;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Event\Event;
@@ -29,6 +33,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'payment_trade.paid' => 'onPaid',
             'course.task.create.sync' => 'onTaskCreateSync',
             'course.task.publish.sync' => 'onTaskPublishSync',
+            'course.thread.create' => 'onCourseQuestionCreate',
+            'thread.create' => 'onClassroomQuestionCreate',
+            'course.thread.post.create' => 'onCourseQuestionAnswerCreate',
+            'thread.post.create' => 'onClassroomQuestionAnswerCreate',
         );
     }
 
@@ -213,6 +221,122 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 ));
                 $this->sendCloudWeChatNotification('paySuccess', 'wechat_notify_pay_success', $list);
             }
+        }
+    }
+
+    public function onCourseQuestionCreate(Event $event)
+    {
+        $thread = $event->getSubject();
+        if ('question' != $thread['type']) {
+            return;
+        }
+        $course = $this->getCourseService()->getCourse($thread['courseId']);
+        $teachers = $this->getCourseMemberService()->findCourseTeachers($course['id']);
+        $userIds = ArrayToolkit::column($teachers, 'userId');
+
+        $this->askQuestionSendNotification($thread, $userIds);
+    }
+
+    public function onClassroomQuestionCreate(Event $event)
+    {
+        $thread = $event->getSubject();
+
+        if ('classroom' != $thread['targetType'] || 'question' != $thread['type']) {
+            return;
+        }
+        $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
+        $classroomTeachers = $this->getClassroomService()->findTeachers($classroom['id']);
+        $userIds = ArrayToolkit::column($classroomTeachers, 'userId');
+
+        $this->askQuestionSendNotification($thread, $userIds);
+    }
+
+    public function onCourseQuestionAnswerCreate(Event $event)
+    {
+        $post = $event->getSubject();
+
+        if (empty($post['courseId'])) {
+            return;
+        }
+
+        $course = $this->getCourseService()->getCourse($post['courseId']);
+        $thread = $this->getCourseThreadService()->getThread($course['id'], $post['threadId']);
+        if ($this->getCourseMemberService()->isCourseTeacher($post['courseId'], $post['userId'])) {
+            $this->answerQuestionNotification($thread['userId'], $post['content'], $course['title'], $thread['createdTime']);
+        }
+    }
+
+    public function onClassroomQuestionAnswerCreate(Event $event)
+    {
+        $post = $event->getSubject();
+
+        if (empty($post['targetId']) && 'classroom' != $post['targetType']) {
+            return;
+        }
+
+        $classroom = $this->getClassroomService()->getClassroom($post['targetId']);
+        $thread = $this->getThreadService()->getThread($post['threadId']);
+
+        if ($this->getClassroomService()->isClassroomTeacher($post['targetId'], $post['userId'])) {
+            $this->answerQuestionNotification($thread['userId'], $post['content'], $classroom['title'], $thread['createdTime']);
+        }
+    }
+
+    protected function answerQuestionNotification($userId, $content, $title, $createdTime)
+    {
+        $templateId = $this->getWeChatService()->getTemplateId('answerQuestion');
+        if (!empty($templateId)) {
+            $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($userId);
+            $content = TextHelper::truncate($content, 30);
+            $data = array(
+                'first' => array('value' => '亲爱的学员，您在《'.$title.'》中的发表的问题有了新的回答'.PHP_EOL),
+                'keyword1' => array('value' => date('Y-m-d H:i:s', $createdTime)),
+                'keyword2' => array('value' => $content),
+                'remark' => array('value' => ''),
+            );
+            $list = array(array(
+                'channel' => 'wechat',
+                'to_id' => $weChatUser['openId'],
+                'template_id' => $templateId,
+                'template_args' => $data,
+            ));
+
+            $this->sendCloudWeChatNotification('answerQuestion', 'wechat_notify_answer_question', $list);
+        }
+    }
+
+    protected function askQuestionSendNotification($thread, $userIds)
+    {
+        $templateId = $this->getWeChatService()->getTemplateId('askQuestion');
+        if (!empty($templateId)) {
+            $user = $this->getUserService()->getUser($thread['userId']);
+            $weChatUsers = $this->getWeChatService()->searchWeChatUsers(
+                array('userIds' => $userIds),
+                array('lastRefreshTime' => 'ASC'),
+                0,
+                PHP_INT_MAX,
+                array('id', 'openId', 'unionId', 'userId')
+            );
+            $data = array(
+                'first' => array('value' => '尊敬的老师，您的在教课程中有学员发布了提问'.PHP_EOL),
+                'keyword1' => array('value' => $user['nickname']),
+                'keyword2' => array('value' => mb_substr($thread['title'], 0, 30, 'utf-8')),
+                'keyword3' => array('value' => date('Y-m-d H:i:s', $thread['createdTime'])),
+                'remark' => array('value' => ''),
+            );
+            $templateData = array(
+                'template_id' => $templateId,
+                'template_args' => $data,
+            );
+            $list = array();
+            foreach ($weChatUsers as $weChatUser) {
+                $list[] = array_merge(array(
+                    'channel' => 'wechat',
+                    'to_id' => $weChatUser['openId'],
+                ), $templateData);
+            }
+
+            $this->sendCloudWeChatNotification('askQuestion', 'wechat_notify_ask_question', $list);
         }
     }
 
@@ -413,6 +537,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $this->getBiz()->service('Course:CourseSetService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
@@ -451,5 +578,29 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     protected function getTaskDao()
     {
         return $this->getBiz()->dao('Task:TaskDao');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ThreadService
+     */
+    protected function getCourseThreadService()
+    {
+        return $this->getBiz()->service('Course:ThreadService');
+    }
+
+    /**
+     * @return \Biz\Thread\Service\ThreadService
+     */
+    protected function getThreadService()
+    {
+        return $this->getBiz()->service('Thread:ThreadService');
     }
 }

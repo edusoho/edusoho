@@ -477,3 +477,12 @@ weChatFansType:
 weChatFansKeywordType:
     nickname: Nickname
     wechatNickname: WechatNickname
+
+weekDays:
+    Mon: Monday
+    Tue: Tuesday
+    Wed: Wednesday
+    Thu: Thursday
+    Fri: Friday
+    Sat: Saturday
+    Sun: Sunday
