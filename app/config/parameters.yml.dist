@@ -31,3 +31,6 @@ parameters:
     #sentry_dsn: "http://9697ef7b0b1b4bc793886d50eb7e96c9:fe6e85725c3d4b72ba432d2d1d7601c1@sentry.codeages.net/2"
 
     #sentry_app_path: "/var/www/edusoho”
+
+    #二维码协议白名单，APP内扫码用
+    #qrcode_protocol_whitelist: ['mqqwpa']
