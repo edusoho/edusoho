@@ -8837,7 +8837,6 @@ wechat.notification.template.exam_result.rule: 'When there are subjective questi
 wechat.notification.template.lesson_add.rule: 'A notification is sent to participants when new assignments are posted.'
 wechat.notification.template.charge_success.rule: 'A notification will be sent when students successfully recharge their virtual currency or exchange their study card.'
 wechat.notification.template.buy_success.rule: 'A notification is sent when a student has successfully purchased a course, class, or membership.'
->>>>>>> 3846bc475bce8b7be655b477b65ab2a0a45bc276
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: audio end
@@ -8859,3 +8858,18 @@ classroom.joining_date.expired_tips: Classroom joining date expired
 
 # 富文本
 editor.iframe_tips: To use IFrame normally, please set it in [Admin] - [System] -[Security] -[White List Domain]
+
+#上课提醒
+course.remind.each_week: Weekly
+course.remind.mon: Mon
+course.remind.tue: Tue
+course.remind.wed: Wed
+course.remind.thu: Thu
+course.remind.fri: Fri
+course.remind.sat: Sat
+course.remind.sun: Sun
+course.setting.course_remind: Course Remind
+course.setting.course_remind_tip: 'Currently, %D% % %H% sends learning reminders to all current students.'
+course.setting.course_remind_change: Change Setting
+course.setting.course_remind_not_open: Reminder not to open course
+course.setting.course_remind_go_to_open: To open

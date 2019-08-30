@@ -10151,3 +10151,18 @@ classroom.joining_date.expired_tips: 班级已过有效期！
 
 # 富文本
 editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+
+#上课提醒
+course.remind.each_week: 每周
+course.remind.mon: 周一
+course.remind.tue: 周二
+course.remind.wed: 周三
+course.remind.thu: 周四
+course.remind.fri: 周五
+course.remind.sat: 周六
+course.remind.sun: 周日
+course.setting.course_remind: 上课提醒
+course.setting.course_remind_tip: 当前设置，%D% %H%会向所有在读学员发送学习提醒通知。
+course.setting.course_remind_change: 修改设置
+course.setting.course_remind_not_open: 未开启上课提醒
+course.setting.course_remind_go_to_open: 前往开启

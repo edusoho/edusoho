@@ -19,7 +19,7 @@ class CourseRemindNotificationJobTest extends BaseTestCase
         ));
 
         $job = new CourseRemindNotificationJob(array(), $this->biz);
-        $job->args = array('key' => 1, 'usl' => 'xxxx', 'sendTime' => '00:00', 'sendDays' => array(''));
+        $job->args = array('key' => 1, 'url' => 'xxxx', 'sendTime' => '00:00', 'sendDays' => array(''));
         $result = $job->execute();
 
         $this->assertEmpty($result);

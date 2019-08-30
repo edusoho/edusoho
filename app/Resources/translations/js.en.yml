@@ -1466,3 +1466,4 @@ user.account.order_pay_vip_close_hint: The vip level in this order has been clos
 user.account.order_pay: Continue
 user.account.order_not_pay: Not paying
 
+admin.wechat_notification.send_days: Send Days
