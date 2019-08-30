@@ -33,5 +33,4 @@ parameters:
     #sentry_app_path: "/var/www/edusoho”
 
     #二维码协议白名单，APP内扫码用
-    #qrcode_protocol_whitelist:
-      - mqqwpa
+    #qrcode_protocol_whitelist: ['mqqwpa']
