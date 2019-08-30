@@ -37,6 +37,7 @@ class LiveNotificationJob extends AbstractNotificationJob
         $data = array(
             'userName' => array('value' => '同学'),
             'courseName' => array('value' => $courseSet['title']),
+            'taskName' => array('value' => $task['title']),
             'date' => array('value' => date('Y-m-d H:i', $task['startTime'])),
             'remark' => array('value' => '不要迟到哦'),
         );

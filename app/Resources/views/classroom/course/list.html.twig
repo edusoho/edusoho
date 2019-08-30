@@ -29,9 +29,11 @@
                 {% endif %}
               </a>
             </div>
-            <div class="score">
-              {{ web_macro.star(course.rating) }}
-            </div>
+            {% if setting('course.show_review', '1') == 1 %}
+              <div class="score">
+                {{ web_macro.star(course.rating) }}
+              </div>
+            {% endif %}
             <div class="price hidden-xs">
                 {{ 'classroom.origin_price'|trans }}：
                 {% include 'course/widgets/price.html.twig' with {courseSet: course.courseSet, shows:'originPrice'} %}
