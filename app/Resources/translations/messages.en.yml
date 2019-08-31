@@ -4821,6 +4821,8 @@ admin.wechat_notification.template_show: Show
 admin.wechat_notification.failure_reason: Failure Reason
 admin.wechat_notification.failure_number: Failure Number
 admin.wechat_notification.failure_reason.empty: No Failure Reason
+admin.wechat.notification.open_wechat_notify_tip: WeChat notification refers to sending messages to students through WeChat service number, and students can receive WeChat notification by binding WeChat and paying attention to the service number. WeChat notification has two major advantages
+admin.wechat.notification.go_to_open: Go to open
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
@@ -8811,6 +8813,7 @@ wechat.notification.fans_list.subscribe_time: Subscribe Time
 wechat.notification.fans_list.tips: The fan list refreshes every 30 minutes
 wechat.notification.fans_list.user_num: User Num:
 wechat.notification.fans_list.fans_list_empty: No fan
+wechat.notification.fans_list.no_wechat_bind: WeChat service number is not bound yet
 wechat.notification.fans_list.placeholder: Please enter keywords
 wechat.notification.send_days: Send Days
 wechat.notification.course_remind_conditions: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
