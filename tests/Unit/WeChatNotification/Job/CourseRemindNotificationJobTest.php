@@ -17,6 +17,12 @@ class CourseRemindNotificationJobTest extends BaseTestCase
         $this->mockBiz('Course:MemberService', array(
             array('functionName' => 'findLastLearnTimeRecordStudents', 'returnValue' => array(array('userId' => 1, 'courseId' => 1, 'learnedCompulsoryTaskNum' => 1))),
         ));
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'findCoursesByIds', 'returnValue' => array(array('id' => 1, 'title' => 'test', 'compulsoryTaskNum' => 1))),
+        ));
+        $this->mockBiz('Course:CourseSetService', array(
+            array('functionName' => 'findCourseSetsByIds', 'returnValue' => array(array('id' => 1, 'title' => 'test'))),
+        ));
 
         $job = new CourseRemindNotificationJob(array(), $this->biz);
         $job->args = array('key' => 1, 'url' => 'xxxx', 'sendTime' => '00:00', 'sendDays' => array(''));
