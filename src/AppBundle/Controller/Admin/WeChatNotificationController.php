@@ -143,7 +143,6 @@ class WeChatNotificationController extends BaseController
 
     public function liveTemplateStatusAction(Request $request)
     {
-
     }
 
     protected function filterConditions($conditions)
@@ -193,10 +192,10 @@ class WeChatNotificationController extends BaseController
                 throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
             }
 
-            $wechatSetting[$key]['templateId'] = $data['template_id'];
+            $wechatSetting['templates'][$key]['templateId'] = $data['template_id'];
         }
 
-        $wechatSetting[$key]['status'] = 1;
+        $wechatSetting['templates'][$key]['status'] = 1;
         $this->getSettingService()->set('wechat', $wechatSetting);
 
         return $this->getSettingService()->get('wechat', $wechatSetting);
@@ -207,7 +206,7 @@ class WeChatNotificationController extends BaseController
         $wechatSetting = $this->getSettingService()->get('wechat', array());
 
         if ('homeworkOrTestPaperReview' == $key) {
-            $wechatSetting['homeworkOrTestPaperReview']['sendTime'] = $fields['sendTime'];
+            $wechatSetting['templates']['homeworkOrTestPaperReview']['sendTime'] = $fields['sendTime'];
             $this->getSettingService()->set('wechat', array());
             if (!empty($wechatSetting['homeworkOrTestPaperReview']['templateId']) && !empty($wechatSetting['homeworkOrTestPaperReview']['sendTime'])) {
                 $expression = $this->getSendTimeExpression($fields['sendTime']);
@@ -255,18 +254,18 @@ class WeChatNotificationController extends BaseController
 
         $wechatSetting = $this->getSettingService()->get('wechat');
 
-        if (empty($wechatSetting[$key]['templateId'])) {
+        if (empty($wechatSetting['templates'][$key]['templateId'])) {
             throw new \RuntimeException($this->trans('wechat.notification.template_not_exist'));
         }
 
-        $data = $client->deleteTemplate($wechatSetting[$key]['templateId']);
+        $data = $client->deleteTemplate($wechatSetting['templates'][$key]['templateId']);
 
         if (empty($data)) {
             throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
         }
 
-        $wechatSetting[$key]['templateId'] = '';
-        $wechatSetting[$key]['status'] = 0;
+        $wechatSetting['templates'][$key]['templateId'] = '';
+        $wechatSetting['templates'][$key]['status'] = 0;
 
         return $this->getSettingService()->set('wechat', $wechatSetting);
     }
@@ -290,7 +289,7 @@ class WeChatNotificationController extends BaseController
     private function getTemplateSetting($templates, $wechatSetting)
     {
         foreach ($templates as $key => &$template) {
-            $template['status'] = empty($wechatSetting[$key]['status']) ? 0 : $wechatSetting[$key]['status'];
+            $template['status'] = empty($wechatSetting['templates'][$key]['status']) ? 0 : $wechatSetting['templates'][$key]['status'];
         }
 
         return $templates;

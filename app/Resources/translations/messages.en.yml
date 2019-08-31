@@ -1653,7 +1653,7 @@ course.plan_task.post_time: 'Post at %createdTime%'
 course.plan_task.post_num: '%postNum% answers'
 course.plan_task.course_teacher: Teacher
 course.plan_task.go_back_btn: Back
-course.plan_task.question_author: By 
+course.plan_task.question_author: By
 course.plan_task.question_answer: Answer
 course.plan_task.question_content: Content
 course.plan_task.add_answer_btn: 'Add answer'
@@ -3310,7 +3310,7 @@ my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
 my.teaching.live_schedule_menu: Teaching Schedules
 my.teaching.hints_block: Only live courses are shown currently
-my.teaching.today_courses: 'Number of courses today' 
+my.teaching.today_courses: 'Number of courses today'
 my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
@@ -4814,6 +4814,7 @@ admin.wechat_notification.template_content_sample: Template Content Sample
 admin.wechat_notification.send_object: Send Object
 admin.wechat_notification.operation: Operation
 admin.wechat_notification.template_switch: Switch
+admin.wechat_notification.template_status: Status
 admin.wechat_notification.template_content: Notification Content
 admin.wechat_notification.template_content_detail: Detail
 admin.wechat_notification.template_setting: Setting
@@ -8304,7 +8305,7 @@ user.learn.statistics.manage.describe_tips: >
 
 admin.datalab.setting.modal_title: 'Tips:'
 admin.datalab.setting.modal_enable_body: "When it is on, the data will update after 24 hours. Data doesn't update while it is off."
-admin.datalab.setting.modal_disable_body: 'Data will not update while it is off. Confirm to turn off?' 
+admin.datalab.setting.modal_disable_body: 'Data will not update while it is off. Confirm to turn off?'
 admin.datalab.setting.agreement: 'Agreement'
 admin.datalab.setting.operation_title: 'Open data service:'
 admin.datalab.warning_tip: 'The data service is closed, and the report will not update. Go <a href="%url%">【Setting】</a> to reopen.'

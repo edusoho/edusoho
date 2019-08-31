@@ -33,18 +33,9 @@ class TemplateUtil
                 'object' => '提问者',
                 'status' => 0,
             ),
-            'oneHourBeforeLiveOpen' => array(
+            'liveOpen' => array(
                 'id' => 'TM00080',
-                'name' => '直播开课通知(一小时前)',
-                'content' => 'wechat.notification.template.live_start',
-                'rule' => 'wechat.notification.template.live_start.rule',
-                'detail' => '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}',
-                'object' => '课程学员',
-                'status' => 0,
-            ),
-            'oneDayBeforeLiveOpen' => array(
-                'id' => 'TM00080',
-                'name' => '直播开课通知(一天前)',
+                'name' => '直播开课通知',
                 'content' => 'wechat.notification.template.live_start',
                 'rule' => 'wechat.notification.template.live_start.rule',
                 'detail' => '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}',
@@ -69,18 +60,9 @@ class TemplateUtil
                 'object' => '试卷提交学员',
                 'status' => 0,
             ),
-            'normalTaskUpdate' => array(
+            'taskUpdate' => array(
                 'id' => 'TM408917738',
-                'name' => '课程更新提醒（普通任务）',
-                'content' => 'wechat.notification.template.lesson_add',
-                'rule' => 'wechat.notification.template.lesson_add.rule',
-                'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}',
-                'object' => '课程学员',
-                'status' => 0,
-            ),
-            'liveTaskUpdate' => array(
-                'id' => 'TM408917738',
-                'name' => '课程更新提醒（直播任务）',
+                'name' => '课程更新提醒',
                 'content' => 'wechat.notification.template.lesson_add',
                 'rule' => 'wechat.notification.template.lesson_add.rule',
                 'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}',

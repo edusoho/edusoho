@@ -1844,7 +1844,7 @@ course.plan_task.post_num: %postNum%回答
 course.plan_task.course_teacher: 老师
 course.plan_task.go_back_btn: 返回
 course.plan_task.question_author: >
-  By 
+  By
 course.plan_task.question_answer: 回答
 course.plan_task.question_content: 内容
 course.plan_task.add_answer_btn: 添加答案
@@ -4060,7 +4060,7 @@ my.teaching.course_set.select_type.live_open_course.tips: 免费、无门槛参�
 my.teaching.course_set.select_type.course_title: 课程标题
 my.teaching.course_set.select_type.how_do_create: 如何创建课程？
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购买云直播服务
-my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用  
+my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
 
 # 录播公开课
@@ -5845,6 +5845,7 @@ admin.wechat_notification.template_content_sample: 模板内容示例
 admin.wechat_notification.send_object: 发送对象
 admin.wechat_notification.operation: 操作
 admin.wechat_notification.template_switch: 开关
+admin.wechat_notification.template_status: 状态
 admin.wechat_notification.template_content: 通知内容
 admin.wechat_notification.template_content_detail: 详情
 admin.wechat_notification.template_setting: 设置
@@ -6081,7 +6082,7 @@ admin.operation_invite.coupon.order_title_th: 订单信息
 admin.operation_invite.register_coupon: 注册奖励
 admin.operation_invite.invite_coupon: 邀请奖励
 admin.operation_invite.invite_code_owner: 邀请人
-admin.operation_invite.register_user: 注册用户 
+admin.operation_invite.register_user: 注册用户
 
 #账户明细
 admin.money_records.content_title: 账户明细
@@ -7025,7 +7026,7 @@ admin.user_auth.Protection.middle.30_times: 同一IP24小时內只能注册30次
 admin.user_auth.Protection.high.10_times: 同一IP24小时內只能注册10次。
 admin.user_auth.Protection.high.sign_up_count: 同一IP1小时內只能注册1个帐号。
 admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时须要完成安全验证。
-                                           
+
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
 admin.user_auth.Setup_welcome_message.send.help_block: 欢迎信以站内私信的方式，发送给新用户。
@@ -10109,7 +10110,7 @@ wechat.notification.fans_list.placeholder: 请输入关键词
 wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[课程名]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
 wechat.notification.template.homework_result: '同学，你好，你的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
 wechat.notification.template.exam_result: '同学，你好，你的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
-wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]<br>请及时前往学习'
+wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]或[直播开始时间]<br>请及时前往学习'
 wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值或学习卡<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
 wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
 wechat.notification.template.ask_question: '尊敬的老师，您的在教课程中有学员发布了提问<br>[提问者]<br>[问题标题]<br>[问题提交时间]'

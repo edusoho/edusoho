@@ -47,7 +47,7 @@
             <th width="20%">{{ 'admin.wechat_notification.template_name'|trans }}</th>
             <th width="50%">{{ 'admin.wechat_notification.template_content_sample'|trans }}</th>
             <th width="15%">{{ 'admin.wechat_notification.send_object'|trans }}</th>
-            <th width="10%">{{ 'admin.wechat_notification.template_switch'|trans }}</th>
+            <th width="10%">{{ 'admin.wechat_notification.template_status'|trans }}</th>
             <th width="5%">{{ 'admin.wechat_notification.operation'|trans }}</th>
           </tr>
         </thead>
@@ -55,17 +55,24 @@
           {% for key,template in templates %}
             <tr>
               <td width="20%">{{ template.name }}</td>
-              <td width="50%"><a class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_show', {key: key}) }}">{{ template.content|trans|sub_text(35)|raw }}</td>
+              <td width="50%"><a class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_show', {key: key}) }}">{{ template.content|trans|sub_text(30)|raw }}</td>
               <td width="15%">{{ template.object }}</td>
               <td width="10%">
-                {% if key == 'homeworkOrTestPaperReview' and template.status == 0 %}
-                  <a data-toggle="modal" href="#modal" data-url="{{ path('admin_wechat_notification_homework_review_template_status')}}"><label class="form-switch setting-switch {% if template.status %}checked{% endif %}"></label></a>
+                {% if template.status == 1 %}
+                  <span class="text-success">已开启</span>
                 {% else %}
-                  <label class="form-switch setting-switch {% if template.status %}checked{% endif %}">
-                    <input type="checkbox" name="switch" value="{{template.status }}" id="weixinweb_enabled" data-toggle="switch" data-url="{{ path('admin_wechat_notification_template_status', {key: key}) }}" data-key="{{ key }}">
-                  </label>
+                  <span>未开启</span>
                 {% endif %}
               </td>
+{#              <td width="10%">#}
+{#                {% if key == 'homeworkOrTestPaperReview' and template.status == 0 %}#}
+{#                  <a data-toggle="modal" href="#modal" data-url="{{ path('admin_wechat_notification_homework_review_template_status')}}"><label class="form-switch setting-switch {% if template.status %}checked{% endif %}"></label></a>#}
+{#                {% else %}#}
+{#                  <label class="form-switch setting-switch {% if template.status %}checked{% endif %}">#}
+{#                    <input type="checkbox" name="switch" value="{{template.status }}" id="weixinweb_enabled" data-toggle="switch" data-url="{{ path('admin_wechat_notification_template_status', {key: key}) }}" data-key="{{ key }}">#}
+{#                  </label>#}
+{#                {% endif %}#}
+{#              </td>#}
               <td width="5%">
                 <a class="alert-link" href="#modal" data-toggle="modal" data-url="{% if key == 'homeworkOrTestPaperReview' %}{{ path('admin_wechat_notification_homework_review_template_status')}}{% else %}{{ path('admin_wechat_notification_show_rule', {key: key}) }}{% endif %}">
                  {% if key == 'homeworkOrTestPaperReview' %}{{ 'admin.wechat_notification.template_setting'|trans }}{% else %}{{ 'admin.wechat_notification.template_show'|trans }}{% endif %}
