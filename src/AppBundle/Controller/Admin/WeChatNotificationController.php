@@ -54,25 +54,29 @@ class WeChatNotificationController extends BaseController
         $conditions = $request->query->all();
         $conditions = $this->filterConditions($conditions);
         $conditions['subscribeTimeNotEqual'] = 0;
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
 
-        $currentNum = $this->getWeChatService()->countWeChatUserJoinUser($conditions);
-        $paginator = new Paginator(
-            $request,
-            $currentNum,
-            20
-        );
+        if (isset($wechatSetting['wechat_notification_enabled']) && 1 == $wechatSetting['wechat_notification_enabled']) {
+            $currentNum = $this->getWeChatService()->countWeChatUserJoinUser($conditions);
+            $paginator = new Paginator(
+                $request,
+                $currentNum,
+                20
+            );
 
-        $fans = $this->getWeChatService()->searchWeChatUsersJoinUser(
-            $conditions,
-            array('subscribeTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+            $fans = $this->getWeChatService()->searchWeChatUsersJoinUser(
+                $conditions,
+                array('subscribeTime' => 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
 
         return $this->render('admin/wechat-notification/fans-list.html.twig', array(
-            'fans' => $fans,
-            'paginator' => $paginator,
-            'currentNum' => $currentNum,
+            'fans' => isset($fans) ? $fans : array(),
+            'paginator' => isset($paginator) ? $paginator : array(),
+            'currentNum' => isset($currentNum) ? $currentNum : 0,
+            'wechatSetting' => $wechatSetting,
         ));
     }
 
