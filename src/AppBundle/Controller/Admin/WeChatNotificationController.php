@@ -104,9 +104,12 @@ class WeChatNotificationController extends BaseController
     {
         $key = $request->query->get('key');
         $templates = TemplateUtil::templates();
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
 
         return $this->render('admin/wechat-notification/rule-modal.html.twig', array(
             'template' => $templates[$key],
+            'wechatSetting' => $wechatSetting,
+            'key' => $key,
         ));
     }
 
@@ -255,6 +258,26 @@ class WeChatNotificationController extends BaseController
                         'url' => $this->generateUrl('my_courses_learning', array(), true),
                         'sendTime' => $wechatSetting['courseRemind']['sendTime'],
                         'sendDays' => $wechatSetting['courseRemind']['sendDays'],
+                    ),
+                );
+                $this->getSchedulerService()->register($job);
+            }
+        }
+
+        if ('vipExpired' == $key) {
+            if (!empty($wechatSetting['vipExpired']['templateId'])) {
+                $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_VipExpired');
+                if ($notificationJob) {
+                    $this->getSchedulerService()->deleteJob($notificationJob['id']);
+                }
+                $job = array(
+                    'name' => 'WeChatNotificationJob_VipExpired',
+                    'expression' => '* 20 * * *',
+                    'class' => 'VipPlugin\Biz\WeChatNotification\Job\VipExpiredNotificationJob',
+                    'misfire_policy' => 'executing',
+                    'args' => array(
+                        'key' => $key,
+                        'url' => $this->generateUrl('vip', array(), true),
                     ),
                 );
                 $this->getSchedulerService()->register($job);
