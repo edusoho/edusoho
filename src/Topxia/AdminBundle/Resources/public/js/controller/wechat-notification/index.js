@@ -21,7 +21,7 @@ define(function(require, exports, module) {
           $parent.addClass('checked');
         }
         $this.val(reverseEnable);
-        if ($this.data('key') === 'homeworkOrTestPaperReview') {
+        if ($this.data('key') === 'homeworkOrTestPaperReview' || 'courseRemind') {
           window.location.reload();
         }
       }).fail(function (xhr, status, error){

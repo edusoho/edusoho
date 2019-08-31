@@ -58,17 +58,17 @@
               <td width="50%"><a class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_show', {key: key}) }}">{{ template.content|trans|sub_text(35)|raw }}</td>
               <td width="15%">{{ template.object }}</td>
               <td width="10%">
-                {% if key == 'homeworkOrTestPaperReview' and template.status == 0 %}
-                  <a data-toggle="modal" href="#modal" data-url="{{ path('admin_wechat_notification_homework_review_template_status')}}"><label class="form-switch setting-switch {% if template.status %}checked{% endif %}"></label></a>
+                {% if (key == 'homeworkOrTestPaperReview' or key == 'courseRemind') and template.status == 0 %}
+                  <a data-toggle="modal" href="#modal" data-url="{{ path('admin_wechat_notification_detail_template_status', {key: key})}}"><label class="form-switch setting-switch {% if template.status %}checked{% endif %}"></label></a>
                 {% else %}
                   <label class="form-switch setting-switch {% if template.status %}checked{% endif %}">
-                    <input type="checkbox" name="switch" value="{{template.status }}" id="weixinweb_enabled" data-toggle="switch" data-url="{{ path('admin_wechat_notification_template_status', {key: key}) }}" data-key="{{ key }}">
+                    <input type="checkbox" name="switch" value="{{ template.status }}" id="weixinweb_enabled" data-toggle="switch" data-url="{{ path('admin_wechat_notification_template_status', {key: key}) }}" data-key="{{ key }}">
                   </label>
                 {% endif %}
               </td>
               <td width="5%">
-                <a class="alert-link" href="#modal" data-toggle="modal" data-url="{% if key == 'homeworkOrTestPaperReview' %}{{ path('admin_wechat_notification_homework_review_template_status')}}{% else %}{{ path('admin_wechat_notification_show_rule', {key: key}) }}{% endif %}">
-                 {% if key == 'homeworkOrTestPaperReview' %}{{ 'admin.wechat_notification.template_setting'|trans }}{% else %}{{ 'admin.wechat_notification.template_show'|trans }}{% endif %}
+                <a class="alert-link" href="#modal" data-toggle="modal" data-url="{% if key == 'homeworkOrTestPaperReview' or key == 'courseRemind' %}{{ path('admin_wechat_notification_detail_template_status', {key: key})}}{% else %}{{ path('admin_wechat_notification_show', {key: key}) }}{% endif %}">
+                 {% if key == 'homeworkOrTestPaperReview' or key == 'courseRemind' %}{{ 'admin.wechat_notification.template_setting'|trans }}{% else %}{{ 'admin.wechat_notification.template_show'|trans }}{% endif %}
                 </a>
               </td>
             </tr>

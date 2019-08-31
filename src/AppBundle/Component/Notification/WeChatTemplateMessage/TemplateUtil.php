@@ -15,6 +15,15 @@ class TemplateUtil
                 'object' => '课程教师',
                 'status' => 0,
             ),
+            'courseRemind' => array(
+                'id' => 'OPENTM400833477',
+                'name' => '上课提醒',
+                'content' => 'wechat.notification.template.remind_course',
+                'rule' => 'wechat.notification.template.remind_course.rule',
+                'detail' => '{{first.DATA}}<br>{{keyword1.DATA}}<br>{{keyword2.DATA}}<br>{{remark.DATA}}',
+                'object' => '有未完成的教学计划的学员',
+                'status' => 0,
+            ),
             'askQuestion' => array(
                 'id' => 'OPENTM414529612',
                 'name' => '答疑提醒',
