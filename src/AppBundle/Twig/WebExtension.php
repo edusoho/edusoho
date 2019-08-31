@@ -175,7 +175,46 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_system_generated_email', array($this, 'isSystemGeneratedEmail')),
             new \Twig_SimpleFunction('get_transcode_error_message_key', array($this, 'getTranscodeErrorMessageKeyByCode')),
             new \Twig_SimpleFunction('uniqid', array($this, 'uniqid')),
+            new \Twig_SimpleFunction('get_days', array($this, 'getDays')),
         );
+    }
+
+    public function getDays($days)
+    {
+        if (7 == count($days)) {
+            return $this->trans('course.remind.each_week');
+        }
+
+        $result = '';
+        foreach ($days as $day) {
+            switch ($day) {
+                case 'Mon':
+                    $result = $result.''.$this->trans('course.remind.mon').'、';
+                    break;
+                case 'Tue':
+                    $result = $result.''.$this->trans('course.remind.tue').'、';
+                    break;
+                case 'Wed':
+                    $result = $result.''.$this->trans('course.remind.wed').'、';
+                    break;
+                case 'Thu':
+                    $result = $result.''.$this->trans('course.remind.thu').'、';
+                    break;
+                case 'Fri':
+                    $result = $result.''.$this->trans('course.remind.fri').'、';
+                    break;
+                case 'Sat':
+                    $result = $result.''.$this->trans('course.remind.sat').'、';
+                    break;
+                case 'Sun':
+                    $result = $result.''.$this->trans('course.remind.sun').'、';
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return rtrim($result, '、');
     }
 
     public function convertAbsoluteUrl($html)

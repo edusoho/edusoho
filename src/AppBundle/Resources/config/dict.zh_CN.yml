@@ -494,3 +494,12 @@ weChatFansType:
 weChatFansKeywordType:
     nickname: 网校用户名
     wechatNickname: 微信昵称
+
+weekDays:
+    Mon: 周一
+    Tue: 周二
+    Wed: 周三
+    Thu: 周四
+    Fri: 周五
+    Sat: 周六
+    Sun: 周日

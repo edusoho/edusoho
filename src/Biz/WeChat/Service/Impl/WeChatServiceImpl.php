@@ -94,6 +94,11 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $this->getUserWeChatDao()->searchWeChatUsersJoinUser($conditions, $orderBys, $start, $limit);
     }
 
+    public function findAllBindUserIds()
+    {
+        return $this->getUserWeChatDao()->findAllBindUserIds();
+    }
+
     public function searchWeChatUsers($conditions, $orderBys, $start, $limit, $columns = array())
     {
         return $this->getUserWeChatDao()->search($conditions, $orderBys, $start, $limit, $columns);

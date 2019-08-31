@@ -80,6 +80,13 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
         return $this->findByFields(array('userId' => $userId, 'type' => $type));
     }
 
+    public function findAllBindUserIds()
+    {
+        $sql = "SELECT userId FROM {$this->table} WHERE userId > 0";
+
+        return $this->db()->fetchAll($sql);
+    }
+
     public function getByUserIdAndType($userId, $type)
     {
         return $this->getByFields(array('userId' => $userId, 'type' => $type));
@@ -114,7 +121,7 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
         }
 
         $marks = str_repeat('?,', count($userIds) - 1).'?';
-        $sql = "SELECT openId FROM {$this->table} WHERE userId IN ({$marks}) AND type = ? AND isSubscribe = 1";
+        $sql = "SELECT openId, userId FROM {$this->table} WHERE userId IN ({$marks}) AND type = ? AND isSubscribe = 1";
 
         return $this->db()->fetchAll($sql, array_merge($userIds, array($type))) ?: array();
     }

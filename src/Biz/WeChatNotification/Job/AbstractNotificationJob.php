@@ -29,6 +29,7 @@ class AbstractNotificationJob extends AbstractJob
         if (empty($userIds)) {
             return;
         }
+
         $users = $this->getUserService()->searchUsers(
             array('userIds' => $userIds, 'locked' => 0),
             array(),
@@ -42,12 +43,16 @@ class AbstractNotificationJob extends AbstractJob
         foreach ($batchs as $batch) {
             $list = array();
             foreach ($batch as $user) {
-                $templateData = isset($templateData[$user['userId']]) ? $templateData[$user['userId']] : array_shift($templateData);
+                $data = isset($templateData[$user['userId']]) ? $templateData[$user['userId']] : array_shift($templateData);
+                if (!is_array($data)) {
+                    $data = array();
+                }
                 $list[] = array_merge(array(
                     'channel' => 'wechat',
                     'to_id' => $user['openId'],
-                ), $templateData);
+                ), $data);
             }
+
             $this->sendWeChatNotification($key, $logName, $list);
         }
     }

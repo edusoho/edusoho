@@ -4822,6 +4822,8 @@ admin.wechat_notification.template_show: Show
 admin.wechat_notification.failure_reason: Failure Reason
 admin.wechat_notification.failure_number: Failure Number
 admin.wechat_notification.failure_reason.empty: No Failure Reason
+admin.wechat.notification.open_wechat_notify_tip: WeChat notification refers to sending messages to students through WeChat service number, and students can receive WeChat notification by binding WeChat and paying attention to the service number. WeChat notification has two major advantages
+admin.wechat.notification.go_to_open: Go to open
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
@@ -8812,7 +8814,10 @@ wechat.notification.fans_list.subscribe_time: Subscribe Time
 wechat.notification.fans_list.tips: The fan list refreshes every 30 minutes
 wechat.notification.fans_list.user_num: User Num:
 wechat.notification.fans_list.fans_list_empty: No fan
+wechat.notification.fans_list.no_wechat_bind: WeChat service number is not bound yet
 wechat.notification.fans_list.placeholder: Please enter keywords
+wechat.notification.send_days: Send Days
+wechat.notification.course_remind_conditions: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
 
 # 微信通知模板
 wechat.notification.template.live_start: 'Hello, classmate.<br>It is hereby notified that the [course name] you are enrolled in will start in the [live class start time].<br>Don't be late.'
@@ -8823,7 +8828,9 @@ wechat.notification.template.charge_success: 'Dear customer, you have recharged 
 wechat.notification.template.buy_success: 'Dear customer, you have paid successfully<br>Order details: [product name]<br>Order price: [Order price]<br>Order time: [payment time]<br>Member due date: none<br>Please go to view'
 wechat.notification.template.ask_question: 'Dear teacher, some students in your course have posted questions<br>[questioner]<br>[question title]<br>[question submission time]'
 wechat.notification.template.homework_or_testpaper_need_review: 'Dear teacher, you still have homework/exam papers unmarked today<br>time: [date]<br>homework number: [homework and exam papers number]<br>please correct in time.'
+wechat.notification.template.remind_course: 'Dear students, please continue to study today. [name of last teaching plan][date, accurate to day] learning progress: [the learning progress of this teaching plan] if you have completed the learning plan today, please ignore this notice.'
 wechat.notification.template.answer_question: 'Dear student, there is a new answer to the question you posted in the course name or class name. [time for questions]'
+wechat.notification.template.vip_expired: 'Dear student, the membership you purchased is about to expire.<br>opening time: [opening time]<br>expiration time: [expiration time]<br>please renew in time, so as not to affect your study'
 
 #微信通知规则
 wechat.notification.template.ask_question.rule: 'When someone in the class or class issues a question, a notice is sent to the teacher.'
@@ -8835,6 +8842,8 @@ wechat.notification.template.exam_result.rule: 'When there are subjective questi
 wechat.notification.template.lesson_add.rule: 'A notification is sent to participants when new assignments are posted.'
 wechat.notification.template.charge_success.rule: 'A notification will be sent when students successfully recharge their virtual currency or exchange their study card.'
 wechat.notification.template.buy_success.rule: 'A notification is sent when a student has successfully purchased a course, class, or membership.'
+wechat.notification.template.vip_expired.rule: 'Send notifications based on the reminder date set by the administrator.，<a href="%url%" target="_blank">Click here to go to Settings</a>'
+wechat.notification.template.vip_is_not_install: 'Notification cannot be sent normally without member plug-in installed.'
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: audio end
@@ -8856,3 +8865,18 @@ classroom.joining_date.expired_tips: Classroom joining date expired
 
 # 富文本
 editor.iframe_tips: To use IFrame normally, please set it in [Admin] - [System] -[Security] -[White List Domain]
+
+#上课提醒
+course.remind.each_week: Weekly
+course.remind.mon: Mon
+course.remind.tue: Tue
+course.remind.wed: Wed
+course.remind.thu: Thu
+course.remind.fri: Fri
+course.remind.sat: Sat
+course.remind.sun: Sun
+course.setting.course_remind: Course Remind
+course.setting.course_remind_tip: 'Currently, %D% % %H% sends learning reminders to all current students.'
+course.setting.course_remind_change: Change Setting
+course.setting.course_remind_not_open: Reminder not to open course
+course.setting.course_remind_go_to_open: To open

@@ -32,15 +32,23 @@
     </tr>
   </thead>
   <tbody>
-    {% for fan in fans %}
-      {% include 'admin/wechat-notification/fans-tr.html.twig' %}
-    {% else %}
+    {% if not wechatSetting.wechat_notification_enabled %}
       <tr>
         <td colspan="20">
-          <div class="empty">{{'wechat.notification.fans_list.fans_list_empty'|trans}}</div>
+          <div class="empty">{{'wechat.notification.fans_list.no_wechat_bind'|trans}}</div>
         </td>
       </tr>
-    {% endfor %}
+    {% else %}
+      {% for fan in fans %}
+        {% include 'admin/wechat-notification/fans-tr.html.twig' %}
+      {% else %}
+        <tr>
+          <td colspan="20">
+            <div class="empty">{{'wechat.notification.fans_list.fans_list_empty'|trans}}</div>
+          </td>
+        </tr>
+      {% endfor %}
+    {% endif %}
   </tbody>
 </table>
   {{ admin_macro.paginator(paginator) }}

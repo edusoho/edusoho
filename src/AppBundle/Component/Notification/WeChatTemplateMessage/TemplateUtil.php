@@ -15,6 +15,15 @@ class TemplateUtil
                 'object' => '课程教师',
                 'status' => 0,
             ),
+            'courseRemind' => array(
+                'id' => 'OPENTM400833477',
+                'name' => '上课提醒',
+                'content' => 'wechat.notification.template.remind_course',
+                'rule' => 'wechat.notification.template.remind_course.rule',
+                'detail' => '{{first.DATA}}<br>{{keyword1.DATA}}<br>{{keyword2.DATA}}<br>{{remark.DATA}}',
+                'object' => '有未完成的教学计划的学员',
+                'status' => 0,
+            ),
             'askQuestion' => array(
                 'id' => 'OPENTM414529612',
                 'name' => '答疑提醒',
@@ -31,6 +40,15 @@ class TemplateUtil
                 'rule' => 'wechat.notification.template.answer_question.rule',
                 'detail' => '{{first.DATA}}<br>提问时间：{{keyword1.DATA}}<br>回复内容：{{keyword2.DATA}}<br>{{remark.DATA}}',
                 'object' => '提问者',
+                'status' => 0,
+            ),
+            'vipExpired' => array(
+                'id' => 'OPENTM401520362',
+                'name' => '会员到期提醒',
+                'content' => 'wechat.notification.template.vip_expired',
+                'rule' => 'wechat.notification.template.vip_expired.rule',
+                'detail' => '{{first.DATA}}<br>开通时间：{{keyword1.DATA}}<br>到期时间：{{keyword2.DATA}}<br>{{remark.DATA}}',
+                'object' => '单个用户',
                 'status' => 0,
             ),
             'liveOpen' => array(

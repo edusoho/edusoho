@@ -54,25 +54,29 @@ class WeChatNotificationController extends BaseController
         $conditions = $request->query->all();
         $conditions = $this->filterConditions($conditions);
         $conditions['subscribeTimeNotEqual'] = 0;
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
 
-        $currentNum = $this->getWeChatService()->countWeChatUserJoinUser($conditions);
-        $paginator = new Paginator(
-            $request,
-            $currentNum,
-            20
-        );
+        if (isset($wechatSetting['wechat_notification_enabled']) && 1 == $wechatSetting['wechat_notification_enabled']) {
+            $currentNum = $this->getWeChatService()->countWeChatUserJoinUser($conditions);
+            $paginator = new Paginator(
+                $request,
+                $currentNum,
+                20
+            );
 
-        $fans = $this->getWeChatService()->searchWeChatUsersJoinUser(
-            $conditions,
-            array('subscribeTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+            $fans = $this->getWeChatService()->searchWeChatUsersJoinUser(
+                $conditions,
+                array('subscribeTime' => 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
 
         return $this->render('admin/wechat-notification/fans-list.html.twig', array(
-            'fans' => $fans,
-            'paginator' => $paginator,
-            'currentNum' => $currentNum,
+            'fans' => isset($fans) ? $fans : array(),
+            'paginator' => isset($paginator) ? $paginator : array(),
+            'currentNum' => isset($currentNum) ? $currentNum : 0,
+            'wechatSetting' => $wechatSetting,
         ));
     }
 
@@ -104,9 +108,12 @@ class WeChatNotificationController extends BaseController
     {
         $key = $request->query->get('key');
         $templates = TemplateUtil::templates();
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
 
         return $this->render('admin/wechat-notification/rule-modal.html.twig', array(
             'template' => $templates[$key],
+            'wechatSetting' => $wechatSetting,
+            'key' => $key,
         ));
     }
 
@@ -131,14 +138,25 @@ class WeChatNotificationController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function homeworkReviewTemplateStatusAction(Request $request)
+    public function detailTemplateStatusAction(Request $request)
     {
+        $key = $request->query->get('key');
         $wechatSetting = $this->getSettingService()->get('wechat', array());
 
-        return $this->render('admin/wechat-notification/homework-review-notification-setting-modal.html.twig', array(
-            'sendTime' => isset($wechatSetting['homeworkOrTestPaperReview']['sendTime']) ? $wechatSetting['homeworkOrTestPaperReview']['sendTime'] : '',
-            'key' => 'homeworkOrTestPaperReview',
-        ));
+        if ('homeworkOrTestPaperReview' == $key) {
+            return $this->render('admin/wechat-notification/homework-review-notification-setting-modal.html.twig', array(
+                'sendTime' => isset($wechatSetting[$key]['sendTime']) ? $wechatSetting[$key]['sendTime'] : '',
+                'key' => 'homeworkOrTestPaperReview',
+            ));
+        }
+
+        if ('courseRemind' == $key) {
+            return $this->render('admin/wechat-notification/course-remind-notification-setting-modal.html.twig', array(
+                'sendTime' => isset($wechatSetting['courseRemind']['sendTime']) ? $wechatSetting['courseRemind']['sendTime'] : '',
+                'sendDays' => isset($wechatSetting['courseRemind']['sendDays']) ? $wechatSetting['courseRemind']['sendDays'] : array(),
+                'key' => 'courseRemind',
+            ));
+        }
     }
 
     public function liveTemplateStatusAction(Request $request)
@@ -207,7 +225,7 @@ class WeChatNotificationController extends BaseController
 
         if ('homeworkOrTestPaperReview' == $key) {
             $wechatSetting['templates']['homeworkOrTestPaperReview']['sendTime'] = $fields['sendTime'];
-            $this->getSettingService()->set('wechat', array());
+            $this->getSettingService()->set('wechat', $wechatSetting);
             if (!empty($wechatSetting['homeworkOrTestPaperReview']['templateId']) && !empty($wechatSetting['homeworkOrTestPaperReview']['sendTime'])) {
                 $expression = $this->getSendTimeExpression($fields['sendTime']);
                 $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_HomeWorkOrTestPaperReview');
@@ -228,7 +246,82 @@ class WeChatNotificationController extends BaseController
             }
         }
 
+        if ('courseRemind' == $key) {
+            $wechatSetting['courseRemind']['sendTime'] = $fields['sendTime'];
+            $wechatSetting['courseRemind']['sendDays'] = $fields['sendDays'];
+            $this->getSettingService()->set('wechat', $wechatSetting);
+            if (!empty($wechatSetting['courseRemind']['templateId']) && !empty($wechatSetting['courseRemind']['sendTime']) && !empty($wechatSetting['courseRemind']['sendDays'])) {
+                $expression = $this->getSendDayAndTimeExpression($wechatSetting['courseRemind']['sendDays'], $wechatSetting['courseRemind']['sendTime']);
+                $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_CourseRemind');
+                if ($notificationJob) {
+                    $this->getSchedulerService()->deleteJob($notificationJob['id']);
+                }
+                $job = array(
+                    'name' => 'WeChatNotificationJob_CourseRemind',
+                    'expression' => $expression,
+                    'class' => 'Biz\WeChatNotification\Job\CourseRemindNotificationJob',
+                    'misfire_policy' => 'executing',
+                    'args' => array(
+                        'key' => $key,
+                        'url' => $this->generateUrl('my_courses_learning', array(), true),
+                        'sendTime' => $wechatSetting['courseRemind']['sendTime'],
+                        'sendDays' => $wechatSetting['courseRemind']['sendDays'],
+                    ),
+                );
+                $this->getSchedulerService()->register($job);
+            }
+        }
+
+        if ('vipExpired' == $key) {
+            if (!empty($wechatSetting['vipExpired']['templateId'])) {
+                $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_VipExpired');
+                if ($notificationJob) {
+                    $this->getSchedulerService()->deleteJob($notificationJob['id']);
+                }
+                $job = array(
+                    'name' => 'WeChatNotificationJob_VipExpired',
+                    'expression' => '* 20 * * *',
+                    'class' => 'VipPlugin\Biz\WeChatNotification\Job\VipExpiredNotificationJob',
+                    'misfire_policy' => 'executing',
+                    'args' => array(
+                        'key' => $key,
+                        'url' => $this->generateUrl('vip', array(), true),
+                    ),
+                );
+                $this->getSchedulerService()->register($job);
+            }
+        }
+
         return $this->getSettingService()->set('wechat', $wechatSetting);
+    }
+
+    protected function getSendDayAndTimeExpression($days, $time)
+    {
+        $filterDays = array();
+
+        $allDays = array(
+            'Sun' => 0,
+            'Mon' => 1,
+            'Tue' => 2,
+            'Wed' => 3,
+            'Thu' => 4,
+            'Fri' => 5,
+            'Sat' => 6,
+        );
+
+        foreach ($allDays as $key => $day) {
+            if (in_array($key, $days)) {
+                $filterDays[] = $day;
+            }
+        }
+
+        $runDays = implode(',', $filterDays);
+        $runDays = empty($runDays) ? '*' : $runDays;
+        $time = explode(':', $time);
+        $hour = 2 === count($time) ? $time[0] : 0;
+        $minute = 2 === count($time) ? $time[1] : 0;
+
+        return $minute.' '.$hour.' * * '.$runDays;
     }
 
     protected function getSendTimeExpression($sendTime)

@@ -42,5 +42,7 @@ interface WeChatService
 
     public function searchWeChatUsersJoinUser($conditions, $orderBys, $start, $limit);
 
+    public function findAllBindUserIds();
+
     public function searchWeChatUsers($conditions, $orderBys, $start, $limit, $columns);
 }
