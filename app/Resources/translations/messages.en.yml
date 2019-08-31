@@ -8823,6 +8823,7 @@ wechat.notification.template.buy_success: 'Dear customer, you have paid successf
 wechat.notification.template.ask_question: 'Dear teacher, some students in your course have posted questions<br>[questioner]<br>[question title]<br>[question submission time]'
 wechat.notification.template.homework_or_testpaper_need_review: 'Dear teacher, you still have homework/exam papers unmarked today<br>time: [date]<br>homework number: [homework and exam papers number]<br>please correct in time.'
 wechat.notification.template.answer_question: 'Dear student, there is a new answer to the question you posted in the course name or class name. [time for questions]'
+wechat.notification.template.vip_expired: 'Dear student, the membership you purchased is about to expire.<br>opening time: [opening time]<br>expiration time: [expiration time]<br>please renew in time, so as not to affect your study'
 
 #微信通知规则
 wechat.notification.template.ask_question.rule: 'When someone in the class or class issues a question, a notice is sent to the teacher.'
@@ -8834,6 +8835,8 @@ wechat.notification.template.exam_result.rule: 'When there are subjective questi
 wechat.notification.template.lesson_add.rule: 'A notification is sent to participants when new assignments are posted.'
 wechat.notification.template.charge_success.rule: 'A notification will be sent when students successfully recharge their virtual currency or exchange their study card.'
 wechat.notification.template.buy_success.rule: 'A notification is sent when a student has successfully purchased a course, class, or membership.'
+wechat.notification.template.vip_expired.rule: 'Send notifications based on the reminder date set by the administrator.，<a href="%url%" target="_blank">Click here to go to Settings</a>'
+wechat.notification.template.vip_is_not_install: 'Notification cannot be sent normally without member plug-in installed.'
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: audio end

@@ -368,6 +368,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'wechat_notify_coin_recharge',
                 'wechat_notify_ask_question',
                 'wechat_notify_answer_question',
+                'wechat_notify_vip_expired',
             ),
             self::ORDER => array(
                 'pay_result',

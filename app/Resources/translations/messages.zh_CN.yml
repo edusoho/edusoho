@@ -10115,6 +10115,7 @@ wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<
 wechat.notification.template.ask_question: '尊敬的老师，您的在教课程中有学员发布了提问<br>[提问者]<br>[问题标题]<br>[问题提交时间]'
 wechat.notification.template.homework_or_testpaper_need_review: '尊敬的老师，您今日仍有作业/试卷未批改<br>时间：[当日日期，精确到天]<br>作业数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
 wechat.notification.template.answer_question: '亲爱的学员，您在[课程名或班级名]中的发表的问题有了新的回答。<br>[提问的时间]<br>[回复内容]'
+wechat.notification.template.vip_expired: '亲爱的学员，您购买的会员即将到期<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
 
 #微信通知规则
 wechat.notification.template.ask_question.rule: '课程或班级中有人发布提问，会发送通知给教师。'
@@ -10126,6 +10127,8 @@ wechat.notification.template.exam_result.rule: '当试卷中含有主观题时�
 wechat.notification.template.lesson_add.rule: '当课程有新的任务发布时，会发一条通知给课程学员。'
 wechat.notification.template.charge_success.rule: '当学员成功充值虚拟币或兑换学习卡时，会发送一条通知。'
 wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员是，会发送一条通知。'
+wechat.notification.template.vip_expired.rule: '根据管理员设置的提醒日期来发送通知，点此<a href="%url%" target="_blank">前往设置</a>'
+wechat.notification.template.vip_is_not_install: '未安装会员插件，无法正常发送通知。'
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: 听完音频

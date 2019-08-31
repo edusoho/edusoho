@@ -33,6 +33,15 @@ class TemplateUtil
                 'object' => '提问者',
                 'status' => 0,
             ),
+            'vipExpired' => array(
+                'id' => 'OPENTM401520362',
+                'name' => '会员到期提醒',
+                'content' => 'wechat.notification.template.vip_expired',
+                'rule' => 'wechat.notification.template.vip_expired.rule',
+                'detail' => '{{first.DATA}}<br>开通时间：{{keyword1.DATA}}<br>到期时间：{{keyword2.DATA}}<br>{{remark.DATA}}',
+                'object' => '单个用户',
+                'status' => 0,
+            ),
             'oneHourBeforeLiveOpen' => array(
                 'id' => 'TM00080',
                 'name' => '直播开课通知(一小时前)',
