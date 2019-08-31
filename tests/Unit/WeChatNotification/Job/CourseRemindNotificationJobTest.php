@@ -21,7 +21,7 @@ class CourseRemindNotificationJobTest extends BaseTestCase
             array('functionName' => 'findCoursesByIds', 'returnValue' => array(array('id' => 1, 'title' => 'test', 'compulsoryTaskNum' => 1))),
         ));
         $this->mockBiz('Course:CourseSetService', array(
-            array('functionName' => 'findCourseSetsByIds', 'returnValue' => array(array('id' => 1, 'title' => 'test'))),
+            array('functionName' => 'findCourseSetsByIds', 'returnValue' => array(array('id' => 1, 'title' => 'test', 'defaultCourseId' => 1))),
         ));
 
         $job = new CourseRemindNotificationJob(array(), $this->biz);
