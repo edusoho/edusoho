@@ -9,9 +9,6 @@
 {% endif %}
 
 {% block body %}
-
-
-
   {% if not pptPlayer.error is empty %}
     <div class="iframe-parent-content pv20 ph20">
       <div class="alert alert-danger"><i class="es-icon es-icon-info"></i>{{ pptPlayer.error.message|raw }}</div>
@@ -23,6 +20,10 @@
         data-user-name="{{app.user.username|default('')}}"
         data-image-info="{{ pptPlayer.result.images|json_encode() }}"
         data-type=""
+        data-finish-type="{{ activity.ext.finishType }}"
+        data-finish-detail="{{ activity.ext.finishDetail }}"
+        data-token-url="{{ path('activity_ppt_token', {mediaId: activity.mediaId}) }}"
+        data-slides="{{ pptPlayer.result.images|default()|join(',') }}"
       {% if setting('magic.ppt_watermark') %}
       data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}
       {% if pptPlayer.result.animation is defined %}
