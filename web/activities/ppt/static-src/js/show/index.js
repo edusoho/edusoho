@@ -11,48 +11,54 @@ let url = $('.js-cloud-url').data('url');
 })(url);
 
 let $element = $('#activity-ppt-content');
-
 let currentPPTPlayer = $element.data('type') || 'slide';
+let tokenUrl = $element.data('tokenUrl');
 
-initPptPlayer();
-
-
-
-$('.js-change-ppt-btn').on('click', (event) => {
-  console.log('点击数时间');
-  currentPPTPlayer = currentPPTPlayer === 'img' ? 'slide' : 'img';
-  initPptPlayer();
-})
-
-
-function initPptPlayer() {
+const initPptPlayer = (flag) => {
+  // 清空内容后切换
+  $element.empty();
   if ($element.data('imgType') === 'onlyImg') {
     initPPTNormalPlayer();
   } else {
     if (currentPPTPlayer ===  'img') {
       initPPTImgPlayer();
     } else if (currentPPTPlayer === 'slide') {
-      initPPTNormalPlayer();
+      if (flag) {
+        changePPTNormalPlayer();
+      } else {
+        initPPTNormalPlayer();
+      }
     }
   }
 }
 
-
-function initPPTImgPlayer() {
-  let images = $element.data('imageInfo');
-  const imgPlayer = new QiQiuYun.Player({
+const newPlayer = (token) => {
+  let finalToken = token ? token: $element.data('token');
+  new QiQiuYun.Player({
     id: 'activity-ppt-content',
     // 环境配置
-    // playServer: app.cloudPlayServer,
-    // sdkBaseUri: app.cloudSdkBaseUri,
-    // disableDataUpload: app.cloudDisableLogReport,
-    // disableSentry: app.cloudDisableLogReport,
-    // resNo: $element.data('resNo'),
-    // token: $element.data('token'),
-    // user: {
-    //   id: $element.data('userId'),
-    //   name: $element.data('userName')
-    // },
+    playServer: app.cloudPlayServer,
+    sdkBaseUri: app.cloudSdkBaseUri,
+    disableDataUpload: app.cloudDisableLogReport,
+    disableSentry: app.cloudDisableLogReport,
+    resNo: $element.data('resNo'),
+    token: finalToken,
+    user: {
+      id: $element.data('userId'),
+      name: $element.data('userName')
+    }
+  });
+}
+
+// 兼容老ppt，默认就是时候img-player，不用切换
+const initPPTNormalPlayer = () => {
+  newPlayer();
+}
+
+const initPPTImgPlayer = () => {
+  const images = $element.data('imageInfo');
+  const imgPlayer = new QiQiuYun.Player({
+    id: 'activity-ppt-content',
     source: {
       type: 'ppt',
       args: {
@@ -62,30 +68,23 @@ function initPPTImgPlayer() {
       }
     },
   });
-
-  imgPlayer.on('img.poschanged', (obj) => {
-    const page = Number(obj.pageNum);
-  });
-
-  imgPlayer.on('img.ready', () => {
-    imgPlayer.setCurrentPage(1);
-  });
 }
 
-// 包括旧版的img播放器和ppt播放器
-function initPPTNormalPlayer() {
-  new QiQiuYun.Player({
-    id: 'activity-ppt-content',
-    // 环境配置
-    playServer: app.cloudPlayServer,
-    sdkBaseUri: app.cloudSdkBaseUri,
-    disableDataUpload: app.cloudDisableLogReport,
-    disableSentry: app.cloudDisableLogReport,
-    resNo: $element.data('resNo'),
-    token: $element.data('token'),
-    user: {
-      id: $element.data('userId'),
-      name: $element.data('userName')
-    }
-  });
+// img 切换成 slide播放器
+const changePPTNormalPlayer = () => {
+  $.get(tokenUrl).then(res => {
+    newPlayer(res.result.token);
+  })
 }
+
+initPptPlayer();
+
+
+$('.js-change-ppt-btn').on('click', (event) => {
+  const $target = $(event.target);
+  currentPPTPlayer = currentPPTPlayer === 'img' ? 'slide' : 'img';
+  $element.data('type', currentPPTPlayer);
+  const text = currentPPTPlayer === 'img' ?  Translator.trans('course.plan_task.activity_ppt_animation_slide'): Translator.trans('course.plan_task.activity_ppt_animation_img');
+  $target.text(text);
+  initPptPlayer(true);
+})

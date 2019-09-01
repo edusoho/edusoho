@@ -1466,3 +1466,5 @@ user.account.order_pay_vip_close_hint: The vip level in this order has been clos
 user.account.order_pay: Continue
 user.account.order_not_pay: Not paying
 
+course.plan_task.activity_ppt_animation_img: Switch img mode
+course.plan_task.activity_ppt_animation_slide: Switch animation mode

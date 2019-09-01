@@ -36,6 +36,10 @@
   position: absolute;
   left: 8px;
   bottom: 8px;
+  z-index: 100;
+  @media (max-width: @screen-xs-min) {
+    left: 0;
+  }
 }
 
 .task-preview-modal-content {

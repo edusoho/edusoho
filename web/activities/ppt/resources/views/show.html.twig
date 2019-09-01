@@ -14,24 +14,21 @@
       <div class="alert alert-danger"><i class="es-icon es-icon-info"></i>{{ pptPlayer.error.message|raw }}</div>
     </div>
   {% else %}
-    <div class="iframe-parent-content iframe-parent-full" id="activity-ppt-content" data-res-no="{{ file.globalId }}"
+    <div class="iframe-parent-content iframe-parent-full" id="activity-ppt-content"
+        data-type="slide"
+        data-finish-type="{{ activity.ext.finishType }}"
+        data-finish-detail="{{ activity.ext.finishDetail }}"
+        data-res-no="{{ file.globalId }}"
         data-token="{{ pptPlayer.result.token }}"
         data-user-id="{{app.user.id|default(0)}}"
         data-user-name="{{app.user.username|default('')}}"
         data-image-info="{{ pptPlayer.result.images|json_encode() }}"
-        data-type=""
-        data-finish-type="{{ activity.ext.finishType }}"
-        data-finish-detail="{{ activity.ext.finishDetail }}"
         data-token-url="{{ path('activity_ppt_token', {mediaId: activity.mediaId}) }}"
-        data-slides="{{ pptPlayer.result.images|default()|join(',') }}"
-      {% if setting('magic.ppt_watermark') %}
-      data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}
-      {% if pptPlayer.result.animation is defined %}
-      data-img-type="onlyImg"
-      {% endif %}>
+        {% if setting('magic.ppt_watermark') %}data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}
+        {% if pptPlayer.result.animation is not defined %}data-img-type="onlyImg"{% endif %}>
     </div>
     {% if pptPlayer.result.animation is defined %}
-      <button class="cd-btn cd-btn-primary ppt-player-change-btn js-change-ppt-btn" type="button">切换图片模式</button>
+      <button class="cd-btn cd-btn-primary ppt-player-change-btn js-change-ppt-btn" type="button">{{ 'course.plan_task.activity_ppt_animation_btn'|trans }}</button>
     {% endif %}
     <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('player') }}">
     {% do script(['libs/base.js','app/js/common.js','app/js/main.js','pptactivity/js/show/index.js'], 1000) %}
