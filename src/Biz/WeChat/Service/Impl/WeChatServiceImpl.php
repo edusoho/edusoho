@@ -224,18 +224,32 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $batchUpdateHelper->flush();
     }
 
-    public function getTemplateId($key)
+    /**
+     * @param $key
+     * key 模板key
+     * @param string $scene
+     * scene 模板对应场景
+     * @return mixed|null
+     */
+    public function getTemplateId($key, $scene = '')
     {
         $wechatSetting = $this->getSettingService()->get('wechat', array());
         if (empty($wechatSetting['wechat_notification_enabled'])) {
-            return;
+            return null;
         }
 
-        if (empty($wechatSetting[$key]['status']) || empty($wechatSetting[$key]['templateId'])) {
-            return;
+        $template = !empty($wechatSetting['templates'][$key]) ? $wechatSetting['templates'][$key] : array();
+
+        if (empty($template['status']) || empty($template['templateId'])) {
+            return null;
         }
 
-        return $wechatSetting[$key]['templateId'];
+        $scenes = !empty($template['scenes']) ? array() : $template['scenes'];
+        if (!empty($scene) && !in_array($scene, $scenes)) {
+            return null;
+        }
+
+        return $template['templateId'];
     }
 
     public function handleCloudNotification($oldSetting, $newSetting, $loginConnect)

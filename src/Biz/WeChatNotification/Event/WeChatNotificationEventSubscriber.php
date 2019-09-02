@@ -2,6 +2,7 @@
 
 namespace Biz\WeChatNotification\Event;
 
+use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -363,13 +364,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         foreach ($tasks as $task) {
             if ('live' == $task['type']) {
-                $key = 'liveTaskUpdate';
                 $this->deleteLiveNotificationJob($task);
                 $this->registerLiveNotificationJob($task);
-            } else {
-                $key = 'normalTaskUpdate';
             }
-
+            $key = TemplateUtil::TEMPLATE_COURSE_UPDATE;
             $this->deleteLessonPublishJob($task);
             $this->registerLessonNotificationJob($key, $task);
         }
@@ -413,8 +411,8 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
     private function registerLiveNotificationJob($task)
     {
-        $hourTemplateId = $this->getWeChatService()->getTemplateId('oneHourBeforeLiveOpen');
-        $dayTemplateId = $this->getWeChatService()->getTemplateId('oneDayBeforeLiveOpen');
+        $hourTemplateId = $this->getWeChatService()->getTemplateId(TemplateUtil::TEMPLATE_LIVE_OPEN, 'beforeOneHour');
+        $dayTemplateId = $this->getWeChatService()->getTemplateId(TemplateUtil::TEMPLATE_LIVE_OPEN, 'beforeOneDay');
         if (!empty($dayTemplateId) && $task['startTime'] >= (time() + 24 * 60 * 60)) {
             $job = array(
                 'name' => 'WeChatNotificationJob_LiveOneDay_'.$task['id'],

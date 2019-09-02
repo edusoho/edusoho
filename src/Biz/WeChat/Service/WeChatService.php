@@ -32,7 +32,7 @@ interface WeChatService
 
     public function handleCloudNotification($oldSetting, $newSetting, $loginConnect);
 
-    public function getTemplateId($key);
+    public function getTemplateId($key, $scene = '');
 
     public function createWeChatUser($fields);
 

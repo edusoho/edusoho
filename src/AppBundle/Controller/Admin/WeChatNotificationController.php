@@ -104,6 +104,32 @@ class WeChatNotificationController extends BaseController
         ));
     }
 
+    public function settingModalAction(Request $request)
+    {
+        $key = $request->query->get('key');
+        $templates = TemplateUtil::templates();
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        if ($request->getMethod() == 'POST') {
+            if (empty($wechatSetting['wechat_notification_enabled'])) {
+                throw new \RuntimeException($this->trans('wechat.notification.service_not_open'));
+            }
+            $fields = $request->request->all();
+            if ($fields['status'] == 1) {
+                $this->addTemplate($templates[$key], $key);
+            } else {
+                $this->deleteTemplate($templates[$key], $key);
+            }
+            $this->setTemplateDetail($key, $fields);
+            return $this->redirect($this->generateUrl('admin_wechat_notification_manage'));
+        }
+        $modal = isset($templates[$key]['setting_modal']) ? $templates[$key]['setting_modal'] : 'admin/wechat-notification/setting-modal/default-modal.html.twig';
+        return $this->render($modal, array(
+            'template' => $templates[$key],
+            'wechatSetting' => $wechatSetting,
+            'key' => $key,
+        ));
+    }
+
     public function showRuleAction(Request $request)
     {
         $key = $request->query->get('key');
@@ -157,10 +183,6 @@ class WeChatNotificationController extends BaseController
                 'key' => 'courseRemind',
             ));
         }
-    }
-
-    public function liveTemplateStatusAction(Request $request)
-    {
     }
 
     protected function filterConditions($conditions)

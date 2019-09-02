@@ -82,8 +82,8 @@
 {#                {% endif %}#}
               </td>
               <td width="5%">
-                <a class="alert-link" href="#modal" data-toggle="modal" data-url="{% if key == 'homeworkOrTestPaperReview' or key == 'courseRemind' %}{{ path('admin_wechat_notification_detail_template_status', {key: key})}}{% else %}{{ path('admin_wechat_notification_show', {key: key}) }}{% endif %}">
-                 {% if key == 'homeworkOrTestPaperReview' or key == 'courseRemind' %}{{ 'admin.wechat_notification.template_setting'|trans }}{% else %}{{ 'admin.wechat_notification.template_show'|trans }}{% endif %}
+                <a class="js-wechat-notification-setting alert-link" {% if isCloudOpen %} href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_setting_modal', {key: key})}}"{% else %}href="javascript:;" {% endif %}>
+                 {{ 'admin.wechat_notification.template_setting'|trans }}
                 </a>
               </td>
             </tr>
