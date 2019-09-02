@@ -7318,6 +7318,7 @@ admin.setting_wechat_auth.account_code_download: 下载二维码
 
 #开发者设置
 admin.developer_setting.cloud_notification_api: 通知服务API
+admin.developer_setting.cloud_wechat_api: 微信托管服务API
 admin.developer_setting.content_title: 开发者设置
 admin.developer_setting.debug_label: 调试
 admin.developer_setting.app_center_api_address: 应用中心API地址
