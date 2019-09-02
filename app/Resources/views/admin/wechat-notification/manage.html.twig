@@ -14,12 +14,10 @@
   <div class="form-horizontal">
     <fieldset>
       <legend>{{'admin.wechat_notification.switch'|trans}}</legend>
-      {% if not wechatSetting.wechat_notification_enabled %}
+      {% if not wechatSetting.wechat_notification_enabled|default('') %}
       <div class="form-group">
         <div class="mll">
-          {% if not wechatSetting.wechat_is_authorization %}
-            {{ 'admin.wechat.notification.open_wechat_notify_tip'|trans }}
-          {% endif %}
+          {{ 'admin.wechat.notification.open_wechat_notify_tip'|trans }}
         </div>
         <div class="" align="center">
           <img class="pbl ptl img-responsive" src='{{ asset('bundles/topxiaadmin/img/weixin-notify-intro.png') }}'>
