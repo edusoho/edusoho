@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Classroom\ClassroomException;
 
 class PageClassroom extends AbstractResource
 {
@@ -18,7 +19,7 @@ class PageClassroom extends AbstractResource
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw new NotFoundHttpException('班级不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+            throw ClassroomException::NOTFOUND_CLASSROOM();
         }
         $user = $this->getCurrentUser();
         $member = null;

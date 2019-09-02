@@ -369,6 +369,7 @@ t.add("course.thread_delete_hint", "Do you really want to delete this reply?", "
 t.add("course_manage.course_dashboard.student_num", "Number of students", "js", "en");
 t.add("course_manage.course_dashboard.finish_num", "Number of completions", "js", "en");
 t.add("course_manage.course_dashboard.finish_rate", "Completion rate", "js", "en");
+t.add("course.manage.teacher.manage.repeat_tip", "Can not add repeatedly.", "js", "en");
 t.add("course_manage.lesson_dashboard.finish_rate", "Completion rate", "js", "en");
 t.add("course_manage.lesson_dashboard.student_num", "Person", "js", "en");
 t.add("course_manage.lesson_dashboard.total_amount", "Total", "js", "en");
@@ -680,6 +681,7 @@ t.add("validate.fail", "Failed to verify", "js", "en");
 t.add("validate.expiry_days_required_hint", "please input the expiry days", "js", "en");
 t.add("validate.empty_content_hint", "please input content!", "js", "en");
 t.add("validate.no_number_first_hint", "URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits", "js", "en");
+t.add("validate.have_spaces", "Password can't have spaces", "js", "en");
 t.add("alert.file_convert_error.message", "File conversion submission failed, please try again!", "js", "en");
 t.add("notify.file_not_select.message", "No file records selected", "js", "en");
 t.add("page.file_converting.message", "Converting in file format", "js", "en");
