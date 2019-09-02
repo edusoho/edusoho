@@ -61,7 +61,7 @@ class WeChatNotificationController extends BaseController
             $paginator = new Paginator(
                 $request,
                 $currentNum,
-                20
+                10
             );
 
             $fans = $this->getWeChatService()->searchWeChatUsersJoinUser(
