@@ -87,6 +87,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('cdn', array($this, 'cdn')),
             new \Twig_SimpleFilter('wrap', array($this, 'wrap')),
             new \Twig_SimpleFilter('convert_absolute_url', array($this, 'convertAbsoluteUrl')),
+            new \Twig_SimpleFilter('url_decode', array($this, 'urlDecode')),
         );
     }
 
@@ -177,6 +178,11 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('uniqid', array($this, 'uniqid')),
             new \Twig_SimpleFunction('get_days', array($this, 'getDays')),
         );
+    }
+
+    public function urlDecode($url)
+    {
+        return !empty($url) ? urldecode($url) : '';
     }
 
     public function getDays($days)
