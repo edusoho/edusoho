@@ -73,7 +73,7 @@ import guidePage from "../component/guide-page";
 import itemBank from "../component/itemBank";
 
 import homeworkMixin from '@/mixins/lessonTask/homework.js';
-
+//由于会重定向到说明页或者结果页，为了避免跳转后不能返回，添加backUrl机制
 let backUrl=''
 export default {
   name: "homework-do",
@@ -115,6 +115,7 @@ export default {
     this.getData();
   },
   beforeRouteEnter (to, from, next) {
+      //通过链接进来
       if(from.fullPath==="/"){
         backUrl="/"
       }else{
@@ -209,7 +210,7 @@ export default {
             this.canDoing(this.homework,this.user.id).then(()=>{
 
             }).catch(({answer})=>{
-              this.submitpaper(answer);
+              this.submitHomework(answer);
               return;
             })
       }
@@ -412,8 +413,20 @@ export default {
             //跳转到结果页
             this.showResult();
           }).catch((err)=>{
-              reject()
-              Toast.fail(err.message);
+              /**
+               * 4036705：已经提交过此次作业，直接去结果页
+               */
+              const toast = Toast.fail(err.message);
+              if("4036705"==err.code){
+                  setTimeout(()=>{
+                    this.isHandHomework=true;
+                    toast.clear();
+                    resolve();
+                    this.showResult();
+                  },2000)
+              }else{
+                reject();
+              }
           })
       })
     },
@@ -436,7 +449,8 @@ export default {
           name: 'homeworkIntro',
           query: {
             courseId: this.$route.query.courseId,
-            taskId: this.$route.query.targetId
+            taskId: this.$route.query.targetId,
+            backUrl:backUrl,
         }
       })
     }
