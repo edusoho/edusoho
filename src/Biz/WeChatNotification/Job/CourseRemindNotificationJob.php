@@ -44,7 +44,7 @@ class CourseRemindNotificationJob extends AbstractNotificationJob
             if (empty($courseMember['courseId'])) {
                 continue;
             }
-            $courseTitle = !empty($courses[$courseMember['courseId']]['title']) ? $courses[$courseMember['courseId']]['title'] : $courses[$courseMember['courseId']]['courseSetTitle'];
+            $courseTitle = (isset($courses[$courseMember['courseId']]) && !empty($courses[$courseMember['courseId']]['title'])) ? $courses[$courseMember['courseId']]['title'] : $courses[$courseMember['courseId']]['courseSetTitle'];
             $courseCompulsoryTaskNum = isset($courses[$courseMember['courseId']]['compulsoryTaskNum']) ? $courses[$courseMember['courseId']]['compulsoryTaskNum'] : '0';
             $process = (0 == $courseCompulsoryTaskNum) ? 0 : $courseMember['learnedCompulsoryTaskNum'] ? round($courseMember['learnedCompulsoryTaskNum'] / $courseCompulsoryTaskNum, 2) * 100 : 0;
             $keyword2 = date('Y-m-d', time())."\r学习进度：".$process.'%';

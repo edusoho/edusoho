@@ -237,6 +237,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         if (empty($userIds)) {
             return;
         }
+
         $this->askQuestionSendNotification($thread, $userIds);
     }
 
