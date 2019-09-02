@@ -17,8 +17,8 @@ let $element = $('#activity-ppt-content');
 let currentPPTPlayer = $element.data('type') || 'slide';
 let tokenUrl = $element.data('tokenUrl');
 const images = $element.data('imageInfo');
-const totalPagesNumber = images.length;
-console.log(totalPagesNumber);
+const totalPagesNumber = Number(images.length);
+const finishType = $element.data('finishType');
 
 const initPptPlayer = (flag) => {
   // 清空内容后切换
@@ -33,6 +33,29 @@ const initPptPlayer = (flag) => {
         changePPTNormalPlayer();
       } else {
         initPPTNormalPlayer();
+      }
+    }
+  }
+}
+
+const toggleText = (type) => {
+  if (!$('.js-change-ppt-btn').length || type === '') {
+    return;
+  }
+  const $toggleBtn = $('.js-change-ppt-btn');
+  const textStr = `course.plan_task.activity_ppt_animation_${type}`;
+  $toggleBtn.html(Translator.trans(textStr)).attr('disabled', false);
+}
+
+// 触发任务finish状态
+const endFinishTip = (pageNumber) => {
+  if ($element.data('finishType') === 'end') {
+    if (totalPagesNumber === 1 ) {
+      emitter.emit('finish', { page: 1 });
+    } else {
+      const page = Number(pageNumber);
+      if (totalPagesNumber === page) {
+        emitter.emit('finish', { page });
       }
     }
   }
@@ -56,28 +79,24 @@ const newPlayer = (token) => {
   });
 
   pptPlayer.on('slide.ready', (data) => {
-    if (data.total === 1) {
-      emitter.emit('finish', data);
-    }
+    const type = token ? 'img': '';
+    toggleText(type);
+    endFinishTip();
   })
 
   pptPlayer.on('slide.pagechanged', (data) => {
-    if (data.page === data.total) {
-      emitter.emit('finish', data);
-    }
+    endFinishTip(data.page);
   });
 
   // 监听老图片
+  pptPlayer.on('img.ready', () => {
+    endFinishTip();
+  });
+
   pptPlayer.on('img.poschanged', (data) => {
-    const page = Number(data.pageNum);
-    if (page === totalPagesNumber) {
-      console.log('finish');
-      emitter.emit('finish', { page });
-    }
+    endFinishTip(data.pageNum);
   });
 }
-
-
 
 // 兼容老ppt，默认就是时候img-player，不用切换
 const initPPTNormalPlayer = () => {
@@ -97,11 +116,14 @@ const initPPTImgPlayer = () => {
     },
   });
 
+  imgPlayer.on('img.ready', () => {
+    const type = 'slide'
+    toggleText(type);
+    endFinishTip();
+  });
+
   imgPlayer.on('img.poschanged', (data) => {
-    const page = Number(data.pageNum);
-    if (page === totalPagesNumber) {
-      emitter.emit('finish', { page });
-    }
+    endFinishTip(data.pageNum);
   });
 }
 
@@ -117,9 +139,8 @@ initPptPlayer();
 
 $('.js-change-ppt-btn').on('click', (event) => {
   const $target = $(event.target);
+  $target.html(Translator.trans('site.loading')).attr('disabled', true);
   currentPPTPlayer = currentPPTPlayer === 'img' ? 'slide' : 'img';
   $element.data('type', currentPPTPlayer);
-  const text = currentPPTPlayer === 'img' ?  Translator.trans('course.plan_task.activity_ppt_animation_slide'): Translator.trans('course.plan_task.activity_ppt_animation_img');
-  $target.text(text);
   initPptPlayer(true);
 })
