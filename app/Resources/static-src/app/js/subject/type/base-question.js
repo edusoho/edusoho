@@ -30,7 +30,7 @@ class BaseQuestion {
     cd.select({
       el: '#courseEditBelong',
       type: 'single',
-      parent: '.js-edit-form'
+      parent: '.js-setting-item'
     }).on('change', (value, text) => {
       let url = $('#courseEditBelong').data('url');
       let select2 = $('.js-lessonSelect');
@@ -57,7 +57,7 @@ class BaseQuestion {
     cd.select({
       el: '#lessonEditBelong',
       type: 'single',
-      parent: '.js-edit-form'
+      parent: '.js-setting-item'
     });
   }
 
