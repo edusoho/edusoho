@@ -5,7 +5,7 @@
 {% set pptPlayer = ppt_player(ppt, app.request.secure) %}
 
 {% if pptPlayer.error is empty %}
-  {% do script(['pptactivity/js/show/index.js']) %}
+  {% do script('pptactivity/js/show/index.js') %}
 {% endif %}
 
 {% block body %}
@@ -30,7 +30,7 @@
     {% if pptPlayer.result.animation is defined %}
       <button class="cd-btn cd-btn-primary ppt-player-change-btn js-change-ppt-btn" type="button">{{ 'course.plan_task.activity_ppt_animation_btn'|trans }}</button>
     {% endif %}
-    <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('player') }}">
+    <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('newPlayer') }}">
     {% do script(['libs/base.js','app/js/common.js','app/js/main.js','pptactivity/js/show/index.js'], 1000) %}
   {% endif %}
 {% endblock %}

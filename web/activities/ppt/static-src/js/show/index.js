@@ -1,7 +1,6 @@
 import ActivityEmitter from 'app/js/activity/activity-emitter';
 
 const emitter = new ActivityEmitter();
-
 let url = $('.js-cloud-url').data('url');
 (function (url) {
   window.QiQiuYun || (window.QiQiuYun = {});
@@ -17,6 +16,9 @@ let url = $('.js-cloud-url').data('url');
 let $element = $('#activity-ppt-content');
 let currentPPTPlayer = $element.data('type') || 'slide';
 let tokenUrl = $element.data('tokenUrl');
+const images = $element.data('imageInfo');
+const totalPagesNumber = images.length;
+console.log(totalPagesNumber);
 
 const initPptPlayer = (flag) => {
   // 清空内容后切换
@@ -38,7 +40,7 @@ const initPptPlayer = (flag) => {
 
 const newPlayer = (token) => {
   let finalToken = token ? token: $element.data('token');
-  new QiQiuYun.Player({
+  const pptPlayer = new QiQiuYun.Player({
     id: 'activity-ppt-content',
     // 环境配置
     playServer: app.cloudPlayServer,
@@ -52,7 +54,30 @@ const newPlayer = (token) => {
       name: $element.data('userName')
     }
   });
+
+  pptPlayer.on('slide.ready', (data) => {
+    if (data.total === 1) {
+      emitter.emit('finish', data);
+    }
+  })
+
+  pptPlayer.on('slide.pagechanged', (data) => {
+    if (data.page === data.total) {
+      emitter.emit('finish', data);
+    }
+  });
+
+  // 监听老图片
+  pptPlayer.on('img.poschanged', (data) => {
+    const page = Number(data.pageNum);
+    if (page === totalPagesNumber) {
+      console.log('finish');
+      emitter.emit('finish', { page });
+    }
+  });
 }
+
+
 
 // 兼容老ppt，默认就是时候img-player，不用切换
 const initPPTNormalPlayer = () => {
@@ -60,7 +85,6 @@ const initPPTNormalPlayer = () => {
 }
 
 const initPPTImgPlayer = () => {
-  const images = $element.data('imageInfo');
   const imgPlayer = new QiQiuYun.Player({
     id: 'activity-ppt-content',
     source: {
@@ -71,6 +95,13 @@ const initPPTImgPlayer = () => {
         type: "img",
       }
     },
+  });
+
+  imgPlayer.on('img.poschanged', (data) => {
+    const page = Number(data.pageNum);
+    if (page === totalPagesNumber) {
+      emitter.emit('finish', { page });
+    }
   });
 }
 
