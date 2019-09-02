@@ -248,8 +248,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
         $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
-        $classroomTeachers = $this->getClassroomService()->findTeachers($classroom['id']);
-        $userIds = ArrayToolkit::column($classroomTeachers, 'userId');
+        $userIds = $this->getClassroomService()->findTeachers($classroom['id']);
         if (empty($userIds)) {
             return;
         }
