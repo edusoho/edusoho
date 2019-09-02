@@ -1,3 +1,7 @@
+import ActivityEmitter from 'app/js/activity/activity-emitter';
+
+const emitter = new ActivityEmitter();
+
 let url = $('.js-cloud-url').data('url');
 (function (url) {
   window.QiQiuYun || (window.QiQiuYun = {});
