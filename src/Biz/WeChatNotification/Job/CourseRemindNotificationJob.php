@@ -30,10 +30,7 @@ class CourseRemindNotificationJob extends AbstractNotificationJob
         $userIds = ArrayToolkit::column($courseMembers, 'userId');
 
         $courseIds = ArrayToolkit::column($courseMembers, 'courseId');
-        $courseSetIds = ArrayToolkit::column($courseMembers, 'courseSetId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-        $courseSets = ArrayToolkit::index($courseSets, 'defaultCourseId');
 
         $data = array(
             'first' => array('value' => '亲爱的学员，今日也要坚持学习哦'),
@@ -47,7 +44,7 @@ class CourseRemindNotificationJob extends AbstractNotificationJob
             if (empty($courseMember['courseId'])) {
                 continue;
             }
-            $courseTitle = isset($courses[$courseMember['courseId']]) ? $courses[$courseMember['courseId']]['title'] : $courseSets[$courseMember['courseId']]['title'];
+            $courseTitle = !empty($courses[$courseMember['courseId']]['title']) ? $courses[$courseMember['courseId']]['title'] : $courses[$courseMember['courseId']]['courseSetTitle'];
             $courseCompulsoryTaskNum = isset($courses[$courseMember['courseId']]['compulsoryTaskNum']) ? $courses[$courseMember['courseId']]['compulsoryTaskNum'] : '0';
             $process = (0 == $courseCompulsoryTaskNum) ? 0 : $courseMember['learnedCompulsoryTaskNum'] ? round($courseMember['learnedCompulsoryTaskNum'] / $courseCompulsoryTaskNum, 2) * 100 : 0;
             $keyword2 = date('Y-m-d', time())."\r学习进度：".$process.'%';
