@@ -166,7 +166,7 @@ export default {
         /**
          * 4036706:试卷正在批阅中
          */
-          if(err.code="4036706"){
+          if("4036706"==err.code){
               setTimeout(()=>{
                 this.toIntro();
                 toast.clear();
