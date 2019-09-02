@@ -83,7 +83,7 @@ class TemplateUtil
                 'name' => '考试结果通知',
                 'content' => 'wechat.notification.template.exam_result',
                 'rule' => 'wechat.notification.template.exam_result.rule',
-                'detail' => '{{first.DATA}}<br>考试科目：{{keyword1.DATA}}<br>考试成绩：{{keyword2.DATA}}<br>{{remark.DATA}',
+                'detail' => '{{first.DATA}}<br>考试科目：{{keyword1.DATA}}<br>考试成绩：{{keyword2.DATA}}<br>{{remark.DATA}}',
                 'object' => '试卷提交学员',
                 'status' => 0,
             ),

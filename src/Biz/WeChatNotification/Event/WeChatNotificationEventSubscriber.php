@@ -234,6 +234,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $teachers = $this->getCourseMemberService()->findCourseTeachers($course['id']);
         $userIds = ArrayToolkit::column($teachers, 'userId');
 
+        if (empty($userIds)) {
+            return;
+        }
         $this->askQuestionSendNotification($thread, $userIds);
     }
 
@@ -247,7 +250,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
         $classroomTeachers = $this->getClassroomService()->findTeachers($classroom['id']);
         $userIds = ArrayToolkit::column($classroomTeachers, 'userId');
-
+        if (empty($userIds)) {
+            return;
+        }
         $this->askQuestionSendNotification($thread, $userIds);
     }
 
@@ -288,6 +293,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $templateId = $this->getWeChatService()->getTemplateId('answerQuestion');
         if (!empty($templateId)) {
             $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($userId);
+
+            if (empty($weChatUser)) {
+                return;
+            }
             $content = TextHelper::truncate($content, 30);
             $data = array(
                 'first' => array('value' => '亲爱的学员，您在《'.$title.'》中的发表的问题有了新的回答'.PHP_EOL),
@@ -318,6 +327,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 PHP_INT_MAX,
                 array('id', 'openId', 'unionId', 'userId')
             );
+
+            if (empty($weChatUsers)) {
+                return;
+            }
             $data = array(
                 'first' => array('value' => '尊敬的老师，您的在教课程中有学员发布了提问'.PHP_EOL),
                 'keyword1' => array('value' => $user['nickname']),
