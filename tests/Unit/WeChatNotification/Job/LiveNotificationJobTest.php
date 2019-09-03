@@ -14,7 +14,7 @@ class LiveNotificationJobTest extends BaseTestCase
             array(
                 'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
-                'withParams' => array('oneDayBeforeLiveOpen'),
+                'withParams' => array('liveOpen', 'beforeOneDay'),
             ),
             array(
                 'functionName' => 'findSubscribedUsersByUserIdsAndType',
@@ -57,7 +57,7 @@ class LiveNotificationJobTest extends BaseTestCase
         ));
 
         $job = new LiveNotificationJob(array(), $this->biz);
-        $job->args = array('key' => 'oneDayBeforeLiveOpen', 'taskId' => 1, 'url' => 'www.test.com');
+        $job->args = array('key' => 'liveOpen', 'taskId' => 1, 'url' => 'www.test.com');
         $result = $job->execute();
 
         $this->assertEmpty($result);

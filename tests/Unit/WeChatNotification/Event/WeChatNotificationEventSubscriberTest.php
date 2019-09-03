@@ -72,12 +72,12 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
             array(
                 'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
-                'withParams' => array('oneHourBeforeLiveOpen'),
+                'withParams' => array('liveOpen', 'beforeOneHour'),
             ),
             array(
                 'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
-                'withParams' => array('oneDayBeforeLiveOpen'),
+                'withParams' => array('liveOpen', 'beforeOneDay'),
             ),
         ));
         $subscriber->onTaskUpdate($this->getTaskEvent(array('type' => 'live', 'startTime' => time() + 87000)));
