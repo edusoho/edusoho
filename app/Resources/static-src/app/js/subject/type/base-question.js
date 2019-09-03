@@ -67,6 +67,23 @@ class BaseQuestion {
       $(event.currentTarget).button('loading');
       let question = self.getQuestion();
       self.finishEdit(question);
+      self.changeBottomFixed();
+    }
+  }
+
+  changeBottomFixed() {
+    const visibleBottom = parseInt(window.scrollY + document.documentElement.clientHeight);
+    let footerBottom = 0;
+    // 判断底部元素是否存在
+    if ($('.es-footer-link').length) {
+      footerBottom = parseInt($('.es-footer-link').offset().top);
+    } else {
+      if ($('.es-footer').length) {
+        footerBottom = parseInt($('.es-footer').offset().top);
+      }
+    }
+    if (footerBottom && footerBottom < visibleBottom) {
+      $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
     }
   }
 

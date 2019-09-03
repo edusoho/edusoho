@@ -610,6 +610,7 @@ export default class sbList {
         let key = $item.attr('data-key');
         this.questionOperate.deleteSubQuestion(token, key);
         $item.remove();
+        this.changeBottomFixed();
         let order = 0;
         $(`[data-material-token="${token}"]`).each(function() {
           $(this).attr('id', `sub${order}`);
@@ -625,16 +626,36 @@ export default class sbList {
       const $listItem = $(`[data-anchor=#${token}]`).parent();
       this.orderQuestionList(order, $listItem, $item);
       this.questionOperate.deleteQuestion(token);
-
+      const self = this;
       if (question.type == 'material') {
         $item.nextUntil('.js-subject-main-item').each(function() {
           $(this).remove();
+          self.changeBottomFixed();
         });
       }
       $listItem.remove();
       $item.remove();
+      self.changeBottomFixed();
+
       this.statErrorQuestions();
     });
+  }
+
+  changeBottomFixed() {
+    const visibleBottom = parseInt(window.scrollY + document.documentElement.clientHeight);
+    console.log($('.es-footer-link').offset().top);
+    let footerBottom = 0;
+    // 判断底部元素是否存在
+    if ($('.es-footer-link').length) {
+      footerBottom = parseInt($('.es-footer-link').offset().top);
+    } else {
+      if ($('.es-footer').length) {
+        footerBottom = parseInt($('.es-footer').offset().top);
+      }
+    }
+    if (footerBottom && footerBottom < visibleBottom) {
+      $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
+    }
   }
 
   editTestpaperTitle(event) {
