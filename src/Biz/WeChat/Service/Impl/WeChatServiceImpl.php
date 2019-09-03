@@ -260,7 +260,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             return null;
         }
 
-        $scenes = !empty($template['scenes']) ? array() : $template['scenes'];
+        $scenes = empty($template['scenes']) ? array() : $template['scenes'];
         if (!empty($scene) && !in_array($scene, $scenes)) {
             return null;
         }
