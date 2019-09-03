@@ -6012,6 +6012,7 @@ admin.setting_wechat_auth.account_code_empty: No QR Code Yet
 admin.setting_wechat_auth.account_code_view: View Larger Image
 admin.setting_wechat_auth.account_code_download: Download QR code
 admin.developer_setting.cloud_notification_api: Notification API
+admin.developer_setting.cloud_wechat_api: WeChat API
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
