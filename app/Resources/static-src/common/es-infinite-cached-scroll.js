@@ -97,10 +97,9 @@ export default class ESInfiniteCachedScroll extends Emitter {
     let $text = target.find('.js-remove-text');
     if ($icon.hasClass($expandIconClass)) {
       $icon.removeClass($expandIconClass).addClass($putIconClass);
-      if ($('.js-all-courses-link').length) {
-        $('.js-all-courses-link').addClass('hidden');
+      if ($('.js-only-display-one-page').length == 0) {
+        this._displayCurrentPageDataAndSwitchToNext();
       }
-      this._displayCurrentPageDataAndSwitchToNext();
     } else {
       $icon.removeClass($putIconClass).addClass($expandIconClass);
     }
