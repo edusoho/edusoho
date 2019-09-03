@@ -643,7 +643,6 @@ export default class sbList {
 
   changeBottomFixed() {
     const visibleBottom = parseInt(window.scrollY + document.documentElement.clientHeight);
-    console.log($('.es-footer-link').offset().top);
     let footerBottom = 0;
     // 判断底部元素是否存在
     if ($('.es-footer-link').length) {
