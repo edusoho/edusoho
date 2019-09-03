@@ -56,9 +56,11 @@ $form.validate({
   }
 });
 
-drag.on('success', function(token){
-  $smsCode.removeClass('disabled').attr('disabled', false);
-});
+if (drag) {
+  drag.on('success', function(token){
+    $smsCode.removeClass('disabled').attr('disabled', false);
+  });
+}
 
 $smsCode.on('click', function() {
   $smsCode.attr('disabled', true);
