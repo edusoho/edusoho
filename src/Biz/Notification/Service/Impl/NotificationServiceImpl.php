@@ -11,7 +11,6 @@ use Biz\Notification\Dao\NotificationStrategyDao;
 use Biz\Notification\Service\NotificationService;
 use AppBundle\Common\Exception\RuntimeException;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
-use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 
 class NotificationServiceImpl extends BaseService implements NotificationService
 {
@@ -101,7 +100,8 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 
     public function createWeChatNotificationRecord($sn, $key, $data)
     {
-        $templates = TemplateUtil::templates();
+        global $kernel;
+        $templates = $kernel->getContainer()->get('extension.manager')->getWeChatTemplates();
         $template = $templates[$key];
         $content = $this->spliceContent($template['detail'], $data);
         $event = array(

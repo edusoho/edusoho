@@ -2410,7 +2410,3 @@ admin_wechat_notification_show:
 admin_wechat_notification_setting_modal:
     path: /wechat/notification/setting_edit
     defaults: { _controller: AppBundle:Admin/WeChatNotification:settingModal }
-
-admin_wechat_notification_show_rule:
-    path: /wechat/notification/show_rule
-    defaults: { _controller: AppBundle:Admin/WeChatNotification:showRule}

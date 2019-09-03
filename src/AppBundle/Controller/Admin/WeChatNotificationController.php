@@ -8,7 +8,6 @@ use Biz\Notification\Service\NotificationService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Biz\WeChat\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 use Biz\CloudPlatform\CloudAPIFactory;
 
 class WeChatNotificationController extends BaseController
@@ -85,7 +84,8 @@ class WeChatNotificationController extends BaseController
         $wechatDefault = $this->getDefaultWechatSetting();
         $wechatSetting = $this->getSettingService()->get('wechat', array());
         $wechatSetting = array_merge($wechatDefault, $wechatSetting);
-        $templates = $this->getTemplateSetting(TemplateUtil::templates(), $wechatSetting);
+        $templates = $this->get('extension.manager')->getWeChatTemplates();
+        $templates = $this->getTemplateSetting($templates, $wechatSetting);
 
         return $this->render('admin/wechat-notification/manage.html.twig', array(
             'wechatSetting' => $wechatSetting,
@@ -97,7 +97,7 @@ class WeChatNotificationController extends BaseController
     public function showAction(Request $request)
     {
         $key = $request->query->get('key');
-        $templates = TemplateUtil::templates();
+        $templates = $this->get('extension.manager')->getWeChatTemplates();
 
         return $this->render('admin/wechat-notification/template-modal.html.twig', array(
             'template' => $templates[$key],
@@ -108,7 +108,8 @@ class WeChatNotificationController extends BaseController
     {
         $key = $request->query->get('key');
         $wechatSetting = $this->getSettingService()->get('wechat', array());
-        $templates = $this->getTemplateSetting(TemplateUtil::templates(), $wechatSetting);
+        $templates = $this->get('extension.manager')->getWeChatTemplates();
+        $templates = $this->getTemplateSetting($templates, $wechatSetting);
 
         if ('POST' == $request->getMethod()) {
             if (empty($wechatSetting['wechat_notification_enabled'])) {
@@ -127,19 +128,6 @@ class WeChatNotificationController extends BaseController
         $modal = isset($templates[$key]['setting_modal']) ? $templates[$key]['setting_modal'] : 'admin/wechat-notification/setting-modal/default-modal.html.twig';
 
         return $this->render($modal, array(
-            'template' => $templates[$key],
-            'wechatSetting' => $wechatSetting,
-            'key' => $key,
-        ));
-    }
-
-    public function showRuleAction(Request $request)
-    {
-        $key = $request->query->get('key');
-        $templates = TemplateUtil::templates();
-        $wechatSetting = $this->getSettingService()->get('wechat', array());
-
-        return $this->render('admin/wechat-notification/rule-modal.html.twig', array(
             'template' => $templates[$key],
             'wechatSetting' => $wechatSetting,
             'key' => $key,
