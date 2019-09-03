@@ -31,6 +31,7 @@ class CourseRemindNotificationJob extends AbstractNotificationJob
 
         $courseIds = ArrayToolkit::column($courseMembers, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::index($courses, 'id');
 
         $data = array(
             'first' => array('value' => '亲爱的学员，今日也要坚持学习哦'),
