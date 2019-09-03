@@ -214,7 +214,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 'data' => $freshWeChatUser,
                 'isSubscribe' => empty($freshWeChatUser['subscribe']) ? 0 : $freshWeChatUser['subscribe'],
                 'lastRefreshTime' => time(),
-                'nickname' => empty($freshWeChatUser['nickname']) ? '' : $freshWeChatUser['nickname'],
+                'nickname' => empty($freshWeChatUser['nickname']) ? '' : urlencode($freshWeChatUser['nickname']),
                 'profilePicture' => empty($freshWeChatUser['headimgurl']) ? '' : $freshWeChatUser['headimgurl'],
                 'subscribeTime' => empty($freshWeChatUser['subscribe_time']) ? 0 : $freshWeChatUser['subscribe_time'],
             );

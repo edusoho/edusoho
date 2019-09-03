@@ -261,7 +261,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
         $courseMemberService = $this->mockBiz('Course:MemberService', array(
             array(
                 'functionName' => 'findCourseTeachers',
-                'returnValue' => array(array('userIds' => 1), array('userIds' => 2)),
+                'returnValue' => array(array('userId' => 1), array('userId' => 2)),
                 'withParams' => array('1'),
             ),
         ));
@@ -299,7 +299,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findTeachers',
-                'returnValue' => array(array('userIds' => 1), array('userIds' => 2)),
+                'returnValue' => array(array('userId' => 1), array('userId' => 2)),
                 'withParams' => array('1'),
             ),
         ));
