@@ -26,10 +26,10 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             throw new InvalidArgumentException('缺少必要字段');
         }
         $wechatSetting['templates'][$key] = empty($wechatSetting['templates'][$key]) ? $fields : array_merge($wechatSetting['templates'][$key], $fields);
-        $wechatSetting = $this->getSettingService()->set('wechat', $wechatSetting);
-        $this->dispatchEvent('wechat.template_setting.save', new Event($fields), array('key' => $key, 'wechatSetting' => $wechatSetting));
+        $this->getSettingService()->set('wechat', $wechatSetting);
+        $this->dispatchEvent('wechat.template_setting.save', new Event($fields, array('key' => $key, 'wechatSetting' => $wechatSetting)));
 
-        return $wechatSetting;
+        return true;
     }
 
     public function getWeChatUser($id)
