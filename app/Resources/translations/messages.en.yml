@@ -1673,6 +1673,9 @@ course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exi
 course.plan_task.activity_manage.preview_failed_tips: 'Please enroll %taskName% to start.'
 course.plan_task.activity_manage.title_name: Title
 course.plan_task.activity_manage.help_block: 'It is recommended that the number of title words be controlled within 15 words, otherwise it will affect the browsing of mobile phones.'
+course.plan_task.activity_ppt_animation_tip: Currently, the PC has been supported to play animations and audio and video in PPT (expect app, applet and new micro-network school).
+course.plan_task.activity_ppt_animation_link: Animation support
+course.plan_task.activity_ppt_animation_btn: Switch img mode
 course.plan_task.activity_manage.setup_is_option: 'Set as optional'
 course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next %taskName% to unlock.'
 course.plan_task.activity_manage.choose_teach_way: '<span class="number">1</span>Please select'
