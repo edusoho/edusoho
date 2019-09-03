@@ -35,4 +35,9 @@ abstract class Extension extends BizAware implements ExtensionInterface
     {
         return array();
     }
+
+    public function getWeChatTemplates()
+    {
+        return array();
+    }
 }

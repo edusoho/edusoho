@@ -19,10 +19,10 @@ define(function(require, exports, module) {
           return false;
         }
 
-        $.post($form.attr('action'), {'isEnable':1, 'sendTime': $('[name="sendTime"]').val()})
+        $.post($form.attr('action'), $form.serialize())
           .success(function(response) {
             window.location.reload();
-        })
+          });
       }
     });
 
@@ -31,7 +31,7 @@ define(function(require, exports, module) {
       required: true,
     });
 
-    $("#send-time").datetimepicker({
+    $('#send-time').datetimepicker({
       language: 'zh-CN',
       autoclose: true,
       format: 'hh:ii',
@@ -42,6 +42,6 @@ define(function(require, exports, module) {
       validator.query('#send-time').execute();
     });
 
-    $("#send-time").datetimepicker('setValue', $("#send-time").val().substring(0, 5));
+    $('#send-time').datetimepicker('setValue', $('#send-time').val().substring(0, 5));
   };
 })

@@ -11,7 +11,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
     public function testOnTaskPublish()
     {
         $subscriber = new WeChatNotificationEventSubscriber($this->biz);
-        $this->mockTemplateId('normalTaskUpdate');
+        $this->mockTemplateId('courseUpdate');
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'getCourse',
@@ -72,12 +72,12 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
             array(
                 'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
-                'withParams' => array('oneHourBeforeLiveOpen'),
+                'withParams' => array('liveOpen', 'beforeOneHour'),
             ),
             array(
                 'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
-                'withParams' => array('oneDayBeforeLiveOpen'),
+                'withParams' => array('liveOpen', 'beforeOneDay'),
             ),
         ));
         $subscriber->onTaskUpdate($this->getTaskEvent(array('type' => 'live', 'startTime' => time() + 87000)));
@@ -91,7 +91,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
     public function testOnTaskPublishSync()
     {
         $subscriber = new WeChatNotificationEventSubscriber($this->biz);
-        $this->mockTemplateId('normalTaskUpdate');
+        $this->mockTemplateId('courseUpdate');
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'findCoursesByParentIdAndLocked',
@@ -115,7 +115,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
     public function testOnTaskCreateSync()
     {
         $subscriber = new WeChatNotificationEventSubscriber($this->biz);
-        $this->mockTemplateId('normalTaskUpdate');
+        $this->mockTemplateId('courseUpdate');
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'findCoursesByParentIdAndLocked',
@@ -299,7 +299,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findTeachers',
-                'returnValue' => array(array('userIds' => 1), array('userIds' => 2)),
+                'returnValue' => array(array('userId' => 1), array('userId' => 2)),
                 'withParams' => array('1'),
             ),
         ));

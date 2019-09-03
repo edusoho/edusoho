@@ -2,10 +2,12 @@
 
 namespace Biz\WeChatNotification\Event;
 
+use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\System\Service\SettingService;
 use Biz\Util\TextHelper;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -37,7 +39,82 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'thread.create' => 'onClassroomQuestionCreate',
             'course.thread.post.create' => 'onCourseQuestionAnswerCreate',
             'thread.post.create' => 'onClassroomQuestionAnswerCreate',
+            'wechat.template_setting.save' => 'onWeChatTemplateSettingSave',
         );
+    }
+
+    public function onWeChatTemplateSettingSave(Event $event)
+    {
+        $fields = $event->getSubject();
+        $key = $event->getArgument('key');
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        $templates = empty($wechatSetting['templates']) ? array() : $wechatSetting['templates'];
+        if ('homeworkOrTestPaperReview' == $key) {
+            $templates['homeworkOrTestPaperReview']['sendTime'] = $fields['sendTime'];
+            if (!empty($templates['homeworkOrTestPaperReview']['templateId']) && !empty($templates['homeworkOrTestPaperReview']['sendTime'])) {
+                $expression = $this->getSendTimeExpression($fields['sendTime']);
+                $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_HomeWorkOrTestPaperReview');
+                if ($notificationJob) {
+                    $this->getSchedulerService()->deleteJob($notificationJob['id']);
+                }
+                $job = array(
+                    'name' => 'WeChatNotificationJob_HomeWorkOrTestPaperReview',
+                    'expression' => $expression,
+                    'class' => 'Biz\WeChatNotification\Job\HomeWorkOrTestPaperReviewNotificationJob',
+                    'misfire_policy' => 'executing',
+                    'args' => array(
+                        'key' => $key,
+                        'sendTime' => $templates['homeworkOrTestPaperReview']['sendTime'],
+                    ),
+                );
+                $this->getSchedulerService()->register($job);
+            }
+        }
+
+        if ('courseRemind' == $key) {
+            $templates['courseRemind']['sendTime'] = $fields['sendTime'];
+            $templates['courseRemind']['sendDays'] = $fields['sendDays'];
+            if (!empty($templates['courseRemind']['templateId']) && !empty($templates['courseRemind']['sendTime']) && !empty($templates['courseRemind']['sendDays'])) {
+                $expression = $this->getSendDayAndTimeExpression($templates['courseRemind']['sendDays'], $templates['courseRemind']['sendTime']);
+                $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_CourseRemind');
+                if ($notificationJob) {
+                    $this->getSchedulerService()->deleteJob($notificationJob['id']);
+                }
+                $job = array(
+                    'name' => 'WeChatNotificationJob_CourseRemind',
+                    'expression' => $expression,
+                    'class' => 'Biz\WeChatNotification\Job\CourseRemindNotificationJob',
+                    'misfire_policy' => 'executing',
+                    'args' => array(
+                        'key' => $key,
+                        'url' => $this->generateUrl('my_courses_learning', array(), true),
+                        'sendTime' => $templates['courseRemind']['sendTime'],
+                        'sendDays' => $templates['courseRemind']['sendDays'],
+                    ),
+                );
+                $this->getSchedulerService()->register($job);
+            }
+        }
+
+        if ('vipExpired' == $key) {
+            if (!empty($templates['vipExpired']['templateId'])) {
+                $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_VipExpired');
+                if ($notificationJob) {
+                    $this->getSchedulerService()->deleteJob($notificationJob['id']);
+                }
+                $job = array(
+                    'name' => 'WeChatNotificationJob_VipExpired',
+                    'expression' => '* 20 * * *',
+                    'class' => 'VipPlugin\Biz\WeChatNotification\Job\VipExpiredNotificationJob',
+                    'misfire_policy' => 'executing',
+                    'args' => array(
+                        'key' => $key,
+                        'url' => $this->generateUrl('vip', array(), true),
+                    ),
+                );
+                $this->getSchedulerService()->register($job);
+            }
+        }
     }
 
     public function onTaskPublish(Event $event)
@@ -377,13 +454,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         foreach ($tasks as $task) {
             if ('live' == $task['type']) {
-                $key = 'liveTaskUpdate';
                 $this->deleteLiveNotificationJob($task);
                 $this->registerLiveNotificationJob($task);
-            } else {
-                $key = 'normalTaskUpdate';
             }
-
+            $key = TemplateUtil::TEMPLATE_COURSE_UPDATE;
             $this->deleteLessonPublishJob($task);
             $this->registerLessonNotificationJob($key, $task);
         }
@@ -427,8 +501,8 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
     private function registerLiveNotificationJob($task)
     {
-        $hourTemplateId = $this->getWeChatService()->getTemplateId('oneHourBeforeLiveOpen');
-        $dayTemplateId = $this->getWeChatService()->getTemplateId('oneDayBeforeLiveOpen');
+        $hourTemplateId = $this->getWeChatService()->getTemplateId(TemplateUtil::TEMPLATE_LIVE_OPEN, 'beforeOneHour');
+        $dayTemplateId = $this->getWeChatService()->getTemplateId(TemplateUtil::TEMPLATE_LIVE_OPEN, 'beforeOneDay');
         if (!empty($dayTemplateId) && $task['startTime'] >= (time() + 24 * 60 * 60)) {
             $job = array(
                 'name' => 'WeChatNotificationJob_LiveOneDay_'.$task['id'],
@@ -436,7 +510,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'class' => 'Biz\WeChatNotification\Job\LiveNotificationJob',
                 'misfire_threshold' => 60 * 60,
                 'args' => array(
-                    'key' => 'oneDayBeforeLiveOpen',
+                    'key' => 'liveOpen',
                     'taskId' => $task['id'],
                     'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), true),
                 ),
@@ -451,7 +525,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'class' => 'Biz\WeChatNotification\Job\LiveNotificationJob',
                 'misfire_threshold' => 60 * 10,
                 'args' => array(
-                    'key' => 'oneHourBeforeLiveOpen',
+                    'key' => 'liveOpen',
                     'taskId' => $task['id'],
                     'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), true),
                 ),
@@ -481,6 +555,49 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
 
         return false;
+    }
+
+    protected function getSendDayAndTimeExpression($days, $time)
+    {
+        $filterDays = array();
+
+        $allDays = array(
+            'Sun' => 0,
+            'Mon' => 1,
+            'Tue' => 2,
+            'Wed' => 3,
+            'Thu' => 4,
+            'Fri' => 5,
+            'Sat' => 6,
+        );
+
+        foreach ($allDays as $key => $day) {
+            if (in_array($key, $days)) {
+                $filterDays[] = $day;
+            }
+        }
+
+        $runDays = implode(',', $filterDays);
+        $runDays = empty($runDays) ? '*' : $runDays;
+        $time = explode(':', $time);
+        $hour = 2 === count($time) ? $time[0] : 0;
+        $minute = 2 === count($time) ? $time[1] : 0;
+
+        return $minute.' '.$hour.' * * '.$runDays;
+    }
+
+    protected function getSendTimeExpression($sendTime)
+    {
+        $expression = '';
+        if (!is_array($sendTime)) {
+            $hourAndMinute = explode(':', $sendTime);
+            $minute = ($hourAndMinute[1] < 10) ? $hourAndMinute[1] % 10 : $hourAndMinute[1];
+            $hour = ($hourAndMinute[0] < 10) ? $hourAndMinute[0] % 10 : $hourAndMinute[0];
+
+            $expression = $minute.' '.$hour.' * * *';
+        }
+
+        return $expression;
     }
 
     private function deleteLessonPublishJob($task)
@@ -616,5 +733,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     protected function getThreadService()
     {
         return $this->getBiz()->service('Thread:ThreadService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 }

@@ -4,28 +4,64 @@ namespace AppBundle\Component\Notification\WeChatTemplateMessage;
 
 class TemplateUtil
 {
+    const TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW = 'homeworkOrTestPaperReview';
+    const TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW_CODE = 'OPENTM414077970';
+
+    const TEMPLATE_COURSE_REMIND = 'courseRemind';
+    const TEMPLATE_COURSE_REMIND_CODE = 'OPENTM400833477';
+
+    const TEMPLATE_ASK_QUESTION = 'askQuestion';
+    const TEMPLATE_ASK_QUESTION_CODE = 'OPENTM414529612';
+
+    const TEMPLATE_ANSWER_QUESTION = 'answerQuestion';
+    const TEMPLATE_ANSWER_QUESTION_CODE = 'OPENTM416215703';
+
+    const TEMPLATE_VIP_EXPIRED = 'vipExpired';
+    const TEMPLATE_VIP_EXPIRED_CODE = 'OPENTM401520362';
+
+    const TEMPLATE_LIVE_OPEN = 'liveOpen';
+    const TEMPLATE_LIVE_OPEN_CODE = 'TM00080';
+
+    const TEMPLATE_HOMEWORK_RESULT = 'homeworkResult';
+    const TEMPLATE_HOMEWORK_RESULT_CODE = 'OPENTM400905764';
+
+    const TEMPLATE_EXAM_RESULT = 'examResult';
+    const TEMPLATE_EXAM_RESULT_CODE = 'OPENTM409257668';
+
+    const TEMPLATE_COURSE_UPDATE = 'courseUpdate';
+    const TEMPLATE_COURSE_UPDATE_CODE = 'TM408917738';
+
+    const TEMPLATE_COIN_RECHARGE = 'coinRecharge';
+    const TEMPLATE_COIN_RECHARGE_CODE = 'OPENTM401498850';
+
+    const TEMPLATE_PAY_SUCCESS = 'paySuccess';
+    const TEMPLATE_PAY_SUCCESS_CODE = 'OPENTM417184648';
+
     public static function templates()
     {
         $templates = array(
-            'homeworkOrTestPaperReview' => array(
-                'id' => 'OPENTM414077970',
+            self::TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW => array(
+                'id' => self::TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW_CODE,
                 'name' => '作业/试卷批改提醒',
+                'setting_modal' => 'admin/wechat-notification/setting-modal/testpaper-or-homework-review-modal.html.twig',
                 'content' => 'wechat.notification.template.homework_or_testpaper_need_review',
+                'rule' => 'wechat.notification.homework_or_testpaper_setting_conditions',
                 'detail' => '{{first.DATA}}<br>时间：{{keyword1.DATA}}<br>作业数目：{{keyword2.DATA}}<br>{{remark.DATA}}',
                 'object' => '课程教师',
                 'status' => 0,
             ),
-            'courseRemind' => array(
-                'id' => 'OPENTM400833477',
+            self::TEMPLATE_COURSE_REMIND => array(
+                'id' => self::TEMPLATE_COURSE_REMIND_CODE,
                 'name' => '上课提醒',
+                'setting_modal' => 'admin/wechat-notification/setting-modal/course-remind-modal.html.twig',
                 'content' => 'wechat.notification.template.remind_course',
                 'rule' => 'wechat.notification.template.remind_course.rule',
                 'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>时间：{{keyword2.DATA}}<br>{{remark.DATA}}',
-                'object' => '有未完成的教学计划的学员',
+                'object' => '课程学员',
                 'status' => 0,
             ),
-            'askQuestion' => array(
-                'id' => 'OPENTM414529612',
+            self::TEMPLATE_ASK_QUESTION => array(
+                'id' => self::TEMPLATE_ASK_QUESTION_CODE,
                 'name' => '答疑提醒',
                 'content' => 'wechat.notification.template.ask_question',
                 'rule' => 'wechat.notification.template.ask_question.rule',
@@ -33,8 +69,8 @@ class TemplateUtil
                 'object' => '课程教师',
                 'status' => 0,
             ),
-            'answerQuestion' => array(
-                'id' => 'OPENTM416215703',
+            self::TEMPLATE_ANSWER_QUESTION => array(
+                'id' => self::TEMPLATE_ANSWER_QUESTION_CODE,
                 'name' => '问题回复通知',
                 'content' => 'wechat.notification.template.answer_question',
                 'rule' => 'wechat.notification.template.answer_question.rule',
@@ -42,35 +78,28 @@ class TemplateUtil
                 'object' => '提问者',
                 'status' => 0,
             ),
-            'vipExpired' => array(
-                'id' => 'OPENTM401520362',
+            self::TEMPLATE_VIP_EXPIRED => array(
+                'id' => self::TEMPLATE_VIP_EXPIRED_CODE,
                 'name' => '会员到期提醒',
+                'setting_modal' => 'admin/wechat-notification/setting-modal/vip-expired-modal.html.twig',
                 'content' => 'wechat.notification.template.vip_expired',
                 'rule' => 'wechat.notification.template.vip_expired.rule',
                 'detail' => '{{first.DATA}}<br>开通时间：{{keyword1.DATA}}<br>到期时间：{{keyword2.DATA}}<br>{{remark.DATA}}',
                 'object' => '单个用户',
                 'status' => 0,
             ),
-            'oneHourBeforeLiveOpen' => array(
-                'id' => 'TM00080',
-                'name' => '直播开课通知(一小时前)',
+            self::TEMPLATE_LIVE_OPEN => array(
+                'id' => self::TEMPLATE_LIVE_OPEN_CODE,
+                'name' => '直播开课通知',
+                'setting_modal' => 'admin/wechat-notification/setting-modal/live-open-modal.html.twig',
                 'content' => 'wechat.notification.template.live_start',
                 'rule' => 'wechat.notification.template.live_start.rule',
                 'detail' => '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}',
                 'object' => '课程学员',
                 'status' => 0,
             ),
-            'oneDayBeforeLiveOpen' => array(
-                'id' => 'TM00080',
-                'name' => '直播开课通知(一天前)',
-                'content' => 'wechat.notification.template.live_start',
-                'rule' => 'wechat.notification.template.live_start.rule',
-                'detail' => '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}',
-                'object' => '课程学员',
-                'status' => 0,
-            ),
-            'homeworkResult' => array(
-                'id' => 'OPENTM400905764',
+            self::TEMPLATE_HOMEWORK_RESULT => array(
+                'id' => self::TEMPLATE_HOMEWORK_RESULT_CODE,
                 'name' => '作业结果通知',
                 'content' => 'wechat.notification.template.homework_result',
                 'rule' => 'wechat.notification.template.homework_result.rule',
@@ -78,8 +107,8 @@ class TemplateUtil
                 'object' => '作业提交学员',
                 'status' => 0,
             ),
-            'examResult' => array(
-                'id' => 'OPENTM409257668',
+            self::TEMPLATE_EXAM_RESULT => array(
+                'id' => self::TEMPLATE_EXAM_RESULT_CODE,
                 'name' => '考试结果通知',
                 'content' => 'wechat.notification.template.exam_result',
                 'rule' => 'wechat.notification.template.exam_result.rule',
@@ -87,26 +116,17 @@ class TemplateUtil
                 'object' => '试卷提交学员',
                 'status' => 0,
             ),
-            'normalTaskUpdate' => array(
-                'id' => 'TM408917738',
-                'name' => '课程更新提醒（普通任务）',
+            self::TEMPLATE_COURSE_UPDATE => array(
+                'id' => self::TEMPLATE_COURSE_UPDATE_CODE,
+                'name' => '课程更新提醒',
                 'content' => 'wechat.notification.template.lesson_add',
                 'rule' => 'wechat.notification.template.lesson_add.rule',
                 'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}',
                 'object' => '课程学员',
                 'status' => 0,
             ),
-            'liveTaskUpdate' => array(
-                'id' => 'TM408917738',
-                'name' => '课程更新提醒（直播任务）',
-                'content' => 'wechat.notification.template.lesson_add',
-                'rule' => 'wechat.notification.template.lesson_add.rule',
-                'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}',
-                'object' => '课程学员',
-                'status' => 0,
-            ),
-            'coinRecharge' => array(
-                'id' => 'OPENTM401498850',
+            self::TEMPLATE_COIN_RECHARGE => array(
+                'id' => self::TEMPLATE_COIN_RECHARGE_CODE,
                 'name' => '充值成功通知',
                 'content' => 'wechat.notification.template.charge_success',
                 'rule' => 'wechat.notification.template.charge_success.rule',
@@ -114,8 +134,8 @@ class TemplateUtil
                 'object' => '购买者',
                 'status' => 0,
             ),
-            'paySuccess' => array(
-                'id' => 'OPENTM417184648',
+            self::TEMPLATE_PAY_SUCCESS => array(
+                'id' => self::TEMPLATE_PAY_SUCCESS_CODE,
                 'name' => '购买成功通知',
                 'content' => 'wechat.notification.template.buy_success',
                 'rule' => 'wechat.notification.template.buy_success.rule',

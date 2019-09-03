@@ -307,6 +307,7 @@ t.add("course.thread_delete_hint", "\u60a8\u771f\u7684\u8981\u5220\u9664\u8be5\u
 t.add("course_manage.course_dashboard.student_num", "\u5b66\u5458\u6570", "js", "zh_CN");
 t.add("course_manage.course_dashboard.finish_num", "\u5b8c\u8bfe\u4eba\u6570", "js", "zh_CN");
 t.add("course_manage.course_dashboard.finish_rate", "\u5b8c\u8bfe\u7387", "js", "zh_CN");
+t.add("course.manage.teacher.manage.repeat_tip", "\u4e0d\u80fd\u91cd\u590d\u6dfb\u52a0", "js", "zh_CN");
 t.add("course_manage.course_overview.person_unit", "\u4eba\u6570", "js", "zh_CN");
 t.add("course_manage.lesson_dashboard.finish_rate", "\u5b8c\u6210\u7387", "js", "zh_CN");
 t.add("course_manage.lesson_dashboard.student_num", "\u4eba", "js", "zh_CN");
@@ -622,6 +623,7 @@ t.add("validate.fail", "\u9a8c\u8bc1\u5931\u8d25", "js", "zh_CN");
 t.add("validate.expiry_days_required_hint", "\u8bf7\u8f93\u5165\u6709\u6548\u671f", "js", "zh_CN");
 t.add("validate.empty_content_hint", "\u8bf7\u8f93\u5165\u5185\u5bb9!", "js", "zh_CN");
 t.add("validate.no_number_first_hint", "URL\u8def\u5f84\u53ea\u80fd\u5305\u542b\u5b57\u6bcd\u548c\u6570\u5b57,\u8bf7\u4ee5\u5b57\u6bcd\u5f00\u5934!\u957f\u5ea6\u5927\u4e8e2\u4f4d", "js", "zh_CN");
+t.add("validate.have_spaces", "\u5bc6\u7801\u4e0d\u80fd\u6709\u7a7a\u683c\u54e6", "js", "zh_CN");
 t.add("alert.file_convert_error.message", "\u6587\u4ef6\u8f6c\u6362\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");
 t.add("notify.file_not_select.message", "\u672a\u9009\u4e2d\u4efb\u4f55\u6587\u4ef6\u8bb0\u5f55", "js", "zh_CN");
 t.add("page.file_converting.message", "\u6b63\u5728\u6587\u4ef6\u683c\u5f0f\u8f6c\u6362", "js", "zh_CN");

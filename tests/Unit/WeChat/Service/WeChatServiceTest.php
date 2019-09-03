@@ -289,9 +289,11 @@ class WeChatServiceTest extends BaseTestCase
     {
         $wechatSetting = array(
             'wechat_notification_enabled' => 1,
-            'abc' => array(
-                'status' => 'open',
-                'templateId' => 123,
+            'templates' => array(
+                'abc' => array(
+                    'status' => 'open',
+                    'templateId' => 123,
+                ),
             ),
         );
         $this->getSettingService()->set('wechat', $wechatSetting);
