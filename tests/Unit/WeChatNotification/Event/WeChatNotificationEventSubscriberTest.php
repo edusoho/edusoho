@@ -115,7 +115,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
     public function testOnTaskCreateSync()
     {
         $subscriber = new WeChatNotificationEventSubscriber($this->biz);
-        $this->mockTemplateId('normalTaskUpdate');
+        $this->mockTemplateId('courseUpdate');
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'findCoursesByParentIdAndLocked',

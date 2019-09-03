@@ -14,7 +14,7 @@ class LiveNotificationJobTest extends BaseTestCase
             array(
                 'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
-                'withParams' => array('liveOpen', 'beforeOneDay'),
+                'withParams' => array('liveOpen'),
             ),
             array(
                 'functionName' => 'findSubscribedUsersByUserIdsAndType',
