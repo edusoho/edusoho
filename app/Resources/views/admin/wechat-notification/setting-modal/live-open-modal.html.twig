@@ -1,0 +1,13 @@
+{% extends 'admin/wechat-notification/setting-modal/layout.html.twig' %}
+
+{% block custom %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label"><label>{{'wechat.notification.setting_time_label'|trans}}</label></div>
+    <div class="col-sm-10 controls radios mts">
+      <label><input type="checkbox" name="scenes" value="beforeOneHour" {% if 'beforeOneHour' in template.scenes|default([]) %}checked{% endif %}> {{'wechat.notification.setting_live_time_before_one_hour'|trans}}</label>
+    </div>
+    <div class="col-sm-offset-2 col-sm-10 controls radios mts">
+      <label><input type="checkbox" name="scenes" value="beforeOneDay" {% if 'beforeOneDay' in template.scenes|default([]) %}checked{% endif %}> {{'wechat.notification.setting_live_time_before_one_day'|trans}}</label>
+    </div>
+  </div>
+{% endblock %}

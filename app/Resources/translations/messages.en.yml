@@ -1653,7 +1653,7 @@ course.plan_task.post_time: 'Post at %createdTime%'
 course.plan_task.post_num: '%postNum% answers'
 course.plan_task.course_teacher: Teacher
 course.plan_task.go_back_btn: Back
-course.plan_task.question_author: By 
+course.plan_task.question_author: By
 course.plan_task.question_answer: Answer
 course.plan_task.question_content: Content
 course.plan_task.add_answer_btn: 'Add answer'
@@ -3310,7 +3310,7 @@ my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
 my.teaching.live_schedule_menu: Teaching Schedules
 my.teaching.hints_block: Only live courses are shown currently
-my.teaching.today_courses: 'Number of courses today' 
+my.teaching.today_courses: 'Number of courses today'
 my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
@@ -4814,6 +4814,7 @@ admin.wechat_notification.template_content_sample: Template Content Sample
 admin.wechat_notification.send_object: Send Object
 admin.wechat_notification.operation: Operation
 admin.wechat_notification.template_switch: Switch
+admin.wechat_notification.template_status: Status
 admin.wechat_notification.template_content: Notification Content
 admin.wechat_notification.template_content_detail: Detail
 admin.wechat_notification.template_setting: Setting
@@ -8306,7 +8307,7 @@ user.learn.statistics.manage.describe_tips: >
 
 admin.datalab.setting.modal_title: 'Tips:'
 admin.datalab.setting.modal_enable_body: "When it is on, the data will update after 24 hours. Data doesn't update while it is off."
-admin.datalab.setting.modal_disable_body: 'Data will not update while it is off. Confirm to turn off?' 
+admin.datalab.setting.modal_disable_body: 'Data will not update while it is off. Confirm to turn off?'
 admin.datalab.setting.agreement: 'Agreement'
 admin.datalab.setting.operation_title: 'Open data service:'
 admin.datalab.warning_tip: 'The data service is closed, and the report will not update. Go <a href="%url%">【Setting】</a> to reopen.'
@@ -8799,8 +8800,12 @@ wechat.notification.template_open_error: The template failed to open. It may be 
 wechat.notification.service_not_open: WeChat service number notification is not enabled
 wechat.notification.empty_token: Get WeChat information error
 wechat.notification.template_not_exist: Template does not exist
-wechat.notification.homework_or_testpaper_setting_conditions: A notice will be sent to the course teacher at the specified time if all assignments or papers submitted within the past 24 hours have not been corrected.
-wechat.notification.homework_or_testpaper_setting_conditions_label: The trigger condition
+wechat.notification.setting_conditions: A notice will be sent to the course teacher at the specified time if all assignments or papers submitted within the past 24 hours have not been corrected.
+wechat.notification.setting_conditions_label: The trigger condition
+wechat.notification.setting_status_label: isOpen
+wechat.notification.setting_time_label: Time Setting
+wechat.notification.setting_live_time_before_one_hour: live before one hour
+wechat.notification.setting_live_time_before_one_day: live before one day
 wechat.notification.template_detail: Detail
 wechat.notification.send_time: Send Time
 wechat.notification.save: save
@@ -8832,7 +8837,7 @@ wechat.notification.template.answer_question: 'Dear student, there is a new answ
 wechat.notification.template.vip_expired: 'Dear student, the membership you purchased is about to expire.<br>opening time: [opening time]<br>expiration time: [expiration time]<br>please renew in time, so as not to affect your study'
 
 #微信通知规则
-wechat.notification.template.ask_question.rule: 'When someone in the class or class issues a question, a notice is sent to the teacher.'
+Fwechat.notification.template.ask_question.rule: 'When someone in the class or class issues a question, a notice is sent to the teacher.'
 wechat.notification.template.answer_question.rule: When the teacher answers the student's question, a notification is sent to the questioner.
 wechat.notification.template.homework_or_testpaper_need_review.rule: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
 wechat.notification.template.live_start.rule: 'A notification will be sent to participants at the designated time before the live class begins.'
@@ -8843,6 +8848,8 @@ wechat.notification.template.charge_success.rule: 'A notification will be sent w
 wechat.notification.template.buy_success.rule: 'A notification is sent when a student has successfully purchased a course, class, or membership.'
 wechat.notification.template.vip_expired.rule: 'Send notifications based on the reminder date set by the administrator.，<a href="%url%" target="_blank">Click here to go to Settings</a>'
 wechat.notification.template.vip_is_not_install: 'Notification cannot be sent normally without member plug-in installed.'
+wechat.notification.template.remind_course.rule: 'Send a notification reminder at a fixed frequency and a fixed time for at least one student who has not completed and has not withdrawn from the program.'
+
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: audio end

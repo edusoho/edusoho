@@ -3,6 +3,7 @@
 namespace Biz\WeChat\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Exception\InvalidArgumentException;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\User\Service\UserService;
@@ -11,12 +12,26 @@ use Biz\WeChat\Dao\UserWeChatDao;
 use Biz\WeChat\Service\WeChatService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use QiQiuYun\SDK\Constants\NotificationChannelTypes;
 
 class WeChatServiceImpl extends BaseService implements WeChatService
 {
+    public function saveWeChatTemplateSetting($key, $fields)
+    {
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        if (!ArrayToolkit::requireds($fields, array('status'))) {
+            throw new InvalidArgumentException('缺少必要字段');
+        }
+        $wechatSetting['templates'][$key] = empty($wechatSetting['templates'][$key]) ? $fields : array_merge($wechatSetting['templates'][$key], $fields);
+        $this->getSettingService()->set('wechat', $wechatSetting);
+        $this->dispatchEvent('wechat.template_setting.save', new Event($fields, array('key' => $key, 'wechatSetting' => $wechatSetting)));
+
+        return true;
+    }
+
     public function getWeChatUser($id)
     {
         return $this->getUserWeChatDao()->get($id);
@@ -224,18 +239,33 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $batchUpdateHelper->flush();
     }
 
-    public function getTemplateId($key)
+    /**
+     * @param $key
+     * key 模板key
+     * @param string $scene
+     *                      scene 模板对应场景
+     *
+     * @return mixed|null
+     */
+    public function getTemplateId($key, $scene = '')
     {
         $wechatSetting = $this->getSettingService()->get('wechat', array());
         if (empty($wechatSetting['wechat_notification_enabled'])) {
-            return;
+            return null;
         }
 
-        if (empty($wechatSetting[$key]['status']) || empty($wechatSetting[$key]['templateId'])) {
-            return;
+        $template = !empty($wechatSetting['templates'][$key]) ? $wechatSetting['templates'][$key] : array();
+
+        if (empty($template['status']) || empty($template['templateId'])) {
+            return null;
         }
 
-        return $wechatSetting[$key]['templateId'];
+        $scenes = empty($template['scenes']) ? array() : $template['scenes'];
+        if (!empty($scene) && !in_array($scene, $scenes)) {
+            return null;
+        }
+
+        return $template['templateId'];
     }
 
     public function handleCloudNotification($oldSetting, $newSetting, $loginConnect)
