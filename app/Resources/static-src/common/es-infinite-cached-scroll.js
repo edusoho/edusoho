@@ -3,6 +3,7 @@ import 'waypoints/lib/jquery.waypoints.min';
 import Emitter from 'common/es-event-emitter';
 import { debounce } from 'app/common/widget/debounce';
 /** 
+ *
  * 伪分页，从缓存中读取数据，数据结构格式见 构造方法
  *   例子见 app/Resources/static-src/app/js/courseset/show/index.js
  *     及 app/Resources/views/course/task-list/default-task-list.html.twig
@@ -83,12 +84,39 @@ export default class ESInfiniteCachedScroll extends Emitter {
 
     this._options = options;
     this._initConfig();
-
+    this.chapterAnimate();
     if (this._displayAllImmediately) {
       this._displayCurrentPageDataAndSwitchToNext();
     } else {
       this._initUpLoading();
     }
+  }
+
+  toggleIcon(target, $expandIconClass, $putIconClass) {
+    let $icon = target.find('.js-remove-icon');
+    let $text = target.find('.js-remove-text');
+    if ($icon.hasClass($expandIconClass)) {
+      $icon.removeClass($expandIconClass).addClass($putIconClass);
+      if ($('.js-all-courses-link').length) {
+        $('.js-all-courses-link').addClass('hidden');
+      }
+      this._displayCurrentPageDataAndSwitchToNext();
+    } else {
+      $icon.removeClass($putIconClass).addClass($expandIconClass);
+    }
+  }
+
+  chapterAnimate(
+    delegateTarget = 'body',
+    target = '.js-task-chapter',
+    $expandIconClass = 'es-icon-remove',
+    $putIconClass = 'es-icon-anonymous-iconfont') {
+      const self = this;
+    $(delegateTarget).on('click', target, (event) => {
+      let $this = $(event.currentTarget);
+      $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
+      self.toggleIcon($this, $expandIconClass, $putIconClass);
+    })
   }
 
   _initUpLoading() {
@@ -98,10 +126,15 @@ export default class ESInfiniteCachedScroll extends Emitter {
       let waypoint = new Waypoint({
         element: $('.js-down-loading-more')[0],
         handler: function(direction) {
+          console.log(direction);
           if (direction == 'down') {
+            console.log(direction);
+            console.log(self._isLastPage);
+            console.log(self._canNotDisplayMore());
             if (self._isLastPage || self._canNotDisplayMore()) {
               waypoint.disable();
             } else {
+              console.log('1111');
               self._scrollToBottom();
               waypoint.disable();
               self._displayCurrentPageDataAndSwitchToNext();
@@ -110,7 +143,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
             }
           }
         },
-        offset: 'bottom-in-view'
+        offset: '80%'
       });
     }
   }
@@ -158,6 +191,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
   }
 
   _displayData() {
+    console.log(this._isLastPage);
     if (this._isLastPage) {
       return;
     }

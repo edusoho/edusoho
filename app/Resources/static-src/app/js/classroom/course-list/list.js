@@ -4,7 +4,7 @@ import PagedCourseLesson from 'app/js/courseset/show/paged-course-lesson';
 export default class CourseList {
   constructor($element) {
     this.$element = $element;
-    chapterAnimate();
+    // chapterAnimate();
     this.initEvent();
   }
 
