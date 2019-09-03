@@ -19,6 +19,14 @@ let tokenUrl = $element.data('tokenUrl');
 const images = $element.data('imageInfo');
 const totalPagesNumber = Number(images.length);
 const finishType = $element.data('finishType');
+const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+
+const iosFullScreen = () => {
+  if (isIOS) {
+    $('#task-content-iframe', parent.document).toggleClass('ios-ppt-full-screen');
+  }
+}
 
 const initPptPlayer = (flag) => {
   // 清空内容后切换
@@ -88,6 +96,14 @@ const newPlayer = (token) => {
     endFinishTip(data.page);
   });
 
+  pptPlayer.on('img.requestFullscreen', () => {
+    iosFullScreen();
+  })
+
+  pptPlayer.on('slide.requestFullscreen', () => {
+    iosFullScreen();
+  })
+
   // 监听老图片
   pptPlayer.on('img.ready', () => {
     endFinishTip();
@@ -120,6 +136,10 @@ const initPPTImgPlayer = () => {
     const type = 'slide'
     toggleText(type);
     endFinishTip();
+  });
+
+  imgPlayer.on('img.requestFullscreen', () => {
+    iosFullScreen();
   });
 
   imgPlayer.on('img.poschanged', (data) => {
