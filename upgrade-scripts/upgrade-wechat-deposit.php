@@ -1,5 +1,6 @@
 <?php
 
+use Biz\System\Service\SettingService;
 use Symfony\Component\Filesystem\Filesystem;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use AppBundle\Common\ArrayToolkit;
@@ -54,7 +55,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'test',
+            'updateWeChatSetting',
         );
 
         $funcNames = array();
@@ -90,8 +91,67 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    public function test()
+    public function updateWeChatSetting()
     {
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        if (empty($wechatSetting) || !empty($wechatSetting['templates'])) {
+            return 1;
+        }
+
+        foreach ($wechatSetting as $key => $value) {
+            if (in_array($key, array(
+                'oneHourBeforeLiveOpen',
+                'oneDayBeforeLiveOpen',
+            ))) {
+                $wechatSetting['templates']['liveOpen']['status'] = 0;
+                $wechatSetting['templates']['liveOpen']['templateId'] = '';
+                if (empty($wechatSetting['templates']['liveOpen']['templateId']) && !empty($value['templateId'])) {
+                    $wechatSetting['templates']['liveOpen']['status'] = 1;
+                    $wechatSetting['templates']['liveOpen']['templateId'] = $value['templateId'];
+                    $wechatSetting['templates']['liveOpen']['scenes'][] = $key == 'oneHourBeforeLiveOpen' ? 'beforeOneHour' : 'beforeOneDay';
+                } elseif(!empty($value['templateId'])) {
+                    try {
+                        $this->biz['wechat.template_message_client']->deleteTemplate($value['templateId']);
+                    } catch (\Exception $e) {
+                       $this->logger('error', $e->getTraceAsString());
+                    }
+                }
+            }
+
+            if (in_array($key, array(
+                'normalTaskUpdate',
+                'liveTaskUpdate',
+            ))) {
+                $wechatSetting['templates']['courseUpdate']['status'] = 0;
+                $wechatSetting['templates']['courseUpdate']['templateId'] = '';
+                if (empty($wechatSetting['templates']['courseUpdate']['templateId']) && !empty($value['templateId'])) {
+                    $wechatSetting['templates']['liveOpen']['status'] = 1;
+                    $wechatSetting['templates']['liveOpen']['templateId'] = $value['templateId'];
+                } elseif(!empty($value['templateId'])) {
+                    try {
+                        $this->biz['wechat.template_message_client']->deleteTemplate($value['templateId']);
+                    } catch (\Exception $e) {
+                        $this->logger('error', $e->getTraceAsString());
+                    }
+                }
+            }
+            if (in_array($key, array(
+                'homeworkOrTestPaperReview',
+                'courseRemind',
+                'askQuestion',
+                'answerQuestion',
+                'vipExpired',
+                'homeworkResult',
+                'examResult',
+                'coinRecharge',
+                'paySuccess',
+            ))) {
+                $wechatSetting['templates'][$key] = $value;
+            }
+        }
+        $this->getSettingService()->set('wechat', $wechatSetting);
+
+        return 1;
 
     }
     protected function generateIndex($step, $page)
@@ -164,6 +224,9 @@ class EduSohoUpgrade extends AbstractUpdater
         return sha1(uniqid(mt_rand(), true));
     }
 
+    /**
+     * @return SettingService
+     */
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
