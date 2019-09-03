@@ -1409,3 +1409,5 @@ user.account.order_pay_vip_close_hint: 该订单的会员等级已关闭，确�
 user.account.order_pay: 继续
 user.account.order_not_pay: 不支付
 
+course.plan_task.activity_ppt_animation_img: 切换图片模式
+course.plan_task.activity_ppt_animation_slide: 切换动画模式
