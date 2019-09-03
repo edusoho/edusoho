@@ -10093,7 +10093,11 @@ wechat.notification.service_not_open: 未开启微信服务号通知
 wechat.notification.empty_token: 获取微信信息错误
 wechat.notification.template_not_exist: 模板不存在
 wechat.notification.homework_or_testpaper_setting_conditions: 以设置的发送时间为截止时间，在过去24小时内提交的作业或试卷没有全部批改完成时，会在指定时间发送通知给课程教师。
-wechat.notification.homework_or_testpaper_setting_conditions_label: 触发条件
+wechat.notification.setting_conditions_label: 触发条件
+wechat.notification.setting_status_label: 是否开启
+wechat.notification.setting_time_label: 时间设置
+wechat.notification.setting_live_time_before_one_hour: 直播开始前1小时
+wechat.notification.setting_live_time_before_one_day: 直播开始前24小时
 wechat.notification.template_detail: 详情
 wechat.notification.send_time: 发送时间
 wechat.notification.save: 保存
@@ -10136,6 +10140,7 @@ wechat.notification.template.charge_success.rule: '当学员成功充值虚拟�
 wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员是，会发送一条通知。'
 wechat.notification.template.vip_expired.rule: '根据管理员设置的提醒日期来发送通知，点此<a href="%url%" target="_blank">前往设置</a>'
 wechat.notification.template.vip_is_not_install: '未安装会员插件，无法正常发送通知。'
+wechat.notification.template.remind_course.rule: '针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。'
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: 听完音频

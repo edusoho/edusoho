@@ -3,7 +3,7 @@
 {% block custom %}
   <div class="form-group">
     <div class="col-sm-2 control-label"><label for="send-time">{{ 'wechat.notification.send_time'|trans }}</label></div>
-    <div class="col-sm-4 controls mts"><input class="form-control" type="text" id="send-time" name="sendTime" {% if sendTime|default(0) %}data-date="{{ sendTime|default('00:00') }}" {% endif %} autocomplete="off"></div>
+    <div class="col-sm-4 controls mts"><input class="form-control" type="text" id="send-time" name="sendTime" {% if template.sendTime|default(0) %}data-date="{{ template.sendTime|default('00:00') }}" {% endif %} autocomplete="off"></div>
   </div>
 {% endblock %}
 {% block footer %}

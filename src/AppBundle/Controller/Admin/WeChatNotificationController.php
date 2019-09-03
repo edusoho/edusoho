@@ -107,22 +107,25 @@ class WeChatNotificationController extends BaseController
     public function settingModalAction(Request $request)
     {
         $key = $request->query->get('key');
-        $templates = TemplateUtil::templates();
         $wechatSetting = $this->getSettingService()->get('wechat', array());
-        if ($request->getMethod() == 'POST') {
+        $templates = $this->getTemplateSetting(TemplateUtil::templates(), $wechatSetting);
+
+        if ('POST' == $request->getMethod()) {
             if (empty($wechatSetting['wechat_notification_enabled'])) {
                 throw new \RuntimeException($this->trans('wechat.notification.service_not_open'));
             }
             $fields = $request->request->all();
-            if ($fields['status'] == 1) {
+            if (1 == $fields['status']) {
                 $this->addTemplate($templates[$key], $key);
             } else {
                 $this->deleteTemplate($templates[$key], $key);
             }
-            $this->setTemplateDetail($key, $fields);
-            return $this->redirect($this->generateUrl('admin_wechat_notification_manage'));
+            $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields);
+
+            return $this->createJsonResponse(true);
         }
         $modal = isset($templates[$key]['setting_modal']) ? $templates[$key]['setting_modal'] : 'admin/wechat-notification/setting-modal/default-modal.html.twig';
+
         return $this->render($modal, array(
             'template' => $templates[$key],
             'wechatSetting' => $wechatSetting,
@@ -141,48 +144,6 @@ class WeChatNotificationController extends BaseController
             'wechatSetting' => $wechatSetting,
             'key' => $key,
         ));
-    }
-
-    public function statusAction(Request $request)
-    {
-        $key = $request->query->get('key');
-        $fields = $request->request->all();
-        $templates = TemplateUtil::templates();
-        $template = $templates[$key];
-        $wechatSetting = $this->getSettingService()->get('wechat', array());
-        if (empty($wechatSetting['wechat_notification_enabled'])) {
-            throw new \RuntimeException($this->trans('wechat.notification.service_not_open'));
-        }
-
-        if ($fields['isEnable']) {
-            $this->addTemplate($template, $key);
-            $this->setTemplateDetail($key, $fields);
-        } else {
-            $this->deleteTemplate($template, $key);
-        }
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function detailTemplateStatusAction(Request $request)
-    {
-        $key = $request->query->get('key');
-        $wechatSetting = $this->getSettingService()->get('wechat', array());
-
-        if ('homeworkOrTestPaperReview' == $key) {
-            return $this->render('admin/wechat-notification/homework-review-notification-setting-modal.html.twig', array(
-                'sendTime' => isset($wechatSetting[$key]['sendTime']) ? $wechatSetting[$key]['sendTime'] : '',
-                'key' => 'homeworkOrTestPaperReview',
-            ));
-        }
-
-        if ('courseRemind' == $key) {
-            return $this->render('admin/wechat-notification/course-remind-notification-setting-modal.html.twig', array(
-                'sendTime' => isset($wechatSetting['courseRemind']['sendTime']) ? $wechatSetting['courseRemind']['sendTime'] : '',
-                'sendDays' => isset($wechatSetting['courseRemind']['sendDays']) ? $wechatSetting['courseRemind']['sendDays'] : array(),
-                'key' => 'courseRemind',
-            ));
-        }
     }
 
     protected function filterConditions($conditions)
@@ -225,7 +186,7 @@ class WeChatNotificationController extends BaseController
         }
 
         $wechatSetting = $this->getSettingService()->get('wechat');
-        if (empty($wechatSetting[$key]['templateId'])) {
+        if (empty($wechatSetting['templates'][$key]['templateId'])) {
             $data = $client->addTemplate($template['id']);
 
             if (empty($data)) {
@@ -241,125 +202,6 @@ class WeChatNotificationController extends BaseController
         return $this->getSettingService()->get('wechat', $wechatSetting);
     }
 
-    protected function setTemplateDetail($key, $fields)
-    {
-        $wechatSetting = $this->getSettingService()->get('wechat', array());
-
-        if ('homeworkOrTestPaperReview' == $key) {
-            $wechatSetting['templates']['homeworkOrTestPaperReview']['sendTime'] = $fields['sendTime'];
-            $this->getSettingService()->set('wechat', $wechatSetting);
-            if (!empty($wechatSetting['homeworkOrTestPaperReview']['templateId']) && !empty($wechatSetting['homeworkOrTestPaperReview']['sendTime'])) {
-                $expression = $this->getSendTimeExpression($fields['sendTime']);
-                $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_HomeWorkOrTestPaperReview');
-                if ($notificationJob) {
-                    $this->getSchedulerService()->deleteJob($notificationJob['id']);
-                }
-                $job = array(
-                    'name' => 'WeChatNotificationJob_HomeWorkOrTestPaperReview',
-                    'expression' => $expression,
-                    'class' => 'Biz\WeChatNotification\Job\HomeWorkOrTestPaperReviewNotificationJob',
-                    'misfire_policy' => 'executing',
-                    'args' => array(
-                        'key' => $key,
-                        'sendTime' => $wechatSetting['homeworkOrTestPaperReview']['sendTime'],
-                    ),
-                );
-                $this->getSchedulerService()->register($job);
-            }
-        }
-
-        if ('courseRemind' == $key) {
-            $wechatSetting['courseRemind']['sendTime'] = $fields['sendTime'];
-            $wechatSetting['courseRemind']['sendDays'] = $fields['sendDays'];
-            $this->getSettingService()->set('wechat', $wechatSetting);
-            if (!empty($wechatSetting['courseRemind']['templateId']) && !empty($wechatSetting['courseRemind']['sendTime']) && !empty($wechatSetting['courseRemind']['sendDays'])) {
-                $expression = $this->getSendDayAndTimeExpression($wechatSetting['courseRemind']['sendDays'], $wechatSetting['courseRemind']['sendTime']);
-                $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_CourseRemind');
-                if ($notificationJob) {
-                    $this->getSchedulerService()->deleteJob($notificationJob['id']);
-                }
-                $job = array(
-                    'name' => 'WeChatNotificationJob_CourseRemind',
-                    'expression' => $expression,
-                    'class' => 'Biz\WeChatNotification\Job\CourseRemindNotificationJob',
-                    'misfire_policy' => 'executing',
-                    'args' => array(
-                        'key' => $key,
-                        'url' => $this->generateUrl('my_courses_learning', array(), true),
-                        'sendTime' => $wechatSetting['courseRemind']['sendTime'],
-                        'sendDays' => $wechatSetting['courseRemind']['sendDays'],
-                    ),
-                );
-                $this->getSchedulerService()->register($job);
-            }
-        }
-
-        if ('vipExpired' == $key) {
-            if (!empty($wechatSetting['vipExpired']['templateId'])) {
-                $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_VipExpired');
-                if ($notificationJob) {
-                    $this->getSchedulerService()->deleteJob($notificationJob['id']);
-                }
-                $job = array(
-                    'name' => 'WeChatNotificationJob_VipExpired',
-                    'expression' => '* 20 * * *',
-                    'class' => 'VipPlugin\Biz\WeChatNotification\Job\VipExpiredNotificationJob',
-                    'misfire_policy' => 'executing',
-                    'args' => array(
-                        'key' => $key,
-                        'url' => $this->generateUrl('vip', array(), true),
-                    ),
-                );
-                $this->getSchedulerService()->register($job);
-            }
-        }
-
-        return $this->getSettingService()->set('wechat', $wechatSetting);
-    }
-
-    protected function getSendDayAndTimeExpression($days, $time)
-    {
-        $filterDays = array();
-
-        $allDays = array(
-            'Sun' => 0,
-            'Mon' => 1,
-            'Tue' => 2,
-            'Wed' => 3,
-            'Thu' => 4,
-            'Fri' => 5,
-            'Sat' => 6,
-        );
-
-        foreach ($allDays as $key => $day) {
-            if (in_array($key, $days)) {
-                $filterDays[] = $day;
-            }
-        }
-
-        $runDays = implode(',', $filterDays);
-        $runDays = empty($runDays) ? '*' : $runDays;
-        $time = explode(':', $time);
-        $hour = 2 === count($time) ? $time[0] : 0;
-        $minute = 2 === count($time) ? $time[1] : 0;
-
-        return $minute.' '.$hour.' * * '.$runDays;
-    }
-
-    protected function getSendTimeExpression($sendTime)
-    {
-        $expression = '';
-        if (!is_array($sendTime)) {
-            $hourAndMinute = explode(':', $sendTime);
-            $minute = ($hourAndMinute[1] < 10) ? $hourAndMinute[1] % 10 : $hourAndMinute[1];
-            $hour = ($hourAndMinute[0] < 10) ? $hourAndMinute[0] % 10 : $hourAndMinute[0];
-
-            $expression = $minute.' '.$hour.' * * *';
-        }
-
-        return $expression;
-    }
-
     protected function deleteTemplate($template, $key)
     {
         $client = $this->getTemplateClient();
@@ -369,14 +211,12 @@ class WeChatNotificationController extends BaseController
 
         $wechatSetting = $this->getSettingService()->get('wechat');
 
-        if (empty($wechatSetting['templates'][$key]['templateId'])) {
-            throw new \RuntimeException($this->trans('wechat.notification.template_not_exist'));
-        }
+        if (!empty($wechatSetting['templates'][$key]['templateId'])) {
+            $data = $client->deleteTemplate($wechatSetting['templates'][$key]['templateId']);
 
-        $data = $client->deleteTemplate($wechatSetting['templates'][$key]['templateId']);
-
-        if (empty($data)) {
-            throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
+            if (empty($data)) {
+                throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
+            }
         }
 
         $wechatSetting['templates'][$key]['templateId'] = '';
@@ -404,7 +244,7 @@ class WeChatNotificationController extends BaseController
     private function getTemplateSetting($templates, $wechatSetting)
     {
         foreach ($templates as $key => &$template) {
-            $template['status'] = empty($wechatSetting['templates'][$key]['status']) ? 0 : $wechatSetting['templates'][$key]['status'];
+            $template = empty($wechatSetting['templates'][$key]) ? $template : array_merge($template, $wechatSetting['templates'][$key]);
         }
 
         return $templates;

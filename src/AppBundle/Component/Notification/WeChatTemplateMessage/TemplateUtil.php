@@ -53,6 +53,7 @@ class TemplateUtil
             self::TEMPLATE_COURSE_REMIND => array(
                 'id' => self::TEMPLATE_COURSE_REMIND_CODE,
                 'name' => '上课提醒',
+                'setting_modal' => 'admin/wechat-notification/setting-modal/course-remind-modal.html.twig',
                 'content' => 'wechat.notification.template.remind_course',
                 'rule' => 'wechat.notification.template.remind_course.rule',
                 'detail' => '{{first.DATA}}<br>{{keyword1.DATA}}<br>{{keyword2.DATA}}<br>{{remark.DATA}}',

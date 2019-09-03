@@ -16,6 +16,8 @@ interface WeChatService
 
     const WECHAT_MAX_USER_COUNT = 10000;
 
+    public function saveWeChatTemplateSetting($key, $fields);
+
     public function getWeChatUserByTypeAndUnionId($type, $unionId);
 
     public function getWeChatUserByTypeAndOpenId($type, $openId);

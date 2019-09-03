@@ -2414,11 +2414,3 @@ admin_wechat_notification_setting_modal:
 admin_wechat_notification_show_rule:
     path: /wechat/notification/show_rule
     defaults: { _controller: AppBundle:Admin/WeChatNotification:showRule}
-
-admin_wechat_notification_template_status:
-    path: /wechat/notification/template/status
-    defaults: { _controller: AppBundle:Admin/WeChatNotification:status}
-
-admin_wechat_notification_detail_template_status:
-    path: /wechat/notification/detail/template/status
-    defaults: { _controller: AppBundle:Admin/WeChatNotification:detailTemplateStatus}

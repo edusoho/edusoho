@@ -19,7 +19,7 @@ define(function(require, exports, module) {
           return false;
         }
 
-        $.post($form.attr('action'), {'isEnable':1, 'sendTime': $('[name="sendTime"]').val()})
+        $.post($form.attr('action'), $form.serialize())
           .success(function(response) {
             window.location.reload();
           });
