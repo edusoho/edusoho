@@ -103,7 +103,6 @@ export default class MobileBind {
           self.drag.initDragCaptcha();
         },
         additionalAction: function(ackResponse) {
-          console.log(ackResponse);
           if (ackResponse == 'captchaRequired') {
             self.$smsCode.attr('disabled', true);
             $('.js-drag-jigsaw').removeClass('hidden');
