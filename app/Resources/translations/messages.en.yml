@@ -8847,7 +8847,7 @@ wechat.notification.template.exam_result.rule: 'When there are subjective questi
 wechat.notification.template.lesson_add.rule: 'A notification is sent to participants when new assignments are posted.'
 wechat.notification.template.charge_success.rule: 'A notification will be sent when students successfully recharge their virtual currency or exchange their study card.'
 wechat.notification.template.buy_success.rule: 'A notification is sent when a student has successfully purchased a course, class, or membership.'
-wechat.notification.template.vip_expired.rule: 'Send notifications based on the reminder date set by the administrator.，<a href="%url%" target="_blank">Click here to go to Settings</a>'
+wechat.notification.template.vip_expired.rule: 'Send notifications at 8 PM each night, depending on the reminder date set by the administrator. <a href="%url%" target="_blank">Click here to go to Settings</a>'
 wechat.notification.template.vip_is_not_install: 'Notification cannot be sent normally without member plug-in installed.'
 wechat.notification.template.remind_course.rule: 'Send a notification reminder at a fixed frequency and a fixed time for at least one student who has not completed and has not withdrawn from the program.'
 
