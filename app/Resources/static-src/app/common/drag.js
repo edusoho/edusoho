@@ -57,6 +57,7 @@ export default class Drag extends Emitter{
       $(img).prependTo('.js-drag-img');
       $('.js-drag-img-mask').addClass('hidden');
       $('.js-jigsaw').attr('src', src);
+      $('.js-drag-img').css('minHeight', img.height);
     };
   }
 
