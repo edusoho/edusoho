@@ -40,7 +40,20 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'course.thread.post.create' => 'onCourseQuestionAnswerCreate',
             'thread.post.create' => 'onClassroomQuestionAnswerCreate',
             'wechat.template_setting.save' => 'onWeChatTemplateSettingSave',
+            'wechat.job.delete' => 'onWeChatNotificationJobDelete',
         );
+    }
+
+    public function onWeChatNotificationJobDelete(Event $event)
+    {
+        $key = $event->getArgument('key');
+        if ('homeworkOrTestPaperReview' == $key || 'CourseRemind' == $key) {
+            $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_'.ucfirst($key));
+
+            if (!empty($notificationJob)) {
+                $this->getSchedulerService()->deleteJob($notificationJob['id']);
+            }
+        }
     }
 
     public function onWeChatTemplateSettingSave(Event $event)

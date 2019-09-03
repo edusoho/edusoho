@@ -29,6 +29,10 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $this->getSettingService()->set('wechat', $wechatSetting);
         $this->dispatchEvent('wechat.template_setting.save', new Event($fields, array('key' => $key, 'wechatSetting' => $wechatSetting)));
 
+        if (isset($wechatSetting['templates'][$key]) && $wechatSetting['templates'][$key]['status'] == 0) {
+            $this->dispatchEvent('wechat.job.delete', new Event($fields, array('key' => $key)));
+        }
+
         return true;
     }
 
