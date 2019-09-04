@@ -113,8 +113,8 @@ export default class ESInfiniteCachedScroll extends Emitter {
     const self = this;
     $(delegateTarget).on('click', target, (event) => {
       let $this = $(event.currentTarget);
-      $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
       self.toggleIcon($this, $expandIconClass, $putIconClass);
+      $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
     })
   }
 
