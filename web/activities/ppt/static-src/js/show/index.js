@@ -24,6 +24,9 @@ const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //io
 
 const iosFullScreen = () => {
   if (isIOS) {
+    if ($('.js-change-ppt-btn').length != 0) {
+      $('.js-change-ppt-btn').toggleClass('hidden');
+    }
     $('#task-content-iframe', parent.document).toggleClass('ios-ppt-full-screen');
   }
 }
