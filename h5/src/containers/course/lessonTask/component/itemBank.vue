@@ -176,35 +176,40 @@ export default {
         },
         //题目类型过滤
         subject(paper) {
-            let type;
+            var parentType='';
+            var type = paper.type;
+            var typeName;
+
             if (paper.parentType) {
-                type = paper.parentType;
-            } else {
-                type = paper.type;
+              parentType = "材料题-";
             }
+
             switch (type) {
-                case "single_choice":
-                return "单选题";
+              case "single_choice":
+                typeName='单选题';
                 break;
-                case "choice":
-                return "多选题";
+              case "choice":
+                typeName='多选题';
                 break;
-                case "essay":
-                return "问答题";
+              case "essay":
+                typeName='问答题';
                 break;
-                case "uncertain_choice":
-                return "不定项选择题";
+              case "uncertain_choice":
+                typeName='不定项选择题';
                 break;
-                case "determine":
-                return "判断题";
+              case "determine":
+                typeName='判断题';
                 break;
-                case "fill":
-                return "填空题";
+              case "fill":
+                typeName='填空题';
                 break;
-                case "material":
-                return "材料题";
+              case "material":
+                typeName='材料题';
                 break;
+              default:
+                ''
             }
+            return parentType + typeName
         },
         //单选题选择
         singleChoose(name, id) {
