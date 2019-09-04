@@ -7,11 +7,9 @@ export default class MobileBind {
   constructor() {
     this.$form = $('#mobile-bind-form');
     this.$smsCode = this.$form.find('.js-sms-send');
-    this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
-      limitType: 'web_register'
-    }) : null;
-    this.dragEvent();
+    this.drag = null;
     this.initCheckCookie();
+    this.dragEvent();
     this.initValidator();
     this.initMobileCodeSendBtn();
   }
@@ -29,6 +27,9 @@ export default class MobileBind {
     let key = this.$form.data('userId') + '-last-login-in';
 
     if (!Cookies.get(key) || Cookies.get(key) != new Date().getDate()) {
+      this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
+        limitType: 'web_register'
+      }) : null
       $('#mobile-bind-modal').modal('show');
       Cookies.set(key, new Date().getDate());
     }
