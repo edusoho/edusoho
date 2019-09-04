@@ -110,7 +110,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
     target = '.js-task-chapter',
     $expandIconClass = 'es-icon-remove',
     $putIconClass = 'es-icon-anonymous-iconfont') {
-      const self = this;
+    const self = this;
     $(delegateTarget).on('click', target, (event) => {
       let $this = $(event.currentTarget);
       $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
@@ -125,15 +125,10 @@ export default class ESInfiniteCachedScroll extends Emitter {
       let waypoint = new Waypoint({
         element: $('.js-down-loading-more')[0],
         handler: function(direction) {
-          console.log(direction);
           if (direction == 'down') {
-            console.log(direction);
-            console.log(self._isLastPage);
-            console.log(self._canNotDisplayMore());
             if (self._isLastPage || self._canNotDisplayMore()) {
               waypoint.disable();
             } else {
-              console.log('1111');
               self._scrollToBottom();
               waypoint.disable();
               self._displayCurrentPageDataAndSwitchToNext();
@@ -142,7 +137,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
             }
           }
         },
-        offset: '80%'
+        offset: 'bottom-in-view'
       });
     }
   }
@@ -190,7 +185,6 @@ export default class ESInfiniteCachedScroll extends Emitter {
   }
 
   _displayData() {
-    console.log(this._isLastPage);
     if (this._isLastPage) {
       return;
     }
