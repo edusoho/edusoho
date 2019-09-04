@@ -43,7 +43,8 @@ class BaseQuestion {
       let url = $('#courseEditBelong').data('url');
       let select2 = $('.js-lessonSelect');
       $('.js-lesson-edit-options').html('');
-      $('.js-setting-item').find('input[name="lessonId"]').val(0);
+      $('.js-lessonSelect').find('input[name="lessonId"]').val(0);
+      $('.js-lessonSelect').find('.select-value').text(Translator.trans('site.choose_hint'));
       if (value == 0) {
         select2.hide();
         return;

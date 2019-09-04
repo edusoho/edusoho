@@ -80,7 +80,8 @@ export default class sbList {
       let url = $('#courseBelong').data('url');
       let select2 = $('#lessonBelong');
       $('.js-lesson-options').html('');
-      this.$belongModal.find('input[name="lessonId"]').val(0);
+      $('#lessonBelong').find('input[name="lessonId"]').val(0);
+      $('#lessonBelong').find('.select-value').text(Translator.trans('site.choose_hint'));
       if (value == 0) {
         select2.hide();
         return;
