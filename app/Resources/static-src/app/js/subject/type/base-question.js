@@ -94,8 +94,19 @@ class BaseQuestion {
         footerBottom = parseInt($('.es-footer').offset().top);
       }
     }
-    if (footerBottom && footerBottom < visibleBottom) {
-      $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
+    // 适配其他主题
+    if (!footerBottom) {
+      const scrollHeight = parseInt($(document).scrollTop());
+      const windowHeight = parseInt($(document.body).height());
+      const visibleHeight = parseInt($(window).height());
+      const offsetHeight = windowHeight - 560;
+      if ((scrollHeight + visibleHeight) >= offsetHeight) {
+        $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
+      }
+    } else {
+      if (footerBottom < visibleBottom) {
+        $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
+      }
     }
   }
 

@@ -168,15 +168,34 @@ export default class sbList {
 
   scrollBottom() {
     const $fixedFooterElement = $('.js-subject-item-btn');
-    const footerLinkHeight = $('.es-footer-link').length ? $('.es-footer-link').outerHeight(): 0;
-    const footerHeight = $('.es-footer').length ? $('.es-footer').outerHeight(): 0;
-    const bottomHeight = footerLinkHeight + footerHeight;
-    const finalHeight = $(document).height() - $(window).height() - bottomHeight;
     $(window).scroll(function(event) {
-      if ($(window).scrollTop() < finalHeight) {
-        $fixedFooterElement.addClass('subject-bottom-fixed');
+      const visibleBottom = parseInt(window.scrollY + document.documentElement.clientHeight);
+      let footerBottom = 0;
+      // 判断底部元素是否存在
+      if ($('.es-footer-link').length) {
+        footerBottom = parseInt($('.es-footer-link').offset().top);
       } else {
-        $fixedFooterElement.removeClass('subject-bottom-fixed');
+        if ($('.es-footer').length) {
+          footerBottom = parseInt($('.es-footer').offset().top);
+        }
+      }
+      // 其他主题默认滚动到距离底部560
+      if (!footerBottom) {
+        const scrollHeight = parseInt($(document).scrollTop());
+        const windowHeight = parseInt($(document.body).height());
+        const visibleHeight = parseInt($(window).height());
+        const offsetHeight = windowHeight - 560;
+        if ((scrollHeight + visibleHeight) < offsetHeight) {
+          $fixedFooterElement.addClass('subject-bottom-fixed');
+        } else {
+          $fixedFooterElement.removeClass('subject-bottom-fixed');
+        }
+      } else {
+        if (footerBottom > visibleBottom) {
+          $fixedFooterElement.addClass('subject-bottom-fixed');
+        } else {
+          $fixedFooterElement.removeClass('subject-bottom-fixed');
+        }
       }
     });
   }
@@ -654,8 +673,19 @@ export default class sbList {
         footerBottom = parseInt($('.es-footer').offset().top);
       }
     }
-    if (footerBottom && footerBottom < visibleBottom) {
-      $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
+    // 适配其他主题
+    if (!footerBottom) {
+      const scrollHeight = parseInt($(document).scrollTop());
+      const windowHeight = parseInt($(document.body).height());
+      const visibleHeight = parseInt($(window).height());
+      const offsetHeight = windowHeight - 560;
+      if ((scrollHeight + visibleHeight) >= offsetHeight) {
+        $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
+      }
+    } else {
+      if (footerBottom < visibleBottom) {
+        $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
+      }
     }
   }
 
