@@ -1,4 +1,5 @@
 import ESInfiniteCachedScroll from 'common/es-infinite-cached-scroll';
+import { isEmpty } from 'common/utils';
 
 class PagedCourseLesson {
 
@@ -31,6 +32,9 @@ class PagedCourseLesson {
   // 分页数根据课程的最大章中的数量来设定，小于25则设置为25
   _getPageSizeByMaxLessonsNumOfChapter(options) {
     let items = options.data;
+    if (isEmpty(items)) {
+      return;
+    }
     let pageSize = 0
     let num = 0
     items.forEach(item => {
