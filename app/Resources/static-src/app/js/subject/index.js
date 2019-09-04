@@ -80,6 +80,8 @@ export default class sbList {
       let url = $('#courseBelong').data('url');
       let select2 = $('#lessonBelong');
       $('.js-lesson-options').html('');
+      $('#lessonBelong').find('input[name="lessonId"]').val(0);
+      $('#lessonBelong').find('.select-value').text(Translator.trans('site.choose_hint'));
       if (value == 0) {
         select2.hide();
         return;
@@ -375,8 +377,8 @@ export default class sbList {
   }
 
   batchSetBelong() {
-    let courseId = $('input[name="courseId"]').val();
-    let lessonId = $('input[name="lessonId"]').val();
+    let courseId = this.$belongModal.find('input[name="courseId"]').val();
+    let lessonId = this.$belongModal.find('input[name="lessonId"]').val();
     this.questionOperate.modifyBelong(this.selectQuestion, courseId, lessonId);
     this.selectQuestion = [];
 

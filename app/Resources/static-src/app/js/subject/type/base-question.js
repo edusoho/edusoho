@@ -27,14 +27,24 @@ class BaseQuestion {
   }
 
   _initSelect() {
-    cd.select({
+    let courseSelect = cd.select({
       el: '#courseEditBelong',
       type: 'single',
       parent: '.js-setting-item'
-    }).on('change', (value, text) => {
+    });
+
+    let lessonSelect = cd.select({
+      el: '#lessonEditBelong',
+      type: 'single',
+      parent: '.js-setting-item'
+    });
+
+    courseSelect.on('change', (value, text) => {
       let url = $('#courseEditBelong').data('url');
       let select2 = $('.js-lessonSelect');
       $('.js-lesson-edit-options').html('');
+      $('.js-lessonSelect').find('input[name="lessonId"]').val(0);
+      $('.js-lessonSelect').find('.select-value').text(Translator.trans('site.choose_hint'));
       if (value == 0) {
         select2.hide();
         return;
@@ -54,10 +64,12 @@ class BaseQuestion {
       });
     });
 
-    cd.select({
-      el: '#lessonEditBelong',
-      type: 'single',
-      parent: '.js-setting-item'
+    $('#courseEditBelong').on('click', (value, text) => {
+      lessonSelect.clear();
+    });
+
+    $('#lessonEditBelong').on('click', (value, text) => {
+      courseSelect.clear();
     });
   }
 
