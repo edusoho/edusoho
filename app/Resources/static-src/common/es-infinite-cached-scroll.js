@@ -3,6 +3,7 @@ import 'waypoints/lib/jquery.waypoints.min';
 import Emitter from 'common/es-event-emitter';
 import { debounce } from 'app/common/widget/debounce';
 /** 
+ *
  * 伪分页，从缓存中读取数据，数据结构格式见 构造方法
  *   例子见 app/Resources/static-src/app/js/courseset/show/index.js
  *     及 app/Resources/views/course/task-list/default-task-list.html.twig
@@ -83,12 +84,38 @@ export default class ESInfiniteCachedScroll extends Emitter {
 
     this._options = options;
     this._initConfig();
-
+    this.chapterAnimate();
     if (this._displayAllImmediately) {
       this._displayCurrentPageDataAndSwitchToNext();
     } else {
       this._initUpLoading();
     }
+  }
+
+  toggleIcon(target, $expandIconClass, $putIconClass) {
+    let $icon = target.find('.js-remove-icon');
+    let $text = target.find('.js-remove-text');
+    if ($icon.hasClass($expandIconClass)) {
+      $icon.removeClass($expandIconClass).addClass($putIconClass);
+      if ($('.js-only-display-one-page').length == 0) {
+        this._displayCurrentPageDataAndSwitchToNext();
+      }
+    } else {
+      $icon.removeClass($putIconClass).addClass($expandIconClass);
+    }
+  }
+
+  chapterAnimate(
+    delegateTarget = 'body',
+    target = '.js-task-chapter',
+    $expandIconClass = 'es-icon-remove',
+    $putIconClass = 'es-icon-anonymous-iconfont') {
+    const self = this;
+    $(delegateTarget).on('click', target, (event) => {
+      let $this = $(event.currentTarget);
+      $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
+      self.toggleIcon($this, $expandIconClass, $putIconClass);
+    })
   }
 
   _initUpLoading() {
