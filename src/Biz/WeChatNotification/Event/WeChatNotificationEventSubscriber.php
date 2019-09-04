@@ -314,6 +314,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         if (empty($userIds)) {
             return;
         }
+
         $this->askQuestionSendNotification($thread, $userIds);
     }
 
@@ -325,8 +326,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
         $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
-        $classroomTeachers = $this->getClassroomService()->findTeachers($classroom['id']);
-        $userIds = ArrayToolkit::column($classroomTeachers, 'userId');
+        $userIds = $this->getClassroomService()->findTeachers($classroom['id']);
         if (empty($userIds)) {
             return;
         }
@@ -344,7 +344,8 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $course = $this->getCourseService()->getCourse($post['courseId']);
         $thread = $this->getCourseThreadService()->getThread($course['id'], $post['threadId']);
         if ($this->getCourseMemberService()->isCourseTeacher($post['courseId'], $post['userId'])) {
-            $this->answerQuestionNotification($thread['userId'], $post['content'], $course['title'], $thread['createdTime']);
+            $title = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
+            $this->answerQuestionNotification($thread['userId'], $post['content'], $title, $thread['createdTime']);
         }
     }
 
