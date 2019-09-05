@@ -1859,6 +1859,7 @@ course.live.replay_manage.lesson_add_btn: Add
 course.liveroom.content_title: 'Live'
 course.liveroom.open_liveroom_tips: 'Live entering, please wait ...'
 activity.live.not_created_notice: Live classroom not yet created!
+activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
 course.note.save_btn: Save
 course.note.share_btn: Share
 file_chooser.empty: 'No resources'
