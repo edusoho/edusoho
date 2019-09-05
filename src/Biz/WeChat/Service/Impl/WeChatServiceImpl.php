@@ -23,11 +23,13 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     /**
      * @param $platformType WeChatPlatformTypes
      * @param $callbackUrl
+     *
      * @return mixed
      */
     public function getPreAuthUrl($platformType, $callbackUrl)
     {
         $preAuthUrl = $this->biz['qiQiuYunSdk.wechat']->getPreAuthUrl($platformType, $callbackUrl);
+
         return $preAuthUrl['url'];
     }
 

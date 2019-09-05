@@ -80,14 +80,15 @@ class WeChatSettingController extends BaseController
     /**
      * @param Request $request
      * @param $platformType
+     *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function preAuthUrlAction(Request $request, $platformType)
     {
-        if ($platformType == 'official_account') {
+        if ('official_account' == $platformType) {
             $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::OFFICIAL_ACCOUNT, $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL));
         }
-        if ($platformType == 'mini_program') {
+        if ('mini_program' == $platformType) {
             $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::MINI_PROGRAM, $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL));
         }
 
