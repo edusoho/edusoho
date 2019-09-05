@@ -59,20 +59,19 @@
               <input type="hidden" name="wechatSetting[wechat_notification_enabled]" value="{{ wechatSetting.wechat_notification_enabled }}">
             </label>
           </div>
-          {% if wechatSetting.wechat_is_authorization|default(0) != 1 and wechatSetting.authorization_func_complete|default(0) != 1 %}
+          {% if wechatAuth.isAuthorized|default(0) != 1 and wechatSetting.wholeness|default(0) != 1 %}
             <div class="setting-comment alert alert-warning">
-              {% if not wechatSetting.wechat_is_authorization|default(0) %}
+              {% if not wechatAuth.isAuthorized|default(0) %}
                 {% if wechatSetting.wechat_notification_enabled %}
                   <div class="setting-comment-block">{{'开启微信通知前，请先进行扫码授权。'|trans}}</div>
                 {% else %}
                   <div class="setting-comment-block">{{'为防止网校服务器或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。'|trans}}</div>
                 {% endif %}
-              {% elseif wechatSetting.authorization_func_complete|default(false) %}
+              {% elseif wechatSetting.wholeness|default(false) %}
                 <div class="setting-comment-block color-danger">
                   {{ '检测到您在扫码授权时，未将群发与通知权限”授予ES第三方平台，将无法启用“微信服务号通知”，请进行重新授权。'|trans }}
                 </div>
               {% endif %}
-
               <div class="setting-comment-button">
                 <a data-url="{{ path('admin_setting_wechat_pre_auth_url', {platformType: 'official_account'}) }}" type="button" class="btn btn-default btn-large btn-primary js-wechat-pre-auth-url" target="blank">{{'立即授权'|trans}}</a>
               </div>

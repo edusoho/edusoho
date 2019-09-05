@@ -74,6 +74,7 @@ class WeChatSettingController extends BaseController
             'payment' => $payment,
             'wechatSetting' => $wechatSetting,
             'isCloudOpen' => $this->isCloudOpen(),
+            'wechatAuth' => $this->getAuthorizationInfo(),
         ));
     }
 
@@ -111,6 +112,22 @@ class WeChatSettingController extends BaseController
         }
 
         return true;
+    }
+
+    protected function getAuthorizationInfo()
+    {
+        $biz = $this->getBiz();
+        $info = $biz['qiQiuYunSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
+        if ($info['isAuthorized']) {
+            $ids = ArrayToolkit::column($info['funcInfo'], 'funcscope_category');
+            $ids = ArrayToolkit::column($ids, 'id');
+            $needIds = array(1,2,3,4,7);
+            $diff = array_diff($needIds, $ids);
+            if (empty($diff)) {
+                $info['wholeness'] = 1;
+            }
+        }
+        return $info;
     }
 
     private function decideEnabledLoginConnect($loginConnect)
