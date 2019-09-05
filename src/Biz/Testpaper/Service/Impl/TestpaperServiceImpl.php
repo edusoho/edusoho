@@ -1221,7 +1221,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $exportQuestions;
     }
 
-    private function filterNotExistImage($stems) {
+    private function filterNotExistImage($stems)
+    {
         $filtered = array();
 
         foreach ($stems as $stem) {
