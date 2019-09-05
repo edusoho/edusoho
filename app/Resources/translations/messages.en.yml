@@ -4827,6 +4827,7 @@ admin.wechat.notification.go_to_open: Go to open
 admin.wechat.notification.un_authorized_before_open_tip: Before opening the Wechat notification, please sweep the code first.
 admin.wechat.notification.un_authorized_after_open_tip: In order to prevent abnormal notification function caused by IP change of network school server or message server, it is recommended that you sweep code authorization.
 admin.wechat.notification.authorized_wholeless: It was detected that you did not grant group distribution and notification rights to ES third-party platform when sweeping code authorization. Wechat Service Number Notification could not be enabled. Please re-authorize.
+admin.wechat.notification.go_authorizer: Authorizer now
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
