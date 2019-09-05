@@ -5855,6 +5855,9 @@ admin.wechat_notification.failure_number: 失败人数
 admin.wechat_notification.failure_reason.empty: 暂无失败原因
 admin.wechat.notification.open_wechat_notify_tip: 微信通知，指的是通过微信服务号向学员发送消息，学员绑定微信并关注服务号即可收取微信通知，微信通知具有两大优势
 admin.wechat.notification.go_to_open: 前往开启
+admin.wechat.notification.un_authorized_before_open_tip: 开启微信通知前，请先进行扫码授权。
+admin.wechat.notification.un_authorized_after_open_tip: 为防止网校服务器或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
+admin.wechat.notification.authorized_wholeless: 检测到您在扫码授权时，未将群发与通知权限”授予ES第三方平台，将无法启用“微信服务号通知”，请进行重新授权。
 
 # 数据统计
 admin.operation_analysis.data_type_placeholder: --选择数据类型--
