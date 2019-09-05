@@ -6,7 +6,6 @@ use Psr\Log\LoggerInterface;
 use QiQiuYun\SDK\HttpClient\ClientInterface;
 use QiQiuYun\SDK\Exception\SDKException;
 use QiQiuYun\SDK\Service\NotificationService;
-use QiQiuYun\SDK\Service\WeChatService;
 
 class QiQiuYunSDK
 {
@@ -125,9 +124,6 @@ class QiQiuYunSDK
         return $this->getService('Notification');
     }
 
-    /**
-     * @return WeChatService
-     */
     public function getWeChatService()
     {
         return $this->getService('WeChat');
