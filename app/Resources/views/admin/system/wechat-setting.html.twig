@@ -74,7 +74,7 @@
               {% endif %}
 
               <div class="setting-comment-button">
-                <a href="http://www.qiqiuyu.com/faq/259/detail" type="button" class="btn btn-default btn-large btn-primary" target="blank">{{'立即授权'|trans}}</a>
+                <a data-url="{{ path('admin_setting_wechat_pre_auth_url', {platformType: 'official_account'}) }}" type="button" class="btn btn-default btn-large btn-primary js-wechat-pre-auth-url" target="blank">{{'立即授权'|trans}}</a>
               </div>
             </div>
           {% endif %}

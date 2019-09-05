@@ -2387,6 +2387,10 @@ admin_setting_wechat_auth:
     path: /wechat/auth/setting
     defaults: { _controller: AppBundle:Admin/WeChatSetting:index}
 
+admin_setting_wechat_pre_auth_url:
+    path: /wechat/pre_auth_url/{platformType}
+    defaults: { _controller: AppBundle:Admin/WeChatSetting:preAuthUrl }
+
 admin_wechat_notification_record:
     path: /wechat/notification/record
     defaults: { _controller: AppBundle:Admin/WeChatNotification:record}
