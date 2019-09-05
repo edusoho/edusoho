@@ -597,6 +597,7 @@ t.add("validate.alphanumeric.message", "\u5fc5\u987b\u662f\u82f1\u6587\u5b57\u6b
 t.add("validate.raty_star.message", "\u8bf7\u6253\u5206", "js", "zh_CN");
 t.add("validate.reg_invite_code.message", "\u5fc5\u987b\u662f5\u4f4d\u6570\u5b57\u3001\u82f1\u6587\u5b57\u6bcd\u7ec4\u6210", "js", "zh_CN");
 t.add("validate.phone.message", "\u8bf7\u8f93\u5165\u6709\u6548\u624b\u673a\u53f7\u7801", "js", "zh_CN");
+t.add("validate.mobile_or_telephone.message", "\u8bf7\u8f93\u5165\u6709\u6548\u624b\u673a\u53f7\u7801\u6216\u8005\u7535\u8bdd\u53f7\u7801(\u533a\u53f7-\u7535\u8bdd\u53f7\u7801)", "js", "zh_CN");
 t.add("validate.nickname.message", "\u4e0d\u5141\u8bb8\u4ee51\u5f00\u5934\u768411\u4f4d\u7eaf\u6570\u5b57", "js", "zh_CN");
 t.add("validate.password_check.message", "\u5bc6\u7801\u9519\u8bef", "js", "zh_CN");
 t.add("validate.sms_code_input.message", "\u8bf7\u8f93\u5165\u77ed\u4fe1\u9a8c\u8bc1\u7801", "js", "zh_CN");
@@ -1207,6 +1208,7 @@ t.add("subject.period", "\u3002", "js", "zh_CN");
 t.add("subject.miss_score_no_more_than_score", "\u6f0f\u9009\u5206\u503c\u4e0d\u5f97\u8d85\u8fc7\u9898\u76ee\u5206\u503c", "js", "zh_CN");
 t.add("subject.score_update_success", "\u5206\u6570\u4fee\u6539\u6210\u529f", "js", "zh_CN");
 t.add("subject.difficulty_update_success", "\u96be\u5ea6\u4fee\u6539\u6210\u529f", "js", "zh_CN");
+t.add("subject.belong_update_success", "\u4ece\u5c5e\u4fee\u6539\u6210\u529f", "js", "zh_CN");
 t.add("subject.question_count", "\u5171%count%\u9053\u9898", "js", "zh_CN");
 t.add("subject.total_score", "\u603b\u5206%totalScore%\u5206", "js", "zh_CN");
 t.add("subject.is_editing_warning", "\u8bf7\u5148\u5b8c\u6210\u7b2c%seq%\u9898\u7684\u7f16\u8f91", "js", "zh_CN");
