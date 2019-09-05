@@ -93,16 +93,19 @@ export default class ESInfiniteCachedScroll extends Emitter {
   }
 
   toggleIcon(target, $expandIconClass, $putIconClass) {
-    let $icon = target.find('.js-remove-icon');
-    let $text = target.find('.js-remove-text');
-    if ($icon.hasClass($expandIconClass)) {
-      $icon.removeClass($expandIconClass).addClass($putIconClass);
-      if ($('.js-only-display-one-page').length == 0) {
-        this._displayCurrentPageDataAndSwitchToNext();
+    return new Promise((resolve, reject) => {
+      let $icon = target.find('.js-remove-icon');
+      let $text = target.find('.js-remove-text');
+      if ($icon.hasClass($expandIconClass)) {
+        $icon.removeClass($expandIconClass).addClass($putIconClass);
+        if ($('.js-only-display-one-page').length == 0) {
+          this._displayCurrentPageDataAndSwitchToNext();
+        }
+      } else {
+        $icon.removeClass($putIconClass).addClass($expandIconClass);
       }
-    } else {
-      $icon.removeClass($putIconClass).addClass($expandIconClass);
-    }
+      resolve();
+    });
   }
 
   chapterAnimate(
@@ -111,10 +114,11 @@ export default class ESInfiniteCachedScroll extends Emitter {
     $expandIconClass = 'es-icon-remove',
     $putIconClass = 'es-icon-anonymous-iconfont') {
     const self = this;
-    $(delegateTarget).on('click', target, (event) => {
+    $(delegateTarget).off('click').on('click', target, (event) => {
       let $this = $(event.currentTarget);
-      self.toggleIcon($this, $expandIconClass, $putIconClass);
-      $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
+      self.toggleIcon($this, $expandIconClass, $putIconClass).then(() => {
+        $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
+      });
     })
   }
 
