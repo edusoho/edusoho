@@ -62,7 +62,7 @@
         <tbody>
           {% for key,template in templates %}
             <tr>
-              <td width="20%">{{ template.name }}</td>
+              <td width="20%">{{ template.name|trans|raw }}</td>
               <td width="50%"><a class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_show', {key: key}) }}">{{ template.content|trans|sub_text(30)|raw }}</td>
               <td width="15%">{{ template.object }}</td>
               <td width="10%">
@@ -71,13 +71,6 @@
                 {% else %}
                   <span>未开启</span>
                 {% endif %}
-{#                {% if (key == 'homeworkOrTestPaperReview' or key == 'courseRemind') and template.status == 0 %}#}
-{#                  <a data-toggle="modal" href="#modal" data-url="{{ path('admin_wechat_notification_detail_template_status', {key: key})}}"><label class="form-switch setting-switch {% if template.status %}checked{% endif %}"></label></a>#}
-{#                {% else %}#}
-{#                  <label class="form-switch setting-switch {% if template.status %}checked{% endif %}">#}
-{#                    <input type="checkbox" name="switch" value="{{ template.status }}" id="weixinweb_enabled" data-toggle="switch" data-url="{{ path('admin_wechat_notification_template_status', {key: key}) }}" data-key="{{ key }}">#}
-{#                  </label>#}
-{#                {% endif %}#}
               </td>
               <td width="5%">
                 <a class="js-wechat-notification-setting alert-link" {% if isCloudOpen %} href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_setting_modal', {key: key})}}"{% else %}href="javascript:;" {% endif %}>
