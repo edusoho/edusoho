@@ -76,7 +76,7 @@ define(function(require, exports, module) {
 
         $('[name="loginConnect[weixinweb_enabled]"]').change(function(e) {
           var checked = e.target.value;
-          var subItem = $(this).parents('form').children().children('[data-sub="weixinweb"]');
+          var subItem = $(this).parents('form').find('[data-sub="weixinweb"]');
 
           if (checked == '1') {
             subItem.removeClass('hidden');
@@ -98,7 +98,7 @@ define(function(require, exports, module) {
         $('[name="loginConnect[weixinmob_enabled]"]').change(function(e) {
           var checked = e.target.value;
           var wxpayChecked = $('#wxpay_enabled').val();
-          var subItem = $(this).parents('form').children().children('[data-sub="weixinmob"]');
+          var subItem = $(this).parents('form').find('[data-sub="weixinmob"]');
 
           if (checked == '1' || wxpayChecked == '1') {
             subItem.removeClass('hidden');
@@ -128,7 +128,7 @@ define(function(require, exports, module) {
 
         $('[name="wechatSetting[wechat_notification_enabled]"]').change(function(e) {
           var checked = e.target.value;
-          var subItem = $(this).parents('form').children().children('[data-sub="account"]');
+          var subItem = $(this).parents('form').find('[data-sub="account"]');
 
           if (checked == '1') {
             subItem.removeClass('hidden');
@@ -145,8 +145,8 @@ define(function(require, exports, module) {
         $('[name="payment[wxpay_enabled]"]').change(function(e) {
           var checked = e.target.value;
           var weixinmobChecked = $('#weixinmob_enabled').val();
-          var subItem = $(this).parents('form').children().children('[data-sub="wxpay"]');
-          var mobItem = $(this).parents('form').children().children('[data-sub="weixinmob"]');
+          var subItem = $(this).parents('form').find('[data-sub="wxpay"]');
+          var mobItem = $(this).parents('form').find('[data-sub="weixinmob"]');
 
           if (checked == '1') {
             subItem.removeClass('hidden');
