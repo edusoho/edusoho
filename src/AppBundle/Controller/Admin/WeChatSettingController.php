@@ -87,10 +87,10 @@ class WeChatSettingController extends BaseController
     public function preAuthUrlAction(Request $request, $platformType)
     {
         if ('official_account' == $platformType) {
-            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::OFFICIAL_ACCOUNT, $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL));
+            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::OFFICIAL_ACCOUNT, $this->generateUrl('admin_setting_wechat_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL));
         }
         if ('mini_program' == $platformType) {
-            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::MINI_PROGRAM, $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL));
+            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::MINI_PROGRAM, $this->generateUrl('admin_setting_wechat_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL));
         }
 
         return $this->createJsonResponse(array(
