@@ -7,7 +7,7 @@ namespace QiQiuYun\SDK\Service;
  */
 class WeChatService extends BaseService
 {
-    protected $host = 'http://wechat-trust-service.cloud-test.edusoho.cn';
+    protected $host = 'wechat-trust-service.cloud-test.edusoho.cn';
 
     /**
      * 获取预授权URL
