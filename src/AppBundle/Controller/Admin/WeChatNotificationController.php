@@ -206,7 +206,6 @@ class WeChatNotificationController extends BaseController
         if (!empty($wechatSetting['templates'][$key]['templateId'])) {
             if ($wechatSetting['is_authorization']) {
                 $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['templateId']);
-                file_put_contents('1.txt', json_encode($data));
             } else {
                 $data = $client->deleteTemplate($wechatSetting['templates'][$key]['templateId']);
             }
