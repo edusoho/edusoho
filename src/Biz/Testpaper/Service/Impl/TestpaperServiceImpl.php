@@ -1202,7 +1202,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
 
             $question = $wrapper->handle($question, 'exportQuestion');
-            $question['stem'] = $this->filterNotExistFile($question['stem']);
+            $question['stem'] = $this->filterNotExistImage($question['stem']);
             $question = ArrayToolkit::parts($question, array(
                 'type',
                 'seq',
@@ -1221,7 +1221,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $exportQuestions;
     }
 
-    private function filterNotExistFile($stems) {
+    private function filterNotExistImage($stems) {
         $filtered = array();
 
         foreach ($stems as $stem) {
