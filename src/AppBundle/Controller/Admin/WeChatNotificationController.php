@@ -175,7 +175,11 @@ class WeChatNotificationController extends BaseController
 
         $wechatSetting = $this->getSettingService()->get('wechat');
         if (empty($wechatSetting['templates'][$key]['templateId'])) {
-            $data = $client->addTemplate($template['id']);
+            if ($wechatSetting['is_authorization']) {
+                $data = $this->getSDKWeChatService()->createNotificationTemplate($template['id']);
+            } else {
+                $data = $client->addTemplate($template['id']);
+            }
 
             if (empty($data)) {
                 throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
@@ -200,7 +204,12 @@ class WeChatNotificationController extends BaseController
         $wechatSetting = $this->getSettingService()->get('wechat');
 
         if (!empty($wechatSetting['templates'][$key]['templateId'])) {
-            $data = $client->deleteTemplate($wechatSetting['templates'][$key]['templateId']);
+            if ($wechatSetting['is_authorization']) {
+                $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['templateId']);
+                file_put_contents('1.txt', json_encode($data));
+            } else {
+                $data = $client->deleteTemplate($wechatSetting['templates'][$key]['templateId']);
+            }
 
             if (empty($data)) {
                 throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
@@ -280,5 +289,13 @@ class WeChatNotificationController extends BaseController
     protected function getWeChatService()
     {
         return $this->createService('WeChat:WeChatService');
+    }
+
+    /**
+     * @return \QiQiuYun\SDK\Service\WeChatService
+     */
+    protected function getSDKWeChatService()
+    {
+        return $this->getBiz()['qiQiuYunSdk.wechat'];
     }
 }
