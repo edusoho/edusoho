@@ -38,7 +38,7 @@ class WeChatService extends BaseService
      */
     public function getUserList($nextOpenId = '')
     {
-        return $this->request('GET', '/official_account/user_list', array('next_openid' => $nextOpenId));
+        return $this->request('GET', '/official_account/user_list', array('nextOpenId' => $nextOpenId));
     }
 
     /**
@@ -68,21 +68,21 @@ class WeChatService extends BaseService
      */
     public function getUserInfo($openId, $lang = 'zh_CN')
     {
-        return $this->request('GET', '/official_account/user_list', array('openid' => $openId, 'lang' => $lang));
+        return $this->request('GET', '/official_account/user_list', array('openId' => $openId, 'lang' => $lang));
     }
 
     /**
      * 获取微信多个用户信息
      *
-     * @param $openids array 必填 微信openIds
+     * @param $openIds array 必填 微信openIds
      *        $lang   string 选填 语言（zh_CN 简体，zh_TW 繁体，en 英语，默认zh_CN）
      *
      * @return array 返回参数如下
      *               user_info_list  array  数据内容为 多个getUserInfo返回参数集合
      */
-    public function batchGetUserInfo($openids, $lang = 'zh_CN')
+    public function batchGetUserInfo($openIds, $lang = 'zh_CN')
     {
-        return $this->request('POST', '/official_account/user_infos', array('openids' => $openids, 'lang' => $lang));
+        return $this->request('POST', '/official_account/user_infos', array('openIds' => $openIds, 'lang' => $lang));
     }
 
     /**
