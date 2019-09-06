@@ -10143,6 +10143,19 @@ wechat.notification.template.vip_expired.rule: '根据管理员设置的提醒�
 wechat.notification.template.vip_is_not_install: '未安装会员插件，无法正常发送通知。'
 wechat.notification.template.remind_course.rule: '针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。'
 
+#微信通知名称
+wechat.notification.template_name.homework_or_testpaper_need_review: '作业/试卷批改提醒'
+wechat.notification.template_name.remind_course: '上课提醒'
+wechat.notification.template_name.ask_question: '答疑提醒'
+wechat.notification.template_name.answer_question: '问题回复通知'
+wechat.notification.template_name.vip_expired: '会员到期提醒'
+wechat.notification.template_name.live_start: '直播开课提醒'
+wechat.notification.template_name.homework_result: '作业结果通知'
+wechat.notification.template_name.exam_result: '考试结果通知'
+wechat.notification.template_name.lesson_add: '课程更新提醒'
+wechat.notification.template_name.charge_success: '充值成功通知'
+wechat.notification.template_name.buy_success: '购买成功通知'
+
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: 听完音频
 mobile.task.finish_tips.discuss.join: 在本课程下发表或者回复一个话题

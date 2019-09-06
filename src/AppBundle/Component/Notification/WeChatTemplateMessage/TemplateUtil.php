@@ -39,7 +39,7 @@ class TemplateUtil
         $templates = array(
             self::TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW => array(
                 'id' => self::TEMPLATE_HOMEWORK_OR_TESTPAPER_REVIEW_CODE,
-                'name' => '作业/试卷批改提醒',
+                'name' => 'wechat.notification.template_name.homework_or_testpaper_need_review',
                 'setting_modal' => 'admin/wechat-notification/setting-modal/testpaper-or-homework-review-modal.html.twig',
                 'content' => 'wechat.notification.template.homework_or_testpaper_need_review',
                 'rule' => 'wechat.notification.homework_or_testpaper_setting_conditions',
@@ -49,26 +49,26 @@ class TemplateUtil
             ),
             self::TEMPLATE_COURSE_REMIND => array(
                 'id' => self::TEMPLATE_COURSE_REMIND_CODE,
-                'name' => '上课提醒',
+                'name' => 'wechat.notification.template_name.remind_course',
                 'setting_modal' => 'admin/wechat-notification/setting-modal/course-remind-modal.html.twig',
                 'content' => 'wechat.notification.template.remind_course',
                 'rule' => 'wechat.notification.template.remind_course.rule',
-                'detail' => '{{first.DATA}}<br>{{keyword1.DATA}}<br>{{keyword2.DATA}}<br>{{remark.DATA}}',
+                'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>时间：{{keyword2.DATA}}<br>{{remark.DATA}}',
                 'object' => '课程学员',
                 'status' => 0,
             ),
             self::TEMPLATE_ASK_QUESTION => array(
                 'id' => self::TEMPLATE_ASK_QUESTION_CODE,
-                'name' => '答疑提醒',
+                'name' => 'wechat.notification.template_name.ask_question',
                 'content' => 'wechat.notification.template.ask_question',
                 'rule' => 'wechat.notification.template.ask_question.rule',
-                'detail' => '尊敬的老师，您的在教课程中有学员发布了提问<br>{{keyword1.DATA}}<br>{{keyword2.DATA}}<br>时间{{keyword3.DATA}}<br>{{remark.DATA}}',
+                'detail' => '尊敬的老师，您的在教课程中有学员发布了提问<br>申请人：{{keyword1.DATA}}<br>问题内容：{{keyword2.DATA}}<br>时间：{{keyword3.DATA}}<br>{{remark.DATA}}',
                 'object' => '课程教师',
                 'status' => 0,
             ),
             self::TEMPLATE_ANSWER_QUESTION => array(
                 'id' => self::TEMPLATE_ANSWER_QUESTION_CODE,
-                'name' => '问题回复通知',
+                'name' => 'wechat.notification.template_name.answer_question',
                 'content' => 'wechat.notification.template.answer_question',
                 'rule' => 'wechat.notification.template.answer_question.rule',
                 'detail' => '{{first.DATA}}<br>提问时间：{{keyword1.DATA}}<br>回复内容：{{keyword2.DATA}}<br>{{remark.DATA}}',
@@ -77,7 +77,7 @@ class TemplateUtil
             ),
             self::TEMPLATE_LIVE_OPEN => array(
                 'id' => self::TEMPLATE_LIVE_OPEN_CODE,
-                'name' => '直播开课通知',
+                'name' => 'wechat.notification.template_name.live_start',
                 'setting_modal' => 'admin/wechat-notification/setting-modal/live-open-modal.html.twig',
                 'content' => 'wechat.notification.template.live_start',
                 'rule' => 'wechat.notification.template.live_start.rule',
@@ -87,7 +87,7 @@ class TemplateUtil
             ),
             self::TEMPLATE_HOMEWORK_RESULT => array(
                 'id' => self::TEMPLATE_HOMEWORK_RESULT_CODE,
-                'name' => '作业结果通知',
+                'name' => 'wechat.notification.template_name.homework_result',
                 'content' => 'wechat.notification.template.homework_result',
                 'rule' => 'wechat.notification.template.homework_result.rule',
                 'detail' => '{{first.DATA}}<br>作业名称：{{keyword1.DATA}}<br>所属课程：{{keyword2.DATA}}<br>辅导老师：{{keyword3.DATA}}<br>{{remark.DATA}}',
@@ -96,7 +96,7 @@ class TemplateUtil
             ),
             self::TEMPLATE_EXAM_RESULT => array(
                 'id' => self::TEMPLATE_EXAM_RESULT_CODE,
-                'name' => '考试结果通知',
+                'name' => 'wechat.notification.template_name.exam_result',
                 'content' => 'wechat.notification.template.exam_result',
                 'rule' => 'wechat.notification.template.exam_result.rule',
                 'detail' => '{{first.DATA}}<br>考试科目：{{keyword1.DATA}}<br>考试成绩：{{keyword2.DATA}}<br>{{remark.DATA}}',
@@ -105,7 +105,7 @@ class TemplateUtil
             ),
             self::TEMPLATE_COURSE_UPDATE => array(
                 'id' => self::TEMPLATE_COURSE_UPDATE_CODE,
-                'name' => '课程更新提醒',
+                'name' => 'wechat.notification.template_name.lesson_add',
                 'content' => 'wechat.notification.template.lesson_add',
                 'rule' => 'wechat.notification.template.lesson_add.rule',
                 'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}',
@@ -114,7 +114,7 @@ class TemplateUtil
             ),
             self::TEMPLATE_COIN_RECHARGE => array(
                 'id' => self::TEMPLATE_COIN_RECHARGE_CODE,
-                'name' => '充值成功通知',
+                'name' => 'wechat.notification.template_name.charge_success',
                 'content' => 'wechat.notification.template.charge_success',
                 'rule' => 'wechat.notification.template.charge_success.rule',
                 'detail' => '{{first.DATA}}<br>充值类型：{{keyword1.DATA}}<br>充值订单号：{{keyword2.DATA}}<br>充值金额：{{keyword3.DATA}}<br>充值时间：{{keyword4.DATA}}<br>{{remark.DATA}}',
@@ -123,7 +123,7 @@ class TemplateUtil
             ),
             self::TEMPLATE_PAY_SUCCESS => array(
                 'id' => self::TEMPLATE_PAY_SUCCESS_CODE,
-                'name' => '购买成功通知',
+                'name' => 'wechat.notification.template_name.buy_success',
                 'content' => 'wechat.notification.template.buy_success',
                 'rule' => 'wechat.notification.template.buy_success.rule',
                 'detail' => '{{first.DATA}}<br>订单详情：{{keyword1.DATA}}<br>订单价格：{{keyword2.DATA}}<br>订单时间：{{keyword3.DATA}}<br>会员到期日：{{keyword4.DATA}}<br>{{remark.DATA}}',

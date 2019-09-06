@@ -5,9 +5,11 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
+use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class WeChatSettingController extends BaseController
 {
@@ -72,6 +74,26 @@ class WeChatSettingController extends BaseController
             'payment' => $payment,
             'wechatSetting' => $wechatSetting,
             'isCloudOpen' => $this->isCloudOpen(),
+        ));
+    }
+
+    /**
+     * @param Request $request
+     * @param $platformType
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function preAuthUrlAction(Request $request, $platformType)
+    {
+        if ('official_account' == $platformType) {
+            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::OFFICIAL_ACCOUNT, $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL));
+        }
+        if ('mini_program' == $platformType) {
+            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::MINI_PROGRAM, $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL));
+        }
+
+        return $this->createJsonResponse(array(
+            'url' => empty($url) ? '' : $url,
         ));
     }
 

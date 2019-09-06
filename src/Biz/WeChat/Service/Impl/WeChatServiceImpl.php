@@ -16,9 +16,23 @@ use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use QiQiuYun\SDK\Constants\NotificationChannelTypes;
+use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
 
 class WeChatServiceImpl extends BaseService implements WeChatService
 {
+    /**
+     * @param $platformType WeChatPlatformTypes
+     * @param $callbackUrl
+     *
+     * @return mixed
+     */
+    public function getPreAuthUrl($platformType, $callbackUrl)
+    {
+        $preAuthUrl = $this->biz['qiQiuYunSdk.wechat']->getPreAuthUrl($platformType, $callbackUrl);
+
+        return $preAuthUrl['url'];
+    }
+
     public function saveWeChatTemplateSetting($key, $fields)
     {
         $wechatSetting = $this->getSettingService()->get('wechat', array());

@@ -212,6 +212,12 @@ define(function(require, exports, module) {
             $target.addClass('hidden');
           }
         });
+
+        $('.js-wechat-pre-auth-url').on('click', function (event) {
+            $.get($('.js-wechat-pre-auth-url').data('url'), function (resp) {
+              window.location.href = resp.url;
+            })
+        });
     };
 
 });
