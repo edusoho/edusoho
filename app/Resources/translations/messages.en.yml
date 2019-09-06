@@ -1673,6 +1673,7 @@ course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exi
 course.plan_task.activity_manage.preview_failed_tips: 'Please enroll %taskName% to start.'
 course.plan_task.activity_manage.title_name: Title
 course.plan_task.activity_manage.help_block: 'It is recommended that the number of title words be controlled within 15 words, otherwise it will affect the browsing of mobile phones.'
+course.plan_task.activity_ppt_animation_btn: Switch img mode
 course.plan_task.activity_manage.setup_is_option: 'Set as optional'
 course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next %taskName% to unlock.'
 course.plan_task.activity_manage.choose_teach_way: '<span class="number">1</span>Please select'
@@ -1858,6 +1859,7 @@ course.live.replay_manage.lesson_add_btn: Add
 course.liveroom.content_title: 'Live'
 course.liveroom.open_liveroom_tips: 'Live entering, please wait ...'
 activity.live.not_created_notice: Live classroom not yet created!
+activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
 course.note.save_btn: Save
 course.note.share_btn: Share
 file_chooser.empty: 'No resources'

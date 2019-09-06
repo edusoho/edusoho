@@ -783,6 +783,7 @@ class ManageController extends BaseController
             'missScore',
             'analysis',
             'attachments',
+            'attachment',
             'subQuestions',
             'difficulty',
             'courseId',

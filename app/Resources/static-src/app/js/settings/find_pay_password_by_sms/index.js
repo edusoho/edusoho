@@ -28,9 +28,11 @@ $('#submit-btn').click(() => {
   }
 });
 
-drag.on('success', function(token){
-  $smsCode.removeClass('disabled').attr('disabled', false);
-});
+if (drag) {
+  drag.on('success', function(token){
+    $smsCode.removeClass('disabled').attr('disabled', false);
+  });
+}
 
 $smsCode.on('click', () => {
   $smsCode.attr('disabled', true);

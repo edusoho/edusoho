@@ -1864,6 +1864,7 @@ course.plan_task.activity_manage.activity_file_empty: 抱歉，%type%文件不�
 course.plan_task.activity_manage.preview_failed_tips: 当前%taskName%不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
 course.plan_task.activity_manage.help_block: 建议标题字数控制在15字以内，否则会影响手机端浏览
+course.plan_task.activity_ppt_animation_btn: 切换图片模式
 course.plan_task.activity_manage.setup_is_option: 设为选修
 course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
 course.plan_task.activity_manage.choose_teach_way: >
@@ -2103,6 +2104,7 @@ course.live.replay_manage.lesson_add_btn: 添加
 course.liveroom.content_title: 直播教室
 course.liveroom.open_liveroom_tips: 正在打开教室，请稍候......
 activity.live.not_created_notice: 直播教室尚未创建！
+activity.live.overlap_time_notice: 所选时间已经有直播了，请换个时间
 
 
 

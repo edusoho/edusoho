@@ -80,6 +80,8 @@ export default class sbList {
       let url = $('#courseBelong').data('url');
       let select2 = $('#lessonBelong');
       $('.js-lesson-options').html('');
+      $('#lessonBelong').find('input[name="lessonId"]').val(0);
+      $('#lessonBelong').find('.select-value').text(Translator.trans('site.choose_hint'));
       if (value == 0) {
         select2.hide();
         return;
@@ -166,15 +168,34 @@ export default class sbList {
 
   scrollBottom() {
     const $fixedFooterElement = $('.js-subject-item-btn');
-    const footerLinkHeight = $('.es-footer-link').length ? $('.es-footer-link').outerHeight(): 0;
-    const footerHeight = $('.es-footer').length ? $('.es-footer').outerHeight(): 0;
-    const bottomHeight = footerLinkHeight + footerHeight;
-    const finalHeight = $(document).height() - $(window).height() - bottomHeight;
     $(window).scroll(function(event) {
-      if ($(window).scrollTop() < finalHeight) {
-        $fixedFooterElement.addClass('subject-bottom-fixed');
+      const visibleBottom = parseInt(window.scrollY + document.documentElement.clientHeight);
+      let footerBottom = 0;
+      // 判断底部元素是否存在
+      if ($('.es-footer-link').length) {
+        footerBottom = parseInt($('.es-footer-link').offset().top);
       } else {
-        $fixedFooterElement.removeClass('subject-bottom-fixed');
+        if ($('.es-footer').length) {
+          footerBottom = parseInt($('.es-footer').offset().top);
+        }
+      }
+      // 其他主题默认滚动到距离底部560
+      if (!footerBottom) {
+        const scrollHeight = parseInt($(document).scrollTop());
+        const windowHeight = parseInt($(document.body).height());
+        const visibleHeight = parseInt($(window).height());
+        const offsetHeight = windowHeight - 560;
+        if ((scrollHeight + visibleHeight) < offsetHeight) {
+          $fixedFooterElement.addClass('subject-bottom-fixed');
+        } else {
+          $fixedFooterElement.removeClass('subject-bottom-fixed');
+        }
+      } else {
+        if (footerBottom > visibleBottom) {
+          $fixedFooterElement.addClass('subject-bottom-fixed');
+        } else {
+          $fixedFooterElement.removeClass('subject-bottom-fixed');
+        }
       }
     });
   }
@@ -375,8 +396,8 @@ export default class sbList {
   }
 
   batchSetBelong() {
-    let courseId = $('input[name="courseId"]').val();
-    let lessonId = $('input[name="lessonId"]').val();
+    let courseId = this.$belongModal.find('input[name="courseId"]').val();
+    let lessonId = this.$belongModal.find('input[name="lessonId"]').val();
     this.questionOperate.modifyBelong(this.selectQuestion, courseId, lessonId);
     this.selectQuestion = [];
 
@@ -610,6 +631,7 @@ export default class sbList {
         let key = $item.attr('data-key');
         this.questionOperate.deleteSubQuestion(token, key);
         $item.remove();
+        this.changeBottomFixed();
         let order = 0;
         $(`[data-material-token="${token}"]`).each(function() {
           $(this).attr('id', `sub${order}`);
@@ -625,16 +647,46 @@ export default class sbList {
       const $listItem = $(`[data-anchor=#${token}]`).parent();
       this.orderQuestionList(order, $listItem, $item);
       this.questionOperate.deleteQuestion(token);
-
+      const self = this;
       if (question.type == 'material') {
         $item.nextUntil('.js-subject-main-item').each(function() {
           $(this).remove();
+          self.changeBottomFixed();
         });
       }
       $listItem.remove();
       $item.remove();
+      self.changeBottomFixed();
+
       this.statErrorQuestions();
     });
+  }
+
+  changeBottomFixed() {
+    const visibleBottom = parseInt(window.scrollY + document.documentElement.clientHeight);
+    let footerBottom = 0;
+    // 判断底部元素是否存在
+    if ($('.es-footer-link').length) {
+      footerBottom = parseInt($('.es-footer-link').offset().top);
+    } else {
+      if ($('.es-footer').length) {
+        footerBottom = parseInt($('.es-footer').offset().top);
+      }
+    }
+    // 适配其他主题
+    if (!footerBottom) {
+      const scrollHeight = parseInt($(document).scrollTop());
+      const windowHeight = parseInt($(document.body).height());
+      const visibleHeight = parseInt($(window).height());
+      const offsetHeight = windowHeight - 560;
+      if ((scrollHeight + visibleHeight) >= offsetHeight) {
+        $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
+      }
+    } else {
+      if (footerBottom < visibleBottom) {
+        $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
+      }
+    }
   }
 
   editTestpaperTitle(event) {
