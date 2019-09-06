@@ -1,9 +1,10 @@
 import ESInfiniteCachedScroll from 'common/es-infinite-cached-scroll';
+import { isEmpty } from 'common/utils';
 
 class PagedCourseLesson {
 
   /**
-   * @param options 
+   * @param options
    * {
    *   'displayAllImmediately': false //默认为false, 如果为true, 则不做分页处理，立刻显示全部
    *   'afterFirstLoad': function() {},
@@ -20,11 +21,32 @@ class PagedCourseLesson {
   _init(options) {
     let finalOptions = $.extend(this._getDefaultOptions(options), options);
     finalOptions.wrapDom = options.wrapTarget;
+    finalOptions.pageSize = this._getPageSizeByMaxLessonsNumOfChapter(finalOptions)
     new ESInfiniteCachedScroll(finalOptions);
 
     if (this._displayAllImmediately) {
       this._destroyPaging();
     }
+  }
+
+  // 分页数根据课程的最大章中的数量来设定，小于25则设置为25
+  _getPageSizeByMaxLessonsNumOfChapter(options) {
+    let items = options.data;
+    if (isEmpty(items)) {
+      return;
+    }
+    let pageSize = 0
+    let num = 0
+    items.forEach(item => {
+      if (options.context.isChapter(item)) {
+        pageSize = num > pageSize ? num : pageSize
+        num = 0;
+      } else {
+        num ++;
+      }
+    });
+
+    return pageSize < 25 ? 25 : pageSize + 1
   }
 
   _getDefaultOptions(options) {

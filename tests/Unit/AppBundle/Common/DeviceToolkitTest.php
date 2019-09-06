@@ -9,12 +9,12 @@ class DeviceToolkitTest extends BaseTestCase
 {
     public function testisMobileClient()
     {
-        $_SERVER = array(
+        $_SERVER = array_merge($_SERVER, array(
             'HTTP_X_WAP_PROFILE' => true,
             'HTTP_VIA' => 'wap',
             'HTTP_USER_AGENT' => 'nokia',
             'HTTP_ACCEPT' => 'vnd.wap.wml',
-        );
+        ));
 
         $this->assertTrue(DeviceToolkit::isMobileClient());
 
@@ -33,9 +33,9 @@ class DeviceToolkitTest extends BaseTestCase
 
     public function testIsIOSClient()
     {
-        $_SERVER = array(
+        $_SERVER = array_merge($_SERVER, array(
             'HTTP_USER_AGENT' => 'IPHONE',
-        );
+        ));
 
         $this->assertTrue(DeviceToolkit::isIOSClient());
 

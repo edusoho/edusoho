@@ -1491,7 +1491,7 @@ course.testpaper_manage.import.re_edit.total_score: Total score %totalScore%
 course.testpaper_manage.import.re_edit.edit_title_hint: Edit the testpaper title here and enter up to 50 characters.
 course.testpaper_manage.import.re_edit.finish_import: Finish import
 course.testpaper_manage.import.re_edit.delete_attachment: Delete
-course.testpaper_manage.import.re_edit.batch_set_score: Batch set score
+course.testpaper_manage.import.re_edit.batch_set_score: Set Score
 course.testpaper_manage.import.re_edit.score_hint: Positive number less than 1000
 course.testpaper_manage.import.re_edit.miss_score: Miss Score
 course.testpaper_manage.import.re_edit.selected: 'Selected: '
@@ -1504,12 +1504,14 @@ course.testpaper_manage.import.re_edit.new_question_title: Add new question
 course.testpaper_manage.import.re_edit.select_type: Select question type
 course.testpaper_manage.import.re_edit.uncertain_choice: Uncertain Choice
 course.testpaper_manage.import.re_edit.question_statistics: Question Statistics
-course.testpaper_manage.import.re_edit.batch_set_difficulty: Batch Set difficulty
+course.testpaper_manage.import.re_edit.batch_set_difficulty: Set difficulty
+course.testpaper_manage.import.re_edit.batch_set_belong: Set Belong
 course.testpaper_manage.import.re_edit.question_list: Question list
 course.testpaper_manage.import.re_edit.batch_operate: Batch Operate
 course.testpaper_manage.import.re_edit.select_all: Select All
 course.testpaper_manage.import.re_edit.finish_batch_operate: Finish
 course.testpaper_manage.import.re_edit.answer: Answer
+course.testpaper_manage.import.re_edit.explain: Explain
 course.testpaper_manage.import.re_edit.correct: Correct
 course.testpaper_manage.import.re_edit.wrong: Wrong
 course.testpaper_manage.import.re_edit.convert_hint: Can convert to
@@ -1671,6 +1673,7 @@ course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exi
 course.plan_task.activity_manage.preview_failed_tips: 'Please enroll %taskName% to start.'
 course.plan_task.activity_manage.title_name: Title
 course.plan_task.activity_manage.help_block: 'It is recommended that the number of title words be controlled within 15 words, otherwise it will affect the browsing of mobile phones.'
+course.plan_task.activity_ppt_animation_btn: Switch img mode
 course.plan_task.activity_manage.setup_is_option: 'Set as optional'
 course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next %taskName% to unlock.'
 course.plan_task.activity_manage.choose_teach_way: '<span class="number">1</span>Please select'
@@ -1856,6 +1859,7 @@ course.live.replay_manage.lesson_add_btn: Add
 course.liveroom.content_title: 'Live'
 course.liveroom.open_liveroom_tips: 'Live entering, please wait ...'
 activity.live.not_created_notice: Live classroom not yet created!
+activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
 course.note.save_btn: Save
 course.note.share_btn: Share
 file_chooser.empty: 'No resources'
@@ -8796,7 +8800,7 @@ wechat.notification.empty_token: Get WeChat information error
 wechat.notification.template_not_exist: Template does not exist
 
 # 微信通知模板
-wechat.notification.template.live_start: Hello, classmate.<br>It is hereby notified that the [course name] you are enrolled in will start in the [live class start time].<br>Don't be late.
+wechat.notification.template.live_start: Hello, classmate.<br>It is hereby notified that the [course name - task name] you are enrolled in will start in the [live class start time].<br>Don't be late.
 wechat.notification.template.homework_result: 'Classmate, hello, your homework has been reviewed.<br>Job Name: [Task Name]]<br>Course: [course name]<br>Tutor: [Teacher User Name]<br>Homework result: [homework result]'
 wechat.notification.template.exam_result: 'Hello, your class has been reviewed.<br>Examination subject: [task name]<br>Test score: [test score]<br>Keep up the good work'
 wechat.notification.template.lesson_add: 'Classmate, hello, the course has a new task to post<br>Course Name: [Course Name]<br>Course category: [Course category]<br>Course Teacher: [Teacher User Name]<br>Course time: [Task release time]<br>Please go to study in time.'

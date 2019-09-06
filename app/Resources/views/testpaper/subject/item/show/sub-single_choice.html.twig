@@ -36,6 +36,9 @@
     {% if errors.answers is defined and errors.answers.code == 100003 %}
       <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_answer'|trans }}</span>
     {% endif %}
+    {% if item.analysis is not empty %}
+      <div class="subject-sub-item__explain cd-ml32">{{ 'course.testpaper_manage.import.re_edit.explain'|trans }}：{{ item.analysis|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
+    {% endif %}
   </div>
   {% include 'testpaper/subject/common.html.twig' with {position:'sub', type: item.type, difficulty: item.difficulty, score: item.score } %}
 </div>
