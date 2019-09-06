@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;
+use Symfony\Component\Filesystem\Filesystem;
 
 class FileServiceImpl extends BaseService implements FileService
 {
@@ -180,11 +181,13 @@ class FileServiceImpl extends BaseService implements FileService
     {
         $parsed = $this->parseFileUri($uri);
         if ($parsed['access'] == 'public') {
-            $directory = realpath($this->biz['topxia.upload.public_directory']);
+            $path = $this->biz['topxia.upload.public_directory'];
         } else {
-            $directory = realpath($this->biz['topxia.upload.private_directory']);
+            $path = $this->biz['topxia.upload.private_directory'];
         }
 
+        $this->checkDirectoryExist($path);
+        $directory = realpath($path);
         if (!is_writable($directory)) {
             $this->createNewException(FileException::FILE_DIRECTORY_UN_WRITABLE());
         }
@@ -199,6 +202,16 @@ class FileServiceImpl extends BaseService implements FileService
         }
 
         return $newFile;
+    }
+
+    protected function checkDirectoryExist($dirPath)
+    {
+        $fileSystem = new FileSystem();
+        if (!$fileSystem->exists($dirPath)) {
+            $fileSystem->mkdir($dirPath, 0777);
+        }
+
+        return true;
     }
 
     protected function generateUri($group, File $file)
