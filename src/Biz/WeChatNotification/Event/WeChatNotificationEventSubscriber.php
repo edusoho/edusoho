@@ -57,17 +57,20 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 if ($notificationJob) {
                     $this->getSchedulerService()->deleteJob($notificationJob['id']);
                 }
-                $job = array(
-                    'name' => 'WeChatNotificationJob_HomeWorkOrTestPaperReview',
-                    'expression' => $expression,
-                    'class' => 'Biz\WeChatNotification\Job\HomeWorkOrTestPaperReviewNotificationJob',
-                    'misfire_policy' => 'executing',
-                    'args' => array(
-                        'key' => $key,
-                        'sendTime' => $templates['homeworkOrTestPaperReview']['sendTime'],
-                    ),
-                );
-                $this->getSchedulerService()->register($job);
+
+                if (1 == $templates['homeworkOrTestPaperReview']['status']) {
+                    $job = array(
+                        'name' => 'WeChatNotificationJob_HomeWorkOrTestPaperReview',
+                        'expression' => $expression,
+                        'class' => 'Biz\WeChatNotification\Job\HomeWorkOrTestPaperReviewNotificationJob',
+                        'misfire_policy' => 'executing',
+                        'args' => array(
+                            'key' => $key,
+                            'sendTime' => $templates['homeworkOrTestPaperReview']['sendTime'],
+                        ),
+                    );
+                    $this->getSchedulerService()->register($job);
+                }
             }
         }
 
@@ -80,19 +83,22 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 if ($notificationJob) {
                     $this->getSchedulerService()->deleteJob($notificationJob['id']);
                 }
-                $job = array(
-                    'name' => 'WeChatNotificationJob_CourseRemind',
-                    'expression' => $expression,
-                    'class' => 'Biz\WeChatNotification\Job\CourseRemindNotificationJob',
-                    'misfire_policy' => 'executing',
-                    'args' => array(
-                        'key' => $key,
-                        'url' => $this->generateUrl('my_courses_learning', array(), true),
-                        'sendTime' => $templates['courseRemind']['sendTime'],
-                        'sendDays' => $templates['courseRemind']['sendDays'],
-                    ),
-                );
-                $this->getSchedulerService()->register($job);
+
+                if (1 == $templates['courseRemind']['status']) {
+                    $job = array(
+                        'name' => 'WeChatNotificationJob_CourseRemind',
+                        'expression' => $expression,
+                        'class' => 'Biz\WeChatNotification\Job\CourseRemindNotificationJob',
+                        'misfire_policy' => 'executing',
+                        'args' => array(
+                            'key' => $key,
+                            'url' => $this->generateUrl('my_courses_learning', array(), true),
+                            'sendTime' => $templates['courseRemind']['sendTime'],
+                            'sendDays' => $templates['courseRemind']['sendDays'],
+                        ),
+                    );
+                    $this->getSchedulerService()->register($job);
+                }
             }
         }
 

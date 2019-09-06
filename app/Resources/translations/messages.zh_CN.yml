@@ -10139,7 +10139,7 @@ wechat.notification.template.exam_result.rule: '当试卷中含有主观题时�
 wechat.notification.template.lesson_add.rule: '当课程有新的任务发布时，会发一条通知给课程学员。'
 wechat.notification.template.charge_success.rule: '当学员成功充值虚拟币或兑换学习卡时，会发送一条通知。'
 wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员是，会发送一条通知。'
-wechat.notification.template.vip_expired.rule: '根据管理员设置的提醒日期来发送通知，点此<a href="%url%" target="_blank">前往设置</a>'
+wechat.notification.template.vip_expired.rule: '根据管理员设置的提醒日期，每晚8点来发送通知，点此<a href="%url%" target="_blank">前往设置</a>'
 wechat.notification.template.vip_is_not_install: '未安装会员插件，无法正常发送通知。'
 wechat.notification.template.remind_course.rule: '针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。'
 

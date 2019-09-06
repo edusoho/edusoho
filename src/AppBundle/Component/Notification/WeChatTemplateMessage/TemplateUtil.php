@@ -16,9 +16,6 @@ class TemplateUtil
     const TEMPLATE_ANSWER_QUESTION = 'answerQuestion';
     const TEMPLATE_ANSWER_QUESTION_CODE = 'OPENTM416215703';
 
-    const TEMPLATE_VIP_EXPIRED = 'vipExpired';
-    const TEMPLATE_VIP_EXPIRED_CODE = 'OPENTM401520362';
-
     const TEMPLATE_LIVE_OPEN = 'liveOpen';
     const TEMPLATE_LIVE_OPEN_CODE = 'TM00080';
 
@@ -76,16 +73,6 @@ class TemplateUtil
                 'rule' => 'wechat.notification.template.answer_question.rule',
                 'detail' => '{{first.DATA}}<br>提问时间：{{keyword1.DATA}}<br>回复内容：{{keyword2.DATA}}<br>{{remark.DATA}}',
                 'object' => '提问者',
-                'status' => 0,
-            ),
-            self::TEMPLATE_VIP_EXPIRED => array(
-                'id' => self::TEMPLATE_VIP_EXPIRED_CODE,
-                'name' => 'wechat.notification.template_name.vip_expired',
-                'setting_modal' => 'admin/wechat-notification/setting-modal/vip-expired-modal.html.twig',
-                'content' => 'wechat.notification.template.vip_expired',
-                'rule' => 'wechat.notification.template.vip_expired.rule',
-                'detail' => '{{first.DATA}}<br>开通时间：{{keyword1.DATA}}<br>到期时间：{{keyword2.DATA}}<br>{{remark.DATA}}',
-                'object' => '单个用户',
                 'status' => 0,
             ),
             self::TEMPLATE_LIVE_OPEN => array(
