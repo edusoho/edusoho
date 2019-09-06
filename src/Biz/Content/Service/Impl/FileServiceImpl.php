@@ -180,7 +180,7 @@ class FileServiceImpl extends BaseService implements FileService
     protected function saveFile(File $file, $uri)
     {
         $parsed = $this->parseFileUri($uri);
-        if ($parsed['access'] == 'public') {
+        if ('public' == $parsed['access']) {
             $path = $this->biz['topxia.upload.public_directory'];
         } else {
             $path = $this->biz['topxia.upload.private_directory'];
@@ -243,7 +243,7 @@ class FileServiceImpl extends BaseService implements FileService
     {
         $parsed = array();
         $parts = explode('://', $uri);
-        if (empty($parts) || count($parts) != 2) {
+        if (empty($parts) || 2 != count($parts)) {
             $this->createNewException(FileException::FILE_PARSE_URI_FAILED());
         }
         $parsed['access'] = $parts[0];
@@ -251,7 +251,7 @@ class FileServiceImpl extends BaseService implements FileService
         $parsed['directory'] = dirname($parsed['path']);
         $parsed['name'] = basename($parsed['path']);
 
-        if ($parsed['access'] == 'public') {
+        if ('public' == $parsed['access']) {
             $directory = $this->biz['topxia.upload.public_directory'];
         } else {
             $directory = $this->biz['topxia.upload.private_directory'];
