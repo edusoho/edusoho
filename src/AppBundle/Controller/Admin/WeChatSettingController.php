@@ -121,12 +121,13 @@ class WeChatSettingController extends BaseController
         if ($info['isAuthorized']) {
             $ids = ArrayToolkit::column($info['funcInfo'], 'funcscope_category');
             $ids = ArrayToolkit::column($ids, 'id');
-            $needIds = array(1,2,3,4,7);
+            $needIds = array(1, 2, 3, 4, 7);
             $diff = array_diff($needIds, $ids);
             if (empty($diff)) {
                 $info['wholeness'] = 1;
             }
         }
+
         return $info;
     }
 
