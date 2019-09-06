@@ -49,6 +49,29 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function smsSendCheckCaptchaAction(Request $request)
+    {
+        $smsType = $request->request->get('sms_type');
+
+        $status = $this->getUserService()->getSmsCommonCaptchaStatus($request->getClientIp());
+        if ('captchaRequired' == $status) {
+            $captchaNum = $request->request->get('captcha_num');
+            if (empty($captchaNum)) {
+                return $this->createJsonResponse(array('ACK' => 'captchaRequired'));
+            } elseif (!$this->validateDragCaptcha($request)) {
+                return $this->createJsonResponse(array('error' => '验证码错误'));
+            }
+        }
+
+        $result = $this->sendSms($request, $smsType);
+
+        if (!empty($result['ACK']) && 'ok' == $result['ACK']) {
+            $this->getUserService()->getSmsCommonCaptchaStatus($request->getClientIp(), true);
+        }
+
+        return $this->createJsonResponse($result);
+    }
+
     public function smsCheckAction(Request $request, $type)
     {
         $targetSession = $request->getSession()->get($type);

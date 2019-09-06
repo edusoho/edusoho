@@ -657,6 +657,7 @@ t.add("validate.alphanumeric.message", "Must be English letters, numbers and und
 t.add("validate.raty_star.message", "Please score", "js", "en");
 t.add("validate.reg_invite_code.message", "Must consists of five numbers and english characters", "js", "en");
 t.add("validate.phone.message", "Please enter a valid mobile phone number", "js", "en");
+t.add("validate.mobile_or_telephone.message", "Please enter a valid mobile number or phone number", "js", "en");
 t.add("validate.nickname.message", "Do not allow 11-bit pure numbers beginning with 1", "js", "en");
 t.add("validate.password_check.message", "Wrong password", "js", "en");
 t.add("validate.sms_code_input.message", "Please enter the verification code", "js", "en");
@@ -1262,6 +1263,7 @@ t.add("subject.period", ".", "js", "en");
 t.add("subject.miss_score_no_more_than_score", "Missing score is no more than score", "js", "en");
 t.add("subject.score_update_success", "Score modified successfully", "js", "en");
 t.add("subject.difficulty_update_success", "Difficulty modified successfully", "js", "en");
+t.add("subject.belong_update_success", "Belong modified successfully", "js", "en");
 t.add("subject.question_count", "%count% questions total", "js", "en");
 t.add("subject.total_score", "%totalScore% score total", "js", "en");
 t.add("subject.is_editing_warning", "Finish %seq% question before other operation", "js", "en");

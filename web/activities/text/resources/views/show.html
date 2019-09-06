@@ -13,12 +13,23 @@
       white-space: pre-wrap;
       word-wrap: break-word;
     }
+    .iframe-scroll {
+      -webkit-overflow-scrolling: touch;
+      overflow-y: scroll;
+      z-index: 1;
+    }
+    .text-iframe-wrap {
+      padding-top: 0;
+      padding-bottom: 0;
+      height: 100%;
+      overflow: scroll;
+    }
   </style>
   <body>
     <script src="/static-dist/libs/ltc-sdk-client.js"></script>
     
     <div class="iframe-parent-content iframe-parent-full" id="text-activity" data-finish-time="{{ activity.ext.finishDetail }}" data-disable-copy="{{ setting('course.copy_enabled') }}">
-      <div class="text-activity-content cke_editable cke_contents_ltr">
+      <div class="text-activity-content cke_editable cke_contents_ltr js-text-activity-content">
       </div>
     </div>
     <script>document.write("<script type='text/javascript' src='/activities/text/static-dist/js/show/index.js?v=" + Math.round(Date.now()/3600000) + "'><\/script>");</script>
