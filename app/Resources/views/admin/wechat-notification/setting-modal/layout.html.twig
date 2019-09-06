@@ -1,5 +1,5 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
-{% block title %}{{'wechat.notification.template_detail'|trans}}{% endblock %}
+{% block title %}{{ template.name|trans|raw }}{% endblock %}
 
 {% block body %}
   <form class="form-horizontal" id="notification-setting-form" method="post" action="{{ path('admin_wechat_notification_setting_modal', {key: key}) }}">
