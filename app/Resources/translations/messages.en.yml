@@ -4824,6 +4824,10 @@ admin.wechat_notification.failure_number: Failure Number
 admin.wechat_notification.failure_reason.empty: No Failure Reason
 admin.wechat.notification.open_wechat_notify_tip: WeChat notification refers to sending messages to students through WeChat service number, and students can receive WeChat notification by binding WeChat and paying attention to the service number. WeChat notification has two major advantages
 admin.wechat.notification.go_to_open: Go to open
+admin.wechat.notification.un_authorized_before_open_tip: Before opening the Wechat notification, please sweep the code first.
+admin.wechat.notification.un_authorized_after_open_tip: In order to prevent abnormal notification function caused by IP change of network school server or message server, it is recommended that you sweep code authorization.
+admin.wechat.notification.authorized_wholeless: It was detected that you did not grant group distribution and notification rights to ES third-party platform when sweeping code authorization. Wechat Service Number Notification could not be enabled. Please re-authorize.
+admin.wechat.notification.go_authorizer: Authorizer now
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'

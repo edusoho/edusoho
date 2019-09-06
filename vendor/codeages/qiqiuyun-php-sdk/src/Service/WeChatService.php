@@ -104,9 +104,9 @@ class WeChatService extends BaseService
      *               }
      *               ]
      */
-    public function getAuthorizationInfoList($platformType)
+    public function getAuthorizationInfo($platformType)
     {
-        return $this->request('GET', "/{$platformType}/authorization_info", array());
+        return $this->request('GET', "/open_platform/{$platformType}/authorization_info", array());
     }
 
     /**
