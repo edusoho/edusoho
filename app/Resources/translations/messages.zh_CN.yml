@@ -10119,7 +10119,6 @@ classroom.joining_date.expired_tips: 班级已过有效期！
 editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
 
 
-
 #coupon
 coupon.usage_detail_title: 优惠码使用详情
 coupon.enable_hint: 优惠码未开启，请先在<a href="%path%"> 系统-运营设置-优惠码 </a>中设置开启
@@ -10183,7 +10182,7 @@ coupon.status.receive: 已领取
 coupon.status.used: 已使用
 
 coupon.generate_num: 生成数量
-coupon.generate_num_hint: 生成数量必须在1～10000之间
+coupon.generate_num_hint: 生成数量必须在1～100之间
 coupon.generate_num_unit: 个
 coupon.prefix: 优惠码前缀
 coupon.prefix_hint: 优惠码前缀不可重复，不占优惠码位数

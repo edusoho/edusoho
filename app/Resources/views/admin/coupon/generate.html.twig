@@ -28,7 +28,6 @@
       <div class="col-md-7 controls">
         <div class="radios">
           <label><input type="radio" name="type" value="minus" checked="checked"> {{ 'coupon.type.minus'|trans }}</label>
-          <label><input type="radio" name="type" value="discount"> {{ 'coupon.type.discount'|trans }}</label>
         </div>
       </div>
     </div>
@@ -40,15 +39,6 @@
         <input type="text" id="minus-rate" name="minus-rate" class="form-control">
       </div>
       <div style="margin-top:5px;">{{ 'coupon.type.minus_rate_unit'|trans }}</div>
-    </div>
-    <div class="row form-group discount-rate" style="display:none;">
-      <div class="col-md-2 control-label">
-        <label for="discount-rate">{{ 'coupon.type.discount_rate'|trans }}</label>
-      </div>
-      <div class="col-md-3 controls">
-        <input type="text" id="discount-rate" name="discount-rate" class="form-control">
-      </div>
-      <div style="margin-top:5px;">{{ 'coupon.type.discount_rate_unit'|trans }}</div>
     </div>
     <div class="row form-group">
       <div class="col-md-2 control-label">
@@ -112,75 +102,9 @@
         <label for="target">{{ 'coupon.target'|trans }}</label>
       </div>
       <div class="col-md-3 controls">
-        <select class="form-control" name="targetType">
-          <option value="course" selected="selected">{{ 'coupon.target_type.course'|trans }}</option>
-          {% if is_plugin_installed('Vip') and version_compare(plugin_version('Vip'),'1.1.1','>') %}
-            <option value="vip">{{ 'coupon.target_type.vip'|trans }}</option>
-          {% endif %}
-          <option value="classroom">{{ 'coupon.target_type.classroom'|trans }}</option>
-          {# <option value="fullDiscount">满减</option> #}
-          <option value="all">{{ 'coupon.target_type.all'|trans }}</option>
-        </select>
-      </div>
-    </div>
-    
-    <div class="row form-group  radio js-fullDiscount-radios" style="display: none;padding-left:0">
-      <div class="col-md-2 control-label">
-        <label for="fullDiscountPrice" style="font-weight:500">{{ 'coupon.full_discount_price'|trans }}</label>
-      </div>
-      <div class="col-md-7 controls">
-        <input type="text" id="fullDiscountPrice" name="fullDiscountPrice" class="form-control">
-      </div>
-    </div>
-    
-    <div class="row form-group">
-      <div class="col-md-offset-2 col-md-2 radios">
-        <div class="radio  js-course-radios">
-          <label>
-            <input type="radio" name="courseId" class="all-items-input" value="0" checked="checked">{{ 'coupon.target_type.course_all'|trans }}
-          </label>
+        <div class="radios">
+          <label><input type="radio" name="targetType" value="all" checked="checked"> {{ 'coupon.target_type.all'|trans }}</label>
         </div>
-        <div class="radio  js-course-radios">
-          <label>
-            <input type="radio" name="courseId" id="choose-course-input" data-toggle="modal" data-target="#modal"  data-url="{{ path('admin_course_chooser') }}" value="">
-            {{ 'coupon.target_type.course_specific'|trans }}
-          </label>
-        </div>
-        {% if is_plugin_installed('Vip') and version_compare(plugin_version('Vip'),'1.1.1','>') %}
-          <div class="radio js-vip-radios" style="display: none;">
-            <label>
-              <input type="radio" name="vipId" class="all-items-input" value="0" checked="checked">{{ 'coupon.target_type.vip_all'|trans }}
-            </label>
-          </div>
-          <div class="radio js-vip-radios" style="display: none;">
-            <label>
-              <input type="radio" name="vipId" id="choose-vip-input" data-toggle="modal" data-target="#modal"  data-url="{{ path('admin_vip_level_chooser') }}" value="">
-              {{ 'coupon.target_type.vip_specific'|trans }}
-            </label>
-          </div>
-        {% endif %}
-          <div class="radio js-classroom-radios" style="display: none;">
-            <label>
-              <input type="radio" name="classroomId" class="all-items-input" value="0" checked="checked">{{ 'coupon.target_type.classroom_all'|trans }}
-            </label>
-          </div>
-          <div class="radio js-classroom-radios" style="display: none;">
-            <label>
-              <input type="radio" name="classroomId" id="choose-classroom-input"
-              data-toggle="modal" data-target="#modal"  data-url="{{ path('admin_classroom_chooser') }}" value="">
-              {{ 'coupon.target_type.classroom_specific'|trans }}
-            </label>
-          </div>        
-      </div>
-      <div class="col-md-5" style="display:none;" id="course-display">
-        <div class="well" style="width:200px;display:inline-block;margin:0px;"></div>
-        <div class="js-rechoose" style="display:inline-block;">
-          <a style="margin-left:10px;" class="btn btn-primary btn-lg js-rechoose-course" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_course_chooser') }}" >{{ 'coupon.target_type.course_rechoose'|trans }}</a>
-          {% if is_plugin_installed('Vip') and version_compare(plugin_version('Vip'),'1.1.1','>') %}
-            <a style="margin-left:10px; display: none;" class="btn btn-primary btn-lg js-rechoose-vip" data-toggle="modal" data-target="#modal"  data-url="{{ path('admin_vip_level_chooser') }}" >{{ 'coupon.target_type.vip_rechoose'|trans }}</a>
-          {% endif %}
-           <a style="margin-left:10px; display: none;" class="btn btn-primary btn-lg js-rechoose-classroom" data-toggle="modal" data-target="#modal"  data-url="{{ path('admin_classroom_chooser') }}" >{{ 'coupon.target_type.classroom_rechoose'|trans }}</a>
-         </div>
       </div>
     </div>
     <div class="row form-group">

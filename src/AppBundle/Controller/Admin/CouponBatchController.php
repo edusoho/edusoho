@@ -71,30 +71,8 @@ class CouponBatchController extends BaseController
         if ('POST' == $request->getMethod()) {
             $couponData = $request->request->all();
 
-            if ('minus' == $couponData['type']) {
-                $couponData['rate'] = $couponData['minus-rate'];
-                unset($couponData['minus-rate']);
-                unset($couponData['discount-rate']);
-            } else {
-                $couponData['rate'] = $couponData['discount-rate'];
-                unset($couponData['minus-rate']);
-                unset($couponData['discount-rate']);
-            }
-
-            if ('course' == $couponData['targetType']) {
-                $couponData['targetId'] = $couponData['courseId'];
-                unset($couponData['courseId']);
-            }
-
-            if ('vip' == $couponData['targetType']) {
-                $couponData['targetId'] = $couponData['vipId'];
-                unset($couponData['vipId']);
-            }
-
-            if ('classroom' == $couponData['targetType']) {
-                $couponData['targetId'] = $couponData['classroomId'];
-                unset($couponData['classroomId']);
-            }
+            $couponData['rate'] = $couponData['minus-rate'];
+            unset($couponData['minus-rate']);
 
             $batch = $this->getCouponBatchService()->generateCoupon($couponData);
 
