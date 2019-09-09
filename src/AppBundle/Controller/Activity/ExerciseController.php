@@ -29,6 +29,7 @@ class ExerciseController extends BaseActivityController implements ActivityActio
                 'exerciseResult' => $exerciseResult,
                 'exercise' => $exercise,
                 'courseId' => $activity['fromCourseId'],
+                'questionLack' => $this->getTestpaperService()->isQuestionsLackedByTestId($activity['mediaId'])
             ));
         }
 
@@ -50,6 +51,15 @@ class ExerciseController extends BaseActivityController implements ActivityActio
 
         if (!$exercise) {
             return $this->createMessageResponse('error', 'exercise not found');
+        }
+
+        if ($this->getTestpaperService()->isQuestionsLackedByTestId($activity['mediaId'])) {
+            return $this->render('activity/exercise/show.html.twig', array(
+                'activity' => $activity,
+                'exercise' => $exercise,
+                'courseId' => $activity['fromCourseId'],
+                'questionLack' => true,
+            ));
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($exercise['id']);
