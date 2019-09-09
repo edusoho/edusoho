@@ -175,7 +175,7 @@ class WeChatNotificationController extends BaseController
 
         $wechatSetting = $this->getSettingService()->get('wechat');
         if (empty($wechatSetting['templates'][$key]['templateId'])) {
-            if ($wechatSetting['is_authorization']) {
+            if (isset($wechatSetting['wechat_notification_enabled']) && $wechatSetting['is_authorization']) {
                 $data = $this->getSDKWeChatService()->createNotificationTemplate($template['id']);
             } else {
                 $data = $client->addTemplate($template['id']);
@@ -204,7 +204,7 @@ class WeChatNotificationController extends BaseController
         $wechatSetting = $this->getSettingService()->get('wechat');
 
         if (!empty($wechatSetting['templates'][$key]['templateId'])) {
-            if ($wechatSetting['is_authorization']) {
+            if (isset($wechatSetting['wechat_notification_enabled']) && $wechatSetting['is_authorization']) {
                 $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['templateId']);
             } else {
                 $data = $client->deleteTemplate($wechatSetting['templates'][$key]['templateId']);
