@@ -18,13 +18,9 @@ class CommonController extends BaseController
     {
         $text = $request->get('text');
 
-        $whitelist = $this->getQrCodeProtocolWhitelist();
-        $inWhitelist = false;
-        foreach ($whitelist as $protocol) {
-            if (0 === strpos($text, $protocol.'://')) {
-                $inWhitelist = true;
-            }
-        }
+        $qrCodeFilter = $this->get('qrcode_whitelist_filter');      
+        $inWhitelist = $qrCodeFilter->isInWhiteList($text);
+
         if (!$inWhitelist && 0 !== strpos($text, $request->getUriForPath(''))) {
             $text = $this->generateUrl('homepage', array(), true);
         }
@@ -185,15 +181,5 @@ class CommonController extends BaseController
     protected function getWeChatService()
     {
         return $this->getBiz()->service('WeChat:WeChatService');
-    }
-
-    private function getQrCodeProtocolWhitelist()
-    {
-        $list = $this->getParameter('qrcode_protocol_whitelist_default');
-        if ($this->container->hasParameter('qrcode_protocol_whitelist')) {
-            $list = array_merge($list, $this->getParameter('qrcode_protocol_whitelist'));
-        }
-
-        return $list;
     }
 }
