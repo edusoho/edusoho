@@ -8825,7 +8825,7 @@ wechat.notification.fans_list.nickname: Nickname
 wechat.notification.fans_list.username: Username
 wechat.notification.fans_list.subscribe_time: Subscribe Time
 wechat.notification.fans_list.tips: The fan list refreshes every 30 minutes
-wechat.notification.fans_list.user_num: User Num:
+wechat.notification.fans_list.user_num: "User Num:"
 wechat.notification.fans_list.fans_list_empty: No fan
 wechat.notification.fans_list.no_wechat_bind: WeChat service number is not bound yet
 wechat.notification.fans_list.placeholder: Please enter keywords

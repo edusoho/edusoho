@@ -5,7 +5,9 @@ define(function(require, exports, module) {
     $('.js-wechat-notification-setting').on('click', function() {
       if ($('.js-click-enable').length > 0) {
         Notify.danger(Translator.trans('wechat.notification.cloud_open_tip'));
-        return;
+      }
+      if ($('.js-wechat-template-list').data('enabled') == '0') {
+        Notify.danger(Translator.trans('未开启微信服务号通知'));
       }
     });
   };
