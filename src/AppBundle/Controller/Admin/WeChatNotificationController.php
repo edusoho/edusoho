@@ -295,6 +295,8 @@ class WeChatNotificationController extends BaseController
      */
     protected function getSDKWeChatService()
     {
-        return $this->getBiz()['qiQiuYunSdk.wechat'];
+        $biz = $this->getBiz();
+
+        return $biz['qiQiuYunSdk.wechat'];
     }
 }
