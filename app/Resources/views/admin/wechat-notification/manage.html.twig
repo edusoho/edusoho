@@ -11,7 +11,7 @@
       <a href="{{ path('admin_my_cloud_overview') }}">{{ 'wechat.notification.cloud_open'|trans }}</a>
     </div>
   {% endif %}
-  <div class="form-horizontal">
+  <div class="form-horizontal js-wechat-template-list" data-enabled="{% if wechatSetting.wechat_notification_enabled|default('') %}1{% else %}0{% endif %}">
     <fieldset>
       <legend>{{'admin.wechat_notification.switch'|trans}}</legend>
       {% if not wechatSetting.wechat_notification_enabled|default('') %}
@@ -73,7 +73,7 @@
                 {% endif %}
               </td>
               <td width="5%">
-                <a class="js-wechat-notification-setting alert-link" {% if isCloudOpen %} href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_setting_modal', {key: key})}}"{% else %}href="javascript:;" {% endif %}>
+                <a class="js-wechat-notification-setting alert-link" {% if isCloudOpen and wechatSetting.wechat_notification_enabled %} href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_setting_modal', {key: key})}}"{% else %}href="javascript:;" {% endif %}>
                  {{ 'admin.wechat_notification.template_setting'|trans }}
                 </a>
               </td>

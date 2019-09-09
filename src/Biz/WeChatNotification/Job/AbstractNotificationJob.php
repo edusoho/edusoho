@@ -5,6 +5,7 @@ namespace Biz\WeChatNotification\Job;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Notification\Service\NotificationService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
@@ -30,6 +31,9 @@ class AbstractNotificationJob extends AbstractJob
             return;
         }
 
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        $channel = empty($wechatSetting['is_authorization']) ? 'wechat' : 'wechat_agent';
+
         $users = $this->getUserService()->searchUsers(
             array('userIds' => $userIds, 'locked' => 0),
             array(),
@@ -48,7 +52,7 @@ class AbstractNotificationJob extends AbstractJob
                     $data = array();
                 }
                 $list[] = array_merge(array(
-                    'channel' => 'wechat',
+                    'channel' => $channel,
                     'to_id' => $user['openId'],
                 ), $data);
             }
@@ -145,5 +149,13 @@ class AbstractNotificationJob extends AbstractJob
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }
