@@ -65,6 +65,12 @@ class WeChatSettingController extends BaseController
                 ));
             }
             $wechatSetting = array_merge($wechatSetting, $newWeChatSetting);
+
+            $wechatAuth = $this->getAuthorizationInfo();
+            if ($wechatAuth['isAuthorized']) {
+                $wechatSetting['is_authorization'] = 1;
+            }
+
             $this->getSettingService()->set('wechat', $wechatSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
