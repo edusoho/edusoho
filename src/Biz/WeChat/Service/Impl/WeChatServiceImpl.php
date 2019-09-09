@@ -174,7 +174,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     {
         $conditions = array(
             'type' => WeChatService::OFFICIAL_TYPE,
-            'lastRefreshTime_LT' => time(),
+            'lastRefreshTime_LT' => time() - $lifeTime,
         );
         $weChatUsers = $this->searchWeChatUsers(
             $conditions,
@@ -229,6 +229,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $unionId = !empty($freshWeChatUser['unionid']) ? $freshWeChatUser['unionid'] : $weChatUser['unionId'];
 
         $userBind = $this->getUserService()->getUserBindByTypeAndUserId('weixin', $weChatUser['userId']);
+
         if (empty($userBind['fromId']) || $userBind['fromId'] != $unionId) {
             $userBind = $this->getUserService()->getUserBindByTypeAndFromId('weixin', $weChatUser['unionId']);
         }
