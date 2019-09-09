@@ -49,4 +49,6 @@ interface WeChatService
     public function findAllBindUserIds();
 
     public function searchWeChatUsers($conditions, $orderBys, $start, $limit, $columns);
+
+    public function getWeChatSendChannel();
 }

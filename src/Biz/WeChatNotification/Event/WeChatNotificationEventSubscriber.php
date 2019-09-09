@@ -9,6 +9,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\Util\TextHelper;
+use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Event\Event;
@@ -241,7 +242,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
 
         $list = array(array(
-            'channel' => 'wechat',
+            'channel' => $this->getWeChatService()->getWeChatSendChannel(),
             'to_id' => $weChatUser['openId'],
             'template_id' => $templateId,
             'template_args' => $data,
@@ -268,7 +269,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']);
             if (!empty($weChatUser['isSubscribe'])) {
                 $list = array(array(
-                    'channel' => 'wechat',
+                    'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                     'to_id' => $weChatUser['openId'],
                     'template_id' => $chargeTemplateId,
                     'template_args' => $data,
@@ -296,7 +297,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
             if (!empty($weChatUser['isSubscribe'])) {
                 $list = array(array(
-                    'channel' => 'wechat',
+                    'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                     'to_id' => $weChatUser['openId'],
                     'template_id' => $payTemplateId,
                     'template_args' => $data,
@@ -388,7 +389,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'remark' => array('value' => ''),
             );
             $list = array(array(
-                'channel' => 'wechat',
+                'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                 'to_id' => $weChatUser['openId'],
                 'template_id' => $templateId,
                 'template_args' => $data,
@@ -428,7 +429,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $list = array();
             foreach ($weChatUsers as $weChatUser) {
                 $list[] = array_merge(array(
-                    'channel' => 'wechat',
+                    'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                     'to_id' => $weChatUser['openId'],
                 ), $templateData);
             }
@@ -687,6 +688,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $this->getBiz()->service('User:UserService');
     }
 
+    /**
+     * @return WeChatService
+     */
     protected function getWeChatService()
     {
         return $this->getBiz()->service('WeChat:WeChatService');
