@@ -5,8 +5,6 @@
 {% set menu = 'admin_operation_coupon_query' %}
 
 {% block main %}
-{% if setting("coupon.enabled") %}
-
   {{ web_macro.flash_messages() }}
 
   <form id="coupon-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
@@ -61,14 +59,5 @@
 	</tbody>
 </table>
   {{ web_macro.paginator(paginator) }}
-
-  {% else %}
-<div class="well">
-
-
-{{ 'coupon.enable_hint'|trans({'%path%': path('admin_coupon_setting')})|raw }}
-
-</div>
-{% endif %}
 
 {% endblock %}

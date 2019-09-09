@@ -177,6 +177,7 @@
 </html>
 
 {% macro menu_link_html(_context, menu, class) %}
+{% if not menu.visible is defined or (menu.visible is defined and eval_expression(menu.visible)) %}
   <a 
   {% if class %}
     class="{{ class }}"
@@ -192,4 +193,5 @@
     target="blank"
   {% endif %}
   >{{ menu.name|trans({}, 'menu') }}</a>
+{% endif %}
 {% endmacro %}

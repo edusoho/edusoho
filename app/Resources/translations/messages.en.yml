@@ -8846,7 +8846,7 @@ coupon.description: 优惠说明
 coupon.target: 使用对象
 coupon.full_discount_price: 金额设置
 coupon.channel: 发放渠道
-coupon.setting.status: 优惠码状态
+coupon.setting.status: 优惠劵全局开关
 coupon.content: 优惠内容
 coupon.batch.name: 批次名称
 coupon.no_coupon_tip: 无优惠码记录
@@ -8917,6 +8917,8 @@ coupon.query.by_type: 按优惠方式
 coupon.query.by_use_start_date: 使用时间起始
 coupon.query.by_use_end_date: 使用时间截止
 coupon.query.by_code: 优惠码
+coupon.setting.close: 优惠券未开启，请先开启优惠券开关
+coupon.setting.permission.goto_open: 去开启
 
 coupon.deadline_mode.day.help_block: >
   至<br/>领取后%day%天内
