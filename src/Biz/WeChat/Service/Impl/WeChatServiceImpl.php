@@ -46,6 +46,13 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return true;
     }
 
+    public function getWeChatSendChannel()
+    {
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+
+        return empty($wechatSetting['is_authorization']) ? 'wechat' : 'wechat_agent';
+    }
+
     public function getWeChatUser($id)
     {
         return $this->getUserWeChatDao()->get($id);
@@ -136,7 +143,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     {
         $biz = $this->biz;
         $weChatSetting = $this->getSettingService()->get('wechat', array());
-        if ($weChatSetting['is_authorization']) {
+        if (!empty($weChatSetting['is_authorization'])) {
             $weChatUsersList = $this->getSDKWeChatService()->getUserList($nextOpenId);
         } else {
             $weChatUsersList = $biz['wechat.template_message_client']->getUserList($nextOpenId);
@@ -253,7 +260,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     {
         $biz = $this->biz;
         $wechatSetting = $this->getSettingService()->get('wechat', array());
-        if (isset($wechatSetting['is_authorization']) && 1 == $wechatSetting['is_authorization']) {
+        if (!empty($wechatSetting['is_authorization'])) {
             $freshWeChatUsers = $this->getSDKWeChatService()->batchGetUserInfo(ArrayToolkit::column($weChatUsers, 'openId'));
         } else {
             $userList = $this->convertWeChatUsersToOfficialRequestParams($weChatUsers);

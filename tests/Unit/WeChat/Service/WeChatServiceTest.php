@@ -471,6 +471,22 @@ class WeChatServiceTest extends BaseTestCase
         $this->assertEquals(1, $result);
     }
 
+    public function testGetWeChatSendChannel()
+    {
+        $this->getSettingService()->set('wechat', array(
+            'wechat_notification_enabled' => 1,
+            'is_authorization' => 1,
+        ));
+        $res = $this->getWeChatService()->getWeChatSendChannel();
+        $this->assertEquals('wechat_agent', $res);
+    }
+
+    public function testGetWeChatSendChannelWithNoAuth()
+    {
+        $res = $this->getWeChatService()->getWeChatSendChannel();
+        $this->assertEquals('wechat', $res);
+    }
+
     protected function mockCreateWeChatUser($fields = array())
     {
         $user = $this->getCurrentUser();

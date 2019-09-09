@@ -32,7 +32,7 @@ class AbstractNotificationJob extends AbstractJob
         }
 
         $wechatSetting = $this->getSettingService()->get('wechat', array());
-        $channel = empty($wechatSetting['is_authorization']) ? 'wechat' : 'wechat_agent';
+        $channel = $this->getWeChatService()->getWeChatSendChannel();
 
         $users = $this->getUserService()->searchUsers(
             array('userIds' => $userIds, 'locked' => 0),
