@@ -253,7 +253,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     {
         $biz = $this->biz;
         $wechatSetting = $this->getSettingService()->get('wechat', array());
-        if (1 == $wechatSetting['is_authorization']) {
+        if (isset($wechatSetting['is_authorization']) && 1 == $wechatSetting['is_authorization']) {
             $freshWeChatUsers = $this->getSDKWeChatService()->batchGetUserInfo(ArrayToolkit::column($weChatUsers, 'openId'));
         } else {
             $userList = $this->convertWeChatUsersToOfficialRequestParams($weChatUsers);
