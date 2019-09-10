@@ -83,6 +83,10 @@ class AuthorizationController extends BaseController
             $this->createJsonResponse(array('error' => 'user is not exsit'));
         }
 
+        $user['smallAvatar'] = $this->getFileUrl($user['smallAvatar']);
+        $user['mediumAvatar'] = $this->getFileUrl($user['mediumAvatar']);
+        $user['largeAvatar'] = $this->getFileUrl($user['largeAvatar']);
+
         $result = ArrayToolkit::parts($user, array(
             'nickname', 'verifiedMobile', 'about', 'email', 'title', 'roles', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
         ));
@@ -121,14 +125,9 @@ class AuthorizationController extends BaseController
         }
         $path = str_replace('public://', '', $path);
         $path = str_replace('files/', '', $path);
-        $path = $this->getHttpHost()."/files/{$path}";
+        $path = "/files/{$path}";
 
         return $path;
-    }
-
-    protected function getHttpHost()
-    {
-        return "http://{$_SERVER['HTTP_HOST']}";
     }
 
     private function authCookie($request)
