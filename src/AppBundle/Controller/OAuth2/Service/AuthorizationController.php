@@ -83,10 +83,6 @@ class AuthorizationController extends BaseController
             $this->createJsonResponse(array('error' => 'user is not exsit'));
         }
 
-        $user['smallAvatar'] = $this->getFileUrl($user['smallAvatar']);
-        $user['mediumAvatar'] = $this->getFileUrl($user['mediumAvatar']);
-        $user['largeAvatar'] = $this->getFileUrl($user['largeAvatar']);
-
         $result = ArrayToolkit::parts($user, array(
             'nickname', 'verifiedMobile', 'about', 'email', 'title', 'roles', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
         ));
