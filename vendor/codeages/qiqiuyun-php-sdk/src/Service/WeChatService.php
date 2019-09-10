@@ -82,7 +82,9 @@ class WeChatService extends BaseService
      */
     public function batchGetUserInfo($openIds, $lang = 'zh_CN')
     {
-        return $this->request('POST', '/official_account/user_infos', array('openIds' => $openIds, 'lang' => $lang));
+        $result = $this->request('POST', '/official_account/user_infos', array('openIds' => $openIds, 'lang' => $lang));
+
+        return !empty($result['user_info_list']) ? $result['user_info_list'] : array();
     }
 
     /**
