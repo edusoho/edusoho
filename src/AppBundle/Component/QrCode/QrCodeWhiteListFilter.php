@@ -28,7 +28,8 @@ class QrCodeWhiteListFilter
                 $inWhitelist = true;
             }
         }
-
+var_dump($match, $inWhitelist);
+exit();
         return $inWhitelist;
     }
 
@@ -44,6 +45,10 @@ class QrCodeWhiteListFilter
 
     private function getQrCodeSiteWhitelist()
     {
-        return $this->container->getParameter('qrcode_site_whitelist');
+        if ($this->container->hasParameter('qrcode_site_whitelist')) {
+            return $this->container->getParameter('qrcode_site_whitelist');
+        }
+
+        return array();
     }
 }
