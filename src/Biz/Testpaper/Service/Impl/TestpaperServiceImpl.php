@@ -1202,7 +1202,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
 
             $question = $wrapper->handle($question, 'exportQuestion');
-            $question['stem'] = $this->filterNotExistImage($question['stem']);
             $question = ArrayToolkit::parts($question, array(
                 'type',
                 'seq',
@@ -1219,21 +1218,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         return $exportQuestions;
-    }
-
-    private function filterNotExistImage($stems)
-    {
-        $filtered = array();
-
-        foreach ($stems as $stem) {
-            if ($stem['element'] == 'img' && !file_exists($stem['content'])) {
-                continue;
-            }
-
-            $filtered[] = $stem;
-        }
-
-        return $filtered;
     }
 
     private function getUserMaxScore($userResults)
