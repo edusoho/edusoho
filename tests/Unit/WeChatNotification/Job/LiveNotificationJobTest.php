@@ -21,6 +21,10 @@ class LiveNotificationJobTest extends BaseTestCase
                 'returnValue' => array(array('openId' => 'test')),
                 'withParams' => array(array(12), 'official'),
             ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
+            ),
         ));
         $this->mockBiz('Task:TaskService', array(
             array(

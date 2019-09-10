@@ -13,6 +13,7 @@ class CourseRemindNotificationJobTest extends BaseTestCase
             array('functionName' => 'getTemplateId', 'returnValue' => 2),
             array('functionName' => 'findSubscribedUsersByUserIdsAndType', 'returnValue' => array(array('openId' => 123))),
             array('functionName' => 'findAllBindUserIds', 'returnValue' => array(array('openId' => 123, 'userId' => 1))),
+            array('functionName' => 'getWeChatSendChannel', 'returnValue' => 'wechat'),
         ));
         $this->mockBiz('Course:MemberService', array(
             array('functionName' => 'findLastLearnTimeRecordStudents', 'returnValue' => array(array('userId' => 1, 'courseId' => 1, 'learnedCompulsoryTaskNum' => 1))),

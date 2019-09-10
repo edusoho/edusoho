@@ -173,6 +173,10 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
                 'returnValue' => array('id' => 2, 'isSubscribe' => 1, 'openId' => 'testOpenId'),
                 'withParams' => array('2'),
             ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
+            ),
         ));
         $result = $subscriber->onTestpaperReviewd($this->getPaperResultEvent());
         $weChatService->shouldHaveReceived('getOfficialWeChatUserByUserId');
@@ -209,6 +213,10 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
                 'functionName' => 'getOfficialWeChatUserByUserId',
                 'returnValue' => array('id' => 2, 'isSubscribe' => 1, 'openId' => 'testOpenId'),
                 'withParams' => array('2'),
+            ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
             ),
         ));
         $result = $subscriber->onPaid($this->getTradeEvent());
@@ -247,6 +255,10 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
             array(
                 'functionName' => 'searchWeChatUsers',
                 'returnValue' => $return,
+            ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
             ),
         ));
 
@@ -289,6 +301,10 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
                 'functionName' => 'searchWeChatUsers',
                 'returnValue' => $return,
             ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
+            ),
         ));
 
         $classroomService = $this->mockBiz('Classroom:ClassroomService', array(
@@ -325,6 +341,10 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
                 'functionName' => 'getOfficialWeChatUserByUserId',
                 'returnValue' => array('id' => 1, 'isSubscribe' => 1, 'openId' => 'testOpenId'),
                 'withParams' => array('1'),
+            ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
             ),
         ));
 
@@ -374,6 +394,10 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
                 'functionName' => 'getOfficialWeChatUserByUserId',
                 'returnValue' => array('id' => 1, 'isSubscribe' => 1, 'openId' => 'testOpenId'),
                 'withParams' => array('1'),
+            ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
             ),
         ));
 

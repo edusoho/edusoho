@@ -12,6 +12,7 @@ class HomeWorkOrTestPaperReviewNotificationJobTest extends BaseTestCase
         $this->mockBiz('WeChat:WeChatService', array(
             array('functionName' => 'getTemplateId', 'returnValue' => 2),
             array('functionName' => 'findSubscribedUsersByUserIdsAndType', 'returnValue' => array(array('openId' => 123))),
+            array('functionName' => 'getWeChatSendChannel', 'returnValue' => 'wechat'),
         ));
         $this->mockBiz('Testpaper:TestpaperService', array(
             array('functionName' => 'searchTestpaperResultsCountJoinCourseMemberGroupByUserId', 'returnValue' => array(array('userId' => 1, 'num' => 1))),
