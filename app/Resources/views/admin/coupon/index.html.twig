@@ -2,7 +2,11 @@
 
 {% set script_controller = 'coupon/list' %}
 {% set menu = 'admin_operation_coupon_manage' %}
-
+ {% block page_buttons %}
+   {% if setting('coupon.enabled', 0) == 1 %}
+      <a class="btn btn-success btn-sm " href="{{ path('admin_coupon_generate') }}" target="blank">{{ '生成优惠码'|trans }}</a>
+   {% endif %}
+ {% endblock %}
 {% block main %}
 
   {{ web_macro.flash_messages() }}

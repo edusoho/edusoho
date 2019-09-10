@@ -638,7 +638,6 @@ admin:
                                 admin_coupon_generate:
                                     name: admin.operation.coupon_menu.generate_btn
                                     group: topBtn
-                                    visible: (setting('coupon.enabled', false) == 1)
                         admin_operation_coupon_query:
                             name: admin.operation.query_menu.basic_tab
                             disable: true
