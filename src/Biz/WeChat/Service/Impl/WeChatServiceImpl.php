@@ -181,7 +181,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     {
         $conditions = array(
             'type' => WeChatService::OFFICIAL_TYPE,
-            'lastRefreshTime_LT' => time(),
+            'lastRefreshTime_LT' => time() - $lifeTime,
         );
         $weChatUsers = $this->searchWeChatUsers(
             $conditions,
@@ -228,7 +228,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     {
         $biz = $this->biz;
         $wechatSetting = $this->getSettingService()->get('wechat', array());
-        if (1 == $wechatSetting['is_authorization']) {
+        if (!empty($wechatSetting['is_authorization']) && 1 == $wechatSetting['is_authorization']) {
             $freshWeChatUser = $this->getSDKWeChatService()->getUserInfo($weChatUser['openId']);
         } else {
             $freshWeChatUser = $biz['wechat.template_message_client']->getUserInfo($weChatUser['openId']);
@@ -236,6 +236,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $unionId = !empty($freshWeChatUser['unionid']) ? $freshWeChatUser['unionid'] : $weChatUser['unionId'];
 
         $userBind = $this->getUserService()->getUserBindByTypeAndUserId('weixin', $weChatUser['userId']);
+
         if (empty($userBind['fromId']) || $userBind['fromId'] != $unionId) {
             $userBind = $this->getUserService()->getUserBindByTypeAndFromId('weixin', $weChatUser['unionId']);
         }
