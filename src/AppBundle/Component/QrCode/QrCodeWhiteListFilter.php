@@ -28,8 +28,7 @@ class QrCodeWhiteListFilter
                 $inWhitelist = true;
             }
         }
-var_dump($match, $inWhitelist);
-exit();
+
         return $inWhitelist;
     }
 
