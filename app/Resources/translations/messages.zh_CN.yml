@@ -1600,6 +1600,7 @@ course.question_manage.manage.score: 分值
 course.question_manage.manage.steom_tips: >
   点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对
 course.question_manage.manage.material: 材料
+course.question_manage.manage.belong_change_tips: 此题目若被引用，更改从属是可能会影响会课时的练习，请谨慎操作！
 course.question_manage.edit: 编辑题目
 course.question_manage.import.btn: 导入题目
 course.question_manage.import.modal_title: 题目导入
