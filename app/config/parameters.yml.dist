@@ -34,3 +34,6 @@ parameters:
 
     #二维码协议白名单，APP内扫码用
     #qrcode_protocol_whitelist: ['mqqwpa']
+
+    #二维码域名白名单,填写例子：www.edusoho.com
+    #qrcode_site_whitelist: []
