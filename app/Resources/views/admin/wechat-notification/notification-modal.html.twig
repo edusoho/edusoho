@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{ notification.title|default('admin.wechat_notification.template_content_detail'|trans)}}{% endblock %}
+{% block title %}{{ notification.title|default('admin.wechat_notification.template_content_detail'|trans)|trans}}{% endblock %}
 
 {% set hide_footer = true %}
 
