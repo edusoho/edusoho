@@ -2,9 +2,10 @@
 
 namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
+use AppBundle\Extensions\DataTag\AnnouncementsDataTag;
 use Biz\Announcement\Service\AnnouncementService;
 use Biz\BaseTestCase;
-use AppBundle\Extensions\DataTag\AnnouncementsDataTag;
+use Biz\User\CurrentUser;
 
 class AnnouncementsDataTagTest extends BaseTestCase
 {
@@ -60,9 +61,36 @@ class AnnouncementsDataTagTest extends BaseTestCase
             'targetId' => '1',
         ));
 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1, 'orgCode' => '1.'),
+        ));
+
+        $this->getServiceKernel()->setBiz($this->getBiz());
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $dataTag = new AnnouncementsDataTag();
         $announcement = $dataTag->getData(array('count' => '5', 'targetType' => 'course', 'targetId' => 1));
         $this->assertEquals(2, count($announcement));
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1, 'orgCode' => '1.2.'),
+        ));
+
+        $this->getServiceKernel()->setBiz($this->getBiz());
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $announcement = $dataTag->getData(array('count' => '5', 'targetType' => 'course', 'targetId' => 1));
+        $this->assertEquals(0, count($announcement));
     }
 
     /**

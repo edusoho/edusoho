@@ -4,6 +4,7 @@ namespace Tests\Unit\Announcement\Service;
 
 use Biz\Announcement\Service\AnnouncementService;
 use Biz\BaseTestCase;
+use Biz\User\CurrentUser;
 
 class AnnouncementServiceTest extends BaseTestCase
 {
@@ -81,6 +82,18 @@ class AnnouncementServiceTest extends BaseTestCase
             'endTime' => time() + 3600 * 1000,
             'url' => 'http://www.baidu.com',
         );
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1, 'orgCode' => '1.'),
+        ));
+
+        $this->getServiceKernel()->setBiz($this->getBiz());
+        $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $announcement1 = $this->getAnnouncementService()->createAnnouncement($announcementInfo1);
         $announcement2 = $this->getAnnouncementService()->createAnnouncement($announcementInfo2);
