@@ -241,10 +241,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
+        $templates = TemplateUtil::templates();
+        $templateCode = isset($templates[$key]['id']) ? $templates[$key]['id'] : '';
         $list = array(array(
             'channel' => $this->getWeChatService()->getWeChatSendChannel(),
             'to_id' => $weChatUser['openId'],
             'template_id' => $templateId,
+            'template_code' => $templateCode,
             'template_args' => $data,
             'goto' => $options,
         ));
@@ -267,11 +270,14 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             );
             $options = array('type' => 'url', 'url' => $this->generateUrl('course_set_explore', array(), true));
             $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']);
+            $templates = TemplateUtil::templates();
+            $templateCode = isset($templates['coinRecharge']['id']) ? $templates['coinRecharge']['id'] : '';
             if (!empty($weChatUser['isSubscribe'])) {
                 $list = array(array(
                     'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                     'to_id' => $weChatUser['openId'],
                     'template_id' => $chargeTemplateId,
+                    'template_code' => $templateCode,
                     'template_args' => $data,
                     'goto' => $options,
                 ));
@@ -295,11 +301,14 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
             $options = array('type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $orderItems[0]['target_id']));
             $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
+            $templates = TemplateUtil::templates();
+            $templateCode = isset($templates['paySuccess']['id']) ? $templates['paySuccess']['id'] : '';
             if (!empty($weChatUser['isSubscribe'])) {
                 $list = array(array(
                     'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                     'to_id' => $weChatUser['openId'],
                     'template_id' => $payTemplateId,
+                    'template_code' => $templateCode,
                     'template_args' => $data,
                     'goto' => $options,
                 ));
@@ -388,10 +397,14 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'keyword2' => array('value' => $content),
                 'remark' => array('value' => ''),
             );
+
+            $templates = TemplateUtil::templates();
+            $templateCode = isset($templates['answerQuestion']['id']) ? $templates['answerQuestion']['id'] : '';
             $list = array(array(
                 'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                 'to_id' => $weChatUser['openId'],
                 'template_id' => $templateId,
+                'template_code' => $templateCode,
                 'template_args' => $data,
             ));
 
@@ -422,8 +435,11 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'keyword3' => array('value' => date('Y-m-d H:i:s', $thread['createdTime'])),
                 'remark' => array('value' => ''),
             );
+            $templates = TemplateUtil::templates();
+            $templateCode = isset($templates['askQuestion']['id']) ? $templates['askQuestion']['id'] : '';
             $templateData = array(
                 'template_id' => $templateId,
+                'template_code' => $templateCode,
                 'template_args' => $data,
             );
             $list = array();

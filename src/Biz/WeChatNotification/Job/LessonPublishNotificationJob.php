@@ -3,6 +3,7 @@
 namespace Biz\WeChatNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 
 class LessonPublishNotificationJob extends AbstractNotificationJob
 {
@@ -55,8 +56,12 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
             'remark' => array('value' => ('live' == $task['type']) ? '请准时参加' : '请及时前往学习'),
         );
         $options = array('url' => $url, 'type' => 'url');
+
+        $templates = TemplateUtil::templates();
+        $templateCode = isset($templates[$key]['id']) ? $templates[$key]['id'] : '';
         $templateData = array(array(
             'template_id' => $templateId,
+            'template_code' => $templateCode,
             'template_args' => $data,
             'goto' => $options,
         ));
