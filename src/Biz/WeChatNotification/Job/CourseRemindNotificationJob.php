@@ -3,6 +3,7 @@
 namespace Biz\WeChatNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 use Biz\Course\Service\LearningDataAnalysisService;
 
 class CourseRemindNotificationJob extends AbstractNotificationJob
@@ -41,6 +42,8 @@ class CourseRemindNotificationJob extends AbstractNotificationJob
         );
         $templateData = array();
         $options = array('url' => $url, 'type' => 'url');
+        $templates = TemplateUtil::templates();
+        $templateCode = isset($templates[$key]['id']) ? $templates[$key]['id'] : '';
         foreach ($courseMembers as $courseMember) {
             if (empty($courseMember['courseId'])) {
                 continue;
@@ -53,6 +56,7 @@ class CourseRemindNotificationJob extends AbstractNotificationJob
             $data['keyword2'] = array('value' => $keyword2);
             $templateData[$courseMember['userId']] = array(
                 'template_id' => $templateId,
+                'template_code' => $templateCode,
                 'template_args' => $data,
                 'goto' => $options,
             );

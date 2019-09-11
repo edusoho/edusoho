@@ -3,6 +3,7 @@
 namespace Biz\WeChatNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 use Biz\Testpaper\Service\TestpaperService;
 
 class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
@@ -41,10 +42,13 @@ class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
         );
 
         $templateData = array();
+        $templates = TemplateUtil::templates();
+        $templateCode = isset($templates[$key]['id']) ? $templates[$key]['id'] : '';
         foreach ($nums as $num) {
             $data['keyword2'] = array('value' => $num['num']);
             $templateData[$num['userId']] = array(
                 'template_id' => $templateId,
+                'template_code' => $templateCode,
                 'template_args' => $data,
             );
         }
