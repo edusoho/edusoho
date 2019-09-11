@@ -9,7 +9,7 @@ class EmailRegistrationTemplate extends BaseTemplate implements EmailTemplateInt
      */
     public function parse($options)
     {
-//        由于分校插件重写settingService，此处不传入默认值
+        /** 由于分校插件重写settingService，此处不传入默认值 */
         $emailTitle = $this->setting('auth.email_activation_title');
         $emailBody = $this->setting('auth.email_activation_body');
         $params = $options['params'];
