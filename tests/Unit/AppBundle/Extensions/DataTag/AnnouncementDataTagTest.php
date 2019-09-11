@@ -94,21 +94,6 @@ class AnnouncementDataTagTest extends BaseTestCase
         $dataTag = new AnnouncementDataTag();
         $announcement = $dataTag->getData(array('count' => '5'));
         $this->assertEquals(5, count($announcement));
-
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => 0,
-            'nickname' => '游客',
-            'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
-            'org' => array('id' => 1, 'orgCode' => '1.2.'),
-        ));
-
-        $this->getServiceKernel()->setBiz($this->getBiz());
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-
-        $announcement = $dataTag->getData(array('count' => '5'));
-        $this->assertEquals(0, count($announcement));
     }
 
     /**
