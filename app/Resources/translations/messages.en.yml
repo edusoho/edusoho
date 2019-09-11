@@ -1431,6 +1431,7 @@ course.question_manage.manage.advanced_options: 'Show / Hide advanced options'
 course.question_manage.manage.score: Score
 course.question_manage.manage.steom_tips: "Click the button <span style=\"color:red\">[ ]</span>  to insert a blank. You can also input manually, for example “This year is [[2014]]”, the answer is “2014”\n"
 course.question_manage.manage.material: Material
+course.question_manage.manage.belong_change_tips: If this question is cited, changing the subordinate is likely to affect the practice of the class, please be cautious!
 course.question_manage.edit: Edit
 course.question_manage.import.btn: Import question
 course.question_manage.import.modal_title: Import question
@@ -1739,6 +1740,7 @@ course.plan_task.activity_manage.exercise.questionNum: >
 course.plan_task.activity_manage.exercise.start_btn: Start
 course.plan_task.activity_manage.exercise.info: Introduction
 course.plan_task.activity_manage.exercise.info_tips: 'This assignment is random generate <span class="color-success">%itemCount% questions</span>'
+course.plan_task.activity_manage.exercise.info_tips.question_lack: The number of questions is inconsistent with the teacher's settings, please contact the teacher!
 course.plan_task.activity_manage.exercise.total_questions: '%itemCount% questions in total'
 course.plan_task.activity_manage.exercise.confirm_submit: Confirm
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to submit?'
