@@ -10119,7 +10119,6 @@ classroom.joining_date.expired_tips: 班级已过有效期！
 editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
 
 
-
 #coupon
 coupon.usage_detail_title: 优惠码使用详情
 coupon.enable_hint: 优惠码未开启，请先在<a href="%path%"> 系统-运营设置-优惠码 </a>中设置开启
@@ -10142,7 +10141,7 @@ coupon.description: 优惠说明
 coupon.target: 使用对象
 coupon.full_discount_price: 金额设置
 coupon.channel: 发放渠道
-coupon.setting.status: 优惠码状态
+coupon.setting.status: 优惠劵全局开关
 coupon.content: 优惠内容
 coupon.batch.name: 批次名称
 coupon.no_coupon_tip: 无优惠码记录
@@ -10183,7 +10182,7 @@ coupon.status.receive: 已领取
 coupon.status.used: 已使用
 
 coupon.generate_num: 生成数量
-coupon.generate_num_hint: 生成数量必须在1～10000之间
+coupon.generate_num_hint: 生成数量必须在1～100之间
 coupon.generate_num_unit: 个
 coupon.prefix: 优惠码前缀
 coupon.prefix_hint: 优惠码前缀不可重复，不占优惠码位数
@@ -10214,6 +10213,8 @@ coupon.query.by_type: 按优惠方式
 coupon.query.by_use_start_date: 使用时间起始
 coupon.query.by_use_end_date: 使用时间截止
 coupon.query.by_code: 优惠码
+coupon.setting.close: 优惠券未开启，请先开启优惠券开关
+coupon.setting.permission.goto_open: 去开启
 
 coupon.deadline_mode.day.help_block: >
   至<br/>领取后%day%天内

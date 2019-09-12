@@ -68,33 +68,17 @@ class CouponBatchController extends BaseController
 
     public function generateAction(Request $request)
     {
+        $couponSetting = $this->getSettingService()->get('coupon', array());
+
+        if (empty($couponSetting['enabled'])) {
+            return $this->render('admin/coupon/permission-message.html.twig', array('type' => 'info'));
+        }
+
         if ('POST' == $request->getMethod()) {
             $couponData = $request->request->all();
 
-            if ('minus' == $couponData['type']) {
-                $couponData['rate'] = $couponData['minus-rate'];
-                unset($couponData['minus-rate']);
-                unset($couponData['discount-rate']);
-            } else {
-                $couponData['rate'] = $couponData['discount-rate'];
-                unset($couponData['minus-rate']);
-                unset($couponData['discount-rate']);
-            }
-
-            if ('course' == $couponData['targetType']) {
-                $couponData['targetId'] = $couponData['courseId'];
-                unset($couponData['courseId']);
-            }
-
-            if ('vip' == $couponData['targetType']) {
-                $couponData['targetId'] = $couponData['vipId'];
-                unset($couponData['vipId']);
-            }
-
-            if ('classroom' == $couponData['targetType']) {
-                $couponData['targetId'] = $couponData['classroomId'];
-                unset($couponData['classroomId']);
-            }
+            $couponData['rate'] = $couponData['minus-rate'];
+            unset($couponData['minus-rate']);
 
             $batch = $this->getCouponBatchService()->generateCoupon($couponData);
 
@@ -327,5 +311,10 @@ class CouponBatchController extends BaseController
     private function getLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

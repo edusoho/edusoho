@@ -184,7 +184,7 @@ define(function(require, exports, module) {
         validator.addItem({
         	element: '[name="generatedNum"]',
         	required: true,
-        	rule: 'max{max:10000} min{min:1} positive_integer'
+        	rule: 'max{max:100} min{min:1} positive_integer'
         });
 
         validator.addItem({
