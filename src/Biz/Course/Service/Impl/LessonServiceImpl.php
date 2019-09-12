@@ -93,7 +93,9 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->publishTasks($lesson['id']);
 
         $this->dispatchEvent('course.lesson.publish', new Event($lesson));
-        $this->updateLessonNumbers($courseId);
+        if ($updateLessonNum) {
+            $this->updateLessonNumbers($courseId);
+        }
 
         return $lesson;
     }
