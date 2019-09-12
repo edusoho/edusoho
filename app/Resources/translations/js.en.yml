@@ -436,6 +436,7 @@ course.thread_delete_hint: Do you really want to delete this reply?
 course_manage.course_dashboard.student_num: Number of students
 course_manage.course_dashboard.finish_num: Number of completions
 course_manage.course_dashboard.finish_rate: Completion rate
+course.manage.teacher.manage.repeat_tip: Can not add repeatedly.
 
 course_manage.lesson_dashboard.finish_rate: Completion rate
 course_manage.lesson_dashboard.student_num: Person
@@ -785,6 +786,7 @@ validate.alphanumeric.message: Must be English letters, numbers and underscores
 validate.raty_star.message: Please score
 validate.reg_invite_code.message: Must consists of five numbers and english characters
 validate.phone.message: Please enter a valid mobile phone number
+validate.mobile_or_telephone.message: Please enter a valid mobile number or phone number
 validate.nickname.message: Do not allow 11-bit pure numbers beginning with 1
 validate.password_check.message: Wrong password
 validate.sms_code_input.message: Please enter the verification code
@@ -811,6 +813,7 @@ validate.fail: Failed to verify
 validate.expiry_days_required_hint: please input the expiry days
 validate.empty_content_hint: please input content!
 validate.no_number_first_hint: URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits
+validate.have_spaces: Password can't have spaces
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
@@ -1437,6 +1440,7 @@ subject.period: .
 subject.miss_score_no_more_than_score: Missing score is no more than score
 subject.score_update_success: Score modified successfully
 subject.difficulty_update_success: Difficulty modified successfully
+subject.belong_update_success: Belong modified successfully
 subject.question_count: '%count% questions total'
 subject.total_score: '%totalScore% score total'
 subject.is_editing_warning: 'Finish %seq% question before other operation'
@@ -1463,4 +1467,3 @@ user.account.order_pay_vip_close_title: The vip level is closed
 user.account.order_pay_vip_close_hint: The vip level in this order has been closed.Confirmed to pay?
 user.account.order_pay: Continue
 user.account.order_not_pay: Not paying
-

@@ -7,6 +7,15 @@ use AppBundle\Extensions\DataTag\GroupDataTag;
 
 class GroupDataTagTest extends BaseTestCase
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testEmptyGroupId()
+    {
+        $dataTag = new GroupDataTag();
+        $dataTag->getData(array());
+    }
+
     public function testGetData()
     {
         $group = array(

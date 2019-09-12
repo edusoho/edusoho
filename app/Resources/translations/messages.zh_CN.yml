@@ -1668,7 +1668,7 @@ course.testpaper_manage.import.re_edit.total_score: 总分%totalScore%分
 course.testpaper_manage.import.re_edit.edit_title_hint: 此处可编辑试卷名称，最多输入50个字符
 course.testpaper_manage.import.re_edit.finish_import: 完成导入
 course.testpaper_manage.import.re_edit.delete_attachment: 删除
-course.testpaper_manage.import.re_edit.batch_set_score: 批量设置分数
+course.testpaper_manage.import.re_edit.batch_set_score: 设置分数
 course.testpaper_manage.import.re_edit.score_hint: 请输入小于1000的正整数
 course.testpaper_manage.import.re_edit.miss_score: 漏选分值
 course.testpaper_manage.import.re_edit.selected: 已选：
@@ -1681,12 +1681,14 @@ course.testpaper_manage.import.re_edit.new_question_title: 添加新题
 course.testpaper_manage.import.re_edit.select_type: 选择题型
 course.testpaper_manage.import.re_edit.uncertain_choice: 不定项
 course.testpaper_manage.import.re_edit.question_statistics: 题目统计
-course.testpaper_manage.import.re_edit.batch_set_difficulty: 批量设置难度
+course.testpaper_manage.import.re_edit.batch_set_difficulty: 设置难度
+course.testpaper_manage.import.re_edit.batch_set_belong: 设置从属
 course.testpaper_manage.import.re_edit.question_list: 题目列表
 course.testpaper_manage.import.re_edit.batch_operate: 批量操作
 course.testpaper_manage.import.re_edit.select_all: 全选
 course.testpaper_manage.import.re_edit.finish_batch_operate: 完成
 course.testpaper_manage.import.re_edit.answer: 答案
+course.testpaper_manage.import.re_edit.explain: 解析
 course.testpaper_manage.import.re_edit.correct: 正确
 course.testpaper_manage.import.re_edit.wrong: 错误
 course.testpaper_manage.import.re_edit.convert_hint: 可选择转换题型为
@@ -1862,6 +1864,7 @@ course.plan_task.activity_manage.activity_file_empty: 抱歉，%type%文件不�
 course.plan_task.activity_manage.preview_failed_tips: 当前%taskName%不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
 course.plan_task.activity_manage.help_block: 建议标题字数控制在15字以内，否则会影响手机端浏览
+course.plan_task.activity_ppt_animation_btn: 切换图片模式
 course.plan_task.activity_manage.setup_is_option: 设为选修
 course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
 course.plan_task.activity_manage.choose_teach_way: >
@@ -2101,6 +2104,7 @@ course.live.replay_manage.lesson_add_btn: 添加
 course.liveroom.content_title: 直播教室
 course.liveroom.open_liveroom_tips: 正在打开教室，请稍候......
 activity.live.not_created_notice: 直播教室尚未创建！
+activity.live.overlap_time_notice: 所选时间已经有直播了，请换个时间
 
 
 
@@ -5672,8 +5676,8 @@ admin.setting.share.as_group_name: 为小组名称
 admin.setting.share.as_thread_name: 为话题名称
 admin.setting.share.classroom_share_content: 班级分享内容
 admin.setting.share.as_classroom_name: 为班级名称
-admin.setting.security.IFrame_white_domain: 白名单域名
-admin.setting.security.help_block: 在课程简介、课时内容等区域允许添加iframe、图片等涉及外链的代码，以引入第三方网站的组件。为保障网校安全，只允许白名单域名范围内的外链网址。一行一个域名，请不要添加http://前缀。
+admin.setting.security.IFrame_white_domain: IFrame白名单
+admin.setting.security.help_block: 当编辑区允许添加iframe、图片等涉及外链的代码，以引入第三方网站的组件时。为保障网校安全，只允许白名单域名范围内的外链网址。一行一个域名，请不要添加http://前缀。
 # 运营模块
 # 编辑区管理
 admin.block_manage.all: 所有
@@ -10095,7 +10099,7 @@ wechat.notification.empty_token: 获取微信信息错误
 wechat.notification.template_not_exist: 模板不存在
 
 # 微信通知模板
-wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[课程名]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
+wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[《课程名》-《任务名》]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
 wechat.notification.template.homework_result: '同学，你好，你的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
 wechat.notification.template.exam_result: '同学，你好，你的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
 wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]<br>请及时前往学习'
@@ -10120,3 +10124,6 @@ mobile.task.finish_tips.video.end: 学习到最后
 mobile.task.finish_tips.video.time: 至少学习 %finishData% 分钟
 
 classroom.joining_date.expired_tips: 班级已过有效期！
+
+# 富文本
+editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置

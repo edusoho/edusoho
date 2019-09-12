@@ -379,7 +379,7 @@ course.thread_delete_hint: 您真的要删除该回帖吗？
 course_manage.course_dashboard.student_num: 学员数
 course_manage.course_dashboard.finish_num: 完课人数
 course_manage.course_dashboard.finish_rate: 完课率
-
+course.manage.teacher.manage.repeat_tip: 不能重复添加
 
 course_manage.course_overview.person_unit: 人数
 
@@ -725,6 +725,7 @@ validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
 validate.raty_star.message: 请打分
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.phone.message: 请输入有效手机号码
+validate.mobile_or_telephone.message: 请输入有效手机号码或者电话号码(区号-电话号码)
 validate.nickname.message: 不允许以1开头的11位纯数字
 validate.password_check.message: 密码错误
 validate.sms_code_input.message: 请输入短信验证码
@@ -752,6 +753,7 @@ validate.fail: 验证失败
 validate.expiry_days_required_hint: 请输入有效期
 validate.empty_content_hint: 请输入内容!
 validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母开头!长度大于2位
+validate.have_spaces: 密码不能有空格哦
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -1380,6 +1382,7 @@ subject.period: 。
 subject.miss_score_no_more_than_score: 漏选分值不得超过题目分值
 subject.score_update_success: 分数修改成功
 subject.difficulty_update_success: 难度修改成功
+subject.belong_update_success: 从属修改成功
 subject.question_count: 共%count%道题
 subject.total_score: 总分%totalScore%分
 subject.is_editing_warning: 请先完成第%seq%题的编辑
@@ -1407,4 +1410,3 @@ user.account.order_pay_vip_close_title: 该会员等级已关闭
 user.account.order_pay_vip_close_hint: 该订单的会员等级已关闭，确定还要支付？
 user.account.order_pay: 继续
 user.account.order_not_pay: 不支付
-

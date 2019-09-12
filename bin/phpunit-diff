@@ -110,7 +110,8 @@ if [[  "$contain" != '' ]]; then
 else
     echo '分支不存在，开始全局单元测试'
     phpunitAll=("bin/phpunit -c app/ --testsuite UnitA2B"
-                "bin/phpunit -c app/ --testsuite UnitC2D"
+                "bin/phpunit -c app/ --testsuite UnitC2C"
+                "bin/phpunit -c app/ --testsuite UnitD2D"
                 "bin/phpunit -c app/ --testsuite UnitE2P"
                 "bin/phpunit -c app/ --testsuite UnitQ2T"
                 "bin/phpunit -c app/ --testsuite UnitU2Z")

@@ -14,9 +14,4 @@ class SelectedTagGroupsDataTag extends CourseBaseDataTag implements DataTag
 
         return $groupIds;
     }
-
-    protected function getTagService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
-    }
 }

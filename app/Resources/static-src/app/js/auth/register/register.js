@@ -6,6 +6,7 @@ export default class Register {
     this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
       limitType: 'web_register'
     }) : null;
+    this.setValidateRule();
     this.dragEvent();
     this.initValidator();
     this.inEventMobile();
@@ -20,6 +21,12 @@ export default class Register {
         self._smsBtnable();
       });
     }
+  }
+
+  setValidateRule() {
+    $.validator.addMethod('spaceNoSupport', function (value, element) {
+      return value.indexOf(' ') < 0;
+    }, $.validator.format(Translator.trans('validate.have_spaces')));
   }
 
   initValidator() {
@@ -146,6 +153,7 @@ export default class Register {
         password: {
           minlength: 5,
           maxlength: 20,
+          spaceNoSupport: true,
         },
         email: {
           required: true,

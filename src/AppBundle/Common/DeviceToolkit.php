@@ -77,7 +77,7 @@ class DeviceToolkit
             }
         }
 
-        if (strpos($userAgent, 'Android') > -1) {
+        if (strpos($userAgent, 'android') > -1) {
             return 'android';
         }
 

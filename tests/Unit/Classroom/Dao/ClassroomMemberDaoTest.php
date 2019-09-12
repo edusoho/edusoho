@@ -15,7 +15,7 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
         $this->getUserSerivice()->register(array(
             'nickname' => 'test',
             'email' => 'test@admin.com',
-            'password' => 'test',
+            'password' => 'test123',
             'verifiedMobile' => '13967340627',
             'mobile' => '13967340627',
         ));
@@ -26,7 +26,7 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
         $this->getUserSerivice()->register(array(
             'nickname' => 'test2',
             'email' => 'test2@admin.com',
-            'password' => 'test2',
+            'password' => 'test1234',
             'verifiedMobile' => '13967340600',
             'mobile' => '13967340600',
         ));
@@ -38,7 +38,7 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
         $this->getUserSerivice()->register(array(
             'nickname' => 'test3',
             'email' => 'test3@admin.com',
-            'password' => 'test3',
+            'password' => 'test123456',
             'verifiedMobile' => '13967340627',
             'mobile' => '13967340627',
         ));
