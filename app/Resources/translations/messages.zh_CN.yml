@@ -9861,6 +9861,13 @@ exception.testpaper.not_found_result: 试卷结果不存在
 exception.testpaper.modify_committed_testpaper: 已经交卷的试卷不能修改!
 exception.testpaper.doing: 试卷还未提交
 exception.testpaper.redo_interval_exist: 教师设置了重考间隔
+exception.homework.not_found: 作业不存在
+exception.homework.draft: 该作业未发布，如有疑问请联系老师！
+exception.homework.closed: 该作业已关闭，如有疑问请联系老师！
+exception.homework.forbidden_access_homework: 不可以访问其他学生的作业!
+exception.homework.forbidden_duplicate_commit_homework: 作业已经做完，不能重复提交!
+exception.homework.reviewing: 作业正在批阅！不能重新开始!
+exception.homework.not_found_result: 作业结果不存在
 exception.uploadfile.file_not_found: 文件不存在
 exception.uploadfile.forbidden_manage_file: 没有权限管理资源
 exception.uploadfile.error_status: 状态不正确
