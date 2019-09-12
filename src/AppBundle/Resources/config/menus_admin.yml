@@ -637,12 +637,14 @@ admin:
                             children:
                                 admin_coupon_generate:
                                     name: admin.operation.coupon_menu.generate_btn
-                                    parent: admin_operation_coupon_manage
                                     group: topBtn
                         admin_operation_coupon_query:
                             name: admin.operation.query_menu.basic_tab
                             disable: true
                             router_name: admin_coupon_query
+                        admin_coupon_setting:
+                            name: admin.system.operation.coupon_setting_tab
+                            disable: true
                 admin_operation_keyword:
                     name: admin.operation.sensitive_words_menu
                     parent: admin_operation
@@ -1039,9 +1041,6 @@ admin:
                             name: admin.system.operation.message_tab
                             disable: true
                             parent: admin_setting_operation
-                        admin_coupon_setting:
-                          name: admin.system.operation.coupon_setting_tab
-                          disable: true
                 admin_setting_finance:
                     name: admin.system.finance_menu
                     children:

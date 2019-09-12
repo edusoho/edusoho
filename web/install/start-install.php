@@ -505,6 +505,9 @@ EOD;
         'cloud_sms' => array(
             'system_remind' => 'on',
         ),
+        'coupon' => array(
+            'enabled' => 1,
+        )
     );
 
     $service = ServiceKernel::instance()->createService('System:SettingService');

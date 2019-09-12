@@ -24,6 +24,8 @@ class CouponException extends AbstractException
 
     const FINISHED = 5004508;
 
+    const SETTING_CLOSED = 4034509;
+
     public $messages = array(
         4044501 => 'exception.coupon.not_found',
         5004502 => 'exception.coupon.status_invalid',
@@ -33,5 +35,6 @@ class CouponException extends AbstractException
         4044506 => 'exception.coupon.invalid',
         5004507 => 'exception.coupon.received',
         5004508 => 'exception.coupon.finished',
+        4034509 => '',
     );
 }
