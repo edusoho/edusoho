@@ -266,7 +266,7 @@ class SystemInitializer
 
     private function _initCouponSetting()
     {
-        $this->output->write('  初始化云优惠码设置');
+        $this->output->write('  初始化优惠码设置');
 
         $default = array(
             'enabled' => 1,
