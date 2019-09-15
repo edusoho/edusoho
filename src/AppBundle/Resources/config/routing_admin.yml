@@ -495,6 +495,14 @@ admin_course_chooser:
     path: /course_set/chooser
     defaults: { _controller: AppBundle:Admin/CourseSet:chooser }
 
+admin_course_chooser_ajax:
+    path: /course_set/chooser/ajax
+    defaults: { _controller: AppBundle:Admin/CourseSet:ajaxChooser }
+
+admin_coupon_course_selected:
+    path: /coupon/course_set/selected
+    defaults: { _controller: AppBundle:Admin/CourseSet:selectedCourse }
+
 admin_course_set_recommend_list:
     path: /course_set/recommend/list
     defaults: { _controller: AppBundle:Admin/CourseSet:recommendList }
@@ -2159,8 +2167,16 @@ admin_classroom_review_batch_delete:
 
 admin_classroom_chooser:
     path: /classroom/chooser
-    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:chooser }    
- 
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:chooser }
+
+admin_classroom_chooser_ajax:
+    path: /classroom/chooser/ajax
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:ajaxChooser }
+
+admin_coupon_classroom_selected:
+    path: /coupon/classroom/selected
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:selectedClassroom }
+
 #org
 admin_org:
     path: /org

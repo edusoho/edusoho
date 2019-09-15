@@ -253,6 +253,53 @@ class ClassroomAdminController extends BaseController
     public function chooserAction(Request $request)
     {
         $conditions = $request->query->all();
+        list($conditions, $classrooms, $categories, $paginator) = $this->buildChooserClassrooms($conditions);
+
+        return $this->render('admin/classroom/classroom-chooser.html.twig', array(
+            'conditions' => $conditions,
+            'classrooms' => $classrooms,
+            'categories' => $categories,
+            'paginator' => $paginator,
+        ));
+    }
+
+    public function ajaxChooserAction(Request $request)
+    {
+        $conditions = $request->request->all();
+        list($conditions, $classrooms, $categories, $paginator) = $this->buildChooserClassrooms($conditions, 'ajax');
+
+        return $this->render('admin/classroom/classroom-chooser-tr.html.twig', array(
+            'conditions' => $conditions,
+            'classrooms' => $classrooms,
+            'categories' => $categories,
+            'paginator' => $paginator,
+        ));
+    }
+
+    /**
+     * coupon指定课程
+     */
+    public function selectedClassroomAction(Request $request)
+    {
+        $ids = $request->request->get('ids', array(-1));
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            array('classroomIds' => $ids),
+            array('createdTime' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+
+        return $this->render(
+            'admin/coupon/classroom/classroom-selected-tr.html.twig',
+            array(
+                'classrooms' => $classrooms,
+            )
+        );
+    }
+
+    private function buildChooserClassrooms($conditions, $type = '')
+    {
         $conditions['parentId'] = 0;
 
         if (isset($conditions['categoryId']) && '' == $conditions['categoryId']) {
@@ -274,7 +321,9 @@ class ClassroomAdminController extends BaseController
             $count,
             20
         );
-
+        if ('ajax' != $type) {
+            $paginator->setBaseUrl($this->generateUrl('admin_classroom_chooser_ajax'));
+        }
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
             array('createdTime' => 'ASC'),
@@ -284,12 +333,7 @@ class ClassroomAdminController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classrooms, 'categoryId'));
 
-        return $this->render('admin/classroom/classroom-chooser.html.twig', array(
-            'conditions' => $conditions,
-            'classrooms' => $classrooms,
-            'categories' => $categories,
-            'paginator' => $paginator,
-        ));
+        return array($conditions, $classrooms, $categories, $paginator);
     }
 
     private function renderClassroomTr($id, $classroom)

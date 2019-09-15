@@ -533,6 +533,64 @@ class CourseSetController extends BaseController
     public function chooserAction(Request $request)
     {
         $conditions = $request->query->all();
+        list($users, $conditions, $courseSets, $categories, $paginator, $withCoursePlan) = $this->buildChooserCourseSets($conditions);
+
+        return $this->render(
+            'admin/course/course-set-chooser.html.twig',
+            array(
+                'users' => $users,
+                'conditions' => $conditions,
+                'courseSets' => $courseSets,
+                'categories' => $categories,
+                'paginator' => $paginator,
+                'withCoursePlan' => $withCoursePlan,
+            )
+        );
+    }
+
+    public function ajaxChooserAction(Request $request)
+    {
+        $conditions = $request->request->all();
+
+        list($users, $conditions, $courseSets, $categories, $paginator, $withCoursePlan) = $this->buildChooserCourseSets($conditions, 'ajax');
+
+        return $this->render(
+            'admin/course/course-set-chooser-tr.html.twig',
+            array(
+                'users' => $users,
+                'conditions' => $conditions,
+                'courseSets' => $courseSets,
+                'categories' => $categories,
+                'paginator' => $paginator,
+                'withCoursePlan' => $withCoursePlan,
+            )
+        );
+    }
+
+    /**
+     * coupon指定课程
+     */
+    public function selectedCourseAction(Request $request)
+    {
+        $ids = $request->request->get('ids', array(-1));
+
+        $courseSets = $this->getCourseSetService()->searchCourseSets(
+            array('ids' => $ids),
+            null,
+            0,
+            PHP_INT_MAX
+        );
+
+        return $this->render(
+            'admin/coupon/course/course-set-selected-tr.html.twig',
+            array(
+                'courseSets' => $courseSets,
+            )
+        );
+    }
+
+    private function buildChooserCourseSets($conditions, $type = '')
+    {
         $conditions['parentId'] = 0;
 
         if (isset($conditions['categoryId']) && '' == $conditions['categoryId']) {
@@ -560,7 +618,9 @@ class CourseSetController extends BaseController
         $count = $this->getCourseSetService()->countCourseSets($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
-
+        if ('ajax' != $type) {
+            $paginator->setBaseUrl($this->generateUrl('admin_course_chooser_ajax', array('withPlan' => $withCoursePlan)));
+        }
         if ($withCoursePlan) {
             $courseSets = $this->searchCourseSetWithCourses(
                 $conditions,
@@ -581,17 +641,7 @@ class CourseSetController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseSets, 'creator'));
 
-        return $this->render(
-            'admin/course/course-set-chooser.html.twig',
-            array(
-                'users' => $users,
-                'conditions' => $conditions,
-                'courseSets' => $courseSets,
-                'categories' => $categories,
-                'paginator' => $paginator,
-                'withCoursePlan' => $withCoursePlan,
-            )
-        );
+        return array($users, $conditions, $courseSets, $categories, $paginator, $withCoursePlan);
     }
 
     private function searchCourseSetWithCourses($conditions, $orderbys, $start, $limit)

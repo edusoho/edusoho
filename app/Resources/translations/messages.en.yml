@@ -83,6 +83,7 @@ site.btn.share: Share
 site.btn.all_select: 'Select all'
 site.btn.previous_page: 'Prev'
 site.btn.next_page: 'Next'
+site.btn.delete: 'Delete'
 site.price: Price
 site.org: Organizition
 site.org.setup: 'Set organizition'
@@ -8922,3 +8923,5 @@ coupon.setting.permission.goto_open: 去开启
 
 coupon.deadline_mode.day.help_block: >
   至<br/>领取后%day%天内
+coupon.resource.selected: 已选：
+coupon.resource.clear: 清空

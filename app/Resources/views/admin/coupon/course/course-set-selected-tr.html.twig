@@ -1,0 +1,24 @@
+{% import "admin/macro.html.twig" as web_macro %}
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+
+{% for courseSet in courseSets %}
+  <tr class='js-selected-item' data-id="{{ courseSet.id }}">
+    <td width="40%">
+      <a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank"><strong>{{ courseSet.title }}</strong></a>
+      <br>
+    </td>
+    <td width="40%">
+      {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
+        {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %}
+      {% else %}
+        {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %}
+        <span class="cd-text-sm">～</span>
+        {% include 'common/price.html.twig' with {'productPrice': courseSet.maxCoursePrice} %}
+      {% endif %}
+    </td>
+    <td width="20%">
+      <a href="javascript:;" class="js-selected-item-delete">{{ 'site.btn.delete'|trans }}</a>
+      <br>
+    </td>
+  </tr>
+{% endfor %}
