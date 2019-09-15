@@ -277,7 +277,7 @@ class ClassroomAdminController extends BaseController
     }
 
     /**
-     * coupon指定课程
+     * coupon指定班级
      */
     public function selectedClassroomAction(Request $request)
     {
