@@ -3,16 +3,22 @@
 namespace Biz\WeChatNotification\Event;
 
 use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
+use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Biz\Util\TextHelper;
 use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Biz\AppLoggerConstant;
@@ -42,6 +48,269 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'thread.post.create' => 'onClassroomQuestionAnswerCreate',
             'wechat.template_setting.save' => 'onWeChatTemplateSettingSave',
         );
+    }
+
+    public function onTaskUnpublish(Event $event)
+    {
+        $task = $event->getSubject();
+        $this->deleteLiveNotificationJob($task);
+    }
+
+    public function onTaskPublish(Event $event)
+    {
+        $task = $event->getSubject();
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        if ('published' != $courseSet['status'] || 'published' != $course['status']) {
+            return;
+        }
+
+        $this->sendTasksPublishNotification(array($task));
+    }
+
+    public function onTaskUpdate(Event $event)
+    {
+        $task = $event->getSubject();
+        if ('live' == $task['type']) {
+            $this->deleteLiveNotificationJob($task);
+
+            if ('published' == $task['status']) {
+                $this->registerLiveNotificationJob($task);
+            }
+        }
+    }
+
+    public function onTaskDelete(Event $event)
+    {
+        $task = $event->getSubject();
+        $this->deleteLiveNotificationJob($task);
+    }
+
+    public function onTestpaperReviewd(Event $event)
+    {
+        $paperResult = $event->getSubject();
+        $activity = $this->getActivityService()->getActivity($paperResult['lessonId']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        if (empty($task)) {
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'wechat_notification_error', '发送微信通知失败:获取任务失败', $paperResult);
+
+            return;
+        }
+
+        if (!in_array($paperResult['type'], array('testpaper', 'homework'))) {
+            return;
+        }
+
+        if ('testpaper' == $paperResult['type']) {
+            $key = 'examResult';
+            $logName = 'wechat_notify_exam_result';
+            $data = array(
+                'first' => array('value' => '同学，您好，你的试卷已批阅完成'.PHP_EOL),
+                'keyword1' => array('value' => $task['title']),
+                'keyword2' => array('value' => $paperResult['score'].PHP_EOL),
+                'remark' => array('value' => '再接再厉哦'),
+            );
+        } elseif ('homework' == $paperResult['type']) {
+            $key = 'homeworkResult';
+            $logName = 'wechat_notify_homework_result';
+            $course = $this->getCourseService()->getCourse($task['courseId']);
+            $teachers = $this->getCourseMemberService()->searchMembers(
+                array('courseId' => $course['id'], 'role' => 'teacher', 'isVisible' => 1),
+                array('id' => 'asc'),
+                0,
+                1
+            );
+            if (empty($teachers)) {
+                $nickname = '';
+            } else {
+                $user = $this->getUserService()->getUser($teachers[0]['userId']);
+                $nickname = $user['nickname'];
+            }
+
+            $data = array(
+                'first' => array('value' => '同学，您好，你的作业已批阅完成'.PHP_EOL),
+                'keyword1' => array('value' => $task['title']),
+                'keyword2' => array('value' => $course['courseSetTitle']),
+                'keyword3' => array('value' => $nickname),
+                'remark' => array('value' => '作业结果：'.$this->testpaperStatus[$paperResult['passedStatus']]),
+            );
+        }
+
+        $templateId = $this->getWeChatService()->getTemplateId($key);
+        if (empty($templateId)) {
+            return;
+        }
+
+        $options = array('type' => 'url', 'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true));
+        $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($paperResult['userId']);
+        if (empty($weChatUser['isSubscribe']) || $this->isUserLocked($paperResult['userId'])) {
+            return;
+        }
+
+        $templates = TemplateUtil::templates();
+        $templateCode = isset($templates[$key]['id']) ? $templates[$key]['id'] : '';
+        $list = array(array(
+            'channel' => $this->getWeChatService()->getWeChatSendChannel(),
+            'to_id' => $weChatUser['openId'],
+            'template_id' => $templateId,
+            'template_code' => $templateCode,
+            'template_args' => $data,
+            'goto' => $options,
+        ));
+        $this->sendCloudWeChatNotification($key, $logName, $list);
+    }
+
+    public function onPaid(Event $event)
+    {
+        $trade = $event->getSubject();
+        $chargeTemplateId = $this->getWeChatService()->getTemplateId('coinRecharge');
+        $payTemplateId = $this->getWeChatService()->getTemplateId('paySuccess');
+        if (!empty($chargeTemplateId) && 'recharge' == $trade['type']) {
+            $data = array(
+                'first' => array('value' => '尊敬的客户，您已充值成功'.PHP_EOL),
+                'keyword1' => array('value' => '现金充值或学习卡'),
+                'keyword2' => array('value' => $trade['trade_sn']),
+                'keyword3' => array('value' => ($trade['amount'] / 100).'元'),
+                'keyword4' => array('value' => date('Y-m-d H:i', $trade['pay_time']).PHP_EOL),
+                'remark' => array('value' => '快去看看课程吧~'),
+            );
+            $options = array('type' => 'url', 'url' => $this->generateUrl('course_set_explore', array(), true));
+            $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']);
+            $templates = TemplateUtil::templates();
+            $templateCode = isset($templates['coinRecharge']['id']) ? $templates['coinRecharge']['id'] : '';
+            if (!empty($weChatUser['isSubscribe']) && !$this->isUserLocked($trade['user_id'])) {
+                $list = array(array(
+                    'channel' => $this->getWeChatService()->getWeChatSendChannel(),
+                    'to_id' => $weChatUser['openId'],
+                    'template_id' => $chargeTemplateId,
+                    'template_code' => $templateCode,
+                    'template_args' => $data,
+                    'goto' => $options,
+                ));
+                $this->sendCloudWeChatNotification('coinRecharge', 'wechat_notify_coin_recharge', $list);
+            }
+        }
+
+        if (!empty($payTemplateId)) {
+            $data = array(
+                'first' => array('value' => '尊敬的客户，您已支付成功'.PHP_EOL),
+                'keyword1' => array('value' => $trade['title']),
+                'keyword2' => array('value' => ($trade['amount'] / 100).'元'),
+                'keyword3' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
+                'keyword4' => array('value' => '无'.PHP_EOL),
+                'remark' => array('value' => '请前往查看'),
+            );
+            $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
+            if (empty($order)) {
+                return;
+            }
+            $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+            $options = array('type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $orderItems[0]['target_id']));
+            $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
+            $templates = TemplateUtil::templates();
+            $templateCode = isset($templates['paySuccess']['id']) ? $templates['paySuccess']['id'] : '';
+            if (!empty($weChatUser['isSubscribe']) && !$this->isUserLocked($trade['user_id'])) {
+                $list = array(array(
+                    'channel' => $this->getWeChatService()->getWeChatSendChannel(),
+                    'to_id' => $weChatUser['openId'],
+                    'template_id' => $payTemplateId,
+                    'template_code' => $templateCode,
+                    'template_args' => $data,
+                    'goto' => $options,
+                ));
+                $this->sendCloudWeChatNotification('paySuccess', 'wechat_notify_pay_success', $list);
+            }
+        }
+    }
+
+    public function onTaskCreateSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        if ('published' == $task['status']) {
+            $tasks = $this->getCopiedTasks($task);
+
+            $this->sendTasksPublishNotification($tasks);
+        }
+    }
+
+    public function onTaskPublishSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        if ('published' == $task['status'] && $this->isTaskCreateSyncFinished($task)) {
+            $tasks = $this->getCopiedTasks($task);
+
+            $this->sendTasksPublishNotification($tasks);
+        }
+    }
+
+    public function onCourseQuestionCreate(Event $event)
+    {
+        $thread = $event->getSubject();
+        if ('question' != $thread['type']) {
+            return;
+        }
+        $course = $this->getCourseService()->getCourse($thread['courseId']);
+        $teachers = $this->getCourseMemberService()->findCourseTeachers($course['id']);
+        $userIds = ArrayToolkit::column($teachers, 'userId');
+
+        if (empty($userIds)) {
+            return;
+        }
+
+        $this->askQuestionSendNotification($thread, $userIds);
+    }
+
+    public function onClassroomQuestionCreate(Event $event)
+    {
+        $thread = $event->getSubject();
+
+        if ('classroom' != $thread['targetType'] || 'question' != $thread['type']) {
+            return;
+        }
+        $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
+        $userIds = $this->getClassroomService()->findTeachers($classroom['id']);
+        if (empty($userIds)) {
+            return;
+        }
+        $this->askQuestionSendNotification($thread, $userIds);
+    }
+
+    public function onCourseQuestionAnswerCreate(Event $event)
+    {
+        $post = $event->getSubject();
+
+        if (empty($post['courseId'])) {
+            return;
+        }
+
+        $course = $this->getCourseService()->getCourse($post['courseId']);
+        $thread = $this->getCourseThreadService()->getThread($course['id'], $post['threadId']);
+        if ($this->getCourseMemberService()->isCourseTeacher($post['courseId'], $post['userId'])) {
+            $title = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
+            if (!$this->isUserLocked($thread['userId'])) {
+                $this->answerQuestionNotification($thread['userId'], $post['content'], $title, $thread['createdTime']);
+            }
+        }
+    }
+
+    public function onClassroomQuestionAnswerCreate(Event $event)
+    {
+        $post = $event->getSubject();
+
+        if (empty($post['targetId']) && 'classroom' != $post['targetType']) {
+            return;
+        }
+
+        $classroom = $this->getClassroomService()->getClassroom($post['targetId']);
+        $thread = $this->getThreadService()->getThread($post['threadId']);
+
+        if ($this->getClassroomService()->isClassroomTeacher($post['targetId'], $post['userId'])) {
+            if (!$this->isUserLocked($thread['userId'])) {
+                $this->answerQuestionNotification($thread['userId'], $post['content'], $classroom['title'], $thread['createdTime']);
+            }
+        }
     }
 
     public function onWeChatTemplateSettingSave(Event $event)
@@ -124,263 +393,6 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
     }
 
-    public function onTaskPublish(Event $event)
-    {
-        $task = $event->getSubject();
-        $course = $this->getCourseService()->getCourse($task['courseId']);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        if ('published' != $courseSet['status'] || 'published' != $course['status']) {
-            return;
-        }
-
-        $this->sendTasksPublishNotification(array($task));
-    }
-
-    public function onTaskUnpublish(Event $event)
-    {
-        $task = $event->getSubject();
-        $this->deleteLiveNotificationJob($task);
-    }
-
-    public function onTaskDelete(Event $event)
-    {
-        $task = $event->getSubject();
-        $this->deleteLiveNotificationJob($task);
-    }
-
-    public function onTaskUpdate(Event $event)
-    {
-        $task = $event->getSubject();
-        if ('live' == $task['type']) {
-            $this->deleteLiveNotificationJob($task);
-
-            if ('published' == $task['status']) {
-                $this->registerLiveNotificationJob($task);
-            }
-        }
-    }
-
-    public function onTaskPublishSync(Event $event)
-    {
-        $task = $event->getSubject();
-
-        if ('published' == $task['status'] && $this->isTaskCreateSyncFinished($task)) {
-            $tasks = $this->getCopiedTasks($task);
-
-            $this->sendTasksPublishNotification($tasks);
-        }
-    }
-
-    public function onTaskCreateSync(Event $event)
-    {
-        $task = $event->getSubject();
-
-        if ('published' == $task['status']) {
-            $tasks = $this->getCopiedTasks($task);
-
-            $this->sendTasksPublishNotification($tasks);
-        }
-    }
-
-    public function onTestpaperReviewd(Event $event)
-    {
-        $paperResult = $event->getSubject();
-        $activity = $this->getActivityService()->getActivity($paperResult['lessonId']);
-        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-        if (empty($task)) {
-            $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'wechat_notification_error', '发送微信通知失败:获取任务失败', $paperResult);
-
-            return;
-        }
-
-        if ('testpaper' == $paperResult['type']) {
-            $key = 'examResult';
-            $logName = 'wechat_notify_exam_result';
-            $data = array(
-                'first' => array('value' => '同学，您好，你的试卷已批阅完成'.PHP_EOL),
-                'keyword1' => array('value' => $task['title']),
-                'keyword2' => array('value' => $paperResult['score'].PHP_EOL),
-                'remark' => array('value' => '再接再厉哦'),
-            );
-        } elseif ('homework' == $paperResult['type']) {
-            $key = 'homeworkResult';
-            $logName = 'wechat_notify_homework_result';
-            $course = $this->getCourseService()->getCourse($task['courseId']);
-            $teachers = $this->getCourseMemberService()->searchMembers(
-                array('courseId' => $course['id'], 'role' => 'teacher', 'isVisible' => 1),
-                array('id' => 'asc'),
-                0,
-                1
-            );
-            if (empty($teachers)) {
-                $nickname = '';
-            } else {
-                $user = $this->getUserService()->getUser($teachers[0]['userId']);
-                $nickname = $user['nickname'];
-            }
-
-            $data = array(
-                'first' => array('value' => '同学，您好，你的作业已批阅完成'.PHP_EOL),
-                'keyword1' => array('value' => $task['title']),
-                'keyword2' => array('value' => $course['courseSetTitle']),
-                'keyword3' => array('value' => $nickname),
-                'remark' => array('value' => '作业结果：'.$this->testpaperStatus[$paperResult['passedStatus']]),
-            );
-        } else {
-            return;
-        }
-
-        $templateId = $this->getWeChatService()->getTemplateId($key);
-        if (empty($templateId)) {
-            return;
-        }
-
-        $options = array('type' => 'url', 'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true));
-        $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($paperResult['userId']);
-        if (empty($weChatUser['isSubscribe'])) {
-            return;
-        }
-
-        $templates = TemplateUtil::templates();
-        $templateCode = isset($templates[$key]['id']) ? $templates[$key]['id'] : '';
-        $list = array(array(
-            'channel' => $this->getWeChatService()->getWeChatSendChannel(),
-            'to_id' => $weChatUser['openId'],
-            'template_id' => $templateId,
-            'template_code' => $templateCode,
-            'template_args' => $data,
-            'goto' => $options,
-        ));
-        $this->sendCloudWeChatNotification($key, $logName, $list);
-    }
-
-    public function onPaid(Event $event)
-    {
-        $trade = $event->getSubject();
-        $chargeTemplateId = $this->getWeChatService()->getTemplateId('coinRecharge');
-        $payTemplateId = $this->getWeChatService()->getTemplateId('paySuccess');
-        if (!empty($chargeTemplateId) && 'recharge' == $trade['type']) {
-            $data = array(
-                'first' => array('value' => '尊敬的客户，您已充值成功'.PHP_EOL),
-                'keyword1' => array('value' => '现金充值或学习卡'),
-                'keyword2' => array('value' => $trade['trade_sn']),
-                'keyword3' => array('value' => ($trade['amount'] / 100).'元'),
-                'keyword4' => array('value' => date('Y-m-d H:i', $trade['pay_time']).PHP_EOL),
-                'remark' => array('value' => '快去看看课程吧~'),
-            );
-            $options = array('type' => 'url', 'url' => $this->generateUrl('course_set_explore', array(), true));
-            $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']);
-            $templates = TemplateUtil::templates();
-            $templateCode = isset($templates['coinRecharge']['id']) ? $templates['coinRecharge']['id'] : '';
-            if (!empty($weChatUser['isSubscribe'])) {
-                $list = array(array(
-                    'channel' => $this->getWeChatService()->getWeChatSendChannel(),
-                    'to_id' => $weChatUser['openId'],
-                    'template_id' => $chargeTemplateId,
-                    'template_code' => $templateCode,
-                    'template_args' => $data,
-                    'goto' => $options,
-                ));
-                $this->sendCloudWeChatNotification('coinRecharge', 'wechat_notify_coin_recharge', $list);
-            }
-        }
-
-        if (!empty($payTemplateId)) {
-            $data = array(
-                'first' => array('value' => '尊敬的客户，您已支付成功'.PHP_EOL),
-                'keyword1' => array('value' => $trade['title']),
-                'keyword2' => array('value' => ($trade['amount'] / 100).'元'),
-                'keyword3' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
-                'keyword4' => array('value' => '无'.PHP_EOL),
-                'remark' => array('value' => '请前往查看'),
-            );
-            $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
-            if (empty($order)) {
-                return;
-            }
-            $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-            $options = array('type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $orderItems[0]['target_id']));
-            $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
-            $templates = TemplateUtil::templates();
-            $templateCode = isset($templates['paySuccess']['id']) ? $templates['paySuccess']['id'] : '';
-            if (!empty($weChatUser['isSubscribe'])) {
-                $list = array(array(
-                    'channel' => $this->getWeChatService()->getWeChatSendChannel(),
-                    'to_id' => $weChatUser['openId'],
-                    'template_id' => $payTemplateId,
-                    'template_code' => $templateCode,
-                    'template_args' => $data,
-                    'goto' => $options,
-                ));
-                $this->sendCloudWeChatNotification('paySuccess', 'wechat_notify_pay_success', $list);
-            }
-        }
-    }
-
-    public function onCourseQuestionCreate(Event $event)
-    {
-        $thread = $event->getSubject();
-        if ('question' != $thread['type']) {
-            return;
-        }
-        $course = $this->getCourseService()->getCourse($thread['courseId']);
-        $teachers = $this->getCourseMemberService()->findCourseTeachers($course['id']);
-        $userIds = ArrayToolkit::column($teachers, 'userId');
-
-        if (empty($userIds)) {
-            return;
-        }
-
-        $this->askQuestionSendNotification($thread, $userIds);
-    }
-
-    public function onClassroomQuestionCreate(Event $event)
-    {
-        $thread = $event->getSubject();
-
-        if ('classroom' != $thread['targetType'] || 'question' != $thread['type']) {
-            return;
-        }
-        $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
-        $userIds = $this->getClassroomService()->findTeachers($classroom['id']);
-        if (empty($userIds)) {
-            return;
-        }
-        $this->askQuestionSendNotification($thread, $userIds);
-    }
-
-    public function onCourseQuestionAnswerCreate(Event $event)
-    {
-        $post = $event->getSubject();
-
-        if (empty($post['courseId'])) {
-            return;
-        }
-
-        $course = $this->getCourseService()->getCourse($post['courseId']);
-        $thread = $this->getCourseThreadService()->getThread($course['id'], $post['threadId']);
-        if ($this->getCourseMemberService()->isCourseTeacher($post['courseId'], $post['userId'])) {
-            $title = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
-            $this->answerQuestionNotification($thread['userId'], $post['content'], $title, $thread['createdTime']);
-        }
-    }
-
-    public function onClassroomQuestionAnswerCreate(Event $event)
-    {
-        $post = $event->getSubject();
-
-        if (empty($post['targetId']) && 'classroom' != $post['targetType']) {
-            return;
-        }
-
-        $classroom = $this->getClassroomService()->getClassroom($post['targetId']);
-        $thread = $this->getThreadService()->getThread($post['threadId']);
-
-        if ($this->getClassroomService()->isClassroomTeacher($post['targetId'], $post['userId'])) {
-            $this->answerQuestionNotification($thread['userId'], $post['content'], $classroom['title'], $thread['createdTime']);
-        }
-    }
-
     protected function answerQuestionNotification($userId, $content, $title, $createdTime)
     {
         $templateId = $this->getWeChatService()->getTemplateId('answerQuestion');
@@ -414,6 +426,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
     protected function askQuestionSendNotification($thread, $userIds)
     {
+        $users = $this->getUserService()->searchUsers(
+            array('userIds' => $userIds, 'locked' => 0),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        $userIds = ArrayToolkit::column($users, 'id');
         $templateId = $this->getWeChatService()->getTemplateId('askQuestion');
         if (!empty($templateId)) {
             $user = $this->getUserService()->getUser($thread['userId']);
@@ -623,6 +642,17 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $expression;
     }
 
+    protected function isUserLocked($userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        if ($user['locked']) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function deleteLessonPublishJob($task)
     {
         $this->deleteByJobName('WeChatNotificationJob_LessonPublish_'.$task['id']);
@@ -681,11 +711,17 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
@@ -699,6 +735,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $this->getBiz()->service('Course:MemberService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
@@ -712,11 +751,17 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $this->getBiz()->service('WeChat:WeChatService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->getBiz()->service('Order:OrderService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
@@ -727,6 +772,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $this->getBiz()->service('Notification:NotificationService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
