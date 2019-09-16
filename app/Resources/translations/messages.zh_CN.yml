@@ -89,6 +89,7 @@ site.btn.share: 分享
 site.btn.all_select: 全选
 site.btn.previous_page: 上一页
 site.btn.next_page: 下一页
+site.btn.delete: 删除
 site.price: 价格
 site.org: 组织机构
 site.org.setup: 设置组织机构
@@ -10218,3 +10219,5 @@ coupon.setting.permission.goto_open: 去开启
 
 coupon.deadline_mode.day.help_block: >
   至<br/>领取后%day%天内
+coupon.resource.selected: 已选：
+coupon.resource.clear: 清空

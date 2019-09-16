@@ -491,10 +491,6 @@ admin_course_set_cancel_recommend:
     methods: [POST]
     permissions: [admin_course_set_recommend_list, admin_course_set_cancel_recommend]
 
-admin_course_chooser:
-    path: /course_set/chooser
-    defaults: { _controller: AppBundle:Admin/CourseSet:chooser }
-
 admin_course_set_recommend_list:
     path: /course_set/recommend/list
     defaults: { _controller: AppBundle:Admin/CourseSet:recommendList }
@@ -2157,10 +2153,6 @@ admin_classroom_review_batch_delete:
     defaults: { _controller: AppBundle:Admin/ClassroomReview:batchDelete }
     methods: [POST]
 
-admin_classroom_chooser:
-    path: /classroom/chooser
-    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:chooser }    
- 
 #org
 admin_org:
     path: /org
