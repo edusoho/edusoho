@@ -70,9 +70,9 @@
   </label>
   <div class="col-sm-8">
     {% set wechatSetting = setting('wechat')|default([]) %}
-    {% if wechatSetting.courseRemind|default('') %}
-      {% set days = get_days(wechatSetting.courseRemind.sendDays) %}
-    <div class="help-block course-mange-space">{{ 'course.setting.course_remind_tip'|trans({'%D%': days, '%H%': wechatSetting.courseRemind.sendTime }) }}
+    {% if wechatSetting.templates.courseRemind|default('') and  wechatSetting.templates.courseRemind.status|default(0) %}
+      {% set days = get_days(wechatSetting.templates.courseRemind.sendDays) %}
+    <div class="help-block course-mange-space">{{ 'course.setting.course_remind_tip'|trans({'%D%': days, '%H%': wechatSetting.templates.courseRemind.sendTime }) }}
       <a class="" data-container="body" data-toggle="popover" data-trigger="hover" href="{{ path('admin_wechat_notification_manage') }}" target="_blank">{{ 'course.setting.course_remind_change'|trans }}</a>
     </div>
     {% else %}
