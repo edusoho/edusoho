@@ -14,8 +14,6 @@ use Biz\Testpaper\Service\TestpaperService;
 use Biz\Course\Service\CourseService;
 use AppBundle\Common\ArrayToolkit;
 
-// Exercise
-// exercise
 class ExerciseResult extends AbstractResource
 {
     public function add(ApiRequest $request, $exerciseId)
