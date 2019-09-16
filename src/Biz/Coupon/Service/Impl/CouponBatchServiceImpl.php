@@ -48,7 +48,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         $couponData['codeEnable'] = isset($couponData['channel']['codeEnable']) ?: 0;
         $couponData['deadline'] = isset($couponData['deadline']) ? strtotime($couponData['deadline']) : 0;
         $couponData['fixedDay'] = isset($couponData['fixedDay']) ? $couponData['fixedDay'] : 0;
-        $targetIds = empty($couponData['targetIds']) ? array() : $couponData['targetIds'];
+
         $batchArray = array(
             'name',
             'prefix',
@@ -106,13 +106,9 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 
         $batch['token'] = $token['token'];
 
-        $this->beginTransaction();
         try {
             $batch = $this->getCouponBatchDao()->create($batch);
-            $this->dispatchEvent('coupon.batch.create', array('targetIds' => $targetIds, 'batchId' => $batch['id'], 'targetType' => $batch['targetType']));
-            $this->commit();
         } catch (\Exception $e) {
-            $this->rollback();
             throw $this->createServiceException($e->getMessage());
         }
 
