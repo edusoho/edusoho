@@ -93,8 +93,8 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
                 'type IN ( :types )',
                 'lessonId = :lessonId',
                 'cm.role = :role',
-                'beginTime <= beginTime_LE',
-                'beginTime >= beginTime_GE',
+                'beginTime <= :beginTime_LE',
+                'beginTime >= :beginTime_GE',
             ),
             'serializes' => array(
                 'metas' => 'json',
