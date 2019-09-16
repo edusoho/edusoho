@@ -1469,3 +1469,5 @@ user.account.order_pay_vip_close_title: The vip level is closed
 user.account.order_pay_vip_close_hint: The vip level in this order has been closed.Confirmed to pay?
 user.account.order_pay: Continue
 user.account.order_not_pay: Not paying
+
+admin.wechat.live_open_scenes_error.hint: At least one scene。

@@ -39,6 +39,8 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         if (!ArrayToolkit::requireds($fields, array('status'))) {
             throw new InvalidArgumentException('缺少必要字段');
         }
+
+        $fields['scenes'] = empty($fields['scenes']) ? array() : $fields['scenes'];
         $wechatSetting['templates'][$key] = empty($wechatSetting['templates'][$key]) ? $fields : array_merge($wechatSetting['templates'][$key], $fields);
         $this->getSettingService()->set('wechat', $wechatSetting);
         $this->dispatchEvent('wechat.template_setting.save', new Event($fields, array('key' => $key, 'wechatSetting' => $wechatSetting)));
