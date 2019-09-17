@@ -1412,3 +1412,6 @@ user.account.order_pay: 继续
 user.account.order_not_pay: 不支付
 
 course.question_manage.manage.delete_tips: 删除题目，可能会影响课时的练习，请谨慎操作！
+
+course.plan_task.activity_ppt_animation_img: 切换图片模式
+course.plan_task.activity_ppt_animation_slide: 切换动画模式
