@@ -62,7 +62,7 @@
           {% if wechatAuth.isAuthorized|default(0) != 1 or wechatAuth.wholeness|default(0) != 1 %}
             <div class="setting-comment alert alert-warning">
               {% if not wechatAuth.isAuthorized|default(0) %}
-                {% if wechatSetting.wechat_notification_enabled %}
+                {% if not wechatSetting.wechat_notification_enabled %}
                   <div class="setting-comment-block">{{'admin.wechat.notification.un_authorized_before_open_tip'|trans}}</div>
                 {% else %}
                   <div class="setting-comment-block">{{'admin.wechat.notification.un_authorized_after_open_tip'|trans}}</div>
@@ -218,4 +218,21 @@
       </div>
     </div>
   </form>
+  <div class="confirm-modal modal fade" id="confirm-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close js-confirm-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{ 'site.tips'|trans }}</h4>
+        </div>
+        <div class="modal-body js-confirm-tip">
+          {{ '请在新窗口完成公众号授权' }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary confirm-modal__btn js-confirm-close" data-dismiss="modal">{{ '已成功授权'|trans }}</button>
+          <a type="button" href="#" target="_blank" class="btn btn-default js-confirm-close js-re-auth-btn">{{ '重新授权'|trans }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
