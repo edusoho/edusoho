@@ -56,6 +56,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'updateWeChatSetting',
+            'addUserWeChatColumns'
         );
 
         $funcNames = array();
@@ -109,11 +110,11 @@ class EduSohoUpgrade extends AbstractUpdater
                     $wechatSetting['templates']['liveOpen']['status'] = 1;
                     $wechatSetting['templates']['liveOpen']['templateId'] = $value['templateId'];
                     $wechatSetting['templates']['liveOpen']['scenes'][] = $key == 'oneHourBeforeLiveOpen' ? 'beforeOneHour' : 'beforeOneDay';
-                } elseif(!empty($value['templateId'])) {
+                } elseif (!empty($value['templateId'])) {
                     try {
                         $this->biz['wechat.template_message_client']->deleteTemplate($value['templateId']);
                     } catch (\Exception $e) {
-                       $this->logger('error', $e->getTraceAsString());
+                        $this->logger('error', $e->getTraceAsString());
                     }
                 }
             }
@@ -127,7 +128,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 if (empty($wechatSetting['templates']['courseUpdate']['templateId']) && !empty($value['templateId'])) {
                     $wechatSetting['templates']['liveOpen']['status'] = 1;
                     $wechatSetting['templates']['liveOpen']['templateId'] = $value['templateId'];
-                } elseif(!empty($value['templateId'])) {
+                } elseif (!empty($value['templateId'])) {
                     try {
                         $this->biz['wechat.template_message_client']->deleteTemplate($value['templateId']);
                     } catch (\Exception $e) {
@@ -152,8 +153,25 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set('wechat', $wechatSetting);
 
         return 1;
-
     }
+
+    public function addUserWeChatColumns()
+    {
+        if (!$this->isFieldExist('user_wechat', 'nickname')) {
+            $this->getConnection()->exec("ALTER TABLE `user_wechat` ADD COLUMN `nickname` varchar(128) NOT NULL DEFAULT '' COMMENT '微信昵称' AFTER `isSubscribe`;");
+        }
+
+        if (!$this->isFieldExist('user_wechat', 'profilePicture')) {
+            $this->getConnection()->exec("ALTER TABLE `user_wechat` ADD COLUMN `profilePicture` varchar(256) NOT NULL DEFAULT '' COMMENT '微信头像' AFTER `nickname`;");
+        }
+
+        if (!$this->isFieldExist('user_wechat', 'subscribeTime')) {
+            $this->getConnection()->exec("ALTER TABLE `user_wechat` ADD COLUMN `subscribeTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '关注时间' AFTER `lastRefreshTime`;");
+        }
+
+        return 1;
+    }
+
     protected function generateIndex($step, $page)
     {
         return $step * 1000000 + $page;
