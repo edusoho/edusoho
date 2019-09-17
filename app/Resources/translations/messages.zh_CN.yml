@@ -10034,6 +10034,7 @@ exception.coupon.plugin.not.installed: 优惠券插件未安装
 exception.coupon.invalid: 优惠券已失效
 exception.coupon.received: 优惠券已领过
 exception.coupon.finished: 优惠券已领完
+exception.coupon.over_batch_limit: 超过批次总额限制
 exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
 
 course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
