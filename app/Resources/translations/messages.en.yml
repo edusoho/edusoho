@@ -8458,6 +8458,7 @@ exception.coupon.plugin.not.installed: Coupon plugin not installed
 exception.coupon.invalid: Coupon invalid
 exception.coupon.received: Coupon received
 exception.coupon.finished: Coupon finished
+exception.coupon.over_batch_limit: Exceeding the batch total limit
 
 exception.lesson.not_found: Lesson is not exist
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
