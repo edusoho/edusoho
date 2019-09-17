@@ -66,7 +66,8 @@ class CouponController extends BaseController
             $this->getSettingService()->set('menu_hiddens', $hiddenMenus);
 
             $this->getLogService()->info('coupon', 'setting', '更新优惠码状态', $couponSetting);
-            $this->setFlashMessage('success', '优惠码状态已保存！');
+
+            return $this->createJsonResponse(true);
         }
 
         return $this->render('admin/coupon/setting.html.twig', array(

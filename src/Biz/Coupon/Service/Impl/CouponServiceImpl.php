@@ -249,6 +249,14 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     public function checkCoupon($code, $id, $type)
     {
+        $couponSetting = $this->getSettingService()->get('coupon', array());
+        if (empty($couponSetting['enabled'])) {
+            return array(
+                'useable' => 'no',
+                'message' => '优惠券已失效',
+            );
+        }
+
         try {
             $this->beginTransaction();
             $coupon = $this->getCouponByCode($code, true);

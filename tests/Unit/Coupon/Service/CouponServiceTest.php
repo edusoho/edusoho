@@ -481,6 +481,9 @@ class CouponServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'courseSetId' => 1)),
         ));
+        $this->mockBiz('System:SettingService', array(
+            array('functionName' => 'get', 'returnValue' => array('enabled' => 1)),
+        ));
         $coupon = array(
             'code' => 'x22232423',
             'type' => 'minus',
@@ -502,6 +505,9 @@ class CouponServiceTest extends BaseTestCase
     {
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'courseSetId' => 1)),
+        ));
+        $this->mockBiz('System:SettingService', array(
+            array('functionName' => 'get', 'returnValue' => array('enabled' => 1)),
         ));
         $coupon = array(
             'code' => 'x22232423',
@@ -526,6 +532,9 @@ class CouponServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'courseSetId' => 1)),
         ));
+        $this->mockBiz('System:SettingService', array(
+            array('functionName' => 'get', 'returnValue' => array('enabled' => 1)),
+        ));
         $coupon = array(
             'code' => 'x22232423',
             'type' => 'minus',
@@ -549,6 +558,9 @@ class CouponServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'courseSetId' => 1)),
         ));
+        $this->mockBiz('System:SettingService', array(
+            array('functionName' => 'get', 'returnValue' => array('enabled' => 1)),
+        ));
         $coupon = array(
             'code' => 'x22232423',
             'type' => 'minus',
@@ -571,6 +583,9 @@ class CouponServiceTest extends BaseTestCase
     {
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'courseSetId' => 1)),
+        ));
+        $this->mockBiz('System:SettingService', array(
+            array('functionName' => 'get', 'returnValue' => array('enabled' => 1)),
         ));
         $coupon = array(
             'code' => 'x22232423',

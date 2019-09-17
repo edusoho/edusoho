@@ -9,28 +9,9 @@ define(function(require, exports, module) {
 	exports.run = function (){
         $('#fixedDay').addClass('disabled').attr('disabled', true);
 
-        $('[name=targetType]').change(function () {
-            $('#course-display').hide();
-            var targetType = $('[name=targetType]').val();
-            $('div.radio').hide();
-            $('.js-'+targetType+'-radios').show();
-            $('.js-rechoose-'+targetType).show().siblings().hide();
-            resetRadioValue();
-            if ('vip' == targetType) {
-                $('.js-page-detail').hide();
-                $('.js-page-detail').find('[name=page_detail]').attr('checked',false);
-                $('.js-page-detail').find('[name=h5MpsEnable]').attr('checked',false);
-            } else {
-                $('.js-page-detail').show();
-                $('.js-page-detail').find('[name=page_detail]').prop("checked",true);
-                $('.js-page-detail').find('[name=h5MpsEnable]').prop("checked",true);
-            }
-
-        })
-
-        $('.save-btn').click(function () {
-          $('.save-btn').addClass('disabled');
-        });
+      $('.save-btn').click(function () {
+        $('.save-btn').addClass('disabled');
+      });
 
 		$form = $('#coupon-generate-form');
 
@@ -73,20 +54,6 @@ define(function(require, exports, module) {
                 }).fail(function (xhr, status, error){
                     Notify.danger(xhr.responseJSON.error.message);
                 })
-            }
-        });
-
-        $form.on('change', '[name=courseId]', function(e){
-            var target = $('.all-items-input').is(':checked');
-            if (target) {
-                $('#course-display').hide();
-            }
-        });
-
-        $form.on('change', '[name=classroomId]', function(e){
-            var target = $('.all-items-input').is(':checked');
-            if (target) {
-                $('#course-display').hide();
             }
         });
 

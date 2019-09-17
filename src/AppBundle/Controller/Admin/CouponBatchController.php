@@ -68,6 +68,12 @@ class CouponBatchController extends BaseController
 
     public function generateAction(Request $request)
     {
+        $couponSetting = $this->getSettingService()->get('coupon', array());
+
+        if (empty($couponSetting['enabled'])) {
+            return $this->render('admin/coupon/permission-message.html.twig', array('type' => 'info'));
+        }
+
         if ('POST' == $request->getMethod()) {
             $couponData = $request->request->all();
 
@@ -305,5 +311,10 @@ class CouponBatchController extends BaseController
     private function getLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

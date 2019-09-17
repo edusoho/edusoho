@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biz\Coupon\Service\CouponBatchService;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\AccessDeniedException;
@@ -22,6 +23,11 @@ class CouponBatchController extends BaseController
         if (!$couponBatch['linkEnable']) {
             throw new AccessDeniedException('Coupon receipt by link is not allowed');
         }
+        $couponSetting = $this->getSettingService()->get('coupon', array());
+        if (empty($couponSetting['enabled'])) {
+            return $this->createMessageResponse('info', '优惠券已失效');
+        }
+
         $result = $this->getCouponBatchService()->receiveCoupon($token, $user['id']);
 
         if ($result['code']) {
@@ -55,5 +61,13 @@ class CouponBatchController extends BaseController
     private function getCouponBatchService()
     {
         return $this->createService('Coupon:CouponBatchService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

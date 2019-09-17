@@ -2,7 +2,7 @@
 <tr>
   <td>{{ coupon.id }}</td>
   <td>
-    {% if batch.codeEnable %}
+    {% if batch.codeEnable|default() %}
       {{ coupon.code }}
     {% else %}
       --
@@ -49,7 +49,7 @@
       {{ order.pay_amount|to_cash }}
     {% else %}-{% endif %}
   </td>
-  <td><a href="#modal" data-toggle="modal" data-url="{{ path('admin_coupon_show', { batchId:batch.id }) }}">{{ batch.name }}</a></td>
+  <td><a href="#modal" data-toggle="modal" data-url="{{ path('admin_coupon_show', { batchId:batch.id|default(0) }) }}">{{ batch.name|default('') }}</a></td>
   <td>{% if coupon.receiveTime %}{{coupon.receiveTime|date('Y-m-d H:i')}}{% else %}--{% endif %}</td>
   <td>{% if coupon.orderTime %}{{ coupon.orderTime|date('Y-m-d H:i')}}{% else %}--{% endif %}</td>
 </tr>
