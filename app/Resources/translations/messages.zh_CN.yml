@@ -10222,4 +10222,3 @@ coupon.deadline_mode.day.help_block: >
   至<br/>领取后%day%天内
 coupon.resource.selected: 已选：
 coupon.resource.clear: 清空
-admin.coupon.issue_btn: 发放到用户账户
