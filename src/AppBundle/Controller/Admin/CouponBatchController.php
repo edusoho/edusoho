@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -41,7 +42,7 @@ class CouponBatchController extends BaseController
             if (!empty($batch['targetId'])) {
                 $targetCount = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batch['id']));
                 if (1 == $targetCount) {
-                    $target = $this->getCouponBatchResourceService()->searchCouponBatchResource(array('batchId' => $batch['id']));
+                    $target = $this->getCouponBatchResourceService()->searchCouponBatchResource(array('batchId' => $batch['id']), array('id' => 'ASC'), 0, 1);
                     $target = array_shift($target);
                 } else {
                     $batch['couponContent'] = 'multi';
@@ -330,6 +331,9 @@ class CouponBatchController extends BaseController
         return $this->createService('Coupon:CouponBatchService');
     }
 
+    /**
+     * @return CouponBatchResourceService
+     */
     private function getCouponBatchResourceService()
     {
         return $this->createService('Coupon:CouponBatchResourceService');

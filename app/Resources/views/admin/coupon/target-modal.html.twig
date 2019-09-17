@@ -1,0 +1,26 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% import "admin/macro.html.twig" as web_macro %}
+{% set modal_class = 'modal-lg' %}
+{% block title %}{% if %}{% elseif %}{% endif %}{% endblock %}
+{% block body %}
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for target in targets %}
+      <tr>
+        <td></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+{% endblock %}
