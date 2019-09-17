@@ -26,9 +26,9 @@ class NeteaseOpenCourseItemParserTest extends BaseTestCase
 
     public function testDetect()
     {
-//        $this->assertEquals(1, $this->createParser()->detect('http://v.163.com/movie/abc.html'));
-//        $this->assertEquals(1, $this->createParser()->detect('http://open.163.com/movie/a.html'));
-//        $this->assertEquals(0, $this->createParser()->detect('http://open.164.com/movie/a.html'));
+        $this->assertEquals(1, $this->createParser()->detect('http://v.163.com/movie/abc.html'));
+        $this->assertEquals(1, $this->createParser()->detect('http://open.163.com/movie/a.html'));
+        $this->assertEquals(0, $this->createParser()->detect('http://open.164.com/movie/a.html'));
     }
 
     private function createParser()
