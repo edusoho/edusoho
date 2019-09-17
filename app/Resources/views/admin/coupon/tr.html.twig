@@ -16,8 +16,13 @@
   {% elseif batch.type=='minus' %}
     <span>{{ 'coupon.type.minus_tip'|trans({'%rate%': batch.rate}) }}</span>
   {% endif %}   
-  <br>  
-   <span class="text-muted text-sm">{{ batch.couponContent }}</span>
+  <br>
+    {% if batch.couponContent == 'multi' %}
+      {% if batch.targetType == 'course' %}部分课程{% elseif batch.targetType == 'classroom' %}部分班级{% endif %}
+      <a href="" data-url="">详情</a>
+    {% else %}
+    <span class="text-muted text-sm">{{ batch.couponContent }}</span>
+    {% endif %}
   </td>
   <td>{{ batch.usedNum }}/{{ batch.generatedNum-batch.unreceivedNum }}/{{ batch.generatedNum }}</td>  
   <td>

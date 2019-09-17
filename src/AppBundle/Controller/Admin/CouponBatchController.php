@@ -4,7 +4,9 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\Service\CouponBatchService;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +38,19 @@ class CouponBatchController extends BaseController
         );
 
         foreach ($batchs as $key => &$batch) {
-            $batch['couponContent'] = $this->getCouponContent($batch['targetType'], $batch['targetId']);
+            if (!empty($batch['targetId'])) {
+                $targetCount = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batch['id']));
+                if (1 == $targetCount) {
+                    $target = $this->getCouponBatchResourceService()->searchCouponBatchResource(array('batchId' => $batch['id']));
+                    $target = array_shift($target);
+                } else {
+                    $batch['couponContent'] = 'multi';
+                    continue;
+                }
+            }
+
+            $targetId = empty($target['targetId']) ? $batch['targetId'] : $target['targetId'];
+            $batch['couponContent'] = $this->getCouponContent($batch['targetType'], $targetId);
         }
 
         return $this->render('admin/coupon/index.html.twig', array(
@@ -200,6 +214,32 @@ class CouponBatchController extends BaseController
         ));
     }
 
+    public function targetDetailAction(Request $request, $targetType, $batchId)
+    {
+        $count = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batchId));
+        $paginator = new Paginator($this->get('request'), $count, 10);
+        $resources = $this->getCouponBatchResourceService()->searchCouponBatchResource(
+            array('batchId' => $batchId),
+            array('id' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $targetIds = ArrayToolkit::column($resources, 'targetId');
+
+        $targets = array();
+        if ('course' == $targetType) {
+            $targets = $this->getCourseService()->findCoursesByIds($targetIds);
+        } elseif ('classroom' == $targetType) {
+            $targets = $this->getClassroomService()->findClassroomsByIds($targetIds);
+        }
+
+        return $this->render('admin/coupon/target-modal.html.twig', array(
+            'targets' => $targets,
+            'targetType' => $targetType,
+            'paginator' => $paginator,
+        ));
+    }
+
     public function getReceiveUrlAction(Request $request, $batchId)
     {
         $batch = $this->getCouponBatchService()->getBatch($batchId);
@@ -290,6 +330,11 @@ class CouponBatchController extends BaseController
         return $this->createService('Coupon:CouponBatchService');
     }
 
+    private function getCouponBatchResourceService()
+    {
+        return $this->createService('Coupon:CouponBatchResourceService');
+    }
+
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
@@ -303,6 +348,17 @@ class CouponBatchController extends BaseController
         return $this->createService('Course:CourseSetService');
     }
 
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
