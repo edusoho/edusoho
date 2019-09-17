@@ -26,6 +26,7 @@ define(function(require, exports, module) {
                             }
                         });
                     }else{
+                        $('.js-delete-btn').button('reset');
                         $('#delete-form').children('div').addClass('has-error');
                         $('#delete-form').find('.help-block').show().text(Translator.trans('admin.course.delete_course.check_password_fail_hint'));
                     }
