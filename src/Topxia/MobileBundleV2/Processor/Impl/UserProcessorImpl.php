@@ -10,6 +10,7 @@ use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\EncryptionToolkit;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Pay\Service\AccountService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
@@ -660,6 +661,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $userProfile = $this->controller->getUserService()->getUserProfile($oldToken['userId']);
             $userProfile = $this->filterUserProfile($userProfile);
             $user = array_merge($user, $userProfile);
+            $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
 
             $this->getTokenService()->deleteTokenByTypeAndUserId(MobileBaseController::TOKEN_TYPE, $user['id']);
 
@@ -714,6 +716,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $userProfile = $this->controller->getUserService()->getUserProfile($user['id']);
         $userProfile = $this->filterUserProfile($userProfile);
         $user = array_merge($user, $userProfile);
+        $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
 
         $result = array(
             'token' => $token,
@@ -968,5 +971,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     protected function getBatchNotificationService()
     {
         return ServiceKernel::instance()->createService('User:BatchNotificationService');
+    }
+
+    /**
+     * @return AccountService
+     */
+    protected function getAccountService()
+    {
+        return ServiceKernel::instance()->createService('Pay:AccountService');
     }
 }

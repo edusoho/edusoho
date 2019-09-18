@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
+use Codeages\Biz\Pay\Service\AccountService;
 
 class Me extends AbstractResource
 {
@@ -50,11 +51,21 @@ class Me extends AbstractResource
             }
         }
 
+        $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
+
         return $user;
     }
 
     protected function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return AccountService
+     */
+    private function getAccountService()
+    {
+        return $this->service('Pay:AccountService');
     }
 }

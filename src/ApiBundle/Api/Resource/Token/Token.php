@@ -4,8 +4,8 @@ namespace ApiBundle\Api\Resource\Token;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
+use Codeages\Biz\Pay\Service\AccountService;
 
 class Token extends AbstractResource
 {
@@ -45,6 +45,8 @@ class Token extends AbstractResource
             }
         }
 
+        $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
+
         return $user;
     }
 
@@ -57,10 +59,10 @@ class Token extends AbstractResource
     }
 
     /**
-     * @return LogService
+     * @return AccountService
      */
-    private function getLogService()
+    private function getAccountService()
     {
-        return $this->service('System:LogService');
+        return $this->service('Pay:AccountService');
     }
 }
