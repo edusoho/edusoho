@@ -315,7 +315,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findTeachers',
-                'returnValue' => array(array('userId' => 1), array('userId' => 2)),
+                'returnValue' => array('1', '2'),
                 'withParams' => array('1'),
             ),
         ));

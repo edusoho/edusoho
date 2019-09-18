@@ -215,9 +215,15 @@ define(function(require, exports, module) {
 
         $('.js-wechat-pre-auth-url').on('click', function (event) {
             $.get($('.js-wechat-pre-auth-url').data('url'), function (resp) {
-              window.location.href = resp.url;
-            })
+              $('.js-re-auth-btn').attr('href', resp.url);
+              $('#confirm-modal').modal('show');
+              window.open(resp.url,'_blank');
+            });
         });
+
+      $('#confirm-modal').on('hidden.bs.modal', function () {
+        window.location.reload();
+      });
     };
 
 });
