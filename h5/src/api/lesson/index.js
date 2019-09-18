@@ -59,5 +59,17 @@ export default [
     name: 'homeworkResult',
     url: '/homeworks/{homeworkId}/results/{homeworkResultId}',
     method: 'GET'
+  },
+  {
+    // 获得练习说明信息
+    name: 'getExerciseIntro',
+    url: '/courses/{courseId}/task_medias/{taskId}',
+    method: 'GET'
+  },
+  {
+    // 获得练习信息
+    name: 'getExerciseInfo',
+    url: '/exercises/{exerciseId}/results',
+    method: 'POST'
   }
 ];
