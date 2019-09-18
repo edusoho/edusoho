@@ -36,6 +36,8 @@ const filters = [
           return '考试';
         case 'homework':
           return '作业';
+        case 'exercise':
+          return '练习';
         default:
           return '暂不支持此类型';
       }
@@ -118,6 +120,7 @@ const filters = [
         case 'ppt':
         case 'testpaper':
         case 'homework':
+        case 'exercise':
           return '';
         default:
           return '暂不支持';
