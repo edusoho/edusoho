@@ -3,9 +3,9 @@
 namespace Biz\Card\Dao\Impl;
 
 use Biz\Card\Dao\CardDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class CardDaoImpl extends GeneralDaoImpl implements CardDao
+class CardDaoImpl extends AdvancedDaoImpl implements CardDao
 {
     protected $table = 'card';
 
