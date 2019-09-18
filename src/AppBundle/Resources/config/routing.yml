@@ -1040,6 +1040,10 @@ receive_coupon:
     path:     /my/invitecode/receivecoupon
     defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
 
+coupon_course_list:
+    path:     /my/coupon/list
+    defaults: {_controller: AppBundle:My/Coin:listCoupon  }
+
 coin_show:
     path:     /my/coin/show
     defaults: { _controller: AppBundle:My/Coin:show }

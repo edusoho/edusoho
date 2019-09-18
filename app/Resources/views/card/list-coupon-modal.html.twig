@@ -1,0 +1,59 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class= "modal-lg coupon-modal" %}
+
+{% block title %}
+本优惠券适用于：
+{% endblock %}
+
+
+{% block body %}
+<div class="coupon-modal-list">
+  <div class="media coupon-modal-item">
+    <div class="media-left">
+      <img class="course-cover-img" src="{{ asset('assets/img/default/avatar.png') }}">
+    </div>
+    <div class="media-body">
+      <div class="coupon-modal-item__title">{{ '优惠券引流优化流程课'|sub_text(30)}}</div>
+      <div class="gray-dark">价格：<span class="color-danger coupon-modal-item__price">¥ 50.00</span></div>
+    </div>
+    <div class="media-right">
+      <a href="" class="cd-btn cd-btn-ghost-primary cd-mt8">去消费</a>
+    </div>
+  </div>
+  <div class="media coupon-modal-item">
+    <div class="media-left">
+      <img class="course-cover-img" src="{{ asset('assets/img/default/avatar.png') }}">
+    </div>
+    <div class="media-body">
+      <div class="coupon-modal-item__title">{{ '优惠券引流优化流程课'|sub_text(30)}}</div>
+      <div class="gray-dark">价格：<span class="color-danger coupon-modal-item__price">¥ 50.00</span></div>
+    </div>
+    <div class="media-right">
+      <a href="" class="cd-btn cd-btn-ghost-primary cd-mt8">去消费</a>
+    </div>
+  </div>
+  <div class="media coupon-modal-item">
+    <div class="media-left">
+      <img class="course-cover-img" src="{{ asset('assets/img/default/avatar.png') }}">
+    </div>
+    <div class="media-body">
+      <div class="coupon-modal-item__title">{{ '优惠券引流优化流程课'|sub_text(30)}}</div>
+      <div class="gray-dark">价格：<span class="color-success text-bold">免费</span></div>
+    </div>
+    <div class="media-right">
+      <a href="" class="cd-btn cd-btn-ghost-primary cd-mt8">去消费</a>
+    </div>
+  </div>
+</div>
+
+
+{% if paginator|default(null) %}
+  {% if type|default('') == 'ajax_pagination' %}
+    {{ web_macro.ajax_paginator(paginator|default(null)) }}
+  {% else %}
+    {{ web_macro.paginator(paginator|default(null)) }}
+  {% endif %}
+{% endif %}
+
+{% endblock %}

@@ -170,6 +170,16 @@ class CoinController extends BaseController
         return $response;
     }
 
+    public function listCouponAction(Request $request)
+    {
+ 
+        return $this->render('card/list-coupon-modal.html.twig', array(
+        ));
+        
+    }
+
+    
+
     public function showAction(Request $request)
     {
         $coinSetting = $this->getSettingService()->get('coin', array());
