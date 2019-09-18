@@ -12,7 +12,7 @@ export default {
       return new Promise((resolve, reject) => {
         if (result && result.status === 'doing') {
           // 获取localstorge数据
-          const answerName = `${userId}-${result.id}`;
+          const answerName = `homework-${userId}-${result.id}`;
           let answer = JSON.parse(localStorage.getItem(answerName));
 
           // 本地是否有answer缓存，没有则为一个空对象
