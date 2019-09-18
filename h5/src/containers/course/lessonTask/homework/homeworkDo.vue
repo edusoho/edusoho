@@ -63,12 +63,6 @@ import * as types from "@/store/mutation-types";
 import { mapState, mapMutations, mapActions } from "vuex";
 
 import { Toast, Overlay, Popup, Dialog, Lazyload } from "vant";
-import fillType from "../component/fill";
-import essayType from "../component/essay";
-import headTop from "../component/head";
-import choiceType from "../component/choice";
-import singleChoice from "../component/single-choice";
-import determineType from "../component/determine";
 import guidePage from "../component/guide-page";
 import itemBank from "../component/itemBank";
 
@@ -331,8 +325,8 @@ export default {
     },
     //获取本地数据
     getLocalData(){
-        this.localanswerName=`${this.user.id}-${this.homework.id}`;
-        this.localuseTime=`${this.user.id}-${this.homework.id}-usedTime`;
+        this.localanswerName=`homework-${this.user.id}-${this.homework.id}`;
+        this.localuseTime=`homework-${this.user.id}-${this.homework.id}-usedTime`;
         this.lastAnswer=JSON.parse(localStorage.getItem(this.localanswerName));
     },
     //实时存储答案

@@ -152,7 +152,7 @@ const actions = {
     let { answer, homeworkResultId, homeworkId, userId } = { ...datas };
 
     // 时间取localstorge存储时间，默认值为0
-    const localuseTime = `${userId}-${homeworkResultId}-usedTime`;
+    const localuseTime = `homework-${userId}-${homeworkResultId}-usedTime`;
     const usedTime = Number(localStorage.getItem(localuseTime)) || 0;
 
     return new Promise((resolve, reject) => {
@@ -167,7 +167,7 @@ const actions = {
         }
       })
         .then(res => {
-          localStorage.removeItem(`${userId}-${homeworkResultId}`);
+          localStorage.removeItem(`homework-${userId}-${homeworkResultId}`);
           localStorage.removeItem(localuseTime);
           resolve(res);
         })
