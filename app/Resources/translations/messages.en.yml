@@ -3799,6 +3799,9 @@ change_log: Changelog
 common.courseStatus.draft: Draft
 common.courseStatus.published: Published
 common.courseStatus.closed: Closed
+common.classroomStatus.draft: Draft
+common.classroomStatus.published: Published
+common.classroomStatus.closed: Closed
 common.fileType.video: Video
 common.fileType.audio: Audio
 common.fileType.document: Document
@@ -8883,6 +8886,9 @@ coupon.target_type.course_specific: 指定课程
 coupon.target_type.course_rechoose: 重新选择课程
 coupon.target_type.classroom_rechoose: 重新选择班级
 coupon.target_type.vip_rechoose: 重新选择会员
+coupon.target_type.multi_course: 部分课程
+coupon.target_type.multi_classroom: 部分班级
+coupon.target_type.detail: 详情
 
 coupon.status.unused: 未使用
 coupon.status.receive: 已领取

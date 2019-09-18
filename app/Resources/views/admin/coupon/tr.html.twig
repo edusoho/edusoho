@@ -18,8 +18,8 @@
   {% endif %}   
   <br>
     {% if batch.couponContent == 'multi' %}
-      {% if batch.targetType == 'course' %}部分课程{% elseif batch.targetType == 'classroom' %}部分班级{% endif %}
-      <a href="" data-url="">详情</a>
+      <span class="text-muted text-sm">{% if batch.targetType == 'course' %}{{ 'coupon.target_type.multi_course'|trans }}{% elseif batch.targetType == 'classroom' %}{{ 'coupon.target_type.multi_classroom'|trans }}{% endif %}</span>
+      <a class="text-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_coupon_show_target', {targetType:batch.targetType, batchId:batch.id}) }}">{{ 'coupon.target_type.detail'|trans }}</a>
     {% else %}
     <span class="text-muted text-sm">{{ batch.couponContent }}</span>
     {% endif %}
