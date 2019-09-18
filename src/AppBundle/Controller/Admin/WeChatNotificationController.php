@@ -150,7 +150,7 @@ class WeChatNotificationController extends BaseController
 
         if (isset($conditions['weChatFansKeywordType'])) {
             if ('wechatNickname' == $conditions['weChatFansKeywordType']) {
-                $conditions['wechatname'] = $conditions['keyword'];
+                $conditions['wechatname'] = urlencode($conditions['keyword']);
             }
 
             if ('nickname' == $conditions['weChatFansKeywordType']) {
