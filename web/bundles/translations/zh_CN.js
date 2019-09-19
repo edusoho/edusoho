@@ -1234,4 +1234,5 @@ t.add("user.account.order_pay_vip_close_title", "\u8be5\u4f1a\u5458\u7b49\u7ea7\
 t.add("user.account.order_pay_vip_close_hint", "\u8be5\u8ba2\u5355\u7684\u4f1a\u5458\u7b49\u7ea7\u5df2\u5173\u95ed\uff0c\u786e\u5b9a\u8fd8\u8981\u652f\u4ed8\uff1f", "js", "zh_CN");
 t.add("user.account.order_pay", "\u7ee7\u7eed", "js", "zh_CN");
 t.add("user.account.order_not_pay", "\u4e0d\u652f\u4ed8", "js", "zh_CN");
+t.add("course.question_manage.manage.delete_tips", "\u5220\u9664\u9898\u76ee\uff0c\u53ef\u80fd\u4f1a\u5f71\u54cd\u8bfe\u65f6\u7684\u7ec3\u4e60\uff0c\u8bf7\u8c28\u614e\u64cd\u4f5c\uff01", "js", "zh_CN");
 })(Translator);
