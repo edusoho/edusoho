@@ -4561,6 +4561,9 @@ change_log: 更新日志
 common.courseStatus.draft: 未发布
 common.courseStatus.published: 已发布
 common.courseStatus.closed: 已关闭
+common.classroomStatus.draft: 未发布
+common.classroomStatus.published: 已发布
+common.classroomStatus.closed: 已关闭
 common.fileType.video: 视频
 common.fileType.audio: 音频
 common.fileType.document: 文档
@@ -10178,6 +10181,9 @@ coupon.target_type.course_specific: 指定课程
 coupon.target_type.course_rechoose: 重新选择课程
 coupon.target_type.classroom_rechoose: 重新选择班级
 coupon.target_type.vip_rechoose: 重新选择会员
+coupon.target_type.multi_course: 部分课程
+coupon.target_type.multi_classroom: 部分班级
+coupon.target_type.detail: 详情
 
 coupon.status.unused: 未使用
 coupon.status.receive: 已领取

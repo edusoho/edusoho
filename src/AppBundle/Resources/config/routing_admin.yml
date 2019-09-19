@@ -2429,6 +2429,10 @@ admin_coupon_show:
     pattern: /coupon/show/{batchId}
     defaults: { _controller: AppBundle:Admin/CouponBatch:detail }
 
+admin_coupon_show_target:
+  path: /coupon/show/{targetType}/{batchId}
+  defaults: { _controller: AppBundle:Admin/CouponBatch:targetDetail }
+
 admin_coupon_get_receive_url:
     pattern: /coupon/getreceiveurl/{batchId}
     defaults: { _controller: AppBundle:Admin/CouponBatch:getReceiveUrl }
