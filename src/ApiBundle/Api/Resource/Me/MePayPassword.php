@@ -18,6 +18,11 @@ class MePayPassword extends AbstractResource
     {
         $passwords = $request->request->all();
         $host = $request->getHttpRequest()->getHost();
+        $user = $this->getCurrentUser();
+
+        if ($this->getAccountService()->isPayPasswordSetted($user['id'])) {
+            throw AccountException::PAY_PASSWORD_EXISTED();
+        }
 
         if (!ArrayToolkit::requireds($passwords, array('loginPassword', 'payPassword', 'confirmPayPassword'))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
@@ -25,15 +30,12 @@ class MePayPassword extends AbstractResource
         $this->checkConfirmPayPassword($passwords['payPassword'], $passwords['confirmPayPassword']);
 
         $loginPassword = $this->decryptPassword($passwords['loginPassword'], $host);
-        $user = $this->getCurrentUser();
         if (!$this->getUserService()->verifyPassword($user['id'], $loginPassword)) {
             throw UserException::PASSWORD_ERROR();
         }
 
-        if (!$this->getAccountService()->isPayPasswordSetted($user['id'])) {
-            $payPassword = $this->decryptPassword($passwords['payPassword'], $host);
-            $this->getAccountService()->setPayPassword($user['id'], $payPassword);
-        }
+        $payPassword = $this->decryptPassword($passwords['payPassword'], $host);
+        $this->getAccountService()->setPayPassword($user['id'], $payPassword);
 
         return array(
             'success' => true,
@@ -44,6 +46,11 @@ class MePayPassword extends AbstractResource
     {
         $passwords = $request->request->all();
         $host = $request->getHttpRequest()->getHost();
+        $user = $this->getCurrentUser();
+
+        if (!$this->getAccountService()->isPayPasswordSetted($user['id'])) {
+            throw AccountException::NOTFOUND_PAY_PASSWORD();
+        }
 
         if (!ArrayToolkit::requireds($passwords, array('oldPayPassword', 'newPayPassword', 'confirmPayPassword'))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
@@ -51,15 +58,12 @@ class MePayPassword extends AbstractResource
         $this->checkConfirmPayPassword($passwords['newPayPassword'], $passwords['confirmPayPassword']);
 
         $oldPayPassword = $this->decryptPassword($passwords['oldPayPassword'], $host);
-        $user = $this->getCurrentUser();
         if (!$this->getAccountService()->validatePayPassword($user['id'], $oldPayPassword)) {
             throw AccountException::ERROR_PAY_PASSWORD();
         }
 
-        if ($this->getAccountService()->isPayPasswordSetted($user['id'])) {
-            $newPayPassword = $this->decryptPassword($passwords['newPayPassword'], $host);
-            $this->getAccountService()->setPayPassword($user['id'], $newPayPassword);
-        }
+        $newPayPassword = $this->decryptPassword($passwords['newPayPassword'], $host);
+        $this->getAccountService()->setPayPassword($user['id'], $newPayPassword);
 
         return array(
             'success' => true,
