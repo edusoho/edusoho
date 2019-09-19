@@ -4,6 +4,8 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -36,7 +38,7 @@ class CouponBatchController extends BaseController
         );
 
         foreach ($batchs as $key => &$batch) {
-            $batch['couponContent'] = $this->getCouponContent($batch['targetType'], $batch['targetId']);
+            $batch['couponContent'] = $this->getCouponContent($batch['id'], $batch['targetType'], $batch['targetId']);
         }
 
         return $this->render('admin/coupon/index.html.twig', array(
@@ -200,6 +202,38 @@ class CouponBatchController extends BaseController
         ));
     }
 
+    public function targetDetailAction(Request $request, $targetType, $batchId)
+    {
+        $count = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batchId));
+        $paginator = new Paginator($this->get('request'), $count, 10);
+        $resources = $this->getCouponBatchResourceService()->searchCouponBatchResource(
+            array('batchId' => $batchId),
+            array('id' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $targetIds = ArrayToolkit::column($resources, 'targetId');
+
+        $targets = array();
+        $users = array();
+        $categories = array();
+        if ('course' == $targetType) {
+            $targets = $this->getCourseSetService()->findCourseSetsByIds($targetIds);
+            $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($targets, 'creator'));
+        } elseif ('classroom' == $targetType) {
+            $targets = $this->getClassroomService()->findClassroomsByIds($targetIds);
+            $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($targets, 'categoryId'));
+        }
+
+        return $this->render('admin/coupon/target-modal.html.twig', array(
+            'targets' => $targets,
+            'targetType' => $targetType,
+            'users' => $users,
+            'categories' => $categories,
+            'paginator' => $paginator,
+        ));
+    }
+
     public function getReceiveUrlAction(Request $request, $batchId)
     {
         $batch = $this->getCouponBatchService()->getBatch($batchId);
@@ -240,7 +274,7 @@ class CouponBatchController extends BaseController
         return $this->createMessageResponse('info', '无效的链接', '', 3, $this->generateUrl('homepage'));
     }
 
-    private function getCouponContent($targetType, $targetId)
+    private function getCouponContent($batchId, $targetType, $targetId)
     {
         $couponContents = array(
             'all' => '全站可用',
@@ -249,8 +283,19 @@ class CouponBatchController extends BaseController
             'classroom' => '全部班级',
         );
 
-        $couponContent = '';
+        $couponContent = 'multi';
 
+        if (!empty($targetId) && 'vip' != $targetType) {
+            $targetCount = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batchId));
+            if (1 == $targetCount) {
+                $target = $this->getCouponBatchResourceService()->searchCouponBatchResource(array('batchId' => $batchId), array('id' => 'ASC'), 0, 1);
+                $target = array_shift($target);
+            } else {
+                return $couponContent;
+            }
+        }
+
+        $targetId = empty($target['targetId']) ? $targetId : $target['targetId'];
         if (0 == $targetId || 'all' == $targetType) {
             $couponContent = $couponContents[$targetType];
         } elseif ('course' == $targetType) {
@@ -290,6 +335,14 @@ class CouponBatchController extends BaseController
         return $this->createService('Coupon:CouponBatchService');
     }
 
+    /**
+     * @return CouponBatchResourceService
+     */
+    private function getCouponBatchResourceService()
+    {
+        return $this->createService('Coupon:CouponBatchResourceService');
+    }
+
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
@@ -303,9 +356,17 @@ class CouponBatchController extends BaseController
         return $this->createService('Course:CourseSetService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    private function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     private function getLevelService()

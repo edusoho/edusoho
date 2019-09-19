@@ -3,6 +3,7 @@
 namespace Biz\Coupon\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Coupon\Dao\CouponBatchResourceDao;
 use Biz\Coupon\Service\CouponBatchResourceService;
 
 class CouponBatchResourceServiceImpl extends BaseService implements CouponBatchResourceService
@@ -19,6 +20,14 @@ class CouponBatchResourceServiceImpl extends BaseService implements CouponBatchR
         return empty($count) ? false : true;
     }
 
+    public function searchCouponBatchResource($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getCouponBatchResourceDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    /**
+     * @return CouponBatchResourceDao
+     */
     private function getCouponBatchResourceDao()
     {
         return $this->createDao('Coupon:CouponBatchResourceDao');
