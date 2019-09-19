@@ -36,7 +36,7 @@
         </div>
 
       <div class="result-footer" ref="footer" v-if="isReadOver">
-        <van-button class="result-footer__btn" type="primary" @click="startHomework()">再做一次</van-button>
+        <van-button class="result-footer__btn" type="primary" @click="startExercise()">再做一次</van-button>
       </div>
     </div>
   </div>
@@ -59,9 +59,9 @@ export default {
                items:null,
                color: { // 题号标签状态判断
                     'right': 'green',
-                    'none': 'brown',
+                    'none': 'subjective',
                     'wrong': 'orange',
-                    'partRight': 'subjective',
+                    'partRight': 'orange',
                     'noAnswer': 'gray',
                }
           }

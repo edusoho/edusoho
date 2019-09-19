@@ -121,11 +121,16 @@ export default {
     if(this.info.length==0 || this.isHandExercise || this.exercise.status!='doing'){
       next();
     }else{
-      this.submitpaper().then(()=>{
-          next();
-      }).catch(()=>{
+      if( this.submitpaper()){
+        next();
+      }else{
         next(false);
-      });
+      }
+      // this.submitpaper().then(()=>{
+      //     next();
+      // }).catch(()=>{
+      //   next(false);
+      // });
     }
   },
    beforeDestroy() { //清除定时器
@@ -361,7 +366,7 @@ export default {
       if(index>0){
          message=`还有${index}题未做，确认提交吗？`
       }
-      return new Promise((resolve,reject)=>{
+      // return new Promise((resolve,reject)=>{
           Dialog.confirm({
             title: '提交',
             cancelButtonText:'立即提交',
@@ -370,18 +375,18 @@ export default {
           }).then(() => {
             //显示答题卡
             this.cardShow=true;
-            reject()
+            return false
           })
           .catch(() => {
             this.clearTime();
            //提交作业
            this.submitExercise(answer).then(res=>{
-              resolve();
+              return true
             }).catch((err)=>{
-                reject();
+              return false
             })
           });
-      })
+      // })
     },
      //dispatch给store，提交答卷
     submitExercise(answer){
