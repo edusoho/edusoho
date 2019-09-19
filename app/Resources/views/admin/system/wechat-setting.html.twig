@@ -179,7 +179,7 @@
               <span class="code-help-block {% if wechatSetting.account_code %}hidden{% endif %}">{{'admin.setting_wechat_auth.account_code_empty'|trans|raw}}</span>
               <a class="btn btn-default btn-sm btn-primary" id="qrcode-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_logo_upload') }}">{{'form.btn.set'|trans}}</a>
               <a href="http://www.qiqiuyu.com/faq/876/detail" target="blank">{{'admin.setting_wechat_auth.account_code_download'|trans}}</a>
-              <input type="hidden" id="account_code" name="wechatSetting[account_code]" value="{{ wechatSetting.account_code }}" class="form-control"></input>
+              <input type="hidden" id="account_code" name="wechatSetting[account_code]" value="{{ wechatSetting.account_code }}" class="form-control">
             </div>
           </div>
         </div>
@@ -190,7 +190,7 @@
               <label for="wxpay_account">{{'admin.setting_wechat_auth.account_number'|trans}}</label>
             </div>
             <div class="controls col-md-7">
-              <input id="wxpay_account" name="payment[wxpay_account]" value="{{ payment.wxpay_account }}" class="form-control"></input>
+              <input id="wxpay_account" name="payment[wxpay_account]" value="{{ payment.wxpay_account }}" class="form-control">
               <div class="help-block">
                 <div>{{'admin.setting_wechat_auth.account_number_hint'|trans|raw}}</div>
               </div>
@@ -202,7 +202,7 @@
               <label for="wxpay_key">{{'admin.setting_wechat_auth.api_secret_key'|trans}}</label>
             </div>
             <div class="controls col-md-7">
-              <input id="wxpay_key" name="payment[wxpay_key]" value="{{ payment.wxpay_key }}" class="form-control"></input>
+              <input id="wxpay_key" name="payment[wxpay_key]" value="{{ payment.wxpay_key }}" class="form-control">
               <div class="help-block">
                 <div>{{'admin.setting_wechat_auth.api_secret_key_hint'|trans|raw}}</div>
               </div>
