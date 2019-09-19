@@ -21,6 +21,7 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 'targetType = :targetType',
                 'targetType IN (:targetTypes)',
                 'name LIKE :nameLike',
+                'deadlineMode = :deadlineMode',
                 'type = :type',
                 'unreceivedNum > :unreceivedNumGt',
                 'h5MpsEnable = :h5MpsEnable',

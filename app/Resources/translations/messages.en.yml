@@ -3799,6 +3799,9 @@ change_log: Changelog
 common.courseStatus.draft: Draft
 common.courseStatus.published: Published
 common.courseStatus.closed: Closed
+common.classroomStatus.draft: Draft
+common.classroomStatus.published: Published
+common.classroomStatus.closed: Closed
 common.fileType.video: Video
 common.fileType.audio: Audio
 common.fileType.document: Document
@@ -8736,6 +8739,7 @@ exception.course.draft.not_found: 教学计划草稿不存在
 exception.task_result.not_found: 学习任务结果不存在
 exception.discovery_column.not_found: 发现栏目不存在
 exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
+exception.coupon.target_type_error: 该批次不支持查看详情
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 
@@ -8895,6 +8899,9 @@ coupon.target_type.course_specific: 指定课程
 coupon.target_type.course_rechoose: 重新选择课程
 coupon.target_type.classroom_rechoose: 重新选择班级
 coupon.target_type.vip_rechoose: 重新选择会员
+coupon.target_type.multi_course: 部分课程
+coupon.target_type.multi_classroom: 部分班级
+coupon.target_type.detail: 详情
 
 coupon.status.unused: 未使用
 coupon.status.receive: 已领取

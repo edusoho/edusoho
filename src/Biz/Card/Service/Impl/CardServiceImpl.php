@@ -9,6 +9,7 @@ use Biz\Card\DetailProcessor\DetailFactory;
 use Biz\Card\DetailProcessor\DetailProcessor;
 use Biz\Card\Service\CardService;
 use Biz\Common\CommonException;
+use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 
@@ -99,9 +100,23 @@ class CardServiceImpl extends BaseService implements CardService
             return true;
         }
 
-        if ($coupon['targetType'] == $targetType && ($coupon['targetId'] == 0 || $coupon['targetId'] == $targetId)) {
+        if ($coupon['targetType'] != $targetType) {
+            return false;
+        }
+
+        if (0 == $coupon['targetId']) {
             return true;
         }
+
+        if ('vip' == $targetType && $coupon['targetId'] == $targetId) {
+            return true;
+        }
+
+        if (in_array($targetType, array('course', 'classroom')) && $this->getCouponBatchResourceService()->isCouponTarget($coupon['batchId'], $targetId)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function findCardsByUserIdAndCardType($userId, $cardType)
@@ -217,5 +232,13 @@ class CardServiceImpl extends BaseService implements CardService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return CouponBatchResourceService
+     */
+    protected function getCouponBatchResourceService()
+    {
+        return $this->createService('Coupon:CouponBatchResourceService');
     }
 }
