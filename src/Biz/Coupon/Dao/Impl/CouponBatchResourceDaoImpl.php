@@ -9,6 +9,11 @@ class CouponBatchResourceDaoImpl extends AdvancedDaoImpl implements CouponBatchR
 {
     protected $table = 'coupon_batch_resource';
 
+    public function findByBatchId($batchId)
+    {
+        return $this->findByFields(array('batchId' => $batchId));
+    }
+
     public function declares()
     {
         return array(
@@ -17,6 +22,7 @@ class CouponBatchResourceDaoImpl extends AdvancedDaoImpl implements CouponBatchR
             'timestamps' => array('createdTime'),
             'conditions' => array(
                 'batchId = :batchId',
+                'batchId IN (:batchIds)',
                 'targetId = :targetId',
                 'targetId IN (:targetIds)',
                 'targetType = :targetType',

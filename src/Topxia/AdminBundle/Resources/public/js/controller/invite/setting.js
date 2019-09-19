@@ -10,24 +10,41 @@ define(function(require, exports, module) {
             triggerType: 'change'
         });
 
-        validator.addItem({
-            element: '[name=promoted_user_value]',
-            required: false,
-            rule:'positive_integer'
-        });
+      $('[name=promoted_user_enable]').change(function (e) {
+        if($('[name=promoted_user_enable]').prop("checked")){
+          $('[name=promoted_user_enable]').val(1);
+          $('.js-promoted-user-content').removeClass('hidden')
+        }else {
+          $('[name=promoted_user_enable]').val(0);
+          $('.js-promoted-user-content').addClass('hidden')
+        }
+      });
 
-        validator.addItem({
-            element: '[name=promote_user_value]',
-            required: false,
-            rule:'positive_integer'
-        });
 
-        validator.addItem({
-            element: '[name=deadline]',
-            required: true,
-            rule:'positive_integer'
-        });
+      $('[name=promote_user_enable]').change(function (e) {
+        if($('[name=promote_user_enable]').prop("checked")){
+          $('[name=promote_user_enable]').val(1);
+          $('.js-promote-user-content').removeClass('hidden')
+        }else {
+          $('[name=promote_user_enable]').val(0);
+          $('.js-promote-user-content').addClass('hidden')
+        }
+      });
+      $('[name=promote_user_enable]').change(function (e) {
+        if($('[name=promote_user_enable]').prop("checked")){
+          $('[name=promote_user_enable]').val(1);
+          $('.js-promote-user-content').removeClass('hidden')
+        }else {
+          $('[name=promote_user_enable]').val(0);
+          $('.js-promote-user-content').addClass('hidden')
+        }
+      });
 
+      $('#invite-form').on('click','.js-remove-item',function (e) {
+       $(this).parents('.user-content').find('.js-user-batchId').val('');
+        $(this).parents('tbody').html('');
+
+      })
     };
 
 });

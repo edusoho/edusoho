@@ -17,38 +17,45 @@
 
       <div class="row form-group">
         <div class="col-md-2 control-label">
-          <label for="promoted_user_value">{{'admin.invite_setting.promoted_user_award'|trans}}</label>
+          <label for="promoted_user_batchId">{{'admin.invite_setting.promoted_user_award'|trans}}</label>
         </div>
-        <div class="controls col-md-7 radios">
-        <input type="text" class="form-control width-input width-input-small" id="promoted_user_value" name="promoted_user_value" value="{{ inviteSetting.promoted_user_value}}">{{'admin.invite_setting.discount_coupon_setting'|trans}}
-        </div>
-      </div>
-
-      <div class="row form-group">
-        <div class="col-md-2 control-label" >
-          <label for="promote_user_value">{{'admin.invite_setting.promote_user_award'|trans}}</label>
-        </div>
-        <div class="controls col-md-7 radios">
-        <input type="text" class="form-control width-input width-input-small" id="promote_user_value"name="promote_user_value" value="{{ inviteSetting.promote_user_value }}">{{'admin.invite_setting.discount_coupon_setting'|trans}}
-        </div>
-      </div>
-
-      <div class="row form-group">
-        <div class="control-label col-md-2">
-        </div>
-        <div class="controls col-md-7 "> 
+        <div class="controls col-md-7">
           <div class="checkbox">
-            <input type="checkbox" id="get_coupon_setting" name="get_coupon_setting" value="1" {% if inviteSetting.get_coupon_setting == 1 %} checked="checked" {% endif %} >{{'admin.invite_setting.get_coupon_setting'|trans}}
+            <label>
+              <input type="checkbox" name="promoted_user_enable" value="{{ inviteSetting.promoted_user_enable|default(0) }}"  {% if inviteSetting.promoted_user_enable|default(0) %}checked {% endif %}> 发放优惠券
+            </label>
+          </div>
+          <div class="{% if not inviteSetting.promoted_user_enable|default(0) %}hidden {% endif %}  js-promoted-user-content user-content" style="padding-top: 5px;padding-bottom: 5px">
+            <a class="btn btn-sm btn-default mtm mll" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_coupon_chooser',{'type': 'promoted'}) }}">选择优惠劵</a>
+            <input type="text" class="hidden js-user-batchId" id="promoted_user_batchId" name="promoted_user_batchId" value="{{ inviteSetting.promoted_user_batchId|default('')}}">
+            {% include 'admin/invite/coupon-batch-table.html.twig' with {'batchId': inviteSetting.promoted_user_batchId|default('')}%}
           </div>
         </div>
       </div>
 
       <div class="row form-group">
-        <div class="col-md-2 control-label" >
-          <label for="deadline">{{'admin.invite_setting.coupon_deadline'|trans}}</label>
+        <div class="col-md-2 control-label">
+          <label for="promote_user_batchId">{{'admin.invite_setting.promote_user_award'|trans}}</label>
         </div>
-        <div class="controls col-md-7 radios">
-          <input type="text" class="form-control width-input width-input-small" id="deadline"name="deadline" value="{{ inviteSetting.deadline }}">{{'site.date.day'|trans}}
+        <div class="controls col-md-7">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="promote_user_enable" value="{{ inviteSetting.promote_user_enable|default(0) }}"  {% if inviteSetting.promote_user_enable|default(0) %}checked {% endif %}> 发放优惠券
+            </label>
+          </div>
+          <div class="{% if not inviteSetting.promote_user_enable|default(0) %}hidden {% endif %} js-promote-user-content user-content" style="padding-top: 5px;padding-bottom: 5px">
+            <a class="btn btn-sm btn-default mtm mll" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_coupon_chooser',{'type': 'promote'}) }}">选择优惠劵</a>
+            <input type="text" class="hidden js-user-batchId" id="promote_user_batchId" name="promote_user_batchId" value="{{ inviteSetting.promote_user_batchId|default('')}}">
+            {% include 'admin/invite/coupon-batch-table.html.twig' with {'batchId': inviteSetting.promote_user_batchId|default('')}%}
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="get_coupon_setting">{{'邀请人奖励发放时机'|trans}}</label>
+        </div>
+        <div class="col-md-7 radios " style="margin-top: 5px">
+          {{ radios('get_coupon_setting', {0:'被邀请人注册成功时'|trans, 1:'被邀请人完成第一笔消费时'|trans}, inviteSetting.get_coupon_setting|default('1')) }}
         </div>
       </div>
 

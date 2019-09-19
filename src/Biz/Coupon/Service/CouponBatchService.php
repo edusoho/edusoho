@@ -48,4 +48,6 @@ interface CouponBatchService
     public function countH5MpsBatches($conditions);
 
     public function fillUserCurrentCouponByBatches($batches);
+
+    public function getCouponBatchContent($batchId, $targetType, $targetId);
 }

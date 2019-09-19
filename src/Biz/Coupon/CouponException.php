@@ -26,7 +26,7 @@ class CouponException extends AbstractException
 
     const OVER_BATCH_LIMIT = 5004509;
 
-    const SETTING_CLOSED = 4034509;
+    const TARGET_TYPE_ERROR = 4044510;
 
     public $messages = array(
         4044501 => 'exception.coupon.not_found',
@@ -38,6 +38,6 @@ class CouponException extends AbstractException
         5004507 => 'exception.coupon.received',
         5004508 => 'exception.coupon.finished',
         5004509 => 'exception.coupon.over_batch_limit',
-        4034509 => '',
+        4044510 => '',
     );
 }

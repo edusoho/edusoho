@@ -2444,3 +2444,11 @@ admin_coupon_query:
 admin_coupon_setting:
   pattern: /setting/coupon
   defaults: { _controller: AppBundle:Admin/Coupon:setting }
+
+admin_coupon_chooser:
+  pattern: /coupon/batch/chooser/{type}
+  defaults: { _controller: AppBundle:Admin/CouponBatch:chooserCoupon }
+
+admin_coupon_chooser_resource_list:
+  pattern: /coupon/batch/{batchId}/chooser/resource/list
+  defaults: { _controller: AppBundle:Admin/CouponBatch:chooserResourceList }
