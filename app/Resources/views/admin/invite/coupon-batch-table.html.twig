@@ -30,9 +30,9 @@
           <span class="text-muted text-sm">{{ batch.couponContent }}</span>
         {% endif %}
       </td>
-      <td><a href="javascript:;" class="js-remove-item" >删除</a></td>
+      <td><a href="javascript:;" class="js-remove-item" >{{ 'site.delete'|trans }}</a></td>
     </tr>
   {% endif %}
   </tbody>
 </table>
-<span class="text-muted text-sm" style="margin-left: 20px">可用优惠券发放完成后，邀请功能即自动关闭，请做好活动预算</span>
+<span class="text-muted text-sm" style="margin-left: 20px">{{ 'admin.setting.invite.chooser_message'|trans }}</span>

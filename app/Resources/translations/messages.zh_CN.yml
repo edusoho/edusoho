@@ -10229,3 +10229,10 @@ coupon.deadline_mode.day.help_block: >
   至<br/>领取后%day%天内
 coupon.resource.selected: 已选：
 coupon.resource.clear: 清空
+admin.setting.invite.chooser_coupon: 选择优惠券
+admin.setting.invite.chooser_btn: 选择
+admin.setting.invite.chooser_message: 可用优惠券发放完成后，邀请功能即自动关闭，请做好活动预算
+admin.setting.invite.promoted_user_enable: 发放优惠券
+admin.setting.invite.get_coupon_setting: 邀请人奖励发放时机
+admin.setting.invite.get_coupon_setting.register: 被邀请人注册成功时
+admin.setting.invite.get_coupon_setting.pay: 被邀请人完成第一笔消费时

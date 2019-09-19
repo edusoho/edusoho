@@ -5,8 +5,8 @@
 <div class="modal-dialog coupon-resource-list {% if modal_class|default('') %} {{ modal_class }}{% endif %}">
   <div class="modal-content">
     <div class="modal-header">
-      <a type="button" href="javascript:;" class="text-muted" data-dismiss="modal">{{ '选择优惠券'|trans }}</a>
-      > 全部课程
+      <a type="button" href="javascript:;" class="text-muted" data-dismiss="modal">{{ 'admin.setting.invite.chooser_coupon'|trans }}</a>
+      > {{ 'coupon.target_type.course_all'|trans }}
     </div>
     <div class="modal-body">
       {% block body %}

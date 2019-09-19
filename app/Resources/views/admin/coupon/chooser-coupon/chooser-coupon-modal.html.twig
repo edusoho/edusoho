@@ -1,7 +1,7 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 {% import "admin/macro.html.twig" as web_macro %}
 {% set modal_class = 'modal-lg' %}
-{% block title %}{{ '选择优惠券'|trans }}{% endblock %}
+{% block title %}{{ 'admin.setting.invite.chooser_coupon'|trans }}{% endblock %}
 {% block body %}
 
   <form id="coupon-search-form" class="form-inline pull-right" action="{{ path('admin_coupon_chooser',{'type':type}) }}" method="get" novalidate>
@@ -58,7 +58,7 @@
           {% endif %}
         </td>
         <td>
-          <a class="btn btn-primary mtm js-chooser" data-batch-id="{{ batch.id }}" data-userd-num="{{ batch.usedNum }}/{{ batch.generatedNum-batch.unreceivedNum }}/{{ batch.generatedNum }}" data-content="{{ content }}" data-batch="{{ batch|json_encode }}" data-type="{{ type|default('promoted') }}">选择</a>
+          <a class="btn btn-primary mtm js-chooser" data-batch-id="{{ batch.id }}" data-userd-num="{{ batch.usedNum }}/{{ batch.generatedNum-batch.unreceivedNum }}/{{ batch.generatedNum }}" data-content="{{ content }}" data-batch="{{ batch|json_encode }}" data-type="{{ type|default('promoted') }}">{{ 'admin.setting.invite.chooser_btn'|trans }}</a>
         </td>
       </tr>
     {% else %}
