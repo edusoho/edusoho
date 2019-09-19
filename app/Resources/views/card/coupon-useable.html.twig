@@ -2,14 +2,17 @@
   {# 课程 #}
 	{% if cardDetail.targetType == "course" %}
 		{% if cardDetail.targetId == 0 %}
-			<p class="title range">{{ 'coupon.for_any_course'|trans }}</p>
+			{# <p class="title range">{{ 'coupon.for_any_course'|trans }}</p> #}
+			<p class="title range">适用于全部课程</p>
 		{% else %}
-			<p class="title range">{{ 'coupon.for_specified_courses'|trans }}</p>
+			{# <p class="title range">{{ 'coupon.for_specified_courses'|trans }}</p> #}
+			<p class="title range">适用于指定课程</p>
 		{% endif %}
   {% endif %}
   {# 班级 #}
 	{% if cardDetail.targetType == "classroom" %}
 		{% if cardDetail.targetId == 0 %}
+			<p class="title range">{{ 'coupon.for_any_classroom'|trans }}</p>
 			<p class="title range">{{ 'coupon.for_any_classroom'|trans }}</p>
 		{% else %}
 			<p class="title range">{{ 'coupon.for_specified_classrooms'|trans }}</p>
