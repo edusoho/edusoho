@@ -1,5 +1,45 @@
 <template>
-  
+   <div>
+    <e-loading v-if="isLoading"></e-loading>
+    <div class="result-data" ref="data" v-if="result">
+      <div class="result-data__item">
+        正确率
+        <div class="result-data__bottom data-number-green data-medium" v-if="isReadOver"><span class="data-number">{{ result.rightRate }}</span>%</div>
+        <div class="result-data__bottom data-text-blue" v-else>待批阅</div>
+      </div>
+      <div class="result-data__item">
+        做题用时
+        <div class="result-data__bottom data-number-gray data-medium"><span class=" data-number">{{ usedTime }}</span>分钟</div>
+      </div>
+    </div>
+
+    <div class="result-tag" ref="tag">
+      <div class="result-tag-item clearfix">
+        <div class="result-tag-item__circle circle-green"></div>正确
+      </div>
+      <div class="result-tag-item clearfix">
+        <div class="result-tag-item__circle circle-orange"></div>错误
+      </div>
+      <div class="result-tag-item clearfix">
+        <div class="result-tag-item__circle circle-gray"></div>未作答
+      </div>
+      <div class="result-tag-item clearfix">
+        <div class="result-tag-item__circle circle-subjective"></div>主观题
+      </div>
+    </div>
+
+    <div class="result-subject" :style="{height: calHeight}">
+        <div class="result-paner">
+            <ul class="result-list">
+                <li :class="[ 'result-list__item homework-number', `circle-${color[item.status]}`]" v-for="(item, index) in items" :key=index>{{ item.seq }}</li>
+            </ul>
+        </div>
+
+      <div class="result-footer" ref="footer" v-if="isReadOver">
+        <van-button class="result-footer__btn" type="primary" @click="startHomework()">再做一次</van-button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -21,7 +61,7 @@ export default {
                     'right': 'green',
                     'none': 'brown',
                     'wrong': 'orange',
-                    'partRight': 'orange',
+                    'partRight': 'subjective',
                     'noAnswer': 'gray',
                }
           }
@@ -67,12 +107,11 @@ export default {
                     exerciseResultId:this.$route.query.exerciseResultId
                 },
             }).then(res => {
-                 console.log(res)
-               //  this.result=res;
-               //  this.setNavbarTitle(res.paperName);
-               //  this.interruption();
-               //  this.formatData(res);
-               //  this.calSubjectHeight();
+                this.result=res;
+                this.setNavbarTitle(res.paperName);
+                this.interruption();
+                this.formatData(res);
+                this.calSubjectHeight();
             });
         },
          //异常中断
@@ -120,7 +159,7 @@ export default {
                 }
             })
         },
-         //交作业
+        //交作业
         submitExercise(answer){
             let datas={
                 answer,
@@ -152,7 +191,7 @@ export default {
                 const finalHeight = allHeight - dataHeight - footerHeight;
                 this.calHeight = `${finalHeight}px`;
             })
-        },
+        }
     }
 }
 </script>
