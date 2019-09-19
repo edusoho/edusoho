@@ -167,7 +167,7 @@ class Login extends AbstractResource
         }
         $user['following'] = $this->getUserService()->findUserFollowingCount($user['id']);
         $user['follower'] = $this->getUserService()->findUserFollowerCount($user['id']);
-        $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
+        $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
     }
 
     private function getLoginToken($userId, $smsCode, $smsToken, $mobile, $client)

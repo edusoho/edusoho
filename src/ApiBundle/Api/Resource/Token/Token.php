@@ -45,7 +45,7 @@ class Token extends AbstractResource
             }
         }
 
-        $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
+        $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
         return $user;
     }

@@ -23,7 +23,7 @@ class FaceSession extends AbstractResource
 
         if (!empty($session['status']) && in_array($session['status'], array(FaceService::FACE_STATUS_FAIL, FaceService::FACE_STATUS_SUCCESS))) {
             $user = $this->getUserService()->getUser($session['user']['id']);
-            $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
+            $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
             if (empty($user)) {
                 throw UserException::NOTFOUND_USER();

@@ -661,7 +661,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $userProfile = $this->controller->getUserService()->getUserProfile($oldToken['userId']);
             $userProfile = $this->filterUserProfile($userProfile);
             $user = array_merge($user, $userProfile);
-            $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
+            $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
             $this->getTokenService()->deleteTokenByTypeAndUserId(MobileBaseController::TOKEN_TYPE, $user['id']);
 
@@ -716,7 +716,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $userProfile = $this->controller->getUserService()->getUserProfile($user['id']);
         $userProfile = $this->filterUserProfile($userProfile);
         $user = array_merge($user, $userProfile);
-        $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
+        $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
         $result = array(
             'token' => $token,
