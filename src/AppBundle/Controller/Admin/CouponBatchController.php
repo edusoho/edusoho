@@ -206,8 +206,6 @@ class CouponBatchController extends BaseController
     public function targetDetailAction(Request $request, $targetType, $batchId)
     {
         $count = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batchId));
-        var_dump($count);
-        var_dump($batchId);
         $paginator = new Paginator($this->get('request'), $count, 10);
         $resources = $this->getCouponBatchResourceService()->searchCouponBatchResource(
             array('batchId' => $batchId),
