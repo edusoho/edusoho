@@ -6694,6 +6694,10 @@ admin.edu_cloud.edu_sms.homework_checked: 作业完成批阅
 admin.edu_cloud.edu_sms.homework_checked_tips: 您的课程：《课程名称》-《学习任务名称》的作业已被老师批阅，快来看看吧!
 admin.edu_cloud.edu_sms.testpaper_checked: 试卷完成批阅
 admin.edu_cloud.edu_sms.testpaper_checked_tips: 您的课程：《课程名称》-《学习任务名称》的试卷已被老师批阅，快来看看吧!
+admin.edu_cloud.edu_sms.invite_rewards_not_enough: 邀请注册奖励不足
+admin.edu_cloud.edu_sms.coupon_not_enough_tips: 您设置的［邀请注册］活动奖励［优惠券名称］仅剩 50 张，请及时关注剩余优惠券数量。
+admin.edu_cloud.edu_sms.invite_rewards_is_exhausted: 邀请注册奖励消耗完
+admin.edu_cloud.edu_sms.coupon_is_exhausted_tips: 您设置的［邀请注册］活动奖励［优惠券名称］已消耗完，请及时在优惠券管理中添加新的优惠券。
 admin.edu_cloud.edu_sms.receipt_type: 回执类
 admin.edu_cloud.edu_sms.pay_receipt_success: 支付成功回执
 admin.edu_cloud.edu_sms.course_buy: 课程购买

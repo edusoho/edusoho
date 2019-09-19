@@ -4,6 +4,8 @@ namespace Biz\Coupon\Event;
 
 use Biz\Coupon\Service\CouponService;
 use Biz\Order\Service\OrderService;
+use Biz\Sms\SmsType;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Biz\Coupon\Service\CouponBatchService;
@@ -16,6 +18,7 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
     {
         return array(
             'coupon.use' => 'onCouponUse',
+            'coupon.receive' => 'onCouponReceive',
         );
     }
 
@@ -36,6 +39,62 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
             $coupon['batchId'],
             array('usedNum' => $usedCount, 'money' => MathToolkit::simple($allDiscount, 0.01))
         );
+    }
+
+    public function onCouponReceive(Event $event)
+    {
+        $batch = $event->getSubject();
+
+        $inviteSetting = $this->getSettingService()->get('invite', array());
+
+        if ($inviteSetting['promoted_user_batchId'] != $batch['id'] && $inviteSetting['promote_user_batchId'] != $batch['id']) {
+            return;
+        }
+
+        if ($inviteSetting['promoted_user_batchId'] == $batch['id']) {
+            $isSmsSend = 'promoted_sms_send';
+        } else {
+            $isSmsSend = 'promote_sms_send';
+        }
+
+        if ($inviteSetting[$isSmsSend]) {
+            return;
+        }
+
+        if (0 == $batch['unreceivedNum']) {
+            $this->sendSms(SmsType::INVITE_REWARD_EXHAUST, $batch);
+
+            return;
+        }
+
+        if ($batch['unreceivedNum'] < $inviteSetting['remain_number']) {
+            $this->sendSms(SmsType::INVITE_REWARD_INSUFFICIENT, $batch);
+
+            $inviteSetting[$isSmsSend] = 1;
+            $this->getSettingService()->set('invite', $inviteSetting);
+        }
+    }
+
+    private function sendSms($type, $batch)
+    {
+        $inviteSetting = $this->getSettingService()->get('invite', array());
+
+        $templateParams = array(
+            'name' => $batch['name'],
+            'remain' => $inviteSetting['remain_number'],
+        );
+
+        $smsParams = array(
+            'mobiles' => $inviteSetting['mobile'],
+            'templateId' => $type,
+            'templateParams' => $templateParams,
+        );
+
+        try {
+            $this->getSDKSmsService()->sendToOne($smsParams);
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     /**
@@ -60,5 +119,20 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
     private function getCouponBatchService()
     {
         return $this->getBiz()->service('Coupon:CouponBatchService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
+    }
+
+    private function getSDKSmsService()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['qiQiuYunSdk.sms'];
     }
 }
