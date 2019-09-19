@@ -22,11 +22,6 @@
       </li>
     {% endif %}
 
-    {% if is_plugin_installed('MoneyCard') %}
-      <li class="cd-sidebar__item {% if side_nav == 'my-money-card' %} active {% endif %}">
-        <a href="{{ path('my_cards', {cardType:'moneyCard'}) }}">{{ 'plugin.money_card'|trans }}</a>
-      </li>
-    {% endif %}
     {{ slot('my.account.menu.extension', {'sideNav': side_nav}) }}
     {{ slot('my.account.menu.extension.invoice', {'sideNav': side_nav}) }}
 

@@ -16,6 +16,7 @@ class CouponBatchResourceDaoImpl extends AdvancedDaoImpl implements CouponBatchR
             'orderbys' => array('createdTime', 'id'),
             'timestamps' => array('createdTime'),
             'conditions' => array(
+                'batchId = :batchId',
                 'targetId = :targetId',
                 'targetId IN (:targetIds)',
                 'targetType = :targetType',
