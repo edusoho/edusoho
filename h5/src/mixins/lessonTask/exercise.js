@@ -12,7 +12,7 @@ export default {
       return new Promise((resolve, reject) => {
         if (result && result.status === 'doing') {
           // 获取localstorge数据
-          const answerName = `homework-${userId}-${result.id}`;
+          const answerName = `exercise-${userId}-${result.id}`;
           let answer = JSON.parse(localStorage.getItem(answerName));
 
           // 本地是否有answer缓存，没有则为一个空对象
@@ -28,7 +28,7 @@ export default {
             title: '提示',
             cancelButtonText: '放弃做题',
             confirmButtonText: '继续做题',
-            message: '您有未完成的作业，是否继续？'
+            message: '您有未完成的练习，是否继续？'
           }).then(() => {
             resolve();
           })

@@ -13,7 +13,7 @@
       </div>
       <div class="intro-footer" v-if="exercise">
         <van-button class="intro-footer__btn" type="primary" v-if="hasResult" @click="showResult">查看结果</van-button>
-        <van-button class="intro-footer__btn" type="primary" v-else @click="startHomework()">开始答题</van-button>
+        <van-button class="intro-footer__btn" type="primary" v-else @click="startExercise()">开始答题</van-button>
       </div>
   </div>
 </template>
@@ -22,8 +22,10 @@
 import Api from '@/api';
 import { mapState,mapActions } from 'vuex';
 import { Dialog,Toast } from "vant";
+import exerciseMixin from '@/mixins/lessonTask/exercise.js';
 export default {
     name: "exercise-intro",
+    mixins: [exerciseMixin],
     data(){
         return{
             courseId:null,
@@ -53,9 +55,9 @@ export default {
         next()
     },
      methods:{
-        // ...mapActions('course', [
-        //         'handExercisedo',
-        //     ]),
+        ...mapActions('course', [
+                'handExercisedo',
+            ]),
         getInfo(){
             this.courseId = this.$route.query.courseId;
             this.taskId = this.$route.query.taskId;
@@ -72,11 +74,11 @@ export default {
         },
         //异常中断
         interruption(){
-            // this.canDoing(this.exercise.latestExerciseResult,this.user.id).then(()=>{
-            //     this.startExercise();
-            // }).catch(({answer})=>{
-            //     this.submitExercise(answer)
-            // })
+            this.canDoing(this.exercise.latestExerciseResult,this.user.id).then(()=>{
+                this.startExercise();
+            }).catch(({answer})=>{
+                this.submitExercise(answer)
+            })
         },
         //跳转到结果页
         showResult() {
@@ -104,7 +106,7 @@ export default {
                 }
             })
         },
-        //交作业
+        //交练习
         submitExercise(answer){
             let datas={
                 answer,
@@ -112,7 +114,7 @@ export default {
                 userId:this.user.id,
                 exerciseResultId:this.exercise.latestExerciseResult.id
             }
-            //提交作业+跳转到结果页
+            //提交练习+跳转到结果页
             this.handExercisedo(datas).then(res=>{
                 this.showResult()
             }).catch((err)=>{
