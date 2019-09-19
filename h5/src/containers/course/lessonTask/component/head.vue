@@ -2,7 +2,7 @@
   <div class="head-top">
     <div class="head-left">
       {{subject}}
-      <span class="left-color">[{{score}}分]</span>
+      <span class="left-color" v-show="showScore">[{{score}}分]</span>
     </div>
     <div class="head-right">
       <span class="right-color">{{current}}</span>/{{all}}
@@ -29,6 +29,10 @@ export default {
     score:{
       type:String,
       default:'0'
+    },
+    showScore:{
+        type:Boolean,
+        default:true
     }
   }
 };

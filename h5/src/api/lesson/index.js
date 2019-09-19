@@ -32,10 +32,32 @@ export default [
     method: 'POST'
   },
   {
-    // 交卷
+    // 考试交卷
     name: 'handExam',
     url: '/testpaper_result',
     method: 'POST'
+  }, {
+    // 获得作业说明信息
+    name: 'getHomeworkIntro',
+    url: '/courses/{courseId}/task_medias/{taskId}',
+    method: 'GET'
+  },
+  {
+    // 获取作业信息
+    name: 'getHomeworkInfo',
+    url: '/homeworks/{homeworkId}/results',
+    method: 'POST'
+  },
+  {
+    // 作业提交
+    name: 'handHomework',
+    url: '/homeworks/{homeworkId}/results/{homeworkResultId}',
+    method: 'PUT'
+  },
+  {
+    // 获得作业结果
+    name: 'homeworkResult',
+    url: '/homeworks/{homeworkId}/results/{homeworkResultId}',
+    method: 'GET'
   }
-
 ];

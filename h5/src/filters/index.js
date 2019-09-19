@@ -34,6 +34,8 @@ const filters = [
           return '文档';
         case 'testpaper':
           return '考试';
+        case 'homework':
+          return '作业';
         default:
           return '暂不支持此类型';
       }
@@ -115,6 +117,7 @@ const filters = [
         case 'doc':
         case 'ppt':
         case 'testpaper':
+        case 'homework':
           return '';
         default:
           return '暂不支持';

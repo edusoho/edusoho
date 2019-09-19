@@ -110,6 +110,24 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "testpaperIntro" */ '@/containers/course/lessonTask/exam/testpaperIntro.vue')
   }, {
+    path: '/homeworkDo',
+    name: 'homeworkDo',
+    component: () => import(/* webpackChunkName: "homeworkDo" */ '@/containers/course/lessonTask/homework/homeworkDo.vue')
+  }, {
+    path: '/homeworkResult',
+    name: 'homeworkResult',
+    meta: {
+      title: ''
+    },
+    component: () => import(/* webpackChunkName: "homeworkResult" */ '@/containers/course/lessonTask/homework/homeworkResult.vue')
+  }, {
+    path: '/homeworkIntro',
+    name: 'homeworkIntro',
+    meta: {
+      title: '作业说明'
+    },
+    component: () => import(/* webpackChunkName: "homeworkIntro" */ '@/containers/course/lessonTask/homework/homeworkIntro.vue')
+  }, {
     path: '/testpaperDo',
     name: 'testpaperDo',
     component: () => import(/* webpackChunkName: "testpaperDo" */ '@/containers/course/lessonTask/exam/testpaperDo.vue')

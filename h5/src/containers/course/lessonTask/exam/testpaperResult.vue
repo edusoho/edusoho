@@ -231,7 +231,7 @@ export default {
       this.timeMeter = null;
     },
     startTestpaper() {
-      this.$router.replace({
+      this.$router.push({
         name: 'testpaperDo',
         query: {
           testId: this.result.testId,
