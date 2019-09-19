@@ -46,6 +46,7 @@
       <div class="class-bg-layer"></div>
       <div class="class-header-bg clearfix">
         <div class="class-img">
+          {{ slot('drp.product_tags.extension', {'type':'classroom','targetId':classroom.id}) }}
           <a href="{{ path('classroom_show',{id:classroom.id}) }}">
             <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}"
               href="{{ path('classroom_show',{id:classroom.id}) }}">
