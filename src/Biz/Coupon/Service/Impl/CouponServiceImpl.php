@@ -86,38 +86,88 @@ class CouponServiceImpl extends BaseService implements CouponService
 
         switch ($mode) {
             case 'register':
-                $settingName = 'promoted_user_value';
+                $batchId = 'promoted_user_batchId';
+                $enable = 'promoted_user_enable';
                 $rewardName = '注册';
                 break;
 
             case 'pay':
-                $settingName = 'promote_user_value';
+                $batchId = 'promote_user_batchId';
+                $enable = 'promote_user_enable';
                 $rewardName = '邀请';
                 break;
         }
 
         $inviteSetting = $this->getSettingService()->get('invite', array());
+        if (isset($inviteSetting['invite_code_setting']) && $inviteSetting[$enable] && $inviteSetting[$batchId] > 0) {
+            $batch = $this->getCouponBatchService()->getBatch($inviteSetting[$batchId]);
+            if (empty($batch)) {
+                return array();
+            }
 
-        if (isset($inviteSetting['invite_code_setting'])
-            && 1 == $inviteSetting['invite_code_setting']
-            && $inviteSetting[$settingName] > 0
-        ) {
-            $coupon = $this->generateCoupon(
-                array(
-                    'type' => 'inviteCoupon',
+            $lockName = "im_batch_receive_coupons_{$mode}";
+            $lockResult = $this->getLock()->get($lockName, 20);
+            if (!$lockResult) {
+                $this->createNewException(CouponException::INVALID());
+            }
+
+            $conditions = array(
+                'userId' => 0,
+                'batchId' => $batch['id'],
+            );
+
+            $coupons = $this->searchCoupons($conditions, array('id' => 'DESC'), 0, 1);
+            $coupons = array_values($coupons);
+            $coupon = empty($coupons) ? array() : $coupons[0];
+
+            if (!empty($userId) && !empty($coupon)) {
+                $fields = array(
                     'userId' => $userId,
-                    'price' => $inviteSetting[$settingName],
-                    'expireDayCount' => $inviteSetting['deadline'],
-                )
-            );
-            $message = array(
-                'rewardName' => $rewardName,
-                'settingName' => $inviteSetting[$settingName],
-            );
-            $this->getNotificationService()->notify($userId, 'invite-reward', $message);
-            $this->dispatchEvent('invite.reward', $coupon, array('message' => $message));
+                    'status' => 'receive',
+                    'receiveTime' => time(),
+                );
 
-            return $coupon;
+                if ('day' == $batch['deadlineMode']) {
+                    if (0 == $batch['fixedDay']) {
+                        return array();
+                    }
+
+                    //ES优惠券领取时，对于优惠券过期时间会加86400秒，所以计算deadline时对于固定天数模式应与设置有效期模式一致，都为当天凌晨00:00:00
+                    $fields['deadline'] = strtotime(date('Y-m-d')) + 24 * 60 * 60 * $batch['fixedDay'];
+                }
+
+                $coupon = $this->updateCoupon($coupon['id'], $fields);
+
+                if (empty($coupon)) {
+                    $this->getCouponBatchDao()->db()->commit();
+
+                    return array();
+                }
+
+                $this->getCardService()->addCard(array(
+                    'cardType' => 'coupon',
+                    'cardId' => $coupon['id'],
+                    'deadline' => $coupon['deadline'],
+                    'userId' => $userId,
+                ));
+
+                $rate = $coupon['rate'];
+                if ('minus' == $coupon['type']) {
+                    $message = "恭喜您获得{$rewardName}奖励,一张价值{$rate}元的优惠券已发至您的账户。";
+                } else {
+                    $message = "恭喜您获得{$rewardName}奖励,一张抵扣为{$rate}折的优惠券已发至您的账户。";
+                }
+
+                $notify['title'] = $rewardName;
+                $notify['content'] = $message;
+
+                $this->getNotificationService()->notify($userId, 'default', $message);
+                $this->dispatchEvent('invite.reward', $coupon, array('message' => $notify));
+                $this->getLogService()->info('coupon', 'receive', "领取了注册优惠券 {$coupon['code']}", $coupon);
+            }
+
+            $this->getCouponBatchService()->updateUnreceivedNumByBatchId($batch['id']);
+            $this->getLock()->release($lockName);
         }
 
         return array();
@@ -555,6 +605,11 @@ class CouponServiceImpl extends BaseService implements CouponService
     protected function getAppService()
     {
         return $this->biz->service('CloudPlatform:AppService');
+    }
+
+    private function getCouponBatchDao()
+    {
+        return $this->createDao('Coupon:CouponBatchDao');
     }
 
     /**

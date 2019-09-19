@@ -2,12 +2,20 @@
 
 namespace Biz\Coupon\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Coupon\Dao\CouponBatchResourceDao;
 use Biz\Coupon\Service\CouponBatchResourceService;
 
 class CouponBatchResourceServiceImpl extends BaseService implements CouponBatchResourceService
 {
+    public function findResourcesByBatchId($batchId)
+    {
+        $resources = $this->getCouponBatchResourceDao()->findByBatchId($batchId);
+
+        return ArrayToolkit::index($resources, 'id');
+    }
+
     public function countCouponBatchResource($conditions)
     {
         return $this->getCouponBatchResourceDao()->count($conditions);

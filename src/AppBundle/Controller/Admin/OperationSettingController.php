@@ -77,27 +77,24 @@ class OperationSettingController extends BaseController
     {
         $default = array(
             'invite_code_setting' => 0,
-            'promoted_user_value' => '',
-            'promote_user_value' => '',
+            'promoted_user_enable' => 0,
+            'promoted_user_batchId' => '',
+            'promote_user_enable' => 0,
+            'promote_user_batchId' => '',
             'get_coupon_setting' => 1,
-            'deadline' => 90,
             'inviteInfomation_template' => '{{registerUrl}}',
         );
 
         if ('POST' == $request->getMethod()) {
             $inviteSetting = $request->request->all();
-            if (isset($inviteSetting['get_coupon_setting'])) {
-                $inviteSetting['get_coupon_setting'] = 1;
-            } else {
-                $inviteSetting['get_coupon_setting'] = 0;
-            }
 
             $inviteSetting = ArrayToolkit::parts($inviteSetting, array(
                 'invite_code_setting',
-                'promoted_user_value',
-                'promote_user_value',
+                'promoted_user_enable',
+                'promoted_user_batchId',
+                'promote_user_enable',
+                'promote_user_batchId',
                 'get_coupon_setting',
-                'deadline',
                 'inviteInfomation_template',
             ));
 
