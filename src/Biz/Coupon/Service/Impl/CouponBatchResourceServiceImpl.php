@@ -21,6 +21,13 @@ class CouponBatchResourceServiceImpl extends BaseService implements CouponBatchR
         return $this->getCouponBatchResourceDao()->count($conditions);
     }
 
+    public function isCouponTarget($batchId, $targetId)
+    {
+        $count = $this->countCouponBatchResource(array('batchId' => $batchId, 'targetId' => $targetId));
+
+        return empty($count) ? false : true;
+    }
+
     public function searchCouponBatchResource($conditions, $orderBy, $start, $limit)
     {
         return $this->getCouponBatchResourceDao()->search($conditions, $orderBy, $start, $limit);

@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Card\Service\CardService;
 use Biz\Coupon\CouponException;
 use Biz\Coupon\Dao\CouponDao;
+use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Coupon\State\ReceiveCoupon;
 use Biz\Coupon\State\UsingCoupon;
@@ -342,7 +343,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                 $message['message'] = sprintf('优惠券%s已过期', $code);
             }
 
-            if (empty($message['message']) && $this->isAvailableForTarget($coupon, $type, $id)) {
+            if (empty($message['message']) && !$this->isAvailableForTarget($coupon, $type, $id)) {
                 $message['message'] = '该优惠券不能被该商品使用';
             }
 
@@ -377,7 +378,27 @@ class CouponServiceImpl extends BaseService implements CouponService
             $targetId = $course ? $course['courseSetId'] : null;
         }
 
-        return !('all' == $coupon['targetType'] || ($coupon['targetType'] == $targetType && ($coupon['targetId'] == $targetId || 0 == $coupon['targetId'])));
+        if ('all' == $coupon['targetType']) {
+            return true;
+        }
+
+        if ($coupon['targetType'] != $targetType) {
+            return false;
+        }
+
+        if (0 == $coupon['targetId']) {
+            return true;
+        }
+
+        if ('vip' == $targetType && $coupon['targetId'] == $targetId) {
+            return true;
+        }
+
+        if (in_array($targetType, array('course', 'classroom')) && $this->getCouponBatchResourceService()->isCouponTarget($coupon['batchId'], $targetId)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function getCouponByCode($code, $lock = false)
@@ -392,6 +413,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             array(
                 'userId' => $useId,
                 'status' => 'receive',
+                'receiveTime' => time(),
             )
         );
 
@@ -593,6 +615,14 @@ class CouponServiceImpl extends BaseService implements CouponService
     protected function getCouponBatchService()
     {
         return $this->createService('Coupon:CouponBatchService');
+    }
+
+    /**
+     * @return CouponBatchResourceService
+     */
+    protected function getCouponBatchResourceService()
+    {
+        return $this->createService('Coupon:CouponBatchResourceService');
     }
 
     protected function isPluginInstalled($code)

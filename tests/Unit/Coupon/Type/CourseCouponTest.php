@@ -21,11 +21,23 @@ class CourseCouponTest extends BaseTestCase
             'courseType' => 'default',
         );
         $this->getCourseService()->createCourse($course);
+        $this->mockBiz('Coupon:CouponBatchResourceService', array(
+            array(
+                'functionName' => 'isCouponTarget',
+                'returnValue' => true,
+                'withParams' => array(1, 1),
+            ),
+            array(
+                'functionName' => 'isCouponTarget',
+                'returnValue' => false,
+                'withParams' => array(1, null),
+            ),
+        ));
 
-        $result = $courseCoupon->canUseable(array('targetId' => '1'), array('id' => 1));
+        $result = $courseCoupon->canUseable(array('batchId' => '1'), array('id' => 1));
         $this->assertTrue($result);
 
-        $result1 = $courseCoupon->canUseable(array('targetId' => '1'), array('id' => 10));
+        $result1 = $courseCoupon->canUseable(array('batchId' => '1'), array('id' => 10));
         $this->assertFalse($result1);
     }
 
