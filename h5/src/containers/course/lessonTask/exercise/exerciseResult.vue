@@ -159,7 +159,7 @@ export default {
                 }
             })
         },
-        //交作业
+        //交练习
         submitExercise(answer){
             let datas={
                 answer,
@@ -167,7 +167,7 @@ export default {
                 userId:this.user.id,
                 exerciseResultId:this.$route.query.exerciseResultId
             }
-            //提交作业+跳转到结果页
+            //提交练习+跳转到结果页
             this.handExercisedo(datas).then(res=>{
                 this.$router.replace({
                     name: 'exerciseResult',

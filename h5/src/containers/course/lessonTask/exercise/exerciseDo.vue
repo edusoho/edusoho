@@ -74,7 +74,7 @@ export default {
    mixins: [exerciseMixin],
    data() {
     return {
-      info: [], //作业信息
+      info: [], //练习信息
       answer: {}, //答案
       lastAnswer: null,
       cardSeq: 0, //点击题卡要滑动的指定位置的索引
@@ -85,7 +85,7 @@ export default {
       lastUsedTime:null,
       lastAnswer:null,
       usedTime:null,//使用时间，本地实时计时
-      isHandExercise:false,//是否已经交完作业
+      isHandExercise:false,//是否已经交完练习
       slideIndex:0,//题库组件当前所在的划片位置
     };
   },
@@ -349,7 +349,7 @@ export default {
       clearInterval(this.usedTime);
       this.usedTime = null;
     },
-    //提交作业
+    //提交练习
     submitpaper(){
       let index=0;
       let message='题目已经做完，确认提交吗?'
@@ -379,7 +379,7 @@ export default {
           })
           .catch(() => {
             this.clearTime();
-           //提交作业
+           //提交练习
            this.submitExercise(answer).then(res=>{
               return true
             }).catch((err)=>{
@@ -413,7 +413,7 @@ export default {
             this.showResult();
           }).catch((err)=>{
               /**
-               * 4036705：已经提交过此次作业，直接去结果页
+               * 4036705：已经提交过此次练习，直接去结果页
                */
               const toast = Toast.fail(err.message);
               if("4036705"==err.code){

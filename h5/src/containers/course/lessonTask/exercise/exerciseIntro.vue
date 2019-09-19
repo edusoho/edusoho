@@ -106,7 +106,7 @@ export default {
                 }
             })
         },
-        //交作业
+        //交练习
         submitExercise(answer){
             let datas={
                 answer,
