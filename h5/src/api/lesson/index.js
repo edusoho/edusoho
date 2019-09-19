@@ -71,5 +71,17 @@ export default [
     name: 'getExerciseInfo',
     url: '/exercises/{exerciseId}/results',
     method: 'POST'
+  },
+  {
+    // 练习提交
+    name: 'handExercise',
+    url: '/exercises/{exerciseId}/results/{exerciseResultId}',
+    method: 'PUT'
+  },
+  {
+    // 获得练习结果
+    name: 'exerciseResult',
+    url: '/exercises/{exerciseId}/results/{exerciseResultId}',
+    method: 'GET'
   }
 ];

@@ -191,7 +191,7 @@ export default {
     //判断是否做题状态
     isDoing(){
       if(this.homework.status != 'doing'){
-        //this.showResult();
+        this.showResult();
         return true
       }else{
         return false
