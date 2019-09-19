@@ -25,25 +25,34 @@
         </div>
       </div>
       {% else %}
-      <div class="form-group">
-        <div class="col-md-3 control-label">
-          <label>{{ 'admin.setting_wechat_auth.wechat_notification'|trans }}</label>
-        </div>
-        <div class="controls col-md-1">
-          <p class="form-control-static">
-            {{ 'admin.payment_setting.api_open'|trans }}
-          </p>
-        </div>
-        <div class="controls col-md-2 form-control-static">
-          <a target="_blank" href="{{ path('admin_setting_wechat_auth') }}">
-          {% if wechatSetting.wechat_notification_enabled %}
-            {{ 'admin.payment_setting.api_close.direct'|trans }}
-          {% else %}
-            {{ 'admin.payment_setting.api_open.direct'|trans }}
-          {% endif %}
-          </a>
-        </div>
-      </div>
+        {% if not wechatSetting.is_authorization|default(0) %}
+          <div class="setting-comment alert alert-warning">
+            <div class="setting-comment-block">{{'admin.wechat.notification.un_authorized_after_open_tip'|trans}}</div>
+            <div class="pull-right" style="margin-top: -26px">
+              <a href="{{ path('admin_setting_wechat_auth') }}" type="button" class="btn btn-default btn-large btn-primary" target="blank">{{'前往授权'|trans}}</a>
+            </div>
+          </div>
+        {% else %}
+          <div class="form-group">
+            <div class="col-md-3 control-label">
+              <label>{{ 'admin.setting_wechat_auth.wechat_notification'|trans }}</label>
+            </div>
+            <div class="controls col-md-1">
+              <p class="form-control-static">
+                {{ 'admin.payment_setting.api_open'|trans }}
+              </p>
+            </div>
+            <div class="controls col-md-2 form-control-static">
+              <a target="_blank" href="{{ path('admin_setting_wechat_auth') }}">
+              {% if wechatSetting.wechat_notification_enabled %}
+                {{ 'admin.payment_setting.api_close.direct'|trans }}
+              {% else %}
+                {{ 'admin.payment_setting.api_open.direct'|trans }}
+              {% endif %}
+              </a>
+            </div>
+          </div>
+        {% endif %}
       {% endif %}
     </fieldset>
 
