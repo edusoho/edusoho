@@ -7746,6 +7746,14 @@ admin.invite_setting.notification_variable_description: 通知变量说明
 admin.invite_setting.invite_infomation_template: 邀请信息模板
 admin.invite_setting.coupon_deadline: 优惠券有效时间
 admin.invite_setting.discount_coupon_setting: 元面值抵价优惠券 （可用于全站消费）
+admin.invite_setting.coupon_limit_remind: 异常提醒
+admin.invite_setting.coupon_limit_remind_hint: 在奖励可用数量不足的情况下提醒管理员
+admin.invite_setting.rewards_not_reach: 当奖励数量不足
+admin.invite_setting.send_remind_sms_to_admin: 时，向管理员发送短信提醒
+admin.invite_setting.rewards_count_required: 请输入 1-1000 的数字
+admin.invite_setting.mobile_required: 请输入手机号
+admin.invite_setting.mobile_for_receive: 接收提醒的手机号：
+admin.invite_setting.sms_enable_hint: 请注意，此功能在云短信开启时生效，且短信通知将扣除网校云短信的条数
 
 admin.wap_setting: 手机微网校
 admin.wap_setting.find: 发现页设置

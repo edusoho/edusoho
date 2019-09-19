@@ -28,6 +28,19 @@ define(function(require, exports, module) {
             rule:'positive_integer'
         });
 
+        validator.addItem({
+          element: '[name=remain_number]',
+          required: false,
+          rule: 'positive_integer min{min:1} max{max:1000}',
+          errormessage: '请输入1-1000的数字',
+        });
+
+        validator.addItem({
+          element: '[name=mobile]',
+          required: false,
+          rule: 'mobile',
+          errormessageMobile:'请输入有效的手机号码'
+        });
     };
 
 });

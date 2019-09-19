@@ -82,6 +82,8 @@ class OperationSettingController extends BaseController
             'get_coupon_setting' => 1,
             'deadline' => 90,
             'inviteInfomation_template' => '{{registerUrl}}',
+            'remain_number' => '',
+            'mobile' => '',
         );
 
         if ('POST' == $request->getMethod()) {
@@ -99,6 +101,8 @@ class OperationSettingController extends BaseController
                 'get_coupon_setting',
                 'deadline',
                 'inviteInfomation_template',
+                'remain_number',
+                'mobile',
             ));
 
             $inviteSetting = array_merge($default, $inviteSetting);

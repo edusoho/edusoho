@@ -6355,6 +6355,14 @@ admin.invite_setting.notification_variable_description: 'Inform variable descrip
 admin.invite_setting.invite_infomation_template: 'Invitation templates'
 admin.invite_setting.coupon_deadline: 'Coupon duration'
 admin.invite_setting.discount_coupon_setting: 'CNY deduction coupon (Can be used for whole site consumption)'
+admin.invite_setting.coupon_limit_remind: Abnormal reminder
+admin.invite_setting.coupon_limit_remind_hint: Remind administrators if there are not enough rewards available
+admin.invite_setting.rewards_not_reach: While number of rewards not reach
+admin.invite_setting.send_remind_sms_to_admin: system will send sms to remind admin
+admin.invite_setting.rewards_count_required: Please enter a number from 1-1000
+admin.invite_setting.mobile_required: Phone number required
+admin.invite_setting.mobile_for_receive: Phone number to receive reminders
+admin.invite_setting.sms_enable_hint: Please note that this feature will take effect when the cloud message is enabled, and the SMS notification will deduct the number of SMS messages of network school.
 admin.wap_setting: 'Mobile site'
 admin.wap_setting.find: '发现页设置'
 admin.wap_setting.site: '站点设置'
