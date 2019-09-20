@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Coupon\CouponException;
 use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseSetService;
@@ -38,7 +39,7 @@ class CouponBatchController extends BaseController
         );
 
         foreach ($batchs as $key => &$batch) {
-            $batch['couponContent'] = $this->getCouponContent($batch['id'], $batch['targetType'], $batch['targetId']);
+            $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id'], $batch['targetType'], $batch['targetId']);
         }
 
         return $this->render('admin/coupon/index.html.twig', array(
@@ -274,42 +275,53 @@ class CouponBatchController extends BaseController
         return $this->createMessageResponse('info', '无效的链接', '', 3, $this->generateUrl('homepage'));
     }
 
-    private function getCouponContent($batchId, $targetType, $targetId)
+    public function chooserCouponAction(Request $request, $type)
     {
-        $couponContents = array(
-            'all' => '全站可用',
-            'vip' => '全部会员',
-            'course' => '全部课程',
-            'classroom' => '全部班级',
+        $conditions = $request->query->all();
+        $conditions['deadlineMode'] = 'day';
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCouponBatchService()->searchBatchsCount($conditions),
+            10
         );
 
-        $couponContent = 'multi';
+        $batchs = $this->getCouponBatchService()->searchBatchs(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        if (!empty($targetId) && 'vip' != $targetType) {
-            $targetCount = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batchId));
-            if (1 == $targetCount) {
-                $target = $this->getCouponBatchResourceService()->searchCouponBatchResource(array('batchId' => $batchId), array('id' => 'ASC'), 0, 1);
-                $target = array_shift($target);
-            } else {
-                return $couponContent;
-            }
+        foreach ($batchs as $key => &$batch) {
+            $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id'], $batch['targetType'], $batch['targetId']);
         }
 
-        $targetId = empty($target['targetId']) ? $targetId : $target['targetId'];
-        if (0 == $targetId || 'all' == $targetType) {
-            $couponContent = $couponContents[$targetType];
-        } elseif ('course' == $targetType) {
-            $course = $this->getCourseSetService()->getCourseSet($targetId);
-            $couponContent = '课程:'.$course['title'];
-        } elseif ('classroom' == $targetType) {
-            $classroom = $this->getClassroomService()->getClassroom($targetId);
-            $couponContent = '班级:'.$classroom['title'];
-        } elseif ('vip' == $targetType && $this->isPluginInstalled('Vip')) {
-            $level = $this->getLevelService()->getLevel($targetId);
-            $couponContent = '会员:'.$level['name'];
+        return $this->render('admin/coupon/chooser-coupon/chooser-coupon-modal.html.twig', array(
+            'batchs' => $batchs,
+            'type' => $type,
+            'paginator' => $paginator,
+        ));
+    }
+
+    public function chooserResourceListAction(Request $request, $batchId)
+    {
+        $batch = $this->getCouponBatchService()->getBatch($batchId);
+        if (!in_array($batch['targetType'], array('course', 'classroom')) || $batch['targetId'] < 0) {
+            $this->createNewException(CouponException::TARGET_TYPE_ERROR());
+        }
+        $resources = $this->getCouponBatchResourceService()->findResourcesByBatchId($batchId);
+        $resourceIds = empty($resources) ? array(-1) : ArrayToolkit::column($resources, 'id');
+        if ('course' == $batch['targetType']) {
+            $resources = $this->getCourseSetService()->findCourseSetsByIds($resourceIds);
+        } else {
+            $resources = $this->getClassroomService()->findClassroomsByIds($resourceIds);
         }
 
-        return $couponContent;
+        return $this->render('admin/coupon/chooser-coupon/coupon-batch-resource-list-modal.html.twig', array(
+            'batch' => $batch,
+            'resources' => $resources,
+        ));
     }
 
     protected function getUserService()
@@ -367,11 +379,6 @@ class CouponBatchController extends BaseController
     private function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
-    }
-
-    private function getLevelService()
-    {
-        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getSettingService()

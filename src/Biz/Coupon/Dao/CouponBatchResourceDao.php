@@ -6,4 +6,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CouponBatchResourceDao extends GeneralDaoInterface
 {
+    public function findByBatchId($batchId);
 }
