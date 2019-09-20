@@ -2,7 +2,6 @@
   <div class="paper-swiper">
     <van-swipe
       ref="swipe"
-      :height="height"
       @change="changeswiper"
       :show-indicators="false"
       :loop="false"
@@ -27,15 +26,15 @@
             @singleChoose="singleChoose"
           />
 
-          <choice-type 
+          <choice-type
             v-if=" paper.type=='choice' || paper.type=='uncertain_choice' "
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
             :number="index+1"
             @choiceChoose="choiceChoose"
           />
-          
-          <determine-type 
+
+          <determine-type
             v-if=" paper.type=='determine'"
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
@@ -43,14 +42,14 @@
             @determineChoose="determineChoose"
           />
 
-          <essay-type 
+          <essay-type
             v-if=" paper.type=='essay'"
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
             :number="index+1"
           />
 
-          <fill-type 
+          <fill-type
             v-if=" paper.type=='fill'"
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
@@ -92,7 +91,6 @@ export default {
         return{
             testData:this.info,
             testAnswer:this.answer,
-            height: 0,//滑动卡片当前高度
             currentIndex:this.current
         }
     },
@@ -132,33 +130,10 @@ export default {
         singleChoice,
         determineType
     },
-    mounted() {
-     setTimeout(()=>{
-       this.$nextTick(() => {
-          this.changeswiper(0)
-        });
-     },500)
-    },
     methods:{
-        //由于swiper的高度无法自适应内容高度，所以切换页面要动态更改索引和设置高度
         changeswiper(index) {
             this.currentIndex = index;
-            this.$emit('update:slideIndex', index)
-            this.$nextTick(() => {
-                let docHeight = window.getComputedStyle(this.$refs[`paper${index}`][0])
-                .height;
-                let heights = Math.max(
-                Number(docHeight.substring(0, docHeight.length - 2))
-                );
-                if (heights == this.height) {
-                    return;
-                }
-                if (heights <= WINDOWHEIGHT) {
-                    this.height = WINDOWHEIGHT;
-                    return;
-                }
-                this.height = heights;
-            });
+            this.$emit('update:slideIndex', index);
         },
          //左滑动
         last() {
