@@ -1,5 +1,5 @@
 <template>
-  <div class="paper-swiper">
+   <div class="paper-swiper">
     <e-loading v-if="isLoading"></e-loading>
 
     <!-- 做题 -->
@@ -66,26 +66,26 @@ import { Toast, Overlay, Popup, Dialog, Lazyload } from "vant";
 import guidePage from "../component/guide-page";
 import itemBank from "../component/itemBank";
 
-import homeworkMixin from '@/mixins/lessonTask/homework.js';
+import exerciseMixin from '@/mixins/lessonTask/exercise.js';
 //由于会重定向到说明页或者结果页，为了避免跳转后不能返回，添加backUrl机制
 let backUrl=''
 export default {
-  name: "homework-do",
-  mixins: [homeworkMixin],
-  data() {
+   name: "exercise-do",
+   mixins: [exerciseMixin],
+   data() {
     return {
-      info: [], //作业信息
+      info: [], //练习信息
       answer: {}, //答案
       lastAnswer: null,
       cardSeq: 0, //点击题卡要滑动的指定位置的索引
-      homework: null,
+      exercise: null,
       cardShow: false, //答题卡显示标记
       localanswerName:null,
       localtimeName:null,
       lastUsedTime:null,
       lastAnswer:null,
       usedTime:null,//使用时间，本地实时计时
-      isHandHomework:false,//是否已经交完作业
+      isHandExercise:false,//是否已经交完练习
       slideIndex:0,//题库组件当前所在的划片位置
     };
   },
@@ -118,17 +118,22 @@ export default {
       next();
   },
   beforeRouteLeave (to, from, next) { //可捕捉离开提醒
-    if(this.info.length==0 || this.isHandHomework || this.homework.status!='doing'){
+    if(this.info.length==0 || this.isHandExercise || this.exercise.status!='doing'){
       next();
     }else{
-      this.submitpaper().then(()=>{
-          next();
-      }).catch(()=>{
+      if( this.submitpaper()){
+        next();
+      }else{
         next(false);
-      });
+      }
+      // this.submitpaper().then(()=>{
+      //     next();
+      // }).catch(()=>{
+      //   next(false);
+      // });
     }
   },
-  beforeDestroy() { //清除定时器
+   beforeDestroy() { //清除定时器
     this.clearTime();
     Dialog.close();
   },
@@ -137,16 +142,16 @@ export default {
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
     ...mapActions('course', [
-        'handHomeworkdo',
+        'handExercisedo',
     ]),
     //请求接口获取数据
     getData() {
-      let homeworkId = this.$route.query.homeworkId;
+      let exerciseId = this.$route.query.exerciseId;
       let targetId = this.$route.query.targetId;
       let action = this.$route.query.action;
-      Api.getHomeworkInfo({
+      Api.getExerciseInfo({
         query: {
-          homeworkId
+          exerciseId
         },
         data: {
           targetId,
@@ -173,7 +178,7 @@ export default {
     afterGetData(res) {
       this.setNavbarTitle(res.paperName);
 
-      this.homework = res;
+      this.exercise = res;
 
       //判断是否做题状态
        if(this.isDoing()){
@@ -190,7 +195,7 @@ export default {
     },
     //判断是否做题状态
     isDoing(){
-      if(this.homework.status != 'doing'){
+      if(this.exercise.status != 'doing'){
         this.showResult();
         return true
       }else{
@@ -201,10 +206,10 @@ export default {
     interruption(){
       if(!this.$route.params.KeepDoing){
           //异常中断或者刷新页面
-            this.canDoing(this.homework,this.user.id).then(()=>{
+            this.canDoing(this.exercise,this.user.id).then(()=>{
 
             }).catch(({answer})=>{
-              this.submitHomework(answer);
+              this.submitExercise(answer);
               return;
             })
       }
@@ -325,8 +330,8 @@ export default {
     },
     //获取本地数据
     getLocalData(){
-        this.localanswerName=`homework-${this.user.id}-${this.homework.id}`;
-        this.localuseTime=`homework-${this.user.id}-${this.homework.id}-usedTime`;
+        this.localanswerName=`exercise-${this.user.id}-${this.exercise.id}`;
+        this.localuseTime=`exercise-${this.user.id}-${this.exercise.id}-usedTime`;
         this.lastAnswer=JSON.parse(localStorage.getItem(this.localanswerName));
     },
     //实时存储答案
@@ -344,7 +349,7 @@ export default {
       clearInterval(this.usedTime);
       this.usedTime = null;
     },
-    //提交作业
+    //提交练习
     submitpaper(){
       let index=0;
       let message='题目已经做完，确认提交吗?'
@@ -361,7 +366,7 @@ export default {
       if(index>0){
          message=`还有${index}题未做，确认提交吗？`
       }
-      return new Promise((resolve,reject)=>{
+      // return new Promise((resolve,reject)=>{
           Dialog.confirm({
             title: '提交',
             cancelButtonText:'立即提交',
@@ -370,21 +375,21 @@ export default {
           }).then(() => {
             //显示答题卡
             this.cardShow=true;
-            reject()
+            return false
           })
           .catch(() => {
             this.clearTime();
-           //提交作业
-           this.submitHomework(answer).then(res=>{
-              resolve();
+           //提交练习
+           this.submitExercise(answer).then(res=>{
+              return true
             }).catch((err)=>{
-                reject();
+              return false
             })
           });
-      })
+      // })
     },
      //dispatch给store，提交答卷
-    submitHomework(answer){
+    submitExercise(answer){
       //如果已经遍历过answer就不要再次遍历，直接用
       if(!answer){
         answer=JSON.parse(JSON.stringify(this.answer));
@@ -395,25 +400,25 @@ export default {
 
       let datas={
           answer,
-          homeworkId:this.$route.query.homeworkId,
+          exerciseId:this.$route.query.exerciseId,
           userId:this.user.id,
-          homeworkResultId:this.homework.id
+          exerciseResultId:this.exercise.id
       }
 
       return new Promise((resolve,reject)=>{
-        this.handHomeworkdo(datas).then(res=>{
-            this.isHandHomework=true;
+        this.handExercisedo(datas).then(res=>{
+            this.isHandExercise=true;
              resolve();
             //跳转到结果页
             this.showResult();
           }).catch((err)=>{
               /**
-               * 4036705：已经提交过此次作业，直接去结果页
+               * 4036705：已经提交过此次练习，直接去结果页
                */
               const toast = Toast.fail(err.message);
               if("4036705"==err.code){
                   setTimeout(()=>{
-                    this.isHandHomework=true;
+                    this.isHandExercise=true;
                     toast.clear();
                     resolve();
                     this.showResult();
@@ -427,10 +432,10 @@ export default {
     //跳转到结果页
     showResult() {
       this.$router.replace({
-        name: 'homeworkResult',
+        name: 'exerciseResult',
         query: {
-          homeworkId: this.$route.query.homeworkId,
-          homeworkResultId:this.homework.id,
+          exerciseId: this.$route.query.exerciseId,
+          exerciseResultId:this.exercise.id,
           taskId:this.$route.query.targetId,
           backUrl:backUrl,
           courseId: this.$route.query.courseId,
@@ -440,7 +445,7 @@ export default {
     //跳转到说明页
     toIntro(){
       this.$router.replace({
-          name: 'homeworkIntro',
+          name: 'exerciseIntro',
           query: {
             courseId: this.$route.query.courseId,
             taskId: this.$route.query.targetId,
@@ -449,8 +454,9 @@ export default {
       })
     }
   }
-};
+}
 </script>
 
 <style>
+
 </style>
