@@ -168,7 +168,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         if (!empty($chargeTemplateId) && 'recharge' == $trade['type']) {
             $data = array(
                 'first' => array('value' => '尊敬的客户，您已充值成功'.PHP_EOL),
-                'keyword1' => array('value' => '现金充值或学习卡'),
+                'keyword1' => array('value' => '现金充值'),
                 'keyword2' => array('value' => $trade['trade_sn']),
                 'keyword3' => array('value' => ($trade['amount'] / 100).'元'),
                 'keyword4' => array('value' => date('Y-m-d H:i', $trade['pay_time']).PHP_EOL),
