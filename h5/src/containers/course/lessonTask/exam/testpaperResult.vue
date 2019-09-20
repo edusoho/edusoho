@@ -203,8 +203,7 @@ export default {
       this.$nextTick(()=>{
         const dataHeight = this.$refs.data.offsetHeight + this.$refs.tag.offsetHeight + 46;
         const allHeight = document.documentElement.clientHeight;
-        const footerHeight = (this.doTimes==0) ?
-                              this.$refs.footer.offsetHeight: 0;
+        const footerHeight = this.$refs.footer.offsetHeight || 0;
         const finalHeight = allHeight - dataHeight - footerHeight;
         this.calHeight = `${finalHeight}px`;
       })
