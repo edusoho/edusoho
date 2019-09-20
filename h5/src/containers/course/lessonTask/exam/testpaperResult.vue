@@ -39,10 +39,25 @@
         </ul>
       </van-panel>
 
-      <div class="result-footer" ref="footer" v-if="doTimes==0">
-        <van-button class="result-footer__btn" type="primary" :style="{marginRight: (isReadOver || remainTime)? '2vw' : 0}">查看解析</van-button>
-        <van-button class="result-footer__btn" type="primary" v-if="again && isReadOver" @click="startTestpaper()">再考一次</van-button>
-        <van-button class="result-footer__btn" type="primary" v-if="!again && remainTime && isReadOver" disabled>在{{remainTime}}后可以再考一次</van-button>
+      <div class="result-footer" ref="footer">
+        <van-button
+          class="result-footer__btn"
+          type="primary"
+          :style="{marginRight: (isReadOver || remainTime)? '2vw' : 0}">
+          查看解析
+        </van-button>
+        <van-button
+          v-if="again && isReadOver && doTimes==0"
+          class="result-footer__btn" type="primary"
+          @click="startTestpaper()">
+          再考一次
+        </van-button>
+        <van-button
+          v-if="!again && remainTime && isReadOver && doTimes==0"
+          class="result-footer__btn" type="primary"
+          disabled>
+          在{{remainTime}}后可以再考一次
+        </van-button>
       </div>
     </div>
   </div>
