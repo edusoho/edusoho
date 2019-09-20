@@ -35,8 +35,9 @@
             </ul>
         </div>
 
-      <div class="result-footer" ref="footer" v-if="isReadOver">
-        <van-button class="result-footer__btn" type="primary" @click="startExercise()">再做一次</van-button>
+      <div class="result-footer" ref="footer" >
+        <van-button class="result-footer__btn" type="primary" :style="{marginRight: isReadOver ? '2vw' : 0}">查看解析</van-button>
+        <van-button v-if="isReadOver" class="result-footer__btn" type="primary" @click="startExercise()">再做一次</van-button>
       </div>
     </div>
   </div>
