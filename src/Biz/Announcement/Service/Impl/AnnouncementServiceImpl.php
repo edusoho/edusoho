@@ -111,6 +111,15 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
             $this->createNewException(AnnouncementException::TYPE_INVALID());
         }
 
+        if (!isset($conditions['likeOrgCode']) && !isset($conditions['orgCode']) && !isset($conditions['orgId'])) {
+            $conditions['orgCode'] = $this->getCurrentUser()->getSelectOrgCode();
+        }
+
+        if (isset($conditions['likeOrgCode']) && !empty($conditions['likeOrgCode'])) {
+            $conditions['orgCode'] = $conditions['likeOrgCode'];
+            unset($conditions['likeOrgCode']);
+        }
+
         return $conditions;
     }
 

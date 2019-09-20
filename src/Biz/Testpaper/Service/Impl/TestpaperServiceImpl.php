@@ -607,6 +607,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaperResult;
     }
 
+    public function isQuestionsLackedByTestId($testId)
+    {
+        $testpaper = $this->getTestpaper($testId);
+        $testpaperBuilder = $this->getTestpaperBuilder($testpaper['type']);
+
+        return $testpaperBuilder->countQuestionsByTestPaper($testpaper) < $testpaper['itemCount'];
+    }
+
     public function showTestpaperItems($testId, $resultId = 0)
     {
         $testpaper = $this->getTestpaper($testId);
