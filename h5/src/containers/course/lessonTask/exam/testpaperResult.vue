@@ -39,9 +39,10 @@
         </ul>
       </van-panel>
 
-      <div class="result-footer" ref="footer" v-if="doTimes==0 && isReadOver">
-        <van-button class="result-footer__btn" type="primary" v-if="again" @click="startTestpaper()">再考一次</van-button>
-        <van-button class="result-footer__btn" type="primary" v-if="!again && remainTime" disabled>在{{remainTime}}后可以再考一次</van-button>
+      <div class="result-footer" ref="footer" v-if="doTimes==0">
+        <van-button class="result-footer__btn" type="primary" :style="{marginRight: (isReadOver || remainTime)? '2vw' : 0}">查看解析</van-button>
+        <van-button class="result-footer__btn" type="primary" v-if="again && isReadOver" @click="startTestpaper()">再考一次</van-button>
+        <van-button class="result-footer__btn" type="primary" v-if="!again && remainTime && isReadOver" disabled>在{{remainTime}}后可以再考一次</van-button>
       </div>
     </div>
   </div>
@@ -187,7 +188,7 @@ export default {
       this.$nextTick(()=>{
         const dataHeight = this.$refs.data.offsetHeight + this.$refs.tag.offsetHeight + 46;
         const allHeight = document.documentElement.clientHeight;
-        const footerHeight = (this.doTimes==0 && this.isReadOver) ?
+        const footerHeight = (this.doTimes==0) ?
                               this.$refs.footer.offsetHeight: 0;
         const finalHeight = allHeight - dataHeight - footerHeight;
         this.calHeight = `${finalHeight}px`;
