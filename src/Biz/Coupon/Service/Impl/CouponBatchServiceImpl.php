@@ -5,6 +5,7 @@ namespace Biz\Coupon\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Coupon\Dao\CouponBatchDao;
 use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseSetService;
@@ -42,7 +43,8 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             'userId' => 0,
             'batchId' => $batch['id'],
         ));
-        $this->getCouponBatchDao()->update($batchId, array('unreceivedNum' => $unreceivedNum));
+
+        return $this->getCouponBatchDao()->update($batchId, array('unreceivedNum' => $unreceivedNum));
     }
 
     public function generateCoupon($couponData)
@@ -311,8 +313,9 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                 $this->getLogService()->info('coupon', 'receive', "领取了优惠券 {$coupon['code']}", $coupon);
             }
 
-            $this->updateUnreceivedNumByBatchId($batch['id']);
+            $batch = $this->updateUnreceivedNumByBatchId($batch['id']);
             $this->getCouponBatchDao()->db()->commit();
+            $this->dispatchEvent('coupon.receive', $batch);
 
             return array(
                 'id' => $coupon['id'],
@@ -531,6 +534,9 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         return $this->createDao('Coupon:CouponDao');
     }
 
+    /**
+     * @return CouponBatchDao
+     */
     private function getCouponBatchDao()
     {
         return $this->createDao('Coupon:CouponBatchDao');

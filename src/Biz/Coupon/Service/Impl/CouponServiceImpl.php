@@ -164,10 +164,11 @@ class CouponServiceImpl extends BaseService implements CouponService
 
                 $this->getNotificationService()->notify($userId, 'default', $message);
                 $this->dispatchEvent('invite.reward', $coupon, array('message' => $notify));
+                $batch = $this->getCouponBatchService()->updateUnreceivedNumByBatchId($batch['id']);
+                $this->dispatchEvent('coupon.receive', $batch);
                 $this->getLogService()->info('coupon', 'receive', "领取了注册优惠券 {$coupon['code']}", $coupon);
             }
 
-            $this->getCouponBatchService()->updateUnreceivedNumByBatchId($batch['id']);
             $this->getLock()->release($lockName);
         }
 
@@ -262,19 +263,8 @@ class CouponServiceImpl extends BaseService implements CouponService
         }
 
         if ('unused' == $coupon['status']) {
-            $coupon = $this->getCouponDao()->update(
-                $coupon['id'],
-                array(
-                    'userId' => $currentUser['id'],
-                    'status' => 'receive',
-                )
-            );
-            $this->getLogService()->info(
-                'coupon',
-                'receive',
-                "用户{$currentUser['nickname']}(#{$currentUser['id']})领取了优惠券 {$coupon['code']}",
-                $coupon
-            );
+            $coupon = $this->receiveCouponByUserId($coupon['id'], $currentUser['id']);
+
             if (empty($coupon)) {
                 return false;
             }
@@ -408,7 +398,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     private function receiveCouponByUserId($couponId, $useId)
     {
-        $coupon = $this->getCouponDao()->update(
+        $coupon = $this->updateCoupon(
             $couponId,
             array(
                 'userId' => $useId,
@@ -420,6 +410,8 @@ class CouponServiceImpl extends BaseService implements CouponService
         if ($this->isPluginInstalled('Coupon')) {
             $this->getCouponBatchService()->updateUnreceivedNumByBatchId($coupon['batchId']);
         }
+        $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
+        $this->dispatchEvent('coupon.receive', $batch);
 
         $this->getCardService()->addCard(array(
             'cardType' => 'coupon',
@@ -434,6 +426,8 @@ class CouponServiceImpl extends BaseService implements CouponService
             "用户(#{$useId})领取了优惠券 (#{$couponId})",
             $coupon
         );
+
+        return $coupon;
     }
 
     private function generateRandomCode($length, $prefix)

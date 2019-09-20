@@ -9,7 +9,7 @@ class SmsType
      */
     const IMPORT_USER = 1665;
 
-    const INVITE_REWARD_INSUFFICIENT = 0;
+    const INVITE_REWARD_INSUFFICIENT = 1748;
 
-    const INVITE_REWARD_EXHAUST = 1;
+    const INVITE_REWARD_EXHAUST = 1749;
 }

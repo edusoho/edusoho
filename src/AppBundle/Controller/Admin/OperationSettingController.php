@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Coupon\Service\CouponBatchService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\CloudPlatform\CloudAPIFactory;
 
@@ -103,6 +104,11 @@ class OperationSettingController extends BaseController
             ));
 
             $inviteSetting = array_merge($default, $inviteSetting);
+            $inviteSetting['promoted_sms_send'] = 1;
+            $inviteSetting['promote_sms_send'] = 1;
+            if (!empty($inviteSetting['remain_number']) && !empty($inviteSetting['mobile'])) {
+                $inviteSetting = $this->updateInviteSmsSendSetting($inviteSetting);
+            }
 
             $this->getSettingService()->set('invite', $inviteSetting);
             $this->setFlashMessage('success', 'site.save.success');
@@ -117,6 +123,25 @@ class OperationSettingController extends BaseController
             'inviteSetting' => $inviteSetting,
             'inviteInfomation_template' => $inviteSetting['inviteInfomation_template'],
         ));
+    }
+
+    protected function updateInviteSmsSendSetting($inviteSetting)
+    {
+        if ($inviteSetting['promoted_user_enable']) {
+            $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promoted_user_batchId']);
+            if (!empty($batch) && $inviteSetting['remain_number'] < $batch['unreceivedNum']) {
+                $inviteSetting['promoted_sms_send'] = 0;
+            }
+        }
+
+        if ($inviteSetting['promote_user_enable']) {
+            $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promote_user_batchId']);
+            if (!empty($batch) && $inviteSetting['remain_number'] < $batch['unreceivedNum']) {
+                $inviteSetting['promote_sms_send'] = 0;
+            }
+        }
+
+        return $inviteSetting;
     }
 
     protected function getCourseService()
@@ -147,5 +172,13 @@ class OperationSettingController extends BaseController
     protected function getArticleService()
     {
         return $this->createService('Article:ArticleService');
+    }
+
+    /**
+     * @return CouponBatchService
+     */
+    protected function getCouponBatchService()
+    {
+        return $this->createService('Coupon:CouponBatchService');
     }
 }

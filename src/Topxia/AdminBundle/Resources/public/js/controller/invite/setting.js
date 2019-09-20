@@ -44,16 +44,6 @@ define(function(require, exports, module) {
         }
       });
 
-      $('[name=promote_user_enable]').change(function(e) {
-        if ($('[name=promote_user_enable]').prop("checked")) {
-          $('[name=promote_user_enable]').val(1);
-          $('.js-promote-user-content').removeClass('hidden');
-        } else {
-          $('[name=promote_user_enable]').val(0);
-          $('.js-promote-user-content').addClass('hidden');
-        }
-      });
-
       $('#invite-form').on('click', '.js-remove-item', function(e) {
         $(this).parents('.user-content').find('.js-user-batchId').val('');
         $(this).parents('tbody').html('');

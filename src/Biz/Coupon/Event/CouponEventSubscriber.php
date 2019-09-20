@@ -45,19 +45,22 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
     {
         $batch = $event->getSubject();
 
-        $inviteSetting = $this->getSettingService()->get('invite', array());
-
-        if ($inviteSetting['promoted_user_batchId'] != $batch['id'] && $inviteSetting['promote_user_batchId'] != $batch['id']) {
+        $smsSetting = $this->getSettingService()->get('cloud_sms', array());
+        if (empty($smsSetting['sms_enabled'])) {
             return;
         }
 
-        if ($inviteSetting['promoted_user_batchId'] == $batch['id']) {
-            $isSmsSend = 'promoted_sms_send';
-        } else {
-            $isSmsSend = 'promote_sms_send';
+        $inviteSetting = $this->getSettingService()->get('invite', array());
+        if (empty($inviteSetting['invite_code_setting']) || empty($inviteSetting['mobile'])) {
+            return;
         }
 
-        if ($inviteSetting[$isSmsSend]) {
+        if ($inviteSetting['promoted_user_batchId'] == $batch['id'] && !empty($inviteSetting['promoted_user_enable'])) {
+            $isSmsSend = 'promoted_sms_send';
+        } elseif ($inviteSetting['promote_user_batchId'] == $batch['id'] && !empty($inviteSetting['promote_user_enable'])) {
+            $isSmsSend = 'promote_sms_send';
+        }
+        if (empty($isSmsSend) || ($inviteSetting[$isSmsSend] && 0 != $batch['unreceivedNum'])) {
             return;
         }
 
@@ -80,7 +83,8 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
         $templateParams = array(
-            'name' => $batch['name'],
+            'activity_name' => '邀请注册',
+            'reward_name' => $batch['name'],
             'remain' => $inviteSetting['remain_number'],
         );
 
