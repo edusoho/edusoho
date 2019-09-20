@@ -1289,4 +1289,5 @@ t.add("user.account.order_pay_vip_close_title", "The vip level is closed", "js",
 t.add("user.account.order_pay_vip_close_hint", "The vip level in this order has been closed.Confirmed to pay?", "js", "en");
 t.add("user.account.order_pay", "Continue", "js", "en");
 t.add("user.account.order_not_pay", "Not paying", "js", "en");
+t.add("course.question_manage.manage.delete_tips", "Deleting the question may affect the exercise of class, please be cautious!", "js", "en");
 })(Translator);
