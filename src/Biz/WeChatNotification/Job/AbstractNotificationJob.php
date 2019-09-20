@@ -41,6 +41,9 @@ class AbstractNotificationJob extends AbstractJob
             PHP_INT_MAX
         );
         $userIds = ArrayToolkit::column($users, 'id');
+        if (empty($userIds)) {
+            return;
+        }
         $subscribedUsers = $this->getWeChatService()->findSubscribedUsersByUserIdsAndType($userIds, self::OFFICIAL_TYPE);
         $subscribedUsers = ArrayToolkit::index($subscribedUsers, 'userId');
         $batchs = array_chunk($subscribedUsers, self::LIMIT_NUM);
