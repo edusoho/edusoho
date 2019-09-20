@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class AppPackageUpdateController extends BaseController
@@ -20,7 +21,11 @@ class AppPackageUpdateController extends BaseController
     {
         $settings = $this->getSettingService()->get('storage', array());
 
-        if (empty($settings['cloud_key_applied']) || empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
+        $api = CloudAPIFactory::create('root');
+        // 当网校key不可用(被封禁)时，返回为{"error" => "xxx"}
+        $info = $api->get('/me');
+
+        if (empty($info['accessKey']) || empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $errors = array(sprintf('您尚未申请云平台授权码，<a href="%s">请先申请授权码</a>。', $this->generateUrl('admin_setting_cloud_key_update')));
         } else {
             $errors = $this->getAppService()->checkEnvironmentForPackageUpdate($id);

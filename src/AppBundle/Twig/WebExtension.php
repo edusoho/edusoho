@@ -19,6 +19,7 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Player\Service\PlayerService;
+use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
@@ -177,6 +178,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_transcode_error_message_key', array($this, 'getTranscodeErrorMessageKeyByCode')),
             new \Twig_SimpleFunction('uniqid', array($this, 'uniqid')),
             new \Twig_SimpleFunction('get_days', array($this, 'getDays')),
+            new \Twig_SimpleFunction('isQuestionLack', array($this, 'isQuestionLack')),
         );
     }
 
@@ -1890,11 +1892,24 @@ class WebExtension extends \Twig_Extension
         return MathToolkit::uniqid();
     }
 
+    public function isQuestionLack($testpaperId)
+    {
+        return $this->getTestPaperService()->isQuestionsLackedByTestId($testpaperId);
+    }
+
     /**
      * @return PlayerService
      */
     protected function getPlayerService()
     {
         return $this->createService('Player:PlayerService');
+    }
+
+    /**
+     * @return TestpaperService
+     */
+    protected function getTestPaperService()
+    {
+        return $this->createService('Testpaper:TestpaperService');
     }
 }

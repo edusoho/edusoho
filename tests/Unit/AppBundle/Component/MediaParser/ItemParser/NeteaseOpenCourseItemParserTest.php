@@ -9,7 +9,7 @@ class NeteaseOpenCourseItemParserTest extends BaseTestCase
 {
     public function testParse()
     {
-        // $video = $this->createParser()->parse('http://open.163.com/movie/2013/7/N/S/M941471K5_M9414FGNS.html');
+        // $video = $this->createParser()->parse('http://open.163.com/newview/movie/free?pid=MEM5RR44O&mid=MEM5RTLOA');
 
         // $this->assertEquals('video', $video['type']);
         // $this->assertEquals('NeteaseOpenCourse', $video['source']);

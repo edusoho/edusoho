@@ -25,7 +25,7 @@ class SmsException extends AbstractException
     const NEED_WAIT = 4030708;
 
     public $messages = array(
-        4030701 => 'exception.sms.setting_enbale',
+        4030701 => 'exception.sms.setting_enable',
         4030702 => 'exception.sms.code_invalid',
         5000703 => 'exception.sms.type_error',
         5000704 => 'exception.sms.send_failed',

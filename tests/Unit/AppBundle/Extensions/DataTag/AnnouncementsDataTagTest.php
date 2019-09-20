@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
+use AppBundle\Extensions\DataTag\AnnouncementsDataTag;
 use Biz\Announcement\Service\AnnouncementService;
 use Biz\BaseTestCase;
-use AppBundle\Extensions\DataTag\AnnouncementsDataTag;
 
 class AnnouncementsDataTagTest extends BaseTestCase
 {

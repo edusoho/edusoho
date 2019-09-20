@@ -1600,6 +1600,7 @@ course.question_manage.manage.score: 分值
 course.question_manage.manage.steom_tips: >
   点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对
 course.question_manage.manage.material: 材料
+course.question_manage.manage.belong_change_tips: 此题目若被引用，更改从属是可能会影响会课时的练习，请谨慎操作！
 course.question_manage.edit: 编辑题目
 course.question_manage.import.btn: 导入题目
 course.question_manage.import.modal_title: 题目导入
@@ -1948,6 +1949,7 @@ course.plan_task.activity_manage.exercise.start_btn: 开始做题
 course.plan_task.activity_manage.exercise.info: 练习说明
 course.plan_task.activity_manage.exercise.info_tips: >
   本次练习随机生成<span class="color-success">%itemCount%题</span>
+course.plan_task.activity_manage.exercise.info_tips.question_lack: 题目数与老师设定不一致，请联系老师处理！
 course.plan_task.activity_manage.exercise.total_questions: 共%itemCount%题
 course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
@@ -6653,10 +6655,10 @@ admin.edu_cloud.edu_sms.sms_sign: 短信签名
 admin.edu_cloud.edu_sms.to_set: 去设置
 admin.edu_cloud.edu_sms.sms_sign_tips: 签名显示在短信内容的最前面，显示这条短信来自哪家公司/产品/网站。
 admin.edu_cloud.edu_sms.warn_setting: 预警设置
-admin.edu_cloud.edu_sms.singel_day_send_max_count: 单日短信发送阈值
+admin.edu_cloud.edu_sms.singel_day_send_max_count: 24小时短信发送阈值
 admin.edu_cloud.edu_sms.no_set: 未设置
 admin.edu_cloud.edu_sms.goto_set: 去设置
-admin.edu_cloud.edu_sms.singel_day_send_max_count_tips: 单日短信发送量超过此阈值时，发送通知。
+admin.edu_cloud.edu_sms.singel_day_send_max_count_tips: 24小时短信发送量超过此阈值时，发送通知。
 admin.edu_cloud.edu_sms.template_setting: 模板设置
 admin.edu_cloud.edu_sms.sms_type: 短信类型
 admin.edu_cloud.edu_sms.type_id: 类型编号
@@ -9870,6 +9872,13 @@ exception.testpaper.not_found_result: 试卷结果不存在
 exception.testpaper.modify_committed_testpaper: 已经交卷的试卷不能修改!
 exception.testpaper.doing: 试卷还未提交
 exception.testpaper.redo_interval_exist: 教师设置了重考间隔
+exception.homework.not_found: 作业不存在
+exception.homework.draft: 该作业未发布，如有疑问请联系老师！
+exception.homework.closed: 该作业已关闭，如有疑问请联系老师！
+exception.homework.forbidden_access_homework: 不可以访问其他学生的作业!
+exception.homework.forbidden_duplicate_commit_homework: 作业已经做完，不能重复提交!
+exception.homework.reviewing: 作业正在批阅！不能重新开始!
+exception.homework.not_found_result: 作业结果不存在
 exception.uploadfile.file_not_found: 文件不存在
 exception.uploadfile.forbidden_manage_file: 没有权限管理资源
 exception.uploadfile.error_status: 状态不正确

@@ -413,6 +413,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             PHP_INT_MAX
         );
         $userIds = ArrayToolkit::column($users, 'id');
+
+        if (empty($userIds)) {
+            return;
+        }
         $templateId = $this->getWeChatService()->getTemplateId('askQuestion');
         if (!empty($templateId)) {
             $user = $this->getUserService()->getUser($thread['userId']);

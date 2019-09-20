@@ -206,3 +206,7 @@ services:
     export_factory:
         class: AppBundle\Component\Export\Factory
         arguments: ['@service_container']
+
+    qrcode_whitelist_filter:
+        class: AppBundle\Component\QrCode\QrCodeWhiteListFilter
+        arguments: ['@service_container']

@@ -1413,3 +1413,4 @@ user.account.order_pay: 继续
 user.account.order_not_pay: 不支付
 
 admin.wechat.live_open_scenes_error.hint: 请至少勾选一个选项。
+course.question_manage.manage.delete_tips: 删除题目，可能会影响课时的练习，请谨慎操作！

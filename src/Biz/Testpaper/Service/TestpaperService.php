@@ -116,6 +116,8 @@ interface TestpaperService
 
     public function finishTest($resultId, $formData);
 
+    public function isQuestionsLackedByTestId($testId);
+
     public function showTestpaperItems($testId, $resultId = 0);
 
     public function makeAccuracy($resultId);
