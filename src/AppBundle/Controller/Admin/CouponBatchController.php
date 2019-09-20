@@ -311,7 +311,7 @@ class CouponBatchController extends BaseController
             $this->createNewException(CouponException::TARGET_TYPE_ERROR());
         }
         $resources = $this->getCouponBatchResourceService()->findResourcesByBatchId($batchId);
-        $resourceIds = empty($resources) ? array(-1) : ArrayToolkit::column($resources, 'id');
+        $resourceIds = empty($resources) ? array(-1) : ArrayToolkit::column($resources, 'targetId');
         if ('course' == $batch['targetType']) {
             $resources = $this->getCourseSetService()->findCourseSetsByIds($resourceIds);
         } else {

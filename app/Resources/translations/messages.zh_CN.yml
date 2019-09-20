@@ -4493,13 +4493,15 @@ upgrade.browser.recommend_browsers: 推荐使用以下浏览器：
 
 # 优惠券
 coupon: 优惠券
-coupon.for_any_course: 可用于抵扣全站课程
-coupon.for_specified_courses: 用于抵扣指定课程
-coupon.for_any_classroom: 可用于抵扣全站班级
-coupon.for_specified_classrooms: 可用于抵扣指定班级
-coupon.for_any_level_of_VIP_membership: 可用于抵扣全站会员
-coupon.for_specified_level_of_VIP_membership: 用于抵扣指定会员
-coupon.for_any_purchase_on_our_web_site: 可用于抵扣全站所有类型消费
+coupon.for_any_course: 适用于全站课程
+coupon.for_specified_courses: 适用于指定课程
+coupon.for_multi_courses: 适用于多个课程
+coupon.for_multi_classrooms: 适用于多个班级
+coupon.for_any_classroom: 适用于全站班级
+coupon.for_specified_classrooms: 适用于指定班级
+coupon.for_any_level_of_VIP_membership: 适用于全站会员
+coupon.for_specified_level_of_VIP_membership: 适用于指定会员
+coupon.for_any_purchase_on_our_web_site: 全站可用
 coupon.expired_on: 有效期截止：
 coupon.deadline_year: %deadline%年
 coupon.deadline_month: %deadline%月
@@ -10236,3 +10238,5 @@ admin.setting.invite.promoted_user_enable: 发放优惠券
 admin.setting.invite.get_coupon_setting: 邀请人奖励发放时机
 admin.setting.invite.get_coupon_setting.register: 被邀请人注册成功时
 admin.setting.invite.get_coupon_setting.pay: 被邀请人完成第一笔消费时
+coupon.resource_list.title: '本优惠券适用于：'
+

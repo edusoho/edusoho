@@ -2,7 +2,13 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Coupon\CouponException;
+use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Coupon\Service\CouponBatchService;
+use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,6 +51,48 @@ class CouponBatchController extends BaseController
         return $this->createMessageResponse('info', '无效的链接', '', 3, $this->generateUrl('homepage'));
     }
 
+    public function couponResourceListAction(Request $request, $batchId)
+    {
+        $batch = $this->getCouponBatchService()->getBatch($batchId);
+        if (!in_array($batch['targetType'], array('course', 'classroom')) || $batch['targetId'] < 0) {
+            $this->createNewException(CouponException::TARGET_TYPE_ERROR());
+        }
+        $resources = $this->getCouponBatchResourceService()->findResourcesByBatchId($batchId);
+        $resourceIds = empty($resources) ? array(-1) : ArrayToolkit::column($resources, 'targetId');
+
+        if ('course' == $batch['targetType']) {
+            $paginator = new Paginator(
+                $request,
+                $this->getCourseSetService()->countCourseSets(array('ids' => $resourceIds)),
+                10
+            );
+            $resources = $this->getCourseSetService()->searchCourseSets(
+                array('ids' => $resourceIds),
+                array(),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        } else {
+            $paginator = new Paginator(
+                $request,
+                $this->getClassroomService()->countClassrooms(array('classroomIds' => $resourceIds)),
+                10
+            );
+            $resources = $this->getClassroomService()->searchClassrooms(
+                array('classroomIds' => $resourceIds),
+                array(),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
+
+        return $this->render('card/coupon-resource-list-modal.html.twig', array(
+            'paginator' => $paginator,
+            'batch' => $batch,
+            'resources' => $resources,
+        ));
+    }
+
     protected function getUserService()
     {
         return $this->createService('User:UserService');
@@ -69,5 +117,29 @@ class CouponBatchController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return CouponBatchResourceService
+     */
+    private function getCouponBatchResourceService()
+    {
+        return $this->createService('Coupon:CouponBatchResourceService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    private function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    private function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

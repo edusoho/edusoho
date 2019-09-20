@@ -25,7 +25,7 @@
     <tbody>
     {% for batch in batchs %}
       {% if batch.type=='discount' %}
-        {% set content =  batch.couponContent~'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(1)}) %}
+        {% set content =  'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(1)}) %}
       {% elseif batch.type=='minus' %}
         {% set content =  'coupon.type.minus_tip'|trans({'%rate%': batch.rate}) %}
       {% endif %}

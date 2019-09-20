@@ -1040,10 +1040,6 @@ receive_coupon:
     path:     /my/invitecode/receivecoupon
     defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
 
-coupon_course_list:
-    path:     /my/coupon/list
-    defaults: {_controller: AppBundle:My/Coin:listCoupon  }
-
 coin_show:
     path:     /my/coin/show
     defaults: { _controller: AppBundle:My/Coin:show }
@@ -3249,3 +3245,7 @@ coupon_receive:
   pattern: /coupon/{token}/receive
   defaults: { _controller: AppBundle:CouponBatch:couponReceive }
   h5: true
+
+coupon_resource_list:
+  path:     /coupon/{batchId}/resource/list
+  defaults: {_controller: AppBundle:CouponBatch:couponResourceList  }

@@ -30,7 +30,7 @@ class CoinController extends BaseController
 
         $coinEnabled = $this->setting('coin.coin_enabled');
 
-        if (empty($coinEnabled) || $coinEnabled == 0) {
+        if (empty($coinEnabled) || 0 == $coinEnabled) {
             return $this->createMessageResponse('error', '网校虚拟币未开启！');
         }
 
@@ -170,16 +170,6 @@ class CoinController extends BaseController
         return $response;
     }
 
-    public function listCouponAction(Request $request)
-    {
- 
-        return $this->render('card/list-coupon-modal.html.twig', array(
-        ));
-        
-    }
-
-    
-
     public function showAction(Request $request)
     {
         $coinSetting = $this->getSettingService()->get('coin', array());
@@ -200,7 +190,7 @@ class CoinController extends BaseController
     {
         $inviteSetting = $this->setting('invite');
 
-        if (isset($inviteSetting['get_coupon_setting']) && $inviteSetting['get_coupon_setting'] == 0) {
+        if (isset($inviteSetting['get_coupon_setting']) && 0 == $inviteSetting['get_coupon_setting']) {
             $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUserId, 'pay');
 
             if (!empty($inviteCoupon)) {
@@ -243,7 +233,7 @@ class CoinController extends BaseController
                 $send = $range[1];
             }
 
-            if ($bottomConsume > $range[0] || $bottomConsume == 0) {
+            if ($bottomConsume > $range[0] || 0 == $bottomConsume) {
                 $bottomConsume = $range[0];
             }
         }
