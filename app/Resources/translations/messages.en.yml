@@ -8714,6 +8714,9 @@ exception.reward_point.account.not_found: 积分账号不存在
 exception.reward_point.account.already_open: 积分账号已创建
 exception.reward_point.account.userid_invalid: 用户id错误
 exception.reward_point.account.balance_insufficient: 余额不足
+exception.reward_point.account.error_pay_password: pay password invalid
+exception.reward_point.account.pay_password_existed: pay password already existed
+exception.reward_point.account.not_found_pay_password: pay password not found
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
 exception.live_replay.not_found: 直播回放不存在
