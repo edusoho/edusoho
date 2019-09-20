@@ -26,15 +26,15 @@
             @singleChoose="singleChoose"
           />
 
-          <choice-type 
+          <choice-type
             v-if=" paper.type=='choice' || paper.type=='uncertain_choice' "
             :itemdata="paper"
             :answer="answer[paper.id]"
             :number="index+1"
             @choiceChoose="choiceChoose"
           />
-          
-          <determine-type 
+
+          <determine-type
             v-if=" paper.type=='determine'"
             :itemdata="paper"
             :answer="answer[paper.id]"
@@ -42,14 +42,14 @@
             @determineChoose="determineChoose"
           />
 
-          <essay-type 
+          <essay-type
             v-if=" paper.type=='essay'"
             :itemdata="paper"
             :answer="answer[paper.id]"
             :number="index+1"
           />
 
-          <fill-type 
+          <fill-type
             v-if=" paper.type=='fill'"
             :itemdata="paper"
             :answer="answer[paper.id]"
@@ -114,25 +114,25 @@
           <div class="card-item" v-for="(cards,name) in items" :key="name">
             <div class="card-item-title">{{name | type}}</div>
             <div class="card-item-list" v-if="name!='material'">
-              <div 
-               :class="['list-cicle',formatStatus(craditem.type,craditem.id)==1 ? 'cicle-active' :'']" 
-               v-for="(craditem) in items[name]" 
+              <div
+               :class="['list-cicle',formatStatus(craditem.type,craditem.id)==1 ? 'cicle-active' :'']"
+               v-for="(craditem) in items[name]"
                :key="craditem.id" @click="slideToNumber(craditem.seq)">
                {{craditem.seq}}
                </div>
             </div>
              <div class="card-item-list" v-if="name=='material'">
                <template v-for="(craditem) in items[name]" >
-                 <div 
-                 :class="['list-cicle',formatStatus(materialitem.type,materialitem.id)==1 ? 'cicle-active' :'']" 
-                 v-for="(materialitem) in craditem.subs" 
+                 <div
+                 :class="['list-cicle',formatStatus(materialitem.type,materialitem.id)==1 ? 'cicle-active' :'']"
+                 v-for="(materialitem) in craditem.subs"
                  :key="materialitem.id" @click="slideToNumber(materialitem.seq)">
                  {{materialitem.seq}}
                 </div>
                </template>
             </div>
           </div>
-        </div> 
+        </div>
       </div>
     </van-popup>
 
@@ -297,7 +297,6 @@ export default {
           res.testpaperResult.limitedTime=Number(res.testpaperResult.limitedTime)
           this.testpaperResult = res.testpaperResult;
 
-          
 
           this.localanswerName=`${this.user.id}-${this.testpaperResult.id}`;
           this.localtimeName=`${this.user.id}-${this.testpaperResult.id}-time`;
@@ -305,13 +304,12 @@ export default {
           this.lastAnswer=JSON.parse(localStorage.getItem(this.localanswerName));
 
 
-
           this.setVisited();
 
 
           //处理数据格式
           this.formatData(res);
-          
+
           console.log(new Date().getTime()-startTime)
 
           this.$nextTick(()=>{
@@ -575,7 +573,7 @@ export default {
       this.localtime = null;
     },
     //将0-9的数字前面加上0，例1变为01
-    checkTime(i) { 
+    checkTime(i) {
         if (i < 10) {
             i = "0" + i;
         }
