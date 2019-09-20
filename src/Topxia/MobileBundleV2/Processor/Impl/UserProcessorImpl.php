@@ -340,6 +340,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
         $userProfile = $this->controller->getUserService()->getUserProfile($userId);
         $userProfile = $this->filterUserProfile($userProfile);
+        $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
         $user = array_merge($user, $userProfile);
 
         return $this->controller->filterUser($user);
