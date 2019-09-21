@@ -1,14 +1,15 @@
 <template>
   <div class="paper-swiper">
     <van-swipe
+     v-if="testData.length>0"
       ref="swipe"
-      @change="changeswiper"
+      :height="height"
       :show-indicators="false"
       :loop="false"
       :duration="100"
-      v-if="testData.length>0"
+      @change="changeswiper"
     >
-      <van-swipe-item v-for="(paper,index) in info" :key="paper.id">
+      <van-swipe-item v-for="(paper,index) in info" :key="paper.id" :style="{height:height+'px'}">
         <div :ref="`paper${index}`" class="paper-item">
           <head-top
             :all="testData.length"
@@ -75,7 +76,8 @@
 </template>
 
 <script>
-const WINDOWHEIGHT = document.documentElement.clientHeight - 44;
+const NAVBARHEIGHT=44;
+const WINDOWHEIGHT = document.documentElement.clientHeight - NAVBARHEIGHT;
 import { mapState, mapMutations , mapActions} from "vuex";
 import fillType from "../component/fill";
 import essayType from "../component/essay";
@@ -91,7 +93,8 @@ export default {
         return{
             testData:this.info,
             testAnswer:this.answer,
-            currentIndex:this.current
+            currentIndex:this.current,
+            height:WINDOWHEIGHT
         }
     },
     props:{
