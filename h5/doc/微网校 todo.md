@@ -18,4 +18,5 @@
 - pwa 功能测试，目前采用第三方npm包完成基本功能（ feature/pwa 自测未合并 ），要解决的问题是启动页的名称和图标目前不能动态获取到网校的。
 - 首页 tab 之间转场动画 （ feature/router-transition 自测未合并）
 - vue-awesome-swiper 插件太大，打包后多了将近250KB，不能按需使用配置，需要想办法替换（vant 轮播，有前后边距时，有时候后一个轮播会消失，体验不好）
+- 考试、作业、任务的题目处理代码( formatData函数 )可以统一放入到做题组件( item-bank ) 中
 
