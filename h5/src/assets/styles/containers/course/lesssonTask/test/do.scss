@@ -3,6 +3,9 @@
         padding-bottom: vw(56);
         box-sizing: border-box;
     }
+    .van-swipe-item{
+        overflow-y: scroll!important;
+    }
     .left-slide__btn{
         position: fixed;
         top:50%;
