@@ -19,11 +19,13 @@ class CouponBatchDataTag extends BaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
-        if (empty($arguments['batchId'])) {
+        if (!isset($arguments['batchId'])) {
             throw new \InvalidArgumentException($this->getServiceKernel()->trans('batchId参数缺失'));
         }
         $batch = $this->getCouponBatchService()->getBatch($arguments['batchId']);
-        $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id'], $batch['targetType'], $batch['targetId']);
+        if (!empty($batch)) {
+            $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id'], $batch['targetType'], $batch['targetId']);
+        }
 
         return $batch;
     }

@@ -427,7 +427,7 @@ web.classroom.content.students_side_nav: 学员管理
 web.classroom.content.testpaper_check_side_nav: 试卷批阅
 
 #coupon
-admin.system.operation.coupon_setting_tab: 优惠劵设置
+admin.system.operation.coupon_setting_tab: 优惠券设置
 admin.operation.coupon_menu: 优惠码管理
 admin.operation.coupon_menu.basic_tab: 优惠码管理
 admin.operation.coupon_menu.generate_btn: 生成优惠码

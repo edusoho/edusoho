@@ -1,7 +1,11 @@
 {% import "macro.html.twig" as web_macro %}
 {% do script(['app/js/card/card-receive/index.js'])%}
 {% set coin = setting('coin') %}
-
+<style>
+  .modal-backdrop.in {
+    opacity: 0.5;
+  }
+</style>
 {#登录后#}
 {% if app.user %}
   <div class="modal-dialog modal-card-pack modal-logined">
@@ -17,8 +21,10 @@
         </div>
         {#卡券内容#}
         {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}
-          {% include 'card/coupon-useable.html.twig' %}
+          {% include 'card/coupon-useable.html.twig' with {'modal': 1}%}
           <div class="modal-action">
+            {% set batch = data('CouponBatch',{'batchId': cardDetail.batchId|default(0)}) %}
+            {# 指定多资源跳转#}
             <a class="btn btn-ghost-white btn-xlg hidden"
               {% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}href="{{ path('course_show',{ id : cardDetail.targetId }) }}"
               {% elseif cardDetail.targetType == "course" and cardDetail.targetId == 0 %}href="{{ path('course_set_explore') }}"
@@ -52,7 +58,7 @@
           {{ 'card.notLogin.receive.tips'|trans }}
         </div>
         {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}
-          {% include 'card/coupon-useable.html.twig' %}
+          {% include 'card/coupon-useable.html.twig' with {'modal': 1} %}
         {% endif %}
         {% if cardId is not null and cardDetail is not null and cardType == "moneyCard" %}
           {% include 'card/moneycard-useable.html.twig' %}
