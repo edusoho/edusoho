@@ -197,25 +197,25 @@ class WebExtension extends \Twig_Extension
         foreach ($days as $day) {
             switch ($day) {
                 case 'Mon':
-                    $result = $result.''.$this->trans('course.remind.mon').'、';
+                    $result = $result.''.$this->trans('course.remind.mon').' 、';
                     break;
                 case 'Tue':
-                    $result = $result.''.$this->trans('course.remind.tue').'、';
+                    $result = $result.''.$this->trans('course.remind.tue').' 、';
                     break;
                 case 'Wed':
-                    $result = $result.''.$this->trans('course.remind.wed').'、';
+                    $result = $result.''.$this->trans('course.remind.wed').' 、';
                     break;
                 case 'Thu':
-                    $result = $result.''.$this->trans('course.remind.thu').'、';
+                    $result = $result.''.$this->trans('course.remind.thu').' 、';
                     break;
                 case 'Fri':
-                    $result = $result.''.$this->trans('course.remind.fri').'、';
+                    $result = $result.''.$this->trans('course.remind.fri').' 、';
                     break;
                 case 'Sat':
-                    $result = $result.''.$this->trans('course.remind.sat').'、';
+                    $result = $result.''.$this->trans('course.remind.sat').' 、';
                     break;
                 case 'Sun':
-                    $result = $result.''.$this->trans('course.remind.sun').'、';
+                    $result = $result.''.$this->trans('course.remind.sun').' 、';
                     break;
                 default:
                     break;
