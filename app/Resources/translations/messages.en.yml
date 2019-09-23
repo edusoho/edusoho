@@ -8909,3 +8909,7 @@ course.setting.course_remind_tip: 'Currently, %D% % %H% sends learning reminders
 course.setting.course_remind_change: Change Setting
 course.setting.course_remind_not_open: Reminder not to open course
 course.setting.course_remind_go_to_open: To open
+
+admin.setting_wechat_auth.re_authorization_btn: ReAuth
+admin.setting_wechat_auth.authorization_in_new_page_hint: Please Authorization In New Page
+admin.setting_wechat_auth.authorization_success: Anthorized Success

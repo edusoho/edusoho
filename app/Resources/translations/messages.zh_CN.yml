@@ -7326,6 +7326,9 @@ admin.setting_wechat_auth.api_secret_key: 微信商户平台API密钥
 admin.setting_wechat_auth.account_code_empty: 暂未设置二维码
 admin.setting_wechat_auth.account_code_view: 查看大图
 admin.setting_wechat_auth.account_code_download: 下载二维码
+admin.setting_wechat_auth.re_authorization_btn: 重新授权
+admin.setting_wechat_auth.authorization_in_new_page_hint: 请在新窗口完成公众号授权
+admin.setting_wechat_auth.authorization_success: 已成功授权
 
 #开发者设置
 admin.developer_setting.cloud_notification_api: 通知服务API

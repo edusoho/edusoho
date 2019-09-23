@@ -73,7 +73,7 @@
                 </div>
               {% endif %}
               <div class="setting-comment-button">
-                <a data-url="{{ path('admin_setting_wechat_pre_auth_url', {platformType: 'official_account'}) }}" type="button" class="btn btn-default btn-large btn-primary js-wechat-pre-auth-url" target="blank">{{'立即授权'|trans}}</a>
+                <a data-url="{{ path('admin_setting_wechat_pre_auth_url', {platformType: 'official_account'}) }}" type="button" class="btn btn-default btn-large btn-primary js-wechat-pre-auth-url" target="blank">{{'admin.wechat.notification.go_authorizer'|trans}}</a>
               </div>
             </div>
           {% endif %}
@@ -226,11 +226,11 @@
           <h4 class="modal-title">{{ 'site.tips'|trans }}</h4>
         </div>
         <div class="modal-body js-confirm-tip">
-          {{ '请在新窗口完成公众号授权' }}
+          {{ 'admin.setting_wechat_auth.authorization_in_new_page_hint'|trans }}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary confirm-modal__btn js-confirm-close" data-dismiss="modal">{{ '已成功授权'|trans }}</button>
-          <a type="button" href="#" target="_blank" class="btn btn-default js-confirm-close js-re-auth-btn">{{ '重新授权'|trans }}</a>
+          <button type="button" class="btn btn-primary confirm-modal__btn js-confirm-close" data-dismiss="modal">{{ 'admin.setting_wechat_auth.authorization_success'|trans }}</button>
+          <a type="button" href="#" target="_blank" class="btn btn-default js-confirm-close js-re-auth-btn">{{ 'admin.setting_wechat_auth.re_authorization_btn'|trans }}</a>
         </div>
       </div>
     </div>
