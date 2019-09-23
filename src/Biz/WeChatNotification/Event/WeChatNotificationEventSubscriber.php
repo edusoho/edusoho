@@ -105,7 +105,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $key = 'examResult';
             $logName = 'wechat_notify_exam_result';
             $data = array(
-                'first' => array('value' => '同学，您好，你的试卷已批阅完成'.PHP_EOL),
+                'first' => array('value' => '同学，您好，你的试卷已批阅完成'),
                 'keyword1' => array('value' => $task['title']),
                 'keyword2' => array('value' => $paperResult['score'].PHP_EOL),
                 'remark' => array('value' => '再接再厉哦'),
@@ -128,7 +128,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             }
 
             $data = array(
-                'first' => array('value' => '同学，您好，你的作业已批阅完成'.PHP_EOL),
+                'first' => array('value' => '同学，您好，你的作业已批阅完成'),
                 'keyword1' => array('value' => $task['title']),
                 'keyword2' => array('value' => $course['courseSetTitle']),
                 'keyword3' => array('value' => $nickname),
@@ -167,7 +167,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $payTemplateId = $this->getWeChatService()->getTemplateId('paySuccess');
         if (!empty($chargeTemplateId) && 'recharge' == $trade['type']) {
             $data = array(
-                'first' => array('value' => '尊敬的客户，您已充值成功'.PHP_EOL),
+                'first' => array('value' => '尊敬的客户，您已充值成功'),
                 'keyword1' => array('value' => '现金充值'),
                 'keyword2' => array('value' => $trade['trade_sn']),
                 'keyword3' => array('value' => ($trade['amount'] / 100).'元'),
@@ -193,7 +193,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if (!empty($payTemplateId)) {
             $data = array(
-                'first' => array('value' => '尊敬的客户，您已支付成功'.PHP_EOL),
+                'first' => array('value' => '尊敬的客户，您已支付成功'),
                 'keyword1' => array('value' => $trade['title']),
                 'keyword2' => array('value' => ($trade['amount'] / 100).'元'),
                 'keyword3' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
@@ -384,7 +384,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             }
             $content = TextHelper::truncate($content, 30);
             $data = array(
-                'first' => array('value' => '亲爱的学员，您在《'.$title.'》中的发表的问题有了新的回答'.PHP_EOL),
+                'first' => array('value' => '亲爱的学员，您在《'.$title.'》中的发表的问题有了新的回答'),
                 'keyword1' => array('value' => date('Y-m-d H:i:s', $createdTime)),
                 'keyword2' => array('value' => $content),
                 'remark' => array('value' => ''),
@@ -432,7 +432,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 return;
             }
             $data = array(
-                'first' => array('value' => '尊敬的老师，您的在教课程中有学员发布了提问'.PHP_EOL),
+                'first' => array('value' => '尊敬的老师，您的在教课程中有学员发布了提问'),
                 'keyword1' => array('value' => $user['nickname']),
                 'keyword2' => array('value' => mb_substr($thread['title'], 0, 30, 'utf-8')),
                 'keyword3' => array('value' => date('Y-m-d H:i:s', $thread['createdTime'])),

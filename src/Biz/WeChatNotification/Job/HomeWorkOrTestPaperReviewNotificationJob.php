@@ -35,7 +35,7 @@ class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
         }
 
         $data = array(
-            'first' => array('value' => '尊敬的老师，您今日仍有作业/试卷未批改'.PHP_EOL),
+            'first' => array('value' => '尊敬的老师，您今日仍有作业/试卷未批改'),
             'keyword1' => array('value' => date('Y-m-d', time())),
             'keyword2' => array('value' => ''),
             'remark' => array('value' => '请及时批改'),
