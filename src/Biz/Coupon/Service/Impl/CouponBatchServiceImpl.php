@@ -44,7 +44,8 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             'batchId' => $batch['id'],
         ));
 
-        return $this->getCouponBatchDao()->update($batchId, array('unreceivedNum' => $unreceivedNum));
+        $this->getCouponBatchDao()->update($batchId, array('unreceivedNum' => $unreceivedNum));
+        $this->dispatchEvent('coupon.receive', $batch);
     }
 
     public function generateCoupon($couponData)
@@ -215,25 +216,23 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                 );
             }
 
-            if (!empty($userId)) {
-                $conditions = array(
-                    'userId' => $userId,
-                    'batchId' => $batch['id'],
+            $conditions = array(
+                'userId' => $userId,
+                'batchId' => $batch['id'],
+            );
+            $coupon = $this->getCouponService()->searchCoupons($conditions, array('id' => 'DESC'), 0, 1);
+
+            if (!empty($coupon)) {
+                $this->getCouponBatchDao()->db()->commit();
+
+                return array(
+                    'code' => 'failed',
+                    'message' => '您已经领取该批优惠码',
+                    'exception' => array(
+                        'class' => 'Biz\Coupon\CouponException',
+                        'method' => 'RECEIVED',
+                    ),
                 );
-                $coupon = $this->getCouponService()->searchCoupons($conditions, array('id' => 'DESC'), 0, 1);
-
-                if (!empty($coupon)) {
-                    $this->getCouponBatchDao()->db()->commit();
-
-                    return array(
-                        'code' => 'failed',
-                        'message' => '您已经领取该批优惠码',
-                        'exception' => array(
-                            'class' => 'Biz\Coupon\CouponException',
-                            'method' => 'RECEIVED',
-                        ),
-                    );
-                }
             }
 
             $conditions = array(
@@ -313,9 +312,8 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                 $this->getLogService()->info('coupon', 'receive', "领取了优惠券 {$coupon['code']}", $coupon);
             }
 
-            $batch = $this->updateUnreceivedNumByBatchId($batch['id']);
+            $this->updateUnreceivedNumByBatchId($batch['id']);
             $this->getCouponBatchDao()->db()->commit();
-            $this->dispatchEvent('coupon.receive', $batch);
 
             return array(
                 'id' => $coupon['id'],

@@ -19,6 +19,7 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
         return array(
             'coupon.use' => 'onCouponUse',
             'coupon.receive' => 'onCouponReceive',
+            'coupon.append' => 'onCouponAppend',
         );
     }
 
@@ -41,9 +42,31 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
         );
     }
 
+    public function onCouponAppend(Event $event)
+    {
+        $batch = $event->getSubject();
+
+        $inviteSetting = $this->getSettingService()->get('invite', array());
+        if ($batch['unreceivedNum'] < $inviteSetting['remain_number']) {
+            return;
+        }
+
+        if ($inviteSetting['promoted_user_batchId'] == $batch['id'] && !empty($inviteSetting['promoted_user_enable'])) {
+            $isSmsSend = 'promoted_sms_send';
+        } elseif ($inviteSetting['promote_user_batchId'] == $batch['id'] && !empty($inviteSetting['promote_user_enable'])) {
+            $isSmsSend = 'promote_sms_send';
+        }
+        if (empty($isSmsSend)) {
+            return;
+        }
+        $inviteSetting[$isSmsSend] = 0;
+        $this->getSettingService()->set('invite', $inviteSetting);
+    }
+
     public function onCouponReceive(Event $event)
     {
         $batch = $event->getSubject();
+        $batch = $this->getCouponBatchService()->getBatch($batch['id']);
 
         $smsSetting = $this->getSettingService()->get('cloud_sms', array());
         if (empty($smsSetting['sms_enabled'])) {

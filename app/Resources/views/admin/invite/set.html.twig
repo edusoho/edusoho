@@ -87,14 +87,14 @@
         <div class="form-group">
           <div class="controls col-md-8 col-md-offset-1">
             {{ 'admin.invite_setting.rewards_not_reach'|trans }}
-            <input type="text" name="remain_number" class="form-control width-input width-input-large" placeholder="{{ 'admin.invite_setting.rewards_count_required'|trans }}">
+            <input type="text" name="remain_number" class="form-control width-input width-input-large" placeholder="{{ 'admin.invite_setting.rewards_count_required'|trans }}" value="{{ inviteSetting.remain_number|default('') }}">
             {{ 'admin.invite_setting.send_remind_sms_to_admin'|trans }}
           </div>
         </div>
         <div class="form-group">
           <div class="controls col-md-8 col-md-offset-1">
             {{ 'admin.invite_setting.mobile_for_receive'|trans }}
-            <input type="text" name="mobile" class="form-control width-input width-input-large" placeholder="{{ 'admin.invite_setting.mobile_required'|trans }}">
+            <input type="text" name="mobile" class="form-control width-input width-input-large" placeholder="{{ 'admin.invite_setting.mobile_required'|trans }}" value="{{ inviteSetting.mobile|default('') }}">
           </div>
         </div>
         <div class="form-group">

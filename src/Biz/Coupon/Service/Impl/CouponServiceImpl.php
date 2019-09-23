@@ -164,8 +164,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
                 $this->getNotificationService()->notify($userId, 'default', $message);
                 $this->dispatchEvent('invite.reward', $coupon, array('message' => $notify));
-                $batch = $this->getCouponBatchService()->updateUnreceivedNumByBatchId($batch['id']);
-                $this->dispatchEvent('coupon.receive', $batch);
+                $this->getCouponBatchService()->updateUnreceivedNumByBatchId($batch['id']);
                 $this->getLogService()->info('coupon', 'receive', "领取了注册优惠券 {$coupon['code']}", $coupon);
             }
 
@@ -407,11 +406,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             )
         );
 
-        if ($this->isPluginInstalled('Coupon')) {
-            $this->getCouponBatchService()->updateUnreceivedNumByBatchId($coupon['batchId']);
-        }
-        $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
-        $this->dispatchEvent('coupon.receive', $batch);
+        $this->getCouponBatchService()->updateUnreceivedNumByBatchId($coupon['batchId']);
 
         $this->getCardService()->addCard(array(
             'cardType' => 'coupon',
