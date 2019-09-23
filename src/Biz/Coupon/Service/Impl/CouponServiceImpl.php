@@ -169,6 +169,8 @@ class CouponServiceImpl extends BaseService implements CouponService
             }
 
             $this->getLock()->release($lockName);
+
+            return $coupon;
         }
 
         return array();
