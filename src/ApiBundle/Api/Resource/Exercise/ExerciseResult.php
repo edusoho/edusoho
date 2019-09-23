@@ -113,9 +113,30 @@ class ExerciseResult extends AbstractResource
 
         $exerciseResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($exercise['id']));
         $exerciseResult['items'] = $this->fillItems($exerciseResult['items'], $exerciseResult);
-        $exerciseResult['rightRate'] = intval($exerciseResult['rightItemCount'] / $exercise['itemCount'] * 100 + 0.5);
+        $essayItemNum = $this->getEssayItemNum($exerciseResult['items']);
+        $itemCount = $exercise['itemCount'] - $essayItemNum;
+        $exerciseResult['rightRate'] = intval($exerciseResult['rightItemCount'] / $itemCount * 100 + 0.5);
 
         return $exerciseResult;
+    }
+
+    protected function getEssayItemNum($items)
+    {
+        $num = 0;
+        foreach ($items as $item) {
+            if ('essay' == $item['type']) {
+                ++$num;
+            }
+            if (isset($item['subs']) && !empty($item['subs'])) {
+                foreach ($item['subs'] as $subItem) {
+                    if ('essay' == $subItem['type']) {
+                        ++$num;
+                    }
+                }
+            }
+        }
+
+        return $num;
     }
 
     protected function fillItems($items, $exerciseResult)
