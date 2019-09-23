@@ -7,6 +7,7 @@ use Biz\BaseTestCase;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
 class WeChatServiceTest extends BaseTestCase
 {
@@ -17,6 +18,13 @@ class WeChatServiceTest extends BaseTestCase
     public function testCreateWeChatUserWithErrorParams()
     {
         $this->getWeChatService()->createWeChatUser(array());
+    }
+
+    public function testFindAllBindUser()
+    {
+        $result = $this->getWeChatService()->findAllBindUserIds();
+
+        $this->assertEquals(array(), $result);
     }
 
     public function testGetWeChatUserByTypeAndUnionId()
@@ -282,9 +290,11 @@ class WeChatServiceTest extends BaseTestCase
     {
         $wechatSetting = array(
             'wechat_notification_enabled' => 1,
-            'abc' => array(
-                'status' => 'open',
-                'templateId' => 123,
+            'templates' => array(
+                'abc' => array(
+                    'status' => 'open',
+                    'templateId' => 123,
+                ),
             ),
         );
         $this->getSettingService()->set('wechat', $wechatSetting);
@@ -444,6 +454,90 @@ class WeChatServiceTest extends BaseTestCase
         $this->assertEquals('WeChatUserFreshJob', $result[1]['name']);
     }
 
+    public function testSearchWeChatUsersJoinUser()
+    {
+        $this->mockCreateWeChatUser(array('openId' => 'www'));
+
+        $result = $this->getWeChatService()->searchWeChatUsersJoinUser(array('userId' => 1), array('lastRefreshTime' => 'ASC'), 0, 10);
+
+        $this->assertEquals('1', $result[0]['userId']);
+    }
+
+    public function testCountWeChatUsersJoinUser()
+    {
+        $this->mockCreateWeChatUser(array('openId' => 'www'));
+
+        $result = $this->getWeChatService()->countWeChatUserJoinUser(array('userId' => 1));
+
+        $this->assertEquals(1, $result);
+    }
+
+    public function testGetWeChatSendChannel()
+    {
+        $this->getSettingService()->set('wechat', array(
+            'wechat_notification_enabled' => 1,
+            'is_authorization' => 1,
+        ));
+        $res = $this->getWeChatService()->getWeChatSendChannel();
+        $this->assertEquals('wechat_agent', $res);
+    }
+
+    public function testGetWeChatSendChannelWithNoAuth()
+    {
+        $res = $this->getWeChatService()->getWeChatSendChannel();
+        $this->assertEquals('wechat', $res);
+    }
+
+    public function testSaveWeChatTemplateSetting()
+    {
+        $wechatSetting = array(
+            'wechat_notification_enabled' => 1,
+            'templates' => array(
+                'homeworkOrTestPaperReview' => array(
+                    'templateId' => 'testId',
+                    'status' => 1,
+                    'sendTime' => '11:20',
+                ),
+                'courseRemind' => array(
+                    'templateId' => 'testId',
+                    'status' => 1,
+                    'sendTime' => '11:20',
+                    'sendDays' => array('Mon'),
+                ),
+            ),
+        );
+        $this->mockBiz('System:SettingService', array(
+            array(
+                'functionName' => 'get',
+                'withParams' => array('wechat', array()),
+                'returnValue' => $wechatSetting,
+            ),
+            array(
+                'functionName' => 'set',
+                'returnValue' => $wechatSetting,
+            ),
+        ));
+
+        $this->getSettingService()->set('wechat', $wechatSetting);
+
+        $this->getWeChatService()->saveWeChatTemplateSetting('homeworkOrTestPaperReview', array(
+            'templateId' => 'testId',
+            'status' => 1,
+            'sendTime' => '11:20',
+        ));
+        $schedulerJobs = $this->getSchedulerService()->searchJobs(array('name' => 'WeChatNotificationJob_HomeWorkOrTestPaperReview'), array(), 0, 1);
+        $this->assertEquals('WeChatNotificationJob_HomeWorkOrTestPaperReview', $schedulerJobs[0]['name']);
+
+        $this->getWeChatService()->saveWeChatTemplateSetting('courseRemind', array(
+            'templateId' => 'testId',
+            'status' => 1,
+            'sendTime' => '11:20',
+            'sendDays' => array('Mon'),
+        ));
+        $schedulerJobs = $this->getSchedulerService()->searchJobs(array('name' => 'WeChatNotificationJob_CourseRemind'), array(), 0, 1);
+        $this->assertCount('WeChatNotificationJob_CourseRemind', $schedulerJobs[0]['name']);
+    }
+
     protected function mockCreateWeChatUser($fields = array())
     {
         $user = $this->getCurrentUser();
@@ -475,5 +569,13 @@ class WeChatServiceTest extends BaseTestCase
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }

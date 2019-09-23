@@ -60,13 +60,21 @@ services:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension, priority: 10  }
-    
+
     callback.extension:
         class: AppBundle\Extension\CallbackExtension
         calls:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension }
+
+    wechat_template.extension:
+      class: AppBundle\Extension\WeChatTemplateExtension
+      calls:
+        - [setBiz, ['@biz']]
+      tags:
+        - { name: extension, priority: 10 }
+
 
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector

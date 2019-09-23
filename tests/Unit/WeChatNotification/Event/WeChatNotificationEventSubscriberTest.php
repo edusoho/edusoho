@@ -11,7 +11,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
     public function testOnTaskPublish()
     {
         $subscriber = new WeChatNotificationEventSubscriber($this->biz);
-        $this->mockTemplateId('normalTaskUpdate');
+        $this->mockTemplateId('courseUpdate');
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'getCourse',
@@ -72,12 +72,12 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
             array(
                 'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
-                'withParams' => array('oneHourBeforeLiveOpen'),
+                'withParams' => array('liveOpen', 'beforeOneHour'),
             ),
             array(
                 'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
-                'withParams' => array('oneDayBeforeLiveOpen'),
+                'withParams' => array('liveOpen', 'beforeOneDay'),
             ),
         ));
         $subscriber->onTaskUpdate($this->getTaskEvent(array('type' => 'live', 'startTime' => time() + 87000)));
@@ -91,7 +91,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
     public function testOnTaskPublishSync()
     {
         $subscriber = new WeChatNotificationEventSubscriber($this->biz);
-        $this->mockTemplateId('normalTaskUpdate');
+        $this->mockTemplateId('courseUpdate');
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'findCoursesByParentIdAndLocked',
@@ -115,7 +115,7 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
     public function testOnTaskCreateSync()
     {
         $subscriber = new WeChatNotificationEventSubscriber($this->biz);
-        $this->mockTemplateId('normalTaskUpdate');
+        $this->mockTemplateId('courseUpdate');
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'findCoursesByParentIdAndLocked',
@@ -173,6 +173,10 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
                 'returnValue' => array('id' => 2, 'isSubscribe' => 1, 'openId' => 'testOpenId'),
                 'withParams' => array('2'),
             ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
+            ),
         ));
         $result = $subscriber->onTestpaperReviewd($this->getPaperResultEvent());
         $weChatService->shouldHaveReceived('getOfficialWeChatUserByUserId');
@@ -210,6 +214,10 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
                 'returnValue' => array('id' => 2, 'isSubscribe' => 1, 'openId' => 'testOpenId'),
                 'withParams' => array('2'),
             ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
+            ),
         ));
         $result = $subscriber->onPaid($this->getTradeEvent());
         $weChatService->shouldHaveReceived('getOfficialWeChatUserByUserId');
@@ -229,6 +237,196 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
         ));
         $result = $subscriber->onPaid($this->getTradeEvent(array('type' => 'pay')));
         $weChatService->shouldHaveReceived('getOfficialWeChatUserByUserId');
+        $this->assertNull($result);
+    }
+
+    public function testOnCourseQuestionCreate()
+    {
+        $subscriber = new WeChatNotificationEventSubscriber($this->biz);
+        $this->getSettingService()->set('storage', array('cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey'));
+        $return = array(array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4, 'userId' => 1),
+            array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4, 'userId' => 1), );
+        $weChatService = $this->mockBiz('WeChat:WeChatService', array(
+            array(
+                'functionName' => 'getTemplateId',
+                'returnValue' => 'test',
+                'withParams' => array('askQuestion'),
+            ),
+            array(
+                'functionName' => 'searchWeChatUsers',
+                'returnValue' => $return,
+            ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
+            ),
+        ));
+
+        $courseService = $this->mockBiz('Course:CourseService', array(
+            array(
+                'functionName' => 'getCourse',
+                'returnValue' => array('id' => 1, 'title' => 'test'),
+                'withParams' => array('1'),
+            ),
+        ));
+
+        $courseMemberService = $this->mockBiz('Course:MemberService', array(
+            array(
+                'functionName' => 'findCourseTeachers',
+                'returnValue' => array(array('userId' => 1), array('userId' => 2)),
+                'withParams' => array('1'),
+            ),
+        ));
+
+        $result = $subscriber->onCourseQuestionCreate($this->getCourseThread());
+        $weChatService->shouldHaveReceived('searchWeChatUsers');
+        $courseService->shouldHaveReceived('getCourse');
+        $courseMemberService->shouldHaveReceived('findCourseTeachers');
+        $this->assertNull($result);
+    }
+
+    public function testOnClassroomQuestionCreate()
+    {
+        $subscriber = new WeChatNotificationEventSubscriber($this->biz);
+        $this->getSettingService()->set('storage', array('cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey'));
+        $return = array(array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4, 'userId' => 1),
+            array('id' => 1, 'openId' => 'testOpenId', 'unionId' => 4, 'userId' => 1), );
+        $weChatService = $this->mockBiz('WeChat:WeChatService', array(
+            array(
+                'functionName' => 'getTemplateId',
+                'returnValue' => 'test',
+                'withParams' => array('askQuestion'),
+            ),
+            array(
+                'functionName' => 'searchWeChatUsers',
+                'returnValue' => $return,
+            ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
+            ),
+        ));
+
+        $classroomService = $this->mockBiz('Classroom:ClassroomService', array(
+            array(
+                'functionName' => 'getClassroom',
+                'returnValue' => array('id' => 1, 'title' => 'test'),
+                'withParams' => array('1'),
+            ),
+            array(
+                'functionName' => 'findTeachers',
+                'returnValue' => array('1', '2'),
+                'withParams' => array('1'),
+            ),
+        ));
+
+        $result = $subscriber->onClassroomQuestionCreate($this->getThread());
+        $weChatService->shouldHaveReceived('searchWeChatUsers');
+        $classroomService->shouldHaveReceived('getClassroom');
+        $classroomService->shouldHaveReceived('findTeachers');
+        $this->assertNull($result);
+    }
+
+    public function testOnCourseQuestionAnswerCreate()
+    {
+        $subscriber = new WeChatNotificationEventSubscriber($this->biz);
+        $this->getSettingService()->set('storage', array('cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey'));
+        $weChatService = $this->mockBiz('WeChat:WeChatService', array(
+            array(
+                'functionName' => 'getTemplateId',
+                'returnValue' => 'test',
+                'withParams' => array('answerQuestion'),
+            ),
+            array(
+                'functionName' => 'getOfficialWeChatUserByUserId',
+                'returnValue' => array('id' => 1, 'isSubscribe' => 1, 'openId' => 'testOpenId'),
+                'withParams' => array('1'),
+            ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
+            ),
+        ));
+
+        $courseService = $this->mockBiz('Course:CourseService', array(
+            array(
+                'functionName' => 'getCourse',
+                'returnValue' => array('id' => 1, 'title' => 'test'),
+                'withParams' => array('1'),
+            ),
+        ));
+
+        $courseThreadService = $this->mockBiz('Course:ThreadService', array(
+            array(
+                'functionName' => 'getThread',
+                'returnValue' => array('id' => 1, 'createdTime' => time(), 'userId' => 1),
+                'withParams' => array('1', '1'),
+            ),
+        ));
+
+        $courseMemberService = $this->mockBiz('Course:MemberService', array(
+            array(
+                'functionName' => 'isCourseTeacher',
+                'returnValue' => true,
+                'withParams' => array('1', '1'),
+            ),
+        ));
+
+        $result = $subscriber->onCourseQuestionAnswerCreate($this->getCoursePost());
+        $weChatService->shouldHaveReceived('getOfficialWeChatUserByUserId');
+        $courseMemberService->shouldHaveReceived('isCourseTeacher');
+        $courseThreadService->shouldHaveReceived('getThread');
+        $courseService->shouldHaveReceived('getCourse');
+        $this->assertNull($result);
+    }
+
+    public function testOnClassroomQuestionAnswerCreate()
+    {
+        $subscriber = new WeChatNotificationEventSubscriber($this->biz);
+        $this->getSettingService()->set('storage', array('cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey'));
+        $weChatService = $this->mockBiz('WeChat:WeChatService', array(
+            array(
+                'functionName' => 'getTemplateId',
+                'returnValue' => 'test',
+                'withParams' => array('answerQuestion'),
+            ),
+            array(
+                'functionName' => 'getOfficialWeChatUserByUserId',
+                'returnValue' => array('id' => 1, 'isSubscribe' => 1, 'openId' => 'testOpenId'),
+                'withParams' => array('1'),
+            ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
+            ),
+        ));
+
+        $classroomService = $this->mockBiz('Classroom:ClassroomService', array(
+            array(
+                'functionName' => 'getClassroom',
+                'returnValue' => array('id' => 1, 'title' => 'test'),
+                'withParams' => array('1'),
+            ),
+            array(
+                'functionName' => 'isClassroomTeacher',
+                'returnValue' => true,
+                'withParams' => array('1', '1'),
+            ),
+        ));
+
+        $threadService = $this->mockBiz('Thread:ThreadService', array(
+            array(
+                'functionName' => 'getThread',
+                'returnValue' => array('id' => 1, 'createdTime' => time(), 'userId' => 1),
+                'withParams' => array('1'),
+            ),
+        ));
+
+        $result = $subscriber->onClassroomQuestionAnswerCreate($this->getPost());
+        $weChatService->shouldHaveReceived('getOfficialWeChatUserByUserId');
+        $classroomService->shouldHaveReceived('isClassroomTeacher');
+        $classroomService->shouldHaveReceived('getClassroom');
+        $threadService->shouldHaveReceived('getThread');
         $this->assertNull($result);
     }
 
@@ -287,6 +485,68 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
         $trade = array_merge($default, $trade);
 
         return new Event($trade);
+    }
+
+    private function getThread($thread = array())
+    {
+        $default = array(
+            'id' => 1,
+            'targetType' => 'classroom',
+            'targetId' => '1',
+            'type' => 'question',
+            'createdTime' => time(),
+            'userId' => 1,
+            'title' => 'title',
+        );
+        $thread = array_merge($default, $thread);
+
+        return new Event($thread);
+    }
+
+    private function getCourseThread($thread = array())
+    {
+        $default = array(
+            'id' => 1,
+            'type' => 'question',
+            'createdTime' => time(),
+            'userId' => 1,
+            'title' => 'title',
+            'courseId' => 1,
+        );
+        $thread = array_merge($default, $thread);
+
+        return new Event($thread);
+    }
+
+    private function getPost($post = array())
+    {
+        $default = array(
+            'id' => 1,
+            'targetType' => 'classroom',
+            'targetId' => '1',
+            'threadId' => '1',
+            'createdTime' => time(),
+            'userId' => 1,
+            'content' => 'content',
+        );
+        $post = array_merge($default, $post);
+
+        return new Event($post);
+    }
+
+    private function getCoursePost($post = array())
+    {
+        $default = array(
+            'id' => 1,
+            'courseId' => '1',
+            'createdTime' => time(),
+            'userId' => 1,
+            'threadId' => 1,
+            'content' => 'content',
+        );
+        $post = array_merge($default, $post);
+
+        return new Event($post);
     }
 
     protected function getSchedulerService()
