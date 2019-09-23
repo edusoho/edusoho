@@ -131,7 +131,6 @@ check env:
   only:
     refs:
       - develop
-      - project/wechat-for-deposit
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
