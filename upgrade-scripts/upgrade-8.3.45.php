@@ -158,7 +158,7 @@ class EduSohoUpgrade extends AbstractUpdater
     public function addUserWeChatColumns()
     {
         if (!$this->isFieldExist('user_wechat', 'nickname')) {
-            $this->getConnection()->exec("ALTER TABLE `user_wechat` ADD COLUMN `nickname` varchar(128) NOT NULL DEFAULT '' COMMENT '微信昵称' AFTER `isSubscribe`;");
+            $this->getConnection()->exec("ALTER TABLE `user_wechat` ADD COLUMN `nickname` varchar(512) NOT NULL DEFAULT '' COMMENT '微信昵称' AFTER `isSubscribe`;");
         }
 
         if (!$this->isFieldExist('user_wechat', 'profilePicture')) {
