@@ -432,9 +432,9 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         );
 
         $couponContent = 'multi';
+        $targetCount = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batchId));
 
-        if (!empty($targetId) && 'vip' != $targetType) {
-            $targetCount = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batchId));
+        if (!empty($targetId) && 'vip' != $targetType && $targetCount > 0) {
             if (1 == $targetCount) {
                 $target = $this->getCouponBatchResourceService()->searchCouponBatchResource(array('batchId' => $batchId), array('id' => 'ASC'), 0, 1);
                 $target = array_shift($target);

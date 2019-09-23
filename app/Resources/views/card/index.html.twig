@@ -49,7 +49,7 @@
     {% if setting('coin.coin_enabled') != 0 or cardType != 'moneyCard' %}
       {% if cards is not null %}
         {% for card in cards %}
-          <div class="col-lg-4 col-md-6 col-sm-6">
+          <div class="col-lg-5 col-md-6 col-sm-6">
             {% if cardDetails[card.cardId] is defined %}{# this if condition is to be delete #}
               {% if card.cardType == 'coupon' %}
                 {% include 'card/coupon-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}

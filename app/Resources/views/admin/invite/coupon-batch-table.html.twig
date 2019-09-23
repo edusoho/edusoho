@@ -19,7 +19,7 @@
       </td>
       <td>
         {% if batch.type=='discount' %}
-          <span>{{ batch.couponContent }}{{ 'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(1)}) }}</span>
+          <span>{{ 'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(1)}) }}</span>
         {% elseif batch.type=='minus' %}
           <span>{{ 'coupon.type.minus_tip'|trans({'%rate%': batch.rate}) }}</span>
         {% endif %}
