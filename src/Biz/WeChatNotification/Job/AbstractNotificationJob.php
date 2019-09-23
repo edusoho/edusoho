@@ -50,7 +50,7 @@ class AbstractNotificationJob extends AbstractJob
         foreach ($batchs as $batch) {
             $list = array();
             foreach ($batch as $user) {
-                $data = isset($templateData[$user['userId']]) ? $templateData[$user['userId']] : array_shift($templateData);
+                $data = isset($templateData[$user['userId']]) ? $templateData[$user['userId']] : $templateData[0];
                 if (!is_array($data)) {
                     $data = array();
                 }
