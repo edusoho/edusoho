@@ -28,12 +28,7 @@ class MePayPassword extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        $passwords = $this->decryptPasswords(array(
-            $passwords['loginPassword'],
-            $passwords['payPassword'],
-            $passwords['confirmPayPassword'],
-        ), $host);
-
+        $passwords = $this->decryptPasswords($passwords, $host);
         $this->checkPayPasswords($passwords['payPassword'], $passwords['confirmPayPassword']);
 
         if (!$this->getUserService()->verifyPassword($user['id'], $passwords['loginPassword'])) {
@@ -61,12 +56,7 @@ class MePayPassword extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        $passwords = $this->decryptPasswords(array(
-            $passwords['oldPayPassword'],
-            $passwords['newPayPassword'],
-            $passwords['confirmPayPassword'],
-        ), $host);
-
+        $passwords = $this->decryptPasswords($passwords, $host);
         $this->checkPayPasswords($passwords['newPayPassword'], $passwords['confirmPayPassword']);
 
         if (!$this->getAccountService()->validatePayPassword($user['id'], $passwords['oldPayPassword'])) {
@@ -91,12 +81,10 @@ class MePayPassword extends AbstractResource
         }
     }
 
-    private function decryptPasswords($encryptedPasswords, $key)
+    private function decryptPasswords($passwords, $key)
     {
-        $passwords = array();
-
-        foreach ($encryptedPasswords as $encryptedPassword) {
-            $passwords[] = EncryptionToolkit::XXTEADecrypt(base64_decode($encryptedPassword), $key);
+        foreach ($passwords as $index => $password) {
+            $passwords[$index] = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $key);
         }
 
         return $passwords;
