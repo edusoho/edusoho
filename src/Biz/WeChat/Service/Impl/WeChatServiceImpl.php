@@ -98,7 +98,11 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         }
 
         if ($weChatUser['lastRefreshTime'] < time() - self::FRESH_TIME) {
-            $this->freshOfficialWeChatUser($weChatUser);
+            try {
+                $this->freshOfficialWeChatUser($weChatUser);
+            } catch (\Exception $e) {
+                $this->getLogger()->error($e->getMessage());
+            }
         }
 
         return $this->getUserWeChatDao()->getByUserIdAndType($userId, self::OFFICIAL_TYPE);

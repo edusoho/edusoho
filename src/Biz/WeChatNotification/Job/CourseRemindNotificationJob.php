@@ -38,7 +38,7 @@ class CourseRemindNotificationJob extends AbstractNotificationJob
             'first' => array('value' => '亲爱的学员，今日也要坚持学习哦'),
             'keyword1' => array('value' => ''),
             'keyword2' => array('value' => ''),
-            'remark' => array('value' => '请前往查看'),
+            'remark' => array('value' => '如果今日已完成学习计划，请忽略本通知'),
         );
         $templateData = array();
         $options = array('url' => $url, 'type' => 'url');
