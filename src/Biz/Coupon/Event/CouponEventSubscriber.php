@@ -108,8 +108,11 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $templateParams = array(
             'activity_name' => '邀请注册',
             'reward_name' => $batch['name'],
-            'remain' => $inviteSetting['remain_number'],
         );
+
+        if (0 != $batch['unreceivedNum']) {
+            $templateParams['remain'] = $inviteSetting['remain_number'];
+        }
 
         $smsParams = array(
             'mobiles' => $inviteSetting['mobile'],
