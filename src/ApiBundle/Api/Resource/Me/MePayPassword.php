@@ -27,11 +27,11 @@ class MePayPassword extends AbstractResource
         if (!ArrayToolkit::requireds($passwords, array('loginPassword', 'payPassword', 'confirmPayPassword'))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $this->checkConfirmPayPassword($passwords['payPassword'], $passwords['confirmPayPassword']);
+        $this->checkPayPasswords($passwords['payPassword'], $passwords['confirmPayPassword']);
 
         $loginPassword = $this->decryptPassword($passwords['loginPassword'], $host);
         if (!$this->getUserService()->verifyPassword($user['id'], $loginPassword)) {
-            throw UserException::PASSWORD_ERROR();
+            throw UserException::PASSWORD_FAILED();
         }
 
         $payPassword = $this->decryptPassword($passwords['payPassword'], $host);
@@ -55,7 +55,7 @@ class MePayPassword extends AbstractResource
         if (!ArrayToolkit::requireds($passwords, array('oldPayPassword', 'newPayPassword', 'confirmPayPassword'))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $this->checkConfirmPayPassword($passwords['newPayPassword'], $passwords['confirmPayPassword']);
+        $this->checkPayPasswords($passwords['newPayPassword'], $passwords['confirmPayPassword']);
 
         $oldPayPassword = $this->decryptPassword($passwords['oldPayPassword'], $host);
         if (!$this->getAccountService()->validatePayPassword($user['id'], $oldPayPassword)) {
@@ -70,10 +70,14 @@ class MePayPassword extends AbstractResource
         );
     }
 
-    private function checkConfirmPayPassword($payPassword, $confirmPayPassword)
+    private function checkPayPasswords($payPassword, $confirmPayPassword)
     {
         if ($payPassword != $confirmPayPassword) {
-            throw CommonException::ERROR_PARAMETER();
+            throw AccountException::ERROR_PAY_PASSWORD_FORMAT();
+        }
+
+        if (strlen($payPassword) > 20) {
+            throw AccountException::ERROR_PAY_PASSWORD_FORMAT();
         }
     }
 
