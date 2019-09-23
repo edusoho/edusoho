@@ -1249,6 +1249,7 @@ t.add("wechat.notification.wechat_bind_hover", "<div class=\"wechat-intro-title 
 t.add("wechat.notification.homepage_open_tip", "<span class=\"%messageClass%\">\"WeChat notification\" can be opened in \"Personal Settings - Third Party Login\"\u3002<\/span>", "js", "en");
 t.add("wechat.notification.homepage.open_tip_title", "<span class=\"%messageClass%\">go to open<\/span>", "js", "en");
 t.add("wechat.notification.cloud_open_tip", "Please open ES Cloud", "js", "en");
+t.add("admin.wechat_notification.send_days", "Send Days", "js", "en");
 t.add("document.import.intro_hover", "<div class=\"document-import-intro-title cd-text-warning\"><i class=\"es-icon es-icon-xinxi cd-mr8\"><\/i>\u63d0\u793a<\/div> <div class=\"document-import-intro-content\">\n  <div align=\"center\">New import function,Just try.<\/div>\n<\/div>\n", "js", "en");
 t.add("document.import.skip_btn", "I know!", "js", "en");
 t.add("subject.testpaper_title_empty_hint", "Testpaper title can not be empty", "js", "en");
@@ -1289,5 +1290,6 @@ t.add("user.account.order_pay_vip_close_title", "The vip level is closed", "js",
 t.add("user.account.order_pay_vip_close_hint", "The vip level in this order has been closed.Confirmed to pay?", "js", "en");
 t.add("user.account.order_pay", "Continue", "js", "en");
 t.add("user.account.order_not_pay", "Not paying", "js", "en");
+t.add("admin.wechat.live_open_scenes_error.hint", "At least one scene\u3002", "js", "en");
 t.add("course.question_manage.manage.delete_tips", "Deleting the question may affect the exercise of class, please be cautious!", "js", "en");
 })(Translator);
