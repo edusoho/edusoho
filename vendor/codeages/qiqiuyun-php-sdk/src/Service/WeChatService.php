@@ -13,7 +13,7 @@ class WeChatService extends BaseService
      * 获取预授权URL
      *
      * @param $platformType int     必填 （1：公众号  2：小程序）
-     *        $callbackUrl  string  必填  授权回调地址
+     * @param $callbackUrl  string  必填  授权回调地址
      *
      * @return array
      *               url  string 预授权URL
@@ -26,7 +26,7 @@ class WeChatService extends BaseService
     /**
      * 获取服务号的所有用户，分页
      *
-     * @params $nextOpenId string 选填 从这个OPENID开始取用户数据
+     * @param $nextOpenId string 选填 从这个OPENID开始取用户数据
      *
      * @return array 返回参数如下：
      *               total string  总数

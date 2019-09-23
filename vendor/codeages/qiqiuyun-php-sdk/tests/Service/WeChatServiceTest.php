@@ -9,11 +9,11 @@ class WeChatServiceTest extends BaseTestCase
 {
     public function testGetPreAuthUrl()
     {
-        $httpClient = $this->mockHttpClient('ww.test.com');
+        $httpClient = $this->mockHttpClient(array('url' => 'ww.test.com'));
         $service = new WeChatService($this->auth, array(), null, $httpClient);
         $result = $service->getPreAuthUrl(1, 'test.com');
 
-        $this->assertEquals($result, 'ww.test.com');
+        $this->assertEquals($result['url'], 'ww.test.com');
     }
 
     public function testGetUserList()
@@ -40,14 +40,14 @@ class WeChatServiceTest extends BaseTestCase
         $service = new WeChatService($this->auth, array(), null, $httpClient);
         $result = $service->batchGetUserInfo(array('test1', 'test2'));
 
-        $this->assertEquals($result['user_info_list'][0]['subscribe'], 1);
+        $this->assertEquals($result[0]['subscribe'], 1);
     }
 
-    public function testGetAuthorizationInfoList()
+    public function testGetAuthorizationInfo()
     {
         $httpClient = $this->mockHttpClient(array(array('funcscope_category' => array('id' => 1)), array('funcscope_category' => array('id' => 2))));
         $service = new WeChatService($this->auth, array(), null, $httpClient);
-        $result = $service->getAuthorizationInfoList('official');
+        $result = $service->getAuthorizationInfo('official');
 
         $this->assertEquals($result[0]['funcscope_category'], array('id' => 1));
     }
