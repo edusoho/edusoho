@@ -11,7 +11,7 @@
   <tbody >
 
   {% if batchId|default(0) >0%}
-    {% set batch = data('CouponBatch',{'batchId': batchId|default('')}) %}
+    {% set batch = data('CouponBatch',{'batchId': batchId|default(0)}) %}
     <tr>
       <td>{{ batch.name }}</td>
       <td>
