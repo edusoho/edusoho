@@ -21,13 +21,13 @@
   <div class="course-detail-bottom">
     <div class="course-detail-img">
       <span class="tags mrm">
-        {{ slot('drp.product_tags.extension', {'type':'course','targetId':course.id}) }}
         {% if courseSet.serializeMode == 'serialized' %}
           <span class="tag-serialing"></span>
         {% elseif courseSet.serializeMode == 'finished' %}
           <span class="tag-finished"></span>
         {% endif %}
       </span>
+      {{ slot('drp.product_tags.extension', {'type':'course','targetId':course.id}) }}
       <img class="img-responsive" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" alt="{{ course.title }} ">
       <div class="image-overlay"></div>
 			{% if previewTask | default(null) %}
