@@ -27,15 +27,20 @@ class MePayPassword extends AbstractResource
         if (!ArrayToolkit::requireds($passwords, array('loginPassword', 'payPassword', 'confirmPayPassword'))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
+
+        $passwords = $this->decryptPasswords(array(
+            $passwords['loginPassword'],
+            $passwords['payPassword'],
+            $passwords['confirmPayPassword'],
+        ), $host);
+
         $this->checkPayPasswords($passwords['payPassword'], $passwords['confirmPayPassword']);
 
-        $loginPassword = $this->decryptPassword($passwords['loginPassword'], $host);
-        if (!$this->getUserService()->verifyPassword($user['id'], $loginPassword)) {
+        if (!$this->getUserService()->verifyPassword($user['id'], $passwords['loginPassword'])) {
             throw UserException::PASSWORD_FAILED();
         }
 
-        $payPassword = $this->decryptPassword($passwords['payPassword'], $host);
-        $this->getAccountService()->setPayPassword($user['id'], $payPassword);
+        $this->getAccountService()->setPayPassword($user['id'], $passwords['payPassword']);
 
         return array(
             'success' => true,
@@ -55,15 +60,20 @@ class MePayPassword extends AbstractResource
         if (!ArrayToolkit::requireds($passwords, array('oldPayPassword', 'newPayPassword', 'confirmPayPassword'))) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
+
+        $passwords = $this->decryptPasswords(array(
+            $passwords['oldPayPassword'],
+            $passwords['newPayPassword'],
+            $passwords['confirmPayPassword'],
+        ), $host);
+
         $this->checkPayPasswords($passwords['newPayPassword'], $passwords['confirmPayPassword']);
 
-        $oldPayPassword = $this->decryptPassword($passwords['oldPayPassword'], $host);
-        if (!$this->getAccountService()->validatePayPassword($user['id'], $oldPayPassword)) {
+        if (!$this->getAccountService()->validatePayPassword($user['id'], $passwords['oldPayPassword'])) {
             throw AccountException::ERROR_PAY_PASSWORD();
         }
 
-        $newPayPassword = $this->decryptPassword($passwords['newPayPassword'], $host);
-        $this->getAccountService()->setPayPassword($user['id'], $newPayPassword);
+        $this->getAccountService()->setPayPassword($user['id'], $passwords['newPayPassword']);
 
         return array(
             'success' => true,
@@ -81,9 +91,15 @@ class MePayPassword extends AbstractResource
         }
     }
 
-    private function decryptPassword($encryptedPassword, $key)
+    private function decryptPasswords($encryptedPasswords, $key)
     {
-        return EncryptionToolkit::XXTEADecrypt(base64_decode($encryptedPassword), $key);
+        $passwords = array();
+
+        foreach ($encryptedPasswords as $encryptedPassword) {
+            $passwords[] = EncryptionToolkit::XXTEADecrypt(base64_decode($encryptedPassword), $key);
+        }
+
+        return $passwords;
     }
 
     /**
