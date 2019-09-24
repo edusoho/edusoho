@@ -6,7 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\Coupon\Service\CouponService;
-use CouponPlugin\Biz\Coupon\Service\CouponBatchService;
+use Biz\Coupon\Service\CouponBatchService;
 
 class CouponAction extends AbstractResource
 {
@@ -39,27 +39,20 @@ class CouponAction extends AbstractResource
         $type = $request->request->get('targetType');
 
         $coupon = $this->getCouponService()->getCouponByCode($code);
-
         if (empty($coupon)) {
             return $this->error('该优惠券不存在');
         }
+        $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
+        if (empty($batch['codeEnable'])) {
+            return $this->error('该优惠卷无法通过优惠码渠道发放');
+        }
 
-        if ($this->isPluginInstalled('Coupon')) {
-            $coupon = $this->getCouponService()->getCouponByCode($code);
-            $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
-            if (empty($batch['codeEnable'])) {
-                return $this->error('该优惠卷无法通过优惠码渠道发放');
-            }
-
-            if (isset($batch['deadlineMode']) && 'day' == $batch['deadlineMode']) {
-                //ES优惠券领取时，对于优惠券过期时间会加86400秒，所以计算deadline时对于固定天数模式应与设置有效期模式一致，都为当天凌晨00:00:00
-                $fields['deadline'] = strtotime(date('Y-m-d')) + 24 * 60 * 60 * $batch['fixedDay'];
-
-                $this->getCouponService()->updateCoupon($coupon['id'], $fields);
-            }
+        if (isset($batch['deadlineMode']) && 'day' == $batch['deadlineMode']) {
+            //ES优惠券领取时，对于优惠券过期时间会加86400秒，所以计算deadline时对于固定天数模式应与设置有效期模式一致，都为当天凌晨00:00:00
+            $fields['deadline'] = strtotime(date('Y-m-d')) + 24 * 60 * 60 * $batch['fixedDay'];
+            $this->getCouponService()->updateCoupon($coupon['id'], $fields);
         }
         $result = $this->getCouponService()->checkCoupon($code, $id, $type);
-
         if (isset($result['useable']) && 'no' == $result['useable']) {
             return $this->error($result['message']);
         }
@@ -92,7 +85,7 @@ class CouponAction extends AbstractResource
      */
     private function getCouponBatchService()
     {
-        return $this->service('CouponPlugin:Coupon:CouponBatchService');
+        return $this->service('Coupon:CouponBatchService');
     }
 
     /**
