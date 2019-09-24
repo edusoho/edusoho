@@ -62,8 +62,8 @@
             :number="index+1"
           />
 
-          <analysis 
-            v-if="!canDo" 
+          <analysis
+            v-if="!canDo"
             :testResult="paper.testResult"
             :analysis="paper.analysis"
             :answer="paper.answer"
@@ -141,9 +141,14 @@ export default {
             this.$emit('update:answer', val)
         },
         current(val,oldval){
+          if(!this.canDo){
+            console.log(this.canDo)
+            this.currentIndex = val-1;
+          }
           //答题卡定位
           let index=Number(val);
-          this.$refs.swipe.swipeTo(val-1);
+          this.$refs.swipe.swipeTo(index-1);
+          console.log('current'+val)
         }
     },
     components: {
@@ -157,6 +162,7 @@ export default {
     },
     methods:{
         changeswiper(index) {
+          console.log(index);
             this.currentIndex = index;
             this.$emit('update:slideIndex', index);
         },
