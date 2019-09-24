@@ -426,6 +426,15 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         return $batch['targetContent'];
     }
 
+    public function getCouponBatchTargetDetail($batchId)
+    {
+        $batch = $this->getBatch($batchId);
+        $wrapper = $this->getWrapper();
+        $batch = $wrapper->handle($batch, 'CouponBatch');
+
+        return $batch['targetDetail'];
+    }
+
     protected function fullSearchH5MpsBatchesConditions(&$conditions)
     {
         $user = $this->getCurrentUser();

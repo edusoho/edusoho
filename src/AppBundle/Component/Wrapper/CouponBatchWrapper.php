@@ -47,15 +47,36 @@ class CouponBatchWrapper extends Wrapper
         return $batch;
     }
 
-    public function targetType()
+    public function targetDetail($batch)
     {
-        // return
+        list($productType, $numType) = $this->getProductTypeAndNumType($batch);
+        $batch['targetDetail'] = array(
+            'product' => $productType,
+            'numType' => $numType,
+        );
+
+        return $batch;
+    }
+
+    protected function getProductTypeAndNumType($batch)
+    {
+        $productType = $batch['targetType'];
+        $numType = 'single';
+        if ($batch['targetId'] == 0) {
+            $numType = 'all';
+        }
+        if (!empty($batch['targetId']) && count($batch['targetIds']) > 1) {
+            $numType = 'multi';
+        }
+
+        return array($productType, $numType);
     }
 
     protected function getWrapList()
     {
         return array(
             'targetContent',
+            'targetDetail'
         );
     }
 

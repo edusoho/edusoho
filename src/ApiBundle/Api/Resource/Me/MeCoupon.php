@@ -38,10 +38,6 @@ class MeCoupon extends AbstractResource
         if (empty($token)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-
-        if (!$this->isPluginInstalled('coupon')) {
-            throw CouponException::PLUGIN_NOT_INSTALLED();
-        }
         $result = $this->getCouponBatchService()->receiveCoupon($token, $user['id']);
 
         if ('success' != $result['code']) {
@@ -61,7 +57,7 @@ class MeCoupon extends AbstractResource
 
     private function getCouponBatchService()
     {
-        return $this->service('CouponPlugin:Coupon:CouponBatchService');
+        return $this->service('Coupon:CouponBatchService');
     }
 
     private function getCouponService()
