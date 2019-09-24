@@ -82,12 +82,6 @@ import { mapState, mapMutations , mapActions} from "vuex";
 import * as types from "@/store/mutation-types";
 import { Toast,Overlay,Popup,Dialog,Lazyload } from "vant";
 
-import fillType from "../component/fill";
-import essayType from "../component/essay";
-import headTop from "../component/head";
-import choiceType from "../component/choice";
-import singleChoice from "../component/single-choice";
-import determineType from "../component/determine";
 import guidePage from "../component/guide-page";
 import itemBank from "../component/itemBank";
 
@@ -98,16 +92,9 @@ import examMixin from '@/mixins/lessonTask/exam.js';
 
 let backUrl=''
 
-let listenAction;
-let originalHeight;
-let currHeight;
-
 export default {
   name: "testpaperDo",
   mixins: [examMixin],
-  directives: {
-    //fixfoot
-  },
   data() {
     return {
       cardSeq: 0,//点击题卡要滑动的指定位置的索引

@@ -12,8 +12,8 @@
       <van-swipe-item v-for="(paper,index) in info" :key="paper.id" :style="{height:height+'px'}">
         <div :ref="`paper${index}`" class="paper-item">
           <head-top
-            :all="testData.length"
-            :current="currentIndex+1"
+            :all="all"
+            :current="Number(paper.seq)"
             :subject="subject(paper)"
             :score="`${parseFloat(paper.score)}`"
             :showScore="showScore"
@@ -24,6 +24,7 @@
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
             :number="index+1"
+            :canDo="canDo"
             @singleChoose="singleChoose"
           />
 
@@ -32,6 +33,7 @@
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
             :number="index+1"
+            :canDo="canDo"
             @choiceChoose="choiceChoose"
           />
 
@@ -40,6 +42,7 @@
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
             :number="index+1"
+            :canDo="canDo"
             @determineChoose="determineChoose"
           />
 
@@ -47,6 +50,7 @@
             v-if=" paper.type=='essay'"
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
+            :canDo="canDo"
             :number="index+1"
           />
 
@@ -54,9 +58,17 @@
             v-if=" paper.type=='fill'"
             :itemdata="paper"
             :answer="testAnswer[paper.id]"
+            :canDo="canDo"
             :number="index+1"
           />
 
+          <analysis 
+            v-if="!canDo" 
+            :testResult="paper.testResult"
+            :analysis="paper.analysis"
+            :answer="paper.answer"
+            :subject="paper.type"
+          />
         </div>
       </van-swipe-item>
     </van-swipe>
@@ -85,6 +97,7 @@ import headTop from "../component/head";
 import choiceType from "../component/choice";
 import singleChoice from "../component/single-choice";
 import determineType from "../component/determine";
+import analysis from "../component/analysis";
 import { setTimeout } from 'timers';
 
 export default {
@@ -113,7 +126,15 @@ export default {
         showScore:{
             type:Boolean,
             default:true
-        }
+        },
+        canDo:{
+          type:Boolean,
+          default:true
+        },
+        all:{
+            type:Number,
+            default:0
+        },
     },
     watch:{
         answer(val){
@@ -131,7 +152,8 @@ export default {
         headTop,
         choiceType,
         singleChoice,
-        determineType
+        determineType,
+        analysis
     },
     methods:{
         changeswiper(index) {

@@ -152,6 +152,11 @@ const routes = [
     path: '/testpaperResult',
     name: 'testpaperResult',
     component: () => import(/* webpackChunkName: "testpaperResult" */ '@/containers/course/lessonTask/exam/testpaperResult.vue')
+  },
+  {
+    path: '/testpaperAnalysis',
+    name: 'testpaperAnalysis',
+    component: () => import(/* webpackChunkName: "testpaperAnalysis" */ '@/containers/course/lessonTask/exam/testpaperAnalysis.vue')
   }, {
     path: '/homeworkDo',
     name: 'homeworkDo',

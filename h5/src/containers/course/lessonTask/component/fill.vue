@@ -19,9 +19,10 @@
           class="fill-input"
           label-width="0px"
           type="textarea"
-          placeholder="请填写答案"
+          :placeholder="placeholder"
           rows="1"
           autosize
+          :disabled="!canDo"
         />
       </div>
     </div>
@@ -49,6 +50,10 @@ export default {
     number:{
       type: Number,
       default: 1
+    },
+    canDo:{
+      type:Boolean,
+      default:true
     }
   },
   computed:{
@@ -60,33 +65,19 @@ export default {
           return this.itemdata.stem
         }
       }
+    },
+    placeholder:{
+       get(){
+        if(this.canDo){
+          return '请填写答案'
+        }else{
+          return '未作答'
+        }
+      }
     }
   },
   data() {
     return {
-      // filldata:{
-      //   id: "6",
-      //   type: "fill",
-      //   stem:
-      //     "<p>但是我奋斗的是[[我其实对方认为|v 奋斗色个人]]dwqfdwqer[[dewqad2w|dfwqe ]]</p>\r\n",
-      //   score: "2.0",
-      //   metas: [],
-      //   categoryId: "0",
-      //   difficulty: "normal",
-      //   target: "course-1",
-      //   courseId: "0",
-      //   lessonId: "0",
-      //   parentId: "0",
-      //   subCount: "0",
-      //   finishedTimes: "0",
-      //   passedTimes: "0",
-      //   createdUserId: "2",
-      //   updatedUserId: "2",
-      //   courseSetId: "1",
-      //   seq: "6",
-      //   missScore: "0.0",
-      //   answers:[]
-      // },
       index: 0
     };
   },

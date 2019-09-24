@@ -43,7 +43,8 @@
         <van-button
           class="result-footer__btn"
           type="primary"
-          :style="{marginRight: (isReadOver || remainTime)? '2vw' : 0}">
+          :style="{marginRight: (isReadOver || remainTime)? '2vw' : 0}"
+          @click="viewAnalysis()">
           查看解析
         </van-button>
         <van-button
@@ -278,6 +279,16 @@ export default {
         this.judgeTime();
       });
     },
+    //查看解析
+    viewAnalysis(){
+        this.$router.push({
+        name: 'testpaperAnalysis',
+        query: {
+          resultId: this.$route.query.resultId,
+          title:this.testpaperTitle,
+        }
+      })
+    }
   }
 }
 </script>

@@ -1,0 +1,44 @@
+.analysis{
+    font-size: vw(14);
+    background: #F6F6F6;
+    overflow:hidden;
+    .analysis-title{
+        margin: 0 vw(20);
+        padding: vw(0) 0 vw(10) 0;
+        color: #333333;
+        font-weight:600;
+        border-bottom: vw(1) solid #F5F5F5;
+    }
+    .analysis-result{
+        background: #fff;
+        padding:vw(20) 0;
+    }
+    .analysis-content{
+        margin: 0 vw(35);
+        .fill-type{
+            border-bottom:vw(1) dashed #F6F6F6;
+            padding-bottom:vw(10)
+        }
+        .fill-type:last-of-type{
+            border:0;
+        }
+        .analysis-content__item{
+            display:flex;
+            .analysis-item__title{
+                margin-right:vw(10)
+            }
+            .analysis-item_right{
+                color:#00D041
+            }
+            .analysis-item_worng{
+                color:#FF5722
+            }
+            .analysis-item_noAnswer{
+                color:#CCCCCC
+            }
+            .analysis-item_none{
+                color:#FF954D
+            }
+        }
+    }
+}

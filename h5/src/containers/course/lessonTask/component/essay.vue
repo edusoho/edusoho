@@ -17,8 +17,9 @@
         class="essay-input"
         label-width="0px"
         type="textarea"
-        placeholder="请填写你的答案......"
+        :placeholder="placeholder"
         :autosize="{ maxHeight: 200,minHeight: 200 }"
+        :disabled="!canDo"
       />
     </div>
   </div>
@@ -39,6 +40,10 @@ export default {
     number:{
       type: Number,
       default: 1
+    },
+    canDo:{
+      type:Boolean,
+      default:true
     }
   },
   computed:{
@@ -48,6 +53,15 @@ export default {
           return this.itemdata.parentTitle.stem
         }else{
           return this.itemdata.stem
+        }
+      }
+    },
+    placeholder:{
+       get(){
+        if(this.canDo){
+          return '请填写你的答案......'
+        }else{
+          return '未作答'
         }
       }
     }
