@@ -43,16 +43,17 @@
         </div>
         <div class="media-body">
           <div class="coupon-modal-item__title">{{ resource.title|sub_text(30)}}</div>
-          <div class="gray-dark">{{ 'site.price'|trans }}：<span class="color-danger coupon-modal-item__price">
+          <div class="gray-dark">{{ 'site.price'|trans }}：<span class="coupon-modal-item__price">
             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
               {% if resource.price > 0 %}
-                {{resource.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                <span class="color-danger">{{resource.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}</span>
               {% else %}
-                {{ 'admin.classroom_manage.chooser.free'|trans }}
+                <span class="color-success">{{ 'admin.classroom_manage.chooser.free'|trans }}></span>
               {% endif %}
             {% else %}
-              ¥ {{ resource.price }}
+            <span class="color-danger"> ¥ {{ resource.price }}</span>
             {% endif %}
+
         </span>
         </div>
         </div>
