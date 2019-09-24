@@ -113,9 +113,7 @@
                 position: relative;
                 padding-left: vw(24);
                 display: inline-block; 
-            }
-            span:nth-of-type(2){
-                margin-left: vw(20)
+                margin-right: vw(20)
             }
             .card-finish::before{
                 content: '';
@@ -135,6 +133,46 @@
                 width: vw(16);
                 height: vw(16);
                 background: rgba(204, 204, 204, 1);
+                border-radius: 100%;
+            }
+            .card-right::before{
+                content: '';
+                position: absolute;
+                left: 0;
+                top:vw(14);
+                width: vw(16);
+                height: vw(16);
+                background: #00D041;
+                border-radius: 100%;
+            }
+            .card-none::before{
+                content: '';
+                position: absolute;
+                left: 0;
+                top:vw(14);
+                width: vw(16);
+                height: vw(16);
+                background: #FF954D;
+                border-radius: 100%;
+            }
+            .card-wrong::before{
+                content: '';
+                position: absolute;
+                left: 0;
+                top:vw(14);
+                width: vw(16);
+                height: vw(16);
+                background: #FF5722;
+                border-radius: 100%;
+            }
+            .card-subjective::before{
+                content: '';
+                position: absolute;
+                left: 0;
+                top:vw(14);
+                width: vw(16);
+                height: vw(16);
+                background: #00E6DC;
                 border-radius: 100%;
             }
             .icon-no{
@@ -176,6 +214,18 @@
                 }
                 .cicle-active{
                     background: rgba(64, 143, 251, 1)!important;
+                }
+                .cicle-right{
+                    background: #00D041!important;
+                }
+                .cicle-none{
+                    background: #FF954D!important;
+                }
+                .cicle-wrong{
+                    background: #FF5722!important;
+                }
+                .cicle-subjective{
+                    background: #00E6DC!important;
                 }
                 .list-cicle:nth-child(9n+0){
                     margin-right: 0;

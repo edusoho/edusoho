@@ -126,6 +126,14 @@ p{
       background-color: $primary-color;
       color: #fff;
     }
+    .subject-option__order_wrong {
+      background-color: #FF5722 ;
+      border: 1px solid #FF5722;
+    }
+    .subject-option__order_right {
+      background-color: #20D558;
+      border: 1px solid #20D558;
+    }
   }
   .van-checkbox__icon {
     .subject-option__order--square {
