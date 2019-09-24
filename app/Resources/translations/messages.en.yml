@@ -8942,3 +8942,6 @@ admin.setting.invite.get_coupon_setting.register: 被邀请人注册成功时
 admin.setting.invite.get_coupon_setting.pay: 被邀请人完成第一笔消费时
 coupon.resource_list.title: '本优惠券适用于：'
 coupon.remaining_amount: 剩余可用数量
+coupon.resource.course.chooser.limit: 最多支持选择200个课程
+coupon.resource.classroom.chooser.limit: 最多支持选择200个班级
+coupon.resource.chooser.limit: 请指定不超过200个资源
