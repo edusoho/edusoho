@@ -16,7 +16,7 @@ class Setting extends AbstractResource
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'cloud', 'user'))) {
+        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'cloud', 'user', 'coupon'))) {
             throw CommonException::ERROR_PARAMETER();
         }
 
@@ -290,6 +290,18 @@ class Setting extends AbstractResource
         return array(
             'show_student_num_enabled' => isset($classroomSetting['show_student_num_enabled']) ? (bool) $classroomSetting['show_student_num_enabled'] : true,
         );
+    }
+
+    public function getCoupon()
+    {
+        $couponSetting = $this->getSettingService()->get('coupon', array());
+        $default = array(
+            'enabled' => 1,
+        );
+        $couponSetting = array_merge($default, $couponSetting);
+
+
+        return $couponSetting;
     }
 
     private function getLoginConnect($clients)
