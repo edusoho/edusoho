@@ -9,7 +9,6 @@ use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
-use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Topxia\Service\Common\ServiceKernel;
 
 class CouponBatchServiceImpl extends BaseService implements CouponBatchService
@@ -423,40 +422,11 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 
     public function getCouponBatchContent($batchId, $targetType, $targetId)
     {
-        $couponContents = array(
-            'all' => '全站可用',
-            'vip' => '全部会员',
-            'course' => '全部课程',
-            'classroom' => '全部班级',
-        );
+        $batch = $this->getBatch($batchId);
+        $wrapper = $this->getWrapper();
+        $batch = $wrapper->handle($batch, 'CouponBatch');
 
-        $couponContent = 'multi';
-        $targetCount = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batchId));
-
-        if (!empty($targetId) && 'vip' != $targetType && $targetCount > 0) {
-            if (1 == $targetCount) {
-                $target = $this->getCouponBatchResourceService()->searchCouponBatchResource(array('batchId' => $batchId), array('id' => 'ASC'), 0, 1);
-                $target = array_shift($target);
-            } else {
-                return $couponContent;
-            }
-        }
-
-        $targetId = empty($target['targetId']) ? $targetId : $target['targetId'];
-        if (0 == $targetId || 'all' == $targetType) {
-            $couponContent = $couponContents[$targetType];
-        } elseif ('course' == $targetType) {
-            $course = $this->getCourseSetService()->getCourseSet($targetId);
-            $couponContent = '课程:'.$course['title'];
-        } elseif ('classroom' == $targetType) {
-            $classroom = $this->getClassroomService()->getClassroom($targetId);
-            $couponContent = '班级:'.$classroom['title'];
-        } elseif ('vip' == $targetType && $this->isPluginInstalled('Vip')) {
-            $level = $this->getLevelService()->getLevel($targetId);
-            $couponContent = '会员:'.$level['name'];
-        }
-
-        return $couponContent;
+        return $batch['targetContent'];
     }
 
     protected function fullSearchH5MpsBatchesConditions(&$conditions)
@@ -556,39 +526,10 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         return $this->createService('User:UserService');
     }
 
-    /**
-     * @return CouponBatchResourceService
-     */
-    private function getCouponBatchResourceService()
+    protected function getWrapper()
     {
-        return $this->createService('Coupon:CouponBatchResourceService');
-    }
+        global $kernel;
 
-    /**
-     * @return CourseSetService
-     */
-    private function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
-    }
-
-    /**
-     * @return ClassroomService
-     */
-    private function getClassroomService()
-    {
-        return $this->createService('Classroom:ClassroomService');
-    }
-
-    private function getLevelService()
-    {
-        return $this->createService('VipPlugin:Vip:LevelService');
-    }
-
-    protected function isPluginInstalled($code)
-    {
-        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
-
-        return $pluginManager->isPluginInstalled($code);
+        return $kernel->getContainer()->get('web.wrapper');
     }
 }
