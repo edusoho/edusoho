@@ -33,7 +33,7 @@
           </div>
         </div>
         <div class="media-right">
-          <a href="{{ path('course_show',{ id : resource.id }) }}" class="cd-btn cd-btn-ghost-primary cd-mt8">{{ 'coupon.buy_something_btn'|trans }}</a>
+          <a href="{{ path('course_show',{ id : resource.defaultCourseId }) }}" class="cd-btn cd-btn-ghost-primary cd-mt8">{{ 'coupon.buy_something_btn'|trans }}</a>
         </div>
       </div>
     {% elseif batch.targetType == 'classroom'%}
