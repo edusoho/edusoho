@@ -730,6 +730,25 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals(2, $count);
     }
 
+    public function testSearchTestpaperResultsCountJoinCourseMemberGroupByUserId()
+    {
+        $result = $this->getTestpaperService()->searchTestpaperResultsCount(array('courseIds' => array()));
+        $this->assertEmpty($result);
+
+        $testpaper = $this->createTestpaper1();
+        $this->createTestpaperResult1($testpaper);
+        $this->createTestpaperResult2($testpaper);
+        $this->createTestpaperResult3($testpaper);
+
+        $conditions = array(
+            'testId' => $testpaper['id'],
+            'status' => 'doing',
+        );
+
+        $nums = $this->getTestpaperService()->searchTestpaperResultsCountJoinCourseMemberGroupByUserId($conditions);
+        $this->assertEquals(2, $nums[0]['num']);
+    }
+
     public function testSearchTestpaperResults()
     {
         $results = $this->getTestpaperService()->searchTestpaperResults(array('courseIds' => array()), array('endTime' => 'DESC'), 0, 10);

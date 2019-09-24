@@ -5,9 +5,11 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\System\Service\SettingService;
 use Biz\WeChat\Service\WeChatService;
+use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class WeChatSettingController extends BaseController
 {
@@ -63,6 +65,12 @@ class WeChatSettingController extends BaseController
                 ));
             }
             $wechatSetting = array_merge($wechatSetting, $newWeChatSetting);
+
+            $wechatAuth = $this->getAuthorizationInfo();
+            if ($wechatAuth['isAuthorized']) {
+                $wechatSetting['is_authorization'] = 1;
+            }
+
             $this->getSettingService()->set('wechat', $wechatSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
@@ -72,6 +80,27 @@ class WeChatSettingController extends BaseController
             'payment' => $payment,
             'wechatSetting' => $wechatSetting,
             'isCloudOpen' => $this->isCloudOpen(),
+            'wechatAuth' => $this->getAuthorizationInfo(),
+        ));
+    }
+
+    /**
+     * @param Request $request
+     * @param $platformType
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function preAuthUrlAction(Request $request, $platformType)
+    {
+        if ('official_account' == $platformType) {
+            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::OFFICIAL_ACCOUNT, $this->generateUrl('admin_setting_wechat_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL));
+        }
+        if ('mini_program' == $platformType) {
+            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::MINI_PROGRAM, $this->generateUrl('admin_setting_wechat_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL));
+        }
+
+        return $this->createJsonResponse(array(
+            'url' => empty($url) ? '' : $url,
         ));
     }
 
@@ -89,6 +118,26 @@ class WeChatSettingController extends BaseController
         }
 
         return true;
+    }
+
+    protected function getAuthorizationInfo()
+    {
+        $biz = $this->getBiz();
+        $info = $biz['qiQiuYunSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
+        if ($info['isAuthorized']) {
+            $ids = ArrayToolkit::column($info['funcInfo'], 'funcscope_category');
+            $ids = ArrayToolkit::column($ids, 'id');
+            /**
+             * 2、用户管理权限  7、群发与通知权限
+             */
+            $needIds = array(2, 7);
+            $diff = array_diff($needIds, $ids);
+            if (empty($diff)) {
+                $info['wholeness'] = 1;
+            }
+        }
+
+        return $info;
     }
 
     private function decideEnabledLoginConnect($loginConnect)

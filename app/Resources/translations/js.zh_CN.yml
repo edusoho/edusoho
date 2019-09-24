@@ -36,7 +36,7 @@ site.data.collapse: 收起
 site.data.already_exists: 已经存在
 video.quality.switcher.name: "%videoQuality%画质/%audioQuality%音质"
 site.video.quality.quota: 画质
-site.video.quality.low: 流畅 
+site.video.quality.low: 流畅
 site.video.quality.normal: 标准
 site.video.quality.high: 精细
 site.cancel: 取消
@@ -62,7 +62,7 @@ user.settings.security.password_modify.incorrect_password: 当前密码不正确
 
 
 site.audio.quality.quota: 音质
-site.audio.quality.low: 流畅 
+site.audio.quality.low: 流畅
 site.audio.quality.normal: 标准
 site.audio.quality.high: 精细
 
@@ -1362,6 +1362,7 @@ wechat.notification.wechat_bind_hover: >
 wechat.notification.homepage.open_tip: <span class="%messageClass%">“微信通知”可在“个人设置-第三方登录”开启。</span>
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">前往开启</span>
 wechat.notification.cloud_open_tip: 请先开启教育云
+admin.wechat_notification.send_days: 发送日
 
 #试卷导入引导
 document.import.intro_hover: >
@@ -1411,6 +1412,7 @@ user.account.order_pay_vip_close_hint: 该订单的会员等级已关闭，确�
 user.account.order_pay: 继续
 user.account.order_not_pay: 不支付
 
+admin.wechat.live_open_scenes_error.hint: 请至少勾选一个选项。
 course.question_manage.manage.delete_tips: 删除题目，可能会影响课时的练习，请谨慎操作！
 
 course.plan_task.activity_ppt_animation_img: 切换图片模式
