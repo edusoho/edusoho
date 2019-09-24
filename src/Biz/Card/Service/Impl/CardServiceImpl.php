@@ -9,7 +9,6 @@ use Biz\Card\DetailProcessor\DetailFactory;
 use Biz\Card\DetailProcessor\DetailProcessor;
 use Biz\Card\Service\CardService;
 use Biz\Common\CommonException;
-use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 
@@ -88,7 +87,7 @@ class CardServiceImpl extends BaseService implements CardService
 
     private function isAvailable($coupon, $targetType, $targetId)
     {
-        if ($coupon['status'] != 'receive') {
+        if ('receive' != $coupon['status']) {
             return false;
         }
 
@@ -96,7 +95,7 @@ class CardServiceImpl extends BaseService implements CardService
             return false;
         }
 
-        if ($coupon['targetType'] == 'all' || $coupon['targetType'] == 'fullDiscount') {
+        if ('all' == $coupon['targetType'] || 'fullDiscount' == $coupon['targetType']) {
             return true;
         }
 
@@ -112,7 +111,7 @@ class CardServiceImpl extends BaseService implements CardService
             return true;
         }
 
-        if (in_array($targetType, array('course', 'classroom')) && $this->getCouponBatchResourceService()->isCouponTarget($coupon['batchId'], $targetId)) {
+        if (in_array($targetType, array('course', 'classroom')) && in_array($targetId, $coupon['targetIds'])) {
             return true;
         }
 
@@ -181,7 +180,7 @@ class CardServiceImpl extends BaseService implements CardService
     private function _prepareRecordConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
-            if ($value == 0) {
+            if (0 == $value) {
                 return true;
             }
 
@@ -232,13 +231,5 @@ class CardServiceImpl extends BaseService implements CardService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    /**
-     * @return CouponBatchResourceService
-     */
-    protected function getCouponBatchResourceService()
-    {
-        return $this->createService('Coupon:CouponBatchResourceService');
     }
 }

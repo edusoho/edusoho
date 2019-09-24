@@ -12,7 +12,9 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
     public function declares()
     {
         return array(
-            'serializes' => array(),
+            'serializes' => array(
+                'targetIds' => 'delimiter',
+            ),
             'orderbys' => array('createdTime', 'id'),
             'timestamps' => array('createdTime'),
             'conditions' => array(

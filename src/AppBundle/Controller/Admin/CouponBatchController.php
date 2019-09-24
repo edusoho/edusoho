@@ -6,7 +6,6 @@ use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\CouponException;
-use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -205,24 +204,28 @@ class CouponBatchController extends BaseController
 
     public function targetDetailAction(Request $request, $targetType, $batchId)
     {
-        $count = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batchId));
-        $paginator = new Paginator($this->get('request'), $count, 10);
-        $resources = $this->getCouponBatchResourceService()->searchCouponBatchResource(
-            array('batchId' => $batchId),
-            array('id' => 'ASC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        $targetIds = ArrayToolkit::column($resources, 'targetId');
+        $batch = $this->getCouponBatchService()->getBatch($batchId);
+        $paginator = new Paginator($this->get('request'), count($batch['targetIds']), 10);
+        $targetIds = empty($batch['targetIds']) ? array(-1) : $batch['targetIds'];
 
         $targets = array();
         $users = array();
         $categories = array();
         if ('course' == $targetType) {
-            $targets = $this->getCourseSetService()->findCourseSetsByIds($targetIds);
+            $targets = $this->getCourseSetService()->searchCourseSets(
+                array('ids' => $targetIds),
+                array('createdTime' => 'ASC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
             $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($targets, 'creator'));
         } elseif ('classroom' == $targetType) {
-            $targets = $this->getClassroomService()->findClassroomsByIds($targetIds);
+            $targets = $this->getClassroomService()->searchClassrooms(
+                array('classroomIds' => $targetIds),
+                array('createdTime' => 'ASC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
             $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($targets, 'categoryId'));
         }
 
@@ -310,8 +313,7 @@ class CouponBatchController extends BaseController
         if (!in_array($batch['targetType'], array('course', 'classroom')) || $batch['targetId'] < 0) {
             $this->createNewException(CouponException::TARGET_TYPE_ERROR());
         }
-        $resources = $this->getCouponBatchResourceService()->findResourcesByBatchId($batchId);
-        $resourceIds = empty($resources) ? array(-1) : ArrayToolkit::column($resources, 'targetId');
+        $resourceIds = empty($batch['targetIds']) ? array(-1) : $batch['targetIds'];
         if ('course' == $batch['targetType']) {
             $resources = $this->getCourseSetService()->findCourseSetsByIds($resourceIds);
         } else {
@@ -345,14 +347,6 @@ class CouponBatchController extends BaseController
     private function getCouponBatchService()
     {
         return $this->createService('Coupon:CouponBatchService');
-    }
-
-    /**
-     * @return CouponBatchResourceService
-     */
-    private function getCouponBatchResourceService()
-    {
-        return $this->createService('Coupon:CouponBatchResourceService');
     }
 
     private function getOrderService()

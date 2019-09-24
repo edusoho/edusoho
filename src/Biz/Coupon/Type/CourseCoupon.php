@@ -2,7 +2,6 @@
 
 namespace Biz\Coupon\Type;
 
-use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Course\Service\CourseService;
 
 class CourseCoupon extends BaseCoupon
@@ -14,7 +13,7 @@ class CourseCoupon extends BaseCoupon
     {
         $course = $this->getCourseService()->getCourse($target['id']);
 
-        return $this->getCouponBatchResourceService()->isCouponTarget($coupon['batchId'], $course['courseSetId']);
+        return in_array($course['courseSetId'], $coupon['targetIds']);
     }
 
     /**
@@ -23,13 +22,5 @@ class CourseCoupon extends BaseCoupon
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
-    }
-
-    /**
-     * @return CouponBatchResourceService
-     */
-    protected function getCouponBatchResourceService()
-    {
-        return $this->biz->service('Coupon:CouponBatchResourceService');
     }
 }
