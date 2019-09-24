@@ -19,7 +19,7 @@
         <div class="media-left">
           <img class="course-cover-img" src="{{ filepath(resource.cover.middle|default(), 'course.png') }}">
         </div>
-        <div class="media-body pt0 pb0">
+        <div class="media-body">
           <div class="coupon-modal-item__title">{{ resource.title|sub_text(30)}}</div>
           <div class="gray-dark">{{ 'site.price'|trans }}：<span class="color-danger coupon-modal-item__price">
               {% if resource.minCoursePrice == resource.maxCoursePrice %}
