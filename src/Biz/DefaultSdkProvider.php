@@ -107,6 +107,21 @@ class DefaultSdkProvider implements ServiceProviderInterface
             return $service;
         };
 
+        /*
+         * @param $biz
+         * @return \QiQiuYun\SDK\Service\WeChatService|null
+         */
+        $biz['qiQiuYunSdk.wechat'] = function ($biz) use ($that) {
+            $service = null;
+
+            $sdk = $that->generateSdk($biz, $that->getWechatConfig($biz));
+            if (!empty($sdk)) {
+                $service = $sdk->getWeChatService();
+            }
+
+            return $service;
+        };
+
         $biz['qiQiuYunSdk.sms'] = function ($biz) use ($that) {
             $service = null;
 
@@ -287,5 +302,23 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return array('notification' => array('host' => $url['host']));
+    }
+
+    public function getWechatConfig($biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', array());
+
+        if (empty($developerSetting['cloud_api_wechat_server'])) {
+            return array();
+        }
+
+        $url = parse_url($developerSetting['cloud_api_wechat_server']);
+
+        if (empty($url['host'])) {
+            return array();
+        }
+
+        return array('wechat' => array('host' => $url['host']));
     }
 }

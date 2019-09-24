@@ -10,6 +10,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\File\UploadFileException;
 
 class MaterialLibController extends BaseController
 {
@@ -494,6 +495,10 @@ class MaterialLibController extends BaseController
 
     public function downloadAction(Request $request, $fileId)
     {
+        if (!$this->getCourseSetService()->hasCourseSetManageRole()) {
+            $this->createNewException(UploadFileException::PERMISSION_DENIED());
+        }
+
         $this->getUploadFileService()->tryAccessFile($fileId);
 
         return $this->forward('AppBundle:UploadFile:download', array(
@@ -644,5 +649,10 @@ class MaterialLibController extends BaseController
     protected function getCourseMaterialService()
     {
         return $this->createService('Course:MaterialService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

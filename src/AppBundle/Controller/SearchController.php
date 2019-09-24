@@ -65,6 +65,7 @@ class SearchController extends BaseController
         $conditions = array(
             'status' => 'published',
             'titleLike' => $keywords,
+            'showable' => 1,
         );
 
         if ('free' == $filter) {

@@ -9,8 +9,9 @@ class EmailRegistrationTemplate extends BaseTemplate implements EmailTemplateInt
      */
     public function parse($options)
     {
-        $emailTitle = $this->setting('auth.email_activation_title', '请激活你的帐号 完成注册');
-        $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
+        /** 由于分校插件重写settingService，此处不传入默认值 */
+        $emailTitle = $this->setting('auth.email_activation_title');
+        $emailBody = $this->setting('auth.email_activation_body');
         $params = $options['params'];
         $valuesToReplace = array($params['nickname'], $params['sitename'], $params['siteurl'], $params['verifyurl']);
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
@@ -19,8 +20,8 @@ class EmailRegistrationTemplate extends BaseTemplate implements EmailTemplateInt
         $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
 
         return array(
-            'title' => $emailTitle,
-            'body' => $emailBody,
+            'title' => empty($emailTitle) ? '请激活你的帐号 完成注册' : $emailTitle,
+            'body' => empty($emailBody) ? '验证邮箱内容' : $emailBody,
         );
     }
 }

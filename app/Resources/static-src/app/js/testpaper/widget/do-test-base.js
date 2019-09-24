@@ -198,6 +198,7 @@ class DoTestBase
   _btnSubmit(event) {
     let $target = $(event.currentTarget);
     $target.button('loading');
+    clearInterval(this.saveTimer);
     this._submitTest($target.data('url'), $target.data('goto'));
   }
 
@@ -257,7 +258,7 @@ class DoTestBase
     if ($('input[name="testSuspend"]').length > 0) {
       let self = this;
       let url = $('input[name="testSuspend"]').data('url');
-      setInterval(function(){
+      this.saveTimer = setInterval(function(){
         self._suspendSubmit(url);
         let currentTime = new Date().getHours()+ ':' + new Date().getMinutes()+ ':' +new Date().getSeconds();
         notify('success',currentTime + Translator.trans('testpaper.widget.save_success_hint'));
