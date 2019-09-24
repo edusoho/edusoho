@@ -127,28 +127,30 @@ export default {
             type:Boolean,
             default:true
         },
-        canDo:{
+        canDo:{ //是否是做题模式
           type:Boolean,
           default:true
         },
-        all:{
-            type:Number,
-            default:0
+        all:{ //所有题数
+          type:Number,
+          default:0
         },
+        isWrongMode:{ //是否是错题模式,只有在解析的时候有
+          type:Boolean,
+          default:false
+        }
     },
     watch:{
         answer(val){
             this.$emit('update:answer', val)
         },
         current(val,oldval){
-          if(!this.canDo){
-            console.log(this.canDo)
-            this.currentIndex = val-1;
-          }
           //答题卡定位
           let index=Number(val);
           this.$refs.swipe.swipeTo(index-1);
-          console.log('current'+val)
+        },
+        isWrongMode(val){//更改为错题模式时需要手动改变当前的currentIndex
+            this.currentIndex = this.current-1;
         }
     },
     components: {
@@ -162,7 +164,6 @@ export default {
     },
     methods:{
         changeswiper(index) {
-          console.log(index);
             this.currentIndex = index;
             this.$emit('update:slideIndex', index);
         },
