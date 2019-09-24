@@ -4494,13 +4494,13 @@ upgrade.browser.recommend_browsers: 推荐使用以下浏览器：
 
 # 优惠券
 coupon: 优惠券
-coupon.for_any_course: 适用于全站课程
+coupon.for_any_course: 适用于全部课程
 coupon.for_specified_courses: 适用于指定课程
 coupon.for_multi_courses: 适用于多个课程
 coupon.for_multi_classrooms: 适用于多个班级
-coupon.for_any_classroom: 适用于全站班级
+coupon.for_any_classroom: 适用于全部班级
 coupon.for_specified_classrooms: 适用于指定班级
-coupon.for_any_level_of_VIP_membership: 适用于全站会员
+coupon.for_any_level_of_VIP_membership: 适用于全部会员
 coupon.for_specified_level_of_VIP_membership: 适用于指定会员
 coupon.for_any_purchase_on_our_web_site: 全站可用
 coupon.expired_on: 有效期截止：

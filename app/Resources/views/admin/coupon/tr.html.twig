@@ -24,7 +24,7 @@
     <span class="text-muted text-sm">{{ batch.couponContent }}</span>
     {% endif %}
   </td>
-  <td>{{ batch.usedNum }}/{{ batch.generatedNum-batch.unreceivedNum }}/{{ batch.generatedNum }}</td>  
+  <td>{{ batch.usedNum }}/{{ batch.generatedNum-batch.unreceivedNum }}/{{ batch.generatedNum }}</td>
   <td>
     {{ (batch.createdTime )|date('Y-n-d') }}
     {% if batch.deadlineMode == 'time' %}
