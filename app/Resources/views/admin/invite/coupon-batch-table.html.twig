@@ -9,9 +9,8 @@
   </tr>
   </thead>
   <tbody >
-
-  {% if batchId|default(0) >0%}
-    {% set batch = data('CouponBatch',{'batchId': batchId|default(0)}) %}
+  {% set batch = data('CouponBatch',{'batchId': batchId|default(0)}) %}
+  {% if batch|default()%}
     <tr>
       <td>{{ batch.name }}</td>
       <td>

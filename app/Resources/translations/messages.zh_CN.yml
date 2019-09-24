@@ -10178,7 +10178,7 @@ coupon.target_type.course: 课程
 coupon.target_type.all: 全站
 coupon.target_type.classroom_all: 全部班级
 coupon.target_type.classroom_specific: 指定班级
-coupon.target_type.vip_all : 全部会员
+coupon.target_type.vip_all: 全部会员
 coupon.target_type.vip_specific: 指定会员
 coupon.target_type.course_all: 全部课程
 coupon.target_type.course_specific: 指定课程

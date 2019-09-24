@@ -28,6 +28,8 @@ class CouponException extends AbstractException
 
     const TARGET_TYPE_ERROR = 4044510;
 
+    const CHOOSER_RESOURCE_LIMIT_ERROR = 5004511;
+
     public $messages = array(
         4044501 => 'exception.coupon.not_found',
         5004502 => 'exception.coupon.status_invalid',
@@ -39,5 +41,6 @@ class CouponException extends AbstractException
         5004508 => 'exception.coupon.finished',
         5004509 => 'exception.coupon.over_batch_limit',
         4044510 => 'exception.coupon.target_type_error',
+        5004511 => 'coupon.resource.chooser.limit',
     );
 }

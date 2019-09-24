@@ -12,10 +12,10 @@ class CouponBatchWrapper extends Wrapper
         $targetType = $batch['targetType'];
         $targetId = $batch['targetId'];
         $couponContents = array(
-            'all' => '全站可用',
-            'vip' => '全部会员',
-            'course' => '全部课程',
-            'classroom' => '全部班级',
+            'all' => $this->getServiceKernel()->trans('coupon.for_any_purchase_on_our_web_site'),
+            'vip' => $this->getServiceKernel()->trans('coupon.target_type.vip_all'),
+            'course' => $this->getServiceKernel()->trans('coupon.target_type.course_all'),
+            'classroom' => $this->getServiceKernel()->trans('coupon.target_type.classroom_all'),
         );
 
         $couponContent = 'multi';
@@ -62,7 +62,7 @@ class CouponBatchWrapper extends Wrapper
     {
         $productType = $batch['targetType'];
         $numType = 'single';
-        if ($batch['targetId'] == 0) {
+        if (0 == $batch['targetId']) {
             $numType = 'all';
         }
         if (!empty($batch['targetId']) && count($batch['targetIds']) > 1) {
@@ -76,13 +76,18 @@ class CouponBatchWrapper extends Wrapper
     {
         return array(
             'targetContent',
-            'targetDetail'
+            'targetDetail',
         );
+    }
+
+    private function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 
     protected function getCourseSetService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Course:CourseSetService');
+        return $this->getServiceKernel()->getBiz()->service('Course:CourseSetService');
     }
 
     /**
@@ -90,17 +95,17 @@ class CouponBatchWrapper extends Wrapper
      */
     private function getClassroomService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Classroom:ClassroomService');
+        return $this->getServiceKernel()->getBiz()->service('Classroom:ClassroomService');
     }
 
     private function getLevelService()
     {
-        return ServiceKernel::instance()->getBiz()->service('VipPlugin:Vip:LevelService');
+        return $this->getServiceKernel()->getBiz()->service('VipPlugin:Vip:LevelService');
     }
 
     protected function isPluginInstalled($code)
     {
-        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
+        $pluginManager = new PluginConfigurationManager($this->getServiceKernel()->getParameter('kernel.root_dir'));
 
         return $pluginManager->isPluginInstalled($code);
     }
