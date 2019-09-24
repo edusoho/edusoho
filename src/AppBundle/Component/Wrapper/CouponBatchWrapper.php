@@ -19,20 +19,17 @@ class CouponBatchWrapper extends Wrapper
         );
 
         $couponContent = 'multi';
-        $targetCount = $this->getCouponBatchResourceService()->countCouponBatchResource(array('batchId' => $batch['id']));
 
-        if (!empty($targetId) && 'vip' != $targetType && $targetCount > 0) {
-            if (1 == $targetCount) {
-                $target = $this->getCouponBatchResourceService()->searchCouponBatchResource(array('batchId' => $batch['id']), array('id' => 'ASC'), 0, 1);
-                $target = array_shift($target);
-            } else {
+        if (!empty($targetId) && 'vip' != $targetType && count($batch['targetIds']) > 0) {
+            if (count($batch['targetIds']) > 1) {
                 $batch['targetContent'] = $couponContent;
 
                 return $batch;
+            } else {
+                $targetId = $batch['targetIds'][0];
             }
         }
 
-        $targetId = empty($target['targetId']) ? $targetId : $target['targetId'];
         if (0 == $targetId || 'all' == $targetType) {
             $couponContent = $couponContents[$targetType];
         } elseif ('course' == $targetType) {
@@ -58,21 +55,13 @@ class CouponBatchWrapper extends Wrapper
     protected function getWrapList()
     {
         return array(
-            'targetContent'
+            'targetContent',
         );
     }
 
     protected function getCourseSetService()
     {
         return ServiceKernel::instance()->getBiz()->service('Course:CourseSetService');
-    }
-
-    /**
-     * @return CouponBatchResourceService
-     */
-    private function getCouponBatchResourceService()
-    {
-        return ServiceKernel::instance()->getBiz()->service('Coupon:CouponBatchResourceService');
     }
 
     /**

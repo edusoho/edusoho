@@ -34,19 +34,10 @@ define(function(require, exports, module) {
       let content = '';
       $(`#${type}_user_batchId`, window.parent.document).val($(this).data('batchId'));
       let $tbody = $(`.js-${type}-user-content`, window.parent.document).find('tbody');
-      if(batch.couponContent == 'multi'){
-        if(batch.targetType == 'course'){
-          content = Translator.trans('coupon.target_type.multi_course');
-        }else if(batch.targetType == 'classroom'){
-          content = Translator.trans('coupon.target_type.multi_classroom');
-        }
-      }else{
-          content = batch.couponContent;
-      }
       let html = `<tr>
                    <td>${batch.name}</td>
                    <td>${batch.prefix}</td>
-                   <td> <span>${ $(this).data('content') }</span><br><span class="text-muted text-sm">${ content }</span></td>
+                   <td> ${ batch.unreceivedNum }</td>
                    <td><a href="javascript:;" class="js-remove-item" >删除</a></td>
                    </tr>`;
       $tbody.html(html);

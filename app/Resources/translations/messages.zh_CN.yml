@@ -30,6 +30,7 @@ site.data.score: 分
 site.data.count: 数
 site.data.num: 个
 site.data.empty: 暂无
+site.delete: 删除
 site.copy: 复制
 site.datagrid.empty: 暂无记录
 site.datagrid.filter.all_records: 全部记录
@@ -10239,4 +10240,5 @@ admin.setting.invite.get_coupon_setting: 邀请人奖励发放时机
 admin.setting.invite.get_coupon_setting.register: 被邀请人注册成功时
 admin.setting.invite.get_coupon_setting.pay: 被邀请人完成第一笔消费时
 coupon.resource_list.title: '本优惠券适用于：'
+coupon.remaining_amount: 剩余可用数量
 

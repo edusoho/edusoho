@@ -4,7 +4,7 @@
     {% if cardDetail.targetId == 0 %}
        <p class="title range">{{'coupon.for_any_course'|trans}}</p>
     {% else %}
-      {% if batch.couponContent|default() == 'multi' %}
+      {% if batch.couponContent|default('') == 'multi' %}
         <p class="title range">{{ 'coupon.for_multi_courses'|trans }}</p>
       {% else %}
         <p class="title range">{{'coupon.for_specified_courses'|trans}}</p>
