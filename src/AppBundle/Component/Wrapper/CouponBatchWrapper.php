@@ -52,7 +52,7 @@ class CouponBatchWrapper extends Wrapper
 
     public function targetType()
     {
-        return
+        // return
     }
 
     protected function getWrapList()
