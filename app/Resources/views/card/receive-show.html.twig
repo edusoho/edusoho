@@ -23,7 +23,6 @@
         {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}
           {% include 'card/coupon-useable.html.twig' with {'modal': 1}%}
           <div class="modal-action">
-            {% set batch = data('CouponBatch',{'batchId': cardDetail.batchId|default(0)}) %}
             {# 指定多资源跳转#}
             <a class="btn btn-ghost-white btn-xlg hidden"
               {% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}href="{{ path('course_show',{ id : cardDetail.targetId }) }}"

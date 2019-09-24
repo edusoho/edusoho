@@ -5,7 +5,7 @@
 {# 指定多资源跳转#}
 <a class="coupon-pack-item coupon-item"
   {% if cardDetail.status != 'using' %}
-    {% if batch.couponContent == 'multi' %}
+    {% if batch.couponContent|default('') == 'multi' %}
       {% if modal|default(0) ==0 %}data-toggle="modal" data-target="#modal"{% endif %}
        href="javascript:;" data-role="coupon-pack" data-url="{{ path('coupon_resource_list',{'batchId':batch.id}) }}"
     {% else %}
@@ -33,7 +33,7 @@
 		{% if cardDetail.targetId == 0 %}
 			 <p class="title range">{{ 'coupon.for_any_course'|trans }}</p>
 		{% else %}
-      {% if batch.couponContent == 'multi' %}
+      {% if batch.couponContent|default('') == 'multi' %}
         <p class="title range">{{ 'coupon.for_multi_courses'|trans }}</p>
       {% else %}
         <p class="title range">{{'coupon.for_specified_courses'|trans}}</p>

@@ -2,30 +2,30 @@
 <div class="coupon-pack-item coupon-item useless">
   {% if cardDetail.targetType == "course" %}
     {% if cardDetail.targetId == 0 %}
-       <p class="title">{{'coupon.for_any_course'|trans}}</p>
+       <p class="title range">{{'coupon.for_any_course'|trans}}</p>
     {% else %}
-      {% if batch.couponContent|default() == 'multi' %}
+      {% if batch.couponContent|default('') == 'multi' %}
         <p class="title range">{{ 'coupon.for_multi_courses'|trans }}</p>
       {% else %}
-        <p class="title">{{'coupon.for_specified_courses'|trans}}</p>
+        <p class="title range">{{'coupon.for_specified_courses'|trans}}</p>
       {% endif %}
     {% endif %}
   {% endif %}
 
   {% if cardDetail.targetType == "classroom" or cardDetail.targetType == "fullDiscount" %}
-    <p class="title">{{'coupon.for_any_classroom'|trans}}</p>
+    <p class="title range">{{'coupon.for_any_classroom'|trans}}</p>
   {% endif %}
 
   {% if cardDetail.targetType == "vip" %}
     {% if cardDetail.targetId == 0 %}
-      <p class="title">{{'coupon.for_any_level_of_VIP_membership'|trans}}</p>
+      <p class="title range">{{'coupon.for_any_level_of_VIP_membership'|trans}}</p>
     {% else %}
-      <p class="title">{{'coupon.for_specified_level_of_VIP_membership'|trans}}</p>
+      <p class="title range">{{'coupon.for_specified_level_of_VIP_membership'|trans}}</p>
     {% endif %}
   {% endif %}
   {% if cardDetail.targetType == "all" %}
-    <p class="title">{{'coupon.for_any_purchase_on_our_web_site'|trans}}</p>
-    <p class="title"></p>
+    <p class="title range">{{'coupon.for_any_purchase_on_our_web_site'|trans}}</p>
+    <p class="title range"></p>
   {% endif %}
   <p class="price">
     {% if cardDetail.type == "minus" %}￥{% endif %}<strong class="price__number">{{ cardDetail.rate }}</strong>{% if cardDetail.type == "discount" %}{{'coupon.discount'|trans}}{% endif %}

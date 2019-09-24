@@ -29,6 +29,9 @@ class CouponDaoImpl extends AdvancedDaoImpl implements CouponDao
                 'id IN ( :ids)',
             ),
             'timestamps' => array('createdTime'),
+            'serializes' => array(
+                'targetIds' => 'delimiter',
+            ),
             'orderbys' => array(
                 'createdTime',
                 'orderTime',

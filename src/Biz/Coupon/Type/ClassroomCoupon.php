@@ -2,8 +2,6 @@
 
 namespace Biz\Coupon\Type;
 
-use Biz\Coupon\Service\CouponBatchResourceService;
-
 class ClassroomCoupon extends BaseCoupon
 {
     /**
@@ -11,14 +9,6 @@ class ClassroomCoupon extends BaseCoupon
      */
     public function canUseable($coupon, $target)
     {
-        return isset($target['id']) && $this->getCouponBatchResourceService()->isCouponTarget($coupon['batchId'], $target['id']);
-    }
-
-    /**
-     * @return CouponBatchResourceService
-     */
-    protected function getCouponBatchResourceService()
-    {
-        return $this->biz->service('Coupon:CouponBatchResourceService');
+        return isset($target['id']) && in_array($target['id'], $coupon['targetIds']);
     }
 }

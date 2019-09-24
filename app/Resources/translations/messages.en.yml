@@ -25,6 +25,7 @@ site.data.title: Title
 site.data.score: Score
 site.data.count: Count
 site.copy: Copy
+site.delete: Delete
 site.datagrid.empty: 'No data'
 site.datagrid.filter.all_records: 'All'
 site.datagrid.filter.last_one_week: 'Last 7 days'
@@ -8952,3 +8953,4 @@ admin.setting.invite.get_coupon_setting: 邀请人奖励发放时机
 admin.setting.invite.get_coupon_setting.register: 被邀请人注册成功时
 admin.setting.invite.get_coupon_setting.pay: 被邀请人完成第一笔消费时
 coupon.resource_list.title: '本优惠券适用于：'
+coupon.remaining_amount: 剩余可用数量

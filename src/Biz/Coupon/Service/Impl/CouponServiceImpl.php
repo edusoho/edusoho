@@ -7,7 +7,6 @@ use Biz\BaseService;
 use Biz\Card\Service\CardService;
 use Biz\Coupon\CouponException;
 use Biz\Coupon\Dao\CouponDao;
-use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Coupon\State\ReceiveCoupon;
 use Biz\Coupon\State\UsingCoupon;
@@ -385,7 +384,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             return true;
         }
 
-        if (in_array($targetType, array('course', 'classroom')) && $this->getCouponBatchResourceService()->isCouponTarget($coupon['batchId'], $targetId)) {
+        if (in_array($targetType, array('course', 'classroom')) && in_array($targetId, $coupon['targetIds'])) {
             return true;
         }
 
@@ -606,14 +605,6 @@ class CouponServiceImpl extends BaseService implements CouponService
     protected function getCouponBatchService()
     {
         return $this->createService('Coupon:CouponBatchService');
-    }
-
-    /**
-     * @return CouponBatchResourceService
-     */
-    protected function getCouponBatchResourceService()
-    {
-        return $this->createService('Coupon:CouponBatchResourceService');
     }
 
     protected function isPluginInstalled($code)
