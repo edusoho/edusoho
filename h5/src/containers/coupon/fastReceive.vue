@@ -102,7 +102,7 @@ export default {
             const token = this.$route.params.token;
             await Api.getCouponInfo({
                query: {
-                    batchToken: token
+                    token: token
                 }
             }).then((res)=>{
                 this.coupons=res;

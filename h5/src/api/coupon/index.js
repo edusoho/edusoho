@@ -2,7 +2,7 @@ export default [
   {
     // 获取优惠券信息
     name: 'getCouponInfo',
-    url: '/plugins/coupon/coupon_batch/{batchToken}',
+    url: '/coupon_batch/{token}',
     method: 'get'
   },
   {
