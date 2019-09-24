@@ -4,7 +4,9 @@ namespace Biz\Coupon\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Coupon\Dao\CouponBatchDao;
 use Biz\Coupon\Service\CouponBatchService;
+use Biz\Coupon\Service\CouponService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 
 class CouponBatchServiceImpl extends BaseService implements CouponBatchService
@@ -37,7 +39,9 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             'userId' => 0,
             'batchId' => $batch['id'],
         ));
+
         $this->getCouponBatchDao()->update($batchId, array('unreceivedNum' => $unreceivedNum));
+        $this->dispatchEvent('coupon.receive', $batch);
     }
 
     public function generateCoupon($couponData)
@@ -208,25 +212,23 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                 );
             }
 
-            if (!empty($userId)) {
-                $conditions = array(
-                    'userId' => $userId,
-                    'batchId' => $batch['id'],
+            $conditions = array(
+                'userId' => $userId,
+                'batchId' => $batch['id'],
+            );
+            $coupon = $this->getCouponService()->searchCoupons($conditions, array('id' => 'DESC'), 0, 1);
+
+            if (!empty($coupon)) {
+                $this->getCouponBatchDao()->db()->commit();
+
+                return array(
+                    'code' => 'failed',
+                    'message' => '您已经领取该批优惠码',
+                    'exception' => array(
+                        'class' => 'Biz\Coupon\CouponException',
+                        'method' => 'RECEIVED',
+                    ),
                 );
-                $coupon = $this->getCouponService()->searchCoupons($conditions, array('id' => 'DESC'), 0, 1);
-
-                if (!empty($coupon)) {
-                    $this->getCouponBatchDao()->db()->commit();
-
-                    return array(
-                        'code' => 'failed',
-                        'message' => '您已经领取该批优惠码',
-                        'exception' => array(
-                            'class' => 'Biz\Coupon\CouponException',
-                            'method' => 'RECEIVED',
-                        ),
-                    );
-                }
             }
 
             $conditions = array(
@@ -497,6 +499,9 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         return $this->createService('Card:CardService');
     }
 
+    /**
+     * @return CouponService
+     */
     private function getCouponService()
     {
         return $this->createService('Coupon:CouponService');
@@ -507,6 +512,9 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         return $this->createDao('Coupon:CouponDao');
     }
 
+    /**
+     * @return CouponBatchDao
+     */
     private function getCouponBatchDao()
     {
         return $this->createDao('Coupon:CouponBatchDao');

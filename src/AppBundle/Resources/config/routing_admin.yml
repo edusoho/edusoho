@@ -2430,7 +2430,7 @@ admin_coupon_show:
     defaults: { _controller: AppBundle:Admin/CouponBatch:detail }
 
 admin_coupon_show_target:
-  path: /coupon/show/{targetType}/{batchId}
+  path: /coupon/show/target/{targetType}/{batchId}
   defaults: { _controller: AppBundle:Admin/CouponBatch:targetDetail }
 
 admin_coupon_get_receive_url:

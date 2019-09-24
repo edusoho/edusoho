@@ -54,6 +54,7 @@
         <div class="col-md-2 control-label">
           <label for="get_coupon_setting">{{'admin.setting.invite.get_coupon_setting'|trans}}</label>
         </div>
+
         <div class="col-md-7 radios " style="margin-top: 5px">
           {{ radios('get_coupon_setting', {0:'admin.setting.invite.get_coupon_setting.register'|trans, 1:'admin.setting.invite.get_coupon_setting.pay'|trans}, inviteSetting.get_coupon_setting|default('1')) }}
         </div>
@@ -68,6 +69,40 @@
         </div>
       </div>
 
+      <div class="alert alert-info">
+        <p><strong>{{'admin.invite_setting.notification_variable_description'|trans}}：</strong></p>
+        <ul>
+          <li>{% verbatim %}{{siteName}}:{% endverbatim %}{{'site.online_school_name'|trans}}</li>
+          <li>{% verbatim %}{{registerUrl}}:{% endverbatim %}{{'site.register_link_url'|trans}}</li>
+        </ul>
+      </div>
+
+      <fieldset>
+        <legend>{{ 'admin.invite_setting.coupon_limit_remind'|trans }}</legend>
+        <div class="form-group">
+          <div class="controls col-md-8">
+            <span class="text-muted">{{ 'admin.invite_setting.coupon_limit_remind_hint'|trans }}</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="controls col-md-8 col-md-offset-1">
+            {{ 'admin.invite_setting.rewards_not_reach'|trans }}
+            <input type="text" name="remain_number" class="form-control width-input width-input-large" placeholder="{{ 'admin.invite_setting.rewards_count_required'|trans }}" value="{{ inviteSetting.remain_number|default('') }}">
+            {{ 'admin.invite_setting.send_remind_sms_to_admin'|trans }}
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="controls col-md-8 col-md-offset-1">
+            {{ 'admin.invite_setting.mobile_for_receive'|trans }}
+            <input type="text" name="mobile" class="form-control width-input width-input-large" placeholder="{{ 'admin.invite_setting.mobile_required'|trans }}" value="{{ inviteSetting.mobile|default('') }}">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="controls col-md-8">
+            <span class="text-muted">{{ 'admin.invite_setting.sms_enable_hint'|trans }}</span>
+          </div>
+        </div>
+      </fieldset>
 
       <div class="row form-group">
         <div class="col-md-2 control-label"></div>
@@ -78,13 +113,5 @@
 
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
-
-<div class="alert alert-info">
-  <p><strong>{{'admin.invite_setting.notification_variable_description'|trans}}：</strong></p>
-  <ul>
-    <li>{% verbatim %}{{siteName}}:{% endverbatim %}{{'site.online_school_name'|trans}}</li>
-    <li>{% verbatim %}{{registerUrl}}:{% endverbatim %}{{'site.register_link_url'|trans}}</li>
-  </ul>
-</div>
 
 {% endblock %}
