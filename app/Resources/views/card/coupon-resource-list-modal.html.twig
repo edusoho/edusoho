@@ -48,7 +48,7 @@
               {% if resource.price > 0 %}
                 <span class="color-danger">{{resource.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}</span>
               {% else %}
-                <span class="color-success">{{ 'admin.classroom_manage.chooser.free'|trans }}></span>
+                <span class="color-success">{{ 'admin.classroom_manage.chooser.free'|trans }}</span>
               {% endif %}
             {% else %}
             <span class="color-danger"> ¥ {{ resource.price }}</span>
