@@ -2,11 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\CouponException;
-use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
@@ -57,8 +55,7 @@ class CouponBatchController extends BaseController
         if (!in_array($batch['targetType'], array('course', 'classroom')) || $batch['targetId'] < 0) {
             $this->createNewException(CouponException::TARGET_TYPE_ERROR());
         }
-        $resources = $this->getCouponBatchResourceService()->findResourcesByBatchId($batchId);
-        $resourceIds = empty($resources) ? array(-1) : ArrayToolkit::column($resources, 'targetId');
+        $resourceIds = empty($batch['targetIds']) ? array(-1) : $batch['targetIds'];
 
         if ('course' == $batch['targetType']) {
             $paginator = new Paginator(
@@ -117,14 +114,6 @@ class CouponBatchController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    /**
-     * @return CouponBatchResourceService
-     */
-    private function getCouponBatchResourceService()
-    {
-        return $this->createService('Coupon:CouponBatchResourceService');
     }
 
     /**

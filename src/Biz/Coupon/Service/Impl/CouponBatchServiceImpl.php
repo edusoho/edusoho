@@ -4,12 +4,8 @@ namespace Biz\Coupon\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Coupon\Service\CouponBatchResourceService;
 use Biz\Coupon\Service\CouponBatchService;
-use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
-use Topxia\Service\Common\ServiceKernel;
 
 class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 {
@@ -363,6 +359,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                     'deadline' => ('time' == $batch['deadlineMode']) ? $batch['deadline'] : 0,
                     'targetType' => $batch['targetType'],
                     'targetId' => $batch['targetId'],
+                    'targetIds' => $batch['targetIds'],
                     'fullDiscountPrice' => $batch['fullDiscountPrice'],
                     'createdTime' => $time,
                 );
