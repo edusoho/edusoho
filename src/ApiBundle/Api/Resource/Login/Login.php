@@ -23,6 +23,7 @@ use Biz\User\Service\BatchNotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Pay\Service\AccountService;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
@@ -166,6 +167,7 @@ class Login extends AbstractResource
         }
         $user['following'] = $this->getUserService()->findUserFollowingCount($user['id']);
         $user['follower'] = $this->getUserService()->findUserFollowerCount($user['id']);
+        $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
     }
 
     private function getLoginToken($userId, $smsCode, $smsToken, $mobile, $client)
@@ -301,6 +303,14 @@ class Login extends AbstractResource
     private function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return AccountService
+     */
+    private function getAccountService()
+    {
+        return $this->service('Pay:AccountService');
     }
 
     protected function getSDKSmsService()
