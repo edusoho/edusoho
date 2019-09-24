@@ -77,11 +77,14 @@ export default {
       result: null,
       items: {}, //分组题目
       info: [],
+      allList:[],//所有题集
+      wrongList:[], //所有题集
+      wrongType:[],//错题包含的题型
       cardSeq: 0, //点击题卡要滑动的指定位置的索引
       cardShow: false, //答题卡显示标记
       answer: {},
       slideIndex: 0, //题库组件当前所在的划片位置
-      canDo: false //是否能答题，解析模式下不能答题
+      canDo: false, //是否能答题，解析模式下不能答题
     };
   },
   filters: {
@@ -142,8 +145,6 @@ export default {
     //遍历数据类型去做对应处理
     formatData(res) {
       let paper = res.items;
-      let info = [];
-      let answer = [];
       Object.keys(paper).forEach(key => {
         if (key != "material") {
           paper[key].forEach(item => {
@@ -182,13 +183,13 @@ export default {
           );
         }
         this.$set(this.answer, item.id, answer);
-        this.info.push(item);
+        // this.info.push(item);
       }
 
       if (type == "essay") {
         let answer = item.testResult ? item.testResult.answer : [];
         this.$set(this.answer, item.id, answer);
-        this.info.push(item);
+        // this.info.push(item);
       }
 
       if (type == "fill") {
@@ -198,7 +199,18 @@ export default {
         item.fillnum = index;
         let answer = item.testResult ? item.testResult.answer: [];
         this.$set(this.answer, item.id, answer);
-        this.info.push(item);
+        // this.info.push(item);
+      }
+      this.info.push(item);
+      this.allList.push(item);
+      if(item.testResult){
+        if(item.testResult.status=='wrong' || item.testResult.status=='partRight'){
+          let type=item.parentType ? item.parentType :item.type ;
+          if(!this.wrongType.includes(type)){
+              this.wrongType.push(type)
+          }
+          this.wrongList.push(item);
+        }
       }
     },
     //处理富文本，并统计填空题的空格个数
