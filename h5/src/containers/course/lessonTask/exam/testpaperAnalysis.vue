@@ -40,11 +40,11 @@
         </div>
         <div class="card-list">
           <div class="card-item" v-for="(cards,name) in items" :key="name"
-               v-if="isWrongMode ? wrongType.indexOf(name) !== -1 : true">
+               v-if="isWrongType(name)">
             <div class="card-item-title">{{name | type}}</div>
             <div class="card-item-list" v-if="name!='material'">
               <div
-                v-if="isWrongMode ? craditem.testResult.status !== 'right' : true"
+                v-if="isWrongList(craditem)"
                 :class="['list-cicle',formatStatus(craditem)]"
                 v-for="(craditem) in items[name]"
                 :key="craditem.id"
@@ -55,9 +55,9 @@
             <div class="card-item-list" v-if="name=='material'">
               <template v-for="(craditem) in items[name]">
                 <div
+                  v-if="isWrongList(materialitem)"
                   :class="['list-cicle',formatStatus(materialitem)]"
                   v-for="(materialitem) in craditem.subs"
-                  v-if="isWrongMode ? materialitem.testResult.status !== 'right' : true"
                   :key="materialitem.id"
                   @click="slideToNumber(materialitem.seq)"
                 >{{materialitem.seq}}
@@ -279,7 +279,10 @@
           Toast('当前没有错题');
           return;
         }
-        Toast('切换成功');
+        Toast({
+          message: '切换成功',
+          duration: 1000
+        });
         this.isWrongMode = !this.isWrongMode;
 
         if (this.isWrongMode) {
@@ -304,8 +307,14 @@
           });
         }
         return itemIndex;
+      },
+      isWrongType(name) {
+        return this.isWrongMode ? this.wrongType.indexOf(name) !== -1 : true;
+      },
+      isWrongList(item) {
+        return this.isWrongMode ? item.testResult.status !== 'right' : true
       }
-    }
+    },
   };
 </script>
 
