@@ -10,6 +10,7 @@
       :answer.sync="answer"
       :showScore="false"
       :slideIndex.sync="slideIndex"
+      :all="info.length"
     />
 
     <!-- 引导页 -->
@@ -49,7 +50,7 @@
                 :class="['list-cicle',formatStatus(cards.type,cards.id)==1 ? 'cicle-active' :'']"
                 @click="slideToNumber(cards.seq)"
               >{{cards.seq}}</div>
-            </div>          
+            </div>
           </div>
         </div>
       </div>
