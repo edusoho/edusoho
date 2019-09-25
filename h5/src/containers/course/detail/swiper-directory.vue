@@ -49,7 +49,7 @@ export default {
             this.$emit('changeChapter', index)
         },
         handleChapter(index){
-            this.$refs.chapterSwipe.swipeTo(index, true);
+            this.$refs.chapterSwipe.swipeTo(index);
         }
     }
 }
