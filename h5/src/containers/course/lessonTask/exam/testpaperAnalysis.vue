@@ -3,13 +3,13 @@
     <e-loading v-if="isLoading"></e-loading>
     <item-bank
       v-if="info.length>0"
+      :isWrongMode="isWrongMode"
       :current.sync="cardSeq"
       :info="info"
       :answer="answer"
       :slideIndex.sync="slideIndex"
       :canDo="canDo"
       :all="allList.length"
-      :isWrongMode="isWrongMode"
     />
     <!-- 底部 -->
     <div class="paper-footer">
