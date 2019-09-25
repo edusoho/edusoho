@@ -45,7 +45,8 @@ const config = [
   }, {
     // 获取优惠券功能开关
     name: 'getCouponSetting',
-    url: '/setting/coupon'
+    url: '/setting/coupon',
+    method: 'GET'
   }, {
     // 获取优惠券
     name: 'getCouponList',

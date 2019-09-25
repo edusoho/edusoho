@@ -1,8 +1,9 @@
 <template>
   <div class="receive-all">
     <e-loading v-if="isLoading"></e-loading>
-    <fast-receive v-if="cloudSetting ==1 && sitePlugins==1" />
-    <pass-receive v-if="cloudSetting ==2 || sitePlugins==2"/>
+      <fast-receive v-if="cloudSetting ==1 && sitePlugins==1" />
+      <pass-receive v-if="cloudSetting ==2 || sitePlugins==2"/>
+    </div>
   </div>
 </template>
 <script>
@@ -29,6 +30,7 @@ export default {
   computed: {
     ...mapState({
       isLoading: state => state.isLoading,
+      isCouponOpen: state => state.coupon
     })
   },
   methods: {
@@ -48,6 +50,9 @@ export default {
               that.sitePlugins=2
             }
             that.getsettingsCloud();
+            if (!this.isCouponOpen) {
+              Toast.fail('领取失败，优惠券已失效');
+            }
           }
         })
         .catch(err => {

@@ -100,9 +100,11 @@ export default {
         //通过链接获取优惠券信息
         async getCouponInfo(){
             const token = this.$route.params.token;
+
+            // console.log(token);
             await Api.getCouponInfo({
                query: {
-                    batchToken: token
+                    batchToken: 'd1f1914adeb411e9b70f024255e33e33'
                 }
             }).then((res)=>{
                 this.coupons=res;

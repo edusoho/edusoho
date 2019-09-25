@@ -237,7 +237,7 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "verification" */'@/containers/login/face/verification.vue')
   }, {
-    path: '/coupon/:token/receive',
+    path: '/coupon/d1f1914adeb411e9b70f024255e33e33/receive',
     name: 'coupon_receive',
     meta: {
       title: '优惠券领取',
@@ -333,6 +333,7 @@ const setWeChatSwitch = () => new Promise((resolve, reject) => {
   return resolve();
 });
 
+
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name);
 
@@ -375,6 +376,12 @@ router.beforeEach((to, from, next) => {
 
   if (store.state.token) {
     setWeChatSwitch();
+  }
+
+  if (to.name === 'coupon_receive') {
+    store.dispatch('setCouponSwitch').then(res => {
+      console.log(res);
+    });
   }
 });
 

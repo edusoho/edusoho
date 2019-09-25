@@ -44,8 +44,9 @@ export default [
     url: '/coupons/{code}/actions',
     disableLoading: true
   }, {
-    // 优惠券总开关设置
-    name: 'couponSetting',
+    // 获取优惠券功能开关
+    name: 'getCouponSetting',
+    url: '/setting/coupon',
     method: 'GET'
   }
 ];

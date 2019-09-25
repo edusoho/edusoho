@@ -12,7 +12,7 @@
         :course="course">
       </e-course>
       <!-- 使用优惠券 -->
-      <div class="order-coupon">
+      <div class="order-coupon" v-show="couponSetting">
         <div class="coupon-column" @click="showList = true">
           <span>优惠券</span>
           <span :class="['red',itemData ? 'coupon-money':'']">{{ couponShow }}<span class="coupon-type" v-if="itemData">{{itemData.type | couponType}}</span>
@@ -95,7 +95,7 @@
     <div class='order-footer'>
       <div class='order-footer__text'>
         实付：<div class="price">{{total}}</div>
-        <div class="discount" v-show="itemData">已优惠{{couponMoney}}</div>
+        <div class="discount" v-show="itemData && couponSetting">已优惠{{couponMoney}}</div>
       </div>
       <div :class="['order-footer__btn', {'disabled': !validPayWay}]" @click="handleSubmit">
         去支付
@@ -152,9 +152,12 @@ export default {
     this.getSettings();
   },
   computed: {
-    ...mapState(['wechatSwitch', 'isLoading']),
+    ...mapState(['wechatSwitch', 'isLoading', 'couponSetting']),
     total() {
       const totalNumber = this.course.totalPrice;
+      if (!this.couponSetting) {
+        return totalNumber ? Number(this.course.totalPrice).toFixed(2) : '';
+      }
       if (!this.itemData) {
         return totalNumber ? Number(this.course.totalPrice).toFixed(2) : '';
       }

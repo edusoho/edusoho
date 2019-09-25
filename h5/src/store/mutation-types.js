@@ -25,3 +25,6 @@ export const SET_AVATAR = 'SET_AVATAR';
 export const SET_NICKNAME = 'SET_NICKNAME';
 export const BIND_MOBILE = 'BIND_MOBILE';
 export const SET_SOCIAL_STATUS = 'SET_SOCIAL_STATUS';
+
+// 优惠券总开关
+export const COUPON = 'COUPON';
