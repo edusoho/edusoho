@@ -2,12 +2,13 @@
   <div class="paper-swiper">
     <e-loading v-if="isLoading"></e-loading>
 
-    <item-bank 
+    <item-bank
       v-if="info.length>0"
       :current.sync="cardSeq"
       :info="info"
       :answer.sync="answer"
       :slideIndex.sync="slideIndex"
+      :all="info.length"
     />
 
     <!-- 引导页 -->
@@ -47,25 +48,25 @@
           <div class="card-item" v-for="(cards,name) in items" :key="name">
             <div class="card-item-title">{{name | type}}</div>
             <div class="card-item-list" v-if="name!='material'">
-              <div 
-               :class="['list-cicle',formatStatus(craditem.type,craditem.id)==1 ? 'cicle-active' :'']" 
-               v-for="(craditem) in items[name]" 
+              <div
+               :class="['list-cicle',formatStatus(craditem.type,craditem.id)==1 ? 'cicle-active' :'']"
+               v-for="(craditem) in items[name]"
                :key="craditem.id" @click="slideToNumber(craditem.seq)">
                {{craditem.seq}}
                </div>
             </div>
              <div class="card-item-list" v-if="name=='material'">
                <template v-for="(craditem) in items[name]" >
-                 <div 
-                 :class="['list-cicle',formatStatus(materialitem.type,materialitem.id)==1 ? 'cicle-active' :'']" 
-                 v-for="(materialitem) in craditem.subs" 
+                 <div
+                 :class="['list-cicle',formatStatus(materialitem.type,materialitem.id)==1 ? 'cicle-active' :'']"
+                 v-for="(materialitem) in craditem.subs"
                  :key="materialitem.id" @click="slideToNumber(materialitem.seq)">
                  {{materialitem.seq}}
                 </div>
                </template>
             </div>
           </div>
-        </div> 
+        </div>
       </div>
     </van-popup>
 

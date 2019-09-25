@@ -36,7 +36,7 @@
         </div>
 
       <div class="result-footer" ref="footer">
-        <van-button class="result-footer__btn" type="primary" :style="{marginRight: isReadOver ? '2vw' : 0}">查看解析</van-button>
+        <van-button class="result-footer__btn" type="primary" :style="{marginRight: isReadOver ? '2vw' : 0}" @click="viewAnalysis">查看解析</van-button>
         <van-button v-if="isReadOver" class="result-footer__btn" type="primary" @click="startHomework()">再做一次</van-button>
       </div>
     </div>
@@ -192,6 +192,15 @@ export default {
                 this.calHeight = `${finalHeight}px`;
             })
         },
+      viewAnalysis(){
+        this.$router.push({
+          name: 'homeworkAnalysis',
+          query: {
+            resultId: this.$route.query.resultId,
+            title:this.testpaperTitle,
+          }
+        })
+      }
     }
 }
 </script>

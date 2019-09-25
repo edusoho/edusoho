@@ -165,6 +165,11 @@ const routes = [
     path: '/homeworkResult',
     name: 'homeworkResult',
     component: () => import(/* webpackChunkName: "homeworkResult" */ '@/containers/course/lessonTask/homework/homeworkResult.vue')
+  },
+  {
+    path: '/homeworkAnalysis',
+    name: 'homeworkAnalysis',
+    component: () => import(/* webpackChunkName: "testpaperAnalysis" */ '@/containers/course/lessonTask/homework/homeworkAnalysis.vue')
   }, {
     path: '/homeworkIntro',
     name: 'homeworkIntro',

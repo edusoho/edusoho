@@ -3,7 +3,8 @@
     <e-loading v-if="isLoading"></e-loading>
     <item-bank
       v-if="info.length>0"
-      :current="cardSeq"
+      :isWrongMode="isWrongMode"
+      :current.sync="cardSeq"
       :info="info"
       :answer="answer"
       :slideIndex.sync="slideIndex"
@@ -19,7 +20,7 @@
         </span>
       </div>
       <div>
-        <span @click="showWrongList" :class="{'footer__div__span--active': isWrongList}">
+        <span @click="showWrongList" :class="{'footer__div__span--active': isWrongMode}">
           <i class="iconfont icon-submit"></i>
           错题
         </span>
@@ -39,11 +40,11 @@
         </div>
         <div class="card-list">
           <div class="card-item" v-for="(cards,name) in items" :key="name"
-               v-if="isWrongList ? wrongType.indexOf(name) !== -1 : true">
+               v-if="isWrongType(name)">
             <div class="card-item-title">{{name | type}}</div>
             <div class="card-item-list" v-if="name!='material'">
               <div
-                v-if="isWrongList ? craditem.testResult && craditem.testResult.status !== 'right' : true"
+                v-if="isWrongList(craditem)"
                 :class="['list-cicle',formatStatus(craditem)]"
                 v-for="(craditem) in items[name]"
                 :key="craditem.id"
@@ -54,9 +55,9 @@
             <div class="card-item-list" v-if="name=='material'">
               <template v-for="(craditem) in items[name]">
                 <div
+                  v-if="isWrongList(materialitem)"
                   :class="['list-cicle',formatStatus(materialitem)]"
                   v-for="(materialitem) in craditem.subs"
-                  v-if="isWrongList ? materialitem.testResult.status !== 'right' : true"
                   :key="materialitem.id"
                   @click="slideToNumber(materialitem.seq)"
                 >{{materialitem.seq}}
@@ -84,7 +85,7 @@
         result: null,
         items: {}, //分组题目
         info: [],
-        isWrongList: false, //当前是否显示错题列表
+        isWrongMode: false, //是否是错题模式
         allList: [],//所有题集
         wrongList: [], //所有题集
         wrongType: [],//错题包含的题型
@@ -259,7 +260,16 @@
       //答题卡定位
       slideToNumber(num) {
         let index = Number(num);
-        this.cardSeq = index;
+        if (!this.isWrongMode) {
+          this.cardSeq = index;
+        } else {
+          // 解决了错题下答题卡定位不准的问题,错题情况下会少一些题，不能直接用index去找
+          this.info.forEach((item, i) => {
+            if (index === parseInt(item.seq)) {
+              this.cardSeq = i + 1;
+            }
+          });
+        }
         //关闭弹出层
         this.cardShow = false;
       },
@@ -269,27 +279,42 @@
           Toast('当前没有错题');
           return;
         }
-        this.isWrongList = !this.isWrongList;
-        if (this.isWrongList === true) {
+        Toast({
+          message: '切换成功',
+          duration: 1000
+        });
+        this.isWrongMode = !this.isWrongMode;
+
+        if (this.isWrongMode) {
           this.info = this.wrongList;
-          this.cardSeq = parseInt(this.isWrongItem());
-        }
-        if (this.isWrongList === false) {
-          this.slideIndex=0;
+          this.cardSeq = this.isWrongItem();
+        } else {
           this.info = this.allList;
           this.cardSeq = 1;
         }
+        // 修改后不会出现多次点第1题切换到第2题的问题
+        this.slideIndex = this.cardSeq - 1;
       },
-      // 当前题目是否是错误题目
+      // 当前题目是否是错误题目,是错题则找出当前题在错题list中的索引，保持当前错题位置不动
       isWrongItem() {
         let item = this.allList[this.slideIndex];
+        let itemIndex = 1; //如果不是错题，默认为从第一个开始
         if (item.testResult && item.testResult.status !== 'right') {
-          console.log(this.wrongList.indexOf(item))
-          return this.wrongList.indexOf(item)+1;
+          this.wrongList.forEach((list, index) => {
+            if (list.id == item.id) {
+              itemIndex = index + 1;
+            }
+          });
         }
-        return 1;
+        return itemIndex;
+      },
+      isWrongType(name) {
+        return this.isWrongMode ? this.wrongType.indexOf(name) !== -1 : true;
+      },
+      isWrongList(item) {
+        return this.isWrongMode ? item.testResult.status !== 'right' : true
       }
-    }
+    },
   };
 </script>
 

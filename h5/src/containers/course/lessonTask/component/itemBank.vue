@@ -127,28 +127,38 @@ export default {
             type:Boolean,
             default:true
         },
-        canDo:{
+        canDo:{ //是否是做题模式
           type:Boolean,
           default:true
         },
-        all:{
-            type:Number,
-            default:0
+        all:{ //所有题数
+          type:Number,
+          default:0
         },
+        isWrongMode:{ //是否是错题模式,只有在解析的时候有
+          type:Boolean,
+          default:false
+        }
     },
     watch:{
         answer(val){
             this.$emit('update:answer', val)
         },
+        isWrongMode(val){//更改为错题模式时需要手动改变当前的currentIndex,并跳转过去
+            this.currentIndex = this.current-1;
+            if(val){
+                // 设置 immediate: true后可以关闭动画,解决点错题的时候会闪一下的问题
+                this.$refs.swipe.swipeTo(this.current-1, {immediate: true});
+            }
+        },
         current(val,oldval){
-          if(!this.canDo){
-            console.log(this.canDo)
-            this.currentIndex = val-1;
-          }
           //答题卡定位
+          console.log(val, 'slideIndex:',this.currentIndex);
           let index=Number(val);
+          if (index -1 === this.currentIndex) {
+            return;
+          }
           this.$refs.swipe.swipeTo(index-1);
-          console.log('current'+val)
         }
     },
     components: {
@@ -162,9 +172,9 @@ export default {
     },
     methods:{
         changeswiper(index) {
-          console.log(index);
-            this.currentIndex = index;
-            this.$emit('update:slideIndex', index);
+          this.currentIndex = index;
+          this.$emit('update:current', index + 1);
+          this.$emit('update:slideIndex', index);
         },
          //左滑动
         last() {

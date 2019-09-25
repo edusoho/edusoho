@@ -1,7 +1,7 @@
 <template>
   <div class="essay">
     <div class="subject-stem" >
-      <div class="serial-number">{{number}}、</div>
+      <div class="serial-number">{{itemdata.seq}}、</div>
       <div v-html="stem" class="rich-text"></div>
     </div>
 
