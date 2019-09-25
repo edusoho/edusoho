@@ -51,8 +51,6 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'createCouponBatch',
-            'createDefaultBatch',
-            'updateCouponAddDefaultBatchId',
             'createPromotedCouponBatch',
             'createPromoteCouponBatch',
             'updateInviteSetting',
@@ -157,62 +155,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if (!$this->isFieldExist('coupon', 'targetIds')) {
             $this->getConnection()->exec("ALTER TABLE `coupon` ADD `targetIds` text COMMENT '优惠券绑定资源' AFTER `targetId`;");
-        }
-
-        return 1;
-    }
-
-    /**
-     * 创建默认批次
-     */
-    public function createDefaultBatch()
-    {
-        $md5Code = md5('upgradeCreateDefaultBatch');
-        $batchSql = "select id from `coupon_batch` where prefix= '{$md5Code}'";
-        $batch = $this->getConnection()->fetchAssoc($batchSql);
-        if (empty($batch)) {
-            $countSql = 'select count(id) from `coupon` where batchId is null';
-            $count = $this->getConnection()->fetchColumn($countSql);
-            $batch = array(
-                'token' => 0,
-                'name' => '默认批次',
-                'type' => 'minus',
-                'generatedNum' => $count,
-                'usedNum' => $count,
-                'rate' => 0,
-                'prefix' => $md5Code,
-                'digits' => 8,
-                'money' => 0,
-                'deadlineMode' => 'day',
-                'deadline' => 0,
-                'fixedDay' => 0,
-                'targetType' => 'all',
-                'targetId' => 0,
-                'description' => '',
-                'createdTime' => time(),
-                'fullDiscountPrice' => 0,
-                'unreceivedNum' => 0,
-                'codeEnable' => 0,
-                'linkEnable' => 0,
-                'h5MpsEnable' => 0,
-            );
-            $this->getCouponBatchDao()->create($batch);
-        }
-
-        return 1;
-    }
-
-    /**
-     * 以前不走批次自动生成的优惠券挂到默认批次下
-     */
-    public function updateCouponAddDefaultBatchId()
-    {
-        $md5Code = md5('upgradeCreateDefaultBatch');
-        $batchSql = "select id from `coupon_batch` where prefix= '{$md5Code}'";
-        $batch = $this->getConnection()->fetchAssoc($batchSql);
-        if (!empty($batch)) {
-            $couponSql = "update `coupon` set batchId = '{$batch['id']}'  where batchId is null";
-            $this->getConnection()->exec($couponSql);
         }
 
         return 1;
