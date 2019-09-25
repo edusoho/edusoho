@@ -146,8 +146,17 @@ export default {
         },
         current(val,oldval){
           //答题卡定位
+          console.log(val, 'slideIndex:',this.currentIndex);
           let index=Number(val);
-          this.$refs.swipe.swipeTo(index-1);
+          if (index -1 === this.currentIndex) {
+            return;
+          }
+          // 设置 immediate: true后可以关闭动画,解决点错题的时候会闪一下的问题
+          if (this.isWrongMode) {
+            this.$refs.swipe.swipeTo(index-1, {immediate: true});
+          } else {
+            this.$refs.swipe.swipeTo(index-1);
+          }
         },
         isWrongMode(val){//更改为错题模式时需要手动改变当前的currentIndex
             this.currentIndex = this.current-1;
@@ -164,8 +173,9 @@ export default {
     },
     methods:{
         changeswiper(index) {
-            this.currentIndex = index;
-            this.$emit('update:slideIndex', index);
+          this.currentIndex = index;
+          this.$emit('update:current', index + 1);
+          this.$emit('update:slideIndex', index);
         },
          //左滑动
         last() {

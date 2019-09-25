@@ -3,7 +3,7 @@
     <e-loading v-if="isLoading"></e-loading>
     <item-bank
       v-if="info.length>0"
-      :current="cardSeq"
+      :current.sync="cardSeq"
       :info="info"
       :answer="answer"
       :slideIndex.sync="slideIndex"
@@ -44,7 +44,7 @@
             <div class="card-item-title">{{name | type}}</div>
             <div class="card-item-list" v-if="name!='material'">
               <div
-                v-if="isWrongMode ? craditem.testResult && craditem.testResult.status !== 'right' : true"
+                v-if="isWrongMode ? craditem.testResult.status !== 'right' : true"
                 :class="['list-cicle',formatStatus(craditem)]"
                 v-for="(craditem) in items[name]"
                 :key="craditem.id"
@@ -260,7 +260,16 @@
       //答题卡定位
       slideToNumber(num) {
         let index = Number(num);
-        this.cardSeq = index;
+        if (!this.isWrongMode) {
+          this.cardSeq = index;
+        } else {
+          // 解决了错题下答题卡定位不准的问题,错题情况下会少一些题，不能直接用index去找
+          this.info.forEach((item, i) => {
+            if (index === parseInt(item.seq)) {
+              this.cardSeq = i + 1;
+            }
+          });
+        }
         //关闭弹出层
         this.cardShow = false;
       },
@@ -276,22 +285,23 @@
         if (this.isWrongMode) {
           this.info = this.wrongList;
           this.cardSeq = this.isWrongItem();
-        }else {
+        } else {
           this.info = this.allList;
           this.cardSeq = 1;
         }
-        this.slideIndex=this.cardSeq
+        // 修改后不会出现多次点第1题切换到第2题的问题
+        this.slideIndex = this.cardSeq - 1;
       },
       // 当前题目是否是错误题目,是错题则找出当前题在错题list中的索引，保持当前错题位置不动
       isWrongItem() {
         let item = this.allList[this.slideIndex];
-        let itemIndex=1; //如果不是错题，默认为从第一个开始
+        let itemIndex = 0; //如果不是错题，默认为从第一个开始
         if (item.testResult && item.testResult.status !== 'right') {
-          this.wrongList.forEach((list,index)=>{
-            if(list.id==item.id){
-                itemIndex=index+1
+          this.wrongList.forEach((list, index) => {
+            if (list.id == item.id) {
+              itemIndex = index + 1;
             }
-          })
+          });
         }
         return itemIndex;
       }
