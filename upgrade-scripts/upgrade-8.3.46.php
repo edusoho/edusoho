@@ -51,11 +51,11 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'createCouponBatch',
-            'createCouponBatchResource',
             'createDefaultBatch',
             'updateCouponAddDefaultBatchId',
             'createPromotedCouponBatch',
             'createPromoteCouponBatch',
+            'updateInviteSetting',
             'initCouponTargetIds',
             'initCouponBatchTargetIds',
         );
@@ -156,7 +156,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('coupon', 'targetIds')) {
-            $this->getConnection()->exec("ALTER TABLE `coupon_batch` ADD `targetIds` text COMMENT '优惠券绑定资源' AFTER `targetId`;");
+            $this->getConnection()->exec("ALTER TABLE `coupon` ADD `targetIds` text COMMENT '优惠券绑定资源' AFTER `targetId`;");
         }
 
         return 1;
