@@ -279,7 +279,7 @@
           Toast('当前没有错题');
           return;
         }
-
+        Toast('切换成功');
         this.isWrongMode = !this.isWrongMode;
 
         if (this.isWrongMode) {
@@ -295,7 +295,7 @@
       // 当前题目是否是错误题目,是错题则找出当前题在错题list中的索引，保持当前错题位置不动
       isWrongItem() {
         let item = this.allList[this.slideIndex];
-        let itemIndex = 0; //如果不是错题，默认为从第一个开始
+        let itemIndex = 1; //如果不是错题，默认为从第一个开始
         if (item.testResult && item.testResult.status !== 'right') {
           this.wrongList.forEach((list, index) => {
             if (list.id == item.id) {
