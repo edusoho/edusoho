@@ -11,16 +11,18 @@ use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 class CouponBatchFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'name', 'token', 'type', 'prefix', 'generatedNum', 'usedNum', 'receiveNum', 'rate', 'deadlineMode', 'fixedDay', 'deadline', 'unreceivedNum', 'currentUserCoupon', 'target', 'targetType', 'description', 'createdTime', 'targetDetail', 'targetIds'
+        'id', 'name', 'token', 'type', 'prefix', 'generatedNum', 'usedNum', 'receiveNum', 'rate', 'deadlineMode', 'fixedDay', 'deadline', 'unreceivedNum', 'currentUserCoupon', 'targets', 'targetType', 'description', 'createdTime', 'targetDetail', 'targetIds',
     );
 
     protected function publicFields(&$data)
     {
         $data['deadline'] = $data['deadline'] > 0 ? date('c', $data['deadline']) : '';
-        if (!empty($data['target'])) {
-            $targetFilter = $this->getFilter($data['targetType']);
-            $targetFilter->setMode(Filter::SIMPLE_MODE);
-            $targetFilter->filter($data['target']);
+        if (!empty($data['targets'])) {
+            foreach ($data['targets'] as &$target) {
+                $targetFilter = $this->getFilter($data['targetType']);
+                $targetFilter->setMode(Filter::SIMPLE_MODE);
+                $targetFilter->filter($target);
+            }
         }
 
         if (isset($data['currentUserCoupon'])) {
