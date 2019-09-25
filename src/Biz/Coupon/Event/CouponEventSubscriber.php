@@ -47,7 +47,7 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $batch = $event->getSubject();
 
         $inviteSetting = $this->getSettingService()->get('invite', array());
-        if ($batch['unreceivedNum'] < $inviteSetting['remain_number']) {
+        if (empty($inviteSetting['remain_number']) || $batch['unreceivedNum'] < $inviteSetting['remain_number']) {
             return;
         }
 
