@@ -43,5 +43,9 @@ export default [
     method: 'POST',
     url: '/coupons/{code}/actions',
     disableLoading: true
+  }, {
+    // 优惠券总开关设置
+    name: 'couponSetting',
+    method: 'GET'
   }
 ];

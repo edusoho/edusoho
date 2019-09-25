@@ -43,6 +43,10 @@ const config = [
     name: 'getClassList',
     url: '/classrooms'
   }, {
+    // 获取优惠券功能开关
+    name: 'getCouponSetting',
+    url: '/setting/coupon'
+  }, {
     // 获取优惠券
     name: 'getCouponList',
     url: '/plugins/coupon/coupon_batches'
