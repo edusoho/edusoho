@@ -3,9 +3,10 @@
 {% set modal_class = 'modal-lg' %}
 {% block title %}{{ 'admin.setting.invite.chooser_coupon'|trans }}{% endblock %}
 {% block body %}
-
+  <a  href="{{ path('admin_coupon') }}" class="btn btn-default" target="_blank">{{ 'admin.setting.invite.chooser_coupon.manage_btn'|trans }}</a>
+  <a id="refresh" href="javascript:;" class="mlm" style="color: #333">{{ 'admin.setting.invite.chooser_coupon.refresh_btn'|trans }}</a>
   <form id="coupon-search-form" class="form-inline pull-right" action="{{ path('admin_coupon_chooser',{'type':type}) }}" method="get" novalidate>
-      <div class="form-group">
+    <div class="form-group">
         <input class="form-control" type="text" placeholder="{{ 'coupon.name'|trans }}" name="nameLike" value="{{ app.request.get('nameLike') }}">
       </div>
       <button type="submit" class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
@@ -25,7 +26,7 @@
     <tbody>
     {% for batch in batchs %}
       {% if batch.type=='discount' %}
-        {% set content =  'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(1)}) %}
+        {% set content =  'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(2)}) %}
       {% elseif batch.type=='minus' %}
         {% set content =  'coupon.type.minus_tip'|trans({'%rate%': batch.rate}) %}
       {% endif %}
@@ -42,10 +43,15 @@
           <br>
           {% if batch.couponContent == 'multi' %}
             <a href="javascript:;" class="js-resource-list" data-url="{{ path('admin_coupon_chooser_resource_list',{'batchId': batch.id}) }}">
-            {% if batch.targetType == 'course' %}{{ 'coupon.target_type.multi_course'|trans }}{% elseif batch.targetType == 'classroom' %}{{ 'coupon.target_type.multi_classroom'|trans }}{% endif %}
-            >></a>
+            {% if batch.targetType == 'course' %}
+              {% set couponContent =  'coupon.target_type.multi_course'|trans%}
+            {% elseif batch.targetType == 'classroom' %}
+              {% set couponContent =  'coupon.target_type.multi_classroom'|trans%}
+            {% endif %}
+            {{ couponContent }}>></a>
           {% else %}
-            <span class="text-muted text-sm">{{ batch.couponContent }}</span>
+            {% set couponContent =  batch.couponContent %}
+            <span class="text-muted text-sm">{{ couponContent }}</span>
           {% endif %}
         </td>
         <td>{{ batch.usedNum }}/{{ batch.generatedNum-batch.unreceivedNum }}/{{ batch.generatedNum }}</td>
@@ -58,7 +64,7 @@
           {% endif %}
         </td>
         <td>
-          <a class="btn btn-primary mtm js-chooser" data-batch-id="{{ batch.id }}" data-userd-num="{{ batch.usedNum }}/{{ batch.generatedNum-batch.unreceivedNum }}/{{ batch.generatedNum }}" data-content="{{ content }}" data-batch="{{ batch|json_encode }}" data-type="{{ type|default('promoted') }}">{{ 'admin.setting.invite.chooser_btn'|trans }}</a>
+          <a class="btn btn-primary mtm js-chooser" data-name="{{ batch.name }}" data-batch-id="{{ batch.id }}" data-coupon-content="{{ couponContent }}" data-unreceived-num="{{ batch.unreceivedNum }}" data-content="{{ content }}" data-type="{{ type|default('promoted') }}">{{ 'admin.setting.invite.chooser_btn'|trans }}</a>
         </td>
       </tr>
     {% else %}

@@ -12,6 +12,13 @@ define(function(require, exports, module) {
       });
     });
 
+    $('#refresh').click(function (e) {
+      e.preventDefault();
+      $.get($form.attr('action'), {}, function (html) {
+        self.$modal.html(html);
+      });
+    });
+
     this.$attachmentModal.on('shown.bs.modal', () => {
       this.$modal.modal('hide');
     });
@@ -30,14 +37,16 @@ define(function(require, exports, module) {
 
     $('.js-chooser').click(function (e) {
       let type = $(this).data('type');
-      let batch = $(this).data('batch');
-      let content = '';
+      let content = $(this).data('content');
+      let couponContent = $(this).data('couponContent');
+      let unreceivedNum = $(this).data('unreceivedNum');
+      let name = $(this).data('name');
       $(`#${type}_user_batchId`, window.parent.document).val($(this).data('batchId'));
       let $tbody = $(`.js-${type}-user-content`, window.parent.document).find('tbody');
-      let html = `<tr>
-                   <td>${batch.name}</td>
-                   <td>${batch.prefix}</td>
-                   <td> ${ batch.unreceivedNum }</td>
+      let html = `<tr class="table-${type}">
+                   <td>${name}</td>
+                   <td><span>${ content }</span><br><span class="text-muted text-sm">${ couponContent }</span></td>
+                   <td> ${ unreceivedNum }</td>
                    <td><a href="javascript:;" class="js-remove-item" >删除</a></td>
                    </tr>`;
       $tbody.html(html);

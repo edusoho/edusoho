@@ -5947,7 +5947,7 @@ admin.operation_analysis.income.price: 价格
 admin.operation_analysis.income.discount: 优惠
 admin.operation_analysis.income.buyer: 购买者
 admin.operation_analysis.income.buy_time: 下单&支付时间
-admin.operation_analysis.income.discount_code: 优惠码
+admin.operation_analysis.income.discount_code: 优惠券
 admin.operation_analysis.teach_plan: 教学计划
 admin.operation_analysis.teach_plan.creator: 创建者
 admin.operation_analysis.teach_plan.empty: 暂无教学计划明细
@@ -8596,7 +8596,7 @@ log.module.crontab: 定时任务
 log.module.marker: 驻点
 log.module.vip: 会员
 log.module.coin: 虚拟币
-log.module.coupon: 优惠码
+log.module.coupon: 优惠券
 log.module.money_card: 学习卡
 log.module.discount: 打折活动
 log.module.exercise: 练习
@@ -9569,7 +9569,7 @@ admin.cashflow.keyword_default: --选择类型--
 
 order.pay_check_msg.parameters_error: 参数错误
 order.pay_check_msg.coin_amount_error: 金额错误
-order.pay_check_msg.coupon_had_been_used: 优惠码已经被使用了
+order.pay_check_msg.coupon_had_been_used: 优惠券已经被使用了
 order.pay_check_msg.product_not_found: 该类型产品找不到
 order.pay_check_msg.unpurchasable_product: 未开放购买
 order.pay_check_msg.order_not_exist: 订单不存在
@@ -10220,11 +10220,11 @@ classroom.joining_date.expired_tips: 班级已过有效期！
 editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
 
 #coupon
-coupon.usage_detail_title: 优惠码使用详情
-coupon.enable_hint: 优惠码未开启，请先在<a href="%path%"> 系统-运营设置-优惠码 </a>中设置开启
+coupon.usage_detail_title: 优惠券使用详情
+coupon.enable_hint: 优惠券未开启，请先在<a href="%path%"> 系统-运营设置-优惠券 </a>中设置开启
 
 coupon.id: 编号
-coupon.code: 优惠码
+coupon.code: 优惠券
 coupon.status: 状态
 coupon.user: 使用者
 coupon.order: 订单信息
@@ -10232,7 +10232,7 @@ coupon.origin_price: 原价
 coupon.pay_amount: 实付
 coupon.receive_time: 领取时间
 coupon.used_time: 使用时间
-coupon.name: 优惠码名称
+coupon.name: 优惠券名称
 coupon.type: 优惠方式
 coupon.deadline: 有效期至
 coupon.deadline.day.help_block.behind: 领券当日起
@@ -10244,10 +10244,10 @@ coupon.channel: 发放渠道
 coupon.setting.status: 优惠券全局开关
 coupon.content: 优惠内容
 coupon.batch.name: 批次名称
-coupon.no_coupon_tip: 无优惠码记录
-coupon.batch: 优惠码批次
+coupon.no_coupon_tip: 无优惠券记录
+coupon.batch: 优惠券批次
 coupon.receive_url: 发放地址
-coupon.batch.prefix: 优惠码前缀
+coupon.batch.prefix: 优惠券前缀
 coupon.operation: 操作
 coupon.total_count: 总数
 coupon.expiry_date: 有效期
@@ -10287,14 +10287,14 @@ coupon.status.used: 已使用
 coupon.generate_num: 生成数量
 coupon.generate_num_hint: 生成数量必须在1～100之间
 coupon.generate_num_unit: 个
-coupon.prefix: 优惠码前缀
-coupon.prefix_hint: 优惠码前缀不可重复，不占优惠码位数
-coupon.digits: 优惠码位数
-coupon.digits_hint: 优惠码位数必须在5～15位之间
+coupon.prefix: 优惠券前缀
+coupon.prefix_hint: 优惠券前缀不可重复，不占优惠券位数
+coupon.digits: 优惠券位数
+coupon.digits_hint: 优惠券位数必须在5～15位之间
 coupon.channel_hint: 通过本功能控制优惠券可被领取的方式
 
 coupon.channel_type.link: 通过链接
-coupon.channel_type.code: 通过优惠码
+coupon.channel_type.code: 通过优惠券
 coupon.channel_type.page_detail: 通过商品详情页
 coupon.channel_type.h5_mps: 小程序/新版微网校
 coupon.channel_type.page_detail_hint: 选中此项则系统将自动获取商品可用的优惠券显示在商品详情页
@@ -10315,7 +10315,7 @@ coupon.query.by_status: 使用状态
 coupon.query.by_type: 按优惠方式
 coupon.query.by_use_start_date: 使用时间起始
 coupon.query.by_use_end_date: 使用时间截止
-coupon.query.by_code: 优惠码
+coupon.query.by_code: 优惠券
 coupon.setting.close: 优惠券未开启，请先开启优惠券开关
 coupon.setting.permission.goto_open: 去开启
 
@@ -10347,3 +10347,6 @@ course.setting.course_remind_tip: 当前设置，%D% %H%会向所有在读学员
 course.setting.course_remind_change: 修改设置
 course.setting.course_remind_not_open: 未开启上课提醒
 course.setting.course_remind_go_to_open: 前往开启
+
+admin.setting.invite.chooser_coupon.manage_btn: 优惠券管理
+admin.setting.invite.chooser_coupon.refresh_btn: 刷新

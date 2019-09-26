@@ -1414,16 +1414,18 @@ user.account.order_not_pay: 不支付
 
 #coupon
 notify.copy_link_success: 链接复制成功
-confirm.remove_coupon: 确认要删除此批次优惠码？
-notify.remove_coupon_success: 删除优惠码成功!
-notify.remove_coupon_fail: 删除优惠码失败!
+confirm.remove_coupon: 确认要删除此批次优惠券？
+notify.remove_coupon_success: 删除优惠券成功!
+notify.remove_coupon_fail: 删除优惠券失败!
 notify.channel_select: 至少选择一个发放渠道
 
 coupon.fixed_day: 有效期
 coupon.fixed_day.message: 请输入领取后有效天数
-admin.coupon.setting.confirm_message:  关闭优惠券开关将影响到所有当前正在发放或已经发放的优惠券。已经发放的优惠券也将无法继续使用，是否继续？
-admin.coupon.setting.success_message: 优惠码状态已保存
+admin.coupon.setting.confirm_message:  关闭优惠券开关将影响到所有正在发放优惠券的营销活动，将导致使用优惠券的营销活动无法正常进行。已经发放的优惠券也将无法继续使用，学员侧将屏蔽「我的优惠券」模块，订单页面也将无法继续选取优惠券下单。是否继续？
+admin.coupon.setting.success_message: 优惠券状态已保存
 coupon.target_type.multi_course: 部分课程
 coupon.target_type.multi_classroom: 部分班级
 admin.wechat.live_open_scenes_error.hint: 请至少勾选一个选项。
 course.question_manage.manage.delete_tips: 删除题目，可能会影响课时的练习，请谨慎操作！
+admin.setting.invite.promoted.empty.tips: 请先选择被邀请人奖励优惠劵
+admin.setting.invite.promote.empty.tips: 请先选择邀请人奖励优惠劵

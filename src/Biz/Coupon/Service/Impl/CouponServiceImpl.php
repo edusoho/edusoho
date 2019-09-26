@@ -99,7 +99,7 @@ class CouponServiceImpl extends BaseService implements CouponService
         }
 
         $inviteSetting = $this->getSettingService()->get('invite', array());
-        if (isset($inviteSetting['invite_code_setting']) && $inviteSetting[$enable] && $inviteSetting[$batchId] > 0) {
+        if (!empty($inviteSetting['invite_code_setting']) && $inviteSetting[$enable] && $inviteSetting[$batchId] > 0) {
             $batch = $this->getCouponBatchService()->getBatch($inviteSetting[$batchId]);
             if (empty($batch)) {
                 return array();

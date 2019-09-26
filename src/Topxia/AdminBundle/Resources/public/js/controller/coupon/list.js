@@ -9,6 +9,11 @@ var Notify = require('common/bootstrap-notify');
             $short.slideUp('fast').parents('.short-long-text').find('.long-text').slideDown('fast');
         });
 
+      $element.on('click', '.long-text', function() {
+        var $long = $(this);
+        $long.slideUp('fast').parents('.short-long-text').find('.short-text').slideDown('fast');
+      });
+
         $('#coupon-list').on('click', 'a.coupon-remove', function() {
             if (!confirm(Translator.trans('confirm.remove_coupon'))) return false;
             var $btn = $(this);

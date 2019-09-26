@@ -50,9 +50,29 @@ class CouponBatchWrapper extends Wrapper
     public function targetDetail($batch)
     {
         list($productType, $numType) = $this->getProductTypeAndNumType($batch);
+        $data = array();
+        if ($numType != 'all') {
+            switch ($productType) {
+                case 'course':
+                    $data = $this->getCourseSetService()->findCourseSetsByIds($batch['targetIds']);
+                    break;
+                case 'classroom':
+                    $data = $this->getClassroomService()->findClassroomsByIds($batch['targetIds']);
+                    break;
+                case 'vip':
+                    if ($this->isPluginInstalled('Vip')) {
+                        $vip = $this->getLevelService()->getLevel($batch['targetId']);
+                        $data = array($vip);
+                    }
+                default:
+                    break;
+            }
+            $data = array_values($data);
+        }
         $batch['targetDetail'] = array(
             'product' => $productType,
             'numType' => $numType,
+            'data' => $data
         );
 
         return $batch;
