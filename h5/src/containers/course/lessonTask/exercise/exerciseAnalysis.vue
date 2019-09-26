@@ -21,7 +21,9 @@
       </div>
       <div>
         <span @click="showWrongList" :class="{'footer__div__span--active': isWrongMode}">
-          <i class="cuoti"><img :src="isWrongMode ? 'static/images/cuoti-active.png' : 'static/images/cuoti.png'" alt=""></i>
+          <i class="cuoti">
+            <img :src="isWrongMode ? 'static/images/cuoti-active.png' : 'static/images/cuoti.png'" alt="">
+          </i>
           错题
         </span>
       </div>
@@ -34,7 +36,7 @@
             <span class="card-right">正确</span>
             <span class="card-wrong">错误</span>
             <span class="card-nofinish">未作答</span>
-            <span class="card-none">待批阅</span>
+            <span class="card-subjective">主观题</span>
           </div>
           <i class="iconfont icon-no" @click="cardShow=false"></i>
         </div>
@@ -63,7 +65,7 @@
   import { Toast } from 'vant';
 
   export default {
-    name: 'homeworkAnalysis',
+    name: 'exerciseAnalysis',
     data() {
       return {
         result: null,
@@ -118,17 +120,17 @@
     },
     created() {
       this.setNavbarTitle(this.$route.query.title);
-      this.gethomeworkResult();
+      this.getexerciseResult();
     },
     methods: {
       ...mapMutations({
         setNavbarTitle: types.SET_NAVBAR_TITLE
       }),
-      gethomeworkResult() {
-        Api.homeworkResult({
+      getexerciseResult() {
+        Api.exerciseResult({
           query: {
-            homeworkId: this.$route.query.homeworkId,
-            homeworkResultId: this.$route.query.homeworkResultId
+            exerciseId: this.$route.query.exerciseId,
+            exerciseResultId: this.$route.query.exerciseResultId
           },
         })
           .then(res => {
@@ -180,13 +182,11 @@
             );
           }
           this.$set(this.answer, item.id, answer);
-          // this.info.push(item);
         }
 
         if (type == 'essay') {
           let answer = item.testResult ? item.testResult.answer : [];
           this.$set(this.answer, item.id, answer);
-          // this.info.push(item);
         }
 
         if (type == 'fill') {
@@ -229,7 +229,7 @@
               return 'cicle-right';
               break;
             case 'none':
-              return 'cicle-none';
+              return 'cicle-subjective';
               break;
             case 'wrong':
               return 'cicle-wrong';

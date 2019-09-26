@@ -193,7 +193,7 @@
                 homeworkId: this.$route.query.homeworkId,
                 homeworkResultId: this.$route.query.homeworkResultId,
                 courseId: this.$route.query.courseId,
-                taskId: tthis.$route.query.taskId
+                taskId: this.$route.query.taskId
               }
             });
           })
