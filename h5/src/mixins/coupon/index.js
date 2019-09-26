@@ -30,14 +30,7 @@ export default {
       }
       return `<span class="${intClass}">${intPrice}</span><span class="text-14">${pointPrice + typeText}</span>`;
     },
-    scopeFilter({ targetType }) {
-      console.log('targetType');
-      console.log(targetType);
-      const targetDetail = {
-        product: 'course',
-        numtype: 'single'
-      };
-
+    scopeFilter({ targetDetail }) {
       const numberType = targetDetail.numtype;
       const productType = targetDetail.product;
       let text = '';
