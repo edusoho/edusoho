@@ -51,6 +51,7 @@ class MeCoupon extends AbstractResource
 
         $coupon = $this->getCouponService()->getCoupon($result['id']);
         $coupon['target'] = $this->getCouponService()->getCouponTargetByTargetTypeAndTargetId($coupon['targetType'], $coupon['targetId']);
+        $coupon['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($coupon['batchId']);
 
         return $coupon;
     }
