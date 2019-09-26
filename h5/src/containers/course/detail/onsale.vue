@@ -17,7 +17,7 @@
       </template>
     </van-cell>
     <!-- 优惠券 -->
-    <van-cell v-if="unreceivedCoupons.length && isCouponOpen" class="course-detail__cell" is-link @click="couponListShow = true">
+    <van-cell v-if="unreceivedCoupons.length" class="course-detail__cell" is-link @click="couponListShow = true">
       <template slot="title">
         <span class="text-12">领券：</span>
         <mini-coupon :item="item" v-for="(item, index) in miniCoupons" :key="index" />
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import EPopup from '@/components/popup';
 import coupon from '@/containers/components/e-coupon/e-coupon';
 import miniCoupon from '@/containers/components/e-mini-coupon/e-mini-coupon';
@@ -56,19 +55,6 @@ export default {
     return {
       couponListShow: false,
     }
-  },
-  computed: {
-    ...mapState({
-      isCouponOpen: state => state.coupon
-    }),
-  },
-  methods: {
-    test() {
-      console.log(this.isCouponOpen);
-    }
-  },
-  created() {
-    this.test();
   }
 }
 </script>
