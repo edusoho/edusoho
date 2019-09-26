@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="testResults">
     <e-loading v-if="isLoading"></e-loading>
     <div class="result-data" ref="data" v-if="result">
       <div class="result-data__item">
