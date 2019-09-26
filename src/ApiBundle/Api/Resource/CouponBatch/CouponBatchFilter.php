@@ -23,7 +23,7 @@ class CouponBatchFilter extends Filter
             $targetFilter->filter($data['target']);
         }
 
-        if (!empty($data['targetDetail'] && !empty($data['targetDetail']['data']))) {
+        if (!empty($data['targetDetail']) && !empty($data['targetDetail']['data'])) {
             foreach ($data['targetDetail']['data'] as &$target) {
                 $targetFilter = $this->getFilter($data['targetType']);
                 $targetFilter->setMode(Filter::SIMPLE_MODE);
