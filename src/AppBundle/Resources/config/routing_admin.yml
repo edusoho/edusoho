@@ -2080,7 +2080,7 @@ admin_keyword_banlogs:
     defaults: { _controller: AppBundle:Admin/Sensitive:banlogs }
 
 
-#classroom 
+#classroom
 admin_classroom:
     path:     /classroom/index
     defaults: { _controller: AppBundle:Admin/ClassroomAdmin:index }
@@ -2111,7 +2111,7 @@ admin_classroom_delete:
 admin_classroom_category:
     path: /classroom/category
     defaults: { _controller: AppBundle:Admin/ClassroomCategory:index }
-    
+
 admin_classroom_thread:
     path:     /classroom/thread
     defaults: { _controller: AppBundle:Admin/ClassroomThreadAdmin:index }
@@ -2152,6 +2152,10 @@ admin_classroom_review_batch_delete:
     path:  /classroom/review/batch_delete
     defaults: { _controller: AppBundle:Admin/ClassroomReview:batchDelete }
     methods: [POST]
+
+admin_classroom_chooser:
+    path: /classroom/chooser
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:chooser }
 
 #org
 admin_org:
@@ -2379,19 +2383,27 @@ admin_setting_wechat_auth:
     path: /wechat/auth/setting
     defaults: { _controller: AppBundle:Admin/WeChatSetting:index}
 
-admin_wechat_notification_record: 
+admin_setting_wechat_pre_auth_url:
+    path: /wechat/pre_auth_url/{platformType}
+    defaults: { _controller: AppBundle:Admin/WeChatSetting:preAuthUrl }
+
+admin_wechat_notification_record:
     path: /wechat/notification/record
     defaults: { _controller: AppBundle:Admin/WeChatNotification:record}
 
-admin_wechat_notification_record_detail: 
+admin_wechat_notification_record_detail:
     path: /wechat/notification/record/{id}/detail
     defaults: { _controller: AppBundle:Admin/WeChatNotification:recordDetail}
 
-admin_wechat_notification_manage: 
+admin_wechat_fans_list:
+    path: /wechat/fans/list
+    defaults: { _controller: AppBundle:Admin/WeChatNotification:fansList }
+
+admin_wechat_notification_manage:
     path: /wechat/notification/manage
     defaults: { _controller: AppBundle:Admin/WeChatNotification:manage}
 
-admin_wechat_notification_show: 
+admin_wechat_notification_show:
     path: /wechat/notification/show
     defaults: { _controller: AppBundle:Admin/WeChatNotification:show}
 
@@ -2452,3 +2464,8 @@ admin_coupon_chooser:
 admin_coupon_chooser_resource_list:
   pattern: /coupon/batch/{batchId}/chooser/resource/list
   defaults: { _controller: AppBundle:Admin/CouponBatch:chooserResourceList }
+
+admin_wechat_notification_setting_modal:
+    path: /wechat/notification/setting_edit
+    defaults: { _controller: AppBundle:Admin/WeChatNotification:settingModal }
+

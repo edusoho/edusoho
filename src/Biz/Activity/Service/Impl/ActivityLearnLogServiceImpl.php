@@ -70,8 +70,9 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
      */
     public function calcLearnProcessByCourseIdAndUserId($courseId, $userId)
     {
-        $daysCount = $this->getActivityLearnLogDao()->countLearnedDaysByCourseIdAndUserId($courseId, $userId);
-//        $learnedTime = $this->getActivityLearnLogDao()->sumLearnedTimeByCourseIdAndUserId($courseId, $userId);
+        $activities = $this->getActivityDao()->findByCourseId($courseId);
+        $activityIds = ArrayToolkit::column($activities, 'id');
+        $daysCount = $this->getActivityLearnLogDao()->countLearnedDaysByActivityIdsAndUserId($activityIds, $userId);
         $learnedTime = 0;
         $learnedTimePerDay = $daysCount > 0 ? $learnedTime / $daysCount : 0;
 
@@ -107,5 +108,10 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
     protected function getActivityLearnLogDao()
     {
         return $this->createDao('Activity:ActivityLearnLogDao');
+    }
+
+    protected function getActivityDao()
+    {
+        return $this->createDao('Activity:ActivityDao');
     }
 }

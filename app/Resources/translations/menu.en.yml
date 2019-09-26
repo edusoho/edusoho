@@ -187,6 +187,7 @@ admin.operation.mobile.discovery_column_tab.create_btn: 'Add Category'
 
 ##微信通知管理模块
 admin.operation.wechat.notification_record_tab: Send Record
+admin.operation.wechat.fans_list_tab: Fans List
 admin.operation.wechat.notification_manage: Setting
 
 ##数据统计模块

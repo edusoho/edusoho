@@ -24,7 +24,8 @@ class Creator {
         title: {
           maxlength: 10,
           required: true,
-          trim: true
+          trim: true,
+          course_title: true
         }
       },
     });

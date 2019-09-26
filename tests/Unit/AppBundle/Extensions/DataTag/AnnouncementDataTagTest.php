@@ -77,6 +77,7 @@ class AnnouncementDataTagTest extends BaseTestCase
             'targetType' => 'global',
             'targetId' => '1',
         ));
+
         $dataTag = new AnnouncementDataTag();
         $announcement = $dataTag->getData(array('count' => '5'));
         $this->assertEquals(5, count($announcement));

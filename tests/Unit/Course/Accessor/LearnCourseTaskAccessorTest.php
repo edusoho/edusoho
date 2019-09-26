@@ -21,6 +21,13 @@ class LearnCourseTaskAccessorTest extends BaseTestCase
                     'functionName' => 'get',
                     'returnValue' => true,
                     'withParams' => array('course.allowAnonymousPreview', 1),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(),
+                    'withParams' => array('security'),
+                    'runTimes' => 1,
                 ),
             )
         );

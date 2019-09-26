@@ -36,7 +36,7 @@ site.data.collapse: 收起
 site.data.already_exists: 已经存在
 video.quality.switcher.name: "%videoQuality%画质/%audioQuality%音质"
 site.video.quality.quota: 画质
-site.video.quality.low: 流畅 
+site.video.quality.low: 流畅
 site.video.quality.normal: 标准
 site.video.quality.high: 精细
 site.cancel: 取消
@@ -62,7 +62,7 @@ user.settings.security.password_modify.incorrect_password: 当前密码不正确
 
 
 site.audio.quality.quota: 音质
-site.audio.quality.low: 流畅 
+site.audio.quality.low: 流畅
 site.audio.quality.normal: 标准
 site.audio.quality.high: 精细
 
@@ -725,6 +725,7 @@ validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
 validate.raty_star.message: 请打分
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.phone.message: 请输入有效手机号码
+validate.mobile_or_telephone.message: 请输入有效手机号码或者电话号码(区号-电话号码)
 validate.nickname.message: 不允许以1开头的11位纯数字
 validate.password_check.message: 密码错误
 validate.sms_code_input.message: 请输入短信验证码
@@ -1361,6 +1362,7 @@ wechat.notification.wechat_bind_hover: >
 wechat.notification.homepage.open_tip: <span class="%messageClass%">“微信通知”可在“个人设置-第三方登录”开启。</span>
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">前往开启</span>
 wechat.notification.cloud_open_tip: 请先开启教育云
+admin.wechat_notification.send_days: 发送日
 
 #试卷导入引导
 document.import.intro_hover: >
@@ -1381,6 +1383,7 @@ subject.period: 。
 subject.miss_score_no_more_than_score: 漏选分值不得超过题目分值
 subject.score_update_success: 分数修改成功
 subject.difficulty_update_success: 难度修改成功
+subject.belong_update_success: 从属修改成功
 subject.question_count: 共%count%道题
 subject.total_score: 总分%totalScore%分
 subject.is_editing_warning: 请先完成第%seq%题的编辑
@@ -1422,3 +1425,5 @@ admin.coupon.setting.confirm_message:  关闭优惠券开关将影响到所有�
 admin.coupon.setting.success_message: 优惠码状态已保存
 coupon.target_type.multi_course: 部分课程
 coupon.target_type.multi_classroom: 部分班级
+admin.wechat.live_open_scenes_error.hint: 请至少勾选一个选项。
+course.question_manage.manage.delete_tips: 删除题目，可能会影响课时的练习，请谨慎操作！

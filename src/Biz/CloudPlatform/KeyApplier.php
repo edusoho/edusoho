@@ -32,6 +32,7 @@ class KeyApplier
         $params['mobile'] = empty($profile['mobile']) ? '' : $profile['mobile'];
         $params['edition'] = empty($edition) ? 'opensource' : $edition;
         $params['source'] = empty($source) ? 'apply' : $source;
+        $params['visitorId'] = empty($user['visitorId']) ? '' : $user['visitorId'];
 
         $url = empty($setting['cloud_api_server']) ? 'http://api.edusoho.net' : rtrim($setting['cloud_api_server'], '/');
         $url = $url.'/v1/keys';
