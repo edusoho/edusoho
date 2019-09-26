@@ -17,8 +17,14 @@ class CouponBatchFilter extends Filter
     protected function publicFields(&$data)
     {
         $data['deadline'] = $data['deadline'] > 0 ? date('c', $data['deadline']) : '';
-        if (!empty($data['targets'])) {
-            foreach ($data['targets'] as &$target) {
+        if (!empty($data['target'])) {
+            $targetFilter = $this->getFilter($data['targetType']);
+            $targetFilter->setMode(Filter::SIMPLE_MODE);
+            $targetFilter->filter($data['target']);
+        }
+
+        if (!empty($data['targetDetail'] && !empty($data['targetDetail']['data']))) {
+            foreach ($data['targetDetail']['data'] as &$target) {
                 $targetFilter = $this->getFilter($data['targetType']);
                 $targetFilter->setMode(Filter::SIMPLE_MODE);
                 $targetFilter->filter($target);
