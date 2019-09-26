@@ -115,9 +115,35 @@ class HomeworkResult extends AbstractResource
 
         $homeworkResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($homework['id']));
         $homeworkResult['items'] = $this->fillItems($homeworkResult['items'], $homeworkResult);
-        $homeworkResult['rightRate'] = intval($homeworkResult['rightItemCount'] / $homework['itemCount'] * 100 + 0.5);
+        $homeworkResult['rightRate'] = $this->getRightRate($homeworkResult['items']);
 
         return $homeworkResult;
+    }
+
+    protected function getRightRate($items)
+    {
+        $rightNum = $num = 0;
+
+        foreach ($items as $item) {
+            ++$num;
+
+            if (isset($item['testResult']) && 'right' == $item['testResult']['status']) {
+                ++$rightNum;
+            }
+
+            if ('material' == $item['type'] && !empty($item['subs'])) {
+                --$num;
+                foreach ($item['subs'] as $subItem) {
+                    ++$num;
+
+                    if (isset($subItem['testResult']) && 'right' == $subItem['testResult']['status']) {
+                        ++$rightNum;
+                    }
+                }
+            }
+        }
+
+        return intval($rightNum / $num * 100 + 0.5);
     }
 
     protected function fillItems($items, $homeworkResult)
