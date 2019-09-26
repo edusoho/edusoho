@@ -27,10 +27,7 @@ class CouponBatch extends AbstractResource
         );
 
         foreach ($couponBatches as &$couponBatch) {
-            $couponBatch['targets'] = array();
-            foreach ($couponBatch['targetIds'] as $targetId) {
-                $couponBatch['targets'][] = $this->getCouponService()->getCouponTargetByTargetTypeAndTargetId($couponBatch['targetType'], $targetId);
-            }
+            $couponBatch['target'] = $this->getCouponService()->getCouponTargetByTargetTypeAndTargetId($couponBatch['targetType'], $couponBatch['targetId']);
             $couponBatch['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($couponBatch['id']);
         }
 
