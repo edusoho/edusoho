@@ -128,14 +128,14 @@ class OperationSettingController extends BaseController
     {
         if ($inviteSetting['promoted_user_enable']) {
             $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promoted_user_batchId']);
-            if (!empty($batch) && $inviteSetting['remain_number'] < $batch['unreceivedNum']) {
+            if (!empty($batch) && $inviteSetting['remain_number'] <= $batch['unreceivedNum']) {
                 $inviteSetting['promoted_sms_send'] = 0;
             }
         }
 
         if ($inviteSetting['promote_user_enable']) {
             $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promote_user_batchId']);
-            if (!empty($batch) && $inviteSetting['remain_number'] < $batch['unreceivedNum']) {
+            if (!empty($batch) && $inviteSetting['remain_number'] <= $batch['unreceivedNum']) {
                 $inviteSetting['promote_sms_send'] = 0;
             }
         }
