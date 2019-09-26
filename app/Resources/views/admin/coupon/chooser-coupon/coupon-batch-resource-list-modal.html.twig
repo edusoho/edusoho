@@ -6,7 +6,7 @@
   <div class="modal-content">
     <div class="modal-header">
       <a type="button" href="javascript:;" class="text-muted" data-dismiss="modal">{{ 'admin.setting.invite.chooser_coupon'|trans }}</a>
-      > {{ 'coupon.target_type.course_all'|trans }}
+      > {% if batch.targetType == 'course' %}{{ 'coupon.target_type.course_all'|trans }}{% else %}{{ 'coupon.target_type.classroom_all'|trans }}{% endif %}
     </div>
     <div class="modal-body">
       {% block body %}
@@ -23,14 +23,17 @@
                     </a>
                   </td>
                   <td width="30%">
-                    <div class="price">
-                      {% if resource.minCoursePrice == resource.maxCoursePrice %}
-                        {% include 'common/price.html.twig' with {'productPrice': resource.minCoursePrice} %}
-                      {% else %}
-                        {% include 'common/price.html.twig' with {'productPrice': resource.minCoursePrice} %}
-                        <span class="cd-text-sm">～</span>
-                        {% include 'common/price.html.twig' with {'productPrice': resource.maxCoursePrice} %}
-                      {% endif %}
+                    <div>
+                      {{ 'classroom.price'|trans }}:
+                        <span class="mlm price">
+                          {% if resource.minCoursePrice == resource.maxCoursePrice %}
+                            {% include 'common/price.html.twig' with {'productPrice': resource.minCoursePrice} %}
+                          {% else %}
+                            {% include 'common/price.html.twig' with {'productPrice': resource.minCoursePrice} %}
+                            <span class="cd-text-sm">～</span>
+                            {% include 'common/price.html.twig' with {'productPrice': resource.maxCoursePrice} %}
+                          {% endif %}
+                        </span>
                     </div>
                   </td>
                 {% else %}
@@ -42,19 +45,20 @@
                   </td>
 
                   <td width="30%">
-                    <strong>
-                      <div class="price">
-                        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                          {% if resource.price > 0 %}
-                            {{resource.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
-                          {% else %}
-                            {{ 'admin.classroom_manage.chooser.free'|trans }}
-                          {% endif %}
-                        {% else %}
-                          ¥ {{ resource.price }}
-                        {% endif %}
+                      <div>
+                        {{ 'classroom.price'|trans }}:
+                          <span class="mlm price">
+                            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                              {% if resource.price > 0 %}
+                                {{resource.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                              {% else %}
+                                <span style="color: #43bc60">{{ 'admin.classroom_manage.chooser.free'|trans }}</span>
+                              {% endif %}
+                            {% else %}
+                              ¥ {{ resource.price }}
+                            {% endif %}
+                          </span>
                       </div>
-                    </strong>
                   </td>
                 {% endif %}
 

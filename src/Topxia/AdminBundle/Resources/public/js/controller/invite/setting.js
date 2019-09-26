@@ -4,10 +4,33 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
+      let $form = $('#invite-form');
       let validator = new Validator({
-        element: '#invite-form',
+        element: $form,
         failSilently: true,
-        triggerType: 'change'
+        triggerType: 'change',
+        autoSubmit: false,
+        onFormValidated: function(error, results, $form) {
+          if (error) {
+            return ;
+          }
+
+          if ($('[name=promoted_user_enable]').prop("checked") && $form.find('.table-promoted').length == 0) {
+            Notify.danger(Translator.trans('admin.setting.invite.promoted.empty.tips'));
+            return;
+          }
+
+          if ($('[name=promote_user_enable]').prop("checked") && $form.find('.table-promote').length == 0) {
+            Notify.danger(Translator.trans('admin.setting.invite.promote.empty.tips'));
+            return;
+          }
+
+          $.post($form.attr('action'), $form.serialize(), function(data){
+              Notify.success(Translator.trans('site.save_success_hint'));
+             window.location.reload();
+          });
+
+        }
       });
 
       validator.addItem({

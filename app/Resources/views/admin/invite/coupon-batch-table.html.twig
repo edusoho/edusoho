@@ -3,7 +3,7 @@
   <thead>
   <tr>
     <th width="30%">{{ 'coupon.name'|trans }}</th>
-    <th width="30%">{{ 'coupon.batch.prefix'|trans }}</th>
+    <th width="30%">{{ 'coupon.content'|trans }}</th>
     <th width="30%">{{ 'coupon.remaining_amount'|trans }}</th>
     <th width="10%">{{ 'coupon.operation'|trans }}</th>
   </tr>
@@ -11,10 +11,21 @@
   <tbody >
   {% set batch = data('CouponBatch',{'batchId': batchId|default(0)}) %}
   {% if batch|default()%}
-    <tr>
+    <tr class="table-{{ type }}">
       <td>{{ batch.name }}</td>
       <td>
-        {{ batch.prefix }}
+        {% if batch.type=='discount' %}
+          {% set content =  'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(2)}) %}
+        {% elseif batch.type=='minus' %}
+          {% set content =  'coupon.type.minus_tip'|trans({'%rate%': batch.rate}) %}
+        {% endif %}
+        <span>{{ content }}</span>
+        <br>
+        {% if batch.couponContent == 'multi' %}
+          {% if batch.targetType == 'course' %}{{ 'coupon.target_type.multi_course'|trans }}{% elseif batch.targetType == 'classroom' %}{{ 'coupon.target_type.multi_classroom'|trans }}{% endif %}
+        {% else %}
+          <span class="text-muted text-sm">{{ batch.couponContent }}</span>
+        {% endif %}
       </td>
       <td>
         {{batch.unreceivedNum }}

@@ -11,11 +11,6 @@ class CouponController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
-        $default = array(
-            'batchIdNotEqual' => 0,
-        );
-        $conditions = array_merge($default, $conditions);
-
         $paginator = new Paginator(
             $request,
             $this->getCouponService()->searchCouponsCount($conditions),
@@ -53,6 +48,11 @@ class CouponController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $couponSetting = $request->request->all();
+            if (0 == $couponSetting['enabled']) {
+                $inviteSetting = $this->getSettingService()->get('invite', array());
+                $inviteSetting['invite_code_setting'] = 0;
+                $this->getSettingService()->set('invite', $inviteSetting);
+            }
             $this->getSettingService()->set('coupon', $couponSetting);
 
             $hiddenMenus = $this->getSettingService()->get('menu_hiddens', array());

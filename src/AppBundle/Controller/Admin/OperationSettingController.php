@@ -111,14 +111,13 @@ class OperationSettingController extends BaseController
             }
 
             $this->getSettingService()->set('invite', $inviteSetting);
-            $this->setFlashMessage('success', 'site.save.success');
-            goto response;
+
+            return $this->createJsonResponse(true);
         }
 
         $inviteSetting = $this->getSettingService()->get('invite', array());
         $inviteSetting = array_merge($default, $inviteSetting);
 
-        response:
         return $this->render('admin/invite/set.html.twig', array(
             'inviteSetting' => $inviteSetting,
             'inviteInfomation_template' => $inviteSetting['inviteInfomation_template'],

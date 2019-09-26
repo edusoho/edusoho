@@ -8957,3 +8957,5 @@ coupon.remaining_amount: 剩余可用数量
 coupon.resource.course.chooser.limit: 最多支持选择200个课程
 coupon.resource.classroom.chooser.limit: 最多支持选择200个班级
 coupon.resource.chooser.limit: 请指定不超过200个资源
+admin.setting.invite.chooser_coupon.manage_btn: 优惠券管理
+admin.setting.invite.chooser_coupon.refresh_btn: 刷新

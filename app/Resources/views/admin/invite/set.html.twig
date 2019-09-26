@@ -5,7 +5,7 @@
 
 {% block main %}
   {{ web_macro.flash_messages() }}
-    <form class="form-horizontal" method="post" id="invite-form">
+    <form class="form-horizontal" method="post"  action="{{ path('admin_invite_set') }}" id="invite-form">
       <div class="row form-group">
         <div class="col-md-2 control-label">
           <label>{{'admin.invite_setting'|trans}}</label>
@@ -28,7 +28,7 @@
           <div class="{% if not inviteSetting.promoted_user_enable|default(0) %}hidden {% endif %}  js-promoted-user-content user-content" style="padding-top: 5px;padding-bottom: 5px">
             <a class="btn btn-sm btn-default mtm mll" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_coupon_chooser',{'type': 'promoted'}) }}">{{ 'admin.setting.invite.promoted_user_enable'|trans }}</a>
             <input type="text" class="hidden js-user-batchId" id="promoted_user_batchId" name="promoted_user_batchId" value="{{ inviteSetting.promoted_user_batchId|default('')}}">
-            {% include 'admin/invite/coupon-batch-table.html.twig' with {'batchId': inviteSetting.promoted_user_batchId|default('')}%}
+            {% include 'admin/invite/coupon-batch-table.html.twig' with {'type': 'promoted', 'batchId': inviteSetting.promoted_user_batchId|default('')}%}
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@
           <div class="{% if not inviteSetting.promote_user_enable|default(0) %}hidden {% endif %} js-promote-user-content user-content" style="padding-top: 5px;padding-bottom: 5px">
             <a class="btn btn-sm btn-default mtm mll" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_coupon_chooser',{'type': 'promote'}) }}">选择优惠劵</a>
             <input type="text" class="hidden js-user-batchId" id="promote_user_batchId" name="promote_user_batchId" value="{{ inviteSetting.promote_user_batchId|default('')}}">
-            {% include 'admin/invite/coupon-batch-table.html.twig' with {'batchId': inviteSetting.promote_user_batchId|default('')}%}
+            {% include 'admin/invite/coupon-batch-table.html.twig' with {'type': 'promote','batchId': inviteSetting.promote_user_batchId|default('')}%}
           </div>
         </div>
       </div>
