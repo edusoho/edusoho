@@ -51,7 +51,7 @@ class CouponBatchWrapper extends Wrapper
     {
         list($productType, $numType) = $this->getProductTypeAndNumType($batch);
         $data = array();
-        if ($numType != 'multi') {
+        if ($numType != 'all') {
             switch ($productType) {
                 case 'course':
                     $data = $this->getCourseSetService()->findCourseSetsByIds($batch['targetIds']);
@@ -67,6 +67,7 @@ class CouponBatchWrapper extends Wrapper
                 default:
                     break;
             }
+            $data = array_values($data);
         }
         $batch['targetDetail'] = array(
             'product' => $productType,
