@@ -16,17 +16,21 @@ define(function(require, exports, module) {
           }
 
           if ($('[name=promoted_user_enable]').prop("checked") && $form.find('.table-promoted').length == 0) {
-            Notify.danger(Translator.trans('admin.setting.invite.promoted.empty.tips'));
+            Notify.danger(Translator.trans('admin.setting.invite.coupon.empty.tips'));
             return;
           }
 
           if ($('[name=promote_user_enable]').prop("checked") && $form.find('.table-promote').length == 0) {
-            Notify.danger(Translator.trans('admin.setting.invite.promote.empty.tips'));
+            Notify.danger(Translator.trans('admin.setting.invite.coupon.empty.tips'));
             return;
           }
 
           $.post($form.attr('action'), $form.serialize(), function(data){
-              Notify.success(Translator.trans('site.save_success_hint'));
+            if(data.status==false){
+              Notify.danger(Translator.trans(data.message));
+                return;
+            }
+            Notify.success(Translator.trans('site.save_success_hint'));
              window.location.reload();
           });
 

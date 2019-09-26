@@ -1479,5 +1479,5 @@ admin.coupon.setting.confirm_message:  关闭优惠券开关将影响到所有�
 admin.coupon.setting.success_message: 优惠券状态已保存
 coupon.target_type.multi_course: 部分课程
 coupon.target_type.multi_classroom: 部分班级
-admin.setting.invite.promoted.empty.tips: 请先选择被邀请人奖励优惠劵
-admin.setting.invite.promote.empty.tips: 请先选择邀请人奖励优惠劵
+admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
+

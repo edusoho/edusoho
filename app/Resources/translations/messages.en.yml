@@ -8959,3 +8959,4 @@ coupon.resource.classroom.chooser.limit: 最多支持选择200个班级
 coupon.resource.chooser.limit: 请指定不超过200个资源
 admin.setting.invite.chooser_coupon.manage_btn: 优惠券管理
 admin.setting.invite.chooser_coupon.refresh_btn: 刷新
+admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
