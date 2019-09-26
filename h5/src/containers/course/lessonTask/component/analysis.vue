@@ -24,7 +24,7 @@
         <div v-if="subject!=='fill'">
           <div class="analysis-content__item  mt10">
             <div class="analysis-item__title">正确答案</div>
-            <div :class="[statusColor]">{{filterOrder(answer,'standard')}}</div>
+            <div class="analysis-item_right">{{filterOrder(answer,'standard')}}</div>
           </div>
           <div class="analysis-content__item  mt10">
             <div class="analysis-item__title">你的答案</div>

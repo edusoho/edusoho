@@ -11,8 +11,8 @@
     </div>
 
     <van-radio-group v-model="radio" class="answer-paper" @change="choose()">
-      <van-radio 
-          class="subject-option subject-option--determine" 
+      <van-radio
+          class="subject-option subject-option--determine"
           :name=1
           :disabled="!canDo">
         <div class="subject-option__content">对</div>
@@ -22,8 +22,8 @@
         :class="['iconfont','icon-yes','subject-option__order', !canDo ? checkAnswer(1,itemdata) :'' ]"
         ></i>
       </van-radio>
-      <van-radio 
-          class="subject-option subject-option--determine" 
+      <van-radio
+          class="subject-option subject-option--determine"
           :name=0
           :disabled="!canDo">
         <div class="subject-option__content">错</div>
