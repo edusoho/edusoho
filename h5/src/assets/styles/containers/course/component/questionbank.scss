@@ -120,6 +120,7 @@ p{
     line-height: vw(18);
     color: #666;
   }
+
   .van-checkbox__icon--checked,
   .van-radio__icon--checked {
     .subject-option__order {
@@ -135,6 +136,18 @@ p{
       border: 1px solid #20D558;
     }
   }
+
+  .subject-option__order_wrong {
+    background-color: #FF5722!important;
+    border: 1px solid #FF5722!important;
+    color:#fff!important;
+  }
+  .subject-option__order_right {
+    background-color: #20D558!important;
+    border: 1px solid #20D558!important;
+    color:#fff!important;
+  }
+
   .van-checkbox__icon {
     .subject-option__order--square {
       border-radius: 4px;
