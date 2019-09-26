@@ -113,30 +113,43 @@ class ExerciseResult extends AbstractResource
 
         $exerciseResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($exercise['id']));
         $exerciseResult['items'] = $this->fillItems($exerciseResult['items'], $exerciseResult);
-        $essayItemNum = $this->getEssayItemNum($exerciseResult['items']);
-        $itemCount = $exercise['itemCount'] - $essayItemNum;
-        $exerciseResult['rightRate'] = intval($exerciseResult['rightItemCount'] / $itemCount * 100 + 0.5);
+        $exerciseResult['rightRate'] = $this->getRightRate($exerciseResult['items'] );
 
         return $exerciseResult;
     }
 
-    protected function getEssayItemNum($items)
+    protected function getRightRate($items)
     {
-        $num = 0;
+        $subjectivityNum = $rightNum = $num = 0;
+
         foreach ($items as $item) {
-            if ('essay' == $item['type']) {
-                ++$num;
+            ++$num;
+
+            if (isset($item['testResult']) && 'right' == $item['testResult']['status']) {
+                ++$rightNum;
             }
-            if (isset($item['subs']) && !empty($item['subs'])) {
+
+            if ('essay' == $item['type']) {
+                ++$subjectivityNum;
+            }
+
+            if ('material' == $item['type'] && !empty($item['subs'])) {
+                --$num;
                 foreach ($item['subs'] as $subItem) {
+                    ++$num;
+
                     if ('essay' == $subItem['type']) {
-                        ++$num;
+                        ++$subjectivityNum;
+                    }
+
+                    if (isset($subItem['testResult']) && 'right' == $subItem['testResult']['status']) {
+                        ++$rightNum;
                     }
                 }
             }
         }
 
-        return $num;
+        return intval($rightNum / ($num - $subjectivityNum) * 100 + 0.5);
     }
 
     protected function fillItems($items, $exerciseResult)
