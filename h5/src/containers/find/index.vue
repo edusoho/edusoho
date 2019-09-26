@@ -20,7 +20,7 @@
         :feedback="feedback"/>
       <e-coupon-list
         class="gray-border-bottom"
-        v-if="part.type === 'coupon' && part.data.items && part.data.items.length"
+        v-if="part.type === 'coupon' && couponSwitch && part.data.items && part.data.items.length"
         :coupons="part.data.items"
         :showTitle="part.data.titleShow"
         @couponHandle="couponHandle($event)"
@@ -90,7 +90,7 @@
       };
     },
     computed: {
-      ...mapState(['vipSwitch', 'isLoading', 'wechatSwitch']),
+      ...mapState(['vipSwitch', 'isLoading', 'wechatSwitch', 'couponSwitch']),
     },
     created() {
       const {preview, token} = this.$route.query

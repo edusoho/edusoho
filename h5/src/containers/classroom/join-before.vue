@@ -114,7 +114,7 @@
       }
     },
     computed: {
-      ...mapState(['user']),
+      ...mapState(['couponSwitch', 'user']),
       accessToJoin() {
         return this.details.access.code === 'success'
           || this.details.access.code === 'user.not_login';
@@ -153,19 +153,21 @@
     },
     mounted() {
       // 获取促销优惠券
-      Api.searchCoupon({
-        params: {
-          targetId: this.details.classId,
-          targetType: 'classroom',
-        }
-      }).then(res => {
-        this.unreceivedCoupons = res.data;
+      if (this.couponSwitch) {
+        Api.searchCoupon({
+          params: {
+            targetId: this.details.classId,
+            targetType: 'classroom',
+          }
+        }).then(res => {
+          this.unreceivedCoupons = res.data;
 
-        this.miniCoupons = this.unreceivedCoupons.length > 3 ?
-          this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
-      }).catch(err => {
-        console.error(err);
-      });
+          this.miniCoupons = this.unreceivedCoupons.length > 3 ?
+            this.unreceivedCoupons.slice(0, 4) : this.unreceivedCoupons
+        }).catch(err => {
+          console.error(err);
+        });
+      }
       // 获取营销活动
       Api.classroomsActivities({
         query: { id: this.details.classId }

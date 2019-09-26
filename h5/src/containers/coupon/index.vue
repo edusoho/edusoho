@@ -30,7 +30,6 @@ export default {
   computed: {
     ...mapState({
       isLoading: state => state.isLoading,
-      isCouponOpen: state => state.coupon
     })
   },
   methods: {
@@ -50,9 +49,6 @@ export default {
               that.sitePlugins=2
             }
             that.getsettingsCloud();
-            if (!this.isCouponOpen) {
-              Toast.fail('领取失败，优惠券已失效');
-            }
           }
         })
         .catch(err => {

@@ -237,7 +237,8 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "verification" */'@/containers/login/face/verification.vue')
   }, {
-    path: '/coupon/d1f1914adeb411e9b70f024255e33e33/receive',
+    path: '/coupon/:token/receive',
+    // path: '/coupon/6739da90e04111e9a534024255e33e33/receive',
     name: 'coupon_receive',
     meta: {
       title: '优惠券领取',
@@ -378,11 +379,10 @@ router.beforeEach((to, from, next) => {
     setWeChatSwitch();
   }
 
-  if (to.name === 'coupon_receive') {
-    store.dispatch('setCouponSwitch').then(res => {
-      console.log(res);
-    });
-  }
+
+  store.dispatch('setCouponSwitch').then(res => {
+    console.log(res);
+  });
 });
 
 // 异步加载配置
