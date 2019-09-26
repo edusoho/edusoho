@@ -4,7 +4,7 @@
 {% block title %}{{ 'admin.setting.invite.chooser_coupon'|trans }}{% endblock %}
 {% block body %}
   <a  href="{{ path('admin_coupon') }}" class="btn btn-default" target="_blank">{{ 'admin.setting.invite.chooser_coupon.manage_btn'|trans }}</a>
-  <button id="refresh" class="btn mlm btn-default" >{{ 'admin.setting.invite.chooser_coupon.refresh_btn'|trans }}</button>
+  <a id="refresh" href="javascript:;" class="mlm" style="color: #333">{{ 'admin.setting.invite.chooser_coupon.refresh_btn'|trans }}</a>
   <form id="coupon-search-form" class="form-inline pull-right" action="{{ path('admin_coupon_chooser',{'type':type}) }}" method="get" novalidate>
     <div class="form-group">
         <input class="form-control" type="text" placeholder="{{ 'coupon.name'|trans }}" name="nameLike" value="{{ app.request.get('nameLike') }}">
