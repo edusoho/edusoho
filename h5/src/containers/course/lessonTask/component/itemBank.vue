@@ -1,7 +1,7 @@
 <template>
   <div class="paper-swiper">
     <van-swipe
-     v-if="testData.length>0"
+      v-if="testData.length>0"
       ref="swipe"
       :height="height"
       :show-indicators="false"
@@ -88,159 +88,157 @@
 </template>
 
 <script>
-const NAVBARHEIGHT=44;
-const WINDOWHEIGHT = document.documentElement.clientHeight - NAVBARHEIGHT;
-import { mapState, mapMutations , mapActions} from "vuex";
-import fillType from "../component/fill";
-import essayType from "../component/essay";
-import headTop from "../component/head";
-import choiceType from "../component/choice";
-import singleChoice from "../component/single-choice";
-import determineType from "../component/determine";
-import analysis from "../component/analysis";
-import { setTimeout } from 'timers';
+  const NAVBARHEIGHT = 44;
+  const WINDOWHEIGHT = document.documentElement.clientHeight - NAVBARHEIGHT;
+  import { mapState, mapMutations, mapActions } from 'vuex';
+  import fillType from '../component/fill';
+  import essayType from '../component/essay';
+  import headTop from '../component/head';
+  import choiceType from '../component/choice';
+  import singleChoice from '../component/single-choice';
+  import determineType from '../component/determine';
+  import analysis from '../component/analysis';
+  import { setTimeout } from 'timers';
 
-export default {
-    name:'item-bank',
-    data(){
-        return{
-            testData:this.info,
-            testAnswer:this.answer,
-            currentIndex:this.current,
-            height:WINDOWHEIGHT
-        }
+  export default {
+    name: 'item-bank',
+    data() {
+      return {
+        testData: this.info,
+        testAnswer: this.answer,
+        currentIndex: this.current,
+        height: WINDOWHEIGHT
+      };
     },
-    props:{
-        info:{
-            type:Array,
-            default:()=>[]
-        },
-        answer:{
-            type:Object,
-            default:()=>{}
-        },
-        current:{
-            type:Number,
-            default:0
-        },
-        showScore:{
-            type:Boolean,
-            default:true
-        },
-        canDo:{ //是否是做题模式
-          type:Boolean,
-          default:true
-        },
-        all:{ //所有题数
-          type:Number,
-          default:0
-        },
-        isWrongMode:{ //是否是错题模式,只有在解析的时候有
-          type:Boolean,
-          default:false
+    props: {
+      info: {
+        type: Array,
+        default: () => []
+      },
+      answer: {
+        type: Object,
+        default: () => {
         }
+      },
+      current: {
+        type: Number,
+        default: 0
+      },
+      showScore: {
+        type: Boolean,
+        default: true
+      },
+      canDo: { //是否是做题模式
+        type: Boolean,
+        default: true
+      },
+      all: { //所有题数
+        type: Number,
+        default: 0
+      },
+      isWrongMode: { //是否是错题模式,只有在解析的时候有
+        type: Boolean,
+        default: false
+      }
     },
-    watch:{
-        answer(val){
-            this.$emit('update:answer', val)
-        },
-        isWrongMode(val){//更改为错题模式时需要手动改变当前的currentIndex,并跳转过去
-            this.currentIndex = this.current-1;
-            if(val){
-                // 设置 immediate: true后可以关闭动画,解决点错题的时候会闪一下的问题
-                this.$refs.swipe.swipeTo(this.current-1, {immediate: true});
-            }
-        },
-        current(val,oldval){
-          //答题卡定位
-          console.log(val, 'slideIndex:',this.currentIndex);
-          let index=Number(val);
-          if (index -1 === this.currentIndex) {
-            return;
-          }
-          this.$refs.swipe.swipeTo(index-1);
+    watch: {
+      answer(val) {
+        this.$emit('update:answer', val);
+      },
+      isWrongMode(val) {//更改为错题模式时需要手动改变当前的currentIndex,并跳转过去
+        this.currentIndex = this.current - 1;
+        // 设置 immediate: true后可以关闭动画,解决点错题的时候会闪一下的问题
+        this.$refs.swipe.swipeTo(this.current - 1, { immediate: true });
+      },
+      current(val, oldval) {
+        //答题卡定位
+        let index = Number(val);
+        if (index - 1 === this.currentIndex) {
+          return;
         }
+        this.$refs.swipe.swipeTo(index - 1);
+      }
     },
     components: {
-        fillType,
-        essayType,
-        headTop,
-        choiceType,
-        singleChoice,
-        determineType,
-        analysis
+      fillType,
+      essayType,
+      headTop,
+      choiceType,
+      singleChoice,
+      determineType,
+      analysis
     },
-    methods:{
-        changeswiper(index) {
-          this.currentIndex = index;
-          this.$emit('update:current', index + 1);
-          this.$emit('update:slideIndex', index);
-        },
-         //左滑动
-        last() {
-            if (this.currentIndex == 0) {
-                return;
-            }
-            this.$refs.swipe.swipeTo(this.currentIndex - 1);
-        },
-        //右滑动
-        next() {
-            if (this.currentIndex == this.info.length - 1) {
-                return;
-            }
-            this.$refs.swipe.swipeTo(this.currentIndex + 1);
-        },
-        //题目类型过滤
-        subject(paper) {
-            var parentType='';
-            var type = paper.type;
-            var typeName;
-
-            if (paper.parentType) {
-              parentType = "材料题-";
-            }
-
-            switch (type) {
-              case "single_choice":
-                typeName='单选题';
-                break;
-              case "choice":
-                typeName='多选题';
-                break;
-              case "essay":
-                typeName='问答题';
-                break;
-              case "uncertain_choice":
-                typeName='不定项选择题';
-                break;
-              case "determine":
-                typeName='判断题';
-                break;
-              case "fill":
-                typeName='填空题';
-                break;
-              case "material":
-                typeName='材料题';
-                break;
-              default:
-                ''
-            }
-            return parentType + typeName
-        },
-        //单选题选择
-        singleChoose(name, id) {
-            this.$set(this.testAnswer[id], 0, name);
-        },
-        //多选题和不定项选择
-        choiceChoose(name, id){
-            this.$set(this.testAnswer, id, name);
-        },
-        //判断题选择
-        determineChoose(name, id){
-            this.$set(this.testAnswer[id], 0, Number(name));
+    methods: {
+      changeswiper(index) {
+        this.currentIndex = index;
+        this.$emit('update:current', index + 1);
+        this.$emit('update:slideIndex', index);
+      },
+      //左滑动
+      last() {
+        if (this.currentIndex == 0) {
+          return;
         }
+        this.$refs.swipe.swipeTo(this.currentIndex - 1);
+      },
+      //右滑动
+      next() {
+        if (this.currentIndex == this.info.length - 1) {
+          return;
+        }
+        this.$refs.swipe.swipeTo(this.currentIndex + 1);
+      },
+      //题目类型过滤
+      subject(paper) {
+        var parentType = '';
+        var type = paper.type;
+        var typeName;
+
+        if (paper.parentType) {
+          parentType = '材料题-';
+        }
+
+        switch (type) {
+          case 'single_choice':
+            typeName = '单选题';
+            break;
+          case 'choice':
+            typeName = '多选题';
+            break;
+          case 'essay':
+            typeName = '问答题';
+            break;
+          case 'uncertain_choice':
+            typeName = '不定项选择题';
+            break;
+          case 'determine':
+            typeName = '判断题';
+            break;
+          case 'fill':
+            typeName = '填空题';
+            break;
+          case 'material':
+            typeName = '材料题';
+            break;
+          default:
+            '';
+        }
+        return parentType + typeName;
+      },
+      //单选题选择
+      singleChoose(name, id) {
+        this.$set(this.testAnswer[id], 0, name);
+      },
+      //多选题和不定项选择
+      choiceChoose(name, id) {
+        this.$set(this.testAnswer, id, name);
+      },
+      //判断题选择
+      determineChoose(name, id) {
+        this.$set(this.testAnswer[id], 0, Number(name));
+      }
     }
-}
+  };
 </script>
 
 <style>

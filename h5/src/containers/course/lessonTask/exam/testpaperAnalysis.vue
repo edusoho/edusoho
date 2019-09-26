@@ -21,7 +21,7 @@
       </div>
       <div>
         <span @click="showWrongList" :class="{'footer__div__span--active': isWrongMode}">
-          <i class="iconfont icon-submit"></i>
+          <i class="cuoti"><img :src="isWrongMode ? 'static/images/cuoti-active.png' : 'static/images/cuoti.png'" alt=""></i>
           错题
         </span>
       </div>
@@ -215,7 +215,7 @@
         this.info.push(item);
         this.allList.push(item);
         if (item.testResult) {
-          if (item.testResult.status !== 'right') {
+          if ((item.testResult && item.testResult.status !== 'right') || !item.testResult) {
             let type = item.parentType ? item.parentType : item.type;
             if (!this.wrongType.includes(type)) {
               this.wrongType.push(type);
@@ -312,7 +312,7 @@
         return this.isWrongMode ? this.wrongType.indexOf(name) !== -1 : true;
       },
       isWrongList(item) {
-        return this.isWrongMode ? item.testResult.status !== 'right' : true
+        return this.isWrongMode ? item.testResult && item.testResult.status !== 'right' : true;
       }
     },
   };
