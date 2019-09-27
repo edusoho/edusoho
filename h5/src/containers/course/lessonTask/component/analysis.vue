@@ -37,7 +37,7 @@
     </div>
     <div class="mt10 analysis-result">
       <div class="analysis-title">做题解析</div>
-      <div class="analysis-content mt10" v-if="analysis">{{analysis}}</div>
+      <div class="analysis-content mt10" v-if="analysis" v-html="analysis"></div>
       <div class="analysis-content mt10" v-else>无解析</div>
     </div>
   </div>

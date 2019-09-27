@@ -164,7 +164,7 @@
         }
       },
       startHomework() {
-        this.$router.push({
+        this.$router.replace({
           name: 'homeworkDo',
           query: {
             targetId: this.$route.query.taskId,

@@ -113,7 +113,7 @@ export default {
     }),
     usedTime: function() {
       const timeInterval = parseInt(this.result.usedTime) || 0;
-      return Math.round(timeInterval/60);
+      return  timeInterval <= 60 ? 1 : Math.round(timeInterval/60);
     }
   },
   watch:{
@@ -247,7 +247,7 @@ export default {
       this.timeMeter = null;
     },
     startTestpaper() {
-      this.$router.push({
+      this.$router.replace({
         name: 'testpaperDo',
         query: {
           testId: this.result.testId,
