@@ -1471,19 +1471,19 @@ user.account.order_pay: Continue
 user.account.order_not_pay: Not paying
 
 #coupon
-notify.copy_link_success: 链接复制成功
-confirm.remove_coupon: 确认要删除此批次优惠券？
-notify.remove_coupon_success: 删除优惠券成功!
-notify.remove_coupon_fail: 删除优惠券失败!
-notify.channel_select: 至少选择一个发放渠道
+notify.copy_link_success: Copy link succeeded
+confirm.remove_coupon: Sure to delete this coupon batch?
+notify.remove_coupon_success: Delete this coupon batch succeeded!
+notify.remove_coupon_fail: Delete this coupon batch failed!
+notify.channel_select: Choose at least one distribution channel
 
-coupon.fixed_day: 有效期
-coupon.fixed_day.message: 请输入领取后有效天数
-admin.coupon.setting.confirm_message:  关闭优惠券开关将影响到所有正在发放优惠券的营销活动，将导致使用优惠券的营销活动无法正常进行。已经发放的优惠券也将无法继续使用，学员侧将屏蔽「我的优惠券」模块，订单页面也将无法继续选取优惠券下单。是否继续？
-admin.coupon.setting.success_message: 优惠券状态已保存
-coupon.target_type.multi_course: 部分课程
-coupon.target_type.multi_classroom: 部分班级
+coupon.fixed_day: Validity period
+coupon.fixed_day.message: Please enter validity days after receipt
+admin.coupon.setting.confirm_message: Closing the coupon switch will affect all marketing campaigns that are issuing coupons, which will result in the marketing campaigns that use coupons not working properly. Coupons that have already been issued will not be able to continue to be used. The student side will block the "My Coupons" module, and the order page will not be able to continue to select coupon orders. Whether to continue?
+admin.coupon.setting.success_message: status saved
+coupon.target_type.multi_course: Part of course
+coupon.target_type.multi_classroom: Part of class
 admin.wechat.live_open_scenes_error.hint: At least one scene。
 course.question_manage.manage.delete_tips: Deleting the question may affect the exercise of class, please be cautious!
-admin.setting.invite.promoted.empty.tips: 请先选择被邀请人奖励优惠劵
-admin.setting.invite.promote.empty.tips: 请先选择邀请人奖励优惠劵
+admin.setting.invite.coupon.empty.tips: Please set coupon batch
+

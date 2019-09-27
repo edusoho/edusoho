@@ -3,7 +3,6 @@
 namespace Biz\Coupon\Event;
 
 use Biz\Coupon\Service\CouponService;
-use Biz\Order\Service\OrderService;
 use Biz\Sms\SmsType;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Event\Event;
@@ -111,7 +110,7 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
         );
 
         if (0 != $batch['unreceivedNum']) {
-            $templateParams['remain'] = $inviteSetting['remain_number'];
+            $templateParams['remain'] = $batch['unreceivedNum'];
         }
 
         $smsParams = array(
@@ -133,14 +132,6 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
     private function getCouponService()
     {
         return $this->getBiz()->service('Coupon:CouponService');
-    }
-
-    /**
-     * @return OrderService
-     */
-    private function getOrderService()
-    {
-        return $this->getBiz()->service('Order:OrderService');
     }
 
     /**

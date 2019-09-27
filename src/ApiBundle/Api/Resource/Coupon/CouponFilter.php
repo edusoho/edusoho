@@ -10,7 +10,7 @@ use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 class CouponFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'code', 'type', 'status', 'rate', 'userId', 'deadline', 'targetType', 'targetId', 'target',
+        'id', 'code', 'type', 'status', 'rate', 'userId', 'deadline', 'targetType', 'targetId', 'target', 'targetDetail',
     );
 
     protected function publicFields(&$data)
@@ -22,6 +22,14 @@ class CouponFilter extends Filter
             $targetFilter->setMode(Filter::SIMPLE_MODE);
             $targetFilter->filter($data['target']);
         }
+        if (!empty($data['targetDetail']) && !empty($data['targetDetail']['data'])) {
+            foreach ($data['targetDetail']['data'] as &$target) {
+                $targetFilter = $this->getFilter($data['targetType']);
+                $targetFilter->setMode(Filter::SIMPLE_MODE);
+                $targetFilter->filter($target);
+            }
+        }
+
         isset($data['target']) && is_array($data['target']) ? $data['targetId'] = $data['target']['id'] : $data['target'] = null;
     }
 

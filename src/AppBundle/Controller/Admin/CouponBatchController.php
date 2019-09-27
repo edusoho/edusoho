@@ -282,6 +282,7 @@ class CouponBatchController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions['deadlineMode'] = 'day';
+        $conditions['unreceivedNumGt'] = 1;
 
         $paginator = new Paginator(
             $request,

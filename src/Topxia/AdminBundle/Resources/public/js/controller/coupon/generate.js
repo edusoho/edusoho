@@ -196,7 +196,10 @@ define(function(require, exports, module) {
             validator.query('#coupon-deadline').execute();
         });
 
-        var resetRadioValue = function () {
+       $('#coupon-deadline').prop('autocomplete', 'off');
+
+
+    var resetRadioValue = function () {
           $('#choose-course-input').val('');
           $('#choose-classroom-input').val('');
           $('#choose-vip-input').val('');

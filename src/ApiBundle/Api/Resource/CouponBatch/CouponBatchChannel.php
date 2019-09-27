@@ -13,7 +13,7 @@ class CouponBatchChannel extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
-     * @ResponseFilter(class="CouponPlugin\Api\Resource\CouponBatch\CouponBatchFilter")
+     * @ResponseFilter(class="Api\Resource\CouponBatch\CouponBatchFilter")
      */
     public function search(ApiRequest $request, $channel)
     {
@@ -39,6 +39,7 @@ class CouponBatchChannel extends AbstractResource
 
         foreach ($batches as &$couponBatch) {
             $couponBatch['target'] = $this->getCouponService()->getCouponTargetByTargetTypeAndTargetId($couponBatch['targetType'], $couponBatch['targetId']);
+            $couponBatch['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($couponBatch['id']);
         }
 
         return $this->makePagingObject(array_values($batches), $total, $offset, $limit);

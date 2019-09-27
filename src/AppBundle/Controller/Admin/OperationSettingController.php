@@ -90,7 +90,18 @@ class OperationSettingController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $inviteSetting = $request->request->all();
-
+            if (!empty($inviteSetting['promoted_user_batchId']) || !empty($inviteSetting['promoted_user_enable'])) {
+                $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promoted_user_batchId']);
+                if ($batch['unreceivedNum'] <= 1) {
+                    return  $this->createJsonResponse(array('status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')));
+                }
+            }
+            if (!empty($inviteSetting['promote_user_batchId']) || !empty($inviteSetting['promote_user_enable'])) {
+                $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promote_user_batchId']);
+                if ($batch['unreceivedNum'] <= 1) {
+                    return  $this->createJsonResponse(array('status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')));
+                }
+            }
             $inviteSetting = ArrayToolkit::parts($inviteSetting, array(
                 'invite_code_setting',
                 'promoted_user_enable',
@@ -128,14 +139,14 @@ class OperationSettingController extends BaseController
     {
         if ($inviteSetting['promoted_user_enable']) {
             $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promoted_user_batchId']);
-            if (!empty($batch) && $inviteSetting['remain_number'] < $batch['unreceivedNum']) {
+            if (!empty($batch) && $inviteSetting['remain_number'] <= $batch['unreceivedNum']) {
                 $inviteSetting['promoted_sms_send'] = 0;
             }
         }
 
         if ($inviteSetting['promote_user_enable']) {
             $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promote_user_batchId']);
-            if (!empty($batch) && $inviteSetting['remain_number'] < $batch['unreceivedNum']) {
+            if (!empty($batch) && $inviteSetting['remain_number'] <= $batch['unreceivedNum']) {
                 $inviteSetting['promote_sms_send'] = 0;
             }
         }

@@ -1427,5 +1427,4 @@ coupon.target_type.multi_course: 部分课程
 coupon.target_type.multi_classroom: 部分班级
 admin.wechat.live_open_scenes_error.hint: 请至少勾选一个选项。
 course.question_manage.manage.delete_tips: 删除题目，可能会影响课时的练习，请谨慎操作！
-admin.setting.invite.promoted.empty.tips: 请先选择被邀请人奖励优惠劵
-admin.setting.invite.promote.empty.tips: 请先选择邀请人奖励优惠劵
+admin.setting.invite.coupon.empty.tips: 请设置优惠券批次

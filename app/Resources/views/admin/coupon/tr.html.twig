@@ -12,7 +12,7 @@
   </td>
   <td class="text-danger">
   {% if batch.type=='discount' %}
-    <span>{{ 'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(1)}) }}</span>
+    <span>{{ 'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(2)}) }}</span>
   {% elseif batch.type=='minus' %}
     <span>{{ 'coupon.type.minus_tip'|trans({'%rate%': batch.rate}) }}</span>
   {% endif %}   
