@@ -18,7 +18,7 @@
       {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId == 0 %}
          href="{{ path('classroom_explore') }}"
       {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId != 0 %}
-         href="{{ path('classroom_show',{ id : cardDetail.targetId }) }}"
+         href="{{ path('classroom_show',{ id : cardDetail.targetIds[0]|default() }) }}"
       {% elseif cardDetail.targetType == "vip" %}
          href="{{ path('vip') }}"
       {% else %}
