@@ -10,6 +10,7 @@
       :slideIndex.sync="slideIndex"
       :canDo="canDo"
       :all="allList.length"
+      :isExercise=true
     />
     <!-- 底部 -->
     <div class="paper-footer">

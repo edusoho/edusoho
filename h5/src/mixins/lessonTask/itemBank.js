@@ -1,7 +1,6 @@
 export default {
   methods: {
     checkAnswer(index, itemdata) {
-      console.log(index, itemdata);
       const rightanswer = itemdata.answer;
       if (itemdata.testResult && itemdata.testResult.answer) {
         const answer = itemdata.testResult.answer || [];
