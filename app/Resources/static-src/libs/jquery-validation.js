@@ -525,6 +525,19 @@ $.validator.addMethod('ckeditor_maxlength', function (value, element, params) {
   return value.replace(/<\/?[^>]+(>|$)/g, '').replace(/[\r\n]/g,'').length > params ? false : true;
 });
 
+$.validator.addMethod('mobile_or_telephone', function (value, element) {
+  var reg_mobile = /^1\d{10}$/;
+  let reg_telephone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;
+  var result = false;
+  var isMobile = reg_mobile.test(value);
+  var isTelephone = reg_telephone.test(value);
+  if (isTelephone || isMobile) {
+    result = true;
+  }
+  $.validator.messages.mobile_or_telephone = Translator.trans('validate.mobile_or_telephone.message');
+  return this.optional(element) || result;
+}, $.validator.format(Translator.trans('validate.mobile_or_telephone.message')));
+
 function calculateByteLength(string) {
   let length = string.length;
   for (let i = 0; i < string.length; i++) {

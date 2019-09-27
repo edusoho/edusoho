@@ -24,7 +24,7 @@ class CouponBatchDataTag extends BaseDataTag implements DataTag
         }
         $batch = $this->getCouponBatchService()->getBatch($arguments['batchId']);
         if (!empty($batch)) {
-            $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id'], $batch['targetType'], $batch['targetId']);
+            $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id']);
         }
 
         return $batch;

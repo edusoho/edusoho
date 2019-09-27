@@ -5,6 +5,7 @@ namespace Biz\WeChatNotification\Job;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Notification\Service\NotificationService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
@@ -29,6 +30,10 @@ class AbstractNotificationJob extends AbstractJob
         if (empty($userIds)) {
             return;
         }
+
+        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        $channel = $this->getWeChatService()->getWeChatSendChannel();
+
         $users = $this->getUserService()->searchUsers(
             array('userIds' => $userIds, 'locked' => 0),
             array(),
@@ -36,16 +41,25 @@ class AbstractNotificationJob extends AbstractJob
             PHP_INT_MAX
         );
         $userIds = ArrayToolkit::column($users, 'id');
+        if (empty($userIds)) {
+            return;
+        }
         $subscribedUsers = $this->getWeChatService()->findSubscribedUsersByUserIdsAndType($userIds, self::OFFICIAL_TYPE);
+        $subscribedUsers = ArrayToolkit::index($subscribedUsers, 'userId');
         $batchs = array_chunk($subscribedUsers, self::LIMIT_NUM);
         foreach ($batchs as $batch) {
             $list = array();
             foreach ($batch as $user) {
+                $data = isset($templateData[$user['userId']]) ? $templateData[$user['userId']] : $templateData[0];
+                if (!is_array($data)) {
+                    $data = array();
+                }
                 $list[] = array_merge(array(
-                    'channel' => 'wechat',
+                    'channel' => $channel,
                     'to_id' => $user['openId'],
-                ), $templateData);
+                ), $data);
             }
+
             $this->sendWeChatNotification($key, $logName, $list);
         }
     }
@@ -138,5 +152,13 @@ class AbstractNotificationJob extends AbstractJob
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

@@ -18,7 +18,7 @@ class PushServiceTest extends BaseTestCase
             'device_token' => 'test_token',
             'os' => 'android',
             'os_version' => '2.3.3',
-            'model' => '233'
+            'model' => '233',
         ));
 
         $this->assertEquals($device['reg_id'], $result['reg_id']);
@@ -62,7 +62,7 @@ class PushServiceTest extends BaseTestCase
             'device_token' => 'test_device_token',
             'os' => 'android',
             'os_version' => '2.3.3',
-            'model' => '2333'
+            'model' => '2333',
         );
     }
 }

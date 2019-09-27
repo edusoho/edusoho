@@ -56,6 +56,7 @@ class CouponAction extends AbstractResource
         if (isset($result['useable']) && 'no' == $result['useable']) {
             return $this->error($result['message']);
         }
+        $result['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($coupon['batchId']);
 
         return $this->success($result);
     }

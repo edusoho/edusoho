@@ -33,6 +33,7 @@ class CourseTaskUpdateSyncJob extends AbstractJob
                     'title',
                     'isFree',
                     'isOptional',
+                    'isLesson',
                     'startTime',
                     'endTime',
                     'number',

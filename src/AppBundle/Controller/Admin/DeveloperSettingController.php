@@ -24,6 +24,7 @@ class DeveloperSettingController extends BaseController
             'cloud_api_es_op_server' => empty($storageSetting['cloud_api_es_op_server']) ? '' : $storageSetting['cloud_api_es_op_server'],
             'cloud_api_notification_server' => empty($storageSetting['cloud_api_notification_server']) ? '' : $storageSetting['cloud_api_notification_server'],
             'cloud_api_im_server' => '',
+            'cloud_api_wechat_server' => empty($storageSetting['cloud_api_wechat_server']) ? '' : $storageSetting['cloud_api_wechat_server'],
             'app_api_url' => '',
             'cloud_sdk_cdn' => '',
             'hls_encrypted' => '1',
@@ -43,6 +44,7 @@ class DeveloperSettingController extends BaseController
             $storageSetting['cloud_api_im_server'] = $developerSetting['cloud_api_im_server'];
             $storageSetting['cloud_api_es_op_server'] = $developerSetting['cloud_api_es_op_server'];
             $storageSetting['cloud_api_notification_server'] = $developerSetting['cloud_api_notification_server'];
+            $storageSetting['cloud_api_wechat_server'] = $developerSetting['cloud_api_wechat_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 

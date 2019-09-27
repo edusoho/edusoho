@@ -9,6 +9,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseSetService;
 use Biz\User\Service\TokenService;
+use Biz\Course\Service\CourseService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File as FileObject;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,12 +97,16 @@ class QuestionParserController extends BaseController
         }
         $templateInfo = $this->getTemplateInfo($type);
 
+        $user = $this->getCurrentUser();
+        $courses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $token['data']['courseSetId']);
+
         return $this->render($templateInfo['reEditTemplate'], array(
             'filename' => mb_substr(str_replace('.docx', '', $data['filename']), 0, 50, 'utf-8'),
             'questions' => $questions,
             'questionAnalysis' => $questionAnalysis,
             'courseSetId' => $token['data']['courseSetId'],
             'totalScore' => $totalScore,
+            'courses' => $courses,
         ));
     }
 
@@ -189,5 +194,13 @@ class QuestionParserController extends BaseController
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 }

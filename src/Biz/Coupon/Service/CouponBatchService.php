@@ -49,5 +49,5 @@ interface CouponBatchService
 
     public function fillUserCurrentCouponByBatches($batches);
 
-    public function getCouponBatchContent($batchId, $targetType, $targetId);
+    public function getCouponBatchContent($batchId);
 }

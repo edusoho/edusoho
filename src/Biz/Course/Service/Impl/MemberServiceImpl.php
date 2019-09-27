@@ -1142,6 +1142,15 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByUserIdAndCourseSetIdAndRole($userId, $courseSetId, 'teacher');
     }
 
+    public function findLastLearnTimeRecordStudents($userIds)
+    {
+        if (empty($userIds)) {
+            return array();
+        }
+
+        return $this->getMemberDao()->findLastLearnTimeRecordStudents($userIds);
+    }
+
     /**
      * @param int $userId
      *

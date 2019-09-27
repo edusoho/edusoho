@@ -186,6 +186,7 @@ admin.operation.mobile.discovery_column_tab.create_btn: '添加栏目'
 
 ##微信通知管理模块
 admin.operation.wechat.notification_record_tab: 发送记录
+admin.operation.wechat.fans_list_tab: 粉丝列表
 admin.operation.wechat.notification_manage: 设置
 
 ##数据统计模块

@@ -12,7 +12,9 @@ class KeyApplierTest extends BaseTestCase
     {
         $applier = new KeyApplier();
         ReflectionUtils::setProperty($applier, 'moked', true);
-        $result = $applier->applyKey($this->getCurrentUser(), 'opensource', 'apply', 1);
+        $user = $this->getCurrentUser();
+        $user['visitorId'] = 'visitorId1234';
+        $result = $applier->applyKey($user, 'opensource', 'apply', 1);
 
         $this->assertEquals('http://api.edusoho.net/v1/keys', $result['url']);
         $this->assertArrayEquals(array(
@@ -24,6 +26,7 @@ class KeyApplierTest extends BaseTestCase
             'mobile' => '',
             'edition' => 'opensource',
             'source' => 'apply',
+            'visitorId' => 'visitorId1234',
         ), $result['params']);
 
         $this->assertArrayEquals(array(
@@ -32,7 +35,7 @@ class KeyApplierTest extends BaseTestCase
             'timeout' => 20,
             'headers' => array(
             0 => 'Content-type: application/json',
-            1 => 'Sign: bd7eb87d90411c8a228dbd06abd000f4',
+            1 => 'Sign: d5bd7d78a5cb4f46dfa15f2d8a5de0c0',
             ),
         ), $result['curlOptions']);
     }

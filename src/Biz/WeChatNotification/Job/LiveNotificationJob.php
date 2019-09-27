@@ -3,6 +3,7 @@
 namespace Biz\WeChatNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 
 class LiveNotificationJob extends AbstractNotificationJob
 {
@@ -36,16 +37,19 @@ class LiveNotificationJob extends AbstractNotificationJob
         $userIds = ArrayToolkit::column($members, 'userId');
         $data = array(
             'userName' => array('value' => '同学'),
-            'courseName' => array('value' => $courseSet['title']),
+            'courseName' => array('value' => "《{$courseSet['title']}》-《{$task['title']}》"),
             'date' => array('value' => date('Y-m-d H:i', $task['startTime'])),
             'remark' => array('value' => '不要迟到哦'),
         );
         $options = array('url' => $url, 'type' => 'url');
-        $templateData = array(
+        $templates = TemplateUtil::templates();
+        $templateCode = isset($templates[$key]['id']) ? $templates[$key]['id'] : '';
+        $templateData = array(array(
             'template_id' => $templateId,
+            'template_code' => $templateCode,
             'template_args' => $data,
             'goto' => $options,
-        );
+        ));
         $this->sendNotifications($key, 'wechat_notify_live_play', $userIds, $templateData);
     }
 }
