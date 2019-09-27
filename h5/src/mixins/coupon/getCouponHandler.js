@@ -44,7 +44,7 @@ export default {
     },
     hasreceiveCoupon(coupon) {
       /* 已领券 */
-      const targetType = coupon.targetDetail.product;
+      const targetType = coupon.targetType;
       const allType = Object.values(ALL_TYPE);
 
       if (!allType.includes(targetType)) {
