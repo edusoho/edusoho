@@ -170,7 +170,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         return empty($prefix) ? true : false;
     }
 
-    public function receiveCoupon($token, $userId)
+    public function receiveCoupon($token, $userId, $canRepeat = false)
     {
         $batch = $this->getCouponBatchDao()->getBatchByToken($token, true);
         $token = $this->getTokenService()->verifyToken('coupon', $token);
@@ -218,7 +218,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             );
             $coupon = $this->getCouponService()->searchCoupons($conditions, array('id' => 'DESC'), 0, 1);
 
-            if (!empty($coupon)) {
+            if (!empty($coupon) && !$canRepeat) {
                 $this->getCouponBatchDao()->db()->commit();
 
                 return array(

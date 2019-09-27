@@ -33,7 +33,7 @@ interface CouponBatchService
 
     public function checkBatchPrefix($prefix);
 
-    public function receiveCoupon($token, $userId);
+    public function receiveCoupon($token, $userId, $canRepeat = false);
 
     public function updateBatch($id, $fields);
 
