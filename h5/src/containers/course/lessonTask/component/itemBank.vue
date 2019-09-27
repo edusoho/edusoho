@@ -68,6 +68,7 @@
             :analysis="paper.analysis"
             :answer="paper.answer"
             :subject="paper.type"
+            :isExercise="isExercise"
           />
         </div>
       </van-swipe-item>
@@ -137,6 +138,10 @@
         default: 0
       },
       isWrongMode: { //是否是错题模式,只有在解析的时候有
+        type: Boolean,
+        default: false
+      },
+      isExercise: {
         type: Boolean,
         default: false
       }

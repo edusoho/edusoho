@@ -11,7 +11,7 @@
         <div v-if="subject=='fill'">
           <div class="analysis-content__item  mt10" v-for="(item,index) in answer" :key="`right${index}`">
             <div class="analysis-item__title">正确答案</div>
-            <div :class="[statusColor]">（{{index+1}}）{{filterOrder(item)}}</div>
+            <div class="analysis-item_right">（{{index+1}}）{{filterOrder(item)}}</div>
           </div>
           <!-- 因为这里的testResult在部分情况下是没有的，所以这里的遍历使用正确答案来遍历 -->
           <div class="analysis-content__item  mt10" v-for="(item,index) in answer" :key="index">
@@ -63,6 +63,10 @@
       subject: {
         type: String,
         default: ''
+      },
+      isExercise: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -75,7 +79,7 @@
           case 'right':
             return 'analysis-item_right';
           case 'none':
-            return 'analysis-item_none';
+            return this.isExercise ? 'analysis-item_subject' : 'analysis-item_none';
           case 'wrong':
           case 'partRight':
             return 'analysis-item_worng';
@@ -94,7 +98,7 @@
           case 'right':
             return '回答正确';
           case 'none':
-            return '待批阅';
+            return this.isExercise ? '主观题' : '待批阅';
           case 'wrong':
           case 'partRight':
             return '回答错误';
