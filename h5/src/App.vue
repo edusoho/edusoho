@@ -59,6 +59,7 @@ export default {
         if(to.meta.hideTitle){
           this.isQrcode=true
         }
+
         this.showLeftArrow = ![
           "my",
           "find",

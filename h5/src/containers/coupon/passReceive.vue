@@ -69,15 +69,15 @@
       }
 
       if (token) {
-        // Api.receiveCoupon({
-        //   data: { token }
-        // }).then(res => {
-        //   this.item = res;
-        //   this.message = '恭喜您成功领取了一张优惠券！';
-        // }).catch(err => {
-        //   this.message = '优惠券领取失败！'
-        //   Toast.fail(err.message);
-        // });
+        Api.receiveCoupon({
+          data: { token }
+        }).then(res => {
+          this.item = res;
+          this.message = '恭喜您成功领取了一张优惠券！';
+        }).catch(err => {
+          this.message = '优惠券领取失败！'
+          Toast.fail(err.message);
+        });
       }
     }
   }

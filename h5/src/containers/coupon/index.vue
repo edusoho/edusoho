@@ -1,9 +1,8 @@
 <template>
   <div class="receive-all">
     <e-loading v-if="isLoading"></e-loading>
-      <fast-receive v-if="cloudSetting ==1 && sitePlugins==1" />
-      <pass-receive v-if="cloudSetting ==2 || sitePlugins==2"/>
-    </div>
+    <fast-receive v-if="cloudSetting ==1 && sitePlugins==1" />
+    <pass-receive v-if="cloudSetting ==2 || sitePlugins==2"/>
   </div>
 </template>
 <script>

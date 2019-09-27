@@ -55,7 +55,7 @@ export default {
   [types.SET_SOCIAL_STATUS](state, { key, status }) {
     state.socialBinded[key] = status;
   },
-  [types.COUPON](state, payload) {
-    state.coupon = payload;
+  [types.COUPON_SWITCH](state, payload) {
+    state.couponSwitch = payload;
   }
 };
