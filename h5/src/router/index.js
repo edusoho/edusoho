@@ -238,7 +238,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "verification" */'@/containers/login/face/verification.vue')
   }, {
     path: '/coupon/:token/receive',
-    // path: '/coupon/6739da90e04111e9a534024255e33e33/receive',
     name: 'coupon_receive',
     meta: {
       title: '优惠券领取',
