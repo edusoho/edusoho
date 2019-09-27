@@ -44,6 +44,7 @@ class CourseTaskCreateSyncJob extends AbstractJob
                     'title' => $task['title'],
                     'isFree' => $task['isFree'],
                     'isOptional' => $task['isOptional'],
+                    'isLesson' => $task['isLesson'],
                     'startTime' => $task['startTime'],
                     'endTime' => $task['endTime'],
                     'number' => $task['number'],

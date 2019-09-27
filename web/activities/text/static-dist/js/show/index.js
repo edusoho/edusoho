@@ -9,14 +9,21 @@ load.then(function(){
   }, function(result) {
     var $content = $(result['content']);
     $('.text-activity-content').append($content);
+    var $iframe = $('#text-activity').find('iframe');
+    if ($iframe.length !== 0) {
+      var isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+      var classStr = isIOS ? 'text-iframe-wrap iframe-scroll': 'text-iframe-wrap';
+      $('.js-text-activity-content').addClass(classStr);
+      $iframe.attr('scrolling', 'no');
+    } else {
+      $('#text-activity').perfectScrollbar();
+      $('#text-activity').perfectScrollbar('update');
+    }
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block);
     });
   });
 
-  $('#text-activity').perfectScrollbar();
-  $('#text-activity').perfectScrollbar('update');
-  
   if ($('#text-activity').data('disableCopy')) {
     document.oncontextmenu = 
     document.onselectstart = function() {

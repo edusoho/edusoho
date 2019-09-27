@@ -267,7 +267,9 @@
           </div>
         {% endif %}
 
-        {{ render(controller('AppBundle:Default:latestReviewsBlock',{number:5})) }}
+        {% if setting('course.show_review', '1') == 1 %}
+          {{ render(controller('AppBundle:Default:latestReviewsBlock',{number:5})) }}
+        {% endif %}
 
         {# 最热话题 #}
         {% if setting('group').group_show|default(1) %}
@@ -355,16 +357,18 @@
                 <span class="teacher-title ellipsis">{{ teacher.title }}</span>
               </div>
             {% endif %}
-            <div class="course-metas">
-              <span class="stars-{{ (courseSet.rating)|number_format }}">&nbsp;</span>
-              {% if setting('course.show_student_num_enabled', '1') == 1 %}
-                <span class="divider"></span>
-                <span class="text-muted mrm mls">
-                  <strong>{{ courseSet.studentNum }}</strong>
-                  {{ setting('default.user_name', '学员'|trans) }}
-                </span>
-              {% endif %}
-            </div>
+            {% if setting('course.show_review', '1') == 1 %}
+              <div class="course-metas">
+                <span class="stars-{{ (courseSet.rating)|number_format }}">&nbsp;</span>
+                {% if setting('course.show_student_num_enabled', '1') == 1 %}
+                  <span class="divider"></span>
+                  <span class="text-muted mrm mls">
+                    <strong>{{ courseSet.studentNum }}</strong>
+                    {{ setting('default.user_name', '学员'|trans) }}
+                  </span>
+                {% endif %}
+              </div>
+            {% endif %}
           </div>
         </div>
       </li>
@@ -427,7 +431,9 @@
             <div class="course-metas">
               <span class="text-muted mrm"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
               <span class="text-muted mrm"><i class="es-icon es-icon-thumbup"></i>{{ course.likeNum }}</span>
-              <span class="text-muted mrm"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+              {% if setting('openCourse.show_comment', '1') == 1 %}
+                <span class="text-muted mrm"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+              {% endif %}
             </div>
           </div>
         </div>

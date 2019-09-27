@@ -27,6 +27,7 @@ class ExportQuestionWrapper extends Wrapper
     public function stem($question)
     {
         $question['stem'] = $this->explodeTextAndImg($question['stem']);
+        $question['stem'] = $this->filterImage($question['stem']);
 
         return $question;
     }
@@ -124,6 +125,20 @@ class ExportQuestionWrapper extends Wrapper
                     'content' => $item,
                 );
             }
+        }
+
+        return $items;
+    }
+
+    protected function filterImage($stems)
+    {
+        $items = array();
+        foreach ($stems as $stem) {
+            if ('img' == $stem['element'] && !file_exists($stem['content'])) {
+                continue;
+            }
+
+            $items[] = $stem;
         }
 
         return $items;

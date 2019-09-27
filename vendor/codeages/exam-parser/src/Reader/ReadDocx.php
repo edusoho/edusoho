@@ -123,7 +123,7 @@ class ReadDocx
         $paragraphList = $this->docXml->getElementsByTagName('p');
         $text = '';
         foreach ($paragraphList as $paragraph) {
-            $text .= $paragraph->textContent.PHP_EOL;
+            $text .= trim($paragraph->textContent).PHP_EOL;
         }
 
         $this->documentText = $text;

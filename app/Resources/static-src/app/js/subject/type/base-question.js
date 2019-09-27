@@ -17,6 +17,7 @@ class BaseQuestion {
     this._initEvent();
     this._initValidate();
     this._initAnalysisEditor();
+    this._initSelect();
   }
 
   _initEvent() {
@@ -25,12 +26,87 @@ class BaseQuestion {
     this.$analysisModal.on('click', '.js-analysis-btn', event => this.saveAnalysis(event));
   }
 
+  _initSelect() {
+    let courseSelect = cd.select({
+      el: '#courseEditBelong',
+      type: 'single',
+      parent: '.js-setting-item'
+    });
+
+    let lessonSelect = cd.select({
+      el: '#lessonEditBelong',
+      type: 'single',
+      parent: '.js-setting-item'
+    });
+
+    courseSelect.on('change', (value, text) => {
+      let url = $('#courseEditBelong').data('url');
+      let select2 = $('.js-lessonSelect');
+      $('.js-lesson-edit-options').html('');
+      $('.js-lessonSelect').find('input[name="lessonId"]').val(0);
+      $('.js-lessonSelect').find('.select-value').text(Translator.trans('site.choose_hint'));
+      if (value == 0) {
+        select2.hide();
+        return;
+      }
+
+      $.post(url,{courseId:value},function(result){
+        if (result != '') {
+          let option = '<li class="checked" data-value="0">'+Translator.trans('site.choose_hint')+'</li>';
+          $.each(result,function(index,task){
+            option += '<li data-value="'+task.id+'">'+task.title+'</li>';
+          });
+          $('.js-lesson-edit-options').append(option);
+          select2.show();
+        } else {
+          select2.hide();
+        }
+      });
+    });
+
+    $('#courseEditBelong').on('click', (value, text) => {
+      lessonSelect.clear();
+    });
+
+    $('#lessonEditBelong').on('click', (value, text) => {
+      courseSelect.clear();
+    });
+  }
+
   submitForm(event) {
     let self = this;
     if (self.validator.form()) {
       $(event.currentTarget).button('loading');
       let question = self.getQuestion();
       self.finishEdit(question);
+      self.changeBottomFixed();
+    }
+  }
+
+  changeBottomFixed() {
+    const visibleBottom = parseInt(window.scrollY + document.documentElement.clientHeight);
+    let footerBottom = 0;
+    // 判断底部元素是否存在
+    if ($('.es-footer-link').length) {
+      footerBottom = parseInt($('.es-footer-link').offset().top);
+    } else {
+      if ($('.es-footer').length) {
+        footerBottom = parseInt($('.es-footer').offset().top);
+      }
+    }
+    // 适配其他主题
+    if (!footerBottom) {
+      const scrollHeight = parseInt($(document).scrollTop());
+      const windowHeight = parseInt($(document.body).height());
+      const visibleHeight = parseInt($(window).height());
+      const offsetHeight = windowHeight - 560;
+      if ((scrollHeight + visibleHeight) >= offsetHeight) {
+        $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
+      }
+    } else {
+      if (footerBottom < visibleBottom) {
+        $('.js-subject-item-btn').removeClass('subject-bottom-fixed');
+      }
     }
   }
 

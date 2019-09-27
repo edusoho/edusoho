@@ -3,7 +3,6 @@
 namespace Tests\Unit\Activity\Service;
 
 use Biz\BaseTestCase;
-use Biz\Activity\Service\ActivityLearnLogService;
 
 class ActivityLearnLogServiceTest extends BaseTestCase
 {
@@ -42,9 +41,23 @@ class ActivityLearnLogServiceTest extends BaseTestCase
             'Activity:ActivityLearnLogDao',
             array(
                 array(
-                    'functionName' => 'countLearnedDaysByCourseIdAndUserId',
+                    'functionName' => 'countLearnedDaysByActivityIdsAndUserId',
                     'returnValue' => 10,
-                    'withParams' => array(24, 24),
+                    'withParams' => array(array(4), 24),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Activity:ActivityDao',
+            array(
+                array(
+                    'functionName' => 'findByCourseId',
+                    'returnValue' => array(
+                        0 => array(
+                            'id' => '4',
+                        ),
+                    ),
+                    'withParams' => array(24),
                 ),
             )
         );

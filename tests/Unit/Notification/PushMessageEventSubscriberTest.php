@@ -1087,15 +1087,15 @@ class PushMessageEventSubscriberTest extends BaseTestCase
             'batchId' => 10,
         );
         $subscriber = $this->getEventSubscriberWithMockedQueue();
-        $subscriber->onInviteReward(new Event($coupon, array('message' => array('rewardName' => 'rewardName', 'settingName' => 'settingName'))));
+        $subscriber->onInviteReward(new Event($coupon, array('message' => array('title' => 'rewardTitle', 'content' => 'content'))));
         $result = $this->getQueueService()->getJob()->getBody();
 
         $this->assertArrayEquals(
             array(
                 'type' => 'invite.reward',
                 'userId' => 1,
-                'title' => 'rewardName',
-                'message' => '恭喜您获得rewardName奖励，settingName元面值抵价优惠券一张，已发至您的账户',
+                'title' => 'rewardTitle',
+                'message' => 'content',
             ),
             $result['body']
         );

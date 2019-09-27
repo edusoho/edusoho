@@ -370,7 +370,7 @@ class BaseController extends Controller
             $url = $this->generateUrl('homepage', array(), true);
         }
 
-        return $url;
+        return strip_tags($url);
     }
 
     protected function createSuccessJsonResponse($data = array())

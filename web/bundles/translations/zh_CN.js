@@ -307,6 +307,7 @@ t.add("course.thread_delete_hint", "\u60a8\u771f\u7684\u8981\u5220\u9664\u8be5\u
 t.add("course_manage.course_dashboard.student_num", "\u5b66\u5458\u6570", "js", "zh_CN");
 t.add("course_manage.course_dashboard.finish_num", "\u5b8c\u8bfe\u4eba\u6570", "js", "zh_CN");
 t.add("course_manage.course_dashboard.finish_rate", "\u5b8c\u8bfe\u7387", "js", "zh_CN");
+t.add("course.manage.teacher.manage.repeat_tip", "\u4e0d\u80fd\u91cd\u590d\u6dfb\u52a0", "js", "zh_CN");
 t.add("course_manage.course_overview.person_unit", "\u4eba\u6570", "js", "zh_CN");
 t.add("course_manage.lesson_dashboard.finish_rate", "\u5b8c\u6210\u7387", "js", "zh_CN");
 t.add("course_manage.lesson_dashboard.student_num", "\u4eba", "js", "zh_CN");
@@ -596,6 +597,7 @@ t.add("validate.alphanumeric.message", "\u5fc5\u987b\u662f\u82f1\u6587\u5b57\u6b
 t.add("validate.raty_star.message", "\u8bf7\u6253\u5206", "js", "zh_CN");
 t.add("validate.reg_invite_code.message", "\u5fc5\u987b\u662f5\u4f4d\u6570\u5b57\u3001\u82f1\u6587\u5b57\u6bcd\u7ec4\u6210", "js", "zh_CN");
 t.add("validate.phone.message", "\u8bf7\u8f93\u5165\u6709\u6548\u624b\u673a\u53f7\u7801", "js", "zh_CN");
+t.add("validate.mobile_or_telephone.message", "\u8bf7\u8f93\u5165\u6709\u6548\u624b\u673a\u53f7\u7801\u6216\u8005\u7535\u8bdd\u53f7\u7801(\u533a\u53f7-\u7535\u8bdd\u53f7\u7801)", "js", "zh_CN");
 t.add("validate.nickname.message", "\u4e0d\u5141\u8bb8\u4ee51\u5f00\u5934\u768411\u4f4d\u7eaf\u6570\u5b57", "js", "zh_CN");
 t.add("validate.password_check.message", "\u5bc6\u7801\u9519\u8bef", "js", "zh_CN");
 t.add("validate.sms_code_input.message", "\u8bf7\u8f93\u5165\u77ed\u4fe1\u9a8c\u8bc1\u7801", "js", "zh_CN");
@@ -622,6 +624,7 @@ t.add("validate.fail", "\u9a8c\u8bc1\u5931\u8d25", "js", "zh_CN");
 t.add("validate.expiry_days_required_hint", "\u8bf7\u8f93\u5165\u6709\u6548\u671f", "js", "zh_CN");
 t.add("validate.empty_content_hint", "\u8bf7\u8f93\u5165\u5185\u5bb9!", "js", "zh_CN");
 t.add("validate.no_number_first_hint", "URL\u8def\u5f84\u53ea\u80fd\u5305\u542b\u5b57\u6bcd\u548c\u6570\u5b57,\u8bf7\u4ee5\u5b57\u6bcd\u5f00\u5934!\u957f\u5ea6\u5927\u4e8e2\u4f4d", "js", "zh_CN");
+t.add("validate.have_spaces", "\u5bc6\u7801\u4e0d\u80fd\u6709\u7a7a\u683c\u54e6", "js", "zh_CN");
 t.add("alert.file_convert_error.message", "\u6587\u4ef6\u8f6c\u6362\u63d0\u4ea4\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");
 t.add("notify.file_not_select.message", "\u672a\u9009\u4e2d\u4efb\u4f55\u6587\u4ef6\u8bb0\u5f55", "js", "zh_CN");
 t.add("page.file_converting.message", "\u6b63\u5728\u6587\u4ef6\u683c\u5f0f\u8f6c\u6362", "js", "zh_CN");
@@ -1191,6 +1194,7 @@ t.add("wechat.notification.wechat_bind_hover", "<div class=\"wechat-intro-title 
 t.add("wechat.notification.homepage.open_tip", "<span class=\"%messageClass%\">\u201c\u5fae\u4fe1\u901a\u77e5\u201d\u53ef\u5728\u201c\u4e2a\u4eba\u8bbe\u7f6e-\u7b2c\u4e09\u65b9\u767b\u5f55\u201d\u5f00\u542f\u3002<\/span>", "js", "zh_CN");
 t.add("wechat.notification.homepage.open_tip_title", "<span class=\"%messageClass%\">\u524d\u5f80\u5f00\u542f<\/span>", "js", "zh_CN");
 t.add("wechat.notification.cloud_open_tip", "\u8bf7\u5148\u5f00\u542f\u6559\u80b2\u4e91", "js", "zh_CN");
+t.add("admin.wechat_notification.send_days", "\u53d1\u9001\u65e5", "js", "zh_CN");
 t.add("document.import.intro_hover", "<div class=\"document-import-intro-title cd-text-warning\"><i class=\"es-icon es-icon-xinxi cd-mr8\"><\/i>\u63d0\u793a<\/div> <div class=\"document-import-intro-content\">\n  <div align=\"center\">\u5168\u65b0\u5bfc\u5165\u529f\u80fd\uff0c\u5feb\u6765\u8bd5\u8bd5\u5427\u3002<\/div>\n<\/div>\n", "js", "zh_CN");
 t.add("document.import.skip_btn", "\u77e5\u9053\u4e86", "js", "zh_CN");
 t.add("subject.testpaper_title_empty_hint", "\u8bd5\u5377\u540d\u79f0\u4e0d\u80fd\u4e3a\u7a7a", "js", "zh_CN");
@@ -1205,6 +1209,7 @@ t.add("subject.period", "\u3002", "js", "zh_CN");
 t.add("subject.miss_score_no_more_than_score", "\u6f0f\u9009\u5206\u503c\u4e0d\u5f97\u8d85\u8fc7\u9898\u76ee\u5206\u503c", "js", "zh_CN");
 t.add("subject.score_update_success", "\u5206\u6570\u4fee\u6539\u6210\u529f", "js", "zh_CN");
 t.add("subject.difficulty_update_success", "\u96be\u5ea6\u4fee\u6539\u6210\u529f", "js", "zh_CN");
+t.add("subject.belong_update_success", "\u4ece\u5c5e\u4fee\u6539\u6210\u529f", "js", "zh_CN");
 t.add("subject.question_count", "\u5171%count%\u9053\u9898", "js", "zh_CN");
 t.add("subject.total_score", "\u603b\u5206%totalScore%\u5206", "js", "zh_CN");
 t.add("subject.is_editing_warning", "\u8bf7\u5148\u5b8c\u6210\u7b2c%seq%\u9898\u7684\u7f16\u8f91", "js", "zh_CN");
@@ -1230,4 +1235,6 @@ t.add("user.account.order_pay_vip_close_title", "\u8be5\u4f1a\u5458\u7b49\u7ea7\
 t.add("user.account.order_pay_vip_close_hint", "\u8be5\u8ba2\u5355\u7684\u4f1a\u5458\u7b49\u7ea7\u5df2\u5173\u95ed\uff0c\u786e\u5b9a\u8fd8\u8981\u652f\u4ed8\uff1f", "js", "zh_CN");
 t.add("user.account.order_pay", "\u7ee7\u7eed", "js", "zh_CN");
 t.add("user.account.order_not_pay", "\u4e0d\u652f\u4ed8", "js", "zh_CN");
+t.add("admin.wechat.live_open_scenes_error.hint", "\u8bf7\u81f3\u5c11\u52fe\u9009\u4e00\u4e2a\u9009\u9879\u3002", "js", "zh_CN");
+t.add("course.question_manage.manage.delete_tips", "\u5220\u9664\u9898\u76ee\uff0c\u53ef\u80fd\u4f1a\u5f71\u54cd\u8bfe\u65f6\u7684\u7ec3\u4e60\uff0c\u8bf7\u8c28\u614e\u64cd\u4f5c\uff01", "js", "zh_CN");
 })(Translator);
