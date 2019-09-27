@@ -38,7 +38,7 @@ class CouponBatchController extends BaseController
         );
 
         foreach ($batchs as $key => &$batch) {
-            $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id'], $batch['targetType'], $batch['targetId']);
+            $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id']);
         }
 
         return $this->render('admin/coupon/index.html.twig', array(
@@ -298,7 +298,7 @@ class CouponBatchController extends BaseController
         );
 
         foreach ($batchs as $key => &$batch) {
-            $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id'], $batch['targetType'], $batch['targetId']);
+            $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id']);
         }
 
         return $this->render('admin/coupon/chooser-coupon/chooser-coupon-modal.html.twig', array(

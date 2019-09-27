@@ -419,7 +419,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         return $this->getCouponBatchDao()->countH5MpsBatches($conditions);
     }
 
-    public function getCouponBatchContent($batchId, $targetType, $targetId)
+    public function getCouponBatchContent($batchId)
     {
         $batch = $this->getBatch($batchId);
         $wrapper = $this->getWrapper();
