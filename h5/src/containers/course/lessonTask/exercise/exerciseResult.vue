@@ -164,7 +164,7 @@
         }
       },
       startExercise() {
-        this.$router.push({
+        this.$router.replace({
           name: 'exerciseDo',
           query: {
             targetId: this.$route.query.taskId,
