@@ -101,11 +101,9 @@ export default {
         //通过链接获取优惠券信息
         async getCouponInfo(){
             const token = this.$route.params.token;
-
             await Api.getCouponInfo({
                query: {
                     batchToken: token,
-                    // batchToken: '6739da90e04111e9a534024255e33e33'
                 }
             }).then((res)=>{
                 this.coupons=res;
@@ -115,6 +113,7 @@ export default {
                    this.isLogin();
                 }
             }).catch((err)=>{
+
                 Toast.fail(err.message);
             })
         },

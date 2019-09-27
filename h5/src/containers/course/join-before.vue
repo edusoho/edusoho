@@ -151,7 +151,7 @@
     },
     mounted() {
       if (!this.isClassCourse && this.couponSwitch) {
-        // 获取促销优惠
+        // 获取促销优惠券
         Api.searchCoupon({
           params: {
             targetId: this.details.courseSet.id,

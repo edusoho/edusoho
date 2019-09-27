@@ -334,7 +334,6 @@ const setWeChatSwitch = () => new Promise((resolve, reject) => {
   return resolve();
 });
 
-
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name);
 
