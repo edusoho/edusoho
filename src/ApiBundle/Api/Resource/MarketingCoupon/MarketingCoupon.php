@@ -46,12 +46,13 @@ class MarketingCoupon extends AbstractResource
         }
 
         if (isset($postData['batch_id']) && isset($postData['batch_token'])) {
-            $response = $this->getCouponBatchService()->receiveCoupon($postData['batch_token'], $user['id']);
-            if (isset($response['code']) && 'failed' == $response['code']) {
-                throw $response['exception']['class']::$response['exception']['method']();
+            $result = $this->getCouponBatchService()->receiveCoupon($postData['batch_token'], $user['id'], true);
+            if (isset($result['code']) && 'failed' == $result['code']) {
+                $exceptionMethod = $result['exception']['method'];
+                throw $result['exception']['class']::$exceptionMethod();
             }
+            $response = $this->getCouponService()->getCoupon($result['id']);
             $response['couponBatch'] = $this->getCouponBatchService()->getBatchByToken($postData['batch_token']);
-            $response['coupon'] = $this->getCouponService()->getCoupon($response['id']);
         } else {
             $response = $this->getCouponService()->generateMarketingCoupon($user['id'], $postData['price'], $postData['expire_day']);
         }
