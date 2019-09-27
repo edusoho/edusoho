@@ -117,7 +117,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLoading', 'vipLevels', 'vipSettings', 'vipSetupStatus', 'couponSetting', 'vipPlugin']),
+    ...mapState(['isLoading', 'vipLevels', 'vipSettings', 'vipSetupStatus', 'vipPlugin']),
+    ...mapState({
+      couponSwitch: state => state.couponSwitch,
+    }),
     stopDraggleClasses() {
       return '.module-frame__setting, .find-footer,'
         + '.search__container, .el-dialog__header, .el-dialog__footer';
@@ -242,15 +245,18 @@ export default {
           }
           break;
         case 'coupon':
-          if (!this.couponSetting) {
-            this.$confirm('优惠券功能未开通', '提示', {
-              confirmButtonText: '去开通',
-              cancelButtonText: '取消',
-            }).then(() => {
-              window.open(window.location.origin + '/admin/setting/coupon');
-            }).catch(() => {});
-            return;
-          }
+          Api.getCouponSetting().then(res => {
+            if (!parseInt(res.enabled, 10)) {
+              this.$confirm('优惠券功能未开通', '提示', {
+                confirmButtonText: '去开通',
+                cancelButtonText: '取消',
+              }).then(() => {
+                window.open(window.location.origin + '/admin/setting/coupon');
+              }).catch(() => {});
+              return;
+            }
+          });
+          break;
         default:
           break;
       }

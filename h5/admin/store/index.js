@@ -16,7 +16,6 @@ const state = {
   vipLevels: [],
   vipSettings: {},
   vipSetupStatus: false,
-  couponSetting: 0,
   vipPlugin: {}
 };
 

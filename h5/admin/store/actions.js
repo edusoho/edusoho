@@ -116,18 +116,6 @@ export const getMarketingList = ({ commit }, params) => Api.getMarketingList({
   params
 });
 
-// 全局优惠券设置开关
-export const getCouponSetting = ({ commit }, params) => Api.getCouponSetting.then((enabled) => {
-  const couponEnabled = parseInt(enabled);
-  commit(types.GET_SETTINGS, { key: 'couponSetting', setting: couponEnabled });
-  return couponEnabled;
-});
-
-// 优惠券搜索列表数据
-export const getCouponList = ({ commit }, params) => Api.getCouponList({
-  params
-});
-
 // 后台配置预览二维码
 export const getQrcode = ({ commit }, { route, preview, times, duration }) => Api.getQrcode({
   query: {
