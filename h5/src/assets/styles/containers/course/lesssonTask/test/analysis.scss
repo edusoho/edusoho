@@ -34,9 +34,17 @@
 
     .analysis-content__item {
       display: flex;
-
+      .analysis-content__item--column{
+        display:flex;
+        flex-direction: column;
+      }
       .analysis-item__title {
-        margin-right: vw(10)
+        margin-right: vw(10);
+        flex:0 0 20%;
+      }
+
+      .fill-answer{
+        margin: 0 0 vw(10) vw(-8);
       }
 
       .analysis-item_right {

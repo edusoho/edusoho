@@ -9,15 +9,19 @@
         </div>
 
         <div v-if="subject=='fill'">
-          <div class="analysis-content__item  mt10" v-for="(item,index) in answer" :key="`right${index}`">
+          <div class="analysis-content__item  mt10" >
             <div class="analysis-item__title">正确答案</div>
-            <div class="analysis-item_right">（{{index+1}}）{{filterOrder(item)}}</div>
+            <div class="analysis-item_right analysis-content__item--column" >
+              <div class="fill-answer"  v-for="(item,index) in answer" :key="`right${index}`" >（{{index+1}}）{{filterOrder(item)}}</div>
+            </div>
           </div>
           <!-- 因为这里的testResult在部分情况下是没有的，所以这里的遍历使用正确答案来遍历 -->
-          <div class="analysis-content__item  mt10" v-for="(item,index) in answer" :key="index">
+          <div class="analysis-content__item " >
             <div class="analysis-item__title">你的答案</div>
             <div class="analysis-item_noAnswer" v-if="!testResult">未回答</div>
-            <div v-else :class="[statusColor]">（{{index+1}}）{{ filterOrder(testResult.answer[index])}}</div>
+            <div v-else :class="[statusColor,'analysis-content__item--column']" >
+              <div class="fill-answer"  v-for="(item,index) in answer" :key="index">（{{index+1}}）{{ filterOrder(testResult.answer[index])}} </div>
+            </div>
           </div>
         </div>
 
