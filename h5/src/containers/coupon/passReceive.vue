@@ -27,6 +27,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
   import Api from '@/api';
   import { Toast } from 'vant';
   import couponMixin from '@/mixins/coupon'
@@ -51,9 +52,14 @@
     computed: {
       couponStatus() {
         return Object.keys(this.item).length ? 'coupon-receive-success' : '';
-      }
+      },
+      ...mapState(['couponSwitch']),
     },
     created() {
+      if (!this.couponSwitch) {
+        Toast.fail('优惠券已失效');
+        return;
+      }
       // 通过链接领取优惠券
       const token = this.$route.params.token;
 
