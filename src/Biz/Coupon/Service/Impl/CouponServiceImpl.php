@@ -5,6 +5,7 @@ namespace Biz\Coupon\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Card\Service\CardService;
+use Biz\Common\CommonException;
 use Biz\Coupon\CouponException;
 use Biz\Coupon\Dao\CouponDao;
 use Biz\Coupon\Service\CouponService;
@@ -42,6 +43,20 @@ class CouponServiceImpl extends BaseService implements CouponService
         $this->dispatchEvent('coupon.update', $coupon);
 
         return $coupon;
+    }
+
+    public function batchUpdateCoupons(array $userCoupons)
+    {
+        if (empty($userCoupons)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+        $userCoupons = array_values($userCoupons);
+        if (!ArrayToolkit::requireds($userCoupons[0], array('id'))) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+        $ids = ArrayToolkit::column($userCoupons, 'id');
+
+        return $this->getCouponDao()->batchUpdate($ids, $userCoupons);
     }
 
     public function findCouponsByBatchId($batchId, $start, $limit)
