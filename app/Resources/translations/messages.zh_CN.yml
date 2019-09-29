@@ -9894,6 +9894,7 @@ exception.uploadfile.globalId_required: 缺少globalId
 exception.uploadfile.local_convert_not_support: 本地文件暂不支持转换
 exception.uploadfile.extension_not_allowed: 该文件格式，不允许上传。
 exception.uploadfile.not_found_attachment: 附件不存在
+exception.uploadfile.arguments_invalid: 参数不合法
 exception.activity.watch_video_limit: 您的视频观看时长已达限制，无法继续观看！
 exception.activity.not_found: 教学活动不存在
 exception.activity.not_in_course: 教学计划中没有该教学活动
