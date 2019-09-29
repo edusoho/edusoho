@@ -31,7 +31,7 @@ export default {
       return `<span class="${intClass}">${intPrice}</span><span class="text-14">${pointPrice + typeText}</span>`;
     },
     scopeFilter({ targetDetail }) {
-      const numberType = targetDetail.numtype;
+      const numberType = targetDetail.numType;
       const productType = targetDetail.product;
       let text = '';
       if (numberType === 'single') {

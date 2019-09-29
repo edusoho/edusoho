@@ -19,7 +19,7 @@ export default [
   }, {
     // 根据渠道查询优惠券
     name: 'searchCoupon',
-    url: '/plugins/coupon/channel/h5Mps/coupon_batches?limit=100',
+    url: '/coupon_batch/h5Mps/channel?limit=100',
     disableLoading: true
   }, {
     // 判断兑换券券码引流插件是否安装

@@ -53,7 +53,7 @@ export default {
       }
 
       // 指定课程或者班级
-      if (coupon.targetDetail.numtype === 'single') {
+      if (coupon.targetDetail.numType === 'single') {
         const targetId = coupon.target.id;
         // 指定vip
         if (targetType === ALL_TYPE.vip) {
@@ -71,7 +71,7 @@ export default {
             path: `/${targetType}/${id}` // course/{id} | classroom/{id}
           });
         });
-      } else if (coupon.targetDetail.numtype === 'multi') {
+      } else if (coupon.targetDetail.numType === 'multi') {
         // 多个班级/课程
         this.$router.push({
           path: `/${coupon.targetDetail.product}/explore` // course/explore | classroom/explore

@@ -130,7 +130,7 @@ export default {
         //优惠券类型过滤
         couponType(coupons) {
             //指定优惠
-            const numberType = coupons.targetDetail.numtype;
+            const numberType = coupons.targetDetail.numType;
             const productType = coupons.targetDetail.product;
             if (numberType === 'single') {
                 switch (productType) {
