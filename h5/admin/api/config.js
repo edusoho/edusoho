@@ -50,7 +50,7 @@ const config = [
   }, {
     // 获取优惠券
     name: 'getCouponList',
-    url: '/plugins/coupon/coupon_batches'
+    url: '/coupon_batch'
   }, {
     // 微营销活动列表数据
     name: 'getMarketingList',

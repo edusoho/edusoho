@@ -30,24 +30,52 @@ const tableFilter = (item, label, subProperty) => {
     case 'generatedNum':
       return `${item.unreceivedNum} / ${item.generatedNum}`;
     case 'rate':
+      const discountType = '折扣';
+      const text = '折';
+      const numberType = item.targetDetail.numType;
+      const productType = item.targetDetail.product;
       let targetType = '全部商品';
-      let discountType = '折扣';
-      let text = '折';
-      const target = item.target;
+      if (numberType === 'single') {
+        switch (productType) {
+          case 'course':
+          case 'classroom':
+            targetType = '指定商品';
+            break;
+          case 'vip':
+            targetType = '指定会员';
+            break;
+          default:
+            targetType = '';
+        }
+      } else if (numberType === 'all') {
+        // 全部
+        switch (productType) {
+          case 'course':
+            targetType = '全部课程';
+            break;
+          case 'classroom':
+            targetType = '全部班级';
+            break;
+          case 'all':
+            targetType = '全部商品';
+            break;
+          case 'vip':
+            targetType = '全部会员';
+            break;
+          default:
+            targetType = '';
+        }
+      } else {
+        switch (productType) {
+          case 'course':
+          case 'classroom':
+            targetType = '部分商品';
+            break;
+          default:
+            targetType = '';
+        }
+      }
 
-      if (item.targetType === 'classroom') {
-        targetType = target ? target.title : '全部班级';
-      }
-      if (item.targetType === 'course') {
-        targetType = target ? target.title : '全部课程';
-      }
-      if (item.targetType === 'vip') {
-        targetType = target ? target.name : '全部会员';
-      }
-      if (item.type === 'minus') {
-        discountType = '抵价';
-        text = '元';
-      }
       return `${discountType + item.rate + text} / ${targetType}`;
     default:
       // 有子属性的返回子属性
