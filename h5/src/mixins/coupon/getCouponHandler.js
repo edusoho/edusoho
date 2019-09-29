@@ -45,6 +45,7 @@ export default {
     hasreceiveCoupon(coupon) {
       /* 已领券 */
       const targetType = coupon.targetDetail.product;
+      const targetNum = coupon.targetDetail.numType;
       const allType = Object.values(ALL_TYPE);
 
       if (!allType.includes(targetType)) {
@@ -53,7 +54,7 @@ export default {
       }
 
       // 指定课程或者班级
-      if (coupon.targetDetail.numType === 'single') {
+      if (targetNum === 'single') {
         const targetId = coupon.target.id;
         // 指定vip
         if (targetType === ALL_TYPE.vip) {
@@ -65,13 +66,14 @@ export default {
           });
           return;
         }
+
         this.getPathParams(targetType, targetId).then(({ id }) => {
           if (!id) return;
           this.$router.push({
             path: `/${targetType}/${id}` // course/{id} | classroom/{id}
           });
         });
-      } else if (coupon.targetDetail.numType === 'multi') {
+      } else if (targetNum === 'multi') {
         // 多个班级/课程
         this.$router.push({
           path: `/${coupon.targetDetail.product}/explore` // course/explore | classroom/explore
