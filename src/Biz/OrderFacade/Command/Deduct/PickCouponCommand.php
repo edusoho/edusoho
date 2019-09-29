@@ -10,8 +10,8 @@ class PickCouponCommand extends Command
 {
     public function execute(Product $product, $params = array())
     {
-        $couponCode = trim($params['couponCode']);
-        if (!empty($couponCode)) {
+        if (!empty($params['couponCode'])) {
+            $couponCode = trim($params['couponCode']);
             $checkData = $this->getCouponService()->checkCoupon($couponCode, $product->targetId, $product->targetType);
 
             if (isset($checkData['useable']) && $checkData['useable'] == 'no') {
