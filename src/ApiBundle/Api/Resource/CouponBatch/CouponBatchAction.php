@@ -2,8 +2,12 @@
 
 namespace ApiBundle\Api\Resource\CouponBatch;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Coupon\CouponException;
+use Biz\User\UserException;
+use Biz\Common\CommonException;
 
 class CouponBatchAction extends AbstractResource
 {
@@ -35,19 +39,31 @@ class CouponBatchAction extends AbstractResource
         }
     }
 
-    protected function batchReceive($request, $token)
+    protected function receive($request, $token)
     {
-        $userIds = $request->request->get('userIds');
-        if (empty($userIds)) {
-            return $this->error('没有发券目标');
+        $userId = $request->request->get('userId');
+        if (empty($userId)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user)) {
+            throw UserException::NOTFOUND_USER();
         }
         $batch = $this->getCouponBatchService()->getBatchByToken($token);
         if (empty($batch)) {
-            return $this->error('该批次不存在');
+            throw CouponException::NOTFOUND_COUPON();
         }
-        if (0 == $batch['unreceivedNum'] || $batch['unreceivedNum'] < count($userIds)) {
-            return $this->error('该批次余量不足');
+        if (0 == $batch['unreceivedNum']) {
+            throw CouponException::OVER_BATCH_LIMIT();
         }
+
+        $result = $this->getCouponBatchService()->receiveCoupon($token, $userId, true);
+        if (isset($result['code']) && 'failed' == $result['code']) {
+            $exceptionMethod = $result['exception']['method'];
+            throw $result['exception']['class']::$exceptionMethod();
+        }
+
+        return $this->getCouponBatchService()->getBatchByToken($token);
     }
 
     /**
@@ -56,5 +72,10 @@ class CouponBatchAction extends AbstractResource
     private function getCouponBatchService()
     {
         return $this->service('Coupon:CouponBatchService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }

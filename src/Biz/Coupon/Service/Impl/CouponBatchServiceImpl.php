@@ -8,6 +8,7 @@ use Biz\Coupon\Dao\CouponBatchDao;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
+use Codeages\PluginBundle\System\PluginConfigurationManager;
 
 class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 {
@@ -437,6 +438,42 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         return $batch['targetDetail'];
     }
 
+    //为了兼容接口老版本存在target，需要将targetIds中的结果进行转换
+    public function getTargetByBatchId($batchId)
+    {
+        $batch = $this->getBatch($batchId);
+        if (empty($batch)) {
+            return null;
+        }
+        if (empty($batch['targetType']) || empty($batch['targetId']) || $batch['targetType'] == 'all') {
+            return null;
+        }
+        if (empty($batch['targetIds'])) {
+            return null;
+        }
+        $targetId = current($batch['targetIds']);
+        switch ($batch['targetType']) {
+            case 'course':
+                $target = $this->getCourseSetService()->getCourseSet($targetId);
+                break;
+
+            case 'vip':
+                if ($this->isPluginInstalled('Vip')) {
+                    $target = $this->getLevelService()->getLevel($targetId);
+                }
+                break;
+
+            case 'classroom':
+                $target = $this->getClassroomService()->getClassroom($targetId);
+                break;
+
+            default:
+                break;
+        }
+
+        return $target;
+    }
+
     protected function fullSearchH5MpsBatchesConditions(&$conditions)
     {
         $user = $this->getCurrentUser();
@@ -545,5 +582,27 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         global $kernel;
 
         return $kernel->getContainer()->get('web.wrapper');
+    }
+
+    private function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    private function getLevelService()
+    {
+        return $this->biz->service('VipPlugin:Vip:LevelService');
+    }
+
+    private function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
+
+    protected function isPluginInstalled($code)
+    {
+        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
+
+        return $pluginManager->isPluginInstalled($code);
     }
 }

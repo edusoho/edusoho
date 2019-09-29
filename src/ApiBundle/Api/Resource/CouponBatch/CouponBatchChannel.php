@@ -38,7 +38,7 @@ class CouponBatchChannel extends AbstractResource
         $batches = $this->getCouponBatchService()->fillUserCurrentCouponByBatches($batches);
 
         foreach ($batches as &$couponBatch) {
-            $couponBatch['target'] = $this->getCouponService()->getCouponTargetByTargetTypeAndTargetId($couponBatch['targetType'], $couponBatch['targetId']);
+            $couponBatch['target'] = $this->getCouponBatchService()->getTargetByBatchId($couponBatch['id']);
             $couponBatch['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($couponBatch['id']);
         }
 
