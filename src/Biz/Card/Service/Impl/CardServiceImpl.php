@@ -25,6 +25,20 @@ class CardServiceImpl extends BaseService implements CardService
         return $this->getCardDao()->create($card);
     }
 
+    public function batchAddCouponCards(array $userCards)
+    {
+        if (empty($userCards)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+        $userCards = array_values($userCards);
+
+        if (!ArrayToolkit::requireds($userCards[0], array('cardType', 'cardId', 'deadline', 'userId'))) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        return $this->getCardDao()->batchCreate($userCards);
+    }
+
     public function getCard($id)
     {
         return $this->getCardDao()->get($id);
