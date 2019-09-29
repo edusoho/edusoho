@@ -102,7 +102,7 @@ export default {
             const token = this.$route.params.token;
             await Api.getCouponInfo({
                query: {
-                    batchToken: token
+                    token: token
                 }
             }).then((res)=>{
                 this.coupons=res;
@@ -128,23 +128,25 @@ export default {
             }
         },
         //优惠券类型过滤
-        couponType(coupons){
+        couponType(coupons) {
             //指定优惠
-            if(coupons.target){
-                switch (coupons.targetType){
+            const numberType = coupons.targetDetail.numType;
+            const productType = coupons.targetDetail.product;
+            if (numberType === 'single') {
+                switch (productType) {
                     case 'course':
                     case 'classroom':
-                        return `${coupons.target.title}`
+                        return '指定商品'
                         break;
                     case 'vip':
-                        return `${coupons.target.name}`
+                        return '指定会员'
                         break;
                     default:
                         return ''
                 }
-            }else{
+            } else if (numberType === 'all') {
                 //全部
-                switch (coupons.targetType){
+                switch (productType) {
                     case 'course':
                         return '全部课程'
                         break;
@@ -156,6 +158,15 @@ export default {
                         break;
                     case 'vip':
                         return '全部会员'
+                        break;
+                    default:
+                        return ''
+                }
+            } else {
+                switch (productType) {
+                    case 'course':
+                    case 'classroom':
+                        return '部分商品'
                         break;
                     default:
                         return ''
