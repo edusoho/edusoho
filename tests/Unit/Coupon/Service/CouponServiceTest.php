@@ -291,6 +291,7 @@ class CouponServiceTest extends BaseTestCase
                     'id' => 1,
                     'deadlineMode' => 'day',
                     'fixedDay' => 1,
+                    'unreceivedNum'=>2,
                 ),
             ),
             array(
