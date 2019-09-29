@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\MathToolkit;
 use Biz\Common\CommonException;
+use Biz\Coupon\Service\CouponBatchService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
@@ -116,11 +117,11 @@ class OrderInfo extends AbstractResource
                 //按年月
                 if ('10' == $vipSetting['buyType']) {
                     $defaultDuration = $vipSetting['default_buy_months10'];
-                //按年
+                    //按年
                 } elseif ('20' == $vipSetting['buyType']) {
                     $defaultUnitType = 'year';
                     $defaultDuration = $vipSetting['default_buy_years'];
-                //按月
+                    //按月
                 } else {
                     $defaultDuration = $vipSetting['default_buy_months'];
                 }
@@ -184,5 +185,13 @@ class OrderInfo extends AbstractResource
     private function getAccountService()
     {
         return $this->service('Pay:AccountService');
+    }
+
+    /**
+     * @return CouponBatchService
+     */
+    private function getCouponBatchService()
+    {
+        return $this->service('Coupon:CouponBatchService');
     }
 }
