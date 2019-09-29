@@ -52,7 +52,7 @@ class ExportQuestionWrapper extends Wrapper
                 '错误',
                 '正确',
             );
-            $answer = (int) $question['answer'];
+            $answer = (int) reset($question['answer']);
             $question['answer'] = $determineAnswer[$answer];
         } elseif (in_array($question['type'], array('choice', 'single_choice', 'uncertain_choice'))) {
             $choiceAnswer = '';
