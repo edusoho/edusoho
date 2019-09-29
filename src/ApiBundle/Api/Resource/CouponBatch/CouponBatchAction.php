@@ -4,8 +4,6 @@ namespace ApiBundle\Api\Resource\CouponBatch;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Annotation\ApiConf;
-use Biz\Coupon\CouponException;
 
 class CouponBatchAction extends AbstractResource
 {
@@ -47,11 +45,9 @@ class CouponBatchAction extends AbstractResource
         if (empty($batch)) {
             return $this->error('该批次不存在');
         }
-        if ($batch['unreceivedNum'] == 0 || $batch['unreceivedNum'] < count($userIds)) {
+        if (0 == $batch['unreceivedNum'] || $batch['unreceivedNum'] < count($userIds)) {
             return $this->error('该批次余量不足');
         }
-
-        $this->getCouponBatchService()->
     }
 
     /**
