@@ -152,7 +152,7 @@ export default {
     this.getSettings();
   },
   computed: {
-    ...mapState(['wechatSwitch', 'isLoading']),
+    ...mapState(['wechatSwitch', 'isLoading', 'couponSwitch']),
     total() {
       const totalNumber = this.course.totalPrice;
       if (!this.itemData) {
@@ -286,9 +286,11 @@ export default {
        Api.confirmOrder({
         data: data
       }).then(res => {
-        let coupons=res.availableCoupons;
+        if (couponSwitch) {
+          let coupons=res.availableCoupons;
+          this.itemData= coupons.length>0 ? coupons[0]:null;
+        }
         this.course = res;
-        this.itemData= coupons.length>0 ? coupons[0]:null;
       }).catch(err => {
         //购买后返回会造成重复下单报错
         this.$router.go(-1);
