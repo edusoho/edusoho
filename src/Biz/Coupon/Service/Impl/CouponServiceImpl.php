@@ -117,6 +117,10 @@ class CouponServiceImpl extends BaseService implements CouponService
         if (!empty($inviteSetting['invite_code_setting']) && $inviteSetting[$enable] && $inviteSetting[$batchId] > 0) {
             $batch = $this->getCouponBatchService()->getBatch($inviteSetting[$batchId]);
             if (empty($batch)) {
+                $inviteSetting[$enable] = 0;
+                $inviteSetting[$batchId] = '';
+                $this->getSettingService()->set('invite', $inviteSetting);
+
                 return array();
             }
 
@@ -165,6 +169,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                     'deadline' => $coupon['deadline'],
                     'userId' => $userId,
                 ));
+                $this->getLock()->release($lockName);
 
                 $rate = $coupon['rate'];
                 if ('minus' == $coupon['type']) {
@@ -181,8 +186,6 @@ class CouponServiceImpl extends BaseService implements CouponService
                 $this->getCouponBatchService()->updateUnreceivedNumByBatchId($batch['id']);
                 $this->getLogService()->info('coupon', 'receive', "领取了注册优惠券 {$coupon['code']}", $coupon);
             }
-
-            $this->getLock()->release($lockName);
 
             return $coupon;
         }
