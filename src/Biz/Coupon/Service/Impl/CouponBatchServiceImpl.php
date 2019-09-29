@@ -9,6 +9,7 @@ use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
+use Topxia\Service\Common\ServiceKernel;
 
 class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 {
@@ -448,7 +449,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         if (empty($batch['targetType']) || empty($batch['targetId']) || $batch['targetType'] == 'all') {
             return null;
         }
-        if (empty($batch['targetIds'])) {
+        if ($batch['targetType'] != 'vip' && empty($batch['targetIds'])) {
             return null;
         }
         $targetId = current($batch['targetIds']);
@@ -459,7 +460,8 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 
             case 'vip':
                 if ($this->isPluginInstalled('Vip')) {
-                    $target = $this->getLevelService()->getLevel($targetId);
+                    //vip业务没有修改，沿用原来的id
+                    $target = $this->getLevelService()->getLevel($batch['targetId']);
                 }
                 break;
 
