@@ -42,7 +42,7 @@
           <i class="iconfont icon-no" @click="cardShow=false"></i>
         </div>
         <div class="card-list">
-          <div class="card-homework-item card-item">
+          <div class="card-homework-item">
             <div class="card-item-list">
               <div
                 v-for="cards in info" :key="cards.id"
