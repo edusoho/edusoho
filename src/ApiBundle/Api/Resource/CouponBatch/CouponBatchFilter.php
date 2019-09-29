@@ -11,7 +11,7 @@ use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 class CouponBatchFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'name', 'token', 'type', 'prefix', 'generatedNum', 'usedNum', 'receiveNum', 'rate', 'deadlineMode', 'fixedDay', 'deadline', 'unreceivedNum', 'currentUserCoupon', 'targets', 'targetType', 'description', 'createdTime', 'targetDetail', 'targetIds',
+        'id', 'name', 'token', 'type', 'prefix', 'generatedNum', 'usedNum', 'receiveNum', 'rate', 'deadlineMode', 'fixedDay', 'deadline', 'unreceivedNum', 'currentUserCoupon', 'target', 'targetType', 'description', 'createdTime', 'targetDetail', 'targetIds',
     );
 
     protected function publicFields(&$data)
