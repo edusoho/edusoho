@@ -291,7 +291,7 @@ class CouponServiceTest extends BaseTestCase
                     'id' => 1,
                     'deadlineMode' => 'day',
                     'fixedDay' => 1,
-                    'unreceivedNum'=>2,
+                    'unreceivedNum' => 2,
                 ),
             ),
             array(
@@ -336,6 +336,7 @@ class CouponServiceTest extends BaseTestCase
                     'id' => 1,
                     'deadlineMode' => 'day',
                     'fixedDay' => 1,
+                    'unreceivedNum' => 2,
                 ),
             ),
             array(
@@ -647,7 +648,7 @@ class CouponServiceTest extends BaseTestCase
             array('functionName' => 'get', 'returnValue' => array('enabled' => 1)),
         ));
         $this->mockBiz('Coupon:CouponBatchService', array(
-            array('functionName' => 'updateUnreceivedNumByBatchId',),
+            array('functionName' => 'updateUnreceivedNumByBatchId'),
         ));
         $coupon = array(
             'code' => 'x22232423',
