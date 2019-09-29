@@ -27,7 +27,7 @@ class CouponBatch extends AbstractResource
         );
 
         foreach ($couponBatches as &$couponBatch) {
-            $couponBatch['target'] = $this->getCouponService()->getCouponTargetByTargetTypeAndTargetId($couponBatch['targetType'], $couponBatch['targetId']);
+            $couponBatch['target'] = $this->getCouponBatchService()->getTargetByBatchId($couponBatch['id']);
             $couponBatch['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($couponBatch['id']);
         }
 
@@ -60,7 +60,7 @@ class CouponBatch extends AbstractResource
         if (empty($couponBatch)) {
             throw CouponException::NOTFOUND_COUPON();
         }
-        $couponBatch['target'] = $this->getCouponService()->getCouponTargetByTargetTypeAndTargetId($couponBatch['targetType'], $couponBatch['targetId']);
+        $couponBatch['target'] = $this->getCouponBatchService()->getTargetByBatchId($couponBatch['id']);
         $couponBatch['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($couponBatch['id']);
         $couponBatch['currentUserCoupon'] = empty($batchAfterFill[$couponBatch['id']]['currentUserCoupon']) ? null : $batchAfterFill[$couponBatch['id']]['currentUserCoupon'];
 
