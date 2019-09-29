@@ -111,7 +111,7 @@ class ExerciseResult extends AbstractResource
             throw ExerciseException::FORBIDDEN_ACCESS_EXERCISE();
         }
 
-        $exerciseResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($exercise['id']));
+        $exerciseResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($exercise['id'], $exerciseResultId));
         $exerciseResult['items'] = $this->fillItems($exerciseResult['items'], $exerciseResult);
         $exerciseResult['rightRate'] = $this->getRightRate($exerciseResult['items'] );
 

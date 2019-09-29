@@ -113,7 +113,7 @@ class HomeworkResult extends AbstractResource
             throw HomeworkException::FORBIDDEN_ACCESS_HOMEWORK();
         }
 
-        $homeworkResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($homework['id']));
+        $homeworkResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($homework['id'], $homeworkResultId));
         $homeworkResult['items'] = $this->fillItems($homeworkResult['items'], $homeworkResult);
         $homeworkResult['rightRate'] = $this->getRightRate($homeworkResult['items']);
 
