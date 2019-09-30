@@ -34,8 +34,9 @@
           </div>
           <div class="analysis-content__item  mt10">
             <div class="analysis-item__title">你的答案</div>
-            <div v-if="!testResult && testResult.answer[0]" 
-                :class="[statusColor]">{{testResult.answer[0]}}</div>
+            <div v-if="testResult && testResult.answer.length>0" 
+                :class="[statusColor]"  
+                v-html="testResult.answer[0]"></div>
             <div v-else class="analysis-item_noAnswer" >未回答</div> 
           </div>
         </div>
