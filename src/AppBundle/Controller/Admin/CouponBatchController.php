@@ -137,7 +137,7 @@ class CouponBatchController extends BaseController
 
         $coupons = array_map(function ($coupon) {
             $export_coupon['batchId'] = $coupon['batchId'];
-            $export_coupon['deadline'] = date('Y-m-d', $coupon['deadline']);
+            $export_coupon['deadline'] = empty($coupon['deadline']) ? '--' : date('Y-m-d', $coupon['deadline']);
             $export_coupon['code'] = $coupon['code'];
 
             if ('unused' == $coupon['status']) {
