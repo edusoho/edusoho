@@ -217,6 +217,25 @@
     .card-list {
       max-height: vw(415);
       overflow: scroll;
+      .cicle-active {
+        background: rgba(64, 143, 251, 1) !important;
+      }
+
+      .cicle-right {
+        background: #00D041 !important;
+      }
+
+      .cicle-none {
+        background: #FF954D !important;
+      }
+
+      .cicle-wrong {
+        background: #FF5722 !important;
+      }
+
+      .cicle-subjective {
+        background: #00E6DC !important;
+      }
 
       .card-item {
         margin-top: vw(10);
@@ -249,26 +268,6 @@
           border-radius: 100%;
           color: #fff;
           background: rgba(204, 204, 204, 1);
-        }
-
-        .cicle-active {
-          background: rgba(64, 143, 251, 1) !important;
-        }
-
-        .cicle-right {
-          background: #00D041 !important;
-        }
-
-        .cicle-none {
-          background: #FF954D !important;
-        }
-
-        .cicle-wrong {
-          background: #FF5722 !important;
-        }
-
-        .cicle-subjective {
-          background: #00E6DC !important;
         }
 
         .list-cicle:nth-child(9n+0) {

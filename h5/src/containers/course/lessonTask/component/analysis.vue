@@ -8,11 +8,11 @@
           <div :class="[statusColor]">{{status(testResult)}}</div>
         </div>
 
-        <div v-if="subject=='fill'">
+        <div v-if="subject==='fill'">
           <div class="analysis-content__item  mt10" >
             <div class="analysis-item__title">正确答案</div>
             <div class="analysis-item_right analysis-content__item--column" >
-              <div class="fill-answer"  v-for="(item,index) in answer" :key="`right${index}`" >（{{index+1}}）{{filterOrder(item)}}</div>
+              <div class="fill-answer"  v-for="(item,index) in answer" :key="`right${index}`" >（{{index+1}}）{{filterOrder(item,'standard')}}</div>
             </div>
           </div>
           <!-- 因为这里的testResult在部分情况下是没有的，所以这里的遍历使用正确答案来遍历 -->
@@ -27,7 +27,21 @@
           </div>
         </div>
 
-        <div v-if="subject!=='fill'">
+         <div v-if="subject==='essay'">
+          <div class="analysis-content__item  mt10">
+            <div class="analysis-item__title">正确答案</div>
+            <div class="analysis-item_right" v-html="answer[0]"></div>
+          </div>
+          <div class="analysis-content__item  mt10">
+            <div class="analysis-item__title">你的答案</div>
+            <div v-if="testResult && testResult.answer.length>0" 
+                :class="[statusColor]"  
+                v-html="testResult.answer[0]"></div>
+            <div v-else class="analysis-item_noAnswer" >未回答</div> 
+          </div>
+        </div>
+
+        <div v-if="subject!=='fill' && subject!=='essay'">
           <div class="analysis-content__item  mt10">
             <div class="analysis-item__title">正确答案</div>
             <div class="analysis-item_right">{{filterOrder(answer,'standard')}}</div>
@@ -38,7 +52,6 @@
             <div v-else :class="[statusColor]">{{ filterOrder(testResult.answer)}}</div>
           </div>
         </div>
-
       </div>
     </div>
     <div class="mt10 analysis-result">
@@ -113,7 +126,8 @@
         }
       },
       filterOrder: function (answer = [], mode = 'do') {
-        if (this.subject == 'fill' || this.subject == 'essay') {
+        //standard表示标砖答案过滤
+        if (this.subject == 'fill') {
           if (mode == 'standard') {
             return answer.length > 0 ? answer.toString() : '无';
           } else {
