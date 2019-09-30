@@ -13,7 +13,7 @@ class CouponBatchChannel extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
-     * @ResponseFilter(class="Api\Resource\CouponBatch\CouponBatchFilter")
+     * @ResponseFilter(class="ApiBundle\Api\Resource\CouponBatch\CouponBatchFilter")
      */
     public function search(ApiRequest $request, $channel)
     {
