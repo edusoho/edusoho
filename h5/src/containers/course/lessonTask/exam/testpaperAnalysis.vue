@@ -34,7 +34,7 @@
             <span class="card-right">正确</span>
             <span class="card-wrong">错误</span>
             <span class="card-nofinish">未作答</span>
-            <span class="card-none">待批阅</span>
+            <span class="card-none" v-if="!isReadOver">待批阅</span>
           </div>
           <i class="iconfont icon-no" @click="cardShow=false"></i>
         </div>
@@ -85,6 +85,7 @@
         result: null,
         items: {}, //分组题目
         info: [],
+        isReadOver: false,
         isWrongMode: false, //是否是错题模式
         allList: [],//所有题集
         wrongList: [], //所有题集
@@ -147,7 +148,9 @@
           }
         })
           .then(res => {
+            this.result = res.testpaperResult;
             this.formatData(res);
+            this.isReadOver = this.result.status === 'finished';
             this.result = res.testpaperResult;
             this.items = res.items;
           });
@@ -290,7 +293,7 @@
           this.cardSeq = this.isWrongItem();
         } else {
           this.info = this.allList;
-          this.cardSeq = 1;
+          this.cardSeq = parseInt(this.wrongList[this.slideIndex].seq);
         }
         // 修改后不会出现多次点第1题切换到第2题的问题
         this.slideIndex = this.cardSeq - 1;

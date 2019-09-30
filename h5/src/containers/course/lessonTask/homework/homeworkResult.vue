@@ -3,7 +3,7 @@
     <e-loading v-if="isLoading"></e-loading>
     <div class="result-data" ref="data" v-if="result">
       <div class="result-data__item">
-        正确率
+        客观题正确率
         <div class="result-data__bottom data-number-green data-medium" v-if="isReadOver"><span class="data-number">{{ result.rightRate }}</span>%
         </div>
         <div class="result-data__bottom data-text-blue" v-else>待批阅</div>
@@ -92,10 +92,7 @@
         return Math.round(timeInterval / 60);
       },
       isReadOver() {
-        if (this.result && this.result.status == 'finished') {
-          return true;
-        }
-        return false;
+        return !!(this.result && this.result.status === 'finished');
       }
     },
     created() {
