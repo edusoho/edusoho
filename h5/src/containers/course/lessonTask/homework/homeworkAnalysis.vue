@@ -34,7 +34,7 @@
             <span class="card-right">正确</span>
             <span class="card-wrong">错误</span>
             <span class="card-nofinish">未作答</span>
-            <span class="card-none">待批阅</span>
+            <span class="card-none" v-if="!isReadOver">待批阅</span>
           </div>
           <i class="iconfont icon-no" @click="cardShow=false"></i>
         </div>
@@ -114,7 +114,10 @@
       ...mapState({
         isLoading: state => state.isLoading,
         user: state => state.user
-      })
+      }),
+      isReadOver() {
+        return !!(this.result && this.result.status === 'finished');
+      }
     },
     created() {
       this.setNavbarTitle(this.$route.query.title);
@@ -276,7 +279,7 @@
           this.cardSeq = this.isWrongItem();
         } else {
           this.info = this.allList;
-          this.cardSeq = 1;
+          this.cardSeq = parseInt(this.wrongList[this.slideIndex].seq);
         }
         // 修改后不会出现多次点第1题切换到第2题的问题
         this.slideIndex = this.cardSeq - 1;

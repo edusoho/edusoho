@@ -277,7 +277,7 @@
           this.cardSeq = this.isWrongItem();
         } else {
           this.info = this.allList;
-          this.cardSeq = 1;
+          this.cardSeq = parseInt(this.wrongList[this.slideIndex].seq);
         }
         // 修改后不会出现多次点第1题切换到第2题的问题
         this.slideIndex = this.cardSeq - 1;
@@ -298,6 +298,5 @@
     },
   };
 </script>
-1
 <style>
 </style>
