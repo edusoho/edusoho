@@ -543,7 +543,7 @@
       },
       //跳转到说明页
       toIntro() {
-        this.$router.push({
+        this.$router.replace({
           name: 'testpaperIntro',
           query: {
             testId: this.$route.query.testId,

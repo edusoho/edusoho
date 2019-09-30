@@ -64,8 +64,9 @@
         </van-button>
         <van-button
           v-if="!again && remainTime && isReadOver && doTimes==0"
-          class="result-footer__btn text-overflow" type="primary"
-          disabled>
+          class="result-footer__btn" type="primary"
+          disabled
+          style="line-height: 21px">
           在{{remainTime}}后可以再考一次
         </van-button>
       </div>
