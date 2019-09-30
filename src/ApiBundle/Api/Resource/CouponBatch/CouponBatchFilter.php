@@ -41,12 +41,21 @@ class CouponBatchFilter extends Filter
 
     protected function getFilter($type)
     {
-        $filters = array(
-            'course' => new CourseSetFilter(),
-            'classroom' => new ClassroomFilter(),
-            'vip' => new VipLevelFilter(),
-        );
+        switch ($type) {
+            case 'course':
+                $filter = new CourseSetFilter();
+                break;
+            case 'classroom':
+                $filter = new ClassroomFilter();
+                break;
+            case 'vip':
+                $filter = new VipLevelFilter();
+                break;
+            default:
+                $filter = null;
+                break;
+        }
 
-        return $filters[$type];
+        return $filter;
     }
 }
