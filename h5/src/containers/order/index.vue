@@ -286,7 +286,7 @@ export default {
        Api.confirmOrder({
         data: data
       }).then(res => {
-        if (couponSwitch) {
+        if (this.couponSwitch) {
           let coupons=res.availableCoupons;
           this.itemData= coupons.length>0 ? coupons[0]:null;
         }
