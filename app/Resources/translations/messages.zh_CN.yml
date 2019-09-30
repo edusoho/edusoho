@@ -9884,6 +9884,12 @@ exception.homework.forbidden_access_homework: 不可以访问其他学生的作�
 exception.homework.forbidden_duplicate_commit_homework: 作业已经做完，不能重复提交!
 exception.homework.reviewing: 作业正在批阅！不能重新开始!
 exception.homework.not_found_result: 作业结果不存在
+exception.exercise.not_found: 练习不存在
+exception.exercise.draft: 该练习未发布，如有疑问请联系老师！
+exception.exercise.closed: 该练习已关闭，如有疑问请联系老师！
+exception.exercise.forbidden_access_exercise: 不可以访问其他学生的练习!
+exception.exercise.forbidden_duplicate_commit_exercise: 练习已经做完，不能重复提交!
+exception.exercise.not_found_result: 练习结果不存在
 exception.uploadfile.file_not_found: 文件不存在
 exception.uploadfile.forbidden_manage_file: 没有权限管理资源
 exception.uploadfile.error_status: 状态不正确
