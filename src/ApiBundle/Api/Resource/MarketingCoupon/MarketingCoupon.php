@@ -23,8 +23,8 @@ class MarketingCoupon extends AbstractResource
      */
     public function add(ApiRequest $request)
     {
-        $couponEnable = $this->getSettingService()->get('coupon', array('enabled' => 0));
-        if (!$couponEnable) {
+        $couponSetting = $this->getSettingService()->get('coupon', array('enabled' => 0));
+        if (!$couponSetting['enabled']) {
             throw CouponException::SETTING_CLOSE();
         }
 
