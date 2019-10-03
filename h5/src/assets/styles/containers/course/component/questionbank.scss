@@ -130,7 +130,9 @@ p {
   align-items: flex-start;
   margin-bottom: vw(24);
   min-height: vw(40);
-
+  &:last-of-type {
+    margin-bottom: vw(5);
+  }
   .van-checkbox__icon,
   .van-radio__icon {
     margin-right: vw(12);
