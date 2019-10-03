@@ -223,6 +223,8 @@
               this.toIntro();
             } else {
               Toast.fail(err.message);
+              // 跳转到结果页
+              this.showResult();
             }
           });
       },
@@ -504,8 +506,8 @@
             .then(res => {
               this.isHandExam = true;
               resolve();
-              //跳转到结果页
-              //  this.showResult();
+              // 跳转到结果页
+               this.showResult();
             })
             .catch((err) => {
               reject();
