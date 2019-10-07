@@ -9752,6 +9752,7 @@ exception.user.lock_denied: 没有封禁该角色的权限
 exception.user.not_match_bind_email: 与绑定邮箱不符
 exception.user_lock: 账户被封禁，请联系管理员
 exception.user.password_error: 用户名密码错误
+exception.user.password_failed: 登录密码不正确
 exception.user.login_limit: 登录限制！
 exception.user.lock_self_denied: 您不能封禁自己
 exception.user.datefield_invalid: 日期类型字段没有按日期格式填写
@@ -10029,9 +10030,10 @@ exception.reward_point.account.not_found: 积分账号不存在
 exception.reward_point.account.already_open: 积分账号已创建
 exception.reward_point.account.userid_invalid: 用户id错误
 exception.reward_point.account.balance_insufficient: 余额不足
-exception.reward_point.account.error_pay_password: 支付密码错误
+exception.reward_point.account.error_pay_password: 当前支付密码不正确
 exception.reward_point.account.pay_password_existed: 支付密码已存在
 exception.reward_point.account.not_found_pay_password: 支付密码不存在
+exception.reward_point.account.error_pay_password_format: 新支付密码不可用，请尝试其它密码组合
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
 exception.live_replay.not_found: 直播回放不存在

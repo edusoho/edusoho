@@ -8428,6 +8428,7 @@ exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
 exception.user.permission_denied: 暂无权限访问
 exception.user.password_error: 用户名或密码错误
+exception.user.password_failed: Login password is incorrect
 exception.user.lock_self_denied: You can't lock yourself
 
 exception.user_lock: User account is locked, please contact system administrator.
@@ -8729,6 +8730,7 @@ exception.reward_point.account.balance_insufficient: 余额不足
 exception.reward_point.account.error_pay_password: pay password invalid
 exception.reward_point.account.pay_password_existed: pay password already existed
 exception.reward_point.account.not_found_pay_password: pay password not found
+exception.reward_point.account.error_pay_password_format: The new payment password is not available, please try another password combination
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
 exception.live_replay.not_found: 直播回放不存在
