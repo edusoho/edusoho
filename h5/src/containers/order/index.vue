@@ -12,7 +12,7 @@
         :course="course">
       </e-course>
       <!-- 使用优惠券 -->
-      <div class="order-coupon">
+      <div class="order-coupon" v-show="couponSwitch">
         <div class="coupon-column" @click="showList = true">
           <span>优惠券</span>
           <span :class="['red',itemData ? 'coupon-money':'']">{{ couponShow }}<span class="coupon-type" v-if="itemData">{{itemData.type | couponType}}</span>
@@ -286,9 +286,8 @@ export default {
        Api.confirmOrder({
         data: data
       }).then(res => {
-        if (this.couponSwitch) {
-          let coupons=res.availableCoupons;
-          this.itemData= coupons.length>0 ? coupons[0]:null;
+        if (!this.couponSwitch) {
+          res.availableCoupons.length = 0;
         }
         this.course = res;
       }).catch(err => {
