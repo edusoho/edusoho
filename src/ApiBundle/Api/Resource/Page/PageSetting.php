@@ -127,6 +127,7 @@ class PageSetting extends AbstractResource
         }
         if ('coupon' == $discoverySetting['type']) {
             foreach ($discoverySetting['data']['items'] as &$couponBatch) {
+                $couponBatch['target'] = $this->getCouponBatchService()->getTargetByBatchId($couponBatch['id']);
                 $couponBatch['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($couponBatch['id']);
             }
         }
