@@ -488,17 +488,10 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 
         $conditions = ArrayToolkit::parts($conditions, array('targetType', 'targetId'));
 
-        if (empty($user['id'])) {
-            $conditions['h5MpsEnable'] = 1;
-            $conditions['deadlineGt'] = time();
-            $conditions['unreceivedNumGt'] = '0';
-
-            $conditions['targetTypes'] = array('all', $conditions['targetType']);
-            unset($conditions['targetType']);
-
-            $conditions['targetIds'] = array(0, $conditions['targetId']);
-            unset($conditions['targetId']);
-        } else {
+        $conditions['likeTargetIds'] = "%|{$conditions['targetId']}|%";
+        $conditions['deadlineGt'] = time() - 86400;
+        unset($conditions['targetId']);
+        if (!empty($user['id'])) {
             $conditions['userId'] = $user['id'];
         }
     }
