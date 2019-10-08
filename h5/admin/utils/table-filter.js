@@ -31,7 +31,7 @@ const tableFilter = (item, label, subProperty) => {
       return `${item.unreceivedNum} / ${item.generatedNum}`;
     case 'rate':
       const discountType = '折扣';
-      const text = '折';
+      let text = '折';
       const numberType = item.targetDetail.numType;
       const productType = item.targetDetail.product;
       let targetType = '全部商品';
@@ -74,6 +74,11 @@ const tableFilter = (item, label, subProperty) => {
           default:
             targetType = '';
         }
+      }
+
+      if (item.type === 'minus') {
+        discountType = '抵价';
+        text = '元';
       }
 
       return `${discountType + item.rate + text} / ${targetType}`;
