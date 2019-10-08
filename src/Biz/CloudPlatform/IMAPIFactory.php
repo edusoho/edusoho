@@ -57,9 +57,9 @@ class IMAPIFactory
         $stream->setFormatter($formatter);
         $logger->pushHandler($stream);
         if (isset($_SERVER['TRACE_ID']) && $_SERVER['TRACE_ID']) {
-            $logger->pushProcessor(function($record){
+            $logger->pushProcessor(function ($record) {
                 $record['extra']['trace_id'] = $_SERVER['TRACE_ID'];
-             
+
                 return $record;
             });
         }

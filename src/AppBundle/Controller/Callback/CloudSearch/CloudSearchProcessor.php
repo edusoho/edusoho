@@ -60,7 +60,7 @@ class CloudSearchProcessor extends BizAware implements ProcessorInterface
     public function execute(Request $request)
     {
         $method = strtolower($request->getMethod());
-        if ($method != 'get') {
+        if ('get' != $method) {
             throw new \InvalidArgumentException(sprintf('unsupported method: %s', $method));
         }
 
