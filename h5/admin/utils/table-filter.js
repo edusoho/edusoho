@@ -30,7 +30,7 @@ const tableFilter = (item, label, subProperty) => {
     case 'generatedNum':
       return `${item.unreceivedNum} / ${item.generatedNum}`;
     case 'rate':
-      const discountType = '折扣';
+      let discountType = '折扣';
       let text = '折';
       const numberType = item.targetDetail.numType;
       const productType = item.targetDetail.product;
