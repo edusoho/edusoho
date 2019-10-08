@@ -90,7 +90,9 @@ class ExerciseResult extends AbstractResource
             throw ExerciseException::FORBIDDEN_DUPLICATE_COMMIT();
         }
 
-        $data['seq'] = $exerciseResult['metas']['orders'];
+        if (!empty($exerciseResult['metas']['orders'])) {
+            $data['seq'] = $exerciseResult['metas']['orders'];
+        }
 
         $exerciseResult = $this->getTestpaperService()->finishTest($exerciseResult['id'], $data);
         $exercise = $this->getTestpaperService()->getTestpaper($exerciseResult['testId']);
