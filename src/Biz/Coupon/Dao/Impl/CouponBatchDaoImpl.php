@@ -79,7 +79,7 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 $conditions['userId'],
                 $conditions['deadlineGt'],
                 $conditions['likeTargetIds'],
-                $conditions['targetType']
+                $conditions['targetType'],
             ));
         } else {
             $sql = "
@@ -93,10 +93,11 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 ORDER BY id DESC
                 LIMIT {$offset}, {$limit}
             ";
+
             return $this->db()->fetchAll($sql, array(
                 $conditions['deadlineGt'],
                 $conditions['likeTargetIds'],
-                $conditions['targetType']
+                $conditions['targetType'],
             ));
         }
     }
@@ -124,7 +125,7 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 $conditions['userId'],
                 $conditions['deadlineGt'],
                 $conditions['likeTargetIds'],
-                $conditions['targetType']
+                $conditions['targetType'],
             ));
         } else {
             $sql = "
@@ -136,10 +137,11 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                     AND (targetIds IS NULL OR targetIds LIKE ?)
                     AND targetType IN ('all', ?)
             ";
+
             return $this->db()->fetchColumn($sql, array(
                 $conditions['deadlineGt'],
                 $conditions['likeTargetIds'],
-                $conditions['targetType']
+                $conditions['targetType'],
             ));
         }
     }
