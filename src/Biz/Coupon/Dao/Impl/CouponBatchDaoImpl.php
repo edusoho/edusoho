@@ -69,7 +69,7 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 WHERE (coupon_batch.h5MpsEnable = 1)
                     AND ((coupon.userId IS NULL AND coupon_batch.unreceivedNum > 0) OR (coupon.status = 'receive'))
                     AND (coupon_batch.deadline > ? OR coupon_batch.deadline = 0)
-                    AND (coupon_batch.targetIds IS NULL OR coupon_batch.targetIds LIKE ?)
+                    AND (coupon_batch.targetIds IS NULL OR coupon_batch.targetIds LIKE ? OR coupon_batch.targetIds = '')
                     AND (coupon_batch.targetType IN ('all', ?))
                 ORDER BY coupon_batch.id DESC
                 LIMIT {$offset}, {$limit}
@@ -88,7 +88,7 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 WHERE h5MpsEnable = 1
                     AND unreceivedNum > 0
                     AND (deadline > ? OR deadline = 0)
-                    AND (targetIds IS NULL OR targetIds LIKE ?)
+                    AND (targetIds IS NULL OR targetIds LIKE ? OR targetIds = '')
                     AND targetType IN ('all', ?)
                 ORDER BY id DESC
                 LIMIT {$offset}, {$limit}
@@ -117,7 +117,7 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 WHERE (coupon_batch.h5MpsEnable = 1)
                     AND ((coupon.userId IS NULL AND coupon_batch.unreceivedNum > 0) OR (coupon.status = 'receive'))
                     AND (coupon_batch.deadline > ? OR coupon_batch.deadline = 0)
-                    AND (coupon_batch.targetIds IS NULL OR coupon_batch.targetIds LIKE ?)
+                    AND (coupon_batch.targetIds IS NULL OR coupon_batch.targetIds LIKE ? OR coupon_batch.targetIds = '')
                     AND (coupon_batch.targetType IN ('all', ?))
             ";
 
@@ -134,7 +134,7 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 WHERE h5MpsEnable = 1
                     AND unreceivedNum > 0
                     AND (deadline > ? OR deadline = 0)
-                    AND (targetIds IS NULL OR targetIds LIKE ?)
+                    AND (targetIds IS NULL OR targetIds LIKE ? OR targetIds = '')
                     AND targetType IN ('all', ?)
             ";
 
