@@ -69,15 +69,35 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 WHERE (coupon_batch.h5MpsEnable = 1)
                     AND ((coupon.userId IS NULL AND coupon_batch.unreceivedNum > 0) OR (coupon.status = 'receive'))
                     AND (coupon_batch.deadline > ? OR coupon_batch.deadline = 0)
-                    AND (coupon_batch.targetId IN (0, ?))
+                    AND (coupon_batch.targetIds IS NULL OR coupon_batch.targetIds LIKE ?)
                     AND (coupon_batch.targetType IN ('all', ?))
                 ORDER BY coupon_batch.id DESC
                 LIMIT {$offset}, {$limit}
             ";
 
-            return $this->db()->fetchAll($sql, array($conditions['userId'], time() - 86400, $conditions['targetId'], $conditions['targetType']));
+            return $this->db()->fetchAll($sql, array(
+                $conditions['userId'],
+                $conditions['deadlineGt'],
+                $conditions['likeTargetIds'],
+                $conditions['targetType']
+            ));
         } else {
-            return $this->search($conditions, array('id' => 'DESC'), $offset, $limit);
+            $sql = "
+                SELECT *
+                FROM coupon_batch coupon_batch
+                WHERE h5MpsEnable = 1
+                    AND unreceivedNum > 0
+                    AND (deadline > ? OR deadline = 0)
+                    AND (targetIds IS NULL OR targetIds LIKE ?)
+                    AND targetType IN ('all', ?)
+                ORDER BY id DESC
+                LIMIT {$offset}, {$limit}
+            ";
+            return $this->db()->fetchAll($sql, array(
+                $conditions['deadlineGt'],
+                $conditions['likeTargetIds'],
+                $conditions['targetType']
+            ));
         }
     }
 
@@ -96,13 +116,31 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 WHERE (coupon_batch.h5MpsEnable = 1)
                     AND ((coupon.userId IS NULL AND coupon_batch.unreceivedNum > 0) OR (coupon.status = 'receive'))
                     AND (coupon_batch.deadline > ? OR coupon_batch.deadline = 0)
-                    AND (coupon_batch.targetId IN (0, ?))
+                    AND (coupon_batch.targetIds IS NULL OR coupon_batch.targetIds LIKE ?)
                     AND (coupon_batch.targetType IN ('all', ?))
             ";
 
-            return $this->db()->fetchColumn($sql, array($conditions['userId'], time() - 86400, $conditions['targetId'], $conditions['targetType']));
+            return $this->db()->fetchColumn($sql, array(
+                $conditions['userId'],
+                $conditions['deadlineGt'],
+                $conditions['likeTargetIds'],
+                $conditions['targetType']
+            ));
         } else {
-            return $this->count($conditions);
+            $sql = "
+                SELECT COUNT(DISTINCT(id))
+                FROM coupon_batch
+                WHERE h5MpsEnable = 1
+                    AND unreceivedNum > 0
+                    AND (deadline > ? OR deadline = 0)
+                    AND (targetIds IS NULL OR targetIds LIKE ?)
+                    AND targetType IN ('all', ?)
+            ";
+            return $this->db()->fetchColumn($sql, array(
+                $conditions['deadlineGt'],
+                $conditions['likeTargetIds'],
+                $conditions['targetType']
+            ));
         }
     }
 
