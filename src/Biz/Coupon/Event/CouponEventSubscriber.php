@@ -87,6 +87,8 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
         }
 
         if (0 == $batch['unreceivedNum']) {
+            $inviteSetting['invite_code_setting'] = 0;
+            $this->getSettingService()->set('invite', $inviteSetting);
             $this->sendSms(SmsType::INVITE_REWARD_EXHAUST, $batch);
 
             return;
