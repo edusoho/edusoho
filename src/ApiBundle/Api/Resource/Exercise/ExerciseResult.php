@@ -55,11 +55,28 @@ class ExerciseResult extends AbstractResource
             }
 
             $exerciseResult = $this->getTestpaperService()->startTestpaper($exercise['id'], array('lessonId' => $activity['id'], 'courseId' => $activity['fromCourseId'], 'limitedTime' => $exercise['limitedTime']));
+            $exerciseResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($exercise['id']));
+
+            $this->updateOrders($exerciseResult['id'], $exerciseResult['items']);
+        } else {
+            $exerciseResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($exercise['id'], $exerciseResult['id']));
         }
 
-        $exerciseResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($exercise['id']));
-
         return $exerciseResult;
+    }
+
+    protected function updateOrders($exerciseResultId, $items)
+    {
+        $orders = array();
+        foreach ($items as $item) {
+            $orders[] = $item['id'];
+            if (!empty($item['subs'])) {
+                foreach ($item['subs'] as $subItem) {
+                    $orders[] = $subItem['id'];
+                }
+            }
+        }
+        $this->getTestpaperService()->updateTestpaperResult($exerciseResultId, array('metas' => array('orders' => $orders)));
     }
 
     public function update(ApiRequest $request, $exerciseId, $exerciseResultId)
@@ -72,6 +89,8 @@ class ExerciseResult extends AbstractResource
         if (!empty($exerciseResult) && !in_array($exerciseResult['status'], array('doing', 'paused'))) {
             throw ExerciseException::FORBIDDEN_DUPLICATE_COMMIT();
         }
+
+        $data['seq'] = $exerciseResult['metas']['orders'];
 
         $exerciseResult = $this->getTestpaperService()->finishTest($exerciseResult['id'], $data);
         $exercise = $this->getTestpaperService()->getTestpaper($exerciseResult['testId']);
@@ -113,7 +132,7 @@ class ExerciseResult extends AbstractResource
 
         $exerciseResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($exercise['id'], $exerciseResultId));
         $exerciseResult['items'] = $this->fillItems($exerciseResult['items'], $exerciseResult);
-        $exerciseResult['rightRate'] = $this->getRightRate($exerciseResult['items'] );
+        $exerciseResult['rightRate'] = $this->getRightRate($exerciseResult['items']);
 
         return $exerciseResult;
     }
