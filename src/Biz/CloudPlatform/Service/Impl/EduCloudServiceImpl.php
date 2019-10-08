@@ -8,6 +8,7 @@ use Monolog\Handler\StreamHandler;
 use Biz\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Codeages\Biz\Framework\Util\ReadableJsonFormatter;
 
 class EduCloudServiceImpl extends BaseService implements EduCloudService
 {
@@ -26,9 +27,7 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
             $api = $this->createCloudApi();
             $overview = $api->get("/cloud/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
-            $logger = new Logger('CloudAPI');
-            $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG));
-            $logger->addInfo($e->getMessage());
+            $this->writeErrorLog($e);
 
             return $this->isVisible;
         }
@@ -51,6 +50,23 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
         }
 
         return false;
+    }
+
+    protected function writeErrorLog($e)
+    {
+        $logger = new Logger('CloudAPI');
+        $stream = new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG);
+        $formatter = new ReadableJsonFormatter();
+        $stream->setFormatter($formatter);
+        $logger->pushHandler($stream);
+        if (isset($_SERVER['TRACE_ID']) && $_SERVER['TRACE_ID']) {
+            $logger->pushProcessor(function($record){
+                $record['extra']['trace_id'] = $_SERVER['TRACE_ID'];
+                
+                return $record;
+            });
+        }
+        $logger->addInfo($e->getMessage());
     }
 
     private function isReloadSmsAccountFromCloud($smsAccount)

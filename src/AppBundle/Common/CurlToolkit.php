@@ -26,7 +26,7 @@ class CurlToolkit
         $conditions['connectTimeout'] = isset($conditions['connectTimeout']) ? $conditions['connectTimeout'] : 10;
         $conditions['timeout'] = isset($conditions['timeout']) ? $conditions['timeout'] : 10;
         if (isset($_SERVER['TRACE_ID']) && $_SERVER['TRACE_ID']) {
-            $conditions['headers'] = array_merge($conditions['headers'], array('TRACE-ID: '.$_SERVER['TRACE_ID']));
+            $conditions['headers'] = empty($conditions['headers']) ? array('TRACE-ID: '.$_SERVER['TRACE_ID']) : array_merge($conditions['headers'], array('TRACE-ID: '.$_SERVER['TRACE_ID']));
         }
 
         $curl = curl_init();

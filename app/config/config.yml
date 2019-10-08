@@ -136,3 +136,11 @@ services:
         arguments: ['@file_locator']
         tags:
             - {name: routing.loader}
+
+    json_formatter:
+        class: Codeages\Biz\Framework\Util\ReadableJsonFormatter
+
+    monolog.processor.trace_processor:
+        class: AppBundle\Processor\TraceProcessor
+        tags:
+            - { name: monolog.processor }

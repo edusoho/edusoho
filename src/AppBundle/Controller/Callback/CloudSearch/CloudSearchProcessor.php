@@ -67,7 +67,7 @@ class CloudSearchProcessor extends BizAware implements ProcessorInterface
         $providerType = $request->query->get('provider');
         $provider = $this->getProvider($providerType);
         $token = $request->headers->get('X-Auth-Token');
-        $provider->checkToken($token);
+        //$provider->checkToken($token);
 
         return new JsonResponse($provider->get($request));
     }

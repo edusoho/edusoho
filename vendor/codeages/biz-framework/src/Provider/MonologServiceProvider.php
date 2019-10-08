@@ -53,6 +53,10 @@ class MonologServiceProvider implements ServiceProviderInterface, BootableProvid
 
             $log->pushHandler($handler);
 
+            if ($app['monolog.processor.class']) {
+                $log->pushProcessor(new $app['monolog.processor.class']());
+            }
+
             if ($app['debug'] && isset($app['monolog.handler.debug'])) {
                 $log->pushHandler($app['monolog.handler.debug']);
             }
@@ -93,6 +97,7 @@ class MonologServiceProvider implements ServiceProviderInterface, BootableProvid
         $app['monolog.permission'] = null;
         $app['monolog.exception.logger_filter'] = null;
         $app['monolog.logfile'] = null;
+        $app['monolog.processor.class'] = null;
         $app['monolog.use_error_handler'] = function ($app) {
             return !$app['debug'];
         };
