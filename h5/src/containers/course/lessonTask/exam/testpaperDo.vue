@@ -423,7 +423,7 @@
             this.timeWarn = true;
           }
           if ((Number(hours) == 0 && Number(minutes) == 0 &&
-              Number(seconds) == 0) || Number(seconds) < 0) {
+            Number(seconds) == 0) || Number(seconds) < 0) {
             this.clearTime();
             //直接交卷
             this.submitExam();
@@ -507,11 +507,13 @@
               this.isHandExam = true;
               resolve();
               // 跳转到结果页
-               this.showResult();
+              this.showResult();
             })
             .catch((err) => {
               reject();
               Toast.fail(err.message);
+              this.isHandExam = true;
+              this.showResult();
             });
 
         });
