@@ -68,11 +68,12 @@ import guidePage from "../component/guide-page";
 import itemBank from "../component/itemBank";
 
 import exerciseMixin from '@/mixins/lessonTask/exercise.js';
+import testMixin from '@/mixins/lessonTask/index.js';
 //由于会重定向到说明页或者结果页，为了避免跳转后不能返回，添加backUrl机制
 let backUrl=''
 export default {
    name: "exercise-do",
-   mixins: [exerciseMixin],
+   mixins: [exerciseMixin,testMixin],
    data() {
     return {
       info: [], //练习信息
@@ -127,14 +128,9 @@ export default {
       }else{
         next(false);
       }
-      // this.submitpaper().then(()=>{
-      //     next();
-      // }).catch(()=>{
-      //   next(false);
-      // });
     }
   },
-   beforeDestroy() { //清除定时器
+  beforeDestroy() { //清除定时器
     this.clearTime();
     Dialog.close();
   },
@@ -222,7 +218,10 @@ export default {
       let answer = [];
       paper.forEach(item => {
         if (item.type != "material") {
-          this.sixType(item.type, item);
+
+          let detail=this.sixType(item.type, item, this.lastAnswer);
+          this.$set(this.answer, item.id, detail.answer);
+          this.info.push(detail.item);
         }
         if (item.type == "material") {
           let title = Object.assign({}, item, { subs: "" });
@@ -230,71 +229,74 @@ export default {
             sub.parentTitle = title; //材料题题干
             sub.parentType = item.type; //材料题题型
             sub.materialIndex = index + 1; //材料题子题的索引值，在页面要显示
-            this.sixType(sub.type, sub);
+
+           let detail=this.sixType(sub.type, sub, this.lastAnswer);
+           this.$set(this.answer, sub.id, detail.answer);
+           this.info.push(detail.item);
           });
         }
       });
     },
-    //处理六大题型数据
-    sixType(type, item) {
-      if (type == "single_choice") {
-        //刷新页面或意外中断回来数据会丢失，因此要判断本地是否有缓存数据，如果有要把数据塞回
-        if (this.lastAnswer) {
-          this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-        } else {
-          this.$set(this.answer, item.id, []);
-        }
-        this.info.push(item);
-      }
-      if (type == "choice" || type == "uncertain_choice") {
-        if (this.lastAnswer) {
-          this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-        } else {
-          this.$set(this.answer, item.id, []);
-        }
-        this.info.push(item);
-      }
-      if (type == "essay") {
-        if (this.lastAnswer) {
-          this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-        } else {
-          this.$set(this.answer, item.id, [""]);
-        }
-        this.info.push(item);
-      }
+    // //处理六大题型数据
+    // sixType(type, item) {
+    //   if (type == "single_choice") {
+    //     //刷新页面或意外中断回来数据会丢失，因此要判断本地是否有缓存数据，如果有要把数据塞回
+    //     if (this.lastAnswer) {
+    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
+    //     } else {
+    //       this.$set(this.answer, item.id, []);
+    //     }
+    //     this.info.push(item);
+    //   }
+    //   if (type == "choice" || type == "uncertain_choice") {
+    //     if (this.lastAnswer) {
+    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
+    //     } else {
+    //       this.$set(this.answer, item.id, []);
+    //     }
+    //     this.info.push(item);
+    //   }
+    //   if (type == "essay") {
+    //     if (this.lastAnswer) {
+    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
+    //     } else {
+    //       this.$set(this.answer, item.id, [""]);
+    //     }
+    //     this.info.push(item);
+    //   }
 
-      if (type == "fill") {
-        let fillstem = item.stem;
-        let { stem, index } = this.fillReplce(fillstem, 0);
-        item.stem = stem;
-        item.fillnum = index;
-        if (this.lastAnswer) {
-          this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-        } else {
-          this.$set(this.answer, item.id, new Array(index).fill(""));
-        }
-        this.info.push(item);
-      }
+    //   if (type == "fill") {
+    //     let fillstem = item.stem;
+    //     let { stem, index } = this.fillReplce(fillstem, 0);
+    //     item.stem = stem;
+    //     item.fillnum = index;
+    //     if (this.lastAnswer) {
+    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
+    //     } else {
+    //       this.$set(this.answer, item.id, new Array(index).fill(""));
+    //     }
+    //     this.info.push(item);
+    //   }
 
-      if (type == "determine") {
-        if (this.lastAnswer) {
-          this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-        } else {
-          this.$set(this.answer, item.id, []);
-        }
-        this.info.push(item);
-      }
-    },
-    //处理富文本，并统计填空题的空格个数
-    fillReplce(stem, index) {
-      const reg = /\[\[.+?\]\]/;
-      while (reg.exec(stem)) {
-        stem = stem.replace(reg, () => {
-          return `<span class="fill-bank">（${++index}）</span>`;
-        });
-      }
-      return { stem, index };
-    },
+    //   if (type == "determine") {
+    //     if (this.lastAnswer) {
+    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
+    //     } else {
+    //       this.$set(this.answer, item.id, []);
+    //     }
+    //     this.info.push(item);
+    //   }
+    // },
+    // //处理富文本，并统计填空题的空格个数
+    // fillReplce(stem, index) {
+    //   const reg = /\[\[.+?\]\]/;
+    //   while (reg.exec(stem)) {
+    //     stem = stem.replace(reg, () => {
+    //       return `<span class="fill-bank">（${++index}）</span>`;
+    //     });
+    //   }
+    //   return { stem, index };
+    // },
      //答题卡状态判断,finish 0是未完成  1是已完成
     formatStatus(type,id){
       let finish=0
