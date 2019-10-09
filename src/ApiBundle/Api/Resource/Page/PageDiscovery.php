@@ -14,7 +14,7 @@ class PageDiscovery extends AbstractResource
      */
     public function search(ApiRequest $request, $portal)
     {
-        if (!in_array($portal, array('h5', 'miniprogram'))) {
+        if (!in_array($portal, array('h5', 'miniprogram', 'apps'))) {
             throw PageException::ERROR_PORTAL();
         }
         $params = $request->query->all();
@@ -26,7 +26,7 @@ class PageDiscovery extends AbstractResource
             }
             $mode = 'draft';
         }
-        $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
+        $discoverySettings = $this->getH5SettingService()->getDiscovery('apps' == $portal ? 'h5' : $portal, $mode);
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
@@ -42,7 +42,7 @@ class PageDiscovery extends AbstractResource
             }
         }
 
-        return $discoverySettings;
+        return 'apps' == $portal ? array_values($discoverySettings) : $discoverySettings;
     }
 
     protected function getCourseService()
