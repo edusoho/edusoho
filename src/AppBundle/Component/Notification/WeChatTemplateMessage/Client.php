@@ -3,9 +3,9 @@
 namespace AppBundle\Component\Notification\WeChatTemplateMessage;
 
 use Monolog\Handler\StreamHandler;
+use Biz\Common\JsonLogger;
 use Monolog\Logger;
 use Topxia\Service\Common\ServiceKernel;
-use Codeages\Biz\Framework\Util\ReadableJsonFormatter;
 
 class Client
 {
@@ -64,18 +64,8 @@ class Client
 
     public function setLogger()
     {
-        $logger = new Logger('WeChatTemplateMessage');
         $stream = new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/template-message.log', Logger::DEBUG);
-        $formatter = new ReadableJsonFormatter();
-        $stream->setFormatter($formatter);
-        $logger->pushHandler($stream);
-        if (isset($_SERVER['TRACE_ID']) && $_SERVER['TRACE_ID']) {
-            $logger->pushProcessor(function ($record) {
-                $record['extra']['trace_id'] = $_SERVER['TRACE_ID'];
-
-                return $record;
-            });
-        }
+        $logger = new JsonLogger('WeChatTemplateMessage', $stream);
         $this->logger = $logger;
     }
 
