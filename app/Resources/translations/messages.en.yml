@@ -1656,7 +1656,7 @@ course.plan_task.post_time: 'Post at %createdTime%'
 course.plan_task.post_num: '%postNum% answers'
 course.plan_task.course_teacher: Teacher
 course.plan_task.go_back_btn: Back
-course.plan_task.question_author: By 
+course.plan_task.question_author: By
 course.plan_task.question_answer: Answer
 course.plan_task.question_content: Content
 course.plan_task.add_answer_btn: 'Add answer'
@@ -1674,6 +1674,8 @@ course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exi
 course.plan_task.activity_manage.preview_failed_tips: 'Please enroll %taskName% to start.'
 course.plan_task.activity_manage.title_name: Title
 course.plan_task.activity_manage.help_block: 'It is recommended that the number of title words be controlled within 15 words, otherwise it will affect the browsing of mobile phones.'
+course.plan_task.activity_ppt_animation_tip: Currently, the PC has been supported to play animations and audio and video in PPT (expect app, applet and new micro-network school).
+course.plan_task.activity_ppt_animation_link: Animation support
 course.plan_task.activity_ppt_animation_btn: Switch img mode
 course.plan_task.activity_manage.setup_is_option: 'Set as optional'
 course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next %taskName% to unlock.'
@@ -3316,7 +3318,7 @@ my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
 my.teaching.live_schedule_menu: Teaching Schedules
 my.teaching.hints_block: Only live courses are shown currently
-my.teaching.today_courses: 'Number of courses today' 
+my.teaching.today_courses: 'Number of courses today'
 my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
@@ -4819,11 +4821,21 @@ admin.wechat_notification.template_name: Template Name
 admin.wechat_notification.template_content_sample: Template Content Sample
 admin.wechat_notification.send_object: Send Object
 admin.wechat_notification.operation: Operation
+admin.wechat_notification.template_switch: Switch
+admin.wechat_notification.template_status: Status
 admin.wechat_notification.template_content: Notification Content
 admin.wechat_notification.template_content_detail: Detail
+admin.wechat_notification.template_setting: Setting
+admin.wechat_notification.template_show: Show
 admin.wechat_notification.failure_reason: Failure Reason
 admin.wechat_notification.failure_number: Failure Number
 admin.wechat_notification.failure_reason.empty: No Failure Reason
+admin.wechat.notification.open_wechat_notify_tip: WeChat notification refers to sending messages to students through WeChat service number, and students can receive WeChat notification by binding WeChat and paying attention to the service number. WeChat notification has two major advantages
+admin.wechat.notification.go_to_open: Go to open
+admin.wechat.notification.un_authorized_before_open_tip: Before opening the Wechat notification, please sweep the code first.
+admin.wechat.notification.un_authorized_after_open_tip: In order to prevent abnormal notification function caused by IP change of network school server or message server, it is recommended that you sweep code authorization.
+admin.wechat.notification.authorized_wholeless: It was detected that you did not grant group distribution and notification rights to ES third-party platform when sweeping code authorization. Wechat Service Number Notification could not be enabled. Please re-authorize.
+admin.wechat.notification.go_authorizer: Authorizer now
 admin.operation_analysis.data_type_placeholder: '--Select Data Type--'
 admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
@@ -6012,6 +6024,7 @@ admin.setting_wechat_auth.account_code_empty: No QR Code Yet
 admin.setting_wechat_auth.account_code_view: View Larger Image
 admin.setting_wechat_auth.account_code_download: Download QR code
 admin.developer_setting.cloud_notification_api: Notification API
+admin.developer_setting.cloud_wechat_api: WeChat API
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
@@ -8307,7 +8320,7 @@ user.learn.statistics.manage.describe_tips: >
 
 admin.datalab.setting.modal_title: 'Tips:'
 admin.datalab.setting.modal_enable_body: "When it is on, the data will update after 24 hours. Data doesn't update while it is off."
-admin.datalab.setting.modal_disable_body: 'Data will not update while it is off. Confirm to turn off?' 
+admin.datalab.setting.modal_disable_body: 'Data will not update while it is off. Confirm to turn off?'
 admin.datalab.setting.agreement: 'Agreement'
 admin.datalab.setting.operation_title: 'Open data service:'
 admin.datalab.warning_tip: 'The data service is closed, and the report will not update. Go <a href="%url%">【Setting】</a> to reopen.'
@@ -8415,6 +8428,7 @@ exception.user.nickname_invalid: 昵称格式错误
 exception.user.nickname_existed: 昵称已存在
 exception.user.permission_denied: 暂无权限访问
 exception.user.password_error: 用户名或密码错误
+exception.user.password_failed: Login password is incorrect
 exception.user.lock_self_denied: You can't lock yourself
 
 exception.user_lock: User account is locked, please contact system administrator.
@@ -8585,6 +8599,7 @@ exception.uploadfile.globalId_required: 缺少globalId
 exception.uploadfile.local_convert_not_support: 本地文件暂不支持转换
 exception.uploadfile.extension_not_allowed: 该文件格式，不允许上传。
 exception.uploadfile.not_found_attachment: 附件不存在
+exception.uploadfile.arguments_invalid: Invalid arguments
 exception.activity.watch_video_limit: 您的视频观看时长已达限制，无法继续观看！
 exception.activity.not_found: 教学活动不存在
 exception.activity.not_in_course: Activity is not in the course given
@@ -8712,6 +8727,10 @@ exception.reward_point.account.not_found: 积分账号不存在
 exception.reward_point.account.already_open: 积分账号已创建
 exception.reward_point.account.userid_invalid: 用户id错误
 exception.reward_point.account.balance_insufficient: 余额不足
+exception.reward_point.account.error_pay_password: pay password invalid
+exception.reward_point.account.pay_password_existed: pay password already existed
+exception.reward_point.account.not_found_pay_password: pay password not found
+exception.reward_point.account.error_pay_password_format: The new payment password is not available, please try another password combination
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
 exception.live_replay.not_found: 直播回放不存在
@@ -8800,14 +8819,68 @@ wechat.notification.template_open_error: The template failed to open. It may be 
 wechat.notification.service_not_open: WeChat service number notification is not enabled
 wechat.notification.empty_token: Get WeChat information error
 wechat.notification.template_not_exist: Template does not exist
+wechat.notification.setting_conditions: A notice will be sent to the course teacher at the specified time if all assignments or papers submitted within the past 24 hours have not been corrected.
+wechat.notification.setting_conditions_label: The trigger condition
+wechat.notification.setting_status_label: isOpen
+wechat.notification.setting_time_label: Time Setting
+wechat.notification.setting_live_time_before_one_hour: live before one hour
+wechat.notification.setting_live_time_before_one_day: live before one day
+wechat.notification.template_detail: Detail
+wechat.notification.send_time: Send Time
+wechat.notification.save: save
+wechat.notification.saving: saving
+wechat.notification.form.btn.search_submit_btn: Search
+wechat.notification.fans_list.profile_picture: Profile Picture
+wechat.notification.fans_list.nickname: Nickname
+wechat.notification.fans_list.username: Username
+wechat.notification.fans_list.subscribe_time: Subscribe Time
+wechat.notification.fans_list.tips: The fan list refreshes every 30 minutes
+wechat.notification.fans_list.user_num: "User Num:"
+wechat.notification.fans_list.fans_list_empty: No fan
+wechat.notification.fans_list.no_wechat_bind: WeChat service number is not bound yet
+wechat.notification.fans_list.placeholder: Please enter keywords
+wechat.notification.send_days: Send Days
+wechat.notification.course_remind_conditions: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
 
 # 微信通知模板
 wechat.notification.template.live_start: Hello, classmate.<br>It is hereby notified that the [course name - task name] you are enrolled in will start in the [live class start time].<br>Don't be late.
 wechat.notification.template.homework_result: 'Classmate, hello, your homework has been reviewed.<br>Job Name: [Task Name]]<br>Course: [course name]<br>Tutor: [Teacher User Name]<br>Homework result: [homework result]'
 wechat.notification.template.exam_result: 'Hello, your class has been reviewed.<br>Examination subject: [task name]<br>Test score: [test score]<br>Keep up the good work'
 wechat.notification.template.lesson_add: 'Classmate, hello, the course has a new task to post<br>Course Name: [Course Name]<br>Course category: [Course category]<br>Course Teacher: [Teacher User Name]<br>Course time: [Task release time]<br>Please go to study in time.'
-wechat.notification.template.charge_success: 'Dear customer, you have recharged successfully<br>Recharge type: cash recharge or study card<br>Recharge order number: [order number]<br>Recharge amount: [actual payment price]<br>Recharge time: [payment time]<br>Go and see the course~'
+wechat.notification.template.charge_success: 'Dear customer, you have recharged successfully<br>Recharge type: cash recharge<br>Recharge order number: [order number]<br>Recharge amount: [actual payment price]<br>Recharge time: [payment time]<br>Go and see the course~'
 wechat.notification.template.buy_success: 'Dear customer, you have paid successfully<br>Order details: [product name]<br>Order price: [Order price]<br>Order time: [payment time]<br>Member due date: none<br>Please go to view'
+wechat.notification.template.ask_question: 'Dear teacher, some students in your course have posted questions<br>[questioner]<br>[question title]<br>[question submission time]'
+wechat.notification.template.homework_or_testpaper_need_review: 'Dear teacher, you still have homework/exam papers unmarked today<br>time: [date]<br>homework number: [homework and exam papers number]<br>please correct in time.'
+wechat.notification.template.remind_course: 'Dear students, keep learning today, too.<br>course name: [last study plan name]<br>time: [date of the day, accurate to day] progress: [study plan progress]<br>if you have completed the study plan today, please ignore this notice.'
+wechat.notification.template.answer_question: 'Dear student, there is a new answer to the question you posted in the [course name or class name]. <br>question time: [question time]<br>reply content: [reply content]'
+wechat.notification.template.vip_expired: 'Dear student, the membership you purchased is about to expire.<br>opening time: [opening time]<br>expiration time: [expiration time]<br>please renew in time, so as not to affect your study'
+
+#微信通知规则
+Fwechat.notification.template.ask_question.rule: 'When someone in the class or class issues a question, a notice is sent to the teacher.'
+wechat.notification.template.answer_question.rule: When the teacher answers the student's question, a notification is sent to the questioner.
+wechat.notification.template.homework_or_testpaper_need_review.rule: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
+wechat.notification.template.live_start.rule: 'A notification will be sent to participants at the designated time before the live class begins.'
+wechat.notification.template.homework_result.rule: 'When the homework contains subjective questions, the teacher will send the results to the students after reviewing.'
+wechat.notification.template.exam_result.rule: 'When there are subjective questions in the test paper, the teacher will send the results to the students after reviewing.'
+wechat.notification.template.lesson_add.rule: 'A notification is sent to participants when new assignments are posted.'
+wechat.notification.template.charge_success.rule: 'A notification will be sent when students successfully recharge their virtual currency.'
+wechat.notification.template.buy_success.rule: 'A notification is sent when a student has successfully purchased a course, class, or membership.'
+wechat.notification.template.vip_expired.rule: 'Send notifications at 8 PM each night, depending on the reminder date set by the administrator. <a href="%url%" target="_blank">Click here to go to Settings</a>'
+wechat.notification.template.vip_is_not_install: 'Notification cannot be sent normally without member plug-in installed.'
+wechat.notification.template.remind_course.rule: 'Send a notification reminder at a fixed frequency and a fixed time for at least one student who has not completed and has not withdrawn from the program.'
+
+#微信通知名称
+wechat.notification.template_name.homework_or_testpaper_need_review: 'Homework/TestPaper Need Review'
+wechat.notification.template_name.remind_course: 'Remind Course'
+wechat.notification.template_name.ask_question: 'Ask Question'
+wechat.notification.template_name.answer_question: 'Answer Question'
+wechat.notification.template_name.vip_expired: 'Vip Expired'
+wechat.notification.template_name.live_start: 'Live Start'
+wechat.notification.template_name.homework_result: 'Homework Result'
+wechat.notification.template_name.exam_result: 'Exam Result'
+wechat.notification.template_name.lesson_add: 'Lesson Add'
+wechat.notification.template_name.charge_success: 'Charge Success'
+wechat.notification.template_name.buy_success: 'Buy Success'
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: audio end
@@ -8829,3 +8902,22 @@ classroom.joining_date.expired_tips: Classroom joining date expired
 
 # 富文本
 editor.iframe_tips: To use IFrame normally, please set it in [Admin] - [System] -[Security] -[White List Domain]
+
+#上课提醒
+course.remind.each_week: Weekly
+course.remind.mon: Mon
+course.remind.tue: Tue
+course.remind.wed: Wed
+course.remind.thu: Thu
+course.remind.fri: Fri
+course.remind.sat: Sat
+course.remind.sun: Sun
+course.setting.course_remind: Course Remind
+course.setting.course_remind_tip: 'Currently, %D% % %H% sends learning reminders to all current students.'
+course.setting.course_remind_change: Change Setting
+course.setting.course_remind_not_open: Reminder not to open course
+course.setting.course_remind_go_to_open: To open
+
+admin.setting_wechat_auth.re_authorization_btn: ReAuth
+admin.setting_wechat_auth.authorization_in_new_page_hint: Please Authorization In New Page
+admin.setting_wechat_auth.authorization_success: Anthorized Success

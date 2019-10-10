@@ -22,7 +22,7 @@ class QrCodeWhiteListFilter
         }
 
         $whiteSiteList = $this->getQrCodeSiteWhitelist();
-        preg_match('/^(http:\/\/|https:\/\/)?([^\/]+)/i', $url, $match);
+        preg_match('/^(http:\/\/|https:\/\/)?([^\/|?]+)/i', $url, $match);
         foreach ($whiteSiteList as $site) {
             if ($site == $match[2]) {
                 $inWhitelist = true;
