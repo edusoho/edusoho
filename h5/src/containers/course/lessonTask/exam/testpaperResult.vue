@@ -9,7 +9,7 @@
         <div class="result-data__bottom data-text-blue" v-else>待批阅</div>
       </div>
       <div class="result-data__item">
-        客观题正确率
+        正确率
         <div class="result-data__bottom data-number-green data-medium" v-if="isReadOver"><span class=" data-number">{{ result.rightRate }}</span>%
         </div>
         <div class="result-data__bottom data-text-blue" v-else>待批阅</div>
