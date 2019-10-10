@@ -114,6 +114,10 @@ abstract class BaseService
         if (!isset($headers['Authorization'])) {
             $headers['Authorization'] = $this->auth->makeRequestAuthorization($uri, isset($options['body']) ? $options['body'] : '');
         }
+
+        if (isset($_SERVER['TRACE_ID']) && $_SERVER['TRACE_ID']) {
+            $headers['TRACE-ID'] = $_SERVER['TRACE_ID'];
+        }
         $headers['Content-Type'] = 'application/json';
         $options['headers'] = $headers;
 

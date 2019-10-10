@@ -73,6 +73,9 @@ class RestApiClient
 
         $token   = $this->spec->packToken($this->config, $this->makeSignatureUri($url), $body, time() + $this->config['lifetime'], $requestId);
         $headers = array_merge($this->spec->getHeaders($token, $requestId), $headers);
+        if (isset($_SERVER['TRACE_ID']) && $_SERVER['TRACE_ID']) {
+            $headers = array_merge($headers, array('TRACE-ID: '.$_SERVER['TRACE_ID']));
+        }
 
         $body = $this->http->request($method, $url, $body, $headers, $requestId);
 

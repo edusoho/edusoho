@@ -10,6 +10,7 @@ use Biz\System\Service\SettingService;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Common\JsonLogger;
 
 class CloudAPIFactory
 {
@@ -26,8 +27,8 @@ class CloudAPIFactory
             $storage = $setting->get('storage', array());
             $developer = $setting->get('developer', array());
 
-            $logger = new Logger('CloudAPI');
-            $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG));
+            $stream = new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG);
+            $logger = new JsonLogger('CloudAPI', $stream);
 
             if ('tui' == $type) {
                 $api = new CloudAPI(array(
