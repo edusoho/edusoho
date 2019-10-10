@@ -465,7 +465,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
             $this->getAccountService()->transferCoin($recharge);
 
-            $batch['rechargedNumber'] += 1;
+            ++$batch['rechargedNumber'];
             $this->updateBatch($batch['id'], $batch);
             $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
 
