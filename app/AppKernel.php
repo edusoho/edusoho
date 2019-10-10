@@ -154,8 +154,12 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             'monolog.level' => $this->isDebug() ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO,
             'monolog.permission' => 0666,
             'monolog.formatter' => new \Codeages\Biz\Framework\Util\ReadableJsonFormatter(),
-            'monolog.processor.class' => '\AppBundle\Processor\TraceProcessor',
         ));
+        $biz->extend('monolog', function($monolog) {
+            $monolog->pushProcessor(new \AppBundle\Processor\TraceProcessor());
+        
+            return $monolog;
+        });
         $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());
         $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider(), array('targetlog.interceptor_enable' => false));
         $biz->register(new \Biz\System\LogServiceProvider());
