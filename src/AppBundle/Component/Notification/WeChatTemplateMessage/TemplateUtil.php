@@ -62,7 +62,7 @@ class TemplateUtil
                 'name' => 'wechat.notification.template_name.ask_question',
                 'content' => 'wechat.notification.template.ask_question',
                 'rule' => 'wechat.notification.template.ask_question.rule',
-                'detail' => '尊敬的老师，您的在教课程中有学员发布了提问<br>申请人：{{keyword1.DATA}}<br>问题内容：{{keyword2.DATA}}<br>时间：{{keyword3.DATA}}<br>{{remark.DATA}}',
+                'detail' => '{{first.DATA}}<br>申请人：{{keyword1.DATA}}<br>问题内容：{{keyword2.DATA}}<br>时间：{{keyword3.DATA}}<br>{{remark.DATA}}',
                 'object' => '课程教师',
                 'status' => 0,
             ),
