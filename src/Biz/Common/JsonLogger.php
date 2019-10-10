@@ -28,4 +28,3 @@ class JsonLogger extends Logger
         }
     }
 }
-
