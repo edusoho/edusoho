@@ -63,6 +63,8 @@ interface MemberService
 
     public function setDefaultTeacher($courseId);
 
+    public function findLastLearnTimeRecordStudents($userIds);
+
     /**
      * @param $courseId
      * @param $teachers

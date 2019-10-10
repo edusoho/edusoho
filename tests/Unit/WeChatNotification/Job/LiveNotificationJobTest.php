@@ -14,12 +14,16 @@ class LiveNotificationJobTest extends BaseTestCase
             array(
                 'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
-                'withParams' => array('oneDayBeforeLiveOpen'),
+                'withParams' => array('liveOpen'),
             ),
             array(
                 'functionName' => 'findSubscribedUsersByUserIdsAndType',
                 'returnValue' => array(array('openId' => 'test')),
                 'withParams' => array(array(12), 'official'),
+            ),
+            array(
+                'functionName' => 'getWeChatSendChannel',
+                'returnValue' => 'wechat',
             ),
         ));
         $this->mockBiz('Task:TaskService', array(
@@ -57,7 +61,7 @@ class LiveNotificationJobTest extends BaseTestCase
         ));
 
         $job = new LiveNotificationJob(array(), $this->biz);
-        $job->args = array('key' => 'oneDayBeforeLiveOpen', 'taskId' => 1, 'url' => 'www.test.com');
+        $job->args = array('key' => 'liveOpen', 'taskId' => 1, 'url' => 'www.test.com');
         $result = $job->execute();
 
         $this->assertEmpty($result);

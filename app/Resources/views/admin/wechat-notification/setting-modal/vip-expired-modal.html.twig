@@ -1,0 +1,9 @@
+{% extends 'admin/wechat-notification/setting-modal/layout.html.twig' %}
+
+{% block rule %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label"><label>{{'wechat.notification.setting_conditions_label'|trans}}</label></div>
+    <div class="col-sm-10 controls mts">{{ template.rule|trans({'%url%':url('admin_vip_setting')})|raw }}</div>
+  </div>
+
+{% endblock %}
