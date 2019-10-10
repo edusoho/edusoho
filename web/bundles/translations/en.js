@@ -1292,4 +1292,6 @@ t.add("user.account.order_pay", "Continue", "js", "en");
 t.add("user.account.order_not_pay", "Not paying", "js", "en");
 t.add("admin.wechat.live_open_scenes_error.hint", "At least one scene\u3002", "js", "en");
 t.add("course.question_manage.manage.delete_tips", "Deleting the question may affect the exercise of class, please be cautious!", "js", "en");
+t.add("course.plan_task.activity_ppt_animation_img", "Switch img mode", "js", "en");
+t.add("course.plan_task.activity_ppt_animation_slide", "Switch animation mode", "js", "en");
 })(Translator);
