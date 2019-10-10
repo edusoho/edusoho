@@ -279,6 +279,29 @@ const routes = [
       title: '兑换卡券'
     },
     component: () => import(/* webpackChunkName: "auth_social" */'@/containers/coupon/covert/index.vue')
+  }, {
+    path: '/study_card',
+    name: 'study_card',
+    meta: {
+      title: '学习卡充值'
+    },
+    component: () => import(/* webpackChunkName: "study_card" */'@/containers/study-card/index.vue'),
+    redirect: 'input_code',
+    children: [{
+      path: '/input_code',
+      name: 'input_code',
+      meta: {
+        title: '学习卡充值'
+      },
+      component: () => import(/* webpackChunkName: "input_code" */'@/containers/study-card/components/input-code')
+    }, {
+      path: '/valid_card',
+      name: 'valid_card',
+      meta: {
+        title: '学习卡充值'
+      },
+      component: () => import(/* webpackChunkName: "valid_card" */'@/containers/study-card/components/valid-card')
+    }]
   }
 ];
 
@@ -303,7 +326,8 @@ const setVipSwitch = () => new Promise((resolve, reject) => {
       .then(vipRes => {
         // vip 前端元素判断（vip 插件已安装(升级) && vip 插件已开启 && vip 等级已设置）
         if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
-          return store.dispatch('setVipSwitch', true).then(() => resolve());
+          return store.dispatch('setVipSwitch', true)
+            .then(() => resolve());
         }
         return resolve(vipRes);
       })
@@ -321,7 +345,8 @@ const setWeChatSwitch = () => new Promise((resolve, reject) => {
     return store.dispatch('getGlobalSettings', { type: 'wechat', key: 'wechatSettings' })
       .then(res => {
         if (res.enabled) {
-          return store.dispatch('setWeChatSwitch', true).then(() => resolve());
+          return store.dispatch('setWeChatSwitch', true)
+            .then(() => resolve());
         }
         return resolve(res);
       })
@@ -358,7 +383,8 @@ router.beforeEach((to, from, next) => {
           to.meta.title = siteRes.name;
         }
         if (to.name === 'vip') {
-          setVipSwitch().then(() => next());
+          setVipSwitch()
+            .then(() => next());
         } else {
           next();
         }
@@ -385,9 +411,10 @@ router.afterEach(to => {
     store.dispatch('getGlobalSettings', {
       type: 'course',
       key: 'courseSettings'
-    }).catch(err => {
-      Toast.fail(err.message);
-    });
+    })
+      .catch(err => {
+        Toast.fail(err.message);
+      });
   }
   if (to.name !== 'vip') {
     setVipSwitch();

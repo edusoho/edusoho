@@ -1,0 +1,147 @@
+.e-study-card {
+  font-family: PingFangSC-Regular, PingFangSC, serif;
+  height: calc(100% - 46px);
+
+  //实体卡输入卡密页面
+  .input-code {
+    height: 100%;
+    background: url("../../../static/images/bg@2x.png") 0 0 no-repeat;
+    background-size: 100% 100%;
+
+    .schoolName {
+      color: #fff;
+      margin: auto;
+      padding: vw(12) vw(50);
+    }
+
+    .input-code__field {
+      position: absolute;
+      top: 66.9%;
+      left: 0;
+      right: 0;
+      width: 88%;
+      margin: auto;
+      border-radius: vw(2);
+
+      > div {
+        padding: 0 vw(16);
+      }
+    }
+
+    .submit {
+      position: absolute;
+      bottom: 8%;
+      margin: auto;
+      left: 0;
+      right: 0;
+      width: 80%;
+      opacity: .5;
+      color: #408FFB;
+      transition: opacity .3s;
+
+      &.active {
+        opacity: 1;
+      }
+
+    }
+  }
+
+  //卡密正确
+  .valid-card {
+    background-color: #f8f8f8;
+    height: 100%;
+    overflow: hidden;
+
+    .container {
+      height: 100%;
+      margin-top: vw(13);
+      background-color: #fff;
+    }
+
+    .top {
+      font-size: vw(16);
+      padding: vw(20) vw(64) vw(12);
+      text-align: center;
+      color: #333;
+    }
+
+    .middle {
+
+      color: #fff;
+
+      .card {
+        margin: auto;
+        background: url("../../../static/images/100金币@2x.png") 0 0 no-repeat;
+        background-size: 100% 100%;
+        width: vw(345);
+        height: vw(180);
+
+        .valid-date {
+          font-size: vw(12);
+          padding: vw(12) vw(24) 0;
+        }
+
+        .money {
+          font-size: vw(48);
+          padding: vw(31) 0 vw(4) vw(24);
+          text-shadow: 0 vw(2) vw(2) #666;
+          display: flex;
+          align-items: center;
+
+          span {
+            padding-left: vw(4);
+            font-size: vw(24);
+          }
+        }
+
+        .code {
+          padding-left: vw(24);
+          font-size: vw(18);
+        }
+
+      }
+    }
+
+    .bottom {
+      position: absolute;
+      bottom: 8%;
+      width: 100%;
+
+      .van-button {
+        width: vw(305);
+        height: vw(44);
+        margin: auto;
+      }
+    }
+  }
+
+  .login {
+
+    .err-msg {
+      font-size: vw(12);
+      bottom: 0;
+      color: #ff2020;
+      height: vw(25);
+      line-height: vw(25);
+      padding-left: vw(16);
+    }
+
+    .login__container {
+      padding: vw(48) vw(35);
+      .login__container__field {
+        border-radius: vw(2);
+        margin:  auto;
+        background-color: #f1f3f8;
+        > div {
+          padding: 0 vw(16);
+        }
+
+        .login__container__button {
+          color:rgba(64,143,251,1);
+          padding: vw(4) vw(0) vw(4) vw(15);
+          border-left: 1px solid #ddd;
+        }
+      }
+    }
+  }
+}
