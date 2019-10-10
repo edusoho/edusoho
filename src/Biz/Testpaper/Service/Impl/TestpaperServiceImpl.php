@@ -904,15 +904,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $type = array();
             $typesCount = array();
             foreach ($items as $item) {
-                if ('material' != $item['questionType']) {
-                    $totalScore += $item['score'];
-                    if ($item['parentId']) {
-                        $fields['metas']['totalScores']['material'] += $item['score'];
-                    } else {
-                        $fields['metas']['totalScores'][$item['questionType']] += $item['score'];
-                    }
-                }
-
                 if (!in_array($item['questionType'], $type) && 0 != $item['parentId']) {
                     $type[] = $item['questionType'];
                 }
@@ -922,6 +913,18 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 } elseif (0 == $item['parentId']) {
                     $typesCount[$item['questionType']] = 1;
                 }
+
+                if ('material' == $item['questionType']) {
+                    continue;
+                }
+
+                $totalScore += $item['score'];
+                if ($item['parentId']) {
+                    $fields['metas']['totalScores']['material'] += $item['score'];
+                } else {
+                    $fields['metas']['totalScores'][$item['questionType']] += $item['score'];
+                }
+
             }
             $fields['metas']['question_type_seq'] = $type;
             $fields['metas']['counts'] = $typesCount;
