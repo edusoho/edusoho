@@ -394,6 +394,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         } else {
             $uuid = substr($chars, 0, $uuidLength);
         }
+        $uuid = str_replace('i', 'a', $uuid);
 
         return $prefix.$uuid;
     }
