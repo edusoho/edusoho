@@ -1237,4 +1237,6 @@ t.add("user.account.order_pay", "\u7ee7\u7eed", "js", "zh_CN");
 t.add("user.account.order_not_pay", "\u4e0d\u652f\u4ed8", "js", "zh_CN");
 t.add("admin.wechat.live_open_scenes_error.hint", "\u8bf7\u81f3\u5c11\u52fe\u9009\u4e00\u4e2a\u9009\u9879\u3002", "js", "zh_CN");
 t.add("course.question_manage.manage.delete_tips", "\u5220\u9664\u9898\u76ee\uff0c\u53ef\u80fd\u4f1a\u5f71\u54cd\u8bfe\u65f6\u7684\u7ec3\u4e60\uff0c\u8bf7\u8c28\u614e\u64cd\u4f5c\uff01", "js", "zh_CN");
+t.add("course.plan_task.activity_ppt_animation_img", "\u5207\u6362\u56fe\u7247\u6a21\u5f0f", "js", "zh_CN");
+t.add("course.plan_task.activity_ppt_animation_slide", "\u5207\u6362\u52a8\u753b\u6a21\u5f0f", "js", "zh_CN");
 })(Translator);
