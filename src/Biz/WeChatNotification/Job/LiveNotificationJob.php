@@ -12,7 +12,6 @@ class LiveNotificationJob extends AbstractNotificationJob
         $key = $this->args['key'];
         $templateId = $this->getWeChatService()->getTemplateId($key);
 
-
         if (empty($templateId)) {
             return;
         }
