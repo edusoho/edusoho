@@ -45,7 +45,7 @@ export default {
     },
     methods:{
          changeChapter(index) {
-            this.current=index
+            this.current=index;
             this.$emit('changeChapter', index)
         },
         handleChapter(index){
