@@ -12,6 +12,8 @@ class HomeworkFilter extends Filter
 
     protected function publicFields(&$data)
     {
+        $data['description'] = $this->convertAbsoluteUrl($data['description']);
+
         if (isset($data['latestHomeworkResult'])) {
             $homeworkResultFilter = new HomeworkResultFilter();
             $homeworkResultFilter->setMode(Filter::SIMPLE_MODE);

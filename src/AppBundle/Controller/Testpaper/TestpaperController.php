@@ -188,6 +188,10 @@ class TestpaperController extends BaseController
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
+        if ('finished' === $testpaperResult['status']) {
+            $this->createNewException(TestpaperException::MODIFY_COMMITTED_TESTPAPER());
+        }
+
         if (!$testpaperResult) {
             $this->createNewException(TestpaperException::NOTFOUND_RESULT());
         }

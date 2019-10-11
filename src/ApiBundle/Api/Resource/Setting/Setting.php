@@ -22,7 +22,6 @@ class Setting extends AbstractResource
     public function get(ApiRequest $request, $type)
     {
         $this->checkType($type);
-
         $method = "get${type}";
 
         return $this->$method($request);

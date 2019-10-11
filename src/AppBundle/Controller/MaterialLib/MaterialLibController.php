@@ -19,7 +19,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            $this->createNewException(UserException::PERMISSION_DENIED());
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
         return $this->render('material-lib/web/material-thumb-view.html.twig', array(

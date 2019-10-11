@@ -1867,6 +1867,8 @@ course.plan_task.activity_manage.activity_file_empty: 抱歉，%type%文件不�
 course.plan_task.activity_manage.preview_failed_tips: 当前%taskName%不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
 course.plan_task.activity_manage.help_block: 建议标题字数控制在15字以内，否则会影响手机端浏览
+course.plan_task.activity_ppt_animation_tip: 当前PC端已支持播放PPT中的动画及音视频（App、小程序和新版微网校暂不支持）。
+course.plan_task.activity_ppt_animation_link: 动画支持情况
 course.plan_task.activity_ppt_animation_btn: 切换图片模式
 course.plan_task.activity_manage.setup_is_option: 设为选修
 course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
@@ -9901,6 +9903,12 @@ exception.homework.forbidden_access_homework: 不可以访问其他学生的作�
 exception.homework.forbidden_duplicate_commit_homework: 作业已经做完，不能重复提交!
 exception.homework.reviewing: 作业正在批阅！不能重新开始!
 exception.homework.not_found_result: 作业结果不存在
+exception.exercise.not_found: 练习不存在
+exception.exercise.draft: 该练习未发布，如有疑问请联系老师！
+exception.exercise.closed: 该练习已关闭，如有疑问请联系老师！
+exception.exercise.forbidden_access_exercise: 不可以访问其他学生的练习!
+exception.exercise.forbidden_duplicate_commit_exercise: 练习已经做完，不能重复提交!
+exception.exercise.not_found_result: 练习结果不存在
 exception.uploadfile.file_not_found: 文件不存在
 exception.uploadfile.forbidden_manage_file: 没有权限管理资源
 exception.uploadfile.error_status: 状态不正确
@@ -9911,6 +9919,7 @@ exception.uploadfile.globalId_required: 缺少globalId
 exception.uploadfile.local_convert_not_support: 本地文件暂不支持转换
 exception.uploadfile.extension_not_allowed: 该文件格式，不允许上传。
 exception.uploadfile.not_found_attachment: 附件不存在
+exception.uploadfile.arguments_invalid: 参数不合法
 exception.activity.watch_video_limit: 您的视频观看时长已达限制，无法继续观看！
 exception.activity.not_found: 教学活动不存在
 exception.activity.not_in_course: 教学计划中没有该教学活动
@@ -10039,6 +10048,9 @@ exception.reward_point.account.not_found: 积分账号不存在
 exception.reward_point.account.already_open: 积分账号已创建
 exception.reward_point.account.userid_invalid: 用户id错误
 exception.reward_point.account.balance_insufficient: 余额不足
+exception.reward_point.account.error_pay_password: 支付密码错误
+exception.reward_point.account.pay_password_existed: 支付密码已存在
+exception.reward_point.account.not_found_pay_password: 支付密码不存在
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
 exception.live_replay.not_found: 直播回放不存在
@@ -10347,9 +10359,9 @@ course.setting.course_remind: 上课提醒
 course.setting.course_remind_tip: 当前设置，%D% %H%会向所有在读学员发送学习提醒通知。
 course.setting.course_remind_change: 修改设置
 course.setting.course_remind_not_open: 未开启上课提醒
-course.setting.course_remind_go_to_open: 前往开启
 
 admin.setting.invite.chooser_coupon.manage_btn: 优惠券管理
 admin.setting.invite.chooser_coupon.refresh_btn: 刷新
 admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
 admin.operation.coupon_menu.generate_btn: 生成优惠券
+course.setting.course_remind_go_to_open: 前往开启
