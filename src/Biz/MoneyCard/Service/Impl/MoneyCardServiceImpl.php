@@ -32,6 +32,11 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         return $this->getMoneyCardBatchDao()->get($id);
     }
 
+    public function getBatchByToken($token, $options = array())
+    {
+        return $this->getMoneyCardBatchDao()->getBatchByToken($token, $options);
+    }
+
     public function searchMoneyCards(array $conditions, array $oderBy, $start, $limit)
     {
         return $this->getMoneyCardDao()->search($conditions, $oderBy, $start, $limit);
@@ -380,7 +385,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         return $cardIds;
     }
 
-    public function uuid($uuidLength, $prefix = '', $needSplit = false)
+    protected function uuid($uuidLength, $prefix = '', $needSplit = false)
     {
         $chars = md5(uniqid(mt_rand(), true));
 
