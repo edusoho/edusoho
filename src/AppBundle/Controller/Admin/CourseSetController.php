@@ -530,6 +530,97 @@ class CourseSetController extends BaseController
         }
     }
 
+    public function chooserAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        $conditions['parentId'] = 0;
+
+        if (isset($conditions['categoryId']) && '' == $conditions['categoryId']) {
+            unset($conditions['categoryId']);
+        }
+
+        if (isset($conditions['status']) && '' == $conditions['status']) {
+            unset($conditions['status']);
+        }
+
+        if (isset($conditions['title']) && '' == $conditions['title']) {
+            unset($conditions['title']);
+        }
+
+        if (isset($conditions['creatorName']) && '' == $conditions['creatorName']) {
+            unset($conditions['creatorName']);
+        }
+
+        $withCoursePlan = false;
+        if (!empty($conditions['withPlan'])) {
+            $withCoursePlan = true;
+            unset($conditions['withPlan']);
+        }
+
+        $count = $this->getCourseSetService()->countCourseSets($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        if ($withCoursePlan) {
+            $courseSets = $this->searchCourseSetWithCourses(
+                $conditions,
+                null,
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        } else {
+            $courseSets = $this->getCourseSetService()->searchCourseSets(
+                $conditions,
+                null,
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseSets, 'creator'));
+
+        return $this->render(
+            'admin/course/course-set-chooser.html.twig',
+            array(
+                'users' => $users,
+                'conditions' => $conditions,
+                'courseSets' => $courseSets,
+                'categories' => $categories,
+                'paginator' => $paginator,
+                'withCoursePlan' => $withCoursePlan,
+            )
+        );
+    }
+
+    private function searchCourseSetWithCourses($conditions, $orderbys, $start, $limit)
+    {
+        $conditions['status'] = 'published'; //计划模式下，只取发布的课程和计划
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderbys, $start, $limit);
+
+        if (empty($courseSets)) {
+            return array();
+        }
+
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(array_keys($courseSets));
+        if (!empty($courses)) {
+            foreach ($courses as $course) {
+                if ('published' != $course['status']) {
+                    continue;
+                }
+                if (empty($courseSets[$course['courseSetId']]['courses'])) {
+                    $courseSets[$course['courseSetId']]['courses'] = array($course);
+                } else {
+                    $courseSets[$course['courseSetId']]['courses'][] = $course;
+                }
+            }
+        }
+
+        return array_values($courseSets);
+    }
+
     public function courseListAction(Request $request, $id)
     {
         $conditions = array(

@@ -491,6 +491,10 @@ admin_course_set_cancel_recommend:
     methods: [POST]
     permissions: [admin_course_set_recommend_list, admin_course_set_cancel_recommend]
 
+admin_course_chooser:
+    path: /course_set/chooser
+    defaults: { _controller: AppBundle:Admin/CourseSet:chooser }
+
 admin_course_set_recommend_list:
     path: /course_set/recommend/list
     defaults: { _controller: AppBundle:Admin/CourseSet:recommendList }
