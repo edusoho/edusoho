@@ -12,7 +12,7 @@ set('writable_mode', 'acl');
 
 host('124.160.104.77')
     ->stage('dev')
-    ->user('deployer')
+    ->user('root')
     ->identityFile('~/.ssh/deployerkey')
     ->addSshOption('UserKnownHostsFile', '/dev/null')
     ->addSshOption('StrictHostKeyChecking', 'no')
