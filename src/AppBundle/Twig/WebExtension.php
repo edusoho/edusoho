@@ -178,7 +178,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_transcode_error_message_key', array($this, 'getTranscodeErrorMessageKeyByCode')),
             new \Twig_SimpleFunction('uniqid', array($this, 'uniqid')),
             new \Twig_SimpleFunction('get_days', array($this, 'getDays')),
-            new \Twig_SimpleFunction('isQuestionLack', array($this, 'isQuestionLack')),
+            new \Twig_SimpleFunction('is_question_lack', array($this, 'isQuestionLack')),
         );
     }
 
