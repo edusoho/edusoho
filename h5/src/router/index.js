@@ -302,6 +302,29 @@ const routes = [
       title: '兑换卡券'
     },
     component: () => import(/* webpackChunkName: "auth_social" */'@/containers/coupon/covert/index.vue')
+  }, {
+    path: '/study_card',
+    name: 'study_card',
+    meta: {
+      title: '学习卡充值'
+    },
+    component: () => import(/* webpackChunkName: "study_card" */'@/containers/study-card/index.vue'),
+    redirect: 'input_code',
+    children: [{
+      path: '/input_code',
+      name: 'input_code',
+      meta: {
+        title: '学习卡充值'
+      },
+      component: () => import(/* webpackChunkName: "input_code" */'@/containers/study-card/components/input-code')
+    }, {
+      path: '/valid_card',
+      name: 'valid_card',
+      meta: {
+        title: '学习卡充值'
+      },
+      component: () => import(/* webpackChunkName: "valid_card" */'@/containers/study-card/components/valid-card')
+    }]
   }
 ];
 
