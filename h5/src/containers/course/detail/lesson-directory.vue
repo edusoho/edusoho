@@ -289,6 +289,15 @@ export default {
             }
           })
           break;
+        case 'exercise':
+          this.$router.push({
+            name: 'exerciseIntro',
+            query: {
+              courseId: this.$route.params.id,
+              taskId: task.id
+            }
+          })
+          break;
         default:
           Toast("暂不支持此类型");
       }

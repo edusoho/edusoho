@@ -3,7 +3,7 @@
     <e-loading v-if="isLoading"></e-loading>
     <div class="result-data" ref="data" v-if="result">
       <div class="result-data__item">
-        正确率
+        客观题正确率
         <div class="result-data__bottom data-number-green data-medium" v-if="isReadOver"><span class="data-number">{{ result.rightRate }}</span>%
         </div>
         <div class="result-data__bottom data-text-blue" v-else>待批阅</div>
@@ -28,9 +28,9 @@
         <div class="result-tag-item__circle circle-gray"></div>
         未作答
       </div>
-      <div class="result-tag-item clearfix" v-show="!isReadOver">
-        <div class="result-tag-item__circle circle-brown"></div>
-        待批阅
+      <div class="result-tag-item clearfix">
+        <div class="result-tag-item__circle circle-subjective"></div>
+        主观题
       </div>
     </div>
 
@@ -47,7 +47,7 @@
         <van-button class="result-footer__btn" type="primary" :style="{marginRight: isReadOver ? '2vw' : 0}"
                     @click="viewAnalysis">查看解析
         </van-button>
-        <van-button v-if="isReadOver" class="result-footer__btn" type="primary" @click="startHomework()">再做一次
+        <van-button v-if="isReadOver" class="result-footer__btn" type="primary" @click="startExercise()">再做一次
         </van-button>
       </div>
     </div>
@@ -59,11 +59,11 @@
   import { mapState, mapMutations, mapActions } from 'vuex';
   import * as types from '@/store/mutation-types';
 
-  import homeworkMixin from '@/mixins/lessonTask/homework.js';
+  import exerciseMixin from '@/mixins/lessonTask/exercise.js';
 
   export default {
-    name: 'homework-result',
-    mixins: [homeworkMixin],
+    name: 'exercise-result',
+    mixins: [exerciseMixin],
     data() {
       return {
         result: null,
@@ -72,7 +72,7 @@
         title: null,
         color: { // 题号标签状态判断
           'right': 'green',
-          'none': 'brown',
+          'none': 'subjective',
           'wrong': 'orange',
           'partRight': 'orange',
           'noAnswer': 'gray',
@@ -96,7 +96,7 @@
       }
     },
     created() {
-      this.gethomeworkResult();
+      this.getexerciseResult();
     },
     beforeRouteEnter(to, from, next) {
       document.getElementById('app').style.background = '#f6f6f6';
@@ -110,11 +110,11 @@
       ...mapMutations({
         setNavbarTitle: types.SET_NAVBAR_TITLE
       }),
-      gethomeworkResult() {
-        Api.homeworkResult({
+      getexerciseResult() {
+        Api.exerciseResult({
           query: {
-            homeworkId: this.$route.query.homeworkId,
-            homeworkResultId: this.$route.query.homeworkResultId
+            exerciseId: this.$route.query.exerciseId,
+            exerciseResultId: this.$route.query.exerciseResultId
           },
         })
           .then(res => {
@@ -130,10 +130,10 @@
       interruption() {
         this.canDoing(this.result, this.user.id)
           .then(() => {
-            this.startHomework();
+            this.startExercise();
           })
           .catch(({ answer }) => {
-            this.submitHomework(answer);
+            this.submitExercise(answer);
           });
       },
       formatData(res) {
@@ -160,12 +160,12 @@
           return 'noAnswer';
         }
       },
-      startHomework() {
+      startExercise() {
         this.$router.replace({
-          name: 'homeworkDo',
+          name: 'exerciseDo',
           query: {
             targetId: this.$route.query.taskId,
-            homeworkId: this.$route.query.homeworkId,
+            exerciseId: this.$route.query.exerciseId,
             courseId: this.$route.query.courseId
           },
           params: {
@@ -173,24 +173,24 @@
           }
         });
       },
-      //交作业
-      submitHomework(answer) {
+      //交练习
+      submitExercise(answer) {
         let datas = {
           answer,
-          homeworkId: this.$route.query.homeworkId,
+          exerciseId: this.$route.query.exerciseId,
           userId: this.user.id,
-          homeworkResultId: this.$route.query.homeworkResultId
+          exerciseResultId: this.$route.query.exerciseResultId
         };
-        //提交作业+跳转到结果页
-        this.handHomeworkdo(datas)
+        //提交练习+跳转到结果页
+        this.handExercisedo(datas)
           .then(res => {
             this.$router.replace({
-              name: 'homeworkResult',
+              name: 'exerciseResult',
               query: {
-                homeworkId: this.$route.query.homeworkId,
-                homeworkResultId: this.$route.query.homeworkResultId,
+                exerciseId: this.$route.query.exerciseId,
+                exerciseResultId: this.$route.query.exerciseResultId,
                 courseId: this.$route.query.courseId,
-                taskId: this.$route.query.taskId
+                taskId: tthis.$route.query.taskId
               }
             });
           })
@@ -209,12 +209,8 @@
       },
       viewAnalysis() {
         this.$router.push({
-          name: 'homeworkAnalysis',
-          query: {
-            homeworkId: this.$route.query.homeworkId,
-            homeworkResultId: this.$route.query.homeworkResultId,
-            title: this.title
-          }
+          name: 'exerciseAnalysis',
+          query: this.$route.query
         });
       }
     }
