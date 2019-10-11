@@ -1,7 +1,7 @@
 <template>
   <div class="subject">
     <div class="subject-stem">
-      <span class="serial-number">{{ number }}、</span>
+      <span class="serial-number">{{ itemdata.seq }}、</span>
       <div class="subject-stem__content rich-text" v-html="stem"></div>
     </div>
 
@@ -16,12 +16,13 @@
         v-for="(item, index) in itemdata.metas.choices"
         :key="index"
         :name="index"
+        :disabled="!canDo"
       >
         <div class="subject-option__content" v-html="item"></div>
         <span
           slot="icon"
           slot-scope="props"
-          class="subject-option__order subject-option__order--square"
+          :class="['subject-option__order','subject-option__order--square',!canDo ? checkAnswer(index,itemdata) :'']"
         >{{ index|filterOrder }}</span>
       </van-checkbox>
     </van-checkbox-group>
@@ -29,38 +30,12 @@
 </template>
 
 <script>
+import  checkAnswer from '../../../../mixins/lessonTask/itemBank'
 export default {
   name: "choice-type",
+  mixins:[checkAnswer],
   data() {
     return {
-      choice: {
-        id: "5",
-        type: "choice",
-        stem: "<p>测试多选题</p>\r\n",
-        score: "2.0",
-        metas: {
-          choices: [
-            "<p>选项A</p>\n",
-            "<p>选项B</p>\n",
-            "<p>选项C</p>\n",
-            "<p>选项D</p>\n"
-          ]
-        },
-        categoryId: "0",
-        difficulty: "normal",
-        target: "course-20",
-        courseId: "0",
-        lessonId: "0",
-        parentId: "0",
-        subCount: "0",
-        finishedTimes: "0",
-        passedTimes: "0",
-        createdUserId: "2",
-        updatedUserId: "2",
-        courseSetId: "20",
-        seq: "2",
-        missScore: "0.0"
-      },
       result: this.answer
     };
   },
@@ -77,6 +52,10 @@ export default {
       type: Array,
       default: () => []
     },
+    canDo:{
+      type:Boolean,
+      default:true
+    }
   },
   computed: {
     stem: {

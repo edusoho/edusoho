@@ -87,58 +87,6 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "nickname" */'@/containers/my/setting/nickname.vue')
   }, {
-    path: '/course/try',
-    name: 'course_try',
-    component: () => import(/* webpackChunkName: "courseTry" */'@/containers/course/try.vue')
-  }, {
-    path: '/course/web',
-    name: 'course_web',
-    component: () => import(/* webpackChunkName: "webView" */'@/containers/course/detail/web-view.vue')
-  }, {
-    path: '/course/audioview',
-    name: 'course_audioview',
-    component: () => import(/* webpackChunkName: "audioDoc" */ '@/containers/course/detail/audio-doc.vue')
-  }, {
-    path: '/live',
-    name: 'live',
-    component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
-  }, {
-    path: '/testpaper',
-    name: 'testpaperIntro',
-    meta: {
-      title: '考试说明'
-    },
-    component: () => import(/* webpackChunkName: "testpaperIntro" */ '@/containers/course/lessonTask/exam/testpaperIntro.vue')
-  }, {
-    path: '/homeworkDo',
-    name: 'homeworkDo',
-    component: () => import(/* webpackChunkName: "homeworkDo" */ '@/containers/course/lessonTask/homework/homeworkDo.vue')
-  }, {
-    path: '/homeworkResult',
-    name: 'homeworkResult',
-    meta: {
-      title: ''
-    },
-    component: () => import(/* webpackChunkName: "homeworkResult" */ '@/containers/course/lessonTask/homework/homeworkResult.vue')
-  }, {
-    path: '/homeworkIntro',
-    name: 'homeworkIntro',
-    meta: {
-      title: '作业说明'
-    },
-    component: () => import(/* webpackChunkName: "homeworkIntro" */ '@/containers/course/lessonTask/homework/homeworkIntro.vue')
-  }, {
-    path: '/testpaperDo',
-    name: 'testpaperDo',
-    component: () => import(/* webpackChunkName: "testpaperDo" */ '@/containers/course/lessonTask/exam/testpaperDo.vue')
-  }, {
-    path: '/testpaperResult',
-    name: 'testpaperResult',
-    meta: {
-      title: ''
-    },
-    component: () => import(/* webpackChunkName: "testpaperResult" */ '@/containers/course/lessonTask/exam/testpaperResult.vue')
-  }, {
     path: '/course/explore',
     name: 'more_course',
     meta: {
@@ -173,6 +121,81 @@ const routes = [
       title: '课程详情'
     },
     component: () => import(/* webpackChunkName: "course" */'@/containers/course/index.vue')
+  }, {
+    path: '/course/try',
+    name: 'course_try',
+    component: () => import(/* webpackChunkName: "courseTry" */'@/containers/course/try.vue')
+  }, {
+    path: '/course/web',
+    name: 'course_web',
+    component: () => import(/* webpackChunkName: "webView" */'@/containers/course/detail/web-view.vue')
+  }, {
+    path: '/course/audioview',
+    name: 'course_audioview',
+    component: () => import(/* webpackChunkName: "audioDoc" */ '@/containers/course/detail/audio-doc.vue')
+  }, {
+    path: '/live',
+    name: 'live',
+    component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
+  }, {
+    path: '/testpaper',
+    name: 'testpaperIntro',
+    meta: {
+      title: '考试说明'
+    },
+    component: () => import(/* webpackChunkName: "testpaperIntro" */ '@/containers/course/lessonTask/exam/testpaperIntro.vue')
+  }, {
+    path: '/testpaperDo',
+    name: 'testpaperDo',
+    component: () => import(/* webpackChunkName: "testpaperDo" */ '@/containers/course/lessonTask/exam/testpaperDo.vue')
+  }, {
+    path: '/testpaperResult',
+    name: 'testpaperResult',
+    component: () => import(/* webpackChunkName: "testpaperResult" */ '@/containers/course/lessonTask/exam/testpaperResult.vue')
+  },
+  {
+    path: '/testpaperAnalysis',
+    name: 'testpaperAnalysis',
+    component: () => import(/* webpackChunkName: "testpaperAnalysis" */ '@/containers/course/lessonTask/exam/testpaperAnalysis.vue')
+  }, {
+    path: '/homeworkDo',
+    name: 'homeworkDo',
+    component: () => import(/* webpackChunkName: "homeworkDo" */ '@/containers/course/lessonTask/homework/homeworkDo.vue')
+  }, {
+    path: '/homeworkResult',
+    name: 'homeworkResult',
+    component: () => import(/* webpackChunkName: "homeworkResult" */ '@/containers/course/lessonTask/homework/homeworkResult.vue')
+  },
+  {
+    path: '/homeworkAnalysis',
+    name: 'homeworkAnalysis',
+    component: () => import(/* webpackChunkName: "homeworkAnalysis" */ '@/containers/course/lessonTask/homework/homeworkAnalysis.vue')
+  }, {
+    path: '/homeworkIntro',
+    name: 'homeworkIntro',
+    meta: {
+      title: '作业说明'
+    },
+    component: () => import(/* webpackChunkName: "homeworkIntro" */ '@/containers/course/lessonTask/homework/homeworkIntro.vue')
+  }, {
+    path: '/exerciseDo',
+    name: 'exerciseDo',
+    component: () => import(/* webpackChunkName: "exerciseDo" */ '@/containers/course/lessonTask/exercise/exerciseDo.vue')
+  }, {
+    path: '/exerciseResult',
+    name: 'exerciseResult',
+    component: () => import(/* webpackChunkName: "exerciseResult" */ '@/containers/course/lessonTask/exercise/exerciseResult.vue')
+  }, {
+    path: '/exerciseAnalysis',
+    name: 'exerciseAnalysis',
+    component: () => import(/* webpackChunkName: "exerciseAnalysis" */ '@/containers/course/lessonTask/exercise/exerciseAnalysis.vue')
+  }, {
+    path: '/exerciseIntro',
+    name: 'exerciseIntro',
+    meta: {
+      title: '练习说明'
+    },
+    component: () => import(/* webpackChunkName: "exerciseIntro" */ '@/containers/course/lessonTask/exercise/exerciseIntro.vue')
   }, {
     path: '/classroom/:id',
     name: 'classroom',

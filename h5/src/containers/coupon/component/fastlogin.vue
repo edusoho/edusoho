@@ -1,10 +1,10 @@
 <template>
     <div class="coupon-receive-login">
         <div class="receive-login-input">
-            <van-field 
-                v-model="userinfo.mobile" 
+            <van-field
+                v-model="userinfo.mobile"
                 type="number"
-                placeholder="请输入手机号码" 
+                placeholder="请输入手机号码"
                 clearable
                 :border=false
                 :error-message="errorMessage.mobile"
@@ -22,13 +22,13 @@
             </div>
         </div>
         <div class="receive-login-input">
-            <van-field 
-                v-model="userinfo.smsCode" 
+            <van-field
+                v-model="userinfo.smsCode"
                 type="number"
                 placeholder="请输入验证码"
                 clearable
                 :border=false
-                maxLength="6"
+                maxlength="6"
                 ref="smsCode">
                 <div slot="button" @click="clickSmsBtn" :class="['code-btn',cansentCode ? '': 'code-btn--disabled']">
                     <span v-show="!count.showCount">发送验证码</span>
