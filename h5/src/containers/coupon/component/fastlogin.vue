@@ -89,11 +89,7 @@ export default {
             && this.userinfo.smsCode);
         },
         cansentCode(){
-            if( this.count.codeBtnDisable || !this.validated.mobile){
-                return false
-            }else{
-                return true
-            }
+            return !(this.count.codeBtnDisable || !this.validated.mobile);
         }
     },
     methods:{

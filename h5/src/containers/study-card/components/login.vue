@@ -196,6 +196,27 @@
           Toast.fail(err.message);
         })
       },
+      countDown() {
+        //验证码自动聚焦
+        this.$nextTick(_=>{
+          this.$refs.smsCode.$refs.input.focus()
+        })
+
+        this.count.showCount = true;
+        this.count.codeBtnDisable = true;
+        this.count.num = 60;
+
+        const timer = setInterval(() => {
+          if (this.count.num <= 0) {
+            this.count.codeBtnDisable = false;
+            this.count.showCount = false;
+            clearInterval(timer);
+            return;
+          }
+          // eslint-disable-next-line no-plusplus
+          this.count.num--;
+        }, 1000);
+      },
     }
   };
 </script>

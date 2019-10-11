@@ -1,5 +1,5 @@
 <template>
-  <div class="e-drag">
+  <div class="e-drag" ref="drag">
     <div class="e-drag-section">
       <div class="e-drag-img">
         <img :src="imgInfo.url" alt="" ref="dragImgBg">
@@ -62,14 +62,16 @@
       this.initDragCaptcha();
     },
     mounted() {
+      const drag = this.$refs.drag;
       const bar = this.$refs.bar;
       const dragBtn = this.$refs.dragBtn;
       const barRect = bar.getBoundingClientRect();
       Object.assign(this.dragState, {
         left: barRect.left.toFixed(2),
-        width: bar.clientWidth,
+        width: drag.offsetWidth + (drag.offsetWidth - bar.offsetWidth) / 2,
         btnWidth: dragBtn.offsetWidth / 2
       });
+
     },
     methods: {
       initDragCaptcha() {
@@ -129,12 +131,10 @@
           e.targetTouches[0].pageX.toFixed(2);
         let currentX = (pageX - dragState.left - dragState.btnWidth).toFixed(2);
         if (currentX < 0) currentX = 0;
-
-        if (pageX > dragState.width) {
+        if (pageX > (dragState.width)) {
           currentX = (dragState.width - dragState.left - dragState.btnWidth).toFixed(2);
         }
-
-        console.log(dragState.width, dragState.left, dragState.btnWidth);
+        console.log(pageX, dragState.width, dragState.left, dragState.btnWidth);
 
         Object.assign(this.dragState, {
           currentLeft: currentX,
