@@ -2,6 +2,15 @@
   font-family: PingFangSC-Regular, PingFangSC, serif;
   height: calc(100% - 46px);
 
+  .err-msg {
+    font-size: vw(12);
+    bottom: 0;
+    color: #ff2020;
+    height: vw(25);
+    line-height: vw(25);
+    padding-left: vw(16);
+  }
+
   //实体卡输入卡密页面
   .input-code {
     height: 100%;
@@ -98,6 +107,69 @@
           padding-left: vw(24);
           font-size: vw(18);
         }
+      }
+
+      .result-box {
+        width: vw(241);
+        margin: auto;
+        padding: vw(80) vw(67) 0;
+        display: flex;
+        justify-content: center;
+
+
+        .result-box__valid-card {
+          color: #333;
+          text-align: center;
+
+          .link {
+            color: #408FFB;
+            text-decoration: underline;
+          }
+        }
+
+        .result-box__invalid-card--process-is-done {
+          justify-content: center;
+          color: #E7E9ED;
+          display: flex;
+          flex-wrap: wrap;
+
+          .icon-Fail {
+            font-size: vw(36);
+          }
+
+          > span {
+            color: #999;
+            padding-left: vw(12);
+            line-height: vw(40);
+            font-size: vw(20);
+          }
+
+          .res-msg {
+            padding-top: vw(12);
+            color: #333;
+          }
+        }
+
+        .result-box__valid-card--process-is-done {
+          color: #333;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+
+          .result-box__icon-Success {
+            display: inline-block;
+            height: vw(55);
+            width: vw(71);
+            background: url("../../../static/images/study_card_success.svg") 0 0 no-repeat;
+          }
+          > span {
+            color: #408FFB;
+            font-size: vw(20);
+            font-weight: 600;
+          }
+
+        }
 
       }
     }
@@ -117,30 +189,30 @@
 
   .login {
 
-    .err-msg {
-      font-size: vw(12);
-      bottom: 0;
-      color: #ff2020;
-      height: vw(25);
-      line-height: vw(25);
-      padding-left: vw(16);
-    }
-
     .login__container {
       padding: vw(48) vw(35);
+
       .login__container__field {
         border-radius: vw(2);
-        margin:  auto;
+        margin: auto;
         background-color: #f1f3f8;
+
         > div {
           padding: 0 vw(16);
         }
 
         .login__container__button {
-          color:rgba(64,143,251,1);
+          color: rgba(64, 143, 251, 1);
           padding: vw(4) vw(0) vw(4) vw(15);
           border-left: 1px solid #ddd;
+          opacity: .5;
+
+          &.active {
+            opacity: 1;
+          }
         }
+
+
       }
     }
   }

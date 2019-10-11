@@ -297,7 +297,7 @@ export default {
           res.testpaperResult.limitedTime=Number(res.testpaperResult.limitedTime)
           this.testpaperResult = res.testpaperResult;
 
-          
+
 
           this.localanswerName=`${this.user.id}-${this.testpaperResult.id}`;
           this.localtimeName=`${this.user.id}-${this.testpaperResult.id}-time`;
@@ -305,13 +305,12 @@ export default {
           this.lastAnswer=JSON.parse(localStorage.getItem(this.localanswerName));
 
 
-
           this.setVisited();
 
 
           //处理数据格式
           this.formatData(res);
-          
+
           console.log(new Date().getTime()-startTime)
 
           this.$nextTick(()=>{
@@ -575,7 +574,7 @@ export default {
       this.localtime = null;
     },
     //将0-9的数字前面加上0，例1变为01
-    checkTime(i) { 
+    checkTime(i) {
         if (i < 10) {
             i = "0" + i;
         }

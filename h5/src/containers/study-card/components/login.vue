@@ -12,10 +12,13 @@
             placeholder="请输入手机号"
             class="login__container__field"
             right-icon="1"
-            @input="handlePhoneNumber"
+            @input="validatePhoneNumber"
+            @blur="validatePhoneNumber"
         >
         </van-field>
-        <div class="err-msg">手机号输入错误</div>
+        <div class="err-msg">
+          <span v-if="isPhoneNumberValid === false">手机号输入错误</span>
+        </div>
 
         <van-field
             v-model="verifyCode"
@@ -26,7 +29,7 @@
         >
           <span
               slot="button"
-              class="login__container__button"
+              :class="['login__container__button', {active: isPhoneNumberValid}]"
           >
             获取验证码
           </span>
@@ -49,7 +52,8 @@
       return {
         visible: this.show,
         phoneNumber: '',
-        verifyCode: ''
+        verifyCode: '',
+        isPhoneNumberValid: null
       };
     },
     watch: {
@@ -61,8 +65,9 @@
       updateShow(show) {
         this.$emit('update:show', false);
       },
-      handlePhoneNumber() {
-
+      validatePhoneNumber() {
+        const reg = /^1\d{10}$/;
+        this.isPhoneNumberValid = reg.test(this.phoneNumber);
       }
     }
   };
