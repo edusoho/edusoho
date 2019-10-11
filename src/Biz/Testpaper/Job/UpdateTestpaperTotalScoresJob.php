@@ -41,7 +41,6 @@ class UpdateTestpaperTotalScoresJob extends AbstractJob
 
             $this->getTestpaperService()->updateTestpaper($testpaper['id'], $testpaper);
         }
-
     }
 
     /**

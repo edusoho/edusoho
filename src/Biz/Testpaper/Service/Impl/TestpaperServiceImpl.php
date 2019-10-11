@@ -924,7 +924,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 } else {
                     $fields['metas']['totalScores'][$item['questionType']] += $item['score'];
                 }
-
             }
             $fields['metas']['question_type_seq'] = $type;
             $fields['metas']['counts'] = $typesCount;
