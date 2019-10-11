@@ -26,7 +26,7 @@ class PageDiscovery extends AbstractResource
             }
             $mode = 'draft';
         }
-        $discoverySettings = $this->getH5SettingService()->getDiscovery('apps' == $portal ? 'h5' : $portal, $mode);
+        $discoverySettings = $this->getH5SettingService()->getDiscovery($portal);
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
@@ -42,7 +42,7 @@ class PageDiscovery extends AbstractResource
             }
         }
 
-        return 'apps' == $portal ? array_values($discoverySettings) : $discoverySettings;
+        return !empty($params['format']) && 'list' == $params['format'] ? array_values($discoverySettings) : $discoverySettings;
     }
 
     protected function getCourseService()
