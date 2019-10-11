@@ -261,10 +261,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         $courseName = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
 
-        $title = "在教课程《{$courseName}》";
-        $goto = $this->generateUrl('course_thread_show', array('courseId' => $course['id'], 'threadId' => $thread['id']), true);
-
-        $this->askQuestionSendNotification($thread, $userIds, $title, $goto);
+        $templateParams = array(
+            'thread' => $thread,
+            'userIds' => $userIds,
+            'title' => "在教课程《{$courseName}》",
+            'goto' => $this->generateUrl('course_thread_show', array('courseId' => $course['id'], 'threadId' => $thread['id']), true),
+        );
+        $this->askQuestionSendNotification($templateParams);
     }
 
     public function onClassroomQuestionCreate(Event $event)
@@ -280,9 +283,14 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        $title = "在教班级《{$classroom['title']}》";
-        $goto = $this->generateUrl('classroom_thread_show', array('classroomId' => $classroom['id'], 'threadId' => $thread['id']), true);
-        $this->askQuestionSendNotification($thread, $userIds, $title, $goto);
+        $templateParams = array(
+            'thread' => $thread,
+            'userIds' => $userIds,
+            'title' => "在教班级《{$classroom['title']}》",
+            'goto' => $this->generateUrl('classroom_thread_show', array('classroomId' => $classroom['id'], 'threadId' => $thread['id']), true),
+        );
+
+        $this->askQuestionSendNotification($templateParams);
     }
 
     public function onCourseQuestionAnswerCreate(Event $event)
@@ -298,8 +306,14 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         if ($this->getCourseMemberService()->isCourseTeacher($post['courseId'], $post['userId'])) {
             $title = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
             if (!$this->isUserLocked($thread['userId'])) {
-                $goto = $this->generateUrl('course_thread_show', array('courseId' => $course['id'], 'threadId' => $thread['id']), true);
-                $this->answerQuestionNotification($thread['userId'], $post['content'], $title, $thread['createdTime'], $goto);
+                $templateParams = array(
+                    'userId' => $thread['userId'],
+                    'content' => $post['content'],
+                    'title' => $title,
+                    'createdTime' => $thread['createdTime'],
+                    'goto' => $this->generateUrl('course_thread_show', array('courseId' => $course['id'], 'threadId' => $thread['id']), true),
+                );
+                $this->answerQuestionNotification($templateParams);
             }
         }
     }
@@ -317,8 +331,14 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if ($this->getClassroomService()->isClassroomTeacher($post['targetId'], $post['userId'])) {
             if (!$this->isUserLocked($thread['userId'])) {
-                $goto = $this->generateUrl('classroom_thread_show', array('classroomId' => $classroom['id'], 'threadId' => $thread['id']), true);
-                $this->answerQuestionNotification($thread['userId'], $post['content'], $classroom['title'], $thread['createdTime'], $goto);
+                $templateParams = array(
+                    'userId' => $thread['userId'],
+                    'content' => $post['content'],
+                    'title' => $classroom['title'],
+                    'createdTime' => $thread['createdTime'],
+                    'goto' => $this->generateUrl('classroom_thread_show', array('classroomId' => $classroom['id'], 'threadId' => $thread['id']), true),
+                );
+                $this->answerQuestionNotification($templateParams);
             }
         }
     }
@@ -383,19 +403,27 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
     }
 
-    protected function answerQuestionNotification($userId, $content, $title, $createdTime, $goto)
+    protected function answerQuestionNotification($templateParams)
     {
+        $templateParams = ArrayToolkit::filter($templateParams, array(
+            'userId' => null,
+            'content' => null,
+            'title' => null,
+            'createdTime' => null,
+            'goto' => null,
+        ));
+
         $templateId = $this->getWeChatService()->getTemplateId('answerQuestion');
         if (!empty($templateId)) {
-            $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($userId);
+            $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($templateParams['userId']);
 
             if (empty($weChatUser)) {
                 return;
             }
-            $content = TextHelper::truncate($content, 30);
+            $content = TextHelper::truncate($templateParams['content'], 30);
             $data = array(
-                'first' => array('value' => '亲爱的学员，您在《'.$title.'》中的发表的问题有了新的回答'),
-                'keyword1' => array('value' => date('Y-m-d H:i:s', $createdTime)),
+                'first' => array('value' => '亲爱的学员，您在《'.$templateParams['title'].'》中的发表的问题有了新的回答'),
+                'keyword1' => array('value' => date('Y-m-d H:i:s', $templateParams['createdTime'])),
                 'keyword2' => array('value' => $content),
                 'remark' => array('value' => ''),
             );
@@ -410,7 +438,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'template_args' => $data,
                 'goto' => array(
                     'type' => 'url',
-                    'url' => $goto,
+                    'url' => $templateParams['goto'],
                 ),
             ));
 
@@ -418,10 +446,17 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
     }
 
-    protected function askQuestionSendNotification($thread, $userIds, $title, $goto)
+    protected function askQuestionSendNotification($templateParams)
     {
+        $templateParams = ArrayToolkit::filter($templateParams, array(
+            'thread' => array(),
+            'userIds' => array(),
+            'title' => null,
+            'goto' => null,
+        ));
+
         $users = $this->getUserService()->searchUsers(
-            array('userIds' => $userIds, 'locked' => 0),
+            array('userIds' => $templateParams['userIds'], 'locked' => 0),
             array(),
             0,
             PHP_INT_MAX
@@ -433,7 +468,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
         $templateId = $this->getWeChatService()->getTemplateId('askQuestion');
         if (!empty($templateId)) {
-            $user = $this->getUserService()->getUser($thread['userId']);
+            $user = $this->getUserService()->getUser($templateParams['thread']['userId']);
             $weChatUsers = $this->getWeChatService()->searchWeChatUsers(
                 array('userIds' => $userIds),
                 array('lastRefreshTime' => 'ASC'),
@@ -447,10 +482,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             }
 
             $data = array(
-                'first' => array('value' => '尊敬的老师，您的'.$title.'中有学员发布了提问'),
+                'first' => array('value' => '尊敬的老师，您的'.$templateParams['title'].'中有学员发布了提问'),
                 'keyword1' => array('value' => $user['nickname']),
-                'keyword2' => array('value' => mb_substr($thread['title'], 0, 30, 'utf-8')),
-                'keyword3' => array('value' => date('Y-m-d H:i:s', $thread['createdTime'])),
+                'keyword2' => array('value' => mb_substr($templateParams['thread']['title'], 0, 30, 'utf-8')),
+                'keyword3' => array('value' => date('Y-m-d H:i:s', $templateParams['thread']['createdTime'])),
                 'remark' => array('value' => ''),
             );
             $templates = TemplateUtil::templates();
@@ -468,7 +503,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                     'to_id' => $weChatUser['openId'],
                     'goto' => array(
                         'type' => 'url',
-                        'url' => $goto,
+                        'url' => $templateParams['goto'],
                     ),
                 ), $templateData);
             }
