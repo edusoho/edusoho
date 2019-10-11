@@ -12,6 +12,25 @@ class Datermine extends QuestionFormBase {
     this.init();
   }
 
+  initTitleEditor(validator) {
+    let $target = $('#' + this.titleFieldId);
+    let editor = CKEDITOR.replace(this.titleFieldId, {
+      toolbar: this.titleEditorToolBarName,
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
+      filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
+      height: $target.height()
+    });
+
+    editor.on('change', () => {
+      $target.val(editor.getData());
+      console.log(editor.getData());
+    });
+    editor.on('blur', () => {
+      $target.val(editor.getData());
+      console.log(editor.getData());
+    });
+  }
+
   init() {
     this.$answerField.rules('add', {
       required: true,

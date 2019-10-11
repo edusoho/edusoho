@@ -3254,3 +3254,7 @@ coupon_receive:
 coupon_resource_list:
   path:     /coupon/{batchId}/resource/list
   defaults: {_controller: AppBundle:CouponBatch:couponResourceList  }
+
+activity_ppt_token:
+ path: /activity/ppt/token/{mediaId}
+ defaults: { _controller: AppBundle:Activity/Ppt:getPptToken }
