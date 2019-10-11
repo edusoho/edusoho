@@ -65,6 +65,13 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             }
 
             $randomQuestions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        } elseif (!empty($exerciseResult['metas']['orders'])) {
+            $randomQuestions = $this->getQuestionService()->findQuestionsByIds($exerciseResult['metas']['orders']);
+            foreach ($randomQuestions as $id => $question) {
+                if ($question['parentId'] > 0) {
+                    unset($randomQuestions[$id]);
+                }
+            }
         } else {
             $conditions = $this->_prepareConditionsByTestPaper($exercise);
 

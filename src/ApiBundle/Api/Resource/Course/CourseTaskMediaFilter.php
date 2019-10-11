@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\Homework\HomeworkFilter;
+use ApiBundle\Api\Resource\Exercise\ExerciseFilter;
 
 class CourseTaskMediaFilter extends Filter
 {
@@ -18,8 +19,15 @@ class CourseTaskMediaFilter extends Filter
 
                 $homeworkFilter = new HomeworkFilter();
                 $homeworkFilter->filter($data['media']);
-                $data['media']['description'] = $this->convertAbsoluteUrl($data['media']['description']);
                 $data['homework'] = $data['media'];
+                unset($data['media']);
+                break;
+
+            case 'exercise':
+
+                $exerciseFilter = new ExerciseFilter();
+                $exerciseFilter->filter($data['media']);
+                $data['exercise'] = $data['media'];
                 unset($data['media']);
                 break;
 

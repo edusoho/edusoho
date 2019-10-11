@@ -1472,3 +1472,6 @@ user.account.order_not_pay: Not paying
 
 admin.wechat.live_open_scenes_error.hint: At least one scene。
 course.question_manage.manage.delete_tips: Deleting the question may affect the exercise of class, please be cautious!
+
+course.plan_task.activity_ppt_animation_img: Switch img mode
+course.plan_task.activity_ppt_animation_slide: Switch animation mode
