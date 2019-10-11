@@ -10151,7 +10151,7 @@ wechat.notification.send_days: 发送日
 wechat.notification.course_remind_conditions: 针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。
 
 # 微信通知模板
-wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[《课程名》-《任务名》]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
+wechat.notification.template.live_start: '同学，您好，您报名的直播课即将开课。<br>课程名称：{《课程名》-《任务名》}<br>开课时间：{直播开始时间}（精确到分钟）<br>开课地点：在线直播<br>联系方式：无<br>不要迟到哦。'
 wechat.notification.template.homework_result: '同学，你好，你的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
 wechat.notification.template.exam_result: '同学，你好，你的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
 wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]或[直播开始时间]<br>请及时前往学习'
@@ -10183,7 +10183,7 @@ wechat.notification.template_name.remind_course: '上课提醒'
 wechat.notification.template_name.ask_question: '答疑提醒'
 wechat.notification.template_name.answer_question: '问题回复通知'
 wechat.notification.template_name.vip_expired: '会员到期提醒'
-wechat.notification.template_name.live_start: '直播开课提醒'
+wechat.notification.template_name.live_start: '课程开课通知'
 wechat.notification.template_name.homework_result: '作业结果通知'
 wechat.notification.template_name.exam_result: '考试结果通知'
 wechat.notification.template_name.lesson_add: '课程更新提醒'

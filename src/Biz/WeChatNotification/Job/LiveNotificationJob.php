@@ -11,6 +11,8 @@ class LiveNotificationJob extends AbstractNotificationJob
     {
         $key = $this->args['key'];
         $templateId = $this->getWeChatService()->getTemplateId($key);
+
+
         if (empty($templateId)) {
             return;
         }
@@ -36,10 +38,12 @@ class LiveNotificationJob extends AbstractNotificationJob
 
         $userIds = ArrayToolkit::column($members, 'userId');
         $data = array(
-            'userName' => array('value' => '同学'),
-            'courseName' => array('value' => "《{$courseSet['title']}》-《{$task['title']}》"),
-            'date' => array('value' => date('Y-m-d H:i', $task['startTime'])),
-            'remark' => array('value' => '不要迟到哦'),
+            'first' => array('value' => '同学，您好，您报名的直播课即将开课。'),
+            'keyword1' => array('value' => "《{$courseSet['title']}》-《{$task['title']}》"),
+            'keyword2' => array('value' => date('Y-m-d H:i', $task['startTime'])),
+            'keyword3' => array('value' => '在线直播'),
+            'keyword4' => array('value' => '无'),
+            'remark' => array('value' => '不要迟到哦。'),
         );
         $options = array('url' => $url, 'type' => 'url');
         $templates = TemplateUtil::templates();
@@ -50,6 +54,7 @@ class LiveNotificationJob extends AbstractNotificationJob
             'template_args' => $data,
             'goto' => $options,
         ));
+
         $this->sendNotifications($key, 'wechat_notify_live_play', $userIds, $templateData);
     }
 }

@@ -8843,7 +8843,7 @@ wechat.notification.send_days: Send Days
 wechat.notification.course_remind_conditions: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
 
 # 微信通知模板
-wechat.notification.template.live_start: Hello, classmate.<br>It is hereby notified that the [course name - task name] you are enrolled in will start in the [live class start time].<br>Don't be late.
+wechat.notification.template.live_start: Hello, classmates, the live lessons you are enrolling will start soon.<br>Course: {《course name》 - 《task name》}<br>Start time: {Live start time} (accurate to minute)<br>Course location: live online<br>Contact: None<br>Don't be late.
 wechat.notification.template.homework_result: 'Classmate, hello, your homework has been reviewed.<br>Job Name: [Task Name]]<br>Course: [course name]<br>Tutor: [Teacher User Name]<br>Homework result: [homework result]'
 wechat.notification.template.exam_result: 'Hello, your class has been reviewed.<br>Examination subject: [task name]<br>Test score: [test score]<br>Keep up the good work'
 wechat.notification.template.lesson_add: 'Classmate, hello, the course has a new task to post<br>Course Name: [Course Name]<br>Course category: [Course category]<br>Course Teacher: [Teacher User Name]<br>Course time: [Task release time]<br>Please go to study in time.'
@@ -8875,7 +8875,7 @@ wechat.notification.template_name.remind_course: 'Remind Course'
 wechat.notification.template_name.ask_question: 'Ask Question'
 wechat.notification.template_name.answer_question: 'Answer Question'
 wechat.notification.template_name.vip_expired: 'Vip Expired'
-wechat.notification.template_name.live_start: 'Live Start'
+wechat.notification.template_name.live_start: 'Course Start'
 wechat.notification.template_name.homework_result: 'Homework Result'
 wechat.notification.template_name.exam_result: 'Exam Result'
 wechat.notification.template_name.lesson_add: 'Lesson Add'
