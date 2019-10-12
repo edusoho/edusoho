@@ -41,7 +41,7 @@ class CouponController extends BaseController
         $couponSetting = $this->getSettingService()->get('coupon', array());
 
         $default = array(
-            'enabled' => 0,
+            'enabled' => 1,
         );
 
         $couponSetting = array_merge($default, $couponSetting);
