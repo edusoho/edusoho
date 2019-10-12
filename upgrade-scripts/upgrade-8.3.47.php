@@ -124,6 +124,18 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
         }
 
+        if ($this->isFieldExist('coupon', 'status')) {
+            $this->getConnection()->exec("ALTER TABLE `coupon` CHANGE `status` `status` enum('used', 'unused','receive', 'using') NOT NULL DEFAULT 'unused'  COMMENT '使用状态';");
+        }
+
+        if (!$this->isFieldExist('coupon', 'receiveTime')) {
+            $this->getConnection()->exec("ALTER TABLE `coupon` ADD `receiveTime` int(10) unsigned NOT NULL DEFAULT '0'  AFTER `createdTime`;");
+        }
+
+        if (!$this->isFieldExist('coupon', 'fullDiscountPrice')) {
+            $this->getConnection()->exec('ALTER TABLE `coupon` ADD `fullDiscountPrice`  float(10,2) unsigned  NULL ;');
+        }
+
         if (!$this->isFieldExist('coupon_batch', 'h5MpsEnable')) {
             $this->getConnection()->exec("ALTER TABLE `coupon_batch` ADD `h5MpsEnable` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '通过商品详情页小程序/微网校渠道发放' AFTER `fullDiscountPrice`;");
         }
@@ -316,6 +328,7 @@ class EduSohoUpgrade extends AbstractUpdater
             }
             file_put_contents($routingPath, '');
         }
+
         return 1;
     }
 
