@@ -8719,6 +8719,8 @@ exception.money_card.not_found_batch: 批次不存在
 exception.money_card.duplicate_card: 卡号有重复
 exception.money_card.batch_status_equal_invalid: 在批次被作废的情况下，不能启用批次下的充值卡
 exception.money_card.unlock_not_invalid_card: 只能启用作废状态的充值卡
+exception.money_card.password_invalid: password is invalid
+exception.money_card.batch_token_invalid: batch token is invalid
 exception.reward_point.account.not_found: 积分账号不存在
 exception.reward_point.account.already_open: 积分账号已创建
 exception.reward_point.account.userid_invalid: 用户id错误

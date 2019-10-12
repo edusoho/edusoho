@@ -32,6 +32,11 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         return $this->getMoneyCardBatchDao()->get($id);
     }
 
+    public function getBatchByToken($token, $options = array())
+    {
+        return $this->getMoneyCardBatchDao()->getBatchByToken($token, $options);
+    }
+
     public function searchMoneyCards(array $conditions, array $oderBy, $start, $limit)
     {
         return $this->getMoneyCardDao()->search($conditions, $oderBy, $start, $limit);
@@ -380,7 +385,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         return $cardIds;
     }
 
-    public function uuid($uuidLength, $prefix = '', $needSplit = false)
+    protected function uuid($uuidLength, $prefix = '', $needSplit = false)
     {
         $chars = md5(uniqid(mt_rand(), true));
 
@@ -394,6 +399,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         } else {
             $uuid = substr($chars, 0, $uuidLength);
         }
+        $uuid = str_replace('i', 'a', $uuid);
 
         return $prefix.$uuid;
     }
@@ -464,7 +470,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
             $this->getAccountService()->transferCoin($recharge);
 
-            $batch['rechargedNumber'] += 1;
+            ++$batch['rechargedNumber'];
             $this->updateBatch($batch['id'], $batch);
             $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
 
