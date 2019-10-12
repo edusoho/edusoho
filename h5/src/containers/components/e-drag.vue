@@ -4,6 +4,7 @@
       <div class="e-drag-img">
         <img :src="imgInfo.url" alt="" ref="dragImgBg">
         <img :src="imgInfo.jigsaw" alt=""
+             ref="dragImg"
              class="e-drag-img__dragable"
              :style="{ left: `${dragState.currentLeft}px` }">
       </div>
@@ -64,6 +65,7 @@
     mounted() {
       const bar = this.$refs.bar;
       const dragBtn = this.$refs.dragBtn;
+      const drag = this.$refs.drag;
       const barRect = bar.getBoundingClientRect();
       Object.assign(this.dragState, {
         left: Number(barRect.left.toFixed(2)),
@@ -128,12 +130,12 @@
           e.targetTouches[0].pageX.toFixed(2) - this.$refs.drag.offsetLeft;
         let currentX = (pageX - dragState.left - dragState.btnWidth).toFixed(2);
         if (currentX < 0) currentX = 0;
-        if (pageX > dragState.width + dragState.left) {
-          currentX = (dragState.width + this.$refs.drag.offsetLeft -
-            dragState.left - dragState.btnWidth).toFixed(2);
+        if (pageX > dragState.width + this.$refs.drag.offsetLeft) {
+          //大图片的宽度减去小图片的宽度
+          currentX = dragState.width - this.$refs.dragImg.width;
         }
 
-        // console.log(currentX, pageX, dragState.width, dragState.left, dragState.btnWidth);
+        console.log(this.$refs.dragImg.width);
 
         Object.assign(this.dragState, {
           currentLeft: currentX,
