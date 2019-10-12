@@ -632,7 +632,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                 );
             }
 
-            if (!$this->checkMoneyCardCanUse($moneyCard, $userId)) {
+            if (!$this->isMoneyCardInvalid($moneyCard, $userId)) {
                 return array(
                     'code' => 'invalid',
                     'message' => '学习卡已失效',
@@ -693,7 +693,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         }
     }
 
-    protected function checkMoneyCardCanUse($moneyCard, $userId)
+    protected function isMoneyCardInvalid($moneyCard, $userId)
     {
         if (!(0 == $moneyCard['rechargeTime'])) {
             return false;
