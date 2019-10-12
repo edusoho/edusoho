@@ -618,6 +618,98 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         }
     }
 
+    public function receiveMoneyCardByPassword($password, $userId)
+    {
+        try {
+            $this->biz['db']->beginTransaction();
+
+            $moneyCard = $this->getMoneyCardByPassword($password);
+
+            if (!$moneyCard) {
+                return array(
+                    'code' => 'failed',
+                    'message' => '无效卡密',
+                );
+            }
+
+            if (!$this->checkMoneyCardCanUse($moneyCard, $userId)) {
+                return array(
+                    'code' => 'invalid',
+                    'message' => '学习卡已失效',
+                );
+            }
+    
+            if (!(time() < 86400 + strtotime($moneyCard['deadline']))) {
+                return array(
+                    'code' => 'expired',
+                    'message' => '学习卡已过期',
+                );
+            }
+
+            $moneyCard = $this->getMoneyCardDao()->update($moneyCard['id'], array(
+                'rechargeUserId' => $userId,
+                'cardStatus' => 'receive',
+                'receiveTime' => time(),
+            ));
+
+            if (empty($moneyCard)) {
+                $this->biz['db']->commit();
+
+                return array(
+                    'code' => 'failed',
+                    'message' => '学习卡领取失败',
+                );
+            }
+
+            $this->getCardService()->addCard(array(
+                'cardId' => $moneyCard['id'],
+                'cardType' => 'moneyCard',
+                'deadline' => strtotime($moneyCard['deadline']),
+                'userId' => $userId,
+            ));
+
+            $receivedNumber = $this->getMoneyCardDao()->count(array(
+                'batchId' => $moneyCard['batchId'],
+                'receiveTime_GT' => 0,
+            ));
+            $batch = $this->getMoneyCardBatchDao()->update($moneyCard['batchId'], array(
+                'receivedNumber' => $receivedNumber,
+            ));
+
+            $message = "您有一张价值为{$batch['coin']}{$this->getCoinName()}的充值卡领取成功";
+            $this->getNotificationService()->notify($userId, 'default', $message);
+            $this->dispatchEvent('moneyCard.receive', $batch);
+
+            $this->biz['db']->commit();
+
+            return array(
+                'id' => $moneyCard['id'],
+                'code' => 'success',
+                'message' => '学习卡领取成功',
+            );
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
+    }
+
+    protected function checkMoneyCardCanUse($moneyCard, $userId)
+    {
+        if (!($moneyCard['rechargeTime'] == 0)) {
+            return false;
+        }
+
+        if ($moneyCard['cardStatus'] == 'invalid') {
+            return false;
+        }
+
+        if ($moneyCard['cardStatus'] == 'receive' && $moneyCard['rechargeUserId'] != $userId) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * @return MoneyCardDao
      */
