@@ -62,16 +62,14 @@
       this.initDragCaptcha();
     },
     mounted() {
-      const drag = this.$refs.drag;
       const bar = this.$refs.bar;
       const dragBtn = this.$refs.dragBtn;
       const barRect = bar.getBoundingClientRect();
       Object.assign(this.dragState, {
-        left: barRect.left.toFixed(2),
-        width: drag.offsetWidth + (drag.offsetWidth - bar.offsetWidth) / 2,
+        left: Number(barRect.left.toFixed(2)),
+        width: bar.clientWidth,
         btnWidth: dragBtn.offsetWidth / 2
       });
-
     },
     methods: {
       initDragCaptcha() {
@@ -125,16 +123,17 @@
         const dragBtn = this.$refs.dragBtn;
         const bg = this.$refs.dragImgBg;
         const dragState = this.dragState;
-
         let pageX = e.clientX ?
           e.clientX.toFixed(2) :
-          e.targetTouches[0].pageX.toFixed(2);
+          e.targetTouches[0].pageX.toFixed(2) - this.$refs.drag.offsetLeft;
         let currentX = (pageX - dragState.left - dragState.btnWidth).toFixed(2);
         if (currentX < 0) currentX = 0;
-        if (pageX > (dragState.width)) {
-          currentX = (dragState.width - dragState.left - dragState.btnWidth).toFixed(2);
+        if (pageX > dragState.width + dragState.left) {
+          currentX = (dragState.width + this.$refs.drag.offsetLeft -
+            dragState.left - dragState.btnWidth).toFixed(2);
         }
-        console.log(pageX, dragState.width, dragState.left, dragState.btnWidth);
+
+        // console.log(currentX, pageX, dragState.width, dragState.left, dragState.btnWidth);
 
         Object.assign(this.dragState, {
           currentLeft: currentX,

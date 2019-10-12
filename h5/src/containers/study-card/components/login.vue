@@ -200,7 +200,7 @@
         //验证码自动聚焦
         this.$nextTick(_=>{
           this.$refs.smsCode.$refs.input.focus()
-        })
+        });
 
         this.count.showCount = true;
         this.count.codeBtnDisable = true;
