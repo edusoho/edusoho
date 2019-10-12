@@ -56,6 +56,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateInviteSetting',
             'initCouponTargetIds',
             'initCouponBatchTargetIds',
+            'updateCouponConfig',
         );
 
         $funcNames = array();
@@ -288,6 +289,33 @@ class EduSohoUpgrade extends AbstractUpdater
         $couponSql = "update `coupon_batch` set targetIds = CONCAT('|',targetId,'|') where targetId > 0 and targetIds is null and targetType != 'vip'";
         $this->getConnection()->exec($couponSql);
 
+        return 1;
+    }
+
+    /**
+     * 在优惠券插件已安装的情况下，主程序menus_admin.yml和routing_admin.yml会覆盖主程序，备份并清空两个文件
+     */
+    public function updateCouponConfig()
+    {
+        $pluginPath = $this->biz['plugin.directory'];
+        $menusPath = $pluginPath.'/CouponPlugin/Resources/config/menus_admin.yml';
+        $menusDistPath = $menusPath.'.dist';
+        $routingPath = $pluginPath.'/CouponPlugin/Resources/config/routing_admin.yml';
+        $routingDistPath = $routingPath.'.dist';
+        $filesystem = new Filesystem();
+        if ($filesystem->exists($menusPath)) {
+            if (!$filesystem->exists($menusDistPath)) {
+                $filesystem->copy($menusPath, $menusDistPath);
+            }
+            file_put_contents($menusPath, '');
+        }
+
+        if ($filesystem->exists($routingPath)) {
+            if (!$filesystem->exists($routingDistPath)) {
+                $filesystem->copy($routingPath, $routingDistPath);
+            }
+            file_put_contents($routingPath, '');
+        }
         return 1;
     }
 
