@@ -299,22 +299,23 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $pluginPath = $this->biz['plugin.directory'];
         $menusPath = $pluginPath.'/CouponPlugin/Resources/config/menus_admin.yml';
-        $menusBackPath = $menusPath.'.back';
+        $menusDistPath = $menusPath.'.dist';
         $routingPath = $pluginPath.'/CouponPlugin/Resources/config/routing_admin.yml';
-        $routingBackPath = $routingPath.'.back';
+        $routingDistPath = $routingPath.'.dist';
         $filesystem = new Filesystem();
-        if ($filesystem->exists($menusPath) && $filesystem->exists($routingPath)) {
-            if (!$filesystem->exists($menusBackPath)) {
-                $filesystem->copy($menusPath, $menusBackPath);
+        if ($filesystem->exists($menusPath)) {
+            if (!$filesystem->exists($menusDistPath)) {
+                $filesystem->copy($menusPath, $menusDistPath);
             }
-            if (!$filesystem->exists($routingBackPath)) {
-                $filesystem->copy($routingPath, $routingBackPath);
-            }
-
             file_put_contents($menusPath, '');
-            file_put_contents($routingPath, '');
         }
 
+        if ($filesystem->exists($routingPath)) {
+            if (!$filesystem->exists($routingDistPath)) {
+                $filesystem->copy($routingPath, $routingDistPath);
+            }
+            file_put_contents($routingPath, '');
+        }
         return 1;
     }
 
