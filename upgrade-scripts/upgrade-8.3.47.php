@@ -50,6 +50,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'updateCouponSetting',
             'createCouponBatch',
             'createPromotedCouponBatch',
             'createPromoteCouponBatch',
@@ -90,6 +91,17 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+
+    public function updateCouponSetting()
+    {
+        $setting = $this->getSettingService()->get('coupon', array());
+        if (!isset($setting['enabled'])) {
+            $this->getSettingService()->set('coupon', array('enabled' => 1));
+        }
+
+        return 1;
     }
 
     public function createCouponBatch()
