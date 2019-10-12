@@ -638,7 +638,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                     'message' => '学习卡已失效',
                 );
             }
-    
+
             if (!(time() < 86400 + strtotime($moneyCard['deadline']))) {
                 return array(
                     'code' => 'expired',
@@ -695,15 +695,15 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
     protected function checkMoneyCardCanUse($moneyCard, $userId)
     {
-        if (!($moneyCard['rechargeTime'] == 0)) {
+        if (!(0 == $moneyCard['rechargeTime'])) {
             return false;
         }
 
-        if ($moneyCard['cardStatus'] == 'invalid') {
+        if ('invalid' == $moneyCard['cardStatus']) {
             return false;
         }
 
-        if ($moneyCard['cardStatus'] == 'receive' && $moneyCard['rechargeUserId'] != $userId) {
+        if ('receive' == $moneyCard['cardStatus'] && $moneyCard['rechargeUserId'] != $userId) {
             return false;
         }
 
