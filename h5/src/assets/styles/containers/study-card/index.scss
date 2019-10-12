@@ -190,7 +190,7 @@
 
   .login {
     .login__container {
-      padding: vw(48) vw(35) vw(24);
+      padding: vw(48) vw(35) vw(20);
 
       .receive-login-input {
         .van-cell {
@@ -216,8 +216,9 @@
         border-radius: vw(4);
 
         .code-btn {
-          margin-right: vw(6);
-          padding-left: vw(15);
+          text-align: center;
+          min-width: vw(90);
+          padding: 0 vw(6) 0 vw(15);
           height: 100%;
           box-sizing: border-box;
           color: #408FFB;
@@ -244,12 +245,45 @@
       .receive-login__text {
         color: #999;
         text-align: center;
+        padding-top: vw(40);
+        height: vw(70);
 
         .receive-login-tools {
+          margin-top: vw(50);
           display: inline-block;
           position: relative;
-          margin-top: vw(30);
-          font-size: 14px;
+          font-size: 12px;
+
+          &::before {
+            position: absolute;
+            left: -25px;
+            top: 10px;
+            content: '';
+            height: 1px;
+            width: 18px;
+            background: linear-gradient(90deg, transparent, #ddd);
+          }
+
+          &::after {
+            position: absolute;
+            right: -25px;
+            top: 10px;
+            content: '';
+            height: 1px;
+            width: 18px;
+            background: linear-gradient(270deg, transparent, #ddd);
+            /* 标准的语法 */
+          }
+        }
+      }
+
+      .third-part-login {
+        text-align: center;
+
+        .third-part-login-tools {
+          display: inline-block;
+          position: relative;
+          font-size: 12px;
 
           &::before {
             position: absolute;
@@ -276,7 +310,7 @@
 
       .receive-login__btn {
         text-align: center;
-        margin: vw(40) auto 0 auto;
+        margin: vw(20) auto 0;
         height: vw(40);
         line-height: vw(40);
         color: #fff;
@@ -297,6 +331,30 @@
       .mobile-drag-content {
         .e-drag {
           margin: auto;
+        }
+      }
+
+      .reset-password {
+        height: vw(28);
+        line-height: vw(28);
+        color: #B3B3B3;
+        text-align: right;
+        font-size: 12px;
+      }
+
+      .choice-bar {
+        height: vw(36);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+
+        .left {
+          color: #777;
+        }
+
+        .right {
+          color: #408FFB;
         }
       }
     }

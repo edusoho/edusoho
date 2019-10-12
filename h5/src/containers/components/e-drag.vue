@@ -135,8 +135,6 @@
           currentX = dragState.width - this.$refs.dragImg.width;
         }
 
-        console.log(this.$refs.dragImg.width);
-
         Object.assign(this.dragState, {
           currentLeft: currentX,
           maskWidth: (Number(currentX) + dragBtn.offsetWidth / 2).toFixed(2)
