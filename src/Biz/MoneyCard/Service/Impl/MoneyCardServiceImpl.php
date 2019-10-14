@@ -628,21 +628,21 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
             if (!$moneyCard) {
                 return array(
                     'code' => 'failed',
-                    'message' => '无效卡密',
+                    'message' => 'money_card.invalid_password',
                 );
             }
 
             if (!$this->isMoneyCardInvalid($moneyCard, $userId)) {
                 return array(
                     'code' => 'invalid',
-                    'message' => '学习卡已失效',
+                    'message' => 'money_card.invalid_card',
                 );
             }
 
             if (!(time() < 86400 + strtotime($moneyCard['deadline']))) {
                 return array(
                     'code' => 'expired',
-                    'message' => '学习卡已过期',
+                    'message' => 'money_card.expired_card',
                 );
             }
 
@@ -657,7 +657,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
                 return array(
                     'code' => 'failed',
-                    'message' => '学习卡领取失败',
+                    'message' => 'money_card.card_receive_fail',
                 );
             }
 
@@ -676,7 +676,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                 'receivedNumber' => $receivedNumber,
             ));
 
-            $message = "您有一张价值为{$batch['coin']}{$this->getCoinName()}的充值卡领取成功";
+            $message = $this->trans('money_card.notify.card_receive_success', array('coin_number' => $batch['coin'], 'coin_name' => $this->getCoinName()));
             $this->getNotificationService()->notify($userId, 'default', $message);
             $this->dispatchEvent('moneyCard.receive', $batch);
 
@@ -685,7 +685,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
             return array(
                 'id' => $moneyCard['id'],
                 'code' => 'success',
-                'message' => '学习卡领取成功',
+                'message' => 'money_card.card_receive_success',
             );
         } catch (\Exception $e) {
             $this->biz['db']->rollback();

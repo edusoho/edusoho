@@ -10214,3 +10214,10 @@ course.setting.course_remind_tip: 当前设置，%D% %H%会向所有在读学员
 course.setting.course_remind_change: 修改设置
 course.setting.course_remind_not_open: 未开启上课提醒
 course.setting.course_remind_go_to_open: 前往开启
+
+money_card.invalid_password: 无效的卡密
+money_card.invalid_card: 学习卡已失效
+money_card.expired_card: 学习卡已过期
+money_card.card_receive_fail: 学习卡领取失败
+money_card.card_receive_success: 学习卡领取成功
+money_card.notify.card_receive_success: 您有一张价值为%coin_number%%coin_name%的充值卡领取成功
