@@ -32,7 +32,7 @@ class ReadableJsonFormatter extends JsonFormatter
             return parent::format($record);
         }
  
-        return parent::format([
+        return parent::format(array(
             'time' => $record['datetime']->format($this->dateFormat),
             'channel' => $record['channel'],
             'level_name' => $record['level_name'],
@@ -40,6 +40,6 @@ class ReadableJsonFormatter extends JsonFormatter
             'context' => $record['context'],
             'extra' => $record['extra'],
             'level' => $this->logLevels[$record['level']],
-        ]);
+        ));
     }
 }
