@@ -16,7 +16,7 @@
         </div>
         <div class="result-box">
           <div class="result-box__valid-card" v-show="!invalidCard && isLogin && !processIsDone">
-            <div>将充值到当前账户：xxxx</div>
+            <div>将充值到当前账户：{{verifiedMobile}}</div>
             <a href="javascript: void(0)" class="link" @click="jump2login">是否放入其他账户</a>
           </div>
           <div class="result-box__invalid-card--process-is-done" v-show="invalidCard">
@@ -36,10 +36,10 @@
       <div class="bottom">
         <van-button type="primary" block @click="initStatus" v-show="startProcess">立即充值</van-button>
         <van-button type="primary" block @click="submit" v-show="!startProcess && !processIsDone">立即充值</van-button>
-        <van-button type="primary" block v-show="!startProcess && processIsDone">去首页</van-button>
+        <van-button type="primary" block v-show="!startProcess && processIsDone" to="/">去首页</van-button>
       </div>
     </div>
-    <e-login :show.sync="show"></e-login>
+    <e-login :show.sync="show" :isLogin.sync="isLogin"  :processIsDone.sync="processIsDone"></e-login>
   </div>
 </template>
 
@@ -74,7 +74,7 @@
     },
     computed: {
       ...mapState({
-        nickname: 'nickname',
+        verifiedMobile: state => state.user['verifiedMobile'],
       }),
       // 格式化成每4个空一个的样式
       formattedCode() {
@@ -109,7 +109,7 @@
           //  @todo
           Dialog.confirm({
             title: '将充值到当前登录账户',
-            message: '1879871798798',
+            message: this.verifiedMobile,
             cancelButtonText: '充值其他账户',
           })
             .then(() => {

@@ -9,14 +9,14 @@
         <div class="receive-login-input">
           <van-field
               v-model="userinfo.mobile"
-              type="number"
+              type="text"
               :placeholder="currentLoginMode.accountPlaceholder"
               clearable
               :border=false
               class="login__container__field"
               :error-message="errorMessage.mobile"
-              @blur="validateMobileOrPsw('mobile')"
-              @input="validatedChecker()"
+              @blur="loginMode === 'fastLoginMode' && validateMobileOrPsw('mobile')"
+              @input="loginMode === 'fastLoginMode' && validatedChecker()"
           >
           </van-field>
         </div>
@@ -24,7 +24,7 @@
         <div class="receive-login-input">
           <van-field
               v-model="userinfo.smsCode"
-              type="number"
+              type="text"
               :border=false
               clearable
               maxlength=6
@@ -45,7 +45,8 @@
               to="/setting/password/reset"
               class="reset-password"
               tag="div"
-          >忘记密码？</router-link>
+          >忘记密码？
+          </router-link>
         </div>
         <div class="mobile-drag" v-if="dragEnable">
           <div class="mobile-drag-content">
@@ -57,7 +58,7 @@
                 @success="handleSmsSuccess"></e-drag>
           </div>
         </div>
-        <div :class="['receive-login__btn',btnDisable ? 'disabled__btn' : '']" @click="handleSubmit()">登录并领取</div>
+        <div :class="['receive-login__btn',btnDisable ? 'disabled__btn' : '']" @click="handleSubmit(handleSubmitSuccess)">登录并领取</div>
         <div class="choice-bar">
           <router-link to="/register" tag="div" class="left">注册账号</router-link>
           <div class="right" v-show="loginMode === 'fastLoginMode'" @click="changeLoginMode">使用其他方式登录 >></div>
@@ -81,7 +82,6 @@
   import EDrag from '@/containers/components/e-drag';
   import fastLoginMixin from '@/mixins/fastLogin';
   import { mapActions } from 'vuex';
-  import { Toast } from 'vant';
   import activityMixin from '@/mixins/activity';
   import redirectMixin from '@/mixins/saveRedirect';
 
@@ -92,6 +92,14 @@
     },
     props: {
       show: {
+        type: Boolean,
+        default: false
+      },
+      isLogin: {
+        type: Boolean,
+        default: false
+      },
+      processIsDone: {
         type: Boolean,
         default: false
       }
@@ -115,11 +123,7 @@
         validated: {
           mobile: false,
         },
-        count: {
-          showCount: false,
-          num: 60,
-          codeBtnDisable: false
-        },
+
         // fastLoginMode 为手机快捷登录，normalLoginMode 为账号密码登录
         loginMode: 'fastLoginMode',
         currentLoginMode: {},
@@ -157,105 +161,37 @@
         'sendSmsSend',
         'fastLogin'
       ]),
-      updateShow(show) {
+      updateShow() {
         this.$emit('update:show', false);
       },
-      clickSmsBtn() {
-        if (this.count.codeBtnDisable || !this.validated.mobile) {
-          return;
-        }
-        if (!this.dragEnable) {
-          this.handleSendSms();
-          return;
-        }
-        // 验证码组件更新数据
-        if (!this.$refs.dragComponent.dragToEnd) {
-          Toast('请先完成拼图验证');
-          return;
-        }
-        this.$refs.dragComponent.initDragCaptcha();
+      updateIsLogin() {
+        this.$emit('update:isLogin', true);
       },
-      handleSendSms() {
-        this.sendSmsSend(this.userinfo)
-          .then((res) => {
-            this.userinfo.smsToken = res.smsToken;
-            this.countDown();
-            this.dragEnable = false;
-            this.userinfo.dragCaptchaToken = '';
-          })
-          .catch(err => {
-            switch (err.code) {
-              case 4030301:
-              case 4030302:
-                this.dragKey++;
-                this.userinfo.dragCaptchaToken = '';
-                this.userinfo.smsToken = '';
-                Toast.fail(err.message);
-                break;
-              case 4030303:
-                if (this.dragEnable) {
-                  Toast.fail(err.message);
-                } else {
-                  this.dragEnable = true;
-                }
-                break;
-              default:
-                Toast.fail(err.message);
-                break;
-            }
-          });
+      updateProcessIsDone() {
+        this.$emit('update:processIsDone', true);
       },
+
       // 校验成功
       handleSmsSuccess(token) {
         this.userinfo.dragCaptchaToken = token;
         this.handleSendSms();
       },
-      handleSubmit() {
-        if (this.btnDisable) {
-          return;
-        }
+      handleSubmitSuccess() {
         let data = {
           mobile: this.userinfo.mobile,
           smsToken: this.userinfo.smsToken,
           smsCode: this.userinfo.smsCode,
         };
-        this.fastLogin({
-          mobile: this.userinfo.mobile,
-          smsToken: this.userinfo.smsToken,
-          smsCode: this.userinfo.smsCode,
-          loginType: 'sms',
-          client: 'h5',
-        })
-          .then((res) => {
-            this.$emit('lReceiveCoupon', data);
-          })
-          .catch((err) => {
-            Toast.fail(err.message);
-          });
-      },
-      countDown() {
-        //验证码自动聚焦
-        this.$nextTick(_ => {
-          this.$refs.smsCode.$refs.input.focus();
-        });
-
-        this.count.showCount = true;
-        this.count.codeBtnDisable = true;
-        this.count.num = 60;
-
-        const timer = setInterval(() => {
-          if (this.count.num <= 0) {
-            this.count.codeBtnDisable = false;
-            this.count.showCount = false;
-            clearInterval(timer);
-            return;
-          }
-          this.count.num--;
-        }, 1000);
+        this.$emit('lReceiveCoupon', data);
+        this.updateShow();
+        this.updateIsLogin();
+        this.updateProcessIsDone();
       },
       changeLoginMode() {
         this.loginMode = this.loginMode === 'fastLoginMode' ? 'normalLoginMode' : 'fastLoginMode';
         this.currentLoginMode = this[this.loginMode];
+        this.userinfo.mobile = '';
+        this.userinfo.smsCode = '';
       }
     },
   };

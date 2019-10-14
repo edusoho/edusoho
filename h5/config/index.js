@@ -16,7 +16,7 @@ module.exports = {
     proxyTable: {
       '/api': {
       // target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
-      target: 'http://gdy.st.edusoho.cn',
+      target: 'http://zyc.st.edusoho.cn',
       //target: 'http://wr.st.edusoho.cn',
       // target: 'http://devtest.edusoho.cn',
         changeOrigin: true,
@@ -25,7 +25,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '192.168.100.53', // can be overwritten by process.env.HOST
+    host: '192.168.100.60', // can be overwritten by process.env.HOST
     port: 8010, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,

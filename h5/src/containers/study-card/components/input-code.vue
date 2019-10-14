@@ -39,7 +39,7 @@
       submit() {
         if (this.code.length === 19) {
           // 这边的逻辑之后改
-          this.$router.push('/valid_card');
+          this.$router.push('/moneycard/valid_card');
         }
       }
     },
