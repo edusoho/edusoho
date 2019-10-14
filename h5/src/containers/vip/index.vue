@@ -249,8 +249,6 @@ export default {
       Toast.fail(err.message)
     })
 
-    console.log(this.levels);
-
     Api.hasDrpPluginInstalled().then(res => {
       if (!res.Drp) {
         return;
