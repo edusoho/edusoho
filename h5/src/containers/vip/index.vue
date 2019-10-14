@@ -41,6 +41,12 @@
       @vipOpen="vipOpen">
     </vip-introduce>
 
+    <a :href="inviteUrl" v-if="hasDrp">
+      <div class="coupon-code-entrance">邀请好友购买
+        <i class="van-icon van-icon-arrow pull-right"></i><i class="pull-right">赚 {{ bindAgencyRelation.directRewardRatio }}%</i>
+      </div>
+    </a>
+
     <!-- 会员免费课程 -->
     <e-course-list
       v-if="courseData"
@@ -90,6 +96,7 @@ import { formatFullTime, getOffsetDays } from '@/utils/date-toolkit.js';
 import { mapState } from 'vuex';
 import { Toast } from 'vant';
 import * as types from '@/store/mutation-types';
+import qs from 'qs';
 
 export default {
   components: {
@@ -120,7 +127,10 @@ export default {
       orderParams: {
         unit: 'month',
         num: 0,
-      }
+      },
+      hasDrp: false,
+      drpSetting: {},
+      bindAgencyRelation: {},
     }
   },
   computed: {
@@ -174,6 +184,14 @@ export default {
       const todayStamp = new Date().getTime();
       const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
       return getOffsetDays(todayStamp, deadlineStamp) + 1;
+    },
+    inviteUrl() {
+      let params = {
+        type: 'vip',
+        id: this.levels[this.currentLevelIndex].id,
+        merchant_id: this.bindAgencyRelation.merchantId,
+      };
+      return this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
     }
   },
   created() {
@@ -226,8 +244,29 @@ export default {
         });
         this.currentLevelIndex = vipIndex;
       })
+      console.log(this.levels);
     }).catch(err => {
       Toast.fail(err.message)
+    })
+
+    console.log(this.levels);
+
+    Api.hasDrpPluginInstalled().then(res => {
+      if (!res.Drp) {
+        return;
+      }
+
+      Api.getAgencyBindRelation().then(data => {
+        if (JSON.stringify(data) == '{}') {
+          console.log(111);
+          return;
+        }
+        Api.getDrpSetting().then(data => {
+          this.drpSetting = data;
+        });
+        this.bindAgencyRelation = data;
+        this.hasDrp = true;
+      })
     })
 
     setTimeout(() => {

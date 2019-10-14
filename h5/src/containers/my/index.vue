@@ -7,6 +7,11 @@
         <i class="van-icon van-icon-arrow pull-right"></i>
       </div>
     </router-link>
+    <a :href="drpSetting.distributor_login_url" v-if="hasDrp">
+      <div class="coupon-code-entrance">分销中心
+        <i class="van-icon van-icon-arrow pull-right"></i>
+      </div>
+    </a>
     <van-tabs v-model="activeIndex" class="after-tabs e-learn">
       <van-tab v-for="(item, index) in tabs"  :title="item" :key="index"></van-tab>
     </van-tabs>
@@ -33,7 +38,9 @@ export default {
     return {
       activeIndex: 0,
       tabs: ['我的订单', '我的活动'],
-      hasBusinessDrainage: false
+      hasBusinessDrainage: false,
+      hasDrp: false,
+      drpSetting: [],
     };
   },
   computed: {
@@ -48,6 +55,23 @@ export default {
     Api.hasPluginInstalled().then(res => {
       this.hasBusinessDrainage = res.BusinessDrainage
     })
+    Api.hasDrpPluginInstalled().then(res => {
+      if (!res.Drp) {
+        return;
+      }
+
+      Api.getAgencyBindRelation().then(data => {
+        if (!data) {
+          return;
+        }
+      })
+
+      this.hasDrp = true
+    })
+
+    Api.getDrpSetting().then(data => {
+      this.drpSetting = data;
+    });
   }
 }
 </script>
