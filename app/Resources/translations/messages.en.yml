@@ -6163,6 +6163,8 @@ admin.crontab_job.log_show_btn: Log view
 admin.crontab_job.enable: enable
 admin.crontab_job.disable: disable
 admin.crontab_job.run_log: Running log
+admin.crontab_job.set_next_fire_time: Set next fire time
+admin.crontab_job.next_fire_time: next fire time
 admin.ip_black_list.titile: 'IP Blacklist'
 admin.ip_black_list.tips: 'One IP per line. IPs on the blacklist are blocked from visiting the site! You can use wildcards such as: 202.101.20.*.'
 admin.post_num_rules.same_ip_rule: 'Maximum posts(including replies) per Ip in 5 minutes'

@@ -2270,6 +2270,10 @@ admin_job_disabled:
     defaults: { _controller: AppBundle:Admin/Job:disabled }
     methods: [POST]
 
+admin_job_set_next_exec_time:
+  path: /job/{id}/set_next_exec_time
+  defaults: { _controller: AppBundle:Admin/Job:setNextExecTime }
+
 admin_job_fires:
     path: /job/{id}/fires
     defaults: { _controller: AppBundle:Admin/Job:fires }
