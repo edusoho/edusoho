@@ -21,6 +21,11 @@ class WeixinShare
 
     protected $timeout = 30;
 
+    /**
+     * 仅给单元测试mock用。
+     */
+    protected $mockedRequest = null;
+
     const JSAPI_TICKET_URL = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket';
     const ACCESS_TOKEN_URL = 'https://api.weixin.qq.com/cgi-bin/token';
 
@@ -51,7 +56,7 @@ class WeixinShare
         $rawToken = array();
         $rawToken = json_decode($result, true);
 
-        if (isset($rawToken['errmsg']) && $rawToken['errmsg'] != 'ok') {
+        if (isset($rawToken['errmsg']) && 'ok' != $rawToken['errmsg']) {
             $this->logger && $this->logger->error('WEIXIN_ACCESS_TOKEN_ERROR', $rawToken);
 
             return array();
@@ -80,7 +85,7 @@ class WeixinShare
         $rawToken = array();
         $rawToken = json_decode($result, true);
 
-        if (isset($rawToken['errmsg']) && $rawToken['errmsg'] != 'ok') {
+        if (isset($rawToken['errmsg']) && 'ok' != $rawToken['errmsg']) {
             $this->logger && $this->logger->error('WEIXIN_JS_API_TICKET_ERROR', $rawToken);
 
             return array();
@@ -94,6 +99,10 @@ class WeixinShare
 
     public function getRequest($url, $params)
     {
+        if (!empty($this->mockedRequest)) {
+            return $this->mockedRequest;
+        }
+
         $curl = curl_init();
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -112,5 +121,13 @@ class WeixinShare
         curl_close($curl);
 
         return $response;
+    }
+
+    /**
+     * 仅给单元测试mock用。
+     */
+    public function setRequest(array $request)
+    {
+        $this->mockedRequest = json_encode($request);
     }
 }
