@@ -1470,5 +1470,22 @@ user.account.order_pay_vip_close_hint: The vip level in this order has been clos
 user.account.order_pay: Continue
 user.account.order_not_pay: Not paying
 
+#coupon
+notify.copy_link_success: Copy link succeeded
+confirm.remove_coupon: Sure to delete this coupon batch?
+notify.remove_coupon_success: Delete this coupon batch succeeded!
+notify.remove_coupon_fail: Delete this coupon batch failed!
+notify.channel_select: Choose at least one distribution channel
+
+coupon.fixed_day: Validity period
+coupon.fixed_day.message: Please enter validity days after receipt
+admin.coupon.setting.confirm_message: Closing the coupon switch will affect all marketing campaigns that are issuing coupons, which will result in the marketing campaigns that use coupons not working properly. Coupons that have already been issued will not be able to continue to be used. The student side will block the "My Coupons" module, and the order page will not be able to continue to select coupon orders. Whether to continue?
+admin.coupon.setting.success_message: status saved
+coupon.target_type.multi_course: Part of course
+coupon.target_type.multi_classroom: Part of class
 admin.wechat.live_open_scenes_error.hint: At least one scene。
 course.question_manage.manage.delete_tips: Deleting the question may affect the exercise of class, please be cautious!
+admin.setting.invite.coupon.empty.tips: Please set coupon batch
+
+course.plan_task.activity_ppt_animation_img: Switch img mode
+course.plan_task.activity_ppt_animation_slide: Switch animation mode

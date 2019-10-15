@@ -12,10 +12,10 @@ class ClassroomCouponTest extends BaseTestCase
         $couponFactory = $biz['coupon_factory'];
         $classroomCoupon = $couponFactory('classroom');
 
-        $result = $classroomCoupon->canUseable(array('targetId' => 1), array('id' => 1));
+        $result = $classroomCoupon->canUseable(array('targetIds' => array('1')), array('id' => 1));
         $this->assertTrue($result);
 
-        $result1 = $classroomCoupon->canUseable(array('targetId' => 1), array('id' => 2));
+        $result1 = $classroomCoupon->canUseable(array('targetIds' => array('1')), array('id' => 2));
         $this->assertFalse($result1);
     }
 }

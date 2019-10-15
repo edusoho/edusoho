@@ -535,7 +535,7 @@ class WeChatServiceTest extends BaseTestCase
             'sendDays' => array('Mon'),
         ));
         $schedulerJobs = $this->getSchedulerService()->searchJobs(array('name' => 'WeChatNotificationJob_CourseRemind'), array(), 0, 1);
-        $this->assertCount('WeChatNotificationJob_CourseRemind', $schedulerJobs[0]['name']);
+        $this->assertEquals('WeChatNotificationJob_CourseRemind', $schedulerJobs[0]['name']);
     }
 
     protected function mockCreateWeChatUser($fields = array())

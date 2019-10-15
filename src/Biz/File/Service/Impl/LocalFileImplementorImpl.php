@@ -237,6 +237,10 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     protected function getFilePath($targetType, $targetId)
     {
+        if (preg_match('/\/|\\\\/i', $targetType.$targetId, $matches)) {
+            $this->createNewException(UploadFileException::ARGUMENTS_INVALID());
+        }
+
         $baseDirectory = $this->biz['topxia.disk.local_directory'];
 
         return $baseDirectory.DIRECTORY_SEPARATOR.$targetType.DIRECTORY_SEPARATOR.$targetId;

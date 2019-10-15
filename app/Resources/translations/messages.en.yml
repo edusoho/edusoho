@@ -25,6 +25,7 @@ site.data.title: Title
 site.data.score: Score
 site.data.count: Count
 site.copy: Copy
+site.delete: Delete
 site.datagrid.empty: 'No data'
 site.datagrid.filter.all_records: 'All'
 site.datagrid.filter.last_one_week: 'Last 7 days'
@@ -83,6 +84,7 @@ site.btn.share: Share
 site.btn.all_select: 'Select all'
 site.btn.previous_page: 'Prev'
 site.btn.next_page: 'Next'
+site.btn.delete: 'Delete'
 site.price: Price
 site.org: Organizition
 site.org.setup: 'Set organizition'
@@ -1674,6 +1676,8 @@ course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exi
 course.plan_task.activity_manage.preview_failed_tips: 'Please enroll %taskName% to start.'
 course.plan_task.activity_manage.title_name: Title
 course.plan_task.activity_manage.help_block: 'It is recommended that the number of title words be controlled within 15 words, otherwise it will affect the browsing of mobile phones.'
+course.plan_task.activity_ppt_animation_tip: Currently, the PC has been supported to play animations and audio and video in PPT (expect app, applet and new micro-network school).
+course.plan_task.activity_ppt_animation_link: Animation support
 course.plan_task.activity_ppt_animation_btn: Switch img mode
 course.plan_task.activity_manage.setup_is_option: 'Set as optional'
 course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next %taskName% to unlock.'
@@ -3803,6 +3807,9 @@ change_log: Changelog
 common.courseStatus.draft: Draft
 common.courseStatus.published: Published
 common.courseStatus.closed: Closed
+common.classroomStatus.draft: Draft
+common.classroomStatus.published: Published
+common.classroomStatus.closed: Closed
 common.fileType.video: Video
 common.fileType.audio: Audio
 common.fileType.document: Document
@@ -5562,6 +5569,10 @@ admin.edu_cloud.edu_sms.homework_checked: 'The homework is completed'
 admin.edu_cloud.edu_sms.homework_checked_tips: 'The homework of Course：<Course Name>-<Study Task name> is reviewed. Please check.'
 admin.edu_cloud.edu_sms.testpaper_checked: 'Testpaper marked'
 admin.edu_cloud.edu_sms.testpaper_checked_tips: 'Your test paper in the "lesson name" - course: "course name" has been marked by teacher, have a look! %smsScoolName%'
+admin.edu_cloud.edu_sms.invite_rewards_not_enough: 'Insufficient invitation to register'
+admin.edu_cloud.edu_sms.coupon_not_enough_tips: 'The [Invitation Registration] activity rewards you set [the coupon name] is only 50, please pay attention to the remaining coupons.'
+admin.edu_cloud.edu_sms.invite_rewards_is_exhausted: 'Invite registration rewards to be exhausted'
+admin.edu_cloud.edu_sms.coupon_is_exhausted_tips: 'The [Invitation Registration] event reward [coupon name] that you have set is exhausted. Please add a new coupon to the coupon management in time.'
 admin.edu_cloud.edu_sms.receipt_type: 'Receipt type'
 admin.edu_cloud.edu_sms.pay_receipt_success: 'Payment receipt'
 admin.edu_cloud.edu_sms.course_buy: 'Course purchase'
@@ -6370,6 +6381,14 @@ admin.invite_setting.notification_variable_description: 'Inform variable descrip
 admin.invite_setting.invite_infomation_template: 'Invitation templates'
 admin.invite_setting.coupon_deadline: 'Coupon duration'
 admin.invite_setting.discount_coupon_setting: 'CNY deduction coupon (Can be used for whole site consumption)'
+admin.invite_setting.coupon_limit_remind: Abnormal reminder
+admin.invite_setting.coupon_limit_remind_hint: Remind administrators if there are not enough rewards available
+admin.invite_setting.rewards_not_reach: While number of rewards not reach
+admin.invite_setting.send_remind_sms_to_admin: system will send sms to remind admin
+admin.invite_setting.rewards_count_required: Please enter a number from 1-1000
+admin.invite_setting.mobile_required: Phone number required
+admin.invite_setting.mobile_for_receive: Phone number to receive reminders
+admin.invite_setting.sms_enable_hint: Please note that this feature will take effect when the cloud message is enabled, and the SMS notification will deduct the number of SMS messages of network school.
 admin.wap_setting: 'Mobile site'
 admin.wap_setting.find: '发现页设置'
 admin.wap_setting.site: '站点设置'
@@ -8473,6 +8492,7 @@ exception.coupon.plugin.not.installed: Coupon plugin not installed
 exception.coupon.invalid: Coupon invalid
 exception.coupon.received: Coupon received
 exception.coupon.finished: Coupon finished
+exception.coupon.over_batch_limit: Exceeding the batch total limit
 
 exception.lesson.not_found: Lesson is not exist
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
@@ -8596,6 +8616,7 @@ exception.uploadfile.globalId_required: 缺少globalId
 exception.uploadfile.local_convert_not_support: 本地文件暂不支持转换
 exception.uploadfile.extension_not_allowed: 该文件格式，不允许上传。
 exception.uploadfile.not_found_attachment: 附件不存在
+exception.uploadfile.arguments_invalid: Invalid arguments
 exception.activity.watch_video_limit: 您的视频观看时长已达限制，无法继续观看！
 exception.activity.not_found: 教学活动不存在
 exception.activity.not_in_course: Activity is not in the course given
@@ -8723,6 +8744,9 @@ exception.reward_point.account.not_found: 积分账号不存在
 exception.reward_point.account.already_open: 积分账号已创建
 exception.reward_point.account.userid_invalid: 用户id错误
 exception.reward_point.account.balance_insufficient: 余额不足
+exception.reward_point.account.error_pay_password: pay password invalid
+exception.reward_point.account.pay_password_existed: pay password already existed
+exception.reward_point.account.not_found_pay_password: pay password not found
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
 exception.live_replay.not_found: 直播回放不存在
@@ -8738,6 +8762,8 @@ exception.course.draft.not_found: 教学计划草稿不存在
 exception.task_result.not_found: 学习任务结果不存在
 exception.discovery_column.not_found: 发现栏目不存在
 exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
+exception.coupon.target_type_error: 该批次不支持查看详情
+exception.coupon.setting_close: Coupon global switch is closed
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 
@@ -8894,6 +8920,120 @@ classroom.joining_date.expired_tips: Classroom joining date expired
 
 # 富文本
 editor.iframe_tips: To use IFrame normally, please set it in [Admin] - [System] -[Security] -[White List Domain]
+#coupon
+coupon.usage_detail_title: 优惠券使用详情
+coupon.enable_hint: 优惠券未开启，请先在<a href="%path%"> 系统-运营设置-优惠券 </a>中设置开启
+
+coupon.id: 编号
+coupon.code: 优惠券
+coupon.status: 状态
+coupon.user: 使用者
+coupon.order: 订单信息
+coupon.origin_price: 原价
+coupon.pay_amount: 实付
+coupon.receive_time: 领取时间
+coupon.used_time: 使用时间
+coupon.name: 优惠券名称
+coupon.type: 优惠方式
+coupon.deadline: 有效期至
+coupon.deadline.day.help_block.behind: 领券当日起
+coupon.deadline.day.help_block.after: 天内可用
+coupon.description: 优惠说明
+coupon.target: 使用对象
+coupon.full_discount_price: 金额设置
+coupon.channel: 发放渠道
+coupon.setting.status: 优惠券全局开关
+coupon.content: 优惠内容
+coupon.batch.name: 批次名称
+coupon.no_coupon_tip: 无优惠券记录
+coupon.batch: 优惠券批次
+coupon.receive_url: 发放地址
+coupon.batch.prefix: 优惠券前缀
+coupon.operation: 操作
+coupon.total_count: 总数
+coupon.expiry_date: 有效期
+coupon.amount: 已优惠金额
+coupon.target_type: 类型
+
+coupon.type.minus: 抵价
+coupon.type.discount: 打折
+coupon.type.minus_rate: 抵价金额
+coupon.type.discount_rate: 打折
+coupon.type.minus_rate_unit: 元
+coupon.type.discount_rate_unit: 折
+coupon.type.minus_tip: 抵价%rate%元
+coupon.type.discount_tip: 打折%rate%折
+
+coupon.target_type.classroom: 班级
+coupon.target_type.vip: 会员
+coupon.target_type.course: 课程
+coupon.target_type.all: 全站
+coupon.target_type.classroom_all: 全部班级
+coupon.target_type.classroom_specific: 指定班级
+coupon.target_type.vip_all : 全部会员
+coupon.target_type.vip_specific: 指定会员
+coupon.target_type.course_all: 全部课程
+coupon.target_type.course_specific: 指定课程
+coupon.target_type.course_rechoose: 重新选择课程
+coupon.target_type.classroom_rechoose: 重新选择班级
+coupon.target_type.vip_rechoose: 重新选择会员
+coupon.target_type.multi_course: 部分课程
+coupon.target_type.multi_classroom: 部分班级
+coupon.target_type.detail: 详情
+
+coupon.status.unused: 未使用
+coupon.status.receive: 已领取
+coupon.status.used: 已使用
+
+coupon.generate_num: 生成数量
+coupon.generate_num_hint: 生成数量必须在1～10000之间
+coupon.generate_num_unit: 个
+coupon.prefix: 优惠券前缀
+coupon.prefix_hint: 优惠券前缀不可重复，不占优惠券位数
+coupon.digits: 优惠券位数
+coupon.digits_hint: 优惠券位数必须在5～15位之间
+coupon.channel_hint: 通过本功能控制优惠券可被领取的方式
+
+coupon.channel_type.link: 通过链接
+coupon.channel_type.code: 通过优惠券
+coupon.channel_type.page_detail: 通过商品详情页
+coupon.channel_type.h5_mps: 小程序/新版微网校
+coupon.channel_type.page_detail_hint: 选中此项则系统将自动获取商品可用的优惠券显示在商品详情页
+coupon.channel_type.wait_hint: （敬请期待）
+coupon.channel.postfix: 发放
+
+coupon.generage.btn: 生成
+coupon.generate.loading_text: 正在生成...
+coupon.copy.btn: 复制
+
+coupon.batch.detail: 详情
+coupon.batch.export_csv: 导出CSV文件
+coupon.batch.get_receive_url: 获取发放地址
+coupon.batch.delete: 删除
+
+coupon.query.by_status: 使用状态
+coupon.query.by_type: 按优惠方式
+coupon.query.by_use_start_date: 使用时间起始
+coupon.query.by_use_end_date: 使用时间截止
+coupon.query.by_code: 优惠券
+coupon.setting.close: 优惠券未开启，请先开启优惠券开关
+coupon.setting.permission.goto_open: 去开启
+
+coupon.deadline_mode.day.help_block: >
+  至<br/>领取后%day%天内
+coupon.resource.selected: 已选：
+coupon.resource.clear: 清空
+admin.setting.invite.chooser_btn: 选择
+admin.setting.invite.chooser_message: 可用优惠券发放完成后，邀请功能即自动关闭，请做好活动预算
+admin.setting.invite.promoted_user_enable: 发放优惠券
+admin.setting.invite.get_coupon_setting: 邀请人奖励发放时机
+admin.setting.invite.get_coupon_setting.register: 被邀请人注册成功时
+admin.setting.invite.get_coupon_setting.pay: 被邀请人完成第一笔消费时
+coupon.resource_list.title: '本优惠券适用于：'
+coupon.remaining_amount: 剩余可用数量
+coupon.resource.course.chooser.limit: 最多支持选择200个课程
+coupon.resource.classroom.chooser.limit: 最多支持选择200个班级
+coupon.resource.chooser.limit: 请指定不超过200个资源
 
 #上课提醒
 course.remind.each_week: Weekly
@@ -8913,3 +9053,8 @@ course.setting.course_remind_go_to_open: To open
 admin.setting_wechat_auth.re_authorization_btn: ReAuth
 admin.setting_wechat_auth.authorization_in_new_page_hint: Please Authorization In New Page
 admin.setting_wechat_auth.authorization_success: Anthorized Success
+
+admin.setting.invite.chooser_coupon.manage_btn: 优惠券管理
+admin.setting.invite.chooser_coupon.refresh_btn: 刷新
+admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
+admin.operation.coupon_menu.generate_btn: Generate Coupon

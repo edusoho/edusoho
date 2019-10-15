@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Coupon\Service\CouponBatchService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\CloudPlatform\CloudAPIFactory;
 
@@ -77,45 +78,80 @@ class OperationSettingController extends BaseController
     {
         $default = array(
             'invite_code_setting' => 0,
-            'promoted_user_value' => '',
-            'promote_user_value' => '',
+            'promoted_user_enable' => 0,
+            'promoted_user_batchId' => '',
+            'promote_user_enable' => 0,
+            'promote_user_batchId' => '',
             'get_coupon_setting' => 1,
-            'deadline' => 90,
             'inviteInfomation_template' => '{{registerUrl}}',
+            'remain_number' => '',
+            'mobile' => '',
         );
 
         if ('POST' == $request->getMethod()) {
             $inviteSetting = $request->request->all();
-            if (isset($inviteSetting['get_coupon_setting'])) {
-                $inviteSetting['get_coupon_setting'] = 1;
-            } else {
-                $inviteSetting['get_coupon_setting'] = 0;
+            if (!empty($inviteSetting['promoted_user_batchId']) || !empty($inviteSetting['promoted_user_enable'])) {
+                $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promoted_user_batchId']);
+                if ($batch['unreceivedNum'] <= 1) {
+                    return  $this->createJsonResponse(array('status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')));
+                }
             }
-
+            if (!empty($inviteSetting['promote_user_batchId']) || !empty($inviteSetting['promote_user_enable'])) {
+                $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promote_user_batchId']);
+                if ($batch['unreceivedNum'] <= 1) {
+                    return  $this->createJsonResponse(array('status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')));
+                }
+            }
             $inviteSetting = ArrayToolkit::parts($inviteSetting, array(
                 'invite_code_setting',
-                'promoted_user_value',
-                'promote_user_value',
+                'promoted_user_enable',
+                'promoted_user_batchId',
+                'promote_user_enable',
+                'promote_user_batchId',
                 'get_coupon_setting',
-                'deadline',
                 'inviteInfomation_template',
+                'remain_number',
+                'mobile',
             ));
 
             $inviteSetting = array_merge($default, $inviteSetting);
+            $inviteSetting['promoted_sms_send'] = 1;
+            $inviteSetting['promote_sms_send'] = 1;
+            if (!empty($inviteSetting['remain_number']) && !empty($inviteSetting['mobile'])) {
+                $inviteSetting = $this->updateInviteSmsSendSetting($inviteSetting);
+            }
 
             $this->getSettingService()->set('invite', $inviteSetting);
-            $this->setFlashMessage('success', 'site.save.success');
-            goto response;
+
+            return $this->createJsonResponse(true);
         }
 
         $inviteSetting = $this->getSettingService()->get('invite', array());
         $inviteSetting = array_merge($default, $inviteSetting);
 
-        response:
         return $this->render('admin/invite/set.html.twig', array(
             'inviteSetting' => $inviteSetting,
             'inviteInfomation_template' => $inviteSetting['inviteInfomation_template'],
         ));
+    }
+
+    protected function updateInviteSmsSendSetting($inviteSetting)
+    {
+        if ($inviteSetting['promoted_user_enable']) {
+            $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promoted_user_batchId']);
+            if (!empty($batch) && $inviteSetting['remain_number'] <= $batch['unreceivedNum']) {
+                $inviteSetting['promoted_sms_send'] = 0;
+            }
+        }
+
+        if ($inviteSetting['promote_user_enable']) {
+            $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promote_user_batchId']);
+            if (!empty($batch) && $inviteSetting['remain_number'] <= $batch['unreceivedNum']) {
+                $inviteSetting['promote_sms_send'] = 0;
+            }
+        }
+
+        return $inviteSetting;
     }
 
     protected function getCourseService()
@@ -146,5 +182,13 @@ class OperationSettingController extends BaseController
     protected function getArticleService()
     {
         return $this->createService('Article:ArticleService');
+    }
+
+    /**
+     * @return CouponBatchService
+     */
+    protected function getCouponBatchService()
+    {
+        return $this->createService('Coupon:CouponBatchService');
     }
 }
