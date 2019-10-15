@@ -48,7 +48,7 @@ class WeixinShareTest extends BaseTestCase
         $this->assertEquals($request, $result);
     }
 
-    public function testGetJjsApiTicket()
+    public function testGetJsApiTicket()
     {
         $config = array(
             'key' => 'testKey',
