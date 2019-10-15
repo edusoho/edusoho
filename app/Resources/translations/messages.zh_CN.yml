@@ -10220,4 +10220,5 @@ money_card.invalid_card: 学习卡已失效
 money_card.expired_card: 学习卡已过期
 money_card.card_receive_fail: 学习卡领取失败
 money_card.card_receive_success: 学习卡领取成功
+money_card.card_recharge_success: 学习卡充值成功
 money_card.notify.card_receive_success: 您有一张价值为%coin_number%%coin_name%的充值卡领取成功
