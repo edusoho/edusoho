@@ -1180,7 +1180,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet = $this->fillOrgId($courseSet);
 
         $courseSet['status'] = 'draft';
-
+        $courseSet['title'] = $this->purifyHtml($courseSet['title'], true);
         $coinSetting = $this->getSettingService()->get('coin', array());
         if (!empty($coinSetting['coin_enabled']) && (bool) $coinSetting['coin_enabled']) {
             $courseSet['maxRate'] = 100;

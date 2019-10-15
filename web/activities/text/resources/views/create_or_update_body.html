@@ -15,6 +15,11 @@
     width:100%!important;
     height:100%!important;
   }
+
+  .help-block {
+    color: #a1a1a1;
+    margin-bottom: 0;
+  }
 </style>
 <body>
 <script src="/static-dist/libs/ltc-sdk-client.js"></script>
@@ -29,7 +34,7 @@
                 </div>
                 <div class="col-sm-10">
                   <input id="title" class="form-control" type="text" name="title" value="" >
-                  <div class="help-block" style="color: #a1a1a1; margin-bottom: 0;">{{ 'course.plan_task.activity_manage.help_block'|trans }}</div>
+                  <div class="help-block">{{ 'course.plan_task.activity_manage.help_block'|trans }}</div>
                 </div>
             </div>
             <div class="form-group">
@@ -43,6 +48,7 @@
                     您有一段自动保存内容，请点击继续编辑
                   </a>
                     <textarea class="form-control type-hidden js-text" id="text-content-field" name="content"></textarea>
+                    <div class="help-block">{{ 'editor.iframe_tips'|trans }}</div>
                 </div>
             </div>
         </form>

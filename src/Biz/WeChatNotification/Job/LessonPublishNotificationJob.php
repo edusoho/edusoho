@@ -3,6 +3,7 @@
 namespace Biz\WeChatNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 
 class LessonPublishNotificationJob extends AbstractNotificationJob
 {
@@ -47,7 +48,7 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
 
         $userIds = ArrayToolkit::column($members, 'userId');
         $data = array(
-            'first' => array('value' => ('live' == $task['type']) ? '同学，您好，课程有新的直播任务发布'.PHP_EOL : '同学，您好，课程有新的任务发布'.PHP_EOL),
+            'first' => array('value' => ('live' == $task['type']) ? '同学，您好，课程有新的直播任务发布' : '同学，您好，课程有新的任务发布'),
             'keyword1' => array('value' => $courseSet['title']),
             'keyword2' => array('value' => ('live' == $courseSet['type']) ? '直播课' : '普通课'),
             'keyword3' => array('value' => $teacher['nickname']),
@@ -55,11 +56,15 @@ class LessonPublishNotificationJob extends AbstractNotificationJob
             'remark' => array('value' => ('live' == $task['type']) ? '请准时参加' : '请及时前往学习'),
         );
         $options = array('url' => $url, 'type' => 'url');
-        $templateData = array(
+
+        $templates = TemplateUtil::templates();
+        $templateCode = isset($templates[$key]['id']) ? $templates[$key]['id'] : '';
+        $templateData = array(array(
             'template_id' => $templateId,
+            'template_code' => $templateCode,
             'template_args' => $data,
             'goto' => $options,
-        );
+        ));
         $this->sendNotifications($key, 'wechat_notify_lesson_publish', $userIds, $templateData);
     }
 

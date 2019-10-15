@@ -30,6 +30,14 @@ class ClassroomController extends BaseController
         $classroomMembers = array_merge($classroomMembers, $this->getClassroomService()->searchMembers(array('role' => 'assistant', 'userId' => $user->getId()), $orderBy, 0, PHP_INT_MAX));
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
 
+        if (empty($classroomIds)) {
+            return $this->render('my/teaching/classroom.html.twig', array(
+                'classrooms' => array(),
+                'members' => array(),
+                'paginator' => array(),
+            ));
+        }
+
         $conditions = array('classroomIds' => $classroomIds);
 
         $paginator = new Paginator(

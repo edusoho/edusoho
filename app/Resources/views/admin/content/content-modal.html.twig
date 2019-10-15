@@ -20,7 +20,7 @@
         <div class="form-group">
           <label for="content-title-field" class="control-label">{{'admin.custom_page_manage.custom_page_title'|trans}}</label>
           <div class="controls">
-            <input class="form-control" id="content-title-field" type="text" name="title" value="{{ field_value(content, 'title') }}">
+            <input class="form-control" id="content-title-field" type="text" name="title" value="{{ content.title|default('') }}">
           </div>
         </div>
       {% endif %}

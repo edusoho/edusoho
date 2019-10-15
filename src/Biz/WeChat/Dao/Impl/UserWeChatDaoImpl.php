@@ -12,11 +12,12 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
     public function declares()
     {
         return array(
-            'orderbys' => array('createdTime', 'updatedTime', 'lastRefreshTime'),
+            'orderbys' => array('createdTime', 'updatedTime', 'lastRefreshTime', 'subscribeTime'),
             'conditions' => array(
                 'id = :id',
                 'appId = :appId',
                 'userId = :userId',
+                'userId != :userIdNotEqual',
                 'type= :type',
                 'openId = :openId',
                 'unionId = :unionId',
@@ -25,7 +26,10 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
                 'lastRefreshTime = :lastRefreshTime',
                 'lastRefreshTime < :lastRefreshTime_LT',
                 'lastRefreshTime > :lastRefreshTime_GT',
-                'userId in (:userIds)',
+                'userId IN (:userIds)',
+                'user_wechat.subscribeTime != :subscribeTimeNotEqual',
+                'u.nickname LIKE :nickname',
+                'user_wechat.nickname LIKE :wechatname',
             ),
             'timestamps' => array(
                 'createdTime',
@@ -35,6 +39,30 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
                 'data' => 'json',
             ),
         );
+    }
+
+    public function countWeChatUserJoinUser($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->leftJoin('user_wechat', 'user', 'u', 'u.id = user_wechat.userId')
+            ->select('COUNT(*)');
+
+        return (int) $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchWeChatUsersJoinUser($conditions, $orderBys, $start, $limit)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->leftJoin('user_wechat', 'user', 'u', 'u.id = user_wechat.userId')
+            ->select('user_wechat.userId AS userId, user_wechat.nickname AS nickname, u.nickname AS username, user_wechat.subscribeTime AS subscribeTime, user_wechat.profilePicture AS profilePicture')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        foreach ($orderBys ?: array() as $order => $sort) {
+            $builder->addOrderBy($order, $sort);
+        }
+
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     public function findByIds(array $ids)
@@ -50,6 +78,13 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
     public function findByUserIdAndType($userId, $type)
     {
         return $this->findByFields(array('userId' => $userId, 'type' => $type));
+    }
+
+    public function findAllBindUserIds()
+    {
+        $sql = "SELECT userId FROM {$this->table} WHERE userId > 0";
+
+        return $this->db()->fetchAll($sql);
     }
 
     public function getByUserIdAndType($userId, $type)
@@ -86,7 +121,7 @@ class UserWeChatDaoImpl extends AdvancedDaoImpl implements UserWeChatDao
         }
 
         $marks = str_repeat('?,', count($userIds) - 1).'?';
-        $sql = "SELECT openId FROM {$this->table} WHERE userId IN ({$marks}) AND type = ? AND isSubscribe = 1";
+        $sql = "SELECT openId, userId FROM {$this->table} WHERE userId IN ({$marks}) AND type = ? AND isSubscribe = 1";
 
         return $this->db()->fetchAll($sql, array_merge($userIds, array($type))) ?: array();
     }

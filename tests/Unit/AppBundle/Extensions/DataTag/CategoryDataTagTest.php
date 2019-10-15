@@ -7,6 +7,15 @@ use AppBundle\Extensions\DataTag\CategoryDataTag;
 
 class CategoryDataTagTest extends BaseTestCase
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testEmptyCategoryId()
+    {
+        $dataTag = new CategoryDataTag();
+        $dataTag->getData(array());
+    }
+
     public function testGetData()
     {
         $group = $this->getCategoryService()->addGroup(array('name' => '课程', 'code' => 'course', 'depth' => 2));

@@ -35,9 +35,9 @@ site.browser_useless_play_video_hint: Your browser can not play the video.
 site.choose_hint: Please select
 video.quality.switcher.name: '%videoQuality% Video / %audioQuality% Audio'
 site.video.quality.quota: Video
-site.video.quality.low: Smooth 
-site.video.quality.normal: Standard 
-site.video.quality.high: High Definition 
+site.video.quality.low: Smooth
+site.video.quality.normal: Standard
+site.video.quality.high: High Definition
 
 site.incorrect.password: Incorrect password
 user.settings.security.mobile_bind.success: Bind mobile successfully
@@ -47,9 +47,9 @@ site.modify.success: Modify successfully
 user.settings.security.password_modify.incorrect_password: Incorrect password
 
 site.audio.quality.quota: Audio
-site.audio.quality.low: Smooth 
-site.audio.quality.normal: Standard 
-site.audio.quality.high: High Definition 
+site.audio.quality.low: Smooth
+site.audio.quality.normal: Standard
+site.audio.quality.high: High Definition
 site.service_error_hint: Server Error!
 site.form.submit_error: Form submit error
 
@@ -112,7 +112,7 @@ uploader.type_denied_limit_hint: File type is wrong!
 uploader.error.bad_file.hint: Your source file may be damaged, please check and re-upload
 uploader.btn.batch_paused: Paused All
 uploader.btn.batch_continue: Continue All
-uploader.btn.add: Add 
+uploader.btn.add: Add
 uploader.btn.paused: Paused
 uploader.btn.begin: Begin
 uploader.progress.tips: Uploaded
@@ -195,7 +195,7 @@ activity.download_manage.link_error_hint: The link address is incorrect
 activity.download_manage.materials_error_hint: Please upload or select the resource
 activity.download_manage.materials_or_link_error_hint: Please upload file or add internet links
 activity.download_manage.materials_or_link_fail: Failed to add material, please try again.
-activity.download_manage.materials_or_link_success: Add material successfully 
+activity.download_manage.materials_or_link_success: Add material successfully
 activity.download_manage.materials_or_link_delete: material deleted
 activity.download_manage.materials_or_link_confirm_delete: Are you determined to delete the material?
 activity.download_manage.materials_exist_error_hint: The file is already added, please re-select
@@ -436,6 +436,7 @@ course.thread_delete_hint: Do you really want to delete this reply?
 course_manage.course_dashboard.student_num: Number of students
 course_manage.course_dashboard.finish_num: Number of completions
 course_manage.course_dashboard.finish_rate: Completion rate
+course.manage.teacher.manage.repeat_tip: Can not add repeatedly.
 
 course_manage.lesson_dashboard.finish_rate: Completion rate
 course_manage.lesson_dashboard.student_num: Person
@@ -559,7 +560,7 @@ meterial_lib.select_resource_delete_hint: Please select you want to delete the r
 meterial_lib.confirm_share_resource_hint: Sure you want to share these resources?
 meterial_lib.confirm_share_resource_hint_single: Sure you want to share this resource?
 meterial_lib.confirm_unshare_resource_hint: Sure you want to cancel the share the resource
-meterial_lib.select_resource_operate_hint: Please select your resource to operate 
+meterial_lib.select_resource_operate_hint: Please select your resource to operate
 meterial_lib.select_share_resource_hint: Please select you want to share resource
 meterial_lib.unshare_resource_success_hint: Cancel the share resource of success
 meterial_lib.share_resource_success_hint: Share resource success
@@ -741,7 +742,7 @@ validate.valid_url_input.message: Please enter a valid URL.
 validate.valid_date_input.message: Please enter a valid date.
 validate.valid_date_iso_input.message: Please enter a valid date  (ISO)
 validate.valid_number_input.message: Please enter a valid number
-validate.valid_digits_input.message: Please enter only digits 
+validate.valid_digits_input.message: Please enter only digits
 validate.valid_creditcard_input.message: Please enter a valid credit card number.
 validate.valid_equal_to_input.message: Please enter the same value again.
 validate.valid_extension_input.message: Please enter a valid suffix
@@ -785,6 +786,7 @@ validate.alphanumeric.message: Must be English letters, numbers and underscores
 validate.raty_star.message: Please score
 validate.reg_invite_code.message: Must consists of five numbers and english characters
 validate.phone.message: Please enter a valid mobile phone number
+validate.mobile_or_telephone.message: Please enter a valid mobile number or phone number
 validate.nickname.message: Do not allow 11-bit pure numbers beginning with 1
 validate.password_check.message: Wrong password
 validate.sms_code_input.message: Please enter the verification code
@@ -811,6 +813,7 @@ validate.fail: Failed to verify
 validate.expiry_days_required_hint: please input the expiry days
 validate.empty_content_hint: please input content!
 validate.no_number_first_hint: URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits
+validate.have_spaces: Password can't have spaces
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
@@ -982,7 +985,7 @@ lesson_tasks_no_more_than_5: Lesson task no more than 5.
 Bad credentials.: Bad credentials
 User account is locked.: The account is blocked.
 
-cloud_search.network.error_message: Due to the poor network condition, you are switched to simple search mode. 
+cloud_search.network.error_message: Due to the poor network condition, you are switched to simple search mode.
 message.send.not_allowed: not allowed to send messages
 
 admin.index.register_count: register count
@@ -1417,6 +1420,8 @@ wechat.notification.wechat_bind_hover: >
 wechat.notification.homepage_open_tip: <span class="%messageClass%">"WeChat notification" can be opened in "Personal Settings - Third Party Login"。</span>
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">go to open</span>
 wechat.notification.cloud_open_tip: Please open ES Cloud
+admin.wechat_notification.send_days: Send Days
+
 
 #试卷导入引导
 document.import.intro_hover: >
@@ -1437,6 +1442,7 @@ subject.period: .
 subject.miss_score_no_more_than_score: Missing score is no more than score
 subject.score_update_success: Score modified successfully
 subject.difficulty_update_success: Difficulty modified successfully
+subject.belong_update_success: Belong modified successfully
 subject.question_count: '%count% questions total'
 subject.total_score: '%totalScore% score total'
 subject.is_editing_warning: 'Finish %seq% question before other operation'
@@ -1464,3 +1470,22 @@ user.account.order_pay_vip_close_hint: The vip level in this order has been clos
 user.account.order_pay: Continue
 user.account.order_not_pay: Not paying
 
+#coupon
+notify.copy_link_success: Copy link succeeded
+confirm.remove_coupon: Sure to delete this coupon batch?
+notify.remove_coupon_success: Delete this coupon batch succeeded!
+notify.remove_coupon_fail: Delete this coupon batch failed!
+notify.channel_select: Choose at least one distribution channel
+
+coupon.fixed_day: Validity period
+coupon.fixed_day.message: Please enter validity days after receipt
+admin.coupon.setting.confirm_message: Closing the coupon switch will affect all marketing campaigns that are issuing coupons, which will result in the marketing campaigns that use coupons not working properly. Coupons that have already been issued will not be able to continue to be used. The student side will block the "My Coupons" module, and the order page will not be able to continue to select coupon orders. Whether to continue?
+admin.coupon.setting.success_message: status saved
+coupon.target_type.multi_course: Part of course
+coupon.target_type.multi_classroom: Part of class
+admin.wechat.live_open_scenes_error.hint: At least one scene。
+course.question_manage.manage.delete_tips: Deleting the question may affect the exercise of class, please be cautious!
+admin.setting.invite.coupon.empty.tips: Please set coupon batch
+
+course.plan_task.activity_ppt_animation_img: Switch img mode
+course.plan_task.activity_ppt_animation_slide: Switch animation mode

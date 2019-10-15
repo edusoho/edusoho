@@ -156,7 +156,7 @@ class SmsServiceTest extends BaseTestCase
         $userInfo['email'] = "{$user}@{$user}.com";
         $userInfo['verifiedMobile'] = $phone;
         $userInfo['nickname'] = "{$user}";
-        $userInfo['password'] = "{$user}";
+        $userInfo['password'] = "{$user}123";
         $userInfo['loginIp'] = '127.0.0.1';
 
         return $this->getUserService()->register($userInfo);

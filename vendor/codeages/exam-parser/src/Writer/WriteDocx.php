@@ -229,7 +229,7 @@ class WriteDocx
     {
         $text = strip_tags($text);
         $text = str_replace(array("\n", "\r", "\t"), '<w:br/>', $text);
-        $text = str_replace('&nbsp;', ' ', $text);
+        $text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
         $text = str_replace('&', '&amp;', $text);
         $text = trim($text);
 

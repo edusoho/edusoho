@@ -2,12 +2,13 @@ import { isEmpty } from 'common/utils';
 import 'waypoints/lib/jquery.waypoints.min';
 import Emitter from 'common/es-event-emitter';
 import { debounce } from 'app/common/widget/debounce';
-/** 
+/**
+ *
  * 伪分页，从缓存中读取数据，数据结构格式见 构造方法
  *   例子见 app/Resources/static-src/app/js/courseset/show/index.js
  *     及 app/Resources/views/course/task-list/default-task-list.html.twig
- * 
-     <!-- 
+ *
+     <!--
       必须通过模板来生成节点, 模板由dataTemplateNode自定义（见构造函数）
         1. 变量以 {chapterName} 的方式生成，chapterName是变量，会先从 context 中找chapterName方法(参数为当前行data和context),
         如果没有此方法，则去data中找到相应属性
@@ -17,7 +18,7 @@ import { debounce } from 'app/common/widget/debounce';
            如果tmp节点上有 js-ignore-remove, 则不会被删除
      -->
      <div class="js-infinite-item-template hidden">
-      <li class="task-item bg-gray-lighter js-task-chapter infinite-item" 
+      <li class="task-item bg-gray-lighter js-task-chapter infinite-item"
           display-if="{isChapter}">
         <i class="es-icon es-icon-menu left-menu"></i>
         <a href="javascript:" class="title gray-dark">{chapterName}</a>
@@ -31,8 +32,8 @@ import { debounce } from 'app/common/widget/debounce';
       </tmp>
     </div>
 
-     <!-- 
-       显示节点的容器, 必须要有class "infinite-container", 
+     <!--
+       显示节点的容器, 必须要有class "infinite-container",
        根据所给的值，会将模板内的节点生成并显示到容器内（不包含模板节点本身）
      -->
      <ul class="task-list task-list-md task-list-hover infinite-container">
@@ -43,9 +44,9 @@ import { debounce } from 'app/common/widget/debounce';
  */
 export default class ESInfiniteCachedScroll extends Emitter {
   /**
-   * @param options  
+   * @param options
    *  {
-   *    'data': eval($('.infiniteScrollDataJson').val()),  
+   *    'data': eval($('.infiniteScrollDataJson').val()),
           //json数组
             [
               {
@@ -67,10 +68,10 @@ export default class ESInfiniteCachedScroll extends Emitter {
               return 'chapter' == data.itemType;
             },
           }
-   *    'dataTemplateNode': '.js-infinite-item-template',  
+   *    'dataTemplateNode': '.js-infinite-item-template',
    *        //会通过 $(dataTemplateNode)来找到模板, 只会生成 dataTemplateNode 指定节点内的内容（不包括该节点本身）,
    *        // 模板如下
-            <div class="js-infinite-item-template hidden">  
+            <div class="js-infinite-item-template hidden">
               <i class="es-icon es-icon-undone-check color-{color} left-menu"></i> // 实际显示的节点
             </div>
         'displayAllImmediately': false,  //没有分页刷新功能，直接显示全部
@@ -83,12 +84,42 @@ export default class ESInfiniteCachedScroll extends Emitter {
 
     this._options = options;
     this._initConfig();
-
+    this.chapterAnimate();
     if (this._displayAllImmediately) {
       this._displayCurrentPageDataAndSwitchToNext();
     } else {
       this._initUpLoading();
     }
+  }
+
+  toggleIcon(target, $expandIconClass, $putIconClass) {
+    return new Promise((resolve, reject) => {
+      let $icon = target.find('.js-remove-icon');
+      let $text = target.find('.js-remove-text');
+      if ($icon.hasClass($expandIconClass)) {
+        $icon.removeClass($expandIconClass).addClass($putIconClass);
+        if ($('.js-only-display-one-page').length == 0) {
+          this._displayCurrentPageDataAndSwitchToNext();
+        }
+      } else {
+        $icon.removeClass($putIconClass).addClass($expandIconClass);
+      }
+      resolve();
+    });
+  }
+
+  chapterAnimate(
+    delegateTarget = 'body',
+    target = '.js-task-chapter',
+    $expandIconClass = 'es-icon-remove',
+    $putIconClass = 'es-icon-anonymous-iconfont') {
+    const self = this;
+    $(delegateTarget).off('click').on('click', target, (event) => {
+      let $this = $(event.currentTarget);
+      self.toggleIcon($this, $expandIconClass, $putIconClass).then(() => {
+        $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
+      });
+    })
   }
 
   _initUpLoading() {
@@ -123,6 +154,10 @@ export default class ESInfiniteCachedScroll extends Emitter {
       this._pageSize = 10000;
     } else {
       this._pageSize = this._options['pageSize'] ? this._options['pageSize'] : 25;
+    }
+    //适配介绍页的查看全部要固定25个
+    if (this._pageSize > 25 && $('.js-only-display-one-page').length != 0) {
+      this._pageSize = 25
     }
 
     this._afterFirstLoad = this._options['afterFirstLoad'] ? this._options['afterFirstLoad'] : null;

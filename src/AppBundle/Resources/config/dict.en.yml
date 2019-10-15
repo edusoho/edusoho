@@ -468,3 +468,21 @@ questionOption:
     7: H
     8: I
     9: J
+
+weChatFansType:
+    all: All
+    user: User
+    notUser: NotUser
+
+weChatFansKeywordType:
+    nickname: Nickname
+    wechatNickname: WechatNickname
+
+weekDays:
+    Mon: Monday
+    Tue: Tuesday
+    Wed: Wednesday
+    Thu: Thursday
+    Fri: Friday
+    Sat: Saturday
+    Sun: Sunday

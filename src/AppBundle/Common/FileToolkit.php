@@ -48,7 +48,7 @@ class FileToolkit
         return $fileName;
     }
 
-    public static function validateFileExtension(File $file, $extensions = array())
+    public static function validateFileExtension(File $file, $extensions = null)
     {
         if (empty($extensions)) {
             $extensions = static::getSecureFileExtensions();

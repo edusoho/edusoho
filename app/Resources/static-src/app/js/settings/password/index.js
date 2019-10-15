@@ -1,5 +1,9 @@
 import notify from 'common/notify';
 
+$.validator.addMethod('spaceNoSupport', function (value, element) {
+  return value.indexOf(' ') < 0;
+}, $.validator.format(Translator.trans('validate.have_spaces')));
+
 $('#settings-password-form').validate({
   currentDom: '#password-save-btn',
   ajax: true,
@@ -11,7 +15,8 @@ $('#settings-password-form').validate({
       required: true,
       minlength: 5,
       maxlength: 20,
-      visible_character: true
+      visible_character: true,
+      spaceNoSupport: true
     },
     'confirmPassword': {
       required: true,
