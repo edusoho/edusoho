@@ -91,7 +91,7 @@ class UserCommonAdminServiceTest extends BaseTestCase
         $user = array();
         $user['email'] = 'user@user.com';
         $user['nickname'] = 'user';
-        $user['password'] = 'user';
+        $user['password'] = 'user123';
 
         return $this->getUserService()->register($user);
     }

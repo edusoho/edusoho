@@ -148,7 +148,7 @@ class BaseTestCase extends TestCase
             'nickname' => '游客',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
-            'org' => array('id' => 1),
+            'org' => array('id' => 1, 'orgCode' => '1.'),
         ));
 
         $this->getServiceKernel()->setBiz($this->getBiz());
@@ -165,7 +165,7 @@ class BaseTestCase extends TestCase
         $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         $user = $userService->changeUserRoles($user['id'], $roles);
         $user['currentIp'] = $user['createdIp'];
-        $user['org'] = array('id' => 1);
+        $user['org'] = array('id' => 1, 'orgCode' => '1.');
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->grantPermissionToUser($currentUser);

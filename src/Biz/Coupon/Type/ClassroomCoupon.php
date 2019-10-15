@@ -9,6 +9,6 @@ class ClassroomCoupon extends BaseCoupon
      */
     public function canUseable($coupon, $target)
     {
-        return isset($target['id']) && $coupon['targetId'] === $target['id'];
+        return isset($target['id']) && in_array($target['id'], $coupon['targetIds']);
     }
 }

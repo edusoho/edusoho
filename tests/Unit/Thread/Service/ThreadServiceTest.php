@@ -874,7 +874,7 @@ class ThreadServiceTest extends BaseTestCase
         $user = array();
         $user['email'] = 'user@user.com';
         $user['nickname'] = 'user';
-        $user['password'] = 'user';
+        $user['password'] = 'user123';
         $user = array_merge($user, $fields);
         $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';

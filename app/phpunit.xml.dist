@@ -20,8 +20,10 @@
             <directory>../tests/Unit/B*</directory>
             <file>./tests/Unit/AbstractCopyTest.php</file>
         </testsuite>
-        <testsuite name="UnitC2D">
+        <testsuite name="UnitC2C">
             <directory>../tests/Unit/C*</directory>
+        </testsuite>
+        <testsuite name="UnitD2D">
             <directory>../tests/Unit/D*</directory>
         </testsuite>
         <testsuite name="UnitE2P">
@@ -67,6 +69,7 @@
             <directory suffix=".php">../src/Biz</directory>
             <exclude>
                 <directory>../src/Biz/Util/Phpsec</directory>
+                <directory suffix="Exception.php">../src/Biz</directory>
             </exclude>
 
             <directory suffix=".php">../src/AppBundle</directory>

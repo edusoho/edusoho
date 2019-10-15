@@ -7,6 +7,15 @@ use AppBundle\Extensions\DataTag\TagDataTag;
 
 class TagDataTagTest extends BaseTestCase
 {
+    /**
+     * @expectedException \Biz\Common\CommonException
+     */
+    public function testEmptyTagId()
+    {
+        $dataTag = new TagDataTag();
+        $dataTag->getData(array());
+    }
+
     public function testGetData()
     {
         $tag1 = $this->getTagService()->addTag(array('name' => 'tag1'));

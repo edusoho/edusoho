@@ -13,7 +13,7 @@ class CourseThreadDataTagTest extends BaseTestCase
     public function testEmptyCourseId()
     {
         $dataTag = new CourseThreadDataTag();
-        $announcement = $dataTag->getData(array());
+        $dataTag->getData(array());
     }
 
     /**
@@ -22,7 +22,7 @@ class CourseThreadDataTagTest extends BaseTestCase
     public function testEmptyThreadId()
     {
         $dataTag = new CourseThreadDataTag();
-        $announcement = $dataTag->getData(array('courseId' => 1));
+        $dataTag->getData(array('courseId' => 1));
     }
 
     public function testGetData()

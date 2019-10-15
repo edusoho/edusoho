@@ -152,6 +152,10 @@ class TaskServiceImpl extends BaseService implements TaskService
         try {
             $this->preUpdateTaskCheck($id, $fields);
 
+            if (isset($fields['content'])) {
+                $fields['content'] = $this->purifyHtml($fields['content'], true);
+            }
+
             $activity = $this->getActivityService()->updateActivity($task['activityId'], $fields);
 
             if (in_array($activity['mediaType'], self::$mediaList)) {

@@ -165,4 +165,16 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
 
         return $response;
     }
+
+    public function setActivitiesDir($path)
+    {
+        if ($this->container->getParameter('kernel.debug')) {
+            $this->activitiesDir = $path;
+            $this->activityConfigManager = new ActivityConfigManager(
+                $this->container->getParameter('kernel.cache_dir'),
+                $path,
+                $this->container->getParameter('kernel.debug')
+            );
+        }
+    }
 }

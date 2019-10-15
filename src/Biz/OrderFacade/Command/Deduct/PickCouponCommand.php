@@ -11,13 +11,14 @@ class PickCouponCommand extends Command
     public function execute(Product $product, $params = array())
     {
         if (!empty($params['couponCode'])) {
-            $checkData = $this->getCouponService()->checkCoupon($params['couponCode'], $product->targetId, $product->targetType);
+            $couponCode = trim($params['couponCode']);
+            $checkData = $this->getCouponService()->checkCoupon($couponCode, $product->targetId, $product->targetType);
 
             if (isset($checkData['useable']) && $checkData['useable'] == 'no') {
                 return;
             }
 
-            $coupon = $this->getCouponService()->getCouponByCode($params['couponCode']);
+            $coupon = $this->getCouponService()->getCouponByCode($couponCode);
 
             if ($product->promotionPrice) {
                 $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->promotionPrice);

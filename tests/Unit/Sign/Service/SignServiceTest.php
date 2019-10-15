@@ -91,7 +91,7 @@ class SignServiceTest extends BaseTestCase
         $userInfo = array();
         $userInfo['email'] = "{$user}@{$user}.com";
         $userInfo['nickname'] = "{$user}";
-        $userInfo['password'] = "{$user}";
+        $userInfo['password'] = "{$user}123";
         $userInfo['loginIp'] = '127.0.0.1';
 
         return $this->getUserService()->register($userInfo);

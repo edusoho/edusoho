@@ -194,6 +194,36 @@ class CourseTaskMedia extends AbstractResource
         );
     }
 
+    protected function getHomework($course, $task, $activity, $request, $ssl = fals)
+    {
+        $user = $this->getCurrentUser();
+
+        $activity['ext']['latestHomeworkResult'] = $this->getTestpaperService()->getUserLatelyResultByTestId(
+            $user['id'],
+            $activity['mediaId'],
+            $activity['fromCourseId'],
+            $activity['id'],
+            'homework'
+        );
+
+        return $activity['ext'];
+    }
+
+    protected function getExercise($course, $task, $activity, $request, $ssl = fals)
+    {
+        $user = $this->getCurrentUser();
+
+        $activity['ext']['latestExerciseResult'] = $this->getTestpaperService()->getUserLatelyResultByTestId(
+            $user['id'],
+            $activity['mediaId'],
+            $activity['fromCourseId'],
+            $activity['id'],
+            'exercise'
+        );
+
+        return $activity['ext'];
+    }
+
     protected function getAudio($course, $task, $activity, $request, $ssl = false)
     {
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
@@ -281,6 +311,14 @@ class CourseTaskMedia extends AbstractResource
         }
 
         return $this->generateUrl($result['route'], $result['params'], $result['referenceType']);
+    }
+
+    /**
+     * @return TestpaperService
+     */
+    protected function getTestpaperService()
+    {
+        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 
     /**

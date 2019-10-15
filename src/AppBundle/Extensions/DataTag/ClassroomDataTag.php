@@ -33,6 +33,6 @@ class ClassroomDataTag extends BaseDataTag implements DataTag
      */
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 }

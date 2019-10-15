@@ -30,6 +30,7 @@ export default class Drag extends Emitter{
     let self = this;
     Api.dragCaptcha.get({
       before() {
+        $('.js-drag-img').css('minHeight', $('.js-jigsaw').height());
         $('.js-drag-img-mask').removeClass('hidden');
         $('.js-jigsaw-bg').remove();
         $('.js-jigsaw').attr('src', '');
