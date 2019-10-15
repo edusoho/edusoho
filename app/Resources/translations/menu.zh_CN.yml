@@ -426,3 +426,10 @@ web.classroom.setting.assistants_side_nav: 助教设置
 web.classroom.content.courses_side_nav: 课程管理
 web.classroom.content.students_side_nav: 学员管理
 web.classroom.content.testpaper_check_side_nav: 试卷批阅
+
+#coupon
+admin.system.operation.coupon_setting_tab: 优惠券设置
+admin.operation.coupon_menu: 优惠券管理
+admin.operation.coupon_menu.basic_tab: 优惠券管理
+admin.operation.coupon_menu.generate_btn: 生成优惠券
+admin.operation.query_menu.basic_tab: 使用查询

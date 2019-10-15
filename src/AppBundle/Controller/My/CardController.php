@@ -4,6 +4,7 @@ namespace AppBundle\Controller\My;
 
 use Biz\Card\Service\CardService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
@@ -29,6 +30,11 @@ class CardController extends BaseController
 
         if (empty($cardType) || !in_array($cardType, array('coupon', 'moneyCard'))) {
             $cardType = 'coupon';
+        }
+
+        $couponSetting = $this->getSettingService()->get('coupon', array());
+        if ('coupon' == $cardType && empty($couponSetting['enabled'])) {
+            return $this->createMessageResponse('error', '无法访问该页面');
         }
 
         $cards = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], $cardType);
@@ -166,5 +172,13 @@ class CardController extends BaseController
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 }
