@@ -8923,4 +8923,8 @@ money_card.expired_card: Expired Card
 money_card.card_receive_fail: Card Receive Fail
 money_card.card_receive_success: Card Receive Success
 money_card.card_recharge_success: Card ReCharge Success
+money_card.card_received: Card Received
+money_card.card_received_by_other: Card Received By Other
+money_card.card_used: Card Used
+money_card.card_used_by_other: Card Used By Other
 money_card.notify.card_receive_success: You have a prepaid card with a value of %coin_number%%coin_name% successfully received
