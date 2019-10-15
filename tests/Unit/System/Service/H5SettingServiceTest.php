@@ -125,9 +125,10 @@ class H5SettingServiceTest extends BaseTestCase
         $discoverySetting = $this->createCoupon();
         $discoverySetting = $this->getH5SettingService()->couponFilter($discoverySetting);
 
-        $this->assertEquals(0, $discoverySetting['data']['items'][0]['money']);
-        $this->assertEquals(1, $discoverySetting['data']['items'][0]['usedNum']);
-        $this->assertEquals(1, $discoverySetting['data']['items'][0]['unreceivedNum']);
+        // $this->assertEquals(0, $discoverySetting['data']['items'][0]['money']);
+        // $this->assertEquals(1, $discoverySetting['data']['items'][0]['usedNum']);
+        // $this->assertEquals(1, $discoverySetting['data']['items'][0]['unreceivedNum']);
+        $this->assertEquals(array(), $discoverySetting['data']['items']);
     }
 
     public function testVipFilter()

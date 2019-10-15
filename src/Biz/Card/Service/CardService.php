@@ -10,6 +10,8 @@ interface CardService
 
     public function addCard($card);
 
+    public function batchAddCouponCards(array $userCards);
+
     public function getCard($id);
 
     public function getCardByCardId($cardId);
