@@ -1,20 +1,11 @@
 {% extends 'layout.html.twig' %}
 {% do script(['libs/jquery-validation.js','app/js/auth/login/index.js']) %}
 {% set bodyClass = 'login' %}
-{#{% set ai_face_enabled = (setting('feature.face_enabled')|default(0) and setting('face.login.enabled')|default(0) and setting('face.login.pc_enabled')|default(0)) %}#}
+
 {% block title %}{{ 'user.login.content_title'|trans }} - {{ parent() }}{% endblock %}
 
 {% block content %}
-  {#{% if app.request.cookies.get('modalOpened') == 1 %}#}
-    {#<a href="#modal" class=" hidden" data-toggle="modal"#}
-       {#data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" class="hidden"><span#}
-      {#class="receive-modal"></span></a>#}
-  {#{% endif %}#}
   <div class="es-section login-section">
-    {#<div class="logon-tab clearfix">#}
-      {#<a class="active">{{ 'user.login.login_account'|trans }}</a>#}
-      {#<a href="{{ path('register', {goto:_target_path}) }}">{{ 'user.register.register_account'|trans }}</a>#}
-    {#</div>#}
     <div class="login-main js-login-main">
       <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">
 
@@ -54,39 +45,10 @@
           <button type="button" class="btn btn-primary btn-lg btn-block js-btn-login">{{ 'user.login.submit_button'|trans }}</button>
         </div>
 
-        {#<input type="hidden" name="_target_path" value="{{ _target_path }}">#}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
-
-      {#<div class="mbl">#}
-        {#<a class="link-primary" href="{{ path('password_reset') }}">{{ 'user.login.find_password'|trans }}</a>#}
-        {#<span class="color-gray mhs">|</span>#}
-        {#<span class="color-gray">{{ 'user.login.ask_register'|trans }}</span>#}
-        {#<a class="link-primary" href="{{ path('register', {goto:_target_path}) }}">{{ 'user.login.go_register'|trans }}</a>#}
-      {#</div>#}
-
-      {#{% if setting('login_bind.enabled') or ai_face_enabled %}#}
-        {#<div class="social-login">#}
-            {#<span>#}
-              {#{% if ai_face_enabled %}#}
-                {#<a class="sts-login-link js-sts-login-link" href="javascript:;">#}
-                  {#<img src="{{ asset('static-dist/app/img/face.png') }}"#}
-                       {#srcset="{{ asset('static-dist/app/img/face.png') }} 1x, {{ asset('static-dist/app/img/face@2x.png') }} 2x" alt="{{'user.login.sts_discovery'|trans}}"/>#}
-                {#</a>#}
-              {#{% endif %}#}
-              {#{{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}#}
-            {#</span>#}
-          {#<div class="line"></div>#}
-        {#</div>#}
-      {#{% endif %}#}
     </div>
-
-    {#{% if ai_face_enabled %}#}
-      {#{% set type = 'page' %}#}
-      {#{% include 'login/sts-logins-block.htm.twig'  with { type: type, goto: _target_path } %}#}
-    {#{% endif %}#}
   </div>
-
 {% endblock %}
 
 {% block bottom %}
