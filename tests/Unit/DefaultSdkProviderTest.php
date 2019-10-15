@@ -4,8 +4,6 @@ namespace Tests\Unit;
 
 use AppBundle\System;
 use Biz\BaseTestCase;
-use Codeages\Biz\Framework\Context\Biz;
-use Pimple\Container;
 use QiQiuYun\SDK\Service\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -44,5 +42,4 @@ class DefaultSdkProviderTest extends BaseTestCase
             $this->assertTrue($biz['qiQiuYunSdk.'.$value] instanceof BaseService);
         }
     }
-
 }
