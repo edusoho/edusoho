@@ -187,6 +187,7 @@ admin.operation.mobile.discovery_column_tab.create_btn: 'Add Category'
 
 ##微信通知管理模块
 admin.operation.wechat.notification_record_tab: Send Record
+admin.operation.wechat.fans_list_tab: Fans List
 admin.operation.wechat.notification_manage: Setting
 
 ##数据统计模块
@@ -423,3 +424,10 @@ web.classroom.setting.assistants_side_nav: Assistants
 web.classroom.content.courses_side_nav: Courses
 web.classroom.content.students_side_nav: Students
 web.classroom.content.testpaper_check_side_nav: Testpaper Review
+
+#coupon
+admin.system.operation.coupon_setting_tab: Coupon Setting
+admin.operation.coupon_menu: Coupon Manage
+admin.operation.coupon_menu.basic_tab: Coupon Manage
+admin.operation.coupon_menu.generate_btn: Generate Coupon
+admin.operation.query_menu.basic_tab: Use Query

@@ -19,11 +19,18 @@ export default class Create {
   }
 
   init() {
+    this.setValidateRule();
     this.initValidator();
     this.smsSend();
     this.submitForm();
     this.removeSmsErrorTip();
     this.dragEvent();
+  }
+
+  setValidateRule() {
+    $.validator.addMethod('spaceNoSupport', function (value, element) {
+      return value.indexOf(' ') < 0;
+    }, $.validator.format(Translator.trans('validate.have_spaces')));
   }
 
   dragEvent() {
@@ -63,6 +70,7 @@ export default class Create {
         required: true,
         minlength: 5,
         maxlength: 20,
+        spaceNoSupport: true,
       },
       confirmPassword: {
         required: true,

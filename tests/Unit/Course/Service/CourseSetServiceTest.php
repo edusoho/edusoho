@@ -272,7 +272,7 @@ class CourseSetServiceTest extends BaseTestCase
         $user = $this->getUserService()->register(array(
             'nickname' => 'user',
             'email' => 'user@user.com',
-            'password' => 'user',
+            'password' => 'user123',
             'createdIp' => '127.0.0.1',
             'orgCode' => '1.',
             'orgId' => '1',
@@ -846,7 +846,7 @@ class CourseSetServiceTest extends BaseTestCase
         $user = array();
         $user['email'] = 'normal@user.com';
         $user['nickname'] = 'normal';
-        $user['password'] = 'user';
+        $user['password'] = 'user123';
         $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
         $user['roles'] = array('ROLE_USER');

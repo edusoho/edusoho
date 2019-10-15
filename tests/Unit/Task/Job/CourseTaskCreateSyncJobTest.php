@@ -30,6 +30,7 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                         'seq' => 22,
                         'categoryId' => 123,
                         'title' => 'task title',
+                        'isLesson' => 1,
                         'isFree' => 1,
                         'isOptional' => 1,
                         'startTime' => 111111111,

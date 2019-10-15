@@ -93,7 +93,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $course = $event->getSubject();
         $member = $event->getArgument('member');
 
-        if ($member['role'] == 'student') {
+        if ('student' == $member['role']) {
             $this->getCourseService()->updateCourseStatistics($course['id'], array('studentNum'));
             $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('studentNum'));
         }
@@ -140,7 +140,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'courseId' => $course['id'],
             'objectType' => 'course',
             'objectId' => $course['id'],
-            'private' => $course['status'] == 'published' ? 0 : 1,
+            'private' => 'published' == $course['status'] ? 0 : 1,
             'userId' => $member['userId'],
             'properties' => array(
                 'course' => $this->simplifyCourse($course),
@@ -155,7 +155,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $course = $event->getSubject();
         $member = $event->getArgument('member');
 
-        if ($member['role'] == 'student') {
+        if ('student' == $member['role']) {
             $this->getCourseService()->updateCourseStatistics($course['id'], array('studentNum'));
             $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('studentNum'));
         }
@@ -177,7 +177,11 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $student = $this->getCourseMemberService()->getCourseMember($taskResult['courseId'], $taskResult['userId']);
         $course = $this->getCourseService()->getCourse($taskResult['courseId']);
-        $isFinished = intval($student['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum']) >= 1 ? true : false;
+        if (0 == $course['compulsoryTaskNum']) {
+            $isFinished = false;
+        } else {
+            $isFinished = intval($student['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum']) >= 1 ? true : false;
+        }
         $finishTime = $isFinished ? time() : 0;
 
         return $finishTime;

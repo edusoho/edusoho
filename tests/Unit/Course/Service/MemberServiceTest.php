@@ -777,6 +777,20 @@ class MemberServiceTest extends BaseTestCase
         $this->assertEquals('2019-07-05', $result);
     }
 
+    public function testFindLastLearnTimeRecordStudentsWithEmptyUserIds()
+    {
+        $results = $this->getMemberService()->findLastLearnTimeRecordStudents(array());
+
+        $this->assertEquals(array(), $results);
+    }
+
+    public function testFindLastLearnTimeRecordStudents()
+    {
+        $results = $this->getMemberService()->findLastLearnTimeRecordStudents(array('1'));
+
+        $this->assertEquals(array(), $results);
+    }
+
     public function testFindMembersByUserIdAndJoinType()
     {
         $user = $this->createNormalUser();
@@ -1208,7 +1222,7 @@ class MemberServiceTest extends BaseTestCase
         $user = array();
         $user['email'] = 'normal@user.com';
         $user['nickname'] = 'normal';
-        $user['password'] = 'user';
+        $user['password'] = 'user123';
         $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
         $user['roles'] = array('ROLE_USER');

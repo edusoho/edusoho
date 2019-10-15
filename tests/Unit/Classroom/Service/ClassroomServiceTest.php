@@ -1058,7 +1058,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin4',
             'email' => 'admin4@admin.com',
-            'password' => 'admin',
+            'password' => 'admin123',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -1359,7 +1359,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin4',
             'email' => 'admin4@admin.com',
-            'password' => 'admin',
+            'password' => 'admin123',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -1647,7 +1647,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin4',
             'email' => 'admin4@admin.com',
-            'password' => 'admin',
+            'password' => 'admin123',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -1768,7 +1768,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin4',
             'email' => 'admin4@admin.com',
-            'password' => 'admin',
+            'password' => 'admin123',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -1839,7 +1839,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin4',
             'email' => 'admin4@admin.com',
-            'password' => 'admin',
+            'password' => 'admin123',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -1933,7 +1933,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin4',
             'email' => 'admin4@admin.com',
-            'password' => 'admin',
+            'password' => 'admin123',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -2020,7 +2020,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin4',
             'email' => 'admin4@admin.com',
-            'password' => 'admin',
+            'password' => 'admin123',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -2049,7 +2049,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin4',
             'email' => 'admin4@admin.com',
-            'password' => 'admin',
+            'password' => 'admin123',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -2077,7 +2077,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin4',
             'email' => 'admin4@admin.com',
-            'password' => 'admin',
+            'password' => 'admin123',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -2179,7 +2179,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin5',
             'email' => 'admin5@admin.com',
-            'password' => 'admin',
+            'password' => 'admin123',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -2239,7 +2239,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin1',
             'email' => 'admin1@admin.com',
-            'password' => 'admin',
+            'password' => 'admin111',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -2248,18 +2248,18 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'admin2',
             'email' => 'admin2@admin.com',
-            'password' => 'admin',
+            'password' => 'admin222',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
         $user3 = $this->getUserService()->register(array(
             'nickname' => 'admin3',
-            'password' => 'admin',
+            'password' => 'admin333',
             'email' => 'admin3@admin.com',
         ));
         $user4 = $this->getUserService()->register(array(
             'nickname' => 'admin4',
-            'password' => 'admin',
+            'password' => 'admin444',
             'email' => 'admin4@admin.com',
         ));
 
@@ -2310,7 +2310,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 2,
             'nickname' => 'teacher',
             'email' => 'teacher@teacher.com',
-            'password' => 'admin',
+            'password' => 'admin111',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -2319,7 +2319,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 3,
             'nickname' => 'auditor',
             'email' => 'auditor@auditor.com',
-            'password' => 'auditor',
+            'password' => 'auditor222',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -2328,7 +2328,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 4,
             'nickname' => 'student',
             'email' => 'student@student.com',
-            'password' => 'student',
+            'password' => 'student333',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -2403,7 +2403,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 3,
             'nickname' => 'admin1',
             'email' => 'admin@adm1in.com',
-            'password' => 'adm1in',
+            'password' => 'admin111',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -2425,7 +2425,7 @@ class ClassroomServiceTest extends BaseTestCase
             'id' => 4,
             'nickname' => 'admin11',
             'email' => 'admin@adm11in.com',
-            'password' => 'adm11in',
+            'password' => 'admin112',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER'),
         ));
@@ -3056,7 +3056,7 @@ class ClassroomServiceTest extends BaseTestCase
         $user = array();
         $user['email'] = 'user@user.com';
         $user['nickname'] = 'user';
-        $user['password'] = 'user';
+        $user['password'] = 'user123';
         $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
         $user['roles'] = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
@@ -3123,7 +3123,7 @@ class ClassroomServiceTest extends BaseTestCase
         $user = array();
         $user['email'] = 'user@user1.com';
         $user['nickname'] = 'use1r';
-        $user['password'] = 'user1';
+        $user['password'] = 'user1234';
         $user['roles'] = array('ROLE_USER');
 
         return $this->getUserService()->register($user);
@@ -3134,7 +3134,7 @@ class ClassroomServiceTest extends BaseTestCase
         $user = array();
         $user['nickname'] = 'user'.$id;
         $user['email'] = $user['nickname'].'@user.com';
-        $user['password'] = 'user';
+        $user['password'] = 'user123';
         $user['roles'] = array('ROLE_USER', 'ROLE_TEACHER');
         $user = $this->getUserService()->register($user);
 

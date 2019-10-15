@@ -15,4 +15,6 @@ interface ExtensionInterface
     public function getTaskToolbars();
 
     public function getCourseTypes();
+
+    public function getWeChatTemplates();
 }

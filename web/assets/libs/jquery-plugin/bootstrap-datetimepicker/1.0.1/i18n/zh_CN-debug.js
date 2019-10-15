@@ -9,7 +9,7 @@ define("jquery-plugin/bootstrap-datetimepicker/1.0.1/i18n/zh_CN-debug", [ "$-deb
             monthsShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ],
             today: "今日",
             suffix: [],
-            meridiem: []
+            meridiem: ['上午', '下午']
         };
     })(jQuery);
 });

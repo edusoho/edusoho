@@ -14,10 +14,11 @@ class BizRateLimitListener
         $this->biz = $biz;
     }
 
+    //namespace '//' replace to '_'
     private $ruleMap = array(
-        array('SmsCenter', 'post', 'register_sms_rate_limiter'),
-        array('UserSmsResetPassword', 'post', 'sms_rate_limiter'),
-        array('Login', 'post', 'sms_rate_limiter'),
+        array('ApiBundle_Api_Resource_SmsCenter_SmsCenter', 'post', 'register_sms_rate_limiter'),
+        array('ApiBundle_Api_Resource_User_UserSmsResetPassword', 'post', 'sms_rate_limiter'),
+        array('ApiBundle_Api_Resource_Login_Login', 'post', 'sms_rate_limiter'),
     );
 
     public function handle(ResourceEvent $event)
@@ -44,9 +45,9 @@ class BizRateLimitListener
 
     private function getClassName($class)
     {
-        $path = explode('\\', $class);
+        $classStr = str_replace('\\', '_', $class);
 
-        return array_pop($path);
+        return $classStr;
     }
 
     /**

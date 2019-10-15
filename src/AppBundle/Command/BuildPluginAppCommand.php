@@ -47,7 +47,7 @@ class BuildPluginAppCommand extends BaseCommand
     private function getOriginDir($rootDir, $pluginCode)
     {
         $originDir = $rootDir.'/../web/static-dist/'.strtolower($pluginCode);
-        if ($pluginCode == 'FavoriteReward') {
+        if ('FavoriteReward' == $pluginCode) {
             $originDir = $rootDir.'/../web/static-dist/litetheme';
         }
 
@@ -63,7 +63,7 @@ class BuildPluginAppCommand extends BaseCommand
         $targetDir = $rootDir.'/../plugins/'.$pluginCode.'Plugin';
 
         $folder = strtolower($pluginCode);
-        if ($pluginCode == 'FavoriteReward') {
+        if ('FavoriteReward' == $pluginCode) {
             $folder = 'litetheme';
         }
         if ($this->isPluginTheme($pluginCode)) {
@@ -184,7 +184,7 @@ class BuildPluginAppCommand extends BaseCommand
     {
         if (file_exists($pluginDir.'/block.json')) {
             $this->filesystem->copy($pluginDir.'/block.json', $distDir.'/block.json');
-            BlockToolkit::generateBlcokContent($pluginDir.'/block.json', $distDir.'/blocks', $container);
+            BlockToolkit::generateBlockContent($pluginDir.'/block.json', $distDir.'/blocks', $container);
         }
     }
 

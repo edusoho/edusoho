@@ -59,7 +59,9 @@
 
           <div class="metas">
             <span class="num prl"><i class="es-icon es-icon-people prm"></i>{{ courseSet.studentNum }}</span>
-            <span class="comment"><i class="es-icon es-icon-textsms prm"></i>{{ courseSet.ratingNum }}</span>
+            {% if setting('course.show_review', '1') == 1 %}
+              <span class="comment"><i class="es-icon es-icon-textsms prm"></i>{{ courseSet.ratingNum }}</span>
+            {% endif %}
           </div>
           <div class="user">
             {% if courseSet.course.teacherIds|default(null) %}

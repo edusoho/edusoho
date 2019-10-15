@@ -58,7 +58,7 @@ define(function(require, exports, module) {
         });
       },
 
-      downloadFile(url) {
+      downloadFile: function(url) {
         var iframe = document.createElement("iframe");
         iframe.style.display = "none";
         iframe.style.height = 0;
@@ -69,7 +69,7 @@ define(function(require, exports, module) {
         }, 5 * 60 * 1000);
       },
 
-      batchDownload() {
+      batchDownload: function() {
         var self = this;
         var urls = [];
         $('#materials-table').find('[data-role=batch-item]:checked').each(function() {

@@ -72,6 +72,7 @@ class ContentServiceImpl extends BaseService implements ContentService
             $this->createNewException(ContentException::TITLE_REQUIRED());
         }
 
+        $content['title'] = $this->purifyHtml($content['title'], true);
         $content['userId'] = $this->getCurrentUser()->id;
         $content['createdTime'] = time();
 

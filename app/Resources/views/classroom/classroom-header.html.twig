@@ -42,10 +42,12 @@
             </span>
           </h2>
           <div class="metas">
-            <div class="score">
-              {{ web_macro.star(classroom.rating) }}
-              <span>({{ classroom.ratingNum }}{{ 'classroom.reviews'|trans }})</span>
-            </div>
+            {% if setting('classroom.show_review', '1') == 1 %}
+              <div class="score">
+                {{ web_macro.star(classroom.rating) }}
+                <span>({{ classroom.ratingNum }}{{ 'classroom.reviews'|trans }})</span>
+              </div>
+            {% endif %}
             <div class="price">
               {{ 'classroom.price'|trans }}：
               <span>
