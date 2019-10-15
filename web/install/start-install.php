@@ -29,6 +29,7 @@ $functionName = 'install_step'.$step;
 $functionName($init_data);
 
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Crontab\SystemCrontabInitializer;
 
@@ -505,6 +506,9 @@ EOD;
         'cloud_sms' => array(
             'system_remind' => 'on',
         ),
+        'coupon' => array(
+            'enabled' => 1,
+        ),
     );
 
     $service = ServiceKernel::instance()->createService('System:SettingService');
@@ -540,6 +544,15 @@ function _initKey()
     if (empty($users) || empty($users[0])) {
         return array('error' => '管理员帐号不存在，创建Key失败');
     }
+
+    $filePath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/visitor.yml';
+
+    if (file_exists($filePath)) {
+        $yaml = new Yaml();
+        $visitor = $yaml->parse($filePath);
+        $visitorId = empty($visitor['visitorId']) ? '' : $visitor['visitorId'];
+    }
+    $users[0]['visitorId'] = empty($visitorId) ? '' : $visitorId;
 
     $keys = $applier->applyKey($users[0], 'opensource', 'install');
 

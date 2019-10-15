@@ -6,6 +6,63 @@
   }
 }
 
+.coupon-pack-item {
+  position: relative;
+  display: inline-block;
+  width: 330px;
+  height: 190px;
+  margin-bottom: 16px;
+  padding-left: 30px;
+  color: #fff;
+  background: url('@{img-src}coupon.png') no-repeat;
+  .range {
+    padding-top: 26px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 20px;
+    color: #fff;
+  }
+  .tip {
+    position: absolute;
+    top: 84px;
+    right: 26px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #fff;
+  }
+  .date {
+    color: #fff;
+  }
+  .price {
+    font-size: 16px;
+    color: #fff;
+    .price__number {
+      font-size: 48px;
+      font-weight: 600;
+      line-height: 67px;
+      vertical-align: sub;
+      color: #fff;
+    }
+  }
+  .stamp {
+    position: absolute;
+    left: 14px;
+    bottom: 16px;
+    display: inline-block;
+    width: 122px;
+    height: 122px;
+    &.stamp-outdate {
+      background: url('@{img-src}coupon.png') no-repeat -183px -384px;
+    }
+    &.stamp-used {
+      background: url('@{img-src}coupon.png') no-repeat -30px -384px;
+    }
+  }
+  &.useless {
+    background: url('@{img-src}coupon.png') no-repeat 0 -190px;
+  }
+}
+
 .card-pack-item {
   position: relative;
   width: 254px;
@@ -115,6 +172,9 @@
         font-size: 18px;
       }
     }
+    .coupon-pack-item {
+      margin-left: 74px;
+    }
     .modal-action {
       margin-top: 30px;
       text-align: center;
@@ -123,4 +183,58 @@
       }
     }
   }
+}
+
+
+.coupon-modal {
+  .modal-header {
+    border: none;
+  }
+  .modal-body {
+    padding-top: 0;
+    padding-bottom: 24px;
+  }
+  .modal-footer {
+    border: none;
+    display: none;
+  }
+  .coupon-modal-paginator {
+    text-align: center;
+    .pagination {
+      margin-bottom: 0;
+    }
+  }
+}
+.coupon-modal-item {
+  margin-top: 0;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  border-top: 1px solid #ebebeb;
+  &:last-child {
+    border-bottom: 1px solid #ebebeb;
+  }
+
+  .classroom-cover-img {
+    width: 68px;
+    height: 45px;
+    max-width: 68px;
+  }
+
+  .course-cover-img {
+    width: 80px;
+    height: 45px;
+    max-width: 80px;
+  }
+  .coupon-modal-item__title {
+    margin-bottom: 4px;
+    color: @gray-darker;
+    line-height: 20px;
+  }
+
+  .coupon-modal-item__price {
+    font-size: 18px;
+    line-height: 25px;
+    font-weight: bold;
+  }
+  
 }

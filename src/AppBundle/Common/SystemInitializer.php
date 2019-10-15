@@ -54,6 +54,7 @@ class SystemInitializer
         $this->_initRefundSetting();
         $this->_initSiteSetting();
         $this->_initStorageSetting();
+        $this->_initCouponSetting();
         $this->_initSystemUsers();
         $this->_initCustom();
     }
@@ -259,6 +260,19 @@ class SystemInitializer
         );
 
         $this->getSettingService()->set('storage', $default);
+
+        $this->output->writeln(' ...<info>成功</info>');
+    }
+
+    private function _initCouponSetting()
+    {
+        $this->output->write('  初始化优惠码设置');
+
+        $default = array(
+            'enabled' => 1,
+        );
+
+        $this->getSettingService()->set('coupon', $default);
 
         $this->output->writeln(' ...<info>成功</info>');
     }

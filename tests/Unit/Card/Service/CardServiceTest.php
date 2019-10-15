@@ -229,7 +229,7 @@ class CardServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getCardService(), 'isAvailable', array(array('status' => 'receive', 'deadline' => time(), 'targetType' => 'all'), 'all', 1));
         $this->assertTrue($result);
 
-        $result = ReflectionUtils::invokeMethod($this->getCardService(), 'isAvailable', array(array('status' => 'receive', 'deadline' => time(), 'targetType' => 'course', 'targetId' => 1), 'course', 1));
+        $result = ReflectionUtils::invokeMethod($this->getCardService(), 'isAvailable', array(array('status' => 'receive', 'deadline' => time(), 'targetType' => 'course', 'targetId' => 1, 'targetIds' => array(1)), 'course', 1));
         $this->assertTrue($result);
     }
 
@@ -301,7 +301,7 @@ class CardServiceTest extends BaseTestCase
         $user = array();
         $user['email'] = 'user@user.com';
         $user['nickname'] = 'user';
-        $user['password'] = 'user';
+        $user['password'] = 'user123';
         $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
         $user['roles'] = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');

@@ -379,7 +379,9 @@
       {% endif %}
 
       {# 学员评价 #}
-      {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
+      {% if setting('course.show_review', '1') == 1 %}
+        {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
+      {% endif %}
 
       {# 最热话题 #}
       {% if setting('group').group_show|default(1) %}

@@ -11,12 +11,18 @@
         </div>
         <div class="content">
           <div class="text-16">
+            {% if questionLack|default(false) %}
+            {{'course.plan_task.activity_manage.exercise.info_tips.question_lack'|trans|raw}}
+            {% else %}
             {{'course.plan_task.activity_manage.exercise.info_tips'|trans({'%itemCount%':exercise.itemCount})|raw}}
+            {% endif %}
           </div>
         </div>
+        {% if not questionLack %}
         <div class="text-right mt20">
           <a class="btn btn-primary" href="{{ path('exercise_start_do',{lessonId:activity.id,exerciseId:exercise.id})}}">{{'course.plan_task.activity_manage.exercise.start_btn'|trans}}</a>
         </div>
+        {% endif %}
       </div>
     </div>
   </div>

@@ -12,7 +12,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
         $registration = array(
             'email' => 'hello@howzhi.com',
             'nickname' => 'hello',
-            'password' => '123',
+            'password' => '123456',
         );
         list($user, $inviteUser) = $this->getEmailRegistDecoder()->register($registration, 'default');
 
@@ -29,7 +29,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
         $registration = array(
             'email' => 'hello@howzhi.com',
             'nickname' => '123',
-            'password' => '123',
+            'password' => '123456',
         );
         $this->getEmailRegistDecoder()->register($registration, 'default');
     }
@@ -113,7 +113,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
         $registration = array(
             'email' => 'hello@howzhi.com',
             'nickname' => 'hello',
-            'password' => '123',
+            'password' => '123456',
             'token' => array(
                 'userId' => 1357,
             ),
@@ -161,7 +161,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
         $registration = array(
             'email' => 'hello@howzhi.com',
             'nickname' => 'hello',
-            'password' => '123',
+            'password' => '123456',
         );
         $this->getEmailRegistDecoder()->register($registration);
 

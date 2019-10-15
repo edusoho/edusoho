@@ -29,7 +29,7 @@ class BinderRegistDecoderImplTest extends BaseTestCase
         $registration = array(
             'email' => 'hello@howzhi.com',
             'nickname' => 'hello',
-            'password' => '123',
+            'password' => '123456',
             'authid' => 'sdfses1',
             'type' => 'qq',
         );
@@ -40,7 +40,7 @@ class BinderRegistDecoderImplTest extends BaseTestCase
 
         $user = $this->getUserService()->getUser($user['id']);
 
-        $expectedPass = $this->getPasswordEncoder()->encodePassword('123', $user['salt']);
+        $expectedPass = $this->getPasswordEncoder()->encodePassword('123456', $user['salt']);
         $this->assertEquals('hello@howzhi.com', $user['email']);
         $this->assertEquals($expectedPass, $user['password']);
         $this->assertEquals(1, $user['setup']);

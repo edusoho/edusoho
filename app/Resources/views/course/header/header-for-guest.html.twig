@@ -1,8 +1,8 @@
 {% extends 'course/header/header-layout.html.twig' %}
 
 {% if previewAs == 'guest' %}
-	{% set member = null %}
-	{% set courses = data('CoursesByCourseSetId', {courseSetId: courseSet.id}) %}
+  {% set member = null %}
+  {% set courses = data('CoursesByCourseSetId', {courseSetId: courseSet.id}) %}
 {% endif %}
 
 {% set page_type = 'guest' %}
@@ -14,7 +14,7 @@
 {% block course_header_people_num %}{% endblock %}
 
 {% block course_member_count %}
-	{{ 'course.course_member_count'|trans({'%studentsNum%':courseSet.studentNum}) }}
+  {{ 'course.course_member_count'|trans({'%studentsNum%':courseSet.studentNum}) }}
 {% endblock %}
 
 {% block course_heard_content %}
@@ -30,11 +30,11 @@
       {{ slot('drp.product_tags.extension', {'type':'course','targetId':course.id}) }}
       <img class="img-responsive" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" alt="{{ course.title }} ">
       <div class="image-overlay"></div>
-			{% if previewTask | default(null) %}
+      {% if previewTask | default(null) %}
         <a href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:course.id, id:previewTask.id}) }}" class="course-img-cover">
           <i class="es-icon es-icon-playcircleoutline"></i>
         </a>
-			{% endif %}
+      {% endif %}
       
       <div class="course-detail-remask">
         {% if setting('course.show_student_num_enabled', '1') == 1  %}
@@ -44,10 +44,12 @@
             <i class="es-icon es-icon-view"></i>{{ 'course.students_count'|trans({'%studentsNum%':course.hitNum|default(0)})|raw }}
           {% endif %}
         {% endif %}
-        <div class="score pull-right mb0">
-					{{ web_macro.star(courseSet.rating|default(0)) }}
-          <span class="vertical-middle">{{'course.mask.rating_num'|trans({'%ratingNum%':courseSet.ratingNum|default(0)})}}</span>
-        </div>
+        {% if setting('course.show_review', '1') == 1 %}
+          <div class="score pull-right mb0">
+            {{ web_macro.star(courseSet.rating|default(0)) }}
+            <span class="vertical-middle">{{'course.mask.rating_num'|trans({'%ratingNum%':courseSet.ratingNum|default(0)})}}</span>
+          </div>
+        {% endif %}
       </div>
     </div>
     <div class="course-detail-info">

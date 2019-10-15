@@ -45,7 +45,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'text' => array(
                 'meta' => array(
                     'name' => 'course.activity.text',
-                    'icon' => 'es-icon es-icon-graphicclass',
+                    'icon' => 'es-icon es-icon-graphic',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Text',
                 'controller' => 'AppBundle:Activity/Text',
@@ -57,7 +57,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'video' => array(
                 'meta' => array(
                     'name' => 'course.activity.video',
-                    'icon' => 'es-icon es-icon-videoclass',
+                    'icon' => 'es-icon es-icon-video',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Video',
                 'controller' => 'AppBundle:Activity/Video',
@@ -69,7 +69,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'audio' => array(
                 'meta' => array(
                     'name' => 'course.activity.audio',
-                    'icon' => 'es-icon es-icon-audioclass',
+                    'icon' => 'es-icon es-icon-audio',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Audio',
                 'controller' => 'AppBundle:Activity/Audio',
@@ -81,7 +81,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'live' => array(
                 'meta' => array(
                     'name' => 'course.activity.live',
-                    'icon' => 'es-icon es-icon-videocam',
+                    'icon' => 'es-icon es-icon-live',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Live',
                 'controller' => 'AppBundle:Activity/Live',
@@ -95,7 +95,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'discuss' => array(
                 'meta' => array(
                     'name' => 'course.activity.discuss',
-                    'icon' => 'es-icon es-icon-comment',
+                    'icon' => 'es-icon es-icon-discuss',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Discuss',
                 'controller' => 'AppBundle:Activity/Discuss',
@@ -108,7 +108,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'flash' => array(
                 'meta' => array(
                     'name' => 'course.activity.flash',
-                    'icon' => 'es-icon es-icon-flashclass',
+                    'icon' => 'es-icon es-icon-flash',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Flash',
                 'controller' => 'AppBundle:Activity/Flash',
@@ -123,7 +123,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'doc' => array(
                 'meta' => array(
                     'name' => 'course.activity.doc',
-                    'icon' => 'es-icon es-icon-description',
+                    'icon' => 'es-icon es-icon-document',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Doc',
                 'controller' => 'AppBundle:Activity/Doc',
@@ -138,7 +138,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'ppt' => array(
                 'meta' => array(
                     'name' => 'course.activity.ppt',
-                    'icon' => 'es-icon es-icon-pptclass',
+                    'icon' => 'es-icon es-icon-ppt',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Ppt',
                 'controller' => 'AppBundle:Activity/Ppt',
@@ -153,7 +153,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'testpaper' => array(
                 'meta' => array(
                     'name' => 'course.activity.testpaper',
-                    'icon' => 'es-icon es-icon-kaoshi',
+                    'icon' => 'es-icon es-icon-examination',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Testpaper',
                 'controller' => 'AppBundle:Activity/Testpaper',
@@ -165,7 +165,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'homework' => array(
                 'meta' => array(
                     'name' => 'course.activity.homework',
-                    'icon' => 'es-icon es-icon-zuoye',
+                    'icon' => 'es-icon es-icon-task',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Homework',
                 'controller' => 'AppBundle:Activity/Homework',
@@ -177,7 +177,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'exercise' => array(
                 'meta' => array(
                     'name' => 'course.activity.exercise',
-                    'icon' => 'es-icon es-icon-mylibrarybooks',
+                    'icon' => 'es-icon es-icon-exercise',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Exercise',
                 'controller' => 'AppBundle:Activity/Exercise',
@@ -189,7 +189,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'download' => array(
                 'meta' => array(
                     'name' => 'course.activity.download',
-                    'icon' => 'es-icon es-icon-filedownload',
+                    'icon' => 'es-icon es-icon-downloadfile',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Download',
                 'controller' => 'AppBundle:Activity/Download',

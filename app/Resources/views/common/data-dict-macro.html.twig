@@ -97,3 +97,13 @@
       {{'common.video_quality.high'|trans}} <span class="color-gray">({{'common.video_quality.high.tips'|trans}})</span>
     {% endif %}
 {% endmacro %}
+
+{% macro classroomStatus(status) %}
+  {% if status == 'draft' %}
+    <span class="color-gray">{{ 'common.classroomStatus.draft'|trans }}</span>
+  {% elseif status == 'published' %}
+    <span class="color-success">{{ 'common.classroomStatus.published'|trans }}</span>
+  {% elseif status == 'closed' %}
+    <span class="color-danger">{{ 'common.classroomStatus.closed'|trans }}</span>
+  {% endif %}
+{% endmacro %}

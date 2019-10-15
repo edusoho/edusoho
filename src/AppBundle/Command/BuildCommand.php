@@ -72,7 +72,7 @@ class BuildCommand extends BaseCommand
         $this->clean();
 
         $this->copyInstallFiles();
-        $this->package();
+        $this->_zipPackage();
         $output->writeln('<info>End build.</info>');
     }
 
@@ -146,13 +146,12 @@ class BuildCommand extends BaseCommand
         }
     }
 
-    private function package()
+    private function _zipPackage()
     {
-        $this->output->writeln('build installation package  use: tar zcf edusoho-'.System::VERSION.'tar.gz edusoho/');
+        $this->output->writeln('build installation package  use: zip -r edusoho-'.System::VERSION.'.zip edusoho/');
 
         chdir($this->buildDirectory);
-
-        $command = 'tar zcf edusoho-'.System::VERSION.'.tar.gz edusoho/';
+        $command = 'zip -r edusoho-'.System::VERSION.'.zip edusoho/';
         exec($command);
     }
 
@@ -246,7 +245,7 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ThemeCreateCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ThemeCreateCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ResetPasswordCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/UserChangeCommand.php", "{$this->distDirectory}/src/AppBundle/Command/UserChangeCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php", "{$this->distDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/InitWebsiteCommand.php", "{$this->distDirectory}/src/AppBundle/Command/InitWebsiteCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php", "{$this->distDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php");

@@ -81,6 +81,11 @@
   vertical-align: top;
 }
 
+.subject-explain-label {
+  display: inline-block;
+  width: 40px;
+}
+
 .subject-sub-item-title {
   display: table;
 }
@@ -147,7 +152,8 @@
   .subject-item__operation {
     left: 42px;
   }
-  .subject-sub-item__answer {
+  .subject-sub-item__answer,
+  .subject-sub-item__explain {
     margin-left: 30px;
   }
 }
@@ -485,4 +491,20 @@
       max-width: 550px;
     }
   }
+}
+
+.subject-bottom-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  background-color: #fff;
+  z-index: 10;
+  .cd-box-shadow-z(8px);
+}
+
+.overflow-unset {
+  overflow: unset !important;
 }

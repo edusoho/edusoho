@@ -161,6 +161,38 @@ class LocalFileImplementorTest extends BaseTestCase
         $this->getLocalFileImplementor()->moveFile('materiallibtest', '1', new UploadedFile($tmpFilePath, $moveFilePath, null, filesize($tmpFilePath), UPLOAD_ERR_OK, 1), array('hashId' => 'materiallibtest/1/testMoved.jpg'));
     }
 
+    /**
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.arguments_invalid
+     */
+    public function testMoveFileTargetTypeInvalidArgumentException()
+    {
+        $baseDirectory = $this->biz['topxia.disk.local_directory'];
+        $tmpPath = $baseDirectory.DIRECTORY_SEPARATOR.'tmp';
+        $tmpFilePath = $tmpPath.DIRECTORY_SEPARATOR.'tmp.jpg';
+        FileToolkit::remove($tmpPath);
+        mkdir($tmpPath, 0777, true);
+        file_put_contents($tmpFilePath, 'test12345');
+        $moveFilePath = $baseDirectory.DIRECTORY_SEPARATOR.'test/1/test1.jpg';
+        $this->getLocalFileImplementor()->moveFile('test/', '1', new UploadedFile($tmpFilePath, $moveFilePath, null, filesize($tmpFilePath), UPLOAD_ERR_OK, 1), array('hashId' => 'test/1/testMoved.jpg'));
+    }
+
+    /**
+     * @expectedException \Biz\File\UploadFileException
+     * @expectedExceptionMessage exception.uploadfile.arguments_invalid
+     */
+    public function testMoveFileTargetIdInvalidArgumentException()
+    {
+        $baseDirectory = $this->biz['topxia.disk.local_directory'];
+        $tmpPath = $baseDirectory.DIRECTORY_SEPARATOR.'tmp';
+        $tmpFilePath = $tmpPath.DIRECTORY_SEPARATOR.'tmp.jpg';
+        FileToolkit::remove($tmpPath);
+        mkdir($tmpPath, 0777, true);
+        file_put_contents($tmpFilePath, 'test12345');
+        $moveFilePath = $baseDirectory.DIRECTORY_SEPARATOR.'test/1/test1.jpg';
+        $this->getLocalFileImplementor()->moveFile('test', '/1', new UploadedFile($tmpFilePath, $moveFilePath, null, filesize($tmpFilePath), UPLOAD_ERR_OK, 1), array('hashId' => 'test/1/testMoved.jpg'));
+    }
+
     public function testReconvertOldFile()
     {
         $result = $this->getLocalFileImplementor()->reconvertOldFile(null, '');

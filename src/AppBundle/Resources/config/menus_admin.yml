@@ -605,8 +605,12 @@ admin:
                                     mode: modal
                 admin_operation_wechat_notification:
                     name: admin.operation.wechat_notification
-                    group: 2
+                    group: 3
                     children:
+                        admin_operation_wechat_fans_list:
+                            name: admin.operation.wechat.fans_list_tab
+                            disable: true
+                            router_name: admin_wechat_fans_list
                         admin_operation_wechat_notification_record:
                             name: admin.operation.wechat.notification_record_tab
                             disable: true
@@ -626,6 +630,25 @@ admin:
                                 tab: trend
                                 analysisDateType: register
                             router_name: admin_operation_analysis_register
+                admin_operation_coupon:
+                    name: admin.operation.coupon_menu
+                    router_name: admin_coupon
+                    children:
+                        admin_operation_coupon_manage:
+                            name: admin.operation.coupon_menu.basic_tab
+                            disable: true
+                            router_name: admin_coupon
+                            children:
+                                admin_coupon_generate:
+                                    name: admin.operation.coupon_menu.generate_btn
+                                    group: topBtn
+                        admin_operation_coupon_query:
+                            name: admin.operation.query_menu.basic_tab
+                            disable: true
+                            router_name: admin_coupon_query
+                        admin_coupon_setting:
+                            name: admin.system.operation.coupon_setting_tab
+                            disable: true
                 admin_operation_keyword:
                     name: admin.operation.sensitive_words_menu
                     parent: admin_operation
@@ -847,7 +870,7 @@ admin:
                         _marketing_marketing_page:
                             name: admin.marketing.menu
                             router_name: admin_login_marketing
-        
+
         admin_distributor_top:
             name: admin.distributor.menu
             blank: true

@@ -104,12 +104,12 @@ define(function(require, exports, module) {
           }
         });
 
-        validator.addItem({
-          element: '[name="task_name"]',
-          required: true,
-          rule: 'maxlength{max:10}',
-          display: '名称'
-        });
+        // validator.addItem({
+        //   element: '[name="task_name"]',
+        //   required: true,
+        //   rule: 'maxlength{max:10}',
+        //   display: '名称'
+        // });
         validator.addItem({
           element: '[name="chapter_name"]',
           required: true,

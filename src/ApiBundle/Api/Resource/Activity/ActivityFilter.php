@@ -31,6 +31,7 @@ class ActivityFilter extends Filter
         //testpaper module
         if ('testpaper' == $data['mediaType']) {
             if (!empty($data['ext'])) {
+                $data['testpaperInfo']['testpaperId'] = $data['ext']['mediaId'];
                 $data['testpaperInfo']['testMode'] = $data['ext']['testMode'];
                 $data['testpaperInfo']['limitTime'] = $data['ext']['limitedTime'];
                 $data['testpaperInfo']['redoInterval'] = $data['ext']['redoInterval'] * 60; //分钟
