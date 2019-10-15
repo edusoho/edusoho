@@ -8915,3 +8915,12 @@ course.setting.course_remind_go_to_open: To open
 admin.setting_wechat_auth.re_authorization_btn: ReAuth
 admin.setting_wechat_auth.authorization_in_new_page_hint: Please Authorization In New Page
 admin.setting_wechat_auth.authorization_success: Anthorized Success
+
+
+money_card.invalid_password: Invalid Password
+money_card.invalid_card: Invalid Card
+money_card.expired_card: Expired Card
+money_card.card_receive_fail: Card Receive Fail
+money_card.card_receive_success: Card Receive Success
+money_card.card_recharge_success: Card ReCharge Success
+money_card.notify.card_receive_success: You have a prepaid card with a value of %coin_number%%coin_name% successfully received

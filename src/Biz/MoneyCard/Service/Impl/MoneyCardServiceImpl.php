@@ -618,6 +618,98 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         }
     }
 
+    public function receiveMoneyCardByPassword($password, $userId)
+    {
+        try {
+            $this->biz['db']->beginTransaction();
+
+            $moneyCard = $this->getMoneyCardByPassword($password);
+
+            if (!$moneyCard) {
+                return array(
+                    'code' => 'failed',
+                    'message' => 'money_card.invalid_password',
+                );
+            }
+
+            if (!$this->isMoneyCardInvalid($moneyCard, $userId)) {
+                return array(
+                    'code' => 'invalid',
+                    'message' => 'money_card.invalid_card',
+                );
+            }
+
+            if (!(time() < 86400 + strtotime($moneyCard['deadline']))) {
+                return array(
+                    'code' => 'expired',
+                    'message' => 'money_card.expired_card',
+                );
+            }
+
+            $moneyCard = $this->getMoneyCardDao()->update($moneyCard['id'], array(
+                'rechargeUserId' => $userId,
+                'cardStatus' => 'receive',
+                'receiveTime' => time(),
+            ));
+
+            if (empty($moneyCard)) {
+                $this->biz['db']->commit();
+
+                return array(
+                    'code' => 'failed',
+                    'message' => 'money_card.card_receive_fail',
+                );
+            }
+
+            $this->getCardService()->addCard(array(
+                'cardId' => $moneyCard['id'],
+                'cardType' => 'moneyCard',
+                'deadline' => strtotime($moneyCard['deadline']),
+                'userId' => $userId,
+            ));
+
+            $receivedNumber = $this->getMoneyCardDao()->count(array(
+                'batchId' => $moneyCard['batchId'],
+                'receiveTime_GT' => 0,
+            ));
+            $batch = $this->getMoneyCardBatchDao()->update($moneyCard['batchId'], array(
+                'receivedNumber' => $receivedNumber,
+            ));
+
+            $message = $this->trans('money_card.notify.card_receive_success', array('coin_number' => $batch['coin'], 'coin_name' => $this->getCoinName()));
+            $this->getNotificationService()->notify($userId, 'default', $message);
+            $this->dispatchEvent('moneyCard.receive', $batch);
+
+            $this->biz['db']->commit();
+
+            return array(
+                'id' => $moneyCard['id'],
+                'code' => 'success',
+                'message' => 'money_card.card_receive_success',
+            );
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
+    }
+
+    protected function isMoneyCardInvalid($moneyCard, $userId)
+    {
+        if (!(0 == $moneyCard['rechargeTime'])) {
+            return false;
+        }
+
+        if ('invalid' == $moneyCard['cardStatus']) {
+            return false;
+        }
+
+        if ('receive' == $moneyCard['cardStatus'] && $moneyCard['rechargeUserId'] != $userId) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * @return MoneyCardDao
      */
