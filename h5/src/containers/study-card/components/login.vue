@@ -13,7 +13,6 @@
               :placeholder="currentLoginMode.accountPlaceholder"
               clearable
               :border=false
-              class="login__container__field"
               :error-message="errorMessage.mobile"
               @blur="loginMode === 'fastLoginMode' && validateMobileOrPsw('mobile')"
               @input="loginMode === 'fastLoginMode' && validatedChecker()"
@@ -27,10 +26,9 @@
               type="text"
               :border=false
               clearable
-              maxlength=6
+              :maxlength="loginMode === 'fastLoginMode' ? 6 : 64"
               ref="smsCode"
               :placeholder="currentLoginMode.passwordPlaceholder"
-              class="login__container__field"
           >
             <div
                 v-show="loginMode === 'fastLoginMode'"
@@ -58,7 +56,9 @@
                 @success="handleSmsSuccess"></e-drag>
           </div>
         </div>
-        <div :class="['receive-login__btn',btnDisable ? 'disabled__btn' : '']" @click="handleSubmit(handleSubmitSuccess)">登录并领取</div>
+        <div :class="['receive-login__btn',btnDisable ? 'disabled__btn' : '']"
+             @click="onSubmit">登录并领取
+        </div>
         <div class="choice-bar">
           <router-link to="/register" tag="div" class="left">注册账号</router-link>
           <div class="right" v-show="loginMode === 'fastLoginMode'" @click="changeLoginMode">使用其他方式登录 >></div>
@@ -84,6 +84,7 @@
   import { mapActions } from 'vuex';
   import activityMixin from '@/mixins/activity';
   import redirectMixin from '@/mixins/saveRedirect';
+  import { Toast } from 'vant';
 
   export default {
     name: 'login',
@@ -92,10 +93,6 @@
     },
     props: {
       show: {
-        type: Boolean,
-        default: false
-      },
-      isLogin: {
         type: Boolean,
         default: false
       },
@@ -159,14 +156,30 @@
         'addUser',
         'setMobile',
         'sendSmsSend',
-        'fastLogin'
+        'fastLogin',
+        'userLogin'
       ]),
+      onSubmit() {
+        if (this.loginMode === 'fastLoginMode') {
+          this.handleSubmit(this.handleSubmitSuccess);
+          return;
+        }
+          this.userLogin({
+          username: this.userinfo.mobile,
+          password: this.userinfo.smsCode
+        })
+          .then(res => {
+            this.updateShow();
+            this.$emit('submit');
+          })
+          .catch(err => {
+            Toast.fail(err.message);
+          });
+      },
       updateShow() {
         this.$emit('update:show', false);
       },
-      updateIsLogin() {
-        this.$emit('update:isLogin', true);
-      },
+
       updateProcessIsDone() {
         this.$emit('update:processIsDone', true);
       },
@@ -177,21 +190,15 @@
         this.handleSendSms();
       },
       handleSubmitSuccess() {
-        let data = {
-          mobile: this.userinfo.mobile,
-          smsToken: this.userinfo.smsToken,
-          smsCode: this.userinfo.smsCode,
-        };
-        this.$emit('lReceiveCoupon', data);
         this.updateShow();
-        this.updateIsLogin();
-        this.updateProcessIsDone();
+        this.$emit('submit');
       },
       changeLoginMode() {
         this.loginMode = this.loginMode === 'fastLoginMode' ? 'normalLoginMode' : 'fastLoginMode';
         this.currentLoginMode = this[this.loginMode];
         this.userinfo.mobile = '';
         this.userinfo.smsCode = '';
+        this.errorMessage.mobile = '';
       }
     },
   };

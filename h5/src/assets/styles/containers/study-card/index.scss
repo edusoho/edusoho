@@ -18,6 +18,7 @@
     background-size: 100% 100%;
 
     .schoolName {
+      text-align: center;
       color: #fff;
       margin: auto;
       padding: vw(12) vw(50);
@@ -25,16 +26,30 @@
 
     .input-code__field {
       position: absolute;
-      top: 66.9%;
+      top: 66.7%;
+      width: 86%;
       left: 0;
       right: 0;
-      width: 88%;
       margin: auto;
-      border-radius: vw(2);
-
-      > div {
-        padding: 0 vw(16);
+      padding-right: vw(9);
+      height: vw(44);
+      line-height: vw(44);
+      background: rgb(241, 243, 248);
+      border-radius: vw(4);
+      .van-cell {
+        background-color: transparent;
       }
+
+      .van-field__body {
+        padding-left: vw(20);
+      }
+
+      .van-field__error-message {
+        margin-top: vw(14);
+        padding-left: vw(16);
+      }
+
+
     }
 
     .submit {
@@ -103,7 +118,7 @@
           }
         }
 
-        .code {
+        .password {
           padding-left: vw(24);
           font-size: vw(18);
         }
@@ -145,6 +160,8 @@
           }
 
           .res-msg {
+            width: 100%;
+            text-align: center;
             padding-top: vw(12);
             color: #333;
           }

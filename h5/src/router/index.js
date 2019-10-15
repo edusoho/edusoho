@@ -318,12 +318,19 @@ const routes = [
       },
       component: () => import(/* webpackChunkName: "fixed_receive" */'@/containers/study-card/components/input-code')
     }, {
-      path: '/moneycard/valid_card',
-      name: 'valid_card',
+      path: '/moneycard/:token/receive',
+      name: 'receive',
       meta: {
         title: '学习卡充值'
       },
-      component: () => import(/* webpackChunkName: "valid_card" */'@/containers/study-card/components/valid-card')
+      component: () => import(/* webpackChunkName: "receive" */'@/containers/study-card/components/valid-card')
+    }, {
+      path: '/moneycard/receive/:password',
+      name: 'receive',
+      meta: {
+        title: '学习卡充值'
+      },
+      component: () => import(/* webpackChunkName: "receive" */'@/containers/study-card/components/valid-card')
     }]
   }
 ];

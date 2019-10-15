@@ -62,7 +62,7 @@ export default {
         loginType: 'sms',
         client: 'h5'
       })
-        .then(cb())
+        .then(res => cb(res))
         .catch(err => {
           Toast.fail(err.message);
         });

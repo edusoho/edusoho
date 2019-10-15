@@ -2,7 +2,7 @@
   <div class="valid-card">
     <div class="container">
       <div class="top text-overflow">
-        第一网校/休闲鞋谢谢啊晚上的期望乔卫东阿三
+        {{settingsName}}
       </div>
       <div class="middle">
         <div class="card">
@@ -12,34 +12,33 @@
           <div class="money">{{money}}
             <span>金币</span>
           </div>
-          <div class="code">{{formattedCode}}</div>
+          <div class="password">{{formattedPassword}}</div>
         </div>
         <div class="result-box">
-          <div class="result-box__valid-card" v-show="!invalidCard && isLogin && !processIsDone">
-            <div>将充值到当前账户：{{verifiedMobile}}</div>
+          <div class="result-box__valid-card" v-show="!initProcess && !invalidCard && this.isLogin && !processIsDone">
+            <div>将充值到当前账户：{{account}}</div>
             <a href="javascript: void(0)" class="link" @click="jump2login">是否放入其他账户</a>
           </div>
           <div class="result-box__invalid-card--process-is-done" v-show="invalidCard">
             <i class="iconfont icon-Fail"></i>
             <span>充值失败</span>
-            <!--充值失败时的文案有很多种，不能写死在这里-->
-            <div class="res-msg">卡已失效，去看看其他精品吧</div>
+            <div class="res-msg">{{message}}</div>
           </div>
           <div class="result-box__valid-card--process-is-done" v-show="processIsDone && !invalidCard">
             <i class="result-box__icon-Success"></i>
             <span>充值成功</span>
-            <div class="result-box__account">当前账户余额：{{}}金币</div>
+            <div class="result-box__account">当前账户余额：{{cash}}金币</div>
             <div>尽情去购物啦～</div>
           </div>
         </div>
       </div>
       <div class="bottom">
-        <van-button type="primary" block @click="initStatus" v-show="startProcess">立即充值</van-button>
-        <van-button type="primary" block @click="submit" v-show="!startProcess && !processIsDone">立即充值</van-button>
-        <van-button type="primary" block v-show="!startProcess && processIsDone" to="/">去首页</van-button>
+        <van-button type="primary" block @click="initStatus" v-show="initProcess">立即充值</van-button>
+        <van-button type="primary" block @click="submit" v-show="!initProcess && !processIsDone">立即充值</van-button>
+        <van-button type="primary" block v-show="!initProcess && processIsDone" to="/">去首页</van-button>
       </div>
     </div>
-    <e-login :show.sync="show" :isLogin.sync="isLogin"  :processIsDone.sync="processIsDone"></e-login>
+    <e-login :show.sync="show" @submit="switchUser2submit"></e-login>
   </div>
 </template>
 
@@ -48,6 +47,8 @@
   import eLogin from './login';
   import { Dialog } from 'vant';
   import { mapState } from 'vuex';
+  import Api from '@/api';
+
   export default {
     name: 'valid-card',
     components: {
@@ -56,77 +57,166 @@
     data() {
       return {
         //卡的有效期
-        date: '2019年10月31日',
+        date: '',
         //卡的金额
-        money: 1000,
+        money: 0,
         // 卡密
-        code: '1231232132showMe',
+        password: '',
         // 是否显示登录的菜单
         show: false,
         // invalidCard 为 true 的时候表示卡是无效的，这个时候流程该结束了
         invalidCard: false,
-        // isLogin 为 true 的时候表示用户已经登录
-        isLogin: false,
-        startProcess: true,
+        initProcess: true,
         // processIsDone 为 true 的时候表示充值卡的流程已经结束，之后就是显示失败或成功的内容
         processIsDone: false,
+        // 充值后返回的信息
+        message: '',
+        isECard: undefined,
+        // 学习卡的token，不是用户的token， 用户token是userToken
+        token: '',
+        cash: 0
       };
     },
     computed: {
       ...mapState({
-        verifiedMobile: state => state.user['verifiedMobile'],
+        account: state => state.user['verifiedMobile'] || state.user.nickname,
+        isLogin: state => !!state.token,
+        settingsName: state => state.settings.name,
+        userToken: state => state.token
       }),
       // 格式化成每4个空一个的样式
-      formattedCode() {
-        return this.code.toString()
+      formattedPassword() {
+        return this.password.toString()
           .replace(/\W/g, '')
           .replace(/....(?!$)/g, '$& ');
       }
     },
+    created() {
+      // 根据token获取卡批次信息
+      this.token = this.$route.params.token || '';
+      this.password = this.$route.params.password || '';
+      if (this.token.length) {
+        this.isECard = true;
+        Api.getMoneyCardByToken({
+          query: { token: this.token }
+        })
+          .then(res => {
+            this.date = res.deadline;
+            this.money = res.coin;
+          })
+          .catch(err => {
+            this.initProcess = false;
+            this.invalidCard = true;
+            this.processIsDone = true;
+            this.message = err.message;
+          });
+        return;
+      }
+
+      this.isECard = false;
+      Api.getMoneyCardByPassword({
+        query: { password: this.password }
+      })
+        .then(res => {
+          this.date = res.deadline;
+          this.money = res.coin;
+          this.code = res.password;
+        })
+        .catch(err => {
+          this.initProcess = false;
+          this.invalidCard = true;
+          this.processIsDone = true;
+          this.message = err.message;
+        });
+    },
     methods: {
       initStatus() {
-        this.startProcess = false;
-        //先校验卡是否有效，有效的话判断是否登录，卡无效的话就显示卡校验失败的页面。
-        // @todo
-        //如果卡无效,立即充值变成去首页
-        // @todo
-        // this.invalidCard = true;
-        //卡有效
-        // @todo
-        // 如果用户登录
-        if (this.$store.state.token) {
-          this.isLogin = true;
+        this.initProcess = false;
+        //先校验卡是否有效，有效的话判断用户是否登录，卡无效的话就显示卡校验失败的页面。
+        if (this.invalidCard) {
+          //卡无效,立即充值变成去首页
+          this.processIsDone = true;
           return;
         }
-
-        this.isLogin = false;
-        this.show = true;
+        //卡有效
+        !this.isLogin && this.jump2login();
       },
 
       submit() {
         // 卡有效且用户已经登录的情况
         if (!this.invalidCard && this.isLogin) {
-          //  @todo
           Dialog.confirm({
             title: '将充值到当前登录账户',
-            message: this.verifiedMobile,
+            message: this.account,
             cancelButtonText: '充值其他账户',
           })
             .then(() => {
-              this.processIsDone = true;
+              // 判断是电子卡还是实体卡
+              this.isECard === true ?
+                this.chargeMoneyCardByToken() : this.chargeMoneyCardByPassword();
             })
             .catch(() => {
-              this.show = true;
+              this.jump2login();
             });
         }
 
         //卡有效但用户没有登录的情况
         if (!this.invalidCard && !this.isLogin) {
-          this.show = true;
+          this.jump2login();
         }
+      },
+      switchUser2submit() {
+        this.isECard === true ?
+          this.chargeMoneyCardByToken() : this.chargeMoneyCardByPassword();
       },
       jump2login() {
         this.show = true;
+      },
+      chargeMoneyCardByToken() {
+        Api.chargeMoneyCardByToken({
+          query: { token: this.token },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Auth-Token': this.userToken
+          }
+        })
+          .then(res => {
+            if (res.success === true) {
+              this.invalidCard = false;
+              this.message = res.message;
+              this.cash = res.cash;
+            } else {
+              this.invalidCard = true;
+              this.message = res.error.message;
+            }
+            this.processIsDone = true;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      },
+      chargeMoneyCardByPassword() {
+        Api.chargeMoneyCardByPassword({
+          query: { password: this.password },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Auth-Token': this.userToken
+          }
+        })
+          .then(res => {
+            if (res.success === true) {
+              this.invalidCard = false;
+              this.message = res.message;
+              this.cash = res.cash;
+            } else {
+              this.invalidCard = true;
+              this.message = res.error.message;
+            }
+            this.processIsDone = true;
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
     },
 
