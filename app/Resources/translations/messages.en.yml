@@ -8923,119 +8923,119 @@ classroom.joining_date.expired_tips: Classroom joining date expired
 # 富文本
 editor.iframe_tips: To use IFrame normally, please set it in [Admin] - [System] -[Security] -[White List Domain]
 #coupon
-coupon.usage_detail_title: 优惠券使用详情
-coupon.enable_hint: 优惠券未开启，请先在<a href="%path%"> 系统-运营设置-优惠券 </a>中设置开启
+coupon.usage_detail_title: Coupon usage details
+coupon.enable_hint: The coupon is not open. Please enable it in <a href="%path%"> System - Operational Settings - Coupon </a>
 
-coupon.id: 编号
-coupon.code: 优惠券
-coupon.status: 状态
-coupon.user: 使用者
-coupon.order: 订单信息
-coupon.origin_price: 原价
-coupon.pay_amount: 实付
-coupon.receive_time: 领取时间
-coupon.used_time: 使用时间
-coupon.name: 优惠券名称
-coupon.type: 优惠方式
-coupon.deadline: 有效期至
-coupon.deadline.day.help_block.behind: 领券当日起
-coupon.deadline.day.help_block.after: 天内可用
-coupon.description: 优惠说明
-coupon.target: 使用对象
-coupon.full_discount_price: 金额设置
-coupon.channel: 发放渠道
-coupon.setting.status: 优惠券全局开关
-coupon.content: 优惠内容
-coupon.batch.name: 批次名称
-coupon.no_coupon_tip: 无优惠券记录
-coupon.batch: 优惠券批次
-coupon.receive_url: 发放地址
-coupon.batch.prefix: 优惠券前缀
-coupon.operation: 操作
-coupon.total_count: 总数
-coupon.expiry_date: 有效期
-coupon.amount: 已优惠金额
-coupon.target_type: 类型
+coupon.id: Coupon id
+coupon.code: Coupon
+coupon.status: Status
+coupon.user: User
+coupon.order: Order
+coupon.origin_price: Original price
+coupon.pay_amount: Actually paid
+coupon.receive_time: Pick up time
+coupon.used_time: Used time
+coupon.name: Coupon name
+coupon.type: Coupon type
+coupon.deadline: Deadline
+coupon.deadline.day.help_block.behind: From the date of the receipt
+coupon.deadline.day.help_block.after: Available in days
+coupon.description: Coupon description
+coupon.target: Target
+coupon.full_discount_price: Amount setting
+coupon.channel: Distribution channel
+coupon.setting.status: Coupon global switch
+coupon.content: Coupon content
+coupon.batch.name: Batch name
+coupon.no_coupon_tip: No coupon record
+coupon.batch: Coupon lot
+coupon.receive_url: Issuing address
+coupon.batch.prefix: Coupon prefix
+coupon.operation: Operation
+coupon.total_count: Sum
+coupon.expiry_date: Validity period
+coupon.amount: Preferential amount
+coupon.target_type: Type
 
-coupon.type.minus: 抵价
-coupon.type.discount: 打折
-coupon.type.minus_rate: 抵价金额
-coupon.type.discount_rate: 打折
-coupon.type.minus_rate_unit: 元
-coupon.type.discount_rate_unit: 折
-coupon.type.minus_tip: 抵价%rate%元
-coupon.type.discount_tip: 打折%rate%折
+coupon.type.minus: Price
+coupon.type.discount: Discount
+coupon.type.minus_rate: Amount of the price
+coupon.type.discount_rate: Discount
+coupon.type.minus_rate_unit: CNY
+coupon.type.discount_rate_unit: off
+coupon.type.minus_tip: Arrival price %rate% CNY
+coupon.type.discount_tip: Discount %rate% off
 
-coupon.target_type.classroom: 班级
-coupon.target_type.vip: 会员
-coupon.target_type.course: 课程
-coupon.target_type.all: 全站
-coupon.target_type.classroom_all: 全部班级
-coupon.target_type.classroom_specific: 指定班级
-coupon.target_type.vip_all : 全部会员
-coupon.target_type.vip_specific: 指定会员
-coupon.target_type.course_all: 全部课程
-coupon.target_type.course_specific: 指定课程
-coupon.target_type.course_rechoose: 重新选择课程
-coupon.target_type.classroom_rechoose: 重新选择班级
-coupon.target_type.vip_rechoose: 重新选择会员
-coupon.target_type.multi_course: 部分课程
-coupon.target_type.multi_classroom: 部分班级
-coupon.target_type.detail: 详情
+coupon.target_type.classroom: Classroom
+coupon.target_type.vip: Vip
+coupon.target_type.course: Course
+coupon.target_type.all: Full Site
+coupon.target_type.classroom_all: All classerooms
+coupon.target_type.classroom_specific: Designated classroom
+coupon.target_type.vip_all : All vip
+coupon.target_type.vip_specific: Designated vip
+coupon.target_type.course_all: All courses
+coupon.target_type.course_specific: Designated course
+coupon.target_type.course_rechoose: Reselect course
+coupon.target_type.classroom_rechoose: Reselect classroom
+coupon.target_type.vip_rechoose: Reselect vip
+coupon.target_type.multi_course: Part of the course
+coupon.target_type.multi_classroom: Part of the classroom
+coupon.target_type.detail: Details
 
-coupon.status.unused: 未使用
-coupon.status.receive: 已领取
-coupon.status.used: 已使用
+coupon.status.unused: Unused
+coupon.status.receive: Received
+coupon.status.used: Used
 
-coupon.generate_num: 生成数量
-coupon.generate_num_hint: 生成数量必须在1～10000之间
-coupon.generate_num_unit: 个
-coupon.prefix: 优惠券前缀
-coupon.prefix_hint: 优惠券前缀不可重复，不占优惠券位数
-coupon.digits: 优惠券位数
-coupon.digits_hint: 优惠券位数必须在5～15位之间
-coupon.channel_hint: 通过本功能控制优惠券可被领取的方式
+coupon.generate_num: Number of generation
+coupon.generate_num_hint: The number of generation must be between 1 and 10,000.
+coupon.generate_num_unit: pcs
+coupon.prefix: Coupon prefix
+coupon.prefix_hint: Coupon prefix is not repeatable, does not account for the number of coupons
+coupon.digits: Number of coupons
+coupon.digits_hint: The number of coupons must be between 5 and 15 digits.
+coupon.channel_hint: How to control coupons can be picked up by this function
 
-coupon.channel_type.link: 通过链接
-coupon.channel_type.code: 通过优惠券
-coupon.channel_type.page_detail: 通过商品详情页
-coupon.channel_type.h5_mps: 小程序/新版微网校
-coupon.channel_type.page_detail_hint: 选中此项则系统将自动获取商品可用的优惠券显示在商品详情页
-coupon.channel_type.wait_hint: （敬请期待）
-coupon.channel.postfix: 发放
+coupon.channel_type.link: By link
+coupon.channel_type.code: By coupons
+coupon.channel_type.page_detail: By product details page
+coupon.channel_type.h5_mps: Small program/New micro network school
+coupon.channel_type.page_detail_hint: Check this box will automatically get the coupons available for the item on the store listing page.
+coupon.channel_type.wait_hint: （Comming soon）
+coupon.channel.postfix: Issue
 
-coupon.generage.btn: 生成
-coupon.generate.loading_text: 正在生成...
-coupon.copy.btn: 复制
+coupon.generage.btn: Generate
+coupon.generate.loading_text: Generating...
+coupon.copy.btn: Copy
 
-coupon.batch.detail: 详情
-coupon.batch.export_csv: 导出CSV文件
-coupon.batch.get_receive_url: 获取发放地址
-coupon.batch.delete: 删除
+coupon.batch.detail: Details
+coupon.batch.export_csv: Export CSV file
+coupon.batch.get_receive_url: Get the issue address
+coupon.batch.delete: Delete
 
-coupon.query.by_status: 使用状态
-coupon.query.by_type: 按优惠方式
-coupon.query.by_use_start_date: 使用时间起始
-coupon.query.by_use_end_date: 使用时间截止
-coupon.query.by_code: 优惠券
-coupon.setting.close: 优惠券未开启，请先开启优惠券开关
-coupon.setting.permission.goto_open: 去开启
+coupon.query.by_status: status of use
+coupon.query.by_type: By preferential method
+coupon.query.by_use_start_date: Use time start
+coupon.query.by_use_end_date: Use time limit
+coupon.query.by_code: Coupon
+coupon.setting.close: The coupon is not open, please open the coupon switch first.
+coupon.setting.permission.goto_open: Go to open
 
 coupon.deadline_mode.day.help_block: >
-  至<br/>领取后%day%天内
-coupon.resource.selected: 已选：
-coupon.resource.clear: 清空
-admin.setting.invite.chooser_btn: 选择
-admin.setting.invite.chooser_message: 可用优惠券发放完成后，邀请功能即自动关闭，请做好活动预算
-admin.setting.invite.promoted_user_enable: 发放优惠券
-admin.setting.invite.get_coupon_setting: 邀请人奖励发放时机
-admin.setting.invite.get_coupon_setting.register: 被邀请人注册成功时
-admin.setting.invite.get_coupon_setting.pay: 被邀请人完成第一笔消费时
-coupon.resource_list.title: '本优惠券适用于：'
-coupon.remaining_amount: 剩余可用数量
-coupon.resource.course.chooser.limit: 最多支持选择200个课程
-coupon.resource.classroom.chooser.limit: 最多支持选择200个班级
-coupon.resource.chooser.limit: 请指定不超过200个资源
+  To<br/> %day% days after receiving
+coupon.resource.selected: Selected：
+coupon.resource.clear: Clear
+admin.setting.invite.chooser_btn: Select
+admin.setting.invite.chooser_message: After the coupon is issued, the invitation function will be automatically closed. Please complete the activity budget.
+admin.setting.invite.promoted_user_enable: Issue coupons
+admin.setting.invite.get_coupon_setting: Inviting person rewards timing
+admin.setting.invite.get_coupon_setting.register: When the invitee registers successfully
+admin.setting.invite.get_coupon_setting.pay: When the invitee completes the first purchase
+coupon.resource_list.title: 'This coupon applies to：'
+coupon.remaining_amount: Remaining available quantity
+coupon.resource.course.chooser.limit: Support up to 200 courses
+coupon.resource.classroom.chooser.limit: Support up to 200 classerooms
+coupon.resource.chooser.limit: Please specify no more than 200 resources
 
 #上课提醒
 course.remind.each_week: Weekly
@@ -9056,7 +9056,7 @@ admin.setting_wechat_auth.re_authorization_btn: ReAuth
 admin.setting_wechat_auth.authorization_in_new_page_hint: Please Authorization In New Page
 admin.setting_wechat_auth.authorization_success: Anthorized Success
 
-admin.setting.invite.chooser_coupon.manage_btn: 优惠券管理
-admin.setting.invite.chooser_coupon.refresh_btn: 刷新
-admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
+admin.setting.invite.chooser_coupon.manage_btn: Coupon management
+admin.setting.invite.chooser_coupon.refresh_btn: Refresh
+admin.setting.invite.chooser_coupon.unreceived_num: Please set a coupon lot with more than 1 available
 admin.operation.coupon_menu.generate_btn: Generate Coupon
