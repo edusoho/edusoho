@@ -65,44 +65,15 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             }
 
             $randomQuestions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-        } else {
-            $conditions = array(
-                'types' => $exercise['metas']['questionTypes'],
-                'courseSetId' => $exercise['courseSetId'],
-                'parentId' => 0,
-            );
-            if (!empty($exercise['metas']['difficulty'])) {
-                $conditions['difficulty'] = $exercise['metas']['difficulty'];
-            }
-            //兼容course1.0 start
-            if (!empty($exercise['metas']['range']) && $exercise['metas']['range'] == 'lesson') {
-                $filter = array(
-                    'activityId' => $exercise['lessonId'],
-                    'type' => 'exercise',
-                    'courseId' => $exercise['courseId'],
-                );
-                $task = $this->getCourseTaskService()->searchTasks($filter, null, 0, 1);
-                if ($task) {
-                    $conditions = array(
-                        'categoryId' => $task[0]['categoryId'],
-                        'mode' => 'lesson',
-                    );
-                    $lessonTask = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
-                    if ($lessonTask) {
-                        $conditions['lessonId'] = $lessonTask[0]['id'];
-                    }
+        } elseif (!empty($exerciseResult['metas']['orders'])) {
+            $randomQuestions = $this->getQuestionService()->findQuestionsByIds($exerciseResult['metas']['orders']);
+            foreach ($randomQuestions as $id => $question) {
+                if ($question['parentId'] > 0) {
+                    unset($randomQuestions[$id]);
                 }
-                unset($exercise['metas']['range']);
             }
-            //兼容course1.0 end
-
-            if (!empty($exercise['metas']['range']['courseId'])) {
-                $conditions['courseId'] = $exercise['metas']['range']['courseId'];
-            }
-
-            if (!empty($exercise['metas']['range']['courseId']) && !empty($exercise['metas']['range']['lessonId'])) {
-                $conditions['lessonId'] = $exercise['metas']['range']['lessonId'];
-            }
+        } else {
+            $conditions = $this->_prepareConditionsByTestPaper($exercise);
 
             $count = $this->getQuestionService()->searchCount($conditions);
             $questions = $this->getQuestionService()->search(
@@ -121,6 +92,56 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         }
 
         return $this->formatQuestions($randomQuestions, $itemResults, $orders);
+    }
+
+    public function countQuestionsByTestPaper($testPaper)
+    {
+        $conditions = $this->_prepareConditionsByTestPaper($testPaper);
+
+        return $this->getQuestionService()->searchCount($conditions);
+    }
+
+    private function _prepareConditionsByTestPaper($testPaper)
+    {
+        $conditions = array(
+            'types' => $testPaper['metas']['questionTypes'],
+            'courseSetId' => $testPaper['courseSetId'],
+            'parentId' => 0,
+        );
+        if (!empty($testPaper['metas']['difficulty'])) {
+            $conditions['difficulty'] = $testPaper['metas']['difficulty'];
+        }
+        //兼容course1.0 start
+        if (!empty($testPaper['metas']['range']) && 'lesson' == $testPaper['metas']['range']) {
+            $filter = array(
+                'activityId' => $testPaper['lessonId'],
+                'type' => 'testPaper',
+                'courseId' => $testPaper['courseId'],
+            );
+            $task = $this->getCourseTaskService()->searchTasks($filter, null, 0, 1);
+            if ($task) {
+                $conditions = array(
+                    'categoryId' => $task[0]['categoryId'],
+                    'mode' => 'lesson',
+                );
+                $lessonTask = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
+                if ($lessonTask) {
+                    $conditions['lessonId'] = $lessonTask[0]['id'];
+                }
+            }
+            unset($testPaper['metas']['range']);
+        }
+        //兼容course1.0 end
+
+        if (!empty($testPaper['metas']['range']['courseId'])) {
+            $conditions['courseId'] = $testPaper['metas']['range']['courseId'];
+        }
+
+        if (!empty($testPaper['metas']['range']['courseId']) && !empty($testPaper['metas']['range']['lessonId'])) {
+            $conditions['lessonId'] = $testPaper['metas']['range']['lessonId'];
+        }
+
+        return $conditions;
     }
 
     public function filterFields($fields, $mode = 'create')

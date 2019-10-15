@@ -8,6 +8,24 @@ use AppBundle\Extensions\DataTag\AnnouncementDataTag;
 
 class AnnouncementDataTagTest extends BaseTestCase
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testEmptyCount()
+    {
+        $dataTag = new AnnouncementDataTag();
+        $dataTag->getData(array());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testMaxCount()
+    {
+        $dataTag = new AnnouncementDataTag();
+        $dataTag->getData(array('count' => 101));
+    }
+
     public function testGetData()
     {
         $this->getAnnouncementService()->createAnnouncement(array(
@@ -59,6 +77,7 @@ class AnnouncementDataTagTest extends BaseTestCase
             'targetType' => 'global',
             'targetId' => '1',
         ));
+
         $dataTag = new AnnouncementDataTag();
         $announcement = $dataTag->getData(array('count' => '5'));
         $this->assertEquals(5, count($announcement));

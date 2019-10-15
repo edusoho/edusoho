@@ -8,7 +8,9 @@
       <div class="title">{{ course.title }}</div>
       <div class="metas">
         <span><i class="es-icon es-icon-removeredeye mrs"></i>{{ course.hitNum }}</span>
-        <span><i class="es-icon es-icon-textsms mrs"></i>{{ course.postNum }}</span>
+        {% if setting('openCourse.show_comment', '1') == 1 %}
+          <span><i class="es-icon es-icon-textsms mrs"></i>{{ course.postNum }}</span>
+        {% endif %}
       </div>
     </div>
   </div>

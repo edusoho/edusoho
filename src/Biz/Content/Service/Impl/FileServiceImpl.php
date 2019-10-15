@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;
+use Symfony\Component\Filesystem\Filesystem;
 
 class FileServiceImpl extends BaseService implements FileService
 {
@@ -179,12 +180,14 @@ class FileServiceImpl extends BaseService implements FileService
     protected function saveFile(File $file, $uri)
     {
         $parsed = $this->parseFileUri($uri);
-        if ($parsed['access'] == 'public') {
-            $directory = realpath($this->biz['topxia.upload.public_directory']);
+        if ('public' == $parsed['access']) {
+            $path = $this->biz['topxia.upload.public_directory'];
         } else {
-            $directory = realpath($this->biz['topxia.upload.private_directory']);
+            $path = $this->biz['topxia.upload.private_directory'];
         }
 
+        $this->checkDirectoryExist($path);
+        $directory = realpath($path);
         if (!is_writable($directory)) {
             $this->createNewException(FileException::FILE_DIRECTORY_UN_WRITABLE());
         }
@@ -199,6 +202,16 @@ class FileServiceImpl extends BaseService implements FileService
         }
 
         return $newFile;
+    }
+
+    protected function checkDirectoryExist($dirPath)
+    {
+        $fileSystem = new FileSystem();
+        if (!$fileSystem->exists($dirPath)) {
+            $fileSystem->mkdir($dirPath, 0777);
+        }
+
+        return true;
     }
 
     protected function generateUri($group, File $file)
@@ -230,7 +243,7 @@ class FileServiceImpl extends BaseService implements FileService
     {
         $parsed = array();
         $parts = explode('://', $uri);
-        if (empty($parts) || count($parts) != 2) {
+        if (empty($parts) || 2 != count($parts)) {
             $this->createNewException(FileException::FILE_PARSE_URI_FAILED());
         }
         $parsed['access'] = $parts[0];
@@ -238,7 +251,7 @@ class FileServiceImpl extends BaseService implements FileService
         $parsed['directory'] = dirname($parsed['path']);
         $parsed['name'] = basename($parsed['path']);
 
-        if ($parsed['access'] == 'public') {
+        if ('public' == $parsed['access']) {
             $directory = $this->biz['topxia.upload.public_directory'];
         } else {
             $directory = $this->biz['topxia.upload.private_directory'];

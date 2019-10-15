@@ -45,6 +45,7 @@
                   <option value="{{ task.id }}" {% if question.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
                 {% endfor %}
               </select>
+              <div class="help-block">{{ 'course.question_manage.manage.belong_change_tips'|trans }}</div>
             </div>
           </div>
         {% endif %}

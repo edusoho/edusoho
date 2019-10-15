@@ -78,7 +78,6 @@ export default class TaskSidebar extends Emitter {
           $paneBody.html(html);
           $pane.perfectScrollbar();
           $btn.data('loaded', true);
-          this.listEvent();
           this.isManualOperation = true;
           this.emit($btn.data('plugin')+'-loaded', $paneBody);
         });

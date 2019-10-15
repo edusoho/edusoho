@@ -48,11 +48,6 @@ class CourseAnnouncementsDataTag extends BaseDataTag implements DataTag
         return $this->getServiceKernel()->getBiz()->service('Announcement:AnnouncementService');
     }
 
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->getBiz()->service('Course:CourseService');
-    }
-
     protected function checkCount(array $arguments)
     {
         if (empty($arguments['count'])) {

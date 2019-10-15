@@ -124,6 +124,11 @@ class QiQiuYunSDK
         return $this->getService('Notification');
     }
 
+    public function getWeChatService()
+    {
+        return $this->getService('WeChat');
+    }
+
     /**
      * 创建API请求认证类实例
      *

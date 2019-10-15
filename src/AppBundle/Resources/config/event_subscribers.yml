@@ -315,3 +315,9 @@ services:
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }
+
+    coupon_event_subscriber:
+        class: Biz\Coupon\Event\CouponEventSubscriber
+        arguments: ['@biz']
+        tags:
+        - { name: codeages_plugin.event.subscriber }

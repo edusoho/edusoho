@@ -23,12 +23,13 @@ class ExerciseController extends BaseActivityController implements ActivityActio
         $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
         $exerciseResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $exercise['id'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
-        if (!$exerciseResult || ($exerciseResult['status'] == 'doing' && !$exerciseResult['updateTime'])) {
+        if (!$exerciseResult || ('doing' == $exerciseResult['status'] && !$exerciseResult['updateTime'])) {
             return $this->render('activity/exercise/show.html.twig', array(
                 'activity' => $activity,
                 'exerciseResult' => $exerciseResult,
                 'exercise' => $exercise,
                 'courseId' => $activity['fromCourseId'],
+                'questionLack' => $this->getTestpaperService()->isQuestionsLackedByTestId($activity['mediaId']),
             ));
         }
 
@@ -50,6 +51,15 @@ class ExerciseController extends BaseActivityController implements ActivityActio
 
         if (!$exercise) {
             return $this->createMessageResponse('error', 'exercise not found');
+        }
+
+        if ($this->getTestpaperService()->isQuestionsLackedByTestId($activity['mediaId'])) {
+            return $this->render('activity/exercise/show.html.twig', array(
+                'activity' => $activity,
+                'exercise' => $exercise,
+                'courseId' => $activity['fromCourseId'],
+                'questionLack' => true,
+            ));
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($exercise['id']);
@@ -146,9 +156,9 @@ class ExerciseController extends BaseActivityController implements ActivityActio
 
         if (is_array($range)) {
             return $range;
-        } elseif ($range == 'course') {
+        } elseif ('course' == $range) {
             return $rangeDefault;
-        } elseif ($range == 'lesson') {
+        } elseif ('lesson' == $range) {
             //兼容老数据
             $conditions = array(
                 'activityId' => $activity['id'],
@@ -180,10 +190,10 @@ class ExerciseController extends BaseActivityController implements ActivityActio
     {
         $count = 0;
         array_map(function ($question) use (&$count) {
-            if ($question['type'] == 'material') {
+            if ('material' == $question['type']) {
                 $count += count($question['subs']);
             } else {
-                $count += 1;
+                ++$count;
             }
         }, $questions);
 

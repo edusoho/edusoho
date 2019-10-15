@@ -391,7 +391,9 @@
           </div>
         {% endif %}
 
-        {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
+        {% if setting('course.show_review', '1') == 1 %}
+          {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
+        {% endif %}
 
         {# 最热话题 #}
         {% if setting('group').group_show|default(1) %}
@@ -477,8 +479,8 @@
                  {% include "course/widgets/course-set-price.html.twig" %}
               </div>
             {% endif %}
-
-                  <span class="review-col pull-left" style="text-align: left;">
+            {% if setting('course.show_review', '1') == 1 %}
+              <span class="review-col pull-left" style="text-align: left;">
                 {% if course.ratingNum > 0 %}
                   <span class="meta-label"><strong>{{ courseSet.ratingNum }}</strong> {{ '评价'|trans }}</span>
                   <span class="review-rating">
@@ -491,7 +493,7 @@
                   </span>
                 {% endif %}
               </span>
-
+            {% endif %}
                   {% if setting('course.show_student_num_enabled', '1') == 1 %}
                     <span class="student-col">
                 <span class="meta-label">{{ '学生'|trans }}</span>
@@ -587,9 +589,11 @@
                 <span class="text-muted mrm">
                   <i class="es-icon es-icon-thumbup mrs"></i>{{ course.likeNum }}
                 </span>
-                <span class="text-muted mrm">
-                  <i class="es-icon es-icon-textsms mrs"></i>{{ course.postNum }}
-                </span>
+                {% if setting('openCourse.show_comment', '1') == 1 %}
+                  <span class="text-muted mrm">
+                    <i class="es-icon es-icon-textsms mrs"></i>{{ course.postNum }}
+                  </span>
+                {% endif %}
               </span>
 
             {% set user = users[course.teacherIds|first]|default(null) %}

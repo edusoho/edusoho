@@ -99,6 +99,8 @@ interface TestpaperService
 
     public function searchTestpaperResultsCount($conditions);
 
+    public function searchTestpaperResultsCountJoinCourseMemberGroupByUserId($conditions);
+
     public function searchTestpaperResults($conditions, $sort, $start, $limit);
 
     public function searchTestpapersScore($conditions);
@@ -113,6 +115,8 @@ interface TestpaperService
     public function startTestpaper($id, $fields);
 
     public function finishTest($resultId, $formData);
+
+    public function isQuestionsLackedByTestId($testId);
 
     public function showTestpaperItems($testId, $resultId = 0);
 

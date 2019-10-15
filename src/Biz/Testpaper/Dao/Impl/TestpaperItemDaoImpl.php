@@ -49,7 +49,7 @@ class TestpaperItemDaoImpl extends AdvancedDaoImpl implements TestpaperItemDao
 
     public function findItemsByIds(array $ids)
     {
-        return $this->findInField('id', array($ids));
+        return $this->findInField('id', $ids);
     }
 
     public function findItemsByTestId($testpaperId, $type)
@@ -103,7 +103,7 @@ class TestpaperItemDaoImpl extends AdvancedDaoImpl implements TestpaperItemDao
         return $this->db()->executeUpdate($sql, $ids);
     }
 
-    public function updateItemsMissScoreByPaperIds(array $ids, $missScore)
+    public function changeItemsMissScoreByPaperIds(array $ids, $missScore)
     {
         if (empty($ids)) {
             return array();
