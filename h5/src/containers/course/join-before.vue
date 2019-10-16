@@ -103,10 +103,10 @@
       onsale,
     },
     computed: {
+      ...mapState(['couponSwitch', 'user']),
       ...mapState('course', {
         details: state => state.details
       }),
-      ...mapState(['user']),
       summary () {
         return this.details.summary || this.details.courseSet.summary;
       },
@@ -150,7 +150,7 @@
       },
     },
     mounted() {
-      if (!this.isClassCourse) {
+      if (!this.isClassCourse && this.couponSwitch) {
         // 获取促销优惠券
         Api.searchCoupon({
           params: {

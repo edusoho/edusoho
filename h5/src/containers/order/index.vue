@@ -12,7 +12,7 @@
         :course="course">
       </e-course>
       <!-- 使用优惠券 -->
-      <div class="order-coupon">
+      <div class="order-coupon" v-show="couponSwitch">
         <div class="coupon-column" @click="showList = true">
           <span>优惠券</span>
           <span :class="['red',itemData ? 'coupon-money':'']">{{ couponShow }}<span class="coupon-type" v-if="itemData">{{itemData.type | couponType}}</span>
@@ -152,7 +152,7 @@ export default {
     this.getSettings();
   },
   computed: {
-    ...mapState(['wechatSwitch', 'isLoading']),
+    ...mapState(['wechatSwitch', 'isLoading', 'couponSwitch']),
     total() {
       const totalNumber = this.course.totalPrice;
       if (!this.itemData) {
@@ -286,9 +286,10 @@ export default {
        Api.confirmOrder({
         data: data
       }).then(res => {
-        let coupons=res.availableCoupons;
+        if (!this.couponSwitch) {
+          res.availableCoupons.length = 0;
+        }
         this.course = res;
-        this.itemData= coupons.length>0 ? coupons[0]:null;
       }).catch(err => {
         //购买后返回会造成重复下单报错
         this.$router.go(-1);
