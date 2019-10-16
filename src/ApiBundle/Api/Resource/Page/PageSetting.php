@@ -26,7 +26,7 @@ class PageSetting extends AbstractResource
             throw PageException::ERROR_TYPE();
         }
 
-        if (!in_array($portal, array('h5', 'miniprogram'))) {
+        if (!in_array($portal, array('h5', 'miniprogram', 'apps'))) {
             throw PageException::ERROR_PORTAL();
         }
         $method = 'get'.ucfirst($type);
@@ -48,7 +48,7 @@ class PageSetting extends AbstractResource
             throw PageException::ERROR_TYPE();
         }
 
-        if (!in_array($portal, array('h5', 'miniprogram'))) {
+        if (!in_array($portal, array('h5', 'miniprogram', 'apps'))) {
             throw PageException::ERROR_PORTAL();
         }
         $content = $request->request->all();
@@ -70,7 +70,7 @@ class PageSetting extends AbstractResource
             throw PageException::ERROR_TYPE();
         }
 
-        if (!in_array($portal, array('h5', 'miniprogram'))) {
+        if (!in_array($portal, array('h5', 'miniprogram', 'apps'))) {
             throw PageException::ERROR_PORTAL();
         }
         $method = 'remove'.ucfirst($type);
