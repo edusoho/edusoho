@@ -628,11 +628,12 @@ class MoneyCardServiceTest extends BaseTestCase
             array('functionName' => 'getBatchByToken', 'returnValue' => array('id' => 1, 'batchStatus' => 'ok')),
         ));
         $this->mockBiz('MoneyCard:MoneyCardDao', array(
-            array('functionName' => 'search', 'returnValue' => array('id' => '1')),
+            array('functionName' => 'search', 'returnValue' => array(array('id' => '1', 'rechargeTime' => 0))),
         ));
         $result = $this->getMoneyCardService()->receiveMoneyCard('', 1);
         $this->assertEquals(array(
-            'code' => 'failed',
+            'batchId' => 1,
+            'code' => 'received',
             'message' => '您已经领取该批学习卡',
         ), $result);
     }
@@ -650,7 +651,7 @@ class MoneyCardServiceTest extends BaseTestCase
         ));
         $result = $this->getMoneyCardService()->receiveMoneyCard('', 0);
         $this->assertEquals(array(
-            'code' => 'failed',
+            'code' => 'empty',
             'message' => '该批学习卡已经被领完',
         ), $result);
     }
@@ -684,6 +685,7 @@ class MoneyCardServiceTest extends BaseTestCase
             'id' => 1,
             'code' => 'success',
             'message' => '领取成功，请在卡包中查看',
+            'batchId' => 1,
         ), $result);
     }
 

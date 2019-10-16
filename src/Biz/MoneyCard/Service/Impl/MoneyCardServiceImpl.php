@@ -541,12 +541,22 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
                 $moneyCard = $this->getMoneyCardDao()->search($conditions, array('id' => 'DESC'), 0, 1);
 
-                if (!empty($moneyCard)) {
+                if (!empty($moneyCard) && 0 == $moneyCard[0]['rechargeTime']) {
                     $this->biz['db']->commit();
 
                     return array(
-                        'code' => 'failed',
+                        'batchId' => $batch['id'],
+                        'code' => 'received',
                         'message' => '您已经领取该批学习卡',
+                    );
+                }
+
+                if (!empty($moneyCard) && 0 != $moneyCard[0]['rechargeTime']) {
+                    $this->biz['db']->commit();
+
+                    return array(
+                        'code' => 'used',
+                        'message' => '您已经领取并使用该批学习卡',
                     );
                 }
             }
@@ -562,7 +572,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                 $this->biz['db']->commit();
 
                 return array(
-                    'code' => 'failed',
+                    'code' => 'empty',
                     'message' => '该批学习卡已经被领完',
                 );
             }
@@ -609,6 +619,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
             return array(
                 'id' => $moneyCard['id'],
+                'batchId' => $batch['id'],
                 'code' => 'success',
                 'message' => '领取成功，请在卡包中查看',
             );
@@ -620,31 +631,14 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
     public function receiveMoneyCardByPassword($password, $userId)
     {
+        $moneyCard = $this->getMoneyCardByPassword($password);
+        $result = $this->canUseMoneyCard($moneyCard, $userId);
+        if (!empty($result)) {
+            return $result;
+        }
+
         try {
             $this->biz['db']->beginTransaction();
-
-            $moneyCard = $this->getMoneyCardByPassword($password);
-
-            if (!$moneyCard) {
-                return array(
-                    'code' => 'failed',
-                    'message' => 'money_card.invalid_password',
-                );
-            }
-
-            if (!$this->isMoneyCardInvalid($moneyCard, $userId)) {
-                return array(
-                    'code' => 'invalid',
-                    'message' => 'money_card.invalid_card',
-                );
-            }
-
-            if (!(time() < 86400 + strtotime($moneyCard['deadline']))) {
-                return array(
-                    'code' => 'expired',
-                    'message' => 'money_card.expired_card',
-                );
-            }
 
             $moneyCard = $this->getMoneyCardDao()->update($moneyCard['id'], array(
                 'rechargeUserId' => $userId,
@@ -693,21 +687,57 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         }
     }
 
-    protected function isMoneyCardInvalid($moneyCard, $userId)
+    protected function canUseMoneyCard($moneyCard, $userId)
     {
-        if (!(0 == $moneyCard['rechargeTime'])) {
-            return false;
+        if (!$moneyCard) {
+            return array(
+                'code' => 'failed',
+                'message' => 'money_card.invalid_password',
+            );
         }
 
         if ('invalid' == $moneyCard['cardStatus']) {
-            return false;
+            return array(
+                'code' => 'invalid',
+                'message' => 'money_card.invalid_card',
+            );
         }
 
         if ('receive' == $moneyCard['cardStatus'] && $moneyCard['rechargeUserId'] != $userId) {
-            return false;
+            return array(
+                'code' => 'receivedByOther',
+                'message' => 'money_card.card_received_by_other',
+            );
         }
 
-        return true;
+        if ('receive' == $moneyCard['cardStatus'] && $moneyCard['rechargeUserId'] == $userId) {
+            return array(
+                'id' => $moneyCard['id'],
+                'code' => 'received',
+                'message' => 'money_card.card_received',
+            );
+        }
+
+        if (0 != $moneyCard['rechargeTime'] && $moneyCard['rechargeUserId'] == $userId) {
+            return array(
+                'code' => 'used',
+                'message' => 'money_card.card_used',
+            );
+        }
+
+        if (0 != $moneyCard['rechargeTime'] && $moneyCard['rechargeUserId'] != $userId) {
+            return array(
+                'code' => 'usedByOther',
+                'message' => 'money_card.card_used_by_other',
+            );
+        }
+
+        if (!(time() < 86400 + strtotime($moneyCard['deadline']))) {
+            return array(
+                'code' => 'expired',
+                'message' => 'money_card.expired_card',
+            );
+        }
     }
 
     /**
