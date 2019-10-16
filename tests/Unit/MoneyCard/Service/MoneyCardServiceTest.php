@@ -628,7 +628,7 @@ class MoneyCardServiceTest extends BaseTestCase
             array('functionName' => 'getBatchByToken', 'returnValue' => array('id' => 1, 'batchStatus' => 'ok')),
         ));
         $this->mockBiz('MoneyCard:MoneyCardDao', array(
-            array('functionName' => 'search', 'returnValue' => array('id' => '1')),
+            array('functionName' => 'search', 'returnValue' => array(array('id' => '1', 'rechargeTime' => 0))),
         ));
         $result = $this->getMoneyCardService()->receiveMoneyCard('', 1);
         $this->assertEquals(array(
