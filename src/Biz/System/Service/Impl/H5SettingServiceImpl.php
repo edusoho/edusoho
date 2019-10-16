@@ -368,6 +368,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function getDefaultDiscovery($portal)
     {
         $result = array();
+
+        if ('apps' == $portal) {
+            return $result;
+        }
+
         if ('h5' == $portal) {
             $posters = $this->getBlockService()->getPosters();
             $slides = array();
