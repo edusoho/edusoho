@@ -721,6 +721,110 @@ class MoneyCardServiceTest extends BaseTestCase
         $this->getMoneyCardService()->receiveMoneyCard('', 1);
     }
 
+    public function testReceiveMoneyCardByPassword()
+    {
+        $this->mockBiz('MoneyCard:MoneyCardBatchDao', array(
+            array('functionName' => 'update', 'returnValue' => $this->getFakeMoneyCardBatch()),
+        ));
+
+        $fields = array(
+            'deadline' => date('Y-m-d', time()),
+            'cardStatus' => 'normal',
+            'rechargeTime' => 0,
+        );
+        $moneyCard = $this->getFakeMoneyCard($fields);
+        $this->mockBiz('MoneyCard:MoneyCardDao', array(
+            array('functionName' => 'getMoneyCardByPassword', 'returnValue' => $moneyCard),
+            array('functionName' => 'update', 'returnValue' => $moneyCard),
+            array('functionName' => 'count', 'returnValue' => 1),
+        ));
+        $this->mockBiz('Card:CardService', array(
+            array('functionName' => 'addCard'),
+            array('functionName' => 'updateCardByCardIdAndCardType'),
+        ));
+        $result = $this->getMoneyCardService()->receiveMoneyCardByPassword('', 1);
+        $this->assertEquals(array(
+            'id' => $moneyCard['id'],
+            'code' => 'success',
+            'message' => 'money_card.card_receive_success',
+        ), $result);
+    }
+
+    public function testReceiveMoneyCardByPasswordWithUpdateError()
+    {
+        $this->mockBiz('MoneyCard:MoneyCardBatchDao', array(
+            array('functionName' => 'update', 'returnValue' => $this->getFakeMoneyCardBatch()),
+        ));
+
+        $fields = array(
+            'deadline' => date('Y-m-d', time()),
+            'cardStatus' => 'normal',
+            'rechargeTime' => 0,
+        );
+        $moneyCard = $this->getFakeMoneyCard($fields);
+        $this->mockBiz('MoneyCard:MoneyCardDao', array(
+            array('functionName' => 'getMoneyCardByPassword', 'returnValue' => $moneyCard),
+            array('functionName' => 'update', 'returnValue' => array()),
+        ));
+        $result = $this->getMoneyCardService()->receiveMoneyCardByPassword('', 1);
+        $this->assertEquals(array(
+            'code' => 'failed',
+            'message' => 'money_card.card_receive_fail',
+        ), $result);
+    }
+
+    public function testCanUseMoneyCard()
+    {
+        $result = ReflectionUtils::invokeMethod($this->getMoneyCardService(), 'canUseMoneyCard', array(array(), 1));
+        $this->assertEquals(array(
+            'code' => 'failed',
+            'message' => 'money_card.invalid_password',
+        ), $result);
+
+        $moneyCard = $this->getFakeMoneyCard(array('cardStatus' => 'invalid'));
+        $result = ReflectionUtils::invokeMethod($this->getMoneyCardService(), 'canUseMoneyCard', array($moneyCard, 1));
+        $this->assertEquals(array(
+            'code' => 'invalid',
+            'message' => 'money_card.invalid_card',
+        ), $result);
+
+        $moneyCard = $this->getFakeMoneyCard();
+        $result = ReflectionUtils::invokeMethod($this->getMoneyCardService(), 'canUseMoneyCard', array($moneyCard, 2));
+        $this->assertEquals(array(
+            'code' => 'receivedByOther',
+            'message' => 'money_card.card_received_by_other',
+        ), $result);
+
+        $moneyCard = $this->getFakeMoneyCard();
+        $result = ReflectionUtils::invokeMethod($this->getMoneyCardService(), 'canUseMoneyCard', array($moneyCard, 1));
+        $this->assertEquals(array(
+            'id' => $moneyCard['id'],
+            'code' => 'received',
+            'message' => 'money_card.card_received',
+        ), $result);
+
+        $moneyCard = $this->getFakeMoneyCard(array('cardStatus' => 'normal'));
+        $result = ReflectionUtils::invokeMethod($this->getMoneyCardService(), 'canUseMoneyCard', array($moneyCard, 1));
+        $this->assertEquals(array(
+            'code' => 'recharged',
+            'message' => 'money_card.card_used',
+        ), $result);
+
+        $moneyCard = $this->getFakeMoneyCard(array('cardStatus' => 'normal'));
+        $result = ReflectionUtils::invokeMethod($this->getMoneyCardService(), 'canUseMoneyCard', array($moneyCard, 2));
+        $this->assertEquals(array(
+            'code' => 'rechargedByOther',
+            'message' => 'money_card.card_used_by_other',
+        ), $result);
+
+        $moneyCard = $this->getFakeMoneyCard(array('cardStatus' => 'normal', 'rechargeTime' => 0));
+        $result = ReflectionUtils::invokeMethod($this->getMoneyCardService(), 'canUseMoneyCard', array($moneyCard, 2));
+        $this->assertEquals(array(
+            'code' => 'expired',
+            'message' => 'money_card.expired_card',
+        ), $result);
+    }
+
     private function getFakeMoneyCard($fields = array())
     {
         $default = array(
