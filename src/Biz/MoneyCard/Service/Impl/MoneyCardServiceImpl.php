@@ -555,7 +555,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                     $this->biz['db']->commit();
 
                     return array(
-                        'code' => 'used',
+                        'code' => 'recharged',
                         'message' => '您已经领取并使用该批学习卡',
                     );
                 }
@@ -720,14 +720,14 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
         if (0 != $moneyCard['rechargeTime'] && $moneyCard['rechargeUserId'] == $userId) {
             return array(
-                'code' => 'used',
+                'code' => 'recharged',
                 'message' => 'money_card.card_used',
             );
         }
 
         if (0 != $moneyCard['rechargeTime'] && $moneyCard['rechargeUserId'] != $userId) {
             return array(
-                'code' => 'usedByOther',
+                'code' => 'rechargedByOther',
                 'message' => 'money_card.card_used_by_other',
             );
         }

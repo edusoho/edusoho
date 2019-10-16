@@ -638,6 +638,24 @@ class MoneyCardServiceTest extends BaseTestCase
         ), $result);
     }
 
+    public function testReceiveMoneyCardWithHasUsed()
+    {
+        $this->mockBiz('User:TokenService', array(
+            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1)),
+        ));
+        $this->mockBiz('MoneyCard:MoneyCardBatchDao', array(
+            array('functionName' => 'getBatchByToken', 'returnValue' => array('id' => 1, 'batchStatus' => 'ok')),
+        ));
+        $this->mockBiz('MoneyCard:MoneyCardDao', array(
+            array('functionName' => 'search', 'returnValue' => array(array('id' => '1', 'rechargeTime' => 10))),
+        ));
+        $result = $this->getMoneyCardService()->receiveMoneyCard('', 1);
+        $this->assertEquals(array(
+            'code' => 'recharged',
+            'message' => '您已经领取并使用该批学习卡',
+        ), $result);
+    }
+
     public function testReceiveMoneyCardWithEmptyCards()
     {
         $this->mockBiz('User:TokenService', array(
@@ -703,9 +721,9 @@ class MoneyCardServiceTest extends BaseTestCase
         $this->getMoneyCardService()->receiveMoneyCard('', 1);
     }
 
-    private function getFakeMoneyCard()
+    private function getFakeMoneyCard($fields = array())
     {
-        return array(
+        $default = array(
             'id' => 1,
             'money_card' => 123,
             'batchId' => 1,
@@ -715,6 +733,8 @@ class MoneyCardServiceTest extends BaseTestCase
             'deadline' => 1,
             'rechargeTime' => 1,
         );
+
+        return array_merge($default, $fields);
     }
 
     private function getFakeMoneyCardBatch()
