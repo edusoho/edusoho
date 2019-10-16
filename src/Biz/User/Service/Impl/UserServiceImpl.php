@@ -1014,24 +1014,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(UserException::BLOG_INVALID());
         }
 
-        $numericalFields = array('intField1', 'intField2', 'intField3', 'intField4', 'intField5', 'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5');
-        foreach ($numericalFields as $field) {
-            if (empty($fields[$field])) {
-                $fields[$field] = null;
-            }
-        }
-
-        $dateFields = array('dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5');
-        foreach ($dateFields as $dateField) {
-            if (empty($fields[$dateField])) {
-                $fields[$dateField] = null;
-            }
-
-            if (!empty($fields[$dateField]) && !SimpleValidator::date($fields[$dateField])) {
-                $this->createNewException(UserException::DATEFIELD_INVALID());
-            }
-        }
-
+        $fields = $this->filterCustomField($fields);
         if (empty($fields['isWeiboPublic'])) {
             $fields['isWeiboPublic'] = 0;
         } else {
@@ -1059,7 +1042,7 @@ class UserServiceImpl extends BaseService implements UserService
                 return !empty($value);
             });
         }
-        var_dump($fields);
+
         $userProfile = $this->getProfileDao()->update($id, $fields);
         $this->dispatchEvent('profile.update', new Event(array('user' => $user, 'fields' => $fields)));
 
@@ -2081,6 +2064,29 @@ class UserServiceImpl extends BaseService implements UserService
     public function setFaceRegistered($id)
     {
         return $this->getUserDao()->update($id, array('faceRegistered' => 1));
+    }
+
+    protected function filterCustomField($fields)
+    {
+        $numericalFields = array('intField1', 'intField2', 'intField3', 'intField4', 'intField5', 'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5');
+        foreach ($numericalFields as $field) {
+            if (isset($fields[$field]) && empty($fields[$field])) {
+                $fields[$field] = null;
+            }
+        }
+
+        $dateFields = array('dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5');
+        foreach ($dateFields as $dateField) {
+            if (isset($fields[$dateField]) && empty($fields[$dateField])) {
+                $fields[$dateField] = null;
+            }
+
+            if (!empty($fields[$dateField]) && !SimpleValidator::date($fields[$dateField])) {
+                $this->createNewException(UserException::DATEFIELD_INVALID());
+            }
+        }
+
+        return $fields;
     }
 
     protected function _prepareApprovalConditions($conditions)
