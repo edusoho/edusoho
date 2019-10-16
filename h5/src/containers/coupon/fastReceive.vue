@@ -26,17 +26,17 @@
             </div>
             <div class='ticket-range text-overflow'>适用于：{{couponType(coupons)}}</div>
         </div>
-        <div class="receive-status" v-if="hasReceive && !loginMethods">
+        <div class="receive-status" v-if="hasReceive && !loginMethods && couponSwitch">
             <img src="static/images/coupon-yes.png" class="status-icon"/>
                 <div class="status-text">{{successmessage}}</div>
                 <div class="status-user">{{username}}账户</div>
             <div class="status__btn" @click="useCoupon()">立即使用</div>
         </div>
-         <div class="receive-status" v-if="receiveFail && !loginMethods">
+         <div class="receive-status" v-if="(receiveFail && !loginMethods) || !couponSwitch">
             <img src="static/images/coupon-no.png" class="status-icon"/>
             <div class="status-text">{{failmessage}}</div>
         </div>
-        <fast-login v-if="!login && canuse" @lReceiveCoupon="lReceiveCoupon"></fast-login>
+        <fast-login v-if="!login && canuse && couponSwitch" @lReceiveCoupon="lReceiveCoupon"></fast-login>
     </div>
 </template>
 <script>
@@ -61,7 +61,7 @@ export default {
             canuse:false, //当前优惠券失效了
             hasReceive:false, //是否已经领取了优惠券
             receiveFail:false, //优惠券是否能正常使用
-            failmessage:'',//失败提示
+            failmessage: '优惠券已失效',//失败提示
             successmessage:'',//成功提示
             loginMethods:false, //登录方式 在手机快捷登录的时候是ture
         }
@@ -73,7 +73,8 @@ export default {
         ...mapState({
             user: state => state.user,
             isLoading: state => state.isLoading,
-            settings:state => state.settings,
+            settings: state => state.settings,
+            couponSwitch: state => state.couponSwitch
         }),
         username:{
             get:function(){
@@ -102,7 +103,7 @@ export default {
             const token = this.$route.params.token;
             await Api.getCouponInfo({
                query: {
-                    batchToken: token
+                    token: token
                 }
             }).then((res)=>{
                 this.coupons=res;
@@ -128,23 +129,25 @@ export default {
             }
         },
         //优惠券类型过滤
-        couponType(coupons){
+        couponType(coupons) {
             //指定优惠
-            if(coupons.target){
-                switch (coupons.targetType){
+            const numberType = coupons.targetDetail.numType;
+            const productType = coupons.targetDetail.product;
+            if (numberType === 'single') {
+                switch (productType) {
                     case 'course':
                     case 'classroom':
-                        return `${coupons.target.title}`
+                        return '指定商品'
                         break;
                     case 'vip':
-                        return `${coupons.target.name}`
+                        return '指定会员'
                         break;
                     default:
                         return ''
                 }
-            }else{
+            } else if (numberType === 'all') {
                 //全部
-                switch (coupons.targetType){
+                switch (productType) {
                     case 'course':
                         return '全部课程'
                         break;
@@ -156,6 +159,15 @@ export default {
                         break;
                     case 'vip':
                         return '全部会员'
+                        break;
+                    default:
+                        return ''
+                }
+            } else {
+                switch (productType) {
+                    case 'course':
+                    case 'classroom':
+                        return '部分商品'
                         break;
                     default:
                         return ''
