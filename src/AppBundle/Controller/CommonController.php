@@ -17,6 +17,14 @@ class CommonController extends BaseController
     public function qrcodeAction(Request $request)
     {
         $text = $request->get('text');
+
+        $qrCodeFilter = $this->get('qrcode_whitelist_filter');
+        $inWhitelist = $qrCodeFilter->isInWhiteList($text);
+
+        if (!$inWhitelist && 0 !== strpos($text, $request->getUriForPath(''))) {
+            $text = $this->generateUrl('homepage', array(), true);
+        }
+
         $qrCode = new QrCode();
         $qrCode->setText($text);
         $qrCode->setSize(250);

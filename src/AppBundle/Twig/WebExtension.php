@@ -19,6 +19,7 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Player\Service\PlayerService;
+use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
@@ -87,6 +88,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('cdn', array($this, 'cdn')),
             new \Twig_SimpleFilter('wrap', array($this, 'wrap')),
             new \Twig_SimpleFilter('convert_absolute_url', array($this, 'convertAbsoluteUrl')),
+            new \Twig_SimpleFilter('url_decode', array($this, 'urlDecode')),
         );
     }
 
@@ -175,7 +177,52 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_system_generated_email', array($this, 'isSystemGeneratedEmail')),
             new \Twig_SimpleFunction('get_transcode_error_message_key', array($this, 'getTranscodeErrorMessageKeyByCode')),
             new \Twig_SimpleFunction('uniqid', array($this, 'uniqid')),
+            new \Twig_SimpleFunction('get_days', array($this, 'getDays')),
+            new \Twig_SimpleFunction('isQuestionLack', array($this, 'isQuestionLack')),
         );
+    }
+
+    public function urlDecode($url)
+    {
+        return !empty($url) ? urldecode($url) : '';
+    }
+
+    public function getDays($days)
+    {
+        if (7 == count($days)) {
+            return $this->trans('course.remind.each_week');
+        }
+
+        $result = '';
+        foreach ($days as $day) {
+            switch ($day) {
+                case 'Mon':
+                    $result = $result.''.$this->trans('course.remind.mon').' 、';
+                    break;
+                case 'Tue':
+                    $result = $result.''.$this->trans('course.remind.tue').' 、';
+                    break;
+                case 'Wed':
+                    $result = $result.''.$this->trans('course.remind.wed').' 、';
+                    break;
+                case 'Thu':
+                    $result = $result.''.$this->trans('course.remind.thu').' 、';
+                    break;
+                case 'Fri':
+                    $result = $result.''.$this->trans('course.remind.fri').' 、';
+                    break;
+                case 'Sat':
+                    $result = $result.''.$this->trans('course.remind.sat').' 、';
+                    break;
+                case 'Sun':
+                    $result = $result.''.$this->trans('course.remind.sun').' 、';
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return rtrim($result, '、');
     }
 
     public function convertAbsoluteUrl($html)
@@ -1739,6 +1786,7 @@ class WebExtension extends \Twig_Extension
 
         $paths = array(
             'player' => 'js-sdk/sdk-v1.js',
+            'newPlayer' => 'js-sdk/sdk-v2.js',
             'video' => 'js-sdk/video-player/sdk-v1.js',
             'uploader' => 'js-sdk/uploader/sdk-2.1.0.js',
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
@@ -1845,11 +1893,24 @@ class WebExtension extends \Twig_Extension
         return MathToolkit::uniqid();
     }
 
+    public function isQuestionLack($testpaperId)
+    {
+        return $this->getTestPaperService()->isQuestionsLackedByTestId($testpaperId);
+    }
+
     /**
      * @return PlayerService
      */
     protected function getPlayerService()
     {
         return $this->createService('Player:PlayerService');
+    }
+
+    /**
+     * @return TestpaperService
+     */
+    protected function getTestPaperService()
+    {
+        return $this->createService('Testpaper:TestpaperService');
     }
 }

@@ -14,7 +14,6 @@ use Biz\Task\TaskException;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Biz\User\UserException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TestpaperAction extends AbstractResource
 {
@@ -89,16 +88,13 @@ class TestpaperAction extends AbstractResource
                 'items' => $items,
                 'isShowTestResult' => 1,
             );
-        }
-        if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
+        } else {
             return array(
                 'testpaperResult' => $testpaperResult,
                 'testpaper' => $testpaper,
                 'items' => $items,
                 'isShowTestResult' => 1,
             );
-        } else {
-            throw TestpaperException::REVIEWING_TESTPAPER();
         }
     }
 
@@ -143,7 +139,7 @@ class TestpaperAction extends AbstractResource
         $task['activity'] = $activity;
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $activity['fromCourseSetId'], $activity['id'], $testpaper['type']);
+        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $activity['fromCourseId'], $activity['id'], $testpaper['type']);
 
         if ($testpaperActivity['doTimes'] && $testpaperResult && 'finished' == $testpaperResult['status']) {
             throw TestpaperException::FORBIDDEN_RESIT();

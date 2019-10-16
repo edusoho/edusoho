@@ -11,18 +11,52 @@ use Biz\System\SettingException;
 
 class Setting extends AbstractResource
 {
+    private $supportTypes = array(
+        'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
+        'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer', 'user', 'cloud', 'coupon',
+    );
+
     /**
      * @ApiConf(isRequiredAuth=false)
      */
     public function get(ApiRequest $request, $type)
     {
-        if (!in_array($type, array('site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig', 'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'cloud', 'user'))) {
-            throw CommonException::ERROR_PARAMETER();
-        }
-
+        $this->checkType($type);
         $method = "get${type}";
 
         return $this->$method($request);
+    }
+
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function search(ApiRequest $request)
+    {
+        $result = array();
+        $types = $request->query->get('types', '');
+
+        foreach ($types as $type) {
+            $this->checkType($type);
+        }
+
+        foreach ($types as $type) {
+            $result[$type] = $this->get($request, $type);
+        }
+
+        return $result;
+    }
+
+    public function getDeveloper($request)
+    {
+        $developer = $this->getSettingService()->get('developer', array());
+        $cloudSdkCdn = empty($developer['cloud_sdk_cdn']) ? 'service-cdn.qiqiuyun.net' : $developer['cloud_sdk_cdn'];
+        // \QiQiuYun\SDK\Service\PlayV2Service 将host设置为protect变量，拿不出来，只能自己定义
+        $cloudPlayServer = empty($developer['cloud_play_server']) ? 'play1.qiqiuyun.net' : $developer['cloud_play_server'];
+
+        return array(
+            'cloudSdkCdn' => $cloudSdkCdn,
+            'cloudPlayServer' => $cloudPlayServer,
+        );
     }
 
     public function getUser($request = null)
@@ -290,6 +324,25 @@ class Setting extends AbstractResource
         return array(
             'show_student_num_enabled' => isset($classroomSetting['show_student_num_enabled']) ? (bool) $classroomSetting['show_student_num_enabled'] : true,
         );
+    }
+
+    private function checkType($type)
+    {
+        if (!in_array($type, $this->supportTypes)) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+    }
+
+    public function getCoupon()
+    {
+        $couponSetting = $this->getSettingService()->get('coupon', array());
+        $default = array(
+            'enabled' => 1,
+        );
+        $couponSetting = array_merge($default, $couponSetting);
+
+
+        return $couponSetting;
     }
 
     private function getLoginConnect($clients)

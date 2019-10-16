@@ -22,10 +22,10 @@ class CourseCouponTest extends BaseTestCase
         );
         $this->getCourseService()->createCourse($course);
 
-        $result = $courseCoupon->canUseable(array('targetId' => '1'), array('id' => 1));
+        $result = $courseCoupon->canUseable(array('targetIds' => array('1')), array('id' => 1));
         $this->assertTrue($result);
 
-        $result1 = $courseCoupon->canUseable(array('targetId' => '1'), array('id' => 10));
+        $result1 = $courseCoupon->canUseable(array('targetIds' => array('1')), array('id' => 10));
         $this->assertFalse($result1);
     }
 

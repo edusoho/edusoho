@@ -16,11 +16,9 @@ class MaterialLibChoose extends Chooser {
 
   _initEvent() {
     $(this.container).on('click', '.js-material-type', this._switchFileSource.bind(this));
-    $(this.container).on('change', '.js-file-owner', this._filterByFileOwner);
     $(this.container).on('click', '.js-browser-search', this._filterByFileName.bind(this));
     $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
     $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
-    // $('.js-choose-trigger').on('click', this._open.bind(this))
   }
 
   _loadList() {
@@ -96,11 +94,6 @@ class MaterialLibChoose extends Chooser {
     this._loadList();
   }
 
-  _filterByFileOwner() {
-    // params.currentUserId = $('.js-file-owner option:selected').val();
-    // $('input[name=currentUserId]').val(currentUserId);
-    // this._loadList();
-  }
 
   _onSelectFile(event) {
     $('.file-browser-item').removeClass('active');

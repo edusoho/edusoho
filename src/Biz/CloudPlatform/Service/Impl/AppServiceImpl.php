@@ -13,7 +13,6 @@ use Biz\Common\CommonException;
 use Biz\Role\Service\RoleService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
-use Biz\User\Service\UserService;
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -982,19 +981,6 @@ class AppServiceImpl extends BaseService implements AppService
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
-    }
-
-    /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->biz->service('User:UserService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
     }
 
     /**

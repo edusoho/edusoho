@@ -50,6 +50,16 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function searchTestpaperResultsCountJoinCourseMemberGroupByUserId($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->leftJoin('testpaper_result_v8', 'course_member', 'cm', 'cm.courseId = testpaper_result_v8.courseId')
+            ->select('cm.userId, COUNT(*) as num')
+            ->groupBy('cm.userId');
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
     public function declares()
     {
         return array(
@@ -82,6 +92,9 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
                 'type = :type',
                 'type IN ( :types )',
                 'lessonId = :lessonId',
+                'cm.role = :role',
+                'beginTime <= :beginTime_LE',
+                'beginTime >= :beginTime_GE',
             ),
             'serializes' => array(
                 'metas' => 'json',

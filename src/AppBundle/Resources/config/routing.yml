@@ -1248,6 +1248,11 @@ edu_cloud_sms_send_registration:
     defaults: { _controller: AppBundle:EduCloud:smsSendRegistration }
     methods: [POST]
 
+edu_cloud_sms_send_check_captcha:
+    path:  /edu_cloud/sms_send_check_captcha
+    defaults: { _controller: AppBundle:EduCloud:smsSendCheckCaptcha }
+    methods: [POST]
+
 edu_cloud_sms_check:
     path:  /edu_cloud/sms_check/{type}
     defaults: { _controller: AppBundle:EduCloud:smsCheck }
@@ -3241,19 +3246,32 @@ questions_import_save:
   methods: [POST]
   defaults: { _controller: AppBundle:Question/Manage:saveImportQuestions }
 
+coupon_receive:
+  pattern: /coupon/{token}/receive
+  defaults: { _controller: AppBundle:CouponBatch:couponReceive }
+  h5: true
+
+coupon_resource_list:
+  path:     /coupon/{batchId}/resource/list
+  defaults: {_controller: AppBundle:CouponBatch:couponResourceList  }
+
+activity_ppt_token:
+  path: /activity/ppt/token/{mediaId}
+  defaults: { _controller: AppBundle:Activity/Ppt:getPptToken }
+
 oauth2_es_authorize:
-    path:  /oauth/authorize
-    defaults: { _controller: AppBundle:OAuth2/Service/Authorization:authorize }
+  path:  /oauth/authorize
+  defaults: { _controller: AppBundle:OAuth2/Service/Authorization:authorize }
 
 oauth2_es_token:
-    path:  /oauth/token
-    defaults: { _controller: AppBundle:OAuth2/Service/Authorization:token }
-    methods: [POST]
+  path:  /oauth/token
+  defaults: { _controller: AppBundle:OAuth2/Service/Authorization:token }
+  methods: [POST]
 
 oauth2_es_token_verify:
-    path:  /oauth/access_token
-    defaults: { _controller: AppBundle:OAuth2/Service/Authorization:verify }
+  path:  /oauth/access_token
+  defaults: { _controller: AppBundle:OAuth2/Service/Authorization:verify }
 
 oauth2_es_user_info:
-    path:  /oauth/user_info/{userId}
-    defaults: { _controller: AppBundle:OAuth2/Service/Authorization:getUserInfo }
+  path:  /oauth/user_info/{userId}
+  defaults: { _controller: AppBundle:OAuth2/Service/Authorization:getUserInfo }

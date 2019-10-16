@@ -231,7 +231,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $user = $this->getUserService()->register(array(
             'nickname' => 'user',
             'email' => 'user@user.com',
-            'password' => 'user',
+            'password' => 'user123',
             'createdIp' => '127.0.0.1',
             'orgCode' => '1.',
             'orgId' => '1',
@@ -287,7 +287,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $user = $this->getUserService()->register(array(
             'nickname' => 'user',
             'email' => 'user@user.com',
-            'password' => 'user',
+            'password' => 'user123',
             'createdIp' => '127.0.0.1',
             'orgCode' => '1.',
             'orgId' => '1',

@@ -476,6 +476,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->count($conditions);
     }
 
+    public function searchTestpaperResultsCountJoinCourseMemberGroupByUserId($conditions)
+    {
+        return $this->getTestpaperResultDao()->searchTestpaperResultsCountJoinCourseMemberGroupByUserId($conditions);
+    }
+
     public function searchTestpaperResults($conditions, $sort, $start, $limit)
     {
         if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
@@ -605,6 +610,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         return $testpaperResult;
+    }
+
+    public function isQuestionsLackedByTestId($testId)
+    {
+        $testpaper = $this->getTestpaper($testId);
+        $testpaperBuilder = $this->getTestpaperBuilder($testpaper['type']);
+
+        return $testpaperBuilder->countQuestionsByTestPaper($testpaper) < $testpaper['itemCount'];
     }
 
     public function showTestpaperItems($testId, $resultId = 0)

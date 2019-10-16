@@ -41,3 +41,7 @@ parameters:
         - '/pay/center/pay/llpay/return'
         - '/pay/center/pay/llpay/notify'
         - '/cashier/wechat/notify'
+
+    qrcode_protocol_whitelist_default:
+        - 'weixin'
+        - 'alipays'

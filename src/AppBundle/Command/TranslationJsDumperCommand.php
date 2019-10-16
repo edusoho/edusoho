@@ -85,11 +85,11 @@ class TranslationJsDumperCommand extends BaseCommand
                 continue;
             }
 
-            if (!empty($code) && 0 !== strpos($filename, $rootDirectory.'/plugins/'.ucfirst($code).'Plugin')) {
+            if (!empty($code) && 0 !== strpos(realpath($filename), $rootDirectory.'/plugins/'.ucfirst($code).'Plugin')) {
                 continue;
             }
 
-            if (empty($code) && 0 === strpos($filename, $rootDirectory.'/plugins/')) {
+            if (empty($code) && 0 === strpos(realpath($filename), $rootDirectory.'/plugins/')) {
                 continue;
             }
 
