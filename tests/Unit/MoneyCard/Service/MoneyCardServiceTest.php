@@ -632,7 +632,8 @@ class MoneyCardServiceTest extends BaseTestCase
         ));
         $result = $this->getMoneyCardService()->receiveMoneyCard('', 1);
         $this->assertEquals(array(
-            'code' => 'empty',
+            'batchId' => 1,
+            'code' => 'received',
             'message' => '您已经领取该批学习卡',
         ), $result);
     }
