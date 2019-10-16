@@ -29,6 +29,7 @@
               :maxlength="loginMode === 'fastLoginMode' ? 6 : 64"
               ref="smsCode"
               :placeholder="currentLoginMode.passwordPlaceholder"
+              :error-message="errorMessage.password"
           >
             <div
                 v-show="loginMode === 'fastLoginMode'"
@@ -70,7 +71,6 @@
               v-show="loginMode === 'normalLoginMode'"
               class="third-part-login"
           >
-            <span class="third-part-login-tools">更多登录方式</span>
           </div>
         </div>
       </div>
@@ -116,6 +116,7 @@
         dragKey: 0,
         errorMessage: {
           mobile: '',
+          password: ''
         },
         validated: {
           mobile: false,
@@ -174,6 +175,12 @@
           })
           .catch(err => {
             Toast.fail(err.message);
+            if (err.code === 4040104) {
+              this.errorMessage.mobile = err.message;
+            }
+            if (err.code === 5000116) {
+              this.errorMessage.password = err.message;
+            }
           });
       },
       updateShow() {

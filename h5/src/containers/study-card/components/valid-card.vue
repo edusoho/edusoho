@@ -74,7 +74,14 @@
         isECard: undefined,
         // 学习卡的token，不是用户的token， 用户token是userToken
         token: '',
-        cash: 0
+        cash: 0,
+        cardStatusList: {
+          'expired': '卡已过期，去看看其他精品吧～',
+          'invalid': '卡已失效，去看看其他精品吧～',
+          'used': '之前已充值，当前账户余额 ' + this.cash + '尽情购物啦～',
+          'usedByOther': '卡已被其他人充值，去看看其他精品吧～',
+          'failed': '卡已被抢完，去看看其他精品吧～'
+        }
       };
     },
     computed: {
@@ -103,6 +110,12 @@
           .then(res => {
             this.date = res.deadline;
             this.money = res.coin;
+            if (res.cardStatus === 'normal') return;
+            this.message = this.cardStatusList[res.batchStatus];
+            console.log(res);
+            this.initProcess = false;
+            this.invalidCard = true;
+            this.processIsDone = true;
           })
           .catch(err => {
             this.initProcess = false;
@@ -121,6 +134,11 @@
           this.date = res.deadline;
           this.money = res.coin;
           this.code = res.password;
+          if (res.cardStatus === 'normal') return;
+          this.message = this.cardStatusList[res.cardStatus];
+          this.initProcess = false;
+          this.invalidCard = true;
+          this.processIsDone = true;
         })
         .catch(err => {
           this.initProcess = false;
@@ -217,7 +235,7 @@
           .catch(err => {
             console.log(err);
           });
-      }
+      },
     },
 
   };

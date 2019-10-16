@@ -36,6 +36,7 @@
       line-height: vw(44);
       background: rgb(241, 243, 248);
       border-radius: vw(4);
+
       .van-cell {
         background-color: transparent;
       }
@@ -210,6 +211,7 @@
       padding: vw(48) vw(35) vw(20);
 
       .receive-login-input {
+        position: relative;
         .van-cell {
           background-color: transparent;
         }
@@ -352,6 +354,9 @@
       }
 
       .reset-password {
+        position: absolute;
+        right: 0;
+        bottom: vw(-28);
         height: vw(28);
         line-height: vw(28);
         color: #B3B3B3;
