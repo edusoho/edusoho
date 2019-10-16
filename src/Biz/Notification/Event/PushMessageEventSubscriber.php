@@ -606,8 +606,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'invite.reward',
                 'userId' => $inviteCoupon['userId'],
-                'title' => "{$message['rewardName']}",
-                'message' => "恭喜您获得{$message['rewardName']}奖励，{$message['settingName']}元面值抵价优惠券一张，已发至您的账户",
+                'title' => "{$message['title']}",
+                'message' => "{$message['content']}",
             );
 
             $this->createPushJob($from, $to, $body);

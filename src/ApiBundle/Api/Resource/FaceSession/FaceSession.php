@@ -9,6 +9,7 @@ use Biz\Common\CommonException;
 use Biz\User\TokenException;
 use Biz\User\UserException;
 use Biz\Face\Service\FaceService;
+use Codeages\Biz\Pay\Service\AccountService;
 
 class FaceSession extends AbstractResource
 {
@@ -22,6 +23,8 @@ class FaceSession extends AbstractResource
 
         if (!empty($session['status']) && in_array($session['status'], array(FaceService::FACE_STATUS_FAIL, FaceService::FACE_STATUS_SUCCESS))) {
             $user = $this->getUserService()->getUser($session['user']['id']);
+            $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
+
             if (empty($user)) {
                 throw UserException::NOTFOUND_USER();
             }
@@ -129,5 +132,13 @@ class FaceSession extends AbstractResource
     protected function getTokenService()
     {
         return $this->service('User:TokenService');
+    }
+
+    /**
+     * @return AccountService
+     */
+    private function getAccountService()
+    {
+        return $this->service('Pay:AccountService');
     }
 }

@@ -4,6 +4,7 @@ namespace ApiBundle\Api;
 
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 
 class ApiRequest
 {
@@ -59,6 +60,9 @@ class ApiRequest
         return $this->method;
     }
 
+    /**
+     * @return Request
+     */
     public function getHttpRequest()
     {
         return $this->httpRequest;

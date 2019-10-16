@@ -60,3 +60,24 @@
     
   {% endif %}
 {% endmacro %}
+
+{% macro ajax_paginator(paginator, class)  %}
+  {% if paginator.lastPage > 1 %}
+    <nav class="admin-pagination {{ class|default('text-center') }}">
+      <ul class="pagination">
+        {% if paginator.currentPage != paginator.firstPage %}
+          <li data-url="{{ paginator.getPageUrl(paginator.firstPage) }}" data-page="{{paginator.firstPage}}"><span style="cursor:pointer;">{{ 'paginator.firstPage'|trans }}</span></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.previousPage) }}" data-page="{{paginator.previousPage}}"><span style="cursor:pointer;"><i class="es-icon es-icon-chevronleft"></i></span></li>
+        {% endif %}
+        {% for page in paginator.pages %}
+          <li {% if page == paginator.currentPage %}class="active"{% endif %} data-url="{{ paginator.getPageUrl(page) }}" data-page="{{page}}"><span style="cursor:pointer;">{{ page }}</span></li>
+        {% endfor %}
+
+        {% if paginator.currentPage != paginator.lastPage %}
+          <li data-url="{{ paginator.getPageUrl(paginator.nextPage) }}" data-page="{{paginator.nextPage}}"><span style="cursor:pointer;"><i class="es-icon es-icon-chevronright"></i></span></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.getLastPage) }}" data-page="{{paginator.getLastPage}}"><span style="cursor:pointer;">{{ 'paginator.endPage'|trans }}</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endmacro %}
