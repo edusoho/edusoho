@@ -632,7 +632,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
     public function receiveMoneyCardByPassword($password, $userId)
     {
         $moneyCard = $this->getMoneyCardByPassword($password);
-        $result = $this->checkMoneyCardCanUse($moneyCard, $userId);
+        $result = $this->canUseMoneyCard($moneyCard, $userId);
         if (!empty($result)) {
             return $result;
         }
@@ -687,7 +687,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         }
     }
 
-    protected function checkMoneyCardCanUse($moneyCard, $userId)
+    protected function canUseMoneyCard($moneyCard, $userId)
     {
         if (!$moneyCard) {
             return array(
