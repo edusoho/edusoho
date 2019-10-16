@@ -16,9 +16,12 @@
         <a href="{{path('my_invite_code')}}">{{'user.account.invite_code'|trans}}</a>
       </li>
     {% endif %}
-    <li class="cd-sidebar__item {% if side_nav == 'my-coupon' %} active {% endif %}">
-      <a href="{{path('my_cards')}}">{{'plugin.coupon'|trans}}</a>
-    </li>
+    {% if setting('coupon.enabled', 0) %}
+      <li class="cd-sidebar__item {% if side_nav == 'my-coupon' %} active {% endif %}">
+        <a href="{{path('my_cards')}}">{{'plugin.coupon'|trans}}</a>
+      </li>
+    {% endif %}
+
     {{ slot('my.account.menu.extension', {'sideNav': side_nav}) }}
     {{ slot('my.account.menu.extension.invoice', {'sideNav': side_nav}) }}
 

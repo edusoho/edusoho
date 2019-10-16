@@ -18,3 +18,12 @@ $('body').on('click', '.money-card-use', function () {
     notify('danger', Translator.trans('card.card_receive_failed_hint'));
   });
 });
+
+
+
+$('body').on('click', '[data-role=coupon-pack]', function () {
+  let url = $(this).data('url');
+  $.post($(this).data('url'), function (html) {
+    $('#modal').html(html);
+  });
+});
