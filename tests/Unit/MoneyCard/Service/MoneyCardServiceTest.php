@@ -650,7 +650,7 @@ class MoneyCardServiceTest extends BaseTestCase
         ));
         $result = $this->getMoneyCardService()->receiveMoneyCard('', 0);
         $this->assertEquals(array(
-            'code' => 'failed',
+            'code' => 'empty',
             'message' => '该批学习卡已经被领完',
         ), $result);
     }
