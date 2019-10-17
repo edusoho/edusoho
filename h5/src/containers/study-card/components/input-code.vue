@@ -1,15 +1,17 @@
 <template>
   <div class="input-code">
-    <div class="schoolName text-overflow">第一网校/xxxxasdasdasdasdasdasd按顺序</div>
-    <van-field
-        v-model="code"
-        center
-        clearable
-        placeholder="请输入16位卡密"
-        class="input-code__field"
-        @input="handleCode"
-    >
-    </van-field>
+    <div class="schoolName text-overflow">{{settingsName}}</div>
+    <div class="input-code__field">
+      <van-field
+          v-model="code"
+          center
+          clearable
+          placeholder="请输入16位卡密"
+          @input="handleCode"
+          :error-message="errorMessage"
+      >
+      </van-field>
+    </div>
     <van-button
         type="default"
         :class="['submit', {
@@ -23,12 +25,21 @@
 </template>
 
 <script>
+  import Api from '@/api';
+  import { mapState } from 'vuex';
+
   export default {
     name: 'entity-card',
     data() {
       return {
-        code: ''
+        code: '',
+        errorMessage: ''
       };
+    },
+    computed: {
+      ...mapState({
+        settingsName: state => state.settings.name
+      })
     },
     methods: {
       handleCode(value) {
@@ -38,8 +49,16 @@
       },
       submit() {
         if (this.code.length === 19) {
-          // 这边的逻辑之后改
-          this.$router.push('/valid_card');
+          const password = this.code.replace(/\s/g, '');
+          Api.getMoneyCardByPassword({
+            query: { password }
+          })
+            .then(res => {
+              this.$router.push(`/moneycard/receive/${password}`);
+            })
+            .catch(err => {
+              this.errorMessage = err.message;
+            });
         }
       }
     },

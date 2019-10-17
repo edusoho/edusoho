@@ -18,6 +18,7 @@
     background-size: 100% 100%;
 
     .schoolName {
+      text-align: center;
       color: #fff;
       margin: auto;
       padding: vw(12) vw(50);
@@ -25,16 +26,31 @@
 
     .input-code__field {
       position: absolute;
-      top: 66.9%;
+      top: 66.7%;
+      width: 86%;
       left: 0;
       right: 0;
-      width: 88%;
       margin: auto;
-      border-radius: vw(2);
+      padding-right: vw(9);
+      height: vw(44);
+      line-height: vw(44);
+      background: rgb(241, 243, 248);
+      border-radius: vw(4);
 
-      > div {
-        padding: 0 vw(16);
+      .van-cell {
+        background-color: transparent;
       }
+
+      .van-field__body {
+        padding-left: vw(20);
+      }
+
+      .van-field__error-message {
+        margin-top: vw(14);
+        padding-left: vw(16);
+      }
+
+
     }
 
     .submit {
@@ -103,7 +119,7 @@
           }
         }
 
-        .code {
+        .password {
           padding-left: vw(24);
           font-size: vw(18);
         }
@@ -145,6 +161,8 @@
           }
 
           .res-msg {
+            width: 100%;
+            text-align: center;
             padding-top: vw(12);
             color: #333;
           }
@@ -190,9 +208,10 @@
 
   .login {
     .login__container {
-      padding: vw(48) vw(35) vw(24);
+      padding: vw(48) vw(35) vw(20);
 
       .receive-login-input {
+        position: relative;
         .van-cell {
           background-color: transparent;
         }
@@ -210,14 +229,15 @@
         padding: 0 vw(9) 0 vw(0);
         box-sizing: border-box;
         width: vw(305);
-        height: 44px;
-        line-height: 44px;
+        height: vw(44);
+        line-height: vw(44);
         background: rgb(241, 243, 248);
         border-radius: vw(4);
 
         .code-btn {
-          margin-right: vw(6);
-          padding-left: vw(15);
+          text-align: center;
+          min-width: vw(90);
+          padding: 0 vw(6) 0 vw(15);
           height: 100%;
           box-sizing: border-box;
           color: #408FFB;
@@ -233,7 +253,7 @@
       .login__container__button {
         color: rgba(64, 143, 251, 1);
         padding: vw(4) vw(0) vw(4) vw(15);
-        border-left: 1px solid #ddd;
+        border-left: vw(1) solid #ddd;
         opacity: .5;
 
         &.active {
@@ -244,31 +264,64 @@
       .receive-login__text {
         color: #999;
         text-align: center;
+        padding-top: vw(40);
+        height: vw(70);
 
         .receive-login-tools {
+          margin-top: vw(50);
           display: inline-block;
           position: relative;
-          margin-top: vw(30);
-          font-size: 14px;
+          font-size: vw(12);
 
           &::before {
             position: absolute;
-            left: -25px;
-            top: 10px;
+            left: vw(-25);
+            top: vw(8);
             content: '';
-            height: 1px;
-            width: 18px;
+            height: vw(2);
+            width: vw(18);
             background: linear-gradient(90deg, transparent, #ddd);
           }
 
           &::after {
             position: absolute;
-            right: -25px;
-            top: 10px;
+            right: vw(-25);
+            top: vw(8);
             content: '';
-            height: 1px;
-            width: 18px;
+            height: vw(2);
+            width: vw(18);
             background: linear-gradient(270deg, transparent, #ddd);
+            /* 标准的语法 */
+          }
+        }
+      }
+
+      .third-part-login {
+        text-align: center;
+
+        .third-part-login-tools {
+          display: inline-block;
+          position: relative;
+          font-size: vw(12);
+
+          &::before {
+            position: absolute;
+            left: vw(-115);
+            top: vw(8);
+            content: '';
+            height: vw(1);
+            width: vw(108);
+            background: #ddd;
+          }
+
+          &::after {
+            position: absolute;
+            right: vw(-115);
+            top: vw(8);
+            content: '';
+            height: vw(1);
+            width: vw(108);
+            background: #ddd;
             /* 标准的语法 */
           }
         }
@@ -276,7 +329,7 @@
 
       .receive-login__btn {
         text-align: center;
-        margin: vw(40) auto 0 auto;
+        margin: vw(20) auto 0;
         height: vw(40);
         line-height: vw(40);
         color: #fff;
@@ -297,6 +350,33 @@
       .mobile-drag-content {
         .e-drag {
           margin: auto;
+        }
+      }
+
+      .reset-password {
+        position: absolute;
+        right: 0;
+        bottom: vw(-28);
+        height: vw(28);
+        line-height: vw(28);
+        color: #B3B3B3;
+        text-align: right;
+        font-size: vw(12);
+      }
+
+      .choice-bar {
+        height: vw(36);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: vw(12);
+
+        .left {
+          color: #777;
+        }
+
+        .right {
+          color: #408FFB;
         }
       }
     }
