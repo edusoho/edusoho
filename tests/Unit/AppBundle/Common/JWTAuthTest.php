@@ -11,7 +11,7 @@ class JWTAuthTest extends BaseTestCase
         $key = md5('JWTAuthTest');
 
         $JWTAuth = new JWTAuth($key);
-        $result = $JWTAuth->auth(array(), array('exp' => time(), 'iat'));
+        $result = $JWTAuth->auth(array(), array('exp' => time()));
         $result = explode('.', $result);
         $this->assertEquals('eyJhbGciOiJzaGExIiwidHlwIjoiSldUIn0', $result[0]);
     }
@@ -20,7 +20,7 @@ class JWTAuthTest extends BaseTestCase
     {
         $key = md5('JWTAuthTest');
         $JWTAuth = new JWTAuth($key);
-        $payload = 'eyJhbGciOiJzaGExIiwidHlwIjoiSldUIn0.eyJpc3MiOiIiLCJpYXQiOjE1NzA3Nzk4OTUsImV4cCI6MTU3MDc4MzQ5NSwiYXVkIjoiIiwic3ViIjoiIiwibmJmIjoiIiwianRpIjoiIn0.20cf6d0428acf3d562d3311df113df1cf056c2cb';
+        $payload = $JWTAuth->auth(array(), array('exp' => time()));
         $result1 = $JWTAuth->valid($payload);
 
         $result2 = $JWTAuth->auth(array(), array('iat' => time() + 3600, 'exp' => time() + 7200));
