@@ -433,12 +433,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/exam-parser.git",
-            "reference": "4d8d4954d848b0acc9223846a53f22c5fd596ac4"
+            "reference": "3e9c8fb8029cdea73f5ccab23ef889454102b5a4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/exam-parser/zipball/4d8d4954d848b0acc9223846a53f22c5fd596ac4",
-            "reference": "4d8d4954d848b0acc9223846a53f22c5fd596ac4",
+            "url": "https://api.github.com/repos/codeages/exam-parser/zipball/3e9c8fb8029cdea73f5ccab23ef889454102b5a4",
+            "reference": "3e9c8fb8029cdea73f5ccab23ef889454102b5a4",
             "shasum": "",
             "mirrors": [
                 {
@@ -459,7 +459,7 @@
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2019-08-09T09:17:34+00:00",
+        "time": "2019-10-10T07:40:00+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {

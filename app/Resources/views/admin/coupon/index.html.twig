@@ -1,0 +1,49 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'coupon/list' %}
+{% set menu = 'admin_operation_coupon_manage' %}
+ {% block page_buttons %}
+   {% if setting('coupon.enabled', 0) == 1 %}
+      <a class="btn btn-success btn-sm " href="{{ path('admin_coupon_generate') }}" target="blank">{{ 'admin.operation.coupon_menu.generate_btn'|trans }}</a>
+   {% endif %}
+ {% endblock %}
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form id="coupon-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <div class="form-group">
+      <select class="form-control" name="type">
+        {{ select_options(dict('couponType'), app.request.query.get('type'), 'coupon.query.by_type'|trans) }}
+      </select>
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="{{ 'coupon.name'|trans }}" name="name" value="{{ app.request.get('name') }}">
+    </div>
+    <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+  </form>
+
+  <table class="table table-striped" id="coupon-list">
+    <thead>
+      <tr>
+        <th width="15%">{{ 'coupon.name'|trans }}</th>
+        <th width="12%">{{ 'coupon.batch.prefix'|trans }}</th>
+        <th width="13%">{{ 'coupon.content'|trans }}</th>
+        <th>{{ 'coupon.status.used'|trans }}/{{ 'coupon.status.receive'|trans }}/{{ 'coupon.total_count'|trans }}</th>
+        <th>{{ 'coupon.expiry_date'|trans }}</th>
+        <th width="10%">{{ 'coupon.amount'|trans }}</th>
+        <th>{{ 'coupon.channel'|trans }}</th>
+        <th>{{ 'coupon.operation'|trans }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for batch in batchs %}
+        {% include 'admin/coupon/tr.html.twig' %}
+      {% else %}
+        <tr class="empty"><td colspan="20">{{ 'coupon.no_coupon_tip'|trans }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

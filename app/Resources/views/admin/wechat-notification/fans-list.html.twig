@@ -32,7 +32,7 @@
     </tr>
   </thead>
   <tbody>
-    {% if not wechatSetting.wechat_notification_enabled %}
+    {% if not wechatSetting.wechat_notification_enabled|default(false) %}
       <tr>
         <td colspan="20">
           <div class="empty">{{'wechat.notification.fans_list.no_wechat_bind'|trans}}</div>
