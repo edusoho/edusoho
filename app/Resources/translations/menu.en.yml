@@ -341,6 +341,7 @@ admin.system.wechat_auth_menu: WeChat Authorization Information
 ##移动端设置模块
 admin.system.mobile.h5: Mobile Site Setting
 admin.system.mobile.basic_tab: Mobile Setting
+admin.system.mobile.discoveries_setting: Discoveries Setting
 
 ##IOS内购商品设置模块
 admin.system.mobile_iap_product.basic_tab: iOS Purchase Setting

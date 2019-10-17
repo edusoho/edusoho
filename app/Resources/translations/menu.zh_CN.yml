@@ -343,6 +343,7 @@ admin.system.wechat_auth_menu: 微信授权信息
 ##移动端设置模块
 admin.system.mobile.h5: 微网校设置
 admin.system.mobile.basic_tab: APP 设置
+admin.system.mobile.discoveries_setting: 发现页设置
 
 ##IOS内购商品设置模块
 admin.system.mobile_iap_product.basic_tab: IOS内购商品设置
