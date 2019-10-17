@@ -44,7 +44,8 @@ export default {
     },
     hasreceiveCoupon(coupon) {
       /* 已领券 */
-      const targetType = coupon.targetType;
+      const targetType = coupon.targetDetail.product;
+      const targetNum = coupon.targetDetail.numType;
       const allType = Object.values(ALL_TYPE);
 
       if (!allType.includes(targetType)) {
@@ -53,7 +54,7 @@ export default {
       }
 
       // 指定课程或者班级
-      if (coupon.target) {
+      if (targetNum === 'single') {
         const targetId = coupon.target.id;
         // 指定vip
         if (targetType === ALL_TYPE.vip) {
@@ -65,26 +66,24 @@ export default {
           });
           return;
         }
+
         this.getPathParams(targetType, targetId).then(({ id }) => {
           if (!id) return;
           this.$router.push({
             path: `/${targetType}/${id}` // course/{id} | classroom/{id}
           });
         });
-        return;
-      }
-      // 全站跳转到发现页
-      if (targetType === ALL_TYPE.all) {
+      } else if (targetNum === 'multi') {
+        // 多个班级/课程
+        this.$router.push({
+          path: `/${coupon.targetDetail.product}/explore` // course/explore | classroom/explore
+        });
+      } else {
+        // 全站
         this.$router.push({
           path: '/'
         });
-        return;
       }
-
-      // 所有班级或者课程
-      this.$router.push({
-        path: '/'
-      });
     },
     /* 课程的id 需要转换成计划id 跳转到对应计划详情页 */
     getPathParams(type, id) {

@@ -114,6 +114,7 @@ export default {
       typeCount: {},
       pathName: this.$route.name,
       currentMPVersion: '0.0.0',
+      couponSwitch: 0,
     }
   },
   computed: {
@@ -162,6 +163,8 @@ export default {
     this.getCourseCategories();
     // 获得班级分类列表
     this.getClassCategories();
+    // 获得优惠券开关
+    this.getCouponSwitch();
   },
   methods: {
     ...mapActions([
@@ -171,6 +174,11 @@ export default {
       'saveDraft',
       'getDraft',
     ]),
+    getCouponSwitch() {
+      Api.getCouponSetting().then(res => {
+        this.couponSwitch = parseInt(res.enabled, 10);
+      });
+    },
     supportVersion(version) {
       return !needUpgrade(version, this.currentMPVersion)
     },
@@ -237,6 +245,17 @@ export default {
               cancelButtonText: '取消',
             }).then(() => {
               window.open(window.location.origin + '/admin/setting/vip/level');
+            }).catch(() => {});
+            return;
+          }
+          break;
+        case 'coupon':
+          if (!this.couponSwitch) {
+            this.$confirm('优惠券功能未开通', '提示', {
+              confirmButtonText: '去开通',
+              cancelButtonText: '取消',
+            }).then(() => {
+              window.open(window.location.origin + '/admin/setting/coupon');
             }).catch(() => {});
             return;
           }

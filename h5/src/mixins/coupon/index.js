@@ -30,17 +30,51 @@ export default {
       }
       return `<span class="${intClass}">${intPrice}</span><span class="text-14">${pointPrice + typeText}</span>`;
     },
-    scopeFilter({ targetType, target }) {
-      if (targetType === 'classroom') {
-        return target ? target.title : '全部班级';
+    scopeFilter({ targetDetail }) {
+      const numberType = targetDetail.numType;
+      const productType = targetDetail.product;
+      let text = '';
+      if (numberType === 'single') {
+        switch (productType) {
+          case 'course':
+          case 'classroom':
+            text = '指定商品';
+            break;
+          case 'vip':
+            text = '指定会员';
+            break;
+          default:
+            text = '';
+        }
+      } else if (numberType === 'all') {
+        // 全部
+        switch (productType) {
+          case 'course':
+            text = '全部课程';
+            break;
+          case 'classroom':
+            text = '全部班级';
+            break;
+          case 'all':
+            text = '全部商品';
+            break;
+          case 'vip':
+            text = '全部会员';
+            break;
+          default:
+            text = '';
+        }
+      } else {
+        switch (productType) {
+          case 'course':
+          case 'classroom':
+            text = '部分商品';
+            break;
+          default:
+            text = '';
+        }
       }
-      if (targetType === 'course') {
-        return target ? target.title : '全部课程';
-      }
-      if (targetType === 'vip') {
-        return target ? target.name : '全部会员';
-      }
-      return '全部商品';
+      return text;
     },
     handleClick(coupon) {
       this.$emit('buttonClick', coupon);

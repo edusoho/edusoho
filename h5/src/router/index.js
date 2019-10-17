@@ -432,6 +432,11 @@ router.beforeEach((to, from, next) => {
   if (store.state.token) {
     setWeChatSwitch();
   }
+
+
+  store.dispatch('setCouponSwitch').then(res => {
+    console.log(res);
+  });
 });
 
 // 异步加载配置
