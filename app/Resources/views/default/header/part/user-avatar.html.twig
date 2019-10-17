@@ -33,9 +33,9 @@
         <i class="es-icon es-icon-book"></i>{{'homepage.header.my_learning_menu'|trans}}
       </a>
     </li>
-    {% if is_plugin_installed("Drp") and mobile %}
+    {% if is_plugin_installed("Drp") and mobile and generate_distribution_login_url(app.user.id) is not null %}
       <li class="user-nav-li-my">
-        <a href="{{ generate_distribution_login_url() }}">
+        <a href="{{ generate_distribution_login_url(app.user.id) }}">
           <i class="es-icon es-icon-fenxiaozhongxin"></i>{{'homepage.header.distribution_center_menu'|trans}}
         </a>
       </li>
