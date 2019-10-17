@@ -166,7 +166,7 @@
             this.isLoading = false;
             this.date = res.deadline;
             this.money = res.coin;
-            if (res.cardStatus === 'normal') return;
+            if (res.batchStatus === 'normal') return;
             this.message = this.cardStatusList[res.batchStatus];
             this.initProcess = false;
             this.invalidCard = true;
@@ -227,7 +227,6 @@
           this.jump2login();
         }
       },
-
       jump2login() {
         this.show = true;
       },
@@ -237,9 +236,7 @@
       chargeMoneyCardByPassword() {
         this.switchCharge('chargeMoneyCardByPassword', 'password');
       },
-
     },
-
   };
 </script>
 
