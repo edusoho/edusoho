@@ -1,5 +1,6 @@
 <template>
   <div class="valid-card">
+    <e-loading v-if="isLoading"></e-loading>
     <div class="container">
       <div class="top text-overflow">
         {{settingsName}}
@@ -89,7 +90,8 @@
         account: state => state.user['verifiedMobile'] || state.user.nickname,
         isLogin: state => !!state.token,
         settingsName: state => state.settings.name,
-        userToken: state => state.token
+        userToken: state => state.token,
+        isLoading: state => state.isLoading
       }),
       // 格式化成每4个空一个的样式
       formattedPassword() {
