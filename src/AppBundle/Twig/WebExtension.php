@@ -181,6 +181,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('uniqid', array($this, 'uniqid')),
             new \Twig_SimpleFunction('get_days', array($this, 'getDays')),
             new \Twig_SimpleFunction('isQuestionLack', array($this, 'isQuestionLack')),
+            new \Twig_SimpleFunction('generate_distribution_login_url', array($this, 'generateDistributionLoginUrl')),
         );
     }
 
