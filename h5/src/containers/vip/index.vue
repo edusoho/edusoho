@@ -256,7 +256,6 @@ export default {
 
       Api.getAgencyBindRelation().then(data => {
         if (JSON.stringify(data) == '{}') {
-          console.log(111);
           return;
         }
         Api.getDrpSetting().then(data => {
