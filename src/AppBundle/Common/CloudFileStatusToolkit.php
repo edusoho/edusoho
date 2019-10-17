@@ -6,7 +6,7 @@ class CloudFileStatusToolkit
 {
     const TRANSCODE_DEFAULT_ERROR_MESSAGE_KEY = 'cloud_file.transcoding_tips.default_error_message';
 
-    const  PROCESS_STATUS_DEFAULT_CONVERT_STATUS = 'unknow';
+    const PROCESS_STATUS_DEFAULT_CONVERT_STATUS = 'unknow';
 
     const SERVER_ERROR_PREFIX = '5';
 
