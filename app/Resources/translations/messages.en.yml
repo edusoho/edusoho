@@ -2971,7 +2971,6 @@ cloud_file.transcoding_tips.error_code_51008.solution: Please contact the operat
 
 cloud_file.transcoding_tips.default_error_message.reason: Transcoding failed
 cloud_file.transcoding_tips.default_error_message.solution: Please contact the operator for processing
->>>>>>> 115fdeb0f51ecdf33034c616e36c03a8876b095f
 
 my.teaching.open_course.title: Name
 cloud_file.material_thumbnail_generate: 'Producing screenshots...'
