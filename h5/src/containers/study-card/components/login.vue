@@ -61,7 +61,7 @@
              @click="onSubmit">登录并领取
         </div>
         <div class="choice-bar">
-          <router-link to="/register" tag="div" class="left">注册账号</router-link>
+          <div class="left" @click="jump2register">注册账号</div>
           <div class="right" v-show="loginMode === 'fastLoginMode'" @click="changeLoginMode">使用其他方式登录 >></div>
           <div class="right" v-show="loginMode === 'normalLoginMode'" @click="changeLoginMode">使用手机快捷登录 >></div>
         </div>
@@ -160,12 +160,20 @@
         'fastLogin',
         'userLogin'
       ]),
+      jump2register() {
+        this.$router.push({
+          name: 'register',
+          query: {
+            redirect: this.$route.fullPath
+          }
+        });
+      },
       onSubmit() {
         if (this.loginMode === 'fastLoginMode') {
           this.handleSubmit(this.handleSubmitSuccess);
           return;
         }
-          this.userLogin({
+        this.userLogin({
           username: this.userinfo.mobile,
           password: this.userinfo.smsCode
         })
