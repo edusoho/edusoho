@@ -16,7 +16,7 @@ host('124.160.104.77')
     ->identityFile('~/.ssh/deployerkey')
     ->addSshOption('UserKnownHostsFile', '/dev/null')
     ->addSshOption('StrictHostKeyChecking', 'no')
-    ->set('deploy_path', '/var/www/zyc.st.edusoho.cn');
+    ->set('deploy_path', '/var/www/zyc.st.edusoho.cn.h5');
 
 // Tasks
 

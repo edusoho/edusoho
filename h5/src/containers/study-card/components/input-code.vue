@@ -18,6 +18,7 @@
           'active': code.length === 19
         }]"
         @click="submit"
+        :disabled="code.length !== 19"
     >
       立即充值
     </van-button>
