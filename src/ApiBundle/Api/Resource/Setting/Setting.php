@@ -8,12 +8,14 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\System\SettingException;
+use Biz\OrderFacade\CoinCurrency;
 
 class Setting extends AbstractResource
 {
     private $supportTypes = array(
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
-        'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer', 'user', 'cloud',
+        'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer', 
+        'user', 'cloud', 'coin',
     );
 
     /**
@@ -95,6 +97,16 @@ class Setting extends AbstractResource
         );
 
         return $result;
+    }
+
+    public function getCoin($request)
+    {
+        $coinSetting = $this->getSettingService()->get('coin');
+
+        return array(
+            'name' => !empty($coinSetting['coin_name']) ? $coinSetting['coin_name'] : CoinCurrency::PREFIX,
+            'cash_model' => !empty($coinSetting['cash_model']) ? $coinSetting['cash_model'] : 'none',
+        );
     }
 
     public function getHasPluginInstalled($request)
