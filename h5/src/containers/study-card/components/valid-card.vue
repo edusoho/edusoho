@@ -101,6 +101,8 @@
       }
     },
     created() {
+      // 设置虚拟币名称
+      this.setCoin();
       // 根据token获取卡批次信息
       this.token = this.$route.params.token || '';
       this.password = this.$route.params.password || '';
@@ -115,6 +117,13 @@
       this.getMoneyCardByPassword();
     },
     methods: {
+      setCoin() {
+        Api.setCoin()
+          .then(res => {
+            this.coin = res.name;
+          })
+          .catch(err => console.log(err));
+      },
       switchCharge(name, query) {
         this.isLoading = true;
         Api[name]({

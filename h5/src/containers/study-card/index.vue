@@ -10,11 +10,7 @@
   export default {
     name: 'index',
     created() {
-      Api.setCoin()
-        .then(res => {
-          localStorage.setItem('coin', res.name);
-        })
-        .catch(err => console.log(err))
+
     }
   };
 </script>
