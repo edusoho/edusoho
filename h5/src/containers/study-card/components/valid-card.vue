@@ -1,6 +1,6 @@
 <template>
   <div class="valid-card">
-    <e-loading v-if="isLoading"></e-loading>
+    <e-loading v-if="isLoading !== 2"></e-loading>
     <div class="container">
       <div class="top text-overflow">
         {{settingsName}}
@@ -56,7 +56,7 @@
     },
     data() {
       return {
-        coin: localStorage.getItem('coin'),
+        coin: '',
         //卡的有效期
         date: '',
         //卡的金额
@@ -83,7 +83,7 @@
           'usedByOther': '卡已被其他人充值，去看看其他精品吧～',
           'failed': '卡已被抢完，去看看其他精品吧～'
         },
-        isLoading: true
+        isLoading: 0
       };
     },
     computed: {
@@ -121,11 +121,12 @@
         Api.setCoin()
           .then(res => {
             this.coin = res.name;
+            this.isLoading += 1;
           })
           .catch(err => console.log(err));
       },
       switchCharge(name, query) {
-        this.isLoading = true;
+        this.isLoading -= 1;
         Api[name]({
           query: { [query]: this[query] },
           headers: {
@@ -134,7 +135,7 @@
           }
         })
           .then(res => {
-            this.isLoading = false;
+            this.isLoading += 1;
             if (res.success === true) {
               this.invalidCard = false;
               this.message = res.message;
@@ -144,7 +145,6 @@
               this.message = res.error.message;
             }
             this.processIsDone = true;
-            this.isLoading = false;
           })
           .catch(err => {
             console.log(err);
@@ -173,7 +173,7 @@
           query: { token: this.token }
         })
           .then(res => {
-            this.isLoading = false;
+            this.isLoading += 1;
             this.date = res.deadline;
             this.money = res.coin;
             if (res.batchStatus === 'normal') return;
@@ -196,7 +196,7 @@
           query: { password: this.password }
         })
           .then(res => {
-            this.isLoading = false;
+            this.isLoading += 1;
             this.date = res.deadline;
             this.money = res.coin;
             this.code = res.password;
