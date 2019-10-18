@@ -128,7 +128,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $target = empty($id) ? null : $this->getTarget($link['type'], $id);
                 if (empty($target)) {
                     $link['target'] = null;
-                    $link['url'] = '';
+                    $link['url'] = 'url' != $link['type'] ? '' : $link['url'];
                     $slideShow['link'] = $link;
                 }
             }

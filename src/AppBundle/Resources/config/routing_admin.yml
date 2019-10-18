@@ -585,6 +585,11 @@ admin_operation_mobile:
     defaults: { _controller: AppBundle:Admin/Mobile:mobile }
     permissions: [admin_operation_mobile_banner_manage]
 
+admin_operation_mobile_upgrade:
+    path:  /operation/mobile_upgrade
+    defaults: { _controller: AppBundle:Admin/Mobile:mobileUpgrade }
+    permissions: [admin_operation_mobile_banner_manage]
+
 admin_operation_mobile_select:
     path:  /operation/mobile/select
     defaults: { _controller: AppBundle:Admin/Mobile:mobileSelect }
