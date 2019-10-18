@@ -92,6 +92,12 @@ class SettingController extends BaseController
         ));
     }
 
+    public function mobileDiscoveriesAction(Request $request)
+    {
+        
+        return $this->render('admin/system/mobile.setting.discoveries.html.twig', array());
+    }
+
     public function mobileIapProductAction(Request $request)
     {
         $products = $this->getSettingService()->get('mobile_iap_product', array());

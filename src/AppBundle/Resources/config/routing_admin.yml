@@ -625,6 +625,11 @@ admin_discovery_column_create:
     path:  /discovery_column/create
     defaults: { _controller: AppBundle:Admin/DiscoveryColumn:create }
 
+admin_setting_mobile_discoveries:
+    path:  /setting/mobile_discoveries
+    defaults: { _controller: AppBundle:Admin/Setting:mobileDiscoveries }
+    permissions: [admin_setting_mobile_settings]
+
 admin_setting_mobile:
     path:  /setting/mobile
     defaults: { _controller: AppBundle:Admin/Setting:mobile }
