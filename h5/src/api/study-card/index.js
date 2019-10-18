@@ -19,5 +19,9 @@ export default [
     name: 'chargeMoneyCardByToken',
     url: '/api/plugins/moneyCard/moneyCardBatch/{token}/receive',
     method: 'POST'
+  }, {
+    name: 'setCoin',
+    url: '/api/setting/coin',
+    method: 'GET'
   }
 ];

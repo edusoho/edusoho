@@ -20,7 +20,11 @@ export default {
     return {
       showLeftArrow: false,
       isQrcode: false,
-      isShare: false
+      isShare: false,
+      style: {
+        background: '#000',
+        color: '#fff'
+      }
     };
   },
   methods: {
@@ -51,7 +55,7 @@ export default {
     $route: {
       handler(to, from) {
         //需要返回首页标记
-        this.isShare = from.fullPath === "/" ? true : false;
+        this.isShare = from.fullPath === "/";
 
         const redirect = to.query.redirect || "";
 
@@ -67,7 +71,7 @@ export default {
           "prelogin",
           "preview",
           "coupon_receive",
-          "share_redirect"
+          "share_redirect",
         ].includes(to.name);
 
         if (redirect === "learning") {

@@ -11,7 +11,7 @@
             学习卡充值有效期至：{{date}}
           </div>
           <div class="money">{{money}}
-            <span>金币</span>
+            <span>{{coin}}</span>
           </div>
           <div class="password">{{formattedPassword}}</div>
         </div>
@@ -28,7 +28,7 @@
           <div class="result-box__valid-card--process-is-done" v-show="processIsDone && !invalidCard">
             <i class="result-box__icon-Success"></i>
             <span>充值成功</span>
-            <div class="result-box__account">当前账户余额：{{cash}}金币</div>
+            <div class="result-box__account">当前账户余额：{{cash}}{{coin}}</div>
             <div>尽情去购物啦～</div>
           </div>
         </div>
@@ -56,6 +56,7 @@
     },
     data() {
       return {
+        coin: localStorage.getItem('coin'),
         //卡的有效期
         date: '',
         //卡的金额
