@@ -314,21 +314,24 @@ const routes = [
       path: '/moneycard/fixed_receive',
       name: 'fixed_receive',
       meta: {
-        title: '学习卡充值'
+        title: '学习卡充值',
+        color: 'white'
       },
       component: () => import(/* webpackChunkName: "fixed_receive" */'@/containers/study-card/components/input-code')
     }, {
       path: '/moneycard/:token/receive',
       name: 'receive',
       meta: {
-        title: '学习卡充值'
+        title: '学习卡充值',
+        color: 'white'
       },
       component: () => import(/* webpackChunkName: "receive" */'@/containers/study-card/components/valid-card')
     }, {
       path: '/moneycard/receive/:password',
       name: 'receive',
       meta: {
-        title: '学习卡充值'
+        title: '学习卡充值',
+        color: 'white'
       },
       component: () => import(/* webpackChunkName: "receive" */'@/containers/study-card/components/valid-card')
     }]
