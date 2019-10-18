@@ -182,12 +182,15 @@ a {
 }
 
 // nav
-.nav-bar {
+.nav-bar--default {
   background-color: $bg-black;
   color: #fff;
   .van-icon {
     color: #fff;
     font-weight: bold;
+  }
+  .van-nav-bar__title{
+    color: #fff;
   }
 }
 .blue-nav {

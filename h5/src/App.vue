@@ -2,7 +2,7 @@
   <div id="app">
     <van-nav-bar
       style="z-index: 1001;"
-      :class="[{hide: isQrcode}, 'nav-bar']"
+      :class="[{hide: isQrcode}, color === 'white' ? 'nav-bar--white' : 'nav-bar--default' ]"
       :title="title"
       :left-arrow="showLeftArrow"
       @click-left="backFn()"
@@ -21,10 +21,7 @@ export default {
       showLeftArrow: false,
       isQrcode: false,
       isShare: false,
-      style: {
-        background: '#000',
-        color: '#fff'
-      }
+      color: ''
     };
   },
   methods: {
@@ -62,6 +59,12 @@ export default {
         this.isQrcode = !!to.query.loginToken;
         if(to.meta.hideTitle){
           this.isQrcode=true
+        }
+
+        if (to.meta.color === 'white') {
+          this.color = 'white';
+        } else {
+          this.color = '';
         }
 
         this.showLeftArrow = ![
