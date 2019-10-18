@@ -21,22 +21,22 @@
       text-align: center;
       color: #fff;
       margin: auto;
-      padding: vw(12) vw(50);
+      padding: vw(24) vw(95);
     }
 
     .input-code__field {
       position: absolute;
       top: 66.7%;
-      width: 86%;
+      width: 87%;
       left: 0;
       right: 0;
       margin: auto;
-      padding-right: vw(9);
+      padding-right: vw(12);
       height: vw(44);
       line-height: vw(44);
       background: rgb(241, 243, 248);
       border-radius: vw(4);
-
+      box-sizing: border-box;
       .van-cell {
         background-color: transparent;
       }
@@ -85,7 +85,7 @@
 
     .top {
       font-size: vw(16);
-      padding: vw(20) vw(64) vw(12);
+      padding: vw(20) vw(95) vw(12);
       text-align: center;
       color: #333;
     }

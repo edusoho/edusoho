@@ -137,7 +137,8 @@
     },
     computed: {
       btnDisable() {
-        return !(this.userinfo.mobile && this.userinfo.smsCode);
+        const reg = /^1\d{10}$/;
+        return !(reg.test(this.userinfo.mobile) && this.userinfo.smsCode);
       },
       cansentCode() {
         return !(this.count.codeBtnDisable || !this.validated.mobile);
