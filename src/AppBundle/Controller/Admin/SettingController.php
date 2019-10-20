@@ -15,6 +15,7 @@ use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\System\Service\H5SettingService;
 
 class SettingController extends BaseController
 {
@@ -39,6 +40,7 @@ class SettingController extends BaseController
         $operationMobile = $this->getSettingService()->get('operation_mobile', array());
         $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
         $settingMobile = $this->getSettingService()->get('mobile', array());
+        $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
 
         $default = array(
             'enabled' => 1, // 网校状态
@@ -89,12 +91,18 @@ class SettingController extends BaseController
             'mobile' => $mobile,
             'mobileCode' => $mobileCode,
             'hasMobile' => $hasMobile,
+            'appDiscoveryVersion' => $appDiscoveryVersion,
         ));
     }
 
     public function mobileDiscoveriesAction(Request $request)
     {
-        
+        $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
+
+        if (0 == $appDiscoveryVersion) {
+            return $this->redirect($this->generateUrl('admin_setting_mobile'));
+        }
+
         return $this->render('admin/system/mobile.setting.discoveries.html.twig', array());
     }
 
@@ -735,5 +743,13 @@ class SettingController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
+    }
+
+    /**
+     * @return H5SettingService
+     */
+    protected function getH5SettingService()
+    {
+        return $this->createService('System:H5SettingService');
     }
 }

@@ -39,6 +39,13 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySettings;
     }
 
+    public function getAppDiscoveryVersion()
+    {
+        $appDiscoverySetting = $this->getSettingService()->get('app_discovery', array());
+
+        return empty($appDiscoverySetting['version']) ? 0 : (int) $appDiscoverySetting['version'];
+    }
+
     public function courseListFilter($discoverySetting, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {

@@ -13,11 +13,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\System\Service\H5SettingService;
 
 class MobileController extends BaseController
 {
     public function mobileAction(Request $request)
     {
+        $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
+
+        if (1 == $appDiscoveryVersion) {
+            return $this->render('admin/system/mobile-discovery-setting-upgraded.html.twig', array());
+        }
+
         $operationMobile = $this->getSettingService()->get('operation_mobile', array());
         $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
         $settingMobile = $this->getSettingService()->get('mobile', array());
@@ -64,20 +71,37 @@ class MobileController extends BaseController
         return $this->render('admin/system/mobile.html.twig', array(
             'mobile' => $mobile,
             'bannerCourses' => $bannerCourses,
+            'appDiscoveryVersion' => $appDiscoveryVersion,
         ));
     }
 
     public function mobileUpgradeAction(Request $request)
     {
-        $appSettings = array();
-        $bannersSetting = $this->getAppBannersSetting();
-        $channelSettings = $this->getAppChannelSettings(empty($bannersSetting) ? 0 : 1);
+        $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
 
-        $appSettings = array_merge($bannersSetting, $channelSettings);
+        if (0 == $appDiscoveryVersion) {
+            try {
+                $appSettings = array();
 
-        // print_r($appSettings);
-        // $this->getSettingService()->set('h5_published_discovery', $appSettings);
-        exit();
+                $bannersSetting = $this->getAppBannersSetting();
+
+                $channelSettings = $this->getAppChannelSettings(empty($bannersSetting) ? 0 : 1);
+
+                $appSettings = array_merge($bannersSetting, $channelSettings);
+
+                $this->getSettingService()->set('app_discovery', array('version' => 1));
+
+                $this->getSettingService()->set('apps_published_discovery', $appSettings);
+
+                return $this->createJsonResponse(array('status' => 'successed'));
+            } catch (\Exception $e) {
+                $this->getSettingService()->delete('app_discovery');
+
+                return $this->createJsonResponse(array('status' => 'failed', 'msg' => $e->getMessage()));
+            }
+        }
+
+        return $this->createJsonResponse(array('status' => 'upgraded'));
     }
 
     protected function getAppChannelSettings($index = 0)
@@ -388,5 +412,13 @@ class MobileController extends BaseController
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
+    }
+
+    /**
+     * @return H5SettingService
+     */
+    protected function getH5SettingService()
+    {
+        return $this->createService('System:H5SettingService');
     }
 }

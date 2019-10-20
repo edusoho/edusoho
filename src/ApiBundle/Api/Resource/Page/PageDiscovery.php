@@ -27,7 +27,7 @@ class PageDiscovery extends AbstractResource
             }
             $mode = 'draft';
         }
-        $discoverySettings = $this->getH5SettingService()->getDiscovery($portal);
+        $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
         foreach ($discoverySettings as &$discoverySetting) {
             if ('course_list' == $discoverySetting['type']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));

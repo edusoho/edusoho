@@ -13,7 +13,7 @@ class Setting extends AbstractResource
 {
     private $supportTypes = array(
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
-        'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer', 'user', 'cloud', 'coupon',
+        'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer', 'user', 'cloud', 'coupon', 'appDiscovery',
     );
 
     /**
@@ -44,6 +44,15 @@ class Setting extends AbstractResource
         }
 
         return $result;
+    }
+
+    public function getAppDiscovery()
+    {
+        $appDiscoverySetting = $this->getSettingService()->get('app_discovery', array());
+
+        return array(
+            'version' => empty($appDiscoverySetting['version']) ? 0 : (int) $appDiscoverySetting['version'],
+        );
     }
 
     public function getDeveloper($request)
@@ -340,7 +349,6 @@ class Setting extends AbstractResource
             'enabled' => 1,
         );
         $couponSetting = array_merge($default, $couponSetting);
-
 
         return $couponSetting;
     }
