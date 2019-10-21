@@ -22,6 +22,10 @@ app_admin:
     resource: "@AppBundle/Resources/config/routing_admin.yml"
     prefix:   /admin
 
+app_admin_v2:
+  resource: "@AppBundle/Resources/config/routing_admin_v2.yml"
+  prefix:   /admin
+
 _plugins:
    resource: routing_plugins.yml
 

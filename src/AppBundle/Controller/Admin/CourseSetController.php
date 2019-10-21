@@ -764,7 +764,7 @@ class CourseSetController extends BaseController
         }
         $tags = $this->getTagService()->findTagsByIds($tags);
         foreach ($courseSets as &$courseSet) {
-            if (!empty($courseSet['tags'])) {
+            if (!empty($courseSet['tags']) && !empty($tags[$courseSet['tags'][0]])) {
                 $courseSet['displayTag'] = $tags[$courseSet['tags'][0]]['name'];
                 if (count($courseSet['tags']) > 1) {
                     $courseSet['displayTagNames'] = $this->buildTagsDisplayNames($courseSet['tags'], $tags);
