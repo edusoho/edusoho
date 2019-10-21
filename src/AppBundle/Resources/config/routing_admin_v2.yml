@@ -1,7 +1,6 @@
-admin:
-    path: /teach/open_course/{filter}
-    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }
-
+admin_v2:
+    path:  /
+    defaults: { _controller: AppBundle:Admin/Default:index }
 
 #测试测试菜单展示
 admin_v2_user:
@@ -25,3 +24,190 @@ admin_v2_user_learn_statistics:
     path:  /user/create
     defaults: { _controller: AppBundle:Admin/User:show }
     permissions: [admin]
+
+#测试测试菜单展示
+admin_v2_online:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:show }
+    permissions: [admin]
+
+#测试测试菜单展示
+admin_v2_login_record:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:show }
+    permissions: [admin]
+
+#班级管理模块开始
+admin_v2_classroom:
+    path:     /classroom/index
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:index }
+
+admin_v2_classroom_create:
+    path:  /classroom/create
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:create }
+
+admin_v2_classroom_set_recommend:
+    path:   /classroom/{id}/recommend
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommend }
+    permissions: [admin_classroom_set_recommend]
+
+admin_v2_classroom_cancel_recommend:
+    path:   /classroom/{id}/recommend/cancel
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:cancelRecommend }
+    permissions: [admin_classroom_cancel_recommend]
+
+admin_v2_classroom_close:
+    path:  /classroom/{id}/close
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:close }
+    methods: [POST]
+
+admin_v2_classroom_open:
+    path:  /classroom/{id}/open
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:open }
+    methods: [POST]
+
+admin_v2_classroom_delete:
+    path:  /classroom/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:delete }
+    methods: [POST]
+
+admin_v2_classroom_recommend_list:
+    path:   /classroom/recommend/list
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommendIndex }
+
+
+# 班级管理模块结束
+
+
+# 通用开始
+
+sms_prepare_v2:
+    path:  /sms/prepare/{targetType}/{id}
+    defaults: { _controller: AppBundle:AdminV2/Sms:prepare }
+
+publish_sms_send_v2:
+    path:  /publish/sms_send/{targetType}/{id}
+    defaults: { _controller: AppBundle:AdminV2/Sms:send }
+
+generate_short_link_v2:
+    path:  /generate/short/link
+    defaults: { _controller: AppBundle:AdminV2/Sms:changeLink }
+
+# 通用结束
+
+admin:
+    path: /teach/open_course/{filter}
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }
+
+#教学
+##课程管理
+admin_v2_course_set:
+    path:  /course_set/index
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:index }
+    permissions: [admin_v2_course_manage]
+
+admin_v2_course_list:
+    path:  /course_set/{id}/course/list
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:courseList }
+    permissions: [admin_v2_course_manage]
+
+admin_v2_course_set_clone_by_web:
+    path:  /course_set/{courseSetId}/clone_by_web
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:cloneByWeb }
+    permissions: [admin_v2_course_manage]
+    methods: [POST]
+
+admin_v2_course_set_clone_by_crontab:
+    path:  /course_set/{courseSetId}/clone_by_crontab
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:cloneByCrontab }
+    permissions: [admin_v2_course_manage]
+    methods: [POST]
+
+admin_v2_course_set_delete:
+    path:  /course_set/{id}/delete/{type}
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:delete, type:'' }
+    permissions: [admin_v2_course_manage]
+
+admin_v2_course_set_clone:
+    path:  /course_set/{courseSetId}/clone
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:clone, type:'web' }
+    permissions: [admin_v2_course_manage]
+
+admin_v2_course_set_publish:
+    path: /course_set/{id}/publish
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:publish }
+    methods: [POST]
+    permissions: [admin_v2_course_manage]
+
+admin_v2_course_set_close:
+    path: /course_set/{id}/close
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:close }
+    methods: [POST]
+    permissions: [admin_v2_course_set_close]
+
+admin_v2_course_set_recommend:
+    path: /course_set/{id}/recommend
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:recommend }
+    permissions: [admin_v2_course_set_recommend_list, admin_v2_course_set_recommend]
+
+admin_v2_course_set_cancel_recommend:
+    path: /course_set/{id}/recommend/cancel/{target}
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:cancelRecommend }
+    methods: [POST]
+    permissions: [admin_v2_course_set_recommend_list, admin_v2_course_set_cancel_recommend]
+
+admin_v2_course_chooser:
+    path: /course_set/chooser
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:chooser }
+
+admin_v2_course_set_recommend_list:
+    path: /course_set/recommend/list
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:recommendList }
+
+admin_v2_course_set_data:
+    path:  /course_set/{filter}/data
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:dataList , filter:'normal'}
+
+course_v2_set_detail_data:
+    path:  /course_set/detail/data/{id}
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:detailData }
+
+admin_v2_course_tag_match:
+    path:  /course_set/tag/match
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:courseTagMatch }
+
+admin_v2_course_set_detail_data:
+    path:  /course_set/detail/data/{id}
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:detailData }
+
+admin_v2_courses_data:
+    path:  /courses/data/{courseSetId}
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:coursesData }
+    permissions: [admin_v2_course_set_data]
+
+admin_v2_course_task_data_export_prepare:
+    path: /course/{courseId}/datas/export/prepare
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:prepareForExportTasksDatas}
+    permissions: [admin_course_set_data]
+
+admin_v2_course_task_data_export:
+    path: /course/{courseId}/datas/export
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:exportTaskDatas}
+
+admin_v2_check_password:
+    path:  /check/password
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:checkPassword }
+    permissions: [admin_v2_course_manage]
+
+#用户
+##用户管理
+admin_v2_user_show:
+  path:  /user/{id}
+  defaults: { _controller: AppBundle:AdminV2/User/User:show }
+  permissions: [admin_v2]
+
+#系统
+##组织机构管理
+admin_v2_batch_update_org:
+    path:  batch/update/{module}/org
+    defaults: { _controller: AppBundle:AdminV2/System/OrgManage:batchUpdate }
