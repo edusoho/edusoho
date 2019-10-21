@@ -1431,3 +1431,7 @@ admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
 
 course.plan_task.activity_ppt_animation_img: 切换图片模式
 course.plan_task.activity_ppt_animation_slide: 切换动画模式
+
+admin.mobile_manage.discovery_upgrade_madal.notice_successed: '升级成功'
+admin.mobile_manage.discovery_upgrade_madal.notice_failed: '升级失败'
+admin.mobile_manage.discovery_upgrade_madal.notice_upgraded: '无法重复升级'

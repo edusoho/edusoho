@@ -5,6 +5,8 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     exports.run = function() {
 
+        $('#upgrade-modal').modal('show');
+        
         var group = $('.table-hover tbody').sortable({
             group: 'serialization',
             containerPath: '> tr',

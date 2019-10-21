@@ -1,0 +1,23 @@
+{% do load_script('setting/mobile-discovery-upgrade-madal') %}
+<div class="modal fade" tabindex="-1" role="dialog" id="upgrade-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">
+          <span class="step1">{{ 'admin.mobile_manage.discovery_upgrade_madal.stup1_title'|trans }}</span>
+          <span class="hide step2">{{ 'admin.mobile_manage.discovery_upgrade_madal.stup2_title'|trans }}</span>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <p class="step1">{{ 'admin.mobile_manage.discovery_upgrade_madal.stup1_content'|trans }}<p>
+        <p class="hide step2">{{ 'admin.mobile_manage.discovery_upgrade_madal.stup2_content'|trans }}<p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">{{ 'admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade'|trans }}</button>
+        <button id="next" type="buttom" class="btn btn-primary step1" tabindex="4">{{ 'admin.mobile_manage.discovery_upgrade_madal.btn_confirm'|trans }}</button>
+        <button data-loading-text="{{ 'admin.mobile_manage.discovery_upgrade_madal.btn_loading'|trans }}" type="buttom" class="btn btn-primary hide step2" tabindex="4" id="upgrade" data-url="{{ path('admin_operation_mobile_upgrade') }}" data-success-url="{{ path('admin_setting_mobile_discoveries') }}">{{ 'admin.mobile_manage.discovery_upgrade_madal.btn_next'|trans }}</button>
+      </div>
+    </div>
+  </div>
+</div>

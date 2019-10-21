@@ -6,6 +6,8 @@
 
     exports.run = function() {
 
+        $('#upgrade-modal').modal('show');
+
         var $form = $("#mobile-form");
 
         var uploader1 = new WebUploader({

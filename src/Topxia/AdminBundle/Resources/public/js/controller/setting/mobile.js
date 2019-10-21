@@ -7,6 +7,10 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+      if ('0' == $("input[name='appDiscoveryVersion']").val()) {
+        $('#upgrade-modal').modal('show');
+      }
+
       var $form = $("#mobile-form");
   
       var validator = new Validator({

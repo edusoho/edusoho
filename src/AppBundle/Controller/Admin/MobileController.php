@@ -77,31 +77,33 @@ class MobileController extends BaseController
 
     public function mobileUpgradeAction(Request $request)
     {
-        $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
+        if ('POST' == $request->getMethod()) {
+            $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
 
-        if (0 == $appDiscoveryVersion) {
-            try {
-                $appSettings = array();
+            if (0 == $appDiscoveryVersion) {
+                try {
+                    $appSettings = array();
 
-                $bannersSetting = $this->getAppBannersSetting();
+                    $bannersSetting = $this->getAppBannersSetting();
 
-                $channelSettings = $this->getAppChannelSettings();
+                    $channelSettings = $this->getAppChannelSettings();
 
-                $appSettings = array_merge($bannersSetting, $channelSettings);
+                    $appSettings = array_merge($bannersSetting, $channelSettings);
 
-                $this->getSettingService()->set('app_discovery', array('version' => 1));
+                    $this->getSettingService()->set('app_discovery', array('version' => 1));
 
-                $this->getSettingService()->set('apps_published_discovery', $appSettings);
+                    $this->getSettingService()->set('apps_published_discovery', $appSettings);
 
-                return $this->createJsonResponse(array('status' => 'successed'));
-            } catch (\Exception $e) {
-                $this->getSettingService()->delete('app_discovery');
+                    return $this->createJsonResponse(array('status' => 'successed'));
+                } catch (\Exception $e) {
+                    $this->getSettingService()->delete('app_discovery');
 
-                return $this->createJsonResponse(array('status' => 'failed', 'msg' => $e->getMessage()));
+                    return $this->createJsonResponse(array('status' => 'failed', 'msg' => $e->getMessage()));
+                }
             }
-        }
 
-        return $this->createJsonResponse(array('status' => 'upgraded'));
+            return $this->createJsonResponse(array('status' => 'upgraded'));
+        }
     }
 
     protected function getAppChannelSettings()
