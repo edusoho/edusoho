@@ -6,11 +6,13 @@ export default [
     method: 'GET'
   },
   {
+    // 判断Drp插件是否安装
     name: 'hasDrpPluginInstalled',
     url: '/settings/hasPluginInstalled?pluginCodes=Drp',
     disableLoading: true
   },
   {
+    // 获取Drp设置信息
     name: 'getDrpSetting',
     url: '/plugins/drp/drp_setting',
     disableLoading: true
