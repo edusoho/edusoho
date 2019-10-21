@@ -84,6 +84,7 @@ class ExportQuestionWrapper extends Wrapper
     public function analysis($question)
     {
         if (!empty($question['analysis'])) {
+            $question['analysis'] = $this->stripTags(implode($question['analysis']));
             $question['analysis'] = $this->explodeTextAndImg($question['analysis']);
         }
 
