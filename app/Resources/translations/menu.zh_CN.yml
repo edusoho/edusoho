@@ -439,13 +439,7 @@ admin.operation.query_menu.basic_tab: 使用查询
 
 #后台菜单
 admin_v2.basic_menu: 后台管理员
-#Teach
-  #营销	Marketing
-  #运营	Operating
-  #用户	User
-  #交易	Trade
-#数据	DataStatistics
-#系统	System
+
 # 新版后台顶部导航
 admin_v2.nav.teach: 教学
 admin_v2.nav.marketing: 营销
@@ -455,10 +449,10 @@ admin_v2.nav.trade: 交易
 admin_v2.nav.statistics: 数据
 admin_v2.nav.system: 系统
 
-
-
-
 # 教学模块-课程管理模块
+admin_v2.course.basic_group: 课程管理
+
+# 教学模块-课程管理-班级管理模块
 admin_v2.course.classroom_menu: 班级管理
 
 

@@ -23,17 +23,17 @@ admin_v2_classroom_cancel_recommend:
 
 admin_v2_classroom_close:
     path:  /classroom/{id}/close
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:closeClassroom }
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:close }
     methods: [POST]
 
 admin_v2_classroom_open:
     path:  /classroom/{id}/open
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:openClassroom }
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:open }
     methods: [POST]
 
 admin_v2_classroom_delete:
     path:  /classroom/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:deleteClassroom }
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:delete }
     methods: [POST]
 
 admin_v2_classroom_recommend_list:
@@ -42,6 +42,23 @@ admin_v2_classroom_recommend_list:
 
 
 # 班级管理模块结束
+
+
+# 通用开始
+
+sms_prepare_v2:
+    path:  /sms/prepare/{targetType}/{id}
+    defaults: { _controller: AppBundle:AdminV2/Sms:prepare }
+
+publish_sms_send_v2:
+    path:  /publish/sms_send/{targetType}/{id}
+    defaults: { _controller: AppBundle:AdminV2/Sms:send }
+
+generate_short_link_v2:
+    path:  /generate/short/link
+    defaults: { _controller: AppBundle:AdminV2/Sms:changeLink }
+
+# 通用结束
 
 admin:
     path: /teach/open_course/{filter}

@@ -143,7 +143,7 @@ class ClassroomAdminController extends BaseController
         return $this->renderClassroomTr($id, $classroom);
     }
 
-    public function openClassroomAction($id)
+    public function openAction($id)
     {
         $this->getClassroomService()->publishClassroom($id);
 
@@ -152,7 +152,7 @@ class ClassroomAdminController extends BaseController
         return $this->renderClassroomTr($id, $classroom);
     }
 
-    public function deleteClassroomAction($id)
+    public function deleteAction($id)
     {
         $this->getClassroomService()->deleteClassroom($id);
 

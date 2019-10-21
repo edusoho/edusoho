@@ -441,10 +441,17 @@ admin_v2.basic_menu: Admin
 
 # 新版后台顶部导航
 admin_v2.nav.teach: Teach
-
-
+admin_v2.nav.marketing: Marketing
+admin_v2.nav.operating: Operating
+admin_v2.nav.user: User
+admin_v2.nav.trade: Trade
+admin_v2.nav.statistics: Statistics
+admin_v2.nav.system: System
 
 # 教学模块-课程管理模块
+admin_v2.course.basic_group: Course Manage
+
+# 教学模块-课程管理-班级管理模块
 admin_v2.course.classroom_menu: Classes
 
 
