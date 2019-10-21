@@ -32,7 +32,11 @@
   <div class="dashboard-body">
     <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="lesson-content"
          data-media-source="{{ video.mediaSource }}">
-      <div id="swf-player" data-url="{{ video.mediaUri }}"></div>
+      {% if activity.ext.mediaSource == 'NeteaseOpenCourse' and activity.content is not empty %}
+        <div id="local-video-player" data-url="{{ activity.ext.mediaUri }}"></div>
+      {% else %}
+        <div id="swf-player" data-url="{{ activity.ext.mediaUri }}"></div>
+      {% endif %}
     </div>
   </div>
 {% endif %}

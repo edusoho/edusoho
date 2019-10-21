@@ -2,37 +2,42 @@
 
 namespace AppBundle\Component\MediaParser\ItemParser;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\MediaParser\ParserException;
 
 class NeteaseOpenCourseItemParser extends AbstractItemParser
 {
+    const API_URL = 'https://c.open.163.com';
+
     protected function parseForWebUrl($item, $url)
     {
-        $response = $this->fetchUrl($url);
+        $parseUrl = parse_url($url);
+        $query = empty($parseUrl['query']) ? array() : $this->convertUrlQuery($parseUrl['query']);
+        if (!empty($query['pid'])) {
+            $response = $this->fetchUrl(self::API_URL."/mob/{$query['pid']}/getMoviesForAndroid.do");
+        }
 
         if (200 != $response['code']) {
             throw ParserException::PARSED_FAILED_NETEASE();
         }
 
-        $matched = preg_match('/getCurrentMovie.*?id\s*:\s*\'(.*?)\'.*?image\s*:\s*\'(.*?)\'.*?title\s*:\s*\'(.*?)\'.*?host\s*\+\s*\'(.*?)\',/s', $response['content'], $matches);
-        $parseUrl = parse_url($url);
+        $content = json_decode($response['content'], true);
+        $data = $content['data'];
+        $videoList = ArrayToolkit::index($data['videoList'], 'plid');
+        $video = $videoList[$query['pid']];
 
-        if (!$matched || empty($parseUrl['host'])) {
-            throw ParserException::PARSED_FAILED_NETEASE();
-        }
-
-        $item['id'] = $matches[1];
+        $item['id'] = $query['pid'];
         $item['uuid'] = 'NeteaseOpenCourse:'.$item['id'];
-        $item['name'] = $matches[3];
+        $item['name'] = $video['title'];
         $item['page'] = $url;
         $item['pictures'] = array(
-            array('url' => $matches[2]),
+            array('url' => empty($video['imgPath']) ? '' : $video['imgPath']),
         );
 
         $item['files'] = array(
             array(
-                'url' => '//'.$parseUrl['host'].$matches[4],
-                'type' => 'swf',
+                'url' => empty($video['mp4HdUrl']) ? $video['mp4SdUrl'] : $video['mp4HdUrl'],
+                'type' => 'mp4',
             ),
         );
 
@@ -41,7 +46,7 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
 
     protected function getUrlPrefixes()
     {
-        return array('v.163.com/movie/', 'open.163.com/movie/');
+        return array('v.163.com/movie/', 'open.163.com/movie/', 'open.163.com/newview/movie');
     }
 
     protected function convertMediaUri($video)
@@ -60,5 +65,17 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
             'source' => 'NeteaseOpenCourse',
             'name' => '网易公开课视频',
         );
+    }
+
+    protected function convertUrlQuery($query)
+    {
+        $queryParts = explode('&', $query);
+        $params = array();
+        foreach ($queryParts as $param) {
+            $item = explode('=', $param);
+            $params[$item[0]] = $item[1];
+        }
+
+        return $params;
     }
 }
