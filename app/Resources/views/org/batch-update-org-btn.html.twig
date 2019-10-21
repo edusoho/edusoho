@@ -6,7 +6,7 @@
 		<div>
 	    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{ 'site.btn.all_select'|trans }}</label>
 	{% endif %}
-  	<a class="btn btn-default btn-sm {% if generate %} mlm {% endif %}" id="batch-update-org" data-form-id="{{formId}}" data-toggle="modal" data-generate="{{generate|default(false)}}" data-target="#modal" data-url="{{path('admin_batch_update_org',{module:module})}}">{{ 'site.org.setup'|trans }}</a>
+  	<a class="btn btn-default btn-sm {% if generate %} mlm {% endif %}" id="batch-update-org" data-form-id="{{formId}}" data-toggle="modal" data-generate="{{generate|default(false)}}" data-target="#modal" data-url="{{path('admin_v2_batch_update_org',{module:module})}}">{{ 'site.org.setup'|trans }}</a>
 	{% if generate %}
 	  </div>
 	{% endif %}

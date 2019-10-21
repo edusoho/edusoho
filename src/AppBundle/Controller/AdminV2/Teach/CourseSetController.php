@@ -30,10 +30,12 @@ use VipPlugin\Biz\Vip\Service\LevelService;
 
 class CourseSetController extends BaseController
 {
-    public function indexAction(Request $request, $filter)
+    public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
         $conditions['excludeTypes'] = array('reservation');
+        $filter = empty($conditions['filter']) ? 'normal' : $conditions['filter'];
+        unset($conditions['filter']);
         $conditions = $this->filterCourseSetConditions($filter, $conditions);
 
         $paginator = new Paginator(
@@ -56,7 +58,7 @@ class CourseSetController extends BaseController
         $courseSets = $this->buildCourseSetTags($courseSets);
 
         return $this->render(
-            'admin/course-set/index.html.twig',
+            'admin-v2/teach/course-set/index.html.twig',
             array(
                 'courseSets' => $courseSets,
                 'users' => $users,
@@ -68,21 +70,6 @@ class CourseSetController extends BaseController
                 'courseSetStatusNum' => $courseSetStatusNum,
                 'coursesCount' => $coursesCount,
             )
-        );
-    }
-
-    protected function getDifferentCourseSetsNum($conditions)
-    {
-        $total = $this->getCourseSetService()->countCourseSets($conditions);
-        $published = $this->getCourseSetService()->countCourseSets(array_merge($conditions, array('status' => 'published')));
-        $closed = $this->getCourseSetService()->countCourseSets(array_merge($conditions, array('status' => 'closed')));
-        $draft = $this->getCourseSetService()->countCourseSets(array_merge($conditions, array('status' => 'draft')));
-
-        return array(
-            'total' => empty($total) ? 0 : $total,
-            'published' => empty($published) ? 0 : $published,
-            'closed' => empty($closed) ? 0 : $closed,
-            'draft' => empty($draft) ? 0 : $draft,
         );
     }
 
@@ -124,7 +111,7 @@ class CourseSetController extends BaseController
 
         $isCheckPassword = $request->getSession()->get('checkPassword');
         if (!$isCheckPassword) {
-            return $this->render('admin/course/delete.html.twig', array('courseSet' => $courseSet));
+            return $this->render('admin-v2/teach/course/delete.html.twig', array('courseSet' => $courseSet));
         }
 
         $request->getSession()->remove('checkPassword');
@@ -189,7 +176,7 @@ class CourseSetController extends BaseController
 
             if ('recommendList' == $ref) {
                 return $this->render(
-                    'admin/course-set/course-recommend-tr.html.twig',
+                    'admin-v2/teach/course-set/course-recommend-tr.html.twig',
                     array(
                         'courseSet' => $courseSet,
                         'user' => $user,
@@ -201,7 +188,7 @@ class CourseSetController extends BaseController
         }
 
         return $this->render(
-            'admin/course-set/course-recommend-modal.html.twig',
+            'admin-v2/teach/course-set/course-recommend-modal.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'ref' => $ref,
@@ -250,7 +237,7 @@ class CourseSetController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
 
         return $this->render(
-            'admin/course-set/course-recommend-list.html.twig',
+            'admin-v2/teach/course-set/course-recommend-list.html.twig',
             array(
                 'courseSets' => $courseSets,
                 'users' => $users,
@@ -260,7 +247,7 @@ class CourseSetController extends BaseController
         );
     }
 
-    public function dataAction(Request $request, $filter)
+    public function dataListAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
 
@@ -331,7 +318,7 @@ class CourseSetController extends BaseController
         }
 
         return $this->render(
-            'admin/course-set/data.html.twig',
+            'admin-v2/teach/course-set/data.html.twig',
             array(
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
@@ -381,7 +368,7 @@ class CourseSetController extends BaseController
         }
 
         return $this->render(
-            'admin/course-set/course-data-modal.html.twig',
+            'admin-v2/teach/course-set/course-data-modal.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'courses' => $courses,
@@ -397,7 +384,7 @@ class CourseSetController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
         return $this->render(
-            'admin/course-set/course-set-clone-modal.html.twig',
+            'admin-v2/teach/course-set/course-set-clone-modal.html.twig',
             array(
                 'courseSet' => $courseSet,
             )
@@ -469,7 +456,7 @@ class CourseSetController extends BaseController
         }
 
         return $this->render(
-            'admin/course-set/tr.html.twig',
+            'admin-v2/teach/course-set/tr.html.twig',
             array(
                 'user' => $this->getUserService()->getUser($courseSet['creator']),
                 'category' => isset($courseSet['categoryId']) ? $this->getCategoryService()->getCategory(
@@ -583,7 +570,7 @@ class CourseSetController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseSets, 'creator'));
 
         return $this->render(
-            'admin/course/course-set-chooser.html.twig',
+            'admin-v2/teach/course/course-set-chooser.html.twig',
             array(
                 'users' => $users,
                 'conditions' => $conditions,
@@ -644,7 +631,7 @@ class CourseSetController extends BaseController
         $userIds = ArrayToolkit::column($courses, 'creator');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('admin/course-set/course-list-modal.html.twig', array(
+        return $this->render('admin-v2/teach/course-set/course-list-modal.html.twig', array(
             'courses' => $courses,
             'users' => $users,
             'paginator' => $paginator,
@@ -658,6 +645,21 @@ class CourseSetController extends BaseController
         $tags = $this->getTagService()->searchTags(array('likeName' => $queryString), array(), 0, PHP_INT_MAX);
 
         return $this->createJsonResponse($tags);
+    }
+
+    protected function getDifferentCourseSetsNum($conditions)
+    {
+        $total = $this->getCourseSetService()->countCourseSets($conditions);
+        $published = $this->getCourseSetService()->countCourseSets(array_merge($conditions, array('status' => 'published')));
+        $closed = $this->getCourseSetService()->countCourseSets(array_merge($conditions, array('status' => 'closed')));
+        $draft = $this->getCourseSetService()->countCourseSets(array_merge($conditions, array('status' => 'draft')));
+
+        return array(
+            'total' => empty($total) ? 0 : $total,
+            'published' => empty($published) ? 0 : $published,
+            'closed' => empty($closed) ? 0 : $closed,
+            'draft' => empty($draft) ? 0 : $draft,
+        );
     }
 
     protected function filterCourseSetConditions($filter, $conditions)

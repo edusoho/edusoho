@@ -1,0 +1,39 @@
+{% set permissions = sub_permissions(parentCode) %}
+
+{% if permissions|default(null) %}
+  {% if menu|default(null) %}
+    {% set rootMenu = menu|parent_permission.code|parent_permission %}
+  {% else %}
+    {% set rootMenu = permission('admin') %}
+  {% endif %}
+
+  {# 兼容菜单配置中单词错误拼写：visable 正确为：visible  等插件全部更新完毕删除此代码 #}
+  {% set permissions = arrays_key_convert(permissions, 'visable', 'visible') %}
+  {# 兼容代码结束 #}
+
+  <ul class="nav navbar-nav">
+    {% for m in permissions if not m.visible is defined or eval_expression(m.visible) %}
+      {# {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %} #}
+      {% if m.code != 'admin_homepage' %}
+        <li {% if menu and  m.code == rootMenu.code|default(null) %}class="active"{% endif %} id="menu_{{ m.code }}">
+          {% set tabMenu = first_child_permission(first_child_permission(m)) %}
+          {% if tabMenu.mode|default('') == 'capsules' %}
+            {% set tabMenu = first_child_permission(tabMenu) %}
+          {% endif %}
+          <a
+              title="{{ m.name|trans({}, 'menu') }}"
+              href="{{ permission_path(tabMenu) }}"
+              {% if m.blank|default(false)%}
+                target="_blank"
+              {% endif %}
+          >
+            {{ m.name|trans({}, 'menu') }}
+          </a>
+
+        {# {{ self_macro.menu_link_html(_context, currentMenu) }} #}
+      </li>
+      {% endif %}
+      {# {% endif %} #}
+    {% endfor %}
+  </ul>
+{% endif %}
