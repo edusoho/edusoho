@@ -14,7 +14,7 @@
               clearable
               :border=false
               :error-message="errorMessage.mobile"
-              @blur="loginMode === 'fastLoginMode' && validateMobileOrPsw('mobile')"
+              @blur="loginMode === 'fastLoginMode' ? validateMobileOrPsw('mobile') : validateEmail()"
               @input="loginMode === 'fastLoginMode' && validatedChecker()"
           >
           </van-field>
@@ -141,7 +141,7 @@
         if (this.loginMode === 'fastLoginMode') {
           return !(reg.test(this.userinfo.mobile) && this.userinfo.smsCode);
         }
-        return !(this.userinfo.mobile && this.userinfo.smsCode);
+        return !(this.userinfo.mobile && this.userinfo.smsCode && this.validateEmail());
       },
       cansentCode() {
         return !(this.count.codeBtnDisable || !this.validated.mobile);
@@ -217,7 +217,6 @@
         this.$emit('submit');
       },
       handleSubmitFail(err) {
-        console.log(err);
         this.errorMessage.password = err;
       },
       changeLoginMode() {
@@ -227,6 +226,15 @@
         this.userinfo.smsCode = '';
         this.errorMessage.mobile = '';
         this.errorMessage.password = '';
+      },
+      validateEmail() {
+        if (this.userinfo.mobile.includes('@')) {
+          const reg = /^\w+@\w+(\.\w+)+$/;
+          reg.test(this.userinfo.mobile) ?
+            this.errorMessage.mobile = '' : this.errorMessage.mobile = '邮箱输入错误';
+          return reg.test(this.userinfo.mobile);
+        }
+        return true;
       }
     },
   };
