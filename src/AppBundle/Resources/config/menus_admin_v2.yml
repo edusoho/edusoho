@@ -1,5 +1,5 @@
 admin_v2:
-    name: admin_v2
+    name: admin_v2.basic_menu
     parent: null
     children:
         # 教学管理模块
@@ -87,4 +87,30 @@ admin_v2:
                         admin_v2_classroom_recommend:
                             name: admin_v2.course.classroom.recommend_tab
                             router_name: admin_v2_classroom_recommend_list
+        # 营销管理模块
+        admin_v2_marketing:
+            name: admin_v2.nav.marketing
+            children:
+        # 运营管理模块
+        admin_v2_operating:
+            name: admin_v2.nav.operating
+            children:
+        # 用户管理模块
+        admin_v2_user:
+            name: admin_v2.nav.user
+            children:
+        # 交易管理模块
+        admin_v2_trade:
+            name: admin_v2.nav.trade
+            children:
+        # 数据管理模块
+        admin_v2_statistics:
+            name: admin_v2.nav.statistics
+            children:
+        # 系统管理模块
+        admin_v2_system:
+            name: admin_v2.nav.system
+            children:
+
+
 

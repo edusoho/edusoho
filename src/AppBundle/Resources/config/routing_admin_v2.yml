@@ -28,17 +28,22 @@ admin_v2_classroom_close:
 
 admin_v2_classroom_open:
     path:  /classroom/{id}/open
-    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:openClassroom }
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:openClassroom }
     methods: [POST]
 
 admin_v2_classroom_delete:
     path:  /classroom/{id}/delete
-    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:deleteClassroom }
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:deleteClassroom }
     methods: [POST]
 
 admin_v2_classroom_recommend_list:
     path:   /classroom/recommend/list
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommendList }
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommendIndex }
 
 
 # 班级管理模块结束
+
+admin:
+    path: /teach/open_course/{filter}
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }
+

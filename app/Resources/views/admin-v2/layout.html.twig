@@ -155,7 +155,7 @@
     {% endblock %}
 
     {% block scriptBoot %}
-      {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+      {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app-v2.js')} %}
       {% include 'admin-v2/default/script-webpack.html.twig' %}
       {% include 'admin-v2/script_boot.html.twig'  with {state :0} %}
     {% endblock %}

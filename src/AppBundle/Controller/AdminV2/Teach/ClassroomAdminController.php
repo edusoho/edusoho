@@ -198,7 +198,7 @@ class ClassroomAdminController extends BaseController
         return $this->renderClassroomTr($id, $classroom);
     }
 
-    public function recommendListAction()
+    public function recommendIndexAction()
     {
         $conditions = array(
             'status' => 'published',
@@ -220,53 +220,11 @@ class ClassroomAdminController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($classrooms, 'userId'));
 
-        return $this->render('admin/classroom/recommend-list.html.twig', array(
+        return $this->render('admin-v2/teach/classroom/recommend-list.html.twig', array(
             'classrooms' => $classrooms,
             'users' => $users,
             'paginator' => $paginator,
             'ref' => 'recommendList',
-        ));
-    }
-
-    public function chooserAction(Request $request)
-    {
-        $conditions = $request->query->all();
-        $conditions['parentId'] = 0;
-
-        if (isset($conditions['categoryId']) && '' == $conditions['categoryId']) {
-            unset($conditions['categoryId']);
-        }
-
-        if (isset($conditions['status']) && '' == $conditions['status']) {
-            unset($conditions['status']);
-        }
-
-        if (isset($conditions['title']) && '' == $conditions['title']) {
-            unset($conditions['title']);
-        }
-
-        $count = $this->getClassroomService()->countClassrooms($conditions);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $count,
-            20
-        );
-
-        $classrooms = $this->getClassroomService()->searchClassrooms(
-            $conditions,
-            array('createdTime' => 'ASC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classrooms, 'categoryId'));
-
-        return $this->render('admin/classroom/classroom-chooser.html.twig', array(
-            'conditions' => $conditions,
-            'classrooms' => $classrooms,
-            'categories' => $categories,
-            'paginator' => $paginator,
         ));
     }
 
