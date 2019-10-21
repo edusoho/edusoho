@@ -81,7 +81,7 @@
           'invalid': '卡已失效，去看看其他精品吧～',
           'recharged': '之前已充值，去看看其他精品吧～',
           'usedByOther': '卡已被其他人充值，去看看其他精品吧～',
-          'failed': '卡已被抢完，去看看其他精品吧～'
+          'empty': '卡已被抢完，去看看其他精品吧～'
         },
         isLoading: 0
       };
@@ -92,6 +92,7 @@
         isLogin: state => !!state.token,
         settingsName: state => state.settings.name,
         userToken: state => state.token,
+        userId: state => state.user.id
       }),
       // 格式化成每4个空一个的样式
       formattedPassword() {
@@ -177,6 +178,7 @@
             this.date = res.deadline;
             this.money = res.coin;
             if (res.batchStatus === 'normal') return;
+            res.batchStatus = res.userId === this.userId ? res.batchStatus : 'usedByOther';
             this.message = this.cardStatusList[res.batchStatus];
             this.initProcess = false;
             this.invalidCard = true;
@@ -185,10 +187,6 @@
           .catch(err => {
             // 第一次进页面的时候如果卡密无效就直接去首页
             this.$router.push('/');
-            // this.initProcess = false;
-            // this.invalidCard = true;
-            // this.processIsDone = true;
-            // this.message = err.message;
           });
       },
       getMoneyCardByPassword() {
@@ -201,6 +199,7 @@
             this.money = res.coin;
             this.code = res.password;
             if (res.cardStatus === 'normal') return;
+            res.cardStatus = res.userId === this.userId ? res.cardStatus : 'usedByOther';
             this.message = this.cardStatusList[res.cardStatus];
             this.initProcess = false;
             this.invalidCard = true;
@@ -209,10 +208,6 @@
           .catch(err => {
             // 第一次进页面的时候如果卡密无效就直接去首页
             this.$router.push('/');
-            // this.initProcess = false;
-            // this.invalidCard = true;
-            // this.processIsDone = true;
-            // this.message = err.message;
           });
       },
       submit() {
