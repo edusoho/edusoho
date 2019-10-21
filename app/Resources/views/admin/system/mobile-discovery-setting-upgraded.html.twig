@@ -5,8 +5,31 @@
 {% block main %}
 <style>
 .nav.nav-tabs.mbm{ display:none; }
+.upgrade-tips-container {
+    width:90%;
+    margin-left:5%;
+    margin-top:50px
+}
+.upgrade-tips-container-content {
+    float:left;
+    width:450px;
+    margin-top:100px;
+    text-align:center
+} 
+.upgrade-tips-container-content p {
+    font-size:18px
+}
+.find-bg-plate {
+    float:right;
+    margin-right:50px
+}
 </style>
 
-    <img class="find-bg-plate" src="{{ asset('static-dist/app/img/admin/h5/find_plate@2x.png') }}" alt="">
-      
+<div class="upgrade-tips-container">
+    <div class="upgrade-tips-container-content">
+        <p>{{ 'admin.mobile_manage.discovery_upgrade.transfer_tips'|trans }}</p>
+        <a type="buttom" href="{{ path('admin_setting_mobile_discoveries') }}" class="btn btn-success" style="margin-top:50px">{{ 'admin.mobile_manage.discovery_upgrade.transfer_btn'|trans }}</a>
+    </div>
+    <img class="find-bg-plate" src="{{ asset('static-dist/app/img/admin/app_find_plate.png') }}" alt="">
+</div>
 {% endblock %}

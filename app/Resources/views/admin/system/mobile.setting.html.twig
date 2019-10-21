@@ -37,7 +37,9 @@
     <div class="controls col-md-8 radios">
       {{ radios('enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, mobile.enabled) }}
       <div class="help-block">{{ 'admin.mobile_setting.mobile_homepage_set_hint'|trans({'%mobileHomepage%': path('mobile')})|raw }}</div>
+      {% if 0 == appDiscoveryVersion|default(0) %}
       <div class="help-block">{{ 'admin.mobile_setting.mobile_operation_hint'|trans({'%operationUrl%': path('admin_operation_mobile')})|raw }}</div>
+      {% endif %}
     </div>
   </div>
 

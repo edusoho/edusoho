@@ -5859,6 +5859,8 @@ admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: '暂不升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_next: '继续'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: '升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_loading: '升级中'
+admin.mobile_manage.discovery_upgrade.transfer_tips: '移动端内容管理已升级至App首页配置功能'
+admin.mobile_manage.discovery_upgrade.transfer_btn: '去使用'
 
 # 微信通知管理
 admin.wechat_notification.switch: 微信通知开关

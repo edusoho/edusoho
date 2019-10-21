@@ -4828,6 +4828,8 @@ admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: 'Do not upgrade tem
 admin.mobile_manage.discovery_upgrade_madal.btn_next: 'Continue'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: 'Upgrade'
 admin.mobile_manage.discovery_upgrade_madal.btn_loading: 'Upgrade in progress'
+admin.mobile_manage.discovery_upgrade.transfer_tips: '移动端内容管理已升级至App首页配置功能'
+admin.mobile_manage.discovery_upgrade.transfer_btn: 'To use'
 admin.wechat_notification.switch: WeChat Notification Switch
 admin.wechat_notification.template: WeChat Notification Template
 admin.wechat_notification.template_name: Template Name
