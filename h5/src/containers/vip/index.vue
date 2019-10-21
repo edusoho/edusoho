@@ -41,7 +41,7 @@
       @vipOpen="vipOpen">
     </vip-introduce>
 
-    <a :href="inviteUrl" v-if="hasDrp">
+    <a v-if="hasDrp" :href="inviteUrl">
       <div class="coupon-code-entrance">邀请好友购买
         <i class="van-icon van-icon-arrow pull-right"></i><i class="pull-right">赚 {{ bindAgencyRelation.directRewardRatio }}%</i>
       </div>
@@ -128,9 +128,9 @@ export default {
         unit: 'month',
         num: 0,
       },
-      hasDrp: false,
-      drpSetting: {},
-      bindAgencyRelation: {},
+      isShowInviteUrl: false, // 是否显示邀请链接
+      drpSetting: {}, // Drp设置信息
+      bindAgencyRelation: {}, // 分销代理商绑定信息
     }
   },
   computed: {
@@ -244,27 +244,16 @@ export default {
         });
         this.currentLevelIndex = vipIndex;
       })
-      console.log(this.levels);
     }).catch(err => {
       Toast.fail(err.message)
     })
 
-    Api.hasDrpPluginInstalled().then(res => {
-      if (!res.Drp) {
-        return;
-      }
+    this.isShowInviteUrl = this.showInviteUrl();
 
-      Api.getAgencyBindRelation().then(data => {
-        if (JSON.stringify(data) == '{}') {
-          return;
-        }
-        Api.getDrpSetting().then(data => {
-          this.drpSetting = data;
-        });
-        this.bindAgencyRelation = data;
-        this.hasDrp = true;
-      })
-    })
+    if (this.isShowInviteUrl) {
+      this.bindAgencyRelation = this.getAgencyBindRelation();
+      this.getDrpSetting = this.getDrpSetting();
+    }
 
     setTimeout(() => {
       window.scrollTo(0,0);
@@ -360,6 +349,30 @@ export default {
         this.currentLevelIndex = vipIndex
       }
       this.vipPopShow = true;
+    },
+    showInviteUrl() {
+      Api.hasDrpPluginInstalled().then(res => {
+        if (!res.Drp) {
+          return false;
+        }
+
+        Api.getAgencyBindRelation().then(data => {
+          if (JSON.stringify(data) == '{}') {
+            return false;
+          }
+          return true;
+        })
+      })
+    },
+    getDrpSetting() {
+      Api.getDrpSetting().then(data => {
+        return data;
+      });
+    },
+    getAgencyBindRelation() {
+      Api.getAgencyBindRelation().then(data => {
+        return data;
+      })
     }
   }
 }

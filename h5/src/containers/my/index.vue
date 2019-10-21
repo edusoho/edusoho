@@ -7,7 +7,7 @@
         <i class="van-icon van-icon-arrow pull-right"></i>
       </div>
     </router-link>
-    <a :href="drpSetting.distributor_login_url" v-if="hasDrp">
+    <a v-if="isShowDistributorEntrance" :href="drpSetting.distributor_login_url">
       <div class="coupon-code-entrance">分销中心
         <i class="van-icon van-icon-arrow pull-right"></i>
       </div>
@@ -39,8 +39,8 @@ export default {
       activeIndex: 0,
       tabs: ['我的订单', '我的活动'],
       hasBusinessDrainage: false,
-      hasDrp: false,
-      drpSetting: [],
+      isShowDistributorEntrance: false, // 是否展示分销中心入口
+      drpSetting: [], // Drp设置信息
     };
   },
   computed: {
@@ -55,23 +55,31 @@ export default {
     Api.hasPluginInstalled().then(res => {
       this.hasBusinessDrainage = res.BusinessDrainage
     })
-    Api.hasDrpPluginInstalled().then(res => {
-      if (!res.Drp) {
-        return;
-      }
 
-      Api.getAgencyBindRelation().then(data => {
-        if (!data) {
-          return;
+    this.isShowDistributorEntrance = this.showDistributorEntrance();
+    this.drpSetting = this.getDrpSetting();
+  },
+  methods: {
+    showDistributorEntrance() {
+      Api.hasDrpPluginInstalled().then(res => {
+        if (!res.Drp) {
+          return false;
         }
+
+        Api.getAgencyBindRelation().then(data => {
+          if (!data) {
+            return false;
+          }
+        })
+
+        return true
       })
-
-      this.hasDrp = true
-    })
-
-    Api.getDrpSetting().then(data => {
-      this.drpSetting = data;
-    });
+    },
+    getDrpSetting() {
+      Api.getDrpSetting().then(data => {
+        return data;
+      });
+    }
   }
 }
 </script>
