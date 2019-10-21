@@ -1,0 +1,5 @@
+#eg：
+# 前一个为老的权限，后一个是新的权限；可以一对多，多对一
+#admin_user_manage: admin_v2_user_manage
+#admin_user_manage: admin_v2_course_manage
+#admin_course_manage: admin_v2_course_manage
