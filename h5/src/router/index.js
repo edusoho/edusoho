@@ -314,6 +314,7 @@ const routes = [
       path: '/moneycard/fixed_receive',
       name: 'fixed_receive',
       meta: {
+        hideTitle: true,
         title: '学习卡充值',
         color: 'white'
       },
@@ -322,6 +323,7 @@ const routes = [
       path: '/moneycard/:token/receive',
       name: 'receive',
       meta: {
+        hideTitle: true,
         title: '学习卡充值',
         color: 'white'
       },
@@ -330,6 +332,7 @@ const routes = [
       path: '/moneycard/receive/:password',
       name: 'receive',
       meta: {
+        hideTitle: true,
         title: '学习卡充值',
         color: 'white'
       },
