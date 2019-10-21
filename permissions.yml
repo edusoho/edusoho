@@ -3,3 +3,9 @@
 #admin_user_manage: admin_v2_user_manage
 #admin_user_manage: admin_v2_course_manage
 #admin_course_manage: admin_v2_course_manage
+
+admin_classroom: admin_v2_classroom
+admin_classroom_manage: admin_v2_classroom_manage
+admin_classroom_content_manage: admin_v2_classroom_content_manage
+admin_classroom_recommend_list: admin_v2_classroom_recommend_list
+admin_classroom_create: admin_v2_classroom_create

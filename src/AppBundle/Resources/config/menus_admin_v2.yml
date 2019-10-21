@@ -2,14 +2,16 @@ admin_v2:
     name: admin_v2
     parent: null
     children:
+        # 教学管理模块
         admin_v2_teach:
             name: admin_v2.nav.teach
             children:
+                # 班级管理模块
                 admin_v2_classroom:
                     name: admin_v2.course.classroom_menu
                     parent: admin_v2_teach
-                    #                after: 课程管理模块
-                    #                before: 公开课模块
+                    # after: 课程管理模块
+                    # before: 公开课管理模块
                     children:
                         admin_v2_classroom_manage:
                             name: admin_v2.course.classroom.basic_tab
