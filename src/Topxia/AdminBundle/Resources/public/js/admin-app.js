@@ -2,7 +2,7 @@ define(function(require, exports, module) {
   window.$ = window.jQuery = require('jquery');
   require('./util/mark-menu.js');
   require('placeholder');
-  require('bootstrap');
+  // require('bootstrap');
   require('common/bootstrap-modal-hack2');
 
   var Notify = require('common/bootstrap-notify');
