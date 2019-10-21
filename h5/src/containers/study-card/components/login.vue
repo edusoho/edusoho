@@ -23,7 +23,7 @@
         <div class="receive-login-input">
           <van-field
               v-model="userinfo.smsCode"
-              type="text"
+              :type="loginMode === 'fastLoginMode' ? 'text' : 'password'"
               :border=false
               clearable
               :maxlength="loginMode === 'fastLoginMode' ? 6 : 64"
@@ -138,7 +138,10 @@
     computed: {
       btnDisable() {
         const reg = /^1\d{10}$/;
-        return !(reg.test(this.userinfo.mobile) && this.userinfo.smsCode);
+        if (this.loginMode === 'fastLoginMode') {
+          return !(reg.test(this.userinfo.mobile) && this.userinfo.smsCode);
+        }
+        return !(this.userinfo.mobile && this.userinfo.smsCode);
       },
       cansentCode() {
         return !(this.count.codeBtnDisable || !this.validated.mobile);
@@ -190,6 +193,7 @@
             if (err.code === 5000116) {
               this.errorMessage.password = err.message;
             }
+            this.userinfo.smsCode = '';
           });
       },
       updateShow() {
@@ -215,6 +219,7 @@
         this.userinfo.mobile = '';
         this.userinfo.smsCode = '';
         this.errorMessage.mobile = '';
+        this.errorMessage.password = '';
       }
     },
   };
