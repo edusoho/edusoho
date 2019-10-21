@@ -99,7 +99,7 @@ class SmsController extends BaseController
             $this->createNewException(SmsException::FORBIDDEN_SMS_SETTING());
         }
 
-        $parameters['url'] = $url.' ';
+        $parameters['url'] = $url.' ';      // 加' '防止因生成的url后跟有字母导致的跳转链接不正确
         if (!empty($students)) {
             if ('course' == $targetType && $courseSet['parentId']) {
                 $studentIds = ArrayToolkit::column($students, 'userId');
@@ -125,7 +125,7 @@ class SmsController extends BaseController
         $shortUrl = SmsToolkit::getShortLink($url);
         $url = empty($shortUrl) ? $url : $shortUrl;
 
-        return $this->createJsonResponse(array('url' => $url.' '));
+        return $this->createJsonResponse(array('url' => $url.' '));     // 加' '防止因生成的url后跟有字母导致的跳转链接不正确
     }
 
     private function getCloudSmsInfo()
