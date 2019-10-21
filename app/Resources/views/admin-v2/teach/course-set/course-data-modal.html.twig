@@ -7,7 +7,7 @@
     <div class="clearfix mbl">
       <select style="width:200px;" class="form-control pull-left" name="categoryId" tabindex="-1" id = "course-select">
         {% for course in courses %}
-          <option value="{{course.id}}" {% if courseId == course.id  %} selected {% endif %} data-url="{{ path('course_set_detail_data',{id:courseSet.id,courseId:course.id}) }}">{{course.title}}</option> 
+          <option value="{{course.id}}" {% if courseId == course.id  %} selected {% endif %} data-url="{{ path('admin_v2_course_set_detail_data',{id:courseSet.id,courseId:course.id}) }}">{{course.title}}</option>
         {% endfor %}
       </select>
     </div>
