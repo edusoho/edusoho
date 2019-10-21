@@ -12,6 +12,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class CourseController extends BaseController
 {
@@ -92,6 +93,24 @@ class CourseController extends BaseController
         $fileName = sprintf('%s-(%s).csv', $courseTitle, date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
+    }
+
+    public function checkPasswordAction(Request $request)
+    {
+        if ('POST' == $request->getMethod()) {
+            $password = $request->request->get('password');
+            $currentUser = $this->getUser();
+            $password = $this->getPasswordEncoder()->encodePassword($password, $currentUser->salt);
+
+            if ($password == $currentUser->password) {
+                $response = array('success' => true, 'message' => '密码正确');
+                $request->getSession()->set('checkPassword', true);
+            } else {
+                $response = array('success' => false, 'message' => '密码错误');
+            }
+
+            return $this->createJsonResponse($response);
+        }
     }
 
     protected function getExportTasksDatas($courseId, $start, $limit, $exportAllowCount)
@@ -200,6 +219,11 @@ class CourseController extends BaseController
         }
 
         return $tasks;
+    }
+
+    protected function getPasswordEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
     }
 
     /**
