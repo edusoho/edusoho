@@ -6,10 +6,110 @@ admin_v2:
         admin_v2_teach:
             name: admin_v2.nav.teach
             children:
-                # 班级管理模块
+                # 课程管理（group）
                 admin_v2_course_group:
-                    name: admin_v2.course.group
+                    name: admin_v2.course.basic_group
                     children:
+                        # 课程管理模块
+                        admin_v2_course_show:
+                            name: admin_v2.course.basic_menu
+                            children:
+                                admin_v2_course_manage:
+                                    name: admin_v2.course.basic.basic_tab
+                                    router_name: admin_v2_course_set
+                                    children:
+                                        admin_v2_course_content_manage:
+                                            name: admin_v2.course.basic.basic_tab.manage_btn
+                                        admin_v2_course_add:
+                                            name: admin_v2.course.basic.basic_tab.create_btn
+                                            router_name: course_set_manage_create
+                                            group: topBtn
+                                            blank: 1
+                                        admin_v2_course_set_recommend:
+                                            name: admin_v2.course.basic.basic_tab.recommend_btn
+                                            router_params:
+                                                id: (courseSet.id)
+                                                filter: (filter)
+                                                ref: 'courseList'
+                                            group: groupButton
+                                            visible: ( filter == 'normal' and not courseSet.recommended )
+                                            icon: 'glyphicon glyphicon-hand-up'
+                                            mode: modal
+                                        admin_v2_course_set_cancel_recommend:
+                                            name: admin_v2.btn.recommend_cancel_btn
+                                            router_params:
+                                                id: (courseSet.id)
+                                                filter: (filter)
+                                                target: (target)
+                                            group: groupButton
+                                            class: cancel-recommend-course
+                                            visible: ( filter == 'normal' and courseSet.recommended )
+                                            icon: 'glyphicon glyphicon-hand-right'
+                                            mode: none
+                                        admin_v2_course_guest_member_preview:
+                                            name: admin_v2.course.basic.basic_tab.preview_btn
+                                            router_name: course_set_show
+                                            router_params:
+                                                id: (courseSet.id)
+                                                previewAs: 'guest'
+                                            group: groupButton
+                                            icon: 'glyphicon glyphicon-eye-open'
+                                            blank: 1
+                                        admin_v2_course_set_close:
+                                            name: admin_v2.course.basic.basic_tab.close_btn
+                                            router_params:
+                                                id: (courseSet.id)
+                                                filter: (filter)
+                                            group: groupButton
+                                            icon: 'glyphicon glyphicon-ban-circle'
+                                            mode: none
+                                            class: close-course
+                                            visible: (courseSet.status == 'published')
+                                        admin_v2_course_sms_prepare:
+                                            name: admin_v2.btn.sms_send_btn
+                                            router_name: sms_prepare
+                                            router_params:
+                                                id: (courseSet.id)
+                                                targetType: 'course'
+                                            group: groupButton
+                                            icon: 'glyphicon glyphicon-envelope'
+                                            mode: modal
+                                            visible: (courseSet.status == 'published')
+                                        admin_v2_course_set_clone:
+                                            name: admin_v2.course.basic.basic_tab.clone_btn
+                                            router_params:
+                                                courseSetId: (courseSet.id)
+                                            group: groupButton
+                                            class: 'js-course-set-clone'
+                                            icon: 'glyphicon glyphicon-repeat'
+                                            mode: none
+                                            visible: (courseSet.parentId == 0 and courseSet.type != 'live')
+                                        admin_v2_course_set_publish:
+                                            name: admin_v2.course.basic.basic_tab.publish_submit_btn
+                                            router_params:
+                                                id: (courseSet.id)
+                                                filter: (filter)
+                                            group: groupButton
+                                            class: publish-course
+                                            icon: 'glyphicon glyphicon-ok-circle'
+                                            mode: none
+                                            visible: (courseSet.status != 'published')
+                                        admin_v2_course_set_delete:
+                                            name: admin_v2.course.basic.basic_tab.delete_submit_btn
+                                            class: delete-course
+                                            router_params:
+                                                id: (courseSet.id)
+                                                filter: (filter)
+                                                type: ''
+                                            group: groupButton
+                                            icon: 'glyphicon glyphicon-trash'
+                                            mode: none
+                                            visible: ( courseSet.status in ['closed', 'draft', 'published'])
+                                admin_v2_course_set_recommend_list:
+                                    name: admin_v2.course.basic.recommend_list_tab
+                                admin_v2_course_set_data:
+                                    name: admin_v2.course.basic.analysis_tab
+                        # 班级管理模块
                         admin_v2_classroom:
                             name: admin_v2.course.classroom_menu
                             # after: 课程管理模块
@@ -113,6 +213,3 @@ admin_v2:
         admin_v2_system:
             name: admin_v2.nav.system
             children:
-
-
-

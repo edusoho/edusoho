@@ -432,8 +432,6 @@ admin.operation.coupon_menu.basic_tab: Coupon Manage
 admin.operation.coupon_menu.generate_btn: Generate Coupon
 admin.operation.query_menu.basic_tab: Use Query
 
-
-
 # 新版后台开始
 
 #后台菜单
@@ -451,9 +449,26 @@ admin_v2.nav.system: System
 # 教学模块-课程管理模块
 admin_v2.course.basic_group: Course Manage
 
+# 教学模块-课程管理模块
+admin_v2.course.basic_menu: Courses
+
+
+# 课程管理模块
+admin_v2.course.basic.basic_tab: Courses
+admin_v2.course.basic.recommend_list_tab: Recommended
+admin_v2.course.basic.analysis_tab: Statistics
+
+admin_v2.course.basic.basic_tab.manage_btn: Manage
+admin_v2.course.basic.basic_tab.create_btn: Create
+admin_v2.course.basic.basic_tab.recommend_btn: Recommend
+admin_v2.course.basic.basic_tab.preview_btn: Preview
+admin_v2.course.basic.basic_tab.close_btn: Close
+admin_v2.course.basic.basic_tab.publish_submit_btn: Publish
+admin_v2.course.basic.basic_tab.clone_btn: Clone
+admin_v2.course.basic.basic_tab.delete_submit_btn: Delete
+
 # 教学模块-课程管理-班级管理模块
 admin_v2.course.classroom_menu: Classes
-
 
 # 班级管理模块
 admin_v2.course.classroom.basic_tab: Classes
@@ -468,6 +483,5 @@ admin_v2.course.classroom.basic_tab.delete_submit_btn: Delete
 # 通用按钮
 admin_v2.btn.sms_send_btn: Notify the publish
 admin_v2.btn.recommend_cancel_btn: Un-recommend
-
 
 # 新版后台结束
