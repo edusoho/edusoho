@@ -486,3 +486,7 @@ weekDays:
     Fri: Friday
     Sat: Saturday
     Sun: Sunday
+
+adminCourseTypes:
+    normal: Course
+    classroom: Classroom course
