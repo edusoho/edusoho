@@ -4,8 +4,10 @@ namespace AppBundle\Controller\AdminV2\Teach;
 
 use AppBundle\Common\ExportHelp;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskResultService;
@@ -111,6 +113,58 @@ class CourseController extends BaseController
 
             return $this->createJsonResponse($response);
         }
+    }
+
+    public function noteListAction(Request $request)
+    {
+        $conditions = $request->query->all();
+
+        if (isset($conditions['keywordType']) && 'courseTitle' == $conditions['keywordType']) {
+            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);
+            $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
+            unset($conditions['keywordType'], $conditions['keyword']);
+            $conditions['courseSetIds'] = $conditions['courseSetIds'] ?: array(-1);
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getNoteService()->countCourseNotes($conditions),
+            20
+        );
+        $notes = $this->getNoteService()->searchNotes(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($notes, 'courseId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($notes, 'courseSetId'));
+        $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($notes, 'taskId'));
+
+        return $this->render('admin-v2/teach/course-note/index.html.twig', array(
+            'notes' => $notes,
+            'paginator' => $paginator,
+            'users' => $users,
+            'tasks' => ArrayToolkit::index($tasks, 'id'),
+            'courses' => $courses,
+            'courseSets' => $courseSets,
+        ));
+    }
+
+    public function deleteNoteAction(Request $request, $id)
+    {
+        $note = $this->getNoteService()->deleteNote($id);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function batchDeleteNoteAction(Request $request)
+    {
+        $ids = $request->request->get('ids', array());
+        $this->getNoteService()->deleteNotes($ids);
+
+        return $this->createJsonResponse(true);
     }
 
     protected function getExportTasksDatas($courseId, $start, $limit, $exportAllowCount)
@@ -272,5 +326,13 @@ class CourseController extends BaseController
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return CourseNoteService
+     */
+    protected function getNoteService()
+    {
+        return $this->createService('Course:CourseNoteService');
     }
 }
