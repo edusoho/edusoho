@@ -1,8 +1,9 @@
 <?php
 
-namespace AppBundle\Controller\Admin;
+namespace AppBundle\Controller\AdminV2\Teach;
 
 use AppBundle\Common\Paginator;
+use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Common\CommonException;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Service\TaskService;
