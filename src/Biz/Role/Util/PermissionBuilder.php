@@ -235,7 +235,7 @@ class PermissionBuilder
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
         $files = array(
             $rootDir.'/../src/AppBundle/Resources/config/menus_admin.yml',
-            $rootDir.'/../src/AppBundle/Resources/config/menus_v2_admin.yml',
+            $rootDir.'/../src/AppBundle/Resources/config/menus_admin_v2.yml',
             $rootDir.'/../src/CustomBundle/Resources/config/menus_admin.yml',
         );
 

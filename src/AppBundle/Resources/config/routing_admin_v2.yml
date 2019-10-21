@@ -1,0 +1,44 @@
+admin_v2:
+    path:  /
+    defaults: { _controller: AppBundle:Admin/Default:index }
+
+#班级管理模块开始
+admin_v2_classroom:
+    path:     /classroom/index
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:index }
+
+admin_v2_classroom_create:
+    path:  /classroom/create
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:addClassroom }
+
+admin_v2_classroom_set_recommend:
+    path:   /classroom/{id}/recommend
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommend }
+    permissions: [admin_classroom_set_recommend]
+
+admin_v2_classroom_cancel_recommend:
+    path:   /classroom/{id}/recommend/cancel
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:cancelRecommend }
+    permissions: [admin_classroom_cancel_recommend]
+
+admin_v2_classroom_close:
+    path:  /classroom/{id}/close
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:closeClassroom }
+    methods: [POST]
+
+admin_v2_classroom_open:
+    path:  /classroom/{id}/open
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:openClassroom }
+    methods: [POST]
+
+admin_v2_classroom_delete:
+    path:  /classroom/{id}/delete
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:deleteClassroom }
+    methods: [POST]
+
+admin_v2_classroom_recommend_list:
+    path:   /classroom/recommend/list
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommendList }
+
+
+# 班级管理模块结束
