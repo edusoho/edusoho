@@ -1,3 +1,27 @@
 admin:
     path: /teach/open_course/{filter}
     defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }
+
+
+#测试测试菜单展示
+admin_v2_user:
+    path:  /user
+    defaults: { _controller: AppBundle:Admin/User:index }
+    permissions: [admin_user_manage]
+
+#测试测试菜单展示
+admin_v2_user_create:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:create }
+
+#测试测试菜单展示
+admin_v2_user_show:
+    path:  /user/{id}
+    defaults: { _controller: AppBundle:Admin/User:show }
+    permissions: [admin]
+
+#测试测试菜单展示
+admin_v2_user_learn_statistics:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:show }
+    permissions: [admin]

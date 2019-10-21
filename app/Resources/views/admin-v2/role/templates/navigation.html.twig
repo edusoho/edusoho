@@ -1,0 +1,28 @@
+{% set permissions = sub_permissions('admin_v2') %}
+
+{% if permissions|default(null) %}
+  {% if menu|default(null) %}
+    {# rootMenu多次调用parent_permission需要优化 todo#}
+    {% set rootMenu = menu|parent_permission.code|parent_permission.code|parent_permission %}
+  {% else %}
+    {% set rootMenu = permission('admin') %}
+  {% endif %}
+
+<ul class="cd-tabs ct-layout-navbar_ul">
+  {% for m in permissions if not m.visible is defined or eval_expression(m.visible) %}
+    {# tabMenu多次调用first_child_permission需要优化 todo#}
+    {% set tabMenu = first_child_permission(first_child_permission(first_child_permission(m))) %}
+  <li {% if menu and m.code == rootMenu.code|default(null) %}class="active"{% endif %} id="menu_{{ m.code }}">
+    <a
+      title="{{ m.name|trans({}, 'menu') }}"
+      href="{{ permission_path(tabMenu) }}"
+      {% if m.blank|default(false)%}
+        target="_blank"
+      {% endif %}
+    >
+      {{ m.name|trans({}, 'menu') }}
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}

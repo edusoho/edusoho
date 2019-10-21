@@ -35,7 +35,52 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('has_permission', array($this, 'hasPermission')),
             new \Twig_SimpleFunction('eval_expression', array($this, 'evalExpression'), array('needs_context' => true, 'needs_environment' => true)),
             new \Twig_SimpleFunction('first_child_permission', array($this, 'getFirstChild')),
+            new \Twig_SimpleFunction('side_bar_permission', array($this, 'getSideBar')),
         );
+    }
+
+    public function getSideBar($code)
+    {
+//        todo  多次调用getParentPermission 需要优化
+        $permission = $this->getParentPermission($code);
+        $permission = $this->getParentPermission($permission['code']);
+        $permission = $this->getParentPermission($permission['code']);
+
+        $group = $this->createPermissionBuilder()->groupedPermissions($permission['code']);
+        $permissionMenus = $this->buildChildPermissionMenus($group);
+
+        return $permissionMenus;
+    }
+
+    protected function buildChildPermissionMenus($allGroup, $grade = 0)
+    {
+        $permissions = array();
+        foreach ($allGroup as $group) {
+            foreach ($group as $k => &$children) {
+                if (isset($children['visible']) && !$this->evalExpression($this->container->get('twig'), array(), $children['visible'])) {
+                    unset($group[$k]);
+                    continue;
+                }
+
+                $childrenInfo = array();
+                $childrenInfo['name'] = ServiceKernel::instance()->trans($children['name'], array(), 'menu');
+                $childrenInfo['link'] = '';
+                if (isset($children['is_group'])) {
+                    $childrenInfo['grade'] = $grade;
+                }
+                foreach ($children['children'] as $child) {
+                    $nodes = array();
+                    $nodes['name'] = ServiceKernel::instance()->trans($child['name'], array(), 'menu');
+                    $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getFirstChild($children)));
+                    $nodes['grade'] = 1;
+                    $nodes['nodes'] = array();
+                    $childrenInfo['nodes'][] = $nodes;
+                }
+                $permissions[] = $childrenInfo;
+            }
+        }
+
+        return $permissions;
     }
 
     public function getFirstChild($menu)
@@ -60,7 +105,7 @@ class PermissionExtension extends \Twig_Extension
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 
         foreach ($params as $key => $value) {
-            if (strpos($value, '(') === 0) {
+            if (0 === strpos($value, '(')) {
                 $value = $this->evalExpression($env, $context['_context'], $value);
                 $params[$key] = $value;
             } else {
@@ -74,7 +119,7 @@ class PermissionExtension extends \Twig_Extension
     public function evalExpression($twig, $context, $code)
     {
         $code = trim($code);
-        if (strpos($code, '(') === 0) {
+        if (0 === strpos($code, '(')) {
             $code = substr($code, 1, strlen($code) - 2);
         } else {
             $code = "'{$code}'";

@@ -61,18 +61,7 @@
           <a href="">ES后台管理</a>
         </div>
         <div class="ct-layout-navbar">
-          <ul class="cd-tabs ct-layout-navbar_ul">
-            <li class="active">
-              <a data-href="user">用户</a>
-            </li>
-            <li>
-              <a data-href="yy">运营</a>
-            </li>
-            <li>
-              <a data-href="kc">课程</a>
-            </li>
-            <li>
-          </ul>
+          {% include 'admin-v2/role/templates/navigation.html.twig' %}
         </div>
         <div class="ct-layout-person">
           <ul class="cd-clearfix ">
@@ -95,12 +84,7 @@
         </div>
       </div>
       <div class="cd-layout-main">
-        <div class="cd-layout-sidebar">
-          <div class="sidebar-title">
-            <h5>标题</h5>
-          </div>
-          <ul class="cd-sidebar-container pl0"></ul>
-        </div>
+        {% include 'admin-v2/role/templates/side-bar.html.twig' %}
         <div class="cd-layout-aside">
           <div class="cd-layout-aside_bread">
 
