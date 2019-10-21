@@ -10365,3 +10365,5 @@ admin.setting.invite.chooser_coupon.refresh_btn: 刷新
 admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
 admin.operation.coupon_menu.generate_btn: 生成优惠券
 course.setting.course_remind_go_to_open: 前往开启
+
+
