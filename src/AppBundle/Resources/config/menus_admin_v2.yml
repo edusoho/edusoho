@@ -176,7 +176,7 @@ admin_v2:
                                             visible: ( classroom.status=='draft' )
                                         admin_v2_sms_prepare:
                                             name: admin_v2.btn.sms_send_btn
-                                            router_name: sms_prepare_v2
+                                            router_name: admin_v2_sms_prepare
                                             mode: modal
                                             icon: 'glyphicon glyphicon-envelope'
                                             group: groupButton

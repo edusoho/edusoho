@@ -178,15 +178,15 @@ admin_v2_batch_update_org:
     defaults: { _controller: AppBundle:AdminV2/System/OrgManage:batchUpdate }
 
 # 通用
-sms_prepare_v2:
+admin_v2_sms_prepare:
     path:  /sms/prepare/{targetType}/{id}
     defaults: { _controller: AppBundle:AdminV2/Sms:prepare }
 
-publish_sms_send_v2:
+admin_v2_publish_sms_send:
     path:  /publish/sms_send/{targetType}/{id}
     defaults: { _controller: AppBundle:AdminV2/Sms:send }
 
-generate_short_link_v2:
+admin_v2_generate_short_link:
     path:  /generate/short/link
     defaults: { _controller: AppBundle:AdminV2/Sms:changeLink }
 
