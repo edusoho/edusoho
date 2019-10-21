@@ -1,5 +1,6 @@
 import swfobject from 'es-swfobject';
 import EsMessenger from 'app/common/messenger';
+import LocalVideoPlayer from 'app/js/player/local-video-player';
 export  default class VideoPlay {
   constructor(container) {
     this.player = {};
@@ -7,11 +8,19 @@ export  default class VideoPlay {
   }
 
   play() {
-    if ($('#swf-player').length) {
+    if ($('#local-video-player').length) {
+      this._playerLocalVideo();
+    }else if ($('#swf-player').length) {
       this._playerSwf();
     } else {
       this._playVideo();
     }
+  }
+
+  _playerLocalVideo() {
+    new LocalVideoPlayer({
+      'url' : $('#local-video-player').data('url'),
+    });
   }
 
   _playerSwf() {
