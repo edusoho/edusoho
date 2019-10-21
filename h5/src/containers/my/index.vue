@@ -56,28 +56,28 @@ export default {
       this.hasBusinessDrainage = res.BusinessDrainage
     })
 
-    this.isShowDistributorEntrance = this.showDistributorEntrance();
-    this.drpSetting = this.getDrpSetting();
+    this.showDistributorEntrance();
+    this.getDrpSetting();
   },
   methods: {
     showDistributorEntrance() {
       Api.hasDrpPluginInstalled().then(res => {
         if (!res.Drp) {
-          return false;
+          this.isShowDistributorEntrance = false;
         }
 
         Api.getAgencyBindRelation().then(data => {
           if (!data) {
-            return false;
+            this.isShowDistributorEntrance = false;
           }
         })
 
-        return true
+        this.isShowDistributorEntrance = true;
       })
     },
     getDrpSetting() {
       Api.getDrpSetting().then(data => {
-        return data;
+        this.drpSetting = data;
       });
     }
   }

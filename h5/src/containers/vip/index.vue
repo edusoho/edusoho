@@ -41,7 +41,7 @@
       @vipOpen="vipOpen">
     </vip-introduce>
 
-    <a v-if="hasDrp" :href="inviteUrl">
+    <a v-if="isShowInviteUrl" :href="inviteUrl">
       <div class="coupon-code-entrance">邀请好友购买
         <i class="van-icon van-icon-arrow pull-right"></i><i class="pull-right">赚 {{ bindAgencyRelation.directRewardRatio }}%</i>
       </div>
@@ -248,12 +248,8 @@ export default {
       Toast.fail(err.message)
     })
 
-    this.isShowInviteUrl = this.showInviteUrl();
-
-    if (this.isShowInviteUrl) {
-      this.bindAgencyRelation = this.getAgencyBindRelation();
-      this.getDrpSetting = this.getDrpSetting();
-    }
+    this.showInviteUrl();
+    this.getDrpSetting();
 
     setTimeout(() => {
       window.scrollTo(0,0);
@@ -353,27 +349,23 @@ export default {
     showInviteUrl() {
       Api.hasDrpPluginInstalled().then(res => {
         if (!res.Drp) {
-          return false;
+          this.isShowInviteUrl = false;
         }
 
         Api.getAgencyBindRelation().then(data => {
           if (JSON.stringify(data) == '{}') {
-            return false;
+            this.isShowInviteUrl = false;
           }
-          return true;
+          this.bindAgencyRelation = data;
+          this.isShowInviteUrl = true;
         })
       })
     },
     getDrpSetting() {
       Api.getDrpSetting().then(data => {
-        return data;
+        this.drpSetting = data;
       });
     },
-    getAgencyBindRelation() {
-      Api.getAgencyBindRelation().then(data => {
-        return data;
-      })
-    }
   }
 }
 </script>
