@@ -173,6 +173,9 @@
         });
       },
       onSubmit() {
+        if (this.btnDisable) {
+          return;
+        }
         if (this.loginMode === 'fastLoginMode') {
           this.handleSubmit(this.handleSubmitSuccess);
           return;
