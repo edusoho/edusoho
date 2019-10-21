@@ -9,7 +9,7 @@ admin_v2_classroom:
 
 admin_v2_classroom_create:
     path:  /classroom/create
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:addClassroom }
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:create }
 
 admin_v2_classroom_set_recommend:
     path:   /classroom/{id}/recommend

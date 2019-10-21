@@ -64,11 +64,11 @@
     <td>
 
   <div class="btn-group">
-      {% if has_permission('admin_classroom_content_manage') %}
+      {% if has_permission('admin_v2_classroom_content_manage') %}
         <a href="{{ path('classroom_manage', {id:classroom.id}) }}" target="_blank" class="btn btn-default btn-sm">{{ 'admin.classroom_manage.manage.manage_btn'|trans }}</a>
       {% endif %}
 
-      {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_classroom_manage', group:'groupButton', classroom: classroom} %}
+      {% include 'admin-v2/role/templates/group-button.html.twig' with {parentCode: 'admin_v2_classroom_manage', group:'groupButton', classroom: classroom} %}
   </div>
  </td>
 </tr>

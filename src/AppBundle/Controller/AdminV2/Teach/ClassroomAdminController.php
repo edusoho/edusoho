@@ -3,6 +3,10 @@
 namespace AppBundle\Controller\AdminV2\Teach;
 
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
@@ -81,34 +85,7 @@ class ClassroomAdminController extends BaseController
         );
     }
 
-    public function setAction(Request $request)
-    {
-        $classroomSetting = $this->getSettingService()->get('classroom', array());
-
-        $default = array(
-            'explore_default_orderBy' => 'createdTime',
-            'show_review' => '1',
-            'show_thread' => '1',
-            'show_note' => '1',
-        );
-
-        $classroomSetting = array_merge($default, $classroomSetting);
-
-        if ('POST' == $request->getMethod()) {
-            $set = $request->request->all();
-
-            $classroomSetting = array_merge($classroomSetting, $set);
-
-            $this->getSettingService()->set('classroom', $set);
-            $this->setFlashMessage('success', 'site.save.success');
-        }
-
-        return $this->render('admin/classroom/set.html.twig', array(
-            'classroomSetting' => $classroomSetting,
-        ));
-    }
-
-    public function addClassroomAction(Request $request)
+    public function createAction(Request $request)
     {
         $user = $this->getUser();
 
@@ -157,7 +134,7 @@ class ClassroomAdminController extends BaseController
         return $this->render('classroom/classroomadd.html.twig');
     }
 
-    public function closeClassroomAction($id)
+    public function closeAction($id)
     {
         $this->getClassroomService()->closeClassroom($id);
 
@@ -193,7 +170,7 @@ class ClassroomAdminController extends BaseController
             $classroom = $this->getClassroomService()->recommendClassroom($id, $number);
 
             if ('recommendList' == $ref) {
-                return $this->render('admin/classroom/recommend-tr.html.twig', array(
+                return $this->render('admin-v2/teach/classroom/recommend-tr.html.twig', array(
                     'classroom' => $classroom,
                 ));
             }
@@ -201,7 +178,7 @@ class ClassroomAdminController extends BaseController
             return $this->renderClassroomTr($id, $classroom);
         }
 
-        return $this->render('admin/classroom/recommend-modal.html.twig', array(
+        return $this->render('admin-v2/teach/classroom/recommend-modal.html.twig', array(
             'classroom' => $classroom,
             'ref' => $ref,
         ));
@@ -213,7 +190,7 @@ class ClassroomAdminController extends BaseController
         $ref = $request->query->get('ref');
 
         if ('recommendList' == $ref) {
-            return $this->render('admin/classroom/recommend-tr.html.twig', array(
+            return $this->render('admin-v2/teach/classroom/recommend-tr.html.twig', array(
                 'classroom' => $classroom,
             ));
         }
@@ -312,7 +289,7 @@ class ClassroomAdminController extends BaseController
         $coinPriceAll[$id] = $coinPrice;
         $priceAll[$id] = $price;
 
-        return $this->render('admin/classroom/table-tr.html.twig', array(
+        return $this->render('admin-v2/teach/classroom/table-tr.html.twig', array(
             'classroom' => $classroom,
             'classroomCoursesNum' => $classroomCoursesNum,
             'coinPriceAll' => $coinPriceAll,
@@ -329,21 +306,33 @@ class ClassroomAdminController extends BaseController
         return $cashRate;
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return CategoryService
+     */
     private function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');

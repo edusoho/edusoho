@@ -435,7 +435,7 @@ admin.operation.coupon_menu.generate_btn: 生成优惠券
 admin.operation.query_menu.basic_tab: 使用查询
 
 
-# 新版后台
+# 新版后台开始
 
 #后台菜单
 admin_v2.basic_menu: 后台管理员
@@ -454,11 +454,13 @@ admin_v2.course.classroom.basic_tab: 班级管理
 admin_v2.course.classroom.recommend_tab: 班级推荐
 admin_v2.course.classroom.basic_tab.manage_btn: 管理班级
 admin_v2.course.classroom.basic_tab.create_btn: 创建班级
-admin_v2.btn.recommend_cancel_btn: 取消推荐
 admin_v2.course.classroom.basic_tab.recommend_btn: 推荐班级
 admin_v2.course.classroom.basic_tab.close_btn: 关闭班级
-admin_v2.btn.sms_send_btn: 发送发布通知短信
 admin_v2.course.classroom.basic_tab.publish_submit_btn: 发布班级
 admin_v2.course.classroom.basic_tab.delete_submit_btn: 删除班级
 
+#通用按钮
+admin_v2.btn.recommend_cancel_btn: 取消推荐
+admin_v2.btn.sms_send_btn: 发送发布通知短信
 
+# 新版后台结束
