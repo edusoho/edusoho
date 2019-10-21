@@ -51,7 +51,7 @@ export default {
         this.count.num -= 1;
       }, 1000);
     },
-    handleSubmit(cb) {
+    handleSubmit(cb, cb2 = undefined) {
       if (this.btnDisable) {
         return;
       }
@@ -64,6 +64,9 @@ export default {
       })
         .then(res => cb(res))
         .catch(err => {
+          if (cb2) {
+            cb2(err.message);
+          }
           Toast.fail(err.message);
         });
     },
