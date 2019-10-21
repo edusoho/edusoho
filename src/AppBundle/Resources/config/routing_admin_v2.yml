@@ -1,0 +1,3 @@
+admin:
+    path: /teach/open_course/{filter}
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }

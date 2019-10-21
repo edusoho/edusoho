@@ -1,0 +1,25 @@
+admin_v2:
+    name: admin_v2.basic_menu
+    parent: null
+    children:
+        admin_v2_teach:
+            name: 教学
+            children:
+        admin_v2_marketing:
+            name: 营销
+            children:
+        admin_v2_operating:
+            name: 运营
+            children:
+        admin_v2_user:
+            name: 用户
+            children:
+        admin_v2_trade:
+            name: 交易
+            children:
+        admin_v2_statistics:
+            name: 数据
+            children:
+        admin_v2_system:
+            name: 系统
+            children:
