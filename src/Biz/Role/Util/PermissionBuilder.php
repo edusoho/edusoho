@@ -235,6 +235,7 @@ class PermissionBuilder
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
         $files = array(
             $rootDir.'/../src/AppBundle/Resources/config/menus_admin.yml',
+            $rootDir.'/../src/AppBundle/Resources/config/menus_v2_admin.yml',
             $rootDir.'/../src/CustomBundle/Resources/config/menus_admin.yml',
         );
 
@@ -262,6 +263,7 @@ class PermissionBuilder
 
             $code = ucfirst($app['code']);
             $configPaths[] = "{$rootDir}/../plugins/{$code}Plugin/Resources/config/menus_{$position}.yml";
+            $configPaths[] = "{$rootDir}/../plugins/{$code}Plugin/Resources/config/menus_{$position}_v2.yml";
         }
 
         return $configPaths;
