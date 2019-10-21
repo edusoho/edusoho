@@ -440,14 +440,18 @@ admin.operation.query_menu.basic_tab: 使用查询
 #后台菜单
 admin_v2.basic_menu: 后台管理员
 
-#通用按钮
-admin_v2.btn.recommend_cancel_btn: 取消推荐
-admin_v2.btn.sms_send_btn: 发送发布通知短信
 
 # 新版后台顶部导航
 admin_v2.nav.teach: 教学
+admin_v2.nav.marketing: 营销
+admin_v2.nav.operating: 运营
+admin_v2.nav.user: 用户
+admin_v2.nav.trade: 交易
+admin_v2.nav.statistics: 数据
+admin_v2.nav.system: 系统
 
-
+# 教学模块-课程管理模块
+admin_v2.course.basic_group: 课程管理
 
 # 教学模块-课程管理模块
 admin_v2.course.basic_menu: 课程管理
@@ -466,3 +470,24 @@ admin_v2.course.basic.basic_tab.close_btn: 关闭课程
 admin_v2.course.basic.basic_tab.publish_submit_btn: 发布课程
 admin_v2.course.basic.basic_tab.clone_btn: 复制课程
 admin_v2.course.basic.basic_tab.delete_submit_btn: 删除课程
+
+
+# 教学模块-课程管理-班级管理模块
+admin_v2.course.classroom_menu: 班级管理
+
+# 班级管理模块
+admin_v2.course.classroom.basic_tab: 班级管理
+admin_v2.course.classroom.recommend_tab: 班级推荐
+admin_v2.course.classroom.basic_tab.manage_btn: 管理班级
+admin_v2.course.classroom.basic_tab.create_btn: 创建班级
+admin_v2.course.classroom.basic_tab.recommend_btn: 推荐班级
+admin_v2.course.classroom.basic_tab.close_btn: 关闭班级
+admin_v2.course.classroom.basic_tab.publish_submit_btn: 发布班级
+admin_v2.course.classroom.basic_tab.delete_submit_btn: 删除班级
+
+#通用按钮
+admin_v2.btn.recommend_cancel_btn: 取消推荐
+admin_v2.btn.sms_send_btn: 发送发布通知短信
+
+
+# 新版后台结束
