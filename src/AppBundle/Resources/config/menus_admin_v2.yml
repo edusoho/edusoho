@@ -2,7 +2,7 @@ admin_v2:
     name: admin_v2.basic_menu
     parent: null
     children:
-        # 教学管理模块
+        # 教学管理
         admin_v2_teach:
             name: admin_v2.nav.teach
             children:
@@ -10,7 +10,7 @@ admin_v2:
                 admin_v2_course_group:
                     name: admin_v2.course.basic_group
                     children:
-                        # 课程管理模块
+                        # 课程管理
                         admin_v2_course_show:
                             name: admin_v2.course.basic_menu
                             children:
@@ -109,11 +109,9 @@ admin_v2:
                                     name: admin_v2.course.basic.recommend_list_tab
                                 admin_v2_course_set_data:
                                     name: admin_v2.course.basic.analysis_tab
-                        # 班级管理模块
+                        # 班级管理
                         admin_v2_classroom:
                             name: admin_v2.course.classroom_menu
-                            # after: 课程管理模块
-                            # before: 公开课管理模块
                             children:
                                 admin_v2_classroom_manage:
                                     name: admin_v2.course.classroom.basic_tab
@@ -189,6 +187,20 @@ admin_v2:
                                 admin_v2_classroom_recommend:
                                     name: admin_v2.course.classroom.recommend_tab
                                     router_name: admin_v2_classroom_recommend_list
+                # 助学管理（group）
+                admin_v2_tool_group:
+                    name: admin_v2.tool.basic_group
+                    children:
+                        # 问答管理
+                        admin_v2_course_question:
+                            name: admin_v2.course.question_menu
+                            children:
+                                admin_v2_course_question_manage:
+                                    name: admin_v2.course.question.basic_tab
+                                    router_name: admin_v2_question
+                                    router_params:
+                                        postStatus: unPosted
+                                    disable: true
         # 营销管理模块
         admin_v2_marketing:
             name: admin_v2.nav.marketing

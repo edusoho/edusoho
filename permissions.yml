@@ -4,8 +4,9 @@
 #admin_user_manage: admin_v2_course_manage
 #admin_course_manage: admin_v2_course_manage
 
-# 班级管理权限
+admin: admin_v2
 
+# 班级管理权限
 admin_classroom: admin_v2_classroom #班级管理
 admin_classroom_manage: admin_v2_classroom_manage  #班级管理
 admin_classroom_content_manage: admin_v2_classroom_content_manage #管理班级
@@ -17,3 +18,9 @@ admin_classroom_open: admin_v2_classroom_open #发布班级
 admin_classroom_delete: admin_v2_classroom_delete #删除班级
 admin_sms_prepare: admin_v2_sms_prepare #发送发布通知短信
 admin_classroom_recommend: admin_v2_classroom_recommend #班级推荐
+
+# 问答管理权限
+admin_course_question_manage: admin_v2_course_question_manage
+
+# 话题管理权限
+admin_course_thread: admin_v2_course_thread
