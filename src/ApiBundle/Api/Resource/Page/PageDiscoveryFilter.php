@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\Coupon\CouponFilter;
 use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\MarketingActivity\MarketingActivityFilter;
+use ApiBundle\Api\Util\AssetHelper;
 
 class PageDiscoveryFilter extends Filter
 {
@@ -60,6 +61,14 @@ class PageDiscoveryFilter extends Filter
                 }
                 if (!empty($couponBatch['currentUserCoupon'])) {
                     $couponFilter->filter($couponBatch['currentUserCoupon']);
+                }
+            }
+        }
+
+        if ('slide_show' == $data['type']) {
+            foreach ($data['data'] as &$slide) {
+                if (false === strpos($slide['image']['uri'], 'http://') && false === strpos($slide['image']['uri'], 'https://')) {
+                    $slide['image']['uri'] = AssetHelper::uriForPath($slide['image']['uri']);
                 }
             }
         }

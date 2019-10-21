@@ -376,11 +376,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     {
         $result = array();
 
-        if ('apps' == $portal) {
-            return $result;
-        }
-
-        if ('h5' == $portal) {
+        if (in_array($portal, array('h5', 'apps'))) {
             $posters = $this->getBlockService()->getPosters();
             $slides = array();
             foreach ($posters as $poster) {

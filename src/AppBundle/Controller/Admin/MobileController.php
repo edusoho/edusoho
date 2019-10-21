@@ -85,7 +85,7 @@ class MobileController extends BaseController
 
                 $bannersSetting = $this->getAppBannersSetting();
 
-                $channelSettings = $this->getAppChannelSettings(empty($bannersSetting) ? 0 : 1);
+                $channelSettings = $this->getAppChannelSettings();
 
                 $appSettings = array_merge($bannersSetting, $channelSettings);
 
@@ -104,8 +104,10 @@ class MobileController extends BaseController
         return $this->createJsonResponse(array('status' => 'upgraded'));
     }
 
-    protected function getAppChannelSettings($index = 0)
+    protected function getAppChannelSettings()
     {
+        $index = 1;
+
         $settings = array();
 
         $discoveryColumns = $this->getDiscoveryColumnService()->getDisplayData();
@@ -141,7 +143,7 @@ class MobileController extends BaseController
             switch ($discoveryColumn['type']) {
                 case 'classroom':
                     $setting['type'] = 'classroom_list';
-                    $setting['moduleType'] = 'classroom_list-'.$index;
+                    $setting['moduleType'] = 'classroomList-'.$index;
                     $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
                     $setting['data']['sort'] = empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']];
                     $setting['data']['limit'] = $discoveryColumn['showCount'];
@@ -150,7 +152,7 @@ class MobileController extends BaseController
 
                 case 'live':
                     $setting['type'] = 'course_list';
-                    $setting['moduleType'] = 'course_list-'.$index;
+                    $setting['moduleType'] = 'courseList-'.$index;
                     $setting['data']['sourceType'] = 'custom';
                     $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
                     $setting['data']['sort'] = '-createdTime';
@@ -173,7 +175,7 @@ class MobileController extends BaseController
 
                 case 'course':
                     $setting['type'] = 'course_list';
-                    $setting['moduleType'] = 'course_list-'.$index;
+                    $setting['moduleType'] = 'courseList-'.$index;
                     $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
                     $setting['data']['sort'] = empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']];
                     $setting['data']['limit'] = $discoveryColumn['showCount'];
@@ -189,7 +191,7 @@ class MobileController extends BaseController
                     break;
             }
 
-            $settings[$setting['type'].'-'.$index] = $setting;
+            $settings[$setting['moduleType']] = $setting;
 
             ++$index;
         }
@@ -206,9 +208,9 @@ class MobileController extends BaseController
 
         $setting = array();
         if (!empty($banners)) {
-            $setting['slide_show-0'] = array(
+            $setting['slide-1'] = array(
                 'type' => 'slide_show',
-                'moduleType' => 'slide_show-0',
+                'moduleType' => 'slide-1',
                 'data' => array(),
             );
 
@@ -255,7 +257,7 @@ class MobileController extends BaseController
                         break;
                 }
 
-                $setting['slide_show-0']['data'][] = array(
+                $setting['slide-1']['data'][] = array(
                     'title' => '',
                     'image' => array(
                         'id' => 0,
