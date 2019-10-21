@@ -3485,10 +3485,9 @@ cloud_file.process_status.waiting: 转码中
 cloud_file.process_status.doing: 正在转码
 cloud_file.process_status.error: 转码失败
 cloud_file.transcoding_tips: 视频还没有转码完成，请等待转码完成......
+
 cloud_file.transcoding_tips.error_code_41001.reason: 当前文件格式异常，不支持进行转码
 cloud_file.transcoding_tips.error_code_41001.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
-cloud_file.transcoding_tips.error_code_51009.reason: 当前文件格式异常，不支持进行转码
-cloud_file.transcoding_tips.error_code_51009.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
 cloud_file.transcoding_tips.error_code_41002.reason: 当前文件被删除，不支持进行转码
 cloud_file.transcoding_tips.error_code_41002.solution: 此文件的源文件被删除，无法进行转码，请重新上传后进行转码操作
 cloud_file.transcoding_tips.error_code_41003.reason: 当前文件格式异常，不支持转码
@@ -3499,6 +3498,23 @@ cloud_file.transcoding_tips.error_code_41005.reason: 当前文件超过转码支
 cloud_file.transcoding_tips.error_code_41005.solution: 请将源文件缩小至100MB以下（删减源文件内容或将源文件变为多个文件内容上传），再上传进行转码操作
 cloud_file.transcoding_tips.error_code_41006.reason: 当前文件格式异常，不支持转码
 cloud_file.transcoding_tips.error_code_41006.solution: 当前文件无法正常打开，请选择其他正常文件上传进行转码操作
+
+cloud_file.transcoding_tips.error_code_40100001.reason: 当前文件格式异常，不支持进行转码
+cloud_file.transcoding_tips.error_code_40100001.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
+cloud_file.transcoding_tips.error_code_40100002.reason: 当前文件被删除，不支持进行转码
+cloud_file.transcoding_tips.error_code_40100002.solution: 此文件的源文件被删除，无法进行转码，请重新上传后进行转码操作
+cloud_file.transcoding_tips.error_code_40100003.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_40100003.solution: 请使用Office软件将源文件内容重新保存后，上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100004.reason: 当前文件被加密，不支持转码
+cloud_file.transcoding_tips.error_code_40100004.solution: 请将源文件解密后，再上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100005.reason: 当前文件超过转码支持大小，不支持转码
+cloud_file.transcoding_tips.error_code_40100005.solution: 请将源文件缩小至100MB以下（删减源文件内容或将源文件变为多个文件内容上传），再上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100006.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_40100006.solution: 当前文件无法正常打开，请选择其他正常文件上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100007.reason: 当前PPT文件内容为空，不支持转码
+cloud_file.transcoding_tips.error_code_40100007.solution: 请使用Office软件将源文件内容重新保存后，上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100008.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_40100008.solution: 当前文件无法正常打开，请选择其他正常文件上传进行转码操作
 
 cloud_file.transcoding_tips.error_code_51001.reason: 文件转码失败
 cloud_file.transcoding_tips.error_code_51001.solution: 请联系运营人员处理
@@ -3516,6 +3532,8 @@ cloud_file.transcoding_tips.error_code_51007.reason: 文件转码失败
 cloud_file.transcoding_tips.error_code_51007.solution: 请联系运营人员处理
 cloud_file.transcoding_tips.error_code_51008.reason: 文件转码失败
 cloud_file.transcoding_tips.error_code_51008.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51009.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51009.solution: 请联系运营人员处理
 
 cloud_file.transcoding_tips.default_error_message.reason: 文件转码失败
 cloud_file.transcoding_tips.default_error_message.solution: 请联系运营人员处理

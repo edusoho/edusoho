@@ -341,7 +341,6 @@ class Setting extends AbstractResource
         );
         $couponSetting = array_merge($default, $couponSetting);
 
-
         return $couponSetting;
     }
 

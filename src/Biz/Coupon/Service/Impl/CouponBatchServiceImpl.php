@@ -446,10 +446,10 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         if (empty($batch)) {
             return null;
         }
-        if (empty($batch['targetType']) || empty($batch['targetId']) || $batch['targetType'] == 'all') {
+        if (empty($batch['targetType']) || empty($batch['targetId']) || 'all' == $batch['targetType']) {
             return null;
         }
-        if ($batch['targetType'] != 'vip' && empty($batch['targetIds'])) {
+        if ('vip' != $batch['targetType'] && empty($batch['targetIds'])) {
             return null;
         }
         $targetId = current($batch['targetIds']);
