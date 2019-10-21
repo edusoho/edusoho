@@ -7511,10 +7511,13 @@ admin.crontab_job.log_name: 名称
 admin.crontab_job.log_time: 时间
 admin.crontab_job.log_resource: 来源
 admin.crontab_job.log_status: 状态
+admin.crontab_job.run_log: 运行日志
 admin.crontab_job.run_log_title: 任务运行日志
 admin.crontab_job.log_show_btn: 日志查看
 admin.crontab_job.enable: 启用
 admin.crontab_job.disable: 禁用
+admin.crontab_job.set_next_fire_time: 设置下次执行时间
+admin.crontab_job.next_fire_time: 下次执行时间
 
 #　ip黑名单
 admin.ip_black_list.titile: IP黑名单
