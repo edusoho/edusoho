@@ -1,0 +1,58 @@
+<script>
+  if (typeof app === 'undefined') {
+    var app = {};
+  }
+  app.version = '{{ asset_version('/') }}';
+  app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
+  app.basePath = '{{ base_path() }}';
+  app.theme = '{{ setting("theme.uri"|default("default")) }}';
+
+  {% set crontabNextExecutedTime = crontab_next_executed_time() %}
+  {% if not setting('magic.disable_web_crontab', 0) and crontabNextExecutedTime > 0  %}
+    {% if date(crontabNextExecutedTime|date('Y-m-d H:i:s')) < date() %}
+      app.scheduleCrontab = '{{ path('crontab_web') }}';
+    {% endif %}
+  {% endif %}
+
+  var CLOUD_FILE_SERVER = "{{ setting('developer.cloud_file_server', '') }}";
+
+  app.config = {{
+  {
+    api:{
+      weibo:{key:setting('login_bind.weibo_key', '')},
+      qq:{key:setting('login_bind.qq_key', '')},
+      douban:{key:setting('login_bind.douban_key', '')},
+      renren:{key:setting('login_bind.renren_key', '')}
+    },
+      loading_img_path: asset('assets/img/default/loading.gif'),
+    }|json_encode|raw
+  }};
+
+  app.arguments = {};
+  {% if script_controller is defined %}
+    app.controller = '{{ script_controller }}';
+  {% endif %}
+  {% if script_arguments is defined %}
+    app.arguments = {{ script_arguments|json_encode|raw }};
+  {% endif %}
+
+  app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
+  app.fileSingleSizeLimit = {{ setting("magic.file_single_size_limit", 10) }};
+  app.uploadUrl = '{{ path("file_upload") }}';
+  app.imgCropUrl = '{{ path("file_img_crop") }}';
+  app.lessonCopyEnabled = '{{ setting("course.copy_enabled","0") }}';
+  app.cloudPlayerSdkUrl = '{{ cloud_sdk_url("player") }}';
+  app.cloudPlayServer = '{{ setting("developer.cloud_play_server", "") }}';
+  app.cloudVideoPlayerSdkUrl = '{{ cloud_sdk_url("video") }}';
+  app.cloudOldUploaderSdkUrl = '{{ cloud_sdk_url("old_uploader") }}';
+  app.cloudOldDocumentSdkUrl = '{{ cloud_sdk_url("old_document") }}';
+  app.lang = '{{ app.request.locale }}';
+</script>
+{% if state %}
+  {% include 'admin-v2/script/translation.html.twig' %}
+{% endif %}
+{% include 'admin-v2/js_loader.html.twig' %}
+
+<script type="text/javascript">
+  window.seajsBoot && window.seajsBoot();
+</script>
