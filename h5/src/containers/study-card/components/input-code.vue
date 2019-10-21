@@ -19,6 +19,7 @@
         }]"
         @click="submit"
         :disabled="code.length !== 19"
+        :style="{'display': currentHeight < defaultHeight ? 'none' : 'block'}"
     >
       立即充值
     </van-button>
@@ -28,19 +29,26 @@
 <script>
   import Api from '@/api';
   import { mapState } from 'vuex';
-
+  import { Toast } from 'vant';
   export default {
     name: 'entity-card',
     data() {
       return {
         code: '',
-        errorMessage: ''
+        errorMessage: '',
+        defaultHeight: window.innerHeight,
+        currentHeight: window.innerHeight,
       };
     },
     computed: {
       ...mapState({
         settingsName: state => state.settings.name
       })
+    },
+    mounted() {
+      window.onresize = () => {
+        this.currentHeight = window.innerHeight
+      }
     },
     methods: {
       handleCode(value) {
@@ -58,6 +66,7 @@
               this.$router.push(`/moneycard/receive/${password}`);
             })
             .catch(err => {
+              Toast.fail(err.message);
               this.errorMessage = err.message;
             });
         }

@@ -41,12 +41,17 @@
         background-color: transparent;
       }
 
+      .van-field {
+        padding: 0;
+        line-height: vw(44);
+      }
+
       .van-field__body {
         padding-left: vw(20);
       }
 
       .van-field__error-message {
-        margin-top: vw(14);
+        line-height: vw(26);
         padding-left: vw(16);
       }
 
@@ -55,7 +60,7 @@
 
     .submit {
       position: absolute;
-      bottom: 8%;
+      bottom: vw(48);
       margin: auto;
       left: 0;
       right: 0;
