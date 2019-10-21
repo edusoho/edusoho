@@ -177,7 +177,7 @@
           return;
         }
         if (this.loginMode === 'fastLoginMode') {
-          this.handleSubmit(this.handleSubmitSuccess);
+          this.handleSubmit(this.handleSubmitSuccess, this.handleSubmitFail);
           return;
         }
         this.userLogin({
@@ -215,6 +215,10 @@
       handleSubmitSuccess() {
         this.updateShow();
         this.$emit('submit');
+      },
+      handleSubmitFail(err) {
+        console.log(err);
+        this.errorMessage.password = err;
       },
       changeLoginMode() {
         this.loginMode = this.loginMode === 'fastLoginMode' ? 'normalLoginMode' : 'fastLoginMode';
