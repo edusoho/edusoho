@@ -178,7 +178,7 @@
             this.date = res.deadline;
             this.money = res.coin;
             if (res.batchStatus === 'normal') return;
-            res.batchStatus = res.userId === this.userId ? res.batchStatus : 'usedByOther';
+            res.batchStatus = res.rechargeUserId === this.userId ? res.batchStatus : 'usedByOther';
             this.message = this.cardStatusList[res.batchStatus];
             this.initProcess = false;
             this.invalidCard = true;
@@ -199,7 +199,7 @@
             this.money = res.coin;
             this.code = res.password;
             if (res.cardStatus === 'normal') return;
-            res.cardStatus = res.userId === this.userId ? res.cardStatus : 'usedByOther';
+            res.cardStatus = res.rechargeUserId === this.userId ? res.cardStatus : 'usedByOther';
             this.message = this.cardStatusList[res.cardStatus];
             this.initProcess = false;
             this.invalidCard = true;
