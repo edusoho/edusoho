@@ -34,7 +34,7 @@ class TagController extends BaseController
         }
 
         return $this->render(
-            'admin-v2/tag/index.html.twig',
+            'admin-v2/teach/tag/index.html.twig',
             array(
                 'tags' => $tags,
                 'paginator' => $paginator,
@@ -50,7 +50,7 @@ class TagController extends BaseController
             $tagRelation = $this->getTagService()->findTagRelationsByTagIds(array($tag['id']));
 
             return $this->render(
-                'admin-v2/tag/list-tr.html.twig',
+                'admin-v2/teach/tag/list-tr.html.twig',
                 array(
                     'tag' => $tag,
                     'tagRelations' => $tagRelation,
@@ -59,7 +59,7 @@ class TagController extends BaseController
         }
 
         return $this->render(
-            'admin-v2/tag/tag-modal.html.twig',
+            'admin-v2/teach/tag/tag-modal.html.twig',
             array(
                 'tag' => array('id' => 0, 'name' => ''),
             )
@@ -78,7 +78,7 @@ class TagController extends BaseController
             $tag = $this->getTagService()->updateTag($id, $request->request->all());
 
             return $this->render(
-                'admin-v2/tag/list-tr.html.twig',
+                'admin-v2/teach/tag/list-tr.html.twig',
                 array(
                     'tag' => $tag,
                 )
@@ -86,7 +86,7 @@ class TagController extends BaseController
         }
 
         return $this->render(
-            'admin-v2/tag/tag-modal.html.twig',
+            'admin-v2/teach/tag/tag-modal.html.twig',
             array(
                 'tag' => $tag,
             )

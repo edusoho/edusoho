@@ -17,12 +17,29 @@ class CategoryController extends BaseController
 
         $categories = $this->getCategoryService()->getCategoryStructureTree($group['id']);
 
-        return $this->render('admin-v2/category/embed.html.twig', array(
+        return $this->render('admin-v2/teach/category/embed.html.twig', array(
             'group' => $group,
             'menu' => $menu,
             'categories' => $categories,
             'layout' => $layout,
         ));
+    }
+
+    public function courseCategoryAction()
+    {
+        return $this->embedAction(
+            'course',
+            'admin-v2/layout.html.twig'
+        );
+    }
+
+    public function classroomCategoryAction()
+    {
+        return $this->embedAction(
+            'classroom',
+            'admin-v2/layout.html.twig',
+            'admin_v2_course_category'
+        );
     }
 
     public function createAction(Request $request)
@@ -44,7 +61,7 @@ class CategoryController extends BaseController
             'icon' => '',
         );
 
-        return $this->render('admin-v2/category/modal.html.twig', array(
+        return $this->render('admin-v2/teach/category/modal.html.twig', array(
             'category' => $category,
         ));
     }
@@ -63,7 +80,7 @@ class CategoryController extends BaseController
             return $this->renderTbody($category['groupId']);
         }
 
-        return $this->render('admin-v2/category/modal.html.twig', array(
+        return $this->render('admin-v2/teach/category/modal.html.twig', array(
             'category' => $category,
         ));
     }
@@ -113,7 +130,7 @@ class CategoryController extends BaseController
         $group = $this->getCategoryService()->getGroup($groupId);
         $categories = $this->getCategoryService()->getCategoryStructureTree($groupId);
 
-        return $this->render('admin-v2/category/tbody.html.twig', array(
+        return $this->render('admin-v2/teach/category/tbody.html.twig', array(
             'categories' => $categories,
             'group' => $group,
         ));

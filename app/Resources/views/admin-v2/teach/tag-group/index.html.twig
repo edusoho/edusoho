@@ -4,13 +4,13 @@
 {% set script_controller = 'tag-group/list' %}
 {% block page_buttons %}
 <div class="pull-right">
-    <a class="btn btn-success btn-sm" data-url="{{url('admin_v2_tag_group_create')}}" data-toggle="modal" data-target="#modal">{{'admin_v2.tag_manage.tag.group.create.modal_title'|trans}}</a>
+    <a class="btn btn-success btn-sm" data-url="{{path('admin_v2_tag_group_create')}}" data-toggle="modal" data-target="#modal">{{'admin_v2.tag_manage.tag.group.create.modal_title'|trans}}</a>
 </div>
 {% endblock %}
 {% block main %}
 <div class="btn-group mbm">
-	<a href=" {{ url('admin_v2_tag') }}" type="button" class="btn btn-default btn-sm">{{'admin_v2.course.tag'|trans}}</a>
-	<a href=" {{ url('admin_v2_tag_group') }}" type="button" class="btn btn-default btn-sm btn-primary">{{'admin_v2.course.tag.group'|trans}}</a>
+	<a href=" {{ path('admin_v2_tag') }}" type="button" class="btn btn-default btn-sm">{{'admin_v2.course.tag'|trans}}</a>
+	<a href=" {{ path('admin_v2_tag_group') }}" type="button" class="btn btn-default btn-sm btn-primary">{{'admin_v2.course.tag.group'|trans}}</a>
 </div>
 <table id="tag-group-table" class="table table-striped">
     <thead>
@@ -25,7 +25,7 @@
     <tbody>
       {% if tagGroups %}
         {% for tagGroup in tagGroups %}
-          {% include 'admin-v2/tag-group/list-tr.html.twig' %}
+          {% include 'admin-v2/teach/tag-group/list-tr.html.twig' %}
         {% endfor %}
       {% else %}
        <tr><td colspan="20"><div class="empty">{{ 'admin.tag_manage.tag_group.empty'|trans }}</div></td></tr>

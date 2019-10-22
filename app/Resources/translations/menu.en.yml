@@ -494,6 +494,12 @@ admin_v2.course.question_menu: Q&A
 
 admin_v2.course.question.basic_tab: Q&A
 
+# 教学-助学管理-话题管理
+admin_v2.course.thread_menu: Discussions
+
+admin_v2.course.thread.course_thread_tab: Course Discussions
+admin_v2.course.thread.classroom_thread_tab: Class Discussions
+
 # 通用按钮
 admin_v2.btn.sms_send_btn: Notify the publish
 admin_v2.btn.recommend_cancel_btn: Un-recommend

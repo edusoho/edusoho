@@ -41,7 +41,7 @@ class PermissionExtension extends \Twig_Extension
 
     public function getSideBar($code)
     {
-//        todo  多次调用getParentPermission 需要优化
+        /** todo  多次调用getParentPermission 需要优化 */
         $permission = $this->getParentPermission($code);
         $permission = $this->getParentPermission($permission['code']);
         $permission = $this->getParentPermission($permission['code']);

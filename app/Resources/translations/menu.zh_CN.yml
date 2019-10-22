@@ -495,6 +495,12 @@ admin_v2.course.question_menu: 问答管理
 
 admin_v2.course.question.basic_tab: 问答管理
 
+# 教学-助学管理-话题管理
+admin_v2.course.thread_menu: 话题管理
+
+admin_v2.course.thread.course_thread_tab: 课程话题
+admin_v2.course.thread.classroom_thread_tab: 班级话题
+
 #通用按钮
 admin_v2.btn.recommend_cancel_btn: 取消推荐
 admin_v2.btn.sms_send_btn: 发送发布通知短信
