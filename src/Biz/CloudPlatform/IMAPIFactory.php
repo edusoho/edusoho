@@ -8,6 +8,7 @@ use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\RestApiClient\RestApiClient;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification;
+use Biz\Common\JsonLogger;
 
 class IMAPIFactory
 {
@@ -50,8 +51,8 @@ class IMAPIFactory
             return self::$logger;
         }
 
-        $logger = new Logger('IM');
-        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG));
+        $stream = new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG);
+        $logger = new JsonLogger('IM', $stream);
 
         self::$logger = $logger;
 
