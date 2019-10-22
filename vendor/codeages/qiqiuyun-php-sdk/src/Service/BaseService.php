@@ -118,6 +118,7 @@ abstract class BaseService
         if (isset($_SERVER['TRACE_ID']) && $_SERVER['TRACE_ID']) {
             $headers['TRACE-ID'] = $_SERVER['TRACE_ID'];
         }
+
         $headers['Content-Type'] = 'application/json';
         $options['headers'] = $headers;
 
