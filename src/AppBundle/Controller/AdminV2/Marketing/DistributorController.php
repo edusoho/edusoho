@@ -12,15 +12,20 @@ class DistributorController extends BaseController
 {
     public function loginAction(Request $request)
     {
+        $drpService = $this->getDistributorUserService()->getDrpService();
+        if (!$drpService) {
+            return $this->render('admin-v2/marketing/distributor/not-access.html.twig', array());
+        }
+
         $form = MarketingUtils::generateLoginFormForCurrentUser(array(
             'settingService' => $this->getSettingService(),
             'webExtension' => $this->getWebExtension(),
             'request' => $request,
             'currentUser' => $this->getCurrentUser(),
-            'drpService' => $this->getDistributorUserService()->getDrpService(),
+            'drpService' => $drpService,
         ));
 
-        return $this->render('admin/marketing/login.html.twig', array(
+        return $this->render('admin-v2/marketing/distributor/index.html.twig', array(
             'form' => $form,
         ));
     }

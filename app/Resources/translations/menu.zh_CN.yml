@@ -492,6 +492,9 @@ admin_v2.course.question_menu: 问答管理
 
 admin_v2.course.question.basic_tab: 问答管理
 
+#营销-营销管理
+admin_v2.marketing.basic_group: 营销管理
+
 # 营销-渠道管理
 admin_v2.channel.basic_group: 渠道管理
 

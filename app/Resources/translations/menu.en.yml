@@ -491,6 +491,15 @@ admin_v2.course.question_menu: Q&A
 
 admin_v2.course.question.basic_tab: Q&A
 
+#营销-营销管理
+admin_v2.marketing.basic_group: Marketing Manage
+
+# 营销-渠道管理
+admin_v2.channel.basic_group: Channel Manage
+
+# 营销-渠道管理-分销
+admin_v2.distributor.menu: Distributor
+
 # 通用按钮
 admin_v2.btn.sms_send_btn: Notify the publish
 admin_v2.btn.recommend_cancel_btn: Un-recommend
