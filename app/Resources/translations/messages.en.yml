@@ -2919,6 +2919,24 @@ cloud_file.process_status.ok: Success
 cloud_file.process_status.waiting: Converting
 cloud_file.process_status.error: 'Convert failed'
 cloud_file.transcoding_tips: 'Video transcoding is not completed, please wait ...'
+
+cloud_file.transcoding_tips.error_code_40100001.reason: The current file format is abnormal and does not support transcoding.
+cloud_file.transcoding_tips.error_code_40100001.solution:  This file format does not support transcoding. Please use the relevant video format conversion software such as format factory, convert it to FLV or MP4 format, and then re-upload and transcode.
+cloud_file.transcoding_tips.error_code_40100002.reason: The current file is deleted and transcoding is not supported.
+cloud_file.transcoding_tips.error_code_40100002.solution: The source file has been deleted and cannot be transcoded. Please re-upload and then transcode.
+cloud_file.transcoding_tips.error_code_40100003.reason: The current file format is abnormal and does not support transcoding.
+cloud_file.transcoding_tips.error_code_40100003.solution: Please use the Office to re-save the source file content and upload it for transcoding.
+cloud_file.transcoding_tips.error_code_40100004.reason: The current file is encrypted and does not support transcoding.
+cloud_file.transcoding_tips.error_code_40100004.solution: Please decrypt the source file and upload it for transcoding.
+cloud_file.transcoding_tips.error_code_40100005.reason: The current file exceeds the transcoding support size and does not support transcoding.
+cloud_file.transcoding_tips.error_code_40100005.solution: Please reduce the source file to less than 100MB (cut the source file content or change the source file into multiple file content upload), then upload and transcode the operation.
+cloud_file.transcoding_tips.error_code_40100006.reason: The current file format is abnormal and does not support transcoding.
+cloud_file.transcoding_tips.error_code_40100006.solution: The current file cannot be opened. Please select another file upload for transcoding.
+cloud_file.transcoding_tips.error_code_40100007.reason: The content of the current PPT file is empty, transcoding is not supported.
+cloud_file.transcoding_tips.error_code_40100007.solution: Please use office software to save the content of the source file again and upload it for transcoding.
+cloud_file.transcoding_tips.error_code_40100008.reason: The current file format is abnormal, transcoding is not supported.
+cloud_file.transcoding_tips.error_code_40100008.solution: The current file cannot be opened normally. Please select another normal file to upload for transcoding.
+
 cloud_file.transcoding_tips.error_code_41001.reason: The current file format is abnormal and does not support transcoding.
 cloud_file.transcoding_tips.error_code_41001.solution: This file format does not support transcoding. Please use the relevant video format conversion software such as format factory, convert it to FLV or MP4 format, and then re-upload and transcode.
 cloud_file.transcoding_tips.error_code_51009.reason: The current file format is abnormal and does not support transcoding.
@@ -6173,6 +6191,8 @@ admin.crontab_job.log_show_btn: Log view
 admin.crontab_job.enable: enable
 admin.crontab_job.disable: disable
 admin.crontab_job.run_log: Running log
+admin.crontab_job.set_next_fire_time: Set next fire time
+admin.crontab_job.next_fire_time: next fire time
 admin.ip_black_list.titile: 'IP Blacklist'
 admin.ip_black_list.tips: 'One IP per line. IPs on the blacklist are blocked from visiting the site! You can use wildcards such as: 202.101.20.*.'
 admin.post_num_rules.same_ip_rule: 'Maximum posts(including replies) per Ip in 5 minutes'
