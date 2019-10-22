@@ -2,78 +2,37 @@ admin_v2:
     path:  /
     defaults: { _controller: AppBundle:Admin/Default:index }
 
-#班级管理模块开始
-admin_v2_classroom:
-    path:     /classroom/index
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:index }
+#测试测试菜单展示
+admin_v2_user:
+    path:  /user
+    defaults: { _controller: AppBundle:Admin/User:index }
+    permissions: [admin_user_manage]
 
-admin_v2_classroom_create:
-    path:  /classroom/create
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:create }
+#测试测试菜单展示
+admin_v2_user_create:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:create }
 
-admin_v2_classroom_set_recommend:
-    path:   /classroom/{id}/recommend
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommend }
-    permissions: [admin_classroom_set_recommend]
+#测试测试菜单展示
+admin_v2_user_learn_statistics:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:show }
+    permissions: [admin]
 
-admin_v2_classroom_cancel_recommend:
-    path:   /classroom/{id}/recommend/cancel
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:cancelRecommend }
-    permissions: [admin_classroom_cancel_recommend]
+#测试测试菜单展示
+admin_v2_online:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:show }
+    permissions: [admin]
 
-admin_v2_classroom_close:
-    path:  /classroom/{id}/close
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:close }
-    methods: [POST]
-
-admin_v2_classroom_open:
-    path:  /classroom/{id}/open
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:open }
-    methods: [POST]
-
-admin_v2_classroom_delete:
-    path:  /classroom/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:delete }
-    methods: [POST]
-
-admin_v2_classroom_recommend_list:
-    path:   /classroom/recommend/list
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommendIndex }
+#测试测试菜单展示
+admin_v2_login_record:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:show }
+    permissions: [admin]
 
 
-# 班级管理模块结束
-
-
-# 通用开始
-
-sms_prepare_v2:
-    path:  /sms/prepare/{targetType}/{id}
-    defaults: { _controller: AppBundle:AdminV2/Sms:prepare }
-
-publish_sms_send_v2:
-    path:  /publish/sms_send/{targetType}/{id}
-    defaults: { _controller: AppBundle:AdminV2/Sms:send }
-
-generate_short_link_v2:
-    path:  /generate/short/link
-    defaults: { _controller: AppBundle:AdminV2/Sms:changeLink }
-
-# 通用结束
-
-admin_v2_open_course:
-    path: /open_course/{filter}
-    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }
-
-admin_v2_open_course_recommend_list:
-    path: /open_course/recommend/list
-    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:recommendList }
-
-admin_v2_opencourse_analysis:
-    path:  /open_course/analysis
-    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:index }
-
-#教学
-##课程管理
+# 教学-课程管理-课程管理
 admin_v2_course_set:
     path:  /course_set/index
     defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:index }
@@ -161,7 +120,7 @@ admin_v2_courses_data:
 admin_v2_course_task_data_export_prepare:
     path: /course/{courseId}/datas/export/prepare
     defaults: { _controller: AppBundle:AdminV2/Teach/Course:prepareForExportTasksDatas}
-    permissions: [admin_course_set_data]
+    permissions: [admin_v2_course_set_data]
 
 admin_v2_course_task_data_export:
     path: /course/{courseId}/datas/export
@@ -172,15 +131,179 @@ admin_v2_check_password:
     defaults: { _controller: AppBundle:AdminV2/Teach/Course:checkPassword }
     permissions: [admin_v2_course_manage]
 
+# 教学-课程管理-班级管理
+admin_v2_classroom:
+    path:     /classroom/index
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:index }
+
+admin_v2_classroom_create:
+    path:  /classroom/create
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:create }
+
+admin_v2_classroom_set_recommend:
+    path:   /classroom/{id}/recommend
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommend }
+    permissions: [admin_v2_classroom_set_recommend]
+
+admin_v2_classroom_cancel_recommend:
+    path:   /classroom/{id}/recommend/cancel
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:cancelRecommend }
+    permissions: [admin_v2_classroom_cancel_recommend]
+
+admin_v2_classroom_close:
+    path:  /classroom/{id}/close
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:close }
+    methods: [POST]
+
+admin_v2_classroom_open:
+    path:  /classroom/{id}/open
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:open }
+    methods: [POST]
+
+admin_v2_classroom_delete:
+    path:  /classroom/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:delete }
+    methods: [POST]
+
+admin_v2_classroom_recommend_list:
+    path:   /classroom/recommend/list
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommendIndex }
+
+# 教学-课程管理-公开课管理
+admin_v2_open_course:
+    path: /open_course/{filter}
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }
+
+admin_v2_open_course_recommend_list:
+    path: /open_course/recommend/list
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:recommendList }
+
+admin_v2_open_course_delete:
+    path: /open_course/{courseId}/delete/{type}
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:delete, type:'' }
+    methods: [POST]
+
+admin_v2_open_course_publish:
+    path: /open_course/{id}/publish
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:publish }
+    methods: [POST]
+
+admin_v2_open_course_close:
+    path: /open_course/{id}/close
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:close }
+    methods: [POST]
+
+admin_v2_open_course_recommend:
+    path: /open_course/{id}/recommend
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:recommend }
+
+admin_v2_open_course_cancel_recommend:
+    path: /open_course/{id}/recommend/cancel/{target}
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:cancelRecommend }
+    methods: [POST]
+
+admin_v2_open_course_analysis:
+    path:  /open_course/analysis/index
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:index }
+
+admin_v2_open_course_analysis_referer_summary_list:
+    path:  /open_course/analysis/referer/list
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:summaryList }
+
+admin_v2_open_course_analysis_referer_summary:
+    path:  /open_course/analysis/referer/summary
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:summary }
+
+admin_v2_open_course_analysis_referer_watch_statistics:
+    path: /open_course/analysis/watch
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:watch }
+
+admin_v2_open_course_analysis_referer_detail:
+    path:  /open_course/{id}/analysis/referer/detail
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:detail }
+
+admin_v2_open_course_analysis_referer_detail_list:
+    path:  /open_course/{id}/analysis/referer/detailList
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:detailList }
+
+admin_v2_open_course_analysis_conversion:
+    path:  open_course/analysis/conversion
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:conversion }
+
+admin_v2_open_course_analysis_conversion_result:
+    path:  /open_course/{courseId}/analysis/conversion/result
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:conversionResult }
+# 教学-助学管理-问答管理
+admin_v2_question:
+    path:  /question/{postStatus}
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseQuestion:index }
+    permissions: [admin_v2_course_question_manage]
+
+# 教学-助学管理-话题管理
+admin_v2_course_thread_delete:
+    path: /thread/{id}/delete
+    defaults: {_controller: AppBundle:AdminV2/Teach/Thread:delete }
+    methods: [POST]
+    permissions: [admin_v2_course_thread, admin_v2_course_question_manage]
+
+admin_v2_course_thread_batch_delete:
+    path: /thread/batch_delete
+    defaults: {_controller: AppBundle:AdminV2/Teach/Thread:batchDelete }
+    methods: [POST]
+    permissions: [admin_v2_course_thread]
+
+##笔记管理
+admin_v2_course_note:
+    path: /note
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:noteList }
+    permissions: [admin_v2_course_note_manage]
+
+admin_v2_note_delete:
+    path: /note/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:deleteNote }
+    methods: [POST]
+    permissions: [admin_v2_course_note_manage]
+
+admin_v2_note_batch_delete:
+    path: /note/batch_delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:batchDeleteNote }
+    methods: [POST]
+    permissions: [admin_v2_course_note_manage]
+
 #用户
 ##用户管理
 admin_v2_user_show:
-  path:  /user/{id}
-  defaults: { _controller: AppBundle:AdminV2/User/User:show }
-  permissions: [admin_v2]
+    path:  /user/{id}
+    defaults: { _controller: AppBundle:AdminV2/User/User:show }
+    permissions: [admin_v2]
 
-#系统
-##组织机构管理
+# 系统
+## 组织机构管理
 admin_v2_batch_update_org:
     path:  batch/update/{module}/org
     defaults: { _controller: AppBundle:AdminV2/System/OrgManage:batchUpdate }
+
+# 通用
+admin_v2_sms_prepare:
+    path:  /sms/prepare/{targetType}/{id}
+    defaults: { _controller: AppBundle:AdminV2/Sms:prepare }
+
+admin_v2_publish_sms_send:
+    path:  /publish/sms_send/{targetType}/{id}
+    defaults: { _controller: AppBundle:AdminV2/Sms:send }
+
+admin_v2_generate_short_link:
+    path:  /generate/short/link
+    defaults: { _controller: AppBundle:AdminV2/Sms:changeLink }
+
+admin_v2_question_remind_teachers:
+    path: /course/{courseId}/question/{questionId}/remindTeachers
+    defaults: { _controller: AppBundle:AdminV2/Default:questionRemindTeachers }
+    methods:  [POST]
+    permissions: [admin_v2]
+
+# 应用中心-云服务-短信概览
+admin_v2_edu_cloud_sms:
+    path:  /edu_cloud/sms/overview
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/CloudServer:smsOverview }
+    permissions: [admin_v2_edu_cloud_sms_overview]

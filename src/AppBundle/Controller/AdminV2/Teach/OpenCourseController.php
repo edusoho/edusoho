@@ -5,9 +5,13 @@ namespace AppBundle\Controller\AdminV2\Teach;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Course\CourseException;
+use Biz\OpenCourse\OpenCourseException;
+use Biz\OpenCourse\Service\OpenCourseDeleteService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 class OpenCourseController extends BaseController
@@ -70,6 +74,114 @@ class OpenCourseController extends BaseController
         ));
     }
 
+    public function deleteAction(Request $request, $courseId, $type)
+    {
+        $currentUser = $this->getUser();
+
+        if (!$currentUser->isSuperAdmin()) {
+            $this->createNewException(UserException::PERMISSION_DENIED());
+        }
+
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+
+        if ('published' == $course['status']) {
+            $this->createNewException(CourseException::FORBIDDEN_DELETE_PUBLISHED());
+        }
+
+        if ('draft' == $course['status']) {
+            $this->getOpenCourseService()->deleteCourse($courseId);
+
+            return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
+        }
+
+        if ('closed' == $course['status']) {
+            if ($type) {
+                $isCheckPassword = $request->getSession()->get('checkPassword');
+
+                if (!$isCheckPassword) {
+                    $this->createNewException(OpenCourseException::CHECK_PASSWORD_REQUIRED());
+                }
+
+                $result = $this->getOpenCourseDeleteService()->delete($courseId, $type);
+
+                return $this->createJsonResponse($this->returnDeleteStatus($result, $type));
+            }
+        }
+
+        return $this->render('admin-v2/teach/open-course/delete.html.twig', array('course' => $course));
+    }
+
+    public function closeAction(Request $request, $id)
+    {
+        $this->getOpenCourseService()->closeCourse($id);
+
+        return $this->renderOpenCourseTr($id, $request);
+    }
+
+    public function publishAction(Request $request, $id)
+    {
+        $course = $this->getOpenCourseService()->getCourse($id);
+
+        $result = $this->getOpenCourseService()->publishCourse($id);
+
+        if ('liveOpen' == $course['type'] && !$result['result']) {
+            return $this->createJsonResponse(array('message' => '请先设置直播时间'));
+        }
+
+        if ('open' == $course['type'] && !$result['result']) {
+            return $this->createJsonResponse(array('message' => '请先创建课时'));
+        }
+
+        return $this->renderOpenCourseTr($id, $request);
+    }
+
+    public function recommendAction(Request $request, $id)
+    {
+        $course = $this->getOpenCourseService()->getCourse($id);
+
+        $ref = $request->query->get('ref');
+        $filter = $request->query->get('filter');
+
+        if ('POST' == $request->getMethod()) {
+            $formData['recommended'] = 1;
+            $formData['recommendedSeq'] = $request->request->get('number');
+            $formData['recommendedTime'] = time();
+
+            $course = $this->getOpenCourseService()->updateCourse($id, $formData);
+            $user = $this->getUserService()->getUser($course['userId']);
+
+            if ('recommendList' == $ref) {
+                return $this->render('admin-v2/teach/open-course/recommend-tr.html.twig', array(
+                    'course' => $course,
+                    'user' => $user,
+                ));
+            }
+
+            return $this->renderOpenCourseTr($id, $request);
+        }
+
+        return $this->render('admin-v2/teach/open-course/recommend-modal.html.twig', array(
+            'course' => $course,
+            'ref' => $ref,
+            'filter' => $filter,
+        ));
+    }
+
+    public function cancelRecommendAction(Request $request, $id, $target)
+    {
+        $course = $this->getOpenCourseService()->updateCourse($id, array('recommended' => 0, 'recommendedSeq' => 0));
+
+        if ('recommend_list' == $target) {
+            return $this->forward('AppBundle:AdminV2/Teach/OpenCourse:recommendList', array(
+                'request' => $request,
+            ));
+        }
+
+        if ('open_index' == $target) {
+            return $this->renderOpenCourseTr($id, $request);
+        }
+    }
+
     public function recommendListAction(Request $request)
     {
         $conditions = $request->query->all();
@@ -100,6 +212,32 @@ class OpenCourseController extends BaseController
         ));
     }
 
+    protected function renderOpenCourseTr($courseId, $request)
+    {
+        $fields = $request->query->all();
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+        $default = $this->getSettingService()->get('default', array());
+
+        return $this->render('admin-v2/teach/open-course/tr.html.twig', array(
+            'user' => $this->getUserService()->getUser($course['userId']),
+            'category' => $this->getCategoryService()->getCategory($course['categoryId']),
+            'course' => $course,
+            'default' => $default,
+            'filter' => $fields['filter'],
+        ));
+    }
+
+    protected function returnDeleteStatus($result, $type)
+    {
+        $dataDictionary = array('lessons' => '课时', 'recommend' => '推荐课程', 'members' => '课程成员', 'course' => '课程', 'materials' => '课程文件');
+
+        if ($result > 0) {
+            $message = $dataDictionary[$type].'数据删除';
+
+            return array('success' => true, 'message' => $message);
+        }
+    }
+
     /**
      * @return OpenCourseService
      */
@@ -122,5 +260,13 @@ class OpenCourseController extends BaseController
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
+    }
+
+    /**
+     * @return OpenCourseDeleteService
+     */
+    protected function getOpenCourseDeleteService()
+    {
+        return $this->createService('OpenCourse:OpenCourseDeleteService');
     }
 }

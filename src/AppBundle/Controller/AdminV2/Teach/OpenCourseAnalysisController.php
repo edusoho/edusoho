@@ -5,13 +5,19 @@ namespace AppBundle\Controller\AdminV2\Teach;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\RefererLog\Service\OrderRefererLogService;
+use Biz\RefererLog\Service\RefererLogService;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Vip\Service\LevelService;
 
 class OpenCourseAnalysisController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->redirect($this->generateUrl('admin_opencourse_analysis_referer_summary_list', array('date-range' => 'week')));
+        return $this->redirect($this->generateUrl('admin_v2_open_course_analysis_referer_summary_list', array('date-range' => 'week')));
     }
 
     public function summaryAction(Request $request)
@@ -24,7 +30,7 @@ class OpenCourseAnalysisController extends BaseController
         $refererlogDatas = $this->getRefererLogService()->analysisSummary($conditions);
         $analysisDataNames = json_encode(ArrayToolkit::column($refererlogDatas, 'refererName'));
 
-        return $this->render('admin/open-course-analysis/referer/summary.html.twig', array(
+        return $this->render('admin-v2/teach/open-course-analysis/referer/summary.html.twig', array(
             'dateRange' => $this->getDataInfo($timeRange),
             'refererlogAnalysisList' => $refererlogDatas,
             'refererlogAnalysisDatas' => json_encode($refererlogDatas),
@@ -43,7 +49,7 @@ class OpenCourseAnalysisController extends BaseController
         $openCourses = $this->getOpenCourseService()->findCoursesByIds($targetIds);
         $openCourses = ArrayToolkit::index($openCourses, 'id');
 
-        return $this->render('admin/open-course-analysis/referer/list.html.twig', array(
+        return $this->render('admin-v2/teach/open-course-analysis/referer/list.html.twig', array(
             'dateRange' => $this->getDataInfo($timeRange),
             'refererlogDatas' => $refererlogDatas,
             'openCourses' => $openCourses,
@@ -65,7 +71,7 @@ class OpenCourseAnalysisController extends BaseController
 
         list($paginator, $refererloglist) = $this->getDetailList($conditions);
 
-        return $this->render('admin/open-course-analysis/referer/detail.html.twig', array(
+        return $this->render('admin-v2/teach/open-course-analysis/referer/detail.html.twig', array(
             'paginator' => $paginator,
             'refererloglist' => $refererloglist,
             'course' => $course,
@@ -84,7 +90,7 @@ class OpenCourseAnalysisController extends BaseController
         $refererlogsDetail = $this->getRefererLogService()->analysisSummary($conditions);
         $refererlogNames = json_encode(ArrayToolkit::column($refererlogsDetail, 'refererName'));
 
-        return $this->render('admin/open-course-analysis/referer/detail-graph.html.twig', array(
+        return $this->render('admin-v2/teach/open-course-analysis/referer/detail-graph.html.twig', array(
             'refererlogsDetail' => $refererlogsDetail,
             'refererlogDetailDatas' => json_encode($refererlogsDetail),
             'refererlogNames' => $refererlogNames,
@@ -104,7 +110,7 @@ class OpenCourseAnalysisController extends BaseController
 
         list($paginator, $refererloglist) = $this->getDetailList($conditions);
 
-        return $this->render('admin/open-course-analysis/parts/referer-detail-list.html.twig', array(
+        return $this->render('admin-v2/teach/open-course-analysis/parts/referer-detail-list.html.twig', array(
             'paginator' => $paginator,
             'refererloglist' => $refererloglist,
             'targetId' => $id,
@@ -142,7 +148,7 @@ class OpenCourseAnalysisController extends BaseController
 
         $averageWatchNum = empty($watchData['watchNum']) ? 0 : number_format(array_sum($watchData['watchNum']) / count($watchData['watchNum']));
 
-        return $this->render('admin/open-course-analysis/referer/watch.html.twig', array(
+        return $this->render('admin-v2/teach/open-course-analysis/referer/watch.html.twig', array(
             'dateRange' => $this->getDataInfo($timeRange),
             'totalOpenCourseNum' => $totalOpenCourseNum,
             'totalWatchNum' => $totalWatchNum,
@@ -243,7 +249,7 @@ class OpenCourseAnalysisController extends BaseController
 
         $totalData = $this->getTotalConversionData();
 
-        return $this->render('admin/open-course-analysis/conversion/index.html.twig', array(
+        return $this->render('admin-v2/teach/open-course-analysis/conversion/index.html.twig', array(
             'courses' => $courses,
             'paginator' => $paginator,
             'refererLogs' => $refererLogs,
@@ -261,7 +267,7 @@ class OpenCourseAnalysisController extends BaseController
 
         $orderLogs = $this->getConversionOrderData($conditions);
 
-        return $this->render('admin/open-course-analysis/conversion/result-modal.html.twig', array(
+        return $this->render('admin-v2/teach/open-course-analysis/conversion/result-modal.html.twig', array(
             'orderLogs' => $orderLogs,
             'course' => $course,
         ));
@@ -370,31 +376,49 @@ class OpenCourseAnalysisController extends BaseController
         return $totalData;
     }
 
+    /**
+     * @return OpenCourseService
+     */
     protected function getOpenCourseService()
     {
         return $this->createService('OpenCourse:OpenCourseService');
     }
 
+    /**
+     * @return RefererLogService
+     */
     protected function getRefererLogService()
     {
         return $this->createService('RefererLog:RefererLogService');
     }
 
+    /**
+     * @return OrderRefererLogService
+     */
     protected function getOrderRefererLogService()
     {
         return $this->createService('RefererLog:OrderRefererLogService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return LevelService
+     */
     protected function getVipLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');

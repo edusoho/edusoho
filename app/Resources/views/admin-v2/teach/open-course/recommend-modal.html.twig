@@ -1,0 +1,25 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'admin.open_manage.recommend.set_seq.modal_title'|trans}}{% endblock %}
+{% block body %}
+
+{% set recommendUrl = path('admin_v2_open_course_recommend', {id:course.id, ref:ref, filter:filter}) %}
+    <form id="course-recommend-form" class="form-horizontal" method="post" action="{{ recommendUrl }}">
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="number">{{'admin.open_manage.recommend.set_seq.seq_label'|trans}}</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="number" name="number" class="form-control" value="" data-widget-cid="widget-1" data-explain="{{'admin.open_manage.recommend.set_seq.seq_tips'|trans}}">
+        <div class="help-block">{{'admin.open_manage.recommend.set_seq.seq_tips'|trans}}</div></div>
+      </div>
+    </form>
+{% endblock %}
+
+{% block footer %}
+      <button id = "course-recommend-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#course-recommend-form">{{'form.btn.save'|trans}}</button>
+      <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+      <script>app.load('course/recommend-modal');</script>
+{% endblock %}

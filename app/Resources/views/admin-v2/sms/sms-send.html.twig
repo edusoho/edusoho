@@ -5,7 +5,7 @@
 {% block title %}{{'user.register.sms.sms_send'|trans}}{% endblock %}
 {% block body %}
 
-    <lable id="smsSend-form" class="form-horizontal"  data-url = "{{ path('generate_short_link_v2',{url:url})}}" style="display:none;">
+    <lable id="smsSend-form" class="form-horizontal"  data-url = "{{ path('admin_v2_generate_short_link',{url:url})}}" style="display:none;">
         <div class="row form-group">
             <div class="col-md-3 control-label">
                 <label for="title">{{'user.register.sms.sms_send_to'|trans}}:</label>
@@ -57,7 +57,7 @@
 {% endblock %}
 
 {% block footer %}
-    <button id = 'begin-smsSend' data-url="{{ path('publish_sms_send_v2',{targetType:targetType,id:item.id,count:count,index:0,url:url}) }}" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#smsSend-form" style="display:none;">{{'form.btn.send'|trans}}</button>
+    <button id = 'begin-smsSend' data-url="{{ path('admin_v2_publish_sms_send',{targetType:targetType,id:item.id,count:count,index:0,url:url}) }}" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#smsSend-form" style="display:none;">{{'form.btn.send'|trans}}</button>
     <strong class="text color-danger" id="updating-hint" style="display:none;">{{'register.sms.not_close_window_tips'|trans}}...</strong>
     <button id = 'cancle-smsSend'type="button" class="btn btn-link pull-right" data-dismiss="modal" style="display:none;">{{'form.btn.cancel'|trans}}</button>
     <button id="finish-smsSend" data-loading-text="{{'user.register.sms.wait_tips'|trans}}..." class="btn btn-primary" style="display:none">{{'user.register.sms.send_success'|trans}}</button>
