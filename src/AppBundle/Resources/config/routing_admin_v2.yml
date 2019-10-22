@@ -2,6 +2,45 @@ admin_v2:
     path:  /
     defaults: { _controller: AppBundle:Admin/Default:index }
 
+#测试测试菜单展示
+admin_v2_user:
+    path:  /user
+    defaults: { _controller: AppBundle:Admin/User:index }
+    permissions: [admin_user_manage]
+
+#测试测试菜单展示
+admin_v2_user_create:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:create }
+
+#测试测试菜单展示
+admin_v2_user_show:
+    path:  /user/{id}
+    defaults: { _controller: AppBundle:Admin/User:show }
+    permissions: [admin]
+
+#测试测试菜单展示
+admin_v2_user_learn_statistics:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:show }
+    permissions: [admin]
+
+#测试测试菜单展示
+admin_v2_online:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:show }
+    permissions: [admin]
+
+#测试测试菜单展示
+admin_v2_login_record:
+    path:  /user/create
+    defaults: { _controller: AppBundle:Admin/User:show }
+    permissions: [admin]
+
+admin:
+    path: /teach/open_course/{filter}
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }
+
 # 教学-课程管理-课程管理
 admin_v2_course_set:
     path:  /course_set/index
