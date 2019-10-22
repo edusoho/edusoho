@@ -5,6 +5,12 @@ namespace AppBundle\Controller\AdminV2\Operating;
 use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Content\Service\FileService;
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\UserFieldService;
 use Symfony\Component\HttpFoundation\Request;
 
 class SiteSettingController extends BaseController
@@ -157,31 +163,49 @@ class SiteSettingController extends BaseController
         return $default;
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
         return $this->createService('CloudPlatform:AppService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
         return $this->createService('User:UserFieldService');
     }
 
+    /**
+     * @return AuthService
+     */
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
