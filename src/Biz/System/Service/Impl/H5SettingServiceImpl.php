@@ -49,13 +49,12 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function courseListFilter($discoverySetting, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
+            $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
             if (!empty($discoverySetting['data']['lastDays'])) {
                 $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
                 $conditions['outerStartTime'] = $timeRange['startTime'];
                 $conditions['outerEndTime'] = $timeRange['endTime'];
             }
-
-            $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
             $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
             $sort = $this->getSortByStr($discoverySetting['data']['sort']);
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
@@ -91,13 +90,12 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function classroomListFilter($discoverySetting, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
+            $conditions = array('status' => 'published', 'showable' => 1);
             if (!empty($discoverySetting['data']['lastDays'])) {
                 $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
                 $conditions['outerStartTime'] = $timeRange['startTime'];
                 $conditions['outerEndTime'] = $timeRange['endTime'];
             }
-
-            $conditions = array('status' => 'published', 'showable' => 1);
             $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
             $sort = $this->getSortByStr($discoverySetting['data']['sort']);
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
