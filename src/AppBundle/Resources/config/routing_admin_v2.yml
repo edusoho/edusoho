@@ -37,64 +37,6 @@ admin_v2_login_record:
     defaults: { _controller: AppBundle:Admin/User:show }
     permissions: [admin]
 
-#班级管理模块开始
-admin_v2_classroom:
-    path:     /classroom/index
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:index }
-
-admin_v2_classroom_create:
-    path:  /classroom/create
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:create }
-
-admin_v2_classroom_set_recommend:
-    path:   /classroom/{id}/recommend
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommend }
-    permissions: [admin_classroom_set_recommend]
-
-admin_v2_classroom_cancel_recommend:
-    path:   /classroom/{id}/recommend/cancel
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:cancelRecommend }
-    permissions: [admin_classroom_cancel_recommend]
-
-admin_v2_classroom_close:
-    path:  /classroom/{id}/close
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:close }
-    methods: [POST]
-
-admin_v2_classroom_open:
-    path:  /classroom/{id}/open
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:open }
-    methods: [POST]
-
-admin_v2_classroom_delete:
-    path:  /classroom/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:delete }
-    methods: [POST]
-
-admin_v2_classroom_recommend_list:
-    path:   /classroom/recommend/list
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommendIndex }
-
-
-# 班级管理模块结束
-
-
-# 通用开始
-
-sms_prepare_v2:
-    path:  /sms/prepare/{targetType}/{id}
-    defaults: { _controller: AppBundle:AdminV2/Sms:prepare }
-
-publish_sms_send_v2:
-    path:  /publish/sms_send/{targetType}/{id}
-    defaults: { _controller: AppBundle:AdminV2/Sms:send }
-
-generate_short_link_v2:
-    path:  /generate/short/link
-    defaults: { _controller: AppBundle:AdminV2/Sms:changeLink }
-
-# 通用结束
-
 admin:
     path: /teach/open_course/{filter}
     defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }
