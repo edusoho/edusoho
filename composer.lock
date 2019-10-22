@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "750ab0494df3352743a79dd1372255ea",
+    "content-hash": "ac0e8761952d060cbdf4ebf0380d010b",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -338,16 +338,16 @@
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.29",
+            "version": "v0.1.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "61ca6adfc7acc570b9ae098fbc351cc1035b07f3"
+                "reference": "f55420cb208ab1623d57034f8180725a79dbd0cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/61ca6adfc7acc570b9ae098fbc351cc1035b07f3",
-                "reference": "61ca6adfc7acc570b9ae098fbc351cc1035b07f3",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/f55420cb208ab1623d57034f8180725a79dbd0cf",
+                "reference": "f55420cb208ab1623d57034f8180725a79dbd0cf",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -378,7 +378,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2019-10-16T05:47:41+00:00"
+            "time": "2019-10-22T02:56:11+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
