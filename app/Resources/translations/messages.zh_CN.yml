@@ -5859,7 +5859,13 @@ admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: '暂不升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_next: '继续'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: '升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_loading: '升级中'
-admin.mobile_manage.discovery_upgrade.transfer_tips: '移动端内容管理已升级至 移动端-App设置-发现页配置功能'
+admin.mobile_manage.discovery_upgrade.transfer_tips: > 
+  <p class="upgrade-color-info">移动端内容管理已经升级至</p>
+  <p class="upgrade-color-primary">移动端-App设置-发现页配置功能</p>
+admin.mobile_manage.discovery_upgrade.function: > 
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>自定义设置各模块</li>
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>边设置边预览，实时查看展示效果</li>
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性APP</li>
 admin.mobile_manage.discovery_upgrade.transfer_btn: '去使用'
 
 # 微信通知管理

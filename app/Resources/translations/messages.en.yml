@@ -4828,7 +4828,13 @@ admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: 'Cancel'
 admin.mobile_manage.discovery_upgrade_madal.btn_next: 'Upgrade'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: 'Upgrade'
 admin.mobile_manage.discovery_upgrade_madal.btn_loading: 'Upgrade in progress'
-admin.mobile_manage.discovery_upgrade.transfer_tips: 'Mobile content is upgraded to APP home screen configuration'
+admin.mobile_manage.discovery_upgrade.transfer_tips: > 
+  <p class="upgrade-color-info">Mobile content is upgraded to</p>
+  <p class="upgrade-color-primary">APP home screen configuration</p>
+admin.mobile_manage.discovery_upgrade.function: > 
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>Custom setting of each module</li>
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>Preview while setting to see the display effect in real time</li>
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>Create your personalized app at will</li>
 admin.mobile_manage.discovery_upgrade.transfer_btn: 'To use'
 admin.wechat_notification.switch: WeChat Notification Switch
 admin.wechat_notification.template: WeChat Notification Template
