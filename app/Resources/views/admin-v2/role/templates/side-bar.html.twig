@@ -1,0 +1,8 @@
+{% do script(['app/js/admin/new/index.js']) %}
+{% set data = side_bar_permission(menu) %}
+<input id="js-side-bar-data" class="hidden" data-value="{{ data|json_encode }}">
+<div class="cd-layout-sidebar">
+  <div class="sidebar-title">
+  </div>
+  <ul class="cd-sidebar-container pl0"></ul>
+</div>
