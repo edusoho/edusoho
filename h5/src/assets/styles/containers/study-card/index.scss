@@ -38,6 +38,7 @@
       background: rgb(241, 243, 248);
       border-radius: vw(4);
       box-sizing: border-box;
+
       .van-cell {
         background-color: transparent;
       }
@@ -134,9 +135,8 @@
       }
 
       .result-box {
-        width: vw(241);
         margin: auto;
-        padding: vw(80) vw(67) 0;
+        padding-top: vw(80);
         display: flex;
         justify-content: center;
 
@@ -152,10 +152,21 @@
         }
 
         .result-box__invalid-card--process-is-done {
-          justify-content: center;
           color: #E7E9ED;
-          display: flex;
-          flex-wrap: wrap;
+          text-align: center;
+
+          .icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            > span {
+              padding-left: vw(10);
+              color: #999;
+              font-size: vw(20);
+              font-weight: 600;
+            }
+          }
 
           .icon-Fail {
             font-size: vw(36);
@@ -177,11 +188,21 @@
         }
 
         .result-box__valid-card--process-is-done {
+          text-align: center;
           color: #333;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-wrap: wrap;
+
+          .icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            > span {
+              padding-left: vw(10);
+              color: #408FFB;
+              font-size: vw(20);
+              font-weight: 600;
+            }
+          }
 
           .result-box__icon-Success {
             display: inline-block;
@@ -190,11 +211,6 @@
             background: url("../../../static/images/study_card_success.svg") 0 0 no-repeat;
           }
 
-          > span {
-            color: #408FFB;
-            font-size: vw(20);
-            font-weight: 600;
-          }
 
         }
 
@@ -220,6 +236,7 @@
 
       .receive-login-input {
         position: relative;
+
         .van-cell {
           background-color: transparent;
           line-height: vw(44);

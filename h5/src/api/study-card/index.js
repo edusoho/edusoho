@@ -20,8 +20,12 @@ export default [
     url: '/plugins/moneyCard/moneyCardBatch/{token}/receive',
     method: 'POST'
   }, {
-    name: 'setCoin',
+    name: 'getCoin',
     url: '/setting/coin',
+    method: 'GET'
+  }, {
+    name: 'getCash',
+    url: '/me/cashAccount',
     method: 'GET'
   }
 ];

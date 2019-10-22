@@ -21,13 +21,13 @@
             <a href="javascript: void(0)" class="link" @click="jump2login">是否放入其他账户</a>
           </div>
           <div class="result-box__invalid-card--process-is-done" v-show="invalidCard">
-            <i class="iconfont icon-Fail"></i>
-            <span>充值失败</span>
-            <div class="res-msg">{{message}}</div>
+            <div class="icon"><i class="iconfont icon-Fail"></i>
+              <span>充值失败</span></div>
+            <div class="res-msg" v-html="message"></div>
           </div>
           <div class="result-box__valid-card--process-is-done" v-show="processIsDone && !invalidCard">
-            <i class="result-box__icon-Success"></i>
-            <span>充值成功</span>
+            <div class="icon"><i class="result-box__icon-Success"></i>
+              <span>充值成功</span></div>
             <div class="result-box__account">当前账户余额：{{cash}}{{coin}}</div>
             <div>尽情去购物啦～</div>
           </div>
@@ -79,9 +79,9 @@
         cardStatusList: {
           'expired': '卡已过期，去看看其他精品吧～',
           'invalid': '卡已失效，去看看其他精品吧～',
-          'recharged': '之前已充值，去看看其他精品吧～',
+          'recharged': this.rechargedMsg,
           'usedByOther': '卡已被其他人充值，去看看其他精品吧～',
-          'empty': '卡已被抢完，去看看其他精品吧～'
+          'empty': '卡已被抢完，去看看其他精品吧～',
         },
         isLoading: 0
       };
@@ -99,28 +99,32 @@
         return this.password.toString()
           .replace(/\W/g, '')
           .replace(/....(?!$)/g, '$& ');
+      },
+      rechargedMsg() {
+        return 'xxxx';
       }
     },
     created() {
       document.title = '学习卡充值';
-      // 设置虚拟币名称
-      this.setCoin();
       // 根据token获取卡批次信息
       this.token = this.$route.params.token || '';
       this.password = this.$route.params.password || '';
-      if (this.token.length) {
-        // 电子卡根据token获取数据
-        this.isECard = true;
-        this.getMoneyCardByToken();
-        return;
-      }
-      // 实体卡通过密码获取数据
-      this.isECard = false;
-      this.getMoneyCardByPassword();
+      // isECard 为 true 的时候，根据 token 获取信息，为 false 根据 password 获取信息
+      this.isECard = !!this.token.length;
+      this.init();
     },
     methods: {
-      setCoin() {
-        Api.setCoin()
+      async init() {
+        await this.getCoin();
+        await this.getCash();
+        if (this.isECard === true) {
+          this.getMoneyCardByToken();
+        } else {
+          this.getMoneyCardByPassword();
+        }
+      },
+      getCoin() {
+        return Api.getCoin()
           .then(res => {
             this.coin = res.name;
             this.isLoading += 1;
@@ -170,6 +174,19 @@
         //用户没有登录就先去登录
         !this.isLogin && this.jump2login();
       },
+      getCash() {
+        return Api.getCash({
+          query: {
+            userId: this.userId
+          }
+        })
+          .then(res => {
+            this.cash = res.cash;
+            this.cardStatusList['recharged'] =
+              '之前已充值，当前账户余额：' + res.cash + this.coin + '<br/>尽情去购物啦～';
+          })
+          .catch(err => console.log(err));
+      },
       getMoneyCardByToken() {
         Api.getMoneyCardByToken({
           query: { token: this.token }
@@ -180,8 +197,6 @@
             this.date = res.deadline;
             this.money = res.coin;
             if (res.batchStatus === 'normal') return;
-            res.batchStatus = res.rechargeUserId !== this.userId &&
-            res.batchStatus === 'recharged' ? 'usedByOther' : res.batchStatus;
             this.message = this.cardStatusList[res.batchStatus];
             this.initProcess = false;
             this.invalidCard = true;
@@ -201,9 +216,13 @@
             this.date = res.deadline;
             this.money = res.coin;
             this.code = res.password;
-            if (res.cardStatus === 'normal') return;
+            if (res.cardStatus === 'normal' ||
+              (res.rechargeUserId === this.userId && res.cardStatus === 'receive')) {
+              return;
+            }
             res.cardStatus = res.rechargeUserId !== this.userId &&
-            res.cardStatus === 'recharged' ? 'usedByOther' : res.cardStatus;
+            (res.cardStatus === 'recharged' || res.cardStatus === 'receive') ?
+              'usedByOther' : res.cardStatus;
             this.message = this.cardStatusList[res.cardStatus];
             this.initProcess = false;
             this.invalidCard = true;
