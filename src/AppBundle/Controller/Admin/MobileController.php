@@ -145,7 +145,7 @@ class MobileController extends BaseController
             switch ($discoveryColumn['type']) {
                 case 'classroom':
                     $setting['type'] = 'classroom_list';
-                    $setting['moduleType'] = 'classroomList-'.$index;
+                    $setting['moduleType'] = 'classroom_list-'.$index;
                     $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
                     $setting['data']['sort'] = empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']];
                     $setting['data']['limit'] = $discoveryColumn['showCount'];
@@ -154,7 +154,7 @@ class MobileController extends BaseController
 
                 case 'live':
                     $setting['type'] = 'course_list';
-                    $setting['moduleType'] = 'courseList-'.$index;
+                    $setting['moduleType'] = 'course_list-'.$index;
                     $setting['data']['sourceType'] = 'custom';
                     $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
                     $setting['data']['sort'] = '-createdTime';
@@ -177,7 +177,7 @@ class MobileController extends BaseController
 
                 case 'course':
                     $setting['type'] = 'course_list';
-                    $setting['moduleType'] = 'courseList-'.$index;
+                    $setting['moduleType'] = 'course_list-'.$index;
                     $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
                     $setting['data']['sort'] = empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']];
                     $setting['data']['limit'] = $discoveryColumn['showCount'];
