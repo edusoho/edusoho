@@ -492,6 +492,12 @@ admin_v2.course.question_menu: 问答管理
 
 admin_v2.course.question.basic_tab: 问答管理
 
+# 营销-渠道管理
+admin_v2.channel.basic_group: 渠道管理
+
+# 营销-渠道管理-分销
+admin_v2.distributor.menu: 分销
+
 #通用按钮
 admin_v2.btn.recommend_cancel_btn: 取消推荐
 admin_v2.btn.sms_send_btn: 发送发布通知短信

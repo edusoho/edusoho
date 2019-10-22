@@ -47,4 +47,9 @@ admin_course_question_manage: admin_v2_course_question_manage
 # 话题管理权限
 admin_course_thread: admin_v2_course_thread
 
+# 分销管理
+admin_distributor_top: admin_v2_distributor
+_admin_distributor_menu: --
+_distributor_page: admin_v2_distributor_page
+
 
