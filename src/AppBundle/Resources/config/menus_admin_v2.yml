@@ -2,7 +2,7 @@ admin_v2:
     name: admin_v2.basic_menu
     parent: null
     children:
-        # 教学管理
+        # 教学模块
         admin_v2_teach:
             name: admin_v2.nav.teach
             children:
@@ -221,27 +221,179 @@ admin_v2:
                                     name: admin_v2.course.thread.classroom_thread_tab
                                     router_name: admin_v2_classroom_thread
                                     disable: true
-        # 营销管理模块
-        admin_v2_marketing:
-            name: admin_v2.nav.marketing
-            children:
-        # 运营管理模块
-        admin_v2_operating:
-            name: admin_v2.nav.operating
-            children:
+#        # 营销管理模块
+#        admin_v2_marketing:
+#            name: admin_v2.nav.marketing
+#            children:
+#        # 运营管理模块
+#        admin_v2_operating:
+#            name: admin_v2.nav.operating
+#            children:
+#admin_v2_user测试菜单栏显示
         # 用户管理模块
         admin_v2_user:
             name: admin_v2.nav.user
             children:
-        # 交易管理模块
-        admin_v2_trade:
-            name: admin_v2.nav.trade
-            children:
-        # 数据管理模块
-        admin_v2_statistics:
-            name: admin_v2.nav.statistics
-            children:
-        # 系统管理模块
-        admin_v2_system:
-            name: admin_v2.nav.system
-            children:
+                admin_v2_user_group:
+                    name: 用户管理组
+                    is_group: true
+                    children:
+                      admin_v2_user_show:
+                          name: 用户管理
+                          children:
+                              admin_v2_user_manage:
+                                  name: 用户管理
+                                  router_name: admin_v2_user
+                                  children:
+                                      admin_v2_user_create:
+                                          name: admin.user.basic.basic_tab.create_btn
+                                          mode: modal
+                                          group: topBtn
+                                          visible: (user.type != 'system')
+                                      admin_v2_user_edit:
+                                          name: admin.user.basic.basic_tab.edit_btn
+                                          mode: modal
+                                          group: groupButton
+                                          visible: (user.type != 'system')
+                                          router_params:
+                                              id: (user.id)
+                                      admin_v2_user_roles:
+                                          name: admin.user.basic.basic_tab.setting_roles_btn
+                                          mode: modal
+                                          group: groupButton
+                                          visible: (user.type != 'system')
+                                          router_params:
+                                              id: (user.id)
+                                      admin_v2_user_avatar:
+                                          name: admin.user.basic.basic_tab.update_avatar_btn
+                                          mode: modal
+                                          group: groupButton
+                                          visible: (user.type != 'system')
+                                          router_params:
+                                              id: (user.id)
+                                      admin_v2_user_change_password:
+                                          name: admin.user.basic.basic_tab.change_password_btn
+                                          mode: modal
+                                          group: groupButton
+                                          visible: (user.type != 'system')
+                                          router_params:
+                                              userId: (user.id)
+                                      admin_v2_user_send_passwordreset_email:
+                                          name: admin.user.basic.basic_tab.send_passwordreset_email_btn
+                                          group: groupButton
+                                          class: send-passwordreset-email
+                                          mode: none
+                                          visible: (user.type != 'system')
+                                          router_params:
+                                              id: (user.id)
+                                      admin_v2_user_send_emailverify_email:
+                                          name: admin.user.basic.basic_tab.send_emailverify_email_btn
+                                          class: send-emailverify-email
+                                          group: groupButton
+                                          mode: none
+                                          visible: (user.type != 'system')
+                                          router_params:
+                                              id: (user.id)
+                                      admin_v2_user_lock:
+                                          name: admin.user.basic.basic_tab.lock_btn
+                                          group: groupButton
+                                          class: lock-user
+                                          mode: none
+                                          visible: (user.type != 'system' and user.locked == 0)
+                                          router_params:
+                                              id: (user.id)
+                                      admin_v2_user_unlock:
+                                          name: admin.user.basic.basic_tab.unlock_btn
+                                          class: unlock-user
+                                          group: groupButton
+                                          mode: none
+                                          visible: (user.type != 'system' and user.locked == 1)
+                                          router_params:
+                                              id: (user.id)
+                                      admin_v2_user_org_update:
+                                          name: admin.user.basic.basic_tab.org_update_btn
+                                          parent: admin_user_manage
+                                          mode: modal
+                                          group: groupButton
+                                          visible: ( app.user.id != user.id and setting('magic.enable_org', 0) == 1 )
+                                          router_params:
+                                              id: (user.id)
+                                          disable: true
+                              admin_v2_online:
+                                  name: admin.user.basic.online
+                              admin_v2_login_record:
+                                  name: admin.user.basic.login_record_tab
+                      admin_v2_approval_manage:
+                          name: admin.user.approval_menu
+                          children:
+                              admin_v2_approval_approvals:
+                                  name: admin.user.approval.basic_tab
+                                  router_params:
+                                      approvalStatus: approving
+                                  disable: true
+                                  children:
+                                      admin_v2_approval_cancel:
+                                          name: admin.user.approval.basic_tab.cancel_btn
+                                          router_params:
+                                              id: (user.id)
+                                          class: 'btn cancel-approval'
+                                          mode: none
+                                          group: groupButton
+                      admin_v2_message_manage:
+                          name: admin.user.message_menu
+                          children:
+                              admin_v2_message:
+                                  name: admin.user.message.basic_tab
+                                  disable: true
+                admin_v2_user_group2:
+                    name: 第二组
+                    is_group: true
+                    children:
+                        admin_v2_user_learn_statistics_manage:
+                            name: admin.user.statistics_manage
+                            children:
+                              admin_v2_user_learn_statistics:
+                                name: admin.user.statistics_manage
+                        admin_v2_teacher:
+                            name: admin.user.teacher_menu
+                            children:
+                                admin_v2_teacher_manage:
+                                    name: admin.user.teacher.basic_tab
+                                    router_name: admin_v2_teacher
+                                    disable: true
+                                    children:
+                                        admin_v2_teacher_promote:
+                                            name: admin.user.teacher.basic_tab.promote_btn
+                                            class: promote-teacher
+                                            mode: modal
+                                            icon: 'glyphicon glyphicon-hand-up'
+                                            group: groupButton
+                                            visible: (user.promoted == 0)
+                                            router_params:
+                                                id: (user.id)
+                                                type: teacherList
+                                        admin_v2_teacher_promote_cancel:
+                                            name: admin.btn.recommend_cancel_btn
+                                            class: cancel-promote-teacher
+                                            mode: none
+                                            group: groupButton
+                                            visible: (user.promoted == 1)
+                                            router_params:
+                                                id: (user.id)
+                                admin_v2_teacher_promote_list:
+                                    name: admin.user.teacher.promote_list_tab
+                                    disable: true
+
+#        # 交易模块
+#        admin_v2_trade:
+#            name: admin_v2.nav.trade
+#            children:
+#        # 数据模块
+#        admin_v2_statistics:
+#            name: admin_v2.nav.statistics
+#            children:
+#        # 系统模块
+#        admin_v2_system:
+#            name: admin_v2.nav.system
+#            children:
+
