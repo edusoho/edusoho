@@ -4,8 +4,24 @@
 #admin_user_manage: admin_v2_course_manage
 #admin_course_manage: admin_v2_course_manage
 
-# 班级管理权限
 
+admin_course: admin_v2_teach  #教学
+
+# 课程管理权限
+admin_course_show: admin_v2_course_show #课程管理
+admin_course_manage: admin_v2_course_manage  #课程管理
+admin_course_content_manage: admin_v2_course_content_manage #管理课程
+admin_course_add: admin_v2_course_add #创建课程
+admin_course_set_recommend: admin_v2_course_set_recommend #推荐课程
+admin_course_set_cancel_recommend: admin_v2_course_set_cancel_recommend #取消推荐
+admin_course_guest_member_preview: admin_v2_course_guest_member_preview #预览
+admin_course_set_close: admin_v2_course_set_close #关闭课程
+admin_course_sms_prepare: admin_v2_course_sms_prepare #发送发布通知短信
+admin_course_set_clone: admin_v2_course_set_clone #复制课程
+admin_course_set_publish: admin_v2_course_set_publish #发布课程
+admin_course_set_delete: admin_v2_course_set_delete #删除课程
+
+# 班级管理权限
 admin_classroom: admin_v2_classroom #班级管理
 admin_classroom_manage: admin_v2_classroom_manage  #班级管理
 admin_classroom_content_manage: admin_v2_classroom_content_manage #管理班级
@@ -17,3 +33,7 @@ admin_classroom_open: admin_v2_classroom_open #发布班级
 admin_classroom_delete: admin_v2_classroom_delete #删除班级
 admin_sms_prepare: admin_v2_sms_prepare #发送发布通知短信
 admin_classroom_recommend: admin_v2_classroom_recommend #班级推荐
+
+# 笔记管理权限
+admin_course_note: admin_v2_course_note #笔记管理
+admin_course_note_manage: admin_v2_course_note_manage  #笔记管理
