@@ -67,7 +67,7 @@
         show: false,
         // invalidCard 为 true 的时候表示卡是无效的，这个时候流程该结束了
         invalidCard: false,
-        initProcess: true,
+        initProcess: false,
         // processIsDone 为 true 的时候表示充值卡的流程已经结束，之后就是显示失败或成功的内容
         processIsDone: false,
         // 充值后返回的信息
