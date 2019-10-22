@@ -283,11 +283,46 @@ admin_v2_classroom_thread_delete:
     path:     /classroom/thread/{threadId}/delete
     defaults: { _controller: AppBundle:AdminV2/Teach/Thread:classroomThreadDelete }
     methods: [POST]
+  
+#反馈管理
+admin_v2_course_review:
+    path:  /course/review
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
+    permissions: [admin_v2_course_review_tab]
+
+admin_v2_course_review_delete:
+    path: /course/review/{id}/delete
+    defaults: {_controller: AppBundle:AdminV2/Teach/Review:deleteCourseReview }
+    methods: [POST]
+    permissions: [admin_v2_course_review_tab]
+
+admin_v2_course_review_batch_delete:
+    path: /course/review/batch_delete
+    defaults: {_controller: AppBundle:AdminV2/Teach/Review:batchDeleteCourseReview }
+    methods: [POST]
+    permissions: [admin_v2_course_review_tab]
+
+admin_v2_classroom_review:
+    path:  /classroom/review
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:classroomReviewList }
+    permissions: [admin_v2_classroom_review_tab]
 
 admin_v2_classroom_thread_batch_delete:
     path:     /classroom/thread/batch_delete
     defaults: { _controller: AppBundle:AdminV2/Teach/Thread:classroomThreadBatchDelete }
 
+admin_v2_classroom_review_delete:
+    path:  /classroom/review/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:deleteClassroomReview }
+    methods: [POST]
+    permissions: [admin_v2_classroom_review_tab]
+
+admin_v2_classroom_review_batch_delete:
+    path:  /classroom/review/batch_delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:batchDeleteClassroomReview }
+    methods: [POST]
+    permissions: [admin_v2_classroom_review_tab]
+  
 #用户
 ##用户管理
 admin_v2_user_show:

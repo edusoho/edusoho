@@ -490,6 +490,7 @@ admin_v2.course.note_menu: 笔记管理
 
 admin_v2.course.note.basic_tab: 笔记管理
 
+
 # 教学-助学管理-问答管理
 admin_v2.course.question_menu: 问答管理
 
@@ -500,6 +501,13 @@ admin_v2.course.thread_menu: 话题管理
 
 admin_v2.course.thread.course_thread_tab: 课程话题
 admin_v2.course.thread.classroom_thread_tab: 班级话题
+
+
+# 教学模块-助学管理-反馈管理
+admin_v2.course.review_menu: 反馈管理
+
+admin_v2.course.review.course_review_tab: 课程评价
+admin_v2.course.review.classroom_review_tab: 班级评价
 
 #通用按钮
 admin_v2.btn.recommend_cancel_btn: 取消推荐

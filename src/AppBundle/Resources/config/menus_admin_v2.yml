@@ -303,6 +303,18 @@ admin_v2:
                                     name: admin_v2.course.thread.classroom_thread_tab
                                     router_name: admin_v2_classroom_thread
                                     disable: true
+                        # 反馈管理模块
+                        admin_v2_review:
+                            name: admin_v2.course.review_menu
+                            children:
+                                admin_v2_course_review_tab:
+                                    name: admin_v2.course.review.course_review_tab
+                                    router_name: admin_v2_course_review
+                                    disable: true
+                                admin_v2_classroom_review_tab:
+                                    name: admin_v2.course.review.classroom_review_tab
+                                    router_name: admin_v2_classroom_review
+                                    disable: true
 #        # 营销管理模块
 #        admin_v2_marketing:
 #            name: admin_v2.nav.marketing
