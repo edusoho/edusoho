@@ -35,7 +35,7 @@ admin.user.basic.login_record_tab: 登录日志
 admin.user.basic.basic_tab.create_btn: '添加新用户'
 admin.user.basic.basic_tab.edit_btn: '编辑用户信息'
 admin.user.basic.basic_tab.setting_roles_btn: '设置用户组'
-admin.user.basic.basic_tab.update_avatar_btn: '修改用户头像' 
+admin.user.basic.basic_tab.update_avatar_btn: '修改用户头像'
 admin.user.basic.basic_tab.change_password_btn: '修改密码'
 admin.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置邮件'
 admin.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'
@@ -496,4 +496,17 @@ admin_v2.course.question.basic_tab: 问答管理
 admin_v2.btn.recommend_cancel_btn: 取消推荐
 admin_v2.btn.sms_send_btn: 发送发布通知短信
 
+# 教学-课程管理-公开课模块
+admin_v2.course.open_course_menu: 公开课管理
+admin_v2.course.open_course.basic_tab: 公开课管理
+admin_v2.course.open_course.basic_tab.create_btn: 创建公开课
+admin_v2.course.open_course.recommend_list_tab: 公开课推荐
+admin_v2.course.open_course.analysis_tab: 公开课统计
+
+# 应用中心-基础云-云服务-短信
+admin_v2.nav.cloud_center: 应用中心
+admin_v2.basic_cloud_group: 基础云
+admin_v2.cloud_service.basic_menu: 云服务
+admin_v2.cloud_service.sms_tab: 云短信
+admin_v2.cloud_service.sms_overview_tab: 概览
 # 新版后台结束
