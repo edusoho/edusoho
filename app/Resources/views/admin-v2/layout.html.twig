@@ -40,6 +40,7 @@
   <link href="{{ asset('static-dist/app/css/admin.css') }}" rel="stylesheet" />
   <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
   <link href="{{ asset('static-dist/app/css/main-v2.css') }}" rel="stylesheet" />
+  <link href="{{ asset('static-dist/app/css/admin-v2.css') }}" rel="stylesheet" />
   {% endblock %}
 
   {% block javascripts %}{% endblock %}
@@ -55,10 +56,10 @@
       {% include 'default/ie8-alert.html.twig' %}
     <![endif]-->
 
-    <div class="ct-layout-container">
+    <div class="ct-layout-container admin-layout-container">
       <div class="cd-fixed-top">
         <div class="ct-top-logo">
-          <a href="">ES后台管理</a>
+          <a class="admin-navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}后台</a>
         </div>
         <div class="ct-layout-navbar">
           <ul class="cd-tabs ct-layout-navbar_ul">
@@ -75,11 +76,11 @@
           </ul>
         </div>
         <div class="ct-layout-person">
-          <ul class="cd-clearfix ">
+          <ul class="cd-clearfix">
             <li class="ct-layout-person_center">
               <a href="javascript:;">
                 <div class="ct-center_action avatar-wrapper">
-                  <img class="cd-avatar cd-avatar-xs" src="http://dev.training.com/files/default/2018/04-27/141055fa9621754161.jpg" alt="">
+                  {# <img class="cd-avatar cd-avatar-xs" src="" alt=""> #}
                 </div>
                 <div class="ct-center_action ct-layout-admin_name">
                   <span>admin</span>
