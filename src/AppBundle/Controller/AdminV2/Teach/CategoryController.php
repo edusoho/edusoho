@@ -118,6 +118,7 @@ class CategoryController extends BaseController
             'group' => $group,
         ));
     }
+
     /**
      * @return CategoryService
      */

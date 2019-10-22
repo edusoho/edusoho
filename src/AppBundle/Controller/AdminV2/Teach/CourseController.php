@@ -270,6 +270,8 @@ class CourseController extends BaseController
         $this->getNoteService()->deleteNotes($ids);
 
         return $this->createJsonResponse(true);
+    }
+
     public function publishAction(Request $request, $id)
     {
         $this->getCourseService()->publishCourse($id);
