@@ -102,6 +102,7 @@
       }
     },
     created() {
+      document.title = '学习卡充值';
       // 设置虚拟币名称
       this.setCoin();
       // 根据token获取卡批次信息

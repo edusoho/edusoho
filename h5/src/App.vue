@@ -43,7 +43,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(["title"]),
+    ...mapState({
+      title: 'title',
+      settingsName: state => state.settings.name,
+    }),
     routerKeepAlive() {
       return this.$route.meta.keepAlive;
     }
@@ -83,6 +86,7 @@ export default {
         }
 
         this.setNavbarTitle(to.meta.title);
+        document.title = this.settingsName;
       }
     }
   }
