@@ -144,6 +144,7 @@ class AccountProxyServiceTest extends BaseTestCase
                         array(),
                         0,
                         5,
+                        array('id')
                     ),
                 ),
             )
@@ -161,7 +162,8 @@ class AccountProxyServiceTest extends BaseTestCase
             ),
             array(),
             0,
-            5
+            5,
+            array('id')
         );
 
         $this->assertEquals(array(array('id' => 11)), $result);
