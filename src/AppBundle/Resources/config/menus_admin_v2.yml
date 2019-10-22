@@ -234,6 +234,18 @@ admin_v2:
                                     router_params:
                                         postStatus: unPosted
                                     disable: true
+                        # 话题管理
+                        admin_v2_course_thread:
+                            name: admin_v2.course.thread_menu
+                            children:
+                                admin_v2_course_thread_manage:
+                                    name: admin_v2.course.thread.course_thread_tab
+                                    router_name: admin_v2_course_thread
+                                    disable: true
+                                admin_v2_classroom_thread_manage:
+                                    name: admin_v2.course.thread.classroom_thread_tab
+                                    router_name: admin_v2_classroom_thread
+                                    disable: true
                         # 反馈管理模块
                         admin_v2_review:
                             name: admin_v2.course.review_menu
