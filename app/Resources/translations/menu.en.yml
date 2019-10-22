@@ -486,16 +486,24 @@ admin_v2.course.note_menu: Notes
 
 admin_v2.course.note.basic_tab: Notes
 
+
 # 教学-助学管理-问答管理
 admin_v2.course.question_menu: Q&A
 
 admin_v2.course.question.basic_tab: Q&A
+
 
 # 教学-助学管理-话题管理
 admin_v2.course.thread_menu: Discussions
 
 admin_v2.course.thread.course_thread_tab: Course Discussions
 admin_v2.course.thread.classroom_thread_tab: Class Discussions
+
+# 教学模块-助学管理-反馈管理
+admin_v2.course.review_menu: Reviews
+
+admin_v2.course.review.course_review_tab: Reviews
+admin_v2.course.review.classroom_review_tab: Rate
 
 # 通用按钮
 admin_v2.btn.sms_send_btn: Notify the publish
