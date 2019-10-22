@@ -66,23 +66,21 @@
         </div>
         <div class="ct-layout-person">
           <ul class="cd-clearfix">
-            <li class="ct-layout-person_center">
-              <a href="javascript:;">
-                <div class="ct-center_action avatar-wrapper">
-                  {# <img class="cd-avatar cd-avatar-xs" src="" alt=""> #}
+            <li class="ct-layout-person_center cd-dropdown" data-toggle="cd-dropdown">
+                <a class="user-avatar-toggle" href="javascript:;">
+                  <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+                  <span class="cd-ml8">{{ app.user.nickname }}</span>
+                </a>
+                <div class="dropdown-menu user-dropdown">
+                  <div class="text-center ptl">
+                    <div class="dropdown-arrow"></div>
+                    <a class="user-logout" href="{{ path('logout') }}"><i class="glyphicon glyphicon-off cd-mr8"></i>{{ 'homepage.header.logout'|trans }}</a>
+                  </div>
                 </div>
-                <div class="ct-center_action ct-layout-admin_name">
-                  <span>admin</span>
-                </div>
-              </a>
-            </li>
-            <li class="ct-layout-home">
-              <a href="">
-                <i class="icon cd-icon cd-icon-qq"></i>
-              </a>
             </li>
           </ul>
         </div>
+        <div class="pull-right change-version-btn"><a><i class="es-icon es-icon-change"></i>切换旧版</a></div>
       </div>
       <div class="cd-layout-main">
         {% include 'admin-v2/role/templates/side-bar.html.twig' %}
