@@ -490,7 +490,7 @@ admin_v2.course.note.basic_tab: 笔记管理
 # 教学-助学管理-问答管理
 admin_v2.course.question_menu: 问答管理
 
-admin_c2.course.question.basic_tab: 问答管理
+admin_v2.course.question.basic_tab: 问答管理
 
 #通用按钮
 admin_v2.btn.recommend_cancel_btn: 取消推荐
