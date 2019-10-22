@@ -188,7 +188,7 @@ class ReadDocx
                 $file = $this->getZipResource($rels[$imageId]);
                 if ($file) {
                     $ext = pathinfo($rels[$imageId], PATHINFO_EXTENSION);
-                    $path = $this->resourceTmpPath . '/' . Uuid::uuid4() . '.' . $ext;
+                    $path = $this->resourceTmpPath.'/'.Uuid::uuid4().'.'.$ext;
                     file_put_contents($path, $file);
                     $imageXml->nodeValue = sprintf('<img src="%s" width="%s" height="%s">', $path, $widthMatches[1], $heightMatches[1]);
                 }

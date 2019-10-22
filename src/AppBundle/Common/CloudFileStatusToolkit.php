@@ -4,9 +4,11 @@ namespace AppBundle\Common;
 
 class CloudFileStatusToolkit
 {
-    const TRANSCODE_DETAULT_ERROR_MESSAGE_KEY = 'cloud_file.transcoding_tips.default_error_message';
+    const TRANSCODE_DEFAULT_ERROR_MESSAGE_KEY = 'cloud_file.transcoding_tips.default_error_message';
 
     const PROCESS_STATUS_DEFAULT_CONVERT_STATUS = 'unknow';
+
+    const SERVER_ERROR_PREFIX = '5';
 
     public static $errorCodeMap = array(
         '41001' => 'TRANSCODE_CLIENT_ERROR_NOT_SUPPORT_VIDEO_FORMAT',
@@ -24,6 +26,14 @@ class CloudFileStatusToolkit
         '51007' => 'TRANSCODE_SERVER_ERROR_UPLOAD_FILE_ERROR',
         '51008' => 'TRANSCODE_SERVER_ERROR_UNKNOW_ERROR',
         '51009' => 'TRANSCODE_SERVER_ERROR_NO_ENCODER',
+        '40100001' => 'TRANSCODE_CLIENT_ERROR_NOT_SUPPORT_VIDEO_FORMAT',
+        '40100002' => 'TRANSCODE_CLIENT_ERROR_FILE_DELETED',
+        '40100003' => 'TRANSCODE_CLIENT_ERROR_NOT_SUPPORT_DOCUMENT_FORMAT',
+        '40100004' => 'TRANSCODE_CLIENT_ERROR_FILE_ENCRYPTED',
+        '40100005' => 'TRANSCODE_CLIENT_ERROR_FILE_TOO_LARGE',
+        '40100006' => 'TRANSCODE_CLIENT_ERROR_FILE_CANNOT_OPEN',
+        '40100007' => 'TRANSCODE_CLIENT_ERROR_PPT_FILE_EMPTY',
+        '40100008' => 'TRANSCODE_CLIENT_ERROR_FILE_FORMAT_ERROR',
     );
 
     public static $processStatusMap = array(
@@ -55,11 +65,15 @@ class CloudFileStatusToolkit
 
     public static function getTranscodeErrorMessageKeyByCode($code)
     {
+        if (1 == strpos($code, self::SERVER_ERROR_PREFIX)) {
+            return self::TRANSCODE_DEFAULT_ERROR_MESSAGE_KEY;
+        }
+
         if (isset(self::$errorCodeMap[$code])) {
             return 'cloud_file.transcoding_tips.error_code_'.$code;
         }
 
-        return self::TRANSCODE_DETAULT_ERROR_MESSAGE_KEY;
+        return self::TRANSCODE_DEFAULT_ERROR_MESSAGE_KEY;
     }
 
     public static function getTranscodeFilterStatusCondition($filterStatus)
