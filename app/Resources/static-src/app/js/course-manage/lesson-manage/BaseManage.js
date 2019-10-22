@@ -102,6 +102,7 @@ export default class Manage {
 
     this.handleEmptyShow();
     this._flushTaskNumber();
+    this._flushPublishLessonNum();
     this.clearPosition();
     this.afterAddItem($elm);
   }
@@ -133,6 +134,7 @@ export default class Manage {
         self._triggerAsTaskNumUpdated(container);
         self.handleEmptyShow();
         self._flushTaskNumber();
+        self._flushPublishLessonNum();
         $.post($this.data('url'), function(data) {
           notify('success', Translator.trans('site.delete_success_hint'));
           self.sortList();
@@ -294,6 +296,13 @@ export default class Manage {
     this.$taskNumber.text(num);
   }
 
+  _flushPublishLessonNum() {
+    let lessonNum = $('.js-settings-item.active').length;
+    let publishedLessonNum = $('.js-lesson-unpublish-status.hidden').length;
+    let content = Translator.trans('course.plan_task.lessons_publish_status', {'publishedNum':publishedLessonNum, 'unpublishedNum': lessonNum - publishedLessonNum});
+    $('.js-lessons-publish-status').attr('data-content', content);
+  }
+
   _createTask() {
     this.$element.on('click', '.js-create-task-btn', function(event) {
       let url = $(this).data('url');
@@ -379,21 +388,13 @@ export default class Manage {
       $dom.toggleClass('hidden');
       $oppositeDom.toggleClass('hidden');
 
-      if (isHideUnPublish) {
-        if (setProperty) {
-          const $displayTextDom = $parentLi.find('.display-text');
-          $displayTextDom.toggleClass('hidden');
-          self.setShowNum($parentLi);
-          self.sortList();
-        }
-      } else {
-        if (info.flag) {
-          const $displayTextDom = $parentLi.find('.display-text');
-          $displayTextDom.toggleClass('hidden');
-          self.setShowNum($parentLi);
-          self.sortList();
-        }
+      if (isHideUnPublish && setProperty || !isHideUnPublish && info.flag) {
+        const $displayTextDom = $parentLi.find('.display-text');
+        $displayTextDom.toggleClass('hidden');
+        self.setShowNum($parentLi);
+        self.sortList();
       }
+      this._flushPublishLessonNum();
 
       cd.message({ type: 'success', message: info.success });
     }).fail(function(data) {

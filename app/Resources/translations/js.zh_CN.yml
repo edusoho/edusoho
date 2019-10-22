@@ -1431,3 +1431,4 @@ admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
 
 course.plan_task.activity_ppt_animation_img: 切换图片模式
 course.plan_task.activity_ppt_animation_slide: 切换动画模式
+course.plan_task.lessons_publish_status: 已发布课时数：%publishedNum%<br/>未发布课时数：%unpublishedNum%
