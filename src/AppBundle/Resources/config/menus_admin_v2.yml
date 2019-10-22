@@ -191,6 +191,14 @@ admin_v2:
                 admin_v2_tool_group:
                     name: admin_v2.tool.basic_group
                     children:
+                        # 笔记管理模块
+                        admin_v2_course_note:
+                            name: admin_v2.course.note_menu
+                            children:
+                                admin_v2_course_note_manage:
+                                    name: admin_v2.course.note.basic_tab
+                                    router_name: admin_v2_course_note
+                                    disable: true
                         # 问答管理
                         admin_v2_course_question:
                             name: admin_v2.course.question_menu

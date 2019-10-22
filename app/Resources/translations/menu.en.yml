@@ -447,10 +447,12 @@ admin_v2.nav.statistics: Statistics
 admin_v2.nav.system: System
 
 # 教学模块-课程管理
+
 admin_v2.course.basic_group: Course Manage
 
 # 教学模块-课程管理-课程管理
 admin_v2.course.basic_menu: Courses
+
 admin_v2.course.basic.basic_tab: Courses
 admin_v2.course.basic.recommend_list_tab: Recommended
 admin_v2.course.basic.analysis_tab: Statistics
@@ -475,11 +477,18 @@ admin_v2.course.classroom.basic_tab.close_btn: Close
 admin_v2.course.classroom.basic_tab.publish_submit_btn: Publish
 admin_v2.course.classroom.basic_tab.delete_submit_btn: Delete
 
+
 # 教学-助学管理
 admin_v2.tool.basic_group: Tool Manage
 
+# 教学-助学管理-笔记管理
+admin_v2.course.note_menu: Notes
+
+admin_v2.course.note.basic_tab: Notes
+
 # 教学-助学管理-问答管理
 admin_v2.course.question_menu: Q&A
+
 admin_v2.course.question.basic_tab: Q&A
 
 # 通用按钮

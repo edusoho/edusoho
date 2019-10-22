@@ -453,6 +453,7 @@ admin_v2.course.basic_group: 课程管理
 
 # 教学-课程管理-课程管理
 admin_v2.course.basic_menu: 课程管理
+
 admin_v2.course.basic.basic_tab: 课程管理
 admin_v2.course.basic.recommend_list_tab: 课程推荐
 admin_v2.course.basic.analysis_tab: 课程统计
@@ -468,6 +469,7 @@ admin_v2.course.basic.basic_tab.delete_submit_btn: 删除课程
 
 # 教学-课程管理-班级管理
 admin_v2.course.classroom_menu: 班级管理
+
 admin_v2.course.classroom.basic_tab: 班级管理
 admin_v2.course.classroom.recommend_tab: 班级推荐
 admin_v2.course.classroom.basic_tab.manage_btn: 管理班级
@@ -480,8 +482,14 @@ admin_v2.course.classroom.basic_tab.delete_submit_btn: 删除班级
 # 教学-助学管理
 admin_v2.tool.basic_group: 助学管理
 
+# 教学-助学管理-笔记管理
+admin_v2.course.note_menu: 笔记管理
+
+admin_v2.course.note.basic_tab: 笔记管理
+
 # 教学-助学管理-问答管理
 admin_v2.course.question_menu: 问答管理
+
 admin_c2.course.question.basic_tab: 问答管理
 
 #通用按钮
