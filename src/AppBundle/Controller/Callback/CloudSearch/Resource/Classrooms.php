@@ -50,6 +50,7 @@ class Classrooms extends BaseProvider
             return array_merge($carry, $tagIds);
         }, array());
         $tagIds = array_unique($tagIds);
+        $tagIds = array_values($tagIds);
         $tags = $this->getTagService()->findTagsByIds($tagIds);
         foreach ($classrooms as &$classroom) {
             $classroom['tags'] = array();
