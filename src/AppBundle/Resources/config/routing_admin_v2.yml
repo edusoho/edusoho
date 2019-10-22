@@ -14,12 +14,6 @@ admin_v2_user_create:
     defaults: { _controller: AppBundle:Admin/User:create }
 
 #测试测试菜单展示
-admin_v2_user_show:
-    path:  /user/{id}
-    defaults: { _controller: AppBundle:Admin/User:show }
-    permissions: [admin]
-
-#测试测试菜单展示
 admin_v2_user_learn_statistics:
     path:  /user/create
     defaults: { _controller: AppBundle:Admin/User:show }
@@ -36,10 +30,6 @@ admin_v2_login_record:
     path:  /user/create
     defaults: { _controller: AppBundle:Admin/User:show }
     permissions: [admin]
-
-admin:
-    path: /teach/open_course/{filter}
-    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }
 
 # 教学-课程管理-课程管理
 admin_v2_course_set:
@@ -179,9 +169,69 @@ admin_v2_classroom_recommend_list:
     defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommendIndex }
 
 # 教学-课程管理-公开课管理
-admin:
-    path: /teach/open_course/{filter}
+admin_v2_open_course:
+    path: /open_course/{filter}
     defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }
+
+admin_v2_open_course_recommend_list:
+    path: /open_course/recommend/list
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:recommendList }
+
+admin_v2_open_course_delete:
+    path: /open_course/{courseId}/delete/{type}
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:delete, type:'' }
+    methods: [POST]
+
+admin_v2_open_course_publish:
+    path: /open_course/{id}/publish
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:publish }
+    methods: [POST]
+
+admin_v2_open_course_close:
+    path: /open_course/{id}/close
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:close }
+    methods: [POST]
+
+admin_v2_open_course_recommend:
+    path: /open_course/{id}/recommend
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:recommend }
+
+admin_v2_open_course_cancel_recommend:
+    path: /open_course/{id}/recommend/cancel/{target}
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:cancelRecommend }
+    methods: [POST]
+
+admin_v2_open_course_analysis:
+    path:  /open_course/analysis/index
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:index }
+
+admin_v2_open_course_analysis_referer_summary_list:
+    path:  /open_course/analysis/referer/list
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:summaryList }
+
+admin_v2_open_course_analysis_referer_summary:
+    path:  /open_course/analysis/referer/summary
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:summary }
+
+admin_v2_open_course_analysis_referer_watch_statistics:
+    path: /open_course/analysis/watch
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:watch }
+
+admin_v2_open_course_analysis_referer_detail:
+    path:  /open_course/{id}/analysis/referer/detail
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:detail }
+
+admin_v2_open_course_analysis_referer_detail_list:
+    path:  /open_course/{id}/analysis/referer/detailList
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:detailList }
+
+admin_v2_open_course_analysis_conversion:
+    path:  open_course/analysis/conversion
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:conversion }
+
+admin_v2_open_course_analysis_conversion_result:
+    path:  /open_course/{courseId}/analysis/conversion/result
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:conversionResult }
 
 # 教学-助学管理-问答管理
 admin_v2_question:
@@ -219,7 +269,7 @@ admin_v2_note_batch_delete:
     defaults: { _controller: AppBundle:AdminV2/Teach/Course:batchDeleteNote }
     methods: [POST]
     permissions: [admin_v2_course_note_manage]
-  
+
 #用户
 ##用户管理
 admin_v2_user_show:
@@ -331,3 +381,9 @@ admin_v2_tag_group_delete:
 admin_v2_tag_group_checkname:
     path: /tag/group/checkname
     defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:checkName }
+
+# 应用中心-云服务-短信概览
+admin_v2_edu_cloud_sms:
+    path:  /edu_cloud/sms/overview
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/CloudServer:smsOverview }
+    permissions: [admin_v2_edu_cloud_sms_overview]
