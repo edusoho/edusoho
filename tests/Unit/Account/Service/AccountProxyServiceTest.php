@@ -144,7 +144,7 @@ class AccountProxyServiceTest extends BaseTestCase
                         array(),
                         0,
                         5,
-                        array('id')
+                        array('id'),
                     ),
                 ),
             )
