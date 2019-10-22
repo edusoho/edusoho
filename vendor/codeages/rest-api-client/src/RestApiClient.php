@@ -81,14 +81,7 @@ class RestApiClient
 
         $context = array('headers' => $headers, 'body' => $body);
 
-        $result = $this->spec->unserialize($body);
-        if (empty($result)) {
-            $message = "[RestApiClient #{$requestId}] Resut unserialize error (url: {$url}).";
-            $this->logger && $this->logger->error($message, $context);
-            throw new ResponseException($message);
-        }
-
-        return $result;
+        return $this->spec->unserialize($body);
     }
 
     protected function makeRequestId()

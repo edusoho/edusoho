@@ -279,17 +279,17 @@
     },
     {
         "name": "codeages/biz-framework",
-        "version": "v0.9.32",
-        "version_normalized": "0.9.32.0",
+        "version": "v0.9.33",
+        "version_normalized": "0.9.33.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "a1e64350f9ebda889941cfeb0cc49ff85571ab17"
+            "reference": "e53bdc4f513334640ab5933ba4ad76058b09b900"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/a1e64350f9ebda889941cfeb0cc49ff85571ab17",
-            "reference": "a1e64350f9ebda889941cfeb0cc49ff85571ab17",
+            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/e53bdc4f513334640ab5933ba4ad76058b09b900",
+            "reference": "e53bdc4f513334640ab5933ba4ad76058b09b900",
             "shasum": "",
             "mirrors": [
                 {
@@ -321,7 +321,7 @@
         "suggest": {
             "ramsey/uuid": "Dao UUID primary key feature need this package."
         },
-        "time": "2019-08-01T03:15:36+00:00",
+        "time": "2019-10-15T01:55:04+00:00",
         "bin": [
             "bin/biz"
         ],
@@ -654,17 +654,17 @@
     },
     {
         "name": "codeages/qiqiuyun-php-sdk",
-        "version": "v0.3.4",
-        "version_normalized": "0.3.4.0",
+        "version": "v0.3.5",
+        "version_normalized": "0.3.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "db44440568f22336d5f649aab574726064c62b39"
+            "reference": "f721cfa9b1a5ab5477fbd9bc12f4a4aa43b3af26"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/db44440568f22336d5f649aab574726064c62b39",
-            "reference": "db44440568f22336d5f649aab574726064c62b39",
+            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/f721cfa9b1a5ab5477fbd9bc12f4a4aa43b3af26",
+            "reference": "f721cfa9b1a5ab5477fbd9bc12f4a4aa43b3af26",
             "shasum": "",
             "mirrors": [
                 {
@@ -682,7 +682,7 @@
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2019-09-23T02:11:36+00:00",
+        "time": "2019-10-17T03:05:47+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -755,17 +755,17 @@
     },
     {
         "name": "codeages/rest-api-client",
-        "version": "v0.2.2",
-        "version_normalized": "0.2.2.0",
+        "version": "v0.3.1",
+        "version_normalized": "0.3.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/rest-api-client.git",
-            "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e"
+            "reference": "521886cc591801a79e28c5f07bd81bffba22b99b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/rest-api-client/zipball/dca73e2181d39c07e6b4e5eb0cca23d636d2877e",
-            "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e",
+            "url": "https://api.github.com/repos/codeages/rest-api-client/zipball/521886cc591801a79e28c5f07bd81bffba22b99b",
+            "reference": "521886cc591801a79e28c5f07bd81bffba22b99b",
             "shasum": "",
             "mirrors": [
                 {
@@ -781,7 +781,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.0"
         },
-        "time": "2017-07-02T16:55:37+00:00",
+        "time": "2019-10-10T02:00:22+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
