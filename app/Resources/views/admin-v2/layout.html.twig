@@ -74,13 +74,13 @@
                 <div class="dropdown-menu user-dropdown">
                   <div class="text-center ptl">
                     <div class="dropdown-arrow"></div>
-                    <a class="user-logout" href="{{ path('logout') }}"><i class="glyphicon glyphicon-off cd-mr8"></i>{{ 'homepage.header.logout'|trans }}</a>
+                    <a class="user-logout" href="{{ path('logout') }}"><i class="es-icon es-icon-logout cd-mr8"></i>{{ 'homepage.header.logout'|trans }}</a>
                   </div>
                 </div>
             </li>
           </ul>
         </div>
-        <div class="pull-right change-version-btn"><a><i class="es-icon es-icon-change"></i>切换旧版</a></div>
+        <div class="pull-right change-version-btn"><a><i class="es-icon es-icon-toggle"></i>切换旧版</a></div>
       </div>
       <div class="cd-layout-main">
         {% include 'admin-v2/role/templates/side-bar.html.twig' %}
