@@ -10,7 +10,7 @@
   export default {
     name: 'index',
     created() {
-
+      document.title = '学习卡充值';
     }
   };
 </script>

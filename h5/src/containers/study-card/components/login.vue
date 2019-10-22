@@ -192,8 +192,10 @@
             Toast.fail(err.message);
             if (err.code === 4040104) {
               this.errorMessage.mobile = err.message;
+              this.errorMessage.password = '';
             }
             if (err.code === 5000116) {
+              this.errorMessage.mobile = '';
               this.errorMessage.password = err.message;
             }
             this.userinfo.smsCode = '';
