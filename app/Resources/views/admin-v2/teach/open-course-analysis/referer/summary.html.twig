@@ -1,0 +1,39 @@
+{% extends 'admin-v2/teach/open-course-analysis/layout.html.twig' %}
+{% do load_script('open-course-analysis/referer') %}
+
+{% set nav = 'referer' %}
+{% block analysis_content %}
+    {% set tab = 'summary' %}
+    {% include 'admin-v2/teach/open-course-analysis/referer/summary-tab.html.twig' with { tab: tab } %}
+    <div class="row">
+      <div class="col-md-5" id="echats-pie" style="height: 300px; width: 500px;"></div>
+      <div class="col-md-5">
+        <table class="table table-hover" style="word-break:break-all;">
+          <thead>
+          <tr>
+            <th>{{ 'admin.open_manage.analysis.referer.referer_th'|trans }}</th>
+            <th>{{ 'admin.open_manage.analysis.referer.referer_number_th'|trans }}</th>
+            <th>{{ 'admin.open_manage.analysis.referer.proportion_th'|trans }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for refererlog in refererlogAnalysisList %}
+            <tr>
+              <th scope="row">{{ refererlog.refererName }}</th>
+              <th>{{ refererlog.count }}</th>
+              <th>{{ refererlog.percent }}</th>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="20">
+                <div class="empty">{{ 'admin.open_manage.analysis.referer.empty'|trans }}</div>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <input id="data" type="hidden" value="{% if refererlogAnalysisDatas %} {{ refererlogAnalysisDatas }} {% endif %}">
+    <input id="dataName" type="hidden" value="{% if analysisDataNames %} {{ analysisDataNames }} {% endif %}">
+{% endblock %}
