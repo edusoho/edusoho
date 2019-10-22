@@ -189,6 +189,18 @@ admin_v2:
                                 admin_v2_classroom_recommend:
                                     name: admin_v2.course.classroom.recommend_tab
                                     router_name: admin_v2_classroom_recommend_list
+                # 助学管理（group）
+                admin_v2_tool_group:
+                    name: admin_v2.tool.basic_group
+                    children:
+                        # 笔记管理模块
+                        admin_v2_course_note:
+                            name: admin_v2.course.note_menu
+                            children:
+                                admin_v2_course_note_manage:
+                                    name: admin_v2.course.note.basic_tab
+                                    router_name: admin_v2_course_note
+                                    disable: true
         # 营销管理模块
         admin_v2_marketing:
             name: admin_v2.nav.marketing
