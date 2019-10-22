@@ -35,7 +35,7 @@ admin.user.basic.login_record_tab: System Log
 admin.user.basic.basic_tab.create_btn: 'Add'
 admin.user.basic.basic_tab.edit_btn: 'Edit'
 admin.user.basic.basic_tab.setting_roles_btn: 'Group setting'
-admin.user.basic.basic_tab.update_avatar_btn: 'Change avatar' 
+admin.user.basic.basic_tab.update_avatar_btn: 'Change avatar'
 admin.user.basic.basic_tab.change_password_btn: 'Change password'
 admin.user.basic.basic_tab.send_passwordreset_email_btn: 'Send password reset confirmation email'
 admin.user.basic.basic_tab.send_emailverify_email_btn: 'Send verifcation email'
@@ -135,7 +135,7 @@ admin.operation.group_menu: Group Discussions
 admin.operation.invite_menu: Invitations
 admin.operation.announcement_menu: 'Site Announcements'
 admin.operation.notification_menu: 'Site Notices'
-admin.operation.block_menu: Area Control 
+admin.operation.block_menu: Area Control
 admin.operation.content_menu: Customize pages
 admin.operation.mobile_menu: 'App contents'
 admin.operation.wechat_notification: WeChat Notification
@@ -484,4 +484,11 @@ admin_v2.course.classroom.basic_tab.delete_submit_btn: Delete
 admin_v2.btn.sms_send_btn: Notify the publish
 admin_v2.btn.recommend_cancel_btn: Un-recommend
 
+# 公开课模块
+#公开课模块
+admin_v2.course.open_course_menu:  Public Courses
+admin_v2.course.open_course.basic_tab: Open courses
+admin_v2.course.open_course.basic_tab.create_btn: Create
+admin_v2.course.open_course.recommend_list_tab: Recommended
+admin_v2.course.open_course.analysis_tab: Statistics
 # 新版后台结束

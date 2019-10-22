@@ -17,3 +17,12 @@ admin_classroom_open: admin_v2_classroom_open #发布班级
 admin_classroom_delete: admin_v2_classroom_delete #删除班级
 admin_sms_prepare: admin_v2_sms_prepare #发送发布通知短信
 admin_classroom_recommend: admin_v2_classroom_recommend #班级推荐
+
+
+# 公开课管理权限模块
+
+admin_open_course_manage: admin_v2_open_course_manage #公开课管理
+admin_open_course: admin_v2_open_course #公开课管理tab
+admin_open_course_add: admin_v2_open_course_add #创建公开课
+admin_open_course_recommend_list: admin_v2_open_course_recommend_list #公开课推荐
+admin_opencourse_analysis: admin_v2_opencourse_analysis # 公开课统计

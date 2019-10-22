@@ -60,9 +60,17 @@ generate_short_link_v2:
 
 # 通用结束
 
-admin:
-    path: /teach/open_course/{filter}
+admin_v2_open_course:
+    path: /open_course/{filter}
     defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:index, filter:'open' }
+
+admin_v2_open_course_recommend_list:
+    path: /open_course/recommend/list
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourse:recommendList }
+
+admin_v2_opencourse_analysis:
+    path:  /open_course/analysis
+    defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:index }
 
 #教学
 ##课程管理

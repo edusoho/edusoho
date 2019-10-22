@@ -70,6 +70,36 @@ class OpenCourseController extends BaseController
         ));
     }
 
+    public function recommendListAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        $conditions['recommended'] = 1;
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getOpenCourseService()->countCourses($conditions),
+            20
+        );
+
+        $courses = $this->getOpenCourseService()->searchCourses(
+            $conditions,
+            array('recommendedSeq' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
+
+        return $this->render('admin-v2/teach/open-course/recommend-list.html.twig', array(
+            'courses' => $courses,
+            'users' => $users,
+            'paginator' => $paginator,
+            'categories' => $categories,
+        ));
+    }
+
     /**
      * @return OpenCourseService
      */
