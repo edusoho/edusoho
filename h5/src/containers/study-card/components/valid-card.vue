@@ -149,6 +149,9 @@
             } else {
               this.invalidCard = true;
               this.message = res.error.message;
+              if (res.error.status === 'recharged') {
+                this.message = this.cardStatusList['recharged']
+              }
             }
             this.processIsDone = true;
           })
