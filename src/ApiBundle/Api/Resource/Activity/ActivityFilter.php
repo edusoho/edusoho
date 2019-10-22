@@ -16,6 +16,10 @@ class ActivityFilter extends Filter
             $data['replayStatus'] = $data['ext']['replayStatus'];
         }
 
+        if (!empty($data['ext']) && !empty($data['ext']['liveProvider'])) {
+            $data['liveProvider'] = $data['ext']['liveProvider'];
+        }
+
         if (!empty($data['finishData'])) {
             $data['finishDetail'] = $data['finishData'];
         }

@@ -125,6 +125,12 @@ class PageSetting extends AbstractResource
         if ('classroom_list' == $discoverySetting['type']) {
             $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
         }
+        if ('coupon' == $discoverySetting['type']) {
+            foreach ($discoverySetting['data']['items'] as &$couponBatch) {
+                $couponBatch['target'] = $this->getCouponBatchService()->getTargetByBatchId($couponBatch['id']);
+                $couponBatch['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($couponBatch['id']);
+            }
+        }
         $pageDiscoveryFilter = new PageDiscoveryFilter();
         $pageDiscoveryFilter->setMode(Filter::PUBLIC_MODE);
         $pageDiscoveryFilter->filter($discoverySetting);
@@ -135,6 +141,11 @@ class PageSetting extends AbstractResource
     protected function getCourseCondition($portal, $mode = 'published')
     {
         return $this->getH5SettingService()->getCourseCondition($portal, $mode);
+    }
+
+    private function getCouponBatchService()
+    {
+        return $this->service('Coupon:CouponBatchService');
     }
 
     protected function getSettingService()

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f1d05dab86cd166a90f4cdf1f65768b8",
+    "content-hash": "994daba06b7849ea38ca82e68bee79ce",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -338,16 +338,16 @@
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.28",
+            "version": "v0.1.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "86512c97984aadedbfc679d00d2c005622d3bab7"
+                "reference": "61ca6adfc7acc570b9ae098fbc351cc1035b07f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/86512c97984aadedbfc679d00d2c005622d3bab7",
-                "reference": "86512c97984aadedbfc679d00d2c005622d3bab7",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/61ca6adfc7acc570b9ae098fbc351cc1035b07f3",
+                "reference": "61ca6adfc7acc570b9ae098fbc351cc1035b07f3",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -378,7 +378,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2019-05-06T06:42:52+00:00"
+            "time": "2019-10-16T05:47:41+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -423,12 +423,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/exam-parser.git",
-                "reference": "4d8d4954d848b0acc9223846a53f22c5fd596ac4"
+                "reference": "3e9c8fb8029cdea73f5ccab23ef889454102b5a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/4d8d4954d848b0acc9223846a53f22c5fd596ac4",
-                "reference": "4d8d4954d848b0acc9223846a53f22c5fd596ac4",
+                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/3e9c8fb8029cdea73f5ccab23ef889454102b5a4",
+                "reference": "3e9c8fb8029cdea73f5ccab23ef889454102b5a4",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -469,7 +469,7 @@
                 }
             ],
             "description": "Exam Parser",
-            "time": "2019-08-09T09:17:34+00:00"
+            "time": "2019-10-10T07:40:00+00:00"
         },
         {
             "name": "codeages/omnipay-alipay",
