@@ -90,7 +90,7 @@ admin_v2_courses_data:
 admin_v2_course_task_data_export_prepare:
     path: /course/{courseId}/datas/export/prepare
     defaults: { _controller: AppBundle:AdminV2/Teach/Course:prepareForExportTasksDatas}
-    permissions: [admin_course_set_data]
+    permissions: [admin_v2_course_set_data]
 
 admin_v2_course_task_data_export:
     path: /course/{courseId}/datas/export
@@ -113,12 +113,12 @@ admin_v2_classroom_create:
 admin_v2_classroom_set_recommend:
     path:   /classroom/{id}/recommend
     defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommend }
-    permissions: [admin_classroom_set_recommend]
+    permissions: [admin_v2_classroom_set_recommend]
 
 admin_v2_classroom_cancel_recommend:
     path:   /classroom/{id}/recommend/cancel
     defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:cancelRecommend }
-    permissions: [admin_classroom_cancel_recommend]
+    permissions: [admin_v2_classroom_cancel_recommend]
 
 admin_v2_classroom_close:
     path:  /classroom/{id}/close
@@ -148,20 +148,20 @@ admin:
 admin_v2_question:
     path:  /question/{postStatus}
     defaults: { _controller: AppBundle:AdminV2/Teach/CourseQuestion:index }
-    permissions: [admin_course_question_manage]
+    permissions: [admin_v2_course_question_manage]
 
 # 教学-助学管理-话题管理
 admin_v2_course_thread_delete:
     path: /thread/{id}/delete
     defaults: {_controller: AppBundle:AdminV2/Teach/Thread:delete }
     methods: [POST]
-    permissions: [admin_course_thread, admin_course_question_manage]
+    permissions: [admin_v2_course_thread, admin_v2_course_question_manage]
 
 admin_v2_course_thread_batch_delete:
     path: /thread/batch_delete
     defaults: {_controller: AppBundle:AdminV2/Teach/Thread:batchDelete }
     methods: [POST]
-    permissions: [admin_course_thread]
+    permissions: [admin_v2_course_thread]
 
 
 # 用户
@@ -194,4 +194,4 @@ admin_v2_question_remind_teachers:
     path: /course/{courseId}/question/{questionId}/remindTeachers
     defaults: { _controller: AppBundle:AdminV2/Default:questionRemindTeachers }
     methods:  [POST]
-    permissions: [admin]
+    permissions: [admin_v2]
