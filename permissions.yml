@@ -48,3 +48,15 @@ admin_course_question_manage: admin_v2_course_question_manage
 admin_course_thread: admin_v2_course_thread
 
 
+#分类标签权限
+
+admin_course_category: admin_v2_course_category #分类管理
+admin_course_category_manage: admin_v2_course_category_manage #课程分类
+admin_category_create: admin_v2_category_create #添加课程分类
+admin_classroom_category_manage: admin_v2_classroom_category_manage #班级分类
+admin_classroom_category_create: admin_v2_classroom_category_create #添加班级分类
+admin_course_tag: admin_v2_tag #标签管理
+admin_course_tag_manage: admin_v2_course_tag_manage #标签管理
+admin_course_tag_add: admin_v2_course_tag_add #新增标签
+admin_course_tag_group_manage: admin_v2_course_tag_group_manage #标签组管理
+admin_course_tag_group_add: admin_v2_course_tag_group_add #添加标签组

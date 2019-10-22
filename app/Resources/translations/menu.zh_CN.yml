@@ -20,6 +20,9 @@ admin.nav.cloud: 教育云
 admin.nav.system: 系统
 admin.nav.wechat_app: 移动端
 
+#新后台顶部导航
+admin.v2.nav.teach: 教学
+
 #用户模块
 admin.user.basic_menu: 用户管理
 admin.user.statistics_manage: 用户数据统计
@@ -496,4 +499,20 @@ admin_v2.course.question.basic_tab: 问答管理
 admin_v2.btn.recommend_cancel_btn: 取消推荐
 admin_v2.btn.sms_send_btn: 发送发布通知短信
 
+#教学模块-分类标签模块
+admin_v2.course.category_tag_menu: 分类标签
+
+##分类标签模块
+admin_v2.course.category_menu: 分类管理
+admin_v2.course.tag_menu: 标签管理
+admin_v2.course.tag.basic_tab: '标签管理'
+admin_v2.course.tag.tag_group_tab: '标签组管理'
+admin_v2.course.tag.basic_tab.create_btn: '新增标签'
+admin_v2.course.tag.tag_group_tab.create_tag_group_btn: '新建标签组'
+admin_v2.course.category.course_category_tab: 课程分类
+admin_v2.course.category.classroom_category_tab: 班级分类
+admin_v2.btn.create_category_btn: 添加分类
+
 # 新版后台结束
+
+
