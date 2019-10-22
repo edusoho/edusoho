@@ -4821,14 +4821,14 @@ admin.mobile_manage.discovery_column.edit_btn: Edit
 admin.mobile_manage.discovery_column.delete_btn: Delete
 admin.mobile_manage.discovery_column.empty: 'No Category'
 admin.mobile_manage.discovery_upgrade_madal.stup1_title: 'App contents can be upgraded'
-admin.mobile_manage.discovery_upgrade_madal.stup1_content: '移动端内容管理可升级至发现页自由配置功能，升级后可在 移动端-首页配置功能 设置App 首页内容。'
+admin.mobile_manage.discovery_upgrade_madal.stup1_content: 'Mobile content can be upgraded to APP home screen configuration. After the upgrading, you can set the App home screen content on the APP home screen configuration.'
 admin.mobile_manage.discovery_upgrade_madal.stup2_title: 'Tips'
-admin.mobile_manage.discovery_upgrade_madal.stup2_content: '升级后，原有内容管理将迁移至 移动端-首页配置功能，原有移动端内容管理功能将不再可用，升级后，学员 App 端将提示升级 App 才能继续使用是否继续？'
-admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: 'Do not upgrade temporarily'
-admin.mobile_manage.discovery_upgrade_madal.btn_next: 'Continue'
+admin.mobile_manage.discovery_upgrade_madal.stup2_content: 'After the upgrading, mobile content will be migrated to the APP home screen configuration and the mobile content management will no longer available. The student app will prompt to upgrade the latest app, continue ？'
+admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: 'Cancel'
+admin.mobile_manage.discovery_upgrade_madal.btn_next: 'Upgrade'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: 'Upgrade'
 admin.mobile_manage.discovery_upgrade_madal.btn_loading: 'Upgrade in progress'
-admin.mobile_manage.discovery_upgrade.transfer_tips: '移动端内容管理已升级至App首页配置功能'
+admin.mobile_manage.discovery_upgrade.transfer_tips: 'Mobile content is upgraded to APP home screen configuration'
 admin.mobile_manage.discovery_upgrade.transfer_btn: 'To use'
 admin.wechat_notification.switch: WeChat Notification Switch
 admin.wechat_notification.template: WeChat Notification Template

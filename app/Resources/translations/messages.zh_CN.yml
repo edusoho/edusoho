@@ -5852,14 +5852,14 @@ admin.mobile_manage.discovery_column.edit_btn: 编辑
 admin.mobile_manage.discovery_column.delete_btn: 删除
 admin.mobile_manage.discovery_column.empty: 暂无分类记录
 admin.mobile_manage.discovery_upgrade_madal.stup1_title: '移动端内容管理可升级'
-admin.mobile_manage.discovery_upgrade_madal.stup1_content: '移动端内容管理可升级至发现页自由配置功能，升级后可在 移动端-首页配置功能 设置App 首页内容。'
+admin.mobile_manage.discovery_upgrade_madal.stup1_content: '移动端内容管理可升级至发现页自由配置功能，升级后可在 移动端-App设置-发现页配置功能 设置App首页内容。'
 admin.mobile_manage.discovery_upgrade_madal.stup2_title: '提示'
-admin.mobile_manage.discovery_upgrade_madal.stup2_content: '升级后，原有内容管理将迁移至 移动端-首页配置功能，原有移动端内容管理功能将不再可用，升级后，学员 App 端将提示升级 App 才能继续使用是否继续？'
+admin.mobile_manage.discovery_upgrade_madal.stup2_content: '升级后，原有内容管理将迁移至 移动端-App设置-发现页配置功能，原有移动端内容管理功能将不再可用，升级后，学员App端将提示升级App才能继续使用是否继续？'
 admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: '暂不升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_next: '继续'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: '升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_loading: '升级中'
-admin.mobile_manage.discovery_upgrade.transfer_tips: '移动端内容管理已升级至App首页配置功能'
+admin.mobile_manage.discovery_upgrade.transfer_tips: '移动端内容管理已升级至 移动端-App设置-发现页配置功能'
 admin.mobile_manage.discovery_upgrade.transfer_btn: '去使用'
 
 # 微信通知管理
