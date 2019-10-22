@@ -54,3 +54,15 @@ admin_course_question_manage: admin_v2_course_question_manage
 # 话题管理权限
 admin_course_thread: admin_v2_course_thread
 
+
+#运营－站点设置
+admin_operation: admin_v2_operating #运营
+admin_setting: admin_v2_site_setting #站点设置
+admin_top_navigation: admin_v2_top_navigation #顶部导航
+admin_foot_navigation: admin_v2_foot_navigation #底部导航
+admin_setting_consult_setting: admin_v2_setting_consult_setting #客服
+admin_setting_es_bar: admin_v2_setting_es_bar #侧边栏
+admin_content: admin_v2_content #自定义页面
+admin_setting_share: admin_v2_setting_share #分享
+admin_friendlyLink_navigation: admin_v2_friendlyLink_navigation #友情链接
+

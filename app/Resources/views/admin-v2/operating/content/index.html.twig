@@ -1,0 +1,55 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'content/list' %}
+
+{% set menu = 'admin_v2_content' %}
+{% set type = app.request.get('type') %}
+{% set typeName = dict('contentType')[type] %}
+
+{% block page_buttons %}  	
+	<button class="btn btn-success btn-sm pull-right" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_v2_content_create', {type: type}) }}"> {{'admin.custom_page_manage.top_button'|trans}}{{ typeName }}</button>
+{% endblock %}
+
+{% block main %}
+
+<form class="well well-sm form-inline">
+	<div class="form-group">
+		<select class="form-control" name="status">
+		  {{ select_options(dict('contentStatus'), app.request.query.get('status'), 'admin.custom_page_manage.all_status_placeholder'|trans) }}
+		</select>
+	</div>
+	<div class="form-group">
+		<input class="form-control" name="keywords" type="text" placeholder="{{'admin.custom_page_manage.keyword_placeholder'|trans}}" value="{{ app.request.query.get('keywords') }}">
+	</div>
+		<input type="hidden" name="type" value="{{ type }}">
+	<button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+
+</form>
+
+<table class="table table-hover" id="content-table">
+	<thead>
+		<tr>
+			<th width="30%">{{'admin.custom_page_manage.table_title'|trans}}</th>
+			<th>{{'admin.custom_page_manage.table_page_url'|trans}}</th>
+			<th>{{'admin.custom_page_manage.table_type'|trans}}</th>
+			<th>{{'admin.custom_page_manage.table_status'|trans}}</th>
+			<th>{{'admin.custom_page_manage.table_publish_time_or_user'|trans}}</th>
+			<th>{{'admin.custom_page_manage.table_operation'|trans}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% if contents %}
+			{% for content in contents %}
+			  {% set user = users[content.userId] %}
+			  {% set category = categories[content.categoryId]|default(null) %}
+			  {% include 'admin-v2/operating/content/content-tr.html.twig' %}
+			{% endfor %}
+		{% else %}
+			<tr><td colspan="20"><div class="empty">{{'admin.custom_page_manage.empty'|trans}}</div></td></tr>
+		{% endif %}
+	</tbody>
+</table>
+
+{{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

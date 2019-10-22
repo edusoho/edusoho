@@ -277,6 +277,95 @@ admin_v2_user_show:
     defaults: { _controller: AppBundle:AdminV2/User/User:show }
     permissions: [admin_v2]
 
+# 运营
+## 站点设置管理
+admin_v2_navigation:
+    path:  /setting/navigation
+    defaults: { _controller: AppBundle:AdminV2/Operating/Navigation:index }
+    permissions: [admin_v2_top_navigation,admin_v2_foot_navigation]
+
+admin_v2_navigation_seqs_update:
+    path:  /setting/navigation/seqs/update
+    defaults: { _controller: AppBundle:AdminV2/Operating/Navigation:updateSeqs }
+    permissions: [admin_v2_top_navigation,admin_v2_foot_navigation]
+
+admin_v2_navigation_create:
+    path:  /setting/navigation/create
+    defaults: { _controller: AppBundle:AdminV2/Operating/Navigation:create }
+    permissions: [admin_v2_top_navigation,admin_v2_foot_navigation]
+
+admin_v2_navigation_update:
+    path:  /setting/navigation/{id}/update
+    defaults: { _controller: AppBundle:AdminV2/Operating/Navigation:edit }
+    permissions: [admin_v2_top_navigation,admin_v2_foot_navigation]
+
+admin_v2_navigation_delete:
+    path:  /setting/navigation/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/Navigation:delete }
+    methods: [POST]
+    permissions: [admin_v2_top_navigation,admin_v2_foot_navigation]
+
+admin_v2_setting_consult_setting:
+    path:  /setting/consult-setting
+    defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:consultSetting }
+
+admin_v2_setting_consult_upload:
+    path:  /setting/consult-upload
+    defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:consultUpload }
+    permissions: [admin_v2_setting_consult_setting]
+
+admin_v2_setting_consult_webchat_delete:
+    path:  /setting/consult-webchat-delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:deleteWebchat }
+    methods:  [POST]
+    permissions: [admin_v2_setting_consult_setting]
+    
+admin_v2_setting_es_bar:
+    path:  /setting/es-bar
+    defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:esBarSetting }
+
+admin_v2_content:
+    path:  /setting/content
+    defaults: { _controller: AppBundle:AdminV2/Operating/Content:index }
+    
+admin_v2_content_create:
+    path:  /content/create/{type}
+    defaults: { _controller: AppBundle:AdminV2/Operating/Content:create }
+    permissions: [admin_v2_content]
+
+admin_v2_content_edit:
+    path:  /content/{id}/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/Content:edit }
+    permissions: [admin_v2_content]
+
+admin_v2_content_publish:
+    path:  /content/{id}/publish
+    defaults: { _controller: AppBundle:AdminV2/Operating/Content:publish }
+    methods:  [POST]
+    permissions: [admin_v2_content]
+
+admin_v2_content_trash:
+    path:  /content/{id}/trash
+    defaults: { _controller: AppBundle:AdminV2/Operating/Content:trash }
+    methods:  [POST]
+    permissions: [admin_v2_content]
+
+admin_v2_content_delete:
+    path:  /content/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/Content:delete }
+    methods:  [POST]
+    permissions: [admin_v2_content]
+
+admin_v2_content_alias_check:
+    path:  /content/alias/check
+    defaults: { _controller: AppBundle:Admin/Content:aliasCheck }
+    permissions: [admin_v2_content]
+
+admin_v2_setting_share:
+    path:  /setting/share
+    defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:share }
+    
+
 # 系统
 ## 组织机构管理
 admin_v2_batch_update_org:

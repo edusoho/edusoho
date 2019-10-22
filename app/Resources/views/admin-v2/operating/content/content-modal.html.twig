@@ -1,0 +1,148 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{'admin.custom_page_manage.create_custom_page'|trans}}{% endblock %}
+{% block body %}
+
+{% set content = content|default(null) %}
+
+<form class="two-col-form" id="content-form" method="post" enctype="multipart/form-data"
+  {% if content %}
+    action="{{ path('admin_v2_content_edit', {id:content.id}) }}"
+  {% else %}
+    action="{{ path('admin_v2_content_create', {type:type.alias}) }}"
+  {% endif %}
+  >
+  <div class="row">
+    <div class="col-md-8 two-col-main">
+      {% if 'title' in type.basicFields %}
+        <div class="form-group">
+          <label for="content-title-field" class="control-label">{{'admin.custom_page_manage.custom_page_title'|trans}}</label>
+          <div class="controls">
+            <input class="form-control" id="content-title-field" type="text" name="title" value="{{ content.title|default('') }}">
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="form-group">
+        <label for="editor-field" class="control-label">{{'admin.custom_page_manage.custom_page_editor_type'|trans}}</label>
+        <div class="controls radios">
+          <label><input type="radio" name="editor" value="richeditor" 
+            {% if content is empty %}
+             checked="checked" 
+            {% elseif content.editor == 'richeditor'%}
+             checked="checked"
+            {% endif %}>
+            {{'admin.custom_page_manage.custom_page_richeditor_radio'|trans}}</label>
+        <label><input type="radio" name="editor" value="none"
+          {% if content and content.editor == 'none' %} checked="checked" {% endif %}
+          >{{'admin.custom_page_manage.custom_page_htmleditor_radio'|trans}}</label>
+        </div>
+      </div>
+
+      {% if 'body' in type.basicFields %}
+        <label for="content-body-field" class="control-label">{{'admin.custom_page_manage.custom_page_content'|trans}}</label>
+
+        <div class="form-group" 
+        {% if content and content.editor == 'none' %}
+          style="display:none"
+        {% endif %}
+        >
+          <div class="controls">
+            <textarea class="form-control" id="richeditor-body-field" rows="16" name="richeditor-body"
+              data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+              data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
+            >{{ field_value(content, 'body') }}</textarea>
+          </div>
+        </div>
+
+        <div class="form-group" 
+        {% if content is empty %}
+               style="display:none" 
+              {% elseif content.editor == 'richeditor'%}
+               style="display:none"
+              {% endif %}>
+          <div class="controls">
+            <textarea class="form-control" id="noneeditor-body-field" rows="16" name="noneeditor-body">{{ field_value(content, 'body') }}</textarea>
+          </div>
+        </div> 
+      {% endif %}
+
+      {% if type.extendedFields %}
+        {% include 'admin-v2/operating/content/' ~ type.alias ~ '-extended-fields.html.twig' %}
+      {% endif %}
+    </div>
+    <div class="col-md-4 two-col-side">
+      {% if 'alias' in type.basicFields %}
+        <div class="panel panel-default">
+          <div class="panel-heading">{{'admin.custom_page_manage.custom_page_url'|trans}}</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <div class="controls">
+                <input class="form-control width-input width-input-large" type="text" name="alias" value="{{ field_value(content, 'alias') }}" data-url="{{ path('admin_v2_content_alias_check', {that:content.alias|default('')}) }}">
+
+                <i class="glyphicon glyphicon-question-sign text-muted" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-html="false" data-content="{{'admin.custom_page_manage.custom_page_url_tips'|trans}}"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if 'categoryId' in type.basicFields %}
+        <div class="panel">
+          <div class="panel-heading">{{'admin.custom_page_manage.title_category'|trans}}</div>
+          <select name="categoryId">
+            {{ select_options(category_choices('default'), field_value(content, 'categoryId'), 'admin.custom_page_manage.custom_page_category_option'|trans) }}
+          </select>
+        </div>
+      {% endif %}
+
+      {% if 'tagIds' in type.basicFields %}
+        <div class="panel">
+          <div class="panel-heading">{{'admin.custom_page_manage.custom_page_tag'|trans}}</div>
+          <div class="form-group">
+            <div class="controls" style="width:100%;">
+              <input class="width-full" id="content-tags-field" type="text" name="tags" value="{{ field_value(content, 'tagIds')|tags_join }}">
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if 'template' in type.basicFields %}
+        <div class="panel panel-default" >
+          <div class="panel-heading">{{'admin.custom_page_manage.custom_page_template'|trans}}</div>
+          <div class="panel-body">
+            {% set templates = {
+              'default': 'admin.custom_page_manage.custom_page_default_template'|trans,
+              'blank': 'admin.custom_page_manage.custom_page_no_nav_template'|trans,
+              'fullBlank': 'admin.custom_page_manage.custom_page_blank_template'|trans
+            } %}
+
+            <select class="form-control" name="template">
+              {{ select_options(templates, field_value(content, 'template')) }}
+            </select>
+          </div>
+        </div>
+      {% endif %} 
+
+      <input type="hidden" name="publishedTime" value="{{ field_value(content, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
+
+
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+
+  <script> app.load('content/content-modal'); </script>
+
+{% endblock %}
+
+{% block footer %}
+
+    <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+    <button id="content-save-btn" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#content-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
+{% endblock %}
+
+{% set hideFooter = true %}
