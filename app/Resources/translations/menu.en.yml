@@ -20,6 +20,9 @@ admin.nav.cloud:  ES Cloud
 admin.nav.system: System
 admin.nav.wechat_app: Mobile
 
+#新后台顶部导航
+admin.v2.nav.teach: Teaching
+
 #用户模块
 admin.user.basic_menu: Users
 admin.user.statistics_manage: Statistics
@@ -507,6 +510,20 @@ admin_v2.course.review.classroom_review_tab: Rate
 # 通用按钮
 admin_v2.btn.sms_send_btn: Notify the publish
 admin_v2.btn.recommend_cancel_btn: Un-recommend
+
+#教学模块-分类标签模块
+admin_v2.course.category_tag_menu: Classification Label
+
+##分类标签模块
+admin_v2.course.category_menu: Classification management
+admin_v2.course.tag_menu: Label management
+admin_v2.course.tag.basic_tab: 'Tags'
+admin_v2.course.tag.tag_group_tab: 'Tag Groups'
+admin_v2.course.tag.basic_tab.create_btn: 'Add'
+admin_v2.course.tag.tag_group_tab.create_tag_group_btn: 'Add a Group'
+admin_v2.course.category.course_category_tab: Course Categories
+admin_v2.course.category.classroom_category_tab: Class Categories
+admin_v2.btn.create_category_btn: Add a Category
 
 #公开课模块
 admin_v2.course.open_course_menu:  Public Courses
