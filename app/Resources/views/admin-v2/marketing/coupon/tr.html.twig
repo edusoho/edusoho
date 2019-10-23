@@ -53,7 +53,7 @@
           {% if batch.token and batch.linkEnable %}
             <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_coupon_get_receive_url', {batchId:batch.id}) }}" >{{ 'coupon.batch.get_receive_url'|trans }}</a></li>
           {% endif %}
-          {{ slot('batch.append.coupon', {'batch': batch}) }}
+          {{ slot('admin_v2.batch.append.coupon', {'batch': batch}) }}
           {% if batch.codeEnable or batch.linkEnable %}
             <li class="divider"></li>
           {% endif %}
