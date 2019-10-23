@@ -57,9 +57,13 @@ admin_course_thread: admin_v2_course_thread
 admin_course_thread_manage: admin_v2_course_thread_manage
 admin_classroom_thread_manage: admin_v2_classroom_thread_manage
 
-
 #反馈管理
 admin_review: admin_v2_review  #反馈管理
 admin_course_review_tab: admin_v2_course_review_tab #课程评价
 admin_classroom_review_tab: admin_v2_classroom_review_tab #班级评价
+
+# 分销管理
+admin_distributor_top: admin_v2_distributor
+_admin_distributor_menu: --
+_distributor_page: admin_v2_distributor_page
 

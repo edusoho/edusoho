@@ -492,7 +492,6 @@ admin_v2.course.question_menu: Q&A
 
 admin_v2.course.question.basic_tab: Q&A
 
-
 # 教学-助学管理-话题管理
 admin_v2.course.thread_menu: Discussions
 
@@ -522,4 +521,14 @@ admin_v2.basic_cloud_group: Basic Cloud
 admin_v2.cloud_service.basic_menu: Cloud Server
 admin_v2.cloud_service.sms_tab: Sms Cloud
 admin_v2.cloud_service.sms_overview_tab: Overview
+
+#营销-营销管理
+admin_v2.marketing.basic_group: Marketing Manage
+
+# 营销-渠道管理
+admin_v2.channel.basic_group: Channel Manage
+
+# 营销-渠道管理-分销
+admin_v2.distributor.menu: Distributor
+
 # 新版后台结束
