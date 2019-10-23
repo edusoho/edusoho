@@ -178,7 +178,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_transcode_error_message_key', array($this, 'getTranscodeErrorMessageKeyByCode')),
             new \Twig_SimpleFunction('uniqid', array($this, 'uniqid')),
             new \Twig_SimpleFunction('get_days', array($this, 'getDays')),
-            new \Twig_SimpleFunction('isQuestionLack', array($this, 'isQuestionLack')),
+            new \Twig_SimpleFunction('is_question_lack', array($this, 'isQuestionLack')),
         );
     }
 
@@ -1786,6 +1786,7 @@ class WebExtension extends \Twig_Extension
 
         $paths = array(
             'player' => 'js-sdk/sdk-v1.js',
+            'newPlayer' => 'js-sdk/sdk-v2.js',
             'video' => 'js-sdk/video-player/sdk-v1.js',
             'uploader' => 'js-sdk/uploader/sdk-2.1.0.js',
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',

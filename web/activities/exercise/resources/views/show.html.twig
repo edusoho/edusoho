@@ -1,5 +1,5 @@
 {% set exercise = activity.ext %}
-{% set questionLack = isQuestionLack(activity.mediaId)|default(false) %}
+{% set questionLack = is_question_lack(activity.mediaId)|default(false) %}
 {% if app.request.get('preview') == 1 %}
   {% include '@activity/exercise/resources/views/show/preview.html.twig' %}
 {% else %}

@@ -101,7 +101,7 @@ class Parser
         $lines = preg_replace('/^(难度|\[难度\]|【难度】)/', '<#难度#>', $lines);
         $lines = preg_replace('/^(分数|\[分数\]|【分数】)/', '<#分数#>', $lines);
         $lines = preg_replace('/^(解析|\[解析\]|【解析】)/', '<#解析#>', $lines);
-        $lines = preg_replace('/^([A-J])(\.|、|。|\\s)/', '<#$1#>', $lines, -1, $count);
+        $lines = preg_replace('/^([A-J])(\.|、|。)/', '<#$1#>', $lines, -1, $count);
         $lines = preg_replace('/(\(正确\)|（正确）)\s{0,}/', '<#正确#>', $lines);
         $lines = preg_replace('/(\(错误\)|（错误）)\s{0,}/', '<#错误#>', $lines);
         $lines = preg_replace('/【不定项选择题】/', '<#不定项选择题#>', $lines);

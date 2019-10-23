@@ -70,7 +70,7 @@ class Show {
 
   initPlayer() {
     const customPos = parseInt(this.lastLearnTime) ? parseInt(this.lastLearnTime) : 0;
-    return PlayerFactory.create(
+    return window.player = PlayerFactory.create(
       this.playerType, {
         element: '#lesson-player',
         url: this.url,
@@ -161,7 +161,7 @@ class Show {
           player.setCurrentTime(time);
         }
         player.play();
-      } 
+      }
       if (this.isCloudVideoPalyer()) {
         if (this.markerUrl) {
           $.getJSON(this.markerUrl, function(questions) {

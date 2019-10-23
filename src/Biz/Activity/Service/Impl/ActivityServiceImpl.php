@@ -192,6 +192,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $fields['mediaId'] = $media['id'];
         }
 
+        if (!empty($fields['media'])) {
+            $fields['content'] = json_encode($fields['media']);
+        }
+
         $materials = $this->getMaterialsFromActivity($fields);
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
