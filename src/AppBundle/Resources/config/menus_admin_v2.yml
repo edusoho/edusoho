@@ -68,7 +68,7 @@ admin_v2:
                                             visible: (courseSet.status == 'published')
                                         admin_v2_course_sms_prepare:
                                             name: admin_v2.btn.sms_send_btn
-                                            router_name: sms_prepare
+                                            router_name: admin_v2_sms_prepare
                                             router_params:
                                                 id: (courseSet.id)
                                                 targetType: 'course'
@@ -338,11 +338,50 @@ admin_v2:
                                 admin_v2_distributor_page:
                                     name: admin_v2.distributor.menu
                                     router_name: admin_v2_login_distributor
-        #        # 运营管理模块
-#        admin_v2_operating:
-#            name: admin_v2.nav.operating
-#            children:
-#admin_v2_user测试菜单栏显示
+        # 运营管理模块
+        admin_v2_operating:
+            name: admin_v2.nav.operating
+            children:
+                admin_v2_site_decoration_group:
+                    name: admin_v2.operation.site_decoration.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_site_setting:
+                            name: admin_v2.operation.site_menu
+                            router_name: admin_v2_navigation
+                            children:
+                                admin_v2_top_navigation:
+                                    name: admin_v2.operation.site.top_navigation_tab
+                                    router_name: admin_v2_navigation
+                                    disable: true
+                                    router_params:
+                                        type: top
+                                admin_v2_foot_navigation:
+                                    name: admin_v2.operation.site.foot_navigation_tab
+                                    router_name: admin_v2_navigation
+                                    disable: true
+                                    router_params:
+                                        type: foot
+                                admin_v2_setting_consult_setting:
+                                    name: admin_v2.operation.site.consult_setting_tab
+                                    disable: true
+                                admin_v2_setting_es_bar:
+                                    name: admin_v2.operation.site.es_bar_tab
+                                    disable: true
+                                admin_v2_content:
+                                    name: admin_v2.operation.content.basic_tab
+                                    disable: true
+                                    router_params:
+                                        type: page
+                                admin_v2_setting_share:
+                                    name: admin_v2.operation.site.share_tab
+                                    disable: true
+                                admin_v2_friendlyLink_navigation:
+                                    name: admin_v2.operation.site.friendlyLink_navigation_tab
+                                    router_name: admin_v2_navigation
+                                    disable: true
+                                    router_params:
+                                        type: friendlyLink
         # 用户管理模块
         admin_v2_user:
             name: admin_v2.nav.user
