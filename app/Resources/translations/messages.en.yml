@@ -9070,5 +9070,5 @@ admin_v2.category_manage.add_title: Add Category
 admin_v2.tag_manage.tag.create.modal_title: Add Tag
 admin_v2.tag_manage.tag.group.create.modal_title: Add Tag Group
 
-
-# 新版后台结束
+# 新后台
+admin_v2.edu_cloud_not_access: Edu cloud not accessable

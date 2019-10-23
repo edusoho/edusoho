@@ -211,29 +211,6 @@ admin_v2:
                                 admin_v2_open_course_analysis:
                                     name: admin_v2.course.open_course.analysis_tab
                                     disable: true
-                        # 助学管理（group）
-                        admin_v2_tool_group:
-                            name: admin_v2.tool.basic_group
-                            is_group: true
-                            children:
-                                # 笔记管理模块
-                                admin_v2_course_note:
-                                    name: admin_v2.course.note_menu
-                                    children:
-                                        admin_v2_course_note_manage:
-                                            name: admin_v2.course.note.basic_tab
-                                            router_name: admin_v2_course_note
-                                            disable: true
-                                # 问答管理
-                                admin_v2_course_question:
-                                    name: admin_v2.course.question_menu
-                                    children:
-                                        admin_v2_course_question_manage:
-                                            name: admin_v2.course.question.basic_tab
-                                            router_name: admin_v2_question
-                                            router_params:
-                                                postStatus: unPosted
-                                            disable: true
                         #分类标签                    
                         admin_v2_course_category_tag:
                             name: admin_v2.course.category_tag_menu
@@ -291,6 +268,29 @@ admin_v2:
                                                     router_name: admin_v2_tag_group_create
                                                     mode: modal
                                                     group: topBtn
+                # 助学管理（group）
+                admin_v2_tool_group:
+                    name: admin_v2.tool.basic_group
+                    is_group: true
+                    children:
+                        # 笔记管理模块
+                        admin_v2_course_note:
+                            name: admin_v2.course.note_menu
+                            children:
+                                admin_v2_course_note_manage:
+                                    name: admin_v2.course.note.basic_tab
+                                    router_name: admin_v2_course_note
+                                    disable: true
+                        # 问答管理
+                        admin_v2_course_question:
+                            name: admin_v2.course.question_menu
+                            children:
+                                admin_v2_course_question_manage:
+                                    name: admin_v2.course.question.basic_tab
+                                    router_name: admin_v2_question
+                                    router_params:
+                                        postStatus: unPosted
+                                    disable: true
                         # 话题管理
                         admin_v2_course_thread:
                             name: admin_v2.course.thread_menu
@@ -315,11 +315,30 @@ admin_v2:
                                     name: admin_v2.course.review.classroom_review_tab
                                     router_name: admin_v2_classroom_review
                                     disable: true
-#        # 营销管理模块
-#        admin_v2_marketing:
-#            name: admin_v2.nav.marketing
-#            children:
-#        # 运营管理模块
+        # 营销管理模块
+        admin_v2_marketing:
+            name: admin_v2.nav.marketing
+            children:
+                # 营销管理
+                #                admin_v2_marketing_group:
+                #                    name: admin_v2.marketing.basic_group
+                #                    is_group: true
+                #                    children:
+                # 渠道管理
+                admin_v2_channel_group:
+                    name: admin_v2.channel.basic_group
+                    is_group: true
+                    after: admin_v2_marketing_group
+                    children:
+                        # 分销
+                        admin_v2_distributor:
+                            name: admin_v2.distributor.menu
+                            disable: true
+                            children:
+                                admin_v2_distributor_page:
+                                    name: admin_v2.distributor.menu
+                                    router_name: admin_v2_login_distributor
+        #        # 运营管理模块
 #        admin_v2_operating:
 #            name: admin_v2.nav.operating
 #            children:

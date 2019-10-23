@@ -10377,6 +10377,6 @@ admin_v2.category_manage.add_title: 添加分类
 admin_v2.tag_manage.tag.create.modal_title: 新增标签
 admin_v2.tag_manage.tag.group.create.modal_title: 新增标签组
 
-# 新版后台结束
 
-
+# 新后台
+admin_v2.edu_cloud_not_access: 未接入教育云
