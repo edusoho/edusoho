@@ -79,8 +79,8 @@ class Choice extends AbstractQuestion
         }
 
         //处理A-J选项
-        if (preg_match('/\s([A-J])(\.|、|。|\\s)/', $line)) {
-            $optionStr = preg_replace('/\s([A-J])(\.|、|。|\\s)/', PHP_EOL.'<#$1#>', $line);
+        if (preg_match('/\s([A-J])(\.|、|。)/', $line)) {
+            $optionStr = preg_replace('/\s([A-J])(\.|、|。)/', PHP_EOL.'<#$1#>', $line);
             $optionLines = explode(PHP_EOL, $optionStr);
             foreach ($optionLines as $line) {
                 if (preg_match('/<#([A-J])#>/', $line, $matches)) {

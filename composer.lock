@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac0e8761952d060cbdf4ebf0380d010b",
+    "content-hash": "b4c07125aadd8af2378ad8e9963643de",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -423,12 +423,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/exam-parser.git",
-                "reference": "3e9c8fb8029cdea73f5ccab23ef889454102b5a4"
+                "reference": "e51ac4dd5b57b2d319665cf805791bbf2690f2ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/3e9c8fb8029cdea73f5ccab23ef889454102b5a4",
-                "reference": "3e9c8fb8029cdea73f5ccab23ef889454102b5a4",
+                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/e51ac4dd5b57b2d319665cf805791bbf2690f2ed",
+                "reference": "e51ac4dd5b57b2d319665cf805791bbf2690f2ed",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -469,7 +469,7 @@
                 }
             ],
             "description": "Exam Parser",
-            "time": "2019-10-10T07:40:00+00:00"
+            "time": "2019-10-23T07:03:36+00:00"
         },
         {
             "name": "codeages/omnipay-alipay",
