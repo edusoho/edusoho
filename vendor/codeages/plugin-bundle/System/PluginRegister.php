@@ -141,7 +141,8 @@ class PluginRegister
                 $filePath = sprintf('%s/%s', $this->pluginRootDir, $resourcePath);
 
                 if ($fs->exists($filePath)) {
-                    $routing["_plugin_{$plugin['code']}_{$prefix}"] = array(
+                    $name = str_replace('/', '_', $prefix);
+                    $routing["_plugin_{$plugin['code']}_{$name}"] = array(
                         'resource' => '@'.$resourcePath,
                         'prefix' => '/'.$prefix,
                     );

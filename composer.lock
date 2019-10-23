@@ -584,12 +584,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "aa872be6b57df9801a36588cfb4d14e5773b4295"
+                "reference": "188bec40df0dcdc4ee860b431d93dc423a0ee2ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/aa872be6b57df9801a36588cfb4d14e5773b4295",
-                "reference": "aa872be6b57df9801a36588cfb4d14e5773b4295",
+                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/188bec40df0dcdc4ee860b431d93dc423a0ee2ad",
+                "reference": "188bec40df0dcdc4ee860b431d93dc423a0ee2ad",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -633,7 +633,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2019-10-23T03:41:56+00:00"
+            "time": "2019-10-23T03:58:37+00:00"
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
