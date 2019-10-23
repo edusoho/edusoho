@@ -555,6 +555,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                     $this->biz['db']->commit();
 
                     return array(
+                        'batchId' => $batch['id'],
                         'code' => 'recharged',
                         'message' => '您已经领取并使用该批学习卡',
                     );
