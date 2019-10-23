@@ -142,6 +142,9 @@
         })
           .then(res => {
             this.isLoading += 1;
+            if (res.cardPassword) {
+              this.password = res.cardPassword;
+            }
             if (res.success === true) {
               this.invalidCard = false;
               this.message = res.message;
@@ -195,7 +198,6 @@
           query: { token: this.token }
         })
           .then(res => {
-            console.log(res);
             this.isLoading += 1;
             this.date = res.deadline;
             this.money = res.coin;
