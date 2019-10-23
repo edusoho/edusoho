@@ -83,7 +83,7 @@ class PluginUtil extends BaseService
             if (self::$filesystem->exists($routingPath)) {
                 $config .= "_plugin_{$code}_admin_v2:\n";
                 $config .= sprintf("    resource: \"@%sPlugin/Resources/config/routing_admin_v2.yml\"\n", ucfirst($code));
-                $config .= "    prefix:   /admin_v2\n";
+                $config .= "    prefix:   /admin/v2\n";
             }
         }
 
