@@ -36,6 +36,9 @@ admin_classroom_delete: admin_v2_classroom_delete #删除班级
 admin_sms_prepare: admin_v2_sms_prepare #发送发布通知短信
 admin_classroom_recommend: admin_v2_classroom_recommend #班级推荐
 
+admin_course_set_recommend_list: admin_v2_course_set_recommend_list #课程推荐
+admin_course_set_data: admin_v2_course_set_data #课程统计
+
 # 公开课管理权限模块
 admin_open_course_manage: admin_v2_open_course_manage #公开课管理
 admin_open_course: admin_v2_open_course #公开课管理tab
@@ -49,10 +52,22 @@ admin_course_note_manage: admin_v2_course_note_manage  #笔记管理
 
 
 # 问答管理权限
+admin_course_question: admin_v2_course_question
 admin_course_question_manage: admin_v2_course_question_manage
 
 # 话题管理权限
 admin_course_thread: admin_v2_course_thread
+admin_course_thread_manage: admin_v2_course_thread_manage
+admin_classroom_thread_manage: admin_v2_classroom_thread_manage
+
+#反馈管理
+admin_review: admin_v2_review  #反馈管理
+admin_course_review_tab: admin_v2_course_review_tab #课程评价
+admin_classroom_review_tab: admin_v2_classroom_review_tab #班级评价
+
+# 分销管理
+admin_distributor_top: admin_v2_distributor
+_distributor_page: admin_v2_distributor_page
 
 
 #运营－站点设置

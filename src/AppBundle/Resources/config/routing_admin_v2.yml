@@ -233,26 +233,7 @@ admin_v2_open_course_analysis_conversion_result:
     path:  /open_course/{courseId}/analysis/conversion/result
     defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:conversionResult }
 
-# 教学-助学管理-问答管理
-admin_v2_question:
-    path:  /question/{postStatus}
-    defaults: { _controller: AppBundle:AdminV2/Teach/CourseQuestion:index }
-    permissions: [admin_v2_course_question_manage]
-
-# 教学-助学管理-话题管理
-admin_v2_course_thread_delete:
-    path: /thread/{id}/delete
-    defaults: {_controller: AppBundle:AdminV2/Teach/Thread:delete }
-    methods: [POST]
-    permissions: [admin_v2_course_thread, admin_v2_course_question_manage]
-
-admin_v2_course_thread_batch_delete:
-    path: /thread/batch_delete
-    defaults: {_controller: AppBundle:AdminV2/Teach/Thread:batchDelete }
-    methods: [POST]
-    permissions: [admin_v2_course_thread]
-
-##笔记管理
+# 教学-助学管理-笔记管理
 admin_v2_course_note:
     path: /note
     defaults: { _controller: AppBundle:AdminV2/Teach/Course:noteList }
@@ -270,6 +251,83 @@ admin_v2_note_batch_delete:
     methods: [POST]
     permissions: [admin_v2_course_note_manage]
 
+# 教学-助学管理-问答管理
+admin_v2_question:
+    path:  /question/{postStatus}
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseQuestion:index }
+    permissions: [admin_v2_course_question_manage]
+
+# 教学-助学管理-话题管理
+admin_v2_course_thread:
+    path:  /thread
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:courseThreadIndex }
+    permissions: [admin_v2_course_thread]
+
+admin_v2_course_thread_delete:
+    path: /thread/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:courseThreadDelete }
+    methods: [POST]
+    permissions: [admin_v2_course_thread, admin_v2_course_question_manage]
+
+admin_v2_course_thread_batch_delete:
+    path: /thread/batch_delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:courseThreadBatchDelete }
+    methods: [POST]
+    permissions: [admin_v2_course_thread]
+
+admin_v2_classroom_thread:
+    path:     /classroom/thread
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:classroomThreadIndex }
+
+admin_v2_classroom_thread_delete:
+    path:     /classroom/thread/{threadId}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:classroomThreadDelete }
+    methods: [POST]
+  
+#反馈管理
+admin_v2_course_review:
+    path:  /course/review
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
+    permissions: [admin_v2_course_review_tab]
+
+admin_v2_course_review_delete:
+    path: /course/review/{id}/delete
+    defaults: {_controller: AppBundle:AdminV2/Teach/Review:deleteCourseReview }
+    methods: [POST]
+    permissions: [admin_v2_course_review_tab]
+
+admin_v2_course_review_batch_delete:
+    path: /course/review/batch_delete
+    defaults: {_controller: AppBundle:AdminV2/Teach/Review:batchDeleteCourseReview }
+    methods: [POST]
+    permissions: [admin_v2_course_review_tab]
+
+admin_v2_classroom_review:
+    path:  /classroom/review
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:classroomReviewList }
+    permissions: [admin_v2_classroom_review_tab]
+
+admin_v2_classroom_thread_batch_delete:
+    path:     /classroom/thread/batch_delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:classroomThreadBatchDelete }
+
+admin_v2_classroom_review_delete:
+    path:  /classroom/review/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:deleteClassroomReview }
+    methods: [POST]
+    permissions: [admin_v2_classroom_review_tab]
+
+admin_v2_classroom_review_batch_delete:
+    path:  /classroom/review/batch_delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:batchDeleteClassroomReview }
+    methods: [POST]
+    permissions: [admin_v2_classroom_review_tab]
+
+#运营-渠道管理-分销
+admin_v2_login_distributor:
+    path: /login/distributor
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Distributor:login }
+  
 #用户
 ##用户管理
 admin_v2_user_show:

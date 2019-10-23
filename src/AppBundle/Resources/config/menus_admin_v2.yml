@@ -234,10 +234,53 @@ admin_v2:
                                     router_params:
                                         postStatus: unPosted
                                     disable: true
-#        # 营销管理模块
-#       admin_v2_marketing:
-#            name: admin_v2.nav.marketing
-#            children:
+                        # 话题管理
+                        admin_v2_course_thread:
+                            name: admin_v2.course.thread_menu
+                            children:
+                                admin_v2_course_thread_manage:
+                                    name: admin_v2.course.thread.course_thread_tab
+                                    router_name: admin_v2_course_thread
+                                    disable: true
+                                admin_v2_classroom_thread_manage:
+                                    name: admin_v2.course.thread.classroom_thread_tab
+                                    router_name: admin_v2_classroom_thread
+                                    disable: true
+                        # 反馈管理模块
+                        admin_v2_review:
+                            name: admin_v2.course.review_menu
+                            children:
+                                admin_v2_course_review_tab:
+                                    name: admin_v2.course.review.course_review_tab
+                                    router_name: admin_v2_course_review
+                                    disable: true
+                                admin_v2_classroom_review_tab:
+                                    name: admin_v2.course.review.classroom_review_tab
+                                    router_name: admin_v2_classroom_review
+                                    disable: true
+        # 营销管理模块
+        admin_v2_marketing:
+            name: admin_v2.nav.marketing
+            children:
+                # 营销管理
+                #                admin_v2_marketing_group:
+                #                    name: admin_v2.marketing.basic_group
+                #                    is_group: true
+                #                    children:
+                # 渠道管理
+                admin_v2_channel_group:
+                    name: admin_v2.channel.basic_group
+                    is_group: true
+                    after: admin_v2_marketing_group
+                    children:
+                        # 分销
+                        admin_v2_distributor:
+                            name: admin_v2.distributor.menu
+                            disable: true
+                            children:
+                                admin_v2_distributor_page:
+                                    name: admin_v2.distributor.menu
+                                    router_name: admin_v2_login_distributor
         # 运营管理模块
         admin_v2_operating:
             name: admin_v2.nav.operating

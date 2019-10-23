@@ -9058,3 +9058,6 @@ admin.setting.invite.chooser_coupon.manage_btn: 优惠券管理
 admin.setting.invite.chooser_coupon.refresh_btn: 刷新
 admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
 admin.operation.coupon_menu.generate_btn: Generate Coupon
+
+# 新后台
+admin_v2.edu_cloud_not_access: Edu cloud not accessable

@@ -32,7 +32,7 @@ class PluginUtil extends BaseService
         );
 
         foreach ($apps as $app) {
-            if ($app['code'] == 'MAIN') {
+            if ('MAIN' == $app['code']) {
                 continue;
             }
 
@@ -55,11 +55,11 @@ class PluginUtil extends BaseService
         $config = '';
 
         foreach ($apps as $app) {
-            if ($app['code'] == 'MAIN') {
+            if ('MAIN' == $app['code']) {
                 continue;
             }
 
-            if ($app['protocol'] != 3) {
+            if (3 != $app['protocol']) {
                 continue;
             }
 
@@ -77,6 +77,13 @@ class PluginUtil extends BaseService
                 $config .= "_plugin_{$code}_admin:\n";
                 $config .= sprintf("    resource: \"@%sPlugin/Resources/config/routing_admin.yml\"\n", ucfirst($code));
                 $config .= "    prefix:   /admin\n";
+            }
+
+            $routingPath = sprintf("{$pluginRootDirectory}/%sPlugin/Resources/config/routing_admin_v2.yml", ucfirst($code), ucfirst($code));
+            if (self::$filesystem->exists($routingPath)) {
+                $config .= "_plugin_{$code}_admin_v2:\n";
+                $config .= sprintf("    resource: \"@%sPlugin/Resources/config/routing_admin_v2.yml\"\n", ucfirst($code));
+                $config .= "    prefix:   /admin_v2\n";
             }
         }
 
