@@ -1,0 +1,25 @@
+<tbody data-update-seqs-url="{{ path('admin_v2_navigation_seqs_update') }}">
+  {% for navigation in navigations %}
+		<tr class="treegrid-{{ navigation.id }} {% if navigation.parentId != 0 %}treegrid-parent-{{ navigation.parentId }}{% endif %} {% if navigation.parentId == 0 %}has-subItems{% else %} child{% endif %}" id="navigations-tr-{{ navigation.id }}" data-id="{{ navigation.id }}" data-parent-id="{{ navigation.parentId }}">
+		  <td class="" style="vertical-align: middle; {% if navigation.parentId != 0 %}padding-left: 30px{% endif %}">
+        <a href="{{navigation.url|navigation_url}}" target="_blank"> {{navigation.name}} </a>
+      </td>
+		  <td>
+				{% if navigation.isNewWin == 0 %}{{'admin.setting.navigation.isNewWin.no'|trans}}{% else %}{{'admin.setting.navigation.isNewWin.yes'|trans}}{% endif %}
+  		</td>
+		  <td>
+        {% if navigation.isOpen == 1 %}{{'admin.setting.navigation.status.open'|trans}}{% else %}{{'admin.setting.navigation.status.closed'|trans}}{% endif %}
+  		</td>
+		  <td>
+        {% if navigation.type == 'top' and navigation.parentId == 0 %}
+	        <button class="btn btn-sm btn-default edit-btn" data-url="{{ path('admin_v2_navigation_create', {type: navigation.type, parentId: navigation.id}) }}" data-toggle="modal" data-target="#modal">{{'admin.setting.navigation.add_child_menu_btn'|trans}}</button>
+        {% endif %}
+          <button class="btn btn-sm btn-default edit-btn" data-url="{{ path('admin_v2_navigation_update', {id:navigation.id}) }}" data-toggle="modal" data-target="#modal">{{'admin.setting.navigation.edit_btn'|trans}}</button>
+	        <button class="btn btn-sm btn-default delete-btn" data-url="{{ path('admin_v2_navigation_delete', {id:navigation.id}) }}" data-target="{{ navigation.id }}">{{'form.btn.delete'|trans}}</button>
+		   </td>
+		 </tr>
+	{% else %}
+	  <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+  {% endfor %}
+
+</tbody>
