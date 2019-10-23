@@ -61,7 +61,9 @@
              @click="onSubmit">登录并领取
         </div>
         <div class="choice-bar">
-          <div class="left" @click="jump2register">注册账号</div>
+          <div class="left">
+            <div @click="jump2register" v-show="!isLogin">注册账号</div>
+          </div>
           <div class="right" v-show="loginMode === 'fastLoginMode'" @click="changeLoginMode">使用其他方式登录 >></div>
           <div class="right" v-show="loginMode === 'normalLoginMode'" @click="changeLoginMode">使用手机快捷登录 >></div>
         </div>
@@ -81,7 +83,7 @@
 <script>
   import EDrag from '@/containers/components/e-drag';
   import fastLoginMixin from '@/mixins/fastLogin';
-  import { mapActions } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   import activityMixin from '@/mixins/activity';
   import redirectMixin from '@/mixins/saveRedirect';
   import { Toast } from 'vant';
@@ -136,6 +138,9 @@
       };
     },
     computed: {
+      ...mapState({
+        isLogin: state => !!state.token,
+      }),
       btnDisable() {
         const reg = /^1\d{10}$/;
         if (this.loginMode === 'fastLoginMode') {
