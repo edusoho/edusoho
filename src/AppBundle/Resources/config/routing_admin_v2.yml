@@ -323,6 +323,61 @@ admin_v2_classroom_review_batch_delete:
     methods: [POST]
     permissions: [admin_v2_classroom_review_tab]
 
+# 运营-营销管理-优惠券管理
+admin_v2_coupon:
+    pattern: /coupon
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:index }
+
+admin_v2_coupon_generate:
+    pattern: /coupon/generate
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:generate }
+
+admin_v2_coupon_batch_create:
+    pattern: /coupon/batch/{batchId}/create
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:batchCreate }
+    methods: [POST]
+
+admin_v2_coupon_checkprefix:
+    pattern: /coupon/checkprefix
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:checkPrefix }
+
+admin_v2_coupon_delete:
+    pattern: /coupon/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:delete }
+    methods: [POST]
+
+admin_v2_coupon_batch_export:
+    pattern: /coupon/export/csv/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:exportCsv }
+
+admin_v2_coupon_show:
+    pattern: /coupon/show/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:detail }
+
+admin_v2_coupon_show_target:
+    path: /coupon/show/target/{targetType}/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:targetDetail }
+
+admin_v2_coupon_get_receive_url:
+    pattern: /coupon/getreceiveurl/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:getReceiveUrl }
+
+admin_v2_coupon_query:
+    pattern: /coupon/index
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:queryIndex }
+
+admin_v2_coupon_setting:
+    pattern: /setting/coupon
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:setting }
+
+admin_v2_coupon_chooser:
+    pattern: /coupon/batch/chooser/{type}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:chooseCoupon }
+
+admin_v2_coupon_chooser_resource_list:
+    pattern: /coupon/batch/{batchId}/chooser/resource/list
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:chooseResourceList }
+
 #运营-渠道管理-分销
 admin_v2_login_distributor:
     path: /login/distributor
