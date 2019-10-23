@@ -192,7 +192,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $fields['mediaId'] = $media['id'];
         }
 
-        if (!empty($fields['media'])) {
+        // 使用content来存储media内容
+        if (!empty($fields['media']) && empty($fields['content'])) {
             $fields['content'] = json_encode($fields['media']);
         }
 

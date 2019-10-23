@@ -48,7 +48,7 @@ class FileChooser extends Emitter{
   fillTitle(file){
     let $title = $('#title');
     if ($title.length > 0 && $title.val()=='') {
-      let title = file.name.substring(0,file.name.lastIndexOf('.') !== -1 ? file.name.lastIndexOf('.') : file.name.length - 1);
+      let title = file.name.substring(0,file.name.lastIndexOf('.') !== -1 ? file.name.lastIndexOf('.') : file.name.length);
       $title.val(title);
     }
   }
