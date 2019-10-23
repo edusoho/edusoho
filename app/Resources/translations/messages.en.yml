@@ -8762,6 +8762,8 @@ exception.money_card.not_found_batch: Batch does not exist
 exception.money_card.duplicate_card: Card number has been repeated
 exception.money_card.batch_status_equal_invalid: In the case that the batch is invalidated, the recharge card under the batch cannot be enabled.
 exception.money_card.unlock_not_invalid_card: Only recharge cards with invalid status can be enabled
+exception.money_card.password_invalid: Invalid Password
+exception.money_card.batch_token_invalid: Invalid Batch Token
 exception.reward_point.account.not_found: Credit account does not exist
 exception.reward_point.account.already_open: Credit account has been created
 exception.reward_point.account.userid_invalid: User id error
