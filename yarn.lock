@@ -1547,9 +1547,10 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-"codeages-design@git+https://github.com/codeages-design/codeages-design.git#8ef70a262bd69fdf383a94a2b5d2d3ef24c27dde":
-  version "0.1.9"
-  resolved "git+https://github.com/codeages-design/codeages-design.git#8ef70a262bd69fdf383a94a2b5d2d3ef24c27dde"
+codeages-design@0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/codeages-design/-/codeages-design-0.1.10.tgz#78679f1299ded3dd6eadd71fab25a92b42aef87f"
+  integrity sha512-oBLs8BVGBD2r3+ed4C43MFKAGagOwINRZCYnJ0ULSzFXBv4lFYtp9LHoewj/JBOuzNdztab+3AyJg9/SL+vb0w==
   dependencies:
     jquery "^3.2.1"
 

@@ -35,7 +35,7 @@ admin.user.basic.login_record_tab: System Log
 admin.user.basic.basic_tab.create_btn: 'Add'
 admin.user.basic.basic_tab.edit_btn: 'Edit'
 admin.user.basic.basic_tab.setting_roles_btn: 'Group setting'
-admin.user.basic.basic_tab.update_avatar_btn: 'Change avatar' 
+admin.user.basic.basic_tab.update_avatar_btn: 'Change avatar'
 admin.user.basic.basic_tab.change_password_btn: 'Change password'
 admin.user.basic.basic_tab.send_passwordreset_email_btn: 'Send password reset confirmation email'
 admin.user.basic.basic_tab.send_emailverify_email_btn: 'Send verifcation email'
@@ -135,7 +135,7 @@ admin.operation.group_menu: Group Discussions
 admin.operation.invite_menu: Invitations
 admin.operation.announcement_menu: 'Site Announcements'
 admin.operation.notification_menu: 'Site Notices'
-admin.operation.block_menu: Area Control 
+admin.operation.block_menu: Area Control
 admin.operation.content_menu: Customize pages
 admin.operation.mobile_menu: 'App contents'
 admin.operation.wechat_notification: WeChat Notification
@@ -486,10 +486,41 @@ admin_v2.course.note_menu: Notes
 
 admin_v2.course.note.basic_tab: Notes
 
+
 # 教学-助学管理-问答管理
 admin_v2.course.question_menu: Q&A
 
 admin_v2.course.question.basic_tab: Q&A
+
+# 教学-助学管理-话题管理
+admin_v2.course.thread_menu: Discussions
+
+admin_v2.course.thread.course_thread_tab: Course Discussions
+admin_v2.course.thread.classroom_thread_tab: Class Discussions
+
+# 教学模块-助学管理-反馈管理
+admin_v2.course.review_menu: Reviews
+
+admin_v2.course.review.course_review_tab: Reviews
+admin_v2.course.review.classroom_review_tab: Rate
+
+# 通用按钮
+admin_v2.btn.sms_send_btn: Notify the publish
+admin_v2.btn.recommend_cancel_btn: Un-recommend
+
+#公开课模块
+admin_v2.course.open_course_menu:  Public Courses
+admin_v2.course.open_course.basic_tab: Open courses
+admin_v2.course.open_course.basic_tab.create_btn: Create
+admin_v2.course.open_course.recommend_list_tab: Recommended
+admin_v2.course.open_course.analysis_tab: Statistics
+
+# 应用中心-基础云-云服务-短信
+admin_v2.nav.cloud_center: Cloud Center
+admin_v2.basic_cloud_group: Basic Cloud
+admin_v2.cloud_service.basic_menu: Cloud Server
+admin_v2.cloud_service.sms_tab: Sms Cloud
+admin_v2.cloud_service.sms_overview_tab: Overview
 
 #营销-营销管理
 admin_v2.marketing.basic_group: Marketing Manage
@@ -499,9 +530,5 @@ admin_v2.channel.basic_group: Channel Manage
 
 # 营销-渠道管理-分销
 admin_v2.distributor.menu: Distributor
-
-# 通用按钮
-admin_v2.btn.sms_send_btn: Notify the publish
-admin_v2.btn.recommend_cancel_btn: Un-recommend
 
 # 新版后台结束

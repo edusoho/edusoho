@@ -9,6 +9,7 @@ admin_v2:
                 # 课程管理（group）
                 admin_v2_course_group:
                     name: admin_v2.course.basic_group
+                    is_group: true
                     children:
                         # 课程管理
                         admin_v2_course_show:
@@ -187,9 +188,33 @@ admin_v2:
                                 admin_v2_classroom_recommend:
                                     name: admin_v2.course.classroom.recommend_tab
                                     router_name: admin_v2_classroom_recommend_list
+                        #公开课管理模块
+                        admin_v2_open_course_manage:
+                            name: admin_v2.course.open_course_menu
+                            router_name: admin_v2_open_course
+                            children:
+                                admin_v2_open_course:
+                                    name: admin_v2.course.open_course.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_open_course
+                                    children:
+                                        admin_v2_open_course_add:
+                                            name: admin_v2.course.open_course.basic_tab.create_btn
+                                            router_name: course_set_manage_create
+                                            router_params:
+                                                default: 'open'
+                                            group: topBtn
+                                            blank: 1
+                                admin_v2_open_course_recommend_list:
+                                    name: admin_v2.course.open_course.recommend_list_tab
+                                    disable: true
+                                admin_v2_open_course_analysis:
+                                    name: admin_v2.course.open_course.analysis_tab
+                                    disable: true
                 # 助学管理（group）
                 admin_v2_tool_group:
                     name: admin_v2.tool.basic_group
+                    is_group: true
                     children:
                         # 笔记管理模块
                         admin_v2_course_note:
@@ -209,15 +234,39 @@ admin_v2:
                                     router_params:
                                         postStatus: unPosted
                                     disable: true
+                        # 话题管理
+                        admin_v2_course_thread:
+                            name: admin_v2.course.thread_menu
+                            children:
+                                admin_v2_course_thread_manage:
+                                    name: admin_v2.course.thread.course_thread_tab
+                                    router_name: admin_v2_course_thread
+                                    disable: true
+                                admin_v2_classroom_thread_manage:
+                                    name: admin_v2.course.thread.classroom_thread_tab
+                                    router_name: admin_v2_classroom_thread
+                                    disable: true
+                        # 反馈管理模块
+                        admin_v2_review:
+                            name: admin_v2.course.review_menu
+                            children:
+                                admin_v2_course_review_tab:
+                                    name: admin_v2.course.review.course_review_tab
+                                    router_name: admin_v2_course_review
+                                    disable: true
+                                admin_v2_classroom_review_tab:
+                                    name: admin_v2.course.review.classroom_review_tab
+                                    router_name: admin_v2_classroom_review
+                                    disable: true
         # 营销管理模块
         admin_v2_marketing:
             name: admin_v2.nav.marketing
             children:
                 # 营销管理
-#                admin_v2_marketing_group:
-#                    name: admin_v2.marketing.basic_group
-#                    is_group: true
-#                    children:
+                #                admin_v2_marketing_group:
+                #                    name: admin_v2.marketing.basic_group
+                #                    is_group: true
+                #                    children:
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group
@@ -403,4 +452,25 @@ admin_v2:
 #        admin_v2_system:
 #            name: admin_v2.nav.system
 #            children:
+        # 应用中心模块
+        admin_v2_cloud_center:
+            name: admin_v2.nav.cloud_center
+            children:
+                admin_v2_basic_cloud_group:
+                    name: admin_v2.basic_cloud_group
+                    is_group: true
+                    children:
+                        admin_v2_cloud_service:
+                            name: admin_v2.cloud_service.basic_menu
+                            children:
+                                admin_v2_cloud_sms:
+                                    name: admin_v2.cloud_service.sms_tab
+                                    router_name: admin_v2_edu_cloud_sms
+                                    visible: (cloudStatus())
+                                    children:
+                                        admin_v2_edu_cloud_sms_overview:
+                                            name: admin_v2.cloud_service.sms_overview_tab
+                                            router_name: admin_v2_edu_cloud_sms
+                                            disable: true
+
 
