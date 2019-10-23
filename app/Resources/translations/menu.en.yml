@@ -533,6 +533,13 @@ admin_v2.course.open_course.recommend_list_tab: Recommended
 admin_v2.course.open_course.analysis_tab: Statistics
 
 
+# 运营-网校装修-APP装修
+admin_v2.operation.mobile_menu: App Setting
+admin_v2.operation.mobile.basic_tab: App Setting
+admin_v2.operation.mobile.banner_setting_tab: Sliders management
+admin_v2.operation.mobile.discovery_column_tab: 'Explore Page Category'
+admin_v2.operation.mobile.discovery_column_tab.create_btn: 'Add Category'
+
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: Site Decoration
 

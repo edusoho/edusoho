@@ -537,6 +537,14 @@ admin_v2.course.open_course.recommend_list_tab: 公开课推荐
 admin_v2.course.open_course.analysis_tab: 公开课统计
 
 
+# 运营-网校装修-APP装修
+admin_v2.operation.mobile_menu: App装修
+admin_v2.operation.mobile.basic_tab: App设置
+admin_v2.operation.mobile.banner_setting_tab: 轮播图
+admin_v2.operation.mobile.discovery_column_tab: '发现页栏目'
+admin_v2.operation.mobile.discovery_column_tab.create_btn: '添加栏目'
+
+
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: 网校装修
     
