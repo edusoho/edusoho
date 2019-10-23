@@ -18,10 +18,10 @@
 {% block main %}
 
 {% if type == 'foot' %}
-{% set url = path('admin_block', {category:'theme'}) %}
+{% set url = path('admin_v2_block', {category:'theme'}) %}
 <div class="alert alert-info"><i class="glyphicon glyphicon-info-sign"></i> {{ 'admin.setting.navigation.foot.tips'|trans({'%url%': url })|raw }}</div>
 {% elseif type == 'friendlyLink' %}
-{% set url = path('admin_setting_theme') %}
+{% set url = path('admin_v2_setting_theme') %}
 <div class="alert alert-info"><i class="glyphicon glyphicon-info-sign"></i>{{ 'admin.setting.navigation.friendlyLink.tips'|trans({'%url%': url})|raw }}
 </div>
 {% endif %}

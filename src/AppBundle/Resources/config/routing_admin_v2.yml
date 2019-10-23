@@ -364,8 +364,16 @@ admin_v2_content_alias_check:
 admin_v2_setting_share:
     path:  /setting/share
     defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:share }
+   
+#web端装修
+admin_v2_block:
+    path:  /block/list-{category}
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:index }
     
-
+admin_v2_setting_theme:
+    path:  /setting/theme
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:index }
+    
 # 系统
 ## 组织机构管理
 admin_v2_batch_update_org:
