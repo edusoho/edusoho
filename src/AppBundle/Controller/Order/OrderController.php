@@ -85,22 +85,21 @@ class OrderController extends BaseController
             $id = $request->request->get('targetId');
             $type = $request->request->get('targetType');
             $price = $request->request->get('price');
-            if ($this->isPluginInstalled('Coupon')) {
-                $coupon = $this->getCouponService()->getCouponByCode($code);
-                $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
-                if (empty($batch['codeEnable'])) {
-                    $message = array('useable' => 'no', 'message' => '该优惠券不存在');
+            $coupon = $this->getCouponService()->getCouponByCode($code);
+            $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
+            if (empty($batch['codeEnable'])) {
+                $message = array('useable' => 'no', 'message' => '该优惠券不存在');
 
-                    return $this->createJsonResponse($message);
-                }
-
-                if (isset($batch['deadlineMode']) && 'day' == $batch['deadlineMode']) {
-                    //ES优惠券领取时，对于优惠券过期时间会加86400秒，所以计算deadline时对于固定天数模式应与设置有效期模式一致，都为当天凌晨00:00:00
-                    $fields['deadline'] = strtotime(date('Y-m-d')) + 24 * 60 * 60 * $batch['fixedDay'];
-
-                    $this->getCouponService()->updateCoupon($coupon['id'], $fields);
-                }
+                return $this->createJsonResponse($message);
             }
+
+            if (isset($batch['deadlineMode']) && 'day' == $batch['deadlineMode']) {
+                //ES优惠券领取时，对于优惠券过期时间会加86400秒，所以计算deadline时对于固定天数模式应与设置有效期模式一致，都为当天凌晨00:00:00
+                $fields['deadline'] = strtotime(date('Y-m-d')) + 24 * 60 * 60 * $batch['fixedDay'];
+
+                $this->getCouponService()->updateCoupon($coupon['id'], $fields);
+            }
+
             $coupon = $this->getCouponService()->checkCoupon($code, $id, $type);
             if (isset($coupon['useable']) && 'no' == $coupon['useable']) {
                 return $this->createJsonResponse($coupon);
@@ -193,6 +192,6 @@ class OrderController extends BaseController
     //插件service
     protected function getCouponBatchService()
     {
-        return $this->createService('CouponPlugin:Coupon:CouponBatchService');
+        return $this->createService('Coupon:CouponBatchService');
     }
 }

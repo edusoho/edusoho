@@ -28,6 +28,8 @@ class UploadFileException extends AbstractException
 
     const NOTFOUND_ATTACHMENT = 4042310;
 
+    const ARGUMENTS_INVALID = 5002311;
+
     public $messages = array(
         4042301 => 'exception.uploadfile.file_not_found',
         4032302 => 'exception.uploadfile.forbidden_manage_file',
@@ -39,5 +41,6 @@ class UploadFileException extends AbstractException
         5002308 => 'exception.uploadfile.local_convert_not_support',
         5002309 => 'exception.uploadfile.extension_not_allowed',
         4042310 => 'exception.uploadfile.not_found_attachment',
+        5002311 => 'exception.uploadfile.arguments_invalid',
     );
 }

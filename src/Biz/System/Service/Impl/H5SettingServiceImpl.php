@@ -208,14 +208,12 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $batches = $discoverySetting['data']['items'];
         $batches = ArrayToolkit::index($batches, 'id');
         $batchIds = ArrayToolkit::column($batches, 'id');
-        if ('show' == $usage && $this->isPluginInstalled('Coupon')) {
+        if ('show' == $usage) {
             $batches = $this->getCouponBatchService()->fillUserCurrentCouponByBatches($batches);
         }
 
         $currentBatches = array();
-        if ($this->isPluginInstalled('Coupon')) {
-            $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
-        }
+        $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
         foreach ($batches as $key => &$batch) {
             $batchId = $batch['id'];
             if (empty($currentBatches[$batchId])) {
@@ -477,7 +475,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     protected function getCouponBatchService()
     {
-        return $this->biz->service('CouponPlugin:Coupon:CouponBatchService');
+        return $this->biz->service('Coupon:CouponBatchService');
     }
 
     protected function getAppService()

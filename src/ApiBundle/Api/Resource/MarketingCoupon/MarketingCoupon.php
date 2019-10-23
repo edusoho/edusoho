@@ -7,7 +7,10 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
+use Biz\Coupon\CouponException;
+use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
+use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 
 class MarketingCoupon extends AbstractResource
@@ -20,6 +23,11 @@ class MarketingCoupon extends AbstractResource
      */
     public function add(ApiRequest $request)
     {
+        $couponSetting = $this->getSettingService()->get('coupon', array('enabled' => 0));
+        if (!$couponSetting['enabled']) {
+            throw CouponException::SETTING_CLOSE();
+        }
+
         $postData = $request->request->all();
 
         if (empty($postData['mobile'])) {
@@ -37,15 +45,27 @@ class MarketingCoupon extends AbstractResource
             $isNew = true;
         }
 
-        $response = $this->getCouponService()->generateMarketingCoupon($user['id'], $postData['price'], $postData['expire_day']);
+        if (isset($postData['batch_id']) && isset($postData['batch_token'])) {
+            $result = $this->getCouponBatchService()->receiveCoupon($postData['batch_token'], $user['id'], true);
+            if (isset($result['code']) && 'failed' == $result['code']) {
+                $exceptionMethod = $result['exception']['method'];
+                throw $result['exception']['class']::$exceptionMethod();
+            }
+            $response = $this->getCouponService()->getCoupon($result['id']);
+            $response['couponBatch'] = $this->getCouponBatchService()->getBatchByToken($postData['batch_token']);
+        } else {
+            $response = $this->getCouponService()->generateMarketingCoupon($user['id'], $postData['price'], $postData['expire_day']);
+        }
+
         if ($isNew) {
             $response['password'] = $password;
         }
+
         $response['isNew'] = $isNew;
-
         $response['deadline'] = date('c', $response['deadline']);
-
-        $response = ArrayToolkit::parts($response, array('id', 'code', 'type', 'status', 'rate', 'userId', 'deadline', 'targetType', 'targetId', 'password', 'isNew'));
+        $response = ArrayToolkit::parts($response,
+            array('id', 'code', 'type', 'status', 'rate', 'userId', 'deadline', 'targetType', 'targetId', 'password', 'isNew', 'couponBatch', 'coupon')
+        );
 
         return $response;
     }
@@ -64,5 +84,21 @@ class MarketingCoupon extends AbstractResource
     private function getCouponService()
     {
         return $this->service('Coupon:CouponService');
+    }
+
+    /**
+     * @return CouponBatchService
+     */
+    private function getCouponBatchService()
+    {
+        return $this->service('Coupon:CouponBatchService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

@@ -34,6 +34,11 @@ class ReadDocx
      */
     const CM_PX = 25;
 
+    /**
+     * pt和px的换算规则
+     */
+    const PT_PX = 1.33;
+
     protected $resourceTmpPath = '/tmp';
 
     /**
@@ -95,8 +100,40 @@ class ReadDocx
     protected function convertImage()
     {
         $rels = $this->getRels();
-        $imagesList = $this->docXml->getElementsByTagName('drawing');
 
+        $drawingImagesList = $this->docXml->getElementsByTagName('drawing');
+        $pictImagesList = $this->docXml->getElementsByTagName('pict');
+
+        if ($drawingImagesList->length > 0) {
+            $rels = $this->convertDrawingImage($drawingImagesList, $rels);
+        }
+
+        if ($pictImagesList->length > 0) {
+            $rels = $this->convertPictImage($pictImagesList, $rels);
+        }
+
+        $this->docXml->saveXML();
+        $paragraphList = $this->docXml->getElementsByTagName('p');
+        $text = '';
+        foreach ($paragraphList as $paragraph) {
+            $text .= trim($paragraph->textContent).PHP_EOL;
+        }
+
+        $this->documentText = $text;
+    }
+
+    /**
+     * @param $imagesList
+     * @param $rels
+     *
+     * @return mixed
+     *
+     * @throws ExamException
+     *
+     *  导入的docx文档xml中存在图片为 <w: drawing> 标签的解析方式
+     */
+    protected function convertDrawingImage($imagesList, $rels)
+    {
         foreach ($imagesList as $key => $imageXml) {
             $img = $imageXml->getElementsByTagName('blip')->item(0);
             if (empty($img)) {
@@ -119,14 +156,46 @@ class ReadDocx
                 }
             }
         }
-        $this->docXml->saveXML();
-        $paragraphList = $this->docXml->getElementsByTagName('p');
-        $text = '';
-        foreach ($paragraphList as $paragraph) {
-            $text .= trim($paragraph->textContent).PHP_EOL;
+
+        return $rels;
+    }
+
+    /**
+     * @param $imagesList
+     * @param $rels
+     *
+     * @return mixed
+     *
+     * @throws ExamException
+     *
+     * 导入的docx文档xml中存在图片为 <w: pict> 标签的解析方式
+     */
+    protected function convertPictImage($imagesList, $rels)
+    {
+        foreach ($imagesList as $key => $imageXml) {
+            $img = $imageXml->getElementsByTagName('imagedata')->item(0);
+
+            if (empty($img)) {
+                continue;
+            }
+            $imageId = $img->getAttribute('r:id');
+            $imageShape = $imageXml->getElementsByTagName('shape')->item(0);
+            $style = $imageShape->getAttribute('style');
+            preg_match('/width:(.*?);/', $style, $widthMatches);
+            preg_match('/height:(.*?);/', $style, $heightMatches);
+
+            if (isset($rels[$imageId]) && isset($widthMatches[1]) && isset($heightMatches[1])) {
+                $file = $this->getZipResource($rels[$imageId]);
+                if ($file) {
+                    $ext = pathinfo($rels[$imageId], PATHINFO_EXTENSION);
+                    $path = $this->resourceTmpPath.'/'.Uuid::uuid4().'.'.$ext;
+                    file_put_contents($path, $file);
+                    $imageXml->nodeValue = sprintf('<img src="%s" width="%s" height="%s">', $path, $widthMatches[1], $heightMatches[1]);
+                }
+            }
         }
 
-        $this->documentText = $text;
+        return $rels;
     }
 
     protected function loadXml($xmlPath)

@@ -15,7 +15,7 @@ class Setting extends AbstractResource
     private $supportTypes = array(
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer', 
-        'user', 'cloud', 'coin',
+        'user', 'cloud', 'coin', 'coupon'
     );
 
     /**
@@ -343,6 +343,17 @@ class Setting extends AbstractResource
         if (!in_array($type, $this->supportTypes)) {
             throw CommonException::ERROR_PARAMETER();
         }
+    }
+
+    public function getCoupon()
+    {
+        $couponSetting = $this->getSettingService()->get('coupon', array());
+        $default = array(
+            'enabled' => 1,
+        );
+        $couponSetting = array_merge($default, $couponSetting);
+
+        return $couponSetting;
     }
 
     private function getLoginConnect($clients)

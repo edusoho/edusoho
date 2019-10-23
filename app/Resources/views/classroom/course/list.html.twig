@@ -25,19 +25,19 @@
                 {% if course.courseNum|default(1) > 1 %}
                   {{ course.courseSet.title ~ ' - ' ~ course.title }}
                 {% else %}
-                  {{ course.courseSet.title }}
+                  {{ course.courseSet.title|sub_text(56) }}
                 {% endif %}
               </a>
             </div>
-            {% if setting('course.show_review', '1') == 1 %}
-              <div class="score">
-                {{ web_macro.star(course.rating) }}
-              </div>
-            {% endif %}
-            <div class="price hidden-xs">
+            <div class="hidden-xs class-course-price">
                 {{ 'classroom.origin_price'|trans }}：
                 {% include 'course/widgets/price.html.twig' with {courseSet: course.courseSet, shows:'originPrice'} %}
             </div>
+            {% if setting('course.show_review', '1') == 1 %}
+              <div class="class-course-score">
+                {{ web_macro.star(course.rating) }}
+              </div>
+            {% endif %}
             <span class="course-show">
               <i class="es-icon es-icon-keyboardarrowdown" data-lesson-url="{{ path('classrom_course_tasks_list', {courseId:course.id, classroomId:classroom.id}) }}"></i>
             </span>
