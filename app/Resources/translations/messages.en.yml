@@ -8740,51 +8740,6 @@ exception.live_activity.roomtype_invalid: Type of live room is invalid
 exception.live_activity.live_time_invalid: Start time or live broadcast time is incorrect
 exception.live_activity.create_liveroom_failed: Create liveroom failed, please try again
 exception.live_activity.live_status_invalid: Live status is invalid
-<<<<<<< HEAD
-exception.course.thread.not_found: 课程话题不存在
-exception.course.thread.not_in_course: 课程话题不在教学计划中
-exception.course.thread.not_found_post: 课程话题回复不存在
-exception.course.thread.post_not_in_course: 课程话题回复不在教学计划中
-exception.course.thread.title_required: 课程话题标题缺失
-exception.course.thread.type_invalid: 课程话题类型错误
-exception.course.thread.courseid_required: 计划id缺失
-exception.classroom.review.not_found: 班级评价不存在
-exception.classroom.review.no_more_than_5: 评分不能超过5
-exception.classroom.review.permission_denied: 没有权限
-exception.subtitle.not_found: 字幕不存在
-exception.subtitle.no_more_than_4: 最多添加4个字幕
-exception.money_card.money_invalid: 钱不能小于0
-exception.money_card.coin_invalid: 币值不能小于0
-exception.money_card.cardlength_invalid: 卡长过小
-exception.money_card.number_invalid: 卡号不能小于0
-exception.money_card.not_found: 充值卡不存在
-exception.money_card.lock_used_card: 不能作废已使用状态的充值卡
-exception.money_card.not_found_batch: 批次不存在
-exception.money_card.duplicate_card: 卡号有重复
-exception.money_card.batch_status_equal_invalid: 在批次被作废的情况下，不能启用批次下的充值卡
-exception.money_card.unlock_not_invalid_card: 只能启用作废状态的充值卡
-exception.money_card.password_invalid: password is invalid
-exception.money_card.batch_token_invalid: batch token is invalid
-exception.reward_point.account.not_found: 积分账号不存在
-exception.reward_point.account.already_open: 积分账号已创建
-exception.reward_point.account.userid_invalid: 用户id错误
-exception.reward_point.account.balance_insufficient: 余额不足
-exception.question_marker.not_found: 弹题不存在
-exception.order_pay_check.instance_error: 不是ProductDealerService实例
-exception.live_replay.not_found: 直播回放不存在
-exception.cloud_file.not_found: 云文件不存在
-exception.cloud_file.not_found_player: 云播放器不存在
-exception.token.invalid: token不存在或已过期
-exception.token.not_match_user: token与用户不匹配
-exception.token.not_match_course: token与教学计划不匹配
-exception.filetoolkit.not_image: 图片格式不正确
-exception.filetoolkit.not_flash: 您上传的不是flash文件
-exception.filetoolkit.file_type_error: 文件类型不正确
-exception.course.draft.not_found: 教学计划草稿不存在
-exception.task_result.not_found: 学习任务结果不存在
-exception.discovery_column.not_found: 发现栏目不存在
-exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
-=======
 exception.course.thread.not_found: Course topic does not exist
 exception.course.thread.not_in_course: Course topics are not in the teaching plan
 exception.course.thread.not_found_post: Course topic reply does not exist
@@ -8832,7 +8787,6 @@ exception.discovery_column.not_found: Discovery column does not exist
 exception.educloud.user_disabled_hint: The education cloud has been banned, and the payment system is automatically lifted. Tutorial <a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">See here</a>
 exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed
->>>>>>> 8abfe012075858e4981a34f585f0a52d3e7d1706
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 
