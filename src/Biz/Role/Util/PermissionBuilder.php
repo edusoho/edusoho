@@ -144,7 +144,7 @@ class PermissionBuilder
         foreach ($a as $b) {
             foreach ($b->getChildren() as $child) {
                 $groupIndex2 = $child->data['parent'];
-                if (empty($children[$groupIndex2]['children'][$child->data['code']]))  {
+                if (empty($children[$groupIndex2]['children'][$child->data['code']])) {
                     $children[$groupIndex2]['children'][$child->data['code']] = $child->data;
                 }
             }
