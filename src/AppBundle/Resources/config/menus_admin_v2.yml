@@ -324,6 +324,23 @@ admin_v2:
                     name: admin_v2.marketing.basic_group
                     is_group: true
                     children:
+                        #邀请管理
+                        admin_v2_operation_invite:
+                            name: admin_v2.operation.invite_menu
+                            children:
+                                admin_v2_operation_invite_record:
+                                    name: admin_v2.operation.invite.record_tab
+                                    disable: true
+                                    router_name: admin_v2_invite_record
+                                admin_v2_operation_invite_user:
+                                    name: admin_v2.operation.invite.user_tab
+                                    disable: true
+                                    router_name: admin_v2_invite
+                                admin_v2_operation_invite_coupon:
+                                    name: admin_v2.operation.invite.coupon_tab
+                                    disable: true
+                                    router_name: admin_v2_invite_coupon
+                        # 优惠券管理
                         admin_v2_marketing_coupon:
                             name: admin_v2.operation.coupon_menu
                             router_name: admin_v2_coupon
