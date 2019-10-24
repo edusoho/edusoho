@@ -97,7 +97,23 @@ admin_operation_invite_record: admin_v2_operation_invite_record #邀请记录
 admin_operation_invite_user: admin_v2_operation_invite_user #用户查询
 admin_operation_invite_coupon: admin_v2_operation_invite_coupon #奖励查询
 
-#运营－站点设置
+#运营
+#微网校装修
+admin_h5_set: admin_v2_h5_set #微网校装修
+admin_wap_set: admin_v2_wap_set #微网校装修
+
+#小程序装修
+admin_wechat_app_manage: admin_v2_wechat_app_manage #小程序装修
+admin_wechat_app: admin_v2_wechat_app_manage #小程序装修
+
+#App装修
+admin_setting_mobile: admin_v2_setting_mobile #App装修
+admin_setting_mobile_settings: admin_v2_mobile_settings #App设置
+admin_operation_mobile_banner_manage: admin_v2_mobile_banner_manage #轮播图设置
+admin_discovery_column_index: admin_v2_discovery_column_index #发现页栏目
+admin_discovery_column_create: admin_v2_discovery_column_create #添加栏目
+
+#站点设置
 admin_operation: admin_v2_operating #运营
 admin_setting: admin_v2_site_setting #站点设置
 admin_top_navigation: admin_v2_top_navigation #顶部导航
