@@ -766,10 +766,6 @@ admin_v2_app_package_update_check_download_and_extract:
     methods: [POST]
 #    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
-admin_v2_invite_set:
-    path:  /setting/invite
-    defaults: { _controller: AppBundle:Admin/OperationSetting:inviteSet }
-
 admin_v2_app_package_update_begin_upgrade:
     path: /app/package_update/{id}/begin_upgrade
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:beginUpgrade }
