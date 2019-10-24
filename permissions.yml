@@ -88,6 +88,11 @@ admin_operation_invite_record: admin_v2_operation_invite_record #邀请记录
 admin_operation_invite_user: admin_v2_operation_invite_user #用户查询
 admin_operation_invite_coupon: admin_v2_operation_invite_coupon #奖励查询
 
+# 微营销
+admin_marketing_top: admin_v2_micromarketing
+_marketing_marketing_page: admin_v2_micromarketing_page
+
+
 #运营－站点设置
 admin_operation: admin_v2_operating #运营
 admin_setting: admin_v2_site_setting #站点设置

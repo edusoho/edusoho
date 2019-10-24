@@ -556,7 +556,7 @@ admin_v2_invite:
 
 admin_v2_invite_coupon:
     path: /invite/{filter}/coupon/
-    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:coupon, filter:'invited'}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:coupon, filter:'invited' }
 
 admin_v2_invite_coupon_query:
     path: /invite/coupon/query/
@@ -570,3 +570,8 @@ admin_v2_invite_detail:
 admin_v2_invite_set:
     path:  /setting/invite
     defaults: { _controller: AppBundle:Admin/OperationSetting:inviteSet }
+
+# 营销-营销管理-微营销
+admin_v2_login_micromarketing:
+    path: /login/marketing
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Micromarketing:login }

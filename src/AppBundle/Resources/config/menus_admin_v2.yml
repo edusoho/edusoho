@@ -340,6 +340,14 @@ admin_v2:
                                     name: admin_v2.operation.invite.coupon_tab
                                     disable: true
                                     router_name: admin_v2_invite_coupon
+                        # 微营销
+                        admin_v2_micromarketing:
+                            name: admin_v2.micromarketing.menu
+                            disable: true
+                            children:
+                                admin_v2_micromarketing_page:
+                                    name: admin_v2.micromarketing.menu
+                                    router_name: admin_v2_login_micromarketing
 
                 # 渠道管理
                 admin_v2_channel_group:

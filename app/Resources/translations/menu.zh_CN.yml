@@ -572,4 +572,7 @@ admin_v2.operation.invite.record_tab: 邀请记录
 admin_v2.operation.invite.user_tab: 用户查询
 admin_v2.operation.invite.coupon_tab: 奖励查询
 
+#营销-营销管理-微营销
+admin_v2.micromarketing.menu: 微营销
+
 # 新版后台结束
