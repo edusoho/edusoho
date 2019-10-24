@@ -239,6 +239,87 @@ admin_v2_open_course_analysis_conversion_result:
     path:  /open_course/{courseId}/analysis/conversion/result
     defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:conversionResult }
 
+#教学
+##分类标签
+admin_v2_course_category:
+    path: /course/category
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:courseCategory }
+    permissions: [admin_v2_course_category_manage]
+
+admin_v2_classroom_category:
+    path: /classroom/category
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:classroomCategory }
+
+admin_v2_category_create:
+    path: /category/create
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:create }
+
+admin_v2_category_edit:
+    path:  /category/{id}/edit
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:edit }
+    permissions: [admin_v2_course_category_manage]
+
+admin_v2_category_delete:
+    path:  /category/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:delete }
+    methods: [POST]
+
+admin_v2_category_sort:
+    path:  /category/sort
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:sort }
+    methods: [POST]
+
+admin_v2_category_checkcode:
+    path:  /category/checkcode
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:checkCode }
+    permissions: [admin_v2_course_category_manage]
+
+admin_v2_tag:
+    path:  /tag
+    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:index }
+    permissions: [admin_v2_course_tag_manage]
+
+admin_v2_tag_create:
+    path:  /tag/create
+    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:create }
+    permissions: [admin_v2_course_tag_add]
+
+admin_v2_tag_update:
+    path:  /tag/{id}/update
+    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:update }
+    permissions: [admin_v2_course_tag_manage]
+
+admin_v2_tag_delete:
+    path:  /tag/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:delete }
+    methods:  [POST]
+    permissions: [admin_v2_course_tag_manage]
+
+admin_v2_tag_checkname:
+    path:  /tag/checkname
+    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:checkName}
+    permissions: [admin_v2_course_tag_manage]
+
+admin_v2_tag_group:
+    path: /tag/group
+    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:index }
+
+admin_v2_tag_group_update:
+    path: /tag/group/{groupId}/update
+    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:update }
+
+admin_v2_tag_group_create:
+    path: /tag/group/create
+    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:create }
+
+admin_v2_tag_group_delete:
+    path: /tag/group/{tagId}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:delete }
+
+admin_v2_tag_group_checkname:
+    path: /tag/group/checkname
+    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:checkName }
+    
 # 教学-助学管理-笔记管理
 admin_v2_course_note:
     path: /note
@@ -402,87 +483,6 @@ admin_v2_cloud_file_tag_show:
     path: /cloud_file/tag/show
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:batchTagShow }
     permissions: [admin_v2_cloud_resource]
-    
-#教学
-##分类标签
-admin_v2_course_category:
-    path: /course/category
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:courseCategory }
-    permissions: [admin_v2_course_category_manage]
-
-admin_v2_classroom_category:
-    path: /classroom/category
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:classroomCategory }
-
-admin_v2_category_create:
-    path: /category/create
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:create }
-
-admin_v2_category_edit:
-    path:  /category/{id}/edit
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:edit }
-    permissions: [admin_v2_course_category_manage]
-
-admin_v2_category_delete:
-    path:  /category/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:delete }
-    methods: [POST]
-
-admin_v2_category_sort:
-    path:  /category/sort
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:sort }
-    methods: [POST]
-
-admin_v2_category_checkcode:
-    path:  /category/checkcode
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:checkCode }
-    permissions: [admin_v2_course_category_manage]
-
-admin_v2_tag:
-    path:  /tag
-    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:index }
-    permissions: [admin_v2_course_tag_manage]
-
-admin_v2_tag_create:
-    path:  /tag/create
-    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:create }
-    permissions: [admin_v2_course_tag_add]
-
-admin_v2_tag_update:
-    path:  /tag/{id}/update
-    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:update }
-    permissions: [admin_v2_course_tag_manage]
-
-admin_v2_tag_delete:
-    path:  /tag/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:delete }
-    methods:  [POST]
-    permissions: [admin_v2_course_tag_manage]
-
-admin_v2_tag_checkname:
-    path:  /tag/checkname
-    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:checkName}
-    permissions: [admin_v2_course_tag_manage]
-
-admin_v2_tag_group:
-    path: /tag/group
-    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:index }
-
-admin_v2_tag_group_update:
-    path: /tag/group/{groupId}/update
-    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:update }
-
-admin_v2_tag_group_create:
-    path: /tag/group/create
-    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:create }
-
-admin_v2_tag_group_delete:
-    path: /tag/group/{tagId}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:delete }
-
-admin_v2_tag_group_checkname:
-    path: /tag/group/checkname
-    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:checkName }
     
 # 运营-营销管理-优惠券管理
 admin_v2_coupon:
@@ -678,12 +678,76 @@ admin_v2_setting_share:
    
 #web端装修
 admin_v2_block:
-    path:  /block/list-{category}
+    path:  /block/list/{category}
     defaults: { _controller: AppBundle:AdminV2/Operating/Block:index }
     
 admin_v2_setting_theme:
     path:  /setting/theme
     defaults: { _controller: AppBundle:AdminV2/Operating/Theme:index }
+    
+
+## APP装修
+admin_v2_setting_mobile:
+    path:  /setting/mobile
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:mobile }
+    permissions: [admin_v2_mobile_settings]
+
+admin_v2_mobile_picture_upload:
+    path:  /setting/mobile/picture/upload/{type}
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:mobilePictureUpload }
+    methods: [POST]
+    permissions: [admin_v2_mobile_settings]
+
+admin_v2_mobile_picture_remove:
+    path:  /setting/mobile/picture/remove/{type}
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:mobilePictureRemove }
+    methods: [POST]
+    permissions: [admin_v2_mobile_settings]
+
+admin_v2_mobile_banner_manage:
+    path:  /setting/mobile/banner
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:banner }
+    permissions: [admin_v2_mobile_banner_manage]
+
+admin_v2_discovery_column_index:
+    path:  /discovery_column/index
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:index }
+
+admin_v2_discovery_column_create:
+    path:  /discovery_column/create
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:create }
+    permissions: [admin_v2_setting_mobile]
+
+admin_v2_discovery_column_delete:
+    path:  /discovery_column/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:delete }
+    methods: [POST]
+    permissions: [admin_v2_setting_mobile]
+
+admin_v2_discovery_column_edit:
+    path:  /discovery_column/{id}/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:edit }
+    permissions: [admin_v2_setting_mobile]
+
+admin_v2_discovery_column_title_check:
+    path:  /discovery_column/{id}/title_check
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:checkTitle }
+    permissions: [admin_v2_setting_mobile]
+
+admin_v2_discovery_column_sort:
+    path:  /discovery_column/sort
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:sort }
+    permissions: [admin_v2_setting_mobile]
+    
+admin_v2_discovery_column_category_tree:
+    path: /discovery_column/category/tree
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:categoryTree }
+    permissions: [admin_v2_setting_mobile]
+    
+admin_v2_course_search_to_fill_banner:
+    path: /course/search_to_fill_banner
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:searchToFillBanner }
+    permissions: [admin_v2_setting_mobile]
     
 # 系统
 ## 组织机构管理
