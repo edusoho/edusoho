@@ -104,7 +104,7 @@ admin_wap_set: admin_v2_wap_set #微网校装修
 
 #小程序装修
 admin_wechat_app_manage: admin_v2_wechat_app_manage #小程序装修
-admin_v2_wechat_app: admin_v2_wechat_app_manage #小程序装修
+admin_wechat_app: admin_v2_wechat_app_manage #小程序装修
 
 #App装修
 admin_setting_mobile: admin_v2_setting_mobile #App装修
