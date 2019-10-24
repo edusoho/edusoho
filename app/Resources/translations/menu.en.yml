@@ -541,8 +541,8 @@ admin_v2.btn.create_category_btn: Add a Category
 
 
 # 运营-网校装修-微网校装修
-admin_v2.system.mobile.h5: Mobile Site Setting
-admin_v2.system.operation.wap_tab: Mobile Site Setting
+admin_v2.operation.mobile.h5: Mobile Site Setting
+admin_v2.operation.wap_tab: Mobile Site Setting
 
 # 运营-网校装修-小程序装修
 admin_v2.wechat_app.menu: Wechat App Setting
