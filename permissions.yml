@@ -111,6 +111,13 @@ admin_wap_set: admin_v2_wap_set #微网校装修
 admin_wechat_app_manage: admin_v2_wechat_app_manage #小程序装修
 admin_wechat_app: admin_v2_wechat_app_manage #小程序装修
 
+# 资讯
+admin_operation_article: admin_v2_operation_article
+admin_operation_article_manage: admin_v2_operation_article_manage
+admin_operation_article_create: admin_v2_operation_article_create
+admin_operation_article_category: admin_v2_operation_article_category
+admin_operation_category_create: admin_v2_operation_category_create
+
 #App装修
 admin_setting_mobile: admin_v2_setting_mobile #App装修
 admin_setting_mobile_settings: admin_v2_mobile_settings #App设置
