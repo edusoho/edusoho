@@ -221,7 +221,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
         foreach ($batches as $key => &$batch) {
             if ('discount' == $batch['type']) {
-                $batch['rate'] = floatval($batch['rate']);
+                $batch['rate'] = strval(floatval($batch['rate']));
             }
 
             $batchId = $batch['id'];

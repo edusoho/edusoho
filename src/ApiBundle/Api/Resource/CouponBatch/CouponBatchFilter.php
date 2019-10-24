@@ -19,7 +19,7 @@ class CouponBatchFilter extends Filter
         $data['deadline'] = $data['deadline'] > 0 ? date('c', $data['deadline']) : '';
 
         if ('discount' == $data['type']) {
-            $data['rate'] = floatval($data['rate']);
+            $data['rate'] = strval(floatval($data['rate']));
         }
 
         if (!empty($data['target'])) {
