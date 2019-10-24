@@ -350,55 +350,6 @@ class CouponController extends BaseController
         return $this->createMessageResponse('info', '无效的链接', '', 3, $this->generateUrl('homepage'));
     }
 
-    public function chooseCouponAction(Request $request, $type)
-    {
-        $conditions = $request->query->all();
-        $conditions['deadlineMode'] = 'day';
-        $conditions['unreceivedNumGt'] = 1;
-
-        $paginator = new Paginator(
-            $request,
-            $this->getCouponBatchService()->searchBatchsCount($conditions),
-            10
-        );
-
-        $batchs = $this->getCouponBatchService()->searchBatchs(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        foreach ($batchs as $key => &$batch) {
-            $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id']);
-        }
-
-        return $this->render('admin-v2/marketing/coupon/chooser-coupon/chooser-coupon-modal.html.twig', array(
-            'batchs' => $batchs,
-            'type' => $type,
-            'paginator' => $paginator,
-        ));
-    }
-
-    public function chooseResourceListAction(Request $request, $batchId)
-    {
-        $batch = $this->getCouponBatchService()->getBatch($batchId);
-        if (!in_array($batch['targetType'], array('course', 'classroom')) || $batch['targetId'] < 0) {
-            $this->createNewException(CouponException::TARGET_TYPE_ERROR());
-        }
-        $resourceIds = empty($batch['targetIds']) ? array(-1) : $batch['targetIds'];
-        if ('course' == $batch['targetType']) {
-            $resources = $this->getCourseSetService()->findCourseSetsByIds($resourceIds);
-        } else {
-            $resources = $this->getClassroomService()->findClassroomsByIds($resourceIds);
-        }
-
-        return $this->render('admin-v2/marketing/coupon/chooser-coupon/coupon-batch-resource-list-modal.html.twig', array(
-            'batch' => $batch,
-            'resources' => $resources,
-        ));
-    }
-
     /**
      * @return OrderService
      */
