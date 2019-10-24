@@ -1,0 +1,30 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{ 'coupon.batch.get_receive_url'|trans }}{% endblock %}
+
+{% block body %}
+
+<div class="form-horizontal">
+  <div class="form-group">
+    <label class="col-sm-3 control-label">{{ 'coupon.batch'|trans }}</label>
+    <div class="col-sm-9 form-control-static">
+      {{batch.name}}
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-3 control-label">{{ 'coupon.receive_url'|trans }}</label>
+    <div class="col-sm-9">
+      <textarea class="form-control" id='content'>{{url}}</textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-9 col-sm-offset-3">
+      <button class="btn btn-primary " id='copy'>{{ 'coupon.copy.btn'|trans }}</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+  <script>app.load('coupon/copy')</script>
+{% endblock %} 

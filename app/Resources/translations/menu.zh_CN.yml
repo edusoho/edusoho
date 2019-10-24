@@ -560,6 +560,13 @@ admin_v2.cloud_service.sms_overview_tab: 概览
 #营销-营销管理
 admin_v2.marketing.basic_group: 营销管理
 
+#营销-营销管理-优惠券管理
+admin_v2.operation.coupon_menu: 优惠券管理
+admin_v2.marketing.coupon_menu.basic_tab: 优惠券管理
+admin_v2.marketing.coupon_menu.generate_btn: 生成优惠券
+admin_v2.marketing.query_menu.basic_tab: 使用查询
+admin_v2.system.marketing.coupon_setting_tab: 优惠券设置
+
 # 营销-渠道管理
 admin_v2.channel.basic_group: 渠道管理
 
