@@ -482,9 +482,10 @@ admin_v2.course.classroom.basic_tab.delete_submit_btn: Delete
 
 # 教学-课程管理-直播模块
 admin_v2.course.live_menu: Lives
-admin.course.coming.live_tab: Coming
-admin.course.underway.live_tab: Underway
-admin.course.end.live_tab: End
+admin_v2.course.coming.live_tab: Coming
+admin_v2.course.underway.live_tab: Underway
+admin_v2.course.end.live_tab: End
+admin_v2.course.live.basic_tab.create_btn: Create
 
 #公开课模块
 admin_v2.course.open_course_menu:  Public Courses

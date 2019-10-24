@@ -193,12 +193,12 @@ admin_v2:
                             name: admin.course.live_menu
                             children:
                                 admin_v2_live_course_coming:
-                                    name: admin.course.coming.live_tab
+                                    name: admin_v2.course.coming.live_tab
                                     router_name: admin_v2_live_course
                                     disable: true
                                     children:
                                         admin_v2_live_course_add:
-                                            name: admin.course.live.basic_tab.create_btn
+                                            name: admin_v2.course.live.basic_tab.create_btn
                                             router_name: course_set_manage_create
                                             router_params:
                                                 default: 'live'
@@ -206,13 +206,13 @@ admin_v2:
                                             disable: true
                                             blank: 1
                                 admin_v2_live_course_underway:
-                                    name: admin.course.underway.live_tab
+                                    name: admin_v2.course.underway.live_tab
                                     router_name: admin_v2_live_course
                                     router_params:
                                         status: underway
                                     disable: true
                                 admin_v2_live_course_end:
-                                    name: admin.course.end.live_tab
+                                    name: admin_v2.course.end.live_tab
                                     router_name: admin_v2_live_course
                                     router_params:
                                         status: end

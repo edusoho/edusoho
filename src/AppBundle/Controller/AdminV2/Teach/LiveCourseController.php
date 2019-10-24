@@ -6,7 +6,6 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveCourseController extends BaseController
@@ -88,24 +87,6 @@ class LiveCourseController extends BaseController
         $courseSets = $this->getCourseSetService()->searchCourseSets($courseSetConditions, array(), 0, PHP_INT_MAX);
 
         return ArrayToolkit::index($courseSets, 'id');
-    }
-
-    public function getMaxOnlineAction(Request $request)
-    {
-        $conditions = $request->query->all();
-
-        if (!empty($conditions['courseId']) && !empty($conditions['lessonId'])) {
-            $lesson = $this->getCourseService()->getCourseLesson($conditions['courseId'], $conditions['lessonId']);
-
-            $client = new EdusohoLiveClient();
-
-            if ('live' == $lesson['type']) {
-                $result = $client->getMaxOnline($lesson['mediaId']);
-                $lesson = $this->getCourseService()->setCourseLessonMaxOnlineNum($lesson['id'], $result['onLineNum']);
-            }
-        }
-
-        return $this->createJsonResponse($lesson);
     }
 
     private function getConditionAndOrderByStatus($status, $conditions)
