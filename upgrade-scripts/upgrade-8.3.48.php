@@ -106,7 +106,8 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             if (empty($data)) {
-                throw new \RuntimeException('模板打开失败');
+                $this->logger('info', '模板打开失败');
+                return 1;
             }
 
             $wechatSetting['templates']['liveOpen']['templateId'] = $data['template_id'];
