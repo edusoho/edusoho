@@ -78,6 +78,12 @@ admin_review: admin_v2_review  #反馈管理
 admin_course_review_tab: admin_v2_course_review_tab #课程评价
 admin_classroom_review_tab: admin_v2_classroom_review_tab #班级评价
 
+#云资源
+admin_cloud_file_manage: admin_v2_cloud_resource #云资源
+admin_cloud_file: admin_v2_cloud_file #云视频
+admin_cloud_attachment: admin_v2_cloud_attachment #云附件
+admin_edu_cloud_attachment: admin_v2_cloud_attachment_setting #云附件设置
+
 # 优惠券管理
 admin_operation_coupon: admin_v2_marketing_coupon
 admin_operation_coupon_manage: admin_v2_marketing_coupon_manage

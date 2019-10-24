@@ -507,6 +507,14 @@ admin_v2.course.review_menu: Reviews
 admin_v2.course.review.course_review_tab: Reviews
 admin_v2.course.review.classroom_review_tab: Rate
 
+
+# 教学模块-资源管理-云资源
+admin_v2.cloud_resource.basic_group: Cloud Resources
+admin_v2.cloud_resource.basic_tab: Cloud Resources
+admin_v2.cloud.file.basic_tab: Cloud Resources
+admin_v2.cloud.attachment.basic_tab: Cloud Attachement
+admin_v2.cloud.attachment_setting.basic_tab: Cloud Attachement Setting
+
 # 通用按钮
 admin_v2.btn.sms_send_btn: Notify the publish
 admin_v2.btn.recommend_cancel_btn: Un-recommend

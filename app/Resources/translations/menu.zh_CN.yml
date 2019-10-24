@@ -509,6 +509,13 @@ admin_v2.course.review_menu: 反馈管理
 admin_v2.course.review.course_review_tab: 课程评价
 admin_v2.course.review.classroom_review_tab: 班级评价
 
+# 教学模块-资源管理-云资源
+admin_v2.cloud_resource.basic_group: 资源管理
+admin_v2.cloud_resource.basic_tab: 云资源
+admin_v2.cloud.file.basic_tab: 云资源
+admin_v2.cloud.attachment.basic_tab: 云附件
+admin_v2.cloud.attachment_setting.basic_tab: 云附件设置
+
 #通用按钮
 admin_v2.btn.recommend_cancel_btn: 取消推荐
 admin_v2.btn.sms_send_btn: 发送发布通知短信
