@@ -116,7 +116,7 @@
               </a>
               <div name="{{ 'bannerCourseShow' ~ i}}">
                 <ul class="banner-course" role="bannerCourse">
-                    {% include 'admin/course/course-item.html.twig' with {course:bannerCourses[i]} %}
+                    {% include 'admin-v2/teach/course/course-item.html.twig' with {course:bannerCourses[i]} %}
                 </ul>
               </div>
               {% set bannerJumpToCourseId  = 'bannerJumpToCourseId' ~ i%}
