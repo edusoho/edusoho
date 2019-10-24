@@ -240,7 +240,7 @@ admin_v2:
                                 admin_v2_open_course_analysis:
                                     name: admin_v2.course.open_course.analysis_tab
                                     disable: true
-                        #分类标签                    
+                        #分类标签
                         admin_v2_course_category_tag:
                             name: admin_v2.course.category_tag_menu
                             children:
@@ -462,6 +462,14 @@ admin_v2:
                                     disable: true
                                     router_params:
                                         type: friendlyLink
+#                admin_v2_content_operation_group:
+#                    name: admin_v2.operation.content_operation.basic_group
+#                    is_group: true
+#                    children:
+#                        admin_v2_operation_wechat_notification:
+#                            name: admin_v2.operation.wechat_notification
+#                            children:
+
         # 用户管理模块
         admin_v2_user:
             name: admin_v2.nav.user
