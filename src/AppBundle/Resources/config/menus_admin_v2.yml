@@ -412,10 +412,10 @@ admin_v2:
                     is_group: true
                     children:
                         admin_v2_h5_set:
-                            name: admin_v2.system.mobile.h5
+                            name: admin_v2.operation.mobile.h5
                             children:
                                 admin_v2_wap_set:
-                                    name: admin_v2.system.operation.wap_tab
+                                    name: admin_v2.operation.wap_tab
                                     disable: true
                                     router_name: admin_v2_wap_set
                         admin_v2_wechat_app_manage:
@@ -462,6 +462,25 @@ admin_v2:
                                     disable: true
                                     router_params:
                                         type: friendlyLink
+                        admin_v2_setting_mobile:
+                            name: admin_v2.operation.mobile_menu
+                            children:
+                                admin_v2_mobile_settings:
+                                    name: admin_v2.operation.mobile.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_mobile
+                                admin_v2_mobile_banner_manage:
+                                    name: admin_v2.operation.mobile.banner_setting_tab
+                                    disable: true
+                                    router_name: admin_v2_mobile_banner_manage
+                                admin_v2_discovery_column_index:
+                                    name: admin_v2.operation.mobile.discovery_column_tab
+                                    disable: true
+                                    children:
+                                        admin_v2_discovery_column_create:
+                                            name: admin_v2.operation.mobile.discovery_column_tab.create_btn
+                                            group: topBtn
+                                            mode: modal
         # 用户管理模块
         admin_v2_user:
             name: admin_v2.nav.user
