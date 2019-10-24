@@ -480,6 +480,19 @@ admin_v2.course.classroom.basic_tab.close_btn: Close
 admin_v2.course.classroom.basic_tab.publish_submit_btn: Publish
 admin_v2.course.classroom.basic_tab.delete_submit_btn: Delete
 
+# 教学-课程管理-直播模块
+admin_v2.course.live_menu: Lives
+admin_v2.course.coming.live_tab: Coming
+admin_v2.course.underway.live_tab: Underway
+admin_v2.course.end.live_tab: End
+admin_v2.course.live.basic_tab.create_btn: Create
+
+#公开课模块
+admin_v2.course.open_course_menu:  Public Courses
+admin_v2.course.open_course.basic_tab: Open courses
+admin_v2.course.open_course.basic_tab.create_btn: Create
+admin_v2.course.open_course.recommend_list_tab: Recommended
+admin_v2.course.open_course.analysis_tab: Statistics
 
 # 教学-助学管理
 admin_v2.tool.basic_group: Tool Manage
@@ -525,12 +538,6 @@ admin_v2.course.category.course_category_tab: Course Categories
 admin_v2.course.category.classroom_category_tab: Class Categories
 admin_v2.btn.create_category_btn: Add a Category
 
-#公开课模块
-admin_v2.course.open_course_menu:  Public Courses
-admin_v2.course.open_course.basic_tab: Open courses
-admin_v2.course.open_course.basic_tab.create_btn: Create
-admin_v2.course.open_course.recommend_list_tab: Recommended
-admin_v2.course.open_course.analysis_tab: Statistics
 
 
 # 运营-网校装修-微网校装修

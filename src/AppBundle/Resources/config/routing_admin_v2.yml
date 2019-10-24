@@ -168,6 +168,12 @@ admin_v2_classroom_recommend_list:
     path:   /classroom/recommend/list
     defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommendIndex }
 
+# 教学-课程管理-直播管理
+admin_v2_live_course:
+    path: /livecourse/{status}
+    defaults: { _controller: AppBundle:AdminV2/Teach/LiveCourse:index, status:'coming'}
+    permissions: [admin_v2_live_course]
+    
 # 教学-课程管理-公开课管理
 admin_v2_open_course:
     path: /open_course/{filter}
@@ -482,16 +488,11 @@ admin_v2_invite_detail:
     path:  /invite/detail
     defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:inviteDetail }
     permissions: [admin_v2_operation_invite]
-
-admin_v2_invite_set:
-    path:  /setting/invite
-    defaults: { _controller: AppBundle:Admin/OperationSetting:inviteSet }
     
 #营销-渠道管理-分销
 admin_v2_login_distributor:
     path: /login/distributor
     defaults: { _controller: AppBundle:AdminV2/Marketing/Distributor:login }
-  
 #用户
 ##用户管理
 admin_v2_user_show:
@@ -641,6 +642,14 @@ admin_v2_edu_cloud_sms:
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/CloudServer:smsOverview }
     permissions: [admin_v2_edu_cloud_sms_overview]
     
+admin_v2_my_cloud_overview:
+    path:  /setting/my/cloud/overview
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloudOverview }
+    
+admin_v2_setting_cloud_edulive:
+    path:  /setting/cloud/edulive
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveSetting }
+
 admin_v2_app_package_update_modal:
     path:  /app/package_update/{id}/modal
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal }

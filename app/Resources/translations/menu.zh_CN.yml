@@ -482,6 +482,20 @@ admin_v2.course.classroom.basic_tab.close_btn: 关闭班级
 admin_v2.course.classroom.basic_tab.publish_submit_btn: 发布班级
 admin_v2.course.classroom.basic_tab.delete_submit_btn: 删除班级
 
+# 教学-课程管理-直播模块
+admin_v2.course.live_menu: 直播管理
+admin_v2.course.coming.live_tab: 即将开始
+admin_v2.course.underway.live_tab: 当前进行
+admin_v2.course.end.live_tab: 已结束的
+admin_v2.course.live.basic_tab.create_btn: 创建直播
+
+# 教学-课程管理-公开课模块
+admin_v2.course.open_course_menu: 公开课管理
+admin_v2.course.open_course.basic_tab: 公开课管理
+admin_v2.course.open_course.basic_tab.create_btn: 创建公开课
+admin_v2.course.open_course.recommend_list_tab: 公开课推荐
+admin_v2.course.open_course.analysis_tab: 公开课统计
+
 # 教学-助学管理
 admin_v2.tool.basic_group: 助学管理
 
@@ -527,14 +541,6 @@ admin_v2.course.category.course_category_tab: 课程分类
 admin_v2.course.category.classroom_category_tab: 班级分类
 admin_v2.btn.create_category_btn: 添加分类
 
-
-
-# 教学-课程管理-公开课模块
-admin_v2.course.open_course_menu: 公开课管理
-admin_v2.course.open_course.basic_tab: 公开课管理
-admin_v2.course.open_course.basic_tab.create_btn: 创建公开课
-admin_v2.course.open_course.recommend_list_tab: 公开课推荐
-admin_v2.course.open_course.analysis_tab: 公开课统计
 
 # 运营-网校装修-微网校装修
 admin_v2.system.mobile.h5: 微网校装修
