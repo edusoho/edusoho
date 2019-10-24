@@ -383,18 +383,18 @@ admin_v2:
                     is_group: true
                     children:
                         admin_v2_h5_set:
-                            name: admin.system.mobile.h5
+                            name: admin_v2.system.mobile.h5
                             children:
                                 admin_v2_wap_set:
-                                    name: admin.system.operation.wap_tab
+                                    name: admin_v2.system.operation.wap_tab
                                     disable: true
                                     router_name: admin_v2_wap_set
                         admin_v2_wechat_app_manage:
-                            name: admin.wechat_app.menu
+                            name: admin_v2.wechat_app.menu
                             router_name: admin_v2_wechat_app
                             children:
                                 admin_v2_wechat_app:
-                                    name: admin.wechat_app.menu
+                                    name: admin_v2.wechat_app.menu
                                     router_name: admin_v2_wechat_app
                                     disable: true
                         admin_v2_site_setting:
