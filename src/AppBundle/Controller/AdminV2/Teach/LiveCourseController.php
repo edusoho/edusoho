@@ -146,7 +146,7 @@ class LiveCourseController extends BaseController
 
         return $eduCloudStatus;
     }
-    
+
     /**
      * @return ActivityService
      */
@@ -154,7 +154,7 @@ class LiveCourseController extends BaseController
     {
         return $this->createService('Activity:ActivityService');
     }
-    
+
     /**
      * @return EduCloudService
      */
@@ -162,7 +162,7 @@ class LiveCourseController extends BaseController
     {
         return $this->createService('CloudPlatform:EduCloudService');
     }
-    
+
     /**
      * @return CourseService
      */
@@ -178,7 +178,7 @@ class LiveCourseController extends BaseController
     {
         return $this->createService('Task:TaskService');
     }
-    
+
     /**
      * @return CourseSetService
      */
@@ -186,7 +186,7 @@ class LiveCourseController extends BaseController
     {
         return $this->createService('Course:CourseSetService');
     }
-    
+
     /**
      * @return SettingService
      */
