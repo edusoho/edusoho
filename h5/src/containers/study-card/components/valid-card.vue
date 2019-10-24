@@ -79,7 +79,7 @@
         cardStatusList: {
           'expired': '卡已过期，去看看其他精品吧～',
           'invalid': '卡已失效，去看看其他精品吧～',
-          'recharged': 'this.rechargedMsg',
+          'recharged': '',
           'usedByOther': '卡已被其他人充值，去看看其他精品吧～',
           'empty': '卡已被抢完，去看看其他精品吧～',
         },
