@@ -10380,3 +10380,4 @@ admin_v2.tag_manage.tag.group.create.modal_title: 新增标签组
 
 # 新后台
 admin_v2.edu_cloud_not_access: 未接入教育云
+admin_v2.live_course.create_btn: 创建直播
