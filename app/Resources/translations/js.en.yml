@@ -1489,3 +1489,4 @@ admin.setting.invite.coupon.empty.tips: Please set coupon batch
 
 course.plan_task.activity_ppt_animation_img: Switch img mode
 course.plan_task.activity_ppt_animation_slide: Switch animation mode
+course.plan_task.lessons_publish_status: Published Lesson Number:%publishedNum%<br/>Unpublish Lesson Number:%unpublishedNum%
