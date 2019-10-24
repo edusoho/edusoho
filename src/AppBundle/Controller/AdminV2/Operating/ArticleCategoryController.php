@@ -4,6 +4,7 @@ namespace AppBundle\Controller\AdminV2\Operating;
 
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Article\CategoryException;
+use Biz\Article\Service\ArticleService;
 use Biz\Article\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -148,6 +149,9 @@ class ArticleCategoryController extends BaseController
         return $this->createService('Article:CategoryService');
     }
 
+    /**
+     * @return ArticleService
+     */
     protected function getArticleService()
     {
         return $this->createService('Article:ArticleService');
