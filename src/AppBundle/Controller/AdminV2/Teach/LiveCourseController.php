@@ -3,6 +3,11 @@
 namespace AppBundle\Controller\AdminV2\Teach;
 
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Activity\Service\ActivityService;
+use Biz\CloudPlatform\Service\EduCloudService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
@@ -141,17 +146,26 @@ class LiveCourseController extends BaseController
 
         return $eduCloudStatus;
     }
-
+    
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
     }
-
+    
+    /**
+     * @return EduCloudService
+     */
     protected function getEduCloudService()
     {
         return $this->createService('CloudPlatform:EduCloudService');
     }
-
+    
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
@@ -164,12 +178,18 @@ class LiveCourseController extends BaseController
     {
         return $this->createService('Task:TaskService');
     }
-
+    
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
     }
-
+    
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
