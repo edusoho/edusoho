@@ -94,7 +94,8 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!empty($wechatSetting['templates']['liveOpen']['templateId'])) {
             $client = $this->biz['wechat.template_message_client'];
             if (empty($client)) {
-                throw new \RuntimeException('获取微信信息错误');
+                $this->logger('info', '获取微信信息错误');
+                return 1;
             }
 
             if (!empty($wechatSetting['is_authorization'])) {
