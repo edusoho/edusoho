@@ -7909,6 +7909,7 @@ admin.finance_refund.notification_variable_description: 通知变量说明
 admin.finance_refund.refund_amount: 退款金额
 admin.finance_refund.refund_course_or_classroom: 需退款的课程或班级
 
+admin.mobile_setting.discovery_tips: 注：使用发现页配置功能，app版本需要升级到4.5.38及以上
 admin.mobile_setting.client_open_or_close: 是否开启客户端
 admin.mobile_setting.mobile_homepage_set_hint: >
   1.开启后，可将<a target="_blank" href="%mobileHomepage%">移动端首页</a>（域名/mobile）地址添加到网站顶部导航中

@@ -40,7 +40,6 @@ class SettingController extends BaseController
         $operationMobile = $this->getSettingService()->get('operation_mobile', array());
         $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
         $settingMobile = $this->getSettingService()->get('mobile', array());
-        $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
 
         $default = array(
             'enabled' => 1, // 网校状态
@@ -91,7 +90,7 @@ class SettingController extends BaseController
             'mobile' => $mobile,
             'mobileCode' => $mobileCode,
             'hasMobile' => $hasMobile,
-            'appDiscoveryVersion' => $appDiscoveryVersion,
+            'appDiscoveryVersion' => $this->getH5SettingService()->getAppDiscoveryVersion(),
         ));
     }
 

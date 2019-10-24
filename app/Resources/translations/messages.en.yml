@@ -6491,6 +6491,7 @@ admin.finance_refund.failed_notification_hint: 'When administrator refused refun
 admin.finance_refund.notification_variable_description: 'Notice variable description'
 admin.finance_refund.refund_amount: 'Refund amount'
 admin.finance_refund.refund_course_or_classroom: 'Refund course or class'
+admin.mobile_setting.discovery_tips: Notice：Using the discovery page configuration function, the app version needs to be upgraded to 4.5.38 and above
 admin.mobile_setting.client_open_or_close: 'Enable mobile app'
 admin.mobile_setting.mobile_homepage_set_hint: '1. If turned on, you can add  <a target= "_blank" HREF = "%mobileHomepage%" > mobile page </a>(domain name /mobile ) address to the site navigation'
 admin.mobile_setting.mobile_operation_hint: '2. click <a target=, "_blank" HREF = "%operationUrl%" >here </a> to set the mobile banners and pages'
