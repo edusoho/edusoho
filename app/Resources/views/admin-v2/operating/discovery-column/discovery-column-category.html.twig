@@ -1,0 +1,17 @@
+<label class="col-md-3 control-label">{{'admin.mobile_manage.discovery_column.category'|trans}}</label>
+{% if type == 'course' or type == 'live' %}
+<div class="col-md-8 controls course-category">
+  <select name="categoryId" required="required" class="form-control width-input width-input-large">
+    {{ select_options(category_choices('course'), categoryId, 'admin.mobile_manage.discovery_column.category'|trans) }}
+  </select>
+  <div class="help-block" style="display:none;"></div>
+</div>
+{% else %}
+ <div class="col-md-8 controls classroom-category">
+  <select name="categoryId" required="required" class="form-control width-input width-input-large">
+    {{ select_options(category_choices('classroom'), categoryId, 'admin.mobile_manage.discovery_column.category'|trans) }}
+  </select>
+  <div class="help-block" style="display:none;"></div>
+</div>       
+{% endif %}
+

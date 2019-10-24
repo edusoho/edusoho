@@ -541,12 +541,19 @@ admin_v2.btn.create_category_btn: Add a Category
 
 
 # 运营-网校装修-微网校装修
-admin_v2.system.mobile.h5: Mobile Site Setting
-admin_v2.system.operation.wap_tab: Mobile Site Setting
+admin_v2.operation.mobile.h5: Mobile Site Setting
+admin_v2.operation.wap_tab: Mobile Site Setting
 
 # 运营-网校装修-小程序装修
 admin_v2.wechat_app.menu: Wechat App Setting
 
+
+# 运营-网校装修-APP装修
+admin_v2.operation.mobile_menu: App Setting
+admin_v2.operation.mobile.basic_tab: App Setting
+admin_v2.operation.mobile.banner_setting_tab: Sliders management
+admin_v2.operation.mobile.discovery_column_tab: 'Explore Page Category'
+admin_v2.operation.mobile.discovery_column_tab.create_btn: 'Add Category'
 
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: Site Decoration

@@ -118,6 +118,45 @@ class PermissionBuilder
         return $this->cached['getSubPermissions'][$code][$group];
     }
 
+    public function groupedV2Permissions($code)
+    {
+        if (isset($this->cached['groupedPermissions'][$code])) {
+            return $this->cached['groupedPermissions'][$code];
+        }
+
+        $this->cached['groupedPermissions'][$code] = array();
+
+        $userPermissionTree = $this->getUserPermissionTree();
+
+        $codeTree = $userPermissionTree->find(
+            function ($tree) use ($code) {
+                return $tree->data['code'] === $code;
+            }
+        );
+
+        if (is_null($codeTree)) {
+            return $this->cached['groupedPermissions'][$code];
+        }
+
+        $grouped = array();
+        $a = $codeTree->getChildren();
+        $children = $codeTree->data['children'];
+        foreach ($a as $b) {
+            foreach ($b->getChildren() as $child) {
+                $groupIndex2 = $child->data['parent'];
+                if (empty($children[$groupIndex2]['children'][$child->data['code']])) {
+                    $children[$groupIndex2]['children'][$child->data['code']] = $child->data;
+                }
+            }
+
+            $grouped = $children;
+        }
+
+        $this->cached['groupedPermissions'][$code] = $grouped;
+
+        return $this->cached['groupedPermissions'][$code];
+    }
+
     public function groupedPermissions($code)
     {
         if (isset($this->cached['groupedPermissions'][$code])) {
@@ -320,7 +359,6 @@ class PermissionBuilder
         if (in_array($environment, array('test', 'dev'))) {
             return $permissions;
         }
-
         $cache = "<?php \nreturn ".var_export($permissions, true).';';
         file_put_contents($cacheFile, $cache);
 
@@ -341,6 +379,7 @@ class PermissionBuilder
             }
 
             $menus = $this->loadPermissionsFromConfig($menus);
+
             $permissions = array_merge($permissions, $menus);
         }
 
@@ -384,7 +423,6 @@ class PermissionBuilder
         foreach ($parents as $key => $value) {
             $value['code'] = $key;
             $menus[$key] = $value;
-
             if (isset($value['children'])) {
                 $childrenMenu = $value['children'];
 
