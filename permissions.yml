@@ -78,10 +78,24 @@ admin_review: admin_v2_review  #反馈管理
 admin_course_review_tab: admin_v2_course_review_tab #课程评价
 admin_classroom_review_tab: admin_v2_classroom_review_tab #班级评价
 
+# 优惠券管理
+admin_operation_coupon: admin_v2_marketing_coupon
+admin_operation_coupon_manage: admin_v2_marketing_coupon_manage
+admin_coupon_generate: admin_v2_coupon_generate
+admin_operation_coupon_query: admin_v2_marketing_coupon_query
+admin_coupon_setting: admin_v2_coupon_setting
+
+
+
 # 分销管理
 admin_distributor_top: admin_v2_distributor
 _distributor_page: admin_v2_distributor_page
 
+#邀请管理权限
+admin_operation_invite: admin_v2_operation_invite  #邀请管理
+admin_operation_invite_record: admin_v2_operation_invite_record #邀请记录
+admin_operation_invite_user: admin_v2_operation_invite_user #用户查询
+admin_operation_invite_coupon: admin_v2_operation_invite_coupon #奖励查询
 
 #运营
 #微网校装修

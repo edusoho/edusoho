@@ -556,10 +556,23 @@ admin_v2.cloud_service.sms_overview_tab: Overview
 #营销-营销管理
 admin_v2.marketing.basic_group: Marketing Manage
 
+#营销-营销管理-优惠券管理
+admin_v2.operation.coupon_menu: Coupon Manage
+admin_v2.marketing.coupon_menu.basic_tab: Coupon Manage
+admin_v2.marketing.coupon_menu.generate_btn: Generate Coupon
+admin_v2.marketing.query_menu.basic_tab: Use Query
+admin_v2.system.marketing.coupon_setting_tab: Coupon Setting
+
 # 营销-渠道管理
 admin_v2.channel.basic_group: Channel Manage
 
 # 营销-渠道管理-分销
 admin_v2.distributor.menu: Distributor
+
+#营销-营销管理-邀请管理
+admin_v2.operation.invite_menu: Invitations
+admin_v2.operation.invite.record_tab: Invitation Records
+admin_v2.operation.invite.user_tab: Invitation Records
+admin_v2.operation.invite.coupon_tab: Rewards
 
 # 新版后台结束

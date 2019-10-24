@@ -323,7 +323,171 @@ admin_v2_classroom_review_batch_delete:
     methods: [POST]
     permissions: [admin_v2_classroom_review_tab]
 
-#运营-渠道管理-分销
+#教学
+##分类标签
+admin_v2_course_category:
+    path: /course/category
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:courseCategory }
+    permissions: [admin_v2_course_category_manage]
+
+admin_v2_classroom_category:
+    path: /classroom/category
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:classroomCategory }
+
+admin_v2_category_create:
+    path: /category/create
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:create }
+
+admin_v2_category_edit:
+    path:  /category/{id}/edit
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:edit }
+    permissions: [admin_v2_course_category_manage]
+
+admin_v2_category_delete:
+    path:  /category/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:delete }
+    methods: [POST]
+
+admin_v2_category_sort:
+    path:  /category/sort
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:sort }
+    methods: [POST]
+
+admin_v2_category_checkcode:
+    path:  /category/checkcode
+    defaults: { _controller: AppBundle:AdminV2/Teach/Category:checkCode }
+    permissions: [admin_v2_course_category_manage]
+
+admin_v2_tag:
+    path:  /tag
+    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:index }
+    permissions: [admin_v2_course_tag_manage]
+
+admin_v2_tag_create:
+    path:  /tag/create
+    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:create }
+    permissions: [admin_v2_course_tag_add]
+
+admin_v2_tag_update:
+    path:  /tag/{id}/update
+    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:update }
+    permissions: [admin_v2_course_tag_manage]
+
+admin_v2_tag_delete:
+    path:  /tag/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:delete }
+    methods:  [POST]
+    permissions: [admin_v2_course_tag_manage]
+
+admin_v2_tag_checkname:
+    path:  /tag/checkname
+    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:checkName}
+    permissions: [admin_v2_course_tag_manage]
+
+admin_v2_tag_group:
+    path: /tag/group
+    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:index }
+
+admin_v2_tag_group_update:
+    path: /tag/group/{groupId}/update
+    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:update }
+
+admin_v2_tag_group_create:
+    path: /tag/group/create
+    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:create }
+
+admin_v2_tag_group_delete:
+    path: /tag/group/{tagId}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:delete }
+
+admin_v2_tag_group_checkname:
+    path: /tag/group/checkname
+    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:checkName }
+    
+# 运营-营销管理-优惠券管理
+admin_v2_coupon:
+    path: /coupon
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:index }
+
+admin_v2_coupon_generate:
+    path: /coupon/generate
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:generate }
+
+admin_v2_coupon_batch_create:
+    path: /coupon/batch/{batchId}/create
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:batchCreate }
+    methods: [POST]
+
+admin_v2_coupon_checkprefix:
+    path: /coupon/checkprefix
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:checkPrefix }
+
+admin_v2_coupon_delete:
+    path: /coupon/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:delete }
+    methods: [POST]
+
+admin_v2_coupon_batch_export:
+    path: /coupon/export/csv/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:exportCsv }
+
+admin_v2_coupon_show:
+    path: /coupon/show/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:detail }
+
+admin_v2_coupon_show_target:
+    path: /coupon/show/target/{targetType}/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:targetDetail }
+
+admin_v2_coupon_get_receive_url:
+    path: /coupon/getreceiveurl/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:getReceiveUrl }
+
+admin_v2_coupon_query:
+    path: /coupon/index
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:queryIndex }
+
+admin_v2_coupon_setting:
+    path: /setting/coupon
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:setting }
+
+admin_v2_coupon_chooser:
+    path: /coupon/batch/chooser/{type}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:chooseCoupon }
+
+admin_v2_coupon_chooser_resource_list:
+    path: /coupon/batch/{batchId}/chooser/resource/list
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:chooseResourceList }
+
+#营销-营销管理-邀请管理
+admin_v2_invite_record:
+    path:  /invite/record
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:record }
+    permissions: [admin_v2_operation_invite]
+
+admin_v2_invite:
+    path:  /invite
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:userRecords }
+    permissions: [admin_v2_operation_invite]
+
+admin_v2_invite_coupon:
+    path: /invite/{filter}/coupon/
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:coupon, filter:'invited'}
+
+admin_v2_invite_coupon_query:
+    path: /invite/coupon/query/
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:queryInviteCoupon }
+
+admin_v2_invite_detail:
+    path:  /invite/detail
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:inviteDetail }
+    permissions: [admin_v2_operation_invite]
+
+admin_v2_invite_set:
+    path:  /setting/invite
+    defaults: { _controller: AppBundle:Admin/OperationSetting:inviteSet }
+    
+#营销-渠道管理-分销
 admin_v2_login_distributor:
     path: /login/distributor
     defaults: { _controller: AppBundle:AdminV2/Marketing/Distributor:login }
@@ -470,86 +634,6 @@ admin_v2_question_remind_teachers:
     defaults: { _controller: AppBundle:AdminV2/Default:questionRemindTeachers }
     methods:  [POST]
     permissions: [admin_v2]
-#教学
-##分类标签
-admin_v2_course_category:
-    path: /course/category
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:courseCategory }
-    permissions: [admin_v2_course_category_manage]
-
-admin_v2_classroom_category:
-    path: /classroom/category
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:classroomCategory }
-
-admin_v2_category_create:
-    path: /category/create
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:create }
-
-admin_v2_category_edit:
-    path:  /category/{id}/edit
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:edit }
-    permissions: [admin_v2_course_category_manage]
-
-admin_v2_category_delete:
-    path:  /category/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:delete }
-    methods: [POST]
-
-admin_v2_category_sort:
-    path:  /category/sort
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:sort }
-    methods: [POST]
-
-admin_v2_category_checkcode:
-    path:  /category/checkcode
-    defaults: { _controller: AppBundle:AdminV2/Teach/Category:checkCode }
-    permissions: [admin_v2_course_category_manage]
-
-admin_v2_tag:
-    path:  /tag
-    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:index }
-    permissions: [admin_v2_course_tag_manage]
-
-admin_v2_tag_create:
-    path:  /tag/create
-    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:create }
-    permissions: [admin_v2_course_tag_add]
-
-admin_v2_tag_update:
-    path:  /tag/{id}/update
-    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:update }
-    permissions: [admin_v2_course_tag_manage]
-
-admin_v2_tag_delete:
-    path:  /tag/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:delete }
-    methods:  [POST]
-    permissions: [admin_v2_course_tag_manage]
-
-admin_v2_tag_checkname:
-    path:  /tag/checkname
-    defaults: { _controller: AppBundle:AdminV2/Teach/Tag:checkName}
-    permissions: [admin_v2_course_tag_manage]
-
-admin_v2_tag_group:
-    path: /tag/group
-    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:index }
-
-admin_v2_tag_group_update:
-    path: /tag/group/{groupId}/update
-    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:update }
-
-admin_v2_tag_group_create:
-    path: /tag/group/create
-    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:create }
-
-admin_v2_tag_group_delete:
-    path: /tag/group/{tagId}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:delete }
-
-admin_v2_tag_group_checkname:
-    path: /tag/group/checkname
-    defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:checkName }
 
 # 应用中心-云服务-短信概览
 admin_v2_edu_cloud_sms:
