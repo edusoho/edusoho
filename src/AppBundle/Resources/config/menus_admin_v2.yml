@@ -240,7 +240,7 @@ admin_v2:
                                 admin_v2_open_course_analysis:
                                     name: admin_v2.course.open_course.analysis_tab
                                     disable: true
-                        #分类标签                    
+                        #分类标签
                         admin_v2_course_category_tag:
                             name: admin_v2.course.category_tag_menu
                             children:
@@ -462,6 +462,32 @@ admin_v2:
                                     disable: true
                                     router_params:
                                         type: friendlyLink
+                admin_v2_content_operation_group:
+                    name: admin_v2.operation.content_operation.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_operation_article:
+                            name: admin_v2.operation.article_menu
+                            children:
+                                admin_v2_operation_article_manage:
+                                    name: admin_v2.operation.article.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_article
+                                    children:
+                                        admin_v2_operation_article_create:
+                                            name: admin_v2.operation.article.basic_tab.create_btn
+                                            router_name: admin_v2_article_create
+                                            group: topBtn
+                                admin_v2_operation_article_category:
+                                    name: admin_v2.operation.article.category_tab
+                                    disable: true
+                                    router_name: admin_v2_article_category
+                                    children:
+                                        admin_v2_operation_category_create:
+                                            name: admin_v2.operation.article.category_tab.category_create_btn
+                                            router_name: admin_v2_article_category_create
+                                            mode: modal
+                                            group: topBtn
         # 用户管理模块
         admin_v2_user:
             name: admin_v2.nav.user

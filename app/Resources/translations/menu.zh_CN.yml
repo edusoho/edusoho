@@ -550,7 +550,7 @@ admin_v2.system.operation.wap_tab: 微网校装修
 admin_v2.wechat_app.menu: 小程序装修
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: 网校装修
-    
+
 admin_v2.operation.site_menu: 站点设置
 admin_v2.operation.site.top_navigation_tab: 顶部导航
 admin_v2.operation.site.foot_navigation_tab: 底部导航
@@ -559,6 +559,13 @@ admin_v2.operation.site.es_bar_tab: '侧边栏'
 admin_v2.operation.content.basic_tab: 自定义页面管理
 admin_v2.operation.site.share_tab: 分享
 admin_v2.operation.site.friendlyLink_navigation_tab: '友情链接'
+# 运营-内容运营-资讯
+admin_v2.operation.content_operation.basic_group: 内容运营
+admin_v2.operation.article_menu: 资讯管理
+admin_v2.operation.article.basic_tab: 资讯管理
+admin_v2.operation.article.basic_tab.create_btn: 添加资讯
+admin_v2.operation.article.category_tab: 栏目管理
+admin_v2.operation.article.category_tab.category_create_btn: 添加栏目
 
 
 # 应用中心-基础云-云服务-短信
