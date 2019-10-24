@@ -14,6 +14,7 @@
               clearable
               :border=false
               :error-message="errorMessage.mobile"
+              @focus="errorMessage.mobile = ''"
               @blur="loginMode === 'fastLoginMode' ? validateMobileOrPsw('mobile') : validateEmail()"
               @input="loginMode === 'fastLoginMode' && validatedChecker()"
           >
@@ -30,6 +31,7 @@
               ref="smsCode"
               :placeholder="currentLoginMode.passwordPlaceholder"
               :error-message="errorMessage.password"
+              @focus="errorMessage.password = ''"
           >
             <div
                 v-show="loginMode === 'fastLoginMode'"

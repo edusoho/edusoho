@@ -30,7 +30,7 @@ desc('Upload frontend compiled files');
 task('frontend:upload', function() {
     desc('Upload frontend compiled files');
     upload('./dist/', '{{release_path}}');
-});
+});\
 
 desc('Deploy your project');
 task('deploy', [
