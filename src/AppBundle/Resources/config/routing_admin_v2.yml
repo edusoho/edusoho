@@ -403,8 +403,91 @@ admin_v2_classroom_review_batch_delete:
     defaults: { _controller: AppBundle:AdminV2/Teach/Review:batchDeleteClassroomReview }
     methods: [POST]
     permissions: [admin_v2_classroom_review_tab]
+    
+# 运营-营销管理-优惠券管理
+admin_v2_coupon:
+    path: /coupon
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:index }
 
-#运营-渠道管理-分销
+admin_v2_coupon_generate:
+    path: /coupon/generate
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:generate }
+
+admin_v2_coupon_batch_create:
+    path: /coupon/batch/{batchId}/create
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:batchCreate }
+    methods: [POST]
+
+admin_v2_coupon_checkprefix:
+    path: /coupon/checkprefix
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:checkPrefix }
+
+admin_v2_coupon_delete:
+    path: /coupon/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:delete }
+    methods: [POST]
+
+admin_v2_coupon_batch_export:
+    path: /coupon/export/csv/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:exportCsv }
+
+admin_v2_coupon_show:
+    path: /coupon/show/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:detail }
+
+admin_v2_coupon_show_target:
+    path: /coupon/show/target/{targetType}/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:targetDetail }
+
+admin_v2_coupon_get_receive_url:
+    path: /coupon/getreceiveurl/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:getReceiveUrl }
+
+admin_v2_coupon_query:
+    path: /coupon/index
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:queryIndex }
+
+admin_v2_coupon_setting:
+    path: /setting/coupon
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:setting }
+
+admin_v2_coupon_chooser:
+    path: /coupon/batch/chooser/{type}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:chooseCoupon }
+
+admin_v2_coupon_chooser_resource_list:
+    path: /coupon/batch/{batchId}/chooser/resource/list
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:chooseResourceList }
+
+#营销-营销管理-邀请管理
+admin_v2_invite_record:
+    path:  /invite/record
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:record }
+    permissions: [admin_v2_operation_invite]
+
+admin_v2_invite:
+    path:  /invite
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:userRecords }
+    permissions: [admin_v2_operation_invite]
+
+admin_v2_invite_coupon:
+    path: /invite/{filter}/coupon/
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:coupon, filter:'invited'}
+
+admin_v2_invite_coupon_query:
+    path: /invite/coupon/query/
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:queryInviteCoupon }
+
+admin_v2_invite_detail:
+    path:  /invite/detail
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:inviteDetail }
+    permissions: [admin_v2_operation_invite]
+
+admin_v2_invite_set:
+    path:  /setting/invite
+    defaults: { _controller: AppBundle:Admin/OperationSetting:inviteSet }
+    
+#营销-渠道管理-分销
 admin_v2_login_distributor:
     path: /login/distributor
     defaults: { _controller: AppBundle:AdminV2/Marketing/Distributor:login }
@@ -417,6 +500,20 @@ admin_v2_user_show:
     permissions: [admin_v2]
 
 # 运营
+## 微网校装修
+admin_v2_wap_set:
+    path: /setting/wap
+    defaults: { _controller: AppBundle:AdminV2/Operating/Setting:wapSet }
+
+#小程序装修
+admin_v2_wechat_app:
+    path: /wechat_app
+    defaults: { _controller: AppBundle:AdminV2/Operating/Setting:weChatApp }
+
+admin_v2_wechat_app_access:
+    path:  /cloud/accessWechat
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:accessWechat }
+
 ## 站点设置管理
 admin_v2_navigation:
     path:  /setting/navigation
@@ -497,7 +594,7 @@ admin_v2_content_delete:
 
 admin_v2_content_alias_check:
     path:  /content/alias/check
-    defaults: { _controller: AppBundle:Admin/Content:aliasCheck }
+    defaults: { _controller: AppBundle:AdminV2/Operating/Content:aliasCheck }
     permissions: [admin_v2_content]
 
 admin_v2_setting_share:
@@ -602,37 +699,66 @@ admin_v2_question_remind_teachers:
     methods:  [POST]
     permissions: [admin_v2]
 
-
 # 应用中心-云服务-短信概览
 admin_v2_edu_cloud_sms:
     path:  /edu_cloud/sms/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/CloudServer:smsOverview }
     permissions: [admin_v2_edu_cloud_sms_overview]
+    
+admin_v2_app_package_update_modal:
+    path:  /app/package_update/{id}/modal
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal }
+#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]  后面对应模块修改时需要修改
 
-#营销-营销管理-邀请管理
-admin_v2_invite_record:
-    path:  /invite/record
-    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:record }
-    permissions: [admin_v2_operation_invite]
+admin_v2_app_package_update_check_environment:
+    path: /app/package_update/{id}/check_environment
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkEnvironment }
+    methods: [POST]
+#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
-admin_v2_invite:
-    path:  /invite
-    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:userRecords }
-    permissions: [admin_v2_operation_invite]
+admin_v2_app_package_update_check_depends:
+    path: /app/package_update/{id}/check_depends
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkDepends }
+    methods: [POST]
+#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
-admin_v2_invite_coupon:
-    path: /invite/{filter}/coupon/
-    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:coupon, filter:'invited'}
+admin_v2_app_package_update_check_last_error:
+    path: /app/package_update/{id}/check_lasterror
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checklastError }
+    methods: [POST]
+#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
-admin_v2_invite_coupon_query:
-    path: /invite/coupon/query/
-    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:queryInviteCoupon }
+admin_v2_app_package_update_backup_file:
+    path: /app/package_update/{id}/backup_file
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:backupFile }
+    methods: [POST]
+#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
-admin_v2_invite_detail:
-    path:  /invite/detail
-    defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:inviteDetail }
-    permissions: [admin_v2_operation_invite]
+admin_v2_app_package_update_backup_db:
+    path: /app/package_update/{id}/backup_db
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:backupDb }
+    methods: [POST]
+#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
-admin_v2_invite_set:
-    path:  /setting/invite
-    defaults: { _controller: AppBundle:Admin/OperationSetting:inviteSet }
+admin_v2_app_package_update_download_and_extract:
+    path: /app/package_update/{id}/download_extract
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:downloadAndExtract }
+    methods: [POST]
+#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+
+admin_v2_app_package_update_check_download_and_extract:
+    path: /app/package_update/{id}/check_download_extract
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkDownloadAndExtract }
+    methods: [POST]
+#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+
+admin_v2_app_package_update_begin_upgrade:
+    path: /app/package_update/{id}/begin_upgrade
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:beginUpgrade }
+    methods: [POST]
+#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+
+admin_v2 _app_package_update_check_newest:
+    path: /app/package_update/check/newest/code/{code}
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkNewest }
+    methods: [POST]
