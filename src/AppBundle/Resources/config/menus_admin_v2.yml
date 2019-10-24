@@ -340,7 +340,26 @@ admin_v2:
                                     name: admin_v2.operation.invite.coupon_tab
                                     disable: true
                                     router_name: admin_v2_invite_coupon
-
+                        # 优惠券管理
+                        admin_v2_marketing_coupon:
+                            name: admin_v2.operation.coupon_menu
+                            router_name: admin_v2_coupon
+                            children:
+                                admin_v2_marketing_coupon_manage:
+                                    name: admin_v2.marketing.coupon_menu.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_coupon
+                                    children:
+                                        admin_v2_coupon_generate:
+                                            name: admin_v2.marketing.coupon_menu.generate_btn
+                                            group: topBtn
+                                admin_v2_marketing_coupon_query:
+                                    name: admin_v2.marketing.query_menu.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_coupon_query
+                                admin_v2_coupon_setting:
+                                    name: admin_v2.system.marketing.coupon_setting_tab
+                                    disable: true
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group
