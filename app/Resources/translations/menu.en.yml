@@ -533,6 +533,14 @@ admin_v2.course.open_course.recommend_list_tab: Recommended
 admin_v2.course.open_course.analysis_tab: Statistics
 
 
+# 运营-网校装修-微网校装修
+admin_v2.system.mobile.h5: Mobile Site Setting
+admin_v2.system.operation.wap_tab: Mobile Site Setting
+
+# 运营-网校装修-小程序装修
+admin_v2.wechat_app.menu: Wechat App Setting
+
+
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: Site Decoration
 
