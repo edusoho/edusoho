@@ -39,6 +39,11 @@ admin_classroom_recommend: admin_v2_classroom_recommend #班级推荐
 admin_course_set_recommend_list: admin_v2_course_set_recommend_list #课程推荐
 admin_course_set_data: admin_v2_course_set_data #课程统计
 
+#直播管理权限模块
+admin_live_course: admin_v2_live_course #直播管理
+admin_live_course_manage: admin_v2_live_course_coming #未开始的
+admin_live_course_add: admin_v2_live_course_add #创建直播
+
 # 公开课管理权限模块
 admin_open_course_manage: admin_v2_open_course_manage #公开课管理
 admin_open_course: admin_v2_open_course #公开课管理tab
@@ -85,8 +90,6 @@ admin_coupon_generate: admin_v2_coupon_generate
 admin_operation_coupon_query: admin_v2_marketing_coupon_query
 admin_coupon_setting: admin_v2_coupon_setting
 
-
-
 # 分销管理
 admin_distributor_top: admin_v2_distributor
 _distributor_page: admin_v2_distributor_page
@@ -101,8 +104,23 @@ admin_operation_invite_coupon: admin_v2_operation_invite_coupon #奖励查询
 admin_marketing_top: admin_v2_micromarketing
 _marketing_marketing_page: admin_v2_micromarketing_page
 
+#运营
+#微网校装修
+admin_h5_set: admin_v2_h5_set #微网校装修
+admin_wap_set: admin_v2_wap_set #微网校装修
 
-#运营－站点设置
+#小程序装修
+admin_wechat_app_manage: admin_v2_wechat_app_manage #小程序装修
+admin_wechat_app: admin_v2_wechat_app_manage #小程序装修
+
+#App装修
+admin_setting_mobile: admin_v2_setting_mobile #App装修
+admin_setting_mobile_settings: admin_v2_mobile_settings #App设置
+admin_operation_mobile_banner_manage: admin_v2_mobile_banner_manage #轮播图设置
+admin_discovery_column_index: admin_v2_discovery_column_index #发现页栏目
+admin_discovery_column_create: admin_v2_discovery_column_create #添加栏目
+
+#站点设置
 admin_operation: admin_v2_operating #运营
 admin_setting: admin_v2_site_setting #站点设置
 admin_top_navigation: admin_v2_top_navigation #顶部导航
