@@ -357,7 +357,62 @@ admin_v2_invite_set:
     path:  /setting/invite
     defaults: { _controller: AppBundle:Admin/OperationSetting:inviteSet }
   
-#营销-渠道管理-分销
+# 运营-营销管理-优惠券管理
+admin_v2_coupon:
+    path: /coupon
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:index }
+
+admin_v2_coupon_generate:
+    path: /coupon/generate
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:generate }
+
+admin_v2_coupon_batch_create:
+    path: /coupon/batch/{batchId}/create
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:batchCreate }
+    methods: [POST]
+
+admin_v2_coupon_checkprefix:
+    path: /coupon/checkprefix
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:checkPrefix }
+
+admin_v2_coupon_delete:
+    path: /coupon/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:delete }
+    methods: [POST]
+
+admin_v2_coupon_batch_export:
+    path: /coupon/export/csv/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:exportCsv }
+
+admin_v2_coupon_show:
+    path: /coupon/show/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:detail }
+
+admin_v2_coupon_show_target:
+    path: /coupon/show/target/{targetType}/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:targetDetail }
+
+admin_v2_coupon_get_receive_url:
+    path: /coupon/getreceiveurl/{batchId}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:getReceiveUrl }
+
+admin_v2_coupon_query:
+    path: /coupon/index
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:queryIndex }
+
+admin_v2_coupon_setting:
+    path: /setting/coupon
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:setting }
+
+admin_v2_coupon_chooser:
+    path: /coupon/batch/chooser/{type}
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:chooseCoupon }
+
+admin_v2_coupon_chooser_resource_list:
+    path: /coupon/batch/{batchId}/chooser/resource/list
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:chooseResourceList }
+
+#运营-渠道管理-分销
 admin_v2_login_distributor:
     path: /login/distributor
     defaults: { _controller: AppBundle:AdminV2/Marketing/Distributor:login }
