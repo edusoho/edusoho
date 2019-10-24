@@ -188,6 +188,35 @@ admin_v2:
                                 admin_v2_classroom_recommend:
                                     name: admin_v2.course.classroom.recommend_tab
                                     router_name: admin_v2_classroom_recommend_list
+                        #直播管理
+                        admin_v2_live_course:
+                            name: admin.course.live_menu
+                            children:
+                                admin_v2_live_course_coming:
+                                    name: admin_v2.course.coming.live_tab
+                                    router_name: admin_v2_live_course
+                                    disable: true
+                                    children:
+                                        admin_v2_live_course_add:
+                                            name: admin_v2.course.live.basic_tab.create_btn
+                                            router_name: course_set_manage_create
+                                            router_params:
+                                                default: 'live'
+                                            group: topBtn
+                                            disable: true
+                                            blank: 1
+                                admin_v2_live_course_underway:
+                                    name: admin_v2.course.underway.live_tab
+                                    router_name: admin_v2_live_course
+                                    router_params:
+                                        status: underway
+                                    disable: true
+                                admin_v2_live_course_end:
+                                    name: admin_v2.course.end.live_tab
+                                    router_name: admin_v2_live_course
+                                    router_params:
+                                        status: end
+                                    disable: true
                         #公开课管理模块
                         admin_v2_open_course_manage:
                             name: admin_v2.course.open_course_menu
@@ -383,18 +412,18 @@ admin_v2:
                     is_group: true
                     children:
                         admin_v2_h5_set:
-                            name: admin.system.mobile.h5
+                            name: admin_v2.system.mobile.h5
                             children:
                                 admin_v2_wap_set:
-                                    name: admin.system.operation.wap_tab
+                                    name: admin_v2.system.operation.wap_tab
                                     disable: true
                                     router_name: admin_v2_wap_set
                         admin_v2_wechat_app_manage:
-                            name: admin.wechat_app.menu
+                            name: admin_v2.wechat_app.menu
                             router_name: admin_v2_wechat_app
                             children:
                                 admin_v2_wechat_app:
-                                    name: admin.wechat_app.menu
+                                    name: admin_v2.wechat_app.menu
                                     router_name: admin_v2_wechat_app
                                     disable: true
                         admin_v2_site_setting:
