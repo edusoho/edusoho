@@ -1,0 +1,65 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_keyword_banlogs' %}
+
+{% block main %}
+	<form id="banlog-search-form" class="form-inline well well-sm" action="" method="get">
+    <div class="form-group">
+      <select class="form-control" name="state">
+        {{ select_options(dict('state'), app.request.query.get('state'), 'admin.sensitive_manage.all_state_placeholder'|trans) }}
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control" name="searchBanlog">
+        {{ select_options(dict('searchBanlog'), app.request.query.get('searchBanlog')) }}
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'admin.sensitive_manage.search_keyword_placeholder'|trans}}">
+    </div>
+    <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+
+  </form>
+{% if banlogs %}
+	<table class="table table-striped table-hover" id="keyword-table">
+	    <thead>
+		    <tr>
+		      <th width="5%">{{'admin.sensitive_manage.num'|trans}}</th>
+		      <th width="10%">{{'admin.sensitive_manage.hit_sensitive'|trans}}</th>
+		      <th width="10%">{{'admin.sensitive_manage.type'|trans}}</th>
+		      <th width="35%">{{'admin.sensitive_manage.replaced_text'|trans}}</th>
+		      <th width="10%">{{'admin.sensitive_manage.user'|trans}}</th>
+		      <th width="10%">{{'admin.sensitive_manage.replaced_time'|trans}}</th>
+			  <th width="20%">{{'admin.sensitive_manage.ip'|trans}}</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+	    	{% for banlog in banlogs %}
+					<tr id="banlog-table-tr-{{ banlog.id }}">
+					    <td>{{ banlog.id }}</td>
+
+					    <td style="word-wrap: break-word;word-break:break-all;">{{ banlog.keywordName }}</td>
+
+					    <td>
+					    	{% if banlog.state == 'banned' %}{{'admin.sensitive_manage.banned'|trans}}
+					    	{% elseif banlog.state == 'replaced' %}{{'admin.sensitive_manage.replaced'|trans}}
+					    	{% endif %}
+					    </td>
+
+					    <td style="word-wrap: break-word;word-break:break-all;">{{ banlog.text|raw }}</td>
+
+					    <td>{% if banlog.userId %}{{ users[banlog.userId].nickname }} {% else %} - {% endif %}</td>
+
+					    <td>{{ banlog.createdTime|date('Y-n-d H:i:s') }}</td>
+							<td>{{ banlog.ip }}</td>
+					</tr>
+		   {% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	  <div class="empty">{{'admin.sensitive_manage.replaced_empty'|trans}}</div>
+{% endif %}
+	 {{ admin_macro.paginator(paginator) }}
+{% endblock %}
+
+

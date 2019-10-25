@@ -46,7 +46,8 @@ class PermissionExtension extends \Twig_Extension
         $permission = $this->getParentPermission($permission['code']);
         $permission = $this->getParentPermission($permission['code']);
 
-        $group = $this->createPermissionBuilder()->groupedPermissions($permission['code']);
+        $group = $this->createPermissionBuilder()->groupedV2Permissions($permission['code']);
+
         $permissionMenus = $this->buildChildPermissionMenus($group);
 
         return $permissionMenus;
@@ -55,29 +56,28 @@ class PermissionExtension extends \Twig_Extension
     protected function buildChildPermissionMenus($allGroup, $grade = 0)
     {
         $permissions = array();
-        foreach ($allGroup as $group) {
-            foreach ($group as $k => &$children) {
-                if (isset($children['visible']) && !$this->evalExpression($this->container->get('twig'), array(), $children['visible'])) {
-                    unset($group[$k]);
-                    continue;
-                }
 
-                $childrenInfo = array();
-                $childrenInfo['name'] = ServiceKernel::instance()->trans($children['name'], array(), 'menu');
-                $childrenInfo['link'] = '';
-                if (isset($children['is_group'])) {
-                    $childrenInfo['grade'] = $grade;
-                }
-                foreach ($children['children'] as $child) {
-                    $nodes = array();
-                    $nodes['name'] = ServiceKernel::instance()->trans($child['name'], array(), 'menu');
-                    $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getFirstChild($children)));
-                    $nodes['grade'] = 1;
-                    $nodes['nodes'] = array();
-                    $childrenInfo['nodes'][] = $nodes;
-                }
-                $permissions[] = $childrenInfo;
+        foreach ($allGroup as $key => &$children) {
+            if (isset($children['visible']) && !$this->evalExpression($this->container->get('twig'), array(), $children['visible'])) {
+                unset($allGroup[$key]);
+                continue;
             }
+
+            $childrenInfo = array();
+            $childrenInfo['name'] = ServiceKernel::instance()->trans($children['name'], array(), 'menu');
+            $childrenInfo['link'] = '';
+            if (isset($children['is_group'])) {
+                $childrenInfo['grade'] = 0;
+            }
+            foreach ($children['children'] as $k => $child) {
+                $nodes = array();
+                $nodes['name'] = ServiceKernel::instance()->trans($child['name'], array(), 'menu');
+                $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getPermissionByCode($k)));
+                $nodes['grade'] = 1;
+                $nodes['nodes'] = array();
+                $childrenInfo['nodes'][] = $nodes;
+            }
+            $permissions[] = $childrenInfo;
         }
 
         return $permissions;

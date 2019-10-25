@@ -301,6 +301,7 @@ admin_v2:
                 admin_v2_tool_group:
                     name: admin_v2.tool.basic_group
                     is_group: true
+                    afther: admin_v2_course_group
                     children:
                         # 笔记管理模块
                         admin_v2_course_note:
@@ -389,6 +390,14 @@ admin_v2:
                                 admin_v2_coupon_setting:
                                     name: admin_v2.system.marketing.coupon_setting_tab
                                     disable: true
+                        # 微营销
+                        admin_v2_micromarketing:
+                            name: admin_v2.micromarketing.menu
+                            children:
+                                admin_v2_micromarketing_page:
+                                    name: admin_v2.micromarketing.menu
+                                    router_name: admin_v2_login_micromarketing
+                                    disable: true
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group
@@ -398,11 +407,11 @@ admin_v2:
                         # 分销
                         admin_v2_distributor:
                             name: admin_v2.distributor.menu
-                            disable: true
                             children:
                                 admin_v2_distributor_page:
                                     name: admin_v2.distributor.menu
                                     router_name: admin_v2_login_distributor
+                                    disable: true
         # 运营管理模块
         admin_v2_operating:
             name: admin_v2.nav.operating
@@ -412,10 +421,10 @@ admin_v2:
                     is_group: true
                     children:
                         admin_v2_h5_set:
-                            name: admin_v2.system.mobile.h5
+                            name: admin_v2.operation.mobile.h5
                             children:
                                 admin_v2_wap_set:
-                                    name: admin_v2.system.operation.wap_tab
+                                    name: admin_v2.operation.wap_tab
                                     disable: true
                                     router_name: admin_v2_wap_set
                         admin_v2_wechat_app_manage:
@@ -462,14 +471,65 @@ admin_v2:
                                     disable: true
                                     router_params:
                                         type: friendlyLink
-#                admin_v2_content_operation_group:
-#                    name: admin_v2.operation.content_operation.basic_group
-#                    is_group: true
-#                    children:
-#                        admin_v2_operation_wechat_notification:
-#                            name: admin_v2.operation.wechat_notification
-#                            children:
-
+                        admin_v2_setting_mobile:
+                            name: admin_v2.operation.mobile_menu
+                            children:
+                                admin_v2_mobile_settings:
+                                    name: admin_v2.operation.mobile.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_mobile
+                                admin_v2_mobile_banner_manage:
+                                    name: admin_v2.operation.mobile.banner_setting_tab
+                                    disable: true
+                                    router_name: admin_v2_mobile_banner_manage
+                                admin_v2_discovery_column_index:
+                                    name: admin_v2.operation.mobile.discovery_column_tab
+                                    disable: true
+                                    children:
+                                        admin_v2_discovery_column_create:
+                                            name: admin_v2.operation.mobile.discovery_column_tab.create_btn
+                                            group: topBtn
+                                            mode: modal
+                admin_v2_content_operation_group:
+                    name: admin_v2.operation.content_operation.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_operation_article:
+                            name: admin_v2.operation.article_menu
+                            children:
+                                admin_v2_operation_article_manage:
+                                    name: admin_v2.operation.article.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_article
+                                    children:
+                                        admin_v2_operation_article_create:
+                                            name: admin_v2.operation.article.basic_tab.create_btn
+                                            router_name: admin_v2_article_create
+                                            group: topBtn
+                                admin_v2_operation_article_category:
+                                    name: admin_v2.operation.article.category_tab
+                                    disable: true
+                                    router_name: admin_v2_article_category
+                                    children:
+                                        admin_v2_operation_category_create:
+                                            name: admin_v2.operation.article.category_tab.category_create_btn
+                                            router_name: admin_v2_article_category_create
+                                            mode: modal
+                                            group: topBtn
+                        admin_v2_operation.sensitive_words:
+                            name: admin_v2.operation.sensitive_words_menu
+                            children:
+                                admin_v2_keyword:
+                                    name: admin_v2.operation.sensitive_words.sensitive_words_list_tab
+                                    disable: true
+                                    children:
+                                        admin_v2_keyword_create:
+                                            name: admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn
+                                            mode: modal
+                                            group: topBtn
+                                admin_v2_keyword_banlogs:
+                                    name: admin_v2.operation.sensitive_words.banlogs_tab
+                                    disable: true
         # 用户管理模块
         admin_v2_user:
             name: admin_v2.nav.user

@@ -173,7 +173,7 @@ admin_v2_live_course:
     path: /livecourse/{status}
     defaults: { _controller: AppBundle:AdminV2/Teach/LiveCourse:index, status:'coming'}
     permissions: [admin_v2_live_course]
-    
+
 # 教学-课程管理-公开课管理
 admin_v2_open_course:
     path: /open_course/{filter}
@@ -238,96 +238,6 @@ admin_v2_open_course_analysis_conversion:
 admin_v2_open_course_analysis_conversion_result:
     path:  /open_course/{courseId}/analysis/conversion/result
     defaults: { _controller: AppBundle:AdminV2/Teach/OpenCourseAnalysis:conversionResult }
-
-# 教学-助学管理-笔记管理
-admin_v2_course_note:
-    path: /note
-    defaults: { _controller: AppBundle:AdminV2/Teach/Course:noteList }
-    permissions: [admin_v2_course_note_manage]
-
-admin_v2_note_delete:
-    path: /note/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Course:deleteNote }
-    methods: [POST]
-    permissions: [admin_v2_course_note_manage]
-
-admin_v2_note_batch_delete:
-    path: /note/batch_delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Course:batchDeleteNote }
-    methods: [POST]
-    permissions: [admin_v2_course_note_manage]
-
-# 教学-助学管理-问答管理
-admin_v2_question:
-    path:  /question/{postStatus}
-    defaults: { _controller: AppBundle:AdminV2/Teach/CourseQuestion:index }
-    permissions: [admin_v2_course_question_manage]
-
-# 教学-助学管理-话题管理
-admin_v2_course_thread:
-    path:  /thread
-    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:courseThreadIndex }
-    permissions: [admin_v2_course_thread]
-
-admin_v2_course_thread_delete:
-    path: /thread/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:courseThreadDelete }
-    methods: [POST]
-    permissions: [admin_v2_course_thread, admin_v2_course_question_manage]
-
-admin_v2_course_thread_batch_delete:
-    path: /thread/batch_delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:courseThreadBatchDelete }
-    methods: [POST]
-    permissions: [admin_v2_course_thread]
-
-admin_v2_classroom_thread:
-    path:     /classroom/thread
-    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:classroomThreadIndex }
-
-admin_v2_classroom_thread_delete:
-    path:     /classroom/thread/{threadId}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:classroomThreadDelete }
-    methods: [POST]
-  
-#反馈管理
-admin_v2_course_review:
-    path:  /course/review
-    defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
-    permissions: [admin_v2_course_review_tab]
-
-admin_v2_course_review_delete:
-    path: /course/review/{id}/delete
-    defaults: {_controller: AppBundle:AdminV2/Teach/Review:deleteCourseReview }
-    methods: [POST]
-    permissions: [admin_v2_course_review_tab]
-
-admin_v2_course_review_batch_delete:
-    path: /course/review/batch_delete
-    defaults: {_controller: AppBundle:AdminV2/Teach/Review:batchDeleteCourseReview }
-    methods: [POST]
-    permissions: [admin_v2_course_review_tab]
-
-admin_v2_classroom_review:
-    path:  /classroom/review
-    defaults: { _controller: AppBundle:AdminV2/Teach/Review:classroomReviewList }
-    permissions: [admin_v2_classroom_review_tab]
-
-admin_v2_classroom_thread_batch_delete:
-    path:     /classroom/thread/batch_delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:classroomThreadBatchDelete }
-
-admin_v2_classroom_review_delete:
-    path:  /classroom/review/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Review:deleteClassroomReview }
-    methods: [POST]
-    permissions: [admin_v2_classroom_review_tab]
-
-admin_v2_classroom_review_batch_delete:
-    path:  /classroom/review/batch_delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/Review:batchDeleteClassroomReview }
-    methods: [POST]
-    permissions: [admin_v2_classroom_review_tab]
 
 #教学
 ##分类标签
@@ -409,7 +319,97 @@ admin_v2_tag_group_delete:
 admin_v2_tag_group_checkname:
     path: /tag/group/checkname
     defaults: { _controller: AppBundle:AdminV2/Teach/TagGroup:checkName }
-    
+
+# 教学-助学管理-笔记管理
+admin_v2_course_note:
+    path: /note
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:noteList }
+    permissions: [admin_v2_course_note_manage]
+
+admin_v2_note_delete:
+    path: /note/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:deleteNote }
+    methods: [POST]
+    permissions: [admin_v2_course_note_manage]
+
+admin_v2_note_batch_delete:
+    path: /note/batch_delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:batchDeleteNote }
+    methods: [POST]
+    permissions: [admin_v2_course_note_manage]
+
+# 教学-助学管理-问答管理
+admin_v2_question:
+    path:  /question/{postStatus}
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseQuestion:index }
+    permissions: [admin_v2_course_question_manage]
+
+# 教学-助学管理-话题管理
+admin_v2_course_thread:
+    path:  /thread
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:courseThreadIndex }
+    permissions: [admin_v2_course_thread]
+
+admin_v2_course_thread_delete:
+    path: /thread/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:courseThreadDelete }
+    methods: [POST]
+    permissions: [admin_v2_course_thread, admin_v2_course_question_manage]
+
+admin_v2_course_thread_batch_delete:
+    path: /thread/batch_delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:courseThreadBatchDelete }
+    methods: [POST]
+    permissions: [admin_v2_course_thread]
+
+admin_v2_classroom_thread:
+    path:     /classroom/thread
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:classroomThreadIndex }
+
+admin_v2_classroom_thread_delete:
+    path:     /classroom/thread/{threadId}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:classroomThreadDelete }
+    methods: [POST]
+
+#反馈管理
+admin_v2_course_review:
+    path:  /course/review
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
+    permissions: [admin_v2_course_review_tab]
+
+admin_v2_course_review_delete:
+    path: /course/review/{id}/delete
+    defaults: {_controller: AppBundle:AdminV2/Teach/Review:deleteCourseReview }
+    methods: [POST]
+    permissions: [admin_v2_course_review_tab]
+
+admin_v2_course_review_batch_delete:
+    path: /course/review/batch_delete
+    defaults: {_controller: AppBundle:AdminV2/Teach/Review:batchDeleteCourseReview }
+    methods: [POST]
+    permissions: [admin_v2_course_review_tab]
+
+admin_v2_classroom_review:
+    path:  /classroom/review
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:classroomReviewList }
+    permissions: [admin_v2_classroom_review_tab]
+
+admin_v2_classroom_thread_batch_delete:
+    path:     /classroom/thread/batch_delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Thread:classroomThreadBatchDelete }
+
+admin_v2_classroom_review_delete:
+    path:  /classroom/review/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:deleteClassroomReview }
+    methods: [POST]
+    permissions: [admin_v2_classroom_review_tab]
+
+admin_v2_classroom_review_batch_delete:
+    path:  /classroom/review/batch_delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/Review:batchDeleteClassroomReview }
+    methods: [POST]
+    permissions: [admin_v2_classroom_review_tab]
+
 # 运营-营销管理-优惠券管理
 admin_v2_coupon:
     path: /coupon
@@ -488,7 +488,12 @@ admin_v2_invite_detail:
     path:  /invite/detail
     defaults: { _controller: AppBundle:AdminV2/Marketing/Invite:inviteDetail }
     permissions: [admin_v2_operation_invite]
-    
+
+# 营销-营销管理-微营销
+admin_v2_login_micromarketing:
+    path: /login/marketing
+    defaults: { _controller: AppBundle:AdminV2/Marketing/Micromarketing:login }
+
 #营销-渠道管理-分销
 admin_v2_login_distributor:
     path: /login/distributor
@@ -515,7 +520,7 @@ admin_v2_wechat_app_access:
     path:  /cloud/accessWechat
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:accessWechat }
 
-## 站点设置管理
+## 运营-内容运营-站点设置管理
 admin_v2_navigation:
     path:  /setting/navigation
     defaults: { _controller: AppBundle:AdminV2/Operating/Navigation:index }
@@ -556,7 +561,7 @@ admin_v2_setting_consult_webchat_delete:
     defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:deleteWebchat }
     methods:  [POST]
     permissions: [admin_v2_setting_consult_setting]
-    
+
 admin_v2_setting_es_bar:
     path:  /setting/es-bar
     defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:esBarSetting }
@@ -564,7 +569,7 @@ admin_v2_setting_es_bar:
 admin_v2_content:
     path:  /setting/content
     defaults: { _controller: AppBundle:AdminV2/Operating/Content:index }
-    
+
 admin_v2_content_create:
     path:  /content/create/{type}
     defaults: { _controller: AppBundle:AdminV2/Operating/Content:create }
@@ -601,16 +606,203 @@ admin_v2_content_alias_check:
 admin_v2_setting_share:
     path:  /setting/share
     defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:share }
-   
+
+# 运营-内容运营-资讯
+admin_v2_article:
+    path:  /article
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:index }
+    permissions: [admin_v2_operation_article_manage]
+
+admin_v2_article_category:
+    path: /article/category
+    defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:index }
+    permissions: [admin_v2_operation_article_category]
+
+admin_v2_article_category_create:
+    path:  /article/category/create
+    defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:create }
+    permissions: [admin_v2_operation_article_category]
+
+admin_v2_article_category_checkparentid:
+    path:  /article/category/checkparentid
+    defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:checkParentId }
+    permissions: [admin_v2_operation_article_category]
+
+admin_v2_article_category_checkcode:
+    path:  /article/category/checkcode
+    defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:checkCode }
+    permissions: [admin_v2_operation_article_category]
+
+admin_v2_article_category_edit:
+    path:  /article/category/{id}/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:edit }
+    permissions: [admin_v2_operation_article_category]
+
+admin_v2_article_category_delete:
+    path:  /article/category/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:delete }
+    methods: [POST]
+
+admin_v2_article_category_sort:
+    path:  /article/category/sort
+    defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:sort }
+    methods: [POST]
+
+admin_v2_article_create:
+    path:  /article/create
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:create }
+    permissions: [admin_v2_operation_article_create]
+
+admin_v2_article_picture_crop:
+    path:  /article/picture/crop
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:pictureCrop }
+    permissions: [admin_v2_operation_article_manage]
+
+admin_v2_article_show_upload:
+    path:  /article/show/upload
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:showUpload }
+    permissions: [admin_v2_operation_article_manage]
+
+admin_v2_article_set_property:
+    path:  /article/set/property/{id}/{property}
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:setArticleProperty }
+    permissions: [admin_v2_operation_article_manage]
+
+admin_v2_article_cancel_property:
+    path:  /article/cancel/property/{id}/{property}
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:cancelArticleProperty }
+    permissions: [admin_v2_operation_article_manage]
+
+admin_v2_article_edit:
+    path:  /article/{id}/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:edit }
+    permissions: [admin_v2_operation_article_manage]
+
+admin_v2_article_publish:
+    path:  /article/{id}/publish
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:publish }
+    methods:  [POST]
+    permissions: [admin_v2_operation_article_manage]
+
+admin_v2_article_unpublish:
+    path:  /article/{id}/unpublish
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:unpublish }
+    methods:  [POST]
+    permissions: [admin_v2_operation_article_manage]
+
+admin_v2_article_thumb_remove:
+    path:  /article/thumb/{id}/remove
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:thumbRemove }
+    permissions: [admin_v2_operation_article_manage]
+
+admin_v2_article_trash:
+    path:  /article/{id}/trash
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:trash }
+    methods:  [POST]
+    permissions: [admin_v2_operation_article_manage]
+
+admin_v2_article_delete:
+    path:  /article/delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/Article:delete }
+    methods:  [POST]
+    permissions: [admin_v2_operation_article_manage]
+
+# 运营-内容运营-敏感词设置
+admin_v2_keyword:
+    path:  /keyword
+    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:index }
+
+admin_v2_keyword_create:
+    path:  /keyword/create
+    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:create }
+
+admin_v2_keyword_delete:
+    path:  /keyword/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:delete }
+    methods:  [POST]
+    permissions: [admin_v2_keyword]
+
+admin_v2_keyword_change:
+    path:  /keyword/{id}/change
+    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:change }
+    permissions: [admin_v2_keyword]
+
+admin_v2_keyword_banlogs:
+    path:  /keyword/banlogs
+    defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:banlogs }
+
 #web端装修
 admin_v2_block:
-    path:  /block/list-{category}
+    path:  /block/list/{category}
     defaults: { _controller: AppBundle:AdminV2/Operating/Block:index }
-    
+
 admin_v2_setting_theme:
     path:  /setting/theme
     defaults: { _controller: AppBundle:AdminV2/Operating/Theme:index }
-    
+
+## APP装修
+admin_v2_setting_mobile:
+    path:  /setting/mobile
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:mobile }
+    permissions: [admin_v2_mobile_settings]
+
+admin_v2_mobile_picture_upload:
+    path:  /setting/mobile/picture/upload/{type}
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:mobilePictureUpload }
+    methods: [POST]
+    permissions: [admin_v2_mobile_settings]
+
+admin_v2_mobile_picture_remove:
+    path:  /setting/mobile/picture/remove/{type}
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:mobilePictureRemove }
+    methods: [POST]
+    permissions: [admin_v2_mobile_settings]
+
+admin_v2_mobile_banner_manage:
+    path:  /setting/mobile/banner
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:banner }
+    permissions: [admin_v2_mobile_banner_manage]
+
+admin_v2_discovery_column_index:
+    path:  /discovery_column/index
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:index }
+
+admin_v2_discovery_column_create:
+    path:  /discovery_column/create
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:create }
+    permissions: [admin_v2_setting_mobile]
+
+admin_v2_discovery_column_delete:
+    path:  /discovery_column/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:delete }
+    methods: [POST]
+    permissions: [admin_v2_setting_mobile]
+
+admin_v2_discovery_column_edit:
+    path:  /discovery_column/{id}/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:edit }
+    permissions: [admin_v2_setting_mobile]
+
+admin_v2_discovery_column_title_check:
+    path:  /discovery_column/{id}/title_check
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:checkTitle }
+    permissions: [admin_v2_setting_mobile]
+
+admin_v2_discovery_column_sort:
+    path:  /discovery_column/sort
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:sort }
+    permissions: [admin_v2_setting_mobile]
+
+admin_v2_discovery_column_category_tree:
+    path: /discovery_column/category/tree
+    defaults: { _controller: AppBundle:AdminV2/Operating/DiscoveryColumn:categoryTree }
+    permissions: [admin_v2_setting_mobile]
+
+admin_v2_course_search_to_fill_banner:
+    path: /course/search_to_fill_banner
+    defaults: { _controller: AppBundle:AdminV2/Teach/Course:searchToFillBanner }
+    permissions: [admin_v2_setting_mobile]
+
 # 系统
 ## 组织机构管理
 admin_v2_batch_update_org:
@@ -641,11 +833,11 @@ admin_v2_edu_cloud_sms:
     path:  /edu_cloud/sms/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/CloudServer:smsOverview }
     permissions: [admin_v2_edu_cloud_sms_overview]
-    
+
 admin_v2_my_cloud_overview:
     path:  /setting/my/cloud/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloudOverview }
-    
+
 admin_v2_setting_cloud_edulive:
     path:  /setting/cloud/edulive
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveSetting }
@@ -707,3 +899,13 @@ admin_v2 _app_package_update_check_newest:
     path: /app/package_update/check/newest/code/{code}
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkNewest }
     methods: [POST]
+
+# 交易-订单管理-商品订单
+admin_v2_order_detail:
+    path: /order/{id}/detail
+    defaults: { _controller: AppBundle:Admin/Order:detail }
+
+# 系统-资产设置-退款
+admin_v2_setting_refund:
+    path:  /setting/refund
+    defaults: { _controller: AppBundle:Admin/FinanceSetting:refund }

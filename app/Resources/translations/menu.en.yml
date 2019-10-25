@@ -541,12 +541,19 @@ admin_v2.btn.create_category_btn: Add a Category
 
 
 # 运营-网校装修-微网校装修
-admin_v2.system.mobile.h5: Mobile Site Setting
-admin_v2.system.operation.wap_tab: Mobile Site Setting
+admin_v2.operation.mobile.h5: Mobile Site Setting
+admin_v2.operation.wap_tab: Mobile Site Setting
 
 # 运营-网校装修-小程序装修
 admin_v2.wechat_app.menu: Wechat App Setting
 
+
+# 运营-网校装修-APP装修
+admin_v2.operation.mobile_menu: App Setting
+admin_v2.operation.mobile.basic_tab: App Setting
+admin_v2.operation.mobile.banner_setting_tab: Sliders management
+admin_v2.operation.mobile.discovery_column_tab: 'Explore Page Category'
+admin_v2.operation.mobile.discovery_column_tab.create_btn: 'Add Category'
 
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: Site Decoration
@@ -559,6 +566,20 @@ admin_v2.operation.site.es_bar_tab: 'Sidebar'
 admin_v2.operation.content.basic_tab: Customize pages
 admin_v2.operation.site.share_tab: Share
 admin_v2.operation.site.friendlyLink_navigation_tab: 'Recommended Links'
+
+# 运营-内容运营-资讯
+admin_v2.operation.content_operation.basic_group: Content Operating
+admin_v2.operation.article_menu: Article Manage
+admin_v2.operation.article.basic_tab: Article Manage
+admin_v2.operation.article.basic_tab.create_btn: Add Article
+admin_v2.operation.article.category_tab: Category Manage
+admin_v2.operation.article.category_tab.category_create_btn: Add Category
+
+# 运营-内容运营-敏感词
+admin_v2.operation.sensitive_words_menu: Sensitive Words
+admin_v2.operation.sensitive_words.sensitive_words_list_tab: Sensitive Words List
+admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: Add Sensitive Word
+admin_v2.operation.sensitive_words.banlogs_tab: Processing History
 
 
 # 应用中心-基础云-云服务-短信
@@ -589,5 +610,7 @@ admin_v2.operation.invite_menu: Invitations
 admin_v2.operation.invite.record_tab: Invitation Records
 admin_v2.operation.invite.user_tab: Invitation Records
 admin_v2.operation.invite.coupon_tab: Rewards
+
+admin_v2.micromarketing.menu: Micromarketing
 
 # 新版后台结束
