@@ -275,30 +275,6 @@ class GroupController extends BaseController
         ));
     }
 
-    /**
-     * @return GroupService
-     */
-    protected function getGroupService()
-    {
-        return $this->createService('Group:GroupService');
-    }
-
-    /**
-     * @return ThreadService
-     */
-    protected function getThreadService()
-    {
-        return $this->createService('Group:ThreadService');
-    }
-
-    /**
-     * @return NotificationService
-     */
-    protected function getNotifiactionService()
-    {
-        return $this->createService('User:NotificationService');
-    }
-
     protected function filterSort($sort)
     {
         switch ($sort) {
@@ -333,14 +309,6 @@ class GroupController extends BaseController
         return $orderBys;
     }
 
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->createService('System:SettingService');
-    }
-
     protected function prepareThreadConditions($conditions)
     {
         if (isset($conditions['threadType']) && !empty($conditions['threadType'])) {
@@ -371,5 +339,37 @@ class GroupController extends BaseController
         }
 
         return $conditions;
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+    
+    /**
+     * @return GroupService
+     */
+    protected function getGroupService()
+    {
+        return $this->createService('Group:GroupService');
+    }
+
+    /**
+     * @return ThreadService
+     */
+    protected function getThreadService()
+    {
+        return $this->createService('Group:ThreadService');
+    }
+
+    /**
+     * @return NotificationService
+     */
+    protected function getNotifiactionService()
+    {
+        return $this->createService('User:NotificationService');
     }
 }
