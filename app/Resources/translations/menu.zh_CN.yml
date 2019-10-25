@@ -578,7 +578,7 @@ admin_v2.operation.article.category_tab.category_create_btn: 添加栏目
 
 # 运营-内容运营-敏感词
 admin_v2.operation.sensitive_words_menu: 敏感词管理
-admin_v2.operation.sensitive_words.sensitive_words_list_tab: 敏感词管理
+admin_v2.operation.sensitive_words.sensitive_words_list_tab: 敏感词列表
 admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: 添加敏感词
 admin_v2.operation.sensitive_words.banlogs_tab: 屏蔽记录
 
