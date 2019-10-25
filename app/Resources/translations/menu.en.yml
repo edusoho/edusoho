@@ -575,6 +575,13 @@ admin_v2.operation.article.basic_tab.create_btn: Add Article
 admin_v2.operation.article.category_tab: Category Manage
 admin_v2.operation.article.category_tab.category_create_btn: Add Category
 
+# 运营-内容运营-敏感词
+admin_v2.operation.sensitive_words_menu: Sensitive Words
+admin_v2.operation.sensitive_words.sensitive_words_list_tab: Sensitive Words List
+admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: Add Sensitive Word
+admin_v2.operation.sensitive_words.banlogs_tab: Processing History
+
+
 # 应用中心-基础云-云服务-短信
 admin_v2.nav.cloud_center: Cloud Center
 admin_v2.basic_cloud_group: Basic Cloud

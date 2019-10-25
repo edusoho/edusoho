@@ -120,6 +120,12 @@ admin_operation_article_create: admin_v2_operation_article_create
 admin_operation_article_category: admin_v2_operation_article_category
 admin_operation_category_create: admin_v2_operation_category_create
 
+#敏感词
+admin_operation_keyword: admin_v2_operation.sensitive_words
+admin_keyword: admin_v2_keyword
+admin_keyword_create: admin_v2_keyword_create
+admin_keyword_banlogs: admin_v2_keyword_banlogs
+
 #App装修
 admin_setting_mobile: admin_v2_setting_mobile #App装修
 admin_setting_mobile_settings: admin_v2_mobile_settings #App设置
