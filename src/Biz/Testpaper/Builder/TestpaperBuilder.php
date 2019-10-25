@@ -204,17 +204,35 @@ class TestpaperBuilder implements TestpaperBuilderInterface
     {
         $count = 0;
         $score = 0;
-        array_walk($items, function ($item) use (&$count, &$score) {
+        $totalScores = array(
+            'single_choice' => 0,
+            'choice' => 0,
+            'essay' => 0,
+            'uncertain_choice' => 0,
+            'determine' => 0,
+            'fill' => 0,
+            'material' => 0,
+        );
+        array_walk($items, function ($item) use (&$count, &$score, &$totalScores) {
             if (!$item['parentId']) {
                 ++$count;
             }
 
             if ('material' != $item['questionType']) {
                 $score += $item['score'];
+                if ($item['parentId']) {
+                    $totalScores['material'] += $item['score'];
+                } else {
+                    $totalScores[$item['questionType']] += $item['score'];
+                }
             }
         });
 
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $testpaper['metas']['totalScores'] = $totalScores;
+
         $fields = array(
+            'metas' => $testpaper['metas'],
             'itemCount' => $count,
             'score' => $score,
         );

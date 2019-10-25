@@ -886,6 +886,7 @@ class ManageController extends BaseController
             $types[$type] = array(
                 'name' => $typeConfig['name'],
                 'hasMissScore' => $typeConfig['hasMissScore'],
+                'seqNum' => $typeConfig['seqNum'],
             );
         }
 

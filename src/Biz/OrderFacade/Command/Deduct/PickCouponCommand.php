@@ -14,7 +14,7 @@ class PickCouponCommand extends Command
             $couponCode = trim($params['couponCode']);
             $checkData = $this->getCouponService()->checkCoupon($couponCode, $product->targetId, $product->targetType);
 
-            if (isset($checkData['useable']) && $checkData['useable'] == 'no') {
+            if (isset($checkData['useable']) && 'no' == $checkData['useable']) {
                 return;
             }
 

@@ -349,6 +349,15 @@
 
 
 .subject-edit-item {
+  .tip-count-1 {
+    & + .tooltip {
+      pointer-events: none;
+      top: -2px !important;
+    }
+  }
+  .tooltip {
+    max-width: 150px;
+  }
   .subject-edit-item__order {
     position: absolute;
     top: 4px;
@@ -467,6 +476,17 @@
 }
 
 .subject-state-form {
+
+  .tip-count-1 {
+    position: relative;
+    & + .tooltip {
+      pointer-events: none;
+      top: -2px !important;
+    }
+  }
+  .tooltip {
+    max-width: 150px;
+  }
   .subject-state-form__label {
     padding-left: 28px;
     text-align: left;

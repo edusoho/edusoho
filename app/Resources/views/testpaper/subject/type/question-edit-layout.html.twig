@@ -31,11 +31,11 @@
             <div class="col-sm-10">
               <div class="cd-select width-150" id="courseEditBelong" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSetId})}}">
                 <input type="hidden" value="{{ courseId }}" name="courseId" data-edit="courseId" />
-                <div class="select-value">{% if courseId != 0 %}{{ get_course_title(courses[courseId]) }}{% else %}{{'course.question_manage.manage.default_belong'|trans}}{% endif %}</div>
+                <div class="select-value text-overflow">{% if courseId != 0 %}{{ get_course_title(courses[courseId]) }}{% else %}{{'course.question_manage.manage.default_belong'|trans}}{% endif %}</div>
                 <ul class="select-options">
                   <li {% if courseId == '0' %}class="checked"{% endif %} data-value="0">{{'course.question_manage.manage.default_belong'|trans}}</li>
                   {% for course in courses if courses %}
-                    <li data-value="{{ course.id }}" {% if courseId == course.id %}class="checked"{% endif %}>{{ get_course_title(course) }}</li>
+                    <li data-value="{{ course.id }}" class="{% if loop.index == 1 %}tip-count-1{% endif %}  {% if courseId == course.id %}checked{% endif %}" title="{{ get_course_title(course) }}" data-toggle="tooltip" data-placement="top">{{ get_course_title(course) }}</li>
                   {% endfor %}
                 </ul>
               </div>
@@ -46,11 +46,11 @@
             <div class="col-sm-10">
               <div class="cd-select width-150" id="lessonEditBelong">
                 <input type="hidden" value="{{ lessonId }}" name="lessonId" data-edit="lessonId" />
-                <div class="select-value">{% if lessonId != 0 %}{{ courseTasks[lessonId].title }}{% else %}{{'course.question_manage.manage.choose'|trans}}{% endif %}</div>
+                <div class="select-value text-overflow">{% if lessonId != 0 %}{{ courseTasks[lessonId].title }}{% else %}{{'course.question_manage.manage.choose'|trans}}{% endif %}</div>
                 <ul class="select-options js-lesson-edit-options">
-                  <li {% if lessonId == '0' %}class="checked"{% endif %} data-value="0">{{'course.question_manage.manage.choose'|trans}}</li>
+                  <li {% if lessonId == '0' %}class="checked"{% endif %} data-value="0" >{{'course.question_manage.manage.choose'|trans}}</li>
                   {% for task in courseTasks if courseTasks %}
-                    <li data-value="{{ task.id }}" {% if lessonId == task.id %}class="checked"{% endif %}>{{ task.title }}</li>
+                    <li data-value="{{ task.id }}" class="{% if loop.index == 1 %}tip-count-1{% endif %} {% if lessonId == task.id %}checked{% endif %}" title="{{ task.title }}" data-toggle="tooltip" data-placement="top">{{ task.title }}</li>
                   {% endfor %}
                 </ul>
               </div>
