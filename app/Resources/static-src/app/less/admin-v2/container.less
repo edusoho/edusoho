@@ -84,6 +84,24 @@
     background-color: rgba(66,139,202, 0.1);
     color: @brand-primary;
     .cdv2-text-sm;
+    .es-transition;
+    &:hover {
+      .es-transition;
+      background-color: @brand-primary;
+      color: @cdv2-white;
+    }
+  }
+  &.task-step--done {
+    background-color: @cdv2-bg;
+    .task-step__btn {
+      background-color: @cdv2-icon-assist;
+      color: #fff;
+      cursor: not-allowed;
+    }
+    .task-step__link {
+      cursor: not-allowed;
+      color: @cdv2-light-minor !important;
+    }
   }
   .task-step__tip {
     height: 32px;
