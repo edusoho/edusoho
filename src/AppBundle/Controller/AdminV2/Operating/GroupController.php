@@ -348,7 +348,7 @@ class GroupController extends BaseController
     {
         return $this->createService('System:SettingService');
     }
-    
+
     /**
      * @return GroupService
      */
