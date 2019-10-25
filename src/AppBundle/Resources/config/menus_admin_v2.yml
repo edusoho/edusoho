@@ -534,6 +534,17 @@ admin_v2:
                                             router_name: admin_v2_article_category_create
                                             mode: modal
                                             group: topBtn
+                        admin_v2_operation_wechat_notification:
+                            name: admin_v2.operation.wechat_notification
+                            children:
+                                admin_v2_operation_wechat_notification_record:
+                                    name: admin_v2.operation.wechat.notification_record_tab
+                                    disable: true
+                                    router_name: admin_v2_wechat_notification_record
+                                admin_v2_operation_wechat_notification_manage:
+                                    name: admin_v2.operation.wechat.notification_manage
+                                    disable: true
+                                    router_name: admin_v2_wechat_notification_manage
                         admin_v2_operation.sensitive_words:
                             name: admin_v2.operation.sensitive_words_menu
                             children:

@@ -150,3 +150,7 @@ admin_content: admin_v2_content #自定义页面
 admin_setting_share: admin_v2_setting_share #分享
 admin_friendlyLink_navigation: admin_v2_friendlyLink_navigation #友情链接
 
+# 微信通知
+admin_operation_wechat_notification: admin_v2_operation_wechat_notification #nav
+admin_operation_wechat_notification_record: admin_v2_operation_wechat_notification_record # 发送记录
+admin_operation_wechat_notification_manage: admin_v2_operation_wechat_notification_manage # 设置

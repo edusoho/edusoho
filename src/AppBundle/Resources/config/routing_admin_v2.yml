@@ -805,6 +805,28 @@ admin_v2_keyword_banlogs:
     path:  /keyword/banlogs
     defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:banlogs }
 
+#运营-内容运营-微信设置
+
+admin_v2_wechat_notification_record:
+    path: /wechat/notification/record
+    defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:index }
+
+admin_v2_wechat_notification_manage:
+    path: /wechat/notification/manage
+    defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:manage }
+
+admin_v2_wechat_notification_record_detail:
+    path: /wechat/notification/record/{id}/detail
+    defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:recordDetail }
+
+admin_v2_wechat_notification_setting_modal:
+    path: /wechat/notification/setting_edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:settingModal }
+
+admin_v2_wechat_notification_show:
+    path: /wechat/notification/show
+    defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:show }
+
 #web端装修
 admin_v2_block:
     path:  /block/list/{category}
@@ -987,3 +1009,8 @@ admin_v2_order_detail:
 admin_v2_setting_refund:
     path:  /setting/refund
     defaults: { _controller: AppBundle:Admin/FinanceSetting:refund }
+
+# 设置-通用设置-微信授权信息
+admin_v2_setting_wechat_auth:
+    path: /wechat/auth/setting
+    defaults: { _controller: AppBundle:Admin/WeChatSetting:index}
