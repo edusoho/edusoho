@@ -516,6 +516,20 @@ admin_v2:
                                             router_name: admin_v2_article_category_create
                                             mode: modal
                                             group: topBtn
+                        admin_v2_operation.sensitive_words:
+                            name: admin_v2.operation.sensitive_words_menu
+                            children:
+                                admin_v2_keyword:
+                                    name: admin_v2.operation.sensitive_words.sensitive_words_list_tab
+                                    disable: true
+                                    children:
+                                        admin_v2_keyword_create:
+                                            name: admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn
+                                            mode: modal
+                                            group: topBtn
+                                admin_v2_keyword_banlogs:
+                                    name: admin_v2.operation.sensitive_words.banlogs_tab
+                                    disable: true
         # 用户管理模块
         admin_v2_user:
             name: admin_v2.nav.user
