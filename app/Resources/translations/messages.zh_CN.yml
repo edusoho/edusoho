@@ -10169,6 +10169,10 @@ wechat.notification.fans_list.no_wechat_bind: 暂未绑定微信服务号
 wechat.notification.fans_list.placeholder: 请输入关键词
 wechat.notification.send_days: 发送日
 wechat.notification.course_remind_conditions: 针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。
+wechat.notification.tooltip_hint: 微信服务号通知不支持广告等营销类消息以及其它所有可能对用户造成骚扰的消息，如果通知发送失败，则可能是任务名称、课程名称等关键词中包含违规内容。
+wechat.notification.goto_authorization: 前往授权
+wechat.notification.template_opend: 已开启
+wechat.notification.template_closed: 未开启
 
 # 微信通知模板
 wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[《课程名》-《任务名》]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
