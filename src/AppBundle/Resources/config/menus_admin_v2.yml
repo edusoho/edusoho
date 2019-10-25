@@ -434,6 +434,7 @@ admin_v2:
         admin_v2_operating:
             name: admin_v2.nav.operating
             children:
+                #网校装修(group)
                 admin_v2_site_decoration_group:
                     name: admin_v2.operation.site_decoration.basic_group
                     is_group: true
@@ -508,6 +509,7 @@ admin_v2:
                                             name: admin_v2.operation.mobile.discovery_column_tab.create_btn
                                             group: topBtn
                                             mode: modal
+                #内容运营(group)
                 admin_v2_content_operation_group:
                     name: admin_v2.operation.content_operation.basic_group
                     is_group: true
@@ -534,6 +536,23 @@ admin_v2:
                                             router_name: admin_v2_article_category_create
                                             mode: modal
                                             group: topBtn
+                        admin_v2_operation_group_manage:
+                            name: admin_v2.operation.group_menu
+                            children:
+                                admin_v2_operation_group:
+                                    name: admin_v2.operation.group.group_tab
+                                    router_name: admin_v2_group
+                                    disable: true
+                                    children:
+                                        admin_v2_operation_group_create:
+                                            name: admin_v2.operation.group.group_tab.create_group_btn
+                                            router_name: group_add
+                                            group: topBtn
+                                            blank: 1
+                                admin_v2_operation_group_thread:
+                                    name: admin_v2.operation.group.group_thread_tab
+                                    disable: true
+                                    router_name: admin_v2_groupThread
                         admin_v2_operation_wechat_notification:
                             name: admin_v2.operation.wechat_notification
                             children:

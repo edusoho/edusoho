@@ -626,4 +626,10 @@ admin_v2.operation.invite.coupon_tab: 奖励查询
 #营销-营销管理-微营销
 admin_v2.micromarketing.menu: 微营销
 
+#运营-内容运营-小组管理
+
+admin_v2.operation.group_menu: 小组管理
+admin_v2.operation.group.group_tab: 小组管理
+admin_v2.operation.group.group_tab.create_group_btn: 创建小组
+admin_v2.operation.group.group_thread_tab: 小组话题管理
 # 新版后台结束
