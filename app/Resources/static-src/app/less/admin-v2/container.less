@@ -1,3 +1,8 @@
+
+.admin-v2-page {
+  line-height: 22px;
+}
+
 .admin-v2-container {
   @media (min-width: 1400px) {
     width: 1380px;
@@ -59,7 +64,7 @@
 }
 
 .task-step {
-  padding: 24px 8px 16px 8px;
+  padding: 24px 4px 16px 4px;
   text-align: center;
   border-radius: 4px;
   box-shadow: 0 2px 12px 0 rgba(0,0,0,0.05);
@@ -265,6 +270,24 @@
       vertical-align: text-bottom;
       line-height: 18px;
       border-radius: 4px;
+    }
+
+    &.rank-tag--yellow {
+      .rank-tag__icon {
+        background: linear-gradient(90deg,rgba(255,238,144,1) 0%,rgba(245,186,8,1) 100%);
+      }
+      .rank-tag__text {
+        background-color: #f6c93f;
+      }
+    }
+
+    &.rank-tag--green {
+      .rank-tag__icon {
+        background: linear-gradient(90deg,rgba(136,234,195,1) 0%,rgba(23,207,160,1) 100%);
+      }
+      .rank-tag__text {
+        background-color: #6ad9af;
+      }
     }
   }
 
