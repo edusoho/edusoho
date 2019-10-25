@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f1d05dab86cd166a90f4cdf1f65768b8",
+    "content-hash": "387d7c3283c672df069d6401eb39135d",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -580,16 +580,16 @@
         },
         {
             "name": "codeages/plugin-bundle",
-            "version": "v0.1.21",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "8793be694fe785615a5dd37d5712724f1de4adb8"
+                "reference": "188bec40df0dcdc4ee860b431d93dc423a0ee2ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/8793be694fe785615a5dd37d5712724f1de4adb8",
-                "reference": "8793be694fe785615a5dd37d5712724f1de4adb8",
+                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/188bec40df0dcdc4ee860b431d93dc423a0ee2ad",
+                "reference": "188bec40df0dcdc4ee860b431d93dc423a0ee2ad",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -599,7 +599,7 @@
                 ]
             },
             "require": {
-                "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5 || ^0.6 || ^0.7 || ^0.8 || ^0.9 || ^1.0 || ^0.10",
+                "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5 || ^0.6 || ^0.7 || ^0.8 || ^0.9 || ^1.0",
                 "php": "^5.3.3 || ^7.0",
                 "symfony/config": "^2.8",
                 "symfony/framework-bundle": "^2.8 || ^3.0",
@@ -633,7 +633,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2017-09-29T07:00:41+00:00"
+            "time": "2019-10-23T03:58:37+00:00"
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
@@ -6427,6 +6427,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "codeages/plugin-bundle": 20,
         "codeages/exam-parser": 20
     },
     "prefer-stable": true,

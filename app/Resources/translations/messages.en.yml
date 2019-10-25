@@ -9058,3 +9058,19 @@ admin.setting.invite.chooser_coupon.manage_btn: 优惠券管理
 admin.setting.invite.chooser_coupon.refresh_btn: 刷新
 admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
 admin.operation.coupon_menu.generate_btn: Generate Coupon
+
+# 新版后台开始
+
+##分类标签
+admin_v2.course.tag: Tag
+admin_v2.course.tag.group: Tag Groups
+admin_v2.course.category.course_category_tab: Course Categories
+admin_v2.course.category.classroom_category_tab: Class Categories
+admin_v2.category_manage.add_title: Add Category
+admin_v2.tag_manage.tag.create.modal_title: Add Tag
+admin_v2.tag_manage.tag.group.create.modal_title: Add Tag Group
+
+# 新后台
+admin_v2.edu_cloud_not_access: Edu cloud not accessable
+admin_v2.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">App Setting</a>\n"
+admin_v2.live_course.create_btn: Create

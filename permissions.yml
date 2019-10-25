@@ -36,15 +36,105 @@ admin_classroom_delete: admin_v2_classroom_delete #删除班级
 admin_sms_prepare: admin_v2_sms_prepare #发送发布通知短信
 admin_classroom_recommend: admin_v2_classroom_recommend #班级推荐
 
+admin_course_set_recommend_list: admin_v2_course_set_recommend_list #课程推荐
+admin_course_set_data: admin_v2_course_set_data #课程统计
+
+#直播管理权限模块
+admin_live_course: admin_v2_live_course #直播管理
+admin_live_course_manage: admin_v2_live_course_coming #未开始的
+admin_live_course_add: admin_v2_live_course_add #创建直播
+
+# 公开课管理权限模块
+admin_open_course_manage: admin_v2_open_course_manage #公开课管理
+admin_open_course: admin_v2_open_course #公开课管理tab
+admin_open_course_add: admin_v2_open_course_add #创建公开课
+admin_open_course_recommend_list: admin_v2_open_course_recommend_list #公开课推荐
+admin_opencourse_analysis: admin_v2_open_course_analysis # 公开课统计
+
 # 笔记管理权限
 admin_course_note: admin_v2_course_note #笔记管理
 admin_course_note_manage: admin_v2_course_note_manage  #笔记管理
 
 
 # 问答管理权限
+admin_course_question: admin_v2_course_question
 admin_course_question_manage: admin_v2_course_question_manage
 
 # 话题管理权限
 admin_course_thread: admin_v2_course_thread
+admin_course_thread_manage: admin_v2_course_thread_manage
+admin_classroom_thread_manage: admin_v2_classroom_thread_manage
 
+
+#分类标签权限
+
+admin_course_category: admin_v2_course_category #分类管理
+admin_course_category_manage: admin_v2_course_category_manage #课程分类
+admin_category_create: admin_v2_category_create #添加课程分类
+admin_classroom_category_manage: admin_v2_classroom_category_manage #班级分类
+admin_classroom_category_create: admin_v2_classroom_category_create #添加班级分类
+admin_course_tag: admin_v2_tag #标签管理
+admin_course_tag_manage: admin_v2_course_tag_manage #标签管理
+admin_course_tag_add: admin_v2_course_tag_add #新增标签
+admin_course_tag_group_manage: admin_v2_course_tag_group_manage #标签组管理
+admin_course_tag_group_add: admin_v2_course_tag_group_add #添加标签组
+#反馈管理
+admin_review: admin_v2_review  #反馈管理
+admin_course_review_tab: admin_v2_course_review_tab #课程评价
+admin_classroom_review_tab: admin_v2_classroom_review_tab #班级评价
+
+# 优惠券管理
+admin_operation_coupon: admin_v2_marketing_coupon
+admin_operation_coupon_manage: admin_v2_marketing_coupon_manage
+admin_coupon_generate: admin_v2_coupon_generate
+admin_operation_coupon_query: admin_v2_marketing_coupon_query
+admin_coupon_setting: admin_v2_coupon_setting
+
+# 分销管理
+admin_distributor_top: admin_v2_distributor
+_distributor_page: admin_v2_distributor_page
+
+#邀请管理权限
+admin_operation_invite: admin_v2_operation_invite  #邀请管理
+admin_operation_invite_record: admin_v2_operation_invite_record #邀请记录
+admin_operation_invite_user: admin_v2_operation_invite_user #用户查询
+admin_operation_invite_coupon: admin_v2_operation_invite_coupon #奖励查询
+
+# 微营销
+admin_marketing_top: admin_v2_micromarketing
+_marketing_marketing_page: admin_v2_micromarketing_page
+
+#运营
+#微网校装修
+admin_h5_set: admin_v2_h5_set #微网校装修
+admin_wap_set: admin_v2_wap_set #微网校装修
+
+#小程序装修
+admin_wechat_app_manage: admin_v2_wechat_app_manage #小程序装修
+admin_wechat_app: admin_v2_wechat_app_manage #小程序装修
+
+# 资讯
+admin_operation_article: admin_v2_operation_article
+admin_operation_article_manage: admin_v2_operation_article_manage
+admin_operation_article_create: admin_v2_operation_article_create
+admin_operation_article_category: admin_v2_operation_article_category
+admin_operation_category_create: admin_v2_operation_category_create
+
+#App装修
+admin_setting_mobile: admin_v2_setting_mobile #App装修
+admin_setting_mobile_settings: admin_v2_mobile_settings #App设置
+admin_operation_mobile_banner_manage: admin_v2_mobile_banner_manage #轮播图设置
+admin_discovery_column_index: admin_v2_discovery_column_index #发现页栏目
+admin_discovery_column_create: admin_v2_discovery_column_create #添加栏目
+
+#站点设置
+admin_operation: admin_v2_operating #运营
+admin_setting: admin_v2_site_setting #站点设置
+admin_top_navigation: admin_v2_top_navigation #顶部导航
+admin_foot_navigation: admin_v2_foot_navigation #底部导航
+admin_setting_consult_setting: admin_v2_setting_consult_setting #客服
+admin_setting_es_bar: admin_v2_setting_es_bar #侧边栏
+admin_content: admin_v2_content #自定义页面
+admin_setting_share: admin_v2_setting_share #分享
+admin_friendlyLink_navigation: admin_v2_friendlyLink_navigation #友情链接
 

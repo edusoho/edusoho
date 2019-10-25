@@ -12,6 +12,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Taxonomy\Service\CategoryService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -167,6 +168,47 @@ class CourseController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function searchToFillBannerAction(Request $request)
+    {
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction(
+            $request,
+            'admin-v2/teach/course/search-to-fill-banner.html.twig'
+        );
+    }
+
+    protected function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request, $twigToRender)
+    {
+        $key = $request->query->get('key');
+
+        $conditions = array('title' => $key);
+        $conditions['status'] = 'published';
+        $conditions['type'] = 'normal';
+        $conditions['parentId'] = 0;
+
+        $count = $this->getCourseService()->searchCourseCount($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 6);
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            null,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
+
+        return $this->render($twigToRender, array(
+            'key' => $key,
+            'courses' => $courses,
+            'users' => $users,
+            'categories' => $categories,
+            'paginator' => $paginator,
+        ));
+    }
+
     protected function getExportTasksDatas($courseId, $start, $limit, $exportAllowCount)
     {
         $this->getCourseService()->tryManageCourse($courseId);
@@ -278,6 +320,14 @@ class CourseController extends BaseController
     protected function getPasswordEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     /**

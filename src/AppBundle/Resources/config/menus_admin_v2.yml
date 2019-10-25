@@ -9,6 +9,7 @@ admin_v2:
                 # 课程管理（group）
                 admin_v2_course_group:
                     name: admin_v2.course.basic_group
+                    is_group: true
                     children:
                         # 课程管理
                         admin_v2_course_show:
@@ -67,7 +68,7 @@ admin_v2:
                                             visible: (courseSet.status == 'published')
                                         admin_v2_course_sms_prepare:
                                             name: admin_v2.btn.sms_send_btn
-                                            router_name: sms_prepare
+                                            router_name: admin_v2_sms_prepare
                                             router_params:
                                                 id: (courseSet.id)
                                                 targetType: 'course'
@@ -187,9 +188,120 @@ admin_v2:
                                 admin_v2_classroom_recommend:
                                     name: admin_v2.course.classroom.recommend_tab
                                     router_name: admin_v2_classroom_recommend_list
+                        #直播管理
+                        admin_v2_live_course:
+                            name: admin.course.live_menu
+                            children:
+                                admin_v2_live_course_coming:
+                                    name: admin_v2.course.coming.live_tab
+                                    router_name: admin_v2_live_course
+                                    disable: true
+                                    children:
+                                        admin_v2_live_course_add:
+                                            name: admin_v2.course.live.basic_tab.create_btn
+                                            router_name: course_set_manage_create
+                                            router_params:
+                                                default: 'live'
+                                            group: topBtn
+                                            disable: true
+                                            blank: 1
+                                admin_v2_live_course_underway:
+                                    name: admin_v2.course.underway.live_tab
+                                    router_name: admin_v2_live_course
+                                    router_params:
+                                        status: underway
+                                    disable: true
+                                admin_v2_live_course_end:
+                                    name: admin_v2.course.end.live_tab
+                                    router_name: admin_v2_live_course
+                                    router_params:
+                                        status: end
+                                    disable: true
+                        #公开课管理模块
+                        admin_v2_open_course_manage:
+                            name: admin_v2.course.open_course_menu
+                            router_name: admin_v2_open_course
+                            children:
+                                admin_v2_open_course:
+                                    name: admin_v2.course.open_course.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_open_course
+                                    children:
+                                        admin_v2_open_course_add:
+                                            name: admin_v2.course.open_course.basic_tab.create_btn
+                                            router_name: course_set_manage_create
+                                            router_params:
+                                                default: 'open'
+                                            group: topBtn
+                                            blank: 1
+                                admin_v2_open_course_recommend_list:
+                                    name: admin_v2.course.open_course.recommend_list_tab
+                                    disable: true
+                                admin_v2_open_course_analysis:
+                                    name: admin_v2.course.open_course.analysis_tab
+                                    disable: true
+                        #分类标签
+                        admin_v2_course_category_tag:
+                            name: admin_v2.course.category_tag_menu
+                            children:
+                                admin_v2_course_category:
+                                    name: admin_v2.course.category_menu
+                                    children:
+                                        admin_v2_course_category_manage:
+                                            name: admin_v2.course.category.course_category_tab
+                                            router_name: admin_v2_course_category
+                                            disable: true
+                                            children:
+                                                admin_v2_category_create:
+                                                    name: admin_btn.create_category_btn
+                                                    router_params:
+                                                        groupId: (group.id)
+                                                    router_params_context: 1
+                                                    group: topBtn
+                                                    mode: modal
+                                        admin_v2_classroom_category_manage:
+                                            name: admin_v2.course.category.classroom_category_tab
+                                            parent: admin_v2_course_category
+                                            router_name: admin_v2_classroom_category
+                                            disable: true
+                                            children:
+                                                admin_v2_classroom_category_create:
+                                                    name: admin_v2.btn.create_category_btn
+                                                    parent: admin_v2_classroom_category_manage
+                                                    router_name: admin_v2_category_create
+                                                    router_params:
+                                                        groupId: (group.id)
+                                                    router_params_context: 1
+                                                    group: topBtn
+                                                    mode: modal
+                                admin_v2_tag:
+                                    name: admin_v2.course.tag_menu
+                                    children:
+                                        admin_v2_course_tag_manage:
+                                            name: admin_v2.course.tag.basic_tab
+                                            router_name: admin_v2_tag
+                                            disable: true
+                                            children:
+                                                admin_v2_course_tag_add:
+                                                    name: admin_v2.course.tag.basic_tab.create_btn
+                                                    router_name: admin_v2_tag_create
+                                                    mode: modal
+                                                    group: topBtn
+                                        admin_v2_course_tag_group_manage:
+                                            name: admin_v2.course.tag.tag_group_tab
+                                            router_name: admin_v2_tag_group
+                                            disable: true
+                                            children:
+                                                admin_v2_course_tag_group_add:
+                                                    name: admin_v2.course.tag.tag_group_tab.create_tag_group_btn
+                                                    router_name: admin_v2_tag_group_create
+                                                    mode: modal
+                                                    group: topBtn
                 # 助学管理（group）
                 admin_v2_tool_group:
                     name: admin_v2.tool.basic_group
+                    is_group: true
+                    afther: admin_v2_course_group
                     children:
                         # 笔记管理模块
                         admin_v2_course_note:
@@ -209,15 +321,201 @@ admin_v2:
                                     router_params:
                                         postStatus: unPosted
                                     disable: true
-#        # 营销管理模块
-#        admin_v2_marketing:
-#            name: admin_v2.nav.marketing
-#            children:
-#        # 运营管理模块
-#        admin_v2_operating:
-#            name: admin_v2.nav.operating
-#            children:
-#admin_v2_user测试菜单栏显示
+                        # 话题管理
+                        admin_v2_course_thread:
+                            name: admin_v2.course.thread_menu
+                            children:
+                                admin_v2_course_thread_manage:
+                                    name: admin_v2.course.thread.course_thread_tab
+                                    router_name: admin_v2_course_thread
+                                    disable: true
+                                admin_v2_classroom_thread_manage:
+                                    name: admin_v2.course.thread.classroom_thread_tab
+                                    router_name: admin_v2_classroom_thread
+                                    disable: true
+                        # 反馈管理模块
+                        admin_v2_review:
+                            name: admin_v2.course.review_menu
+                            children:
+                                admin_v2_course_review_tab:
+                                    name: admin_v2.course.review.course_review_tab
+                                    router_name: admin_v2_course_review
+                                    disable: true
+                                admin_v2_classroom_review_tab:
+                                    name: admin_v2.course.review.classroom_review_tab
+                                    router_name: admin_v2_classroom_review
+                                    disable: true
+        # 营销管理模块
+        admin_v2_marketing:
+            name: admin_v2.nav.marketing
+            children:
+                # 营销管理
+                admin_v2_marketing_group:
+                    name: admin_v2.marketing.basic_group
+                    is_group: true
+                    children:
+                        #邀请管理
+                        admin_v2_operation_invite:
+                            name: admin_v2.operation.invite_menu
+                            children:
+                                admin_v2_operation_invite_record:
+                                    name: admin_v2.operation.invite.record_tab
+                                    disable: true
+                                    router_name: admin_v2_invite_record
+                                admin_v2_operation_invite_user:
+                                    name: admin_v2.operation.invite.user_tab
+                                    disable: true
+                                    router_name: admin_v2_invite
+                                admin_v2_operation_invite_coupon:
+                                    name: admin_v2.operation.invite.coupon_tab
+                                    disable: true
+                                    router_name: admin_v2_invite_coupon
+                        # 优惠券管理
+                        admin_v2_marketing_coupon:
+                            name: admin_v2.operation.coupon_menu
+                            router_name: admin_v2_coupon
+                            children:
+                                admin_v2_marketing_coupon_manage:
+                                    name: admin_v2.marketing.coupon_menu.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_coupon
+                                    children:
+                                        admin_v2_coupon_generate:
+                                            name: admin_v2.marketing.coupon_menu.generate_btn
+                                            group: topBtn
+                                admin_v2_marketing_coupon_query:
+                                    name: admin_v2.marketing.query_menu.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_coupon_query
+                                admin_v2_coupon_setting:
+                                    name: admin_v2.system.marketing.coupon_setting_tab
+                                    disable: true
+                        # 微营销
+                        admin_v2_micromarketing:
+                            name: admin_v2.micromarketing.menu
+                            children:
+                                admin_v2_micromarketing_page:
+                                    name: admin_v2.micromarketing.menu
+                                    router_name: admin_v2_login_micromarketing
+                                    disable: true
+                # 渠道管理
+                admin_v2_channel_group:
+                    name: admin_v2.channel.basic_group
+                    is_group: true
+                    after: admin_v2_marketing_group
+                    children:
+                        # 分销
+                        admin_v2_distributor:
+                            name: admin_v2.distributor.menu
+                            children:
+                                admin_v2_distributor_page:
+                                    name: admin_v2.distributor.menu
+                                    router_name: admin_v2_login_distributor
+                                    disable: true
+        # 运营管理模块
+        admin_v2_operating:
+            name: admin_v2.nav.operating
+            children:
+                admin_v2_site_decoration_group:
+                    name: admin_v2.operation.site_decoration.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_h5_set:
+                            name: admin_v2.operation.mobile.h5
+                            children:
+                                admin_v2_wap_set:
+                                    name: admin_v2.operation.wap_tab
+                                    disable: true
+                                    router_name: admin_v2_wap_set
+                        admin_v2_wechat_app_manage:
+                            name: admin_v2.wechat_app.menu
+                            router_name: admin_v2_wechat_app
+                            children:
+                                admin_v2_wechat_app:
+                                    name: admin_v2.wechat_app.menu
+                                    router_name: admin_v2_wechat_app
+                                    disable: true
+                        admin_v2_site_setting:
+                            name: admin_v2.operation.site_menu
+                            router_name: admin_v2_navigation
+                            children:
+                                admin_v2_top_navigation:
+                                    name: admin_v2.operation.site.top_navigation_tab
+                                    router_name: admin_v2_navigation
+                                    disable: true
+                                    router_params:
+                                        type: top
+                                admin_v2_foot_navigation:
+                                    name: admin_v2.operation.site.foot_navigation_tab
+                                    router_name: admin_v2_navigation
+                                    disable: true
+                                    router_params:
+                                        type: foot
+                                admin_v2_setting_consult_setting:
+                                    name: admin_v2.operation.site.consult_setting_tab
+                                    disable: true
+                                admin_v2_setting_es_bar:
+                                    name: admin_v2.operation.site.es_bar_tab
+                                    disable: true
+                                admin_v2_content:
+                                    name: admin_v2.operation.content.basic_tab
+                                    disable: true
+                                    router_params:
+                                        type: page
+                                admin_v2_setting_share:
+                                    name: admin_v2.operation.site.share_tab
+                                    disable: true
+                                admin_v2_friendlyLink_navigation:
+                                    name: admin_v2.operation.site.friendlyLink_navigation_tab
+                                    router_name: admin_v2_navigation
+                                    disable: true
+                                    router_params:
+                                        type: friendlyLink
+                        admin_v2_setting_mobile:
+                            name: admin_v2.operation.mobile_menu
+                            children:
+                                admin_v2_mobile_settings:
+                                    name: admin_v2.operation.mobile.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_mobile
+                                admin_v2_mobile_banner_manage:
+                                    name: admin_v2.operation.mobile.banner_setting_tab
+                                    disable: true
+                                    router_name: admin_v2_mobile_banner_manage
+                                admin_v2_discovery_column_index:
+                                    name: admin_v2.operation.mobile.discovery_column_tab
+                                    disable: true
+                                    children:
+                                        admin_v2_discovery_column_create:
+                                            name: admin_v2.operation.mobile.discovery_column_tab.create_btn
+                                            group: topBtn
+                                            mode: modal
+                admin_v2_content_operation_group:
+                    name: admin_v2.operation.content_operation.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_operation_article:
+                            name: admin_v2.operation.article_menu
+                            children:
+                                admin_v2_operation_article_manage:
+                                    name: admin_v2.operation.article.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_article
+                                    children:
+                                        admin_v2_operation_article_create:
+                                            name: admin_v2.operation.article.basic_tab.create_btn
+                                            router_name: admin_v2_article_create
+                                            group: topBtn
+                                admin_v2_operation_article_category:
+                                    name: admin_v2.operation.article.category_tab
+                                    disable: true
+                                    router_name: admin_v2_article_category
+                                    children:
+                                        admin_v2_operation_category_create:
+                                            name: admin_v2.operation.article.category_tab.category_create_btn
+                                            router_name: admin_v2_article_category_create
+                                            mode: modal
+                                            group: topBtn
         # 用户管理模块
         admin_v2_user:
             name: admin_v2.nav.user
@@ -384,4 +682,25 @@ admin_v2:
 #        admin_v2_system:
 #            name: admin_v2.nav.system
 #            children:
+        # 应用中心模块
+        admin_v2_cloud_center:
+            name: admin_v2.nav.cloud_center
+            children:
+                admin_v2_basic_cloud_group:
+                    name: admin_v2.basic_cloud_group
+                    is_group: true
+                    children:
+                        admin_v2_cloud_service:
+                            name: admin_v2.cloud_service.basic_menu
+                            children:
+                                admin_v2_cloud_sms:
+                                    name: admin_v2.cloud_service.sms_tab
+                                    router_name: admin_v2_edu_cloud_sms
+                                    visible: (cloudStatus())
+                                    children:
+                                        admin_v2_edu_cloud_sms_overview:
+                                            name: admin_v2.cloud_service.sms_overview_tab
+                                            router_name: admin_v2_edu_cloud_sms
+                                            disable: true
+
 

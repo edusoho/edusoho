@@ -10366,4 +10366,20 @@ admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1
 admin.operation.coupon_menu.generate_btn: 生成优惠券
 course.setting.course_remind_go_to_open: 前往开启
 
+# 新版后台开始
 
+##分类标签
+admin_v2.course.tag: 标签管理
+admin_v2.course.tag.group: 标签组管理
+admin_v2.course.category.course_category_tab: 课程分类
+admin_v2.course.category.classroom_category_tab: 班级分类
+admin_v2.category_manage.add_title: 添加分类
+admin_v2.tag_manage.tag.create.modal_title: 新增标签
+admin_v2.tag_manage.tag.group.create.modal_title: 新增标签组
+
+
+# 新后台
+admin_v2.edu_cloud_not_access: 未接入教育云
+admin_v2.mobile_manage.open_tips: >
+  移动端未开启，请先在<a href="%openUrl%">APP设置</a>中设置开启
+admin_v2.live_course.create_btn: 创建直播
