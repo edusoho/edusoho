@@ -17,7 +17,7 @@ class CloudFileController extends BaseController
             $api = CloudAPIFactory::create('leaf');
             $result = $api->get('/me');
         } catch (\RuntimeException $e) {
-            return $this->render('admin/cloud-file/api-error.html.twig', array());
+            return $this->render('admin-v2/cloud-file/api-error.html.twig', array());
         }
 
         $storageSetting = $this->getSettingService()->get('storage', array());
