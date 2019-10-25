@@ -81,15 +81,15 @@ import rulesConfig from '@/utils/rule-config.js'
 const registerType = {
   binding: '绑定手机',
   register: '注册账号'
-}
+};
 const btnType = {
   binding: '绑定',
   register: '注册'
-}
+};
 const placeHolder = {
   binding: '请输入密码',
   register: '请设置密码（5-20位字符）'
-}
+};
 
 export default {
   components: {
@@ -151,7 +151,7 @@ export default {
       if (ele.length == 0) {
         this.errorMessage[type] = '';
         return false;
-      };
+      }
 
       this.errorMessage[type] = !rule.validator(ele)
         ? rule.message: '';

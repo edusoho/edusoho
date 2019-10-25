@@ -21,8 +21,7 @@ export default {
       active = true;
     };
     const getCurrHeight = () => {
-      const getHeight = document.body.clientHeight;
-      return getHeight;
+      return document.body.clientHeight;
     };
     const check = () => {
       currHeight = getCurrHeight();

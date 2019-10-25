@@ -23,7 +23,7 @@
       <div class="login-change" v-show="cloudSetting" @click="changeLogin">
           <img src="static/images/login_change.png" class="login_change-icon"/>切换手机快捷登录
       </div>
-    </div>  
+    </div>
   </div>
 
 </template>
@@ -82,11 +82,7 @@ export default {
     //网校是否开启短信云服务
     async getsettingsCloud(){
       await Api.settingsCloud().then(res=>{
-        if(res.sms_enabled){
-          this.cloudSetting=true;
-        }else{
-          this.cloudSetting=false;
-        }
+        this.cloudSetting = !!res.sms_enabled;
       }).catch(err => {
         Toast.fail(err.message)
       });
@@ -107,8 +103,8 @@ export default {
     },
     jumpRegister() {
       if (!this.registerSettings
-        || this.registerSettings.mode == 'closed'
-        || this.registerSettings.mode == 'email') {
+        || this.registerSettings.mode === 'closed'
+        || this.registerSettings.mode === 'email') {
         Toast('网校未开启手机注册，请联系管理员');
         return;
       }

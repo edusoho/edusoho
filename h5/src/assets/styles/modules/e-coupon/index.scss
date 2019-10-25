@@ -342,9 +342,9 @@ html,body,#app,.receive-all{
   }
   &-login{
     margin-top: vw(40);
-    .receive-login-input{
+    .receive-input{
       .van-cell{
-        background-color:transparent!important; 
+        background-color:transparent!important;
       }
       .van-field__body{
         padding-left: vw(20);

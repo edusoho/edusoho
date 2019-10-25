@@ -302,6 +302,42 @@ const routes = [
       title: '兑换卡券'
     },
     component: () => import(/* webpackChunkName: "auth_social" */'@/containers/coupon/covert/index.vue')
+  }, {
+    path: '/moneycard',
+    name: 'study_card',
+    meta: {
+      title: '学习卡充值'
+    },
+    component: () => import(/* webpackChunkName: "study_card" */'@/containers/study-card/index.vue'),
+    redirect: '/moneycard/fixed_receive',
+    children: [{
+      path: '/moneycard/fixed_receive',
+      name: 'fixed_receive',
+      meta: {
+        hideTitle: true,
+        title: '学习卡充值',
+        color: 'white'
+      },
+      component: () => import(/* webpackChunkName: "fixed_receive" */'@/containers/study-card/components/input-code')
+    }, {
+      path: '/moneycard/:token/receive',
+      name: 'receive',
+      meta: {
+        hideTitle: true,
+        title: '学习卡充值',
+        color: 'white'
+      },
+      component: () => import(/* webpackChunkName: "receive" */'@/containers/study-card/components/valid-card')
+    }, {
+      path: '/moneycard/receive/:password',
+      name: 'receive',
+      meta: {
+        hideTitle: true,
+        title: '学习卡充值',
+        color: 'white'
+      },
+      component: () => import(/* webpackChunkName: "receive" */'@/containers/study-card/components/valid-card')
+    }]
   }
 ];
 

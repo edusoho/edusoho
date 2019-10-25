@@ -11,7 +11,7 @@
   }
   &-img {
     position: relative;
-    min-height: vw(144);
+    min-height: vw(100);
     width: 100%;
     img:first-child {
       vertical-align: middle;
@@ -31,7 +31,7 @@
     height: vw(34);
     background-color: #f1f1f1;
     margin: vw(8) 0;
-    text-align: center;    
+    text-align: center;
     > span {
       color: #919191;
       font-size: vw(14);

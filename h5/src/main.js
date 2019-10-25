@@ -34,7 +34,8 @@ import {
   CheckboxGroup,
   Radio,
   RadioGroup,
-  Panel
+  Panel,
+  ActionSheet
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -57,6 +58,7 @@ Vue.component('van-radio', Radio);
 Vue.component('van-radio-group', RadioGroup);
 Vue.component('van-panel', Panel);
 
+Vue.use(ActionSheet);
 Vue.use(filters);
 Vue.use(Row);
 Vue.use(Col);
