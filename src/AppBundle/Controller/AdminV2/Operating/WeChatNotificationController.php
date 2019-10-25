@@ -95,7 +95,7 @@ class WeChatNotificationController extends BaseController
 
             return $this->createJsonResponse(true);
         }
-        $modal = isset($templates[$key]['setting_modal_v2']) ? $templates[$key]['setting_modal_v2'] : 'admin/wechat-notification/setting-modal/default-modal.html.twig';
+        $modal = isset($templates[$key]['setting_modal_v2']) ? $templates[$key]['setting_modal_v2'] : 'admin-v2/operating/wechat-notification/setting-modal/default-modal.html.twig';
 
         return $this->render($modal, array(
             'template' => $templates[$key],

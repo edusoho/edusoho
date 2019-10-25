@@ -931,3 +931,8 @@ admin_v2_order_detail:
 admin_v2_setting_refund:
     path:  /setting/refund
     defaults: { _controller: AppBundle:Admin/FinanceSetting:refund }
+
+# 设置-通用设置-微信授权信息
+admin_v2_setting_wechat_auth:
+    path: /wechat/auth/setting
+    defaults: { _controller: AppBundle:Admin/WeChatSetting:index}
