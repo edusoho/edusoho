@@ -54,9 +54,9 @@ class OpenCoursePlayer {
       if (caller === undefined) {
         return;
       }
-      
+
       caller(this);
-      
+
     });
   }
 
@@ -76,7 +76,7 @@ class OpenCoursePlayer {
       return;
     }
     let lesson = this.lesson;
-            
+
     if (lesson.type == 'video' || lesson.type == 'audio') {
       if (lesson.convertStatus != 'success' && lesson.storage == 'cloud') {
         $('#media-error-dialog').show();
@@ -125,7 +125,7 @@ class OpenCoursePlayer {
     let $target = $(e.currentTarget);
 
     let lesson = this.lesson;
-    
+
     if (lesson.mediaError) {
       $('#media-error-dialog').show();
       $('#media-error-dialog').find('.modal-body .media-error').html(lesson.mediaError);
@@ -152,7 +152,7 @@ class OpenCoursePlayer {
   }
 
   getPlayer() {
-    return window.frames['viewerIframe'].window.BalloonPlayer ||
+    return window.frames['viewerIframe'].window.BalloonVideoPlayer ||
            window.frames['viewerIframe'].window.player;
   }
 

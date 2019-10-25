@@ -26,6 +26,7 @@ class ExportQuestionWrapper extends Wrapper
 
     public function stem($question)
     {
+        $question['stem'] = $this->stripTags($question['stem']);
         $question['stem'] = $this->explodeTextAndImg($question['stem']);
         $question['stem'] = $this->filterImage($question['stem']);
 
@@ -37,6 +38,7 @@ class ExportQuestionWrapper extends Wrapper
         $question['options'] = empty($question['metas']['choices']) ? array() : $question['metas']['choices'];
         foreach ($question['options'] as $index => $option) {
             $option = $this->numberToCapitalLetter($index).'.'.$option;
+            $option = $this->stripTags($option);
             $question['options'][$index] = $this->explodeTextAndImg($option);
         }
 
@@ -46,13 +48,14 @@ class ExportQuestionWrapper extends Wrapper
     public function answer($question)
     {
         if ('essay' == $question['type']) {
-            $question['answer'] = $this->explodeTextAndImg(implode($question['answer']));
+            $question['answer'] = $this->stripTags(implode($question['answer']));
+            $question['answer'] = $this->explodeTextAndImg($question['answer']);
         } elseif ('determine' == $question['type']) {
             $determineAnswer = array(
                 '错误',
                 '正确',
             );
-            $answer = (int) $question['answer'];
+            $answer = (int) reset($question['answer']);
             $question['answer'] = $determineAnswer[$answer];
         } elseif (in_array($question['type'], array('choice', 'single_choice', 'uncertain_choice'))) {
             $choiceAnswer = '';
@@ -81,6 +84,7 @@ class ExportQuestionWrapper extends Wrapper
     public function analysis($question)
     {
         if (!empty($question['analysis'])) {
+            $question['analysis'] = $this->stripTags($question['analysis']);
             $question['analysis'] = $this->explodeTextAndImg($question['analysis']);
         }
 
@@ -151,6 +155,11 @@ class ExportQuestionWrapper extends Wrapper
         }
 
         return chr($number + 65);
+    }
+
+    protected function stripTags($str)
+    {
+        return trim(strip_tags($str, '<a><img>'));
     }
 
     protected function getWrapList()

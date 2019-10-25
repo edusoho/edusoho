@@ -372,6 +372,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
         }
 
+        $info['totalScores'] = $info['scores'];
+
         return $info;
     }
 
@@ -887,15 +889,21 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $fields['itemCount'] = $this->searchItemCount($conditions);
         $fields['metas'] = $testpaper['metas'];
 
+        $fields['metas']['totalScores'] = array(
+            'single_choice' => 0,
+            'choice' => 0,
+            'essay' => 0,
+            'uncertain_choice' => 0,
+            'determine' => 0,
+            'fill' => 0,
+            'material' => 0,
+        );
+
         $totalScore = 0;
         if ($items) {
             $type = array();
             $typesCount = array();
             foreach ($items as $item) {
-                if ('material' != $item['questionType']) {
-                    $totalScore += $item['score'];
-                }
-
                 if (!in_array($item['questionType'], $type) && 0 != $item['parentId']) {
                     $type[] = $item['questionType'];
                 }
@@ -904,6 +912,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     ++$typesCount[$item['questionType']];
                 } elseif (0 == $item['parentId']) {
                     $typesCount[$item['questionType']] = 1;
+                }
+
+                if ('material' == $item['questionType']) {
+                    continue;
+                }
+
+                $totalScore += $item['score'];
+                if ($item['parentId']) {
+                    $fields['metas']['totalScores']['material'] += $item['score'];
+                } else {
+                    $fields['metas']['totalScores'][$item['questionType']] += $item['score'];
                 }
             }
             $fields['metas']['question_type_seq'] = $type;
