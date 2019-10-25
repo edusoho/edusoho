@@ -90,8 +90,6 @@ admin_coupon_generate: admin_v2_coupon_generate
 admin_operation_coupon_query: admin_v2_marketing_coupon_query
 admin_coupon_setting: admin_v2_coupon_setting
 
-
-
 # 分销管理
 admin_distributor_top: admin_v2_distributor
 _distributor_page: admin_v2_distributor_page
@@ -101,6 +99,10 @@ admin_operation_invite: admin_v2_operation_invite  #邀请管理
 admin_operation_invite_record: admin_v2_operation_invite_record #邀请记录
 admin_operation_invite_user: admin_v2_operation_invite_user #用户查询
 admin_operation_invite_coupon: admin_v2_operation_invite_coupon #奖励查询
+
+# 微营销
+admin_marketing_top: admin_v2_micromarketing
+_marketing_marketing_page: admin_v2_micromarketing_page
 
 #运营
 #微网校装修
