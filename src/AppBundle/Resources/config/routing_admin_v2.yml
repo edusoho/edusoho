@@ -885,3 +885,70 @@ admin_v2_order_detail:
 admin_v2_setting_refund:
     path:  /setting/refund
     defaults: { _controller: AppBundle:Admin/FinanceSetting:refund }
+#运营-内容运营-小组管理
+admin_v2_group:
+    path:  /group
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:index }
+    permissions: [admin_v2_operation_group_manage]
+
+admin_v2_groupThread:
+    path:  /group/thread
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:thread }
+    permissions: [admin_v2_operation_group_thread]
+
+admin_v2_groupThread_batch_delete:
+    path:  /group/batchDeleteThread
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:batchDeleteThread }
+    permissions: [admin_v2_operation_group_thread]
+    methods:  [POST]
+
+admin_v2_group_thread_cancel_elite:
+    path:  /group/thread/{threadId}/removeElite
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:removeElite }
+    permissions: [admin_v2operation_group_manage]
+
+admin_v2_group_thread_set_elite:
+    path:  /group/thread/{threadId}/setElite
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:setElite }
+    permissions: [admin_v2_operation_group_manage]
+
+admin_v2_group_thread_cancel_stick:
+    path:  /group/thread/{threadId}/removeStick
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:removeStick }
+    permissions: [admin_v2_operation_group_manage]
+
+admin_v2_group_thread_set_stick:
+    path:  /group/thread/{threadId}/setStick
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:setStick }
+    permissions: [admin_v2_operation_group_manage]
+
+admin_v2_group_thread_close:
+    path:  /group/thread/{threadId}/closeThread
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:closeThread }
+    permissions: [admin_v2_operation_group_manage]
+
+admin_v2_group_thread_open:
+    path:  /group/thread/{threadId}/openThread
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:openThread }
+    permissions: [admin_v2_operation_group_manage]
+
+admin_v2_group_thread_delete:
+    path:  /group/thread/{threadId}/deleteThread
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:deleteThread }
+    permissions: [admin_v2_operation_group_manage]
+    methods:  [POST]
+
+admin_v2_group_close:
+    path:  /group/{id}/close
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:closeGroup }
+    permissions: [admin_v2_operation_group_manage]
+
+admin_v2_group_open:
+    path:  /group/{id}/open
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:openGroup }
+    permissions: [admin_v2_operation_group_manage]
+
+admin_v2_group_transfer:
+    path:  /group/transfer/{groupId}
+    defaults: { _controller: AppBundle:AdminV2/Operating/Group:transferGroup }
+    permissions: [admin_v2_operation_group_manage]

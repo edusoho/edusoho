@@ -606,4 +606,10 @@ admin_v2.operation.invite.coupon_tab: Rewards
 
 admin_v2.micromarketing.menu: Micromarketing
 
+#运营-内容运营-小组管理
+
+admin_v2.operation.group_menu: Group Discussions
+admin_v2.operation.group.group_tab: Groups
+admin_v2.operation.group.group_tab.create_group_btn: Add Group
+admin_v2.operation.group.group_thread_tab: Group Discussions
 # 新版后台结束
