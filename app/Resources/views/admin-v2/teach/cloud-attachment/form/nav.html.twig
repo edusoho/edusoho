@@ -1,0 +1,10 @@
+<ul class="materials-nav nav nav-tabs js-tags-container">
+  <li class="all"><span>{{ 'type'|trans }}：</span></li>
+  <li class="active js-type-btn" data-value=""><a class="item" href="javascript:;">{{ 'cloud_file.type.all'|trans }}</a></li>
+  <li class="js-type-btn " data-value="video"><a class="item" href="javascript:;">{{ 'cloud_file.type.video'|trans }}</a></li>
+  <li class="js-type-btn " data-value="audio"><a class="item" href="javascript:;">{{ 'cloud_file.type.audio'|trans }}</a></li>
+  <li class="js-type-btn " data-value="document"><a class="item" href="javascript:;">{{ 'cloud_file.type.document'|trans }}</a></li>
+  <li class="js-type-btn " data-value="ppt"><a class="item" href="javascript:;">{{ 'cloud_file.type.ppt'|trans }}</a></li>
+  <li class="js-type-btn " data-value="other"><a class="item" href="javascript:;">{{ 'cloud_file.type.other'|trans }}</a></li>
+  <input type="hidden" name="type" value="{{ type|default('') }}">
+</ul>
