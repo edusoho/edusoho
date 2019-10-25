@@ -410,6 +410,80 @@ admin_v2_classroom_review_batch_delete:
     methods: [POST]
     permissions: [admin_v2_classroom_review_tab]
 
+#云资源
+admin_v2_cloud_attachment_setting:
+    path: /setting/edu_cloud/attachment
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:attachmentSetting }
+    permissions: [admin_v2_cloud_resource]
+
+admin_v2_cloud_attachment:
+    path: /cloud_attachment
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:attachmentList }
+    permissions: [admin_v2_cloud_resource]
+    
+admin_v2_cloud_file:
+    path:  /cloud_files
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:index }
+    permissions: [admin_v2_cloud_resource]
+    
+admin_v2_cloud_file_manage:
+    path:  /cloud_files/manage
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:manage }
+    permissions: [admin_v2_cloud_resource]
+
+admin_v2_cloud_file_render_table:
+    path:  /cloud_files/table/render
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:render }
+    permissions: [admin_v2_cloud_resource]
+    
+admin_v2_cloud_file_detail:
+    path:  /cloud_file/{globalId}/detail
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:detail }
+    permissions: [admin_v2_cloud_resource]
+    
+admin_v2_cloud_file_edit:
+    path:  /cloud_file/{globalId}/edit
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:edit, fields:'' }
+    methods: [POST]
+    permissions: [admin_v2_cloud_resource]
+    
+admin_v2_cloud_file_preview:
+    path:  /cloud_file/{globalId}/preview
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:preview }
+    permissions: [admin_v2_cloud_resource]
+    
+admin_v2_cloud_file_reconvert:
+    path: /cloud_file/{globalId}/reconvert
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:reconvert }
+    permissions: [admin_v2_cloud_resource]
+
+admin_v2_cloud_file_download:
+    path: /cloud_file/{globalId}/download
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:download }
+    permissions: [admin_v2_cloud_resource]
+
+admin_v2_cloud_file_delete:
+    path: /cloud_file/{globalId}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:delete }
+    methods:  [POST]
+    permissions: [admin_v2_cloud_resource]
+
+admin_v2_cloud_file_batch_delete:
+    path: /cloud_file/delete/batch
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:batchDelete }
+    methods:  [POST]
+    permissions: [admin_v2_cloud_resource]
+
+admin_v2_cloud_file_delete_modal_show:
+    path: /cloud_file/delete/show
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:deleteShow }
+    permissions: [admin_v2_cloud_resource]
+    
+admin_v2_cloud_file_tag_show:
+    path: /cloud_file/tag/show
+    defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:batchTagShow }
+    permissions: [admin_v2_cloud_resource]
+    
 # 运营-营销管理-优惠券管理
 admin_v2_coupon:
     path: /coupon
@@ -833,7 +907,11 @@ admin_v2_edu_cloud_sms:
     path:  /edu_cloud/sms/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/CloudServer:smsOverview }
     permissions: [admin_v2_edu_cloud_sms_overview]
-
+    
+admin_v2_cloud_video_overview:
+    path:  /cloud/video/overview
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoOverview }
+    
 admin_v2_my_cloud_overview:
     path:  /setting/my/cloud/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloudOverview }

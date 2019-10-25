@@ -345,6 +345,24 @@ admin_v2:
                                     name: admin_v2.course.review.classroom_review_tab
                                     router_name: admin_v2_classroom_review
                                     disable: true
+                admin_v2_cloud_resource_group:
+                    name: admin_v2.cloud_resource.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_cloud_resource:
+                            name: admin_v2.cloud_resource.basic_tab
+                            children:
+                                admin_v2_cloud_file:
+                                    name: admin_v2.cloud.file.basic_tab
+                                    router_name: admin_v2_cloud_file
+                                    disable: true
+                                admin_v2_cloud_attachment:
+                                    name: admin_v2.cloud.attachment.basic_tab
+                                    disable: true
+                                admin_v2_cloud_attachment_setting:
+                                    name: admin_v2.cloud.attachment_setting.basic_tab
+                                    disable: true
+                                
         # 营销管理模块
         admin_v2_marketing:
             name: admin_v2.nav.marketing

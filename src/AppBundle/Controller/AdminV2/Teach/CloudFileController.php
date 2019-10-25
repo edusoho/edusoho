@@ -1,9 +1,10 @@
 <?php
 
-namespace AppBundle\Controller\Admin;
+namespace AppBundle\Controller\AdminV2\Teach;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudFile\Service\CloudFileService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,16 +17,16 @@ class CloudFileController extends BaseController
             $api = CloudAPIFactory::create('leaf');
             $result = $api->get('/me');
         } catch (\RuntimeException $e) {
-            return $this->render('admin/cloud-file/api-error.html.twig', array());
+            return $this->render('admin-v2/cloud-file/api-error.html.twig', array());
         }
 
         $storageSetting = $this->getSettingService()->get('storage', array());
 
         if (isset($result['hasStorage']) && '1' == $result['hasStorage'] && 'cloud' == $storageSetting['upload_mode']) {
-            return $this->redirect($this->generateUrl('admin_cloud_file_manage'));
+            return $this->redirect($this->generateUrl('admin_v2_cloud_file_manage'));
         }
 
-        return $this->render('admin/cloud-file/error.html.twig', array());
+        return $this->render('admin-v2/teach/cloud-file/error.html.twig', array());
     }
 
     public function manageAction(Request $request)
@@ -33,12 +34,30 @@ class CloudFileController extends BaseController
         $storageSetting = $this->getSettingService()->get('storage', array());
 
         if ('cloud' != $storageSetting['upload_mode']) {
-            return $this->redirect($this->generateUrl('admin_cloud_file'));
+            return $this->redirect($this->generateUrl('admin_v2_cloud_file'));
         }
 
-        return $this->render('admin/cloud-file/manage.html.twig', array(
+        return $this->render('admin-v2/teach/cloud-file/manage.html.twig', array(
             'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX),
         ));
+    }
+
+    public function attachmentListAction(Request $request)
+    {
+        try {
+            $api = CloudAPIFactory::create('leaf');
+            $result = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return $this->render('admin-v2/teach/cloud-attachment/api-error.html.twig', array());
+        }
+
+        $storageSetting = $this->getSettingService()->get('storage', array());
+
+        if (isset($result['hasStorage']) && '1' == $result['hasStorage'] && 'cloud' == $storageSetting['upload_mode']) {
+            return $this->render('admin-v2/teach/cloud-attachment/index.html.twig');
+        }
+
+        return $this->render('admin-v2/teach/cloud-attachment/error.html.twig', array());
     }
 
     public function renderAction(Request $request)
@@ -59,7 +78,7 @@ class CloudFileController extends BaseController
         );
         $pageType = (isset($conditions['resType']) && 'attachment' == $conditions['resType']) ? 'attachment' : 'file';
 
-        return $this->render('admin/cloud-file/tbody.html.twig', array(
+        return $this->render('admin-v2/teach/cloud-file/tbody.html.twig', array(
             'pageType' => $pageType,
             'type' => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials' => $results['data'],
@@ -72,7 +91,7 @@ class CloudFileController extends BaseController
     {
         $file = $this->getCloudFileService()->getByGlobalId($globalId);
 
-        return $this->render('admin/cloud-file/preview-modal.html.twig', array(
+        return $this->render('admin-v2/teach/cloud-file/preview-modal.html.twig', array(
             'file' => $file,
         ));
     }
@@ -81,12 +100,12 @@ class CloudFileController extends BaseController
     {
         try {
             if (!$globalId) {
-                return $this->render('admin/cloud-file/detail-not-found.html.twig', array());
+                return $this->render('admin-v2/teach/cloud-file/detail-not-found.html.twig', array());
             }
 
             $cloudFile = $this->getCloudFileService()->getByGlobalId($globalId);
         } catch (\RuntimeException $e) {
-            return $this->render('admin/cloud-file/detail-not-found.html.twig', array());
+            return $this->render('admin-v2/teach/cloud-file/detail-not-found.html.twig', array());
         }
 
         try {
@@ -97,11 +116,11 @@ class CloudFileController extends BaseController
             $thumbnails = array();
         }
 
-        return $this->render('admin/cloud-file/detail.html.twig', array(
+        return $this->render('admin-v2/teach/cloud-file/detail.html.twig', array(
             'material' => $cloudFile,
             'thumbnails' => empty($thumbnails) ? '' : $thumbnails,
             'params' => $reqeust->query->all(),
-            'editUrl' => $this->generateUrl('admin_cloud_file_edit', array('globalId' => $globalId)),
+            'editUrl' => $this->generateUrl('admin_v2_cloud_file_edit', array('globalId' => $globalId)),
         ));
     }
 
@@ -124,7 +143,7 @@ class CloudFileController extends BaseController
             $createdUser = $this->getUserService()->getUser($cloudFile['createdUserId']);
         }
 
-        return $this->render('admin/cloud-file/table-tr.html.twig', array(
+        return $this->render('admin-v2/teach/cloud-file/table-tr.html.twig', array(
             'cloudFile' => $cloudFile,
             'createdUser' => isset($createdUser) ? $createdUser : array(),
         ));
@@ -177,7 +196,7 @@ class CloudFileController extends BaseController
             'materials' => $materials,
             'files' => $files,
             'ids' => $globalIds,
-            'deleteFormUrl' => $this->generateUrl('admin_cloud_file_batch_delete'),
+            'deleteFormUrl' => $this->generateUrl('admin_v2_cloud_file_batch_delete'),
         ));
     }
 
@@ -188,7 +207,7 @@ class CloudFileController extends BaseController
 
         $this->getMaterialLibService()->batchTagEdit($fileIds, $data['tags']);
 
-        return $this->redirect($this->generateUrl('admin_cloud_file_manage'));
+        return $this->redirect($this->generateUrl('admin_v2_cloud_file_manage'));
     }
 
     protected function getSettingService()

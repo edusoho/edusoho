@@ -1,0 +1,178 @@
+{% import _self as forms %}
+{% if cloudFile.useType|default('') =='course.thread' %}
+  {% set thread = data('CourseThreadByThreadId', {courseId: null, threadId: cloudFile.targetId|default(0)}) %}
+{% endif %}
+{% if cloudFile.useType|default('') == 'course.thread.post' %}
+  {% set post = data('CourseThreadPost', {courseId: null, postId: cloudFile.targetId|default(0)}) %}
+{% endif %}
+  <tr class="js-tr-item">
+    <td class="vertical-middle vertical-middle">
+      <input value="{{ cloudFile.globalId }}" data-download="{{ path('admin_v2_cloud_file_download', {globalId:cloudFile.globalId}) }}" type="checkbox" data-role="batch-item" data-file-id="{{ cloudFile.id }}" data-link-count="{{ cloudFile.usedCount }}" data-file-name="{{ cloudFile.filename }}"/>
+    </td>
+    <td class="vertical-middle">
+        <div class="materials-table-img">
+          <div class="mask">
+            {% if (cloudFile.type in ['video','document','ppt'] and cloudFile.audioConvertStatus == 'success') or cloudFile.type in ['audio','flash','image'] %}
+              <a class="btn btn-info btn-xs" href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_cloud_file_preview', {globalId: cloudFile.globalId}) }}">{{ 'cloud_file.preview'|trans }}</a>
+            {% endif %}
+            {% if cloudFile.audioConvertStatus == 'error' %}
+              {% if setting("developer.debug")|default(0) %}
+              <a class="js-reconvert-btn btn btn-warning btn-xs" data-url='{{ path('admin_v2_cloud_file_reconvert', {globalId:cloudFile.globalId}) }}' data-loading-text="{{ 'cloud_file.re_transcoding.submiting'|trans }}">{{ 'cloud_file.re_transcoding_btn'|trans }}</a>
+              {% endif %}
+            {% endif %}
+            {% if cloudFile.type == 'video' %}
+              {% if cloudFile.useType == 'course.thread' %}
+                {% if thread.source|default('web') == 'app' %}
+                  <a class="btn btn-info btn-xs" href="#modal" data-toggle="modal" data-url="{{ path('attachment_direct_video_preview', {id: cloudFile.id}) }}">{{ 'cloud_file.preview'|trans }}</a>
+                {% endif %}
+              {% endif %}
+              {% if cloudFile.useType == 'course.thread.post' %}
+                {% if post.source|default('web') == 'app' %}
+                  <a class="btn btn-info btn-xs" href="#modal" data-toggle="modal" data-url="{{ path('attachment_direct_video_preview', {id: cloudFile.id}) }}">{{ 'cloud_file.preview'|trans }}</a>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+            {% if (cloudFile.type == 'video' and cloudFile.audioConvertStatus == 'success') %}
+              <div class="time">
+                {{ cloudFile.length|default(0)|activity_length_format }}
+              </div>
+            {% endif %}
+          </div>
+          <img src="{{ asset(cloudFile.thumbnail|default('assets/img/default/cloud_' ~ cloudFile.type ~ '.png')) }}">
+        </div>
+        <div class="materials-table-title">
+          <a class="heading"  href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_cloud_file_preview', {globalId: cloudFile.globalId})}}"  data-placement="top" title="{{ cloudFile.filename }}">{{ cloudFile.filename }}</a>
+          <div class="subtitle">
+            {% if createdUser %}
+                {{ createdUser.nickname }} {{ 'cloud_file.upload'|trans }}
+            {% endif %}
+          </div>
+          {% if  cloudFile.usedCount|default(0) == 0 %}
+            <div><span class="label label-default label-default--admin">{{ 'cloud_file.no_use_tips'|trans }}</span></div>
+          {% endif %}
+        </div>
+    </td>
+
+    <td class=" vertical-middle">
+      <div class="mbs">{{ dict_text('fileType', cloudFile.type) }}</div>
+      {% if cloudFile.type == 'video' and cloudFile.hasMp4|default(false) %}
+        <div class="label label-info label-info--admin mtm">{{ 'cloud_file.mc_yes_status_tips'|trans }}</div>
+      {% endif %}
+    </td>
+    <td class=" vertical-middle">
+      {{ cloudFile.fileSize|file_size }}
+      {% if cloudFile.type in ['video', 'audio'] %}
+        <div class="text-sm color-gray">{{ cloudFile.length|activity_length_format }}</div>
+      {% endif %}
+    </td>
+    <td class=" vertical-middle">
+      {% if pageType == 'attachment' %}
+        <span style="display:block">{{ cloudFile.createdTime|date('Y-m-d') }}</span>
+        {{ cloudFile.createdTime|date('H:i:s') }}
+      {% else %}
+        <span style="display:block">{{ cloudFile.createdTime|date('Y-m-d H:i:s') }}</span>
+      {% endif %}
+    </td>
+    {% if pageType == 'attachment' %}
+      <td class=" vertical-middle">
+        <span style="display:block">{{ forms.showType(cloudFile.useType) }}</span>
+      </td>
+    {% endif %}
+
+    {# 转码进度 #}
+    <td class="vertical-middle">
+    {% if cloudFile.storage == "cloud" %}
+      {% if cloudFile.type == 'video' %}
+        {% if cloudFile.levelsStatus|default(false) %}
+          {% for transcodingQuality, status in cloudFile.levelsStatus %}
+          <div class="clearfix {% if loop.index == 3 %}mb0{% else %}mbm{% endif %}">
+            <span class="label label-info mrm pull-left">{{ ('material.common_table.quality.' ~ transcodingQuality)|trans }}</span>
+            {% if status.status == 'ok' %}
+              <span class="color-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+            {% elseif status.status == 'error'%}
+              <a class="color-danger js-cd-modal" href="" data-toggle="modal" data-target="#error-modal" data-title="{{cloudFile.filename}}" data-reason="{{ (get_transcode_error_message_key(status.error_code) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(status.error_code) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ status.error_type|default('server'))|trans }}&nbsp;></a>
+            {% else %}
+              <div class="ad-progress ad-progress-success material-progress">
+                <div class="progress-bar">
+                  <div class="progress-outer">
+                    <div class="progress-inner" style="width: {{ status.transcoding_progress|default(0) }}%;"></div>
+                  </div>
+                </div>
+                <div class="progress-text">{{ status.transcoding_progress|default(0) }}%</div>
+              </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+          {% if cloudFile.convertStatus == 'error' %}
+            <a class="color-danger js-cd-modal" href="" data-toggle="modal" data-target="#error-modal" data-title="{{cloudFile.filename}}" data-reason="{{ (get_transcode_error_message_key(cloudFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(cloudFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ cloudFile.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ cloudFile.errorType|default('server'))|trans }}&nbsp;></a>
+          {% elseif cloudFile.convertStatus == 'doing' %}
+            <span class="color-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
+          {% elseif cloudFile.convertStatus == 'waiting' %}
+            <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
+          {% elseif  cloudFile.convertStatus == 'success' %}
+            <span class="color-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+          {% elseif  cloudFile.convertStatus == 'noneed' %}
+            {{ 'material.common_table.no_need_transcode'|trans }}
+          {% endif %}
+        {% endif %}
+      {% elseif cloudFile.type in ['ppt', 'document'] %}
+        {% if cloudFile.convertStatus == 'error' %}
+          <a class="color-danger js-cd-modal" href="" data-toggle="modal" data-target="#error-modal" data-title="{{cloudFile.filename}}"  data-reason="{{ (get_transcode_error_message_key(cloudFile.errorCode) ~ '.reason')|trans }}" data-solution="{{ (get_transcode_error_message_key(cloudFile.errorCode) ~ '.solution')|trans }}" data-status="{{ ('material.common_table.transcode_error.' ~ cloudFile.errorType|default('server'))|trans }}">{{ ('material.common_table.transcode_error.' ~ cloudFile.errorType|default('server'))|trans }}&nbsp;></a>
+        {% elseif cloudFile.convertStatus == 'doing' %}
+          <span class="color-success">{{ 'material.common_table.transcode_doing'|trans }}</span>
+        {% elseif cloudFile.convertStatus == 'waiting' %}
+          <span>{{ 'material.common_table.transcode_waiting'|trans }}</span>
+        {% elseif  cloudFile.convertStatus == 'success' %}
+          <span class="color-success">{{ 'material.common_table.transcode_success'|trans }}</span>
+        {% elseif  cloudFile.convertStatus == 'noneed' %}
+          {{ 'material.common_table.no_need_transcode'|trans }}
+        {% endif %}
+      {% else %}
+        {{ 'material.common_table.no_need_transcode'|trans }}
+      {% endif %}
+    {% else %}
+      --
+    {% endif %}
+
+    </td>
+    <td class="es-materillib-table vertical-middle">
+      <div class="btn-group ">
+        {% if pageType  == 'attachment' %}
+          <a class="btn btn-default btn-sm" href="{{ path('admin_v2_cloud_file_download', {globalId:cloudFile.globalId}) }}"  target="__blank">{{ 'cloud_file.download_btn'|trans }}</a>
+        {% else %}
+          <a class="btn btn-default btn-sm js-detail-btn " data-url="{{ path('admin_v2_cloud_file_detail', {globalId:cloudFile.globalId}) }}">{{ 'cloud_file.edit_btn'|trans }}</a>
+        {% endif %}
+
+        <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu pull-right">
+          <li>
+            {% if pageType  == 'file' %}
+              <a class="js-download-btn" data-url={{ path('admin_v2_cloud_file_download', {globalId:cloudFile.globalId}) }} href="{{ path('admin_v2_cloud_file_download', {globalId:cloudFile.globalId}) }}" target="__blank"><span class="glyphicon glyphicon-download-alt"></span>{{ 'cloud_file.download_btn'|trans }}</a>
+            {% endif %}
+          </li>
+          <li>
+            <a class="js-delete-btn" href="javascript:" data-url="{{ path('admin_v2_cloud_file_delete_modal_show') }}" data-id="{{ cloudFile.globalId }}"><span class="glyphicon glyphicon-trash"></span> {{ 'cloud_file.delete_btn'|trans }}</a>
+          </li>
+        </ul>
+      </div>
+    </td>
+  </tr>
+
+{% macro showType( useType) %}
+    {% if useType == "article" %}
+      {{ 'cloud_attachment.type.article'|trans }}
+    {% elseif useType in ['course.thread','course.thread.post'] %}
+      {{ 'cloud_attachment.type.course_discussion_area'|trans }}
+    {% elseif  useType in ['classroom.thread','classroom.thread.post'] %}
+      {{ 'cloud_attachment.type.classroom_thread'|trans }}
+    {% elseif useType in ['group.thread', 'group.thread.post'] %}
+      {{ 'cloud_attachment.type.group'|trans }}
+    {% elseif useType in ['question.stem', 'question.analysis'] %}
+      {{ 'cloud_attachment.type.test_question'|trans }}
+    {% else %}
+      --
+    {% endif %}
+{% endmacro %}
