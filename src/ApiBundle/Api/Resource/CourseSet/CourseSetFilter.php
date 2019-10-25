@@ -20,6 +20,8 @@ class CourseSetFilter extends Filter
 
     protected function simpleFields(&$data)
     {
+        $data['discount'] = strval(floatval($data['discount']));
+
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
         $this->transformCover($data['cover']);
 
@@ -37,6 +39,8 @@ class CourseSetFilter extends Filter
 
     protected function publicFields(&$data)
     {
+        $data['discount'] = strval(floatval($data['discount']));
+
         $data['recommendedTime'] = date('c', $data['recommendedTime']);
 
         $userFilter = new UserFilter();
