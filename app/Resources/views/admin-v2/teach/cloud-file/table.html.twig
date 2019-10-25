@@ -1,0 +1,23 @@
+<div class="table-responsive">
+  <table class="table table-striped table-hover mtl" id="materials-table" data-url="{{ path('admin_v2_cloud_file_render_table')}}">
+    <thead>
+      <tr>
+        <th width="40%">{{ 'file'|trans }}</th>
+        <th width="" class="text-center">{{ 'type'|trans }}</th>
+        <th width="" class="text-center">{{ 'size'|trans }}</th>
+        <th width="" class="text-center">{{ 'cloud_file.upload_time'|trans }}</th>
+        {% if pageType == 'attachment'%}
+          <th width="" class="text-center">{{ 'cloud_file.application'|trans }}</th>
+        {% endif %}
+        <th width="" class="text-center" style="min-width:98px">{{ 'operation'|trans }}</th>
+      </tr>
+    </thead>
+
+    <tbody></tbody>
+  </table>
+</div>
+<input class="js-page" type="hidden" name="page" value="1">
+
+<div data-role="paginator" class="text-center">
+
+</div>
