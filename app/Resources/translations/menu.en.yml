@@ -576,7 +576,7 @@ admin_v2.operation.article.category_tab: Category Manage
 admin_v2.operation.article.category_tab.category_create_btn: Add Category
 
 # 运营-内容运营-微信通知
-admin_v2.operation.wechat_notification: WeChat Notifiction
+admin_v2.operation.wechat_notification: WeChat Notification
 admin_v2.operation.wechat.notification_record_tab: Send Record
 admin_v2.operation.wechat.notification_manage: Setting
 
