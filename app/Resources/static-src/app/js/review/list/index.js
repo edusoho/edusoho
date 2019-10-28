@@ -111,6 +111,6 @@ if ($('.js-reviews').length > 0) {
     }
     let $form = $(this).parents('.thread-subpost-container').find('.thread-subpost-form');
     $form.toggleClass('hide');
-    threadShowWidget._initSubpostForm($form);
+    threadShowWidget.initSubpostForm($form);
   });
 }

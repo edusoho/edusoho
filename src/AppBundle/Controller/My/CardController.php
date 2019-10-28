@@ -20,7 +20,7 @@ class CardController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
 
-        if ($cardType == 'moneyCard') {
+        if ('moneyCard' == $cardType) {
             if (!$this->isPluginInstalled('moneyCard') || ($this->isPluginInstalled('moneyCard') && version_compare($this->getWebExtension()->getPluginVersion('moneyCard'), '1.1.1', '<='))) {
                 return $this->render('card/index.html.twig', array(
                     'cards' => null,
@@ -45,11 +45,11 @@ class CardController extends BaseController
         if (!empty($filter)) {
             $groupCards = ArrayToolkit::group($cards, 'status');
 
-            if ($filter == 'used') {
+            if ('used' == $filter) {
                 $cards = isset($groupCards['used']) ? $groupCards['used'] : null;
-            } elseif ($filter == 'outdate') {
+            } elseif ('outdate' == $filter) {
                 $cards = isset($groupCards['outdate']) ? $groupCards['outdate'] : null;
-            } elseif ($filter == 'invalid') {
+            } elseif ('invalid' == $filter) {
                 $cards = isset($groupCards['invalid']) ? $groupCards['invalid'] : null;
             } else {
                 $cards = isset($groupCards['useable']) ? $groupCards['useable'] : null;
@@ -73,7 +73,7 @@ class CardController extends BaseController
             $lowerTop = array();
 
             foreach ($availableCoupons as $key => &$coupon) {
-                if ($coupon['type'] == 'minus') {
+                if ('minus' == $coupon['type']) {
                     $coupon['truePrice'] = $totalPrice - $coupon['rate'];
                 } else {
                     $coupon['truePrice'] = $totalPrice * ($coupon['rate'] / 10);
@@ -104,7 +104,7 @@ class CardController extends BaseController
 
     private function availableCouponsByIdAndType($id, $type)
     {
-        if ($type == 'course') {
+        if ('course' == $type) {
             $course = $this->getCourseService()->getCourse($id);
             $id = $course['courseSetId'];
         }
