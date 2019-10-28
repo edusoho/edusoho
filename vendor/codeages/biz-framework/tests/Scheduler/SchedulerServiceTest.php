@@ -6,6 +6,37 @@ use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
 class SchedulerServiceTest extends IntegrationTestCase
 {
+    public function testGet()
+    {
+        $job = $this->getSchedulerService()->register(array(
+            'name' => 'testJob',
+            'source' => 'MAIN',
+            'expression' => intval(time() + 10),
+            'class' => 'Biz\Test\Job\TestJob',//无实体文件
+            'args' => array('cursor' => 0),
+            'misfire_threshold' => 60 * 60,
+        ));
+
+        $jobGet = $this->getSchedulerService()->getJob($job['id']);
+        $this->assertEquals($job['name'], $jobGet['name']);
+    }
+
+    public function testGetByName()
+    {
+        $job = $this->getSchedulerService()->register(array(
+            'name' => 'testJob',
+            'source' => 'MAIN',
+            'expression' => intval(time() + 10),
+            'class' => 'Biz\Test\Job\TestJob',//无实体文件
+            'args' => array('cursor' => 0),
+            'misfire_threshold' => 60 * 60,
+        ));
+
+        $jobGet = $this->getSchedulerService()->getJobByName($job['name']);
+        $this->assertEquals($job['id'], $jobGet['id']);
+        $this->assertEquals($job['name'], $jobGet['name']);
+    }
+
     public function testCreateJobProcess()
     {
         $process = array(

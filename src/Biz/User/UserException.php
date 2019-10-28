@@ -38,6 +38,8 @@ class UserException extends AbstractException
 
     const PASSWORD_ERROR = 5000116;
 
+    const PASSWORD_FAILED = 5000117;
+
     const NOTFOUND_TOKEN = 4040117;
 
     const NO_USER_PROVIDER = 4040118;
@@ -110,6 +112,7 @@ class UserException extends AbstractException
         4030114 => 'exception.user.permission_denied',
         4030115 => 'exception.user.lock',
         5000116 => 'exception.user.password_error',
+        5000117 => 'exception.user.password_failed',
         4040117 => 'exception.user.token_not_found',
         4040118 => 'exception.user.no_user_provider',
         5000119 => 'exception.user.email_invalid',

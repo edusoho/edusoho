@@ -3,6 +3,7 @@
 namespace AppBundle\Component\Notification\WeChatTemplateMessage;
 
 use Monolog\Handler\StreamHandler;
+use Biz\Common\JsonLogger;
 use Monolog\Logger;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -63,8 +64,8 @@ class Client
 
     public function setLogger()
     {
-        $logger = new Logger('WeChatTemplateMessage');
-        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/template-message.log', Logger::DEBUG));
+        $stream = new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/template-message.log', Logger::DEBUG);
+        $logger = new JsonLogger('WeChatTemplateMessage', $stream);
         $this->logger = $logger;
     }
 

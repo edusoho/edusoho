@@ -18,11 +18,11 @@
             <div class="col-md-9 controls">
               <div class="cd-select width-150" id="courseBelong" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSetId})}}">
                 <input type="hidden" value="0" name="courseId" />
-                <div class="select-value">{{'course.question_manage.manage.default_belong'|trans}}</div>
+                <div class="select-value text-overflow">{{'course.question_manage.manage.default_belong'|trans}}</div>
                 <ul class="select-options">
-                  <li class="checked" data-value="0">{{'course.question_manage.manage.default_belong'|trans}}</li>
+                  <li class="checked" data-value="0" >{{'course.question_manage.manage.default_belong'|trans}}</li>
                   {% for course in courses if course %}
-                    <li data-value="{{ course.id }}">{{ get_course_title(course) }}</li>
+                    <li data-value="{{ course.id }}" class="{% if loop.index == 1 %}tip-count-1{% endif %}" title="{{ get_course_title(course) }}" data-toggle="tooltip" data-placement="top">{{ get_course_title(course) }}</li>
                   {% endfor %}
                 </ul>
               </div>
