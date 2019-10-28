@@ -496,7 +496,7 @@ admin_v2:
                                     router_params:
                                         category: system
                                 admin_v2_setting_theme:
-                                    name: admin_v2.system.site.theme_tab
+                                    name: admin_v2.operation.site.theme_tab
                                     disable: true
                         admin_v2_site_setting:
                             name: admin_v2.operation.site_menu

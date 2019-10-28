@@ -38,7 +38,6 @@ define(function(require, exports, module) {
       selectFirst: true
     }).render();
     autocomplete.on('itemSelect', function(data) {
-      console.log(data);
       window.location.href = window.location.origin + data.gotoUrl;
     });
   };
