@@ -19,8 +19,10 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Player\Service\PlayerService;
+use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\Framework\Context\Biz;
+use DrpPlugin\Biz\AgencyBindRelation\Service\RelationService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
@@ -179,6 +181,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('uniqid', array($this, 'uniqid')),
             new \Twig_SimpleFunction('get_days', array($this, 'getDays')),
             new \Twig_SimpleFunction('is_question_lack', array($this, 'isQuestionLack')),
+            new \Twig_SimpleFunction('generate_distribution_login_url', array($this, 'generateDistributionLoginUrl')),
         );
     }
 
@@ -1699,6 +1702,20 @@ class WebExtension extends \Twig_Extension
         return $number;
     }
 
+    public function generateDistributionLoginUrl($userId)
+    {
+        $agencyBindRelation = $this->getAgencyBindRelationService()->getRelationByUserId($userId);
+
+        if (empty($agencyBindRelation)) {
+            return null;
+        }
+
+        $setting = $this->getSettingService()->get('storage', array());
+        $developerSetting = $this->getSettingService()->get('developer', array());
+
+        return $developerSetting['distributor_server'].'/login?access_key='.$setting['cloud_access_key'];
+    }
+
     protected function createService($alias)
     {
         return $this->biz->service($alias);
@@ -1912,5 +1929,21 @@ class WebExtension extends \Twig_Extension
     protected function getTestPaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return RelationService
+     */
+    protected function getAgencyBindRelationService()
+    {
+        return $this->createService('DrpPlugin:AgencyBindRelation:RelationService');
     }
 }

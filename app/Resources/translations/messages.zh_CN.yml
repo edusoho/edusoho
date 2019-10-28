@@ -3407,6 +3407,7 @@ homepage.header.personal_menu: 个人主页
 homepage.header.settings_menu: 个人设置
 homepage.header.my_teaching_menu: 我的教学
 homepage.header.my_learning_menu: 我的学习
+homepage.header.distribution_center_menu: 分销中心
 homepage.header.account_menu: 账户中心
 homepage.header.reward: 积分
 homepage.header.admin_menu: 管理后台
