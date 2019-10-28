@@ -55,20 +55,12 @@
               <td width="25%" class="text-muted" style="text-align: right">{{ orderDeduct.deduct_type_name|trans }}</td>
               <td width="75%">
                 <span class="text-muted">-{{ orderDeduct.deduct_amount|to_cash(0) }} {{ 'site.currency.CNY'|trans }}</span>
-                {#{% if orderDeduct.snapshot.couponCode|default('') %}#}
-                  {#<span class="text-muted text-sm pull-right">{{ 'order.use_coupon_tip'|trans ~ orderDeduct.snapshot.couponCode }}</span>#}
-                {#{% endif %}#}
-
                 {% if orderDeduct.snapshot.couponCode is defined %}
                   <span class="pull-right">
-                  <span class="text-muted">{{ orderDeduct.snapshot.couponCode }}</span>
-                  <input type="text" style="width: 10px;height: 10px;opacity: 0;" id="copy-content" value="{{ orderDeduct.snapshot.couponCode }}">
-                  <a href="javascript:;" class="btn btn-success btn-xs" id="copy">{{ 'site.copy'|trans }}<a/>
-{#                  <a class="es-icon es-icon-help text-normal link-gray"#}
-{#                     data-toggle="popover" data-trigger="hover"#}
-{#                     data-placement="left"#}
-{#                     data-content="{{ 'order.use_coupon'|trans }} {{ orderDeduct.snapshot.couponCode }}"></a>#}
-                </span>
+                    <span class="text-muted">{{ orderDeduct.snapshot.couponCode }}</span>
+                    <input type="text" style="width: 10px;height: 10px;opacity: 0;" id="copy-content" value="{{ orderDeduct.snapshot.couponCode }}">
+                    <a href="javascript:;" class="btn btn-success btn-xs" id="copy">{{ 'site.copy'|trans }}</a>
+                  </span>
                 {% endif %}
               </td>
             </tr>
@@ -95,7 +87,6 @@
                      data-content="{{ 'order.platform_sn'|trans }} {{ paymentTrade.platform_sn }}"></a>
                 </span>
               {% endif %}
-              {#<span class="text-muted text-sm pull-right">{{ 'order.platform_sn'|trans ~ order.trade_sn }}</span>#}
             </td>
           </tr>
 
@@ -135,7 +126,7 @@
         {% endif %}
 
         {% if order.status == 'closed' %}
-          <tr> <td width="25%">{{'order.closed_time'|trans}}</td> 
+          <tr> <td width="25%">{{'order.closed_time'|trans}}</td>
           <td width="75%"> {{ order.close_time | date('Y-n-d H:i:s') }}</td> </tr>
         {% endif %}
 
