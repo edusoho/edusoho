@@ -429,7 +429,9 @@ class CourseController extends BaseController
                 $task['activity'] = $activities[$task['activityId']];
             }
         );
-
+        usort($tasks, function ($a, $b) {
+            return $a['seq'] > $b['seq'];
+        });
         $tasks = $this->taskDataStatistics($tasks);
 
         return $tasks;
@@ -494,7 +496,7 @@ class CourseController extends BaseController
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
 
         usort($tasks, function ($a, $b) {
-            return $a['id'] > $b['id'];
+            return $a['seq'] > $b['seq'];
         });
 
         $tasks = $this->taskDataStatistics($tasks);

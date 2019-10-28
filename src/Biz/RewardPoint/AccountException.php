@@ -22,6 +22,8 @@ class AccountException extends AbstractException
 
     const NOTFOUND_PAY_PASSWORD = 5005707;
 
+    const ERROR_PAY_PASSWORD_FORMAT = 5005708;
+
     public $messages = array(
         4045701 => 'exception.reward_point.account.not_found',
         5005702 => 'exception.reward_point.account.already_open',
@@ -30,5 +32,6 @@ class AccountException extends AbstractException
         5005705 => 'exception.reward_point.account.error_pay_password',
         5005706 => 'exception.reward_point.account.pay_password_existed',
         5005707 => 'exception.reward_point.account.not_found_pay_password',
+        5005708 => 'exception.reward_point.account.error_pay_password_format',
     );
 }

@@ -28,7 +28,7 @@ interface PayService
 
     public function findTradesByTradeSn($tradeSns);
 
-    public function searchTrades($conditions, $orderBy, $start, $limit);
+    public function searchTrades($conditions, $orderBy, $start, $limit, $columns = array());
 
     public function countTrades($conditions);
 
