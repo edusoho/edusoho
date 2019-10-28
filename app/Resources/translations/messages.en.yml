@@ -8859,6 +8859,10 @@ wechat.notification.fans_list.no_wechat_bind: WeChat service number is not bound
 wechat.notification.fans_list.placeholder: Please enter keywords
 wechat.notification.send_days: Send Days
 wechat.notification.course_remind_conditions: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
+wechat.notification.tooltip_hint: Wechat service number notice does not support marketing messages such as advertisements and all other messages that may cause harassment to users. If the notice fails to be sent, it may be that the keywords such as task name and course name contain illegal content.
+wechat.notification.goto_authorization: Goto Authoriation
+wechat.notification.template_opend: Opend
+wechat.notification.template_closed: Closed
 
 # 微信通知模板
 wechat.notification.template.live_start: Hello, classmate.<br>It is hereby notified that the [course name - task name] you are enrolled in will start in the [live class start time].<br>Don't be late.

@@ -155,3 +155,13 @@ admin_content: admin_v2_content #自定义页面
 admin_setting_share: admin_v2_setting_share #分享
 admin_friendlyLink_navigation: admin_v2_friendlyLink_navigation #友情链接
 
+#运营-内容运营-小组管理
+admin_operation_group: admin_v2_operation_group_manage #小组管理
+admin_operation_group_manage: admin_v2_operation_group_manage #小组管理
+admin_operation_group_create: admin_v2_operation_group_create #创建小组
+admin_operation_group_thread: admin_v2_operation_group_thread #小组话题管理
+
+# 微信通知
+admin_operation_wechat_notification: admin_v2_operation_wechat_notification #nav
+admin_operation_wechat_notification_record: admin_v2_operation_wechat_notification_record # 发送记录
+admin_operation_wechat_notification_manage: admin_v2_operation_wechat_notification_manage # 设置
