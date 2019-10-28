@@ -57,10 +57,10 @@
                 <span class="text-muted">-{{ orderDeduct.deduct_amount|to_cash(0) }} {{ 'site.currency.CNY'|trans }}</span>
                 {% if orderDeduct.snapshot.couponCode is defined %}
                   <span class="pull-right">
-                  <span class="text-muted">{{ orderDeduct.snapshot.couponCode }}</span>
-                  <input type="text" style="width: 10px;height: 10px;opacity: 0;" id="copy-content" value="{{ orderDeduct.snapshot.couponCode }}">
-                  <a href="javascript:;" class="btn btn-success btn-xs" id="copy">{{ 'site.copy'|trans }}<a/>
-                </span>
+                    <span class="text-muted">{{ orderDeduct.snapshot.couponCode }}</span>
+                    <input type="text" style="width: 10px;height: 10px;opacity: 0;" id="copy-content" value="{{ orderDeduct.snapshot.couponCode }}">
+                    <a href="javascript:;" class="btn btn-success btn-xs" id="copy">{{ 'site.copy'|trans }}</a>
+                  </span>
                 {% endif %}
               </td>
             </tr>
