@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\OAuth2\Service;
+namespace AppBundle\Controller\OAuth2\Server;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Common\ArrayToolkit;
