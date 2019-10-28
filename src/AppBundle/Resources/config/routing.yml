@@ -3261,17 +3261,17 @@ activity_ppt_token:
 
 oauth2_es_authorize:
   path:  /oauth/authorize
-  defaults: { _controller: AppBundle:OAuth2/Service/Authorization:authorize }
+  defaults: { _controller: AppBundle:OAuth2/Server/Authorization:authorize }
 
 oauth2_es_token:
   path:  /oauth/token
-  defaults: { _controller: AppBundle:OAuth2/Service/Authorization:token }
+  defaults: { _controller: AppBundle:OAuth2/Server/Authorization:token }
   methods: [POST]
 
 oauth2_es_token_verify:
   path:  /oauth/access_token
-  defaults: { _controller: AppBundle:OAuth2/Service/Authorization:verify }
+  defaults: { _controller: AppBundle:OAuth2/Server/Authorization:verify }
 
 oauth2_es_user_info:
   path:  /oauth/user_info/{userId}
-  defaults: { _controller: AppBundle:OAuth2/Service/Authorization:getUserInfo }
+  defaults: { _controller: AppBundle:OAuth2/Server/Authorization:getUserInfo }
