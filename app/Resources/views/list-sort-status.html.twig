@@ -2,14 +2,18 @@
 <a href="{{ path(path, {sort: sort, direction: directionToggle}) }}">
   {{ title }}
 </a>
-<span class="glyphicon glyphicon-arrow-down text-sm gray-light 
+<span class="glyphicon glyphicon-arrow-down text-sm
   {% if sort == querySort and direction == 'desc' %}
-    gray-darker text-normal 
-  {% endif %}" 
+    gray-darker text-normal
+  {% else %}
+    gray-light
+  {% endif %}"
 aria-hidden="true">
-</span><span class="glyphicon glyphicon-arrow-up text-sm gray-light 
+</span><span class="glyphicon glyphicon-arrow-up text-sm
   {% if sort == querySort and direction == 'asc' %}
-    gray-darker text-normal 
-  {% endif %}" 
+    gray-darker text-normal
+  {% else %}
+    gray-light
+  {% endif %}"
 aria-hidden="true">
 </span>

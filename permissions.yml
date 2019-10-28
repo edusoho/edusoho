@@ -161,6 +161,24 @@ admin_operation_wechat_notification: admin_v2_operation_wechat_notification #nav
 admin_operation_wechat_notification_record: admin_v2_operation_wechat_notification_record # 发送记录
 admin_operation_wechat_notification_manage: admin_v2_operation_wechat_notification_manage # 设置
 
+#交易-商品订单
+admin_finance: admin_v2_trade # 交易
+admin_orders: admin_v2_goods_order #商品订单
+admin_order_manage: admin_v2_goods_order_list #商品订单（默认tab）
+
+#交易-退款订单
+admin_order_refunds: admin_v2_order_refunds
+admin_order_refunds_manage: admin_v2_order_refunds_manage
+
+#交易-网校账单
+admin_bills: admin_v2_bills
+admin_bill_cash: admin_v2_bill_cash
+admin_bill_coin: admin_v2_bill_coin
+
+#交易-虚拟币管理
+admin_coin_user: admin_v2_user_coin
+admin_coin_user_records: admin_v2_coin_user_records
+
 #云概览
 admin_my_cloud: admin_v2_my_cloud #概览
 admin_my_cloud_overview: admin_v2_my_cloud_overview

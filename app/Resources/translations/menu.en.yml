@@ -626,6 +626,25 @@ admin_v2.operation.group.group_tab: Groups
 admin_v2.operation.group.group_tab.create_group_btn: Add Group
 admin_v2.operation.group.group_thread_tab: Group Discussions
 
+#交易-商品订单
+admin_v2.trade.order_manage.basic_group: Order Manage
+admin_v2.trade.goods_order.menu: Goods Order
+admin_v2.trade.goods_order.basic_tab: Goods Order
+
+# 交易-退款订单
+admin_v2.trade.order_refunds_menu: Refund Order
+admin_v2.trade.order_refunds.basic_tab: Refund Order
+
+#交易-网校账单
+admin_v2.trade.asset_manage.basic_group: Asset Manage
+admin_v2.trade.bills_menu: Bills
+admin_v2.trade.bills.cash_records_tab: Cash Bill
+admin_v2.trade.bills.coin_records_tab: Coin Bill
+
+# 交易-虚拟币管理
+admin_v2.trade.coin_menu: Coin Manage
+admin_v2.trade.coin.basic_tab: Coin Manage
+
 # 应用中心-基础云-概览
 admin_v2.cloud.overview_menu: Overview
 admin_v2.cloud.overview.basic_tab: Overview
