@@ -453,6 +453,50 @@ admin_v2:
                                     name: admin_v2.wechat_app.menu
                                     router_name: admin_v2_wechat_app
                                     disable: true
+                        admin_v2_setting_mobile:
+                            name: admin_v2.operation.mobile_menu
+                            children:
+                                admin_v2_mobile_settings:
+                                    name: admin_v2.operation.mobile.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_mobile
+                                admin_v2_mobile_banner_manage:
+                                    name: admin_v2.operation.mobile.banner_setting_tab
+                                    disable: true
+                                    router_name: admin_v2_mobile_banner_manage
+                                admin_v2_discovery_column_index:
+                                    name: admin_v2.operation.mobile.discovery_column_tab
+                                    disable: true
+                                    children:
+                                        admin_v2_discovery_column_create:
+                                            name: admin_v2.operation.mobile.discovery_column_tab.create_btn
+                                            group: topBtn
+                                            mode: modal
+                        admin_v2_block_manage:
+                            name: admin_v2.operation.block_menu
+                            group: 2
+                            children:
+                                admin_v2_block_theme:
+                                    name: admin_v2.operation.block.theme.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_block
+                                    router_params:
+                                        category: theme
+                                admin_v2_block_all:
+                                    name: admin_v2.operation.block.all.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_block
+                                    router_params:
+                                        category: all
+                                admin_v2_block_system:
+                                    name: admin_v2.operation.block.system.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_block
+                                    router_params:
+                                        category: system
+                                admin_v2_setting_theme:
+                                    name: admin_v2.system.site.theme_tab
+                                    disable: true
                         admin_v2_site_setting:
                             name: admin_v2.operation.site_menu
                             router_name: admin_v2_navigation
@@ -489,25 +533,6 @@ admin_v2:
                                     disable: true
                                     router_params:
                                         type: friendlyLink
-                        admin_v2_setting_mobile:
-                            name: admin_v2.operation.mobile_menu
-                            children:
-                                admin_v2_mobile_settings:
-                                    name: admin_v2.operation.mobile.basic_tab
-                                    disable: true
-                                    router_name: admin_v2_setting_mobile
-                                admin_v2_mobile_banner_manage:
-                                    name: admin_v2.operation.mobile.banner_setting_tab
-                                    disable: true
-                                    router_name: admin_v2_mobile_banner_manage
-                                admin_v2_discovery_column_index:
-                                    name: admin_v2.operation.mobile.discovery_column_tab
-                                    disable: true
-                                    children:
-                                        admin_v2_discovery_column_create:
-                                            name: admin_v2.operation.mobile.discovery_column_tab.create_btn
-                                            group: topBtn
-                                            mode: modal
                 admin_v2_content_operation_group:
                     name: admin_v2.operation.content_operation.basic_group
                     is_group: true

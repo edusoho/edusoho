@@ -1,0 +1,72 @@
+{% for code,item in block.meta.items|default(null) %}
+  {% if item.type != 'poster' %}
+    <section id="js-affix-{{ code }}">
+      <div class="item-title">
+        <strong>{{ item.title }}</strong>
+        <p class="text-muted">{{ item.desc }}
+          {% if code == 'carousel' %}
+            <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="panel-group sortable-list" id="js-accordion-{{ code }}" data-code="{{ code }}"
+           data-prefix="data[{{ code }}]" data-count="{{ item.count }}" data-role="collapse" role="tablist"
+           aria-multiselectable="true">
+        {% for dataId,data in  block.data[code]|default(null) %}
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="{{ code }}-heading-{{ dataId }}" data-toggle="collapse"
+                 data-parent="#js-accordion-{{ code }}" href="#{{ code }}-collapse-{{ loop.index }}-{{ dataId }}"
+                 aria-expanded="false" aria-controls="{{ code }}-collapse-{{ loop.index }}-{{ dataId }}">
+              <h4 class="panel-title clearfix">
+                <i class="js-move-seq glyphicon glyphicon-move pull-left mrs"></i>
+                <span class="panel-item-title ellipsis">{{ item.title }}</span>
+                <span class="pull-left">&nbsp;-&nbsp;</span>
+                {% include 'admin-v2/operating/block/label/' ~ item.type ~ '.html.twig' %}
+                <i class="js-expand-icon glyphicon glyphicon-chevron-down pull-right" title="{{ 'admin.block_manage.visual_edit.panel_expand'|trans }}"></i>
+                {% if item.count != 1 %}
+                  <i class="mrs js-remove-btn glyphicon glyphicon-trash pull-right" title="{{ 'admin.block_manage.visual_edit.panel_delete'|trans }}"></i>
+                {% endif %}
+              </h4>
+
+            </div>
+            <div id="{{ code }}-collapse-{{ loop.index }}-{{ dataId }}" class="panel-collapse collapse" role="tabpanel"
+                 aria-labelledby="{{ code }}-heading-{{ dataId }}">
+              <div class="panel-body">
+                {% include 'admin-v2/operating/block/tag/' ~ item.type ~ '.html.twig' %}
+              </div>
+            </div>
+          </div>
+
+        {% endfor %}
+      </div>
+      {% if item.count != 1 %}
+        <div class="btn btn-default text-center js-add-btn"
+             style="width:100%;margin-top:-10px;margin-bottom:20px;">{{ 'admin.block_manage.visual_edit.add_panel'|trans }}</div>
+      {% endif %}
+
+    </section>
+  {% else %}
+    <ul class="nav nav-pills mvl sortable-list" id="btn-tabs">
+      {% include 'admin-v2/operating/block/label/' ~ item.type ~ '.html.twig' %}
+    </ul>
+    <div class="well">
+      <div class="tab-content">
+        {% include 'admin-v2/operating/block/tag/' ~ item.type ~ '.html.twig' %}
+      </div>
+    </div>
+  {% endif %}
+
+{% endfor %}
+<div class="form-group mtl">
+  <div class="col-sm-10 col-sm-offset-2">
+    <input type="hidden" name="blockId" value="{{ block.blockId|default() }}">
+    <input type="hidden" name="blockTemplateId" value="{{ block.blockTemplateId|default() }}">
+    <input type="hidden" name="templateName" value="{{ block.templateName|default() }}">
+    <input type="hidden" name="code" value="{{ block.code|default() }}">
+    <input type="hidden" name="mode" value="{{ block.mode|default() }}">
+  </div>
+</div>
+<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+<button id="block-save-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary mrm"
+        data-toggle="block-edit-form" data-target="#block-edit-form">{{ 'admin.block_manage.visual_edit.save'|trans }}</button>

@@ -1,0 +1,47 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% set block = block|default(null) %}
+
+{% block title %}{{'admin.block_manage.visual_edit.title'|trans}}{% endblock %}
+
+
+{% set modal_class = 'modal-lg' %}
+
+{% block body %}
+
+<h5>{{'admin.block_manage.visual_edit.name'|trans}}{{block.title}}</h5>
+
+<form id="block-form"  {% if block.mode == 'template' %}class="form-horizontal" {% endif %} action="{{ path('admin_v2_block_update', {blockTemplateId:block.id}) }}" method="post">
+  {% if block.mode == 'html' %}
+  <div class="form-group">
+      <div class="controls">
+        <textarea class="form-control" id="blockContent" rows="10" name="content" data-role="editor-field" style="z-index:1000;">{{ block.content }}</textarea>
+        <input type="hidden" name="blockId" value="{{ block.blockId|default() }}">
+        <input type="hidden" name="blockTemplateId" value="{{ block.blockTemplateId|default() }}">
+        <input type="hidden" name="code" value="{{ block.code|default() }}">
+        <input type="hidden" name="data" value="{{ block.data|default() }}">
+      </div>
+  </div>
+  {% endif %}
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% if block.mode == 'html' %}
+<form id="block-image-upload-form" action="{{ path('file_upload', {group:'default'}) }}" method="post" enctype="multipart/form-data">
+  <input class="btn btn-default btn-sm" type="file" name="file" value="{{'admin.block_manage.visual_edit.tag_img_upload'|trans}}" style="display:inline-block;">
+  <input type="hidden" name="token" value="{{ upload_token('block', 'image') }}" />
+  <button class="btn btn-default btn-sm">{{'admin.block_manage.visual_edit.upload_img'|trans}}</button>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% endif %}
+
+<div class="mbm mtl"><strong>{{'admin.block_manage.visual_edit.help_tips'|trans}}</strong></div>
+<div class="text-info">{{ block.tips|nl2br }}</div>
+
+<div class="mbm mtl"><strong>{{'admin.block_manage.visual_edit.history'|trans}}</strong></div>
+{% include 'admin-v2/operating/block/block-history-data.html.twig'  %}
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  <button id="block-update-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#block-form">{{'form.btn.save'|trans}}</button>
+  <script type="text/javascript">app.load('block/update');</script>
+{% endblock %}

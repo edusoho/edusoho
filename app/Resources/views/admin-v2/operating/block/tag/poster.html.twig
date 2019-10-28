@@ -1,0 +1,87 @@
+{% set first = 1 %}
+{% for dataId,data in  block.data[code]|default(null) %}
+  <div role="tabpanel" class="tab-pane {% if first == 1 %}active{% endif %}" id="poster-{{ dataId }}">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">{{'admin.block_manage.visual_edit.poster_open_btn'|trans}}</label>
+      <label class="checkbox-inline">
+        <input class="status-input" type="radio" value="1" {% if data.status == 1 %}checked{% endif %}> {{'admin.block_manage.visual_edit.poster_open_radio'|trans}}
+      </label>
+      <label class="checkbox-inline">
+        <input class="status-input" type="radio" value="0" {% if data.status == 0 %}checked{% endif %}> {{'admin.block_manage.visual_edit.poster_closed_radio'|trans}}
+      </label>
+      <input class="status-value" type="hidden" name="data[{{ code }}][{{ dataId }}][status]" value="{{ data.status }}">
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">{{'admin.block_manage.visual_edit.poster_layout_mode'|trans}}</label>
+      <label class="checkbox-inline">
+        <input class="layout-input" type="radio" value="limitWide" {% if data.layout == 'limitWide' %}checked{% endif %}> {{'admin.block_manage.visual_edit.poster_width_center_radio'|trans}}
+      </label>
+      <label class="checkbox-inline">
+        <input class="layout-input" type="radio" value="tile" {% if data.layout == 'tile' %}checked{% endif %}> {{'admin.block_manage.visual_edit.poster_tile_center_radio'|trans}}
+      </label>
+      <input class="layout-value" type="hidden" name="data[{{ code }}][{{ dataId }}][layout]" value="{{ data.layout }}">
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">{{'admin.block_manage.visual_edit.poster_edit_mode'|trans}}</label>
+      <label class="checkbox-inline">
+        <input class="imgMode" type="radio" value="option1" {% if data.mode == 'img' %}checked="checked"{% endif %}> {{'admin.block_manage.visual_edit.poster_img_mode_radio'|trans}}
+      </label>
+      <label class="checkbox-inline">
+        <input class="htmlMode" type="radio" value="option2" {% if data.mode == 'html' %}checked="checked"{% endif %}> {{'admin.block_manage.visual_edit.poster_html_mode_radio'|trans}}
+      </label>
+      <input type="hidden" name="data[{{ code }}][{{ dataId }}][mode]" class="mode-value" value="{{ data.mode }}">
+    </div>
+    <div class="edit-mode-img" {% if data.mode == 'html' %}style="display: none;"{% endif %}>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          {{'admin.block_manage.visual_edit.poster_select_img'|trans}}
+        </label>
+
+        <div class="col-sm-10">
+          <label class="control-label img-mrl">{{ data.src }}</label>
+          <a class="btn btn-default btn-sm img-mode-upload" id="img-{{ code }}-uploadId-{{ dataId }}" data-upload-token="{{ upload_token('system', 'image') }}">{{'admin.block_manage.visual_edit.poster_img_upload'|trans}}</a>
+          <p class="text-success">
+            {% if block.code == 'live_top_banner' %}
+              {{'admin.block_manage.visual_edit.poster_live_top_banner_tips'|trans|raw}}
+              <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
+            {% else %}
+              {{'admin.block_manage.visual_edit.poster_other_tips'|trans|raw}}
+              <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
+            {% endif %}
+          </p>
+          <input class="form-control img-value" type="hidden" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">
+          <img class="img-responsive mtm img-mtl" src="{{ asset(data.src) }}" alt="">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          {{'admin.block_manage.visual_edit.tag_img_background_color'|trans}}
+        </label>
+
+        <div class="col-sm-10">
+          <input type="text" class="form-control colorpicker-input width-input-small" name="data[{{ code }}][{{ dataId }}][background]" id="data[{{ code }}][{{ dataId }}][background]" placeholder="{{ data.background }}" value="{{ data.background }}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          {{'admin.block_manage.visual_edit.poster_link_url'|trans}}
+        </label>
+
+        <div class="col-sm-10">
+          <input type="text" class="form-control width-input-large" name="data[{{ code }}][{{ dataId }}][href]" id="data[{{ code }}][{{ dataId }}][href]" placeholder="{{ app.request.getScheme() }}://" value="{{ data.href }}">
+        </div>
+      </div>
+    </div>
+    <div class="edit-mode-html" {% if data.mode == 'img' %}style="display: none;"{% endif %}>
+      <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+          <textarea class="form-control mbl" id="data[{{ code }}][{{ dataId }}][html]" rows="15"
+          name="data[{{ code }}][{{ dataId }}][html]" data-role="editor-field">{{ data.html }}</textarea>
+          <label class="control-label html-mrl"></label><br>
+          <a class="btn btn-default btn-sm html-mode-upload" id="html-{{ code }}-uploadId-{{ dataId }}" data-upload-token="{{ upload_token('system', 'image') }}">{{'admin.block_manage.visual_edit.poster_img_upload'|trans}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% set first = 0 %}
+{% endfor %}

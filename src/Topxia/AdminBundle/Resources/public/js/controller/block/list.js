@@ -38,7 +38,8 @@ define(function(require, exports, module) {
       selectFirst: true
     }).render();
     autocomplete.on('itemSelect', function(data) {
-      window.location.href = window.location.origin + "/admin/blockTemplate/" + data.id + "/visual/edit";
+      console.log(data);
+      window.location.href = window.location.origin + data.gotoUrl;
     });
   };
 });
