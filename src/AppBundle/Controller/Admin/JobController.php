@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
+use Biz\SchedulerFacade\Service\SchedulerFacadeService;
 use Codeages\Biz\Framework\Scheduler\Service\JobPool;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\Request;
@@ -89,6 +90,28 @@ class JobController extends BaseController
         ));
     }
 
+    public function setNextExecTimeAction(Request $request, $id)
+    {
+        $job = $this->getSchedulerFacadeService()->getJob($id);
+        if ('POST' == $request->getMethod()) {
+            $nextFiredTime = $request->request->get('nextExecTime', '');
+            if (empty($nextFiredTime)) {
+                return $this->createJsonResponse(false);
+            }
+            $nextFiredTime = strtotime($nextFiredTime);
+            $job = $this->getSchedulerFacadeService()->setNextFiredTime($id, $nextFiredTime);
+            if (empty($job)) {
+                return $this->createJsonResponse(false);
+            }
+
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->render('admin/jobs/set-next-fired-time-modal.html.twig', array(
+            'job' => $job,
+        ));
+    }
+
     public function firesAction(Request $request, $id)
     {
         $conditions = array(
@@ -148,5 +171,13 @@ class JobController extends BaseController
     protected function getSchedulerService()
     {
         return $this->getBiz()->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return SchedulerFacadeService
+     */
+    protected function getSchedulerFacadeService()
+    {
+        return $this->getBiz()->service('SchedulerFacade:SchedulerFacadeService');
     }
 }
