@@ -9,43 +9,61 @@ class DistributorProductDealerServiceTest extends BaseTestCase
 {
     public function testDealBeforeCreateProduct()
     {
-        $settingService = $this->mockBiz(
-            'System:SettingService',
+        $this->mockDistributorUserService();
+        $logger = $this->mockBiz(
+            'logger',
             array(
                 array(
-                    'functionName' => 'get',
-                    'withParams' => array('storage', array()),
-                    'returnValue' => array(
-                        'cloud_access_key' => 'abc',
-                        'cloud_secret_key' => 'efg',
-                    ),
-                ),
-                array(
-                    'functionName' => 'get',
-                    'withParams' => array('developer', array()),
-                    'returnValue' => array(
-                    ),
+                    'functionName' => 'info',
                 ),
             )
         );
 
-        $token = 'courseOrder:9:123:333:1524324352:c9a10dc1737f63a43d2ca6d155155999:2DQ1xlkUFVceNkn_QLOvf3acM8w=';
+        $this->biz['drp.plugin.logger'] = $logger;
+
+        $token = 'redirect:L2NvdXJzZS8x:1:1:1565751518:dasdaskjd:CtFJ-tHEOkPSj1yabW9nbXo9oKA=';
+
+        $drpUserService = $this->mockBiz(
+            'DrpPlugin:Drp:DrpUserService',
+            array(
+                array(
+                    'functionName' => 'trySaveUserDistributorToken',
+                    'withParams' => array(),
+                    'returnValue' => true,
+                ),
+            )
+        );
         $this->getDistributorProductDealerService()->setParams(
             array(
                 'distributor-productOrder-token' => $token,
             )
         );
-
         $product = new CourseProduct();
 
         $product = $this->getDistributorProductDealerService()->dealBeforeCreateProduct($product);
 
         $createExtra = $product->getCreateExtra();
-        $this->assertEquals($token, $createExtra['distributorToken']);
+        $this->assertEquals(true, empty($createExtra['distributorToken']));
     }
 
     private function getDistributorProductDealerService()
     {
         return $this->createService('Distributor:DistributorProductDealerService');
+    }
+
+    private function mockDistributorUserService()
+    {
+        return $this->mockBiz(
+            'Distributor:DistributorUserService',
+            array(
+                array(
+                    'functionName' => 'decodeToken',
+                    'withParams' => array('redirect:L2NvdXJzZS8x:1:1:1565751518:dasdaskjd:CtFJ-tHEOkPSj1yabW9nbXo9oKA='),
+                    'returnValue' => array(
+                        'valid' => true,
+                    ),
+                ),
+            )
+        );
     }
 }

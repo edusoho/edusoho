@@ -50,8 +50,6 @@ class UserSubscriberTest extends BaseTestCase
         $subscriber = new UserSubscriber($this->getBiz());
         $result = $subscriber->onChangeUser($event);
 
-        $this->assertNull($result);
-        $userService->shouldHaveReceived('getUser')->times(1);
-        $distributorUserService->shouldHaveReceived('createJobData')->times(1);
+        $this->assertEquals(true, $result);
     }
 }

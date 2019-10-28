@@ -18,12 +18,8 @@ class UserSubscriber extends EventSubscriber implements EventSubscriberInterface
 
     public function onChangeUser(Event $event)
     {
-        $context = $event->getSubject();
-        $user = $this->getUserService()->getUser($context['id']);
-        if (!empty($user) && 'distributor' == $user['type']) {
-            $user['token'] = $user['distributorToken'];
-            $this->getDistributorUserService()->createJobData($user);
-        }
+        // 分销2.0 不再使用
+        return true;
     }
 
     protected function getUserService()
