@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f1d05dab86cd166a90f4cdf1f65768b8",
+    "content-hash": "b4c07125aadd8af2378ad8e9963643de",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -276,16 +276,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.32",
+            "version": "v0.9.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "a1e64350f9ebda889941cfeb0cc49ff85571ab17"
+                "reference": "e53bdc4f513334640ab5933ba4ad76058b09b900"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/a1e64350f9ebda889941cfeb0cc49ff85571ab17",
-                "reference": "a1e64350f9ebda889941cfeb0cc49ff85571ab17",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/e53bdc4f513334640ab5933ba4ad76058b09b900",
+                "reference": "e53bdc4f513334640ab5933ba4ad76058b09b900",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -334,20 +334,20 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2019-08-01T03:15:36+00:00"
+            "time": "2019-10-15T01:55:04+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.28",
+            "version": "v0.1.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "86512c97984aadedbfc679d00d2c005622d3bab7"
+                "reference": "f55420cb208ab1623d57034f8180725a79dbd0cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/86512c97984aadedbfc679d00d2c005622d3bab7",
-                "reference": "86512c97984aadedbfc679d00d2c005622d3bab7",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/f55420cb208ab1623d57034f8180725a79dbd0cf",
+                "reference": "f55420cb208ab1623d57034f8180725a79dbd0cf",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -378,7 +378,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2019-05-06T06:42:52+00:00"
+            "time": "2019-10-22T02:56:11+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -423,12 +423,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/exam-parser.git",
-                "reference": "4d8d4954d848b0acc9223846a53f22c5fd596ac4"
+                "reference": "e51ac4dd5b57b2d319665cf805791bbf2690f2ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/4d8d4954d848b0acc9223846a53f22c5fd596ac4",
-                "reference": "4d8d4954d848b0acc9223846a53f22c5fd596ac4",
+                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/e51ac4dd5b57b2d319665cf805791bbf2690f2ed",
+                "reference": "e51ac4dd5b57b2d319665cf805791bbf2690f2ed",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -469,7 +469,7 @@
                 }
             ],
             "description": "Exam Parser",
-            "time": "2019-08-09T09:17:34+00:00"
+            "time": "2019-10-23T07:03:36+00:00"
         },
         {
             "name": "codeages/omnipay-alipay",
@@ -637,16 +637,16 @@
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
-            "version": "v0.3.4",
+            "version": "v0.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "db44440568f22336d5f649aab574726064c62b39"
+                "reference": "f721cfa9b1a5ab5477fbd9bc12f4a4aa43b3af26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/db44440568f22336d5f649aab574726064c62b39",
-                "reference": "db44440568f22336d5f649aab574726064c62b39",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/f721cfa9b1a5ab5477fbd9bc12f4a4aa43b3af26",
+                "reference": "f721cfa9b1a5ab5477fbd9bc12f4a4aa43b3af26",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -682,7 +682,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2019-09-23T02:11:36+00:00"
+            "time": "2019-10-17T03:05:47+00:00"
         },
         {
             "name": "codeages/rate-limiter",
@@ -734,16 +734,16 @@
         },
         {
             "name": "codeages/rest-api-client",
-            "version": "v0.2.2",
+            "version": "v0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/rest-api-client.git",
-                "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e"
+                "reference": "521886cc591801a79e28c5f07bd81bffba22b99b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/rest-api-client/zipball/dca73e2181d39c07e6b4e5eb0cca23d636d2877e",
-                "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e",
+                "url": "https://api.github.com/repos/codeages/rest-api-client/zipball/521886cc591801a79e28c5f07bd81bffba22b99b",
+                "reference": "521886cc591801a79e28c5f07bd81bffba22b99b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -775,7 +775,7 @@
                 }
             ],
             "description": "A PHP REST API Client.",
-            "time": "2017-07-02T16:55:37+00:00"
+            "time": "2019-10-10T02:00:22+00:00"
         },
         {
             "name": "codeages/symfony-lock-lite",
