@@ -641,4 +641,10 @@ admin_v2.trade.goods_order.basic_tab: 商品订单
 # 交易-退款订单
 admin_v2.trade.order_refunds_menu: 退款订单
 admin_v2.trade.order_refunds.basic_tab: 退款订单
+
+#交易-网校账单
+admin_v2.trade.asset_manage.basic_group: 资产管理
+admin_v2.trade.bills_menu: 网校账单
+admin_v2.trade.bills.cash_records_tab: 现金账单
+admin_v2.trade.bills.coin_records_tab: 虚拟币账单
 # 新版后台结束
