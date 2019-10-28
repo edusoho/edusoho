@@ -3,7 +3,7 @@
 namespace Biz\Distributor\Service\Impl;
 
 use AppBundle\Common\Exception\RuntimeException;
-use AppBundle\Common\TimeMachine;
+use DrpPlugin\Biz\DistributionToken\Service\DistributionTokenService;
 
 class DistributorUserServiceImpl extends BaseDistributorServiceImpl
 {
@@ -11,38 +11,20 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
      * @param token 分销平台的token，只能使用一次
      *
      * @return array(
-     *                'couponPrice' => 123, //优惠券，奖励多少分 （单位为分）
-     *                'couponExpiryDay' => unix_time, //优惠券有效时间
      *                'valid'  => true, //是否可注册，指的是分销平台是否颁发过这个token， 如果为false，则注册的用户不算分销平台用户
-     *                'rewardable' => false  //是否有奖励, 当couponPrice或couponExpiryday=0时, 则注册的用户不会发放优惠券
      *                )
      */
     public function decodeToken($token)
     {
-        $splitedStr = explode(':', $token);
-
         $tokenInfo = array(
             'valid' => false,
-            'rewardable' => false,
         );
-
         try {
-            $drpService = $this->getDrpService();
-            if (!empty($drpService)) {
-                $this->validateExistedToken($token);
-                $parsedInfo = $this->getDrpService()->parseRegisterToken($token);
-                $tokenInfo['valid'] = true;
-                $tokenExpireTime = strtotime('+1 day', intval($parsedInfo['time']));
-                if ($tokenExpireTime >= TimeMachine::time()) {
-                    $tokenInfo['couponPrice'] = $parsedInfo['coupon_price'];
-                    $tokenInfo['couponExpiryDay'] = $parsedInfo['coupon_expiry_day'];
-                    if (0 != $tokenInfo['couponPrice'] && 0 != $tokenInfo['couponExpiryDay']) {
-                        $tokenInfo['rewardable'] = true;
-                    }
-                }
-            }
+            $this->validateExistedToken($token);
+            $this->getDistributionTokenService()->parseRedirectToken($token);
+            $tokenInfo['valid'] = true;
         } catch (\Exception $e) {
-            $this->biz['logger']->error('distributor sign error DistributorUserServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
+            $this->getLogger()->error('distributor sign error DistributorUserServiceImpl::decodeToken '.$e->getMessage(), array('token' => $token));
         }
 
         return $tokenInfo;
@@ -97,7 +79,21 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
             1
         );
         if (!empty($existedUser)) {
+            $this->getLogger()->error('distributor token already existed DistributorUserServiceImpl::validateExistedToken', array('token' => $token));
             throw new RuntimeException('token already existed');
         }
+    }
+
+    /**
+     * @return DistributionTokenService
+     */
+    protected function getDistributionTokenService()
+    {
+        return $this->createService('DrpPlugin:DistributionToken:DistributionTokenService');
+    }
+
+    protected function getLogger()
+    {
+        return $this->biz->offsetGet('drp.plugin.logger');
     }
 }
