@@ -16,13 +16,12 @@ class EduCloudController extends BaseController
     // refactor
     public function myCloudOverviewAction(Request $request)
     {
-        //直播业务有用到只迁移了action需要后面修改云模块的修改
         try {
             $api = CloudAPIFactory::create('root');
             $isBinded = $this->getAppService()->getBinded();
             $overview = $api->get("/cloud/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
-            return $this->render('admin/edu-cloud/cloud-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/cloud-error.html.twig', array());
         }
         if (!isset($overview['error'])) {
             $paidService = array();
@@ -48,7 +47,7 @@ class EduCloudController extends BaseController
             }
         }
 
-        return $this->render('admin/edu-cloud/overview/index.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/overview/index.html.twig', array(
             'isBinded' => $isBinded,
             'overview' => $overview,
             'paidService' => isset($paidService) ? $paidService : false,
@@ -178,6 +177,9 @@ class EduCloudController extends BaseController
         try {
             $api = CloudAPIFactory::create('root');
             $info = $api->get('/me');
+            if (empty($info['accessKey'])) {
+                return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', array('menu' => 'admin_v2_cloud_attachment_setting'));
+            }
         } catch (\RuntimeException $e) {
             return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', array());
         }

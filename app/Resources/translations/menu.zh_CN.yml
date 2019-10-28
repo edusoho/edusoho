@@ -594,12 +594,7 @@ admin_v2.operation.sensitive_words.sensitive_words_list_tab: 敏感词列表
 admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: 添加敏感词
 admin_v2.operation.sensitive_words.banlogs_tab: 屏蔽记录
 
-# 应用中心-基础云-云服务-短信
-admin_v2.nav.cloud_center: 应用中心
-admin_v2.basic_cloud_group: 基础云
-admin_v2.cloud_service.basic_menu: 云服务
-admin_v2.cloud_service.sms_tab: 云短信
-admin_v2.cloud_service.sms_overview_tab: 概览
+
 
 #营销-营销管理
 admin_v2.marketing.basic_group: 营销管理
@@ -651,4 +646,15 @@ admin_v2.trade.bills.coin_records_tab: 虚拟币账单
 # 交易-虚拟币管理
 admin_v2.trade.coin_menu: 虚拟币管理
 admin_v2.trade.coin.basic_tab: 虚拟币管理
+
+# 应用中心-基础云-概览
+admin_v2.cloud.overview_menu: 概览
+admin_v2.cloud.overview.basic_tab: 教育云概览
+
+# 应用中心-基础云-云服务-短信
+admin_v2.nav.cloud_center: 应用中心
+admin_v2.basic_cloud_group: 基础云
+admin_v2.cloud_service.basic_menu: 云服务
+admin_v2.cloud_service.sms_tab: 云短信
+admin_v2.cloud_service.sms_overview_tab: 概览
 # 新版后台结束

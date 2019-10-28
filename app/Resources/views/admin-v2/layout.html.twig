@@ -6,8 +6,6 @@
 {% set currentMenu = permission(menu) %}
 {% set cloudSmsInfo = isOldSmsUser()|default(false) %}
 {% set lang = app.request.getLocale() %}
-{% set bodyClass = 'pt0 pb0' %}
-{% do script(['app/js/admin/new/index.js']) %}
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -38,8 +36,6 @@
   {% block stylesheets %}
   <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
   <link href="{{ asset('static-dist/app/css/admin.css') }}" rel="stylesheet" />
-  <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
-  <link href="{{ asset('static-dist/app/css/main-v2.css') }}" rel="stylesheet" />
   <link href="{{ asset('static-dist/app/css/admin-v2.css') }}" rel="stylesheet" />
   {% endblock %}
 
@@ -83,48 +79,50 @@
         <div class="pull-right change-version-btn"><a><i class="es-icon es-icon-toggle"></i>切换旧版</a></div>
       </div>
       <div class="cd-layout-main">
-        {% include 'admin-v2/role/templates/side-bar.html.twig' %}
-        <div class="cd-layout-aside">
-          <div class="cd-layout-aside_bread">
+        {% block container %}
+          {% include 'admin-v2/role/templates/side-bar.html.twig' %}
+          <div class="cd-layout-aside">
+            <div class="cd-layout-aside_bread">
 
-          </div>
-          <div class="cd-layout-adside_content mtm phm">
-
-            <div class="page-header clearfix pvm">
-                {% block page_flash_message %}
-
-                {% endblock %}
-              <h1 class="pull-left">
-                  {% block page_title %}
-                      {{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}
-                  {% endblock %}
-              </h1>
-              <div class="pull-right">
-
-                  {% block page_buttons %}
-
-                      {% if currentMenu.mode|default('') == 'capsules' and capsule|default(false) %}
-                          {% for m in sub_permissions(permission(capsule).code,'topBtn') %}
-                              {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
-                          {% endfor %}
-                      {% else %}
-                          {% for m in sub_permissions(currentMenu.code,'topBtn') %}
-                              {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
-                          {% endfor %}
-                      {% endif %}
-                  {% endblock %}
-
-              </div>
             </div>
+            <div class="cd-layout-adside_content mtm phm">
 
-              {% block content_header %}{% endblock %}
+              <div class="page-header clearfix pvm">
+                  {% block page_flash_message %}
 
-              {% block tabs %}{% include 'admin-v2/role/templates/tabs.html.twig' %}{% endblock %}
-              {% block capsule %}{% endblock %}
-              {% block main %}
-              {% endblock %}
+                  {% endblock %}
+                <h1 class="pull-left">
+                    {% block page_title %}
+                        {{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}
+                    {% endblock %}
+                </h1>
+                <div class="pull-right">
+
+                    {% block page_buttons %}
+
+                        {% if currentMenu.mode|default('') == 'capsules' and capsule|default(false) %}
+                            {% for m in sub_permissions(permission(capsule).code,'topBtn') %}
+                                {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                            {% endfor %}
+                        {% else %}
+                            {% for m in sub_permissions(currentMenu.code,'topBtn') %}
+                                {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                            {% endfor %}
+                        {% endif %}
+                    {% endblock %}
+
+                </div>
+              </div>
+
+                {% block content_header %}{% endblock %}
+
+                {% block tabs %}{% include 'admin-v2/role/templates/tabs.html.twig' %}{% endblock %}
+                {% block capsule %}{% endblock %}
+                {% block main %}
+                {% endblock %}
+            </div>
           </div>
-        </div>
+        {% endblock %}
       </div>
     </div>
 
