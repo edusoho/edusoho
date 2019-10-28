@@ -64,7 +64,6 @@ class AppController extends BaseController
             'installedApps' => $installedApps,
             'type' => $postStatus,
             'appTypeChoices' => ('hidden' == $showType) ? 'installedApps' : null,
-            'installPackageId' => $request->query->get('installPackageId', ''),
         ));
     }
 

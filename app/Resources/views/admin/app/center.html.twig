@@ -31,7 +31,7 @@
       {{'admin.edu_cloud.connect_failed_tips'|trans({'%EduSoho%': 'EduSoho'|copyright_less })}}
     </p>
   {% else %}
-    <table class="table table-striped table-hover" id="app-table-container" data-install-package-id="{{ installPackageId }}">
+    <table class="table table-striped table-hover" id="app-table-container" data-install-package-id="{{ app.request.query.get('installPackageId') | default('') }}">
       <thead>
 
       </thead>
