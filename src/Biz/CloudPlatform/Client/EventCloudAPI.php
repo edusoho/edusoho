@@ -44,16 +44,16 @@ class EventCloudAPI extends AbstractCloudAPI
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 1);
 
-        if ($method == 'POST') {
+        if ('POST' == $method) {
             curl_setopt($curl, CURLOPT_POST, 1);
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } elseif ($method == 'PUT') {
+        } elseif ('PUT' == $method) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } elseif ($method == 'DELETE') {
+        } elseif ('DELETE' == $method) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } elseif ($method == 'PATCH') {
+        } elseif ('PATCH' == $method) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } else {
@@ -63,6 +63,9 @@ class EventCloudAPI extends AbstractCloudAPI
         }
 
         $headers[] = 'API-REQUEST-ID: '.$requestId;
+        if (isset($_SERVER['TRACE_ID']) && $_SERVER['TRACE_ID']) {
+            $headers[] = 'TRACE-ID: '.$_SERVER['TRACE_ID'];
+        }
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url);
