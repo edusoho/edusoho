@@ -14,7 +14,7 @@ class DistributorController extends BaseController
     {
         $drpService = $this->getDistributorUserService()->getDrpService();
         if (!$drpService) {
-            return $this->render('admin-v2/marketing/distributor/not-access.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', array('menu' => 'admin_v2_micromarketing_page'));
         }
 
         $form = MarketingUtils::generateLoginFormForCurrentUser(array(

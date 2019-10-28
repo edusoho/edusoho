@@ -595,13 +595,6 @@ admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: Add Sens
 admin_v2.operation.sensitive_words.banlogs_tab: Processing History
 
 
-# 应用中心-基础云-云服务-短信
-admin_v2.nav.cloud_center: Cloud Center
-admin_v2.basic_cloud_group: Basic Cloud
-admin_v2.cloud_service.basic_menu: Cloud Server
-admin_v2.cloud_service.sms_tab: Sms Cloud
-admin_v2.cloud_service.sms_overview_tab: Overview
-
 #营销-营销管理
 admin_v2.marketing.basic_group: Marketing Manage
 
@@ -632,4 +625,15 @@ admin_v2.operation.group_menu: Group Discussions
 admin_v2.operation.group.group_tab: Groups
 admin_v2.operation.group.group_tab.create_group_btn: Add Group
 admin_v2.operation.group.group_thread_tab: Group Discussions
+
+# 应用中心-基础云-概览
+admin_v2.cloud.overview_menu: Overview
+admin_v2.cloud.overview.basic_tab: Overview
+
+# 应用中心-基础云-云服务-短信
+admin_v2.nav.cloud_center: Cloud Center
+admin_v2.basic_cloud_group: Basic Cloud
+admin_v2.cloud_service.basic_menu: Cloud Server
+admin_v2.cloud_service.sms_tab: Sms Cloud
+admin_v2.cloud_service.sms_overview_tab: Overview
 # 新版后台结束
