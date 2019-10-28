@@ -14,6 +14,7 @@ use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\Sms\SmsException;
 use Biz\System\SettingException;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 
 class User extends AbstractResource
 {
@@ -98,6 +99,10 @@ class User extends AbstractResource
             'registeredWay' => $registeredWay,
             'createdIp' => $request->getHttpRequest()->getClientIp(),
         );
+
+        if ($this->isPluginInstalled('Drp')) {
+            $user = DistributorCookieToolkit::setCookieTokenToFields($request->getHttpRequest(), $user, DistributorCookieToolkit::USER);
+        }
 
         $user = $this->getAuthService()->register($user);
         $user['token'] = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
