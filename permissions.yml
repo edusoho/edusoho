@@ -160,3 +160,8 @@ admin_operation_group_thread: admin_v2_operation_group_thread #小组话题管�
 admin_operation_wechat_notification: admin_v2_operation_wechat_notification #nav
 admin_operation_wechat_notification_record: admin_v2_operation_wechat_notification_record # 发送记录
 admin_operation_wechat_notification_manage: admin_v2_operation_wechat_notification_manage # 设置
+
+# 交易-商品订单
+admin_finance: admin_v2_trade # 交易
+admin_orders: admin_v2_goods_order #商品订单
+admin_order_manage: admin_v2_goods_order_list #商品订单（默认tab）

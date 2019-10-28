@@ -632,4 +632,8 @@ admin_v2.operation.group_menu: Group Discussions
 admin_v2.operation.group.group_tab: Groups
 admin_v2.operation.group.group_tab.create_group_btn: Add Group
 admin_v2.operation.group.group_thread_tab: Group Discussions
+
+#交易-商品订单
+admin_v2.trade.order_manage.basic_group: Order Manage
+admin_v2.trade.goods_order.menu: Goods Order
 # 新版后台结束

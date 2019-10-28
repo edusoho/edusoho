@@ -362,7 +362,7 @@ admin_v2:
                                 admin_v2_cloud_attachment_setting:
                                     name: admin_v2.cloud.attachment_setting.basic_tab
                                     disable: true
-                                
+
         # 营销管理模块
         admin_v2_marketing:
             name: admin_v2.nav.marketing
@@ -732,10 +732,21 @@ admin_v2:
                                     name: admin.user.teacher.promote_list_tab
                                     disable: true
 
-#        # 交易模块
-#        admin_v2_trade:
-#            name: admin_v2.nav.trade
-#            children:
+        # 交易模块
+        admin_v2_trade:
+            name: admin_v2.nav.trade
+            children:
+                admin_v2_basic_order_manage_group:
+                    name: admin_v2.trade.order_manage.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_goods_order:
+                            name: admin_v2.trade.goods_order.menu
+                            router_name: admin_v2_order_manage
+                            children:
+                                admin_v2_goods_order_list:
+                                    name: admin_v2.trade.goods_order.menu
+                                    router_name: admin_v2_order_manage
 #        # 数据模块
 #        admin_v2_statistics:
 #            name: admin_v2.nav.statistics
