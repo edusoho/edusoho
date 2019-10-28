@@ -1914,13 +1914,4 @@ class WebExtension extends \Twig_Extension
     {
         return $this->createService('Testpaper:TestpaperService');
     }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->createService('System:SettingService');
-    }
-
 }
