@@ -59,16 +59,13 @@
             <td>
               <a href="javascript:" data-url="{{ path('admin_v2_order_detail', {id:refund.order_id}) }}" data-toggle="modal" data-target="#modal">{{ refund.title }}</a>
               <div class="text-muted text-sm">{{'order.id'|trans}}：{{ order.sn }}</div>
-              {#<div class="text-muted text-sm">#}
-              {#{{'admin.order_refund.reason'|trans}}：{{ refund.reason }} #}
-              {#</div>#}
               <div class="text-muted text-sm">
                 {{ 'admin.order_refund.sn'|trans }}：{{ refund.sn }}
               </div>
             </td>
             <td>{{ refund.amount|to_cash(0) }}</td>
             <td>
-              {% if has_permission('admin_user_manage') %}
+              {% if has_permission('admin_v2_user_manage') %}
                 <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a>
               {% else %}
                 <span><a target="_blank" href="{{ path('user_show', {id: user.id}) }}">{{ user.nickname|default('--') }}</a></span>
@@ -82,7 +79,7 @@
             </td>
             <td>
               {% if refund.deal_user_id != 0 %}
-                {% if has_permission('admin_user_manage') %}
+                {% if has_permission('admin_v2_user_manage') %}
                   <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id:refund.deal_user_id}) }}">{{ users[refund.deal_user_id].nickname|default('--') }}</a>
                 {% else %}
                   <span><a target="_blank" href="{{ path('user_show', {id: refund.deal_user_id}) }}">{{ users[refund.deal_user_id].nickname|default('--') }}</a></span>
