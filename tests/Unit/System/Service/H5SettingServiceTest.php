@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\System\Service;
 
-use Biz\System\Service\H5SettingService;
 use Biz\BaseTestCase;
 
 class H5SettingServiceTest extends BaseTestCase

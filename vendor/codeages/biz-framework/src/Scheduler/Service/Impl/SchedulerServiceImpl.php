@@ -154,6 +154,11 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         }
     }
 
+    public function getJob($id)
+    {
+        return $this->getJobDao()->get($id);
+    }
+
     public function getJobByName($name)
     {
         return $this->getJobDao()->getByName($name);

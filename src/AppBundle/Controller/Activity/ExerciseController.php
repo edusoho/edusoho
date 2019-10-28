@@ -183,7 +183,7 @@ class ExerciseController extends BaseActivityController implements ActivityActio
             return $rangeDefault;
         }
 
-        return $targetDefault;
+        return $rangeDefault;
     }
 
     protected function getActureQuestionNum($questions)
@@ -206,12 +206,7 @@ class ExerciseController extends BaseActivityController implements ActivityActio
             return array();
         }
 
-        $conditions = array(
-            'courseId' => $courseId,
-            'typesNotIn' => array('testpaper', 'homework', 'exercise'),
-        );
-
-        return $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
+        return $this->getTaskService()->findTasksByCourseId($courseId);
     }
 
     /**

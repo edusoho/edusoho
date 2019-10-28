@@ -121,6 +121,10 @@ class CourseInfo {
           date: true,
           after_date: '#expiryStartDate'
         },
+        watchLimit:{
+          unsigned_integer:true,
+          max:10000,
+        },
         summary: {
           ckeditor_maxlength: 10000,
         },

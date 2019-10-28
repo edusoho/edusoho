@@ -2,6 +2,7 @@ import swfobject from 'es-swfobject';
 import EsMessenger from 'app/common/messenger';
 import { getSupportedPlayer } from 'common/video-player-judge';
 import ActivityEmitter from 'app/js/activity/activity-emitter';
+import LocalVideoPlayer from 'app/js/player/local-video-player';
 
 export default class VideoPlay {
   constructor(recorder) {
@@ -12,7 +13,9 @@ export default class VideoPlay {
   }
 
   play() {
-    if ($('#swf-player').length) {
+    if ($('#local-video-player').length) {
+      this._playerLocalVideo();
+    }else if ($('#swf-player').length) {
       this.flashTip();
       this._playerSwf();
     } else {
@@ -25,6 +28,13 @@ export default class VideoPlay {
     this.record();
   }
 
+  _playerLocalVideo() {
+    $('#lesson-video-content').html('<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>');
+    new LocalVideoPlayer({
+      'element' : 'lesson-player',
+      'url' : $('#lesson-video-content').data('url'),
+    });
+  }
 
   flashTip(flag) {
     if (!swfobject.hasFlashPlayerVersion('11')) {

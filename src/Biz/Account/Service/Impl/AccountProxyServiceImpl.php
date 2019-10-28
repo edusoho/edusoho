@@ -21,11 +21,11 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
         return parent::countCashflows($conditions);
     }
 
-    public function searchCashflows($conditions, $orderBy, $start, $limit)
+    public function searchCashflows($conditions, $orderBy, $start, $limit, $columns = array())
     {
         $conditions = $this->prepareConditions($conditions);
 
-        return parent::searchCashflows($conditions, $orderBy, $start, $limit);
+        return parent::searchCashflows($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function sumColumnByConditions($column, $conditions)
