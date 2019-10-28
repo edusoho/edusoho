@@ -647,4 +647,8 @@ admin_v2.trade.asset_manage.basic_group: Asset Manage
 admin_v2.trade.bills_menu: Bills
 admin_v2.trade.bills.cash_records_tab: Cash Bill
 admin_v2.trade.bills.coin_records_tab: Coin Bill
+
+# 交易-虚拟币管理
+admin_v2.trade.coin_menu: Coin Manage
+admin_v2.trade.coin.basic_tab: Coin Manage
 # 新版后台结束

@@ -175,3 +175,7 @@ admin_bills: admin_v2_bills
 admin_bill_cash: admin_v2_bill_cash
 admin_bill_coin: admin_v2_bill_coin
 
+#交易-虚拟币管理
+admin_coin_user: admin_v2_user_coin
+admin_coin_user_records: admin_v2_coin_user_records
+

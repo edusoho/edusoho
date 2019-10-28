@@ -772,6 +772,13 @@ admin_v2:
                                     router_params:
                                         type: coin
                                     disable: true
+                        admin_v2_user_coin:
+                            name: admin_v2.trade.coin_menu
+                            children:
+                                admin_v2_coin_user_records:
+                                    name: admin_v2.trade.coin.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_coin_user_records
 #        # 数据模块
 #        admin_v2_statistics:
 #            name: admin_v2.nav.statistics
