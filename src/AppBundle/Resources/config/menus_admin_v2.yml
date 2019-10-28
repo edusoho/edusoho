@@ -745,8 +745,14 @@ admin_v2:
                             router_name: admin_v2_order_manage
                             children:
                                 admin_v2_goods_order_list:
-                                    name: admin_v2.trade.goods_order.menu
+                                    name: admin_v2.trade.goods_order.basic_tab
                                     router_name: admin_v2_order_manage
+                        admin_v2_order_refunds:
+                            name: admin_v2.trade.order_refunds_menu
+                            children:
+                                admin_v2_order_refunds_manage:
+                                    name: admin_v2.trade.order_refunds.basic_tab
+                                    router_name: admin_v2_order_refunds
 #        # 数据模块
 #        admin_v2_statistics:
 #            name: admin_v2.nav.statistics

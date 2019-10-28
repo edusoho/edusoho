@@ -636,4 +636,9 @@ admin_v2.operation.group.group_thread_tab: 小组话题管理
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: 订单管理
 admin_v2.trade.goods_order.menu: 商品订单
+admin_v2.trade.goods_order.basic_tab: 商品订单
+
+# 交易-退款订单
+admin_v2.trade.order_refunds_menu: 退款订单
+admin_v2.trade.order_refunds.basic_tab: 退款订单
 # 新版后台结束

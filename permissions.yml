@@ -165,3 +165,7 @@ admin_operation_wechat_notification_manage: admin_v2_operation_wechat_notificati
 admin_finance: admin_v2_trade # 交易
 admin_orders: admin_v2_goods_order #商品订单
 admin_order_manage: admin_v2_goods_order_list #商品订单（默认tab）
+
+#交易-退款订单
+admin_order_refunds: admin_v2_order_refunds
+admin_order_refunds_manage: admin_v2_order_refunds_manage

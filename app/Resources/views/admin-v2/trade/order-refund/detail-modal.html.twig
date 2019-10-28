@@ -1,0 +1,120 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {{ 'order.refund.detail'|trans }}
+{% endblock %}
+
+{% block body %}
+  <table class="table cd-table table-striped order-refund-detail-table">
+    <tr>
+      <td width="25%">{{'order.refund.id'|trans}}</td>
+      <td width="75%">{{ orderRefund.sn }}</td>
+    </tr>
+    <tr>
+      <td width="25%">{{ 'admin.order_refund.refund_person'|trans }}</td>
+      <td width="75%">
+        <strong>
+          {{ web_macro.user_link(applyUser) }}
+        </strong>
+      </td>
+    </tr>
+    <tr>
+      <td width="25%">{{ 'user.orders.refund_apply_time'|trans }}</td>
+      <td width="75%">{{ orderRefund.created_time|date('Y-n-d H:i:s') }}</td>
+    </tr>
+    <tr>
+      <td width="25%">{{ 'admin.order_refund.reason'|trans }}</td>
+      <td width="75%">{{ orderRefund.reason|trans }}</td>
+    </tr>
+    <tr>
+      <td width="25%">{{ 'order.id'|trans }}</td>
+      <td width="75%">{{ order.sn }}</td>
+    </tr>
+    <tr>
+      <td width="25%">{{ 'order.product_name'|trans }}</td>
+      <td width="75%">{{ order.title }}</td>
+    </tr>
+    <tr>
+      <td width="25%">{{ 'order.price_amount'|trans }}</td>
+      <td width="75%"><span class="color-warning">{{ order.pay_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+    </tr>
+    <tr>
+      <td width="25%" class="text-muted" style="text-align: right">{{ 'user.account.my_coin.pay_coin'|trans({'%coin_name%' : setting('coin.coin_name')|default("finance.coin"|trans)}) }}</td>
+      <td width="75%"><span class="color-warning">
+      {{ order.paid_coin_amount|to_coin(0) }}</span>
+        ({{ 'order.refund.equal'|trans }} <span class="color-warning">{{ (order.pay_amount - order.paid_cash_amount)|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }})
+      </td>
+    </tr>
+    <tr>
+      <td width="25%" class="text-muted" style="text-align: right">{{ 'order.paid_cash_amount'|trans }}</td>
+      <td width="75%"><span class="color-warning">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+    </tr>
+
+    {% if order.paid_cash_amount and order.payment|default(null) != null %}
+      <tr>
+        <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('payment', order.payment) }}</td>
+        <td width="75%">
+          <span class="text-muted">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
+          {% if paymentTrade.platform_sn|default(null) is not null %}
+            <span class="pull-right">
+              <a class="es-icon es-icon-help text-normal link-gray"
+                 data-toggle="popover" data-trigger="hover"
+                 data-placement="left"
+                 data-content="{{ 'order.platform_sn'|trans }} {{ paymentTrade.platform_sn }}"></a>
+            </span>
+          {% endif %}
+        </td>
+      </tr>
+    {% endif %}
+    
+    <tr>
+      <td width="25%">{{ 'order.paid_time'|trans }}</td>
+      <td width="75%">{{ order.pay_time|date('Y-n-d H:i:s') }}</td>
+    </tr>
+    <tr>
+      <td width="25%">{{ 'order.refund.deal_status'|trans }}</td>
+      <td width="75%">{{ dict_text('refundStatus', orderRefund.status) }}</td>
+    </tr>
+
+    {% if orderRefund.status in ['refunded', 'refused'] %}
+      <tr>
+        <td width="25%">{{ 'order.refund.deal_time'|trans }}</td>
+        <td width="75%">{% if orderRefund.status in ['refunded', 'refused'] %}{{ orderRefund.deal_time|date('Y-n-d H:i:s') }}{% else %}--{% endif %}</td>
+      </tr>
+      {% if orderRefund.status in ['refunded'] %}
+        <tr>
+          <td width="25%">{{ 'order.refund_amount'|trans }}</td>
+          <td width="75%"><span class="color-warning">{{ orderRefund.amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+        </tr>
+        <tr>
+          <td width="25%" class="text-muted" style="text-align: right">{{ 'user.account.my_coin.refunded_coin'|trans({'%coin_name%' : setting('coin.coin_name')|default("finance.coin"|trans)}) }}</td>
+          <td width="75%">
+            <span class="color-warning">{{ orderRefund.refund_coin_amount|to_coin(0) }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td width="25%" class="text-muted" style="text-align: right">{{ 'order.refunded_cash_amount'|trans }}</td>
+          <td width="75%"><span class="color-warning">{{ orderRefund.refund_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+        </tr>
+      {% endif %}
+      <tr>
+        <td width="25%">{{ 'order.refund_feedback'|trans }}</td>
+        <td width="75">{{ orderRefund.deal_reason }}</td>
+      </tr>
+      <tr>
+        <td width="25%">{{ 'order.refund.deal_persion'|trans }}</td>
+        <td width="75%">
+          <strong>
+            {{ web_macro.user_link(dealUser) }}
+          </strong>
+        </td>
+      </tr>
+    {% endif %}
+
+  </table>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+{% endblock %}
+
