@@ -1,0 +1,41 @@
+<table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+  <thead>
+    <tr>
+      <th>{{'admin.operation_analysis.paid_course.classroom'|trans}}</th>
+      <th>{{'admin.operation_analysis.paid_course.user'|trans}}</th>
+      <th>{{'admin.operation_analysis.paid_course.course_prince'|trans}}</th>
+      <th>{{'admin.operation_analysis.paid_course.paid_prince'|trans}}</th>
+      <th>{{'admin.operation_analysis.paid_course.paid_time'|trans}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if paidClassroomDetail %}
+      {% for data in paidClassroomDetail %}
+        {% if classroom[data.classroom_id].title|default(null) %}
+          <tr>
+             <td>
+               <a href="{{ path('classroom_show', {id:data.classroom_id}) }}" target="_blank">
+                 <strong>{{ classroom[data.classroom_id].title|default('admin.operation_analysis.paid_course.empty'|trans) }}</strong>
+                 <br>
+                 <span class="text-muted text-sm">{{'admin.operation_analysis.paid_course.order'|trans}}：{{data.sn}}></span>
+               </a>
+             </td>
+             <td>{{ admin_macro.user_link(users[data.user_id]) }}</td>
+             <td class="text-danger">{{ data.price_amount }}</td>
+             <td class="text-danger">{{ data.pay_amount }}</td>
+             <td>{{data.created_time|date("Y-m-d H:i:s")}}<br>{{data.pay_time|date("Y-m-d H:i:s")}}</td>
+          </tr>
+        {% else %}
+          <tr class="danger">
+            <td> <strong>{{'admin.operation_analysis.paid_course.empty'|trans}}</strong><br><span class="text-muted text-sm">{{'admin.operation_analysis.paid_course.order'|trans}}：{{data.sn}}</span></td>
+            <td>{{ admin_macro.user_link(users[data.user_id]) }}</td>
+            <td class="text-danger">--</td>
+            <td class="text-danger">{{ data.pay_amount }}</td>
+            <td>{{data.created_time|date("Y-m-d H:i:s")}}<br>{{data.pay_time|date("Y-m-d H:i:s")}}</td>
+          </tr>
+        {% endif  %}
+      {% endfor %}
+    {% endif %}
+  </tbody>
+</table>
+{{ admin_macro.paginator(paginator) }}

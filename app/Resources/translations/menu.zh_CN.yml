@@ -663,6 +663,12 @@ admin_v2.user.approval.basic_tab.cancel_btn: 撤销
 admin_v2.user.approval.approving_menu: 审核中
 admin_v2.user.approval.approved_menu: 审核成功
 
+#用户管理-教师管理
+admin_v2.user.teacher_menu: 教师管理
+admin_v2.user.teacher.basic_tab: 教师管理
+admin_v2.user.teacher.basic_tab.promote_btn: 推荐老师
+admin_v2.user.teacher.promote_list_tab: 教师推荐
+
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: 订单管理
 admin_v2.trade.goods_order.menu: 商品订单
@@ -682,6 +688,13 @@ admin_v2.trade.bills.coin_records_tab: 虚拟币账单
 admin_v2.trade.coin_menu: 虚拟币管理
 admin_v2.trade.coin.basic_tab: 虚拟币管理
 
+# 应用中心-营销云-营销应用
+admin_v2.basic_app_center_group: 营销云
+admin_v2.cloud.app_center_menu: 营销应用
+admin_v2.cloud.app_center.basic_tab: 营销应用
+admin_v2.cloud.app_center.installed_tab: 已购项目
+admin_v2.cloud.app_center.upgrades_tab: 更新
+admin_v2.cloud.app_center.logs_tab: 更新日志
 # 应用中心-基础云-概览
 admin_v2.cloud.overview_menu: 概览
 admin_v2.cloud.overview.basic_tab: 教育云概览
@@ -703,6 +716,11 @@ admin_v2.cloud.search_menu: 云搜索
 admin_v2.cloud.consult_menu: 云问答
 
 admin_v2.cloud_service.sms_overview_tab: 概览
+
+# 数据-数据统计
+admin_v2.data_statictics.analysis.basic_group: 数据分析
+admin_v2.data_statistics.statistics.menu: 数据统计
+admin_v2.data_statistics.statistics.basic_tab: 数据统计
 
 # 应用中心-基础云-授权信息
 admin_v2.cloud.cloud_setting_menu: 授权信息

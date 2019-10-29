@@ -657,6 +657,12 @@ admin_v2.user.approval.basic_tab.cancel_btn: Cancel
 admin_v2.user.approval.approving_menu: Approving
 admin_v2.user.approval.approved_menu: Approved
 
+#用户管理-教师管理
+admin_v2.user.teacher_menu: Teachers
+admin_v2.user.teacher.basic_tab: Teacher Managemen
+admin_v2.user.teacher.basic_tab.promote_btn: Recommended Teacher
+admin_v2.user.teacher.promote_list_tab: Teacher recommendation
+
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: Order Manage
 admin_v2.trade.goods_order.menu: Goods Order
@@ -675,6 +681,20 @@ admin_v2.trade.bills.coin_records_tab: Coin Bill
 # 交易-虚拟币管理
 admin_v2.trade.coin_menu: Coin Manage
 admin_v2.trade.coin.basic_tab: Coin Manage
+
+# 数据-数据统计
+admin_v2.data_statictics.analysis.basic_group: Data Analysis
+admin_v2.data_statistics.statistics.menu: Data Statistics
+admin_v2.data_statistics.statistics.basic_tab: Data Statistics
+
+# 应用中心-营销云-营销应用
+admin_v2.basic_app_center_group: Marketing Cloud
+admin_v2.cloud.app_center_menu: ES App Center
+admin_v2.cloud.app_center.basic_tab: ES App Center
+admin_v2.cloud.app_center.installed_tab: My App
+admin_v2.cloud.app_center.upgrades_tab: Upgrade
+admin_v2.cloud.app_center.logs_tab: Update Logs
+
 
 # 应用中心-基础云-概览
 admin_v2.cloud.overview_menu: Overview
@@ -712,5 +732,4 @@ admin_v2.system.optimize.basic_tab: System Optimization
 admin_v2.system.logs_menu: System Logs
 admin_v2.system.logs.logs_query_tab: System Log
 admin_v2.system.logs.logs_prod_tab: Program Log
-
 # 新版后台结束

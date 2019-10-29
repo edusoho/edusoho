@@ -728,11 +728,34 @@ admin_v2:
                                     router_params:
                                         approvalStatus: approved
                                     disabled: ture
-                        admin_message_manage:
-                            name: admin.user.message_menu
+                        admin_v2_teacher:
+                            name: admin_v2.user.teacher_menu
                             children:
-                                admin_message:
-                                    name: admin.user.message.basic_tab
+                                admin_v2_teacher_manage:
+                                    name: admin_v2.user.teacher.basic_tab
+                                    router_name: admin_v2_teacher
+                                    disable: true
+                                    children:
+                                        admin_v2_teacher_promote:
+                                            name: admin_v2.user.teacher.basic_tab.promote_btn
+                                            class: promote-teacher
+                                            mode: modal
+                                            icon: 'glyphicon glyphicon-hand-up'
+                                            group: groupButton
+                                            visible: (user.promoted == 0)
+                                            router_params:
+                                                id: (user.id)
+                                                type: teacherList
+                                        admin_v2_teacher_promote_cancel:
+                                            name: admin_v2.btn.recommend_cancel_btn
+                                            class: cancel-promote-teacher
+                                            mode: none
+                                            group: groupButton
+                                            visible: (user.promoted == 1)
+                                            router_params:
+                                                id: (user.id)
+                                admin_v2_teacher_promote_list:
+                                    name: admin_v2.user.teacher.promote_list_tab
                                     disable: true
         # 交易模块
         admin_v2_trade:
@@ -781,10 +804,24 @@ admin_v2:
                                     name: admin_v2.trade.coin.basic_tab
                                     disable: true
                                     router_name: admin_v2_coin_user_records
-#        # 数据模块
-#        admin_v2_statistics:
-#            name: admin_v2.nav.statistics
-#            children:
+        # 数据模块
+        admin_v2_statistics:
+            name: admin_v2.nav.statistics
+            children:
+                admin_v2_data_statictics_analysis_basic_group:
+                    name: admin_v2.data_statictics.analysis.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_statistics_data_statistics_menu:
+                            name: admin_v2.data_statistics.statistics.menu
+                            children:
+                                admin_v2_data_statistics_basic_tab:
+                                    disable: true
+                                    name: admin_v2.data_statistics.statistics.basic_tab
+                                    router_params:
+                                        tab: trend
+                                        analysisDateType: register
+                                    router_name: admin_v2_data_statistics_index
         # 系统模块
         admin_v2_system:
             name: admin_v2.nav.system
@@ -812,11 +849,38 @@ admin_v2:
                                 admin_v2_logs_prod:
                                     name: admin_v2.system.logs.logs_prod_tab
                                     disable: true
-
         # 应用中心模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center
             children:
+                admin_v2_basic_app_center_group:
+                    name: admin_v2.basic_app_center_group
+                    is_group: true
+                    children:
+                        admin_v2_app_center_show:
+                            name: admin_v2.cloud.app_center_menu
+                            router_name: admin_v2_app_center
+                            router_params:
+                                postStatus: all
+                            children:
+                                admin_v2_app_center:
+                                    name: admin_v2.cloud.app_center.basic_tab
+                                    router_name: admin_v2_app_center
+                                    disable: true
+                                    router_params:
+                                        postStatus: all
+                                admin_v2_app_installed:
+                                    name: admin_v2.cloud.app_center.installed_tab
+                                    disable: true
+                                    router_params:
+                                        postStatus: all
+                                admin_v2_app_upgrades:
+                                    name: admin_v2.cloud.app_center.upgrades_tab
+                                    class: app-upgrade
+                                    disable: true
+                                admin_v2_app_logs:
+                                    name: admin_v2.cloud.app_center.logs_tab
+                                    disable: true
                 admin_v2_basic_cloud_group:
                     name: admin_v2.basic_cloud_group
                     is_group: true
