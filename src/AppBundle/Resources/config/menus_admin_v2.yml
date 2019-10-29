@@ -895,17 +895,80 @@ admin_v2:
                                 admin_v2_my_cloud_overview:
                                     name: admin_v2.cloud.overview.basic_tab
                                     disable: true
+                        #云服务
                         admin_v2_cloud_service:
                             name: admin_v2.cloud_service.basic_menu
+                            visible: (cloudStatus())
                             children:
+                                #云视频
+                                admin_v2_cloud_video:
+                                    name: admin_v2.cloud.video_menu
+                                    router_name: admin_v2_edu_cloud_video_overview
+                                    visible: (cloudStatus())
+                                    children:
+                                        admin_v2_edu_cloud_video_overview:
+                                            name: admin_v2.tab.overview_tab
+                                            disable: true
+                                        admin_v2_edu_cloud_video_setting:
+                                            name: admin_v2.tab.setting_tab
+                                            disable: true
+                                #云直播
+                                admin_v2_cloud_edulive:
+                                    name: admin_v2.cloud.edulive_menu
+                                    visible: (cloudStatus())
+                                    router_name: admin_v2_edu_cloud_edulive_overview
+                                    children:
+                                        admin_v2_edu_cloud_edulive_overview:
+                                            name: admin_v2.tab.overview_tab
+                                            disable: true
+                                        admin_v2_edu_cloud_edulive_setting:
+                                            name: admin_v2.tab.setting_tab
+                                            disable: true
+                                #云短信
                                 admin_v2_cloud_sms:
-                                    name: admin_v2.cloud_service.sms_tab
-                                    router_name: admin_v2_edu_cloud_sms
+                                    name: admin_v2.cloud.sms_menu
+                                    router_name: admin_v2_edu_cloud_sms_overview
                                     visible: (cloudStatus())
                                     children:
                                         admin_v2_edu_cloud_sms_overview:
-                                            name: admin_v2.cloud_service.sms_overview_tab
+                                            name: admin_v2.tab.overview_tab
                                             router_name: admin_v2_edu_cloud_sms
+                                            disable: true
+                                        admin_v2_edu_cloud_sms_setting:
+                                            name: admin_v2.tab.setting_tab
+                                            disable: true
+                                #云邮件
+                                admin_v2_cloud_email:
+                                    name: admin_v2.cloud.email_menu
+                                    visible: (cloudStatus())
+                                    router_name: admin_v2_edu_cloud_email_overview
+                                    children:
+                                        admin_v2_edu_cloud_email_overview:
+                                            name: admin_v2.tab.overview_tab
+                                            disable: true
+                                        admin_v2_edu_cloud_email_setting:
+                                            name: admin_v2.tab.setting_tab
+                                            disable: true
+                                #云搜索
+                                admin_v2_cloud_search:
+                                    name: admin_v2.cloud.search_menu
+                                    visible: (cloudStatus())
+                                    router_name: admin_v2_edu_cloud_search_overview
+                                    children:
+                                        admin_v2_edu_cloud_search_overview:
+                                            name: admin_v2.tab.overview_tab
+                                            disable: true
+                                        admin_v2_edu_cloud_search_setting:
+                                            name: admin_v2.tab.setting_tab
+                                            disable: true
+                                #云问答
+                                admin_v2_cloud_consult:
+                                    name: admin_v2.cloud.consult_menu
+                                    router_name: admin_v2_edu_cloud_consult_setting
+                                    visible: (cloudStatus())
+                                    children:
+                                        admin_v2_edu_cloud_consult_setting:
+                                            name: admin_v2.tab.setting_tab
                                             disable: true
                         # 即时聊天设置
                         admin_v2_app_im:

@@ -34,20 +34,20 @@ class CloudServerController extends BaseController
             $smsInfo = $api->get('/me/sms_account');
             $this->checkSmsSign($smsInfo);
         } catch (\RuntimeException $e) {
-            return $this->render('admin/edu-cloud/sms-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/sms-error.html.twig', array());
         }
         $isSmsWithoutEnable = $this->isSmsWithoutEnable($overview, $cloudSmsSettings);
         if ($isSmsWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
 
-            return $this->render('admin/edu-cloud/sms/without-enable.html.twig', array(
+            return $this->render('admin-v2/cloud-center/edu-cloud/sms/without-enable.html.twig', array(
                 'overview' => $overview,
                 'cloudSmsSettings' => $cloudSmsSettings,
             ));
         }
         $chartData = $this->dealChartData($overview['data']);
 
-        return $this->render('admin/edu-cloud/sms/overview.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/sms/overview.html.twig', array(
             'account' => $overview['account'],
             'chartData' => $chartData,
             'smsInfo' => $smsInfo,
@@ -57,12 +57,12 @@ class CloudServerController extends BaseController
     protected function checkSmsSign($smsInfo)
     {
         if (empty($smsInfo)) {
-            $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
+            $smsSignUrl = $this->generateUrl('admin_v2_cloud_sms_sign');
             $this->setFlashMessage('danger',
                 "尚未开通云短信,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>");
         } else {
             if (empty($smsInfo['name']) && empty($smsInfo['isExistSmsSign'])) {
-                $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
+                $smsSignUrl = $this->generateUrl('admin_v2_cloud_sms_sign');
                 $this->setFlashMessage('danger',
                     "尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>");
             }
