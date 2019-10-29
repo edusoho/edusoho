@@ -1,0 +1,60 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'system/payment' %}
+
+{% set menu = 'admin_v2_payment' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" id="payment-form" novalidate >
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label >{{'admin.payment_setting.payment'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, payment.enabled) }}
+
+      <div class="text-muted payment-close {% if payment.enabled %} hidden {% endif %}">
+          {{ 'admin.payment_setting.close_help.tips'|trans }}
+      </div>
+      <div class="text-muted payment-open {% if not payment.enabled %} hidden {% endif %}">
+          {{ 'admin.payment_setting.open_help.tips'|trans }}
+      </div>
+    </div>
+  </div>
+
+
+    <div class="form-group payment-close {% if payment.enabled %} hidden {% endif %}">
+      <div class="col-md-3 control-label">
+        <label for="disabled_message">{{'admin.payment_setting.pay_disabled_tips'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea id="disabled_message" name="disabled_message" class="form-control">{{payment.disabled_message}}</textarea>
+      </div>
+    </div>
+
+    <div class="payment-open {% if not payment.enabled %} hidden {% endif %}">
+      {% include 'admin-v2/system/asset-setting/pay/alipay.html.twig'%}
+      {% include 'admin-v2/system/asset-setting/pay/wxpay.html.twig'%}
+      {% include 'admin-v2/system/asset-setting/pay/llpay.html.twig'%}
+    </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" id="payment-btn" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+    
+  </div>
+  <div class="form-group submit-error hidden"> 
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+       <div class="help-block"><span class="text-danger"> {{ 'admin.payment_setting.submit_error.tips'|trans }}</span></div>
+    </div>
+  </div>
+  
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% endblock %}

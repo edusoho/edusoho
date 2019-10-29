@@ -700,6 +700,15 @@ admin_v2.cloud_service.sms_overview_tab: Overview
 admin_v2.cloud.cloud_setting_menu: License
 admin_v2.cloud.cloud_setting.basic_tab: License
 
+# 系统-交易设置
+admin_v2.transaction.basic_group: Transaction Settings
+
+# 系统-交易设置-资产设置
+admin_v2.system.asset_menu: Asset Setting
+admin_v2.system.asset.payment_tab: Payment
+admin_v2.system.asset.coin_tab: Virtual Coin
+admin_v2.system.asset.refund_tab: Refund
+
 # 系统-系统管理
 admin_v2.system.basic_group: System Manage
 
