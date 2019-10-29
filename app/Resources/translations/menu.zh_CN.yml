@@ -697,4 +697,12 @@ admin_v2.cloud_service.sms_overview_tab: 概览
 admin_v2.cloud.cloud_setting_menu: 授权信息
 admin_v2.cloud.cloud_setting.basic_tab: 授权信息
 
+# 系统-系统管理
+admin_v2.system.basic_group: 系统管理
+
+# 系统-系统管理-系统日志
+admin_v2.system.logs_menu: 系统日志
+admin_v2.system.logs.logs_query_tab: 系统操作日志
+admin_v2.system.logs.logs_prod_tab: 程序运行日志
+
 # 新版后台结束

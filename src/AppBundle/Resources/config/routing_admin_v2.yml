@@ -1388,3 +1388,27 @@ admin_v2_setting_wechat_auth:
     path: /wechat/auth/setting
     defaults: { _controller: AppBundle:Admin/WeChatSetting:index}
 
+# 系统-系统管理-系统日志
+admin_v2_logs:
+    path:  /setting/logs
+    defaults: { _controller: AppBundle:AdminV2/System/Log:index }
+
+admin_v2_logs_prod:
+    path:  /setting/logs/prod
+    defaults: { _controller: AppBundle:AdminV2/System/Log:prod }
+
+admin_v2_logs_action_dicts:
+    path:  /setting/logs/logActions
+    defaults: { _controller: AppBundle:AdminV2/System/Log:logActions }
+
+admin_v2_logs_username_match:
+    path:  /setting/logs/usernameMatchUsers
+    defaults: { _controller: AppBundle:AdminV2/System/Log:usernameMatchUsers }
+
+admin_v2_logs_old:
+    path:  /setting/logs/old
+    defaults: { _controller: AppBundle:AdminV2/System/Log:old }
+
+admin_v2_logs_field_change:
+    path:  /setting/logs/logFieldChange
+    defaults: { _controller: AppBundle:AdminV2/System/Log:logFieldChange }

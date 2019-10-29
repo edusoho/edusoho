@@ -691,4 +691,12 @@ admin_v2.cloud_service.sms_overview_tab: Overview
 admin_v2.cloud.cloud_setting_menu: License
 admin_v2.cloud.cloud_setting.basic_tab: License
 
+# 系统-系统管理
+admin_v2.system.basic_group: System Manage
+
+# 系统-系统管理-系统日志
+admin_v2.system.logs_menu: System Logs
+admin_v2.system.logs.logs_query_tab: System Log
+admin_v2.system.logs.logs_prod_tab: Program Log
+
 # 新版后台结束

@@ -785,10 +785,26 @@ admin_v2:
 #        admin_v2_statistics:
 #            name: admin_v2.nav.statistics
 #            children:
-#        # 系统模块
-#        admin_v2_system:
-#            name: admin_v2.nav.system
-#            children:
+        # 系统模块
+        admin_v2_system:
+            name: admin_v2.nav.system
+            children:
+                admin_v2.system_group:
+                    name: admin_v2.system.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_logs:
+                            name: admin_v2.system.logs_menu
+                            group: 2
+                            children:
+                                admin_v2_logs_query:
+                                    name: admin_v2.system.logs.logs_query_tab
+                                    disable: true
+                                    router_name: admin_v2_logs
+                                admin_v2_logs_prod:
+                                    name: admin_v2.system.logs.logs_prod_tab
+                                    disable: true
+
         # 应用中心模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center
