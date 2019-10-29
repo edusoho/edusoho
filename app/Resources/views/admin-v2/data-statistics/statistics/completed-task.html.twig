@@ -8,7 +8,7 @@
 			<input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'>
 			<input id="completedTaskStartDate"  type="hidden" value='{% if completedTaskStartDate %}{{completedTaskStartDate}}{% endif %}'>
 				{% elseif tab=="detail" %}
-					{% include 'admin/operation-analysis/completed-task.table.html.twig' %}
+					{% include 'admin-v2/data-statistics/statistics/completed-task.table.html.twig' %}
 				{% endif %}
   </div>
 {% endblock %}

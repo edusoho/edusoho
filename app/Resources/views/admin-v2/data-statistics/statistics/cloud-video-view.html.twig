@@ -7,7 +7,7 @@
       <div id="line-data"></div>
        <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'>
       {% elseif tab=="detail" %}
-        {% include 'admin/operation-analysis/video-view.table.html.twig' %}
+        {% include 'admin-v2/data-statistics/statistics/video-view.table.html.twig' %}
       {% endif %}
   </div>
 {% endblock %}

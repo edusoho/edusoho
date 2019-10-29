@@ -12,7 +12,7 @@
         <div class="col-md-12">
           {{ web_macro.flash_messages() }}
 
-          <form class="well well-sm form-inline" action="{{ url("admin_v2_data_statistics_index",{tab:tab}) }}" method="get" id="operation-form"
+          <form class="well well-sm form-inline" action="{{ path("admin_v2_data_statistics_index",{tab:tab}) }}" method="get" id="operation-form"
             role="form">
             <div class="form-group">
               <select class="form-control" name="analysisDateType">
