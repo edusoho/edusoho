@@ -166,6 +166,13 @@ admin_approval_manage: admin_v2_approval_manage #实名认证
 admin_approval_approvals: admin_v2_approval_approving #审核中
 admin_approval_cancel: admin_v2_approval_cancel #撤销
 
+#用户-用户管理-教师认证
+admin_teacher: admin_v2_teacher #教师管理
+admin_teacher_manage: admin_v2_teacher_manage #教师管理
+admin_teacher_promote: admin_v2_teacher_promote #推荐老师
+admin_teacher_promote_cancel: admin_v2_teacher_promote_cancel #取消推荐
+admin_teacher_promote_list: admin_v2_teacher_promote_list #教师推荐
+
 # 微信通知
 admin_operation_wechat_notification: admin_v2_operation_wechat_notification #nav
 admin_operation_wechat_notification_record: admin_v2_operation_wechat_notification_record # 发送记录
