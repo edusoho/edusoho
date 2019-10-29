@@ -4,12 +4,6 @@
       <h3 class="panel-title">{{ 'admin.edu_cloud.edu_live.status'|trans }}</h3>
     </div>
     <div class="panel-body" style="height: 250px;padding:40px">
-      <!-- {% if liveInfo|default(0) %}
-
-                  {% else %}
-                  <a href="{{ path('admin_v2_cloud_buy',{type:'live'}) }}" target="_blank">购买</a>云直播服务，轻松创建直播课堂
-                  {% endif %} -->
-
       <!--未购买-->
       {% if overview.service.live.enableBuy|default(0) != 1 %}
         <div class="edu-verticalmiddle">
