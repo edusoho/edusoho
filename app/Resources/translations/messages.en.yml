@@ -1574,8 +1574,8 @@ course.testpaper_manage.analysis_card.total_score: 'Score:'
 course.testpaper_manage.analysis_card.avg_score: 'Avg Score:'
 course.testpaper_manage.analysis_card.avg_score_tip: Figure up first submited score
 
-course.course_files: 'Files'
-course.course_files.content_title: 'Files'
+course.course_files: 'Files manage'
+course.course_files.content_title: 'Files manage'
 course.course_files.create_btn: 'Add'
 course.course_files.name: Name
 course.course_files.type: Type
@@ -1598,6 +1598,7 @@ course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
 course.course_files.re_try_convert_video_to_audio: 'Re-Conversion To Audio'
+course.files_manage.tips: "Tip：Course file could not be seen by students until it has been <strong class=\"color-warning\">Added to %taskName%</strong>.\n"
 
 course.plan_overview: 'Data Overview'
 
