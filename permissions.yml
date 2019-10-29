@@ -1,5 +1,5 @@
 #eg：
-# 前一个为老的权限，后一个是新的权限；可以一对多，多对一
+# 前面是老的权限，后面是新的权限；可以一对多，多对一
 #admin_user_manage: admin_v2_user_manage
 #admin_user_manage: admin_v2_course_manage
 #admin_course_manage: admin_v2_course_manage
@@ -170,6 +170,34 @@ admin_approval_cancel: admin_v2_approval_cancel #撤销
 admin_operation_wechat_notification: admin_v2_operation_wechat_notification #nav
 admin_operation_wechat_notification_record: admin_v2_operation_wechat_notification_record # 发送记录
 admin_operation_wechat_notification_manage: admin_v2_operation_wechat_notification_manage # 设置
+
+# 用户-用户管理-用户管理
+admin_user: admin_v2_user
+admin_user_show: admin_v2_user_show
+admin_user_manage: admin_v2_user_manage
+admin_user_create: admin_v2_user_create
+admin_user_edit: admin_v2_user_edit
+admin_user_roles: admin_v2_user_roles
+admin_user_avatar: admin_v2_user_avatar
+admin_user_change_password: admin_v2_user_change_password
+admin_user_send_passwordreset_email: admin_v2_user_send_passwordreset_email
+admin_user_send_emailverify_email: admin_v2_user_send_emailverify_email
+admin_user_lock: admin_v2_user_lock
+admin_user_unlock: admin_v2_user_unlock
+admin_user_org_update: admin_v2_user_org_update
+
+# 用户-用户管理-服务号粉丝
+admin_operation_wechat_fans_list: admin_v2_fans
+
+# 用户-用户管理-在线用户
+admin_online: admin_v2_online
+
+# 用户-用户管理-用户数据统计
+admin_user_learn_statistics_manage: admin_v2_statistics
+admin_user_learn_statistics: admin_v2_statistics
+
+# 用户-用户管理-登录日志
+admin_login_record: admin_v2_login_record
 
 #交易-商品订单
 admin_finance: admin_v2_trade # 交易
