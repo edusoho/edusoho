@@ -6,12 +6,10 @@
 {% block main %}
   <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet"/>
   <div class="row">
-
     <div class="col-md-12">
       {% block analysisHead %}
         <div class="col-md-12">
           {{ web_macro.flash_messages() }}
-
           <form class="well well-sm form-inline" action="{{ path("admin_v2_data_statistics_index",{tab:tab}) }}" method="get" id="operation-form"
             role="form">
             <div class="form-group">
