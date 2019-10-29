@@ -864,5 +864,12 @@ admin_v2:
                                             name: admin_v2.cloud_service.sms_overview_tab
                                             router_name: admin_v2_edu_cloud_sms
                                             disable: true
+                        admin_v2_setting_cloud:
+                            name: admin_v2.cloud.cloud_setting_menu
+                            children:
+                                admin_v2_setting_my_cloud:
+                                    name: admin_v2.cloud.cloud_setting.basic_tab
+                                    router_name: admin_v2_setting_cloud
+                                    disable: true
 
 

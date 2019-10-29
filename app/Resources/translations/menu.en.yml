@@ -669,6 +669,10 @@ admin_v2.cloud_service.basic_menu: Cloud Server
 admin_v2.cloud_service.sms_tab: Sms Cloud
 admin_v2.cloud_service.sms_overview_tab: Overview
 
+# 应用中心-基础云-授权信息
+admin_v2.cloud.cloud_setting_menu: License
+admin_v2.cloud.cloud_setting.basic_tab: License
+
 # 系统-系统管理
 admin_v2.system.basic_group: System Manage
 
