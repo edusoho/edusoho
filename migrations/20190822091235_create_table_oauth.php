@@ -51,13 +51,13 @@ class CreateTableOauth extends Migration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='授权客户端表';
         ");
 
-        $db->exec("
+        $db->exec('
             CREATE TABLE IF NOT EXISTS `oauth_client_public_key` (
               `client_id` varchar(50) NOT NULL,
               `public_key` longtext NOT NULL,
               PRIMARY KEY (`client_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        ");
+        ');
 
         $db->exec("
             CREATE TABLE IF NOT EXISTS `oauth_refresh_token` (
