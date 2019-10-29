@@ -706,6 +706,10 @@ admin_v2.cloud_service.basic_menu: 云服务
 admin_v2.cloud_service.sms_tab: 云短信
 admin_v2.cloud_service.sms_overview_tab: 概览
 
+# 应用中心-基础云-云服务-即时聊天设置
+admin_v2.cloud.im_setting_menu: 即时聊天设置
+admin_v2.cloud.im_setting.basic_tab: 即时聊天设置
+
 # 数据-数据统计
 admin_v2.data_statictics.analysis.basic_group: 数据分析
 admin_v2.data_statistics.statistics.menu: 数据统计

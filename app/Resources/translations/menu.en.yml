@@ -702,6 +702,11 @@ admin_v2.cloud_service.basic_menu: Cloud Server
 admin_v2.cloud_service.sms_tab: Sms Cloud
 admin_v2.cloud_service.sms_overview_tab: Overview
 
+
+# 应用中心-基础云-云服务-即时聊天设置
+admin_v2.cloud.im_setting_menu: Chat Setting
+admin_v2.cloud.im_setting.basic_tab: Chat Setting
+
 # 数据-数据统计
 admin_v2.data_statictics.analysis.basic_group: Data Analysis
 admin_v2.data_statistics.statistics.menu: Data Statistics

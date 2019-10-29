@@ -4,8 +4,10 @@ namespace AppBundle\Controller\AdminV2\CloudCenter;
 
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\Client\AbstractCloudAPI;
+use Biz\CloudPlatform\IMAPIFactory;
 use Biz\CloudPlatform\KeyApplier;
 use Biz\CloudPlatform\Service\EduCloudService;
+use Biz\IM\Service\ConversationService;
 use Biz\System\Service\SettingService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\SettingException;
@@ -356,6 +358,79 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
+    public function appImAction(Request $request)
+    {
+        $appImSetting = $this->getSettingService()->get('app_im', array());
+        if (!$appImSetting) {
+            $appImSetting = array('enabled' => 0, 'convNo' => '');
+            $this->getSettingService()->set('app_im', $appImSetting);
+        }
+
+        $data = array('status' => 'success');
+
+        try {
+            $api = CloudAPIFactory::create('root');
+
+            $overview = $api->get("/users/{$api->getAccessKey()}/overview");
+        } catch (\RuntimeException $e) {
+            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', array());
+        }
+
+        //是否接入教育云
+        if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
+            $data['status'] = 'unconnect';
+        } elseif (empty($overview['user']['licenseDomains'])) {
+            $data['status'] = 'unbinded';
+        } else {
+            $currentHost = $request->server->get('HTTP_HOST');
+            if (!in_array($currentHost, explode(';', $overview['user']['licenseDomains']))) {
+                $data['status'] = 'binded_error';
+            }
+        }
+
+        return $this->render('admin-v2/cloud-center/edu-cloud/app-im-setting.html.twig', array(
+            'data' => $data,
+        ));
+    }
+
+    public function appImUpdateStatusAction(Request $request)
+    {
+        if ('POST' == $request->getMethod()) {
+            $appImSetting = $this->getSettingService()->get('app_im', array());
+            $user = $this->getUser();
+
+            //去云平台判断im帐号是否存在
+            $api = IMAPIFactory::create();
+            $imAccount = $api->get('/me/account');
+
+            if (isset($imAccount['error']) || empty($imAccount['account'])) {
+                $imAccount = $api->post('/accounts');
+            }
+
+            $status = $request->request->get('status', 0);
+            $imStatus = $status ? 'enable' : 'disable';
+
+            //更改云IM帐号状态
+            $api->post('/me/account', array('status' => $imStatus));
+
+            $appImSetting['enabled'] = $status;
+
+            //创建全站会话
+            if ($status && empty($appImSetting['convNo'])) {
+                $conversation = $this->getConversationService()->createConversation('全站会话', 'global', 0, array($user));
+                if ($conversation) {
+                    $appImSetting['convNo'] = $conversation['no'];
+                }
+            }
+
+            $this->getSettingService()->set('app_im', $appImSetting);
+
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
+    }
+
     protected function isLocalAddress($address)
     {
         if (in_array($address, array('localhost', '127.0.0.1'))) {
@@ -633,5 +708,13 @@ class EduCloudController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return ConversationService
+     */
+    protected function getConversationService()
+    {
+        return $this->createService('IM:ConversationService');
     }
 }
