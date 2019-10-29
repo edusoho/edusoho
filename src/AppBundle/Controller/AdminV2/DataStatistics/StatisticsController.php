@@ -1320,7 +1320,7 @@ class StatisticsController extends BaseController
     public function courseSetIncomeAction(Request $request, $tab)
     {
         return $this->forward(
-            'AppBundle:AdminV2/DataStatistics/Statistics:Income',
+            'AppBundle:AdminV2/DataStatistics/Statistics:income',
             array(
                 'request' => $request,
                 'tab' => $tab,
@@ -1332,7 +1332,7 @@ class StatisticsController extends BaseController
     public function classroomIncomeAction(Request $request, $tab)
     {
         return $this->forward(
-            'AppBundle:AdminV2/DataStatistics/Statistics:Income',
+            'AppBundle:AdminV2/DataStatistics/Statistics:income',
             array(
                 'request' => $request,
                 'tab' => $tab,
@@ -1344,7 +1344,7 @@ class StatisticsController extends BaseController
     public function vipIncomeAction(Request $request, $tab)
     {
         return $this->forward(
-            'AppBundle:AdminV2/DataStatistics/Statistics:Income',
+            'AppBundle:AdminV2/DataStatistics/Statistics:income',
             array(
                 'request' => $request,
                 'tab' => $tab,
