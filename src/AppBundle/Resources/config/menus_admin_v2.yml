@@ -583,7 +583,7 @@ admin_v2:
             name: admin_v2.nav.user
             children:
                 admin_v2_user_group:
-                    name: 用户管理组
+                    name: 用户管理
                     is_group: true
                     children:
                       admin_v2_user_show:
@@ -672,65 +672,75 @@ admin_v2:
                               admin_v2_login_record:
                                   name: admin.user.basic.login_record_tab
                       admin_v2_approval_manage:
-                          name: admin.user.approval_menu
+                          name: admin_v2.user.approval_menu
+                          route_name: admin_v2_approval_approvals
+                          router_params:
+                              approvalStatus: approving
                           children:
-                              admin_v2_approval_approvals:
-                                  name: admin.user.approval.basic_tab
+                              admin_v2_approval_approving:
+                                  name: admin_v2.user.approval.approving_menu
+                                  router_name: admin_v2_approval_approvals
                                   router_params:
                                       approvalStatus: approving
                                   disable: true
                                   children:
                                       admin_v2_approval_cancel:
-                                          name: admin.user.approval.basic_tab.cancel_btn
+                                          name: admin_v2.user.approval.basic_tab.cancel_btn
                                           router_params:
                                               id: (user.id)
                                           class: 'btn cancel-approval'
                                           mode: none
                                           group: groupButton
-                      admin_v2_message_manage:
+                              admin_v2_approval_approved:
+                                  name: admin_v2.user.approval.approved_menu
+                                  router_name: admin_v2_approval_approvals
+                                  router_params:
+                                      approvalStatus: approved
+                                  disabled: ture
+                      admin_message_manage:
                           name: admin.user.message_menu
                           children:
-                              admin_v2_message:
+                              admin_message:
                                   name: admin.user.message.basic_tab
                                   disable: true
-                admin_v2_user_group2:
-                    name: 第二组
-                    is_group: true
-                    children:
-                        admin_v2_user_learn_statistics_manage:
-                            name: admin.user.statistics_manage
-                            children:
-                              admin_v2_user_learn_statistics:
-                                name: admin.user.statistics_manage
-                        admin_v2_teacher:
-                            name: admin.user.teacher_menu
-                            children:
-                                admin_v2_teacher_manage:
-                                    name: admin.user.teacher.basic_tab
-                                    router_name: admin_v2_teacher
-                                    disable: true
-                                    children:
-                                        admin_v2_teacher_promote:
-                                            name: admin.user.teacher.basic_tab.promote_btn
-                                            class: promote-teacher
-                                            mode: modal
-                                            icon: 'glyphicon glyphicon-hand-up'
-                                            group: groupButton
-                                            visible: (user.promoted == 0)
-                                            router_params:
-                                                id: (user.id)
-                                                type: teacherList
-                                        admin_v2_teacher_promote_cancel:
-                                            name: admin.btn.recommend_cancel_btn
-                                            class: cancel-promote-teacher
-                                            mode: none
-                                            group: groupButton
-                                            visible: (user.promoted == 1)
-                                            router_params:
-                                                id: (user.id)
-                                admin_v2_teacher_promote_list:
-                                    name: admin.user.teacher.promote_list_tab
-                                    disable: true
+#                admin_v2_user_group2:
+#                    name: 第二组
+#                    is_group: true
+#                    children:
+#                        admin_v2_user_learn_statistics_manage:
+#                            name: admin.user.statistics_manage
+#                            children:
+#                              admin_v2_user_learn_statistics:
+#                                name: admin.user.statistics_manage
+#                        admin_v2_teacher:
+#                            name: admin.user.teacher_menu
+#                            children:
+#                                admin_v2_teacher_manage:
+#                                    name: admin.user.teacher.basic_tab
+#                                    router_name: admin_v2_teacher
+#                                    disable: true
+#                                    children:
+#                                        admin_v2_teacher_promote:
+#                                            name: admin.user.teacher.basic_tab.promote_btn
+#                                            class: promote-teacher
+#                                            mode: modal
+#                                            icon: 'glyphicon glyphicon-hand-up'
+#                                            group: groupButton
+#                                            visible: (user.promoted == 0)
+#                                            router_params:
+#                                                id: (user.id)
+#                                                type: teacherList
+#                                        admin_v2_teacher_promote_cancel:
+#                                            name: admin.btn.recommend_cancel_btn
+#                                            class: cancel-promote-teacher
+#                                            mode: none
+#                                            group: groupButton
+#                                            visible: (user.promoted == 1)
+#                                            router_params:
+#                                                id: (user.id)
+#                                admin_v2_teacher_promote_list:
+#                                    name: admin.user.teacher.promote_list_tab
+#                                    disable: true
 
 #        # 交易模块
 #        admin_v2_trade:
