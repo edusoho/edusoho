@@ -1,0 +1,45 @@
+<div class="col-md-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ 'admin.edu_cloud.edu_video.package.content_title'|trans }}</h3>
+    </div>
+    <div class="panel-body" style="height: 250px;padding:40px">
+      {% set bill = storage.bill|default(null) %}
+
+      <!--未购买-->
+      {% if overview.service.storage.enableBuyVideo|default(0) != 1 %}
+      <div class="edu-verticalmiddle">
+        <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign"
+                                                              aria-hidden="true"></i>
+          {{ 'admin.edu_cloud.edu_video.package.buy_btn'|trans({'%buy%':path('admin_v2_cloud_buy',{type:'video'})})|raw }}
+        </div>
+        {% else %}
+          <p>
+            <span
+                class="text-muted mrm">{{ 'admin.edu_cloud.edu_video.package.storage'|trans }} {{ overview.service.storage.freeSpace }}GB</span>
+            {% if not overview.service.storage.renewVideo.effectiveDate|default(0) %}
+              <a href="{{ path('admin_v2_cloud_video_upgrade') }}"
+                 target="_blank">{{ 'admin.edu_cloud.edu_video.package.storage.upgrade_btn'|trans }}</a>
+              <a href="{{ path('admin_v2_cloud_video_renew') }}"
+                 target="_blank">{{ 'admin.edu_cloud.edu_video.package.storage.renew_btn'|trans }}</a>
+            {% else %}
+              <span>
+          {{ 'admin.edu_cloud.edu_video.package.storage.renew_success_tips'|trans({'%effectiveDate%': overview.service.storage.renewVideo.effectiveDate|date("Y-n-d") }) }})
+        </span>
+            {% endif %}
+          </p>
+          <p class="text-muted">{{ 'admin.edu_cloud.edu_video.package.storage.free_transfer'|trans }} {{ overview.service.storage.freeTransfer }}
+            GB</p>
+          {% if overview.service.storage.startMonth and overview.service.storage.endMonth %}
+            <p class="text-muted">{{ 'admin.edu_cloud.edu_video.package.storage.service_deadline'|trans }} {{ overview.service.storage.startMonth|date('Y.n.d') }} ~ {{ overview.service.storage.endMonth|date('Y.n.d') }}
+          {% endif %}
+          {% if overview.service.storage.remaining > 0 and overview.service.storage.remaining < 30 %}
+            <p class="text-danger text-sm">{{ 'admin.edu_cloud.edu_video.package.storage.will_overdue_tips'|trans({'%remaining%': overview.service.storage.remaining }) }}</p>
+          {% elseif overview.service.storage.remaining <= 0 %}
+            <p class="text-danger text-sm">{{ 'admin.edu_cloud.edu_video.package.storage.overdued_tips'|trans }}</p>
+          {% endif %}
+        {% endif %}
+
+      </div>
+    </div>
+  </div>

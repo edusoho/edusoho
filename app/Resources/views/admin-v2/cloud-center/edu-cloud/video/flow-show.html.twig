@@ -1,0 +1,36 @@
+<div class="panel panel-default panel-chart">
+  <div class="panel-heading">
+    <span class="prl">{{'admin.edu_cloud.edu_video.buy_year_flow'|trans}}</span>
+    <a href="http://open.edusoho.com/doc/ServiceGuide/video-package/index.html" target="_blank">{{'admin.edu_cloud.edu_video.what_year_flow'|trans}}</a>
+  </div>
+  <div class="video-overview">
+    <div class="panel-body"  id="hengxangliebiao">
+      <div class="row pvm">
+        <div class="col-sm-2 text-right">
+        {{'admin.edu_cloud.edu_video.flow'|trans}}
+        </div>
+        <div class="col-sm-7">
+          <div class="progress mbm cloud-progress">
+            <div class="progress-bar progress-bar-flow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:{{yearPackage.usedPercentage}}%">
+              <span class="sr-only">100% Complete</span>
+            </div>
+          </div>
+          <span class="text-danger">{{yearPackage.totalAmount-yearPackage.amount}}GB</span>/{{yearPackage.totalAmount}}GB<span style="color:#aeaeae !important;">{{'admin.edu_cloud.edu_video.surplus_flow'|trans({'%amount%': yearPackage.amount})}}</span>
+        </div>
+      </div>
+      <div class="row pvm">
+        <div class="col-sm-2 text-right">
+        {{'admin.edu_cloud.edu_video.service_time'|trans}}
+        </div>
+        <div class="col-sm-7">
+         {{yearPackage.startTime}}~{{yearPackage.endTime}}
+        </div>
+        <div class="col-sm-offset-2 col-sm-7">
+          <div class="text-danger">
+            {{yearPackage.message}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

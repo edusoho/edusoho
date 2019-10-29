@@ -164,3 +164,22 @@ admin_operation_wechat_notification_manage: admin_v2_operation_wechat_notificati
 #云概览
 admin_my_cloud: admin_v2_my_cloud #概览
 admin_my_cloud_overview: admin_v2_my_cloud_overview
+
+#云服务
+admin_cloud_video_setting: admin_v2_cloud_video  #云视频
+admin_cloud_video_overview: admin_v2_edu_cloud_video_overview  #云视频概览
+admin_cloud_setting_video: admin_v2_edu_cloud_video_setting  #云视频设置
+admin_cloud_edulive_setting: admin_v2_cloud_edulive  #云直播
+admin_cloud_edulive_overview: admin_v2_edu_cloud_edulive_overview  #云直播概览
+admin_setting_cloud_edulive: admin_v2_edu_cloud_edulive_setting  #云直播设置
+admin_edu_cloud_sms: admin_v2_cloud_sms  #云短信
+admin_edu_cloud_sms_overview: admin_v2_edu_cloud_sms_overview  #云短信概览
+admin_edu_cloud_setting_sms: admin_v2_edu_cloud_sms_setting  #云短信设置
+admin_edu_cloud_email: admin_v2_cloud_email  #云邮件
+admin_edu_cloud_email_overview: admin_v2_edu_cloud_email_overview  #云邮件概览
+admin_edu_cloud_email_setting: admin_v2_edu_cloud_email_setting  #云邮件设置
+admin_edu_cloud_search_setting: admin_v2_cloud_search  #云搜索
+admin_edu_cloud_search_overview: admin_v2_edu_cloud_search_overview  #云搜索概览
+admin_edu_cloud_setting_search: admin_v2_edu_cloud_search_setting  #云搜索设置
+admin_cloud_consult: admin_v2_cloud_consult  #云问答
+admin_cloud_consult_setting: admin_v2_edu_cloud_consult_setting  #云问答设置
