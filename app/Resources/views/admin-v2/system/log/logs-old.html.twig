@@ -1,0 +1,99 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_logs_query' %}
+
+{% set script_controller = 'log/list' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="well well-sm form-inline">
+
+    <div class="form-group">
+      <select class="form-control" name="level">
+        {{ select_options(dict('logLevel'), app.request.query.get('level'), 'admin.system_log.all_log_level_option'|trans) }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input type="text" id="startDateTime" value="{{app.request.query.get('startDateTime')}}" name="startDateTime" class="form-control" placeholder="{{'admin.system_log.start_time_placeholder'|trans}}" style="width:150px;">
+    </div>
+
+    <div class="form-group">
+      <input type="text" id="endDateTime" value="{{app.request.query.get('endDateTime')}}" name="endDateTime" class="form-control" placeholder="{{'admin.system_log.end_time_placeholder'|trans}}" style="width:150px;">
+    </div>
+
+    <div class="form-group">
+      <select class="form-control" name="module" id="log-module">
+        <option value="">{{'admin.system_log.all_module_option'|trans}}</option>
+        {% for module in modules %}
+          <option value="{{ module }}" {% if app.request.query.get('module') == module %} selected="{{ module }}" {% endif %}>{{ ('log.module.' ~ module)|trans }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <select class="form-control" name="action" id="log-action" data-url="{{path('admin_v2_logs_action_dicts')}}">
+        {% if actions|default(null) %}
+          <option value="">{{'admin.system_log.all_operation_option'|trans}}</option>
+          {% for action in actions %}
+            <option value="{{ action }}" {% if app.request.query.get('action') == action %}selected="{{ action }}" {% endif %}>{{ ('log.action.' ~ app.request.query.get('module') ~ '.' ~ action)|trans }}</option>
+          {% endfor %}
+        {% else %}
+          <option value="">{{'admin.system_log.all_operation_option'|trans}}</option>
+        {% endif %}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input type="text" id="nickname" name="nickname" value="{{app.request.query.get('nickname')}}" class="form-control" placeholder="{{'admin.system_log.username_placeholder'|trans}}" style="width:120px;">
+    </div>
+
+    <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+
+  </form>
+
+  <table class="table table-hover" id="log-table">
+    <tr>
+      <th width="15%">{{'admin.system_log.username'|trans}}</th>
+      <th width="55%">{{'admin.system_log.operation'|trans}}</th>
+      <th width="10%">{{'admin.system_log.log_lenvel'|trans}}</th>
+      <th width="20%">{{'admin.system_log.time_and_ip'|trans}}</th>
+    </tr>
+    {% for log in logs %}
+      {% set user = users[log.userId]|default(null) %}
+      <tr>
+        <td>
+          {% if user and log.module != 'crontab'%}
+            {{ admin_macro.user_link(user) }}
+          {% else %}
+            --
+          {% endif %}
+        <td>
+          <div style="word-break: break-all;word-wrap: break-word;">
+            {{ log_trans(log.message, log.data) }}
+            {% if log.data %}
+              <a href="javascript:;" class="text-sm text-warning show-data">{{'admin.system_log.show_data'|trans}}</a>
+              <a href="javascript:;" class="text-sm text-warning hide-data" style="display:none;">{{'admin.system_log.hide_data'|trans}}</a>
+              <div class="data" style="display:none;">{{ log.data|json_encode }}</div>
+            {% endif %}
+          </div>
+          <span class="text-muted text-sm">{{ log.module }}.{{ log.action }}</span>
+        </td>
+        <td>{{ dict_macro.logLevel(log.level)}}</td>
+        <td>
+          <span class="">{{ log.createdTime|date("Y-m-d H:i:s") }}</span>
+          <br />
+          <a  class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ log.ip }}" target="_blank">{{ convert_ip(log.ip) }}</a>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td class="empty" colspan="20">{{'admin.system_log.empty'|trans}}</tr>
+    {% endfor %}
+  </table>
+
+  {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}
