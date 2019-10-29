@@ -693,4 +693,7 @@ admin_v2.system.logs_menu: 系统日志
 admin_v2.system.logs.logs_query_tab: 系统操作日志
 admin_v2.system.logs.logs_prod_tab: 程序运行日志
 
+# 数据-数据概览
+admin_v2.data_statistics.overview.menu: 数据概览
+admin_v2.data_statistics.overview.basic_tab: 数据概览
 # 新版后台结束

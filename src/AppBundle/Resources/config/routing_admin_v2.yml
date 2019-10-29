@@ -1360,3 +1360,33 @@ admin_v2_logs_old:
 admin_v2_logs_field_change:
     path:  /setting/logs/logFieldChange
     defaults: { _controller: AppBundle:AdminV2/System/Log:logFieldChange }
+
+# 数据-数据分析-数据概览
+admin_v2_data_statistics_overview:
+    path: /data_statistics/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:index }
+
+admin_v2_data_statistics_daily_overview:
+    path:  /data_statistics/daily/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:daily }
+    permissions: [admin_v2_data_statistics_overview]
+
+admin_v2_data_statistics_study_overview:
+    path: /data_statistics/study/{period}/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:study }
+    permissions: [admin_v2_data_statistics_overview]
+
+admin_v2_data_statistics_order_overview:
+    path: /data_statistics/order/{period}/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:order }
+    permissions: [admin_v2_data_statistics_overview]
+
+admin_v2_data_statistics_task_learn_overview:
+    path: /data_statistics/task/learn/{period}/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:taskLearn }
+    permissions: [admin_v2_data_statistics_overview]
+
+admin_v2_data_statistics_course_explore_overview:
+    path: /data_statistics/course/explore/{period}/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:courseExplore }
+    permissions: [admin_v2_data_statistics_overview]
