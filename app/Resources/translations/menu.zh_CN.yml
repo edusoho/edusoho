@@ -682,6 +682,13 @@ admin_v2.trade.bills.coin_records_tab: 虚拟币账单
 admin_v2.trade.coin_menu: 虚拟币管理
 admin_v2.trade.coin.basic_tab: 虚拟币管理
 
+# 应用中心-营销云-营销应用
+admin_v2.basic_app_center_group: 营销云
+admin_v2.cloud.app_center_menu: 营销应用
+admin_v2.cloud.app_center.basic_tab: 营销应用
+admin_v2.cloud.app_center.installed_tab: 已购项目
+admin_v2.cloud.app_center.upgrades_tab: 更新
+admin_v2.cloud.app_center.logs_tab: 更新日志
 # 应用中心-基础云-概览
 admin_v2.cloud.overview_menu: 概览
 admin_v2.cloud.overview.basic_tab: 教育云概览

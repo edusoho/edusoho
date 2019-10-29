@@ -29,7 +29,7 @@ class AppPackageUpdateController extends BaseController
         $info = $api->get('/me');
 
         if (empty($info['accessKey']) || empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            $errors = array(sprintf('您尚未申请云平台授权码，<a href="%s">请先申请授权码</a>。', $this->generateUrl('admin_setting_cloud_key_update')));
+            $errors = array(sprintf('您尚未申请云平台授权码，<a href="%s">请先申请授权码</a>。', $this->generateUrl('admin_v2_setting_cloud_key_update')));
         } else {
             $errors = $this->getAppService()->checkEnvironmentForPackageUpdate($id);
         }

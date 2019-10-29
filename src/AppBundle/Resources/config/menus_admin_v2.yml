@@ -817,6 +817,34 @@ admin_v2:
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center
             children:
+                admin_v2_basic_app_center_group:
+                    name: admin_v2.basic_app_center_group
+                    is_group: true
+                    children:
+                        admin_v2_app_center_show:
+                            name: admin_v2.cloud.app_center_menu
+                            router_name: admin_v2_app_center
+                            router_params:
+                                postStatus: all
+                            children:
+                                admin_v2_app_center:
+                                    name: admin_v2.cloud.app_center.basic_tab
+                                    router_name: admin_v2_app_center
+                                    disable: true
+                                    router_params:
+                                        postStatus: all
+                                admin_v2_app_installed:
+                                    name: admin_v2.cloud.app_center.installed_tab
+                                    disable: true
+                                    router_params:
+                                        postStatus: all
+                                admin_v2_app_upgrades:
+                                    name: admin_v2.cloud.app_center.upgrades_tab
+                                    class: app-upgrade
+                                    disable: true
+                                admin_v2_app_logs:
+                                    name: admin_v2.cloud.app_center.logs_tab
+                                    disable: true
                 admin_v2_basic_cloud_group:
                     name: admin_v2.basic_cloud_group
                     is_group: true

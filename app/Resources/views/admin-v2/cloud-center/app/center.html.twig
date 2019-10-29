@@ -1,16 +1,16 @@
-{% extends 'admin/layout.html.twig' %}
+{% extends 'admin-v2/layout.html.twig' %}
 
-{% set menu = 'admin_app_center' %}
+{% set menu = 'admin_v2_app_center' %}
 
 {% set script_controller = 'app/center' %}
 
 {% block main %}
-  <div class="mbl btn-group js-upgrades-count" data-url="{{ path('admin_app_upgrades_count') }}" >
-    <a href="{{ url('admin_app_center', {postStatus: 'all' }) }}" type="button"
+  <div class="mbl btn-group js-upgrades-count" data-url="{{ path('admin_v2_app_upgrades_count') }}">
+    <a href="{{ path('admin_v2_app_center', {postStatus: 'all' }) }}" type="button"
        class="btn btn-default btn-sm {% if type == 'all' %} btn-primary{% endif %}">{{ 'admin.app_center.type.all'|trans }}</a>
-    <a href=" {{ url('admin_app_center', {postStatus: 'theme' }) }}" type="button"
+    <a href=" {{ path('admin_v2_app_center', {postStatus: 'theme' }) }}" type="button"
        class="btn btn-default btn-sm {% if type == 'theme' %}btn-primary{% endif %}">{{ 'admin.app_center.type.theme'|trans }}</a>
-    <a href=" {{ url('admin_app_center', {postStatus: 'app' }) }}" type="button"
+    <a href=" {{ path('admin_v2_app_center', {postStatus: 'app' }) }}" type="button"
        class="btn btn-default btn-sm {% if type == 'app' %}btn-primary{% endif %}">{{ 'admin.app_center.type.app'|trans }}</a>
   </div>
 
@@ -18,14 +18,14 @@
        style="float:right;margin-top:-45px;">
     <div class="sortedCourses">
       <input type="checkbox" name="appTypeChoices" id="installedApps"
-             value="installedApps" {% if appTypeChoices|default(null)  == 'installedApps' %} data-url="{{ path('admin_app_center',{postStatus: type,showType:'unhidden'}) }}"  checked {% else %} data-url="{{ path('admin_app_center',{postStatus: type,showType:'hidden'}) }}" {% endif %}>
+             value="installedApps" {% if appTypeChoices|default(null)  == 'installedApps' %} data-url="{{ path('admin_v2_app_center',{postStatus: type,showType:'unhidden'}) }}"  checked {% else %} data-url="{{ path('admin_v2_app_center',{postStatus: type,showType:'hidden'}) }}" {% endif %}>
       {{ 'admin.app_center.buyed_app_hidden'|trans }}
       <input type="hidden" name="type" value='{{ type }}' id="type">
     </div>
   </div>
 
   {% if status|default(null) == 'error' %}
-    <div class="alert alert-danger">{{ 'admin.app_center.error_tips'|trans({'%cloudSettingUrl%': path('admin_setting_cloud')})|raw }}</div>
+    <div class="alert alert-danger">{{ 'admin.app_center.error_tips'|trans({'%cloudSettingUrl%': path('admin_v2_setting_cloud')})|raw }}</div>
   {% elseif  status|default(null) == 'unlink' %}
     <p class="alert alert-danger">
       {{'admin.edu_cloud.connect_failed_tips'|trans({'%EduSoho%': 'EduSoho'|copyright_less })}}
@@ -56,10 +56,10 @@
             {% else %}
               <tr>
                 <td>
-                  {% include 'admin/app/app-detail.html.twig' %}
+                  {% include 'admin-v2/cloud-center/app/app-detail.html.twig' %}
                   <div class="right-info pull-right">
                     <a href="#" data-toggle="modal" data-target="#modal"
-                       data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
+                       data-url="{{ path('admin_v2_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
                        class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">{{ 'admin.app_center.package_update_btn'|trans }}</a>
                   </div>
                 </td>
@@ -68,7 +68,7 @@
           {% else %}
             <tr>
               <td>
-                {% include 'admin/app/app-detail.html.twig' %}
+                {% include 'admin-v2/cloud-center/app/app-detail.html.twig' %}
 
                 <div class="right-info pull-right">
                   {% if app.userAccess|default(null) == "impossible" %}
@@ -76,7 +76,7 @@
                   {% else %}
                     {% if app.price == 0 %}
                       <a href="#" data-toggle="modal" data-target="#modal"
-                         data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
+                         data-url="{{ path('admin_v2_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
                          class="btn btn-primary app-btn" data-keyboard="false"
                          data-backdrop="static">{{ 'admin.app_center.package_update_btn'|trans }}</a>
                     {% else %}
@@ -95,7 +95,7 @@
         {% else %}
           <tr>
             <td>
-              {% include 'admin/app/app-detail.html.twig' %}
+              {% include 'admin-v2/cloud-center/app/app-detail.html.twig' %}
               <div class="right-info pull-right">
 
                 {% if app.purchased|default(false) == true or installedApp %}
@@ -114,7 +114,7 @@
                     {% endif %}
                   {% else %}
                     <a href="#" data-toggle="modal" data-target="#modal"
-                       data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
+                       data-url="{{ path('admin_v2_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
                        class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">{{ 'admin.app_center.package_update_btn'|trans }}</a>
                   {% endif %}
 
@@ -127,7 +127,7 @@
                     {% set triable = app.triable|default(false) %}
                     {% if triable %}
                       <p><a href="#" data-toggle="modal" data-target="#modal"
-                            data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
+                            data-url="{{ path('admin_v2_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
                             class="btn btn-primary app-btn" data-keyboard="false"
                             data-backdrop="static">{{ 'admin.app_center.tria_btn'|trans }}</a></p>
                     {% endif %}
@@ -148,7 +148,7 @@
                     {% else %}
                       {% if app.price == 0 %}
                         <a href="#" data-toggle="modal" data-target="#modal"
-                           data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
+                           data-url="{{ path('admin_v2_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
                            class="btn btn-primary app-btn" data-keyboard="false"
                            data-backdrop="static">{{ 'admin.app_center.package_update_btn'|trans }}</a>
                       {% else %}
