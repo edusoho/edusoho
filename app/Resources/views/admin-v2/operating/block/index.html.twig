@@ -1,0 +1,73 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_block_'~type|default('theme') %}
+
+{% set script_controller = 'block/list' %}
+{% block page_buttons %}
+{% endblock %}
+{% block main %}
+    {% set url = path('admin_v2_block_match',{type: type}) ~ '?q={{query}}' %}
+    <input class="pull-left form-control quicksearch" id="block-input"  data-role="item-input" placeholder="{{'admin.block_manage.search_block_placeholder'|trans}}" data-url='{{url}}'>
+
+    <table id="block-table" class="table table-striped">
+  <thead>
+    <tr>
+      <th width="50%">{{'admin.block_manage.title'|trans}}</th>
+      <th width="25%">{{'admin.block_manage.latest_update'|trans}}</th>
+      <th width="25%">{{'admin.block_manage.operation'|trans}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if blockTemplates %}
+      {% for blockTemplate in blockTemplates %}
+        {% set latestHistory = latestHistories[blockTemplate.id]|default(null) %}
+        {% set latestUpdateUser = users[latestHistory.userId|default(null)]|default(null) %}
+        {% include 'admin-v2/operating/block/list-tr.html.twig' %}
+      {% endfor %}
+  {% else %}
+        <tr><td colspan="20"><div class="empty">{{'admin.block_manage.empty'|trans}}</div></td></tr>
+  {% endif %}
+   </tbody>
+</table>
+ {{ admin_macro.paginator(paginator) }} 
+ <style>
+.form-control.quicksearch{
+  display:inline;
+  float:right;
+  width:auto;
+  padding:4px 12px;
+}
+
+.price{
+
+  color: #e57259;
+  font-size: 16px;
+
+}
+
+.ui-autocomplete {
+    border:1px solid #ccc;
+    background-color: #FFFFFF;
+    box-shadow: 2px 2px 3px #EEEEEE;
+}
+.ui-autocomplete-ctn{
+    margin:0;
+    padding:0;
+}
+.ui-autocomplete-item {
+    width: 180px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 30px;
+    padding:0 10px 0 10px;
+    cursor: default;
+}
+.ui-autocomplete-item-hover {
+    background:#f2f2f2;
+}
+.ui-autocomplete-item-hl {
+    background:#F6FF94;
+}
+</style>
+{% endblock %}

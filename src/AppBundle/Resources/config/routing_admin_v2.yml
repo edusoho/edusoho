@@ -897,13 +897,111 @@ admin_v2_wechat_notification_show:
 
 #web端装修
 admin_v2_block:
-    path:  /block/list/{category}
-    defaults: { _controller: AppBundle:AdminV2/Operating/Block:index }
+    path:  /block/{category}/list
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:index,category:'theme' }
+
+admin_v2_block_match:
+    path:  /block/list/{type}/quikSearch
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:blockMatch, type:'theme' }
+
+admin_v2_block_create:
+    path:  /block/create
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:create }
+
+admin_v2_block_delete:
+    path:  /block/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:delete }
+    methods:  [POST]
+
+admin_v2_block_code_check_forcreate:
+    path:  /block/code/check/forcreate
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:checkBlockCodeForCreate }
+
+admin_v2_block_code_check_foredit:
+    path:  /block/code/{id}/check/foredit
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:checkBlockTemplateCodeForEdit }
+
+admin_v2_block_update:
+    path:  /block/{blockTemplateId}/update
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:edit }
+
+admin_v2_block_template_edit:
+    path:  /block/{blockTemplateId}/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:editBlockTemplate }
+
+admin_v2_block_visual_edit:
+    path:  /blockTemplate/{blockTemplateId}/{type}/visual/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:visualEdit, type:'theme' }
+
+admin_v2_block_visual_view_data:
+    path:  /block/{blockTemplateId}/data/view
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:dataView }
+
+admin_v2_block_visual_edit_history:
+    path:  /blockTemplate/{blockTemplateId}/{type}/visual/edit/history
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:visualHistory, type:'theme' }
+
+admin_v2_block_recovery:
+    path:  /block/{blockTemplateId}/history/{historyId}/{type}/recovery
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:recovery, type:'theme' }
+
+admin_v2_block_history_data:
+    path:  /block/histroy/{blockId}
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:blockHistoriesData }
+
+admin_v2_block_picture_upload:
+    path:  /block/{blockId}/picture/upload
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:upload }
+
+admin_v2_block_picture_preview:
+    path:  /block/{blockId}/picture/preview
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:picPreview }
+
+admin_v2_blockhistory_preview:
+    path:  /blockhistory/{id}/preview
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:preview }
 
 admin_v2_setting_theme:
     path:  /setting/theme
     defaults: { _controller: AppBundle:AdminV2/Operating/Theme:index }
 
+admin_v2_setting_theme_change:
+    path:  /setting/theme/change
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:change }
+    methods:  [POST]
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_theme_manage:
+    path:  /theme/{uri}/manage
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:manageIndex }
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_reset_currentTheme_config:
+    path:  /theme/{uri}/config/reset
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:resetConfig }
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_save_themes_config:
+    path:  /theme/config/save
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:saveConfig }
+    methods:  [POST]
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_confirm_themes_config:
+    path:  /theme/{uri}/config/confirm
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:confirmConfig }
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_themes_show:
+    path:  /theme/show
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:show }
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_themes_config_edit:
+    path:  /theme/config/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:themeConfigEdit }
+    permissions: [admin_v2_setting_theme]
+    
 ## APP装修
 admin_v2_setting_mobile:
     path:  /setting/mobile

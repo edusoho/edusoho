@@ -564,6 +564,13 @@ admin_v2.operation.mobile.discovery_column_tab.create_btn: '添加栏目'
 # 运营-网校装修-小程序装修
 admin_v2.wechat_app.menu: 小程序装修
 
+# 运营-网校装修-web装修
+admin_v2.operation.block_menu: web装修
+admin_v2.operation.block.theme.basic_tab: 当前主题
+admin_v2.operation.block.all.basic_tab: 所有
+admin_v2.operation.block.system.basic_tab: 系统
+admin_v2.operation.site.theme_tab: 已购主题
+
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: 网校装修
 

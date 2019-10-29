@@ -139,6 +139,11 @@ admin_operation_mobile_banner_manage: admin_v2_mobile_banner_manage #轮播图�
 admin_discovery_column_index: admin_v2_discovery_column_index #发现页栏目
 admin_discovery_column_create: admin_v2_discovery_column_create #添加栏目
 
+#web装修
+admin_block_manage: admin_v2_block_manage #web装修
+admin_block: admin_v2_block_theme #当前主题
+admin_setting_theme: admin_v2_setting_theme #已购主题
+
 #站点设置
 admin_operation: admin_v2_operating #运营
 admin_setting: admin_v2_site_setting #站点设置
