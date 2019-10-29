@@ -18,7 +18,7 @@ class OnlineController extends BaseController
         if ($request->query->get('name', '')) {
             $user = $this->getUserService()->getUserByNickname($request->query->get('name', ''));
             if (empty($user)) {
-                return $this->render('admin/online/index.html.twig', array(
+                return $this->render('admin-v2/user/online/index.html.twig', array(
                     'onlines' => array(),
                     'paginator' => new Paginator(
                         $this->get('request'),

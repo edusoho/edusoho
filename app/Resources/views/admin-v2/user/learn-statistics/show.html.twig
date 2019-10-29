@@ -36,7 +36,7 @@
         </tr>
       </thead>
       <tbody>
-      {#{% if isInit %}#}
+      {% if isInit %}
           {% for user in users|default() %}
             {% set statistic = statistics[user.id]|default(null) %}
               <tr>
@@ -61,9 +61,9 @@
           {% if users is empty %}
             <tr><td colspan="20"><div class="empty">{{'user.learn.statistics.empty'|trans}}</div></td></tr>
           {% endif %}  
-      {#{% else %}#}
-        {#<tr><td colspan="20"><div class="empty">{{'user.learn.statistics.init'|trans}}</div></td></tr>   #}
-      {#{% endif %}#}
+      {% else %}
+        <tr><td colspan="20"><div class="empty">{{'user.learn.statistics.init'|trans}}</div></td></tr>
+      {% endif %}
       </tbody>
     </table>
 
