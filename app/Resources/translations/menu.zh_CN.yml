@@ -671,7 +671,7 @@ admin_v2.cloud_service.basic_menu: 云服务
 admin_v2.cloud_service.sms_tab: 云短信
 admin_v2.cloud_service.sms_overview_tab: 概览
 
-
-
-
+# 应用中心-基础云-授权信息
+admin_v2.cloud.cloud_setting_menu: 授权信息
+admin_v2.cloud.cloud_setting.basic_tab: 授权信息
 # 新版后台结束

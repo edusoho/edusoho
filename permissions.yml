@@ -192,3 +192,8 @@ admin_coin_user_records: admin_v2_coin_user_records
 #云概览
 admin_my_cloud: admin_v2_my_cloud #概览
 admin_my_cloud_overview: admin_v2_my_cloud_overview
+
+
+#授权信息
+admin_setting_cloud: admin_v2_setting_cloud #授权信息
+admin_setting_my_cloud: admin_v2_setting_my_cloud #授权信息
