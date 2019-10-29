@@ -163,6 +163,7 @@ admin_operation_group_thread: admin_v2_operation_group_thread #小组话题管�
 
 #用户-用户管理-实名认证
 admin_approval_manage: admin_v2_approval_manage #实名认证
+admin_approval_approvals: admin_v2_approval_approving #审核中
 admin_approval_cancel: admin_v2_approval_cancel #撤销
 
 # 微信通知
