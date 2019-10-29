@@ -98,6 +98,17 @@
     </td>
   </tr>
 
+{#   <tr>
+    <th>类型</th>
+    <td>
+      {% if profile.iam %}
+        {{ profile.iam }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr> #}
+ 
    <tr>
     <th>{{'user.fields.idcard_label'|trans}}</th>
     <td>
@@ -121,7 +132,6 @@
       {% endif %}
     </td>
   </tr>
-
   <tr>
     <th>{{'user.fields.company_label'|trans}}</th>
     <td>
@@ -230,18 +240,18 @@
     {% if fields %}
   {% for field in fields %}
     <tr>
-        <th width="25%">{{field.title}}</th>
-        <td>
-          {% if profile[field.fieldName] %}
-            {% if field.type=="date"%}
-            {{ profile[field.fieldName]|date("Y-m-d") }}
-            {% else %}
-            {{ profile[field.fieldName]|space2nbsp|purify_html|raw|nl2br }}
-            {% endif %}
+      <th width="25%">{{field.title}}</th>
+      <td>
+        {% if profile[field.fieldName] %}
+          {% if field.type=="date"%}
+          {{ profile[field.fieldName]|date("Y-m-d") }}
           {% else %}
-            {{'admin.user.fields.empty'|trans}}
+          {{ profile[field.fieldName]|space2nbsp|purify_html|raw|nl2br }}
           {% endif %}
-        </td>
+        {% else %}
+          {{'admin.user.fields.empty'|trans}}
+        {% endif %}
+      </td>
     </tr>
   {% endfor %}
   {% endif %}

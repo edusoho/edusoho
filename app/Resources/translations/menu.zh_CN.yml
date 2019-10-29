@@ -632,4 +632,28 @@ admin_v2.operation.group_menu: 小组管理
 admin_v2.operation.group.group_tab: 小组管理
 admin_v2.operation.group.group_tab.create_group_btn: 创建小组
 admin_v2.operation.group.group_thread_tab: 小组话题管理
+
+
+# 用户-用户管理-用户管理
+admin_v2.user.user_group: 用户管理
+admin_v2.user.basic_menu: 用户管理
+
+# 用户-用户管理-用户管理-tab
+admin_v2.user.basic.basic_tab: 用户管理
+admin_v2.user.basic.fans_tab: 服务号粉丝
+admin_v2.user.basic.online_tab: 在线用户
+admin_v2.user.basic.statistics_tab: 用户数据统计
+admin_v2.user.basic.login_record_tab: 登录日志
+
+admin_v2.user.basic.basic_tab.create_btn: '添加新用户'
+admin_v2.user.basic.basic_tab.edit_btn: '编辑用户信息'
+admin_v2.user.basic.basic_tab.setting_roles_btn: '设置用户组'
+admin_v2.user.basic.basic_tab.update_avatar_btn: '修改用户头像'
+admin_v2.user.basic.basic_tab.change_password_btn: '修改密码'
+admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置邮件'
+admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'
+admin_v2.user.basic.basic_tab.lock_btn: '封禁用户'
+admin_v2.user.basic.basic_tab.unlock_btn: '解禁用户'
+admin_v2.user.basic.basic_tab.org_update_btn: '修改用户组织机构'
+
 # 新版后台结束
