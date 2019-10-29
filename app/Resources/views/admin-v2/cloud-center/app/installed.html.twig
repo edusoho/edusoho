@@ -8,11 +8,11 @@
 
   <div class="mbl btn-group">
 
-      <a href="{{ url('admin_v2_app_installed', {postStatus: 'all'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-primary{% endif %}">{{'admin.app_center.type.all'|trans}}</a>
+      <a href="{{ path('admin_v2_app_installed', {postStatus: 'all'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-primary{% endif %}">{{'admin.app_center.type.all'|trans}}</a>
 
-      <a href=" {{ url('admin_v2_app_installed', {postStatus: 'theme'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-primary{% endif %}">{{'admin.app_center.type.theme'|trans}}</a>
+      <a href=" {{ path('admin_v2_app_installed', {postStatus: 'theme'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-primary{% endif %}">{{'admin.app_center.type.theme'|trans}}</a>
 
-      <a href=" {{ url('admin_v2_app_installed', {postStatus: 'app'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-primary{% endif %}">{{'admin.app_center.type.app'|trans}}</a>
+      <a href=" {{ path('admin_v2_app_installed', {postStatus: 'app'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-primary{% endif %}">{{'admin.app_center.type.app'|trans}}</a>
   </div>
 
   <table class="table table-striped table-hover js-table" data-url="{{ path('admin_v2_app_upgrades_count') }}">
