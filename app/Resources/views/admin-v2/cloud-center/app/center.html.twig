@@ -59,7 +59,7 @@
                   {% include 'admin-v2/cloud-center/app/app-detail.html.twig' %}
                   <div class="right-info pull-right">
                     <a href="#" data-toggle="modal" data-target="#modal"
-                       data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
+                       data-url="{{ path('admin_v2_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
                        class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">{{ 'admin.app_center.package_update_btn'|trans }}</a>
                   </div>
                 </td>
