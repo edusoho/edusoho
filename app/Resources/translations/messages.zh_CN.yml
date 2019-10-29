@@ -1753,8 +1753,8 @@ course.testpaper_manage.analysis_card.total_score: 总分：
 course.testpaper_manage.analysis_card.avg_score: 平均成绩：
 course.testpaper_manage.analysis_card.avg_score_tip: 平均成绩以首次提交的成绩计算
 
-course.course_files: 课程文件
-course.course_files.content_title: 课程文件
+course.course_files: 文件管理
+course.course_files.content_title: 文件管理
 course.course_files.create_btn: 添加课程文件
 course.course_files.name: 文件名
 course.course_files.type: 类型
@@ -1777,6 +1777,7 @@ course.course_files.reconvert_btn: 重新转换(调试模式)
 course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
 course.course_files.re_try_convert_video_to_audio: 重新转码
+course.files_manage.tips: 提示：课程文件需要<strong class="color-warning">添加到%taskName%</strong>中才能被学员看到。
 
 course.plan_overview: 数据概览
 
@@ -4063,7 +4064,7 @@ my.teaching.open_course.live_label: 直播直播
 my.teaching.open_course.manage_btn: 管理
 my.teaching.open_course.view_btn: 查看
 my.teaching.open_course.lesson_manage_btn: 课时管理
-my.teaching.open_course.file_manage_btn: 课程文件
+my.teaching.open_course.file_manage_btn: 文件管理
 my.teaching.open_course.student_manage_btn: 学员管理
 my.teaching.open_course.empty_hint: 你还没有在教的公开课哦, 赶快去创建吧!
 my.teaching.page_title: 在教课程
