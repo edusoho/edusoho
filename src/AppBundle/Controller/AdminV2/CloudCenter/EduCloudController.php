@@ -8,6 +8,7 @@ use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudFile\Service\CloudFileService;
 use Biz\CloudPlatform\Client\AbstractCloudAPI;
+use Biz\CloudPlatform\KeyApplier;
 use Biz\CloudPlatform\Service\EduCloudService;
 use Biz\EduCloud\Service\Impl\MicroyanConsultServiceImpl;
 use Biz\File\Service\UploadFileService;
@@ -15,6 +16,7 @@ use Biz\Search\Service\SearchService;
 use Biz\System\Service\SettingService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\User\UserException;
+use Biz\System\SettingException;
 use Biz\Util\EdusohoLiveClient;
 use Biz\CloudPlatform\Service\AppService;
 use Imagine\Gd\Imagine;
@@ -812,6 +814,186 @@ class EduCloudController extends BaseController
             'attachment' => $attachment,
             'info' => $info,
         ));
+    }
+
+    //授权页
+    public function keyAction(Request $request)
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+
+        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
+            return $this->redirect($this->generateUrl('admin_v2_setting_cloud_key_update'));
+        }
+
+        $info = array();
+        try {
+            $api = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            $info['error'] = 'error';
+        }
+
+        return $this->render('admin-v2/cloud-center/edu-cloud/key.html.twig', array(
+            'info' => $info,
+        ));
+    }
+
+    public function keyUpdateAction(Request $request)
+    {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->redirect($this->generateUrl('admin_v2_setting_cloud_key'));
+        }
+
+        $settings = $this->getSettingService()->get('storage', array());
+
+        if ('POST' == $request->getMethod()) {
+            $options = $request->request->all();
+
+            $api = CloudAPIFactory::create('root');
+            $api->setKey($options['accessKey'], $options['secretKey']);
+
+            $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
+
+            if (isset($result['error'])) {
+                $this->setFlashMessage('danger', 'admin.cloud.license.incorrect');
+                goto render;
+            }
+
+            $user = $api->get('/me');
+
+            if ('opensource' != $user['edition']) {
+                $this->setFlashMessage('danger', 'admin.cloud.license.edition_mismatching');
+                goto render;
+            }
+
+            $settings['cloud_access_key'] = $options['accessKey'];
+            $settings['cloud_secret_key'] = $options['secretKey'];
+            $settings['cloud_key_applied'] = 1;
+
+            $this->getSettingService()->set('storage', $settings);
+
+            $this->setFlashMessage('success', 'site.save.success');
+
+            return $this->redirect($this->generateUrl('admin_v2_setting_cloud_key'));
+        }
+
+        render:
+
+        return $this->render('admin-v2/cloud-center/edu-cloud/key-update.html.twig', array());
+    }
+
+    public function keyApplyAction(Request $request)
+    {
+        $applier = new KeyApplier();
+        $keys = $applier->applyKey($this->getUser());
+
+        if (empty($keys['accessKey']) || empty($keys['secretKey'])) {
+            return $this->createJsonResponse(array('error' => 'Key生成失败，请检查服务器网络后，重试！'));
+        }
+
+        $settings = $this->getSettingService()->get('storage', array());
+
+        $settings['cloud_access_key'] = $keys['accessKey'];
+        $settings['cloud_secret_key'] = $keys['secretKey'];
+        $settings['cloud_key_applied'] = 1;
+
+        $this->getSettingService()->set('storage', $settings);
+
+        return $this->createJsonResponse(array('status' => 'ok'));
+    }
+
+    public function keyInfoAction(Request $request)
+    {
+        $api = CloudAPIFactory::create('root');
+        $info = $api->get('/me');
+
+        if (!empty($info['accessKey'])) {
+            $settings = $this->getSettingService()->get('storage', array());
+
+            if (empty($settings['cloud_key_applied'])) {
+                $settings['cloud_key_applied'] = 1;
+                $this->getSettingService()->set('storage', $settings);
+            }
+
+            if ($info['copyright']) {
+                $copyright = $this->getSettingService()->get('copyright', array());
+                $copyright['owned'] = 1;
+                $copyright['thirdCopyright'] = $info['thirdCopyright'];
+                $copyright['licenseDomains'] = $info['licenseDomains'];
+                $this->getSettingService()->set('copyright', $copyright);
+            } else {
+                $this->getSettingService()->delete('copyright');
+            }
+        } else {
+            $settings = $this->getSettingService()->get('storage', array());
+            $settings['cloud_key_applied'] = 0;
+            $this->getSettingService()->set('storage', $settings);
+        }
+
+        $currentHost = $request->server->get('HTTP_HOST');
+
+        if (isset($info['licenseDomains'])) {
+            $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
+        }
+
+        return $this->render('admin-v2/cloud-center/edu-cloud/key-license-info.html.twig', array(
+            'info' => $info,
+            'currentHost' => $currentHost,
+            'isLocalAddress' => $this->isLocalAddress($currentHost),
+        ));
+    }
+
+    public function keyBindAction(Request $request)
+    {
+        $api = CloudAPIFactory::create('root');
+        $currentHost = $request->server->get('HTTP_HOST');
+        $result = $api->post('/me/license-domain', array('domain' => $currentHost));
+
+        if (!empty($result['licenseDomains'])) {
+            $this->setFlashMessage('success', 'admin.cloud.license.activate_success');
+        } else {
+            $this->setFlashMessage('danger', 'admin.cloud.license.activate_fail');
+        }
+
+        return $this->createJsonResponse($result);
+    }
+
+    public function keyCopyrightAction(Request $request)
+    {
+        $api = CloudAPIFactory::create('leaf');
+        $info = $api->get('/me');
+
+        if (empty($info['copyright'])) {
+            $this->createNewException(SettingException::NO_COPYRIGHT());
+        }
+
+        $name = $request->request->get('name');
+
+        $this->getSettingService()->set('copyright', array(
+            'owned' => 1,
+            'name' => $request->request->get('name', ''),
+            'thirdCopyright' => isset($info['thirdCopyright']) ? $info['thirdCopyright'] : 0,
+            'licenseDomains' => isset($info['licenseDomains']) ? $info['licenseDomains'] : '',
+        ));
+
+        return $this->createJsonResponse(array('status' => 'ok'));
+    }
+
+    protected function isLocalAddress($address)
+    {
+        if (in_array($address, array('localhost', '127.0.0.1'))) {
+            return true;
+        }
+
+        if (0 === strpos($address, '192.168.')) {
+            return true;
+        }
+
+        if (0 === strpos($address, '10.')) {
+            return true;
+        }
+
+        return false;
     }
 
     private function renderConsultWithoutEnable($cloudConsult)

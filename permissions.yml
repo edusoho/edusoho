@@ -161,6 +161,11 @@ admin_operation_group_manage: admin_v2_operation_group_manage #小组管理
 admin_operation_group_create: admin_v2_operation_group_create #创建小组
 admin_operation_group_thread: admin_v2_operation_group_thread #小组话题管理
 
+#用户-用户管理-实名认证
+admin_approval_manage: admin_v2_approval_manage #实名认证
+admin_approval_approvals: admin_v2_approval_approving #审核中
+admin_approval_cancel: admin_v2_approval_cancel #撤销
+
 # 微信通知
 admin_operation_wechat_notification: admin_v2_operation_wechat_notification #nav
 admin_operation_wechat_notification_record: admin_v2_operation_wechat_notification_record # 发送记录
@@ -208,3 +213,6 @@ admin_edu_cloud_setting_search: admin_v2_edu_cloud_search_setting  #云搜索设
 admin_cloud_consult: admin_v2_cloud_consult  #云问答
 admin_cloud_consult_setting: admin_v2_edu_cloud_consult_setting  #云问答设置
 
+#授权信息
+admin_setting_cloud: admin_v2_setting_cloud #授权信息
+admin_setting_my_cloud: admin_v2_setting_my_cloud #授权信息

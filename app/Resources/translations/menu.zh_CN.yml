@@ -635,6 +635,12 @@ admin_v2.operation.group.group_tab: 小组管理
 admin_v2.operation.group.group_tab.create_group_btn: 创建小组
 admin_v2.operation.group.group_thread_tab: 小组话题管理
 
+#用户-用户管理-实名认证
+admin_v2.user.approval_menu: 实名认证
+admin_v2.user.approval.basic_tab.cancel_btn: 撤销
+admin_v2.user.approval.approving_menu: 审核中
+admin_v2.user.approval.approved_menu: 审核成功
+
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: 订单管理
 admin_v2.trade.goods_order.menu: 商品订单
@@ -674,4 +680,9 @@ admin_v2.cloud.email_menu: 云邮件
 admin_v2.cloud.search_menu: 云搜索
 admin_v2.cloud.consult_menu: 云问答
 
+admin_v2.cloud_service.sms_overview_tab: 概览
+
+# 应用中心-基础云-授权信息
+admin_v2.cloud.cloud_setting_menu: 授权信息
+admin_v2.cloud.cloud_setting.basic_tab: 授权信息
 # 新版后台结束

@@ -895,6 +895,7 @@ admin_v2_wechat_notification_show:
     path: /wechat/notification/show
     defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:show }
 
+
 #web端装修
 admin_v2_block:
     path:  /block/{category}/list
@@ -1064,6 +1065,33 @@ admin_v2_course_search_to_fill_banner:
     path: /course/search_to_fill_banner
     defaults: { _controller: AppBundle:AdminV2/Teach/Course:searchToFillBanner }
     permissions: [admin_v2_setting_mobile]
+
+#用户
+##用户管理-实名认证
+admin_v2_approval_approvals:
+    path:  approvals/{approvalStatus}
+    defaults: { _controller: AppBundle:AdminV2/User/UserApproval:approvals}
+
+admin_v2_approval_info_view:
+    path:  approvals/{id}/view
+    defaults: { _controller: AppBundle:AdminV2/User/UserApproval:viewApprovalInfo }
+    permissions: [admin_v2_approval_manage]
+
+admin_v2_approval_approve:
+    path:  approvals/{id}/approve
+    defaults: { _controller: AppBundle:AdminV2/User/UserApproval:approve }
+    permissions: [admin_v2_approval_manage]
+
+admin_v2_approval_cancel:
+    path:  approvals/{id}/cancel
+    defaults: { _controller: AppBundle:AdminV2/User/UserApproval:cancel }
+    methods:  [POST]
+    permissions: [admin_v2_approval_cancel]
+
+admin_v2_show_idcard:
+    path:   approvals/idcard/show/{userId}/{type}
+    defaults: { _controller: AppBundle:AdminV2/User/UserApproval:showIdcard }
+    permissions: [admin_v2_approval_manage]
 
 # 系统
 ## 组织机构管理
@@ -1264,12 +1292,12 @@ admin_v2_setting_cloud_video_embed_watermark_remove:
 admin_v2_edu_cloud_edulive_overview:
     path:  /edu_cloud/edulive/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveOverview }
-    permissions: [admin_cloud_edulive]
+    permissions: [admin_v2_cloud_edulive]
     
 admin_v2_edu_cloud_edulive_setting:
     path:  /edu_cloud/edulive/setting
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveSetting }
-    permissions: [admin_cloud_edulive]
+    permissions: [admin_v2_cloud_edulive]
     
 # 应用中心-云服务-云短信
 admin_v2_edu_cloud_sms_overview:
@@ -1349,10 +1377,32 @@ admin_v2_edu_cloud_consult_setting:
     path: /edu_cloud/consult/setting
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:consultSetting }
     
+#应用中心－基础云－授权信息
 admin_v2_setting_cloud:
     path:  /setting/cloud
-    defaults: { _controller: AppBundle:Admin/EduCloud:key }
-#    permissions: [admin_setting_my_cloud]
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:key }
+    permissions: [admin_v2_setting_my_cloud]
+    
+admin_v2_setting_cloud_key:
+    path:  /setting/cloud/key
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:key }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_info:
+    path:  /setting/cloud/key/info
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyInfo }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_bind:
+    path:  /setting/cloud/key/bind
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyBind }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_copyright:
+    path:  /setting/cloud/key/copyright
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyCopyright }
+    methods: [POST]
+    permissions: [admin_v2_setting_my_cloud]
     
 admin_v2_app_package_update_modal:
     path:  /app/package_update/{id}/modal
@@ -1466,3 +1516,4 @@ admin_v2_setting_refund:
 admin_v2_setting_wechat_auth:
     path: /wechat/auth/setting
     defaults: { _controller: AppBundle:Admin/WeChatSetting:index}
+

@@ -633,6 +633,12 @@ admin_v2.operation.group.group_tab: Groups
 admin_v2.operation.group.group_tab.create_group_btn: Add Group
 admin_v2.operation.group.group_thread_tab: Group Discussions
 
+#用户-用户管理-实名认证
+admin_v2.user.approval_menu: Authentication
+admin_v2.user.approval.basic_tab.cancel_btn: Cancel
+admin_v2.user.approval.approving_menu: Approving
+admin_v2.user.approval.approved_menu: Approved
+
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: Order Manage
 admin_v2.trade.goods_order.menu: Goods Order
@@ -663,7 +669,6 @@ admin_v2.cloud_service.basic_menu: Cloud Server
 admin_v2.cloud_service.sms_tab: Sms Cloud
 admin_v2.cloud_service.sms_overview_tab: Overview
 
-
 admin_v2.tab.overview_tab: Overview
 admin_v2.tab.setting_tab: Setting
 
@@ -674,4 +679,7 @@ admin_v2.cloud.email_menu: Cloud Email
 admin_v2.cloud.search_menu: Cloud Search
 admin_v2.cloud.consult_menu: Cloud Q&A
 
+# 应用中心-基础云-授权信息
+admin_v2.cloud.cloud_setting_menu: License
+admin_v2.cloud.cloud_setting.basic_tab: License
 # 新版后台结束
