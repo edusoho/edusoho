@@ -687,6 +687,10 @@ admin_v2.cloud_service.basic_menu: Cloud Server
 admin_v2.cloud_service.sms_tab: Sms Cloud
 admin_v2.cloud_service.sms_overview_tab: Overview
 
+# 应用中心-基础云-云服务-即时聊天设置
+admin_v2.cloud.im_setting_menu: Chat Setting
+admin_v2.cloud.im_setting.basic_tab: Chat Setting
+
 # 应用中心-基础云-授权信息
 admin_v2.cloud.cloud_setting_menu: License
 admin_v2.cloud.cloud_setting.basic_tab: License
