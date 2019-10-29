@@ -7,7 +7,8 @@
     <div class="panel-heading clearfix">
       <h3 class="panel-title">
         {{ 'admin.homepage.todays_data_title'|trans }}
-        <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-today-data-popover"></span>
+        <span data-toggle="popover"
+              class="glyphicon glyphicon-question-sign color-gray text-sm js-today-data-popover"></span>
         {{ 'admin.homepage.todays_data.tooltips'|trans|raw }}
       </h3>
     </div>
@@ -95,7 +96,8 @@
           </h3>
         </div>
         <div class="panel-body js-statistic-areas" id="study-task-count-statistic"
-             data-url="{{ path('admin_v2_data_statistics_task_learn_overview', {period: 'week'}) }}" style="height:360px;">\
+             data-url="{{ path('admin_v2_data_statistics_task_learn_overview', {period: 'week'}) }}"
+             style="height:360px;">
         </div>
       </div>
     </div>
@@ -158,7 +160,8 @@
         <div class="panel-body">
           {% if not setting('cloud_search.search_enabled') %}
             <div class="empty">
-              <a target="_blank" href="{{ path('admin_v2_edu_cloud_search_overview') }}">{{ 'admin.homepage.free_access_edu_cloud_search_btn'|trans }}</a>
+              <a target="_blank"
+                 href="{{ path('admin_v2_edu_cloud_search_overview') }}">{{ 'admin.homepage.free_access_edu_cloud_search_btn'|trans }}</a>
             </div>
           {% else %}
             {{ render(controller('AppBundle:AdminV2/DataStatistics/Overview:cloudSearchRanking')) }}
