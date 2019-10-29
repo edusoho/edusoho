@@ -573,8 +573,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         if (!empty($courseSet['discountId'])) {
-            $price = $price * $courseSet['discount'] / 10;
-            $coinPrice = $coinPrice * $courseSet['discount'] / 10;
+            if ('discount' == $courseSet['discountType']) {
+                $price = $price * $courseSet['discount'] / 10;
+                $coinPrice = $coinPrice * $courseSet['discount'] / 10;
+            } else {
+                $setting = $this->getSettingService()->get('coin');
+                $price = $price - $courseSet['discount'];
+                $coinPrice = $coinPrice - $courseSet['discount'] * $setting['cash_rate'];
+            }
         }
 
         return array($price, $coinPrice);

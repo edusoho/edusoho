@@ -522,6 +522,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             array(
                 'discountId',
                 'discount',
+                'discountType',
             )
         );
 
