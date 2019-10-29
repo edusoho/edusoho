@@ -1,5 +1,5 @@
 #eg：
-# 前一个为老的权限，后一个是新的权限；可以一对多，多对一
+# 前面是老的权限，后面是新的权限；可以一对多，多对一
 #admin_user_manage: admin_v2_user_manage
 #admin_user_manage: admin_v2_course_manage
 #admin_course_manage: admin_v2_course_manage
@@ -171,6 +171,34 @@ admin_operation_wechat_notification: admin_v2_operation_wechat_notification #nav
 admin_operation_wechat_notification_record: admin_v2_operation_wechat_notification_record # 发送记录
 admin_operation_wechat_notification_manage: admin_v2_operation_wechat_notification_manage # 设置
 
+# 用户-用户管理-用户管理
+admin_user: admin_v2_user
+admin_user_show: admin_v2_user_show
+admin_user_manage: admin_v2_user_manage
+admin_user_create: admin_v2_user_create
+admin_user_edit: admin_v2_user_edit
+admin_user_roles: admin_v2_user_roles
+admin_user_avatar: admin_v2_user_avatar
+admin_user_change_password: admin_v2_user_change_password
+admin_user_send_passwordreset_email: admin_v2_user_send_passwordreset_email
+admin_user_send_emailverify_email: admin_v2_user_send_emailverify_email
+admin_user_lock: admin_v2_user_lock
+admin_user_unlock: admin_v2_user_unlock
+admin_user_org_update: admin_v2_user_org_update
+
+# 用户-用户管理-服务号粉丝
+admin_operation_wechat_fans_list: admin_v2_fans
+
+# 用户-用户管理-在线用户
+admin_online: admin_v2_online
+
+# 用户-用户管理-用户数据统计
+admin_user_learn_statistics_manage: admin_v2_statistics
+admin_user_learn_statistics: admin_v2_statistics
+
+# 用户-用户管理-登录日志
+admin_login_record: admin_v2_login_record
+
 #交易-商品订单
 admin_finance: admin_v2_trade # 交易
 admin_orders: admin_v2_goods_order #商品订单
@@ -192,7 +220,6 @@ admin_coin_user_records: admin_v2_coin_user_records
 #云概览
 admin_my_cloud: admin_v2_my_cloud #概览
 admin_my_cloud_overview: admin_v2_my_cloud_overview
-
 
 #云服务
 admin_cloud_video_setting: admin_v2_cloud_video  #云视频
@@ -216,3 +243,15 @@ admin_cloud_consult_setting: admin_v2_edu_cloud_consult_setting  #云问答设�
 #授权信息
 admin_setting_cloud: admin_v2_setting_cloud #授权信息
 admin_setting_my_cloud: admin_v2_setting_my_cloud #授权信息
+
+# 系统
+admin_system: admin_v2_system
+
+# 系统-系统管理-系统优化
+admin_optimize: admin_v2_optimize
+admin_optimize_settings: admin_v2_optimize_settings
+
+# 系统-系统管理-系统日志
+admin_logs: admin_v2_logs
+admin_logs_query: admin_v2_logs_query
+admin_logs_prod: admin_v2_logs_prod
