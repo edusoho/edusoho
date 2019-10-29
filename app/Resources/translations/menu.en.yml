@@ -717,6 +717,10 @@ admin_v2.cloud.email_menu: Cloud Email
 admin_v2.cloud.search_menu: Cloud Search
 admin_v2.cloud.consult_menu: Cloud Q&A
 
+# 应用中心-基础云-云服务-即时聊天设置
+admin_v2.cloud.im_setting_menu: Chat Setting
+admin_v2.cloud.im_setting.basic_tab: Chat Setting
+
 # 应用中心-基础云-授权信息
 admin_v2.cloud.cloud_setting_menu: License
 admin_v2.cloud.cloud_setting.basic_tab: License

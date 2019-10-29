@@ -224,6 +224,9 @@ admin_bill_coin: admin_v2_bill_coin
 admin_coin_user: admin_v2_user_coin
 admin_coin_user_records: admin_v2_coin_user_records
 
+# 数据-数据分析-数据统计
+admin_operation_analysis_register: admin_v2_statistics_data_statistics_menu
+admin_operation_analysis: admin_v2_data_statistics_basic_tab
 
 #营销应用
 admin_app_center_show: admin_v2_app_center_show #营销云
@@ -236,7 +239,7 @@ admin_app_logs: admin_v2_app_logs #更新日志
 admin_my_cloud: admin_v2_my_cloud #概览
 admin_my_cloud_overview: admin_v2_my_cloud_overview
 
-<<<<<<< HEAD
+
 #云服务
 admin_cloud_video_setting: admin_v2_cloud_video  #云视频
 admin_cloud_video_overview: admin_v2_edu_cloud_video_overview  #云视频概览
@@ -255,11 +258,10 @@ admin_edu_cloud_search_overview: admin_v2_edu_cloud_search_overview  #云搜索�
 admin_edu_cloud_setting_search: admin_v2_edu_cloud_search_setting  #云搜索设置
 admin_cloud_consult: admin_v2_cloud_consult  #云问答
 admin_cloud_consult_setting: admin_v2_edu_cloud_consult_setting  #云问答设置
-=======
-# 数据-数据分析-数据统计
-admin_operation_analysis_register: admin_v2_statistics_data_statistics_menu
-admin_operation_analysis: admin_v2_data_statistics_basic_tab
->>>>>>> bd6a2be7e531bc5697681b954af45e8e453de14c
+
+# 即时聊天设置
+admin_app_im: admin_v2_app_im #即时聊天设置
+admin_app_im_setting: admin_v2_app_im_setting #即时聊天设置
 
 #授权信息
 admin_setting_cloud: admin_v2_setting_cloud #授权信息
