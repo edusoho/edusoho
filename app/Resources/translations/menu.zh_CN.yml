@@ -671,6 +671,13 @@ admin_v2.cloud_service.basic_menu: 云服务
 admin_v2.cloud_service.sms_tab: 云短信
 admin_v2.cloud_service.sms_overview_tab: 概览
 
+# 系统-系统管理
+admin_v2.system.basic_group: 系统管理
+
+# 系统-系统管理-系统日志
+admin_v2.system.logs_menu: 系统日志
+admin_v2.system.logs.logs_query_tab: 系统操作日志
+admin_v2.system.logs.logs_prod_tab: 程序运行日志
 
 
 
