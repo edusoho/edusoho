@@ -1161,6 +1161,34 @@ admin_v2_cloud_service_overview:
 admin_v2_setting_cloud_edulive:
     path:  /setting/cloud/edulive
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveSetting }
+    permissions: [admin_cloud_edulive]
+
+#应用中心－基础云－授权信息
+admin_v2_setting_cloud:
+    path:  /setting/cloud
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:key }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key:
+    path:  /setting/cloud/key
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:key }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_info:
+    path:  /setting/cloud/key/info
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyInfo }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_bind:
+    path:  /setting/cloud/key/bind
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyBind }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_copyright:
+    path:  /setting/cloud/key/copyright
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyCopyright }
+    methods: [POST]
+    permissions: [admin_v2_setting_my_cloud]
 
 admin_v2_app_package_update_modal:
     path:  /app/package_update/{id}/modal
@@ -1278,3 +1306,57 @@ admin_v2_setting_wechat_auth:
 admin_v2_data_statistics_index:
     path: /data_statistics/tab/{tab}
     defaults: { _controller: AppBundle:AdminV2\DataStatistics\Statistics:index, tab: 'trend' }
+
+# 系统-系统管理-系统优化
+admin_v2_optimize:
+    path:  /setting/optimize
+    defaults: { _controller: AppBundle:AdminV2/System/Optimize:index }
+    permissions: [admin_v2_optimize_settings]
+
+admin_v2_optimize_remove_cache:
+    path:  /setting/optimize/remove-cache
+    defaults: { _controller: AppBundle:AdminV2/System/Optimize:removeCache }
+    methods: [POST]
+    permissions: [admin_v2_optimize_settings]
+
+admin_v2_optimize_remove_tmp:
+    path:  /optimize/remove-tmp
+    defaults: { _controller: AppBundle:AdminV2/System/Optimize:removeTemp }
+    methods: [POST]
+    permissions: [admin_v2_optimize_settings]
+
+admin_v2_optimize_backupdb:
+    path:  /setting/optimize/backupdb
+    defaults: { _controller: AppBundle:AdminV2/System/Optimize:backupDatabase }
+    methods: [POST]
+    permissions: [admin_v2_optimize_settings]
+
+admin_v2_optimize_remove_upload_files:
+    path:  /setting/optimize/remove-unusedfiles
+    defaults: { _controller: AppBundle:AdminV2/System/Optimize:removeUnusedFiles }
+    permissions: [admin_v2_optimize_settings]
+
+# 系统-系统管理-系统日志
+admin_v2_logs:
+    path:  /setting/logs
+    defaults: { _controller: AppBundle:AdminV2/System/Log:index }
+
+admin_v2_logs_prod:
+    path:  /setting/logs/prod
+    defaults: { _controller: AppBundle:AdminV2/System/Log:prod }
+
+admin_v2_logs_action_dicts:
+    path:  /setting/logs/logActions
+    defaults: { _controller: AppBundle:AdminV2/System/Log:logActions }
+
+admin_v2_logs_username_match:
+    path:  /setting/logs/usernameMatchUsers
+    defaults: { _controller: AppBundle:AdminV2/System/Log:usernameMatchUsers }
+
+admin_v2_logs_old:
+    path:  /setting/logs/old
+    defaults: { _controller: AppBundle:AdminV2/System/Log:old }
+
+admin_v2_logs_field_change:
+    path:  /setting/logs/logFieldChange
+    defaults: { _controller: AppBundle:AdminV2/System/Log:logFieldChange }
