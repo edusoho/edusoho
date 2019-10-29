@@ -91,29 +91,34 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $wechatSetting = $this->getSettingService()->get('wechat');
 
-        if (!empty($wechatSetting['templates']['liveOpen']['templateId'])) {
-            $client = $this->biz['wechat.template_message_client'];
-            if (empty($client)) {
-                $this->logger('info', '获取微信信息错误');
-                return 1;
+        try {
+            if (!empty($wechatSetting['templates']['liveOpen']['templateId'])) {
+                $client = $this->biz['wechat.template_message_client'];
+                if (empty($client)) {
+                    $this->logger('info', '获取微信信息错误');
+                    return 1;
+                }
+
+                if (!empty($wechatSetting['is_authorization'])) {
+                    $sdk = $this->biz['qiQiuYunSdk.wechat'];
+                    $data = $sdk->createNotificationTemplate(TemplateUtil::TEMPLATE_LIVE_OPEN_CODE);
+                } else {
+                    $data = $client->addTemplate(TemplateUtil::TEMPLATE_LIVE_OPEN_CODE);
+                }
+
+                if (empty($data)) {
+                    $this->logger('info', '模板打开失败');
+                    return 1;
+                }
+
+                $wechatSetting['templates']['liveOpen']['templateId'] = $data['template_id'];
+
+                $this->getSettingService()->set('wechat', $wechatSetting);
             }
-
-            if (!empty($wechatSetting['is_authorization'])) {
-                $sdk = $this->biz['qiQiuYunSdk.wechat'];
-                $data = $sdk->createNotificationTemplate(TemplateUtil::TEMPLATE_LIVE_OPEN_CODE);
-            } else {
-                $data = $client->addTemplate(TemplateUtil::TEMPLATE_LIVE_OPEN_CODE);
-            }
-
-            if (empty($data)) {
-                $this->logger('info', '模板打开失败');
-                return 1;
-            }
-
-            $wechatSetting['templates']['liveOpen']['templateId'] = $data['template_id'];
-
-            $this->getSettingService()->set('wechat', $wechatSetting);
+        } catch (\Exception $e) {
+            $this->logger('error', $e->getTraceAsString());
         }
+
 
         return 1;
     }
