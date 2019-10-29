@@ -18,7 +18,7 @@
        style="float:right;margin-top:-45px;">
     <div class="sortedCourses">
       <input type="checkbox" name="appTypeChoices" id="installedApps"
-             value="installedApps" {% if appTypeChoices|default(null)  == 'installedApps' %} data-url="{{ path('admin_v2_app_center',{postStatus: type,showType:'unhidden'}) }}"  checked {% else %} data-url="{{ path('admin_app_center',{postStatus: type,showType:'hidden'}) }}" {% endif %}>
+             value="installedApps" {% if appTypeChoices|default(null)  == 'installedApps' %} data-url="{{ path('admin_v2_app_center',{postStatus: type,showType:'unhidden'}) }}"  checked {% else %} data-url="{{ path('admin_v2_app_center',{postStatus: type,showType:'hidden'}) }}" {% endif %}>
       {{ 'admin.app_center.buyed_app_hidden'|trans }}
       <input type="hidden" name="type" value='{{ type }}' id="type">
     </div>
@@ -56,7 +56,7 @@
             {% else %}
               <tr>
                 <td>
-                  {% include 'admin/app/app-detail.html.twig' %}
+                  {% include 'admin-v2/cloud-center/app/app-detail.html.twig' %}
                   <div class="right-info pull-right">
                     <a href="#" data-toggle="modal" data-target="#modal"
                        data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}"
@@ -95,7 +95,7 @@
         {% else %}
           <tr>
             <td>
-              {% include 'admin/app/app-detail.html.twig' %}
+              {% include 'admin-v2/cloud-center/app/app-detail.html.twig' %}
               <div class="right-info pull-right">
 
                 {% if app.purchased|default(false) == true or installedApp %}
