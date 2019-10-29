@@ -738,7 +738,7 @@ class StatisticsController extends BaseController
 
         $courseIds = ArrayToolkit::column($paidCourseDetails, 'course_id'); //订单中的课程
 
-        $courses = $this->getCourseService()->searchCourses(//订单中的课程zai剔除班级中的课程
+        $courses = $this->getCourseService()->searchCourses(//订单中的课程再剔除班级中的课程
             array('courseIds' => $courseIds, 'parentId' => '0'),
             'latest',
             0,
@@ -1067,7 +1067,6 @@ class StatisticsController extends BaseController
         $userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
         $users = ArrayToolkit::index($users, 'id');
-        //  $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('cloud');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
@@ -1202,7 +1201,6 @@ class StatisticsController extends BaseController
         $userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
         $users = ArrayToolkit::index($users, 'id');
-        //$minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('net');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
