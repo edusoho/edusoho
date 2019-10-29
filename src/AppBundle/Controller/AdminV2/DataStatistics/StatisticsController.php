@@ -1,29 +1,37 @@
 <?php
 
-namespace AppBundle\Controller\Admin;
+namespace AppBundle\Controller\AdminV2\DataStatistics;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DateToolkit;
+use AppBundle\Common\Exception\InvalidArgumentException;
 use AppBundle\Common\MathToolkit;
 use AppBundle\Common\Paginator;
+use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\MemberOperation\Service\MemberOperationService;
+use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Service\ViewLogService;
+use Biz\Taxonomy\Service\CategoryService;
+use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
-class AnalysisController extends BaseController
+class StatisticsController extends BaseController
 {
-    public function routeAnalysisDataTypeAction(Request $request, $tab)
+    public function indexAction(Request $request, $tab)
     {
-        $analysisDateType = $request->query->get('analysisDateType');
+        $analysisDateType = $request->query->get('analysisDateType', '');
+        if (!$analysisDateType) {
+            throw new InvalidArgumentException('analysisDateType missing');
+        }
 
         return $this->forward(
-            "AppBundle:Admin/Analysis:{$analysisDateType}",
+            "AppBundle:AdminV2/DataStatistics/Statistics:{$analysisDateType}",
             array(
                 'request' => $request,
                 'tab' => $tab,
@@ -74,7 +82,7 @@ class AnalysisController extends BaseController
         $registerProfiles = $this->getUserService()->findUserProfilesByIds($registerIds);
 
         return $this->render(
-            'admin/operation-analysis/register.html.twig',
+            'admin-v2/data-statistics/statistics/register.html.twig',
             array(
                 'registerDetail' => $registerDetail,
                 'paginator' => $paginator,
@@ -143,7 +151,7 @@ class AnalysisController extends BaseController
         $userSumProfiles = $this->getUserService()->findUserProfilesByIds($userSumIds);
         $result['userSumProfiles'] = $userSumProfiles;
 
-        return $this->render('admin/operation-analysis/user-sum.html.twig', $result);
+        return $this->render('admin-v2/data-statistics/statistics/user-sum.html.twig', $result);
     }
 
     public function courseSetSumAction(Request $request, $tab)
@@ -206,7 +214,7 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/course-set-sum.html.twig',
+            'admin-v2/data-statistics/statistics/course-set-sum.html.twig',
             array(
                 'courseSetSumDetail' => $courseSetSumDetail,
                 'paginator' => $paginator,
@@ -274,7 +282,7 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/course-sum.html.twig',
+            'admin-v2/data-statistics/statistics/course-sum.html.twig',
             array(
                 'courseSumDetail' => $courseSumDetail,
                 'paginator' => $paginator,
@@ -347,7 +355,7 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/login.html.twig',
+            'admin-v2/data-statistics/statistics/login.html.twig',
             array(
                 'loginDetail' => $loginDetail,
                 'paginator' => $paginator,
@@ -414,7 +422,7 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/course-set.html.twig',
+            'admin-v2/data-statistics/statistics/course-set.html.twig',
             array(
                 'courseSetDetail' => $courseSetDetail,
                 'paginator' => $paginator,
@@ -488,7 +496,7 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/task.html.twig',
+            'admin-v2/data-statistics/statistics/task.html.twig',
             array(
                 'taskDetail' => $taskDetail,
                 'paginator' => $paginator,
@@ -566,7 +574,7 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/join-lesson.html.twig',
+            'admin-v2/data-statistics/statistics/join-lesson.html.twig',
             array(
                 'JoinLessonDetail' => $joinLessonDetail,
                 'count' => $count,
@@ -655,7 +663,7 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/exit-lesson.html.twig',
+            'admin-v2/data-statistics/statistics/exit-lesson.html.twig',
             array(
                 'exitLessonDetail' => $exitLessonDetail,
                 'paginator' => $paginator,
@@ -730,7 +738,7 @@ class AnalysisController extends BaseController
 
         $courseIds = ArrayToolkit::column($paidCourseDetails, 'course_id'); //订单中的课程
 
-        $courses = $this->getCourseService()->searchCourses(//订单中的课程zai剔除班级中的课程
+        $courses = $this->getCourseService()->searchCourses(//订单中的课程再剔除班级中的课程
             array('courseIds' => $courseIds, 'parentId' => '0'),
             'latest',
             0,
@@ -757,7 +765,7 @@ class AnalysisController extends BaseController
         $courseSets = ArrayToolkit::index($courseSets, 'id');
 
         return $this->render(
-            'admin/operation-analysis/paid-course.html.twig',
+            'admin-v2/data-statistics/statistics/paid-course.html.twig',
             array(
                 'paidCourseDetail' => $paidCourseDetails,
                 'courseSets' => $courseSets,
@@ -850,7 +858,7 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/paid-classroom.html.twig',
+            'admin-v2/data-statistics/statistics/paid-classroom.html.twig',
             array(
                 'paidClassroomDetail' => $paidClassroomDetails,
                 'paginator' => $paginator,
@@ -932,7 +940,7 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/completed-task.html.twig',
+            'admin-v2/data-statistics/statistics/completed-task.html.twig',
             array(
                 'completedTaskDetail' => $completedTaskDetail,
                 'paginator' => $paginator,
@@ -995,12 +1003,10 @@ class AnalysisController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
         $users = ArrayToolkit::index($users, 'id');
 
-        //  $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('all');
-
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/video-view.html.twig',
+            'admin-v2/data-statistics/statistics/video-view.html.twig',
             array(
                 'videoViewedDetail' => $videoViewedDetail,
                 'paginator' => $paginator,
@@ -1061,12 +1067,11 @@ class AnalysisController extends BaseController
         $userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
         $users = ArrayToolkit::index($users, 'id');
-        //  $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('cloud');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/cloud-video-view.html.twig',
+            'admin-v2/data-statistics/statistics/cloud-video-view.html.twig',
             array(
                 'videoViewedDetail' => $videoViewedDetail,
                 'paginator' => $paginator,
@@ -1129,12 +1134,11 @@ class AnalysisController extends BaseController
         $userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
         $users = ArrayToolkit::index($users, 'id');
-        //  $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('local');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/local-video-view.html.twig',
+            'admin-v2/data-statistics/statistics/local-video-view.html.twig',
             array(
                 'videoViewedDetail' => $videoViewedDetail,
                 'paginator' => $paginator,
@@ -1197,12 +1201,11 @@ class AnalysisController extends BaseController
         $userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
         $users = ArrayToolkit::index($users, 'id');
-        //$minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('net');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/net-video-view.html.twig',
+            'admin-v2/data-statistics/statistics/net-video-view.html.twig',
             array(
                 'videoViewedDetail' => $videoViewedDetail,
                 'paginator' => $paginator,
@@ -1284,7 +1287,7 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($fields, $timeRange);
 
         return $this->render(
-            'admin/operation-analysis/'.(empty($type) ? 'all' : $type).'-income.html.twig',
+            'admin-v2/data-statistics/statistics/'.(empty($type) ? 'all' : $type).'-income.html.twig',
             array(
                 'orders' => $incomeDetails,
                 'paginator' => $paginator,
@@ -1317,7 +1320,7 @@ class AnalysisController extends BaseController
     public function courseSetIncomeAction(Request $request, $tab)
     {
         return $this->forward(
-            'AppBundle:Admin/Analysis:Income',
+            'AppBundle:AdminV2/DataStatistics/Statistics:Income',
             array(
                 'request' => $request,
                 'tab' => $tab,
@@ -1329,7 +1332,7 @@ class AnalysisController extends BaseController
     public function classroomIncomeAction(Request $request, $tab)
     {
         return $this->forward(
-            'AppBundle:Admin/Analysis:Income',
+            'AppBundle:AdminV2/DataStatistics/Statistics:Income',
             array(
                 'request' => $request,
                 'tab' => $tab,
@@ -1341,7 +1344,7 @@ class AnalysisController extends BaseController
     public function vipIncomeAction(Request $request, $tab)
     {
         return $this->forward(
-            'AppBundle:Admin/Analysis:Income',
+            'AppBundle:AdminV2/DataStatistics/Statistics:Income',
             array(
                 'request' => $request,
                 'tab' => $tab,
@@ -1437,6 +1440,9 @@ class AnalysisController extends BaseController
         );
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->createService('System:LogService');
@@ -1482,13 +1488,16 @@ class AnalysisController extends BaseController
         return $this->createService('Task:TaskResultService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
     }
 
     /**
-     * @return \Codeages\Biz\Order\Service\OrderService
+     * @return OrderService
      */
     protected function getOrderService()
     {

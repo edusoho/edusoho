@@ -676,6 +676,15 @@ admin_v2.trade.bills.coin_records_tab: Coin Bill
 admin_v2.trade.coin_menu: Coin Manage
 admin_v2.trade.coin.basic_tab: Coin Manage
 
+# 应用中心-营销云-营销应用
+admin_v2.basic_app_center_group: Marketing Cloud
+admin_v2.cloud.app_center_menu: ES App Center
+admin_v2.cloud.app_center.basic_tab: ES App Center
+admin_v2.cloud.app_center.installed_tab: My App
+admin_v2.cloud.app_center.upgrades_tab: Upgrade
+admin_v2.cloud.app_center.logs_tab: Update Logs
+
+
 # 应用中心-基础云-概览
 admin_v2.cloud.overview_menu: Overview
 admin_v2.cloud.overview.basic_tab: Overview
@@ -687,9 +696,15 @@ admin_v2.cloud_service.basic_menu: Cloud Server
 admin_v2.cloud_service.sms_tab: Sms Cloud
 admin_v2.cloud_service.sms_overview_tab: Overview
 
+
 # 应用中心-基础云-云服务-即时聊天设置
 admin_v2.cloud.im_setting_menu: Chat Setting
 admin_v2.cloud.im_setting.basic_tab: Chat Setting
+
+# 数据-数据统计
+admin_v2.data_statictics.analysis.basic_group: Data Analysis
+admin_v2.data_statistics.statistics.menu: Data Statistics
+admin_v2.data_statistics.statistics.basic_tab: Data Statistics
 
 # 应用中心-基础云-授权信息
 admin_v2.cloud.cloud_setting_menu: License
@@ -706,5 +721,4 @@ admin_v2.system.optimize.basic_tab: System Optimization
 admin_v2.system.logs_menu: System Logs
 admin_v2.system.logs.logs_query_tab: System Log
 admin_v2.system.logs.logs_prod_tab: Program Log
-
 # 新版后台结束

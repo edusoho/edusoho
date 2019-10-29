@@ -1,0 +1,53 @@
+      <table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+          <thead>
+            <tr>
+              <th>{{'admin.operation_analysis.register.username'|trans}}</th>
+              <th>{{'admin.operation_analysis.register.mobile_number'|trans}}</th>
+              <th>{{'admin.operation_analysis.register.email'|trans}}</th>
+              <th>{{'admin.operation_analysis.register.target'|trans}}</th>
+              <th>{{'admin.operation_analysis.register.ip'|trans}}</th>
+              <th>{{'admin.operation_analysis.register.time'|trans}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if registerDetail %}
+            {% for data in registerDetail %}
+              <tr>
+                <td>{{data.nickname}}</td>
+                <td>
+                    {% if data.verifiedMobile %}
+                    {{ data.verifiedMobile }}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span>
+                    {% elseif registerProfiles[data.id].mobile %}
+                    {{ registerProfiles[data.id].mobile }}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
+                    {% else %}
+                    -- 
+                    {% endif %}
+                  </td>
+                <td>
+                    {% if not is_system_generated_email(data.email) %}
+                      {{ data.email }}
+                    {% else %}
+                      {{'admin.operation_analysis.register.no_email'|trans}}
+                    {% endif %}
+                </td>
+                <td>
+                  {% if data.type=="default" %}{{'admin.operation_analysis.register.website'|trans}}
+                  {% elseif data.type=="web_mobile" %}{{'admin.operation_analysis.register.web_mobile'|trans}}
+                  {% elseif data.type=="web_email" %}{{'admin.operation_analysis.register.web_email'|trans}}
+                  {% elseif data.type=="weibo" %}{{'admin.operation_analysis.register.weibo'|trans}}
+                  {% elseif data.type=="qq" %}{{'admin.operation_analysis.register.qq'|trans}}
+                  {% elseif data.type=="renren" %}{{'admin.operation_analysis.register.renren'|trans}}
+                  {% elseif data.type=="discuz" %}{{'admin.operation_analysis.register.discuz'|trans}}
+                  {% elseif data.type=="phpwind" %}{{'admin.operation_analysis.register.phpwind'|trans}}
+                  {% elseif data.type=="weixinweb" or data.type=="weixinmob" or data.type=="weixin" %}{{'admin.operation_analysis.register.weixin'|trans}}
+                  {% elseif data.type=="import" %}{{'admin.operation_analysis.register.import'|trans}}
+                  {% else %}{{'admin.operation_analysis.register.other'|trans}}
+                  {% endif %}</td>
+                <td>{{data.createdIp}}</td>
+                <td>{{data.createdTime|date("Y-m-d H:i:s")}}</td>
+              </tr>
+            {% endfor %}
+            {% endif %}
+          </tbody>
+      </table>    
+      {{ admin_macro.paginator(paginator) }}
