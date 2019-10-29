@@ -3,7 +3,7 @@
          value='{% if chartInfo.videoUsedInfo and setting('storage.upload_mode') == 'cloud' %}{{ chartInfo.videoUsedInfo }}{% else %}{{ "[]" }}{% endif %}'>
   <div class="panel panel-default" style="position: relative;">
     <div class="panel-heading">
-      <p class="pull-right"><a href="{{ path('admin_cloud_video_account') }}"
+      <p class="pull-right"><a href="{{ path('admin_v2_cloud_video_account') }}"
                                target="_blank">{{ 'site.default.detail'|trans }}</a></p>
       <h3 class="panel-title">{{ 'admin.edu_cloud.edu_video.use_info'|trans }}{% if overview.service.tlp|default(0) %}
           <div class="icon-security" data-toggle="tooltip" data-placement="top"

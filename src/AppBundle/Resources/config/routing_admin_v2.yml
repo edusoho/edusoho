@@ -1172,6 +1172,10 @@ admin_v2_cloud_video_detail:
     path: /cloud/video/detail
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:videoDetail }
     
+admin_v2_cloud_video_account:
+    path:  /cloud/video/account
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:videoAccount }
+    
 admin_v2_cloud_live_upgrade:
     path:  /cloud/live/upgrade
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:liveUpgrade }
