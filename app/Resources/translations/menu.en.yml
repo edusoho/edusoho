@@ -563,6 +563,13 @@ admin_v2.operation.mobile.banner_setting_tab: Sliders management
 admin_v2.operation.mobile.discovery_column_tab: 'Explore Page Category'
 admin_v2.operation.mobile.discovery_column_tab.create_btn: 'Add Category'
 
+# 运营-网校装修-web装修
+admin_v2.operation.block_menu: web Setting
+admin_v2.operation.block.theme.basic_tab: Current Theme
+admin_v2.operation.block.all.basic_tab: All Theme
+admin_v2.operation.block.system.basic_tab: System
+admin_v2.operation.site.theme_tab: Purchased Theme
+
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: Site Decoration
 
@@ -595,13 +602,6 @@ admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: Add Sens
 admin_v2.operation.sensitive_words.banlogs_tab: Processing History
 
 
-# 应用中心-基础云-云服务-短信
-admin_v2.nav.cloud_center: Cloud Center
-admin_v2.basic_cloud_group: Basic Cloud
-admin_v2.cloud_service.basic_menu: Cloud Server
-admin_v2.cloud_service.sms_tab: Sms Cloud
-admin_v2.cloud_service.sms_overview_tab: Overview
-
 #营销-营销管理
 admin_v2.marketing.basic_group: Marketing Manage
 
@@ -633,7 +633,6 @@ admin_v2.operation.group.group_tab: Groups
 admin_v2.operation.group.group_tab.create_group_btn: Add Group
 admin_v2.operation.group.group_thread_tab: Group Discussions
 
-
 # 用户-用户管理-用户管理-tab
 admin_v2.user.basic.basic_tab: User Manage
 admin_v2.user.basic.fans_tab: Wechat Fans
@@ -651,4 +650,45 @@ admin_v2.user.basic.basic_tab.send_emailverify_email_btn: 'Send verify email'
 admin_v2.user.basic.basic_tab.lock_btn: 'Lock User'
 admin_v2.user.basic.basic_tab.unlock_btn: 'Unlock User'
 admin_v2.user.basic.basic_tab.org_update_btn: 'Change Organization'
+
+#用户-用户管理-实名认证
+admin_v2.user.approval_menu: Authentication
+admin_v2.user.approval.basic_tab.cancel_btn: Cancel
+admin_v2.user.approval.approving_menu: Approving
+admin_v2.user.approval.approved_menu: Approved
+
+#交易-商品订单
+admin_v2.trade.order_manage.basic_group: Order Manage
+admin_v2.trade.goods_order.menu: Goods Order
+admin_v2.trade.goods_order.basic_tab: Goods Order
+
+# 交易-退款订单
+admin_v2.trade.order_refunds_menu: Refund Order
+admin_v2.trade.order_refunds.basic_tab: Refund Order
+
+#交易-网校账单
+admin_v2.trade.asset_manage.basic_group: Asset Manage
+admin_v2.trade.bills_menu: Bills
+admin_v2.trade.bills.cash_records_tab: Cash Bill
+admin_v2.trade.bills.coin_records_tab: Coin Bill
+
+# 交易-虚拟币管理
+admin_v2.trade.coin_menu: Coin Manage
+admin_v2.trade.coin.basic_tab: Coin Manage
+
+# 应用中心-基础云-概览
+admin_v2.cloud.overview_menu: Overview
+admin_v2.cloud.overview.basic_tab: Overview
+
+# 应用中心-基础云-云服务-短信
+admin_v2.nav.cloud_center: Cloud Center
+admin_v2.basic_cloud_group: Basic Cloud
+admin_v2.cloud_service.basic_menu: Cloud Server
+admin_v2.cloud_service.sms_tab: Sms Cloud
+admin_v2.cloud_service.sms_overview_tab: Overview
+
+# 应用中心-基础云-授权信息
+admin_v2.cloud.cloud_setting_menu: License
+admin_v2.cloud.cloud_setting.basic_tab: License
+
 # 新版后台结束

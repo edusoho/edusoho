@@ -564,6 +564,13 @@ admin_v2.operation.mobile.discovery_column_tab.create_btn: '添加栏目'
 # 运营-网校装修-小程序装修
 admin_v2.wechat_app.menu: 小程序装修
 
+# 运营-网校装修-web装修
+admin_v2.operation.block_menu: web装修
+admin_v2.operation.block.theme.basic_tab: 当前主题
+admin_v2.operation.block.all.basic_tab: 所有
+admin_v2.operation.block.system.basic_tab: 系统
+admin_v2.operation.site.theme_tab: 已购主题
+
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: 网校装修
 
@@ -594,12 +601,7 @@ admin_v2.operation.sensitive_words.sensitive_words_list_tab: 敏感词列表
 admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: 添加敏感词
 admin_v2.operation.sensitive_words.banlogs_tab: 屏蔽记录
 
-# 应用中心-基础云-云服务-短信
-admin_v2.nav.cloud_center: 应用中心
-admin_v2.basic_cloud_group: 基础云
-admin_v2.cloud_service.basic_menu: 云服务
-admin_v2.cloud_service.sms_tab: 云短信
-admin_v2.cloud_service.sms_overview_tab: 概览
+
 
 #营销-营销管理
 admin_v2.marketing.basic_group: 营销管理
@@ -633,7 +635,6 @@ admin_v2.operation.group.group_tab: 小组管理
 admin_v2.operation.group.group_tab.create_group_btn: 创建小组
 admin_v2.operation.group.group_thread_tab: 小组话题管理
 
-
 # 用户-用户管理-用户管理
 admin_v2.user.user_group: 用户管理
 admin_v2.user.basic_menu: 用户管理
@@ -655,5 +656,45 @@ admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮�
 admin_v2.user.basic.basic_tab.lock_btn: '封禁用户'
 admin_v2.user.basic.basic_tab.unlock_btn: '解禁用户'
 admin_v2.user.basic.basic_tab.org_update_btn: '修改用户组织机构'
+
+#用户-用户管理-实名认证
+admin_v2.user.approval_menu: 实名认证
+admin_v2.user.approval.basic_tab.cancel_btn: 撤销
+admin_v2.user.approval.approving_menu: 审核中
+admin_v2.user.approval.approved_menu: 审核成功
+
+#交易-商品订单
+admin_v2.trade.order_manage.basic_group: 订单管理
+admin_v2.trade.goods_order.menu: 商品订单
+admin_v2.trade.goods_order.basic_tab: 商品订单
+
+# 交易-退款订单
+admin_v2.trade.order_refunds_menu: 退款订单
+admin_v2.trade.order_refunds.basic_tab: 退款订单
+
+#交易-网校账单
+admin_v2.trade.asset_manage.basic_group: 资产管理
+admin_v2.trade.bills_menu: 网校账单
+admin_v2.trade.bills.cash_records_tab: 现金账单
+admin_v2.trade.bills.coin_records_tab: 虚拟币账单
+
+# 交易-虚拟币管理
+admin_v2.trade.coin_menu: 虚拟币管理
+admin_v2.trade.coin.basic_tab: 虚拟币管理
+
+# 应用中心-基础云-概览
+admin_v2.cloud.overview_menu: 概览
+admin_v2.cloud.overview.basic_tab: 教育云概览
+
+# 应用中心-基础云-云服务-短信
+admin_v2.nav.cloud_center: 应用中心
+admin_v2.basic_cloud_group: 基础云
+admin_v2.cloud_service.basic_menu: 云服务
+admin_v2.cloud_service.sms_tab: 云短信
+admin_v2.cloud_service.sms_overview_tab: 概览
+
+# 应用中心-基础云-授权信息
+admin_v2.cloud.cloud_setting_menu: 授权信息
+admin_v2.cloud.cloud_setting.basic_tab: 授权信息
 
 # 新版后台结束

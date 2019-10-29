@@ -1,0 +1,17 @@
+<div class="form-group">
+  <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][value]">{{'admin.block_manage.visual_edit.tag_link_text'|trans}}</label>
+  <div class="col-md-9 col-xs-9">
+    <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][value]" value="{{ data.value|default('') }}">
+  </div>
+ </div>
+ <div class="form-group">
+  <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][href]">{{'admin.block_manage.visual_edit.tag_link_url'|trans}}</label>
+  <div class="col-md-9 col-xs-9">
+    <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][href]" value="{{ data.href|default('') }}" placeholder="{{ app.request.getScheme() }}://" >
+  </div>
+ </div>
+ <div class="form-group">
+  <label class="control-label col-md-3 col-xs-3">{{'admin.block_manage.visual_edit.tag_open_new_window'|trans}}</label>
+  <label class="checkbox-inline"><input type="radio" data-role="radio-yes" name="data[{{ code }}][{{ dataId }}][target]" value="_blank" {% if data.target|default('_self') == '_blank' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_yes_radio'|trans}}</label>
+  <label class="checkbox-inline"><input type="radio" data-role="radio-no" name="data[{{ code }}][{{ dataId }}][target]" value="_self" {% if data.target|default('_self') == '_self' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_no_radio'|trans}}</label>
+ </div>

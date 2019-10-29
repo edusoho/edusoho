@@ -1,6 +1,6 @@
 admin_v2:
     path:  /
-    defaults: { _controller: AppBundle:Admin/Default:index }
+    defaults: { _controller: AppBundle:AdminV2/Default:index }
 
 # 用户-用户管理-用户管理
 admin_v2_user:
@@ -505,12 +505,12 @@ admin_v2_cloud_attachment:
     path: /cloud_attachment
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:attachmentList }
     permissions: [admin_v2_cloud_resource]
-    
+
 admin_v2_cloud_file:
     path:  /cloud_files
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:index }
     permissions: [admin_v2_cloud_resource]
-    
+
 admin_v2_cloud_file_manage:
     path:  /cloud_files/manage
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:manage }
@@ -520,23 +520,23 @@ admin_v2_cloud_file_render_table:
     path:  /cloud_files/table/render
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:render }
     permissions: [admin_v2_cloud_resource]
-    
+
 admin_v2_cloud_file_detail:
     path:  /cloud_file/{globalId}/detail
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:detail }
     permissions: [admin_v2_cloud_resource]
-    
+
 admin_v2_cloud_file_edit:
     path:  /cloud_file/{globalId}/edit
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:edit, fields:'' }
     methods: [POST]
     permissions: [admin_v2_cloud_resource]
-    
+
 admin_v2_cloud_file_preview:
     path:  /cloud_file/{globalId}/preview
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:preview }
     permissions: [admin_v2_cloud_resource]
-    
+
 admin_v2_cloud_file_reconvert:
     path: /cloud_file/{globalId}/reconvert
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:reconvert }
@@ -563,12 +563,12 @@ admin_v2_cloud_file_delete_modal_show:
     path: /cloud_file/delete/show
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:deleteShow }
     permissions: [admin_v2_cloud_resource]
-    
+
 admin_v2_cloud_file_tag_show:
     path: /cloud_file/tag/show
     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:batchTagShow }
     permissions: [admin_v2_cloud_resource]
-    
+
 # 运营-营销管理-优惠券管理
 admin_v2_coupon:
     path: /coupon
@@ -933,7 +933,7 @@ admin_v2_group_transfer:
     path:  /group/transfer/{groupId}
     defaults: { _controller: AppBundle:AdminV2/Operating/Group:transferGroup }
     permissions: [admin_v2_operation_group_manage]
-    
+
 # 运营-内容运营-敏感词设置
 admin_v2_keyword:
     path:  /keyword
@@ -980,15 +980,114 @@ admin_v2_wechat_notification_show:
     path: /wechat/notification/show
     defaults: { _controller: AppBundle:AdminV2/Operating/WeChatNotification:show }
 
+
 #web端装修
 admin_v2_block:
-    path:  /block/list/{category}
-    defaults: { _controller: AppBundle:AdminV2/Operating/Block:index }
+    path:  /block/{category}/list
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:index,category:'theme' }
+
+admin_v2_block_match:
+    path:  /block/list/{type}/quikSearch
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:blockMatch, type:'theme' }
+
+admin_v2_block_create:
+    path:  /block/create
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:create }
+
+admin_v2_block_delete:
+    path:  /block/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:delete }
+    methods:  [POST]
+
+admin_v2_block_code_check_forcreate:
+    path:  /block/code/check/forcreate
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:checkBlockCodeForCreate }
+
+admin_v2_block_code_check_foredit:
+    path:  /block/code/{id}/check/foredit
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:checkBlockTemplateCodeForEdit }
+
+admin_v2_block_update:
+    path:  /block/{blockTemplateId}/update
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:edit }
+
+admin_v2_block_template_edit:
+    path:  /block/{blockTemplateId}/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:editBlockTemplate }
+
+admin_v2_block_visual_edit:
+    path:  /blockTemplate/{blockTemplateId}/{type}/visual/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:visualEdit, type:'theme' }
+
+admin_v2_block_visual_view_data:
+    path:  /block/{blockTemplateId}/data/view
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:dataView }
+
+admin_v2_block_visual_edit_history:
+    path:  /blockTemplate/{blockTemplateId}/{type}/visual/edit/history
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:visualHistory, type:'theme' }
+
+admin_v2_block_recovery:
+    path:  /block/{blockTemplateId}/history/{historyId}/{type}/recovery
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:recovery, type:'theme' }
+
+admin_v2_block_history_data:
+    path:  /block/histroy/{blockId}
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:blockHistoriesData }
+
+admin_v2_block_picture_upload:
+    path:  /block/{blockId}/picture/upload
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:upload }
+
+admin_v2_block_picture_preview:
+    path:  /block/{blockId}/picture/preview
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:picPreview }
+
+admin_v2_blockhistory_preview:
+    path:  /blockhistory/{id}/preview
+    defaults: { _controller: AppBundle:AdminV2/Operating/Block:preview }
 
 admin_v2_setting_theme:
     path:  /setting/theme
     defaults: { _controller: AppBundle:AdminV2/Operating/Theme:index }
 
+admin_v2_setting_theme_change:
+    path:  /setting/theme/change
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:change }
+    methods:  [POST]
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_theme_manage:
+    path:  /theme/{uri}/manage
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:manageIndex }
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_reset_currentTheme_config:
+    path:  /theme/{uri}/config/reset
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:resetConfig }
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_save_themes_config:
+    path:  /theme/config/save
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:saveConfig }
+    methods:  [POST]
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_confirm_themes_config:
+    path:  /theme/{uri}/config/confirm
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:confirmConfig }
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_themes_show:
+    path:  /theme/show
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:show }
+    permissions: [admin_v2_setting_theme]
+
+admin_v2_themes_config_edit:
+    path:  /theme/config/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/Theme:themeConfigEdit }
+    permissions: [admin_v2_setting_theme]
+    
 ## APP装修
 admin_v2_setting_mobile:
     path:  /setting/mobile
@@ -1052,6 +1151,33 @@ admin_v2_course_search_to_fill_banner:
     defaults: { _controller: AppBundle:AdminV2/Teach/Course:searchToFillBanner }
     permissions: [admin_v2_setting_mobile]
 
+#用户
+##用户管理-实名认证
+admin_v2_approval_approvals:
+    path:  approvals/{approvalStatus}
+    defaults: { _controller: AppBundle:AdminV2/User/UserApproval:approvals}
+
+admin_v2_approval_info_view:
+    path:  approvals/{id}/view
+    defaults: { _controller: AppBundle:AdminV2/User/UserApproval:viewApprovalInfo }
+    permissions: [admin_v2_approval_manage]
+
+admin_v2_approval_approve:
+    path:  approvals/{id}/approve
+    defaults: { _controller: AppBundle:AdminV2/User/UserApproval:approve }
+    permissions: [admin_v2_approval_manage]
+
+admin_v2_approval_cancel:
+    path:  approvals/{id}/cancel
+    defaults: { _controller: AppBundle:AdminV2/User/UserApproval:cancel }
+    methods:  [POST]
+    permissions: [admin_v2_approval_cancel]
+
+admin_v2_show_idcard:
+    path:   approvals/idcard/show/{userId}/{type}
+    defaults: { _controller: AppBundle:AdminV2/User/UserApproval:showIdcard }
+    permissions: [admin_v2_approval_manage]
+
 # 系统
 ## 组织机构管理
 admin_v2_batch_update_org:
@@ -1082,19 +1208,73 @@ admin_v2_edu_cloud_sms:
     path:  /edu_cloud/sms/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/CloudServer:smsOverview }
     permissions: [admin_v2_edu_cloud_sms_overview]
-    
+
 admin_v2_cloud_video_overview:
     path:  /cloud/video/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoOverview }
-    
+
 admin_v2_my_cloud_overview:
     path:  /setting/my/cloud/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloudOverview }
+    
+#应用中心－基础云－概览
+admin_v2_cloud_access:
+    path:  /cloud/access
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:access }
+    permissions: [admin_v2_my_cloud_overview]
+
+admin_v2_cloud_recharge:
+    path:  /cloud/recharge
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:recharge }
+    permissions: [admin_v2_my_cloud_overview]
+
+admin_v2_cloud_account_person:
+    path:  /cloud/account/person
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:accountPerson }
+    permissions: [admin_v2_my_cloud_overview]
+
+admin_v2_cloud_list_coupon:
+    path:  /cloud/list/coupon
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:listCoupon }
+    permissions: [admin_v2_my_cloud_overview]
+
+admin_v2_cloud_service_overview:
+    path:  /cloud/service/{type}/overview
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:serviceOverview }
+    permissions: [admin_v2_my_cloud_overview]
 
 admin_v2_setting_cloud_edulive:
     path:  /setting/cloud/edulive
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveSetting }
+    permissions: [admin_cloud_edulive]
+    
+#应用中心－基础云－授权信息
+admin_v2_setting_cloud:
+    path:  /setting/cloud
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:key }
+    permissions: [admin_v2_setting_my_cloud]
+    
+admin_v2_setting_cloud_key:
+    path:  /setting/cloud/key
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:key }
+    permissions: [admin_v2_setting_my_cloud]
 
+admin_v2_setting_cloud_key_info:
+    path:  /setting/cloud/key/info
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyInfo }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_bind:
+    path:  /setting/cloud/key/bind
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyBind }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_copyright:
+    path:  /setting/cloud/key/copyright
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyCopyright }
+    methods: [POST]
+    permissions: [admin_v2_setting_my_cloud]
+    
 admin_v2_app_package_update_modal:
     path:  /app/package_update/{id}/modal
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal }
@@ -1154,9 +1334,49 @@ admin_v2 _app_package_update_check_newest:
     methods: [POST]
 
 # 交易-订单管理-商品订单
+admin_v2_order_manage:
+    path: /order/manage
+    defaults: { _controller: AppBundle:AdminV2/Trade/Order:index }
+
 admin_v2_order_detail:
     path: /order/{id}/detail
-    defaults: { _controller: AppBundle:Admin/Order:detail }
+    defaults: { _controller: AppBundle:AdminV2/Trade/Order:detail }
+
+admin_v2_order_adjust_price:
+    path: /order/{id}/adjust_price
+    defaults: { _controller: AppBundle:AdminV2/Trade/Order:adjustPrice }
+    permissions: [admin_v2_trade]
+
+# 交易-订单管理-退款订单
+admin_v2_order_refunds:
+    path: /order/refunds
+    defaults: { _controller: AppBundle:AdminV2/Trade/OrderRefund:index }
+    permissions: [admin_v2_trade]
+
+admin_v2_order_refund_detail:
+    path: /order/refund/{id}/detail
+    defaults: { _controller: AppBundle:AdminV2/Trade/OrderRefund:refundDetail }
+    permissions: [admin_v2_trade]
+
+admin_v2_order_audit_refund:
+    path: /order/{refundId}/audit_refund
+    defaults: { _controller: AppBundle:AdminV2/Trade/OrderRefund:auditRefund }
+    permissions: [admin_v2_trade]
+
+# 交易-资产管理-网校账单
+admin_v2_bill:
+    path: /bill/{type}
+    defaults: { _controller: AppBundle:AdminV2/Trade/Bill:index }
+
+admin_v2_coin_user_records:
+    path:     /coin/records/user
+    defaults: { _controller: AppBundle:AdminV2/Trade/Coin:index }
+
+admin_v2_coin_flow_detail:
+    path:     /coin/flow/detail/
+    defaults: { _controller: AppBundle:AdminV2/Trade/Coin:flowDetail }
+    permissions: [admin_v2_coin_user_records]
+
 
 # 系统-资产设置-退款
 admin_v2_setting_refund:
@@ -1167,3 +1387,4 @@ admin_v2_setting_refund:
 admin_v2_setting_wechat_auth:
     path: /wechat/auth/setting
     defaults: { _controller: AppBundle:Admin/WeChatSetting:index}
+

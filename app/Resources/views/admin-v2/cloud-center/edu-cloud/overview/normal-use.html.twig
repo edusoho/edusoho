@@ -1,0 +1,153 @@
+{% if overview.locked|default(false) == true %}
+  <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.overview.locked_tips'|trans}}：4008041114。</div>
+{% endif %}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="edu-user clearfix">
+        <div class="user-part pull-left">
+          <a href="{{path('admin_v2_cloud_access')}}" target="_blank"><img class="img-circle" {% if  isBinded.avatar|default("") == "" %} src="{{ default_path('user_avatar.png') }}" {% else %} src="{{ isBinded.avatar }}" {% endif %}></a>
+          <div class="user-name text-md pts">Hi,<a href="{{path('admin_v2_cloud_access')}}" target="_blank"><span class="text-primary">{{ isBinded.name | default('') }}</span></a></div>
+        </div>
+        <div class="user-part pull-left">
+          <div class="ptm">{{'admin.edu_cloud.overview.balance'|trans}}</div>
+          <div class="money">{{ overview.cashAccount }}</div>
+          <a href="{{path('admin_v2_cloud_recharge')}}" target="_blank" class="btn btn-primary btn-xs mrs">{{'admin.edu_cloud.overview.recharge'|trans}}</a>
+          <a href="{{path('admin_v2_cloud_account_person')}}" target="_blank">{{'admin.edu_cloud.overview.cost_center'|trans}}</a>
+        </div>
+        <div class="user-part pull-left">
+          <div class="ptm">{{'admin.edu_cloud.overview.cash_coupon'|trans}}</div>
+          <div class="money">{{ overview.couponAccount }}</div>
+          <a href="{{path('admin_v2_cloud_list_coupon')}}" target="_blank">{{'admin.edu_cloud.overview.cash_coupon_manage'|trans}}</a>
+        </div>
+      </div>
+
+
+      {% if paidService %}
+        <div class="edu-combo">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="panel-title">{{'admin.edu_cloud.overview.open_service'|trans}}</div>
+            </div>
+            <div class="panel-body">
+              <div class="col-md-4">
+                <a href="{{path('admin_v2_cloud_service_overview',{type:'storage'})}}" target="_blank" class="my-products-item">
+                  <i class="es-icon es-icon-playcircleoutline"></i>
+                  {{'admin.edu_cloud.overview.cloud_video'|trans}}
+                </a>
+              </div>
+            <div class="col-md-4">
+              <a href="{{path('admin_v2_cloud_service_overview',{type:'search'})}}" target="_blank" class="my-products-item">
+                <i class="es-icon es-icon-search"></i>
+                {{'admin.edu_cloud.overview.cloud_search'|trans}}
+              </a>
+            </div>
+            {% if 'live' in paidService %}
+              <div class="col-md-4">
+                <a href="{{path('admin_v2_cloud_service_overview',{type:'live'})}}" target="_blank" class="my-products-item">
+                  <i class="es-icon es-icon-zhibokecheng"></i>
+                  {{'admin.edu_cloud.overview.cloud_live'|trans}}
+                </a>
+              </div>
+            {% endif %}
+            {% if 'sms' in paidService %}
+              <div class="col-md-4">
+                <a href="{{path('admin_v2_cloud_service_overview',{type:'sms'})}}" target="_blank" class="my-products-item">
+                  <i class="es-icon es-icon-textsms"></i>
+                  {{'admin.edu_cloud.overview.cloud_sms'|trans}}
+                </a>
+              </div>
+            {% endif %}
+            {% if 'email' in paidService %}
+              <div class="col-md-4">
+                <a href="{{path('admin_v2_cloud_service_overview',{type:'email'})}}" target="_blank" class="my-products-item">
+                  <i class="es-icon es-icon-mail"></i>
+                  {{'admin.edu_cloud.overview.cloud_eamil'|trans}}
+                </a>
+              </div>
+            {% endif %}
+            {% if 'robotAccount' in paidService %}
+              <div class="col-md-4">
+                <a href="{{path('admin_v2_cloud_service_overview',{type:'robotQA'})}}" target="_blank" class="my-products-item">
+                  <i class="es-icon es-icon-cloud-ask"></i>
+                  {{'admin.edu_cloud.overview.cloud_Q&A'|trans}}
+                </a>
+              </div>
+            {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+
+    {% if unPaidService %}
+      <div class="edu-combo">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">{{'admin.edu_cloud.overview.need_open_and_charge_tips'|trans}}</div>
+          </div>
+          <div class="panel-body">
+          {% if 'live' in unPaidService %}
+            <div class="col-md-4">
+              <a href="{{path('admin_v2_cloud_service_overview',{type:'live'})}}" target="_blank" class="my-products-item">
+                <i class="es-icon es-icon-zhibokecheng"></i>
+                {{'admin.edu_cloud.overview.cloud_live'|trans}}
+              </a>
+            </div>
+          {% endif %}
+          {% if 'sms' in unPaidService %}
+            <div class="col-md-4">
+              <a href="{{path('admin_v2_cloud_service_overview',{type:'sms'})}}" target="_blank" class="my-products-item">
+                <i class="es-icon es-icon-textsms"></i>
+                {{'admin.edu_cloud.overview.cloud_sms'|trans}}
+              </a>
+            </div>
+          {% endif %}
+          {% if 'email' in unPaidService %}
+            <div class="col-md-4">
+              <a href="{{path('admin_v2_cloud_service_overview',{type:'email'})}}" target="_blank" class="my-products-item">
+                <i class="es-icon es-icon-mail"></i>
+                {{'admin.edu_cloud.overview.cloud_eamil'|trans}}
+              </a>
+            </div>
+          {% endif %}
+          {% if 'robotAccount' in unPaidService %}
+            <div class="col-md-4">
+              <a href="{{path('admin_v2_cloud_service_overview',{type:'robotQA'})}}" target="_blank" class="my-products-item">
+                <i class="es-icon es-icon-cloud-ask"></i>
+                {{'admin.edu_cloud.overview.cloud_Q&A'|trans}}
+              </a>
+            </div>
+          {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">{{'admin.edu_cloud.overview.product_update_log'|trans}}</div>
+        </div>
+        <div class="panel-body">
+          <ul class="update-list">
+            {% for item in overview.updateDoc.items %}
+              <li class="pvs">
+                <a href="{{ 'http://open.edusoho.com'~item.url }}" class="text-overflow link-gray" target="_blank">
+                  <i class="es-icon es-icon-dot text-primary"></i>
+                  <span class="text-muted mrm">{{ item.createdTime | date('m-d') }}</span>
+                  {% if item.name | length > 15 %}
+                    {{ item.name | slice(0,15) }}
+                  {% else %}
+                    {{ item.name }}
+                  {% endif %}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+    
+  </div>

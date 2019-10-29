@@ -1,0 +1,60 @@
+{% extends 'admin-v2/layout.html.twig' %}
+{% set script_controller = 'topxiaadminbundle/controller/bill/index' %}
+{% set menu = 'admin_v2_bill_coin' %}
+{% set coinSetting = setting('coin') %}
+{% block main %}
+    {% include 'admin-v2/trade/bill/form-filter.html.twig' with {'exportName': 'bill-coin-flow'} %}
+    <p class="text-muted">
+      <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ inflow|default(0) }}</strong> {{ coinSetting.coin_name|default('finance.coin'|trans) }}</span>
+      <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ outflow|default(0) }}</strong> {{ coinSetting.coin_name|default('finance.coin'|trans) }}</span>
+      <span class="pull-right">
+        {{ 'coin.rate'|trans }}: 1{{ 'site.currency.CNY'|trans }} = {{ coinSetting.cash_rate ~ coinSetting.coin_name|default('finance.coin'|trans) }}
+      </span>
+    </p>
+    <div class="table-responsive">
+      <table class="table table-striped text-sm">
+        <tr class="text-sm">
+          <th width="150">{{ 'order.sn'|trans }}</th>
+          <th>{{ 'name'|trans }}</th>
+          <th width="200">{{ 'cashflow.trade_sn'|trans }}/{{ 'cashflow.order_sn'|trans }}</th>
+          <th width="100">{{ 'user.fields.username_label'|trans }}</th>
+          <th width="115">{{ 'cashflow.created_time'|trans }}</th>
+          <th width="120" class="text-right prl"><span>{{ 'cashflow.inflow'|trans }}</th>
+        </tr>
+        {% for cash in cashes %}
+        {% set user = users[cash['buyer_id']]|default() %}
+        {% set trade = trades[cash.trade_sn]|default() %}
+          <tr>
+            <td>{{ cash.sn }}</td>
+            <td>
+              <span>{{ cash.title }}</span>
+            </td>
+            <td>
+              <span class="text-muted">{{ 'cashflow.trade_sn'|trans }}：{{ cash.trade_sn|default('--') }}</span><br/>
+              <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn|default('--') }}</span>
+            </td>
+            {% if has_permission('admin_v2_user_manage') %}
+              <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a></td>
+            {% else %}
+              <td><a target="_blank" href="{{ path('user_show', { id:user.id }) }}">
+              {{ user.nickname }}</a></td>
+            {% endif %}
+            <td>{{ cash.created_time|date('Y-m-d H:i') }}</td>
+            <td class="text-right prl">
+            {% if cash.type =="inflow" %}
+              <span class="text-success">
+                +{{ cash.amount }}
+              </span>
+            {% else %}
+             <span class="warning-state">
+                -{{ cash.amount }}
+              </span>
+            {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+ {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

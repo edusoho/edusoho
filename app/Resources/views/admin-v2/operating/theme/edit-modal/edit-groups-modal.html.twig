@@ -1,0 +1,29 @@
+{% extends 'admin-v2/operating/theme/edit-modal-layout.html.twig' %}
+
+{% block custom_count %}{% endblock %}
+
+{% block custom_category_count %}
+  <div class="form-group">
+    <label class="col-sm-3 control-label">{{ 'admin.setting.theme.manage.modal.setting_custom_category_count'|trans }}</label>
+    <div class="col-sm-9 check-box">
+      <label class="checkbox-inline">
+        <input type="checkbox" name="select1" value="checked" {% if config.select1|default() %} checked="checked" {% endif %}>
+        {{ 'admin.setting.theme.manage.modal.hot_group'|trans }}
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" name="select2" value="checked" {% if config.select2|default() %} checked="checked" {% endif %}>
+        {{ 'admin.setting.theme.manage.modal.latest_article'|trans({'%article_name%': setting('article.name')|default('admin.setting.theme.manage.modal.default_article'|trans)}) }}
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" name="select3" value="checked" {% if config.select3|default() %} checked="checked" {% endif %}>
+        {{ 'admin.setting.theme.manage.modal.student_comment'|trans }}
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" name="select4" value="checked"  {% if config.select4|default() %} checked="checked" {% endif %}>
+        {{ 'admin.setting.theme.manage.modal.student_dynamic'|trans }}
+      </label>
+    </div>
+  </div>
+{% endblock %}
+
+{% block custom_orderby %}{% endblock %}

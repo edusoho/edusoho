@@ -2,245 +2,302 @@
 {% block title %}{{ 'admin.hompage.html_head_title'|trans }}{% endblock %}
 {% set panel = 'dashboard' %}
 {% set script_controller = 'default/index' %}
+
+{% set bodyClass = "admin-v2-page" %}
+
 {% block container %}
-  {# 域名检查提示#}
-  {{ render(controller('AppBundle:Admin/Default:validateDomain')) }}
-  <div class="row">
-    {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
-      {{ render(controller('AppBundle:Admin/Default:getCloudNotices')) }}
-    {% endif %}
+  <div class="container admin-v2-container">
+    {# 域名检查提示#}
+    <div class="alert-list">
+    {# {{ render(controller('AppBundle:Admin/Default:validateDomain')) }} #}
 
-    <div class="
-      {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
-        col-md-6
-      {% else %}
-        col-md-12
-      {% endif %}
-      ">
-      <div class="panel panel-default panel-150">
-        <div class="panel-heading">
-          <h3 class="panel-title">{{ 'admin.homepage.status_bar.content_title'|trans }}</h3>
-        </div>
-        <div class="panel-body" id="system-status" data-url="{{ path('admin_system_status') }}">
-          <div class="empty">{{ 'admin.homepage.loadig_data_tips'|trans }}</div>
-        </div>
+      <div class="alert alert-warning" role="alert">
+        <span>当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】</span>
+        <a class="alert-link" href='#'>立即设置 》</a>
+      </div>
+
+      <div class="alert alert-warning" role="alert">
+        <span>欢迎使用！试用将于 <strong>2019年12月30日 </strong> 到期，剩余 <strong>96</strong> 天。 您可以联系销售人员购买授权版本，或者延长试用期限。 <span class="cd-ml16">电话：4008041114 或 QQ：800023860-【站点设置】-【基础信息】-【网站域名】</span></span>
+        <a class="alert-link" href='#'>立即设置 》</a>
       </div>
     </div>
-  </div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading clearfix">
-      <h3 class="panel-title">
-        {{ 'admin.homepage.todays_data_title'|trans }}
-        <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-today-data-popover"></span>
-        {{ 'admin.homepage.todays_data.tooltips'|trans|raw }}
-      </h3>
+    <div class="row">
+      <div class="col-md-9">
 
-    </div>
-    <div class="panel-body" id="site-overview-table" data-url="{{ path('admin_operation_analysis') }}">
-      <div class="empty">{{ 'admin.homepage.loadig_data_tips'|trans }}</div>
-    </div>
-  </div>
-  {##}
-  {#<div class="panel panel-default panel-380">#}
-    {#<div class="panel-heading">#}
-      {#<div class="pull-right">#}
-        {#<span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}</span>#}
-        {#<div class="btn-group btn-group-xs">#}
-          {#<button type="button" class="btn btn-primary js-user-switch-button"#}
-                  {#data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"#}
-                  {#data-url="{{ path('admin_user_statistic', {period: 'week'}) }}">最近7天#}
-          {#</button>#}
-          {#<button type="button" class="btn btn-default js-user-switch-button"#}
-                  {#data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"#}
-                  {#data-url="{{ path('admin_user_statistic', {period: 'month'}) }}">最近30天#}
-          {#</button>#}
-        {#</div>#}
-      {#</div>#}
-      {#<h3 class="panel-title">{{ '用户统计'|trans }}#}
-        {#<span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>#}
-        {#<div class="popover-content hidden">#}
-          {#<div class="popover-item">#}
-            {#<div class="title">{{ '活跃用户数'|trans }}</div>#}
-            {#<div class="content">{{ '在30天内登录过系统的用户即为活跃用户'|trans }}</div>#}
-          {#</div>#}
-          {#<div class="popover-item">#}
-            {#<div class="title">{{ '流失用户数'|trans }}</div>#}
-            {#<div class="content">{{ '在30天内没有登录过系统的注册用户即为流失用户'|trans }}</div>#}
-          {#</div>#}
-        {#</div>#}
-      {#</h3>#}
-    {#</div>#}
-    {#<div class="panel-body js-statistic-areas" id="user-statistic"#}
-         {#data-url="{{ path('admin_user_statistic', {period: 'week'}) }}" style="height:320px;">#}
-      {#<div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>#}
-    {#</div>#}
-  {#</div>#}
-  {##}
+        {# 任务助手 #}
+        <div class="admin-v2-section">
+          <div class="admin-v2-section__header">任务助手<span class="admin-v2-section__tip">六步完成网校基础建设</span><span class="admin-v2-section__more">展开<i class="es-icon es-icon-keyboardarrowdown"></i></span></div>
+          <div class="admin-v2-section__body">
+            <div class="row">
+              <div class="col-md-2 pr0">
+                <div class="task-step task-step--done">
+                  <div class="task-step__title">接入教育云</div>
+                  <div class="task-step__tip">直播、点播安全无忧！</div>
+                  <a class="task-step__btn" href="#">完成任务</a>
+                  <a class="task-step__link" href="#">查看接入指南</a>
+                </div>
+              </div>
+              <div class="col-md-2 pr0">
+                <div class="task-step">
+                  <div class="task-step__title">申请支付</div>
+                  <div class="task-step__tip">开通网校支付，轻松 在线收款</div>
+                  <a class="task-step__btn" href="#">完成任务</a>
+                  <a class="task-step__link" href="#">查看接入指南</a>
+                </div>
+              </div>
+              <div class="col-md-2 pr0">
+                <div class="task-step">
+                  <div class="task-step__title">设置注册</div>
+                  <div class="task-step__tip">设置注册，根据需要 开通合适的注册方式</div>
+                  <a class="task-step__btn" href="#">完成任务</a>
+                  <a class="task-step__link" href="#">查看接入指南</a>
+                </div>
+              </div>
+              <div class="col-md-2 pr0">
+                <div class="task-step">
+                  <div class="task-step__title">安装常见插件</div>
+                  <div class="task-step__tip">为你推荐前10家优秀 网校常用的插件</div>
+                  <a class="task-step__btn" href="#">完成任务</a>
+                  <a class="task-step__link" href="#">查看接入指南</a>
+                </div>
+              </div>
+              <div class="col-md-2 pr0">
+                <div class="task-step">
+                  <div class="task-step__title">创建课程</div>
+                  <div class="task-step__tip">设置课程，快速开通 内容商品</div>
+                  <a class="task-step__btn" href="#">完成任务</a>
+                  <a class="task-step__link" href="#">查看接入指南</a>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="task-step">
+                  <div class="task-step__title">装修网校</div>
+                  <div class="task-step__tip">好的装修是成功的一半</div>
+                  <a class="task-step__btn" href="#">完成任务</a>
+                  <a class="task-step__link" href="#">查看接入指南</a>
+                </div>
+              </div>
 
-  <div class="row">
-    <div class="col-md-6">
-      <div class="panel panel-default panel-380">
-        <div class="panel-heading">
-          <div class="pull-right">
-            <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
-            <div class="btn-group btn-group-xs">
-              <button type="button" class="btn btn-primary js-study-switch-button"
-                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_study_statistic', {period: 'week'}) }}">{{ 'admin.homepage.statistic.week'|trans }}
-              </button>
-              <button type="button" class="btn btn-default js-study-switch-button"
-                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_study_statistic', {period: 'month'}) }}">{{ 'admin.homepage.statistic.month'|trans }}
-              </button>
             </div>
           </div>
-          <h3 class="panel-title">{{ 'admin.homepage.order_statistic_title'|trans }}
-            <span data-toggle="popover"
-                  class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
-            {{ 'admin.homepage.order_statistic.tips'|trans|raw }}
-          </h3>
         </div>
-        <div class="panel-body js-statistic-areas" id="study-count-statistic"
-             data-url="{{ path('admin_study_statistic', {period: 'week'}) }}" style="height:320px;">
 
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="panel panel-default panel-380">
-        <div class="panel-heading">
-          <div class="pull-right">
-            <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
-            <div class="btn-group btn-group-xs">
-              <button type="button" class="btn btn-primary js-order-switch-button"
-                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_order_statistic', {period: 'week'}) }}">{{ 'admin.homepage.statistic.week'|trans }}</button>
-              <button type="button" class="btn btn-default js-order-switch-button"
-                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_order_statistic',{period: 'month'}) }}">{{ 'admin.homepage.statistic.month'|trans }}</button>
+        {# 数据概览 #}
+        <div class="admin-v2-section">
+          <div class="admin-v2-section__header">数据概览<span class="admin-v2-section__more">更多<i class="es-icon es-icon-chevronright"></i></span></div>
+          <div class="admin-v2-section__body admin-data">
+            <div class="row">
+              <div class="col-md-3 text-center">
+                <div class="admin-data__value">12000</div>
+                <div class="admin-data__explain">今日登录用户</div>
+              </div>
+              <div class="col-md-3 text-center">
+                <div class="admin-data__value">800</div>
+                <div class="admin-data__explain">今日注册用户</div>
+              </div>
+              <div class="col-md-3 text-center">
+                <div class="admin-data__value">1000</div>
+                <div class="admin-data__explain">今日付费订单</div>
+              </div>
+              <div class="col-md-3 text-center">
+                <div class="admin-data__value">999</div>
+                <div class="admin-data__explain">今日新增订单</div>
+              </div>
             </div>
           </div>
-          <h3 class="panel-title">{{ 'admin.homepage.pay_order_statistic_title'|trans }}</h3>
         </div>
-        <div class="panel-body js-statistic-areas" id="pay-order-statistic"
-             data-url="{{ path('admin_order_statistic', {period: 'week'}) }}" style="height:320px;">
 
-        </div>
-      </div>
-    </div>
-  </div>
+        {# 常用功能 #}
+        <div class="admin-v2-section">
+          <div class="admin-v2-section__header cd-mb16">常用功能</div>
+          <div class="admin-v2-section__body">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="text-center admin-function">
+                  <div class="admin-function__icon icon-color-green"><i class="es-icon es-icon-lock"></i></div>
+                  <div class="admin-function__name">创建课程</div>
+                </div>
+              </div>
 
-  <div class="row">
-    <div class="col-md-8">
-      <div class="panel panel-default panel-420">
-        <div class="panel-heading">
-          <div class="pull-right">
-            <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
-            <div class="btn-group btn-group-xs">
-              <button type="button" class="btn btn-primary js-task-switch-button"
-                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_task_learn_statistic', {period: 'week'}) }}">{{ 'admin.homepage.statistic.week'|trans }}</button>
-              <button type="button" class="btn btn-default js-task-switch-button"
-                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_task_learn_statistic', {period: 'month'}) }}">{{ 'admin.homepage.statistic.month'|trans }}</button>
+              <div class="col-md-3">
+                <div class="text-center admin-function">
+                  <div class="admin-function__icon icon-color-yellow"><i class="es-icon es-icon-lock"></i></div>
+                  <div class="admin-function__name">网校装修</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="text-center admin-function">
+                  <div class="admin-function__icon icon-color-green"><i class="es-icon es-icon-lock"></i></div>
+                  <div class="admin-function__name">班级管理</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="text-center admin-function">
+                  <div class="admin-function__icon icon-color-yellow"><i class="es-icon es-icon-lock"></i></div>
+                  <div class="admin-function__name">订单管理</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="text-center admin-function">
+                  <div class="admin-function__icon icon-color-yellow"><i class="es-icon es-icon-lock"></i></div>
+                  <div class="admin-function__name">优惠券</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="text-center admin-function">
+                  <div class="admin-function__icon icon-color-blue"><i class="es-icon es-icon-lock"></i></div>
+                  <div class="admin-function__name">用户设置</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="text-center admin-function">
+                  <div class="admin-function__icon icon-color-yellow"><i class="es-icon es-icon-lock"></i></div>
+                  <div class="admin-function__name">虚拟币</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="text-center admin-function-choose">
+                  <a class="admin-function-btn">
+                    <i class="es-icon es-icon-add"></i><span>添加功能</span>
+                  </a>
+                </div>
+              </div>
+
             </div>
           </div>
-          <h3 class="panel-title">{{ 'admin.homepage.task_finish_statistic_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
-            <span data-toggle="popover"
-                  class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
-            <div class="popover-content hidden">
-              <div class="popover-item">
-                <div class="content">
-                  {{ 'admin.homepage.task_finish_statistic.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+        </div>
+
+        {# 应用简介 #}
+        <div class="admin-v2-section">
+          <div class="admin-v2-section__header">应用简介<a class="admin-v2-section__more" href="#">逛逛营销云应用</a></div>
+          <div class="admin-v2-section__body">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="text-center admin-application">
+                  <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+                  <div class="admin-application__name">打折活动</div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center admin-application">
+                  <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+                  <div class="admin-application__name">打折活动</div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center admin-application">
+                  <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+                  <div class="admin-application__name">打折活动</div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="text-center admin-application">
+                  <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+                  <div class="admin-application__name">打折活动</div>
                 </div>
               </div>
             </div>
-          </h3>
+          </div>
         </div>
-        <div class="panel-body js-statistic-areas" id="study-task-count-statistic"
-             data-url="{{ path('admin_task_learn_statistic', {period: 'week'}) }}" style="height:360px;">
 
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="panel panel-default panel-420">
-        <div class="panel-heading">
-          <div class="pull-right">
-            <div class="btn-group btn-group-xs">
-              <button type="button" class="btn btn-primary js-course-switch-button"
-                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_course_explore', {period: 'week'}) }}">{{ 'admin.homepage.statistic.week'|trans }}</button>
-              <button type="button" class="btn btn-default  js-course-switch-button"
-                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_course_explore', {period: 'month'}) }}">{{ 'admin.homepage.statistic.month'|trans }}</button>
+        {# 经营建议 #}
+        <div class="admin-v2-section">
+          <div class="admin-v2-section__header">经营建议<a class="admin-v2-section__more" href="#">前去Edusoho商学院</a></div>
+          <div class="admin-v2-section__body admin-advice">
+            <div class="row">
+              <div class="col-md-3">
+                <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+              </div>
+              <div class="col-md-3">
+                <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+              </div>
+              <div class="col-md-3">
+                <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+              </div>
+              <div class="col-md-3">
+                <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+              </div>
             </div>
           </div>
-          <h3 class="panel-title">{{ 'admin.homepage.course_ranking_title'|trans }}</h3>
         </div>
-        <div class="panel-body js-statistic-areas" id="course-explore-list"
-             data-url="{{ path('admin_course_explore', {period: 'week'}) }}">
 
-        </div>
       </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-4">
-
-      <div class="panel panel-default panel-420 js-course-question-list">
-        <div class="panel-heading">
-          <a class="pull-right" href="{{ url('admin_question', {postStatus: 'unPosted'}) }}"
-          >{{ 'admin.homepage.more_btn'|trans }}</a>
-          <h3 class="panel-title">{{ 'admin.homepage.latest_question_title'|trans }}</h3>
-        </div>
-        <div class="panel-body">
-          {{ render(controller('AppBundle:Admin/Default:unsolvedQuestionsBlock')) }}
-        </div>
-      </div>
-
-    </div>
-    <div class="col-md-4">
-      <div class="panel panel-default panel-420">
-        <div class="panel-heading">
-          <a href="{{ path('admin_review') }}" class="pull-right">{{ 'admin.homepage.more_btn'|trans }}</a>
-          <h3 class="panel-title">
-            {{ 'admin.homepage.latest_review_title'|trans }}
-          </h3>
-        </div>
-        <div class="panel-body">
-          {{ render(controller('AppBundle:Admin/Default:courseReview')) }}
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="panel panel-default search-panel panel-420">
-        <div class="panel-heading">
-          {# <a href="" class="pull-right">{{ '更多'|trans }}</a>#}
-          <h3 class="panel-title">
-            {{ 'admin.homepage.top_search_title'|trans }}
-            <small>{{ 'admin.homepage.statistic.week'|trans }}</small>
-          </h3>
-        </div>
-        <div class="panel-body">
-          {% if not setting('cloud_search.search_enabled') %}
-            <div class="empty">
-              <a target="_blank" href="{{ path('admin_edu_cloud_search') }}">{{ 'admin.homepage.free_access_edu_cloud_search_btn'|trans }}</a>
+      <div class="col-md-3">
+        <div class="admin-info-section">
+          <div class="admin-website">
+            <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+            <div class="admin-website__text">
+              <div class="admin-website__name">哎呀音乐哎呀音乐哎呀哎呀 呀音乐哎呀音乐哎呀音乐...</div>
+              {# 三种颜色的客户等级 #}
+              <span class="rank-tag rank-tag--yellow rank-tag--green"><span class="rank-tag__icon"><i class="es-icon es-icon-star"></i></span><span class="rank-tag__text">商业授权</span></span>
+              <span class="theme-tag">雅致简洁主题</span>
             </div>
-          {% else %}
-            {{ render(controller('AppBundle:Admin/Default:cloudSearchRanking')) }}
-          {% endif %}
+          </div>
+          <div class="admin-update">
+            <div class="admin-update__cell"><span class="admin-update__label">云服务：</span><span class="admin-update__number">3个</span ><a class="admin-update__link"href="#">未开启</a></div>
+            <div class="admin-update__cell"><span class="admin-update__label">应用中心：</span><span class="admin-update__number">3个</span><a class="admin-update__link" href="#">未更新</a></div>
+            <div class="admin-update__cell"><span class="admin-update__label">系统更新：</span><span class="admin-update__number">3个</span><a class="admin-update__link"href="#">未更新</a></div>
+          </div>
+          <div class="admin-link">
+            <a class="admin-link__btn" href="#"><i class="es-icon es-icon-live"></i>访问Web</a>
+            <a class="admin-link__btn admin-link__btn--disabled" href="javascript:;"><i class="es-icon es-icon-live"></i>访问App</a>
+            <a class="admin-link__btn" href="#"><i class="es-icon es-icon-live"></i>访问小程序</a>
+          </div>
+          <div class="admin-version">系统版本：8.3.36</div>
+        </div>
+
+        <div class="admin-sidebar-section">
+          <div class="admin-sidebar-section__header">站长公告</div>
+          <div class="admin-sidebar-section__body admin-notice">
+            <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+            <div class="admin-notice__text">北京EduSoho用户大会于11月11日开始，了解详情点击进入>></div>
+          </div>
+        </div>
+
+        <div class="admin-sidebar-section">
+          <div class="admin-sidebar-section__header">EduSoho更新日志<span class="admin-sidebar-section__more">更多<i class="es-icon es-icon-chevronright"></i></span></div>
+          <div class="admin-sidebar-section__body">
+            <div class="admin-log">
+              <div class="admin-log__cell">
+                <span class="admin-log__date cd-mr16">04.26</span>[新增]新增分销推广
+              </div>
+              <div class="admin-log__cell">
+                <span class="admin-log__date cd-mr16">05.12</span>小程序上线
+              </div>
+              <div class="admin-log__cell">
+                <span class="admin-log__date cd-mr16">05.23</span>[新增]新增分销推广分销推广
+              </div>
+              <div class="admin-log__cell">
+                <span class="admin-log__date cd-mr16">04.26</span>微信通知2.0功能上线
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {# 公众号 #}
+        <div class="admin-sidebar-section">
+          <div class="admin-sidebar-section__header">公众号</div>
+          <div class="admin-sidebar-section__body admin-wechat">
+            <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+            <div class="admin-wechat__text">关注EduSoho公众号 获取最新教育资讯</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div  id="cloud-ad" class="admin-cloud-ad modal fade text-center" aria-hidden="true" data-backdrop="static"  tabindex="-1" role="dialog" data-url ="{{ path('admin_cloud_ad') }}">
-    <div class="modal-dialog">
-        <a href="" target="_blank">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-        </a>
+
+    <div  id="cloud-ad" class="admin-cloud-ad modal fade text-center" aria-hidden="true" data-backdrop="static"  tabindex="-1" role="dialog" data-url ="{{ path('admin_cloud_ad') }}">
+      <div class="modal-dialog">
+          <a href="" target="_blank">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          </a>
+      </div>
     </div>
   </div>
 {% endblock %}

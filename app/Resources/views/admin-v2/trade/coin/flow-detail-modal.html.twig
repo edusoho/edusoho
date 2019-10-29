@@ -1,0 +1,53 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{'admin.coin_flow_detail.content_title'|trans({'%nickname%': user.nickname,'%coin_name%': setting('coin.coin_name') })}} {% endblock %}
+{% block body %}
+
+  <p>
+    <span>{{'finance.balance'|trans}}: <strong class="amount-num">{{user_balance(user.id).amount|to_coin(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">{{'coin.recharge'|trans}}: <strong class="inflow-num">{{user_coin_amount('inflow', user.id)|default(0)|to_coin(0) }}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">{{'coin.consume'|trans}}: <strong class="outflow-num">{{user_coin_amount('outflow', user.id)|default(0)|to_coin(0) }}</strong> {{ setting('coin.coin_name') }}</span>
+  </p>
+
+    <div class="table-responsive">
+      <table class="table table-striped">
+        {% if cashes|default(null) %}
+        <tr>
+          <th>{{'name'|trans}}</th>          
+          <th>{{'coin.recharge'|trans}}</th>
+          <th>{{'coin.consume'|trans}}</th>
+          <th>{{'order.created_time'|trans}}</th>
+        </tr>
+        {% for cash in cashes %}
+           <tr>
+            <td><span class="text-sm">{{cash.title}}</span></td>
+
+            {% if cash.type =="inflow" %}
+            <td style="color:#1bb974;">
+               {{ cash.amount|number_format(2) }} 
+            </td>
+            <td></td>
+            {% endif %}
+            {% if cash.type =="outflow" %}
+            <td></td>
+            <td style="color:#ff7b0e;">
+               {{ cash.amount|number_format(2) }}
+            </td>
+            {% endif %}            
+            <td><span class="text-sm">{{cash.created_time|date('Y-m-d H:i:s')}}</span></td>
+          </tr>
+        {% endfor %}
+        {% else %}
+        <div class="empty">{{'site.datagrid.empty'|trans}}</div>
+        {% endif %}
+      </table>
+    </div>
+     {{ admin_macro.paginator(paginator) }}
+{% endblock %}
+
+{% block footer %}
+
+  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+{% endblock %}

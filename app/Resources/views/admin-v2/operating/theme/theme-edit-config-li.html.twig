@@ -1,0 +1,36 @@
+<li class="list-group-item clearfix  {% if pendant.code != 'footer-link' %}theme-edit-item{% endif %}" id="{{ pendant.id }}">
+  <div class="col-md-4 ">
+    {% if pendant.code != 'footer-link' %}
+      <span class="glyphicon glyphicon-move edit-sort"></span>
+    {% else %}
+      <span class="glyphicon glyphicon-lock  edit-sort"></span>
+    {% endif %}
+    <label>
+      <input type="checkbox" data-component-id="{{ pendant.id }}" class="check-block" {% if isChoiced|default(null) %}checked{% endif %}>
+      <span class="default-title">{{ orginAllConfig[key].defaultTitle|default('') }}</span>
+    </label>
+  </div>
+  <div class="col-md-5">
+    {% if pendant.title|default(null) %}
+      {{ pendant.title }}
+    {% else %}
+      {{ pendant.defaultTitle }}
+    {% endif %}
+  </div>
+  <div class="col-md-3 text-right">
+    {% set blockPendant = ['middle-banner', 'footer-link', 'advertisement-banner'] %}
+    {% if pendant.code in blockPendant %}
+      <a href="{{path('admin_v2_block', {category:'theme'|default('all')})}}" target="_blank" class="btn btn-primary btn-sm item-set-btn" {% if not isChoiced|default() %}style="display:none;"{% endif %}>
+        <span class="glyphicon glyphicon-wrench"></span> 
+        {{ 'admin.setting.theme.manage.edit.setting_btn'|trans }}
+      </a>
+    {% elseif pendant.code == 'friend-link' %}
+      <a href="{{path('admin_v2_navigation', {type:'friendlyLink'})}}" target="_blank" class="btn btn-primary btn-sm item-set-btn" {% if not isChoiced|default() %}style="display:none;"{% endif %}>
+        <span class="glyphicon glyphicon-wrench"></span> 
+        {{ 'admin.setting.theme.manage.edit.setting_btn'|trans }}
+      </a>
+    {% else  %}
+      <button class="btn btn-primary btn-sm item-edit-btn" {% if not isChoiced|default(null) %}style="display:none;"{% endif %} data-title="Edit" data-url="{{ path('admin_v2_themes_config_edit') }}"><span class="glyphicon glyphicon-pencil"></span> {{ 'admin.setting.theme.manage.edit_btn'|trans }}</button>
+    {% endif %}
+  </div>
+</li>

@@ -1,0 +1,90 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{% set categoriesFirst = data('Categories',{'group':'course'})%}
+{% set title = config.title ? config.title : config.defaultTitle %}
+{% set subTitle = config.subTitle|default() ? config.subTitle|default() : config.defaultSubTitle|default() %}
+{% block title %}{{ title }}{{'admin.setting.theme.manage.modal.edit'|trans}}{% endblock %}
+{% block body %}
+  <form id="edit-left-course-form" class="form-horizontal item-config-form" role="form">
+    {% block content %}
+      {% block custom_name %}
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="name">{{'admin.setting.theme.manage.custom_name'|trans}}</label>
+          </div>
+          <div class="col-md-7 controls">
+            <input type="text"  class="form-control" name="title" value="{{ title }}">
+          </div>
+        </div>
+      {% endblock %}
+
+      {% block custom_sub_title %}
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="subname">{{'admin.setting.theme.manage.modal.subname'|trans}}</label>
+          </div>
+          <div class="col-md-7 controls">
+            <input type="text"  class="form-control" name="subTitle" value="{{ subTitle }}">
+          </div>
+        </div>
+      {% endblock %}
+
+      {% block custom_count %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label">{{'admin.setting.theme.manage.modal.setting_count'|trans}}</label>
+          <div class="col-sm-4">
+            {% set selectOptions = {4: 4, 8: 8, 12: 12} %}
+            <select class="form-control width-input-large" name="count">
+              {{ select_options(selectOptions, config.count|default(4)) }}
+            </select>
+          </div>
+        </div>
+      {% endblock %}
+
+      {% block custom_category_count %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label">{{'admin.setting.theme.manage.modal.setting_custom_category_count'|trans}}</label>
+          <div class="col-sm-4">
+            {% set selectOptions = {2: 2, 3: 3, 4: 4} %}
+            <select class="form-control width-input-large" name="categoryCount">
+              {{ select_options(selectOptions, config.categoryCount|default(2)) }}
+            </select>
+          </div>
+        </div>
+      {% endblock %}
+
+      {% block custom_orderby %}
+        <div class="form-group">
+          <label class="col-md-3 control-label">{{'admin.setting.theme.manage.modal.setting_custom_orderby'|trans}}</label>
+          <div class="col-md-4 controls">
+          {% set selectOptions = {'latest': 'site.datagrid.filter.latest'|trans, 'hotSeq': 'site.datagrid.filter.hotest'|trans, 'recommendedSeq': 'site.datagrid.filter.recommended'|trans} %}
+            <select id="orderBy" name="orderBy" required="required" class="form-control width-input width-input-large">
+              {{ select_options(selectOptions, config.orderBy|default('latest')) }}
+            </select>
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+      {% endblock %}
+
+      {% block custom_background_color %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label">{{'admin.setting.theme.manage.modal.setting_ustom_background_color'|trans}}</label>
+          <div class="col-sm-9 check-box radios pts">
+            {% set radiosOptions = {'section-gray' : 'admin.setting.theme.manage.modal.color_gray'|trans, 'section-wihte': 'admin.setting.theme.manage.modal.color_wihte'|trans, '': 'admin.setting.theme.manage.modal.color_default'|trans } %}
+            {{ radios('background', radiosOptions, config.background|default("")) }}
+          </div>
+        </div>
+      {% endblock %}
+    {% endblock %}
+    <input class="hide" value="{{ config.id|default() }}" name="id" >
+    <input class="hide" value="{{ config.blockKey|default('left') }}" name="blockKey" >
+  </form>
+
+{% endblock %}
+
+{% block footer %}
+  <button data-submiting-text="{{'form.btn.save.submiting'|trans}}" class="btn btn-primary pull-right" data-form="#edit-left-course-form" id="save-btn">{{'form.btn.confirm'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  <script>app.load('topxiaadminbundle/controller/theme/left-edit-modal')</script>
+{% endblock %}
