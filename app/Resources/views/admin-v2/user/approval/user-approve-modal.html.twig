@@ -1,0 +1,46 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}
+    {{'admin.user.approval.approving_tab.approve.heading_title'|trans}}
+{% endblock %}
+{% block body %}
+<style type="text/css">
+  .modal-body {max-height: 10000px !important;}
+</style>
+
+<form id="approve-form" class="form-horizontal" method="post" action="{{ path('admin_v2_approval_approve', {id:user.id}) }}">
+
+  {% include 'admin-v2/user/approval/user-approval-form-content.html.twig' with {'status':'approving'} %}
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="note">{{'admin.user.approval.approving_tab.approve.fields.rejection_reason_label'|trans}}</label>
+    </div>
+    <div class="col-md-8">
+    <textarea id="note" name="note" class="form-control" rows="3"></textarea>
+    </div>
+</div>
+
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input id="form_status" type="hidden" name="form_status" >
+</form>
+{% endblock %}
+
+{% block footer %}
+<div class="pull-right">
+
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+
+
+  <button type="submit" class="btn btn-danger user-approve-btn" data-toggle="form-submit" data-status='fail' data-target="#approve-form">{{'admin.user.approval.approving_tab.approve.failed_btn'|trans}}</button>
+  <button type="submit" class="btn btn-success user-approve-btn" data-toggle="form-submit" data-status='success' data-target="#approve-form">{{'admin.user.approval.approving_tab.approve.success_btn'|trans}}</button>
+
+
+  
+  <script>app.load('user/approve');</script>
+    
+</div>
+{% endblock %}
