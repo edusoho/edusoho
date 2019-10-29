@@ -728,11 +728,34 @@ admin_v2:
                                     router_params:
                                         approvalStatus: approved
                                     disabled: ture
-                        admin_message_manage:
-                            name: admin.user.message_menu
+                        admin_v2_teacher:
+                            name: admin_v2.user.teacher_menu
                             children:
-                                admin_message:
-                                    name: admin.user.message.basic_tab
+                                admin_v2_teacher_manage:
+                                    name: admin_v2.user.teacher.basic_tab
+                                    router_name: admin_v2_teacher
+                                    disable: true
+                                    children:
+                                        admin_v2_teacher_promote:
+                                            name: admin_v2.user.teacher.basic_tab.promote_btn
+                                            class: promote-teacher
+                                            mode: modal
+                                            icon: 'glyphicon glyphicon-hand-up'
+                                            group: groupButton
+                                            visible: (user.promoted == 0)
+                                            router_params:
+                                                id: (user.id)
+                                                type: teacherList
+                                        admin_v2_teacher_promote_cancel:
+                                            name: admin_v2.btn.recommend_cancel_btn
+                                            class: cancel-promote-teacher
+                                            mode: none
+                                            group: groupButton
+                                            visible: (user.promoted == 1)
+                                            router_params:
+                                                id: (user.id)
+                                admin_v2_teacher_promote_list:
+                                    name: admin_v2.user.teacher.promote_list_tab
                                     disable: true
         # 交易模块
         admin_v2_trade:

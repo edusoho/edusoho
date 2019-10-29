@@ -657,6 +657,12 @@ admin_v2.user.approval.basic_tab.cancel_btn: Cancel
 admin_v2.user.approval.approving_menu: Approving
 admin_v2.user.approval.approved_menu: Approved
 
+#用户管理-教师管理
+admin_v2.user.teacher_menu: Teachers
+admin_v2.user.teacher.basic_tab: Teacher Managemen
+admin_v2.user.teacher.basic_tab.promote_btn: Recommended Teacher
+admin_v2.user.teacher.promote_list_tab: Teacher recommendation
+
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: Order Manage
 admin_v2.trade.goods_order.menu: Goods Order
