@@ -657,6 +657,12 @@ admin_v2.user.approval.basic_tab.cancel_btn: Cancel
 admin_v2.user.approval.approving_menu: Approving
 admin_v2.user.approval.approved_menu: Approved
 
+#用户管理-教师管理
+admin_v2.user.teacher_menu: Teachers
+admin_v2.user.teacher.basic_tab: Teacher Managemen
+admin_v2.user.teacher.basic_tab.promote_btn: Recommended Teacher
+admin_v2.user.teacher.promote_list_tab: Teacher recommendation
+
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: Order Manage
 admin_v2.trade.goods_order.menu: Goods Order
@@ -696,6 +702,16 @@ admin_v2.cloud_service.basic_menu: Cloud Server
 admin_v2.cloud_service.sms_tab: Sms Cloud
 admin_v2.cloud_service.sms_overview_tab: Overview
 
+
+# 应用中心-基础云-云服务-即时聊天设置
+admin_v2.cloud.im_setting_menu: Chat Setting
+admin_v2.cloud.im_setting.basic_tab: Chat Setting
+
+# 数据-数据统计
+admin_v2.data_statictics.analysis.basic_group: Data Analysis
+admin_v2.data_statistics.statistics.menu: Data Statistics
+admin_v2.data_statistics.statistics.basic_tab: Data Statistics
+
 # 应用中心-基础云-授权信息
 admin_v2.cloud.cloud_setting_menu: License
 admin_v2.cloud.cloud_setting.basic_tab: License
@@ -720,5 +736,4 @@ admin_v2.system.optimize.basic_tab: System Optimization
 admin_v2.system.logs_menu: System Logs
 admin_v2.system.logs.logs_query_tab: System Log
 admin_v2.system.logs.logs_prod_tab: Program Log
-
 # 新版后台结束

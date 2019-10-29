@@ -56,6 +56,7 @@ class UserApprovalController extends BaseController
             $approvals = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
             $approvals = ArrayToolkit::index($approvals, 'userId');
         }
+
         return $this->render('admin-v2/user/approval/approvals.html.twig', array(
             'users' => $users,
             'paginator' => $paginator,
