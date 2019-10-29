@@ -200,6 +200,10 @@ admin_setting_my_cloud: admin_v2_setting_my_cloud #授权信息
 # 系统
 admin_system: admin_v2_system
 
+# 系统-系统管理-系统优化
+admin_optimize: admin_v2_optimize
+admin_optimize_settings: admin_v2_optimize_settings
+
 # 系统-系统管理-系统日志
 admin_logs: admin_v2_logs
 admin_logs_query: admin_v2_logs_query
