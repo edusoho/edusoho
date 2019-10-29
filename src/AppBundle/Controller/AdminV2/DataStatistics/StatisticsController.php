@@ -16,6 +16,7 @@ use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Service\ViewLogService;
+use Biz\Taxonomy\Service\CategoryService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
@@ -1489,6 +1490,9 @@ class StatisticsController extends BaseController
         return $this->createService('Task:TaskResultService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
