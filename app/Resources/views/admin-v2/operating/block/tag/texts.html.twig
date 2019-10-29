@@ -1,0 +1,10 @@
+{% for key,value in data %}
+    <div class="form-group">
+        <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][{{ key }}]">
+            {{ block.meta.itemsLabel[key]|trans }}
+        </label>
+        <div class="col-md-9 col-xs-9">
+            <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][{{ key }}]" value="{{ value|default('') }}">
+        </div>
+    </div>
+{% endfor %}

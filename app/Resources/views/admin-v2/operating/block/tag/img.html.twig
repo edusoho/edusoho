@@ -1,0 +1,15 @@
+<div class="form-group">
+  <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][src]">{{'admin.block_manage.visual_edit.tag_img'|trans}}</label>
+  <div class="col-md-7 col-xs-7">
+    <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">
+  </div>
+  <div class="col-md-2 col-xs-2">
+    <div class="btn btn-default btn-sm img-upload webuploader-container" id="item-{{ code }}-uploadId-{{ dataId }}" data-url="{{ path('admin_v2_block_picture_upload', {blockId:block.id, code:code}) }}">{{'admin.block_manage.visual_edit.tag_img_upload'|trans}}</div>
+  </div>
+</div>
+<div class="form-group">
+  <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][alt]">{{'admin.block_manage.visual_edit.tag_img_describe'|trans}}</label>
+  <div class="col-md-8 col-xs-8">
+    <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][alt]" id="data[{{ code }}][{{ dataId }}][alt]" value="{{ data.alt|default('') }}">
+  </div>
+</div>

@@ -362,7 +362,7 @@ admin_v2:
                                 admin_v2_cloud_attachment_setting:
                                     name: admin_v2.cloud.attachment_setting.basic_tab
                                     disable: true
-                                
+
         # 营销管理模块
         admin_v2_marketing:
             name: admin_v2.nav.marketing
@@ -454,6 +454,50 @@ admin_v2:
                                     name: admin_v2.wechat_app.menu
                                     router_name: admin_v2_wechat_app
                                     disable: true
+                        admin_v2_setting_mobile:
+                            name: admin_v2.operation.mobile_menu
+                            children:
+                                admin_v2_mobile_settings:
+                                    name: admin_v2.operation.mobile.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_mobile
+                                admin_v2_mobile_banner_manage:
+                                    name: admin_v2.operation.mobile.banner_setting_tab
+                                    disable: true
+                                    router_name: admin_v2_mobile_banner_manage
+                                admin_v2_discovery_column_index:
+                                    name: admin_v2.operation.mobile.discovery_column_tab
+                                    disable: true
+                                    children:
+                                        admin_v2_discovery_column_create:
+                                            name: admin_v2.operation.mobile.discovery_column_tab.create_btn
+                                            group: topBtn
+                                            mode: modal
+                        admin_v2_block_manage:
+                            name: admin_v2.operation.block_menu
+                            group: 2
+                            children:
+                                admin_v2_block_theme:
+                                    name: admin_v2.operation.block.theme.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_block
+                                    router_params:
+                                        category: theme
+                                admin_v2_block_all:
+                                    name: admin_v2.operation.block.all.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_block
+                                    router_params:
+                                        category: all
+                                admin_v2_block_system:
+                                    name: admin_v2.operation.block.system.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_block
+                                    router_params:
+                                        category: system
+                                admin_v2_setting_theme:
+                                    name: admin_v2.operation.site.theme_tab
+                                    disable: true
                         admin_v2_site_setting:
                             name: admin_v2.operation.site_menu
                             router_name: admin_v2_navigation
@@ -490,25 +534,6 @@ admin_v2:
                                     disable: true
                                     router_params:
                                         type: friendlyLink
-                        admin_v2_setting_mobile:
-                            name: admin_v2.operation.mobile_menu
-                            children:
-                                admin_v2_mobile_settings:
-                                    name: admin_v2.operation.mobile.basic_tab
-                                    disable: true
-                                    router_name: admin_v2_setting_mobile
-                                admin_v2_mobile_banner_manage:
-                                    name: admin_v2.operation.mobile.banner_setting_tab
-                                    disable: true
-                                    router_name: admin_v2_mobile_banner_manage
-                                admin_v2_discovery_column_index:
-                                    name: admin_v2.operation.mobile.discovery_column_tab
-                                    disable: true
-                                    children:
-                                        admin_v2_discovery_column_create:
-                                            name: admin_v2.operation.mobile.discovery_column_tab.create_btn
-                                            group: topBtn
-                                            mode: modal
                 #内容运营(group)
                 admin_v2_content_operation_group:
                     name: admin_v2.operation.content_operation.basic_group
@@ -742,10 +767,53 @@ admin_v2:
 #                                    name: admin.user.teacher.promote_list_tab
 #                                    disable: true
 
-#        # 交易模块
-#        admin_v2_trade:
-#            name: admin_v2.nav.trade
-#            children:
+        # 交易模块
+        admin_v2_trade:
+            name: admin_v2.nav.trade
+            children:
+                admin_v2_basic_order_manage_group:
+                    name: admin_v2.trade.order_manage.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_goods_order:
+                            name: admin_v2.trade.goods_order.menu
+                            router_name: admin_v2_order_manage
+                            children:
+                                admin_v2_goods_order_list:
+                                    name: admin_v2.trade.goods_order.basic_tab
+                                    router_name: admin_v2_order_manage
+                        admin_v2_order_refunds:
+                            name: admin_v2.trade.order_refunds_menu
+                            children:
+                                admin_v2_order_refunds_manage:
+                                    name: admin_v2.trade.order_refunds.basic_tab
+                                    router_name: admin_v2_order_refunds
+                admin_v2_basic_asset_manage_group:
+                    name: admin_v2.trade.asset_manage.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_bills:
+                            name: admin_v2.trade.bills_menu
+                            children:
+                                admin_v2_bill_cash:
+                                    name: admin_v2.trade.bills.cash_records_tab
+                                    router_name: admin_v2_bill
+                                    router_params:
+                                        type: money
+                                    disable: true
+                                admin_v2_bill_coin:
+                                    name: admin_v2.trade.bills.coin_records_tab
+                                    router_name: admin_v2_bill
+                                    router_params:
+                                        type: coin
+                                    disable: true
+                        admin_v2_user_coin:
+                            name: admin_v2.trade.coin_menu
+                            children:
+                                admin_v2_coin_user_records:
+                                    name: admin_v2.trade.coin.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_coin_user_records
 #        # 数据模块
 #        admin_v2_statistics:
 #            name: admin_v2.nav.statistics
