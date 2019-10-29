@@ -1,0 +1,205 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'admin.user.manage.user_edit.fields.heading_title'|trans}}{% endblock %}
+{% block body %}
+
+<form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_v2_user_edit', {id:user.id}) }}">
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="truename">{{'user.fields.truename_label'|trans}}</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="truename" name="truename" class="form-control" value="{{profile.truename}}" >
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="gender">{{'user.fields.gender_label'|trans}}</label>
+    </div>
+    <div class="col-md-7 controls radios">
+      <div id="gender">
+        <input type="radio" id="gender_0" name="gender" value="male"
+        {% if profile.gender == 'male' %} checked="checked" {% endif %}>
+        <label for="gender_0">{{'user.fields.gender.male'|trans}}</label>
+
+        <input type="radio" id="gender_1" name="gender" value="female"
+        {% if profile.gender == 'female' %} checked="checked" {% endif %}>
+        <label for="gender_1">{{'user.fields.gender.female'|trans}}</label>
+      </div>
+
+    </div>
+  </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label"> 
+        <label for="idcard">{{'user.fields.idcard_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="idcard" name="idcard" class="form-control" value="{{profile.idcard}}">
+     </div>
+    </div>
+
+    {% if (user.verifiedMobile|length) > 0 %}
+      <div class="row form-group">
+        <div class="col-md-2 control-label"> 
+          <label for="mobile">{{'user.fields.mobile_label'|trans}}</label>
+        </div>
+        <div class="col-md-7 controls">
+          <div class="control-text"> {{user.verifiedMobile|default('')}}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span> </div>
+       </div>
+      </div>
+    {% else %}
+      <div class="row form-group">
+        <div class="col-md-2 control-label"> 
+          <label for="mobile">{{'user.fields.mobile_label'|trans}}</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="mobile" name="mobile" class="form-control" value="{{profile.mobile|default('')}}">
+       </div>
+      </div>
+    {% endif %}
+
+    <div class="row form-group">
+        <div class="col-md-2 control-label"> 
+          <label for="company">{{'user.fields.company_label'|trans}}</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="company" name="company" class="form-control" value="{{profile.company}}">
+       </div>
+    </div>
+    
+    <div class="row form-group">
+      <div class="col-md-2 control-label"> 
+        <label for="job">{{'admin.user.fields.job_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="job" name="job" class="form-control" value="{{profile.job}}">
+     </div>
+    </div>
+
+    <p></p>
+    <div class="row form-group">
+      <div class="col-md-2 control-label"> 
+        <label for="title">{{'admin.user.fields.title_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="title" name="title" class="form-control" value="{{profile.title}}">
+     </div>
+    </div>
+    <p></p>
+    <div class="row form-group">
+      <div class="col-md-2 control-label"> 
+        <label for="signature">{{'admin.user.fields.signature_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <textarea type="text" rows="4" maxlength="80" id="signature" name="signature" class="form-control">{{profile.signature}}</textarea>
+     </div>
+    </div>
+    <p></p>
+    <div class="row form-group">
+      <div class="col-md-2 control-label"> 
+        <label for="about">{{'admin.user.fields.about_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <textarea id="about" name="about" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{profile.about}}</textarea>
+      </div>
+    </div>
+    <p></p>
+    <div class="row form-group">
+      <div class="col-md-2 control-label"> 
+        <label for="site">{{'admin.user.fields.personal_menu_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="site" name="site" class="form-control" value="{{profile.site}}">
+     </div>
+    </div>
+    <p></p>
+  <div class="row form-group">
+      <div class="col-md-2 control-label"> 
+        <label for="weibo">{{'user.fileds.microblog'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="weibo" name="weibo" class="form-control" value="{{profile.weibo}}">
+     </div>
+    </div>
+    <p></p>
+    <div class="row form-group">
+      <div class="col-md-2 control-label"> 
+        <label for="qq">{{ 'user.fileds.qq'|trans }}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="qq" name="qq" class="form-control" value="{{profile.qq}}">
+     </div>
+    </div>
+    <p></p>
+    <div class="row form-group">
+      <div class="col-md-2 control-label"> 
+        <label for="weixin">{{'user.fileds.wechat'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="weixin" name="weixin" class="form-control" value="{{profile.weixin}}">
+     </div>
+    </div> 
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">           
+
+{% if fields %}
+<hr>
+{% for field in fields %}
+{% if field.type=="text" %}
+<div class="form-group">
+  <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+  <div class="col-md-7 controls">
+    <textarea id="{{field.fieldName}}" name="{{field.fieldName}}" class="{{field.type}} form-control" >{{ profile[field.fieldName]|default('') }}</textarea>
+    <div class="help-block" style="display:none;"></div>
+  </div>
+</div>
+{% elseif field.type=="int" %}
+<div class="form-group">
+  <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+  <div class="col-md-7 controls">
+    <input type="text" id="{{field.fieldName}}" placeholder="{{'form.placeholder.max_int'|trans}}" name="{{field.fieldName}}" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
+    <div class="help-block" style="display:none;"></div>
+  </div>
+</div>
+{% elseif field.type=="float" %}
+<div class="form-group">
+  <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+  <div class="col-md-7 controls">
+    <input type="text" id="{{field.fieldName}}" placeholder="{{'form.placeholer.two_decimal_places'|trans}}" name="{{field.fieldName}}" class="{{field.type}} form-control" value="{{ profile[field.fieldName]|default('') }}">
+    <div class="help-block" style="display:none;"></div>
+  </div>
+</div>
+{% elseif field.type=="date" %}
+<div class="form-group">
+  <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+  <div class="col-md-7 controls">
+    <input type="text" id="{{field.fieldName}}" name="{{field.fieldName}}" class="{{field.type}} form-control"   value="{% if profile[field.fieldName] %}{{profile[field.fieldName]}}{% endif %}">
+    <div class="help-block" style="display:none;"></div>
+  </div>
+</div>
+{% elseif field.type=="varchar" %}
+<div class="form-group">
+  <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+  <div class="col-md-7 controls">
+    <input type="text" id="{{field.fieldName}}" name="{{field.fieldName}}" class="form-control"  value="{{ profile[field.fieldName]|default('') }}">
+    <div class="help-block" style="display:none;"></div>
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button id="edit-user-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">{{'form.btn.save'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  
+  <script>app.load('user/edit-modal');</script>
+{% endblock %}
