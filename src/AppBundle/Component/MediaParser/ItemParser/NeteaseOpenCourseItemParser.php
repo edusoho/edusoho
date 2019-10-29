@@ -36,7 +36,7 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
 
         $item['files'] = array(
             array(
-                'url' => empty($video['mp4HdUrl']) ? $video['mp4SdUrl'] : $video['mp4HdUrl'],
+                'url' => $this->getMp4Url($video),
                 'type' => 'mp4',
             ),
         );
@@ -77,5 +77,30 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
         }
 
         return $params;
+    }
+
+    protected function getMp4Url($video)
+    {
+        $urlList = array(
+            'mp4ShdUrl',
+            'mp4HdUrl',
+            'mp4SdUrl',
+            'mp4ShdUrlOrign',
+            'mp4HdUrlOrign',
+            'mp4SdUrlOrign',
+        );
+
+        foreach ($urlList as $urlKey) {
+            if (!empty($video[$urlKey])) {
+                $matched = preg_match('/^(http|https):(\S*)/s', $video[$urlKey], $matches);
+                if ($matched) {
+                    return $matches[2];
+                }
+
+                return $video[$urlKey];
+            }
+        }
+
+        return '';
     }
 }

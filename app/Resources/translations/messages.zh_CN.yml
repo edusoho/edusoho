@@ -10066,6 +10066,8 @@ exception.money_card.not_found_batch: 批次不存在
 exception.money_card.duplicate_card: 卡号有重复
 exception.money_card.batch_status_equal_invalid: 在批次被作废的情况下，不能启用批次下的充值卡
 exception.money_card.unlock_not_invalid_card: 只能启用作废状态的充值卡
+exception.money_card.password_invalid: 卡密无效
+exception.money_card.batch_token_invalid: 批次token无效
 exception.reward_point.account.not_found: 积分账号不存在
 exception.reward_point.account.already_open: 积分账号已创建
 exception.reward_point.account.userid_invalid: 用户id错误
@@ -10382,9 +10384,22 @@ course.setting.course_remind: 上课提醒
 course.setting.course_remind_tip: 当前设置，%D% %H%会向所有在读学员发送学习提醒通知。
 course.setting.course_remind_change: 修改设置
 course.setting.course_remind_not_open: 未开启上课提醒
+course.setting.course_remind_go_to_open: 前往开启
+
+money_card.invalid_password: 无效的卡密
+money_card.invalid_card: 学习卡已失效
+money_card.expired_card: 学习卡已过期
+money_card.card_receive_fail: 学习卡领取失败
+money_card.card_receive_success: 学习卡领取成功
+money_card.card_recharge_success: 学习卡充值成功
+money_card.card_received: 您已经领取该学习卡
+money_card.card_received_by_other: 学习卡已被他人领取
+money_card.card_used: 您已经领取并使用该学习卡
+money_card.card_used_by_other: 学习卡已被他人使用
+money_card.notify.card_receive_success: 您有一张价值为%coin_number%%coin_name%的充值卡领取成功
 
 admin.setting.invite.chooser_coupon.manage_btn: 优惠券管理
 admin.setting.invite.chooser_coupon.refresh_btn: 刷新
 admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
 admin.operation.coupon_menu.generate_btn: 生成优惠券
-course.setting.course_remind_go_to_open: 前往开启
+

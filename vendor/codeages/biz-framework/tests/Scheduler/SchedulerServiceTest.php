@@ -12,7 +12,7 @@ class SchedulerServiceTest extends IntegrationTestCase
             'name' => 'testJob',
             'source' => 'MAIN',
             'expression' => intval(time() + 10),
-            'class' => 'Biz\Test\Job\TestJob', //无实体文件
+            'class' => 'Biz\Test\Job\TestJob',//无实体文件
             'args' => array('cursor' => 0),
             'misfire_threshold' => 60 * 60,
         ));
@@ -27,7 +27,7 @@ class SchedulerServiceTest extends IntegrationTestCase
             'name' => 'testJob',
             'source' => 'MAIN',
             'expression' => intval(time() + 10),
-            'class' => 'Biz\Test\Job\TestJob', //无实体文件
+            'class' => 'Biz\Test\Job\TestJob',//无实体文件
             'args' => array('cursor' => 0),
             'misfire_threshold' => 60 * 60,
         ));
@@ -76,7 +76,7 @@ class SchedulerServiceTest extends IntegrationTestCase
             'name' => 'testJob',
             'source' => 'MAIN',
             'expression' => intval(time() + 10),
-            'class' => 'Biz\Test\Job\TestJob', //无实体文件
+            'class' => 'Biz\Test\Job\TestJob',//无实体文件
             'args' => array('cursor' => 0),
             'misfire_threshold' => 60 * 60,
         ));
