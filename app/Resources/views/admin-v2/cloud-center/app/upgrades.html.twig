@@ -76,7 +76,7 @@
 
               <td>
                 <a href="#" data-toggle="modal" data-target="#modal"
-                   data-url="{{ path('admin_app_package_update_modal', {id:app.package.id, type:'upgrade'}) }}"
+                   data-url="{{ path('admin_v2_app_package_update_modal', {id:app.package.id, type:'upgrade'}) }}"
                    class="btn btn-primary {% if version_compare(app.package.edusohoMinVersion, version, ">") %}disabled{% endif %} mrl"
                    data-keyboard="false" data-backdrop="static" style="margin-top:40px;">{{ 'admin.app_upgrades.update_btn'|trans }}</a>
               </td>
