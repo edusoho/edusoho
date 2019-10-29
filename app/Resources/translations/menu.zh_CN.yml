@@ -700,6 +700,11 @@ admin_v2.cloud_service.basic_menu: 云服务
 admin_v2.cloud_service.sms_tab: 云短信
 admin_v2.cloud_service.sms_overview_tab: 概览
 
+# 数据-数据统计
+admin_v2.data_statictics.analysis.basic_group: 数据分析
+admin_v2.data_statistics.statistics.menu: 数据统计
+admin_v2.data_statistics.statistics.basic_tab: 数据统计
+
 # 应用中心-基础云-授权信息
 admin_v2.cloud.cloud_setting_menu: 授权信息
 admin_v2.cloud.cloud_setting.basic_tab: 授权信息
