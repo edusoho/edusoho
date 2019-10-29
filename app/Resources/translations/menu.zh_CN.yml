@@ -663,6 +663,12 @@ admin_v2.user.approval.basic_tab.cancel_btn: 撤销
 admin_v2.user.approval.approving_menu: 审核中
 admin_v2.user.approval.approved_menu: 审核成功
 
+#用户管理-教师管理
+admin_v2.user.teacher_menu: 教师管理
+admin_v2.user.teacher.basic_tab: 教师管理
+admin_v2.user.teacher.basic_tab.promote_btn: 推荐老师
+admin_v2.user.teacher.promote_list_tab: 教师推荐
+
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: 订单管理
 admin_v2.trade.goods_order.menu: 商品订单
@@ -693,12 +699,27 @@ admin_v2.cloud.app_center.logs_tab: 更新日志
 admin_v2.cloud.overview_menu: 概览
 admin_v2.cloud.overview.basic_tab: 教育云概览
 
-# 应用中心-基础云-云服务-短信
+# 应用中心-基础云-云服务
 admin_v2.nav.cloud_center: 应用中心
 admin_v2.basic_cloud_group: 基础云
 admin_v2.cloud_service.basic_menu: 云服务
 admin_v2.cloud_service.sms_tab: 云短信
+
+admin_v2.tab.overview_tab: 概览
+admin_v2.tab.setting_tab: 设置
+
+admin_v2.cloud.video_menu: 云视频
+admin_v2.cloud.edulive_menu: 云直播
+admin_v2.cloud.sms_menu: 云短信
+admin_v2.cloud.email_menu: 云邮件
+admin_v2.cloud.search_menu: 云搜索
+admin_v2.cloud.consult_menu: 云问答
+
 admin_v2.cloud_service.sms_overview_tab: 概览
+
+# 应用中心-基础云-云服务-即时聊天设置
+admin_v2.cloud.im_setting_menu: 即时聊天设置
+admin_v2.cloud.im_setting.basic_tab: 即时聊天设置
 
 # 数据-数据统计
 admin_v2.data_statictics.analysis.basic_group: 数据分析

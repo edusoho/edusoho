@@ -166,6 +166,13 @@ admin_approval_manage: admin_v2_approval_manage #实名认证
 admin_approval_approvals: admin_v2_approval_approving #审核中
 admin_approval_cancel: admin_v2_approval_cancel #撤销
 
+#用户-用户管理-教师认证
+admin_teacher: admin_v2_teacher #教师管理
+admin_teacher_manage: admin_v2_teacher_manage #教师管理
+admin_teacher_promote: admin_v2_teacher_promote #推荐老师
+admin_teacher_promote_cancel: admin_v2_teacher_promote_cancel #取消推荐
+admin_teacher_promote_list: admin_v2_teacher_promote_list #教师推荐
+
 # 微信通知
 admin_operation_wechat_notification: admin_v2_operation_wechat_notification #nav
 admin_operation_wechat_notification_record: admin_v2_operation_wechat_notification_record # 发送记录
@@ -217,6 +224,9 @@ admin_bill_coin: admin_v2_bill_coin
 admin_coin_user: admin_v2_user_coin
 admin_coin_user_records: admin_v2_coin_user_records
 
+# 数据-数据分析-数据统计
+admin_operation_analysis_register: admin_v2_statistics_data_statistics_menu
+admin_operation_analysis: admin_v2_data_statistics_basic_tab
 
 #营销应用
 admin_app_center_show: admin_v2_app_center_show #营销云
@@ -229,9 +239,29 @@ admin_app_logs: admin_v2_app_logs #更新日志
 admin_my_cloud: admin_v2_my_cloud #概览
 admin_my_cloud_overview: admin_v2_my_cloud_overview
 
-# 数据-数据分析-数据统计
-admin_operation_analysis_register: admin_v2_statistics_data_statistics_menu
-admin_operation_analysis: admin_v2_data_statistics_basic_tab
+
+#云服务
+admin_cloud_video_setting: admin_v2_cloud_video  #云视频
+admin_cloud_video_overview: admin_v2_edu_cloud_video_overview  #云视频概览
+admin_cloud_setting_video: admin_v2_edu_cloud_video_setting  #云视频设置
+admin_cloud_edulive_setting: admin_v2_cloud_edulive  #云直播
+admin_cloud_edulive_overview: admin_v2_edu_cloud_edulive_overview  #云直播概览
+admin_setting_cloud_edulive: admin_v2_edu_cloud_edulive_setting  #云直播设置
+admin_edu_cloud_sms: admin_v2_cloud_sms  #云短信
+admin_edu_cloud_sms_overview: admin_v2_edu_cloud_sms_overview  #云短信概览
+admin_edu_cloud_setting_sms: admin_v2_edu_cloud_sms_setting  #云短信设置
+admin_edu_cloud_email: admin_v2_cloud_email  #云邮件
+admin_edu_cloud_email_overview: admin_v2_edu_cloud_email_overview  #云邮件概览
+admin_edu_cloud_email_setting: admin_v2_edu_cloud_email_setting  #云邮件设置
+admin_edu_cloud_search_setting: admin_v2_cloud_search  #云搜索
+admin_edu_cloud_search_overview: admin_v2_edu_cloud_search_overview  #云搜索概览
+admin_edu_cloud_setting_search: admin_v2_edu_cloud_search_setting  #云搜索设置
+admin_cloud_consult: admin_v2_cloud_consult  #云问答
+admin_cloud_consult_setting: admin_v2_edu_cloud_consult_setting  #云问答设置
+
+# 即时聊天设置
+admin_app_im: admin_v2_app_im #即时聊天设置
+admin_app_im_setting: admin_v2_app_im_setting #即时聊天设置
 
 #授权信息
 admin_setting_cloud: admin_v2_setting_cloud #授权信息

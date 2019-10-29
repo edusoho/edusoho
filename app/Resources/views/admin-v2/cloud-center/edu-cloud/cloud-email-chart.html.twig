@@ -1,0 +1,25 @@
+<div class="col-md-6">
+  <input id="emailUsedInfo" type="hidden"
+         value='{% if chartInfo.emailUsedInfo and setting('cloud_email_crm.status')|default('disable') == 'enable' %}{{ chartInfo.emailUsedInfo }}{% else %}{{ "[]" }}{% endif %}'>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ 'admin.edu_cloud.edu_email.use_info'|trans }}</h3>
+    </div>
+    <div class="panel-body" id="email-data-tab" style="height: 250px;">
+      {% if service.email.status|default(null) == 'stoped' %}
+        <div class="edu-verticalmiddle">
+          <div class="edu-verticalmiddle-content text-muted">
+            {{ 'admin.edu_cloud.edu_email.forbidden_tips'|trans|raw }}
+          </div>
+        </div>
+      {% elseif  setting('cloud_email_crm.status')|default('disable') == 'disable' %}
+        <div class="edu-verticalmiddle">
+          <div class="edu-verticalmiddle-content text-muted">
+            <a href="{{ path('admin_v2_edu_cloud_email_overview') }}">{{ 'admin.edu_cloud.edu_email.open_btn'|trans }}</a>
+            {{ 'admin.edu_cloud.edu_email.open_tips'|trans }}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

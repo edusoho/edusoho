@@ -1,0 +1,29 @@
+<div class="col-md-6">
+  <input id="videoUsedInfo" type="hidden"
+         value='{% if chartInfo.videoUsedInfo and setting('storage.upload_mode') == 'cloud' %}{{ chartInfo.videoUsedInfo }}{% else %}{{ "[]" }}{% endif %}'>
+  <div class="panel panel-default" style="position: relative;">
+    <div class="panel-heading">
+      <p class="pull-right"><a href="{{ path('admin_v2_cloud_video_account') }}"
+                               target="_blank">{{ 'site.default.detail'|trans }}</a></p>
+      <h3 class="panel-title">{{ 'admin.edu_cloud.edu_video.use_info'|trans }}{% if overview.service.tlp|default(0) %}
+          <div class="icon-security" data-toggle="tooltip" data-placement="top"
+               title="{{ 'admin.edu_cloud.edu_video.tlp_is_open'|trans }}"></div> {% endif %}</h3>
+    </div>
+    <div class="panel-body" id="storage-data-tab" style="height: 250px;">
+      {% if not overview.service.tlp|default(1) %}
+        <div class="edu-alert" role="alert">
+          <div class="icon-security"></div>
+          {{ 'admin.edu_cloud.edu_video.tlp_tips'|trans({'%tlp%':path('admin_v2_cloud_tlp')})|raw }}
+        </div>
+      {% endif %}
+      {% if  setting('storage.upload_mode')|default('local') == 'local' %}
+        <div class="edu-verticalmiddle">
+          <div class="edu-verticalmiddle-content text-muted">
+            {{ 'admin.edu_cloud.edu_video.open_tips'|trans({'%overview%':path('admin_v2_edu_cloud_video_overview')})|raw }}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
