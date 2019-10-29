@@ -702,7 +702,8 @@ admin_v2:
                             router_params:
                                 approvalStatus: approving
                             children:
-                                admin_v2_approval_approving:admin_v2.user.approval.approving_menu
+                                admin_v2_approval_approving:
+                                    name: admin_v2.user.approval.approving_menu
                                     router_name: admin_v2_approval_approvals
                                     router_params:
                                         approvalStatus: approving
