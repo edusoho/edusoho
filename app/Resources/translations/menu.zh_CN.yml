@@ -678,6 +678,11 @@ admin_v2.cloud.cloud_setting.basic_tab: 授权信息
 # 系统-系统管理
 admin_v2.system.basic_group: 系统管理
 
+# 系统-系统管理-系统优化
+admin_v2.system.optimize_menu: 系统优化
+admin_v2.system.optimize.basic_tab: 系统优化
+
+
 # 系统-系统管理-系统日志
 admin_v2.system.logs_menu: 系统日志
 admin_v2.system.logs.logs_query_tab: 系统操作日志

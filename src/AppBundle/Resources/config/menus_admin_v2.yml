@@ -826,6 +826,14 @@ admin_v2:
                     name: admin_v2.system.basic_group
                     is_group: true
                     children:
+                        admin_v2_optimize:
+                            name: admin_v2.system.optimize_menu
+                            group: 2
+                            children:
+                                admin_v2_optimize_settings:
+                                    name: admin_v2.system.optimize.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_optimize
                         admin_v2_logs:
                             name: admin_v2.system.logs_menu
                             group: 2
