@@ -189,6 +189,14 @@ admin_bill_coin: admin_v2_bill_coin
 admin_coin_user: admin_v2_user_coin
 admin_coin_user_records: admin_v2_coin_user_records
 
+
+#营销应用
+admin_app_center_show: admin_v2_app_center_show #营销云
+admin_app_center: admin_v2_app_center #营销应用
+admin_app_installed: admin_v2_app_installed #已购项目
+admin_app_upgrades: admin_v2_app_upgrades #更新
+admin_app_logs: admin_v2_app_logs #更新日志
+
 #云概览
 admin_my_cloud: admin_v2_my_cloud #概览
 admin_my_cloud_overview: admin_v2_my_cloud_overview

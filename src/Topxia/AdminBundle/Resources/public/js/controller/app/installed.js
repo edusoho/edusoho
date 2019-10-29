@@ -10,8 +10,8 @@ define(function(require, exports, module) {
                 window.location.reload();
             }, 'json');
         });
-
-        $.post('/admin/app/upgrades_count', function(count){
+        let $url = $('.js-table').data('url');
+        $.post($url, function(count){
 
             if (count > 0) {
 

@@ -1117,7 +1117,35 @@ admin_v2_question_remind_teachers:
     defaults: { _controller: AppBundle:AdminV2/Default:questionRemindTeachers }
     methods:  [POST]
     permissions: [admin_v2]
+    
+# 应用中心-营销云-应用中心
+admin_v2_app_center:
+    path:  /app/center/{postStatus}
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:center, postStatus:'all' }
 
+admin_v2_app_installed:
+    path:  /app/installed/{postStatus}
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:installed }
+    
+admin_v2_app_uninstall:
+    path:  /app/uninstall
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:uninstall }
+    permissions: [admin_v2_app_installed]
+
+admin_v2_app_upgrades:
+    path:  /app/upgrades
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:upgrades }
+
+admin_v2_app_logs:
+    path:  /app/logs
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:logs }
+    
+admin_v2_app_upgrades_count:
+    path:  /app/upgrades_count
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:upgradesCount }
+    permissions: [admin_v2_app_upgrades]
+
+    
 # 应用中心-云服务-短信概览
 admin_v2_edu_cloud_sms:
     path:  /edu_cloud/sms/overview
@@ -1161,14 +1189,24 @@ admin_v2_cloud_service_overview:
 admin_v2_setting_cloud_edulive:
     path:  /setting/cloud/edulive
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveSetting }
-    permissions: [admin_cloud_edulive]
     
 #应用中心－基础云－授权信息
 admin_v2_setting_cloud:
     path:  /setting/cloud
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:key }
     permissions: [admin_v2_setting_my_cloud]
-    
+
+admin_v2_setting_cloud_key_update:
+    path:  /setting/cloud/key/update
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyUpdate }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_apply:
+    path:  /setting/cloud/key/apply
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyApply }
+    methods: [POST]
+    permissions: [admin_v2_setting_my_cloud]
+
 admin_v2_setting_cloud_key:
     path:  /setting/cloud/key
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:key }
@@ -1193,55 +1231,55 @@ admin_v2_setting_cloud_key_copyright:
 admin_v2_app_package_update_modal:
     path:  /app/package_update/{id}/modal
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal }
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]  后面对应模块修改时需要修改
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_check_environment:
     path: /app/package_update/{id}/check_environment
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkEnvironment }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
-
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
+    
 admin_v2_app_package_update_check_depends:
     path: /app/package_update/{id}/check_depends
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkDepends }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
-
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
+    
 admin_v2_app_package_update_check_last_error:
     path: /app/package_update/{id}/check_lasterror
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checklastError }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
-
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
+    
 admin_v2_app_package_update_backup_file:
     path: /app/package_update/{id}/backup_file
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:backupFile }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_backup_db:
     path: /app/package_update/{id}/backup_db
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:backupDb }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_download_and_extract:
     path: /app/package_update/{id}/download_extract
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:downloadAndExtract }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_check_download_and_extract:
     path: /app/package_update/{id}/check_download_extract
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkDownloadAndExtract }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_begin_upgrade:
     path: /app/package_update/{id}/begin_upgrade
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:beginUpgrade }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2 _app_package_update_check_newest:
     path: /app/package_update/check/newest/code/{code}
