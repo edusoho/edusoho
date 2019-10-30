@@ -64,11 +64,13 @@ export default {
       Api.hasDrpPluginInstalled().then(res => {
         if (!res.Drp) {
           this.isShowDistributorEntrance = false;
+          return;
         }
 
         Api.getAgencyBindRelation().then(data => {
           if (!data) {
             this.isShowDistributorEntrance = false;
+            return;
           }
         })
 

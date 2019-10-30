@@ -350,11 +350,13 @@ export default {
       Api.hasDrpPluginInstalled().then(res => {
         if (!res.Drp) {
           this.isShowInviteUrl = false;
+          return;
         }
 
         Api.getAgencyBindRelation().then(data => {
           if (JSON.stringify(data) == '{}') {
             this.isShowInviteUrl = false;
+            return;
           }
           this.bindAgencyRelation = data;
           this.isShowInviteUrl = true;
