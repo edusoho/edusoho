@@ -697,7 +697,7 @@ admin_v2:
                                     router_name: admin_v2_fans_list
                                 admin_v2_online:
                                     name: admin.user.basic.online
-                                admin_v2_statistics:
+                                admin_v2_learn_statistics:
                                     name: admin_v2.user.basic.statistics_tab
                                     router_name: admin_v2_user_learn_statistics
                                 admin_v2_login_record:
