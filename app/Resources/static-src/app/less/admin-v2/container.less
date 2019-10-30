@@ -155,7 +155,7 @@
 .admin-function {
   display: table;
   margin: auto;
-  padding: 16px 24px;
+  padding: 16px;
   .es-transition;
   &:hover {
     .es-transition;
@@ -176,16 +176,20 @@
     }
   }
   .admin-function__name {
-    margin-left: 16px;
+    width: 100px;
+    padding-left: 16px;
     font-size: 14px;
     line-height: 48px;
+    text-align: left;
     color: @cdv2-dark-minor;
   }
 }
 
 
 .admin-function-choose {
-  padding: 16px 24px;
+  margin-left: 4px;
+  padding: 16px;
+  text-align: left;
 }
 
 .admin-function-btn {
@@ -372,7 +376,7 @@
   background-color: rgba(66,139,202,0.1);
   .cdv2-text-md;
   color: @brand-primary;
-  border-radius: 24px;
+  border-radius: 4px;
   i {
     margin-right: 4px;
   }
@@ -449,3 +453,56 @@
     color: @cdv2-dark-assist;
   }
 }
+
+.function-modal-dialog {
+  width: 1170px;
+  margin-top: 4%;
+  .modal-title {
+    font-size: 18px;
+    color: #303133;
+    line-height: 24px;
+  }
+  .modal-body {
+    max-height: 420px;
+    overflow-y: scroll;
+  }
+  .function-modal-tip {
+    float: left;
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 500;
+    color: #ff8836;
+  }
+  .function-modal__btn {
+    padding: 8px 48px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #fff;
+    border-radius: 4px;
+    background-color: #428bca;
+  }
+  .function-modal__link {
+    font-size: 14px;
+    line-height: 20px;
+    color: #999;
+  }
+  .entrance-section {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    &:first-child {
+      padding-top: 0;
+    }
+    .admin-function {
+      margin-top: 16px;
+    }
+  }
+  .entrance-section__title {
+    padding-bottom: 12px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+}
+
