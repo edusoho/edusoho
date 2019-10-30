@@ -13,10 +13,21 @@ body {
     line-height: 24px;
     color: #fff !important;
   }
+
+  .cd-tabs > li > a {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    color: #bebebe;
+    font-size: 14px;
+    line-height: 24px;
+    text-decoration: none;
+  }
   
   .ct-layout-navbar_ul {
     li > a {
       .es-transition;
+      margin-top: 16px;
+      padding: 4px 16px !important;
       font-weight: normal !important;
       &:hover {
         .es-transition;
@@ -25,13 +36,10 @@ body {
       }
     }
     li:last-child {
-      height: 64px;
-      padding-top: 16px;
-      line-height: 64px !important;
       a {
         height: auto !important;
-        padding: 6px 18px 6px 24px !important;
-        line-height: 20px !important;
+        padding: 4px 18px 4px 24px !important;
+        line-height: 24px !important;
         border-radius: 16px !important;
         background-color: rgba(255,255, 255, 0.2);
         color: #fff !important;
@@ -43,6 +51,25 @@ body {
           opacity: 1 !important;
         }
       }
+      &.active {
+        a {
+          padding: 4px 18px 4px 24px !important;
+        }
+      }
+    }
+    .es-transition;
+    li.active {
+      .es-transition;
+      a {
+        margin-top: 16px;
+        padding: 4px 16px !important;
+        background-color: #fff !important;
+        border-radius: 16px !important;
+        color: #333 !important;
+        &:before {
+          display: none;
+        }
+      }
     }
   }
 
@@ -50,28 +77,6 @@ body {
     position: absolute;
     left: 20%;
     transform: translateX(-20%);
-  }
-  .cd-tabs > li > a {
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
-    color: #bebebe;
-    font-size: 14px;
-    line-height: 24px;
-    text-decoration: none;
-  }
-
-  .cd-tabs > li.active {
-    padding-top: 16px;
-    padding-bottom: 16px;
-    a {
-      padding: 4px 16px !important;
-      background-color: #fff !important;
-      border-radius: 16px !important;
-      color: #333 !important;
-      &:before {
-        display: none;
-      }
-    }
   }
 
   .change-version-btn {
@@ -169,7 +174,9 @@ body {
   }
 
   .cd-layout-adside_content {
+    margin-right: 64px !important;
     padding-bottom: 10px;
     height: auto !important;
+    min-height: 660px;
   }
 }
