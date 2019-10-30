@@ -268,7 +268,7 @@ export default {
         };
 
         this.tagData.link = this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
-        this.tagData.earnings = this.drpSetting.minDirectRewardRatio * this.details.price;
+        this.tagData.earnings = (this.drpSetting.minDirectRewardRatio / 100) * this.details.price;
       });
     },
   }

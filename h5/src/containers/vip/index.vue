@@ -43,7 +43,7 @@
 
     <a v-if="isShowInviteUrl" :href="inviteUrl">
       <div class="coupon-code-entrance">邀请好友购买
-        <i class="van-icon van-icon-arrow pull-right"></i><i class="pull-right">赚 {{ bindAgencyRelation.directRewardRatio }}%</i>
+        <i class="van-icon van-icon-arrow pull-right"></i><i class="pull-right">赚 {{ drpSetting.minDirectRewardRatio }}%</i>
       </div>
     </a>
 
