@@ -696,7 +696,7 @@ admin_v2:
                                     router_name: admin_v2_fans_list
                                 admin_v2_online:
                                     name: admin.user.basic.online
-                                admin_v2_statistics:
+                                admin_v2_learn_statistics:
                                     name: admin_v2.user.basic.statistics_tab
                                     router_name: admin_v2_user_learn_statistics
                                 admin_v2_login_record:
@@ -844,6 +844,32 @@ admin_v2:
                                     name: admin_v2.system.site.basic_tab
                                     router_name: admin_v2_school_information
                                     disable: true
+                        admin_v2_setting_course_setting:
+                            name: admin_v2.system.course_menu
+                            children:
+                                admin_v2_setting_course:
+                                    name: admin_v2.system.course.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_course_setting
+                                #                                admin_v2_setting_live_course:
+                                #                                   name: 直播
+                                #                                   disable: true
+                                #                                   router_name: admin_v2_setting_live_course_setting
+                                admin_v2_setting_questions_setting:
+                                    name: admin_v2.system.course.questions_tab
+                                    disable: true
+                                admin_v2_setting_course_avatar:
+                                    name: admin_v2.system.course.avatar_tab
+                                    disable: true
+                                admin_v2_classroom_setting:
+                                    name: admin_v2.system.course.classroom_tab
+                                    disable: true
+                                    parent: admin_v2_setting_course_setting
+                                    after: admin_v2_setting_live_course
+                                admin_v2_open_course_setting:
+                                    name: admin.system.course.open_course_tab
+                                    disable: true
+                                    parent: admin_v2_setting_course_setting
                         admin_v2_setting_operation:
                             name: admin_v2.system.operation_menu
                             children:
@@ -863,7 +889,7 @@ admin_v2:
                                     name: admin_v2.system.operation.message_open_tab
                                     disable: true
                                     parent: admin_v2_message_open_set
-                admin_v2_transaction_group:
+                admin_v2.transaction_group:
                     name: admin_v2.transaction.basic_group
                     is_group: true
                     children:

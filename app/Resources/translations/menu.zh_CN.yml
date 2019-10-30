@@ -574,7 +574,7 @@ admin_v2.operation.site.theme_tab: 已购主题
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: 网校装修
 
-admin_v2.operation.site_menu: 站点设置
+admin_v2.operation.site_menu: 站点配置
 admin_v2.operation.site.top_navigation_tab: 顶部导航
 admin_v2.operation.site.foot_navigation_tab: 底部导航
 admin_v2.operation.site.consult_setting_tab: 客服
@@ -764,6 +764,14 @@ admin_v2.system.asset_menu: 资产设置
 admin_v2.system.asset.payment_tab: 支付
 admin_v2.system.asset.coin_tab: 虚拟币
 admin_v2.system.asset.refund_tab: 退款
+
+#系统-通用管理-课程设置
+admin_v2.system.course_menu: 课程设置
+admin_v2.system.course.basic_tab: 课程
+admin_v2.system.course.questions_tab: 题库
+admin_v2.system.course.avatar_tab: 默认图片
+admin_v2.system.course.classroom_tab: 班级
+admin_v2.system.course.open_course_tab: 公开课
 
 # 系统-系统管理
 admin_v2.system.basic_group: 系统管理

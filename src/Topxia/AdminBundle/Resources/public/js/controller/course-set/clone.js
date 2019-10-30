@@ -14,16 +14,15 @@ define(function(require, exports, module) {
     setup: function () {
     },
 
-    doClone: function (courseSetId,title) {
+    doClone: function (courseSetId,title,webUrl,crontabUrl) {
       var self = this;
       this._isCrontabEnabled().then(function (crontabStatus) {
         if (crontabStatus.enabled) {
-          self._doCrontabClone(courseSetId,title);
+          self._doCrontabClone(courseSetId, title, crontabUrl);
         } else {
-          self._doWebClone(courseSetId,title);
+          self._doWebClone(courseSetId, title, webUrl);
         }
       });
-    console.log('run');
     },
 
     _makeProgressBar: function () {
@@ -46,7 +45,7 @@ define(function(require, exports, module) {
             + '</div>';
     },
 
-    _doWebClone: function (courseSetId,title) {
+    _doWebClone: function (courseSetId,title,url) {
       $('#modal').html(this._makeProgressBar()).modal();
       var progressbar = new ProgressBar({
         element: '#clone-progress'
@@ -62,7 +61,7 @@ define(function(require, exports, module) {
             request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
             request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
           },
-          url: '/admin/course_set/'+courseSetId+'/clone_by_web',
+          url: url,
           success: function (resp) {
             resolve(1);
           },
@@ -88,12 +87,6 @@ define(function(require, exports, module) {
       }).catch(function (jqXHR) {
         console.log(jqXHR);
         Notify.danger(Translator.trans('notify.course_set_copy_error.hint'), 10);
-        //任务调度正是开放之后再进行判断
-        // if (jqXHR.status === 504) {
-        //   Notify.danger('复制课程超时了，推荐使用任务调度的方式复制课程', 10);
-        // } else {
-        //
-        // }
 
         clearInterval(intervalId);
       });
@@ -101,7 +94,7 @@ define(function(require, exports, module) {
       
     },
 
-    _doCrontabClone: function (courseSetId,title) {
+    _doCrontabClone: function (courseSetId,title,url) {
       $.ajax({
         type: "POST",
         data: {
@@ -111,7 +104,7 @@ define(function(require, exports, module) {
           request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
           request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
         },
-        url: '/admin/course_set/'+courseSetId+'/clone_by_crontab',
+        url: url,
         success: function (resp) {
           if (resp.success) {
             Notify.info(Translator.trans(resp.msg), 5);
