@@ -91,7 +91,7 @@ export default {
           merchant_id: this.bindAgencyRelation.merchantId,
         };
 
-        this.tagData.link = this.drpSetting.distributor_recruit_url + '?' + qs.stringify(params);
+        this.tagData.link = this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
         this.tagData.earnings = this.drpSetting.minDirectRewardRatio * this.price;
       });
     },
