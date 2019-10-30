@@ -15,6 +15,7 @@ class PermissionBuilderTest extends BaseTestCase
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
         $expected = array(
             $rootDir.'/../src/AppBundle/Resources/config/menus_admin.yml',
+            $rootDir.'/../src/AppBundle/Resources/config/menus_admin_v2.yml',
         );
 
         $this->assertEquals($expected, PermissionBuilder::instance()->getPermissionConfig());
