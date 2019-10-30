@@ -31,7 +31,7 @@
     <input type="hidden" name="cash_rate" value="{{ set.cash_rate }}">
     <input type="hidden" name="type" value="{{type|default('course')}}">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    <p>
+    <p class="clearfix">
       <button type="submit" class="btn btn-primary pull-right" id="finish" >{{'form.btn.finish'|trans}}</button>
       <a type="button" href="{{ url('admin_v2_coin_model',{set:set}) }}" class="btn btn-link pull-right">{{'form.btn.back'|trans}}</a>
     </p>
