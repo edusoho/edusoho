@@ -40,7 +40,7 @@ interface AccountService
 
     public function countCashflows($conditions);
 
-    public function searchCashflows($conditions, $orderBy, $start, $limit);
+    public function searchCashflows($conditions, $orderBy, $start, $limit, $columns = array());
 
     public function sumColumnByConditions($column, $conditions);
 

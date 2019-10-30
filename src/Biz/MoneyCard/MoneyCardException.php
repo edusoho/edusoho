@@ -28,6 +28,10 @@ class MoneyCardException extends AbstractException
 
     const UNLOCK_NOT_INVALID_CARD = 5005610;
 
+    const PASSWORD_INVALID = 5005611;
+
+    const BATCH_TOKEN_INVALID = 5005612;
+
     public $messages = array(
         5005601 => 'exception.money_card.money_invalid',
         5005602 => 'exception.money_card.coin_invalid',
@@ -39,5 +43,7 @@ class MoneyCardException extends AbstractException
         5005608 => 'exception.money_card.duplicate_card',
         5005609 => 'exception.money_card.batch_status_equal_invalid',
         5005610 => 'exception.money_card.unlock_not_invalid_card',
+        5005611 => 'exception.money_card.password_invalid',
+        5005612 => 'exception.money_card.batch_token_invalid',
     );
 }

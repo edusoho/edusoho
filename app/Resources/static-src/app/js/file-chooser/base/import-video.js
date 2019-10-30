@@ -37,7 +37,8 @@ class VideoImport extends Chooser {
         type: video.type,
         source: video.source,
         name: video.name,
-        uri: video.files[0].url
+        uri: video.files[0].url,
+        content: video
       };
       self._onChange(media);
       $urlInput.val('');
