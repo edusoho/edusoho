@@ -979,6 +979,16 @@ admin_v2:
                                     name: admin_v2.cloud.im_setting.basic_tab
                                     router_name: admin_v2_app_im
                                     disable: true
+                        #数据实验室
+                        admin_v2_cloud_data_lab_manage:
+                            name: admin_v2.cloud.data_lab
+                            visible: (cloudStatus())
+                            children:
+                                admin_v2_cloud_data_lab:
+                                    name: admin_v2.cloud.data_lab
+                                    router_name: admin_v2_cloud_data_lab
+                                admin_v2_cloud_data_lab_setting:
+                                    name: admin_v2.cloud.data_lab_setting
                         #授权信息
                         admin_v2_setting_cloud:
                             name: admin_v2.cloud.cloud_setting_menu
