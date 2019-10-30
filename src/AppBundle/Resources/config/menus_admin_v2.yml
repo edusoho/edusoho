@@ -1026,6 +1026,20 @@ admin_v2:
                                     router_name: admin_v2_cloud_data_lab
                                 admin_v2_cloud_data_lab_setting:
                                     name: admin_v2.cloud.data_lab_setting
+                        # 人脸识别
+                        admin_v2_cloud_face_identify:
+                            name: admin_v2.cloud.face_identify
+                            visible: (cloudStatus() and cloud_info()['ai.face']|default(0) and setting('feature.face_enabled'))
+                            children:
+                                admin_v2_cloud_face_identify_setting:
+                                    name: admin_v2.cloud.face_identify
+                        #功能实验室
+                        admin_v2_cloud_feature_lab:
+                            name: admin_v2.cloud.feature_lab
+                            visible: (cloudStatus())
+                            children:
+                                admin_v2_cloud_feature_lab_setting:
+                                    name: admin_v2.cloud.feature_lab
                         #授权信息
                         admin_v2_setting_cloud:
                             name: admin_v2.cloud.cloud_setting_menu
