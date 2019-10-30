@@ -284,3 +284,8 @@ admin_optimize_settings: admin_v2_optimize_settings
 admin_logs: admin_v2_logs
 admin_logs_query: admin_v2_logs_query
 admin_logs_prod: admin_v2_logs_prod
+
+# 系统-系统管理-安全设置
+admin_setting_ip_blacklist_manage: admin_v2_ip_blacklist_setting #IP黑名单
+admin_setting_security: admin_v2_security_setting #白名单域名
+admin_setting_post_num_rules: admin_v2_post_num_rules_setting #发帖限制

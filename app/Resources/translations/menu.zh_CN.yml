@@ -752,6 +752,12 @@ admin_v2.system.logs_menu: 系统日志
 admin_v2.system.logs.logs_query_tab: 系统操作日志
 admin_v2.system.logs.logs_prod_tab: 程序运行日志
 
+# 系统-系统管理-安全设置
+admin_v2.system.security_menu: 安全设置
+admin_v2.system.blacklist_tab: IP黑名单
+admin_v2.system.security_tab: 白名单域名
+admin_v2.system.post_num_tab: 发帖限制
+
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: 数据概览
 admin_v2.data_statistics.overview.basic_tab: 数据概览
