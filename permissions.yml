@@ -146,7 +146,7 @@ admin_setting_theme: admin_v2_setting_theme #已购主题
 
 #站点设置
 admin_operation: admin_v2_operating #运营
-admin_setting: admin_v2_site_setting #站点设置
+admin_setting: { admin_v2_site_setting, admin_v2_school_information_setting } # { 运营-网校装修-站点配置, 系统-通用管理-网校信息 }
 admin_top_navigation: admin_v2_top_navigation #顶部导航
 admin_foot_navigation: admin_v2_foot_navigation #底部导航
 admin_setting_consult_setting: admin_v2_setting_consult_setting #客服
@@ -269,6 +269,9 @@ admin_setting_my_cloud: admin_v2_setting_my_cloud #授权信息
 
 # 系统
 admin_system: admin_v2_system
+
+# 系统-通用管理-网校信息
+admin_setting_message: admin_v2_school_information
 
 # 系统-交易设置-资产设置
 admin_setting_finance: admin_v2_asset_setting
