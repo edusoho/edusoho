@@ -475,7 +475,6 @@ admin_v2:
                                             mode: modal
                         admin_v2_block_manage:
                             name: admin_v2.operation.block_menu
-                            group: 2
                             children:
                                 admin_v2_block_theme:
                                     name: admin_v2.operation.block.theme.basic_tab
@@ -885,7 +884,6 @@ admin_v2:
                     children:
                         admin_v2_optimize:
                             name: admin_v2.system.optimize_menu
-                            group: 2
                             children:
                                 admin_v2_optimize_settings:
                                     name: admin_v2.system.optimize.basic_tab
@@ -893,7 +891,6 @@ admin_v2:
                                     router_name: admin_v2_optimize
                         admin_v2_logs:
                             name: admin_v2.system.logs_menu
-                            group: 2
                             children:
                                 admin_v2_logs_query:
                                     name: admin_v2.system.logs.logs_query_tab
@@ -902,6 +899,15 @@ admin_v2:
                                 admin_v2_logs_prod:
                                     name: admin_v2.system.logs.logs_prod_tab
                                     disable: true
+                        admin_v2_security:
+                            name: admin_v2.system.security_menu
+                            children:
+                                admin_v2_ip_blacklist_setting:
+                                    name: admin_v2.system.blacklist_tab
+                                admin_v2_security_setting:
+                                    name: admin_v2.system.security_tab
+                                admin_v2_post_num_rules_setting:
+                                    name: admin_v2.system.post_num_tab
         # 应用中心模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center

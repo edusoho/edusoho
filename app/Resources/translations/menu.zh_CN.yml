@@ -579,7 +579,7 @@ admin_v2.operation.site.top_navigation_tab: 顶部导航
 admin_v2.operation.site.foot_navigation_tab: 底部导航
 admin_v2.operation.site.consult_setting_tab: 客服
 admin_v2.operation.site.es_bar_tab: '侧边栏'
-admin_v2.operation.content.basic_tab: 自定义页面管理
+admin_v2.operation.content.basic_tab: 自定义页面
 admin_v2.operation.site.share_tab: 分享
 admin_v2.operation.site.friendlyLink_navigation_tab: '友情链接'
 # 运营-内容运营-资讯
@@ -776,6 +776,12 @@ admin_v2.system.optimize.basic_tab: 系统优化
 admin_v2.system.logs_menu: 系统日志
 admin_v2.system.logs.logs_query_tab: 系统操作日志
 admin_v2.system.logs.logs_prod_tab: 程序运行日志
+
+# 系统-系统管理-安全设置
+admin_v2.system.security_menu: 安全设置
+admin_v2.system.blacklist_tab: IP黑名单
+admin_v2.system.security_tab: 白名单域名
+admin_v2.system.post_num_tab: 发帖限制
 
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: 数据概览

@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller\AdminV2;
 
+use AppBundle\Common\CurlToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
+use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -37,6 +39,25 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
+    public function feedbackAction(Request $request)
+    {
+        $site = $this->getSettingService()->get('site');
+        $user = $this->getUser();
+        $token = CurlToolkit::request('POST', 'http://www.edusoho.com/question/get/token', array());
+        $site = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
+        $site = urlencode(http_build_query($site));
+
+        return $this->redirect('http://www.edusoho.com/question?site='.$site.'');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     /**

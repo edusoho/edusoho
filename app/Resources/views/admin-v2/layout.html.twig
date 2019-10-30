@@ -55,7 +55,7 @@
     <div class="ct-layout-container admin-layout-container">
       <div class="cd-fixed-top">
         <div class="ct-top-logo">
-          <a class="admin-navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}后台</a>
+          <a class="admin-navbar-brand" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}后台</a>
         </div>
         <div class="ct-layout-navbar">
           {% include 'admin-v2/role/templates/navigation.html.twig' %}
@@ -145,7 +145,7 @@
     <div id="attachment-modal" class="modal" ></div>
     {% if setting('copyright.thirdCopyright') != 1 %}
       <div class="fixed-bar">
-        <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
+        <a href="{{path('admin_v2_feedback')}}"  target='_blank' class="icon-question-text feedback">
           <i class="es-icon es-icon-help"></i>
           <span>{{ 'admin.fixed_bar.product_feedback'|trans|raw }}</span>
         </a>
@@ -153,7 +153,7 @@
     {% endif %}
 
     {% block faqSDK %}
-      {% include 'admin/faq/sdk.html.twig' %}
+      {% include 'admin-v2/faq/sdk.html.twig' %}
     {% endblock %}
   </body>
 {% endblock %}
