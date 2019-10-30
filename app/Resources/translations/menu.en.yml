@@ -744,6 +744,13 @@ admin_v2.general.basic_group: General Manage
 admin_v2.system.site_menu: Online School Information
 admin_v2.system.site.basic_tab: School Information
 
+# 系统-通用管理-运营设置
+admin_v2.system.operation_menu: Operation Setting
+admin_v2.system.operation.article_tab: Article
+admin_v2.system.operation.group_tab: Group
+admin_v2.system.operation.invite_tab: Invitation Setting
+admin_v2.system.operation.message_tab: Message
+
 # 系统-交易设置
 admin_v2.transaction.basic_group: Transaction Settings
 
@@ -752,6 +759,7 @@ admin_v2.system.asset_menu: Asset Setting
 admin_v2.system.asset.payment_tab: Payment
 admin_v2.system.asset.coin_tab: Virtual Coin
 admin_v2.system.asset.refund_tab: Refund
+
 
 # 系统-系统管理
 admin_v2.system.basic_group: System Manage
