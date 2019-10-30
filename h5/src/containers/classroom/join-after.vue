@@ -1,7 +1,7 @@
 <template>
   <div class="course-detail classroom-detail">
     <div class="join-after">
-      <detail-head ref="head" :cover="details.cover"></detail-head>
+      <detail-head ref="head" :cover="details.cover" :price="planDetails.price" :classroomId="details.classId"></detail-head>
 
       <van-tabs v-model="active" :class="tabsClass">
         <van-tab v-for="item in tabs" :title="item" :key="item"></van-tab>

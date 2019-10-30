@@ -3,6 +3,8 @@
     <div class="join-before">
       <detail-head
         :cover="details.cover"
+        :price="planDetails.price"
+        :classroomId="details.classId"
         @goodsEmpty="sellOut"
         :seckillActivities="marketingActivities.seckill"></detail-head>
 

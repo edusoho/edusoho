@@ -9,12 +9,14 @@
       @timesUp="expire"
       @sellOut="sellOut">
     </countDown>
-    <tagLink :tagData="tagData"></tagLink>
+    <tagLink :tagData="tagData" :price="price">jfkdsjei</tagLink>
   </div>
 </template>
 <script>
 import countDown from '@/containers/components/e-marketing/e-count-down/index';
 import tagLink from '@/containers/components/e-tag-link/e-tag-link';
+import Api from '@/api';
+import qs from 'qs';
 
 export default {
   components: {
@@ -25,18 +27,28 @@ export default {
     return {
       counting: true,
       isEmpty: false,
-      tagData: {
-        isShow: true,
-        money: 666.66,
-        link: 'edusoho.com',
+      tagData: { // 分销标签数据
+        earnings: 0,
+        isShow: false,
+        link: '',
         className: 'course-tag',
-      }
+        minDirectRewardRatio: 0,
+      },
+      bindAgencyRelation: {}, // 分销代理商绑定信息
     };
   },
   props: {
     cover: {
       type: String,
       default: '',
+    },
+    price: {
+      type: String,
+      default: 0,
+    },
+    classroomId: {
+      type: Number,
+      default: 0,
     },
     seckillActivities: {
       type: Object,
@@ -50,7 +62,43 @@ export default {
     sellOut() {
       this.isEmpty = true
       this.$emit('goodsEmpty')
-    }
+    },
+    showTagLink() {
+      Api.hasDrpPluginInstalled().then(res => {
+        if (!res.Drp) {
+          this.tagData.isShow = false;
+          return;
+        }
+
+        Api.getAgencyBindRelation().then(data => {
+          if (!data) {
+            this.tagData.isShow = false;
+            return;
+          }
+          this.bindAgencyRelation = data;
+          this.tagData.isShow = true;
+        })
+      })
+    },
+    initTagData() {
+      Api.getDrpSetting().then(data => {
+        this.drpSetting = data;
+        this.tagData.minDirectRewardRatio = data.minDirectRewardRatio;
+
+        let params = {
+          type: 'classroom',
+          id: this.classroomId,
+          merchant_id: this.bindAgencyRelation.merchantId,
+        };
+
+        this.tagData.link = this.drpSetting.distributor_recruit_url + '?' + qs.stringify(params);
+        this.tagData.earnings = this.drpSetting.minDirectRewardRatio * this.price;
+      });
+    },
+  },
+  created() {
+    this.showTagLink();
+    this.initTagData();
   }
 }
 </script>
