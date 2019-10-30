@@ -70,6 +70,33 @@ class ClassroomAdminController extends BaseController
         ));
     }
 
+    public function setAction(Request $request)
+    {
+        $classroomSetting = $this->getSettingService()->get('classroom', array());
+
+        $default = array(
+            'explore_default_orderBy' => 'createdTime',
+            'show_review' => '1',
+            'show_thread' => '1',
+            'show_note' => '1',
+        );
+
+        $classroomSetting = array_merge($default, $classroomSetting);
+
+        if ('POST' == $request->getMethod()) {
+            $set = $request->request->all();
+
+            $classroomSetting = array_merge($classroomSetting, $set);
+
+            $this->getSettingService()->set('classroom', $set);
+            $this->setFlashMessage('success', 'site.save.success');
+        }
+
+        return $this->render('admin-v2/teach/classroom/set.html.twig', array(
+            'classroomSetting' => $classroomSetting,
+        ));
+    }
+
     protected function getDifferentClassroomNum($conditions)
     {
         $total = $this->getClassroomService()->countClassrooms($conditions);
