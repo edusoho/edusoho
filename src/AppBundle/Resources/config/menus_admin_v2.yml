@@ -475,7 +475,6 @@ admin_v2:
                                             mode: modal
                         admin_v2_block_manage:
                             name: admin_v2.operation.block_menu
-                            group: 2
                             children:
                                 admin_v2_block_theme:
                                     name: admin_v2.operation.block.theme.basic_tab
@@ -833,7 +832,7 @@ admin_v2:
         admin_v2_system:
             name: admin_v2.nav.system
             children:
-                admin_v2.general_group:
+                admin_v2_general_group:
                     name: admin_v2.general.basic_group
                     is_group: true
                     children:
@@ -852,10 +851,10 @@ admin_v2:
                                     name: admin_v2.system.course.basic_tab
                                     disable: true
                                     router_name: admin_v2_setting_course_setting
-#                                admin_v2_setting_live_course:
-#                                   name: 直播
-#                                   disable: true
-#                                   router_name: admin_v2_setting_live_course_setting
+                                #                                admin_v2_setting_live_course:
+                                #                                   name: 直播
+                                #                                   disable: true
+                                #                                   router_name: admin_v2_setting_live_course_setting
                                 admin_v2_setting_questions_setting:
                                     name: admin_v2.system.course.questions_tab
                                     disable: true
@@ -871,6 +870,25 @@ admin_v2:
                                     name: admin.system.course.open_course_tab
                                     disable: true
                                     parent: admin_v2_setting_course_setting
+                        admin_v2_setting_operation:
+                            name: admin_v2.system.operation_menu
+                            children:
+                                admin_v2_article_set:
+                                    name: admin_v2.system.operation.article_tab
+                                    disable: true
+                                admin_v2_group_set:
+                                    name: admin_v2.system.operation.group_tab
+                                    disable: true
+                                admin_v2_invite_set:
+                                    name: admin_v2.system.operation.invite_tab
+                                    disable: true
+                                admin_v2_message_send_set:
+                                    name: admin_v2.system.operation.message_send_tab
+                                    disable: true
+                                admin_v2_message_open_set:
+                                    name: admin_v2.system.operation.message_open_tab
+                                    disable: true
+                                    parent: admin_v2_message_open_set
                 admin_v2.transaction_group:
                     name: admin_v2.transaction.basic_group
                     is_group: true
@@ -889,7 +907,7 @@ admin_v2:
                                 admin_v2_setting_refund:
                                     name: admin_v2.system.asset.refund_tab
                                     disable: true
-                admin_v2.system_group:
+                admin_v2_system_group:
                     name: admin_v2.system.basic_group
                     is_group: true
                     children:

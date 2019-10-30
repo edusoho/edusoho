@@ -616,14 +616,6 @@ admin_v2_coupon_setting:
     path: /setting/coupon
     defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:setting }
 
-admin_v2_coupon_chooser:
-    path: /coupon/batch/chooser/{type}
-    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:chooseCoupon }
-
-admin_v2_coupon_chooser_resource_list:
-    path: /coupon/batch/{batchId}/chooser/resource/list
-    defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:chooseResourceList }
-
 #营销-营销管理-邀请管理
 admin_v2_invite_record:
     path:  /invite/record
@@ -1904,7 +1896,38 @@ admin_v2_setting_favicon_remove:
     defaults: { _controller: AppBundle:AdminV2/System/Setting:faviconRemove }
     methods: [POST]
     permissions: [admin_v2_school_information]
-    
+
+# 系统-通用管理-运营设置
+admin_v2_article_set:
+    path: /setting/article
+    defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:articleSet }
+
+admin_v2_group_set:
+    path:  /setting/group
+    defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:groupSet }
+
+admin_v2_invite_set:
+    path:  /setting/invite
+    defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:inviteSet }
+
+admin_v2_message_open_set:
+    path:  /setting/message-setting
+    defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:messageOpen }
+    permissions: [admin_v2_message_open_set]
+
+admin_v2_message_send_set:
+    path:  /setting/message
+    defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:messageSend }
+    permissions: [admin_v2_message_send_set]
+
+admin_v2_coupon_chooser:
+    path: /coupon/batch/chooser/{type}
+    defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:chooseCoupon }
+
+admin_v2_coupon_chooser_resource_list:
+    path: /coupon/batch/{batchId}/chooser/resource/list
+    defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:chooseResourceList }
+
 admin_v2_feedback:
     path: /feedback
     defaults: { _controller: AppBundle:AdminV2/Default:feedback }

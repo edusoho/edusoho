@@ -748,6 +748,14 @@ admin_v2.general.basic_group: 通用管理
 admin_v2.system.site_menu: 网校信息
 admin_v2.system.site.basic_tab: 学校信息
 
+# 系统-通用管理-运营设置
+admin_v2.system.operation_menu: 运营设置
+admin_v2.system.operation.article_tab: 资讯
+admin_v2.system.operation.group_tab: 小组
+admin_v2.system.operation.invite_tab: 邀请注册设置
+admin_v2.system.operation.message_open_tab: 私信开启
+admin_v2.system.operation.message_send_tab: 私信发送
+
 # 系统-交易设置
 admin_v2.transaction.basic_group: 交易设置
 
