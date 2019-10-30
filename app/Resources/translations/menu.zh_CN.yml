@@ -574,7 +574,7 @@ admin_v2.operation.site.theme_tab: 已购主题
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: 网校装修
 
-admin_v2.operation.site_menu: 站点设置
+admin_v2.operation.site_menu: 站点配置
 admin_v2.operation.site.top_navigation_tab: 顶部导航
 admin_v2.operation.site.foot_navigation_tab: 底部导航
 admin_v2.operation.site.consult_setting_tab: 客服
