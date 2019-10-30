@@ -736,4 +736,8 @@ admin_v2.system.optimize.basic_tab: System Optimization
 admin_v2.system.logs_menu: System Logs
 admin_v2.system.logs.logs_query_tab: System Log
 admin_v2.system.logs.logs_prod_tab: Program Log
+
+# 数据-数据概览
+admin_v2.data_statistics.overview.menu: Data Overview
+admin_v2.data_statistics.overview.basic_tab: Data Overview
 # 新版后台结束

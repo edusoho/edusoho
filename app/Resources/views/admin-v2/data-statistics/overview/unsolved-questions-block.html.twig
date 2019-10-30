@@ -1,0 +1,46 @@
+{% import "admin-v2/macro.html.twig" as admin_macro %}
+{% if questions %}
+  <table class="table table-condensed table-noborder table-overflow" style="margin-bottom:0">
+    <thead>
+      <tr>
+        <th width="58%">{{'admin.homepage.latest_question.tr.question_th'|trans}}</th>
+        <th width="20%">{{'admin.homepage.latest_question.tr.view_count_th'|trans}}</th>
+        <th width="22%">{{'admin.homepage.latest_question.tr.operation_th'|trans}}</th>
+      </tr>
+    </thead>
+    <tbody class="tbody">
+      {% for question in questions %}
+        {% if question.title == '' %}
+          {% if question.questionType == 'video' %}
+            {% set questionType = 'course.thread.question_type.video'|trans %}
+          {% elseif question.questionType == 'image' %}
+            {% set questionType = 'course.thread.question_type.image'|trans %}
+          {% elseif question.questionType == 'audio' %}
+            {% set questionType = 'course.thread.question_type.audio'|trans %}
+          {% elseif question.questionType == 'content' %}
+            {% set questionType = 'course.thread.question_type.content'|trans %}
+          {% endif %}
+        {% endif %}
+        {% set course =  courses[question.courseId]|default(null) %}
+        <tr>
+          <td>
+            <a class="link-primary" href="{{ path('course_thread_show', {courseId:question.courseId, threadId:question.id}) }}" target="_blank">
+              {{ question.title|default('course.thread.question.title'|trans({'%questionType%':questionType|default('course.thread.question_type.content'|trans)})) }}
+            </a>
+          </td>
+          <td class="pull-right prl">
+            {{ question.hitNum }}
+          </td>
+          <td>
+            {% if course %}
+              <button class="btn btn-default btn-xs js-remind-teachers" data-url="{{ path('admin_v2_question_remind_teachers', {courseId:question.courseId, questionId:question.id}) }}">{{'admin.homepage.latest_question.remind_teacher_btn'|trans}}</button>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+{% else %}
+  <div class="empty">{{'admin.homepage.latest_question.empty'|trans}}</div>
+{% endif %}
+
