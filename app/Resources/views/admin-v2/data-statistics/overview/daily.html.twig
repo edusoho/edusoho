@@ -7,8 +7,8 @@ five-subfield
 clearfix">
   <li>
     <div class="title">{{ 'admin.homepage.todays_data.login_users'|trans }}</div>
-    <span class="number"><a href="{{ path('admin_online', {type:'logined'}) }}" target="_blank">{{ loginCount| default('0') }}</a></span>
-    <p>{{ 'admin.homepage.todays_data.login_users.online_total'|trans }}: <a href="{{ path('admin_online', {type:'online'}) }}" target="_blank">{{ onlineCount }}</a></p>
+    <span class="number"><a href="{{ path('admin_v2_online', {type:'logined'}) }}" target="_blank">{{ loginCount| default('0') }}</a></span>
+    <p>{{ 'admin.homepage.todays_data.login_users.online_total'|trans }}: <a href="{{ path('admin_v2_online', {type:'online'}) }}" target="_blank">{{ onlineCount }}</a></p>
   </li>
   <li>
     <div class="title">{{ 'admin.homepage.todays_data.new_registration'|trans }}</div>
