@@ -1,7 +1,6 @@
 {% extends 'admin-v2/layout.html.twig' %}
 {% block title %}{{ 'admin.hompage.html_head_title'|trans }}{% endblock %}
 {% set panel = 'dashboard' %}
-{% set script_controller = 'default/index' %}
 
 {% set bodyClass = "admin-v2-page" %}
 
@@ -17,7 +16,7 @@
       </div>
 
       <div class="alert alert-warning" role="alert">
-        <span>欢迎使用！试用将于 <strong>2019年12月30日 </strong> 到期，剩余 <strong>96</strong> 天。 您可以联系销售人员购买授权版本，或者延长试用期限。 <span class="cd-ml16">电话：4008041114 或 QQ：800023860-【站点设置】-【基础信息】-【网站域名】</span></span>
+        <span>欢迎使用！试用将于 <strong>2019年12月30日 </strong> 到期，剩余 <strong>96</strong> 天。 您可以联系销售人员购买授权版本，或者延长试用期限。 <span>&nbsp;电话：4008041114 或 QQ：800023860</span></span>
         <a class="alert-link" href='#'>立即设置 》</a>
       </div>
     </div>
@@ -34,7 +33,7 @@
                 <div class="task-step task-step--done">
                   <div class="task-step__title">接入教育云</div>
                   <div class="task-step__tip">直播、点播安全无忧！</div>
-                  <a class="task-step__btn" href="#">完成任务</a>
+                  <a class="task-step__btn" href="#">已完成</a>
                   <a class="task-step__link" href="#">查看接入指南</a>
                 </div>
               </div>
@@ -84,8 +83,8 @@
         </div>
 
         {# 数据概览 #}
-        <div class="admin-v2-section">
-          <div class="admin-v2-section__header">数据概览<span class="admin-v2-section__more">更多<i class="es-icon es-icon-chevronright"></i></span></div>
+        <div class="admin-v2-section cd-pb24">
+          <div class="admin-v2-section__header cd-mb16">数据概览<span class="admin-v2-section__more">更多<i class="es-icon es-icon-chevronright"></i></span></div>
           <div class="admin-v2-section__body admin-data">
             <div class="row">
               <div class="col-md-3 text-center">
@@ -175,8 +174,8 @@
         </div>
 
         {# 应用简介 #}
-        <div class="admin-v2-section">
-          <div class="admin-v2-section__header">应用简介<a class="admin-v2-section__more" href="#">逛逛营销云应用</a></div>
+        <div class="admin-v2-section cd-pb24">
+          <div class="admin-v2-section__header cd-mb16">应用简介<a class="admin-v2-section__more" href="#">逛逛营销云应用</a></div>
           <div class="admin-v2-section__body">
             <div class="row">
               <div class="col-md-3">
@@ -208,20 +207,20 @@
         </div>
 
         {# 经营建议 #}
-        <div class="admin-v2-section">
-          <div class="admin-v2-section__header">经营建议<a class="admin-v2-section__more" href="#">前去Edusoho商学院</a></div>
+        <div class="admin-v2-section cd-pb16 cd-mb0">
+          <div class="admin-v2-section__header cd-mb16">经营建议<a class="admin-v2-section__more" href="#">前去Edusoho商学院</a></div>
           <div class="admin-v2-section__body admin-advice">
             <div class="row">
-              <div class="col-md-3">
+              <div class="col-md-3 admin-advice__item">
+                <img class="img-responsive" src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+              </div>
+              <div class="col-md-3 admin-advice__item">
                 <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
               </div>
-              <div class="col-md-3">
+              <div class="col-md-3 admin-advice__item">
                 <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
               </div>
-              <div class="col-md-3">
-                <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
-              </div>
-              <div class="col-md-3">
+              <div class="col-md-3 admin-advice__item">
                 <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
               </div>
             </div>
@@ -253,7 +252,7 @@
           <div class="admin-version">系统版本：8.3.36</div>
         </div>
 
-        <div class="admin-sidebar-section">
+        <div class="admin-sidebar-section cd-pb16">
           <div class="admin-sidebar-section__header">站长公告</div>
           <div class="admin-sidebar-section__body admin-notice">
             <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
@@ -265,16 +264,19 @@
           <div class="admin-sidebar-section__header">EduSoho更新日志<span class="admin-sidebar-section__more">更多<i class="es-icon es-icon-chevronright"></i></span></div>
           <div class="admin-sidebar-section__body">
             <div class="admin-log">
-              <div class="admin-log__cell">
+              <div class="admin-log__cell text-overflow">
                 <span class="admin-log__date cd-mr16">04.26</span>[新增]新增分销推广
               </div>
-              <div class="admin-log__cell">
+              <div class="admin-log__cell text-overflow">
                 <span class="admin-log__date cd-mr16">05.12</span>小程序上线
               </div>
-              <div class="admin-log__cell">
-                <span class="admin-log__date cd-mr16">05.23</span>[新增]新增分销推广分销推广
+              <div class="admin-log__cell text-overflow">
+                <span class="admin-log__date cd-mr16">06.26 </span>约排课功能上线
               </div>
-              <div class="admin-log__cell">
+              <div class="admin-log__cell text-overflow">
+                <span class="admin-log__date cd-mr16">05.23</span>[新增]新增分销推广分销推广销推广分销推广销推广分销推广销推广分销推广
+              </div>
+              <div class="admin-log__cell text-overflow">
                 <span class="admin-log__date cd-mr16">04.26</span>微信通知2.0功能上线
               </div>
             </div>

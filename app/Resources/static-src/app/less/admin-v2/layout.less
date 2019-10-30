@@ -21,6 +21,10 @@ body {
     font-size: 14px;
     line-height: 24px;
     text-decoration: none;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
   }
   
   .ct-layout-navbar_ul {
@@ -29,10 +33,12 @@ body {
       margin-top: 16px;
       padding: 4px 16px !important;
       font-weight: normal !important;
-      &:hover {
+      &:hover,
+      &:focus {
         .es-transition;
         color: #fff !important;
         opacity: 1 !important;
+        text-decoration: none;
       }
     }
     li:last-child {
@@ -44,7 +50,8 @@ body {
         background-color: rgba(255,255, 255, 0.2);
         color: #fff !important;
         .es-transition;
-        &:hover {
+        &:hover,
+        &:focus {
           .es-transition;
           background-color: #fff !important;
           color: #333 !important;
@@ -95,7 +102,8 @@ body {
         vertical-align: text-bottom;
       }
       .es-transition;
-      &:hover {
+      &:hover,
+      &:focus {
         .es-transition;
         background-color: #fff;
         border: 1px solid #fff;
@@ -162,7 +170,8 @@ body {
     text-decoration: none !important;
     color: #333 !important;
     .es-transition;
-    &:hover {
+    &:hover,
+    &:focus {
       .es-transition;
       color: #428bca !important;
     }

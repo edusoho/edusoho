@@ -14,6 +14,10 @@
   margin-bottom: 24px;
   padding-left: 16px;
   padding-right: 16px;
+  @media (min-width: 1400px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
   background-color: #fff7ef;
   .alert {
     margin-bottom: 0;
@@ -42,6 +46,10 @@
 .admin-v2-section {
   margin-bottom: 24px;
   padding: 16px 16px 32px 16px;
+  @media (min-width: 1400px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
   background-color: @cdv2-white;
   .admin-v2-section__header {
     margin-bottom: 24px;
@@ -60,11 +68,20 @@
     font-weight: normal;
     .cdv2-text-md;
     color: @brand-primary;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      cursor: pointer;
+    }
   }
 }
 
 .task-step {
   padding: 24px 4px 16px 4px;
+  @media (min-width: 1400px) {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
   text-align: center;
   border-radius: 4px;
   box-shadow: 0 2px 12px 0 rgba(0,0,0,0.05);
@@ -78,6 +95,7 @@
     width: 88px;
     height: 24px;
     margin: auto;
+    margin-bottom: 2px;
     padding-top: 4px;
     padding-bottom: 4px;
     border-radius: 12px;
@@ -85,10 +103,12 @@
     color: @brand-primary;
     .cdv2-text-sm;
     .es-transition;
-    &:hover {
+    &:hover,
+    &:focus {
       .es-transition;
       background-color: @brand-primary;
       color: @cdv2-white;
+      text-decoration: none;
     }
   }
   &.task-step--done {
@@ -109,14 +129,19 @@
     margin-bottom: 16px;
     .cdv2-text-sm;
     color: @cdv2-light-minor;
+    @media (min-width: 1400px) {
+      width: 120px;
+    }
   }
   .task-step__link {
-    margin-top: 8px;
+    display: inline-block;
     .cdv2-text-sm;
     color: @cdv2-light-minor;
     .es-transition;
-    &:hover {
+    &:hover,
+    &:focus {
       .es-transition;
+      text-decoration: none;
       color: @brand-primary;
     }
   }
@@ -157,7 +182,8 @@
   margin: auto;
   padding: 16px 24px;
   .es-transition;
-  &:hover {
+  &:hover,
+  &:focus {
     .es-transition;
     cursor: pointer;
     box-shadow: 0px 2px 12px 0px rgba(0,0,0,0.05);
@@ -197,7 +223,8 @@
   line-height: 48px;
   color: @cdv2-dark-minor !important;
   border-radius: 24px;
-  &:hover {
+  &:hover,
+  &:focus {
     cursor: pointer;
   }
   span {
@@ -224,20 +251,31 @@
   .admin-application__name {
     font-size: 16px;
     line-height: 22px;
+    color: @cdv2-dark-minor;
   }
 }
 
 .admin-advice {
+  .admin-advice__item {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
   img {
+    width: 100%;
     max-width: 100%;
     height: auto;
-    border-radius:4px
+    border-radius: 4px;
+    height: 121.5px; //临时写死
   }
 }
 
 
 .admin-info-section {
   padding: 16px;
+  @media (min-width: 1400px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
   background-color: @cdv2-white;
 }
 
@@ -248,6 +286,10 @@
     margin-right: 8px;
     width: 60px;
     height: 60px;
+    @media (min-width: 1400px) {
+      width: 80px;
+      height: 80px;
+    }
     border-radius: 100%;
     vertical-align: top;
   }
@@ -260,6 +302,9 @@
     .cdv2-text-md;
     .cdv2-text-medium;
     color: @cdv2-dark-minor;
+    @media (min-width: 1400px) {
+      margin-bottom: 8px;
+    }
   }
   .rank-tag {
     .rank-tag__icon {
@@ -273,6 +318,15 @@
       border-radius: 100%;
       i {
         vertical-align: top;
+      }
+      @media (min-width: 1400px) {
+        width: 28px;
+        height: 28px;
+        i {
+          font-size: 20px;
+          line-height: 28px;
+          vertical-align: middle;
+        }
       }
     }
     .rank-tag__text {
@@ -288,6 +342,13 @@
       vertical-align: text-bottom;
       line-height: 18px;
       border-radius: 4px;
+      @media (min-width: 1400px) {
+        height: 24px;
+        margin-left: -10px;
+        padding-left: 16px;
+        line-height: 24px;
+        vertical-align: unset;
+      }
     }
 
     &.rank-tag--yellow {
@@ -320,6 +381,12 @@
     background-color: @cdv2-line-color;
     border-radius: 4px;
     vertical-align: text-bottom;
+    @media (min-width: 1400px) {
+      height: 24px;
+      line-height: 24px;
+      margin-left: 8px;
+      vertical-align: baseline;
+    }
   }
 }
 
@@ -337,6 +404,11 @@
       margin-bottom: 0;
     }
     .cdv2-text-md;
+    @media (min-width: 1400px) {
+      &:first-child {
+        .cdv2-text-lg;
+      }
+    }
   }
   .admin-update__label {
     display: inline-block;
@@ -376,7 +448,8 @@
   i {
     margin-right: 4px;
   }
-  &:hover {
+  &:hover,
+  &:focus {
     color: @brand-primary;
     text-decoration: none;
   }
@@ -397,6 +470,7 @@
   margin-top: 24px;
   background-color: @cdv2-white;
   padding: 16px;
+  padding-bottom: 28px;
   .admin-sidebar-section__header {
     .cdv2-text-xlg;
     .cdv2-text-medium;
@@ -408,6 +482,9 @@
     font-size: 14px;
     line-height: 28px;
     color: @brand-primary;
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 
@@ -431,6 +508,9 @@
   margin-bottom: 8px;
   .cdv2-text-md;
   color: @cdv2-dark-assist;
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .admin-wechat {
