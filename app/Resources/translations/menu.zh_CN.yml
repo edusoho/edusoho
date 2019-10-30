@@ -579,7 +579,7 @@ admin_v2.operation.site.top_navigation_tab: 顶部导航
 admin_v2.operation.site.foot_navigation_tab: 底部导航
 admin_v2.operation.site.consult_setting_tab: 客服
 admin_v2.operation.site.es_bar_tab: '侧边栏'
-admin_v2.operation.content.basic_tab: 自定义页面管理
+admin_v2.operation.content.basic_tab: 自定义页面
 admin_v2.operation.site.share_tab: 分享
 admin_v2.operation.site.friendlyLink_navigation_tab: '友情链接'
 # 运营-内容运营-资讯
