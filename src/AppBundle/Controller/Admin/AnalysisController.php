@@ -10,7 +10,6 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\MemberOperation\Service\MemberOperationService;
-use Biz\Order\Service\OrderService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Service\ViewLogService;
@@ -1099,10 +1098,8 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getTaskViewLog()->countViewLogs(
-                $searchCondition,
-                20
-            )
+            $this->getTaskViewLog()->countViewLogs($searchCondition),
+            20
         );
 
         $videoViewedDetail = $this->getTaskViewLog()->searchViewLogs(
@@ -1169,10 +1166,8 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getTaskViewLog()->countViewLogs(
-                $searchCondition,
-                20
-            )
+            $this->getTaskViewLog()->countViewLogs($searchCondition),
+            20
         );
 
         $videoViewedDetail = $this->getTaskViewLog()->searchViewLogs(

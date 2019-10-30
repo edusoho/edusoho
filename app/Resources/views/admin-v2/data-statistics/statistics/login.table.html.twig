@@ -1,0 +1,21 @@
+<table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+  <thead>
+  <tr>
+    <th>{{ 'admin.operation_analysis.login.username'|trans }}</th>
+    <th>{{ 'admin.operation_analysis.login.ip'|trans }}</th>
+    <th>{{ 'admin.operation_analysis.login.time'|trans }}</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% if loginDetail %}
+    {% for data in loginDetail %}
+      <tr>
+        <td>{{ admin_macro.user_link(users[data.userId]) }}</td>
+        <td>{{ data.ip }}</td>
+        <td>{{ data.createdTime|date("Y-m-d H:i:s") }}</td>
+      </tr>
+    {% endfor %}
+  {% endif %}
+  </tbody>
+</table>
+{{ admin_macro.paginator(paginator) }}

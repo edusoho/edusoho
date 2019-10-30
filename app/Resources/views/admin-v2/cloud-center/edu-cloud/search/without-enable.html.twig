@@ -1,0 +1,47 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_cloud_search' %}
+
+{% block main %}
+
+  <div class="panel panel-default notice-panel">
+    <div class="panel-body">
+      <i class="es-icon es-icon-infooutline text-primary"></i>
+      <div class="text-md mbl">{{ 'admin.edu_cloud.edu_search.no_enabled_search'|trans }}</div>
+      <div
+          class="color-gray notice-desc">{{ 'admin.edu_cloud.edu_search.search_tips'|trans({'%searchUrl%': path('admin_v2_cloud_search')})|raw }}</div>
+      {% if data.status == 'unbinded' %}
+        <div class="text-danger text-sm">
+          {{ 'admin.edu_cloud.edu_search.unbinded_url_tips'|trans({'%setUrl%': path('admin_v2_setting_cloud')})|raw }}
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg notice-btn" name="upload_mode" value="cloud"
+                disabled="disabled">{{ 'admin.edu_cloud.edu_search.start_enabled_btn'|trans }}
+        </button>
+      {% elseif data.status == 'binded_error' %}
+        <div class="text-danger text-sm">
+          {{ 'admin.edu_cloud.edu_search.binded_error_url_tips'|trans({'%setUrl%': path('admin_v2_setting_cloud')})|raw }}
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg notice-btn" name="upload_mode" value="cloud"
+                disabled="disabled">{{ 'admin.edu_cloud.edu_search.start_enabled_btn'|trans }}
+        </button>
+      {% elseif data.status == 'closed' %}
+        <a class="btn btn-primary btn-lg notice-btn" data-toggle="modal" data-target="#modal"
+           data-url="{{ path('admin_v2_edu_cloud_search_clause') }}">{{ 'admin.edu_cloud.edu_search.start_enabled_btn'|trans }}
+        </a>
+      {% elseif not setting('cloud_search.search_enabled') %}
+        <a href="{{ path('admin_v2_edu_cloud_search_open') }}"
+           class="btn btn-primary btn-lg notice-btn">{{ 'admin.edu_cloud.edu_search.start_enabled_btn'|trans }}</a>
+      {% else %}
+        <a class="btn btn-primary btn-lg notice-btn" data-toggle="modal" data-target="#modal"
+           data-url="{{ path('admin_v2_edu_cloud_search_clause') }}">{{ 'admin.edu_cloud.edu_search.start_enabled_btn'|trans }}
+        </a>
+      {% endif %}
+      <div class="edu-cloud-search-title text-left">
+        <h4 class="mbl">{{ 'admin.edu_cloud.edu_search.search_range_describe'|trans }}</h4>
+      </div>
+      <div class="edu-cloud-search-intro text-left">
+        {{ 'admin.edu_cloud.edu_search.search_range_tips'|trans|raw }}
+      </div>
+    </div>
+  </div>
+{% endblock %}

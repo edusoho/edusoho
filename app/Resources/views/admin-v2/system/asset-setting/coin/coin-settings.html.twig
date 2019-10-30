@@ -1,0 +1,96 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_coin_settings' %}
+{% set script_controller = "coin/range" %}
+
+{% block main %}
+  <ul class="nav nav-pills mbl small">
+    <li class="active">
+      <a href="{{path('admin_v2_coin_settings')}}">{{ 'admin.coin.setting'|trans }}</a>
+    </li>
+    <li>
+      <a href="{{path('admin_v2_coin_model')}}">{{ 'admin.coin.model'|trans }}</a>
+    </li>
+  </ul>
+  {{ web_macro.flash_messages() }}
+  <form class="form-horizontal" method="post" id="coin-settings-form">
+  
+
+      <style type="text/css">
+      .popover{
+        z-index: 9999;
+            }
+        </style>
+        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+         <div id="article-property-tips-html" style="display:none">
+            <div style="width:250px;font-size:14px;">
+              <span style="color:blue;"> {{'admin.coin_setting.description'|trans}}：</span><br>
+              {{'admin.coin_setting.description_hint'|trans}}<br>
+              <span style="color:blue;">{{'admin.coin_setting.promotion_proposal'|trans}}：</span><br>
+              {{ 'admin.coin_setting.promotion_proposal_hint'|trans|raw }}
+            </div>
+        </div>
+
+      <div class="form-group">
+    		<div class="col-md-3 control-label">
+    			<label for="coin_name">{{'coin.name'|trans}}</label>
+    		</div>
+    		<div class="controls col-md-4">
+    			<input type="text" id="coin_name" name="coin_name" class="form-control" value="{{coin_settings_posted.coin_name}}">
+    		</div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-3 control-label">
+          <label for="coin_picture">{{'coin.picture'|trans}}</label>
+        </div>
+        <div class="col-md-7 controls">
+        <div >
+
+          <div id="coin-picture-largeSize" style="display:inline;">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}">{% endif %}</div>
+          <div id="coin-picture-middleSize" style="display:none;">{% if setting('coin.coin_picture_30_30') %}<img src="{{ asset(setting('coin.coin_picture_30_30')) }}">{% endif %}</div>
+          <div id="coin-picture-smallSize" style="display:none;">{% if setting('coin.coin_picture_20_20') %}<img src="{{ asset(setting('coin.coin_picture_20_20')) }}">{% endif %}</div>
+          <div id="coin-picture-extraSmallSize" style="display:none;">{% if setting('coin.coin_picture_10_10') %}<img src="{{ asset(setting('coin.coin_picture_10_10')) }}">{% endif %}</div>
+        </div></br>
+
+          <button class="btn btn-default btn-sm" id="coin-picture-upload" type="button" data-url="{{ path('admin_v2_coin_picture') }}">{{'form.btn.upload'|trans}}</button>
+          <button class="btn btn-default btn-sm" id="coin-picture-remove" type="button" data-url="{{ path('admin_v2_coin_picture_remove') }}" {% if not setting('coin.coin_picture') %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
+          <p class="help-block">
+            {{ 'admin.coin_setting.upload_hint'|trans|raw }}
+          </p>
+          <input type="hidden" name="coin_picture" value="{{setting('coin.coin_picture') }}">
+          <input type="hidden" name="coin_picture_50_50" value="{{setting('coin.coin_picture_50_50') }}">
+          <input type="hidden" name="coin_picture_30_30" value="{{setting('coin.coin_picture_30_30') }}">
+          <input type="hidden" name="coin_picture_20_20" value="{{setting('coin.coin_picture_20_20') }}">
+          <input type="hidden" name="coin_picture_10_10" value="{{setting('coin.coin_picture_10_10') }}">
+          <input type="hidden" name="cash_rate" {% if setting('coin.cash_rate') %} value="{{setting('coin.cash_rate') }}" {% else %} value="1" {% endif %}>
+          <input type="hidden" name="coin_enabled" {% if setting('coin.coin_enabled') %} value="{{setting('coin.coin_enabled') }}" {% else %} value="0" {% endif %}>
+          <input type="hidden" name="cash_model" {% if setting('coin.cash_model') %} value="{{setting('coin.cash_model') }}" {% else %} value="none" {% endif %}>
+          <input type="hidden" name="charge_coin_enabled" {% if setting('coin.charge_coin_enabled') %} value="{{setting('coin.charge_coin_enabled')}}" {% else %} value="0" {% endif %}>
+        </div>
+    </div>
+
+        <div class="form-group">
+              <div class="col-md-3 control-label">
+                <label for="coin_content">{{'admin.coin_setting.coin_description'|trans}}</label>
+              </div>
+          <div class="controls col-md-8">
+            <textarea class="form-control" id="coin_content" rows="16" name="coin_content" value="{{coin_settings_posted.coin_content}}" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ field_value(coin_settings_posted, 'coin_content') }}</textarea>
+            <p class="help-block">{{'admin.coin_setting.content_hint'|trans}}
+            </p>
+          </div>
+        </div> 
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    <div class="row form-group">
+    	<div class="controls col-md-offset-3 col-md-8">
+    		<button type="submit" class="btn btn-primary" >{{'admin.coin_setting.update_submit_btn'|trans}}</button>
+    	</div>
+    </div>
+
+    <div class="alert alert-info">
+      {{ 'admin.coin_setting.tips'|trans|raw }}
+    </div>
+  </form>
+{% endblock %}

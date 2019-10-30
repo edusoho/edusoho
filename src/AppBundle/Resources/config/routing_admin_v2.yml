@@ -2,34 +2,119 @@ admin_v2:
     path:  /
     defaults: { _controller: AppBundle:AdminV2/Default:index }
 
-#测试测试菜单展示
+# 用户-用户管理-用户管理
 admin_v2_user:
-    path:  /user
-    defaults: { _controller: AppBundle:Admin/User:index }
-    permissions: [admin_user_manage]
+    path: /user
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:index }
+    permissions: [admin_v2_user_manage]
 
-#测试测试菜单展示
 admin_v2_user_create:
     path:  /user/create
-    defaults: { _controller: AppBundle:Admin/User:create }
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:create }
 
-#测试测试菜单展示
-admin_v2_user_learn_statistics:
-    path:  /user/create
-    defaults: { _controller: AppBundle:Admin/User:show }
-    permissions: [admin]
+admin_v2_user_create_email_check:
+    path:  /user/create/email/check
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:emailCheck }
+    permissions: [admin_v2_user_manage]
 
-#测试测试菜单展示
+admin_v2_user_create_mobile_check:
+    path:  /user/create/mobile/check
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:mobileCheck }
+    permissions: [admin_v2_user_manage]
+
+admin_v2_user_create_email_or_mobile_check:
+    path:  /user/create/email_or_mobile/check
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:emailOrMobileCheck }
+    permissions: [admin_v2_user_manage]
+
+admin_v2_user_create_nickname_check:
+    path:  /user/create/nickname/check
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:nicknameCheck }
+    permissions: [admin_V2_user_manage]
+
+admin_v2_user_show:
+    path:  /user/{id}
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:show }
+    permissions: [admin_v2]
+
+admin_v2_user_edit:
+    path:  /user/{id}/edit
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:edit }
+
+admin_v2_user_org_update:
+    path: /user/{id}/org/update
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:orgUpdate}
+
+admin_v2_user_lock:
+    path:  /user/{id}/lock
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:lock }
+    methods:  [POST]
+
+admin_v2_user_unlock:
+    path:  /user/{id}/unlock
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:unlock }
+    methods:  [POST]
+
+admin_v2_user_roles:
+    path:  /user/{id}/roles
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:roles }
+
+admin_v2_user_avatar:
+    path:  /user/{id}/avatar
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:avatar }
+
+admin_v2_user_avatar_crop:
+    path:  /user/{id}/avatar/crop
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:avatarCrop }
+    permissions: [admin_v2_user_avatar]
+
+admin_v2_user_change_password:
+    path:  /user/{userId}/change/password
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:changePassword }
+
+admin_v2_user_send_passwordreset_email:
+    path:  /user/{id}/send_passwordreset_email
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:sendPasswordResetEmail }
+    methods:  [POST]
+
+admin_v2_user_send_emailverify_email:
+    path:  /user/{id}/send_emailverify_email
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:sendEmailVerifyEmail }
+    methods:  [POST]
+
+admin_v2_fans_list:
+    path: /user/fans/list
+    defaults: { _controller: AppBundle:AdminV2/User/WechatFans:index }
+
 admin_v2_online:
-    path:  /user/create
-    defaults: { _controller: AppBundle:Admin/User:show }
-    permissions: [admin]
+    path: /online
+    defaults: { _controller: AppBundle:AdminV2/User/Online:index }
 
-#测试测试菜单展示
+admin_v2_user_learn_statistics:
+    path: /user/learn/statistics
+    defaults: { _controller: AppBundle:AdminV2/User/LearnStatistics:index }
+
+admin_v2_user_learn_detail:
+    path: /user/learn/{userId}/detail
+    defaults: { _controller: AppBundle:AdminV2/User/LearnStatistics:detail }
+
+admin_v2_user_learn_chart:
+    path: /user/learn/{userId}/chart
+    defaults: { _controller: AppBundle:AdminV2/User/LearnStatistics:learnChart }
+
+# 隐藏功能
+admin_v2_user_learn_statistics_info:
+    path: /user/learn/statistics/info
+    defaults: { _controller: AppBundle:AdminV2/User/LearnStatistics:syncInfo }
+
 admin_v2_login_record:
-    path:  /user/create
-    defaults: { _controller: AppBundle:Admin/User:show }
-    permissions: [admin]
+    path: /login_record
+    defaults: { _controller: AppBundle:AdminV2/User/LoginRecord:index }
+
+admin_v2_login_record_details:
+    path: /login_record/{id}/details
+    defaults: { _controller: AppBundle:AdminV2/User/LoginRecord:showUserLoginRecord }
+    permissions: [admin_v2_login_record]
 
 # 教学-课程管理-课程管理
 admin_v2_course_set:
@@ -572,12 +657,6 @@ admin_v2_login_micromarketing:
 admin_v2_login_distributor:
     path: /login/distributor
     defaults: { _controller: AppBundle:AdminV2/Marketing/Distributor:login }
-#用户
-##用户管理
-admin_v2_user_show:
-    path:  /user/{id}
-    defaults: { _controller: AppBundle:AdminV2/User/User:show }
-    permissions: [admin_v2]
 
 # 运营
 ## 微网校装修
@@ -1002,7 +1081,7 @@ admin_v2_themes_config_edit:
     path:  /theme/config/edit
     defaults: { _controller: AppBundle:AdminV2/Operating/Theme:themeConfigEdit }
     permissions: [admin_v2_setting_theme]
-    
+
 ## APP装修
 admin_v2_setting_mobile:
     path:  /setting/mobile
@@ -1093,6 +1172,26 @@ admin_v2_show_idcard:
     defaults: { _controller: AppBundle:AdminV2/User/UserApproval:showIdcard }
     permissions: [admin_v2_approval_manage]
 
+##用户管理-教师管理
+admin_v2_teacher:
+    path:  /teacher
+    defaults: { _controller: AppBundle:AdminV2/User/Teacher:index }
+
+admin_v2_teacher_promote:
+    path:  /teacher/{id}/promote
+    defaults: { _controller: AppBundle:AdminV2/User/Teacher:promote }
+
+admin_v2_teacher_promote_list:
+    path: /teacher/promote/list
+    defaults: { _controller: AppBundle:AdminV2/User/Teacher:promoteList }
+    permissions: [admin_v2_teacher_promote]
+
+admin_v2_teacher_promote_cancel:
+    path:  /teacher/{id}/promote/cancel
+    defaults: { _controller: AppBundle:AdminV2/User/Teacher:promoteCancel }
+    methods:  [POST]
+    permissions: [admin_v2_teacher,admin_v2_teacher_promote]
+
 # 系统
 ## 组织机构管理
 admin_v2_batch_update_org:
@@ -1118,21 +1217,7 @@ admin_v2_question_remind_teachers:
     methods:  [POST]
     permissions: [admin_v2]
 
-# 应用中心-云服务-短信概览
-admin_v2_edu_cloud_sms:
-    path:  /edu_cloud/sms/overview
-    defaults: { _controller: AppBundle:AdminV2/CloudCenter/CloudServer:smsOverview }
-    permissions: [admin_v2_edu_cloud_sms_overview]
-
-admin_v2_cloud_video_overview:
-    path:  /cloud/video/overview
-    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoOverview }
-
-admin_v2_my_cloud_overview:
-    path:  /setting/my/cloud/overview
-    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloudOverview }
-    
-#应用中心－基础云－概览
+#应用中心－CloudApi
 admin_v2_cloud_access:
     path:  /cloud/access
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:access }
@@ -1158,62 +1243,384 @@ admin_v2_cloud_service_overview:
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:serviceOverview }
     permissions: [admin_v2_my_cloud_overview]
 
-admin_v2_setting_cloud_edulive:
-    path:  /setting/cloud/edulive
+admin_v2_cloud_buy:
+    path:  /cloud/{type}/buy
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:buy }
+    permissions: [admin_v2_my_cloud_overview]
+
+admin_v2_cloud_sms_account:
+    path:  /cloud/sms/account
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:smsAccount }
+    permissions: [admin_v2_my_cloud_overview]
+
+admin_v2_cloud_video:
+    path:  /cloud/video
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:video }
+    permissions: [admin_v2_my_cloud_overview]
+    
+admin_v2_cloud_live:
+    path:  /cloud/live
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:live }
+    permissions: [admin_v2_my_cloud_overview]
+    
+admin_v2_cloud_sms_detail:
+    path: /cloud/sms/detail
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:smsDetail }
+    
+admin_v2_cloud_sms_statistics:
+    path: /cloud/sms/statistics
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:smsStatistics }
+
+admin_v2_cloud_sms_setting:
+    path: /cloud/sms/setting
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:smsSetting }
+
+admin_v2_cloud_show:
+    path:  /cloud/{type}/show
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:cloudShow , type: 'video'}
+
+admin_v2_cloud_tlp:
+    path:  /cloud/tlp
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:tlp }
+    permissions: [admin_v2_my_cloud_overview]
+    
+admin_v2_cloud_video_upgrade:
+    path:  /cloud/video/upgrade
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:videoUpgrade }
+    permissions: [admin_v2_my_cloud_overview]
+
+admin_v2_cloud_video_renew:
+    path:  /cloud/video/renew
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:videoRenew }
+    permissions: [admin_v2_my_cloud_overview]
+
+admin_v2_cloud_video_detail:
+    path: /cloud/video/detail
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:videoDetail }
+    
+admin_v2_cloud_video_account:
+    path:  /cloud/video/account
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:videoAccount }
+    
+admin_v2_cloud_live_upgrade:
+    path:  /cloud/live/upgrade
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:liveUpgrade }
+
+admin_v2_cloud_live_renew:
+    path:  /cloud/live/renew
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:liveRenew }
+
+admin_v2_cloud_live_more:
+    path: /cloud/live/more
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:liveMore }
+    
+admin_v2_cloud_sms_sign:
+    path:  /cloud/sms/sign
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:smsSign }
+    
+admin_v2_cloud_email_buy:
+    path:  /cloud/{type}/buy/custom
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:emailBuy }
+
+admin_v2_cloud_email_list:
+    path:  /cloud/email/list
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:emailList }
+    
+admin_v2_cloud_search:
+    path:  /cloud/search
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:search }
+    permissions: [admin_v2_my_cloud_overview]
+    
+admin_v2_cloud_search_detail:
+    path: /cloud/search/detail
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:searchDetail }
+  
+# 应用中心-营销云-应用中心
+admin_v2_app_center:
+    path:  /app/center/{postStatus}
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:center, postStatus:'all' }
+
+admin_v2_app_installed:
+    path:  /app/installed/{postStatus}
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:installed }
+
+admin_v2_app_uninstall:
+    path:  /app/uninstall
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:uninstall }
+    permissions: [admin_v2_app_installed]
+
+admin_v2_app_upgrades:
+    path:  /app/upgrades
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:upgrades }
+
+admin_v2_app_logs:
+    path:  /app/logs
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:logs }
+
+admin_v2_app_upgrades_count:
+    path:  /app/upgrades_count
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:upgradesCount }
+    permissions: [admin_v2_app_upgrades]
+    
+#应用中心－基础云－概览
+admin_v2_my_cloud_overview:
+    path:  /setting/my/cloud/overview
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloudOverview }
+   
+# 应用中心-云服务-云视频
+admin_v2_edu_cloud_video_overview:
+    path:  /edu_cloud/video/overview
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoOverview }
+
+admin_v2_edu_cloud_video_setting:
+    path:  /edu_cloud/video/setting
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoSetting }
+
+admin_v2_cloud_video_switch:
+    path:  /edu_cloud/video/switch
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoSwitch }
+    
+admin_v2_cloud_normal_video_delete:
+    path:  /edu_cloud/normal/video/delete
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:deleteVideo }
+    
+admin_v2_uploadfile_head_leader_params:
+    path: /uploadfile/video/head/leader/params
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:headLeaderParams }
+    permissions: [admin_v2_cloud_sms]
+
+admin_v2_setting_cloud_video_watermark_upload:
+    path: /edu_cloud/video_watermark/upload
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoWatermarkUpload }
+    methods: [POST]
+    permissions: [admin_v2_cloud_sms]
+    
+admin_v2_setting_cloud_video_watermark_remove:
+    path: /edu_cloud/video_watermark/remove
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoWatermarkRemove }
+    methods: [POST]
+    permissions: [admin_v2_cloud_sms]
+    
+admin_v2_setting_cloud_video_embed_watermark_upload:
+    path: /edu_cloud/video_embed_watermark/upload
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoEmbedWatermarkUpload }
+    methods: [POST]
+    permissions: [admin_v2_cloud_sms]
+
+admin_v2_setting_cloud_video_embed_watermark_remove:
+    path: /edu_cloud/video_embed_watermark/remove
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoWatermarkRemove }
+    methods: [POST]
+    permissions: [admin_v2_cloud_sms]
+
+# 应用中心-云服务-云直播
+admin_v2_edu_cloud_edulive_overview:
+    path:  /edu_cloud/edulive/overview
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveOverview }
+    permissions: [admin_v2_cloud_edulive]
+    
+admin_v2_edu_cloud_edulive_setting:
+    path:  /edu_cloud/edulive/setting
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveSetting }
+    permissions: [admin_v2_cloud_edulive]
+    
+# 应用中心-云服务-云短信
+admin_v2_edu_cloud_sms_overview:
+    path:  /edu_cloud/sms/overview
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/CloudServer:smsOverview }
+    permissions: [admin_v2_cloud_sms]
+
+admin_v2_edu_cloud_sms_setting:
+    path:  /edu_cloud/sms/setting
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:smsSetting }
+
+admin_v2_edu_cloud_sms_status:
+    path:  /edu_cloud/sms/status
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:smsStatus }
+
+admin_v2_edu_cloud_apply_for_sms:
+    path:  /edu_cloud/apply_for_sms
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:applyForSms }
+    permissions: [admin_v2_cloud_sms]
+
+admin_v2_edu_cloud_sms_no_message:
+    path: /edu_cloud/admin_edu_cloud_sms_no_message
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:smsNoMessage }
+    permissions: [admin_v2_cloud_sms]
+  
+# 应用中心-云服务-云邮件
+admin_v2_edu_cloud_email_overview:
+    path: /edu_cloud/email/overview
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:emailOverview }
+    permissions: [admin_v2_cloud_email]
+
+admin_v2_edu_cloud_email_setting:
+    path: /edu_cloud/email/setting
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:emailSetting }
+    permissions: [admin_v2_cloud_email]
+
+admin_v2_edu_cloud_email_switch:
+    path: /edu_cloud/email/switch
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:emailSwitch }
+    permissions: [admin_v2_cloud_email]
+
+# 应用中心-云服务-云搜索
+admin_v2_edu_cloud_search_overview:
+    path: /edu_cloud/search/overview
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:searchOverview }
+
+admin_v2_edu_cloud_search_setting:
+    path: /edu_cloud/search/setting
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:searchSetting }
+    
+admin_v2_edu_cloud_search_clause:
+    path: /edu_cloud/search/clause
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:searchClause }
+    permissions: [admin_v2_cloud_search]
+
+admin_v2_edu_cloud_search_open:
+    path: /edu_cloud/search/open
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:searchOpen }
+    permissions: [admin_v2_cloud_search]
+    
+admin_v2_edu_cloud_search_reapply:
+    path: /edu_cloud/search/reapply
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:searchReapply }
+    permissions: [admin_v2_cloud_search]
+
+admin_v2_edu_cloud_search_close:
+    path: /edu_cloud/search/close
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:searchClose }
+    permissions: [admin_v2_cloud_search]
+
+admin_v2_edu_cloud_search_result_type:
+    path: /edu_cloud/search_result/type
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:setSearchResultType }
+
+# 应用中心-云服务-云问答
+admin_v2_edu_cloud_consult_setting:
+    path: /edu_cloud/consult/setting
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:consultSetting }
+  
+#应用中心－基础云－即时聊天设置
+admin_v2_app_im:
+    path: /edu_cloud/app/im
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:appIm }
+    permissions: [admin_v2_app_im]
+    
+admin_v2_app_im_update:
+    path: /edu_cloud/app/im/update
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:appImUpdateStatus }
+    methods: [POST]
+    permissions: [admin_v2_app_im]
+
+#应用中心－基础云－数据实验室
+admin_v2_cloud_data_lab:
+    path: /edu_cloud/data/lab
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/DataLab:data }
+
+admin_v2_cloud_data_lab_setting:
+    path: /edu_cloud/data/lab/setting
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/DataLab:settting }
+
+admin_v2_cloud_data_lab_setting_enable_modal:
+    path: /edu_cloud/data/lab/setting/modal/enable
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/DataLab:enable }
+
+admin_v2_cloud_data_lab_setting_disable_modal:
+    path: /edu_cloud/data/lab/setting/modal/disable
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/DataLab:disable }
+    
+#应用中心－基础云－授权信息
+admin_v2_setting_cloud:
+    path:  /setting/cloud
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:key }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_update:
+    path:  /setting/cloud/key/update
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyUpdate }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_apply:
+    path:  /setting/cloud/key/apply
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyApply }
+    methods: [POST]
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key:
+    path:  /setting/cloud/key
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:key }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_info:
+    path:  /setting/cloud/key/info
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyInfo }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_bind:
+    path:  /setting/cloud/key/bind
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyBind }
+    permissions: [admin_v2_setting_my_cloud]
+
+admin_v2_setting_cloud_key_copyright:
+    path:  /setting/cloud/key/copyright
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyCopyright }
+    methods: [POST]
+    permissions: [admin_v2_setting_my_cloud]
 
 admin_v2_app_package_update_modal:
     path:  /app/package_update/{id}/modal
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal }
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]  后面对应模块修改时需要修改
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_check_environment:
     path: /app/package_update/{id}/check_environment
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkEnvironment }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_check_depends:
     path: /app/package_update/{id}/check_depends
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkDepends }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_check_last_error:
     path: /app/package_update/{id}/check_lasterror
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checklastError }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_backup_file:
     path: /app/package_update/{id}/backup_file
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:backupFile }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_backup_db:
     path: /app/package_update/{id}/backup_db
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:backupDb }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_download_and_extract:
     path: /app/package_update/{id}/download_extract
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:downloadAndExtract }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_check_download_and_extract:
     path: /app/package_update/{id}/check_download_extract
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkDownloadAndExtract }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2_app_package_update_begin_upgrade:
     path: /app/package_update/{id}/begin_upgrade
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:beginUpgrade }
     methods: [POST]
-#    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+    permissions: [admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades]
 
 admin_v2 _app_package_update_check_newest:
     path: /app/package_update/check/newest/code/{code}
@@ -1264,14 +1671,138 @@ admin_v2_coin_flow_detail:
     defaults: { _controller: AppBundle:AdminV2/Trade/Coin:flowDetail }
     permissions: [admin_v2_coin_user_records]
 
+# 系统-资产设置
+admin_v2_setting_payment:
+    path:  /setting/payment
+    defaults: { _controller: AppBundle:AdminV2/System/AssetSetting:payment }
+    permissions: [admin_v2_payment]
+
+admin_v2_coin_settings:
+    path:     /setting/coin
+    defaults: { _controller: AppBundle:AdminV2/System/AssetSetting:coin }
+
+admin_v2_coin_model:
+    path:     /setting/coin/model
+    defaults: { _controller: AppBundle:AdminV2/System/AssetSetting:coinModel }
+    permissions: [admin_v2_coin_settings]
+
+admin_v2_coin_model_save:
+    path:     /coin/model/save
+    defaults: { _controller: AppBundle:AdminV2/System/AssetSetting:coinModelSave }
+    permissions: [admin_v2_coin_user_records]
+
+admin_v2_coin_picture:
+    path: /coin/picture
+    defaults: { _controller: AppBundle:AdminV2/System/AssetSetting:coinPicture }
+    methods: [POST]
+    permissions: [admin_v2_coin_settings]
+
+admin_v2_coin_picture_remove:
+    path: /coin/picture/remove
+    defaults: { _controller: AppBundle:AdminV2/System/AssetSetting:coinPictureRemove }
+    methods: [POST]
+    permissions: [admin_v2_coin_settings]
+
+admin_v2_coin_model_ajax:
+    path: /setting/coin/model/ajax
+    defaults: { _controller: AppBundle:AdminV2/System/AssetSetting:coinTableAjax}
+    permissions: [admin_v2_coin_user_records]
 
 # 系统-资产设置-退款
 admin_v2_setting_refund:
     path:  /setting/refund
-    defaults: { _controller: AppBundle:Admin/FinanceSetting:refund }
+    defaults: { _controller: AppBundle:AdminV2/System/AssetSetting:refund }
 
 # 设置-通用设置-微信授权信息
 admin_v2_setting_wechat_auth:
     path: /wechat/auth/setting
     defaults: { _controller: AppBundle:Admin/WeChatSetting:index}
 
+# 数据-数据分析-数据统计
+admin_v2_data_statistics_index:
+    path: /data_statistics/tab/{tab}
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Statistics:index, tab: 'trend' }
+
+# 系统-系统管理-系统优化
+admin_v2_optimize:
+    path:  /setting/optimize
+    defaults: { _controller: AppBundle:AdminV2/System/Optimize:index }
+    permissions: [admin_v2_optimize_settings]
+
+admin_v2_optimize_remove_cache:
+    path:  /setting/optimize/remove-cache
+    defaults: { _controller: AppBundle:AdminV2/System/Optimize:removeCache }
+    methods: [POST]
+    permissions: [admin_v2_optimize_settings]
+
+admin_v2_optimize_remove_tmp:
+    path:  /optimize/remove-tmp
+    defaults: { _controller: AppBundle:AdminV2/System/Optimize:removeTemp }
+    methods: [POST]
+    permissions: [admin_v2_optimize_settings]
+
+admin_v2_optimize_backupdb:
+    path:  /setting/optimize/backupdb
+    defaults: { _controller: AppBundle:AdminV2/System/Optimize:backupDatabase }
+    methods: [POST]
+    permissions: [admin_v2_optimize_settings]
+
+admin_v2_optimize_remove_upload_files:
+    path:  /setting/optimize/remove-unusedfiles
+    defaults: { _controller: AppBundle:AdminV2/System/Optimize:removeUnusedFiles }
+    permissions: [admin_v2_optimize_settings]
+
+# 系统-系统管理-系统日志
+admin_v2_logs:
+    path:  /setting/logs
+    defaults: { _controller: AppBundle:AdminV2/System/Log:index }
+
+admin_v2_logs_prod:
+    path:  /setting/logs/prod
+    defaults: { _controller: AppBundle:AdminV2/System/Log:prod }
+
+admin_v2_logs_action_dicts:
+    path:  /setting/logs/logActions
+    defaults: { _controller: AppBundle:AdminV2/System/Log:logActions }
+
+admin_v2_logs_username_match:
+    path:  /setting/logs/usernameMatchUsers
+    defaults: { _controller: AppBundle:AdminV2/System/Log:usernameMatchUsers }
+
+admin_v2_logs_old:
+    path:  /setting/logs/old
+    defaults: { _controller: AppBundle:AdminV2/System/Log:old }
+
+admin_v2_logs_field_change:
+    path:  /setting/logs/logFieldChange
+    defaults: { _controller: AppBundle:AdminV2/System/Log:logFieldChange }
+
+# 数据-数据分析-数据概览
+admin_v2_data_statistics_overview:
+    path: /data_statistics/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:index }
+
+admin_v2_data_statistics_daily_overview:
+    path:  /data_statistics/daily/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:daily }
+    permissions: [admin_v2_data_statistics_overview]
+
+admin_v2_data_statistics_study_overview:
+    path: /data_statistics/study/{period}/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:study }
+    permissions: [admin_v2_data_statistics_overview]
+
+admin_v2_data_statistics_order_overview:
+    path: /data_statistics/order/{period}/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:order }
+    permissions: [admin_v2_data_statistics_overview]
+
+admin_v2_data_statistics_task_learn_overview:
+    path: /data_statistics/task/learn/{period}/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:taskLearn }
+    permissions: [admin_v2_data_statistics_overview]
+
+admin_v2_data_statistics_course_explore_overview:
+    path: /data_statistics/course/explore/{period}/overview
+    defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:courseExplore }
+    permissions: [admin_v2_data_statistics_overview]

@@ -1,0 +1,61 @@
+{% extends 'admin-v2/cloud-app-layout.html.twig' %}
+
+
+{% set script_controller = 'app/logs' %}
+
+{% set menu = 'admin_v2_app_logs' %}
+
+{% block main %}
+  <style>
+    .table .popover {
+      max-width: 400px;
+    }
+  </style>
+
+  <table class="table table-striped table-hover js-table" data-url="{{ path('admin_v2_app_upgrades_count')}}" >
+    <thead>
+      <tr>
+        <th>{{'admin.app_logs.app_name'|trans}}</th>
+        <th>{{'admin.app_logs.type'|trans}}</th>
+        <th>{{'admin.app_logs.operator'|trans}}</th>
+        <th>{{'admin.app_logs.status'|trans}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+        <tr>
+          <td>{{ log.name }}</td>
+          <td>
+            {% if log.type == 'install' %}
+              {{'admin.app_logs.log_type.install'|trans}}
+              <br> <small class="text-muted">({{ log.toVersion }})</small>
+            {% else %}
+              {{ 'admin.app_logs.log_type.upgrade'|trans }}
+              <br> <small class="text-muted">{{'admin.app_logs.version'|trans}} {{ log.fromVersion }} -&gt; {{ log.toVersion }}</small>
+            {% endif %}
+          </td>
+          <td>
+            {{ admin_macro.user_link(users[log.userId]) }}
+            <br>
+            <small class="text-muted">{{ log.createdTime|date('Y-m-d H:i:s') }}</small>
+          </td>
+          <td>
+            {% if log.status == 'ROLLBACK' %}
+              <strong class="text-danger">{{'admin.app_logs.need_roll_back_tips'|trans}}</strong>
+            {% elseif log.status == 'ERROR' %}
+              <strong class="text-warning">{{'admin.app_logs.update_failed_tips'|trans}}</strong>
+            {% elseif log.status == 'SUCCESS' %}
+              <strong class="text-success">{{'admin.app_logs.update_successed_tips'|trans}}</strong>
+            {% elseif log.status == 'RECOVERED' %}
+              <strong class="text-info">{{'admin.app_logs.recovered_tips'|trans}}</strong>
+            {% endif %}
+            {% if log.message %}
+              <a href="javascript:;" class="btn btn-sm btn-info log-message-btn" data-content="{{log.message}}">{{'admin.app_logs.show_detail_btn'|trans}}</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ admin_macro.paginator(paginator) }}
+{% endblock %}

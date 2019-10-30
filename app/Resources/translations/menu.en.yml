@@ -633,11 +633,35 @@ admin_v2.operation.group.group_tab: Groups
 admin_v2.operation.group.group_tab.create_group_btn: Add Group
 admin_v2.operation.group.group_thread_tab: Group Discussions
 
+# 用户-用户管理-用户管理-tab
+admin_v2.user.basic.basic_tab: User Manage
+admin_v2.user.basic.fans_tab: Wechat Fans
+admin_v2.user.basic.online_tab: Online User
+admin_v2.user.basic.statistics_tab: User Statistics
+admin_v2.user.basic.login_record_tab: Login Record
+
+admin_v2.user.basic.basic_tab.create_btn: 'Add'
+admin_v2.user.basic.basic_tab.edit_btn: 'Edit'
+admin_v2.user.basic.basic_tab.setting_roles_btn: 'Role setting'
+admin_v2.user.basic.basic_tab.update_avatar_btn: 'Change avatar'
+admin_v2.user.basic.basic_tab.change_password_btn: 'Change password'
+admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: 'Send password reset email'
+admin_v2.user.basic.basic_tab.send_emailverify_email_btn: 'Send verify email'
+admin_v2.user.basic.basic_tab.lock_btn: 'Lock User'
+admin_v2.user.basic.basic_tab.unlock_btn: 'Unlock User'
+admin_v2.user.basic.basic_tab.org_update_btn: 'Change Organization'
+
 #用户-用户管理-实名认证
 admin_v2.user.approval_menu: Authentication
 admin_v2.user.approval.basic_tab.cancel_btn: Cancel
 admin_v2.user.approval.approving_menu: Approving
 admin_v2.user.approval.approved_menu: Approved
+
+#用户管理-教师管理
+admin_v2.user.teacher_menu: Teachers
+admin_v2.user.teacher.basic_tab: Teacher Managemen
+admin_v2.user.teacher.basic_tab.promote_btn: Recommended Teacher
+admin_v2.user.teacher.promote_list_tab: Teacher recommendation
 
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: Order Manage
@@ -658,14 +682,75 @@ admin_v2.trade.bills.coin_records_tab: Coin Bill
 admin_v2.trade.coin_menu: Coin Manage
 admin_v2.trade.coin.basic_tab: Coin Manage
 
+# 数据-数据统计
+admin_v2.data_statictics.analysis.basic_group: Data Analysis
+admin_v2.data_statistics.statistics.menu: Data Statistics
+admin_v2.data_statistics.statistics.basic_tab: Data Statistics
+
+# 应用中心-营销云-营销应用
+admin_v2.basic_app_center_group: Marketing Cloud
+admin_v2.cloud.app_center_menu: ES App Center
+admin_v2.cloud.app_center.basic_tab: ES App Center
+admin_v2.cloud.app_center.installed_tab: My App
+admin_v2.cloud.app_center.upgrades_tab: Upgrade
+admin_v2.cloud.app_center.logs_tab: Update Logs
+
+
 # 应用中心-基础云-概览
 admin_v2.cloud.overview_menu: Overview
 admin_v2.cloud.overview.basic_tab: Overview
 
-# 应用中心-基础云-云服务-短信
+# 应用中心-基础云-云服务
 admin_v2.nav.cloud_center: Cloud Center
 admin_v2.basic_cloud_group: Basic Cloud
 admin_v2.cloud_service.basic_menu: Cloud Server
 admin_v2.cloud_service.sms_tab: Sms Cloud
 admin_v2.cloud_service.sms_overview_tab: Overview
+
+admin_v2.tab.overview_tab: Overview
+admin_v2.tab.setting_tab: Setting
+
+admin_v2.cloud.video_menu: Cloud Video
+admin_v2.cloud.edulive_menu: Cloud Live
+admin_v2.cloud.sms_menu: Cloud Sms
+admin_v2.cloud.email_menu: Cloud Email
+admin_v2.cloud.search_menu: Cloud Search
+admin_v2.cloud.consult_menu: Cloud Q&A
+
+# 应用中心-基础云-云服务-即时聊天设置
+admin_v2.cloud.im_setting_menu: Chat Setting
+admin_v2.cloud.im_setting.basic_tab: Chat Setting
+
+#数据实验室
+admin_v2.cloud.data_lab: Data Laboratory
+admin_v2.cloud.data_lab_setting: Data Laboratory Setting
+
+# 应用中心-基础云-授权信息
+admin_v2.cloud.cloud_setting_menu: License
+admin_v2.cloud.cloud_setting.basic_tab: License
+
+# 系统-交易设置
+admin_v2.transaction.basic_group: Transaction Settings
+
+# 系统-交易设置-资产设置
+admin_v2.system.asset_menu: Asset Setting
+admin_v2.system.asset.payment_tab: Payment
+admin_v2.system.asset.coin_tab: Virtual Coin
+admin_v2.system.asset.refund_tab: Refund
+
+# 系统-系统管理
+admin_v2.system.basic_group: System Manage
+
+# 系统-系统管理-系统优化
+admin_v2.system.optimize_menu: System Optimization
+admin_v2.system.optimize.basic_tab: System Optimization
+
+# 系统-系统管理-系统日志
+admin_v2.system.logs_menu: System Logs
+admin_v2.system.logs.logs_query_tab: System Log
+admin_v2.system.logs.logs_prod_tab: Program Log
+
+# 数据-数据概览
+admin_v2.data_statistics.overview.menu: Data Overview
+admin_v2.data_statistics.overview.basic_tab: Data Overview
 # 新版后台结束
