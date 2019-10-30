@@ -20,10 +20,6 @@ export default {
         minDirectRewardRatio: 0,
       }
     },
-    price: {
-      type: String,
-      default: 0,
-    }
   },
 };
 </script>

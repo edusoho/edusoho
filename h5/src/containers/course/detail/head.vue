@@ -36,6 +36,7 @@ import Api from '@/api'
 import { Toast,Dialog } from 'vant';
 import countDown from '@/containers/components/e-marketing/e-count-down/index';
 import tagLink from '@/containers/components/e-tag-link/e-tag-link';
+import qs from 'qs';
 
 export default {
   components: {
@@ -51,12 +52,14 @@ export default {
       player: null,
       counting: true,
       isEmpty: false,
-      tagData: {
-        isShow: true,
-        money: 222.66,
+      tagData: { // 分销标签信息
+        earnings: 0,
+        isShow: false,
         link: '',
-        className: 'course-tag'
-      }
+        className: 'course-tag',
+        minDirectRewardRatio: 0,
+      },
+      bindAgencyRelation: {}, // 分销代理商绑定信息
     };
   },
   props: {
@@ -93,6 +96,8 @@ export default {
   },
   created() {
     this.initHead();
+    this.showTagLink();
+    this.initTagData();
   },
   /*
   * 试看需要传preview=1
@@ -233,7 +238,39 @@ export default {
     sellOut() {
       this.isEmpty = true
       this.$emit('goodsEmpty')
-    }
+    },
+    showTagLink() {
+      Api.hasDrpPluginInstalled().then(res => {
+        if (!res.Drp) {
+          this.tagData.isShow = false;
+          return;
+        }
+
+        Api.getAgencyBindRelation().then(data => {
+          if (!data) {
+            this.tagData.isShow = false;
+            return;
+          }
+          this.bindAgencyRelation = data;
+          this.tagData.isShow = true;
+        })
+      })
+    },
+    initTagData() {
+      Api.getDrpSetting().then(data => {
+        this.drpSetting = data;
+        this.tagData.minDirectRewardRatio = data.minDirectRewardRatio;
+
+        let params = {
+          type: 'course',
+          id: this.details.id,
+          merchant_id: this.bindAgencyRelation.merchantId,
+        };
+
+        this.tagData.link = this.drpSetting.distributor_recruit_url + '?' + qs.stringify(params);
+        this.tagData.earnings = this.drpSetting.minDirectRewardRatio * this.details.price;
+      });
+    },
   }
 }
 </script>

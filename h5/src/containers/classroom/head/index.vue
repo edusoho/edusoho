@@ -9,7 +9,7 @@
       @timesUp="expire"
       @sellOut="sellOut">
     </countDown>
-    <tagLink :tagData="tagData" :price="price">jfkdsjei</tagLink>
+    <tagLink :tagData="tagData"></tagLink>
   </div>
 </template>
 <script>
