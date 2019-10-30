@@ -1,5 +1,5 @@
 <template>
-  <div class="course-detail__head">
+  <div class="course-detail__head pos-rl">
     <div class="course-detail__head--img">
       <img :src="cover" alt="">
     </div>
@@ -9,19 +9,28 @@
       @timesUp="expire"
       @sellOut="sellOut">
     </countDown>
+    <tagLink :tagData="tagData"></tagLink>
   </div>
 </template>
 <script>
 import countDown from '@/containers/components/e-marketing/e-count-down/index';
+import tagLink from '@/containers/components/e-tag-link/e-tag-link';
 
 export default {
   components: {
-    countDown
+    countDown,
+    tagLink,
   },
   data() {
     return {
       counting: true,
-      isEmpty: false
+      isEmpty: false,
+      tagData: {
+        isShow: true,
+        money: 666.66,
+        link: 'edusoho.com',
+        className: 'course-tag',
+      }
     };
   },
   props: {

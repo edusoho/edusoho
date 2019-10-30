@@ -1,5 +1,5 @@
 <template>
-  <div class="course-detail__head" id="course-detail__head">
+  <div class="course-detail__head pos-rl" id="course-detail__head">
     <div class="course-detail__nav--btn" @click="viewAudioDoc" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen">
       文稿
     </div>
@@ -26,6 +26,7 @@
       ref="video"
       v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus">
     </div>
+    <tagLink :tagData="tagData"></tagLink>
   </div>
 </template>
 <script>
@@ -34,10 +35,12 @@ import { mapState } from 'vuex';
 import Api from '@/api'
 import { Toast,Dialog } from 'vant';
 import countDown from '@/containers/components/e-marketing/e-count-down/index';
+import tagLink from '@/containers/components/e-tag-link/e-tag-link';
 
 export default {
   components: {
-    countDown
+    countDown,
+    tagLink,
   },
   data() {
     return {
@@ -47,7 +50,13 @@ export default {
       isPlaying: false,
       player: null,
       counting: true,
-      isEmpty: false
+      isEmpty: false,
+      tagData: {
+        isShow: true,
+        money: 222.66,
+        link: '',
+        className: 'course-tag'
+      }
     };
   },
   props: {
