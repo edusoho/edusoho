@@ -736,6 +736,15 @@ admin_v2.cloud.feature_lab: 功能实验室
 admin_v2.cloud.cloud_setting_menu: 授权信息
 admin_v2.cloud.cloud_setting.basic_tab: 授权信息
 
+# 系统-交易设置
+admin_v2.transaction.basic_group: 交易设置
+
+# 系统-交易设置-资产设置
+admin_v2.system.asset_menu: 资产设置
+admin_v2.system.asset.payment_tab: 支付
+admin_v2.system.asset.coin_tab: 虚拟币
+admin_v2.system.asset.refund_tab: 退款
+
 # 系统-系统管理
 admin_v2.system.basic_group: 系统管理
 
@@ -749,4 +758,7 @@ admin_v2.system.logs_menu: 系统日志
 admin_v2.system.logs.logs_query_tab: 系统操作日志
 admin_v2.system.logs.logs_prod_tab: 程序运行日志
 
+# 数据-数据概览
+admin_v2.data_statistics.overview.menu: 数据概览
+admin_v2.data_statistics.overview.basic_tab: 数据概览
 # 新版后台结束

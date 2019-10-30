@@ -278,6 +278,12 @@ admin_setting_my_cloud: admin_v2_setting_my_cloud #授权信息
 # 系统
 admin_system: admin_v2_system
 
+# 系统-交易设置-资产设置
+admin_setting_finance: admin_v2_asset_setting
+admin_payment: admin_v2_payment
+admin_coin_settings: admin_v2_coin_settings
+admin_setting_refund: admin_v2_setting_refund
+
 # 系统-系统管理-系统优化
 admin_optimize: admin_v2_optimize
 admin_optimize_settings: admin_v2_optimize_settings

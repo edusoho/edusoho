@@ -733,6 +733,16 @@ admin_v2.cloud.face_identify: Face Identify
 #功能实验室
 admin_v2.cloud.feature_lab: Feature Lab
 
+
+# 系统-交易设置
+admin_v2.transaction.basic_group: Transaction Settings
+
+# 系统-交易设置-资产设置
+admin_v2.system.asset_menu: Asset Setting
+admin_v2.system.asset.payment_tab: Payment
+admin_v2.system.asset.coin_tab: Virtual Coin
+admin_v2.system.asset.refund_tab: Refund
+
 # 系统-系统管理
 admin_v2.system.basic_group: System Manage
 
@@ -744,4 +754,8 @@ admin_v2.system.optimize.basic_tab: System Optimization
 admin_v2.system.logs_menu: System Logs
 admin_v2.system.logs.logs_query_tab: System Log
 admin_v2.system.logs.logs_prod_tab: Program Log
+
+# 数据-数据概览
+admin_v2.data_statistics.overview.menu: Data Overview
+admin_v2.data_statistics.overview.basic_tab: Data Overview
 # 新版后台结束

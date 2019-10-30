@@ -1,0 +1,61 @@
+<fieldset>
+  <legend>{{ 'admin.payment_setting.alipay'|trans }}</legend>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.payment_setting.api_status'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('alipay_enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, payment.alipay_enabled) }}
+    </div>
+  </div>
+  <div data-sub="alipay" {% if not payment.alipay_enabled|default(false) %} class="hidden" {% endif %}>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.payment_setting.alipay_api_type.direct' | trans }}</label>
+      </div>
+      <div class="controls col-md-8">
+        <p class="form-control-static">
+          {{ 'admin.payment_setting.alipay_api_type.direct.hint' | trans({'%aliApiHelpUrl%': 'http://www.qiqiuyu.com/faq/258/detail'})|raw }}
+        </p>
+      </div>
+    </div>
+     <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.payment_setting.alipay_api_type.mobile' | trans }}</label>
+      </div>
+      <div class="controls col-md-8">
+        <p class="form-control-static">
+          {{ 'admin.payment_setting.alipay_api_type.mobile.hint' | trans({'%aliApiHelpUrl%': 'http://www.qiqiuyu.com/faq/543/detail'})|raw }}
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="alipay_key">PID</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="alipay_key" name="alipay_key" class="form-control" value="{{payment.alipay_key}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="alipay_secret">{{ 'admin.payment_setting.alipay_secret'|trans }}</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="alipay_secret" name="alipay_secret" class="form-control" value="{{payment.alipay_secret}}">
+        <div class="help-block">
+          {{ 'admin.payment_setting.alipay_hint'|trans({'%alipayUrl%': 'https://open.alipay.com/platform/home.htm'})|raw }}
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="alipay_account">{{ 'admin.payment_setting.alipay_account'|trans }}</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="alipay_account" name="alipay_account" class="form-control" value="{{payment.alipay_account}}">
+        <div class="help-block">{{ 'admin.payment_setting.alipay_mobile_payment_hint'|trans }}</div>
+      </div>
+    </div>
+  </div>
+</fieldset>

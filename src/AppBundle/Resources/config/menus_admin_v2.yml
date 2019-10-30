@@ -812,6 +812,13 @@ admin_v2:
                     name: admin_v2.data_statictics.analysis.basic_group
                     is_group: true
                     children:
+                        admin_v2_data_statistics_overview:
+                            name: admin_v2.data_statistics.overview.menu
+                            children:
+                                admin_v2_data_statistics_overview_basic_tab:
+                                    disable: true
+                                    name: admin_v2.data_statistics.overview.basic_tab
+                                    router_name: admin_v2_data_statistics_overview
                         admin_v2_statistics_data_statistics_menu:
                             name: admin_v2.data_statistics.statistics.menu
                             children:
@@ -826,6 +833,24 @@ admin_v2:
         admin_v2_system:
             name: admin_v2.nav.system
             children:
+                admin_v2.transaction_group:
+                    name: admin_v2.transaction.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_asset_setting:
+                            name: admin_v2.system.asset_menu
+                            children:
+                                admin_v2_payment:
+                                    name: admin_v2.system.asset.payment_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_payment
+                                admin_v2_coin_settings:
+                                    name: admin_v2.system.asset.coin_tab
+                                    disable: true
+                                    router_name: admin_v2_coin_settings
+                                admin_v2_setting_refund:
+                                    name: admin_v2.system.asset.refund_tab
+                                    disable: true
                 admin_v2.system_group:
                     name: admin_v2.system.basic_group
                     is_group: true
