@@ -3,8 +3,11 @@
 namespace AppBundle\Controller\AdminV2\System;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\Service\CouponBatchService;
+use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,7 +31,7 @@ class OperationSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/operation/article-setting.html.twig', array(
+        return $this->render('admin-v2/system/operation/article-set.html.twig', array(
             'articleSetting' => $articleSetting,
         ));
     }
@@ -42,7 +45,7 @@ class OperationSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/operation/group-setting.html.twig', array(
+        return $this->render('admin-v2/system/operation/group-set.html.twig', array(
         ));
     }
 
@@ -101,13 +104,13 @@ class OperationSettingController extends BaseController
         $inviteSetting = $this->getSettingService()->get('invite', array());
         $inviteSetting = array_merge($default, $inviteSetting);
 
-        return $this->render('admin-v2/system/operation/invite-setting.html.twig', array(
+        return $this->render('admin-v2/system/operation/invite-set.html.twig', array(
             'inviteSetting' => $inviteSetting,
             'inviteInfomation_template' => $inviteSetting['inviteInfomation_template'],
         ));
     }
 
-    public function messageSettingAction(Request $request)
+    public function messageOpenAction(Request $request)
     {
         $message = $this->getSettingService()->get('message', array());
 
@@ -126,8 +129,80 @@ class OperationSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/operation/message-setting.html.twig', array(
+        return $this->render('admin-v2/system/operation/message-open.html.twig', array(
             'messageSetting' => $message,
+        ));
+    }
+
+    public function messageSendAction(Request $request)
+    {
+        $messageSettingDefault = array(
+            'studentToStudent' => 1,
+            'studentToTeacher' => 1,
+            'teacherToStudent' => 1,
+        );
+        $setting = $this->getSettingService()->get('message', array());
+        $setting = array_merge($messageSettingDefault, $setting);
+        $this->getSettingService()->set('message', $setting);
+
+        if ('POST' == $request->getMethod()) {
+            $formData = $request->request->all();
+            $formData = ArrayToolkit::parts($formData, array('studentToStudent', 'studentToTeacher', 'teacherToStudent'));
+            $formData = array_merge(array('studentToStudent' => 0, 'studentToTeacher' => 0, 'teacherToStudent' => 0), $formData);
+
+            $this->getSettingService()->set('message', $formData);
+            $this->setFlashMessage('success', 'site.save.success');
+        }
+
+        return $this->render('admin-v2/system/operation/message-send.html.twig');
+    }
+
+    public function chooseCouponAction(Request $request, $type)
+    {
+        $conditions = $request->query->all();
+        $conditions['deadlineMode'] = 'day';
+        $conditions['unreceivedNumGt'] = 1;
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCouponBatchService()->searchBatchsCount($conditions),
+            10
+        );
+
+        $batchs = $this->getCouponBatchService()->searchBatchs(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        foreach ($batchs as $key => &$batch) {
+            $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id']);
+        }
+
+        return $this->render('admin-v2/system/operation/choose-coupon/chooser-coupon-modal.html.twig', array(
+            'batchs' => $batchs,
+            'type' => $type,
+            'paginator' => $paginator,
+        ));
+    }
+
+    public function chooseResourceListAction(Request $request, $batchId)
+    {
+        $batch = $this->getCouponBatchService()->getBatch($batchId);
+        if (!in_array($batch['targetType'], array('course', 'classroom')) || $batch['targetId'] < 0) {
+            $this->createNewException(CouponException::TARGET_TYPE_ERROR());
+        }
+        $resourceIds = empty($batch['targetIds']) ? array(-1) : $batch['targetIds'];
+        if ('course' == $batch['targetType']) {
+            $resources = $this->getCourseSetService()->findCourseSetsByIds($resourceIds);
+        } else {
+            $resources = $this->getClassroomService()->findClassroomsByIds($resourceIds);
+        }
+
+        return $this->render('admin-v2/system/operation/choose-coupon/coupon-batch-resource-list-modal.html.twig', array(
+            'batch' => $batch,
+            'resources' => $resources,
         ));
     }
 
@@ -164,5 +239,21 @@ class OperationSettingController extends BaseController
     protected function getCouponBatchService()
     {
         return $this->createService('Coupon:CouponBatchService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    private function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    private function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

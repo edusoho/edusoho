@@ -291,10 +291,11 @@ admin_setting_message: admin_v2_school_information
 # 系统-通用设置-运营设置
 admin_setting_operation: admin_v2_setting_operation
 
-admin_article_setting: admin_v2_article_setting # 资讯
+admin_article_setting: admin_v2_article_set # 资讯
 admin_group_set: admin_v2_group_set # 小组
 admin_invite_set: admin_v2_invite_set # 邀请注册设置
-admin_message_setting: admin_v2_message_setting # 私信
+admin_message_setting: admin_v2_message_open_set # 私信开启
+admin_setting_user_message: admin_v2_message_send_set # 私信发送
 
 # 系统-交易设置-资产设置
 admin_setting_finance: admin_v2_asset_setting

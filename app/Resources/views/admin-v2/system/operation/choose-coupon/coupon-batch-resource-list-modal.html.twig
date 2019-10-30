@@ -1,0 +1,87 @@
+{% import "macro.html.twig" as web_macro %}
+{% import "admin-v2/macro.html.twig" as admin_macro %}
+{% set modal_class = 'modal-lg' %}
+
+<div class="modal-dialog coupon-resource-list {% if modal_class|default('') %} {{ modal_class }}{% endif %}">
+  <div class="modal-content">
+    <div class="modal-header">
+      <a type="button" href="javascript:;" class="text-muted" data-dismiss="modal">{{ 'admin.setting.invite.chooser_coupon'|trans }}</a>
+      > {% if batch.targetType == 'course' %}{{ 'coupon.target_type.course_all'|trans }}{% else %}{{ 'coupon.target_type.classroom_all'|trans }}{% endif %}
+    </div>
+    <div class="modal-body">
+      {% block body %}
+        <div class="table-list">
+          <table class="table" id="coupon-course-select-table">
+            <tbody >
+            {% for resource in resources %}
+              <tr>
+                {% if batch.targetType == 'course' %}
+                  <td width="70%">
+                    <img class="img-course" src="{{ filepath(resource.cover.middle|default(), 'course.png') }}" alt="{{ resource.title }}" width="100">
+                    <a href="{{ path('course_show', {id: resource.defaultCourseId}) }}" target="_blank">
+                      <strong>{{ resource.title }}</strong>
+                    </a>
+                  </td>
+                  <td width="30%">
+                    <div>
+                      {{ 'classroom.price'|trans }}:
+                        <span class="mlm price">
+                          {% if resource.minCoursePrice == resource.maxCoursePrice %}
+                            {% include 'common/price.html.twig' with {'productPrice': resource.minCoursePrice} %}
+                          {% else %}
+                            {% include 'common/price.html.twig' with {'productPrice': resource.minCoursePrice} %}
+                            <span class="cd-text-sm">～</span>
+                            {% include 'common/price.html.twig' with {'productPrice': resource.maxCoursePrice} %}
+                          {% endif %}
+                        </span>
+                    </div>
+                  </td>
+                {% else %}
+                  <td width="70%">
+                    <img class="img-classroom" src="{{ filepath(resource.smallPicture|default(), 'classroom.png') }}" alt="{{ resource.title }}" width="100">
+                    <a href="{{ path('classroom_show', {id:resource.id}) }}" target="_blank">
+                      <strong>{{ resource.title }}</strong>
+                    </a>
+                  </td>
+
+                  <td width="30%">
+                      <div>
+                        {{ 'classroom.price'|trans }}:
+                          <span class="mlm price">
+                            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                              {% if resource.price > 0 %}
+                                {{resource.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                              {% else %}
+                                <span style="color: #43bc60">{{ 'admin.classroom_manage.chooser.free'|trans }}</span>
+                              {% endif %}
+                            {% else %}
+                              ¥ {{ resource.price }}
+                            {% endif %}
+                          </span>
+                      </div>
+                  </td>
+                {% endif %}
+
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+      {% endblock %}
+    </div>
+    {% if not hide_footer|default(false) %}
+      <div class="modal-footer">{% block footer %}
+          <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+
+        {% endblock %}</div>
+    {% endif %}
+    {% block script %}{% endblock %}
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.seajsBoot && window.seajsBoot();
+  $("[data-toggle='popover']").popover();
+</script>
+

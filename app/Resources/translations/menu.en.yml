@@ -749,7 +749,8 @@ admin_v2.system.operation_menu: Operation Setting
 admin_v2.system.operation.article_tab: Article
 admin_v2.system.operation.group_tab: Group
 admin_v2.system.operation.invite_tab: Invitation Setting
-admin_v2.system.operation.message_tab: Message
+admin_v2.system.operation.message_open_tab: Message Open
+admin_v2.system.operation.message_send_tab: Message Send
 
 # 系统-交易设置
 admin_v2.transaction.basic_group: Transaction Settings
