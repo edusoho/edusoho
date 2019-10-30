@@ -833,6 +833,18 @@ admin_v2:
         admin_v2_system:
             name: admin_v2.nav.system
             children:
+                admin_v2.general_group:
+                    name: admin_v2.general.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_school_information_setting:
+                            name: admin_v2.system.site_menu
+                            router_name: admin_v2_school_information
+                            children:
+                                admin_v2_school_information:
+                                    name: admin_v2.system.site.basic_tab
+                                    router_name: admin_v2_school_information
+                                    disable: true
                 admin_v2.transaction_group:
                     name: admin_v2.transaction.basic_group
                     is_group: true

@@ -729,6 +729,13 @@ admin_v2.cloud.data_lab_setting: Data Laboratory Setting
 admin_v2.cloud.cloud_setting_menu: License
 admin_v2.cloud.cloud_setting.basic_tab: License
 
+# 系统-通用管理
+admin_v2.general.basic_group: General Manage
+
+# 系统-通用管理-网校信息
+admin_v2.system.site_menu: Online School Information
+admin_v2.system.site.basic_tab: School Information
+
 # 系统-交易设置
 admin_v2.transaction.basic_group: Transaction Settings
 
