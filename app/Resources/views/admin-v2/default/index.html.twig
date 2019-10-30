@@ -1,7 +1,6 @@
 {% extends 'admin-v2/layout.html.twig' %}
 {% block title %}{{ 'admin.hompage.html_head_title'|trans }}{% endblock %}
 {% set panel = 'dashboard' %}
-{% set script_controller = 'default/index' %}
 
 {% set bodyClass = "admin-v2-page" %}
 
@@ -110,7 +109,7 @@
 
         {# 常用功能 #}
         <div class="admin-v2-section">
-          <div class="admin-v2-section__header cd-mb16">常用功能</div>
+          <div class="admin-v2-section__header cd-mb16">常用入口</div>
           <div class="admin-v2-section__body">
             <div class="row">
               <div class="col-md-3">
@@ -163,9 +162,9 @@
               </div>
 
               <div class="col-md-3">
-                <div class="text-center admin-function-choose">
-                  <a class="admin-function-btn">
-                    <i class="es-icon es-icon-add"></i><span>添加功能</span>
+                <div class="admin-function-choose">
+                  <a class="admin-function-btn"  data-toggle="modal" data-target="#functionModal">
+                    <i class="es-icon es-icon-add"></i><span>编辑入口</span>
                   </a>
                 </div>
               </div>
@@ -300,4 +299,7 @@
       </div>
     </div>
   </div>
+
+
+  {% include 'admin-v2/default/function-modal.html.twig' %}
 {% endblock %}
