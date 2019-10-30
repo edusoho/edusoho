@@ -1504,15 +1504,32 @@ admin_v2_edu_cloud_consult_setting:
   
 #应用中心－基础云－即时聊天设置
 admin_v2_app_im:
-    path: /setting/app/im
+    path: /edu_cloud/app/im
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:appIm }
     permissions: [admin_v2_app_im]
     
 admin_v2_app_im_update:
-    path: /setting/app/im/update
+    path: /edu_cloud/app/im/update
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:appImUpdateStatus }
     methods: [POST]
     permissions: [admin_v2_app_im]
+
+#应用中心－基础云－数据实验室
+admin_v2_cloud_data_lab:
+    path: /edu_cloud/data/lab
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/DataLab:data }
+
+admin_v2_cloud_data_lab_setting:
+    path: /edu_cloud/data/lab/setting
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/DataLab:settting }
+
+admin_v2_cloud_data_lab_setting_enable_modal:
+    path: /edu_cloud/data/lab/setting/modal/enable
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/DataLab:enable }
+
+admin_v2_cloud_data_lab_setting_disable_modal:
+    path: /edu_cloud/data/lab/setting/modal/disable
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/DataLab:disable }
     
 #应用中心－基础云－授权信息
 admin_v2_setting_cloud:
@@ -1805,3 +1822,39 @@ admin_v2_data_statistics_course_explore_overview:
     path: /data_statistics/course/explore/{period}/overview
     defaults: { _controller: AppBundle:AdminV2\DataStatistics\Overview:courseExplore }
     permissions: [admin_v2_data_statistics_overview]
+
+# 系统-通用管理-网校信息
+admin_v2_school_information:
+    path:  /setting/site
+    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:site }
+    permissions: [admin_v2_school_information]
+
+admin_v2_school_information_save:
+    path:  /setting/site/save
+    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:saveSite }
+    permissions: [admin_v2_school_information]
+    methods: [POST]
+
+admin_v2_setting_logo_upload:
+    path:  /setting/logo/upload
+    defaults: { _controller: AppBundle:AdminV2/System/Setting:logoUpload }
+    methods: [POST]
+    permissions: [admin_v2_school_information]
+
+admin_v2_setting_logo_remove:
+    path:  /setting/logo/remove
+    defaults: { _controller: AppBundle:AdminV2/System/Setting:logoRemove }
+    methods: [POST]
+    permissions: [admin_v2_school_information]
+
+admin_v2_setting_favicon_upload:
+    path: /setting/favicon/upload
+    defaults: { _controller: AppBundle:AdminV2/System/Setting:faviconUpload }
+    methods: [POST]
+    permissions: [admin_v2_school_information]
+
+admin_v2_setting_favicon_remove:
+    path: /setting/favicon/remove
+    defaults: { _controller: AppBundle:AdminV2/System/Setting:faviconRemove }
+    methods: [POST]
+    permissions: [admin_v2_school_information]
