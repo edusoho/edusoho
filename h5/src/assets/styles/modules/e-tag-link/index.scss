@@ -15,10 +15,12 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
+      min-width: vw(80);
       right: vw(6);
       line-height: vw(20);
       font-size: vw(14);
       color: #ffffff;
+      text-align: center;
     }
   }
 }
