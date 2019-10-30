@@ -1,4 +1,4 @@
-materialBad credentials.: 用户名或密码错误
+Bad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
 site.alipay: 支付宝
@@ -3485,10 +3485,9 @@ cloud_file.process_status.waiting: 转码中
 cloud_file.process_status.doing: 正在转码
 cloud_file.process_status.error: 转码失败
 cloud_file.transcoding_tips: 视频还没有转码完成，请等待转码完成......
+
 cloud_file.transcoding_tips.error_code_41001.reason: 当前文件格式异常，不支持进行转码
 cloud_file.transcoding_tips.error_code_41001.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
-cloud_file.transcoding_tips.error_code_51009.reason: 当前文件格式异常，不支持进行转码
-cloud_file.transcoding_tips.error_code_51009.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
 cloud_file.transcoding_tips.error_code_41002.reason: 当前文件被删除，不支持进行转码
 cloud_file.transcoding_tips.error_code_41002.solution: 此文件的源文件被删除，无法进行转码，请重新上传后进行转码操作
 cloud_file.transcoding_tips.error_code_41003.reason: 当前文件格式异常，不支持转码
@@ -3499,6 +3498,23 @@ cloud_file.transcoding_tips.error_code_41005.reason: 当前文件超过转码支
 cloud_file.transcoding_tips.error_code_41005.solution: 请将源文件缩小至100MB以下（删减源文件内容或将源文件变为多个文件内容上传），再上传进行转码操作
 cloud_file.transcoding_tips.error_code_41006.reason: 当前文件格式异常，不支持转码
 cloud_file.transcoding_tips.error_code_41006.solution: 当前文件无法正常打开，请选择其他正常文件上传进行转码操作
+
+cloud_file.transcoding_tips.error_code_40100001.reason: 当前文件格式异常，不支持进行转码
+cloud_file.transcoding_tips.error_code_40100001.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
+cloud_file.transcoding_tips.error_code_40100002.reason: 当前文件被删除，不支持进行转码
+cloud_file.transcoding_tips.error_code_40100002.solution: 此文件的源文件被删除，无法进行转码，请重新上传后进行转码操作
+cloud_file.transcoding_tips.error_code_40100003.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_40100003.solution: 请使用Office软件将源文件内容重新保存后，上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100004.reason: 当前文件被加密，不支持转码
+cloud_file.transcoding_tips.error_code_40100004.solution: 请将源文件解密后，再上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100005.reason: 当前文件超过转码支持大小，不支持转码
+cloud_file.transcoding_tips.error_code_40100005.solution: 请将源文件缩小至100MB以下（删减源文件内容或将源文件变为多个文件内容上传），再上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100006.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_40100006.solution: 当前文件无法正常打开，请选择其他正常文件上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100007.reason: 当前PPT文件内容为空，不支持转码
+cloud_file.transcoding_tips.error_code_40100007.solution: 请使用Office软件将源文件内容重新保存后，上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100008.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_40100008.solution: 当前文件无法正常打开，请选择其他正常文件上传进行转码操作
 
 cloud_file.transcoding_tips.error_code_51001.reason: 文件转码失败
 cloud_file.transcoding_tips.error_code_51001.solution: 请联系运营人员处理
@@ -3516,6 +3532,8 @@ cloud_file.transcoding_tips.error_code_51007.reason: 文件转码失败
 cloud_file.transcoding_tips.error_code_51007.solution: 请联系运营人员处理
 cloud_file.transcoding_tips.error_code_51008.reason: 文件转码失败
 cloud_file.transcoding_tips.error_code_51008.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51009.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51009.solution: 请联系运营人员处理
 
 cloud_file.transcoding_tips.default_error_message.reason: 文件转码失败
 cloud_file.transcoding_tips.default_error_message.solution: 请联系运营人员处理
@@ -7511,10 +7529,13 @@ admin.crontab_job.log_name: 名称
 admin.crontab_job.log_time: 时间
 admin.crontab_job.log_resource: 来源
 admin.crontab_job.log_status: 状态
+admin.crontab_job.run_log: 运行日志
 admin.crontab_job.run_log_title: 任务运行日志
 admin.crontab_job.log_show_btn: 日志查看
 admin.crontab_job.enable: 启用
 admin.crontab_job.disable: 禁用
+admin.crontab_job.set_next_fire_time: 设置下次执行时间
+admin.crontab_job.next_fire_time: 下次执行时间
 
 #　ip黑名单
 admin.ip_black_list.titile: IP黑名单
@@ -9771,6 +9792,7 @@ exception.user.lock_denied: 没有封禁该角色的权限
 exception.user.not_match_bind_email: 与绑定邮箱不符
 exception.user_lock: 账户被封禁，请联系管理员
 exception.user.password_error: 用户名密码错误
+exception.user.password_failed: 登录密码不正确
 exception.user.login_limit: 登录限制！
 exception.user.lock_self_denied: 您不能封禁自己
 exception.user.datefield_invalid: 日期类型字段没有按日期格式填写
@@ -10044,13 +10066,16 @@ exception.money_card.not_found_batch: 批次不存在
 exception.money_card.duplicate_card: 卡号有重复
 exception.money_card.batch_status_equal_invalid: 在批次被作废的情况下，不能启用批次下的充值卡
 exception.money_card.unlock_not_invalid_card: 只能启用作废状态的充值卡
+exception.money_card.password_invalid: 卡密无效
+exception.money_card.batch_token_invalid: 批次token无效
 exception.reward_point.account.not_found: 积分账号不存在
 exception.reward_point.account.already_open: 积分账号已创建
 exception.reward_point.account.userid_invalid: 用户id错误
 exception.reward_point.account.balance_insufficient: 余额不足
-exception.reward_point.account.error_pay_password: 支付密码错误
+exception.reward_point.account.error_pay_password: 当前支付密码不正确
 exception.reward_point.account.pay_password_existed: 支付密码已存在
 exception.reward_point.account.not_found_pay_password: 支付密码不存在
+exception.reward_point.account.error_pay_password_format: 新支付密码不可用，请尝试其它密码组合
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
 exception.live_replay.not_found: 直播回放不存在
@@ -10175,13 +10200,13 @@ wechat.notification.template_opend: 已开启
 wechat.notification.template_closed: 未开启
 
 # 微信通知模板
-wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[《课程名》-《任务名》]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
+wechat.notification.template.live_start: '同学，您好，您报名的直播课即将开课。<br>课程名称：{《课程名》-《任务名》}<br>开课时间：{直播开始时间}（精确到分钟）<br>开课地点：在线直播<br>联系方式：无<br>不要迟到哦。'
 wechat.notification.template.homework_result: '同学，你好，你的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
 wechat.notification.template.exam_result: '同学，你好，你的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
 wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]或[直播开始时间]<br>请及时前往学习'
 wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
 wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
-wechat.notification.template.ask_question: '尊敬的老师，您的在教课程中有学员发布了提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]'
+wechat.notification.template.ask_question: '尊敬的老师，您的在教课程《课程名称》或在教班级《班级名称》中有学员发布了提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]'
 wechat.notification.template.homework_or_testpaper_need_review: '尊敬的老师，您今日仍有作业/试卷未批改<br>时间：[当日日期，精确到天]<br>作业数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
 wechat.notification.template.remind_course: '亲爱的学员，今日也要坚持学习哦<br>课程名称：[上一次学习的教学计划名称]<br>时间：[当天日期，精确到天]学习进度：[该教学计划的学习进度]<br>如果今日已完成学习计划，请忽略本通知。'
 wechat.notification.template.answer_question: '亲爱的学员，您在[课程名或班级名]中的发表的问题有了新的回答。<br>提问时间：[提问的时间]<br>回复内容：[回复内容]'
@@ -10207,7 +10232,7 @@ wechat.notification.template_name.remind_course: '上课提醒'
 wechat.notification.template_name.ask_question: '答疑提醒'
 wechat.notification.template_name.answer_question: '问题回复通知'
 wechat.notification.template_name.vip_expired: '会员到期提醒'
-wechat.notification.template_name.live_start: '直播开课提醒'
+wechat.notification.template_name.live_start: '课程开课通知'
 wechat.notification.template_name.homework_result: '作业结果通知'
 wechat.notification.template_name.exam_result: '考试结果通知'
 wechat.notification.template_name.lesson_add: '课程更新提醒'
@@ -10363,11 +10388,25 @@ course.setting.course_remind: 上课提醒
 course.setting.course_remind_tip: 当前设置，%D% %H%会向所有在读学员发送学习提醒通知。
 course.setting.course_remind_change: 修改设置
 course.setting.course_remind_not_open: 未开启上课提醒
+course.setting.course_remind_go_to_open: 前往开启
+
+money_card.invalid_password: 无效的卡密
+money_card.invalid_card: 学习卡已失效
+money_card.expired_card: 学习卡已过期
+money_card.card_receive_fail: 学习卡领取失败
+money_card.card_receive_success: 学习卡领取成功
+money_card.card_recharge_success: 学习卡充值成功
+money_card.card_received: 您已经领取该学习卡
+money_card.card_received_by_other: 学习卡已被他人领取
+money_card.card_used: 您已经领取并使用该学习卡
+money_card.card_used_by_other: 学习卡已被他人使用
+money_card.notify.card_receive_success: 您有一张价值为%coin_number%%coin_name%的充值卡领取成功
 
 admin.setting.invite.chooser_coupon.manage_btn: 优惠券管理
 admin.setting.invite.chooser_coupon.refresh_btn: 刷新
 admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
 admin.operation.coupon_menu.generate_btn: 生成优惠券
+
 course.setting.course_remind_go_to_open: 前往开启
 
 # 新版后台开始

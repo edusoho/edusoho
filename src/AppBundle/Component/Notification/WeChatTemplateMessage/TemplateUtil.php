@@ -17,7 +17,7 @@ class TemplateUtil
     const TEMPLATE_ANSWER_QUESTION_CODE = 'OPENTM416215703';
 
     const TEMPLATE_LIVE_OPEN = 'liveOpen';
-    const TEMPLATE_LIVE_OPEN_CODE = 'TM00080';
+    const TEMPLATE_LIVE_OPEN_CODE = 'OPENTM206214624';
 
     const TEMPLATE_HOMEWORK_RESULT = 'homeworkResult';
     const TEMPLATE_HOMEWORK_RESULT_CODE = 'OPENTM400905764';
@@ -64,7 +64,7 @@ class TemplateUtil
                 'name' => 'wechat.notification.template_name.ask_question',
                 'content' => 'wechat.notification.template.ask_question',
                 'rule' => 'wechat.notification.template.ask_question.rule',
-                'detail' => '尊敬的老师，您的在教课程中有学员发布了提问<br>申请人：{{keyword1.DATA}}<br>问题内容：{{keyword2.DATA}}<br>时间：{{keyword3.DATA}}<br>{{remark.DATA}}',
+                'detail' => '{{first.DATA}}<br>申请人：{{keyword1.DATA}}<br>问题内容：{{keyword2.DATA}}<br>时间：{{keyword3.DATA}}<br>{{remark.DATA}}',
                 'object' => '课程教师',
                 'status' => 0,
             ),
@@ -84,7 +84,7 @@ class TemplateUtil
                 'setting_modal_v2' => 'admin-v2/operating/wechat-notification/setting-modal/live-open-modal.html.twig',
                 'content' => 'wechat.notification.template.live_start',
                 'rule' => 'wechat.notification.template.live_start.rule',
-                'detail' => '您好，{{userName.DATA}}。<br>您报名参加的{{courseName.DATA}}将于{{date.DATA}}开课，特此通知。<br>{{remark.DATA}}',
+                'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>开课时间：{{keyword2.DATA}}<br>开课地点：{{keyword3.DATA}}<br>联系方式：{{keyword4.DATA}}<br>{{remark.DATA}}',
                 'object' => '课程学员',
                 'status' => 0,
             ),

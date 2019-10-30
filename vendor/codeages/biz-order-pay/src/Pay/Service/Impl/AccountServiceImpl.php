@@ -403,9 +403,9 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
     }
 
-    public function searchCashflows($conditions, $orderBy, $start, $limit)
+    public function searchCashflows($conditions, $orderBy, $start, $limit, $columns = array())
     {
-        return $this->getCashflowDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getCashflowDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function countCashflows($conditions)
