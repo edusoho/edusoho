@@ -5578,6 +5578,7 @@ admin.edu_cloud.edu_sms.manual_send: 'Manual group sent'
 admin.edu_cloud.edu_sms.auto_mass_send: 'Auto group sent'
 admin.edu_cloud.edu_sms.all_user: All_user
 admin.edu_cloud.edu_sms.course_user: Course_user
+admin.edu_cloud.edu_sms.course_classroom_student: Course_and_classroom_student
 admin.edu_cloud.edu_sms.study_task_tips: 'Your course: 《Course name》 - Study task《Study task name》 has been published! link address'
 admin.edu_cloud.edu_sms.study_task_notify_live: 'Task release notification (live)'
 admin.edu_cloud.edu_sms.study_task_notify_normal_course: 'Task release notification (General course)'
