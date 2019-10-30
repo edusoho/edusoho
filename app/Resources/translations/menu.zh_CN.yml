@@ -726,6 +726,12 @@ admin_v2.data_statictics.analysis.basic_group: 数据分析
 admin_v2.data_statistics.statistics.menu: 数据统计
 admin_v2.data_statistics.statistics.basic_tab: 数据统计
 
+# 人脸识别
+admin_v2.cloud.face_identify: 人脸识别
+
+#功能实验室
+admin_v2.cloud.feature_lab: 功能实验室
+
 # 应用中心-基础云-授权信息
 admin_v2.cloud.cloud_setting_menu: 授权信息
 admin_v2.cloud.cloud_setting.basic_tab: 授权信息

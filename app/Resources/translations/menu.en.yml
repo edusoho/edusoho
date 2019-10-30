@@ -249,6 +249,8 @@ admin.cloud.consult_menu: Cloud Q&A
 admin.cloud.data_lab: Data Laboratory
 admin.cloud.data_lab_setting: Data Laboratory Setting
 admin.cloud.cloud_setting_menu: License
+admin.cloud.feature_lab: Feature Lab
+admin.cloud.face_identify: Face Identify
 
 ##概览模块
 admin.cloud.overview.basic_tab: Overview
@@ -724,6 +726,12 @@ admin_v2.cloud.im_setting.basic_tab: Chat Setting
 # 应用中心-基础云-授权信息
 admin_v2.cloud.cloud_setting_menu: License
 admin_v2.cloud.cloud_setting.basic_tab: License
+
+# 人脸识别
+admin_v2.cloud.face_identify: Face Identify
+
+#功能实验室
+admin_v2.cloud.feature_lab: Feature Lab
 
 # 系统-系统管理
 admin_v2.system.basic_group: System Manage

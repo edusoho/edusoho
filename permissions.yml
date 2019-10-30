@@ -263,6 +263,14 @@ admin_cloud_consult_setting: admin_v2_edu_cloud_consult_setting  #云问答设�
 admin_app_im: admin_v2_app_im #即时聊天设置
 admin_app_im_setting: admin_v2_app_im_setting #即时聊天设置
 
+# 人脸识别
+admin_cloud_face_identify_manage: admin_v2_cloud_face_identify
+admin_cloud_face_identify: admin_v2_cloud_face_identify_setting
+
+#功能实验室
+admin_cloud_feature_lab_manage: admin_v2_cloud_feature_lab
+admin_cloud_feature_lab: admin_v2_cloud_feature_lab_setting
+
 #授权信息
 admin_setting_cloud: admin_v2_setting_cloud #授权信息
 admin_setting_my_cloud: admin_v2_setting_my_cloud #授权信息
