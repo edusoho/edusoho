@@ -127,16 +127,16 @@ class CourseSettingController extends BaseController
             $hiddenMenus = $this->getSettingService()->get('menu_hiddens', array());
 
             if ($liveCourseSetting['live_course_enabled']) {
-                unset($hiddenMenus['admin_live_course_add']);
-                unset($hiddenMenus['admin_live_course']);
+                unset($hiddenMenus['admin_v2_live_course_add']);
+                unset($hiddenMenus['admin_v2_live_course']);
             } else {
-                $hiddenMenus['admin_live_course_add'] = true;
-                $hiddenMenus['admin_live_course'] = true;
+                $hiddenMenus['admin_v2_live_course_add'] = true;
+                $hiddenMenus['admin_v2_live_course'] = true;
             }
 
             $this->getSettingService()->set('menu_hiddens', $hiddenMenus);
 
-            $this->getLogService()->info('admin/system/', 'update_settings', '更新课程设置', $setting);
+            $this->getLogService()->info('admin-v2/system/course-setting', 'update_settings', '更新课程设置', $setting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
