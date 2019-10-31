@@ -781,6 +781,10 @@ admin_v2.system.basic_group: System Manage
 admin_v2.system.optimize_menu: System Optimization
 admin_v2.system.optimize.basic_tab: System Optimization
 
+# 系统-系统管理-系统自检
+admin_v2.system.report_status_menu: System Self-checking
+admin_v2.system.report_status.basic_tab: System Self-checking
+
 # 系统-系统管理-系统日志
 admin_v2.system.logs_menu: System Logs
 admin_v2.system.logs.logs_query_tab: System Log

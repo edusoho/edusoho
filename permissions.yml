@@ -330,3 +330,7 @@ admin_logs_prod: admin_v2_logs_prod
 admin_setting_ip_blacklist_manage: admin_v2_ip_blacklist_setting #IP黑名单
 admin_setting_security: admin_v2_security_setting #白名单域名
 admin_setting_post_num_rules: admin_v2_post_num_rules_setting #发帖限制
+
+# 系统-系统管理-系统自检
+admin_report_status: admin_v2_report_status
+admin_report_status_list: admin_v2_report_status_list
