@@ -16,7 +16,7 @@ class CloudFileController extends BaseController
         try {
             $api = CloudAPIFactory::create('leaf');
             $result = $api->get('/me');
-            if (empty($result['accessKey'])) {
+            if (empty($result['accessCloud'])) {
                 return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', array('menu' => 'admin_v2_cloud_file'));
             }
         } catch (\RuntimeException $e) {
@@ -50,7 +50,7 @@ class CloudFileController extends BaseController
         try {
             $api = CloudAPIFactory::create('leaf');
             $result = $api->get('/me');
-            if (empty($result['accessKey'])) {
+            if (empty($result['accessCloud'])) {
                 return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', array('menu' => 'admin_v2_cloud_attachment'));
             }
         } catch (\RuntimeException $e) {
