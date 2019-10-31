@@ -774,6 +774,13 @@ admin_v2.system.asset.payment_tab: 支付
 admin_v2.system.asset.coin_tab: 虚拟币
 admin_v2.system.asset.refund_tab: 退款
 
+#系统-通用管理-用户设置
+admin_v2.system.user_menu: 用户设置
+admin_v2.system.user.user_center_tab: 用户中心
+admin_v2.system.user.login_bind_tab: 登录
+admin_v2.system.user.user_fields_tab: 用户信息设置
+admin_v2.system.user.avatar_tab: 默认头像
+
 #系统-通用管理-课程设置
 admin_v2.system.course_menu: 课程设置
 admin_v2.system.course.basic_tab: 课程
@@ -784,6 +791,7 @@ admin_v2.system.course.open_course_tab: 公开课
 
 # 系统-系统管理
 admin_v2.system.basic_group: 系统管理
+admin_v2.system.user.auth_tab: 注册
 
 # 系统-系统管理-系统优化
 admin_v2.system.optimize_menu: 系统优化
