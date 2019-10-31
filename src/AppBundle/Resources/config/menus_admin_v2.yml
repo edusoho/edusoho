@@ -546,7 +546,7 @@ admin_v2:
                     is_group: true
                     children:
                         admin_v2_operation_notification:
-                            name: admin_V2.operation.notification_menu
+                            name: admin_v2.operation.notification_menu
                             group: 2
                             children:
                                 admin_v2_batch_notification:

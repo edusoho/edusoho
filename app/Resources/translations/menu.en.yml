@@ -585,7 +585,7 @@ admin_v2.operation.site.share_tab: Share
 admin_v2.operation.site.friendlyLink_navigation_tab: 'Recommended Links'
 
 # 运营-内容运营-全站站内通知
-admin_V2.operation.notification_menu: Site Notices
+admin_v2.operation.notification_menu: Site Notices
 admin_v2.operation.notification.basic_tab: Site Notices
 admin_v2.operation.notification.basic_tab.create_btn: Create Site Notification
 
