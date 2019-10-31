@@ -620,6 +620,12 @@ admin_v2:
                                     name: admin_v2.operation.wechat.notification_manage
                                     disable: true
                                     router_name: admin_v2_wechat_notification_manage
+                        admin_v2_message_manage:
+                            name: admin_v2.operation.message_menu
+                            children:
+                                admin_v2_message:
+                                    name: admin_v2.operation.message.basic_tab
+                                    disable: true
                         admin_v2_operation.sensitive_words:
                             name: admin_v2.operation.sensitive_words_menu
                             children:
@@ -890,6 +896,12 @@ admin_v2:
                                 admin_v2_school_information:
                                     name: admin_v2.system.site.basic_tab
                                     router_name: admin_v2_school_information
+                                    disable: true
+                        admin_v2_setting_wechat:
+                            name: admin_v2.system.wechat_auth_menu
+                            children:
+                                admin_v2_setting_wechat_auth:
+                                    name: admin_v2.system.wechat_auth_menu
                                     disable: true
                         # 课程设置
                         admin_v2_setting_course_setting:

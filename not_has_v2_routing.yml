@@ -172,17 +172,6 @@ admin_category_upload:
     methods: [POST]
     permissions: [admin_course_category_manage]
 
-admin_message:
-    path: /message
-    defaults: { _controller: AppBundle:Admin/Message:index }
-    permissions: [admin_message_manage]
-
-admin_message_delete_messages:
-    path: /delete/choosed/messages
-    defaults: {_controller: AppBundle:Admin/Message:deleteChoosedMessages }
-    methods: [POST]
-    permissions: [admin_message_manage]
-
 admin_operation_analysis_register:
     path:  /operation/analysis/register/{tab}
     defaults: { _controller: AppBundle:Admin/Analysis:register }
@@ -477,8 +466,4 @@ admin_queue_failed_logs:
 admin_queue_failed_log_modal:
     path: /queue/failed_log/{id}
     defaults: { _controller: AppBundle:Admin/Queue:failedJob }
-
-admin_setting_wechat_pre_auth_url:
-    path: /wechat/pre_auth_url/{platformType}
-    defaults: { _controller: AppBundle:Admin/WeChatSetting:preAuthUrl }
 
