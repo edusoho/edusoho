@@ -88,11 +88,11 @@ export default {
         let params = {
           type: 'classroom',
           id: this.classroomId,
-          merchant_id: this.bindAgencyRelation.merchantId,
+          merchant_id: this.drpSetting.merchantId,
         };
 
         this.tagData.link = this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
-        this.tagData.earnings = (this.drpSetting.minDirectRewardRatio / 100) * this.price;
+        this.tagData.earnings = this.drpSetting.minDirectRewardRatio * this.price;
       });
     },
   },

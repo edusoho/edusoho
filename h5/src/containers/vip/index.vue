@@ -189,7 +189,7 @@ export default {
       let params = {
         type: 'vip',
         id: this.levels[this.currentLevelIndex].id,
-        merchant_id: this.bindAgencyRelation.merchantId,
+        merchant_id: this.drpSetting.merchantId,
       };
       return this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
     }
