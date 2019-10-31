@@ -889,7 +889,7 @@ admin_v2:
                                     name: admin_v2.system.operation.message_open_tab
                                     disable: true
                                     parent: admin_v2_message_open_set
-                admin_v2.transaction_group:
+                admin_v2_transaction_group:
                     name: admin_v2.transaction.basic_group
                     is_group: true
                     children:
@@ -918,6 +918,13 @@ admin_v2:
                                     name: admin_v2.system.optimize.basic_tab
                                     disable: true
                                     router_name: admin_v2_optimize
+                        admin_v2_report_status:
+                            name: admin_v2.system.report_status_menu
+                            children:
+                                admin_v2_report_status_list:
+                                    name: admin_v2.system.report_status.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_report_status
                         admin_v2_logs:
                             name: admin_v2.system.logs_menu
                             children:

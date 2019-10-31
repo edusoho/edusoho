@@ -780,6 +780,9 @@ admin_v2.system.basic_group: 系统管理
 admin_v2.system.optimize_menu: 系统优化
 admin_v2.system.optimize.basic_tab: 系统优化
 
+# 系统-系统管理-系统自检
+admin_v2.system.report_status_menu: 系统自检
+admin_v2.system.report_status.basic_tab: 系统自检
 
 # 系统-系统管理-系统日志
 admin_v2.system.logs_menu: 系统日志

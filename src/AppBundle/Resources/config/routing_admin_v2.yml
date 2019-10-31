@@ -1932,3 +1932,28 @@ admin_v2_feedback:
     path: /feedback
     defaults: { _controller: AppBundle:AdminV2/Default:feedback }
     permissions: [admin_v2]
+
+# 系统-系统管理-系统自检
+admin_v2_report_status:
+    path: /reports/status
+    defaults: { _controller: AppBundle:AdminV2/System/System:report }
+    permissions: [admin_v2_report_status_list]
+
+admin_v2_report_status_php:
+    path: /reports/status/php
+    defaults: { _controller: AppBundle:AdminV2/System/System:php }
+    permissions: [admin_v2_report_status_list]
+
+admin_v2_report_status_directory:
+    path: /reports/status/directory
+    defaults: { _controller: AppBundle:AdminV2/System/System:checkDir }
+    permissions: [admin_v2_report_status_list]
+
+admin_v2_report_status_ucenter:
+    path: /reports/status/ucenter
+    defaults: { _controller: AppBundle:AdminV2/System/System:ucenter }
+    permissions: [admin_v2_report_status_list]
+
+admin_v2_report_status_email_send:
+    path: /reports/status/email/send
+    defaults: { _controller: AppBundle:AdminV2/System/System:emailSendCheck }
