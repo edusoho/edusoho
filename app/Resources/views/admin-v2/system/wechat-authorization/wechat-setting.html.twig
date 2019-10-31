@@ -177,7 +177,7 @@
               <a class="btn btn-default btn-sm js-code-view">{{'admin.setting_wechat_auth.account_code_view'|trans}}</a>
             </span>
               <span class="code-help-block {% if wechatSetting.account_code %}hidden{% endif %}">{{'admin.setting_wechat_auth.account_code_empty'|trans|raw}}</span>
-              <a class="btn btn-default btn-sm btn-primary" id="qrcode-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_logo_upload') }}">{{'form.btn.set'|trans}}</a>
+              <a class="btn btn-default btn-sm btn-primary" id="qrcode-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_v2_setting_logo_upload') }}">{{'form.btn.set'|trans}}</a>
               <a href="http://www.qiqiuyu.com/faq/876/detail" target="blank">{{'admin.setting_wechat_auth.account_code_download'|trans}}</a>
               <input type="hidden" id="account_code" name="wechatSetting[account_code]" value="{{ wechatSetting.account_code }}" class="form-control">
             </div>
