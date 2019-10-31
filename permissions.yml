@@ -124,6 +124,11 @@ admin_operation_notification: admin_v2_operation_notification
 admin_batch_notification: admin_v2_batch_notification
 admin_batch_notification_create: admin_v2_batch_notification_create
 
+#运营-内容运营-网站公告管理
+admin_announcement: admin_v2_operation_announcement #网站公告管理
+admin_announcement_manage: admin_v2_operation_announcement_manage #网站公告管理
+admin_announcement_create: admin_v2_announcement_create #创建网站公告管理
+
 # 资讯
 admin_operation_article: admin_v2_operation_article
 admin_operation_article_manage: admin_v2_operation_article_manage
