@@ -71,7 +71,7 @@ export default {
         }
 
         Api.getAgencyBindRelation().then(data => {
-          if (!data) {
+          if (!data.agencyId) {
             this.tagData.isShow = false;
             return;
           }

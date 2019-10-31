@@ -354,7 +354,7 @@ export default {
         }
 
         Api.getAgencyBindRelation().then(data => {
-          if (JSON.stringify(data) == '{}') {
+          if (!data.agencyId) {
             this.isShowInviteUrl = false;
             return;
           }
