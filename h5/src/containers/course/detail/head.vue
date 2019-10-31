@@ -268,7 +268,8 @@ export default {
         };
 
         this.tagData.link = this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
-        this.tagData.earnings = Math.floor((this.drpSetting.minDirectRewardRatio * this.details.price) * 100) / 100;
+        const earnings = this.drpSetting.minDirectRewardRatio * this.details.price;
+        this.tagData.earnings = Math.floor(earnings * 100) / 100;
       });
     },
   }
