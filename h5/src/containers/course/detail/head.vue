@@ -1,6 +1,9 @@
 <template>
   <div class="course-detail__head pos-rl" id="course-detail__head">
-    <div class="course-detail__nav--btn" @click="viewAudioDoc" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen">
+    <div class="course-detail__nav--btn"
+          v-if="textContent"
+          @click="viewAudioDoc"
+          v-show="['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen">
       文稿
     </div>
     <div class="course-detail__nav--cover web-view" :class="{ opened: isCoverOpen }" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus">

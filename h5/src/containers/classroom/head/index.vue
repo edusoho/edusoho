@@ -44,7 +44,7 @@ export default {
     },
     price: {
       type: String,
-      default: 0,
+      default: '',
     },
     classroomId: {
       type: Number,
