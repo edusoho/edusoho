@@ -1765,7 +1765,11 @@ admin_v2_setting_refund:
 # 设置-通用设置-微信授权信息
 admin_v2_setting_wechat_auth:
     path: /wechat/auth/setting
-    defaults: { _controller: AppBundle:Admin/WeChatSetting:index}
+    defaults: { _controller: AppBundle:AdminV2/System/WeChatSetting:index}
+
+admin_v2_setting_wechat_pre_auth_url:
+    path: /wechat/pre_auth_url/{platformType}
+    defaults: { _controller: AppBundle:AdminV2/System/WeChatSetting:preAuthUrl }
 
 # 数据-数据分析-数据统计
 admin_v2_data_statistics_index:
