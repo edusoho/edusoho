@@ -1,8 +1,9 @@
 <?php
 
-namespace AppBundle\Controller\AdminV2;
+namespace AppBundle\Controller\AdminV2\Developer;
 
 use AppBundle\Common\JsonToolkit;
+use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudFile\Service\CloudFileService;
 use Biz\CloudPlatform\AppException;
 use Biz\CloudPlatform\Service\AppService;
@@ -59,7 +60,7 @@ class DeveloperSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/developer-setting/index.html.twig', array(
+        return $this->render('admin-v2/developer/developer-setting/index.html.twig', array(
             'developerSetting' => $developerSetting,
         ));
     }
@@ -89,7 +90,7 @@ class DeveloperSettingController extends BaseController
         $appCount = $this->getAppservice()->findAppCount();
         $apps = $this->getAppservice()->findApps(0, $appCount);
 
-        return $this->render('admin-v2/developer-setting/version.html.twig', array(
+        return $this->render('admin-v2/developer/developer-setting/version.html.twig', array(
             'apps' => $apps,
         ));
     }
@@ -112,7 +113,7 @@ class DeveloperSettingController extends BaseController
         $setting = $this->getSettingService()->get('magic', array());
         $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
-        return $this->render('admin-v2/developer-setting/magic.html.twig', array(
+        return $this->render('admin-v2/developer/developer-setting/magic.html.twig', array(
             'setting' => $setting,
         ));
     }
