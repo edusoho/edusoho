@@ -1,6 +1,9 @@
 <template>
-  <div class="course-detail__head" id="course-detail__head">
-    <div class="course-detail__nav--btn" @click="viewAudioDoc" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen">
+  <div class="course-detail__head pos-rl" id="course-detail__head">
+    <div class="course-detail__nav--btn"
+          v-if="textContent"
+          @click="viewAudioDoc"
+          v-show="['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen">
       文稿
     </div>
     <div class="course-detail__nav--cover web-view" :class="{ opened: isCoverOpen }" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus">
@@ -26,6 +29,7 @@
       ref="video"
       v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus">
     </div>
+    <tagLink :tagData="tagData"></tagLink>
   </div>
 </template>
 <script>
@@ -34,10 +38,13 @@ import { mapState } from 'vuex';
 import Api from '@/api'
 import { Toast,Dialog } from 'vant';
 import countDown from '@/containers/components/e-marketing/e-count-down/index';
+import tagLink from '@/containers/components/e-tag-link/e-tag-link';
+import qs from 'qs';
 
 export default {
   components: {
-    countDown
+    countDown,
+    tagLink,
   },
   data() {
     return {
@@ -47,7 +54,15 @@ export default {
       isPlaying: false,
       player: null,
       counting: true,
-      isEmpty: false
+      isEmpty: false,
+      tagData: { // 分销标签信息
+        earnings: 0,
+        isShow: false,
+        link: '',
+        className: 'course-tag',
+        minDirectRewardRatio: 0,
+      },
+      bindAgencyRelation: {}, // 分销代理商绑定信息
     };
   },
   props: {
@@ -84,6 +99,8 @@ export default {
   },
   created() {
     this.initHead();
+    this.showTagLink();
+    this.initTagData();
   },
   /*
   * 试看需要传preview=1
@@ -224,7 +241,40 @@ export default {
     sellOut() {
       this.isEmpty = true
       this.$emit('goodsEmpty')
-    }
+    },
+    showTagLink() {
+      Api.hasDrpPluginInstalled().then(res => {
+        if (!res.Drp) {
+          this.tagData.isShow = false;
+          return;
+        }
+
+        Api.getAgencyBindRelation().then(data => {
+          if (!data) {
+            this.tagData.isShow = false;
+            return;
+          }
+          this.bindAgencyRelation = data;
+          this.tagData.isShow = true;
+        })
+      })
+    },
+    initTagData() {
+      Api.getDrpSetting().then(data => {
+        this.drpSetting = data;
+        this.tagData.minDirectRewardRatio = data.minDirectRewardRatio;
+
+        let params = {
+          type: 'course',
+          id: this.details.id,
+          merchant_id: this.drpSetting.merchantId,
+        };
+
+        this.tagData.link = this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
+        const earnings = this.drpSetting.minDirectRewardRatio * this.details.price;
+        this.tagData.earnings = Math.floor(earnings * 100) / 100;
+      });
+    },
   }
 }
 </script>
