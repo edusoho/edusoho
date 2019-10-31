@@ -620,6 +620,12 @@ admin_v2:
                                     name: admin_v2.operation.wechat.notification_manage
                                     disable: true
                                     router_name: admin_v2_wechat_notification_manage
+                        admin_v2_message_manage:
+                            name: admin_v2.operation.message_menu
+                            children:
+                                admin_v2_message:
+                                    name: admin_v2.operation.message.basic_tab
+                                    disable: true
                         admin_v2_operation.sensitive_words:
                             name: admin_v2.operation.sensitive_words_menu
                             children:

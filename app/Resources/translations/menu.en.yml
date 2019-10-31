@@ -639,11 +639,14 @@ admin_v2.operation.invite.coupon_tab: Rewards
 admin_v2.micromarketing.menu: Micromarketing
 
 #运营-内容运营-小组管理
-
 admin_v2.operation.group_menu: Group Discussions
 admin_v2.operation.group.group_tab: Groups
 admin_v2.operation.group.group_tab.create_group_btn: Add Group
 admin_v2.operation.group.group_thread_tab: Group Discussions
+
+#运营-内容管理-私信管理
+admin_v2.operation.message_menu: Message Manage
+admin_v2.operation.message.basic_tab: Message Manage
 
 # 用户-用户管理-用户管理-tab
 admin_v2.user.basic.basic_tab: User Manage
