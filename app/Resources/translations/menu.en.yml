@@ -778,7 +778,6 @@ admin_v2.system.asset.payment_tab: Payment
 admin_v2.system.asset.coin_tab: Virtual Coin
 admin_v2.system.asset.refund_tab: Refund
 
-<<<<<<< HEAD
 #系统-通用管理-用户设置
 admin_v2.system.user_menu: User Setting
 admin_v2.system.user.user_center_tab: User Center
@@ -786,8 +785,6 @@ admin_v2.system.user.login_bind_tab: Log In
 admin_v2.system.user.user_fields_tab: User Setting
 admin_v2.system.user.avatar_tab: Default
 
-=======
->>>>>>> edbef6a29972139e8604fa31e1cc3a100d539fe1
 #系统-通用设置-微信授权信息
 admin_v2.system.wechat_auth_menu: WeChat Authorization Information
 
