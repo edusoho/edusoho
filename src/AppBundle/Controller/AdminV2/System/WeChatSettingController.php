@@ -75,8 +75,6 @@ class WeChatSettingController extends BaseController
             $this->getSettingService()->set('wechat', $wechatSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
-
-
         return $this->render('admin-v2/system/wechat-authorization/wechat-setting.html.twig', array(
             'loginConnect' => $loginConnect,
             'payment' => $payment,
