@@ -1761,31 +1761,31 @@ admin_v2_cloud_normal_video_delete:
 admin_v2_uploadfile_head_leader_params:
     path: /uploadfile/video/head/leader/params
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:headLeaderParams }
-    permissions: [admin_v2_cloud_sms]
+    permissions: [admin_v2_edu_cloud_video_overview]
 
 admin_v2_setting_cloud_video_watermark_upload:
     path: /edu_cloud/video_watermark/upload
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoWatermarkUpload }
     methods: [POST]
-    permissions: [admin_v2_cloud_sms]
+    permissions: [admin_v2_edu_cloud_video_overview]
     
 admin_v2_setting_cloud_video_watermark_remove:
     path: /edu_cloud/video_watermark/remove
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoWatermarkRemove }
     methods: [POST]
-    permissions: [admin_v2_cloud_sms]
+    permissions: [admin_v2_edu_cloud_video_overview]
     
 admin_v2_setting_cloud_video_embed_watermark_upload:
     path: /edu_cloud/video_embed_watermark/upload
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoEmbedWatermarkUpload }
     methods: [POST]
-    permissions: [admin_v2_cloud_sms]
+    permissions: [admin_v2_edu_cloud_video_overview]
 
 admin_v2_setting_cloud_video_embed_watermark_remove:
     path: /edu_cloud/video_embed_watermark/remove
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoWatermarkRemove }
     methods: [POST]
-    permissions: [admin_v2_cloud_sms]
+    permissions: [admin_v2_edu_cloud_video_overview]
 
 # 应用中心-基础云-云服务-云直播
 admin_v2_edu_cloud_edulive_overview:
