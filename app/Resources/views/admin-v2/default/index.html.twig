@@ -13,11 +13,11 @@
 
       <div class="alert alert-warning" role="alert">
         <span>欢迎使用！试用将于 <strong>2019年12月30日 </strong> 到期，剩余 <strong>96</strong> 天。 您可以联系销售人员购买授权版本，或者延长试用期限。 <span>&nbsp;电话：4008041114 或 QQ：800023860</span></span>
-        <a class="alert-link" href='#' target="_blank">立即续费 》</a>
+        <a class="alert-link" href='#' target="_blank">立即续费<i class="es-icon es-icon-guide"></i></a>
       </div>
       <div class="alert alert-warning" role="alert">
         <span>当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】</span>
-        <a class="alert-link" href='#'>立即设置 》</a>
+        <a class="alert-link" href='#'>立即设置<i class="es-icon es-icon-guide"></i></a>
       </div>
     </div>
 
@@ -179,10 +179,9 @@
           <div class="admin-v2-section__body">
             <div class="row">
               <div class="col-md-3">
-                <a class="text-center admin-application" href="#" target="_blank">
-                  <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
-                  <div class="admin-application__name">打折活动</div>
-                </a>
+                <div class="text-center admin-application">
+                  <i class="es-icon es-icon-application"></i>
+                </div>
               </div>
               <div class="col-md-3">
                 <a class="text-center admin-application" href="#" target="_blank">
@@ -211,18 +210,27 @@
           <div class="admin-v2-section__header cd-mb16">经营建议<a class="admin-v2-section__more" href="#" target="_blank">前去Edusoho商学院</a></div>
           <div class="admin-v2-section__body admin-advice">
             <div class="row">
-              <a class="col-md-3 admin-advice__item" href="#" target="_blank">
-                <img class="img-responsive" src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
-              </a>
-              <a class="col-md-3 admin-advice__item" href="#" target="_blank">
-                <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
-              </a>
-              <a class="col-md-3 admin-advice__item" href="#" target="_blank">
-                <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
-              </a>
-              <a class="col-md-3 admin-advice__item" href="#" target="_blank">
-                <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
-              </a>
+              {# 占位符 #}
+              <div class="col-md-3">
+                <div class=" admin-advice__item">
+                  <div class="admin-advice__placeholder"><i class="es-icon es-icon-placeholder"></i></div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <a class="admin-advice__item" href="#" target="_blank">
+                  <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+                </a>
+              </div>
+              <div class="col-md-3">
+                <a class="admin-advice__item" href="#" target="_blank">
+                  <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+                </a>
+              </div>
+              <div class="col-md-3">
+                <a class="admin-advice__item" href="#" target="_blank">
+                  <img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg">
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -233,7 +241,7 @@
           <div class="admin-website">
             <a href="#"><img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg"></a>
             <a class="admin-website__text" href="#">
-              {% set webSiteName = '哎呀音乐哎呀音世哎呀音乐是' %}
+              {% set webSiteName = '哎呀音乐哎呀音世哎呀音乐是哎呀音乐哎呀音世哎呀音乐是' %}
               <div class="admin-website__name {% if webSiteName|length < 14 %} admin-website__name--short {% endif %}">{{ webSiteName|sub_text(25) }}</div>
               {# 三种颜色的客户等级 #}
               <span class="rank-tag rank-tag--yellow rank-tag--green"><span class="rank-tag__icon"><i class="es-icon es-icon-star"></i></span><span class="rank-tag__text">商业授权</span></span>
@@ -246,9 +254,9 @@
             <div class="admin-update__cell"><span class="admin-update__label">系统更新：</span><span class="admin-update__number">3个</span><a class="admin-update__link"href="#">未更新</a></div>
           </div>
           <div class="admin-link">
-            <a class="admin-link__btn" href="#" target="_blank"><i class="es-icon es-icon-live"></i>访问Web</a>
-            <a class="admin-link__btn admin-link__btn--disabled" href="javascript:;" target="_blank"><i class="es-icon es-icon-live"></i>访问App</a>
-            <a class="admin-link__btn" href="#"><i class="es-icon es-icon-live"></i>访问小程序</a>
+            <a class="admin-link__btn" href="#" target="_blank"><i class="es-icon es-icon-website"></i>访问Web</a>
+            <a class="admin-link__btn admin-link__btn--disabled" href="javascript:;" target="_blank"><i class="es-icon es-icon-app"></i>访问App</a>
+            <a class="admin-link__btn" href="#"><i class="es-icon es-icon-miniprogram"></i>访问小程序</a>
           </div>
           <div class="admin-version">系统版本：8.3.36</div>
         </div>

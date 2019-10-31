@@ -31,6 +31,10 @@
       .alert-link {
         color: #ff8836;
         font-weight: normal;
+        i {
+          margin-left: 4px;
+          vertical-align: text-bottom;
+        }
         &:hover,
         &:focus {
           text-decoration: none;
@@ -272,6 +276,13 @@
   padding-bottom: 26px;
   background-color: @cdv2-bg;
   border-radius: 4px;
+  i {
+    display: inline-block;
+    margin-top: 17px;
+    margin-bottom: 23px;
+    font-size: 46px;
+    color: @cdv2-text-assist;
+  }
   img {
     margin-bottom: 16px;
     height: 48px;
@@ -287,8 +298,18 @@
 
 .admin-advice {
   .admin-advice__item {
-    padding-left: 16px;
-    padding-right: 16px;
+    display: block;
+  }
+  .admin-advice__placeholder {
+    text-align: center;
+    height: 121.5px;
+    background-color: @cdv2-bg;
+    border-radius: 4px;
+    i {
+      font-size: 64px;
+      color: @cdv2-text-assist;
+      line-height: 121.5px;
+    }
   }
   img {
     width: 100%;
@@ -479,13 +500,17 @@
   margin-bottom: 16px;
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: center;
+  text-align: left;
+  padding-left: 35%;
   background-color: rgba(66,139,202,0.1);
   .cdv2-text-md;
   color: @brand-primary;
   border-radius: 24px;
   i {
     margin-right: 4px;
+    font-size: 16px;
+    line-height: 20px;
+    vertical-align: bottom;
   }
   &:hover,
   &:focus {
