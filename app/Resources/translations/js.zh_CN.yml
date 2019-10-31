@@ -1431,3 +1431,6 @@ admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
 
 course.plan_task.activity_ppt_animation_img: 切换图片模式
 course.plan_task.activity_ppt_animation_slide: 切换动画模式
+
+#新后台
+admin_v2.user.cloude_sms_enable_hint: 请先到【管理后台】-【应用中心】-【云服务】-【云短信】中开启云短信哦~

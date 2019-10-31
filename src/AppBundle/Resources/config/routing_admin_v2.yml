@@ -1343,39 +1343,87 @@ admin_v2_question_remind_teachers:
 
 # 系统-通用管理-网校信息
 admin_v2_school_information:
-   path:  /setting/site
-   defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:site }
-   permissions: [admin_v2_school_information]
+    path:  /setting/site
+    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:site }
+    permissions: [admin_v2_school_information]
 
 admin_v2_school_information_save:
-   path:  /setting/site/save
-   defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:saveSite }
-   permissions: [admin_v2_school_information]
-   methods: [POST]
+    path:  /setting/site/save
+    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:saveSite }
+    permissions: [admin_v2_school_information]
+    methods: [POST]
 
 admin_v2_setting_logo_upload:
-   path:  /setting/logo/upload
-   defaults: { _controller: AppBundle:AdminV2/System/Setting:logoUpload }
-   methods: [POST]
-   permissions: [admin_v2_school_information]
+    path:  /setting/logo/upload
+    defaults: { _controller: AppBundle:AdminV2/System/Setting:logoUpload }
+    methods: [POST]
+    permissions: [admin_v2_school_information]
 
 admin_v2_setting_logo_remove:
-   path:  /setting/logo/remove
-   defaults: { _controller: AppBundle:AdminV2/System/Setting:logoRemove }
-   methods: [POST]
-   permissions: [admin_v2_school_information]
+    path:  /setting/logo/remove
+    defaults: { _controller: AppBundle:AdminV2/System/Setting:logoRemove }
+    methods: [POST]
+    permissions: [admin_v2_school_information]
 
 admin_v2_setting_favicon_upload:
-   path: /setting/favicon/upload
-   defaults: { _controller: AppBundle:AdminV2/System/Setting:faviconUpload }
-   methods: [POST]
-   permissions: [admin_v2_school_information]
+    path: /setting/favicon/upload
+    defaults: { _controller: AppBundle:AdminV2/System/Setting:faviconUpload }
+    methods: [POST]
+    permissions: [admin_v2_school_information]
 
 admin_v2_setting_favicon_remove:
-   path: /setting/favicon/remove
-   defaults: { _controller: AppBundle:AdminV2/System/Setting:faviconRemove }
-   methods: [POST]
-   permissions: [admin_v2_school_information]
+    path: /setting/favicon/remove
+    defaults: { _controller: AppBundle:AdminV2/System/Setting:faviconRemove }
+    methods: [POST]
+    permissions: [admin_v2_school_information]
+
+#系统-通用管理-用户设置
+admin_v2_setting_auth:
+    path:  /setting/auth
+    defaults: { _controller: AppBundle:AdminV2/System/UserSetting:auth }
+    permissions: [admin_v2_user_auth]
+
+admin_v2_setting_login_bind:
+    path:  /setting/login-connect
+    defaults: { _controller: AppBundle:AdminV2/System/UserSetting:loginConnect }
+
+admin_v2_setting_admin_sync:
+    path:  /setting/admin_sync
+    defaults: { _controller: AppBundle:AdminV2/System/Setting:adminSync }
+    permissions: [admin_v2_setting_user_center]
+
+admin_v2_setting_user_fields:
+    path:  /setting/user-fields
+    defaults: { _controller: AppBundle:AdminV2/System/UserSetting:userFields }
+
+admin_v2_user_fields_add:
+    path:  /user_fields/add
+    defaults: { _controller: AppBundle:AdminV2/System/UserSetting:addUserFields }
+    permissions: [admin_v2_setting_user_fields]
+
+admin_v2_user_fields_delete:
+    path:  /user_fields/delete/{id}
+    defaults: { _controller: AppBundle:AdminV2/System/UserSetting:deleteUserFields }
+    permissions: [admin_v2_setting_user_fields]
+
+admin_v2_user_fields_edit:
+    path:  /user_fields/edit/{id}
+    defaults: { _controller: AppBundle:AdminV2/System/UserSetting:editUserFields }
+    permissions: [admin_v2_setting_user_fields]
+
+admin_v2_setting_avatar:
+    path:  /setting/user-avatar
+    defaults: { _controller: AppBundle:AdminV2/System/UserSetting:userAvatar }
+    permissions: [admin_v2_setting_avatar]
+
+admin_v2_setting_default_avatar_crop:
+    path:  /setting/default/avatar/crop
+    defaults: { _controller: AppBundle:AdminV2/System/SystemDefaultSetting:defaultAvatarCrop }
+    permissions: [admin_v2_setting_avatar]
+
+admin_v2_setting_user_center:
+    path:  /setting/user-center
+    defaults: { _controller: AppBundle:AdminV2/System/UserSetting:userCenter }
 
 # 设置-通用设置-微信授权信息
 admin_v2_setting_wechat_auth:
@@ -1417,9 +1465,18 @@ admin_v2_open_course_setting:
 admin_v2_setting_default_course_picture_crop:
     path:  /setting/default/course/picture/crop
     defaults: { _controller: AppBundle:AdminV2/System/SystemDefaultSetting:defaultCoursePictureCrop }
-    permissions: [admin_v2_setting_course_avatar,admin_setting_avatar,course_manage_picture]
+    permissions: [admin_v2_setting_course_avatar,admin_v2_setting_avatar,course_manage_picture]
 
 # 系统-通用管理-运营设置
+admin_v2_setting_mailer:
+    path:  /setting/mailer
+    defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:mailer }
+
+admin_v2_setting_mailer_test:
+    path:  /setting/mailer/test
+    defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:mailerTest }
+    methods: [GET]
+
 admin_v2_article_set:
     path: /setting/article
     defaults: { _controller: AppBundle:AdminV2/System/OperationSetting:articleSet }
@@ -1631,16 +1688,16 @@ admin_v2_cloud_video:
     path:  /cloud/video
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:video }
     permissions: [admin_v2_my_cloud_overview]
-    
+
 admin_v2_cloud_live:
     path:  /cloud/live
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:live }
     permissions: [admin_v2_my_cloud_overview]
-    
+
 admin_v2_cloud_sms_detail:
     path: /cloud/sms/detail
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:smsDetail }
-    
+
 admin_v2_cloud_sms_statistics:
     path: /cloud/sms/statistics
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:smsStatistics }
@@ -1657,7 +1714,7 @@ admin_v2_cloud_tlp:
     path:  /cloud/tlp
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:tlp }
     permissions: [admin_v2_my_cloud_overview]
-    
+
 admin_v2_cloud_video_upgrade:
     path:  /cloud/video/upgrade
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:videoUpgrade }
@@ -1671,11 +1728,11 @@ admin_v2_cloud_video_renew:
 admin_v2_cloud_video_detail:
     path: /cloud/video/detail
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:videoDetail }
-    
+
 admin_v2_cloud_video_account:
     path:  /cloud/video/account
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:videoAccount }
-    
+
 admin_v2_cloud_live_upgrade:
     path:  /cloud/live/upgrade
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:liveUpgrade }
@@ -1687,11 +1744,11 @@ admin_v2_cloud_live_renew:
 admin_v2_cloud_live_more:
     path: /cloud/live/more
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:liveMore }
-    
+
 admin_v2_cloud_sms_sign:
     path:  /cloud/sms/sign
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:smsSign }
-    
+
 admin_v2_cloud_email_buy:
     path:  /cloud/{type}/buy/custom
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:emailBuy }
@@ -1699,16 +1756,16 @@ admin_v2_cloud_email_buy:
 admin_v2_cloud_email_list:
     path:  /cloud/email/list
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:emailList }
-    
+
 admin_v2_cloud_search:
     path:  /cloud/search
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:search }
     permissions: [admin_v2_my_cloud_overview]
-    
+
 admin_v2_cloud_search_detail:
     path: /cloud/search/detail
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:searchDetail }
-  
+
 # 应用中心-营销云-营销应用
 admin_v2_app_center:
     path:  /app/center/{postStatus}
@@ -1735,12 +1792,12 @@ admin_v2_app_upgrades_count:
     path:  /app/upgrades_count
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/App:upgradesCount }
     permissions: [admin_v2_app_upgrades]
-    
+
 #应用中心－基础云－概览
 admin_v2_my_cloud_overview:
     path:  /setting/my/cloud/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloudOverview }
-   
+
 # 应用中心-云服务-云视频
 admin_v2_edu_cloud_video_overview:
     path:  /edu_cloud/video/overview
@@ -1753,11 +1810,11 @@ admin_v2_edu_cloud_video_setting:
 admin_v2_cloud_video_switch:
     path:  /edu_cloud/video/switch
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoSwitch }
-    
+
 admin_v2_cloud_normal_video_delete:
     path:  /edu_cloud/normal/video/delete
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:deleteVideo }
-    
+
 admin_v2_uploadfile_head_leader_params:
     path: /uploadfile/video/head/leader/params
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:headLeaderParams }
@@ -1768,13 +1825,13 @@ admin_v2_setting_cloud_video_watermark_upload:
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoWatermarkUpload }
     methods: [POST]
     permissions: [admin_v2_edu_cloud_video_overview]
-    
+
 admin_v2_setting_cloud_video_watermark_remove:
     path: /edu_cloud/video_watermark/remove
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoWatermarkRemove }
     methods: [POST]
     permissions: [admin_v2_edu_cloud_video_overview]
-    
+
 admin_v2_setting_cloud_video_embed_watermark_upload:
     path: /edu_cloud/video_embed_watermark/upload
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:videoEmbedWatermarkUpload }
@@ -1792,12 +1849,12 @@ admin_v2_edu_cloud_edulive_overview:
     path:  /edu_cloud/edulive/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveOverview }
     permissions: [admin_v2_cloud_edulive]
-    
+
 admin_v2_edu_cloud_edulive_setting:
     path:  /edu_cloud/edulive/setting
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveSetting }
     permissions: [admin_v2_cloud_edulive]
-    
+
 # 应用中心-基础云-云服务-云短信
 admin_v2_edu_cloud_sms_overview:
     path:  /edu_cloud/sms/overview
@@ -1821,7 +1878,7 @@ admin_v2_edu_cloud_sms_no_message:
     path: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:smsNoMessage }
     permissions: [admin_v2_cloud_sms]
-  
+
 # 应用中心-基础云-云服务-云邮件
 admin_v2_edu_cloud_email_overview:
     path: /edu_cloud/email/overview
@@ -1846,7 +1903,7 @@ admin_v2_edu_cloud_search_overview:
 admin_v2_edu_cloud_search_setting:
     path: /edu_cloud/search/setting
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:searchSetting }
-    
+
 admin_v2_edu_cloud_search_clause:
     path: /edu_cloud/search/clause
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:searchClause }
@@ -1856,7 +1913,7 @@ admin_v2_edu_cloud_search_open:
     path: /edu_cloud/search/open
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:searchOpen }
     permissions: [admin_v2_cloud_search]
-    
+
 admin_v2_edu_cloud_search_reapply:
     path: /edu_cloud/search/reapply
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:searchReapply }
@@ -1875,13 +1932,13 @@ admin_v2_edu_cloud_search_result_type:
 admin_v2_edu_cloud_consult_setting:
     path: /edu_cloud/consult/setting
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:consultSetting }
-  
+
 #应用中心－基础云－即时聊天设置
 admin_v2_app_im:
     path: /edu_cloud/app/im
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:appIm }
     permissions: [admin_v2_app_im]
-    
+
 admin_v2_app_im_update:
     path: /edu_cloud/app/im/update
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:appImUpdateStatus }
@@ -1904,19 +1961,19 @@ admin_v2_cloud_data_lab_setting_enable_modal:
 admin_v2_cloud_data_lab_setting_disable_modal:
     path: /edu_cloud/data/lab/setting/modal/disable
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/DataLab:disable }
-    
+
 #应用中心－基础云－人脸识别
 admin_v2_cloud_face_identify_setting:
     path: /edu_cloud/face_identify/setting
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/FeatureLab:faceIdentify }
     permissions: [admin_v2_cloud_face_identify]
-    
+
 #应用中心－基础云－功能实验室
 admin_v2_cloud_feature_lab_setting:
     path: /edu_cloud/feature/lab
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/FeatureLab:setting }
     permissions: [admin_v2_cloud_feature_lab]
-    
+
 #应用中心－基础云－授权信息
 admin_v2_setting_cloud:
     path:  /setting/cloud

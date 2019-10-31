@@ -8,6 +8,7 @@ use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
 use Biz\Content\Service\FileService;
 use Biz\System\Service\SettingService;
+use Biz\User\Service\AuthService;
 use Symfony\Component\HttpFoundation\Request;
 
 class SettingController extends BaseController
@@ -213,6 +214,51 @@ class SettingController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function adminSyncAction(Request $request)
+    {
+        $currentUser = $this->getUser();
+        $setting = $this->getSettingService()->get('user_partner', array());
+
+        if (empty($setting['mode']) || !in_array($setting['mode'], array('phpwind', 'discuz'))) {
+            return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
+        }
+
+        $bind = $this->getUserService()->getUserBindByTypeAndUserId($setting['mode'], $currentUser['id']);
+
+        if ($bind) {
+            goto response;
+        } else {
+            $bind = null;
+        }
+
+        if ('POST' === $request->getMethod()) {
+            $data = $request->request->all();
+            $partnerUser = $this->getAuthService()->checkPartnerLoginByNickname($data['nickname'], $data['password']);
+
+            if (empty($partnerUser)) {
+                $this->setFlashMessage('danger', 'site.incorrect.username_or_password');
+                goto response;
+            } else {
+                $this->getUserService()->changeEmail($currentUser['id'], $partnerUser['email']);
+                $this->getUserService()->changeNickname($currentUser['id'], $partnerUser['nickname']);
+                $this->getUserService()->changePassword($currentUser['id'], $data['password']);
+                $this->getUserService()->bindUser($setting['mode'], $partnerUser['id'], $currentUser['id'], null);
+                $user = $this->getUserService()->getUser($currentUser['id']);
+                $this->authenticateUser($user);
+
+                $this->setFlashMessage('success', 'site.save.success');
+
+                return $this->redirect($this->generateUrl('admin_v2_setting_user_center'));
+            }
+        }
+
+        response:
+        return $this->render('admin-v2/system/user-setting/admin-sync.html.twig', array(
+            'mode' => $setting['mode'],
+            'bind' => $bind,
+        ));
+    }
+
     /**
      * @return FileService
      */
@@ -227,5 +273,13 @@ class SettingController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return AuthService
+     */
+    protected function getAuthService()
+    {
+        return $this->createService('User:AuthService');
     }
 }

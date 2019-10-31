@@ -302,6 +302,14 @@ admin_system: admin_v2_system
 # 系统-通用管理-网校信息
 admin_setting_message: admin_v2_school_information
 
+#系统-通用管理-用户设置
+admin_setting_user: admin_v2_setting_user #用户设置
+admin_user_auth: admin_v2_user_auth #注册
+admin_setting_login_bind: admin_v2_setting_login_bind #登陆
+admin_setting_user_center: admin_v2_setting_user_center #用户中心
+admin_setting_user_fields: admin_v2_setting_user_fields #用户信息设置
+admin_setting_avatar: admin_v2_setting_avatar #默认头像
+
 #系统-通用设置-微信授权信息
 admin_setting_wechat: admin_v2_setting_wechat #微信授权信息
 admin_setting_wechat_auth: admin_v2_setting_wechat_auth  #微信授权信息
@@ -317,7 +325,7 @@ admin_open_course_setting: admin_v2_open_course_setting #公开课
 
 # 系统-通用管理-运营设置
 admin_setting_operation: admin_v2_setting_operation
-
+admin_setting_mailer: admin_v2_setting_mailer #邮箱服务器设置
 admin_article_setting: admin_v2_article_set # 资讯
 admin_group_set: admin_v2_group_set # 小组
 admin_invite_set: admin_v2_invite_set # 邀请注册设置

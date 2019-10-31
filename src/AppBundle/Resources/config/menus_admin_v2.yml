@@ -897,6 +897,27 @@ admin_v2:
                                     name: admin_v2.system.site.basic_tab
                                     router_name: admin_v2_school_information
                                     disable: true
+                        # 用户设置
+                        admin_v2_setting_user:
+                            name: admin_v2.system.user_menu
+                            children:
+                                admin_v2_user_auth:
+                                    name: admin_v2.system.user.auth_tab
+                                    disable: true
+                                    router_name: admin_v2_setting_auth
+                                admin_v2_setting_login_bind:
+                                    name: admin_v2.system.user.login_bind_tab
+                                    disable: true
+                                admin_v2_setting_user_center:
+                                    name: admin_v2.system.user.user_center_tab
+                                    disable: true
+                                admin_v2_setting_user_fields:
+                                    name: admin_v2.system.user.user_fields_tab
+                                    disable: true
+                                admin_v2_setting_avatar:
+                                    name: admin_v2.system.user.avatar_tab
+                                    disable: true
+                        #微信授权信息
                         admin_v2_setting_wechat:
                             name: admin_v2.system.wechat_auth_menu
                             children:
@@ -927,13 +948,16 @@ admin_v2:
                                     parent: admin_v2_setting_course_setting
                                     after: admin_v2_setting_live_course
                                 admin_v2_open_course_setting:
-                                    name: admin.system.course.open_course_tab
+                                    name: admin_v2.system.course.open_course_tab
                                     disable: true
                                     parent: admin_v2_setting_course_setting
                         # 运营设置
                         admin_v2_setting_operation:
                             name: admin_v2.system.operation_menu
                             children:
+                                admin_v2_setting_mailer:
+                                    name: admin_v2.system.mailer_setting_tab
+                                    disable: true
                                 admin_v2_article_set:
                                     name: admin_v2.system.operation.article_tab
                                     disable: true
