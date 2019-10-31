@@ -135,12 +135,7 @@ class FileCacheTest extends \Doctrine\Tests\DoctrineTestCase
     public static function getBasePathForWindowsPathLengthTests($pathLength)
     {
         // Not using __DIR__ because it can get screwed up when xdebug debugger is attached.
-        $basePath = realpath(sys_get_temp_dir()) . '/' . uniqid('doctrine-cache', true);
-
-        /** @noinspection MkdirRaceConditionInspection */
-        @mkdir($basePath);
-
-        $basePath = realpath($basePath);
+        $basePath = realpath(sys_get_temp_dir());
 
         // Test whether the desired path length is odd or even.
         $desiredPathLengthIsOdd = ($pathLength % 2) == 1;
@@ -166,14 +161,10 @@ class FileCacheTest extends \Doctrine\Tests\DoctrineTestCase
         return $basePath;
     }
 
-    /**
-     * @param int    $length
-     * @param string $basePath
-     *
-     * @return array
-     */
-    public static function getKeyAndPathFittingLength($length, $basePath)
+    public static function getKeyAndPathFittingLength($length)
     {
+        $basePath = self::getBasePathForWindowsPathLengthTests($length);
+
         $baseDirLength = strlen($basePath);
         $extensionLength = strlen('.doctrine.cache');
         $directoryLength = strlen(DIRECTORY_SEPARATOR . 'aa' . DIRECTORY_SEPARATOR);
@@ -218,9 +209,6 @@ class FileCacheTest extends \Doctrine\Tests\DoctrineTestCase
      * @dataProvider getPathLengthsToTest
      *
      * @covers \Doctrine\Common\Cache\FileCache::getFilename
-     *
-     * @param int  $length
-     * @param bool $pathShouldBeHashed
      */
     public function testWindowsPathLengthLimitationsAreCorrectlyRespected($length, $pathShouldBeHashed)
     {
@@ -228,14 +216,14 @@ class FileCacheTest extends \Doctrine\Tests\DoctrineTestCase
             define('PHP_WINDOWS_VERSION_BUILD', 'Yes, this is the "usual suspect", with the usual limitations');
         }
 
-        $basePath = self::getBasePathForWindowsPathLengthTests($length);
+        $basePath = $this->getBasePathForWindowsPathLengthTests($length);
 
         $fileCache = $this->getMockForAbstractClass(
             'Doctrine\Common\Cache\FileCache',
             array($basePath, '.doctrine.cache')
         );
 
-        list($key, $keyPath, $hashedKeyPath) = self::getKeyAndPathFittingLength($length, $basePath);
+        list($key, $keyPath, $hashedKeyPath) = $this->getKeyAndPathFittingLength($length);
 
         $getFileName = new \ReflectionMethod($fileCache, 'getFilename');
 

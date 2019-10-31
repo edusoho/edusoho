@@ -2,7 +2,6 @@
 
 namespace Doctrine\Tests\Common\Cache;
 
-use Doctrine\Common\Cache\FileCache;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -74,14 +73,10 @@ abstract class BaseFileCacheTest extends CacheTest
         return FileCacheTest::getBasePathForWindowsPathLengthTests($pathLength);
     }
 
-    /**
-     * @param int    $length
-     * @param string $basePath
-     *
-     * @return array
-     */
-    private static function getKeyAndPathFittingLength($length, $basePath)
+    private static function getKeyAndPathFittingLength($length)
     {
+        $basePath = self::getBasePathForWindowsPathLengthTests($length);
+
         $baseDirLength = strlen($basePath);
         $extensionLength = strlen('.doctrine.cache');
         $directoryLength = strlen(DIRECTORY_SEPARATOR . 'aa' . DIRECTORY_SEPARATOR);
@@ -116,39 +111,34 @@ abstract class BaseFileCacheTest extends CacheTest
 
     /**
      * @dataProvider getPathLengthsToTest
-     *
-     * @param int  $length
-     * @param bool $pathShouldBeHashed
      */
     public function testWindowsPathLengthLimitIsCorrectlyHandled($length, $pathShouldBeHashed)
     {
         $this->directory = self::getBasePathForWindowsPathLengthTests($length);
 
-        list($key, $keyPath, $hashedKeyPath) = self::getKeyAndPathFittingLength($length, $this->directory);
+        list($key, $keyPath, $hashedKeyPath) = self::getKeyAndPathFittingLength($length);
 
-        $this->assertEquals($length, strlen($keyPath), 'Unhashed path should be of correct length.');
+        $this->assertEquals($length, strlen($keyPath), "Unhashed path should be of correct length.");
 
         $cacheClass = get_class($this->_getCacheDriver());
-        /* @var $cache \Doctrine\Common\Cache\FileCache */
         $cache = new $cacheClass($this->directory, '.doctrine.cache');
 
         // Trick it into thinking this is windows.
-        $reflClass = new \ReflectionClass(FileCache::class);
+        $reflClass = new \ReflectionClass('\Doctrine\Common\Cache\FileCache');
         $reflProp = $reflClass->getProperty('isRunningOnWindows');
         $reflProp->setAccessible(true);
         $reflProp->setValue($cache, true);
         $reflProp->setAccessible(false);
 
-        $value = uniqid('value', true);
-
-        $cache->save($key, $value);
-        $this->assertEquals($value, $cache->fetch($key));
+        $cache->save($key, $length);
+        $fetched = $cache->fetch($key);
+        $this->assertEquals($length, $fetched);
 
         if ($pathShouldBeHashed) {
-            $this->assertFileExists($hashedKeyPath, 'Path generated for key should be hashed.');
+            $this->assertFileExists($hashedKeyPath, "Path generated for key should be hashed.");
             unlink($hashedKeyPath);
         } else {
-            $this->assertFileExists($keyPath, 'Path generated for key should not be hashed.');
+            $this->assertFileExists($keyPath, "Path generated for key should not be hashed.");
             unlink($keyPath);
         }
     }
