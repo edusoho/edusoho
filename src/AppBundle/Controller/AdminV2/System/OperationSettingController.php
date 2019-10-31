@@ -228,7 +228,7 @@ class OperationSettingController extends BaseController
     public function mailerAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('admin/system/mailer.html.twig', array());
+            return $this->render('admin-v2/system/operation/mailer-set.html.twig', array());
         }
 
         $mailer = $this->getSettingService()->get('mailer', array());
