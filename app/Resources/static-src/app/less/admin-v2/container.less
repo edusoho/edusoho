@@ -180,7 +180,7 @@
 .admin-function {
   display: table;
   margin: auto;
-  padding: 16px 24px;
+  padding: 16px;
   .es-transition;
   &:hover,
   &:focus {
@@ -202,16 +202,23 @@
     }
   }
   .admin-function__name {
-    margin-left: 16px;
+    width: 100px;
+    padding-left: 16px;
     font-size: 14px;
     line-height: 48px;
+    text-align: left;
     color: @cdv2-dark-minor;
   }
 }
 
 
 .admin-function-choose {
-  padding: 16px 24px;
+  margin-left: 4px;
+  padding: 16px;
+  text-align: left;
+  @media (min-width: 1400px) {
+    margin-left: 24px;
+  }
 }
 
 .admin-function-btn {
@@ -399,16 +406,11 @@
   text-align: center;
   border-radius: 4px;
   .admin-update__cell {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     &:last-child {
       margin-bottom: 0;
     }
-    .cdv2-text-md;
-    @media (min-width: 1400px) {
-      &:first-child {
-        .cdv2-text-lg;
-      }
-    }
+    .cdv2-text-lg;
   }
   .admin-update__label {
     display: inline-block;
