@@ -188,7 +188,7 @@ admin_v2:
                                 admin_v2_classroom_recommend:
                                     name: admin_v2.course.classroom.recommend_tab
                                     router_name: admin_v2_classroom_recommend_list
-                        #直播管理
+                        # 直播管理
                         admin_v2_live_course:
                             name: admin.course.live_menu
                             children:
@@ -217,7 +217,7 @@ admin_v2:
                                     router_params:
                                         status: end
                                     disable: true
-                        #公开课管理模块
+                        # 公开课管理模块
                         admin_v2_open_course_manage:
                             name: admin_v2.course.open_course_menu
                             router_name: admin_v2_open_course
@@ -240,7 +240,7 @@ admin_v2:
                                 admin_v2_open_course_analysis:
                                     name: admin_v2.course.open_course.analysis_tab
                                     disable: true
-                        #分类标签
+                        # 分类标签
                         admin_v2_course_category_tag:
                             name: admin_v2.course.category_tag_menu
                             children:
@@ -345,10 +345,12 @@ admin_v2:
                                     name: admin_v2.course.review.classroom_review_tab
                                     router_name: admin_v2_classroom_review
                                     disable: true
+                # 资源管理
                 admin_v2_cloud_resource_group:
                     name: admin_v2.cloud_resource.basic_group
                     is_group: true
                     children:
+                        # 云资源
                         admin_v2_cloud_resource:
                             name: admin_v2.cloud_resource.basic_tab
                             children:
@@ -372,7 +374,7 @@ admin_v2:
                     name: admin_v2.marketing.basic_group
                     is_group: true
                     children:
-                        #邀请管理
+                        # 邀请管理
                         admin_v2_operation_invite:
                             name: admin_v2.operation.invite_menu
                             children:
@@ -434,11 +436,12 @@ admin_v2:
         admin_v2_operating:
             name: admin_v2.nav.operating
             children:
-                #网校装修(group)
+                # 网校装修(group)
                 admin_v2_site_decoration_group:
                     name: admin_v2.operation.site_decoration.basic_group
                     is_group: true
                     children:
+                        # 微网校装修
                         admin_v2_h5_set:
                             name: admin_v2.operation.mobile.h5
                             children:
@@ -446,6 +449,7 @@ admin_v2:
                                     name: admin_v2.operation.wap_tab
                                     disable: true
                                     router_name: admin_v2_wap_set
+                        # 小程序装修
                         admin_v2_wechat_app_manage:
                             name: admin_v2.wechat_app.menu
                             router_name: admin_v2_wechat_app
@@ -454,6 +458,7 @@ admin_v2:
                                     name: admin_v2.wechat_app.menu
                                     router_name: admin_v2_wechat_app
                                     disable: true
+                        # App装修
                         admin_v2_setting_mobile:
                             name: admin_v2.operation.mobile_menu
                             children:
@@ -473,6 +478,7 @@ admin_v2:
                                             name: admin_v2.operation.mobile.discovery_column_tab.create_btn
                                             group: topBtn
                                             mode: modal
+                        # web装修
                         admin_v2_block_manage:
                             name: admin_v2.operation.block_menu
                             children:
@@ -497,6 +503,7 @@ admin_v2:
                                 admin_v2_setting_theme:
                                     name: admin_v2.operation.site.theme_tab
                                     disable: true
+                        # 站点配置
                         admin_v2_site_setting:
                             name: admin_v2.operation.site_menu
                             router_name: admin_v2_navigation
@@ -538,6 +545,20 @@ admin_v2:
                     name: admin_v2.operation.content_operation.basic_group
                     is_group: true
                     children:
+                        # 网站公告管理
+                        admin_v2_operation_announcement:
+                            name: admin_v2.operation.announcement_menu
+                            group: 2
+                            children:
+                                admin_v2_operation_announcement_manage:
+                                    name: admin_v2.operation.announcement.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_announcement
+                                    children:
+                                        admin_v2_announcement_create:
+                                            name: admin_v2.operation.announcement.basic_tab.create_btn
+                                            mode: modal
+                                            group: topBtn
                         admin_v2_operation_article:
                             name: admin_v2.operation.article_menu
                             children:
@@ -760,10 +781,12 @@ admin_v2:
         admin_v2_trade:
             name: admin_v2.nav.trade
             children:
+                # 订单管理
                 admin_v2_basic_order_manage_group:
                     name: admin_v2.trade.order_manage.basic_group
                     is_group: true
                     children:
+                        # 商品订单
                         admin_v2_goods_order:
                             name: admin_v2.trade.goods_order.menu
                             router_name: admin_v2_order_manage
@@ -771,16 +794,19 @@ admin_v2:
                                 admin_v2_goods_order_list:
                                     name: admin_v2.trade.goods_order.basic_tab
                                     router_name: admin_v2_order_manage
+                        # 退款订单
                         admin_v2_order_refunds:
                             name: admin_v2.trade.order_refunds_menu
                             children:
                                 admin_v2_order_refunds_manage:
                                     name: admin_v2.trade.order_refunds.basic_tab
                                     router_name: admin_v2_order_refunds
+                # 资产管理
                 admin_v2_basic_asset_manage_group:
                     name: admin_v2.trade.asset_manage.basic_group
                     is_group: true
                     children:
+                        # 网校账单
                         admin_v2_bills:
                             name: admin_v2.trade.bills_menu
                             children:
@@ -796,6 +822,7 @@ admin_v2:
                                     router_params:
                                         type: coin
                                     disable: true
+                        # 虚拟币管理
                         admin_v2_user_coin:
                             name: admin_v2.trade.coin_menu
                             children:
@@ -807,10 +834,12 @@ admin_v2:
         admin_v2_statistics:
             name: admin_v2.nav.statistics
             children:
+                # 数据分析
                 admin_v2_data_statictics_analysis_basic_group:
                     name: admin_v2.data_statictics.analysis.basic_group
                     is_group: true
                     children:
+                        # 数据概览
                         admin_v2_data_statistics_overview:
                             name: admin_v2.data_statistics.overview.menu
                             children:
@@ -818,6 +847,7 @@ admin_v2:
                                     disable: true
                                     name: admin_v2.data_statistics.overview.basic_tab
                                     router_name: admin_v2_data_statistics_overview
+                        # 数据统计
                         admin_v2_statistics_data_statistics_menu:
                             name: admin_v2.data_statistics.statistics.menu
                             children:
@@ -832,10 +862,12 @@ admin_v2:
         admin_v2_system:
             name: admin_v2.nav.system
             children:
+                # 通用管理
                 admin_v2_general_group:
                     name: admin_v2.general.basic_group
                     is_group: true
                     children:
+                        # 网校信息
                         admin_v2_school_information_setting:
                             name: admin_v2.system.site_menu
                             router_name: admin_v2_school_information
@@ -844,6 +876,7 @@ admin_v2:
                                     name: admin_v2.system.site.basic_tab
                                     router_name: admin_v2_school_information
                                     disable: true
+                        # 课程设置
                         admin_v2_setting_course_setting:
                             name: admin_v2.system.course_menu
                             children:
@@ -870,6 +903,7 @@ admin_v2:
                                     name: admin.system.course.open_course_tab
                                     disable: true
                                     parent: admin_v2_setting_course_setting
+                        # 运营设置
                         admin_v2_setting_operation:
                             name: admin_v2.system.operation_menu
                             children:
@@ -889,10 +923,12 @@ admin_v2:
                                     name: admin_v2.system.operation.message_open_tab
                                     disable: true
                                     parent: admin_v2_message_open_set
+                # 交易设置
                 admin_v2_transaction_group:
                     name: admin_v2.transaction.basic_group
                     is_group: true
                     children:
+                        # 资产设置
                         admin_v2_asset_setting:
                             name: admin_v2.system.asset_menu
                             children:
@@ -907,10 +943,12 @@ admin_v2:
                                 admin_v2_setting_refund:
                                     name: admin_v2.system.asset.refund_tab
                                     disable: true
+                # 系统管理
                 admin_v2_system_group:
                     name: admin_v2.system.basic_group
                     is_group: true
                     children:
+                        # 系统优化
                         admin_v2_optimize:
                             name: admin_v2.system.optimize_menu
                             children:
@@ -918,6 +956,7 @@ admin_v2:
                                     name: admin_v2.system.optimize.basic_tab
                                     disable: true
                                     router_name: admin_v2_optimize
+<<<<<<< HEAD
                         admin_v2_report_status:
                             name: admin_v2.system.report_status_menu
                             children:
@@ -925,6 +964,9 @@ admin_v2:
                                     name: admin_v2.system.report_status.basic_tab
                                     disable: true
                                     router_name: admin_v2_report_status
+=======
+                        # 系统日志
+>>>>>>> fdb799e9a466927a29fd1f06a0eebdde27f460bc
                         admin_v2_logs:
                             name: admin_v2.system.logs_menu
                             children:
@@ -935,6 +977,7 @@ admin_v2:
                                 admin_v2_logs_prod:
                                     name: admin_v2.system.logs.logs_prod_tab
                                     disable: true
+                        # 安全设置
                         admin_v2_security:
                             name: admin_v2.system.security_menu
                             children:

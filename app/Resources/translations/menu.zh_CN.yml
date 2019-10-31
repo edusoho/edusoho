@@ -582,6 +582,12 @@ admin_v2.operation.site.es_bar_tab: '侧边栏'
 admin_v2.operation.content.basic_tab: 自定义页面
 admin_v2.operation.site.share_tab: 分享
 admin_v2.operation.site.friendlyLink_navigation_tab: '友情链接'
+
+#运营-内容运营-网站公告管理
+admin_v2.operation.announcement_menu: 网站公告管理
+admin_v2.operation.announcement.basic_tab: 网站公告管理
+admin_v2.operation.announcement.basic_tab.create_btn: 新增公告
+
 # 运营-内容运营-资讯
 admin_v2.operation.content_operation.basic_group: 内容运营
 admin_v2.operation.article_menu: 资讯管理
