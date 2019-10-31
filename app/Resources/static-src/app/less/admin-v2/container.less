@@ -31,6 +31,10 @@
       .alert-link {
         color: #ff8836;
         font-weight: normal;
+        &:hover,
+        &:focus {
+          text-decoration: none;
+        }
       }
     }
     &:last-child {
@@ -49,6 +53,13 @@
   @media (min-width: 1400px) {
     padding-left: 24px;
     padding-right: 24px;
+  }
+  a {
+    text-decoration: none;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
   }
   background-color: @cdv2-white;
   .admin-v2-section__header {
@@ -72,6 +83,16 @@
     &:focus {
       text-decoration: none;
       cursor: pointer;
+    }
+  }
+  &.admin-v2-section--step {
+    padding-bottom: 14px;
+    .admin-v2-section__header {
+      margin-bottom: 6px;
+    }
+    .admin-v2-section__body {
+      margin-top: 24px;
+      margin-bottom: 18px;
     }
   }
 }
@@ -180,6 +201,7 @@
 .admin-function {
   display: table;
   margin: auto;
+  margin-bottom: 16px;
   padding: 16px;
   .es-transition;
   &:hover,
@@ -245,6 +267,7 @@
 }
 
 .admin-application {
+  display: block;
   padding-top: 32px;
   padding-bottom: 26px;
   background-color: @cdv2-bg;
@@ -434,6 +457,10 @@
     color: @brand-primary;
     font-size: 16px;
     line-height: 20px;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
   }
 }
 
