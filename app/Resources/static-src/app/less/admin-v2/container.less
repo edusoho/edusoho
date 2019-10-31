@@ -326,6 +326,10 @@
   .admin-website__text {
     display: table-cell;
     vertical-align: top;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
   }
 
   .admin-website__name {
@@ -500,6 +504,10 @@
   background-color: @cdv2-white;
   padding: 16px;
   padding-bottom: 28px;
+  @media (min-width: 1400px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
   .admin-sidebar-section__header {
     .cdv2-text-xlg;
     .cdv2-text-medium;
@@ -511,13 +519,21 @@
     font-size: 14px;
     line-height: 28px;
     color: @brand-primary;
-    &:hover {
+    &:hover,
+    &:focus {
       cursor: pointer;
+      text-decoration: none;
     }
   }
 }
 
 .admin-notice {
+  display: block;
+  &:hover,
+  &:focus {
+    cursor: pointer;
+    text-decoration: none;
+  }
   img {
     height: auto;
     margin-top: 8px;
@@ -527,6 +543,12 @@
   .admin-notice__text {
     .cdv2-text-md;
     color: @cdv2-dark-assist;
+    .es-transition;
+    &:hover,
+    &:focus {
+      .es-transition;
+      color: @brand-primary;
+    }
   }
 }
 
