@@ -317,7 +317,7 @@ admin_open_course_setting: admin_v2_open_course_setting #公开课
 
 # 系统-通用管理-运营设置
 admin_setting_operation: admin_v2_setting_operation
-
+admin_setting_mailer: admin_v2_setting_mailer #邮箱服务器设置
 admin_article_setting: admin_v2_article_set # 资讯
 admin_group_set: admin_v2_group_set # 小组
 admin_invite_set: admin_v2_invite_set # 邀请注册设置
