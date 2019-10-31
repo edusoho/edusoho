@@ -20,7 +20,7 @@
         target="_blank"
       {% endif %}
     >
-      {{ m.name|trans({}, 'menu') }}
+    <img src="{{ asset('static-dist/app/css/img/admin-v2/app.png') }}" srcset="{{ asset('static-dist/app/img/admin-v2/app.png') }} 1x, {{ asset('static-dist/app/img/admin-v2/app@2x.png') }} 2x">{{ m.name|trans({}, 'menu') }}
     </a>
   </li>
   {% endfor %}

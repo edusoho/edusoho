@@ -102,6 +102,7 @@
 }
 
 .task-step {
+  position: relative;
   padding: 24px 4px 16px 4px;
   @media (min-width: 1400px) {
     padding-left: 14px;
@@ -114,6 +115,15 @@
     .cdv2-text-md;
     .cdv2-text-medium;
     color: @cdv2-dark-minor;
+  }
+  .task-step__tag {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 12px;
+    width: 33px;
+    height: 30px;
+    background: -webkit-image-set(url("@{img-src}admin-v2/selected.png") 1x, url("@{img-src}admin-v2/selected@2x.png") 2x) no-repeat;
   }
   .task-step__btn {
     display: block;
@@ -512,15 +522,27 @@
     line-height: 20px;
     vertical-align: bottom;
   }
+  .es-transition;
   &:hover,
   &:focus {
-    color: @brand-primary;
+    .es-transition;
+    color: @cdv2-white;
+    background-color: @brand-primary;
     text-decoration: none;
   }
   &.admin-link__btn--disabled {
+    position: relative;
     background-color: rgba(240,240,240,1);
     color: @cdv2-light-minor;
     cursor: not-allowed;
+    .closed-tag {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 57px;
+      height: 44px;
+      background: -webkit-image-set(url("@{img-src}admin-v2/closed.png") 1x, url("@{img-src}admin-v2/closed@2x.png") 2x) no-repeat;
+    }
   }
 }
 
