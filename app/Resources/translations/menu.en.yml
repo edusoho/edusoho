@@ -774,6 +774,9 @@ admin_v2.system.asset.payment_tab: Payment
 admin_v2.system.asset.coin_tab: Virtual Coin
 admin_v2.system.asset.refund_tab: Refund
 
+#系统-通用设置-微信授权信息
+admin_v2.system.wechat_auth_menu: WeChat Authorization Information
+
 #系统-通用管理-课程设置
 admin_v2.system.course_menu: Course Setting
 admin_v2.system.course.basic_tab: Course

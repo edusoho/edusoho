@@ -298,6 +298,10 @@ admin_system: admin_v2_system
 # 系统-通用管理-网校信息
 admin_setting_message: admin_v2_school_information
 
+#系统-通用设置-微信授权信息
+admin_setting_wechat: admin_v2_setting_wechat #微信授权信息
+admin_setting_wechat_auth: admin_v2_setting_wechat_auth  #微信授权信息
+
 #系统-通用管理-课程设置
 admin_setting_course_setting: admin_v2_setting_course_setting #课程设置
 admin_setting_course: admin_v2_setting_course #课程
