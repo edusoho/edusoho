@@ -2069,3 +2069,35 @@ admin_v2_app_package_update_check_newest:
     path: /app/package_update/check/newest/code/{code}
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkNewest }
     methods: [POST]
+
+# 系统-通用管理-组织机构管理
+#org
+admin_v2_org:
+    path: /org
+    defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:index }
+
+admin_v2_org_create:
+    path: /org/create
+    defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:create }
+
+admin_v2_org_update:
+    path: /org/{id}/update
+    defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:update }
+
+admin_v2_org_delete:
+    path: /org/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:delete }
+    methods: [POST]
+
+admin_v2_org_check_code:
+    path: /org/checkcode
+    defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:checkCode }
+
+admin_v2_org_check_name:
+    path: /org/checkname
+    defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:checkName }
+
+admin_v2_org_sort:
+    path:  /org/sort
+    defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:sort }
+    methods: [POST]

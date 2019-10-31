@@ -974,6 +974,15 @@ admin_v2:
                                     name: admin_v2.system.operation.message_open_tab
                                     disable: true
                                     parent: admin_v2_message_open_set
+                        admin_v2_org_manage:
+                            name: admin_v2.system.org_menu
+                            parent: admin_v2_general_group
+                            disable: true
+                            visible: false
+                            children:
+                                admin_v2_org:
+                                    name: admin_v2.system.org.basic_tab
+                                    disable: true
                 # 交易设置
                 admin_v2_transaction_group:
                     name: admin_v2.transaction.basic_group
