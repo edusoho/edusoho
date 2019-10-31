@@ -689,6 +689,9 @@ admin_v2.trade.bills.coin_records_tab: Coin Bill
 admin_v2.trade.coin_menu: Coin Manage
 admin_v2.trade.coin.basic_tab: Coin Manage
 
+# 交易-发票管理
+admin_v2.trade.invoice_manage.basic_group: Invoice Manage
+
 # 数据-数据统计
 admin_v2.data_statictics.analysis.basic_group: Data Analysis
 admin_v2.data_statistics.statistics.menu: Data Statistics

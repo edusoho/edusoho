@@ -694,6 +694,9 @@ admin_v2.trade.bills.coin_records_tab: 虚拟币账单
 admin_v2.trade.coin_menu: 虚拟币管理
 admin_v2.trade.coin.basic_tab: 虚拟币管理
 
+# 交易-发票管理
+admin_v2.trade.invoice_manage.basic_group: 发票管理
+
 # 应用中心-营销云-营销应用
 admin_v2.basic_app_center_group: 营销云
 admin_v2.cloud.app_center_menu: 营销应用
