@@ -538,6 +538,17 @@ admin_v2:
                     name: admin_v2.operation.content_operation.basic_group
                     is_group: true
                     children:
+                        admin_v2_operation_notification:
+                            name: admin_V2.operation.notification_menu
+                            group: 2
+                            children:
+                                admin_v2_batch_notification:
+                                    name: admin_v2.operation.notification.basic_tab
+                                    disable: true
+                                    children:
+                                        admin_v2_batch_notification_create:
+                                            name: admin_v2.operation.notification.basic_tab.create_btn
+                                            group: topBtn
                         admin_v2_operation_article:
                             name: admin_v2.operation.article_menu
                             children:
