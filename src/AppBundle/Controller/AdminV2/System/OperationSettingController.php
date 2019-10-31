@@ -225,6 +225,85 @@ class OperationSettingController extends BaseController
         return $inviteSetting;
     }
 
+    public function mailerAction(Request $request)
+    {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('admin/system/mailer.html.twig', array());
+        }
+
+        $mailer = $this->getSettingService()->get('mailer', array());
+        $default = array(
+            'enabled' => 0,
+            'host' => '',
+            'port' => '',
+            'username' => '',
+            'password' => '',
+            'from' => '',
+            'name' => '',
+        );
+        $mailer = array_merge($default, $mailer);
+        if ($request->isMethod('POST')) {
+            $mailer = $request->request->all();
+            $this->getSettingService()->set('mailer', $mailer);
+            $mailerWithoutPassword = $mailer;
+            $mailerWithoutPassword['password'] = '******';
+            $this->setFlashMessage('success', 'site.save.success');
+        }
+
+        $status = $this->checkMailerStatus();
+
+        $cloudMailName = '';
+
+        return $this->render('admin-v2/system/operation/mailer-set.html.twig', array(
+            'mailer' => $mailer,
+            'status' => $status,
+            'cloudMailName' => $cloudMailName,
+        ));
+    }
+
+    public function mailerTestAction(Request $request)
+    {
+        $user = $this->getUser();
+        $mailOptions = array(
+            'to' => $user['email'],
+            'template' => 'email_system_self_test',
+        );
+        $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+        $mail = $mailFactory($mailOptions);
+
+        try {
+            $mail->send();
+
+            return $this->createJsonResponse(array(
+                'status' => true,
+            ));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array(
+                'status' => false,
+                'message' => $e->getMessage(),
+            ));
+        }
+    }
+
+    /*
+     * 当前云邮件字段为cloud_email_crm
+     */
+    protected function checkMailerStatus()
+    {
+        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
+        $mailer = $this->getSettingService()->get('mailer', array());
+
+        if (!empty($cloudEmail) && 'enable' === $cloudEmail['status']) {
+            return 'cloud_email_crm';
+        }
+
+        if (!empty($mailer) && 1 == $mailer['enabled']) {
+            return 'email';
+        }
+
+        return '';
+    }
+
     /**
      * @return SettingService
      */

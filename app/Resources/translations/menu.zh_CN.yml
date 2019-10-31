@@ -764,6 +764,7 @@ admin_v2.system.site.basic_tab: 学校信息
 
 # 系统-通用管理-运营设置
 admin_v2.system.operation_menu: 运营设置
+admin_v2.system.mailer_setting_tab: 邮件服务器设置
 admin_v2.system.operation.article_tab: 资讯
 admin_v2.system.operation.group_tab: 小组
 admin_v2.system.operation.invite_tab: 邀请注册设置
