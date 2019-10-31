@@ -120,49 +120,11 @@ admin_my_cloud:
     defaults: { _controller: AppBundle:Admin/EduCloud:myCloud }
     permissions: [admin_my_cloud_overview]
 
-admin_oldUpgradeCheck:
-    path:  /upgrade/check
-    defaults: { _controller: AppBundle:Admin/App:oldUpgradeCheck }
-    permissions: [admin_app_upgrades]
-
 admin_category_upload:
     path: /category/uploadfile
     defaults: { _controller: AppBundle:Admin/Category:uploadFile }
     methods: [POST]
     permissions: [admin_course_category_manage]
-
-admin_system_status:
-    path:  /system/status
-    defaults: { _controller: AppBundle:Admin/Default:systemStatus }
-    permissions: [admin]
-
-admin_official_messages:
-    path:  /official/messages
-    defaults: { _controller: AppBundle:Admin/Default:officialMessages }
-    permissions: [admin]
-
-admin_coin_records:
-    path:     /coin/records
-    defaults: { _controller: AppBundle:Admin/Coin:records }
-
-admin_order_manage_export_csv:
-    path: /order/manage/export
-    defaults: { _controller: AppBundle:Admin/Order:exportCsv }
-
-admin_common_add:
-    path:  /common/add
-    defaults: { _controller: AppBundle:Admin/CommonAdmin:addCommonAdmin }
-    permissions: [admin]
-
-admin_common_admin:
-    path:  /common/admin
-    defaults: { _controller: AppBundle:Admin/CommonAdmin:commonAdmin }
-    permissions: [admin]
-
-admin_common_remove:
-    path:  /common/remove/{id}
-    defaults: { _controller: AppBundle:Admin/CommonAdmin:commonRemove }
-    permissions: [admin]
 
 # 添加云直播
 admin_cloud_upload_live_logo:
