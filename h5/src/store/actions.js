@@ -148,3 +148,12 @@ export const setWeChatSwitch = ({ commit }, isOn) =>
       console.log(error.message);
     });
   });
+
+
+// 全局优惠券显示开关
+export const setCouponSwitch = ({ commit }) => Api.getCouponSetting({})
+  .then(res => {
+    const couponSwitch = parseInt(res.enabled, 10);
+    commit(types.COUPON_SWITCH, couponSwitch);
+    return couponSwitch;
+  });

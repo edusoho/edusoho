@@ -7,9 +7,10 @@ import me from './me/index';
 import coupon from './coupon/index';
 import vip from './vip/index';
 import marketing from './marketing/index';
+import studyCard from './study-card/index';
 import distribution from './distribution/index';
 
 const config = [...classroom, ...course, ...lesson, ...me, ...order,
-  ...setting, ...coupon, ...vip, ...marketing, ...distribution];
+  ...setting, ...coupon, ...vip, ...marketing, ...distribution, ...studyCard];
 
 export default config;

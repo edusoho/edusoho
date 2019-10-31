@@ -2,7 +2,7 @@ export default [
   {
     // 获取优惠券信息
     name: 'getCouponInfo',
-    url: '/plugins/coupon/coupon_batch/{batchToken}',
+    url: '/coupon_batch/{token}',
     method: 'get'
   },
   {
@@ -19,7 +19,7 @@ export default [
   }, {
     // 根据渠道查询优惠券
     name: 'searchCoupon',
-    url: '/plugins/coupon/channel/h5Mps/coupon_batches?limit=100',
+    url: '/coupon_batch/h5Mps/channel?limit=100',
     disableLoading: true
   }, {
     // 判断兑换券券码引流插件是否安装
@@ -43,5 +43,10 @@ export default [
     method: 'POST',
     url: '/coupons/{code}/actions',
     disableLoading: true
+  }, {
+    // 获取优惠券功能开关
+    name: 'getCouponSetting',
+    url: '/setting/coupon',
+    method: 'GET'
   }
 ];

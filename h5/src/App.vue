@@ -2,7 +2,7 @@
   <div id="app">
     <van-nav-bar
       style="z-index: 1001;"
-      :class="[{hide: isQrcode}, 'nav-bar']"
+      :class="[{hide: isQrcode}, color === 'white' ? 'nav-bar--white' : 'nav-bar--default' ]"
       :title="title"
       :left-arrow="showLeftArrow"
       @click-left="backFn()"
@@ -20,7 +20,8 @@ export default {
     return {
       showLeftArrow: false,
       isQrcode: false,
-      isShare: false
+      isShare: false,
+      color: ''
     };
   },
   methods: {
@@ -42,7 +43,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(["title"]),
+    ...mapState({
+      title: 'title',
+      settingsName: state => state.settings.name,
+    }),
     routerKeepAlive() {
       return this.$route.meta.keepAlive;
     }
@@ -51,13 +55,19 @@ export default {
     $route: {
       handler(to, from) {
         //需要返回首页标记
-        this.isShare = from.fullPath === "/" ? true : false;
+        this.isShare = from.fullPath === "/";
 
         const redirect = to.query.redirect || "";
 
         this.isQrcode = !!to.query.loginToken;
         if(to.meta.hideTitle){
           this.isQrcode=true
+        }
+
+        if (to.meta.color === 'white') {
+          this.color = 'white';
+        } else {
+          this.color = '';
         }
 
         this.showLeftArrow = ![
@@ -67,7 +77,7 @@ export default {
           "prelogin",
           "preview",
           "coupon_receive",
-          "share_redirect"
+          "share_redirect",
         ].includes(to.name);
 
         if (redirect === "learning") {
@@ -76,6 +86,7 @@ export default {
         }
 
         this.setNavbarTitle(to.meta.title);
+        document.title = this.settingsName;
       }
     }
   }

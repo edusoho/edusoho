@@ -19,6 +19,7 @@ const state = {
   vipSettings: {},
   wechatSwitch: false,
   vipSwitch: false,
+  couponSwitch: 0,
   socialBinded: {
     wx: true
   }
