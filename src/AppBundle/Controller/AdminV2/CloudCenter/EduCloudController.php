@@ -790,6 +790,17 @@ class EduCloudController extends BaseController
 
     public function attachmentSettingAction(Request $request)
     {
+        //云端视频判断
+        try {
+            $api = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+            if (empty($info['accessCloud'])) {
+                return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', array('menu' => 'admin_v2_cloud_attachment_setting'));
+            }
+        } catch (\RuntimeException $e) {
+            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', array());
+        }
+
         $attachment = $this->getSettingService()->get('cloud_attachment', array());
         $defaultData = array('article' => 0, 'course' => 0, 'classroom' => 0, 'group' => 0, 'question' => 0);
         $default = array_merge($defaultData, array('enable' => 0, 'fileSize' => 500));
@@ -800,16 +811,6 @@ class EduCloudController extends BaseController
             $attachment = array_merge($default, $attachment);
             $this->getSettingService()->set('cloud_attachment', $attachment);
             $this->setFlashMessage('success', 'site.save.success');
-        }
-        //云端视频判断
-        try {
-            $api = CloudAPIFactory::create('root');
-            $info = $api->get('/me');
-            if (empty($info['accessKey'])) {
-                return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', array('menu' => 'admin_v2_cloud_attachment_setting'));
-            }
-        } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/video-error.html.twig', array());
         }
 
         return $this->render('admin-v2/cloud-center/edu-cloud/cloud-attachment.html.twig', array(
