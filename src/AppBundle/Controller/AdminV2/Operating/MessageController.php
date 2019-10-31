@@ -1,9 +1,14 @@
 <?php
 
-namespace AppBundle\Controller\Admin;
+namespace AppBundle\Controller\AdminV2\Operating;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\MessageService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
 class MessageController extends BaseController
@@ -30,7 +35,7 @@ class MessageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('admin/message/index.html.twig', array(
+        return $this->render('admin-v2/operating/message/index.html.twig', array(
             'users' => $users,
             'messages' => $messages,
             'paginator' => $paginator, ));
@@ -48,21 +53,33 @@ class MessageController extends BaseController
         }
     }
 
+    /**
+     * @return MessageService
+     */
     protected function getMessageService()
     {
         return $this->createService('User:MessageService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

@@ -58,7 +58,7 @@ class WeChatSettingController extends BaseController
             if (!$this->getWeChatService()->handleCloudNotification($wechatSetting, $newWeChatSetting, $loginConnect)) {
                 $this->setFlashMessage('danger', 'wechat.notification.switch_status_error');
 
-                return $this->render('admin-v2/system/wechat-setting.html.twig', array(
+                return $this->render('admin-v2/system/wechat-authorization/wechat-setting.html.twig', array(
                     'loginConnect' => $loginConnect,
                     'payment' => $payment,
                     'wechatSetting' => $wechatSetting,
@@ -76,7 +76,8 @@ class WeChatSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/wechat-setting.html.twig', array(
+
+        return $this->render('admin-v2/system/wechat-authorization/wechat-setting.html.twig', array(
             'loginConnect' => $loginConnect,
             'payment' => $payment,
             'wechatSetting' => $wechatSetting,

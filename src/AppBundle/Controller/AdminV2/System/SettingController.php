@@ -197,42 +197,6 @@ class SettingController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function mailerAction(Request $request)
-    {
-        if ($this->getWebExtension()->isTrial()) {
-            return $this->render('admin-v2/system/mailer.html.twig', array());
-        }
-
-        $mailer = $this->getSettingService()->get('mailer', array());
-        $default = array(
-            'enabled' => 0,
-            'host' => '',
-            'port' => '',
-            'username' => '',
-            'password' => '',
-            'from' => '',
-            'name' => '',
-        );
-        $mailer = array_merge($default, $mailer);
-        if ($request->isMethod('POST')) {
-            $mailer = $request->request->all();
-            $this->getSettingService()->set('mailer', $mailer);
-            $mailerWithoutPassword = $mailer;
-            $mailerWithoutPassword['password'] = '******';
-            $this->setFlashMessage('success', 'site.save.success');
-        }
-
-        $status = $this->checkMailerStatus();
-
-        $cloudMailName = '';
-
-        return $this->render('admin-v2/system/mailer.html.twig', array(
-            'mailer' => $mailer,
-            'status' => $status,
-            'cloudMailName' => $cloudMailName,
-        ));
-    }
-
     public function faviconRemoveAction(Request $request)
     {
         $setting = $this->getSettingService()->get('site');
