@@ -83,7 +83,7 @@ class DeveloperSettingController extends BaseController
 
             $this->getAppservice()->updateAppVersion($app['id'], $data['version']);
 
-            return $this->redirect($this->generateUrl('admin_app_upgrades'));
+            return $this->redirect($this->generateUrl('admin_v2_app_upgrades'));
         }
 
         $appCount = $this->getAppservice()->findAppCount();
