@@ -583,6 +583,11 @@ admin_v2.operation.content.basic_tab: 自定义页面
 admin_v2.operation.site.share_tab: 分享
 admin_v2.operation.site.friendlyLink_navigation_tab: '友情链接'
 
+# 运营-内容运营-全站站内通知
+admin_v2.operation.notification_menu: 全站站内通知
+admin_v2.operation.notification.basic_tab: 全站站内通知
+admin_v2.operation.notification.basic_tab.create_btn: 创建站内通知
+
 #运营-内容运营-网站公告管理
 admin_v2.operation.announcement_menu: 网站公告管理
 admin_v2.operation.announcement.basic_tab: 网站公告管理

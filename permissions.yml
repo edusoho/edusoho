@@ -119,6 +119,11 @@ admin_wap_set: admin_v2_wap_set #微网校装修
 admin_wechat_app_manage: admin_v2_wechat_app_manage #小程序装修
 admin_wechat_app: admin_v2_wechat_app_manage #小程序装修
 
+# 全站站内通知
+admin_operation_notification: admin_v2_operation_notification
+admin_batch_notification: admin_v2_batch_notification
+admin_batch_notification_create: admin_v2_batch_notification_create
+
 #运营-内容运营-网站公告管理
 admin_announcement: admin_v2_operation_announcement #网站公告管理
 admin_announcement_manage: admin_v2_operation_announcement_manage #网站公告管理
