@@ -1,0 +1,484 @@
+admin_course_search:
+    path: /course/search
+    defaults: { _controller: AppBundle:Admin/Course:search }
+    permissions: [admin_operation_mobile_select_manage]
+
+admin_live_get_max_online:
+    path: /livecourse/get/maxOnline
+    defaults: { _controller: AppBundle:Admin/LiveCourse:getMaxOnline }
+    permissions: [admin_live_course_manage]
+
+admin_operation_mobile_select:
+    path:  /operation/mobile/select
+    defaults: { _controller: AppBundle:Admin/Mobile:mobileSelect }
+    permissions: [admin_operation_mobile_select_manage]
+
+admin_operation_mobile_customization_upgrade:
+    path:  /operation/mobile/customization_upgrade
+    defaults: { _controller: AppBundle:Admin/Mobile:customizationUpgrade }
+    methods: [POST]
+
+admin_setting_mobile_iap_product:
+    path:  /setting/mobile_iap_product
+    defaults: { _controller: AppBundle:Admin/Setting:mobileIapProduct }
+
+admin_setting_mobile_iap_product_delete:
+    path:  /setting/mobile_iap_product_delete/{productId}
+    defaults: { _controller: AppBundle:Admin/Setting:mobileIapProductDelete }
+    methods: [POST]
+
+admin_setting_auth:
+    path:  /setting/auth
+    defaults: { _controller: AppBundle:Admin/UserSetting:auth }
+    permissions: [admin_user_auth]
+
+admin_setting_mailer:
+    path:  /setting/mailer
+    defaults: { _controller: AppBundle:Admin/Setting:mailer }
+
+admin_setting_mailer_test:
+    path:  /setting/mailer/test
+    defaults: { _controller: AppBundle:Admin/Setting:mailerTest }
+    methods: [GET]
+
+admin_setting_login_bind:
+    path:  /setting/login-connect
+    defaults: { _controller: AppBundle:Admin/UserSetting:loginConnect }
+
+admin_cloud_video_overview_renew:
+    path:  /cloud/video/renew/modal
+    defaults: { _controller: AppBundle:Admin/EduCloud:showRenewVideo }
+
+admin_setting_cloud_video_embed_watermark_upload:
+    path: /setting/cloud/video_embed_watermark/upload
+    defaults: { _controller: AppBundle:Admin/EduCloud:videoEmbedWatermarkUpload }
+    methods: [POST]
+    permissions: [admin_cloud_video_overview]
+
+admin_setting_default_avatar_crop:
+    path:  /setting/default/avatar/crop
+    defaults: { _controller: AppBundle:Admin/SystemDefaultSetting:defaultAvatarCrop }
+    permissions: [admin_setting_avatar]
+
+admin_setting_user_center:
+    path:  /setting/user-center
+    defaults: { _controller: AppBundle:Admin/UserSetting:userCenter }
+
+admin_setting_avatar:
+    path:  /setting/user-avatar
+    defaults: { _controller: AppBundle:Admin/UserSetting:userAvatar }
+    permissions: [admin_setting_avatar]
+
+admin_setting_user_fields:
+    path:  /setting/user-fields
+    defaults: { _controller: AppBundle:Admin/UserSetting:userFields }
+
+admin_setting_admin_sync:
+    path:  /setting/admin_sync
+    defaults: { _controller: AppBundle:Admin/Setting:adminSync }
+    permissions: [admin_setting_user_center]
+
+admin_setting_developer:
+    path:  /setting/developer
+    defaults: { _controller: AppBundle:Admin/DeveloperSetting:index }
+    permissions: [admin]
+
+admin_setting_developer_version:
+    path:  /setting/developer/version
+    defaults: { _controller: AppBundle:Admin/DeveloperSetting:version }
+
+admin_setting_developer_magic:
+    path:  /setting/developer/magic
+    defaults: { _controller: AppBundle:Admin/DeveloperSetting:magic }
+
+admin_setting_cdn:
+    path:  /setting/cdn
+    defaults: { _controller: AppBundle:Admin/CdnSetting:index }
+
+admin_mocked:
+    path: /mock
+    defaults: { _controller: AppBundle:Admin/Mock:index }
+
+admin_mocked_distributor_token:
+    path: /mock/distributor_token/{type}
+    defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
+
+admin_mocked_distributor_get_post_data:
+    path: /mock/distributor_get_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:getPostDistributorData }
+
+admin_mocked_distributor_post_data:
+    path: /mock/distributor_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:postDistributorData }
+    methods: [POST]
+
+admin_mocked_marketing_post_data:
+    path: /mock/marketing_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:postMarketingData }
+    methods: [POST]
+
+admin_mocked_post_data_version_3:
+    path: /mock/post_data_version_3
+    defaults: { _controller: AppBundle:Admin/Mock:postDataWithVersion3 }
+    methods: [POST]
+
+admin_mocked_download_token:
+    path: /mock/download_token
+    defaults: { _controller: AppBundle:Admin/Mock:downloadToken }
+    methods: [POST]
+
+admin_optimize_remove_backup:
+    path:  /setting/optimize/remove-backup
+    defaults: { _controller: AppBundle:Admin/Optimize:removeBackup }
+    methods: [POST]
+    permissions: [admin_optimize_settings]
+
+admin_optimize_remove_show_progressbar:
+    path:  /setting/optimize/show-progressbar
+    defaults: { _controller: AppBundle:Admin/Optimize:showProgressbar }
+    permissions: [admin_optimize_settings]
+
+admin_performance:
+    path:  /setting/performance
+    defaults: { _controller: AppBundle:Admin/Setting:performance }
+
+admin_cloud_detail:
+    path:  /cloud/detail
+    defaults: { _controller: AppBundle:Admin/Cloud:detail }
+    permissions: [admin_my_cloud_overview]
+
+admin_cloud_email_count:
+    path: /cloud/email/list
+    defaults: { _controller: AppBundle:Admin/Cloud:emailCount }
+
+admin_cloud_doc:
+    path:  /cloud/doc
+    defaults: { _controller: AppBundle:Admin/Cloud:doc }
+    permissions: [admin_my_cloud_overview]
+
+admin_my_cloud:
+    path:  /setting/my/cloud
+    defaults: { _controller: AppBundle:Admin/EduCloud:myCloud }
+    permissions: [admin_my_cloud_overview]
+
+admin_oldUpgradeCheck:
+    path:  /upgrade/check
+    defaults: { _controller: AppBundle:Admin/App:oldUpgradeCheck }
+    permissions: [admin_app_upgrades]
+
+admin_category_upload:
+    path: /category/uploadfile
+    defaults: { _controller: AppBundle:Admin/Category:uploadFile }
+    methods: [POST]
+    permissions: [admin_course_category_manage]
+
+admin_message:
+    path: /message
+    defaults: { _controller: AppBundle:Admin/Message:index }
+    permissions: [admin_message_manage]
+
+admin_message_delete_messages:
+    path: /delete/choosed/messages
+    defaults: {_controller: AppBundle:Admin/Message:deleteChoosedMessages }
+    methods: [POST]
+    permissions: [admin_message_manage]
+
+admin_operation_analysis_register:
+    path:  /operation/analysis/register/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:register }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_login:
+    path:  /operation/analysis/login/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:login }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_course_set:
+    path:  /operation/analysis/course_set/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:courseSet }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_task:
+    path:  /operation/analysis/task/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:task }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_lesson_join:
+    path:  /operation/analysis/lesson/join/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:joinLesson }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_course_paid:
+    path:  /operation/analysis/course/paid/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:paidCourse }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_task_completed:
+    path:  /operation/analysis/task/completed/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:completedTask }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_classroom_paid:
+    path:  /operation/analysis/classroom/paid/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:paidClassroom }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_video_viewed:
+    path:  /operation/analysis/video/viewed/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:videoViewed }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_video_cloud_viewed:
+    path:  /operation/analysis/video/cloud/viewed/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:cloudVideoViewed }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_video_local_viewed:
+    path:  /operation/analysis/video/local/viewed/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:localVideoViewed }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_video_net_viewed:
+    path:  /operation/analysis/video/net/viewed/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:netVideoViewed }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_income:
+    path:  /operation/analysis/income/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:income }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_course_set_income:
+    path:  /operation/analysis/course_set/income/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:courseSetIncome }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_classroom_income:
+    path:  /operation/analysis/classroom/income/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:classroomIncome }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_vip_income:
+    path:  /operation/analysis/vip/income/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:vipIncome }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_course_set_sum:
+    path:  /operation/analysis/course_set/sum/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:courseSetSum }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_course_sum:
+    path:  /operation/analysis/course/sum/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:courseSum }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_user_sum:
+    path:  /operation/analysis/user/sum/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:userSum }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_rount:
+    path:  /operation/analysis/route_analysis_data_type/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:routeAnalysisDataType }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_lesson_exit:
+    path:  /operation/analysis/lesson/exit/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:exitLesson }
+    permissions: [admin_operation_analysis]
+
+admin_user_fields_add:
+    path:  /user_fields/add
+    defaults: { _controller: AppBundle:Admin/UserSetting:addUserFields }
+    permissions: [admin_setting_user_fields]
+
+admin_user_fields_edit:
+    path:  /user_fields/edit/{id}
+    defaults: { _controller: AppBundle:Admin/UserSetting:editUserFields }
+    permissions: [admin_setting_user_fields]
+
+admin_user_fields_delete:
+    path:  /user_fields/delete/{id}
+    defaults: { _controller: AppBundle:Admin/UserSetting:deleteUserFields }
+    permissions: [admin_setting_user_fields]
+
+admin_system_status:
+    path:  /system/status
+    defaults: { _controller: AppBundle:Admin/Default:systemStatus }
+    permissions: [admin]
+
+admin_official_messages:
+    path:  /official/messages
+    defaults: { _controller: AppBundle:Admin/Default:officialMessages }
+    permissions: [admin]
+
+admin_coin_records:
+    path:     /coin/records
+    defaults: { _controller: AppBundle:Admin/Coin:records }
+
+admin_order_manage_export_csv:
+    path: /order/manage/export
+    defaults: { _controller: AppBundle:Admin/Order:exportCsv }
+
+admin_common_add:
+    path:  /common/add
+    defaults: { _controller: AppBundle:Admin/CommonAdmin:addCommonAdmin }
+    permissions: [admin]
+
+admin_common_admin:
+    path:  /common/admin
+    defaults: { _controller: AppBundle:Admin/CommonAdmin:commonAdmin }
+    permissions: [admin]
+
+admin_common_remove:
+    path:  /common/remove/{id}
+    defaults: { _controller: AppBundle:Admin/CommonAdmin:commonRemove }
+    permissions: [admin]
+
+# 添加云直播
+admin_cloud_upload_live_logo:
+    path: /cloud/edulive/upload
+    defaults: { _controller: AppBundle:Admin/EduCloud:uploadLiveLogo }
+    methods: [POST]
+
+admin_cloud_edulive_logo_crop:
+    path:  /cloud/edulive/{type}/logo/crop
+    defaults: { _controller: AppBundle:Admin/EduCloud:logoCrop }
+
+admin_classroom_chooser:
+    path: /classroom/chooser
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:chooser }
+
+#org
+admin_org:
+    path: /org
+    defaults: { _controller: AppBundle:Admin/OrgManage:index }
+
+admin_org_create:
+    path: /org/create
+    defaults: { _controller: AppBundle:Admin/OrgManage:create }
+
+admin_org_update:
+    path: /org/{id}/update
+    defaults: { _controller: AppBundle:Admin/OrgManage:update }
+
+admin_org_delete:
+    path: /org/{id}/delete
+    defaults: { _controller: AppBundle:Admin/OrgManage:delete }
+    methods: [POST]
+
+admin_org_checkcode:
+    path: /org/checkcode
+    defaults: { _controller: AppBundle:Admin/OrgManage:checkCode }
+
+admin_org_checkname:
+    path: /org/checkname
+    defaults: { _controller: AppBundle:Admin/OrgManage:checkName }
+
+admin_org_sort:
+    path:  /org/sort
+    defaults: { _controller: AppBundle:Admin/OrgManage:sort }
+    methods: [POST]
+
+### role
+admin_roles:
+    path:  /roles
+    defaults: { _controller: AppBundle:Admin/Role:index }
+    permissions: [admin_role_manage]
+
+admin_role_create:
+    path:  /role/create
+    defaults: { _controller: AppBundle:Admin/Role:create }
+
+admin_role_edit:
+    path:  /role/{id}/edit
+    defaults: { _controller: AppBundle:Admin/Role:edit }
+
+admin_role_delete:
+    path:  /role/{id}/delete
+    defaults: { _controller: AppBundle:Admin/Role:delete }
+    methods: [POST]
+
+admin_role_show:
+    path:  /role/{id}/show
+    defaults: { _controller: AppBundle:Admin/Role:show }
+    permissions: [admin_role_manage]
+
+admin_role_check_name:
+    path:  /role/checkName
+    defaults: { _controller: AppBundle:Admin/Role:checkName }
+    permissions: [admin_role_manage]
+
+admin_role_check_code:
+    path:  /role/checkCode
+    defaults: { _controller: AppBundle:Admin/Role:checkCode }
+    permissions: [admin_role_manage]
+
+admin_jobs:
+    path: /jobs
+    defaults: { _controller: AppBundle:Admin/Job:index }
+
+admin_job_logs:
+    path: /job/logs
+    defaults: { _controller: AppBundle:Admin/Job:logs }
+
+admin_crontab:
+    path: /crontab
+    defaults: { _controller: AppBundle:Admin/Crontab:index }
+
+admin_crontab_resotre:
+    path: /crontab/restore
+    defaults: { _controller: AppBundle:Admin/Crontab:restore }
+    methods: [POST]
+
+admin_job_enabled:
+    path: /job/{id}/enabled
+    defaults: { _controller: AppBundle:Admin/Job:enabled }
+    methods: [POST]
+
+admin_job_disabled:
+    path: /job/{id}/disabled
+    defaults: { _controller: AppBundle:Admin/Job:disabled }
+    methods: [POST]
+
+admin_job_set_next_exec_time:
+  path: /job/{id}/set_next_exec_time
+  defaults: { _controller: AppBundle:Admin/Job:setNextExecTime }
+
+admin_job_fires:
+    path: /job/{id}/fires
+    defaults: { _controller: AppBundle:Admin/Job:fires }
+
+admin_job_fired_logs:
+    path: /job/{id}/fire/{jobFiredId}/logs
+    defaults: { _controller: AppBundle:Admin/Job:fireLogs }
+
+admin_xapi_setting:
+    path: /xapi/setting
+    defaults: { _controller: AppBundle:Admin/Xapi:setting }
+
+admin_xapi_statement_list:
+    path: /xapi/statement_list
+    defaults: { _controller: AppBundle:Admin/Xapi:index }
+
+admin_xapi_statement_detail:
+    path: /xapi/statement/{id}/detail
+    defaults: { _controller: AppBundle:Admin/Xapi:detail }
+
+admin_cloud_ad:
+    path: /cloud/ad
+    defaults: { _controller: AppBundle:Admin/EduCloud:getAd }
+
+admin_queue_failed_logs:
+    path: /queue/failed_logs
+    defaults: { _controller: AppBundle:Admin/Queue:failedJobs }
+
+admin_queue_failed_log_modal:
+    path: /queue/failed_log/{id}
+    defaults: { _controller: AppBundle:Admin/Queue:failedJob }
+
+admin_setting_wechat_pre_auth_url:
+    path: /wechat/pre_auth_url/{platformType}
+    defaults: { _controller: AppBundle:Admin/WeChatSetting:preAuthUrl }
+
