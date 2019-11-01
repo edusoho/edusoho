@@ -241,13 +241,13 @@
         <div class="admin-info-section">
           <div class="admin-website">
             <a href="#"><img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg"></a>
-            <a class="admin-website__text" href="#">
-              {% set webSiteName = '哎呀音乐哎呀音世哎呀音乐是哎呀音乐哎呀音世哎呀音乐是' %}
-              <div class="admin-website__name {% if webSiteName|length < 14 %} admin-website__name--short {% endif %}">{{ webSiteName|sub_text(25) }}</div>
+            <div class="admin-website__name"><a class="admin-website__text text-overflow" href="#">哎呀音乐哎呀音世哎呀音乐是哎呀音乐哎呀音世哎呀音乐是</a></div>
               {# 三种颜色的客户等级 #}
+            <div class="">
               <span class="rank-tag rank-tag--yellow rank-tag--green"><span class="rank-tag__icon"><i class="es-icon es-icon-star"></i></span><span class="rank-tag__text">商业授权</span></span>
               <span class="theme-tag">雅致简洁主题</span>
-            </a>
+            </div>
+
           </div>
           <div class="admin-update">
             <div class="admin-update__cell"><span class="admin-update__label">云服务：</span><span class="admin-update__number">3个</span ><a class="admin-update__link"href="#">未开启</a></div>
