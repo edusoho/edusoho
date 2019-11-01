@@ -355,3 +355,7 @@ admin_setting_post_num_rules: admin_v2_post_num_rules_setting #发帖限制
 # 系统-系统管理-系统自检
 admin_report_status: admin_v2_report_status
 admin_report_status_list: admin_v2_report_status_list
+
+# 系统-通用管理-组织机构管理
+admin_org_manage: admin_v2_org_manage
+admin_org: admin_v2_org
