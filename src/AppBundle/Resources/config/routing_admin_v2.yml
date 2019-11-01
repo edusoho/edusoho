@@ -2108,8 +2108,7 @@ admin_v2_app_package_update_check_newest:
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:checkNewest }
     methods: [POST]
 
-# 系统-通用管理-组织机构管理
-#org
+# 系统-通用管理-组织机构管理(隐藏路由)
 admin_v2_org:
     path: /org
     defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:index }
@@ -2157,6 +2156,46 @@ admin_v2_setting_developer_magic:
 admin_v2_setting_cdn:
     path:  /setting/cdn
     defaults: { _controller: AppBundle:AdminV2/Developer/CdnSetting:index }
+
+# 系统-通用管理-任务调度（隐藏路由）
+admin_v2_jobs:
+    path: /jobs
+    defaults: { _controller: AppBundle:AdminV2/Developer/Job:index }
+
+admin_v2_job_logs:
+    path: /job/logs
+    defaults: { _controller: AppBundle:AdminV2/Developer/Job:logs }
+
+admin_v2_crontab:
+    path: /crontab
+    defaults: { _controller: AppBundle:AdminV2/Developer/Job:crontab }
+
+admin_v2_crontab_resotre:
+    path: /crontab/restore
+    defaults: { _controller: AppBundle:AdminV2/Developer/Job:crontabRestore }
+    methods: [POST]
+
+admin_v2_job_fired_logs:
+    path: /job/{id}/fire/{jobFiredId}/logs
+    defaults: { _controller: AppBundle:AdminV2/Developer/Job:fireLogs }
+
+admin_v2_job_set_next_exec_time:
+    path: /job/{id}/set_next_exec_time
+    defaults: { _controller: AppBundle:AdminV2/Developer/Job:setNextExecTime }
+
+admin_v2_job_fires:
+    path: /job/{id}/fires
+    defaults: { _controller: AppBundle:AdminV2/Developer/Job:fires }
+
+admin_v2_job_enabled:
+    path: /job/{id}/enabled
+    defaults: { _controller: AppBundle:AdminV2/Developer/Job:enabled }
+    methods: [POST]
+
+admin_v2_job_disabled:
+    path: /job/{id}/disabled
+    defaults: { _controller: AppBundle:AdminV2/Developer/Job:disabled }
+    methods: [POST]
 
 admin_v2_xapi_setting:
     path: /xapi/setting
