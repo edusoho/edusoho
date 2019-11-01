@@ -330,27 +330,6 @@
                 </div>
               </div>
               {% endfor %}
-
-              {# <div class="col-md-3">
-                <a class="text-center admin-function" href="#">
-                  <div class="admin-function__icon"><i class="es-icon es-icon-entry-"></i></div>
-                  <div class="admin-function__name">网校装修</div>
-                </a>
-              </div>
-
-              <div class="col-md-3">
-                <a class="text-center admin-function" href="#">
-                  <div class="admin-function__icon"><i class="es-icon es-icon-entry-"></i></div>
-                  <div class="admin-function__name">班级管理</div>
-                </a>
-              </div>
-
-              <div class="col-md-3">
-                <a class="text-center admin-function" href="#">
-                  <div class="admin-function__icon"><i class="es-icon es-icon-lock"></i></div>
-                  <div class="admin-function__name">订单管理</div>
-                </a>
-              </div> #}
             </div>
           </div>
         {% endfor %}
@@ -358,7 +337,7 @@
 
       <div class="modal-footer clearfix">
         <div class="function-modal-tip">(最多设置7个快捷入口位）</div>
-        <button type="button" class="btn function-modal__link" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+        <a class="function-modal__link" data-dismiss="modal" href="javascript:;">{{ 'form.btn.cancel'|trans }}</a>
         <button type="button" class="btn function-modal__btn">{{ 'form.btn.save'|trans }}</button>
       </div>
     </div>
