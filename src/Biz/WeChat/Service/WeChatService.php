@@ -16,6 +16,10 @@ interface WeChatService
 
     const WECHAT_MAX_USER_COUNT = 10000;
 
+    public function getPreAuthUrl($platformType, $callbackUrl);
+
+    public function saveWeChatTemplateSetting($key, $fields);
+
     public function getWeChatUserByTypeAndUnionId($type, $unionId);
 
     public function getWeChatUserByTypeAndOpenId($type, $openId);
@@ -32,9 +36,19 @@ interface WeChatService
 
     public function handleCloudNotification($oldSetting, $newSetting, $loginConnect);
 
-    public function getTemplateId($key);
+    public function getTemplateId($key, $scene = '');
 
     public function createWeChatUser($fields);
 
     public function updateWeChatUser($id, $fields);
+
+    public function countWeChatUserJoinUser($conditions);
+
+    public function searchWeChatUsersJoinUser($conditions, $orderBys, $start, $limit);
+
+    public function findAllBindUserIds();
+
+    public function searchWeChatUsers($conditions, $orderBys, $start, $limit, $columns);
+
+    public function getWeChatSendChannel();
 }

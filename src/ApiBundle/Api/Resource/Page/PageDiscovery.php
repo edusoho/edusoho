@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Coupon\Service\CouponBatchService;
 use Biz\User\UserException;
 
 class PageDiscovery extends AbstractResource
@@ -40,9 +41,23 @@ class PageDiscovery extends AbstractResource
             if ('classroom_list' == $discoverySetting['type']) {
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
             }
+            if ('coupon' == $discoverySetting['type']) {
+                foreach ($discoverySetting['data']['items'] as &$couponBatch) {
+                    $couponBatch['target'] = $this->getCouponBatchService()->getTargetByBatchId($couponBatch['id']);
+                    $couponBatch['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($couponBatch['id']);
+                }
+            }
         }
 
         return $discoverySettings;
+    }
+
+    /**
+     * @return CouponBatchService
+     */
+    private function getCouponBatchService()
+    {
+        return $this->service('Coupon:CouponBatchService');
     }
 
     protected function getCourseService()

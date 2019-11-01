@@ -13,7 +13,7 @@ class CourseCoupon extends BaseCoupon
     {
         $course = $this->getCourseService()->getCourse($target['id']);
 
-        return $coupon['targetId'] === $course['courseSetId'];
+        return in_array($course['courseSetId'], $coupon['targetIds']);
     }
 
     /**

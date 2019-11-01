@@ -11,6 +11,6 @@ class SmsTypeTest extends BaseTestCase
     {
         $result = SmsType::IMPORT_USER;
 
-        $this->assertEquals(1665, $result);
+        $this->assertEquals(1746, $result);
     }
 }

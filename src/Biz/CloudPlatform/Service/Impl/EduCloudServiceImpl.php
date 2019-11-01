@@ -8,6 +8,7 @@ use Monolog\Handler\StreamHandler;
 use Biz\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Common\JsonLogger;
 
 class EduCloudServiceImpl extends BaseService implements EduCloudService
 {
@@ -26,9 +27,7 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
             $api = $this->createCloudApi();
             $overview = $api->get("/cloud/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
-            $logger = new Logger('CloudAPI');
-            $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG));
-            $logger->addInfo($e->getMessage());
+            $this->writeErrorLog($e);
 
             return $this->isVisible;
         }
@@ -51,6 +50,13 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
         }
 
         return false;
+    }
+
+    protected function writeErrorLog($e)
+    {
+        $stream = new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG);
+        $logger = new JsonLogger('CloudAPI', $stream);
+        $logger->addInfo($e->getMessage());
     }
 
     private function isReloadSmsAccountFromCloud($smsAccount)

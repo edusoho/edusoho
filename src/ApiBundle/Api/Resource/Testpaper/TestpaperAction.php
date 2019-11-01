@@ -14,7 +14,6 @@ use Biz\Task\TaskException;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Biz\User\UserException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TestpaperAction extends AbstractResource
 {

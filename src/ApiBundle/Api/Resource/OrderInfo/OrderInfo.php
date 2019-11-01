@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\MathToolkit;
 use Biz\Common\CommonException;
+use Biz\Coupon\Service\CouponBatchService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
@@ -78,7 +79,8 @@ class OrderInfo extends AbstractResource
             $orderInfo['availableCoupons'] = $product->availableDeducts['coupon'];
 
             foreach ($orderInfo['availableCoupons'] as &$availableCoupon) {
-                $availableCoupon['target'] = $this->getCouponService()->getCouponTargetByTargetTypeAndTargetId($availableCoupon['targetType'], $availableCoupon['targetId']);
+                $availableCoupon['target'] = $this->getCouponBatchService()->getTargetByBatchId($availableCoupon['id']);
+                $availableCoupon['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($availableCoupon['batchId']);
             }
         }
 
@@ -183,5 +185,13 @@ class OrderInfo extends AbstractResource
     private function getAccountService()
     {
         return $this->service('Pay:AccountService');
+    }
+
+    /**
+     * @return CouponBatchService
+     */
+    private function getCouponBatchService()
+    {
+        return $this->service('Coupon:CouponBatchService');
     }
 }

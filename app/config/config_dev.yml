@@ -23,6 +23,7 @@ monolog:
             type:  stream
             path:  "%kernel.logs_dir%/%kernel.environment%.log"
             level: warning
+            formatter: json_formatter
         firephp:
             type:  firephp
             level: info

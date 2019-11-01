@@ -157,6 +157,9 @@ class AbstractCloudAPI
 
         $headers[] = 'Auth-Token: '.$this->_makeAuthToken($url, 'GET' == $method ? array() : $params);
         $headers[] = 'API-REQUEST-ID: '.$requestId;
+        if (isset($_SERVER['TRACE_ID']) && $_SERVER['TRACE_ID']) {
+            $headers[] = 'TRACE-ID: '.$_SERVER['TRACE_ID'];
+        }
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url);

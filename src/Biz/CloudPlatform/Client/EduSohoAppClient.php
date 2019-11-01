@@ -167,6 +167,9 @@ class EduSohoAppClient implements AppClient
         $httpParams['accessKey'] = $this->accessKey;
         $httpParams['args'] = $args;
         $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
+        if (isset($_SERVER['TRACE_ID']) && $_SERVER['TRACE_ID']) {
+            $httpParams['TRACE-ID'] = $_SERVER['TRACE_ID'];
+        }
 
         return array($url, $httpParams);
     }

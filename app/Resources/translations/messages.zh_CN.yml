@@ -1,4 +1,4 @@
-materialBad credentials.: 用户名或密码错误
+Bad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
 site.alipay: 支付宝
@@ -30,6 +30,7 @@ site.data.score: 分
 site.data.count: 数
 site.data.num: 个
 site.data.empty: 暂无
+site.delete: 删除
 site.copy: 复制
 site.datagrid.empty: 暂无记录
 site.datagrid.filter.all_records: 全部记录
@@ -89,6 +90,7 @@ site.btn.share: 分享
 site.btn.all_select: 全选
 site.btn.previous_page: 上一页
 site.btn.next_page: 下一页
+site.btn.delete: 删除
 site.price: 价格
 site.org: 组织机构
 site.org.setup: 设置组织机构
@@ -537,7 +539,7 @@ order.id: 订单号
 order.token_id: 商户订单号
 order.sn: 流水号
 order.platform_sn: 支付流水号
-order.use_coupon_tip: 使用优惠劵
+order.use_coupon_tip: 使用优惠券
 order.price: 订单价格
 order.paid_time: 付款时间
 order.bank_code: 银行编号
@@ -1600,6 +1602,7 @@ course.question_manage.manage.score: 分值
 course.question_manage.manage.steom_tips: >
   点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对
 course.question_manage.manage.material: 材料
+course.question_manage.manage.belong_change_tips: 此题目若被引用，更改从属是可能会影响会课时的练习，请谨慎操作！
 course.question_manage.edit: 编辑题目
 course.question_manage.import.btn: 导入题目
 course.question_manage.import.modal_title: 题目导入
@@ -1750,8 +1753,8 @@ course.testpaper_manage.analysis_card.total_score: 总分：
 course.testpaper_manage.analysis_card.avg_score: 平均成绩：
 course.testpaper_manage.analysis_card.avg_score_tip: 平均成绩以首次提交的成绩计算
 
-course.course_files: 课程文件
-course.course_files.content_title: 课程文件
+course.course_files: 文件管理
+course.course_files.content_title: 文件管理
 course.course_files.create_btn: 添加课程文件
 course.course_files.name: 文件名
 course.course_files.type: 类型
@@ -1774,6 +1777,7 @@ course.course_files.reconvert_btn: 重新转换(调试模式)
 course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
 course.course_files.re_try_convert_video_to_audio: 重新转码
+course.files_manage.tips: 提示：课程文件需要<strong class="color-warning">添加到%taskName%</strong>中才能被学员看到。
 
 course.plan_overview: 数据概览
 
@@ -1846,7 +1850,7 @@ course.plan_task.post_num: %postNum%回答
 course.plan_task.course_teacher: 老师
 course.plan_task.go_back_btn: 返回
 course.plan_task.question_author: >
-  By 
+  By
 course.plan_task.question_answer: 回答
 course.plan_task.question_content: 内容
 course.plan_task.add_answer_btn: 添加答案
@@ -1864,6 +1868,8 @@ course.plan_task.activity_manage.activity_file_empty: 抱歉，%type%文件不�
 course.plan_task.activity_manage.preview_failed_tips: 当前%taskName%不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
 course.plan_task.activity_manage.help_block: 建议标题字数控制在15字以内，否则会影响手机端浏览
+course.plan_task.activity_ppt_animation_tip: 当前PC端已支持播放PPT中的动画及音视频（App、小程序和新版微网校暂不支持）。
+course.plan_task.activity_ppt_animation_link: 动画支持情况
 course.plan_task.activity_ppt_animation_btn: 切换图片模式
 course.plan_task.activity_manage.setup_is_option: 设为选修
 course.plan_task.activity_manage.setup_is_option_tips: 选修%taskName%是否学习，不会影响下一%taskName%的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修%taskName%。
@@ -1948,6 +1954,7 @@ course.plan_task.activity_manage.exercise.start_btn: 开始做题
 course.plan_task.activity_manage.exercise.info: 练习说明
 course.plan_task.activity_manage.exercise.info_tips: >
   本次练习随机生成<span class="color-success">%itemCount%题</span>
+course.plan_task.activity_manage.exercise.info_tips.question_lack: 题目数与老师设定不一致，请联系老师处理！
 course.plan_task.activity_manage.exercise.total_questions: 共%itemCount%题
 course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
@@ -3479,10 +3486,9 @@ cloud_file.process_status.waiting: 转码中
 cloud_file.process_status.doing: 正在转码
 cloud_file.process_status.error: 转码失败
 cloud_file.transcoding_tips: 视频还没有转码完成，请等待转码完成......
+
 cloud_file.transcoding_tips.error_code_41001.reason: 当前文件格式异常，不支持进行转码
 cloud_file.transcoding_tips.error_code_41001.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
-cloud_file.transcoding_tips.error_code_51009.reason: 当前文件格式异常，不支持进行转码
-cloud_file.transcoding_tips.error_code_51009.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
 cloud_file.transcoding_tips.error_code_41002.reason: 当前文件被删除，不支持进行转码
 cloud_file.transcoding_tips.error_code_41002.solution: 此文件的源文件被删除，无法进行转码，请重新上传后进行转码操作
 cloud_file.transcoding_tips.error_code_41003.reason: 当前文件格式异常，不支持转码
@@ -3493,6 +3499,23 @@ cloud_file.transcoding_tips.error_code_41005.reason: 当前文件超过转码支
 cloud_file.transcoding_tips.error_code_41005.solution: 请将源文件缩小至100MB以下（删减源文件内容或将源文件变为多个文件内容上传），再上传进行转码操作
 cloud_file.transcoding_tips.error_code_41006.reason: 当前文件格式异常，不支持转码
 cloud_file.transcoding_tips.error_code_41006.solution: 当前文件无法正常打开，请选择其他正常文件上传进行转码操作
+
+cloud_file.transcoding_tips.error_code_40100001.reason: 当前文件格式异常，不支持进行转码
+cloud_file.transcoding_tips.error_code_40100001.solution: 此文件格式不支持转码，请使用格式工厂等相关视频格式转换软件，转换成FLV或MP4格式后，再重新上传进行转码
+cloud_file.transcoding_tips.error_code_40100002.reason: 当前文件被删除，不支持进行转码
+cloud_file.transcoding_tips.error_code_40100002.solution: 此文件的源文件被删除，无法进行转码，请重新上传后进行转码操作
+cloud_file.transcoding_tips.error_code_40100003.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_40100003.solution: 请使用Office软件将源文件内容重新保存后，上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100004.reason: 当前文件被加密，不支持转码
+cloud_file.transcoding_tips.error_code_40100004.solution: 请将源文件解密后，再上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100005.reason: 当前文件超过转码支持大小，不支持转码
+cloud_file.transcoding_tips.error_code_40100005.solution: 请将源文件缩小至100MB以下（删减源文件内容或将源文件变为多个文件内容上传），再上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100006.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_40100006.solution: 当前文件无法正常打开，请选择其他正常文件上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100007.reason: 当前PPT文件内容为空，不支持转码
+cloud_file.transcoding_tips.error_code_40100007.solution: 请使用Office软件将源文件内容重新保存后，上传进行转码操作
+cloud_file.transcoding_tips.error_code_40100008.reason: 当前文件格式异常，不支持转码
+cloud_file.transcoding_tips.error_code_40100008.solution: 当前文件无法正常打开，请选择其他正常文件上传进行转码操作
 
 cloud_file.transcoding_tips.error_code_51001.reason: 文件转码失败
 cloud_file.transcoding_tips.error_code_51001.solution: 请联系运营人员处理
@@ -3510,6 +3533,8 @@ cloud_file.transcoding_tips.error_code_51007.reason: 文件转码失败
 cloud_file.transcoding_tips.error_code_51007.solution: 请联系运营人员处理
 cloud_file.transcoding_tips.error_code_51008.reason: 文件转码失败
 cloud_file.transcoding_tips.error_code_51008.solution: 请联系运营人员处理
+cloud_file.transcoding_tips.error_code_51009.reason: 文件转码失败
+cloud_file.transcoding_tips.error_code_51009.solution: 请联系运营人员处理
 
 cloud_file.transcoding_tips.default_error_message.reason: 文件转码失败
 cloud_file.transcoding_tips.default_error_message.solution: 请联系运营人员处理
@@ -4039,7 +4064,7 @@ my.teaching.open_course.live_label: 直播直播
 my.teaching.open_course.manage_btn: 管理
 my.teaching.open_course.view_btn: 查看
 my.teaching.open_course.lesson_manage_btn: 课时管理
-my.teaching.open_course.file_manage_btn: 课程文件
+my.teaching.open_course.file_manage_btn: 文件管理
 my.teaching.open_course.student_manage_btn: 学员管理
 my.teaching.open_course.empty_hint: 你还没有在教的公开课哦, 赶快去创建吧!
 my.teaching.page_title: 在教课程
@@ -4064,7 +4089,7 @@ my.teaching.course_set.select_type.live_open_course.tips: 免费、无门槛参�
 my.teaching.course_set.select_type.course_title: 课程标题
 my.teaching.course_set.select_type.how_do_create: 如何创建课程？
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购买云直播服务
-my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用  
+my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
 
 # 录播公开课
@@ -4495,13 +4520,15 @@ upgrade.browser.recommend_browsers: 推荐使用以下浏览器：
 
 # 优惠券
 coupon: 优惠券
-coupon.for_any_course: 可用于抵扣全站课程
-coupon.for_specified_courses: 用于抵扣指定课程
-coupon.for_any_classroom: 可用于抵扣全站班级
-coupon.for_specified_classrooms: 可用于抵扣指定班级
-coupon.for_any_level_of_VIP_membership: 可用于抵扣全站会员
-coupon.for_specified_level_of_VIP_membership: 用于抵扣指定会员
-coupon.for_any_purchase_on_our_web_site: 可用于抵扣全站所有类型消费
+coupon.for_any_course: 适用于全部课程
+coupon.for_specified_courses: 适用于指定课程
+coupon.for_multi_courses: 适用于多个课程
+coupon.for_multi_classrooms: 适用于多个班级
+coupon.for_any_classroom: 适用于全部班级
+coupon.for_specified_classrooms: 适用于指定班级
+coupon.for_any_level_of_VIP_membership: 适用于全部会员
+coupon.for_specified_level_of_VIP_membership: 适用于指定会员
+coupon.for_any_purchase_on_our_web_site: 全站可用
 coupon.expired_on: 有效期截止：
 coupon.deadline_year: %deadline%年
 coupon.deadline_month: %deadline%月
@@ -4563,6 +4590,9 @@ change_log: 更新日志
 common.courseStatus.draft: 未发布
 common.courseStatus.published: 已发布
 common.courseStatus.closed: 已关闭
+common.classroomStatus.draft: 未发布
+common.classroomStatus.published: 已发布
+common.classroomStatus.closed: 已关闭
 common.fileType.video: 视频
 common.fileType.audio: 音频
 common.fileType.document: 文档
@@ -5848,11 +5878,21 @@ admin.wechat_notification.template_name: 模板名称
 admin.wechat_notification.template_content_sample: 模板内容示例
 admin.wechat_notification.send_object: 发送对象
 admin.wechat_notification.operation: 操作
+admin.wechat_notification.template_switch: 开关
+admin.wechat_notification.template_status: 状态
 admin.wechat_notification.template_content: 通知内容
 admin.wechat_notification.template_content_detail: 详情
+admin.wechat_notification.template_setting: 设置
+admin.wechat_notification.template_show: 查看
 admin.wechat_notification.failure_reason: 失败原因
 admin.wechat_notification.failure_number: 失败人数
 admin.wechat_notification.failure_reason.empty: 暂无失败原因
+admin.wechat.notification.open_wechat_notify_tip: 微信通知，指的是通过微信服务号向学员发送消息，学员绑定微信并关注服务号即可收取微信通知，微信通知具有两大优势
+admin.wechat.notification.go_to_open: 前往开启
+admin.wechat.notification.un_authorized_before_open_tip: 开启微信通知前，请先进行扫码授权。
+admin.wechat.notification.un_authorized_after_open_tip: 为防止网校服务器IP或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
+admin.wechat.notification.authorized_wholeless: 检测到您在扫码授权时，未将群发与通知权限”授予ES第三方平台，将无法启用“微信服务号通知”，请进行重新授权。
+admin.wechat.notification.go_authorizer: 立即授权
 
 # 数据统计
 admin.operation_analysis.data_type_placeholder: --选择数据类型--
@@ -5928,7 +5968,7 @@ admin.operation_analysis.income.price: 价格
 admin.operation_analysis.income.discount: 优惠
 admin.operation_analysis.income.buyer: 购买者
 admin.operation_analysis.income.buy_time: 下单&支付时间
-admin.operation_analysis.income.discount_code: 优惠码
+admin.operation_analysis.income.discount_code: 优惠券
 admin.operation_analysis.teach_plan: 教学计划
 admin.operation_analysis.teach_plan.creator: 创建者
 admin.operation_analysis.teach_plan.empty: 暂无教学计划明细
@@ -6082,7 +6122,7 @@ admin.operation_invite.coupon.order_title_th: 订单信息
 admin.operation_invite.register_coupon: 注册奖励
 admin.operation_invite.invite_coupon: 邀请奖励
 admin.operation_invite.invite_code_owner: 邀请人
-admin.operation_invite.register_user: 注册用户 
+admin.operation_invite.register_user: 注册用户
 
 #账户明细
 admin.money_records.content_title: 账户明细
@@ -6685,6 +6725,7 @@ admin.edu_cloud.edu_sms.manual_send: 手动群发
 admin.edu_cloud.edu_sms.auto_mass_send: 自动群发
 admin.edu_cloud.edu_sms.all_user: 所有用户
 admin.edu_cloud.edu_sms.course_user: 课程用户
+admin.edu_cloud.edu_sms.course_classroom_student: 课程及班级学员
 admin.edu_cloud.edu_sms.study_task_tips: 您的课程：《课程名称》－学习任务：《学习任务名称》已发布！链接地址
 admin.edu_cloud.edu_sms.study_task_notify_live: 学习任务发布通知（直播）
 admin.edu_cloud.edu_sms.study_task_notify_normal_course: 学习任务发布通知（普通课程）
@@ -6696,6 +6737,10 @@ admin.edu_cloud.edu_sms.homework_checked: 作业完成批阅
 admin.edu_cloud.edu_sms.homework_checked_tips: 您的课程：《课程名称》-《学习任务名称》的作业已被老师批阅，快来看看吧!
 admin.edu_cloud.edu_sms.testpaper_checked: 试卷完成批阅
 admin.edu_cloud.edu_sms.testpaper_checked_tips: 您的课程：《课程名称》-《学习任务名称》的试卷已被老师批阅，快来看看吧!
+admin.edu_cloud.edu_sms.invite_rewards_not_enough: 邀请注册奖励不足
+admin.edu_cloud.edu_sms.coupon_not_enough_tips: 您设置的［邀请注册］活动奖励［优惠券名称］仅剩 50 张，请及时关注剩余优惠券数量。
+admin.edu_cloud.edu_sms.invite_rewards_is_exhausted: 邀请注册奖励消耗完
+admin.edu_cloud.edu_sms.coupon_is_exhausted_tips: 您设置的［邀请注册］活动奖励［优惠券名称］已消耗完，请及时在优惠券管理中添加新的优惠券。
 admin.edu_cloud.edu_sms.receipt_type: 回执类
 admin.edu_cloud.edu_sms.pay_receipt_success: 支付成功回执
 admin.edu_cloud.edu_sms.course_buy: 课程购买
@@ -7026,7 +7071,7 @@ admin.user_auth.Protection.middle.30_times: 同一IP24小时內只能注册30次
 admin.user_auth.Protection.high.10_times: 同一IP24小时內只能注册10次。
 admin.user_auth.Protection.high.sign_up_count: 同一IP1小时內只能注册1个帐号。
 admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时须要完成安全验证。
-                                           
+
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
 admin.user_auth.Setup_welcome_message.send.help_block: 欢迎信以站内私信的方式，发送给新用户。
@@ -7314,9 +7359,13 @@ admin.setting_wechat_auth.api_secret_key: 微信商户平台API密钥
 admin.setting_wechat_auth.account_code_empty: 暂未设置二维码
 admin.setting_wechat_auth.account_code_view: 查看大图
 admin.setting_wechat_auth.account_code_download: 下载二维码
+admin.setting_wechat_auth.re_authorization_btn: 重新授权
+admin.setting_wechat_auth.authorization_in_new_page_hint: 请在新窗口完成公众号授权
+admin.setting_wechat_auth.authorization_success: 已成功授权
 
 #开发者设置
 admin.developer_setting.cloud_notification_api: 通知服务API
+admin.developer_setting.cloud_wechat_api: 微信托管服务API
 admin.developer_setting.content_title: 开发者设置
 admin.developer_setting.debug_label: 调试
 admin.developer_setting.app_center_api_address: 应用中心API地址
@@ -7482,10 +7531,13 @@ admin.crontab_job.log_name: 名称
 admin.crontab_job.log_time: 时间
 admin.crontab_job.log_resource: 来源
 admin.crontab_job.log_status: 状态
+admin.crontab_job.run_log: 运行日志
 admin.crontab_job.run_log_title: 任务运行日志
 admin.crontab_job.log_show_btn: 日志查看
 admin.crontab_job.enable: 启用
 admin.crontab_job.disable: 禁用
+admin.crontab_job.set_next_fire_time: 设置下次执行时间
+admin.crontab_job.next_fire_time: 下次执行时间
 
 #　ip黑名单
 admin.ip_black_list.titile: IP黑名单
@@ -7748,6 +7800,14 @@ admin.invite_setting.notification_variable_description: 通知变量说明
 admin.invite_setting.invite_infomation_template: 邀请信息模板
 admin.invite_setting.coupon_deadline: 优惠券有效时间
 admin.invite_setting.discount_coupon_setting: 元面值抵价优惠券 （可用于全站消费）
+admin.invite_setting.coupon_limit_remind: 异常提醒
+admin.invite_setting.coupon_limit_remind_hint: 在奖励可用数量不足的情况下提醒管理员
+admin.invite_setting.rewards_not_reach: 当奖励数量不足
+admin.invite_setting.send_remind_sms_to_admin: 时，向管理员发送短信提醒
+admin.invite_setting.rewards_count_required: 请输入 1-1000 的数字
+admin.invite_setting.mobile_required: 请输入手机号
+admin.invite_setting.mobile_for_receive: 接收提醒的手机号：
+admin.invite_setting.sms_enable_hint: 请注意，此功能在云短信开启时生效，且短信通知将扣除网校云短信的条数
 
 admin.wap_setting: 手机微网校
 admin.wap_setting.find: 发现页设置
@@ -8561,7 +8621,7 @@ log.module.crontab: 定时任务
 log.module.marker: 驻点
 log.module.vip: 会员
 log.module.coin: 虚拟币
-log.module.coupon: 优惠码
+log.module.coupon: 优惠券
 log.module.money_card: 学习卡
 log.module.discount: 打折活动
 log.module.exercise: 练习
@@ -9534,7 +9594,7 @@ admin.cashflow.keyword_default: --选择类型--
 
 order.pay_check_msg.parameters_error: 参数错误
 order.pay_check_msg.coin_amount_error: 金额错误
-order.pay_check_msg.coupon_had_been_used: 优惠码已经被使用了
+order.pay_check_msg.coupon_had_been_used: 优惠券已经被使用了
 order.pay_check_msg.product_not_found: 该类型产品找不到
 order.pay_check_msg.unpurchasable_product: 未开放购买
 order.pay_check_msg.order_not_exist: 订单不存在
@@ -9734,6 +9794,7 @@ exception.user.lock_denied: 没有封禁该角色的权限
 exception.user.not_match_bind_email: 与绑定邮箱不符
 exception.user_lock: 账户被封禁，请联系管理员
 exception.user.password_error: 用户名密码错误
+exception.user.password_failed: 登录密码不正确
 exception.user.login_limit: 登录限制！
 exception.user.lock_self_denied: 您不能封禁自己
 exception.user.datefield_invalid: 日期类型字段没有按日期格式填写
@@ -9859,6 +9920,19 @@ exception.testpaper.not_found_result: 试卷结果不存在
 exception.testpaper.modify_committed_testpaper: 已经交卷的试卷不能修改!
 exception.testpaper.doing: 试卷还未提交
 exception.testpaper.redo_interval_exist: 教师设置了重考间隔
+exception.homework.not_found: 作业不存在
+exception.homework.draft: 该作业未发布，如有疑问请联系老师！
+exception.homework.closed: 该作业已关闭，如有疑问请联系老师！
+exception.homework.forbidden_access_homework: 不可以访问其他学生的作业!
+exception.homework.forbidden_duplicate_commit_homework: 作业已经做完，不能重复提交!
+exception.homework.reviewing: 作业正在批阅！不能重新开始!
+exception.homework.not_found_result: 作业结果不存在
+exception.exercise.not_found: 练习不存在
+exception.exercise.draft: 该练习未发布，如有疑问请联系老师！
+exception.exercise.closed: 该练习已关闭，如有疑问请联系老师！
+exception.exercise.forbidden_access_exercise: 不可以访问其他学生的练习!
+exception.exercise.forbidden_duplicate_commit_exercise: 练习已经做完，不能重复提交!
+exception.exercise.not_found_result: 练习结果不存在
 exception.uploadfile.file_not_found: 文件不存在
 exception.uploadfile.forbidden_manage_file: 没有权限管理资源
 exception.uploadfile.error_status: 状态不正确
@@ -9869,6 +9943,7 @@ exception.uploadfile.globalId_required: 缺少globalId
 exception.uploadfile.local_convert_not_support: 本地文件暂不支持转换
 exception.uploadfile.extension_not_allowed: 该文件格式，不允许上传。
 exception.uploadfile.not_found_attachment: 附件不存在
+exception.uploadfile.arguments_invalid: 参数不合法
 exception.activity.watch_video_limit: 您的视频观看时长已达限制，无法继续观看！
 exception.activity.not_found: 教学活动不存在
 exception.activity.not_in_course: 教学计划中没有该教学活动
@@ -9993,10 +10068,16 @@ exception.money_card.not_found_batch: 批次不存在
 exception.money_card.duplicate_card: 卡号有重复
 exception.money_card.batch_status_equal_invalid: 在批次被作废的情况下，不能启用批次下的充值卡
 exception.money_card.unlock_not_invalid_card: 只能启用作废状态的充值卡
+exception.money_card.password_invalid: 卡密无效
+exception.money_card.batch_token_invalid: 批次token无效
 exception.reward_point.account.not_found: 积分账号不存在
 exception.reward_point.account.already_open: 积分账号已创建
 exception.reward_point.account.userid_invalid: 用户id错误
 exception.reward_point.account.balance_insufficient: 余额不足
+exception.reward_point.account.error_pay_password: 当前支付密码不正确
+exception.reward_point.account.pay_password_existed: 支付密码已存在
+exception.reward_point.account.not_found_pay_password: 支付密码不存在
+exception.reward_point.account.error_pay_password_format: 新支付密码不可用，请尝试其它密码组合
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
 exception.live_replay.not_found: 直播回放不存在
@@ -10036,7 +10117,10 @@ exception.coupon.plugin.not.installed: 优惠券插件未安装
 exception.coupon.invalid: 优惠券已失效
 exception.coupon.received: 优惠券已领过
 exception.coupon.finished: 优惠券已领完
+exception.coupon.over_batch_limit: 超过批次总额限制
 exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
+exception.coupon.target_type_error: 该批次不支持查看详情
+exception.coupon.setting_close: 优惠券全局开关未开启
 
 course.thread.edit_hint: 编辑移动侧的问答能力即将到来，敬请期待！
 course.question.question_background: 问题背景
@@ -10090,14 +10174,68 @@ wechat.notification.template_open_error: 模板打开失败，可能是未启用
 wechat.notification.service_not_open: 未开启微信服务号通知
 wechat.notification.empty_token: 获取微信信息错误
 wechat.notification.template_not_exist: 模板不存在
+wechat.notification.homework_or_testpaper_setting_conditions: 以设置的发送时间为截止时间，在过去24小时内提交的作业或试卷没有全部批改完成时，会在指定时间发送通知给课程教师。
+wechat.notification.setting_conditions_label: 触发条件
+wechat.notification.setting_status_label: 是否开启
+wechat.notification.setting_time_label: 时间设置
+wechat.notification.setting_live_time_before_one_hour: 直播开始前1小时
+wechat.notification.setting_live_time_before_one_day: 直播开始前24小时
+wechat.notification.template_detail: 详情
+wechat.notification.send_time: 发送时间
+wechat.notification.save: 保存
+wechat.notification.saving: 保存中
+wechat.notification.form.btn.search_submit_btn: 搜索
+wechat.notification.fans_list.profile_picture: 微信头像
+wechat.notification.fans_list.nickname: 微信昵称
+wechat.notification.fans_list.username: 网校用户名
+wechat.notification.fans_list.subscribe_time: 关注时间
+wechat.notification.fans_list.tips: 粉丝列表每30分钟刷新一次数据
+wechat.notification.fans_list.user_num: 用户数量：
+wechat.notification.fans_list.fans_list_empty: 暂无粉丝
+wechat.notification.fans_list.no_wechat_bind: 暂未绑定微信服务号
+wechat.notification.fans_list.placeholder: 请输入关键词
+wechat.notification.send_days: 发送日
+wechat.notification.course_remind_conditions: 针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。
 
 # 微信通知模板
-wechat.notification.template.live_start: '您好，同学。<br>您报名参加的[《课程名》-《任务名》]将于[直播课开课时间]开课，特此通知。<br>不要迟到哦。'
+wechat.notification.template.live_start: '同学，您好，您报名的直播课即将开课。<br>课程名称：{《课程名》-《任务名》}<br>开课时间：{直播开始时间}（精确到分钟）<br>开课地点：在线直播<br>联系方式：无<br>不要迟到哦。'
 wechat.notification.template.homework_result: '同学，你好，你的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
 wechat.notification.template.exam_result: '同学，你好，你的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
-wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]<br>请及时前往学习'
-wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值或学习卡<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
+wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]或[直播开始时间]<br>请及时前往学习'
+wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
 wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
+wechat.notification.template.ask_question: '尊敬的老师，您的在教课程《课程名称》或在教班级《班级名称》中有学员发布了提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]'
+wechat.notification.template.homework_or_testpaper_need_review: '尊敬的老师，您今日仍有作业/试卷未批改<br>时间：[当日日期，精确到天]<br>作业数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
+wechat.notification.template.remind_course: '亲爱的学员，今日也要坚持学习哦<br>课程名称：[上一次学习的教学计划名称]<br>时间：[当天日期，精确到天]学习进度：[该教学计划的学习进度]<br>如果今日已完成学习计划，请忽略本通知。'
+wechat.notification.template.answer_question: '亲爱的学员，您在[课程名或班级名]中的发表的问题有了新的回答。<br>提问时间：[提问的时间]<br>回复内容：[回复内容]'
+wechat.notification.template.vip_expired: '亲爱的学员，您购买的会员即将到期<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
+
+#微信通知规则
+wechat.notification.template.ask_question.rule: '课程或班级中有人发布提问，会发送通知给教师。'
+wechat.notification.template.answer_question.rule: '当教师回答了学员的问题，会发送通知给提问者。'
+wechat.notification.template.homework_or_testpaper_need_review.rule: '针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。'
+wechat.notification.template.live_start.rule: '直播课开始前，会在指定时间发送通知给课程学员。'
+wechat.notification.template.homework_result.rule: '当作业中含有主观题时，老师批阅完成后会将结果发送给学员。'
+wechat.notification.template.exam_result.rule: '当试卷中含有主观题时，老师批阅完成后会将结果发送给学员。'
+wechat.notification.template.lesson_add.rule: '当课程有新的任务发布时，会发一条通知给课程学员。'
+wechat.notification.template.charge_success.rule: '当学员成功充值虚拟币时，会发送一条通知。'
+wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员是，会发送一条通知。'
+wechat.notification.template.vip_expired.rule: '根据管理员设置的提醒日期，每晚8点来发送通知，点此<a href="%url%" target="_blank">前往设置</a>'
+wechat.notification.template.vip_is_not_install: '未安装会员插件，无法正常发送通知。'
+wechat.notification.template.remind_course.rule: '针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。'
+
+#微信通知名称
+wechat.notification.template_name.homework_or_testpaper_need_review: '作业/试卷批改提醒'
+wechat.notification.template_name.remind_course: '上课提醒'
+wechat.notification.template_name.ask_question: '答疑提醒'
+wechat.notification.template_name.answer_question: '问题回复通知'
+wechat.notification.template_name.vip_expired: '会员到期提醒'
+wechat.notification.template_name.live_start: '课程开课通知'
+wechat.notification.template_name.homework_result: '作业结果通知'
+wechat.notification.template_name.exam_result: '考试结果通知'
+wechat.notification.template_name.lesson_add: '课程更新提醒'
+wechat.notification.template_name.charge_success: '充值成功通知'
+wechat.notification.template_name.buy_success: '购买成功通知'
 
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: 听完音频
@@ -10120,3 +10258,150 @@ classroom.joining_date.expired_tips: 班级已过有效期！
 
 # 富文本
 editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+
+#coupon
+coupon.usage_detail_title: 优惠券使用详情
+coupon.enable_hint: 优惠券未开启，请先在<a href="%path%"> 系统-运营设置-优惠券 </a>中设置开启
+
+coupon.id: 编号
+coupon.code: 优惠券
+coupon.status: 状态
+coupon.user: 使用者
+coupon.order: 订单信息
+coupon.origin_price: 原价
+coupon.pay_amount: 实付
+coupon.receive_time: 领取时间
+coupon.used_time: 使用时间
+coupon.name: 优惠券名称
+coupon.type: 优惠方式
+coupon.deadline: 有效期至
+coupon.deadline.day.help_block.behind: 领券当日起
+coupon.deadline.day.help_block.after: 天内可用
+coupon.description: 优惠说明
+coupon.target: 使用对象
+coupon.full_discount_price: 金额设置
+coupon.channel: 发放渠道
+coupon.setting.status: 优惠券全局开关
+coupon.content: 优惠内容
+coupon.batch.name: 批次名称
+coupon.no_coupon_tip: 无优惠券记录
+coupon.batch: 优惠券批次
+coupon.receive_url: 发放地址
+coupon.batch.prefix: 优惠券前缀
+coupon.operation: 操作
+coupon.total_count: 总数
+coupon.expiry_date: 有效期
+coupon.amount: 已优惠金额
+coupon.target_type: 类型
+
+coupon.type.minus: 抵价
+coupon.type.discount: 打折
+coupon.type.minus_rate: 抵价金额
+coupon.type.discount_rate: 打折
+coupon.type.minus_rate_unit: 元
+coupon.type.discount_rate_unit: 折
+coupon.type.minus_tip: 抵价%rate%元
+coupon.type.discount_tip: 打折%rate%折
+
+coupon.target_type.classroom: 班级
+coupon.target_type.vip: 会员
+coupon.target_type.course: 课程
+coupon.target_type.all: 全站
+coupon.target_type.classroom_all: 全部班级
+coupon.target_type.classroom_specific: 指定班级
+coupon.target_type.vip_all: 全部会员
+coupon.target_type.vip_specific: 指定会员
+coupon.target_type.course_all: 全部课程
+coupon.target_type.course_specific: 指定课程
+coupon.target_type.course_rechoose: 重新选择课程
+coupon.target_type.classroom_rechoose: 重新选择班级
+coupon.target_type.vip_rechoose: 重新选择会员
+coupon.target_type.multi_course: 部分课程
+coupon.target_type.multi_classroom: 部分班级
+coupon.target_type.detail: 详情
+
+coupon.status.unused: 未使用
+coupon.status.receive: 已领取
+coupon.status.used: 已使用
+
+coupon.generate_num: 生成数量
+coupon.generate_num_hint: 生成数量必须在1～100之间
+coupon.generate_num_unit: 个
+coupon.prefix: 优惠券前缀
+coupon.prefix_hint: 优惠券前缀不可重复，不占优惠券位数
+coupon.digits: 优惠券位数
+coupon.digits_hint: 优惠券位数必须在5～15位之间
+coupon.channel_hint: 通过本功能控制优惠券可被领取的方式
+
+coupon.channel_type.link: 通过链接
+coupon.channel_type.code: 通过优惠券
+coupon.channel_type.page_detail: 通过商品详情页
+coupon.channel_type.h5_mps: 小程序/新版微网校
+coupon.channel_type.page_detail_hint: 选中此项则系统将自动获取商品可用的优惠券显示在商品详情页
+coupon.channel_type.wait_hint: （敬请期待）
+coupon.channel.postfix: 发放
+coupon.channel_type.only_h5_mps: (当前只支持小程序/新版微网校)
+
+coupon.generage.btn: 生成
+coupon.generate.loading_text: 正在生成...
+coupon.copy.btn: 复制
+
+coupon.batch.detail: 详情
+coupon.batch.export_csv: 导出CSV文件
+coupon.batch.get_receive_url: 获取发放地址
+coupon.batch.delete: 删除
+
+coupon.query.by_status: 使用状态
+coupon.query.by_type: 按优惠方式
+coupon.query.by_use_start_date: 使用时间起始
+coupon.query.by_use_end_date: 使用时间截止
+coupon.query.by_code: 优惠券
+coupon.setting.close: 优惠券未开启，请先开启优惠券开关
+coupon.setting.permission.goto_open: 去开启
+
+coupon.deadline_mode.day.help_block: >
+  至<br/>领取后%day%天内
+coupon.resource.selected: 已选：
+coupon.resource.clear: 清空
+admin.setting.invite.chooser_coupon: 选择优惠券
+admin.setting.invite.chooser_btn: 选择
+admin.setting.invite.chooser_message: 可用优惠券发放完成后，邀请功能即自动关闭，请做好活动预算
+admin.setting.invite.promoted_user_enable: 选择优惠券
+admin.setting.invite.get_coupon_setting: 邀请人奖励发放时机
+admin.setting.invite.get_coupon_setting.register: 被邀请人注册成功时
+admin.setting.invite.get_coupon_setting.pay: 被邀请人完成第一笔消费时
+coupon.resource_list.title: '本优惠券适用于：'
+coupon.remaining_amount: 剩余可用数量
+
+#上课提醒
+course.remind.each_week: 每周
+course.remind.mon: 周一
+course.remind.tue: 周二
+course.remind.wed: 周三
+course.remind.thu: 周四
+course.remind.fri: 周五
+course.remind.sat: 周六
+course.remind.sun: 周日
+course.setting.course_remind: 上课提醒
+course.setting.course_remind_tip: 当前设置，%D% %H%会向所有在读学员发送学习提醒通知。
+course.setting.course_remind_change: 修改设置
+course.setting.course_remind_not_open: 未开启上课提醒
+course.setting.course_remind_go_to_open: 前往开启
+
+money_card.invalid_password: 无效的卡密
+money_card.invalid_card: 学习卡已失效
+money_card.expired_card: 学习卡已过期
+money_card.card_receive_fail: 学习卡领取失败
+money_card.card_receive_success: 学习卡领取成功
+money_card.card_recharge_success: 学习卡充值成功
+money_card.card_received: 您已经领取该学习卡
+money_card.card_received_by_other: 学习卡已被他人领取
+money_card.card_used: 您已经领取并使用该学习卡
+money_card.card_used_by_other: 学习卡已被他人使用
+money_card.notify.card_receive_success: 您有一张价值为%coin_number%%coin_name%的充值卡领取成功
+
+admin.setting.invite.chooser_coupon.manage_btn: 优惠券管理
+admin.setting.invite.chooser_coupon.refresh_btn: 刷新
+admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
+admin.operation.coupon_menu.generate_btn: 生成优惠券
+

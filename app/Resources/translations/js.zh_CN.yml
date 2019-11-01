@@ -36,7 +36,7 @@ site.data.collapse: 收起
 site.data.already_exists: 已经存在
 video.quality.switcher.name: "%videoQuality%画质/%audioQuality%音质"
 site.video.quality.quota: 画质
-site.video.quality.low: 流畅 
+site.video.quality.low: 流畅
 site.video.quality.normal: 标准
 site.video.quality.high: 精细
 site.cancel: 取消
@@ -62,7 +62,7 @@ user.settings.security.password_modify.incorrect_password: 当前密码不正确
 
 
 site.audio.quality.quota: 音质
-site.audio.quality.low: 流畅 
+site.audio.quality.low: 流畅
 site.audio.quality.normal: 标准
 site.audio.quality.high: 精细
 
@@ -1362,6 +1362,7 @@ wechat.notification.wechat_bind_hover: >
 wechat.notification.homepage.open_tip: <span class="%messageClass%">“微信通知”可在“个人设置-第三方登录”开启。</span>
 wechat.notification.homepage.open_tip_title: <span class="%messageClass%">前往开启</span>
 wechat.notification.cloud_open_tip: 请先开启教育云
+admin.wechat_notification.send_days: 发送日
 
 #试卷导入引导
 document.import.intro_hover: >
@@ -1410,3 +1411,24 @@ user.account.order_pay_vip_close_title: 该会员等级已关闭
 user.account.order_pay_vip_close_hint: 该订单的会员等级已关闭，确定还要支付？
 user.account.order_pay: 继续
 user.account.order_not_pay: 不支付
+
+#coupon
+notify.copy_link_success: 链接复制成功
+confirm.remove_coupon: 确认要删除此批次优惠券？
+notify.remove_coupon_success: 删除优惠券成功!
+notify.remove_coupon_fail: 删除优惠券失败!
+notify.channel_select: 至少选择一个发放渠道
+
+coupon.fixed_day: 有效期
+coupon.fixed_day.message: 请输入领取后有效天数
+admin.coupon.setting.confirm_message:  关闭优惠券开关将影响到所有正在发放优惠券的营销活动，将导致使用优惠券的营销活动无法正常进行。已经发放的优惠券也将无法继续使用，学员侧将屏蔽「我的优惠券」模块，订单页面也将无法继续选取优惠券下单。是否继续？
+admin.coupon.setting.success_message: 优惠券状态已保存
+coupon.target_type.multi_course: 部分课程
+coupon.target_type.multi_classroom: 部分班级
+admin.wechat.live_open_scenes_error.hint: 请至少勾选一个选项。
+course.question_manage.manage.delete_tips: 删除题目，可能会影响课时的练习，请谨慎操作！
+admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
+
+course.plan_task.activity_ppt_animation_img: 切换图片模式
+course.plan_task.activity_ppt_animation_slide: 切换动画模式
+course.plan_task.lessons_publish_status: 已发布课时数：%publishedNum%<br/>未发布课时数：%unpublishedNum%
