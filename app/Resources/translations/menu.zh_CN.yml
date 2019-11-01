@@ -827,4 +827,9 @@ admin_v2.system.post_num_tab: 发帖限制
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: 数据概览
 admin_v2.data_statistics.overview.basic_tab: 数据概览
+
+# 系统-通用管理-组织机构管理
+admin_v2.system.org_menu: 组织机构管理
+admin_v2.system.org.basic_tab: 组织机构
+
 # 新版后台结束

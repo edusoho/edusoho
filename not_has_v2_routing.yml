@@ -103,49 +103,11 @@ admin_my_cloud:
     defaults: { _controller: AppBundle:Admin/EduCloud:myCloud }
     permissions: [admin_my_cloud_overview]
 
-admin_oldUpgradeCheck:
-    path:  /upgrade/check
-    defaults: { _controller: AppBundle:Admin/App:oldUpgradeCheck }
-    permissions: [admin_app_upgrades]
-
 admin_category_upload:
     path: /category/uploadfile
     defaults: { _controller: AppBundle:Admin/Category:uploadFile }
     methods: [POST]
     permissions: [admin_course_category_manage]
-
-admin_system_status:
-    path:  /system/status
-    defaults: { _controller: AppBundle:Admin/Default:systemStatus }
-    permissions: [admin]
-
-admin_official_messages:
-    path:  /official/messages
-    defaults: { _controller: AppBundle:Admin/Default:officialMessages }
-    permissions: [admin]
-
-admin_coin_records:
-    path:     /coin/records
-    defaults: { _controller: AppBundle:Admin/Coin:records }
-
-admin_order_manage_export_csv:
-    path: /order/manage/export
-    defaults: { _controller: AppBundle:Admin/Order:exportCsv }
-
-admin_common_add:
-    path:  /common/add
-    defaults: { _controller: AppBundle:Admin/CommonAdmin:addCommonAdmin }
-    permissions: [admin]
-
-admin_common_admin:
-    path:  /common/admin
-    defaults: { _controller: AppBundle:Admin/CommonAdmin:commonAdmin }
-    permissions: [admin]
-
-admin_common_remove:
-    path:  /common/remove/{id}
-    defaults: { _controller: AppBundle:Admin/CommonAdmin:commonRemove }
-    permissions: [admin]
 
 # 添加云直播
 admin_cloud_upload_live_logo:
@@ -160,37 +122,6 @@ admin_cloud_edulive_logo_crop:
 admin_classroom_chooser:
     path: /classroom/chooser
     defaults: { _controller: AppBundle:Admin/ClassroomAdmin:chooser }
-
-#org
-admin_org:
-    path: /org
-    defaults: { _controller: AppBundle:Admin/OrgManage:index }
-
-admin_org_create:
-    path: /org/create
-    defaults: { _controller: AppBundle:Admin/OrgManage:create }
-
-admin_org_update:
-    path: /org/{id}/update
-    defaults: { _controller: AppBundle:Admin/OrgManage:update }
-
-admin_org_delete:
-    path: /org/{id}/delete
-    defaults: { _controller: AppBundle:Admin/OrgManage:delete }
-    methods: [POST]
-
-admin_org_checkcode:
-    path: /org/checkcode
-    defaults: { _controller: AppBundle:Admin/OrgManage:checkCode }
-
-admin_org_checkname:
-    path: /org/checkname
-    defaults: { _controller: AppBundle:Admin/OrgManage:checkName }
-
-admin_org_sort:
-    path:  /org/sort
-    defaults: { _controller: AppBundle:Admin/OrgManage:sort }
-    methods: [POST]
 
 ### role
 admin_roles:
