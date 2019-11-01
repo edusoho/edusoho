@@ -356,6 +356,12 @@ admin_setting_post_num_rules: admin_v2_post_num_rules_setting #发帖限制
 admin_report_status: admin_v2_report_status
 admin_report_status_list: admin_v2_report_status_list
 
-# 系统-通用管理-组织机构管理
+# 系统-通用管理-组织机构管理(隐藏路由)
 admin_org_manage: admin_v2_org_manage
 admin_org: admin_v2_org
+
+# 系统-通用管理-任务调度(隐藏路由)
+admin_jobs_manage: admin_v2_jobs_manage
+admin_jobs: admin_v2_jobs
+admin_job_logs: admin_v2_job_logs
+admin_crontab: admin_v2_crontab

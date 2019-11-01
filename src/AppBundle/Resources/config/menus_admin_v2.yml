@@ -983,6 +983,18 @@ admin_v2:
                                 admin_v2_org:
                                     name: admin_v2.system.org.basic_tab
                                     disable: true
+                        admin_v2_jobs_manage:
+                            name: admin_v2.system.jobs_manage_manu
+                            parent: admin_v2_general_group
+                            visible: false
+                            disable: true
+                            children:
+                                admin_v2_jobs:
+                                    name: admin_v2.system.jobs_manage
+                                admin_v2_job_logs:
+                                    name: admin_v2.system.job_logs
+                                admin_v2_crontab:
+                                    name: admin_v2.system.crontab
                 # 交易设置
                 admin_v2_transaction_group:
                     name: admin_v2.transaction.basic_group

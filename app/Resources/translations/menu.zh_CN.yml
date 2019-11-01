@@ -828,8 +828,14 @@ admin_v2.system.post_num_tab: 发帖限制
 admin_v2.data_statistics.overview.menu: 数据概览
 admin_v2.data_statistics.overview.basic_tab: 数据概览
 
-# 系统-通用管理-组织机构管理
+# 系统-通用管理-组织机构管理(隐藏路由)
 admin_v2.system.org_menu: 组织机构管理
 admin_v2.system.org.basic_tab: 组织机构
+
+# 系统-通用管理-任务调度(隐藏路由)
+admin_v2.system.jobs_manage_manu: 任务调度
+admin_v2.system.jobs_manage: 任务调度
+admin_v2.system.job_logs: 任务日志
+admin_v2.system.crontab: crontab管理
 
 # 新版后台结束

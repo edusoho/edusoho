@@ -822,8 +822,14 @@ admin_v2.system.post_num_tab: Post Setting
 admin_v2.data_statistics.overview.menu: Data Overview
 admin_v2.data_statistics.overview.basic_tab: Data Overview
 
-# 系统-通用管理-组织机构管理
+# 系统-通用管理-组织机构管理(隐藏路由)
 admin_v2.system.org_menu: Orgs
 admin_v2.system.org.basic_tab: Organization
+
+# 系统-通用管理-任务调度(隐藏路由)
+admin_v2.system.jobs_manage_manu: Jobs Manage
+admin_v2.system.jobs_manage: Jobs Manage
+admin_v2.system.job_logs: Job Logs
+admin_v2.system.crontab: Crontab Manage
 
 # 新版后台结束
