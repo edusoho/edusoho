@@ -348,6 +348,15 @@ class EduCloudController extends BaseController
         return $this->render('admin-v2/cloud-center/edu-cloud/video/video-delete-confirm-modal.html.twig');
     }
 
+    public function showRenewVideoAction(Request $request)
+    {
+        $renewVideo = $request->query->get('renewVideo');
+
+        return $this->render('admin-v2/cloud-center/edu-cloud/video/video-renew-modal.html.twig', array(
+            'renewVideo' => $renewVideo,
+        ));
+    }
+
     public function headLeaderParamsAction(Request $request)
     {
         $user = $this->getUser();
