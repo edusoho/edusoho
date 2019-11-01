@@ -2101,3 +2101,21 @@ admin_v2_org_sort:
     path:  /org/sort
     defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:sort }
     methods: [POST]
+
+#developer
+admin_v2_setting_developer:
+    path:  /setting/developer
+    defaults: { _controller: AppBundle:AdminV2/Developer/DeveloperSetting:index }
+    permissions: [admin_v2]
+
+admin_v2_setting_developer_version:
+    path:  /setting/developer/version
+    defaults: { _controller: AppBundle:AdminV2/Developer/DeveloperSetting:version }
+
+admin_v2_setting_developer_magic:
+    path:  /setting/developer/magic
+    defaults: { _controller: AppBundle:AdminV2/Developer/DeveloperSetting:magic }
+
+admin_v2_setting_cdn:
+    path:  /setting/cdn
+    defaults: { _controller: AppBundle:AdminV2/Developer/CdnSetting:index }

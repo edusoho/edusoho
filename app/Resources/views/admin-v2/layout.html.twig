@@ -80,48 +80,50 @@
       </div>
       <div class="cd-layout-main">
         {% block container %}
-          {% include 'admin-v2/role/templates/side-bar.html.twig' %}
-          <div class="cd-layout-aside">
-            <div class="cd-layout-aside_bread">
+          {% block content %}
+            {% include 'admin-v2/role/templates/side-bar.html.twig' %}
+            <div class="cd-layout-aside">
+              <div class="cd-layout-aside_bread">
 
-            </div>
-            <div class="cd-layout-adside_content mtm phm">
-
-              <div class="page-header clearfix pvm">
-                  {% block page_flash_message %}
-
-                  {% endblock %}
-                <h1 class="pull-left">
-                    {% block page_title %}
-                        {{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}
-                    {% endblock %}
-                </h1>
-                <div class="pull-right">
-
-                    {% block page_buttons %}
-
-                        {% if currentMenu.mode|default('') == 'capsules' and capsule|default(false) %}
-                            {% for m in sub_permissions(permission(capsule).code,'topBtn') %}
-                                {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
-                            {% endfor %}
-                        {% else %}
-                            {% for m in sub_permissions(currentMenu.code,'topBtn') %}
-                                {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
-                            {% endfor %}
-                        {% endif %}
-                    {% endblock %}
-
-                </div>
               </div>
+              <div class="cd-layout-adside_content mtm phm">
 
-                {% block content_header %}{% endblock %}
+                <div class="page-header clearfix pvm">
+                    {% block page_flash_message %}
 
-                {% block tabs %}{% include 'admin-v2/role/templates/tabs.html.twig' %}{% endblock %}
-                {% block capsule %}{% endblock %}
-                {% block main %}
-                {% endblock %}
+                    {% endblock %}
+                  <h1 class="pull-left">
+                      {% block page_title %}
+                          {{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}
+                      {% endblock %}
+                  </h1>
+                  <div class="pull-right">
+
+                      {% block page_buttons %}
+
+                          {% if currentMenu.mode|default('') == 'capsules' and capsule|default(false) %}
+                              {% for m in sub_permissions(permission(capsule).code,'topBtn') %}
+                                  {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                              {% endfor %}
+                          {% else %}
+                              {% for m in sub_permissions(currentMenu.code,'topBtn') %}
+                                  {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                              {% endfor %}
+                          {% endif %}
+                      {% endblock %}
+
+                  </div>
+                </div>
+
+                  {% block content_header %}{% endblock %}
+
+                  {% block tabs %}{% include 'admin-v2/role/templates/tabs.html.twig' %}{% endblock %}
+                  {% block capsule %}{% endblock %}
+                  {% block main %}
+                  {% endblock %}
+              </div>
             </div>
-          </div>
+          {% endblock %}
         {% endblock %}
       </div>
     </div>
