@@ -118,10 +118,6 @@ admin_role_check_code:
     defaults: { _controller: AppBundle:Admin/Role:checkCode }
     permissions: [admin_role_manage]
 
-admin_cloud_ad:
-    path: /cloud/ad
-    defaults: { _controller: AppBundle:Admin/EduCloud:getAd }
-
 admin_queue_failed_logs:
     path: /queue/failed_logs
     defaults: { _controller: AppBundle:Admin/Queue:failedJobs }
