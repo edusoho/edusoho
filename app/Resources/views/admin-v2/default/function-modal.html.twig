@@ -320,7 +320,7 @@
         {% for itemData in entranceData %}
           <div class="entrance-section">
             <div class="entrance-section__title">{{ itemData.title }}</div>
-            <div class="{{ 'entrance-section__body icon-color-greens row ' ~ itemData.class }}">
+            <div class="{{ 'entrance-section__body cd-pt16 row ' ~ itemData.class }}">
               {% for entry in itemData.data %}
               <div class="col-md-3">
                 <div class="text-center admin-function {% if entry.checked|default(false) %}active{% endif %}">
