@@ -846,4 +846,7 @@ admin_v2.developer.debug_manage: 开发者调试
 admin_v2.developer.developer_manage: 开发者调试
 admin_v2.developer.magic_manage: Magic设置
 admin_v2.developer.version_manage: 应用版本修改
+admin_v2.page_static_manage: 页面设置
+admin_v2.page_static_tab: 页面静态化设置
+
 # 新版后台结束
