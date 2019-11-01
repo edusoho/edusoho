@@ -11,6 +11,7 @@ use Biz\CloudPlatform\Client\AbstractCloudAPI;
 use Biz\CloudPlatform\IMAPIFactory;
 use Biz\CloudPlatform\KeyApplier;
 use Biz\CloudPlatform\Service\EduCloudService;
+use Biz\Content\Service\FileService;
 use Biz\EduCloud\Service\Impl\MicroyanConsultServiceImpl;
 use Biz\File\Service\UploadFileService;
 use Biz\Search\Service\SearchService;
@@ -28,6 +29,36 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EduCloudController extends BaseController
 {
+    public function myCloudAction(Request $request)
+    {
+        // @apitodo 需改成leaf
+        try {
+            $api = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return $this->render('admin-v2/cloud-center/edu-cloud/cloud-error.html.twig', array());
+        }
+
+        if (isset($info['accessCloud']) && 0 != $info['accessCloud']) {
+            return $this->redirect($this->generateUrl('admin_v2_my_cloud_overview'));
+        }
+
+        if (!isset($info['accessCloud']) || $this->getWebExtension()->isTrial() || 0 == $info['accessCloud']) {
+            $trialHtml = $this->getCloudCenterExperiencePage();
+
+            return $this->render('admin/edu-cloud/cloud.html.twig', array(
+                'content' => $trialHtml['content'],
+            ));
+        }
+
+        $unTrial = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
+        $unTrialHtml = json_decode($unTrial, true);
+
+        return $this->render('admin-v2/cloud-center/edu-cloud/cloud.html.twig', array(
+            'content' => $unTrialHtml['content'],
+        ));
+    }
+
     //概览页，服务概况页
     // refactor
     public function myCloudOverviewAction(Request $request)
@@ -203,6 +234,46 @@ class EduCloudController extends BaseController
             'account' => $overview['account'],
             'liveCourseSetting' => $liveCourseSetting,
             'capacity' => $capacity,
+        ));
+    }
+
+    public function logoCropAction(Request $request, $type)
+    {
+        if (!in_array($type, array('web', 'app'))) {
+            return $this->createMessageResponse('error', '参数不正确');
+        }
+
+        if ('POST' === $request->getMethod()) {
+            $options = $request->request->all();
+
+            $image = $options['images'][0];
+            $file = $this->getFileService()->getFile($image['id']);
+
+            $liveSetting = $this->getSettingService()->get('live-course', array());
+            $url = $this->get('web.twig.extension')->getFurl($file['uri']);
+
+            $oldFileId = empty($liveSetting["{$type}LogoFileId"]) ? '' : $liveSetting["{$type}LogoFileId"];
+            if ($oldFileId) {
+                $this->getFileService()->deleteFile($oldFileId);
+            }
+
+            $liveSetting["{$type}LogoFileId"] = $file['id'];
+            $liveSetting["{$type}LogoPath"] = $url;
+
+            $this->getSettingService()->set('live-course', $liveSetting);
+
+            return $this->createJsonResponse(array('fileId' => $file['id'], 'url' => $url, 'type' => $type));
+        }
+
+        $fileId = $request->getSession()->get('fileId');
+
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 100, 100);
+
+        return $this->render('admin-v2/cloud-center/edu-cloud/live/logo-crop-modal.html.twig', array(
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
+            'type' => $type,
         ));
     }
 
@@ -1325,6 +1396,14 @@ class EduCloudController extends BaseController
         return $chartData;
     }
 
+    protected function getCloudCenterExperiencePage()
+    {
+        $trial = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
+        $trialHtml = json_decode($trial, true);
+
+        return $trialHtml;
+    }
+
     private function isVisibleCloud()
     {
         return $this->getEduCloudService()->isVisibleCloud();
@@ -1392,5 +1471,13 @@ class EduCloudController extends BaseController
     protected function getConversationService()
     {
         return $this->createService('IM:ConversationService');
+    }
+
+    /**
+     * @return FileService
+     */
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
     }
 }

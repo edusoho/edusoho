@@ -158,6 +158,23 @@ class CloudController extends BaseController
         return $this->redirectUrl('service_search_overview');
     }
 
+    public function detailAction(Request $request)
+    {
+        return $this->redirectUrl('bill_list');
+    }
+
+    public function emailCountAction(Request $request)
+    {
+        return $this->redirectUrl('service_email_count');
+    }
+
+    public function docAction(Request $request)
+    {
+        $params = array('type' => 'doc');
+
+        return $this->redirectUrl('edu_cloud_show', $params);
+    }
+
     protected function redirectUrl($routingName, $params = array())
     {
         $url = $this->getAppService()->getTokenLoginUrl($routingName, $params);
