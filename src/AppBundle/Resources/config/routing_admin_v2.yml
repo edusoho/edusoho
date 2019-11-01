@@ -2157,3 +2157,15 @@ admin_v2_setting_developer_magic:
 admin_v2_setting_cdn:
     path:  /setting/cdn
     defaults: { _controller: AppBundle:AdminV2/Developer/CdnSetting:index }
+
+admin_v2_xapi_setting:
+    path: /xapi/setting
+    defaults: { _controller: AppBundle:AdminV2/Developer/Xapi:setting }
+
+admin_v2_xapi_statement_list:
+    path: /xapi/statement_list
+    defaults: { _controller: AppBundle:AdminV2/Developer/Xapi:index }
+
+admin_b2_xapi_statement_detail:
+    path: /xapi/statement/{id}/detail
+    defaults: { _controller: AppBundle:AdminV2/Developer/Xapi:detail }
