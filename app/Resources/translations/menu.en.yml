@@ -832,4 +832,12 @@ admin_v2.nav.developer_module.basic_group: Developer Setting
 admin_v2.developer.xapi_manage: xAPI Manage
 admin_v2.developer.xapi_setting: xAPI Setting
 admin_v2.developer.xapi_statement: xAPI Statement
+
+admin_v2.developer.cdn_manage: CDN Manage
+admin_v2.developer.cdn_setting: CDN Setting
+
+admin_v2.developer.debug_manage: Developer DEBUG
+admin_v2.developer.developer_manage: Developer DEBUG
+admin_v2.developer.magic_manage: Magic Setting
+admin_v2.developer.version_manage: App Version Manage
 # 新版后台结束
