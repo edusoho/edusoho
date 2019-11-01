@@ -826,4 +826,10 @@ admin_v2.data_statistics.overview.basic_tab: Data Overview
 admin_v2.system.org_menu: Orgs
 admin_v2.system.org.basic_tab: Organization
 
+# 隐藏模块
+admin_v2.nav.developer_module: Developer
+admin_v2.nav.developer_module.basic_group: Developer Setting
+admin_v2.developer.xapi_manage: xAPI Manage
+admin_v2.developer.xapi_setting: xAPI Setting
+admin_v2.developer.xapi_statement: xAPI Statement
 # 新版后台结束

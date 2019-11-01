@@ -2101,3 +2101,15 @@ admin_v2_org_sort:
     path:  /org/sort
     defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:sort }
     methods: [POST]
+
+admin_v2_xapi_setting:
+    path: /xapi/setting
+    defaults: { _controller: AppBundle:AdminV2/Developer/Xapi:setting }
+
+admin_v2_xapi_statement_list:
+    path: /xapi/statement_list
+    defaults: { _controller: AppBundle:AdminV2/Developer/Xapi:index }
+
+admin_b2_xapi_statement_detail:
+    path: /xapi/statement/{id}/detail
+    defaults: { _controller: AppBundle:AdminV2/Developer/Xapi:detail }
