@@ -58,6 +58,11 @@ class OptimizeController extends BaseController
         }
     }
 
+    public function showProgressbarAction()
+    {
+        return $this->render('admin-v2/system/progressBar.html.twig');
+    }
+
     protected function isDisabledUpgrade()
     {
         return false;
