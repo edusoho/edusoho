@@ -29,7 +29,7 @@
       <td>{{ statement.version }}</td>
       <td>{{ statement.push_time|date('Y-m-d H:i:s') }}</td>
       <td>{{ statement.created_time|date('Y-m-d H:i:s') }}</td>
-      <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_xapi_statement_detail', {id: statement.id}) }}">{{'form.btn.detail'|trans}}</a></td>
+      <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_xapi_statement_detail', {id: statement.id}) }}">{{'form.btn.detail'|trans}}</a></td>
     </tr>
     {% else %}
       <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
