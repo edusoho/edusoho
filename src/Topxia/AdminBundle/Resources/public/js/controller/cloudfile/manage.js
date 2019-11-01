@@ -142,7 +142,7 @@ define(function(require, exports, module) {
         }).done(function(resp) {
           self.element.hide();
           self.element.prev().hide();
-          self.element.parent().prev().html(Translator.trans('material_lib.detail.content_title'));
+          self.element.parent().prev().hide();
           self.element.parent().append(resp);
           new DetailWidget({
             element: '#material-detail',
@@ -150,6 +150,7 @@ define(function(require, exports, module) {
               var $form = $('#materials-form');
               $form.show();
               $form.prev().show();
+              $form.parent().prev().show();
               window.materialWidget.renderTable();
             }
           });

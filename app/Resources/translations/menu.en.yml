@@ -584,6 +584,16 @@ admin_v2.operation.content.basic_tab: Customize pages
 admin_v2.operation.site.share_tab: Share
 admin_v2.operation.site.friendlyLink_navigation_tab: 'Recommended Links'
 
+# 运营-内容运营-全站站内通知
+admin_v2.operation.notification_menu: Site Notices
+admin_v2.operation.notification.basic_tab: Site Notices
+admin_v2.operation.notification.basic_tab.create_btn: Create Site Notification
+
+#运营-内容运营-网站公告管理
+admin_v2.operation.announcement_menu: Site Announcements
+admin_v2.operation.announcement.basic_tab: Site Announcements
+admin_v2.operation.announcement.basic_tab.create_btn: Publish an Announcement
+
 # 运营-内容运营-资讯
 admin_v2.operation.content_operation.basic_group: Content Operating
 admin_v2.operation.article_menu: Article Manage
@@ -629,11 +639,14 @@ admin_v2.operation.invite.coupon_tab: Rewards
 admin_v2.micromarketing.menu: Micromarketing
 
 #运营-内容运营-小组管理
-
 admin_v2.operation.group_menu: Group Discussions
 admin_v2.operation.group.group_tab: Groups
 admin_v2.operation.group.group_tab.create_group_btn: Add Group
 admin_v2.operation.group.group_thread_tab: Group Discussions
+
+#运营-内容管理-私信管理
+admin_v2.operation.message_menu: Message Manage
+admin_v2.operation.message.basic_tab: Message Manage
 
 # 用户-用户管理-用户管理-tab
 admin_v2.user.basic.basic_tab: User Manage
@@ -683,6 +696,9 @@ admin_v2.trade.bills.coin_records_tab: Coin Bill
 # 交易-虚拟币管理
 admin_v2.trade.coin_menu: Coin Manage
 admin_v2.trade.coin.basic_tab: Coin Manage
+
+# 交易-发票管理
+admin_v2.trade.invoice_manage.basic_group: Invoice Manage
 
 # 数据-数据统计
 admin_v2.data_statictics.analysis.basic_group: Data Analysis
@@ -744,6 +760,15 @@ admin_v2.general.basic_group: General Manage
 admin_v2.system.site_menu: Online School Information
 admin_v2.system.site.basic_tab: School Information
 
+# 系统-通用管理-运营设置
+admin_v2.system.operation_menu: Operation Setting
+admin_v2.system.mailer_setting_tab: Mailer Setting
+admin_v2.system.operation.article_tab: Article
+admin_v2.system.operation.group_tab: Group
+admin_v2.system.operation.invite_tab: Invitation Setting
+admin_v2.system.operation.message_open_tab: Message Open
+admin_v2.system.operation.message_send_tab: Message Send
+
 # 系统-交易设置
 admin_v2.transaction.basic_group: Transaction Settings
 
@@ -752,6 +777,16 @@ admin_v2.system.asset_menu: Asset Setting
 admin_v2.system.asset.payment_tab: Payment
 admin_v2.system.asset.coin_tab: Virtual Coin
 admin_v2.system.asset.refund_tab: Refund
+
+#系统-通用管理-用户设置
+admin_v2.system.user_menu: User Setting
+admin_v2.system.user.user_center_tab: User Center
+admin_v2.system.user.login_bind_tab: Log In
+admin_v2.system.user.user_fields_tab: User Setting
+admin_v2.system.user.avatar_tab: Default
+
+#系统-通用设置-微信授权信息
+admin_v2.system.wechat_auth_menu: WeChat Authorization Information
 
 #系统-通用管理-课程设置
 admin_v2.system.course_menu: Course Setting
@@ -768,6 +803,10 @@ admin_v2.system.basic_group: System Manage
 admin_v2.system.optimize_menu: System Optimization
 admin_v2.system.optimize.basic_tab: System Optimization
 
+# 系统-系统管理-系统自检
+admin_v2.system.report_status_menu: System Self-checking
+admin_v2.system.report_status.basic_tab: System Self-checking
+
 # 系统-系统管理-系统日志
 admin_v2.system.logs_menu: System Logs
 admin_v2.system.logs.logs_query_tab: System Log
@@ -782,4 +821,9 @@ admin_v2.system.post_num_tab: Post Setting
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: Data Overview
 admin_v2.data_statistics.overview.basic_tab: Data Overview
+
+# 系统-通用管理-组织机构管理
+admin_v2.system.org_menu: Orgs
+admin_v2.system.org.basic_tab: Organization
+
 # 新版后台结束

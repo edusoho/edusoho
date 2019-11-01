@@ -1,0 +1,222 @@
+admin_course_search:
+    path: /course/search
+    defaults: { _controller: AppBundle:Admin/Course:search }
+    permissions: [admin_operation_mobile_select_manage]
+
+admin_live_get_max_online:
+    path: /livecourse/get/maxOnline
+    defaults: { _controller: AppBundle:Admin/LiveCourse:getMaxOnline }
+    permissions: [admin_live_course_manage]
+
+admin_operation_mobile_select:
+    path:  /operation/mobile/select
+    defaults: { _controller: AppBundle:Admin/Mobile:mobileSelect }
+    permissions: [admin_operation_mobile_select_manage]
+
+admin_operation_mobile_customization_upgrade:
+    path:  /operation/mobile/customization_upgrade
+    defaults: { _controller: AppBundle:Admin/Mobile:customizationUpgrade }
+    methods: [POST]
+
+admin_setting_mobile_iap_product:
+    path:  /setting/mobile_iap_product
+    defaults: { _controller: AppBundle:Admin/Setting:mobileIapProduct }
+
+admin_setting_mobile_iap_product_delete:
+    path:  /setting/mobile_iap_product_delete/{productId}
+    defaults: { _controller: AppBundle:Admin/Setting:mobileIapProductDelete }
+    methods: [POST]
+
+admin_cloud_video_overview_renew:
+    path:  /cloud/video/renew/modal
+    defaults: { _controller: AppBundle:Admin/EduCloud:showRenewVideo }
+
+admin_setting_cloud_video_embed_watermark_upload:
+    path: /setting/cloud/video_embed_watermark/upload
+    defaults: { _controller: AppBundle:Admin/EduCloud:videoEmbedWatermarkUpload }
+    methods: [POST]
+    permissions: [admin_cloud_video_overview]
+
+admin_mocked:
+    path: /mock
+    defaults: { _controller: AppBundle:Admin/Mock:index }
+
+admin_mocked_distributor_token:
+    path: /mock/distributor_token/{type}
+    defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
+
+admin_mocked_distributor_get_post_data:
+    path: /mock/distributor_get_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:getPostDistributorData }
+
+admin_mocked_distributor_post_data:
+    path: /mock/distributor_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:postDistributorData }
+    methods: [POST]
+
+admin_mocked_marketing_post_data:
+    path: /mock/marketing_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:postMarketingData }
+    methods: [POST]
+
+admin_mocked_post_data_version_3:
+    path: /mock/post_data_version_3
+    defaults: { _controller: AppBundle:Admin/Mock:postDataWithVersion3 }
+    methods: [POST]
+
+admin_mocked_download_token:
+    path: /mock/download_token
+    defaults: { _controller: AppBundle:Admin/Mock:downloadToken }
+    methods: [POST]
+
+admin_optimize_remove_backup:
+    path:  /setting/optimize/remove-backup
+    defaults: { _controller: AppBundle:Admin/Optimize:removeBackup }
+    methods: [POST]
+    permissions: [admin_optimize_settings]
+
+admin_optimize_remove_show_progressbar:
+    path:  /setting/optimize/show-progressbar
+    defaults: { _controller: AppBundle:Admin/Optimize:showProgressbar }
+    permissions: [admin_optimize_settings]
+
+admin_performance:
+    path:  /setting/performance
+    defaults: { _controller: AppBundle:Admin/Setting:performance }
+
+admin_cloud_detail:
+    path:  /cloud/detail
+    defaults: { _controller: AppBundle:Admin/Cloud:detail }
+    permissions: [admin_my_cloud_overview]
+
+admin_cloud_email_count:
+    path: /cloud/email/list
+    defaults: { _controller: AppBundle:Admin/Cloud:emailCount }
+
+admin_cloud_doc:
+    path:  /cloud/doc
+    defaults: { _controller: AppBundle:Admin/Cloud:doc }
+    permissions: [admin_my_cloud_overview]
+
+admin_my_cloud:
+    path:  /setting/my/cloud
+    defaults: { _controller: AppBundle:Admin/EduCloud:myCloud }
+    permissions: [admin_my_cloud_overview]
+
+admin_category_upload:
+    path: /category/uploadfile
+    defaults: { _controller: AppBundle:Admin/Category:uploadFile }
+    methods: [POST]
+    permissions: [admin_course_category_manage]
+
+# 添加云直播
+admin_cloud_upload_live_logo:
+    path: /cloud/edulive/upload
+    defaults: { _controller: AppBundle:Admin/EduCloud:uploadLiveLogo }
+    methods: [POST]
+
+admin_cloud_edulive_logo_crop:
+    path:  /cloud/edulive/{type}/logo/crop
+    defaults: { _controller: AppBundle:Admin/EduCloud:logoCrop }
+
+admin_classroom_chooser:
+    path: /classroom/chooser
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:chooser }
+
+### role
+admin_roles:
+    path:  /roles
+    defaults: { _controller: AppBundle:Admin/Role:index }
+    permissions: [admin_role_manage]
+
+admin_role_create:
+    path:  /role/create
+    defaults: { _controller: AppBundle:Admin/Role:create }
+
+admin_role_edit:
+    path:  /role/{id}/edit
+    defaults: { _controller: AppBundle:Admin/Role:edit }
+
+admin_role_delete:
+    path:  /role/{id}/delete
+    defaults: { _controller: AppBundle:Admin/Role:delete }
+    methods: [POST]
+
+admin_role_show:
+    path:  /role/{id}/show
+    defaults: { _controller: AppBundle:Admin/Role:show }
+    permissions: [admin_role_manage]
+
+admin_role_check_name:
+    path:  /role/checkName
+    defaults: { _controller: AppBundle:Admin/Role:checkName }
+    permissions: [admin_role_manage]
+
+admin_role_check_code:
+    path:  /role/checkCode
+    defaults: { _controller: AppBundle:Admin/Role:checkCode }
+    permissions: [admin_role_manage]
+
+admin_jobs:
+    path: /jobs
+    defaults: { _controller: AppBundle:Admin/Job:index }
+
+admin_job_logs:
+    path: /job/logs
+    defaults: { _controller: AppBundle:Admin/Job:logs }
+
+admin_crontab:
+    path: /crontab
+    defaults: { _controller: AppBundle:Admin/Crontab:index }
+
+admin_crontab_resotre:
+    path: /crontab/restore
+    defaults: { _controller: AppBundle:Admin/Crontab:restore }
+    methods: [POST]
+
+admin_job_enabled:
+    path: /job/{id}/enabled
+    defaults: { _controller: AppBundle:Admin/Job:enabled }
+    methods: [POST]
+
+admin_job_disabled:
+    path: /job/{id}/disabled
+    defaults: { _controller: AppBundle:Admin/Job:disabled }
+    methods: [POST]
+
+admin_job_set_next_exec_time:
+  path: /job/{id}/set_next_exec_time
+  defaults: { _controller: AppBundle:Admin/Job:setNextExecTime }
+
+admin_job_fires:
+    path: /job/{id}/fires
+    defaults: { _controller: AppBundle:Admin/Job:fires }
+
+admin_job_fired_logs:
+    path: /job/{id}/fire/{jobFiredId}/logs
+    defaults: { _controller: AppBundle:Admin/Job:fireLogs }
+
+admin_xapi_setting:
+    path: /xapi/setting
+    defaults: { _controller: AppBundle:Admin/Xapi:setting }
+
+admin_xapi_statement_list:
+    path: /xapi/statement_list
+    defaults: { _controller: AppBundle:Admin/Xapi:index }
+
+admin_xapi_statement_detail:
+    path: /xapi/statement/{id}/detail
+    defaults: { _controller: AppBundle:Admin/Xapi:detail }
+
+admin_cloud_ad:
+    path: /cloud/ad
+    defaults: { _controller: AppBundle:Admin/EduCloud:getAd }
+
+admin_queue_failed_logs:
+    path: /queue/failed_logs
+    defaults: { _controller: AppBundle:Admin/Queue:failedJobs }
+
+admin_queue_failed_log_modal:
+    path: /queue/failed_log/{id}
+    defaults: { _controller: AppBundle:Admin/Queue:failedJob }
+

@@ -14,7 +14,7 @@ class MicromarketingController extends BaseController
     {
         $storage = $this->getSettingService()->get('storage');
         if (empty($storage['cloud_access_key']) || empty($storage['cloud_secret_key'])) {
-            return $this->render('admin-v2/marketing/micromarketing/not-access.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', array('menu' => 'admin_v2_micromarketing_page'));
         }
 
         $merchantUrl = $request->getSchemeAndHttpHost();

@@ -582,6 +582,17 @@ admin_v2.operation.site.es_bar_tab: '侧边栏'
 admin_v2.operation.content.basic_tab: 自定义页面
 admin_v2.operation.site.share_tab: 分享
 admin_v2.operation.site.friendlyLink_navigation_tab: '友情链接'
+
+# 运营-内容运营-全站站内通知
+admin_v2.operation.notification_menu: 全站站内通知
+admin_v2.operation.notification.basic_tab: 全站站内通知
+admin_v2.operation.notification.basic_tab.create_btn: 创建站内通知
+
+#运营-内容运营-网站公告管理
+admin_v2.operation.announcement_menu: 网站公告管理
+admin_v2.operation.announcement.basic_tab: 网站公告管理
+admin_v2.operation.announcement.basic_tab.create_btn: 新增公告
+
 # 运营-内容运营-资讯
 admin_v2.operation.content_operation.basic_group: 内容运营
 admin_v2.operation.article_menu: 资讯管理
@@ -629,11 +640,14 @@ admin_v2.operation.invite.coupon_tab: 奖励查询
 admin_v2.micromarketing.menu: 微营销
 
 #运营-内容运营-小组管理
-
 admin_v2.operation.group_menu: 小组管理
 admin_v2.operation.group.group_tab: 小组管理
 admin_v2.operation.group.group_tab.create_group_btn: 创建小组
 admin_v2.operation.group.group_thread_tab: 小组话题管理
+
+#运营-内容管理-私信管理
+admin_v2.operation.message_menu: 私信管理
+admin_v2.operation.message.basic_tab: 私信管理
 
 # 用户-用户管理-用户管理
 admin_v2.user.user_group: 用户管理
@@ -687,6 +701,9 @@ admin_v2.trade.bills.coin_records_tab: 虚拟币账单
 # 交易-虚拟币管理
 admin_v2.trade.coin_menu: 虚拟币管理
 admin_v2.trade.coin.basic_tab: 虚拟币管理
+
+# 交易-发票管理
+admin_v2.trade.invoice_manage.basic_group: 发票管理
 
 # 应用中心-营销云-营销应用
 admin_v2.basic_app_center_group: 营销云
@@ -748,6 +765,15 @@ admin_v2.general.basic_group: 通用管理
 admin_v2.system.site_menu: 网校信息
 admin_v2.system.site.basic_tab: 学校信息
 
+# 系统-通用管理-运营设置
+admin_v2.system.operation_menu: 运营设置
+admin_v2.system.mailer_setting_tab: 邮件服务器设置
+admin_v2.system.operation.article_tab: 资讯
+admin_v2.system.operation.group_tab: 小组
+admin_v2.system.operation.invite_tab: 邀请注册设置
+admin_v2.system.operation.message_open_tab: 私信开启
+admin_v2.system.operation.message_send_tab: 私信发送
+
 # 系统-交易设置
 admin_v2.transaction.basic_group: 交易设置
 
@@ -756,6 +782,16 @@ admin_v2.system.asset_menu: 资产设置
 admin_v2.system.asset.payment_tab: 支付
 admin_v2.system.asset.coin_tab: 虚拟币
 admin_v2.system.asset.refund_tab: 退款
+
+#系统-通用管理-用户设置
+admin_v2.system.user_menu: 用户设置
+admin_v2.system.user.user_center_tab: 用户中心
+admin_v2.system.user.login_bind_tab: 登录
+admin_v2.system.user.user_fields_tab: 用户信息设置
+admin_v2.system.user.avatar_tab: 默认头像
+
+#系统-通用设置-微信授权信息
+admin_v2.system.wechat_auth_menu: 微信授权信息
 
 #系统-通用管理-课程设置
 admin_v2.system.course_menu: 课程设置
@@ -767,11 +803,15 @@ admin_v2.system.course.open_course_tab: 公开课
 
 # 系统-系统管理
 admin_v2.system.basic_group: 系统管理
+admin_v2.system.user.auth_tab: 注册
 
 # 系统-系统管理-系统优化
 admin_v2.system.optimize_menu: 系统优化
 admin_v2.system.optimize.basic_tab: 系统优化
 
+# 系统-系统管理-系统自检
+admin_v2.system.report_status_menu: 系统自检
+admin_v2.system.report_status.basic_tab: 系统自检
 
 # 系统-系统管理-系统日志
 admin_v2.system.logs_menu: 系统日志
@@ -787,4 +827,9 @@ admin_v2.system.post_num_tab: 发帖限制
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: 数据概览
 admin_v2.data_statistics.overview.basic_tab: 数据概览
+
+# 系统-通用管理-组织机构管理
+admin_v2.system.org_menu: 组织机构管理
+admin_v2.system.org.basic_tab: 组织机构
+
 # 新版后台结束
