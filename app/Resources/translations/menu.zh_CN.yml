@@ -832,4 +832,8 @@ admin_v2.data_statistics.overview.basic_tab: 数据概览
 admin_v2.system.org_menu: 组织机构管理
 admin_v2.system.org.basic_tab: 组织机构
 
+#队列
+admin_v2.system.queue_manage_menu: 队列
+admin_v2.system.queue_failed_tab: 队列错误日志
+
 # 新版后台结束

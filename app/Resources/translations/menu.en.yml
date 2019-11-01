@@ -826,4 +826,7 @@ admin_v2.data_statistics.overview.basic_tab: Data Overview
 admin_v2.system.org_menu: Orgs
 admin_v2.system.org.basic_tab: Organization
 
+#队列
+admin_v2.system.queue_manage_menu: Queue Manage
+admin_v2.system.queue_failed_tab: Queue Failed Log
 # 新版后台结束
