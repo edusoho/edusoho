@@ -1233,6 +1233,13 @@ admin_v2:
                                     name: admin_v2.developer.magic_manage
                                 admin_v2_setting_developer_version:
                                     name: admin_v2.developer.version_manage
+                        admin_v2_page_static_manage:
+                            name: admin_v2.page_static_manage
+                            disable: true
+                            children:
+                                admin_v2_page_static_setting:
+                                    name: admin_v2.page_static_tab
+                                    router_name: admin_v2_performance
                         admin_v2_org_manage:
                             name: admin_v2.developer.org_menu
                             disable: true
@@ -1250,4 +1257,3 @@ admin_v2:
                                     name: admin_v2.developer.job_logs
                                 admin_v2_crontab:
                                     name: admin_v2.developer.crontab
-
