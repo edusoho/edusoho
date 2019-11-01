@@ -73,6 +73,7 @@ export default class sbList {
   }
 
   initSelect() {
+    $('[data-toggle="tooltip"]').tooltip();
     cd.select({
       el: '#courseBelong',
       type: 'single'
@@ -90,15 +91,23 @@ export default class sbList {
       $.post(url,{courseId:value},function(result){
         if (result != '') {
           let option = '<li class="checked" data-value="0">'+Translator.trans('site.choose_hint')+'</li>';
+          let $class = '';
           $.each(result,function(index,task){
-            option += '<li data-value="'+task.id+'">'+task.title+'</li>';
+            if(index == 0){
+              $class = 'tip-count-1';
+            }else{
+              $class = '';
+            }
+            option += `<li data-value="${task.id}" class="${$class}" title="${task.title}" data-toggle="tooltip" data-placement="top">${task.title}</li>`;
           });
           $('.js-lesson-options').append(option);
+          $('[data-toggle="tooltip"]').tooltip();
           select2.show();
         } else {
           select2.hide();
         }
       });
+
     });
 
     cd.select({

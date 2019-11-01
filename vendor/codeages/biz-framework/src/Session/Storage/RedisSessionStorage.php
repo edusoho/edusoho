@@ -11,9 +11,20 @@ class RedisSessionStorage implements SessionStorage
         $this->biz = $biz;
     }
 
+    /**
+     * @param $sessId
+     * @return mixed
+     * For php-redis 5.0.0+ function Redis::delete() is deprecated , replaced with Redis::del() compatible.
+     * doc https://pecl.php.net/package-changelog.php?package=redis&release=2.2.3
+     */
     public function delete($sessId)
     {
-        return $this->getRedis()->delete($this->getSessionPrefix().':'.$sessId);
+        $redis = $this->getRedis();
+        if (method_exists($redis, 'del')) {
+            return $redis->del($this->getSessionPrefix().':'.$sessId);
+        }
+
+        return $redis->delete($this->getSessionPrefix().':'.$sessId);
     }
 
     public function get($sessId)

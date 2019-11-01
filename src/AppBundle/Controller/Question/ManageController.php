@@ -68,11 +68,7 @@ class ManageController extends BaseController
 
         $user = $this->getUser();
         $searchCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
-        $conditions = array(
-            'courseId' => $request->query->get('courseId', 0),
-            'typesNotIn' => array('testpaper', 'homework', 'exercise'),
-        );
-        $showTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
+        $showTasks = $this->getTaskService()->findTasksByCourseId($request->query->get('courseId', 0));
         $showTasks = ArrayToolkit::index($showTasks, 'id');
 
         return $this->render('question-manage/index.html.twig', array(
@@ -401,11 +397,7 @@ class ManageController extends BaseController
 
         $this->getCourseService()->tryManageCourse($courseId);
 
-        $conditions = array(
-            'courseId' => $courseId,
-            'typesNotIn' => array('testpaper', 'homework', 'exercise'),
-        );
-        $courseTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
+        $courseTasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
         return $this->createJsonResponse($courseTasks);
     }

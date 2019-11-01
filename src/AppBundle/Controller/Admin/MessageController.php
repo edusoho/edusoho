@@ -48,18 +48,6 @@ class MessageController extends BaseController
         }
     }
 
-    public function deleteAction(Request $request, $id)
-    {
-        $this->getFileService()->deleteFile($id);
-
-        return $this->createNewJsonResponse(true);
-    }
-
-    public function uploadAction(Request $request)
-    {
-        return $this->render('admin/file/upload-modal.html.twig');
-    }
-
     protected function getMessageService()
     {
         return $this->createService('User:MessageService');

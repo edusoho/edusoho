@@ -574,14 +574,25 @@ admin_v2.operation.site.theme_tab: 已购主题
 # 运营-网校装修-站点设置
 admin_v2.operation.site_decoration.basic_group: 网校装修
 
-admin_v2.operation.site_menu: 站点设置
+admin_v2.operation.site_menu: 站点配置
 admin_v2.operation.site.top_navigation_tab: 顶部导航
 admin_v2.operation.site.foot_navigation_tab: 底部导航
 admin_v2.operation.site.consult_setting_tab: 客服
 admin_v2.operation.site.es_bar_tab: '侧边栏'
-admin_v2.operation.content.basic_tab: 自定义页面管理
+admin_v2.operation.content.basic_tab: 自定义页面
 admin_v2.operation.site.share_tab: 分享
 admin_v2.operation.site.friendlyLink_navigation_tab: '友情链接'
+
+# 运营-内容运营-全站站内通知
+admin_v2.operation.notification_menu: 全站站内通知
+admin_v2.operation.notification.basic_tab: 全站站内通知
+admin_v2.operation.notification.basic_tab.create_btn: 创建站内通知
+
+#运营-内容运营-网站公告管理
+admin_v2.operation.announcement_menu: 网站公告管理
+admin_v2.operation.announcement.basic_tab: 网站公告管理
+admin_v2.operation.announcement.basic_tab.create_btn: 新增公告
+
 # 运营-内容运营-资讯
 admin_v2.operation.content_operation.basic_group: 内容运营
 admin_v2.operation.article_menu: 资讯管理
@@ -629,11 +640,14 @@ admin_v2.operation.invite.coupon_tab: 奖励查询
 admin_v2.micromarketing.menu: 微营销
 
 #运营-内容运营-小组管理
-
 admin_v2.operation.group_menu: 小组管理
 admin_v2.operation.group.group_tab: 小组管理
 admin_v2.operation.group.group_tab.create_group_btn: 创建小组
 admin_v2.operation.group.group_thread_tab: 小组话题管理
+
+#运营-内容管理-私信管理
+admin_v2.operation.message_menu: 私信管理
+admin_v2.operation.message.basic_tab: 私信管理
 
 # 用户-用户管理-用户管理
 admin_v2.user.user_group: 用户管理
@@ -688,6 +702,9 @@ admin_v2.trade.bills.coin_records_tab: 虚拟币账单
 admin_v2.trade.coin_menu: 虚拟币管理
 admin_v2.trade.coin.basic_tab: 虚拟币管理
 
+# 交易-发票管理
+admin_v2.trade.invoice_manage.basic_group: 发票管理
+
 # 应用中心-营销云-营销应用
 admin_v2.basic_app_center_group: 营销云
 admin_v2.cloud.app_center_menu: 营销应用
@@ -726,13 +743,36 @@ admin_v2.data_statictics.analysis.basic_group: 数据分析
 admin_v2.data_statistics.statistics.menu: 数据统计
 admin_v2.data_statistics.statistics.basic_tab: 数据统计
 
+
 #数据实验室
 admin_v2.cloud.data_lab: 数据实验室
 admin_v2.cloud.data_lab_setting: 设置
 
+# 人脸识别
+admin_v2.cloud.face_identify: 人脸识别
+
+#功能实验室
+admin_v2.cloud.feature_lab: 功能实验室
+
 # 应用中心-基础云-授权信息
 admin_v2.cloud.cloud_setting_menu: 授权信息
 admin_v2.cloud.cloud_setting.basic_tab: 授权信息
+
+# 系统-通用管理
+admin_v2.general.basic_group: 通用管理
+
+# 系统-通用管理-网校信息
+admin_v2.system.site_menu: 网校信息
+admin_v2.system.site.basic_tab: 学校信息
+
+# 系统-通用管理-运营设置
+admin_v2.system.operation_menu: 运营设置
+admin_v2.system.mailer_setting_tab: 邮件服务器设置
+admin_v2.system.operation.article_tab: 资讯
+admin_v2.system.operation.group_tab: 小组
+admin_v2.system.operation.invite_tab: 邀请注册设置
+admin_v2.system.operation.message_open_tab: 私信开启
+admin_v2.system.operation.message_send_tab: 私信发送
 
 # 系统-交易设置
 admin_v2.transaction.basic_group: 交易设置
@@ -743,20 +783,53 @@ admin_v2.system.asset.payment_tab: 支付
 admin_v2.system.asset.coin_tab: 虚拟币
 admin_v2.system.asset.refund_tab: 退款
 
+#系统-通用管理-用户设置
+admin_v2.system.user_menu: 用户设置
+admin_v2.system.user.user_center_tab: 用户中心
+admin_v2.system.user.login_bind_tab: 登录
+admin_v2.system.user.user_fields_tab: 用户信息设置
+admin_v2.system.user.avatar_tab: 默认头像
+
+#系统-通用设置-微信授权信息
+admin_v2.system.wechat_auth_menu: 微信授权信息
+
+#系统-通用管理-课程设置
+admin_v2.system.course_menu: 课程设置
+admin_v2.system.course.basic_tab: 课程
+admin_v2.system.course.questions_tab: 题库
+admin_v2.system.course.avatar_tab: 默认图片
+admin_v2.system.course.classroom_tab: 班级
+admin_v2.system.course.open_course_tab: 公开课
+
 # 系统-系统管理
 admin_v2.system.basic_group: 系统管理
+admin_v2.system.user.auth_tab: 注册
 
 # 系统-系统管理-系统优化
 admin_v2.system.optimize_menu: 系统优化
 admin_v2.system.optimize.basic_tab: 系统优化
 
+# 系统-系统管理-系统自检
+admin_v2.system.report_status_menu: 系统自检
+admin_v2.system.report_status.basic_tab: 系统自检
 
 # 系统-系统管理-系统日志
 admin_v2.system.logs_menu: 系统日志
 admin_v2.system.logs.logs_query_tab: 系统操作日志
 admin_v2.system.logs.logs_prod_tab: 程序运行日志
 
+# 系统-系统管理-安全设置
+admin_v2.system.security_menu: 安全设置
+admin_v2.system.blacklist_tab: IP黑名单
+admin_v2.system.security_tab: 白名单域名
+admin_v2.system.post_num_tab: 发帖限制
+
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: 数据概览
 admin_v2.data_statistics.overview.basic_tab: 数据概览
+
+# 系统-通用管理-组织机构管理
+admin_v2.system.org_menu: 组织机构管理
+admin_v2.system.org.basic_tab: 组织机构
+
 # 新版后台结束

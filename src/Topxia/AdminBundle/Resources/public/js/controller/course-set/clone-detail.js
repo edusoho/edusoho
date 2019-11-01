@@ -15,8 +15,9 @@ define(function (require, exports, module) {
                 if (error) {
                     return false;
                 }
-
-                csl.doClone($("#js-course-clone-btn").data('courseSetId'),$('#course_title').val());
+                let $webUrl = $('#js-course-clone-btn').data('webUrl');
+                let $crontabUrl = $('#js-course-clone-btn').data('crontabUrl');
+                csl.doClone($("#js-course-clone-btn").data('courseSetId'),$('#course_title').val(), $webUrl, $crontabUrl);
 
             }
         });

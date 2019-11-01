@@ -119,6 +119,16 @@ admin_wap_set: admin_v2_wap_set #微网校装修
 admin_wechat_app_manage: admin_v2_wechat_app_manage #小程序装修
 admin_wechat_app: admin_v2_wechat_app_manage #小程序装修
 
+# 全站站内通知
+admin_operation_notification: admin_v2_operation_notification
+admin_batch_notification: admin_v2_batch_notification
+admin_batch_notification_create: admin_v2_batch_notification_create
+
+#运营-内容运营-网站公告管理
+admin_announcement: admin_v2_operation_announcement #网站公告管理
+admin_announcement_manage: admin_v2_operation_announcement_manage #网站公告管理
+admin_announcement_create: admin_v2_announcement_create #创建网站公告管理
+
 # 资讯
 admin_operation_article: admin_v2_operation_article
 admin_operation_article_manage: admin_v2_operation_article_manage
@@ -146,7 +156,7 @@ admin_setting_theme: admin_v2_setting_theme #已购主题
 
 #站点设置
 admin_operation: admin_v2_operating #运营
-admin_setting: admin_v2_site_setting #站点设置
+admin_setting: { admin_v2_site_setting, admin_v2_school_information_setting } # { 运营-网校装修-站点配置, 系统-通用管理-网校信息 }
 admin_top_navigation: admin_v2_top_navigation #顶部导航
 admin_foot_navigation: admin_v2_foot_navigation #底部导航
 admin_setting_consult_setting: admin_v2_setting_consult_setting #客服
@@ -160,6 +170,10 @@ admin_operation_group: admin_v2_operation_group_manage #小组管理
 admin_operation_group_manage: admin_v2_operation_group_manage #小组管理
 admin_operation_group_create: admin_v2_operation_group_create #创建小组
 admin_operation_group_thread: admin_v2_operation_group_thread #小组话题管理
+
+#运营-内容运营-私信管理
+admin_message_manage: admin_v2_message_manage
+admin_message: admin_v2_message
 
 #用户-用户管理-实名认证
 admin_approval_manage: admin_v2_approval_manage #实名认证
@@ -263,10 +277,20 @@ admin_cloud_consult_setting: admin_v2_edu_cloud_consult_setting  #云问答设�
 admin_app_im: admin_v2_app_im #即时聊天设置
 admin_app_im_setting: admin_v2_app_im_setting #即时聊天设置
 
+
+
 #数据实验室
 admin_cloud_data_lab_manage: admin_v2_cloud_data_lab_manage  #数据实验室
 admin_cloud_data_lab: admin_v2_cloud_data_lab #数据实验室
 admin_cloud_data_lab_setting: admin_v2_cloud_data_lab_setting #设置
+
+# 人脸识别
+admin_cloud_face_identify_manage: admin_v2_cloud_face_identify
+admin_cloud_face_identify: admin_v2_cloud_face_identify_setting
+
+#功能实验室
+admin_cloud_feature_lab_manage: admin_v2_cloud_feature_lab
+admin_cloud_feature_lab: admin_v2_cloud_feature_lab_setting
 
 #授权信息
 admin_setting_cloud: admin_v2_setting_cloud #授权信息
@@ -274,6 +298,39 @@ admin_setting_my_cloud: admin_v2_setting_my_cloud #授权信息
 
 # 系统
 admin_system: admin_v2_system
+
+# 系统-通用管理-网校信息
+admin_setting_message: admin_v2_school_information
+
+#系统-通用管理-用户设置
+admin_setting_user: admin_v2_setting_user #用户设置
+admin_user_auth: admin_v2_user_auth #注册
+admin_setting_login_bind: admin_v2_setting_login_bind #登陆
+admin_setting_user_center: admin_v2_setting_user_center #用户中心
+admin_setting_user_fields: admin_v2_setting_user_fields #用户信息设置
+admin_setting_avatar: admin_v2_setting_avatar #默认头像
+
+#系统-通用设置-微信授权信息
+admin_setting_wechat: admin_v2_setting_wechat #微信授权信息
+admin_setting_wechat_auth: admin_v2_setting_wechat_auth  #微信授权信息
+
+#系统-通用管理-课程设置
+admin_setting_course_setting: admin_v2_setting_course_setting #课程设置
+admin_setting_course: admin_v2_setting_course #课程
+admin_setting_live_course: admin_v2_setting_live_course #直播
+admin_setting_questions_setting: admin_v2_setting_questions_setting #题库
+admin_setting_course_avatar: admin_v2_setting_course_avatar #默认图片
+admin_classroom_setting: admin_v2_classroom_setting #班级
+admin_open_course_setting: admin_v2_open_course_setting #公开课
+
+# 系统-通用管理-运营设置
+admin_setting_operation: admin_v2_setting_operation
+admin_setting_mailer: admin_v2_setting_mailer #邮箱服务器设置
+admin_article_setting: admin_v2_article_set # 资讯
+admin_group_set: admin_v2_group_set # 小组
+admin_invite_set: admin_v2_invite_set # 邀请注册设置
+admin_message_setting: admin_v2_message_open_set # 私信开启
+admin_setting_user_message: admin_v2_message_send_set # 私信发送
 
 # 系统-交易设置-资产设置
 admin_setting_finance: admin_v2_asset_setting
@@ -289,3 +346,16 @@ admin_optimize_settings: admin_v2_optimize_settings
 admin_logs: admin_v2_logs
 admin_logs_query: admin_v2_logs_query
 admin_logs_prod: admin_v2_logs_prod
+
+# 系统-系统管理-安全设置
+admin_setting_ip_blacklist_manage: admin_v2_ip_blacklist_setting #IP黑名单
+admin_setting_security: admin_v2_security_setting #白名单域名
+admin_setting_post_num_rules: admin_v2_post_num_rules_setting #发帖限制
+
+# 系统-系统管理-系统自检
+admin_report_status: admin_v2_report_status
+admin_report_status_list: admin_v2_report_status_list
+
+# 系统-通用管理-组织机构管理
+admin_org_manage: admin_v2_org_manage
+admin_org: admin_v2_org

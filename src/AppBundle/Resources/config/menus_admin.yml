@@ -1010,10 +1010,10 @@ admin:
                             name: admin.system.course.basic_tab
                             disable: true
                             router_name: admin_setting_course_setting
-                        # admin_setting_live_course:
-                        #     name: 直播
-                        #     disable: true
-                        #     router_name: admin_setting_live_course_setting
+#                        admin_setting_live_course:
+#                            name: 直播
+#                            disable: true
+#                            router_name: admin_setting_live_course_setting
                         admin_setting_questions_setting:
                             name: admin.system.course.questions_tab
                             disable: true
