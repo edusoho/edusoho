@@ -1,0 +1,37 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {{ 'admin.xapi.title'|trans }}
+{% endblock %}
+
+{% block body %}
+  <table class="table cd-table table-striped order-detail-table">
+    <tr>
+      <td width="25%">{{ 'admin.xapi.id'|trans }}</td>
+      <td width="75%">{{ statement.uuid }}</td>
+    </tr>
+    <tr>
+      <td width="25%">{{ 'admin.xapi.status'|trans }}</td>
+      <td width="75%">
+        {{ statement.status }}
+      </td>
+    </tr>
+    <tr>
+      <td width="25%">{{ 'admin.xapi.version'|trans }}</td>
+      <td width="75%">
+        {{ statement.version }}
+      </td>
+    </tr>
+    <tr>
+      <td width="25%">{{ 'admin.xapi.body'|trans }}</td>
+      <td width="75%">
+        {{ statement.data|json_encode }}
+      </td>
+    </tr>
+  </table>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+{% endblock %}
+

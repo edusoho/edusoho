@@ -1371,12 +1371,6 @@ admin_category_delete:
     defaults: { _controller: AppBundle:Admin/Category:delete }
     methods: [POST]
 
-admin_category_upload:
-    path: /category/uploadfile
-    defaults: { _controller: AppBundle:Admin/Category:uploadFile }
-    methods: [POST]
-    permissions: [admin_course_category_manage]
-
 admin_category_sort:
     path:  /category/sort
     defaults: { _controller: AppBundle:Admin/Category:sort }
@@ -2045,11 +2039,6 @@ admin_cloud_attachment:
 admin_cloud_edulive_overview:
     path:  /cloud/edulive/overview
     defaults: { _controller: AppBundle:Admin/EduCloud:liveOverview }
-
-admin_cloud_upload_live_logo:
-    path: /cloud/edulive/upload
-    defaults: { _controller: AppBundle:Admin/EduCloud:uploadLiveLogo }
-    methods: [POST]
 
 admin_setting_cloud_edulive:
     path:  /setting/cloud/edulive
