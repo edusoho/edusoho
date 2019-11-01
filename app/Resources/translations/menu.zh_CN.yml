@@ -851,4 +851,14 @@ admin_v2.developer.developer_manage: 开发者调试
 admin_v2.developer.magic_manage: Magic设置
 admin_v2.developer.version_manage: 应用版本修改
 admin_v2.developer.mocked_manage: Mock
+
+# 组织机构管理(隐藏路由)
+admin_v2.developer.org_menu: 组织机构管理
+admin_v2.developer.org.basic_tab: 组织机构
+
+# 任务调度(隐藏路由)
+admin_v2.developer.jobs_manage_manu: 任务调度
+admin_v2.developer.jobs_manage: 任务调度
+admin_v2.developer.job_logs: 任务日志
+admin_v2.developer.crontab: crontab管理
 # 新版后台结束

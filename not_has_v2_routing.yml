@@ -86,45 +86,6 @@ admin_role_check_code:
     defaults: { _controller: AppBundle:Admin/Role:checkCode }
     permissions: [admin_role_manage]
 
-admin_jobs:
-    path: /jobs
-    defaults: { _controller: AppBundle:Admin/Job:index }
-
-admin_job_logs:
-    path: /job/logs
-    defaults: { _controller: AppBundle:Admin/Job:logs }
-
-admin_crontab:
-    path: /crontab
-    defaults: { _controller: AppBundle:Admin/Crontab:index }
-
-admin_crontab_resotre:
-    path: /crontab/restore
-    defaults: { _controller: AppBundle:Admin/Crontab:restore }
-    methods: [POST]
-
-admin_job_enabled:
-    path: /job/{id}/enabled
-    defaults: { _controller: AppBundle:Admin/Job:enabled }
-    methods: [POST]
-
-admin_job_disabled:
-    path: /job/{id}/disabled
-    defaults: { _controller: AppBundle:Admin/Job:disabled }
-    methods: [POST]
-
-admin_job_set_next_exec_time:
-  path: /job/{id}/set_next_exec_time
-  defaults: { _controller: AppBundle:Admin/Job:setNextExecTime }
-
-admin_job_fires:
-    path: /job/{id}/fires
-    defaults: { _controller: AppBundle:Admin/Job:fires }
-
-admin_job_fired_logs:
-    path: /job/{id}/fire/{jobFiredId}/logs
-    defaults: { _controller: AppBundle:Admin/Job:fireLogs }
-
 admin_cloud_ad:
     path: /cloud/ad
     defaults: { _controller: AppBundle:Admin/EduCloud:getAd }
