@@ -837,14 +837,14 @@ admin_v2.developer.developer_manage: Developer DEBUG
 admin_v2.developer.magic_manage: Magic Setting
 admin_v2.developer.version_manage: App Version Manage
 
-# 系统-通用管理-组织机构管理(隐藏路由)
-admin_v2.system.org_menu: Orgs
-admin_v2.system.org.basic_tab: Organization
+# 组织机构管理(隐藏路由)
+admin_v2.developer.org_menu: Orgs
+admin_v2.developer.org.basic_tab: Organization
 
-# 系统-通用管理-任务调度(隐藏路由)
-admin_v2.system.jobs_manage_manu: Jobs Manage
-admin_v2.system.jobs_manage: Jobs Manage
-admin_v2.system.job_logs: Job Logs
-admin_v2.system.crontab: Crontab Manage
+# 任务调度(隐藏路由)
+admin_v2.developer.jobs_manage_manu: Jobs Manage
+admin_v2.developer.jobs_manage: Jobs Manage
+admin_v2.developer.job_logs: Job Logs
+admin_v2.developer.crontab: Crontab Manage
 
 # 新版后台结束

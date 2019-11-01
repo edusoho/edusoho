@@ -974,27 +974,6 @@ admin_v2:
                                     name: admin_v2.system.operation.message_open_tab
                                     disable: true
                                     parent: admin_v2_message_open_set
-                        admin_v2_org_manage:
-                            name: admin_v2.system.org_menu
-                            parent: admin_v2_general_group
-                            disable: true
-                            visible: false
-                            children:
-                                admin_v2_org:
-                                    name: admin_v2.system.org.basic_tab
-                                    disable: true
-                        admin_v2_jobs_manage:
-                            name: admin_v2.system.jobs_manage_manu
-                            parent: admin_v2_general_group
-                            visible: false
-                            disable: true
-                            children:
-                                admin_v2_jobs:
-                                    name: admin_v2.system.jobs_manage
-                                admin_v2_job_logs:
-                                    name: admin_v2.system.job_logs
-                                admin_v2_crontab:
-                                    name: admin_v2.system.crontab
                 # 交易设置
                 admin_v2_transaction_group:
                     name: admin_v2.transaction.basic_group
@@ -1254,5 +1233,21 @@ admin_v2:
                                     name: admin_v2.developer.magic_manage
                                 admin_v2_setting_developer_version:
                                     name: admin_v2.developer.version_manage
-
+                        admin_v2_org_manage:
+                            name: admin_v2.developer.org_menu
+                            disable: true
+                            children:
+                                admin_v2_org:
+                                    name: admin_v2.developer.org.basic_tab
+                                    disable: true
+                        admin_v2_jobs_manage:
+                            name: admin_v2.developer.jobs_manage_manu
+                            disable: true
+                            children:
+                                admin_v2_jobs:
+                                    name: admin_v2.developer.jobs_manage
+                                admin_v2_job_logs:
+                                    name: admin_v2.developer.job_logs
+                                admin_v2_crontab:
+                                    name: admin_v2.developer.crontab
 
