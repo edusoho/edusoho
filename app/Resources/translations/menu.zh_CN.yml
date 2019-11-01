@@ -828,10 +828,6 @@ admin_v2.system.post_num_tab: 发帖限制
 admin_v2.data_statistics.overview.menu: 数据概览
 admin_v2.data_statistics.overview.basic_tab: 数据概览
 
-# 系统-通用管理-组织机构管理
-admin_v2.system.org_menu: 组织机构管理
-admin_v2.system.org.basic_tab: 组织机构
-
 # 隐藏模块
 admin_v2.nav.developer_module: 开发者
 admin_v2.nav.developer_module.basic_group: 开发者设置
@@ -849,4 +845,13 @@ admin_v2.developer.version_manage: 应用版本修改
 admin_v2.page_static_manage: 页面设置
 admin_v2.page_static_tab: 页面静态化设置
 
+# 组织机构管理(隐藏路由)
+admin_v2.developer.org_menu: 组织机构管理
+admin_v2.developer.org.basic_tab: 组织机构
+
+# 任务调度(隐藏路由)
+admin_v2.developer.jobs_manage_manu: 任务调度
+admin_v2.developer.jobs_manage: 任务调度
+admin_v2.developer.job_logs: 任务日志
+admin_v2.developer.crontab: crontab管理
 # 新版后台结束
