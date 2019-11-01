@@ -838,4 +838,12 @@ admin_v2.nav.developer_module.basic_group: 开发者设置
 admin_v2.developer.xapi_manage: xAPI管理
 admin_v2.developer.xapi_setting: xAPI设置
 admin_v2.developer.xapi_statement: xAPI报表
+
+admin_v2.developer.cdn_manage: CDN管理
+admin_v2.developer.cdn_setting: CDN设置
+
+admin_v2.developer.debug_manage: 开发者调试
+admin_v2.developer.developer_manage: 开发者调试
+admin_v2.developer.magic_manage: Magic设置
+admin_v2.developer.version_manage: 应用版本修改
 # 新版后台结束

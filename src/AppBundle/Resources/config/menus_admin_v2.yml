@@ -1225,4 +1225,22 @@ admin_v2:
                                     name: admin_v2.developer.xapi_setting
                                 admin_v2_xapi_statement_list:
                                     name: admin_v2.developer.xapi_statement
+                        admin_v2_cdn_manage:
+                            name: admin_v2.developer.cdn_manage
+                            disable: true
+                            children:
+                                admin_v2_setting_cdn:
+                                    name: admin_v2.developer.cdn_setting
+                        admin_v2_developer_debug_manage:
+                            name: admin_v2.developer.debug_manage
+                            disable: true
+                            children:
+                                admin_v2_develop_debug_setting:
+                                    name: admin_v2.developer.developer_manage
+                                    router_name: admin_v2_setting_developer
+                                admin_v2_setting_developer_magic:
+                                    name: admin_v2.developer.magic_manage
+                                admin_v2_setting_developer_version:
+                                    name: admin_v2.developer.version_manage
+
 
