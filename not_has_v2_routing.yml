@@ -27,16 +27,6 @@ admin_setting_mobile_iap_product_delete:
     defaults: { _controller: AppBundle:Admin/Setting:mobileIapProductDelete }
     methods: [POST]
 
-admin_cloud_video_overview_renew:
-    path:  /cloud/video/renew/modal
-    defaults: { _controller: AppBundle:Admin/EduCloud:showRenewVideo }
-
-admin_setting_cloud_video_embed_watermark_upload:
-    path: /setting/cloud/video_embed_watermark/upload
-    defaults: { _controller: AppBundle:Admin/EduCloud:videoEmbedWatermarkUpload }
-    methods: [POST]
-    permissions: [admin_cloud_video_overview]
-
 admin_mocked:
     path: /mock
     defaults: { _controller: AppBundle:Admin/Mock:index }
