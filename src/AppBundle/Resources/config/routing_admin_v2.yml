@@ -139,6 +139,10 @@ admin_v2_classroom_recommend_list:
     path:   /classroom/recommend/list
     defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommendIndex }
 
+admin_v2_classroom_chooser:
+    path: /classroom/chooser
+    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:chooser }
+    
 # 教学-课程管理-直播管理
 admin_v2_live_course:
     path: /livecourse/{status}
@@ -1777,6 +1781,20 @@ admin_v2_cloud_search_detail:
     path: /cloud/search/detail
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:searchDetail }
 
+admin_v2_cloud_detail:
+    path:  /cloud/detail
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:detail }
+    permissions: [admin_v2_my_cloud_overview]
+
+admin_v2_cloud_email_count:
+    path: /cloud/email/list
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:emailCount }
+    
+admin_cloud_doc:
+    path:  /cloud/doc
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:doc }
+    permissions: [admin_v2_my_cloud_overview]
+    
 # 应用中心-营销云-营销应用
 admin_v2_app_center:
     path:  /app/center/{postStatus}
@@ -1808,6 +1826,11 @@ admin_v2_app_upgrades_count:
 admin_v2_my_cloud_overview:
     path:  /setting/my/cloud/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloudOverview }
+    
+admin_v2_my_cloud:
+    path:  /setting/my/cloud
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloud }
+    permissions: [admin_v2_my_cloud_overview]
 
 # 应用中心-云服务-云视频
 admin_v2_edu_cloud_video_overview:
@@ -1865,6 +1888,10 @@ admin_v2_edu_cloud_edulive_setting:
     path:  /edu_cloud/edulive/setting
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveSetting }
     permissions: [admin_v2_cloud_edulive]
+    
+admin_v2_cloud_edulive_logo_crop:
+    path:  /edu_cloud/edulive/{type}/logo/crop
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:logoCrop }
 
 # 应用中心-基础云-云服务-云短信
 admin_v2_edu_cloud_sms_overview:

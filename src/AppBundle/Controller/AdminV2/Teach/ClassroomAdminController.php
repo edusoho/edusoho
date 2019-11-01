@@ -255,6 +255,48 @@ class ClassroomAdminController extends BaseController
         ));
     }
 
+    public function chooserAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        $conditions['parentId'] = 0;
+
+        if (isset($conditions['categoryId']) && '' == $conditions['categoryId']) {
+            unset($conditions['categoryId']);
+        }
+
+        if (isset($conditions['status']) && '' == $conditions['status']) {
+            unset($conditions['status']);
+        }
+
+        if (isset($conditions['title']) && '' == $conditions['title']) {
+            unset($conditions['title']);
+        }
+
+        $count = $this->getClassroomService()->countClassrooms($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $count,
+            20
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('createdTime' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classrooms, 'categoryId'));
+
+        return $this->render('admin-v2/teach/classroom/classroom-chooser.html.twig', array(
+            'conditions' => $conditions,
+            'classrooms' => $classrooms,
+            'categories' => $categories,
+            'paginator' => $paginator,
+        ));
+    }
+
     private function renderClassroomTr($id, $classroom)
     {
         $coinPrice = 0;

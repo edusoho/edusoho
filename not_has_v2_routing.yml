@@ -84,45 +84,6 @@ admin_performance:
     path:  /setting/performance
     defaults: { _controller: AppBundle:Admin/Setting:performance }
 
-admin_cloud_detail:
-    path:  /cloud/detail
-    defaults: { _controller: AppBundle:Admin/Cloud:detail }
-    permissions: [admin_my_cloud_overview]
-
-admin_cloud_email_count:
-    path: /cloud/email/list
-    defaults: { _controller: AppBundle:Admin/Cloud:emailCount }
-
-admin_cloud_doc:
-    path:  /cloud/doc
-    defaults: { _controller: AppBundle:Admin/Cloud:doc }
-    permissions: [admin_my_cloud_overview]
-
-admin_my_cloud:
-    path:  /setting/my/cloud
-    defaults: { _controller: AppBundle:Admin/EduCloud:myCloud }
-    permissions: [admin_my_cloud_overview]
-
-admin_category_upload:
-    path: /category/uploadfile
-    defaults: { _controller: AppBundle:Admin/Category:uploadFile }
-    methods: [POST]
-    permissions: [admin_course_category_manage]
-
-# 添加云直播
-admin_cloud_upload_live_logo:
-    path: /cloud/edulive/upload
-    defaults: { _controller: AppBundle:Admin/EduCloud:uploadLiveLogo }
-    methods: [POST]
-
-admin_cloud_edulive_logo_crop:
-    path:  /cloud/edulive/{type}/logo/crop
-    defaults: { _controller: AppBundle:Admin/EduCloud:logoCrop }
-
-admin_classroom_chooser:
-    path: /classroom/chooser
-    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:chooser }
-
 ### role
 admin_roles:
     path:  /roles
