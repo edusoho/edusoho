@@ -61,7 +61,7 @@
           {% include 'admin-v2/role/templates/navigation.html.twig' %}
         </div>
         <div class="ct-layout-person">
-          <ul class="cd-clearfix">
+          <ul class="cd-clearfix mb0">
             <li class="ct-layout-person_center cd-dropdown" data-toggle="cd-dropdown">
                 <a class="user-avatar-toggle" href="javascript:;">
                   <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
@@ -76,22 +76,17 @@
             </li>
           </ul>
         </div>
-        <div class="pull-right change-version-btn"><a><i class="es-icon es-icon-toggle"></i>切换旧版</a></div>
+        <div class="pull-right change-version-btn"><a href="javascript:;">切换旧版</a></div>
       </div>
       <div class="cd-layout-main">
         {% block container %}
           {% block content %}
             {% include 'admin-v2/role/templates/side-bar.html.twig' %}
             <div class="cd-layout-aside">
-              <div class="cd-layout-aside_bread">
-
-              </div>
-              <div class="cd-layout-adside_content mtm phm">
-
+              <div class="cd-layout-aside_bread"></div>
+              <div class="cd-layout-adside_content">
                 <div class="page-header clearfix pvm">
-                    {% block page_flash_message %}
-
-                    {% endblock %}
+                  {% block page_flash_message %}{% endblock %}
                   <h1 class="pull-left">
                       {% block page_title %}
                           {{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}
@@ -114,13 +109,11 @@
 
                   </div>
                 </div>
-
-                  {% block content_header %}{% endblock %}
-
-                  {% block tabs %}{% include 'admin-v2/role/templates/tabs.html.twig' %}{% endblock %}
-                  {% block capsule %}{% endblock %}
-                  {% block main %}
-                  {% endblock %}
+                {% block content_header %}{% endblock %}
+                {% block tabs %}{% include 'admin-v2/role/templates/tabs.html.twig' %}{% endblock %}
+                {% block capsule %}{% endblock %}
+                {% block main %}
+                {% endblock %}
               </div>
             </div>
           {% endblock %}
