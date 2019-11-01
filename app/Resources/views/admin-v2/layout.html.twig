@@ -61,7 +61,7 @@
           {% include 'admin-v2/role/templates/navigation.html.twig' %}
         </div>
         <div class="ct-layout-person">
-          <ul class="cd-clearfix">
+          <ul class="cd-clearfix mb0">
             <li class="ct-layout-person_center cd-dropdown" data-toggle="cd-dropdown">
                 <a class="user-avatar-toggle" href="javascript:;">
                   <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
@@ -76,7 +76,7 @@
             </li>
           </ul>
         </div>
-        <div class="pull-right change-version-btn"><a><i class="es-icon es-icon-toggle"></i>切换旧版</a></div>
+        <div class="pull-right change-version-btn"><a href="javascript:;">切换旧版</a></div>
       </div>
       <div class="cd-layout-main">
         {% block container %}
