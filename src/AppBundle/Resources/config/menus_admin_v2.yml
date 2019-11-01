@@ -1251,5 +1251,12 @@ admin_v2:
                                     name: admin_v2.developer.magic_manage
                                 admin_v2_setting_developer_version:
                                     name: admin_v2.developer.version_manage
+                        admin_v2_mocked_manage:
+                            name: admin_v2.developer.mocked_manage
+                            disable: true
+                            children:
+                                admin_v2_mocked:
+                                    name: admin_v2.developer.mocked_manage
+                                        
 
 

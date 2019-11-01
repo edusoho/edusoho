@@ -850,4 +850,5 @@ admin_v2.developer.debug_manage: 开发者调试
 admin_v2.developer.developer_manage: 开发者调试
 admin_v2.developer.magic_manage: Magic设置
 admin_v2.developer.version_manage: 应用版本修改
+admin_v2.developer.mocked_manage: Mock
 # 新版后台结束

@@ -843,4 +843,5 @@ admin_v2.developer.debug_manage: Developer DEBUG
 admin_v2.developer.developer_manage: Developer DEBUG
 admin_v2.developer.magic_manage: Magic Setting
 admin_v2.developer.version_manage: App Version Manage
+admin_v2.developer.mocked_manage: Mock
 # 新版后台结束
