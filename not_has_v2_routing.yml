@@ -8,16 +8,6 @@ admin_live_get_max_online:
     defaults: { _controller: AppBundle:Admin/LiveCourse:getMaxOnline }
     permissions: [admin_live_course_manage]
 
-admin_operation_mobile_select:
-    path:  /operation/mobile/select
-    defaults: { _controller: AppBundle:Admin/Mobile:mobileSelect }
-    permissions: [admin_operation_mobile_select_manage]
-
-admin_operation_mobile_customization_upgrade:
-    path:  /operation/mobile/customization_upgrade
-    defaults: { _controller: AppBundle:Admin/Mobile:customizationUpgrade }
-    methods: [POST]
-
 admin_setting_mobile_iap_product:
     path:  /setting/mobile_iap_product
     defaults: { _controller: AppBundle:Admin/Setting:mobileIapProduct }
