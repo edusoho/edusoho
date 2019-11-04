@@ -377,8 +377,9 @@
       width: 32px;
       height: 32px;
       i {
-        font-size: 26px;
+        font-size: 24px;
         vertical-align: middle;
+        line-height: 30px;
       }
       text-align: center;
       background: linear-gradient(90deg,rgba(141,205,255,1) 0%,rgba(37,173,238,1) 100%);
@@ -387,17 +388,15 @@
     }
     .rank-tag__text {
       display: inline-block;
-      height: 28px;
       margin-left: 16px;
       padding-left: 20px;
-      padding-right: 8px;
+      padding: 7px 8px 7px 20px;
       background-color: #73baf1;
       color: @cdv2-white;
       font-weight: 500;
       font-size: 14px;
-      line-height: 28px;
+      line-height: 14px;
       border-radius: 4px;
-      vertical-align: unset;
     }
 
     &.rank-tag--yellow {
@@ -421,15 +420,13 @@
 
   .theme-tag {
     display: inline-block;
-    height: 28px;
     margin-left: 8px;
-    padding: 4px 8px;
+    padding: 7px 8px;
     font-size: 14px;
-    line-height: 20px;
+    line-height: 14px;
     color: @cdv2-light-minor;
     background-color: @cdv2-line-color;
     border-radius: 4px;
-    vertical-align: baseline;
   }
 }
 
@@ -568,6 +565,7 @@
     margin-top: 8px;
     margin-bottom: 8px;
     max-width: 100%;
+    border-radius: 4px;
   }
   .admin-notice__text {
     .cdv2-text-md;
