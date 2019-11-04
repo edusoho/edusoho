@@ -2409,60 +2409,65 @@ admin_wechat_notification_template_status:
     defaults: { _controller: AppBundle:Admin/WeChatNotification:status}
 
 admin_coupon:
-    pattern: /coupon
+    path: /coupon
     defaults: { _controller: AppBundle:Admin/CouponBatch:index }
 
 admin_coupon_generate:
-    pattern: /coupon/generate
+    path: /coupon/generate
     defaults: { _controller: AppBundle:Admin/CouponBatch:generate }
 
 admin_coupon_batch_create:
-    pattern: /coupon/batch/{batchId}/create
+    path: /coupon/batch/{batchId}/create
     defaults: { _controller: AppBundle:Admin/CouponBatch:batchCreate }
     methods: [POST]
 
 admin_coupon_checkprefix:
-    pattern: /coupon/checkprefix
+    path: /coupon/checkprefix
     defaults: { _controller: AppBundle:Admin/CouponBatch:checkPrefix }
 
 admin_coupon_delete:
-    pattern: /coupon/{id}/delete
+    path: /coupon/{id}/delete
     defaults: { _controller: AppBundle:Admin/CouponBatch:delete }
     methods: [POST]
 
 admin_coupon_batch_export:
-    pattern: /coupon/export/csv/{batchId}
+    path: /coupon/export/csv/{batchId}
     defaults: { _controller: AppBundle:Admin/CouponBatch:exportCsv }
 
 admin_coupon_show:
-    pattern: /coupon/show/{batchId}
+    path: /coupon/show/{batchId}
     defaults: { _controller: AppBundle:Admin/CouponBatch:detail }
 
 admin_coupon_show_target:
-  path: /coupon/show/target/{targetType}/{batchId}
-  defaults: { _controller: AppBundle:Admin/CouponBatch:targetDetail }
+    path: /coupon/show/target/{targetType}/{batchId}
+    defaults: { _controller: AppBundle:Admin/CouponBatch:targetDetail }
 
 admin_coupon_get_receive_url:
-    pattern: /coupon/getreceiveurl/{batchId}
+    path: /coupon/getreceiveurl/{batchId}
     defaults: { _controller: AppBundle:Admin/CouponBatch:getReceiveUrl }
 
 admin_coupon_query:
-  pattern: /coupon/index
-  defaults: { _controller: AppBundle:Admin/Coupon:index }
+    path: /coupon/index
+    defaults: { _controller: AppBundle:Admin/Coupon:index }
 
 admin_coupon_setting:
-  pattern: /setting/coupon
-  defaults: { _controller: AppBundle:Admin/Coupon:setting }
+    path: /setting/coupon
+    defaults: { _controller: AppBundle:Admin/Coupon:setting }
 
 admin_coupon_chooser:
-  pattern: /coupon/batch/chooser/{type}
-  defaults: { _controller: AppBundle:Admin/CouponBatch:chooserCoupon }
+    path: /coupon/batch/chooser/{type}
+    defaults: { _controller: AppBundle:Admin/CouponBatch:chooserCoupon }
 
 admin_coupon_chooser_resource_list:
-  pattern: /coupon/batch/{batchId}/chooser/resource/list
-  defaults: { _controller: AppBundle:Admin/CouponBatch:chooserResourceList }
+    path: /coupon/batch/{batchId}/chooser/resource/list
+    defaults: { _controller: AppBundle:Admin/CouponBatch:chooserResourceList }
 
 admin_wechat_notification_setting_modal:
     path: /wechat/notification/setting_edit
     defaults: { _controller: AppBundle:Admin/WeChatNotification:settingModal }
+    
+admin_upgrade_v2_setting:
+    path: /upgrade/v2_setting
+    defaults: { _controller: AppBundle:Admin/Default:upgradeV2Setting }
+    methods: [POST]
 

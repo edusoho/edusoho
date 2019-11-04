@@ -3,6 +3,10 @@
 {% set panel = 'dashboard' %}
 {% set script_controller = 'default/index' %}
 {% block container %}
+  <div class="alert alert-warning" role="alert">
+    <span>全新版后台已经更新，开启最新的体验，新后台需要手动升级插件，请勿忘记哦！</span>
+    <a href="javascript:;" data-url="{{ path('admin_upgrade_v2_setting') }}" class="btn btn-primary pull-right prl js-upgrade-admin-v2" style="margin-top: -5px">切换新版</a>
+  </div>
   {# 域名检查提示#}
   {{ render(controller('AppBundle:Admin/Default:validateDomain')) }}
   <div class="row">

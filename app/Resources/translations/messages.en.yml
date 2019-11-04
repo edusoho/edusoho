@@ -9116,3 +9116,5 @@ admin_v2.edu_cloud_not_access: Edu cloud not accessable
 admin_v2.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">App Setting</a>\n"
 admin_v2.live_course.create_btn: Create
 admin_v2.system.security_setting: Whitelist Domain
+admin_v2.upgrade_v2_setting_permission.error: Please contact super administrator or administrator operation
+exception.common_upgrade_v2_error: Has been upgraded to the new version

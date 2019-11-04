@@ -52,7 +52,13 @@ services:
         arguments: ['@session']
         tags:
             - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
-
+            
+    kernel.listener.kernel_admin_v2_request_listener:
+        class: AppBundle\Listener\AdminV2KernelRequestListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
+            
     #    kernel.listener.kernel_org_controller_listener:
     #        class: Org\OrgBundle\Listener\OrgControllerListener
     #        arguments:    ['@service_container']

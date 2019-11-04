@@ -34,6 +34,8 @@ class CommonException extends AbstractException
 
     const NOTFOUND_API = 4040313;
 
+    const UPGRADE_V2_ERROR = 5000314;
+
     public $messages = array(
         4030301 => 'exception.common_drag_captcha_error',
         4030302 => 'exception.common_drag_captcha_expired',
@@ -48,5 +50,6 @@ class CommonException extends AbstractException
         4030311 => 'exception.common_not_allowed_method',
         5000312 => 'exception.common_expired_upload_token',
         4040313 => 'exception.common_not_found_api',
+        5000314 => 'exception.common_upgrade_v2_error',
     );
 }
