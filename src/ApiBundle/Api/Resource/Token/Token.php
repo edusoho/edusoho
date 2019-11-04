@@ -6,6 +6,8 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Pay\Service\AccountService;
+use Topxia\MobileBundleV2\Controller\MobileBaseController;
+use Biz\System\Service\LogService;
 
 class Token extends AbstractResource
 {
@@ -23,6 +25,25 @@ class Token extends AbstractResource
             'token' => $token,
             'user' => $user,
         );
+    }
+
+    public function remove(ApiRequest $request, $token)
+    {
+        $token = $request->headers->get('X-Auth-Token');
+
+        if (!empty($token)) {
+            $user = $this->getCurrentUser()->toArray();
+            $device = $this->getPushDeviceService()->getPushDeviceByUserId($user['id']);
+            if (!empty($device)) {
+                $device = $this->getPushDeviceService()->updatePushDevice($device['id'], array('userId' => 0));
+                $this->getPushDeviceService()->getPushSdk()->setDeviceActive($device['regId'], 0);
+            }
+            $this->getLogService()->info(MobileBaseController::MOBILE_MODULE, 'user_logout', '用户退出', array('userToken' => $user));
+        }
+
+        $this->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
+
+        return array('success' => true);
     }
 
     private function appendUser(&$user)
@@ -48,6 +69,22 @@ class Token extends AbstractResource
         $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
         return $user;
+    }
+
+    /**
+     * @return \Biz\PushDevice\Service\Impl\PushDeviceServiceImpl
+     */
+    protected function getPushDeviceService()
+    {
+        return $this->service('PushDevice:PushDeviceService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->service('System:LogService');
     }
 
     /**
