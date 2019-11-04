@@ -12,3 +12,15 @@ $('#functionModal').on('shown.bs.modal', (e) =>  {
 }).on('hidden.bs.modal', (e) => {
   $html.css('overflow', 'scroll');
 })
+
+
+$('.js-entrance-list').on('click', '.js-function-choose', (event) => {
+  const $target = $(event.currentTarget);
+  $target.toggleClass('active');
+})
+
+$('.js-save-btn').on('click', (event) => {
+  if ($('.js-function-choose.active').length > 7) {
+    cd.message({type: 'danger', message: '最多设置7个快捷入口位'})
+  }
+})

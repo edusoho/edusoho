@@ -320,10 +320,10 @@
         {% for itemData in entranceData %}
           <div class="entrance-section">
             <div class="entrance-section__title">{{ itemData.title }}</div>
-            <div class="{{ 'entrance-section__body cd-pt16 row ' ~ itemData.class }}">
+            <div class="{{ 'entrance-section__body js-entrance-list cd-pt16 row ' ~ itemData.class }}">
               {% for entry in itemData.data %}
               <div class="col-md-3">
-                <div class="text-center admin-function {% if entry.checked|default(false) %}active{% endif %}">
+                <div class="text-center admin-function  js-function-choose {% if entry.checked|default(false) %}active{% endif %}">
                   <div class="admin-function__tag"></div>
                   <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entry.icon }}"></i></div>
                   <div class="admin-function__name">{{ entry.text }}</div>
@@ -338,7 +338,7 @@
       <div class="modal-footer clearfix">
         <div class="function-modal-tip">(最多设置7个快捷入口位）</div>
         <a class="function-modal__link" data-dismiss="modal" href="javascript:;">{{ 'form.btn.cancel'|trans }}</a>
-        <button type="button" class="btn function-modal__btn">{{ 'form.btn.save'|trans }}</button>
+        <button type="button" class="btn function-modal__btn js-save-btn">{{ 'form.btn.save'|trans }}</button>
       </div>
     </div>
   </div>
