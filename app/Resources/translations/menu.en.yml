@@ -845,6 +845,8 @@ admin_v2.developer.magic_manage: Magic Setting
 admin_v2.developer.version_manage: App Version Manage
 admin_v2.developer.mocked_manage: Mock
 
+admin_v2.page_static_manage: Page Setting
+admin_v2.page_static_tab: Page Static Setting
 # 组织机构管理(隐藏路由)
 admin_v2.developer.org_menu: Orgs
 admin_v2.developer.org.basic_tab: Organization

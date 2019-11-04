@@ -2247,6 +2247,10 @@ admin_v2_xapi_statement_list:
     path: /xapi/statement_list
     defaults: { _controller: AppBundle:AdminV2/Developer/Xapi:index }
 
-admin_b2_xapi_statement_detail:
+admin_v2_xapi_statement_detail:
     path: /xapi/statement/{id}/detail
     defaults: { _controller: AppBundle:AdminV2/Developer/Xapi:detail }
+
+admin_v2_performance:
+    path:  /setting/performance
+    defaults: { _controller: AppBundle:AdminV2/Developer/PageSetting:performance }
