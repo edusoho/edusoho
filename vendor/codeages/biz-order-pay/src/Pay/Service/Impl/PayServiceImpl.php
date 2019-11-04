@@ -144,7 +144,10 @@ class PayServiceImpl extends BaseService implements PayService
         }
 
         if (!empty($trade['invoice_sn'])) {
-            throw new NotFoundException('trade had invoice');
+            $invoice = $this->getInvoiceService()->getInvoiceBySn($trade['invoice_sn']);
+            if ('refused' != $invoice['status']) {
+                throw new AccessDeniedException('trade had invoice');
+            }
         }
 
         if ($this->biz['user']['id'] != $trade['user_id']) {
@@ -544,6 +547,11 @@ class PayServiceImpl extends BaseService implements PayService
     protected function getAccountService()
     {
         return $this->biz->service('Pay:AccountService');
+    }
+
+    protected function getInvoiceService()
+    {
+        return $this->biz->service('Invoice:InvoiceService');
     }
 
     protected function getDefaultCoinRate()
