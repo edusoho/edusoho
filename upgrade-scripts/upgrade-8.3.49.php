@@ -127,7 +127,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `scopes` text COMMENT '授权范围',
                   `created_user_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建用户ID',
                   `created_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建时间',
-                  `update_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间'
+                  `update_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='授权客户端表';
             ");
