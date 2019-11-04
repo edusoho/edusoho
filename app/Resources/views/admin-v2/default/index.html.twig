@@ -240,7 +240,11 @@
       <div class="col-md-3">
         <div class="admin-info-section">
           <div class="admin-website">
-            <a href="#"><img src="http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg"></a>
+            {% if setting('site.logo') %}
+              <a class="admin-website__logo" href="#">
+                <img src="{{ asset(setting('site.logo')) }}">
+              </a>
+            {% endif %}
             <div class="admin-website__name"><a class="admin-website__text text-overflow" href="#">哎呀音乐哎呀音世哎呀音乐是哎呀音乐哎呀音世哎呀音乐是</a></div>
               {# 三种颜色的客户等级 #}
             <div class="">
