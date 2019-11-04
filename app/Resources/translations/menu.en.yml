@@ -849,4 +849,7 @@ admin_v2.developer.jobs_manage: Jobs Manage
 admin_v2.developer.job_logs: Job Logs
 admin_v2.developer.crontab: Crontab Manage
 
+# IAP
+admin_v2.developer.mobile_iap_product_menu: iOS Purchase Setting
+admin_v2.developer.mobile_iap_product.basic_tab: iOS Purchase Setting
 # 新版后台结束

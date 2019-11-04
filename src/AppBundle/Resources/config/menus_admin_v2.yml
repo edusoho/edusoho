@@ -1257,3 +1257,11 @@ admin_v2:
                                     name: admin_v2.developer.job_logs
                                 admin_v2_crontab:
                                     name: admin_v2.developer.crontab
+                        admin_v2_setting_mobile_iap_product:
+                            name: admin_v2.developer.mobile_iap_product_menu
+                            disable: true
+                            visible: (setting('magic.enable_mobile_iap', '0'))
+                            children:
+                                admin_v2_setting_mobile_iap_product_list:
+                                    name: admin_v2.developer.mobile_iap_product.basic_tab
+                                    router_name: admin_v2_setting_mobile_iap_product

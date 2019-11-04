@@ -854,4 +854,8 @@ admin_v2.developer.jobs_manage_manu: 任务调度
 admin_v2.developer.jobs_manage: 任务调度
 admin_v2.developer.job_logs: 任务日志
 admin_v2.developer.crontab: crontab管理
+
+# IAP
+admin_v2.developer.mobile_iap_product_menu: iOS内购商品设置
+admin_v2.developer.mobile_iap_product.basic_tab: iOS内购商品设置iOS Purchase Setting
 # 新版后台结束
