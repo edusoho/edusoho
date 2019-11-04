@@ -18,15 +18,6 @@ admin_operation_mobile_customization_upgrade:
     defaults: { _controller: AppBundle:Admin/Mobile:customizationUpgrade }
     methods: [POST]
 
-admin_setting_mobile_iap_product:
-    path:  /setting/mobile_iap_product
-    defaults: { _controller: AppBundle:Admin/Setting:mobileIapProduct }
-
-admin_setting_mobile_iap_product_delete:
-    path:  /setting/mobile_iap_product_delete/{productId}
-    defaults: { _controller: AppBundle:Admin/Setting:mobileIapProductDelete }
-    methods: [POST]
-
 admin_cloud_video_overview_renew:
     path:  /cloud/video/renew/modal
     defaults: { _controller: AppBundle:Admin/EduCloud:showRenewVideo }
