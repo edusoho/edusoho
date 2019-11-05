@@ -117,9 +117,9 @@ class CommonController extends BaseController
 
             $token = $this->getTokenService()->makeToken('mobile_login', $tokenFields);
 
-            $url = $request->getSchemeAndHttpHost().'/User/loginWithToken?token='.$token['token'];
+            $url = $request->getSchemeAndHttpHost().'/mapi_v2/User/loginWithToken?token='.$token['token'];
         } else {
-            $url = $request->getSchemeAndHttpHost().'/School/loginSchoolWithSite?v=1';
+            $url = $request->getSchemeAndHttpHost().'/mapi_v2/School/loginSchoolWithSite?v=1';
         }
 
         $qrCode = new QrCode();
