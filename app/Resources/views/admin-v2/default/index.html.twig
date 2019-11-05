@@ -113,58 +113,62 @@
           <div class="admin-v2-section__header cd-mb16">常用入口</div>
           <div class="admin-v2-section__body">
             <div class="row">
-              <div class="col-md-3">
-                <a class="text-center admin-function" href="#">
-                  <div class="admin-function__icon icon-color-green"><i class="es-icon es-icon-lock"></i></div>
-                  <div class="admin-function__name">创建课程</div>
-                </a>
-              </div>
-
-              <div class="col-md-3">
-                <a class="text-center admin-function" href="#">
-                  <div class="admin-function__icon icon-color-yellow"><i class="es-icon es-icon-lock"></i></div>
-                  <div class="admin-function__name">网校装修</div>
-                </a>
-              </div>
-
-              <div class="col-md-3">
-                <a class="text-center admin-function" href="#">
-                  <div class="admin-function__icon icon-color-green"><i class="es-icon es-icon-lock"></i></div>
-                  <div class="admin-function__name">班级管理</div>
-                </a>
-              </div>
-
-              <div class="col-md-3">
-                <a class="text-center admin-function" href="#">
-                  <div class="admin-function__icon icon-color-yellow"><i class="es-icon es-icon-lock"></i></div>
-                  <div class="admin-function__name">订单管理</div>
-                </a>
-              </div>
-
-              <div class="col-md-3">
-                <a class="text-center admin-function" href="#">
-                  <div class="admin-function__icon icon-color-yellow"><i class="es-icon es-icon-lock"></i></div>
-                  <div class="admin-function__name">优惠券</div>
-                </a>
-              </div>
-
-              <div class="col-md-3">
-                <a class="text-center admin-function" href="#">
-                  <div class="admin-function__icon icon-color-blue"><i class="es-icon es-icon-lock"></i></div>
-                  <div class="admin-function__name">用户设置</div>
-                </a>
-              </div>
-
-              <div class="col-md-3">
-                <a class="text-center admin-function" href="#">
-                  <div class="admin-function__icon icon-color-yellow"><i class="es-icon es-icon-lock"></i></div>
-                  <div class="admin-function__name">虚拟币</div>
-                </a>
-              </div>
+              {% set entrance =  [
+                {
+                  'class': 'icon-color-green',
+                  'text': '课程管理',
+                  'link': '#',
+                  'icon': 'course', 
+                },
+                {
+                  'class': 'icon-color-yellow',
+                  'text': 'Web端装修',
+                  'link': '#',
+                  'icon': 'webmix', 
+                },
+                {
+                  'class': 'icon-color-green',
+                  'text': '班级管理',
+                  'link': '#',
+                  'icon': 'class', 
+                },
+                {
+                  'class': 'icon-color-yellow',
+                  'text': '商品订单',
+                  'link': '#',
+                  'icon': 'goods', 
+                },
+                {
+                  'class': 'icon-color-yellow',
+                  'text': '优惠券管理',
+                  'link': '#',
+                  'icon': 'coupon', 
+                },
+                {
+                  'class': 'icon-color-blue',
+                  'text': '用户设置',
+                  'link': '#',
+                  'icon': 'setting', 
+                },
+                {
+                  'class': 'icon-color-yellow',
+                  'text': '虚拟币管理',
+                  'link': '#',
+                  'icon': 'coin', 
+                }
+              ] %}
+              {% for entry in entrance %}
+                <div class="col-md-3">
+                  <a class="{{ 'text-center admin-function ' ~ entry.class }}" href="{{ entry.link }}">
+                    <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entry.icon }}"></i></div>
+                    <div class="admin-function__name">{{ entry.text }}</div>
+                  </a>
+                </div>
+              {% endfor %}
 
               <div class="col-md-3">
                 <div class="admin-function-choose">
-                  <a class="admin-function-btn">
+                  <a class="admin-function-btn" data-toggle="modal" data-target="#functionModal">
                     <i class="es-icon es-icon-add"></i><span>编辑入口</span>
                   </a>
                 </div>
@@ -181,7 +185,7 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="text-center admin-application">
-                  <i class="es-icon es-icon-application"></i>
+                  <i class="es-icon es-icon-entry-application"></i>
                 </div>
               </div>
               <div class="col-md-3">
@@ -321,4 +325,7 @@
       </div>
     </div>
   </div>
+
+
+  {% include 'admin-v2/default/function-modal.html.twig' %}
 {% endblock %}

@@ -202,18 +202,25 @@
 }
 
 .icon-color-green {
-  background-color: #46c37b;
+  .admin-function__icon {
+    background-color: #46c37b;
+  }
 }
 
 .icon-color-yellow {
-  background-color: #f7d370;
+  .admin-function__icon {
+    background-color: #f7d370;
+  }
 }
 
 .icon-color-blue {
-  background-color: #88b5ee;
+  .admin-function__icon {
+    background-color: #88b5ee;
+  }
 }
 
 .admin-function {
+  position: relative;
   display: table;
   margin: auto;
   margin-bottom: 16px;
@@ -223,8 +230,25 @@
   &:focus {
     .es-transition;
     cursor: pointer;
+    text-decoration: none;
     box-shadow: 0px 2px 12px 0px rgba(0,0,0,0.05);
     border-radius: 4px;
+  }
+  &.active {
+    box-shadow: 0px 2px 12px 0px rgba(0,0,0,0.05);
+    .admin-function__tag {
+      display: block;
+    }
+  }
+  .admin-function__tag {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    display: none;
+    right: 0;
+    width: 33px;
+    height: 30px;
+    background: -webkit-image-set(url("@{img-src}admin-v2/selected.png") 1x, url("@{img-src}admin-v2/selected@2x.png") 2x) no-repeat;
   }
   .admin-function__icon {
     display: table-cell;
@@ -349,6 +373,9 @@
       width: 73%;
       height: auto;
     }
+  }
+  .admin-website__logo {
+    display: inline-block;
   }
 
   .admin-website__name {
@@ -607,3 +634,66 @@
     color: @cdv2-dark-assist;
   }
 }
+
+.function-modal-dialog {
+  width: 992px;
+  margin-top: 4%;
+  .modal-title {
+    font-size: 18px;
+    color: #303133;
+    line-height: 24px;
+  }
+  .modal-body {
+    max-height: 420px;
+    overflow-y: scroll;
+  }
+  .function-modal-tip {
+    float: left;
+    font-size: 18px;
+    line-height: 38px;
+    font-weight: 500;
+    color: #ff8836;
+  }
+  .function-modal__btn {
+    padding: 8px 48px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #fff;
+    border-radius: 4px;
+    background-color: #428bca;
+  }
+  .function-modal__link {
+    margin-right: 24px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #999;
+    .es-transition;
+    border: none;
+    outline:none;
+    &:hover,
+    &:focus {
+      .es-transition;
+      color: #666;
+      text-decoration: none;
+    }
+  }
+  .entrance-section {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    &:first-child {
+      padding-top: 0;
+    }
+    .admin-function {
+      margin-top: 16px;
+    }
+  }
+  .entrance-section__title {
+    padding-bottom: 12px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+}
+
