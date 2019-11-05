@@ -12,6 +12,7 @@ if ($selectFinish.length) {
       if (!$('#watchTime').val()) {
         let $options = $('#finish-type option:selected');
         $('#watchTime').val($options.data('value'));
+        $('#finish-data').val($options.data('value'));
       }
       break;
     case 'end':
