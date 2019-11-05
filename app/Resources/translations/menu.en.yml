@@ -822,10 +822,6 @@ admin_v2.system.post_num_tab: Post Setting
 admin_v2.data_statistics.overview.menu: Data Overview
 admin_v2.data_statistics.overview.basic_tab: Data Overview
 
-# 系统-通用管理-组织机构管理
-admin_v2.system.org_menu: Orgs
-admin_v2.system.org.basic_tab: Organization
-
 # 隐藏模块
 admin_v2.nav.developer_module: Developer
 admin_v2.nav.developer_module.basic_group: Developer Setting
@@ -840,4 +836,17 @@ admin_v2.developer.debug_manage: Developer DEBUG
 admin_v2.developer.developer_manage: Developer DEBUG
 admin_v2.developer.magic_manage: Magic Setting
 admin_v2.developer.version_manage: App Version Manage
+
+admin_v2.page_static_manage: Page Setting
+admin_v2.page_static_tab: Page Static Setting
+# 组织机构管理(隐藏路由)
+admin_v2.developer.org_menu: Orgs
+admin_v2.developer.org.basic_tab: Organization
+
+# 任务调度(隐藏路由)
+admin_v2.developer.jobs_manage_manu: Jobs Manage
+admin_v2.developer.jobs_manage: Jobs Manage
+admin_v2.developer.job_logs: Job Logs
+admin_v2.developer.crontab: Crontab Manage
+
 # 新版后台结束
