@@ -20,6 +20,14 @@ class Token extends AbstractResource
 
         $this->appendUser($user);
         $this->getUserService()->markLoginInfo($type);
+        $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+
+        $delTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], MobileBaseController::TOKEN_TYPE);
+        foreach ($delTokens as $delToken) {
+            if ($delToken['token'] != $token) {
+                $this->getTokenService()->destoryToken($delToken['token']);
+            }
+        }
 
         return array(
             'token' => $token,
@@ -69,6 +77,16 @@ class Token extends AbstractResource
         $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
         return $user;
+    }
+
+    protected function getBatchNotificationService()
+    {
+        return $this->service('User:BatchNotificationService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->service('User:TokenService');
     }
 
     /**
