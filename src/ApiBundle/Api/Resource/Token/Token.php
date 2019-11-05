@@ -20,12 +20,16 @@ class Token extends AbstractResource
 
         $this->appendUser($user);
         $this->getUserService()->markLoginInfo($type);
-        $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
 
-        $delTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], MobileBaseController::TOKEN_TYPE);
-        foreach ($delTokens as $delToken) {
-            if ($delToken['token'] != $token) {
-                $this->getTokenService()->destoryToken($delToken['token']);
+        if ('app' == $request->request->get('client')) {
+            $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+
+            $delTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], MobileBaseController::TOKEN_TYPE);
+
+            foreach ($delTokens as $delToken) {
+                if ($delToken['token'] != $token) {
+                    $this->getTokenService()->destoryToken($delToken['token']);
+                }
             }
         }
 
