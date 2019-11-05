@@ -4678,7 +4678,6 @@ course.widgets.classroom_price.price: 价格：
 course.widgets.classroom_price.not_free: >
   价格 : %price%元
 course.widgets.classroom_price.free: 免费
-course.widgets.classroom_price.free: 免费
 course.widgets.course_order.not_free: 收费
 course.widgets.course_order.order_title: 订单名称：%title%
 course.widgets.course_order.order_sn: 订单号：%sn%
@@ -7219,11 +7218,6 @@ admin.user_center.message_student_to_teacher: 允许学员给教师发送私信
 admin.user_center.message_teacher_to_student: 允许教师给学员发送私信
 admin.user_center.message.setting_tip: 提示：支持取消上述角色间互发私信功能，其余角色不影响。设置后仅APP端不生效。
 
-admin.user_center.message_title_name: 私信发送设置
-admin.user_center.message_student_to_student: 允许学员给学员发送私信
-admin.user_center.message_student_to_teacher: 允许学员给教师发送私信
-admin.user_center.message_teacher_to_student: 允许教师给学员发送私信
-
 
 # 角色管理
 admin.role_manage.keyword_type: --关键词类型--
@@ -7233,7 +7227,6 @@ admin.role_manage.createdTime: 创建时间
 admin.role_manage.nickname: 创建者
 admin.role_manage.operation: 操作
 admin.role_manage.role.empty: 暂无角色
-admin.role_manage.keyword.placeholer: 关键词
 admin.role_manage.keyword.placeholer: 关键词
 admin.role_manage.help_block: >
   <p>1、初始化的4个角色，无法编辑和删除</p>
@@ -10407,8 +10400,6 @@ admin.setting.invite.chooser_coupon.refresh_btn: 刷新
 admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
 admin.operation.coupon_menu.generate_btn: 生成优惠券
 
-course.setting.course_remind_go_to_open: 前往开启
-
 # 新版后台开始
 
 ##分类标签
@@ -10427,3 +10418,9 @@ admin_v2.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">APP设置</a>中设置开启
 admin_v2.live_course.create_btn: 创建直播
 admin_v2.system.security_setting: 白名单域名
+admin_v2.setting.navigation.foot.tips: >
+  清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
+  <a class="text-info" style="font-weight:bold;" href="%url%">
+  Web端装修 </a>
+  中进行编辑。
+admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。

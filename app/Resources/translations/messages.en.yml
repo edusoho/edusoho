@@ -9116,3 +9116,5 @@ admin_v2.edu_cloud_not_access: Edu cloud not accessable
 admin_v2.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">App Setting</a>\n"
 admin_v2.live_course.create_btn: Create
 admin_v2.system.security_setting: Whitelist Domain
+admin_v2.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> web setting</a> and edit.\n"
+admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "operating" - "web Setting" - "Purchased Theme" - "setting". Course order settings are only supported by ink-only theme and simplicity theme.'
