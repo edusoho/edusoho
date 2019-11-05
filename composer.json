@@ -56,7 +56,8 @@
     "phpdocumentor/reflection-docblock": "2.0.5",
     "codeages/biz-order-pay": "0.1.30",
     "ramsey/uuid": "^2.9",
-    "codeages/exam-parser": "dev-master"
+    "codeages/exam-parser": "dev-master",
+    "doctrine/cache": "1.5.x-dev"
   },
   "require-dev": {
     "sensio/generator-bundle": "3.0.11",

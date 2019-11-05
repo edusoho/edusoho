@@ -11,7 +11,32 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
     public function testDealDataBeforeSave()
     {
         $settingService = $this->mockSettingService();
+        $this->mockDistributionTokenService();
         $token = $this->mockFeatureDistributorToken();
+
+        $distributorUserService = $this->mockBiz(
+            'Distributor:DistributorUserService',
+            array(
+                array(
+                    'functionName' => 'decodeToken',
+                    'withParams' => array($token),
+                    'returnValue' => array(
+                        'valid' => true,
+                    ),
+                ),
+            )
+        );
+
+        $logger = $this->mockBiz(
+            'logger',
+            array(
+                array(
+                    'functionName' => 'info',
+                ),
+            )
+        );
+
+        $this->biz['drp.plugin.logger'] = $logger;
 
         $result = ReflectionUtils::invokeMethod(
             $this->getDistributorRegisterDecoder(),
@@ -24,41 +49,24 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
         $this->assertEquals('distributor', $result['type']);
         $this->assertEquals($token, $result['distributorToken']);
 
-        $settingService->shouldHaveReceived('get')->times(3);
+        $settingService->shouldHaveReceived('get')->times(1);
+        $logger->shouldHaveReceived('info')->times(1);
     }
 
     public function testDealDataAfterSave()
     {
         $settingService = $this->mockSettingService();
+        $this->mockDistributionTokenService();
         $token = $this->mockFeatureDistributorToken();
 
         $distributorUserService = $this->mockBiz(
             'Distributor:DistributorUserService',
             array(
                 array(
-                    'functionName' => 'createJobData',
-                    'withParams' => array(array('id' => 1, 'token' => $token)),
-                ),
-                array(
                     'functionName' => 'decodeToken',
                     'withParams' => array($token),
                     'returnValue' => array(
-                        'couponPrice' => 10000,
-                        'couponExpiryDay' => 1,
                         'valid' => true,
-                        'rewardable' => true,
-                    ),
-                ),
-            )
-        );
-
-        $couponService = $this->mockBiz(
-            'Coupon:CouponService',
-            array(
-                array(
-                    'functionName' => 'generateDistributionCoupon',
-                    'withParams' => array(
-                        1, 100, 1,
                     ),
                 ),
             )
@@ -72,31 +80,23 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
             )
         );
 
-        $distributorUserService->shouldHaveReceived('createJobData')->times(1);
         $distributorUserService->shouldHaveReceived('decodeToken')->times(1);
-        $couponService->shouldHaveReceived('generateDistributionCoupon')->times(1);
 
         $this->assertNull($result);
     }
 
     public function testDealDataAfterSaveWithErrorInLog()
     {
+        $this->mockDistributionTokenService();
         $logger = $this->mockBiz(
             'logger',
             array(
                 array(
                     'functionName' => 'error',
-                    'withParams' => array(
-                        'distributor sign error DistributorRegistDecoderImpl::dealDataAfterSave',
-                        array(
-                            'userId' => 1,
-                            'token' => 123123,
-                        ),
-                    ),
                 ),
             )
         );
-        $this->biz['logger'] = $logger;
+        $this->biz['drp.plugin.logger'] = $logger;
 
         $result = ReflectionUtils::invokeMethod(
             $this->getDistributorRegisterDecoder(),
@@ -106,7 +106,7 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
             )
         );
 
-        $logger->shouldHaveReceived('error')->times(1);
+        $logger->shouldHaveReceived('error')->times(2);
         $this->assertNull($result);
     }
 
@@ -157,5 +157,24 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
         );
 
         return $token;
+    }
+
+    private function mockDistributionTokenService()
+    {
+        return $this->mockBiz(
+            'DrpPlugin:DistributionToken:DistributionTokenService',
+            array(
+                array(
+                    'functionName' => 'parseRedirectToken',
+                    'withParams' => array('redirect:L2NvdXJzZS8x:1:1:1565751518:dasdaskjd:CtFJ-tHEOkPSj1yabW9nbXo9oKA='),
+                    'returnValue' => array(
+                        'redirect_type' => 'redirect',
+                        'redirect_content' => 'L2NvdXJzZS8x',
+                        'merchant_id' => '1',
+                        'agency_id' => '1',
+                    ),
+                ),
+            )
+        );
     }
 }
