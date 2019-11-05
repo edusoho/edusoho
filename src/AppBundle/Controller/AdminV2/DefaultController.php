@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\AdminV2;
 
 use AppBundle\Common\CurlToolkit;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
@@ -50,6 +51,29 @@ class DefaultController extends BaseController
         $site = urlencode(http_build_query($site));
 
         return $this->redirect('http://www.edusoho.com/question?site='.$site.'');
+    }
+
+    public function switchOldVersionAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('backstage', array('is_v2' => 0));
+
+        if (!empty($setting) && !$setting['is_v2']) {
+            $this->createNewException(CommonException::SWITCH_OLD_VERSION_ERROR());
+        }
+
+        $roles = $this->getCurrentUser()->getRoles();
+        if (in_array('ROLE_SUPER_ADMIN', $roles) && !in_array('ROLE_SUPER_ADMIN', $roles)) {
+            $this->createNewException(CommonException::SWITCH_OLD_VERSION_PERMISSION_ERROR());
+        }
+
+        if ('POST' == $request->getMethod()) {
+            $this->getSettingService()->set('backstage', array('is_v2' => 0));
+
+            return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin')));
+        }
+
+        return $this->render('admin-v2/default/switch-old-version-modal.html.twig', array(
+        ));
     }
 
     /**

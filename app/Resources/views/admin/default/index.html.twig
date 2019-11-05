@@ -4,8 +4,8 @@
 {% set script_controller = 'default/index' %}
 {% block container %}
   <div class="alert alert-warning" role="alert">
-    <span>全新版后台已经更新，开启最新的体验，新后台需要手动升级插件，请勿忘记哦！</span>
-    <a href="javascript:;" data-url="{{ path('admin_upgrade_v2_setting') }}" class="btn btn-primary pull-right prl js-upgrade-admin-v2" style="margin-top: -5px">切换新版</a>
+      <span>{{ 'admin_v2.upgrade_v2_setting.alert'|trans }}</span>
+      <a href="javascript:;" data-url="{{ path('admin_upgrade_v2_setting') }}" class="btn btn-primary pull-right prl js-upgrade-admin-v2" style="margin-top: -5px">{{ 'admin_v2.upgrade_v2_setting.setting_btn'|trans }}</a>
   </div>
   {# 域名检查提示#}
   {{ render(controller('AppBundle:Admin/Default:validateDomain')) }}
@@ -45,42 +45,6 @@
       <div class="empty">{{ 'admin.homepage.loadig_data_tips'|trans }}</div>
     </div>
   </div>
-  {##}
-  {#<div class="panel panel-default panel-380">#}
-    {#<div class="panel-heading">#}
-      {#<div class="pull-right">#}
-        {#<span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}</span>#}
-        {#<div class="btn-group btn-group-xs">#}
-          {#<button type="button" class="btn btn-primary js-user-switch-button"#}
-                  {#data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"#}
-                  {#data-url="{{ path('admin_user_statistic', {period: 'week'}) }}">最近7天#}
-          {#</button>#}
-          {#<button type="button" class="btn btn-default js-user-switch-button"#}
-                  {#data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"#}
-                  {#data-url="{{ path('admin_user_statistic', {period: 'month'}) }}">最近30天#}
-          {#</button>#}
-        {#</div>#}
-      {#</div>#}
-      {#<h3 class="panel-title">{{ '用户统计'|trans }}#}
-        {#<span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>#}
-        {#<div class="popover-content hidden">#}
-          {#<div class="popover-item">#}
-            {#<div class="title">{{ '活跃用户数'|trans }}</div>#}
-            {#<div class="content">{{ '在30天内登录过系统的用户即为活跃用户'|trans }}</div>#}
-          {#</div>#}
-          {#<div class="popover-item">#}
-            {#<div class="title">{{ '流失用户数'|trans }}</div>#}
-            {#<div class="content">{{ '在30天内没有登录过系统的注册用户即为流失用户'|trans }}</div>#}
-          {#</div>#}
-        {#</div>#}
-      {#</h3>#}
-    {#</div>#}
-    {#<div class="panel-body js-statistic-areas" id="user-statistic"#}
-         {#data-url="{{ path('admin_user_statistic', {period: 'week'}) }}" style="height:320px;">#}
-      {#<div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>#}
-    {#</div>#}
-  {#</div>#}
-  {##}
 
   <div class="row">
     <div class="col-md-6">

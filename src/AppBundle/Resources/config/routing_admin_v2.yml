@@ -1,7 +1,11 @@
 admin_v2:
     path:  /
     defaults: { _controller: AppBundle:AdminV2/Default:index }
-
+    
+admin_v2_switch_old_version:
+    path:  /switch/old_version
+    defaults: { _controller: AppBundle:AdminV2/Default:switchOldVersion }
+    
 # 教学-课程管理-课程管理
 admin_v2_course_set:
     path:  /course_set/index

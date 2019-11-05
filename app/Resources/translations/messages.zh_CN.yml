@@ -10426,4 +10426,10 @@ admin_v2.mobile_manage.open_tips: >
 admin_v2.live_course.create_btn: 创建直播
 admin_v2.system.security_setting: 白名单域名
 admin_v2.upgrade_v2_setting_permission.error: 请联系超级管理员或管理员操作
+admin_v2.upgrade_v2_setting.alert: '全新版后台已经更新，开启最新的体验，新后台需要手动升级插件，请勿忘记哦!'
+admin_v2.upgrade_v2_setting.setting_btn: 切换新版
+admin_v2.switch_old_version.setting_btn: 切换旧版
 exception.common_upgrade_v2_error: 已经升级到新版
+exception.switch_old_version.permission_error: 请联系超级管理员或管理员操作
+exception.switch_old_version.error: 已经切回到旧版后台
+admin_v2.default.switch_old_version_btn: 回到旧版后台

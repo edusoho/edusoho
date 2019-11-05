@@ -25,18 +25,27 @@ class AdminV2KernelRequestListener
         if (HttpKernelInterface::MASTER_REQUEST != $event->getRequestType()) {
             return;
         }
+
+        preg_match('/^\/admin\//', $request->getPathInfo(), $adminMatches);
+
+        if (empty($adminMatches)) {
+            return true;
+        }
+
+        preg_match('/^\/admin\/v2\//', $request->getPathInfo(), $adminV2Matches);
+
         $settingService = $this->getSettingService();
+        $backstageSetting = $settingService->get('backstage', array('is_v2' => 0));
 
-        $adminV2Setting = $settingService->get('backstage', array('is_v2' => false));
-        preg_match('/^\/admin\/v2/', $request->getPathInfo(), $matches);
-
-        if (!empty($adminV2Setting) && $adminV2Setting['is_v2'] && empty($matches)) {
+        //新后台进入老后台路由
+        if ($backstageSetting['is_v2'] && empty($adminV2Matches)) {
             $goto = $this->container->get('router')->generate('admin_v2');
             $response = new RedirectResponse($goto, '302');
             $event->setResponse($response);
         }
-
-        if ((empty($adminV2Setting) || !$adminV2Setting['is_v2']) && !empty($matches)) {
+    
+        //老后台进入新后台路由
+        if (!$backstageSetting['is_v2'] && !empty($adminV2Matches)) {
             $goto = $this->container->get('router')->generate('admin');
             $response = new RedirectResponse($goto, '302');
             $event->setResponse($response);
