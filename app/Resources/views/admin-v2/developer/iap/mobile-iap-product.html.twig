@@ -40,7 +40,7 @@
         <th width="30%">{{ product.title }}</td>
         <td>{{ product.price }}</td>
         <td>
-          <a class="btn btn-default btn-sm" data-role="delete" data-url="{{url('admin_v2_setting_mobile_iap_product_delete',{productId:product.productId})}}">{{'form.btn.delete'|trans}}</a>
+          <a class="btn btn-default btn-sm" data-role="delete" data-url="{{path('admin_v2_setting_mobile_iap_product_delete',{productId:product.productId})}}">{{'form.btn.delete'|trans}}</a>
         </td>
       </tr>
     {% else %}

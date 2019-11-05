@@ -120,9 +120,6 @@
     display: inline-block;
     position: absolute;
     top: 0;
-    @media (min-width: 1400px) {
-      right: 12px;
-    }
     right: 0;
     width: 33px;
     height: 30px;
@@ -345,15 +342,19 @@
 }
 
 .admin-website {
-  img {
-    width: 100%;
-    height: auto;
+  .admin-website__logo {
+    display: block;
+    text-align: center;
+    img {
+      width: 73%;
+      height: auto;
+    }
   }
 
   .admin-website__name {
-    margin-top: 12px;
-    margin-bottom: 12px;
-    .cdv2-text-md;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    .cdv2-text-lg;
     .cdv2-text-medium;
     .admin-website__text {
       color: @cdv2-dark-minor;
@@ -373,11 +374,12 @@
       position: absolute;
       top: -2px;
       display: inline-block;
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       i {
         font-size: 24px;
         vertical-align: middle;
+        line-height: 30px;
       }
       text-align: center;
       background: linear-gradient(90deg,rgba(141,205,255,1) 0%,rgba(37,173,238,1) 100%);
@@ -386,17 +388,15 @@
     }
     .rank-tag__text {
       display: inline-block;
-      height: 24px;
-      margin-left: 12px;
+      margin-left: 16px;
       padding-left: 20px;
-      padding-right: 8px;
+      padding: 7px 8px 7px 20px;
       background-color: #73baf1;
       color: @cdv2-white;
       font-weight: 500;
-      font-size: 12px;
-      line-height: 24px;
+      font-size: 14px;
+      line-height: 14px;
       border-radius: 4px;
-      vertical-align: unset;
     }
 
     &.rank-tag--yellow {
@@ -420,15 +420,13 @@
 
   .theme-tag {
     display: inline-block;
-    height: 24px;
     margin-left: 8px;
-    padding: 4px 8px;
-    font-size: 12px;
-    line-height: 16px;
+    padding: 7px 8px;
+    font-size: 14px;
+    line-height: 14px;
     color: @cdv2-light-minor;
     background-color: @cdv2-line-color;
     border-radius: 4px;
-    vertical-align: baseline;
   }
 }
 
@@ -567,6 +565,7 @@
     margin-top: 8px;
     margin-bottom: 8px;
     max-width: 100%;
+    border-radius: 4px;
   }
   .admin-notice__text {
     .cdv2-text-md;
