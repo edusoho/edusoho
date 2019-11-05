@@ -23,4 +23,8 @@ $('.js-save-btn').on('click', (event) => {
   if ($('.js-function-choose.active').length > 7) {
     cd.message({type: 'danger', message: '最多设置7个快捷入口位'})
   }
-})
+});
+
+$.get($('.admin-data').data('url'),  function (html) {
+  $('.admin-data').html(html);
+});

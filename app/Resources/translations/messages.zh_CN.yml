@@ -10411,6 +10411,17 @@ course.setting.course_remind_go_to_open: 前往开启
 
 # 新版后台开始
 
+# 新后台首页
+admin_v2.homepage.more_btn: 更多
+admin_v2.homepage.loadig_data_tips: 正在载入数据，请稍等。
+
+admin_v2.homepage.data_overview: 数据概览
+admin_v2.homepage.today_login_user: 今日登录用户
+admin_v2.homepage.today_register_user: 今日注册用户
+admin_v2.homepage.today_new_paid_order: 今日付费订单
+admin_v2.homepage.today_new_order: 今日新增订单
+
+
 ##分类标签
 admin_v2.course.tag: 标签管理
 admin_v2.course.tag.group: 标签组管理
