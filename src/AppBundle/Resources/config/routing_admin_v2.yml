@@ -2156,6 +2156,48 @@ admin_v2_setting_developer_magic:
 admin_v2_setting_cdn:
     path:  /setting/cdn
     defaults: { _controller: AppBundle:AdminV2/Developer/CdnSetting:index }
+   
+# 队列
+admin_v2_queue_failed_logs:
+    path: /queue/failed_logs
+    defaults: { _controller: AppBundle:AdminV2/Developer/Queue:failedJobs }
+
+admin_v2_queue_failed_log_modal:
+    path: /queue/failed_log/{id}
+    defaults: { _controller: AppBundle:AdminV2/Developer/Queue:failedJob }
+
+#mock
+admin_v2_mocked:
+    path: /mock
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:index }
+
+admin_v2_mocked_distributor_token:
+    path: /mock/distributor_token/{type}
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:mockDistributorToken }
+
+admin_v2_mocked_distributor_get_post_data:
+    path: /mock/distributor_get_post_data
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:getPostDistributorData }
+
+admin_v2_mocked_distributor_post_data:
+    path: /mock/distributor_post_data
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:postDistributorData }
+    methods: [POST]
+
+admin_v2_mocked_marketing_post_data:
+    path: /mock/marketing_post_data
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:postMarketingData }
+    methods: [POST]
+
+admin_v2_mocked_post_data_version_3:
+    path: /mock/post_data_version_3
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:postDataWithVersion3 }
+    methods: [POST]
+
+admin_v2_mocked_download_token:
+    path: /mock/download_token
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:downloadToken }
+    methods: [POST]
 
 # 系统-通用管理-任务调度（隐藏路由）
 admin_v2_jobs:

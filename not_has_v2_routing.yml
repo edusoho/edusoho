@@ -27,38 +27,6 @@ admin_setting_cloud_video_embed_watermark_upload:
     methods: [POST]
     permissions: [admin_cloud_video_overview]
 
-admin_mocked:
-    path: /mock
-    defaults: { _controller: AppBundle:Admin/Mock:index }
-
-admin_mocked_distributor_token:
-    path: /mock/distributor_token/{type}
-    defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
-
-admin_mocked_distributor_get_post_data:
-    path: /mock/distributor_get_post_data
-    defaults: { _controller: AppBundle:Admin/Mock:getPostDistributorData }
-
-admin_mocked_distributor_post_data:
-    path: /mock/distributor_post_data
-    defaults: { _controller: AppBundle:Admin/Mock:postDistributorData }
-    methods: [POST]
-
-admin_mocked_marketing_post_data:
-    path: /mock/marketing_post_data
-    defaults: { _controller: AppBundle:Admin/Mock:postMarketingData }
-    methods: [POST]
-
-admin_mocked_post_data_version_3:
-    path: /mock/post_data_version_3
-    defaults: { _controller: AppBundle:Admin/Mock:postDataWithVersion3 }
-    methods: [POST]
-
-admin_mocked_download_token:
-    path: /mock/download_token
-    defaults: { _controller: AppBundle:Admin/Mock:downloadToken }
-    methods: [POST]
-
 admin_optimize_remove_backup:
     path:  /setting/optimize/remove-backup
     defaults: { _controller: AppBundle:Admin/Optimize:removeBackup }
@@ -112,11 +80,4 @@ admin_cloud_ad:
     path: /cloud/ad
     defaults: { _controller: AppBundle:Admin/EduCloud:getAd }
 
-admin_queue_failed_logs:
-    path: /queue/failed_logs
-    defaults: { _controller: AppBundle:Admin/Queue:failedJobs }
-
-admin_queue_failed_log_modal:
-    path: /queue/failed_log/{id}
-    defaults: { _controller: AppBundle:Admin/Queue:failedJob }
 
