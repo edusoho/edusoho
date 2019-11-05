@@ -43,7 +43,7 @@ class AdminV2KernelRequestListener
             $response = new RedirectResponse($goto, '302');
             $event->setResponse($response);
         }
-    
+
         //老后台进入新后台路由
         if (!$backstageSetting['is_v2'] && !empty($adminV2Matches)) {
             $goto = $this->container->get('router')->generate('admin');
