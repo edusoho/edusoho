@@ -102,6 +102,14 @@ class EduCloudController extends BaseController
         ));
     }
 
+    public function getAdAction()
+    {
+        $api = CloudAPIFactory::create('root');
+        $result = $api->get('/edusoho-ad');
+
+        return $this->createJsonResponse($result);
+    }
+
     //云短信设置
     public function smsSettingAction(Request $request)
     {

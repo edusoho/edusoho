@@ -1832,6 +1832,11 @@ admin_v2_my_cloud:
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloud }
     permissions: [admin_v2_my_cloud_overview]
 
+
+admin_v2_cloud_ad:
+    path: /cloud/ad
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:getAd }
+    
 # 应用中心-云服务-云视频
 admin_v2_edu_cloud_video_overview:
     path:  /edu_cloud/video/overview
