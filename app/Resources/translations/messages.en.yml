@@ -9124,3 +9124,5 @@ admin_v2.default.switch_old_version_btn: Back to old version
 exception.common_upgrade_v2_error: Has been upgraded to the new version
 exception.switch_old_version.permission_error: Please contact super administrator or administrator operation
 exception.switch_old_version.error: Has been upgraded to the old version
+admin_v2.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> web setting</a> and edit.\n"
+admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "operating" - "web Setting" - "Purchased Theme" - "setting". Course order settings are only supported by ink-only theme and simplicity theme.'

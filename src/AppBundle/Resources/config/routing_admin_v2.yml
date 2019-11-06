@@ -108,45 +108,45 @@ admin_v2_check_password:
 # 教学-课程管理-班级管理
 admin_v2_classroom:
     path:     /classroom/index
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:index }
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:index }
 
 admin_v2_classroom_create:
     path:  /classroom/create
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:create }
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:create }
 
 admin_v2_classroom_set_recommend:
     path:   /classroom/{id}/recommend
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommend }
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:recommend }
     permissions: [admin_v2_classroom_set_recommend]
 
 admin_v2_classroom_cancel_recommend:
     path:   /classroom/{id}/recommend/cancel
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:cancelRecommend }
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:cancelRecommend }
     permissions: [admin_v2_classroom_cancel_recommend]
 
 admin_v2_classroom_close:
     path:  /classroom/{id}/close
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:close }
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:close }
     methods: [POST]
 
 admin_v2_classroom_open:
     path:  /classroom/{id}/open
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:open }
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:open }
     methods: [POST]
 
 admin_v2_classroom_delete:
     path:  /classroom/{id}/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:delete }
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:delete }
     methods: [POST]
 
 admin_v2_classroom_recommend_list:
     path:   /classroom/recommend/list
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:recommendIndex }
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:recommendIndex }
 
 admin_v2_classroom_chooser:
     path: /classroom/chooser
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:chooser }
-    
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:chooser }
+
 # 教学-课程管理-直播管理
 admin_v2_live_course:
     path: /livecourse/{status}
@@ -1463,7 +1463,7 @@ admin_v2_setting_live_course_setting:
 
 admin_v2_classroom_setting:
     path:     /setting/classroom
-    defaults: { _controller: AppBundle:AdminV2/Teach/ClassroomAdmin:set }
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:set }
 
 admin_v2_open_course_setting:
     path:  /setting/open-course-setting
@@ -1793,12 +1793,12 @@ admin_v2_cloud_detail:
 admin_v2_cloud_email_count:
     path: /cloud/email/list
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:emailCount }
-    
+
 admin_cloud_doc:
     path:  /cloud/doc
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:doc }
     permissions: [admin_v2_my_cloud_overview]
-    
+
 # 应用中心-营销云-营销应用
 admin_v2_app_center:
     path:  /app/center/{postStatus}
@@ -1830,7 +1830,7 @@ admin_v2_app_upgrades_count:
 admin_v2_my_cloud_overview:
     path:  /setting/my/cloud/overview
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloudOverview }
-    
+
 admin_v2_my_cloud:
     path:  /setting/my/cloud
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:myCloud }
@@ -1892,7 +1892,7 @@ admin_v2_edu_cloud_edulive_setting:
     path:  /edu_cloud/edulive/setting
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:liveSetting }
     permissions: [admin_v2_cloud_edulive]
-    
+
 admin_v2_cloud_edulive_logo_crop:
     path:  /edu_cloud/edulive/{type}/logo/crop
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:logoCrop }
@@ -2160,6 +2160,48 @@ admin_v2_setting_developer_magic:
 admin_v2_setting_cdn:
     path:  /setting/cdn
     defaults: { _controller: AppBundle:AdminV2/Developer/CdnSetting:index }
+   
+# 队列
+admin_v2_queue_failed_logs:
+    path: /queue/failed_logs
+    defaults: { _controller: AppBundle:AdminV2/Developer/Queue:failedJobs }
+
+admin_v2_queue_failed_log_modal:
+    path: /queue/failed_log/{id}
+    defaults: { _controller: AppBundle:AdminV2/Developer/Queue:failedJob }
+
+#mock
+admin_v2_mocked:
+    path: /mock
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:index }
+
+admin_v2_mocked_distributor_token:
+    path: /mock/distributor_token/{type}
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:mockDistributorToken }
+
+admin_v2_mocked_distributor_get_post_data:
+    path: /mock/distributor_get_post_data
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:getPostDistributorData }
+
+admin_v2_mocked_distributor_post_data:
+    path: /mock/distributor_post_data
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:postDistributorData }
+    methods: [POST]
+
+admin_v2_mocked_marketing_post_data:
+    path: /mock/marketing_post_data
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:postMarketingData }
+    methods: [POST]
+
+admin_v2_mocked_post_data_version_3:
+    path: /mock/post_data_version_3
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:postDataWithVersion3 }
+    methods: [POST]
+
+admin_v2_mocked_download_token:
+    path: /mock/download_token
+    defaults: { _controller: AppBundle:AdminV2/Developer/Mock:downloadToken }
+    methods: [POST]
 
 # 系统-通用管理-任务调度（隐藏路由）
 admin_v2_jobs:
@@ -2209,6 +2251,19 @@ admin_v2_xapi_statement_list:
     path: /xapi/statement_list
     defaults: { _controller: AppBundle:AdminV2/Developer/Xapi:index }
 
-admin_b2_xapi_statement_detail:
+admin_v2_xapi_statement_detail:
     path: /xapi/statement/{id}/detail
     defaults: { _controller: AppBundle:AdminV2/Developer/Xapi:detail }
+
+admin_v2_performance:
+    path:  /setting/performance
+    defaults: { _controller: AppBundle:AdminV2/Developer/PageSetting:performance }
+
+admin_v2_setting_mobile_iap_product:
+    path:  /iap_setting/mobile_iap_product
+    defaults: { _controller: AppBundle:AdminV2/Developer/IAP:mobileIapProduct }
+
+admin_v2_setting_mobile_iap_product_delete:
+    path:  /setting/mobile_iap_product_delete/{productId}
+    defaults: { _controller: AppBundle:AdminV2/Developer/IAP:mobileIapProductDelete }
+    methods: [POST]

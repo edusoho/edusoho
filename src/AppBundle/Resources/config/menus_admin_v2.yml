@@ -1036,6 +1036,15 @@ admin_v2:
                                     name: admin_v2.system.security_tab
                                 admin_v2_post_num_rules_setting:
                                     name: admin_v2.system.post_num_tab
+                        # 队列
+                        admin_v2_queue_manage:
+                            name: admin_v2.system.queue_manage_menu
+                            group: 2
+                            visible: false
+                            disable: true
+                            children:
+                                admin_v2_queue_failed_logs:
+                                    name: admin_v2.system.queue_failed_tab
         # 应用中心模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center
@@ -1233,6 +1242,19 @@ admin_v2:
                                     name: admin_v2.developer.magic_manage
                                 admin_v2_setting_developer_version:
                                     name: admin_v2.developer.version_manage
+                        admin_v2_mocked_manage:
+                            name: admin_v2.developer.mocked_manage
+                            disable: true
+                            children:
+                                admin_v2_mocked:
+                                    name: admin_v2.developer.mocked_manage
+                        admin_v2_page_static_manage:
+                            name: admin_v2.page_static_manage
+                            disable: true
+                            children:
+                                admin_v2_page_static_setting:
+                                    name: admin_v2.page_static_tab
+                                    router_name: admin_v2_performance
                         admin_v2_org_manage:
                             name: admin_v2.developer.org_menu
                             disable: true
@@ -1250,4 +1272,11 @@ admin_v2:
                                     name: admin_v2.developer.job_logs
                                 admin_v2_crontab:
                                     name: admin_v2.developer.crontab
-
+                        admin_v2_setting_mobile_iap_product:
+                            name: admin_v2.developer.mobile_iap_product_menu
+                            disable: true
+                            visible: (setting('magic.enable_mobile_iap', '0'))
+                            children:
+                                admin_v2_setting_mobile_iap_product_list:
+                                    name: admin_v2.developer.mobile_iap_product.basic_tab
+                                    router_name: admin_v2_setting_mobile_iap_product

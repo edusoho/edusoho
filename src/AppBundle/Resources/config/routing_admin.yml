@@ -585,16 +585,6 @@ admin_operation_mobile:
     defaults: { _controller: AppBundle:Admin/Mobile:mobile }
     permissions: [admin_operation_mobile_banner_manage]
 
-admin_operation_mobile_select:
-    path:  /operation/mobile/select
-    defaults: { _controller: AppBundle:Admin/Mobile:mobileSelect }
-    permissions: [admin_operation_mobile_select_manage]
-
-admin_operation_mobile_customization_upgrade:
-    path:  /operation/mobile/customization_upgrade
-    defaults: { _controller: AppBundle:Admin/Mobile:customizationUpgrade }
-    methods: [POST]
-
 admin_discovery_column_delete:
     path:  /discovery_column/{id}/delete
     defaults: { _controller: AppBundle:Admin/DiscoveryColumn:delete }
@@ -2404,7 +2394,7 @@ admin_wechat_notification_show:
     path: /wechat/notification/show
     defaults: { _controller: AppBundle:Admin/WeChatNotification:show}
 
-admin_wechat_notification_template_status: 
+admin_wechat_notification_template_status:
     path: /wechat/notification/template/status
     defaults: { _controller: AppBundle:Admin/WeChatNotification:status}
 

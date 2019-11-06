@@ -8,10 +8,10 @@
         <input id="nickname" class="form-control" type="text" name="nickname" placeholder="{{'admin.operation_invite.nickname.placeholer'|trans}}" value="{{ app.request.query.get('nickname')}}">
         <div class="form-group ">
             <input class="form-control" type="text" id="startDate" name="startDate"
-                   value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}">
+                   value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}" autocomplete="off">
             -
             <input class="form-control" type="text" id="endDate" name="endDate"
-                   value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}">
+                   value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}" autocomplete="off">
         </div>
         <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
         {% include 'export/export-btn.html.twig' with
