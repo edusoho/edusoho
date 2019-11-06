@@ -9,13 +9,14 @@ use Biz\Common\CommonException;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\System\SettingException;
 use Biz\OrderFacade\CoinCurrency;
+use ApiBundle\Api\Util\AssetHelper;
 
 class Setting extends AbstractResource
 {
     private $supportTypes = array(
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer', 
-        'user', 'cloud', 'coin', 'coupon'
+        'user', 'cloud', 'coin', 'coupon', 'mobile'
     );
 
     /**
@@ -46,6 +47,24 @@ class Setting extends AbstractResource
         }
 
         return $result;
+    }
+
+    public function getMobile($request)
+    {
+        $mobileSetting = $this->getSettingService()->get('mobile', array());
+        
+        $splashs = array();
+        for ($i = 1; $i < 6; ++$i) {
+            if (!empty($mobileSetting['splash'.$i])) {
+                $splashs[] = AssetHelper::uriForPath('/'.$mobileSetting['splash'.$i]);
+            }
+        }
+        
+        return array(
+            'enabled' => empty($mobileSetting['enabled']) ? true : (bool) $mobileSetting['enabled'],
+            'logo' => empty($mobileSetting['logo']) ? '' : AssetHelper::uriForPath('/'.$mobileSetting['logo']),
+            'splashs' => $splashs,
+        );
     }
 
     public function getDeveloper($request)
