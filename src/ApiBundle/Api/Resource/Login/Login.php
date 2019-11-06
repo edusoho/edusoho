@@ -32,7 +32,7 @@ use Biz\User\UserException;
 class Login extends AbstractResource
 {
     private $supportLoginTypes = array(
-        'sms', 'qrcodeToken',
+        'sms', 'token',
     );
 
     private $supportClients = array(
@@ -56,19 +56,19 @@ class Login extends AbstractResource
         return $this->$method($request);
     }
 
-    public function loginByQrcodeToken(ApiRequest $request)
+    public function loginByToken(ApiRequest $request)
     {
         $mobile = $this->getSettingService()->get('mobile', array());
         if (empty($mobile['enabled'])) {
             throw SettingException::APP_CLIENT_CLOSED();
         }
 
-        $qrcodeToken = $this->getTokenService()->verifyToken(MobileBaseController::TOKEN_TYPE, $request->request->get('qrcodeToken'));
-        if (empty($qrcodeToken) || MobileBaseController::TOKEN_TYPE != $qrcodeToken['type']) {
+        $requestToken = $this->getTokenService()->verifyToken(MobileBaseController::TOKEN_TYPE, $request->request->get('token'));
+        if (empty($requestToken) || MobileBaseController::TOKEN_TYPE != $requestToken['type']) {
             throw UserException::NOTFOUND_TOKEN();
         }
 
-        $user = $this->getUserService()->getUser($qrcodeToken['userId']);
+        $user = $this->getUserService()->getUser($requestToken['userId']);
         if (empty($user)) {
             throw UserException::NOTFOUND_USER();
         }
@@ -85,7 +85,7 @@ class Login extends AbstractResource
 
         $this->afterLogin($user, $token, $client);
 
-        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", array('qrcodeToken' => $qrcodeToken, 'token' => $token, 'user' => $user));
+        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", array('requestToken' => $requestToken, 'token' => $token, 'user' => $user));
 
         return array(
             'token' => $token,
