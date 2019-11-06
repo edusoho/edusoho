@@ -3,12 +3,14 @@
 namespace AppBundle\Controller\AdminV2;
 
 use AppBundle\Common\CurlToolkit;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class DefaultController extends BaseController
 {
@@ -50,6 +52,54 @@ class DefaultController extends BaseController
         $site = urlencode(http_build_query($site));
 
         return $this->redirect('http://www.edusoho.com/question?site='.$site.'');
+    }
+
+    public function validateDomainAction(Request $request)
+    {
+        $result = $this->domainInspect($request);
+
+        if ('ok' == $result['status']) {
+            return $this->render('admin-v2/default/domain.html.twig', array('inspectList' => array()));
+        }
+
+        return $this->render('admin-v2/default/domain.html.twig', array(
+            'inspectList' => array('name' => 'host', 'value' => $result),
+        ));
+    }
+
+    public function getCloudNoticesAction(Request $request)
+    {
+        if ($this->getWebExtension()->isTrial()) {
+            $domain = $this->generateUrl('homepage', array(), true);
+            $api = CloudAPIFactory::create('root');
+            $result = $api->get('/trial/remainDays', array('domain' => $domain));
+        }
+
+        return $this->render('admin-v2/default/cloud-notice.html.twig', array(
+            'trialTime' => (isset($result)) ? $result : null,
+        ));
+    }
+
+    private function domainInspect($request)
+    {
+        $currentHost = $request->server->get('HTTP_HOST');
+        $siteSetting = $this->getSettingService()->get('site');
+        $settingUrl = $this->generateUrl('admin_v2_school_information');
+        $filter = array('http://', 'https://');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'], '/');
+
+        if ($currentHost != str_replace($filter, '', $siteSetting['url'])) {
+            return array(
+                'status' => 'warning',
+                'errorMessage' => ServiceKernel::instance()->trans('admin_v2.domain_error_hint'),
+                'except' => $siteSetting['url'],
+                'actually' => $currentHost,
+                'settingUrl' => $settingUrl,
+            );
+        }
+
+        return array('status' => 'ok', 'except' => $siteSetting['url'], 'actually' => $currentHost, 'settingUrl' => $settingUrl);
     }
 
     /**
