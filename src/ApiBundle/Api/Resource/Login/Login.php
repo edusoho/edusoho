@@ -126,7 +126,6 @@ class Login extends AbstractResource
         $site = $this->getSettingService()->get('site', array());
 
         $templateParams = array(
-            'nickname' => $nickname,
             'url' => $site['url'],
             'password' => $password,
         );
