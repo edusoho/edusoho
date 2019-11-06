@@ -23,8 +23,9 @@
           {{ web_macro.flash_messages() }}
           <div class="course-piece">{{ 'my.teaching.course_set.select_type'|trans }}</div>
           <div class="form-group cd-row mb0">
-            {% set typeCount = courseTypes|length %}
+            {% set typeCount = courseTypes|length %}{{ dump(typeCount) }}
             {% for key,type in courseTypes %}
+                {{ dump(type.template) }}
               <div class="{% if typeCount <= 4 %}col-md-3 {% else %}col-md-2 course-five-types {% endif %}">
                 {% include type.template with {type: key, defaultType: defaultType} %}
               </div>
