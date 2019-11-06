@@ -8,13 +8,11 @@
 {% block container %}
   <div class="container admin-v2-container">
     {# 域名检查提示#}
-    <div class="row cd-mb24">
-      <div class="alert-list">
-        {{ render(controller('AppBundle:AdminV2/Default:validateDomain')) }}
-        {% if not (setting('copyright.thirdCopyright')|default(0) == 1) and is_trial() %}
-          {{ render(controller('AppBundle:AdminV2/Default:getCloudNotices')) }}
-        {% endif %}
-      </div>
+    <div class="alert-list">
+      {{ render(controller('AppBundle:AdminV2/Default:validateDomain')) }}
+      {% if not (setting('copyright.thirdCopyright')|default(0) == 1) and is_trial() %}
+        {{ render(controller('AppBundle:AdminV2/Default:getCloudNotices')) }}
+      {% endif %}
     </div>
 
     <div class="row cd-mt24">
