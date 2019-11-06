@@ -25,7 +25,7 @@
       ¥<span class="price">{{ course.originPrice }}</span>
     {% endif %}
   </span>
-  {% if courseSet.discount != 0 %}
+  {% if courseSet.discount != 0 and courseSet.discountType == 'discount' %}
     <span class="tag-discount">
         <span class="discount-font">
           {% if courseSet.discount*10%10 > 0 %}
