@@ -904,9 +904,13 @@ mobile_download_qrcode:
     path: /mobile/downloadQrcode
     defaults: { _controller: AppBundle:Mobile:downloadQrcode }
 
-mobile_download:
-    path: /mobile/download
-    defaults: { _controller: AppBundle:Mobile:download }
+mobile_userterms:
+    path: /mobile/userterms
+    defaults: { _controller: AppBundle:Mobile:userterms }
+
+mobile_privacyPolicy:
+    path: /mobile/privacyPolicy
+    defaults: { _controller: AppBundle:Mobile:privacyPolicy }
 
 group:
     path:  /group

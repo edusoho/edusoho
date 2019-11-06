@@ -71,6 +71,24 @@ class MobileController extends BaseController
         return $this->redirect($baseUrl.'/mapi_v2/School/getDownloadUrl?'.http_build_query($params));
     }
 
+    public function usertermsAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('auth', array());
+
+        return $this->render('mobile/mobile-view-container.html.twig', array(
+            'content' => empty($setting['user_terms_body']) ? '' : $setting['user_terms_body'],
+        ));
+    }
+
+    public function privacyPolicyAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('auth', array());
+
+        return $this->render('mobile/mobile-view-container.html.twig', array(
+            'content' => empty($setting['privacy_policy_body']) ? '' : $setting['privacy_policy_body'],
+        ));
+    }
+
     /**
      * @return SettingService
      */
