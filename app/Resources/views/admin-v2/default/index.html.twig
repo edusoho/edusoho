@@ -183,29 +183,45 @@
           <div class="admin-v2-section__header cd-mb16">应用简介<a class="admin-v2-section__more" href="#">逛逛营销云应用</a></div>
           <div class="admin-v2-section__body">
             <div class="row">
+
+              {% set applicationData = [
+                {
+                  'name': '打折活动',
+                  'src': 'http://try6.edusoho.cn/files/course/2019/11-04/165423f382b5313029.jpg',
+                },
+                {
+                  'name': '学习卡',
+                  'src': 'http://try6.edusoho.cn/files/course/2019/11-04/165423fe252b085872.png',
+                },
+                {
+                  'name': '优惠券',
+                  'src': 'http://try6.edusoho.cn/files/course/2019/11-04/165426282cc1006807.png',
+                },
+              ] %}
+
+              {# 占位符暂时显示 需要删除 #}
               <div class="col-md-3">
                 <div class="text-center admin-application">
                   <i class="es-icon es-icon-entry-application"></i>
                 </div>
               </div>
-              <div class="col-md-3">
-                <a class="text-center admin-application" href="#" target="_blank">
-                  <img src="http://try6.edusoho.cn/files/course/2019/11-04/165423f382b5313029.jpg">
-                  <div class="admin-application__name">打折活动</div>
-                </a>
-              </div>
-              <div class="col-md-3">
-                <a class="text-center admin-application" href="#" target="_blank">
-                  <img src="http://try6.edusoho.cn/files/course/2019/11-04/165423fe252b085872.png">
-                  <div class="admin-application__name">打折活动</div>
-                </a>
-              </div>
-              <div class="col-md-3">
-                <a class="text-center admin-application" href="#" target="_blank">
-                  <img src="http://try6.edusoho.cn/files/course/2019/11-04/165426282cc1006807.png">
-                  <div class="admin-application__name">打折活动</div>
-                </a>
-              </div>
+
+              {% for item in applicationData %}
+                <div class="col-md-3">
+                  <a class="text-center admin-application" href="#" target="_blank">
+                    <img src={{ item.src }}>
+                    <div class="admin-application__name">{{ item.name }}</div>
+                  </a>
+                </div>
+              {% else %}
+                {% for i in 0..3 %}
+                <div class="col-md-3">
+                  <div class="text-center admin-application">
+                    <i class="es-icon es-icon-entry-application"></i>
+                  </div>
+                </div>
+                {% endfor %}
+              {% endfor %}
             </div>
           </div>
         </div>
@@ -215,27 +231,35 @@
           <div class="admin-v2-section__header cd-mb16">经营建议<a class="admin-v2-section__more" href="#" target="_blank">前去Edusoho商学院</a></div>
           <div class="admin-v2-section__body admin-advice">
             <div class="row">
-              {# 占位符 #}
+
+              {% set adviceData = [
+                'http://try6.edusoho.cn/files/course/2019/11-04/165419bc1cc8787598.jpg',
+                'http://try6.edusoho.cn/files/course/2019/11-04/165420c8dd1a544556.jpg',
+                'http://try6.edusoho.cn/files/course/2019/11-04/165421d7fbdf066767.png',
+              ] %}
+
+              {# 占位符暂时显示 需要删除 #}
               <div class="col-md-3">
                 <div class=" admin-advice__item">
                   <div class="admin-advice__placeholder"><i class="es-icon es-icon-placeholder"></i></div>
                 </div>
               </div>
-              <div class="col-md-3">
-                <a class="admin-advice__item" href="#" target="_blank">
-                  <img src="http://try6.edusoho.cn/files/course/2019/11-04/165419bc1cc8787598.jpg">
-                </a>
-              </div>
-              <div class="col-md-3">
-                <a class="admin-advice__item" href="#" target="_blank">
-                  <img src="http://try6.edusoho.cn/files/course/2019/11-04/165420c8dd1a544556.jpg">
-                </a>
-              </div>
-              <div class="col-md-3">
-                <a class="admin-advice__item" href="#" target="_blank">
-                  <img src="http://try6.edusoho.cn/files/course/2019/11-04/165421d7fbdf066767.png">
-                </a>
-              </div>
+
+              {% for item in adviceData %}
+                <div class="col-md-3">
+                  <a class="admin-advice__item" href="#" target="_blank">
+                    <img src={{ item }}>
+                  </a>
+                </div>
+              {% else %}
+                {% for i in 0..3 %}
+                  <div class="col-md-3">
+                    <div class=" admin-advice__item">
+                      <div class="admin-advice__placeholder"><i class="es-icon es-icon-placeholder"></i></div>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endfor %}
             </div>
           </div>
         </div>
