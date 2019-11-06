@@ -1,0 +1,41 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% set modalSize = 'large' %}
+{% block title %}{{ 'admin.queue.failed_detail'|trans }}{% endblock %}
+
+{% block body %}
+  <div class="row mbm">
+    <div class="col-md-3">ID</div>
+    <div class="col-md-9">{{ failedJob.id }}</div>
+  </div>
+  <div class="row mbm">
+    <div class="col-md-3">{{ 'admin.queue.queue_label'|trans }}</div>
+    <div class="col-md-9">{{ failedJob.queue }}</div>
+  </div>
+  <div class="row mbm">
+    <div class="col-md-3">{{ 'admin.queue.class_label'|trans }}</div>
+    <div class="col-md-9">{{ failedJob.class }}</div>
+  </div>
+  <div class="row mbm">
+    <div class="col-md-3">{{ 'admin.queue.priority_label'|trans }}</div>
+    <div class="col-md-9">{{ failedJob.priority }}</div>
+  </div>
+  <div class="row mbm">
+    <div class="col-md-3">{{ 'admin.queue.timeout_label'|trans }}</div>
+    <div class="col-md-9">{{ failedJob.timeout }}</div>
+  </div>
+  <div class="row mbm">
+    <div class="col-md-3">{{ 'admin.queue.body_label'|trans }}</div>
+    <div class="col-md-9">{{ failedJob.body|json_encode }}</div>
+  </div>
+  <div class="row mbm">
+    <div class="col-md-3">{{ 'admin.queue.failed_reason_label'|trans }}</div>
+    <div class="col-md-9">{{ failedJob.reason }}</div>
+  </div>
+  <div class="row mbm">
+    <div class="col-md-3">{{ 'admin.queue.error_time_label'|trans }}</div>
+    <div class="col-md-9">{{ failedJob.failed_time|date('Y-m-d H:i:s') }}</div>
+  </div>
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">{{ 'form.btn.close'|trans }}</button>
+{% endblock %}

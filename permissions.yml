@@ -365,3 +365,7 @@ admin_jobs_manage: admin_v2_jobs_manage
 admin_jobs: admin_v2_jobs
 admin_job_logs: admin_v2_job_logs
 admin_crontab: admin_v2_crontab
+
+# 开发者管理
+admin_setting_mobile_iap_product: admin_v2_setting_mobile_iap_product
+admin_setting_mobile_iap_product_list: admin_v2_setting_mobile_iap_product_list

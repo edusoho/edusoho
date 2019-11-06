@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 
-class ClassroomAdminController extends BaseController
+class ClassroomController extends BaseController
 {
     public function indexAction(Request $request)
     {

@@ -22,9 +22,9 @@
     </div>
     <div class="form-group">
     {{'admin.live_manage.live_start_time_label'|trans}}：
-    <input class="form-control" type="text" id="startDate" name="startDateTime" placeholder="{{'admin.live_manage.live_start_time_placeholder'|trans}}" value="{{ app.request.get('startDateTime') }}">
+    <input class="form-control" type="text" id="startDate" name="startDateTime" autocomplete="off" placeholder="{{'admin.live_manage.live_start_time_placeholder'|trans}}" value="{{ app.request.get('startDateTime') }}">
     <div class="form-group">-</div>
-    <input class="form-control" type="text" id="endDate" name="endDateTime" placeholder="{{'admin.live_manage.live_end_time_placeholder'|trans}}" value="{{ app.request.get('endDateTime') }}">
+    <input class="form-control" type="text" id="endDate" name="endDateTime" autocomplete="off" placeholder="{{'admin.live_manage.live_end_time_placeholder'|trans}}" value="{{ app.request.get('endDateTime') }}">
     </div>
     <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
   </form>

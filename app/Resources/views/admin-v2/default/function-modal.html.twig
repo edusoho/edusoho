@@ -1,0 +1,345 @@
+<div class="modal cd-modal in" id="functionModal" aria-hidden="true">
+  <div class="modal-dialog cd-modal-dialog function-modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="cd-icon cd-icon-close"></i>
+        </button>
+        <h4 class="modal-title">设置常用入口</h4>
+      </div>
+
+      <div class="modal-body">
+        {% set entranceData = [
+          {
+            'title': '教学',
+            'class': 'icon-color-green',
+            'data': [
+              {
+                'text': '课程管理',
+                'icon': 'course',
+                'link': '#',
+                'checked': true
+              },
+              {
+                'text': '班级管理',
+                'icon': 'class',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '公开课管理',
+                'icon': 'open',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '约排课管理',
+                'icon': 'reserve',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '分类标签',
+                'icon': 'application',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '笔记管理',
+                'icon': 'note',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '问答管理',
+                'icon': 'qaq',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '话题管理',
+                'icon': 'topic',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '反馈管理',
+                'icon': 'feedback',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '云资源管理',
+                'icon': 'cloud',
+                'link': '#',
+                'checked': false
+              },
+            ]
+          },
+          {
+            'title': '营销',
+            'class': 'icon-color-yellow',
+            'data': [
+              {
+                'text': '分享有礼',
+                'icon': 'share',
+                'link': '#',
+                'checked': true
+              },
+              {
+                'text': '邀请管理',
+                'icon': 'invite',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '兑换码',
+                'icon': 'exchange',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '优惠券管理',
+                'icon': 'coupon',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '打折活动',
+                'icon': 'discount',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '学习卡',
+                'icon': 'card',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '积分管理',
+                'icon': 'reward',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '会员管理',
+                'icon': 'vip',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '微营销',
+                'icon': 'market',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': 'CRM',
+                'icon': 'crm',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '组合营销管理',
+                'icon': 'combmarket',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '分销',
+                'icon': 'retail',
+                'link': '#',
+                'checked': false
+              },
+            ]
+          },
+          {
+            'title': '运营',
+            'class': 'icon-color-yellow',
+            'data': [
+              {
+                'text': '微网校装修',
+                'icon': 'miniweb',
+                'link': '#',
+                'checked': true
+              },
+              {
+                'text': '小程序装修',
+                'icon': 'miniprogram',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': 'App装修',
+                'icon': 'app',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': 'Web端装修',
+                'icon': 'webmix',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '站点配置',
+                'icon': 'site',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '资讯管理',
+                'icon': 'article',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '小组管理',
+                'icon': 'group',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '微信通知',
+                'icon': 'wechat',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': 'FAQ管理',
+                'icon': 'faq',
+                'link': '#',
+                'checked': false
+              },
+            ]
+          },
+          {
+            'title': '用户',
+            'class': 'icon-color-blue',
+            'data': [
+              {
+                'text': '用户管理',
+                'icon': 'user',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '实名认证',
+                'icon': 'approve',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '教师管理',
+                'icon': 'teacher',
+                'link': '#',
+                'checked': false
+              }
+            ]
+          },
+          {
+            'title': '交易',
+            'class': 'icon-color-yellow',
+            'data': [
+              {
+                'text': '商品订单',
+                'icon': 'goods',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '退款订单',
+                'icon': 'refund',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '网校账单',
+                'icon': 'bill',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '虚拟币管理',
+                'icon': 'coin',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '发票管理',
+                'icon': 'receipt',
+                'link': '#',
+                'checked': false
+              },
+            ]
+          },
+          {
+            'title': '系统',
+            'class': 'icon-color-blue',
+            'data': [
+              {
+                'text': '网校信息',
+                'icon': 'info',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '分校管理',
+                'icon': 'brance',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '用户设置',
+                'icon': 'setting',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '课程设置',
+                'icon': 'course-setting',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '运营设置',
+                'icon': 'operation',
+                'link': '#',
+                'checked': false
+              },
+              {
+                'text': '资产设置',
+                'icon': 'money',
+                'link': '#',
+                'checked': false
+              },
+            ]
+          }
+        ] %}
+        {% for itemData in entranceData %}
+          <div class="entrance-section">
+            <div class="entrance-section__title">{{ itemData.title }}</div>
+            <div class="{{ 'entrance-section__body js-entrance-list cd-pt16 row ' ~ itemData.class }}">
+              {% for entry in itemData.data %}
+              <div class="col-md-3">
+                <div class="text-center admin-function  js-function-choose {% if entry.checked|default(false) %}active{% endif %}">
+                  <div class="admin-function__tag"></div>
+                  <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entry.icon }}"></i></div>
+                  <div class="admin-function__name">{{ entry.text }}</div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="modal-footer clearfix">
+        <div class="function-modal-tip">(最多设置7个快捷入口位）</div>
+        <a class="function-modal__link" data-dismiss="modal" href="javascript:;">{{ 'form.btn.cancel'|trans }}</a>
+        <button type="button" class="btn function-modal__btn js-save-btn">{{ 'form.btn.save'|trans }}</button>
+      </div>
+    </div>
+  </div>
+</div>

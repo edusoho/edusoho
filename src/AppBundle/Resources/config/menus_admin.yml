@@ -590,11 +590,6 @@ admin:
                             name: admin.operation.mobile.banner_setting_tab
                             disable: true
                             router_name: admin_operation_mobile
-                        admin_operation_mobile_select_manage:
-                            name: admin.operation.mobile.selection_setting_tab
-                            disable: true
-                            router_name: admin_operation_mobile_select
-                            visible: false
                         admin_discovery_column_index:
                             name: admin.operation.mobile.discovery_column_tab
                             disable: true
