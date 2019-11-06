@@ -10402,6 +10402,15 @@ admin.operation.coupon_menu.generate_btn: 生成优惠券
 
 # 新版后台开始
 
+# 新后台首页通知
+admin_v2.domain_error_hint: 当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【通用管理】-【网校信息】-【网站域名】
+admin_v2.homepage.setting_domain_btn: 立即设置
+admin_v2.homepage.renewal_btn: 立即续费
+admin_v2.homepage.cloud_notice.unknown_time: 未知时间
+admin_v2.homepage.cloud_notice.unknown_days: 未知
+
+admin_v2.homepage.cloud_notice: '欢迎使用,试用将于<strong> %endTime% </strong>到期,剩余<strong> %remainDays% </strong>天。您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或 '
+
 ##分类标签
 admin_v2.course.tag: 标签管理
 admin_v2.course.tag.group: 标签组管理
