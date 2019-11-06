@@ -23,6 +23,10 @@ define(function(require, exports, module) {
             }
 
         });
+        var installPackageId = $element.data('installPackageId');
+        if (installPackageId != '') {
+            $('[data-package-id=' + $element.data('installPackageId') + ']').click();
+        }
     };
 
 });
