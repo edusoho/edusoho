@@ -357,10 +357,10 @@
 
 
 .admin-info-section {
-  padding: 16px;
+  padding: 20px 16px;
   @media (min-width: 1400px) {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 24px;
+    padding-right: 24px;
   }
   background-color: @cdv2-white;
 }
@@ -501,7 +501,7 @@
 
 .admin-link__btn {
   display: block;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
@@ -510,6 +510,9 @@
   .cdv2-text-md;
   color: @brand-primary;
   border-radius: 24px;
+  &:last-child {
+    margin-bottom: 0;
+  }
   i {
     margin-right: 4px;
     font-size: 16px;
@@ -551,8 +554,8 @@
   padding: 16px;
   padding-bottom: 28px;
   @media (min-width: 1400px) {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 24px;
+    padding-right: 24px;
   }
   .admin-sidebar-section__header {
     .cdv2-text-xlg;
@@ -634,11 +637,14 @@
 
 .function-modal-dialog {
   width: 992px;
-  margin-top: 4%;
+  margin-top: 6%;
   .modal-title {
     font-size: 18px;
     color: #303133;
     line-height: 24px;
+  }
+  .close {
+    opacity: 1 !important;
   }
   .modal-body {
     max-height: 420px;
@@ -646,7 +652,7 @@
   }
   .function-modal-tip {
     float: left;
-    font-size: 18px;
+    font-size: 14px;
     line-height: 38px;
     font-weight: 500;
     color: #ff8836;
