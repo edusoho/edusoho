@@ -9,7 +9,7 @@
   <div class="container admin-v2-container">
     {# 域名检查提示#}
     <div class="alert-list">
-     {{ render(controller('AppBundle:AdminV2/Default:validateDomain')) }}
+      {{ render(controller('AppBundle:AdminV2/Default:validateDomain')) }}
       {% if not (setting('copyright.thirdCopyright')|default(0) == 1) and is_trial() %}
         {{ render(controller('AppBundle:AdminV2/Default:getCloudNotices')) }}
       {% endif %}
@@ -270,14 +270,15 @@
             <div class="admin-website__name"><a class="admin-website__text text-overflow" href="#">哎呀音乐哎呀音世哎呀音乐是哎呀音乐哎呀音世哎呀音乐是</a></div>
               {# 三种颜色的客户等级 #}
             <div class="">
-              <div class="rank-tag rank-tag--yellow rank-tag--green"><span class="rank-tag__icon"><i class="es-icon es-icon-star"></i></span><div class="rank-tag__text">商业授权</div></div>
+              <div class="rank-tag rank-tag--yellow rank-tag--green"><span class="rank-tag__icon"><i class="cd-icon cd-icon-star"></i></span><div class="rank-tag__text">商业授权</div></div>
               <div class="theme-tag">雅致简洁主题</div>
             </div>
 
           </div>
           <div class="admin-update">
             <div class="admin-update__cell"><span class="admin-update__label">云服务：</span><span class="admin-update__number">3个</span ><a class="admin-update__link"href="#">未开启</a></div>
-            <div class="admin-update__cell"><span class="admin-update__label">应用中心：</span><span class="admin-update__number">3个</span><a class="admin-update__link" href="#">未更新</a></div>
+            {# 已开启和已更新的例子 #}
+            <div class="admin-update__cell"><span class="admin-update__label">应用中心：</span><span class="admin-update__number">3个</span><span class="cdv2-light-minor">已更新</span></div>
             <div class="admin-update__cell"><span class="admin-update__label">系统更新：</span><span class="admin-update__number">3个</span><a class="admin-update__link"href="#">未更新</a></div>
           </div>
           <div class="admin-link">
@@ -297,7 +298,7 @@
           <div class="admin-sidebar-section__header">站长公告</div>
           <a class="admin-sidebar-section__body admin-notice" href="#" target="_blank">
             <img src="http://try6.edusoho.cn/files/course/2019/11-04/165421d7fbdf066767.png">
-            <div class="admin-notice__text">{{ test.text|sub_text(37) }}</div>
+            <div class="admin-notice__text">{{ test.text }}</div>
           </a>
         </div>
 
