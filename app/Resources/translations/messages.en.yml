@@ -9102,6 +9102,14 @@ admin.operation.coupon_menu.generate_btn: Generate Coupon
 
 # 新版后台开始
 
+# 新后台首页
+admin_v2.domain_error_hint: Current domain name does not match with the authorized domain name.to avoid affecting the normal use of cloud sms,please come【System】-【General Manage】-【Online School Information】-【Site Domain】
+admin_v2.homepage.setting_domain_btn: Set Up Now
+admin_v2.homepage.renewal_btn: Renewal Now
+admin_v2.homepage.cloud_notice.unknown_time: Unknow Time
+admin_v2.homepage.cloud_notice.unknown_days: Unknow
+
+admin_v2.homepage.cloud_notice: "Welcome, your trail will be expired on<strong> %endTime% </strong>,<strong> %remainDays% </strong> days left. </br> Contact our business managers to buy licence or extend your trail. Tel: 4008041114 or "
 ##分类标签
 admin_v2.course.tag: Tag
 admin_v2.course.tag.group: Tag Groups
