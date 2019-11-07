@@ -9,6 +9,7 @@ use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Biz\WeChat\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Symfony\Component\HttpFoundation\Response;
 
 class WeChatNotificationController extends BaseController
 {
@@ -81,6 +82,15 @@ class WeChatNotificationController extends BaseController
 
     public function manageAction(Request $request)
     {
+        $a = $this->getSDKWeChatService()->getMiniProgramCode('test', array(
+            'width' => 1280,
+            ));
+        $headers = array(
+            'Content-type' => 'image/jpeg',
+            'Content-Disposition' => 'inline; filename="'.'reg_captcha.jpg'.'"', );
+
+        return $res = new Response(base64_decode($a['content']), 200, $headers);
+        exit();
         $wechatDefault = $this->getDefaultWechatSetting();
         $wechatSetting = $this->getSettingService()->get('wechat', array());
         $wechatSetting = array_merge($wechatDefault, $wechatSetting);
