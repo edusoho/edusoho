@@ -69,4 +69,13 @@ class WeChatServiceTest extends BaseTestCase
 
         $this->assertEquals($result['success'], true);
     }
+
+    public function testGetMiniProgramCode()
+    {
+        $httpClient = $this->mockHttpClient(array('type' => 'image', 'content' => 'testImg'));
+        $service = new WeChatService($this->auth, array(), null, $httpClient);
+        $result = $service->getMiniProgramCode('testScene');
+
+        $this->assertEquals($result['type'], 'image');
+    }
 }
