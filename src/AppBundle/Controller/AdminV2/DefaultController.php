@@ -6,6 +6,7 @@ use AppBundle\Common\CurlToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
+use Biz\QuickEntrance\Service\QuickEntranceService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,8 +17,11 @@ class DefaultController extends BaseController
     {
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
 
+        $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+
         return $this->render('admin-v2/default/index.html.twig', array(
             'dates' => $weekAndMonthDate,
+            'entrances' => $userQuickEntrances,
         ));
     }
 
@@ -50,6 +54,20 @@ class DefaultController extends BaseController
         $site = urlencode(http_build_query($site));
 
         return $this->redirect('http://www.edusoho.com/question?site='.$site.'');
+    }
+
+    public function quickEntranceAction(Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $fields = $request->request->all();
+            $quickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
+
+            return $this->render('admin-v2/default/quick-entrance/index.html.twig', array('entrances' => $quickEntrances));
+        }
+
+        $quickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
+
+        return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
     }
 
     /**
@@ -90,5 +108,13 @@ class DefaultController extends BaseController
     protected function getNotificationService()
     {
         return $this->createService('User:NotificationService');
+    }
+
+    /**
+     * @return QuickEntranceService
+     */
+    protected function getQuickEntranceService()
+    {
+        return $this->createService('QuickEntrance:QuickEntranceService');
     }
 }

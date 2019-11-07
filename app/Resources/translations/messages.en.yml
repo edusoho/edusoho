@@ -9102,6 +9102,10 @@ admin.operation.coupon_menu.generate_btn: Generate Coupon
 
 # 新版后台开始
 
+# 常用入口
+admin_v2.quick_entrance_setting: Set Quick Entrance
+admin_v2.quick_entrance_setting.tips: (Set up to 7 quick entries）
+
 ##分类标签
 admin_v2.course.tag: Tag
 admin_v2.course.tag.group: Tag Groups
