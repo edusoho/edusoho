@@ -1,0 +1,26 @@
+.e-tag-link {
+  width: vw(107);
+  height: vw(46);
+  background: url('/h5/static/images/link-tag@2x.png') center no-repeat;
+  background-position-y: vw(2);
+  background-size: cover;
+
+  > a {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    > span {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      min-width: vw(80);
+      right: vw(6);
+      line-height: vw(20);
+      font-size: vw(14);
+      color: #ffffff;
+      text-align: center;
+    }
+  }
+}

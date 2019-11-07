@@ -41,6 +41,12 @@
       @vipOpen="vipOpen">
     </vip-introduce>
 
+    <a v-if="isShowInviteUrl" :href="inviteUrl">
+      <div class="coupon-code-entrance">邀请好友购买
+        <i class="van-icon van-icon-arrow pull-right"></i><i class="pull-right">赚 {{ drpSetting.minDirectRewardRatio }}%</i>
+      </div>
+    </a>
+
     <!-- 会员免费课程 -->
     <e-course-list
       v-if="courseData"
@@ -90,6 +96,7 @@ import { formatFullTime, getOffsetDays } from '@/utils/date-toolkit.js';
 import { mapState } from 'vuex';
 import { Toast } from 'vant';
 import * as types from '@/store/mutation-types';
+import qs from 'qs';
 
 export default {
   components: {
@@ -120,7 +127,10 @@ export default {
       orderParams: {
         unit: 'month',
         num: 0,
-      }
+      },
+      isShowInviteUrl: false, // 是否显示邀请链接
+      drpSetting: {}, // Drp设置信息
+      bindAgencyRelation: {}, // 分销代理商绑定信息
     }
   },
   computed: {
@@ -174,6 +184,14 @@ export default {
       const todayStamp = new Date().getTime();
       const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
       return getOffsetDays(todayStamp, deadlineStamp) + 1;
+    },
+    inviteUrl() {
+      let params = {
+        type: 'vip',
+        id: this.levels[this.currentLevelIndex].id,
+        merchant_id: this.drpSetting.merchantId,
+      };
+      return this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
     }
   },
   created() {
@@ -229,6 +247,9 @@ export default {
     }).catch(err => {
       Toast.fail(err.message)
     })
+
+    this.showInviteUrl();
+    this.getDrpSetting();
 
     setTimeout(() => {
       window.scrollTo(0,0);
@@ -324,7 +345,29 @@ export default {
         this.currentLevelIndex = vipIndex
       }
       this.vipPopShow = true;
-    }
+    },
+    showInviteUrl() {
+      Api.hasDrpPluginInstalled().then(res => {
+        if (!res.Drp) {
+          this.isShowInviteUrl = false;
+          return;
+        }
+
+        Api.getAgencyBindRelation().then(data => {
+          if (!data.agencyId) {
+            this.isShowInviteUrl = false;
+            return;
+          }
+          this.bindAgencyRelation = data;
+          this.isShowInviteUrl = true;
+        })
+      })
+    },
+    getDrpSetting() {
+      Api.getDrpSetting().then(data => {
+        this.drpSetting = data;
+      });
+    },
   }
 }
 </script>
