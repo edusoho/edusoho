@@ -9111,6 +9111,23 @@ admin_v2.category_manage.add_title: Add Category
 admin_v2.tag_manage.tag.create.modal_title: Add Tag
 admin_v2.tag_manage.tag.group.create.modal_title: Add Tag Group
 
+admin_v2.homepage.school_info.cloud_service: Cloud service
+admin_v2.homepage.school_info.app_center: App center
+admin_v2.homepage.school_info.system_upgrade: System upgrade
+admin_v2.homepage.school_info.cloud_service_status.open: Opened
+admin_v2.homepage.school_info.cloud_service_status.not_open: Open All
+admin_v2.homepage.school_info.app_status.upgraded: Latest
+admin_v2.homepage.school_info.app_status.has_upgrade: New upgrade
+admin_v2.homepage.school_info.system_status.has_upgrade: New upgrade
+admin_v2.homepage.school_info.system_status.upgraded: Latest
+admin_v2.homepage.school_info.system_version: System version
+admin_v2.homepage.school_info.access_web: Access Web
+admin_v2.homepage.school_info.access_mobile_app: Access App
+admin_v2.homepage.school_info.access_wechat_app: Access wechat app
+admin_v2.homepage.school_info.level.opensource: Open source
+admin_v2.homepage.school_info.level.saas: SaaS
+admin_v2.homepage.school_info.level.license: License
+
 # 新后台
 admin_v2.edu_cloud_not_access: Edu cloud not accessable
 admin_v2.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">App Setting</a>\n"

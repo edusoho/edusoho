@@ -10411,6 +10411,22 @@ admin_v2.category_manage.add_title: 添加分类
 admin_v2.tag_manage.tag.create.modal_title: 新增标签
 admin_v2.tag_manage.tag.group.create.modal_title: 新增标签组
 
+admin_v2.homepage.school_info.cloud_service: 云服务
+admin_v2.homepage.school_info.app_center: 应用中心
+admin_v2.homepage.school_info.system_upgrade: 系统更新
+admin_v2.homepage.school_info.cloud_service_status.open: 已开启
+admin_v2.homepage.school_info.cloud_service_status.not_open: 未开启
+admin_v2.homepage.school_info.app_status.upgraded: 已更新
+admin_v2.homepage.school_info.app_status.has_upgrade: 未更新
+admin_v2.homepage.school_info.system_status.has_upgrade: 有更新
+admin_v2.homepage.school_info.system_status.upgraded: 已更新
+admin_v2.homepage.school_info.system_version: 系统版本
+admin_v2.homepage.school_info.access_web: 访问Web
+admin_v2.homepage.school_info.access_mobile_app: 访问App
+admin_v2.homepage.school_info.access_wechat_app: 访问小程序
+admin_v2.homepage.school_info.level.opensource: 开源版
+admin_v2.homepage.school_info.level.saas: SaaS版
+admin_v2.homepage.school_info.level.license: 商业授权
 
 # 新后台
 admin_v2.edu_cloud_not_access: 未接入教育云
