@@ -410,8 +410,13 @@ define(function (require, exports, module) {
     }
 
     var upgradeAdminV2 = function () {
+
         var $upgradeBtn = $('.js-upgrade-admin-v2');
         $upgradeBtn.on('click',function () {
+            if (!confirm(Translator.trans('admin.switch_new_version.confirm_message'))) {
+                return ;
+            }
+            $upgradeBtn.button('loading');
             $.post($upgradeBtn.data('url'),function(res){
                 if(res.status == 'error'){
                     Notify.danger(Translator.trans(res.message));
@@ -421,5 +426,8 @@ define(function (require, exports, module) {
             });
         });
 
+        $('.js-no-permission-btn').on('click',function () {
+            Notify.danger(Translator.trans('admin.switch_old_version.permission_error'));
+        })
     }
 });

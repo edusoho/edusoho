@@ -1492,3 +1492,4 @@ course.plan_task.activity_ppt_animation_slide: Switch animation mode
 
 #新后台
 admin_v2.user.cloude_sms_enable_hint: please go to【Admin】-【App Cente】-【Cloud service】-【Cloud Sms】open cloud sms first.
+admin.switch_old_version.permission_error: Please contact super administrator or administrator operation
