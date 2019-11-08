@@ -27,6 +27,7 @@ use Codeages\Biz\Pay\Service\AccountService;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 
 class Login extends AbstractResource
 {
@@ -77,7 +78,7 @@ class Login extends AbstractResource
         $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
         if (empty($user)) {
             $this->checkMobileRegisterSetting();
-            $user = $this->createUser($clientIp, $client, $mobile);
+            $user = $this->createUser($clientIp, $client, $mobile, $request);
             $this->sendRegisterSms($mobile, $user['id'], $user['nickname'], $user['realPassword']);
         }
         $user['currentIp'] = $clientIp;
@@ -95,7 +96,7 @@ class Login extends AbstractResource
         );
     }
 
-    private function createUser($clientIp, $client, $mobile)
+    private function createUser($clientIp, $client, $mobile, $request)
     {
         $nickname = substr(MathToolkit::uniqid(), 8, 16);
         while (!$this->getUserService()->isNicknameAvaliable($nickname)) {
@@ -111,6 +112,10 @@ class Login extends AbstractResource
             'registeredWay' => $client,
             'createdIp' => $clientIp,
         );
+
+        if ($this->isPluginInstalled('Drp')) {
+            $newUser = DistributorCookieToolkit::setCookieTokenToFields($request->getHttpRequest(), $newUser, DistributorCookieToolkit::USER);
+        }
 
         $user = $this->getAuthService()->register($newUser);
         $user['realPassword'] = $password;

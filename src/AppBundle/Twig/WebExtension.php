@@ -19,6 +19,7 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Player\Service\PlayerService;
+use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
