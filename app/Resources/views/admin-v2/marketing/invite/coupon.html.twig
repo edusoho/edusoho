@@ -17,9 +17,9 @@
     <input class="form-control" type="text" name="nickname" placeholder="{{'admin.operation_invite.nickname.placeholer'|trans}}" value="{{ app.request.query.get('nickname')}}">
      <div class="form-group">
     {{'admin.operation_invite.coupon.recieved_at'|trans}}
-    <input class="form-control" type="text" id="start-date" name="startDateTime" placeholder="{{'admin.operation_invite.coupon.start_time.placeholer'|trans}}" value="{{ app.request.get('startDateTime') }}">
+    <input class="form-control" type="text" id="start-date" name="startDateTime" placeholder="{{'admin.operation_invite.coupon.start_time.placeholer'|trans}}" value="{{ app.request.get('startDateTime') }}" autocomplete="off">
     <div class="form-group">-</div>
-    <input class="form-control" type="text" id="end-date" name="endDateTime" placeholder="{{'admin.operation_invite.coupon.finished_time.placeholer'|trans}}" value="{{ app.request.get('endDateTime') }}">
+    <input class="form-control" type="text" id="end-date" name="endDateTime" placeholder="{{'admin.operation_invite.coupon.finished_time.placeholer'|trans}}" value="{{ app.request.get('endDateTime') }}" autocomplete="off">
     </div>
     <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
 	</form>
