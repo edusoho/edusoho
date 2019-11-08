@@ -65,9 +65,9 @@ abstract class CacheTest extends \Doctrine\Tests\DoctrineTestCase
 
     public function testFetchMultiple()
     {
-        $cache  = $this->_getCacheDriver();
+        $cache = $this->_getCacheDriver();
         $values = $this->provideDataToCache();
-        $saved  = array();
+        $saved = array();
 
         foreach ($values as $key => $value) {
             $cache->save($key, $value[0]);
@@ -107,22 +107,6 @@ abstract class CacheTest extends \Doctrine\Tests\DoctrineTestCase
         $cache = $this->_getCacheDriver();
 
         $this->assertSame(array(), $cache->fetchMultiple(array()));
-    }
-
-    public function testSaveMultiple()
-    {
-        $cache = $this->_getCacheDriver();
-        $cache->deleteAll();
-
-        $data = array_map(function ($value) {
-            return $value[0];
-        }, $this->provideDataToCache());
-
-        $this->assertTrue($cache->saveMultiple($data));
-
-        $keys = array_keys($data);
-
-        $this->assertEquals($data, $cache->fetchMultiple($keys));
     }
 
     public function provideDataToCache()
@@ -280,7 +264,7 @@ abstract class CacheTest extends \Doctrine\Tests\DoctrineTestCase
 
     public function testDeleteAllAndNamespaceVersioningBetweenCaches()
     {
-        if ( ! $this->isSharedStorage()) {
+        if (!$this->isSharedStorage()) {
             $this->markTestSkipped('The cache storage needs to be shared.');
         }
 
@@ -330,7 +314,7 @@ abstract class CacheTest extends \Doctrine\Tests\DoctrineTestCase
 
     public function testFlushAllAndNamespaceVersioningBetweenCaches()
     {
-        if ( ! $this->isSharedStorage()) {
+        if (!$this->isSharedStorage()) {
             $this->markTestSkipped('The cache storage needs to be shared.');
         }
 
@@ -442,16 +426,6 @@ abstract class CacheTest extends \Doctrine\Tests\DoctrineTestCase
         $cache->deleteAll();
         $this->assertTrue($cache->save('without_ttl', 'without_ttl'));
         $this->assertTrue($cache->save('with_ttl', 'with_ttl', 3600));
-    }
-
-    public function testValueThatIsFalseBooleanIsProperlyRetrieved()
-    {
-        $cache = $this->_getCacheDriver();
-        $cache->deleteAll();
-
-        $this->assertTrue($cache->save('key1', false));
-        $this->assertTrue($cache->contains('key1'));
-        $this->assertFalse($cache->fetch('key1'));
     }
 
     /**

@@ -4,12 +4,16 @@ namespace AppBundle\Controller\AdminV2;
 
 use AppBundle\Common\CurlToolkit;
 use Biz\Common\CommonException;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
+use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
+use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class DefaultController extends BaseController
 {
@@ -42,6 +46,33 @@ class DefaultController extends BaseController
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
     }
 
+    public function statisticsDailyAction(Request $request)
+    {
+        $todayTimeStart = strtotime(date('Y-m-d', time()));
+        $todayTimeEnd = strtotime(date('Y-m-d', time() + 24 * 3600));
+
+        $loginCount = $this->getStatisticsService()->countLogin(time() - 15 * 60);
+        $registerNum = $this->getUserService()->countUsers(array('startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd));
+
+        $conditions = array(
+            'pay_time_GT' => $todayTimeStart,
+            'pay_time_LT' => $todayTimeEnd,
+            'statuses' => array('paid', 'success', 'finished', 'refunded'),
+        );
+
+        $newOrderCount = $this->getOrderService()->countOrders($conditions);
+        $conditions['pay_amount_GT'] = 0;
+
+        $newPaidOrderCount = $this->getOrderService()->countOrders($conditions);
+
+        return $this->render('admin-v2/default/daily-statistics.html.twig', array(
+            'loginCount' => $loginCount,
+            'registerNum' => $registerNum,
+            'newOrderCount' => $newOrderCount,
+            'newPaidOrderCount' => $newPaidOrderCount,
+        ));
+    }
+
     public function feedbackAction(Request $request)
     {
         $site = $this->getSettingService()->get('site');
@@ -72,8 +103,55 @@ class DefaultController extends BaseController
             return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin')));
         }
 
-        return $this->render('admin-v2/default/switch-old-version-modal.html.twig', array(
+        return $this->render('admin-v2/default/switch-old-version-modal.html.twig', array());
+    }
+
+    public function validateDomainAction(Request $request)
+    {
+        $result = $this->domainInspect($request);
+
+        if ('ok' == $result['status']) {
+            return $this->render('admin-v2/default/domain.html.twig', array('inspectList' => array()));
+        }
+
+        return $this->render('admin-v2/default/domain.html.twig', array(
+            'inspectList' => array('name' => 'host', 'value' => $result),
         ));
+    }
+
+    public function getCloudNoticesAction(Request $request)
+    {
+        if ($this->getWebExtension()->isTrial()) {
+            $domain = $this->generateUrl('homepage', array(), true);
+            $api = CloudAPIFactory::create('root');
+            $result = $api->get('/trial/remainDays', array('domain' => $domain));
+        }
+
+        return $this->render('admin-v2/default/cloud-notice.html.twig', array(
+            'trialTime' => (isset($result)) ? $result : null,
+        ));
+    }
+
+    private function domainInspect($request)
+    {
+        $currentHost = $request->server->get('HTTP_HOST');
+        $siteSetting = $this->getSettingService()->get('site');
+        $settingUrl = $this->generateUrl('admin_v2_school_information');
+        $filter = array('http://', 'https://');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'], '/');
+
+        if ($currentHost != str_replace($filter, '', $siteSetting['url'])) {
+            return array(
+                'status' => 'warning',
+                'errorMessage' => ServiceKernel::instance()->trans('admin_v2.domain_error_hint'),
+                'except' => $siteSetting['url'],
+                'actually' => $currentHost,
+                'settingUrl' => $settingUrl,
+            );
+        }
+
+        return array('status' => 'ok', 'except' => $siteSetting['url'], 'actually' => $currentHost, 'settingUrl' => $settingUrl);
     }
 
     /**
@@ -114,5 +192,21 @@ class DefaultController extends BaseController
     protected function getNotificationService()
     {
         return $this->createService('User:NotificationService');
+    }
+
+    /**
+     * @return StatisticsService
+     */
+    protected function getStatisticsService()
+    {
+        return $this->createService('System:StatisticsService');
+    }
+
+    /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 }

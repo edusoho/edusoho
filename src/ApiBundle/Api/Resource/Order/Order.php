@@ -28,6 +28,9 @@ class Order extends AbstractResource
             /* @var $product Product */
             $product = $this->getOrderFacadeService()->getOrderProduct($params['targetType'], $params);
             $product->setPickedDeduct($params);
+
+            $this->addCreateDealers($request);
+
             $order = $this->getOrderFacadeService()->create($product);
 
             if (!empty($params['isOrderCreate'])) {
@@ -98,6 +101,17 @@ class Order extends AbstractResource
         if ('Alipay_LegacyWap' == $params['gateway']) {
             $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
             $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+        }
+    }
+
+    private function addCreateDealers($request)
+    {
+        $serviceNames = array('Distributor:DistributorProductDealerService');
+
+        foreach ($serviceNames as $serviceName) {
+            $service = $this->getBiz()->service($serviceName);
+            $service->setParams($request->getHttpRequest()->cookies->all());
+            $this->getOrderFacadeService()->addDealer($service);
         }
     }
 
