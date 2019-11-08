@@ -40,7 +40,14 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
         $permissions = PermissionBuilder::instance()->getUserPermissionTree();
 
         $permissions = $permissions->toArray();
-        $modules = $permissions['children'][2]['children'];
+
+        $modules = array();
+
+        foreach ($permissions['children'] as $permission) {
+            if ('admin_v2' == $permission['code']) {
+                $modules = $permission['children'];
+            }
+        }
 
         $quickEntrances = array();
         foreach ($modules as $module) {
@@ -60,9 +67,9 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
 
     public function updateUserEntrances($userId, $fields)
     {
-        $fields = ArrayToolkit::filter($fields, array('data' => ''));
+        $fields = ArrayToolkit::filter($fields, array('data' => array()));
 
-        if (count(json_decode($fields['data'])) > 7) {
+        if (count($fields['data']) > 7) {
             throw $this->createInvalidArgumentException('Entrance data invalid.');
         }
 
@@ -70,12 +77,25 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
 
         if (empty($userQuickEntrances)) {
             $fields['userId'] = $userId;
-            $this->getQuickEntranceDao()->create($fields);
+            $this->createUserEntrance($fields);
         } else {
             $this->getQuickEntranceDao()->update($userQuickEntrances['id'], $fields);
         }
 
         return $this->getEntrancesByUserId($userId);
+    }
+
+    public function createUserEntrance($fields)
+    {
+        $fields = ArrayToolkit::filter($fields, array('userId' => 0, 'data' => array()));
+
+        if (!ArrayToolkit::requireds($fields, array('userId', 'data')) || count($fields['data']) > 7) {
+            throw $this->createInvalidArgumentException('Fields invalid');
+        }
+
+        $this->getQuickEntranceDao()->create($fields);
+
+        return $this->getEntrancesByUserId($fields['userId']);
     }
 
     private function getEntrancesByCodes($codes)

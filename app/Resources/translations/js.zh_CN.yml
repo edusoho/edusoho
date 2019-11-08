@@ -1434,3 +1434,4 @@ course.plan_task.activity_ppt_animation_slide: 切换动画模式
 
 #新后台
 admin_v2.user.cloude_sms_enable_hint: 请先到【管理后台】-【应用中心】-【云服务】-【云短信】中开启云短信哦~
+admin_v2.homepage.quick_entrance.hint: 最多设置7个快捷入口位

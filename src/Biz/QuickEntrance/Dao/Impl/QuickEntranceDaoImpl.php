@@ -11,15 +11,15 @@ class QuickEntranceDaoImpl extends AdvancedDaoImpl implements QuickEntranceDao
 
     public function getByUserId($userId)
     {
-        $entrance = $this->getByFields(array('userId' => $userId));
-        $entrance['data'] = json_decode($entrance['data']);
-
-        return $entrance;
+        return $this->getByFields(array('userId' => $userId));
     }
 
     public function declares()
     {
         return array(
+            'serializes' => array('data' => 'json'),
+            'orderbys' => array(),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'userId = :userId',
             ),

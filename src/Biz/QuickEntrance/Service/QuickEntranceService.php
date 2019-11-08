@@ -8,5 +8,7 @@ interface QuickEntranceService
 
     public function getAllEntrances($userId);
 
+    public function createUserEntrance($fields);
+
     public function updateUserEntrances($userId, $fields);
 }
