@@ -413,6 +413,7 @@ class UserServiceImpl extends BaseService implements UserService
         }, $oldAvatars);
 
         $user = $this->getUserDao()->update($userId, $fields);
+        $this->dispatchEvent('user.change_avatar', new Event($user));
 
         return UserSerialize::unserialize($user);
     }
