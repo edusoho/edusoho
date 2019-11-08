@@ -10433,9 +10433,10 @@ admin_v2.homepage.school_info.system_version: 系统版本
 admin_v2.homepage.school_info.access_web: 访问Web
 admin_v2.homepage.school_info.access_mobile_app: 访问App
 admin_v2.homepage.school_info.access_wechat_app: 访问小程序
-admin_v2.homepage.school_info.level.opensource: 开源版
+admin_v2.homepage.school_info.level.none: 开源版
 admin_v2.homepage.school_info.level.saas: SaaS版
 admin_v2.homepage.school_info.level.license: 商业授权
+admin_v2.homepage.school_info.level.custom: 定制版
 
 # 新后台
 admin_v2.edu_cloud_not_access: 未接入教育云

@@ -76,7 +76,7 @@ class DefaultController extends BaseController
             'mainAppUpgrade' => $mainAppUpgrade,
             'upgradeAppCount' => $upgradeAppCount,
             'disabledCloudServiceCount' => $this->getDisabledCloudServiceCount(),
-            'wechatAppStatus' => $this->getWeChatAppService()->getWeChatAppStatus(),
+            'wechatAppStatus' => array('installed'=>1),//$this->getWeChatAppService()->getWeChatAppStatus(),
             'schoolLevel' => $this->getSchoolLevelKey(),
         ));
     }
@@ -135,7 +135,7 @@ class DefaultController extends BaseController
     {
         $settings = $this->getSettingService()->get('storage', array());
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            return 'opensource';
+            return 'none';
         }
 
         $info = array();
@@ -145,17 +145,14 @@ class DefaultController extends BaseController
             $info['error'] = 'error';
         }
 
-        if (empty($info['level']) || in_array($info['level'], array('none', 'personal'))) {
-            return 'opensource';
+        if (empty($info['userLevel'])) {
+            return 'none';
         }
-        if ('license' == $info['level']) {
-            return 'license';
-        }
-        if (in_array($info['level'], array('basic', 'medium', 'advanced', 'gold', 'custom'))) {
-            return 'saas';
+        if (in_array($info['userLevel'], array('none', 'license', 'custom', 'saas'))) {
+            return $info['userLevel'];
         }
 
-        return 'opensource';
+        return 'none';
     }
 
     private function domainInspect($request)

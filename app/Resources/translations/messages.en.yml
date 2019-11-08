@@ -9132,9 +9132,10 @@ admin_v2.homepage.school_info.system_version: System version
 admin_v2.homepage.school_info.access_web: Access Web
 admin_v2.homepage.school_info.access_mobile_app: Access App
 admin_v2.homepage.school_info.access_wechat_app: Access wechat app
-admin_v2.homepage.school_info.level.opensource: Open source
+admin_v2.homepage.school_info.level.none: Open source
 admin_v2.homepage.school_info.level.saas: SaaS
 admin_v2.homepage.school_info.level.license: License
+admin_v2.homepage.school_info.level.custom: Custom
 
 # 新后台
 admin_v2.edu_cloud_not_access: Edu cloud not accessable
