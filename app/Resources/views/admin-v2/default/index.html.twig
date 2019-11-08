@@ -79,10 +79,10 @@
 
         {# 数据概览 #}
         <div class="admin-v2-section cd-pb24">
-          <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.homepage.data_overview'|trans }}<a class="admin-v2-section__more" href="{{ path('admin_v2_data_statistics_overview') }}">更多<i class="es-icon es-icon-chevronright"></i></a></div>
+          <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.homepage.data_overview'|trans }}<a class="admin-v2-section__more" href="{{ path('admin_v2_data_statistics_overview') }}">{{ 'admin_v2.homepage.more_btn'|trans }}<i class="es-icon es-icon-chevronright"></i></a></div>
           <div class="admin-v2-section__body admin-data" data-url="{{ path('admin_v2_homepage_daily_statistics') }}">
             <div class="row text-center" style="line-height: 56px;">
-              {{ 'admin_v2.homepage.loadig_data_tips'|trans }}
+              {{ 'admin_v2.homepage.loading_data_tips'|trans }}
             </div>
           </div>
         </div>

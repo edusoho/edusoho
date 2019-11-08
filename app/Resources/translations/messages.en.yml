@@ -9104,7 +9104,7 @@ admin.operation.coupon_menu.generate_btn: Generate Coupon
 
 # 新后台首页
 admin_v2.homepage.more_btn: More
-admin_v2.homepage.loadig_data_tips: 'Loding, please wait..'
+admin_v2.homepage.loading_data_tips: 'Loding, please wait..'
 
 admin_v2.homepage.data_overview: Data Overview
 admin_v2.homepage.today_login_user: Number of users logged in today
