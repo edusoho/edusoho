@@ -1,6 +1,7 @@
 {% extends 'admin-v2/layout.html.twig' %}
 {% block title %}{{ 'admin.hompage.html_head_title'|trans }}{% endblock %}
 {% set panel = 'dashboard' %}
+{% set adminV2Homepage = 1 %}
 {% do script(['app/js/admin-v2/default/index.js']) %}
 
 {% set bodyClass = "admin-v2-page" %}

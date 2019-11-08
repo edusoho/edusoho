@@ -9,6 +9,9 @@
   {% endif %}
 
 <ul class="cd-tabs ct-layout-navbar_ul">
+  <li {% if adminV2Homepage|default(null) %}class="active"{% endif %} id="menu_admin_v2">
+    <a title="{{ 'admin_v2.homepage.overview'|trans }}" href="{{ path('admin_v2') }}">{{ 'admin_v2.homepage.overview'|trans }}</a>
+  </li>
   {% for m in permissions if not m.visible is defined or eval_expression(m.visible) %}
     {# tabMenu多次调用first_child_permission需要优化 todo#}
     {% set tabMenu = first_child_permission(first_child_permission(first_child_permission(m))) %}
