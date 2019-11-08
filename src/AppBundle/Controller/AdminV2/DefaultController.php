@@ -8,7 +8,9 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
+use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
+use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -41,6 +43,33 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
+    public function statisticsDailyAction(Request $request)
+    {
+        $todayTimeStart = strtotime(date('Y-m-d', time()));
+        $todayTimeEnd = strtotime(date('Y-m-d', time() + 24 * 3600));
+
+        $loginCount = $this->getStatisticsService()->countLogin(time() - 15 * 60);
+        $registerNum = $this->getUserService()->countUsers(array('startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd));
+
+        $conditions = array(
+            'pay_time_GT' => $todayTimeStart,
+            'pay_time_LT' => $todayTimeEnd,
+            'statuses' => array('paid', 'success', 'finished', 'refunded'),
+        );
+
+        $newOrderCount = $this->getOrderService()->countOrders($conditions);
+        $conditions['pay_amount_GT'] = 0;
+
+        $newPaidOrderCount = $this->getOrderService()->countOrders($conditions);
+
+        return $this->render('admin-v2/default/daily-statistics.html.twig', array(
+            'loginCount' => $loginCount,
+            'registerNum' => $registerNum,
+            'newOrderCount' => $newOrderCount,
+            'newPaidOrderCount' => $newPaidOrderCount,
+        ));
     }
 
     public function feedbackAction(Request $request)
@@ -140,5 +169,21 @@ class DefaultController extends BaseController
     protected function getNotificationService()
     {
         return $this->createService('User:NotificationService');
+    }
+
+    /**
+     * @return StatisticsService
+     */
+    protected function getStatisticsService()
+    {
+        return $this->createService('System:StatisticsService');
+    }
+
+    /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 }
