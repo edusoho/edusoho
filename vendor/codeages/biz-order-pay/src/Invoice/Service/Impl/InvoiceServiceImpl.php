@@ -75,7 +75,10 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
             }
 
             if (!empty($trade['invoice_sn'])) {
-                throw new AccessDeniedException('order invoiced');
+                $invoice = $this->getInvoiceBySn($trade['invoice_sn']);
+                if ('refused' != $invoice['status']) {
+                    throw new AccessDeniedException('order invoiced');
+                }
             }
 
             $money += $trade['cash_amount'];

@@ -61,7 +61,7 @@
         class="empty">{{ 'admin.classroom_manage.manage.empty'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}</div>
   {% endif %}
   {% include 'org/batch-update-org-btn.html.twig' with {module:'classroom', formId:'classroom-table'} %}
-  <div class="pull-right">
+  <div>
     {{ admin_macro.paginator(paginator) }}
   </div>
 {% endblock %}
