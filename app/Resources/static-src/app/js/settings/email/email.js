@@ -22,6 +22,7 @@ export default class Email {
 
   initValidator() {
     let $btn = $('#submit-btn');
+    let self = this;
 
     $('#setting-email-form').validate({
       currentDom: '#submit-btn',
@@ -41,6 +42,9 @@ export default class Email {
       },
       submitError(data) {
         notify('danger',  Translator.trans(data.responseJSON.message));
+        if (self.drag) {
+          self.drag.initDragCaptcha();
+        }
       }
     });
   }
