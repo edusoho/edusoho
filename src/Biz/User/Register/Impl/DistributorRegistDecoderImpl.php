@@ -16,6 +16,9 @@ class DistributorRegistDecoderImpl extends RegistDecoder
         if ($splitedInfos['valid']) {
             $user['type'] = 'distributor';
             $user['distributorToken'] = $registration['distributorToken'];
+            $this->getLogger()->info('distributor user register sign valid success DistributorRegistDecoderImpl::dealDataBeforeSave', array(
+                'registration' => $registration,
+            ));
         }
 
         return $user;
@@ -28,19 +31,12 @@ class DistributorRegistDecoderImpl extends RegistDecoder
         $errMsg = '';
         if ($splitedInfos['valid']) {
             $user['token'] = $registration['distributorToken'];
-            $this->getDistributorUserService()->createJobData($user);
         } else {
             $errMsg .= 'not valid ';
         }
 
-        if ($splitedInfos['rewardable']) {
-            $this->getCouponService()->generateDistributionCoupon($user['id'], $splitedInfos['couponPrice'] / 100, $splitedInfos['couponExpiryDay']);
-        } else {
-            $errMsg .= 'not rewardable ';
-        }
-
         if (!empty($errMsg)) {
-            $this->biz['logger']->error('distributor sign error DistributorRegistDecoderImpl::dealDataAfterSave', array(
+            $this->getLogger()->error('distributor sign  DistributorRegistDecoderImpl::dealDataAfterSave', array(
                 'userId' => $user['id'],
                 'token' => $registration['distributorToken'],
             ));
@@ -67,5 +63,10 @@ class DistributorRegistDecoderImpl extends RegistDecoder
     protected function getCouponService()
     {
         return $this->biz->service('Coupon:CouponService');
+    }
+
+    protected function getLogger()
+    {
+        return $this->biz->offsetGet('drp.plugin.logger');
     }
 }

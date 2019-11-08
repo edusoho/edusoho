@@ -307,7 +307,7 @@ class CourseSetManageController extends BaseController
                 ),
             ),
             'files' => array(
-                'title' => '课程文件',
+                'title' => '文件管理',
                 'route' => 'course_set_manage_files',
                 'params' => array(
                     'id' => $courseSetId,
