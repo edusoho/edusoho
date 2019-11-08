@@ -1306,4 +1306,5 @@ t.add("course.question_manage.manage.delete_tips", "Deleting the question may af
 t.add("admin.setting.invite.coupon.empty.tips", "Please set coupon batch", "js", "en");
 t.add("course.plan_task.activity_ppt_animation_img", "Switch img mode", "js", "en");
 t.add("course.plan_task.activity_ppt_animation_slide", "Switch animation mode", "js", "en");
+t.add("course.plan_task.lessons_publish_status", "Published Lesson Number:%publishedNum%<br\/>Unpublish Lesson Number:%unpublishedNum%", "js", "en");
 })(Translator);

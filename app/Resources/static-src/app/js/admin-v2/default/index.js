@@ -10,7 +10,7 @@ $('.js-show-toggle').on('click', (event) => {
 
 const $modal = $('#functionModal');
 const $html = $('html');
-$modal.on('shown.bs.modal', (e) =>  {
+$modal.on('shown.bs.modal', (e) => {
   $html.css('overflow', 'hidden');
 }).on('hidden.bs.modal', (e) => {
   $html.css('overflow', 'scroll');
@@ -44,21 +44,21 @@ $('.js-save-btn').on('click', (event) => {
 const showAdImage = ($cloudAd, img, res) => {
   const $img = $(img);
   const $box = $cloudAd.find('.modal-dialog');
-  const boxWidth = $box.width() ? $box.width() : $(window).width()-20;
+  const boxWidth = $box.width() ? $box.width() : $(window).width() - 20;
   const WindowHeight = $(window).height();
   const width = img.width;
   let height = img.height;
   let marginTop = 0;
-  if ((width/height) >= (4/3)) {
-    height = width > boxWidth ? height/(width/boxWidth) : height*(boxWidth/width);
-    marginTop = (WindowHeight-height)/2;
+  if ((width / height) >= (4 / 3)) {
+    height = width > boxWidth ? height / (width / boxWidth) : height * (boxWidth / width);
+    marginTop = (WindowHeight - height) / 2;
   } else {
     height = WindowHeight > 600 ? 600 : WindowHeight * 0.9;
     $img.height(height);
     $img.width('auto');
-    marginTop = (WindowHeight - height)/2;
+    marginTop = (WindowHeight - height) / 2;
   }
-  $cloudAd.find('a').attr('href',res.urlOfImage).append($img).css({'margin-top': marginTop});
+  $cloudAd.find('a').attr('href', res.urlOfImage).append($img).css({'margin-top': marginTop});
   $cloudAd.modal('show');
 };
 
@@ -84,10 +84,27 @@ const showCloudAd = () => {
   });
 
   $cloudAd.on('hide.bs.modal', () => {
-    Cookies.set('cloud-ad', $cloudAd.find('img').attr('src'),{ expires:360*10 });
+    Cookies.set('cloud-ad', $cloudAd.find('img').attr('src'), {expires: 360 * 10});
   });
 };
 
 window.onload = () => {
   showCloudAd();
 };
+
+
+// 静态数据
+const src = 'http://try6.edusoho.cn/files/course/2019/11-07/2038113bdf7d297596.png';
+$('.js-mini-program').popover({
+  trigger: 'hover',
+  placement: 'bottom',
+  title: '扫码打开小程序',
+  template: '<div class="popover mini-program-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+  html: true,
+  content: `<img src=${src}>`
+});
+
+// 数据概览
+$.get($('.admin-data').data('url'), function (html) {
+  $('.admin-data').html(html);
+});

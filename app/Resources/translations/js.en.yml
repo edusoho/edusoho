@@ -1489,6 +1489,7 @@ admin.setting.invite.coupon.empty.tips: Please set coupon batch
 
 course.plan_task.activity_ppt_animation_img: Switch img mode
 course.plan_task.activity_ppt_animation_slide: Switch animation mode
+course.plan_task.lessons_publish_status: Published Lesson Number:%publishedNum%<br/>Unpublish Lesson Number:%unpublishedNum%
 
 #新后台
 admin_v2.user.cloude_sms_enable_hint: please go to【Admin】-【App Cente】-【Cloud service】-【Cloud Sms】open cloud sms first.

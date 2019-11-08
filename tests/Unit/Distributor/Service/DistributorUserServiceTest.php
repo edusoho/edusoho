@@ -48,7 +48,7 @@ class DistributorUserServiceTest extends BaseTestCase
     {
         $time = 1516508150;
         TimeMachine::setMockedTime($time);
-
+        $this->mockDistributionTokenService();
         $settingService = $this->mockBiz(
             'System:SettingService',
             array(
@@ -70,15 +70,12 @@ class DistributorUserServiceTest extends BaseTestCase
         );
 
         $result = $this->getDistributorUserService()->decodeToken(
-            '123:222:1000:1:1516421750:11f75a4d43ba172ef4cd7d378bc47bd8:zISakBT4B_sa8nQPovtjgeRfOIs='
+            'redirect:L2NvdXJzZS8x:1:1:1565751518:dasdaskjd:CtFJ-tHEOkPSj1yabW9nbXo9oKA='
         );
 
         $this->assertArrayEquals(
             array(
                 'valid' => true,
-                'rewardable' => true,
-                'couponPrice' => '1000',
-                'couponExpiryDay' => '1',
             ),
             $result
         );
@@ -125,6 +122,17 @@ class DistributorUserServiceTest extends BaseTestCase
      */
     public function testValidateExistedTokenWithException()
     {
+        $logger = $this->mockBiz(
+            'logger',
+            array(
+                array(
+                    'functionName' => 'error',
+                ),
+            )
+        );
+
+        $this->biz['drp.plugin.logger'] = $logger;
+
         $userService = $this->mockBiz(
             'User:UserService',
             array(
@@ -181,5 +189,24 @@ class DistributorUserServiceTest extends BaseTestCase
     private function getDistributorUserService()
     {
         return $this->createService('Distributor:DistributorUserService');
+    }
+
+    private function mockDistributionTokenService()
+    {
+        return $this->mockBiz(
+            'DrpPlugin:DistributionToken:DistributionTokenService',
+            array(
+                array(
+                    'functionName' => 'parseRedirectToken',
+                    'withParams' => array('redirect:L2NvdXJzZS8x:1:1:1565751518:dasdaskjd:CtFJ-tHEOkPSj1yabW9nbXo9oKA='),
+                    'returnValue' => array(
+                        'redirect_type' => 'redirect',
+                        'redirect_content' => 'L2NvdXJzZS8x',
+                        'merchant_id' => '1',
+                        'agency_id' => '1',
+                    ),
+                ),
+            )
+        );
     }
 }

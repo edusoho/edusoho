@@ -88,28 +88,6 @@ class RedisCache extends CacheProvider
     /**
      * {@inheritdoc}
      */
-    protected function doSaveMultiple(array $keysAndValues, $lifetime = 0)
-    {
-        if ($lifetime) {
-            $success = true;
-
-            // Keys have lifetime, use SETEX for each of them
-            foreach ($keysAndValues as $key => $value) {
-                if (!$this->redis->setex($key, $lifetime, $value)) {
-                    $success = false;
-                }
-            }
-
-            return $success;
-        }
-
-        // No lifetime, use MSET
-        return (bool) $this->redis->mset($keysAndValues);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function doContains($id)
     {
         return $this->redis->exists($id);
@@ -170,11 +148,6 @@ class RedisCache extends CacheProvider
         if (defined('HHVM_VERSION')) {
             return Redis::SERIALIZER_PHP;
         }
-
-        if (defined('Redis::SERIALIZER_IGBINARY') && extension_loaded('igbinary')) {
-            return Redis::SERIALIZER_IGBINARY;
-        }
-
-        return Redis::SERIALIZER_PHP;
+        return defined('Redis::SERIALIZER_IGBINARY') ? Redis::SERIALIZER_IGBINARY : Redis::SERIALIZER_PHP;
     }
 }
