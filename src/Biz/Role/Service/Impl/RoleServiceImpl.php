@@ -2,13 +2,19 @@
 
 namespace Biz\Role\Service\Impl;
 
+use AppBundle\Common\PluginVersionToolkit;
 use Biz\BaseService;
+use Biz\CloudPlatform\Service\AppService;
 use Biz\Common\CommonException;
 use Biz\Role\RoleException;
 use Biz\Role\Service\RoleService;
 use Biz\Role\Util\PermissionBuilder;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Tree;
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
+use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 
 class RoleServiceImpl extends BaseService implements RoleService
@@ -28,7 +34,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         $role['createdTime'] = time();
         $user = $this->getCurrentUser();
         $role['createdUserId'] = $user['id'];
-        $role = ArrayToolkit::parts($role, array('name', 'code', 'data', 'createdTime', 'createdUserId'));
+        $role = ArrayToolkit::parts($role, array('name', 'code', 'data', 'data_v2', 'createdTime', 'createdUserId'));
 
         if (!ArrayToolkit::requireds($role, array('name', 'code'))) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
@@ -44,7 +50,7 @@ class RoleServiceImpl extends BaseService implements RoleService
     public function updateRole($id, array $fields)
     {
         $this->checkChangeRole($id);
-        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'data'));
+        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'data', 'data_v2'));
 
         if (isset($fields['code'])) {
             unset($fields['code']);
@@ -217,10 +223,6 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function isRoleCodeAvalieable($code, $exclude = null)
     {
-        // if (empty($code) || in_array($code, array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) {
-        //     return false;
-        // }
-
         if ($code == $exclude) {
             return true;
         }
@@ -230,18 +232,228 @@ class RoleServiceImpl extends BaseService implements RoleService
         return $tag ? false : true;
     }
 
+    /**
+     * @param $tree  '后台menus树结构数组'
+     * @param $type  '新老后台类型 admin|adminV2'
+     *
+     * @return array
+     *               将权限树里的国际化key进行转译，
+     */
+    public function rolesTreeTrans($tree, $type = 'admin')
+    {
+        $biz = ServiceKernel::instance()->getBiz();
+        $adminPermissionYml = $biz['role.get_permissions_yml'][$type];
+
+        foreach ($tree as &$child) {
+            $child['name'] = $this->trans($child['name'], array(), 'menu');
+            //插入老后台或新后台对应的权限配置permissions，用于前台设置角色权限附带上对应的另一个版本的权限
+            $child['permissions'] = empty($adminPermissionYml[$child['code']]) ? array() : $adminPermissionYml[$child['code']];
+            if (isset($child['children'])) {
+                $child['children'] = $this->rolesTreeTrans($child['children'], $type);
+            }
+        }
+
+        return $tree;
+    }
+
+    /**
+     * @param $permissions  '新老后台角色权限树选中的Code'
+     *
+     * @return array
+     *'根据部分节点查找所有父级节点'
+     */
+    public function getAllParentPermissions($permissions)
+    {
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree();
+        $res = $tree->toArray();
+        $nodes = $this->splitRolesTreeNode($res['children']);
+
+        foreach ($permissions as $permission) {
+            $permissions = $this->getParentRoleCodeArray($permission, $nodes, $permissions);
+        }
+        $permissions = array_unique($permissions);
+        $permissions = array_filter($permissions);
+
+        return $permissions;
+    }
+
+    /**
+     * @param $tree '后台menus树结构数组'
+     *
+     * @return array
+     *               根据新老后台切换设置过滤多余的角色树
+     */
+    public function filterRoleTree($tree)
+    {
+        $backstageSetting = $this->getSettingService()->get('backstage', array('is_v2' => 0));
+        $isV2 = $backstageSetting['is_v2'];
+//        $isV2 = 0;
+        foreach ($tree as $key => $child) {
+            if (($isV2 && 'admin_v2' != $child['code']) || (!$isV2 && 'admin_v2' == $child['code'])) {
+                unset($tree[$key]);
+            }
+        }
+
+        return array_values($tree);
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return array
+     */
+    public function getPermissionsYmlContent()
+    {
+        $permissions = array();
+
+        $permissions['admin'] = $this->loadPermissionsFromAllConfig();
+
+        $permissions['adminV2'] = $this->loadPermissionsFromAllConfig('adminV2');
+
+        return $permissions;
+    }
+
+    /**
+     * @param $tree '后台menus树结构数组'
+     * @param array $permissions '分割散的树节点Array'
+     *
+     * @return array
+     *
+     * 分割树结构各个节点形成array(array('code'=>xxx,'parent'=>xxx))二维数组
+     */
+    public function splitRolesTreeNode($tree, &$permissions = array())
+    {
+        foreach ($tree as &$child) {
+            $permissions[$child['code']] = array(
+                'code' => $child['code'],
+                'parent' => isset($child['parent']) ? $child['parent'] : null,
+            );
+            if (isset($child['children'])) {
+                $child['children'] = $this->splitRolesTreeNode($child['children'], $permissions);
+            }
+        }
+
+        return $permissions;
+    }
+
+    /**
+     * @param $code  '树节点的code'
+     * @param $permissions '分割散的树节点Array, splitRolesTreeNode'
+     * @param array $parentCodes
+     *
+     * @return array 返回传入节点所有的父级节点code
+     */
+    public function getParentRoleCodeArray($code, $nodes, &$parentCodes = array())
+    {
+        if (!empty($nodes[$code]) && !empty($nodes[$code]['parent'])) {
+            $parentCodes[] = $nodes[$code]['parent'];
+            $parentCodes = $this->getParentRoleCodeArray($nodes[$code]['parent'], $nodes, $parentCodes);
+        }
+
+        return $parentCodes;
+    }
+
+    protected function loadPermissionsFromAllConfig($type = 'admin')
+    {
+        $configs = $this->getPermissionConfig($type);
+        $permissions = array();
+        foreach ($configs as $config) {
+            if (!file_exists($config)) {
+                continue;
+            }
+            $menus = Yaml::parse(file_get_contents($config));
+            if (empty($menus)) {
+                continue;
+            }
+
+            $permissions = array_merge($permissions, $menus);
+        }
+
+        return $permissions;
+    }
+
+    protected function getPermissionConfig($type = 'admin')
+    {
+        $configPaths = array();
+
+        $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
+        if ('admin' == $type) {
+            $files = array(
+                $rootDir.'/../permissions.yml',
+            );
+        } else {
+            $files = array(
+                $rootDir.'/../permissions_v2.yml',
+            );
+        }
+
+        foreach ($files as $filepath) {
+            if (is_file($filepath)) {
+                $configPaths[] = $filepath;
+            }
+        }
+
+        $count = $this->getAppService()->findAppCount();
+        $apps = $this->getAppService()->findApps(0, $count);
+
+        foreach ($apps as $app) {
+            if ('plugin' != $app['type']) {
+                continue;
+            }
+
+            if ('MAIN' !== $app['code'] && $app['protocol'] < 3) {
+                continue;
+            }
+
+            if (!PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])) {
+                continue;
+            }
+
+            $code = ucfirst($app['code']);
+            if ('admin' == $type) {
+                $configPaths[] = "{$rootDir}/../plugins/{$code}Plugin/permissions.yml";
+            } else {
+                $configPaths[] = "{$rootDir}/../plugins/{$code}Plugin/permissions_v2.yml";
+            }
+        }
+
+        return $configPaths;
+    }
+
+    /**
+     * @return AppService
+     */
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
     protected function getRoleDao()
     {
         return $this->createDao('Role:RoleDao');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

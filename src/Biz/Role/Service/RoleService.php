@@ -42,4 +42,16 @@ interface RoleService
     public function searchRolesCount($conditions);
 
     public function refreshRoles();
+
+    public function rolesTreeTrans($tree, $type = 'admin');
+
+    public function splitRolesTreeNode($tree, &$permissions = array());
+
+    public function getAllParentPermissions($permissions);
+
+    public function getParentRoleCodeArray($code, $nodes, &$parentCodes = array());
+
+    public function filterRoleTree($tree);
+
+    public function getPermissionsYmlContent();
 }
