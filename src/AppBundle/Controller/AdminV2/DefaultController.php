@@ -13,7 +13,9 @@ use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use Biz\WeChat\Service\WeChatAppService;
+use QiQiuYun\SDK\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceKernel;
 
 class DefaultController extends BaseController
@@ -76,9 +78,27 @@ class DefaultController extends BaseController
             'mainAppUpgrade' => $mainAppUpgrade,
             'upgradeAppCount' => $upgradeAppCount,
             'disabledCloudServiceCount' => $this->getDisabledCloudServiceCount(),
-            'wechatAppStatus' => array('installed'=>1),//$this->getWeChatAppService()->getWeChatAppStatus(),
+            'wechatAppStatus' => $this->getWeChatAppService()->getWeChatAppStatus(),
             'schoolLevel' => $this->getSchoolLevelKey(),
         ));
+    }
+
+    public function miniProgramCodeAction(Request $request)
+    {
+        $miniProgramCodeImg = $this->getMiniProgramCodeImg();
+        $miniProgram = $this->getSettingService()->get('mini_program', array());
+        if (!file_exists($miniProgramCodeImg) || empty($miniProgram['get_code_time']) || $miniProgram['get_code_time'] < time() - 2 * 3600) {
+            $res = $this->getSDKWeChatService()->getMiniProgramCode('backgroundHome', array('width' => 280));
+
+            if (!file_exists($miniProgramCodeImg)) {
+                touch($miniProgramCodeImg);
+            }
+            file_put_contents($miniProgramCodeImg, base64_decode($res['content']));
+
+            $this->getSettingService()->set('mini_program', array('get_code_time' => time()));
+        }
+
+        return new Response(file_get_contents($miniProgramCodeImg), 200, array('Content-type' => 'image/png'));
     }
 
     public function validateDomainAction(Request $request)
@@ -177,6 +197,13 @@ class DefaultController extends BaseController
         return array('status' => 'ok', 'except' => $siteSetting['url'], 'actually' => $currentHost, 'settingUrl' => $settingUrl);
     }
 
+    private function getMiniProgramCodeImg()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['kernel.root_dir'].'/../web/mini_program_code.png';
+    }
+
     /**
      * @return SettingService
      */
@@ -231,5 +258,15 @@ class DefaultController extends BaseController
     protected function getWeChatAppService()
     {
         return $this->createService('WeChat:WeChatAppService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getSDKWeChatService()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['qiQiuYunSdk.wechat'];
     }
 }
