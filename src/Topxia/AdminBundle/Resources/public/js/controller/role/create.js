@@ -32,14 +32,14 @@ define(function(require, exports, module) {
           return;
         }
         $.post($form.attr('action'), $form.serialize(), function(html) {
-          // var string = $form.attr('action');
-          //
-          // if (string.indexOf('edit') >= 0) {
-          //   Notify.success(Translator.trans('admin.role.update_success_hint'));
-          // } else{
-          //   Notify.success(Translator.trans('admin.role.add_success_hint'));
-          // }
-          // window.location.reload();
+          var string = $form.attr('action');
+
+          if (string.indexOf('edit') >= 0) {
+            Notify.success(Translator.trans('admin.role.update_success_hint'));
+          } else{
+            Notify.success(Translator.trans('admin.role.add_success_hint'));
+          }
+          window.location.reload();
         });
 
       }
