@@ -618,7 +618,7 @@ admin_v2.operation.sensitive_words.banlogs_tab: 屏蔽记录
 admin_v2.marketing.basic_group: 营销管理
 
 #营销-营销管理-优惠券管理
-admin_v2.operation.coupon_menu: 优惠券管理
+admin_v2.operation.coupon_menu: 优惠券
 admin_v2.marketing.coupon_menu.basic_tab: 优惠券管理
 admin_v2.marketing.coupon_menu.generate_btn: 生成优惠券
 admin_v2.marketing.query_menu.basic_tab: 使用查询
@@ -708,7 +708,7 @@ admin_v2.trade.invoice_manage.basic_group: 发票管理
 # 应用中心-营销云-营销应用
 admin_v2.basic_app_center_group: 营销云
 admin_v2.cloud.app_center_menu: 营销应用
-admin_v2.cloud.app_center.basic_tab: 营销应用
+admin_v2.cloud.app_center.basic_tab: 应用中心
 admin_v2.cloud.app_center.installed_tab: 已购项目
 admin_v2.cloud.app_center.upgrades_tab: 更新
 admin_v2.cloud.app_center.logs_tab: 更新日志
@@ -800,6 +800,12 @@ admin_v2.system.course.questions_tab: 题库
 admin_v2.system.course.avatar_tab: 默认图片
 admin_v2.system.course.classroom_tab: 班级
 admin_v2.system.course.open_course_tab: 公开课
+    
+admin_v2.system.roles_menu: 角色权限
+admin_v2.system.roles.basic_tab: 角色权限
+admin_v2.system.roles.basic.create_btn: 新增角色
+admin_v2.system.roles.basic.edit_btn: 编辑角色
+admin_v2.system.roles.basic.delete_submit_btn: 删除角色
 
 # 系统-系统管理
 admin_v2.system.basic_group: 系统管理

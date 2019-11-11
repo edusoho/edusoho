@@ -6692,7 +6692,6 @@ admin.edu_cloud.edu_sms.type_id: 类型编号
 admin.edu_cloud.edu_sms.application_scenarios: 短信应用场景
 admin.edu_cloud.edu_sms.sms_type_num: 类型编号
 admin.edu_cloud.edu_sms.sms_open_status: 启用状态
-admin.edu_cloud.edu_sms.sms_content: 短信内容
 admin.edu_cloud.edu_sms.sms_school_notify: 网校通知
 admin.edu_cloud.edu_sms.application_scenarios: 应用场景
 admin.edu_cloud.edu_sms.content: 内容示例
@@ -10404,6 +10403,16 @@ admin.operation.coupon_menu.generate_btn: 生成优惠券
 
 # 新版后台开始
 
+# 新后台首页
+admin_v2.homepage.more_btn: 更多
+admin_v2.homepage.loading_data_tips: 正在载入数据，请稍等。
+
+admin_v2.homepage.data_overview: 数据概览
+admin_v2.homepage.today_login_user: 今日登录用户
+admin_v2.homepage.today_register_user: 今日注册用户
+admin_v2.homepage.today_new_paid_order: 今日付费订单
+admin_v2.homepage.today_new_order: 今日新增订单
+
 # 新后台首页通知
 admin_v2.domain_error_hint: 当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【通用管理】-【网校信息】-【网站域名】
 admin_v2.homepage.setting_domain_btn: 立即设置
@@ -10412,6 +10421,11 @@ admin_v2.homepage.cloud_notice.unknown_time: 未知时间
 admin_v2.homepage.cloud_notice.unknown_days: 未知
 
 admin_v2.homepage.cloud_notice: '欢迎使用,试用将于<strong> %endTime% </strong>到期,剩余<strong> %remainDays% </strong>天。您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或 '
+
+# 常用入口
+admin_v2.edit_quick_entrance.btn: 编辑入口
+admin_v2.quick_entrance_setting: 设置常用入口
+admin_v2.quick_entrance_setting.tips: (最多设置7个快捷入口位）
 
 ##分类标签
 admin_v2.course.tag: 标签管理
@@ -10446,9 +10460,20 @@ admin_v2.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">APP设置</a>中设置开启
 admin_v2.live_course.create_btn: 创建直播
 admin_v2.system.security_setting: 白名单域名
+admin_v2.upgrade_v2_setting_permission.error: 请联系超级管理员或管理员操作
+admin_v2.upgrade_v2_setting.alert: '全新版后台已经更新，开启最新的体验，新后台需要手动升级插件，请勿忘记哦!'
+admin_v2.upgrade_v2_setting.setting_btn: 切换新版
+admin_v2.switch_old_version.setting_btn: 切换旧版
+admin_v2.switch_version.btn_loading: 正在切换....
+exception.common_upgrade_v2_error: 已经升级到新版
+exception.switch_old_version.permission_error: 请联系超级管理员或管理员操作
+exception.switch_old_version.error: 已经切回到旧版后台
+admin_v2.default.switch_old_version_btn: 回到旧版后台
 admin_v2.setting.navigation.foot.tips: >
   清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
   <a class="text-info" style="font-weight:bold;" href="%url%">
   Web端装修 </a>
   中进行编辑。
 admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
+admin_v2.role_permission_manage.error: 错误
+admin_v2.default_page.changelog_title: EduSoho更新日志

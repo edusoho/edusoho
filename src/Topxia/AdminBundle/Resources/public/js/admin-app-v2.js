@@ -79,4 +79,8 @@ define(function(require, exports, module) {
     });
   
     $.ajax('/online/sample');
+
+    $('.js-no-permission-btn').on('click',function () {
+        Notify.danger(Translator.trans('admin.switch_old_version.permission_error'));
+    })
   });

@@ -618,7 +618,7 @@ admin_v2.operation.sensitive_words.banlogs_tab: Processing History
 admin_v2.marketing.basic_group: Marketing Manage
 
 #营销-营销管理-优惠券管理
-admin_v2.operation.coupon_menu: Coupon Manage
+admin_v2.operation.coupon_menu: Coupon
 admin_v2.marketing.coupon_menu.basic_tab: Coupon Manage
 admin_v2.marketing.coupon_menu.generate_btn: Generate Coupon
 admin_v2.marketing.query_menu.basic_tab: Use Query
@@ -798,6 +798,12 @@ admin_v2.system.course.open_course_tab: Open Course
 
 # 系统-系统管理
 admin_v2.system.basic_group: System Manage
+
+admin_v2.system.roles_menu: Role Setting
+admin_v2.system.roles.basic_tab: Role Setting
+admin_v2.system.roles.basic.create_btn: Create
+admin_v2.system.roles.basic.edit_btn: Edit
+admin_v2.system.roles.basic.delete_submit_btn: Delete
 
 # 系统-系统管理-系统优化
 admin_v2.system.optimize_menu: System Optimization

@@ -5,15 +5,20 @@ namespace AppBundle\Controller\AdminV2;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\System;
+use AppBundle\Common\ChangelogToolkit;
+use Biz\Common\CommonException;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
+use Biz\QuickEntrance\Service\QuickEntranceService;
 use Biz\System\Service\SettingService;
+use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
 use Biz\WeChat\Service\WeChatAppService;
 use QiQiuYun\SDK\Service\WeChatService;
+use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceKernel;
@@ -24,8 +29,23 @@ class DefaultController extends BaseController
     {
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
 
+        $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+
         return $this->render('admin-v2/default/index.html.twig', array(
             'dates' => $weekAndMonthDate,
+            'entrances' => $userQuickEntrances,
+        ));
+    }
+
+    public function changelogAction(Request $request)
+    {
+        $rootDir = $this->getParameter('kernel.root_dir');
+        $changelogPath = $rootDir.'/../CHANGELOG';
+        $changelog = explode(PHP_EOL.PHP_EOL, file_get_contents($changelogPath));
+        $currentChangeLog = ChangelogToolkit::parseSingleChangelog($changelog[0]);
+
+        return $this->render('admin-v2/default/changelog.html.twig', array(
+            'currentChangelog' => $currentChangeLog,
         ));
     }
 
@@ -47,6 +67,33 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
+    public function statisticsDailyAction(Request $request)
+    {
+        $todayTimeStart = strtotime(date('Y-m-d', time()));
+        $todayTimeEnd = strtotime(date('Y-m-d', time() + 24 * 3600));
+
+        $loginCount = $this->getStatisticsService()->countLogin(time() - 15 * 60);
+        $registerNum = $this->getUserService()->countUsers(array('startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd));
+
+        $conditions = array(
+            'pay_time_GT' => $todayTimeStart,
+            'pay_time_LT' => $todayTimeEnd,
+            'statuses' => array('paid', 'success', 'finished', 'refunded'),
+        );
+
+        $newOrderCount = $this->getOrderService()->countOrders($conditions);
+        $conditions['pay_amount_GT'] = 0;
+
+        $newPaidOrderCount = $this->getOrderService()->countOrders($conditions);
+
+        return $this->render('admin-v2/default/daily-statistics.html.twig', array(
+            'loginCount' => $loginCount,
+            'registerNum' => $registerNum,
+            'newOrderCount' => $newOrderCount,
+            'newPaidOrderCount' => $newPaidOrderCount,
+        ));
     }
 
     public function feedbackAction(Request $request)
@@ -99,6 +146,28 @@ class DefaultController extends BaseController
         }
 
         return new Response(file_get_contents($miniProgramCodeImg), 200, array('Content-type' => 'image/png'));
+    }
+
+    public function switchOldVersionAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('backstage', array('is_v2' => 0));
+
+        if (!empty($setting) && !$setting['is_v2']) {
+            $this->createNewException(CommonException::SWITCH_OLD_VERSION_ERROR());
+        }
+
+        $roles = $this->getCurrentUser()->getRoles();
+        if (0 == count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
+            $this->createNewException(CommonException::SWITCH_OLD_VERSION_PERMISSION_ERROR());
+        }
+
+        if ('POST' == $request->getMethod()) {
+            $this->getSettingService()->set('backstage', array('is_v2' => 0));
+
+            return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin')));
+        }
+
+        return $this->render('admin-v2/default/switch-old-version-modal.html.twig', array());
     }
 
     public function validateDomainAction(Request $request)
@@ -204,6 +273,20 @@ class DefaultController extends BaseController
         return $biz['kernel.root_dir'].'/../web/mini_program_code.png';
     }
 
+    public function quickEntranceAction(Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $fields = $request->request->all();
+            $quickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
+
+            return $this->render('admin-v2/default/quick-entrance/index.html.twig', array('entrances' => $quickEntrances));
+        }
+
+        $quickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
+
+        return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
+    }
+
     /**
      * @return SettingService
      */
@@ -268,5 +351,29 @@ class DefaultController extends BaseController
         $biz = $this->getBiz();
 
         return $biz['qiQiuYunSdk.wechat'];
+    }
+
+    /**
+     * @return QuickEntranceService
+     */
+    protected function getQuickEntranceService()
+    {
+        return $this->createService('QuickEntrance:QuickEntranceService');
+    }
+
+    /**
+     * @return StatisticsService
+     */
+    protected function getStatisticsService()
+    {
+        return $this->createService('System:StatisticsService');
+    }
+
+    /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 }

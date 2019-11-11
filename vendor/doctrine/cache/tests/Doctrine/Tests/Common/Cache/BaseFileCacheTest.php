@@ -12,13 +12,13 @@ abstract class BaseFileCacheTest extends CacheTest
     protected function setUp()
     {
         do {
-            $this->directory = sys_get_temp_dir() . '/doctrine_cache_'. uniqid();
+            $this->directory = sys_get_temp_dir().'/doctrine_cache_'.uniqid();
         } while (file_exists($this->directory));
     }
 
     protected function tearDown()
     {
-        if ( ! is_dir($this->directory)) {
+        if (!is_dir($this->directory)) {
             return;
         }
 
@@ -64,7 +64,7 @@ abstract class BaseFileCacheTest extends CacheTest
             array(257, false),
             array(258, false),
             array(259, true),
-            array(260, true)
+            array(260, true),
         );
     }
 
@@ -79,8 +79,8 @@ abstract class BaseFileCacheTest extends CacheTest
 
         $baseDirLength = strlen($basePath);
         $extensionLength = strlen('.doctrine.cache');
-        $directoryLength = strlen(DIRECTORY_SEPARATOR . 'aa' . DIRECTORY_SEPARATOR);
-        $namespaceAndBracketLength = strlen(bin2hex("[][1]"));
+        $directoryLength = strlen(DIRECTORY_SEPARATOR.'aa'.DIRECTORY_SEPARATOR);
+        $namespaceAndBracketLength = strlen(bin2hex('[][1]'));
         $keyLength = $length
             - ($baseDirLength
                 + $extensionLength
@@ -88,23 +88,23 @@ abstract class BaseFileCacheTest extends CacheTest
                 + $namespaceAndBracketLength);
 
         $key = str_repeat('a', floor($keyLength / 2));
-        $namespacedKey = '[' . $key . '][1]';
+        $namespacedKey = '['.$key.'][1]';
 
         $keyHash = hash('sha256', $namespacedKey);
 
         $keyPath = $basePath
-            . DIRECTORY_SEPARATOR
-            . substr($keyHash, 0, 2)
-            . DIRECTORY_SEPARATOR
-            . bin2hex($namespacedKey)
-            . '.doctrine.cache';
+            .DIRECTORY_SEPARATOR
+            .substr($keyHash, 0, 2)
+            .DIRECTORY_SEPARATOR
+            .bin2hex($namespacedKey)
+            .'.doctrine.cache';
 
         $hashedKeyPath = $basePath
-            . DIRECTORY_SEPARATOR
-            . substr($keyHash, 0, 2)
-            . DIRECTORY_SEPARATOR
-            . '_' . $keyHash
-            . '.doctrine.cache';
+            .DIRECTORY_SEPARATOR
+            .substr($keyHash, 0, 2)
+            .DIRECTORY_SEPARATOR
+            .'_'.$keyHash
+            .'.doctrine.cache';
 
         return array($key, $keyPath, $hashedKeyPath);
     }
@@ -118,7 +118,7 @@ abstract class BaseFileCacheTest extends CacheTest
 
         list($key, $keyPath, $hashedKeyPath) = self::getKeyAndPathFittingLength($length);
 
-        $this->assertEquals($length, strlen($keyPath), "Unhashed path should be of correct length.");
+        $this->assertEquals($length, strlen($keyPath), 'Unhashed path should be of correct length.');
 
         $cacheClass = get_class($this->_getCacheDriver());
         $cache = new $cacheClass($this->directory, '.doctrine.cache');
@@ -135,10 +135,10 @@ abstract class BaseFileCacheTest extends CacheTest
         $this->assertEquals($length, $fetched);
 
         if ($pathShouldBeHashed) {
-            $this->assertFileExists($hashedKeyPath, "Path generated for key should be hashed.");
+            $this->assertFileExists($hashedKeyPath, 'Path generated for key should be hashed.');
             unlink($hashedKeyPath);
         } else {
-            $this->assertFileExists($keyPath, "Path generated for key should not be hashed.");
+            $this->assertFileExists($keyPath, 'Path generated for key should not be hashed.');
             unlink($keyPath);
         }
     }
