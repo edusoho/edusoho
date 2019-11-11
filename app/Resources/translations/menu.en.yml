@@ -799,6 +799,12 @@ admin_v2.system.course.open_course_tab: Open Course
 # 系统-系统管理
 admin_v2.system.basic_group: System Manage
 
+admin_v2.system.roles_menu: Role Setting
+admin_v2.system.roles.basic_tab: Role Setting
+admin_v2.system.roles.basic.create_btn: Create
+admin_v2.system.roles.basic.edit_btn: Edit
+admin_v2.system.roles.basic.delete_submit_btn: Delete
+
 # 系统-系统管理-系统优化
 admin_v2.system.optimize_menu: System Optimization
 admin_v2.system.optimize.basic_tab: System Optimization

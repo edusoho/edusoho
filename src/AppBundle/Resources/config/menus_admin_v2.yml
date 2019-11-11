@@ -377,14 +377,10 @@ admin_v2:
                                 admin_v2_cloud_file:
                                     name: admin_v2.cloud.file.basic_tab
                                     router_name: admin_v2_cloud_file
-                                    disable: true
                                 admin_v2_cloud_attachment:
                                     name: admin_v2.cloud.attachment.basic_tab
-                                    disable: true
                                 admin_v2_cloud_attachment_setting:
                                     name: admin_v2.cloud.attachment_setting.basic_tab
-                                    disable: true
-
         # 营销管理模块
         admin_v2_marketing:
             class: 'icon-color-yellow'
@@ -540,7 +536,6 @@ admin_v2:
                                         category: system
                                 admin_v2_setting_theme:
                                     name: admin_v2.operation.site.theme_tab
-                                    disable: true
                         # 站点配置
                         admin_v2_site_setting:
                             quick_entrance_icon: 'site'
@@ -552,33 +547,26 @@ admin_v2:
                                 admin_v2_top_navigation:
                                     name: admin_v2.operation.site.top_navigation_tab
                                     router_name: admin_v2_navigation
-                                    disable: true
                                     router_params:
                                         type: top
                                 admin_v2_foot_navigation:
                                     name: admin_v2.operation.site.foot_navigation_tab
                                     router_name: admin_v2_navigation
-                                    disable: true
                                     router_params:
                                         type: foot
                                 admin_v2_setting_consult_setting:
                                     name: admin_v2.operation.site.consult_setting_tab
-                                    disable: true
                                 admin_v2_setting_es_bar:
                                     name: admin_v2.operation.site.es_bar_tab
-                                    disable: true
                                 admin_v2_content:
                                     name: admin_v2.operation.content.basic_tab
-                                    disable: true
                                     router_params:
                                         type: page
                                 admin_v2_setting_share:
                                     name: admin_v2.operation.site.share_tab
-                                    disable: true
                                 admin_v2_friendlyLink_navigation:
                                     name: admin_v2.operation.site.friendlyLink_navigation_tab
                                     router_name: admin_v2_navigation
-                                    disable: true
                                     router_params:
                                         type: friendlyLink
                 #内容运营(group)
@@ -661,11 +649,9 @@ admin_v2:
                             children:
                                 admin_v2_operation_wechat_notification_record:
                                     name: admin_v2.operation.wechat.notification_record_tab
-                                    disable: true
                                     router_name: admin_v2_wechat_notification_record
                                 admin_v2_operation_wechat_notification_manage:
                                     name: admin_v2.operation.wechat.notification_manage
-                                    disable: true
                                     router_name: admin_v2_wechat_notification_manage
                         admin_v2_message_manage:
                             name: admin_v2.operation.message_menu
@@ -673,7 +659,7 @@ admin_v2:
                                 admin_v2_message:
                                     name: admin_v2.operation.message.basic_tab
                                     disable: true
-                        admin_v2_operation.sensitive_words:
+                        admin_v2_operation_sensitive_words:
                             name: admin_v2.operation.sensitive_words_menu
                             children:
                                 admin_v2_keyword:
@@ -815,7 +801,7 @@ admin_v2:
                                     router_name: admin_v2_approval_approvals
                                     router_params:
                                         approvalStatus: approved
-                                    disabled: ture
+                                    disable: ture
                         admin_v2_teacher:
                             quick_entrance_icon: 'teacher'
                             router_name: admin_v2_teacher
@@ -970,20 +956,15 @@ admin_v2:
                             children:
                                 admin_v2_user_auth:
                                     name: admin_v2.system.user.auth_tab
-                                    disable: true
                                     router_name: admin_v2_setting_auth
                                 admin_v2_setting_login_bind:
                                     name: admin_v2.system.user.login_bind_tab
-                                    disable: true
                                 admin_v2_setting_user_center:
                                     name: admin_v2.system.user.user_center_tab
-                                    disable: true
                                 admin_v2_setting_user_fields:
                                     name: admin_v2.system.user.user_fields_tab
-                                    disable: true
                                 admin_v2_setting_avatar:
                                     name: admin_v2.system.user.avatar_tab
-                                    disable: true
                         #微信授权信息
                         admin_v2_setting_wechat:
                             name: admin_v2.system.wechat_auth_menu
@@ -1028,23 +1009,16 @@ admin_v2:
                             children:
                                 admin_v2_setting_mailer:
                                     name: admin_v2.system.mailer_setting_tab
-                                    disable: true
                                 admin_v2_article_set:
                                     name: admin_v2.system.operation.article_tab
-                                    disable: true
                                 admin_v2_group_set:
                                     name: admin_v2.system.operation.group_tab
-                                    disable: true
                                 admin_v2_invite_set:
                                     name: admin_v2.system.operation.invite_tab
-                                    disable: true
                                 admin_v2_message_send_set:
                                     name: admin_v2.system.operation.message_send_tab
-                                    disable: true
                                 admin_v2_message_open_set:
                                     name: admin_v2.system.operation.message_open_tab
-                                    disable: true
-                                    parent: admin_v2_message_open_set
                 # 交易设置
                 admin_v2_transaction_group:
                     name: admin_v2.transaction.basic_group
@@ -1080,6 +1054,31 @@ admin_v2:
                                     name: admin_v2.system.optimize.basic_tab
                                     disable: true
                                     router_name: admin_v2_optimize
+                        admin_v2_roles:
+                            name: admin_v2.system.roles_menu
+                            children:
+                                admin_v2_role_manage:
+                                    name: admin_v2.system.roles.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_roles
+                                    children:
+                                        admin_v2_role_create:
+                                            name: admin_v2.system.roles.basic.create_btn
+                                            mode: modal
+                                            group: topBtn
+                                        admin_v2_role_edit:
+                                            name: admin_v2.system.roles.basic.edit_btn
+                                            mode: modal
+                                            group: groupBtn
+                                            router_params:
+                                                id: (role.id)
+                                        admin_v2_role_delete:
+                                            name: admin_v2.system.roles.basic.delete_submit_btn
+                                            class: role-delete js-delete-role
+                                            group: groupBtn
+                                            mode: none
+                                            router_params:
+                                                id: (role.id)
                         # 系统自检
                         admin_v2_report_status:
                             name: admin_v2.system.report_status_menu
@@ -1109,15 +1108,6 @@ admin_v2:
                                     name: admin_v2.system.security_tab
                                 admin_v2_post_num_rules_setting:
                                     name: admin_v2.system.post_num_tab
-                        # 队列
-                        admin_v2_queue_manage:
-                            name: admin_v2.system.queue_manage_menu
-                            group: 2
-                            visible: false
-                            disable: true
-                            children:
-                                admin_v2_queue_failed_logs:
-                                    name: admin_v2.system.queue_failed_tab
         # 应用中心模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center
@@ -1353,3 +1343,12 @@ admin_v2:
                                 admin_v2_setting_mobile_iap_product_list:
                                     name: admin_v2.developer.mobile_iap_product.basic_tab
                                     router_name: admin_v2_setting_mobile_iap_product
+                        # 队列
+                        admin_v2_queue_manage:
+                            name: admin_v2.system.queue_manage_menu
+                            group: 2
+                            visible: false
+                            disable: true
+                            children:
+                                admin_v2_queue_failed_logs:
+                                    name: admin_v2.system.queue_failed_tab

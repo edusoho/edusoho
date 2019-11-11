@@ -36,6 +36,7 @@ class RoleDaoImpl extends GeneralDaoImpl implements RoleDao
 
         $declares['serializes'] = array(
             'data' => 'json',
+            'data_v2' => 'json',
         );
 
         $declares['orderbys'] = array(
