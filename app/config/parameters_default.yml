@@ -16,6 +16,7 @@ parameters:
         - '/crontab'
         - '/passport/notify'
         - '/oauth/v2/token'
+        - '/oauth/token'
         - '/login/oauth/access_token'
         - '/uploader/upload_callback'
         - '/uploader/process_callback'
