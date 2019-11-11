@@ -284,7 +284,6 @@ class CourseSetController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
         $classrooms = array();
 
         if ('classroom' == $filter) {
@@ -299,35 +298,7 @@ class CourseSetController extends BaseController
             }
         }
 
-        $courseSetIncomes = $this->getCourseSetService()->findCourseSetIncomesByCourseSetIds($courseSetIds);
-        $courseSetIncomes = ArrayToolkit::index($courseSetIncomes, 'courseSetId');
-
-        $courseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
-        foreach ($courseSets as $key => &$courseSet) {
-            // TODO 完成人数目前只统计了默认教学计划
-            $courseSetId = $courseSet['id'];
-            $defaultCourseId = $courseSet['defaultCourseId'];
-            $courseCount = $this->getCourseService()->searchCourseCount(array('courseSetId' => $courseSetId));
-            $isLearnedNum = empty($courses[$defaultCourseId]) ? 0 : $this->getMemberService()->countMembers(
-                array('finishedTime_GT' => 0, 'courseId' => $courseSet['defaultCourseId'], 'learnedCompulsoryTaskNumGreaterThan' => $courses[$defaultCourseId]['compulsoryTaskNum'])
-            );
-
-            $taskCount = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
-
-            $courseSet['learnedTime'] = $this->getTaskService()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
-            $courseSet['learnedTime'] = round($courseSet['learnedTime'] / 60);
-            if (!empty($courseSetIncomes[$courseSetId])) {
-                $courseSet['income'] = $courseSetIncomes[$courseSetId]['income'];
-            } else {
-                $courseSet['income'] = 0;
-            }
-            $courseSet['isLearnedNum'] = $isLearnedNum;
-            $courseSet['taskCount'] = $taskCount;
-            $courseSet['courseCount'] = $courseCount;
-            $courseSet['studentNum'] = $this->getMemberService()->countStudentMemberByCourseSetId($courseSetId);
-        }
+        $courseSets = $this->statsCourseSetData($courseSets);
 
         return $this->render(
             'admin/course-set/data.html.twig',
@@ -657,6 +628,49 @@ class CourseSetController extends BaseController
         $tags = $this->getTagService()->searchTags(array('likeName' => $queryString), array(), 0, PHP_INT_MAX);
 
         return $this->createJsonResponse($tags);
+    }
+
+    protected function statsCourseSetData($courseSets)
+    {
+        if (empty($courseSets)) {
+            return $courseSets;
+        }
+
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+        $courseSetIncomes = $this->getCourseSetService()->findCourseSetIncomesByCourseSetIds($courseSetIds);
+        $courseSetIncomes = ArrayToolkit::index($courseSetIncomes, 'courseSetId');
+
+        $defaultCourseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
+        $defaultCourses = $this->getCourseService()->findCoursesByIds($defaultCourseIds);
+
+        $tasks = $this->getTaskService()->searchTasks(array('fromCourseSetIds' => $courseSetIds), array(), 0, PHP_INT_MAX);
+        $tasks = ArrayToolkit::group($tasks, 'fromCourseSetId');
+
+        foreach ($courseSets as &$courseSet) {
+            // TODO 完成人数目前只统计了默认教学计划
+            $courseSetId = $courseSet['id'];
+            $defaultCourseId = $courseSet['defaultCourseId'];
+            $courseCount = $this->getCourseService()->searchCourseCount(array('courseSetId' => $courseSetId));
+            $isLearnedNum = empty($defaultCourses[$defaultCourseId]) ? 0 : $this->getMemberService()->countMembers(
+                array('finishedTime_GT' => 0, 'courseId' => $courseSet['defaultCourseId'], 'learnedCompulsoryTaskNumGreaterThan' => $defaultCourses[$defaultCourseId]['compulsoryTaskNum'])
+            );
+
+            $courseSet['learnedTime'] = empty($tasks[$courseSetId]) ? 0 : $this->getTaskService()->sumCourseSetLearnedTimeByTaskIds(
+                ArrayToolkit::column($tasks[$courseSetId], 'id')
+            );
+            $courseSet['learnedTime'] = round($courseSet['learnedTime'] / 60);
+            if (!empty($courseSetIncomes[$courseSetId])) {
+                $courseSet['income'] = $courseSetIncomes[$courseSetId]['income'];
+            } else {
+                $courseSet['income'] = 0;
+            }
+            $courseSet['isLearnedNum'] = $isLearnedNum;
+            $courseSet['taskCount'] = empty($tasks[$courseSetId]) ? 0 : count($tasks[$courseSetId]);
+            $courseSet['courseCount'] = $courseCount;
+            $courseSet['studentNum'] = $this->getMemberService()->countStudentMemberByCourseSetId($courseSetId);
+        }
+
+        return $courseSets;
     }
 
     protected function filterCourseSetConditions($filter, $conditions)

@@ -225,7 +225,7 @@ interface TaskService
     /**
      * 获得课程的总学习时间.
      */
-    public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
+    public function sumCourseSetLearnedTimeByTaskIds($taskIds);
 
     public function analysisTaskDataByTime($startTime, $endTime);
 
