@@ -203,18 +203,6 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         return $this->db()->fetchAll($sql, $parmaters) ?: array();
     }
 
-    public function sumCourseSetLearnedTimeByTaskIds($taskIds)
-    {
-        if (empty($taskIds)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($taskIds) - 1).'?';
-        $sql = "select sum(`time`) from `course_task_result` where `courseTaskId` in ({$marks})";
-
-        return $this->db()->fetchColumn($sql, $taskIds);
-    }
-
     public function countLessonsWithMultipleTasks($courseId)
     {
         $sql = "SELECT count(*) AS num FROM {$this->table()} WHERE courseId = ? GROUP BY categoryId HAVING num > 1;";

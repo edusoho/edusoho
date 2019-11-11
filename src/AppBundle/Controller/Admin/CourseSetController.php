@@ -655,7 +655,7 @@ class CourseSetController extends BaseController
                 array('finishedTime_GT' => 0, 'courseId' => $courseSet['defaultCourseId'], 'learnedCompulsoryTaskNumGreaterThan' => $defaultCourses[$defaultCourseId]['compulsoryTaskNum'])
             );
 
-            $courseSet['learnedTime'] = empty($tasks[$courseSetId]) ? 0 : $this->getTaskService()->sumCourseSetLearnedTimeByTaskIds(
+            $courseSet['learnedTime'] = empty($tasks[$courseSetId]) ? 0 : $this->getTaskResultService()->sumCourseSetLearnedTimeByTaskIds(
                 ArrayToolkit::column($tasks[$courseSetId], 'id')
             );
             $courseSet['learnedTime'] = round($courseSet['learnedTime'] / 60);
