@@ -1,0 +1,346 @@
+<?php
+
+use Symfony\Component\Filesystem\Filesystem;
+
+class EduSohoUpgrade extends AbstractUpdater
+{
+    public function __construct($biz)
+    {
+        parent::__construct($biz);
+    }
+
+    public function update($index = 0)
+    {
+        $this->getConnection()->beginTransaction();
+        try {
+            $result = $this->updateScheme($index);
+
+            $this->getConnection()->commit();
+
+            if (!empty($result)) {
+                return $result;
+            } else {
+                $this->logger('info', '执行升级脚本结束');
+            }
+        } catch (\Exception $e) {
+            $this->getConnection()->rollback();
+            $this->logger('error', $e->getTraceAsString());
+            throw $e;
+        }
+
+        try {
+            $dir = realpath($this->biz['kernel.root_dir'].'/../web/install');
+            $filesystem = new Filesystem();
+
+            if (!empty($dir)) {
+                $filesystem->remove($dir);
+            }
+        } catch (\Exception $e) {
+            $this->logger('error', $e->getTraceAsString());
+        }
+
+        $developerSetting = $this->getSettingService()->get('developer', array());
+        $developerSetting['debug'] = 0;
+
+        $this->getSettingService()->set('developer', $developerSetting);
+        $this->getSettingService()->set('crontab_next_executed_time', time());
+    }
+
+    private function updateScheme($index)
+    {
+        $definedFuncNames = array(
+            'updateOldAdminDisableRoles',
+            'roleAddDataV2',
+            'upgradeRoleDataV2',
+            'updateAdminV2Setting',
+        );
+
+        $funcNames = array();
+        foreach ($definedFuncNames as $key => $funcName) {
+            $funcNames[$key + 1] = $funcName;
+        }
+
+        if (0 == $index) {
+            $this->logger('info', '开始执行升级脚本');
+            $this->deleteCache();
+
+            return array(
+                'index' => $this->generateIndex(1, 1),
+                'message' => '升级数据...',
+                'progress' => 0,
+            );
+        }
+
+        list($step, $page) = $this->getStepAndPage($index);
+        $method = $funcNames[$step];
+        $page = $this->$method($page);
+
+        if (1 == $page) {
+            ++$step;
+        }
+
+        if ($step <= count($funcNames)) {
+            return array(
+                'index' => $this->generateIndex($step, $page),
+                'message' => '升级数据...',
+                'progress' => 0,
+            );
+        }
+    }
+
+    public function updateOldAdminDisableRoles()
+    {
+        $disableRoles = array(
+            'admin_setting_operation' => array(
+                'admin_article_setting',
+                'admin_group_set',
+                'admin_invite_set',
+                'admin_message_setting',
+            ),
+            'admin_setting_user' => array(
+                'admin_user_auth',
+                'admin_setting_login_bind',
+                'admin_setting_user_center',
+                'admin_setting_user_fields',
+                'admin_setting_avatar',
+                'admin_setting_user_message',
+            ),
+            'admin_setting' => array(
+                'admin_setting_message',
+                'admin_setting_theme',
+                'admin_setting_mailer',
+                'admin_top_navigation',
+                'admin_foot_navigation',
+                'admin_friendlyLink_navigation',
+                'admin_setting_consult_setting',
+                'admin_setting_es_bar',
+                'admin_setting_share',
+                'admin_setting_security',
+            ),
+            'admin_operation_wechat_notification' => array(
+                'admin_operation_wechat_fans_list',
+                'admin_operation_wechat_notification_record',
+                'admin_operation_wechat_notification_manage',
+            ),
+        );
+
+        $roles = $this->getRoleService()->searchRoles(array('excludeCodes' => array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')), array(), 0, PHP_INT_MAX);
+
+        foreach ($roles as &$role) {
+            foreach ($disableRoles as $key => $disableRole) {
+                if (in_array($key, $role['data'])) {
+                    $role['data'] = array_merge($role['data'], $disableRole);
+                }
+            }
+            $this->getRoleService()->updateRole($role['id'], $role);
+        }
+
+        return 1;
+    }
+
+    public function roleAddDataV2()
+    {
+        if (!$this->isFieldExist('role', 'data_v2')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `role` ADD `data_v2` text COMMENT 'admin_v2权限配置' AFTER `data`;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function upgradeRoleDataV2()
+    {
+        if (!$this->isFieldExist('role', 'data_v2')) {
+            return 1;
+        }
+
+        $this->getRoleService()->refreshRoles();
+        $roles = $this->getRoleService()->searchRoles(array('excludeCodes' => array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')), array(), 0, PHP_INT_MAX);
+
+        foreach ($roles as &$role) {
+            $role['data_v2'] = $this->getAdminV2Permissions($role['data']);
+            $this->getRoleService()->updateRole($role['id'], $role);
+        }
+
+        return 1;
+    }
+
+    public function updateAdminV2Setting()
+    {
+        $setting = $this->getSettingService()->get('backstage', array('is_v2' => 0));
+
+        $setting['allow_show_switch_btn'] = 1;
+        $this->getSettingService()->set('backstage', $setting);
+
+        return 1;
+    }
+
+    protected function getAdminV2Permissions($roleData)
+    {
+        $biz = \Topxia\Service\Common\ServiceKernel::instance()->getBiz();
+        $adminPermissions = $biz['role.get_permissions_yml']['admin'];
+        $roles = array();
+        foreach ($roleData as $menu) {
+            if (!empty($adminPermissions[$menu]) && is_array($adminPermissions[$menu])) {
+                $roles = array_merge($roles, $adminPermissions[$menu]);
+            }
+        }
+
+        return  $this->getRoleService()->getAllParentPermissions($roles);
+    }
+
+    protected function generateIndex($step, $page)
+    {
+        return $step * 1000000 + $page;
+    }
+
+    protected function getStepAndPage($index)
+    {
+        $step = intval($index / 1000000);
+        $page = $index % 1000000;
+
+        return array($step, $page);
+    }
+
+    protected function isFieldExist($table, $filedName)
+    {
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
+    }
+
+    protected function isTableExist($table)
+    {
+        $sql = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
+    }
+
+    protected function isIndexExist($table, $filedName, $indexName)
+    {
+        $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
+    }
+
+    protected function createIndex($table, $index, $column)
+    {
+        if (!$this->isIndexExist($table, $column, $index)) {
+            $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column})");
+        }
+    }
+
+    protected function isJobExist($code)
+    {
+        $sql = "select * from biz_scheduler_job where name='{$code}'";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
+    }
+
+    protected function deleteCache()
+    {
+        $cachePath = $this->biz['cache_directory'];
+        $filesystem = new Filesystem();
+        $filesystem->remove($cachePath);
+
+        clearstatcache(true);
+
+        $this->logger('info', '删除缓存');
+
+        return 1;
+    }
+
+    private function makeUUID()
+    {
+        return sha1(uniqid(mt_rand(), true));
+    }
+
+    private function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    protected function getUserDao()
+    {
+        return $this->createDao('User:UserDao');
+    }
+
+    /**
+     * @return \Codeages\Biz\Framework\Scheduler\Service\SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return \Codeages\Biz\Framework\Scheduler\Dao\JobDao
+     */
+    protected function getJobDao()
+    {
+        return $this->createDao('Scheduler:JobDao');
+    }
+
+    /**
+     * @return \Biz\Role\Service\RoleService
+     */
+    protected function getRoleService()
+    {
+        return $this->createService('Role:RoleService');
+    }
+
+    /**
+     * @return \Biz\CloudPlatform\Service\AppService
+     */
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
+    }
+}
+
+abstract class AbstractUpdater
+{
+    protected $biz;
+
+    public function __construct($biz)
+    {
+        $this->biz = $biz;
+    }
+
+    public function getConnection()
+    {
+        return $this->biz['db'];
+    }
+
+    protected function createService($name)
+    {
+        return $this->biz->service($name);
+    }
+
+    protected function createDao($name)
+    {
+        return $this->biz->dao($name);
+    }
+
+    abstract public function update();
+
+    protected function logger($level, $message)
+    {
+        $version = \AppBundle\System::VERSION;
+        $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
+        if (!file_exists($this->getLoggerFile())) {
+            touch($this->getLoggerFile());
+        }
+        file_put_contents($this->getLoggerFile(), $data, FILE_APPEND);
+    }
+
+    private function getLoggerFile()
+    {
+        return $this->biz['kernel.root_dir'].'/../app/logs/upgrade.log';
+    }
+}
