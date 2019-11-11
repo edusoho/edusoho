@@ -2,8 +2,12 @@
 
 namespace AppBundle\Controller\AdminV2;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\CurlToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Content\Service\BlockService;
+use Biz\Content\Service\NavigationService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
@@ -22,6 +26,7 @@ class DefaultController extends BaseController
 
         return $this->render('admin-v2/default/index.html.twig', array(
             'dates' => $weekAndMonthDate,
+            'newcomerTaskStatus' => $this->getNewcomerTaskStatus(),
         ));
     }
 
@@ -131,12 +136,73 @@ class DefaultController extends BaseController
         return array('status' => 'ok', 'except' => $siteSetting['url'], 'actually' => $currentHost, 'settingUrl' => $settingUrl);
     }
 
+    protected function getNewcomerTaskStatus()
+    {
+        $newcomerTaskStatus = array(
+            'cloud_applied' => 0,
+            'auth_applied' => 0,
+            'payment_applied' => 0,
+            'plugin_applied' => 0,
+            'course_applied' => 0,
+            'decoration_applied' => 0,
+        );
+
+        $storage = $this->getSettingService()->get('storage', array());
+        if (!empty($storage['cloud_key_applied'])) {
+            $newcomerTaskStatus['cloud_applied'] = 1;
+        }
+        $payment = $this->getSettingService()->get('payment', array());
+        if (!empty($payment['alipay_enabled']) || !empty($payment['wxpay_enabled']) || !empty($payment['llpay_enabled'])) {
+            $newcomerTaskStatus['payment_applied']= 1;
+        }
+        $apps = $this->getAppService()->findApps(0, $this->getAppService()->findAppCount());
+        $appTypes = ArrayToolkit::column($apps, 'type');
+        if (in_array(AppService::PLUGIN_TYPE, $appTypes)) {
+            $newcomerTaskStatus['plugin_applied'] = 1;
+        }
+        $publishCount = $this->getCourseSetService()->countCourseSets(array('status' => 'published'));
+        if (!empty($publishCount)) {
+            $newcomerTaskStatus['course_applied'] = 1;
+        }
+
+        $newcomerTaskSetting = $this->getSettingService()->get('newcomer_task', $newcomerTaskStatus);
+        $newcomerTaskSetting = array_filter($newcomerTaskSetting);
+        $newcomerTaskStatus = array_merge($newcomerTaskStatus, $newcomerTaskSetting);
+        $this->getSettingService()->set('newcomer_task', array_filter($newcomerTaskStatus));
+
+        return $newcomerTaskStatus;
+    }
+
     /**
      * @return SettingService
      */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return AppService
+     */
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
+    }
+
+    /**
+     * @return BlockService
+     */
+    protected function getBlockService()
+    {
+        return $this->createService('Content:BlockService');
+    }
+
+    /**
+     * @return NavigationService
+     */
+    protected function getNavigationService()
+    {
+        return $this->createService('Content:NavigationService');
     }
 
     /**

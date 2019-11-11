@@ -9139,3 +9139,22 @@ admin_v2.live_course.create_btn: Create
 admin_v2.system.security_setting: Whitelist Domain
 admin_v2.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> web setting</a> and edit.\n"
 admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "operating" - "web Setting" - "Purchased Theme" - "setting". Course order settings are only supported by ink-only theme and simplicity theme.'
+
+admin_v2.newcomer_task.helper: Task assistant
+admin_v2.newcomer_task.helper_tip: Six steps to complete the network school infrastructure
+admin_v2.newcomer_task.collapse: collapse
+admin_v2.newcomer_task.todo: Go ahead
+admin_v2.newcomer_task.done: Completed
+admin_v2.newcomer_task.check_guide: View guide
+admin_v2.newcomer_task.cloud_applied.title: Access education cloud
+admin_v2.newcomer_task.cloud_applied.tip: Live, on-demand and other capabilities, low cost, high concurrency
+admin_v2.newcomer_task.payment_applied.title: Apply for payment
+admin_v2.newcomer_task.payment_applied.tip: Open WeChat, Alipay and other payments, easy online payment
+admin_v2.newcomer_task.auth_applied.title: Setting up registration
+admin_v2.newcomer_task.auth_applied.tip: Open registration and establish a network user-specific user traffic pool
+admin_v2.newcomer_task.plugin_applied.title: Install common plugins
+admin_v2.newcomer_task.plugin_applied.tip: Recommend the plug-ins that are used by the top 10 excellent online schools for you
+admin_v2.newcomer_task.course_applied.title: Create Course
+admin_v2.newcomer_task.course_applied.tip: Quickly create course products and get online school earnings
+admin_v2.newcomer_task.decoration_applied.title: Decoration online school
+admin_v2.newcomer_task.decoration_applied.tip: Renovate the online school homepage, get more users
