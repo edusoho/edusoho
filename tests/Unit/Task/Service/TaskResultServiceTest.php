@@ -389,6 +389,14 @@ class TaskResultServiceTest extends BaseTestCase
         $this->assertNotEmpty($taskResult);
     }
 
+    public function testSumCourseSetLearnedTimeByTaskIds()
+    {
+        $this->mockTaskResult();
+        $this->mockTaskResult(array('courseTaskId' => 1));
+        $result = $this->getTaskResultService()->sumCourseSetLearnedTimeByTaskIds(array(1));
+        $this->assertEquals($result, 1);
+    }
+
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
