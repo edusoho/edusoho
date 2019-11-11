@@ -1,11 +1,11 @@
 admin_v2:
     path:  /
     defaults: { _controller: AppBundle:AdminV2/Default:index }
-    
+
 admin_v2_switch_old_version:
     path:  /switch/old_version
     defaults: { _controller: AppBundle:AdminV2/Default:switchOldVersion }
-    
+
 admin_v2_homepage_daily_statistics:
     path: /homepage/data_statistics/daily
     defaults: { _controller: AppBundle:AdminV2/Default:statisticsDaily }
