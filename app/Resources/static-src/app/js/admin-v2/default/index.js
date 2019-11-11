@@ -99,7 +99,7 @@ $('.js-mini-program').popover({
   title: '扫码打开小程序',
   template: '<div class="popover mini-program-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
   html: true,
-  content: `<img src=${src}>`
+  content: `<img src="${src}" width="200px">`
 });
 
 // 数据概览
