@@ -22,8 +22,9 @@ namespace Doctrine\Common\Cache;
 /**
  * Array cache driver.
  *
- * @link   www.doctrine-project.org
+ * @see   www.doctrine-project.org
  * @since  2.0
+ *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>
@@ -33,7 +34,7 @@ namespace Doctrine\Common\Cache;
 class ArrayCache extends CacheProvider
 {
     /**
-     * @var array $data
+     * @var array
      */
     private $data = array();
 

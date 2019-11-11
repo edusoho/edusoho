@@ -19,7 +19,7 @@ class MongoDBCacheTest extends CacheTest
 
     protected function setUp()
     {
-        if ( ! version_compare(phpversion('mongo'), '1.3.0', '>=')) {
+        if (!version_compare(phpversion('mongo'), '1.3.0', '>=')) {
             $this->markTestSkipped('Mongo >= 1.3.0 is required.');
         }
 
