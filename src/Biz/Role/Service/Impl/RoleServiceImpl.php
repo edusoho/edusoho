@@ -106,106 +106,6 @@ class RoleServiceImpl extends BaseService implements RoleService
         return $this->getRoleDao()->findByCodes($codes);
     }
 
-    public function refreshRoles()
-    {
-        $permissions = PermissionBuilder::instance()->loadPermissionsFromAllConfig();
-        $tree = Tree::buildWithArray($permissions, null, 'code', 'parent');
-
-        $getSuperAdminRoles = $tree->column('code');
-        $adminForbidRoles = array(
-            'admin_user_avatar',
-            'admin_user_change_password',
-            'admin_my_cloud',
-            'admin_cloud_video_setting',
-            'admin_edu_cloud_sms',
-            'admin_edu_cloud_search_setting',
-            'admin_setting_cloud_attachment',
-            'admin_setting_cloud',
-            'admin_system',
-        );
-
-        $getAdminForbidRoles = array();
-        foreach ($adminForbidRoles as $adminForbidRole) {
-            $adminRole = $tree->find(function ($tree) use ($adminForbidRole) {
-                return $tree->data['code'] === $adminForbidRole;
-            });
-
-            if (is_null($adminRole)) {
-                continue;
-            }
-
-            $getAdminForbidRoles = array_merge($adminRole->column('code'), $getAdminForbidRoles);
-        }
-
-        $getTeacherRoles = $tree->find(function ($tree) {
-            return 'web' === $tree->data['code'];
-        });
-        $getTeacherRoles = $getTeacherRoles->column('code');
-
-        $roles = array(
-            'ROLE_USER' => array(),
-            'ROLE_TEACHER' => $getTeacherRoles,
-            'ROLE_ADMIN' => array_diff($getSuperAdminRoles, $getAdminForbidRoles),
-            'ROLE_SUPER_ADMIN' => $getSuperAdminRoles,
-        );
-
-        foreach ($roles as $key => $value) {
-            $userRole = $this->getRoleDao()->getByCode($key);
-
-            if (empty($userRole)) {
-                $this->initCreateRole($key, array_values($value));
-            } else {
-                $this->getRoleDao()->update($userRole['id'], array('data' => array_values($value)));
-            }
-        }
-    }
-
-    private function initCreateRole($code, $role)
-    {
-        $userRoles = array(
-            'ROLE_SUPER_ADMIN' => array('name' => '超级管理员', 'code' => 'ROLE_SUPER_ADMIN'),
-            'ROLE_ADMIN' => array('name' => '管理员', 'code' => 'ROLE_ADMIN'),
-            'ROLE_TEACHER' => array('name' => '教师', 'code' => 'ROLE_TEACHER'),
-            'ROLE_USER' => array('name' => '学员', 'code' => 'ROLE_USER'),
-        );
-        $userRole = $userRoles[$code];
-
-        $userRole['data'] = $role;
-        $userRole['createdTime'] = time();
-        $userRole['createdUserId'] = $this->getCurrentUser()->getId();
-        $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"'.$userRole['name'].'"', $userRole);
-
-        return $this->getRoleDao()->create($userRole);
-    }
-
-    private function checkChangeRole($id)
-    {
-        $role = $this->getRoleDao()->get($id);
-        $notUpdateRoles = array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
-        if (in_array($role['code'], $notUpdateRoles)) {
-            $this->createNewException(RoleException::FORBIDDEN_MODIFY());
-        }
-
-        return $role;
-    }
-
-    protected function prepareSearchConditions($conditions)
-    {
-        if (!empty($conditions['nextExcutedStartTime']) && !empty($conditions['nextExcutedEndTime'])) {
-            $conditions['nextExcutedStartTime'] = strtotime($conditions['nextExcutedStartTime']);
-            $conditions['nextExcutedEndTime'] = strtotime($conditions['nextExcutedEndTime']);
-        } else {
-            unset($conditions['nextExcutedStartTime']);
-            unset($conditions['nextExcutedEndTime']);
-        }
-
-        if (empty($conditions['cycle'])) {
-            unset($conditions['cycle']);
-        }
-
-        return $conditions;
-    }
-
     public function isRoleNameAvalieable($name, $exclude = null)
     {
         if (empty($name)) {
@@ -274,7 +174,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         $permissions = array_unique($permissions);
         $permissions = array_filter($permissions);
 
-        return $permissions;
+        return array_values($permissions);
     }
 
     /**
@@ -350,6 +250,179 @@ class RoleServiceImpl extends BaseService implements RoleService
         }
 
         return $parentCodes;
+    }
+
+    public function refreshRoles()
+    {
+        $permissions = PermissionBuilder::instance()->loadPermissionsFromAllConfig();
+        $tree = Tree::buildWithArray($permissions, null, 'code', 'parent');
+        //获取老后台权限menus
+        $roles = $this->getAdminRoles($tree);
+        //获取新后台权限menus
+        $v2Roles = $this->getAdminV2Roles($tree);
+        foreach ($roles as $key => $value) {
+            $userRole = $this->getRoleDao()->getByCode($key);
+
+            if (empty($userRole)) {
+                $this->initCreateRole($key, array_values($value), array_values($v2Roles[$key]));
+            } else {
+                $this->getRoleDao()->update($userRole['id'], array('data' => array_values($value), 'data_v2' => array_values($v2Roles[$key])));
+            }
+        }
+    }
+
+    /**
+     * @param $tree
+     *
+     * @return array
+     *
+     * 获取老后台权限menus
+     */
+    protected function getAdminRoles($tree)
+    {
+        $getAdminRoles = $tree->find(function ($tree) {
+            return 'admin' === $tree->data['code'];
+        });
+        $adminRoles = $getAdminRoles->column('code');
+        $getWebRoles = $tree->find(function ($tree) {
+            return 'web' === $tree->data['code'];
+        });
+        $webRoles = $getWebRoles->column('code');
+        $adminForbidParentRoles = array(
+            'admin_user_avatar',
+            'admin_user_change_password',
+            'admin_my_cloud',
+            'admin_cloud_video_setting',
+            'admin_edu_cloud_sms',
+            'admin_edu_cloud_search_setting',
+            'admin_setting_cloud_attachment',
+            'admin_setting_cloud',
+            'admin_system',
+        );
+        $adminForbidRoles = $this->getAllForbidRoles($getAdminRoles, $adminForbidParentRoles);
+        $superAdminRoles = array_merge($adminRoles, $webRoles);
+
+        return array(
+            'ROLE_USER' => array(),
+            'ROLE_TEACHER' => $webRoles,
+            'ROLE_ADMIN' => array_diff($superAdminRoles, $adminForbidRoles),
+            'ROLE_SUPER_ADMIN' => $superAdminRoles,
+        );
+    }
+
+    /**
+     * @param $tree
+     *
+     * @return array
+     *
+     * 获取新后台权限menus
+     */
+    protected function getAdminV2Roles($tree)
+    {
+        $getAdminV2Roles = $tree->find(function ($tree) {
+            return 'admin_v2' === $tree->data['code'];
+        });
+        $adminV2Roles = $getAdminV2Roles->column('code');
+
+        $getWebRoles = $tree->find(function ($tree) {
+            return 'web' === $tree->data['code'];
+        });
+        $webRoles = $getWebRoles->column('code');
+
+        $adminV2ForbidParentRoles = array(
+            'admin_v2_user_avatar',
+            'admin_v2_user_change_password',
+            'admin_v2_my_cloud',
+            'admin_v2_cloud_video',
+            'admin_v2_cloud_sms',
+            'admin_v2_cloud_search',
+            'admin_v2_cloud_attachment_setting',
+            'admin_v2_setting_cloud',
+            'admin_v2_system',
+        );
+
+        $adminV2ForbidRoles = $this->getAllForbidRoles($getAdminV2Roles, $adminV2ForbidParentRoles);
+        $superAdminV2Roles = array_merge($adminV2Roles, $webRoles);
+
+        return array(
+            'ROLE_USER' => array(),
+            'ROLE_TEACHER' => $webRoles,
+            'ROLE_ADMIN' => array_diff($superAdminV2Roles, $adminV2ForbidRoles),
+            'ROLE_SUPER_ADMIN' => $superAdminV2Roles,
+        );
+    }
+
+    /**
+     * @param $tree
+     * @param $forbidRoles
+     *
+     * @return array
+     *
+     * '根据admin|admin_v2各自的权限树和要过滤的权限的部分节点返回完整的被过滤的权限code'
+     */
+    protected function getAllForbidRoles($tree, $forbidRoles)
+    {
+        $adminForbidRoles = array();
+        foreach ($forbidRoles as $forbidRole) {
+            $adminRole = $tree->find(function ($tree) use ($forbidRole) {
+                return $tree->data['code'] === $forbidRole;
+            });
+
+            if (is_null($adminRole)) {
+                continue;
+            }
+
+            $adminForbidRoles = array_merge($adminRole->column('code'), $adminForbidRoles);
+        }
+
+        return $adminForbidRoles;
+    }
+
+    private function initCreateRole($code, $role, $v2Role)
+    {
+        $userRoles = array(
+            'ROLE_SUPER_ADMIN' => array('name' => '超级管理员', 'code' => 'ROLE_SUPER_ADMIN'),
+            'ROLE_ADMIN' => array('name' => '管理员', 'code' => 'ROLE_ADMIN'),
+            'ROLE_TEACHER' => array('name' => '教师', 'code' => 'ROLE_TEACHER'),
+            'ROLE_USER' => array('name' => '学员', 'code' => 'ROLE_USER'),
+        );
+        $userRole = $userRoles[$code];
+
+        $userRole['data'] = $role;
+        $userRole['data_v2'] = $v2Role;
+        $userRole['createdTime'] = time();
+        $userRole['createdUserId'] = $this->getCurrentUser()->getId();
+        $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"'.$userRole['name'].'"', $userRole);
+
+        return $this->getRoleDao()->create($userRole);
+    }
+
+    private function checkChangeRole($id)
+    {
+        $role = $this->getRoleDao()->get($id);
+        $notUpdateRoles = array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
+        if (in_array($role['code'], $notUpdateRoles)) {
+            $this->createNewException(RoleException::FORBIDDEN_MODIFY());
+        }
+
+        return $role;
+    }
+
+    protected function prepareSearchConditions($conditions)
+    {
+        if (!empty($conditions['nextExcutedStartTime']) && !empty($conditions['nextExcutedEndTime'])) {
+            $conditions['nextExcutedStartTime'] = strtotime($conditions['nextExcutedStartTime']);
+            $conditions['nextExcutedEndTime'] = strtotime($conditions['nextExcutedEndTime']);
+        } else {
+            unset($conditions['nextExcutedStartTime']);
+            unset($conditions['nextExcutedEndTime']);
+        }
+
+        if (empty($conditions['cycle'])) {
+            unset($conditions['cycle']);
+        }
+
+        return $conditions;
     }
 
     protected function loadPermissionsFromAllConfig($type = 'admin')

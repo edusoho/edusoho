@@ -423,7 +423,8 @@ class DefaultController extends BaseController
         if (0 == count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => $this->trans('admin_v2.upgrade_v2_setting_permission.error')));
         }
-        $this->getSettingService()->set('backstage', array('is_v2' => 1));
+        $setting['is_v2'] = 1;
+        $this->getSettingService()->set('backstage', $setting);
 
         return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin_v2')));
     }
