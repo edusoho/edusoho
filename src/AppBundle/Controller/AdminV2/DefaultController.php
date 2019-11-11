@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\AdminV2;
 
+use AppBundle\Common\ChangelogToolkit;
 use AppBundle\Common\CurlToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\CourseService;
@@ -22,6 +23,18 @@ class DefaultController extends BaseController
 
         return $this->render('admin-v2/default/index.html.twig', array(
             'dates' => $weekAndMonthDate,
+        ));
+    }
+
+    public function changelogAction(Request $request)
+    {
+        $rootDir = $this->getParameter('kernel.root_dir');
+        $changelogPath = $rootDir.'/../CHANGELOG';
+        $changelog = explode(PHP_EOL.PHP_EOL, file_get_contents($changelogPath));
+        $currentChangeLog = ChangelogToolkit::parseSingleChangelog($changelog[0]);
+
+        return $this->render('admin-v2/default/changelog.html.twig', array(
+            'currentChangelog' => $currentChangeLog,
         ));
     }
 
