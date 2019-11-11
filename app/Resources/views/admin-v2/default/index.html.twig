@@ -97,43 +97,43 @@
                   'class': 'icon-color-green',
                   'text': '课程管理',
                   'link': '#',
-                  'icon': 'course', 
+                  'icon': 'course',
                 },
                 {
                   'class': 'icon-color-yellow',
                   'text': 'Web端装修',
                   'link': '#',
-                  'icon': 'webmix', 
+                  'icon': 'webmix',
                 },
                 {
                   'class': 'icon-color-green',
                   'text': '班级管理',
                   'link': '#',
-                  'icon': 'class', 
+                  'icon': 'class',
                 },
                 {
                   'class': 'icon-color-yellow',
                   'text': '商品订单',
                   'link': '#',
-                  'icon': 'goods', 
+                  'icon': 'goods',
                 },
                 {
                   'class': 'icon-color-yellow',
                   'text': '优惠券管理',
                   'link': '#',
-                  'icon': 'coupon', 
+                  'icon': 'coupon',
                 },
                 {
                   'class': 'icon-color-blue',
                   'text': '用户设置',
                   'link': '#',
-                  'icon': 'setting', 
+                  'icon': 'setting',
                 },
                 {
                   'class': 'icon-color-yellow',
                   'text': '虚拟币管理',
                   'link': '#',
-                  'icon': 'coin', 
+                  'icon': 'coin',
                 }
               ] %}
               {% for entry in entrance %}
@@ -286,28 +286,7 @@
           </a>
         </div>
 
-        <div class="admin-sidebar-section">
-          <div class="admin-sidebar-section__header">EduSoho更新日志<a class="admin-sidebar-section__more" href="#" target="_blank">更多<i class="es-icon es-icon-chevronright"></i></a></div>
-          <div class="admin-sidebar-section__body">
-            <div class="admin-log">
-              <div class="admin-log__cell text-overflow">
-                <span class="admin-log__date cd-mr16">04.26</span>[新增]新增分销推广
-              </div>
-              <div class="admin-log__cell text-overflow">
-                <span class="admin-log__date cd-mr16">05.12</span>小程序上线
-              </div>
-              <div class="admin-log__cell text-overflow">
-                <span class="admin-log__date cd-mr16">06.26 </span>约排课功能上线
-              </div>
-              <div class="admin-log__cell text-overflow">
-                <span class="admin-log__date cd-mr16">05.23</span>[新增]新增分销推广分销推广销推广分销推广销推广分销推广销推广分销推广
-              </div>
-              <div class="admin-log__cell text-overflow">
-                <span class="admin-log__date cd-mr16">04.26</span>微信通知2.0功能上线
-              </div>
-            </div>
-          </div>
-        </div>
+        {{ render(controller('AppBundle:AdminV2/Default:changelog')) }}
 
         {# 公众号 #}
         <div class="admin-sidebar-section">
