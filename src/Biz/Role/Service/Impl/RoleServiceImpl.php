@@ -286,9 +286,9 @@ class RoleServiceImpl extends BaseService implements RoleService
     public function filterRoleTree($tree)
     {
         $backstageSetting = $this->getSettingService()->get('backstage', array('is_v2' => 0));
-        $isV2 = $backstageSetting['is_v2'];
+        $isV2 = empty($backstageSetting['is_v2']) ? 'admin' : 'admin_v2';
         foreach ($tree as $key => $child) {
-            if (($isV2 && 'admin_v2' != $child['code']) || (!$isV2 && 'admin_v2' == $child['code'])) {
+            if ($isV2 != $child['code']) {
                 unset($tree[$key]);
             }
         }
