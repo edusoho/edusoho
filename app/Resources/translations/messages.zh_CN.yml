@@ -10423,6 +10423,11 @@ admin_v2.homepage.cloud_notice.unknown_days: 未知
 
 admin_v2.homepage.cloud_notice: '欢迎使用,试用将于<strong> %endTime% </strong>到期,剩余<strong> %remainDays% </strong>天。您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或 '
 
+# 常用入口
+admin_v2.edit_quick_entrance.btn: 编辑入口
+admin_v2.quick_entrance_setting: 设置常用入口
+admin_v2.quick_entrance_setting.tips: (最多设置7个快捷入口位）
+
 ##分类标签
 admin_v2.course.tag: 标签管理
 admin_v2.course.tag.group: 标签组管理
@@ -10431,7 +10436,6 @@ admin_v2.course.category.classroom_category_tab: 班级分类
 admin_v2.category_manage.add_title: 添加分类
 admin_v2.tag_manage.tag.create.modal_title: 新增标签
 admin_v2.tag_manage.tag.group.create.modal_title: 新增标签组
-
 
 # 新后台
 admin_v2.edu_cloud_not_access: 未接入教育云

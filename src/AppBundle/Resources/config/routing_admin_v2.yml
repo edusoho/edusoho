@@ -10,6 +10,10 @@ admin_v2_homepage_daily_statistics:
     path: /homepage/data_statistics/daily
     defaults: { _controller: AppBundle:AdminV2/Default:statisticsDaily }
 
+admin_v2_quick_entrance:
+    path: /quick_entrance
+    defaults: { _controller: AppBundle:AdminV2/Default:quickEntrance }
+
 # 教学-课程管理-课程管理
 admin_v2_course_set:
     path:  /course_set/index

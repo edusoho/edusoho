@@ -618,7 +618,7 @@ admin_v2.operation.sensitive_words.banlogs_tab: 屏蔽记录
 admin_v2.marketing.basic_group: 营销管理
 
 #营销-营销管理-优惠券管理
-admin_v2.operation.coupon_menu: 优惠券管理
+admin_v2.operation.coupon_menu: 优惠券
 admin_v2.marketing.coupon_menu.basic_tab: 优惠券管理
 admin_v2.marketing.coupon_menu.generate_btn: 生成优惠券
 admin_v2.marketing.query_menu.basic_tab: 使用查询

@@ -9,6 +9,7 @@ use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
+use Biz\QuickEntrance\Service\QuickEntranceService;
 use Biz\System\Service\SettingService;
 use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
@@ -22,8 +23,11 @@ class DefaultController extends BaseController
     {
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
 
+        $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+
         return $this->render('admin-v2/default/index.html.twig', array(
             'dates' => $weekAndMonthDate,
+            'entrances' => $userQuickEntrances,
         ));
     }
 
@@ -167,6 +171,20 @@ class DefaultController extends BaseController
         return array('status' => 'ok', 'except' => $siteSetting['url'], 'actually' => $currentHost, 'settingUrl' => $settingUrl);
     }
 
+    public function quickEntranceAction(Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $fields = $request->request->all();
+            $quickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
+
+            return $this->render('admin-v2/default/quick-entrance/index.html.twig', array('entrances' => $quickEntrances));
+        }
+
+        $quickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
+
+        return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
+    }
+
     /**
      * @return SettingService
      */
@@ -208,6 +226,14 @@ class DefaultController extends BaseController
     }
 
     /**
+     * @return QuickEntranceService
+     */
+    protected function getQuickEntranceService()
+    {
+        return $this->createService('QuickEntrance:QuickEntranceService');
+    }
+
+    /*
      * @return StatisticsService
      */
     protected function getStatisticsService()
