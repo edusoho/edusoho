@@ -5,7 +5,7 @@
 {% block container %}
   <div class="alert alert-warning" role="alert">
       <span>{{ 'admin_v2.upgrade_v2_setting.alert'|trans }}</span>
-    {% set canAccess = 'ROLE_SUPER_ADMIN' in app.user.roles|default('') or 'ROLE_ADMIN' in app.user.roles|default('') %}
+    {% set canAccess = 'ROLE_SUPER_ADMIN' in app.user.roles|default([]) or 'ROLE_ADMIN' in app.user.roles|default([]) %}
     {% if canAccess %}
       <a href="javascript:;" data-url="{{ path('admin_upgrade_v2_setting') }}" data-loading-text="{{ 'admin_v2.switch_version.btn_loading'|trans }}" class="btn btn-primary pull-right prl js-upgrade-admin-v2" style="margin-top: -5px">{{ 'admin_v2.upgrade_v2_setting.setting_btn'|trans }}</a>
     {% else %}

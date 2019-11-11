@@ -93,7 +93,7 @@ class DefaultController extends BaseController
         }
 
         $roles = $this->getCurrentUser()->getRoles();
-        if (in_array('ROLE_SUPER_ADMIN', $roles) && !in_array('ROLE_SUPER_ADMIN', $roles)) {
+        if (0 == count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
             $this->createNewException(CommonException::SWITCH_OLD_VERSION_PERMISSION_ERROR());
         }
 

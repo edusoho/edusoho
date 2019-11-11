@@ -34,11 +34,11 @@ class CommonException extends AbstractException
 
     const NOTFOUND_API = 4040313;
 
-    const UPGRADE_V2_ERROR = 5000314;
+    const UPGRADE_V2_ERROR = 4030314;
 
-    const SWITCH_OLD_VERSION_PERMISSION_ERROR = 5000315;
+    const SWITCH_OLD_VERSION_PERMISSION_ERROR = 4030315;
 
-    const SWITCH_OLD_VERSION_ERROR = 5000316;
+    const SWITCH_OLD_VERSION_ERROR = 4030316;
 
     public $messages = array(
         4030301 => 'exception.common_drag_captcha_error',
@@ -54,8 +54,8 @@ class CommonException extends AbstractException
         4030311 => 'exception.common_not_allowed_method',
         5000312 => 'exception.common_expired_upload_token',
         4040313 => 'exception.common_not_found_api',
-        5000314 => 'exception.common_upgrade_v2_error',
-        5000315 => 'exception.switch_old_version.permission_error',
-        5000316 => 'exception.switch_old_version.error',
+        4030314 => 'exception.common_upgrade_v2_error',
+        4030315 => 'exception.switch_old_version.permission_error',
+        4030316 => 'exception.switch_old_version.error',
     );
 }

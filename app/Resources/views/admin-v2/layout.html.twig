@@ -77,7 +77,7 @@
           </ul>
         </div>
         <div class="pull-right change-version-btn">
-          {% set canAccess = 'ROLE_SUPER_ADMIN' in app.user.roles|default('') or 'ROLE_ADMIN' in app.user.roles|default('') %}
+          {% set canAccess = 'ROLE_SUPER_ADMIN' in app.user.roles|default([]) or 'ROLE_ADMIN' in app.user.roles|default([]) %}
           {% if canAccess %}
             <a href="#modal" data-toggle="modal" data-loading-text="{{ 'admin_v2.switch_version.btn_loading'|trans }}" data-url="{{ path('admin_v2_switch_old_version') }}">{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
           {% else %}
