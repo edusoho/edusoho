@@ -16,6 +16,7 @@ class WeChatSettingController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        $isCallback = $request->query->get('isCallback', false);
         $clients = OAuthClientFactory::clients();
         $loginDefault = $this->getDefaultLoginConnect($clients);
         $loginConnect = $this->getSettingService()->get('login_bind', array());
@@ -29,6 +30,13 @@ class WeChatSettingController extends BaseController
         $wechatSetting = $this->getSettingService()->get('wechat', array());
         $wechatSetting = array_merge($wechatDefault, $wechatSetting);
 
+        if ($isCallback) {
+            $wechatAuth = $this->getAuthorizationInfo();
+            if ($wechatAuth['isAuthorized']) {
+                $wechatSetting['is_authorization'] = 1;
+            }
+            $this->getSettingService()->set('wechat', $wechatSetting);
+        }
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
             $loginConnect = array_merge($loginConnect, ArrayToolkit::trim($fields['loginConnect']));
@@ -75,6 +83,7 @@ class WeChatSettingController extends BaseController
             $this->getSettingService()->set('wechat', $wechatSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
+
         return $this->render('admin-v2/system/wechat-authorization/wechat-setting.html.twig', array(
             'loginConnect' => $loginConnect,
             'payment' => $payment,
@@ -93,7 +102,7 @@ class WeChatSettingController extends BaseController
     public function preAuthUrlAction(Request $request, $platformType)
     {
         if ('official_account' == $platformType) {
-            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::OFFICIAL_ACCOUNT, $this->generateUrl('admin_v2_setting_wechat_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL));
+            $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::OFFICIAL_ACCOUNT, $this->generateUrl('admin_v2_setting_wechat_auth', array('isCallback' => true), UrlGeneratorInterface::ABSOLUTE_URL));
         }
         if ('mini_program' == $platformType) {
             $url = $this->getWeChatService()->getPreAuthUrl(WeChatPlatformTypes::MINI_PROGRAM, $this->generateUrl('admin_v2_setting_wechat_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL));
