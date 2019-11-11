@@ -19,13 +19,14 @@
 
 namespace Doctrine\Common\Cache;
 
-use \Memcached;
+use Memcached;
 
 /**
  * Memcached cache provider.
  *
- * @link   www.doctrine-project.org
+ * @see   www.doctrine-project.org
  * @since  2.2
+ *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>
@@ -43,8 +44,6 @@ class MemcachedCache extends CacheProvider
      * Sets the memcache instance to use.
      *
      * @param Memcached $memcached
-     *
-     * @return void
      */
     public function setMemcached(Memcached $memcached)
     {
@@ -83,7 +82,7 @@ class MemcachedCache extends CacheProvider
     protected function doContains($id)
     {
         return false !== $this->memcached->get($id)
-            || $this->memcached->getResultCode() !== Memcached::RES_NOTFOUND;
+            || Memcached::RES_NOTFOUND !== $this->memcached->getResultCode();
     }
 
     /**
@@ -94,6 +93,7 @@ class MemcachedCache extends CacheProvider
         if ($lifeTime > 30 * 24 * 3600) {
             $lifeTime = time() + $lifeTime;
         }
+
         return $this->memcached->set($id, $data, (int) $lifeTime);
     }
 
@@ -103,7 +103,7 @@ class MemcachedCache extends CacheProvider
     protected function doDelete($id)
     {
         return $this->memcached->delete($id)
-            || $this->memcached->getResultCode() === Memcached::RES_NOTFOUND;
+            || Memcached::RES_NOTFOUND === $this->memcached->getResultCode();
     }
 
     /**
@@ -119,15 +119,16 @@ class MemcachedCache extends CacheProvider
      */
     protected function doGetStats()
     {
-        $stats   = $this->memcached->getStats();
+        $stats = $this->memcached->getStats();
         $servers = $this->memcached->getServerList();
-        $key     = $servers[0]['host'] . ':' . $servers[0]['port'];
-        $stats   = $stats[$key];
+        $key = $servers[0]['host'].':'.$servers[0]['port'];
+        $stats = $stats[$key];
+
         return array(
-            Cache::STATS_HITS   => $stats['get_hits'],
+            Cache::STATS_HITS => $stats['get_hits'],
             Cache::STATS_MISSES => $stats['get_misses'],
             Cache::STATS_UPTIME => $stats['uptime'],
-            Cache::STATS_MEMORY_USAGE     => $stats['bytes'],
+            Cache::STATS_MEMORY_USAGE => $stats['bytes'],
             Cache::STATS_MEMORY_AVAILABLE => $stats['limit_maxbytes'],
         );
     }
