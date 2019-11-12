@@ -66,16 +66,17 @@ export default {
           this.isShowDistributorEntrance = false;
           return;
         }
-
-        Api.getAgencyBindRelation().then(data => {
+        this.getAgencyBindRelation();
+      })
+    },
+    getAgencyBindRelation(){
+         Api.getAgencyBindRelation().then(data => {
           if (!data.agencyId) {
             this.isShowDistributorEntrance = false;
             return;
           }
+          this.isShowDistributorEntrance = true;
         })
-
-        this.isShowDistributorEntrance = true;
-      })
     },
     getDrpSetting() {
       Api.getDrpSetting().then(data => {
