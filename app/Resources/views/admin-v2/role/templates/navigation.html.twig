@@ -11,7 +11,7 @@
   {% for m in permissions if not m.visible is defined or eval_expression(m.visible) %}
     {# tabMenu多次调用first_child_permission需要优化 todo#}
     {% set tabMenu = first_child_permission(first_child_permission(first_child_permission(m))) %}
-  <li class="{% if menu and m.code == rootMenu.code|default(null) %}active{% endif %} {% if m.code == 'admin_v2_cloud_center' %}application-icon"{% endif %} id="menu_{{ m.code }}">
+  <li class="{% if menu and m.code == rootMenu.code|default(null) %}active{% endif %} {% if m.code == 'admin_v2_cloud_center' %}application-icon{% endif %}" id="menu_{{ m.code }}">
     <a
       title="{{ m.name|trans({}, 'menu') }}"
       href="{{ permission_path(tabMenu) }}"
