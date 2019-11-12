@@ -7,7 +7,7 @@
           {% if advice.details[i] is defined %}
             {% set item = advice.details[i] %}
             <a class="admin-advice__item" href="{{ item.url|default() }}" target="_blank">
-              <img src={{ item.image|default() }}/>
+              <img src="{{ item.image|default() }}"/>
             </a>
           {% else %}
             <div class=" admin-advice__item">

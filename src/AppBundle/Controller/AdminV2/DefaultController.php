@@ -154,7 +154,11 @@ class DefaultController extends BaseController
     {
         $advice = array();
         if (!$this->isWithoutNetwork()) {
-            $advice = $this->getPlatformNewsSdkService()->getAdvice();
+            try {
+                $advice = $this->getPlatformNewsSdkService()->getAdvice();
+            } catch (\Exception $e) {
+                $advice = array();
+            }
         }
 
         return $this->render('admin-v2/default/business-advice.html.twig', array(
