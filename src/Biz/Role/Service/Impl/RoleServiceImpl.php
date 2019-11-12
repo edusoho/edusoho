@@ -425,6 +425,19 @@ class RoleServiceImpl extends BaseService implements RoleService
         return $conditions;
     }
 
+    /**
+     * 主要用于主程序和所有插件在主程序8.5.0版本升级处理自定义角色的data_v2，根据原有权限配置data找到对应的v2的menus
+     */
+    public function upgradeRoleDataV2()
+    {
+        $roles = $this->searchRoles(array('excludeCodes' => array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')), array(), 0, PHP_INT_MAX);
+
+        foreach ($roles as &$role) {
+            $role['data_v2'] = $this->getAdminV2Permissions($role['data']);
+            $this->updateRole($role['id'], $role);
+        }
+    }
+
     protected function loadPermissionsFromAllConfig($type = 'admin')
     {
         $configs = $this->getPermissionConfig($type);
@@ -490,6 +503,26 @@ class RoleServiceImpl extends BaseService implements RoleService
         }
 
         return $configPaths;
+    }
+
+    /**
+     * @param $roleData
+     *
+     * @return array
+     *               根据role的data的menus获取对应的admin_v2的menus
+     */
+    protected function getAdminV2Permissions($roleData)
+    {
+        $biz = ServiceKernel::instance()->getBiz();
+        $adminPermissions = $biz['role.get_permissions_yml']['admin'];
+        $roles = array();
+        foreach ($roleData as $menu) {
+            if (!empty($adminPermissions[$menu]) && is_array($adminPermissions[$menu])) {
+                $roles = array_merge($roles, $adminPermissions[$menu]);
+            }
+        }
+
+        return  $this->getAllParentPermissions($roles);
     }
 
     /**
