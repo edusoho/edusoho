@@ -2,7 +2,6 @@
 
 namespace AppBundle\Listener;
 
-use Biz\System\Service\SettingService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -53,28 +52,14 @@ class PermissionKernelControllerListener
 
                 $self = $this;
                 $event->setController(function () use ($self, $request) {
-                    $backstage = $self->getSettingService()->get('backstage', array('is_v2' => 0));
+                    $biz = $self->container->get('biz');
+                    $settingService = $biz->service('System:SettingService');
+                    $backstage = $settingService->get('backstage', array('is_v2' => 0));
                     $template = $backstage['is_v2'] ? 'admin-v2/role/permission-error.html.twig' : 'admin/role/permission-error.html.twig';
 
                     return $self->container->get('templating')->renderResponse($template);
                 });
             }
         }
-    }
-
-    /**
-     * @return \Codeages\Biz\Framework\Context\Biz|object
-     */
-    protected function getBiz()
-    {
-        return $this->container->get('biz');
-    }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->getBiz()->service('System:SettingService');
     }
 }
