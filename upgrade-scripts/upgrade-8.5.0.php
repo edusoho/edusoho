@@ -49,8 +49,8 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'updateOldAdminDisableRoles',
             'roleAddDataV2',
+            'updateOldAdminDisableRoles',
             'upgradeRoleDataV2',
             'updateAdminV2Setting',
         );
@@ -132,6 +132,9 @@ class EduSohoUpgrade extends AbstractUpdater
                     $role['data'] = array_merge($role['data'], $disableRole);
                 }
             }
+            $role['data'] = array_unique($role['data']);
+            $role['data'] = array_filter($role['data']);
+            $role['data'] = array_values($role['data']);
             $this->getRoleService()->updateRole($role['id'], $role);
         }
 
@@ -151,17 +154,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function upgradeRoleDataV2()
     {
-        if (!$this->isFieldExist('role', 'data_v2')) {
-            return 1;
-        }
-
         $this->getRoleService()->refreshRoles();
-        $roles = $this->getRoleService()->searchRoles(array('excludeCodes' => array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')), array(), 0, PHP_INT_MAX);
-
-        foreach ($roles as &$role) {
-            $role['data_v2'] = $this->getAdminV2Permissions($role['data']);
-            $this->getRoleService()->updateRole($role['id'], $role);
-        }
+        $this->getRoleService()->upgradeRoleDataV2();
 
         return 1;
     }
@@ -174,20 +168,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set('backstage', $setting);
 
         return 1;
-    }
-
-    protected function getAdminV2Permissions($roleData)
-    {
-        $biz = \Topxia\Service\Common\ServiceKernel::instance()->getBiz();
-        $adminPermissions = $biz['role.get_permissions_yml']['admin'];
-        $roles = array();
-        foreach ($roleData as $menu) {
-            if (!empty($adminPermissions[$menu]) && is_array($adminPermissions[$menu])) {
-                $roles = array_merge($roles, $adminPermissions[$menu]);
-            }
-        }
-
-        return  $this->getRoleService()->getAllParentPermissions($roles);
     }
 
     protected function generateIndex($step, $page)
