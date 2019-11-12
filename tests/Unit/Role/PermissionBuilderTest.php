@@ -123,6 +123,12 @@ class PermissionBuilderTest extends BaseTestCase
         $this->assertEmpty(PermissionBuilder::instance()->getParentPermissionByCode('admin_test_permission'));
     }
 
+    public function testGroupedV2Permissions()
+    {
+        $groupedPermissions = PermissionBuilder::instance()->getParentPermissionByCode('admin_v2_user_show');
+        $this->assertEquals('admin_v2.user.user_group', $groupedPermissions['name']);
+    }
+
     protected function loadPermissions($user)
     {
         if (empty($user['id'])) {

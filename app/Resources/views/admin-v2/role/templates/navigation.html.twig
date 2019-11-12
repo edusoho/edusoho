@@ -2,8 +2,7 @@
 
 {% if permissions|default(null) %}
   {% if menu|default(null) %}
-    {# rootMenu多次调用parent_permission需要优化 todo#}
-    {% set rootMenu = menu|parent_permission.code|parent_permission.code|parent_permission %}
+    {% set rootMenu = nav_permission(menu) %}
   {% else %}
     {% set rootMenu = permission('admin') %}
   {% endif %}
