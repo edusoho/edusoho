@@ -4,6 +4,7 @@ admin_v2:
     children:
         # 教学模块
         admin_v2_teach:
+            class: 'icon-color-green'
             name: admin_v2.nav.teach
             children:
                 # 课程管理（group）
@@ -13,7 +14,9 @@ admin_v2:
                     children:
                         # 课程管理
                         admin_v2_course_show:
+                            quick_entrance_icon: 'course'
                             name: admin_v2.course.basic_menu
+                            router_name: admin_v2_course_set
                             children:
                                 admin_v2_course_manage:
                                     name: admin_v2.course.basic.basic_tab
@@ -113,6 +116,8 @@ admin_v2:
                         # 班级管理
                         admin_v2_classroom:
                             name: admin_v2.course.classroom_menu
+                            quick_entrance_icon: 'class'
+                            router_name: admin_v2_classroom
                             children:
                                 admin_v2_classroom_manage:
                                     name: admin_v2.course.classroom.basic_tab
@@ -190,7 +195,9 @@ admin_v2:
                                     router_name: admin_v2_classroom_recommend_list
                         # 直播管理
                         admin_v2_live_course:
+                            quick_entrance_icon: 'live'
                             name: admin.course.live_menu
+                            router_name: admin_v2_live_course
                             children:
                                 admin_v2_live_course_coming:
                                     name: admin_v2.course.coming.live_tab
@@ -220,6 +227,7 @@ admin_v2:
                         # 公开课管理模块
                         admin_v2_open_course_manage:
                             name: admin_v2.course.open_course_menu
+                            quick_entrance_icon: 'open'
                             router_name: admin_v2_open_course
                             children:
                                 admin_v2_open_course:
@@ -305,7 +313,9 @@ admin_v2:
                     children:
                         # 笔记管理模块
                         admin_v2_course_note:
+                            quick_entrance_icon: 'note'
                             name: admin_v2.course.note_menu
+                            router_name: admin_v2_course_note
                             children:
                                 admin_v2_course_note_manage:
                                     name: admin_v2.course.note.basic_tab
@@ -314,6 +324,10 @@ admin_v2:
                         # 问答管理
                         admin_v2_course_question:
                             name: admin_v2.course.question_menu
+                            quick_entrance_icon: 'qaq'
+                            router_name: admin_v2_question
+                            router_params:
+                                postStatus: unPosted
                             children:
                                 admin_v2_course_question_manage:
                                     name: admin_v2.course.question.basic_tab
@@ -324,6 +338,8 @@ admin_v2:
                         # 话题管理
                         admin_v2_course_thread:
                             name: admin_v2.course.thread_menu
+                            quick_entrance_icon: 'topic'
+                            router_name: admin_v2_course_thread
                             children:
                                 admin_v2_course_thread_manage:
                                     name: admin_v2.course.thread.course_thread_tab
@@ -336,6 +352,8 @@ admin_v2:
                         # 反馈管理模块
                         admin_v2_review:
                             name: admin_v2.course.review_menu
+                            quick_entrance_icon: 'feedback'
+                            router_name: admin_v2_course_review
                             children:
                                 admin_v2_course_review_tab:
                                     name: admin_v2.course.review.course_review_tab
@@ -352,21 +370,20 @@ admin_v2:
                     children:
                         # 云资源
                         admin_v2_cloud_resource:
+                            quick_entrance_icon: 'cloud'
                             name: admin_v2.cloud_resource.basic_tab
+                            router_name: admin_v2_cloud_file
                             children:
                                 admin_v2_cloud_file:
                                     name: admin_v2.cloud.file.basic_tab
                                     router_name: admin_v2_cloud_file
-                                    disable: true
                                 admin_v2_cloud_attachment:
                                     name: admin_v2.cloud.attachment.basic_tab
-                                    disable: true
                                 admin_v2_cloud_attachment_setting:
                                     name: admin_v2.cloud.attachment_setting.basic_tab
-                                    disable: true
-
         # 营销管理模块
         admin_v2_marketing:
+            class: 'icon-color-yellow'
             name: admin_v2.nav.marketing
             children:
                 # 营销管理
@@ -376,7 +393,9 @@ admin_v2:
                     children:
                         # 邀请管理
                         admin_v2_operation_invite:
+                            quick_entrance_icon: 'invite'
                             name: admin_v2.operation.invite_menu
+                            router_name: admin_v2_invite_record
                             children:
                                 admin_v2_operation_invite_record:
                                     name: admin_v2.operation.invite.record_tab
@@ -393,6 +412,7 @@ admin_v2:
                         # 优惠券管理
                         admin_v2_marketing_coupon:
                             name: admin_v2.operation.coupon_menu
+                            quick_entrance_icon: 'coupon'
                             router_name: admin_v2_coupon
                             children:
                                 admin_v2_marketing_coupon_manage:
@@ -413,6 +433,8 @@ admin_v2:
                         # 微营销
                         admin_v2_micromarketing:
                             name: admin_v2.micromarketing.menu
+                            quick_entrance_icon: 'market'
+                            router_name: admin_v2_login_micromarketing
                             children:
                                 admin_v2_micromarketing_page:
                                     name: admin_v2.micromarketing.menu
@@ -426,6 +448,8 @@ admin_v2:
                     children:
                         # 分销
                         admin_v2_distributor:
+                            quick_entrance_icon: 'retail'
+                            router_name: admin_v2_login_distributor
                             name: admin_v2.distributor.menu
                             children:
                                 admin_v2_distributor_page:
@@ -434,6 +458,7 @@ admin_v2:
                                     disable: true
         # 运营管理模块
         admin_v2_operating:
+            class: 'icon-color-yellow'
             name: admin_v2.nav.operating
             children:
                 # 网校装修(group)
@@ -443,6 +468,8 @@ admin_v2:
                     children:
                         # 微网校装修
                         admin_v2_h5_set:
+                            quick_entrance_icon: 'miniweb'
+                            router_name: admin_v2_wap_set
                             name: admin_v2.operation.mobile.h5
                             children:
                                 admin_v2_wap_set:
@@ -451,6 +478,7 @@ admin_v2:
                                     router_name: admin_v2_wap_set
                         # 小程序装修
                         admin_v2_wechat_app_manage:
+                            quick_entrance_icon: 'miniprogram'
                             name: admin_v2.wechat_app.menu
                             router_name: admin_v2_wechat_app
                             children:
@@ -460,6 +488,8 @@ admin_v2:
                                     disable: true
                         # App装修
                         admin_v2_setting_mobile:
+                            quick_entrance_icon: 'app'
+                            router_name: admin_v2_setting_mobile
                             name: admin_v2.operation.mobile_menu
                             children:
                                 admin_v2_mobile_settings:
@@ -480,7 +510,11 @@ admin_v2:
                                             mode: modal
                         # web装修
                         admin_v2_block_manage:
+                            quick_entrance_icon: 'webmix'
                             name: admin_v2.operation.block_menu
+                            router_name: admin_v2_block
+                            router_params:
+                                category: theme
                             children:
                                 admin_v2_block_theme:
                                     name: admin_v2.operation.block.theme.basic_tab
@@ -502,42 +536,37 @@ admin_v2:
                                         category: system
                                 admin_v2_setting_theme:
                                     name: admin_v2.operation.site.theme_tab
-                                    disable: true
                         # 站点配置
                         admin_v2_site_setting:
+                            quick_entrance_icon: 'site'
                             name: admin_v2.operation.site_menu
                             router_name: admin_v2_navigation
+                            router_params:
+                                type: top
                             children:
                                 admin_v2_top_navigation:
                                     name: admin_v2.operation.site.top_navigation_tab
                                     router_name: admin_v2_navigation
-                                    disable: true
                                     router_params:
                                         type: top
                                 admin_v2_foot_navigation:
                                     name: admin_v2.operation.site.foot_navigation_tab
                                     router_name: admin_v2_navigation
-                                    disable: true
                                     router_params:
                                         type: foot
                                 admin_v2_setting_consult_setting:
                                     name: admin_v2.operation.site.consult_setting_tab
-                                    disable: true
                                 admin_v2_setting_es_bar:
                                     name: admin_v2.operation.site.es_bar_tab
-                                    disable: true
                                 admin_v2_content:
                                     name: admin_v2.operation.content.basic_tab
-                                    disable: true
                                     router_params:
                                         type: page
                                 admin_v2_setting_share:
                                     name: admin_v2.operation.site.share_tab
-                                    disable: true
                                 admin_v2_friendlyLink_navigation:
                                     name: admin_v2.operation.site.friendlyLink_navigation_tab
                                     router_name: admin_v2_navigation
-                                    disable: true
                                     router_params:
                                         type: friendlyLink
                 #内容运营(group)
@@ -572,6 +601,8 @@ admin_v2:
                                             group: topBtn
                         admin_v2_operation_article:
                             name: admin_v2.operation.article_menu
+                            quick_entrance_icon: 'article'
+                            router_name: admin_v2_article
                             children:
                                 admin_v2_operation_article_manage:
                                     name: admin_v2.operation.article.basic_tab
@@ -594,6 +625,8 @@ admin_v2:
                                             group: topBtn
                         admin_v2_operation_group_manage:
                             name: admin_v2.operation.group_menu
+                            quick_entrance_icon: 'group'
+                            router_name: admin_v2_group
                             children:
                                 admin_v2_operation_group:
                                     name: admin_v2.operation.group.group_tab
@@ -611,14 +644,14 @@ admin_v2:
                                     router_name: admin_v2_groupThread
                         admin_v2_operation_wechat_notification:
                             name: admin_v2.operation.wechat_notification
+                            quick_entrance_icon: 'wechat'
+                            router_name: admin_v2_wechat_notification_record
                             children:
                                 admin_v2_operation_wechat_notification_record:
                                     name: admin_v2.operation.wechat.notification_record_tab
-                                    disable: true
                                     router_name: admin_v2_wechat_notification_record
                                 admin_v2_operation_wechat_notification_manage:
                                     name: admin_v2.operation.wechat.notification_manage
-                                    disable: true
                                     router_name: admin_v2_wechat_notification_manage
                         admin_v2_message_manage:
                             name: admin_v2.operation.message_menu
@@ -626,7 +659,7 @@ admin_v2:
                                 admin_v2_message:
                                     name: admin_v2.operation.message.basic_tab
                                     disable: true
-                        admin_v2_operation.sensitive_words:
+                        admin_v2_operation_sensitive_words:
                             name: admin_v2.operation.sensitive_words_menu
                             children:
                                 admin_v2_keyword:
@@ -642,6 +675,7 @@ admin_v2:
                                     disable: true
         # 用户管理模块
         admin_v2_user:
+            class: 'icon-color-blue'
             name: admin_v2.nav.user
             children:
                 admin_v2_user_group:
@@ -649,6 +683,8 @@ admin_v2:
                     is_group: true
                     children:
                         admin_v2_user_show:
+                            quick_entrance_icon: 'user'
+                            router_name: admin_v2_user
                             name: admin_v2.user.basic_menu
                             children:
                                 admin_v2_user_manage:
@@ -740,6 +776,7 @@ admin_v2:
                                 admin_v2_login_record:
                                     name: admin.user.basic.login_record_tab
                         admin_v2_approval_manage:
+                            quick_entrance_icon: 'approve'
                             name: admin_v2.user.approval_menu
                             router_name: admin_v2_approval_approvals
                             router_params:
@@ -764,8 +801,10 @@ admin_v2:
                                     router_name: admin_v2_approval_approvals
                                     router_params:
                                         approvalStatus: approved
-                                    disabled: ture
+                                    disable: ture
                         admin_v2_teacher:
+                            quick_entrance_icon: 'teacher'
+                            router_name: admin_v2_teacher
                             name: admin_v2.user.teacher_menu
                             children:
                                 admin_v2_teacher_manage:
@@ -796,6 +835,7 @@ admin_v2:
                                     disable: true
         # 交易模块
         admin_v2_trade:
+            class: 'icon-color-yellow'
             name: admin_v2.nav.trade
             children:
                 # 订单管理
@@ -805,6 +845,7 @@ admin_v2:
                     children:
                         # 商品订单
                         admin_v2_goods_order:
+                            quick_entrance_icon: 'goods'
                             name: admin_v2.trade.goods_order.menu
                             router_name: admin_v2_order_manage
                             children:
@@ -814,6 +855,8 @@ admin_v2:
                         # 退款订单
                         admin_v2_order_refunds:
                             name: admin_v2.trade.order_refunds_menu
+                            quick_entrance_icon: 'refund'
+                            router_name: admin_v2_order_refunds
                             children:
                                 admin_v2_order_refunds_manage:
                                     name: admin_v2.trade.order_refunds.basic_tab
@@ -825,6 +868,10 @@ admin_v2:
                     children:
                         # 网校账单
                         admin_v2_bills:
+                            quick_entrance_icon: 'bill'
+                            router_name: admin_v2_bill
+                            router_params:
+                                type: money
                             name: admin_v2.trade.bills_menu
                             children:
                                 admin_v2_bill_cash:
@@ -841,6 +888,8 @@ admin_v2:
                                     disable: true
                         # 虚拟币管理
                         admin_v2_user_coin:
+                            quick_entrance_icon: 'coin'
+                            router_name: admin_v2_coin_user_records
                             name: admin_v2.trade.coin_menu
                             children:
                                 admin_v2_coin_user_records:
@@ -881,6 +930,7 @@ admin_v2:
                                     router_name: admin_v2_data_statistics_index
         # 系统模块
         admin_v2_system:
+            class: 'icon-color-blue'
             name: admin_v2.nav.system
             children:
                 # 通用管理
@@ -890,6 +940,7 @@ admin_v2:
                     children:
                         # 网校信息
                         admin_v2_school_information_setting:
+                            quick_entrance_icon: 'info'
                             name: admin_v2.system.site_menu
                             router_name: admin_v2_school_information
                             children:
@@ -900,23 +951,20 @@ admin_v2:
                         # 用户设置
                         admin_v2_setting_user:
                             name: admin_v2.system.user_menu
+                            quick_entrance_icon: 'setting'
+                            router_name: admin_v2_setting_auth
                             children:
                                 admin_v2_user_auth:
                                     name: admin_v2.system.user.auth_tab
-                                    disable: true
                                     router_name: admin_v2_setting_auth
                                 admin_v2_setting_login_bind:
                                     name: admin_v2.system.user.login_bind_tab
-                                    disable: true
                                 admin_v2_setting_user_center:
                                     name: admin_v2.system.user.user_center_tab
-                                    disable: true
                                 admin_v2_setting_user_fields:
                                     name: admin_v2.system.user.user_fields_tab
-                                    disable: true
                                 admin_v2_setting_avatar:
                                     name: admin_v2.system.user.avatar_tab
-                                    disable: true
                         #微信授权信息
                         admin_v2_setting_wechat:
                             name: admin_v2.system.wechat_auth_menu
@@ -926,6 +974,8 @@ admin_v2:
                                     disable: true
                         # 课程设置
                         admin_v2_setting_course_setting:
+                            quick_entrance_icon: 'course-setting'
+                            router_name: admin_v2_setting_course_setting
                             name: admin_v2.system.course_menu
                             children:
                                 admin_v2_setting_course:
@@ -954,35 +1004,21 @@ admin_v2:
                         # 运营设置
                         admin_v2_setting_operation:
                             name: admin_v2.system.operation_menu
+                            quick_entrance_icon: 'operation'
+                            router_name: admin_v2_setting_mailer
                             children:
                                 admin_v2_setting_mailer:
                                     name: admin_v2.system.mailer_setting_tab
-                                    disable: true
                                 admin_v2_article_set:
                                     name: admin_v2.system.operation.article_tab
-                                    disable: true
                                 admin_v2_group_set:
                                     name: admin_v2.system.operation.group_tab
-                                    disable: true
                                 admin_v2_invite_set:
                                     name: admin_v2.system.operation.invite_tab
-                                    disable: true
                                 admin_v2_message_send_set:
                                     name: admin_v2.system.operation.message_send_tab
-                                    disable: true
                                 admin_v2_message_open_set:
                                     name: admin_v2.system.operation.message_open_tab
-                                    disable: true
-                                    parent: admin_v2_message_open_set
-                        admin_v2_org_manage:
-                            name: admin_v2.system.org_menu
-                            parent: admin_v2_general_group
-                            disable: true
-                            visible: false
-                            children:
-                                admin_v2_org:
-                                    name: admin_v2.system.org.basic_tab
-                                    disable: true
                 # 交易设置
                 admin_v2_transaction_group:
                     name: admin_v2.transaction.basic_group
@@ -990,6 +1026,8 @@ admin_v2:
                     children:
                         # 资产设置
                         admin_v2_asset_setting:
+                            quick_entrance_icon: 'money'
+                            router_name: admin_v2_setting_payment
                             name: admin_v2.system.asset_menu
                             children:
                                 admin_v2_payment:
@@ -1016,6 +1054,31 @@ admin_v2:
                                     name: admin_v2.system.optimize.basic_tab
                                     disable: true
                                     router_name: admin_v2_optimize
+                        admin_v2_roles:
+                            name: admin_v2.system.roles_menu
+                            children:
+                                admin_v2_role_manage:
+                                    name: admin_v2.system.roles.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_roles
+                                    children:
+                                        admin_v2_role_create:
+                                            name: admin_v2.system.roles.basic.create_btn
+                                            mode: modal
+                                            group: topBtn
+                                        admin_v2_role_edit:
+                                            name: admin_v2.system.roles.basic.edit_btn
+                                            mode: modal
+                                            group: groupBtn
+                                            router_params:
+                                                id: (role.id)
+                                        admin_v2_role_delete:
+                                            name: admin_v2.system.roles.basic.delete_submit_btn
+                                            class: role-delete js-delete-role
+                                            group: groupBtn
+                                            mode: none
+                                            router_params:
+                                                id: (role.id)
                         # 系统自检
                         admin_v2_report_status:
                             name: admin_v2.system.report_status_menu
@@ -1208,4 +1271,84 @@ admin_v2:
                                     router_name: admin_v2_setting_cloud
                                     disable: true
 
-
+        admin_v2_developer_module:
+            name: admin_v2.nav.developer_module
+            visible: false
+            disable: true
+            children:
+                admin_v2_developer_group:
+                    name: admin_v2.nav.developer_module.basic_group
+                    is_group: true
+                    children:
+                        admin_v2_xapi_manage:
+                            name: admin_v2.developer.xapi_manage
+                            disable: true
+                            children:
+                                admin_v2_xapi_setting:
+                                    name: admin_v2.developer.xapi_setting
+                                admin_v2_xapi_statement_list:
+                                    name: admin_v2.developer.xapi_statement
+                        admin_v2_cdn_manage:
+                            name: admin_v2.developer.cdn_manage
+                            disable: true
+                            children:
+                                admin_v2_setting_cdn:
+                                    name: admin_v2.developer.cdn_setting
+                        admin_v2_developer_debug_manage:
+                            name: admin_v2.developer.debug_manage
+                            disable: true
+                            children:
+                                admin_v2_develop_debug_setting:
+                                    name: admin_v2.developer.developer_manage
+                                    router_name: admin_v2_setting_developer
+                                admin_v2_setting_developer_magic:
+                                    name: admin_v2.developer.magic_manage
+                                admin_v2_setting_developer_version:
+                                    name: admin_v2.developer.version_manage
+                        admin_v2_mocked_manage:
+                            name: admin_v2.developer.mocked_manage
+                            disable: true
+                            children:
+                                admin_v2_mocked:
+                                    name: admin_v2.developer.mocked_manage
+                        admin_v2_page_static_manage:
+                            name: admin_v2.page_static_manage
+                            disable: true
+                            children:
+                                admin_v2_page_static_setting:
+                                    name: admin_v2.page_static_tab
+                                    router_name: admin_v2_performance
+                        admin_v2_org_manage:
+                            name: admin_v2.developer.org_menu
+                            disable: true
+                            children:
+                                admin_v2_org:
+                                    name: admin_v2.developer.org.basic_tab
+                                    disable: true
+                        admin_v2_jobs_manage:
+                            name: admin_v2.developer.jobs_manage_manu
+                            disable: true
+                            children:
+                                admin_v2_jobs:
+                                    name: admin_v2.developer.jobs_manage
+                                admin_v2_job_logs:
+                                    name: admin_v2.developer.job_logs
+                                admin_v2_crontab:
+                                    name: admin_v2.developer.crontab
+                        admin_v2_setting_mobile_iap_product:
+                            name: admin_v2.developer.mobile_iap_product_menu
+                            disable: true
+                            visible: (setting('magic.enable_mobile_iap', '0'))
+                            children:
+                                admin_v2_setting_mobile_iap_product_list:
+                                    name: admin_v2.developer.mobile_iap_product.basic_tab
+                                    router_name: admin_v2_setting_mobile_iap_product
+                        # 队列
+                        admin_v2_queue_manage:
+                            name: admin_v2.system.queue_manage_menu
+                            group: 2
+                            visible: false
+                            disable: true
+                            children:
+                                admin_v2_queue_failed_logs:
+                                    name: admin_v2.system.queue_failed_tab

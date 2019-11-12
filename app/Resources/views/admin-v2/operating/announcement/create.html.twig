@@ -34,7 +34,7 @@
         <label for="startTime">{{ 'admin.operation_announcement.createTime_th'|trans }}</label>
       </div>
       <div class="col-md-8 controls" style="z-index:2000;">
-        <input type="text" id="startTime" name="startTime" class="form-control"
+        <input type="text" id="startTime" name="startTime" autocomplete="off" class="form-control"
           value="{% if announcement|default(null) %}{{ announcement.startTime|date("Y-m-d H:i") }}{% endif %}">
       </div>
     </div>
@@ -44,7 +44,7 @@
         <label for="endTime">{{ 'admin.operation_announcement.endTime_th'|trans }}</label>
       </div>
       <div class="col-md-8 controls" style="z-index:2000;">
-        <input type="text" id="endTime" name="endTime" class="form-control"
+        <input type="text" id="endTime" name="endTime" autocomplete="off" class="form-control"
           value="{% if announcement|default(null) %}{{ announcement.endTime|date("Y-m-d H:i") }}{% endif %}">
       </div>
     </div>

@@ -1,361 +1,502 @@
-#eg：
-# 前面是老的权限，后面是新的权限；可以一对多，多对一
-#admin_user_manage: admin_v2_user_manage
-#admin_user_manage: admin_v2_course_manage
-#admin_course_manage: admin_v2_course_manage
-
-admin: admin_v2
-
-
-admin_course: admin_v2_teach  #教学
-
-# 课程管理权限
-admin_course_show: admin_v2_course_show #课程管理
-admin_course_manage: admin_v2_course_manage  #课程管理
-admin_course_content_manage: admin_v2_course_content_manage #管理课程
-admin_course_add: admin_v2_course_add #创建课程
-admin_course_set_recommend: admin_v2_course_set_recommend #推荐课程
-admin_course_set_cancel_recommend: admin_v2_course_set_cancel_recommend #取消推荐
-admin_course_guest_member_preview: admin_v2_course_guest_member_preview #预览
-admin_course_set_close: admin_v2_course_set_close #关闭课程
-admin_course_sms_prepare: admin_v2_course_sms_prepare #发送发布通知短信
-admin_course_set_clone: admin_v2_course_set_clone #复制课程
-admin_course_set_publish: admin_v2_course_set_publish #发布课程
-admin_course_set_delete: admin_v2_course_set_delete #删除课程
-
-# 班级管理权限
-admin_classroom: admin_v2_classroom #班级管理
-admin_classroom_manage: admin_v2_classroom_manage  #班级管理
-admin_classroom_content_manage: admin_v2_classroom_content_manage #管理班级
-admin_classroom_create: admin_v2_classroom_create #创建班级
-admin_classroom_cancel_recommend: admin_v2_classroom_cancel_recommend #取消推荐
-admin_classroom_set_recommend: admin_v2_classroom_set_recommend #推荐班级
-admin_classroom_close: admin_v2_classroom_close #关闭班级
-admin_classroom_open: admin_v2_classroom_open #发布班级
-admin_classroom_delete: admin_v2_classroom_delete #删除班级
-admin_sms_prepare: admin_v2_sms_prepare #发送发布通知短信
-admin_classroom_recommend: admin_v2_classroom_recommend #班级推荐
-
-admin_course_set_recommend_list: admin_v2_course_set_recommend_list #课程推荐
-admin_course_set_data: admin_v2_course_set_data #课程统计
-
-#直播管理权限模块
-admin_live_course: admin_v2_live_course #直播管理
-admin_live_course_manage: admin_v2_live_course_coming #未开始的
-admin_live_course_add: admin_v2_live_course_add #创建直播
-
-# 公开课管理权限模块
-admin_open_course_manage: admin_v2_open_course_manage #公开课管理
-admin_open_course: admin_v2_open_course #公开课管理tab
-admin_open_course_add: admin_v2_open_course_add #创建公开课
-admin_open_course_recommend_list: admin_v2_open_course_recommend_list #公开课推荐
-admin_opencourse_analysis: admin_v2_open_course_analysis # 公开课统计
-
-# 笔记管理权限
-admin_course_note: admin_v2_course_note #笔记管理
-admin_course_note_manage: admin_v2_course_note_manage  #笔记管理
-
-
-# 问答管理权限
-admin_course_question: admin_v2_course_question
-admin_course_question_manage: admin_v2_course_question_manage
-
-# 话题管理权限
-admin_course_thread: admin_v2_course_thread
-admin_course_thread_manage: admin_v2_course_thread_manage
-admin_classroom_thread_manage: admin_v2_classroom_thread_manage
-
-
-#分类标签权限
-
-admin_course_category: admin_v2_course_category #分类管理
-admin_course_category_manage: admin_v2_course_category_manage #课程分类
-admin_category_create: admin_v2_category_create #添加课程分类
-admin_classroom_category_manage: admin_v2_classroom_category_manage #班级分类
-admin_classroom_category_create: admin_v2_classroom_category_create #添加班级分类
-admin_course_tag: admin_v2_tag #标签管理
-admin_course_tag_manage: admin_v2_course_tag_manage #标签管理
-admin_course_tag_add: admin_v2_course_tag_add #新增标签
-admin_course_tag_group_manage: admin_v2_course_tag_group_manage #标签组管理
-admin_course_tag_group_add: admin_v2_course_tag_group_add #添加标签组
-#反馈管理
-admin_review: admin_v2_review  #反馈管理
-admin_course_review_tab: admin_v2_course_review_tab #课程评价
-admin_classroom_review_tab: admin_v2_classroom_review_tab #班级评价
-
-#云资源
-admin_cloud_file_manage: admin_v2_cloud_resource #云资源
-admin_cloud_file: admin_v2_cloud_file #云视频
-admin_cloud_attachment: admin_v2_cloud_attachment #云附件
-admin_edu_cloud_attachment: admin_v2_cloud_attachment_setting #云附件设置
-
-# 优惠券管理
-admin_operation_coupon: admin_v2_marketing_coupon
-admin_operation_coupon_manage: admin_v2_marketing_coupon_manage
-admin_coupon_generate: admin_v2_coupon_generate
-admin_operation_coupon_query: admin_v2_marketing_coupon_query
-admin_coupon_setting: admin_v2_coupon_setting
-
-# 分销管理
-admin_distributor_top: admin_v2_distributor
-_distributor_page: admin_v2_distributor_page
-
-#邀请管理权限
-admin_operation_invite: admin_v2_operation_invite  #邀请管理
-admin_operation_invite_record: admin_v2_operation_invite_record #邀请记录
-admin_operation_invite_user: admin_v2_operation_invite_user #用户查询
-admin_operation_invite_coupon: admin_v2_operation_invite_coupon #奖励查询
-
-# 微营销
-admin_marketing_top: admin_v2_micromarketing
-_marketing_marketing_page: admin_v2_micromarketing_page
-
-#运营
-#微网校装修
-admin_h5_set: admin_v2_h5_set #微网校装修
-admin_wap_set: admin_v2_wap_set #微网校装修
-
-#小程序装修
-admin_wechat_app_manage: admin_v2_wechat_app_manage #小程序装修
-admin_wechat_app: admin_v2_wechat_app_manage #小程序装修
-
-# 全站站内通知
-admin_operation_notification: admin_v2_operation_notification
-admin_batch_notification: admin_v2_batch_notification
-admin_batch_notification_create: admin_v2_batch_notification_create
-
-#运营-内容运营-网站公告管理
-admin_announcement: admin_v2_operation_announcement #网站公告管理
-admin_announcement_manage: admin_v2_operation_announcement_manage #网站公告管理
-admin_announcement_create: admin_v2_announcement_create #创建网站公告管理
-
-# 资讯
-admin_operation_article: admin_v2_operation_article
-admin_operation_article_manage: admin_v2_operation_article_manage
-admin_operation_article_create: admin_v2_operation_article_create
-admin_operation_article_category: admin_v2_operation_article_category
-admin_operation_category_create: admin_v2_operation_category_create
-
-#敏感词
-admin_operation_keyword: admin_v2_operation.sensitive_words
-admin_keyword: admin_v2_keyword
-admin_keyword_create: admin_v2_keyword_create
-admin_keyword_banlogs: admin_v2_keyword_banlogs
-
-#App装修
-admin_setting_mobile: admin_v2_setting_mobile #App装修
-admin_setting_mobile_settings: admin_v2_mobile_settings #App设置
-admin_operation_mobile_banner_manage: admin_v2_mobile_banner_manage #轮播图设置
-admin_discovery_column_index: admin_v2_discovery_column_index #发现页栏目
-admin_discovery_column_create: admin_v2_discovery_column_create #添加栏目
-
-#web装修
-admin_block_manage: admin_v2_block_manage #web装修
-admin_block: admin_v2_block_theme #当前主题
-admin_setting_theme: admin_v2_setting_theme #已购主题
-
-#站点设置
-admin_operation: admin_v2_operating #运营
-admin_setting: { admin_v2_site_setting, admin_v2_school_information_setting } # { 运营-网校装修-站点配置, 系统-通用管理-网校信息 }
-admin_top_navigation: admin_v2_top_navigation #顶部导航
-admin_foot_navigation: admin_v2_foot_navigation #底部导航
-admin_setting_consult_setting: admin_v2_setting_consult_setting #客服
-admin_setting_es_bar: admin_v2_setting_es_bar #侧边栏
-admin_content: admin_v2_content #自定义页面
-admin_setting_share: admin_v2_setting_share #分享
-admin_friendlyLink_navigation: admin_v2_friendlyLink_navigation #友情链接
-
-#运营-内容运营-小组管理
-admin_operation_group: admin_v2_operation_group_manage #小组管理
-admin_operation_group_manage: admin_v2_operation_group_manage #小组管理
-admin_operation_group_create: admin_v2_operation_group_create #创建小组
-admin_operation_group_thread: admin_v2_operation_group_thread #小组话题管理
-
-#运营-内容运营-私信管理
-admin_message_manage: admin_v2_message_manage
-admin_message: admin_v2_message
-
-#用户-用户管理-实名认证
-admin_approval_manage: admin_v2_approval_manage #实名认证
-admin_approval_approvals: admin_v2_approval_approving #审核中
-admin_approval_cancel: admin_v2_approval_cancel #撤销
-
-#用户-用户管理-教师认证
-admin_teacher: admin_v2_teacher #教师管理
-admin_teacher_manage: admin_v2_teacher_manage #教师管理
-admin_teacher_promote: admin_v2_teacher_promote #推荐老师
-admin_teacher_promote_cancel: admin_v2_teacher_promote_cancel #取消推荐
-admin_teacher_promote_list: admin_v2_teacher_promote_list #教师推荐
-
-# 微信通知
-admin_operation_wechat_notification: admin_v2_operation_wechat_notification #nav
-admin_operation_wechat_notification_record: admin_v2_operation_wechat_notification_record # 发送记录
-admin_operation_wechat_notification_manage: admin_v2_operation_wechat_notification_manage # 设置
-
-# 用户-用户管理-用户管理
-admin_user: admin_v2_user
-admin_user_show: admin_v2_user_show
-admin_user_manage: admin_v2_user_manage
-admin_user_create: admin_v2_user_create
-admin_user_edit: admin_v2_user_edit
-admin_user_roles: admin_v2_user_roles
-admin_user_avatar: admin_v2_user_avatar
-admin_user_change_password: admin_v2_user_change_password
-admin_user_send_passwordreset_email: admin_v2_user_send_passwordreset_email
-admin_user_send_emailverify_email: admin_v2_user_send_emailverify_email
-admin_user_lock: admin_v2_user_lock
-admin_user_unlock: admin_v2_user_unlock
-admin_user_org_update: admin_v2_user_org_update
-
-# 用户-用户管理-服务号粉丝
-admin_operation_wechat_fans_list: admin_v2_fans
-
-# 用户-用户管理-在线用户
-admin_online: admin_v2_online
-
-# 用户-用户管理-用户数据统计
-admin_user_learn_statistics_manage: admin_v2_statistics
-admin_user_learn_statistics: admin_v2_statistics
-
-# 用户-用户管理-登录日志
-admin_login_record: admin_v2_login_record
-
-#交易-商品订单
-admin_finance: admin_v2_trade # 交易
-admin_orders: admin_v2_goods_order #商品订单
-admin_order_manage: admin_v2_goods_order_list #商品订单（默认tab）
-
-#交易-退款订单
-admin_order_refunds: admin_v2_order_refunds
-admin_order_refunds_manage: admin_v2_order_refunds_manage
-
-#交易-网校账单
-admin_bills: admin_v2_bills
-admin_bill_cash: admin_v2_bill_cash
-admin_bill_coin: admin_v2_bill_coin
-
-#交易-虚拟币管理
-admin_coin_user: admin_v2_user_coin
-admin_coin_user_records: admin_v2_coin_user_records
-
-# 数据-数据分析-数据统计
-admin_operation_analysis_register: admin_v2_statistics_data_statistics_menu
-admin_operation_analysis: admin_v2_data_statistics_basic_tab
-
-#营销应用
-admin_app_center_show: admin_v2_app_center_show #营销云
-admin_app_center: admin_v2_app_center #营销应用
-admin_app_installed: admin_v2_app_installed #已购项目
-admin_app_upgrades: admin_v2_app_upgrades #更新
-admin_app_logs: admin_v2_app_logs #更新日志
-
-#云概览
-admin_my_cloud: admin_v2_my_cloud #概览
-admin_my_cloud_overview: admin_v2_my_cloud_overview
-
-
-#云服务
-admin_cloud_video_setting: admin_v2_cloud_video  #云视频
-admin_cloud_video_overview: admin_v2_edu_cloud_video_overview  #云视频概览
-admin_cloud_setting_video: admin_v2_edu_cloud_video_setting  #云视频设置
-admin_cloud_edulive_setting: admin_v2_cloud_edulive  #云直播
-admin_cloud_edulive_overview: admin_v2_edu_cloud_edulive_overview  #云直播概览
-admin_setting_cloud_edulive: admin_v2_edu_cloud_edulive_setting  #云直播设置
-admin_edu_cloud_sms: admin_v2_cloud_sms  #云短信
-admin_edu_cloud_sms_overview: admin_v2_edu_cloud_sms_overview  #云短信概览
-admin_edu_cloud_setting_sms: admin_v2_edu_cloud_sms_setting  #云短信设置
-admin_edu_cloud_email: admin_v2_cloud_email  #云邮件
-admin_edu_cloud_email_overview: admin_v2_edu_cloud_email_overview  #云邮件概览
-admin_edu_cloud_email_setting: admin_v2_edu_cloud_email_setting  #云邮件设置
-admin_edu_cloud_search_setting: admin_v2_cloud_search  #云搜索
-admin_edu_cloud_search_overview: admin_v2_edu_cloud_search_overview  #云搜索概览
-admin_edu_cloud_setting_search: admin_v2_edu_cloud_search_setting  #云搜索设置
-admin_cloud_consult: admin_v2_cloud_consult  #云问答
-admin_cloud_consult_setting: admin_v2_edu_cloud_consult_setting  #云问答设置
-
-# 即时聊天设置
-admin_app_im: admin_v2_app_im #即时聊天设置
-admin_app_im_setting: admin_v2_app_im_setting #即时聊天设置
-
-
-
-#数据实验室
-admin_cloud_data_lab_manage: admin_v2_cloud_data_lab_manage  #数据实验室
-admin_cloud_data_lab: admin_v2_cloud_data_lab #数据实验室
-admin_cloud_data_lab_setting: admin_v2_cloud_data_lab_setting #设置
-
-# 人脸识别
-admin_cloud_face_identify_manage: admin_v2_cloud_face_identify
-admin_cloud_face_identify: admin_v2_cloud_face_identify_setting
-
-#功能实验室
-admin_cloud_feature_lab_manage: admin_v2_cloud_feature_lab
-admin_cloud_feature_lab: admin_v2_cloud_feature_lab_setting
-
-#授权信息
-admin_setting_cloud: admin_v2_setting_cloud #授权信息
-admin_setting_my_cloud: admin_v2_setting_my_cloud #授权信息
-
-# 系统
-admin_system: admin_v2_system
-
-# 系统-通用管理-网校信息
-admin_setting_message: admin_v2_school_information
-
-#系统-通用管理-用户设置
-admin_setting_user: admin_v2_setting_user #用户设置
-admin_user_auth: admin_v2_user_auth #注册
-admin_setting_login_bind: admin_v2_setting_login_bind #登陆
-admin_setting_user_center: admin_v2_setting_user_center #用户中心
-admin_setting_user_fields: admin_v2_setting_user_fields #用户信息设置
-admin_setting_avatar: admin_v2_setting_avatar #默认头像
-
-#系统-通用设置-微信授权信息
-admin_setting_wechat: admin_v2_setting_wechat #微信授权信息
-admin_setting_wechat_auth: admin_v2_setting_wechat_auth  #微信授权信息
-
-#系统-通用管理-课程设置
-admin_setting_course_setting: admin_v2_setting_course_setting #课程设置
-admin_setting_course: admin_v2_setting_course #课程
-admin_setting_live_course: admin_v2_setting_live_course #直播
-admin_setting_questions_setting: admin_v2_setting_questions_setting #题库
-admin_setting_course_avatar: admin_v2_setting_course_avatar #默认图片
-admin_classroom_setting: admin_v2_classroom_setting #班级
-admin_open_course_setting: admin_v2_open_course_setting #公开课
-
-# 系统-通用管理-运营设置
-admin_setting_operation: admin_v2_setting_operation
-admin_setting_mailer: admin_v2_setting_mailer #邮箱服务器设置
-admin_article_setting: admin_v2_article_set # 资讯
-admin_group_set: admin_v2_group_set # 小组
-admin_invite_set: admin_v2_invite_set # 邀请注册设置
-admin_message_setting: admin_v2_message_open_set # 私信开启
-admin_setting_user_message: admin_v2_message_send_set # 私信发送
-
-# 系统-交易设置-资产设置
-admin_setting_finance: admin_v2_asset_setting
-admin_payment: admin_v2_payment
-admin_coin_settings: admin_v2_coin_settings
-admin_setting_refund: admin_v2_setting_refund
-
-# 系统-系统管理-系统优化
-admin_optimize: admin_v2_optimize
-admin_optimize_settings: admin_v2_optimize_settings
-
-# 系统-系统管理-系统日志
-admin_logs: admin_v2_logs
-admin_logs_query: admin_v2_logs_query
-admin_logs_prod: admin_v2_logs_prod
-
-# 系统-系统管理-安全设置
-admin_setting_ip_blacklist_manage: admin_v2_ip_blacklist_setting #IP黑名单
-admin_setting_security: admin_v2_security_setting #白名单域名
-admin_setting_post_num_rules: admin_v2_post_num_rules_setting #发帖限制
-
-# 系统-系统管理-系统自检
-admin_report_status: admin_v2_report_status
-admin_report_status_list: admin_v2_report_status_list
-
-# 系统-通用管理-组织机构管理
-admin_org_manage: admin_v2_org_manage
-admin_org: admin_v2_org
+admin:
+    - admin_v2
+admin_course:
+    - admin_v2_teach
+admin_course_show:
+    - admin_v2_course_show
+admin_course_manage:
+    - admin_v2_course_manage
+admin_course_content_manage:
+    - admin_v2_course_content_manage
+admin_course_add:
+    - admin_v2_course_add
+admin_course_set_recommend:
+    - admin_v2_course_set_recommend
+admin_course_set_cancel_recommend:
+    - admin_v2_course_set_cancel_recommend
+admin_course_guest_member_preview:
+    - admin_v2_course_guest_member_preview
+admin_course_set_close:
+    - admin_v2_course_set_close
+admin_course_sms_prepare:
+    - admin_v2_course_sms_prepare
+admin_course_set_clone:
+    - admin_v2_course_set_clone
+admin_course_set_publish:
+    - admin_v2_course_set_publish
+admin_course_set_delete:
+    - admin_v2_course_set_delete
+admin_course_set_recommend_list:
+    - admin_v2_course_set_recommend_list
+admin_course_set_data:
+    - admin_v2_course_set_data
+admin_classroom:
+    - admin_v2_classroom
+admin_classroom_manage:
+    - admin_v2_classroom_manage
+admin_classroom_content_manage:
+    - admin_v2_classroom_content_manage
+admin_classroom_create:
+    - admin_v2_classroom_create
+admin_classroom_cancel_recommend:
+    - admin_v2_classroom_cancel_recommend
+admin_classroom_set_recommend:
+    - admin_v2_classroom_set_recommend
+admin_classroom_close:
+    - admin_v2_classroom_close
+admin_classroom_open:
+    - admin_v2_classroom_open
+admin_classroom_delete:
+    - admin_v2_classroom_delete
+admin_sms_prepare:
+    - admin_v2_sms_prepare
+admin_classroom_recommend:
+    - admin_v2_classroom_recommend
+admin_live_course:
+    - admin_v2_live_course
+admin_live_course_manage:
+    - admin_v2_live_course_coming
+admin_live_course_add:
+    - admin_v2_live_course_add
+admin_open_course_manage:
+    - admin_v2_open_course_manage
+admin_open_course:
+    - admin_v2_open_course
+admin_open_course_add:
+    - admin_v2_open_course_add
+admin_open_course_recommend_list:
+    - admin_v2_open_course_recommend_list
+admin_opencourse_analysis:
+    - admin_v2_open_course_analysis
+admin_course_category:
+    - admin_v2_course_category
+admin_course_category_manage:
+    - admin_v2_course_category_manage
+admin_category_create:
+    - admin_v2_category_create
+admin_classroom_category_manage:
+    - admin_v2_classroom_category_manage
+admin_classroom_category_create:
+    - admin_v2_classroom_category_create
+admin_course_tag:
+    - admin_v2_tag
+admin_course_tag_manage:
+    - admin_v2_course_tag_manage
+admin_course_tag_add:
+    - admin_v2_course_tag_add
+admin_course_tag_group_manage:
+    - admin_v2_course_tag_group_manage
+admin_course_tag_group_add:
+    - admin_v2_course_tag_group_add
+admin_course_note:
+    - admin_v2_course_note
+admin_course_note_manage:
+    - admin_v2_course_note_manage
+admin_course_question:
+    - admin_v2_course_question
+admin_course_question_manage:
+    - admin_v2_course_question_manage
+admin_course_thread:
+    - admin_v2_course_thread
+admin_course_thread_manage:
+    - admin_v2_course_thread_manage
+admin_classroom_thread_manage:
+    - admin_v2_classroom_thread_manage
+admin_course_review:
+    - admin_v2_review
+admin_course_review_tab:
+    - admin_v2_course_review_tab
+admin_classroom_review_tab:
+    - admin_v2_classroom_review_tab
+admin_cloud_file_manage:
+    - admin_v2_cloud_file
+admin_cloud_attachment_manage:
+    - admin_v2_cloud_attachment
+admin_setting_cloud_attachment:
+    - admin_v2_cloud_attachment_setting
+admin_cloud_file:
+    - admin_v2_cloud_file
+admin_cloud_attachment:
+    - admin_v2_cloud_attachment
+admin_edu_cloud_attachment:
+    - admin_v2_cloud_attachment_setting
+admin_operation_invite:
+    - admin_v2_operation_invite
+admin_operation_invite_record:
+    - admin_v2_operation_invite_record
+admin_operation_invite_user:
+    - admin_v2_operation_invite_user
+admin_operation_invite_coupon:
+    - admin_v2_operation_invite_coupon
+admin_operation_coupon:
+    - admin_v2_marketing_coupon
+admin_operation_coupon_manage:
+    - admin_v2_marketing_coupon_manage
+admin_coupon_generate:
+    - admin_v2_coupon_generate
+admin_operation_coupon_query:
+    - admin_v2_marketing_coupon_query
+admin_coupon_setting:
+    - admin_v2_coupon_setting
+admin_distributor_top:
+    - admin_v2_distributor
+_admin_distributor_menu:
+    - admin_v2_distributor
+_distributor_page:
+    - admin_v2_distributor_page
+admin_marketing_top:
+    - admin_v2_micromarketing
+_admin_marketing_marketing_menu:
+    - admin_v2_micromarketing
+_marketing_marketing_page:
+    - admin_v2_micromarketing_page
+admin_operation:
+    - admin_v2_operating
+admin_mobile:
+    - admin_v2_h5_set
+admin_h5_set:
+    - admin_v2_h5_set
+admin_wap_set:
+    - admin_v2_wap_set
+admin_wechat_app_manage:
+    - admin_v2_wechat_app_manage
+admin_wechat_app:
+    - admin_v2_wechat_app_manage
+admin_setting_mobile:
+    - admin_v2_setting_mobile
+admin_operation_mobile:
+    - admin_v2_setting_mobile
+admin_setting_mobile_settings:
+    - admin_v2_mobile_settings
+admin_operation_mobile_banner_manage:
+    - admin_v2_mobile_banner_manage
+admin_discovery_column_index:
+    - admin_v2_discovery_column_index
+admin_discovery_column_create:
+    - admin_v2_discovery_column_create
+admin_block_manage:
+    - admin_v2_block_manage
+admin_block:
+    - admin_v2_block_theme
+admin_setting_theme:
+    - admin_v2_setting_theme
+admin_setting:
+    - admin_v2_site_setting
+admin_top_navigation:
+    - admin_v2_top_navigation
+admin_foot_navigation:
+    - admin_v2_foot_navigation
+admin_setting_consult_setting:
+    - admin_v2_setting_consult_setting
+admin_setting_es_bar:
+    - admin_v2_setting_es_bar
+admin_operation_content:
+    - admin_v2_content
+admin_content:
+    - admin_v2_content
+admin_setting_share:
+    - admin_v2_setting_share
+admin_friendlyLink_navigation:
+    - admin_v2_friendlyLink_navigation
+admin_operation_notification:
+    - admin_v2_operation_notification
+admin_batch_notification:
+    - admin_v2_batch_notification
+admin_batch_notification_create:
+    - admin_v2_batch_notification_create
+admin_announcement:
+    - admin_v2_operation_announcement
+admin_announcement_manage:
+    - admin_v2_operation_announcement_manage
+admin_announcement_create:
+    - admin_v2_announcement_create
+admin_operation_article:
+    - admin_v2_operation_article
+admin_operation_article_manage:
+    - admin_v2_operation_article_manage
+admin_operation_article_create:
+    - admin_v2_operation_article_create
+admin_operation_article_category:
+    - admin_v2_operation_article_category
+admin_operation_category_create:
+    - admin_v2_operation_category_create
+admin_operation_keyword:
+    - admin_v2_operation_sensitive_words
+admin_keyword:
+    - admin_v2_keyword
+admin_keyword_create:
+    - admin_v2_keyword_create
+admin_keyword_banlogs:
+    - admin_v2_keyword_banlogs
+admin_operation_group:
+    - admin_v2_operation_group_manage
+admin_operation_group_manage:
+    - admin_v2_operation_group_manage
+admin_operation_group_create:
+    - admin_v2_operation_group_create
+admin_operation_group_thread:
+    - admin_v2_operation_group_thread
+admin_message_manage:
+    - admin_v2_message_manage
+admin_message:
+    - admin_v2_message
+admin_approval_manage:
+    - admin_v2_approval_manage
+admin_approval_approvals:
+    - admin_v2_approval_approving
+admin_approval_cancel:
+    - admin_v2_approval_cancel
+admin_teacher:
+    - admin_v2_teacher
+admin_teacher_manage:
+    - admin_v2_teacher_manage
+admin_teacher_promote:
+    - admin_v2_teacher_promote
+admin_teacher_promote_cancel:
+    - admin_v2_teacher_promote_cancel
+admin_teacher_promote_list:
+    - admin_v2_teacher_promote_list
+admin_operation_wechat_notification:
+    - admin_v2_operation_wechat_notification
+admin_operation_wechat_notification_record:
+    - admin_v2_operation_wechat_notification_record
+admin_operation_wechat_notification_manage:
+    - admin_v2_operation_wechat_notification_manage
+admin_user:
+    - admin_v2_user
+admin_user_show:
+    - admin_v2_user_show
+admin_user_manage:
+    - admin_v2_user_manage
+admin_user_create:
+    - admin_v2_user_create
+admin_user_edit:
+    - admin_v2_user_edit
+admin_user_roles:
+    - admin_v2_user_roles
+admin_user_avatar:
+    - admin_v2_user_avatar
+admin_user_change_password:
+    - admin_v2_user_change_password
+admin_user_send_passwordreset_email:
+    - admin_v2_user_send_passwordreset_email
+admin_user_send_emailverify_email:
+    - admin_v2_user_send_emailverify_email
+admin_user_lock:
+    - admin_v2_user_lock
+admin_user_unlock:
+    - admin_v2_user_unlock
+admin_user_org_update:
+    - admin_v2_user_org_update
+admin_operation_wechat_fans_list:
+    - admin_v2_fans
+admin_online:
+    - admin_v2_online
+admin_user_learn_statistics_manage:
+    - admin_v2_learn_statistics
+admin_user_learn_statistics:
+    - admin_v2_learn_statistics
+admin_login_record:
+    - admin_v2_login_record
+admin_finance:
+    - admin_v2_trade
+admin_orders:
+    - admin_v2_goods_order
+admin_order_manage:
+    - admin_v2_goods_order_list
+admin_order_refunds:
+    - admin_v2_order_refunds
+admin_order_refunds_manage:
+    - admin_v2_order_refunds_manage
+admin_bills:
+    - admin_v2_bills
+admin_bill_cash:
+    - admin_v2_bill_cash
+admin_bill_coin:
+    - admin_v2_bill_coin
+admin_coin_user:
+    - admin_v2_user_coin
+admin_coin_user_records:
+    - admin_v2_coin_user_records
+admin_operation_analysis_register:
+    - admin_v2_statistics_data_statistics_menu
+    - admin_v2_data_statistics_overview
+admin_operation_analysis:
+    - admin_v2_data_statistics_basic_tab
+admin_app_center_show:
+    - admin_v2_app_center_show
+admin_app_center:
+    - admin_v2_app_center
+admin_app_installed:
+    - admin_v2_app_installed
+admin_app_upgrades:
+    - admin_v2_app_upgrades
+admin_app_logs:
+    - admin_v2_app_logs
+admin_my_cloud:
+    - admin_v2_my_cloud
+admin_my_cloud_overview:
+    - admin_v2_my_cloud_overview
+admin_cloud_video_setting:
+    - admin_v2_cloud_video
+admin_cloud_video_overview:
+    - admin_v2_edu_cloud_video_overview
+admin_cloud_setting_video:
+    - admin_v2_edu_cloud_video_setting
+admin_cloud_edulive_setting:
+    - admin_v2_cloud_edulive
+admin_cloud_edulive_overview:
+    - admin_v2_edu_cloud_edulive_overview
+admin_setting_cloud_edulive:
+    - admin_v2_edu_cloud_edulive_setting
+admin_edu_cloud_sms:
+    - admin_v2_cloud_sms
+admin_edu_cloud_sms_overview:
+    - admin_v2_edu_cloud_sms_overview
+admin_edu_cloud_setting_sms:
+    - admin_v2_edu_cloud_sms_setting
+admin_edu_cloud_email:
+    - admin_v2_cloud_email
+admin_edu_cloud_email_overview:
+    - admin_v2_edu_cloud_email_overview
+admin_edu_cloud_email_setting:
+    - admin_v2_edu_cloud_email_setting
+admin_edu_cloud_search_setting:
+    - admin_v2_cloud_search
+admin_edu_cloud_search_overview:
+    - admin_v2_edu_cloud_search_overview
+admin_edu_cloud_setting_search:
+    - admin_v2_edu_cloud_search_setting
+admin_cloud_consult:
+    - admin_v2_cloud_consult
+admin_cloud_consult_setting:
+    - admin_v2_edu_cloud_consult_setting
+admin_app_im:
+    - admin_v2_app_im
+admin_app_im_setting:
+    - admin_v2_app_im_setting
+admin_cloud_data_lab_manage:
+    - admin_v2_cloud_data_lab_manage
+admin_cloud_data_lab:
+    - admin_v2_cloud_data_lab
+admin_cloud_data_lab_setting:
+    - admin_v2_cloud_data_lab_setting
+admin_cloud_face_identify_manage:
+    - admin_v2_cloud_face_identify
+admin_cloud_face_identify:
+    - admin_v2_cloud_face_identify_setting
+admin_cloud_feature_lab_manage:
+    - admin_v2_cloud_feature_lab
+admin_cloud_feature_lab:
+    - admin_v2_cloud_feature_lab_setting
+admin_setting_cloud:
+    - admin_v2_setting_cloud
+admin_setting_my_cloud:
+    - admin_v2_setting_my_cloud
+admin_system:
+    - admin_v2_system
+admin_setting_message:
+    - admin_v2_school_information
+    - admin_v2_school_information_setting
+admin_setting_user:
+    - admin_v2_setting_user
+admin_user_auth:
+    - admin_v2_user_auth
+admin_setting_login_bind:
+    - admin_v2_setting_login_bind
+admin_setting_user_center:
+    - admin_v2_setting_user_center
+admin_setting_user_fields:
+    - admin_v2_setting_user_fields
+admin_setting_avatar:
+    - admin_v2_setting_avatar
+admin_setting_wechat:
+    - admin_v2_setting_wechat
+admin_setting_wechat_auth:
+    - admin_v2_setting_wechat_auth
+admin_setting_course_setting:
+    - admin_v2_setting_course_setting
+admin_setting_course:
+    - admin_v2_setting_course
+admin_setting_live_course:
+    - admin_v2_setting_live_course
+admin_setting_questions_setting:
+    - admin_v2_setting_questions_setting
+admin_setting_course_avatar:
+    - admin_v2_setting_course_avatar
+admin_classroom_setting:
+    - admin_v2_classroom_setting
+admin_open_course_setting:
+    - admin_v2_open_course_setting
+admin_setting_operation:
+    - admin_v2_setting_operation
+admin_setting_mailer:
+    - admin_v2_setting_mailer
+admin_article_setting:
+    - admin_v2_article_set
+admin_group_set:
+    - admin_v2_group_set
+admin_invite_set:
+    - admin_v2_invite_set
+admin_message_setting:
+    - admin_v2_message_open_set
+admin_setting_user_message:
+    - admin_v2_message_send_set
+admin_setting_finance:
+    - admin_v2_asset_setting
+admin_payment:
+    - admin_v2_payment
+admin_coin_settings:
+    - admin_v2_coin_settings
+admin_setting_refund:
+    - admin_v2_setting_refund
+admin_optimize:
+    - admin_v2_optimize
+admin_optimize_settings:
+    - admin_v2_optimize_settings
+admin_roles:
+    - admin_v2_roles
+admin_role_manage:
+    - admin_v2_role_manage
+admin_role_create:
+    - admin_v2_role_create
+admin_role_edit:
+    - admin_v2_role_edit
+admin_role_delete:
+    - admin_v2_role_delete
+admin_logs:
+    - admin_v2_logs
+admin_logs_query:
+    - admin_v2_logs_query
+admin_logs_prod:
+    - admin_v2_logs_prod
+admin_setting_ip_blacklist_manage:
+    - admin_v2_ip_blacklist_setting
+admin_setting_ip_blacklist:
+    - admin_v2_ip_blacklist_setting
+admin_setting_security:
+    - admin_v2_security_setting
+admin_setting_post_num_rules:
+    - admin_v2_post_num_rules_setting
+admin_setting_post_num_rules_settings:
+    - admin_v2_post_num_rules_setting
+admin_report_status:
+    - admin_v2_report_status
+admin_report_status_list:
+    - admin_v2_report_status_list
+admin_org_manage:
+    - admin_v2_org_manage
+admin_org:
+    - admin_v2_org
+admin_jobs_manage:
+    - admin_v2_jobs_manage
+admin_jobs:
+    - admin_v2_jobs
+admin_job_logs:
+    - admin_v2_job_logs
+admin_crontab:
+    - admin_v2_crontab
+admin_setting_mobile_iap_product:
+    - admin_v2_setting_mobile_iap_product
+admin_setting_mobile_iap_product_list:
+    - admin_v2_setting_mobile_iap_product_list
