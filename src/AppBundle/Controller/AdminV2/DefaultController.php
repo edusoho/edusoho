@@ -4,6 +4,7 @@ namespace AppBundle\Controller\AdminV2;
 
 use AppBundle\Common\ChangelogToolkit;
 use AppBundle\Common\CurlToolkit;
+use Biz\CloudPlatform\Service\EduCloudService;
 use Biz\Common\CommonException;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\CourseService;
@@ -14,6 +15,7 @@ use Biz\System\Service\SettingService;
 use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
 use Codeages\Biz\Order\Service\OrderService;
+use QiQiuYun\SDK\Service\PlatformNewsService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -147,6 +149,43 @@ class DefaultController extends BaseController
         return $this->render('admin-v2/default/cloud-notice.html.twig', array(
             'trialTime' => (isset($result)) ? $result : null,
         ));
+    }
+
+    public function applicationIntroAction(Request $request)
+    {
+        $template = 'admin-v2/default/application-intro.html.twig';
+        $result = $this->getPlatformSdkService()->getApplications();
+
+        $returnUrl = empty($result['returnUrl']) ? '' : $result['returnUrl'];
+        $hasPermission = $this->getCurrentUser()->hasPermission('admin_v2_app_center');
+
+        if ($hasPermission) {
+            $returnUrl = $this->getEduCloudService()->isVisibleCloud() ? $this->generateUrl('admin_v2_app_center') : $this->generateUrl('admin_v2_my_cloud_overview');
+        }
+
+        return $this->render($template, array(
+            'applicationData' => empty($result['details']) ? array() : $result['details'],
+            'returnUrl' => $returnUrl,
+            'hasPermission' => $hasPermission,
+        ));
+    }
+
+    /**
+     * @return PlatformNewsService
+     */
+    private function getPlatformSdkService()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['qiQiuYunSdk.platformNews'];
+    }
+
+    /**
+     * @return EduCloudService
+     */
+    private function getEduCloudService()
+    {
+        return $this->createService('CloudPlatform:EduCloudService');
     }
 
     private function domainInspect($request)
