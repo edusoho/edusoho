@@ -9155,3 +9155,5 @@ admin_v2.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B�
 admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "operating" - "web Setting" - "Purchased Theme" - "setting". Course order settings are only supported by ink-only theme and simplicity theme.'
 admin_v2.role_permission_manage.error: Error
 admin_v2.default_page.changelog_title: EduSoho Changelog
+admin_v2.business_advice.title: Business advice
+admin_v2.buiness_advice.goto_qiqiuyu: Edusoho Business School

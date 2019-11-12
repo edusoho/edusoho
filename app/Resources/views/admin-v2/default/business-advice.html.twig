@@ -1,0 +1,21 @@
+<div class="admin-v2-section cd-pb16 cd-mb0">
+  <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.business_advice.title'|trans }}<a {% if is_without_network() %}class="admin-v2-section__more js-no-network" href="javascript:;" {% else %}class="admin-v2-section__more" href="http://www.qiqiuyu.com" target="_blank"{% endif %}>{{ 'admin_v2.buiness_advice.goto_qiqiuyu'|trans }}</a></div>
+  <div class="admin-v2-section__body admin-advice">
+    <div class="row">
+      {% for i in 0..3 %}
+        <div class="col-md-3">
+          {% if advice.details[i] is defined %}
+            {% set item = advice.details[i] %}
+            <a class="admin-advice__item" href="{{ item.url|default() }}" target="_blank">
+              <img src={{ item.image|default() }}/>
+            </a>
+          {% else %}
+            <div class=" admin-advice__item">
+              <div class="admin-advice__placeholder"><i class="es-icon es-icon-placeholder"></i></div>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
