@@ -45,7 +45,6 @@ class PermissionExtension extends \Twig_Extension
         $permission = $this->getParentPermission($code);
         $permission = $this->getParentPermission($permission['code']);
         $permission = $this->getParentPermission($permission['code']);
-
         $group = $this->createPermissionBuilder()->groupedV2Permissions($permission['code']);
 
         $permissionMenus = $this->buildChildPermissionMenus($group);
@@ -66,6 +65,7 @@ class PermissionExtension extends \Twig_Extension
             $childrenInfo = array();
             $childrenInfo['name'] = ServiceKernel::instance()->trans($children['name'], array(), 'menu');
             $childrenInfo['link'] = '';
+            $childrenInfo['code'] = $children['code'];
             if (isset($children['is_group'])) {
                 $childrenInfo['grade'] = 0;
             }
@@ -74,6 +74,7 @@ class PermissionExtension extends \Twig_Extension
                 $nodes['name'] = ServiceKernel::instance()->trans($child['name'], array(), 'menu');
                 $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getPermissionByCode($k)));
                 $nodes['grade'] = 1;
+                $nodes['code'] = $child['code'];
                 $nodes['nodes'] = array();
                 $childrenInfo['nodes'][] = $nodes;
             }

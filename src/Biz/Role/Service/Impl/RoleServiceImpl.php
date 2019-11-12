@@ -6,6 +6,7 @@ use AppBundle\Common\PluginVersionToolkit;
 use Biz\BaseService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Common\CommonException;
+use Biz\Role\Dao\RoleDao;
 use Biz\Role\RoleException;
 use Biz\Role\Service\RoleService;
 use Biz\Role\Util\PermissionBuilder;
@@ -508,6 +509,9 @@ class RoleServiceImpl extends BaseService implements RoleService
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return RoleDao
+     */
     protected function getRoleDao()
     {
         return $this->createDao('Role:RoleDao');
