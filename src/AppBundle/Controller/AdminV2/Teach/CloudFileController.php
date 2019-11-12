@@ -20,7 +20,7 @@ class CloudFileController extends BaseController
                 return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', array('menu' => 'admin_v2_cloud_file'));
             }
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-file/api-error.html.twig', array());
+            return $this->render('admin-v2/teach/cloud-file/api-error.html.twig', array());
         }
 
         $storageSetting = $this->getSettingService()->get('storage', array());
