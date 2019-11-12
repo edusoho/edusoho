@@ -124,7 +124,7 @@ class EduSohoUpgrade extends AbstractUpdater
             ),
         );
 
-        $roles = $this->getRoleService()->searchRoles(array('excludeCodes' => array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')), array(), 0, PHP_INT_MAX);
+        $roles = $this->getRoleService()->searchRoles(array('excludeCodes' => array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN','ROLE_SCHOOL_ADMIN')), array(), 0, PHP_INT_MAX);
 
         foreach ($roles as &$role) {
             foreach ($disableRoles as $key => $disableRole) {
