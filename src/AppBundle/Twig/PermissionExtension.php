@@ -70,6 +70,10 @@ class PermissionExtension extends \Twig_Extension
                 $childrenInfo['grade'] = 0;
             }
             foreach ($children['children'] as $k => $child) {
+                if (isset($child['visible']) && !$this->evalExpression($this->container->get('twig'), array(), $child['visible'])) {
+                    unset($children['children'][$k]);
+                    continue;
+                }
                 $nodes = array();
                 $nodes['name'] = ServiceKernel::instance()->trans($child['name'], array(), 'menu');
                 $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getPermissionByCode($k)));
