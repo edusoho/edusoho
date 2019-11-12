@@ -60,6 +60,7 @@ admin.user.message.basic_tab: 私信管理
 #课程模块
 admin.course.basic_menu: 课程管理
 admin.course.classroom_menu: 班级管理
+admin.course.question_bank: 题库管理
 admin.course.open_course_menu: 公开课管理
 admin.course.live_menu: 直播管理
 admin.course.thread_menu: 话题管理
@@ -93,6 +94,12 @@ admin.course.classroom.basic_tab.recommend_btn: 推荐班级
 admin.course.classroom.basic_tab.close_btn: 关闭班级
 admin.course.classroom.basic_tab.publish_submit_btn: 发布班级
 admin.course.classroom.basic_tab.delete_submit_btn: 删除班级
+
+##题库管理模块
+admin.course.question_bank.basic_tab: 题库管理
+admin.course.question_bank.basic_tab.create_btn: 创建题库
+admin.course.question_bank_category.basic_tab: 题库分类管理
+admin.course.question_bank_category.basic_tab.create_btn: 添加分类
 
 ##公开课管理模块
 admin.course.open_course.basic_tab: 公开课管理
