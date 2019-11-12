@@ -1207,6 +1207,10 @@
   content: "\e70c";
 }
 
+.es-icon-entry-live:before {
+  content: "\e6f1";
+}
+
 .es-icon-entry-reserve:before {
   content: "\e70d";
 }
@@ -1285,6 +1289,10 @@
 
 .es-icon-entry-miniweb:before {
   content: "\e720";
+}
+
+.es-icon-entry-miniprogram:before {
+  content: "\e721";
 }
 
 .es-icon-miniprogram:before {
@@ -1390,4 +1398,3 @@
 .es-icon-placeholder:before {
   content: "\e739";
 }
-

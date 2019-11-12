@@ -47,6 +47,7 @@
       
      {% include 'material-lib/widget/material-table.html.twig' with { path: path, subtitlePath: goto, type: 'courseFile' } %}
 
+      <div class="color-gray mtl">{{ 'course.files_manage.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})|raw }}</div>
       <nav class="text-center">
         {{ web_macro.paginator(paginator) }}
       </nav>

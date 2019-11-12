@@ -1574,8 +1574,8 @@ course.testpaper_manage.analysis_card.total_score: 'Score:'
 course.testpaper_manage.analysis_card.avg_score: 'Avg Score:'
 course.testpaper_manage.analysis_card.avg_score_tip: Figure up first submited score
 
-course.course_files: 'Files'
-course.course_files.content_title: 'Files'
+course.course_files: 'Files manage'
+course.course_files.content_title: 'Files manage'
 course.course_files.create_btn: 'Add'
 course.course_files.name: Name
 course.course_files.type: Type
@@ -1598,6 +1598,7 @@ course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
 course.course_files.re_try_convert_video_to_audio: 'Re-Conversion To Audio'
+course.files_manage.tips: "Tip：Course file could not be seen by students until it has been <strong class=\"color-warning\">Added to %taskName%</strong>.\n"
 
 course.plan_overview: 'Data Overview'
 
@@ -5577,6 +5578,7 @@ admin.edu_cloud.edu_sms.manual_send: 'Manual group sent'
 admin.edu_cloud.edu_sms.auto_mass_send: 'Auto group sent'
 admin.edu_cloud.edu_sms.all_user: All_user
 admin.edu_cloud.edu_sms.course_user: Course_user
+admin.edu_cloud.edu_sms.course_classroom_student: Course_and_classroom_student
 admin.edu_cloud.edu_sms.study_task_tips: 'Your course: 《Course name》 - Study task《Study task name》 has been published! link address'
 admin.edu_cloud.edu_sms.study_task_notify_live: 'Task release notification (live)'
 admin.edu_cloud.edu_sms.study_task_notify_normal_course: 'Task release notification (General course)'
@@ -9103,6 +9105,16 @@ admin.operation.coupon_menu.generate_btn: Generate Coupon
 # 新版后台开始
 
 # 新后台首页
+admin_v2.homepage.more_btn: More
+admin_v2.homepage.loading_data_tips: 'Loding, please wait..'
+
+admin_v2.homepage.data_overview: Data Overview
+admin_v2.homepage.today_login_user: Number of users logged in today
+admin_v2.homepage.today_register_user: Number of users registered today
+admin_v2.homepage.today_new_paid_order: Orders paid today
+admin_v2.homepage.today_new_order: Number of orders added today
+
+# 新后台首页通知
 admin_v2.domain_error_hint: Current domain name does not match with the authorized domain name.to avoid affecting the normal use of cloud sms,please come【System】-【General Manage】-【Online School Information】-【Site Domain】
 admin_v2.homepage.setting_domain_btn: Set Up Now
 admin_v2.homepage.renewal_btn: Renewal Now
@@ -9110,6 +9122,12 @@ admin_v2.homepage.cloud_notice.unknown_time: Unknow Time
 admin_v2.homepage.cloud_notice.unknown_days: Unknow
 
 admin_v2.homepage.cloud_notice: "Welcome, your trail will be expired on<strong> %endTime% </strong>,<strong> %remainDays% </strong> days left. </br> Contact our business managers to buy licence or extend your trail. Tel: 4008041114 or "
+
+# 常用入口
+admin_v2.edit_quick_entrance.btn: Edit Quick Entrance
+admin_v2.quick_entrance_setting: Set Quick Entrance
+admin_v2.quick_entrance_setting.tips: (Set up to 7 quick entries）
+
 ##分类标签
 admin_v2.course.tag: Tag
 admin_v2.course.tag.group: Tag Groups
@@ -9124,6 +9142,19 @@ admin_v2.edu_cloud_not_access: Edu cloud not accessable
 admin_v2.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">App Setting</a>\n"
 admin_v2.live_course.create_btn: Create
 admin_v2.system.security_setting: Whitelist Domain
+admin_v2.upgrade_v2_setting_permission.error: Please contact super administrator or administrator operation
+admin_v2.upgrade_v2_setting.alert: New version background has been updated, open the latest experience, the new background needs to manually upgrade plug-ins, please do not forget oh!
+admin_v2.upgrade_v2_setting.setting_btn: Switch New Version
+admin_v2.switch_old_version.setting_btn: Switch Old Version
+admin_v2.switch_version.btn_loading: Switching....
+admin_v2.default.switch_old_version_btn: Back to old version
+exception.common_upgrade_v2_error: Has been upgraded to the new version
+exception.switch_old_version.permission_error: Please contact super administrator or administrator operation
+exception.switch_old_version.error: Has been upgraded to the old version
 admin_v2.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> web setting</a> and edit.\n"
 admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "operating" - "web Setting" - "Purchased Theme" - "setting". Course order settings are only supported by ink-only theme and simplicity theme.'
 admin_v2.homepage.overview: Overview
+admin_v2.developer_setting.platform_news_api_server: API to get information from platform
+admin_v2.developer_setting.platform_news_api_server.info: 'Default value is //'
+admin_v2.role_permission_manage.error: Error
+admin_v2.default_page.changelog_title: EduSoho Changelog

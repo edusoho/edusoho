@@ -23,6 +23,8 @@ define(function (require, exports, module) {
         loadAjaxData();
         //云广告
         showCloudAd();
+        //升级新后台
+        upgradeAdminV2();
     };
 
     var loadAjaxData = function () {
@@ -405,5 +407,27 @@ define(function (require, exports, module) {
 
         $cloudAd.find('a').attr('href',res.urlOfImage).append($img).css({'margin-top': marginTop});
         $cloudAd.modal('show');
+    }
+
+    var upgradeAdminV2 = function () {
+
+        var $upgradeBtn = $('.js-upgrade-admin-v2');
+        $upgradeBtn.on('click',function () {
+            if (!confirm(Translator.trans('admin.switch_new_version.confirm_message'))) {
+                return ;
+            }
+            $upgradeBtn.button('loading');
+            $.post($upgradeBtn.data('url'),function(res){
+                if(res.status == 'error'){
+                    Notify.danger(Translator.trans(res.message));
+                }else if(res.status == 'success' && res.url){
+                    window.location.href = res.url;
+                }
+            });
+        });
+
+        $('.js-no-permission-btn').on('click',function () {
+            Notify.danger(Translator.trans('admin.switch_old_version.permission_error'));
+        })
     }
 });

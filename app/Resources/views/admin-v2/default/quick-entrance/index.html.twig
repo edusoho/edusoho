@@ -1,0 +1,16 @@
+{% for entrance in entrances %}
+  <div class="col-md-3">
+    <a class="{{ 'text-center admin-function ' ~ entrance.class }}" href="{{ entrance.link }}">
+      <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entrance.icon }}"></i></div>
+      <div class="admin-function__name">{{ entrance.text }}</div>
+    </a>
+  </div>
+{% endfor %}
+<div class="col-md-3">
+  <div class="admin-function-choose">
+    <a class="admin-function-btn" data-url="{{ path('admin_v2_quick_entrance') }}" data-toggle="modal"
+       data-target="#modal">
+      <i class="es-icon es-icon-add"></i><span>{{ 'admin_v2.edit_quick_entrance.btn'|trans }}</span>
+    </a>
+  </div>
+</div>

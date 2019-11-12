@@ -8,6 +8,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Role\Util\PermissionBuilder;
 use AppBundle\Common\ReflectionUtils;
+use Biz\System\Service\SettingService;
 
 class RoleServiceTest extends BaseTestCase
 {
@@ -171,6 +172,62 @@ class RoleServiceTest extends BaseTestCase
 
         $result = $this->getRoleService()->isRoleCodeAvalieable('ROLE_USER');
         $this->assertFalse($result);
+    }
+
+    public function testRolesTreeTrans()
+    {
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree();
+        $res = $tree->toArray();
+        $children = $this->getRoleService()->rolesTreeTrans($res['children']);
+        $this->assertTrue(in_array('admin', $children[0]) || in_array('admin_v2', $children[0]));
+    }
+
+    public function testSplitRolesTreeNode()
+    {
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree();
+        $res = $tree->toArray();
+        $nodes = $this->getRoleService()->splitRolesTreeNode($res['children']);
+        $this->assertTrue(!empty($nodes['admin_v2']));
+    }
+
+    public function testGetParentRoleCodeArray()
+    {
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree();
+        $res = $tree->toArray();
+        $nodes = $this->getRoleService()->splitRolesTreeNode($res['children']);
+
+        $permissions = $this->getRoleService()->getParentRoleCodeArray('admin_v2_course_show', $nodes);
+        $this->assertTrue(in_array('admin_v2', $permissions));
+    }
+
+    public function testGetAllParentPermissions()
+    {
+        $result = $this->getRoleService()->getAllParentPermissions(array('admin_v2_course_show'));
+        $this->assertTrue(in_array('admin_v2', $result));
+    }
+
+    public function testFilterRoleTree()
+    {
+        $this->getSettingService()->set('backstage', array('is_v2' => 1));
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree();
+        $res = $tree->toArray();
+        $children = $this->getRoleService()->rolesTreeTrans($res['children']);
+        $result = $this->getRoleService()->filterRoleTree($children);
+        $this->assertEquals('admin_v2', $result[0]['code']);
+    }
+
+    public function testGetPermissionsYmlContent()
+    {
+        $result = $this->getRoleService()->getPermissionsYmlContent();
+        $this->assertEquals(array('admin_v2'), $result['admin']['admin']);
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     /**

@@ -18,6 +18,13 @@ class NormalManage extends BaseManage {
     this.$taskNumber.text(num);
   }
 
+  _flushPublishLessonNum() {
+    let lessonNum = $('.js-task-manage-item:not(.drag)').length;
+    let publishedLessonNum = $('.js-lesson-unpublish-status.hidden').length;
+    let content = Translator.trans('course.plan_task.lessons_publish_status', {'publishedNum':publishedLessonNum, 'unpublishedNum': lessonNum - publishedLessonNum});
+    $('.js-lessons-publish-status').attr('data-content', content);
+  }
+
   _triggerAsTaskNumUpdated(container) {
     let lessonBox = container.find('.js-lesson-box');
     let isMulTasks = lessonBox.find('.js-task-manage-item').length > 1;
