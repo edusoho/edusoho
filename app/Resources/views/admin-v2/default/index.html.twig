@@ -19,7 +19,9 @@
       <div class="col-md-9">
 
         {# 任务助手 #}
-        {% include 'admin-v2/default/newcomer-task.html.twig' %}
+        {% if not isNewcomerTaskAllDone %}
+          {% include 'admin-v2/default/newcomer-task.html.twig' %}
+        {% endif %}
 
         {# 数据概览 #}
         <div class="admin-v2-section cd-pb24">

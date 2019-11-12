@@ -27,6 +27,7 @@ class DefaultController extends BaseController
         return $this->render('admin-v2/default/index.html.twig', array(
             'dates' => $weekAndMonthDate,
             'newcomerTaskStatus' => $this->getNewcomerTaskStatus(),
+            'isNewcomerTaskAllDone' => $this->isNewcomerTaskAllDone(),
         ));
     }
 
@@ -164,13 +165,46 @@ class DefaultController extends BaseController
         if (!empty($publishCount)) {
             $newcomerTaskStatus['course_applied'] = 1;
         }
+        $recommendCount = $this->getCourseSetService()->countCourseSets(array('recommended' => 1));
+        if (!empty($recommendCount)) {
+            $newcomerTaskStatus['recommend_course_applied'] = 1;
+        }
+        $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
+        if (!empty($latestBlockHistory)) {
+            $newcomerTaskStatus['banner_applied'] = 1;
+        }
 
         $newcomerTaskSetting = $this->getSettingService()->get('newcomer_task', $newcomerTaskStatus);
         $newcomerTaskSetting = array_filter($newcomerTaskSetting);
+
+        $isRecommendCourseApplied = !empty($newcomerTaskStatus['recommend_course_applied']) || !empty($newcomerTaskSetting['recommend_course_applied']);
+        $isBannerApplied = !empty($newcomerTaskStatus['banner_applied']) || !empty($newcomerTaskSetting['banner_applied']);
+        if (!empty($newcomerTaskSetting['top_navigation_applied']) && $isBannerApplied && $isRecommendCourseApplied) {
+            $newcomerTaskStatus['decoration_applied'] = 1;
+        }
+
         $newcomerTaskStatus = array_merge($newcomerTaskStatus, $newcomerTaskSetting);
         $this->getSettingService()->set('newcomer_task', array_filter($newcomerTaskStatus));
 
         return $newcomerTaskStatus;
+    }
+
+    protected function isNewcomerTaskAllDone()
+    {
+        $newcomerTask = $this->getSettingService()->get('newcomer_task', array());
+        $newcomerTask = array_filter($newcomerTask);
+        if (ArrayToolkit::requireds($newcomerTask, array(
+            'cloud_applied',
+            'auth_applied',
+            'payment_applied',
+            'plugin_applied',
+            'course_applied',
+            'decoration_applied',
+        ))) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
