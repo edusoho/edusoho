@@ -220,11 +220,7 @@
         } %}
 
         <div class="admin-sidebar-section cd-pb16">
-          <div class="admin-sidebar-section__header">站长公告</div>
-          <a class="admin-sidebar-section__body admin-notice" href="#" target="_blank">
-            <img src="http://try6.edusoho.cn/files/course/2019/11-04/165421d7fbdf066767.png">
-            <div class="admin-notice__text">{{ test.text }}</div>
-          </a>
+          <div class="admin-sidebar-section__header announcement-from-platform" data-url="{{ path('admin_v2_announcement_from_platform') }}">站长公告</div>
         </div>
 
         {{ render(controller('AppBundle:AdminV2/Default:changelog')) }}

@@ -14,6 +14,7 @@ use Biz\System\Service\SettingService;
 use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
 use Codeages\Biz\Order\Service\OrderService;
+use QiQiuYun\SDK\Service\PlatformNewsService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -149,6 +150,15 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function getAnnouncementFromPlatformAction(Request $request)
+    {
+        $result = $this->getPlatformNewsSdkService()->getAnnouncements();
+
+        return $this->render('admin-v2/default/announcement.html.twig', array(
+            'announcement' => empty($result['details']) ? array() : array_pop($result['details']),
+        ));
+    }
+
     private function domainInspect($request)
     {
         $currentHost = $request->server->get('HTTP_HOST');
@@ -247,5 +257,15 @@ class DefaultController extends BaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    /**
+     * @return PlatformNewsService
+     */
+    protected function getPlatformNewsSdkService()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['qiQiuYunSdk.platformNews'];
     }
 }

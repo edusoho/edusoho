@@ -108,3 +108,10 @@ $('.js-mini-program').popover({
 $.get($('.admin-data').data('url'), function (html) {
   $('.admin-data').html(html);
 });
+
+if ($('.announcement-from-platform').length) {
+  console.log($('.announcement-from-platform').data('url'));
+  $.get($('.announcement-from-platform').data('url'), (html) => {
+    $('.announcement-from-platform').html(html);
+  });
+}

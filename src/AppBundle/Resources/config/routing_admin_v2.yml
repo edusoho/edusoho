@@ -14,6 +14,10 @@ admin_v2_quick_entrance:
     path: /quick_entrance
     defaults: { _controller: AppBundle:AdminV2/Default:quickEntrance }
 
+admin_v2_announcement_from_platform:
+    path: /announcement_from_platform
+    defaults: { _controller: AppBundle:AdminV2/Default:getAnnouncementFromPlatform }
+
 # 教学-课程管理-课程管理
 admin_v2_course_set:
     path:  /course_set/index
