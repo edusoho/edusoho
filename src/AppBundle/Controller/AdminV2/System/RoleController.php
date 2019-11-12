@@ -1,14 +1,16 @@
 <?php
 
-namespace AppBundle\Controller\Admin;
+namespace AppBundle\Controller\AdminV2\System;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Role\Service\RoleService;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class RoleController extends BaseController
 {
@@ -41,7 +43,7 @@ class RoleController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
         $users = ArrayToolkit::index($users, 'id');
 
-        return $this->render('admin/role/index.html.twig', array(
+        return $this->render('admin-v2/role/index.html.twig', array(
             'roles' => $roles,
             'users' => $users,
             'paginator' => $paginator,
@@ -52,10 +54,9 @@ class RoleController extends BaseController
     {
         if ('POST' == $request->getMethod()) {
             $params = $request->request->all();
-            $params['data'] = json_decode($params['data'], true);
-            $params['data_v2'] = json_decode($params['permissions'], true);
-            $params['data_v2'] = $this->getRoleService()->getAllParentPermissions($params['data_v2']);
-
+            $params['data_v2'] = json_decode($params['data'], true);
+            $params['data'] = json_decode($params['permissions'], true);
+            $params['data'] = $this->getRoleService()->getAllParentPermissions($params['data']);
             $this->getRoleService()->createRole($params);
 
             return $this->createJsonResponse(true);
@@ -63,10 +64,10 @@ class RoleController extends BaseController
 
         $tree = PermissionBuilder::instance()->getOriginPermissionTree();
         $res = $tree->toArray();
-        $children = $this->getRoleService()->rolesTreeTrans($res['children']);
+        $children = $this->getRoleService()->rolesTreeTrans($res['children'], 'adminV2');
         $children = $this->getRoleService()->filterRoleTree($children);
 
-        return $this->render('admin/role/role-modal.html.twig', array(
+        return $this->render('admin-v2/role/role-modal.html.twig', array(
             'menus' => json_encode($children),
             'model' => 'create',
         ));
@@ -78,29 +79,28 @@ class RoleController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $params = $request->request->all();
-            $params['data'] = json_decode($params['data'], true);
-            $params['data_v2'] = json_decode($params['permissions'], true);
-            $params['data_v2'] = $this->getRoleService()->getAllParentPermissions($params['data_v2']);
+            $params['data_v2'] = json_decode($params['data'], true);
+            $params['data'] = json_decode($params['permissions'], true);
+            $params['data'] = $this->getRoleService()->getAllParentPermissions($params['data']);
             $this->getRoleService()->updateRole($id, $params);
 
             return $this->createJsonResponse(true);
         }
 
         $tree = PermissionBuilder::instance()->getOriginPermissionTree();
-
-        if (!empty($role['data'])) {
+        if (!empty($role['data_v2'])) {
             $tree->each(function (&$tree) use ($role) {
-                if (in_array($tree->data['code'], $role['data'])) {
+                if (in_array($tree->data['code'], $role['data_v2'])) {
                     $tree->data['checked'] = true;
                 }
             });
         }
 
         $res = $tree->toArray();
-        $children = $this->getRoleService()->rolesTreeTrans($res['children']);
+        $children = $this->getRoleService()->rolesTreeTrans($res['children'], 'adminV2');
         $children = $this->getRoleService()->filterRoleTree($children);
 
-        return $this->render('admin/role/role-modal.html.twig', array(
+        return $this->render('admin-v2/role/role-modal.html.twig', array(
             'menus' => json_encode($children),
             'model' => 'edit',
             'role' => $role,
@@ -120,7 +120,7 @@ class RoleController extends BaseController
         $tree = PermissionBuilder::instance()->getOriginPermissionTree();
 
         $tree->each(function (&$tree) use ($role) {
-            if (in_array($tree->data['code'], $role['data'])) {
+            if (in_array($tree->data['code'], $role['data_v2'])) {
                 $tree->data['checked'] = true;
             }
 
@@ -129,10 +129,10 @@ class RoleController extends BaseController
 
         $res = $tree->toArray();
 
-        $children = $this->getRoleService()->rolesTreeTrans($res['children']);
+        $children = $this->getRoleService()->rolesTreeTrans($res['children'], 'adminV2');
         $children = $this->getRoleService()->filterRoleTree($children);
 
-        return $this->render('admin/role/role-modal.html.twig', array(
+        return $this->render('admin-v2/role/role-modal.html.twig', array(
             'menus' => json_encode($children),
             'model' => 'show',
             'role' => $role,
@@ -192,6 +192,6 @@ class RoleController extends BaseController
      */
     protected function getUserService()
     {
-        return $this->createService('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

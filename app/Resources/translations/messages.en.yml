@@ -9123,6 +9123,11 @@ admin_v2.homepage.cloud_notice.unknown_days: Unknow
 
 admin_v2.homepage.cloud_notice: "Welcome, your trail will be expired on<strong> %endTime% </strong>,<strong> %remainDays% </strong> days left. </br> Contact our business managers to buy licence or extend your trail. Tel: 4008041114 or "
 
+# 常用入口
+admin_v2.edit_quick_entrance.btn: Edit Quick Entrance
+admin_v2.quick_entrance_setting: Set Quick Entrance
+admin_v2.quick_entrance_setting.tips: (Set up to 7 quick entries）
+
 ##分类标签
 admin_v2.course.tag: Tag
 admin_v2.course.tag.group: Tag Groups
@@ -9151,3 +9156,5 @@ admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names 
 
 admin_v2.developer_setting.platform_news_api_server: API to get information from platform
 admin_v2.developer_setting.platform_news_api_server.info: 'Default value is //open.edusoho.com'
+admin_v2.role_permission_manage.error: Error
+admin_v2.default_page.changelog_title: EduSoho Changelog

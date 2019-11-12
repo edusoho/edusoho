@@ -2,12 +2,14 @@
 
 namespace AppBundle\Controller\AdminV2;
 
+use AppBundle\Common\ChangelogToolkit;
 use AppBundle\Common\CurlToolkit;
 use Biz\Common\CommonException;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
+use Biz\QuickEntrance\Service\QuickEntranceService;
 use Biz\System\Service\SettingService;
 use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
@@ -21,8 +23,23 @@ class DefaultController extends BaseController
     {
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
 
+        $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+
         return $this->render('admin-v2/default/index.html.twig', array(
             'dates' => $weekAndMonthDate,
+            'entrances' => $userQuickEntrances,
+        ));
+    }
+
+    public function changelogAction(Request $request)
+    {
+        $rootDir = $this->getParameter('kernel.root_dir');
+        $changelogPath = $rootDir.'/../CHANGELOG';
+        $changelog = explode(PHP_EOL.PHP_EOL, file_get_contents($changelogPath));
+        $currentChangeLog = ChangelogToolkit::parseSingleChangelog($changelog[0]);
+
+        return $this->render('admin-v2/default/changelog.html.twig', array(
+            'currentChangelog' => $currentChangeLog,
         ));
     }
 
@@ -154,6 +171,20 @@ class DefaultController extends BaseController
         return array('status' => 'ok', 'except' => $siteSetting['url'], 'actually' => $currentHost, 'settingUrl' => $settingUrl);
     }
 
+    public function quickEntranceAction(Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $fields = $request->request->all();
+            $quickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
+
+            return $this->render('admin-v2/default/quick-entrance/index.html.twig', array('entrances' => $quickEntrances));
+        }
+
+        $quickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
+
+        return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
+    }
+
     /**
      * @return SettingService
      */
@@ -195,6 +226,14 @@ class DefaultController extends BaseController
     }
 
     /**
+     * @return QuickEntranceService
+     */
+    protected function getQuickEntranceService()
+    {
+        return $this->createService('QuickEntrance:QuickEntranceService');
+    }
+
+    /*
      * @return StatisticsService
      */
     protected function getStatisticsService()
