@@ -37,72 +37,11 @@
         <div class="admin-v2-section cd-pb16">
           <div class="admin-v2-section__header cd-mb16">常用入口</div>
           <div class="admin-v2-section__body">
-            <div class="row">
-              {% set entrance =  [
-                {
-                  'class': 'icon-color-green',
-                  'text': '课程管理',
-                  'link': '#',
-                  'icon': 'course', 
-                },
-                {
-                  'class': 'icon-color-yellow',
-                  'text': 'Web端装修',
-                  'link': '#',
-                  'icon': 'webmix', 
-                },
-                {
-                  'class': 'icon-color-green',
-                  'text': '班级管理',
-                  'link': '#',
-                  'icon': 'class', 
-                },
-                {
-                  'class': 'icon-color-yellow',
-                  'text': '商品订单',
-                  'link': '#',
-                  'icon': 'goods', 
-                },
-                {
-                  'class': 'icon-color-yellow',
-                  'text': '优惠券管理',
-                  'link': '#',
-                  'icon': 'coupon', 
-                },
-                {
-                  'class': 'icon-color-blue',
-                  'text': '用户设置',
-                  'link': '#',
-                  'icon': 'setting', 
-                },
-                {
-                  'class': 'icon-color-yellow',
-                  'text': '虚拟币管理',
-                  'link': '#',
-                  'icon': 'coin', 
-                }
-              ] %}
-              {% for entry in entrance %}
-                <div class="col-md-3">
-                  <a class="{{ 'text-center admin-function ' ~ entry.class }}" href="{{ entry.link }}">
-                    <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entry.icon }}"></i></div>
-                    <div class="admin-function__name">{{ entry.text }}</div>
-                  </a>
-                </div>
-              {% endfor %}
-
-              <div class="col-md-3">
-                <div class="admin-function-choose">
-                  <a class="admin-function-btn" data-toggle="modal" data-target="#functionModal">
-                    <i class="es-icon es-icon-add"></i><span>编辑入口</span>
-                  </a>
-                </div>
-              </div>
-
+            <div class="row quick-entrance">
+              {% include 'admin-v2/default/quick-entrance/index.html.twig' %}
             </div>
           </div>
         </div>
-
         {# 应用简介 #}
         <div class="admin-v2-section cd-pb24">
           <div class="admin-v2-section__header cd-mb16">应用简介<a class="admin-v2-section__more" href="#">逛逛营销云应用</a></div>
@@ -140,11 +79,11 @@
                 </div>
               {% else %}
                 {% for i in 0..3 %}
-                <div class="col-md-3">
-                  <div class="text-center admin-application">
-                    <i class="es-icon es-icon-entry-application"></i>
+                  <div class="col-md-3">
+                    <div class="text-center admin-application">
+                      <i class="es-icon es-icon-entry-application"></i>
+                    </div>
                   </div>
-                </div>
                 {% endfor %}
               {% endfor %}
             </div>
@@ -201,7 +140,9 @@
             <div class="admin-website__name"><a class="admin-website__text text-overflow" href="#">哎呀音乐哎呀音世哎呀音乐是哎呀音乐哎呀音世哎呀音乐是</a></div>
               {# 三种颜色的客户等级 #}
             <div class="">
-              <div class="rank-tag rank-tag--yellow rank-tag--green"><span class="rank-tag__icon"><i class="cd-icon cd-icon-star"></i></span><div class="rank-tag__text">商业授权</div></div>
+              <div class="rank-tag rank-tag--yellow rank-tag--green"><span class="rank-tag__icon"><i class="cd-icon cd-icon-star"></i></span>
+                <div class="rank-tag__text">商业授权</div>
+              </div>
               <div class="theme-tag">雅致简洁主题</div>
             </div>
 
@@ -232,28 +173,7 @@
           </a>
         </div>
 
-        <div class="admin-sidebar-section">
-          <div class="admin-sidebar-section__header">EduSoho更新日志<a class="admin-sidebar-section__more" href="#" target="_blank">更多<i class="es-icon es-icon-chevronright"></i></a></div>
-          <div class="admin-sidebar-section__body">
-            <div class="admin-log">
-              <div class="admin-log__cell text-overflow">
-                <span class="admin-log__date cd-mr16">04.26</span>[新增]新增分销推广
-              </div>
-              <div class="admin-log__cell text-overflow">
-                <span class="admin-log__date cd-mr16">05.12</span>小程序上线
-              </div>
-              <div class="admin-log__cell text-overflow">
-                <span class="admin-log__date cd-mr16">06.26 </span>约排课功能上线
-              </div>
-              <div class="admin-log__cell text-overflow">
-                <span class="admin-log__date cd-mr16">05.23</span>[新增]新增分销推广分销推广销推广分销推广销推广分销推广销推广分销推广
-              </div>
-              <div class="admin-log__cell text-overflow">
-                <span class="admin-log__date cd-mr16">04.26</span>微信通知2.0功能上线
-              </div>
-            </div>
-          </div>
-        </div>
+        {{ render(controller('AppBundle:AdminV2/Default:changelog')) }}
 
         {# 公众号 #}
         <div class="admin-sidebar-section">
@@ -276,5 +196,4 @@
   </div>
 
 
-  {% include 'admin-v2/default/function-modal.html.twig' %}
 {% endblock %}

@@ -10423,6 +10423,11 @@ admin_v2.homepage.cloud_notice.unknown_days: 未知
 
 admin_v2.homepage.cloud_notice: '欢迎使用,试用将于<strong> %endTime% </strong>到期,剩余<strong> %remainDays% </strong>天。您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或 '
 
+# 常用入口
+admin_v2.edit_quick_entrance.btn: 编辑入口
+admin_v2.quick_entrance_setting: 设置常用入口
+admin_v2.quick_entrance_setting.tips: (最多设置7个快捷入口位）
+
 ##分类标签
 admin_v2.course.tag: 标签管理
 admin_v2.course.tag.group: 标签组管理
@@ -10432,13 +10437,21 @@ admin_v2.category_manage.add_title: 添加分类
 admin_v2.tag_manage.tag.create.modal_title: 新增标签
 admin_v2.tag_manage.tag.group.create.modal_title: 新增标签组
 
-
 # 新后台
 admin_v2.edu_cloud_not_access: 未接入教育云
 admin_v2.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">APP设置</a>中设置开启
 admin_v2.live_course.create_btn: 创建直播
 admin_v2.system.security_setting: 白名单域名
+admin_v2.upgrade_v2_setting_permission.error: 请联系超级管理员或管理员操作
+admin_v2.upgrade_v2_setting.alert: '全新版后台已经更新，开启最新的体验，新后台需要手动升级插件，请勿忘记哦!'
+admin_v2.upgrade_v2_setting.setting_btn: 切换新版
+admin_v2.switch_old_version.setting_btn: 切换旧版
+admin_v2.switch_version.btn_loading: 正在切换....
+exception.common_upgrade_v2_error: 已经升级到新版
+exception.switch_old_version.permission_error: 请联系超级管理员或管理员操作
+exception.switch_old_version.error: 已经切回到旧版后台
+admin_v2.default.switch_old_version_btn: 回到旧版后台
 admin_v2.setting.navigation.foot.tips: >
   清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
   <a class="text-info" style="font-weight:bold;" href="%url%">
@@ -10464,3 +10477,8 @@ admin_v2.newcomer_task.course_applied.title: 创建课程
 admin_v2.newcomer_task.course_applied.tip: 快速创建课程商品，获取网校收益
 admin_v2.newcomer_task.decoration_applied.title: 装修网校
 admin_v2.newcomer_task.decoration_applied.tip: 装修网校首页，获得更多用户好感
+
+admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
+admin_v2.developer_setting.platform_news_api_server.info: '默认为 //'
+admin_v2.role_permission_manage.error: 错误
+admin_v2.default_page.changelog_title: EduSoho更新日志

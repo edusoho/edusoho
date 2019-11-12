@@ -34,6 +34,7 @@ class DeveloperSettingController extends BaseController
             'cloud_sdk_cdn' => '',
             'hls_encrypted' => '1',
             'mp_service_url' => 'http://mp-service.qiqiuyun.net',
+            'platform_news_api_server' => empty($storageSetting['platform_news_api_server']) ? '' : $storageSetting['platform_news_api_server'],
         );
 
         $developerSetting = array_merge($default, $developerSetting);
@@ -50,6 +51,7 @@ class DeveloperSettingController extends BaseController
             $storageSetting['cloud_api_es_op_server'] = $developerSetting['cloud_api_es_op_server'];
             $storageSetting['cloud_api_notification_server'] = $developerSetting['cloud_api_notification_server'];
             $storageSetting['cloud_api_wechat_server'] = $developerSetting['cloud_api_wechat_server'];
+            $storageSetting['platform_news_api_server'] = $developerSetting['platform_news_api_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
