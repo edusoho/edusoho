@@ -194,7 +194,7 @@ class DefaultController extends BaseController
         }
         $payment = $this->getSettingService()->get('payment', array());
         if (!empty($payment['alipay_enabled']) || !empty($payment['wxpay_enabled']) || !empty($payment['llpay_enabled'])) {
-            $newcomerTaskStatus['payment_applied']= 1;
+            $newcomerTaskStatus['payment_applied'] = 1;
         }
         $apps = $this->getAppService()->findApps(0, $this->getAppService()->findAppCount());
         $appTypes = ArrayToolkit::column($apps, 'type');
