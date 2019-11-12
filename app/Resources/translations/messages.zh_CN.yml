@@ -10458,5 +10458,7 @@ admin_v2.setting.navigation.foot.tips: >
   Web端装修 </a>
   中进行编辑。
 admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
+admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
+admin_v2.developer_setting.platform_news_api_server.info: '默认为 //'
 admin_v2.role_permission_manage.error: 错误
 admin_v2.default_page.changelog_title: EduSoho更新日志
