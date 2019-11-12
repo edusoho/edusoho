@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Common\TreeToolkit;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\CategoryException;
 use Symfony\Component\HttpFoundation\Request;
 

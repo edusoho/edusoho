@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Common\TreeToolkit;
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionBankController extends BaseController
@@ -16,6 +14,5 @@ class QuestionBankController extends BaseController
 
     public function createAction()
     {
-
     }
 }
