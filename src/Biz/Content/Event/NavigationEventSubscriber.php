@@ -12,9 +12,7 @@ class NavigationEventSubscriber extends EventSubscriber implements EventSubscrib
     public static function getSubscribedEvents()
     {
         return array(
-            'navigation.create' => 'onNavigationOperate',
-            'navigation.update' => 'onNavigationOperate',
-            'navigation.delete' => 'onNavigationOperate',
+            'navigation.operate' => 'onNavigationOperate',
         );
     }
 
