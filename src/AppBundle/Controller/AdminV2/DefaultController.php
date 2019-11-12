@@ -16,7 +16,6 @@ use Biz\User\Service\NotificationService;
 use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use QiQiuYun\SDK\Constants\PlatformNewsBlockTypes;
 use QiQiuYun\SDK\Service\PlatformNewsService;
 
 class DefaultController extends BaseController
@@ -155,7 +154,7 @@ class DefaultController extends BaseController
     {
         $advice = array();
         if (!$this->isWithoutNetwork()) {
-            $advice = $this->getPlatformNewsSdkService()->getNews(PlatformNewsBlockTypes::ADVICE_BLOCK);
+            $advice = $this->getPlatformNewsSdkService()->getAdvice();
         }
 
         return $this->render('admin-v2/default/business-advice.html.twig', array(
