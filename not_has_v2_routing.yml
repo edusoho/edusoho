@@ -8,16 +8,6 @@ admin_live_get_max_online:
     defaults: { _controller: AppBundle:Admin/LiveCourse:getMaxOnline }
     permissions: [admin_live_course_manage]
 
-admin_cloud_video_overview_renew:
-    path:  /cloud/video/renew/modal
-    defaults: { _controller: AppBundle:Admin/EduCloud:showRenewVideo }
-
-admin_setting_cloud_video_embed_watermark_upload:
-    path: /setting/cloud/video_embed_watermark/upload
-    defaults: { _controller: AppBundle:Admin/EduCloud:videoEmbedWatermarkUpload }
-    methods: [POST]
-    permissions: [admin_cloud_video_overview]
-
 admin_optimize_remove_backup:
     path:  /setting/optimize/remove-backup
     defaults: { _controller: AppBundle:Admin/Optimize:removeBackup }
@@ -32,39 +22,3 @@ admin_optimize_remove_show_progressbar:
 admin_performance:
     path:  /setting/performance
     defaults: { _controller: AppBundle:Admin/Setting:performance }
-
-### role
-admin_roles:
-    path:  /roles
-    defaults: { _controller: AppBundle:Admin/Role:index }
-    permissions: [admin_role_manage]
-
-admin_role_create:
-    path:  /role/create
-    defaults: { _controller: AppBundle:Admin/Role:create }
-
-admin_role_edit:
-    path:  /role/{id}/edit
-    defaults: { _controller: AppBundle:Admin/Role:edit }
-
-admin_role_delete:
-    path:  /role/{id}/delete
-    defaults: { _controller: AppBundle:Admin/Role:delete }
-    methods: [POST]
-
-admin_role_show:
-    path:  /role/{id}/show
-    defaults: { _controller: AppBundle:Admin/Role:show }
-    permissions: [admin_role_manage]
-
-admin_role_check_name:
-    path:  /role/checkName
-    defaults: { _controller: AppBundle:Admin/Role:checkName }
-    permissions: [admin_role_manage]
-
-admin_role_check_code:
-    path:  /role/checkCode
-    defaults: { _controller: AppBundle:Admin/Role:checkCode }
-    permissions: [admin_role_manage]
-
-
