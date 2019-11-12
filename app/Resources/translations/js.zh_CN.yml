@@ -1439,4 +1439,4 @@ admin_v2.homepage.quick_entrance.hint: 最多设置7个快捷入口位
 admin.switch_old_version.permission_error: 请联系超级管理员或管理员操作
 admin.switch_old_version.confirm_message: '切换到老后台后，所有管理员将切换至老后台，确认切换？'
 admin.switch_new_version.confirm_message: '升级到新后台后，所有管理员将切换至新后台，但权限功能不会改变， 确认切换？'
-admin_v2.homepage.application-intro.hint: 无法链接到数据
+admin_v2.homepage.application-intro.hint: 无法连接到数据

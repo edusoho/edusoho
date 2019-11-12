@@ -4,7 +4,6 @@ namespace AppBundle\Controller\AdminV2;
 
 use AppBundle\Common\ChangelogToolkit;
 use AppBundle\Common\CurlToolkit;
-use Biz\CloudPlatform\Service\EduCloudService;
 use Biz\Common\CommonException;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\CourseService;
@@ -153,39 +152,12 @@ class DefaultController extends BaseController
 
     public function applicationIntroAction(Request $request)
     {
-        $template = 'admin-v2/default/application-intro.html.twig';
         $result = $this->getPlatformSdkService()->getApplications();
 
-        $returnUrl = empty($result['returnUrl']) ? '' : $result['returnUrl'];
-        $hasPermission = $this->getCurrentUser()->hasPermission('admin_v2_app_center');
-
-        if ($hasPermission) {
-            $returnUrl = $this->getEduCloudService()->isVisibleCloud() ? $this->generateUrl('admin_v2_app_center') : $this->generateUrl('admin_v2_my_cloud_overview');
-        }
-
-        return $this->render($template, array(
+        return $this->render('admin-v2/default/application-intro.html.twig', array(
             'applicationData' => empty($result['details']) ? array() : $result['details'],
-            'returnUrl' => $returnUrl,
-            'hasPermission' => $hasPermission,
+            'returnUrl' => empty($result['returnUrl']) ? '' : $result['returnUrl'],
         ));
-    }
-
-    /**
-     * @return PlatformNewsService
-     */
-    private function getPlatformSdkService()
-    {
-        $biz = $this->getBiz();
-
-        return $biz['qiQiuYunSdk.platformNews'];
-    }
-
-    /**
-     * @return EduCloudService
-     */
-    private function getEduCloudService()
-    {
-        return $this->createService('CloudPlatform:EduCloudService');
     }
 
     private function domainInspect($request)
@@ -222,6 +194,16 @@ class DefaultController extends BaseController
         $quickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
 
         return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
+    }
+
+    /**
+     * @return PlatformNewsService
+     */
+    private function getPlatformSdkService()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['qiQiuYunSdk.platformNews'];
     }
 
     /**
