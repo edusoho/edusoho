@@ -643,7 +643,7 @@ class CourseSetController extends BaseController
         $defaultCourseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
         $defaultCourses = $this->getCourseService()->findCoursesByIds($defaultCourseIds);
 
-        $tasks = $this->getTaskService()->searchTasks(array('fromCourseSetIds' => $courseSetIds), array(), 0, PHP_INT_MAX);
+        $tasks = $this->getTaskService()->findTasksByCourseSetIds($courseSetIds);
         $tasks = ArrayToolkit::group($tasks, 'fromCourseSetId');
 
         foreach ($courseSets as &$courseSet) {
