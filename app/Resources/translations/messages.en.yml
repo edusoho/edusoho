@@ -4382,6 +4382,14 @@ admin.classroom_manage.chooser.empty: 'No %classroomName% Record'
 admin.question_bank.category_manage.name: Title
 admin.question_bank.category_manage.bank_number: Bank Number
 admin.question_bank.category_manage.operate: Action
+admin.question_bank.category_manage.bank: Question Bank
+admin.question_bank.manage.name: Title
+admin.question_bank.manage.bank_content: Content
+admin.question_bank.manage.category: Category
+admin.question_bank.manage.operate: Action
+admin.question_bank.manage.testpaper: Testpaper
+admin.question_bank.manage.question: Question
+admin.question_bank.manage.empty: Empty Question Bank
 admin.category_manage.name_th: Title
 admin.category_manage.code_th: Code
 admin.category_manage.operate_th: Action

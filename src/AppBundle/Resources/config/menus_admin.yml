@@ -401,7 +401,7 @@ admin:
                             name: admin.course.question_bank_category.basic_tab
                             router_name: admin_question_bank_category
                             children:
-                                admin_question_bank_add:
+                                admin_question_bank_category_add:
                                     name: admin.course.question_bank_category.basic_tab.create_btn
                                     router_name: question_bank_category_manage_create
                                     group: topBtn
