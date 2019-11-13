@@ -462,7 +462,7 @@ settings_password:
 settings_email:
     path:  /settings/email
     defaults: { _controller: AppBundle:Settings:email }
-    
+
 settings_email_verify:
     path:  /settings/email/verify
     defaults: { _controller: AppBundle:Settings:emailVerify }
@@ -587,8 +587,8 @@ my_live_courses_learning:
     defaults: { _controller: AppBundle:My/CourseSet:lives }
 
 my_testpaper_check_list:
-    path: /my/testpaper/check/{status}
-    defaults: { _controller: AppBundle:My/Testpaper:checkList, status: 'reviewing' }
+    path: /my/testpaper/check
+    defaults: { _controller: AppBundle:My/Testpaper:checkList }
 
 my_testpaper_list:
     path: /my/testpaper/list

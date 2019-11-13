@@ -3983,6 +3983,7 @@ my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
 my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
+my.teaching.online_review_menu: 在线批阅
 my.teaching.testpaper_check_menu: 试卷批阅
 my.teaching.homework_check_menu: 作业批阅
 my.teaching.material_lib_menu: 教学资料库
@@ -4049,12 +4050,16 @@ my.teaching.testpaper.answer_detail: >
   <div class="color-gray"><small>客观题%objectiveScore%分 / 主观题%subjectiveScore%分</small></div>
   <div class="color-success"><small>%teacherName% 批于%checkTime%</small>
 my.teaching.testpaper.default_teacher: 系统
+my.teaching.online.review.title: 在线批阅
 my.teaching.testpaper.check_title: 试卷批阅
 my.teaching.testpaper.uncheck: 未批阅
 my.teaching.testpaper.check_finished: 已批阅
-my.teaching.testpaper.reviewing_empty: 还没有等待批阅的试卷
+my.teaching.testpaper.reviewing_empty: 没有需要批阅的试卷
 my.teaching.testpaper.check_finished_empty: 还没有已经批阅的试卷
 my.teaching.testpaper.test_record: 我的考试记录
+my.teaching.testpaper.keyword.course_title: 课程名称
+my.teaching.testpaper.keyword.nickname: 用户名
+my.teaching.testpaper.placeholder: 请输入关键词
 
 my.teaching.open_course.title: 名称
 my.teaching.open_course.hit_num: 浏览数
