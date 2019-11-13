@@ -40,7 +40,6 @@ class HomeworkController extends BaseController
 
         $courses = $this->getCourseService()->findCoursesByIds($conditions['courseIds']);
 
-
         if ('nickname' == $keywordType && $keyword) {
             $searchUser = $this->getUserService()->getUserByNickname($keyword);
             $conditions['userId'] = $searchUser ? $searchUser['id'] : '-1';
@@ -84,7 +83,7 @@ class HomeworkController extends BaseController
             'testpapers' => $testpapers,
             'tasks' => $tasks,
             'keyword' => $keyword,
-            'keywordType' => $keywordType
+            'keywordType' => $keywordType,
         ));
     }
 

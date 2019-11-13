@@ -34,7 +34,7 @@ class TestpaperController extends BaseController
         $conditions = array(
             'type' => 'testpaper',
             'courseIds' => $courseIds,
-            'status' => $status
+            'status' => $status,
         );
 
         if (!empty($courseIds) && 'courseTitle' == $keywordType) {
@@ -44,7 +44,6 @@ class TestpaperController extends BaseController
             $courseIds = ArrayToolkit::column($courses, 'id');
             $conditions['courseIds'] = array_intersect($conditions['courseIds'], $courseIds);
         }
-
 
         if ('nickname' == $keywordType && $keyword) {
             $searchUser = $this->getUserService()->getUserByNickname($keyword);
@@ -89,7 +88,7 @@ class TestpaperController extends BaseController
             'status' => $status,
             'testpapers' => $testpapers,
             'keywordType' => $keywordType,
-            'keyword' => $keyword
+            'keyword' => $keyword,
         ));
     }
 
