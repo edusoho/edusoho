@@ -36,16 +36,20 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('eval_expression', array($this, 'evalExpression'), array('needs_context' => true, 'needs_environment' => true)),
             new \Twig_SimpleFunction('first_child_permission', array($this, 'getFirstChild')),
             new \Twig_SimpleFunction('side_bar_permission', array($this, 'getSideBar')),
+            new \Twig_SimpleFunction('root_permission', array($this, 'getRootPermission')),
+            new \Twig_SimpleFunction('nav_permission', array($this, 'getNavPermission')),
         );
     }
 
+    /**
+     * @param $code
+     *
+     * @return array
+     *               获取admin_v2的sideBar
+     */
     public function getSideBar($code)
     {
-        /** todo  多次调用getParentPermission 需要优化 */
-        $permission = $this->getParentPermission($code);
-        $permission = $this->getParentPermission($permission['code']);
-        $permission = $this->getParentPermission($permission['code']);
-
+        $permission = $this->getNavPermission($code);
         $group = $this->createPermissionBuilder()->groupedV2Permissions($permission['code']);
 
         $permissionMenus = $this->buildChildPermissionMenus($group);
@@ -66,14 +70,20 @@ class PermissionExtension extends \Twig_Extension
             $childrenInfo = array();
             $childrenInfo['name'] = ServiceKernel::instance()->trans($children['name'], array(), 'menu');
             $childrenInfo['link'] = '';
+            $childrenInfo['code'] = $children['code'];
             if (isset($children['is_group'])) {
                 $childrenInfo['grade'] = 0;
             }
             foreach ($children['children'] as $k => $child) {
+                if (isset($child['visible']) && !$this->evalExpression($this->container->get('twig'), array(), $child['visible'])) {
+                    unset($children['children'][$k]);
+                    continue;
+                }
                 $nodes = array();
                 $nodes['name'] = ServiceKernel::instance()->trans($child['name'], array(), 'menu');
                 $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getPermissionByCode($k)));
                 $nodes['grade'] = 1;
+                $nodes['code'] = $child['code'];
                 $nodes['nodes'] = array();
                 $childrenInfo['nodes'][] = $nodes;
             }
@@ -97,6 +107,22 @@ class PermissionExtension extends \Twig_Extension
         }
 
         return current($menus);
+    }
+
+    /**
+     * @param $menu
+     *
+     * @return array|mixed
+     *                     递归获取叶子节点的permissions
+     */
+    public function getLeafFirstChild($menu)
+    {
+        $childMenu = $this->getFirstChild($menu);
+        if ($childMenu['children']) {
+            $childMenu = $this->getLeafFirstChild($childMenu);
+        }
+
+        return $childMenu;
     }
 
     public function getPermissionPath($env, $context, $menu)
@@ -174,6 +200,40 @@ class PermissionExtension extends \Twig_Extension
         }
 
         return $parent;
+    }
+
+    /**
+     * @param $code
+     * @param string $type admin|admin_v2
+     *
+     * @return array|mixed
+     *                     通过递归方式获取到root节点的permission
+     */
+    public function getRootPermission($code, $type = 'admin_v2')
+    {
+        $permission = $this->getParentPermission($code);
+        if ($permission['code'] != $type) {
+            $permission = $this->getRootPermission($permission['code']);
+        }
+
+        return $permission;
+    }
+
+    /**
+     * @param $code
+     * @param string $type admin|admin_v2
+     *
+     * @return array|mixed
+     *                     通过递归方式获取到nav栏的permission
+     */
+    public function getNavPermission($code, $type = 'admin_v2')
+    {
+        $permission = $this->getParentPermission($code);
+        if ($permission['parent'] != $type) {
+            $permission = $this->getNavPermission($permission['code']);
+        }
+
+        return $permission;
     }
 
     private function createPermissionBuilder()
