@@ -3,8 +3,8 @@ import EsImageCrop from 'common/es-image-crop.js';
 let imageCrop = new EsImageCrop({
   element: '#classroom-picture-crop',
   group: 'course',
-  cropedWidth: 525,
-  cropedHeight: 350
+  cropedWidth: 540,
+  cropedHeight: 304
 });
 
 imageCrop.afterCrop = function(response) {
@@ -19,9 +19,9 @@ $('#upload-picture-btn').click(function(e) {
   $('#upload-picture-btn').button('loading');
   imageCrop.crop({
     imgs: {
-      large: [525, 350],
-      middle: [345, 230],
-      small: [213, 142],
+      large: [540, 304],
+      middle: [354, 200],
+      small: [219, 124],
     }
   });
 });
