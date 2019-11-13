@@ -10463,3 +10463,5 @@ admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
 admin_v2.developer_setting.platform_news_api_server.info: '默认为 //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: 错误
 admin_v2.default_page.changelog_title: EduSoho更新日志
+
+admin_v2.homepage.announcement_from_platform: 站长公告

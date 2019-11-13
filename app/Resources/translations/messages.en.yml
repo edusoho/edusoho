@@ -9158,3 +9158,5 @@ admin_v2.developer_setting.platform_news_api_server: API to get information from
 admin_v2.developer_setting.platform_news_api_server.info: 'Default value is //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: Error
 admin_v2.default_page.changelog_title: EduSoho Changelog
+
+admin_v2.homepage.announcement_from_platform: Announcement From Platform
