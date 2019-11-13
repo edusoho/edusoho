@@ -10,16 +10,15 @@ let publicPath="./";
 let bgImgPath="/";
 let projectname = process.argv[4]; // 获取入口文件
 if (process.env.NODE_ENV === 'production') {
-	projectname = process.argv[5];
-	bgImgPath=publicPath=projectname==='h5' ? "/h5/h5/" : "/h5/admin/";
+	projectname = process.argv[5]
+	bgImgPath=publicPath=projectname==='h5' ? "/h5/" : "/h5/admin/";
 }
 const chunks = {
 	dafault: ['chunk-vendors', 'chunk-common', projectname],
 	prodChunks: ['chunk-libs', 'chunk-commons', 'chunk-vant', 'chunk-elementUI', 'runtime', projectname]
 }
-const objectProject = {
-	h5: {
-		entry: "src/h5/main.js", // page 的入口
+page[projectname]={
+		entry: `src/${projectname}/main.js`, // page 的入口
 		template: "src/public/index.html", // 模板来源
 		filename: "index.html", // 在 dist/index.html 的输出r
 		// 当使用 title 选项时，template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
@@ -27,20 +26,11 @@ const objectProject = {
 		// 在这个页面中包含的块，默认情况下会包含,提取出来的通用 chunk 和 vendor chunk。
 		//chunks: ['chunk-commons','chunk-vant','chunk-libs','chunk-common', 'h5']
 		chunks: (process.env.NODE_ENV !== 'development') ? chunks.prodChunks : chunks.dafault
-	},
-	admin: {
-		entry: "src/admin/main.js",
-		template: "src/public/admin.html",
-		filename: "index.html",
-		title: "Index Page",
-		//chunks: ['chunk-vendors', 'chunk-common', 'admin']
-		chunks: (process.env.NODE_ENV !== 'development') ? chunks.prodChunks : chunks.dafault
-	}
-};
-page[projectname] = objectProject[projectname];
+}
+
 module.exports = {
 	publicPath: publicPath, // 官方要求修改路径在这里做更改，默认是根目录下，可以自行配置
-	outputDir: "dist/" + projectname, //标识是打包哪个文件
+	outputDir: `dist${projectname==='h5' ? '' : '/'+projectname }`,//标识是打包哪个文件
 	assetsDir:'static',
 	lintOnSave:process.env.NODE_ENV === 'production'? false : true,
   css: {

@@ -1,13 +1,14 @@
 <template>
-  <module-frame containerClass="setting-carousel" :isActive="isActive" :isIncomplete="isIncomplete">
+  <module-frame :is-active="isActive" :is-incomplete="isIncomplete" container-class="setting-carousel">
     <div slot="preview" class="carousel-image-container">
-      <img class="carousel-image"
+      <img
         v-show="carouselImage"
-        :src="carouselImage">
-      <div class="image-mask" v-show="!carouselImage">
+        :src="carouselImage"
+        class="carousel-image">
+      <div v-show="!carouselImage" class="image-mask">
         轮播图
       </div>
-      <div class="carousel-title ellipsis">{{carouselTitle}}</div>
+      <div class="carousel-title ellipsis">{{ carouselTitle }}</div>
     </div>
 
     <div slot="setting" class="carousel-allocate">
@@ -18,158 +19,157 @@
           :item="item"
           :index="index"
           :active="activeItemIndex"
-          :itemNum="itemNum"
-          :courseSets="courseSets[index]"
+          :item-num="itemNum"
+          :course-sets="courseSets[index]"
           @selected="selected"
           @chooseCourse="openModal"
           @remove="itemRemove"
-          @removeCourseLink="removeCourseLink"></item>
+          @removeCourseLink="removeCourseLink"/>
       </div>
-      <el-button class="btn-add-item" type="info" size="medium" @click="addItem" v-show="addBtnShow">添加一个轮播图</el-button>
+      <el-button v-show="addBtnShow" class="btn-add-item" type="info" size="medium" @click="addItem">添加一个轮播图</el-button>
     </div>
 
     <course-modal
       slot="modal"
-      limit=1
       :type="['course_list', 'classroom_list'].includes(type) ? type : 'course_list'"
       :visible="modalVisible"
-      :courseList="courseSets[activeItemIndex] || []"
+      :course-list="courseSets[activeItemIndex] || []"
+      limit="1"
       @visibleChange="modalVisibleHandler"
-      @updateCourses="getUpdatedCourses">
-    </course-modal>
+      @updateCourses="getUpdatedCourses"/>
   </module-frame>
 </template>
 
 <script>
-import Api from 'admin/api';
-import { MODULE_DEFAULT } from 'admin/config/module-default-config';
-import item from './item';
-import moduleFrame from '../module-frame';
-import courseModal from '../course/modal/course-modal';
+import Api from 'admin/api'
+import { MODULE_DEFAULT } from 'admin/config/module-default-config'
+import item from './item'
+import moduleFrame from '../module-frame'
+import courseModal from '../course/modal/course-modal'
 
 export default {
   components: {
     item,
     moduleFrame,
-    courseModal,
+    courseModal
+  },
+  props: {
+    active: {
+      type: Boolean,
+      default: false
+    },
+    moduleData: {
+      type: Object,
+      default: {}
+    },
+    incomplete: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
-    return  {
+    return {
       activeItemIndex: 0,
       modalVisible: false,
       courseSets: [],
       type: 'course_list'
     }
   },
-  props: {
-    active: {
-      type: Boolean,
-      default: false,
-    },
-    moduleData: {
-      type: Object,
-      default: {},
-    },
-    incomplete: {
-      type: Boolean,
-      default: false,
-    },
-  },
   computed: {
     isActive: {
       get() {
-        return this.active;
+        return this.active
       },
       set() {}
     },
     isIncomplete: {
       get() {
-        return this.incomplete;
+        return this.incomplete
       },
       set() {}
     },
     copyModuleData: {
       get() {
-        return this.moduleData;
+        return this.moduleData
       },
       set() {
         console.log('changed copyModuleData')
       }
     },
     carouselImage() {
-      return this.copyModuleData.data[this.activeItemIndex]
-        && this.copyModuleData.data[this.activeItemIndex].image.uri;
+      return this.copyModuleData.data[this.activeItemIndex] &&
+        this.copyModuleData.data[this.activeItemIndex].image.uri
     },
     carouselTitle() {
-      return this.copyModuleData.data[this.activeItemIndex]
-        && this.copyModuleData.data[this.activeItemIndex].title;
+      return this.copyModuleData.data[this.activeItemIndex] &&
+        this.copyModuleData.data[this.activeItemIndex].title
     },
     itemNum() {
-      return this.copyModuleData.data.length;
+      return this.copyModuleData.data.length
     },
     addBtnShow() {
-      return this.itemNum < 5;
-    },
+      return this.itemNum < 5
+    }
   },
   watch: {
     copyModuleData: {
       handler(data) {
-        this.$emit('updateModule', data);
+        this.$emit('updateModule', data)
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   methods: {
     addItem() {
       // 需要深拷贝对象
-      const itemString = JSON.stringify(MODULE_DEFAULT.slideShow.data[0]);
-      const itemObject = JSON.parse(itemString);
+      const itemString = JSON.stringify(MODULE_DEFAULT.slideShow.data[0])
+      const itemObject = JSON.parse(itemString)
       this.copyModuleData.data.push(itemObject)
     },
     selected(selected) {
-      this.activeItemIndex = selected.selectIndex;
+      this.activeItemIndex = selected.selectIndex
     },
     getUpdatedCourses(data) {
-      const linkData = this.copyModuleData.data[this.activeItemIndex].link;
+      const linkData = this.copyModuleData.data[this.activeItemIndex].link
       if (this.type === 'classroom_list') {
         this.courseSets[this.activeItemIndex] = [{
           id: data[0].id,
           // courseSetId: data[0].courseSet.id,
           title: data[0].title,
-          displayedTitle: data[0].title,
-        }];
-        linkData.type = 'classroom';
-        return;
+          displayedTitle: data[0].title
+        }]
+        linkData.type = 'classroom'
+        return
       }
       this.courseSets[this.activeItemIndex] = [{
         id: data[0].id,
         courseSetId: data[0].courseSet.id,
         title: data[0].title || data[0].courseSetTitle,
-        displayedTitle: data[0].displayedTitle,
-      }];
-      linkData.type = 'course';
+        displayedTitle: data[0].displayedTitle
+      }]
+      linkData.type = 'course'
     },
     modalVisibleHandler(visible) {
-      this.modalVisible = visible;
+      this.modalVisible = visible
     },
     openModal({ value, index }) {
       if (value !== 'vip') {
-        this.modalVisible = true;
+        this.modalVisible = true
       } else {
-        this.copyModuleData.data[index].link.type = 'vip';
+        this.copyModuleData.data[index].link.type = 'vip'
       }
-      this.type = value;
-      this.activeItemIndex = index;
+      this.type = value
+      this.activeItemIndex = index
     },
     itemRemove(index) {
-      this.activeItemIndex = index - 1;
-      this.copyModuleData.data.splice(index, 1);
+      this.activeItemIndex = index - 1
+      this.copyModuleData.data.splice(index, 1)
     },
     removeCourseLink(index) {
-      this.type = '';
-      this.copyModuleData.data[index].link.type = '';
-      this.copyModuleData.data[index].link.target = null;
-      this.courseSets[this.activeItemIndex] = [];
+      this.type = ''
+      this.copyModuleData.data[index].link.type = ''
+      this.copyModuleData.data[index].link.target = null
+      this.courseSets[this.activeItemIndex] = []
     }
   }
 }
