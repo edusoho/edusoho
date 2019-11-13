@@ -1,0 +1,21 @@
+// 单独引入 h5 文件夹中的组件样式
+@import '../../../h5/assets/styles/modules/e-course/index.scss';
+@import '../../../h5/assets/styles/modules/e-course-lists/index.scss';
+@import '../../../h5/assets/styles/modules/e-poster/index.scss';
+@import '../../../h5/assets/styles/modules/e-swipe/index.scss';
+@import '../../../h5/assets/styles/modules/e-vip-list/index.scss';
+@import '../../../h5/assets/styles/modules/e-marketing/index.scss';
+
+
+// 引入 admin 文件夹中的组件样式
+@import '../modules/module-frame/index.scss';
+@import '../modules/module-template/index.scss';
+@import '../modules/carousel/index.scss';
+@import '../modules/course/index.scss';
+@import '../modules/course-modal/index.scss';
+@import '../modules/course-table/index.scss';
+@import "../modules/poster/index.scss";
+@import "../modules/marketing-activity/index.scss";
+@import "../modules/footer/index.scss";
+@import "../modules/coupon/index.scss";
+@import "../modules/vip/index.scss";
