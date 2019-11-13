@@ -252,7 +252,7 @@ class DefaultController extends BaseController
         return $this->createService('QuickEntrance:QuickEntranceService');
     }
 
-    /*
+    /**
      * @return StatisticsService
      */
     protected function getStatisticsService()
@@ -277,5 +277,4 @@ class DefaultController extends BaseController
 
         return $biz['qiQiuYunSdk.platformNews'];
     }
-
 }
