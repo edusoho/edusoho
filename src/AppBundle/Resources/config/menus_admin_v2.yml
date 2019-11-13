@@ -1133,14 +1133,17 @@ admin_v2:
                                 admin_v2_app_installed:
                                     name: admin_v2.cloud.app_center.installed_tab
                                     disable: true
+                                    visible: (cloudStatus())
                                     router_params:
                                         postStatus: all
                                 admin_v2_app_upgrades:
                                     name: admin_v2.cloud.app_center.upgrades_tab
                                     class: app-upgrade
+                                    visible: (cloudStatus())
                                     disable: true
                                 admin_v2_app_logs:
                                     name: admin_v2.cloud.app_center.logs_tab
+                                    visible: (cloudStatus())
                                     disable: true
                 # 基础云
                 admin_v2_basic_cloud_group:
