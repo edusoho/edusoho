@@ -1,0 +1,8 @@
+<ul class="nav nav-pills mb15">
+  <li class="{% if type == 'testpaper' %}active{% endif %}">
+    <a href="{{ path('my_testpaper_check_list') }}">{{ 'my.teaching.testpaper.check_title'|trans }}</a>
+  </li>
+  <li class="{% if type == 'homework' %}active{% endif %}">
+    <a href="{{ path('my_homework_check_list') }}">{{ 'my.learning.homework.check_title'|trans }}</a>
+  </li>
+</ul>

@@ -3344,6 +3344,7 @@ my.teaching.today_courses: 'Number of courses today'
 my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
+my.teaching.online_review_menu: 'Online review'
 my.teaching.testpaper_check_menu: 'Tests review'
 my.teaching.homework_check_menu: 'Assignments review'
 my.teaching.material_lib_menu: 'Library'
@@ -3397,12 +3398,16 @@ my.teaching.testpaper.submit: Submit
 my.teaching.testpaper.check: Review
 my.teaching.testpaper.answer_detail: "Total <strong>%totalCount%</strong></div> <div class=\"color-gray\"><small>objective scroe %objectiveScore% points/ subjective score %subjectiveScore% points</small></div> <div class=\"color-success\"><small>%teacherName% at %checkTime%</small>\n"
 my.teaching.testpaper.default_teacher: System
+my.teaching.online.review.title: Online Review
 my.teaching.testpaper.check_title: 'Review test'
 my.teaching.testpaper.uncheck: Not reviewed
 my.teaching.testpaper.check_finished: Reviewed
 my.teaching.testpaper.reviewing_empty: 'No paper needs to review'
 my.teaching.testpaper.check_finished_empty: 'No paper has been reviewed'
 my.teaching.testpaper.test_record: 'My tests'
+my.teaching.testpaper.keyword.course_title: Course Title
+my.teaching.testpaper.keyword.nickname: Nickname
+my.teaching.testpaper.placeholder: Please input keyword
 my.teaching.open_course.hit_num: PV
 my.teaching.open_course.status: Status
 my.teaching.open_course.actions: Action
