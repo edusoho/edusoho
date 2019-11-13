@@ -4,8 +4,6 @@ namespace Biz\QuestionBank\Service\Impl;
 
 use Biz\BaseService;
 use Biz\QuestionBank\Service\QuestionBankService;
-use AppBundle\Common\TreeToolkit;
-use AppBundle\Common\ArrayToolkit;
 
 class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 {

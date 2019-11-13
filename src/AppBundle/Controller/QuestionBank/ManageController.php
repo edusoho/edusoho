@@ -8,6 +8,5 @@ class ManageController extends BaseController
 {
     public function indexAction()
     {
-
     }
 }
