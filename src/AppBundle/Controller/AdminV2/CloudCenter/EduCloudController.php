@@ -224,12 +224,12 @@ class EduCloudController extends BaseController
         }
 
         if (empty($liveCourseSetting['live_course_enabled'])) {
-            return $this->redirect($this->generateUrl('admin_v2_cloud_edulive_overview'));
+            return $this->redirect($this->generateUrl('admin_v2_edu_cloud_edulive_overview'));
         }
 
         $liveEnabled = $liveCourseSetting['live_course_enabled'];
         if (null === $liveEnabled || 0 === $liveEnabled) {
-            return $this->redirect($this->generateUrl('admin_v2_cloud_edulive_overview'));
+            return $this->redirect($this->generateUrl('admin_v2_edu_cloud_edulive_overview'));
         }
         try {
             $api = CloudAPIFactory::create('root');
