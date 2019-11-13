@@ -16,6 +16,7 @@ use Biz\User\Service\NotificationService;
 use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use QiQiuYun\SDK\Service\PlatformNewsService;
 
 class DefaultController extends BaseController
 {
@@ -150,6 +151,22 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function businessAdviceAction()
+    {
+        $advice = array();
+        if (!$this->isWithoutNetwork()) {
+            try {
+                $advice = $this->getPlatformNewsSdkService()->getAdvice();
+            } catch (\Exception $e) {
+                $advice = array();
+            }
+        }
+
+        return $this->render('admin-v2/default/business-advice.html.twig', array(
+            'advice' => $advice,
+        ));
+    }
+
     private function domainInspect($request)
     {
         $currentHost = $request->server->get('HTTP_HOST');
@@ -184,6 +201,13 @@ class DefaultController extends BaseController
         $quickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
 
         return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
+    }
+
+    protected function isWithoutNetwork()
+    {
+        $developer = $this->getSettingService()->get('developer');
+
+        return empty($developer['without_network']) ? false : (bool) $developer['without_network'];
     }
 
     /**
@@ -234,7 +258,7 @@ class DefaultController extends BaseController
         return $this->createService('QuickEntrance:QuickEntranceService');
     }
 
-    /*
+    /**
      * @return StatisticsService
      */
     protected function getStatisticsService()
@@ -248,5 +272,15 @@ class DefaultController extends BaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    /**
+     * @return PlatformNewsService
+     */
+    protected function getPlatformNewsSdkService()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['qiQiuYunSdk.platformNews'];
     }
 }
