@@ -230,13 +230,8 @@
         {{ render(controller('AppBundle:AdminV2/Default:changelog')) }}
 
         {# 公众号 #}
-        <div class="admin-sidebar-section">
-          <div class="admin-sidebar-section__header">公众号</div>
-          <div class="admin-sidebar-section__body admin-wechat">
-            <img src="http://try6.edusoho.cn/files/course/2019/11-04/1707346b8652981940.jpeg">
-            <div class="admin-wechat__text">关注EduSoho公众号 获取最新教育资讯</div>
-          </div>
-        </div>
+        {{ render(controller('AppBundle:AdminV2/Default:qrCode')) }}
+
       </div>
     </div>
 

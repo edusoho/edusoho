@@ -10462,3 +10462,6 @@ admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
 admin_v2.developer_setting.platform_news_api_server.info: '默认为 //'
 admin_v2.role_permission_manage.error: 错误
 admin_v2.default_page.changelog_title: EduSoho更新日志
+
+admin_v2.wechat_official_account.title: 公众号
+admin_v2.wechat_official_account.text: 关注EduSoho公众号 获取最新教育资讯

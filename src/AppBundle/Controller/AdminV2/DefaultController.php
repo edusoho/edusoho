@@ -14,6 +14,7 @@ use Biz\System\Service\SettingService;
 use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
 use Codeages\Biz\Order\Service\OrderService;
+use QiQiuYun\SDK\Service\PlatformNewsService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -185,6 +186,24 @@ class DefaultController extends BaseController
         return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
     }
 
+    public function qrCodeAction(Request $request)
+    {
+        if ($this->isWithoutNetwork()) {
+            $qrCode = array();
+        } else {
+            try {
+                $qrCode = $this->getPlatformNewsSdkService()->getQrCode();
+                $qrCode = empty($qrCode['details']) ? array() : array_pop($qrCode['details']);
+            } catch (\Exception $e) {
+                $qrCode = array();
+            }
+        }
+
+        return $this->render('admin-v2/default/qr-code.html.twig', array(
+            'qrCode' => $qrCode,
+        ));
+    }
+
     /**
      * @return SettingService
      */
@@ -248,4 +267,15 @@ class DefaultController extends BaseController
     {
         return $this->createService('Order:OrderService');
     }
+
+    /**
+     * @return PlatformNewsService
+     */
+    protected function getPlatformNewsSdkService()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['qiQiuYunSdk.platformNews'];
+    }
+
 }
