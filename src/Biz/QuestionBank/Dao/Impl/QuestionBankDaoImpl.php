@@ -2,24 +2,12 @@
 
 namespace Biz\QuestionBank\Dao\Impl;
 
-use Biz\QuestionBank\Dao\CategoryDao;
+use Biz\QuestionBank\Dao\QuestionBankDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class CategoryDaoImpl extends AdvancedDaoImpl implements CategoryDao
+class QuestionBankDaoImpl extends AdvancedDaoImpl implements QuestionBankDao
 {
-    protected $table = 'question_bank_category';
-
-    public function findByIds($ids)
-    {
-        return $this->findInField('id', $ids);
-    }
-
-    public function findAll()
-    {
-        $sql = "SELECT * FROM {$this->table()}";
-
-        return $this->db()->fetchAll($sql) ?: array();
-    }
+    protected $table = 'question_bank';
 
     public function declares()
     {
@@ -34,6 +22,8 @@ class CategoryDaoImpl extends AdvancedDaoImpl implements CategoryDao
 
         $declares['conditions'] = array(
             'id = :id',
+            'categoryId = :categoryId',
+            'orgCode like :likeOrgCode',
         );
 
         return $declares;

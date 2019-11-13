@@ -2485,6 +2485,14 @@ question_bank_manage_create:
     path: /question_bank/create
     defaults: { _controller: AppBundle:Admin/QuestionBank:create }
 
+question_bank_manage_edit:
+    path: /question_bank/{id}/edit
+    defaults: { _controller: AppBundle:Admin/QuestionBank:edit }
+
+question_bank_manage_delete:
+    path: /question_bank/{id}/delete
+    defaults: { _controller: AppBundle:Admin/QuestionBank:delete }
+
 admin_question_bank_category:
     path: /question_bank/category/index
     defaults: { _controller: AppBundle:Admin/QuestionBankCategory:index }

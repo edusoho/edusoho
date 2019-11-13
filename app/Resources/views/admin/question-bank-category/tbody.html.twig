@@ -25,13 +25,13 @@
                         {% endif %}
                         {{ category.name }}
                     </div>
-                    <div class="td col-md-2 code">{{ category.bankNum }}</div>
+                    <div class="td col-md-2 code">{{'admin.question_bank.category_manage.bank'|trans}}：{{ category.bankNum }}</div>
                     <div class="td col-md-3 operation" style="overflow: unset;">
                         {% if category.depth < 2 %}
                           <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('question_bank_category_manage_create', {parentId: category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> {{'admin.category_manage.create_sub_category_btn'|trans}}</a>
                         {% endif %}
                         <div class="btn-group">
-                          <a href="javascript:;" class="btn btn-default btn-sm " data-url="{{ path('question_bank_category_manage_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal">
+                          <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('question_bank_category_manage_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal">
                             <i class="glyphicon glyphicon-edit"></i> {{'admin.category_manage.edit_btn'|trans}}
                           </a>
                           <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">

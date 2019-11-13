@@ -5314,6 +5314,14 @@ admin.classroom_manage.chooser.empty: 暂无%classroomName%记录
 admin.question_bank.category_manage.name: 名称
 admin.question_bank.category_manage.bank_number: 包含内容
 admin.question_bank.category_manage.operate: 操作
+admin.question_bank.category_manage.bank: 题库
+admin.question_bank.manage.name: 名称
+admin.question_bank.manage.bank_content: 包含内容
+admin.question_bank.manage.category: 所属分类
+admin.question_bank.manage.operate: 操作
+admin.question_bank.manage.testpaper: 试卷
+admin.question_bank.manage.question: 题目
+admin.question_bank.manage.empty: 暂无题库
 
 #　分类管理
 admin.category_manage.name_th: 名称
