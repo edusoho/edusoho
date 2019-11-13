@@ -60,6 +60,7 @@ admin.user.message.basic_tab: 'Messages'
 #课程模块
 admin.course.basic_menu: Courses
 admin.course.classroom_menu: Classes
+admin.course.question_bank: Question Bank
 admin.course.open_course_menu: Public Courses
 admin.course.live_menu: Lives
 admin.course.thread_menu: Discussions
@@ -93,6 +94,12 @@ admin.course.classroom.basic_tab.recommend_btn: Recommend
 admin.course.classroom.basic_tab.close_btn: Close
 admin.course.classroom.basic_tab.publish_submit_btn: Publish
 admin.course.classroom.basic_tab.delete_submit_btn: Delete
+
+##题库管理模块
+admin.course.question_bank.basic_tab: Question Bank
+admin.course.question_bank.basic_tab.create_btn: Create
+admin.course.question_bank_category.basic_tab: Question Bank Category
+admin.course.question_bank_category.basic_tab.create_btn: Create
 
 ##公开课管理模块
 admin.course.open_course.basic_tab: Open courses

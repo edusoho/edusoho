@@ -1018,6 +1018,7 @@ admin.category.icon_delete_fail_hint: 删除分类图标失败！
 admin.category.save_success_hint: 保存分类成功！
 admin.category.save_fail_hint: 添加分类失败，请重试！
 admin.category.delete_hint: 真的要删除该分类及其子分类吗？
+admin.category.delete_fail: 分类删除失败
 admin.classroom.choose_success_hint: 指定班级成功
 admin.classroom.operation_success_hint: 成功！
 admin.classroom.operation_fail_hint: 失败

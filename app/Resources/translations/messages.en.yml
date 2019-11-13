@@ -4379,6 +4379,9 @@ admin.classroom_manage.chooser.recommend: Recommended
 admin.classroom_manage.chooser.free: Free
 admin.classroom_manage.chooser.select_btn: Choose
 admin.classroom_manage.chooser.empty: 'No %classroomName% Record'
+admin.question_bank.category_manage.name: Title
+admin.question_bank.category_manage.bank_number: Bank Number
+admin.question_bank.category_manage.operate: Action
 admin.category_manage.name_th: Title
 admin.category_manage.code_th: Code
 admin.category_manage.operate_th: Action

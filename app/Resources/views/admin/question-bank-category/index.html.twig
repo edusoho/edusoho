@@ -1,0 +1,18 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'topxiaadminbundle/controller/question-bank-category/list' %}
+
+{% set menu = 'admin_question_bank_category_manage' %}
+
+{% block main %}
+  <ul class="list-table" id="category-table" style="margin-bottom: 0">
+    <li class="th">
+      <div class="row">
+        <div class="td col-md-7">{{'admin.question_bank.category_manage.name'|trans}}</div>
+        <div class="td col-md-2">{{'admin.question_bank.category_manage.bank_number'|trans}}</div>
+        <div class="td col-md-3">{{'admin.question_bank.category_manage.operate'|trans}}</div>
+      </div>
+    </li>
+    {% include 'admin/question-bank-category/tbody.html.twig' %}
+  </ul>
+{% endblock %}

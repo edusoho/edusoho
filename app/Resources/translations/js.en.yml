@@ -1079,6 +1079,7 @@ admin.category.icon_delete_hint: Are you sure you want to delete the icon?
 admin.category.icon_delete_success_hint: Delete the category icon successfully!
 admin.category.icon_delete_fail_hint: Delete the category icon failed!
 admin.category.delete_hint: Are you sure you want to delete this category and its subcategories?
+admin.category.delete_fail: Fail to delete this category
 admin.classroom.choose_success_hint: Choose classroom success
 admin.classroom.operation_success_hint: successfully！
 admin.classroom.operation_fail_hint: failure

@@ -5310,6 +5310,11 @@ admin.classroom_manage.chooser.free: 免费
 admin.classroom_manage.chooser.select_btn: 选择
 admin.classroom_manage.chooser.empty: 暂无%classroomName%记录
 
+# 题库管理
+admin.question_bank.category_manage.name: 名称
+admin.question_bank.category_manage.bank_number: 包含内容
+admin.question_bank.category_manage.operate: 操作
+
 #　分类管理
 admin.category_manage.name_th: 名称
 admin.category_manage.code_th: 编码
