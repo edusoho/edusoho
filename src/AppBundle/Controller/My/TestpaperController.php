@@ -27,22 +27,22 @@ class TestpaperController extends BaseController
         $teacherCourses = $this->getCourseMemberService()->findTeacherMembersByUserId($user['id']);
         $courseIds = ArrayToolkit::column($teacherCourses, 'courseId');
 
+        if (!in_array($status, array('finished', 'reviewing'))) {
+            $status = 'reviewing';
+        }
+
         $conditions = array(
             'type' => 'testpaper',
-            'courseIds' => $courseIds
+            'courseIds' => $courseIds,
+            'status' => $status
         );
 
         if (!empty($courseIds) && 'courseTitle' == $keywordType) {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keyword);
             $courseSetIds = ArrayToolkit::column($courseSets, 'id');
             $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
-            $courseIds =  ArrayToolkit::column($courses, 'id');
+            $courseIds = ArrayToolkit::column($courses, 'id');
             $conditions['courseIds'] = array_intersect($conditions['courseIds'], $courseIds);
-        }
-
-
-        if (!in_array($status, array('finished', 'reviewing'))) {
-            $status = 'reviewing';
         }
 
 
@@ -53,10 +53,6 @@ class TestpaperController extends BaseController
 
         if ($status == 'finished') {
             $conditions['checkTeacherId'] = $user['id'];
-        }
-
-        if ($status != 'all') {
-            $conditions['status'] = $status;
         }
 
         $paginator = new Paginator(

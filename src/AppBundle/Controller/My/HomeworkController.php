@@ -12,19 +12,39 @@ class HomeworkController extends BaseController
     public function checkListAction(Request $request, $status)
     {
         $user = $this->getUser();
+
         if (!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
+        $status = $request->query->get('status', 'reviewing');
+        $keywordType = $request->query->get('keywordType', 'nickname');
+        $keyword = $request->query->get('keyword', '');
+
         $teacherCourses = $this->getCourseMemberService()->findTeacherMembersByUserId($user['id']);
         $courseIds = ArrayToolkit::column($teacherCourses, 'courseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $conditions = array(
             'status' => $status,
             'type' => 'homework',
             'courseIds' => $courseIds,
         );
+
+        if (!empty($courseIds) && 'courseTitle' == $keywordType) {
+            $likeCourseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keyword);
+            $likeCourseSetIds = ArrayToolkit::column($likeCourseSets, 'id');
+            $likeCourses = $this->getCourseService()->findCoursesByCourseSetIds($likeCourseSetIds);
+            $likeCourseIds = ArrayToolkit::column($likeCourses, 'id');
+            $conditions['courseIds'] = array_intersect($conditions['courseIds'], $likeCourseIds);
+        }
+
+        $courses = $this->getCourseService()->findCoursesByIds($conditions['courseIds']);
+
+
+        if ('nickname' == $keywordType && $keyword) {
+            $searchUser = $this->getUserService()->getUserByNickname($keyword);
+            $conditions['userId'] = $searchUser ? $searchUser['id'] : '-1';
+        }
 
         $paginator = new Paginator(
             $request,
@@ -63,6 +83,8 @@ class HomeworkController extends BaseController
             'status' => $status,
             'testpapers' => $testpapers,
             'tasks' => $tasks,
+            'keyword' => $keyword,
+            'keywordType' => $keywordType
         ));
     }
 
