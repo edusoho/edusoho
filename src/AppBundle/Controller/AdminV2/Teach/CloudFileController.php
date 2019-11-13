@@ -7,6 +7,11 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudFile\Service\CloudFileService;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Course\Service\MaterialService;
+use Biz\File\Service\UploadFileService;
+use Biz\MaterialLib\Service\MaterialLibService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CloudFileController extends BaseController
@@ -20,7 +25,7 @@ class CloudFileController extends BaseController
                 return $this->render('admin-v2/cloud-center/edu-cloud/not-access.html.twig', array('menu' => 'admin_v2_cloud_file'));
             }
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-file/api-error.html.twig', array());
+            return $this->render('admin-v2/teach/cloud-file/api-error.html.twig', array());
         }
 
         $storageSetting = $this->getSettingService()->get('storage', array());
@@ -216,11 +221,17 @@ class CloudFileController extends BaseController
         return $this->redirect($this->generateUrl('admin_v2_cloud_file_manage'));
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
@@ -234,16 +245,25 @@ class CloudFileController extends BaseController
         return $this->createService('CloudFile:CloudFileService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
     }
 
+    /**
+     * @return MaterialLibService
+     */
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLibService');
     }
 
+    /**
+     * @return MaterialService
+     */
     protected function getCourseMaterialService()
     {
         return $this->createService('Course:MaterialService');

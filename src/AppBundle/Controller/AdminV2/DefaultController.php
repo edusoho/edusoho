@@ -111,12 +111,13 @@ class DefaultController extends BaseController
         }
 
         $roles = $this->getCurrentUser()->getRoles();
-        if (0 == count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
+        if (0 == count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) || empty($setting['allow_show_switch_btn'])) {
             $this->createNewException(CommonException::SWITCH_OLD_VERSION_PERMISSION_ERROR());
         }
 
         if ('POST' == $request->getMethod()) {
-            $this->getSettingService()->set('backstage', array('is_v2' => 0));
+            $setting['is_v2'] = 0;
+            $this->getSettingService()->set('backstage', $setting);
 
             return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin')));
         }
@@ -147,6 +148,22 @@ class DefaultController extends BaseController
 
         return $this->render('admin-v2/default/cloud-notice.html.twig', array(
             'trialTime' => (isset($result)) ? $result : null,
+        ));
+    }
+
+    public function businessAdviceAction()
+    {
+        $advice = array();
+        if (!$this->isWithoutNetwork()) {
+            try {
+                $advice = $this->getPlatformNewsSdkService()->getAdvice();
+            } catch (\Exception $e) {
+                $advice = array();
+            }
+        }
+
+        return $this->render('admin-v2/default/business-advice.html.twig', array(
+            'advice' => $advice,
         ));
     }
 
@@ -202,6 +219,13 @@ class DefaultController extends BaseController
         return $this->render('admin-v2/default/qr-code.html.twig', array(
             'qrCode' => $qrCode,
         ));
+    }
+
+    protected function isWithoutNetwork()
+    {
+        $developer = $this->getSettingService()->get('developer');
+
+        return empty($developer['without_network']) ? false : (bool) $developer['without_network'];
     }
 
     /**

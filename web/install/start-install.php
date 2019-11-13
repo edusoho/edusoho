@@ -509,6 +509,10 @@ EOD;
         'coupon' => array(
             'enabled' => 1,
         ),
+        'backstage' => array(
+            'is_v2' => 1,
+            'allow_show_switch_btn' => 0,
+        ),
     );
 
     $service = ServiceKernel::instance()->createService('System:SettingService');
