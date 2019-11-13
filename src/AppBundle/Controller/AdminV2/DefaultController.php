@@ -22,6 +22,7 @@ use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceKernel;
+use QiQiuYun\SDK\Service\PlatformNewsService;
 
 class DefaultController extends BaseController
 {
@@ -157,12 +158,13 @@ class DefaultController extends BaseController
         }
 
         $roles = $this->getCurrentUser()->getRoles();
-        if (0 == count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
+        if (0 == count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) || empty($setting['allow_show_switch_btn'])) {
             $this->createNewException(CommonException::SWITCH_OLD_VERSION_PERMISSION_ERROR());
         }
 
         if ('POST' == $request->getMethod()) {
-            $this->getSettingService()->set('backstage', array('is_v2' => 0));
+            $setting['is_v2'] = 0;
+            $this->getSettingService()->set('backstage', $setting);
 
             return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin')));
         }
@@ -194,6 +196,65 @@ class DefaultController extends BaseController
         return $this->render('admin-v2/default/cloud-notice.html.twig', array(
             'trialTime' => (isset($result)) ? $result : null,
         ));
+    }
+
+    public function businessAdviceAction()
+    {
+        $advice = array();
+        if (!$this->isWithoutNetwork()) {
+            try {
+                $advice = $this->getPlatformNewsSdkService()->getAdvice();
+            } catch (\Exception $e) {
+                $advice = array();
+            }
+        }
+
+        return $this->render('admin-v2/default/business-advice.html.twig', array(
+            'advice' => $advice,
+        ));
+    }
+
+    private function domainInspect($request)
+    {
+        $currentHost = $request->server->get('HTTP_HOST');
+        $siteSetting = $this->getSettingService()->get('site');
+        $settingUrl = $this->generateUrl('admin_v2_school_information');
+        $filter = array('http://', 'https://');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'], '/');
+
+        if ($currentHost != str_replace($filter, '', $siteSetting['url'])) {
+            return array(
+                'status' => 'warning',
+                'errorMessage' => ServiceKernel::instance()->trans('admin_v2.domain_error_hint'),
+                'except' => $siteSetting['url'],
+                'actually' => $currentHost,
+                'settingUrl' => $settingUrl,
+            );
+        }
+
+        return array('status' => 'ok', 'except' => $siteSetting['url'], 'actually' => $currentHost, 'settingUrl' => $settingUrl);
+    }
+
+    private function getMiniProgramCodeImg()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['kernel.root_dir'].'/../web/mini_program_code.png';
+    }
+
+    public function quickEntranceAction(Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $fields = $request->request->all();
+            $quickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
+
+            return $this->render('admin-v2/default/quick-entrance/index.html.twig', array('entrances' => $quickEntrances));
+        }
+
+        $quickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
+
+        return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
     }
 
     protected function getDisabledCloudServiceCount()
@@ -244,47 +305,11 @@ class DefaultController extends BaseController
         return 'none';
     }
 
-    private function domainInspect($request)
+    protected function isWithoutNetwork()
     {
-        $currentHost = $request->server->get('HTTP_HOST');
-        $siteSetting = $this->getSettingService()->get('site');
-        $settingUrl = $this->generateUrl('admin_v2_school_information');
-        $filter = array('http://', 'https://');
-        $siteSetting['url'] = rtrim($siteSetting['url']);
-        $siteSetting['url'] = rtrim($siteSetting['url'], '/');
+        $developer = $this->getSettingService()->get('developer');
 
-        if ($currentHost != str_replace($filter, '', $siteSetting['url'])) {
-            return array(
-                'status' => 'warning',
-                'errorMessage' => ServiceKernel::instance()->trans('admin_v2.domain_error_hint'),
-                'except' => $siteSetting['url'],
-                'actually' => $currentHost,
-                'settingUrl' => $settingUrl,
-            );
-        }
-
-        return array('status' => 'ok', 'except' => $siteSetting['url'], 'actually' => $currentHost, 'settingUrl' => $settingUrl);
-    }
-
-    private function getMiniProgramCodeImg()
-    {
-        $biz = $this->getBiz();
-
-        return $biz['kernel.root_dir'].'/../web/mini_program_code.png';
-    }
-
-    public function quickEntranceAction(Request $request)
-    {
-        if ($request->isMethod('POST')) {
-            $fields = $request->request->all();
-            $quickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
-
-            return $this->render('admin-v2/default/quick-entrance/index.html.twig', array('entrances' => $quickEntrances));
-        }
-
-        $quickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
-
-        return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
+        return empty($developer['without_network']) ? false : (bool) $developer['without_network'];
     }
 
     /**
@@ -375,5 +400,15 @@ class DefaultController extends BaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    /**
+     * @return PlatformNewsService
+     */
+    protected function getPlatformNewsSdkService()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['qiQiuYunSdk.platformNews'];
     }
 }

@@ -4,7 +4,6 @@ namespace Tests\Unit\Role\Service;
 
 use Biz\Role\Service\RoleService;
 use AppBundle\Common\Tree;
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Role\Util\PermissionBuilder;
 use AppBundle\Common\ReflectionUtils;
@@ -14,45 +13,23 @@ class RoleServiceTest extends BaseTestCase
 {
     public function testrefreshRoles()
     {
-        $permissions = PermissionBuilder::instance()->getOriginPermissions();
-        $permissionTree = Tree::buildWithArray($permissions, null, 'code', 'parent');
-        $superAdminPermissions = ArrayToolkit::column($permissions, 'code');
-
-        $adminForbiddenRootPermissions = array(
-            'admin_user_avatar',
-            'admin_user_change_password',
-            'admin_my_cloud',
-            'admin_cloud_video_setting',
-            'admin_edu_cloud_sms',
-            'admin_edu_cloud_search_setting',
-            'admin_setting_cloud_attachment',
-            'admin_setting_cloud',
-            'admin_system',
-        );
-
-        $adminForbiddenPermissions = array();
-        foreach ($adminForbiddenRootPermissions as $rootPermission) {
-            $adminRoleTree = $permissionTree->find(function ($permissionNode) use ($rootPermission) {
-                return $permissionNode->data['code'] === $rootPermission;
-            });
-            $adminForbiddenPermissions = array_merge($adminRoleTree->column('code'), $adminForbiddenPermissions);
-        }
-        $adminPermissions = array_diff($superAdminPermissions, $adminForbiddenPermissions);
-
-        $teacherRoleTree = $permissionTree->find(function ($tree) {
+        $this->getRoleService()->refreshRoles();
+        $permissions = PermissionBuilder::instance()->loadPermissionsFromAllConfig();
+        $tree = Tree::buildWithArray($permissions, null, 'code', 'parent');
+        $getAdminRoles = $tree->find(function ($tree) {
+            return 'admin' === $tree->data['code'];
+        });
+        $adminRoles = $getAdminRoles->column('code');
+        $getWebRoles = $tree->find(function ($tree) {
             return 'web' === $tree->data['code'];
         });
-
-        $this->getRoleService()->refreshRoles();
+        $webRoles = $getWebRoles->column('code');
 
         $superAdminRole = $this->getRoleService()->getRoleByCode('ROLE_SUPER_ADMIN');
-        $this->assertEquals(count($superAdminPermissions), count($superAdminRole['data']));
-
-        $adminRole = $this->getRoleService()->getRoleByCode('ROLE_ADMIN');
-        $this->assertEquals(count($adminPermissions), count($adminRole['data']));
+        $this->assertEquals(count(array_merge($adminRoles, $webRoles)), count($superAdminRole['data']));
 
         $teacherRole = $this->getRoleService()->getRoleByCode('ROLE_TEACHER');
-        $this->assertEquals(count($teacherRoleTree->column('code')), count($teacherRole['data']));
+        $this->assertEquals(count($webRoles), count($teacherRole['data']));
 
         $userRole = $this->getRoleService()->getRoleByCode('ROLE_USER');
         $this->assertEquals(count(array()), count($userRole['data']));

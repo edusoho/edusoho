@@ -107,3 +107,6 @@ $.get($('.admin-data').data('url'), function (html) {
   $('.admin-data').html(html);
 });
 
+$('.js-no-network').click(function () {
+  cd.message({type: 'danger', 'message': Translator.trans('admin.can_not_link_data')});
+});
