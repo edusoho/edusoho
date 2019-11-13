@@ -10478,7 +10478,8 @@ admin_v2.newcomer_task.course_applied.tip: 快速创建课程商品，获取网�
 admin_v2.newcomer_task.decoration_applied.title: 装修网校
 admin_v2.newcomer_task.decoration_applied.tip: 装修网校首页，获得更多用户好感
 
+admin_v2.homepage.overview: 概况
 admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
-admin_v2.developer_setting.platform_news_api_server.info: '默认为 //'
+admin_v2.developer_setting.platform_news_api_server.info: '默认为 //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: 错误
 admin_v2.default_page.changelog_title: EduSoho更新日志

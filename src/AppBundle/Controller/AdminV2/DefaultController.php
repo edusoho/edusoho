@@ -116,12 +116,13 @@ class DefaultController extends BaseController
         }
 
         $roles = $this->getCurrentUser()->getRoles();
-        if (0 == count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
+        if (0 == count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) || empty($setting['allow_show_switch_btn'])) {
             $this->createNewException(CommonException::SWITCH_OLD_VERSION_PERMISSION_ERROR());
         }
 
         if ('POST' == $request->getMethod()) {
-            $this->getSettingService()->set('backstage', array('is_v2' => 0));
+            $setting['is_v2'] = 0;
+            $this->getSettingService()->set('backstage', $setting);
 
             return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin')));
         }

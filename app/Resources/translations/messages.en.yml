@@ -9173,7 +9173,8 @@ admin_v2.newcomer_task.course_applied.tip: Quickly create course products and ge
 admin_v2.newcomer_task.decoration_applied.title: Decoration online school
 admin_v2.newcomer_task.decoration_applied.tip: Renovate the online school homepage, get more users
 
+admin_v2.homepage.overview: Overview
 admin_v2.developer_setting.platform_news_api_server: API to get information from platform
-admin_v2.developer_setting.platform_news_api_server.info: 'Default value is //'
+admin_v2.developer_setting.platform_news_api_server.info: 'Default value is //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: Error
 admin_v2.default_page.changelog_title: EduSoho Changelog

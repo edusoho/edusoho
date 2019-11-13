@@ -1,18 +1,18 @@
 {% if set.cash_model =="deduction" %}
   <ul class="nav nav-pills mbl">
-    <li role="presentation" class = "js-type-filter 
-    {% if (type|default('course') == 'course') %}active {% endif %}" 
+    <li role="presentation" class = "js-type-filter
+    {% if (type|default('course') == 'course') %}active {% endif %}"
     data-url="{{path('admin_v2_coin_model_ajax',{type:'course'|default('course'), set:set})}}" id="course">
     <a href="javascript:;">{{'course'|trans}}</a>
     </li>
-    <li role="presentation" class = "js-type-filter 
-    {% if (type|default('course') == 'classroom') %}active {% endif %}" 
+    <li role="presentation" class = "js-type-filter
+    {% if (type|default('course') == 'classroom') %}active {% endif %}"
     data-url="{{path('admin_v2_coin_model_ajax',{type:'classroom'|default('course'), set:set})}}" id="classroom">
     <a href="javascript:;">{{'classroom'|trans}}</a>
     </li>
-    {% if is_plugin_installed('vip') %}
-      <li role="presentation" class = "js-type-filter 
-      {% if (type|default('course') == 'vip') %}active {% endif %}" 
+    {% if is_plugin_installed('vip') and has_permission('admin_v2_coin_user_records') %}
+      <li role="presentation" class = "js-type-filter
+      {% if (type|default('course') == 'vip') %}active {% endif %}"
       data-url="{{path('admin_v2_coin_model_ajax',{type:'vip'|default('course'), set:set})}}" id="vip">
       <a href="javascript:;">{{'vip'|trans}}</a>
       </li>
