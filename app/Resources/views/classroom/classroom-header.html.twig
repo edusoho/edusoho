@@ -127,8 +127,8 @@
 
           </div>
         </div>
-
-        {% if classroom_permit(classroom.id, 'Manage') and has_permission('admin_classroom_content_manage') %}
+        {#添加admin_v2#}
+        {% if classroom_permit(classroom.id, 'Manage') and (has_permission('admin_classroom_content_manage') or has_permission('admin_v2_classroom_content_manage')) %}
           <a href="{{ path('classroom_manage',{id:classroom.id}) }}" class="btn btn-default setting hidden-xs hidden-sm"
             title="{{ 'classroom.classroom_manage'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}">
             <i class="es-icon es-icon-setting"></i>
