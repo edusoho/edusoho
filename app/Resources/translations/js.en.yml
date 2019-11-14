@@ -1495,3 +1495,5 @@ course.plan_task.lessons_publish_status: Published Lesson Number:%publishedNum%<
 admin.question_bank.choose_category: Please select the category
 admin.question_bank.save_success: Save Success
 admin.question_bank.save_fail: Save Fail
+admin.question_bank.delete_hint: Are you sure you want to delete this question bank？
+admin.question_bank.fail_not_delete: This question bank contains %testpaperNum% of the test papers, %questionNum% of the questions, can not be deleted
