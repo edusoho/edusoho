@@ -88,3 +88,11 @@ if ($('.application-intro').length && $('.application-intro').data('url')) {
 $('.js-no-network').click(function () {
   cd.message({type: 'danger', 'message': Translator.trans('admin.can_not_link_data')});
 });
+
+
+// 站长公告
+if ($('.announcement-from-platform').length && $('.announcement-from-platform').data('url')) {
+  $.get($('.announcement-from-platform').data('url'), (html) => {
+    $('.announcement-from-platform').html(html);
+  });
+}
