@@ -118,12 +118,6 @@ if ($('.application-intro').length && $('.application-intro').data('url')) {
   });
 }
 
-if ($('.application-intro-not-connected').length) {
-  $('.application-intro-not-connected').click(() => {
-    cd.message({type: 'danger', message: Translator.trans('admin_v2.homepage.application-intro.hint')});
-  });
-}
-
 $('.js-no-network').click(function () {
   cd.message({type: 'danger', 'message': Translator.trans('admin.can_not_link_data')});
 });

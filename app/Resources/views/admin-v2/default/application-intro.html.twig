@@ -12,9 +12,9 @@
     {% for i in 0..3 %}
       <div class="col-md-3">
         {% if applicationData[i] is defined %}
-          <a class="text-center admin-application" href="{{ app.url }}" target="_blank">
-            <img src={{ app.image }}>
-            <div class="admin-application__name">{{ app.title }}</div>
+          <a class="text-center admin-application" href="{{ applicationData[i].url }}" target="_blank">
+            <img src={{ applicationData[i].image }}>
+            <div class="admin-application__name">{{ applicationData[i].title }}</div>
           </a>
         {% else %}
           <div class="text-center admin-application">
