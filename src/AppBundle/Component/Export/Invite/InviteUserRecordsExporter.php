@@ -23,7 +23,7 @@ class InviteUserRecordsExporter extends Exporter
     {
         $user = $this->getUser();
 
-        if ($user->hasPermission('admin_operation_invite_user')) {
+        if ($user->hasPermission('admin_operation_invite_user') || $user->hasPermission('admin_v2_operation_invite_user')) {
             return true;
         }
 
