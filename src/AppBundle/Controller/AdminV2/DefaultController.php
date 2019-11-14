@@ -502,14 +502,6 @@ class DefaultController extends BaseController
     }
 
     /**
-     * @return AppService
-     */
-    protected function getAppService()
-    {
-        return $this->createService('CloudPlatform:AppService');
-    }
-
-    /**
      * @return WeChatAppService
      */
     protected function getWeChatAppService()
