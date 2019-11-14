@@ -10,13 +10,15 @@ use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\System\SettingException;
 use Biz\OrderFacade\CoinCurrency;
 use ApiBundle\Api\Util\AssetHelper;
+use Biz\User\UserException;
+use AppBundle\Common\ArrayToolkit;
 
 class Setting extends AbstractResource
 {
     private $supportTypes = array(
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
-        'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer', 
-        'user', 'cloud', 'coin', 'coupon', 'mobile'
+        'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
+        'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo',
     );
 
     /**
@@ -49,17 +51,65 @@ class Setting extends AbstractResource
         return $result;
     }
 
+    public function getCloudVideo()
+    {
+        $storageSetting = $this->getSettingService()->get('storage');
+        $fingerPrintSetting = array(
+            'video_fingerprint' => '0',
+        );
+        $watermarkSetting = array(
+            'video_watermark' => '0',
+        );
+
+        if (!empty($storageSetting)) {
+            $fingerPrintSetting = ArrayToolkit::parts($storageSetting, array(
+                'video_fingerprint',
+                'video_fingerprint_time',
+            ));
+
+            $watermarkSetting = ArrayToolkit::parts($storageSetting, array(
+                'video_watermark',
+                'video_watermark_image',
+                'video_embed_watermark_image',
+                'video_watermark_position',
+            ));
+
+            foreach ($watermarkSetting as $key => &$value) {
+                if (in_array($key, array('video_watermark_image', 'video_embed_watermark_image'))) {
+                    $value = AssetHelper::getFurl($value);
+                }
+            }
+        }
+
+        return array(
+            'watermarkSetting' => $watermarkSetting,
+            'fingerPrintSetting' => $fingerPrintSetting,
+        );
+    }
+
+    public function getAppIm($request)
+    {
+        $this->checkLogin();
+
+        $appIm = $this->getSettingService()->get('app_im');
+
+        return array(
+            'enabled' => empty($appIm['enabled']) ? 0 : $appIm['enabled'],
+            'convNo' => empty($appIm['convNo']) ? null : $appIm['convNo'],
+        );
+    }
+
     public function getMobile($request)
     {
         $mobileSetting = $this->getSettingService()->get('mobile', array());
-        
+
         $splashs = array();
         for ($i = 1; $i < 6; ++$i) {
             if (!empty($mobileSetting['splash'.$i])) {
                 $splashs[] = AssetHelper::uriForPath('/'.$mobileSetting['splash'.$i]);
             }
         }
-        
+
         return array(
             'enabled' => empty($mobileSetting['enabled']) ? true : (bool) $mobileSetting['enabled'],
             'logo' => empty($mobileSetting['logo']) ? '' : AssetHelper::uriForPath('/'.$mobileSetting['logo']),
@@ -390,6 +440,14 @@ class Setting extends AbstractResource
         }
 
         return $loginConnect;
+    }
+
+    private function checkLogin()
+    {
+        $user = $this->getCurrentUser();
+        if (empty($user) || 0 == $user['id']) {
+            throw UserException::UN_LOGIN();
+        }
     }
 
     private function getDefaultLoginConnect($clients)
