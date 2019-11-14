@@ -210,8 +210,8 @@ class DefaultController extends BaseController
         $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
 
         if ($request->isMethod('POST')) {
-            $fields = $request->request->all();
-            $userQuickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
+            $entrances = $request->request->get('data', array());
+            $userQuickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $entrances);
         }
 
         $allQuickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
