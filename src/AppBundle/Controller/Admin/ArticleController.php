@@ -95,6 +95,7 @@ class ArticleController extends BaseController
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         if ($request->getMethod() == 'POST') {
+            var_dump($request->request->all());
             $formData = $request->request->all();
             $article = $this->getArticleService()->updateArticle($id, $formData);
 
@@ -102,7 +103,7 @@ class ArticleController extends BaseController
 
             $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $article['id'], $attachment['targetType'], $attachment['type']);
 
-            return $this->redirect($this->generateUrl('admin_article'));
+            //return $this->redirect($this->generateUrl('admin_article'));
         }
 
         return $this->render('admin/article/article-modal.html.twig', array(
