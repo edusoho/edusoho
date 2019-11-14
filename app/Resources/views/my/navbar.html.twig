@@ -32,5 +32,9 @@
     <li class="nav-header-section__item {% if side_nav == 'material-lib' %} active {% endif %}">
       <a href="{{ path('material_lib_browsing') }}">{{ 'my.teaching.material_lib_menu'|trans }}</a>
     </li>
+
+    <li class="nav-header-section__item {% if side_nav == 'my-question-bank' %} active {% endif %}">
+      <a href="{{ path('question_bank_list') }}">{{ 'my.teaching.question_bank_menu'|trans }}</a>
+    </li>
   </ul>
 </div>
