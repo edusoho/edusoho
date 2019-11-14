@@ -9159,10 +9159,10 @@ admin_v2.developer_setting.platform_news_api_server: API to get information from
 admin_v2.developer_setting.platform_news_api_server.info: 'Default value is //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: Error
 admin_v2.default_page.changelog_title: EduSoho Changelog
-
+admin_v2.wechat_official_account.title: Official Account
+admin_v2.wechat_official_account.text: Follow the EduSoho official account to get the latest education information
 admin_v2.homepage.announcement_from_platform: Announcement From Platform
 admin_v2.homepage.application_intro: Application Introduction
 admin_v2.homepage.application_intro.more_btn: View more marketing cloud application
-
 admin_v2.business_advice.title: Business advice
 admin_v2.buiness_advice.goto_qiqiuyu: EduSoho Business School

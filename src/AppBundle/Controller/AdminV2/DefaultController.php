@@ -222,6 +222,24 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function qrCodeAction(Request $request)
+    {
+        if ($this->isWithoutNetwork()) {
+            $qrCode = array();
+        } else {
+            try {
+                $qrCode = $this->getPlatformNewsSdkService()->getQrCode();
+                $qrCode = empty($qrCode['details']) ? array() : array_pop($qrCode['details']);
+            } catch (\Exception $e) {
+                $qrCode = array();
+            }
+        }
+
+        return $this->render('admin-v2/default/qr-code.html.twig', array(
+            'qrCode' => $qrCode,
+        ));
+    }
+
     protected function isWithoutNetwork()
     {
         $developer = $this->getSettingService()->get('developer');
