@@ -1,16 +1,23 @@
-$('.js-entrance-list').on('click', '.js-function-choose', (event) => {
+$('html').on('shown.bs.modal', '#functionModal', (e) => {
+  $('html').css('overflow', 'hidden');
+}).on('hidden.bs.modal', '#functionModal', (e) => {
+  $('html').css('overflow', 'scroll');
+});
+
+$('.quick-entrance').on('click', '.js-function-choose', (event) => {
   const $target = $(event.currentTarget);
 
   if (!$target.hasClass('active') && $('.js-function-choose.active').length >= 7) {
-    cd.message({type: 'danger', message: Translator.trans('admin_v2.homepage.quick_entrance.hint')});
+    cd.message({type: 'warning', message: Translator.trans('admin_v2.homepage.quick_entrance.hint')});
     return;
   }
+
   $target.toggleClass('active');
 });
 
-$('.js-save-btn').on('click', (event) => {
+$('.quick-entrance').on('click', '.js-save-btn', (event) => {
   if ($('.js-function-choose.active').length > 7) {
-    cd.message({type: 'danger', message: Translator.trans('admin_v2.homepage.quick_entrance.hint')});
+    cd.message({type: 'warning', message: Translator.trans('admin_v2.homepage.quick_entrance.hint')});
     return;
   }
   const $target = $(event.target);
@@ -27,10 +34,8 @@ $('.js-save-btn').on('click', (event) => {
     data: entranceCodes
   }, function (quickEntrances) {
     $target.button('reset');
-    if (quickEntrances) {
-      $('.quick-entrance').html(quickEntrances);
-      $('#modal').modal('hide');
-    }
+    $('#functionModal').modal('hide');
+    $('.quick-entrance').html(quickEntrances);
   });
 
 });

@@ -90,7 +90,7 @@ class CourseSetController extends BaseController
     {
         $currentUser = $this->getUser();
 
-        if (!$currentUser->hasPermission('admin_course_set_delete')) {
+        if (!$currentUser->hasPermission('admin_v2_course_set_delete')) {
             $this->createNewException(UserException::PERMISSION_DENIED());
         }
 

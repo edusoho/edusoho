@@ -8,39 +8,6 @@ $('.js-show-toggle').on('click', (event) => {
   $target.find('i').toggleClass('es-icon-keyboardarrowup es-icon-keyboardarrowdown');
 });
 
-const $modal = $('#functionModal');
-const $html = $('html');
-$modal.on('shown.bs.modal', (e) => {
-  $html.css('overflow', 'hidden');
-}).on('hidden.bs.modal', (e) => {
-  $html.css('overflow', 'scroll');
-});
-
-
-$('.js-entrance-list').on('click', '.js-function-choose', (event) => {
-  const $target = $(event.currentTarget);
-  $target.toggleClass('active');
-});
-
-let currentItem = [];
-
-$('.js-save-btn').on('click', (event) => {
-  if ($('.js-function-choose.active').length > 7) {
-    cd.message({type: 'danger', message: '最多设置7个快捷入口位'});
-    return;
-  }
-  const $quickItem = $('.js-function-body').find('.js-function-choose');
-  $quickItem.each(item => {
-    const code = $(item).data('link');
-    const flag = $(item).hasClass('active');
-    if (flag && !currentItem.includes(code)) {
-      currentItem.push(code);
-    }
-  });
-  $modal.modal('hide');
-});
-
-
 const showAdImage = ($cloudAd, img, res) => {
   const $img = $(img);
   const $box = $cloudAd.find('.modal-dialog');
@@ -105,6 +72,27 @@ $('.js-mini-program').popover({
 });
 
 // 数据概览
-$.get($('.admin-data').data('url'), function (html) {
-  $('.admin-data').html(html);
+if ($('.admin-data').length) {
+  $.get($('.admin-data').data('url'), (html) => {
+    $('.admin-data').html(html);
+  });
+}
+
+// 应用简介
+if ($('.application-intro').length && $('.application-intro').data('url')) {
+  $.get($('.application-intro').data('url'), (html) => {
+    $('.application-intro').html(html);
+  });
+}
+
+$('.js-no-network').click(function () {
+  cd.message({type: 'danger', 'message': Translator.trans('admin.can_not_link_data')});
 });
+
+
+// 站长公告
+if ($('.announcement-from-platform').length && $('.announcement-from-platform').data('url')) {
+  $.get($('.announcement-from-platform').data('url'), (html) => {
+    $('.announcement-from-platform').html(html);
+  });
+}

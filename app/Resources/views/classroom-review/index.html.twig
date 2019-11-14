@@ -67,7 +67,13 @@
               <span class="color-gray">{{review.createdTime|date('Y-n-d H:i')}}</span>
             </td>
             <td>
-              <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_review.content'|trans}}" data-url="{{ path('admin_classroom_review_delete', {id:review.id}) }}">{{'form.btn.delete'|trans}}</button>
+              {#添加admin_v2#}
+              {% if setting('backstage.is_v2',0)  == 0 %}
+                {% set dataDeleteUrl = path('admin_classroom_review_delete', {id:review.id}) %}
+              {% else %}
+                {% set dataDeleteUrl=  path('admin_v2_classroom_review_delete', {id:review.id}) %}
+              {% endif %}
+              <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_review.content'|trans}}" data-url="{{ dataDeleteUrl }}">{{'form.btn.delete'|trans}}</button>
             </td>
           </tr>
         {% else %}
@@ -78,7 +84,13 @@
 
     <div>
       <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.course_thread.select_all_btn'|trans}}</label>
-      <button class="btn btn-default btn-sm mlm" data-url="{{ path('admin_classroom_review_batch_delete') }}" data-role="batch-delete" data-name="{{'admin.course_review.content'|trans}}">{{'form.btn.delete'|trans}}</button>
+      {#添加admin_v2#}
+      {% if setting('backstage.is_v2',0)  == 0 %}
+        {% set dataDeleteUrl = path('admin_classroom_review_batch_delete') %}
+      {% else %}
+        {% set dataDeleteUrl=  path('admin_v2_classroom_review_batch_delete') %}
+      {% endif %}
+      <button class="btn btn-default btn-sm mlm" data-url="{{ dataDeleteUrl }}" data-role="batch-delete" data-name="{{'admin.course_review.content'|trans}}">{{'form.btn.delete'|trans}}</button>
     </div>
   </div>
 
