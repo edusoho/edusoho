@@ -3,13 +3,15 @@
 namespace AppBundle\Controller\AdminV2;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ChangelogToolkit;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\FileToolkit;
 use AppBundle\System;
-use AppBundle\Common\ChangelogToolkit;
 use Biz\Common\CommonException;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\CloudPlatform\Service\AppService;
+use Biz\Content\Service\BlockService;
+use Biz\Content\Service\NavigationService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
@@ -33,6 +35,8 @@ class DefaultController extends BaseController
 
         return $this->render('admin-v2/default/index.html.twig', array(
             'dates' => $weekAndMonthDate,
+            'newcomerTaskStatus' => $this->getNewcomerTaskStatus(),
+            'isNewcomerTaskAllDone' => $this->isNewcomerTaskAllDone(),
         ));
     }
 
@@ -273,13 +277,83 @@ class DefaultController extends BaseController
         }
     }
 
+    protected function getNewcomerTaskStatus()
+    {
+        $newcomerTaskStatus = array(
+            'cloud_applied' => 0,
+            'auth_applied' => 0,
+            'payment_applied' => 0,
+            'plugin_applied' => 0,
+            'course_applied' => 0,
+            'decoration_applied' => 0,
+        );
+
+        $storage = $this->getSettingService()->get('storage', array());
+        if (!empty($storage['cloud_key_applied'])) {
+            $newcomerTaskStatus['cloud_applied'] = 1;
+        }
+        $payment = $this->getSettingService()->get('payment', array());
+        if (!empty($payment['alipay_enabled']) || !empty($payment['wxpay_enabled']) || !empty($payment['llpay_enabled'])) {
+            $newcomerTaskStatus['payment_applied'] = 1;
+        }
+        $apps = $this->getAppService()->findApps(0, $this->getAppService()->findAppCount());
+        $appTypes = ArrayToolkit::column($apps, 'type');
+        if (in_array(AppService::PLUGIN_TYPE, $appTypes)) {
+            $newcomerTaskStatus['plugin_applied'] = 1;
+        }
+        $publishCount = $this->getCourseSetService()->countCourseSets(array('status' => 'published'));
+        if (!empty($publishCount)) {
+            $newcomerTaskStatus['course_applied'] = 1;
+        }
+        $recommendCount = $this->getCourseSetService()->countCourseSets(array('recommended' => 1));
+        if (!empty($recommendCount)) {
+            $newcomerTaskStatus['recommend_course_applied'] = 1;
+        }
+        $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
+        if (!empty($latestBlockHistory)) {
+            $newcomerTaskStatus['banner_applied'] = 1;
+        }
+
+        $newcomerTaskSetting = $this->getSettingService()->get('newcomer_task', $newcomerTaskStatus);
+        $newcomerTaskSetting = array_filter($newcomerTaskSetting);
+
+        $isRecommendCourseApplied = !empty($newcomerTaskStatus['recommend_course_applied']) || !empty($newcomerTaskSetting['recommend_course_applied']);
+        $isBannerApplied = !empty($newcomerTaskStatus['banner_applied']) || !empty($newcomerTaskSetting['banner_applied']);
+        if (!empty($newcomerTaskSetting['top_navigation_applied']) && $isBannerApplied && $isRecommendCourseApplied) {
+            $newcomerTaskStatus['decoration_applied'] = 1;
+        }
+
+        $newcomerTaskStatus = array_merge($newcomerTaskStatus, $newcomerTaskSetting);
+        $this->getSettingService()->set('newcomer_task', array_filter($newcomerTaskStatus));
+
+        return $newcomerTaskStatus;
+    }
+
+    protected function isNewcomerTaskAllDone()
+    {
+        $newcomerTask = $this->getSettingService()->get('newcomer_task', array());
+        $newcomerTask = array_filter($newcomerTask);
+        if (ArrayToolkit::requireds($newcomerTask, array(
+            'cloud_applied',
+            'auth_applied',
+            'payment_applied',
+            'plugin_applied',
+            'course_applied',
+            'decoration_applied',
+        ))) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function quickEntranceAction(Request $request)
     {
         $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
 
         if ($request->isMethod('POST')) {
-            $fields = $request->request->all();
-            $userQuickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
+            $entrances = $request->request->get('data', array());
+            $userQuickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $entrances);
         }
 
         $allQuickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
@@ -369,6 +443,30 @@ class DefaultController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return AppService
+     */
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
+    }
+
+    /**
+     * @return BlockService
+     */
+    protected function getBlockService()
+    {
+        return $this->createService('Content:BlockService');
+    }
+
+    /**
+     * @return NavigationService
+     */
+    protected function getNavigationService()
+    {
+        return $this->createService('Content:NavigationService');
     }
 
     /**

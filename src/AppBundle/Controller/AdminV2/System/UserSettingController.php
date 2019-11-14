@@ -51,6 +51,10 @@ class UserSettingController extends BaseController
 
         $auth = array_merge($default, $auth);
 
+        $newcomerTask = $this->getSettingService()->get('newcomer_task', array());
+        $newcomerTask = array_merge($newcomerTask, array('auth_applied' => 1));
+        $this->getSettingService()->set('newcomer_task', $newcomerTask);
+
         if ('POST' == $request->getMethod()) {
             $defaultSetting = $request->request->all();
 

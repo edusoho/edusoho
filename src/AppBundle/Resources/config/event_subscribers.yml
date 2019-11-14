@@ -315,3 +315,9 @@ services:
         arguments: ['@biz']
         tags:
         - { name: codeages_plugin.event.subscriber }
+
+    navigation_event_subscriber:
+        class: Biz\Content\Event\NavigationEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }

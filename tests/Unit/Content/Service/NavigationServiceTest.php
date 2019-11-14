@@ -543,6 +543,9 @@ class NavigationServiceTest extends BaseTestCase
                 'functionName' => 'get',
                 'returnValue' => array('enable_org' => 1),
             ),
+            array(
+                'functionName' => 'set',
+            ),
         ));
     }
 
