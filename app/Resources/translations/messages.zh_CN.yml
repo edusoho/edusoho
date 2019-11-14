@@ -10424,6 +10424,7 @@ admin_v2.homepage.cloud_notice.unknown_days: 未知
 admin_v2.homepage.cloud_notice: '欢迎使用,试用将于<strong> %endTime% </strong>到期,剩余<strong> %remainDays% </strong>天。您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或 '
 
 # 常用入口
+admin_v2.homepage.quick_entrance: 常用入口
 admin_v2.edit_quick_entrance.btn: 编辑入口
 admin_v2.quick_entrance_setting: 设置常用入口
 admin_v2.quick_entrance_setting.tips: (最多设置7个快捷入口位）
@@ -10463,8 +10464,9 @@ admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
 admin_v2.developer_setting.platform_news_api_server.info: '默认为 //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: 错误
 admin_v2.default_page.changelog_title: EduSoho更新日志
-
 admin_v2.wechat_official_account.title: 公众号
 admin_v2.wechat_official_account.text: 关注EduSoho公众号 获取最新教育资讯
+admin_v2.homepage.application_intro: 应用简介
+admin_v2.homepage.application_intro.more_btn: 逛逛营销云应用
 admin_v2.business_advice.title: 经营建议
 admin_v2.buiness_advice.goto_qiqiuyu: 前去EduSoho商学院

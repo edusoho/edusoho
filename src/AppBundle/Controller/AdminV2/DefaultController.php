@@ -24,11 +24,8 @@ class DefaultController extends BaseController
     {
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
 
-        $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
-
         return $this->render('admin-v2/default/index.html.twig', array(
             'dates' => $weekAndMonthDate,
-            'entrances' => $userQuickEntrances,
         ));
     }
 
@@ -151,6 +148,16 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function applicationIntroAction(Request $request)
+    {
+        $result = $this->getPlatformNewsSdkService()->getApplications();
+
+        return $this->render('admin-v2/default/application-intro.html.twig', array(
+            'applicationData' => empty($result['details']) ? array() : $result['details'],
+            'returnUrl' => empty($result['returnUrl']) ? '' : $result['returnUrl'],
+        ));
+    }
+
     public function businessAdviceAction()
     {
         $advice = array();
@@ -191,16 +198,19 @@ class DefaultController extends BaseController
 
     public function quickEntranceAction(Request $request)
     {
+        $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
-            $quickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
-
-            return $this->render('admin-v2/default/quick-entrance/index.html.twig', array('entrances' => $quickEntrances));
+            $userQuickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
         }
 
-        $quickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
+        $allQuickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
 
-        return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
+        return $this->render('admin-v2/default/quick-entrance/index.html.twig', array(
+            'allQuickEntrances' => $allQuickEntrances,
+            'userQuickEntrances' => $userQuickEntrances,
+        ));
     }
 
     public function qrCodeAction(Request $request)
