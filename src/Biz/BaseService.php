@@ -174,4 +174,19 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     {
         return ServiceKernel::instance()->trans($message, $arguments, $domain, $locale);
     }
+
+    /**
+     * @param $code
+     *
+     * @return array
+     *               根据给定的权限，获取匹配的新|老后台的权限
+     */
+    protected function getMarriedPermissions($code)
+    {
+        $backstageSetting = $this->createService('System:SettingService')->get('backstage', array('is_v2' => 0));
+        $rolePermissionsYml = $this->biz['role.get_permissions_yml'];
+        $allPermissions = array_merge($rolePermissionsYml['adminV2'], $rolePermissionsYml['admin']);
+
+        return !empty($allPermissions[$code]) ? $allPermissions[$code] : array();
+    }
 }
