@@ -18,12 +18,12 @@ use Biz\System\Service\SettingService;
 use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
 use Biz\WeChat\Service\WeChatAppService;
-use QiQiuYun\SDK\Service\WeChatService;
 use Codeages\Biz\Order\Service\OrderService;
+use QiQiuYun\SDK\Service\WeChatService;
+use QiQiuYun\SDK\Service\PlatformNewsService;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use QiQiuYun\SDK\Service\PlatformNewsService;
 
 class DefaultController extends BaseController
 {
@@ -31,11 +31,8 @@ class DefaultController extends BaseController
     {
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
 
-        $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
-
         return $this->render('admin-v2/default/index.html.twig', array(
             'dates' => $weekAndMonthDate,
-            'entrances' => $userQuickEntrances,
         ));
     }
 
@@ -176,6 +173,16 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function applicationIntroAction(Request $request)
+    {
+        $result = $this->getPlatformNewsSdkService()->getApplications();
+
+        return $this->render('admin-v2/default/application-intro.html.twig', array(
+            'applicationData' => empty($result['details']) ? array() : $result['details'],
+            'returnUrl' => empty($result['returnUrl']) ? '' : $result['returnUrl'],
+        ));
+    }
+
     public function businessAdviceAction()
     {
         $advice = array();
@@ -189,6 +196,15 @@ class DefaultController extends BaseController
 
         return $this->render('admin-v2/default/business-advice.html.twig', array(
             'advice' => $advice,
+        ));
+    }
+
+    public function getAnnouncementFromPlatformAction(Request $request)
+    {
+        $result = $this->getPlatformNewsSdkService()->getAnnouncements();
+
+        return $this->render('admin-v2/default/announcement.html.twig', array(
+            'announcement' => empty($result['details']) ? array() : array_pop($result['details']),
         ));
     }
 
@@ -259,16 +275,37 @@ class DefaultController extends BaseController
 
     public function quickEntranceAction(Request $request)
     {
+        $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
-            $quickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
-
-            return $this->render('admin-v2/default/quick-entrance/index.html.twig', array('entrances' => $quickEntrances));
+            $userQuickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
         }
 
-        $quickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
+        $allQuickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
 
-        return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
+        return $this->render('admin-v2/default/quick-entrance/index.html.twig', array(
+            'allQuickEntrances' => $allQuickEntrances,
+            'userQuickEntrances' => $userQuickEntrances,
+        ));
+    }
+
+    public function qrCodeAction(Request $request)
+    {
+        if ($this->isWithoutNetwork()) {
+            $qrCode = array();
+        } else {
+            try {
+                $qrCode = $this->getPlatformNewsSdkService()->getQrCode();
+                $qrCode = empty($qrCode['details']) ? array() : array_pop($qrCode['details']);
+            } catch (\Exception $e) {
+                $qrCode = array();
+            }
+        }
+
+        return $this->render('admin-v2/default/qr-code.html.twig', array(
+            'qrCode' => $qrCode,
+        ));
     }
 
     protected function getDisabledCloudServiceCount()

@@ -248,7 +248,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $user = $this->getCurrentUser();
 
-        return $user->hasPermission('admin_course_content_manage');
+        return $user->hasPermission('admin_course_content_manage') || $user->hasPermission('admin_v2_course_content_manage');
     }
 
     public function searchCourseSets(array $conditions, $orderBys, $start, $limit)

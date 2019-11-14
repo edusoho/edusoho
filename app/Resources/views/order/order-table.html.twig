@@ -36,9 +36,16 @@
           <td>{{ display_order_status(order.status, 0) }}</td>
           <td><span class="color-warning">{{ order.price_amount|to_cash(0) }}</span></td>
           <td><span class="color-warning">{{ order.pay_amount|to_cash(0) }}</span></td>
-          {% if has_permission('admin_user_manage') %}
+          {#添加admin_v2#}
+          {% if has_permission('admin_user_manage') or has_permission('admin_v2_user_manage')%}
             <td>
-              <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:buyer.id}) }}">{{ buyer.nickname|default('--') }}</a>
+              {#添加admin_v2#}
+              {% if setting('backstage.is_v2',0)  == 0 %}
+                {% set dataUrl = path('admin_user_show', {id:buyer.id}) %}
+              {% else %}
+                {% set dataUrl=  path('admin_v2_user_show', {id:buyer.id}) %}
+              {% endif %}
+              <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ dataUrl }}">{{ buyer.nickname|default('--') }}</a>
             </td>
           {% else %}
             <td>

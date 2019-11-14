@@ -1,0 +1,27 @@
+<div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.homepage.application_intro'|trans }}
+  {% if not has_permission('admin_v2_app_center') %}
+    <a class="admin-v2-section__more application-intro-not-connected" href="{{ returnUrl|default('#') }}"
+       target="_blank">{{ 'admin_v2.homepage.application_intro.more_btn'|trans }}</a>
+  {% else %}
+    <a class="admin-v2-section__more application-intro-not-connected"
+       href="{{ path('admin_v2_app_center') }}">{{ 'admin_v2.homepage.application_intro.more_btn'|trans }}</a>
+  {% endif %}
+</div>
+<div class="admin-v2-section__body">
+  <div class="row">
+    {% for i in 0..3 %}
+      <div class="col-md-3">
+        {% if applicationData[i] is defined %}
+          <a class="text-center admin-application" href="{{ applicationData[i].url }}" target="_blank">
+            <img src={{ applicationData[i].image }}>
+            <div class="admin-application__name">{{ applicationData[i].title }}</div>
+          </a>
+        {% else %}
+          <div class="text-center admin-application">
+            <i class="es-icon es-icon-entry-application"></i>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
