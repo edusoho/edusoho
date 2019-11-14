@@ -2,7 +2,6 @@
 
 namespace Biz\QuickEntrance\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\QuickEntrance\Dao\QuickEntranceDao;
 use Biz\QuickEntrance\Service\QuickEntranceService;
@@ -24,9 +23,11 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
     {
         $userQuickEntrances = $this->getQuickEntranceDao()->getByUserId($userId);
 
-        $codes = empty($userQuickEntrances['data']) ? $this->defaultQuickEntranceCodes : $userQuickEntrances['data'];
+        if (empty($userQuickEntrances)) {
+            return $this->getEntrancesByCodes($this->defaultQuickEntranceCodes);
+        }
 
-        return $this->getEntrancesByCodes($codes);
+        return $this->getEntrancesByCodes($userQuickEntrances['data']);
     }
 
     public function getAllEntrances($userId = 0)
@@ -35,7 +36,7 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
             $userQuickEntrances = $this->getQuickEntranceDao()->getByUserId($userId);
         }
 
-        $userEntranceCodes = empty($userQuickEntrances['data']) ? $this->defaultQuickEntranceCodes : $userQuickEntrances['data'];
+        $userEntranceCodes = empty($userQuickEntrances) ? $this->defaultQuickEntranceCodes : $userQuickEntrances['data'];
 
         $permissions = PermissionBuilder::instance()->getUserPermissionTree();
 
@@ -65,37 +66,32 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
         return $quickEntrances;
     }
 
-    public function updateUserEntrances($userId, $fields)
+    public function updateUserEntrances($userId, $entrances = array())
     {
-        $fields = ArrayToolkit::filter($fields, array('data' => array()));
-
-        if (count($fields['data']) > 7) {
-            throw $this->createInvalidArgumentException('Entrance data invalid.');
+        if (count($entrances) > 7) {
+            throw $this->createInvalidArgumentException('Entrance invalid');
         }
 
         $userQuickEntrances = $this->getQuickEntranceDao()->getByUserId($userId);
 
         if (empty($userQuickEntrances)) {
-            $fields['userId'] = $userId;
-            $this->createUserEntrance($fields);
-        } else {
-            $this->getQuickEntranceDao()->update($userQuickEntrances['id'], $fields);
+            return $this->createUserEntrance($userId, $entrances);
         }
+
+        $this->getQuickEntranceDao()->update($userQuickEntrances['id'], array('data' => $entrances));
 
         return $this->getEntrancesByUserId($userId);
     }
 
-    public function createUserEntrance($fields)
+    public function createUserEntrance($userId, $entrances = array())
     {
-        $fields = ArrayToolkit::filter($fields, array('userId' => 0, 'data' => array()));
-
-        if (!ArrayToolkit::requireds($fields, array('userId', 'data')) || count($fields['data']) > 7) {
-            throw $this->createInvalidArgumentException('Fields invalid');
+        if (count($entrances) > 7) {
+            throw $this->createInvalidArgumentException('Entrance invalid');
         }
 
-        $this->getQuickEntranceDao()->create($fields);
+        $this->getQuickEntranceDao()->create(array('userId' => $userId, 'data' => $entrances));
 
-        return $this->getEntrancesByUserId($fields['userId']);
+        return $this->getEntrancesByUserId($userId);
     }
 
     private function getEntrancesByCodes($codes)

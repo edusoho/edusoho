@@ -8,23 +8,25 @@ use Biz\QuickEntrance\Service\QuickEntranceService;
 
 class QuickEntranceServiceTest extends BaseTestCase
 {
-    public function testGetEntrancesByUserIdEmpty()
+    public function testGetEntrancesByUserIdEmptyWithDbDataEmpty()
     {
-        $fields = array(
-            'userId' => $this->getCurrentUser()->getId(),
-            'data' => array(
-                'test_admin_entrance_empty',
-            ),
-        );
-
-        $this->getQuickEntranceService()->createUserEntrance($fields);
+        $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), array());
 
         $result = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
 
         $this->assertEmpty($result);
     }
 
-    public function testGetEntrancesByUserId()
+    public function testGetEntrancesByUserIdEmptyWithoutMenuConfig()
+    {
+        $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), array('test_admin_without_menu_config'));
+
+        $result = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+
+        $this->assertEmpty($result);
+    }
+
+    public function testGetEntrancesByUserIdWithDefaultConfig()
     {
         $result = $this->getQuickEntranceService()->getEntrancesByUserId(0);
         $result = ArrayToolkit::index($result, 'code');
@@ -37,7 +39,10 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->assertArrayHasKey('admin_v2_marketing_coupon', $result);
         $this->assertArrayHasKey('admin_v2_user_show', $result);
         $this->assertArrayHasKey('admin_v2_user_coin', $result);
+    }
 
+    public function testGetEntrancesByUserId()
+    {
         $this->createCurrentUserInviteManageQuickEntrance();
         $result = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
         $result = ArrayToolkit::index($result, 'code');
@@ -67,6 +72,11 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->assertCount(3, $result['admin_v2_user']['data']);
         $this->assertCount(4, $result['admin_v2_trade']['data']);
         $this->assertCount(5, $result['admin_v2_system']['data']);
+
+        $marketingResult = ArrayToolkit::index($result['admin_v2_marketing']['data'], 'code');
+
+        $this->assertTrue($marketingResult['admin_v2_marketing_coupon']['checked']);
+        $this->assertFalse($marketingResult['admin_v2_operation_invite']['checked']);
     }
 
     public function testGetAllEntranceWithUserId()
@@ -97,6 +107,32 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->assertFalse($marketingResult['admin_v2_marketing_coupon']['checked']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Entrance invalid
+     */
+    public function testCreateUserEntrancesInvalidArgumentException()
+    {
+        $entrances = array(
+            'test_data_1',
+            'test_data_2',
+            'test_data_3',
+            'test_data_4',
+            'test_data_5',
+            'test_data_6',
+            'test_data_7',
+            'test_data_8',
+        );
+
+        $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), $entrances);
+    }
+
+    public function testCreateUserEntranceWithEmpty()
+    {
+        $result = $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), array());
+        $this->assertEmpty($result);
+    }
+
     public function testCreateUserEntrance()
     {
         $expected = array(
@@ -116,26 +152,12 @@ class QuickEntranceServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Fields invalid
+     * @expectedExceptionMessage Entrance invalid
      */
-    public function testCreateUserEntrancesInvalidArgumentExceptionWithoutData()
+    public function testUpdateUserEntrancesWithInvalidArgumentException()
     {
-        $fields = array(
-            'id' => $this->getCurrentUser()->getId(),
-        );
-
-        $this->getQuickEntranceService()->createUserEntrance($fields);
-    }
-
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Fields invalid
-     */
-    public function testCreateUserEntrancesInvalidArgumentException()
-    {
-        $fields = array(
-            'id' => $this->getCurrentUser()->getId(),
-            'data' => array(
+        $this->createCurrentUserInviteManageQuickEntrance();
+        $entrances = array(
                 'test_data_1',
                 'test_data_2',
                 'test_data_3',
@@ -144,20 +166,33 @@ class QuickEntranceServiceTest extends BaseTestCase
                 'test_data_6',
                 'test_data_7',
                 'test_data_8',
-            ),
         );
 
-        $this->getQuickEntranceService()->createUserEntrance($fields);
+        $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $entrances);
+    }
+
+    public function testUpdateUserEntrancesWithEmptyEntrances()
+    {
+        $this->createCurrentUserInviteManageQuickEntrance();
+        $before = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+
+        $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), array());
+
+        $after = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+
+        $this->assertNotEquals($before, $after);
+        $this->assertCount(1, $before);
+        $this->assertEmpty($after);
     }
 
     public function testUpdateUserEntrances()
     {
-        $fields = array(
-            'data' => array('admin_v2_marketing_coupon', 'admin_v2_operation_invite'),
-        );
         $this->createCurrentUserInviteManageQuickEntrance();
         $before = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
-        $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
+
+        $entrances = array('admin_v2_marketing_coupon', 'admin_v2_operation_invite');
+        $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $entrances);
+
         $after = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
 
         $this->assertNotEquals($before, $after);
@@ -165,39 +200,9 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->assertCount(2, $after);
     }
 
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Entrance data invalid.
-     */
-    public function testUpdateUserEntrancesWithInvalidArgumentException()
-    {
-        $this->createCurrentUserInviteManageQuickEntrance();
-        $fields = array(
-            'data' => array(
-                'test_data_1',
-                'test_data_2',
-                'test_data_3',
-                'test_data_4',
-                'test_data_5',
-                'test_data_6',
-                'test_data_7',
-                'test_data_8',
-            ),
-        );
-
-        $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $fields);
-    }
-
     private function createCurrentUserInviteManageQuickEntrance()
     {
-        $fields = array(
-            'userId' => $this->getCurrentUser()->getId(),
-            'data' => array(
-                'admin_v2_operation_invite',
-            ),
-        );
-
-        return $this->getQuickEntranceService()->createUserEntrance($fields);
+        return $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), array('admin_v2_operation_invite'));
     }
 
     /**
