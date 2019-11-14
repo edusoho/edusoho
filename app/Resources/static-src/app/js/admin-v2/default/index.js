@@ -72,9 +72,18 @@ $('.js-mini-program').popover({
 });
 
 // 数据概览
-$.get($('.admin-data').data('url'), function (html) {
-  $('.admin-data').html(html);
-});
+if ($('.admin-data').length) {
+  $.get($('.admin-data').data('url'), (html) => {
+    $('.admin-data').html(html);
+  });
+}
+
+// 应用简介
+if ($('.application-intro').length && $('.application-intro').data('url')) {
+  $.get($('.application-intro').data('url'), (html) => {
+    $('.application-intro').html(html);
+  });
+}
 
 $('.js-no-network').click(function () {
   cd.message({type: 'danger', 'message': Translator.trans('admin.can_not_link_data')});

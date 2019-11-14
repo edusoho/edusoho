@@ -14,9 +14,9 @@ use Biz\System\Service\SettingService;
 use Biz\System\Service\StatisticsService;
 use Biz\User\Service\NotificationService;
 use Codeages\Biz\Order\Service\OrderService;
+use QiQiuYun\SDK\Service\PlatformNewsService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use QiQiuYun\SDK\Service\PlatformNewsService;
 
 class DefaultController extends BaseController
 {
@@ -145,6 +145,16 @@ class DefaultController extends BaseController
 
         return $this->render('admin-v2/default/cloud-notice.html.twig', array(
             'trialTime' => (isset($result)) ? $result : null,
+        ));
+    }
+
+    public function applicationIntroAction(Request $request)
+    {
+        $result = $this->getPlatformNewsSdkService()->getApplications();
+
+        return $this->render('admin-v2/default/application-intro.html.twig', array(
+            'applicationData' => empty($result['details']) ? array() : $result['details'],
+            'returnUrl' => empty($result['returnUrl']) ? '' : $result['returnUrl'],
         ));
     }
 
