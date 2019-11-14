@@ -1,7 +1,13 @@
 {% if not featuredArticles and not promotedArticles %}
   {% if is_granted('ROLE_ADMIN') %}
     <div class="alert alert-warning">
-      {{ 'article.banner_tips'|trans({'%articleUrl%':path('admin_article')})|raw }}
+      {#添加admin_v2#}
+      {% if setting('backstage.is_v2',0)  == 0 %}
+        {% set dataUrl = path('admin_article') %}
+      {% else %}
+        {% set dataUrl=  path('admin_v2_article') %}
+      {% endif %}
+      {{ 'article.banner_tips'|trans({'%articleUrl%':dataUrl})|raw }}
     </div>
   {% endif %}
 {% else %}
