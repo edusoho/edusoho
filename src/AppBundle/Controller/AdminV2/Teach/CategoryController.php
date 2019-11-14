@@ -4,6 +4,7 @@ namespace AppBundle\Controller\AdminV2\Teach;
 
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Taxonomy\CategoryException;
+use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends BaseController

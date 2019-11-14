@@ -989,7 +989,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-        if ($user->hasPermission('admin_course_manage')) {
+        if ($user->hasPermission('admin_course_manage') || $user->hasPermission('admin_v2_course_manage')) {
             return true;
         }
 
@@ -2350,7 +2350,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $user = $this->getCurrentUser();
 
-        return $user->hasPermission('admin_course_content_manage');
+        return $user->hasPermission('admin_course_content_manage') || $user->hasPermission('admin_v2_course_content_manage');
     }
 
     /**

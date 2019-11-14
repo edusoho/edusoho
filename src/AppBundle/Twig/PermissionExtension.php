@@ -84,6 +84,7 @@ class PermissionExtension extends \Twig_Extension
                 $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getPermissionByCode($k)));
                 $nodes['grade'] = 1;
                 $nodes['code'] = $child['code'];
+                $nodes['linkType'] = isset($child['target']) ? $child['target'] : '';
                 $nodes['nodes'] = array();
                 $childrenInfo['nodes'][] = $nodes;
             }
