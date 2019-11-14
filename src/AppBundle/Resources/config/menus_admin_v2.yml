@@ -790,6 +790,12 @@ admin_v2:
                                     router_params:
                                         approvalStatus: approving
                                     disable: true
+                                admin_v2_approval_approved:
+                                    name: admin_v2.user.approval.approved_menu
+                                    router_name: admin_v2_approval_approvals
+                                    router_params:
+                                        approvalStatus: approved
+                                    disable: ture
                                     children:
                                         admin_v2_approval_cancel:
                                             name: admin_v2.user.approval.basic_tab.cancel_btn
@@ -798,12 +804,6 @@ admin_v2:
                                             class: 'btn cancel-approval'
                                             mode: none
                                             group: groupButton
-                                admin_v2_approval_approved:
-                                    name: admin_v2.user.approval.approved_menu
-                                    router_name: admin_v2_approval_approvals
-                                    router_params:
-                                        approvalStatus: approved
-                                    disable: ture
                         admin_v2_teacher:
                             quick_entrance_icon: 'teacher'
                             router_name: admin_v2_teacher
