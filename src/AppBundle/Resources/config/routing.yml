@@ -3281,5 +3281,5 @@ question_bank_manage:
     defaults: { _controller: AppBundle:QuestionBank/Manage:manage }
 
 question_bank_list:
-    path: /question_bank/list
+    path: /my/question_banks
     defaults: { _controller: AppBundle:QuestionBank/Manage:index }
