@@ -123,3 +123,7 @@ if ($('.application-intro-not-connected').length) {
     cd.message({type: 'danger', message: Translator.trans('admin_v2.homepage.application-intro.hint')});
   });
 }
+
+$('.js-no-network').click(function () {
+  cd.message({type: 'danger', 'message': Translator.trans('admin.can_not_link_data')});
+});

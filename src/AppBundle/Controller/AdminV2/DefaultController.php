@@ -111,12 +111,13 @@ class DefaultController extends BaseController
         }
 
         $roles = $this->getCurrentUser()->getRoles();
-        if (0 == count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
+        if (0 == count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) || empty($setting['allow_show_switch_btn'])) {
             $this->createNewException(CommonException::SWITCH_OLD_VERSION_PERMISSION_ERROR());
         }
 
         if ('POST' == $request->getMethod()) {
-            $this->getSettingService()->set('backstage', array('is_v2' => 0));
+            $setting['is_v2'] = 0;
+            $this->getSettingService()->set('backstage', $setting);
 
             return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin')));
         }
@@ -152,11 +153,27 @@ class DefaultController extends BaseController
 
     public function applicationIntroAction(Request $request)
     {
-        $result = $this->getPlatformSdkService()->getApplications();
+        $result = $this->getPlatformNewsSdkService()->getApplications();
 
         return $this->render('admin-v2/default/application-intro.html.twig', array(
             'applicationData' => empty($result['details']) ? array() : $result['details'],
             'returnUrl' => empty($result['returnUrl']) ? '' : $result['returnUrl'],
+        ));
+    }
+
+    public function businessAdviceAction()
+    {
+        $advice = array();
+        if (!$this->isWithoutNetwork()) {
+            try {
+                $advice = $this->getPlatformNewsSdkService()->getAdvice();
+            } catch (\Exception $e) {
+                $advice = array();
+            }
+        }
+
+        return $this->render('admin-v2/default/business-advice.html.twig', array(
+            'advice' => $advice,
         ));
     }
 
@@ -196,14 +213,11 @@ class DefaultController extends BaseController
         return $this->render('admin-v2/default/quick-entrance/modal.html.twig', array('entranceData' => $quickEntrances));
     }
 
-    /**
-     * @return PlatformNewsService
-     */
-    private function getPlatformSdkService()
+    protected function isWithoutNetwork()
     {
-        $biz = $this->getBiz();
+        $developer = $this->getSettingService()->get('developer');
 
-        return $biz['qiQiuYunSdk.platformNews'];
+        return empty($developer['without_network']) ? false : (bool) $developer['without_network'];
     }
 
     /**
@@ -254,7 +268,7 @@ class DefaultController extends BaseController
         return $this->createService('QuickEntrance:QuickEntranceService');
     }
 
-    /*
+    /**
      * @return StatisticsService
      */
     protected function getStatisticsService()
@@ -268,5 +282,15 @@ class DefaultController extends BaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    /**
+     * @return PlatformNewsService
+     */
+    protected function getPlatformNewsSdkService()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['qiQiuYunSdk.platformNews'];
     }
 }

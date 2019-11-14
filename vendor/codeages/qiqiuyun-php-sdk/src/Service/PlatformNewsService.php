@@ -9,7 +9,7 @@ use QiQiuYun\SDK\Constants\PlatformNewsBlockTypes;
  */
 class PlatformNewsService extends BaseService
 {
-    protected $host = '';
+    protected $host = 'platform-news-service.qiqiuyun.net';
 
     /**
      * 获取ES商学院课程推荐
