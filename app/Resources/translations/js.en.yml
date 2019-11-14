@@ -1491,3 +1491,9 @@ admin.setting.invite.coupon.empty.tips: Please set coupon batch
 course.plan_task.activity_ppt_animation_img: Switch img mode
 course.plan_task.activity_ppt_animation_slide: Switch animation mode
 course.plan_task.lessons_publish_status: Published Lesson Number:%publishedNum%<br/>Unpublish Lesson Number:%unpublishedNum%
+
+admin.question_bank.choose_category: Please select the category
+admin.question_bank.save_success: Save Success
+admin.question_bank.save_fail: Save Fail
+admin.question_bank.delete_hint: Are you sure you want to delete this question bank？
+admin.question_bank.fail_not_delete: This question bank contains %testpaperNum% of the test papers, %questionNum% of the questions, can not be deleted

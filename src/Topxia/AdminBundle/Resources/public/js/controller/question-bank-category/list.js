@@ -13,8 +13,8 @@ define(function(require, exports, module) {
       }
       $.post($(this).data('url'), function() {
         window.location.reload();
-      }).error(function() {
-        Notify.danger(Translator.trans('admin.category.delete_fail'));
+      }).error(function(error) {
+        Notify.danger(error.responseJSON.error.message);
       });
     });
   };

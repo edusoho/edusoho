@@ -1433,3 +1433,9 @@ admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
 course.plan_task.activity_ppt_animation_img: 切换图片模式
 course.plan_task.activity_ppt_animation_slide: 切换动画模式
 course.plan_task.lessons_publish_status: 已发布课时数：%publishedNum%<br/>未发布课时数：%unpublishedNum%
+
+admin.question_bank.choose_category: 请选择所属分类
+admin.question_bank.save_success: 保存题库成功
+admin.question_bank.save_fail: 保存题库失败
+admin.question_bank.delete_hint: 确定要删除此题库吗
+admin.question_bank.fail_not_delete: 此题库内含有%testpaperNum%份试卷，%questionNum%道题目，无法删除
