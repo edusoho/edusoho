@@ -42,7 +42,7 @@ class QuestionBankController extends BaseController
 
         $questionBank = array(
             'id' => 0,
-            'name' => '', 
+            'name' => '',
             'categoryId' => 0,
         );
         $categoryTree = $this->getCategoryService()->getCategoryTree();
@@ -65,7 +65,7 @@ class QuestionBankController extends BaseController
         $members = $this->getMemberService()->findMembersByBankId($id);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
         $bankMembers = array();
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $bankMembers[] = array('id' => $user['id'], 'name' => $user['nickname']);
         }
         $categoryTree = $this->getCategoryService()->getCategoryTree();

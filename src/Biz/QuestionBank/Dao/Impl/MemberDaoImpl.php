@@ -26,7 +26,7 @@ class MemberDaoImpl extends AdvancedDaoImpl implements MemberDao
 
         $declares['conditions'] = array(
             'id = :id',
-            'bankId = :bankId'
+            'bankId = :bankId',
         );
 
         return $declares;

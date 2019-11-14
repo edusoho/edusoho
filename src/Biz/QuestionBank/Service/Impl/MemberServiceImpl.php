@@ -39,10 +39,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $members = array();
-        foreach($userIds as $userId) {
+        foreach ($userIds as $userId) {
             $members[] = array(
-                'bankId' => $bankId, 
-                'userId' => $userId
+                'bankId' => $bankId,
+                'userId' => $userId,
             );
         }
 

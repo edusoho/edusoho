@@ -145,7 +145,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     {
         return $this->createService('System:SettingService');
     }
-    
+
     protected function getCategoryService()
     {
         return $this->createService('QuestionBank:CategoryService');

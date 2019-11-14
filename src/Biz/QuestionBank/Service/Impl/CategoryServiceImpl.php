@@ -74,7 +74,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $children[] = $category;
 
         $this->validateCategoriesCanDelete($children);
-        
+
         foreach ($children as $category) {
             $this->getCategoryDao()->delete($category['id']);
         }
@@ -147,7 +147,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function validateCategoriesCanDelete($categories)
     {
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             if ($category['bankNum'] > 0) {
                 $this->createNewException(QuestionBankException::FORBIDDEN_DELETE_CATEGORY());
             }
