@@ -3345,6 +3345,7 @@ my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
 my.teaching.online_review_menu: 'Online review'
+my.teaching.question_bank_menu: 'Question Bank'
 my.teaching.testpaper_check_menu: 'Tests review'
 my.teaching.homework_check_menu: 'Assignments review'
 my.teaching.material_lib_menu: 'Library'
