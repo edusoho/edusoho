@@ -90,10 +90,10 @@
 
         {# 常用入口 #}
         <div class="admin-v2-section cd-pb16">
-          <div class="admin-v2-section__header cd-mb16">常用入口</div>
+          <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.homepage.quick_entrance'|trans }}</div>
           <div class="admin-v2-section__body">
             <div class="row quick-entrance">
-              {% include 'admin-v2/default/quick-entrance/index.html.twig' %}
+              {{ render(controller('AppBundle:AdminV2/Default:quickEntrance')) }}
             </div>
           </div>
         </div>
@@ -214,6 +214,4 @@
       </div>
     </div>
   </div>
-
-
 {% endblock %}
