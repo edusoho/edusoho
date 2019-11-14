@@ -1,5 +1,5 @@
 {% extends 'my/my-teaching.html.twig' %}
-
+{% do script(['app/js/question_bank/index.js']) %}
 {% block title %}{{ 'my.teaching.testpaper.check_title'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'my-question-bank' %}
 
@@ -13,37 +13,48 @@
       </ul>
     </div>
   </div>
-
   <div class="question-bank-list clearfix">
     <a href="#" class="question-bank-list-item link-dark">
        <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
              srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
+        <div  class="question-bank-wrap text-center">
+          <div class="question-bank-text">我的数学我的数学我的数学我的数学我的数学我的数学我的数学我的数学</div>
+        </div> 
     </a>
      <a href="#" class="question-bank-list-item link-dark">
        <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
              srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
+        <div  class="question-bank-wrap text-center">
+          <div class="question-bank-text">我的数学</div>
+        </div>
     </a>
     <a href="#" class="question-bank-list-item link-dark">
        <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
              srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
+        <div  class="question-bank-wrap text-center">
+          <div class="question-bank-text">我的数学我的数学我的数学我的数学我的数学我的数学我的数学我的数学</div>
+        </div> 
     </a>
     <a href="#" class="question-bank-list-item link-dark">
        <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
              srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
+        <div  class="question-bank-wrap text-center">
+          <div class="question-bank-text">我的数学我的数学我的数学我的数学我的数学我的数学我的数学我的数学</div>
+        </div> 
     </a>
     <a href="#" class="question-bank-list-item link-dark">
        <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
              srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
+        <div  class="question-bank-wrap text-center">
+          <div class="question-bank-text">我的数学我的数学我的数学我的数学我的数学我的数学我的数学我的数学</div>
+        </div> 
     </a>
     <a href="#" class="question-bank-list-item link-dark">
        <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
              srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
+       <div  class="question-bank-wrap text-center">
+          <div class="question-bank-text">我的数学我的数学我的数学我的数学我的数学我的</div>
+        </div> 
     </a>
   </div>
 {% endblock %}

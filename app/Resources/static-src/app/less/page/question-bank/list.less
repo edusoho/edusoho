@@ -16,13 +16,36 @@
     img{
        width:100%;
     }
-    p{
+    .question-bank-wrap{
+      position:relative;
       margin-top:22px;
       display:block;
+      height:44px;
       font-size:16px;
+      overflow:hidden;
       font-weight:400;
       font-family:PingFangSC-Regular,PingFang SC;
     }
+    .question-bank-eslipise{
+      position:relative;
+      &::after{
+        position: absolute;
+        content: "...";
+        bottom: 0px;
+        height: 20px;
+        right: -5px;
+        line-height: 20px;
+        padding-left: 5px;
+        width: 40px;
+        /* 显示更好的效果 */
+        background: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), to(white), color-stop(40%, white));
+        background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0), white 40%, white);
+        background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 40%, white);
+        background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 40%, white);
+        background: linear-gradient(to right, rgba(255, 255, 255, 0), white 40%, white);
+      } 
+    }
+ 
   }
   @media (max-width: @screen-xs-max) {
     padding: 0 30px 30px 30px;
@@ -32,7 +55,7 @@
       &:nth-of-type(2n){
         margin-right:0px
       }
-      p{
+      .question-bank-wrap{
         margin-top:12px;
         font-size:14px;
       }
