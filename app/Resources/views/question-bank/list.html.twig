@@ -4,5 +4,41 @@
 {% set side_nav = 'my-question-bank' %}
 
 {% block main %}
+  <div class="tabs-wrapper">
+    <div class="tabs-group">
+      <div class="title">分类:</div>
+      <ul class="content clearfix">
+        <li class=""><a class="nav-link" href="/course/explore?orderBy=latest">全部</a></li>
+        <li class="active"><a class="nav-link" href="/course/explore/default?orderBy=latest">默认分类</a></li>
+      </ul>
+    </div>
+  </div>
 
+  <div class="question-bank-list clearfix">
+    <div class="question-bank-list-item">
+       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
+             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
+        <a href="#" class="text-center ">我的数学</a>
+    </div>
+     <div class="question-bank-list-item">
+       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
+             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
+        <a href="#" class="text-center">我的数学</a>
+    </div>
+     <div class="question-bank-list-item">
+       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
+             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
+        <a href="#" class="text-center nav-link">我的数学</a>
+    </div>
+     <div class="question-bank-list-item">
+       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
+             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
+        <a href="#" class="text-center nav-link">我的数学</a>
+    </div>
+     <div class="question-bank-list-item">
+       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
+             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
+        <a href="#" class="text-center nav-link">我的数学</a>
+    </div>
+  </div>
 {% endblock %}

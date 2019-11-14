@@ -1,0 +1,44 @@
+.question-bank-list{
+  margin:24px auto 0;
+  padding: 0 58px 40px 58px;
+  width:100%;
+  background:#fff;
+  border-radius:8px;
+  &-item{
+    float:left;
+    margin:40px 14% 0 0;
+    width:14.5%;
+    display:inline-block;
+    &:nth-of-type(4n){
+      margin-right:0px
+    }
+    img{
+       width:100%;
+    }
+    a{
+      margin-top:22px;
+      display:block;
+      color:#333333;
+      font-size:16px;
+      font-weight:400;
+      font-family:PingFangSC-Regular,PingFang SC;
+      &:hover{
+        color:#46C37B;
+      }
+    }
+  }
+  @media (max-width: @screen-xs-max) {
+    padding: 0 30px 30px 30px;
+    &-item{
+      margin:30px 25% 0 0;
+      width:37.5%;
+      &:nth-of-type(2n){
+        margin-right:0px
+      }
+      a{
+        margin-top:12px;
+        font-size:14px;
+      }
+    }
+  }
+}
