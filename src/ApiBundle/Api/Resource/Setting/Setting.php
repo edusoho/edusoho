@@ -76,7 +76,7 @@ class Setting extends AbstractResource
 
             foreach ($watermarkSetting as $key => &$value) {
                 if (in_array($key, array('video_watermark_image', 'video_embed_watermark_image'))) {
-                    $value = AssetHelper::getFurl($value);
+                    $value = empty($value) ? '' : AssetHelper::getFurl($value);
                 }
             }
         }
