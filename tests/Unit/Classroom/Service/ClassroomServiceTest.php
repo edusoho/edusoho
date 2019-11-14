@@ -704,7 +704,7 @@ class ClassroomServiceTest extends BaseTestCase
                     'returnValue' => array('id' => 1, 'title' => 'title'),
                     'withParams' => array(
                         1,
-                        array('smallPicture' => 'uri1', 'middlePicture' => 'uri2', 'largePicture' => 'uri3'),
+                        array('smallPicture' => 'uri1?version=2', 'middlePicture' => 'uri2?version=2', 'largePicture' => 'uri3?version=2'),
                     ),
                 ),
             )
@@ -715,9 +715,9 @@ class ClassroomServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'getFilesByIds',
                     'returnValue' => array(
-                        array('id' => 1, 'uri' => 'uri1'),
-                        array('id' => 2, 'uri' => 'uri2'),
-                        array('id' => 3, 'uri' => 'uri3'),
+                        array('id' => 1, 'uri' => 'uri1?version=2'),
+                        array('id' => 2, 'uri' => 'uri2?version=2'),
+                        array('id' => 3, 'uri' => 'uri3?version=2'),
                     ),
                     'withParams' => array(array(1, 2, 3)),
                 ),
@@ -752,9 +752,9 @@ class ClassroomServiceTest extends BaseTestCase
                         'update_picture',
                         '更新课程《title》(#1)图片',
                         array(
-                            'smallPicture' => 'uri1',
-                            'middlePicture' => 'uri2',
-                            'largePicture' => 'uri3',
+                            'smallPicture' => 'uri1?version=2',
+                            'middlePicture' => 'uri2?version=2',
+                            'largePicture' => 'uri3?version=2',
                         ),
                     ),
                     'runTimes' => 1,
@@ -767,9 +767,9 @@ class ClassroomServiceTest extends BaseTestCase
                         'update',
                         '更新班级《title》(#1)',
                         array(
-                            'smallPicture' => array('old' => 'smallPicture', 'new' => 'uri1'),
-                            'middlePicture' => array('old' => 'middlePicture', 'new' => 'uri2'),
-                            'largePicture' => array('old' => 'largePicture', 'new' => 'uri3'),
+                            'smallPicture' => array('old' => 'smallPicture', 'new' => 'uri1?version=2'),
+                            'middlePicture' => array('old' => 'middlePicture', 'new' => 'uri2?version=2'),
+                            'largePicture' => array('old' => 'largePicture', 'new' => 'uri3?version=2'),
                             'id' => 1,
                             'showTitle' => 'title',
                         ),
