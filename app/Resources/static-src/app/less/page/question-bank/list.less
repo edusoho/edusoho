@@ -7,6 +7,7 @@
   &-item{
     float:left;
     margin:40px 14% 0 0;
+    color:#333333;
     width:14.5%;
     display:inline-block;
     &:nth-of-type(4n){
@@ -15,16 +16,12 @@
     img{
        width:100%;
     }
-    a{
+    p{
       margin-top:22px;
       display:block;
-      color:#333333;
       font-size:16px;
       font-weight:400;
       font-family:PingFangSC-Regular,PingFang SC;
-      &:hover{
-        color:#46C37B;
-      }
     }
   }
   @media (max-width: @screen-xs-max) {
@@ -35,7 +32,7 @@
       &:nth-of-type(2n){
         margin-right:0px
       }
-      a{
+      p{
         margin-top:12px;
         font-size:14px;
       }
