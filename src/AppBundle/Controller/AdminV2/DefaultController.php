@@ -174,6 +174,15 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function getAnnouncementFromPlatformAction(Request $request)
+    {
+        $result = $this->getPlatformNewsSdkService()->getAnnouncements();
+
+        return $this->render('admin-v2/default/announcement.html.twig', array(
+            'announcement' => empty($result['details']) ? array() : array_pop($result['details']),
+        ));
+    }
+
     private function domainInspect($request)
     {
         $currentHost = $request->server->get('HTTP_HOST');

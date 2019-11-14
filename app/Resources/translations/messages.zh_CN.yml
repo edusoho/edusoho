@@ -10466,6 +10466,7 @@ admin_v2.role_permission_manage.error: 错误
 admin_v2.default_page.changelog_title: EduSoho更新日志
 admin_v2.wechat_official_account.title: 公众号
 admin_v2.wechat_official_account.text: 关注EduSoho公众号 获取最新教育资讯
+admin_v2.homepage.announcement_from_platform: 站长公告
 admin_v2.homepage.application_intro: 应用简介
 admin_v2.homepage.application_intro.more_btn: 逛逛营销云应用
 admin_v2.business_advice.title: 经营建议
