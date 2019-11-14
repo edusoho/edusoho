@@ -4,6 +4,7 @@ namespace AppBundle\Controller\AdminV2;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\CurlToolkit;
+use AppBundle\Common\FileToolkit;
 use AppBundle\System;
 use AppBundle\Common\ChangelogToolkit;
 use Biz\Common\CommonException;
@@ -19,8 +20,8 @@ use Biz\User\Service\NotificationService;
 use Biz\WeChat\Service\WeChatAppService;
 use QiQiuYun\SDK\Service\WeChatService;
 use Codeages\Biz\Order\Service\OrderService;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceKernel;
 use QiQiuYun\SDK\Service\PlatformNewsService;
 
@@ -111,15 +112,9 @@ class DefaultController extends BaseController
     public function infoAction(Request $request)
     {
         $apps = $this->getAppService()->checkAppUpgrades();
-
-        $upgradeAppCount = count($apps);
-
         $indexApps = ArrayToolkit::index($apps, 'code');
         $mainAppUpgrade = empty($indexApps['MAIN']) ? array() : $indexApps['MAIN'];
-
-        if ($mainAppUpgrade) {
-            $upgradeAppCount = $upgradeAppCount - 1;
-        }
+        $upgradeAppCount = empty($mainAppUpgrade) ? count($apps) : count($apps) - 1;
 
         return $this->render('admin-v2/default/school-info.html.twig', array(
             'version' => System::VERSION,
@@ -128,25 +123,8 @@ class DefaultController extends BaseController
             'disabledCloudServiceCount' => $this->getDisabledCloudServiceCount(),
             'wechatAppStatus' => $this->getWeChatAppService()->getWeChatAppStatus(),
             'schoolLevel' => $this->getSchoolLevelKey(),
+            'miniProgramCodeImg' => $this->getMiniProgramCodeImg(),
         ));
-    }
-
-    public function miniProgramCodeAction(Request $request)
-    {
-        $miniProgramCodeImg = $this->getMiniProgramCodeImg();
-        $miniProgram = $this->getSettingService()->get('mini_program', array());
-        if (!file_exists($miniProgramCodeImg) || empty($miniProgram['get_code_time']) || $miniProgram['get_code_time'] < time() - 2 * 3600) {
-            $res = $this->getSDKWeChatService()->getMiniProgramCode('backgroundHome', array('width' => 280));
-
-            if (!file_exists($miniProgramCodeImg)) {
-                touch($miniProgramCodeImg);
-            }
-            file_put_contents($miniProgramCodeImg, base64_decode($res['content']));
-
-            $this->getSettingService()->set('mini_program', array('get_code_time' => time()));
-        }
-
-        return new Response(file_get_contents($miniProgramCodeImg), 200, array('Content-type' => 'image/png'));
     }
 
     public function switchOldVersionAction(Request $request)
@@ -236,11 +214,47 @@ class DefaultController extends BaseController
         return array('status' => 'ok', 'except' => $siteSetting['url'], 'actually' => $currentHost, 'settingUrl' => $settingUrl);
     }
 
-    private function getMiniProgramCodeImg()
+    protected function getMiniProgramCodeImg()
     {
-        $biz = $this->getBiz();
+        if ($this->isMiniProgramCodeImgNeedGenerate()) {
+            $res = $this->getSDKWeChatService()->getMiniProgramCode('backgroundHome', array('width' => 280));
 
-        return $biz['kernel.root_dir'].'/../web/mini_program_code.png';
+            $tmpPath = tempnam(sys_get_temp_dir(), 'mini_program');
+            file_put_contents($tmpPath, base64_decode($res['content']));
+            $miniProgramCodeImg = new File($tmpPath);
+            $directory = "{$this->getParameter('topxia.upload.public_directory')}/system";
+            $filename = FileToolkit::generateFilename('png');
+            $miniProgramCodeImg = $miniProgramCodeImg->move($directory, $filename);
+            $this->deleteExpiredMiniProgramCodeImg();
+            $this->getSettingService()->set('mini_program', array(
+                'get_code_time' => time(),
+                'img_path' => $miniProgramCodeImg->getRealPath(),
+                'img_url' => $this->get('web.twig.extension')->getFileUrl("system/{$filename}"),
+            ));
+        }
+
+        return $this->getSettingService()->get('mini_program', array());
+    }
+
+    private function isMiniProgramCodeImgNeedGenerate()
+    {
+        $miniProgram = $this->getSettingService()->get('mini_program', array());
+        if (empty($miniProgram['get_code_time']) || $miniProgram['get_code_time'] < time() - 2 * 3600) {
+            return true;
+        }
+        if (empty($miniProgram['img_path']) || !file_exists($miniProgram['img_path'])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function deleteExpiredMiniProgramCodeImg()
+    {
+        $miniProgram = $this->getSettingService()->get('mini_program', array());
+        if (!empty($miniProgram['img_path']) && file_exists($miniProgram['img_path'])) {
+            unlink($miniProgram['img_path']);
+        }
     }
 
     public function quickEntranceAction(Request $request)
