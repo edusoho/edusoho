@@ -3276,6 +3276,10 @@ oauth2_es_user_info:
   path:  /oauth/user_info/{userId}
   defaults: { _controller: AppBundle:OAuth2/Server/Authorization:getUserInfo }
 
-admin_question_bank_manage:
+question_bank_manage:
     path: /question_bank/{id}/manage
+    defaults: { _controller: AppBundle:QuestionBank/Manage:manage }
+
+question_bank_list:
+    path: /question_bank/list
     defaults: { _controller: AppBundle:QuestionBank/Manage:index }
