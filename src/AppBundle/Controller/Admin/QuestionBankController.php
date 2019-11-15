@@ -32,16 +32,71 @@ class QuestionBankController extends BaseController
         ));
     }
 
-    public function createAction()
+    public function createAction(Request $request)
     {
+        if ('POST' == $request->getMethod()) {
+            $questionBank = $this->getQuestionBankService()->createQuestionBank($request->request->all());
+
+            return $this->createJsonResponse($questionBank);
+        }
+
+        $questionBank = array(
+            'id' => 0,
+            'name' => '',
+            'categoryId' => 0,
+        );
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
+
+        return $this->render('admin/question-bank/modal.html.twig', array(
+            'questionBank' => $questionBank,
+            'categoryTree' => $categoryTree,
+        ));
     }
 
-    public function editAction()
+    public function editAction(Request $request, $id)
     {
+        if ('POST' == $request->getMethod()) {
+            $questionBank = $this->getQuestionBankService()->updateQuestionBank($id, $request->request->all());
+
+            return $this->createJsonResponse($questionBank);
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $members = $this->getMemberService()->findMembersByBankId($id);
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
+        $bankMembers = array();
+        foreach ($users as $user) {
+            $bankMembers[] = array('id' => $user['id'], 'name' => $user['nickname']);
+        }
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
+
+        return $this->render('admin/question-bank/modal.html.twig', array(
+            'questionBank' => $questionBank,
+            'categoryTree' => $categoryTree,
+            'bankMembers' => json_encode($bankMembers),
+        ));
     }
 
-    public function deleteAction()
+    public function deleteAction(Request $request, $id)
     {
+        $questionBank = $this->getQuestionBankService()->deleteQuestionBank($id);
+
+        return $this->createJsonResponse($questionBank);
+    }
+
+    public function memberMatchAction(Request $request)
+    {
+        $queryField = $request->query->get('q');
+
+        $users = $this->getUserService()->searchUsers(
+            array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'),
+            array('createdTime' => 'DESC'),
+            0,
+            10,
+            array('id', 'nickname')
+        );
+
+        return $this->createJsonResponse($users);
     }
 
     protected function getQuestionBankService()
@@ -52,5 +107,10 @@ class QuestionBankController extends BaseController
     protected function getCategoryService()
     {
         return $this->createService('QuestionBank:CategoryService');
+    }
+
+    protected function getMemberService()
+    {
+        return $this->createService('QuestionBank:MemberService');
     }
 }

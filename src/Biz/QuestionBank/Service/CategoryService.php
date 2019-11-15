@@ -10,6 +10,14 @@ interface CategoryService
 
     public function getCategoryStructureTree();
 
+    public function createCategory(array $category);
+
+    public function updateCategory($id, array $fields);
+
+    public function deleteCategory($id);
+
+    public function waveCategoryBankNum($id, $diff);
+
     public function getCategoryTree();
 
     public function findAllCategories();
