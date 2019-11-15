@@ -162,6 +162,12 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return true;
     }
 
+    public function findAllChildrenIdsByParentId($parentId)
+    {
+        // TODO: Implement findAllChildrenIdsByParentId() method.
+        return ArrayToolkit::column($this->getCategoryDao()->findAllByParentId($parentId), 'id');
+    }
+
     protected function makeCategoryTree(&$tree, &$categories, $parentId)
     {
         static $depth = 0;

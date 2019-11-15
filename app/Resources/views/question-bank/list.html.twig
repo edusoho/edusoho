@@ -1,5 +1,5 @@
 {% extends 'my/my-teaching.html.twig' %}
-{% do script(['app/js/question_bank/index.js']) %}
+{#{% do script(['app/js/question_bank/index.js']) %}#}
 
 {% block title %}{{ 'my.teaching.question_bank_title'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'my-question-bank' %}
@@ -16,7 +16,7 @@
           <p class="text-center">{{ questionBank.name }}</p>
         </a>
       {% endfor %}
-    {% elseif has_permission('admin') %}
+    {% elseif has_permission('admin_question_bank') %}
       {% set quesionManagePath = path('admin_question_bank') %}
       <div class="empty">{{ 'question_bank.empty'|trans({'%loginUrl%': quesionManagePath})|raw }}</div>
       {% else %}

@@ -22,8 +22,6 @@ class ManageController extends BaseController
             20
         );
 
-        list($conditions, $orderBy) = $this->getQuestionBankSearchOrderBy($conditions);
-
         $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(
             $conditions,
             array('createdTime' => 'DESC'),
@@ -35,16 +33,6 @@ class ManageController extends BaseController
             'category' => $category,
             'questionBanks' => $questionBanks,
         ));
-    }
-
-    protected function getQuestionBankSearchOrderBy($conditions)
-    {
-        $orderBy = 'latest';
-
-        $orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
-        unset($conditions['orderBy']);
-
-        return array($conditions, $orderBy);
     }
 
     protected function mergeConditionsByCategory($conditions, $category)
