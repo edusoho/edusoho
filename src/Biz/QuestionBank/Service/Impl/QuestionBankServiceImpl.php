@@ -23,7 +23,6 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $this->getQuestionBankDao()->count($conditions);
     }
 
-
     /**
      * @return QuestionBankDao
      */

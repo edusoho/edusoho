@@ -14,6 +14,7 @@ class CategoryController extends BaseController
         $selectedSubCategory = $request->query->get('subCategory', '');
         $categories = $this->getCategoryService()->getCategoryStructureTree();
         $subCategories = $this->makeSubCategories($category);
+
         return $this->render('question-bank/category/tree-nav.html.twig', array(
             'selectedCategory' => $category,
             'selectedSubCategory' => $selectedSubCategory,
@@ -43,7 +44,6 @@ class CategoryController extends BaseController
 
         return $subCategories;
     }
-
 
     /**
      * @return CategoryService

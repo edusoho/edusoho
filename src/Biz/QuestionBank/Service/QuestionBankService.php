@@ -10,4 +10,3 @@ interface QuestionBankService
 
     public function countQuestionBanks($conditions);
 }
-

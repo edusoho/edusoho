@@ -33,7 +33,7 @@ class ManageController extends BaseController
 
         return $this->render('question-bank/list.html.twig', array(
             'category' => $category,
-            'questionBanks' => $questionBanks
+            'questionBanks' => $questionBanks,
         ));
     }
 
