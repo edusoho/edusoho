@@ -8,6 +8,8 @@ use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Exception\UnableJoinException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use ApiBundle\Api\Annotation\ApiConf;
+use AppBundle\Common\ArrayToolkit;
 
 class ClassroomMember extends AbstractResource
 {
@@ -32,6 +34,29 @@ class ClassroomMember extends AbstractResource
         }
 
         return null;
+    }
+
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function search(ApiRequest $request, $classroomId)
+    {
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $conditions = array('classroomId' => $classroomId);
+
+        if ($request->query->get('role', '')) {
+            $conditions['role'] = $request->query->get('role');
+        }
+
+        $total = $this->getClassroomService()->searchMemberCount($conditions);
+        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime' => 'DESC'), $offset, $limit);
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
+        foreach ($members as &$member) {
+            $member['user'] = empty($users[$member['userId']]) ? null : $users[$member['userId']];
+        }
+
+        return $this->makePagingObject($members, $total, $offset, $limit);
     }
 
     private function tryJoin($classroom)
@@ -64,5 +89,10 @@ class ClassroomMember extends AbstractResource
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }
