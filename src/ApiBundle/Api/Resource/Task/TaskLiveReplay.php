@@ -25,8 +25,7 @@ class TaskLiveReplay extends AbstractResource
         }
 
         if ('videoGenerated' == $activity['ext']['replayStatus']) {
-            $apiRequest = new ApiRequest('/api/courses/'.$task['courseId'].'/task_medias/'.$taskId, 'GET', array(), array());
-            return $this->invokeResource($apiRequest);
+            throw TaskException::LIVE_REPLAY_INVALID();
         }
 
         $device = $request->request->get('device');
@@ -51,7 +50,7 @@ class TaskLiveReplay extends AbstractResource
             ),
             'device' => $device,
         );
-        
+
         // if liveProvider is edusoho light live we you video as replay;
         if (5 == $activity['ext']['liveProvider']) {
             //获取globalid
@@ -79,7 +78,7 @@ class TaskLiveReplay extends AbstractResource
             $response = $replays[0];
             $response['replays'] = $replays;
         }
-    
+
         return $response;
     }
 
