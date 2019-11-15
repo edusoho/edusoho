@@ -62,3 +62,69 @@
     }
   }
 }
+.question-bank-model{
+  position:relative;
+  margin-top:auto;
+  border-radius: 12px;
+  .es-icon{
+    margin-right:8px;
+    color:#62A6FC;
+    font-size:22px;
+    vertical-align: text-top;
+  }
+  .es-icon-close01{
+    position: absolute;
+    top: 11px;
+    right: 9px;
+    font-size: 25px;
+    color: #ffffff;
+    cursor:pointer;
+  }
+  .es-icon-Promote{
+    margin-left:-10px;
+    font-size:32px;
+    vertical-align: bottom;
+  }
+  &-img{
+    width:100%;
+    margin-top:-9%;
+  }
+  &-wrap{
+    margin-top:-4%;
+    padding:0px 30px 30px 52px;
+  }
+  &-title{
+    font-size:16px;
+    font-family:PingFangSC-Medium,PingFang SC;
+    font-weight:500;
+    color:rgba(51,51,51,1);
+    line-height:24px;
+  }
+  &-text{
+    margin:12px 0px 24px 30px;
+    font-size:14px;
+    font-family:PingFangSC-Regular,PingFang SC;
+    font-weight:400;
+    color:rgba(102,102,102,1);
+    line-height:20px;
+    text-indent: 32px;
+  }
+  &__special{
+    color:#62A6FC;
+  }
+  @media (max-width: @screen-xs-max) {
+      margin-top:10%;
+      .es-icon{
+        font-size:16px;
+      }
+      &-wrap{
+        padding:0px 10px 30px 22px;
+      }
+      &-title{
+        font-size:14px;
+      }
+      &-text{
+        margin:0px 0px 12px 30px;
+      }
+  }
+}
