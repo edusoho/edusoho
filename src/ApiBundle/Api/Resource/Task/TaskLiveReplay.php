@@ -25,7 +25,8 @@ class TaskLiveReplay extends AbstractResource
         }
 
         if ('videoGenerated' == $activity['ext']['replayStatus']) {
-            // return json_decode($this->sendRequest('GET', $this->getHttpHost().$app['url_generator']->generate('get_lesson', array('id' => $task['id'])), array(sprintf('X-Auth-Token: %s', $request->headers->get('X-Auth-Token')))), true);
+            $apiRequest = new ApiRequest('/api/courses/'.$task['courseId'].'/task_medias/'.$taskId, 'GET', array(), array());
+            return $this->invokeResource($apiRequest);
         }
 
         $device = $request->request->get('device');
