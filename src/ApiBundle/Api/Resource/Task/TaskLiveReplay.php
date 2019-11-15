@@ -50,38 +50,35 @@ class TaskLiveReplay extends AbstractResource
             ),
             'device' => $device,
         );
-        try {
-            // if liveProvider is edusoho light live we you video as replay;
-            if (5 == $activity['ext']['liveProvider']) {
-                //获取globalid
-                $globalId = $visibleReplays[0]['globalId'];
-                $options = array(
-                    'fromApi' => !$this->isSetEncryption(),
-                    'times' => 2,
-                    'line' => $request->request->get('line', ''),
-                    'format' => $request->request->get('format', ''),
-                    'type' => 'apiLessonReplay',
-                    'replayId' => $visibleReplays[0]['id'],
-                    'duration' => '3600',
-                );
-                $response['url'] = $this->getEsLiveReplayUrl($globalId, $options);
-                $response['extra']['provider'] = 'longinus';
-            } else {
-                $protocol = $this->container->get('request')->getScheme();
-                $replays = array();
+        
+        // if liveProvider is edusoho light live we you video as replay;
+        if (5 == $activity['ext']['liveProvider']) {
+            //获取globalid
+            $globalId = $visibleReplays[0]['globalId'];
+            $options = array(
+                'fromApi' => !$this->isSetEncryption(),
+                'times' => 2,
+                'line' => $request->request->get('line', ''),
+                'format' => $request->request->get('format', ''),
+                'type' => 'apiLessonReplay',
+                'replayId' => $visibleReplays[0]['id'],
+                'duration' => '3600',
+            );
+            $response['url'] = $this->getEsLiveReplayUrl($globalId, $options);
+            $response['extra']['provider'] = 'longinus';
+        } else {
+            $protocol = $this->container->get('request')->getScheme();
+            $replays = array();
 
-                foreach ($visibleReplays as $index => $visibleReplay) {
-                    $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[$index]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
-                    $replays[$index]['title'] = $visibleReplay['title'];
-                }
-
-                $response = $replays[0];
-                $response['replays'] = $replays;
+            foreach ($visibleReplays as $index => $visibleReplay) {
+                $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[$index]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
+                $replays[$index]['title'] = $visibleReplay['title'];
             }
-        } catch (\Exception $e) {
-            throw TaskException::LIVE_REPLAY_NOT_FOUND();
-        }
 
+            $response = $replays[0];
+            $response['replays'] = $replays;
+        }
+    
         return $response;
     }
 
