@@ -2,22 +2,24 @@
   <div class="course-table">
     <div class="course-table__th">
       <!-- 遍历表头数据 -->
-      <span class="course-table__td"
+      <span
         v-for="(item, index) in head[type]"
         :class="tdClass(item.col)"
-        :key="index">{{ item.title }}</span>
+        :key="index"
+        class="course-table__td">{{ item.title }}</span>
     </div>
 
     <draggable v-model="courseSets">
-      <div class="course-table__tr" v-for="(course, courseIndex) in courseSets" :key="courseIndex">
+      <div v-for="(course, courseIndex) in courseSets" :key="courseIndex" class="course-table__tr">
         <div class="tr-content">
           <!-- 遍历表格内数据 -->
-          <template v-for="(item, index) in head[type]">
-            <span class="course-table__td text-overflow course-table__td-space"
+          <template v-for="(item, index) in head[type]" >
+            <span
               v-if="index !== 0"
               :class="[ tdClass(item.col), { 'delete': item.label === 'delete' }]"
+              class="course-table__td text-overflow course-table__td-space"
               @click="deleteItem(item.label === 'delete', courseIndex)">
-              {{ course | tableFilter(item.label, item.subProperty)}}</span>
+              {{ course | tableFilter(item.label, item.subProperty) }}</span>
             <el-tooltip
               v-if="index === 0"
               :disabled="course[item.label].length <= 20"
@@ -37,42 +39,42 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable';
-import head from 'admin/config/modal-config';
-import tableFilter from 'admin/utils/table-filter.js';
+import draggable from 'vuedraggable'
+import head from 'admin/config/modal-config'
+import tableFilter from 'admin/utils/table-filter.js'
 
 export default {
-  name: 'course-table',
+  name: 'CourseTable',
   components: {
-    draggable,
+    draggable
+  },
+  filters: {
+    tableFilter
   },
   props: {
     courseList: {
       type: Array,
-      default: [],
+      default: () => []
     },
     type: {
       type: String,
       default: 'course_list'
     }
   },
-  data () {
+  data() {
     return {
-      head,
+      head
     }
   },
   computed: {
     courseSets: {
       get() {
-        return this.courseList;
+        return this.courseList
       },
       set(courses) {
-        this.$emit('updateCourses', courses);
+        this.$emit('updateCourses', courses)
       }
     }
-  },
-  filters: {
-    tableFilter
   },
   methods: {
     tdClass(ratio) {
@@ -80,10 +82,10 @@ export default {
     },
     deleteItem(isDeleteBtn, index) {
       if (!isDeleteBtn) {
-        return;
+        return
       }
-      this.courseSets.splice(index, 1);
-      this.courseSets = this.courseSets; // 触发 courseSets 的 set 事件，向父组件抛出事件
+      this.courseSets.splice(index, 1)
+      this.courseSets = this.courseSets // 触发 courseSets 的 set 事件，向父组件抛出事件
     }
   }
 }

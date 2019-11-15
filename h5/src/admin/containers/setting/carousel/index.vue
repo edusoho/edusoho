@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import Api from 'admin/api'
 import { MODULE_DEFAULT } from 'admin/config/module-default-config'
 import item from './item'
 import moduleFrame from '../module-frame'
@@ -60,7 +59,7 @@ export default {
     },
     moduleData: {
       type: Object,
-      default: {}
+      default: () => {}
     },
     incomplete: {
       type: Boolean,

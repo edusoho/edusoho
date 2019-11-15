@@ -1,53 +1,76 @@
 <template>
   <div class="module-template" @click="activeModule">
     <!-- 基础组件——轮播 -->
-    <carousel v-if="module.type === moduleDefault.slideShow.type"
-      :active="isActive" :moduleData="module" :incomplete="validateFuc"
-      @updateModule="updateHandler(module, index)"></carousel>
+    <carousel
+      v-if="module.type === moduleDefault.slideShow.type"
+      :active="isActive"
+      :module-data="module"
+      :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"/>
 
     <!-- 基础组件——课程列表 -->
-    <course v-if="module.type === moduleDefault.courseList.type" :key="1"
-      :active="isActive" :moduleData="module" :incomplete="validateFuc"
-      @updateModule="updateHandler(module, index)"></course>
+    <course
+      v-if="module.type === moduleDefault.courseList.type"
+      :key="1"
+      :active="isActive"
+      :module-data="module"
+      :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"/>
 
     <!-- 班级列表 -->
-    <course v-if="module.type === moduleDefault.classList.type" :key="2"
-      :active="isActive" :moduleData="module" :incomplete="validateFuc"
-      @updateModule="updateHandler(module, index)"></course>
+    <course
+      v-if="module.type === moduleDefault.classList.type"
+      :key="2"
+      :active="isActive"
+      :module-data="module"
+      :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"/>
 
     <!-- 广告海报 -->
-    <poster v-if="module.type === moduleDefault.poster.type"
-      :active="isActive" :moduleData="module" :incomplete="validateFuc"
-      @updateModule="updateHandler(module, index)"></poster>
+    <poster
+      v-if="module.type === moduleDefault.poster.type"
+      :active="isActive"
+      :module-data="module"
+      :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"/>
 
     <!-- 优惠券 -->
-    <coupon v-if="module.type === moduleDefault.coupon.type"
-      :active="isActive" :moduleData="module" :incomplete="validateFuc"
-      @updateModule="updateHandler(module, index)"></coupon>
+    <coupon
+      v-if="module.type === moduleDefault.coupon.type"
+      :active="isActive"
+      :module-data="module"
+      :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"/>
 
     <!-- 会员 -->
-    <vip v-if="module.type === moduleDefault.vip.type"
-      :active="isActive" :moduleData="module" :incomplete="validateFuc"
-      @updateModule="updateHandler(module, index)"></vip>
+    <vip
+      v-if="module.type === moduleDefault.vip.type"
+      :active="isActive"
+      :module-data="module"
+      :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"/>
 
     <!-- 营销组件——拼团，砍价，秒杀 -->
     <marketing-activity
       v-if="[moduleDefault.groupon.type, moduleDefault.cut.type, moduleDefault.seckill.type].includes(module.type)"
-      :active="isActive" :moduleData="module" :incomplete="validateFuc" :key="index"
-      @updateModule="updateHandler(module, index)"></marketing-activity>
-    <img class="icon-delete" src="static/images/delete.png" @click="handleRemove(module, index)" v-show="isActive">
+      :active="isActive"
+      :module-data="module"
+      :incomplete="validateFuc"
+      :key="index"
+      @updateModule="updateHandler(module, index)"/>
+    <img v-show="isActive" class="icon-delete" src="static/images/delete.png" @click="handleRemove(module, index)">
   </div>
 </template>
 
 <script>
-import Carousel from '../carousel';
-import Course from '../course';
-import Poster from '../poster';
-import Coupon from '../coupon';
-import Vip from '../vip';
-import MarketingActivity from '../marketing-activity';
-import validate from 'admin/utils/module-validator';
-import { MODULE_DEFAULT } from 'admin/config/module-default-config';
+import Carousel from '../carousel'
+import Course from '../course'
+import Poster from '../poster'
+import Coupon from '../coupon'
+import Vip from '../vip'
+import MarketingActivity from '../marketing-activity'
+import validate from 'admin/utils/module-validator'
+import { MODULE_DEFAULT } from 'admin/config/module-default-config'
 
 export default {
   components: {
@@ -62,87 +85,87 @@ export default {
     module: {
       type: Object,
       default: () => {
-        return {};
-      },
+        return {}
+      }
     },
     active: {
       type: Boolean,
-      default: true,
+      default: true
     },
     index: {
       type: Number,
-      default: 0,
+      default: 0
     },
     moduleKey: {
       type: String,
-      default: 'demo-1',
+      default: 'demo-1'
     },
     saveFlag: {
       type: Number,
-      default: 0,
+      default: 0
+    }
+  },
+  data() {
+    return {
+      incomplete: false,
+      moduleDefault: MODULE_DEFAULT
     }
   },
   computed: {
     isActive: {
       get() {
-        return this.active;
+        return this.active
       },
       set() {
-        if (this.active) return;
-        this.$emit('activeModule', this.index);
+        if (this.active) return
+        this.$emit('activeModule', this.index)
       }
     },
     validateFuc() {
       if (this.saveFlag) {
-        return validate(this.module);
+        return validate(this.module)
       }
-    },
+    }
   },
   watch: {
     saveFlag(value) {
-      if (!value) return;
-      this.triggerValidate();
+      if (!value) return
+      this.triggerValidate()
     }
   },
   created() {
     // 每个模块唯一值
-    this.module.moduleType = this.moduleKey;
-    this.triggerValidate();
+    this.module.moduleType = this.moduleKey
+    this.triggerValidate()
   },
   updated() {
     // 每个模块唯一值
-    this.module.moduleType = this.moduleKey;
-  },
-  data () {
-    return {
-      incomplete: false,
-      moduleDefault: MODULE_DEFAULT,
-    }
+    this.module.moduleType = this.moduleKey
   },
   methods: {
     activeModule() {
-      this.isActive = true;
+      this.isActive = true
     },
     updateHandler() {
     },
     triggerValidate() {
       if (this.module.type === 'poster') {
-        const linkData = this.module.data.link;
+        const linkData = this.module.data.link
         if (linkData.type === 'url') {
-          linkData.target = null;
+          linkData.target = null
         } else {
-          linkData.url = '';
+          linkData.url = ''
         }
       }
-      const incomplete = validate(this.module, this.saveFlag);
+      const incomplete = validate(this.module, this.saveFlag)
       this.$emit('updateModule', {
         incomplete,
-        updateModule: this.module,
-      });
+        updateModule: this.module
+      })
     },
     handleRemove(data, index) {
-      this.$emit('removeModule', data);
-    },
+      this.$emit('removeModule', data)
+    }
   }
 }
 </script>

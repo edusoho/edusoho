@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="help-block" v-if="portal === 'miniprogram'"></div>
-    <div class="setting-page" :class="{'setting-page-miniprogram': portal === 'miniprogram' && supportActivityVersion}">
-      <img class="find-head-img" :src="portal === 'miniprogram' ? 'static/images/miniprogram_head.jpg' : 'static/images/find_head_url.jpg'" alt="">
-      <div class="find-navbar" :class="{'find-navbar-miniprogram': portal === 'miniprogram'}">
-        <i class="h5-icon h5-icon-houtui"></i>{{ portal === 'miniprogram' ? '小程序' : '微网校'}}
+    <div v-if="portal === 'miniprogram'" class="help-block"/>
+    <div :class="{'setting-page-miniprogram': portal === 'miniprogram' && supportActivityVersion}" class="setting-page">
+      <img :src="portal === 'miniprogram' ? 'static/images/miniprogram_head.jpg' : 'static/images/find_head_url.jpg'" class="find-head-img" alt="">
+      <div :class="{'find-navbar-miniprogram': portal === 'miniprogram'}" class="find-navbar">
+        <i class="h5-icon h5-icon-houtui"/>{{ portal === 'miniprogram' ? '小程序' : '微网校' }}
       </div>
 
       <!-- 操作预览区域 -->
@@ -14,23 +14,23 @@
           :options="{
             filter: stopDraggleClasses,
             preventOnFilter: false,
-          }">
-          <module-template v-for="(module, index) in modules"
+        }">
+          <module-template
+            v-for="(module, index) in modules"
             :key="index"
-            :saveFlag="saveFlag"
+            :save-flag="saveFlag"
             :index="index"
             :module="module"
             :active="isActive(index)"
-            :moduleKey="`${module.type}-${index}`"
+            :module-key="`${module.type}-${index}`"
             @activeModule="activeModule"
             @updateModule="updateModule($event, index)"
-            @removeModule="removeModule($event, index)">
-          </module-template>
+            @removeModule="removeModule($event, index)"/>
         </draggable>
       </div>
 
       <!-- h5配置——底部添加组件按钮 -->
-<!--       <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportActivityVersion">
+      <!--       <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportActivityVersion">
         <div class="section-title">点击添加组件</div>
         <div class="section-button-group">
           <div v-for="(item, index) in baseModules" :key="index">
@@ -47,52 +47,69 @@
       <div class="multi-find-section find-section clearfix">
         <div class="section-title">基础组件</div>
         <div class="section-button-group clearfix">
-          <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-            v-for="(item, index) in baseModules" :key="`base-${index}`">
+          <el-button
+            v-for="(item, index) in baseModules"
+            :key="`base-${index}`"
+            class="find-section-item"
+            type=""
+            size="medium"
+            @click="addModule(item, index)">
             {{ item.name }}
           </el-button>
         </div>
         <div class="section-title">营销组件
-          <a class="color-primary pull-right text-12" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a>
+          <a :href="createMarketingUrl" class="color-primary pull-right text-12" target="_blank">创建活动&gt;&gt;</a>
         </div>
         <div class="section-button-group clearfix">
-          <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-            v-for="(item, index) in marketingModules" :key="`marketing-${index}`">
+          <el-button
+            v-for="(item, index) in marketingModules"
+            :key="`marketing-${index}`"
+            class="find-section-item"
+            type=""
+            size="medium"
+            @click="addModule(item, index)">
             {{ item.name }}
           </el-button>
         </div>
       </div>
 
-      <find-footer></find-footer>
+      <find-footer/>
     </div>
 
     <!-- 发布预览按钮 -->
     <div class="setting-button-group">
       <el-button
+        :disabled="isLoading"
         class="setting-button-group__button text-14 btn-border-primary"
-        size="mini" @click="reset" :disabled="isLoading">重 置</el-button>
+        size="mini"
+        @click="reset">重 置</el-button>
       <el-button
+        :disabled="isLoading"
         class="setting-button-group__button text-14 btn-border-primary"
-        size="mini" @click="save('draft')" :disabled="isLoading">预 览</el-button>
+        size="mini"
+        @click="save('draft')">预 览</el-button>
       <el-button
-        class="setting-button-group__button text-14" type="primary"
-        size="mini" @click="save('published')" :disabled="isLoading">发 布</el-button>
+        :disabled="isLoading"
+        class="setting-button-group__button text-14"
+        type="primary"
+        size="mini"
+        @click="save('published')">发 布</el-button>
     </div>
   </div>
 </template>
 <script>
-import Api from 'admin/api';
-import * as types from 'admin/store/mutation-types';
-import { BASE_MODULE, MARKETING_MODULE } from 'admin/config/module-default-config';
-import ModuleCounter from 'admin/utils/module-counter';
-import needUpgrade from 'admin/utils/version-compare';
-import pathName2Portal from 'admin/config/api-portal-config';
-import marketingMixins from 'admin/mixins/marketing';
-import ObjectArray2ObjectByKey from '@/utils/array2object';
-import moduleTemplate from './module-template';
-import findFooter from './footer';
-import draggable from 'vuedraggable';
-import { mapActions, mapState } from 'vuex';
+import Api from 'admin/api'
+import * as types from 'admin/store/mutation-types'
+import { BASE_MODULE, MARKETING_MODULE } from 'admin/config/module-default-config'
+import ModuleCounter from 'admin/utils/module-counter'
+import needUpgrade from 'admin/utils/version-compare'
+import pathName2Portal from 'admin/config/api-portal-config'
+import marketingMixins from 'admin/mixins/marketing'
+import ObjectArray2ObjectByKey from '@/utils/array2object'
+import moduleTemplate from './module-template'
+import findFooter from './footer'
+import draggable from 'vuedraggable'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   components: {
@@ -114,32 +131,32 @@ export default {
       typeCount: {},
       pathName: this.$route.name,
       currentMPVersion: '0.0.0',
-      couponSwitch: 0,
+      couponSwitch: 0
     }
   },
   computed: {
     ...mapState(['isLoading', 'vipLevels', 'vipSettings', 'vipSetupStatus', 'vipPlugin']),
     stopDraggleClasses() {
-      return '.module-frame__setting, .find-footer,'
-        + '.search__container, .el-dialog__header, .el-dialog__footer';
+      return '.module-frame__setting, .find-footer,' +
+        '.search__container, .el-dialog__header, .el-dialog__footer'
     },
     portal() {
-      return pathName2Portal[this.pathName];
+      return pathName2Portal[this.pathName]
     },
     supportActivityVersion() {
-      return true;
+      return true
       // return this.supportVersion('1.3.7');
     },
     supportClassroomVersion() {
-      return true;
+      return true
       // return this.supportVersion('1.3.1');
     },
     supportCouponVersion() {
-      return true;
+      return true
       // return this.supportVersion('1.3.2');
     },
     supportVipVersion() {
-      return this.vipSetupStatus;
+      return this.vipSetupStatus
       // return this.supportVersion('1.3.4') && this.vipSetupStatus;
     }
   },
@@ -149,22 +166,22 @@ export default {
       Api.getMPVersion().then(res => {
         this.currentMPVersion = res.current_version.version
       }).catch((err) => {
-        this.currentMPVersion = '0.0.0';
+        this.currentMPVersion = '0.0.0'
         this.$message({
           message: err.message,
           type: 'error'
-        });
-      });
+        })
+      })
     }
 
     // 请求发现页配置
-    this.load();
+    this.load()
     // 获得课程分类列表
-    this.getCourseCategories();
+    this.getCourseCategories()
     // 获得班级分类列表
-    this.getClassCategories();
+    this.getClassCategories()
     // 获得优惠券开关
-    this.getCouponSwitch();
+    this.getCouponSwitch()
   },
   methods: {
     ...mapActions([
@@ -172,42 +189,42 @@ export default {
       'getClassCategories',
       'deleteDraft',
       'saveDraft',
-      'getDraft',
+      'getDraft'
     ]),
     getCouponSwitch() {
       Api.getCouponSetting().then(res => {
-        this.couponSwitch = parseInt(res.enabled, 10);
-      });
+        this.couponSwitch = parseInt(res.enabled, 10)
+      })
     },
     supportVersion(version) {
       return !needUpgrade(version, this.currentMPVersion)
     },
     moduleCountInit() {
       // 模块类型计数初始化
-      const typeCount = new ModuleCounter();
+      const typeCount = new ModuleCounter()
       for (let i = 0, len = this.modules.length; i < len; i++) {
-        typeCount.addByType(this.modules[i].type);
+        typeCount.addByType(this.modules[i].type)
       }
-      this.typeCount = typeCount;
+      this.typeCount = typeCount
     },
     isActive(index) {
-      return index === this.currentModuleIndex;
+      return index === this.currentModuleIndex
     },
     activeModule(index) {
       // 激活编辑模块
-      this.currentModuleIndex = index;
+      this.currentModuleIndex = index
     },
     updateModule(data, index) {
       // 更新模块
-      this.validateResults[index] = data.incomplete;
-      console.log('updateModule', data);
+      this.validateResults[index] = data.incomplete
+      console.log('updateModule', data)
     },
     removeModule(data, index) {
       // 删除一个模块
-      this.typeCount.removeByType(data.type);
+      this.typeCount.removeByType(data.type)
 
-      this.currentModuleIndex = Math.max(this.currentModuleIndex - 1, 0);
-      this.modules.splice(index, 1);
+      this.currentModuleIndex = Math.max(this.currentModuleIndex - 1, 0)
+      this.modules.splice(index, 1)
     },
     addModule(data, index) {
       /*
@@ -217,51 +234,51 @@ export default {
        * 未开通会员功能：/admin/setting/vip (vipSettings)
        * 开通会员但未配置会员等级：/admin/setting/vip/level (vipLevels)
       */
-      switch(data.default.type) {
+      switch (data.default.type) {
         case 'vip':
           if (!this.vipSetupStatus) {
-            return;
+            return
           } else if (needUpgrade('1.7.26', this.vipPlugin.version)) {
             this.$confirm('请升级会员插件', '提示', {
               confirmButtonText: '去升级',
-              cancelButtonText: '取消',
+              cancelButtonText: '取消'
             }).then(() => {
-              window.open(window.location.origin + '/admin/app/upgrades');
-            }).catch(() => {});
-            return;
-          } else if (!this.vipSettings
-            || !this.vipSettings.enabled
-            || !this.vipSettings.h5Enabled) {
+              window.open(window.location.origin + '/admin/app/upgrades')
+            }).catch(() => {})
+            return
+          } else if (!this.vipSettings ||
+            !this.vipSettings.enabled ||
+            !this.vipSettings.h5Enabled) {
             this.$confirm('会员功能未开通', '提示', {
               confirmButtonText: '去开通',
-              cancelButtonText: '取消',
+              cancelButtonText: '取消'
             }).then(() => {
-              window.open(window.location.origin + '/admin/setting/vip');
-            }).catch(() => {});
-            return;
+              window.open(window.location.origin + '/admin/setting/vip')
+            }).catch(() => {})
+            return
           } else if (!this.vipLevels || !this.vipLevels.length) {
             this.$confirm('请先设置会员等级', '提示', {
               confirmButtonText: '去设置',
-              cancelButtonText: '取消',
+              cancelButtonText: '取消'
             }).then(() => {
-              window.open(window.location.origin + '/admin/setting/vip/level');
-            }).catch(() => {});
-            return;
+              window.open(window.location.origin + '/admin/setting/vip/level')
+            }).catch(() => {})
+            return
           }
-          break;
+          break
         case 'coupon':
           if (!this.couponSwitch) {
             this.$confirm('优惠券功能未开通', '提示', {
               confirmButtonText: '去开通',
-              cancelButtonText: '取消',
+              cancelButtonText: '取消'
             }).then(() => {
-              window.open(window.location.origin + '/admin/setting/coupon');
-            }).catch(() => {});
-            return;
+              window.open(window.location.origin + '/admin/setting/coupon')
+            }).catch(() => {})
+            return
           }
-          break;
+          break
         default:
-          break;
+          break
       }
 
       // 新增一个模块
@@ -270,118 +287,117 @@ export default {
           message: '同一类型组件最多添加 5 个',
           type: 'warning'
         })
-        return;
+        return
       }
-      this.typeCount.addByType(data.default.type);
+      this.typeCount.addByType(data.default.type)
 
-      const defaultString = JSON.stringify(data.default); // 需要一个深拷贝对象
-      const defaultCopied = JSON.parse(defaultString);
+      const defaultString = JSON.stringify(data.default) // 需要一个深拷贝对象
+      const defaultCopied = JSON.parse(defaultString)
 
-      this.modules.push(defaultCopied);
-      this.currentModuleIndex = Math.max(this.modules.length - 1, 0);
+      this.modules.push(defaultCopied)
+      this.currentModuleIndex = Math.max(this.modules.length - 1, 0)
     },
     load() {
       // 读取草稿配置
-      const mode = this.$route.query.draft == 1 ? 'draft' : 'published';
+      const mode = this.$route.query.draft == 1 ? 'draft' : 'published'
 
       this.getDraft({
         portal: this.portal,
         type: 'discovery',
-        mode,
+        mode
       }).then(res => {
-        this.modules = Object.values(res);
-        this.moduleCountInit();
+        this.modules = Object.values(res)
+        this.moduleCountInit()
       }).catch((err) => {
-        this.moduleCountInit();
+        this.moduleCountInit()
         this.$message({
           message: err.message,
           type: 'error'
-        });
-      });
+        })
+      })
     },
     reset() {
       // 删除草稿配置配置
       this.deleteDraft({
         portal: this.portal,
         type: 'discovery',
-        mode: 'draft',
+        mode: 'draft'
       }).then(res => {
         this.$message({
           message: '重置成功',
           type: 'success'
-        });
-        this.load();
+        })
+        this.load()
       }).catch(err => {
         this.$message({
           message: err.message || '重置失败',
           type: 'error'
-        });
-      });
+        })
+      })
     },
     save(mode, needTrans = true) {
-      this.saveFlag ++;
+      this.saveFlag++
 
       // 验证提交配置
       const validateAndSubmit = () => {
-        let data = this.modules;
-        const isPublish = mode === 'published';
+        let data = this.modules
+        const isPublish = mode === 'published'
 
-        this.validate();
+        this.validate()
         // 如果已经是对象就不用转换
         if (needTrans) {
-          data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
+          data = ObjectArray2ObjectByKey(this.modules, 'moduleType')
         }
 
         if (this.incomplete) {
-          return;
+          return
         }
 
         this.saveDraft({
           data,
           mode,
           portal: this.portal,
-          type: 'discovery',
+          type: 'discovery'
         }).then(() => {
-
           if (isPublish) {
             this.$message({
               message: '发布成功',
               type: 'success'
-            });
-            return;
+            })
+            return
           }
 
-          this.$store.commit(types.UPDATE_DRAFT, data);
+          this.$store.commit(types.UPDATE_DRAFT, data)
           this.$router.push({
             name: 'preview',
             query: {
               times: 10,
               preview: isPublish ? 0 : 1,
               duration: 60 * 5,
-              from: this.pathName,
+              from: this.pathName
             }
-          });
+          })
         }).catch(err => {
           this.$message({
             message: err.message || '发布失败，请重新尝试',
             type: 'error'
-          });
+          })
         })
-      };
+      }
 
       setTimeout(() => {
-        validateAndSubmit();
-      }, 500); // 点击 预览／发布 时去验证所有组件，会有延迟，目前 low 的解决方法延迟 500ms 判断验证结果
+        validateAndSubmit()
+      }, 500) // 点击 预览／发布 时去验证所有组件，会有延迟，目前 low 的解决方法延迟 500ms 判断验证结果
     },
     validate() {
       for (var i = 0; i < this.modules.length; i++) {
         if (this.validateResults[i]) {
           this.incomplete = this.validateResults[i]
-          return;
+          return
         }
       }
-      this.incomplete = false;
-    },
+      this.incomplete = false
+    }
   }
 }
 

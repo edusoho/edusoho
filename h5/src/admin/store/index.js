@@ -1,10 +1,10 @@
-import Vuex from 'vuex';
-import Vue from 'vue';
+import Vuex from 'vuex'
+import Vue from 'vue'
 
-import * as actions from './actions';
-import mutations from './mutations';
+import * as actions from './actions'
+import mutations from './mutations'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 const state = {
   isLoading: false,
@@ -17,11 +17,9 @@ const state = {
   vipSettings: {},
   vipSetupStatus: false,
   vipPlugin: {}
-};
-
-
+}
 export default new Vuex.Store({
   state,
   actions,
   mutations
-});
+})

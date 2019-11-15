@@ -1,10 +1,10 @@
 <template>
-  <module-frame containerClass="setting-poster" :isActive="isActive" :isIncomplete="isIncomplete">
+  <module-frame :is-active="isActive" :is-incomplete="isIncomplete" container-class="setting-poster">
     <div slot="preview" class="poster-image-container">
-      <div class="image-mask" v-show="!copyModuleData.image.uri">
+      <div v-show="!copyModuleData.image.uri" class="image-mask">
         广告图片
       </div>
-      <poster v-show="copyModuleData.image.uri" :class="imageMode[copyModuleData.responsive]" :poster="copyModuleData" :feedback="false"></poster>
+      <poster v-show="copyModuleData.image.uri" :class="imageMode[copyModuleData.responsive]" :poster="copyModuleData" :feedback="false"/>
     </div>
 
     <div slot="setting" class="poster-allocate">
@@ -14,51 +14,50 @@
       </header>
 
       <div class="default-allocate__content clearfix">
-        <setting-cell title="广告图片：" customClass="poster-item-setting__section" leftClass="required-option">
+        <setting-cell title="广告图片：" custom-class="poster-item-setting__section" left-class="required-option">
           <el-upload
-            action="string"
-            accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
             :http-request="uploadImg"
             :before-upload="beforeUpload"
-            :show-file-list="false">
+            :show-file-list="false"
+            action="string"
+            accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP">
             <div class="image-uploader">
               <img v-show="copyModuleData.image.uri" :src="copyModuleData.image.uri" class="poster-img">
-              <div class="add-img" v-show="!copyModuleData.image.uri">
+              <div v-show="!copyModuleData.image.uri" class="add-img">
                 <span><i class="text-18">+</i> 添加图片</span>
               </div>
-              <div class="uploader-mask" v-show="copyModuleData.image.uri">更换图片</div>
+              <div v-show="copyModuleData.image.uri" class="uploader-mask">更换图片</div>
             </div>
           </el-upload>
         </setting-cell>
 
-        <setting-cell title="链接：" customClass="poster-item-setting__section">
+        <setting-cell title="链接：" custom-class="poster-item-setting__section">
           <el-radio v-model="radio" label="insideLink">站内链接</el-radio>
           <el-radio v-if="pathName === 'h5Setting'" v-model="radio" label="url">自定义链接</el-radio>
         </setting-cell>
 
-        <setting-cell title="" customClass="poster-item-setting__section" v-show="radio !== 'url'">
+        <setting-cell v-show="radio !== 'url'" title="" custom-class="poster-item-setting__section">
           <el-dropdown v-show="!courseLinkText">
             <el-button size="mini" class="el-dropdown-link">
               添加链接
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="insideLinkHandle(item.type)" v-for="item in linkOptions" :key="item.key">{{item.label}}</el-dropdown-item>
+              <el-dropdown-item v-for="item in linkOptions" :key="item.key" @click.native="insideLinkHandle(item.type)">{{ item.label }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="courseLinkText">
+          <el-tag v-show="courseLinkText" :disable-transitions="true" class="courseLink" closable @close="handleClose">
             <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
-              <span slot="content">{{courseLinkText}}</span>
+              <span slot="content">{{ courseLinkText }}</span>
               <span>{{ courseLinkText }}</span>
             </el-tooltip>
           </el-tag>
         </setting-cell>
 
-        <setting-cell title="输入链接：" customClass="poster-item-setting__section" v-show="radio === 'url'">
-          <el-input size="mini" v-model="copyModuleData.link.url" placeholder="例如 http://www.eduosho.com" clearable>
-          </el-input>
+        <setting-cell v-show="radio === 'url'" title="输入链接：" custom-class="poster-item-setting__section">
+          <el-input v-model="copyModuleData.link.url" size="mini" placeholder="例如 http://www.eduosho.com" clearable/>
         </setting-cell>
 
-        <setting-cell title="自适应手机屏幕：" customClass="poster-item-setting__section">
+        <setting-cell title="自适应手机屏幕：" custom-class="poster-item-setting__section">
           <el-radio v-model="copyModuleData.responsive" label="1">开启</el-radio>
           <el-radio v-model="copyModuleData.responsive" label="0">关闭</el-radio>
         </setting-cell>
@@ -69,27 +68,39 @@
       slot="modal"
       :visible="modalVisible"
       :type="['course_list', 'classroom_list'].includes(type) ? type : 'course_list'"
-      limit=1
-      :courseList="courseSets"
+      :course-list="courseSets"
+      limit="1"
       @visibleChange="modalVisibleHandler"
-      @updateCourses="getUpdatedCourses">
-    </course-modal>
+      @updateCourses="getUpdatedCourses"/>
   </module-frame>
 </template>
 <script>
-import Api from 'admin/api';
-import moduleFrame from '../module-frame';
-import settingCell from '../module-frame/setting-cell';
-import courseModal from '../course/modal/course-modal';
-import poster from '&/components/e-poster/e-poster.vue';
-
+import Api from 'admin/api'
+import moduleFrame from '../module-frame'
+import settingCell from '../module-frame/setting-cell'
+import courseModal from '../course/modal/course-modal'
+import poster from '&/components/e-poster/e-poster.vue'
 
 export default {
   components: {
     moduleFrame,
     settingCell,
     courseModal,
-    poster,
+    poster
+  },
+  props: {
+    active: {
+      type: Boolean,
+      default: false
+    },
+    moduleData: {
+      type: Object,
+      default: () => {}
+    },
+    incomplete: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -98,69 +109,56 @@ export default {
       courseSets: [],
       imageMode: [
         'responsive',
-        'size-fit',
+        'size-fit'
       ],
       linkOptions: [{
         key: 0,
         type: 'course_list',
-        label: '选择课程',
+        label: '选择课程'
       }, {
         key: 1,
         type: 'classroom_list',
-        label: '选择班级',
+        label: '选择班级'
       }, {
         key: 2,
         type: 'vip',
-        label: '选择会员',
+        label: '选择会员'
       }],
       pathName: this.$route.name,
       type: 'course_list',
-      radio: 'insideLink',
-    }
-  },
-  props: {
-    active: {
-      type: Boolean,
-      default: false,
-    },
-    moduleData: {
-      type: Object
-    },
-    incomplete: {
-      type: Boolean,
-      default: false,
+      radio: 'insideLink'
     }
   },
   computed: {
     isActive: {
       get() {
-        return this.active;
+        return this.active
       },
       set() {}
     },
     isIncomplete: {
       get() {
-        return this.incomplete;
+        return this.incomplete
       },
       set() {}
     },
     copyModuleData: {
       get() {
-        return this.moduleData.data;
+        return this.moduleData.data
       },
       set() {}
     },
     courseLinkText: {
       get() {
         if (this.type === 'vip') {
-          return '会员专区';
+          return '会员专区'
         }
-        const data = this.courseSets[0];
+        const data = this.courseSets[0]
         if (data) {
-          return (this.type === 'course_list') ? data.displayedTitle : data.title;
+          return (this.type === 'course_list') ? data.displayedTitle : data.title
         }
         if (this.copyModuleData.link.target) {
-          return this.copyModuleData.link.target.title;
+          return this.copyModuleData.link.target.title
         }
       },
       set() {}
@@ -169,91 +167,91 @@ export default {
   watch: {
     copyModuleData: {
       handler(data) {
-        this.$emit('updateModule', data);
+        this.$emit('updateModule', data)
       },
-      deep: true,
+      deep: true
     },
     radio(type) {
-      const linkData = this.moduleData.data.link;
+      const linkData = this.moduleData.data.link
       if (type === 'insideLink') {
-        let radioType = (this.type === 'classroom_list') ? 'classroom' : 'course';
-        linkData.type = radioType;
-        return;
+        const radioType = (this.type === 'classroom_list') ? 'classroom' : 'course'
+        linkData.type = radioType
+        return
       }
       if (this.pathName === 'h5Setting') {
-        linkData.type = 'url';
+        linkData.type = 'url'
       }
-    },
+    }
   },
   created() {
     if (this.pathName === 'h5Setting') {
-      this.type = this.moduleData.data.link.type;
+      this.type = this.moduleData.data.link.type
       if (this.moduleData.data.link.type === 'url') {
-        this.radio = 'url';
-      };
-      return;
+        this.radio = 'url'
+      }
+      return
     }
   },
   methods: {
     beforeUpload(file) {
-      const type = file.type;
-      const size = file.size / 1024 / 1024;
-      let message = '';
+      const type = file.type
+      const size = file.size / 1024 / 1024
+      let message = ''
 
       if (type.indexOf('image') === -1) {
-        message = '文件类型仅支持图片格式';
+        message = '文件类型仅支持图片格式'
       } else if (size > 2) {
-        message = '文件大小不得超过 2 MB';
+        message = '文件大小不得超过 2 MB'
       }
 
       if (message) {
         this.$message({
           type: 'error',
-          message,
-        });
-        return false;
+          message
+        })
+        return false
       }
     },
     uploadImg(item) {
-      let formData = new FormData()
+      const formData = new FormData()
       formData.append('file', item.file)
       formData.append('group', 'system')
       Api.uploadFile({
-          data: formData
-        })
+        data: formData
+      })
         .then(data => {
           if (this.pathName !== 'h5Setting') {
             // 小程序后台替换图片协议
-            data.uri = data.uri.replace(/^(\/\/)|(http:\/\/)/, 'https://');
+            data.uri = data.uri.replace(/^(\/\/)|(http:\/\/)/, 'https://')
           }
-          this.copyModuleData.image = data;
+          this.copyModuleData.image = data
           this.$message({
             message: '图片上传成功',
             type: 'success'
-          });
+          })
         })
         .catch(err => {
           this.$message({
             message: err.message,
             type: 'error'
-          });
-        });
+          })
+        })
     },
     modalVisibleHandler(visible) {
-      this.modalVisible = visible;
+      this.modalVisible = visible
     },
     getUpdatedCourses(data) {
-      this.courseSets = data;
-      if (!data.length) return;
+      this.courseSets = data
+      if (!data.length) return
 
       if (this.type === 'classroom_list') {
         this.moduleData.data.link.target = {
           id: data[0].id,
           title: data[0].title,
-          courseSetId: data[0].id,
-        };
-        this.moduleData.data.link.type = 'classroom';
-        return;
+          courseSetId: data[0].id
+        }
+        this.moduleData.data.link.type = 'classroom'
+        return
       }
 
       this.moduleData.data.link.target = {
@@ -261,25 +259,25 @@ export default {
         title: data[0].title || data[0].courseSetTitle,
         courseSetId: data[0].courseSet.id,
         displayedTitle: data[0].displayedTitle
-      };
-      this.moduleData.data.link.type = 'course';
+      }
+      this.moduleData.data.link.type = 'course'
     },
     removeCourseLink() {
-      this.courseSets = [];
-      this.$set(this.copyModuleData.link, 'target', null);
+      this.courseSets = []
+      this.$set(this.copyModuleData.link, 'target', null)
     },
     handleClose() {
-      this.type = '';
-      this.moduleData.data.link.type = '';
-      this.removeCourseLink();
+      this.type = ''
+      this.moduleData.data.link.type = ''
+      this.removeCourseLink()
     },
     insideLinkHandle(value) {
       if (value !== 'vip') {
-        this.modalVisible = true;
+        this.modalVisible = true
       } else {
-        this.moduleData.data.link.type = 'vip';
+        this.moduleData.data.link.type = 'vip'
       }
-      this.type = value;
+      this.type = value
     }
   }
 }
