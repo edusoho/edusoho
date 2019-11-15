@@ -4396,6 +4396,27 @@ admin.question_bank.manage.operate: Action
 admin.question_bank.manage.testpaper: Testpaper
 admin.question_bank.manage.question: Question
 admin.question_bank.manage.empty: Empty Question Bank
+admin.question_bank.manage.add_title: Create Bank
+admin.question_bank.manage.edit_title: Edit Bank
+admin.question_bank.manage.name_label: Name
+admin.question_bank.manage.category_label: Category
+admin.question_bank.manage.manager_label: Authorized Teacher 
+admin.question_bank.manage.model: >
+  <p class="question-bank-model-title"><i class="es-icon es-icon-Promote"></i>Structural modification</p>
+  <p class="question-bank-model-text">In our new version, the questions and testpapers created in the question bank can be used in all courses.</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-manage"></i>New feature : question category</p>
+  <p class="question-bank-model-text">You can ues question category to manage the question.</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-efficiency"></i>optimize the testpaper creation process</p>
+  <p class="question-bank-model-text">You can add different types of question at one operation. And you can select questions through different pages.</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-Jurisdiction"></i>Management authority modification</p>
+  <p class="question-bank-model-text">Only administrators can create question bank. The teachers can use questions and testpapers from the question bank which are authorized to them.</p>
+
+  <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>PS</p>
+  <p class="question-bank-model-text">The questions and testpapers in the courses are all moved to the question bank now.</p>
+
 admin.category_manage.name_th: Title
 admin.category_manage.code_th: Code
 admin.category_manage.operate_th: Action
@@ -8805,6 +8826,8 @@ exception.filetoolkit.file_type_error: File type is incorrect
 exception.course.draft.not_found: Draft teaching plan does not exist
 exception.task_result.not_found: Learning task results do not exist
 exception.discovery_column.not_found: Discovery column does not exist
+exception.question_bank.forbidden_delete_category: There is a question bank under the classification or sub-category and cannot be deleted
+exception.question_bank.not_found_bank: Bank does not exist
 exception.educloud.user_disabled_hint: The education cloud has been banned, and the payment system is automatically lifted. Tutorial <a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">See here</a>
 exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed

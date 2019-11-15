@@ -5336,6 +5336,27 @@ admin.question_bank.manage.operate: 操作
 admin.question_bank.manage.testpaper: 试卷
 admin.question_bank.manage.question: 题目
 admin.question_bank.manage.empty: 暂无题库
+admin.question_bank.manage.add_title: 创建题库
+admin.question_bank.manage.edit_title: 编辑题库
+admin.question_bank.manage.name_label: 名称
+admin.question_bank.manage.category_label: 分类
+admin.question_bank.manage.manager_label: 授权教师
+admin.question_bank.manage.model: >
+  <p class="question-bank-model-title"><i class="es-icon es-icon-Promote"></i>题库结构改造，全面提升复用性</p>
+  <p class="question-bank-model-text">新版本中，实现了题库与课程的分离，在题库中创建的题目和试卷，可以在所有课程中使用，全面提升了题目和试卷的复用性。</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-manage"></i>新增题目分类，题目管理更方便</p>
+  <p class="question-bank-model-text">每个题库中都可以创建一套题目分类，无需再从属于教学计划或者课时，方便网校管理题目。</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-efficiency"></i>试卷创建优化，创建效率大提升</p>
+  <p class="question-bank-model-text">用户可以一次性添加多个题型的题目，并且新增了跨页连选功能，大大提升了创建试卷的效率。</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-Jurisdiction"></i>管理权限改造，权限结构更合理</p>
+  <p class="question-bank-model-text">新版本中，只能由管理员从“后台-课程-题库管理”中创建题库，教师角色的用户必须得到授权后才能在中台进行管理。</p>
+
+  <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>特别说明</p>
+  <p class="question-bank-model-text">老数据处理：原课程中的题目和试卷都搬迁到新版题库中了，原先教师有权限管理的题库，现在依然有权限管理</p>
+
 
 #　分类管理
 admin.category_manage.name_th: 名称
@@ -10119,6 +10140,8 @@ exception.filetoolkit.file_type_error: 文件类型不正确
 exception.course.draft.not_found: 教学计划草稿不存在
 exception.task_result.not_found: 学习任务结果不存在
 exception.discovery_column.not_found: 发现栏目不存在
+exception.question_bank.forbidden_delete_category: 分类或子分类下有所属题库，无法删除
+exception.question_bank.not_found_bank: 题库不存在
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 

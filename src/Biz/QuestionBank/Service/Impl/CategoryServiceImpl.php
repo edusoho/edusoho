@@ -5,8 +5,11 @@ namespace Biz\QuestionBank\Service\Impl;
 use Biz\BaseService;
 use Biz\QuestionBank\Dao\CategoryDao;
 use Biz\QuestionBank\Service\CategoryService;
+use Biz\QuestionBank\QuestionBankException;
 use AppBundle\Common\TreeToolkit;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
+use Biz\Taxonomy\CategoryException;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
@@ -68,16 +71,22 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
-        $ids = $this->findCategoryChildrenIds($id);
-        $ids[] = $id;
+        $children = $this->findCategoryChildren($id);
+        $children[] = $category;
 
-        foreach ($ids as $id) {
-            //todo 清除这些分类下的题库的分类
-            $this->getCategoryDao()->delete($id);
+        $this->validateCategoriesCanDelete($children);
+
+        foreach ($children as $category) {
+            $this->getCategoryDao()->delete($category['id']);
         }
     }
 
-    public function findCategoryChildrenIds($id)
+    public function waveCategoryBankNum($id, $diff)
+    {
+        return $this->getCategoryDao()->wave(array($id), array('bankNum' => $diff));
+    }
+
+    public function findCategoryChildren($id)
     {
         $category = $this->getCategory($id);
 
@@ -87,7 +96,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $tree = $this->getCategoryTree();
 
-        $childrenIds = array();
+        $children = array();
         $depth = 0;
 
         foreach ($tree as $node) {
@@ -97,7 +106,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             }
 
             if ($depth > 0 && $depth < $node['depth']) {
-                $childrenIds[] = $node['id'];
+                $children[] = $node;
             }
 
             if ($depth > 0 && $depth >= $node['depth']) {
@@ -105,7 +114,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             }
         }
 
-        return $childrenIds;
+        return $children;
     }
 
     public function getCategoryTree()
@@ -140,6 +149,17 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function findAllCategoriesByParentId($parentId)
     {
         return ArrayToolkit::index($this->getCategoryDao()->findAllByParentId($parentId), 'id');
+    }
+
+    public function validateCategoriesCanDelete($categories)
+    {
+        foreach ($categories as $category) {
+            if ($category['bankNum'] > 0) {
+                $this->createNewException(QuestionBankException::FORBIDDEN_DELETE_CATEGORY());
+            }
+        }
+
+        return true;
     }
 
     protected function makeCategoryTree(&$tree, &$categories, $parentId)
