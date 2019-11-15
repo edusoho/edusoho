@@ -9828,6 +9828,7 @@ exception.task.lessonid_invalid: 错误的课时id
 exception.task.access_denied: 没有权限
 exception.task.categoryid_invalid: 错误的章节id
 exception.task.forbidden_preview_task: 无权预览任务
+exception.task.type_invalid: 任务类型错误
 exception.course.not_found: 教学计划不存在
 exception.course.forbidden_take_course: 不能访问教学计划
 exception.course.learnmode_invalid: 学习模式错误

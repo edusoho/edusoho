@@ -8537,6 +8537,7 @@ exception.task.lessonid_invalid: Lesson id is invalid
 exception.task.access_denied: Task access denied
 exception.task.categoryid_invalid: Chapter id is invalid
 exception.task.forbidden_preview_task: You can not preview task
+exception.task.type_invalid: Task type invalid
 exception.course.not_found: The course plan doesn't exist
 exception.course.forbidden_take_course: Can't access the teaching plan
 exception.course.learnmode_invalid: Learning mode error
