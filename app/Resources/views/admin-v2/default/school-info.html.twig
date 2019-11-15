@@ -4,11 +4,11 @@
 <div class="admin-info-section">
   <div class="admin-website text-center">
     {% if setting('site.logo') %}
-      <a class="admin-website__logo" href="#">
+      <a class="admin-website__logo" href="{{ path('admin_v2_school_information') }}">
         <img src="{{ asset(setting('site.logo')) }}">
       </a>
     {% endif %}
-    <div class="admin-website__name"><a class="admin-website__text text-overflow" href="{{ path('homepage') }}">{{ setting('site.name') }}</a></div>
+    <div class="admin-website__name"><a class="admin-website__text text-overflow" href="{{ path('admin_v2_school_information') }}">{{ setting('site.name') }}</a></div>
     {# 三种颜色的客户等级 #}
     <div class="">
       <div class="rank-tag {% if schoolLevel == 'saas' %}rank-tag--yellow{% elseif schoolLevel == 'license' %}{% elseif schoolLevel == 'none' %}rank-tag--green{% endif %}">

@@ -179,7 +179,11 @@ class DefaultController extends BaseController
 
     public function applicationIntroAction(Request $request)
     {
-        $result = $this->getPlatformNewsSdkService()->getApplications();
+        try {
+            $result = $this->getPlatformNewsSdkService()->getApplications();
+        } catch (\Exception $e) {
+            $result = array();
+        }
 
         return $this->render('admin-v2/default/application-intro.html.twig', array(
             'applicationData' => empty($result['details']) ? array() : $result['details'],
@@ -205,7 +209,11 @@ class DefaultController extends BaseController
 
     public function getAnnouncementFromPlatformAction(Request $request)
     {
-        $result = $this->getPlatformNewsSdkService()->getAnnouncements();
+        try {
+            $result = $this->getPlatformNewsSdkService()->getAnnouncements();
+        } catch (\Exception $e) {
+            $result = array();
+        }
 
         return $this->render('admin-v2/default/announcement.html.twig', array(
             'announcement' => empty($result['details']) ? array() : array_pop($result['details']),
@@ -237,7 +245,11 @@ class DefaultController extends BaseController
     protected function getMiniProgramCodeImg()
     {
         if ($this->isMiniProgramCodeImgNeedGenerate()) {
-            $res = $this->getSDKWeChatService()->getMiniProgramCode('backgroundHome', array('width' => 280));
+            try {
+                $res = $this->getSDKWeChatService()->getMiniProgramCode('backgroundHome', array('width' => 280));
+            } catch (\Exception $e) {
+                return $this->getSettingService()->get('mini_program', array());
+            }
 
             $tmpPath = tempnam(sys_get_temp_dir(), 'mini_program');
             file_put_contents($tmpPath, base64_decode($res['content']));
