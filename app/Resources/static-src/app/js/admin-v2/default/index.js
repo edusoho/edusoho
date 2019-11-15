@@ -59,16 +59,14 @@ window.onload = () => {
   showCloudAd();
 };
 
-
-// 静态数据
-const src = 'http://try6.edusoho.cn/files/course/2019/11-07/2038113bdf7d297596.png';
+const src = $('.js-mini-program').data('src');
 $('.js-mini-program').popover({
   trigger: 'hover',
   placement: 'bottom',
   title: '扫码打开小程序',
   template: '<div class="popover mini-program-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
   html: true,
-  content: `<img src=${src}>`
+  content: `<img src="${src}" width="200px">`
 });
 
 // 数据概览

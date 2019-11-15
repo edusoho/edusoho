@@ -68,35 +68,8 @@
 
       </div>
       <div class="col-md-3">
-        <div class="admin-info-section">
-          <div class="admin-website">
-            {% if setting('site.logo') %}
-              <a class="admin-website__logo" href="#">
-                <img src="{{ asset(setting('site.logo')) }}">
-              </a>
-            {% endif %}
-            <div class="admin-website__name"><a class="admin-website__text text-overflow" href="#">哎呀音乐哎呀音世哎呀音乐是哎呀音乐哎呀音世哎呀音乐是</a></div>
-              {# 三种颜色的客户等级 #}
-            <div class="">
-              <div class="rank-tag rank-tag--yellow rank-tag--green"><span class="rank-tag__icon"><i class="cd-icon cd-icon-star"></i></span>
-                <div class="rank-tag__text">商业授权</div>
-              </div>
-              <div class="theme-tag">雅致简洁主题</div>
-            </div>
 
-          </div>
-          <div class="admin-update clearfix">
-            <div class="admin-update__cell clearfix"><div class="admin-update__label pull-left">云服务：</div><div class="admin-update__link pull-right"><div class="admin-update__number">3个</div><a href="#">未开启</a></div></div>
-            {# 已开启和已更新的例子 #}
-            <div class="admin-update__cell clearfix"><div class="admin-update__label pull-left">应用中心：</div><div class="cdv2-light-minor pull-right"><div class="admin-update__number">3个</div>已更新</div></div>
-            <div class="admin-update__cell clearfix"><div class="admin-update__label pull-left">系统更新：</div><div class="pull-left cdv2-light-minor">8.3.36</div><div class="admin-update__link pull-right"><a href="#">未更新</a></div></div>
-          </div>
-          <div class="admin-link">
-            <a class="admin-link__btn" href="#" target="_blank"><i class="es-icon es-icon-website"></i>访问Web</a>
-            <a class="admin-link__btn admin-link__btn--disabled" href="javascript:;" target="_blank"><span class="closed-tag"></span><i class="es-icon es-icon-app"></i>访问App</a>
-            <a class="admin-link__btn js-mini-program mb0" href="javascript:;"><i class="es-icon es-icon-miniprogram"></i>访问小程序</a>
-          </div>
-        </div>
+        {{ render(controller('AppBundle:AdminV2/Default:info')) }}
 
         {% set test = {
           'src': 'http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg',
