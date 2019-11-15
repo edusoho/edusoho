@@ -67,7 +67,7 @@ class TaskLiveReplay extends AbstractResource
                 $response['url'] = $this->getEsLiveReplayUrl($globalId, $options);
                 $response['extra']['provider'] = 'longinus';
             } else {
-                $protocol = $request->isSecure() ? 'https' : 'http';
+                $protocol = $this->container->get('request')->getScheme();
                 $replays = array();
 
                 foreach ($visibleReplays as $index => $visibleReplay) {
