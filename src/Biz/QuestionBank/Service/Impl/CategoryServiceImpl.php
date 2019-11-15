@@ -3,6 +3,7 @@
 namespace Biz\QuestionBank\Service\Impl;
 
 use Biz\BaseService;
+use Biz\QuestionBank\Dao\CategoryDao;
 use Biz\QuestionBank\Service\CategoryService;
 use AppBundle\Common\TreeToolkit;
 use AppBundle\Common\ArrayToolkit;
@@ -136,6 +137,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->findAll();
     }
 
+    public function findAllCategoriesByParentId($parentId)
+    {
+        return ArrayToolkit::index($this->getCategoryDao()->findAllByParentId($parentId), 'id');
+    }
+
     protected function makeCategoryTree(&$tree, &$categories, $parentId)
     {
         static $depth = 0;
@@ -209,6 +215,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $category;
     }
 
+    /**
+     * @return CategoryDao
+     */
     protected function getCategoryDao()
     {
         return $this->createDao('QuestionBank:CategoryDao');

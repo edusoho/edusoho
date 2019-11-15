@@ -18,6 +18,7 @@ class QuestionBankDaoImpl extends AdvancedDaoImpl implements QuestionBankDao
 
         $declares['orderbys'] = array(
             'id',
+            'createdTime'
         );
 
         $declares['conditions'] = array(

@@ -3,6 +3,7 @@
 namespace Biz\QuestionBank\Service\Impl;
 
 use Biz\BaseService;
+use Biz\QuestionBank\Dao\QuestionBankDao;
 use Biz\QuestionBank\Service\QuestionBankService;
 
 class QuestionBankServiceImpl extends BaseService implements QuestionBankService
@@ -22,6 +23,10 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $this->getQuestionBankDao()->count($conditions);
     }
 
+
+    /**
+     * @return QuestionBankDao
+     */
     protected function getQuestionBankDao()
     {
         return $this->createDao('QuestionBank:QuestionBankDao');

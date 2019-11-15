@@ -13,4 +13,6 @@ interface CategoryService
     public function getCategoryTree();
 
     public function findAllCategories();
+
+    public function findAllCategoriesByParentId($parentId);
 }

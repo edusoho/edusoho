@@ -9,4 +9,6 @@ interface CategoryDao extends GeneralDaoInterface
     public function findByIds($ids);
 
     public function findAll();
+
+    public function findAllByParentId($parentId);
 }
