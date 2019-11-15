@@ -132,18 +132,24 @@ class WeChatSettingController extends BaseController
     protected function getAuthorizationInfo()
     {
         $biz = $this->getBiz();
-        $info = $biz['qiQiuYunSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
-        if ($info['isAuthorized']) {
-            $ids = ArrayToolkit::column($info['funcInfo'], 'funcscope_category');
-            $ids = ArrayToolkit::column($ids, 'id');
-            /**
-             * 2、用户管理权限  7、群发与通知权限
-             */
-            $needIds = array(2, 7);
-            $diff = array_diff($needIds, $ids);
-            if (empty($diff)) {
-                $info['wholeness'] = 1;
+        try {
+            $info = $biz['qiQiuYunSdk.wechat']->getAuthorizationInfo(WeChatPlatformTypes::OFFICIAL_ACCOUNT);
+            if ($info['isAuthorized']) {
+                $ids = ArrayToolkit::column($info['funcInfo'], 'funcscope_category');
+                $ids = ArrayToolkit::column($ids, 'id');
+                /**
+                 * 2、用户管理权限  7、群发与通知权限
+                 */
+                $needIds = array(2, 7);
+                $diff = array_diff($needIds, $ids);
+                if (empty($diff)) {
+                    $info['wholeness'] = 1;
+                }
             }
+        } catch (\Exception $e) {
+            $info = array(
+                'isAuthorized' => false,
+            );
         }
 
         return $info;
