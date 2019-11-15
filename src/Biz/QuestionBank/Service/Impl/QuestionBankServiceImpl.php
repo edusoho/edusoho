@@ -21,12 +21,14 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = array())
     {
         $conditions = $this->prepareConditions($conditions);
+
         return $this->getQuestionBankDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
     public function countQuestionBanks($conditions)
     {
         $conditions = $this->prepareConditions($conditions);
+
         return $this->getQuestionBankDao()->count($conditions);
     }
 
