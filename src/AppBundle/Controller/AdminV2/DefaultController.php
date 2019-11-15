@@ -40,6 +40,14 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function newcomerAction(Request $request)
+    {
+        return $this->render('admin-v2/default/newcomer-task.html.twig', array(
+            'newcomerTaskStatus' => $this->getNewcomerTaskStatus(),
+            'isNewcomerTaskAllDone' => $this->isNewcomerTaskAllDone(),
+        ));
+    }
+
     public function changelogAction(Request $request)
     {
         $rootDir = $this->getParameter('kernel.root_dir');

@@ -69,10 +69,17 @@ $('.js-mini-program').popover({
   content: `<img src="${src}" width="200px">`
 });
 
+//六步任务助手
+if ($('.js-steps').length) {
+  $.get($('.js-steps').data('url'), (html) => {
+    $('.js-steps').html(html);
+  });
+}
+
 // 数据概览
-if ($('.admin-data').length) {
-  $.get($('.admin-data').data('url'), (html) => {
-    $('.admin-data').html(html);
+if ($('.js-data-overview').length) {
+  $.get($('.js-data-overview').data('url'), (html) => {
+    $('.js-data-overview').html(html);
   });
 }
 
@@ -80,6 +87,12 @@ if ($('.admin-data').length) {
 if ($('.application-intro').length && $('.application-intro').data('url')) {
   $.get($('.application-intro').data('url'), (html) => {
     $('.application-intro').html(html);
+  });
+}
+// 快速入口
+if ($('.js-quick-entrance').length) {
+  $.get($('.js-quick-entrance').data('url'), (html) => {
+    $('.js-quick-entrance').html(html);
   });
 }
 
