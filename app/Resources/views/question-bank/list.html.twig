@@ -8,38 +8,18 @@
 
   <div class="question-bank-list clearfix">
     {% if questionBanks %}
-    {% else %}
-      <div class="empty">{{ 'question_bank.empty'|trans|raw }}</div>
+      {% for questionBank in questionBanks %}
+        <a href="{{ path('question_bank_manage', {id: questionBank.id}) }}" class="question-bank-list-item link-dark">
+          <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
+               srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
+          <p class="text-center">{{ questionBank.name }}</p>
+        </a>
+      {% endfor %}
+    {% elseif has_permission('admin') %}
+      {% set quesionManagePath = path('admin_question_bank') %}
+      <div class="empty">{{ 'question_bank.empty'|trans({'%loginUrl%': quesionManagePath})|raw }}</div>
+      {% else %}
+        <div class="empty">{{ 'question_bank.empty.no_auth'|trans }}</div>
     {% endif %}
-    <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
-     <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
-    <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
-    <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
-    <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
-    <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
   </div>
 {% endblock %}

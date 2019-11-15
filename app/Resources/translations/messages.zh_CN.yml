@@ -3883,7 +3883,7 @@ question_bank_category.all_category: 全部
 
 # 题库
 question_bank.empty: 暂无题库，请前往<a class="link-primary" href="%loginUrl%">后台-课程-题库管理</a>进行创建。
-
+question_bank.empty.no_auth: 暂无题库
 # 附件
 attachments: 附件
 attachments.preview: 预览
