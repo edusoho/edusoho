@@ -1,6 +1,6 @@
 {% for entrance in userQuickEntrances %}
   <div class="col-md-3">
-    <a class="{{ 'text-center admin-function ' ~ entrance.class }}" href="{{ entrance.link }}">
+    <a class="{{ 'text-center admin-function ' ~ entrance.class }}" href="{{ entrance.link }}" target="{{ entrance.target|default('_self') }}">
       <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entrance.icon }}"></i></div>
       <div class="admin-function__name">{{ entrance.text }}</div>
     </a>
