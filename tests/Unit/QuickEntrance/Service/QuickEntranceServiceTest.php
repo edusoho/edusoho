@@ -143,6 +143,7 @@ class QuickEntranceServiceTest extends BaseTestCase
                 'link' => '/admin/v2/invite/record',
                 'checked' => false,
                 'class' => 'icon-color-yellow',
+                'target' => '',
             ),
         );
         $result = $this->createCurrentUserInviteManageQuickEntrance();
