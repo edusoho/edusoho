@@ -20,7 +20,9 @@ class QuestionBankController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($questionBanks, 'categoryId'));
+        $categories = $this->getCategoryService()->findCategoriesByIds(
+            ArrayToolkit::column($questionBanks, 'categoryId')
+        );
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         return $this->render('admin/question-bank/index.html.twig', array(

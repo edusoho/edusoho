@@ -14,6 +14,13 @@ class CategoryDaoImpl extends AdvancedDaoImpl implements CategoryDao
         return $this->findInField('id', $ids);
     }
 
+    public function findAllByParentId($parentId)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE parentId = ?";
+
+        return $this->db()->fetchAll($sql, array($parentId)) ?: array();
+    }
+
     public function findAll()
     {
         $sql = "SELECT * FROM {$this->table()}";
