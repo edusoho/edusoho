@@ -1502,3 +1502,6 @@ question_bank.question_category.name_max_message: The length of the name must be
 question_bank.question_category.name_chinese_alphanumeric_message: The name supports Chinese characters, English letters, numbers and _ . ·
 question_bank.question_category.create_success: Create Category Success
 question_bank.question_category.update_success: Update Category Success
+question_bank.question_category.delete_confirm_title: Delete Confirm
+question_bank.question_category.delete_confirm_hint: This category and its subcategories contain %count% questions. After deletion, these questions will become unclassified. Are you sure you want to delete this category?
+
