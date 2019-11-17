@@ -132,6 +132,10 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
+        if (!$this->getQuestionBankService()->validateCanManageBank($category['bankId'])) {
+            $this->createAccessDeniedException();
+        }
+
         $fields = ArrayToolkit::parts($fields, array('name'));
 
         if (empty($fields)) {
@@ -147,6 +151,10 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         if (empty($category)) {
             $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
+        }
+
+        if (!$this->getQuestionBankService()->validateCanManageBank($category['bankId'])) {
+            $this->createAccessDeniedException();
         }
 
         try {
