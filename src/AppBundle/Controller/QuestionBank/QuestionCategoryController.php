@@ -31,7 +31,7 @@ class QuestionCategoryController extends BaseController
     }
 
     public function batchCreateAction(Request $request, $id)
-    {   
+    {
         if ('POST' == $request->getMethod()) {
             $categoryNames = $request->request->get('categoryNames');
             $parentId = $request->request->get('parentId');
@@ -53,7 +53,7 @@ class QuestionCategoryController extends BaseController
     }
 
     public function editAction(Request $request, $id)
-    {   
+    {
         if ('POST' == $request->getMethod()) {
             $name = $request->request->get('name', '');
 
@@ -65,7 +65,7 @@ class QuestionCategoryController extends BaseController
         $category = $this->getQuestionCategoryService()->getCategory($id);
 
         return $this->render('question-bank/question-category/update-modal.html.twig', array(
-            'category' => $category
+            'category' => $category,
         ));
     }
 
@@ -79,7 +79,7 @@ class QuestionCategoryController extends BaseController
     }
 
     public function deleteAction(Request $request, $id)
-    {   
+    {
         $this->getQuestionCategoryService()->deleteCategory($id);
 
         return $this->createJsonResponse(array('success' => true));

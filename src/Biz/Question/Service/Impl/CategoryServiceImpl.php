@@ -99,7 +99,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         if (empty($names)) {
             return array();
         }
-        
+
         $questionBank = $this->getQuestionBankService()->getQuestionBank($bankId);
 
         if (empty($questionBank)) {
@@ -112,12 +112,12 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $categories = array();
         $user = $this->getCurrentUser();
-        foreach($names as $name) {
+        foreach ($names as $name) {
             $categories[] = array(
-                'bankId' => $bankId, 
-                'name' => $name, 
+                'bankId' => $bankId,
+                'name' => $name,
                 'parentId' => $parentId,
-                'userId' => $user['id']
+                'userId' => $user['id'],
             );
         }
 
@@ -163,7 +163,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $questions = $this->getQuestionService()->findQuestionsByCategoryIds($ids);
             if (!empty($questions)) {
                 $this->getQuestionDao()->batchUpdate(
-                    ArrayToolkit::column($questions, 'id'), 
+                    ArrayToolkit::column($questions, 'id'),
                     array('categoryId' => 0),
                     'id'
                 );
