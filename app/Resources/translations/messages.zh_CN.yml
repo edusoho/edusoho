@@ -4323,6 +4323,18 @@ my.teaching.open_course.material.web_connect: 网络链接资料
 my.teaching.open_course.material.lesson: 课时
 my.teaching.open_course.material.upload_time: 上传于
 
+#题库
+my.teaching.question_bank.question_category.manage: 题目分类管理
+my.teaching.question_bank.question.manage: 题目管理
+my.teaching.question_bank.testpaper.manage: 试卷管理
+my.teaching.question_bank.question_category.create: 添加分类
+my.teaching.question_bank.question_category.update: 更新分类
+my.teaching.question_bank.question_category.title: 题目分类
+my.teaching.question_bank.question_category.latest_update: 最后更新
+my.teaching.question_bank.question_category.operation: 操作
+my.teaching.question_bank.question_category.empty: 无题目分类
+my.teaching.question_bank.question_category.create_hint: 可批量添加分类，一行一个，每个分类最多输入30个字符
+my.teaching.question_bank.question_category.name_label: 分类名称
 
 
 my.learning.menu_heading: 我的学习

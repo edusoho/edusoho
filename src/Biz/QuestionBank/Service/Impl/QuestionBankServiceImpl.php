@@ -136,6 +136,31 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         }
     }
 
+    public function validateCanManageBank($bankId, $permission = 'admin_question_bank')
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if ($user->hasPermission($permission)) {
+            return true;
+        }
+
+        $members = $this->getMemberService()->findMembersByBankId($bankId);
+        $memberUserIds = ArrayToolkit::column($members, 'userId');
+        if (in_array($user['id'], $memberUserIds)) {
+            return true;
+        }
+
+        return false;
+    }
+
     protected function getQuestionBankDao()
     {
         return $this->createDao('QuestionBank:QuestionBankDao');

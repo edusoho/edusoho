@@ -3609,6 +3609,18 @@ my.teaching.open_course.material.web_connect: 'External Online Material'
 my.teaching.open_course.material.lesson: Lesson
 my.teaching.open_course.material.upload_time: 'Uploaded At'
 
+my.teaching.question_bank.question_category.manage: Question Category Manage
+my.teaching.question_bank.question.manage: Question Manage
+my.teaching.question_bank.testpaper.manage: Testpaper Manage
+my.teaching.question_bank.question_category.create: Create Category
+my.teaching.question_bank.question_category.update: Update Category
+my.teaching.question_bank.question_category.title: Question Category
+my.teaching.question_bank.question_category.latest_update: Latest Update
+my.teaching.question_bank.question_category.operation: Operation
+my.teaching.question_bank.question_category.empty: No Question Category
+my.teaching.question_bank.question_category.create_hint: You can add categories in batches, one per line, and enter up to 30 characters for each category
+my.teaching.question_bank.question_category.name_label: Category Name
+
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
 my.learning.live_schedule_menu: Live Schedule

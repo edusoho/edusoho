@@ -29,6 +29,11 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
         return $this->findInField('copyId', array($copyId));
     }
 
+    public function findQuestionsByCategoryIds($categoryIds)
+    {
+        return $this->findInField('categoryId', $categoryIds);
+    }
+
     public function deleteSubQuestions($parentId)
     {
         return $this->db()->delete($this->table(), array('parentId' => $parentId));
@@ -89,6 +94,7 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
             'copyId = :copyId',
             'copyId IN (:copyIds)',
             'parentId > :parentIdGT',
+            'categoryId in (:categoryIds)',
         );
 
         $declares['serializes'] = array(

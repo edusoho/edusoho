@@ -11,6 +11,8 @@ interface QuestionDao extends GeneralDaoInterface
     public function findQuestionsByParentId($id);
 
     public function findQuestionsByCourseSetId($courseSetId);
+    
+    public function findQuestionsByCategoryIds($categoryIds);
 
     public function deleteSubQuestions($parentId);
 
