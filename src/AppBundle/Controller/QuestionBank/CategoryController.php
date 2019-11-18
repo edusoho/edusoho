@@ -4,7 +4,6 @@ namespace AppBundle\Controller\QuestionBank;
 
 use AppBundle\Controller\BaseController;
 use Biz\QuestionBank\Service\CategoryService;
-use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends BaseController
 {
