@@ -103,7 +103,7 @@ const loadFirst = () => {
 };
 
 const loadSecond = () => {
-  // 应用简介
+  // 应用推荐
   if ($('.application-intro').length && $('.application-intro').data('url')) {
     $.get($('.application-intro').data('url'), (html) => {
       $('.application-intro').html(html);
@@ -143,10 +143,6 @@ loadStep();
 window.onload = () => {
   showCloudAd();
 };
-
 $('.js-no-network').click(function () {
   cd.message({type: 'danger', 'message': Translator.trans('admin.can_not_link_data')});
 });
-
-
-

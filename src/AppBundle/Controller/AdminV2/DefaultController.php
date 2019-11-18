@@ -182,10 +182,13 @@ class DefaultController extends BaseController
 
     public function applicationIntroAction(Request $request)
     {
-        try {
-            $result = $this->getPlatformNewsSdkService()->getApplications();
-        } catch (\Exception $e) {
-            $result = array();
+        $result = array();
+        if ($this->isSdkAvailable()) {
+            try {
+                $result = $this->getPlatformNewsSdkService()->getApplications();
+            } catch (\Exception $e) {
+                $result = array();
+            }
         }
 
         return $this->render('admin-v2/default/application-intro.html.twig', array(
@@ -197,7 +200,7 @@ class DefaultController extends BaseController
     public function businessAdviceAction()
     {
         $advice = array();
-        if (!$this->isWithoutNetwork()) {
+        if (!$this->isWithoutNetwork() && $this->isSdkAvailable()) {
             try {
                 $advice = $this->getPlatformNewsSdkService()->getAdvice();
             } catch (\Exception $e) {
@@ -212,10 +215,13 @@ class DefaultController extends BaseController
 
     public function getAnnouncementFromPlatformAction(Request $request)
     {
-        try {
-            $result = $this->getPlatformNewsSdkService()->getAnnouncements();
-        } catch (\Exception $e) {
-            $result = array();
+        $result = array();
+        if ($this->isSdkAvailable()) {
+            try {
+                $result = $this->getPlatformNewsSdkService()->getAnnouncements();
+            } catch (\Exception $e) {
+                $result = array();
+            }
         }
 
         return $this->render('admin-v2/default/announcement.html.twig', array(
@@ -247,7 +253,7 @@ class DefaultController extends BaseController
 
     protected function getMiniProgramCodeImg()
     {
-        if ($this->isMiniProgramCodeImgNeedGenerate()) {
+        if ($this->isMiniProgramCodeImgNeedGenerate() && $this->isSdkAvailable()) {
             try {
                 $res = $this->getSDKWeChatService()->getMiniProgramCode('backgroundHome', array('width' => 280));
             } catch (\Exception $e) {
@@ -381,7 +387,7 @@ class DefaultController extends BaseController
 
     public function qrCodeAction(Request $request)
     {
-        if ($this->isWithoutNetwork()) {
+        if ($this->isWithoutNetwork() || !$this->isSdkAvailable()) {
             $qrCode = array();
         } else {
             try {
@@ -450,6 +456,16 @@ class DefaultController extends BaseController
         $developer = $this->getSettingService()->get('developer');
 
         return empty($developer['without_network']) ? false : (bool) $developer['without_network'];
+    }
+
+    protected function isSdkAvailable()
+    {
+        $storage = $this->getSettingService()->get('storage', array());
+        if (empty($storage['cloud_access_key']) || empty($storage['cloud_secret_key'])) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
