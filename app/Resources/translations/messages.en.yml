@@ -9139,7 +9139,7 @@ admin_v2.tag_manage.tag.create.modal_title: Add Tag
 admin_v2.tag_manage.tag.group.create.modal_title: Add Tag Group
 
 admin_v2.homepage.school_info.cloud_service: Cloud service
-admin_v2.homepage.school_info.app_center: App center
+admin_v2.homepage.school_info.app_center: Cloud market
 admin_v2.homepage.school_info.system_upgrade: System upgrade
 admin_v2.homepage.school_info.cloud_service_status.open: Opened
 admin_v2.homepage.school_info.cloud_service_status.not_open: Open All

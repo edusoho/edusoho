@@ -76,7 +76,7 @@ if ($('.admin-data').length) {
   });
 }
 
-// 应用简介
+// 应用推荐
 if ($('.application-intro').length && $('.application-intro').data('url')) {
   $.get($('.application-intro').data('url'), (html) => {
     $('.application-intro').html(html);
