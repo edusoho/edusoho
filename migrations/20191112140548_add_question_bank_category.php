@@ -16,6 +16,7 @@ class AddQuestionBankCategory extends Migration
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `name` varchar(64) NOT NULL COMMENT '分类名称',
               `bankNum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '题库数量',
+              `weight` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '权重',
               `parentId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父级分类id',
               `orgId` int(10) UNSIGNED NOT NULL DEFAULT '1' COMMENT '组织机构id',
               `orgCode` varchar(265) NOT NULL DEFAULT '1.' COMMENT '组织机构编码',

@@ -18,6 +18,7 @@ class AddQuestionCategory extends Migration
             CREATE TABLE IF NOT EXISTS `question_category` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `name` varchar(64) NOT NULL COMMENT '名称',
+              `weight` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '权重',
               `parentId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父级分类id',
               `bankId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '所属题库id',
               `userId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '更新用户id',
