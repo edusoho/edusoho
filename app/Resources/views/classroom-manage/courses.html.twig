@@ -16,14 +16,14 @@
 
 <div class="panel panel-default" role="classroom-manage-course-manage">
   <div class="panel-heading">{{'classroom.course_manage'|trans}}
-    <button class="btn btn-primary btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_courses_pick',{classroomId:classroom.id})}}">{{'classroom.create_course_btn'|trans}}</button>
+    <button class="btn btn-primary btn-sm panel-bar" data-toggle="modal" data-target="#modal">{{'classroom.create_course_btn'|trans}}</button>
   </div>
   <div class="panel-body">
       <form id="courses-form" class="form-horizontal" method="post">
         {{ web_macro.flash_messages() }}
         <div class="form-group" id="courses-form-group">
           <div class="col-md-12 controls">
-            <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
+            <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" data-sort-url="{{path('classroom_courses_pick',{classroomId:classroom.id})}}">
 
               {% for course in courses %}
 
@@ -73,7 +73,7 @@
                       {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|sub_text(20) }}</div>{% endif %}
                     </h4>
                     <div class="course-manage-btn"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
-              
+
                     <div class="course-footer clearfix">
                       {% set teacher = users[course.teacherIds|first]|default(null) %}
                       {% if teacher %}
@@ -84,12 +84,12 @@
                         </div>
                       {% endif %}
 
-                      <div class="course-metas">  
+                      <div class="course-metas">
 
                         {% if setting('course.show_student_num_enabled', '1') == 1  %}
                         <span class="color-gray text-sm">{{ course.studentNum }} {{'site.default.student'|trans}}</span>
                         <span class="divider"></span>
-                        {% endif %}  
+                        {% endif %}
 
                           <span class="color-gray text-sm">
                               {{'classroom.total_task_count'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNum%':course.taskNum})}}
@@ -121,7 +121,7 @@
               {% endfor %}
 
             </ul>
-          </div>  
+          </div>
         </div>
 
         {% if courses %}
@@ -142,7 +142,7 @@
 
             </div>
 
-          </div>  
+          </div>
         </div>
         {% else %}
         <div class="empty">{{'classroom.course_empty'|trans}}</div>
