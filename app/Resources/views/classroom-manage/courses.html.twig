@@ -16,7 +16,7 @@
 
 <div class="panel panel-default" role="classroom-manage-course-manage">
   <div class="panel-heading">{{'classroom.course_manage'|trans}}
-    <button class="btn btn-primary btn-sm panel-bar" data-toggle="modal" data-target="#modal">{{'classroom.create_course_btn'|trans}}</button>
+    <button class="btn btn-primary btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_courses_pick',{classroomId:classroom.id})}}">{{'classroom.create_course_btn'|trans}}</button>
   </div>
   <div class="panel-body">
       <form id="courses-form" class="form-horizontal" method="post">

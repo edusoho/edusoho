@@ -869,9 +869,15 @@ class ClassroomManageController extends BaseController
         );
     }
 
-    public function courseItemsSortAction($request, $id)
+    public function courseItemsSortAction(Request $request, $id)
     {
-        $courseIds = $request->request->get('courseIds', array());
+        $this->getClassroomService()->tryManageClassroom($id);
+
+        $courseIds = $request->request->get('courseIds');
+        if (empty($courseIds)) {
+            return $this->createJsonResponse(array('result' => false));
+        }
+
         $this->getClassroomService()->updateClassroomCourses($id, $courseIds);
 
         return $this->createJsonResponse(array('result' => true));
