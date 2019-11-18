@@ -23,5 +23,5 @@ sortList({
   itemSelector: 'li',
   ajax:false,
 },(data)=>{
-  $('#courses-form').submit();
+  // $('#courses-form').submit();
 });
