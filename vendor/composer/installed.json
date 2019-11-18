@@ -2099,6 +2099,91 @@
         ]
     },
     {
+        "name": "friendsofphp/php-cs-fixer",
+        "version": "v2.2.0",
+        "version_normalized": "2.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
+            "reference": "d6f17423412d33df6b69c9aaf12037b91703533b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/d6f17423412d33df6b69c9aaf12037b91703533b",
+            "reference": "d6f17423412d33df6b69c9aaf12037b91703533b",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "doctrine/annotations": "^1.2",
+            "ext-tokenizer": "*",
+            "php": "^5.3.6 || >=7.0 <7.2",
+            "sebastian/diff": "^1.1",
+            "symfony/console": "^2.4 || ^3.0",
+            "symfony/event-dispatcher": "^2.1 || ^3.0",
+            "symfony/filesystem": "^2.4 || ^3.0",
+            "symfony/finder": "^2.2 || ^3.0",
+            "symfony/options-resolver": "^2.6 || ^3.0",
+            "symfony/polyfill-php54": "^1.0",
+            "symfony/polyfill-php55": "^1.3",
+            "symfony/polyfill-php70": "^1.0",
+            "symfony/polyfill-xml": "^1.3",
+            "symfony/process": "^2.3 || ^3.0",
+            "symfony/stopwatch": "^2.5 || ^3.0"
+        },
+        "conflict": {
+            "hhvm": "<3.18"
+        },
+        "require-dev": {
+            "gecko-packages/gecko-php-unit": "^2.0",
+            "justinrainbow/json-schema": "^5.0",
+            "phpunit/phpunit": "^4.5 || ^5.0",
+            "satooshi/php-coveralls": "^1.0",
+            "symfony/phpunit-bridge": "^3.2.2"
+        },
+        "suggest": {
+            "ext-mbstring": "For handling non-UTF8 characters in cache signature.",
+            "ext-xml": "For better performance.",
+            "symfony/polyfill-mbstring": "When enabling `ext-mbstring` is not possible."
+        },
+        "time": "2017-03-31T16:16:30+00:00",
+        "bin": [
+            "php-cs-fixer"
+        ],
+        "type": "application",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "PhpCsFixer\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Dariusz Rumiński",
+                "email": "dariusz.ruminski@gmail.com"
+            },
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            }
+        ],
+        "description": "A tool to automatically fix PHP code style"
+    },
+    {
         "name": "gregwar/captcha",
         "version": "v1.1.1",
         "version_normalized": "1.1.1.0",
@@ -5910,6 +5995,69 @@
         ]
     },
     {
+        "name": "symfony/polyfill-php72",
+        "version": "v1.12.0",
+        "version_normalized": "1.12.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/polyfill-php72.git",
+            "reference": "04ce3335667451138df4307d6a9b61565560199e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/04ce3335667451138df4307d6a9b61565560199e",
+            "reference": "04ce3335667451138df4307d6a9b61565560199e",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2019-08-06T08:03:45+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.12-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Polyfill\\Php72\\": ""
+            },
+            "files": [
+                "bootstrap.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Nicolas Grekas",
+                "email": "p@tchwork.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony polyfill backporting some PHP 7.2+ features to lower PHP versions",
+        "homepage": "https://symfony.com",
+        "keywords": [
+            "compatibility",
+            "polyfill",
+            "portable",
+            "shim"
+        ]
+    },
+    {
         "name": "symfony/polyfill-util",
         "version": "v1.6.0",
         "version_normalized": "1.6.0.0",
@@ -5966,6 +6114,61 @@
             "compat",
             "compatibility",
             "polyfill",
+            "shim"
+        ]
+    },
+    {
+        "name": "symfony/polyfill-xml",
+        "version": "v1.12.0",
+        "version_normalized": "1.12.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/polyfill-xml.git",
+            "reference": "e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/polyfill-xml/zipball/e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13",
+            "reference": "e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "symfony/polyfill-php72": "~1.4"
+        },
+        "time": "2019-08-06T08:03:45+00:00",
+        "type": "metapackage",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.12-dev"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Nicolas Grekas",
+                "email": "p@tchwork.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony polyfill for xml's utf8_encode and utf8_decode functions",
+        "homepage": "https://symfony.com",
+        "keywords": [
+            "compatibility",
+            "polyfill",
+            "portable",
             "shim"
         ]
     },
