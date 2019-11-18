@@ -128,6 +128,7 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
                     'icon' => $module['quick_entrance_icon'],
                     'link' => $kernel->getContainer()->get('router')->generate($module['router_name'], $params),
                     'checked' => in_array($module['code'], $userEntranceCodes) ? true : false,
+                    'target' => isset($module['target']) ? $module['target'] : '',
                 ),
             );
         } else {
