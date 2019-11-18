@@ -10438,7 +10438,7 @@ admin_v2.tag_manage.tag.create.modal_title: 新增标签
 admin_v2.tag_manage.tag.group.create.modal_title: 新增标签组
 
 admin_v2.homepage.school_info.cloud_service: 云服务
-admin_v2.homepage.school_info.app_center: 应用中心
+admin_v2.homepage.school_info.app_center: 云市场
 admin_v2.homepage.school_info.system_upgrade: 系统更新
 admin_v2.homepage.school_info.cloud_service_status.open: 已开启
 admin_v2.homepage.school_info.cloud_service_status.not_open: 未开启
@@ -10504,7 +10504,7 @@ admin_v2.default_page.changelog_title: EduSoho更新日志
 admin_v2.wechat_official_account.title: 公众号
 admin_v2.wechat_official_account.text: 关注EduSoho公众号 获取最新教育资讯
 admin_v2.homepage.announcement_from_platform: 站长公告
-admin_v2.homepage.application_intro: 应用简介
-admin_v2.homepage.application_intro.more_btn: 逛逛营销云应用
+admin_v2.homepage.application_intro: 应用推荐
+admin_v2.homepage.application_intro.more_btn: 逛逛营销应用
 admin_v2.business_advice.title: 经营建议
 admin_v2.buiness_advice.goto_qiqiuyu: 前去EduSoho商学院
