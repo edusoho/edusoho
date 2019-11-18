@@ -486,17 +486,29 @@
     display: inline-block;
     margin-right: 8px;
     width: 36px;
-    color: #f6c93f;
+    color: #ff5c3b;
+    font-weight: 500;
+    text-align: right;
+  }
+  .admin-update__icon {
+    margin-left: 4px;
+    font-size: 14px;
+    color: #ff5c3b;
+  }
+  .admin-update__version {
+    display: inline-block;
+    margin-right: 8px;
     font-weight: 500;
     text-align: right;
   }
   .admin-update__link {
     display: inline-block;
     a {
-      color: @brand-primary;
+      color: #ff5c3b;
       &:hover,
       &:focus {
         text-decoration: none;
+        border-bottom: 1px solid #ff5c3b;
       }
     }
   }
@@ -729,4 +741,17 @@
     padding-top: 0;
     padding-bottom: 16px;
   }
+}
+
+
+.v2-color-warning {
+  color: #ff5c3b !important;
+}
+
+.v2-color-success {
+  color: #6bcf95 !important;
+}
+
+.v2-color-gray {
+  color: #999 !important;
 }
