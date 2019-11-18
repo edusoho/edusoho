@@ -23,7 +23,7 @@
         {{ web_macro.flash_messages() }}
         <div class="form-group" id="courses-form-group">
           <div class="col-md-12 controls">
-            <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" data-sort-url="{{path('classroom_courses_pick',{classroomId:classroom.id})}}">
+            <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" data-sort-url="{{path('classroom_manage_items_sort',{id:classroom.id})}}">
 
               {% for course in courses %}
 
