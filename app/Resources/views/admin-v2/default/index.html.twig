@@ -18,7 +18,6 @@
 
     <div class="row cd-mt24">
       <div class="col-md-9">
-
         {# 任务助手 #}
         {% if not isNewcomerTaskAllDone %}
         <div class="admin-v2-section admin-v2-section--step">
@@ -71,18 +70,32 @@
           </div>
         </div>
 
-        {# 经营建议 #}
-        {{ render(controller('AppBundle:AdminV2/Default:businessAdvice')) }}
+        {# 经营建议#}
+        <div class="admin-v2-section cd-pb16 cd-mb0">
+          <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.business_advice.title'|trans }}<a {% if is_without_network() %}class="admin-v2-section__more js-no-network" href="javascript:;" {% else %}class="admin-v2-section__more" href="http://www.qiqiuyu.com" target="_blank"{% endif %}>{{ 'admin_v2.buiness_advice.goto_qiqiuyu'|trans }}</a></div>
+          <div class="admin-v2-section__body admin-advice js-admin-advice" data-url="{{ path('admin_v2_homepage_business_advice') }}">
+            <div class="row text-center" style="line-height: 120px">
+              {% for i in 0..3 %}
+                <div class="col-md-3">
+                  <div class=" admin-advice__item">
+                    <div class="admin-advice__placeholder"><i class="es-icon es-icon-placeholder"></i></div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
       </div>
+
       <div class="col-md-3">
+        {# 网校信息 #}
+        <div class="admin-info-section js-admin-info" data-url="{{ path('admin_v2_homepage_school_info') }}">
+          <div class="text-center" style="line-height: 400px">
+            {{ 'admin_v2.homepage.loading_data_tips'|trans }}
+          </div>
+        </div>
 
-        {{ render(controller('AppBundle:AdminV2/Default:info')) }}
-
-        {% set test = {
-          'src': 'http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg',
-          'text': '北京用户大会于上扣扣的看风使舵开始发送到了解详情点击进入坎坎坷坷第三方发倒是是啦啦>>'
-        } %}
-
+        {# 网校公告 #}
         <div class="admin-sidebar-section cd-pb16">
           <div class="admin-sidebar-section__header">{{ 'admin_v2.homepage.announcement_from_platform'|trans }}</div>
           <div class="announcement-from-platform"{% if not is_without_network() %} data-url="{{ path('admin_v2_announcement_from_platform') }}"{% endif %}>
@@ -92,11 +105,25 @@
           </div>
         </div>
 
-        {{ render(controller('AppBundle:AdminV2/Default:changelog')) }}
+        {# changelog #}
+        <div class="admin-sidebar-section js-admin-changelog" data-url="{{ path('admin_v2_homepage_changelog') }}">
+          <div class="admin-sidebar-section__header">{{ 'admin_v2.default_page.changelog_title'|trans }}<a class="admin-sidebar-section__more" href="{{ path('changelog_list') }}" target="_blank">{{ 'site.datagrid.filter.category_more'|trans }}<i class="es-icon es-icon-chevronright"></i></a></div>
+          <div class="admin-sidebar-section__body">
+            <div class="text-center" style="line-height: 100px">
+              {{ 'admin_v2.homepage.loading_data_tips'|trans }}
+            </div>
+          </div>
+        </div>
 
         {# 公众号 #}
-        {{ render(controller('AppBundle:AdminV2/Default:qrCode')) }}
-
+        <div class="admin-sidebar-section js-admin-qrcode" data-url="{{ path('admin_v2_homepage_qrcode') }}">
+          <div class="admin-sidebar-section__header">{{ 'admin_v2.wechat_official_account.title'|trans }}</div>
+          <div class="admin-sidebar-section__body">
+            <div class="text-center" style="line-height: 120px">
+              {{ 'admin_v2.homepage.loading_data_tips'|trans }}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
