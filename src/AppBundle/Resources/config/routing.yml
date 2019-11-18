@@ -3281,8 +3281,12 @@ question_bank_manage:
     defaults: { _controller: AppBundle:QuestionBank/Manage:manage }
 
 question_bank_list:
-    path: /my/question_banks
-    defaults: { _controller: AppBundle:QuestionBank/Manage:index }
+    path: /my/question_banks/{category}
+    defaults: { _controller: AppBundle:QuestionBank/Manage:index, category:'' }
+
+question_bank_category_tree_nav:
+    path: /question_banks/tree/{category}
+    defaults: { _controller: AppBundle:QuestionBank/Category:treeNav, category:'' }
 
 question_bank_manage_question_category:
     path: /question_bank/{id}/question/category
@@ -3304,3 +3308,5 @@ question_bank_manage_question_category_delete:
 question_bank_manage_question_category_question_count:
     path: /question_bank/question/category/{id}/question_count
     defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:getQuestionCount }
+
+

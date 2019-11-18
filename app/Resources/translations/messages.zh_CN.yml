@@ -3877,6 +3877,13 @@ tag.setting: 标签设置
 category: 分类
 category.all_category: 全部
 
+# 题库分类
+question_bank_category: 题库分类
+question_bank_category.all_category: 全部
+
+# 题库
+question_bank.empty: 暂无题库，请前往<a class="link-primary" href="%loginUrl%">后台-课程-题库管理</a>进行创建。
+question_bank.empty.no_auth: 暂无题库
 # 附件
 attachments: 附件
 attachments.preview: 预览
@@ -3985,6 +3992,7 @@ my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
 my.teaching.online_review_menu: 在线批阅
 my.teaching.question_bank_menu: 题库
+my.teaching.question_bank_title: 题库
 my.teaching.testpaper_check_menu: 试卷批阅
 my.teaching.homework_check_menu: 作业批阅
 my.teaching.material_lib_menu: 教学资料库
@@ -5345,6 +5353,22 @@ admin.question_bank.manage.edit_title: 编辑题库
 admin.question_bank.manage.name_label: 名称
 admin.question_bank.manage.category_label: 分类
 admin.question_bank.manage.manager_label: 授权教师
+admin.question_bank.manage.model: >
+  <p class="question-bank-model-title"><i class="es-icon es-icon-Promote"></i>题库结构改造，全面提升复用性</p>
+  <p class="question-bank-model-text">新版本中，实现了题库与课程的分离，在题库中创建的题目和试卷，可以在所有课程中使用，全面提升了题目和试卷的复用性。</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-manage"></i>新增题目分类，题目管理更方便</p>
+  <p class="question-bank-model-text">每个题库中都可以创建一套题目分类，无需再从属于教学计划或者课时，方便网校管理题目。</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-efficiency"></i>试卷创建优化，创建效率大提升</p>
+  <p class="question-bank-model-text">用户可以一次性添加多个题型的题目，并且新增了跨页连选功能，大大提升了创建试卷的效率。</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-Jurisdiction"></i>管理权限改造，权限结构更合理</p>
+  <p class="question-bank-model-text">新版本中，只能由管理员从“后台-课程-题库管理”中创建题库，教师角色的用户必须得到授权后才能在中台进行管理。</p>
+
+  <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>特别说明</p>
+  <p class="question-bank-model-text">老数据处理：原课程中的题目和试卷都搬迁到新版题库中了，原先教师有权限管理的题库，现在依然有权限管理</p>
+
 
 #　分类管理
 admin.category_manage.name_th: 名称

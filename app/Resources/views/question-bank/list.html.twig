@@ -1,49 +1,38 @@
 {% extends 'my/my-teaching.html.twig' %}
+{#{% do script(['app/js/question_bank/index.js']) %}#}
 
-{% block title %}{{ 'my.teaching.testpaper.check_title'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'my.teaching.question_bank_title'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'my-question-bank' %}
 
 {% block main %}
-  <div class="tabs-wrapper">
-    <div class="tabs-group">
-      <div class="title">分类:</div>
-      <ul class="content clearfix">
-        <li class=""><a class="nav-link" href="/course/explore?orderBy=latest">全部</a></li>
-        <li class="active"><a class="nav-link" href="/course/explore/default?orderBy=latest">默认分类</a></li>
-      </ul>
-    </div>
-  </div>
+  {{ render(path('question_bank_category_tree_nav',{ category: category })) }}
 
   <div class="question-bank-list clearfix">
-    <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
-     <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
-    <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
-    <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
-    <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
-    <a href="#" class="question-bank-list-item link-dark">
-       <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
-             srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
-        <p  class="text-center">我的数学</p>
-    </a>
+    {% if questionBanks %}
+      {% for questionBank in questionBanks %}
+        <a href="{{ path('question_bank_manage', {id: questionBank.id}) }}" class="question-bank-list-item link-dark">
+          <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
+               srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
+          <p class="text-center">{{ questionBank.name }}</p>
+        </a>
+      {% endfor %}
+    {% elseif has_permission('admin_question_bank') %}
+      {% set quesionManagePath = path('admin_question_bank') %}
+      <div class="empty">{{ 'question_bank.empty'|trans({'%loginUrl%': quesionManagePath})|raw }}</div>
+      {% else %}
+        <div class="empty">{{ 'question_bank.empty.no_auth'|trans }}</div>
+    {% endif %}
   </div>
+
+ <div class="modal fade" id="questionBankModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content question-bank-model">
+      <i class="es-icon es-icon-close01 js-model-close"></i>
+      <img class="question-bank-model-img" src="{{ asset('static-dist/app/img/question-bank/questtion_bank_model.png') }}" alt="model"/>
+      <div class="question-bank-model-wrap">
+      {{ 'admin.question_bank.manage.model'|trans|raw }}
+      </div>
+		</div>
+	</div>
+</div>
 {% endblock %}

@@ -3,6 +3,8 @@
 namespace Biz\QuestionBank\Service\Impl;
 
 use Biz\BaseService;
+use Biz\QuestionBank\Dao\QuestionBankDao;
+use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\CategoryException;
@@ -18,11 +20,15 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
     public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = array())
     {
+        $conditions = $this->prepareConditions($conditions);
+
         return $this->getQuestionBankDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
     public function countQuestionBanks($conditions)
     {
+        $conditions = $this->prepareConditions($conditions);
+
         return $this->getQuestionBankDao()->count($conditions);
     }
 
@@ -161,6 +167,23 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return false;
     }
 
+    protected function prepareConditions($conditions)
+    {
+        if (isset($conditions['categoryId'])) {
+            $conditions['categoryIds'] = array();
+            if (!empty($conditions['categoryId'])) {
+                $childrenIds = $this->getCategoryService()->findAllChildrenIdsByParentId($conditions['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            }
+            unset($conditions['categoryId']);
+        }
+
+        return $conditions;
+    }
+
+    /**
+     * @return QuestionBankDao
+     */
     protected function getQuestionBankDao()
     {
         return $this->createDao('QuestionBank:QuestionBankDao');
@@ -171,6 +194,9 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
         return $this->createService('QuestionBank:CategoryService');

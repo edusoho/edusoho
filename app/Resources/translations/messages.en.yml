@@ -4413,6 +4413,22 @@ admin.question_bank.manage.edit_title: Edit Bank
 admin.question_bank.manage.name_label: Name
 admin.question_bank.manage.category_label: Category
 admin.question_bank.manage.manager_label: Authorized Teacher 
+admin.question_bank.manage.model: >
+  <p class="question-bank-model-title"><i class="es-icon es-icon-Promote"></i>Structural modification</p>
+  <p class="question-bank-model-text">In our new version, the questions and testpapers created in the question bank can be used in all courses.</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-manage"></i>New feature : question category</p>
+  <p class="question-bank-model-text">You can ues question category to manage the question.</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-efficiency"></i>optimize the testpaper creation process</p>
+  <p class="question-bank-model-text">You can add different types of question at one operation. And you can select questions through different pages.</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-Jurisdiction"></i>Management authority modification</p>
+  <p class="question-bank-model-text">Only administrators can create question bank. The teachers can use questions and testpapers from the question bank which are authorized to them.</p>
+
+  <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>PS</p>
+  <p class="question-bank-model-text">The questions and testpapers in the courses are all moved to the question bank now.</p>
+
 admin.category_manage.name_th: Title
 admin.category_manage.code_th: Code
 admin.category_manage.operate_th: Action
