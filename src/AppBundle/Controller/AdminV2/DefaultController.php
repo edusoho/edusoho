@@ -33,12 +33,15 @@ class DefaultController extends BaseController
 
     public function indexAction(Request $request)
     {
-        $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
-
         return $this->render('admin-v2/default/index.html.twig', array(
-            'dates' => $weekAndMonthDate,
-            'newcomerTaskStatus' => $this->getNewcomerTaskStatus(),
             'isNewcomerTaskAllDone' => $this->isNewcomerTaskAllDone(),
+        ));
+    }
+
+    public function newcomerAction(Request $request)
+    {
+        return $this->render('admin-v2/default/newcomer-task.html.twig', array(
+            'newcomerTaskStatus' => $this->getNewcomerTaskStatus(),
         ));
     }
 

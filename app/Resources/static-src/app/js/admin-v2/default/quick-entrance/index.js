@@ -4,7 +4,7 @@ $('html').on('shown.bs.modal', '#functionModal', (e) => {
   $('html').css('overflow', 'scroll');
 });
 
-$('.quick-entrance').on('click', '.js-function-choose', (event) => {
+$('.js-quick-entrance').on('click', '.js-function-choose', (event) => {
   const $target = $(event.currentTarget);
 
   if (!$target.hasClass('active') && $('.js-function-choose.active').length >= 7) {
@@ -15,7 +15,7 @@ $('.quick-entrance').on('click', '.js-function-choose', (event) => {
   $target.toggleClass('active');
 });
 
-$('.quick-entrance').on('click', '.js-save-btn', (event) => {
+$('.js-quick-entrance').on('click', '.js-save-btn', (event) => {
   if ($('.js-function-choose.active').length > 7) {
     cd.message({type: 'warning', message: Translator.trans('admin_v2.homepage.quick_entrance.hint')});
     return;
@@ -35,7 +35,7 @@ $('.quick-entrance').on('click', '.js-save-btn', (event) => {
   }, function (quickEntrances) {
     $target.button('reset');
     $('#functionModal').modal('hide');
-    $('.quick-entrance').html(quickEntrances);
+    $('.js-quick-entrance').html(quickEntrances);
   });
 
 });

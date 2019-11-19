@@ -55,10 +55,6 @@ const showCloudAd = () => {
   });
 };
 
-window.onload = () => {
-  showCloudAd();
-};
-
 const src = $('.js-mini-program').data('src');
 $('.js-mini-program').popover({
   trigger: 'hover',
@@ -69,28 +65,84 @@ $('.js-mini-program').popover({
   content: `<img src="${src}" width="200px">`
 });
 
-// 数据概览
-if ($('.admin-data').length) {
-  $.get($('.admin-data').data('url'), (html) => {
-    $('.admin-data').html(html);
-  });
-}
+const loadFirst = () => {
+  //六步任务助手
+  if ($('.js-steps').length) {
+    $.get($('.js-steps').data('url'), (html) => {
+      $('.js-steps').html(html);
+    });
+  }
 
-// 应用推荐
-if ($('.application-intro').length && $('.application-intro').data('url')) {
-  $.get($('.application-intro').data('url'), (html) => {
-    $('.application-intro').html(html);
-  });
-}
+  // 数据概览
+  if ($('.js-data-overview').length) {
+    $.get($('.js-data-overview').data('url'), (html) => {
+      $('.js-data-overview').html(html);
+    });
+  }
 
+  // 快速入口
+  if ($('.js-quick-entrance').length) {
+    $.get($('.js-quick-entrance').data('url'), (html) => {
+      $('.js-quick-entrance').html(html);
+    });
+  }
+
+  //网校信息块
+  if ($('.js-admin-info').length && $('.js-admin-info').data('url')) {
+    $.get($('.js-admin-info').data('url'), (html) => {
+      $('.js-admin-info').html(html);
+    });
+  }
+
+  // 站长公告
+  if ($('.announcement-from-platform').length && $('.announcement-from-platform').data('url')) {
+    $.get($('.announcement-from-platform').data('url'), (html) => {
+      $('.announcement-from-platform').html(html);
+    });
+  }
+};
+
+const loadSecond = () => {
+  // 应用推荐
+  if ($('.application-intro').length && $('.application-intro').data('url')) {
+    $.get($('.application-intro').data('url'), (html) => {
+      $('.application-intro').html(html);
+    });
+  }
+
+  //经营建议
+  if ($('.js-admin-advice').length && $('.js-admin-advice').data('url')) {
+    $.get($('.js-admin-advice').data('url'), (html) => {
+      $('.js-admin-advice').html(html);
+    });
+  }
+
+  //CHANGELOG
+  if ($('.js-admin-changelog').length && $('.js-admin-changelog').data('url')) {
+    $.get($('.js-admin-changelog').data('url'), (html) => {
+      $('.js-admin-changelog').html(html);
+    });
+  }
+
+  //QRCODE
+  if ($('.js-admin-qrcode').length && $('.js-admin-qrcode').data('url')) {
+    $.get($('.js-admin-qrcode').data('url'), (html) => {
+      $('.js-admin-qrcode').html(html);
+    });
+  }
+};
+
+const loadStep = () => {
+  loadFirst();
+  setTimeout(() => {
+    loadSecond();
+  },1000);
+};
+
+loadStep();
+window.onload = () => {
+  showCloudAd();
+};
 $('.js-no-network').click(function () {
   cd.message({type: 'danger', 'message': Translator.trans('admin.can_not_link_data')});
 });
-
-
-// 站长公告
-if ($('.announcement-from-platform').length && $('.announcement-from-platform').data('url')) {
-  $.get($('.announcement-from-platform').data('url'), (html) => {
-    $('.announcement-from-platform').html(html);
-  });
-}

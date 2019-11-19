@@ -1,18 +1,19 @@
-{% for entrance in userQuickEntrances %}
+<div class="row">
+  {% for entrance in userQuickEntrances %}
+    <div class="col-md-3">
+      <a class="{{ 'text-center admin-function ' ~ entrance.class }}" href="{{ entrance.link }}"
+         target="{{ entrance.target|default('_self') }}">
+        <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entrance.icon }}"></i></div>
+        <div class="admin-function__name">{{ entrance.text }}</div>
+      </a>
+    </div>
+  {% endfor %}
   <div class="col-md-3">
-    <a class="{{ 'text-center admin-function ' ~ entrance.class }}" href="{{ entrance.link }}" target="{{ entrance.target|default('_self') }}">
-      <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entrance.icon }}"></i></div>
-      <div class="admin-function__name">{{ entrance.text }}</div>
-    </a>
+    <div class="admin-function-choose">
+      <a class="admin-function-btn" data-toggle="modal" data-target="#functionModal">
+        <i class="es-icon es-icon-add"></i><span>{{ 'admin_v2.edit_quick_entrance.btn'|trans }}</span>
+      </a>
+    </div>
   </div>
-{% endfor %}
-<div class="col-md-3">
-  <div class="admin-function-choose">
-    <a class="admin-function-btn" data-toggle="modal" data-target="#functionModal">
-      <i class="es-icon es-icon-add"></i><span>{{ 'admin_v2.edit_quick_entrance.btn'|trans }}</span>
-    </a>
-  </div>
+  {% include 'admin-v2/default/quick-entrance/modal.html.twig' %}
 </div>
-
-{% include 'admin-v2/default/quick-entrance/modal.html.twig' %}
-{% do script(['app/js/admin-v2/default/quick-entrance/index.js']) %}
