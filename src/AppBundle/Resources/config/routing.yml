@@ -3316,3 +3316,11 @@ question_bank_manage_question_list:
 question_bank_manage_question_show_ajax:
     path: /question_bank/{id}/questions/show/ajax
     defaults: { _controller: AppBundle:QuestionBank/Question:getQuestionsHtml }
+
+question_bank_manage_question_create:
+  path: /question_bank/{id}/question/{type}/create
+  defaults: { _controller: AppBundle:QuestionBank/Question:create }
+
+question_bank_manage_question_update:
+  path: /question_bank/{id}/question/{questionId}/update
+  defaults: { _controller: AppBundle:QuestionBank/Question:update }

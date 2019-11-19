@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Question;
 
 use Biz\Question\QuestionException;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
@@ -54,6 +55,14 @@ class BaseQuestionController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 
     /**

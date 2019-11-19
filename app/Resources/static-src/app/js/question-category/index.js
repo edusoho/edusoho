@@ -1,5 +1,3 @@
-import notify from 'common/notify';
-
 class Category {
   constructor() {
     this.init();
@@ -12,40 +10,25 @@ class Category {
 
   initEvent() {
     $('.js-category-body').on('click', '.delete-btn', function() {
-      var countUrl = $(this).data('countUrl');
-      var postUrl = $(this).data('url');
+      let countUrl = $(this).data('countUrl');
+      let postUrl = $(this).data('url');
 
       $.get(countUrl, function(result) {
-        var count = result.questionCount;
-        if (count > 0) {
-          cd.confirm({
-            title: Translator.trans('question_bank.question_category.delete_confirm_title'),
-            content: Translator.trans('question_bank.question_category.delete_confirm_hint', {count: count}),
-            okText: Translator.trans('site.confirm'),
-            cancelText: Translator.trans('site.cancel'),
-          }).on('ok', () => {
-            $.post(postUrl, function () {
-              window.location.reload();
-            }).error(function(error){
-              cd.message({type: 'danger', message: Translator.trans('admin.category.delete_fail')});
-            });
-          }).on('cancel', () => {
+        let count = result.questionCount;
+        let content = count > 0 ? Translator.trans('question_bank.question_category.delete_confirm_hint', {count: count}) : Translator.trans('admin.category.delete_hint');
+        cd.confirm({
+          title: Translator.trans('question_bank.question_category.delete_confirm_title'),
+          content: content,
+          okText: Translator.trans('site.confirm'),
+          cancelText: Translator.trans('site.cancel'),
+        }).on('ok', () => {
+          $.post(postUrl, function() {
+            window.location.reload();
+          }).error(function(error) {
+            cd.message({type: 'danger', message: Translator.trans('admin.category.delete_fail')});
           });
-        } else {
-          cd.confirm({
-            title: Translator.trans('question_bank.question_category.delete_confirm_title'),
-            content: Translator.trans('admin.category.delete_hint'),
-            okText: Translator.trans('site.confirm'),
-            cancelText: Translator.trans('site.cancel'),
-          }).on('ok', () => {
-            $.post(postUrl, function () {
-              window.location.reload();
-            }).error(function(error){
-              cd.message({type: 'danger', message: Translator.trans('admin.category.delete_fail')});
-            });
-          }).on('cancel', () => {
-          });
-        }
+        }).on('cancel', () => {
+        });
       });
     });
   }
@@ -66,4 +49,4 @@ class Category {
   }
 }
 
-var category = new Category();
+new Category();
