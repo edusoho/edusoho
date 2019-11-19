@@ -1,8 +1,8 @@
 const courseListData = (data, listObj) => {
   switch (listObj.type) {
     case 'price':
-      const showStudentStr = listObj.showStudent ?
-        `<span class="switch-box__state"><p style="color: #B0BDC9">
+      const showStudentStr = listObj.showStudent
+        ? `<span class="switch-box__state"><p style="color: #B0BDC9">
             ${data.studentNum}人在学</p></span>` : '';
       const price = data.price === '0.00' ? '<p style="color: #408FFB">免费</p>'
         : `<p style="color: #ff5353">¥ ${data.price}</p>`;

@@ -1,11 +1,11 @@
 <template>
   <div class="pay-success-container">
     <div class="pay-success-text">
-      <i class="h5-icon h5-icon-check"></i>
+      <i class="h5-icon h5-icon-check"/>
       <span class="text-18 success-text">支付成功！</span>
       <div class="mt5 text-14 color-red">为享受更好的教学服务，建议您开启课程通知。</div>
     </div>
-    <div class="qrcode-img-container" v-if="wechatSettings">
+    <div v-if="wechatSettings" class="qrcode-img-container">
       <img :src="wechatSettings.official_qrcode" alt="">
     </div>
     <div class="press-img-container">
@@ -17,19 +17,18 @@
 </template>
 
 <script>
-import Api from '@/api'
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
 export default {
-  data () {
+  data() {
     return {
       targetId: this.$route.query.targetId || '',
       targetType: this.$route.query.targetType || '',
       paidUrl: this.$route.query.paidUrl
-    };
+    }
   },
   computed: {
-    ...mapState(['wechatSwitch', 'wechatSettings']),
+    ...mapState(['wechatSwitch', 'wechatSettings'])
   },
   created() {
     if (!this.wechatSwitch) {
@@ -41,11 +40,11 @@ export default {
   methods: {
     backToCourse() {
       if (this.paidUrl) {
-        window.location.href = this.paidUrl;
-        return;
+        window.location.href = this.paidUrl
+        return
       }
       this.$router.replace({
-        path: `/${this.targetType}/${this.targetId}`,
+        path: `/${this.targetType}/${this.targetId}`
       })
     }
   }

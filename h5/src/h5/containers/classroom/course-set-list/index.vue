@@ -1,25 +1,25 @@
 <template>
-  <e-panel :title="title" :needFlex="false" :defaulValue="defaulValue">
+  <e-panel :title="title" :need-flex="false" :defaul-value="defaulValue">
     <template v-if="courseSets.length">
-      <moreMask v-if="!disableMask && (courseSets.length > 5)" :forceShow="true" @maskLoadMore="loadMore">
+      <moreMask v-if="!disableMask && (courseSets.length > 5)" :force-show="true" @maskLoadMore="loadMore">
         <template v-for="item in partCourseSets">
-          <course :feedback="feedback" :course="item" style="padding-left: 0;padding-right: 0;"></course>
+          <course :feedback="feedback" :course="item" style="padding-left: 0;padding-right: 0;"/>
         </template>
       </moreMask>
       <template v-else>
         <template v-for="item in courseSets">
-          <course :feedback="feedback" :course="item" style="padding-left: 0;padding-right: 0;"></course>
+          <course :feedback="feedback" :course="item" style="padding-left: 0;padding-right: 0;"/>
         </template>
       </template>
     </template>
   </e-panel>
 </template>
 <script>
-import course from '&/components/e-course/e-course';
-import moreMask from '@/components/more-mask';
+import course from '&/components/e-course/e-course'
+import moreMask from '@/components/more-mask'
 
 export default {
-  name: 'courseSetList',
+  name: 'CourseSetList',
   components: {
     course,
     moreMask
@@ -29,33 +29,33 @@ export default {
       default: null
     },
     title: {
-      default: '',
+      default: ''
     },
     defaulValue: {
-      default: '',
+      default: ''
     },
     disableMask: {
       type: Boolean,
-      default: false,
+      default: false
     },
     feedback: {
       type: Boolean,
-      default: true,
+      default: true
     }
   },
   data() {
     return {
-      maxShowNum: 5,
-    };
+      maxShowNum: 5
+    }
   },
   computed: {
     partCourseSets() {
-      return this.courseSets.slice(0, 5);
+      return this.courseSets.slice(0, 5)
     }
   },
   methods: {
     loadMore() {
-      this.$emit('update:disableMask', true);
+      this.$emit('update:disableMask', true)
     }
   }
 }

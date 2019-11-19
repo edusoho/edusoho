@@ -1,31 +1,31 @@
 <template>
   <div class="paper-swiper">
-    <e-loading v-if="isLoading"></e-loading>
+    <e-loading v-if="isLoading"/>
     <item-bank
       v-if="info.length>0"
-      :isWrongMode="isWrongMode"
+      :is-wrong-mode="isWrongMode"
       :current.sync="cardSeq"
       :info="info"
       :answer="answer"
-      :slideIndex.sync="slideIndex"
-      :canDo="canDo"
+      :slide-index.sync="slideIndex"
+      :can-do="canDo"
       :all="allList.length"
     />
     <!-- 底部 -->
     <div class="paper-footer">
       <div>
         <span @click="cardShow=true">
-          <i class="iconfont icon-Questioncard"></i>
+          <i class="iconfont icon-Questioncard"/>
           题卡
         </span>
       </div>
       <div>
-        <span @click="showWrongList" :class="{'footer__div__span--active': isWrongMode}">
+        <span :class="{'footer__div__span--active': isWrongMode}" @click="showWrongList">
           <i class="cuoti">
             <img
               :src="isWrongMode ? 'static/images/cuoti-active.png' : 'static/images/cuoti.png'"
               alt
-            />
+            >
           </i>
           错题
         </span>
@@ -33,37 +33,37 @@
     </div>
     <!-- 答题卡 -->
     <van-popup v-model="cardShow" position="bottom">
-      <div class="card" v-if="info.length>0">
+      <div v-if="info.length>0" class="card">
         <div class="card-title">
           <div>
             <span class="card-right">正确</span>
             <span class="card-wrong">错误</span>
             <span class="card-nofinish">未作答</span>
-            <span class="card-none" v-if="!isReadOver">待批阅</span>
+            <span v-if="!isReadOver" class="card-none">待批阅</span>
           </div>
-          <i class="iconfont icon-no" @click="cardShow=false"></i>
+          <i class="iconfont icon-no" @click="cardShow=false"/>
         </div>
         <div class="card-list">
-          <div class="card-item" v-for="(cards,name) in items" :key="name" v-if="isWrongType(name)">
-            <div class="card-item-title">{{name | type}}</div>
-            <div class="card-item-list" v-if="name!='material'">
+          <div v-for="(cards,name) in items" v-if="isWrongType(name)" :key="name" class="card-item">
+            <div class="card-item-title">{{ name | type }}</div>
+            <div v-if="name!='material'" class="card-item-list">
               <div
+                v-for="(craditem) in items[name]"
                 v-if="isWrongList(craditem)"
                 :class="['list-cicle',formatStatus(craditem)]"
-                v-for="(craditem) in items[name]"
                 :key="craditem.id"
                 @click="slideToNumber(craditem.seq)"
-              >{{craditem.seq}}</div>
+              >{{ craditem.seq }}</div>
             </div>
-            <div class="card-item-list" v-if="name=='material'">
+            <div v-if="name=='material'" class="card-item-list">
               <template v-for="(craditem) in items[name]">
                 <div
+                  v-for="(materialitem) in craditem.subs"
                   v-if="isWrongList(materialitem)"
                   :class="['list-cicle',formatStatus(materialitem)]"
-                  v-for="(materialitem) in craditem.subs"
                   :key="materialitem.id"
                   @click="slideToNumber(materialitem.seq)"
-                >{{materialitem.seq}}</div>
+                >{{ materialitem.seq }}</div>
               </template>
             </div>
           </div>
@@ -74,62 +74,62 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex";
-import * as types from "@/store/mutation-types";
-import Api from "@/api";
-import itemBank from "../component/itemBank";
-import { Toast } from "vant";
-import testMixin from "@/mixins/lessonTask/index.js";
+import { mapState, mapMutations, mapActions } from 'vuex'
+import * as types from '@/store/mutation-types'
+import Api from '@/api'
+import itemBank from '../component/itemBank'
+import { Toast } from 'vant'
+import testMixin from '@/mixins/lessonTask/index.js'
 
 export default {
-  name: "testpaperAnalysis",
-  mixins: [testMixin],
-  data() {
-    return {
-      result: null,
-      items: {}, //分组题目
-      info: [],
-      isReadOver: false,
-      isWrongMode: false, //是否是错题模式
-      allList: [], //所有题集
-      wrongList: [], //所有题集
-      wrongType: [], //错题包含的题型
-      cardSeq: 0, //点击题卡要滑动的指定位置的索引
-      cardShow: false, //答题卡显示标记
-      answer: {},
-      slideIndex: 0, //题库组件当前所在的划片位置
-      canDo: false //是否能答题，解析模式下不能答题
-    };
-  },
+  name: 'TestpaperAnalysis',
   filters: {
     type: function(type) {
       switch (type) {
-        case "single_choice":
-          return "单选题";
-          break;
-        case "choice":
-          return "多选题";
-          break;
-        case "essay":
-          return "问答题";
-          break;
-        case "uncertain_choice":
-          return "不定项选择题";
-          break;
-        case "determine":
-          return "判断题";
-          break;
-        case "fill":
-          return "填空题";
-          break;
-        case "material":
-          return "材料题";
-          break;
+        case 'single_choice':
+          return '单选题'
+          break
+        case 'choice':
+          return '多选题'
+          break
+        case 'essay':
+          return '问答题'
+          break
+        case 'uncertain_choice':
+          return '不定项选择题'
+          break
+        case 'determine':
+          return '判断题'
+          break
+        case 'fill':
+          return '填空题'
+          break
+        case 'material':
+          return '材料题'
+          break
       }
     }
   },
   components: {
     itemBank
+  },
+  mixins: [testMixin],
+  data() {
+    return {
+      result: null,
+      items: {}, // 分组题目
+      info: [],
+      isReadOver: false,
+      isWrongMode: false, // 是否是错题模式
+      allList: [], // 所有题集
+      wrongList: [], // 所有题集
+      wrongType: [], // 错题包含的题型
+      cardSeq: 0, // 点击题卡要滑动的指定位置的索引
+      cardShow: false, // 答题卡显示标记
+      answer: {},
+      slideIndex: 0, // 题库组件当前所在的划片位置
+      canDo: false // 是否能答题，解析模式下不能答题
+    }
   },
   computed: {
     ...mapState({
@@ -138,8 +138,8 @@ export default {
     })
   },
   created() {
-    this.setNavbarTitle(this.$route.query.title);
-    this.getTestpaperResult();
+    this.setNavbarTitle(this.$route.query.title)
+    this.getTestpaperResult()
   },
   methods: {
     ...mapMutations({
@@ -151,54 +151,54 @@ export default {
           resultId: this.$route.query.resultId
         }
       }).then(res => {
-        this.result = res.testpaperResult;
-        this.formatData(res);
-        this.isReadOver = this.result.status === "finished";
-        this.result = res.testpaperResult;
-        this.items = res.items;
-      });
+        this.result = res.testpaperResult
+        this.formatData(res)
+        this.isReadOver = this.result.status === 'finished'
+        this.result = res.testpaperResult
+        this.items = res.items
+      })
     },
-    //遍历数据类型去做对应处理
+    // 遍历数据类型去做对应处理
     formatData(res) {
-      let paper = res.items;
+      const paper = res.items
       Object.keys(paper).forEach(key => {
-        if (key != "material") {
+        if (key != 'material') {
           paper[key].forEach(item => {
-            let detail = this.analysisSixType(item.type, item);
+            const detail = this.analysisSixType(item.type, item)
 
             this.setData(detail.item, detail.answer)
-          });
+          })
         }
-        if (key == "material") {
-          //材料题下面有子题需要特殊处理
+        if (key == 'material') {
+          // 材料题下面有子题需要特殊处理
           paper[key].forEach(item => {
-            let title = Object.assign({}, item, { subs: "" });
+            const title = Object.assign({}, item, { subs: '' })
             item.subs.forEach((sub, index) => {
-              sub.parentTitle = title; //材料题题干
-              sub.parentType = item.type; //材料题题型
-              sub.materialIndex = index + 1; //材料题子题的索引值，在页面要显示
+              sub.parentTitle = title // 材料题题干
+              sub.parentType = item.type // 材料题题型
+              sub.materialIndex = index + 1 // 材料题子题的索引值，在页面要显示
 
-              let detail = this.analysisSixType(sub.type, sub);
+              const detail = this.analysisSixType(sub.type, sub)
 
               this.setData(detail.item, detail.answer)
-            });
-          });
+            })
+          })
         }
-      });
+      })
     },
     setData(item, answer) {
-      this.$set(this.answer, item.id, answer);
-      this.info.push(item);
-      this.allList.push(item);
+      this.$set(this.answer, item.id, answer)
+      this.info.push(item)
+      this.allList.push(item)
       if (
-        (item.testResult && item.testResult.status !== "right") ||
+        (item.testResult && item.testResult.status !== 'right') ||
         !item.testResult
       ) {
-        let type = item.parentType ? item.parentType : item.type;
+        const type = item.parentType ? item.parentType : item.type
         if (!this.wrongType.includes(type)) {
-          this.wrongType.push(type);
+          this.wrongType.push(type)
         }
-        this.wrongList.push(item);
+        this.wrongList.push(item)
       }
     },
     // //处理六大题型数据
@@ -262,90 +262,90 @@ export default {
     //   }
     //   return { stem, index };
     // },
-    //答题卡状态判断
+    // 答题卡状态判断
     formatStatus(item) {
       if (item.testResult) {
-        let status = item.testResult.status;
+        const status = item.testResult.status
         switch (status) {
-          case "right":
-            return "cicle-right";
-            break;
-          case "none":
-            return "cicle-none";
-            break;
-          case "wrong":
-            return "cicle-wrong";
-            break;
-          case "partRight":
-            return "cicle-wrong";
-            break;
-          case "noAnswer":
-            return "";
-            break;
+          case 'right':
+            return 'cicle-right'
+            break
+          case 'none':
+            return 'cicle-none'
+            break
+          case 'wrong':
+            return 'cicle-wrong'
+            break
+          case 'partRight':
+            return 'cicle-wrong'
+            break
+          case 'noAnswer':
+            return ''
+            break
         }
       }
     },
-    //答题卡定位
+    // 答题卡定位
     slideToNumber(num) {
-      let index = Number(num);
+      const index = Number(num)
       if (!this.isWrongMode) {
-        this.cardSeq = index;
+        this.cardSeq = index
       } else {
         // 解决了错题下答题卡定位不准的问题,错题情况下会少一些题，不能直接用index去找
         this.info.forEach((item, i) => {
           if (index === parseInt(item.seq)) {
-            this.cardSeq = i + 1;
+            this.cardSeq = i + 1
           }
-        });
+        })
       }
-      //关闭弹出层
-      this.cardShow = false;
+      // 关闭弹出层
+      this.cardShow = false
     },
     // 点击错题按钮
     showWrongList() {
       if (this.wrongList.length === 0) {
-        Toast("当前没有错题");
-        return;
+        Toast('当前没有错题')
+        return
       }
       Toast({
-        message: "切换成功",
+        message: '切换成功',
         duration: 1000
-      });
-      this.isWrongMode = !this.isWrongMode;
+      })
+      this.isWrongMode = !this.isWrongMode
 
       if (this.isWrongMode) {
-        this.info = this.wrongList;
-        this.cardSeq = this.isWrongItem();
+        this.info = this.wrongList
+        this.cardSeq = this.isWrongItem()
       } else {
-        this.info = this.allList;
-        this.cardSeq = parseInt(this.wrongList[this.slideIndex].seq);
+        this.info = this.allList
+        this.cardSeq = parseInt(this.wrongList[this.slideIndex].seq)
       }
       // 修改后不会出现多次点第1题切换到第2题的问题
-      this.slideIndex = this.cardSeq - 1;
+      this.slideIndex = this.cardSeq - 1
     },
     // 当前题目是否是错误题目,是错题则找出当前题在错题list中的索引，保持当前错题位置不动
     isWrongItem() {
-      let item = this.allList[this.slideIndex];
-      let itemIndex = 1; //如果不是错题，默认为从第一个开始
-      if (item.testResult && item.testResult.status !== "right") {
+      const item = this.allList[this.slideIndex]
+      let itemIndex = 1 // 如果不是错题，默认为从第一个开始
+      if (item.testResult && item.testResult.status !== 'right') {
         this.wrongList.forEach((list, index) => {
           if (list.id == item.id) {
-            itemIndex = index + 1;
+            itemIndex = index + 1
           }
-        });
+        })
       }
-      return itemIndex;
+      return itemIndex
     },
     isWrongType(name) {
-      return this.isWrongMode ? this.wrongType.indexOf(name) !== -1 : true;
+      return this.isWrongMode ? this.wrongType.indexOf(name) !== -1 : true
     },
     isWrongList(item) {
       return this.isWrongMode
-        ? item.testResult && item.testResult.status !== "right"
-        : true;
+        ? item.testResult && item.testResult.status !== 'right'
+        : true
     }
   }
-};
+}
 </script>
 
 <style>

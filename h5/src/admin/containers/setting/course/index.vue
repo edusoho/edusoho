@@ -26,7 +26,7 @@
 
         <!-- 课程分类 -->
         <setting-cell :title="typeLabel + '分类：'">
-          <el-cascader v-show="sourceType === 'condition'" :options="this.type === 'course_list' ? courseCategories : classCategories" :props="cascaderProps" size="mini" v-model="categoryTempId" placeholder="请输入列表名称" filterable change-on-select/>
+          <el-cascader v-show="sourceType === 'condition'" :options="this.type === 'course_list' ? courseCategories : classCategories" :props="cascaderProps" v-model="categoryTempId" size="mini" placeholder="请输入列表名称" filterable change-on-select/>
           <div v-show="sourceType === 'custom'" class="required-option">
             <el-button size="mini" @click="openModal">选择{{ typeLabel }}</el-button>
           </div>

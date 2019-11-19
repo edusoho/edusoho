@@ -3,92 +3,93 @@
     v-model="loading"
     :finished="finished"
     @load="onLoad">
-    <courseItem v-for="(course, index) in courseList"
+    <courseItem
+      v-for="(course, index) in courseList"
       :key="index"
       :type="courseItemType"
-      :normalTagShow="normalTagShow"
-      :vipTagShow="vipTagShow"
-      :typeList="typeList"
-      :isVip="course.vipLevelId"
+      :normal-tag-show="normalTagShow"
+      :vip-tag-show="vipTagShow"
+      :type-list="typeList"
+      :is-vip="course.vipLevelId"
       :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
-      :courseType="typeList === 'course_list' ? course.courseSet.type : ''"
+      :course-type="typeList === 'course_list' ? course.courseSet.type : ''"
       :course="course | courseListData(listObj)"
-    ></courseItem>
+    />
   </van-list>
 </template>
 
 <script>
-  import courseItem from '../e-class/e-class.vue';
-  import courseListData from '@/utils/filter-course.js';
-  import { mapState } from 'vuex';
+import courseItem from '../e-class/e-class.vue'
+import courseListData from '@/utils/filter-course.js'
+import { mapState } from 'vuex'
 
-  export default {
-    components: {
-      courseItem,
+export default {
+  components: {
+    courseItem
+  },
+
+  filters: {
+    courseListData
+  },
+
+  props: {
+    courseList: Array,
+    isRequestCompile: Boolean,
+    isAllData: Boolean,
+    courseItemType: String,
+    typeList: {
+      type: String,
+      default: 'course_list'
     },
-
-    props: {
-      courseList: Array,
-      isRequestCompile: Boolean,
-      isAllData: Boolean,
-      courseItemType: String,
-      typeList: {
-        type: String,
-        default: 'course_list'
-      },
-      normalTagShow: {
-        type: Boolean,
-        default: true
-      },
-      vipTagShow: {
-        type: Boolean,
-        default: false
-      },
+    normalTagShow: {
+      type: Boolean,
+      default: true
     },
+    vipTagShow: {
+      type: Boolean,
+      default: false
+    }
+  },
 
-    data() {
+  data() {
+    return {
+      list: [],
+      finished: false
+    }
+  },
+
+  computed: {
+    ...mapState(['courseSettings']),
+    loading: {
+      get() {
+        return !this.isRequestCompile
+      },
+      set(v) {
+        console.log(v, 'value')
+      }
+    },
+    listObj() {
       return {
-        list: [],
-        finished: false
-      };
-    },
-
-    filters: {
-      courseListData,
-    },
-
-    computed: {
-      ...mapState(['courseSettings']),
-      loading: {
-        get() {
-          return !this.isRequestCompile;
-        },
-        set(v) {
-          console.log(v, 'value');
-        }
-      },
-      listObj() {
-        return {
-          type: this.courseItemType,
-          typeList: this.typeList,
-          showStudent: this.courseSettings ?
-                      Number(this.courseSettings.show_student_num_enabled) : true,
-        }
-      }
-    },
-
-    watch: {
-      isAllData() {
-        this.loading = false;
-        this.finished = this.isAllData;
-      }
-    },
-
-    methods: {
-      onLoad() {
-        // 通知父组件请求数据并更新courseList
-        if (this.isRequestCompile) this.$emit('needRequest');
+        type: this.courseItemType,
+        typeList: this.typeList,
+        showStudent: this.courseSettings
+          ? Number(this.courseSettings.show_student_num_enabled) : true
       }
     }
+  },
+
+  watch: {
+    isAllData() {
+      this.loading = false
+      this.finished = this.isAllData
+    }
+  },
+
+  methods: {
+    onLoad() {
+      // 通知父组件请求数据并更新courseList
+      if (this.isRequestCompile) this.$emit('needRequest')
+    }
   }
+}
 </script>

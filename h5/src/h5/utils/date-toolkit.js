@@ -101,7 +101,6 @@ const getOffsetDays = (time1, time2) => {
   return Math.floor(offsetTime / (3600 * 24 * 1e3));
 };
 
-
 // 将0-9的数字前面加上0，例1变为01
 const checkTime = i => {
   if (i < 10 && i >= 0) {
@@ -141,7 +140,6 @@ const getdateTimeDown = (date, i) => {
   const time = day + hour + minute + second;
   return time;
 };
-
 
 export {
   formatTime,

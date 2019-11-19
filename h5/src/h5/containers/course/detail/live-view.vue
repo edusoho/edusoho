@@ -1,25 +1,25 @@
 <template>
   <div class="web-view">
-    <e-loading v-if="isLoading"></e-loading>
+    <e-loading v-if="isLoading"/>
     <!-- web-view -->
-    <iframe id="player" :src="playUrl" width="100%" frameborder="0"></iframe>
+    <iframe id="player" :src="playUrl" width="100%" frameborder="0"/>
   </div>
 </template>
 <script>
-import Api from '@/api';
-import { mapState, mapMutations } from 'vuex';
-import * as types from '@/store/mutation-types';
-import { Toast } from 'vant';
-import redirectMixin from '@/mixins/saveRedirect';
+import Api from '@/api'
+import { mapState, mapMutations } from 'vuex'
+import * as types from '@/store/mutation-types'
+import { Toast } from 'vant'
+import redirectMixin from '@/mixins/saveRedirect'
 
 export default {
-  data () {
+  mixins: [redirectMixin],
+  data() {
     return {
       playUrl: '',
       requestCount: 0
     }
   },
-  mixins: [redirectMixin],
   computed: {
     ...mapState('course', {
       joinStatus: state => state.joinStatus
@@ -28,29 +28,29 @@ export default {
       isLoading: state => state.isLoading
     })
   },
-  async mounted () {
+  async mounted() {
     if (!this.$store.state.token) {
       this.$router.push({
         name: 'login',
         query: {
-          redirect: this.redirect,
+          redirect: this.redirect
         }
-      });
-      return;
+      })
+      return
     }
-    this.handleLive();
+    this.handleLive()
   },
   methods: {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
     handleLive() {
-      const { taskId, replay, title } = this.$route.query;
+      const { taskId, replay, title } = this.$route.query
       this.setNavbarTitle(title)
 
       if (String(replay) == 'true') { // query boolean 被转成字符串了
         this.getReplayUrl(taskId)
-        return;
+        return
       }
       this.requestLiveNo(taskId)
     },
@@ -60,46 +60,46 @@ export default {
           taskId
         }
       }).then(res => {
-        if(res.nonsupport) {
-          Toast('回放暂不支持');
+        if (res.nonsupport) {
+          Toast('回放暂不支持')
           return
         }
-        if(res.url) {
+        if (res.url) {
           if (res.url.indexOf('/error/') > -1) {
-            Toast('暂无回放');
+            Toast('暂无回放')
           } else {
-            let index=res.url.indexOf('/');
-            this.playUrl= index==0 ? res.url : res.url.substring(index);
+            const index = res.url.indexOf('/')
+            this.playUrl = index == 0 ? res.url : res.url.substring(index)
           }
-          return;
+          return
         }
         if (res.error) {
-          Toast.fail(res.error.message);
+          Toast.fail(res.error.message)
         }
       }).catch(err => {
-        Toast.fail(err.message);
+        Toast.fail(err.message)
       })
     },
 
     requestLiveNo(taskId) {
       Api.requestLiveNo({
         query: {
-          taskId,
+          taskId
         }
-      }).then(res =>{
-        if(res.no) {
+      }).then(res => {
+        if (res.no) {
           this.getLiveUrl(taskId, res.no)
         }
         if (res.error) {
-          Toast.fail(res.error.message);
+          Toast.fail(res.error.message)
         }
       }).catch(err => {
-        Toast.fail(err.message);
+        Toast.fail(err.message)
       })
     },
 
     getLiveUrl(taskId, no) {
-      this.requestCount ++
+      this.requestCount++
       Api.getLiveUrl({
         query: {
           taskId,
@@ -107,9 +107,9 @@ export default {
         }
       }).then(res => {
         if (res.roomUrl) {
-            let index=res.roomUrl.indexOf('/');
-            //由于在safari中从https转到http的地址会出错
-            this.playUrl= index==0 ?  res.roomUrl : res.roomUrl.substring(index);
+          const index = res.roomUrl.indexOf('/')
+          // 由于在safari中从https转到http的地址会出错
+          this.playUrl = index == 0 ? res.roomUrl : res.roomUrl.substring(index)
         } else {
           if (this.requestCount < 30) {
             this.getLiveUrl(taskId, no)
@@ -118,12 +118,12 @@ export default {
           }
         }
         if (res.error) {
-          Toast.fail(res.error.message);
+          Toast.fail(res.error.message)
         }
       }).catch(err => {
-        Toast.fail(err.message);
+        Toast.fail(err.message)
       })
     }
-  },
+  }
 }
 </script>

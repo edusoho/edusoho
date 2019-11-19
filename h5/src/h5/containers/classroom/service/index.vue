@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'service',
-  props: ['services'],
+  name: 'Service',
+  props: ['services']
 }
 </script>

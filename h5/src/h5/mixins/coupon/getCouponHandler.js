@@ -22,7 +22,6 @@ export default {
         return;
       }
 
-
       /* 未领券 */
       if (!coupon.currentUserCoupon && !isReceive) {
         const token = coupon.token;

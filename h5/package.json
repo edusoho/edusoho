@@ -9,7 +9,7 @@
     "build:h5": "vue-cli-service build --mode prod h5 --report",
     "build:admin": "vue-cli-service build --mode prod admin --report",
     "build": "vue-cli-service build --mode prod h5 && vue-cli-service build --mode prod admin",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint --mode  h5",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {

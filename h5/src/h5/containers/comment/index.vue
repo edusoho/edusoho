@@ -1,24 +1,24 @@
 <template>
   <div class="comment">
-    <van-list style="margin-top: 0;" v-model="loading" :finished="finished" @load="onLoad">
+    <van-list v-model="loading" :finished="finished" style="margin-top: 0;" @load="onLoad">
       <template v-for="item in reviews">
-        <review :isClass="isClass" :review="item" :disableMask="false" timeFormat="complete" :course="item.course"></review>
+        <review :is-class="isClass" :review="item" :disable-mask="false" :course="item.course" time-format="complete"/>
       </template>
     </van-list>
   </div>
 </template>
 
 <script>
-import Api from '@/api';
-import review from '&/components/e-review';
-import { Toast } from 'vant';
+import Api from '@/api'
+import review from '&/components/e-review'
+import { Toast } from 'vant'
 
 export default {
-  name: 'comment',
+  name: 'Comment',
   components: {
-    review,
+    review
   },
-  data () {
+  data() {
     return {
       reviews: [],
       loading: false,
@@ -26,16 +26,16 @@ export default {
       offset: 0,
       ApiType: {
         course: 'getCourseReviews',
-        classroom: 'getClassroomReviews',
+        classroom: 'getClassroomReviews'
       }
-    };
-  },
-  created() {
+    }
   },
   computed: {
     isClass() {
-      return this.type === 'classroom';
+      return this.type === 'classroom'
     }
+  },
+  created() {
   },
   methods: {
     onLoad() {
@@ -61,7 +61,7 @@ export default {
       }).catch(err => {
         Toast.fail(err.message)
         this.loading = false
-      });
+      })
     }
   }
 }

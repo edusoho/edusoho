@@ -1,46 +1,46 @@
 <template>
-  <van-popup class="e-popup" v-model="popupShow" position="bottom">
+  <van-popup v-model="popupShow" class="e-popup" position="bottom">
     <div class="e-popup__title">
       <span class="name">{{ title }}</span>
-      <i class="icon h5-icon h5-icon-guanbi" @click="toggleClick"></i>
+      <i class="icon h5-icon h5-icon-guanbi" @click="toggleClick"/>
     </div>
-    <div class="e-popup__content" :class="contentClass">
-      <slot></slot>
+    <div :class="contentClass" class="e-popup__content">
+      <slot/>
     </div>
   </van-popup>
 </template>
 
 <script>
 export default {
-  name: 'e-popup',
+  name: 'EPopup',
   props: {
     show: {
       type: Boolean,
-      default: false,
+      default: false
     },
     title: {
       type: String,
-      default: '',
+      default: ''
     },
     contentClass: {
       type: String,
-      default: '',
+      default: ''
     }
   },
   computed: {
     popupShow: {
       get() {
-        return this.show;
+        return this.show
       },
       set(value) {
-        this.$emit('update:show', value);
+        this.$emit('update:show', value)
       }
     }
   },
   methods: {
     toggleClick() {
-      this.popupShow = false;
-    },
+      this.popupShow = false
+    }
   }
 }
 </script>

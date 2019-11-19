@@ -1,5 +1,5 @@
 <template>
-  <div v-if="tagData.isShow" class="e-tag-link" :class="tagData.className">
+  <div v-if="tagData.isShow" :class="tagData.className" class="e-tag-link">
     <a :href="tagData.link">
       <span>赚{{ tagData.earnings }}元</span>
     </a>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: "e-tag-link",
+  name: 'ETagLink',
   props: {
     tagData: {
       type: Object,
@@ -17,10 +17,10 @@ export default {
         isShow: false,
         link: '',
         className: '',
-        minDirectRewardRatio: 0,
+        minDirectRewardRatio: 0
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 

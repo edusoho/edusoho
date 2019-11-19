@@ -1,21 +1,21 @@
 <template>
-  <div></div>
+  <div/>
 </template>
 
 <script>
-import activityMixin from '@/mixins/activity';
-import redirectMixin from '@/mixins/saveRedirect';
+import activityMixin from '@/mixins/activity'
+import redirectMixin from '@/mixins/saveRedirect'
 
 export default {
-  name: 'share-redirect',
+  name: 'ShareRedirect',
   mixins: [activityMixin, redirectMixin],
-  data () {
+  data() {
     return {
 
     }
   },
   mounted() {
-    this.afterLogin();
+    this.afterLogin()
   }
 }
 </script>

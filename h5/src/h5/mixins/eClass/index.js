@@ -1,4 +1,4 @@
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 
 export default {
   props: {
@@ -10,15 +10,15 @@ export default {
     },
     type: {
       type: String,
-      default: "price"
+      default: 'price'
     },
     courseType: {
       type: String,
-      default: "normal"
+      default: 'normal'
     },
     discount: {
       type: String,
-      default: "10"
+      default: '10'
     },
     feedback: {
       type: Boolean,
@@ -26,7 +26,7 @@ export default {
     },
     typeList: {
       type: String,
-      default: "course_list"
+      default: 'course_list'
     },
     normalTagShow: {
       type: Boolean,
@@ -38,7 +38,7 @@ export default {
     },
     isVip: {
       type: String,
-      default: "0"
+      default: '0'
     }
   },
   data() {
@@ -47,13 +47,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(["vipSwitch", "isLoading"]),
+    ...mapState(['vipSwitch', 'isLoading']),
     discountNum() {
-      if (this.typeList === "class_list") return false;
-      if (this.discount !== "") {
+      if (this.typeList === 'class_list') return false;
+      if (this.discount !== '') {
         const discount = Number(this.discount);
         if (discount === 10) return false;
-        if (discount === 0) return "限免";
+        if (discount === 0) return '限免';
         return `${discount}折`;
       }
       return false;
@@ -64,12 +64,12 @@ export default {
       handler(course) {
         // 小程序后台替换图片协议
         const courseSet = course.courseSet;
-        if (this.pathName === "miniprogramSetting" && courseSet) {
+        if (this.pathName === 'miniprogramSetting' && courseSet) {
           const keys = Object.keys(courseSet.cover);
           for (let i = 0; i < keys.length; i += 1) {
             courseSet.cover[keys[i]] = courseSet.cover[keys[i]].replace(
               /^(\/\/)|(http:\/\/)/,
-              "https://"
+              'https://'
             );
           }
         }
@@ -82,9 +82,9 @@ export default {
       if (!this.feedback) {
         return;
       }
-      const isOrder = this.type === "order";
+      const isOrder = this.type === 'order';
       const id = this.course.id || this.course.targetId;
-      if (e.target.tagName === "SPAN") {
+      if (e.target.tagName === 'SPAN') {
         return;
       }
       if (isOrder) {
@@ -93,7 +93,7 @@ export default {
       }
       this.$router.push({
         path:
-          this.typeList === "course_list" ? `/course/${id}` : `/classroom/${id}`
+          this.typeList === 'course_list' ? `/course/${id}` : `/classroom/${id}`
       });
     }
   }

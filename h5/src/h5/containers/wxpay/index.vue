@@ -1,6 +1,6 @@
 <template>
   <div class="payPage">
-    <e-loading v-if="isLoading"></e-loading>
+    <e-loading v-if="isLoading"/>
     <div class="payPage__order">
       <div class="order__head">
         {{ detail.title }}
@@ -21,21 +21,21 @@
 <script>
 import Api from '@/api'
 import axios from 'axios'
-import { mapState } from 'vuex';
-import { Toast } from 'vant';
+import { mapState } from 'vuex'
+import { Toast } from 'vant'
 
 export default {
-  data () {
+  data() {
     return {
-      detail: {},
-    };
+      detail: {}
+    }
   },
   computed: {
     ...mapState(['wechatSwitch', 'isLoading'])
   },
   mounted() {
-    const { pay_amount, title, sn, openid } = this.$route.query;
-    this.detail = { pay_amount, title, sn, openid };
+    const { pay_amount, title, sn, openid } = this.$route.query
+    this.detail = { pay_amount, title, sn, openid }
   },
   methods: {
     handlePay() {
@@ -44,7 +44,7 @@ export default {
           gateway: 'WechatPay_JsH5',
           type: 'purchase',
           orderSn: this.detail.sn,
-          openid: this.detail.openid,
+          openid: this.detail.openid
         }
       }).then((data) => {
         WeixinJSBridge.invoke(
@@ -59,24 +59,23 @@ export default {
                     paidUrl: data.paidSuccessUrlH5
                   }
                 })
-                return;
+                return
               }
-              location.href = data.paidSuccessUrlH5;
+              location.href = data.paidSuccessUrlH5
               // this.$router.push({ path: data.paidSuccessUrlH5 });
             } else {
               if (res.err_msg == 'get_brand_wcpay_request:fail') {
-                alert('支付失败');
+                alert('支付失败')
               } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
                 alert('支付已失败')
               }
             }
-
           }
-        );
+        )
       }).catch(err => {
         Toast.fail(err.message)
       })
-    },
+    }
   }
 }
 </script>

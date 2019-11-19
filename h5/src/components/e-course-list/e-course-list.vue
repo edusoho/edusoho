@@ -1,5 +1,5 @@
 <template>
-  <div class="e-course-list" v-if="courseList.items.length">
+  <div v-if="courseList.items.length" class="e-course-list">
     <div class="e-course-list__header">
       <div class="clearfix">
         <span class="e-course-list__list-title text-overflow">{{ courseList.title }}</span>
@@ -9,185 +9,185 @@
       </div>
     </div>
     <div class="e-course-list__body">
-      <e-class v-for="item in courseList.items"
+      <e-class
+        v-for="item in courseList.items"
         :key="item.id"
         :course="item | courseListData(listObj)"
         :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
-        :courseType="typeList === 'course_list' ? item.courseSet.type : ''"
-        :typeList="typeList"
-        :normalTagShow="normalTagShow"
-        :vipTagShow="vipTagShow"
+        :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
+        :type-list="typeList"
+        :normal-tag-show="normalTagShow"
+        :vip-tag-show="vipTagShow"
         :type="type"
-        :isVip="item.vipLevelId"
-        :feedback="feedback">
-      </e-class>
+        :is-vip="item.vipLevelId"
+        :feedback="feedback"/>
     </div>
-    <div v-show="courseItemData" class="e-course__empty">暂无{{typeList === 'course_list' ? '课程' : '班级'}}</div>
+    <div v-show="courseItemData" class="e-course__empty">暂无{{ typeList === 'course_list' ? '课程' : '班级' }}</div>
   </div>
 </template>
 
 <script>
-import eClass from '../e-class/e-class';
-import courseListData from '@/utils/filter-course.js';
-import { mapState } from 'vuex';
+import eClass from '../e-class/e-class'
+import courseListData from '@/utils/filter-course.js'
+import { mapState } from 'vuex'
 
-  export default {
-    props: {
-      courseList: {
-        type: Object,
-        default: {},
-      },
-      feedback: {
-        type: Boolean,
-        default: true,
-      },
-      index: {
-        type: Number,
-        default: -1,
-      },
-      typeList: {
-        type: String,
-        default: 'course_list'
-      },
-      normalTagShow: {
-        type: Boolean,
-        default: true
-      },
-      vipTagShow: {
-        type: Boolean,
-        default: false
-      },
-      moreType: {
-        type: String,
-        default: 'normal'
-      },
-      vipName: {
-        type: String,
-        default: '会员'
-      },
-      levelId: {
-        type: Number,
-        default: 1
+export default {
+  components: {
+    'e-class': eClass
+  },
+  filters: {
+    courseListData
+  },
+  props: {
+    courseList: {
+      type: Object,
+      default: {}
+    },
+    feedback: {
+      type: Boolean,
+      default: true
+    },
+    index: {
+      type: Number,
+      default: -1
+    },
+    typeList: {
+      type: String,
+      default: 'course_list'
+    },
+    normalTagShow: {
+      type: Boolean,
+      default: true
+    },
+    vipTagShow: {
+      type: Boolean,
+      default: false
+    },
+    moreType: {
+      type: String,
+      default: 'normal'
+    },
+    vipName: {
+      type: String,
+      default: '会员'
+    },
+    levelId: {
+      type: Number,
+      default: 1
+    }
+  },
+  data() {
+    return {
+      type: 'price',
+      pathName: this.$route.name
+    }
+  },
+  computed: {
+    ...mapState(['courseSettings']),
+    sourceType: {
+      get() {
+        return this.courseList.sourceType
       }
     },
-    components: {
-      'e-class': eClass,
+    sort: {
+      get() {
+        return this.courseList.sort
+      }
     },
-    data() {
+    lastDays: {
+      get() {
+        return this.courseList.lastDays
+      }
+    },
+    limit: {
+      get() {
+        return this.courseList.limit
+      }
+    },
+    categoryId: {
+      get() {
+        return this.courseList.categoryId
+      }
+    },
+    courseItemData: {
+      get() {
+        return !this.courseList.items.length
+      },
+      set() {}
+    },
+    listObj() {
       return {
         type: 'price',
-        pathName: this.$route.name,
-      };
+        typeList: this.typeList,
+        showStudent: this.courseSettings
+          ? Number(this.courseSettings.show_student_num_enabled) : true
+      }
+    }
+  },
+  watch: {
+    sort(value) {
+      this.fetchCourse()
     },
-    filters: {
-      courseListData,
+    limit(value, oldValue) {
+      if (oldValue > value) {
+        const newItems = this.courseList.items.slice(0, value)
+        this.courseList.items = newItems
+        return
+      }
+      this.fetchCourse()
     },
-    computed: {
-      ...mapState(['courseSettings']),
-      sourceType: {
-        get() {
-          return this.courseList.sourceType;
-        },
-      },
-      sort: {
-        get() {
-          return this.courseList.sort;
-        },
-      },
-      lastDays: {
-        get() {
-          return this.courseList.lastDays;
-        },
-      },
-      limit: {
-        get() {
-          return this.courseList.limit;
-        },
-      },
-      categoryId: {
-        get() {
-          return this.courseList.categoryId;
-        },
-      },
-      courseItemData: {
-        get() {
-          return !this.courseList.items.length;
-        },
-        set() {}
-      },
-      listObj() {
-        return {
-          type: 'price',
-          typeList: this.typeList,
-          showStudent: this.courseSettings ?
-                      Number(this.courseSettings.show_student_num_enabled) : true,
-        }
+    lastDays(value) {
+      this.fetchCourse()
+    },
+    categoryId(value) {
+      this.fetchCourse()
+    },
+    sourceType(value, oldValue) {
+      if (value !== oldValue) {
+        this.courseList.items = []
+      }
+      this.fetchCourse()
+    }
+  },
+  created() {
+    if (!this.pathName.includes('Setting')) return
+    this.fetchCourse()
+  },
+  methods: {
+    jumpTo(source) {
+      if (!this.feedback) {
+        return
+      }
+      if (this.moreType === 'vip') {
+        this.$router.push({
+          name: this.typeList === 'course_list' ? 'vip_course' : 'vip_classroom',
+          query: {
+            vipName: this.vipName,
+            levelId: this.levelId
+          }
+        })
+      } else {
+        this.$router.push({
+          name: this.typeList === 'course_list' ? 'more_course' : 'more_class'
+        })
       }
     },
-    watch: {
-      sort(value) {
-        this.fetchCourse();
-      },
-      limit(value, oldValue) {
-        if (oldValue > value) {
-          const newItems = this.courseList.items.slice(0, value);
-          this.courseList.items = newItems;
-          return;
-        }
-        this.fetchCourse();
-      },
-      lastDays(value) {
-        this.fetchCourse();
-      },
-      categoryId(value) {
-        this.fetchCourse();
-      },
-      sourceType(value, oldValue) {
-        if (value !== oldValue) {
-          this.courseList.items = [];
-        }
-        this.fetchCourse();
-      },
-    },
-    created() {
-      if (!this.pathName.includes('Setting')) return
-      this.fetchCourse();
-    },
-    methods: {
-      jumpTo(source) {
-        if (!this.feedback) {
-          return;
-        }
-        if (this.moreType === 'vip') {
-          this.$router.push({
-            name: this.typeList === 'course_list' ? 'vip_course' : 'vip_classroom',
-            query: {
-              vipName: this.vipName,
-              levelId: this.levelId
-            }
-          });
-        } else {
-          this.$router.push({
-            name: this.typeList === 'course_list' ? 'more_course' : 'more_class'
-          });
-        }
-      },
-      fetchCourse() {
-        if (this.sourceType === 'custom') return;
+    fetchCourse() {
+      if (this.sourceType === 'custom') return
 
-        let params = {
-          sort: this.sort,
-          limit: this.limit,
-          lastDays: this.lastDays,
-          categoryId: this.categoryId,
-        };
-
-        this.$emit('fetchCourse', {
-          index: this.index,
-          params,
-          typeList: this.typeList
-        });
+      const params = {
+        sort: this.sort,
+        limit: this.limit,
+        lastDays: this.lastDays,
+        categoryId: this.categoryId
       }
-    },
+
+      this.$emit('fetchCourse', {
+        index: this.index,
+        params,
+        typeList: this.typeList
+      })
+    }
   }
+}
 </script>

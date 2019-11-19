@@ -32,7 +32,8 @@ module.exports = {
 	publicPath: publicPath, // 官方要求修改路径在这里做更改，默认是根目录下，可以自行配置
 	outputDir: `dist${projectname==='h5' ? '' : '/'+projectname }`,//标识是打包哪个文件
 	assetsDir:'static',
-	lintOnSave:process.env.NODE_ENV === 'production'? false : true,
+  lintOnSave:process.env.NODE_ENV === 'production'? false : true,
+ //lintOnSave:false,
   css: {
           loaderOptions: {
               scss: {
@@ -58,8 +59,9 @@ module.exports = {
 			'/api': {
 				// target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
 				// target: 'http://zyc.st.edusoho.cn',
-				//target: 'http://wr.st.edusoho.cn',
-				target: 'http://devtest.edusoho.cn',
+        //target: 'http://wr.st.edusoho.cn',
+        target:'http://gdy.st.edusoho.cn',
+			//	target: 'http://devtest.edusoho.cn',
 				changeOrigin: true,
 				secure: false,
 			}
@@ -87,7 +89,7 @@ module.exports = {
 		config.resolve.extensions = ['.js', '.vue', '.json']
 	},
 	chainWebpack: config => {
-		//config.performance.set('hints',false);
+		config.performance.set('hints',false);
 		config.plugins
 			.delete('prefetch-h5')
 			.delete('preload-h5')

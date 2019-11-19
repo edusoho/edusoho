@@ -6,7 +6,7 @@
 import couponMixin from '@/mixins/coupon'
 
 export default {
-  name: 'e-mini-coupon',
+  name: 'EMiniCoupon',
   mixins: [couponMixin],
   props: {
     item: {
@@ -14,7 +14,7 @@ export default {
       default: () => {
         return {}
       }
-    },
-  },
+    }
+  }
 }
 </script>

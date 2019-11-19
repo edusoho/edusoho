@@ -1,32 +1,32 @@
 <template>
   <div class="my_setting">
-    <e-loading v-if="isLoading"></e-loading>
-    <div class="my_setting-item" v-for="(item, index) in settings" @click="handleSetting(index)">
-      <span class="my_setting-title title-18">{{item.name}}</span>
+    <e-loading v-if="isLoading"/>
+    <div v-for="(item, index) in settings" class="my_setting-item" @click="handleSetting(index)">
+      <span class="my_setting-title title-18">{{ item.name }}</span>
       <div class="my_setting-content">
-        <img :src="item.info || option.img" alt="" v-if="!index" class="my_setting-avatar">
-        <span v-if="index">{{item.info}}</span>
+        <img v-if="!index" :src="item.info || option.img" alt="" class="my_setting-avatar">
+        <span v-if="index">{{ item.info }}</span>
         <img src="static/images/more.png" alt="" class="my_setting-more">
       </div>
-      <van-uploader :before-read="beforeUpload" v-if="!index">
-        <van-popup v-model="dialogVisible" position="top" :overlay="false">
+      <van-uploader v-if="!index" :before-read="beforeUpload">
+        <van-popup v-model="dialogVisible" :overlay="false" position="top">
           <div class="cropper-container">
             <vueCropper
-              ref="cropper"
               v-show="option.img"
+              ref="cropper"
               :img="option.img"
               :fixed="option.fixed"
               :enlarge="option.enlarge"
-              :autoCrop="option.autoCrop"
-              :fixedNumber="option.fixedNumber"
-              :autoCropWidth="option.autoCropWidth"
-              :autoCropHeight="option.autoCropHeight"
-            ></vueCropper>
+              :auto-crop="option.autoCrop"
+              :fixed-number="option.fixedNumber"
+              :auto-crop-width="option.autoCropWidth"
+              :auto-crop-height="option.autoCropHeight"
+            />
           </div>
-        <div class="dialog-footer">
-          <van-button @click="dialogVisible = false">取 消</van-button>
-          <van-button type="primary" @click="stopCropFn">确 定</van-button>
-        </div>
+          <div class="dialog-footer">
+            <van-button @click="dialogVisible = false">取 消</van-button>
+            <van-button type="primary" @click="stopCropFn">确 定</van-button>
+          </div>
         </van-popup>
       </van-uploader>
     </div>
@@ -34,13 +34,13 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex';
-import { Toast } from 'vant';
-import Api from '@/api';
-import * as types from '@/store/mutation-types';
-import store from '@/store';
-import { Dialog } from 'vant';
-import { VueCropper } from 'vue-cropper';
+import { mapState, mapActions } from 'vuex'
+import { Toast } from 'vant'
+import Api from '@/api'
+import * as types from '@/store/mutation-types'
+import store from '@/store'
+import { Dialog } from 'vant'
+import { VueCropper } from 'vue-cropper'
 
 export default {
   components: {
@@ -50,7 +50,7 @@ export default {
     return {
       settings: [{
         name: '头像',
-        info: '',
+        info: ''
       }, {
         name: '用户名',
         info: ''
@@ -68,7 +68,7 @@ export default {
         fixedNumber: [1, 1],
         fixed: true,
         high: false,
-        enlarge: 2,
+        enlarge: 2
       }
     }
   },
@@ -79,8 +79,8 @@ export default {
     })
   },
   created() {
-    this.$set(this.settings[0], 'info', this.user.avatar.large);
-    this.$set(this.settings[1], 'info', this.user.nickname);
+    this.$set(this.settings[0], 'info', this.user.avatar.large)
+    this.$set(this.settings[1], 'info', this.user.nickname)
     // this.$set(this.settings[2], 'info', this.user.school);
   },
   methods: {
@@ -88,22 +88,22 @@ export default {
       'setAvatar'
     ]),
     handleSetting(index) {
-      switch(index) {
+      switch (index) {
         case 0:
-          break;
+          break
         case 1:
           this.$router.push({
             name: 'setting_nickname',
             query: {
               nickname: (this.user.nickname == '') ? '' : (this.user.nickname)
             }
-          });
-          break;
+          })
+          break
         case 2:
-          Toast('更改手机号，后续开通');
-          break;
+          Toast('更改手机号，后续开通')
+          break
         default:
-          break;
+          break
       }
     },
     logout() {
@@ -114,65 +114,65 @@ export default {
         this.$store.commit(types.USER_LOGIN, {
           token: '',
           user: {}
-        });
+        })
         this.$router.push({
           name: 'my'
         })
       })
     },
     stopCropFn() {
-      const $cropper = this.$refs.cropper[0];
+      const $cropper = this.$refs.cropper[0]
       $cropper.stopCrop()
-      this.dialogVisible = false;
+      this.dialogVisible = false
       $cropper.getCropData((data) => {
-        this.imageCropped = true;
-        this.uploadImg(data);
-        this.option.img = data;
+        this.imageCropped = true
+        this.uploadImg(data)
+        this.option.img = data
       })
     },
     beforeUpload(file) {
-      const type = file.type;
-      const size = file.size / 1024 / 1024;
+      const type = file.type
+      const size = file.size / 1024 / 1024
 
       if (type.indexOf('image') === -1) {
-        Toast.fail('文件类型仅支持图片格式');
-        return;
+        Toast.fail('文件类型仅支持图片格式')
+        return
       }
 
       if (size > 2) {
-        Toast.fail('文件大小不得超过 2 MB');
-        return;
+        Toast.fail('文件大小不得超过 2 MB')
+        return
       }
 
-      this.dialogVisible = true;
-      const reader = new FileReader();
+      this.dialogVisible = true
+      const reader = new FileReader()
       reader.onload = () => {
-        this.option.img = reader.result;
+        this.option.img = reader.result
       }
       reader.readAsDataURL(file)
     },
     uploadImg(file) {
-      if (!this.imageCropped) return;
-      this.imageCropped = false;
-      let formData = new FormData()
+      if (!this.imageCropped) return
+      this.imageCropped = false
+      const formData = new FormData()
       formData.append('file', file)
       formData.append('group', 'user')
       Api.updateFile({
         data: formData
       })
-      .then(res => {
-        this.$set(this.settings[0], 'info', file.content);
-        this.setAvatar({
-          avatarId: res.id
-        }).then(() => {
-          Toast.success('修改成功');
-        }).catch(err => {
+        .then(res => {
+          this.$set(this.settings[0], 'info', file.content)
+          this.setAvatar({
+            avatarId: res.id
+          }).then(() => {
+            Toast.success('修改成功')
+          }).catch(err => {
+            Toast.fail(err.message)
+          })
+        })
+        .catch((err) => {
           Toast.fail(err.message)
         })
-      })
-      .catch((err) => {
-        Toast.fail(err.message)
-      });
     }
   }
 }

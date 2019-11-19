@@ -443,7 +443,6 @@ router.beforeEach((to, from, next) => {
     setWeChatSwitch();
   }
 
-
   store.dispatch('setCouponSwitch').then(res => {
     console.log(res);
   });

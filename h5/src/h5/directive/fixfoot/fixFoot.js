@@ -1,42 +1,42 @@
-let listenAction;
-let originalHeight;
-let currHeight;
+let listenAction
+let originalHeight
+let currHeight
 export default {
   inserted(el) {
-    const elStyle = el.style;
-    let active = false;
-    originalHeight = document.body.clientHeight;
+    const elStyle = el.style
+    let active = false
+    originalHeight = document.body.clientHeight
     const reset = () => {
       if (!active) {
-        return;
+        return
       }
-      elStyle.position = 'fixed';
-      active = false;
-    };
+      elStyle.position = 'fixed'
+      active = false
+    }
     const hang = () => {
       if (active) {
-        return;
+        return
       }
-      elStyle.position = 'static';
-      active = true;
-    };
+      elStyle.position = 'static'
+      active = true
+    }
     const getCurrHeight = () => {
-      return document.body.clientHeight;
-    };
+      return document.body.clientHeight
+    }
     const check = () => {
-      currHeight = getCurrHeight();
+      currHeight = getCurrHeight()
       if (currHeight !== originalHeight) {
-        hang();
+        hang()
       } else {
-        reset();
+        reset()
       }
-    };
+    }
     listenAction = () => {
-      check();
-    };
-    window.addEventListener('resize', listenAction);
+      check()
+    }
+    window.addEventListener('resize', listenAction)
   },
   unbind() {
-    window.removeEventListener('resize', listenAction);
+    window.removeEventListener('resize', listenAction)
   }
-};
+}
