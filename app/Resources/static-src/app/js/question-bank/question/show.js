@@ -1,4 +1,5 @@
 import BatchSelect from 'app/common/widget/res-batch-select';
+import { toggleIcon } from 'app/common/widget/chapter-animate';
 
 class QuestionsShow {
   constructor() {
@@ -6,10 +7,12 @@ class QuestionsShow {
     this.renderUrl = $('.js-question-html').data('url');
     this.attribute = 'mine';
     this.element = $('.js-question-container');
+    this.categoryContainer = $('.js-category-content');
     this.init();
   }
   init() {
     this.initEvent();
+    this.initCategoryShow();
     new BatchSelect(this.element);
   }
   initEvent() {
@@ -30,6 +33,25 @@ class QuestionsShow {
     });
   }
 
+  initCategoryShow() {
+    $('.js-toggle-show').on('click', (event) => {
+      let $this = $(event.target);
+      let $sort = $this.closest('.js-sortable-item');
+      $sort.nextUntil('.js-sortable-item').animate({
+        height: 'toggle',
+        opacity: 'toggle'
+      }, "normal");
+    
+      toggleIcon($sort, 'cd-icon-add', 'cd-icon-remove');
+    });
+    
+    const $currentItem = $('.js-active-item');
+    const $currentParents = $currentItem.parents('.js-sortable-list');
+    const $showIcon = $currentParents.prev('.js-sortable-item').find('i');
+    $currentParents.show();
+    $showIcon.removeClass('cd-icon-add').addClass('cd-icon-remove');
+  }
+
   // 搜索
   onClickSearchBtn(event) {
     this.renderTable();
@@ -45,11 +67,17 @@ class QuestionsShow {
 
   onClickCategorySearch(event) {
     let $target = $(event.currentTarget);
+    this.categoryContainer.find('.js-active-set.active').removeClass('active');
+    console.log(this.element.find('.js-active-set.active'));
+    $target.addClass('active');
     $('.js-category-choose').val($target.data('id'));
     this.renderTable();
   }
 
   onClickAllCategorySearch(event) {
+    let $target = $(event.currentTarget);
+    this.categoryContainer.find('.js-active-set.active').removeClass('active');
+    $target.addClass('active');
     $('.js-category-choose').val('');
     this.renderTable();
   }

@@ -30,13 +30,14 @@
           <table class="table table-striped">
             <thead>
               <tr class="cd-dark-major cd-text-medium">
-                <th>{{ 'my.teaching.question_bank.question_category.title'|trans }}</th>
-                <th>{{ 'my.teaching.question_bank.question_category.latest_update'|trans }}</th>
+                <th width="42%">{{ 'my.teaching.question_bank.question_category.title'|trans }}</th>
+                <th width="34%">{{ 'my.teaching.question_bank.question_category.latest_update'|trans }}</th>
                 <th>{{ 'my.teaching.question_bank.question_category.operation'|trans }}</th>
               </tr>
             </thead>
-            {% include 'question-bank/question-category/tbody.html.twig' %}
           </table>
+          {% include 'question-bank/question-category/tbody.html.twig' %}
+          {# </table> #}
         </div>
       </div>
     </div>
