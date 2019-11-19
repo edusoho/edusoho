@@ -9166,6 +9166,7 @@ admin_v2.upgrade_v2_setting.alert: New version background has been updated, open
 admin_v2.upgrade_v2_setting.setting_btn: Switch New Version
 admin_v2.switch_old_version.setting_btn: Switch Old Version
 admin_v2.switch_version.btn_loading: Switching....
+admin_v2.switch_old_version.title: Toggle backstage
 admin_v2.default.switch_old_version_btn: Back to old version
 exception.common_upgrade_v2_error: Has been upgraded to the new version
 exception.switch_old_version.permission_error: Please contact super administrator or administrator operation
