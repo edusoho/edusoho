@@ -1439,3 +1439,10 @@ admin.question_bank.save_success: 保存题库成功
 admin.question_bank.save_fail: 保存题库失败
 admin.question_bank.delete_hint: 确定要删除此题库吗
 admin.question_bank.fail_not_delete: 此题库内含有%testpaperNum%份试卷，%questionNum%道题目，无法删除
+
+question_bank.question_category.name_max_message: 名称的长度必须小于等于30
+question_bank.question_category.name_chinese_alphanumeric_message: 名称支持中文字、英文字母、数字及_ . ·
+question_bank.question_category.create_success: 创建分类成功
+question_bank.question_category.update_success: 更新分类成功
+question_bank.question_category.delete_confirm_title: 删除确认
+question_bank.question_category.delete_confirm_hint: 此分类及其子分类下共包含%count%道题，删除后，这些题目都将变为未分类题目。您确定要删除此分类吗？

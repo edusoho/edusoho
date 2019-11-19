@@ -38,6 +38,8 @@ interface QuestionService
 
     public function findQuestionsByCourseSetId($courseSetId);
 
+    public function findQuestionsByCategoryIds($categoryIds);
+
     public function search($conditions, $sort, $start, $limit);
 
     public function searchCount($conditions);

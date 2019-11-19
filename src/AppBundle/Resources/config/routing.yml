@@ -3285,5 +3285,28 @@ question_bank_list:
     defaults: { _controller: AppBundle:QuestionBank/Manage:index, category:'' }
 
 question_bank_category_tree_nav:
-  path: /question_banks/tree/{category}
-  defaults: { _controller: AppBundle:QuestionBank/Category:treeNav, category:'' }
+    path: /question_banks/tree/{category}
+    defaults: { _controller: AppBundle:QuestionBank/Category:treeNav, category:'' }
+
+question_bank_manage_question_category:
+    path: /question_bank/{id}/question/category
+    defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:index }
+
+question_bank_manage_question_category_batch_create:
+    path: /question_bank/{id}/question/category/batch_create
+    defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:batchCreate }
+
+question_bank_manage_question_category_edit:
+    path: /question_bank/question/category/{id}/edit
+    defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:edit }
+
+question_bank_manage_question_category_delete:
+    path: /question_bank/question/category/{id}/delete
+    defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:delete }
+    methods: [POST]
+
+question_bank_manage_question_category_question_count:
+    path: /question_bank/question/category/{id}/question_count
+    defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:getQuestionCount }
+
+

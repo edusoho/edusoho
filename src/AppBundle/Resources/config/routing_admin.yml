@@ -2492,6 +2492,7 @@ question_bank_manage_edit:
 question_bank_manage_delete:
     path: /question_bank/{id}/delete
     defaults: { _controller: AppBundle:Admin/QuestionBank:delete }
+    methods:  [POST]
 
 question_bank_member_match:
     path: /question_bank/member_match
