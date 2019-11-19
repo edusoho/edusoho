@@ -8,10 +8,13 @@
 
 {% block container %}
   <div class="container admin-v2-container">
-    {# 域名检查提示#}
     <div class="alert-list">
+      {# 插件、主题升级提示 #}
+      {{ render(controller('AppBundle:AdminV2/Default:validateUpgrade')) }}
+      {# 域名检查提示 #}
       {{ render(controller('AppBundle:AdminV2/Default:validateDomain')) }}
       {% if not (setting('copyright.thirdCopyright')|default(0) == 1) and is_trial() %}
+        {# 教育云推送通知 #}
         {{ render(controller('AppBundle:AdminV2/Default:getCloudNotices')) }}
       {% endif %}
     </div>
@@ -70,11 +73,6 @@
       <div class="col-md-3">
 
         {{ render(controller('AppBundle:AdminV2/Default:info')) }}
-
-        {% set test = {
-          'src': 'http://open.edusoho.com/files/product/SubSchool/iconed1fed70.jpg',
-          'text': '北京用户大会于上扣扣的看风使舵开始发送到了解详情点击进入坎坎坷坷第三方发倒是是啦啦>>'
-        } %}
 
         <div class="admin-sidebar-section cd-pb16">
           <div class="admin-sidebar-section__header">{{ 'admin_v2.homepage.announcement_from_platform'|trans }}</div>
