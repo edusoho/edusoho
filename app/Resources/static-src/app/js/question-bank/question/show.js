@@ -68,7 +68,6 @@ class QuestionsShow {
   onClickCategorySearch(event) {
     let $target = $(event.currentTarget);
     this.categoryContainer.find('.js-active-set.active').removeClass('active');
-    console.log(this.element.find('.js-active-set.active'));
     $target.addClass('active');
     $('.js-category-choose').val($target.data('id'));
     this.renderTable();
