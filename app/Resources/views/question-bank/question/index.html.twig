@@ -11,10 +11,12 @@
   </div>
 
   <div>
-    <div class="cd-tabs" style="margin-bottom: 0px;">
-      <li class="mll active"><a href="{{ path('question_bank_manage_question_list', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question.manage'|trans }}</a></li>
-      <li><a href="javascript:;">{{ 'my.teaching.question_bank.testpaper.manage'|trans }}</a></li>
-      <li class=""><a href="{{ path('question_bank_manage_question_category', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question_category.manage'|trans }}</a></li>
+    <div class="courseset-header-section">
+      <ul class="nav nav-tabs nav-header-section clearfix">
+        <li class="nav-header-section__item cd-ml32 active"><a href="{{ path('question_bank_manage_question_list', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question.manage'|trans }}</a></li>
+        <li class="nav-header-section__item cd-ml32"><a href="javascript:;">{{ 'my.teaching.question_bank.testpaper.manage'|trans }}</a></li>
+        <li class="nav-header-section__item cd-ml32"><a href="{{ path('question_bank_manage_question_category', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question_category.manage'|trans }}</a></li>
+      </ul>
     </div>
     <div class="panel panel-default panel-col">
       <div class="panel-body question-list-container js-question-container">

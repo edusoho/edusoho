@@ -11,15 +11,17 @@
   </div>
 
   <div>
-    <div class="cd-tabs" style="margin-bottom: 0px;">
-      <li class="mll"><a href="{{ path('question_bank_manage_question_list', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question.manage'|trans }}</a></li>
-      <li><a href="javascript:;">{{ 'my.teaching.question_bank.testpaper.manage'|trans }}</a></li>
-      <li class="active"><a href="{{ path('question_bank_manage_question_category', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question_category.manage'|trans }}</a></li>
+    <div class="courseset-header-section">
+      <ul class="nav nav-tabs nav-header-section clearfix">
+        <li class="nav-header-section__item cd-ml32"><a href="{{ path('question_bank_manage_question_list', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question.manage'|trans }}</a></li>
+        <li class="nav-header-section__item cd-ml32"><a href="javascript:;">{{ 'my.teaching.question_bank.testpaper.manage'|trans }}</a></li>
+        <li class="nav-header-section__item cd-ml32 active"><a href="{{ path('question_bank_manage_question_category', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question_category.manage'|trans }}</a></li>
+      </ul>
     </div>
     <div class="panel panel-default panel-col">
       <div class="panel-body">
         <div class="row">
-          <button class="cd-btn cd-btn-primary pull-right" data-toggle="modal" data-backdrop="static"  data-target="#modal" 
+          <button class="cd-btn cd-btn-primary pull-right mrm" data-toggle="modal" data-backdrop="static"  data-target="#modal" 
             data-url="{{ path('question_bank_manage_question_category_batch_create',{id: questionBank.id}) }}"  type="button" data-placement="bottom" >{{'my.teaching.question_bank.question_category.create'|trans}}
           </button>
         </div>
