@@ -66,20 +66,28 @@ class PermissionExtension extends \Twig_Extension
                 unset($allGroup[$key]);
                 continue;
             }
+            if (!isset($children['children'])) {
+                continue;
+            }
 
             $childrenInfo = array();
+            $childrenInfo['id'] = "group_{$children['code']}";
+            $childrenInfo['class'] = isset($children['class']) ? $children['class'] : '';
             $childrenInfo['name'] = ServiceKernel::instance()->trans($children['name'], array(), 'menu');
             $childrenInfo['link'] = '';
             $childrenInfo['code'] = $children['code'];
             if (isset($children['is_group'])) {
                 $childrenInfo['grade'] = 0;
             }
+
             foreach ($children['children'] as $k => $child) {
                 if (isset($child['visible']) && !$this->evalExpression($this->container->get('twig'), array(), $child['visible'])) {
                     unset($children['children'][$k]);
                     continue;
                 }
                 $nodes = array();
+                $nodes['id'] = "menu_{$child['code']}";
+                $nodes['class'] = isset($child['class']) ? $child['class'] : '';
                 $nodes['name'] = ServiceKernel::instance()->trans($child['name'], array(), 'menu');
                 $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getPermissionByCode($k)));
                 $nodes['grade'] = 1;
