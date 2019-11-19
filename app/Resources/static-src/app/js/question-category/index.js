@@ -1,4 +1,5 @@
 import notify from 'common/notify';
+import { toggleIcon } from 'app/common/widget/chapter-animate';
 
 class Category {
   constructor() {
@@ -51,17 +52,14 @@ class Category {
   }
 
   initExpand() {
-    $('.js-expand').click(function() {
-      var $parentNode = $(this).parents('.js-row');
-      if ($parentNode.hasClass('row-collapse')) {
-        $parentNode.removeClass('row-collapse').addClass('row-expand');
-        $(this).children('.es-icon').removeClass('es-icon-chevronright').addClass('es-icon-keyboardarrowdown');
-        $parentNode.next('ul.list-table').find('>li').slideDown();
-      } else if ($parentNode.hasClass('row-expand')) {
-        $parentNode.removeClass('row-expand').addClass('row-collapse');
-        $(this).children('.es-icon').removeClass('es-icon-keyboardarrowdown').addClass('es-icon-chevronright');
-        $parentNode.next('ul.list-table').find('>li').slideUp();
-      }        
+    $('.js-toggle-show').on('click', (event) => {
+      let $this = $(event.target);
+      let $sort = $this.closest('.js-sortable-item');
+      $sort.nextUntil('.js-sortable-item').animate({
+        height: 'toggle',
+        opacity: 'toggle'
+      }, "normal");
+      toggleIcon($sort, 'cd-icon-add', 'cd-icon-remove');
     });
   }
 }
