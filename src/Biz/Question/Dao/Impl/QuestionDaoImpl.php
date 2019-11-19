@@ -95,6 +95,8 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
             'copyId IN (:copyIds)',
             'parentId > :parentIdGT',
             'categoryId in (:categoryIds)',
+            'bankId = :bankId',
+            'categoryId = :categoryId',
         );
 
         $declares['serializes'] = array(

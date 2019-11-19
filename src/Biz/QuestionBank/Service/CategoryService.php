@@ -25,4 +25,6 @@ interface CategoryService
     public function findAllCategoriesByParentId($parentId);
 
     public function findAllChildrenIdsByParentId($parentId);
+
+    public function sortCategories($ids);
 }

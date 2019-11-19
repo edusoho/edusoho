@@ -67,6 +67,17 @@ class QuestionBankCategoryController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function sortAction(Request $request)
+    {
+        $ids = $request->request->get('ids');
+
+        if (!empty($ids)) {
+            $this->getCategoryService()->sortCategories($ids);
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
     protected function getCategoryService()
     {
         return $this->createService('QuestionBank:CategoryService');

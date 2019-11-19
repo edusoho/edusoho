@@ -1,0 +1,33 @@
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}{{ 'my.teaching.question_bank.question.manage'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-question-bank' %}
+
+{% do script(['app/js/question-bank/question/index.js'])  %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{ questionBank.name }}</div>
+  </div>
+
+  <div>
+    <div class="cd-tabs" style="margin-bottom: 0px;">
+      <li class="mll active"><a href="{{ path('question_bank_manage_question_list', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question.manage'|trans }}</a></li>
+      <li><a href="javascript:;">{{ 'my.teaching.question_bank.testpaper.manage'|trans }}</a></li>
+      <li class=""><a href="{{ path('question_bank_manage_question_category', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question_category.manage'|trans }}</a></li>
+    </div>
+    <div class="panel panel-default panel-col">
+      <div class="panel-body question-list-container js-question-container">
+        <div class="mtl category-list-content">
+          <span class="all-question-title">
+            {{ 'my.teaching.question_bank.question.all'|trans }}
+          </span>
+          {% include 'question-bank/question/category-list.html.twig' %}
+        </div>
+        <div class="mtl question-list-content">
+          {% include 'question-bank/question/question-list.html.twig' %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

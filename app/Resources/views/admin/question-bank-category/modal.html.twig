@@ -6,7 +6,7 @@
 {% block body %}
 <div id="category-creater-widget">
 
-	<form id="category-form" class="form-horizontal" action="{% if category.id %}{{ path('question_bank_category_manage_edit', {id:category.id}) }}{% else %}{{ path('question_bank_category_manage_create') }}{% endif %}" method="post">
+	<form id="category-form" class="form-horizontal" action="{% if category.id %}{{ path('admin_question_bank_category_manage_edit', {id:category.id}) }}{% else %}{{ path('admin_question_bank_category_manage_create') }}{% endif %}" method="post">
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="category-name-field">{{'admin.category_manage.name_label'|trans}}</label>
 			<div class="col-md-8 controls">

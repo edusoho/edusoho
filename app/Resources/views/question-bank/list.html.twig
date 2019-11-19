@@ -1,5 +1,5 @@
 {% extends 'my/my-teaching.html.twig' %}
-{#{% do script(['app/js/question_bank/index.js']) %}#}
+{% do script(['app/js/question-bank/index.js']) %}
 
 {% block title %}{{ 'my.teaching.question_bank_title'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'my-question-bank' %}

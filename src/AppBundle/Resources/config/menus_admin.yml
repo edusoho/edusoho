@@ -394,7 +394,7 @@ admin:
                             children:
                                 admin_question_bank_add:
                                     name: admin.course.question_bank.basic_tab.create_btn
-                                    router_name: question_bank_manage_create
+                                    router_name: admin_question_bank_manage_create
                                     group: topBtn
                                     mode: modal
                         admin_question_bank_category_manage:
@@ -403,7 +403,7 @@ admin:
                             children:
                                 admin_question_bank_category_add:
                                     name: admin.course.question_bank_category.basic_tab.create_btn
-                                    router_name: question_bank_category_manage_create
+                                    router_name: admin_question_bank_category_manage_create
                                     group: topBtn
                                     mode: modal
                 admin_course_thread:

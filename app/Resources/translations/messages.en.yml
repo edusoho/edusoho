@@ -3620,6 +3620,8 @@ my.teaching.question_bank.question_category.operation: Operation
 my.teaching.question_bank.question_category.empty: No Question Category
 my.teaching.question_bank.question_category.create_hint: You can add categories in batches, one per line, and enter up to 30 characters for each category
 my.teaching.question_bank.question_category.name_label: Category Name
+my.teaching.question_bank.question.no_category: uncategorized
+my.teaching.question_bank.question.all: All Questions
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'

@@ -19,7 +19,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function getCategoryStructureTree($bankId)
     {
-        return TreeToolkit::makeTree($this->getCategoryTree($bankId), 'id');
+        return TreeToolkit::makeTree($this->getCategoryTree($bankId), 'weight');
     }
 
     public function findCategoryChildrenIds($id)

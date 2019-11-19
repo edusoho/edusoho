@@ -15,10 +15,10 @@
       </a>
       <ul class="dropdown-menu">
         <li>
-          <a href="javascript:" data-role="edit-item" data-url="{{ path('question_bank_manage_edit', {id:questionBank.id}) }}" data-toggle="modal" data-target="#modal">{{'form.btn.edit'|trans}}</a>
+          <a href="javascript:" data-role="edit-item" data-url="{{ path('admin_question_bank_manage_edit', {id:questionBank.id}) }}" data-toggle="modal" data-target="#modal">{{'form.btn.edit'|trans}}</a>
         </li>
         <li>
-          <a href="javascript:" class="delete-btn" data-role="delete-item" data-url="{{ path('question_bank_manage_delete', {id:questionBank.id}) }}" data-testpaper-num="{{ questionBank.testpaperNum }}" data-question-num="{{ questionBank.questionNum }}">{{'site.btn.delete'|trans}}</a>
+          <a href="javascript:" class="delete-btn" data-role="delete-item" data-url="{{ path('admin_question_bank_manage_delete', {id:questionBank.id}) }}" data-testpaper-num="{{ questionBank.testpaperNum }}" data-question-num="{{ questionBank.questionNum }}">{{'site.btn.delete'|trans}}</a>
         </li>
       </ul>
     </div>
