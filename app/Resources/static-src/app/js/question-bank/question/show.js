@@ -44,12 +44,6 @@ class QuestionsShow {
     
       toggleIcon($sort, 'cd-icon-add', 'cd-icon-remove');
     });
-    
-    const $currentItem = $('.js-active-item');
-    const $currentParents = $currentItem.parents('.js-sortable-list');
-    const $showIcon = $currentParents.prev('.js-sortable-item').find('i');
-    $currentParents.show();
-    $showIcon.removeClass('cd-icon-add').addClass('cd-icon-remove');
   }
 
   // 搜索
