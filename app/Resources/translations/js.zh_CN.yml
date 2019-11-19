@@ -1437,6 +1437,7 @@ course.plan_task.lessons_publish_status: 已发布课时数：%publishedNum%<br/
 admin_v2.user.cloude_sms_enable_hint: 请先到【管理后台】-【应用中心】-【云服务】-【云短信】中开启云短信哦~
 admin_v2.homepage.quick_entrance.hint: 最多设置7个快捷入口位
 admin.switch_old_version.permission_error: 请联系超级管理员或管理员操作
+admin.switch_old_version.title: 切换后台
 admin.switch_old_version.confirm_message: '切换到老后台后，所有管理员将切换至老后台，确认切换？'
 admin.switch_new_version.confirm_message: '升级到新后台后，所有管理员将切换至新后台，但权限功能不会改变， 确认切换？'
 admin.can_not_link_data: 无法连接到数据
