@@ -50,9 +50,5 @@ class AddQuestionBankCategory extends Migration
         $connection->exec('
             DROP TABLE IF EXISTS `question_bank_category`;
         ');
-
-        $connection->exec("
-            delete from `question_bank_category` where name = '默认分类';
-        ");
     }
 }

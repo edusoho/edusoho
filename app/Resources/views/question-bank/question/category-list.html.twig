@@ -1,0 +1,45 @@
+
+<div id="category-table-body">
+  <input class="js-category-choose" data-role="search-conditions" type="hidden" name="categoryId" value="">
+  <div class="list-table">
+    <li class="tr mts" style="display: block">
+      <div class="row row-collapse">
+        <div class="td name sort-handle" style="padding-left: 0px;overflow: hidden">
+          <i class="es-icon mll"></i>
+          <a href="javascript:;" class="gray-darker js-all-category-search">
+            {{ 'my.teaching.question_bank.question.no_category'|trans }}
+          </a>
+        </div>
+      </div>
+    </li>
+  </div>
+  {% if categories is not empty %}
+    {{ _self.showCategoryTree(categories, false) }}
+  {% endif %}
+</div>
+
+{% macro showCategoryTree(categories, isCollapseChildren) %}
+    <div class="list-table">
+      {% for category in categories %}
+        {% set isParent = category.children|default(null) is not empty %}
+        {% set isRoot = category.depth == 1 %}
+        <div class="tr mts" style="display: {{ (not isRoot and isCollapseChildren) ? 'none' : 'block' }}">
+          <div class="row{{ (isParent and isCollapseChildren) ? ' row-collapse' : ' row-expand' }}">
+            <div class="td name sort-handle" style="padding-left: {{ 24 * (category.depth - 1 ) }}px; overflow: hidden">
+              {% if isParent %}
+                <i class="es-icon {{ isCollapseChildren ? 'es-icon-keyboardarrowdown' : 'es-icon-chevronright' }}"></i>
+              {% else %}
+                <i class="es-icon mll"></i>
+              {% endif %}
+              <a href="javascript:;" class="gray-darker js-category-search" data-id="{{ category.id }}">
+                {{ category.name }}
+              </a>
+            </div>
+          </div>
+          {% if isParent %}
+            {{ _self.showCategoryTree(category.children, isCollapseChildren) }}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+{% endmacro %}

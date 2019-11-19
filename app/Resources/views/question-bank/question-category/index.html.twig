@@ -12,7 +12,7 @@
 
   <div>
     <div class="cd-tabs" style="margin-bottom: 0px;">
-      <li class="mll"><a href="javascript:;">{{ 'my.teaching.question_bank.question.manage'|trans }}</a></li>
+      <li class="mll"><a href="{{ path('question_bank_manage_question_list', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question.manage'|trans }}</a></li>
       <li><a href="javascript:;">{{ 'my.teaching.question_bank.testpaper.manage'|trans }}</a></li>
       <li class="active"><a href="{{ path('question_bank_manage_question_category', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question_category.manage'|trans }}</a></li>
     </div>

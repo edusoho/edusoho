@@ -3309,4 +3309,10 @@ question_bank_manage_question_category_question_count:
     path: /question_bank/question/category/{id}/question_count
     defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:getQuestionCount }
 
+question_bank_manage_question_list:
+    path: /question_bank/{id}/questions
+    defaults: { _controller: AppBundle:QuestionBank/Question:index }
 
+question_bank_manage_question_show_ajax:
+    path: /question_bank/{id}/questions/show/ajax
+    defaults: { _controller: AppBundle:QuestionBank/Question:getQuestionsHtml }

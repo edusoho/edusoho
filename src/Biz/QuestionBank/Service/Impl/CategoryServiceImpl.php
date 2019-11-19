@@ -27,7 +27,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function getCategoryStructureTree()
     {
-        return TreeToolkit::makeTree($this->getCategoryTree(), 'id');
+        return TreeToolkit::makeTree($this->getCategoryTree(), 'weight');
     }
 
     public function createCategory(array $category)
@@ -52,7 +52,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name', 'parentId'));
+        $fields = ArrayToolkit::parts($fields, array('name', 'parentId', 'weight'));
 
         if (empty($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
@@ -166,6 +166,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     {
         // TODO: Implement findAllChildrenIdsByParentId() method.
         return ArrayToolkit::column($this->getCategoryDao()->findAllByParentId($parentId), 'id');
+    }
+
+    public function sortCategories($ids)
+    {
+        foreach ($ids as $index => $id) {
+            $this->updateCategory($id, array('weight' => $index + 1));
+        }
     }
 
     protected function makeCategoryTree(&$tree, &$categories, $parentId)

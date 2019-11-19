@@ -6,7 +6,7 @@
 {% block body %}
 <div id="bank-creater-widget">
 
-	<form id="bank-form" class="form-horizontal" action="{% if questionBank.id %}{{ path('question_bank_manage_edit', {id:questionBank.id}) }}{% else %}{{ path('question_bank_manage_create') }}{% endif %}" method="post">
+	<form id="bank-form" class="form-horizontal" action="{% if questionBank.id %}{{ path('admin_question_bank_manage_edit', {id:questionBank.id}) }}{% else %}{{ path('admin_question_bank_manage_create') }}{% endif %}" method="post">
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="bank-name">{{'admin.question_bank.manage.name_label'|trans}}</label>
 			<div class="col-md-8 controls">
@@ -29,7 +29,7 @@
     <div class="form-group">
 			<label class="col-md-2 control-label" for="bank-members">{{'admin.question_bank.manage.manager_label'|trans}}</label>
 			<div class="col-md-8 controls">
-				<input type="form-control" id="bank-members" name="members" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ bankMembers|default('') }}" data-match-url="{{ path('question_bank_member_match') }}">
+				<input type="form-control" id="bank-members" name="members" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ bankMembers|default('') }}" data-match-url="{{ path('admin_question_bank_member_match') }}">
         <div class="help-block" style="display:none;"></div>
 			</div>
 		</div>
