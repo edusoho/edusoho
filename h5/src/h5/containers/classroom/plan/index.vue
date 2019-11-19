@@ -10,79 +10,79 @@
     <div class="course-detail__validity">
       <div v-if="details.vipLevel && vipSwitch" class="mb15">
         <span class="mr20">会员免费</span>
-        <img class="vipIcon" :src="details.vipLevel.icon" />
-        <router-link :to="{ path: '/vip', query: { id: details.vipLevel.id } }" class="color-primary">{{details.vipLevel.name}}免费学</router-link>
+        <img :src="details.vipLevel.icon" class="vipIcon" >
+        <router-link :to="{ path: '/vip', query: { id: details.vipLevel.id } }" class="color-primary">{{ details.vipLevel.name }}免费学</router-link>
       </div>
-      <service v-if="details.service.length" :services="details.service" ></service>
+      <service v-if="details.service.length" :services="details.service" />
       <div>
         <span>学习有效期：</span>
-        <span v-html="learnExpiryHtml"></span>
+        <span v-html="learnExpiryHtml"/>
       </div>
     </div>
 
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
-import service from '../service';
-import { formatFullTime } from '@/utils/date-toolkit.js';
+import { mapState } from 'vuex'
+import service from '../service'
+import { formatFullTime } from '@/utils/date-toolkit.js'
 
 export default {
-  props: {
-    details: {
-      default: {},
-    },
-    joinStatus: {
-      default: false,
-    },
-  },
   components: {
-    service,
+    service
   },
   filters: {
     filterPrice(price) {
-      const isFree = Number(price) === 0;
-      return isFree ? '免费' : `¥${price}`;
+      const isFree = Number(price) === 0
+      return isFree ? '免费' : `¥${price}`
+    }
+  },
+  props: {
+    details: {
+      default: {}
     },
+    joinStatus: {
+      default: false
+    }
   },
   watch: {
     learnExpiryHtml: {
       immediate: true,
       handler(val) {
         this.$emit('getLearnExpiry', {
-          val,
-        });
+          val
+        })
       }
     }
   },
   computed: {
     ...mapState(['vipSwitch']),
     learnExpiryHtml() {
-      const memberInfo = this.joinStatus;
-      const learnExpiryData = this.details.expiryValue;
-      const expiryMode = this.details.expiryMode;
+      const memberInfo = this.joinStatus
+      const learnExpiryData = this.details.expiryValue
+      const expiryMode = this.details.expiryMode
 
       if (!memberInfo) {
         switch (expiryMode) {
           case 'forever':
-            return ('永久有效');
-            break;
+            return ('永久有效')
+            break
           case 'date':
-            const time = new Date(learnExpiryData * 1000);
-            return (formatFullTime(time).slice(0, 10) + '之前可学习');
-            break;
+            const time = new Date(learnExpiryData * 1000)
+            return (formatFullTime(time).slice(0, 10) + '之前可学习')
+            break
           case 'days':
-            return (learnExpiryData + '天内可学习');
-            break;
+            return (learnExpiryData + '天内可学习')
+            break
         }
       } else {
         if (expiryMode == 'forever') {
           return '永久有效'
         }
-        return(
+        return (
           (memberInfo.deadline != 0) ? (memberInfo.deadline.slice(0, 10) + '之前可学习')
-          : '永久有效'
-        );
+            : '永久有效'
+        )
       }
     }
   }

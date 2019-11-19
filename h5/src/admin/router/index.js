@@ -29,6 +29,14 @@ const routes = [
       title: '小程序后台配置'
     },
     component: () => import(/* webpackChunkName: "miniprogramSetting" */'admin/containers/setting/index.vue')
+  },
+  {
+    path: '/app',
+    name: 'appSetting',
+    meta: {
+      title: 'app后台配置'
+    },
+    component: () => import(/* webpackChunkName: "appSetting" */'admin/containers/setting/index.vue')
   }
 ]
 
@@ -50,10 +58,13 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // 获取会员后台配置
-  if (!Object.keys(store.state.vipSettings).length) {
+  if (!Object.keys(store.state.courseSettings).length) {
     Promise.all([
       store.dispatch('setVipSetupStatus'),
-      store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' })
+      store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' }),
+      store.dispatch('getGlobalSettings', { type: 'course', key: 'courseSettings' }),
+      store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' }),
+      store.dispatch('getGlobalSettings', { type: 'classroom', key: 'classroomSettings' })
     ]).then(([vipPlugin, vipRes]) => {
       console.log(vipPlugin, 8888)
       return vipRes

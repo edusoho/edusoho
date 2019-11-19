@@ -1,20 +1,20 @@
 <template>
-  <div class="module-frame" :class="containerClass">
+  <div :class="containerClass" class="module-frame">
     <!-- 左侧预览区域 -->
     <template>
-      <div class="module-frame__preview" :class="{ active: isActive, incomplete: isIncomplete }">
-        <slot name="preview"></slot>
+      <div :class="{ active: isActive, incomplete: isIncomplete }" class="module-frame__preview">
+        <slot name="preview"/>
       </div>
     </template>
     <!-- 右侧设置区域 -->
     <template>
-      <div class="module-frame__setting" v-show="isActive">
-        <slot name="setting"></slot>
+      <div v-show="isActive" class="module-frame__setting">
+        <slot name="setting"/>
       </div>
     </template>
 
     <!-- 模态框 -->
-    <slot name="modal"></slot>
+    <slot name="modal"/>
   </div>
 </template>
 
@@ -27,12 +27,12 @@ export default {
     },
     isActive: {
       type: Boolean,
-      default: false,
+      default: false
     },
     isIncomplete: {
       type: Boolean,
-      default: false,
+      default: false
     }
-  },
+  }
 }
 </script>

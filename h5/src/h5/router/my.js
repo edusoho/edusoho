@@ -5,4 +5,4 @@ export default [{
     title: '我的'
   },
   component: () => import(/* webpackChunkName: "my" */'@/containers/my/index.vue')
-}];
+}]

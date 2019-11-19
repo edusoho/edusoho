@@ -1,9 +1,10 @@
 <template>
   <div class="find-page">
-    <div v-for="(part, index) in parts" :key="index" class="find-page__part">
+    <div v-for="(part, index) in parts" :key="index" :class="{'find-page__part__padding':(part.type !== 'slide_show')}" class="find-page__part">
       <e-swipe
         v-if="part.type == 'slide_show'"
         :slides="part.data"
+        :show-title="showTitle"
         :feedback="feedback"/>
       <e-course-list
         v-if="['classroom_list', 'course_list'].includes(part.type)"
@@ -75,6 +76,11 @@ export default {
         'size-fit'
       ],
       from: this.$route.query.from
+    }
+  },
+  computed: {
+    showTitle() {
+      return this.from !== 'appSetting'
     }
   },
   created() {

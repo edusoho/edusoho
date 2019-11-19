@@ -9,23 +9,25 @@
       </div>
     </e-panel>
 
-    <ul class="course-detail__plan" v-if="!defaultPlan">
-      <li v-if="item.title" v-for="(item, index) in items"
-        @click="handleClick(item, index)"
-        :class="{ active: item.active }">{{item.title}}</li>
+    <ul v-if="!defaultPlan" class="course-detail__plan">
+      <li
+        v-for="(item, index) in items"
+        v-if="item.title"
+        :class="{ active: item.active }"
+        @click="handleClick(item, index)">{{ item.title }}</li>
     </ul>
 
     <div class="course-detail__validity">
       <div v-if="details.vipLevel && vipSwitch" class="mb15">
         <span class="mr20">会员免费</span>
-        <img class="vipIcon" :src="details.vipLevel.icon" />
-        <router-link class="color-primary" :to="{ path: '/vip', query: { id: details.vipLevel.id } }">
-          {{details.vipLevel.name}}免费学</router-link>
+        <img :src="details.vipLevel.icon" class="vipIcon" >
+        <router-link :to="{ path: '/vip', query: { id: details.vipLevel.id } }" class="color-primary">
+          {{ details.vipLevel.name }}免费学</router-link>
       </div>
       <service v-if="details.services.length" :services="details.services" />
       <div>
         <span class="mr20">学习有效期</span>
-        <span class="dark" v-html="learnExpiryHtml"></span>
+        <span class="dark" v-html="learnExpiryHtml"/>
       </div>
       <div v-if="details.buyExpiryTime != 0" class="mt5">
         <span class="mr20">购买截止日期</span>
@@ -35,28 +37,27 @@
   </div>
 </template>
 <script>
-import * as types from '@/store/mutation-types';
-import service from '@/containers/classroom/service';
-import { mapMutations, mapState, mapActions } from 'vuex';
-import { Toast } from 'vant';
+import * as types from '@/store/mutation-types'
+import service from '@/containers/classroom/service'
+import { mapState, mapActions } from 'vuex'
 
 export default {
+  components: {
+    service
+  },
+  filters: {
+    filterTime(time) {
+      const fullDate = new Date(time)
+      const year = fullDate.getFullYear()
+      const month = `0${fullDate.getMonth()}`.slice(-2)
+      const date = `0${fullDate.getDate()}`.slice(-2)
+      return `${year}-${month}-${date}`
+    }
+  },
   data() {
     return {
       items: [],
       isFree: false
-    }
-  },
-  components: {
-    service
-  },
-  filters:{
-    filterTime(time) {
-      const fullDate = new Date(time);
-      const year = fullDate.getFullYear();
-      const month = `0${fullDate.getMonth()}`.slice(-2);
-      const date = `0${fullDate.getDate()}`.slice(-2);
-      return `${year}-${month}-${date}`;
     }
   },
   watch: {
@@ -64,28 +65,28 @@ export default {
       immediate: true,
       handler(v) {
         this.items = this.details.courses.map((item, index) => {
-          this.$set(item, 'active', false);
+          this.$set(item, 'active', false)
 
-          if(item.id === this.details.id) {
-            item.active = true;
+          if (item.id === this.details.id) {
+            item.active = true
           }
 
-          return item;
-        });
+          return item
+        })
       }
     },
     learnExpiryHtml: {
       immediate: true,
       handler(val) {
-        const learnExpiryData = this.details.learningExpiryDate;
-        const startDateStr = learnExpiryData.expiryStartDate.slice(0, 10);
-        const endDateStr = learnExpiryData.expiryEndDate.slice(0, 10);
+        const learnExpiryData = this.details.learningExpiryDate
+        const startDateStr = learnExpiryData.expiryStartDate.slice(0, 10)
+        const endDateStr = learnExpiryData.expiryEndDate.slice(0, 10)
 
         this.$emit('getLearnExpiry', {
           val,
           startDateStr,
           endDateStr
-        });
+        })
       }
     }
   },
@@ -93,83 +94,83 @@ export default {
     ...mapState('course', {
       details: state => state.details,
       selectedPlanId: state => state.selectedPlanId,
-      joinStatus: state => state.joinStatus,
+      joinStatus: state => state.joinStatus
     }),
     ...mapState(['courseSettings', 'vipSwitch']),
     learnExpiryHtml() {
-      const memberInfo = this.details.member;
-      const learnExpiryData = this.details.learningExpiryDate;
-      const expiryMode = learnExpiryData.expiryMode;
+      const memberInfo = this.details.member
+      const learnExpiryData = this.details.learningExpiryDate
+      const expiryMode = learnExpiryData.expiryMode
 
       if (!memberInfo) {
         switch (expiryMode) {
           case 'forever':
-            return ('永久有效');
-            break;
+            return ('永久有效')
+            break
           case 'end_date':
-            return (learnExpiryData.expiryEndDate.slice(0, 10) + '之前可学习');
-            break;
+            return (learnExpiryData.expiryEndDate.slice(0, 10) + '之前可学习')
+            break
           case 'days':
-            return (learnExpiryData.expiryDays + '天内可学习');
-            break;
+            return (learnExpiryData.expiryDays + '天内可学习')
+            break
           case 'date':
-            const startDateStr = learnExpiryData.expiryStartDate.slice(0, 10);
-            const endDateStr = learnExpiryData.expiryEndDate.slice(0, 10);
+            const startDateStr = learnExpiryData.expiryStartDate.slice(0, 10)
+            const endDateStr = learnExpiryData.expiryEndDate.slice(0, 10)
             return (
-              '<div class = "mt5">' + '开课日期：' + startDateStr
-              + '&nbsp;&nbsp;&nbsp;' + '截止日期：' + endDateStr + '</div>');
-            break;
+              '<div class = "mt5">' + '开课日期：' + startDateStr +
+              '&nbsp;&nbsp;&nbsp;' + '截止日期：' + endDateStr + '</div>')
+            break
         }
       } else {
         if (expiryMode == 'forever') {
           return '永久有效'
         }
-        return(
+        return (
           (memberInfo.deadline != 0) ? (memberInfo.deadline.slice(0, 10) + '之前可学习')
-          : '永久有效'
-        );
+            : '永久有效'
+        )
       }
     },
     showStudent() {
-      return this.courseSettings ? Number(this.courseSettings.show_student_num_enabled) : true;
+      return this.courseSettings ? Number(this.courseSettings.show_student_num_enabled) : true
     },
     defaultPlan() {
-      return this.items.length === 1 && !this.items[0].title;
+      return this.items.length === 1 && !this.items[0].title
     },
     isDiscount() {
-      if (!this.details.courseSet) return false;
-      const isDiscount = this.details.courseSet.discount;
+      if (!this.details.courseSet) return false
+      const isDiscount = this.details.courseSet.discount
       if (isDiscount !== '') {
-        const discountNum =  Number(isDiscount);
-        if (discountNum === 10) return false;
-        if (discountNum === 0) return true;
-        return discountNum;
+        const discountNum = Number(isDiscount)
+        if (discountNum === 10) return false
+        if (discountNum === 0) return true
+        return discountNum
       }
     }
   },
   methods: {
     ...mapActions('course', [
-        'getCourseLessons',
+      'getCourseLessons'
     ]),
-    handleClick (item, index){
-      this.items.map(item => item.active = false);
-      item.active = true;
-      this.getCourseLessons({courseId:item.id}).then(()=>{
-        this.$emit('switchPlan');
-      }).catch(()=>{
-        this.$emit('switchPlan');
+    handleClick(item, index) {
+      this.items.map(item => item.active = false)
+      item.active = true
+      this.getCourseLessons({ courseId: item.id }).then(() => {
+        this.$emit('switchPlan')
+      }).catch(() => {
+        this.$emit('switchPlan')
       })
     },
-    filterPrice () {
-      const details = this.details;
+    filterPrice() {
+      const details = this.details
 
       if (Number(details.isFree) || details.price === '0.00') {
-        this.isFree = true;
-        return '免费';
+        this.isFree = true
+        return '免费'
       }
 
       this.isFree = false
-      return `¥${details.price}`;
+      return `¥${details.price}`
     }
   }
 }

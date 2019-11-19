@@ -46,13 +46,13 @@
           this.$router.push({
             path: `/vip`
           });
-          return;
+          return
         }
         if (itemLinkData.type === 'course' && itemLinkData.target) {
           this.$router.push({
             path: `/course/${itemLinkData.target.id}`
           });
-          return;
+          return
         }
       }
     }

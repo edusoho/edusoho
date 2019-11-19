@@ -7,21 +7,38 @@
       v-if="seckillActivities && counting && !isEmpty && seckillActivities.status === 'ongoing'"
       :activity="seckillActivities"
       @timesUp="expire"
-      @sellOut="sellOut">
-    </countDown>
-    <tagLink :tagData="tagData"></tagLink>
+      @sellOut="sellOut"/>
+    <tagLink :tag-data="tagData"/>
   </div>
 </template>
 <script>
-import countDown from '&/components/e-marketing/e-count-down/index';
-import tagLink from '&/components/e-tag-link/e-tag-link';
-import Api from '@/api';
-import qs from 'qs';
+import countDown from '&/components/e-marketing/e-count-down/index'
+import tagLink from '&/components/e-tag-link/e-tag-link'
+import Api from '@/api'
+import qs from 'qs'
 
 export default {
   components: {
     countDown,
-    tagLink,
+    tagLink
+  },
+  props: {
+    cover: {
+      type: String,
+      default: ''
+    },
+    price: {
+      type: String,
+      default: ''
+    },
+    classroomId: {
+      type: Number,
+      default: 0
+    },
+    seckillActivities: {
+      type: Object,
+      default: null
+    }
   },
   data() {
     return {
@@ -32,32 +49,18 @@ export default {
         isShow: false,
         link: '',
         className: 'course-tag',
-        minDirectRewardRatio: 0,
+        minDirectRewardRatio: 0
       },
-      bindAgencyRelation: {}, // 分销代理商绑定信息
-    };
-  },
-  props: {
-    cover: {
-      type: String,
-      default: '',
-    },
-    price: {
-      type: String,
-      default: '',
-    },
-    classroomId: {
-      type: Number,
-      default: 0,
-    },
-    seckillActivities: {
-      type: Object,
-      default: null,
+      bindAgencyRelation: {} // 分销代理商绑定信息
     }
+  },
+  created() {
+    this.showTagLink()
+    this.initTagData()
   },
   methods: {
     expire() {
-      this.counting = false;
+      this.counting = false
     },
     sellOut() {
       this.isEmpty = true
@@ -66,40 +69,36 @@ export default {
     showTagLink() {
       Api.hasDrpPluginInstalled().then(res => {
         if (!res.Drp) {
-          this.tagData.isShow = false;
+          this.tagData.isShow = false
           return;
         }
 
         Api.getAgencyBindRelation().then(data => {
           if (!data.agencyId) {
-            this.tagData.isShow = false;
+            this.tagData.isShow = false
             return;
           }
-          this.bindAgencyRelation = data;
-          this.tagData.isShow = true;
+          this.bindAgencyRelation = data
+          this.tagData.isShow = true
         })
       })
     },
     initTagData() {
       Api.getDrpSetting().then(data => {
-        this.drpSetting = data;
-        this.tagData.minDirectRewardRatio = data.minDirectRewardRatio;
+        this.drpSetting = data
+        this.tagData.minDirectRewardRatio = data.minDirectRewardRatio
 
         let params = {
           type: 'classroom',
           id: this.classroomId,
-          merchant_id: this.drpSetting.merchantId,
-        };
+          merchant_id: this.drpSetting.merchantId
+        }
 
-        this.tagData.link = this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
-        const earnings = (this.drpSetting.minDirectRewardRatio / 100) * this.details.price;
-        this.tagData.earnings = (Math.floor(earnings * 100) / 100).toFixed(2);
-      });
-    },
-  },
-  created() {
-    this.showTagLink();
-    this.initTagData();
+        this.tagData.link = this.drpSetting.distributor_template_url + '?' + qs.stringify(params)
+        const earnings = (this.drpSetting.minDirectRewardRatio / 100) * this.details.price
+        this.tagData.earnings = (Math.floor(earnings * 100) / 100).toFixed(2)
+      })
+    }
   }
 }
 </script>
