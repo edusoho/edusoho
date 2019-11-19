@@ -10,6 +10,8 @@ interface CloudAppDao extends GeneralDaoInterface
 
     public function findByCodes(array $codes);
 
+    public function findByTypes(array $types);
+
     public function find($start, $limit);
 
     public function countApps();
