@@ -1,19 +1,17 @@
-import BatchSelect from 'app/common/widget/res-batch-select';
 import { toggleIcon } from 'app/common/widget/chapter-animate';
+import QuestionSelector from './selector';
 
 class QuestionsShow {
   constructor() {
-    this.model = 'normal';
     this.renderUrl = $('.js-question-html').data('url');
-    this.attribute = 'mine';
     this.element = $('.js-question-container');
     this.categoryContainer = $('.js-category-content');
+    this.selector = new QuestionSelector($('.js-question-html'));
     this.init();
   }
   init() {
     this.initEvent();
     this.initCategoryShow();
-    new BatchSelect(this.element);
   }
   initEvent() {
     this.element.on('click', '.js-search-btn', (event) => {
@@ -31,6 +29,10 @@ class QuestionsShow {
     this.element.on('click', '.js-all-category-search', (event) => {
       this.onClickAllCategorySearch(event);
     });
+
+    this.element.on('click', '.js-batch-delete', (event) => {
+      this.onDeleteQuestions(event);
+    });
   }
 
   initCategoryShow() {
@@ -43,6 +45,34 @@ class QuestionsShow {
       }, "normal");
     
       toggleIcon($sort, 'cd-icon-add', 'cd-icon-remove');
+    });
+  }
+
+  onDeleteQuestions(event) {
+    let $target = $(event.currentTarget);
+    let name = $target.data('name');
+    let ids = this.selector.toJson();
+    if (ids.length == 0) {
+      cd.message({type: 'danger', message: Translator.trans('site.data.uncheck_name_hint', {'name': name})});
+      return;
+    }
+
+    cd.confirm({
+      title: Translator.trans('site.data.delete_title_hint', {'name': name}),
+      content: Translator.trans('site.data.delete_check_name_hint', {'name': name}),
+      okText: Translator.trans('site.confirm'),
+      cancelText: Translator.trans('site.close'),
+    }).on('ok', () => {
+      $.post($target.data('url'), {ids: ids}, function(response) {
+        if (response) {
+          cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
+          window.location.reload();
+        } else {
+          cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') });
+        }
+      }).error(function(error) {
+        cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') });
+      });
     });
   }
 
@@ -79,26 +109,27 @@ class QuestionsShow {
     isPaginator || this._resetPage();
     let self = this;
     let $table = $('.js-question-html');
-    this._loading();
     var conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + this.element.find('.js-page').val();
+    this._loading();
     $.ajax({
       type: 'GET',
       url: this.renderUrl,
       data: conditions
     }).done(function(resp){
       $table.html(resp);
+      self.selector.updateTable();
     }).fail(function(){
       self._loaded_error();
     });
   }
   _loading() {
     let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('site.loading') + '</div>';
-    let $table = $('#material-item-list');
+    let $table = $('.js-question-html');
     $table.html(loading);
   }
   _loaded_error() {
     let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('site.loading_error') + '</div>';
-    let $table = $('#material-item-list');
+    let $table = $('.js-question-html');
     $table.html(loading);
   }
   _resetPage() {

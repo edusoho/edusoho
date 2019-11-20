@@ -3316,3 +3316,8 @@ question_bank_manage_question_list:
 question_bank_manage_question_show_ajax:
     path: /question_bank/{id}/questions/show/ajax
     defaults: { _controller: AppBundle:QuestionBank/Question:getQuestionsHtml }
+
+question_bank_manage_question_delete:
+    path: /question_bank/{id}/questions/delete
+    defaults: { _controller: AppBundle:QuestionBank/Question:deleteQuestions }
+    methods: [POST]

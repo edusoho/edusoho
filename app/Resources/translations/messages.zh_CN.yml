@@ -4345,6 +4345,8 @@ my.teaching.question_bank.question_category.create_hint: 可批量添加分类�
 my.teaching.question_bank.question_category.name_label: 分类名称
 my.teaching.question_bank.question.no_category: 未分类
 my.teaching.question_bank.question.all: 全部题目
+my.teaching.question_bank.question.set_category: 设置分类
+my.teaching.question_bank.question.selected: 已选
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程
