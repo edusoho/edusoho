@@ -53,8 +53,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
             
-    kernel.listener.kernel_admin_v2_request_listener:
-        class: AppBundle\Listener\AdminV2KernelRequestListener
+    kernel.listener.kernel_admin_request_intercept_listener:
+        class: AppBundle\Listener\AdminRequestInterceptListener
         arguments:    ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
