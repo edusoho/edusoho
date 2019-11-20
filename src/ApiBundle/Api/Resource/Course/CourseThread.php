@@ -17,12 +17,12 @@ class CourseThread extends AbstractResource
 
         $thread = $this->getCourseThreadService()->getThreadByThreadId($threadId);
 
-        if ($thread['source'] == 'app') {
+        if ('app' == $thread['source']) {
             $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('course.thread', $threadId, 'attachment');
             $thread = $this->addAttachments($thread, ArrayToolkit::group($attachments, 'targetId'));
         }
 
-        if ($thread['source'] == 'web') {
+        if ('web' == $thread['source']) {
             $thread['content'] = $this->filterHtml($thread['content']);
         }
 
@@ -30,7 +30,8 @@ class CourseThread extends AbstractResource
             $file = $this->getUploadFileService()->getFile($thread['videoId']);
             $thread['askVideoLength'] = $file['length'];
         }
-        $thread['user'] = $this->getUserService()->getUser($thread['userId']);
+        $this->getOCUtil()->single($thread, array('userId'));
+        $this->getOCUtil()->single($thread, array('courseId'), 'course');
         $this->getCourseThreadService()->hitThread($courseId, $threadId);
 
         return $thread;
@@ -78,7 +79,7 @@ class CourseThread extends AbstractResource
         $attachments = $this->getUploadFileService()->searchUseFiles(array('targetType' => 'course.thread', 'targetIds' => ArrayToolkit::column($threads, 'id')), true, array('id' => 'ASC'));
         $attachments = ArrayToolkit::group($attachments, 'targetId');
         foreach ($threads as &$thread) {
-            if ($thread['source'] == 'app') {
+            if ('app' == $thread['source']) {
                 $thread = $this->addAttachments($thread, $attachments);
             }
 
@@ -102,7 +103,7 @@ class CourseThread extends AbstractResource
         if (isset($fields['taskId'])) {
             $task = $this->getTaskService()->getTask($fields['taskId']);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            $fields['videoId'] = ($activity['mediaType'] == 'video') ? $activity['ext']['file']['id'] : 0;
+            $fields['videoId'] = ('video' == $activity['mediaType']) ? $activity['ext']['file']['id'] : 0;
         }
 
         $fields['title'] = substr($fields['content'], 0, 100);
@@ -169,7 +170,7 @@ class CourseThread extends AbstractResource
             foreach ($attachments[$thread['id']] as $attachment) {
                 $file = isset($attachment['file']) ? $attachment['file'] : array();
 
-                if ($file['type'] == 'video' or $file['type'] == 'audio') {
+                if ('video' == $file['type'] or 'audio' == $file['type']) {
                     $thread['attachments'][$file['type']] = array(
                         'id' => $file['id'],
                         'length' => $file['length'],
@@ -181,7 +182,7 @@ class CourseThread extends AbstractResource
                     );
                 }
 
-                if ($file['type'] == 'video') {
+                if ('video' == $file['type']) {
                     $thread['attachments'][$file['type']]['thumbnail'] = isset($file['thumbnail']) ? $file['thumbnail'] : '';
                 }
             }

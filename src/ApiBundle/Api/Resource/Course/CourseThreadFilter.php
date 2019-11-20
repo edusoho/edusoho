@@ -9,7 +9,7 @@ class CourseThreadFilter extends Filter
 {
     protected $publicFields = array(
         'id', 'courseId', 'taskId', 'type', 'isStick', 'isElite', 'isClosed', 'private', 'title', 'content', 'source', 'postNum', 'userId', 'attachments', 'attachments',
-        'hitNum', 'followNum', 'latestPostUserId', 'videoAskTime', 'videoId', 'latestPostTime', 'courseSetId', 'createdTime', 'updatedTime', 'user', 'askVideoUri', 'askVideoLength', 'askVideoThumbnail',
+        'hitNum', 'followNum', 'latestPostUserId', 'videoAskTime', 'videoId', 'latestPostTime', 'courseSetId', 'createdTime', 'updatedTime', 'user', 'course', 'askVideoUri', 'askVideoLength', 'askVideoThumbnail',
     );
 
     protected function publicFields(&$data)
@@ -17,6 +17,12 @@ class CourseThreadFilter extends Filter
         if (isset($data['user'])) {
             $userFilter = new UserFilter();
             $userFilter->filter($data['user']);
+        }
+
+        if (isset($data['course'])) {
+            $courseFilter = new CourseFilter();
+            $courseFilter->setMode(Filter::SIMPLE_MODE);
+            $courseFilter->filter($data['course']);
         }
 
         if (isset($data['latestPostTime'])) {
