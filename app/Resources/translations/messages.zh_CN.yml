@@ -1622,6 +1622,8 @@ course.question_manage.import.rule: 导入规则说明
 course.question_manage.export_hint: (当前题目导出仅支持新模板)
 course.question_manage.export_btn: 导出题目
 
+course.testpaper_manage.transfer_text: 题目和试卷搬家啦，点击下方传送门前往查看全新题库。
+course.testpaper_manage.transfer_btn: 前往查看
 course.testpaper_manage: 课程试卷
 course.testpaper_manage.testpaper: 试卷
 course.testpaper_manage.content_title: 课程试卷

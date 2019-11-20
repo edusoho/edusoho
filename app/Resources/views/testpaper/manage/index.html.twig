@@ -10,7 +10,7 @@
 
 {% block main %}
 
-  <div role="courseset-manage-testpaper">
+  {# <div role="courseset-manage-testpaper">
     <div class="courseset-manage-body__title">{{ 'course.testpaper_manage.content_title'|trans }}
       <div class="courseset-manage-body__btn">
         <a href="{{ path('course_set_manage_testpaper_create',{id:courseSet.id}) }}"
@@ -60,6 +60,11 @@
         {{ 'course.testpaper_manage.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})|raw }}
       </div>
     </div>
+  </div> #}
+  <div class="courseset-manage-testpaper-move">
+      <img class="testpaper-move__img" src="{{ asset('static-dist/app/img/testpaper/move.png') }}"
+               srcset="{{ asset('static-dist/app/img/testpaper/move@2x.png') }} 2x" alt="move"/>
+      <p>{{ 'course.testpaper_manage.transfer_text'|trans }}</p> 
+      <a href="{{ path('question_bank_list') }}"  class="cd-btn cd-btn-primary testpaper-move__btn"> {{ 'course.testpaper_manage.transfer_btn'|trans }} </a>
   </div>
-
 {% endblock %}
