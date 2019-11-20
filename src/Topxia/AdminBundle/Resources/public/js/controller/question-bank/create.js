@@ -100,7 +100,7 @@ define(function(require, exports, module) {
     validator.addItem({
       element: '#bank-name',
       required: true,
-      rule: 'maxlength{max:30}'
+      rule: 'maxlength{max:30} visible_character'
     });
 
     validator.addItem({
