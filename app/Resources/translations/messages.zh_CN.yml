@@ -10466,6 +10466,7 @@ admin_v2.upgrade_v2_setting.alert: '全新版后台已经更新，开启最新�
 admin_v2.upgrade_v2_setting.setting_btn: 切换新版
 admin_v2.switch_old_version.setting_btn: 切换旧版
 admin_v2.switch_version.btn_loading: 正在切换....
+admin_v2.switch_old_version.title: 切换后台
 exception.common_upgrade_v2_error: 已经升级到新版
 exception.switch_old_version.permission_error: 请联系超级管理员或管理员操作
 exception.switch_old_version.error: 已经切回到旧版后台
