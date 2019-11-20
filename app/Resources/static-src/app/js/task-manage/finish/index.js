@@ -3,7 +3,17 @@ if ($selectFinish.length) {
   $selectFinish.on('change',function() {
     $('#conditions').children().hide();
     let val = $(this).val();
-    'time' == val ?  $('#watchTime').rules('add', 'positive_integer') : $('#watchTime').rules('remove');
+    if ('time' == val) {
+      $('#watchTime').rules('add', {
+        required: true,
+        positive_integer: true,
+        messages: {
+          required: Translator.trans('activity.video_manage.length_required_error_hint')
+        }
+      });
+    } else {
+      $('#watchTime').rules('remove');
+    }
     
     switch(val)
     {
@@ -29,12 +39,26 @@ let validate = $('#step3-form').validate({
     nameGroup: 'minute second'
   },
   rules: {
-    watchTime: 'positive_integer',
+    watchTime: {
+      required: true,
+      positive_integer: true,
+    },
+    messages: {
+      watchTime: {
+        required: Translator.trans('activity.video_manage.length_required_error_hint')
+      }
+    }
   }
 });
 
 if ($('#conditions-time').css('display') != 'none') {
-  $('#watchTime').rules('add', 'positive_integer');
+  $('#watchTime').rules('add', {
+    required: true,
+    positive_integer: true,
+    messages: {
+      required: Translator.trans('activity.video_manage.length_required_error_hint')
+    }
+  });
 }
 
 $('#watchTime').on('change', function() {
