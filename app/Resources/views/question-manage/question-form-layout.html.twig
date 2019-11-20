@@ -1,13 +1,13 @@
 {% extends 'question-bank/question/index.html.twig' %}
 
-{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'app/js/question-bank/question/index.js', 'app/js/question-manage/form/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'app/js/question-manage/form/index.js']) %}
 
 {% block panel_body %}
 
 {% set parentQuestion = parentQuestion|default(null) %}
 {% set questionTypesDict = getQuestionTypes() %}
 
-<div class="panel-col">
+<div class="panel-body">
   <div id="question-creator-widget">
     <form id="question-create-form" data-role="question-form" class="form-horizontal quiz-question" method="post" action="{% if question|default(null) %}{{ path('question_bank_manage_question_update',{id:questionBank.id, questionId:question.id, goto:request.query.get('goto')}) }}{% else %}{{ path('question_bank_manage_question_create',{id:questionBank.id, type:type, parentId:parentQuestion.id|default(0), goto:app.request.get('goto')}) }}{% endif %}">
 
@@ -15,12 +15,12 @@
 
       {% if not parentQuestion %}
         <div class="form-group">
-          <div class="col-md-2 control-label"><label>{{'my.teaching.question_bank.question_category.title'|trans}}</label></div>
+          <div class="col-md-2 control-label"><label for="categoryId">{{'question_bank.question_manage.manage.category'|trans}}</label></div>
           <div class="col-md-8 controls">
-            <select class="form-control width-150" name="categoryId" data-role="categoryId" data-url="{{ path('', {id:questionBank.id})}}">
-              <option value="0" {% if not question.courseId|default(0) %}selected{% endif %}>{{'course.question_manage.manage.default_belong'|trans}}</option>
-              {% for course in courses if course %}
-                <option value="{{ course.id }}" {% if question.courseId|default(0) == course.id %}selected{% endif %}>{{  }}</option>
+            <select class="form-control width-150" id="categoryId" name="categoryId" data-role="categoryId">
+              <option value="0" {% if not question.categoryId|default(0) %}selected{% endif %}></option>
+              {% for category in categoryTree if categoryTree %}
+                <option value="{{ category.id }}" {% if question.categoryId|default(0) == category.id %}selected{% endif %}>{{ category.name }}</option>
               {% endfor %}
             </select>
           </div>
@@ -28,18 +28,17 @@
       {% endif %}
 
       <div class="form-group">
-        <div class="col-md-2 control-label"><label>{{'course.question_manage.manage.difficulty'|trans}}</label></div>
+        <div class="col-md-2 control-label"><label>{{'question_bank.question_manage.manage.difficulty'|trans}}</label></div>
         <div class="col-md-8 controls radios">
-          {{ radios('difficulty', {'simple':'course.question_manage.manage.easy_difficulty'|trans, 'normal':'course.question_manage.manage.normal_difficulty'|trans, 'difficulty':'course.question_manage.manage.hard_difficulty'|trans}, question.difficulty|default('normal')) }}
+          {{ radios('difficulty', {'simple':'question_bank.question_manage.manage.easy_difficulty'|trans, 'normal':'question_bank.question_manage.manage.normal_difficulty'|trans, 'difficulty':'question_bank.question_manage.manage.hard_difficulty'|trans}, question.difficulty|default('normal')) }}
         </div>
       </div>
 
       <div class="form-group">
-        <div class="col-md-2 control-label"><label for="question-stem-field" class="control-label-required">{{ question_stem_label|default('course.question_manage.manage.stem'|trans) }}</label></div>
+        <div class="col-md-2 control-label"><label for="question-stem-field" class="control-label-required">{{ question_stem_label|default('question_bank.question_manage.manage.stem'|trans) }}</label></div>
         <div class="col-md-8 controls">
-          <textarea class="form-control" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('questionBank')}) }}"  data-image-download-url="{{ path('editor_download', {token:upload_token('questionBank')}) }}" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
-          {% set question_stem_help = question_stem_help|default('') %}
-          {% if question_stem_help %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
+          <textarea class="form-control" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('questionBank')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('questionBank')}) }}" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
+          {% if question_stem_help|default('') %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
         </div>
       </div>
 
@@ -49,20 +48,20 @@
 
       <div class="form-group">
         <div class="col-md-8 col-md-offset-2 controls ">
-          <a href="javascript:;" data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="color-success collapsed">&raquo; {{'course.question_manage.manage.advanced_options'|trans}} ...</a>
+          <a href="javascript:;" data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="color-success collapsed">&raquo; {{'question_bank.question_manage.manage.advanced_options'|trans}} ...</a>
         </div>
       </div>
 
       <div id="advanced-collapse" class="advanced-collapse collapse">
         <div class="form-group">
-          <div class="col-md-2 control-label"><label for="question-analysis-field">{{'course.question_manage.manage.analysis'|trans}}</label></div>
+          <div class="col-md-2 control-label"><label for="question-analysis-field">{{'question_bank.question_manage.manage.analysis'|trans}}</label></div>
           <div class="col-md-8 controls">
             <textarea class="form-control" id="question-analysis-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('questionBank')}) }}" name="analysis" data-image-download-url="{{ path('editor_download', {token:upload_token('questionBank')}) }}">{{ question.analysis|default('') }}</textarea>
           </div>
         </div>
         {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'question.analysis', targetId: question.id|default(0)}, { useType:true,})) }}
         <div class="form-group">
-          <div class="col-md-2 control-label"><label for="question-score-field">{{'course.question_manage.manage.score'|trans}}</label></div>
+          <div class="col-md-2 control-label"><label for="question-score-field">{{'question_bank.question_manage.manage.score'|trans}}</label></div>
           <div class="col-md-8 controls">
             <input class="form-control width-input" value="{{ question.score|default(2) }}" type="text" id="question-score-field" name="score"/>
           </div>
@@ -88,7 +87,6 @@
 
     </form>
   </div>
-
 </div>
 
 {% endblock %}

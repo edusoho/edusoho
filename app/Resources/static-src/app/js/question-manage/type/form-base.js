@@ -35,9 +35,6 @@ class QuestionFormBase {
     let validator = this.$form.validate({
       onkeyup: false,
       rules: {
-        '[data-role="target"]': {
-          required: true,
-        },
         difficulty: {
           required: true,
         },
@@ -53,7 +50,6 @@ class QuestionFormBase {
         }
       },
       messages: {
-        '[data-role="target"]': Translator.trans('course.question.create.belong_required_error_hint'),
         difficulty: Translator.trans('course.question.create.difficulty_required_error_hint')
       }
     });

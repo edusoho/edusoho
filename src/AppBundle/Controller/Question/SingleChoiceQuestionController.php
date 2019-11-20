@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Question;
 
-use Biz\QuestionBank\QuestionBankException;
 use Symfony\Component\HttpFoundation\Request;
 
 class SingleChoiceQuestionController extends BaseQuestionController
@@ -38,22 +37,6 @@ class SingleChoiceQuestionController extends BaseQuestionController
 
     public function createAction(Request $request, $questionBankId, $type)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($questionBankId)) {
-            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
-        }
-
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($questionBankId);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
-
-        $parentId = $request->query->get('parentId', 0);
-        $parentQuestion = $this->getQuestionService()->get($parentId);
-
-        return $this->render('question-manage/single-choice-form.html.twig', array(
-            'parentQuestion' => $parentQuestion,
-            'questionBank' => $questionBank,
-            'type' => $type,
-        ));
+        return $this->baseCreateAction($request, $questionBankId, $type, 'question-manage/single-choice-form.html.twig');
     }
 }

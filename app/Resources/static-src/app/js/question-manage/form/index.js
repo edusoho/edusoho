@@ -6,7 +6,6 @@ import Determine from '../type/question-determine';
 import Fill from '../type/question-fill';
 import Essay from '../type/question-essay';
 import Material from '../type/question-material';
-import SelectLinkage from '../widget/select-linkage.js';
 
 let questionCreator;
 class QuestionCreator {
@@ -47,8 +46,6 @@ class QuestionCreator {
 }
 
 let $form = $('[data-role="question-form"]');
-let type = $('[data-role="question-form"]').find('[name="type"]').val();
+let type = $form.find('[name="type"]').val();
 
 QuestionCreator.getCreator(type, $form);
-
-new SelectLinkage($('[data-role="courseId"]'),$('[data-role="lessonId"]'));

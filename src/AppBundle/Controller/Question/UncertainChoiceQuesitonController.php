@@ -35,20 +35,8 @@ class UncertainChoiceQuesitonController extends BaseQuestionController
         ));
     }
 
-    public function createAction(Request $request, $courseSetId, $type)
+    public function createAction(Request $request, $questionBankId, $type)
     {
-        $user = $this->getUser();
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
-
-        $parentId = $request->query->get('parentId', 0);
-        $parentQuestion = $this->getQuestionService()->get($parentId);
-
-        return $this->render('question-manage/uncertain-choice-form.html.twig', array(
-            'courseSet' => $courseSet,
-            'parentQuestion' => $parentQuestion,
-            'type' => $type,
-            'courses' => $manageCourses,
-        ));
+        return $this->baseCreateAction($request, $questionBankId, $type, 'question-manage/uncertain-choice-form.html.twig');
     }
 }
