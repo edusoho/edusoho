@@ -16,7 +16,7 @@
           <p class="text-center">{{ questionBank.name }}</p>
         </a>
       {% endfor %}
-    {% elseif has_permission('admin_question_bank') %}
+    {% elseif has_permission('admin_question_bank') and not category%}
       {% set quesionManagePath = path('admin_question_bank') %}
       <div class="empty">{{ 'question_bank.empty'|trans({'%loginUrl%': quesionManagePath})|raw }}</div>
       {% else %}
