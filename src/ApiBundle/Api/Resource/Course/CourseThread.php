@@ -106,7 +106,7 @@ class CourseThread extends AbstractResource
             $fields['videoId'] = ('video' == $activity['mediaType']) ? $activity['ext']['file']['id'] : 0;
         }
 
-        $fields['title'] = substr($fields['content'], 0, 100);
+        $fields['title'] = substr($fields['title'], 0, 100);
         if (empty($fields['title'])) {
             $fields['questionType'] = $this->getQuestionType($fields['fileIds']);
         }
