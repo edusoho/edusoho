@@ -112,7 +112,6 @@ export default {
       default: false
     },
     limit: {
-      type: String,
       default: ''
     },
     type: {
