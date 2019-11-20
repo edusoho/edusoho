@@ -23,7 +23,7 @@ class CategoryDaoImpl extends AdvancedDaoImpl implements CategoryDao
 
     public function findAll()
     {
-        $sql = "SELECT * FROM {$this->table()}";
+        $sql = "SELECT * FROM {$this->table()} ORDER BY weight ASC";
 
         return $this->db()->fetchAll($sql) ?: array();
     }
