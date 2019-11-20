@@ -26,7 +26,7 @@ class ClassroomThreadPost extends AbstractResource
 
         $threadPosts = $this->getThreadService()->searchPosts(
             $conditions,
-            array('createdTime' => 'ASC'),
+            array('createdTime' => 'DESC'),
             $offset,
             $limit
         );
