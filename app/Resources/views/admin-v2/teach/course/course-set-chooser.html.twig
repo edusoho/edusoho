@@ -4,7 +4,7 @@
 {% block title %}{{'admin.course_manage.chooser.title'|trans}}{% endblock %}
 {% block body %}
 
-<form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_course_chooser', {'withPlan': withCoursePlan }) }}" method="get" novalidate>
+<form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_v2_course_chooser', {'withPlan': withCoursePlan }) }}" method="get" novalidate>
 	<div class="form-group">
 	  <select class="form-control" name="categoryId">
 	    {{ select_options(category_choices('course'), app.request.query.get('categoryId'), 'admin.course_manage.chooser.course_category'|trans) }}
