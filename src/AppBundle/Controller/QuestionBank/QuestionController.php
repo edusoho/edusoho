@@ -4,7 +4,9 @@ namespace AppBundle\Controller\QuestionBank;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\Question\QuestionException;
 use Biz\Question\Service\QuestionService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\QuestionBank\QuestionBankException;
 use AppBundle\Common\Paginator;
@@ -59,6 +61,7 @@ class QuestionController extends BaseController
             'questionBank' => $questionBank,
             'categories' => $categories,
             'parentQuestion' => $parentQuestion,
+            'questionCategories' => $questionCategories,
         ));
     }
 
@@ -75,6 +78,7 @@ class QuestionController extends BaseController
 
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
+            $fields['bankId'] = $id;
             $question = $this->getQuestionService()->create($fields);
 
             $goto = $request->query->get('goto', null);
@@ -115,6 +119,49 @@ class QuestionController extends BaseController
             'request' => $request,
             'questionBankId' => $id,
             'type' => $type,
+        ));
+    }
+
+    public function updateAction(Request $request, $id, $questionId)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank)) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        $question = $this->getQuestionService()->get($questionId);
+        if (empty($question) || $question['bankId'] != $questionBank['id']) {
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+        }
+
+        if ($request->isMethod('POST')) {
+            $fields = $request->request->all();
+            $this->getQuestionService()->update($question['id'], $fields);
+
+            $this->setFlashMessage('success', 'site.save.success');
+
+            return $this->redirect(
+                $request->query->get(
+                    'goto',
+                    $this->generateUrl(
+                        'question_bank_manage_question_list',
+                        array('id' => $id, 'parentId' => $question['parentId'])
+                    )
+                )
+            );
+        }
+
+        $questionConfig = $this->getQuestionConfig();
+        $editController = $questionConfig[$question['type']]['actions']['edit'];
+
+        return $this->forward($editController, array(
+            'request' => $request,
+            'questionBankId' => $id,
+            'questionId' => $question['id'],
         ));
     }
 
@@ -172,6 +219,9 @@ class QuestionController extends BaseController
         return $this->get('extension.manager')->getQuestionTypes();
     }
 
+    /**
+     * @return QuestionBankService
+     */
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');

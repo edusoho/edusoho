@@ -18,6 +18,7 @@ class BaseQuestion extends BizAware
             'analysis',
             'metas',
             'score',
+            'bankId',
             'categoryId',
             'parentId',
             'copyId',

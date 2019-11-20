@@ -1,6 +1,7 @@
 {% set questionTypes = getQuestionTypes() %}
 {% set parentId = parentQuestion.id|default(0) %}
 
+{{ web_macro.flash_messages() }}
 <div>
   <form class="form-inline js-search-form" novalidate>
     <div class="form-group">

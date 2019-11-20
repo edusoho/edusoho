@@ -6,26 +6,41 @@ use Biz\Question\QuestionException;
 use Biz\Question\Service\CategoryService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Biz\Task\Service\TaskService;
-use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseSetService;
 use Biz\Question\Service\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class BaseQuestionController extends BaseController
 {
-    protected function tryGetCourseSetAndQuestion($courseSetId, $questionId)
+    protected function baseEditAction(Request $request, $questionBankId, $questionId, $view)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $question = $this->getQuestionService()->get($questionId);
+        if (!$this->getQuestionBankService()->validateCanManageBank($questionBankId)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
 
-        if ($question['courseSetId'] != $courseSetId) {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($questionBankId);
+        if (empty($questionBank)) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        $question = $this->getQuestionService()->get($questionId);
+        if (empty($question) || $question['bankId'] != $questionBankId) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
-        return array($courseSet, $question);
+        $parentQuestion = array();
+        if ($question['parentId'] > 0) {
+            $parentQuestion = $this->getQuestionService()->get($question['parentId']);
+        }
+
+        return $this->render($view, array(
+            'questionBank' => $questionBank,
+            'question' => $question,
+            'parentQuestion' => $parentQuestion,
+            'type' => $question['type'],
+            'request' => $request,
+            'categoryTree' => $this->getQuestionCategoryService()->getCategoryTree($questionBankId),
+        ));
     }
 
     protected function baseCreateAction(Request $request, $questionBankId, $type, $view)
@@ -67,42 +82,10 @@ class BaseQuestionController extends BaseController
     }
 
     /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->createService('Task:TaskService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
-    }
-
-    /**
      * @return QuestionBankService
      */
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
-    }
-
-    /**
-     * @return ServiceKernel
-     */
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }
