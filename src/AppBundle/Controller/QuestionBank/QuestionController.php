@@ -7,6 +7,7 @@ use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\QuestionBank\QuestionBankException;
 use AppBundle\Common\Paginator;
+use Biz\Question\QuestionException;
 
 class QuestionController extends BaseController
 {
@@ -107,6 +108,22 @@ class QuestionController extends BaseController
             'questionBank' => $questionBank,
             'questionCategories' => $questionCategories,
         ));
+    }
+
+    public function deleteQuestionsAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $ids = $request->request->get('ids', array());
+        $questions = $this->getQuestionService()->findQuestionsByIds($ids);
+        if (empty($questions)) {
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+        }
+        $this->getQuestionService()->batchDeletes($ids);
+
+        return $this->createJsonResponse(true);
     }
 
     protected function getQuestionBankService()

@@ -3,7 +3,7 @@
 <table class="table table-striped table-hover" id="quiz-table">
   <thead>
   <tr>
-    <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
+    <th><input type="checkbox"  autocomplete="off"  class="js-select-all"></th>
     <th width="25%">{{'course.question_manage.stem'|trans}}</th>
     <th width="15%">{{'course.question_manage.type'|trans}}</th>
     <th width="15%">{{'course.question_manage.manage.difficulty'|trans}}</th>
@@ -14,19 +14,21 @@
   <tbody>
     {% for question in questions %}
       <tr data-role='item'>
-        <td><input value="{{question.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
+        <td><input value="{{question.id}}" data-id="{{question.id}}" type="checkbox"  autocomplete="off" class="js-checkbox"></td>
         <td>
           <a class="color-info" href="#modal" data-toggle="modal" data-url="">
             {% if question.includeImg|default(null) %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
             {{ question.stem |fill_question_stem_text| plain_text(30) }}
             <br/>
-            {% if question.categoryId %}
-              <span class="color-gray text-sm">{{ 'category'|trans }}：{{ questionCategories[question.categoryId].name }}</span>
-            {% endif %}
+            <span class="color-gray text-sm">{{ 'category'|trans }}：
+              {% if question.categoryId %}
+                {{ questionCategories[question.categoryId].name }}
+              {% else %}
+                {{ 'site.data.empty'|trans }}
+              {% endif %}
+            </span>
           </a>
           <div>
-            {# {% include 'question-manage/part/belong.html.twig' with {question:question,courses:courses,courseTasks:courseTasks} %} #}
-
             {% if question.type == 'material' and not question.subCount %}
               <span class="label label-danger">{{'course.question_manage.question.unfinished'|trans}}</span>
             {% endif %}
@@ -73,8 +75,10 @@
   </tbody>
 </table>
 <div>
-  <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> {{'course.question_manage.select_all'|trans}}</label>
-  <button class="cd-btn cd-btn-default cd-btn-sm mlm" data-role="batch-delete"  data-name="{{'course.question_manage.question'|trans}}" data-url="" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'form.btn.delete'|trans}}</button>
+  <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" class="js-select-all"> {{'course.question_manage.select_all'|trans}}</label>
+  <span class="color-gray mlm vertical-middle">{{ 'my.teaching.question_bank.question.selected'|trans }}：<span class="js-select-number">0</span></span>
+  <button class="cd-btn cd-btn-default cd-btn-sm mlm js-batch-delete" data-name="{{'course.question_manage.question'|trans}}" data-url="{{ path('question_bank_manage_question_delete', {id: questionBank.id}) }}" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'form.btn.delete'|trans}}</button>
+  <button class="cd-btn cd-btn-default cd-btn-sm mlm js-batch-set" data-url="" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'my.teaching.question_bank.question.set_category'|trans}}</button>
   <span class="pull-right color-gray">{{'course.question_manage.count'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
 </div>
 <nav class="text-center">
