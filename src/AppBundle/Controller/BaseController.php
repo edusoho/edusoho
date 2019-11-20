@@ -420,6 +420,19 @@ class BaseController extends Controller
         return $this->getBiz()->service('System:LogService');
     }
 
+    protected function pushEventTracking($action, $data = null)
+    {
+        $biz = $this->getBiz();
+        try {
+            $biz['qiQiuYunSdk.esOp']->submitEventTracking(array(
+                'action' => $action,
+                'data' => $data,
+            ));
+        } catch (\Exception $e) {
+            $biz['logger']->error('pushEventTrackingError: '.$e->getMessage(), $e->getTrace());
+        }
+    }
+
     protected function getJWTAuth()
     {
         $setting = $this->setting('storage', array());

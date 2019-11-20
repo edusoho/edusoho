@@ -24,7 +24,7 @@ admin_v2_homepage_application_intro:
 
 admin_v2_homepage_business_advice:
     path: /business_advice
-    defaults: { _controller: AppBundle:AdminV2/Default:BusinessAdvice }
+    defaults: { _controller: AppBundle:AdminV2/Default:businessAdvice }
 
 admin_v2_homepage_school_info:
     path: /school_info
