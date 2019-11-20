@@ -1,94 +1,94 @@
-import { formatTime } from '@/utils/date-toolkit'
+import { formatTime } from '@/utils/date-toolkit';
 
 const tableFilter = (item, label, subProperty) => {
-  const labelStr = subProperty ? subProperty.toLocaleLowerCase() : label.toLocaleLowerCase()
-  const labelField = subProperty ? item[label][subProperty] : item[label]
+  const labelStr = subProperty ? subProperty.toLocaleLowerCase() : label.toLocaleLowerCase();
+  const labelField = subProperty ? item[label][subProperty] : item[label];
   if (labelStr.includes('price')) {
     if (!labelField) {
-      return '未设置'
+      return '未设置';
     }
-    return `${labelField}元`
+    return `${labelField}元`;
   }
   switch (label) {
     case 'deadline':
       if (item.deadlineMode && item.deadlineMode === 'day') {
-        return `领取${item.fixedDay}天后有效`
+        return `领取${item.fixedDay}天后有效`;
       }
       if (!item.deadline) {
-        return '未知日期'
+        return '未知日期';
       }
-      const date = new Date(item.deadline)
-      return formatTime(date).slice(0, 10)
+      const date = new Date(item.deadline);
+      return formatTime(date).slice(0, 10);
     case 'createdTime':
       if (!item.createdTime) {
-        return '未知日期'
+        return '未知日期';
       }
-      const date1 = new Date(item.createdTime)
-      return formatTime(date1)
+      const date1 = new Date(item.createdTime);
+      return formatTime(date1);
     case 'delete':
-      return '移除'
+      return '移除';
     case 'generatedNum':
-      return `${item.unreceivedNum} / ${item.generatedNum}`
+      return `${item.unreceivedNum} / ${item.generatedNum}`;
     case 'rate':
-      let discountType = '折扣'
-      let text = '折'
-      const numberType = item.targetDetail.numType
-      const productType = item.targetDetail.product
-      let targetType = '全部商品'
+      let discountType = '折扣';
+      let text = '折';
+      const numberType = item.targetDetail.numType;
+      const productType = item.targetDetail.product;
+      let targetType = '全部商品';
       if (numberType === 'single') {
         switch (productType) {
           case 'course':
           case 'classroom':
-            targetType = '指定商品'
-            break
+            targetType = '指定商品';
+            break;
           case 'vip':
-            targetType = '指定会员'
-            break
+            targetType = '指定会员';
+            break;
           default:
-            targetType = ''
+            targetType = '';
         }
       } else if (numberType === 'all') {
         // 全部
         switch (productType) {
           case 'course':
-            targetType = '全部课程'
-            break
+            targetType = '全部课程';
+            break;
           case 'classroom':
-            targetType = '全部班级'
-            break
+            targetType = '全部班级';
+            break;
           case 'all':
-            targetType = '全部商品'
-            break
+            targetType = '全部商品';
+            break;
           case 'vip':
-            targetType = '全部会员'
-            break
+            targetType = '全部会员';
+            break;
           default:
-            targetType = ''
+            targetType = '';
         }
       } else {
         switch (productType) {
           case 'course':
           case 'classroom':
-            targetType = '部分商品'
-            break
+            targetType = '部分商品';
+            break;
           default:
-            targetType = ''
+            targetType = '';
         }
       }
 
       if (item.type === 'minus') {
-        discountType = '抵价'
-        text = '元'
+        discountType = '抵价';
+        text = '元';
       }
 
-      return `${discountType + item.rate + text} / ${targetType}`
+      return `${discountType + item.rate + text} / ${targetType}`;
     default:
       // 有子属性的返回子属性
       if (subProperty) {
-        return item[label][subProperty]
+        return item[label][subProperty];
       }
-      return item[label]
+      return item[label];
   }
-}
+};
 
-export default tableFilter
+export default tableFilter;

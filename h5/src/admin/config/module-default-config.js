@@ -96,7 +96,7 @@ const MODULE_DEFAULT = {
       titleShow: 'show'
     }
   }
-}
+};
 
 const BASE_MODULE = [
   {
@@ -118,7 +118,7 @@ const BASE_MODULE = [
     name: '会员专区',
     default: MODULE_DEFAULT.vip
   }
-]
+];
 
 const MARKETING_MODULE = [
   {
@@ -131,7 +131,7 @@ const MARKETING_MODULE = [
     name: '秒杀',
     default: MODULE_DEFAULT.seckill
   }
-]
+];
 
 const VALUE_DEFAULT = {
   classroom_list: {
@@ -152,7 +152,7 @@ const VALUE_DEFAULT = {
   seckill: {
     key: 'name'
   }
-}
+};
 
 const TYPE_TEXT_DEFAULT = {
   course_list: {
@@ -173,8 +173,8 @@ const TYPE_TEXT_DEFAULT = {
   seckill: {
     text: '活动'
   }
-}
+};
 
 export {
   MODULE_DEFAULT, BASE_MODULE, MARKETING_MODULE, VALUE_DEFAULT, TYPE_TEXT_DEFAULT
-}
+};
