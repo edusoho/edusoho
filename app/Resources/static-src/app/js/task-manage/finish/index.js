@@ -40,14 +40,8 @@ let validate = $('#step3-form').validate({
   },
   rules: {
     watchTime: {
-      required: true,
       positive_integer: true,
     },
-    messages: {
-      watchTime: {
-        required: Translator.trans('activity.video_manage.length_required_error_hint')
-      }
-    }
   }
 });
 
