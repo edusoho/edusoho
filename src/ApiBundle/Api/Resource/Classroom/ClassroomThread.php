@@ -6,7 +6,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
 use Biz\Group\Service\ThreadService;
-use Biz\User\Service\UserService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Group\ThreadException;
 
@@ -47,6 +46,26 @@ class ClassroomThread extends AbstractResource
         return $thread;
     }
 
+    public function add(ApiRequest $request, $classroomId)
+    {
+        if (!$this->getClassroomService()->canTakeClassroom($classroomId)) {
+            throw ClassroomException::FORBIDDEN_TAKE_CLASSROOM();
+        }
+
+        $thread = array(
+            'title' => $request->request->get('title'),
+            'content' => $request->request->get('content'),
+            'targetId' => $classroomId,
+            'type' => $request->request->get('type'),
+            'targetType' => 'classroom',
+        );
+
+        $thread = $this->getThreadService()->createThread($thread);
+        $this->getOCUtil()->single($thread, array('userId'));
+
+        return $thread;
+    }
+
     /**
      * @return ThreadService
      */
@@ -61,13 +80,5 @@ class ClassroomThread extends AbstractResource
     protected function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return UserService
-     */
-    private function getUserService()
-    {
-        return $this->service('User:UserService');
     }
 }
