@@ -1,4 +1,3 @@
-const $switchBtn = $('.js-switch-version-btn');
 const iframe = document.getElementById('iframe');
 
 iframe.onload = () => {
@@ -14,7 +13,8 @@ const onMessage = function (event) {
       handleData = JSON.parse(event.data);
     }
     if (handleData.actions === 'reload') {
-      $.post($switchBtn.data('url'), (res) => {
+      const url = $('.js-question-section').data('url');
+      $.post(url, (res) => {
         if (res.status == 'success' && res.url) {
           window.location.href = res.url;
         }
