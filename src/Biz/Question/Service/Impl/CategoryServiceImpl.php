@@ -171,7 +171,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $questions = $this->getQuestionService()->findQuestionsByCategoryIds($ids);
             if (!empty($questions)) {
                 $batchUpdates = array();
-                foreach($questions as $question) {
+                foreach ($questions as $question) {
                     $batchUpdates[] = array('categoryId' => 0);
                 }
                 $this->getQuestionDao()->batchUpdate(
