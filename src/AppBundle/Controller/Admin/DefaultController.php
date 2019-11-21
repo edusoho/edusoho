@@ -425,6 +425,7 @@ class DefaultController extends BaseController
         }
         $setting['is_v2'] = 1;
         $this->getSettingService()->set('backstage', $setting);
+        $this->pushEventTracking('switchToAdminV2');
 
         return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin_v2')));
     }
