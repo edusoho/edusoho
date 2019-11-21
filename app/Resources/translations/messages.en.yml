@@ -4408,6 +4408,7 @@ admin.question_bank.category_manage.bank: Question Bank
 admin.question_bank.manage.name: Title
 admin.question_bank.manage.bank_content: Content
 admin.question_bank.manage.all_category: All Category
+my.teaching.question_bank.question.category_name: Name
 admin.question_bank.manage.category: Category
 admin.question_bank.manage.operate: Action
 admin.question_bank.manage.testpaper: Testpaper

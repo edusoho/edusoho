@@ -26,13 +26,7 @@ class QuestionController extends BaseController
 
         $conditions['bankId'] = $id;
         $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
-
-        $parentQuestion = array();
         $orderBy = array('createdTime' => 'DESC');
-        if ($conditions['parentId'] > 0) {
-            $parentQuestion = $this->getQuestionService()->get($conditions['parentId']);
-            $orderBy = array('createdTime' => 'ASC');
-        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -49,6 +43,7 @@ class QuestionController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'updatedUserId'));
         $categories = $this->getQuestionCategoryService()->getCategoryStructureTree($questionBank['id']);
+        $categoryTree = $this->getQuestionCategoryService()->getCategoryTree($questionBank['id']);
         $questionCategories = $this->getQuestionCategoryService()->findCategories($questionBank['id']);
         $questionCategories = ArrayToolkit::index($questionCategories, 'id');
 
@@ -58,6 +53,8 @@ class QuestionController extends BaseController
             'users' => $users,
             'questionBank' => $questionBank,
             'categories' => $categories,
+            'questionCategories' => $questionCategories,
+            'categoryTree' => $categoryTree,
         ));
     }
 
@@ -76,12 +73,13 @@ class QuestionController extends BaseController
 
         $conditions['bankId'] = $id;
         $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
-
-        $parentQuestion = array();
         $orderBy = array('createdTime' => 'DESC');
-        if ($conditions['parentId'] > 0) {
-            $parentQuestion = $this->getQuestionService()->get($conditions['parentId']);
-            $orderBy = array('createdTime' => 'ASC');
+
+        if (!empty($conditions['categoryId'])) {
+            $childrenIds = $this->getQuestionCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $childrenIds[] = $conditions['categoryId'];
+            $conditions['categoryIds'] = $childrenIds;
+            unset($conditions['categoryId']);
         }
 
         $paginator = new Paginator(
@@ -122,6 +120,24 @@ class QuestionController extends BaseController
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
         $this->getQuestionService()->batchDeletes($ids);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function setCategoryAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $ids = $request->request->get('ids', array());
+        $categoryId = $request->request->get('categoryId', array());
+        $questions = $this->getQuestionService()->findQuestionsByIds($ids);
+        if (empty($questions)) {
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+        }
+
+        $this->getQuestionService()->batchUpdateCategoryId($ids, $categoryId);
 
         return $this->createJsonResponse(true);
     }

@@ -4347,6 +4347,7 @@ my.teaching.question_bank.question.no_category: 未分类
 my.teaching.question_bank.question.all: 全部题目
 my.teaching.question_bank.question.set_category: 设置分类
 my.teaching.question_bank.question.selected: 已选
+my.teaching.question_bank.question.category_name: 名称
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程

@@ -78,7 +78,7 @@
   <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" class="js-select-all"> {{'course.question_manage.select_all'|trans}}</label>
   <span class="color-gray mlm vertical-middle">{{ 'my.teaching.question_bank.question.selected'|trans }}：<span class="js-select-number">0</span></span>
   <button class="cd-btn cd-btn-default cd-btn-sm mlm js-batch-delete" data-name="{{'course.question_manage.question'|trans}}" data-url="{{ path('question_bank_manage_question_delete', {id: questionBank.id}) }}" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'form.btn.delete'|trans}}</button>
-  <button class="cd-btn cd-btn-default cd-btn-sm mlm js-batch-set" data-url="" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'my.teaching.question_bank.question.set_category'|trans}}</button>
+  <button class="cd-btn cd-btn-default cd-btn-sm mlm js-batch-set" data-name="{{'course.question_manage.question'|trans}}" data-url="" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'my.teaching.question_bank.question.set_category'|trans}}</button>
   <span class="pull-right color-gray">{{'course.question_manage.count'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
 </div>
 <nav class="text-center">

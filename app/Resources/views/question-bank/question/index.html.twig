@@ -3,7 +3,7 @@
 {% block title %}{{ 'my.teaching.question_bank.question.manage'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'my-question-bank' %}
 
-{% do script(['app/js/question-bank/question/index.js'])  %}
+{% do script(['libs/select2.js', 'app/js/question-bank/question/index.js'])  %}
 
 {% block main %}
   <div class="panel panel-default panel-col">
@@ -21,9 +21,6 @@
     <div class="panel panel-default panel-col">
       <div class="panel-body question-list-container js-question-container">
         <div class="mtl category-list-content js-category-content">
-          <span class="all-question-title">
-            {{ 'my.teaching.question_bank.question.all'|trans }}
-          </span>
           {% include 'question-bank/question/category-list.html.twig' %}
         </div>
         <div class="mtl question-list-content">
@@ -32,9 +29,7 @@
       </div>
     </div>
   </div>
-{% endblock %}
 
-{% block content %}
   {% block question_category_modal %}
     {% include 'question-bank/question/category-set-modal.html.twig' %}
   {% endblock %}

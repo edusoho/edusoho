@@ -18,6 +18,10 @@ interface QuestionService
 
     public function batchCreateQuestions($questions);
 
+    public function batchUpdateCategoryId($ids, $categoryId);
+
+    public function batchUpdateQuestions($ids, $fields);
+
     public function update($id, $fields);
 
     public function updateCopyQuestionsSubCount($parentId, $subCount);
