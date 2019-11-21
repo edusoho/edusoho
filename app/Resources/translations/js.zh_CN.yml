@@ -1446,3 +1446,5 @@ question_bank.question_category.create_success: 创建分类成功
 question_bank.question_category.update_success: 更新分类成功
 question_bank.question_category.delete_confirm_title: 删除确认
 question_bank.question_category.delete_confirm_hint: 此分类及其子分类下共包含%count%道题，删除后，这些题目都将变为未分类题目。您确定要删除此分类吗？
+
+question.marker_question.select_question_category: --选择分类--

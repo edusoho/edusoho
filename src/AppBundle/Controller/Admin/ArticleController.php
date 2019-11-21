@@ -95,7 +95,6 @@ class ArticleController extends BaseController
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         if ('POST' == $request->getMethod()) {
-            var_dump($request->request->all());
             $formData = $request->request->all();
             $article = $this->getArticleService()->updateArticle($id, $formData);
 
