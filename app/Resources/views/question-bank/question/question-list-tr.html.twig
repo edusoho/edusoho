@@ -3,7 +3,7 @@
 <table class="table table-striped table-hover" id="quiz-table">
   <thead>
   <tr>
-    <th><input type="checkbox"  autocomplete="off"  class="js-select-all"></th>
+    <th><input type="checkbox" autocomplete="off" class="js-select-all"></th>
     <th width="25%">{{'course.question_manage.stem'|trans}}</th>
     <th width="15%">{{'course.question_manage.type'|trans}}</th>
     <th width="15%">{{'course.question_manage.manage.difficulty'|trans}}</th>
@@ -13,8 +13,8 @@
   </thead>
   <tbody>
     {% for question in questions %}
-      <tr data-role='item'>
-        <td><input value="{{question.id}}" data-id="{{question.id}}" type="checkbox"  autocomplete="off" class="js-checkbox"></td>
+      <tr data-role="item">
+        <td><input value="{{question.id}}" data-id="{{question.id}}" type="checkbox" autocomplete="off" class="js-checkbox"></td>
         <td>
           <a class="color-info" href="#modal" data-toggle="modal" data-url="">
             {% if question.includeImg|default(null) %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
@@ -33,7 +33,6 @@
               <span class="label label-danger">{{'course.question_manage.question.unfinished'|trans}}</span>
             {% endif %}
           </div>
-
         </td>
         <td>
           {{ questionTypesDict[question.type] }}
@@ -58,9 +57,9 @@
         <td>
           <div class="btn-group">
             {% if question.type == 'material'%}
-              <a href="" class="color-info">{{'course.question_manage.question.manage_sub_btn'|trans}}</a>
+              <a href="{{ path('question_bank_manage_question_list', {id:questionBank.id, parentId:question.id}) }}" class="color-info">{{'course.question_manage.question.manage_sub_btn'|trans}}</a>
             {% endif %}
-            <a href="" class="color-info"> {{'course.question_manage.question.edit_btn'|trans}}</a>
+            <a href="{{ path('question_bank_manage_question_update', {id:questionBank.id, questionId:question.id}) }}" class="color-info"> {{'course.question_manage.question.edit_btn'|trans}}</a>
             <a href="javascript:" class="color-info" data-name='{{'course.question_manage.question'|trans}}{% if question.type == 'material'%}({{'course.question_manage.question.include_sub'|trans}}){% endif %}' data-role='item-delete' data-url="">
               {{'course.question_manage.question.delete_btn'|trans}}
             </a>
@@ -75,7 +74,7 @@
   </tbody>
 </table>
 <div>
-  <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" class="js-select-all"> {{'course.question_manage.select_all'|trans}}</label>
+  <label class="checkbox-inline"><input type="checkbox" autocomplete="off" class="js-select-all"> {{'course.question_manage.select_all'|trans}}</label>
   <span class="color-gray mlm vertical-middle">{{ 'my.teaching.question_bank.question.selected'|trans }}：<span class="js-select-number">0</span></span>
   <button class="cd-btn cd-btn-default cd-btn-sm mlm js-batch-delete" data-name="{{'course.question_manage.question'|trans}}" data-url="{{ path('question_bank_manage_question_delete', {id: questionBank.id}) }}" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'form.btn.delete'|trans}}</button>
   <button class="cd-btn cd-btn-default cd-btn-sm mlm js-batch-set" data-url="" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'my.teaching.question_bank.question.set_category'|trans}}</button>

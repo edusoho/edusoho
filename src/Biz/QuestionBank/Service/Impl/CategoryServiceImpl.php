@@ -119,21 +119,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function getCategoryTree()
     {
-        $prepare = function ($categories) {
-            $prepared = array();
-
-            foreach ($categories as $category) {
-                if (!isset($prepared[$category['parentId']])) {
-                    $prepared[$category['parentId']] = array();
-                }
-
-                $prepared[$category['parentId']][] = $category;
-            }
-
-            return $prepared;
-        };
-        $data = $this->findAllCategories();
-        $categories = $prepare($data);
+        $categories = $this->findAllCategories();
+        $categories = ArrayToolkit::group($categories, 'parentId');
 
         $tree = array();
         $this->makeCategoryTree($tree, $categories, 0);

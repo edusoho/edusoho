@@ -1,7 +1,9 @@
 {% set questionTypes = getQuestionTypes() %}
+{% set parentId = parentQuestion.id|default(0) %}
 
+{{ web_macro.flash_messages() }}
 <div>
-  <from class="form-inline js-search-form" novalidate>
+  <form class="form-inline js-search-form" novalidate>
     <div class="form-group">
       <select class="form-control" name="difficulty" data-role="search-conditions">
         <option value="" {% if not app.request.get('difficulty', '') %}selected{% endif %}>{{'course.question_manage.manage.difficulty'|trans}}</option>
@@ -35,25 +37,24 @@
       </a>
       {% for type,name in questionTypes %}
         {% if loop.index <= 3 %}
-          <a href="" class="cd-btn cd-btn-primary cd-btn-sm"><i class="cd-icon cd-icon-add cd-text-sm"></i>{{ name|trans }}</a>
+          <a href="{{ path('question_bank_manage_question_create', {id:questionBank.id, type:type, parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="cd-btn cd-btn-primary cd-btn-sm"><i class="cd-icon cd-icon-add cd-text-sm"></i>{{ name|trans }}</a>
         {% endif %}
       {% endfor %}
       <div class="btn-group">
-      <a href="#" type="button" class="cd-btn cd-btn-default cd-btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-      <ul class="dropdown-menu pull-right">
+        <a href="#" type="button" class="cd-btn cd-btn-default cd-btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+        <ul class="dropdown-menu pull-right">
         {% for type,name in questionTypes %}
-          {% if loop.index > 3 %}
-            <li><a href=""><span class="es-icon es-icon-anonymous-iconfont"></span> {{ name|trans }}</a></li>
+          {% if loop.index > 3 and ((type == 'material' and not parentQuestion) or type != 'material') %}
+            <li><a href="{{ path('question_bank_manage_question_create', {id:questionBank.id, type:type, parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}"><span class="es-icon es-icon-anonymous-iconfont"></span> {{ name|trans }}</a></li>
           {% endif %}
         {% endfor %}
-      </ul>
-    </div>
+        </ul>
+      </div>
 
     </div>
   </div>
 
   <div role="courseset-manage-question">
-
     <div id="quiz-table-container" class="js-question-html" data-url="{{ path('question_bank_manage_question_show_ajax', {id: questionBank.id}) }}">
       {% include 'question-bank/question/question-list-tr.html.twig' %}
     </div>

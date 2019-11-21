@@ -10472,3 +10472,15 @@ admin.setting.invite.chooser_coupon.refresh_btn: 刷新
 admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
 admin.operation.coupon_menu.generate_btn: 生成优惠券
 
+question_bank.question_manage.manage.category: 题目分类
+question_bank.question_manage.manage.stem: 题干
+question_bank.question_manage.manage.score: 分值
+question_bank.question_manage.manage.difficulty: 难度
+question_bank.question_manage.manage.easy_difficulty: 简单
+question_bank.question_manage.manage.normal_difficulty: 一般
+question_bank.question_manage.manage.hard_difficulty: 困难
+question_bank.question_manage.manage.analysis: 解析
+question_bank.question_manage.manage.advanced_options: 显示/隐藏 高级选项
+question_bank.question_manage.manage.stem_tips: >
+  点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对
+question_bank.question_manage.manage.material: 材料
