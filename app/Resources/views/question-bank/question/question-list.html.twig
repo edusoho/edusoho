@@ -32,7 +32,7 @@
 
   <div class="mtl">
     <div>
-      <a class="cd-btn cd-btn-primary cd-btn-sm js-import-btn" data-url="" data-toggle="modal" data-target="#modal">
+      <a class="cd-btn cd-btn-primary cd-btn-sm js-import-btn" data-url="{{ path('question_bank_manage_question_import', {id: questionBank.id}) }}" data-toggle="modal" data-target="#modal">
         <i class="cd-icon cd-icon-add cd-text-sm"></i>{{ 'course.question_manage.import.btn'|trans }}
       </a>
       {% for type,name in questionTypes %}

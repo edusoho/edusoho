@@ -67,6 +67,24 @@ class QuestionController extends BaseController
         ));
     }
 
+    public function importAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank)) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        return $this->forward('AppBundle:Question/QuestionParser:read', array(
+            'request' => $request,
+            'type' => 'question',
+            'questionBank' => $questionBank,
+        ));
+    }
+
     public function createAction(Request $request, $id, $type)
     {
         if (!$this->getQuestionBankService()->validateCanManageBank($id)) {

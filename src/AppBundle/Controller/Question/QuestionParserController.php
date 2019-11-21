@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class QuestionParserController extends BaseController
 {
-    public function readAction(Request $request, $type, $courseSet)
+    public function readAction(Request $request, $type, $questionBank)
     {
         $templateInfo = $this->getTemplateInfo($type);
         if ($request->isMethod('POST')) {
@@ -40,7 +40,7 @@ class QuestionParserController extends BaseController
                         'filename' => $file->getClientOriginalName(),
                         'fileuri' => $result['uri'],
                         'filepath' => $uploadFile['fullpath'],
-                        'courseSetId' => $courseSet['id'],
+                        'questionBankId' => $questionBank['id'],
                         'cacheFilePath' => $cacheFilePath,
                     ),
                     'duration' => 86400,
@@ -59,7 +59,7 @@ class QuestionParserController extends BaseController
         }
 
         return $this->render($templateInfo['readModalTemplate'], array(
-            'courseSet' => $courseSet,
+            'questionBank' => $questionBank,
         ));
     }
 
