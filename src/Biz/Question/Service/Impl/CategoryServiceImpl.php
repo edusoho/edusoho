@@ -156,9 +156,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
             $questions = $this->getQuestionService()->findQuestionsByCategoryIds($ids);
             if (!empty($questions)) {
+                $batchUpdates = array();
+                foreach ($questions as $question) {
+                    $batchUpdates[] = array('categoryId' => 0);
+                }
                 $this->getQuestionDao()->batchUpdate(
                     ArrayToolkit::column($questions, 'id'),
-                    array('categoryId' => 0),
+                    $batchUpdates,
                     'id'
                 );
             }
@@ -194,7 +198,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     protected function getQuestionDao()
     {
-        return $this->createService('Question:QuestionDao');
+        return $this->createDao('Question:QuestionDao');
     }
 
     protected function getQuestionBankService()
