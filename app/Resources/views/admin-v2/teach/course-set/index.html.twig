@@ -7,6 +7,7 @@
 {% block main %}
   <div class="well well-sm mtl">
     <form id="message-search-form" class="form-inline" action="" method="get" novalidate>
+      <div class="mbm">
         <div class="form-group">
           <select style="max-width:150px;" class="form-control" name="filter">
             {{ select_options(dict('adminCourseTypes'), app.request.query.get('filter')) }}
@@ -46,6 +47,7 @@
       <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
 
       {% include 'admin-v2/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.course_manage.manage.course_tips'|trans|raw, placement: 'left'} %}
+      </div>
     </form>
   </div>
   
