@@ -69,31 +69,18 @@ class CourseSetDaoTest extends BaseDaoTestCase
     {
         $count = 10;
 
-        while (true) {
-            $startTime = time();
-            $endTime = $startTime + 30;
-            if (date('Y-m-d', $startTime) == date('Y-m-d', $endTime)) {
-                for ($i = 0; $i < $count; ++$i) {
-                    $createdTime = $startTime + $i;
-                    $data = array_merge(
-                        $this->getDefaultMockFields(),
-                        array(
-                            'createdTime' => $createdTime,
-                            'updatedTime' => $createdTime,
-                        )
-                    );
-                    $this->getDao()->create($data);
-                }
-                $result = $this->getDao()->analysisCourseSetDataByTime($startTime, $startTime + 30);
-                break;
-            }
-
-            sleep(30);
+        $startTime = time();
+        for ($i=0; $i < $count; $i++) {
+            $data = $this->getDefaultMockFields();
+            $this->getDao()->create($data);
         }
+        $endTime = time();
+
+        $result = $this->getDao()->analysisCourseSetDataByTime($startTime, $endTime);
 
         $expectedResult = array(array(
             'count' => $count,
-            'date' => date('Y-m-d', $startTime),
+            'date' => date('Y-m-d'),
         ));
         $this->assertArrayEquals($expectedResult, $result);
     }
