@@ -1456,6 +1456,8 @@ course.question_manage.export_btn: export question
 course.testpaper_manage: Testpapers
 course.testpaper_manage.testpaper: Testpaper
 course.testpaper_manage.content_title: Testpaper
+course.testpaper_manage.transfer_text: The questions and test papers have moved. Click the portal below to check the new question bank
+course.testpaper_manage.transfer_btn: Go to see
 course.testpaper_manage.create_btn: Add
 course.testpaper_manage.import_btn: Import
 course.testpaper_manage.name: 'Paper Title'
@@ -9156,3 +9158,14 @@ admin.setting.invite.chooser_coupon.refresh_btn: Refresh
 admin.setting.invite.chooser_coupon.unreceived_num: Please set a coupon lot with more than 1 available
 admin.operation.coupon_menu.generate_btn: Generate Coupon
 
+question_bank.question_manage.manage.category: Question category
+question_bank.question_manage.manage.stem: Statement
+question_bank.question_manage.manage.score: Score
+question_bank.question_manage.manage.difficulty: Difficulty
+question_bank.question_manage.manage.easy_difficulty: Simple
+question_bank.question_manage.manage.normal_difficulty: Normal
+question_bank.question_manage.manage.hard_difficulty: Difficult
+question_bank.question_manage.manage.analysis: Analysis
+question_bank.question_manage.manage.advanced_options: 'Show / Hide advanced options'
+question_bank.question_manage.manage.stem_tips: "Click the button <span style=\"color:red\">[ ]</span>  to insert a blank. You can also input manually, for example “This year is [[2014]]”, the answer is “2014”\n"
+question_bank.question_manage.manage.material: Material

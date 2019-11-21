@@ -66,6 +66,7 @@ class QuestionsShow {
   }
 
   setCategory(event) {
+    let self = this;
     let $target = $(event.currentTarget);
     let url = $target.data('url');
     let data = {
@@ -75,7 +76,9 @@ class QuestionsShow {
     $.post(url, data, function(response) {
       if (response) {
         cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
-        window.location.reload();
+        self.selector.resetItems();
+        self.renderTable(true);
+        self.categoryModal.modal('hide');
       } else {
         cd.message({ type: 'danger', message: Translator.trans('site.save_error_hint') });
       }
@@ -98,6 +101,7 @@ class QuestionsShow {
   }
 
   onDeleteQuestions(event) {
+    let self = this;
     let $target = $(event.currentTarget);
     let name = $target.data('name');
     let ids = this.selector.toJson();
@@ -115,7 +119,9 @@ class QuestionsShow {
       $.post($target.data('url'), {ids: ids}, function(response) {
         if (response) {
           cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
-          window.location.reload();
+          self._resetPage();
+          self.selector.resetItems();
+          self.renderTable();
         } else {
           cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') });
         }

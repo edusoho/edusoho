@@ -19,14 +19,16 @@
       </ul>
     </div>
     <div class="panel panel-default panel-col">
-      <div class="panel-body question-list-container js-question-container">
-        <div class="mtl category-list-content js-category-content">
-          {% include 'question-bank/question/category-list.html.twig' %}
+      {% block panel_body %}
+        <div class="panel-body question-list-container js-question-container">
+          <div class="mtl category-list-content js-category-content">
+            {% include 'question-bank/question/category-list.html.twig' %}
+          </div>
+          <div class="mtl question-list-content">
+            {% include 'question-bank/question/question-list.html.twig' %}
+          </div>
         </div>
-        <div class="mtl question-list-content">
-          {% include 'question-bank/question/question-list.html.twig' %}
-        </div>
-      </div>
+      {% endblock %}
     </div>
   </div>
 

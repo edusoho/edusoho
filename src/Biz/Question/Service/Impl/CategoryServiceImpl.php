@@ -61,21 +61,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
-        $prepare = function ($categories) {
-            $prepared = array();
-
-            foreach ($categories as $category) {
-                if (!isset($prepared[$category['parentId']])) {
-                    $prepared[$category['parentId']] = array();
-                }
-
-                $prepared[$category['parentId']][] = $category;
-            }
-
-            return $prepared;
-        };
-        $data = $this->findCategories($bankId);
-        $categories = $prepare($data);
+        $categories = $this->findCategories($bankId);
+        $categories = ArrayToolkit::group($categories, 'parentId');
 
         $tree = array();
         $this->makeCategoryTree($tree, $categories, 0);
@@ -167,7 +154,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                 $this->getCategoryDao()->delete($id);
             }
 
-            $updateFields = array();
             $questions = $this->getQuestionService()->findQuestionsByCategoryIds($ids);
             if (!empty($questions)) {
                 $this->getQuestionService()->batchUpdateCategoryId(ArrayToolkit::column($questions, 'id'), 0);

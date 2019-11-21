@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Question;
 
+use Biz\QuestionBank\QuestionBankException;
 use Symfony\Component\HttpFoundation\Request;
 
 class MaterialQuestionController extends BaseQuestionController
@@ -11,41 +12,27 @@ class MaterialQuestionController extends BaseQuestionController
         // TODO: Implement showAction() method.
     }
 
-    public function editAction(Request $request, $courseSetId, $questionId)
+    public function editAction(Request $request, $questionBankId, $questionId)
     {
-        list($courseSet, $question) = $this->tryGetCourseSetAndQuestion($courseSetId, $questionId);
-        $user = $this->getUser();
-
-        $parentQuestion = array();
-        if ($question['parentId'] > 0) {
-            $parentQuestion = $this->getQuestionService()->get($question['parentId']);
-        }
-
-        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
-        $courseTasks = $this->getTaskService()->findTasksByCourseId($question['courseId']);
-
-        return $this->render('question-manage/material-form.html.twig', array(
-            'courseSet' => $courseSet,
-            'question' => $question,
-            'parentQuestion' => $parentQuestion,
-            'type' => $question['type'],
-            'courseTasks' => $courseTasks,
-            'courses' => $manageCourses,
-            'request' => $request,
-        ));
+        return $this->baseEditAction($request, $questionBankId, $questionId, 'question-manage/material-form.html.twig');
     }
 
-    public function createAction(Request $request, $courseSetId, $type)
+    public function createAction(Request $request, $questionBankId, $type)
     {
-        $user = $this->getUser();
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
+        if (!$this->getQuestionBankService()->validateCanManageBank($questionBankId)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($questionBankId);
+        if (empty($questionBank)) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         return $this->render('question-manage/material-form.html.twig', array(
-            'courseSet' => $courseSet,
+            'questionBank' => $questionBank,
             'parentQuestion' => array(),
             'type' => $type,
-            'courses' => $manageCourses,
+            'categoryTree' => $this->getQuestionCategoryService()->getCategoryTree($questionBankId),
         ));
     }
 }

@@ -43,11 +43,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
             if (!empty($fields['parentId'])) {
                 $parentQuestion = $this->get($fields['parentId']);
-                $fields['courseId'] = $parentQuestion['courseId'];
-                $fields['lessonId'] = $parentQuestion['lessonId'];
+                empty($parentQuestion) || $fields['categoryId'] = $parentQuestion['categoryId'];
             }
-
-            $fields['target'] = empty($fields['courseSetId']) ? '' : 'course-'.$fields['courseSetId'];
 
             $question = $this->getQuestionDao()->create($fields);
 
@@ -55,7 +52,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
                 $this->waveCount($question['parentId'], array('subCount' => '1'));
             }
 
-            //$this->getLogService()->info('course', 'add_question', "新增题目(#{$question['id']})", $question);
             $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
 
             $this->commit();
@@ -162,7 +158,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         $updateFields = array();
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $updateFields[] = array('categoryId' => $categoryId);
         }
 
@@ -203,11 +199,15 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         if (!empty($question['parentId'])) {
             $parentQuestion = $this->get($question['parentId']);
-            $fields['courseId'] = $parentQuestion['courseId'];
-            $fields['lessonId'] = $parentQuestion['lessonId'];
+            empty($parentQuestion) || $fields['categoryId'] = $parentQuestion['categoryId'];
         }
 
         $question = $this->getQuestionDao()->update($id, $fields);
+
+        $this->getQuestionDao()->update(array('parentId' => $question['id']), array(
+            'categoryId' => $question['categoryId'],
+            'updatedUserId' => $question['updatedUserId'],
+        ));
 
         $this->dispatchEvent('question.update', new Event($question, array('argument' => $argument)));
 

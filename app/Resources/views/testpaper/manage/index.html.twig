@@ -10,7 +10,7 @@
 
 {% block main %}
 
-  <div role="courseset-manage-testpaper">
+  {# <div role="courseset-manage-testpaper">
     <div class="courseset-manage-body__title">{{ 'course.testpaper_manage.content_title'|trans }}
       <div class="courseset-manage-body__btn">
         <a href="{{ path('course_set_manage_testpaper_create',{id:courseSet.id}) }}"
@@ -60,6 +60,6 @@
         {{ 'course.testpaper_manage.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})|raw }}
       </div>
     </div>
-  </div>
-
+  </div> #}
+  {% include 'testpaper/manage/move-tip.html.twig' %}
 {% endblock %}
