@@ -84,6 +84,10 @@ export default class QuestionSelector {
     }
   }
 
+  resetItems() {
+    this.selectMap = {};
+  }
+
   getObjectLength() {
     var arr = Object.keys(this.selectMap);
 

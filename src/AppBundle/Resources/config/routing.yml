@@ -3329,3 +3329,8 @@ question_bank_manage_question_delete:
     path: /question_bank/{id}/questions/delete
     defaults: { _controller: AppBundle:QuestionBank/Question:deleteQuestions }
     methods: [POST]
+
+question_bank_manage_question_set_category:
+    path: /question_bank/{id}/questions/set_category
+    defaults: { _controller: AppBundle:QuestionBank/Question:setCategory }
+    methods: [POST]

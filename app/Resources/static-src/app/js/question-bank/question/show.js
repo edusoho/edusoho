@@ -6,11 +6,13 @@ class QuestionsShow {
     this.renderUrl = $('.js-question-html').data('url');
     this.element = $('.js-question-container');
     this.categoryContainer = $('.js-category-content');
+    this.categoryModal = $('.js-category-modal');
     this.selector = new QuestionSelector($('.js-question-html'));
     this.init();
   }
   init() {
     this.initEvent();
+    this.initSelect();
     this.initCategoryShow();
   }
   initEvent() {
@@ -33,6 +35,56 @@ class QuestionsShow {
     this.element.on('click', '.js-batch-delete', (event) => {
       this.onDeleteQuestions(event);
     });
+
+    this.element.on('click', '.js-batch-set', (event) => {
+      this.showCategoryModal(event);
+    });
+
+    this.categoryModal.on('click', '.js-category-btn', (event) => {
+      this.setCategory(event);
+    });
+  }
+
+  initSelect() {
+    $('#question_categoryId').select2({
+      treeview: true,
+      dropdownAutoWidth: true,
+      treeviewInitState: 'collapsed',
+      placeholderOption: 'first'
+    });
+  }
+
+  showCategoryModal(event) {
+    let $target = $(event.currentTarget);
+    let name = $target.data('name');
+    let ids = this.selector.toJson();
+    if (ids.length == 0) {
+      cd.message({type: 'danger', message: Translator.trans('site.data.uncheck_name_hint', {'name': name})});
+      return;
+    }
+    this.categoryModal.modal('show');
+  }
+
+  setCategory(event) {
+    let self = this;
+    let $target = $(event.currentTarget);
+    let url = $target.data('url');
+    let data = {
+      ids: this.selector.toJson(),
+      categoryId: $('#question_categoryId').val()
+    };
+    $.post(url, data, function(response) {
+      if (response) {
+        cd.message({ type: 'success', message: Translator.trans('site.save_success_hint') });
+        self.selector.resetItems();
+        self.renderTable(true);
+        self.categoryModal.modal('hide');
+      } else {
+        cd.message({ type: 'danger', message: Translator.trans('site.save_error_hint') });
+      }
+    }).error(function(error) {
+      cd.message({ type: 'danger', message: Translator.trans('site.save_error_hint') });
+    });
   }
 
   initCategoryShow() {
@@ -49,6 +101,7 @@ class QuestionsShow {
   }
 
   onDeleteQuestions(event) {
+    let self = this;
     let $target = $(event.currentTarget);
     let name = $target.data('name');
     let ids = this.selector.toJson();
@@ -66,7 +119,9 @@ class QuestionsShow {
       $.post($target.data('url'), {ids: ids}, function(response) {
         if (response) {
           cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
-          window.location.reload();
+          self._resetPage();
+          self.selector.resetItems();
+          self.renderTable();
         } else {
           cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') });
         }
