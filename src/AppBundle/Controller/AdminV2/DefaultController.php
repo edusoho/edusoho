@@ -183,7 +183,6 @@ class DefaultController extends BaseController
 
     protected function canSupportAdminV2($appCode, $appType)
     {
-        $jsonFile = '';
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
         if ('plugin' == $appType) {
             $jsonFile = "{$rootDir}/../plugins/{$appCode}Plugin/plugin.json";
@@ -191,6 +190,10 @@ class DefaultController extends BaseController
 
         if ('theme' == $appType) {
             $jsonFile = "{$rootDir}/../web/themes/{$appCode}/theme.json";
+        }
+
+        if (empty($jsonFile)) {
+            return false;
         }
 
         $appDetail = json_decode(file_get_contents($jsonFile), true);
