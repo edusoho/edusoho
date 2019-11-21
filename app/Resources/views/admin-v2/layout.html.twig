@@ -132,7 +132,9 @@
 
 
     {% block footer %}
-      {{ setting('site.analytics')|raw }}
+      <div class="site-analytics-section">
+        {{ setting('site.analytics')|raw }}
+      </div>
 
       {% if setting('siteTrace.enabled')|default(false) %}
         {{ setting('siteTrace.script')|raw }}

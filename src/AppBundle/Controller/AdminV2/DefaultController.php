@@ -29,6 +29,8 @@ use Topxia\Service\Common\ServiceKernel;
 
 class DefaultController extends BaseController
 {
+    const ADMIN_V2_VERSION = '8.5.0';
+
     public function indexAction(Request $request)
     {
         return $this->render('admin-v2/default/index.html.twig', array(
@@ -147,11 +149,50 @@ class DefaultController extends BaseController
         if ('POST' == $request->getMethod()) {
             $setting['is_v2'] = 0;
             $this->getSettingService()->set('backstage', $setting);
-
+            $this->pushEventTracking('switchToAdmin');
             return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin')));
         }
 
         return $this->render('admin-v2/default/switch-old-version-modal.html.twig', array());
+    }
+
+    public function validateUpgradeAction(Request $request)
+    {
+        $backstageSetting = $this->getSettingService()->get('backstage', array());
+        if (isset($backstageSetting['show_plugin_upgrade_notice']) && 0 == $backstageSetting['show_plugin_upgrade_notice']) {
+            return $this->render('admin-v2/default/upgrade-notice.html.twig', array('notice' => false));
+        }
+
+        $apps = $this->getAppService()->findAppsByTypes(array('theme', 'plugin'));
+        foreach ($apps as $app) {
+            $canSupportAdminV2 = $this->canSupportAdminV2($app['code'], $app['type']);
+
+            if (!$canSupportAdminV2) {
+                return $this->render('admin-v2/default/upgrade-notice.html.twig', array('notice' => true));
+            }
+        }
+
+        $backstageSetting['show_plugin_upgrade_notice'] = 0;
+        $this->getSettingService()->set('backstage', $backstageSetting);
+
+        return $this->render('admin-v2/default/upgrade-notice.html.twig', array('notice' => false));
+    }
+
+    protected function canSupportAdminV2($appCode, $appType)
+    {
+        $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
+        if ('plugin' == $appType) {
+            $jsonFile = "{$rootDir}/../plugins/{$appCode}Plugin/plugin.json";
+        }
+
+        if ('theme' == $appType) {
+            $jsonFile = "{$rootDir}/../web/themes/{$appCode}/theme.json";
+        }
+
+        $appDetail = json_decode(file_get_contents($jsonFile), true);
+        $supportVersion = substr($appDetail['support_version'], 0, strlen($appDetail['support_version']) - 1);
+
+        return version_compare($supportVersion, self::ADMIN_V2_VERSION, '>=');
     }
 
     public function validateDomainAction(Request $request)

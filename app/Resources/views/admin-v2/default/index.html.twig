@@ -8,10 +8,13 @@
 
 {% block container %}
   <div class="container admin-v2-container">
-    {# 域名检查提示#}
     <div class="alert-list">
+      {# 插件、主题升级提示 #}
+      {{ render(controller('AppBundle:AdminV2/Default:validateUpgrade')) }}
+      {# 域名检查提示 #}
       {{ render(controller('AppBundle:AdminV2/Default:validateDomain')) }}
       {% if not (setting('copyright.thirdCopyright')|default(0) == 1) and is_trial() %}
+        {# 教育云推送通知 #}
         {{ render(controller('AppBundle:AdminV2/Default:getCloudNotices')) }}
       {% endif %}
     </div>
