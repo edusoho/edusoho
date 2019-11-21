@@ -251,7 +251,6 @@ class QuestionController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-
     protected function getQuestionConfig()
     {
         return $this->get('extension.manager')->getQuestionTypes();
