@@ -58,6 +58,7 @@ class CourseTaskMedia extends AbstractResource
         return array(
             'mediaType' => $activity['mediaType'],
             'media' => $media,
+            'format' => $request->query->get('format', 'common'),
         );
     }
 
