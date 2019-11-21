@@ -19,9 +19,9 @@ jQuery.validator.addMethod('name_chinese_alphanumeric', function (value, element
   let values = value.split('\n');
   let self = this;
   values.map(function (string) {
-    alphanumericValidator = /^([\s]|[\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(string);
-    if (alphanumericValidator == false) {
-      return self.optional(element) || alphanumericValidator;
+    alphanumericValidator = /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(string);
+    if (alphanumericValidator == false || $.trim(string).length <= 0) {
+      return self.optional(element) || alphanumericValidator || $.trim(string).length <= 0;
     }
   });
   return self.optional(element) || alphanumericValidator;
