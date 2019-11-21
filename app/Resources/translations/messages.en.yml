@@ -1456,6 +1456,8 @@ course.question_manage.export_btn: export question
 course.testpaper_manage: Testpapers
 course.testpaper_manage.testpaper: Testpaper
 course.testpaper_manage.content_title: Testpaper
+course.testpaper_manage.transfer_text: The questions and test papers have moved. Click the portal below to check the new question bank
+course.testpaper_manage.transfer_btn: Go to see
 course.testpaper_manage.create_btn: Add
 course.testpaper_manage.import_btn: Import
 course.testpaper_manage.name: 'Paper Title'
@@ -3622,6 +3624,8 @@ my.teaching.question_bank.question_category.create_hint: You can add categories 
 my.teaching.question_bank.question_category.name_label: Category Name
 my.teaching.question_bank.question.no_category: uncategorized
 my.teaching.question_bank.question.all: All Questions
+my.teaching.question_bank.question.set_category: Set Category
+my.teaching.question_bank.question.selected: selected Number
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'

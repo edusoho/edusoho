@@ -214,6 +214,22 @@ class QuestionController extends BaseController
         ));
     }
 
+    public function deleteQuestionsAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $ids = $request->request->get('ids', array());
+        $questions = $this->getQuestionService()->findQuestionsByIds($ids);
+        if (empty($questions)) {
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+        }
+        $this->getQuestionService()->batchDeletes($ids);
+
+        return $this->createJsonResponse(true);
+    }
+
     protected function getQuestionConfig()
     {
         return $this->get('extension.manager')->getQuestionTypes();

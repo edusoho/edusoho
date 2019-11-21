@@ -35,3 +35,9 @@
     </div>
   </div>
 {% endblock %}
+
+{% block content %}
+  {% block question_category_modal %}
+    {% include 'question-bank/question/category-set-modal.html.twig' %}
+  {% endblock %}
+{% endblock %}

@@ -2,7 +2,7 @@
 <div id="category-table-body question-category-panel__list">
   <input class="js-category-choose" data-role="search-conditions" type="hidden" name="categoryId" value="">
   <div class="js-sortable-item question-category-panel__item text-overflow">
-    <a href="javascript:;" class="gray-darker js-all-category-search js-active-set">{{ 'my.teaching.question_bank.question.no_category'|trans }}</a>
+    <a href="javascript:;" class="gray-darker js-all-category-search js-active-set active">{{ 'my.teaching.question_bank.question.no_category'|trans }}</a>
   </div>
   {% if categories is not empty %}
     {{ _self.showCategoryTree(categories, false, 0) }}

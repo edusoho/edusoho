@@ -1622,6 +1622,8 @@ course.question_manage.import.rule: 导入规则说明
 course.question_manage.export_hint: (当前题目导出仅支持新模板)
 course.question_manage.export_btn: 导出题目
 
+course.testpaper_manage.transfer_text: 题目和试卷搬家啦，点击下方传送门前往查看全新题库。
+course.testpaper_manage.transfer_btn: 前往查看
 course.testpaper_manage: 课程试卷
 course.testpaper_manage.testpaper: 试卷
 course.testpaper_manage.content_title: 课程试卷
@@ -4345,6 +4347,8 @@ my.teaching.question_bank.question_category.create_hint: 可批量添加分类�
 my.teaching.question_bank.question_category.name_label: 分类名称
 my.teaching.question_bank.question.no_category: 未分类
 my.teaching.question_bank.question.all: 全部题目
+my.teaching.question_bank.question.set_category: 设置分类
+my.teaching.question_bank.question.selected: 已选
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程
