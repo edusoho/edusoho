@@ -70,7 +70,7 @@ class CourseSetDaoTest extends BaseDaoTestCase
         $count = 10;
 
         $startTime = time();
-        for ($i=0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $data = $this->getDefaultMockFields();
             $this->getDao()->create($data);
         }
