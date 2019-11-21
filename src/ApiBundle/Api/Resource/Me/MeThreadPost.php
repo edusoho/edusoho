@@ -54,7 +54,9 @@ class MeThreadPost extends AbstractResource
             $thread['notReadPostNum'] = isset($posts[$thread['id']]) ? count($posts[$thread['id']]) : 0;
         }
 
-        return $courseThreads;
+        $this->getOCUtil()->multiple($courseThreads, array('courseId'), 'course');
+
+        return $this->makePagingObject($courseThreads, $total, $offset, $limit);
     }
 
     protected function getCourseThreadService()
