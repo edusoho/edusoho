@@ -32,6 +32,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->batchDelete(array('bankId' => $bankId));
     }
 
+    public function findMembersByUserId($userId)
+    {
+        return $this->getMemberDao()->findByBankId($userId);
+    }
+
     public function batchCreateMembers($bankId, $userIds)
     {
         if (empty($userIds)) {

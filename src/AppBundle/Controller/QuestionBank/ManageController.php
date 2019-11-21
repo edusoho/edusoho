@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller\QuestionBank;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\QuestionBank\Service\CategoryService;
+use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -12,7 +14,19 @@ class ManageController extends BaseController
 {
     public function indexAction(Request $request, $category)
     {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
         $conditions = $request->query->all();
+
+        if (!$user->isSuperAdmin()) {
+            $members = $this->getMemberService()->findMembersByUserId($user->getId());
+            $questionBankIds = ArrayToolkit::column($members, 'bankId');
+            $conditions['ids'] = $questionBankIds ? $questionBankIds : array(-1);
+        }
 
         list($conditions, $categoryArray, $categoryParent) = $this->mergeConditionsByCategory($conditions, $category);
 
@@ -66,6 +80,14 @@ class ManageController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->createService('QuestionBank:MemberService');
     }
 
     /**

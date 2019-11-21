@@ -14,6 +14,11 @@ class MemberDaoImpl extends AdvancedDaoImpl implements MemberDao
         return $this->findByFields(array('bankId' => $bankId));
     }
 
+    public function findByUserId($userId)
+    {
+        return $this->findByFields(array('userId' => $userId));
+    }
+
     public function declares()
     {
         $declares['timestamps'] = array(
@@ -27,6 +32,7 @@ class MemberDaoImpl extends AdvancedDaoImpl implements MemberDao
         $declares['conditions'] = array(
             'id = :id',
             'bankId = :bankId',
+            'userId = :userId',
         );
 
         return $declares;

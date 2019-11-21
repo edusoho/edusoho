@@ -11,4 +11,6 @@ interface MemberService
     public function batchDeleteByBankId($bankId);
 
     public function batchCreateMembers($bankId, $userIds);
+
+    public function findMembersByUserId($userId);
 }
