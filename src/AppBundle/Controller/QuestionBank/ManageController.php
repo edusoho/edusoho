@@ -42,6 +42,7 @@ class ManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
         return $this->render('question-bank/list.html.twig', array(
             'category' => $category,
             'questionBanks' => $questionBanks,
