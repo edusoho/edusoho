@@ -64,20 +64,13 @@
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-plugin-eslint": "^3.12.0",
     "@vue/cli-plugin-unit-jest": "^3.12.0",
-    "@vue/cli-service": "^3.12.0",
     "vue-template-compiler": "^2.6.10",
-    "sass-loader": "^8.0.0",
     "script-ext-html-webpack-plugin": "^2.1.4",
-    "node-sass": "^4.12.0",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-es2015": "^7.0.0-beta.53",
-    "@vue/cli-plugin-babel": "^3.12.0",
-    "@vue/cli-plugin-eslint": "^3.12.0",
-    "@vue/cli-plugin-unit-jest": "^3.12.0",
     "@vue/cli-service": "^3.12.0",
     "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^10.0.1",
-    "babel-plugin-component": "^1.1.1"
+    "babel-eslint": "^10.0.1"
   },
   "devDependencies": {
     "@vue/eslint-config-prettier": "^5.0.0",
