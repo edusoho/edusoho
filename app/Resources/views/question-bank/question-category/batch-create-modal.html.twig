@@ -1,5 +1,7 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
+{% set modal_class = 'modal-ln' %}
+
 {% block title %}{{'my.teaching.question_bank.question_category.create'|trans}}{% endblock %}
 
 {% do script(['libs/jquery-validation.js', 'app/js/question-category/create/index.js']) %}
@@ -10,7 +12,7 @@
       <div class="form-group">
         <label class="col-md-2 control-label" for="category-names">{{'my.teaching.question_bank.question_category.name_label'|trans}}</label>
         <div class="col-md-8 controls">
-          <textarea id="category-names" name="categoryNames" class="form-control" rows="10" data-url=""></textarea>
+          <textarea id="category-names" name="categoryNames" class="form-control" rows="10" style="width: 460px"></textarea>
           <div class="help-block">{{ 'my.teaching.question_bank.question_category.create_hint'|trans }}</div>
         </div>
       </div>

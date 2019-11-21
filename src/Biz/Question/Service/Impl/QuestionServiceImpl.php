@@ -151,6 +151,29 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->batchCreate($questions);
     }
 
+    public function batchUpdateCategoryId($ids, $categoryId)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+
+        $updateFields = array();
+        foreach ($ids as $id) {
+            $updateFields[] = array('categoryId' => $categoryId);
+        }
+
+        return $this->batchUpdateQuestions($ids, $updateFields);
+    }
+
+    public function batchUpdateQuestions($ids, $fields)
+    {
+        if (empty($ids) || empty($fields)) {
+            return array();
+        }
+
+        return $this->getQuestionDao()->batchUpdate($ids, $fields, 'id');
+    }
+
     public function update($id, $fields)
     {
         $question = $this->get($id);

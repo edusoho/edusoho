@@ -16,15 +16,17 @@ jQuery.validator.addMethod('name_max', function (value, element) {
 
 jQuery.validator.addMethod('name_chinese_alphanumeric', function (value, element) {
   let alphanumericValidator = true;
+  let visibleValidator = true;
   let values = value.split('\n');
   let self = this;
-  values.map(function (string) {
-    alphanumericValidator = /^([\s]|[\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(string);
-    if (alphanumericValidator == false) {
-      return self.optional(element) || alphanumericValidator;
+  $.each(values, function (key, string) {
+    alphanumericValidator = /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(string);
+    visibleValidator = ($.trim(string).length > 0);
+    if (alphanumericValidator == false || visibleValidator == false) {
+      return self.optional(element) || (alphanumericValidator && visibleValidator);
     }
   });
-  return self.optional(element) || alphanumericValidator;
+  return self.optional(element) || (alphanumericValidator && visibleValidator);
 }, Translator.trans('question_bank.question_category.name_chinese_alphanumeric_message'));
 
 class CategoryCreate {
