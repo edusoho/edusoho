@@ -158,17 +158,20 @@ class DefaultController extends BaseController
 
     public function validateUpgradeAction(Request $request)
     {
+        $canUpgradeApps = $this->getAppService()->checkAppUpgrades();
         $backstageSetting = $this->getSettingService()->get('backstage', array());
         if (isset($backstageSetting['show_plugin_upgrade_notice']) && 0 == $backstageSetting['show_plugin_upgrade_notice']) {
             return $this->render('admin-v2/default/upgrade-notice.html.twig', array('notice' => false));
         }
 
-        $apps = $this->getAppService()->findAppsByTypes(array('theme', 'plugin'));
-        foreach ($apps as $app) {
-            $canSupportAdminV2 = $this->canSupportAdminV2($app['code'], $app['type']);
+        if (count($canUpgradeApps)) {
+            $apps = $this->getAppService()->findAppsByTypes(array('theme', 'plugin'));
+            foreach ($apps as $app) {
+                $canSupportAdminV2 = $this->canSupportAdminV2($app['code'], $app['type']);
 
-            if (!$canSupportAdminV2) {
-                return $this->render('admin-v2/default/upgrade-notice.html.twig', array('notice' => true));
+                if (!$canSupportAdminV2) {
+                    return $this->render('admin-v2/default/upgrade-notice.html.twig', array('notice' => true));
+                }
             }
         }
 
@@ -180,6 +183,7 @@ class DefaultController extends BaseController
 
     protected function canSupportAdminV2($appCode, $appType)
     {
+        $jsonFile = '';
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
         if ('plugin' == $appType) {
             $jsonFile = "{$rootDir}/../plugins/{$appCode}Plugin/plugin.json";
