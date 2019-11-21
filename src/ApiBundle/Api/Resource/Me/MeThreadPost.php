@@ -5,9 +5,13 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use ApiBundle\Api\Annotation\ResponseFilter;
 
 class MeThreadPost extends AbstractResource
 {
+    /**
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Course\CourseThreadFilter", mode="public")
+     */
     public function search(ApiRequest $request)
     {
         $currentUser = $this->getCurrentUser();
@@ -42,23 +46,15 @@ class MeThreadPost extends AbstractResource
             return array();
         }
 
-        // $courseIds = ArrayToolkit::column($courseThreads, 'courseId');
-        // $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        // $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
-
-        // foreach ($courses as $key => $course) {
-        //     $courses[$key]['courseSet'] = $courseSets[$course['courseSetId']];
-        // }
-
-        // $courses = $this->multicallFilter('Course', $courses);
         $posts = $this->getCourseThreadService()->searchThreadPosts(array('threadIds' => ArrayToolkit::column($courseThreads, 'id'), 'isRead' => 0, 'exceptedUserId' => $currentUser['id']), array(), 0, PHP_INT_MAX);
         $posts = ArrayToolkit::group($posts, 'threadId');
 
-        foreach ($courseThreads as $key => $thread) {
-            $thread['threadContent'] = convertAbsoluteUrl($thread['content']);
-            $thread['content'] = isset($threadPosts[$thread['id']]) ? convertAbsoluteUrl($threadPosts[$thread['id']]['content']) : '';
+        foreach ($courseThreads as &$thread) {
+            $thread['lastPost'] = isset($threadPosts[$thread['id']]) ? $threadPosts[$thread['id']] : array();
             $thread['notReadPostNum'] = isset($posts[$thread['id']]) ? count($posts[$thread['id']]) : 0;
         }
+
+        return $courseThreads;
     }
 
     protected function getCourseThreadService()
