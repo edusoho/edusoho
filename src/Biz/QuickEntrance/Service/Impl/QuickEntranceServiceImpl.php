@@ -52,14 +52,14 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
 
         $quickEntrances = array();
         foreach ($modules as $module) {
-            if (!isset($module['class'])) {
+            if (!isset($module['quick_entrance_icon_class'])) {
                 continue;
             }
 
             $quickEntrances[$module['code']] = array(
                 'data' => $this->getEntrancesArray($module, array(), $userEntranceCodes),
                 'title' => $this->trans($module['name'], array(), 'menu'),
-                'class' => isset($module['class']) ? $module['class'] : '',
+                'class' => $module['quick_entrance_icon_class'],
             );
         }
 
