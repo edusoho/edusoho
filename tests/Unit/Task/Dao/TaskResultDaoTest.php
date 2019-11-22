@@ -150,6 +150,13 @@ class TaskResultDaoTest extends BaseDaoTestCase
         $this->assertEquals(15, $learnedTime);
     }
 
+    public function testSumCourseSetLearnedTimeByTaskIds()
+    {
+        $taksResult = $this->mockTaskResult(array('activityId' => 1, 'courseTaskId' => 1, 'time' => 1, 'watchTime' => 1));
+        $result = $this->getDao()->sumCourseSetLearnedTimeByTaskIds(array(1));
+        $this->assertEquals(1, $result);
+    }
+
     public function testCountTaskNumGroupByUserId()
     {
         $taskResult1 = $this->mockTaskResult(array(

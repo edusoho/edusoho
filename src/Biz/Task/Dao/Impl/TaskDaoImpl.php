@@ -43,6 +43,11 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         ));
     }
 
+    public function findByCourseSetIds($courseSetIds)
+    {
+        return $this->findInField('fromCourseSetId', $courseSetIds);
+    }
+
     public function findByIds($ids)
     {
         return $this->findInField('id', $ids);
@@ -201,13 +206,6 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         $sql = "SELECT * FROM {$this->table()} WHERE copyId IN ({$copyIdMarks}) AND courseId IN ({$courseIdMarks})";
 
         return $this->db()->fetchAll($sql, $parmaters) ?: array();
-    }
-
-    public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
-    {
-        $sql = "select sum(`time`) from `course_task_result` where `courseTaskId` in (SELECT id FROM {$this->table()}  WHERE `fromCourseSetId`= ?)";
-
-        return $this->db()->fetchColumn($sql, array($courseSetId));
     }
 
     public function countLessonsWithMultipleTasks($courseId)
