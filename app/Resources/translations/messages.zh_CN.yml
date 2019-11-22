@@ -785,6 +785,8 @@ question.marker_question.add_practice_tips: >
   <p class="title">添加随堂练习，只需一步操作</p>
   <p class="text-md">将题目拖拽到<span class='color-warning'>「视频编辑区域」</p>
 question.marker_question.video_edit_block: 视频编辑区域
+question.marker_question.select_question_bank: --选择题库--
+question.marker_question.select_question_category: --选择分类--
 
 # 教学资料库
 material_lib: 教学资料库
