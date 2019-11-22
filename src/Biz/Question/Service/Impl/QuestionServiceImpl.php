@@ -52,6 +52,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
                 $this->waveCount($question['parentId'], array('subCount' => '1'));
             }
 
+            if (!empty($question['bankId'])) {
+                $this->getQuestionBankService()->waveQuestionNum($question['bankId'], 1);
+            }
+
             $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
 
             $this->commit();
@@ -239,6 +243,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         if ($question['subCount'] > 0) {
             $this->deleteSubQuestions($question['id']);
+        }
+
+        if (!empty($question['bankId'])) {
+            $this->getQuestionBankService()->waveQuestionNum($question['bankId'], -1);
         }
 
         $this->dispatchEvent('question.delete', new Event($question));
@@ -492,5 +500,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

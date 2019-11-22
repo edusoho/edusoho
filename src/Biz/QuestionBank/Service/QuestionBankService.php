@@ -17,4 +17,8 @@ interface QuestionBankService
     public function deleteQuestionBank($id);
 
     public function validateCanManageBank($bankId, $permission = 'admin_question_bank');
+
+    public function waveTestpaperNum($id, $diff);
+
+    public function waveQuestionNum($id, $diff);
 }

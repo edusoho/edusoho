@@ -3626,6 +3626,7 @@ my.teaching.question_bank.question.no_category: uncategorized
 my.teaching.question_bank.question.all: All Questions
 my.teaching.question_bank.question.set_category: Set Category
 my.teaching.question_bank.question.selected: selected Number
+my.teaching.question_bank.question.category_name: Name
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
@@ -4410,7 +4411,7 @@ admin.question_bank.category_manage.bank: Question Bank
 admin.question_bank.manage.name: Title
 admin.question_bank.manage.bank_content: Content
 admin.question_bank.manage.all_category: All Category
-my.teaching.question_bank.question.category_name: Name
+
 admin.question_bank.manage.category: Category
 admin.question_bank.manage.operate: Action
 admin.question_bank.manage.testpaper: Testpaper
