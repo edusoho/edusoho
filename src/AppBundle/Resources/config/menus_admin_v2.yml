@@ -4,7 +4,7 @@ admin_v2:
     children:
         # 教学模块
         admin_v2_teach:
-            class: 'icon-color-green'
+            quick_entrance_icon_class: 'icon-color-green'
             name: admin_v2.nav.teach
             children:
                 # 课程管理（group）
@@ -383,7 +383,7 @@ admin_v2:
                                     name: admin_v2.cloud.attachment_setting.basic_tab
         # 营销管理模块
         admin_v2_marketing:
-            class: 'icon-color-yellow'
+            quick_entrance_icon_class: 'icon-color-yellow'
             name: admin_v2.nav.marketing
             children:
                 # 营销管理
@@ -460,7 +460,7 @@ admin_v2:
                                     disable: true
         # 运营管理模块
         admin_v2_operating:
-            class: 'icon-color-yellow'
+            quick_entrance_icon_class: 'icon-color-yellow'
             name: admin_v2.nav.operating
             children:
                 # 网校装修(group)
@@ -677,7 +677,7 @@ admin_v2:
                                     disable: true
         # 用户管理模块
         admin_v2_user:
-            class: 'icon-color-blue'
+            quick_entrance_icon_class: 'icon-color-blue'
             name: admin_v2.nav.user
             children:
                 admin_v2_user_group:
@@ -837,7 +837,7 @@ admin_v2:
                                     disable: true
         # 交易模块
         admin_v2_trade:
-            class: 'icon-color-yellow'
+            quick_entrance_icon_class: 'icon-color-yellow'
             name: admin_v2.nav.trade
             children:
                 # 订单管理
@@ -932,7 +932,7 @@ admin_v2:
                                     router_name: admin_v2_data_statistics_index
         # 系统模块
         admin_v2_system:
-            class: 'icon-color-blue'
+            quick_entrance_icon_class: 'icon-color-blue'
             name: admin_v2.nav.system
             children:
                 # 通用管理
