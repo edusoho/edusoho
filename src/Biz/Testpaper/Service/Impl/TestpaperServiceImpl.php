@@ -137,7 +137,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function searchTestpaperCount($conditions)
     {
         $conditions = $this->filterConditions($conditions);
-        
+
         return $this->getTestpaperDao()->count($conditions);
     }
 

@@ -73,7 +73,7 @@ class TestpaperController extends BaseController
         $conditions = array(
             'bankId' => $questionBank['id'],
             'type' => 'testpaper',
-            'keyword' => $request->query->get('keyword', '')
+            'keyword' => $request->query->get('keyword', ''),
         );
 
         $paginator = new Paginator(
@@ -243,7 +243,7 @@ class TestpaperController extends BaseController
         return $this->createService('QuestionBank:QuestionBankService');
     }
 
-     /**
+    /**
      * @return TestpaperService
      */
     protected function getTestpaperService()
