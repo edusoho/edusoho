@@ -2,9 +2,9 @@
 
 namespace Biz\QuestionBank\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface MemberDao extends GeneralDaoInterface
+interface MemberDao extends AdvancedDaoInterface
 {
     public function findByBankId($bankId);
 

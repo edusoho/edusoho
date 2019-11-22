@@ -142,6 +142,11 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         }
     }
 
+    public function findAllQuestionBanks()
+    {
+        return $this->getQuestionBankDao()->findAll();
+    }
+
     public function validateCanManageBank($bankId, $permission = 'admin_question_bank')
     {
         $user = $this->getCurrentUser();

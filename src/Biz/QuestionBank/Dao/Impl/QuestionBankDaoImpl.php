@@ -31,4 +31,11 @@ class QuestionBankDaoImpl extends AdvancedDaoImpl implements QuestionBankDao
 
         return $declares;
     }
+
+    public function findAll()
+    {
+        $sql = "SELECT * FROM {$this->table()} ORDER BY `id` ASC";
+
+        return $this->db()->fetchAll($sql) ?: array();
+    }
 }
