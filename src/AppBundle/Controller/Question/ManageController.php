@@ -7,7 +7,6 @@ use Biz\Content\Service\FileService;
 use Biz\Question\QuestionException;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
@@ -32,66 +31,7 @@ class ManageController extends BaseController
             ));
         }
 
-        $conditions = $request->query->all();
-
-        $conditions['courseSetId'] = $courseSet['id'];
-        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
-
-        $parentQuestion = array();
-        $orderBy = array('createdTime' => 'DESC');
-        if ($conditions['parentId'] > 0) {
-            $parentQuestion = $this->getQuestionService()->get($conditions['parentId']);
-            $orderBy = array('createdTime' => 'ASC');
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getQuestionService()->searchCount($conditions),
-            10
-        );
-
-        $questions = $this->getQuestionService()->search(
-            $conditions,
-            $orderBy,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'updatedUserId'));
-
-        $taskIds = ArrayToolkit::column($questions, 'lessonId');
-        $courseTasks = $this->getTaskService()->findTasksByIds($taskIds);
-        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
-
-        $courseIds = ArrayToolkit::column($questions, 'courseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
-        $user = $this->getUser();
-        $searchCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
-        $showTasks = $this->getTaskService()->findTasksByCourseId($request->query->get('courseId', 0));
-        $showTasks = ArrayToolkit::index($showTasks, 'id');
-
         return $this->render('question-manage/index.html.twig', array(
-            'courseSet' => $courseSet,
-            'questions' => $questions,
-            'users' => $users,
-            'paginator' => $paginator,
-            'parentQuestion' => $parentQuestion,
-            'conditions' => $conditions,
-            'courseTasks' => $courseTasks,
-            'courses' => $courses,
-            'searchCourses' => $searchCourses,
-            'showTasks' => $showTasks,
-        ));
-    }
-
-    public function readAction(Request $request, $id)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-
-        return $this->forward('AppBundle:Question/QuestionParser:read', array(
-            'request' => $request,
-            'type' => 'question',
             'courseSet' => $courseSet,
         ));
     }
@@ -133,99 +73,6 @@ class ManageController extends BaseController
         );
 
         return new BinaryFileResponse($path, 200, $headers);
-    }
-
-    public function createAction(Request $request, $id, $type)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-
-        if ('POST' === $request->getMethod()) {
-            $data = $request->request->all();
-
-            $data['courseSetId'] = $courseSet['id'];
-
-            $question = $this->getQuestionService()->create($data);
-
-            if ('continue' === $data['submission']) {
-                $urlParams = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
-                $urlParams['type'] = $type;
-                $urlParams['id'] = $courseSet['id'];
-                $urlParams['goto'] = $request->query->get('goto', null);
-                $this->setFlashMessage('success', 'site.add.success');
-
-                return $this->redirect($this->generateUrl('course_set_manage_question_create', $urlParams));
-            }
-            if ('continue_sub' === $data['submission']) {
-                $this->setFlashMessage('success', 'site.add.success');
-
-                return $this->redirect(
-                    $request->query->get(
-                        'goto',
-                        $this->generateUrl(
-                            'course_set_manage_question',
-                            array('id' => $courseSet['id'], 'parentId' => $question['id'])
-                        )
-                    )
-                );
-            }
-
-            $this->setFlashMessage('success', 'site.add.success');
-
-            return $this->redirect(
-                $request->query->get(
-                    'goto',
-                    $this->generateUrl(
-                        'course_set_manage_question',
-                        array('id' => $courseSet['id'], 'parentId' => $question['parentId'])
-                    )
-                )
-            );
-        }
-
-        $questionConfig = $this->getQuestionConfig();
-        $createController = $questionConfig[$type]['actions']['create'];
-
-        return $this->forward($createController, array(
-            'request' => $request,
-            'courseSetId' => $courseSet['id'],
-            'type' => $type,
-        ));
-    }
-
-    public function updateAction(Request $request, $courseSetId, $questionId)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $question = $this->getQuestionService()->get($questionId);
-        if (!$question || $question['courseSetId'] != $courseSetId) {
-            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
-        }
-
-        if ('POST' === $request->getMethod()) {
-            $fields = $request->request->all();
-            $this->getQuestionService()->update($question['id'], $fields);
-
-            $this->setFlashMessage('success', 'site.save.success');
-
-            return $this->redirect(
-                $request->query->get(
-                    'goto',
-                    $this->generateUrl(
-                        'course_set_manage_question',
-                        array('id' => $courseSet['id'], 'parentId' => $question['parentId'])
-                    )
-                )
-            );
-        }
-
-        $questionConfig = $this->getQuestionConfig();
-        $createController = $questionConfig[$question['type']]['actions']['edit'];
-
-        return $this->forward($createController, array(
-            'request' => $request,
-            'courseSetId' => $courseSet['id'],
-            'questionId' => $question['id'],
-        ));
     }
 
     public function deleteAction(Request $request, $courseSetId, $questionId)
@@ -520,14 +367,6 @@ class ManageController extends BaseController
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
-    }
-
-    /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->createService('User:UserService');
     }
 
     /**

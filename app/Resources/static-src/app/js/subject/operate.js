@@ -5,7 +5,7 @@
     "type" : "", //required
     "options" : [], //required: choice、single_choice、uncertain_choice、determine
     "answer" : "", //required:  essay 
-    "answers" : [], //required: choice、single_choice、ncertain_choice、determine
+    "answers" : [], //required: choice、single_choice、uncertain_choice、determine
     "score" : 2.0,
     "missScore" : 1.0,
     "analysis" : "",
@@ -27,7 +27,6 @@ export default class QuestionOperate {
     this.questions = {};
     this.eventManager = {};
     this.tokenList = [];
-    this.$statList = $('.js-subject-data');
     this.$itemList = $('.js-item-list');
     this.questionCounts = {};
     this.totalScore = 0;
@@ -44,17 +43,16 @@ export default class QuestionOperate {
   //data-anchor和ID节点从0开始
   initQuestions() {
     let cachedData = this._toJson($('.js-cached-data').text());
-    for (var i = 0; i < cachedData.length; i++) {
+    for (let i = 0; i < cachedData.length; i++) {
       let token = this._getToken();
       let question = cachedData[i];
-      question['courseId'] = 0;
-      question['lessonId'] = 0;
+      question['categoryId'] = 0;
       this.questions[token] = question;
       this.tokenList.push(token);
       let index = i;
-      $(`[data-anchor="#${index}"]`).attr('data-anchor', '#' + token);
-      let $item = $('#' + index).attr('id', token);
-      if (question['type'] == 'material') {
+      $(`[data-anchor="#${index}"]`).attr('data-anchor', `#${token}`);
+      let $item = $(`#${index}`).attr('id', token);
+      if (question['type'] === 'material') {
         $.each(question['subQuestions'], function (key, subQuestion) {
           $item = $item.next(`[data-key="${key}"]`).attr('data-material-token', token);
         })
@@ -79,7 +77,7 @@ export default class QuestionOperate {
       let question = self.questions[token];
       self.questionCounts['total']++;
       self.questionCounts[question['type']]++;
-      if (question['type'] != 'material') {
+      if (question['type'] !== 'material') {
         self.totalScore = (parseFloat(self.totalScore) + parseFloat(question['score'])).toFixed(1);
       } else {
         $.each(question['subQuestions'], function(token, subQuestion) {
@@ -107,10 +105,10 @@ export default class QuestionOperate {
 
   modifyDifficulty(selectQuestion, difficulty, text) {
     let self = this;
-    $.each(selectQuestion, function(index, token){
-      if (typeof self.questions[token] != 'undefined') {
+    $.each(selectQuestion, function(index, token) {
+      if (typeof self.questions[token] !== 'undefined') {
         self.updateQuestionItem(token, 'difficulty', difficulty);
-        self.$itemList.find('#' + token).find('.js-difficulty').html(text);
+        self.$itemList.find(`#${token}`).find('.js-difficulty').html(text);
       }
     });
   }
@@ -122,7 +120,7 @@ export default class QuestionOperate {
       let question = self.getQuestion(token);
       self.updateQuestionItem(token, 'score', scoreObj['score'], false);
       if (isTestpaper) {
-        if (question['type'] == 'choice' || question['type'] == 'uncertain_choice') {
+        if (question['type'] === 'choice' || question['type'] === 'uncertain_choice') {
           self.updateQuestionItem(token, 'missScore', scoreObj['missScore']);
         }
       }
@@ -130,12 +128,11 @@ export default class QuestionOperate {
     self.trigger('updateQuestionScore');
   }
 
-  modifyBelong(selectQuestion, courseId, lessonId) {
+  modifyCategory(selectQuestion, categoryId) {
     let self = this;
-    $.each(selectQuestion, function(index, token){
-      if (typeof self.questions[token] != 'undefined') {
-        self.updateQuestionItem(token, 'courseId', courseId);
-        self.updateQuestionItem(token, 'lessonId', lessonId);
+    $.each(selectQuestion, function(index, token) {
+      if (typeof self.questions[token] !== 'undefined') {
+        self.updateQuestionItem(token, 'categoryId', categoryId);
       }
     });
   }
@@ -145,7 +142,7 @@ export default class QuestionOperate {
       return;
     }
     this.flag = true;
-    if (question['type'] == 'material') {
+    if (question['type'] === 'material') {
       question['subQuestions'] = [];
       question['score'] = 0;
     }
@@ -167,7 +164,6 @@ export default class QuestionOperate {
     if (!this.isUpdating()) {
       return;
     }
-    let self = this;
     this.flag = true;
     const question = this.questions[deleteToken];
     delete this.questions[deleteToken];
@@ -175,9 +171,10 @@ export default class QuestionOperate {
     this.tokenList.splice(position, 1);
     this.questionCounts['total']--;
     this.questionCounts[question['type']]--;
-    if (question['type'] != 'material') {
+    if (question['type'] !== 'material') {
       this.totalScore = (parseFloat(this.totalScore) - parseFloat(question['score'])).toFixed(1);
     } else {
+      let self = this;
       $.each(question['subQuestions'], function(token, subQuestion) {
         self.totalScore = (parseFloat(self.totalScore) - parseFloat(subQuestion['score'])).toFixed(1);
       })
@@ -193,11 +190,11 @@ export default class QuestionOperate {
     this.flag = true;
     let oldValue = this.questions[token][itemKey];
     this.questions[token][itemKey] = itemValue;
-    if (itemKey == 'score') {
+    if (itemKey === 'score') {
       this.totalScore = (this.totalScore - parseFloat(oldValue) + parseFloat(itemValue)).toFixed(1);
       this.trigger('updateQuestionScore', [isTrigger]);
     }
-    if (itemKey == 'type' && oldValue != itemValue) {
+    if (itemKey === 'type' && oldValue != itemValue) {
       this.questionCounts[oldValue]--;
       this.questionCounts[itemValue]++;
       this.trigger('updateQuestionType', [itemKey, itemValue, oldValue, token])
@@ -265,18 +262,18 @@ export default class QuestionOperate {
 
   correctQuestion(token) {
     let question = this.questions[token];
-    if (typeof question['errors'] == 'undefined') {
+    if (typeof question['errors'] === 'undefined') {
       return;
     }
 
-    if (question['type'] == 'material' && typeof question['errors']['hasSubError'] != 'undefined') {
-      question['errors'] = {"hasSubError" : true};
+    if (question['type'] === 'material' && typeof question['errors']['hasSubError'] !== 'undefined') {
+      question['errors'] = {'hasSubError' : true};
     } else {
       delete question['errors'];
     }
 
     this.questions[token] = question;
-    if (typeof question['errors'] == 'undefined') {
+    if (typeof question['errors'] === 'undefined') {
       this.trigger('correctQuestion', [token]);
     }
   }
@@ -285,7 +282,7 @@ export default class QuestionOperate {
     let material = this.questions[token];
     let subQuestion = material['subQuestions'][key];
 
-    if (typeof subQuestion['errors'] == 'undefined') {
+    if (typeof subQuestion['errors'] === 'undefined') {
       return;
     }
 
@@ -299,12 +296,12 @@ export default class QuestionOperate {
     let material = this.questions[token];
     let hasSubError = false;
     $.each(material['subQuestions'], function(index, sub) {
-      if (typeof sub['errors'] != 'undefined') {
+      if (typeof sub['errors'] !== 'undefined') {
         hasSubError = true;
       }
     });
 
-    if (!hasSubError && typeof material['errors'] != 'undefined') {
+    if (!hasSubError && typeof material['errors'] !== 'undefined') {
       delete material['errors']['hasSubError'];
     }
 
@@ -316,7 +313,7 @@ export default class QuestionOperate {
   }
 
   isUpdating() {
-    if (this.flag == true) {
+    if (this.flag === true) {
       cd.message({ type: 'danger', message: Translator.trans('course.question.is_updating_hint') });
       return false;
     }

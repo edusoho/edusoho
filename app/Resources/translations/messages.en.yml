@@ -1422,7 +1422,7 @@ course.question_manage.manage.answer: Answer
 course.question_manage.manage.refer_answer: 'Reference answer'
 course.question_manage.manage.true: Correct
 course.question_manage.manage.fault: Wrong
-course.question_manage.manage.belong: Subordinate
+course.question_manage.manage.category: Category
 course.question_manage.manage.default_belong: 'This course'
 course.question_manage.manage.choose: 'Please select'
 course.question_manage.manage.belong_tips: 'Can be for this course, a program or a learning task'
@@ -1513,7 +1513,7 @@ course.testpaper_manage.import.re_edit.select_type: Select question type
 course.testpaper_manage.import.re_edit.uncertain_choice: Uncertain Choice
 course.testpaper_manage.import.re_edit.question_statistics: Question Statistics
 course.testpaper_manage.import.re_edit.batch_set_difficulty: Set difficulty
-course.testpaper_manage.import.re_edit.batch_set_belong: Set Belong
+course.testpaper_manage.import.re_edit.batch_set_category: Set category
 course.testpaper_manage.import.re_edit.question_list: Question list
 course.testpaper_manage.import.re_edit.batch_operate: Batch Operate
 course.testpaper_manage.import.re_edit.select_all: Select All

@@ -630,14 +630,9 @@ class ManageController extends BaseController
         $isSub = $request->request->get('isSub', '0');
         $isTestpaper = $request->request->get('isTestpaper', 1);
         $method = $request->request->get('method', 'edit');
-        $courseSetId = $request->request->get('courseSetId', 0);
+        $questionBankId = $request->request->get('questionBankId', 0);
 
         $question = $this->filterQuestion($question);
-
-        $user = $this->getCurrentUser();
-        $courses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
-        $courseTasks = empty($question['courseId']) ? array() : $this->getTaskService()->findTasksByCourseId($question['courseId']);
-        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
 
         return $this->render("testpaper/subject/type/{$type}.html.twig", array(
             'question' => $question,
@@ -647,9 +642,7 @@ class ManageController extends BaseController
             'isSub' => $isSub,
             'isTestpaper' => $isTestpaper,
             'method' => $method,
-            'courses' => $courses,
-            'courseSetId' => $courseSetId,
-            'courseTasks' => $courseTasks,
+            'questionBankId' => $questionBankId,
         ));
     }
 
@@ -786,8 +779,7 @@ class ManageController extends BaseController
             'attachment',
             'subQuestions',
             'difficulty',
-            'courseId',
-            'lessonId',
+            'categoryId',
         ));
     }
 

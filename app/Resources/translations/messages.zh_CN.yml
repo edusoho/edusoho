@@ -1589,7 +1589,7 @@ course.question_manage.manage.answer: 答案
 course.question_manage.manage.refer_answer: 参考答案
 course.question_manage.manage.true: 正确
 course.question_manage.manage.fault: 错误
-course.question_manage.manage.belong: 从属
+course.question_manage.manage.category: 分类
 course.question_manage.manage.default_belong: 本课程
 course.question_manage.manage.choose: 请选择
 course.question_manage.manage.belong_tips: 可以针对本课程、某个教学计划或者某个学习活动出题
@@ -1689,7 +1689,7 @@ course.testpaper_manage.import.re_edit.select_type: 选择题型
 course.testpaper_manage.import.re_edit.uncertain_choice: 不定项
 course.testpaper_manage.import.re_edit.question_statistics: 题目统计
 course.testpaper_manage.import.re_edit.batch_set_difficulty: 设置难度
-course.testpaper_manage.import.re_edit.batch_set_belong: 设置从属
+course.testpaper_manage.import.re_edit.batch_set_category: 设置分类
 course.testpaper_manage.import.re_edit.question_list: 题目列表
 course.testpaper_manage.import.re_edit.batch_operate: 批量操作
 course.testpaper_manage.import.re_edit.select_all: 全选

@@ -124,9 +124,9 @@ class ActivityExtension extends \Twig_Extension
             ),
             'context' => $context,
             'editorConfig' => array(
-                'filebrowserImageUploadUrl' => $this->generateUrl('editor_upload', array('token' => $this->getWebExtension()->makeUpoadToken('course'))),
-                'filebrowserFlashUploadUrl' => $this->generateUrl('editor_upload', array('token' => $this->getWebExtension()->makeUpoadToken('course', 'flash'))),
-                'imageDownloadUrl' => $this->generateUrl('editor_download', array('token' => $this->getWebExtension()->makeUpoadToken('course'))),
+                'filebrowserImageUploadUrl' => $this->generateUrl('editor_upload', array('token' => $this->getWebExtension()->makeUploadToken('course'))),
+                'filebrowserFlashUploadUrl' => $this->generateUrl('editor_upload', array('token' => $this->getWebExtension()->makeUploadToken('course', 'flash'))),
+                'imageDownloadUrl' => $this->generateUrl('editor_download', array('token' => $this->getWebExtension()->makeUploadToken('course'))),
             ),
         ));
     }
