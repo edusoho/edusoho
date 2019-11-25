@@ -270,7 +270,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
             $testpaper = array(
                 'name' => $testpaperData['title'],
-                'questionBankId' => $data['questionBankId'],
+                'bankId' => $data['questionBankId'],
                 'metas' => $metas,
                 'pattern' => 'questionType',
                 'itemCount' => count($questions),
