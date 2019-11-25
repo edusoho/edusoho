@@ -2611,7 +2611,7 @@ classroom.price_tips: >
 classroom.amount: >
   相当于%price%
 classroom.picture_tips: >
-  请上传jpg, gif, png格式的图片, 建议图片尺寸为 525×350px。<br>建议图片大小不超过<strong>2MB</strong>。
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 540×304px。<br>建议图片大小不超过<strong>2MB</strong>。
 classroom.upload_picture_btn: 上传新图片
 classroom.commitment_service_label: 承诺提供服务
 classroom.activiy: 活动

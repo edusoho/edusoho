@@ -43,7 +43,7 @@
   {% set thirdLevelCategory = app.request.query.get('selectedthirdLevelCategory', '') %}
 
   {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'classroom'})) }}
-  
+
   <div class="es-filter">
     <ul class="nav nav-sort">
       <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'createdTime'}) }}" class="{% if (orderBy == 'createdTime') %} active {% endif %}">{{'site.datagrid.filter.latest'|trans}}</a></li>
