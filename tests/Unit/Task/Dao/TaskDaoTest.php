@@ -249,15 +249,6 @@ class TaskDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
     }
 
-    public function testSumCourseSetLearnedTimeByCourseSetId()
-    {
-        $field = array('activityId' => 1, 'courseTaskId' => 1, 'time' => 1, 'watchTime' => 1);
-        $taskResult = $this->getTaskResultDao()->create($field);
-        $expected = $this->mockDataObject();
-        $result = $this->getDao()->sumCourseSetLearnedTimeByCourseSetId(3);
-        $this->assertEquals(1, $result);
-    }
-
     public function testAnalysisTaskDataByTime()
     {
         $expected = $this->mockDataObject(array('createdTime' => 7000));
