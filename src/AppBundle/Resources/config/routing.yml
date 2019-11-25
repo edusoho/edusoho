@@ -3339,3 +3339,38 @@ question_bank_manage_question_set_category:
     path: /question_bank/{id}/questions/set_category
     defaults: { _controller: AppBundle:QuestionBank/Question:setCategory }
     methods: [POST]
+
+question_bank_manage_testpaper_list:
+    path: /question_bank/{id}/testpapers
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:index }
+
+question_bank_manage_testpaper_show_ajax:
+    path: /question_bank/{id}/testpaper/show/ajax
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:getTestpaperHtml }
+
+question_bank_manage_testpaper_batch_delete:
+    path: /question_bank/{id}/testpapers/delete
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:deleteTestpapers }
+    methods: [POST]
+
+question_bank_manage_testpaper_publish:
+    path: /question_bank/{id}/testpaper/{testpaperId}/publish
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:publish }
+    methods: [POST]
+
+question_bank_manage_testpaper_close:
+    path: /question_bank/{id}/testpaper/{testpaperId}/close
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:close }
+    methods: [POST]
+
+question_bank_manage_testpaper_preview:
+    path: /question_bank/{id}/testpaper/{testpaperId}/preview
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:preview }
+
+question_bank_manage_testpaper_delete:
+    path: /question_bank/{id}/testpaper/{testpaperId}/delete
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:delete }
+
+question_bank_manage_testpaper_export:
+    path: /question_bank/{id}/testpaper/{testpaperId}/export
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:export }

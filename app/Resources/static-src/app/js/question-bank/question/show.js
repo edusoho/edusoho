@@ -1,5 +1,5 @@
 import { toggleIcon } from 'app/common/widget/chapter-animate';
-import QuestionSelector from './selector';
+import Selector from '../common/selector';
 
 class QuestionsShow {
   constructor() {
@@ -7,7 +7,7 @@ class QuestionsShow {
     this.element = $('.js-question-container');
     this.categoryContainer = $('.js-category-content');
     this.categoryModal = $('.js-category-modal');
-    this.selector = new QuestionSelector($('.js-question-html'));
+    this.selector = new Selector($('.js-question-html'));
     this.init();
   }
   init() {

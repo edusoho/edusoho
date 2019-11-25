@@ -17,6 +17,7 @@
               <div class="col-md-9 controls pl0">
                 <select id="question_categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
                   <option value="0">{{'admin.question_bank.manage.category'|trans}}</option>
+                  <option value="0">{{'site.data.empty'|trans}}</option>
                   {% for tree in categoryTree %}
                     <option value={{ tree.id }}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
                   {% endfor %}
