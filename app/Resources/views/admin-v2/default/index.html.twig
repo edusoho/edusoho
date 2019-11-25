@@ -54,7 +54,7 @@
         </div>
 
         {# 应用推荐 #}
-        <div class="admin-v2-section cd-pb24 application-intro"
+        <div class="admin-v2-section cd-pb24 application-intro js-application-intro"
              {% if not is_without_network() %}data-url="{{ path('admin_v2_homepage_application_intro') }}" {% endif %}>
           <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.homepage.application_intro'|trans }}
             <a class="admin-v2-section__more js-no-network"
@@ -101,7 +101,7 @@
         {# 网校公告 #}
         <div class="admin-sidebar-section cd-pb16">
           <div class="admin-sidebar-section__header">{{ 'admin_v2.homepage.announcement_from_platform'|trans }}</div>
-          <div class="announcement-from-platform"{% if not is_without_network() %} data-url="{{ path('admin_v2_announcement_from_platform') }}"{% endif %}>
+          <div class="announcement-from-platform js-announcement"{% if not is_without_network() %} data-url="{{ path('admin_v2_announcement_from_platform') }}"{% endif %}>
             <div class="admin-notice">
               <img src="{{ asset('static-dist/app/img/admin-v2/announcement-from-platform.png') }}">
             </div>

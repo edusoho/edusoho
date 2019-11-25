@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 $('.js-show-toggle').on('click', (event) => {
   const $target = $(event.currentTarget);
   $('.js-steps').slideToggle();
-  const value = $('.js-toggle-text').text() === '收起' ? '展开': '收起';
+  const value = $('.js-toggle-text').text() === Translator.trans('site.data.collapse') ? Translator.trans('site.data.expand'): Translator.trans('site.data.collapse');
   $('.js-toggle-text').text(value);
   $target.find('i').toggleClass('es-icon-keyboardarrowup es-icon-keyboardarrowdown');
 });
@@ -59,7 +59,7 @@ const src = $('.js-mini-program').data('src');
 $('.js-mini-program').popover({
   trigger: 'hover',
   placement: 'bottom',
-  title: '扫码打开小程序',
+  title: Translator.trans('admin_v2.homepage.mini_program.title'),
   template: '<div class="popover mini-program-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
   html: true,
   content: `<img src="${src}" width="200px">`
@@ -67,67 +67,77 @@ $('.js-mini-program').popover({
 
 const loadFirst = () => {
   //六步任务助手
-  if ($('.js-steps').length) {
-    $.get($('.js-steps').data('url'), (html) => {
-      $('.js-steps').html(html);
+  const $stepsDom = $('.js-steps');
+  if ($stepsDom.length) {
+    $.get($stepsDom.data('url'), (html) => {
+      $stepsDom.html(html);
     });
   }
 
   // 数据概览
-  if ($('.js-data-overview').length) {
-    $.get($('.js-data-overview').data('url'), (html) => {
-      $('.js-data-overview').html(html);
+  const $overviewDom = $('.js-data-overview');
+  if ($overviewDom.length) {
+    $.get($overviewDom.data('url'), (html) => {
+      $overviewDom.html(html);
     });
   }
 
   // 快速入口
-  if ($('.js-quick-entrance').length) {
-    $.get($('.js-quick-entrance').data('url'), (html) => {
-      $('.js-quick-entrance').html(html);
+  const $entranceDom = $('.js-quick-entrance');
+  if ($entranceDom.length) {
+    $.get($entranceDom.data('url'), (html) => {
+      $entranceDom.html(html);
     });
   }
 
   //网校信息块
-  if ($('.js-admin-info').length && $('.js-admin-info').data('url')) {
-    $.get($('.js-admin-info').data('url'), (html) => {
-      $('.js-admin-info').html(html);
+  const $infoDom = $('.js-admin-info');
+  if ($infoDom.length && $infoDom.data('url')) {
+    $.get($infoDom.data('url'), (html) => {
+      $infoDom.html(html);
     });
   }
 
   // 站长公告
-  if ($('.announcement-from-platform').length && $('.announcement-from-platform').data('url')) {
-    $.get($('.announcement-from-platform').data('url'), (html) => {
-      $('.announcement-from-platform').html(html);
+  const $announcementDom = $('.js-announcement');
+  if ($announcementDom.length && $announcementDom.data('url')) {
+    $.get($announcementDom.data('url'), (html) => {
+      $announcementDom.html(html);
     });
   }
 };
 
+
 const loadSecond = () => {
   // 应用推荐
-  if ($('.application-intro').length && $('.application-intro').data('url')) {
-    $.get($('.application-intro').data('url'), (html) => {
-      $('.application-intro').html(html);
+  const $applicationDom = $('.application-intro');
+  if ($applicationDom.length && $applicationDom.data('url')) {
+    $.get($applicationDom.data('url'), (html) => {
+      $applicationDom.html(html);
     });
   }
 
   //经营建议
-  if ($('.js-admin-advice').length && $('.js-admin-advice').data('url')) {
-    $.get($('.js-admin-advice').data('url'), (html) => {
-      $('.js-admin-advice').html(html);
+  const $adviceDom = $('.js-admin-advice');
+  if ($adviceDom.length && $adviceDom.data('url')) {
+    $.get($adviceDom.data('url'), (html) => {
+      $adviceDom.html(html);
     });
   }
 
   //CHANGELOG
-  if ($('.js-admin-changelog').length && $('.js-admin-changelog').data('url')) {
-    $.get($('.js-admin-changelog').data('url'), (html) => {
-      $('.js-admin-changelog').html(html);
+  const $changelogDom = $('.js-admin-changelog');
+  if ($changelogDom.length && $changelogDom.data('url')) {
+    $.get($changelogDom.data('url'), (html) => {
+      $changelogDom.html(html);
     });
   }
 
   //QRCODE
-  if ($('.js-admin-qrcode').length && $('.js-admin-qrcode').data('url')) {
-    $.get($('.js-admin-qrcode').data('url'), (html) => {
-      $('.js-admin-qrcode').html(html);
+  const $qrcodeDom = $('.js-admin-qrcode');
+  if ($qrcodeDom.length && $qrcodeDom.data('url')) {
+    $.get($qrcodeDom.data('url'), (html) => {
+      $qrcodeDom.html(html);
     });
   }
 };

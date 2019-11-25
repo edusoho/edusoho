@@ -1494,6 +1494,7 @@ course.plan_task.lessons_publish_status: Published Lesson Number:%publishedNum%<
 #新后台
 admin_v2.user.cloude_sms_enable_hint: please go to【Admin】-【App Cente】-【Cloud service】-【Cloud Sms】open cloud sms first.
 admin_v2.homepage.quick_entrance.hint: Set up to 7 quick entries
+admin_v2.homepage.mini_program.title: Scan code to open the miniprogram
 admin.switch_old_version.permission_error: Please contact super administrator or administrator operation
 admin.switch_old_version.title: Toggle backstage
 admin.switch_old_version.confirm_message: 'After switching to the old background, all administrators will switch to the old background to confirm the switch?'

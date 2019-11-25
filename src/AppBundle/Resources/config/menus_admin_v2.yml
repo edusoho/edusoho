@@ -1113,7 +1113,7 @@ admin_v2:
         # 应用中心模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center
-            class: new-corner-mark
+            class: js-new-corner-mark
             children:
                 #营销云
                 admin_v2_basic_app_center_group:
@@ -1247,7 +1247,7 @@ admin_v2:
                         #数据实验室
                         admin_v2_cloud_data_lab_manage:
                             name: admin_v2.cloud.data_lab
-                            class: new-corner-mark
+                            class: js-new-corner-mark
                             visible: (cloudStatus())
                             children:
                                 admin_v2_cloud_data_lab:

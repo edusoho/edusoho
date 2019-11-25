@@ -4,7 +4,7 @@ const markNeedMarkedMenus = () => {
     localSetting = window.localStorage.getItem('markMenuList') ? window.localStorage.getItem('markMenuList') : '';
     localSetting = localSetting.split(',');
 
-    $('.new-corner-mark').each((index, item) => {
+    $('.js-new-corner-mark').each((index, item) => {
       if ($.inArray($(item).attr('id'), localSetting) < 0) {
         $(item).addClass('new');
       }
@@ -18,7 +18,7 @@ const clickEvent = () => {
     let localSetting = window.localStorage.getItem('markMenuList') ? window.localStorage.getItem('markMenuList') : '';
     localSetting = localSetting.split(',');
 
-    $('.new-corner-mark').on('click', () => {
+    $('.js-new-corner-mark').on('click', () => {
       let $self = $(event.currentTarget);
       if ($.inArray($self.attr('id'), localSetting) < 0) {
         localSetting.push($self.attr('id'));
