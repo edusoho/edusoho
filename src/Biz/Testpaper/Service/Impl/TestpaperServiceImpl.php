@@ -3,7 +3,6 @@
 namespace Biz\Testpaper\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Activity\Type\Testpaper;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\Testpaper\Dao\TestpaperDao;
@@ -270,10 +269,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
             $testpaper = array(
                 'name' => $testpaperData['title'],
-                'courseSetId' => $data['courseSetId'],
+                'bankId' => $data['questionBankId'],
                 'metas' => $metas,
                 'pattern' => 'questionType',
-                'courseId' => 0,
                 'itemCount' => count($questions),
                 'type' => 'testpaper',
                 'score' => $metas['totalScore'],

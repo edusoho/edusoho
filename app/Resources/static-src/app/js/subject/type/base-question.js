@@ -28,57 +28,16 @@ class BaseQuestion {
   }
 
   _initSelect() {
-    let courseSelect = cd.select({
-      el: '#courseEditBelong',
-      type: 'single',
-      parent: '.js-setting-item'
+    $('[name=categoryId]').select2({
+      treeview: true,
+      dropdownAutoWidth: true,
+      treeviewInitState: 'collapsed',
+      placeholderOption: 'first',
     });
+  }
 
-    let lessonSelect = cd.select({
-      el: '#lessonEditBelong',
-      type: 'single',
-      parent: '.js-setting-item'
-    });
-
-    courseSelect.on('change', (value, text) => {
-      let url = $('#courseEditBelong').data('url');
-      let select2 = $('.js-lessonSelect');
-      $('.js-lesson-edit-options').html('');
-      $('.js-lessonSelect').find('input[name="lessonId"]').val(0);
-      $('.js-lessonSelect').find('.select-value').text(Translator.trans('site.choose_hint'));
-      if (value == 0) {
-        select2.hide();
-        return;
-      }
-
-      $.post(url,{courseId:value},function(result){
-        if (result != '') {
-          let option = '<li class="checked" data-value="0">'+Translator.trans('site.choose_hint')+'</li>';
-          let $class = '';
-          $.each(result,function(index,task){
-            if(index == 0){
-              $class = 'tip-count-1';
-            }else{
-              $class = '';
-            }
-            option += `<li data-value="${task.id}" class="${$class}" title="${task.title}" data-toggle="tooltip" data-placement="top" >${task.title}</li>`;
-          });
-          $('.js-lesson-edit-options').append(option);
-          $('[data-toggle="tooltip"]').tooltip();
-          select2.show();
-        } else {
-          select2.hide();
-        }
-      });
-    });
-
-    $('#courseEditBelong').on('click', (value, text) => {
-      lessonSelect.clear();
-    });
-
-    $('#lessonEditBelong').on('click', (value, text) => {
-      courseSelect.clear();
-    });
+  _initTooltip() {
+    $('[data-toggle=tooltip]').tooltip();
   }
 
   submitForm(event) {
@@ -164,22 +123,23 @@ class BaseQuestion {
     let key = $('.js-edit-form-seq').text() - 1;
     let seq = 0;
     if (isSub == '1') {
-      token = self.updataCachedSubQuestion(token, key, question, method);
+      token = self.updateCachedSubQuestion(token, key, question, method);
       question = self.operate.getSubQuestion(token, key);
       seq = key + 1;
     } else {
-      token = self.updataCachedQuestion(token, question, method);
+      token = self.updateCachedQuestion(token, question, method);
       question = self.operate.getQuestion(token);
       seq = self.operate.getQuestionOrder(token);
     }
 
     this.analysisEditor.destroy();
-    $.post(self.$form.data('url'), {'seq': seq, 'question': question, 'token': token, 'isSub': isSub}, html=> {
+    $.post(self.$form.data('url'), {'seq': seq, 'question': question, 'token': token, 'isSub': isSub}, html => {
       self.$form.parent('.subject-item').replaceWith(html);
+      self._initTooltip();
     });
   }
 
-  updataCachedQuestion(token, question, method) {
+  updateCachedQuestion(token, question, method) {
     let self = this;
     if (method == 'add') {
       token = self.operate.addQuestion(token, question);
@@ -193,7 +153,7 @@ class BaseQuestion {
     return token;
   }
 
-  updataCachedSubQuestion(token, key, question, method) {
+  updateCachedSubQuestion(token, key, question, method) {
     let self = this;
     if (method == 'add') {
       token = self.operate.addSubQuestion(token, question);
@@ -288,12 +248,10 @@ class BaseQuestion {
 
     editor.on('change', () => {
       $target.val(editor.getData());
-      // validator.form();
       $input.val($(self.replacePicture(editor.getData())).text());
     });
     editor.on('blur', () => {
       $target.val(editor.getData());
-      // validator.form();
       $input.val($(self.replacePicture(editor.getData())).text());
     });
     editor.on('instanceReady', function() {

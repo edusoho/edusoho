@@ -124,7 +124,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('context_value', array($this, 'getContextValue')),
             new \Twig_SimpleFunction('is_feature_enabled', array($this, 'isFeatureEnabled')),
             new \Twig_SimpleFunction('parameter', array($this, 'getParameter')),
-            new \Twig_SimpleFunction('upload_token', array($this, 'makeUpoadToken')),
+            new \Twig_SimpleFunction('upload_token', array($this, 'makeUploadToken')),
             new \Twig_SimpleFunction('countdown_time', array($this, 'getCountdownTime')),
             //todo covertIP 要删除
             new \Twig_SimpleFunction('convertIP', array($this, 'getConvertIP')),
@@ -793,7 +793,7 @@ class WebExtension extends \Twig_Extension
         return $this->container->getParameter($name);
     }
 
-    public function makeUpoadToken($group, $type = 'image', $duration = 18000)
+    public function makeUploadToken($group, $type = 'image', $duration = 18000)
     {
         $maker = new UploadToken();
 
