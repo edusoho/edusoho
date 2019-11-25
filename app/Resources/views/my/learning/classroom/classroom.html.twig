@@ -19,7 +19,7 @@
   <div class="panel-body">
     <ul class="course-wide-list">
       {% for classroom in classrooms if classroom %}
-        <li class="my-course-item cd-mb16 clearfix">
+        <li class="my-course-item my-course-item--classroom cd-mb16 clearfix">
           <a class="my-course-item__link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
             <img class="my-course-item__picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
             {% if classroom.status == "draft" %}
