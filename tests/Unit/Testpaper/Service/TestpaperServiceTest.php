@@ -2033,13 +2033,13 @@ class TestpaperServiceTest extends BaseTestCase
         $token = array(
             'token' => 'testtoken',
             'data' => array(
-                'courseSetId' => 1,
+                'questionBankId' => 1,
             ),
         );
 
         $testpaper = $this->getTestpaperService()->importTestpaper($importData, $token);
         $this->assertEquals($importData['title'], $testpaper['name']);
-        $this->assertEquals($token['data']['courseSetId'], $testpaper['courseSetId']);
+        $this->assertEquals($token['data']['questionBankId'], $testpaper['bankId']);
     }
 
     protected function createHomework()

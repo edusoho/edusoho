@@ -3,7 +3,6 @@
 namespace Biz\Testpaper\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Activity\Type\Testpaper;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\Testpaper\Dao\TestpaperDao;
