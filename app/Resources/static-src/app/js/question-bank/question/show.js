@@ -36,8 +36,16 @@ class QuestionsShow {
       this.onDeleteQuestions(event);
     });
 
+    this.element.on('click','.js-delete-btn', (event) => {
+      this.onDeleteSingle(event);
+    });
+
     this.element.on('click', '.js-batch-set', (event) => {
       this.showCategoryModal(event);
+    });
+
+    this.element.on('click', '.js-export-btn', (event) => {
+      this.exportQuestions(event);
     });
 
     this.categoryModal.on('click', '.js-category-btn', (event) => {
@@ -63,6 +71,15 @@ class QuestionsShow {
       return;
     }
     this.categoryModal.modal('show');
+  }
+
+  exportQuestions(event) {
+    let $target = $(event.currentTarget);
+    let conditions = this.element.find('[data-role="search-conditions"]').serialize();
+    let url = $target.data('url');
+    $target.attr('href', url + '?' + conditions);
+    $target.trigger('click');
+    $target.attr('href', 'javascript:');
   }
 
   setCategory(event) {
@@ -105,6 +122,7 @@ class QuestionsShow {
     let $target = $(event.currentTarget);
     let name = $target.data('name');
     let ids = this.selector.toJson();
+    let content = '<br><div class="help-block">' + Translator.trans('course.question_manage.manage.delete_tips') + '</div>';
     if (ids.length == 0) {
       cd.message({type: 'danger', message: Translator.trans('site.data.uncheck_name_hint', {'name': name})});
       return;
@@ -112,11 +130,39 @@ class QuestionsShow {
 
     cd.confirm({
       title: Translator.trans('site.data.delete_title_hint', {'name': name}),
-      content: Translator.trans('site.data.delete_check_name_hint', {'name': name}),
+      content: Translator.trans('site.data.delete_check_name_hint', {'name': name}) + content,
       okText: Translator.trans('site.confirm'),
       cancelText: Translator.trans('site.close'),
     }).on('ok', () => {
       $.post($target.data('url'), {ids: ids}, function(response) {
+        if (response) {
+          cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
+          self._resetPage();
+          self.selector.resetItems();
+          self.renderTable();
+        } else {
+          cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') });
+        }
+      }).error(function(error) {
+        cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') });
+      });
+    });
+  }
+
+  onDeleteSingle(event) {
+    let $btn = $(event.currentTarget);
+
+    let name = $btn.data('name');
+    let self = this;
+    let content = '<br><div class="help-block">' + Translator.trans('course.question_manage.manage.delete_tips') + '</div>';
+
+    cd.confirm({
+      title: Translator.trans('site.data.delete_title_hint', {'name': name}),
+      content: Translator.trans('site.data.delete_name_hint', {'name': name}) + content,
+      okText: Translator.trans('site.confirm'),
+      cancelText: Translator.trans('site.close'),
+    }).on('ok', () => {
+      $.post($btn.data('url'), function (response) {
         if (response) {
           cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
           self._resetPage();

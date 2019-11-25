@@ -10,6 +10,8 @@ use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\QuestionBank\QuestionBankException;
 use AppBundle\Common\Paginator;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use ExamParser\Writer\WriteDocx;
 
 class QuestionController extends BaseController
 {
@@ -217,6 +219,21 @@ class QuestionController extends BaseController
         ));
     }
 
+    public function deleteAction(Request $request, $id, $questionId)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $question = $this->getQuestionService()->get($questionId);
+        if (!$question || $question['bankId'] != $id) {
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+        }
+        $this->getQuestionService()->delete($questionId);
+
+        return $this->createJsonResponse(true);
+    }
+
     public function deleteQuestionsAction(Request $request, $id)
     {
         if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
@@ -249,6 +266,131 @@ class QuestionController extends BaseController
         $this->getQuestionService()->batchUpdateCategoryId($ids, $categoryId);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function previewAction(Request $request, $id, $questionId)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $isNewWindow = $request->query->get('isNew');
+
+        $question = $this->getQuestionService()->get($questionId);
+
+        if (!$question || $question['bankId'] != $id) {
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+        }
+
+        if (!empty($question['matas']['mediaId'])) {
+            $questionTypeObj = $this->getQuestionService()->getQuestionConfig($question['type']);
+            $questionExtends = $questionTypeObj->get($question['matas']['mediaId']);
+            $question = array_merge_recursive($question, $questionExtends);
+        }
+
+        if ($question['subCount'] > 0) {
+            $questionSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+
+            $question['subs'] = $questionSubs;
+        }
+
+        $template = 'question-manage/preview-modal.html.twig';
+        if ($isNewWindow) {
+            $template = 'question-manage/preview.html.twig';
+        }
+
+        return $this->render($template, array(
+            'question' => $question,
+            'showAnswer' => 1,
+            'showAnalysis' => 1,
+        ));
+    }
+
+    public function exportAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $fields = $request->query->all();
+
+        $conditions = ArrayToolkit::parts($fields, array('type', 'keyword', 'categoryId', 'difficulty'));
+        $conditions['bankId'] = $id;
+        $conditions['parentId'] = 0;
+
+        $questionCount = $this->getQuestionService()->searchCount($conditions);
+
+        $questions = $this->getQuestionService()->search(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            0,
+            $questionCount
+        );
+
+        if (empty($questions)) {
+            return $this->createMessageResponse('info', '导出题目为空', null, 3000, $this->generateUrl('course_set_manage_question', array('id' => $id)));
+        }
+
+        $questions = $this->buildExportQuestions($questions);
+
+        $fileName = str_replace(',', '', $questionBank['name']).'-题目.docx';
+        $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
+        $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
+
+        $writer = new WriteDocx($path);
+        $writer->write($questions);
+
+        $headers = array(
+            'Content-Type' => 'application/msword',
+            'Content-Disposition' => 'attachment; filename='.$fileName,
+        );
+
+        return new BinaryFileResponse($path, 200, $headers);
+    }
+
+    protected function buildExportQuestions($questions)
+    {
+        $exportQuestions = array();
+        $wrapper = $this->getWrapper();
+
+        $seq = 1;
+        $num = 1;
+        foreach ($questions as $question) {
+            $question['seq'] = $seq++;
+            $question['num'] = $num++;
+            if ('material' == $question['type']) {
+                $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+                $subSeq = 1;
+                foreach ($subQuestions as $index => $subQuestion) {
+                    $subQuestions[$index]['seq'] = $subSeq++;
+                }
+                $question['subs'] = $subQuestions;
+            }
+
+            $question = $wrapper->handle($question, 'exportQuestion');
+            $question = ArrayToolkit::parts($question, array(
+                'type',
+                'seq',
+                'stem',
+                'options',
+                'answer',
+                'score',
+                'difficulty',
+                'analysis',
+                'subs',
+                'num',
+            ));
+            $exportQuestions[] = $question;
+        }
+
+        return $exportQuestions;
+    }
+
+    protected function getWrapper()
+    {
+        global $kernel;
+
+        return $kernel->getContainer()->get('web.wrapper');
     }
 
     protected function getQuestionConfig()
