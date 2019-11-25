@@ -27,6 +27,7 @@
 
 .user-dropdown-info__avatar {
   display: inline-block;
+  position: relative;
 }
 
 .user-dropdown-profile {
@@ -44,12 +45,19 @@
     vertical-align: text-top;
   }
 }
+.user-center-avatar {
+  .user-dropdown-profile__vip-icon {
+    right: -6px;
+    bottom: -4px;
+  }
+}
 
 .user-dropdown-profile__vip-icon {
-  width: 16px;
-  height: 16px;
-  vertical-align: unset;
-  .cd-border-radius(50%);
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  width: 30%;
+  height: 30%;
 }
 
 .user-dropdown-profile__rank {

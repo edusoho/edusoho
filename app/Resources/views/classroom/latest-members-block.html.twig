@@ -10,7 +10,11 @@
           {% set user = users[student.userId] %}
           {% if loop.index < 16%}
             <li>
-              {{ web_macro.user_avatar(user, '', 'avatar-sm', true) }}
+              <a class="user-dropdown-info__avatar js-user-card" href="{{ path('user_show', {'id': user.id}) }}" data-card-url="{{ path('user_card_show', {userId: user.id}) }}"
+                data-user-id="{{ user.id }}" data-original-title="" title="">
+                <img class="avatar-sm" src="{{ avatar_path(user, 'small') }}">
+                {{ slot('header.user.logo', {user: user}) }}
+              </a>
             </li>
           {% endif %}
         {% endfor %}
