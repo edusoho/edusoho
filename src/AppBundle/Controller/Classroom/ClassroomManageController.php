@@ -817,7 +817,7 @@ class ClassroomManageController extends BaseController
         }
 
         $fileId = $request->getSession()->get('fileId');
-        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 525, 350);
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 540, 304);
 
         return $this->render(
             'classroom-manage/picture-crop.html.twig',
