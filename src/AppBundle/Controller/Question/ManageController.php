@@ -5,14 +5,14 @@ namespace AppBundle\Controller\Question;
 use AppBundle\Common\Paginator;
 use Biz\Content\Service\FileService;
 use Biz\Question\QuestionException;
+use Biz\QuestionBank\QuestionBankException;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
-use ExamParser\Writer\WriteDocx;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,76 +34,6 @@ class ManageController extends BaseController
         return $this->render('question-manage/index.html.twig', array(
             'courseSet' => $courseSet,
         ));
-    }
-
-    public function exportAction(Request $request, $id)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-        $fields = $request->query->all();
-
-        $conditions = ArrayToolkit::parts($fields, array('type', 'courseId', 'keyword', 'lessonId'));
-        $conditions['courseSetId'] = $courseSet['id'];
-        $conditions['parentId'] = 0;
-
-        $questionCount = $this->getQuestionService()->searchCount($conditions);
-
-        $questions = $this->getQuestionService()->search(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            0,
-            $questionCount
-        );
-
-        if (empty($questions)) {
-            return $this->createMessageResponse('info', '导出题目为空', null, 3000, $this->generateUrl('course_set_manage_question', array('id' => $id)));
-        }
-
-        $questions = $this->buildExportQuestions($questions);
-
-        $fileName = str_replace(',', '', $courseSet['title']).'-题目.docx';
-        $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
-        $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
-
-        $writer = new WriteDocx($path);
-        $writer->write($questions);
-
-        $headers = array(
-            'Content-Type' => 'application/msword',
-            'Content-Disposition' => 'attachment; filename='.$fileName,
-        );
-
-        return new BinaryFileResponse($path, 200, $headers);
-    }
-
-    public function deleteAction(Request $request, $courseSetId, $questionId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-        $question = $this->getQuestionService()->get($questionId);
-        if (!$question || $question['courseSetId'] != $courseSetId) {
-            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
-        }
-        $this->getQuestionService()->delete($questionId);
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function deletesAction(Request $request, $courseSetId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $ids = $request->request->get('ids', array());
-        $questions = $this->getQuestionService()->findQuestionsByIds($ids);
-        if (empty($questions)) {
-            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
-        }
-        foreach ($questions as $question) {
-            if ($question['courseSetId'] != $courseSetId) {
-                $this->createNewException(QuestionException::NOTFOUND_QUESTION());
-            }
-        }
-        $this->getQuestionService()->batchDeletes($ids);
-
-        return $this->createJsonResponse(true);
     }
 
     public function previewAction(Request $request, $courseSetId, $questionId)
@@ -276,7 +206,9 @@ class ManageController extends BaseController
     {
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         $data = $token['data'];
-        $this->getCourseSetService()->tryManageCourseSet($data['courseSetId']);
+        if (!$this->getQuestionBankService()->validateCanManageBank($data['questionBankId'])) {
+            $this->createNewException(QuestionBankException::FORBIDDEN_MANAGE_BANK());
+        }
         $content = $request->getContent();
         $postData = json_decode($content, true);
         $this->getQuestionService()->importQuestions($postData['questions'], $token);
@@ -399,5 +331,13 @@ class ManageController extends BaseController
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

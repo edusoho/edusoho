@@ -1,3 +1,4 @@
+import { plainText } from 'common/utils';
 /*
 题目对象：
 {
@@ -128,11 +129,13 @@ export default class QuestionOperate {
     self.trigger('updateQuestionScore');
   }
 
-  modifyCategory(selectQuestion, categoryId) {
+  modifyCategory(selectQuestion, categoryId, categoryText) {
     let self = this;
     $.each(selectQuestion, function(index, token) {
       if (typeof self.questions[token] !== 'undefined') {
         self.updateQuestionItem(token, 'categoryId', categoryId);
+        self.$itemList.find(`#${token}`).find('.js-category').html(plainText(categoryText, 8));
+        self.$itemList.find(`#${token}`).find('.js-category').attr('data-original-title', categoryText);
       }
     });
   }

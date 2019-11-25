@@ -2,9 +2,10 @@
 
 namespace AppBundle\Controller\Testpaper;
 
-use ExamParser\Writer\WriteDocx;
+use Biz\Question\Service\CategoryService;
+use Biz\QuestionBank\QuestionBankException;
+use Biz\QuestionBank\Service\QuestionBankService;
 use http\Exception\InvalidArgumentException;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
@@ -33,85 +34,8 @@ class ManageController extends BaseController
             ));
         }
 
-        $conditions = array(
-            'courseSetId' => $courseSet['id'],
-            'type' => 'testpaper',
-        );
-
-        if ($courseSet['parentId'] > 0 && $courseSet['locked']) {
-            $conditions['copyIdGT'] = 0;
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getTestpaperService()->searchTestpaperCount($conditions),
-            10
-        );
-
-        $testpapers = $this->getTestpaperService()->searchTestpapers(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $userIds = ArrayToolkit::column($testpapers, 'updatedUserId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByMediaIds(ArrayToolkit::column($testpapers, 'id'));
-
         return $this->render('testpaper/manage/index.html.twig', array(
             'courseSet' => $courseSet,
-            'testpapers' => $testpapers,
-            'users' => $users,
-            'paginator' => $paginator,
-            'testpaperActivities' => $testpaperActivities,
-        ));
-    }
-
-    public function createAction(Request $request, $id)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-
-        if ('POST' === $request->getMethod()) {
-            $fields = $request->request->all();
-
-            $fields['courseSetId'] = $courseSet['id'];
-            $fields['courseId'] = 0;
-            $fields['pattern'] = 'questionType';
-
-            $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'testpaper');
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'course_set_manage_testpaper_questions',
-                    array('courseSetId' => $courseSet['id'], 'testpaperId' => $testpaper['id'])
-                )
-            );
-        }
-
-        $types = $this->getQuestionTypes();
-
-        $conditions = array(
-            'types' => array_keys($types),
-            'courseSetId' => $courseSet['id'],
-            'parentId' => 0,
-        );
-
-        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
-        $questionNums = ArrayToolkit::index($questionNums, 'type');
-
-        $user = $this->getUser();
-        $ranges = $this->getTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
-
-        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
-
-        return $this->render('testpaper/manage/create.html.twig', array(
-            'courseSet' => $courseSet,
-            'ranges' => $ranges,
-            'types' => $types,
-            'questionNums' => $questionNums,
-            'courses' => $manageCourses,
         ));
     }
 
@@ -124,33 +48,6 @@ class ManageController extends BaseController
             'type' => 'testpaper',
             'courseSet' => $courseSet,
         ));
-    }
-
-    public function exportAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
-        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            return $this->createMessageResponse('error', 'testpaper not found');
-        }
-
-        $questions = $this->getTestpaperService()->buildExportTestpaperItems($testpaperId);
-
-        $fileName = $testpaper['name'].'.docx';
-        $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
-        $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
-
-        $writer = new WriteDocx($path);
-        $writer->write($questions);
-
-        $headers = array(
-            'Content-Type' => 'application/msword',
-            'Content-Disposition' => 'attachment; filename='.$fileName,
-        );
-
-        return new BinaryFileResponse($path, 200, $headers);
     }
 
     public function checkListAction(Request $request, $targetId, $targetType, $type)
@@ -344,82 +241,6 @@ class ManageController extends BaseController
         return $this->render('testpaper/manage/update.html.twig', array(
             'courseSet' => $courseSet,
             'testpaper' => $testpaper,
-        ));
-    }
-
-    public function deleteAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
-        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            return $this->createMessageResponse('error', 'testpaper not found');
-        }
-
-        $this->getTestpaperService()->deleteTestpaper($testpaperId);
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function deletesAction(Request $request, $courseSetId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $ids = $request->request->get('ids');
-
-        $testpapers = $this->getTestpaperService()->findTestpapersByIds($ids);
-        if (!empty($testpapers)) {
-            foreach ($testpapers as $testpaper) {
-                if ($testpaper['courseSetId'] != $courseSetId) {
-                    return $this->createMessageResponse('error', 'testpaper not found');
-                }
-            }
-            $this->getTestpaperService()->deleteTestpapers($ids);
-
-            return $this->createJsonResponse(true);
-        }
-
-        return $this->createMessageResponse('error', 'testpaper not found');
-    }
-
-    public function publishAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
-        }
-
-        $testpaper = $this->getTestpaperService()->publishTestpaper($testpaperId);
-
-        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
-
-        return $this->render('testpaper/manage/testpaper-list-tr.html.twig', array(
-            'testpaper' => $testpaper,
-            'user' => $user,
-            'courseSet' => $courseSet,
-        ));
-    }
-
-    public function closeAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
-        }
-
-        $testpaper = $this->getTestpaperService()->closeTestpaper($testpaperId);
-
-        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
-
-        return $this->render('testpaper/manage/testpaper-list-tr.html.twig', array(
-            'testpaper' => $testpaper,
-            'user' => $user,
-            'courseSet' => $courseSet,
         ));
     }
 
@@ -718,6 +539,7 @@ class ManageController extends BaseController
         $isSub = $request->request->get('isSub', '0');
 
         $question = $this->filterQuestion($question);
+        $question = $this->wrapQuestion($question);
 
         if ('fill' == $type) {
             $question['stemShow'] = preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $question['stem']);
@@ -747,7 +569,9 @@ class ManageController extends BaseController
         $testpaper = json_decode($content, true);
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         $data = $token['data'];
-        $this->getCourseSetService()->tryManageCourseSet($data['courseSetId']);
+        if (!$this->getQuestionBankService()->validateCanManageBank($data['questionBankId'])) {
+            $this->createNewException(QuestionBankException::FORBIDDEN_MANAGE_BANK());
+        }
         $this->getTestpaperService()->importTestpaper($testpaper, $token);
 
         return $this->createJsonResponse(true);
@@ -761,6 +585,16 @@ class ManageController extends BaseController
             'type' => $type,
             'order' => $field['order'],
         ));
+    }
+
+    protected function wrapQuestion($question)
+    {
+        if (!empty($question['categoryId'])) {
+            $category = $this->getQuestionCategoryService()->getCategory($question['categoryId']);
+            $question['category'] = empty($category) ? array() : $category;
+        }
+
+        return $question;
     }
 
     protected function filterQuestion($question)
@@ -1020,6 +854,14 @@ class ManageController extends BaseController
         return $this->createService('Question:QuestionService');
     }
 
+    /**
+     * @return CategoryService
+     */
+    protected function getQuestionCategoryService()
+    {
+        return $this->createService('Question:CategoryService');
+    }
+
     protected function getQuestionAnalysisService()
     {
         return $this->createService('Question:QuestionAnalysisService');
@@ -1065,5 +907,13 @@ class ManageController extends BaseController
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

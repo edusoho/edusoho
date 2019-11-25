@@ -38,6 +38,7 @@ export default class sbList {
     this.statErrorQuestions();
     this.ieImg();
     this.initSelect();
+    this.initTooltip();
   }
 
   initQuestionOperate() {
@@ -69,14 +70,16 @@ export default class sbList {
   }
 
   initSelect() {
-    $('[data-toggle="tooltip"]').tooltip();
-
     $('[name=categoryId]').select2({
       treeview: true,
       dropdownAutoWidth: true,
       treeviewInitState: 'collapsed',
       placeholderOption: 'first',
     });
+  }
+
+  initTooltip() {
+    $('[data-toggle=tooltip]').tooltip();
   }
 
   confirmFresh() {
@@ -369,7 +372,8 @@ export default class sbList {
 
   batchSetCategory() {
     let categoryId = this.$categoryModal.find('#categoryId').val();
-    this.questionOperate.modifyCategory(this.selectQuestion, categoryId);
+    let categoryText = this.$categoryModal.find('#categoryId').find('option:selected').text();
+    this.questionOperate.modifyCategory(this.selectQuestion, categoryId, $.trim(categoryText));
     this.selectQuestion = [];
 
     cd.message({ type: 'success', message: Translator.trans('subject.category_update_success') });
@@ -378,7 +382,7 @@ export default class sbList {
 
   setDifficulty() {
     let self = this;
-    $('.js-difficulty-btn').click(function(){
+    $('.js-difficulty-btn').click(function() {
       let difficulty = $('input[name=\'difficultyRadios\']:checked').val();
       let text = $('input[name=\'difficultyRadios\']:checked').next().text();
       self.questionOperate.modifyDifficulty(self.selectQuestion, difficulty, text);
@@ -744,10 +748,7 @@ export default class sbList {
       return;
     }
 
-    let title = '';
-    if (this.isTestpaper()) {
-      title = this.testpaperTitle;
-    }
+    let title = this.isTestpaper() ? this.testpaperTitle : '';
     const $target = $(event.currentTarget);
     $target.button('loading');
     $.ajax({

@@ -8850,6 +8850,7 @@ exception.task_result.not_found: Learning task results do not exist
 exception.discovery_column.not_found: Discovery column does not exist
 exception.question_bank.forbidden_delete_category: There is a question bank under the classification or sub-category and cannot be deleted
 exception.question_bank.not_found_bank: Bank does not exist
+exception.question_bank.forbidden_manage_bank: Forbidden manage this bank
 exception.educloud.user_disabled_hint: The education cloud has been banned, and the payment system is automatically lifted. Tutorial <a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">See here</a>
 exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed
@@ -9171,3 +9172,7 @@ question_bank.question_manage.manage.analysis: Analysis
 question_bank.question_manage.manage.advanced_options: 'Show / Hide advanced options'
 question_bank.question_manage.manage.stem_tips: "Click the button <span style=\"color:red\">[ ]</span>  to insert a blank. You can also input manually, for example “This year is [[2014]]”, the answer is “2014”\n"
 question_bank.question_manage.manage.material: Material
+
+question_reedit.select_question_category: --Select category--
+question_reedit.category_text: Category
+question_reedit.category_empty: None
