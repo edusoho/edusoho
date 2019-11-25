@@ -1,13 +1,13 @@
 .my-course-item {
-  padding: 40px;
+  padding: 8px 24px 8px 8px;
+  border: 1px solid #eee;
   @media (max-width: @screen-xs-min) {
     padding: 12px;
   }
-  .cd-box-shadow;
 
   .my-course-item__link {
     position: relative;
-    margin-right: 40px;
+    margin-right: 24px;
     float: left;
     @media (min-width: @screen-sm-min) and (max-width: @screen-md-max) {
       margin-right: 12px;
@@ -26,16 +26,19 @@
   }
 
   .my-course-item__picture {
-    width: 192px;
+    width: 227px;
     @media (max-width: @screen-xs-max) {
       width: 100%;
     }
   }
 
   .my-course-item__info {
-    margin-top: 16px;
     float: left;
+    margin-top: 8px;
     width: 45%;
+    @media (min-width: @screen-md-max) {
+      width: 54%;
+    }
     @media (max-width: @screen-xs-max) {
       margin-top: 24px;
       width: 100%;
@@ -43,8 +46,8 @@
   }
 
   .my-course-item__title {
-    font-size: 18px;
-    line-height: 1;
+    font-size: 20px;
+    line-height: 28px;
   }
 
   .my-course-item__status {
@@ -58,16 +61,31 @@
 
   .my-course-item__classroom {
     margin-top: 8px;
-    font-size: 12px;
+    font-size: 16px;
     line-height: 1;
-    color: @cd-dark-minor;
+    color: @cd-dark-assist;
   }
 
   .my-course-item__progress {
-    font-size: 12px;
+    @media (min-width: @screen-md-max) {
+      font-size: 16px;
+    }
     color: @cd-dark-minor;
+    .progress-text {
+      font-size: 16px !important;
+      color: @gray;
+    }
+    .progress-bar {
+      width: 96%;
+    }
+    .progress-outer {
+      width: 96%;
+    }
     .my-course-item__progress__text {
       float: left;
+      @media (min-width: @screen-md-max) {
+        width: 16%;
+      }
       width: 20%;
     }
     .cd-progress {
@@ -76,12 +94,15 @@
       margin-bottom: 0;
     }
     .progress-text {
-      width: 32px;
+      @media (min-width: @screen-md-max) {
+        width: 48px;
+      }
+      width: 42px;
     }
   }
 
   .my-course-item__btn {
-    margin-top: 34px;
+    margin-top: 48px;
     float: right;
     @media (max-width: @screen-xs-max) {
       margin-top: 24px;
@@ -107,3 +128,12 @@
   }
 }
 
+
+.course-favoriate-panel {
+  .my-course-item__title {
+    margin-top: 16px;
+  }
+  .my-course-item__status {
+    margin-top: 20px;
+  }
+}
