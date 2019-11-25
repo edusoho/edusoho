@@ -1,8 +1,9 @@
 <div class="user-center-header" data-href="{{ filepath(user.largeAvatar, 'avatar.png') }}" data-sharpness="40">
   <div class="container clearfix">
     <div class="user-avatar">
-      <div class="avatar-wrap">
+      <div class="avatar-wrap user-dropdown-info__avatar user-center-avatar">
         <img class="avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+        {{ slot('header.user.logo', {user: app.user}) }}
       </div>
       <div class="name">
         {{user.nickname}}
