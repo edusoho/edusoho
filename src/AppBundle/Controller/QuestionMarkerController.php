@@ -286,7 +286,7 @@ class QuestionMarkerController extends BaseController
         } else {
             $members = $this->getMemberService()->findMembersByUserId($user->getId());
             $questionBankIds = ArrayToolkit::column($members, 'bankId');
-            $conditions['ids'] = $questionBankIds ? : array(-1);
+            $conditions['ids'] = $questionBankIds ?: array(-1);
             $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(
                 $conditions,
                 array('createdTime' => 'DESC'),

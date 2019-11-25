@@ -29,7 +29,7 @@ class TestpaperShow {
     });
 
     this.element.on('click','.js-delete-btn', (event) => {
-      this.ondDeleteSingle(event);
+      this.onDeleteSingle(event);
     });
   }
 
@@ -64,7 +64,7 @@ class TestpaperShow {
     });
   }
 
-  ondDeleteSingle(event) {
+  onDeleteSingle(event) {
     let self = this;
     let $target = $(event.currentTarget);
     let name = $target.data('name');
