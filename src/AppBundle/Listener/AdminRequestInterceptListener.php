@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class AdminV2KernelRequestListener
+class AdminRequestInterceptListener
 {
     /**
      * @var ContainerInterface
@@ -25,31 +25,42 @@ class AdminV2KernelRequestListener
         if (HttpKernelInterface::MASTER_REQUEST != $event->getRequestType()) {
             return;
         }
+        $path = $request->getPathInfo();
 
-        preg_match('/^\/admin\//', $request->getPathInfo(), $adminMatches);
-
-        if (empty($adminMatches)) {
+        if (!$this->isAdminPath($path)) {
             return true;
         }
 
-        preg_match('/^\/admin\/v2\//', $request->getPathInfo(), $adminV2Matches);
-
-        $settingService = $this->getSettingService();
-        $backstageSetting = $settingService->get('backstage', array('is_v2' => 0));
-
-        //新后台进入老后台路由
-        if ($backstageSetting['is_v2'] && empty($adminV2Matches)) {
-            $goto = $this->container->get('router')->generate('admin_v2');
-            $response = new RedirectResponse($goto, '302');
+        if (!$this->isPathMatchSetting($path)) {
+            $routing = $this->isAdminV2Setting() ? 'admin_v2' : 'admin';
+            $url = $this->container->get('router')->generate($routing);
+            $response = new RedirectResponse($url, '302');
             $event->setResponse($response);
         }
 
-        //老后台进入新后台路由
-        if (!$backstageSetting['is_v2'] && !empty($adminV2Matches)) {
-            $goto = $this->container->get('router')->generate('admin');
-            $response = new RedirectResponse($goto, '302');
-            $event->setResponse($response);
-        }
+        return true;
+    }
+
+    protected function isPathMatchSetting($path)
+    {
+        return $this->isAdminV2Path($path) === $this->isAdminV2Setting();
+    }
+
+    protected function isAdminV2Setting()
+    {
+        $adminVersionSetting = $this->getSettingService()->get('backstage', array('is_v2' => 0));
+
+        return !empty($adminVersionSetting['is_v2']);
+    }
+
+    protected function isAdminV2Path($path)
+    {
+        return 0 === strpos($path, '/admin/v2/');
+    }
+
+    protected function isAdminPath($path)
+    {
+        return 0 === strpos($path, '/admin/');
     }
 
     protected function getBiz()
