@@ -4875,7 +4875,7 @@ admin.course_manage.manage.course_tips: >
   <div style='width:250px;'>
     <span style='color:blue;'>课程说明</span><br>
     1. 编号及排序无法修改；<br>
-    2. 课程地址规则：域名/course/课程编号；
+    2. 课程地址规则：域名/course_set/课程编号；
   </div>
 admin.course_manage.manage.count: >
   课程：<strong class="inflow-num">%courseNum%</strong>个
