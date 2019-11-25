@@ -488,7 +488,7 @@ course_set.manage.upgrade_hint: >
 course_set.manage.img: >
   <div class="course-manage-spread"></div>
 course_set.manage.couseset_tab: >
-  <p class="title cd-dark-major cd-mb32">User's guidance</p><div class="cd-dark-minor cd-text-md">Course information, course documents, course papers, and course questions are shared and support any teaching plan.</div>
+  <p class="title cd-dark-major cd-mb32">User's guidance</p><div class="cd-dark-minor cd-text-md">Course information and file management are common functions, which can be referenced by any plan.</div>
 course_set.manage.single_plan: >
   <p class="title cd-dark-major cd-mb32">User's guidance</p><div class="cd-dark-minor cd-text-md">Please enter the default teaching plan settings to set the price of the first teaching plan and so on.</div>
 course_set.manage.all_plan: >
@@ -1505,3 +1505,4 @@ question_bank.question_category.update_success: Update Category Success
 question_bank.question_category.delete_confirm_title: Delete Confirm
 question_bank.question_category.delete_confirm_hint: This category and its subcategories contain %count% questions. After deletion, these questions will become unclassified. Are you sure you want to delete this category?
 
+question.marker_question.select_question_category: '--Select question category--'

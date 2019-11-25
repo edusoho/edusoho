@@ -685,6 +685,8 @@ question.marker_question.select_tips: 'Only support gap filling, choice question
 question.marker_question.understand_btn: Ok
 question.marker_question.add_practice_tips: '<p class="title">only one step to create practice</p><p class="text-md">drag the questions to the <span class=''color-warning''>video edit area</p>'
 question.marker_question.video_edit_block: 'Video edit area'
+question.marker_question.select_question_bank: '--Select question bank--'
+question.marker_question.select_question_category: '--Select question category--'
 resource_lib: 'Resources'
 resource_lib.content_title: 'Resources'
 resource_lib.my: 'My resources'

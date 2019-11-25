@@ -3,6 +3,7 @@
 namespace Biz\QuestionBank\Service\Impl;
 
 use Biz\BaseService;
+use Biz\QuestionBank\Dao\MemberDao;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\Common\CommonException;
 use AppBundle\Common\ArrayToolkit;
@@ -34,7 +35,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findMembersByUserId($userId)
     {
-        return $this->getMemberDao()->findByBankId($userId);
+        return $this->getMemberDao()->findByUserId($userId);
     }
 
     public function batchCreateMembers($bankId, $userIds)
@@ -54,6 +55,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->batchCreate($members);
     }
 
+    /**
+     * @return MemberDao
+     */
     protected function getMemberDao()
     {
         return $this->createDao('QuestionBank:MemberDao');

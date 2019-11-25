@@ -118,7 +118,7 @@ class Manage {
 
   initData() {
     let count = parseInt((document.body.clientHeight - 350) / 50) > 0 ? parseInt((document.body.clientHeight - 350) / 50) : 1;
-    
+
     $.post(this.$form.attr('action'), this.$form.serialize() + '&pageSize=' + count, (response) => {
       $('#subject-lesson-list').html(response);
       $('[data-toggle="popover"]').popover();
@@ -152,7 +152,8 @@ class Manage {
     this.$marker.on('click', '.js-more-questions', event => this.onMoreQuestion(event));
     this.$marker.on('click', '.js-close-introhelp', event => this.onCloseHelp(event));
     this.$marker.on('click', '#mark-form-submit', event => this.onFormSubmit(event));
-    this.$marker.on('change', '#mark-form-target', event => this.onChangeSelect(event));
+    this.$marker.on('change', '#mark-form-bankId', event => this.onChangeSelect(event));
+    this.$marker.on('change', '#mark-form-categoryId', event => this.onChangeSelect(event));
     this.$marker.on('keydown', '#mark-form-keyword', event => this.onFormAutoSubmit(event));
   }
 
@@ -171,6 +172,24 @@ class Manage {
       $.post(this.$form.attr('action'), this.$form.serialize() + '&pageSize=' + count, function (response) {
         $('#subject-lesson-list').html(response);
       });
+
+      let $target = $(e.target);
+      let url = $target.data('url');
+      if (url === undefined) {
+        return;
+      }
+      let bankId = $target.val();
+      if (!bankId) {
+        return;
+      }
+      url = url.replace(/[0-9]/, bankId);
+      $.post(url, function (response) {
+        let option = `<option value="0">${Translator.trans('question.marker_question.select_question_category')}</option>`;
+        $.each(response, function (index, category) {
+          option += `<option value="${category.id}">${category.name}</option>`;
+        });
+        $('#mark-form-categoryId').html(option);
+      });
     }
   }
 
@@ -186,13 +205,14 @@ class Manage {
   }
 
   onMoreQuestion(e) {
-    let target = $('select[name=target]');
+    let bankId = $('select[name=bankId]');
+    let categoryId = $('select[name=categoryId]');
     let $this = $(e.currentTarget).hide().parent().addClass('loading'),
       $list = $('#subject-lesson-list').css('max-height', $('#subject-lesson-list').height()),
       getpage = parseInt($this.data('current-page')) + 1,
       lastpage = $this.data('last-page');
 
-    $.post($this.data('url') + getpage, {'target': target.val(), 'pageSize': this.$form.data('pageSize')}, function (response) {
+    $.post($this.data('url') + getpage, {'bankId': bankId.val(), 'categoryId': categoryId.val(), 'pageSize': this.$form.data('pageSize')}, function (response) {
       $this.remove();
       $list.append(response).animate({scrollTop: 40 * ($list.find('.item-lesson').length + 1)});
       if (getpage == lastpage) {

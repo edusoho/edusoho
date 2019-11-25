@@ -4,6 +4,8 @@ namespace AppBundle\Controller\QuestionBank;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\Question\Service\CategoryService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\QuestionBank\QuestionBankException;
 
@@ -85,11 +87,33 @@ class QuestionCategoryController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
+    public function showCategoriesAction(Request $request, $bankId)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($bankId)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($bankId);
+        if (empty($questionBank)) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        $categories = $this->getQuestionCategoryService()->findCategories($bankId);
+
+        return $this->createJsonResponse($categories);
+    }
+
+    /**
+     * @return QuestionBankService
+     */
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getQuestionCategoryService()
     {
         return $this->createService('Question:CategoryService');

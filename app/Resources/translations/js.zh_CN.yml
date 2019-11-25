@@ -429,7 +429,7 @@ course_set.manage.upgrade_hint:  >
 course_set.manage.img: >
   <div class="course-manage-spread"></div>
 course_set.manage.couseset_tab: >
-  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">课程信息、课程文件、课程试卷、课程题库为共用功能，支持任意计划来进行引用。</div>
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">课程信息、文件管理为共用功能，支持任意计划来进行引用。</div>
 course_set.manage.single_plan: >
   <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">请进入默认计划设置，对首个计划的价格等内容进行设置。</div>
 course_set.manage.all_plan: >
@@ -1446,3 +1446,5 @@ question_bank.question_category.create_success: 创建分类成功
 question_bank.question_category.update_success: 更新分类成功
 question_bank.question_category.delete_confirm_title: 删除确认
 question_bank.question_category.delete_confirm_hint: 此分类及其子分类下共包含%count%道题，删除后，这些题目都将变为未分类题目。您确定要删除此分类吗？
+
+question.marker_question.select_question_category: --选择分类--
