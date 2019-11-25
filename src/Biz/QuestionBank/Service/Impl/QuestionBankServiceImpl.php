@@ -172,6 +172,16 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return false;
     }
 
+    public function waveTestpaperNum($id, $diff)
+    {
+        return $this->getQuestionBankDao()->wave(array($id), array('testpaperNum' => $diff));
+    }
+
+    public function waveQuestionNum($id, $diff)
+    {
+        return $this->getQuestionBankDao()->wave(array($id), array('questionNum' => $diff));
+    }
+
     protected function prepareConditions($conditions)
     {
         if (isset($conditions['categoryId'])) {

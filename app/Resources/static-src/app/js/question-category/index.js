@@ -1,5 +1,3 @@
-import { toggleIcon } from 'app/common/widget/chapter-animate';
-
 class Category {
   constructor() {
     this.init();
@@ -39,12 +37,20 @@ class Category {
     $('.js-toggle-show').on('click', (event) => {
       let $this = $(event.target);
       let $sort = $this.closest('.js-sortable-item');
-      $sort.nextUntil('.js-sortable-item').animate({
+      $sort.children('.js-sortable-list').animate({
         height: 'toggle',
         opacity: 'toggle'
       }, "normal");
-      toggleIcon($sort, 'cd-icon-add', 'cd-icon-remove');
+      this.toggleIcon($this, 'cd-icon-add', 'cd-icon-remove');
     });
+  }
+
+  toggleIcon($icon, $expandIconClass, $putIconClass) {
+    if ($icon.hasClass($expandIconClass)) {
+      $icon.removeClass($expandIconClass).addClass($putIconClass);
+    } else {
+      $icon.removeClass($putIconClass).addClass($expandIconClass);
+    }
   }
 }
 

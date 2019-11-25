@@ -76,6 +76,8 @@ class TestpaperDaoImpl extends AdvancedDaoImpl implements TestpaperDao
             'copyId = :copyId',
             'copyId > :copyIdGT',
             'lessonId = :lessonId',
+            'bankId = :bankId',
+            'name like :nameLike',
         );
 
         $declares['serializes'] = array(

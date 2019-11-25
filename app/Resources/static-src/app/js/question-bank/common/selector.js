@@ -1,4 +1,4 @@
-export default class QuestionSelector {
+export default class Selector {
   constructor(selector) {
     this.$elem = $(selector);
     this.init();

@@ -93,6 +93,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $result = $this->getTestpaperDao()->delete($testpaper['id']);
         $this->deleteItemsByTestId($testpaper['id']);
 
+        if (!empty($testpaper['bankId'])) {
+            $this->getQuestionBankService()->waveTestpaperNum($testpaper['bankId'], -1);
+        }
+
         $this->dispatchEvent('exam.delete', $testpaper);
 
         return $result;
@@ -125,11 +129,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function searchTestpapers($conditions, $orderBy, $start, $limit)
     {
+        $conditions = $this->filterConditions($conditions);
+
         return $this->getTestpaperDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function searchTestpaperCount($conditions)
     {
+        $conditions = $this->filterConditions($conditions);
+
         return $this->getTestpaperDao()->count($conditions);
     }
 
@@ -1275,6 +1283,16 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $passedStatus[0];
     }
 
+    protected function filterConditions($conditions)
+    {
+        if (!empty($conditions['keyword'])) {
+            $conditions['nameLike'] = '%'.trim($conditions['keyword']).'%';
+            unset($conditions['keyword']);
+        }
+
+        return $conditions;
+    }
+
     protected function getWrapper()
     {
         global $kernel;
@@ -1366,5 +1384,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

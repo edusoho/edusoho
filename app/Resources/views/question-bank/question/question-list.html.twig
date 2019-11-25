@@ -24,7 +24,7 @@
     </div>
     <div class="form-group">
       <button class="cd-btn cd-btn-primary js-search-btn">{{'form.btn.search'|trans}}</button>
-      <a class="cd-btn cd-btn-primary" href="">
+      <a class="cd-btn cd-btn-primary js-export-btn" href="javascript:" data-url="{{ path('question_bank_manage_question_export', {id: questionBank.id}) }}">
         {{ 'course.question_manage.export_btn'|trans }}
       </a>
     </div>
