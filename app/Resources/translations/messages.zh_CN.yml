@@ -4341,6 +4341,7 @@ my.teaching.question_bank.question.manage: 题目管理
 my.teaching.question_bank.testpaper.manage: 试卷管理
 my.teaching.question_bank.question_category.create: 添加分类
 my.teaching.question_bank.question_category.update: 更新分类
+my.teaching.question_bank.question_batch_category.title: 批量设置分类
 my.teaching.question_bank.question_category.title: 题目分类
 my.teaching.question_bank.question_category.latest_update: 最后更新
 my.teaching.question_bank.question_category.operation: 操作
