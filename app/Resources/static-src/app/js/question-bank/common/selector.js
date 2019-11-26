@@ -103,6 +103,7 @@ export default class Selector {
         $(item).prop('checked', true);
       }
     });
+    this.changeSelectedNum();
   }
 
   changeSelectedNum() {

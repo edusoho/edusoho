@@ -63,8 +63,7 @@
             {% endif %}
 
             {% if testpaper.status == 'draft' %}
-              <li><a href=""><span class="glyphicon glyphicon-edit mrm"></span> {{'course.testpaper_manage.edit_btn'|trans}}</a></li>
-              <li><a href=""><span class="glyphicon glyphicon-list mrm"></span> {{'course.testpaper_manage.manage_btn'|trans}}</a></li>
+              <li><a href="{{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, testpaperId: testpaper.id}) }}"><span class="glyphicon glyphicon-edit mrm"></span> {{'my.teaching.question_bank.testpaper.edit'|trans}}</a></li>
               <li><a href="javascript:" class="js-delete-btn" data-name='{{'course.testpaper_manage.testpaper'|trans}}' data-url="{{ path('question_bank_manage_testpaper_delete', {id: questionBank.id, testpaperId: testpaper.id}) }}">
                 <span class="es-icon es-icon-delete mrm"></span> {{'course.testpaper_manage.delete_btn'|trans}}
               </a></li>
