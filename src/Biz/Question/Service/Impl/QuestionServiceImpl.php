@@ -72,25 +72,22 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $savedQuestions = array();
         //按照题型分组
         $groupQuestions = $this->groupQuestions($questions);
-        $courseSetId = $token['data']['courseSetId'];
+        $questionBankId = $token['data']['questionBankId'];
         try {
             $this->beginTransaction();
             foreach ($groupQuestions as $type => $questionsGroup) {
                 //分组循环处理题目
                 foreach ($questionsGroup as $key => $question) {
+                    $question['bankId'] = $questionBankId;
+                    $savedQuestions[] = $savedQuestion = $this->importQuestion($question);
                     if ('material' == $question['type']) {
                         $subQuestions = $question['subQuestions'];
-                        $question['courseSetId'] = $courseSetId;
-                        $savedQuestions[] = $savedQuestion = $this->importQuestion($question);
                         //材料题子题处理
                         foreach ($subQuestions as $subQuestion) {
                             $subQuestion['parentId'] = $savedQuestion['id'];
-                            $subQuestion['courseSetId'] = $courseSetId;
+                            $subQuestion['bankId'] = $questionBankId;
                             $savedQuestions[] = $this->importQuestion($subQuestion);
                         }
-                    } else {
-                        $question['courseSetId'] = $courseSetId;
-                        $savedQuestions[] = $this->importQuestion($question);
                     }
                 }
             }

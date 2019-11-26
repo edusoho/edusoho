@@ -10,10 +10,11 @@
   <div id="post-widget">
     <form class="form-horizontal" id="category-form" action="{{ path('question_bank_manage_question_category_batch_create',{id: bankId, parentId:parentId}) }}" method="post">
       <div class="form-group">
-        <label class="col-md-2 control-label" for="category-names">{{'my.teaching.question_bank.question_category.name_label'|trans}}</label>
+        <div class="question-bank__model-tips">{{ 'my.teaching.question_bank.question_category.create_hint'|trans }}</div>
+        <label class="col-md-2 question-bank__model-names" for="category-names">{{'my.teaching.question_bank.question_category.name_label'|trans}}</label>
         <div class="col-md-8 controls">
           <textarea id="category-names" name="categoryNames" class="form-control" rows="10" style="width: 460px"></textarea>
-          <div class="help-block">{{ 'my.teaching.question_bank.question_category.create_hint'|trans }}</div>
+          <div class="help-block"></div>
         </div>
       </div>
       <input type="hidden" name="parentId" value="{{ parentId|default(0) }}">

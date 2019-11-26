@@ -7,16 +7,16 @@ use ExamParser\Reader\ReadDocx;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Content\Service\FileService;
-use Biz\Course\Service\CourseSetService;
 use Biz\User\Service\TokenService;
 use Biz\Course\Service\CourseService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File as FileObject;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionParserController extends BaseController
 {
-    public function readAction(Request $request, $type, $courseSet)
+    public function readAction(Request $request, $type, $questionBank)
     {
         $templateInfo = $this->getTemplateInfo($type);
         if ($request->isMethod('POST')) {
@@ -40,7 +40,7 @@ class QuestionParserController extends BaseController
                         'filename' => $file->getClientOriginalName(),
                         'fileuri' => $result['uri'],
                         'filepath' => $uploadFile['fullpath'],
-                        'courseSetId' => $courseSet['id'],
+                        'questionBankId' => $questionBank['id'],
                         'cacheFilePath' => $cacheFilePath,
                     ),
                     'duration' => 86400,
@@ -59,7 +59,7 @@ class QuestionParserController extends BaseController
         }
 
         return $this->render($templateInfo['readModalTemplate'], array(
-            'courseSet' => $courseSet,
+            'questionBank' => $questionBank,
         ));
     }
 
@@ -70,6 +70,10 @@ class QuestionParserController extends BaseController
             throw new \Exception('超过有效期');
         }
         $data = $token['data'];
+        if (!$this->getQuestionBankService()->validateCanManageBank($data['questionBankId'])) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
         $questionsJson = file_get_contents($data['cacheFilePath']);
         $questions = json_decode($questionsJson, true);
 
@@ -97,16 +101,12 @@ class QuestionParserController extends BaseController
         }
         $templateInfo = $this->getTemplateInfo($type);
 
-        $user = $this->getCurrentUser();
-        $courses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $token['data']['courseSetId']);
-
         return $this->render($templateInfo['reEditTemplate'], array(
             'filename' => mb_substr(str_replace('.docx', '', $data['filename']), 0, 50, 'utf-8'),
             'questions' => $questions,
             'questionAnalysis' => $questionAnalysis,
-            'courseSetId' => $token['data']['courseSetId'],
+            'questionBankId' => $data['questionBankId'],
             'totalScore' => $totalScore,
-            'courses' => $courses,
         ));
     }
 
@@ -181,11 +181,11 @@ class QuestionParserController extends BaseController
     }
 
     /**
-     * @return CourseSetService
+     * @return QuestionBankService
      */
-    protected function getCourseSetService()
+    protected function getQuestionBankService()
     {
-        return $this->createService('Course:CourseSetService');
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 
     /**

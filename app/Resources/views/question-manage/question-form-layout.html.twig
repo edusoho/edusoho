@@ -37,7 +37,7 @@
       <div class="form-group">
         <div class="col-md-2 control-label"><label for="question-stem-field" class="control-label-required">{{ question_stem_label|default('question_bank.question_manage.manage.stem'|trans) }}</label></div>
         <div class="col-md-8 controls">
-          <textarea class="form-control" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('questionBank')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('questionBank')}) }}" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
+          <textarea class="form-control" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
           {% if question_stem_help|default('') %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
         </div>
       </div>
@@ -56,7 +56,7 @@
         <div class="form-group">
           <div class="col-md-2 control-label"><label for="question-analysis-field">{{'question_bank.question_manage.manage.analysis'|trans}}</label></div>
           <div class="col-md-8 controls">
-            <textarea class="form-control" id="question-analysis-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('questionBank')}) }}" name="analysis" data-image-download-url="{{ path('editor_download', {token:upload_token('questionBank')}) }}">{{ question.analysis|default('') }}</textarea>
+            <textarea class="form-control" id="question-analysis-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" name="analysis" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ question.analysis|default('') }}</textarea>
           </div>
         </div>
         {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'question.analysis', targetId: question.id|default(0)}, { useType:true,})) }}

@@ -17,7 +17,7 @@ export default class Selector {
 
     this.$elem.on('click', '.js-select-all', (e) => {
       let $target = $(e.target);
-      if($target.prop('checked')) {
+      if ($target.prop('checked')) {
         this.$elem.find('.js-select-all').prop('checked', true);
         this.addItems();
       } else {
@@ -57,7 +57,6 @@ export default class Selector {
     this.$elem.find('.js-checkbox').each((index, item) => {
       if (!$(item).prop('checked')) {
         this.addItem(item);
-        let obj = this.getItem($(item));
       }
     });
   }
@@ -89,7 +88,7 @@ export default class Selector {
   }
 
   getObjectLength() {
-    var arr = Object.keys(this.selectMap);
+    let arr = Object.keys(this.selectMap);
 
     return arr.length;
   }
