@@ -22,10 +22,6 @@ class QuestionController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
-
         $conditions = $request->query->all();
 
         $conditions['bankId'] = $id;
@@ -73,11 +69,6 @@ class QuestionController extends BaseController
     {
         if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
-        }
-
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
         if ($request->isMethod('POST')) {
@@ -133,9 +124,6 @@ class QuestionController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
 
         $question = $this->getQuestionService()->get($questionId);
         if (empty($question) || $question['bankId'] != $questionBank['id']) {
@@ -176,9 +164,6 @@ class QuestionController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
 
         $conditions = $request->query->all();
 

@@ -4,9 +4,9 @@ namespace AppBundle\Controller\QuestionBank;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\QuestionBank\QuestionBankException;
 use AppBundle\Common\Paginator;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -23,9 +23,6 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
 
         $conditions = array(
             'bankId' => $questionBank['id'],
@@ -66,9 +63,6 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
 
         $conditions = array(
             'bankId' => $questionBank['id'],
@@ -100,6 +94,68 @@ class TestpaperController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
             'testpaperActivities' => $testpaperActivities,
+        ));
+    }
+
+    public function createAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+
+//        if ('POST' === $request->getMethod()) {
+//            $fields = $request->request->all();
+//
+//            $fields['courseSetId'] = $courseSet['id'];
+//            $fields['courseId'] = 0;
+//            $fields['pattern'] = 'questionType';
+//
+//            $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'testpaper');
+//
+//            return $this->redirect(
+//                $this->generateUrl(
+//                    'course_set_manage_testpaper_questions',
+//                    array('courseSetId' => $courseSet['id'], 'testpaperId' => $testpaper['id'])
+//                )
+//            );
+//        }
+
+        $types = $this->getQuestionTypes();
+
+        return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', array(
+            'types' => $types,
+            'questionBank' => $questionBank,
+        ));
+    }
+
+    public function editAction(Request $request, $id, $testpaperId)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+
+        if (!$testpaper || $testpaper['bankId'] != $id) {
+            return $this->createMessageResponse('error', 'testpaper not found');
+        }
+
+        if ('draft' != $testpaper['status']) {
+            return $this->createMessageResponse('error', '已发布或已关闭的试卷不能再修改题目');
+        }
+
+        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
+        $questionCategories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($questions, 'categoryId'));
+
+        return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', array(
+            'questionBank' => $questionBank,
+            'testpaper' => $testpaper,
+            'questions' => $questions,
+            'subCounts' => empty($questions['material']) ? 0 : array_sum(array_column($questions['material'], 'subCount')),
+            'questionCategories' => $questionCategories,
         ));
     }
 
@@ -235,6 +291,22 @@ class TestpaperController extends BaseController
         return new BinaryFileResponse($path, 200, $headers);
     }
 
+    protected function getQuestionTypes()
+    {
+        $typesConfig = $this->get('extension.manager')->getQuestionTypes();
+
+        $types = array();
+        foreach ($typesConfig as $type => $typeConfig) {
+            $types[$type] = array(
+                'name' => $typeConfig['name'],
+                'hasMissScore' => $typeConfig['hasMissScore'],
+                'seqNum' => $typeConfig['seqNum'],
+            );
+        }
+
+        return $types;
+    }
+
     /**
      * @return QuestionBankService
      */
@@ -257,5 +329,18 @@ class TestpaperController extends BaseController
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return QuestionService
+     */
+    protected function getQuestionService()
+    {
+        return $this->createService('Question:QuestionService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->createService('Question:CategoryService');
     }
 }

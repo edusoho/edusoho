@@ -149,6 +149,11 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
     public function validateCanManageBank($bankId, $permission = 'admin_question_bank')
     {
+        $questionBank = $this->getQuestionBank($bankId);
+        if (empty($questionBank)) {
+            return false;
+        }
+
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {

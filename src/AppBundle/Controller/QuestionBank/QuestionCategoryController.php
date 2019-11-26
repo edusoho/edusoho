@@ -18,10 +18,6 @@ class QuestionCategoryController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
-
         $categories = $this->getQuestionCategoryService()->getCategoryStructureTree($questionBank['id']);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($categories, 'userId'));
 
@@ -91,11 +87,6 @@ class QuestionCategoryController extends BaseController
     {
         if (!$this->getQuestionBankService()->validateCanManageBank($bankId)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
-        }
-
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($bankId);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
         $categories = $this->getQuestionCategoryService()->findCategories($bankId);

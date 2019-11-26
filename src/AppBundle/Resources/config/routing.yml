@@ -3365,6 +3365,14 @@ question_bank_manage_testpaper_batch_delete:
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:deleteTestpapers }
     methods: [POST]
 
+question_bank_manage_testpaper_create:
+    path: /question_bank/{id}/testpaper/create
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:create }
+
+question_bank_manage_testpaper_edit:
+    path: /question_bank/{id}/testpaper/{testpaperId}/edit
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:edit }
+
 question_bank_manage_testpaper_publish:
     path: /question_bank/{id}/testpaper/{testpaperId}/publish
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:publish }

@@ -17,6 +17,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->get($id);
     }
 
+    public function findCategoriesByIds($ids)
+    {
+        return ArrayToolkit::index($this->getCategoryDao()->findByIds($ids), 'id');
+    }
+
     public function getCategoryStructureTree($bankId)
     {
         return TreeToolkit::makeTree($this->getCategoryTree($bankId), 'weight');
