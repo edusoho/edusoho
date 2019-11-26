@@ -23,5 +23,5 @@ sortList({
   itemSelector: 'li',
   ajax:false,
 },(data)=>{
-  $('#courses-form').submit();
+  $.post($('#course-list-group').data('sortUrl'), $('#courses-form').serialize(), (response) => {});
 });

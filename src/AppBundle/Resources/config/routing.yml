@@ -462,7 +462,7 @@ settings_password:
 settings_email:
     path:  /settings/email
     defaults: { _controller: AppBundle:Settings:email }
-    
+
 settings_email_verify:
     path:  /settings/email/verify
     defaults: { _controller: AppBundle:Settings:emailVerify }
@@ -2599,6 +2599,11 @@ classroom_manage_course_remove:
 classroom_courses_select:
     path: /classroom/{id}/courses/select
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:coursesSelect }
+
+classroom_manage_items_sort:
+  path:  /classroom/{id}/manage/items/sort
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:courseItemsSort }
+  methods: ['POST']
 
 classroom_manage_set_info:
     path: /classroom/{id}/manage/set_info
