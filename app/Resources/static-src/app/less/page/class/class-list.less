@@ -6,19 +6,18 @@
     .es-box-shadow;
     .class-img {
       position: relative;
-    }
-    img {
-      @media (min-width: @screen-lg-min) {
-        height: 150px;
-      }
-      @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
-        height: 122px;
-      }
-      @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
-        height: 195.5px;
-      }
-      @media (min-width: @screen-xs-min) and (max-width: @screen-xs-max) {
-        height: 195.5px;
+      &.class-img--explore {
+        img {
+          @media (min-width: @screen-lg-min) {
+            height: 205px;
+          }
+          @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+            height: 167.2px;
+          }
+          @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+            height: 195.5px;
+          }
+        }
       }
     }
     .image-overlay {
