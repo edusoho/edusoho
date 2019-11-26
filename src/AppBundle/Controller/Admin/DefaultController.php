@@ -148,6 +148,7 @@ class DefaultController extends BaseController
             'cloud_sms.sms_enabled' => '',
             'cloud_search.search_enabled' => '',
             'cloud_consult.cloud_consult_setting_enabled' => 0,
+            'cloud_email_crm' => 'status',
             'storage.upload_mode' => 'cloud',
         );
 
