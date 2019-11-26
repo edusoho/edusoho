@@ -3628,7 +3628,6 @@ my.teaching.question_bank.question.no_category: uncategorized
 my.teaching.question_bank.question.all: All Questions
 my.teaching.question_bank.question.set_category: Set Category
 my.teaching.question_bank.question.selected: selected Number
-my.teaching.question_bank.question.category_name: Name
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
