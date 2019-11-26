@@ -49,7 +49,7 @@ class ImSync extends AbstractResource
             $convMember = $this->getConversationService()->joinConversation($conv['no'], $user['id']);
 
             return array('convNo' => $convMember['convNo']);
-        } catch (\Error $e) {
+        } catch (\Exception $e) {
             throw ConversationException::JOIN_FAILED();
         }
     }
@@ -167,7 +167,7 @@ class ImSync extends AbstractResource
             try {
                 $this->biz['logger']->debug('MemberSync quitConversations : targetType='.$userConvsMap[$id]['targetType'].',convNo='.$userConvsMap[$id]['convNo'].',targetId='.$id);
                 $this->getConversationService()->quitConversation($userConvsMap[$id]['convNo'], $user['id']);
-            } catch (\Error $e) {
+            } catch (\Exception $e) {
                 $this->biz['logger']->error('MemberSync quitConversations : targetType='.$userConvsMap[$id]['targetType'].',convNo='.$userConvsMap[$id]['convNo'].',targetId='.$id.', error = '.$e->getMessage());
             }
         }
