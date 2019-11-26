@@ -3,11 +3,11 @@
 {% block title %}{{ 'my.teaching.question_bank.testpaper.manage'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'my-question-bank' %}
 
-{% do script(['app/js/question-bank/testpaper/index.js'])  %}
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/question-bank/testpaper/create/index.js'])  %}
 
 {% block main %}
   <div class="panel panel-default panel-col">
-    <div class="question-bank-heading">{{ questionBank.name }}</div>
+    <div class="panel-heading">{{ questionBank.name }}</div>
   </div>
 
   <div>
@@ -22,7 +22,11 @@
       {% block panel_body %}
         <div class="panel-body question-list-container js-testpaper-container">
           <div class="mtl">
-            {% include 'question-bank/testpaper/testpaper-list.html.twig' %}
+            <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true">
+              {% include 'question-bank/testpaper/manage/base-info.html.twig' %}
+              {% include 'question-bank/testpaper/manage/questions-info.html.twig' %}
+            </form>
+            {% include 'question-bank/testpaper/manage/set-score-modal.html.twig' %}
           </div>
         </div>
       {% endblock %}

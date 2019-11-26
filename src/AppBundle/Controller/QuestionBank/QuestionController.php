@@ -8,7 +8,6 @@ use Biz\Question\QuestionException;
 use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\QuestionBank\QuestionBankException;
 use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ExamParser\Writer\WriteDocx;
@@ -22,10 +21,6 @@ class QuestionController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
-
         $conditions = $request->query->all();
 
         $conditions['bankId'] = $id;
@@ -93,11 +88,6 @@ class QuestionController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
-
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
             $fields['bankId'] = $id;
@@ -151,9 +141,6 @@ class QuestionController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
 
         $question = $this->getQuestionService()->get($questionId);
         if (empty($question) || $question['bankId'] != $questionBank['id']) {
@@ -194,9 +181,6 @@ class QuestionController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
 
         $conditions = $request->query->all();
 
