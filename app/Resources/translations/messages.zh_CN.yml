@@ -4339,10 +4339,10 @@ my.teaching.open_course.material.upload_time: 上传于
 my.teaching.question_bank.question_category.manage: 题目分类管理
 my.teaching.question_bank.question.manage: 题目管理
 my.teaching.question_bank.testpaper.manage: 试卷管理
-my.teaching.question_bank.question_category.create: 添加分类
-my.teaching.question_bank.question_category.update: 更新分类
+my.teaching.question_bank.question_category.create: 添加题目分类
+my.teaching.question_bank.question_category.update: 编辑分类
 my.teaching.question_bank.question_batch_category.title: 批量设置分类
-my.teaching.question_bank.question_category.title: 题目分类
+my.teaching.question_bank.question_category.title: 设置题目分类
 my.teaching.question_bank.question_category.latest_update: 最后更新
 my.teaching.question_bank.question_category.operation: 操作
 my.teaching.question_bank.question_category.empty: 无题目分类
@@ -4352,7 +4352,6 @@ my.teaching.question_bank.question.no_category: 未分类
 my.teaching.question_bank.question.all: 全部题目
 my.teaching.question_bank.question.set_category: 设置分类
 my.teaching.question_bank.question.selected: 已选
-my.teaching.question_bank.question.category_name: 名称
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程

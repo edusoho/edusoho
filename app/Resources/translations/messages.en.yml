@@ -3616,10 +3616,10 @@ my.teaching.open_course.material.upload_time: 'Uploaded At'
 my.teaching.question_bank.question_category.manage: Question Category Manage
 my.teaching.question_bank.question.manage: Question Manage
 my.teaching.question_bank.testpaper.manage: Testpaper Manage
-my.teaching.question_bank.question_category.create: Create Category
-my.teaching.question_bank.question_category.update: Update Category
+my.teaching.question_bank.question_category.create: Create Topic Category
+my.teaching.question_bank.question_category.update: Edit Category
 my.teaching.question_bank.question_batch_category.title: Batch setting classification
-my.teaching.question_bank.question_category.title: Question Category
+my.teaching.question_bank.question_category.title: Set Question Category
 my.teaching.question_bank.question_category.latest_update: Latest Update
 my.teaching.question_bank.question_category.operation: Operation
 my.teaching.question_bank.question_category.empty: No Question Category
@@ -3629,7 +3629,6 @@ my.teaching.question_bank.question.no_category: uncategorized
 my.teaching.question_bank.question.all: All Questions
 my.teaching.question_bank.question.set_category: Set Category
 my.teaching.question_bank.question.selected: selected Number
-my.teaching.question_bank.question.category_name: Name
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
