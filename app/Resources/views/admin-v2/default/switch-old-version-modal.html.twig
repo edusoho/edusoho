@@ -6,7 +6,8 @@
 {% block title %}{{ 'admin_v2.switch_old_version.title'|trans }}{% endblock %}
 
 {% block body %}
+  {% set src = 'http://survey-cloud.cg-dev2.cn/index.php/723355?lang=zh-Hans&refurl=' ~ app.request.server.get('HTTP_REFERER')|default('') %}
   <div class="js-question-section question-section" data-url="{{ path('admin_v2_switch_old_version') }}">
-    <iframe src="http://survey-cloud.cg-dev2.cn/index.php/723355?lang=zh-Hans" id="iframe" width="100%" border="0" height="100%" frameborder="0"></iframe>
+    <iframe src="{{ src }}" id="iframe" width="100%" border="0" height="100%" frameborder="0"></iframe>
   </div>
 {% endblock %}
