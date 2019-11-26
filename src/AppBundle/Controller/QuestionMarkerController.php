@@ -14,6 +14,7 @@ use Biz\Question\QuestionException;
 use Biz\Question\Service\QuestionService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
@@ -307,14 +308,14 @@ class QuestionMarkerController extends BaseController
     {
         $conditions = $request->request->all();
 
+        if (empty($conditions['bankId'])) {
+            return array(new Paginator($request, 0), array());
+        }
+        if (!$this->getQuestionBankService()->validateCanManageBank($conditions['bankId'])) {
+            $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
+        }
         if (!empty($conditions['keyword'])) {
             $conditions['stem'] = $conditions['keyword'];
-        }
-        if (empty($conditions['bankId'])) {
-            $conditions['bankId'] = 0;
-        }
-        if (empty($conditions['categoryId'])) {
-            unset($conditions['categoryId']);
         }
         $conditions['parentId'] = 0;
         $conditions['types'] = array('determine', 'single_choice', 'uncertain_choice', 'fill', 'choice');

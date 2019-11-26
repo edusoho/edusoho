@@ -14,6 +14,7 @@ class QuestionFormBase {
   _init() {
     this._initEvent();
     this._initValidate();
+    this._initSelect();
   }
 
   _initEvent() {
@@ -54,6 +55,15 @@ class QuestionFormBase {
       }
     });
     this.validator = validator;
+  }
+
+  _initSelect() {
+    $('#categoryId').select2({
+      treeview: true,
+      dropdownAutoWidth: true,
+      treeviewInitState: 'collapsed',
+      placeholderOption: 'first'
+    });
   }
 
   initTitleEditor(validator) {

@@ -8851,7 +8851,7 @@ exception.task_result.not_found: Learning task results do not exist
 exception.discovery_column.not_found: Discovery column does not exist
 exception.question_bank.forbidden_delete_category: There is a question bank under the classification or sub-category and cannot be deleted
 exception.question_bank.not_found_bank: Bank does not exist
-exception.question_bank.forbidden_manage_bank: Forbidden manage this bank
+exception.question_bank.forbidden_access_bank: Forbidden access this bank
 exception.educloud.user_disabled_hint: The education cloud has been banned, and the payment system is automatically lifted. Tutorial <a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">See here</a>
 exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed

@@ -98,7 +98,7 @@ class QuestionCategoryController extends BaseController
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
-        $categories = $this->getQuestionCategoryService()->findCategories($bankId);
+        $categories = $this->getQuestionCategoryService()->getCategoryTree($bankId);
 
         return $this->createJsonResponse($categories);
     }
