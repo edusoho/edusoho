@@ -105,23 +105,6 @@ class TestpaperController extends BaseController
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
 
-//        if ('POST' === $request->getMethod()) {
-//            $fields = $request->request->all();
-//
-//            $fields['courseSetId'] = $courseSet['id'];
-//            $fields['courseId'] = 0;
-//            $fields['pattern'] = 'questionType';
-//
-//            $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'testpaper');
-//
-//            return $this->redirect(
-//                $this->generateUrl(
-//                    'course_set_manage_testpaper_questions',
-//                    array('courseSetId' => $courseSet['id'], 'testpaperId' => $testpaper['id'])
-//                )
-//            );
-//        }
-
         $types = $this->getQuestionTypes();
 
         return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', array(

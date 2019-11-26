@@ -8,7 +8,6 @@ use Biz\Question\QuestionException;
 use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\QuestionBank\QuestionBankException;
 use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ExamParser\Writer\WriteDocx;

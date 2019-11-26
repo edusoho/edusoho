@@ -7,7 +7,6 @@ use AppBundle\Controller\BaseController;
 use Biz\Question\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\QuestionBank\QuestionBankException;
 
 class QuestionCategoryController extends BaseController
 {
