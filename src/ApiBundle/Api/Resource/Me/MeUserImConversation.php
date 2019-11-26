@@ -32,7 +32,7 @@ class MeUserImConversation extends AbstractResource
                     $user,
                     array('id' => $currentUser['id'], 'nickname' => $currentUser['nickname']),
                 ));
-            } catch (\Error $e) {
+            } catch (\Exception $e) {
                 throw ConversationException::JOIN_FAILED();
             }
         }

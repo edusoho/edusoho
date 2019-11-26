@@ -46,7 +46,7 @@ class ClassroomImConversation extends AbstractResource
             } else {
                 $conversation = $this->getConversationService()->createConversation($classroom['title'], 'classroom', $classroom['id'], array($user));
             }
-        } catch (\Error $e) {
+        } catch (\Exception $e) {
             throw ConversationException::JOIN_FAILED();
         }
 
