@@ -6,6 +6,7 @@
         :item="item"
         :slide-index="slideIndex"
         :has-chapter="hasChapter"
+        id="swiper-directory"
         @changeChapter="changeChapter"
       />
       <div v-if="item.length>0" id="lesson-directory" style="overflow:scroll">

@@ -16,15 +16,8 @@
           <div class="progress-bar__text">{{ progress }}</div>
         </div>
 
-        <!-- <directory
-          @showDialog="showDialog"
-          :hiddeTitle=true
-          :errorMsg="errorMsg"
-          class="join-after-dirctory"
-          :tryLookable="details.tryLookable"></directory> -->
         <afterjoin-directory
           :error-msg="errorMsg"
-          :is-fixed="isFixed"
           @showDialog="showDialog"
         />
       </div>
@@ -220,28 +213,24 @@ export default {
     },
     handleScroll() {
       const PROCESSBAR = document.getElementById('progress-bar')
-      const DOCUMENTHEIGHT = document.documentElement.clientHeight
       const SWIPER = document.getElementById('swiper-directory')
+      const LESSON = document.getElementById('lesson-directory')
+      const DOCUMENTHEIGHT = document.documentElement.clientHeight
       const PROCESSHEIGHT = PROCESSBAR == null ? 0 : PROCESSBAR.offsetHeight
       const SWIPERHEIGHT = SWIPER == null ? 0 : SWIPER.offsetHeight
-      const LESSON = document.getElementById('lesson-directory')
       // 得到页面滚动的距离
       const scrollTop = window.pageYOffset ||
                       document.documentElement.scrollTop ||
                       document.body.scrollTop
       // 判断页面滚动的距离是否大于吸顶元素的位置,并将课程的高度固定
-      if (scrollTop > (this.offsetTop - this.offsetHeight - 2)) {
+      if (scrollTop >= (this.offsetTop)) {
         this.tabFixed = true
-        // PROCESSBAR.classList.add("progress-bar-fix");
         SWIPER ? SWIPER.classList.add('swiper-directory-fix') : null
         LESSON ? (LESSON.style.marginTop = PROCESSHEIGHT + SWIPERHEIGHT + 'px') : null
       } else {
         this.tabFixed = false
-        // PROCESSBAR.classList.remove("progress-bar-fix");
         SWIPER ? SWIPER.classList.remove('swiper-directory-fix') : null
-        // SWIPER.classList.remove("swiper-directory-fix");
         LESSON ? (LESSON.style.marginTop = 0 + 'px') : null
-        // LESSON.style.height="auto"
       }
     }
   }
