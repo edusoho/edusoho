@@ -97,6 +97,21 @@ class TestpaperController extends BaseController
         ));
     }
 
+    public function importAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+
+        return $this->forward('AppBundle:Question/QuestionParser:read', array(
+            'request' => $request,
+            'type' => 'testpaper',
+            'questionBank' => $questionBank,
+        ));
+    }
+
     public function createAction(Request $request, $id)
     {
         if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
