@@ -3,21 +3,22 @@
     <div v-if="lessonNum>0">
       <swiper-directory
         v-if="chapterNum>0 || unitNum>0"
+        id="swiper-directory"
         :item="item"
         :slide-index="slideIndex"
         :has-chapter="hasChapter"
         @changeChapter="changeChapter"
       />
-      <div v-if="item.length>0" id="lesson-directory" style="overflow:scroll">
+      <div v-if="item.length>0" id="lesson-directory">
         <template v-if="chapterNum>0">
           <div v-for="(list, index) in item[slideIndex].children" :key="index" class="pd-bo">
             <util-directory :util="list" />
             <lesson-directory
-              v-bind="$attrs"
               :lesson="list.children"
               :task-id="taskId"
               :task-number="item[slideIndex].lessonNum"
               :unit-num="item[slideIndex].unitNum"
+              v-bind="$attrs"
               v-on="$listeners"
             />
           </div>
@@ -47,11 +48,6 @@ import utilDirectory from "./util-directory.vue";
 import lessonDirectory from "./lesson-directory.vue";
 import Api from "@/api";
 import { mapState, mapMutations } from "vuex";
-import { connect } from "net";
-const options = {
-  click: true,
-  taps: true
-};
 export default {
   name: "AfterjoinDirectory",
   components: {
@@ -59,7 +55,6 @@ export default {
     utilDirectory,
     lessonDirectory
   },
-  props: ["isFixed"],
   data() {
     return {
       scroll: "",
@@ -72,7 +67,7 @@ export default {
       currentUnit: 0, // 章节数目的索引
       currentLesson: 0, // 课时数目的索引
       slideIndex: 0, // 顶部滑动的索引
-      taskId: -1,
+      taskId: null,
       nodata: false
     };
   },
@@ -83,7 +78,7 @@ export default {
       OptimizationCourseLessons: state => state.OptimizationCourseLessons
     }),
     hasChapter: function() {
-      return this.chapterNum===0
+      return this.chapterNum === 0;
     }
   },
   watch: {
@@ -145,28 +140,23 @@ export default {
     },
     startScroll() {
       this.$nextTick(() => {
-        this.newScroll();
-      });
-    },
-    // 定位到指定目录
-    newScroll() {
-      const NARTAB = 44;
-      const PROCESSBAR = document.getElementById("progress-bar");
-      const SWIPER = document.getElementById("swiper-directory");
-      const PROCESSHEIGHT = PROCESSBAR == null ? 0 : PROCESSBAR.offsetHeight;
-      const SWIPERHEIGHT = SWIPER == null ? 0 : SWIPER.offsetHeight;
-      // 52 有待更改改，测试数据
-      const scrolltop =
-        document.getElementById(this.taskId).offsetTop -
-        PROCESSHEIGHT -
-        NARTAB -
-        SWIPERHEIGHT -
-        52;
-      if (scrolltop < document.documentElement.clientWidth) {
-        return;
-      }
-      window.scrollTo({
-        top: scrolltop
+        if (!this.taskId) {
+          return;
+        }
+        const NARTAB = 44;
+        const PROCESSBAR = document.getElementById("progress-bar");
+        const SWIPER = document.getElementById("swiper-directory");
+        const TASK = document.getElementById(this.taskId);
+        const PROCESSHEIGHT = !PROCESSBAR ? 0 : PROCESSBAR.offsetHeight;
+        const SWIPERHEIGHT = !SWIPER ? 0 : SWIPER.offsetHeight;
+        const TASKTOP = !TASK ? 0 : TASK.offsetTop;
+        const scrolltop = TASKTOP - PROCESSHEIGHT - NARTAB - SWIPERHEIGHT;
+        if (scrolltop < document.documentElement.clientWidth) {
+          return;
+        }
+        window.scrollTo({
+          top: scrolltop
+        });
       });
     },
     formatChapter(chapter, list, index) {
@@ -217,7 +207,7 @@ export default {
     },
     formatTask(task, list, index) {
       // 找到下一次学习对应的课时对应的滑动索引
-      if (task.id == this.taskId) {
+      if (Number(task.id) === this.taskId) {
         this.slideIndex =
           this.level == 3 ? this.currentChapter : this.currentUnit;
       }
@@ -248,7 +238,7 @@ export default {
     },
     // 计算目录值
     computedNum(nums, types) {
-      const current = this.level == 3 ? this.currentChapter : this.currentUnit;
+      const current = this.level === 3 ? this.currentChapter : this.currentUnit;
       const num = this.item[current][types] + nums;
       this.$set(this.item[current], types, num);
     },
@@ -257,6 +247,6 @@ export default {
       this.slideIndex = slideIndex;
     }
   }
-}
+};
 </script>
 

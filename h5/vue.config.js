@@ -61,7 +61,8 @@ module.exports = {
 				// target: 'http://zyc.st.edusoho.cn',
         //target: 'http://wr.st.edusoho.cn',
         //target:'http://gdy.st.edusoho.cn',
-				target: 'http://devtest.edusoho.cn',
+        target:'https://www.iyamusic.com',
+				//target: 'http://devtest.edusoho.cn',
 				changeOrigin: true,
 				secure: false,
 			}
