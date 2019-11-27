@@ -212,25 +212,20 @@ export default {
       }).catch(() => {})
     },
     handleScroll() {
-      const PROCESSBAR = document.getElementById('progress-bar')
       const SWIPER = document.getElementById('swiper-directory')
-      const LESSON = document.getElementById('lesson-directory')
-      const DOCUMENTHEIGHT = document.documentElement.clientHeight
-      const PROCESSHEIGHT = PROCESSBAR == null ? 0 : PROCESSBAR.offsetHeight
-      const SWIPERHEIGHT = SWIPER == null ? 0 : SWIPER.offsetHeight
+      const DOCUMENTHEIGHT =document.documentElement.scrollHeight;
+      const CLIENTHEIGHT=document.documentElement.clientHeight;
       // 得到页面滚动的距离
       const scrollTop = window.pageYOffset ||
                       document.documentElement.scrollTop ||
                       document.body.scrollTop
-      // 判断页面滚动的距离是否大于吸顶元素的位置,并将课程的高度固定
-      if (scrollTop >= (this.offsetTop)) {
+      // 判断页面滚动的距离是否大于吸顶元素的位置,并将课程的高度固定。由于ios浏览器可以随意拖动，会造成吸顶抖动，所以这里加上必须可视高度是否大于窗口可视高度
+      if ( (scrollTop >this.offsetTop) && ( (DOCUMENTHEIGHT-this.offsetTop)>CLIENTHEIGHT) ) {
         this.tabFixed = true
         SWIPER ? SWIPER.classList.add('swiper-directory-fix') : null
-        LESSON ? (LESSON.style.marginTop = PROCESSHEIGHT + SWIPERHEIGHT + 'px') : null
       } else {
         this.tabFixed = false
         SWIPER ? SWIPER.classList.remove('swiper-directory-fix') : null
-        LESSON ? (LESSON.style.marginTop = 0 + 'px') : null
       }
     }
   }
