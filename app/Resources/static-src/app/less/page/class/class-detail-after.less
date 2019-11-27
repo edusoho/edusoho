@@ -99,15 +99,6 @@
     }
   }
 
-  .class-operation__auditor {
-    @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
-      padding: 28px 8px !important;
-      .auditor-tip {
-        font-size: 12px;
-      }
-    }
-  }
-
   // 16:9的配比
   .class-header-main--new {
 
@@ -135,22 +126,20 @@
         }
       }
     }
-
-    .class-operation__auditor {
-      padding: 15.5px 8px !important;
-      @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
-        padding: 13px 8px !important;
-        .auditor-tip {
-          font-size: 12px;
-        }
-      }
-      @media (max-width: @screen-xs-max) {
-        padding: 16px !important;
-      }
-    }
   }
 
   &.auditor {
+    .class-header-main--new {
+      .class-operation__auditor {
+        padding: 15.5px 8px !important;
+        @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
+          padding: 13px 8px !important;
+        }
+        @media (max-width: @screen-xs-max) {
+          padding: 16px !important;
+        }
+      }
+    }
     .class-operation__data {
       padding: 0;
       border-bottom: 1px solid @gray-lighter;
@@ -170,13 +159,23 @@
         }
       }
     }
+
     .class-operation__auditor {
-      padding: 31px 40px;
+      padding: 31px 8px;
       line-height: 30px;
       color: @gray;
       background-color: @bg-color;
+      @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
+        padding: 28px 14px !important;
+        .auditor-tip {
+          font-size: 12px;
+        }
+        .btn-vip-free {
+          padding: 6px 12px !important;
+        }
+      }
       @media (max-width: @screen-md-max) {
-        padding: 18px 20px;
+        padding: 18px 14px;
       }
       @media (max-width: @screen-sm-max) {
         padding: 10px 0 0 0;
@@ -187,10 +186,9 @@
       .auditor-tip {
         display: inline-block;
         margin-top: 4px;
-
       }
 
-      @media (min-width: @screen-md-min) {
+      @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
         .auditor-tip--preview {
           float: right;
           margin-top: 0;
