@@ -66,7 +66,7 @@
               </span>
             </span>
           </h2>
-          <div class="metas mb0">
+          <div class="metas class-info__metas mb0">
             {% if setting('classroom.show_review', '1') == 1 %}
               <div class="score">
                 {{ web_macro.star(classroom.rating) }}
@@ -97,15 +97,15 @@
 
           {% if classroom.expiryMode != 'forever' %}
             {% if 'student' in member.role or 'member' in member.role %}
-              <div class="hidden-sm classroom-expiry cd-mb16">
-                <span>{{ 'classroom.expiryDays'|trans }}</span>
+              <div class="cd-text-xs hidden-sm cd-mb16">
+                <span class="class-info__label">{{ 'classroom.expiryDays'|trans }}</span>
                 <span>{{ memberDeadline|date('Y-m-d') }}</span>
               </div>
             {% endif %}
           {% endif %}
 
-          <div class="class-serve hidden-sm hidden-xs">
-            <div class="class-serve__label">{{ 'classroom.showServices'|trans }}</div>
+          <div class="class-info__serve class-serve hidden-sm hidden-xs">
+            <div class="serve-label">{{ 'classroom.showServices'|trans }}</div>
             {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}
           </div>
         </div>
@@ -130,7 +130,7 @@
             </div>
           {% endif %}
 
-          <ul class="class-data clearfix {% if classroomMemberLevel and 'auditor' in member.role %}hidden-sm{% else %}two-col{% endif %}">
+          <ul class="class-operation__data class-data clearfix {% if classroomMemberLevel and 'auditor' in member.role %}hidden-sm{% else %}two-col{% endif %}">
             {% if setting('classroom.show_student_num_enabled', '1') == 1 %}
               <li>
                 <p><i class="es-icon es-icon-person"></i></p>
@@ -160,8 +160,8 @@
           
           {# 旁听生说明以及购买 #}
           {% if 'auditor' in member.role %}
-            <div class="class-auditor hidden-sm clearfix">
-              <span class="class-auditor__tip">
+            <div class="class-operation__auditor hidden-sm clearfix">
+              <span class="auditor-tip {% if classroom.status|default('draft') != 'published' %}auditor-tip--preview{% endif %}">
                 {{ 'classroom.auditor_join_tips'|trans|raw }}
                 <i class="es-icon es-icon-help color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ 'classroom.auditor_and_member_different_tips'|trans }}"></i>
               </span>

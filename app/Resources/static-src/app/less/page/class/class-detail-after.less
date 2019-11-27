@@ -1,57 +1,5 @@
-&.after {
-  .class-auditor {
-    @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
-      padding: 28px 8px !important;
-      .class-auditor__tip {
-        font-size: 12px;
-      }
-    }
-  }
-  .class-header-main--new {
-    .class-data {
-      li {
-        padding: 32px 0;
-        @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
-          width: 100%;
-          border: none;
-          padding: 0;
-          margin: 4px 0;
-        }
-      }
-      &.two-col > li {
-        width: 50%;
-        @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
-          width: 100%;
-          margin: 10px 0;
-        }
-      }
-    }
-    .class-info {
-      @media (max-width: @screen-xs-max) {
-        margin-bottom: 24px;
-      }
-    }
-    .class-auditor {
-      padding: 15.5px 40px !important;
-      @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
-        padding: 13px 8px !important;
-        .class-auditor__tip {
-          font-size: 12px;
-        }
-      }
-      @media (max-width: @screen-xs-max) {
-        padding: 16px !important;
-      }
-    }
-  }
-
-  .class-info__title {
-    color: @gray-darker;
-    font-size: 16px;
-    i {
-      font-size: 20px;
-    }
-  }
+.class-header.after {
+  // 左侧封面
   .class-img {
     position: relative;
     width: 300px;
@@ -62,6 +10,8 @@
       width: 100%;
     }
   }
+
+  // 中间介绍
   .class-info {
     width: 410px;
     padding: 0 20px;
@@ -75,6 +25,18 @@
       font-size: 16px;
     }
   }
+
+  .class-info__serve {
+    position: absolute;
+    bottom: 6px;
+    display: inline-block;
+    .list-unstyled {
+      float: right;
+      margin-bottom: 0;
+    }
+  }
+
+  // 右侧操作
   .class-operation {
     position: relative;
     float: left;
@@ -92,16 +54,8 @@
       width: 100%;
     }
   }
-  .class-serve {
-    position: absolute;
-    bottom: 6px;
-    display: inline-block;
-    .list-unstyled {
-      float: right;
-      margin-bottom: 0;
-    }
-  }
-  .class-data {
+
+  .class-operation__data {
     .border-top-right-radius();
     margin-bottom: 0;
     @media (max-width: @screen-md-max) {
@@ -144,45 +98,109 @@
       }
     }
   }
-  
-}
-&.after.auditor {
-  .class-data {
-    padding: 0;
-    @media (max-width: @screen-md-max) {
-      padding: 10px 0;
+
+  .class-operation__auditor {
+    @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
+      padding: 28px 8px !important;
+      .auditor-tip {
+        font-size: 12px;
+      }
     }
-    @media (max-width: @screen-sm-max) {
+  }
+
+  // 16:9的配比
+  .class-header-main--new {
+
+    .class-info {
+      @media (max-width: @screen-xs-max) {
+        margin-bottom: 24px;
+      }
+    }
+
+    .class-operation__data {
+      li {
+        padding: 32px 0;
+        @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+          width: 100%;
+          margin: 4px 0;
+          padding: 0;
+          border: none;
+        }
+      }
+      &.two-col > li {
+        width: 50%;
+        @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+          width: 100%;
+          margin: 10px 0;
+        }
+      }
+    }
+
+    .class-operation__auditor {
+      padding: 15.5px 8px !important;
+      @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
+        padding: 13px 8px !important;
+        .auditor-tip {
+          font-size: 12px;
+        }
+      }
+      @media (max-width: @screen-xs-max) {
+        padding: 16px !important;
+      }
+    }
+  }
+
+  &.auditor {
+    .class-operation__data {
       padding: 0;
-    }
-    >li {
-      padding: 10px 0;
+      border-bottom: 1px solid @gray-lighter;
+      @media (max-width: @screen-md-max) {
+        padding: 10px 0;
+      }
       @media (max-width: @screen-sm-max) {
         padding: 0;
       }
-      @media (max-width: @screen-xs-max) {
-        padding: 20px 0;
+      >li {
+        padding: 10px 0;
+        @media (max-width: @screen-sm-max) {
+          padding: 0;
+        }
+        @media (max-width: @screen-xs-max) {
+          padding: 20px 0;
+        }
       }
     }
-    border-bottom: 1px solid @gray-lighter;
-  }
-  .class-auditor {
-    padding: 31px 40px;;
-    line-height: 30px;
-    color: @gray;
-    background-color: @bg-color;
-    @media (max-width: @screen-md-max) {
-      padding: 18px 20px;
-    }
-    @media (max-width: @screen-sm-max) {
-      padding: 10px 0 0 0;
-    }
-    @media (max-width: @screen-xs-max) {
-      padding: 10px 20px;
-    }
-    .class-auditor__tip {
-      display: inline-block;
-      margin-top: 4px;
+    .class-operation__auditor {
+      padding: 31px 40px;
+      line-height: 30px;
+      color: @gray;
+      background-color: @bg-color;
+      @media (max-width: @screen-md-max) {
+        padding: 18px 20px;
+      }
+      @media (max-width: @screen-sm-max) {
+        padding: 10px 0 0 0;
+      }
+      @media (max-width: @screen-xs-max) {
+        padding: 10px 20px;
+      }
+      .auditor-tip {
+        display: inline-block;
+        margin-top: 4px;
+
+      }
+
+      @media (min-width: @screen-md-min) {
+        .auditor-tip--preview {
+          float: right;
+          margin-top: 0;
+          line-height: 1;
+        }
+        .unpublish-tip {
+          margin-top: 6px;
+          line-height: 1;
+        }
+      }
     }
   }
 }
