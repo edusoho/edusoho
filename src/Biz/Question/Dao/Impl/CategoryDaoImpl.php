@@ -14,6 +14,11 @@ class CategoryDaoImpl extends AdvancedDaoImpl implements CategoryDao
         return $this->findByFields(array('bankId' => $bankId));
     }
 
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function declares()
     {
         return array(
