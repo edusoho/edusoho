@@ -42,7 +42,7 @@
           {% if classroom.buyable == 1 %}
             <a class="cd-btn cd-btn-primary js-classroom-buy-btn" href="javascript:" data-url="{{ path('classroom_buy',{id:classroom.id}) }}">{{ 'classroom.free_join'|trans }}</a>
           {% else %}
-            <button type="button" style="pointer-events:auto" class="btn btn-default disabled btn-lg" data-toggle="tooltip" data-placement="top"
+            <button type="button" style="pointer-events:auto" class="btn btn-default cd-btn cd-btn-default disabled" data-toggle="tooltip" data-placement="top"
               title="{{ 'classroom.not_online_buy_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}">{{ 'classroom.not_buy'|trans }}</button>
           {% endif %}
         {% endif %}
