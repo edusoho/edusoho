@@ -78,10 +78,11 @@ class QuestionMarkerController extends BaseController
      * 视频弹题预览.
      *
      * @param Request $request
-     * @param  $courseId
-     * @param  $id
+     * @param $courseId
+     * @param $id
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
     public function questionMakerPreviewAction(Request $request, $courseId, $id)
     {
@@ -91,6 +92,9 @@ class QuestionMarkerController extends BaseController
 
         if (empty($question)) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+        }
+        if (!$this->getQuestionBankService()->validateCanManageBank($question['bankId'])) {
+            $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
 
         $item = array(
@@ -102,6 +106,7 @@ class QuestionMarkerController extends BaseController
         if ($question['subCount'] > 0) {
             $questions = $this->getQuestionService()->findQuestionsByParentId($id);
 
+            $items = array();
             foreach ($questions as $value) {
                 $items[] = array(
                     'questionId' => $value['id'],
@@ -124,19 +129,6 @@ class QuestionMarkerController extends BaseController
                 'questionPreview' => $questionPreview,
             )
         );
-    }
-
-    public function sortQuestionAction(Request $request, $markerId)
-    {
-        if (!$this->tryManageQuestionMarker()) {
-            return $this->createJsonResponse(false);
-        }
-
-        $data = $request->request->all();
-        $ids = $data['ids'];
-        $this->getQuestionMarkerService()->sortQuestionMarkers($ids);
-
-        return $this->createJsonResponse(true);
     }
 
     //删除弹题
@@ -188,6 +180,9 @@ class QuestionMarkerController extends BaseController
 
         if (empty($question)) {
             return $this->createMessageResponse('error', '该题目不存在!');
+        }
+        if (!$this->getQuestionBankService()->validateCanManageBank($question['bankId'])) {
+            return $this->createMessageResponse('error', '没有管理该题目的权限');
         }
 
         if (empty($data['markerId'])) {
@@ -352,7 +347,7 @@ class QuestionMarkerController extends BaseController
 
     protected function tryManageQuestionMarker()
     {
-        $user = $this->getUserService()->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         if ($this->getUserService()->hasAdminRoles($user['id'])) {
             return true;
