@@ -5,6 +5,7 @@ namespace AppBundle\Controller\QuestionBank;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Question\QuestionException;
+use Biz\Question\Service\CategoryService;
 use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,9 +72,6 @@ class QuestionController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
 
         return $this->forward('AppBundle:Question/QuestionParser:read', array(
             'request' => $request,
@@ -186,7 +184,11 @@ class QuestionController extends BaseController
 
         $conditions['bankId'] = $id;
         $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
-        $orderBy = array('createdTime' => 'DESC');
+
+        $parentQuestion = array();
+        if (!empty($conditions['parentId'])) {
+            $parentQuestion = $this->getQuestionService()->get($conditions['parentId']);
+        }
 
         if (!empty($conditions['categoryId'])) {
             $childrenIds = $this->getQuestionCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
@@ -203,7 +205,7 @@ class QuestionController extends BaseController
 
         $questions = $this->getQuestionService()->search(
             $conditions,
-            $orderBy,
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -218,6 +220,7 @@ class QuestionController extends BaseController
             'users' => $users,
             'questionBank' => $questionBank,
             'questionCategories' => $questionCategories,
+            'parentQuestion' => $parentQuestion,
         ));
     }
 
@@ -408,6 +411,9 @@ class QuestionController extends BaseController
         return $this->createService('QuestionBank:QuestionBankService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getQuestionCategoryService()
     {
         return $this->createService('Question:CategoryService');

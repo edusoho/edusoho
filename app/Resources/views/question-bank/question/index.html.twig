@@ -44,6 +44,7 @@
                   </div>
                 </div>
               </div>
+              <input type="hidden" name="parentId" value="{{ parentQuestion.id }}" data-role="search-conditions">
               <div class="js-question-html" data-url="{{ path('question_bank_manage_question_show_ajax', {id: questionBank.id}) }}">
                 {% include 'question-bank/question/question-list-table.html.twig' %}
               </div>
