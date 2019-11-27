@@ -53,6 +53,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateOldAdminDisableRoles',
             'upgradeRoleDataV2',
             'updateAdminV2Setting',
+            'addTableQuickEntrance',
         );
 
         $funcNames = array();
@@ -166,6 +167,24 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $setting['allow_show_switch_btn'] = 1;
         $this->getSettingService()->set('backstage', $setting);
+
+        return 1;
+    }
+
+    public function addTableQuickEntrance()
+    {
+        if (!$this->isTableExist('quick_entrance')) {
+            $this->getConnection()->exec("
+                CREATE TABLE IF NOT EXISTS `quick_entrance` (
+                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) NOT NULL COMMENT '用户ID',
+                  `data` text COMMENT '常用功能',
+                  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='常用功能';
+            ");
+        }
 
         return 1;
     }
