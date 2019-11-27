@@ -43,7 +43,7 @@
       </div>
     {% endif %}
 
-    <div class="class-header-mian class-header-mian--new">
+    <div class="class-header-mian class-header-main--new">
       {# 背景层即将舍弃 #}
       <div class="class-bg-layer"></div>
       <div class="class-header-bg clearfix">
@@ -56,7 +56,8 @@
         </div>
         <div class="class-info">
           <h2 class="title class-info__title">
-            {{ classroom.title }}
+            <span class="hidden-xs">{{ classroom.title|sub_text(20) }}</span>
+            <span class="visible-xs">{{ classroom.title }}</span>
             <span class="es-qrcode top" data-url="{{ path('classroom_qrcode',{id: classroom.id}) }}">
               <i class="es-icon es-icon-qrcode"></i>
               <span class="qrcode-popover">
@@ -94,7 +95,6 @@
             {% endif %}
           </div>
 
-         
           {% if classroom.expiryMode != 'forever' %}
             {% if 'student' in member.role or 'member' in member.role %}
               <div class="hidden-sm classroom-expiry cd-mb16">

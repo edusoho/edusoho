@@ -18,7 +18,7 @@
       <li class="active">{{ classroom.title }}</li>
     </ol>
 
-    <div class="class-header-mian class-header-mian--new">
+    <div class="class-header-mian class-header-main--new">
       <div class="class-bg-layer"></div>
       <div class="class-header-bg clearfix">
         <div class="class-img">
@@ -32,7 +32,8 @@
         </div>
         <div class="class-info">
           <h2 class="title class-info__title">
-            {{ classroom.title }}
+            <span class="hidden-xs">{{ classroom.title|sub_text(30) }}</span>
+            <span class="visible-xs">{{ classroom.title }}</span>
             <span class="es-qrcode top" data-url="{{ path('classroom_qrcode',{id: classroom.id}) }}">
               <i class="es-icon es-icon-qrcode"></i>
               <span class="qrcode-popover">
@@ -41,7 +42,7 @@
               </span>
             </span>
           </h2>
-          <div class="metas">
+          <div class="metas class-info__metas">
             {% if setting('classroom.show_review', '1') == 1 %}
               <div class="score">
                 {{ web_macro.star(classroom.rating) }}
@@ -70,17 +71,17 @@
 
          {# 有效期 #}
           {% if classroom.expiryMode == 'date' %}
-            <div class="class-expiry hidden-sm">
-              <span class="class-expiry__label">{{ 'classroom.expiry_date_tips'|trans }}</span>
+            <div class="class-info__expiry hidden-sm">
+              <span class="color-gray cd-text-xs">{{ 'classroom.expiry_date_tips'|trans }}</span>
               <span class="gray-darker">{{ classroom.expiryValue|date('Y-m-d') }}</span>
             </div>
           {% elseif classroom.expiryMode == 'days' %} 
             <div class="class-expiry hidden-sm">
-              <span class="class-expiry__label">{{ 'classroom.expiry_day_tips'|trans({'%expiryValue%': classroom.expiryValue})|raw }}</span>
+              <span class="color-gray cd-text-xs">{{ 'classroom.expiry_day_tips'|trans({'%expiryValue%': classroom.expiryValue})|raw }}</span>
             </div>
           {% endif %}
 
-          <ul class="class-data cd-mt8 hidden-sm clearfix {% if classroomMemberLevel %}active{% endif %}">
+          <ul class="class-info__data cd-mt8 hidden-sm clearfix {% if classroomMemberLevel %}active{% endif %}">
             {% if setting('classroom.show_student_num_enabled', '1') == 1 %}
               <li>
                 <p><i class="es-icon es-icon-person"></i></p>
@@ -113,7 +114,7 @@
             {% endif %}
           </ul>
 
-          <div class="bottom-metas clearfix">
+          <div class="bottom-metas class-info__bottom clearfix">
             <div class="class-serve hidden-sm hidden-xs">
               <div class="class-serve__label">
                 {{ 'classroom.showServices'|trans }}
