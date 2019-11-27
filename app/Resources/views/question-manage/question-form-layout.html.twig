@@ -1,6 +1,6 @@
 {% extends 'question-bank/question/index.html.twig' %}
 
-{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'app/js/question-manage/form/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/question-manage/form/index.js']) %}
 
 {% block panel_body %}
 
@@ -18,9 +18,10 @@
           <div class="col-md-2 control-label"><label for="categoryId">{{'question_bank.question_manage.manage.category'|trans}}</label></div>
           <div class="col-md-8 controls">
             <select class="form-control width-150" id="categoryId" name="categoryId" data-role="categoryId">
-              <option value="0" {% if not question.categoryId|default(0) %}selected{% endif %}></option>
+              <option value="0">{{ 'admin.question_bank.manage.category'|trans }}</option>
+              <option value="0"{% if not question.categoryId|default(0) %} selected{% endif %}>{{ 'site.data.empty'|trans }}</option>
               {% for category in categoryTree if categoryTree %}
-                <option value="{{ category.id }}" {% if question.categoryId|default(0) == category.id %}selected{% endif %}>{{ category.name }}</option>
+                <option value="{{ category.id }}"{% if question.categoryId|default(0) == category.id %} selected{% endif %}>{% for i in 1..(category.depth-1) if category.depth > 1 %}　{% endfor %}{{ category.name }}</option>
               {% endfor %}
             </select>
           </div>

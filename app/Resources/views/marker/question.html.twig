@@ -9,7 +9,7 @@
   >
     <form class="form-horizontal js-mark-form" action="{{path('course_task_question_marker_search',{courseId:course.id,taskId:task.id})}}" method="post" novalidate>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-      <div class="form-group">
+      <div class="form-group cd-mb16">
         <div class="col-xs-6">
           <select class="form-control" name="bankId" id="mark-form-bankId" data-url="{{ path('question_bank_manage_question_category_show', {bankId:0}) }}">
             {{ select_options(questionBankChoices, app.request.request.get('bankId'), 'question.marker_question.select_question_bank'|trans) }}

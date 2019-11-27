@@ -114,6 +114,7 @@ class Manage {
   init() {
     this.initData();
     this.initEvent();
+    this.disableSelect();
   }
 
   initData() {
@@ -157,8 +158,23 @@ class Manage {
     this.$marker.on('keydown', '#mark-form-keyword', event => this.onFormAutoSubmit(event));
   }
 
+  disableSelect() {
+    $('#mark-form-categoryId').select2({
+      'disable': true,
+    });
+  }
+
+  enableSelect() {
+    $('#mark-form-categoryId').select2({
+      treeview: true,
+      dropdownAutoWidth: true,
+      treeviewInitState: 'collapsed',
+      placeholderOption: 'first',
+    });
+  }
+
   onFormAutoSubmit(event) {
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
       event.preventDefault();
       this.onFormSubmit(event);
     }
@@ -178,17 +194,24 @@ class Manage {
       if (url === undefined) {
         return;
       }
+      let $categorySelect = $('#mark-form-categoryId');
+      let option = `<option value="0">${Translator.trans('question.marker_question.select_question_category')}</option>`;
       let bankId = $target.val();
       if (!bankId) {
+        $categorySelect.html(option);
+        this.disableSelect();
         return;
       }
       url = url.replace(/[0-9]/, bankId);
+      let self = this;
       $.post(url, function (response) {
-        let option = `<option value="0">${Translator.trans('question.marker_question.select_question_category')}</option>`;
+        option += `<option value="0">无</option>`;
         $.each(response, function (index, category) {
-          option += `<option value="${category.id}">${category.name}</option>`;
+          let space = category.depth > 1 ? '　'.repeat(category.depth-1) : '';
+          option += `<option value="${category.id}">${space}${category.name}</option>`;
         });
-        $('#mark-form-categoryId').html(option);
+        $categorySelect.html(option);
+        self.enableSelect();
       });
     }
   }

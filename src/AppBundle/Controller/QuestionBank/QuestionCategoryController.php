@@ -88,7 +88,7 @@ class QuestionCategoryController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        $categories = $this->getQuestionCategoryService()->findCategories($bankId);
+        $categories = $this->getQuestionCategoryService()->getCategoryTree($bankId);
 
         return $this->createJsonResponse($categories);
     }

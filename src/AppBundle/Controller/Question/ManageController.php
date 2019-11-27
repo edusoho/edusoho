@@ -207,58 +207,13 @@ class ManageController extends BaseController
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         $data = $token['data'];
         if (!$this->getQuestionBankService()->validateCanManageBank($data['questionBankId'])) {
-            $this->createNewException(QuestionBankException::FORBIDDEN_MANAGE_BANK());
+            $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
         $content = $request->getContent();
         $postData = json_decode($content, true);
         $this->getQuestionService()->importQuestions($postData['questions'], $token);
 
         return $this->createJsonResponse(true);
-    }
-
-    protected function buildExportQuestions($questions)
-    {
-        $exportQuestions = array();
-        $wrapper = $this->getWrapper();
-
-        $seq = 1;
-        $num = 1;
-        foreach ($questions as $question) {
-            $question['seq'] = $seq++;
-            $question['num'] = $num++;
-            if ('material' == $question['type']) {
-                $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-                $subSeq = 1;
-                foreach ($subQuestions as $index => $subQuestion) {
-                    $subQuestions[$index]['seq'] = $subSeq++;
-                }
-                $question['subs'] = $subQuestions;
-            }
-
-            $question = $wrapper->handle($question, 'exportQuestion');
-            $question = ArrayToolkit::parts($question, array(
-                'type',
-                'seq',
-                'stem',
-                'options',
-                'answer',
-                'score',
-                'difficulty',
-                'analysis',
-                'subs',
-                'num',
-            ));
-            $exportQuestions[] = $question;
-        }
-
-        return $exportQuestions;
-    }
-
-    protected function getWrapper()
-    {
-        global $kernel;
-
-        return $kernel->getContainer()->get('web.wrapper');
     }
 
     protected function getQuestionConfig()
