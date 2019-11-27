@@ -212,7 +212,7 @@ class QuestionController extends BaseController
         $questionCategories = $this->getQuestionCategoryService()->findCategories($questionBank['id']);
         $questionCategories = ArrayToolkit::index($questionCategories, 'id');
 
-        return $this->render('question-bank/question/question-list-tr.html.twig', array(
+        return $this->render('question-bank/question/question-list-table.html.twig', array(
             'questions' => $questions,
             'paginator' => $paginator,
             'users' => $users,

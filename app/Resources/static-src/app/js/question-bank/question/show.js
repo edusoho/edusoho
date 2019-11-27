@@ -1,4 +1,5 @@
 import { toggleIcon } from 'app/common/widget/chapter-animate';
+import {shortLongText} from 'app/common/widget/short-long-text';
 import Selector from '../common/selector';
 
 class QuestionsShow {
@@ -14,6 +15,7 @@ class QuestionsShow {
     this.initEvent();
     this.initSelect();
     this.initCategoryShow();
+    this.initShortLongText();
   }
   initEvent() {
     this.element.on('click', '.js-search-btn', (event) => {
@@ -62,11 +64,15 @@ class QuestionsShow {
     });
   }
 
+  initShortLongText() {
+    shortLongText($('#quiz-table-container'));
+  }
+
   showCategoryModal(event) {
     let $target = $(event.currentTarget);
     let name = $target.data('name');
     let ids = this.selector.toJson();
-    if (ids.length == 0) {
+    if (ids.length === 0) {
       cd.message({type: 'danger', message: Translator.trans('site.data.uncheck_name_hint', {'name': name})});
       return;
     }
@@ -123,7 +129,7 @@ class QuestionsShow {
     let name = $target.data('name');
     let ids = this.selector.toJson();
     let content = '<br><div class="help-block">' + Translator.trans('course.question_manage.manage.delete_tips') + '</div>';
-    if (ids.length == 0) {
+    if (ids.length === 0) {
       cd.message({type: 'danger', message: Translator.trans('site.data.uncheck_name_hint', {'name': name})});
       return;
     }
