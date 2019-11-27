@@ -3298,6 +3298,10 @@ question_bank_manage_testpaper_list:
     path: /question_bank/{id}/testpapers
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:index }
 
+question_bank_manage_testpaper_import:
+    path: /question_bank/{id}/testpaper/import
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:import }
+
 question_bank_manage_testpaper_show_ajax:
     path: /question_bank/{id}/testpaper/show/ajax
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:getTestpaperHtml }
