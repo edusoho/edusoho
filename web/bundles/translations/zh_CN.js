@@ -1252,4 +1252,12 @@ t.add("admin.setting.invite.coupon.empty.tips", "\u8bf7\u8bbe\u7f6e\u4f18\u60e0\
 t.add("course.plan_task.activity_ppt_animation_img", "\u5207\u6362\u56fe\u7247\u6a21\u5f0f", "js", "zh_CN");
 t.add("course.plan_task.activity_ppt_animation_slide", "\u5207\u6362\u52a8\u753b\u6a21\u5f0f", "js", "zh_CN");
 t.add("course.plan_task.lessons_publish_status", "\u5df2\u53d1\u5e03\u8bfe\u65f6\u6570\uff1a%publishedNum%<br\/>\u672a\u53d1\u5e03\u8bfe\u65f6\u6570\uff1a%unpublishedNum%", "js", "zh_CN");
+t.add("admin_v2.user.cloude_sms_enable_hint", "\u8bf7\u5148\u5230\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u5e94\u7528\u4e2d\u5fc3\u3011-\u3010\u4e91\u670d\u52a1\u3011-\u3010\u4e91\u77ed\u4fe1\u3011\u4e2d\u5f00\u542f\u4e91\u77ed\u4fe1\u54e6~", "js", "zh_CN");
+t.add("admin_v2.homepage.quick_entrance.hint", "\u6700\u591a\u8bbe\u7f6e7\u4e2a\u5feb\u6377\u5165\u53e3\u4f4d", "js", "zh_CN");
+t.add("admin_v2.homepage.mini_program.title", "\u626b\u7801\u6253\u5f00\u5c0f\u7a0b\u5e8f", "js", "zh_CN");
+t.add("admin.switch_old_version.permission_error", "\u8bf7\u8054\u7cfb\u8d85\u7ea7\u7ba1\u7406\u5458\u6216\u7ba1\u7406\u5458\u64cd\u4f5c", "js", "zh_CN");
+t.add("admin.switch_old_version.title", "\u5207\u6362\u540e\u53f0", "js", "zh_CN");
+t.add("admin.switch_old_version.confirm_message", "\u5207\u6362\u5230\u8001\u540e\u53f0\u540e\uff0c\u6240\u6709\u7ba1\u7406\u5458\u5c06\u5207\u6362\u81f3\u8001\u540e\u53f0\uff0c\u786e\u8ba4\u5207\u6362\uff1f", "js", "zh_CN");
+t.add("admin.switch_new_version.confirm_message", "\u5347\u7ea7\u5230\u65b0\u540e\u53f0\u540e\uff0c\u6240\u6709\u7ba1\u7406\u5458\u5c06\u5207\u6362\u81f3\u65b0\u540e\u53f0\uff0c\u4f46\u6743\u9650\u529f\u80fd\u4e0d\u4f1a\u6539\u53d8\uff0c \u786e\u8ba4\u5207\u6362\uff1f", "js", "zh_CN");
+t.add("admin.can_not_link_data", "\u65e0\u6cd5\u8fde\u63a5\u5230\u6570\u636e", "js", "zh_CN");
 })(Translator);
