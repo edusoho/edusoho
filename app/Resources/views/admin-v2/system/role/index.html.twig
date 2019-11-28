@@ -31,7 +31,7 @@
       <th width="20%">{{ 'admin.role_manage.createdTime'|trans }}</th>
       <th width="20%">{{ 'admin.role_manage.nickname'|trans }}</th>
       <th>{{ 'admin.role_manage.operation'|trans }}</th>
-    </tr>   
+    </tr>
     {% for role in roles %}
       <tr>
         <td>
@@ -48,7 +48,7 @@
           <div class="btn-group">
             <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_role_show', {id:role.id}) }}" data-url="" class="btn btn-default btn-sm">{{ 'form.btn.view'|trans }}</a>
             {% if role.code not in notUpdateRoles %}
-              {% include 'admin-v2/role/templates/group-button.html.twig' with {parentCode: 'admin_v2_role_manage', group:'groupBtn', role: role} %}
+              {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_role_manage', group:'groupBtn', role: role} %}
             {% endif %}
           </div>
         </td>

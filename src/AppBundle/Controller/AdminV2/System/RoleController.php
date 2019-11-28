@@ -43,7 +43,7 @@ class RoleController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
         $users = ArrayToolkit::index($users, 'id');
 
-        return $this->render('admin-v2/role/index.html.twig', array(
+        return $this->render('admin-v2/system/role/index.html.twig', array(
             'roles' => $roles,
             'users' => $users,
             'paginator' => $paginator,
@@ -67,7 +67,7 @@ class RoleController extends BaseController
         $children = $this->getRoleService()->rolesTreeTrans($res['children'], 'adminV2');
         $children = $this->getRoleService()->filterRoleTree($children);
 
-        return $this->render('admin-v2/role/role-modal.html.twig', array(
+        return $this->render('admin-v2/system/role/role-modal.html.twig', array(
             'menus' => json_encode($children),
             'model' => 'create',
         ));
@@ -100,7 +100,7 @@ class RoleController extends BaseController
         $children = $this->getRoleService()->rolesTreeTrans($res['children'], 'adminV2');
         $children = $this->getRoleService()->filterRoleTree($children);
 
-        return $this->render('admin-v2/role/role-modal.html.twig', array(
+        return $this->render('admin-v2/system/role/role-modal.html.twig', array(
             'menus' => json_encode($children),
             'model' => 'edit',
             'role' => $role,
@@ -132,7 +132,7 @@ class RoleController extends BaseController
         $children = $this->getRoleService()->rolesTreeTrans($res['children'], 'adminV2');
         $children = $this->getRoleService()->filterRoleTree($children);
 
-        return $this->render('admin-v2/role/role-modal.html.twig', array(
+        return $this->render('admin-v2/system/role/role-modal.html.twig', array(
             'menus' => json_encode($children),
             'model' => 'show',
             'role' => $role,
