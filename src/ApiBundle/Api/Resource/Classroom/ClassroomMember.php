@@ -41,6 +41,12 @@ class ClassroomMember extends AbstractResource
      */
     public function search(ApiRequest $request, $classroomId)
     {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+
+        if (!$classroom) {
+            throw ClassroomException::NOTFOUND_CLASSROOM();
+        }
+
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions = array('classroomId' => $classroomId);
 
