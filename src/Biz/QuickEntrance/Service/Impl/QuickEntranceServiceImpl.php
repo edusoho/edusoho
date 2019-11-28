@@ -68,7 +68,7 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
 
     public function updateUserEntrances($userId, $entrances = array())
     {
-        if (count($entrances) > 7) {
+        if (count($entrances) > self::QUICK_ENTRANCE_MAX_NUM) {
             throw $this->createInvalidArgumentException('Entrance invalid');
         }
 
@@ -85,7 +85,7 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
 
     public function createUserEntrance($userId, $entrances = array())
     {
-        if (count($entrances) > 7) {
+        if (count($entrances) > self::QUICK_ENTRANCE_MAX_NUM) {
             throw $this->createInvalidArgumentException('Entrance invalid');
         }
 
