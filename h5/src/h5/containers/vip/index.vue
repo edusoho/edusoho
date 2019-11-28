@@ -6,7 +6,7 @@
         <img v-if="user.avatar" :src="user.avatar.large" class="user-img" />
         <div class="user-middle">
           <div class="user-name">{{ user.nickname }}</div>
-          <span v-if="vipInfo" class="user-vip">
+          <span v-if="vipInfo" class="user-vip vip-level text-overflow ">
             <img
               v-if="vipInfo.icon"
               :class="['vip-img', vipDated ? 'vip-expired' : '']"
