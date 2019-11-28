@@ -289,6 +289,16 @@ class TestpaperController extends BaseController
         return new BinaryFileResponse($path, 200, $headers);
     }
 
+    public function questionPickAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('question-bank/common/question-pick-modal.html.twig', array(
+        ));
+    }
+
     protected function getQuestionTypes()
     {
         $typesConfig = $this->get('extension.manager')->getQuestionTypes();
