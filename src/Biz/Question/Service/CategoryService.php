@@ -10,6 +10,8 @@ interface CategoryService
 
     public function getCategoryStructureTree($bankId);
 
+    public function findCategoryChildrenIds($id);
+
     public function getCategoryTree($bankId);
 
     public function findCategories($bankId);

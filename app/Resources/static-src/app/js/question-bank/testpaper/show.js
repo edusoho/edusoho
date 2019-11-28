@@ -1,11 +1,11 @@
-import { toggleIcon } from 'app/common/widget/chapter-animate';
 import Selector from '../common/selector';
 
 class TestpaperShow {
   constructor() {
-    this.renderUrl = $('.js-testpaper-html').data('url');
+    this.table = $('.js-testpaper-html');
+    this.renderUrl = this.table.data('url');
     this.element = $('.js-testpaper-container');
-    this.selector = new Selector($('.js-testpaper-html'));
+    this.selector = new Selector(this.table);
     this.init();
   }
   init() {
@@ -38,7 +38,7 @@ class TestpaperShow {
     let $target = $(event.currentTarget);
     let name = $target.data('name');
     let ids = this.selector.toJson();
-    if (ids.length == 0) {
+    if (ids.length === 0) {
       cd.message({type: 'danger', message: Translator.trans('site.data.uncheck_name_hint', {'name': name})});
       return;
     }
@@ -103,7 +103,7 @@ class TestpaperShow {
     let self = this;
 
     if (!confirm($target.attr('title'))) {
-      return ;
+      return;
     }
 
     $.post($target.data('url'), function(html){
@@ -117,15 +117,14 @@ class TestpaperShow {
   renderTable(isPaginator) {
     isPaginator || this._resetPage();
     let self = this;
-    let $table = $('.js-testpaper-html');
-    var conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + this.element.find('.js-page').val();
+    let conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + this.element.find('.js-page').val();
     this._loading();
     $.ajax({
       type: 'GET',
       url: this.renderUrl,
       data: conditions
     }).done(function(resp){
-      $table.html(resp);
+      self.table.html(resp);
       self.selector.updateTable();
     }).fail(function(){
       self._loaded_error();
@@ -133,13 +132,11 @@ class TestpaperShow {
   }
   _loading() {
     let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('site.loading') + '</div>';
-    let $table = $('.js-testpaper-html');
-    $table.html(loading);
+    this.table.html(loading);
   }
   _loaded_error() {
     let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('site.loading_error') + '</div>';
-    let $table = $('.js-testpaper-html');
-    $table.html(loading);
+    this.table.html(loading);
   }
   _resetPage() {
     this.element.find('.js-page').val(1);
