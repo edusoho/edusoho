@@ -5,6 +5,7 @@ namespace Biz\QuestionBank\Service\Impl;
 use Biz\BaseService;
 use Biz\QuestionBank\Dao\QuestionBankDao;
 use Biz\QuestionBank\Service\CategoryService;
+use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\CategoryException;
@@ -142,9 +143,25 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         }
     }
 
-    public function findAllQuestionBanks()
+    public function findAllAccessibleQuestionBanks()
     {
-        return $this->getQuestionBankDao()->findAll();
+        $user = $this->getCurrentUser();
+
+        if ($user->isAdmin()) {
+            $questionBanks = $this->getQuestionBankDao()->findAll();
+        } else {
+            $members = $this->getMemberService()->findMembersByUserId($user->getId());
+            $questionBankIds = ArrayToolkit::column($members, 'bankId');
+            $conditions['ids'] = $questionBankIds ?: array(-1);
+            $questionBanks = $this->searchQuestionBanks(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                0,
+                $this->countQuestionBanks($conditions)
+            );
+        }
+
+        return $questionBanks;
     }
 
     public function validateCanManageBank($bankId, $permission = 'admin_question_bank')
@@ -222,6 +239,9 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $this->createService('QuestionBank:CategoryService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getMemberService()
     {
         return $this->createService('QuestionBank:MemberService');

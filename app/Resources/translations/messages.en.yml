@@ -9176,6 +9176,7 @@ question_bank.question_manage.manage.advanced_options: 'Show / Hide advanced opt
 question_bank.question_manage.manage.stem_tips: "Click the button <span style=\"color:red\">[ ]</span>  to insert a blank. You can also input manually, for example “This year is [[2014]]”, the answer is “2014”\n"
 question_bank.question_manage.manage.material: Material
 
+question.select_question_bank: --Select question bank--
 question_reedit.select_question_category: --Select category--
 question_reedit.category_text: Category
 question_reedit.category_empty: None

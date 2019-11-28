@@ -15,7 +15,6 @@ use Biz\Question\Service\QuestionService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\QuestionBank\QuestionBankException;
-use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
@@ -275,21 +274,7 @@ class QuestionMarkerController extends BaseController
 
     protected function getQuestionBankChoices()
     {
-        $user = $this->getCurrentUser();
-
-        if ($user->isSuperAdmin()) {
-            $questionBanks = $this->getQuestionBankService()->findAllQuestionBanks();
-        } else {
-            $members = $this->getMemberService()->findMembersByUserId($user->getId());
-            $questionBankIds = ArrayToolkit::column($members, 'bankId');
-            $conditions['ids'] = $questionBankIds ?: array(-1);
-            $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(
-                $conditions,
-                array('createdTime' => 'DESC'),
-                0,
-                $this->getQuestionBankService()->countQuestionBanks($conditions)
-            );
-        }
+        $questionBanks = $this->getQuestionBankService()->findAllAccessibleQuestionBanks();
 
         $choices = array();
         foreach ($questionBanks as &$questionBank) {
@@ -443,13 +428,5 @@ class QuestionMarkerController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
-    }
-
-    /**
-     * @return MemberService
-     */
-    protected function getMemberService()
-    {
-        return $this->createService('QuestionBank:MemberService');
     }
 }

@@ -4,13 +4,14 @@ class Testpaper {
   constructor($element) {
     this.$element = $element;
     this.$form = this.$element.find('#step2-form');
+    this.$testpaperSelect = this.$element.find('#testpaper-media');
     this._init();
   }
 
   _init() {
     dateFormat();
     this.setValidateRule();
-    this.initSelectTestpaper(this.$element.find('#testpaper-media').find('option:selected'),$('[name="finishScore"]').val());
+    this.initSelectTestpaper(this.$element.find('#testpaper-media').find('option:selected'));
     this.initEvent();
     this.initStepForm2();
     window.ltc.on('getActivity', (msg) => {
@@ -31,9 +32,10 @@ class Testpaper {
   }
 
   initEvent() {
-    this.$element.find('#testpaper-media').on('change', event=>this.changeTestpaper(event));
-    this.$element.find('input[name=doTimes]').on('change', event=>this.showRedoInterval(event));
-    this.$element.find('input[name="testMode"]').on('change',event=>this.startTimeCheck(event));
+    this.$element.find('#question-bank').on('change', event => this.changeQuestionBank(event));
+    this.$element.find('#testpaper-media').on('change', event => this.changeTestpaper(event));
+    this.$element.find('input[name=doTimes]').on('change', event => this.showRedoInterval(event));
+    this.$element.find('input[name="testMode"]').on('change', event => this.startTimeCheck(event));
   }
 
   initStepForm2() {
@@ -81,21 +83,48 @@ class Testpaper {
     });
   }
 
-  initSelectTestpaper($option, passScore='') {
+  initSelectTestpaper($option) {
     let mediaId = $option.val();
     if (mediaId != '') {
       this.getItemsTable($option.closest('select').data('getTestpaperItems'), mediaId);
-      let score = $option.data('score');
-      if (passScore == '') {
-        passScore = Math.ceil(score * 0.6);
-      }
-      $('#score-single-input').val(passScore);
-      if(!$('input[name="title"]').val()) {
+      if (!$('input[name="title"]').val()) {
         $('input[name="title"]').val($option.text());
       }
     } else {
       $('#questionItemShowDiv').hide();
     }
+  }
+
+  changeQuestionBank(event) {
+    let url = $('#question-bank').data('url');
+    let $target = $(event.currentTarget);
+    let bankId = $target.val();
+    let option = `<option value="">${Translator.trans('请选择试卷')}</option>`;
+    if (!bankId) {
+      this.$testpaperSelect.html(option);
+      return;
+    }
+    url = url.replace(/[0-9]/, bankId);
+    let self = this;
+    $.post(url, function(resp) {
+      let $helpBlock = $('.js-help-block');
+      if (resp.totalCount === 0) {
+        $helpBlock.addClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.empty_tips'));
+        return;
+      }
+      if (resp.openCount === 0) {
+        $helpBlock.removeClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.no_open_tips'));
+        return;
+      }
+      $helpBlock.addClass('hidden');
+      $.each(resp.testpapers, function(index, testpaper) {
+        option += `<option value="${testpaper.id}">${testpaper.name}</option>`;
+      });
+      self.$testpaperSelect.html(option);
+    }).error(function(e) {
+      console.log(e);
+      cd.message({type: 'danger', message: 'error'});
+    });
   }
 
   changeTestpaper(event) {
@@ -133,7 +162,7 @@ class Testpaper {
   }
 
   getItemsTable(url, testpaperId) {
-    $.post(url, {testpaperId:testpaperId},function(html){
+    $.post(url, {testpaperId:testpaperId}, function(html){
       $('#questionItemShowTable').html(html);
       $('#questionItemShowDiv').show();
     });
