@@ -1115,11 +1115,7 @@ admin_v2:
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center
             class: js-new-corner-mark
-<<<<<<< HEAD
-            visible: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network())
-=======
             visible: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示云市场
->>>>>>> 89a21b45e2d24cb09b28025d6746243440a8699f
             children:
                 #营销云
                 admin_v2_basic_app_center_group:
