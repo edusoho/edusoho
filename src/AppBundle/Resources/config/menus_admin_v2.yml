@@ -373,6 +373,7 @@ admin_v2:
                             quick_entrance_icon: 'cloud'
                             name: admin_v2.cloud_resource.basic_tab
                             router_name: admin_v2_cloud_file
+                            visible: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network())
                             children:
                                 admin_v2_cloud_file:
                                     name: admin_v2.cloud.file.basic_tab
@@ -1114,6 +1115,7 @@ admin_v2:
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center
             class: js-new-corner-mark
+            visible: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network())
             children:
                 #营销云
                 admin_v2_basic_app_center_group:
