@@ -30,16 +30,16 @@
     {% set questionBankTree = data('QuestionBankTree', {}) %}
 
     <div class="form-group">
-      <label class="col-sm-2 control-label">{{'出题范围'|trans}}</label>
+      <label class="col-sm-2 control-label">{{'course.testpaper_manage.create.range'|trans}}</label>
       <div class="col-sm-10 controls radios">
         <select class="form-control width-150" id="questionBankSelect" name="range[bankId]" data-url="{{ path('question_bank_manage_question_category_show') }}" data-check-num-url="{{ path('question_bank_manage_question_check_num') }}">
           {% if questionBankTree %}
-          <option value="0" {% if not range.bankId|default(0) %}selected{% endif %}>{{'选择题库'|trans}}</option>
+          <option value="0" {% if not range.bankId|default(0) %}selected{% endif %}>{{'question.marker_question.select_question_bank'|trans}}</option>
             {% for tree in questionBankTree %}
               <option value={{ tree.id }} {% if tree.categoryId is not defined %} disabled="disabled" {% endif %} {% if range.bankId|default(0) == tree.id %}selected{% endif %}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
             {% endfor %}
           {% else %}
-            <option value="0" {% if not range.bankId|default(0) %}selected{% endif %}>{{'暂无题库'|trans}}</option>
+            <option value="0" {% if not range.bankId|default(0) %}selected{% endif %}>{{'question_bank.empty.no_auth'|trans}}</option>
           {% endif %}
         </select>
         <select class="form-control width-150 {% if not questionCategories|default(null) %}hidden{% endif %}" id="questionCategorySelect" name="range[categoryId]">
