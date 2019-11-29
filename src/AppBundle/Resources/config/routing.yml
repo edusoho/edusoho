@@ -3285,13 +3285,18 @@ question_bank_manage_question_export:
     defaults: { _controller: AppBundle:QuestionBank/Question:export }
 
 question_bank_manage_question_category_show:
-    path: /question_bank/{bankId}/question/show/category
+    path: /question_bank/question/show/category
     defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:showCategories }
     methods: [POST]
 
 question_bank_manage_question_set_category:
     path: /question_bank/{id}/questions/set_category
     defaults: { _controller: AppBundle:QuestionBank/Question:setCategory }
+    methods: [POST]
+
+question_bank_manage_question_check_num:
+    path: /question_bank/manage/question/check/num
+    defaults: { _controller: AppBundle:QuestionBank/Question:showQuestionTypesNum }
     methods: [POST]
 
 question_bank_manage_testpaper_list:

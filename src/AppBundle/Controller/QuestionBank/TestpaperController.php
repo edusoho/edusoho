@@ -18,7 +18,7 @@ class TestpaperController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -58,7 +58,7 @@ class TestpaperController extends BaseController
 
     public function getTestpaperHtmlAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -99,7 +99,7 @@ class TestpaperController extends BaseController
 
     public function importAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -114,9 +114,37 @@ class TestpaperController extends BaseController
 
     public function createAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
+
+        if ('POST' === $request->getMethod()) {
+            $baseInfo = $request->request->get('baseInfo', array());
+            $questionInfo = $request->request->get('questionInfo', array());
+            $baseInfo['pattern'] = 'questionType';
+
+            if (empty($questionInfo['questions'])) {
+                return $this->createMessageResponse('error', '试卷题目不能为空！');
+            }
+            $questionInfo['questions'] = json_decode($questionInfo['questions'], true);
+
+            if (empty($questionInfo['questionTypeSeq'])) {
+                return $this->createMessageResponse('error', '题型排序错误');
+            }
+            $questionInfo['questionTypeSeq'] = json_decode($questionInfo['questionTypeSeq'], true);
+
+            if (count($questionInfo['questions']) > 2000) {
+                return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
+            }
+
+            $testpaper = $this->getTestpaperService()->buildTestpaper($baseInfo, 'testpaper');
+            $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
+
+            return $this->redirect(
+                $this->generateUrl('question_bank_manage_testpaper_list', array('id' => $id))
+            );
+        }
+
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
 
@@ -130,7 +158,7 @@ class TestpaperController extends BaseController
 
     public function editAction(Request $request, $id, $testpaperId)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -143,6 +171,32 @@ class TestpaperController extends BaseController
 
         if ('draft' != $testpaper['status']) {
             return $this->createMessageResponse('error', '已发布或已关闭的试卷不能再修改题目');
+        }
+
+        if ('POST' === $request->getMethod()) {
+            $baseInfo = $request->request->get('baseInfo', array());
+            $questionInfo = $request->request->get('questionInfo', array());
+
+            if (empty($questionInfo['questions'])) {
+                return $this->createMessageResponse('error', '试卷题目不能为空！');
+            }
+            $questionInfo['questions'] = json_decode($questionInfo['questions'], true);
+
+            if (empty($questionInfo['questionTypeSeq'])) {
+                return $this->createMessageResponse('error', '题型排序错误');
+            }
+            $questionInfo['questionTypeSeq'] = json_decode($questionInfo['questionTypeSeq'], true);
+
+            if (count($questionInfo['questions']) > 2000) {
+                return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
+            }
+
+            $this->getTestpaperService()->updateTestpaper($testpaper['id'], $baseInfo);
+            $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
+
+            $this->setFlashMessage('success', 'site.save.success');
+
+            return $this->redirect($this->generateUrl('question_bank_manage_testpaper_list', array('id' => $id)));
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
@@ -159,7 +213,7 @@ class TestpaperController extends BaseController
 
     public function deleteTestpapersAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -177,7 +231,7 @@ class TestpaperController extends BaseController
 
     public function deleteAction(Request $request, $id, $testpaperId)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -194,7 +248,7 @@ class TestpaperController extends BaseController
 
     public function publishAction(Request $request, $id, $testpaperId)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -212,7 +266,7 @@ class TestpaperController extends BaseController
 
     public function closeAction(Request $request, $id, $testpaperId)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -230,7 +284,7 @@ class TestpaperController extends BaseController
 
     public function previewAction(Request $request, $id, $testpaperId)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -262,7 +316,7 @@ class TestpaperController extends BaseController
 
     public function exportAction(Request $request, $id, $testpaperId)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -291,7 +345,7 @@ class TestpaperController extends BaseController
 
     public function questionPickAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 

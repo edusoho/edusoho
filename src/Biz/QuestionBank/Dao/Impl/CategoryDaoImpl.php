@@ -41,6 +41,7 @@ class CategoryDaoImpl extends AdvancedDaoImpl implements CategoryDao
 
         $declares['conditions'] = array(
             'id = :id',
+            'id in (:ids)',
         );
 
         return $declares;

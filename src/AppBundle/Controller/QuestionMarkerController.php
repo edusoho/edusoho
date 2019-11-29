@@ -93,7 +93,7 @@ class QuestionMarkerController extends BaseController
         if (empty($question)) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
-        if (!$this->getQuestionBankService()->validateCanManageBank($question['bankId'])) {
+        if (!$this->getQuestionBankService()->canManageBank($question['bankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
 
@@ -181,7 +181,7 @@ class QuestionMarkerController extends BaseController
         if (empty($question)) {
             return $this->createMessageResponse('error', '该题目不存在!');
         }
-        if (!$this->getQuestionBankService()->validateCanManageBank($question['bankId'])) {
+        if (!$this->getQuestionBankService()->canManageBank($question['bankId'])) {
             return $this->createMessageResponse('error', '没有管理该题目的权限');
         }
 
@@ -306,7 +306,7 @@ class QuestionMarkerController extends BaseController
         if (empty($conditions['bankId'])) {
             return array(new Paginator($request, 0), array());
         }
-        if (!$this->getQuestionBankService()->validateCanManageBank($conditions['bankId'])) {
+        if (!$this->getQuestionBankService()->canManageBank($conditions['bankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
         if (!empty($conditions['keyword'])) {

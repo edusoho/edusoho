@@ -20,6 +20,8 @@ interface CategoryService
 
     public function getCategoryTree();
 
+    public function getCategoryAndBankMixedTree();
+
     public function findAllCategories();
 
     public function findAllCategoriesByParentId($parentId);

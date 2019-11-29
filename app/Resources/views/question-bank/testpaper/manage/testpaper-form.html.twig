@@ -22,7 +22,13 @@
       {% block panel_body %}
         <div class="panel-body question-list-container js-testpaper-container">
           <div class="mtl">
-            <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true">
+            <form id="testpaper-form" class="form-horizontal" method="post" data-url="
+              {% if testpaper is defined %}
+                {{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, testpaperId: testpaper.id}) }}
+              {% else %}
+                {{ path('question_bank_manage_testpaper_create', {id: questionBank.id}) }}
+              {% endif %}
+            ">
               {% include 'question-bank/testpaper/manage/base-info.html.twig' %}
               {% include 'question-bank/testpaper/manage/questions-info.html.twig' %}
             </form>

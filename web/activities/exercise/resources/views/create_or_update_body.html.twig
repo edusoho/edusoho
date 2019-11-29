@@ -3,10 +3,10 @@
 {% set course = get_course(activity.fromCourseId) %}
 {% set exercise = activity.ext|default(null) %}
 {% set range = exercise.metas.range|default(null)|parse_exercise_range %}
-{% if range.courseId|default(0) != 0 %}
-  {% set courseTasks = get_course_tasks(range.courseId, {'typesNotIn':['testpaper', 'homework', 'exercise']}) %}
+{% if range.bankId|default(0) != 0 %}
+  {% set questionCategories = data('QuestionCategoryTree', {bankId: range.bankId}) %}
 {% endif %}
-{% do script(['libs/ltc-sdk-client.js', 'exerciseactivity/js/create/index.js'],300) %}
+{% do script(['libs/select2.js', 'libs/ltc-sdk-client.js', 'exerciseactivity/js/create/index.js'],300) %}
 {% block activity_step %}
 <div class="tab-pane js-course-tasks-pane active js-step2-view">
   <form class="form-horizontal" id="step2-form" >
@@ -27,22 +27,29 @@
         <input type="text" id="itemCount" name="itemCount" required="required" class="form-control width-input width-input-large" value="{{ exercise.itemCount|default(1) }}">
       </div>
     </div>
-    {% set courses = data('CoursesByCourseSetId', {courseSetId: activity.fromCourseSetId}) %}
+    {% set questionBankTree = data('QuestionBankTree', {}) %}
 
     <div class="form-group">
-      <label class="col-sm-2 control-label">{{'course.plan_task.exercise.question_sourse'|trans}}</label>
+      <label class="col-sm-2 control-label">{{'出题范围'|trans}}</label>
       <div class="col-sm-10 controls radios">
-        <select class="form-control width-150" name="range[courseId]" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:activity.fromCourseSetId})}}" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:activity.fromCourseSetId}) }}">
-          <option value="0" {% if not range.courseId|default(0) %}selected{% endif %}>{{'course.plan_task.exercise.question_sourse.course'|trans}}</option>
-          {% for course in courses if course %}
-            <option value="{{ course.id }}" {% if range.courseId|default(0) == course.id %}selected{% endif %}>{{ get_course_title(course) }}</option>
-          {% endfor %}
+        <select class="form-control width-150" id="questionBankSelect" name="range[bankId]" data-url="{{ path('question_bank_manage_question_category_show') }}" data-check-num-url="{{ path('question_bank_manage_question_check_num') }}">
+          {% if questionBankTree %}
+          <option value="0" {% if not range.bankId|default(0) %}selected{% endif %}>{{'选择题库'|trans}}</option>
+            {% for tree in questionBankTree %}
+              <option value={{ tree.id }} {% if tree.categoryId is not defined %} disabled="disabled" {% endif %} {% if range.bankId|default(0) == tree.id %}selected{% endif %}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
+            {% endfor %}
+          {% else %}
+            <option value="0" {% if not range.bankId|default(0) %}selected{% endif %}>{{'暂无题库'|trans}}</option>
+          {% endif %}
         </select>
-        <select class="form-control width-150" {% if not courseTasks|default(null) %}style="display:none;"{% endif %} name="range[lessonId]" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:activity.fromCourseSetId}) }}">
-          <option value="0" {% if not range.lessonId|default(0) %}selected{% endif %}>{{'course.plan_task.exercise.question_sourse.choose'|trans}}</option>
-          {% for task in courseTasks|default([]) if task %}
-            <option value="{{ task.id }}" {% if range.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
-          {% endfor %}
+        <select class="form-control width-150 {% if not questionCategories|default(null) %}hidden{% endif %}" id="questionCategorySelect" name="range[categoryId]">
+          <option value="0" {% if not range.categoryId|default(0) %}selected{% endif %}>{{'course.plan_task.exercise.question_sourse.choose'|trans}}</option>
+          <option value="0">{{'site.data.empty'|trans}}</option>
+          {% if questionCategories|default(null) %}
+            {% for category in questionCategories %}
+              <option value={{ category.id }} {% if range.categoryId|default(0) == category.id %}selected{% endif %}>{% for i in 1..(category.depth-1) if category.depth > 1 %}　{% endfor %}{{ category.name }}</option>
+            {% endfor %}
+          {% endif %}
         </select>
       </div>
     </div>

@@ -19,7 +19,7 @@ class MaterialQuestionController extends BaseQuestionController
 
     public function createAction(Request $request, $questionBankId, $type)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($questionBankId)) {
+        if (!$this->getQuestionBankService()->canManageBank($questionBankId)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 

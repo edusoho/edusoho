@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class QuestionBankException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 66;
+    const EXCEPTION_MODULE = 66;
 
     const FORBIDDEN_DELETE_CATEGORY = 4036601;
 

@@ -17,7 +17,7 @@ class QuestionController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -67,7 +67,7 @@ class QuestionController extends BaseController
 
     public function importAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -82,7 +82,7 @@ class QuestionController extends BaseController
 
     public function createAction(Request $request, $id, $type)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -134,7 +134,7 @@ class QuestionController extends BaseController
 
     public function updateAction(Request $request, $id, $questionId)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -174,7 +174,7 @@ class QuestionController extends BaseController
 
     public function getQuestionsHtmlAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -226,7 +226,7 @@ class QuestionController extends BaseController
 
     public function deleteAction(Request $request, $id, $questionId)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -241,7 +241,7 @@ class QuestionController extends BaseController
 
     public function deleteQuestionsAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -257,7 +257,7 @@ class QuestionController extends BaseController
 
     public function setCategoryAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -275,7 +275,7 @@ class QuestionController extends BaseController
 
     public function previewAction(Request $request, $id, $questionId)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -313,7 +313,7 @@ class QuestionController extends BaseController
 
     public function exportAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
@@ -351,6 +351,22 @@ class QuestionController extends BaseController
         );
 
         return new BinaryFileResponse($path, 200, $headers);
+    }
+
+    public function showQuestionTypesNumAction(Request $request)
+    {
+        $bankId = $request->request->get('bankId', 0);
+        if (!empty($bankId) && !$this->getQuestionBankService()->canManageBank($bankId)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $conditions = $request->request->all();
+        $conditions['parentId'] = 0;
+
+        $typesNum = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
+        $typesNum = ArrayToolkit::index($typesNum, 'type');
+
+        return $this->createJsonResponse($typesNum);
     }
 
     protected function buildExportQuestions($questions)

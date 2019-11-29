@@ -1504,5 +1504,6 @@ question_bank.question_category.create_success: Create Category Success
 question_bank.question_category.update_success: Update Category Success
 question_bank.question_category.delete_confirm_title: Delete Confirm
 question_bank.question_category.delete_confirm_hint: This category and its subcategories contain %count% questions. After deletion, these questions will become unclassified. Are you sure you want to delete this category?
+question_bank.question_category.not_set: Not Set
 
 question.marker_question.select_question_category: '--Select question category--'
