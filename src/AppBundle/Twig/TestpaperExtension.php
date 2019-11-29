@@ -38,6 +38,7 @@ class TestpaperExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('get_features', array($this, 'getFeatures')),
             new \Twig_SimpleFunction('show_answers', array($this, 'canShowAnswers')),
+            new \Twig_SimpleFunction('get_testpaper', array($this, 'getTestPaper')),
         );
     }
 
@@ -76,6 +77,11 @@ class TestpaperExtension extends \Twig_Extension
         }
 
         return $rangeDefault;
+    }
+
+    public function getTestPaper($id)
+    {
+        return $this->getTestpaperService()->getTestpaper($id);
     }
 
     public function getFeatures()

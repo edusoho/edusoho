@@ -5,13 +5,15 @@ class Testpaper {
     this.$element = $element;
     this.$form = this.$element.find('#step2-form');
     this.$testpaperSelect = this.$element.find('#testpaper-media');
+    this.$questionItemShow = this.$element.find('#questionItemShowDiv');
     this._init();
   }
 
   _init() {
     dateFormat();
     this.setValidateRule();
-    this.initSelectTestpaper(this.$element.find('#testpaper-media').find('option:selected'));
+    this.initTestPaperSelector();
+    // this.initSelectTestpaper(this.$testpaperSelect.select2('data')[0]);
     this.initEvent();
     this.initStepForm2();
     window.ltc.on('getActivity', (msg) => {
@@ -19,9 +21,10 @@ class Testpaper {
     });
 
     window.ltc.on('getValidate', (msg) => {
-      window.ltc.emit('returnValidate', { valid: this.validator.form(), context: {
-        score: $('#testpaper-media').find('option:selected').data('score')
-      }});
+      // window.ltc.emit('returnValidate', { valid: this.validator.form(), context: {
+      //   score: $('#testpaper-media').find('option:selected').data('score')
+      // }});
+      window.ltc.emit('returnValidate', { valid: this.validator.form() });
     });
   }
 
@@ -84,6 +87,7 @@ class Testpaper {
   }
 
   initSelectTestpaper($option) {
+    console.log($option);
     let mediaId = $option.val();
     if (mediaId != '') {
       this.getItemsTable($option.closest('select').data('getTestpaperItems'), mediaId);
@@ -95,8 +99,76 @@ class Testpaper {
     }
   }
 
+  initTestPaperSelector() {
+    let options = {
+      data: [
+        {
+          id: 0,
+          text: '请选择试卷',
+          selected: true,
+        }
+      ],
+    };
+
+    let url = this.$testpaperSelect.data('url');
+    if (url) {
+      options = {
+        // placeholder: $('#testpaper').val(),
+        ajax: {
+          url: url,
+          dataType: 'json',
+          data: function(params) {
+            return {
+              keyword: params.term,
+              page: params.page,
+            }
+          },
+          postprocessResults: function(data, params) {
+            params.page = params.page || 1;
+
+            return {
+              results : data.testpapers,
+              pagination : {
+                more : params.page < data.openCount
+              }
+            };
+          },
+          results: function(data) {
+            let results = [];
+
+            $.each(data.testpapers, function(index, testpaper) {
+              results.push({
+                id: testpaper.id,
+                text: testpaper.name,
+              });
+            });
+
+            return {
+              results: results
+            };
+          },
+          initSelection: function(element, callback) {
+            let testpaper = $('#testpaper').val();
+            // testpaper = JSON.parse(testpaper);
+            console.log(testpaper);
+            let data = [];
+            data.push({
+              id: element.val(),
+              text: testpaper,
+              // selected: true,
+            });
+            callback(data);
+          },
+        }
+      }
+    }
+    this.$testpaperSelect.select2(options);
+  }
+
   changeQuestionBank(event) {
-    let url = $('#question-bank').data('url');
+    let $helpBlock = $('.js-help-block');
+    $helpBlock.addClass('hidden');
+    this.$questionItemShow.hide();
     let $target = $(event.currentTarget);
     let bankId = $target.val();
     let option = `<option value="">${Translator.trans('请选择试卷')}</option>`;
@@ -104,32 +176,35 @@ class Testpaper {
       this.$testpaperSelect.html(option);
       return;
     }
+    let url = $('#question-bank').data('url');
     url = url.replace(/[0-9]/, bankId);
     let self = this;
     $.post(url, function(resp) {
-      let $helpBlock = $('.js-help-block');
       if (resp.totalCount === 0) {
         $helpBlock.addClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.empty_tips'));
+        self.$testpaperSelect.html(option);
         return;
       }
       if (resp.openCount === 0) {
         $helpBlock.removeClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.no_open_tips'));
+        self.$testpaperSelect.html(option);
         return;
       }
-      $helpBlock.addClass('hidden');
-      $.each(resp.testpapers, function(index, testpaper) {
-        option += `<option value="${testpaper.id}">${testpaper.name}</option>`;
-      });
-      self.$testpaperSelect.html(option);
+      self.$testpaperSelect.data('url', url);
+      self.initTestPaperSelector();
+      // $.each(resp.testpapers, function(index, testpaper) {
+      //   option += `<option value="${testpaper.id}">${testpaper.name}</option>`;
+      // });
+      // self.$testpaperSelect.html(option);
     }).error(function(e) {
-      console.log(e);
-      cd.message({type: 'danger', message: 'error'});
+      cd.message({type: 'danger', message: e.responseJson.error.message});
     });
   }
 
   changeTestpaper(event) {
     let $target = $(event.currentTarget);
-    let $option = $target.find('option:selected');
+    let $option = $target.find(':selected');
+    console.log($option);
     this.initSelectTestpaper($option);
   }
 

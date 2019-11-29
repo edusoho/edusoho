@@ -20,9 +20,8 @@
             <select class="form-control width-150" id="categoryId" name="categoryId" data-role="categoryId">
               <option value="0">{{ 'admin.question_bank.manage.category'|trans }}</option>
               <option value="0"{% if not question.categoryId|default(0) %} selected{% endif %}>{{ 'site.data.empty'|trans }}</option>
-              {% for category in categoryTree if categoryTree %}
-                <option value="{{ category.id }}"{% if question.categoryId|default(0) == category.id %} selected{% endif %}>{% for i in 1..(category.depth-1) if category.depth > 1 %}　{% endfor %}{{ category.name }}</option>
-              {% endfor %}
+              {% set question_category_choices = question_category_choices(questionBank.id) %}
+              {{ select_options(question_category_choices, question.categoryId|default(0)) }}
             </select>
           </div>
         </div>

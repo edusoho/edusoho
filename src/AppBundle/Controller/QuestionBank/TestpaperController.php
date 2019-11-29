@@ -298,6 +298,7 @@ class TestpaperController extends BaseController
         $conditions = array(
             'bankId' => $id,
             'type' => 'testpaper',
+            'keyword' => $request->query->get('keyword', ''),
         );
         $totalCount = $this->getTestpaperService()->searchTestpaperCount($conditions);
         $conditions['status'] = 'open';

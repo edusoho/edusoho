@@ -1,11 +1,12 @@
 {% extends 'activity/activity-layout.html.twig' %}
 
-{% do script(['libs/ltc-sdk-client.js', 'libs/bootstrap-datetimepicker.js','testpaperactivity/js/manage/index.js'], 300) %}
+{% do script(['libs/ltc-sdk-client.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'testpaperactivity/js/manage/index.js'], 300) %}
 
 {% block activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <form class="form-horizontal" id="step2-form">
       {% set course = get_course(activity.fromCourseId) %}
+      {% set testpaper = get_testpaper(activity.ext.mediaId|default(0))|default() %}
       {% set questionBanks = find_accessible_question_banks() %}
       {% set features = get_features() %}
       <div class="form-group">
@@ -25,15 +26,19 @@
           <select id="question-bank" class="form-control" name="questionBankId" data-url="{{ path('question_bank_manage_testpaper_json', {id:0}) }}">
             <option value="">{{ 'question.select_question_bank'|trans }}</option>
             {% for questionBank in questionBanks %}
-              <option value="{{ questionBank.id }}">{{ questionBank.name }}</option>
+              <option value="{{ questionBank.id }}"{% if questionBank.id == testpaper.bankId|default(0) %} selected{% endif %}>{{ questionBank.name }}</option>
             {% endfor %}
           </select>
           <div class="help-block hidden js-help-block"></div>
         </div>
         <div class="col-sm-5 controls">
-          <select id="testpaper-media" class="form-control" name="testpaperId" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
-            <option value="">{{ 'course.plan_task.activity_manage.testpaper.choose'|trans }}</option>
-          </select>
+          <input id="testpaper-media" class="form-control" name="testpaperId" value="{{ testpaper.id|default(0) }}" data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bankId}) }}{% endif %}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
+            {#<option value="">{{ 'course.plan_task.activity_manage.testpaper.choose'|trans }}</option>#}
+          {% if testpaper|default() %}
+            {#<option value="{{ testpaper.id }}" selected>{{ testpaper.name }}</option>#}
+            <input type="hidden" id="testpaper" value="{{ testpaper.name }}">
+          {% endif %}
+          {#</input>#}
         </div>
       </div>
 
