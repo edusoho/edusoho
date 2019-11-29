@@ -42,20 +42,20 @@
                       {{ lazy_img(filepath(classroom.largePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
                     </a>
                     <div class="class-body">
-                      <h3 class="class-title">
-                        <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+                      <h3 class="class-title text-overflow">
+                        <a class="link-primary" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
                       </h3>
                       <div class="class-metas">
-                      <span class="class-teacher">
-                        {% if teachers %}
-                          <i class="es-icon es-icon-people"></i>
-                          {% for teacher in teachers %}
-                          {% if loop.index <= 1 %}
-                            <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                        <span class="class-teacher">
+                          {% if teachers %}
+                            <i class="es-icon es-icon-people"></i>
+                            {% for teacher in teachers %}
+                            {% if loop.index <= 1 %}
+                              <a class="teacher-nickname mrl link-primary" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                            {% endif %}
+                          {% endfor %}
                           {% endif %}
-                        {% endfor %}
-                        {% endif %}
-                      </span>
+                        </span>
                         <span class="class-student hidden-md"><i class="es-icon es-icon-people"></i>{{ classroom.studentNum + classroom.auditorNum }}</span>
                         <span class="class-price">
                           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
