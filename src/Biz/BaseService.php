@@ -183,7 +183,6 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
      */
     protected function getMarriedPermissions($code)
     {
-        $backstageSetting = $this->createService('System:SettingService')->get('backstage', array('is_v2' => 0));
         $rolePermissionsYml = $this->biz['role.get_permissions_yml'];
         $allPermissions = array_merge($rolePermissionsYml['adminV2'], $rolePermissionsYml['admin']);
 

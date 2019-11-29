@@ -27,7 +27,7 @@ class OpenCourseSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/open-course/set.html.twig', array(
+        return $this->render('admin-v2/system/open-course/set.html.twig', array(
             'openCourseSetting' => $openCourseSetting,
         ));
     }
