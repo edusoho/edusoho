@@ -1,4 +1,4 @@
-{% import "admin-v2/role/templates/macro.html.twig" as self_macro %}
+{% import "admin-v2/widget/macro.html.twig" as self_macro %}
 
 {% set permissions = sub_permissions(parentCode, group|default(null)) %}
 
@@ -20,7 +20,7 @@
 
 {% if dropdownMenusShow and permissions|default(null) %}
 <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-  <span class="caret"></span> 
+  <span class="caret"></span>
 </a>
 <ul class="dropdown-menu">
   {% for permission in permissions %}

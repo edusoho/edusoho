@@ -58,7 +58,7 @@
           <a class="admin-navbar-brand" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}后台</a>
         </div>
         <div class="ct-layout-navbar">
-          {% include 'admin-v2/role/templates/navigation.html.twig' %}
+          {% include 'admin-v2/widget/navigation.html.twig' %}
         </div>
         <div class="ct-layout-person">
           <ul class="cd-clearfix mb0">
@@ -90,7 +90,7 @@
       <div class="cd-layout-main">
         {% block container %}
           {% block content %}
-            {% include 'admin-v2/role/templates/side-bar.html.twig' %}
+            {% include 'admin-v2/widget/side-bar.html.twig' %}
             <div class="cd-layout-aside">
               <div class="cd-layout-aside_bread"></div>
               <div class="cd-layout-adside_content">
@@ -119,7 +119,7 @@
                   </div>
                 </div>
                 {% block content_header %}{% endblock %}
-                {% block tabs %}{% include 'admin-v2/role/templates/tabs.html.twig' %}{% endblock %}
+                {% block tabs %}{% include 'admin-v2/widget/tabs.html.twig' %}{% endblock %}
                 {% block capsule %}{% endblock %}
                 {% block main %}
                 {% endblock %}

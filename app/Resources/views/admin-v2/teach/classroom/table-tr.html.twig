@@ -4,7 +4,7 @@
     <td>{{ classroom.id }}</td>
 
     <td>
-    <strong>  
+    <strong>
       <a target="_blank" href="{{ path('classroom_manage', {id:classroom.id}) }}">{{ classroom.title}}</a>
     </strong>
     <br>
@@ -18,7 +18,7 @@
     {{ classroomCoursesNum[classroom.id] }}
 
     {% if classroomCoursesNum[classroom.id] > 0 %}
-    <strong>  
+    <strong>
       <a target="_blank" href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">{{'admin.classroom_manage.manage.course_detail'|trans}}</a>
     </strong>
     {% endif %}
@@ -54,7 +54,7 @@
     {% if classroom.status=='published' %}
     <span class="text-success">{{'admin.classroom_manage.manage.published'|trans}}</span>
     {% elseif classroom.status=='closed'%}
-    
+
     <span class="text-danger">{{'admin.classroom_manage.manage.closed'|trans}}</span>
     {% else %}
      {{'admin.classroom_manage.manage.unpublished'|trans}}
@@ -68,7 +68,7 @@
         <a href="{{ path('classroom_manage', {id:classroom.id}) }}" target="_blank" class="btn btn-default btn-sm">{{ 'admin.classroom_manage.manage.manage_btn'|trans }}</a>
       {% endif %}
 
-      {% include 'admin-v2/role/templates/group-button.html.twig' with {parentCode: 'admin_v2_classroom_manage', group:'groupButton', classroom: classroom} %}
+      {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_classroom_manage', group:'groupButton', classroom: classroom} %}
   </div>
  </td>
 </tr>
