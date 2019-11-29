@@ -1110,10 +1110,11 @@ admin_v2:
                                     name: admin_v2.system.security_tab
                                 admin_v2_post_num_rules_setting:
                                     name: admin_v2.system.post_num_tab
-        # 应用中心模块
+        # 云市场模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center
             class: js-new-corner-mark
+            visible: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示云市场
             children:
                 #营销云
                 admin_v2_basic_app_center_group:
