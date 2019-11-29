@@ -27,7 +27,7 @@
     {% elseif profile.mobile %}
       {{ profile.mobile }}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
     {% else %}
-       -- 
+       --
     {% endif %}
   </td>
 
@@ -37,7 +37,7 @@
     {% else %}
       --
     {% endif %}
-    
+
     <br>
     {% if user.emailVerified %}
       <label class="label label-success" title="{{'admin.user.manage.label.email_verified_hint'|trans}}">{{'admin.user.manage.fields.verified_label'|trans}}</label>
@@ -70,7 +70,7 @@
   <td>
     <div class="btn-group">
       <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">{{ 'admin.user.btn.show_btn'|trans }}</a>
-      {% include 'admin-v2/role/templates/group-button.html.twig' with {parentCode: 'admin_v2_user_manage', group:'groupButton', user: user} %}
+      {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_user_manage', group:'groupButton', user: user} %}
     </div>
   </td>
 </tr>
