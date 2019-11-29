@@ -73,7 +73,7 @@
       {% endif %}
     {% endif %}
   {% endif %}
-  
+
   <td>
     {{ admin_macro.user_link(user) }}
     <br>
@@ -91,7 +91,7 @@
         <a class="btn btn-default btn-sm" href="{{ path('course_set_manage_base', {id:courseSet.id}) }}"
            target="_blank">{{ 'admin.course_manage.manage.manage_btn'|trans }}</a>
       {% endif %}
-      {% include 'admin-v2/role/templates/group-button.html.twig' with {parentCode: 'admin_v2_course_manage', group:'groupButton', courseSet: courseSet,filter:filter} %}
+      {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_course_manage', group:'groupButton', courseSet: courseSet,filter:filter} %}
     </div>
   </td>
 </tr>
