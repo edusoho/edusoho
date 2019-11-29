@@ -145,7 +145,6 @@ class TestpaperController extends BaseController
             );
         }
 
-
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
 
         $types = $this->getQuestionTypes();

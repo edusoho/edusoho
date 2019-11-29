@@ -82,6 +82,7 @@ class QuestionMarkerController extends BaseController
      * @param $id
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
      * @throws \Exception
      */
     public function questionMakerPreviewAction(Request $request, $courseId, $id)
