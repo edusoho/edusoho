@@ -210,21 +210,28 @@ class PermissionExtension extends \Twig_Extension
         $permissions = array();
 
         foreach ($allGroup as $key => $group) {
+            //菜单组是否为可见状态
             if (isset($group['visible']) && !$this->canVisibleMenus($group['visible'])) {
                 unset($allGroup[$key]);
                 continue;
             }
+            //组下面没有菜单，则不显示该组
             if (!isset($group['children'])) {
                 continue;
             }
 
-            $permissions[] = $this->buildPermissionMenus($group);
+            $group = $this->buildGroupPermissionMenus($group);
+
+            //组下有菜单才显示，如果没有显示的菜单则组也不显示
+            if ($group['grade'] == 0 && isset($group['nodes'])) {
+                $permissions[] = $group;
+            }
         }
 
         return $permissions;
     }
 
-    private function buildPermissionMenus($group, $grade = 0)
+    private function buildGroupPermissionMenus($group, $grade = 0)
     {
         $groupInfo = array();
         if (isset($group['is_group'])) {
@@ -236,10 +243,12 @@ class PermissionExtension extends \Twig_Extension
         $groupInfo['code'] = $group['code'];
 
         foreach ($group['children'] as $k => $child) {
+            //菜单是否可见状态
             if (isset($child['visible']) && !$this->canVisibleMenus($child['visible'])) {
                 unset($group['children'][$k]);
                 continue;
             }
+            // 获取菜单组下面的节点菜单数据
             $groupInfo['nodes'][] = $this->buildNodesPermissionMenus($child);
         }
 
@@ -268,6 +277,18 @@ class PermissionExtension extends \Twig_Extension
         }
 
         return false;
+    }
+
+    private function removeEmptyGroup($permissions)
+    {
+        $array = array();
+        foreach ($permissions as $key => $permission) {
+            if ($permission['grade'] == 0 && !isset($permission['nodes'])) {
+                unset($permissions[$key]);
+            }
+        }
+
+        return $array;
     }
 
     public function getName()
