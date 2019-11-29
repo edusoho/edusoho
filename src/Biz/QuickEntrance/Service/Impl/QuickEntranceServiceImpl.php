@@ -30,6 +30,34 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
         return $this->getEntrancesByCodes($userQuickEntrances['data']);
     }
 
+    public function findAvailableEntrancesByUserId($userId)
+    {
+        $permissions = PermissionBuilder::instance()->getUserPermissionTree()->toArray();
+        foreach ($permissions['children'] as $permission) {
+            if ('admin_v2' == $permission['code']) {
+                $navPermissions = $permission['children'];
+            }
+        }
+
+        foreach ($navPermissions as $navPermission) {
+            if (!isset($navPermission['quick_entrance_icon_class'])) {
+                continue;
+            }
+
+            $quickEntrances[$module['code']] = array(
+                'data' => $this->getEntrancesArray($navPermission, array(), $userEntranceCodes),
+                'title' => $this->trans($module['name'], array(), 'menu'),
+                'class' => $module['quick_entrance_icon_class'],
+            );
+        }
+
+    }
+
+    public function findSelectedEntrancesByUserId()
+    {
+
+    }
+
     public function getAllEntrances($userId = 0)
     {
         if ($userId) {
@@ -115,7 +143,7 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
         return $entrances;
     }
 
-    private function getEntrancesArray($module, $moduleQuickEntrances, $userEntranceCodes)
+    private function getEntrancesByPermission($module)
     {
         if (isset($module['quick_entrance_icon']) && $module['quick_entrance_icon'] && $this->getCurrentUser()->hasPermission($module['code'])) {
             $params = isset($module['router_params']) ? $module['router_params'] : array();
@@ -127,7 +155,6 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
                     'text' => $this->trans($module['name'], array(), 'menu'),
                     'icon' => $module['quick_entrance_icon'],
                     'link' => $kernel->getContainer()->get('router')->generate($module['router_name'], $params),
-                    'checked' => in_array($module['code'], $userEntranceCodes) ? true : false,
                     'target' => isset($module['target']) ? $module['target'] : '',
                 ),
             );
@@ -137,7 +164,7 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
 
         if (isset($module['children'])) {
             foreach ($module['children'] as $child) {
-                $moduleQuickEntrances = array_merge($moduleQuickEntrances, $this->getEntrancesArray($child, $moduleQuickEntrances, $userEntranceCodes));
+                $moduleQuickEntrances = array_merge($moduleQuickEntrances, $this->getEntrancesArray($child));
             }
         }
 

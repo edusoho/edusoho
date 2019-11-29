@@ -10,6 +10,10 @@ interface QuickEntranceService
 
     public function getAllEntrances($userId);
 
+    public function findAvailableEntrancesByUserId($userId);
+
+    public function findSelectedEntrancesByUserId();
+
     public function createUserEntrance($userId, $entrances = array());
 
     public function updateUserEntrances($userId, $entrances = array());

@@ -107,6 +107,19 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->assertFalse($marketingResult['admin_v2_marketing_coupon']['checked']);
     }
 
+    public function testFindAvailableEntrancesByUserId()
+    {
+        $this->createCurrentUserInviteManageQuickEntrance();
+        $availableEntrances = $this->getQuickEntranceService()->findAvailableEntrancesByUserId($this->getCurrentUser()->getId());
+
+
+    }
+
+    public function testFindSelectedEntrancesByUserId()
+    {
+
+    }
+
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      * @expectedExceptionMessage Entrance invalid
