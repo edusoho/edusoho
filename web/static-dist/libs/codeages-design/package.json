@@ -1,6 +1,6 @@
 {
   "name": "codeages-design",
-  "version": "0.1.8",
+  "version": "0.1.11",
   "description": "a Web Design Language",
   "main": "src/codeages-design.js",
   "scripts": {
@@ -23,9 +23,12 @@
   "homepage": "https://github.com/codeages-design/codeages-design#readme",
   "babel": {
     "presets": [
-      ["env", {
-        "modules": false
-      }],
+      [
+        "env",
+        {
+          "modules": false
+        }
+      ],
       "stage-0"
     ],
     "plugins": [],
