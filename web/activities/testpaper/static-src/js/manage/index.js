@@ -4,7 +4,7 @@ class Testpaper {
   constructor($element) {
     this.$element = $element;
     this.$form = this.$element.find('#step2-form');
-    this.$testpaperSelect = this.$element.find('#testpaper-media');
+    this.$testpaperSelector = this.$element.find('#testpaper-media');
     this.$questionItemShow = this.$element.find('#questionItemShowDiv');
     this._init();
   }
@@ -36,7 +36,7 @@ class Testpaper {
 
   initEvent() {
     this.$element.find('#question-bank').on('change', event => this.changeQuestionBank(event));
-    this.$element.find('#testpaper-media').on('change', event => this.changeTestpaper(event));
+    this.$element.find('#testpaper-media').on('change', event => this.changeTestPaper(event));
     this.$element.find('input[name=doTimes]').on('change', event => this.showRedoInterval(event));
     this.$element.find('input[name="testMode"]').on('change', event => this.startTimeCheck(event));
   }
@@ -86,83 +86,89 @@ class Testpaper {
     });
   }
 
-  initSelectTestpaper($option) {
-    console.log($option);
-    let mediaId = $option.val();
-    if (mediaId != '') {
-      this.getItemsTable($option.closest('select').data('getTestpaperItems'), mediaId);
+  initSelectTestPaper($selected) {
+    let mediaId = $selected.id;
+    if (mediaId) {
+      this.getItemsTable(this.$testpaperSelector.data('getTestpaperItems'), mediaId);
       if (!$('input[name="title"]').val()) {
-        $('input[name="title"]').val($option.text());
+        $('input[name="title"]').val($selected.text);
       }
     } else {
       $('#questionItemShowDiv').hide();
     }
   }
 
-  initTestPaperSelector() {
-    let options = {
+  initEmptyTestPaperSelector() {
+    this.$testpaperSelector.select2({
       data: [
         {
-          id: 0,
+          id: '0',
           text: '请选择试卷',
           selected: true,
         }
-      ],
-    };
+      ]
+    });
+  }
 
-    let url = this.$testpaperSelect.data('url');
-    if (url) {
-      options = {
-        // placeholder: $('#testpaper').val(),
-        ajax: {
-          url: url,
-          dataType: 'json',
-          data: function(params) {
-            return {
-              keyword: params.term,
-              page: params.page,
-            }
-          },
-          postprocessResults: function(data, params) {
-            params.page = params.page || 1;
+  initAjaxTestPaperSelector() {
+    let self = this;
+    console.log(this.$testpaperSelector.data('url'));
+    this.$testpaperSelector.select2({
+      ajax: {
+        url: self.$testpaperSelector.data('url'),
+        dataType: 'json',
+        quietMillis: 250,
+        data: function(term, page) {
+          return {
+            keyword: term,
+            page: page,
+          };
+        },
+        results: function(data, page) {
+          let results = [];
+          // if (page === 1) {
+          //   results.push({
+          //     id: '0',
+          //     text: '请选择试卷',
+          //     selected: true,
+          //   });
+          // }
 
-            return {
-              results : data.testpapers,
-              pagination : {
-                more : params.page < data.openCount
-              }
-            };
-          },
-          results: function(data) {
-            let results = [];
-
-            $.each(data.testpapers, function(index, testpaper) {
-              results.push({
-                id: testpaper.id,
-                text: testpaper.name,
-              });
+          $.each(data.testPapers, function(index, testPaper) {
+            results.push({
+              id: testPaper.id,
+              text: testPaper.name,
+              score: testPaper.score,
             });
+          });
 
-            return {
-              results: results
-            };
-          },
-          initSelection: function(element, callback) {
-            let testpaper = $('#testpaper').val();
-            // testpaper = JSON.parse(testpaper);
-            console.log(testpaper);
-            let data = [];
-            data.push({
-              id: element.val(),
-              text: testpaper,
-              // selected: true,
-            });
-            callback(data);
-          },
-        }
+          return {
+            results: results,
+            more: page * 10 < data.openCount,
+          };
+        },
+      },
+      initSelection: function(element, callback) {
+        let testPaper = $('#testpaper').val();
+        let data = {
+          id: element.val(),
+          text: testPaper ? testPaper : '请选择试卷',
+        };
+
+        callback(data);
+      },
+      formatSelection: function(data) {
+        return data.text;
       }
+    });
+  }
+
+  initTestPaperSelector() {
+    if ($('#testpaper')) {
+      this.initEmptyTestPaperSelector();
+    } else {
+      this.initAjaxTestPaperSelector();
     }
-    this.$testpaperSelect.select2(options);
   }
 
   changeQuestionBank(event) {
@@ -171,9 +177,8 @@ class Testpaper {
     this.$questionItemShow.hide();
     let $target = $(event.currentTarget);
     let bankId = $target.val();
-    let option = `<option value="">${Translator.trans('请选择试卷')}</option>`;
     if (!bankId) {
-      this.$testpaperSelect.html(option);
+      this.initEmptyTestPaperSelector();
       return;
     }
     let url = $('#question-bank').data('url');
@@ -182,16 +187,17 @@ class Testpaper {
     $.post(url, function(resp) {
       if (resp.totalCount === 0) {
         $helpBlock.addClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.empty_tips'));
-        self.$testpaperSelect.html(option);
+        self.initEmptyTestPaperSelector();
+        console.log('mei yong');
         return;
       }
       if (resp.openCount === 0) {
         $helpBlock.removeClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.no_open_tips'));
-        self.$testpaperSelect.html(option);
+        self.initEmptyTestPaperSelector();
         return;
       }
-      self.$testpaperSelect.data('url', url);
-      self.initTestPaperSelector();
+      self.$testpaperSelector.data('url', url);
+      self.initAjaxTestPaperSelector();
       // $.each(resp.testpapers, function(index, testpaper) {
       //   option += `<option value="${testpaper.id}">${testpaper.name}</option>`;
       // });
@@ -201,11 +207,9 @@ class Testpaper {
     });
   }
 
-  changeTestpaper(event) {
-    let $target = $(event.currentTarget);
-    let $option = $target.find(':selected');
-    console.log($option);
-    this.initSelectTestpaper($option);
+  changeTestPaper(event) {
+    let $selected = this.$testpaperSelector.select2('data');
+    this.initSelectTestPaper($selected);
   }
 
   showRedoInterval(event) {
@@ -220,7 +224,7 @@ class Testpaper {
   }
 
   startTimeCheck(event) {
-    var $this = $(event.currentTarget);
+    let $this = $(event.currentTarget);
 
     if ($this.val() == 'realTime') {
       $('.starttime-input').removeClass('hidden');

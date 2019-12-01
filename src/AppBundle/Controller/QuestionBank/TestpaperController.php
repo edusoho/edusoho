@@ -310,22 +310,23 @@ class TestpaperController extends BaseController
             10
         );
 
-        $testpapers = $this->getTestpaperService()->searchTestpapers(
+        $testPapers = $this->getTestpaperService()->searchTestpapers(
             $conditions,
             array('createdTime' => 'DESC'),
             $pagination->getOffsetCount(),
             $pagination->getPerPageCount()
         );
 
-        foreach ($testpapers as &$testpaper) {
-            $testpaper = ArrayToolkit::parts($testpaper, array(
+        foreach ($testPapers as &$testPaper) {
+            $testPaper = ArrayToolkit::parts($testPaper, array(
                 'id',
                 'name',
+                'score',
             ));
         }
 
         $data = array(
-            'testpapers' => $testpapers,
+            'testPapers' => $testPapers,
             'totalCount' => $totalCount,
             'openCount' => $openCount,
         );
