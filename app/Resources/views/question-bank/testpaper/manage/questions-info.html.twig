@@ -4,7 +4,7 @@
 <div class="panel-col" id="testpaper-items-manager">
   <div class="clearfix">
     <div class="clearfix mbm">
-      <button data-url="" class="cd-btn cd-btn-primary cd-btn-sm pull-right pbs" data-role="pick-item">{{'course.testpaper_manage.question.create_btn'|trans}}</button>
+      <button data-url="{{ path('question_bank_manage_question_pick', {id: questionBank.id}) }}" class="cd-btn cd-btn-primary cd-btn-sm pull-right pbs" data-toggle="modal" data-target="#modal">{{'course.testpaper_manage.question.create_btn'|trans}}</button>
       <ul class="nav nav-pills nav-mini" id="testpaper-question-nav">
         {% for type, name in questionTypesDict %}
           <li class="question-type-table{% if loop.index == 1 %} active{% endif %}">

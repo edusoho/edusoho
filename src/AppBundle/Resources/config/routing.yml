@@ -3344,3 +3344,7 @@ question_bank_manage_testpaper_export:
 question_bank_manage_testpaper_json:
   path: /question_bank/{id}/testpapers/json
   defaults: { _controller: AppBundle:QuestionBank/Testpaper:json }
+
+question_bank_manage_question_pick:
+  path: /question_bank/{id}/question/pick
+  defaults: { _controller: AppBundle:QuestionBank/Testpaper:questionPick }
