@@ -144,7 +144,6 @@ class QuickEntranceServiceTest extends BaseTestCase
                 'code' => 'admin_v2_operation_invite',
                 'text' => '邀请管理',
                 'icon' => 'invite',
-                'link' => '/admin/v2/invite/record',
                 'class' => 'icon-color-yellow',
                 'target' => '',
             ),

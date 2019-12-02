@@ -35,6 +35,7 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('has_permission', array($this, 'hasPermission')),
             new \Twig_SimpleFunction('eval_expression', array($this, 'evalExpression'), array('needs_context' => true, 'needs_environment' => true)),
             new \Twig_SimpleFunction('first_child_permission', array($this, 'getFirstChild')),
+            new \Twig_SimpleFunction('first_child_permission_by_code', array($this, 'getFirstChildByCode')),
             new \Twig_SimpleFunction('side_bar_permission', array($this, 'getSideBar')),
             new \Twig_SimpleFunction('root_permission', array($this, 'getRootPermission')),
             new \Twig_SimpleFunction('nav_permission', array($this, 'getNavPermission')),
@@ -63,6 +64,22 @@ class PermissionExtension extends \Twig_Extension
 
         if (empty($menus)) {
             $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($menu['code']);
+            if (empty($permissions)) {
+                return array();
+            } else {
+                $menus = $permissions;
+            }
+        }
+
+        return current($menus);
+    }
+
+    public function getFirstChildByCode($code)
+    {
+        $menus = $this->getSubPermissions($code);
+
+        if (empty($menus)) {
+            $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($code);
             if (empty($permissions)) {
                 return array();
             } else {
