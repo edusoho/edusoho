@@ -3,7 +3,6 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Question\Service\CategoryService;
 use Biz\Question\Service\QuestionService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
@@ -37,7 +36,6 @@ class QuestionExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('find_question_num_by_course_set_id', array($this, 'findQuestionNumsByCourseSetId')),
             new \Twig_SimpleFunction('question_html_filter', array($this, 'questionHtmlFilter')),
-            new \Twig_SimpleFunction('question_category_tree', array($this, 'questionCategoryTree')),
         );
     }
 
@@ -79,11 +77,6 @@ class QuestionExtension extends \Twig_Extension
         return $htmlpurifier->purify($html);
     }
 
-    public function questionCategoryTree($questionBankId)
-    {
-        return $this->getQuestionCategoryService()->getCategoryTree($questionBankId);
-    }
-
     protected function warmUp($cacheDir)
     {
         if (!@mkdir($cacheDir, 0777, true) && !is_dir($cacheDir)) {
@@ -93,14 +86,6 @@ class QuestionExtension extends \Twig_Extension
         if (!is_writable($cacheDir)) {
             chmod($cacheDir, 0777);
         }
-    }
-
-    /**
-     * @return CategoryService
-     */
-    protected function getQuestionCategoryService()
-    {
-        return $this->biz->service('Question:CategoryService');
     }
 
     /**

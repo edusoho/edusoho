@@ -31,9 +31,8 @@
               <select id="categoryId" data-edit="categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
                 <option value="0">{{ 'site.data.empty'|trans }}</option>
                 <option value="0"{% if not categoryId %} selected{% endif %}>{{ 'site.data.empty'|trans }}</option>
-                {% for category in question_category_tree(questionBankId) %}
-                  <option value="{{ category.id }}"{% if category.id == categoryId %} selected{% endif %}>{% for i in 1..(category.depth-1) if category.depth > 1 %}　{% endfor %}{{ category.name }}</option>
-                {% endfor %}
+                {% set question_category_choices = question_category_choices(questionBankId) %}
+                {{ select_options(question_category_choices, categoryId) }}
               </select>
             </div>
           </div>
