@@ -5,6 +5,7 @@ namespace Biz\Testpaper\Service\Impl;
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
@@ -43,6 +44,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $fields['updatedUserId'] = $user['id'];
 
         $testpaper = $this->getTestpaperDao()->create($fields);
+
+        if (!empty($testpaper['bankId'])) {
+            $this->getQuestionBankService()->waveTestpaperNum($testpaper['bankId'], 1);
+        }
 
         return $testpaper;
     }
@@ -1385,6 +1390,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->createService('System:LogService');
     }
 
+    /**
+     * @return QuestionBankService
+     */
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
