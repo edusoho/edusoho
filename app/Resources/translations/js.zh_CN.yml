@@ -266,6 +266,7 @@ activity.homework_manage.pass_objective_question_hint: >
 activity.ppt_manage.media_error_hint: 请上传或选择PPT
 activity.ppt_manage.finish_detail_required_error_hint: 请输入至少观看多少分钟
 
+activity.testpaper_manage.media_required: 请选择试卷
 activity.testpaper_manage.arithmetic_float_error_hint: 必须为正数，保留一位小数
 activity.testpaper_manage.positive_integer_error_hint: 必须为正整数
 activity.testpaper_manage.media_error_hint: 请选择试卷
@@ -1449,3 +1450,5 @@ question_bank.question_category.delete_confirm_hint: 此分类及其子分类下
 question_bank.question_category.not_set: 无
 
 question.marker_question.select_question_category: --选择分类--
+queston_bank.testpaper.no_open_tips: 如果找不到试卷，请先确定该试卷已经发布
+queston_bank.testpaper.empty_tips: 此题库还没有试卷

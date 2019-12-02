@@ -4,23 +4,29 @@ class Testpaper {
   constructor($element) {
     this.$element = $element;
     this.$form = this.$element.find('#step2-form');
+    this.$questionBankSelector = this.$element.find('#question-bank');
+    this.$testpaperSelector = this.$element.find('#testpaper-media');
+    this.$questionItemShow = this.$element.find('#questionItemShowDiv');
     this._init();
   }
 
   _init() {
     dateFormat();
     this.setValidateRule();
-    this.initSelectTestpaper(this.$element.find('#testpaper-media').find('option:selected'),$('[name="finishScore"]').val());
+    this.initQuestionBankSelector();
+    this.initTestPaperSelector();
+    this.initSelectTestPaper(this.$testpaperSelector.select2('data'));
     this.initEvent();
     this.initStepForm2();
     window.ltc.on('getActivity', (msg) => {
-      window.ltc.emit('returnActivity', { valid:this.validator.form(), data: window.ltc.getFormSerializeObject($('#step2-form'))});
+      window.ltc.emit('returnActivity', { valid: this.validator.form(), data: window.ltc.getFormSerializeObject($('#step2-form'))});
     });
 
     window.ltc.on('getValidate', (msg) => {
       window.ltc.emit('returnValidate', { valid: this.validator.form(), context: {
-        score: $('#testpaper-media').find('option:selected').data('score')
+        score: this.$testpaperSelector.select2('data').score,
       }});
+      window.ltc.emit('returnValidate', { valid: this.validator.form() });
     });
   }
 
@@ -31,9 +37,10 @@ class Testpaper {
   }
 
   initEvent() {
-    this.$element.find('#testpaper-media').on('change', event=>this.changeTestpaper(event));
-    this.$element.find('input[name=doTimes]').on('change', event=>this.showRedoInterval(event));
-    this.$element.find('input[name="testMode"]').on('change',event=>this.startTimeCheck(event));
+    this.$element.find('#question-bank').on('change', event => this.changeQuestionBank(event));
+    this.$element.find('#testpaper-media').on('change', event => this.changeTestPaper(event));
+    this.$element.find('input[name=doTimes]').on('change', event => this.showRedoInterval(event));
+    this.$element.find('input[name="testMode"]').on('change', event => this.startTimeCheck(event));
   }
 
   initStepForm2() {
@@ -48,13 +55,14 @@ class Testpaper {
         },
         testpaperId: {
           required: true,
-          digits:true
+          digits:true,
+          min: 1,
         },
-        length:{
+        length: {
           required:true,
           digits:true
         },
-        startTime:{
+        startTime: {
           required:function(){
             return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
           },
@@ -62,7 +70,7 @@ class Testpaper {
             return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
           }
         },
-        redoInterval:{
+        redoInterval: {
           required:function(){
             return $('[name="doTimes"]:checked').val() == 0;
           },
@@ -72,7 +80,8 @@ class Testpaper {
       },
       messages: {
         testpaperId: {
-          required:Translator.trans('activity.testpaper_manage.media_error_hint'),
+          required: Translator.trans('activity.testpaper_manage.media_error_hint'),
+          min: Translator.trans('activity.testpaper_manage.media_error_hint'),
         },
         redoInterval: {
           max: Translator.trans('activity.testpaper_manage.max_error_hint')
@@ -81,27 +90,133 @@ class Testpaper {
     });
   }
 
-  initSelectTestpaper($option, passScore='') {
-    let mediaId = $option.val();
-    if (mediaId != '') {
-      this.getItemsTable($option.closest('select').data('getTestpaperItems'), mediaId);
-      let score = $option.data('score');
-      if (passScore == '') {
-        passScore = Math.ceil(score * 0.6);
-      }
-      $('#score-single-input').val(passScore);
-      if(!$('input[name="title"]').val()) {
-        $('input[name="title"]').val($option.text());
+  initSelectTestPaper($selected) {
+    let mediaId = parseInt($selected.id);
+    if (mediaId) {
+      this.getItemsTable(this.$testpaperSelector.data('getTestpaperItems'), mediaId);
+      if (!$('input[name="title"]').val()) {
+        $('input[name="title"]').val($selected.text);
       }
     } else {
       $('#questionItemShowDiv').hide();
     }
   }
 
-  changeTestpaper(event) {
-    let $target = $(event.currentTarget);
-    let $option = $target.find('option:selected');
-    this.initSelectTestpaper($option);
+  initEmptyTestPaperSelector() {
+    this.$testpaperSelector.select2({
+      data: [
+        {
+          id: '0',
+          text: Translator.trans('activity.testpaper_manage.media_required'),
+          selected: true,
+        }
+      ],
+    });
+  }
+
+  initAjaxTestPaperSelector() {
+    let self = this;
+    this.$testpaperSelector.select2({
+      ajax: {
+        url: self.$testpaperSelector.data('url'),
+        dataType: 'json',
+        quietMillis: 250,
+        data: function(term, page) {
+          return {
+            keyword: term,
+            page: page,
+          };
+        },
+        results: function(data, page) {
+          let results = [];
+
+          $.each(data.testPapers, function(index, testPaper) {
+            results.push({
+              id: testPaper.id,
+              text: testPaper.name,
+              score: testPaper.score,
+            });
+          });
+
+          return {
+            results: results,
+            more: page * 10 < data.openCount,
+          };
+        },
+      },
+      initSelection: function(element, callback) {
+        let testPaperName = $('#testPaperName').val();
+        let testPaperId = element.val();
+        if (!parseInt(testPaperId)) {
+          testPaperName = '';
+        }
+        let data = {
+          id: testPaperId,
+          text: testPaperName ? testPaperName : Translator.trans('activity.testpaper_manage.media_required'),
+        };
+
+        callback(data);
+      },
+      formatSelection: function(data) {
+        return data.text;
+      },
+      dropdownAutoWidth: true,
+    });
+  }
+
+  initQuestionBankSelector() {
+    this.$questionBankSelector.select2({
+      treeview: true,
+      dropdownAutoWidth: true,
+      treeviewInitState: 'collapsed',
+      placeholderOption: 'first',
+    });
+  }
+
+  initTestPaperSelector() {
+    if ($('#testPaperName').val()) {
+      this.initAjaxTestPaperSelector();
+    } else {
+      this.initEmptyTestPaperSelector();
+    }
+  }
+
+  changeQuestionBank(event) {
+    let $helpBlock = $('.js-help-block');
+    $helpBlock.addClass('hidden');
+    this.$questionItemShow.hide();
+    this.$testpaperSelector.val('0');
+
+    let selected = this.$questionBankSelector.select2('data');
+    let bankId = selected.id;
+    if (!parseInt(bankId)) {
+      this.initEmptyTestPaperSelector();
+      return;
+    }
+    let url = this.$questionBankSelector.data('url');
+    url = url.replace(/[0-9]/, bankId);
+    let self = this;
+    $.post(url, function(resp) {
+      if (resp.totalCount === 0) {
+        $helpBlock.addClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.empty_tips')).show();
+        self.initEmptyTestPaperSelector();
+        return;
+      }
+      if (resp.openCount === 0) {
+        $helpBlock.removeClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.no_open_tips')).show();
+        self.initEmptyTestPaperSelector();
+        return;
+      }
+      self.$testpaperSelector.data('url', url);
+      self.initAjaxTestPaperSelector();
+    }).error(function(e) {
+      cd.message({type: 'danger', message: e.responseJson.error.message});
+    });
+  }
+
+  changeTestPaper(event) {
+    let $selected = this.$testpaperSelector.select2('data');
+    this.initSelectTestPaper($selected);
   }
 
   showRedoInterval(event) {
@@ -116,7 +231,7 @@ class Testpaper {
   }
 
   startTimeCheck(event) {
-    var $this = $(event.currentTarget);
+    let $this = $(event.currentTarget);
 
     if ($this.val() == 'realTime') {
       $('.starttime-input').removeClass('hidden');
@@ -133,7 +248,7 @@ class Testpaper {
   }
 
   getItemsTable(url, testpaperId) {
-    $.post(url, {testpaperId:testpaperId},function(html){
+    $.post(url, {testpaperId:testpaperId}, function(html){
       $('#questionItemShowTable').html(html);
       $('#questionItemShowDiv').show();
     });

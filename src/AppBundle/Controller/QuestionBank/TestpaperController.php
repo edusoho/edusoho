@@ -342,6 +342,51 @@ class TestpaperController extends BaseController
         return new BinaryFileResponse($path, 200, $headers);
     }
 
+    public function jsonAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $conditions = array(
+            'bankId' => $id,
+            'type' => 'testpaper',
+            'keyword' => $request->query->get('keyword', ''),
+        );
+        $totalCount = $this->getTestpaperService()->searchTestpaperCount($conditions);
+        $conditions['status'] = 'open';
+        $openCount = $this->getTestpaperService()->searchTestpaperCount($conditions);
+
+        $pagination = new Paginator(
+            $request,
+            $openCount,
+            10
+        );
+
+        $testPapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $pagination->getOffsetCount(),
+            $pagination->getPerPageCount()
+        );
+
+        foreach ($testPapers as &$testPaper) {
+            $testPaper = ArrayToolkit::parts($testPaper, array(
+                'id',
+                'name',
+                'score',
+            ));
+        }
+
+        $data = array(
+            'testPapers' => $testPapers,
+            'totalCount' => $totalCount,
+            'openCount' => $openCount,
+        );
+
+        return $this->createJsonResponse($data);
+    }
+
     public function questionPickAction(Request $request, $id)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {

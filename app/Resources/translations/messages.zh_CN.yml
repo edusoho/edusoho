@@ -10493,6 +10493,7 @@ question_bank.question_manage.manage.stem_tips: >
   点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对
 question_bank.question_manage.manage.material: 材料
 
+question.select_question_bank: --选择题库--
 question_reedit.select_question_category: --选择分类--
 question_reedit.category_text: 分类
 question_reedit.category_empty: 无

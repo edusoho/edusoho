@@ -324,13 +324,17 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
-        if (empty($testpaper) || $testpaper['courseSetId'] != $id) {
+        if (!$this->getQuestionBankService()->canManageBank($testpaper['bankId'])) {
+            return $this->createMessageResponse('error', 'can not manage bank');
+        }
+
+        if (empty($testpaper)) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
         $items = $this->getTestpaperService()->getItemsCountByParams(
             array('testId' => $testpaperId, 'parentIdDefault' => 0),
-            $gourpBy = 'questionType'
+            'questionType'
         );
         $subItems = $this->getTestpaperService()->getItemsCountByParams(
             array('testId' => $testpaperId, 'parentId' => 0)

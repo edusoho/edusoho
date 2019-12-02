@@ -322,6 +322,7 @@ activity.homework_manage.pass_objective_question_hint: >
 activity.ppt_manage.media_error_hint: Please upload or select PPT
 input.ppt_manage.finish_detail_required_error_hint: Please enter the the minimum watch time
 
+activity.testpaper_manage.media_required: Please select the testpapers
 activity.testpaper_manage.arithmetic_float_error_hint: Must be a positive number, keep a decimal
 activity.testpaper_manage.positive_integer_error_hint: Must be a positive integer
 activity.testpaper_manage.media_error_hint: Please select the testpapers
@@ -1507,3 +1508,5 @@ question_bank.question_category.delete_confirm_hint: This category and its subca
 question_bank.question_category.not_set: Not Set
 
 question.marker_question.select_question_category: '--Select question category--'
+queston_bank.testpaper.no_open_tips: 'If you can not find a testpaper, please make sure that the testpaper has been published'
+queston_bank.testpaper.empty_tips: 'There is no testpaper in this question bank'
