@@ -1493,3 +1493,4 @@ course.plan_task.activity_ppt_animation_slide: Switch animation mode
 admin.mobile_manage.discovery_upgrade_madal.notice_successed: 'Upgrade success'
 admin.mobile_manage.discovery_upgrade_madal.notice_failed: 'Upgrade failed'
 admin.mobile_manage.discovery_upgrade_madal.notice_upgraded: 'Cannot repeat upgrade'
+course.plan_task.lessons_publish_status: Published Lesson Number:%publishedNum%<br/>Unpublish Lesson Number:%unpublishedNum%

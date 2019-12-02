@@ -1251,4 +1251,5 @@ t.add("course.question_manage.manage.delete_tips", "\u5220\u9664\u9898\u76ee\uff
 t.add("admin.setting.invite.coupon.empty.tips", "\u8bf7\u8bbe\u7f6e\u4f18\u60e0\u5238\u6279\u6b21", "js", "zh_CN");
 t.add("course.plan_task.activity_ppt_animation_img", "\u5207\u6362\u56fe\u7247\u6a21\u5f0f", "js", "zh_CN");
 t.add("course.plan_task.activity_ppt_animation_slide", "\u5207\u6362\u52a8\u753b\u6a21\u5f0f", "js", "zh_CN");
+t.add("course.plan_task.lessons_publish_status", "\u5df2\u53d1\u5e03\u8bfe\u65f6\u6570\uff1a%publishedNum%<br\/>\u672a\u53d1\u5e03\u8bfe\u65f6\u6570\uff1a%unpublishedNum%", "js", "zh_CN");
 })(Translator);

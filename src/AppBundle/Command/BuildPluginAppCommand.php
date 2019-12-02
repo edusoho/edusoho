@@ -25,14 +25,32 @@ class BuildPluginAppCommand extends BaseCommand
         $this->output = $output;
         $this->filesystem = new Filesystem();
         $name = $input->getArgument('name');
-
+        $this->copyTranslationsFile($name);
         $this->copyStaticFile($name);
         $this->_buildDistPackage($name);
     }
 
+    private function copyTranslationsFile($pluginCode)
+    {
+        $this->output->writeln("<info>正在检测翻译文件 {$pluginCode}</info>");
+        $rootDir = $this->getBiz()->offsetGet('kernel.root_dir');
+        $translationsDir = $rootDir."/../plugins/{$pluginCode}Plugin/Resources/static-src/js/translations";
+        $pluginPublicTranslationsDir = $rootDir."/../plugins/{$pluginCode}Plugin/Resources/public/js/controller/translations";
+        $name = strtolower($pluginCode);
+        $staticDir = $rootDir."/../web/static-dist/{$name}plugin/js/translations";
+        if ($this->filesystem->exists($translationsDir)) {
+            $this->output->writeln("<info>    *正在拷贝翻译文件 {$translationsDir} -> {$pluginPublicTranslationsDir}</info>");
+            $this->filesystem->mirror($translationsDir, $pluginPublicTranslationsDir, null, array('override' => true, 'delete' => true));
+            $this->output->writeln("<info>    *正在拷贝翻译文件 {$translationsDir} -> {$staticDir}</info>");
+            $this->filesystem->mirror($translationsDir, $staticDir, null, array('override' => true, 'delete' => true));
+        } else {
+            $this->output->writeln("<warning>    *未检测到翻译文件 {$pluginCode},请查看是否执行app/console trans:dump-js --code=plugin_code</>");
+        }
+    }
+
     private function copyStaticFile($pluginCode)
     {
-        $this->output->writeln("<info>正在检测态资源文件 {$pluginCode}</info>");
+        $this->output->writeln("<info>正在检测静态资源文件 {$pluginCode}</info>");
         $rootDir = $this->getBiz()->offsetGet('kernel.root_dir');
         $originDir = $this->getOriginDir($rootDir, $pluginCode);
         $targetDir = $this->getTargetDir($rootDir, $pluginCode);

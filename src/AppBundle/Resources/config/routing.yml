@@ -462,7 +462,7 @@ settings_password:
 settings_email:
     path:  /settings/email
     defaults: { _controller: AppBundle:Settings:email }
-    
+
 settings_email_verify:
     path:  /settings/email/verify
     defaults: { _controller: AppBundle:Settings:emailVerify }
@@ -2592,6 +2592,11 @@ classroom_courses_select:
     path: /classroom/{id}/courses/select
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:coursesSelect }
 
+classroom_manage_items_sort:
+  path:  /classroom/{id}/manage/items/sort
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:courseItemsSort }
+  methods: ['POST']
+
 classroom_manage_set_info:
     path: /classroom/{id}/manage/set_info
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:setInfo }
@@ -3256,5 +3261,22 @@ coupon_resource_list:
   defaults: {_controller: AppBundle:CouponBatch:couponResourceList  }
 
 activity_ppt_token:
- path: /activity/ppt/token/{mediaId}
- defaults: { _controller: AppBundle:Activity/Ppt:getPptToken }
+  path: /activity/ppt/token/{mediaId}
+  defaults: { _controller: AppBundle:Activity/Ppt:getPptToken }
+
+oauth2_es_authorize:
+  path:  /oauth/authorize
+  defaults: { _controller: AppBundle:OAuth2/Server/Authorization:authorize }
+
+oauth2_es_token:
+  path:  /oauth/token
+  defaults: { _controller: AppBundle:OAuth2/Server/Authorization:token }
+  methods: [POST]
+
+oauth2_es_token_verify:
+  path:  /oauth/access_token
+  defaults: { _controller: AppBundle:OAuth2/Server/Authorization:verify }
+
+oauth2_es_user_info:
+  path:  /oauth/user_info/{userId}
+  defaults: { _controller: AppBundle:OAuth2/Server/Authorization:getUserInfo }

@@ -27,6 +27,7 @@
           <span class="tag-finished"></span>
         {% endif %}
       </span>
+      {{ slot('drp.product_tags.extension', {'type':'course','targetId':course.id}) }}
       <img class="img-responsive" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" alt="{{ course.title }} ">
       <div class="image-overlay"></div>
       {% if previewTask | default(null) %}
