@@ -55,7 +55,7 @@ class PermissionKernelControllerListener
                     $biz = $self->container->get('biz');
                     $settingService = $biz->service('System:SettingService');
                     $backstage = $settingService->get('backstage', array('is_v2' => 0));
-                    $template = $backstage['is_v2'] ? 'admin-v2/system/role/permission-error.html.twig' : 'admin/setting/role/permission-error.html.twig';
+                    $template = $backstage['is_v2'] ? 'admin-v2/system/role/permission-error.html.twig' : 'admin/role/permission-error.html.twig';
 
                     return $self->container->get('templating')->renderResponse($template);
                 });
