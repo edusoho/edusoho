@@ -18,7 +18,7 @@ use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\Dao\TestpaperItemResultDao;
 use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 
-class \TestpaperServiceImpl extends BaseService implements TestpaperService
+class TestpaperServiceImpl extends BaseService implements TestpaperService
 {
     public function getTestpaper($id)
     {

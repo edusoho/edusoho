@@ -438,7 +438,7 @@ class TestpaperController extends BaseController
 
             $questionIds = array_keys($questions);
             $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-            if ($type == 'material') {
+            if ('material' == $type) {
                 foreach ($questions as &$question) {
                     $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);
                 }
