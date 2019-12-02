@@ -1,3 +1,5 @@
+admin:
+    - admin_v2
 admin_course_show:
     - admin_v2_course_show
 admin_course_manage:
