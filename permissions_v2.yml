@@ -132,10 +132,12 @@ admin_v2_marketing_coupon_query:
 admin_v2_coupon_setting:
     - admin_coupon_setting
 admin_v2_distributor:
+    - admin_distributor_top
     - _admin_distributor_menu
-admin_v2_distributor_pages:
+admin_v2_distributor_page:
     - _distributor_page
 admin_v2_micromarketing:
+    - admin_marketing_top
     - _admin_marketing_marketing_menu
 admin_v2_micromarketing_page:
     - _marketing_marketing_page
