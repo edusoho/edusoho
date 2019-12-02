@@ -150,6 +150,7 @@ class DefaultController extends BaseController
             $setting['is_v2'] = 0;
             $this->getSettingService()->set('backstage', $setting);
             $this->pushEventTracking('switchToAdmin');
+
             return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin')));
         }
 
@@ -418,18 +419,20 @@ class DefaultController extends BaseController
 
     public function quickEntranceAction(Request $request)
     {
-        $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+        $userQuickEntrances = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
         if ($request->isMethod('POST')) {
             $entrances = $request->request->get('data', array());
             $userQuickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $entrances);
         }
 
-        $allQuickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
+        $allQuickEntrances = $this->getQuickEntranceService()->findAvailableEntrances();
+        $selectedEntranceCodes = $this->getQuickEntranceService()->findSelectedEntrancesCodeByUserId($this->getCurrentUser()->getId());
 
         return $this->render('admin-v2/default/quick-entrance/index.html.twig', array(
             'allQuickEntrances' => $allQuickEntrances,
             'userQuickEntrances' => $userQuickEntrances,
+            'selectedEntranceCodes' => $selectedEntranceCodes,
         ));
     }
 
