@@ -52,13 +52,14 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
                 'class' => $navPermission['quick_entrance_icon_class'],
             );
         }
-        return $quickEntrances;
 
+        return $quickEntrances;
     }
 
     public function findSelectedEntrancesCodeByUserId($userId)
     {
         $userQuickEntrances = $this->getQuickEntranceDao()->getByUserId($userId);
+
         return empty($userQuickEntrances) ? $this->defaultQuickEntranceCodes : $userQuickEntrances['data'];
     }
 
