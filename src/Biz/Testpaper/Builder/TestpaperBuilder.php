@@ -142,6 +142,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             'pattern',
             'metas',
             'questionTypeSeq',
+            'bankId',
         ));
 
         return $fields;

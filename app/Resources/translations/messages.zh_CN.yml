@@ -29,7 +29,6 @@ site.data.title: 标题
 site.data.score: 分
 site.data.count: 数
 site.data.num: 个
-site.data.empty: 暂无
 site.delete: 删除
 site.copy: 复制
 site.datagrid.empty: 暂无记录

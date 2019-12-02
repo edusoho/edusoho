@@ -1,10 +1,12 @@
 import { delHtmlTag } from 'common/utils';
 import BatchSelect from '../../../../common/widget/batch-select';
+import 'jquery-sortable';
 
 class TestpaperForm {
   constructor($form) {
     this.$form = $form;
     this.$description = this.$form.find('[name="description"]');
+    this.$questionForm = $('#testpaper-items-manager');
     this.validator = null;
     this.difficultySlider = null;
     this.scoreSlider = null;
@@ -17,6 +19,7 @@ class TestpaperForm {
     this._initEvent();
     this._initValidate();
     this._initScoreValidator();
+    this._initTypeSort();
   }
 
   _initEvent() {
@@ -26,15 +29,18 @@ class TestpaperForm {
     this.$form.on('click', '[data-role="item-delete-btn"]', event=>this.deleteQuestion(event));
     this.$form.on('click', '[data-role="batch-delete-btn"]', event=>this.batchDelete(event));
     this.$form.on('click', '[data-role="set-score-btn"]', event=>this.showScoreModal(event));
+    this.$form.on('click', '.js-pick-modal', event => this.showPickModal(event));
     this.$form.on('lengthChange','[data-role="question-body"]', event => this.changeQuestionCount(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
+    $('.modal').on('selectQuestion', (event, typeQuestions) => this.selectQuestion(event, typeQuestions));
   }
 
   _confirmSave() {
     let isOk = this._validateScore();
+    let status = this.validator.form();
 
-    if (!isOk) {
-      return ;
+    if (!status || !isOk) {
+      return;
     }
 
     this.questionsCount = 0;
@@ -64,12 +70,11 @@ class TestpaperForm {
       let type = $(this).find('a').data('type'),
         name = $(this).find('a').data('name');
 
-
       stats[type] = {name:name, count:0, score:0, missScore:0};
 
-      self.$element.find('#testpaper-table-'+type).find('.js-question-score').each(function() {
+      self.$questionForm.find('#testpaper-table-' + type).find('.js-question-score').each(function() {
         let itemType = $(this).closest('tr').data('type');
-        let score = itemType == 'material' ? 0 : parseFloat($(this).val());
+        let score = itemType == 'material' ? 0 : parseFloat($(this).data('score'));
         let question = {};
 
         if (itemType != 'material') {
@@ -80,7 +85,7 @@ class TestpaperForm {
 
         let missScore = 0;
         if ($(this).closest('js-miss-score').length > 0) {
-          missScore = parseFloat($(this).closest('js-miss-score').data('miss-score'));
+          missScore = parseFloat($(this).closest('js-miss-score').data('missScore'));
         }
 
         stats[type]['missScore'] = missScore;
@@ -251,6 +256,48 @@ class TestpaperForm {
     $('.js-count-' + type).html('(' + count + ')');
   }
 
+  showPickModal (event) {
+    let excludeIds = [];
+    let $target = $(event.currentTarget);
+    this.$form.find('[name="questionIds[]"]').each(function(){
+      excludeIds.push($(this).val());
+    });
+
+    let $modal = $('#modal').modal();
+    $.get($target.data('url'), {excludeIds: excludeIds.join(',')}, function(html) {
+      $modal.html(html);
+    });
+  }
+
+  selectQuestion(event, typeQuestions) {
+    let url = this.$form.find('.js-pick-modal').data('pickUrl');
+    let self = this;
+    $.post(url, {typeQuestions: typeQuestions}, typeHtml=> {
+      if (typeHtml) {
+        $.each(typeHtml, function (type, html) {
+          let $tbody = self.$questionForm.find('#testpaper-table-' + type).find('.testpaper-table-tbody');
+          $tbody.append(html);
+          $tbody.trigger('lengthChange');
+          self._refreshSeqs(type);
+        });
+      }
+    });
+  }
+
+  _refreshSeqs(type) {
+    let seq = 1;
+    let $table = this.$form.find('#testpaper-table-' + type);
+    $table.find('tbody tr').each(function(index,item) {
+      let $tr = $(item);
+
+      if (!$tr.hasClass('have-sub-questions')) {
+        $tr.find('td.seq').html(seq);
+        seq ++;
+      }
+    });
+    $table.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1) : null );
+  }
+
   _initEditor(validator) {
     let editor = CKEDITOR.replace(this.$description.attr('id'), {
       toolbar: 'Simple',
@@ -330,11 +377,6 @@ class TestpaperForm {
 
   _submitSave(event) {
     let $target = $(event.currentTarget);
-    let status = this.validator.form();
-
-    if (!status) {
-      return;
-    }
 
     if(this.questionsCount > 2000){
       notify('danger', Translator.trans('activity.testpaper_manage.questions_length_hint'));
@@ -347,18 +389,21 @@ class TestpaperForm {
     });
 
     $target.button('loading').addClass('disabled');
-    $.post($target.data('checkUrl'),this.$form.serialize(),result => {
-      if (result.status == 'no') {
-        $('.js-build-check').html(Translator.trans('activity.testpaper_manage.question_num_error'));
-      } else {
-        $('.js-build-check').html('');
+    // $.post($target.data('checkUrl'),this.$form.serialize(),result => {
+    //   if (result.status == 'no') {
+    //     $('.js-build-check').html(Translator.trans('activity.testpaper_manage.question_num_error'));
+    //   } else {
+    //     $('.js-build-check').html('');
+    //
+    //     $target.button('loading').addClass('disabled');
+    //     this.$form.submit();
+    //   }
+    // });
 
-        $target.button('loading').addClass('disabled');
-        this.$form.submit();
-      }
-    });
-
-    let baseInfo = this.$form.find('[data-info="base"]').serialize();
+    let baseInfo = {
+      name: this.$form.find('#name-field').val(),
+      description: this.$form.find('#description-field').val()
+    };
     let questionInfo = {
       questions: JSON.stringify(this.questions),
       questionTypeSeq: JSON.stringify(questionTypeSeq)
@@ -368,6 +413,41 @@ class TestpaperForm {
       if (result.goto) {
         window.location.href = result.goto;
       }
+    });
+  }
+
+  _initTypeSort() {
+    var $group = $('#testpaper-question-nav');
+    var adjustment;
+    $('#testpaper-question-nav').sortable({
+      handle: '.js-move-icon',
+      itemSelector : '.question-type-table',
+      placeholder: '<li class="question-type-table question-type-placehoder"></li>',
+      onDrop: function ($item, container, _super, event) {
+        $item.removeClass('dragged').removeAttr('style');
+        $('body').removeClass('dragging');
+      },
+      onDragStart: function(item, container, _super) {
+        var offset = item.offset(),
+          pointer = container.rootGroup.pointer;
+        adjustment = {
+          left: pointer.left - offset.left,
+          top: pointer.top - offset.top
+        };
+        _super(item, container);
+      },
+      onDrag: function(item, position) {
+        const height = item.height();
+        const width = item.width();
+        item.css({
+          left: position.left - adjustment.left,
+          top: position.top - adjustment.top
+        });
+        $('.question-type-placehoder').css({
+          'height': height,
+          'width': width,
+        });
+      },
     });
   }
 }

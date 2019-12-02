@@ -1,4 +1,3 @@
-import { toggleIcon } from 'app/common/widget/chapter-animate';
 import {shortLongText} from 'app/common/widget/short-long-text';
 import Selector from '../common/selector';
 
@@ -15,7 +14,6 @@ class QuestionsShow {
   init() {
     this.initEvent();
     this.initSelect();
-    this.initCategoryShow();
     this.initShortLongText();
   }
   initEvent() {
@@ -108,19 +106,6 @@ class QuestionsShow {
       }
     }).error(function(error) {
       cd.message({ type: 'danger', message: Translator.trans('site.save_error_hint') });
-    });
-  }
-
-  initCategoryShow() {
-    $('.js-toggle-show').on('click', (event) => {
-      let $this = $(event.target);
-      let $sort = $this.closest('.js-sortable-item');
-      $sort.nextUntil('.js-sortable-item').animate({
-        height: 'toggle',
-        opacity: 'toggle'
-      }, 'normal');
-
-      toggleIcon($sort, 'cd-icon-add', 'cd-icon-remove');
     });
   }
 

@@ -3347,9 +3347,18 @@ question_bank_manage_testpaper_export:
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:export }
 
 question_bank_manage_testpaper_json:
-  path: /question_bank/{id}/testpapers/json
-  defaults: { _controller: AppBundle:QuestionBank/Testpaper:json }
+    path: /question_bank/{id}/testpapers/json
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:json }
 
 question_bank_manage_question_pick:
-  path: /question_bank/{id}/question/pick
-  defaults: { _controller: AppBundle:QuestionBank/Testpaper:questionPick }
+    path: /question_bank/{id}/question/pick
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:questionPick }
+
+question_bank_manage_question_search:
+    path: /question_bank/{id}/question/search
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:questionSearch }
+
+question_bank_manage_question_picked:
+    path: /question_bank/{id}/question/picked
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:pickedQuestion }
+
