@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use AppBundle\Common\ServiceToolkit;
 use Biz\Course\Service\CourseService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\Course\Service\CourseSetService;
@@ -50,6 +51,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFunction('user_avatar', array($this, 'userAvatar')),
             new \Twig_SimpleFunction('course_price', array($this, 'coursePrice')),
             new \Twig_SimpleFunction('log_trans', array($this, 'logTrans')),
+            new \Twig_SimpleFunction('is_new_classroom_cover_size', array($this, 'isNewClassroomCoverSize')),
         );
     }
 
@@ -236,6 +238,19 @@ class AppExtension extends \Twig_Extension
         } else {
             return '免费';
         }
+    }
+
+    public function isNewClassroomCoverSize($classroom)
+    {
+        if (empty($classroom['largePicture'])) {
+            return true;
+        }
+        $version = ClassroomService::COVER_SIZE_VERSION;
+        if (strpos($classroom['largePicture'], '?version=' . $version)) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function sortTags($tags)

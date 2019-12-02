@@ -1,5 +1,6 @@
 {% import 'macro.html.twig' as web_macro %}
 {% set memberDeadline = member.deadline|default(0) %}
+{% set isNewCoverSize = is_new_classroom_cover_size(classroom) %}
 
 {# 区分角色 #}
 <section class="class-header after {% if 'auditor' in member.role %} auditor{% endif %}">
@@ -43,7 +44,7 @@
       </div>
     {% endif %}
 
-    <div class="class-header-mian class-header-main--new">
+    <div class="class-header-mian {% if isNewCoverSize %} class-header-main--new {% endif %}">
       {# 背景层即将舍弃 #}
       <div class="class-bg-layer"></div>
       <div class="class-header-bg clearfix">
@@ -143,7 +144,7 @@
                   <p><i class="es-icon es-icon-share"></i></p>
                   <p>{{ 'site.btn.share'|trans }}</p>
                 </a>
-                {% include 'common/share-dropdown.html.twig' with {type: 'classroom'} %} 
+                {% include 'common/share-dropdown.html.twig' with {type: 'classroom'} %}
               </span>
             </li>
 
@@ -157,7 +158,7 @@
               </li>
             {% endif %}
           </ul>
-          
+
           {# 旁听生说明以及购买 #}
           {% if 'auditor' in member.role %}
             <div class="class-operation__auditor hidden-sm clearfix">
