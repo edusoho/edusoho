@@ -1,4 +1,5 @@
 {% import 'macro.html.twig' as web_macro %}
+{% set isNewCoverSize = is_new_classroom_cover_size(classroom) %}
 
 <section class="class-header before">
   <div class="container">
@@ -18,7 +19,7 @@
       <li class="active">{{ classroom.title }}</li>
     </ol>
 
-    <div class="class-header-mian class-header-main--new">
+    <div class="class-header-mian {% if isNewCoverSize %} class-header-main--new {% endif %}">
       <div class="class-bg-layer"></div>
       <div class="class-header-bg clearfix">
         <div class="class-img">
@@ -75,7 +76,7 @@
               <span class="color-gray cd-text-xs">{{ 'classroom.expiry_date_tips'|trans }}</span>
               <span class="gray-darker">{{ classroom.expiryValue|date('Y-m-d') }}</span>
             </div>
-          {% elseif classroom.expiryMode == 'days' %} 
+          {% elseif classroom.expiryMode == 'days' %}
             <div class="class-info__expiry hidden-sm">
               <span class="color-gray cd-text-xs">{{ 'classroom.expiry_day_tips'|trans({'%expiryValue%': classroom.expiryValue})|raw }}</span>
             </div>
