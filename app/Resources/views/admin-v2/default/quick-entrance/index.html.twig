@@ -1,7 +1,11 @@
 <div class="row">
   {% for entrance in userQuickEntrances %}
+    {% set tabMenu = first_child_permission_by_code(entrance.code) %}
+    {% if tabMenu.mode|default('') == 'capsules' %}
+      {% set tabMenu = first_child_permission(tabMenu) %}
+    {% endif %}
     <div class="col-md-3">
-      <a class="{{ 'text-center admin-function ' ~ entrance.class }}" href="{{ entrance.link }}"
+      <a class="{{ 'text-center admin-function ' ~ entrance.class }}" href="{{ permission_path(tabMenu) }}"
          target="{{ entrance.target|default('_self') }}">
         <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entrance.icon }}"></i></div>
         <div class="admin-function__name">{{ entrance.text }}</div>
