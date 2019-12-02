@@ -19,6 +19,11 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $this->getQuestionBankDao()->get($id);
     }
 
+    public function findQuestionBanksByIds($ids)
+    {
+        return $this->getQuestionBankDao()->findByIds($ids);
+    }
+
     public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = array())
     {
         $conditions = $this->prepareConditions($conditions);
@@ -68,13 +73,8 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $questionBank;
     }
 
-    public function updateQuestionBank($id, $fields)
+    public function updateQuestionBankWithMembers($id, $fields, $members)
     {
-        $fields = ArrayToolkit::parts($fields, array('name', 'categoryId', 'members'));
-        if (empty($fields)) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
-        }
-
         $questionBank = $this->getQuestionBank($id);
         if (empty($questionBank)) {
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
@@ -94,18 +94,13 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
                 'name' => empty($fields['name']) ? $questionBank['name'] : $fields['name'],
                 'categoryId' => empty($fields['categoryId']) ? $questionBank['categoryId'] : $fields['categoryId'],
             );
-            $updateFields = $this->fillOrgId($updateFields);
-            $newQuestionBank = $this->getQuestionBankDao()->update($id, $updateFields);
-            if (!empty($fields['categoryId']) && $fields['categoryId'] != $questionBank['categoryId']) {
-                $this->getCategoryService()->waveCategoryBankNum($fields['categoryId'], 1);
-                $this->getCategoryService()->waveCategoryBankNum($questionBank['categoryId'], -1);
+            $newQuestionBank = $this->updateQuestionBank($id, $updateFields);
+
+            if (!empty($fields['categoryId'])) {
+                $this->changeQuestionBankCategory($fields['categoryId'], $questionBank['categoryId']);
             }
 
-            $this->getMemberService()->batchDeleteByBankId($newQuestionBank['id']);
-            if (!empty($fields['members'])) {
-                $members = explode(',', $fields['members']);
-                $this->getMemberService()->batchCreateMembers($newQuestionBank['id'], $members);
-            }
+            $this->getMemberService()->resetBankMembers($newQuestionBank['id'], $members);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -114,6 +109,18 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         }
 
         return $newQuestionBank;
+    }
+
+    public function updateQuestionBank($id, $fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array('name', 'categoryId'));
+        if (empty($fields)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
+        $fields = $this->fillOrgId($fields);
+
+        return $this->getQuestionBankDao()->update($id, $fields);
     }
 
     public function deleteQuestionBank($id)
@@ -164,18 +171,9 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $questionBanks;
     }
 
-    public function validateCanManageBank($bankId, $permission = 'admin_question_bank')
+    public function canManageBank($bankId, $permission = 'admin_question_bank')
     {
-        $questionBank = $this->getQuestionBank($bankId);
-        if (empty($questionBank)) {
-            return false;
-        }
-
         $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            return false;
-        }
 
         if ($user->isAdmin()) {
             return true;
@@ -185,9 +183,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             return true;
         }
 
-        $members = $this->getMemberService()->findMembersByBankId($bankId);
-        $memberUserIds = ArrayToolkit::column($members, 'userId');
-        if (in_array($user['id'], $memberUserIds)) {
+        if ($this->getMemberService()->isMemberInBank($bankId, $user['id'])) {
             return true;
         }
 
@@ -202,6 +198,32 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     public function waveQuestionNum($id, $diff)
     {
         return $this->getQuestionBankDao()->wave(array($id), array('questionNum' => $diff));
+    }
+
+    public function findUserManageBanks()
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return array();
+        }
+
+        if ($user->isAdmin() || $user->hasPermission('admin_question_bank')) {
+            $banks = $this->findAllQuestionBanks();
+        } else {
+            $members = $this->getMemberService()->findMembersByUserId($user['id']);
+            $banks = $this->findQuestionBanksByIds(ArrayToolkit::column($members, 'bankId'));
+        }
+
+        return $banks;
+    }
+
+    protected function changeQuestionBankCategory($newCategoryId, $oldCategoryId)
+    {
+        if ($newCategoryId != $oldCategoryId) {
+            $this->getCategoryService()->waveCategoryBankNum($newCategoryId, 1);
+            $this->getCategoryService()->waveCategoryBankNum($oldCategoryId, -1);
+        }
     }
 
     protected function prepareConditions($conditions)

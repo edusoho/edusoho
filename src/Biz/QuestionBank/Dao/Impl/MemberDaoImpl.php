@@ -9,6 +9,11 @@ class MemberDaoImpl extends AdvancedDaoImpl implements MemberDao
 {
     protected $table = 'question_bank_member';
 
+    public function getByBankIdAndUserId($bankId, $userId)
+    {
+        return $this->getByFields(array('bankId' => $bankId, 'userId' => $userId));
+    }
+
     public function findByBankId($bankId)
     {
         return $this->findByFields(array('bankId' => $bankId));

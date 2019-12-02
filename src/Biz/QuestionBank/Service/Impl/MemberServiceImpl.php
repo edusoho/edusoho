@@ -15,6 +15,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByBankId($bankId);
     }
 
+    public function getMemberByBankIdAndUserId($bankId, $userId)
+    {
+        return $this->getMemberDao()->getByBankIdAndUserId($bankId, $userId);
+    }
+
     public function createMember($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('bankId', 'userId'))) {
@@ -53,6 +58,30 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         return $this->getMemberDao()->batchCreate($members);
+    }
+
+    public function resetBankMembers($bankId, $members)
+    {
+        $this->batchDeleteByBankId($bankId);
+        if (!empty($members)) {
+            $createMembers = explode(',', $members);
+            $this->batchCreateMembers($bankId, $createMembers);
+        }
+    }
+
+    public function isMemberInBank($bankId, $userId)
+    {
+        $questionBank = $this->getQuestionBank($bankId);
+        if (empty($questionBank)) {
+            return false;
+        }
+
+        $member = $this->getMemberByBankIdAndUserId($bankId, $userId);
+        if (empty($member)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

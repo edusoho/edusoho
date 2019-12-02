@@ -12,7 +12,7 @@ class QuestionCategoryController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -82,9 +82,10 @@ class QuestionCategoryController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
-    public function showCategoriesAction(Request $request, $bankId)
+    public function showCategoriesAction(Request $request)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($bankId)) {
+        $bankId = $request->request->get('bankId', 0);
+        if (!$this->getQuestionBankService()->canManageBank($bankId)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 

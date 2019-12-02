@@ -26,6 +26,7 @@ class CategoryDaoImpl extends AdvancedDaoImpl implements CategoryDao
             'orderbys' => array('createdTime', 'updateTime'),
             'conditions' => array(
                 'id = :id',
+                'id IN (:ids)',
             ),
         );
     }

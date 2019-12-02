@@ -58,7 +58,8 @@ class QuestionBankController extends BaseController
     public function editAction(Request $request, $id)
     {
         if ('POST' == $request->getMethod()) {
-            $questionBank = $this->getQuestionBankService()->updateQuestionBank($id, $request->request->all());
+            $members = $request->request->get('members', '');
+            $questionBank = $this->getQuestionBankService()->updateQuestionBankWithMembers($id, $request->request->all(), $members);
 
             return $this->createJsonResponse($questionBank);
         }

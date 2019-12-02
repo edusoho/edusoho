@@ -9,6 +9,11 @@ class QuestionBankDaoImpl extends AdvancedDaoImpl implements QuestionBankDao
 {
     protected $table = 'question_bank';
 
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function declares()
     {
         $declares['timestamps'] = array(
