@@ -780,6 +780,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryDays'])) {
                 $this->createNewException(CourseException::EXPIRYDAYS_REQUIRED());
             }
+            if ($course['expiryDays'] > CourseService::MAX_EXPIRY_DAY) {
+                $this->createNewException(CourseException::EXPIRYDAYS_INVALID());
+            }
         } elseif ('end_date' == $course['expiryMode']) {
             $course['expiryStartDate'] = null;
             $course['expiryDays'] = 0;

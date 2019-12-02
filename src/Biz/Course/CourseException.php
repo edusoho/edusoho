@@ -62,6 +62,8 @@ class CourseException extends AbstractException
 
     const FORBIDDEN_LEARN_COURSE = 4031627;
 
+    const EXPIRYDAYS_INVALID = 5001628;
+
     public $messages = array(
         4041601 => 'exception.course.not_found',
         4031602 => 'exception.course.forbidden_take_course',
@@ -90,5 +92,6 @@ class CourseException extends AbstractException
         5001625 => 'exception.course.not_arrive',
         4031626 => 'exception.course.search_order_closed',
         4031627 => 'exception.course.forbidden_learn_course',
+        5001628 => 'exception.course.expirydays_invalid',
     );
 }
