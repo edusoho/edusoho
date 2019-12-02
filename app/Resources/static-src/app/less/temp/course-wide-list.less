@@ -153,6 +153,12 @@
     margin-top: 8px;
     margin-right: 24px;
     margin-left: 254px;
+    @media (max-width: @screen-xs-max) {
+      margin-left: 8px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+      padding-bottom: 16px;
+    }
   }
 }
 
@@ -175,14 +181,27 @@
       font-size: 16px;
       line-height: 22px;
     }
+    @media (max-width: @screen-xs-max) {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
   }
   .good-item__img {
     position: relative;
     float: left;
+    @media (max-width: @screen-xs-max) {
+      display: block;
+      float: none;
+    }
     img {
       width: 230px;
       @media (min-width: @screen-xs-min) {
         max-height: 130px;
+      }
+      @media (max-width: @screen-xs-max) {
+        display: block;
+        width: 100%;
       }
     }
   }
@@ -207,9 +226,14 @@
     }
   }
   .good-item__footer {
-    position: absolute;
-    bottom: 8px;
     font-size: 16px;
     line-height: 22px;
+    @media (min-width: @screen-sm-min) {
+      position: absolute;
+      bottom: 8px;
+    }
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 8px;
+    }
   }
 }
