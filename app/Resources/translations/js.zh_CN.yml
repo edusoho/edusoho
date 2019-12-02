@@ -462,7 +462,7 @@ course.manage.deadline_end_date_error_hint: 请输入学习有效期
 course.manage.expiry_days_error_hint: 开始日期应早于结束日期
 course.manage.expiry_start_date_error_hint: 结束日期应晚于开始日期
 course.manage.expiry_end_date_error_hint: 开始日期应早于结束日期
-course.manage.max_year_error_hint: 有效期最大值不能超过99,999天
+course.manage.max_year_error_hint: 请输入不大于 7300（20年）的数值
 course.manage.max_capacity_hint: 网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
 course.manage.publish_hint: 是否确定发布该教学计划？
 course.manage.publish_title: 发布教学计划

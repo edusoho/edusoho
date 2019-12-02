@@ -13,6 +13,8 @@ interface CourseService
     const FREE_LEARN_MODE = 'freeMode';
     const LOCK_LEARN_MODE = 'lockMode';
 
+    const MAX_EXPIRY_DAY = 7300;
+
     public function getCourse($id);
 
     public function hasCourseManagerRole($courseId = 0);
