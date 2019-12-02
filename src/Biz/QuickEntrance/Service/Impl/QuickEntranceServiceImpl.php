@@ -47,7 +47,7 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
             }
 
             $quickEntrances[$navPermission['code']] = array(
-                'data' => $this->findEntrancesByNavPermissions($navPermission),
+                'data' => $this->findEntrancesByNavPermission($navPermission),
                 'title' => $this->trans($navPermission['name'], array(), 'menu'),
                 'class' => $navPermission['quick_entrance_icon_class'],
             );
@@ -112,7 +112,7 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
         return $entrances;
     }
 
-    private function findEntrancesByNavPermissions($navPermission)
+    private function findEntrancesByNavPermission($navPermission)
     {
         $groups = empty($navPermission['children']) ? array() : $navPermission['children'];
         $quickEntrances = array();
