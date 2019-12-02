@@ -98,7 +98,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
-        if (!$this->getQuestionBankService()->validateCanManageBank($bankId)) {
+        if (!$this->getQuestionBankService()->canManageBank($bankId)) {
             $this->createAccessDeniedException();
         }
 
@@ -124,7 +124,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
-        if (!$this->getQuestionBankService()->validateCanManageBank($category['bankId'])) {
+        if (!$this->getQuestionBankService()->canManageBank($category['bankId'])) {
             $this->createAccessDeniedException();
         }
 
@@ -145,7 +145,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
-        if (!$this->getQuestionBankService()->validateCanManageBank($category['bankId'])) {
+        if (!$this->getQuestionBankService()->canManageBank($category['bankId'])) {
             $this->createAccessDeniedException();
         }
 
@@ -155,9 +155,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $ids = $this->findCategoryChildrenIds($id);
             $ids[] = $id;
 
-            foreach ($ids as $id) {
-                $this->getCategoryDao()->delete($id);
-            }
+            $this->getCategoryDao()->batchDelete(array('ids' => $ids));
 
             $questions = $this->getQuestionService()->findQuestionsByCategoryIds($ids);
             if (!empty($questions)) {

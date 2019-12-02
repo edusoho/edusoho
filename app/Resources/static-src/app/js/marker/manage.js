@@ -202,10 +202,10 @@ class Manage {
         this.disableSelect();
         return;
       }
-      url = url.replace(/[0-9]/, bankId);
+
       let self = this;
-      $.post(url, function (response) {
-        option += `<option value="0">无</option>`;
+      $.post(url, {bankId: bankId}, function (response) {
+        option += '<option value="0">无</option>';
         $.each(response, function (index, category) {
           let space = category.depth > 1 ? '　'.repeat(category.depth-1) : '';
           option += `<option value="${category.id}">${space}${category.name}</option>`;

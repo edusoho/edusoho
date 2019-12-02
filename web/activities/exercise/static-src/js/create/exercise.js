@@ -59,11 +59,11 @@ export default class Exercise {
               },
               range: function () {
                 let range = {};
-                let courseId = $('[name="range[courseId]"]').val();
-                range.courseId = courseId;
-                if ($('[name="range[lessonId]"]').length > 0) {
-                  let lessonId = $('[name="range[lessonId]"]').val();
-                  range.lessonId = lessonId;
+                let bankId = $('[name="range[bankId]"]').val();
+                range.bankId = bankId;
+                if ($('[name="range[categoryId]"]').length > 0) {
+                  let categoryId = $('[name="range[categoryId]"]').val();
+                  range.categoryId = categoryId;
                 }
 
                 return JSON.stringify(range);

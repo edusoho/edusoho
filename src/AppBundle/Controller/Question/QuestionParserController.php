@@ -70,7 +70,7 @@ class QuestionParserController extends BaseController
             throw new \Exception('超过有效期');
         }
         $data = $token['data'];
-        if (!$this->getQuestionBankService()->validateCanManageBank($data['questionBankId'])) {
+        if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 

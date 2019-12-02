@@ -105,7 +105,6 @@ class ExerciseBuilder implements TestpaperBuilderInterface
     {
         $conditions = array(
             'types' => $testPaper['metas']['questionTypes'],
-            'courseSetId' => $testPaper['courseSetId'],
             'parentId' => 0,
         );
         if (!empty($testPaper['metas']['difficulty'])) {
@@ -133,12 +132,12 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         }
         //兼容course1.0 end
 
-        if (!empty($testPaper['metas']['range']['courseId'])) {
-            $conditions['courseId'] = $testPaper['metas']['range']['courseId'];
+        if (!empty($testPaper['metas']['range']['bankId'])) {
+            $conditions['bankId'] = $testPaper['metas']['range']['bankId'];
         }
 
-        if (!empty($testPaper['metas']['range']['courseId']) && !empty($testPaper['metas']['range']['lessonId'])) {
-            $conditions['lessonId'] = $testPaper['metas']['range']['lessonId'];
+        if (!empty($testPaper['metas']['range']['bankId']) && !empty($testPaper['metas']['range']['categoryId'])) {
+            $conditions['categoryId'] = $testPaper['metas']['range']['categoryId'];
         }
 
         return $conditions;
@@ -259,12 +258,12 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $conditions['lessonId'] = $options['range'];
         }
 
-        if (!empty($options['range']['courseId'])) {
-            $conditions['courseId'] = $options['range']['courseId'];
+        if (!empty($options['range']['bankId'])) {
+            $conditions['bankId'] = $options['range']['bankId'];
         }
 
-        if (!empty($options['range']['lessonId'])) {
-            $conditions['lessonId'] = $options['range']['lessonId'];
+        if (!empty($options['range']['categoryId'])) {
+            $conditions['categoryId'] = $options['range']['categoryId'];
         }
 
         if (!empty($options['questionTypes'])) {
@@ -279,7 +278,6 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $conditions['difficulty'] = $options['difficulty'];
         }
 
-        $conditions['courseSetId'] = $options['courseSetId'];
         $conditions['parentId'] = 0;
 
         $total = $this->getQuestionService()->searchCount($conditions);

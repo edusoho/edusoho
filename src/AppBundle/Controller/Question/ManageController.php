@@ -206,7 +206,7 @@ class ManageController extends BaseController
     {
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         $data = $token['data'];
-        if (!$this->getQuestionBankService()->validateCanManageBank($data['questionBankId'])) {
+        if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
         $content = $request->getContent();

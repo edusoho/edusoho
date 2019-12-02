@@ -10,6 +10,8 @@ use AppBundle\Common\TreeToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\Taxonomy\CategoryException;
+use Biz\QuestionBank\Service\MemberService;
+use Biz\QuestionBank\Service\QuestionBankService;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
@@ -25,18 +27,18 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return ArrayToolkit::index($categories, 'id');
     }
 
-    public function getCategoryStructureTree()
+    public function getCategoryStructureTree($rootId = 0)
     {
-        return TreeToolkit::makeTree($this->getCategoryTree(), 'weight');
+        return TreeToolkit::makeTree($this->getCategoryTree($rootId), 'weight');
     }
 
     public function createCategory(array $category)
     {
-        $category = ArrayToolkit::parts($category, array('name', 'parentId'));
-
         if (!ArrayToolkit::requireds($category, array('name', 'parentId'))) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
+
+        $category = ArrayToolkit::parts($category, array('name', 'parentId'));
 
         $this->filterCategoryFields($category);
         $category = $this->setCategoryOrg($category);
@@ -74,11 +76,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $children = $this->findCategoryChildren($id);
         $children[] = $category;
 
-        $this->validateCategoriesCanDelete($children);
+        $this->canDelete($children);
 
-        foreach ($children as $category) {
-            $this->getCategoryDao()->delete($category['id']);
-        }
+        $this->getCategoryDao()->batchDelete(array('ids' => ArrayToolkit::column($children, 'id')));
     }
 
     public function waveCategoryBankNum($id, $diff)
@@ -117,13 +117,33 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $children;
     }
 
-    public function getCategoryTree()
+    public function getCategoryTree($rootId = 0)
     {
         $categories = $this->findAllCategories();
         $categories = ArrayToolkit::group($categories, 'parentId');
 
         $tree = array();
-        $this->makeCategoryTree($tree, $categories, 0);
+        $this->makeCategoryTree($tree, $categories, $rootId);
+
+        return $tree;
+    }
+
+    public function getCategoryAndBankMixedTree()
+    {
+        $banks = $this->getQuestionBankService()->findUserManageBanks();
+        if (empty($banks)) {
+            return array();
+        }
+
+        $categories = $this->findAllCategories();
+        if (empty($categories)) {
+            return $banks;
+        }
+
+        $categories = ArrayToolkit::group($categories, 'parentId');
+        $banks = ArrayToolkit::group($banks, 'categoryId');
+        $tree = array();
+        $this->makeCategoryAndBankMixedTree($banks, $tree, $categories, 0);
 
         return $tree;
     }
@@ -138,7 +158,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return ArrayToolkit::index($this->getCategoryDao()->findAllByParentId($parentId), 'id');
     }
 
-    public function validateCategoriesCanDelete($categories)
+    public function canDelete($categories)
     {
         foreach ($categories as $category) {
             if ($category['bankNum'] > 0) {
@@ -173,6 +193,32 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                 $tree[] = $category;
                 $this->makeCategoryTree($tree, $categories, $category['id']);
                 --$depth;
+            }
+        }
+
+        return $tree;
+    }
+
+    protected function makeCategoryAndBankMixedTree($banks, &$tree, &$categories, $parentId)
+    {
+        static $treeDepth = 0;
+
+        if (!empty($banks[$parentId])) {
+            ++$treeDepth;
+            foreach ($banks[$parentId] as &$bank) {
+                $bank['depth'] = $treeDepth;
+            }
+            $tree = array_merge($tree, $banks[$parentId]);
+            --$treeDepth;
+        }
+
+        if (isset($categories[$parentId]) && is_array($categories[$parentId])) {
+            foreach ($categories[$parentId] as $category) {
+                ++$treeDepth;
+                $category['depth'] = $treeDepth;
+                $tree[] = $category;
+                $this->makeCategoryAndBankMixedTree($banks, $tree, $categories, $category['id']);
+                --$treeDepth;
             }
         }
 
@@ -246,5 +292,21 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->createService('QuestionBank:MemberService');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

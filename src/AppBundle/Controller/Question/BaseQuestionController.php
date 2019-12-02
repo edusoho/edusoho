@@ -14,7 +14,7 @@ class BaseQuestionController extends BaseController
 {
     protected function baseEditAction(Request $request, $questionBankId, $questionId, $view)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($questionBankId)) {
+        if (!$this->getQuestionBankService()->canManageBank($questionBankId)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
@@ -45,7 +45,7 @@ class BaseQuestionController extends BaseController
 
     protected function baseCreateAction(Request $request, $questionBankId, $type, $view)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($questionBankId)) {
+        if (!$this->getQuestionBankService()->canManageBank($questionBankId)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
