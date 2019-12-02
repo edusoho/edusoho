@@ -21,7 +21,7 @@
       {% endif %}
     </span>
   </td>
-  {% if type == 'material' %}
+  {% if question.type == 'material' %}
     <td>{{ questionTypesDict[question.type]|default('--') }}</td>
   {% endif %}
   <td class="js-question-score" data-score="{{ question.score|default(0)|score_text }}">

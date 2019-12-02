@@ -28,6 +28,11 @@ export default class Selector {
     });
   }
 
+  setOpts({ addCb = function() {}, removeCb = function() {} }) {
+    this.addCb = addCb;
+    this.removeCb = removeCb;
+  }
+
   getItem($elem) {
     return {id: $elem.data('id')};
   }
@@ -57,6 +62,7 @@ export default class Selector {
     this.$elem.find('.js-checkbox').each((index, item) => {
       if (!$(item).prop('checked')) {
         this.addItem(item);
+        this.addCb && this.addCb(item);
       }
     });
   }
@@ -66,6 +72,7 @@ export default class Selector {
       if ($(item).prop('checked')) {
         let obj = this.getItem($(item));
         this.removeItem(obj);
+        this.removeCb && this.removeCb(item);
       }
     });
   }
@@ -75,10 +82,12 @@ export default class Selector {
     if ($elem.prop('checked')) {
       if (!this.selectMap[$elem.data('id')]) {
         this.selectMap[$elem.data('id')] = true;
+        this.addCb && this.addCb($elem);
       }
     } else {
       if (this.selectMap[$elem.data('id')]) {
         delete this.selectMap[$elem.data('id')];
+        this.removeCb && this.removeCb($elem);
       }
     }
   }

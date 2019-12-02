@@ -23,7 +23,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
         $testpaperPattern = $this->getTestpaperService()->getTestpaperPattern($testpaper['pattern']);
 
-        $testpaper['metas']['courseSetId'] = $testpaper['courseSetId'];
+        $testpaper['metas']['bankId'] = $testpaper['bankId'];
 
         $result = $testpaperPattern->getTestpaperQuestions($testpaper, $testpaper['metas']);
 
@@ -142,6 +142,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             'pattern',
             'metas',
             'questionTypeSeq',
+            'bankId'
         ));
 
         return $fields;

@@ -1,0 +1,170 @@
+import Selector from '../common/selector';
+
+class QuestionSelect {
+  constructor() {
+    this.element = $('.js-select-container');
+    this.table = $('.js-select-table');
+    this.renderUrl = this.table.data('url');
+    this.categoryContainer = $('.js-category-list');
+    this.selectTypeQuestion = {};
+    this.selector = new Selector(this.table);
+    this.init();
+  }
+  init() {
+    this.initEvent();
+    this.initQuestionType();
+    this.selector.setOpts({
+      addCb: (item) => {
+        this.selectQuestion(item);
+      },
+      removeCb: (item) => {
+        this.removeQuestion(item);
+      }
+    });
+  }
+  initEvent() {
+    this.element.on('click', '.js-search-btn', (event) => {
+      this.onClickSearchBtn(event);
+    });
+
+    this.element.on('click', '.pagination li', (event) => {
+      this.onClickPagination(event);
+    });
+
+    this.element.on('click', '.js-category-search', (event) => {
+      this.onClickCategorySearch(event);
+    });
+
+    this.element.on('click', '.js-all-category-search', (event) => {
+      this.onClickAllCategorySearch(event);
+    });
+
+    this.element.on('click', '.js-clear-select', (event) => {
+      this.onClickClearSelect(event);
+    });
+
+    $('.js-pick-btn').on('click', (event) => {
+      this.onClickPick(event);
+    });
+  }
+
+  initQuestionType() {
+    this.element.find('.js-list-item').each((index, item) => {
+      let type = $(item).data('type');
+      this.selectTypeQuestion[type] = {};
+    });
+  }
+
+  selectQuestion(item) {
+    this.element.find('.js-select-number').text(this.selector.getObjectLength());
+    let type = $(item).data('type');
+    let id = $(item).data('id');
+    if (this.selectTypeQuestion[type]) {
+      this.selectTypeQuestion[type][id] = true;
+      this.element.find('.js-select-' + type).text(this.getTypeQuestionLength(type));
+    }
+  }
+
+  removeQuestion(item) {
+    this.element.find('.js-select-number').text(this.selector.getObjectLength());
+    let type = $(item).data('type');
+    let id = $(item).data('id');
+    if (this.selectTypeQuestion[type][id]) {
+      delete this.selectTypeQuestion[type][id];
+      this.element.find('.js-select-' + type).text(this.getTypeQuestionLength(type));
+    }
+  }
+
+  onClickClearSelect(event) {
+    this.element.find('.js-list-item').each((index, item) => {
+      let type = $(item).data('type');
+      this.selectTypeQuestion[type] = {};
+      this.element.find('.js-select-' + type).text(0);
+    });
+    this.selector.removeItems();
+    this.selector.resetItems();
+    this.element.find('.js-select-number').text(0);
+  }
+
+  onClickPick(event) {
+    let $target = $(event.currentTarget);
+    let $modal = this.element.parents('.modal');
+    let name = $target.data('name');
+    let ids = this.selector.toJson();
+    if (ids.length === 0) {
+      cd.message({type: 'danger', message: Translator.trans('site.data.uncheck_name_hint', {'name': name})});
+      return;
+    }
+
+    $modal.trigger('selectQuestion', this.selectTypeQuestion);
+    $modal.modal('hide');
+  }
+
+  getTypeQuestionLength(type) {
+    if (this.selectTypeQuestion[type]) {
+      let arr = Object.keys(this.selectTypeQuestion[type]);
+      return arr.length;
+    }
+
+    return 0;
+  }
+
+  onClickSearchBtn(event) {
+    this.renderTable();
+    event.preventDefault();
+  }
+
+  onClickPagination(event) {
+    let $target = $(event.currentTarget);
+    this.element.find('.js-page').val($target.data('page'));
+    this.renderTable(true);
+    event.preventDefault();
+  }
+
+  onClickCategorySearch(event) {
+    let $target = $(event.currentTarget);
+    this.categoryContainer.find('.js-active-set.active').removeClass('active');
+    $target.addClass('active');
+    $('.js-category-choose').val($target.data('id'));
+    this.renderTable();
+  }
+
+  onClickAllCategorySearch(event) {
+    let $target = $(event.currentTarget);
+    this.categoryContainer.find('.js-active-set.active').removeClass('active');
+    $target.addClass('active');
+    $('.js-category-choose').val('');
+    this.renderTable();
+  }
+
+  renderTable(isPaginator) {
+    isPaginator || this._resetPage();
+    let self = this;
+    let conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + this.element.find('.js-page').val();
+    this._loading();
+    $.ajax({
+      type: 'GET',
+      url: this.renderUrl,
+      data: conditions
+    }).done(function(resp){
+      self.table.html(resp);
+      self.selector.updateTable();
+    }).fail(function(){
+      self._loaded_error();
+    });
+  }
+  _loading() {
+    let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('site.loading') + '</div>';
+    this.table.html(loading);
+  }
+  _loaded_error() {
+    let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('site.loading_error') + '</div>';
+    this.table.html(loading);
+  }
+  _resetPage() {
+    this.element.find('.js-page').val(1);
+  }
+}
+
+new QuestionSelect();
+

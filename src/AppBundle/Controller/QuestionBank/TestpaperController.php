@@ -4,6 +4,7 @@ namespace AppBundle\Controller\QuestionBank;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\Question\Service\CategoryService;
 use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
@@ -122,6 +123,7 @@ class TestpaperController extends BaseController
             $baseInfo = $request->request->get('baseInfo', array());
             $questionInfo = $request->request->get('questionInfo', array());
             $baseInfo['pattern'] = 'questionType';
+            $baseInfo['bankId'] = $id;
 
             if (empty($questionInfo['questions'])) {
                 return $this->createMessageResponse('error', '试卷题目不能为空！');
@@ -348,8 +350,108 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        return $this->render('question-bank/common/question-pick-modal.html.twig', array(
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $conditions = $request->query->all();
+
+        $conditions['bankId'] = $id;
+        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
+        $orderBy = array('createdTime' => 'DESC');
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getQuestionService()->searchCount($conditions),
+            10
+        );
+
+        $questions = $this->getQuestionService()->search(
+            $conditions,
+            $orderBy,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $categories = $this->getCategoryService()->getCategoryStructureTree($questionBank['id']);
+        $categoryTree = $this->getCategoryService()->getCategoryTree($questionBank['id']);
+        $questionCategories = $this->getCategoryService()->findCategories($questionBank['id']);
+        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
+
+        return $this->render('question-bank/widgets/question-pick-modal.html.twig', array(
+            'questions' => $questions,
+            'paginator' => $paginator,
+            'questionBank' => $questionBank,
+            'categories' => $categories,
+            'categoryTree' => $categoryTree,
+            'questionCategories' => $questionCategories,
         ));
+    }
+
+    public function questionSearchAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $conditions = $request->query->all();
+
+        $conditions['bankId'] = $id;
+        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
+        $orderBy = array('createdTime' => 'DESC');
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getQuestionService()->searchCount($conditions),
+            10
+        );
+
+        $questions = $this->getQuestionService()->search(
+            $conditions,
+            $orderBy,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $questionCategories = $this->getCategoryService()->findCategories($questionBank['id']);
+        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
+
+        return $this->render('question-bank/widgets/question-pick-body.html.twig', array(
+            'questions' => $questions,
+            'paginator' => $paginator,
+            'questionBank' => $questionBank,
+            'questionCategories' => $questionCategories,
+        ));
+    }
+
+    public function pickedQuestionAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $typeQuestions = $request->request->get('typeQuestions', array());
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $questionCategories = $this->getCategoryService()->findCategories($questionBank['id']);
+        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
+        $typeHtml = array();
+        foreach ($typeQuestions as $type => $questions) {
+            if (empty($questions)) {
+                continue;
+            }
+
+            $questionIds = array_keys($questions);
+            $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+            if ($type == 'material') {
+                foreach ($questions as &$question) {
+                    $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+                }
+            }
+
+            $typeHtml[$type] = $this->renderView('question-bank/widgets/picked-question.html.twig', array(
+                'questions' => $questions,
+                'questionBank' => $questionBank,
+                'questionCategories' => $questionCategories,
+            ));
+        }
+
+        return $this->createJsonResponse($typeHtml);
     }
 
     protected function getQuestionTypes()
@@ -400,6 +502,9 @@ class TestpaperController extends BaseController
         return $this->createService('Question:QuestionService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
         return $this->createService('Question:CategoryService');

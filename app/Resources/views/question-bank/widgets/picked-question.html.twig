@@ -1,0 +1,8 @@
+{% for question in questions|default(null) if question %}
+  {% include 'question-bank/testpaper/manage/question-picked.html.twig' %}
+  {% if question.subs|default(null) %}
+    {% for question in question.subs %}
+      {% include 'question-bank/testpaper/manage/question-picked.html.twig' %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
