@@ -6,10 +6,11 @@
     <div class="user-dropdown-info cd-mb24">
       <a class="user-dropdown-info__avatar cd-mr24" href="{{ path('user_show', {id:app.user.id}) }}">
         <img class="cd-avatar" src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
+        {{ slot('header.user.logo', {user: app.user}) }}
       </a>
       <div class="user-dropdown-profile">
         <div class="user-dropdown-profile__nickname">
-          <span>{{ app.user.nickname }}</span>{{ slot('header.user.logo', {user: app.user}) }}
+          <span>{{ app.user.nickname }}</span>
         </div>
         {{ slot('header.user.info', {user: app.user}) }}
       </div>

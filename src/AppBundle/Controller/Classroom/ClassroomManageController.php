@@ -845,30 +845,8 @@ class ClassroomManageController extends BaseController
         $userIds = array();
         $coinPrice = 0;
         $price = 0;
-
-        $classroom = $this->getClassroomService()->getClassroom($id);
-
-        if ('POST' == $request->getMethod()) {
-            $courseIds = $request->request->get('courseIds', array());
-
-            $this->getClassroomService()->updateClassroomCourses($id, $courseIds);
-
-            $this->setFlashMessage('success', 'site.save.success');
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'classroom_manage_courses',
-                    array(
-                        'id' => $id,
-                    )
-                )
-            );
-        }
-
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
-
         $cashRate = $this->getCashRate();
-
         foreach ($courses as $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
 
@@ -877,6 +855,7 @@ class ClassroomManageController extends BaseController
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
+        $classroom = $this->getClassroomService()->getClassroom($id);
 
         return $this->render(
             'classroom-manage/courses.html.twig',
@@ -888,6 +867,20 @@ class ClassroomManageController extends BaseController
                 'users' => $users,
             )
         );
+    }
+
+    public function courseItemsSortAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+
+        $courseIds = $request->request->get('courseIds');
+        if (empty($courseIds)) {
+            return $this->createJsonResponse(array('result' => false));
+        }
+
+        $this->getClassroomService()->updateClassroomCourses($id, $courseIds);
+
+        return $this->createJsonResponse(array('result' => true));
     }
 
     public function coursesSelectAction(Request $request, $id)
