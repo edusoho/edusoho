@@ -7,6 +7,7 @@
     <form class="form-horizontal" id="step2-form">
       {% set course = get_course(activity.fromCourseId) %}
       {% set testpaper = get_testpaper(activity.ext.mediaId|default(0))|default() %}
+      {#{% set questionBankTree = data('QuestionBankTree', {}) %}#}
       {% set questionBanks = find_accessible_question_banks() %}
       {% set features = get_features() %}
       <div class="form-group">
@@ -33,12 +34,9 @@
         </div>
         <div class="col-sm-5 controls">
           <input id="testpaper-media" class="form-control" name="testpaperId" value="{{ testpaper.id|default(0) }}" data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bankId}) }}{% endif %}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
-            {#<option value="">{{ 'course.plan_task.activity_manage.testpaper.choose'|trans }}</option>#}
           {% if testpaper|default() %}
-            {#<option value="{{ testpaper.id }}" selected>{{ testpaper.name }}</option>#}
-            <input type="hidden" id="testpaper" value="{{ testpaper.name }}">
+            <input type="hidden" id="testPaperName" value="{{ testpaper.name }}">
           {% endif %}
-          {#</input>#}
         </div>
       </div>
 

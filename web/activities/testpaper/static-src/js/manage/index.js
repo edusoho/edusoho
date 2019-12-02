@@ -13,17 +13,17 @@ class Testpaper {
     dateFormat();
     this.setValidateRule();
     this.initTestPaperSelector();
-    // this.initSelectTestpaper(this.$testpaperSelect.select2('data')[0]);
+    this.initSelectTestPaper(this.$testpaperSelector.select2('data'));
     this.initEvent();
     this.initStepForm2();
     window.ltc.on('getActivity', (msg) => {
-      window.ltc.emit('returnActivity', { valid:this.validator.form(), data: window.ltc.getFormSerializeObject($('#step2-form'))});
+      window.ltc.emit('returnActivity', { valid: this.validator.form(), data: window.ltc.getFormSerializeObject($('#step2-form'))});
     });
 
     window.ltc.on('getValidate', (msg) => {
-      // window.ltc.emit('returnValidate', { valid: this.validator.form(), context: {
-      //   score: $('#testpaper-media').find('option:selected').data('score')
-      // }});
+      window.ltc.emit('returnValidate', { valid: this.validator.form(), context: {
+        score: this.$testpaperSelector.select2('data').score,
+      }});
       window.ltc.emit('returnValidate', { valid: this.validator.form() });
     });
   }
@@ -87,7 +87,7 @@ class Testpaper {
   }
 
   initSelectTestPaper($selected) {
-    let mediaId = $selected.id;
+    let mediaId = parseInt($selected.id);
     if (mediaId) {
       this.getItemsTable(this.$testpaperSelector.data('getTestpaperItems'), mediaId);
       if (!$('input[name="title"]').val()) {
@@ -106,13 +106,12 @@ class Testpaper {
           text: '请选择试卷',
           selected: true,
         }
-      ]
+      ],
     });
   }
 
   initAjaxTestPaperSelector() {
     let self = this;
-    console.log(this.$testpaperSelector.data('url'));
     this.$testpaperSelector.select2({
       ajax: {
         url: self.$testpaperSelector.data('url'),
@@ -126,13 +125,6 @@ class Testpaper {
         },
         results: function(data, page) {
           let results = [];
-          // if (page === 1) {
-          //   results.push({
-          //     id: '0',
-          //     text: '请选择试卷',
-          //     selected: true,
-          //   });
-          // }
 
           $.each(data.testPapers, function(index, testPaper) {
             results.push({
@@ -149,10 +141,14 @@ class Testpaper {
         },
       },
       initSelection: function(element, callback) {
-        let testPaper = $('#testpaper').val();
+        let testPaperName = $('#testPaperName').val();
+        let testPaperId = element.val();
+        if (!parseInt(testPaperId)) {
+          testPaperName = '';
+        }
         let data = {
-          id: element.val(),
-          text: testPaper ? testPaper : '请选择试卷',
+          id: testPaperId,
+          text: testPaperName ? testPaperName : '请选择试卷',
         };
 
         callback(data);
@@ -164,10 +160,10 @@ class Testpaper {
   }
 
   initTestPaperSelector() {
-    if ($('#testpaper')) {
-      this.initEmptyTestPaperSelector();
-    } else {
+    if ($('#testPaperName').val()) {
       this.initAjaxTestPaperSelector();
+    } else {
+      this.initEmptyTestPaperSelector();
     }
   }
 
@@ -175,9 +171,11 @@ class Testpaper {
     let $helpBlock = $('.js-help-block');
     $helpBlock.addClass('hidden');
     this.$questionItemShow.hide();
+    this.$testpaperSelector.val('0');
+
     let $target = $(event.currentTarget);
     let bankId = $target.val();
-    if (!bankId) {
+    if (!parseInt(bankId)) {
       this.initEmptyTestPaperSelector();
       return;
     }
@@ -188,7 +186,6 @@ class Testpaper {
       if (resp.totalCount === 0) {
         $helpBlock.addClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.empty_tips'));
         self.initEmptyTestPaperSelector();
-        console.log('mei yong');
         return;
       }
       if (resp.openCount === 0) {
