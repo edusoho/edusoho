@@ -19,7 +19,7 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
         'admin_v2_user_coin',
     );
 
-    public function getEntrancesByUserId($userId)
+    public function findEntrancesByUserId($userId)
     {
         $userQuickEntrances = $this->getQuickEntranceDao()->getByUserId($userId);
 
@@ -30,9 +30,11 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
         return $this->getEntrancesByCodes($userQuickEntrances['data']);
     }
 
-    public function findAvailableEntrancesByUserId($userId)
+    public function findAvailableEntrances()
     {
         $permissions = PermissionBuilder::instance()->getUserPermissionTree()->toArray();
+        $navPermissions = array();
+        $quickEntrances = array();
         foreach ($permissions['children'] as $permission) {
             if ('admin_v2' == $permission['code']) {
                 $navPermissions = $permission['children'];
@@ -44,54 +46,20 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
                 continue;
             }
 
-            $quickEntrances[$module['code']] = array(
-                'data' => $this->getEntrancesArray($navPermission, array(), $userEntranceCodes),
-                'title' => $this->trans($module['name'], array(), 'menu'),
-                'class' => $module['quick_entrance_icon_class'],
+            $quickEntrances[$navPermission['code']] = array(
+                'data' => $this->getEntrancesByPermission($navPermission),
+                'title' => $this->trans($navPermission['name'], array(), 'menu'),
+                'class' => $navPermission['quick_entrance_icon_class'],
             );
         }
-
-    }
-
-    public function findSelectedEntrancesByUserId()
-    {
-
-    }
-
-    public function getAllEntrances($userId = 0)
-    {
-        if ($userId) {
-            $userQuickEntrances = $this->getQuickEntranceDao()->getByUserId($userId);
-        }
-
-        $userEntranceCodes = empty($userQuickEntrances) ? $this->defaultQuickEntranceCodes : $userQuickEntrances['data'];
-
-        $permissions = PermissionBuilder::instance()->getUserPermissionTree();
-
-        $permissions = $permissions->toArray();
-
-        $modules = array();
-
-        foreach ($permissions['children'] as $permission) {
-            if ('admin_v2' == $permission['code']) {
-                $modules = $permission['children'];
-            }
-        }
-
-        $quickEntrances = array();
-        foreach ($modules as $module) {
-            if (!isset($module['quick_entrance_icon_class'])) {
-                continue;
-            }
-
-            $quickEntrances[$module['code']] = array(
-                'data' => $this->getEntrancesArray($module, array(), $userEntranceCodes),
-                'title' => $this->trans($module['name'], array(), 'menu'),
-                'class' => $module['quick_entrance_icon_class'],
-            );
-        }
-
         return $quickEntrances;
+
+    }
+
+    public function findSelectedEntrancesCodeByUserId($userId)
+    {
+        $userQuickEntrances = $this->getQuickEntranceDao()->getByUserId($userId);
+        return empty($userQuickEntrances) ? $this->defaultQuickEntranceCodes : $userQuickEntrances['data'];
     }
 
     public function updateUserEntrances($userId, $entrances = array())
@@ -108,7 +76,7 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
 
         $this->getQuickEntranceDao()->update($userQuickEntrances['id'], array('data' => $entrances));
 
-        return $this->getEntrancesByUserId($userId);
+        return $this->findEntrancesByUserId($userId);
     }
 
     public function createUserEntrance($userId, $entrances = array())
@@ -119,12 +87,12 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
 
         $this->getQuickEntranceDao()->create(array('userId' => $userId, 'data' => $entrances));
 
-        return $this->getEntrancesByUserId($userId);
+        return $this->findEntrancesByUserId($userId);
     }
 
     private function getEntrancesByCodes($codes)
     {
-        $allQuickEntrances = $this->getAllEntrances();
+        $allQuickEntrances = $this->findAvailableEntrances();
 
         $entrances = array();
         foreach ($allQuickEntrances as $item) {
@@ -164,7 +132,7 @@ class QuickEntranceServiceImpl extends BaseService implements QuickEntranceServi
 
         if (isset($module['children'])) {
             foreach ($module['children'] as $child) {
-                $moduleQuickEntrances = array_merge($moduleQuickEntrances, $this->getEntrancesArray($child));
+                $moduleQuickEntrances = array_merge($moduleQuickEntrances, $this->getEntrancesByPermission($child));
             }
         }
 

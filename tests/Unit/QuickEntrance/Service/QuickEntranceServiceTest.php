@@ -8,27 +8,27 @@ use Biz\QuickEntrance\Service\QuickEntranceService;
 
 class QuickEntranceServiceTest extends BaseTestCase
 {
-    public function testGetEntrancesByUserIdEmptyWithDbDataEmpty()
+    public function testFindEntrancesByUserIdEmptyWithDbDataEmpty()
     {
         $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), array());
 
-        $result = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+        $result = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
         $this->assertEmpty($result);
     }
 
-    public function testGetEntrancesByUserIdEmptyWithoutMenuConfig()
+    public function testFindEntrancesByUserIdEmptyWithoutMenuConfig()
     {
         $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), array('test_admin_without_menu_config'));
 
-        $result = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+        $result = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
         $this->assertEmpty($result);
     }
 
-    public function testGetEntrancesByUserIdWithDefaultConfig()
+    public function testFindEntrancesByUserIdWithDefaultConfig()
     {
-        $result = $this->getQuickEntranceService()->getEntrancesByUserId(0);
+        $result = $this->getQuickEntranceService()->findEntrancesByUserId(0);
         $result = ArrayToolkit::index($result, 'code');
 
         $this->assertCount(7, $result);
@@ -41,19 +41,19 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->assertArrayHasKey('admin_v2_user_coin', $result);
     }
 
-    public function testGetEntrancesByUserId()
+    public function testFindEntrancesByUserId()
     {
         $this->createCurrentUserInviteManageQuickEntrance();
-        $result = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+        $result = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
         $result = ArrayToolkit::index($result, 'code');
 
         $this->assertCount(1, $result);
         $this->assertArrayHasKey('admin_v2_operation_invite', $result);
     }
 
-    public function testGetAllEntrancesWithoutUserId()
+    public function testFindAvailableEntrancesWithoutUserId()
     {
-        $result = $this->getQuickEntranceService()->getAllEntrances();
+        $result = $this->getQuickEntranceService()->findAvailableEntrances();
 
         $expected = array(
             'admin_v2_teach',
@@ -72,17 +72,12 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->assertCount(3, $result['admin_v2_user']['data']);
         $this->assertCount(4, $result['admin_v2_trade']['data']);
         $this->assertCount(5, $result['admin_v2_system']['data']);
-
-        $marketingResult = ArrayToolkit::index($result['admin_v2_marketing']['data'], 'code');
-
-        $this->assertTrue($marketingResult['admin_v2_marketing_coupon']['checked']);
-        $this->assertFalse($marketingResult['admin_v2_operation_invite']['checked']);
     }
 
-    public function testGetAllEntranceWithUserId()
+    public function testFindAvailableEntrancesWithUserId()
     {
         $this->createCurrentUserInviteManageQuickEntrance();
-        $result = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
+        $result = $this->getQuickEntranceService()->findAvailableEntrances();
 
         $expected = array(
             'admin_v2_teach',
@@ -101,23 +96,19 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->assertCount(3, $result['admin_v2_user']['data']);
         $this->assertCount(4, $result['admin_v2_trade']['data']);
         $this->assertCount(5, $result['admin_v2_system']['data']);
-
-        $marketingResult = ArrayToolkit::index($result['admin_v2_marketing']['data'], 'code');
-        $this->assertTrue($marketingResult['admin_v2_operation_invite']['checked']);
-        $this->assertFalse($marketingResult['admin_v2_marketing_coupon']['checked']);
     }
 
-    public function testFindAvailableEntrancesByUserId()
+    public function testFindSelectedEntrancesCodeByUserIdWithEmpty()
     {
-        $this->createCurrentUserInviteManageQuickEntrance();
-        $availableEntrances = $this->getQuickEntranceService()->findAvailableEntrancesByUserId($this->getCurrentUser()->getId());
-
-
-    }
-
-    public function testFindSelectedEntrancesByUserId()
-    {
-
+        $result = $this->getQuickEntranceService()->findSelectedEntrancesCodeByUserId($this->getCurrentUser()->getId());
+        $this->assertCount(7, $result);
+        $this->assertTrue(in_array('admin_v2_course_show', $result));
+        $this->assertTrue(in_array('admin_v2_block_manage', $result));
+        $this->assertTrue(in_array('admin_v2_classroom', $result));
+        $this->assertTrue(in_array('admin_v2_goods_order', $result));
+        $this->assertTrue(in_array('admin_v2_marketing_coupon', $result));
+        $this->assertTrue(in_array('admin_v2_user_show', $result));
+        $this->assertTrue(in_array('admin_v2_user_coin', $result));
     }
 
     /**
@@ -154,7 +145,6 @@ class QuickEntranceServiceTest extends BaseTestCase
                 'text' => '邀请管理',
                 'icon' => 'invite',
                 'link' => '/admin/v2/invite/record',
-                'checked' => false,
                 'class' => 'icon-color-yellow',
                 'target' => '',
             ),
@@ -188,11 +178,11 @@ class QuickEntranceServiceTest extends BaseTestCase
     public function testUpdateUserEntrancesWithEmptyEntrances()
     {
         $this->createCurrentUserInviteManageQuickEntrance();
-        $before = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+        $before = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
         $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), array());
 
-        $after = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+        $after = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
         $this->assertNotEquals($before, $after);
         $this->assertCount(1, $before);
@@ -202,12 +192,12 @@ class QuickEntranceServiceTest extends BaseTestCase
     public function testUpdateUserEntrances()
     {
         $this->createCurrentUserInviteManageQuickEntrance();
-        $before = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+        $before = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
         $entrances = array('admin_v2_marketing_coupon', 'admin_v2_operation_invite');
         $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $entrances);
 
-        $after = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+        $after = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
         $this->assertNotEquals($before, $after);
         $this->assertCount(1, $before);

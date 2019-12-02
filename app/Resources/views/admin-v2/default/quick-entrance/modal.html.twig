@@ -10,13 +10,13 @@
       <div class="modal-body js-function-body">
         <form id="quick-entrance-form" method="post" action="{{ path('admin_v2_quick_entrance') }}">
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          {% for typeEntrance in allQuickEntrances %}
+          {% for typeEntrance in allQuickEntrances  %}
             <div class="entrance-section">
               <div class="entrance-section__title">{{ typeEntrance.title }}</div>
               <div class="{{ 'entrance-section__body js-entrance-list cd-pt16 row ' ~ typeEntrance.class }}">
                 {% for entrance in typeEntrance.data %}
                   <div class="col-md-3">
-                    <div class="text-center admin-function  js-function-choose {% if entrance.checked|default(false) %}active{% endif %}" data-code="{{ entrance.code }}">
+                    <div class="text-center admin-function  js-function-choose {% if entrance.code in selectedEntranceCodes %}active{% endif %}" data-code="{{ entrance.code }}">
                       <div class="admin-function__tag"></div>
                       <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entrance.icon }}"></i></div>
                       <div class="admin-function__name">{{ entrance.text }}</div>
