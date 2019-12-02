@@ -4,6 +4,7 @@ class Testpaper {
   constructor($element) {
     this.$element = $element;
     this.$form = this.$element.find('#step2-form');
+    this.$questionBankSelector = this.$element.find('#question-bank');
     this.$testpaperSelector = this.$element.find('#testpaper-media');
     this.$questionItemShow = this.$element.find('#questionItemShowDiv');
     this._init();
@@ -12,6 +13,7 @@ class Testpaper {
   _init() {
     dateFormat();
     this.setValidateRule();
+    this.initQuestionBankSelector();
     this.initTestPaperSelector();
     this.initSelectTestPaper(this.$testpaperSelector.select2('data'));
     this.initEvent();
@@ -53,13 +55,14 @@ class Testpaper {
         },
         testpaperId: {
           required: true,
-          digits:true
+          digits:true,
+          min: 1,
         },
-        length:{
+        length: {
           required:true,
           digits:true
         },
-        startTime:{
+        startTime: {
           required:function(){
             return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
           },
@@ -67,7 +70,7 @@ class Testpaper {
             return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
           }
         },
-        redoInterval:{
+        redoInterval: {
           required:function(){
             return $('[name="doTimes"]:checked').val() == 0;
           },
@@ -77,7 +80,8 @@ class Testpaper {
       },
       messages: {
         testpaperId: {
-          required:Translator.trans('activity.testpaper_manage.media_error_hint'),
+          required: Translator.trans('activity.testpaper_manage.media_error_hint'),
+          min: Translator.trans('activity.testpaper_manage.media_error_hint'),
         },
         redoInterval: {
           max: Translator.trans('activity.testpaper_manage.max_error_hint')
@@ -103,7 +107,7 @@ class Testpaper {
       data: [
         {
           id: '0',
-          text: '请选择试卷',
+          text: Translator.trans('activity.testpaper_manage.media_required'),
           selected: true,
         }
       ],
@@ -148,14 +152,24 @@ class Testpaper {
         }
         let data = {
           id: testPaperId,
-          text: testPaperName ? testPaperName : '请选择试卷',
+          text: testPaperName ? testPaperName : Translator.trans('activity.testpaper_manage.media_required'),
         };
 
         callback(data);
       },
       formatSelection: function(data) {
         return data.text;
-      }
+      },
+      dropdownAutoWidth: true,
+    });
+  }
+
+  initQuestionBankSelector() {
+    this.$questionBankSelector.select2({
+      treeview: true,
+      dropdownAutoWidth: true,
+      treeviewInitState: 'collapsed',
+      placeholderOption: 'first',
     });
   }
 
@@ -173,32 +187,28 @@ class Testpaper {
     this.$questionItemShow.hide();
     this.$testpaperSelector.val('0');
 
-    let $target = $(event.currentTarget);
-    let bankId = $target.val();
+    let selected = this.$questionBankSelector.select2('data');
+    let bankId = selected.id;
     if (!parseInt(bankId)) {
       this.initEmptyTestPaperSelector();
       return;
     }
-    let url = $('#question-bank').data('url');
+    let url = this.$questionBankSelector.data('url');
     url = url.replace(/[0-9]/, bankId);
     let self = this;
     $.post(url, function(resp) {
       if (resp.totalCount === 0) {
-        $helpBlock.addClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.empty_tips'));
+        $helpBlock.addClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.empty_tips')).show();
         self.initEmptyTestPaperSelector();
         return;
       }
       if (resp.openCount === 0) {
-        $helpBlock.removeClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.no_open_tips'));
+        $helpBlock.removeClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.no_open_tips')).show();
         self.initEmptyTestPaperSelector();
         return;
       }
       self.$testpaperSelector.data('url', url);
       self.initAjaxTestPaperSelector();
-      // $.each(resp.testpapers, function(index, testpaper) {
-      //   option += `<option value="${testpaper.id}">${testpaper.name}</option>`;
-      // });
-      // self.$testpaperSelect.html(option);
     }).error(function(e) {
       cd.message({type: 'danger', message: e.responseJson.error.message});
     });

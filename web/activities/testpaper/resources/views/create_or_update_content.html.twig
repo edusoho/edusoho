@@ -7,8 +7,7 @@
     <form class="form-horizontal" id="step2-form">
       {% set course = get_course(activity.fromCourseId) %}
       {% set testpaper = get_testpaper(activity.ext.mediaId|default(0))|default() %}
-      {#{% set questionBankTree = data('QuestionBankTree', {}) %}#}
-      {% set questionBanks = find_accessible_question_banks() %}
+      {% set questionBankTree = data('QuestionBankTree', {}) %}
       {% set features = get_features() %}
       <div class="form-group">
         <div class="col-sm-2 control-label">
@@ -25,10 +24,14 @@
         </div>
         <div class="col-sm-5 controls">
           <select id="question-bank" class="form-control" name="questionBankId" data-url="{{ path('question_bank_manage_testpaper_json', {id:0}) }}">
-            <option value="">{{ 'question.select_question_bank'|trans }}</option>
-            {% for questionBank in questionBanks %}
-              <option value="{{ questionBank.id }}"{% if questionBank.id == testpaper.bankId|default(0) %} selected{% endif %}>{{ questionBank.name }}</option>
-            {% endfor %}
+            {% if questionBankTree %}
+              <option value="0">{{ 'question.select_question_bank'|trans }}</option>
+              {% for bank in questionBankTree %}
+                <option value="{{ bank.id }}" {% if bank.categoryId is not defined %} disabled="disabled" {% endif %}{% if testpaper.bankId|default(0) == bank.id %}selected{% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
+              {% endfor %}
+            {% else %}
+              <option value="0"{% if not range.bankId|default(0) %} selected{% endif %}>{{'question_bank.empty.no_auth'|trans}}</option>
+            {% endif %}
           </select>
           <div class="help-block hidden js-help-block"></div>
         </div>

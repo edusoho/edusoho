@@ -275,7 +275,7 @@ class QuestionMarkerController extends BaseController
 
     protected function getQuestionBankChoices()
     {
-        $questionBanks = $this->getQuestionBankService()->findAllAccessibleQuestionBanks();
+        $questionBanks = $this->getQuestionBankService()->findUserManageBanks();
 
         $choices = array();
         foreach ($questionBanks as &$questionBank) {

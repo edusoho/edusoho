@@ -38,7 +38,7 @@ class QuestionBankExtension extends \Twig_Extension
 
     public function findAccessibleQuestionBanks()
     {
-        return $this->getQuestionBankService()->findAllAccessibleQuestionBanks();
+        return $this->getQuestionBankService()->findUserManageBanks();
     }
 
     /**

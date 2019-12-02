@@ -324,7 +324,7 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
-        if (!$this->getQuestionBankService()->validateCanManageBank($testpaper['bankId'])) {
+        if (!$this->getQuestionBankService()->canManageBank($testpaper['bankId'])) {
             return $this->createMessageResponse('error', 'can not manage bank');
         }
 

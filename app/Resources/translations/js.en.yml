@@ -322,6 +322,7 @@ activity.homework_manage.pass_objective_question_hint: >
 activity.ppt_manage.media_error_hint: Please upload or select PPT
 input.ppt_manage.finish_detail_required_error_hint: Please enter the the minimum watch time
 
+activity.testpaper_manage.media_required: Please select the testpapers
 activity.testpaper_manage.arithmetic_float_error_hint: Must be a positive number, keep a decimal
 activity.testpaper_manage.positive_integer_error_hint: Must be a positive integer
 activity.testpaper_manage.media_error_hint: Please select the testpapers

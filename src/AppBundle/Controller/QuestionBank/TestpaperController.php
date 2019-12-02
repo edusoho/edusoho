@@ -344,7 +344,7 @@ class TestpaperController extends BaseController
 
     public function jsonAction(Request $request, $id)
     {
-        if (!$this->getQuestionBankService()->validateCanManageBank($id)) {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 

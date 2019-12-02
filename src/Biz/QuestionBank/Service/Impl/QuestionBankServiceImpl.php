@@ -150,27 +150,6 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         }
     }
 
-    public function findAllAccessibleQuestionBanks()
-    {
-        $user = $this->getCurrentUser();
-
-        if ($user->isAdmin()) {
-            $questionBanks = $this->getQuestionBankDao()->findAll();
-        } else {
-            $members = $this->getMemberService()->findMembersByUserId($user->getId());
-            $questionBankIds = ArrayToolkit::column($members, 'bankId');
-            $conditions['ids'] = $questionBankIds ?: array(-1);
-            $questionBanks = $this->searchQuestionBanks(
-                $conditions,
-                array('createdTime' => 'DESC'),
-                0,
-                $this->countQuestionBanks($conditions)
-            );
-        }
-
-        return $questionBanks;
-    }
-
     public function canManageBank($bankId, $permission = 'admin_question_bank')
     {
         $user = $this->getCurrentUser();
@@ -209,7 +188,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         }
 
         if ($user->isAdmin() || $user->hasPermission('admin_question_bank')) {
-            $banks = $this->findAllQuestionBanks();
+            $banks = $this->getQuestionBankDao()->findAll();
         } else {
             $members = $this->getMemberService()->findMembersByUserId($user['id']);
             $banks = $this->findQuestionBanksByIds(ArrayToolkit::column($members, 'bankId'));
