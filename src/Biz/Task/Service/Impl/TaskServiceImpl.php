@@ -349,6 +349,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findByCourseSetId($courseSetId);
     }
 
+    public function findTasksByCourseSetIds($courseSetIds)
+    {
+        return $this->getTaskDao()->findByCourseSetIds($courseSetIds);
+    }
+
     public function findTasksByCourseIds($courseIds)
     {
         return $this->getTaskDao()->findByCourseIds($courseIds);
@@ -1022,11 +1027,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->getActivityService()->trigger($task['activityId'], $eventName, $data);
 
         return $this->getTaskResultService()->getUserTaskResultByTaskId($id);
-    }
-
-    public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
-    {
-        return $this->getTaskDao()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
     }
 
     public function analysisTaskDataByTime($startTime, $endTime)
