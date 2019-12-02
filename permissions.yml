@@ -219,7 +219,7 @@ admin_keyword_banlogs:
 admin_operation_group:
     - admin_v2_operation_group_manage
 admin_operation_group_manage:
-    - admin_v2_operation_group_manage
+    - admin_v2_operation_group
 admin_operation_group_create:
     - admin_v2_operation_group_create
 admin_operation_group_thread:
