@@ -63,7 +63,7 @@ class AppExtension extends \Twig_Extension
     public function currency($money)
     {
         //当前仅考虑中文的货币处理；
-        if ($money == 0) {
+        if (0 == $money) {
             return '0';
         }
 
@@ -222,7 +222,7 @@ class AppExtension extends \Twig_Extension
         $price = $course['price'];
         $coin = $this->getSettingService()->get('coin');
         if (!empty($coin['coin_enabled'])) {
-            if (isset($coin['price_type']) && $coin['price_type'] == 'Coin') {
+            if (isset($coin['price_type']) && 'Coin' == $coin['price_type']) {
                 if ($price > 0) {
                     $cashRate = empty($coin['coin_rate']) ? 1 : $coin['coin_rate'];
                     $coinName = empty($coin['coin_name']) ? '虚拟币' : $coin['coin_name'];
@@ -246,7 +246,7 @@ class AppExtension extends \Twig_Extension
             return true;
         }
         $version = ClassroomService::COVER_SIZE_VERSION;
-        if (strpos($classroom['largePicture'], '?version=' . $version)) {
+        if (strpos($classroom['largePicture'], '?version='.$version)) {
             return true;
         }
 
