@@ -52,54 +52,9 @@ class PermissionExtension extends \Twig_Extension
         $permission = $this->getNavPermission($code);
         $group = $this->createPermissionBuilder()->groupedV2Permissions($permission['code']);
 
-        $permissionMenus = $this->buildChildPermissionMenus($group);
+        $permissionMenus = $this->buildSidebarPermissionMenus($group);
 
         return $permissionMenus;
-    }
-
-    protected function buildChildPermissionMenus($allGroup, $grade = 0)
-    {
-        $permissions = array();
-
-        foreach ($allGroup as $key => &$children) {
-            if (isset($children['visible']) && !$this->evalExpression($this->container->get('twig'), array(), $children['visible'])) {
-                unset($allGroup[$key]);
-                continue;
-            }
-            if (!isset($children['children'])) {
-                continue;
-            }
-
-            $childrenInfo = array();
-            $childrenInfo['id'] = "group_{$children['code']}";
-            $childrenInfo['class'] = isset($children['class']) ? $children['class'] : '';
-            $childrenInfo['name'] = ServiceKernel::instance()->trans($children['name'], array(), 'menu');
-            $childrenInfo['link'] = '';
-            $childrenInfo['code'] = $children['code'];
-            if (isset($children['is_group'])) {
-                $childrenInfo['grade'] = 0;
-            }
-
-            foreach ($children['children'] as $k => $child) {
-                if (isset($child['visible']) && !$this->evalExpression($this->container->get('twig'), array(), $child['visible'])) {
-                    unset($children['children'][$k]);
-                    continue;
-                }
-                $nodes = array();
-                $nodes['id'] = "menu_{$child['code']}";
-                $nodes['class'] = isset($child['class']) ? $child['class'] : '';
-                $nodes['name'] = ServiceKernel::instance()->trans($child['name'], array(), 'menu');
-                $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getPermissionByCode($k)));
-                $nodes['grade'] = 1;
-                $nodes['code'] = $child['code'];
-                $nodes['linkType'] = isset($child['target']) ? $child['target'] : '';
-                $nodes['nodes'] = array();
-                $childrenInfo['nodes'][] = $nodes;
-            }
-            $permissions[] = $childrenInfo;
-        }
-
-        return $permissions;
     }
 
     public function getFirstChild($menu)
@@ -248,6 +203,92 @@ class PermissionExtension extends \Twig_Extension
     private function createPermissionBuilder()
     {
         return PermissionBuilder::instance();
+    }
+
+    private function buildSidebarPermissionMenus($allGroup, $grade = 0)
+    {
+        $permissions = array();
+
+        foreach ($allGroup as $key => $group) {
+            //菜单组是否为可见状态
+            if (isset($group['visible']) && !$this->canVisibleMenus($group['visible'])) {
+                unset($allGroup[$key]);
+                continue;
+            }
+            //组下面没有菜单，则不显示该组
+            if (!isset($group['children'])) {
+                continue;
+            }
+
+            $group = $this->buildGroupPermissionMenus($group);
+
+            //组下有菜单才显示，如果没有显示的菜单则组也不显示
+            if ($group['grade'] == 0 && isset($group['nodes'])) {
+                $permissions[] = $group;
+            }
+        }
+
+        return $permissions;
+    }
+
+    private function buildGroupPermissionMenus($group, $grade = 0)
+    {
+        $groupInfo = array();
+        if (isset($group['is_group'])) {
+            $groupInfo['grade'] = $grade;
+        }
+        $groupInfo['id'] = "group_{$group['code']}";
+        $groupInfo['name'] = ServiceKernel::instance()->trans($group['name'], array(), 'menu');
+        $groupInfo['class'] = isset($group['class']) ? $group['class'] : '';
+        $groupInfo['code'] = $group['code'];
+
+        foreach ($group['children'] as $k => $child) {
+            //菜单是否可见状态
+            if (isset($child['visible']) && !$this->canVisibleMenus($child['visible'])) {
+                unset($group['children'][$k]);
+                continue;
+            }
+            // 获取菜单组下面的节点菜单数据
+            $groupInfo['nodes'][] = $this->buildNodesPermissionMenus($child);
+        }
+
+        return $groupInfo;
+    }
+
+    private function buildNodesPermissionMenus($child)
+    {
+        $nodes = array();
+        $nodes['id'] = "menu_{$child['code']}";
+        $nodes['class'] = isset($child['class']) ? $child['class'] : '';
+        $nodes['name'] = ServiceKernel::instance()->trans($child['name'], array(), 'menu');
+        $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getPermissionByCode($child['code'])));
+        $nodes['grade'] = 1;
+        $nodes['code'] = $child['code'];
+
+        return $nodes;
+    }
+
+    private function canVisibleMenus($visible)
+    {
+        $twigExpressionResult = $this->evalExpression($this->container->get('twig'), array(), $visible);
+
+        if ($twigExpressionResult) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function removeEmptyGroup($permissions)
+    {
+        $array = array();
+        foreach ($permissions as $key => $permission) {
+            if ($permission['grade'] == 0 && !isset($permission['nodes'])) {
+                unset($permissions[$key]);
+            }
+        }
+
+        return $array;
     }
 
     public function getName()
