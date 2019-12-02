@@ -10,7 +10,7 @@
       <div class="modal-body js-function-body">
         <form id="quick-entrance-form" method="post" action="{{ path('admin_v2_quick_entrance') }}">
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          {% for typeEntrance in allQuickEntrances  %}
+          {% for typeEntrance in allQuickEntrances if typeEntrance.data is not empty %}
             <div class="entrance-section">
               <div class="entrance-section__title">{{ typeEntrance.title }}</div>
               <div class="{{ 'entrance-section__body js-entrance-list cd-pt16 row ' ~ typeEntrance.class }}">
