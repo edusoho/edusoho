@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use AppBundle\Common\ServiceToolkit;
 use Biz\Course\Service\CourseService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\Course\Service\CourseSetService;
@@ -50,6 +51,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFunction('user_avatar', array($this, 'userAvatar')),
             new \Twig_SimpleFunction('course_price', array($this, 'coursePrice')),
             new \Twig_SimpleFunction('log_trans', array($this, 'logTrans')),
+            new \Twig_SimpleFunction('is_new_classroom_cover_size', array($this, 'isNewClassroomCoverSize')),
         );
     }
 
@@ -61,7 +63,7 @@ class AppExtension extends \Twig_Extension
     public function currency($money)
     {
         //当前仅考虑中文的货币处理；
-        if ($money == 0) {
+        if (0 == $money) {
             return '0';
         }
 
@@ -220,7 +222,7 @@ class AppExtension extends \Twig_Extension
         $price = $course['price'];
         $coin = $this->getSettingService()->get('coin');
         if (!empty($coin['coin_enabled'])) {
-            if (isset($coin['price_type']) && $coin['price_type'] == 'Coin') {
+            if (isset($coin['price_type']) && 'Coin' == $coin['price_type']) {
                 if ($price > 0) {
                     $cashRate = empty($coin['coin_rate']) ? 1 : $coin['coin_rate'];
                     $coinName = empty($coin['coin_name']) ? '虚拟币' : $coin['coin_name'];
@@ -236,6 +238,19 @@ class AppExtension extends \Twig_Extension
         } else {
             return '免费';
         }
+    }
+
+    public function isNewClassroomCoverSize($classroom)
+    {
+        if (empty($classroom['largePicture'])) {
+            return true;
+        }
+        $version = ClassroomService::COVER_SIZE_VERSION;
+        if (strpos($classroom['largePicture'], '?version='.$version)) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function sortTags($tags)
