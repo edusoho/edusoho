@@ -96,8 +96,8 @@ export default {
     }
   },
   watch: {
-    selectedPlanId: (val, oldVal) => {
-      val !== oldVal && (this.active = 0)
+    selectedPlanId: function(val, oldVal) {
+     this.active = 1
     }
   },
   mounted() {
